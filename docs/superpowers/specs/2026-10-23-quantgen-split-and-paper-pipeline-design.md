@@ -79,8 +79,16 @@ most of QUANTGEN until February. Instead:
      paper_live's reporting files `analyze`, `report`, `narrative` and
      `compare`, which are off the readout path;
    - nothing changed after the GROKTEAM freeze.
-2. **Both readouts run only from a git worktree at that tag**, for example
-   `..\QUANTGEN-studies`.
+2. **Both readouts run only from a local `git clone` checked out at that
+   tag**, for example
+   `git clone --branch studies-of-record-2026-10-23 QUANTGEN QUANTGEN-studies`.
+   - Not `git worktree`: in a worktree `.git` is a file, so the pinned
+     `gate_ledger.repo_anchor()`, which reads `<root>/.git/HEAD`, would write
+     UNVERSIONED rows.
+   - A clone's detached HEAD gives `git:<eacd57d…>`.
+   - Never run a whole-tree `git checkout`, `reset`, `stash` or `clean` in
+     the main repo, because they rewrite cache-file mtimes that one test
+     relies on.
    - They use an interpreter with the pinned library versions: the global
      one while it still matches, otherwise a dedicated venv pinned to those
      versions.
@@ -106,13 +114,14 @@ most of QUANTGEN until February. Instead:
    - (c) before 2027-02-01 01:00 UTC, `grokteam/out/book/FORWARD_LOOK.json`
      exists on main;
    - (d) the interpreter's numpy, scipy or pandas versions differ from the
-     pins, while a look is still pending. This clause only warns when a
-     pinned venv is recorded instead.
+     pins, while a look is still pending. There is no warn-only branch: a
+     dedicated pinned venv is set up, and this clause rewritten, only if the
+     global interpreter ever has to move before the looks.
 
    **Expiry.** Clauses (a) and (b) stay forever as provenance. Clauses (c)
    and (d) retire once both readouts are committed.
 
-`verdict.holdout_sessions()` may be called as a function inside the worktree.
+`verdict.holdout_sessions()` may be called as a function inside the tag clone.
 Never run `paper_live.verdict` as a module before the readout, because it
 writes `verdict.json`.
 
@@ -320,6 +329,11 @@ These rules go in the TRADEGEN session's brief as hard prerequisites:
   analyst who writes in the same register as the weekly note. Remove "trade
   expression". The FICC report prompts follow the same register.
 - README L670-678.
+- **Reviewed and kept** (2026-10-23 plan review):
+  - `narrate_carry`'s "top-N long/short carry basket" defines how the carry
+    strategy is constructed;
+  - `narrate_fx_forward`'s "being long EUR earns …" explains forward points.
+  - Both describe method, not a recommendation, so D3 does not apply to them.
 
 **A4. Identity.**
 - "Personal quant trading application" becomes "quantitative finance research
@@ -705,7 +719,7 @@ All other tests that assert `UNVERSIONED` read the constants
 | Issue | Raised by | Ruling |
 |---|---|---|
 | The closure misses the H2 readout scripts (`replay`, `verdict`, `power`), calendar and macro data files, and a dynamic import | C-3a | Superseded: readouts run from the tag (section 3.1), so nothing on main needs guarding |
-| A guard freezing about 57 files until February leaves broken pages unfixable | C-3b | **Accepted in full**: tag plus worktree (D9). Main is free. The guard is down to four clauses with stated expiry. |
+| A guard freezing about 57 files until February leaves broken pages unfixable | C-3b | **Accepted in full**: tag plus a local clone at the tag (D9; a clone rather than a worktree, so ledger rows stay anchored). Main is free. The guard is down to four clauses with stated expiry. |
 | "Disable the look write" in TRADEGEN still recomputes and prints the forward results on every run | C-2b | Section 3.2: forward events permanently blinded; PREREG never deleted |
 | Workflow location unconfirmed; the approval check must be deterministic | C-2a | Section 5.1: Agent-tool fallback; `tools.paper.approval check` exit code |
 | FMP row calls the deleted `skill_credential_present` | M-new1 | Section 4.1 A1: `fmp_ready()` and a new note |
