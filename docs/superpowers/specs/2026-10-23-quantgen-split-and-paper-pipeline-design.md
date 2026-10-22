@@ -9,8 +9,12 @@ Status:
   - Round 2: Claude and Gemini said ACCEPT WITH CHANGES. GPT was *review
     incomplete*: the Codex quota is exhausted until 2026-10-27 19:16.
   - Appendices A and A2 rule on every issue.
-- The design was approved by the owner on 2026-10-23. This spec awaits the
-  owner's review before the implementation plan is written.
+- **Approved by the owner on 2026-10-23**: Parts A and B with the recommended
+  defaults and the tag-based freeze. Two owner changes are folded in:
+  - the weekly FICC note is rewritten in an academic register (section 4.1
+    A3);
+  - phone alerts for the H2 test (section 5A).
+- Next: the implementation plan.
 
 Inputs:
 - `research_notes/QUANTGEN TRADEGEN split map/split_map.md`;
@@ -276,11 +280,29 @@ These rules go in the TRADEGEN session's brief as hard prerequisites:
   - keep `report_prompt()` and `deep_analysis()`, re-worded as research
     commentary.
 - **`narrate_weekly_strategy` (L409-490)**, which is deterministic, says
-  "lean long", "run steepeners" and "Carry: long X … funder". It is relabelled
-  a *descriptive read*:
-  - z-levels;
-  - curve regime;
-  - the highest and lowest carry-to-vol, as data only.
+  "lean long", "run steepeners" and "Carry: long X … funder". It is rewritten
+  as an **academic descriptive read** (owner ruling, 2026-10-23).
+  - **Register.** A formal, third-person, journal-style register. No
+    imperative verbs, no position language (long, short, run, fund, size,
+    cut, entry) and no forecasts.
+  - **Content.**
+    - Each quantity is stated with its definition and window: the z-score
+      against the trailing 252-session mean, and the 1-week change in bp.
+    - The curve is described by level, slope and curvature in the sense of
+      Litterman & Scheinkman (1991), and by the 2s10s regime, labelled as
+      "bull/bear steepening/flattening over N sessions".
+    - The 5y5y forward is compared with the 2y/5y/10y level as a measured
+      spread, never as "priced for cuts".
+    - The dollar is described by its regime, change and z-score.
+    - Carry is ranked by carry-to-volatility as defined by Koijen, Moskowitz,
+      Pedersen & Vrugt (2018), reported as a cross-sectional observation.
+  - **Sources and limits.** Short-form citations are allowed only for the
+    definition of a measure, and the two above are already in split_map
+    section 6, rows 38 and 40. The note closes with one sentence stating that
+    it is descriptive and makes no recommendation.
+  - **Example:** "Duration: The 10-year Treasury yield stands at 4.31%,
+    1.2 standard deviations above its trailing one-year mean, following a
+    +12 bp change over the week."
   - It keeps the `Duration:`/`Curve:`/`FX:`/`Carry:` section prefixes the
     tests assert.
   - The `FX:` line at L464-469 ("USD longs against low-yielders", "fading
@@ -294,8 +316,9 @@ These rules go in the TRADEGEN session's brief as hard prerequisites:
   - This is called out for the owner's confirmation in the review note. D3
     named the AI prompts, and this is deterministic text.
 - `core/quant/insights.py::_SYSTEM` (L263-279): change the persona from a
-  "sell-side strategist writing for a trading desk" to a research analyst.
-  Remove "trade expression".
+  "sell-side strategist writing for a trading desk" to an academic research
+  analyst who writes in the same register as the weekly note. Remove "trade
+  expression". The FICC report prompts follow the same register.
 - README L670-678.
 
 **A4. Identity.**
@@ -573,6 +596,26 @@ needs the network.
 **Before the first real topic**, a synthetic fixture topic runs through both
 workflows end to end, to prove that dispatch, the approval hash, the release
 states and the build all work.
+
+## 5A. Owner alerts (owner request, 2026-10-23)
+
+The owner asked to be told on their phone, through Claude mobile, when the H2
+cost-gate test is ready. Two local scheduled tasks (Claude desktop) are set:
+- **`h2-holdout-ready-alert`**, one-shot at 2026-11-04 09:00 KST. Both
+  profiles' 10 holdout sessions end on 2026-11-03, as computed with
+  `verdict.holdout_sessions()` on 2026-10-23.
+  - It reads both `out*/verdict.json` read-only.
+  - It sends one push notification, "H2 holdout complete; readout ready; run
+    by about 2026-12-19".
+  - It runs nothing in `paper_live`.
+- **`h2-readout-deadline-warning`**, one-shot at 2026-12-05 09:00 KST. It
+  pushes only if H2 is still pending, two weeks before the 5-minute bars
+  expire.
+
+Push delivery relies on Remote Control, which is on for new sessions. The
+originating session is also notified when each task completes. Scheduled tasks
+run while the Claude app is open; a task that is due while the app is closed
+runs at the next launch.
 
 ## 6. Out of scope
 
