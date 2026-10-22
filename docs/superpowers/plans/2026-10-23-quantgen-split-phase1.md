@@ -10,6 +10,8 @@
 
 **Spec:** docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md (rev 4, approved 2026-10-23), sections 3 and 4.1; Appendices B and C.
 
+**Plan order:** this plan (Plan A) runs completely first; its Task 1 tag must land before 2026-11-04 00:00 UTC. Plan B (docs/superpowers/plans/2026-10-23-quantgen-paper-pipeline.md) then starts from this plan's A5 commit and quotes `tests/run_all.py` and `README.md` as this plan leaves them.
+
 ---
 
 ## Global Constraints
