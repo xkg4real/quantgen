@@ -1,324 +1,568 @@
 # QUANTGEN after the split, and the research-paper pipeline
 
-Date: 2026-10-23. Status: design approved by the owner on 2026-10-23; this spec
-awaits the owner's review before the implementation plan is written.
+Date: 2026-10-23.
+
+Status:
+- **Revision 2.** This revision answers referee round 1: Claude said ACCEPT
+  WITH CHANGES, GPT (Codex) said REJECT and Gemini (Antigravity) said
+  REJECT. Appendix A rules on every issue.
+- The design was approved by the owner on 2026-10-23. This spec awaits a
+  second referee round and then the owner's review, before the
+  implementation plan is written.
 
 Inputs:
-- `research_notes/QUANTGEN TRADEGEN split map/split_map.md` (file-by-file map,
-  sections 1-8 including the critic addendum);
+- `research_notes/QUANTGEN TRADEGEN split map/split_map.md`;
 - `reports/Korean resident trading venue legality.md`.
 
 ## 1. Purpose
 
 QUANTGEN is split in two:
-
 - **QUANTGEN (this repo)** becomes a quantitative-finance research instrument.
   It goes no further than paper trading.
-- **TRADEGEN** (`Desktop/TRADEGEN`) is a byte copy of QUANTGEN as of this date.
-  It is developed in its own session for real-money trading within Korean law.
+- **TRADEGEN** (`Desktop/TRADEGEN`) is a byte copy of QUANTGEN as of this date,
+  developed in its own session for real-money trading within Korean law.
 
-QUANTGEN gains one new capability: on request, it turns a topic into a
-formal, fully bilingual research paper. Each paper covers the topic's origin
+QUANTGEN gains one capability: on request, it turns a topic into a formal,
+fully bilingual research paper. Each paper covers the topic's origin
 literature, its current state of the art, how QUANTGEN implements it, and a
-reproducible study. The papers build the owner's quant career portfolio.
+reproducible study. The papers build the owner's quant career portfolio, so
+they must be correct, honestly labelled, and disclosed as AI-assisted.
 
 ## 2. Owner decisions (2026-10-22/23)
 
 | # | Decision |
 |---|---|
 | D1 | The GrokBot BOOK study stays in QUANTGEN as the study of record, and TRADEGEN holds a working duplicate. |
-| D2 | The NEXTGEN trading-skills cockpit (Skills, Workflows, Runs) moves to TRADEGEN only. |
-| D3 | AI prompts: strip only the trade-idea parts. Deep analysis stays, as research commentary. |
+| D2 | The NEXTGEN trading-skills cockpit moves to TRADEGEN only. |
+| D3 | Strip only the trade-idea parts of the AI prompts. Deep analysis stays, as research commentary. |
 | D4 | Papers are LaTeX, journal style, fully bilingual: two complete editions, English and Korean. |
-| D5 | The TeX engine is Tectonic 0.17.0 (approved download). |
-| D6 | Paper peer review uses Claude, GPT via the Codex CLI, and Gemini via the Antigravity CLI (`agy`). |
-| D7 | The first paper topic will be named separately by the owner. |
+| D5 | The TeX engine is Tectonic 0.17.0. |
+| D6 | Referees are Claude, GPT via the Codex CLI and Gemini via the Antigravity CLI `agy`. They may also do bounded work, given the project history. |
+| D7 | The owner names the first paper topic separately. |
+| D8 | QUANTGEN is under git (baseline `eacd57d`). This is the owner action that ruling 3.1 asked for. |
 
 ## 3. Constraints that bind every step
 
-1. **GROKTEAM-BOOK pre-registration** (look on or after 2027-02-01; D1 keeps
-   it here). There are two kinds of protected file:
-   - **Pinned (10 files):** `core/quant/garch.py`, `forecast_eval.py`,
-     `validate.py`, `gate_stats.py`, `gate_ledger.py`,
-     `data/crypto/crypto_client.py`, `data/net.py` and the three `grokteam`
-     files. They stay byte-identical until the look.
-   - **Unpinned dependencies:** `core/ficc/pit.py`, `macro_schema.py` and
-     `schemas/`, `contracts.py`, `core/rules/governance.py`,
-     `macro_rules.py`, `core/quant/risk_layer.py`, `vol_estimators.py`,
-     `data/macro/*`, and root `config.py`. They may change only in ways that
-     leave the names the frozen code uses behaving the same.
-   - New quant code goes into new files.
-   - numpy 2.3.5, scipy 1.18.0, pandas 2.3.3 and Python 3.13 in the global
-     interpreter stay as they are. New tools install into separate
-     environments.
-2. **paper_live H2 holdout** (readout about 2026-11-03, confirmed with
-   `verdict.holdout_sessions()`).
-   - No byte change to `paper_live/engine.py` or `config.py`.
-   - No behaviour change in garch, vol_estimators, risk_layer, instruments,
-     validate (`cost_bp`), strategies (`crypto_trend`), gate_stats, gate_ledger,
-     markets, calendars or root `config.macro_dir`.
-   - Never run `paper_live.replay`, `grid`, `verdict` or `sameday` except for
-     the readout.
-3. **test_s4.**
-   - `core/engine/state.py`, `runtime.py`, `feed.py` and `__init__.py` stay
-     byte-identical.
-   - `orders.py`, `evaluator.py` and `ui/trading_page.py` may only gain lines.
-4. **Append-only hash-chained ledgers** (`~/.nextgen/macro/ledgers/*.jsonl`,
-   `governance_events.jsonl`): never delete or rewrite rows.
-5. **Byte-equality tests** (`tests/macro_tf_data.py`) between `reports/`,
-   `docs/council/` and `QUANTGEN_Quant_Council_2026-10-03/`.
-6. **Test-pinned research paths** (T-COUNCIL-DOCS-01):
-   - `research_notes/QUANTGEN macro overlay research/council/` contains only
-     `README.md`;
-   - the technical-and-fundamental-signals README names the tech-fund bundle.
-   - Papers therefore live in a new top-level `papers/`, not in
-     `research_notes/`.
-7. **Git** (baseline `eacd57d`, `* -text`, autocrlf off). Never re-normalise
-   line endings.
+### 3.1 Frozen studies: enforced by a guard, not by a list
+
+Two studies are protected, and so is everything they load:
+- **GROKTEAM-BOOK.**
+  - Its look is on or after 2027-02-01.
+  - Its 10 sha256-pinned files, its `RULES`, `ACCOUNTS`, `VERDICT` and
+    `model_digest()`, and numpy 2.3.5 / scipy 1.18.0 / pandas 2.3.3 / Python 3.13.
+- **paper_live H2.**
+  - `paper_live/engine.py` and `paper_live/config.py` must equal both
+    `out*/frozen_rule/` copies.
+- **The import closure.** The protected set is the **import closure** of
+  those files, computed by an AST walk, not a hand list. Today it includes
+  `gjr.py`, `core/rules/validation.py`, `core/rules/model.py`,
+  `instruments.py` and `history.py`, which the first list missed.
+
+A new test, `tests/frozen_guard.py`, registered in `run_all.py` with lazy
+imports, fails when any of these is true:
+1. `grokteam.prereg.check()` reports any difference;
+2. either H2 file differs from its frozen copies;
+3. any closure file's sha256 differs from `tests/frozen_closure.json`, the
+   manifest generated once from `eacd57d`;
+4. the library versions differ.
+
+**Root `config.py` is the single narrow exception.** It may lose the
+cockpit section. The guard then compares the source of exactly the names the
+frozen code reads (`macro_dir`, `HTTP_TIMEOUT_SECONDS`, `NO_DATA_GRACE_TICKS`,
+`upbit_ready`, `upbit_keys`, and any other name the closure walk finds)
+against the manifest.
+
+Defects found in protected code are recorded, for example in a paper's
+limitations together with the sha. They are not fixed until both looks are
+taken.
+
+**Never run these:**
+- `paper_live.replay`, `grid`, `verdict` (as a module), `sameday` or
+  `calibrate`, except for the readout itself;
+- `grokteam.book` before 2027-02-01.
+
+`verdict.holdout_sessions()` may be **called** as a function.
+
+### 3.2 TRADEGEN must not touch QUANTGEN's records
+
+These rules go in the TRADEGEN session's brief as hard prerequisites:
+- **Nothing in TRADEGEN runs before isolation.** No app, test or script
+  runs until TRADEGEN has its own venv and its own state root; the macro dir,
+  trading dir, runs dir, FICC cache, grokteam data and ledger dir, and the
+  hard-coded KIS-token and DART paths are all redirected in code.
+- **TRADEGEN never takes the GROKTEAM forward look.** It disables the look's
+  write path in its copy, and it never registers trials into
+  `~/.nextgen/macro/ledgers`.
+- **No concurrent runs.** While QUANTGEN's acceptance suite runs, no app
+  from either program runs, because T-HERM-02 snapshots the home state.
+
+### 3.3 Consequences of being under git (D8)
+
+- `gate_ledger.repo_anchor()` now returns `git:<sha>` instead of
+  `UNVERSIONED`, so new ledger rows are anchored. It is part of a pinned file,
+  but neither frozen verdict reads the anchor. Neither `prereg.check()` nor
+  `verdict.py` uses it.
+- Tests that assert the folder is not a git repository (at least T-LEDGER-01,
+  `tests/macro_m7_ledger.py:144`) are updated to follow the actual repo state.
+  The measured list of affected tests is in Appendix B.
+- `MA.GIT_HASH` and `lab.GIT_HASH` stay the constant `UNVERSIONED`. This
+  keeps the macro freeze and admissions refused, exactly as today, and
+  prevents a silent behaviour change in the overlay. Wiring them to git is a
+  separate owner decision, out of scope here, and recorded as a known split.
+- The git rules: `* -text`, autocrlf off, and never re-normalise. The tracked
+  `qa/acceptance_results.json` is committed together with each change group.
+
+### 3.4 Standing rules carried over
+
+- `test_s4`:
+  - `core/engine/state.py`, `runtime.py`, `feed.py` and `__init__.py` stay
+    byte-identical;
+  - `orders.py`, `evaluator.py` and `ui/trading_page.py` may only gain lines;
+  - the S4 modules gain no wall-clock calls (`tests/macro_m5_integration.py:55-56`).
+- Ledgers are append-only and hash-chained.
+- The byte-equality tests in `tests/macro_tf_data.py` hold.
+- The test-pinned research paths hold (T-COUNCIL-DOCS-01). That is why papers
+  live in a new top-level `papers/`.
+- Repository-wide guards bind all new code:
+  - T-CTX-01, the acting-module import scan in `core/ficc/context_log.py`;
+  - T-RO-01 and the safety test_08/09 order-path scans;
+  - `tests/flet_api_guard.py`.
+  - The order-path scans are extended to cover `tools/` and `papers/`.
 
 ## 4. Part A: the split
 
 ### 4.0 Phase 0: done 2026-10-23
 
-- QUANTGEN was copied to `Desktop/TRADEGEN`. All 959 files have identical
-  sha256; only `__pycache__` and `.pytest_cache` were skipped.
-- QUANTGEN was put under git with the baseline commit `eacd57d`.
-- TRADEGEN's isolation (its own venv, `~/.tradegen` state root, KIS token
-  path, ledger copies, git) belongs to the TRADEGEN session, not this repo.
+- The QUANTGEN tree was copied to `Desktop/TRADEGEN`, and all 959 files have
+  identical sha256.
+- QUANTGEN was put under git at `eacd57d`.
+- The spec draft is `39d522c`.
 
-### 4.1 Phase 1: now (one commit per bullet group, full suite after each)
+### 4.1 Phase 1 (each group is one commit; the full suite runs before and after it)
+
+**A0. Guard first.**
+- Add `tests/frozen_guard.py` and `tests/frozen_closure.json` (section 3.1).
+- Make the git-state test changes (section 3.3, Appendix B).
+- The suite must be green apart from the known NOT_RUN rows.
 
 **A1. Cockpit out (D2).**
 - Delete:
   - `core/skills/{index,entrypoints,params,readiness,runner,runs,diagnose,workflows,decisions,insights,wiring}.py`;
   - `ui/{skills_page,workflows_page,runs_page,param_form,charts}.py`.
-- Empty `core/skills/__init__.py` to a docstring. Keep `macro_daily.py`,
-  `pipeline.py`, `alerts.py` and `macro_workflows/`.
-- `main.py`: drop the cockpit imports, the three NAV rows and their branches,
-  `reload_catalogue`, and `on_reload=`.
-- `ui/settings_page.py`: drop the skills-root, skill-provider, runs-dir and
-  reload blocks, and the ALPACA/FINVIZ `.env` lines.
-- `ui/components.py`: inline a 4-value `State` enum.
-- `config.py`: remove only the skills section (`_DEFAULT_SKILLS_ROOT` …
-  `skill_provider_status`, `SKILL_CREDENTIALS`, `runs_dir`). Every name the
-  frozen code reads stays untouched.
-- `.env.example`: drop the skill-library provider block.
+- `core/skills/__init__.py` becomes a docstring only. Keep `macro_daily`,
+  `pipeline`, `alerts` and `macro_workflows/`.
+- `main.py`:
+  - drop the cockpit imports (L46, 67, 69, 70), the three NAV rows and their
+    `build` branches, `reload_catalogue` and `on_reload=`;
+  - simplify `navigate()` to `(name, *, rebuild=False)`, dropping `focus` and
+    `**kwargs`;
+  - fix the docstring at L3-4.
+- `config.py`: remove exactly these names, which are not contiguous:
+  - `_DEFAULT_SKILLS_ROOT`, `skills_root`, `skills_root_valid`,
+    `skill_python`, `SKILL_TIMEOUT_SECONDS`, `runs_dir`;
+  - `SKILL_CREDENTIALS`, `KEYLESS_INTEGRATIONS`, `FILE_INPUT_INTEGRATIONS`,
+    `skill_credential_present`, `skill_env`, `skill_provider_status`.
+  - Keep the provider helpers between them and every name the guard watches.
+  - **Move the FMP status row into `quant_provider_status()`**, because it is
+    shown today only through the skill providers.
+- `ui/settings_page.py`:
+  - imports L18-19;
+  - the skills-root block;
+  - the readiness, Interpreter and Run-timeout rows (L181-187);
+  - the skill-provider list;
+  - the runs-dir row;
+  - the `.env` snippet lines `NEXTGEN_SKILLS_ROOT`, `ALPACA_*`, `FINVIZ_*`
+    and `FXMACRODATA_*` (L192-196);
+  - the `_SIGNUP` entries finviz, alpaca and fxmacrodata;
+  - the `on_reload` parameter and the reload button;
+  - the docstring.
+- `ui/components.py`: **delete** the readiness import, `STATE_STYLE`,
+  `RUN_STATUS_STYLE`, `readiness_chip` and `run_status_chip`, because only the
+  deleted pages used them. Reword the docstring.
+- `.env.example`: drop the skill-provider block and fix the header at L3.
 - `tests/acceptance.py`:
   - keep `_read`, `_code_only`, `runtime_py` and test_08, 09, 13-18, 21, 22
     (10 tests);
-  - remove the other 37. Tests 10-12 import the cockpit runner (critic
-    8.1-1).
-- `tests/run_all.py`: rename the kept suite from `cockpit` to `safety`
-  (8.4-12).
-- `tests/macro_m8_pipeline.py:132`: becomes a negative existence check.
-- `tests/macro_ui_components.py` L120-127: drop the Runs-page assertion and
-  keep the rail-scroll assertion (8.1-2).
-- Dangling text to update (8.4-11):
-  - README L3-4, L354, ~L738-747, ~L777, ~L829;
-  - `ui/krx_page.py` L1, L189;
+  - delete the other 37;
+  - fix the docstring.
+- `tests/run_all.py`: rename the suite `cockpit` to `safety`, including the
+  `--suite` help text.
+- `tests/macro_m8_pipeline.py:132-133`: replace both lines with
+  `assert importlib.util.find_spec("core.skills.workflows") is None`.
+- `tests/macro_ui_components.py:120-127`: drop the Runs-page read and keep the
+  rail-scroll assertion.
+- Dangling text:
+  - README L3-4, L354, L738-747 (nineteen becomes sixteen entries), L763,
+    L777 (the row becomes `safety`, 10), L786 (total), L829;
+  - `ui/krx_page.py` L1, L3, L189;
   - the `config.py` docstring;
+  - `tests/macro_acceptance.py:8,116`;
   - `docs/ARCHITECTURE_REVIEW.md:60`.
-- QUANTGEN's real `.env` keeps its values; the owner deletes the
-  `NEXTGEN_SKILLS_ROOT`, FINVIZ, ALPACA and FXMACRODATA lines when convenient.
-  Claude does not edit `.env`.
+- Owner housekeeping, not done by Claude: remove `NEXTGEN_SKILLS_ROOT`,
+  `FINVIZ_*`, `ALPACA_*`, `FXMACRODATA_*`, `KIS_ACCOUNT_PD` and the unused
+  `TYPESAFE_API_KEY` from QUANTGEN's real `.env`.
 
 **A2. Crypto regime score out.**
-- `core/crypto/analytics.py`: remove `regime_score`, `RegimeComponent`,
-  `RegimeScore` and `_sma`, plus its self-check lines L430-435 (8.1-3).
-- `ui/crypto_page.py`: remove the `regime` uses at L77, 110, 122, 136, 141,
-  164, 220, 225 and 233, and the tile.
-- README crypto line.
-- `docs/ASSET_EXPANSION_SPEC.md:177` and `docs/build_expansion_primer.py:662`
-  get a "moved to TRADEGEN 2026-10-23" note. The already-built Expansion
-  Primer PDF stays as a dated artifact.
+- `core/crypto/analytics.py`:
+  - remove `regime_score`, `RegimeComponent`, `RegimeScore` and `_sma`;
+  - remove the docstring L2 and L15-21;
+  - remove only the regime assertions in the self-check (L430-435). The
+    registered test `expansion/selfcheck_crypto_analytics` stays. Confirm
+    after the run that `weekday_table`'s assertion is unaffected by the
+    shifted rng stream.
+- `ui/crypto_page.py`:
+  - docstring L1;
+  - `MAJORS` L24, with the `majors` draws in `_synthetic` (L39, and re-seed
+    ETH directly at L41) and `_live` (L52-57, 61), so 8 Binance calls a load
+    disappear;
+  - L76-77 (`fa`, `out["regime"]`);
+  - L110 and the whole `if rs:` block L120-123;
+  - L136, 141-142;
+  - L164, 182 (tile) and 189-192 (components chart);
+  - L220, 225, 233, and the regime parts of L236 and L238.
+- Register `ui/crypto_page.py`'s self-check as an expansion test, so the page
+  is exercised from now on.
+- README crypto line. `docs/ASSET_EXPANSION_SPEC.md:177` and
+  `docs/build_expansion_primer.py:662` get a dated "moved to TRADEGEN" note.
+  The built primer PDF stays as an artifact.
 
-**A3. Trade-idea prompt parts out (D3).**
-- `core/ficc/insights.py`: remove the "Positioning ideas"/"Positioning"
-  clauses that ask for trades with entry, stop and target. Keep
-  `report_prompt()` and `deep_analysis()`, re-worded as research commentary
-  (drivers, tensions, sensitivities, what would change the read).
-- `core/quant/insights.py::_SYSTEM`: replace "personal quantitative trading
-  application" and "what the trade expression would be" with research
-  wording (8.2-5).
-- README L674-678 follows.
-- `tests/ficc_acceptance.py` L668-675 is adjusted only if it asserts the
-  removed wording.
+**A3. Trade-idea text out (D3).**
+- `core/ficc/insights.py`:
+  - remove the "Positioning ideas"/"Positioning" clauses that ask for trades
+    with entry, stop and target;
+  - keep `report_prompt()` and `deep_analysis()`, re-worded as research
+    commentary.
+- **`narrate_weekly_strategy` (L409-490)**, which is deterministic, says
+  "lean long", "run steepeners" and "Carry: long X … funder". It is relabelled
+  a *descriptive read*:
+  - z-levels;
+  - curve regime;
+  - the highest and lowest carry-to-vol, as data only.
+  - It keeps the `Duration:`/`Curve:`/`FX:`/`Carry:` section prefixes the
+    tests assert.
+  - `tests/ficc_acceptance.py:744-763` (which asserts `long {best.ccy}`) and
+    `:660-665` are updated.
+  - This is called out for the owner's confirmation in the review note. D3
+    named the AI prompts, and this is deterministic text.
+- `core/quant/insights.py::_SYSTEM` (L263-279): change the persona from a
+  "sell-side strategist writing for a trading desk" to a research analyst.
+  Remove "trade expression".
+- README L670-678.
 
 **A4. Identity.**
 - "Personal quant trading application" becomes "quantitative finance research
-  application" in pyproject, main.py docstrings and the README intro.
-- The README gains a "Split from TRADEGEN (2026-10-23)" note.
-- The README gains a "Research papers" section (Part B).
+  application" in pyproject, the main.py docstrings and the README intro.
+- The README gains a "Split from TRADEGEN (2026-10-23)" note and a "Research
+  papers" section.
 
-**A5. GrokBot labelling (D1).** No code change, and nothing new inside
-`grokteam/`, because the prereg check's view of that folder is not verified.
-- A README section says:
-  - this is the frozen GROKTEAM-BOOK study of record, a benchmark of an outside
-    LLM-bot guide;
-  - the venue is illegal for Korean residents to trade, so it is
-    research-only;
-  - the one look is on or after 2027-02-01;
-  - TRADEGEN's copy is not the record.
+**A5. GrokBot labelling (D1).** No code change; a root README section only.
+- It is the GROKTEAM-BOOK study of record: a benchmark of an outside LLM-bot
+  guide, research-only.
+- Its Kalshi non-sports venue is rated "grey, treat as illegal" for Korean
+  residents. No Korean ruling exists; see the legality report, confidence
+  medium-low.
+- The one look is on or after 2027-02-01.
+- TRADEGEN's copy is not the record.
+- (A note inside `grokteam/` would also be safe, since `check()` hashes a
+  fixed tuple, but the README is enough.)
 
-Verification for Phase 1:
-- `python tests/run_all.py` before and after each group, recording pass,
-  fail and notrun counts.
-- The only expected drop is the removed cockpit tests: 37 tests plus the
-  regime self-check.
-- Every PREREG-pinned sha is unchanged.
-- `python -m grokteam.prereg` (check mode) reports no change.
-- `git diff --stat` touches none of the constraint-3 files.
+**Verification for Phase 1:**
+- The suite runs before and after each group. The outcome compares test
+  identities as well as totals.
+- The expected outcome is **37 fewer registered tests** (848 becomes 811,
+  with PASS 727 becoming 690 and NOT_RUN staying 121), plus the new guard and
+  crypto-page tests.
+- `frozen_guard` passes.
+- `git diff --stat eacd57d -- paper_live grokteam core/engine` is empty, and
+  so is the same diff over every closure file.
 
-### 4.2 Phase 2: after the H2 readout for both profiles
+### 4.2 Phase 2: LAZYOWEN out of paper_live (separate approval)
 
-Apply split_map section 3.4 (LAZYOWEN out of `paper_live` code, report,
-narrative and tests). Re-register the cost-gate hypothesis on QG-TACTICAL vs
-TACT-NOGATE as a new freeze, tested only on sessions after it. LAZYOWEN ledger
-rows stay. The readout and verdict of record are made in QUANTGEN (8.1-4).
+**Precondition:** completed and valid H2 readouts for **both** profiles.
+- That means all planned holdout sessions, matching frozen digests, and
+  archived evidence.
+- A valid "not confirmed" result qualifies. A pending, incomplete or invalid
+  result does not; today both `out*/verdict.json` say pending.
 
-This phase is not scheduled in this plan. It needs its own approval once
-`out*/verdict.json` exists.
+**The readout is time-critical.** The holdout replay pulls 5-minute bars with
+60-day retention, so it must run by about **2026-12-19**.
+
+Then apply split_map section 3.4, and re-register a cost-gate hypothesis on
+QG-TACTICAL vs TACT-NOGATE as a new freeze. LAZYOWEN's ledger rows stay.
 
 ## 5. Part B: the research-paper pipeline
 
-### 5.1 Shape
+### 5.1 Shape and control
 
-There are two saved workflows, so the owner approves the study before any
-code changes:
-
-| Command | Workflow | Output |
+| Command | Executor | Output |
 |---|---|---|
-| `/quantgen-paper <topic>` | `.claude/workflows/quantgen-paper-research.js` | `papers/<date>-<slug>/scope/`: research questions, the module map, an annotated and verified bibliography, the integration analysis, the proposed study with a pre-registration draft, and the proposed new code if any. **Stops for owner approval.** |
-| `/quantgen-paper write <slug>` | `.claude/workflows/quantgen-paper-write.js` | Implementation and tests (if approved), the study run, the English draft, referee rounds, the Korean edition, both PDFs and the portfolio update. |
+| `/quantgen-paper <topic>` | Claude Code's Workflow tool runs the saved script `.claude/workflows/quantgen-paper-research.js`. The date comes in through `args`, and agents do all file I/O. | `papers/<paper_id>/scope/`, with `paper_id` = `YYYY-MM-DD-<slug>` |
+| `/quantgen-paper write <paper_id>` | `.claude/workflows/quantgen-paper-write.js` | the study, both editions, review records and release state |
 
-A project skill, `.claude/skills/quantgen-paper/SKILL.md`, defines the
-command. It tells Claude which workflow to run, and to run the approval
-checkpoint between the two.
+- **The project skill** `.claude/skills/quantgen-paper/SKILL.md` defines the
+  command, runs the approval checkpoint, and resolves a bare slug by glob.
+- **Approval** is recorded in `scope/approval.json` (the sha256 of every scope
+  file plus the owner's words). The write workflow refuses to run if any
+  scope file changed after approval.
+- **Release states:**
+  `DRAFT → REVIEW_INCOMPLETE | BLOCKED_MAJOR → OWNER_REVIEW → RELEASED`.
+  - A referee who returns nothing means `REVIEW_INCOMPLETE`, never "no
+    objections", unless the owner records a substitution.
+  - An unresolved major issue means `BLOCKED_MAJOR`. A round limit stops the
+    work; it does not clear a veto.
+  - Only `RELEASED` papers enter `papers/INDEX.md`. Release requires the
+    owner's sign-off: "I have read the paper and accept every claim".
 
-### 5.2 Research workflow stages
+### 5.2 Research workflow (scope only; no repo code changes)
 
-1. **Scope.** Map the topic onto the 52(+) topics in split_map section 6 and
-   on to modules with file:line references. Write the research questions.
-   Decide whether QUANTGEN already implements the model or new code is needed.
-2. **Literature sweep.** Four parallel searchers, each blind to the others:
-   - (a) the origin and canonical papers;
-   - (b) the state of the art from 2023 to now: top journals, NBER, Fed, BIS,
+1. **Scope.**
+   - Map the topic to split_map section 6 and to modules with file:line
+     references.
+   - Write the research questions.
+   - Decide whether QUANTGEN already implements the method.
+2. **Literature.** Three blind searchers plus a completeness critic. The
+   count depends on the topic and may be fewer.
+   - (a) canonical and textbook treatment;
+   - (b) the state of the art from 2023 to now: journals, NBER, Fed, BIS,
      ECB, BoE and IMF working papers, arXiv q-fin, SSRN;
-   - (c) the owner's study materials (`iCloudDrive/퀀트 학습 자료`,
-     `26년 2학기 수업자료`), cited by document and page as the
-     `[REF]` convention requires;
-   - (d) textbook treatment.
-   The four outputs are merged into one annotated BibTeX file.
-3. **Citation verification.** Every entry is checked by an independent agent
-   against DOI or Crossref, or the publisher or working-paper page: authors,
-   year, title, venue and pages. Entries that can't be confirmed are dropped
-   or marked; none is silently kept. A completeness critic asks what is
-   missing.
-4. **Integration analysis.** How QUANTGEN implements the model, the gaps
-   against the literature, and the guardrails, which must be visible (the
-   owner's standing rule).
-5. **Study proposal.**
-   - The hypotheses, data, metrics and decision rule.
-   - Confirmatory claims get a pre-registration JSON in the existing
-     prereg style, frozen before the run.
-   - Studies use QUANTGEN's own gate (`validate`, `gate_stats`, `forecast_eval`)
-     by import only, so the pinned files are unchanged.
+   - (c) the owner's study materials at `C:\Users\whydi\iCloudDrive\퀀트 학습 자료`
+     and `C:\Users\whydi\iCloudDrive\26년 2학기 수업자료`. These are used to
+     **check derivations**, and the paper cites the published book or paper
+     they correspond to, with page numbers. Slides, lecture notes and the
+     owner's unpublished notes are not cited.
+3. **Reference and claim verification.**
+   - `tools/paper/verify_bib.py` queries doi.org/Crossref and the arXiv API.
+     It writes a `verified` record per entry: method, URL, retrieval date and
+     fetched title. Entries it can't reach (SSRN often blocks bots; books
+     have no DOI) are marked `manual` with a URL and are checked by an agent.
+   - The selfcheck fails on an entry with no record.
+   - Every `\cite` in the literature, model and results sections has a row in
+     `claims.yaml`: claim id, paragraph id, source key, locator
+     (page/equation/table), the supporting passage or derivation, and a status.
+     - A claim whose source was not read is marked `unread`.
+     - `unread` and `unsupported` claims block release.
+     - An independent agent checks the rows, and rechecks changed paragraphs
+       after revision and translation.
+   - Working papers and their published versions are kept apart.
+4. **Integration analysis.** How QUANTGEN implements the method, the gaps,
+   and the guardrails, all visible.
+5. **Analysis protocol (`scope/protocol.md`).**
+   - It states: estimand, observation unit, sample and eligibility, data
+     access history (has this series been used before in `docs/*`?), holdout
+     (dated after the freeze where a confirmatory claim is made), leakage
+     controls, dependence correction, power and MDE, multiplicity, and every
+     variant to be tried.
+   - It labels each claim *exploratory*, *pre-specified on historical data*,
+     or *confirmatory (post-freeze holdout)*.
+   - A NOT_RUN, smoke-only or insufficient-data result can never become a
+     positive claim. Its status propagates to the abstract, conclusion and
+     index.
+   - It uses QUANTGEN's gates where they fit the topic, and says so where
+     they don't (for example, the 5-year strategy gate).
+   - Proposed new code, if any, is listed with the guards it must pass
+     (section 3.4).
 
-### 5.3 Write workflow stages
+### 5.3 Write workflow
 
 6. **Implementation (only if approved).**
-   - New module(s) with an acceptance test registered in `tests/run_all.py`.
-   - Guardrails surfaced in the UI and narrative.
-   - The Models Primer is extended when new estimation machinery appears.
-   - Constraint 3.1 means new files, not edits to pinned or dependency files.
-7. **Study run.** `papers/<slug>/study/run.py` writes `results.*` plus
-   `MANIFEST.json` (sha256). Every number in the paper is generated from these
-   files into `numbers.tex` macros. No hand-typed results.
-8. **English draft.**
-   - Template `tools/paper/template_en.tex`: article 11pt A4, natbib
-     author-year, amsmath, booktabs, hyperref.
-   - Front matter: title, author (Geon Koh, Korea University), abstract,
-     keywords and JEL codes.
-   - Sections: introduction, literature, model, implementation in QUANTGEN
-     (with listings), data and method, results, robustness, limitations,
-     conclusion, references and a reproducibility appendix.
-   - A "not investment advice" footnote.
-9. **Referee panel**, at most 3 rounds.
-   - Claude (a separate reviewer agent), GPT (`codex exec`) and Gemini
-     (`agy -p --model gemini-4-argon-high --sandbox --disable-slash-commands`)
-     each write a structured referee report, sorted into major and minor
-     issues.
-   - A revision agent answers every point in `review/response_round<k>.md`.
-   - The loop stops when no referee raises a major issue. Otherwise, after 3
-     rounds, the remaining disagreements are listed in the paper's
-     limitations and in the response letter.
-   - The runner is `tools/debate.py`, a small subprocess wrapper with a
-     timeout and JSON parsing. The project calls the CLIs directly rather than
-     patching the plugin.
-10. **Korean edition.**
-    - Template `tools/paper/template_ko.tex`: kotex/xetexko with Batang as the
-      body font and Noto Sans KR as the sans font.
-    - A full translation guided by `tools/paper/glossary_ko.yaml`, which
-      covers finance terms (변동성, 조건부 이분산, 최우추정, …).
-    - `tools/paper/consistency.py` then checks that the two editions have the
-      same `numbers.tex` macros, citation keys, equation count, figure and
-      table labels, and section structure. Any mismatch fails the build.
-11. **Build and QA.**
-    - `tectonic -X compile` for both editions. The build fails on undefined
-      references, undefined citations, or overfull boxes over 10 pt.
-    - Pages are rendered to PNG with pypdfium2.
-    - A `design:design-critique` pass reviews the layout.
-12. **Portfolio.**
-    - `tools/paper/build_index.py` regenerates `papers/INDEX.md` and a static
-      `papers/index.html`, styled with design-system tokens and listing each
-      paper's title, both abstracts, EN and KO PDFs, code and results links,
-      and date.
-    - Publishing it as a private shareable page happens only when the owner
-      asks.
+   - Reusable models go in new modules with acceptance tests (lazy imports in
+     `run_all.py`).
+   - Paper-specific code stays in `papers/<paper_id>/study/`.
+   - No edits to the protected closure (section 3.1).
+   - UI and Primer integration is scoped separately; it is not mandatory.
+7. **Study run (`study/run.py`).**
+   - It refuses to run unless `scope/prereg.json` is committed (git anchor
+     and sha) and its pinned code shas match.
+   - It freezes raw inputs into `study/data/` with sha256, and sets
+     `NEXTGEN_FICC_CACHE` to a study-local folder.
+   - It writes `study/runs/<run_id>/` (and refuses to overwrite) with
+     `MANIFEST.json`, which records: input content hashes and vintages, the
+     git commit plus a clean-tree flag, the study-code shas, config, Python and
+     package versions, seeds, time zone and calendar conventions, the command,
+     and the qualification status.
+   - Trials go to a paper-local ledger family `PAPER-<paper_id>`, unless
+     formally registered in an existing family.
+   - A second, offline rerun from the frozen data must match within declared
+     tolerances.
+8. **Numbers and figures.**
+   - `run.py` writes `numbers.json`. For each key it records the value,
+     source file and field, selection, units and rounding.
+   - `numbers.tex` defines `\qnum{key}` through `\csname`, so keys may
+     contain digits and underscores.
+   - Figures are rendered twice (`lang='en'|'ko'`, with matplotlib using the
+     installed Korean font), or they are language-neutral and only the
+     captions are translated.
+   - Tables are generated from `numbers.json` with per-language headers.
+   - Equations live in shared `common/*.tex` files that both editions
+     `\input`.
+9. **English draft.**
+   - `tools/paper/template_en.tex`: article 11pt A4, natbib with `plainnat`
+     and BibTeX (never biblatex/biber), amsmath, booktabs, hyperref, xurl.
+   - Front matter: title, Geon Koh, Korea University, abstract, keywords and
+     JEL codes.
+   - An **AI-assistance statement** naming the tools and their roles
+     (drafting, simulated refereeing, translation).
+   - A "not investment advice" note.
+   - Every paragraph carries a stable `% id:` comment.
+10. **Referee panel.**
+    - **Bundle.** Each round builds an immutable, secret-free bundle in a
+      temp folder: the manuscript, `numbers.json`, `MANIFEST.json`, the study
+      code snapshot and the refs. Quotes from private materials are removed
+      unless the owner allows them.
+    - **Isolation.** Referees run with that bundle as cwd, never the repo:
+      `codex exec --sandbox read-only --output-last-message <file>`, and
+      `agy -p … --sandbox --output-format json`. The bundle is disposable,
+      because agy's sandbox allows writes to its workspace.
+    - **Prompt.** The prompt is short and points at the files, which avoids
+      the Windows command-line length limit.
+    - **Report format.** Reports are Markdown with `## Major` and `## Minor`
+      headings, and each issue carries a stable ID. Raw output and CLI versions
+      are kept.
+    - **Severity rubric.** *Major* means the result, conclusion or
+      provenance would change.
+    - **Revision.** Responses go in `review/response_round<k>.md`, and the
+      loop runs at most 2 rounds. Analyses requested by referees go only into
+      an "Exploratory analyses requested in review" section, through `run.py`
+      with a new MANIFEST. Pre-specified results are never altered.
+    - **Runner.** `tools/debate.py` is about 40 lines: a subprocess call with
+      UTF-8 input and output, a timeout that kills the process tree, a
+      missing-CLI branch and an auth-failure branch. Codex and agy may also
+      take bounded drafting tasks in a bundle (D6). Their output is reviewed
+      before anything is merged.
+11. **Korean edition.**
+    - Template `tools/paper/template_ko.tex`: kotex/xetexko. Fonts load **by
+      file path**: 함초롬바탕 (`HANBatang.ttf`/`HANBatangB.ttf`, static, with a
+      real bold) for the body, and Malgun Gothic (`malgun.ttf`/`malgunbd.ttf`)
+      for sans.
+    - The translation is aligned paragraph by paragraph (by `% id:`), guided
+      by `tools/paper/glossary_ko.yaml`. kotex's automatic particle commands
+      are used after `\qnum`/`\cite`.
+    - `tools/paper/consistency.py` fails when:
+      - per-section `\qnum` usage counts differ between editions;
+      - citation keys per section differ;
+      - labels or refs differ;
+      - any bare digit run appears in a results or robustness paragraph or a
+        table body of either edition.
+    - **Bilingual fidelity review.** Claude and Gemini read the aligned
+      paragraph pairs and check signs, negations, qualifiers, units and claims
+      of significance. The Korean edition passes the same release gate as the
+      English one.
+12. **Build.**
+    - `tools/paper/build.py` runs `tectonic -X compile --keep-logs` with
+      Tectonic 0.17.0 and a pinned bundle URL.
+    - It parses `.log`/`.blg`, and fails on undefined references or
+      citations, `Missing character`, BibTeX errors or overfull boxes over
+      10 pt.
+13. **Index.** `papers/INDEX.md` lists only released papers: title, both
+    abstracts, PDFs, code, results and scientific status. An HTML portfolio
+    waits until there are about five papers.
 
-### 5.4 Folder layout
+### 5.4 Layout
 
 ```
-papers/
-  INDEX.md, index.html
-  2026-MM-DD-<slug>/
-    scope/      questions.md, integration.md, study_proposal.md, prereg.json
-    refs.bib
-    study/      run.py, results.*, MANIFEST.json, numbers.tex
-    en/         paper.tex, figures/, paper_en.pdf
-    ko/         paper.tex, paper_ko.pdf
-    review/     round<k>_<model>.md, response_round<k>.md
-tools/paper/    template_en.tex, template_ko.tex, glossary_ko.yaml,
-                consistency.py, build_index.py, selfcheck.py
-tools/debate.py
+papers/INDEX.md
+papers/<paper_id>/
+  scope/   questions.md, integration.md, protocol.md, prereg.json, approval.json
+  refs.bib, claims.yaml
+  study/   run.py, data/, runs/<run_id>/{results.*, MANIFEST.json}, numbers.json, numbers.tex
+  common/  equations and shared tables (*.tex)
+  en/      paper_en.tex, figures/, paper_en.pdf
+  ko/      paper_ko.tex, figures/, paper_ko.pdf
+  review/  round<k>_<model>.md, response_round<k>.md, fidelity_ko.md
+  STATUS   (DRAFT | REVIEW_INCOMPLETE | BLOCKED_MAJOR | OWNER_REVIEW | RELEASED)
+tools/__init__.py, tools/debate.py
+tools/paper/ __init__.py, template_en.tex, template_ko.tex, glossary_ko.yaml,
+             verify_bib.py, consistency.py, build.py, selfcheck.py
 ```
 
-### 5.5 Tests
+### 5.5 Tests and the first run
 
-`tools/paper/selfcheck.py` is registered as suite `papers` in
-`tests/run_all.py`. It checks four things:
-- a two-page EN and KO sample compiles;
-- `consistency.py` catches a planted number mismatch and a missing citation
-  key;
-- `build_index.py` lists the sample;
-- `debate.py` handles a missing CLI and a timeout without crashing.
+`tools/paper/selfcheck.py` is registered as suite `papers` with lazy imports.
+It covers:
+- `\qnum` keys with digits;
+- `consistency.py` catching a planted bare digit, a missing citation key, a
+  per-section macro-count drift and a dropped paragraph id;
+- `verify_bib.py` on an offline fixture;
+- `debate.py` handling a missing CLI, a timeout, malformed output and a
+  non-zero exit.
 
-The paper workflows themselves are checked by producing the first real paper.
+The compile check runs `tectonic --only-cached` on a sample that uses Korean
+bold, `\emph`, display math, booktabs, natbib, a listing and a long URL. It
+reports `NotRun` when Tectonic or its cache is missing, so the suite never
+needs the network.
+
+**Before the first real topic**, a synthetic fixture topic runs through both
+workflows end to end, to prove that dispatch, the approval hash, the release
+states and the build all work.
 
 ## 6. Out of scope
 
-- An in-app Papers page. It can be added later if wanted.
+- An in-app Papers page and an HTML portfolio (later).
+- Wiring `MA.GIT_HASH` to git (a separate owner decision).
 - Any change to the frozen studies.
-- TRADEGEN work of any kind (its own session).
-- Automatic publication of papers.
+- All TRADEGEN work.
+- Automatic publication.
 
 ## 7. Risks
 
 | Risk | Mitigation |
 |---|---|
-| A Phase 1 edit silently changes frozen behaviour | Constraint list in section 3; a pinned-sha check and a prereg check after every commit |
-| Hallucinated references in a portfolio paper | Independent citation verification stage; unverifiable entries dropped |
-| Hand-typed numbers drift from results | Numbers only enter through generated `numbers.tex` |
-| The two editions drift apart | `consistency.py` gate |
-| An external CLI fails or rate-limits mid-review | `debate.py` timeout; the review continues with the remaining referees and records the gap |
-| Korean font or package issues in Tectonic | Selfcheck compiles a Korean sample before any real paper |
+| An edit silently changes frozen behaviour | `frozen_guard` runs in every suite run (closure, pins, H2, library versions) |
+| TRADEGEN writes into QUANTGEN's state or takes a second look | Hard prerequisites in the TRADEGEN brief (section 3.2) |
+| Hallucinated or unsupported citations | `verify_bib.py` records plus the `claims.yaml` gate; `unread` blocks release |
+| Numbers drift from results | `numbers.json` provenance, `\qnum` only, bare-digit check, offline rerun |
+| The Korean edition says something different | Shared math and tables, aligned paragraph ids, bilingual fidelity review, the same release gate |
+| A referee CLI fails | `REVIEW_INCOMPLETE`; never read as "no objections" |
+| A referee changes repo files | Disposable bundle as cwd; codex read-only |
+| Researcher degrees of freedom | Protocol, prereg, a paper-local ledger, and requested analyses labelled exploratory |
+| An undisclosed AI-written paper damages the portfolio | AI-assistance statement plus owner sign-off before release |
+
+## Appendix A: referee round 1, issue by issue
+
+C = Claude (ACCEPT WITH CHANGES), G = GPT/Codex (REJECT), M = Gemini/agy
+(REJECT). Every issue below is accepted unless it is marked otherwise.
+
+| Issue | Raised by | Ruling |
+|---|---|---|
+| Freeze protection uses an incomplete hand list; nothing guards H2; the prereg check prints instead of failing | C-M1, G-1 | `frozen_guard` plus the closure manifest (section 3.1); `calibrate` added to the never-run list |
+| TRADEGEN shares state and can take a second look | C-M2, G-2, M-2 | Section 3.2 prerequisites in the TRADEGEN brief |
+| Phase 2 condition already met while pending | G-3 | Section 4.2 precondition; 2026-12-19 deadline (C-m7) |
+| Regime removal incomplete | G-4, M-3, C-m2 | Full line list plus a registered crypto-page self-check |
+| Referees can write into the repo | G-5 | Disposable bundles as cwd |
+| The review loop lets unresolved majors through | G-6 | Release states; vetoes are not cleared by round limits |
+| Reproducibility and number provenance too thin | G-7, C-M4, M-7.1 | MANIFEST schema, frozen inputs, immutable runs, offline rerun, `numbers.json`, `\qnum` via csname |
+| "Use QUANTGEN's gate" is not a protocol | G-8, C-M4 | `protocol.md` with claim labels and status propagation |
+| Citation checks metadata, not support | G-9, C-M5, M-7.2 | `verified` records plus `claims.yaml`; private materials only check derivations |
+| Bilingual gate is structural only; figures English-only | G-10, C-M6, M-7.3 | Shared math, per-language figures, aligned ids, fidelity review |
+| CLI protocol underspecified; Windows command-line length | G-11, M-8.1-2 | `debate.py` contract; short prompts pointing at files |
+| TeX build guarantees not real; Batang has no bold; Noto KR is a variable font; biber missing | G-12, C-M7, M-6, C-m15 | Fonts by path (HANBatang/Malgun), natbib with plainnat, log parsing, pinned bundle, full-feature sample |
+| The papers suite could kill `run_all` or need the network | C-M8 | Lazy imports, `NotRun`, `--only-cached` |
+| Referee stop rule and forking paths | C-M9 | Severity rubric, max 2 rounds, requested analyses labelled exploratory |
+| No AI-assistance disclosure | C-M10 | Disclosure plus owner sign-off |
+| `git init` changed `repo_anchor` and broke T-LEDGER-01 | M-1 | Section 3.3 and Appendix B |
+| Stage 6 code must pass T-CTX-01/T-RO-01/flet guards; trial ledgers | M-5, C-m12 | Section 3.4; paper-local ledger; scans extended to `tools/` and `papers/` |
+| FMP disappears from Settings | M-4 | Moved into `quant_provider_status()` |
+| `narrate_weekly_strategy` and `_SYSTEM` still trade-calling | C-M3, M-m4 | Section 4.1 A3; flagged for the owner |
+| main.py `navigate`/`focus`, settings leftovers, components dead code, test docstrings, `macro_m8_pipeline` L133 | M-m1/2/3/5, C-m3/4/5/6 | Section 4.1 A1 |
+| Test-count arithmetic; wrong critic references; A5 rationale; A5 legal wording | G-m1, M-m5, C-m1/9/10, G-m8 | Fixed (37 fewer tests, 811/690/121) |
+| `config.py` deletion described as a range | G-m2 | Exact symbol list |
+| `test_s4` wall-clock clause missing | G-m4 | Section 3.4 |
+| Workflow contract (`paper_id`, approval hash, naming, dates in args) | G-m6, C-m14 | Section 5.1 |
+| Over-engineering: four searchers, HTML portfolio, PNG critique, JSON parsing, mandatory UI | G-m7, M-m6, C-cut | Three searchers plus critic; `INDEX.md` only; log checks; Markdown headings; UI optional |
+| Sending private course quotes to OpenAI/Google | C-m16 | Stripped from bundles unless the owner allows |
+| `.claude/workflows/*.js` "not natively executed" | M-8.3 | **Rejected.** Claude Code's Workflow tool runs saved scripts from `.claude/workflows/`. The executor is now named in section 5.1. |
+| Delete `grokteam/` from TRADEGEN | C-M2 option | **Not adopted**, because D1 says to keep a duplicate. TRADEGEN disables the look's write path instead. |
+
+## Appendix B: git-state test impact (measured)
+
+The full suite was run on 2026-10-23 after `git init`. Result: 725/848 PASS,
+2 FAIL, 121 NOT_RUN. The baseline before git was 727 PASS, 0 FAIL, 121
+NOT_RUN, so exactly two tests changed, and both read the live repo state:
+
+| Test | Why it fails now | Fix in A0 (test-only; `gate_ledger.py` stays pinned and untouched) |
+|---|---|---|
+| `macro_m7_ledger::test_ledger01_refusals_and_null_distribution_runs` (L144) | It asserts `GL.repo_anchor() == UNVERSIONED`, which is "not a git repo". | Use `GL.repo_anchor(<temp dir without .git>) == UNVERSIONED`, and assert that `GL.anchored(GL.repo_anchor())` equals `(GL.REPO_ROOT / ".git").exists()`. |
+| `macro_m7_ledger::test_sel01_b_…_only_anchored` (L410-412) | Its "unanchored commit" case relies on `t_fix`'s default commit, which is `repo_anchor()` and is now `git:<sha>`, so `UnanchoredTimestamp` is no longer raised. | Pass an explicit `commit=GL.Anchor(card["created_utc"], GL.UNVERSIONED, "header_commit")` for that case. The intent stays the same: an unanchored commit refuses step 3. |
+
+All other tests that assert `UNVERSIONED` read the constants
+`MA.GIT_HASH`/`lab.GIT_HASH`, which stay the same (section 3.3), and they pass.
