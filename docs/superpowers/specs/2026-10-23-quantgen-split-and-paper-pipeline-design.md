@@ -3,12 +3,14 @@
 Date: 2026-10-23.
 
 Status:
-- **Revision 2.** This revision answers referee round 1: Claude said ACCEPT
-  WITH CHANGES, GPT (Codex) said REJECT and Gemini (Antigravity) said
-  REJECT. Appendix A rules on every issue.
-- The design was approved by the owner on 2026-10-23. This spec awaits a
-  second referee round and then the owner's review, before the
-  implementation plan is written.
+- **Revision 3.**
+  - Round 1: Claude said ACCEPT WITH CHANGES; GPT (Codex) and Gemini
+    (Antigravity) said REJECT.
+  - Round 2: Claude and Gemini said ACCEPT WITH CHANGES. GPT was *review
+    incomplete*: the Codex quota is exhausted until 2026-10-27 19:16.
+  - Appendices A and A2 rule on every issue.
+- The design was approved by the owner on 2026-10-23. This spec awaits the
+  owner's review before the implementation plan is written.
 
 Inputs:
 - `research_notes/QUANTGEN TRADEGEN split map/split_map.md`;
@@ -40,48 +42,75 @@ they must be correct, honestly labelled, and disclosed as AI-assisted.
 | D6 | Referees are Claude, GPT via the Codex CLI and Gemini via the Antigravity CLI `agy`. They may also do bounded work, given the project history. |
 | D7 | The owner names the first paper topic separately. |
 | D8 | QUANTGEN is under git (baseline `eacd57d`). This is the owner action that ruling 3.1 asked for. |
+| D9 | The two frozen studies run their readouts only from a git tag of `eacd57d`, so QUANTGEN's main line is free to change (section 3.1). |
 
 ## 3. Constraints that bind every step
 
-### 3.1 Frozen studies: enforced by a guard, not by a list
+### 3.1 Frozen studies: read out from a tagged snapshot (D9)
 
-Two studies are protected, and so is everything they load:
+Two pre-registered studies exist:
 - **GROKTEAM-BOOK.**
-  - Its look is on or after 2027-02-01.
-  - Its 10 sha256-pinned files, its `RULES`, `ACCOUNTS`, `VERDICT` and
-    `model_digest()`, and numpy 2.3.5 / scipy 1.18.0 / pandas 2.3.3 / Python 3.13.
+  - Its one look is on or after 2027-02-01 01:00 UTC.
+  - `prereg.check()` pins 10 files, `RULES`, `ACCOUNTS`, `VERDICT`,
+    `model_digest()` and numpy 2.3.5 / scipy 1.18.0 / pandas 2.3.3 /
+    Python 3.13.
 - **paper_live H2.**
-  - `paper_live/engine.py` and `paper_live/config.py` must equal both
-    `out*/frozen_rule/` copies.
-- **The import closure.** The protected set is the **import closure** of
-  those files, computed by an AST walk, not a hand list. Today it includes
-  `gjr.py`, `core/rules/validation.py`, `core/rules/model.py`,
-  `instruments.py` and `history.py`, which the first list missed.
+  - `paper_live/engine.py` and `config.py` equal the `out*/frozen_rule/`
+    copies.
+  - The readout follows the 10 holdout sessions (about 2026-11-03). It must
+    run by about **2026-12-19**, because the 5-minute bars it needs are kept
+    for 60 days.
 
-A new test, `tests/frozen_guard.py`, registered in `run_all.py` with lazy
-imports, fails when any of these is true:
-1. `grokteam.prereg.check()` reports any difference;
-2. either H2 file differs from its frozen copies;
-3. any closure file's sha256 differs from `tests/frozen_closure.json`, the
-   manifest generated once from `eacd57d`;
-4. the library versions differ.
+Both studies need far more than their pinned files. Their import closure is
+about 57 modules, and they also read calendar and macro data files and use one
+dynamic `importlib` load. Guarding all of that on the main line would freeze
+most of QUANTGEN until February. Instead:
 
-**Root `config.py` is the single narrow exception.** It may lose the
-cockpit section. The guard then compares the source of exactly the names the
-frozen code reads (`macro_dir`, `HTTP_TIMEOUT_SECONDS`, `NO_DATA_GRACE_TICKS`,
-`upbit_ready`, `upbit_keys`, and any other name the closure walk finds)
-against the manifest.
+1. **The tag.** An annotated tag `studies-of-record-2026-10-23` is put on
+   `eacd57d`. Appendix C has the evidence that `eacd57d` *is* both frozen
+   states:
+   - the 10 pinned files match PREREG;
+   - the H2 files match `frozen_rule`;
+   - no tracked code or data file changed after the H2 freeze, except
+     paper_live's reporting files `analyze`, `report`, `narrative` and
+     `compare`, which are off the readout path;
+   - nothing changed after the GROKTEAM freeze.
+2. **Both readouts run only from a git worktree at that tag**, for example
+   `..\QUANTGEN-studies`.
+   - They use an interpreter with the pinned library versions: the global
+     one while it still matches, otherwise a dedicated venv pinned to those
+     versions.
+   - They follow their own procedures: H2 is `REPLAY_HOLDOUT=1 python -m
+     paper_live.replay`, then `python -m paper_live.verdict`, per profile.
+     GROKTEAM is the first full `python -m grokteam.book` at or after the
+     look time.
+   - Their outputs are copied into the main line and committed as artifacts:
+     `out*/replay_holdout`, `verdict.json`, `FORWARD_LOOK.json` and the
+     readouts. Their ledger rows are anchored to the tag's commit.
+3. **The main line is free to change any file**, including the pinned ones.
+   On main, `grokteam.prereg` will report VOID once a pinned file changes.
+   That is expected and harmless, because the record runs from the tag.
+   - Main must never run `grokteam.book` on or after the look time.
+   - Main must never run the H2 readout itself.
+4. **The guard.** `tests/frozen_guard.py` imports nothing from `paper_live`
+   or `grokteam`; it uses only git through subprocess and hashlib. It reports
+   `NotRun` if git is missing. It fails when:
+   - (a) the tag is missing or no longer peels to `eacd57d…`;
+   - (b) in the tagged tree (`git show <tag>:<path>`), a pinned file's
+     sha256 differs from PREREG, or an H2 file differs from its
+     `frozen_rule` copy;
+   - (c) before 2027-02-01 01:00 UTC, `grokteam/out/book/FORWARD_LOOK.json`
+     exists on main;
+   - (d) the interpreter's numpy, scipy or pandas versions differ from the
+     pins, while a look is still pending. This clause only warns when a
+     pinned venv is recorded instead.
 
-Defects found in protected code are recorded, for example in a paper's
-limitations together with the sha. They are not fixed until both looks are
-taken.
+   **Expiry.** Clauses (a) and (b) stay forever as provenance. Clauses (c)
+   and (d) retire once both readouts are committed.
 
-**Never run these:**
-- `paper_live.replay`, `grid`, `verdict` (as a module), `sameday` or
-  `calibrate`, except for the readout itself;
-- `grokteam.book` before 2027-02-01.
-
-`verdict.holdout_sessions()` may be **called** as a function.
+`verdict.holdout_sessions()` may be called as a function inside the worktree.
+Never run `paper_live.verdict` as a module before the readout, because it
+writes `verdict.json`.
 
 ### 3.2 TRADEGEN must not touch QUANTGEN's records
 
@@ -90,9 +119,14 @@ These rules go in the TRADEGEN session's brief as hard prerequisites:
   runs until TRADEGEN has its own venv and its own state root; the macro dir,
   trading dir, runs dir, FICC cache, grokteam data and ledger dir, and the
   hard-coded KIS-token and DART paths are all redirected in code.
-- **TRADEGEN never takes the GROKTEAM forward look.** It disables the look's
-  write path in its copy, and it never registers trials into
-  `~/.nextgen/macro/ledgers`.
+- **TRADEGEN never takes the GROKTEAM forward look.** Disabling only the
+  `FORWARD_LOOK.json` write is not enough, because `book.main` still computes
+  and prints the forward results, so every later run would be another look.
+  - Its copy keeps forward events **permanently blinded**: `forward_gate`
+    always blinds, or events are cut at `frozen_utc`.
+  - It never deletes its `PREREG_book.json` or `frozen_book/`, which would
+    remove the gate entirely.
+  - It never registers trials into `~/.nextgen/macro/ledgers`.
 - **No concurrent runs.** While QUANTGEN's acceptance suite runs, no app
   from either program runs, because T-HERM-02 snapshots the home state.
 
@@ -127,7 +161,11 @@ These rules go in the TRADEGEN session's brief as hard prerequisites:
   - T-CTX-01, the acting-module import scan in `core/ficc/context_log.py`;
   - T-RO-01 and the safety test_08/09 order-path scans;
   - `tests/flet_api_guard.py`.
-  - The order-path scans are extended to cover `tools/` and `papers/`.
+- **Order-path scans.** `tests/macro_m0_harness.py::_scan_files()`, which
+  backs T-RO-01, is extended to `tools/` and `papers/`. `papers/` is added to
+  `ORDERS_IMPORTERS_ALLOWED`, so a study may read the simulated fill model.
+  `tests/acceptance.py::runtime_py()` is **not** extended: its raw-text scans
+  would trip on docstrings that merely name a forbidden call.
 
 ## 4. Part A: the split
 
@@ -140,8 +178,10 @@ These rules go in the TRADEGEN session's brief as hard prerequisites:
 
 ### 4.1 Phase 1 (each group is one commit; the full suite runs before and after it)
 
-**A0. Guard first.**
-- Add `tests/frozen_guard.py` and `tests/frozen_closure.json` (section 3.1).
+**A0. Tag and guard first.**
+- Create the annotated tag `studies-of-record-2026-10-23` on `eacd57d`, with
+  the Appendix C evidence in the tag message.
+- Add `tests/frozen_guard.py` (section 3.1).
 - Make the git-state test changes (section 3.3, Appendix B).
 - The suite must be green apart from the known NOT_RUN rows.
 
@@ -162,9 +202,12 @@ These rules go in the TRADEGEN session's brief as hard prerequisites:
     `skill_python`, `SKILL_TIMEOUT_SECONDS`, `runs_dir`;
   - `SKILL_CREDENTIALS`, `KEYLESS_INTEGRATIONS`, `FILE_INPUT_INTEGRATIONS`,
     `skill_credential_present`, `skill_env`, `skill_provider_status`.
-  - Keep the provider helpers between them and every name the guard watches.
+  - Keep the provider helpers between them (`fmp_ready`, `HTTP_TIMEOUT_SECONDS`
+    and the rest).
   - **Move the FMP status row into `quant_provider_status()`**, because it is
-    shown today only through the skill providers.
+    shown today only through the skill providers. Its `ready` becomes
+    `fmp_ready()`, since `skill_credential_present` is deleted, and its note
+    becomes "dividend-adjusted US end-of-day prices".
 - `ui/settings_page.py`:
   - imports L18-19;
   - the skills-root block;
@@ -240,8 +283,14 @@ These rules go in the TRADEGEN session's brief as hard prerequisites:
   - the highest and lowest carry-to-vol, as data only.
   - It keeps the `Duration:`/`Curve:`/`FX:`/`Carry:` section prefixes the
     tests assert.
-  - `tests/ficc_acceptance.py:744-763` (which asserts `long {best.ccy}`) and
-    `:660-665` are updated.
+  - The `FX:` line at L464-469 ("USD longs against low-yielders", "fading
+    dollar strength into high-carry currencies") is also rewritten as a
+    description.
+  - Updated to match:
+    - `tests/ficc_acceptance.py:744-763`, which asserts `long {best.ccy}`;
+    - `tests/ficc_acceptance.py:660-665`;
+    - the module's own self-check at `core/ficc/insights.py:691-696`, which
+      asserts exact trade-call sentences.
   - This is called out for the owner's confirmation in the review note. D3
     named the AI prompts, and this is deterministic text.
 - `core/quant/insights.py::_SYSTEM` (L263-279): change the persona from a
@@ -273,8 +322,10 @@ These rules go in the TRADEGEN session's brief as hard prerequisites:
   with PASS 727 becoming 690 and NOT_RUN staying 121), plus the new guard and
   crypto-page tests.
 - `frozen_guard` passes.
-- `git diff --stat eacd57d -- paper_live grokteam core/engine` is empty, and
-  so is the same diff over every closure file.
+- `git diff --stat eacd57d -- paper_live grokteam core/engine` is empty
+  (Phase 1 has no reason to touch them).
+- The README test table (L763-786) is updated **once**, in the last Phase 1
+  commit, with the measured totals. That avoids stale counts between groups.
 
 ### 4.2 Phase 2: LAZYOWEN out of paper_live (separate approval)
 
@@ -301,9 +352,14 @@ QG-TACTICAL vs TACT-NOGATE as a new freeze. LAZYOWEN's ledger rows stay.
 
 - **The project skill** `.claude/skills/quantgen-paper/SKILL.md` defines the
   command, runs the approval checkpoint, and resolves a bare slug by glob.
+  - If the Workflow tool is unavailable in a session, the skill runs the same
+    stages with the Agent tool.
+  - The synthetic dry run (section 5.5) proves the dispatch path first.
 - **Approval** is recorded in `scope/approval.json` (the sha256 of every scope
-  file plus the owner's words). The write workflow refuses to run if any
-  scope file changed after approval.
+  file plus the owner's words). The refusal is deterministic:
+  `python -m tools.paper.approval check <paper_id>` exits non-zero if any
+  scope file changed after approval, and the write workflow's first stage
+  stops on that exit code. It does not rest on an agent's judgment.
 - **Release states:**
   `DRAFT → REVIEW_INCOMPLETE | BLOCKED_MAJOR → OWNER_REVIEW → RELEASED`.
   - A referee who returns nothing means `REVIEW_INCOMPLETE`, never "no
@@ -368,11 +424,16 @@ QG-TACTICAL vs TACT-NOGATE as a new freeze. LAZYOWEN's ledger rows stay.
    - Reusable models go in new modules with acceptance tests (lazy imports in
      `run_all.py`).
    - Paper-specific code stays in `papers/<paper_id>/study/`.
-   - No edits to the protected closure (section 3.1).
+   - Any file on the main line may change (section 3.1). A defect found in a
+     pinned file is fixed on main, and the paper notes that the study of
+     record runs from the tag.
    - UI and Primer integration is scoped separately; it is not mandatory.
 7. **Study run (`study/run.py`).**
    - It refuses to run unless `scope/prereg.json` is committed (git anchor
      and sha) and its pinned code shas match.
+   - For pre-specified or confirmatory runs, it also refuses a dirty working
+     tree, because `repo_anchor()` reads only HEAD and would otherwise anchor
+     uncommitted code.
    - It freezes raw inputs into `study/data/` with sha256, and sets
      `NEXTGEN_FICC_CACHE` to a study-local folder.
    - It writes `study/runs/<run_id>/` (and refuses to overwrite) with
@@ -409,10 +470,16 @@ QG-TACTICAL vs TACT-NOGATE as a new freeze. LAZYOWEN's ledger rows stay.
       temp folder: the manuscript, `numbers.json`, `MANIFEST.json`, the study
       code snapshot and the refs. Quotes from private materials are removed
       unless the owner allows them.
-    - **Isolation.** Referees run with that bundle as cwd, never the repo:
-      `codex exec --sandbox read-only --output-last-message <file>`, and
-      `agy -p … --sandbox --output-format json`. The bundle is disposable,
-      because agy's sandbox allows writes to its workspace.
+    - **Isolation.** Referees run with that bundle as cwd, never the repo.
+      The bundle is disposable, because agy's sandbox allows writes to its
+      workspace. The invocations:
+      - `codex exec --skip-git-repo-check --sandbox read-only -C <bundle>
+        --output-last-message <file>` (the bundle is not a git repo);
+      - `<agy path> -p … --model <id> --sandbox --disable-slash-commands
+        --output-format json --print-timeout <t>`. The `agy` path is absolute
+        and set in config, because `agy` may not be on PATH in every shell.
+        The JSON envelope supplies `status`, and its `response` is the
+        Markdown report.
     - **Prompt.** The prompt is short and points at the files, which avoids
       the Windows command-line length limit.
     - **Report format.** Reports are Markdown with `## Major` and `## Minor`
@@ -424,11 +491,18 @@ QG-TACTICAL vs TACT-NOGATE as a new freeze. LAZYOWEN's ledger rows stay.
       loop runs at most 2 rounds. Analyses requested by referees go only into
       an "Exploratory analyses requested in review" section, through `run.py`
       with a new MANIFEST. Pre-specified results are never altered.
-    - **Runner.** `tools/debate.py` is about 40 lines: a subprocess call with
-      UTF-8 input and output, a timeout that kills the process tree, a
-      missing-CLI branch and an auth-failure branch. Codex and agy may also
-      take bounded drafting tasks in a bundle (D6). Their output is reviewed
-      before anything is merged.
+    - **Runner.** `tools/debate.py` is about 50 lines:
+      - a subprocess call with UTF-8 input and output;
+      - a timeout that kills the process tree;
+      - branches for a missing CLI, an auth failure and **an exhausted
+        quota**. It recognises Codex's "usage limit" message together with
+        its reset time and records `REVIEW_INCOMPLETE` with that time.
+      - On 2026-10-23 the owner's ChatGPT quota ran out until
+        2026-10-27 19:16, so this case is real.
+    - **Bounded work (D6).** Codex and agy may also take bounded drafting
+      tasks in a bundle. Each gets a written brief carrying the project
+      history and the exact task. Their output is reviewed before anything is
+      merged.
 11. **Korean edition.**
     - Template `tools/paper/template_ko.tex`: kotex/xetexko. Fonts load **by
       file path**: 함초롬바탕 (`HANBatang.ttf`/`HANBatangB.ttf`, static, with a
@@ -453,6 +527,10 @@ QG-TACTICAL vs TACT-NOGATE as a new freeze. LAZYOWEN's ledger rows stay.
     - It parses `.log`/`.blg`, and fails on undefined references or
       citations, `Missing character`, BibTeX errors or overfull boxes over
       10 pt.
+    - It records the sha256 of every font file used. Malgun Gothic and
+      함초롬바탕 are system fonts, so the PDF is reproducible on this machine.
+      Before any public release, the font files are swapped for OFL fonts kept
+      in `tools/paper/fonts/`.
 13. **Index.** `papers/INDEX.md` lists only released papers: title, both
     abstracts, PDFs, code, results and scientific status. An HTML portfolio
     waits until there are about five papers.
@@ -488,7 +566,8 @@ It covers:
 
 The compile check runs `tectonic --only-cached` on a sample that uses Korean
 bold, `\emph`, display math, booktabs, natbib, a listing and a long URL. It
-reports `NotRun` when Tectonic or its cache is missing, so the suite never
+reports `NotRun` only when the Tectonic binary is absent or the cache is
+missing a file. A font error or a TeX error is still a FAIL. The suite never
 needs the network.
 
 **Before the first real topic**, a synthetic fixture topic runs through both
@@ -507,7 +586,7 @@ states and the build all work.
 
 | Risk | Mitigation |
 |---|---|
-| An edit silently changes frozen behaviour | `frozen_guard` runs in every suite run (closure, pins, H2, library versions) |
+| An edit silently changes frozen behaviour | Readouts run only from the tagged snapshot. `frozen_guard` checks the tag, the tagged pins, that no early look exists, and the library versions. |
 | TRADEGEN writes into QUANTGEN's state or takes a second look | Hard prerequisites in the TRADEGEN brief (section 3.2) |
 | Hallucinated or unsupported citations | `verify_bib.py` records plus the `claims.yaml` gate; `unread` blocks release |
 | Numbers drift from results | `numbers.json` provenance, `\qnum` only, bare-digit check, offline rerun |
@@ -524,7 +603,7 @@ C = Claude (ACCEPT WITH CHANGES), G = GPT/Codex (REJECT), M = Gemini/agy
 
 | Issue | Raised by | Ruling |
 |---|---|---|
-| Freeze protection uses an incomplete hand list; nothing guards H2; the prereg check prints instead of failing | C-M1, G-1 | `frozen_guard` plus the closure manifest (section 3.1); `calibrate` added to the never-run list |
+| Freeze protection uses an incomplete hand list; nothing guards H2; the prereg check prints instead of failing | C-M1, G-1 | Revision 2 added `frozen_guard` plus a closure manifest. Revision 3 replaced that with readouts from a tagged snapshot (section 3.1, Appendix A2). |
 | TRADEGEN shares state and can take a second look | C-M2, G-2, M-2 | Section 3.2 prerequisites in the TRADEGEN brief |
 | Phase 2 condition already met while pending | G-3 | Section 4.2 precondition; 2026-12-19 deadline (C-m7) |
 | Regime removal incomplete | G-4, M-3, C-m2 | Full line list plus a registered crypto-page self-check |
@@ -551,7 +630,7 @@ C = Claude (ACCEPT WITH CHANGES), G = GPT/Codex (REJECT), M = Gemini/agy
 | Over-engineering: four searchers, HTML portfolio, PNG critique, JSON parsing, mandatory UI | G-m7, M-m6, C-cut | Three searchers plus critic; `INDEX.md` only; log checks; Markdown headings; UI optional |
 | Sending private course quotes to OpenAI/Google | C-m16 | Stripped from bundles unless the owner allows |
 | `.claude/workflows/*.js` "not natively executed" | M-8.3 | **Rejected.** Claude Code's Workflow tool runs saved scripts from `.claude/workflows/`. The executor is now named in section 5.1. |
-| Delete `grokteam/` from TRADEGEN | C-M2 option | **Not adopted**, because D1 says to keep a duplicate. TRADEGEN disables the look's write path instead. |
+| Delete `grokteam/` from TRADEGEN | C-M2 option | **Not adopted**, because D1 says to keep a duplicate. In revision 3, TRADEGEN's copy keeps forward events permanently blinded (section 3.2). |
 
 ## Appendix B: git-state test impact (measured)
 
@@ -566,3 +645,56 @@ NOT_RUN, so exactly two tests changed, and both read the live repo state:
 
 All other tests that assert `UNVERSIONED` read the constants
 `MA.GIT_HASH`/`lab.GIT_HASH`, which stay the same (section 3.3), and they pass.
+
+## Appendix A2: referee round 2, issue by issue
+
+**Verdicts.**
+- C = Claude: ACCEPT WITH CHANGES. Of its 10 round-1 majors, 8 are resolved
+  and 2 partly resolved; it raised 2 new ones.
+- M = Gemini: ACCEPT WITH CHANGES. Of its 8, 5 are resolved and 3 partly
+  resolved; it raised 5 new ones.
+- G = GPT: **review incomplete**, because the Codex quota is exhausted until
+  2026-10-27 19:16. GPT's round-1 issues are all answered in Appendix A.
+  Under section 5.1's own rule, this is recorded as a gap, not as agreement.
+  If the owner wants it, a GPT check of revision 3 can run after the quota
+  resets.
+
+| Issue | Raised by | Ruling |
+|---|---|---|
+| The closure misses the H2 readout scripts (`replay`, `verdict`, `power`), calendar and macro data files, and a dynamic import | C-3a | Superseded: readouts run from the tag (section 3.1), so nothing on main needs guarding |
+| A guard freezing about 57 files until February leaves broken pages unfixable | C-3b | **Accepted in full**: tag plus worktree (D9). Main is free. The guard is down to four clauses with stated expiry. |
+| "Disable the look write" in TRADEGEN still recomputes and prints the forward results on every run | C-2b | Section 3.2: forward events permanently blinded; PREREG never deleted |
+| Workflow location unconfirmed; the approval check must be deterministic | C-2a | Section 5.1: Agent-tool fallback; `tools.paper.approval check` exit code |
+| FMP row calls the deleted `skill_credential_present` | M-new1 | Section 4.1 A1: `fmp_ready()` and a new note |
+| `FX:` trade wording (L464-469) and the insights self-check (L691-696) | M-new2 | Section 4.1 A3 |
+| Extending `runtime_py()` scans would trip on docstrings; papers need the fill model | M-new3 | Section 3.4: only `_scan_files()` is extended; `papers/` allowed to import orders |
+| The guard must not import `paper_live.engine` (it silences warnings at import) | M-new4 | Section 3.1: the guard uses git and hashlib only |
+| README test table goes stale between commits; agy JSON vs Markdown; agy not on PATH | M-new5 | Section 4.1: one README update at the end. Section 5.3: JSON envelope plus Markdown body; absolute agy path |
+| Codex refuses a non-git bundle | C-minor | `--skip-git-repo-check -C <bundle>` |
+| Dirty-tree anchors | C-minor | Section 5.3 step 7: confirmatory runs refuse a dirty tree |
+| Font portability | C-minor | Font sha256 recorded; OFL fonts before any public release |
+| NotRun masking a real font failure | C-minor | Section 5.5: NotRun only when the binary or a cache file is missing |
+| Guard clause expiry | C-minor | Section 3.1 (4) |
+
+## Appendix C: evidence that `eacd57d` is both frozen states
+
+Measured on 2026-10-23 from the git-tracked tree:
+- The 10 PREREG-pinned files match their pins, for example `garch.py`
+  2a8a0737, `book.py` b92c8af0.
+- `paper_live/engine.py` (642fc67b) and `config.py` (dc712a9d) equal both
+  `out*/frozen_rule/` copies.
+- File modification times of tracked code and data, excluding outputs,
+  backups and research text:
+  - **After the H2 freeze (2026-10-20 01:11 UTC):** 12 files changed, all
+    outside the readout path:
+    - `paper_live/analyze.py`, `report.py`, `narrative.json`,
+      `compare_text.json` and `compare_pdf.py` (the section-3 report
+      corrections);
+    - `.claude/launch.json`, `tests/paper_live_acceptance.py` and
+      `tests/run_all.py`;
+    - the new `grokteam/*` package, finished before its own freeze.
+    - No file in `core/`, `data/` or root `config.py` changed, and neither
+      did `paper_live/engine.py`, `config.py`, `replay.py`, `verdict.py` or
+      `power.py`.
+  - **After the GROKTEAM freeze (2026-10-22 04:30 UTC):** no tracked code or
+    data file changed.
