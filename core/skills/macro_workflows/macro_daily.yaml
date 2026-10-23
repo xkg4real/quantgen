@@ -1,5 +1,6 @@
 # macro_daily (section 3.9, L1191-1245; R-35). Data only: read by core/skills/pipeline.load_pipeline, run by
-# core/skills/macro_daily (in-process, headless). Never routed through core/skills/workflows.py or the Flet page.
+# core/skills/macro_daily (in-process, headless). Never routed through the legacy workflow parser (moved to
+# TRADEGEN on 2026-10-23) or the Flet page.
 # "skill" = an in-process function; "gate" = an automatic check (fail-closed / HALT side effects), never a human pause.
 # Acting steps = macro.pit_snapshot through verdict_filter (L1240-1241).
 name: macro_daily

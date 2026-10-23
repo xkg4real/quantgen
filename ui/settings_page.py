@@ -1,8 +1,8 @@
-"""Settings: credential presence, repository location, and a real KRX probe.
+"""Settings: credential presence and live probes of the KRX, FICC, KIS and crypto providers.
 
 Presence only — no value is ever read into a widget, and there is no field to
 type a key into. Credentials come from `.env` or the process environment, which
-keeps them out of NEXTGEN's own state and out of any screenshot.
+keeps them out of QUANTGEN's own state and out of any screenshot.
 
 The KRX row is a live probe rather than a presence check, because a KRX_API_KEY
 that exists and a KRX_API_KEY that the exchange accepts are different things,
@@ -10,24 +10,17 @@ and the difference is worth one HTTP call.
 """
 from __future__ import annotations
 
-from typing import Callable, Optional
-
 import flet as ft
 
 import config
-from core.skills.index import all_skills
-from core.skills.readiness import State, summarize
 from core.theme import RADII, active
 from data.krx.krx_market_client import KRXMarketClient
-from ui.components import chip, key_value, notice, section
+from ui.components import chip, notice, section
 
 _SIGNUP = {
     "fred": "fred.stlouisfed.org (no key needed)",
     "yfinance": "finance.yahoo.com (no key needed)",
     "fmp": "financialmodelingprep.com",
-    "finviz": "elite.finviz.com",
-    "alpaca": "alpaca.markets",
-    "fxmacrodata": "fxmacrodata.com",
     "kis": "apiportal.koreainvestment.com",
     "opendart": "opendart.fss.or.kr",
     "krx": "data.krx.co.kr",
@@ -49,12 +42,8 @@ def _ficc_status() -> list[dict]:
                  "vars": (), "note": f"{type(exc).__name__}: {exc}"}]
 
 
-def build_settings_page(page: ft.Page, *, on_reload: Optional[Callable] = None) -> ft.Control:
+def build_settings_page(page: ft.Page) -> ft.Control:
     pal = active()
-    root = config.skills_root()
-    valid = config.skills_root_valid(root)
-    skills = all_skills()
-    counts = summarize(skills) if skills else {}
 
     probe_host = ft.Row(spacing=8)
 
@@ -174,26 +163,9 @@ def build_settings_page(page: ft.Page, *, on_reload: Optional[Callable] = None) 
 
     crypto_probe_host.controls = [ft.Button("Test crypto data access", icon=ft.Icons.NETWORK_CHECK, on_click=run_crypto_probe)]
 
-    repo_block = ft.Column([
-        key_value("Repository", str(root)),
-        key_value("Index", "skills-index.yaml found" if valid else "NOT FOUND"),
-        key_value("Skills", str(len(skills))),
-        key_value("Runnable now", str(counts.get(State.READY, 0))),
-        key_value("Needs input", str(counts.get(State.NEEDS_INPUT, 0))),
-        key_value("Key required", str(counts.get(State.MISSING_KEY, 0))),
-        key_value("Reference only", str(counts.get(State.DOC_ONLY, 0))),
-        key_value("Runs directory", str(config.runs_dir())),
-        key_value("Interpreter", config.skill_python()),
-        key_value("Run timeout", f"{config.SKILL_TIMEOUT_SECONDS:.0f}s"),
-    ], spacing=6)
-
     env_help = (
-        "# .env — NEXTGEN reads these from this machine only.\n"
-        "NEXTGEN_SKILLS_ROOT=\n"
+        "# .env — QUANTGEN reads these from this machine only.\n"
         "FMP_API_KEY=\n"
-        "FINVIZ_API_KEY=\n"
-        "ALPACA_API_KEY=\nALPACA_SECRET_KEY=\n"
-        "FXMACRODATA_API_KEY=\n"
         "KIS_APP_KEY=\nKIS_APP_SECRET=\n"
         "OPENDART_API_KEY=\n"
         "KRX_API_KEY=\n"
@@ -206,10 +178,6 @@ def build_settings_page(page: ft.Page, *, on_reload: Optional[Callable] = None) 
     controls: list[ft.Control] = [
         section("Settings", subtitle="Credential presence only. No key is ever displayed here."),
     ]
-    if not valid:
-        controls.append(notice(
-            f"No skills-index.yaml under {root}. Set NEXTGEN_SKILLS_ROOT in .env "
-            "and restart.", "error", icon=ft.Icons.FOLDER_OFF_OUTLINED))
 
     def gs_row() -> ft.Control:
         from core.quant import gsq
@@ -242,11 +210,6 @@ def build_settings_page(page: ft.Page, *, on_reload: Optional[Callable] = None) 
                          spacing=10, run_spacing=10),
         ft.Container(ficc_probe_host, padding=ft.Padding(0, 4, 0, 4)),
 
-        ft.Text("Skill providers", size=15, weight=ft.FontWeight.W_600, color=pal.text),
-        ft.ResponsiveRow([ft.Container(provider_row(p), col={"xs": 12, "md": 6})
-                          for p in config.skill_provider_status()],
-                         spacing=10, run_spacing=10),
-
         ft.Text("Korean market providers", size=15, weight=ft.FontWeight.W_600, color=pal.text),
         notice("KRX closed its keyless CSV export; a free KRX_API_KEY is now required "
                "for whole-market snapshots. KIS and OpenDART registration is also free.",
@@ -269,12 +232,6 @@ def build_settings_page(page: ft.Page, *, on_reload: Optional[Callable] = None) 
                           for p in config.crypto_provider_status()],
                          spacing=10, run_spacing=10),
         ft.Container(crypto_probe_host, padding=ft.Padding(0, 4, 0, 4)),
-
-        ft.Divider(color=pal.border),
-        ft.Text("Repository", size=15, weight=ft.FontWeight.W_600, color=pal.text),
-        repo_block,
-        ft.Row([ft.Button("Reload catalogue", icon=ft.Icons.REFRESH,
-                          on_click=lambda e: on_reload and on_reload())], spacing=8),
 
         ft.Divider(color=pal.border),
         ft.Text("Environment template", size=15, weight=ft.FontWeight.W_600, color=pal.text),

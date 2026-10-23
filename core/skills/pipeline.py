@@ -9,8 +9,8 @@ bound (`close_print_bound_utc + 10 min`: 06:40:29Z refused, 06:40:30Z starts, L1
 later run of a decision that already has a live row is a replay, L1199); the run record appended in `finally`
 even when a step raised (L1237); `missed_decisions` (pure, L1246) and the canonical comparison of two artifacts
 for a replay (R-01 rule 7). Steps and gates are `fn(ctx) -> dict` registered by `core.skills.macro_daily`;
-`macro.run_record` is the runner's epilogue. Nothing here imports Flet, `core.skills.runner` or
-`core.skills.workflows` (the legacy parser is untouched); clock, calendars and paths are injected.
+`macro.run_record` is the runner's epilogue. Nothing here imports Flet or the legacy skill runner and workflow
+parser (both moved to TRADEGEN on 2026-10-23); clock, calendars and paths are injected.
 """
 from __future__ import annotations
 
@@ -71,7 +71,8 @@ class Pipeline:
 
 def load_pipeline(path, *, known_steps: Iterable[str], known_gates: Iterable[str]) -> Pipeline:
     """Strict reader of `core/skills/macro_workflows/*.yaml` (section 3.9 shape: name, runs, run_mode, steps of
-    `skill:` or `gate:`). Never routed through `core.skills.workflows` (code_skills_workflows D.2)."""
+    `skill:` or `gate:`). Never routed through the legacy workflow parser (code_skills_workflows D.2), which moved
+    to TRADEGEN on 2026-10-23."""
     path = Path(path)
     doc = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(doc, dict):

@@ -96,6 +96,12 @@ Finance (MIT)`, `Introduction to Probability, Statistics, and Random Processes`)
    tests/run_all.py: engine + quant + FICC acceptance, hermetic (network touchpoints patched to raise)   docs/: build_models_primer.py, drift_study.py
 ```
 
+> **2026-10-23, split (D2).** The Workflows, Skills and Runs rail entries, `param_form`, `charts`, all eleven
+> `core/skills` cockpit modules (index, entrypoints, params, readiness, runner, runs, diagnose, workflows,
+> decisions, insights, wiring) and the skill env in `config.py` moved to TRADEGEN. The map above shows the
+> application before the split. The rail now has 16 entries, and `core/skills` keeps only `macro_daily`,
+> `pipeline`, `alerts` and `macro_workflows/`.
+
 ### 1.2 The Quant Lab pipeline (as built today)
 
 ```

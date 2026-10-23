@@ -5,7 +5,7 @@ guard, and brackets the suite with T-HERM-01 (every network touchpoint raises wh
 and T-HERM-02 (the shipped read-only trees and `~/.nextgen` are byte-identical before and after).
 
 The guard is armed around every macro test and restored in `finally`, not left in place for the whole
-process: `engine/test_82` serves a loopback HTTP server through `data.net.session` and `cockpit/test_21`
+process: `engine/test_82` serves a loopback HTTP server through `data.net.session` and `safety/test_21`
 reaches KIS when keys are present, so a process-wide patch at import would change inherited results.
 """
 from __future__ import annotations
@@ -113,8 +113,8 @@ def tree_md5s() -> dict[str, str]:
 def home_listing() -> tuple:
     """(relative path, size, mtime_ns) of every file the macro suite must never touch under the home dir:
     `~/.nextgen/macro` (the v2 artifact root), the operator rules store `~/.nextgen/trading/rules.json`, and
-    QUANTGEN_MACRO_DIR when set. Not all of `~/.nextgen`: the legacy cockpit tests write `~/.nextgen/runs` by
-    design, so a concurrent full run tripped T-HERM-02 falsely (Sprint 4 coordinator ruling)."""
+    QUANTGEN_MACRO_DIR when set. Not all of `~/.nextgen`: the cockpit tests (now in TRADEGEN) write `~/.nextgen/runs`
+    by design, so a concurrent full run tripped T-HERM-02 falsely (Sprint 4 coordinator ruling)."""
     home = Path.home() / ".nextgen"
     roots = [home / "macro", home / "trading" / "rules.json"]
     if os.environ.get("QUANTGEN_MACRO_DIR"):

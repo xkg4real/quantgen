@@ -1,9 +1,9 @@
 """QUANTGEN — the operator's personal quant trading application.
 
-Built on the NEXTGEN base (its rule engine, simulated order book, KRX data
-layer, and skill cockpit all survive intact) and upgraded with the thing the
-client build was contractually forbidden from having: an opinion. Three new
-equity surfaces —
+Built on the NEXTGEN base (its rule engine, simulated order book and KRX data
+layer survive intact; the skill cockpit moved to TRADEGEN on 2026-10-23) and
+upgraded with the thing the client build was contractually forbidden from
+having: an opinion. Three new equity surfaces —
 
   * **Quant Lab** — Monte Carlo simulation (GBM, Merton jump-diffusion, block
     bootstrap) calibrated on daily history, with VaR/CVaR and a percentile fan.
@@ -43,7 +43,6 @@ from __future__ import annotations
 import flet as ft
 
 import config
-from core.skills import reload_all
 from core.theme import BREAKPOINTS, RADII, TRANSITION_MS, active, set_mode
 from core.engine.feed import QuoteFeed
 from core.engine.runtime import EngineRuntime
@@ -64,10 +63,7 @@ from ui.structuring_page import build_structuring_page
 from ui.rules_page import build_rules_page
 from ui.signals_page import build_signals_page
 from ui.trading_page import build_trading_page
-from ui.runs_page import build_runs_page
 from ui.settings_page import build_settings_page
-from ui.skills_page import build_skills_page
-from ui.workflows_page import build_workflows_page
 
 LOCALE = "en"
 
@@ -86,10 +82,7 @@ NAV = (
     ("signals", "Signals", ft.Icons.CANDLESTICK_CHART_OUTLINED),
     ("trading", "Execution", ft.Icons.SPEED_ROUNDED),
     ("rules", "Rules", ft.Icons.RULE_FOLDER_OUTLINED),
-    ("workflows", "Workflows", ft.Icons.ACCOUNT_TREE_OUTLINED),
-    ("skills", "Skills", ft.Icons.EXTENSION_OUTLINED),
     ("krx", "KRX", ft.Icons.SHOW_CHART_ROUNDED),
-    ("runs", "Runs", ft.Icons.HISTORY),
     ("settings", "Settings", ft.Icons.SETTINGS_OUTLINED),
 )
 
@@ -121,7 +114,7 @@ def main(page: ft.Page) -> None:
     )
 
     # ------------------------------------------------------------------ views
-    def build(name: str, **kwargs) -> ft.Control:
+    def build(name: str) -> ft.Control:
         ficc = {"macro": build_macro_page, "rates": build_rates_page,
                 "bonds": build_bonds_page, "fx": build_fx_page,
                 "structuring": build_structuring_page,
@@ -145,35 +138,22 @@ def main(page: ft.Page) -> None:
         if name == "rules":
             return build_rules_page(page, rule_store,
                                     on_changed=lambda: cache.pop("trading", None))
-        if name == "workflows":
-            return build_workflows_page(page, on_open_settings=lambda: navigate("settings"),
-                                        on_open_skill=lambda sid: navigate("skills", focus=sid))
-        if name == "skills":
-            return build_skills_page(page, on_open_settings=lambda: navigate("settings"),
-                                     focus_skill=kwargs.get("focus", ""))
         if name == "krx":
             return build_krx_page(page, gateway, locale=LOCALE,
                                   on_open_settings=lambda: navigate("settings"))
-        if name == "runs":
-            return build_runs_page(page)
-        return build_settings_page(page, on_reload=reload_catalogue)
+        return build_settings_page(page)
 
-    def navigate(name: str, *, focus: str = "", rebuild: bool = False) -> None:
-        # Runs and Skills-with-focus must reflect state that changed elsewhere;
-        # everything else keeps its live view so a pipeline survives a tab switch.
-        if rebuild or name in ("runs", "trading") or (name == "skills" and focus):
+    def navigate(name: str, *, rebuild: bool = False) -> None:
+        # Execution must reflect state that changed elsewhere; everything else
+        # keeps its live view so a pipeline survives a tab switch.
+        if rebuild or name == "trading":
             cache.pop(name, None)
         if name not in cache:
-            cache[name] = build(name, focus=focus)
+            cache[name] = build(name)
         current["page"] = name
         content.content = ft.Container(cache[name], padding=24, expand=True)
         render_nav()
         page.update()
-
-    def reload_catalogue() -> None:
-        reload_all()
-        cache.clear()
-        navigate("settings", rebuild=True)
 
     # -------------------------------------------------------------------- nav
     logo = ft.Container(

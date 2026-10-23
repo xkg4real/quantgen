@@ -129,8 +129,8 @@ def test_yaml_loads_with_the_strict_runner_and_the_legacy_parser_is_untouched():
                             "macro.brief", "macro.run_record")
     assert [s.kind for s in p.steps].count("gate") == 3 and PL.ACTING_STEPS == p.step_names[:7]
     assert not (MD.YAML_PATH.parent / "__init__.py").exists()            # a data directory, never a package (F-3)
-    import core.skills.workflows as W
-    assert W.__file__.endswith("workflows.py") and callable(W.all_workflows) and hasattr(W, "Step")
+    import importlib.util
+    assert importlib.util.find_spec("core.skills.workflows") is None    # the legacy parser left with the cockpit (TRADEGEN, 2026-10-23)
     tmp = _tmp()
     bad = {"unknown key": "name: x\nruns: []\nrun_mode: live\nextra: 1\nsteps:\n  - skill: macro.brief\n",
            "unregistered step": "name: x\nrun_mode: live\nsteps:\n  - skill: macro.nope\n",

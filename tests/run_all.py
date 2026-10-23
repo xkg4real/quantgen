@@ -38,7 +38,7 @@ for stream in (sys.stdout, sys.stderr):
     except Exception:
         pass
 
-from tests.acceptance import tests as cockpit_tests        # noqa: E402
+from tests.acceptance import tests as safety_tests         # noqa: E402
 from tests.engine_acceptance import tests as engine_tests  # noqa: E402
 from tests.flet_api_guard import tests as ui_tests          # noqa: E402
 from tests.quant_acceptance import tests as quant_tests     # noqa: E402
@@ -55,7 +55,7 @@ OUT = ROOT / "qa" / "acceptance_results.json"
 
 
 def tests():
-    return ([(f"cockpit/{n}", f) for n, f in cockpit_tests()] +
+    return ([(f"safety/{n}", f) for n, f in safety_tests()] +
             [(f"engine/{n}", f) for n, f in engine_tests()] +
             [(f"ui/{n}", f) for n, f in ui_tests()] +
             [(f"quant/{n}", f) for n, f in quant_tests()] +
@@ -110,7 +110,7 @@ def run(entries) -> list[dict]:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--milestone", help="run the exit set of M<k> via tests/macro_registry.csv")
-    parser.add_argument("--suite", help="run one suite: cockpit, engine, ui, quant, ficc, expansion, macro, paper, grokteam or guard")
+    parser.add_argument("--suite", help="run one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam or guard")
     args = parser.parse_args(argv)
     if args.milestone and not re.fullmatch(r"M(10|[0-9])", args.milestone):
         parser.error("--milestone takes M0..M10")

@@ -118,12 +118,11 @@ def test_open_path_on_a_missing_file_returns_the_selectable_path():
 
 
 def test_shell_fixes_runs_page_delegates_and_the_rail_scrolls():
-    runs_src = (ROOT / "ui" / "runs_page.py").read_text(encoding="utf-8")
-    assert "open_path(path)" in runs_src and "startfile" not in runs_src
+    # The Runs page left with the cockpit (TRADEGEN, 2026-10-23); the name is kept so the test identity holds.
     tree = ast.parse((ROOT / "main.py").read_text(encoding="utf-8"))
     rail = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and getattr(n.func, "attr", "") == "Column"
             and any(isinstance(a, ast.Name) and a.id == "nav_host" for a in ast.walk(n))]
-    assert rail and any(k.arg == "scroll" for k in rail[0].keywords), "the rail column must scroll (19 entries, 620 px)"
+    assert rail and any(k.arg == "scroll" for k in rail[0].keywords), "the rail column must scroll (16 entries, 620 px)"
     assert "on_app_start(background=True)" in (ROOT / "main.py").read_text(encoding="utf-8")
 
 

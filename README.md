@@ -1,8 +1,9 @@
 # QUANTGEN
 
 The upgraded, personal-use successor to NEXTGEN. Same body — the rule engine,
-simulated order book, KRX data layer, and skill cockpit all survive intact —
-with the one organ the client build was contractually forbidden from having:
+simulated order book and KRX data layer all survive intact (the skill cockpit
+moved to TRADEGEN on 2026-10-23) — with the one organ the client build was
+contractually forbidden from having:
 **an opinion**. QUANTGEN computes analysis, ranks outcomes, and recommends. On
 the macro overlay it recommends only what a frozen gate has passed, and today
 nothing has: see
@@ -351,7 +352,7 @@ artifact, an entry in the simulated order book, a costed backtest or
 forward-simulated book, a model card or a displayed exposure recommendation,
 and a displayed recommendation may come only from PASS cards (P7). Every other
 card is computed, logged and shown as a descriptive sleeve labelled with its
-verdict. Static scans (T-RO-01, cockpit test_08 / test_09) hold the line.
+verdict. Static scans (T-RO-01, safety test_08 / test_09) hold the line.
 
 **P1. Macro scales risk; it never generates direction.** No macro or overlay
 module creates, flips or closes a simulated position on its own. Overlays
@@ -735,16 +736,16 @@ Two tiers, reported honestly on Settings:
   functions (swap rates, swaption vols, FX smiles) all need this session, which
   is why the FICC core prices locally.
 
-## Everything inherited from NEXTGEN
+## Inherited from NEXTGEN
 
-Execution, Rules, Workflows, Skills, KRX, Runs, and Settings are the NEXTGEN
-surfaces, unchanged: the DISARMED→ARMED→HALTED engine, frozen rules with
-edit-revokes-confirmation, the simulated order book (there is still **no
-broker order path** in this repository), the 72-skill cockpit, and the
-KIS/OpenDART/KRX data layer. The macro overlay does not run through this
-engine: each v2 book has its own runtime state (see [Statuses](#statuses)).
-The navigation rail scrolls, so all nineteen entries are reachable at the
-620 px minimum window height.
+Execution, Rules, KRX and Settings are the NEXTGEN surfaces: the
+DISARMED→ARMED→HALTED engine, frozen rules with edit-revokes-confirmation, the
+simulated order book (there is still **no broker order path** in this
+repository) and the KIS/OpenDART/KRX data layer. The skill cockpit (Workflows,
+Skills, Runs and the 72-skill catalogue) moved to TRADEGEN on 2026-10-23. The
+macro overlay does not run through this engine: each v2 book has its own
+runtime state (see [Statuses](#statuses)). The navigation rail scrolls, so all
+sixteen entries are reachable at the 620 px minimum window height.
 
 ## Setup
 
@@ -826,8 +827,8 @@ points, FX spot with the forward curve, carry equity, carry bars, caplets,
 payoff diagrams, rate fans, horizon P&L histograms, macro z-scores; its
 self-check renders sixteen images), and six in `ui/xcharts.py` (lines, implied
 vol smile, risk-neutral density, equity against a benchmark, horizontal bars,
-price against NAV). The skill-insight bars (`ui/charts.py`) and the v2
-multiplier bar (`ui/components.py`) are drawn with containers, not matplotlib.
+price against NAV). The v2 multiplier bar (`ui/components.py`) is drawn with
+containers, not matplotlib.
 
 ## Regulatory note
 

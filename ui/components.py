@@ -1,9 +1,8 @@
-"""Shared presentation atoms for the cockpit.
+"""Shared presentation atoms for every QUANTGEN page.
 
-Kept in one place because the three pages must agree on what "ready" looks like.
-A skill that is blocked on a key and a workflow that is blocked on a key should
-be the same colour, the same word, and the same shape, or the operator has to
-re-learn the interface on every tab.
+Kept in one place because the pages must agree on what a status looks like: the
+same state should be the same colour, the same word, and the same shape on every
+tab, or the operator has to re-learn the interface on each one.
 """
 from __future__ import annotations
 
@@ -15,25 +14,7 @@ from typing import Callable, Optional, Sequence
 
 import flet as ft
 
-from core.skills.readiness import State
 from core.theme import RADII, active
-
-# One vocabulary for readiness, used by every surface.
-STATE_STYLE: dict[State, tuple[str, str]] = {
-    State.READY:       ("Ready", "success"),
-    State.NEEDS_INPUT: ("Needs input", "accent"),
-    State.MISSING_KEY: ("Key required", "error"),
-    State.DOC_ONLY:    ("Reference only", "muted"),
-}
-
-RUN_STATUS_STYLE: dict[str, tuple[str, str]] = {
-    "ok":        ("Succeeded", "success"),
-    "failed":    ("Failed", "error"),
-    "timeout":   ("Timed out", "error"),
-    "cancelled": ("Cancelled", "muted"),
-    "error":     ("Could not start", "error"),
-    "running":   ("Running", "accent"),
-}
 
 
 def _colour(token: str) -> str:
@@ -57,16 +38,6 @@ def chip(text: str, token: str = "muted", *, tooltip: str = "") -> ft.Container:
         border_radius=RADII["pill"],
         tooltip=tooltip or None,
     )
-
-
-def readiness_chip(state: State, *, tooltip: str = "") -> ft.Container:
-    label, token = STATE_STYLE[state]
-    return chip(label, token, tooltip=tooltip)
-
-
-def run_status_chip(status: str) -> ft.Container:
-    label, token = RUN_STATUS_STYLE.get(status, (status or "unknown", "muted"))
-    return chip(label, token)
 
 
 def section(title: str, *, subtitle: str = "") -> ft.Column:

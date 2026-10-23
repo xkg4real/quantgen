@@ -1,9 +1,7 @@
-"""KRX: the Korean coverage the skill library does not have.
+"""KRX: QUANTGEN's own read-only Korean market data surface.
 
-Every one of the 72 skills targets US equities, crypto or CME futures — a grep
-for KOSPI/KOSDAQ/KRX across the whole repository returns nothing. This page is
-NEXTGEN's own read-only Korean data surface, sitting on KIS, OpenDART and the
-KRX Open API.
+It sits on KIS, OpenDART and the KRX Open API. It was first built for NEXTGEN
+because the trading-skills library (now in TRADEGEN) had no Korean coverage.
 
 The rule this page follows, which the old EODHD build did not: **an empty result
 must state which provider was asked and why it declined.** A screen of dashes
@@ -186,8 +184,7 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
         section("KRX", subtitle="Read-only Korean market data. Quotes and OHLCV from KIS, "
                                 "disclosures from OpenDART, snapshots from the KRX Open API."),
         provider_bar(),
-        notice("The skill library has no KRX coverage; this page is NEXTGEN's own. "
-               "No order or account-mutation path exists in this build.",
+        notice("No order or account-mutation path exists in this build.",
                "muted", icon=ft.Icons.INFO_OUTLINE),
         ft.Row([ticker, lookup,
                 ft.Button("Run", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy],

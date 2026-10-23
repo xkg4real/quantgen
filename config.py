@@ -1,22 +1,21 @@
-"""Local configuration for the NEXTGEN skill cockpit.
+"""Local configuration for QUANTGEN.
 
-Two independent credential families, deliberately kept apart:
+Every credential is read from `.env` or the process environment, and only its
+presence is ever reported:
 
-  * SKILL providers (FINVIZ / Alpaca / FXMacroData) — consumed by the scripts
-    inside the trading-skills repository. NEXTGEN never reads the values itself;
-    it only reports presence and forwards them to a subprocess env.
+  * FMP — read-only US end-of-day prices and quotes for every venue outside
+    Korea.
 
-  * FMP is BOTH. The skill library forwards it to subprocesses, and the trading
-    system reads it directly to quote non-Korean venues. One key, two consumers
-    — worth stating, because the rest of this module keeps the two credential
-    families apart and FMP is the deliberate exception.
+  * KRX providers (KIS / OpenDART / KRX marketplace) — QUANTGEN's own
+    read-only Korean market data layer.
 
-  * KRX providers (KIS / OpenDART / KRX marketplace) — consumed by NEXTGEN's own
-    read-only Korean market data layer, because the skill library has no KRX
-    coverage at all.
+  * Quant analysis (Claude API, GS Marquee), crypto (keyless public data and an
+    optional read-only Upbit key) and FICC (keyless FRED / Yahoo).
 
-A blank value keeps that provider unavailable. Nothing is ever logged, echoed
-into a run transcript, or written to a run artifact.
+A blank value keeps that provider unavailable. Nothing is ever logged or
+written to an artifact. The NEXTGEN skill-cockpit settings (skills root, skill
+interpreter, run timeout, runs directory, skill-provider keys) moved to
+TRADEGEN on 2026-10-23.
 """
 from __future__ import annotations
 
@@ -42,85 +41,6 @@ def _clean(name: str) -> str:
 
 def _present(name: str) -> bool:
     return bool(_clean(name))
-
-
-# --------------------------------------------------------------------------- #
-# Trading-skills repository
-# --------------------------------------------------------------------------- #
-_DEFAULT_SKILLS_ROOT = (
-    Path.home() / "Downloads" / "claude-trading-skills-main" / "claude-trading-skills-main"
-)
-
-
-def skills_root() -> Path:
-    """Filesystem root of the trading-skills repository."""
-    override = _clean("NEXTGEN_SKILLS_ROOT")
-    return Path(override) if override else _DEFAULT_SKILLS_ROOT
-
-
-def skills_root_valid(root: Path | None = None) -> bool:
-    root = root or skills_root()
-    return (root / "skills-index.yaml").is_file() and (root / "skills").is_dir()
-
-
-# Interpreter used to run skill scripts. Defaults to the one running NEXTGEN.
-def skill_python() -> str:
-    import sys
-    return _clean("NEXTGEN_SKILL_PYTHON") or sys.executable
-
-
-SKILL_TIMEOUT_SECONDS = float(_clean("NEXTGEN_SKILL_TIMEOUT") or "300")
-
-# Where run transcripts and artifacts are written.
-def runs_dir() -> Path:
-    override = _clean("NEXTGEN_RUNS_DIR")
-    return Path(override) if override else (Path.home() / ".nextgen" / "runs")
-
-
-# --------------------------------------------------------------------------- #
-# Skill-provider credentials (forwarded to subprocesses, never read for value)
-# --------------------------------------------------------------------------- #
-# Maps a skills-index integration id -> the env var(s) that satisfy it.
-SKILL_CREDENTIALS: dict[str, tuple[str, ...]] = {
-    "fmp": ("FMP_API_KEY",),
-    "finviz": ("FINVIZ_API_KEY",),
-    "alpaca": ("ALPACA_API_KEY", "ALPACA_SECRET_KEY"),
-    "fxmacrodata": ("FXMACRODATA_API_KEY",),
-}
-
-# Integration ids that need no credential at all.
-KEYLESS_INTEGRATIONS = frozenset({
-    "local_calculation", "public_csv", "coingecko", "binance_funding",
-    "yfinance", "websearch",
-})
-
-# Integration ids satisfied by a file the operator supplies at run time.
-FILE_INPUT_INTEGRATIONS = frozenset({
-    "prices_json", "user_input", "chart_image", "mt5_local_files",
-    "news_events_json", "catalyst_events_json", "profiles_json",
-})
-
-
-def skill_credential_present(integration_id: str) -> bool:
-    names = SKILL_CREDENTIALS.get(integration_id)
-    if not names:
-        return False
-    return all(_present(n) for n in names)
-
-
-def skill_env() -> dict[str, str]:
-    """Environment handed to a skill subprocess: inherited os.environ plus any
-    configured provider keys. Values are copied straight through and are never
-    inspected, logged, or persisted by NEXTGEN."""
-    env = dict(os.environ)
-    for names in SKILL_CREDENTIALS.values():
-        for name in names:
-            value = _clean(name)
-            if value:
-                env[name] = value
-    env.setdefault("PYTHONIOENCODING", "utf-8")
-    env.setdefault("PYTHONUTF8", "1")
-    return env
 
 
 # --------------------------------------------------------------------------- #
@@ -241,30 +161,11 @@ def krx_provider_status() -> list[dict]:
     ]
 
 
-def skill_provider_status() -> list[dict]:
-    return [
-        {"id": "fmp", "label": "Financial Modeling Prep",
-         "ready": skill_credential_present("fmp"), "vars": ("FMP_API_KEY",),
-         "note": "Required by 28 skills."},
-        {"id": "finviz", "label": "FinViz Elite",
-         "ready": skill_credential_present("finviz"), "vars": ("FINVIZ_API_KEY",),
-         "note": "Required by 4 screener skills."},
-        {"id": "alpaca", "label": "Alpaca",
-         "ready": skill_credential_present("alpaca"),
-         "vars": ("ALPACA_API_KEY", "ALPACA_SECRET_KEY"),
-         "note": "Portfolio and broker-side planning skills."},
-        {"id": "fxmacrodata", "label": "FXMacroData",
-         "ready": skill_credential_present("fxmacrodata"),
-         "vars": ("FXMACRODATA_API_KEY",),
-         "note": "Macro release calendar."},
-    ]
-
-
 # --------------------------------------------------------------------------- #
 # Trading system storage
 # --------------------------------------------------------------------------- #
 # Rules the operator authored, the simulated order book, and the engine's halt
-# state. Kept beside the run transcripts, on this machine only.
+# state. Kept under ~/.nextgen, on this machine only.
 def trading_dir() -> Path:
     override = _clean("NEXTGEN_TRADING_DIR")
     return Path(override) if override else (Path.home() / ".nextgen" / "trading")
@@ -328,6 +229,9 @@ def gs_client_secret() -> str:
 def quant_provider_status() -> list[dict]:
     """Presence-only report for the Settings page. No values are returned."""
     return [
+        {"id": "fmp", "label": "Financial Modeling Prep",
+         "ready": fmp_ready(), "vars": ("FMP_API_KEY",),
+         "note": "dividend-adjusted US end-of-day prices"},
         {"id": "anthropic", "label": "Claude API (deep analysis)",
          "ready": ai_ready(), "vars": ("ANTHROPIC_API_KEY",),
          "note": f"AI narrative analysis of quant results. Model: {ai_model()}."},
