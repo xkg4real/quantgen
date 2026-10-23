@@ -1541,6 +1541,20 @@ def test_b5_workflow_scripts_follow_the_rules_and_their_gates_hold():
     assert run["result"]["status"] == "OWNER_REVIEW", run
 
 
+# --------------------------------------------------------------------------- #
+# Task 5 (4/4): the /quantgen-paper skill
+# --------------------------------------------------------------------------- #
+def test_b5_skill_states_the_dispatch_and_the_owner_rules():
+    from tools.paper import index as IX
+    text = (_B5_ROOT / ".claude" / "skills" / "quantgen-paper" / "SKILL.md").read_text(encoding="utf-8")
+    assert text.startswith("---\nname: quantgen-paper\ndescription: "), text[:80]
+    for needle in ("quantgen-paper-research", "quantgen-paper-write", "Agent tool", "scriptPath",
+                   "python -m tools.paper.approval approve", "python -m tools.paper.approval check",
+                   IX.SIGNOFF, "REVIEW_INCOMPLETE", "substitution.json", "round<k>_<reviewer>", "usage limit",
+                   "rereview", "퀀트 학습 자료", "26년 2학기 수업자료", "aistatement", "fixture-", "papers/*-<slug>"):
+        assert needle in text, f"SKILL.md lacks {needle!r}"
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
