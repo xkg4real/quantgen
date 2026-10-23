@@ -135,7 +135,8 @@ Both editions carry it in the `aistatement` environment, translated in the Korea
 > run, and has read and accepts every claim in this paper.
 
 Change it only where the tools actually used differ, for example after a referee substitution. A paper also carries
-the note "This paper is research. It is not investment advice."
+the note "This paper is research. It is not investment advice." `python -m tools.paper.consistency`, which the build
+stage and `release` run, fails when either edition lacks a non-empty `aistatement` environment or that note.
 
 ## Fixture papers
 

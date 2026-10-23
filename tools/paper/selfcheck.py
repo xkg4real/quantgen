@@ -288,6 +288,13 @@ _EN_TEX = r"""\documentclass[11pt,a4paper]{article}
 Twelve-month carry earns a Sharpe ratio of \qnum{sharpe_2y}.
 \end{abstract}
 
+\begin{aistatement}
+% id: front-1
+Claude drafted the text under the author's direction.
+\end{aistatement}
+% id: front-2
+This paper is research. It is not investment advice.
+
 \section{Introduction}\label{sec:intro}
 % id: intro-1
 Carry trades earn a risk premium \citep{lustig2011}; Section~\ref{sec:results} reports its size.
@@ -304,7 +311,7 @@ Months & \qnum{n_months} \\[2pt]
 
 \section{Results}\label{sec:results}
 % id: results-1
-The Sharpe ratio is \qnum{sharpe_2y} \citep{lustig2011,fama1984}, with $t = 2.1$ and an $R^2$ of \qnum{r2_10y} (Table~\ref{tab:res1}).
+The Sharpe ratio is \qnum{sharpe_2y} \citep{lustig2011,fama1984}, with $t = \qnum{t_stat}$ and an $R^2$ of \qnum{r2_10y} (Table~\ref{tab:res1}).
 
 % id: results-2
 Standard errors follow \citet[p.~1035]{hansen1982}.
@@ -339,6 +346,13 @@ _KO_TEX = r"""\documentclass[11pt,a4paper]{article}
 열두 달 캐리 전략의 샤프 비율은 \qnum{sharpe_2y}이다.
 \end{abstract}
 
+\begin{aistatement}
+% id: front-1
+Claude가 저자의 지시에 따라 본문 초안을 작성하였다.
+\end{aistatement}
+% id: front-2
+이 논문은 연구이며 투자 권유가 아니다.
+
 \section{서론}\label{sec:intro}
 % id: intro-1
 캐리 트레이드는 위험 프리미엄을 얻는다 \citep{lustig2011}. 그 크기는 \ref{sec:results}절에서 보고한다.
@@ -355,7 +369,7 @@ _KO_TEX = r"""\documentclass[11pt,a4paper]{article}
 
 \section{결과}\label{sec:results}
 % id: results-1
-샤프 비율은 \qnum{sharpe_2y}이며 \citep{lustig2011,fama1984}, $t = 2.1$이고 $R^2$는 \qnum{r2_10y}이다(표~\ref{tab:res1}).
+샤프 비율은 \qnum{sharpe_2y}이며 \citep{lustig2011,fama1984}, $t = \qnum{t_stat}$이고 $R^2$는 \qnum{r2_10y}이다(표~\ref{tab:res1}).
 
 % id: results-2
 표준오차는 \citet[p.~1035]{hansen1982}를 따른다.
@@ -411,11 +425,42 @@ def test_consistency_clean_pair_passes():
 
 
 def test_consistency_bare_digit_in_results_and_tables():
-    probs = _consistency(("$t = 2.1$이고", "t 값은 2.1이고"))
+    from tools.paper import consistency as C
+    probs = _consistency((r"$t = \qnum{t_stat}$이고", r"$t = \qnum{t_stat}$, 즉 2.1이고"))
     assert probs and all(p.startswith("bare number ko sec:results: ") and "2.1" in p for p in probs), probs
     probs = _consistency((r"개월 수 & \qnum{n_months}", "개월 수 & 120"))
     assert any(p.startswith("bare number ko tabular: ") and "120" in p for p in probs), probs
     assert "qnum sec:data: count differs en/ko {'n_months': (2, 1)}" in probs, probs
+    # a result typed in math mode is as hand-typed as one in prose: in results prose, a table cell, an equation
+    probs = _consistency((r"$t = \qnum{t_stat}$이고", r"$t = \qnum{t_stat}$이고 샤프 비율은 $0.42$이며"))
+    assert probs and all(p.startswith("bare number ko sec:results: ") and "0.42" in p for p in probs), probs
+    probs = _consistency((r"장기 & \qnum{sharpe_2y}", r"장기 & $-0.12^{***}$"))
+    assert any(p.startswith("bare number ko tabular: ") and "0.12" in p for p in probs), probs
+    probs = _consistency((r"r_{t+1} = \alpha + 2\beta x_t", r"\hat\beta = 0.37, r_{t+1} = \alpha + 2\beta x_t"))
+    assert probs and all(p.startswith("bare number ko sec:robustness: ") and "0.37" in p for p in probs), probs
+    # notation is not a result: header digits, coefficients, sub/superscripts, fractions, \qnum keys
+    assert C._bare_digits(r"Horizon $h=1$ & $r_{t+1} = 2\beta x_t$, $\hat\beta_{10} > 0$, $\frac{1}{252}$, "
+                          r"$10^{-3}$, \(\qnum{n_1000}\) and \[ x^{\frac{1}{2}} \]") == []
+    assert C._bare_digits(r"$N = 1{,}250$") and C._bare_digits(r"\(\hat\sigma = .25\)")
+    # a results section under another label is never scanned, so its absence is itself a problem
+    tmp = _Path(_tempfile.mkdtemp(prefix="qgcons_"))
+    for ed, text in (("en", _EN_TEX), ("ko", _KO_TEX)):
+        (tmp / ed).mkdir()
+        (tmp / ed / f"paper_{ed}.tex").write_text(text.replace("sec:results", "sec:empirical"), encoding="utf-8")
+    assert C.check(tmp) == [f"bare number {ed}: no \\label{{sec:results}} section; its prose is never scanned"
+                            for ed in ("en", "ko")], C.check(tmp)
+    # an inner tabular (a two-line header cell) does not end the scan of the outer table
+    probs = _consistency(("통계량 & 값", r"\begin{tabular}[t]{@{}l@{}}통계\\량\end{tabular} & 값"),
+                         (r"개월 수 & \qnum{n_months}", "개월 수 & 777"))
+    assert any(p.startswith("bare number ko tabular: ") and "777" in p for p in probs), probs
+
+
+def test_consistency_requires_the_disclosures_in_both_editions():
+    """The AI-assistance statement and the not-investment-advice note are checked, not left to a prompt."""
+    probs = _consistency(("Claude가 저자의 지시에 따라 본문 초안을 작성하였다.\n", ""))
+    assert probs == ["disclosure ko: no non-empty aistatement environment (the AI-assistance statement)"], probs
+    probs = _consistency(("이 논문은 연구이며 투자 권유가 아니다.", "이 논문은 연구이다."))
+    assert probs == ["disclosure ko: no not-investment-advice note"], probs
 
 
 def test_consistency_missing_cite_key_in_ko():

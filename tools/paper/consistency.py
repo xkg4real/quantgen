@@ -7,8 +7,14 @@ Checks between en/paper_en.tex and ko/paper_ko.tex:
   * per section (a \section and everything up to the next one, named by its first \label{sec:...}):
     the same multiset of \qnum keys and the same set of cite keys;
   * the same \label and \ref sets;
-  * in either edition, no bare digit run in the prose of sec:results / sec:robustness or in any tabular body.
-    Math, comments and the arguments of \qnum, \cite*, \ref*, \label and layout commands are not prose.
+  * in either edition, a sec:results and a sec:robustness section, and no bare digit run in their prose or in any
+    tabular body (an inner tabular, such as a two-line header cell, does not end the outer one). Comments and the
+    arguments of \qnum, \cite*, \ref*, \label and layout commands are not prose. Math is not prose either, but a
+    decimal or a number of three or more digits inside it is still a hand-typed result ($0.42$, $-0.12^{***}$,
+    \hat\beta = 0.37, $N = 1{,}250$); sub- and superscripts, \frac{1}{2} and short integers ($h=1$, 2\beta, > 0) are
+    notation;
+  * in either edition, a non-empty aistatement environment (the AI-assistance statement) and the
+    not-investment-advice note.
 Every \input or \include of a file inside the paper folder (tables/<name>, ../common/<name>) is inlined first, so
 generated tables and shared equations are checked where they appear; study/ (numbers.tex) is left out.
 """
@@ -31,21 +37,29 @@ QNUM_RE = re.compile(r"\\qnum\{([^}]*)\}")
 CITE_RE = re.compile(r"\\[Cc]ite[a-zA-Z]*\*?(?:\[[^\]]*\])*\{([^}]*)\}")
 LABEL_RE = re.compile(r"\\label\{([^}]*)\}")
 REF_RE = re.compile(r"\\(?:ref|eqref|autoref|pageref|nameref|cref|Cref)\*?\{([^}]*)\}")
-TABULAR_RE = re.compile(r"\\begin\{(tabular\*?|tabularx|longtable)\}.*?\\end\{\1\}", re.S)
+TAB_RE = re.compile(r"\\(begin|end)\{(?:tabular\*?|tabularx|longtable)\}")
 DIGITS_RE = re.compile(r"\d+")
+AISTATEMENT_RE = re.compile(r"\\begin\{aistatement\}(.*?)\\end\{aistatement\}", re.S)
+ADVICE_RE = {"en": re.compile(r"not\s+investment\s+advice", re.I), "ko": re.compile(r"투자\s*(?:권유|조언|자문)")}
 
 ARG = r"\{(?:[^{}]|\{[^{}]*\})*\}"                    # one brace group, one level of nesting inside
-NOT_PROSE = [                                          # applied in this order
-    re.compile(r"\\\\\*?\[[^\]]*\]"),                  # \\[2pt] (before math, or its "\[" would open display math)
-    re.compile(r"\\begin\{(equation|align|gather|multline|eqnarray|math|displaymath)(\*?)\}.*?\\end\{\1\2\}", re.S),
-    re.compile(r"\$\$.*?\$\$|(?<!\\)\$.*?(?<!\\)\$|\\\(.*?\\\)|\\\[.*?\\\]", re.S),
+LINEBREAK_OPT = re.compile(r"\\\\\*?\[[^\]]*\]")       # \\[2pt] (before math, or its "\[" would open display math)
+MATH = [re.compile(r"\\begin\{(equation|align|gather|multline|eqnarray|math|displaymath)(\*?)\}.*?\\end\{\1\2\}",
+                   re.S),
+        re.compile(r"\$\$.*?\$\$|(?<!\\)\$.*?(?<!\\)\$|\\\(.*?\\\)|\\\[.*?\\\]", re.S)]
+MARKUP = re.compile(r"\\(?:qnum|[Cc]ite[a-zA-Z]*|ref|eqref|autoref|pageref|nameref|cref|Cref|label|input|include"
+                    r"|includegraphics|url|hspace|vspace|rule|setlength|addlinespace|cline|specialrule|begin|end"
+                    r"|bibliography|bibliographystyle)(?![a-zA-Z])\*?(?:\[[^\]]*\]|" + ARG + r")*")
+NOT_PROSE = [                                          # applied in this order, after LINEBREAK_OPT and MATH
     re.compile(r"\\cmidrule(?:\([^)]*\))?\{[^}]*\}"),
     re.compile(r"\\(?:href|multicolumn" + ARG + r"|multirow" + ARG + r")" + ARG),   # keeps the text argument
-    re.compile(r"\\(?:qnum|[Cc]ite[a-zA-Z]*|ref|eqref|autoref|pageref|nameref|cref|Cref|label|input|include"
-               r"|includegraphics|url|hspace|vspace|rule|setlength|addlinespace|cline|specialrule|begin|end"
-               r"|bibliography|bibliographystyle)(?![a-zA-Z])\*?(?:\[[^\]]*\]|" + ARG + r")*"),
+    MARKUP,
     re.compile(r"\\[a-zA-Z@]+\*?\[[^\]]*\]"),          # the optional argument of any other command
 ]
+SCRIPT_RE = re.compile(r"[_^](?:" + ARG + r"|\\[a-zA-Z]+|.)")   # a sub- or superscript: x_{t+1}, x^2, ^{***}
+FRAC_RE = re.compile(r"\\[dt]?frac\s*\{\s*\d+\s*\}\s*\{\s*\d+\s*\}")
+# ponytail: inside math only decimals and 3+ digit runs count; a hand-typed short integer ($k = 12$) slips through.
+MATH_NUMBER_RE = re.compile(r"\d*\.\d+|\d{3,}")
 
 
 def strip_comments(tex: str) -> str:
@@ -93,10 +107,37 @@ def _keys(rx: re.Pattern, text: str) -> set[str]:
 
 
 def _bare_digits(text: str) -> list[str]:
-    """Context of every digit run left once math and markup arguments are removed."""
+    """Each math span holding a hand-typed number (see the module docstring), then the context of every digit run
+    left once math and markup arguments are removed."""
+    found = []
+
+    def math(m: re.Match) -> str:
+        if MATH_NUMBER_RE.search(FRAC_RE.sub(" ", SCRIPT_RE.sub(" ", MARKUP.sub(" ", m.group(0))))):
+            found.append(" ".join(m.group(0).split())[:80])
+        return " "
+
+    text = LINEBREAK_OPT.sub(" ", text)
+    for rx in MATH:
+        text = rx.sub(math, text)
     for rx in NOT_PROSE:
         text = rx.sub(" ", text)
-    return [" ".join(text[max(m.start() - 30, 0): m.end() + 30].split()) for m in DIGITS_RE.finditer(text)]
+    return found + [" ".join(text[max(m.start() - 30, 0): m.end() + 30].split()) for m in DIGITS_RE.finditer(text)]
+
+
+def _tabulars(body: str):
+    """Each outermost tabular / tabularx / longtable, inner ones included; an unclosed one runs to the end."""
+    depth = start = 0
+    for m in TAB_RE.finditer(body):
+        if m.group(1) == "begin":
+            if depth == 0:
+                start = m.start()
+            depth += 1
+        elif depth:
+            depth -= 1
+            if depth == 0:
+                yield body[start:m.end()]
+    if depth:
+        yield body[start:]
 
 
 def check(paper_dir: Path) -> list[str]:
@@ -140,9 +181,17 @@ def check(paper_dir: Path) -> list[str]:
 
     for ed in EDITIONS:
         for name in NO_BARE_DIGITS:
+            if name not in sections[ed]:
+                problems.append(f"bare number {ed}: no \\label{{{name}}} section; its prose is never scanned")
             problems += [f"bare number {ed} {name}: ...{c}..." for c in _bare_digits(sections[ed].get(name, ""))]
-        for table in TABULAR_RE.finditer(body[ed]):
-            problems += [f"bare number {ed} tabular: ...{c}..." for c in _bare_digits(table.group(0))]
+        for table in _tabulars(body[ed]):
+            problems += [f"bare number {ed} tabular: ...{c}..." for c in _bare_digits(table)]
+    for ed in EDITIONS:
+        statement = AISTATEMENT_RE.search(body[ed])
+        if not statement or not statement.group(1).strip():
+            problems.append(f"disclosure {ed}: no non-empty aistatement environment (the AI-assistance statement)")
+        if not ADVICE_RE[ed].search(body[ed]):
+            problems.append(f"disclosure {ed}: no not-investment-advice note")
     return problems
 
 
