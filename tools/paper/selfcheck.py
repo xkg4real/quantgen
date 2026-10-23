@@ -609,6 +609,93 @@ def test_refs_write_bib_and_schema_refusals():
                 raise AssertionError(f"load_refs accepted an entry with {needle}")
 
 
+_CLAIMS_TEX = r"""\documentclass{article}
+\begin{document}
+\section{Introduction}\label{sec:intro}
+% id: intro-1
+Carry is introduced by \citet{koijen2018carry}.
+
+\section{Literature}
+\label{sec:literature}
+\subsection{Canonical treatment}\label{sec:literature-canon}
+% id: literature-1
+Carry is defined by \citet{koijen2018carry}; curve factors follow \citep[p.~55]{litterman1991common}.
+% A commented \cite{ghost2020} is not a citation.
+
+\section{Results}\label{sec:results}
+% id: results-1
+\Citet{koijen2018carry} define the carry ranking used here.
+\end{document}
+"""
+_CLAIM_ROWS = [
+    {"id": "c1", "paragraph_id": "literature-1", "source_key": "koijen2018carry", "locator": "p. 197, eq. (1)",
+     "support": "Carry is the futures return when the spot price stays unchanged.", "status": "supported"},
+    {"id": "c2", "paragraph_id": "literature-1", "source_key": "litterman1991common", "locator": "p. 55",
+     "support": "Level, steepness and curvature explain most bond-return variance.", "status": "supported"},
+    {"id": "c3", "paragraph_id": "results-1", "source_key": "koijen2018carry", "locator": "section 2",
+     "support": "The carry definition used for the ranking.", "status": "supported"},
+]
+
+
+def _claims_paper(d: Path, rows, *, litterman_ok: bool = True) -> Path:
+    """A paper dir with en/paper_en.tex, refs.yaml (verified records) and claims.yaml."""
+    paper = d / "paper"
+    (paper / "en").mkdir(parents=True)
+    (paper / "en" / "paper_en.tex").write_text(_CLAIMS_TEX, encoding="utf-8")
+    rec = {"method": "doi", "url": _REFS_KCARRY_URL, "retrieved_utc": _REFS_NOW, "fetched_title": "Carry", "ok": True}
+    litterman = {"key": "litterman1991common", "type": "article", "authors": ["Litterman, Robert",
+                 "Scheinkman, Jose"], "year": 1991, "title": "Common Factors Affecting Bond Returns",
+                 "venue": "Journal of Fixed Income", "volume": 1, "pages": "54-61",
+                 "doi": "10.3905/jfi.1991.692347", "class": "published", "verified": dict(rec, ok=litterman_ok)}
+    refs = [dict(_REFS_KCARRY, verified=rec), litterman]
+    (paper / "refs.yaml").write_text(yaml.safe_dump(refs, sort_keys=False), encoding="utf-8")
+    (paper / "claims.yaml").write_text(yaml.safe_dump(rows, sort_keys=False), encoding="utf-8")
+    return paper
+
+
+def test_claims_gate_passes_on_a_supported_paper():
+    from tools.paper import claims as C
+    paras = C.paragraphs(_CLAIMS_TEX)
+    assert [(s, p) for s, p, _ in paras] == [("intro", "intro-1"), ("literature", "literature-1"),
+                                             ("results", "results-1")], paras
+    assert C.cite_keys(paras[1][2]) == ["koijen2018carry", "litterman1991common"], paras[1][2]
+    assert C.cite_keys(paras[2][2]) == ["koijen2018carry"], paras[2][2]               # \Citet is a citation too
+    with tempfile.TemporaryDirectory(prefix="qgclaims_") as d:
+        assert C.check(_claims_paper(Path(d), _CLAIM_ROWS)) == []     # intro-1 is not a gated section
+
+
+def test_claims_gate_fails_on_unread_unsupported_missing_and_unverified():
+    from tools.paper import claims as C
+    c1, c2, c3 = _CLAIM_ROWS
+    cases = [
+        ([dict(c1, status="unread", support=""), c2, c3], True, "claim c1: status unread blocks release"),
+        ([dict(c1, status="unread", support=""), c2, c3], True,
+         "literature-1: \\cite{koijen2018carry} has no supported claims.yaml row"),
+        ([c1, dict(c2, status="unsupported"), c3], True, "claim c2: status unsupported blocks release"),
+        ([c1, c2], True, "results-1: \\cite{koijen2018carry} has no supported claims.yaml row"),
+        (_CLAIM_ROWS, False, "claim c2: source litterman1991common is not verified ok"),
+        ([c1, c2, c3, dict(c3, id="c4", source_key="ghost2020")], True,
+         "claim c4: source 'ghost2020' not in refs.yaml"),
+        ([c1, c2, c3, dict(c3, id="c5", paragraph_id="results-9")], True, "claim c5: paragraph 'results-9' not in"),
+        ([c1, c2, dict(c3, locator="")], True, "claim c3: missing ['locator']"),
+    ]
+    with tempfile.TemporaryDirectory(prefix="qgclaims_") as d:
+        for i, (rows, ok, needle) in enumerate(cases):
+            problems = C.check(_claims_paper(Path(d) / str(i), rows, litterman_ok=ok))
+            assert any(needle in p for p in problems), (needle, problems)
+        # a citation inside an \input file belongs to the paragraph that inputs it
+        paper = _claims_paper(Path(d) / "input", _CLAIM_ROWS)
+        (paper / "en" / "tables").mkdir()
+        (paper / "en" / "tables" / "cites.tex").write_text("Curve factors \\citep{litterman1991common}.\n",
+                                                           encoding="utf-8")
+        tex = paper / "en" / "paper_en.tex"
+        tex.write_text(tex.read_text(encoding="utf-8").replace("used here.", "used here.\n\\input{tables/cites}"),
+                       encoding="utf-8")
+        assert C.check(paper) == ["results-1: \\cite{litterman1991common} has no supported claims.yaml row"], \
+            C.check(paper)
+        assert C.check(Path(d) / "nowhere") == ["missing en/paper_en.tex", "missing claims.yaml", "missing refs.yaml"]
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
