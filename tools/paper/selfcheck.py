@@ -630,6 +630,26 @@ def test_refs_verify_file_records_manual_and_problems():
         assert R.ref_problems([dict(book)]) == ["hamilton1994: no verified record"]
 
 
+def test_refs_verified_record_must_match_the_entry():
+    """An ok record counts only for the DOI / arXiv id and the title it was fetched for: an entry edited after
+    verification, or a record copied from a neighbouring entry, needs `refs verify` again."""
+    from tools.paper import refs as R
+    rec = R.verify_entry(dict(_REFS_KCARRY), fetch=_refs_fetcher({_REFS_KCARRY_URL: _REFS_CROSSREF}), now_utc=_REFS_NOW)
+    entry = dict(_REFS_KCARRY, verified=rec)
+    assert R.ref_problems([entry]) == []
+    stale = "koijen2018carry: verified record does not match the entry; rerun python -m tools.paper.refs verify"
+    for edited in (dict(entry, doi="10.1/changed"), dict(entry, title="Carry Everywhere"),
+                   dict(entry, doi=None, arxiv="2101.00001")):
+        assert R.ref_problems([edited]) == [stale], edited
+    neighbour = {"key": "fixture2021", "type": "misc", "authors": ["Doe, Jane"], "year": 2021,
+                 "title": "Carry", "doi": "10.1/other", "class": "working_paper", "verified": dict(rec)}
+    assert R.ref_problems([neighbour]) == [stale.replace("koijen2018carry", "fixture2021")]
+    manual = {"key": "hamilton1994", "type": "book", "authors": ["Hamilton, James D."], "year": 1994,
+              "title": "Time Series Analysis", "class": "book",
+              "verified": {"method": "manual", "url": "https://press.princeton.edu/", "fetched_title": "", "ok": True}}
+    assert R.ref_problems([manual]) == [], "a manual record is the agent's check and stays as it is"
+
+
 def test_refs_write_bib_and_schema_refusals():
     from tools.paper import refs as R
     with tempfile.TemporaryDirectory(prefix="qgrefs_") as d:
@@ -671,6 +691,10 @@ Carry is introduced by \citet{koijen2018carry}.
 Carry is defined by \citet{koijen2018carry}; curve factors follow \citep[p.~55]{litterman1991common}.
 % A commented \cite{ghost2020} is not a citation.
 
+\section{Model}\label{sec:model}
+% id: model-1
+The ranking sorts currencies by carry.
+
 \section{Results}\label{sec:results}
 % id: results-1
 \Citet{koijen2018carry} define the carry ranking used here.
@@ -695,7 +719,9 @@ def _claims_paper(d: Path, rows, *, litterman_ok: bool = True) -> Path:
     litterman = {"key": "litterman1991common", "type": "article", "authors": ["Litterman, Robert",
                  "Scheinkman, Jose"], "year": 1991, "title": "Common Factors Affecting Bond Returns",
                  "venue": "Journal of Fixed Income", "volume": 1, "pages": "54-61",
-                 "doi": "10.3905/jfi.1991.692347", "class": "published", "verified": dict(rec, ok=litterman_ok)}
+                 "doi": "10.3905/jfi.1991.692347", "class": "published",
+                 "verified": dict(rec, url="https://api.crossref.org/works/10.3905/jfi.1991.692347",
+                                  fetched_title="Common Factors Affecting Bond Returns", ok=litterman_ok)}
     refs = [dict(_REFS_KCARRY, verified=rec), litterman]
     (paper / "refs.yaml").write_text(yaml.safe_dump(refs, sort_keys=False), encoding="utf-8")
     (paper / "claims.yaml").write_text(yaml.safe_dump(rows, sort_keys=False), encoding="utf-8")
@@ -706,9 +732,9 @@ def test_claims_gate_passes_on_a_supported_paper():
     from tools.paper import claims as C
     paras = C.paragraphs(_CLAIMS_TEX)
     assert [(s, p) for s, p, _ in paras] == [("intro", "intro-1"), ("literature", "literature-1"),
-                                             ("results", "results-1")], paras
+                                             ("model", "model-1"), ("results", "results-1")], paras
     assert C.cite_keys(paras[1][2]) == ["koijen2018carry", "litterman1991common"], paras[1][2]
-    assert C.cite_keys(paras[2][2]) == ["koijen2018carry"], paras[2][2]               # \Citet is a citation too
+    assert C.cite_keys(paras[3][2]) == ["koijen2018carry"], paras[3][2]               # \Citet is a citation too
     with tempfile.TemporaryDirectory(prefix="qgclaims_") as d:
         assert C.check(_claims_paper(Path(d), _CLAIM_ROWS)) == []     # intro-1 is not a gated section
 
@@ -761,14 +787,18 @@ def test_claims_gate_fails_on_unread_unsupported_missing_and_unverified():
         assert [(s, p) for s, p, _ in C.paragraphs(
             "\\section{Results}\n% id: results-1\ny \\citet{ghost}\n\\label{sec:results}")] == [("results", "results-1")]
         unlabelled = "\\section{Results} has no \\label{sec:...}; the claims gate cannot tell which section it is"
+        ungated = "no \\label{{sec:{}}} section; its citations are not gated".format
         assert variant("nolabel", _CLAIM_ROWS, ("\\section{Results}\\label{sec:results}", "\\section{Results}")) \
-            == [unlabelled]
+            == [unlabelled, ungated("results")]
         assert variant("lateid", [c1, c2], ("\\section{Results}\\label{sec:results}\n", "\\section{Results}\n"),
                        ("ranking used here.", "ranking used here.\n\\label{sec:results}")) \
             == ["results-1: \\cite{koijen2018carry} has no supported claims.yaml row"]
-        # labels that match no gated section leave the gate with nothing to check, which is a problem in itself
+        # a gated section under another label is never checked, which is a problem in itself, one section at a time
         assert variant("renamed", _CLAIM_ROWS, ("{sec:literature}", "{sec:related}"), ("{sec:results}", "{sec:method}")) \
-            == ["no `% id:` paragraph falls in a gated section (sec:literature, sec:model, sec:results)"]
+            == [ungated("literature"), ungated("results")]
+        assert variant("related", _CLAIM_ROWS, ("{sec:literature}", "{sec:related}"),
+                       ("curve factors follow", "\\citet{fake2020} disagrees; curve factors follow")) \
+            == [ungated("literature")]
         # a cite in a gated section but outside every `% id:` paragraph cannot have a claims row
         assert variant("loose", _CLAIM_ROWS, ("% id: results-1\n", "\\Citet{ghost2020} opens the section.\n% id: results-1\n")) \
             == ["sec:results: \\cite{ghost2020} outside an id'd paragraph"]

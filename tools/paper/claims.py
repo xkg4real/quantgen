@@ -12,8 +12,8 @@ or not a claims row uses it, so a reference added while drafting cannot reach re
 A paragraph runs from its `% id: <section>-<n>` line to the next id line or \\section. A section is
 a \\section and everything up to the next one, named by the first `\\label{sec:...}` anywhere in it
 (as tools.paper.consistency does), so subsection labels do not move it. A \\section without such a
-label is a problem, and so is a paper in which no paragraph falls in a gated section (the labels in
-GATED), because the gate would then check nothing. A cite in a gated section outside every id'd
+label is a problem, and so is each gated section (the labels in GATED) the paper lacks, because a
+renamed one (sec:related, sec:methodology) would go unchecked. A cite in a gated section outside every id'd
 paragraph is a problem too: no claims row can name it. An \\input of a file inside the paper folder
 (for example tables/<name>) is read as part of the paragraph it sits in.
 
@@ -120,8 +120,8 @@ def check(paper_dir: Path) -> list[str]:
             problems.append(f"claim {rid}: source {ref['key']} is not verified ok")
         if status == "supported" and not absent:
             supported.add((r["paragraph_id"], r["source_key"]))
-    if not any(section in GATED for section, _, _ in paras):
-        problems.append("no `% id:` paragraph falls in a gated section (" + ", ".join(f"sec:{g}" for g in GATED) + ")")
+    present = {section for section, _ in loose}
+    problems += [f"no \\label{{sec:{g}}} section; its citations are not gated" for g in GATED if g not in present]
     for section, pid, text in paras:
         if section in GATED:
             for key in cite_keys(text):

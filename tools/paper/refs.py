@@ -141,7 +141,8 @@ def verify_entry(entry: dict, *, fetch: Fetch, now_utc: str) -> dict:
 
 
 def ref_problems(refs) -> list[str]:
-    """One line per entry without an ok record that names a url."""
+    """One line per entry without an ok record that names a url, or whose DOI / arXiv record was fetched for another
+    id or title than the entry now has (edited after verification, or copied from another entry)."""
     out = []
     for e in refs:
         v = e.get("verified") or {}
@@ -151,6 +152,12 @@ def ref_problems(refs) -> list[str]:
             out.append(f"{e['key']}: not verified ({v.get('method')}: fetched {v.get('fetched_title', '')!r})")
         elif not v.get("url"):
             out.append(f"{e['key']}: verified record has no url")
+        elif e.get("doi") or e.get("arxiv"):
+            expected = (("doi", CROSSREF + quote(str(e["doi"]), safe="/")) if e.get("doi")
+                        else ("arxiv", ARXIV + str(e["arxiv"])))
+            if (v.get("method"), v.get("url")) != expected or _norm(v.get("fetched_title")) != _norm(e["title"]):
+                out.append(f"{e['key']}: verified record does not match the entry; "
+                           "rerun python -m tools.paper.refs verify")
     return out
 
 

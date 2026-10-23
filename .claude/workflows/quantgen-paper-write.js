@@ -107,8 +107,8 @@ const revise = k => say(
   `Revision after referee round ${k}. You are the author.`,
   `1. Read every ${P}/review/round${k}_*.md. Write ${P}/review/response_round${k}.md: for each issue (its id and referee), what changed and where (section label and paragraph ids), or why no change was made. The round ${k + 1} referees read it, so it quotes nothing from the owner's private materials.`,
   `2. Revise ${P}/en/paper_en.tex. An analysis a referee requests goes only into a section "Exploratory analyses requested in review" (\\label{sec:exploratory}), produced by python ${REL}/study/run.py --kind exploratory --analysis <name> --now <current UTC time>, which writes a new run directory with its own MANIFEST and adds new numbers keys. Pre-specified results and their numbers never change.`,
-  '3. Set status unread on the claims.yaml row of every paragraph you changed, add rows for new citations, regenerate refs.bib with tools.paper.refs (write_bib(load_refs(refs.yaml), refs.bib)), and recompile the English edition with tools.paper.build.compile_tex until it reports no errors.',
-  `4. Commit ${REL}/en, ${REL}/review/response_round${k}.md, ${REL}/claims.yaml, ${REL}/refs.bib and any new ${REL}/study outputs.`,
+  `3. Set status unread on the claims.yaml row of every paragraph you changed, add rows for new citations, run python -m tools.paper.refs verify ${REL} (it re-verifies every refs.yaml entry against Crossref or arXiv and rewrites refs.yaml and refs.bib; a stored record that no longer matches its entry blocks release), and recompile the English edition with tools.paper.build.compile_tex until it reports no errors.`,
+  `4. Commit ${REL}/en, ${REL}/review/response_round${k}.md, ${REL}/claims.yaml, ${REL}/refs.yaml, ${REL}/refs.bib and any new ${REL}/study outputs.`,
 )
 
 // 0. The approval gate: an exit code, not a judgment
@@ -176,8 +176,8 @@ if (MODE === 'full') {
     `- The aistatement environment holds this text, changed only where the tools actually used differ: "${AI_STATEMENT}"`,
     '- A closing note: "This paper is research. It is not investment advice."',
     `- Add a ${P}/claims.yaml row (status unread) for every \\cite in the model and results sections, keyed to its paragraph id. The literature rows exist already; update their paragraph_id only where a paragraph moved.`,
-    `- Regenerate ${P}/refs.bib with tools.paper.refs (write_bib(load_refs(refs.yaml), refs.bib)).`,
-    `Compile the English edition alone with tools.paper.build.compile_tex(Path("${P}/en/paper_en.tex")) and fix every error it reports (warnings may stay; list them in the summary). Commit ${REL}/en/paper_en.tex, ${REL}/claims.yaml and ${REL}/refs.bib.`,
+    `- Run python -m tools.paper.refs verify ${REL}: it re-verifies every refs.yaml entry against Crossref or arXiv and rewrites refs.yaml and refs.bib (an entry added or edited since the research stage needs it).`,
+    `Compile the English edition alone with tools.paper.build.compile_tex(Path("${P}/en/paper_en.tex")) and fix every error it reports (warnings may stay; list them in the summary). Commit ${REL}/en/paper_en.tex, ${REL}/claims.yaml, ${REL}/refs.yaml and ${REL}/refs.bib.`,
   ), { label: 'draft-en', phase: 'Draft', schema: STAGE })
   if (!draft || !draft.ok) return stop('draft', draft)
   let checked = await claimsCheck('claims-en', 'Draft')
