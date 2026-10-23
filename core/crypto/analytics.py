@@ -1,7 +1,7 @@
 """Crypto analytics on keyless Upbit / Binance data: the kimchi premium, funding
-as carry, a six-component market-regime score, the ETH/BTC ratio test, the
-weekday table, and an out-of-sample scorecard for the app's GARCH(1,1)-t on
-Bitcoin. Nothing here trades; every number carries its sample size.
+as carry, the ETH/BTC ratio test, the weekday table, and an out-of-sample
+scorecard for the app's GARCH(1,1)-t on Bitcoin. Nothing here trades; every
+number carries its sample size.
 
   kimchi_premium      p = P_Upbit(KRW-BTC) / (P_Binance(BTCUSDT) · USDKRW) − 1,
                       1-year z, ADF, half-life, and the next-7-day predictive
@@ -12,13 +12,6 @@ Bitcoin. Nothing here trades; every number carries its sample size.
                       percentile since 2019-09-10, crowded flags, and the
                       decile event study (BIS WP 1087: high carry predicts
                       crashes; He, Manela, Ross & von Wachter 2022).
-  regime_score        the six components of the crypto-regime-analyzer skill
-                      (trend 25 %, alt breadth 20 %, dominance 15 %, funding
-                      15 %, drawdown & vol 15 %, thrust 10 %) re-authored with
-                      explicit thresholds; the skill itself says its bands are
-                      "heuristic descriptive bands, not validated allocation
-                      rules", and candidate C6's gate decides whether the
-                      posture line ships.
   eth_btc_test        ADF / half-life on ln(ETH/BTC); a null is expected.
   weekday_table       returns and volume by weekday (Baur et al. 2019: no
                       persistent return effect, lower weekend volume).
@@ -172,111 +165,6 @@ def funding_carry(funding_daily: dict[str, float], btc_close: dict[str, float], 
 
 
 # --------------------------------------------------------------------------- #
-# Regime score
-# --------------------------------------------------------------------------- #
-@dataclass(frozen=True)
-class RegimeComponent:
-    key: str
-    label: str
-    weight: float
-    score: Optional[float]          # 0–100, None when unavailable
-    signal: str
-
-
-@dataclass(frozen=True)
-class RegimeScore:
-    score: float
-    zone: str                       # RISK_ON | NEUTRAL | RISK_OFF
-    components: tuple[RegimeComponent, ...]
-    effective_weights: dict[str, float]
-    as_of: str
-    note: str = ("Heuristic descriptive bands re-authored from the crypto-regime-analyzer skill; not validated "
-                 "allocation rules until candidate C6 passes its gate.")
-
-
-def _sma(x: np.ndarray, n: int) -> float:
-    return float(np.mean(x[-n:])) if x.size >= n else float("nan")
-
-
-def regime_score(btc: np.ndarray, majors: dict[str, np.ndarray], *, funding_ann_pct: Optional[float] = None,
-                 dominance_30d_change: Optional[float] = None, as_of: str = "") -> RegimeScore:
-    """`btc` and each major: daily closes (≥ 200). Components with missing
-    inputs are dropped and their weight redistributed proportionally."""
-    comps: list[RegimeComponent] = []
-    p = float(btc[-1])
-    s50, s200 = _sma(btc, 50), _sma(btc, 200)
-    slope200 = (s200 / _sma(btc[:-20], 200) - 1.0) if btc.size >= 220 else float("nan")
-    if math.isfinite(s200):
-        if p > s50 > s200 and slope200 > 0:
-            sc, sig = 100.0, "price above a rising 50/200 stack"
-        elif p > s200 and p > s50:
-            sc, sig = 75.0, "price above both averages, 50 below 200"
-        elif p > s200 or p > s50:
-            sc, sig = 45.0, "price above one average only"
-        elif p < s50 < s200 and slope200 < 0:
-            sc, sig = 0.0, "price below a falling 50/200 stack"
-        else:
-            sc, sig = 20.0, "price below both averages"
-        comps.append(RegimeComponent("trend", "BTC trend structure", 0.25, sc, sig))
-    else:
-        comps.append(RegimeComponent("trend", "BTC trend structure", 0.25, None, "insufficient history"))
-    above200 = [float(x[-1]) > _sma(x, 200) for x in majors.values() if x.size >= 200]
-    above50 = [float(x[-1]) > _sma(x, 50) for x in majors.values() if x.size >= 50]
-    if above200:
-        breadth = 100.0 * np.mean(above200)
-        bonus = 10.0 if above50 and np.mean(above50) > 0.5 else 0.0
-        comps.append(RegimeComponent("breadth", "Alt breadth (above 200-DMA)", 0.20, min(100.0, breadth + bonus),
-                                     f"{np.mean(above200):.0%} of {len(above200)} majors above their 200-DMA"))
-    else:
-        comps.append(RegimeComponent("breadth", "Alt breadth (above 200-DMA)", 0.20, None, "no major with 200 sessions"))
-    if dominance_30d_change is not None and math.isfinite(s200):
-        up = p > s200
-        if up:
-            sc, sig = (60.0, "dominance rising in an uptrend: BTC-led") if dominance_30d_change > 0 else (85.0, "dominance falling in an uptrend: broad participation")
-        else:
-            sc, sig = (30.0, "dominance rising in a downtrend: flight to BTC") if dominance_30d_change > 0 else (10.0, "dominance falling in a downtrend: broad liquidation")
-        comps.append(RegimeComponent("dominance", "BTC dominance direction", 0.15, sc, sig))
-    else:
-        comps.append(RegimeComponent("dominance", "BTC dominance direction", 0.15, None, "no dominance history yet (accumulates daily)"))
-    if funding_ann_pct is not None and math.isfinite(funding_ann_pct):
-        a = abs(funding_ann_pct)
-        if a > 30:
-            sc, sig = 20.0, f"funding {funding_ann_pct:+.0f} %/yr: leverage crowded"
-        elif a > 10:
-            sc, sig = 50.0, f"funding {funding_ann_pct:+.0f} %/yr: elevated"
-        else:
-            sc, sig = 80.0, f"funding {funding_ann_pct:+.0f} %/yr: sane"
-        comps.append(RegimeComponent("funding", "Perpetual funding", 0.15, sc, sig))
-    else:
-        comps.append(RegimeComponent("funding", "Perpetual funding", 0.15, None, "funding unavailable"))
-    if btc.size >= 250:
-        dd = 1.0 - p / float(np.max(btc[-365:]))
-        r = np.diff(np.log(btc[-366:]))
-        rv = np.array([np.std(r[i - 30:i]) for i in range(30, r.size)]) * math.sqrt(CRYPTO_DAYS)
-        vol_pct = float(np.mean(rv <= rv[-1])) if rv.size else 0.5
-        sc = 90.0 if dd < 0.10 else 70.0 if dd < 0.25 else 40.0 if dd < 0.50 else 15.0
-        if vol_pct > 0.9:
-            sc = max(0.0, sc - 20.0)
-        comps.append(RegimeComponent("drawdown", "Drawdown & volatility position", 0.15, sc,
-                                     f"{dd:.0%} below the 1-year high; 30-day vol at the {vol_pct:.0%} percentile"))
-    else:
-        comps.append(RegimeComponent("drawdown", "Drawdown & volatility position", 0.15, None, "insufficient history"))
-    pos30 = [float(x[-1]) > float(x[-31]) for x in list(majors.values()) + [btc] if x.size >= 31]
-    if pos30:
-        comps.append(RegimeComponent("thrust", "30-day momentum thrust", 0.10, 100.0 * float(np.mean(pos30)),
-                                     f"{np.mean(pos30):.0%} of the universe up over 30 days"))
-    else:
-        comps.append(RegimeComponent("thrust", "30-day momentum thrust", 0.10, None, "insufficient history"))
-    live = [c for c in comps if c.score is not None]
-    wsum = sum(c.weight for c in live) or 1.0
-    eff = {c.key: c.weight / wsum for c in live}
-    score = float(sum(c.score * eff[c.key] for c in live)) if live else float("nan")
-    zone = "RISK_ON" if score >= 80 else "RISK_OFF" if score < 40 else "NEUTRAL"
-    return RegimeScore(score=score, zone=zone, components=tuple(comps), effective_weights=eff,
-                       as_of=as_of or date.today().isoformat())
-
-
-# --------------------------------------------------------------------------- #
 # ETH/BTC and weekday
 # --------------------------------------------------------------------------- #
 def eth_btc_test(eth: dict[str, float], btc: dict[str, float]) -> dict:
@@ -427,12 +315,6 @@ if __name__ == "__main__":
     fc = funding_carry(fund, dict(zip(ds, us)))
     assert fc.n == n and math.isfinite(fc.last_ann_pct) and 0 <= fc.percentile <= 1 and fc.flag in ("normal", "crowded long", "crowded short")
     majors = {k: 100 * np.exp(np.cumsum(rng.normal(0.001, 0.04, 400))) for k in ("ETH", "SOL", "XRP", "BNB")}
-    rs = regime_score(us[-400:], majors, funding_ann_pct=8.0, dominance_30d_change=-0.01)
-    assert 0 <= rs.score <= 100 and rs.zone in ("RISK_ON", "NEUTRAL", "RISK_OFF") and abs(sum(rs.effective_weights.values()) - 1) < 1e-9
-    rs2 = regime_score(us[-400:], majors)
-    assert rs2.components[2].score is None and rs2.components[3].score is None and abs(sum(rs2.effective_weights.values()) - 1) < 1e-9
-    down = 100 * np.exp(np.cumsum(rng.normal(-0.004, 0.03, 400)))
-    assert regime_score(down, {"ETH": down}).score < regime_score(100 * np.exp(np.cumsum(rng.normal(0.004, 0.02, 400))), {"ETH": majors["ETH"]}).score
     eb = eth_btc_test(dict(zip(ds, majors["ETH"].tolist() * 3)) if False else dict(zip(ds[:400], majors["ETH"])), dict(zip(ds[:400], us[:400])))
     assert eb["n"] == 400 and eb["verdict"]
     wt = weekday_table(ds, us, rng.random(n) * 100 + (np.array([date.fromisoformat(d).weekday() < 5 for d in ds]) * 50))

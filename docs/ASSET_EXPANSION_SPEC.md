@@ -174,7 +174,7 @@ fit; the Derivatives page labels a closed-market board indicative.
 | `core/ficc/curve_models.py` | Diebold–Li, PCA butterfly, bond carry, KRW curve panel | `core.ficc.curves` |
 | `core/ficc/fx_styles.py` | FX momentum, dollar carry, Fama regression | `core.ficc.fx` |
 | `core/ficc/vol_products.py` | VIX term structure, roll-down, ETP drift | `core.quant.strategies.simulate` |
-| `core/crypto/analytics.py` | kimchi premium, funding carry, regime score, ETH/BTC, weekday, GARCH / GJR / skew-t scorecard | `core.quant.garch`, `validate` |
+| `core/crypto/analytics.py` | kimchi premium, funding carry, ETH/BTC, weekday, GARCH / GJR / skew-t scorecard (the regime score moved to TRADEGEN on 2026-10-23) | `core.quant.garch`, `validate` |
 | `core/quant/gjr.py` | GJR-GARCH(1,1) with t, normal or Hansen skewed-t innovations (fit, next variance, skew-t CDF/quantile) | `core.quant.garch` bounds and guardrails |
 | `docs/build_expansion_primer.py`, `docs/primer_kit.py` | the plain-language companion PDF built from the cards | reportlab kit shared with the models primer's conventions |
 | `ui/derivatives_page.py`, `ui/etf_page.py`, `ui/crypto_page.py`, `ui/strategy_lab_page.py` | the four new surfaces | `ai_panel`, `components`, chart helpers |

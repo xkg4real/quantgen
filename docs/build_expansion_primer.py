@@ -613,6 +613,7 @@ def ch7() -> list:
             f"<b>Funding carry</b>: the perpetual funding rate annualised, its percentile, and the forward return after top- "
             f"and bottom-decile funding with a bootstrap. {line('M_C4_funding', 0)} Decision {dec('M_C4_funding')}: the BIS "
             "sign is confirmed and the tile is offered as a positioning read, not as a trade.",
+            # 2026-10-23: the regime score moved to TRADEGEN (split spec 4.1 A2); the built PDF predates this.
             "<b>Regime score</b>: six components (trend, funding, open interest, the premium, realised vol, breadth) each "
             "scored 0-100 with the weights of any missing component redistributed, so a keyless run still reads.",
             f"<b>ETH/BTC</b>: the log ratio tested for a unit root. {line('M_C8_ethbtc', 0)} The expected null; no pair "
@@ -659,7 +660,8 @@ def ch8() -> list:
          "the short-volatility strategy (no board history); any figure from a closed-market board is marked indicative"],
         ["ETF", "NAV premium with half-life, constituents, leveraged-fund drag at realised and GARCH variance, the trend and "
                 "vol-target sleeves with their verdicts", "trend / vol target / risk parity / sector momentum as signals"],
-        ["Crypto", "kimchi premium, funding carry, regime score, GARCH-t on bitcoin with its verdict, ETH/BTC, weekday table, "
+        # 2026-10-23: the regime score moved to TRADEGEN (split spec 4.1 A2); the built PDF predates this and still lists it.
+        ["Crypto", "kimchi premium, funding carry, GARCH-t on bitcoin with its verdict, ETH/BTC, weekday table, "
                    "Upbit balances (asset-inquiry key)", "any order or transfer; ETH/BTC pair; the premium as a trade"],
         ["Strategy Lab", "every card with its lines; the crypto trend rule (PASS) runnable on live data; any family runnable "
                          "ad hoc with the same gate", "REJECT families as recommendations (they run, labelled)"],

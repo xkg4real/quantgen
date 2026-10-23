@@ -341,6 +341,7 @@ def tests():
         ("selfcheck_fx_styles", _selfcheck("core/ficc/fx_styles.py")),
         ("selfcheck_vol_products", _selfcheck("core/ficc/vol_products.py")),
         ("selfcheck_crypto_analytics", _selfcheck("core/crypto/analytics.py")),
+        ("selfcheck_crypto_page", _selfcheck("ui/crypto_page.py")),
     ]
 
 

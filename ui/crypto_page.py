@@ -1,6 +1,6 @@
-"""Crypto — the kimchi premium, funding as carry, the market-regime score,
-the app's GARCH(1,1)-t on Bitcoin, the ETH/BTC test, the weekday table and,
-when an Upbit read-only key is configured, the holdings with their cost basis.
+"""Crypto — the kimchi premium, funding as carry, the app's GARCH(1,1)-t on
+Bitcoin, the ETH/BTC test, the weekday table and, when an Upbit read-only key
+is configured, the holdings with their cost basis.
 
 Everything is keyless public data (`data.crypto.crypto_client`) except the
 balance read. Nothing here trades, and the page says so.
@@ -21,7 +21,6 @@ from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
 import ui.xcharts as xc
 
-MAJORS = ("ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "TRXUSDT", "LINKUSDT")
 CRYPTO_DAYS = 365
 
 
@@ -36,9 +35,9 @@ def _synthetic() -> dict:
         prem[t] = 0.92 * prem[t - 1] + rng.normal(0, 0.4)
     kr = us * fx * (1 + prem / 100)
     fund = rng.normal(0.0002, 0.0004, n)
-    majors = {k: 100 * np.exp(np.cumsum(rng.normal(0.0005, 0.04, n))) for k in MAJORS}
+    eth = 100 * np.exp(np.cumsum(rng.normal(0.0005, 0.04, n)))    # the same draw ETHUSDT had as the first major
     return {"dates": ds, "upbit": dict(zip(ds, kr)), "binance": dict(zip(ds, us)), "usdkrw": dict(zip(ds, fx)),
-            "funding_daily": dict(zip(ds, fund)), "majors": majors, "eth": dict(zip(ds, majors["ETHUSDT"])),
+            "funding_daily": dict(zip(ds, fund)), "eth": dict(zip(ds, eth)),
             "volume": rng.random(n) * 100, "premium_index": {"premium_pct": 0.01, "last_funding_rate": 0.0001},
             "oi": [], "source": "SYNTHETIC"}
 
@@ -49,16 +48,10 @@ def _live(days: int) -> dict:
     up = UpbitPublic().daily("KRW-BTC", days=days)
     bn = BinancePublic()
     btc = bn.daily("BTCUSDT", days=days)
-    majors = {}
-    for sym in MAJORS:
-        try:
-            majors[sym] = np.asarray(bn.daily(sym, days=400).close)
-        except Exception:
-            continue
     fund = bn.funding("BTCUSDT", days=min(days, 1500)).daily()
     fx = load_series("DEXKOUS", source="auto", days=days + 100)
     return {"dates": btc.dates, "upbit": dict(zip(up.dates, up.close)), "binance": dict(zip(btc.dates, btc.close)),
-            "usdkrw": dict(zip(fx.dates, fx.values)), "usdkrw_source": fx.source, "funding_daily": fund, "majors": majors,
+            "usdkrw": dict(zip(fx.dates, fx.values)), "usdkrw_source": fx.source, "funding_daily": fund,
             "eth": dict(zip(*(lambda c: (c.dates, c.close))(bn.daily("ETHUSDT", days=days)))),
             "volume": np.asarray(btc.quote_volume), "premium_index": bn.premium_index("BTCUSDT"),
             "oi": bn.open_interest_hist("BTCUSDT"), "source": "LIVE"}
@@ -73,8 +66,6 @@ def analyze(*, days: int = 730, source: str = "live") -> dict:
     except ValueError as exc:
         out["funding"] = None; out["funding_error"] = str(exc)
     btc = np.array([d["binance"][k] for k in sorted(d["binance"])])
-    fa = out["funding"].last_ann_pct if out["funding"] else None
-    out["regime"] = CA.regime_score(btc, d["majors"], funding_ann_pct=fa)
     out["ethbtc"] = CA.eth_btc_test(d["eth"], d["binance"])
     out["weekday"] = CA.weekday_table(sorted(d["binance"]), btc, np.asarray(d["volume"])[-btc.size:])
     from core.quant.garch import fit_garch
@@ -107,7 +98,7 @@ def analyze(*, days: int = 730, source: str = "live") -> dict:
 
 
 def narrative(a: dict) -> str:
-    kp, fc, rs, g = a["kimchi"], a["funding"], a["regime"], a["garch"]
+    kp, fc, g = a["kimchi"], a["funding"], a["garch"]
     parts = [
         f"Korea pays {kp.last_pct:+.2f} % against the world price for bitcoin ({kp.last_z:+.1f} standard deviations from its one-year mean; "
         f"average {kp.mean_pct:+.2f} %, peak {kp.max_pct:.1f} % since {kp.dates[0]}); the premium's half-life is {kp.half_life_days:.0f} days "
@@ -118,9 +109,6 @@ def narrative(a: dict) -> str:
         parts.append(f"Perpetual funding runs {fc.last_ann_pct:+.1f} % a year on the 7-day mean, the {fc.percentile:.0%} percentile since "
                      f"{fc.dates[0]} ({fc.flag}); after top-decile funding the next 30 days returned {fc.top_decile_fwd30:+.1%} against "
                      f"{fc.bottom_decile_fwd30:+.1%} after bottom-decile funding (bootstrap p {fc.bootstrap_p:.2f}).")
-    live = [c for c in rs.components if c.score is not None]
-    parts.append(f"The regime score is {rs.score:.0f}/100 ({rs.zone}) from {len(live)} components: " +
-                 "; ".join(f"{c.label} {c.score:.0f} ({c.signal})" for c in live) + ". " + rs.note)
     parts.append(f"GARCH(1,1)-t on {g['n']} days of BTCUSDT: ν {g['nu']:.1f}, persistence {g['persistence']:.3f} "
                  f"(half-life {g['half_life']:.0f} days), conditional vol {g['cond_vol_365']:.0%} on a 365-day basis"
                  f"{'' if g['converged'] else '; the solver did not converge'}"
@@ -133,13 +121,12 @@ def narrative(a: dict) -> str:
 
 
 def payload(a: dict) -> dict:
-    kp, fc, rs = a["kimchi"], a["funding"], a["regime"]
+    kp, fc = a["kimchi"], a["funding"]
     return {"source": a["source"], "kimchi": {"last_pct": kp.last_pct, "z": kp.last_z, "mean_pct": kp.mean_pct, "max_pct": kp.max_pct,
                                               "half_life_days": kp.half_life_days, "adf_p": kp.adf_p, "pred_t": kp.pred_t, "n": kp.n},
             "funding": ({"last_ann_pct": fc.last_ann_pct, "percentile": fc.percentile, "flag": fc.flag, "top_decile_fwd30": fc.top_decile_fwd30,
                          "bottom_decile_fwd30": fc.bottom_decile_fwd30, "bootstrap_p": fc.bootstrap_p} if fc else None),
-            "premium_index": a["premium_index"], "regime": {"score": rs.score, "zone": rs.zone, "components":
-                                                            [{"key": c.key, "score": c.score, "signal": c.signal} for c in rs.components]},
+            "premium_index": a["premium_index"],
             "garch": a["garch"], "ethbtc": a["ethbtc"], "weekday": a["weekday"], "verdicts": a["verdicts"],
             "holdings": [{k: v for k, v in b.items()} for b in (a.get("balances") or [])]}
 
@@ -161,7 +148,7 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
             except Exception as exc:
                 host.controls = [notice(f"{type(exc).__name__}: {exc}", "error", icon=ft.Icons.ERROR_OUTLINE)]
                 busy.visible = False; page.update(); return
-            kp, fc, rs, g = a["kimchi"], a["funding"], a["regime"], a["garch"]
+            kp, fc, g = a["kimchi"], a["funding"], a["garch"]
             blocks: list[ft.Control] = []
             blocks.append(notice("Read-only: QUANTGEN never submits crypto orders, never holds a wallet key, and never assumes an "
                                  "account on an unregistered foreign exchange. Binance is public data only.", "accent",
@@ -179,7 +166,6 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
                      tooltip=fc.flag if fc else ""),
                 stat("Funding pct", f"{fc.percentile:.0%}" if fc else "n/a"),
                 stat("Perp premium", f"{a['premium_index'].get('premium_pct', 0):+.3f}%"),
-                stat("Regime", f"{rs.score:.0f} · {rs.zone}", token="success" if rs.zone == "RISK_ON" else "error" if rs.zone == "RISK_OFF" else "text"),
                 stat("BTC cond. vol (365d)", f"{g['cond_vol_365']:.0%}"), stat("ν", f"{g['nu']:.1f}", token="error" if g["at_bound"] else "text"),
             ], spacing=10, wrap=True))
             blocks.append(card(xc.lines_chart(kp.dates, {"kimchi premium %": kp.premium_pct}, title="Kimchi premium (Upbit KRW-BTC vs Binance × USD/KRW)",
@@ -187,9 +173,6 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
             if fc:
                 blocks.append(card(xc.lines_chart(fc.dates, {"funding (ann. %)": fc.carry_ann_pct}, title="Perpetual funding, 7-day mean annualised",
                                                   hlines={"0": 0.0}, pct=True)))
-            blocks.append(card(xc.bars_chart([c.label for c in rs.components], [c.score for c in rs.components],
-                                             title=f"Regime components (score {rs.score:.0f}, {rs.zone})",
-                                             annotate=[c.signal for c in rs.components])))
             px = a["btc"]
             sma50 = np.convolve(px, np.ones(50) / 50, mode="valid"); sma200 = np.convolve(px, np.ones(200) / 200, mode="valid")
             blocks.append(card(xc.lines_chart(a["btc_dates"], {"BTCUSDT": px, "SMA50": np.concatenate([np.full(49, np.nan), sma50]),
@@ -217,12 +200,12 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
 
         page.run_thread(worker)
 
-    host.controls = [empty_state("Refresh the crypto sheet", "Kimchi premium, perpetual funding as carry, the six-component regime "
-                                 "score, GARCH-t on Bitcoin, the ETH/BTC test and the weekday table, all from keyless Upbit and "
-                                 "Binance data; Upbit holdings when a read-only key is set.", icon=ft.Icons.CURRENCY_BITCOIN,
+    host.controls = [empty_state("Refresh the crypto sheet", "Kimchi premium, perpetual funding as carry, GARCH-t on Bitcoin, "
+                                 "the ETH/BTC test and the weekday table, all from keyless Upbit and Binance data; Upbit "
+                                 "holdings when a read-only key is set.", icon=ft.Icons.CURRENCY_BITCOIN,
                                  action=ft.Button("Open Settings", on_click=lambda e: on_open_settings()) if on_open_settings else None)]
     return ft.Column([
-        section("Crypto", subtitle="Kimchi premium, funding carry, regime, GARCH-t on Bitcoin — read-only."),
+        section("Crypto", subtitle="Kimchi premium, funding carry, GARCH-t on Bitcoin — read-only."),
         ft.Row([source, days, ft.Button("Refresh", icon=ft.Icons.REFRESH, on_click=run), busy], spacing=10, wrap=True),
         ft.Column([host], scroll=ft.ScrollMode.AUTO, expand=True),
     ], spacing=14, expand=True)
@@ -230,10 +213,12 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
 
 if __name__ == "__main__":
     a = analyze(source="synthetic")
-    assert a["source"] == "SYNTHETIC" and a["kimchi"].n > 800 and a["regime"].zone in ("RISK_ON", "NEUTRAL", "RISK_OFF")
+    assert a["source"] == "SYNTHETIC" and a["kimchi"].n > 800 and "regime" not in a
+    assert "MAJORS" not in globals() and "majors" not in _synthetic()
+    assert not any(hasattr(CA, k) for k in ("regime_score", "RegimeScore", "RegimeComponent", "_sma"))
     assert a["garch"]["n"] == 730 and len(a["weekday"]["rows"]) == 7
     t = narrative(a)
-    assert "Korea pays" in t and "regime score" in t and "SYNTHETIC" in t
+    assert "Korea pays" in t and "regime" not in t.lower() and "SYNTHETIC" in t
     p = payload(a)
-    assert p["regime"]["components"] and p["kimchi"]["n"] == a["kimchi"].n
+    assert "regime" not in p and p["kimchi"]["n"] == a["kimchi"].n
     print("ok")

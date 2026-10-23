@@ -213,8 +213,7 @@ own history — every one with the validation study's verdict beside it.
 
 Kimchi premium (Upbit KRW-BTC against the world price at the FRED fixing) with
 ADF, half-life and a predictive test; perpetual funding carry with deciles and
-a bootstrap; a six-component regime score whose missing components redistribute
-their weight; GARCH(1,1)-t on bitcoin with its out-of-sample verdict and the
+a bootstrap; GARCH(1,1)-t on bitcoin with its out-of-sample verdict and the
 stationarity share; the ETH/BTC unit-root test; the weekday table; optional
 Upbit balances with an asset-inquiry-only key. Refused by construction: any
 order, withdrawal, transfer or deposit-address path on any venue; private keys,
