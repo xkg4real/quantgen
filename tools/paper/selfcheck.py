@@ -202,6 +202,7 @@ def test_compile_template_ko():
         assert record["fonts"] == {n: {"path": B.FONT_FILES[n], "sha256": h} for n, h in result.fonts.items()}, record
         assert record["tectonic"] == B.TECTONIC_VERSION and record["bundle_url"] == B.BUNDLE_URL, record
         assert record["pdf_sha256"] == hashlib.sha256(result.pdf.read_bytes()).hexdigest(), record
+        assert record["tex_sha256"] == hashlib.sha256(tex.read_bytes()).hexdigest(), record
 
 
 def test_compile_undefined_number_key_is_a_failure():
@@ -209,8 +210,11 @@ def test_compile_undefined_number_key_is_a_failure():
         tex = Path(tmp) / "bad.tex"
         tex.write_text("\\documentclass[11pt,a4paper]{article}\n\\usepackage{qgpaper}\n"
                        "\\begin{document}\nx \\qnum{no_such_key} y\n\\end{document}\n", encoding="utf-8")
+        (Path(tmp) / "build.json").write_text('{"pdf_sha256": "from an earlier, successful build"}\n',
+                                              encoding="utf-8")
         result = _compile(tex)
         assert not result.ok and any("Undefined number key `no_such_key'" in e for e in result.errors), result.errors
+        assert not (Path(tmp) / "build.json").exists(), "a stale success record survived a failed build"
 
 
 def tests():
@@ -1336,6 +1340,32 @@ def test_b5_review_gate_and_status_file():
         assert IX.update_status(d) == "BLOCKED_MAJOR" and (d / "STATUS").read_bytes() == b"BLOCKED_MAJOR\n"
 
 
+def test_b5_review_gate_reads_the_round_just_run_and_the_response():
+    """A rerun's fresh round 1 is judged on its own records, never on a clean round 2 left from an earlier run; and a
+    round-1 major that the authors' response never names stays unresolved in round 2."""
+    from tools.paper import index as IX
+    rounds, fidelity = _b5_reviewers()
+    with tempfile.TemporaryDirectory() as name:
+        d = _b5_paper(Path(name), "2026-10-23-stale")
+        for n in fidelity:
+            _b5_record(d, f"fidelity_{n}", n)
+        for n in rounds:
+            _b5_record(d, f"round2_{n}", n)                                       # stale and clean
+            _b5_record(d, f"round1_{n}", n, major=("M1",) if n == "claude" else ())
+        assert IX.review_gate(d, 1) == "BLOCKED_MAJOR"
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            assert IX.main(["gate", str(d), "--round", "1"]) == 0
+        assert out.getvalue().strip() == "BLOCKED_MAJOR" and IX.read_status(d) == "BLOCKED_MAJOR", out.getvalue()
+        assert IX.review_gate(d, 3) == "REVIEW_INCOMPLETE", "a round with no records is not a clean round"
+        # round 2 is clean, but the response to round 1 must name every round-1 major by its id
+        assert IX.review_gate(d) == "BLOCKED_MAJOR", "no response_round1.md, yet the round-1 major was cleared"
+        response = d / "review" / "response_round1.md"
+        response.write_text("M10: fixed in results-2.\nm1: typo fixed.\n", encoding="utf-8")
+        assert IX.review_gate(d) == "BLOCKED_MAJOR", "M10 and m1 do not answer M1"
+        response.write_text("M1 (claude): the holdout now starts after the freeze (results-2).\n", encoding="utf-8")
+        assert IX.review_gate(d) == "OWNER_REVIEW"
+
+
 def test_b5_release_needs_owner_review_the_signoff_and_clean_checks():
     from tools.paper import approval, claims, consistency
     from tools.paper import index as IX
@@ -1350,9 +1380,10 @@ def test_b5_release_needs_owner_review_the_signoff_and_clean_checks():
                 _b5_record(d, f"round1_{n}", n)
             for n in fidelity:
                 _b5_record(d, f"fidelity_{n}", n)
-            for rel in ("en/paper_en.pdf", "ko/paper_ko.pdf"):
-                (d / rel).parent.mkdir(parents=True, exist_ok=True)
-                (d / rel).write_bytes(b"%PDF-1.7\n")
+            for ed in ("en", "ko"):
+                (d / ed).mkdir(parents=True, exist_ok=True)
+                (d / ed / f"paper_{ed}.tex").write_bytes(b"\\documentclass{article}\n")
+                (d / ed / f"paper_{ed}.pdf").write_bytes(b"%PDF-1.7\n")
             _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "not OWNER_REVIEW")
             assert IX.update_status(d) == "OWNER_REVIEW"
             _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "meta.yaml")
@@ -1361,6 +1392,21 @@ def test_b5_release_needs_owner_review_the_signoff_and_clean_checks():
             approval.check = lambda paper_dir: ["scope/protocol.md changed after approval"]
             _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "changed after approval")
             approval.check = lambda paper_dir: []
+            # a PDF counts only with the build record of a successful build of exactly that PDF and that .tex
+            _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "en/build.json missing")
+
+            def sha(p):
+                return hashlib.sha256(p.read_bytes()).hexdigest()
+            for ed in ("en", "ko"):
+                (d / ed / "build.json").write_text(json.dumps({
+                    "tex_sha256": sha(d / ed / f"paper_{ed}.tex"), "pdf_sha256": sha(d / ed / f"paper_{ed}.pdf")}),
+                    encoding="utf-8")
+            (d / "ko" / "paper_ko.pdf").write_bytes(b"%PDF-1.7\nfrom a failed build\n")
+            _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "ko/build.json does not match")
+            (d / "ko" / "paper_ko.pdf").write_bytes(b"%PDF-1.7\n")
+            (d / "en" / "paper_en.tex").write_bytes(b"\\documentclass{article}\n% edited after the build\n")
+            _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "en/build.json does not match")
+            (d / "en" / "paper_en.tex").write_bytes(b"\\documentclass{article}\n")
             (d / "ko" / "paper_ko.pdf").unlink()
             _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "ko/paper_ko.pdf")
             (d / "ko" / "paper_ko.pdf").write_bytes(b"%PDF-1.7\n")

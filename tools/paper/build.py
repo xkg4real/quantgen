@@ -4,7 +4,9 @@
 bundle, and `parse_log` sorts the .log/.blg into errors (TeX errors, undefined references or citations,
 `Missing character`, BibTeX error messages, overfull boxes over 10 pt) and warnings (every other warning,
 underfull boxes, small overfull boxes). It records the sha256 of every Korean font file the source names;
-`write_build_record` keeps them, with the Tectonic version, the bundle and the PDF's sha256, in build.json.
+`write_build_record` keeps them, with the Tectonic version, the bundle and the sha256 of the .tex and the PDF, in
+build.json. Tectonic writes a PDF even for a build this module rejects, so `compile_tex` deletes the old build.json
+first: a PDF counts only beside the record of its own successful build (tools.paper.index.release checks the hashes).
 
     python -m tools.paper.build <paper_dir>     # en/paper_en.tex and ko/paper_ko.tex; exit 1 on any error
 """
@@ -125,7 +127,7 @@ def compile_tex(tex: Path, *, only_cached: bool = False) -> BuildResult:
         return BuildResult(ok=False, pdf=None, errors=[f"no such file: {tex}"], warnings=[], fonts={}, log=None)
     shutil.copyfile(STY, tex.parent / STY.name)
     log, blg, pdf = (tex.with_suffix(s) for s in (".log", ".blg", ".pdf"))
-    for stale in (log, blg, pdf):
+    for stale in (log, blg, pdf, tex.parent / "build.json"):
         stale.unlink(missing_ok=True)
     cmd = [str(exe), "-X", "compile", "--keep-logs", "-b", BUNDLE_URL, tex.name]
     if only_cached:
@@ -158,11 +160,11 @@ def compile_tex(tex: Path, *, only_cached: bool = False) -> BuildResult:
 
 
 def write_build_record(tex: Path, result: BuildResult) -> Path:
-    """<tex dir>/build.json for a successful build: Tectonic version, bundle, font files and PDF sha256."""
+    """<tex dir>/build.json for a successful build: Tectonic version, bundle, font files, .tex and PDF sha256."""
     exe = find_tectonic()
     record = {"tex": Path(tex).name, "tectonic": tectonic_version(exe) if exe else "", "bundle_url": BUNDLE_URL,
               "fonts": {n: {"path": FONT_FILES[n], "sha256": h} for n, h in result.fonts.items()},
-              "pdf_sha256": _sha256(result.pdf) if result.pdf else None}
+              "tex_sha256": _sha256(Path(tex)), "pdf_sha256": _sha256(result.pdf) if result.pdf else None}
     out = Path(tex).parent / "build.json"
     out.write_text(json.dumps(record, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
     return out

@@ -1,21 +1,23 @@
 """Release state and the public index of QUANTGEN research papers (spec 2026-10-23 sections 5.1 and 5.3 step 13).
 
 STATUS moves DRAFT -> REVIEW_INCOMPLETE | BLOCKED_MAJOR -> OWNER_REVIEW -> RELEASED. `review_gate` derives every
-state except RELEASED from the review records alone (review/round<k>_<name>.json of the latest round and
-review/fidelity_<name>.json): a major issue is BLOCKED_MAJOR; a reviewer who returned nothing usable is
-REVIEW_INCOMPLETE, never "no objections", unless review/substitution.json carries the owner's words for exactly
-that record (keyed by its stem, round<k>_<name> or fidelity_<name>, so a substitution never carries over to a
-later round). Only `release`, given the owner's sign-off sentence, writes RELEASED, and only RELEASED papers enter
-papers/INDEX.md. Fixture papers (id prefix "fixture-") never do.
+state except RELEASED from the review records alone (review/round<k>_<name>.json of round k, the round just run when
+--round names it and the latest round otherwise, and review/fidelity_<name>.json): a major issue is BLOCKED_MAJOR, and
+so, from round 2 on, is a major issue of round k-1 that review/response_round<k-1>.md never names by its id; a
+reviewer who returned nothing usable is REVIEW_INCOMPLETE, never "no objections", unless review/substitution.json
+carries the owner's words for exactly that record (keyed by its stem, round<k>_<name> or fidelity_<name>, so a
+substitution never carries over to a later round). Only `release`, given the owner's sign-off sentence, writes
+RELEASED, and only RELEASED papers enter papers/INDEX.md. Fixture papers (id prefix "fixture-") never do.
 
 CLI, from the repository root:
-  python -m tools.paper.index gate <paper_dir>                    write STATUS from the review records, print it
+  python -m tools.paper.index gate <paper_dir> [--round K]        write STATUS from the review records, print it
   python -m tools.paper.index release <paper_dir> --words "..."   the owner's sign-off; exit 1 with the problems
   python -m tools.paper.index rebuild [papers_root]               rewrite papers/INDEX.md
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -46,13 +48,18 @@ def _json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
 
 
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def read_status(paper_dir: Path) -> str:
     path = paper_dir / "STATUS"
     return path.read_text(encoding="utf-8").strip() if path.is_file() else ""
 
 
-def review_gate(paper_dir: Path) -> str:
-    """DRAFT before any round record; then BLOCKED_MAJOR, REVIEW_INCOMPLETE or OWNER_REVIEW, in that order."""
+def review_gate(paper_dir: Path, round_k: int | None = None) -> str:
+    """DRAFT before any round record; then BLOCKED_MAJOR, REVIEW_INCOMPLETE or OWNER_REVIEW, in that order, for round
+    `round_k` (default: the latest round on disk)."""
     from tools.debate import DEFAULT_REFEREES
     review = paper_dir / "review"
     rounds: dict[int, set[str]] = {}
@@ -62,12 +69,19 @@ def review_gate(paper_dir: Path) -> str:
             rounds.setdefault(int(m.group(1)), set()).add(m.group(2))
     if not rounds:
         return "DRAFT"
-    k = max(rounds)
+    k = round_k or max(rounds)
     stems = [f"round{k}_{n}" for n in ["claude", *(r.name for r in DEFAULT_REFEREES)]]
     stems += [f"fidelity_{n}" for n in ["claude", *(r.name for r in DEFAULT_REFEREES if r.kind == "agy")]]
     wanted = [(stem, _json(review / f"{stem}.json")) for stem in stems]
     if any(rec.get("major") for _, rec in wanted):
         return "BLOCKED_MAJOR"
+    if k > 1:                     # a round-(k-1) major the authors' response never names was never put to round k
+        response = review / f"response_round{k - 1}.md"
+        text = response.read_text(encoding="utf-8") if response.is_file() else ""
+        for path in review.glob(f"round{k - 1}_*.json"):
+            if any(not re.search(rf"(?<![\w-]){re.escape(str(m.get('id')))}(?![\w-])", text)
+                   for m in _json(path).get("major") or []):
+                return "BLOCKED_MAJOR"
     subs = _json(review / "substitution.json")
     if any(rec.get("status") != "ok" and not str((subs.get(stem) or {}).get("owner_words") or "").strip()
            for stem, rec in wanted):
@@ -75,11 +89,11 @@ def review_gate(paper_dir: Path) -> str:
     return "OWNER_REVIEW"
 
 
-def update_status(paper_dir: Path) -> str:
+def update_status(paper_dir: Path, round_k: int | None = None) -> str:
     """Write STATUS from `review_gate`. A RELEASED paper is never re-gated: reopen it by editing STATUS by hand."""
     if read_status(paper_dir) == "RELEASED":
         raise ValueError(f"{paper_dir.name} is RELEASED; reopen it by editing STATUS by hand, then rebuild the index")
-    status = review_gate(paper_dir)
+    status = review_gate(paper_dir, round_k)
     _write(paper_dir / "STATUS", status + "\n")
     return status
 
@@ -96,7 +110,16 @@ def release(paper_dir: Path, owner_words: str, now_utc: str) -> Path:
     if gate != "OWNER_REVIEW":
         problems.append(f"the review records say {gate}")
     problems += approval.check(paper_dir) + claims.check(paper_dir) + consistency.check(paper_dir)
-    problems += [f"{rel} missing" for rel in ("en/paper_en.pdf", "ko/paper_ko.pdf") if not (paper_dir / rel).is_file()]
+    for ed in ("en", "ko"):      # Tectonic writes a PDF even for a build tools.paper.build rejects
+        tex, pdf, built = (paper_dir / ed / f"paper_{ed}.tex", paper_dir / ed / f"paper_{ed}.pdf",
+                           _json(paper_dir / ed / "build.json"))
+        if not pdf.is_file():
+            problems.append(f"{ed}/paper_{ed}.pdf missing")
+        elif not built:
+            problems.append(f"{ed}/build.json missing: no successful build of {ed}/paper_{ed}.pdf is recorded")
+        elif not tex.is_file() or (built.get("tex_sha256"), built.get("pdf_sha256")) != (_sha256(tex), _sha256(pdf)):
+            problems.append(f"{ed}/build.json does not match {ed}/paper_{ed}.tex and .pdf: "
+                            "run python -m tools.paper.build")
     meta_path = paper_dir / "meta.yaml"
     meta = (yaml.safe_load(meta_path.read_text(encoding="utf-8")) if meta_path.is_file() else None) or {}
     missing = [k for k in META_KEYS if not str(meta.get(k) or "").strip()]
@@ -143,7 +166,9 @@ def main(argv: list[str] | None = None) -> int:
             pass
     parser = argparse.ArgumentParser(prog="python -m tools.paper.index", description=__doc__.split("\n\n")[0])
     sub = parser.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("gate").add_argument("paper_dir", type=Path)
+    gate = sub.add_parser("gate")
+    gate.add_argument("paper_dir", type=Path)
+    gate.add_argument("--round", type=int, dest="round_k", help="the round just run (default: the latest on disk)")
     rel = sub.add_parser("release")
     rel.add_argument("paper_dir", type=Path)
     rel.add_argument("--words", required=True, help="the owner's sign-off, verbatim")
@@ -151,7 +176,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         if args.cmd == "gate":
-            print(update_status(args.paper_dir))
+            print(update_status(args.paper_dir, args.round_k))
         elif args.cmd == "release":
             print(release(args.paper_dir, args.words, datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")))
         else:

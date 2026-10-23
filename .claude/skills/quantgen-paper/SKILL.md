@@ -107,8 +107,9 @@ owner's quant career portfolio, so every step prefers correct and honestly label
   "I have read the paper and accept every claim". Claude never writes or supplies that sentence for a real paper.
 - Run `python -m tools.paper.index release papers/<id> --words "<the owner's sentence, verbatim>"`. It refuses
   unless STATUS is `OWNER_REVIEW`, the review records agree, the approval, claims and consistency checks pass, both
-  PDFs exist and `meta.yaml` is complete. It writes `review/signoff.json`, sets STATUS to `RELEASED` and rebuilds
-  `papers/INDEX.md`.
+  PDFs exist and match `en/build.json` and `ko/build.json` (the sha256 of the .tex and the PDF of a build that
+  passed `python -m tools.paper.build`), and `meta.yaml` is complete. It writes `review/signoff.json`, sets STATUS to
+  `RELEASED` and rebuilds `papers/INDEX.md`.
 - Commit `papers/<id>/review/signoff.json`, `papers/<id>/STATUS` and `papers/INDEX.md`.
 - Publication anywhere outside this repository is the owner's act, never automatic.
 - To reopen a released paper, the owner edits its STATUS by hand; then run `python -m tools.paper.index rebuild`.
