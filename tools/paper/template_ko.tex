@@ -1,0 +1,94 @@
+% QUANTGEN research paper, Korean edition. Copy to <paper_dir>/ko/paper_ko.tex.
+% Same paragraph ids, \qnum keys, citation keys, labels and refs as the English edition.
+% Fonts load by file path. Path is drive-relative (/Windows/Fonts/ on the build directory's drive, C:) because
+% Tectonic 0.17.0's XeTeX reads the colon of C: as a font-feature separator and fails (os error 123).
+% These are system fonts; swap them for OFL fonts in tools/paper/fonts/ before any public release.
+\documentclass[11pt,a4paper]{article}
+\usepackage[hangul]{kotex}
+\setmainhangulfont{HANBatang}[Path=/Windows/Fonts/, Extension=.ttf, BoldFont=HANBatangB, ItalicFont=HANBatang, ItalicFeatures={FakeSlant=0.15}]
+\setsanshangulfont{malgun}[Path=/Windows/Fonts/, Extension=.ttf, BoldFont=malgunbd]
+\usepackage[round]{natbib}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{qgpaper}
+\renewcommand*{\qgailabel}{AI 활용 고지}
+\renewcommand*{\qgstatuslabel}{상태}
+\input{../study/numbers.tex}
+\lstset{basicstyle=\ttfamily\small,columns=fullflexible,breaklines=true,frame=single}
+
+\title{평균-분산 가중치: 템플릿 연구}
+\author{Geon Koh\\고려대학교}
+\date{}
+
+\begin{document}
+\maketitle
+\paperstatus{DRAFT}
+
+\begin{abstract}
+% id: abstract-1
+이 템플릿은 QUANTGEN 논문이 쓰는 모든 구성 요소를 보여 준다. 연율화 샤프 비율 \qnum{sharpe_12m}\과 같은 수치는 연구 실행에서 온다.
+\end{abstract}
+
+\noindent\textbf{주제어:} 포트폴리오 선택; 평균-분산; 재현 가능한 연구.\\
+\noindent\textbf{JEL 분류:} G11, C58.
+
+\begin{aistatement}
+% id: front-1
+초안 작성, 모의 심사, 번역에 AI 도구(Claude, Codex CLI를 통한 GPT, Antigravity CLI를 통한 Gemini)를 활용하였다. 저자는 모든 주장, 수치, 인용을 확인하였으며 내용에 대한 책임을 진다.
+\end{aistatement}
+
+% id: front-2
+\noindent\textbf{이 논문은 연구 목적이며 투자 권유가 아니다.}
+
+\section{서론}\label{sec:intro}
+% id: intro-1
+연구 질문은 평균-분산 가중치가 표본 외에서 어떻게 움직이는가이다. 추정 결과는 \ref{sec:results}절에 있다.
+
+\section{선행 연구}\label{sec:literature}
+% id: literature-1
+\citet{markowitz1952}\는 효율적 투자선을 정의한다.
+
+\section{모형}\label{sec:model}
+% id: model-1
+가중치는 다음 식의 해이다.
+\input{../common/model.tex}
+여기서 \(\Sigma\)는 공분산 행렬이다.
+
+\section{구현}\label{sec:implementation}
+% id: implementation-1
+연구는 아래 모듈을 호출하며, 그 소스는 \url{https://example.org/quantgen/papers/2026-10-23-template/study/run.py?revision=0123456789abcdef0123456789abcdef}에 보관된다.
+\begin{lstlisting}[language=Python]
+w = solve(sigma, mu) / gamma  # equation (1)
+\end{lstlisting}
+
+\section{결과}\label{sec:results}
+% id: results-1
+표~\ref{tab:main}\은 \qnum{n_obs}개 거래일에 걸친 연율화 샤프 비율 \qnum{sharpe_12m}\을 보고한다.
+
+\begin{table}[h]
+\centering
+\caption{주요 추정치}\label{tab:main}
+\begin{tabular}{lr}
+\toprule
+통계량 & 추정치 \\
+\midrule
+샤프 비율(연율화) & \qnum{sharpe_12m} \\
+거래일 수 & \qnum{n_obs} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{강건성}\label{sec:robustness}
+% id: robustness-1
+추정치는 프로토콜에 나열된 \emph{모든} 변형에서 안정적이다.
+
+\section{결론}\label{sec:conclusion}
+% id: conclusion-1
+템플릿은 두 판 모두에서 컴파일된다.
+
+\bibliographystyle{plainnat}
+\bibliography{../refs}
+\end{document}

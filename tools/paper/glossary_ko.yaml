@@ -1,0 +1,66 @@
+# English term -> Korean term for the Korean edition (spec 5.3 step 11). The translator uses these terms
+# verbatim; a term not listed is translated and then added here. Keep one Korean term per English term.
+annualised: 연율화
+asset pricing: 자산 가격 결정
+autocorrelation: 자기상관
+backtest: 백테스트
+basis point: 베이시스 포인트
+bootstrap: 부트스트랩
+breakeven inflation rate: 손익분기 인플레이션율
+Brier score: 브라이어 점수
+calibration: 보정
+carry: 캐리
+carry-to-volatility ratio: 캐리 대 변동성 비율
+cointegration: 공적분
+confidence interval: 신뢰구간
+confirmatory analysis: 확증적 분석
+convexity: 볼록성
+covariance matrix: 공분산 행렬
+credit spread: 신용 스프레드
+curvature: 곡률
+deflated Sharpe ratio: 디플레이티드 샤프 비율
+drawdown: 낙폭
+duration: 듀레이션
+efficient frontier: 효율적 투자선
+estimand: 추정 대상
+expected return: 기대수익률
+exploratory analysis: 탐색적 분석
+factor model: 팩터 모형
+five-year five-year forward rate: 5년 후 5년 선도금리
+flattening: 플래트닝
+forward rate: 선도금리
+generalized method of moments: 일반화 적률법
+heteroskedasticity: 이분산성
+holdout sample: 홀드아웃 표본
+hypothesis test: 가설 검정
+implied volatility: 내재 변동성
+in-sample: 표본 내
+level: 수준
+liquidity: 유동성
+log loss: 로그 손실
+maximum likelihood estimation: 최우추정
+mean reversion: 평균 회귀
+mean-variance: 평균-분산
+minimum detectable effect: 최소 검출 효과
+momentum: 모멘텀
+multiple testing: 다중 검정
+Newey-West standard error: 뉴이-웨스트 표준오차
+null hypothesis: 귀무가설
+out-of-sample: 표본 외
+overfitting: 과적합
+p-value: p-값
+portfolio choice: 포트폴리오 선택
+pre-registration: 사전 등록
+risk premium: 위험 프리미엄
+robustness: 강건성
+Sharpe ratio: 샤프 비율
+slope: 기울기
+standard deviation: 표준편차
+stationarity: 정상성
+steepening: 스티프닝
+term premium: 기간 프리미엄
+term structure: 기간 구조
+transaction cost: 거래 비용
+volatility: 변동성
+yield curve: 수익률 곡선
+z-score: z-점수

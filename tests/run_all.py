@@ -54,6 +54,23 @@ REGISTRY = ROOT / "tests" / "macro_registry.csv"
 OUT = ROOT / "qa" / "acceptance_results.json"
 
 
+def papers_tests():
+    """Suite `papers` (tools/paper/selfcheck.py), imported here: a missing third-party package is one NOT_RUN row,
+    any other import failure one FAIL row, and neither stops the other suites."""
+    try:
+        from tools.paper.selfcheck import tests as selfcheck_tests
+    except Exception as exc:
+        missing = isinstance(exc, ModuleNotFoundError) and exc.name in ("yaml", "pypdf", "requests")
+        reason = f"tools.paper.selfcheck does not import ({type(exc).__name__}: {exc})"
+
+        def import_failed():
+            if missing:
+                raise NotRun(f"OWNER: {reason}")
+            raise RuntimeError(reason)
+        return [("import", import_failed)]
+    return selfcheck_tests()
+
+
 def tests():
     return ([(f"safety/{n}", f) for n, f in safety_tests()] +
             [(f"engine/{n}", f) for n, f in engine_tests()] +
@@ -64,7 +81,8 @@ def tests():
             [(f"macro/{n}", f) for n, f in macro_tests()] +
             [(f"paper/{n}", f) for n, f in paper_tests()] +
             [(f"grokteam/{n}", f) for n, f in grokteam_tests()] +
-            [(f"guard/{n}", f) for n, f in guard_tests()])
+            [(f"guard/{n}", f) for n, f in guard_tests()] +
+            [(f"papers/{n}", f) for n, f in papers_tests()])
 
 
 def runs_from() -> dict[str, int]:
@@ -110,7 +128,7 @@ def run(entries) -> list[dict]:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--milestone", help="run the exit set of M<k> via tests/macro_registry.csv")
-    parser.add_argument("--suite", help="run one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam or guard")
+    parser.add_argument("--suite", help="run one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam, guard or papers")
     args = parser.parse_args(argv)
     if args.milestone and not re.fullmatch(r"M(10|[0-9])", args.milestone):
         parser.error("--milestone takes M0..M10")

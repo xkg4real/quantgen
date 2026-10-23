@@ -1,0 +1,87 @@
+% QUANTGEN research paper, English edition. Copy to <paper_dir>/en/paper_en.tex.
+% Every paragraph carries a "% id: <section>-<n>" line; the Korean edition uses the same ids.
+% Numbers come only from ../study/numbers.tex through \qnum{key}. Equations live in ../common/.
+\documentclass[11pt,a4paper]{article}
+\usepackage[round]{natbib}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{qgpaper}
+\input{../study/numbers.tex}
+\lstset{basicstyle=\ttfamily\small,columns=fullflexible,breaklines=true,frame=single}
+
+\title{Mean-Variance Weights: A Template Study}
+\author{Geon Koh\\Korea University}
+\date{}
+
+\begin{document}
+\maketitle
+\paperstatus{DRAFT}
+
+\begin{abstract}
+% id: abstract-1
+This template shows every construct a QUANTGEN paper uses. Its numbers, such as an annualised Sharpe ratio of \qnum{sharpe_12m}, come from the study run.
+\end{abstract}
+
+\noindent\textbf{Keywords:} portfolio choice; mean-variance; reproducible research.\\
+\noindent\textbf{JEL codes:} G11, C58.
+
+\begin{aistatement}
+% id: front-1
+Drafting, simulated refereeing and translation were assisted by AI tools (Claude, GPT via the Codex CLI and Gemini via the Antigravity CLI). The author checked every claim, number and citation and is responsible for the content.
+\end{aistatement}
+
+% id: front-2
+\noindent\emph{This paper is research only and is not investment advice.}
+
+\section{Introduction}\label{sec:intro}
+% id: intro-1
+The question is how mean-variance weights behave out of sample. Section~\ref{sec:results} reports the estimates.
+
+\section{Literature}\label{sec:literature}
+% id: literature-1
+\citet{markowitz1952} defines the efficient frontier.
+
+\section{Model}\label{sec:model}
+% id: model-1
+The weights solve
+\input{../common/model.tex}
+where \(\Sigma\) is the covariance matrix.
+
+\section{Implementation}\label{sec:implementation}
+% id: implementation-1
+The study calls the module below; its source is archived at \url{https://example.org/quantgen/papers/2026-10-23-template/study/run.py?revision=0123456789abcdef0123456789abcdef}.
+\begin{lstlisting}[language=Python]
+w = solve(sigma, mu) / gamma  # equation (1)
+\end{lstlisting}
+
+\section{Results}\label{sec:results}
+% id: results-1
+Table~\ref{tab:main} reports an annualised Sharpe ratio of \qnum{sharpe_12m} over \qnum{n_obs} sessions.
+
+\begin{table}[h]
+\centering
+\caption{Main estimates}\label{tab:main}
+\begin{tabular}{lr}
+\toprule
+Statistic & Estimate \\
+\midrule
+Sharpe ratio (annualised) & \qnum{sharpe_12m} \\
+Sessions & \qnum{n_obs} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Robustness}\label{sec:robustness}
+% id: robustness-1
+The estimate is stable across \emph{all} the variants listed in the protocol.
+
+\section{Conclusion}\label{sec:conclusion}
+% id: conclusion-1
+The template compiles in both editions.
+
+\bibliographystyle{plainnat}
+\bibliography{../refs}
+\end{document}

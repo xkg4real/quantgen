@@ -1,0 +1,21 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{qgpaper}[2026/10/23 QUANTGEN research-paper macros]
+% \qnum{key}: a study number defined by <paper_dir>/study/numbers.tex as
+% \expandafter\def\csname qg@num@<key>\endcsname{...}. Keys match ^[a-z0-9_]+$.
+\newcommand*{\qnum}[1]{%
+  \ifcsname qg@num@#1\endcsname
+    \csname qg@num@#1\endcsname
+  \else
+    \PackageError{qgpaper}{Undefined number key `#1'}%
+      {numbers.tex does not define it. Rerun the study or fix the key.}%
+  \fi}
+% Labels the Korean edition renews.
+\newcommand*{\qgailabel}{AI-assistance statement}
+\newcommand*{\qgstatuslabel}{Status}
+\newenvironment{aistatement}%
+  {\par\medskip\noindent\textbf{\qgailabel.}\ }%
+  {\par\medskip}
+% \paperstatus{DRAFT}: one boxed line in the front matter.
+\newcommand*{\paperstatus}[1]{%
+  \par\noindent\fbox{\small\sffamily\qgstatuslabel: #1}\par\medskip}
+\endinput
