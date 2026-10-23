@@ -79,8 +79,8 @@ const claimsCheck = (label, ph) => agent(say(
 const claudeReferee = (k, fidelity, label, ph) => agent(say(
   fidelity ? 'Korean fidelity review. You are a reviewer here, not the translator.' : `Referee, round ${k}. You are a referee here, not an author.`,
   `1. Run python -m tools.paper.panel ${REL} ${k} --bundle-only${fidelity ? ' --fidelity' : ''}${PRIVATE}. It prints the path of a fresh bundle.`,
-  '2. Read REVIEW_BRIEF.md in that bundle and follow it. Read only files inside the bundle: not the repository, not the review folder, not the reports of other referees.',
-  `3. Save your Markdown report to a scratch file outside the repository, then record it: python -m tools.paper.panel ${REL} ${k} --record claude <that file>${fidelity ? ' --fidelity' : ''}. It prints the record path and its status; a status other than ok means the report lacks the "## Major" and "## Minor" headings the brief requires: fix its shape, not its content, and record it again.`,
+  '2. Read REVIEW_BRIEF.md in that bundle and follow it. Read only files inside the bundle, never the repository or its review folder. From round 2 on the bundle\'s own review/ holds the previous round\'s reports and the authors\' response, which the brief tells you to read; no other referee\'s report of this round is there.',
+  `3. Save your Markdown report to a scratch file outside the repository, then record it: python -m tools.paper.panel ${REL} ${k} --record claude <that file>${fidelity ? ' --fidelity' : ''}. It prints the record path and its status; a status other than ok means the report lacks one of the "## Major" and "## Minor" headings the brief requires, or its verdict is REJECT or NOT FAITHFUL while "## Major" is empty: fix its shape (every objection goes under "## Major" or "## Minor"), not its content, and record it again.`,
   'ok=true once the record is written with status ok; summary = your verdict line.',
 ), { label, phase: ph, schema: STAGE })
 

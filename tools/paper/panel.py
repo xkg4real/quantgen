@@ -4,9 +4,11 @@
 Every run builds its own disposable, secret-free bundle (tools.paper.bundle.make_bundle) and writes REVIEW_BRIEF.md
 into it, so the command-line prompt stays short. Every selected referee gets a record, review/round<k>_<name>.json
 (review/fidelity_<name>.json for the Korean fidelity review), whatever happened: a quota, a missing CLI, a timeout, a
-crash, an empty reply or a reply without `## Major`/`## Minor` headings is recorded as such, and
-tools.paper.index.review_gate reads it as REVIEW_INCOMPLETE, never as "no objections". The Claude referee runs as an
-agent on a --bundle-only bundle and files its report with --record, which applies the same checks.
+crash, an empty reply, a reply without both `## Major` and `## Minor` headings, or a REJECT / NOT FAITHFUL verdict
+with an empty `## Major` is recorded as such, and tools.paper.index.review_gate reads it as REVIEW_INCOMPLETE, never as
+"no objections". From round 2 on the bundle also holds every report of the previous round and the authors' response.
+The Claude referee runs as an agent on a --bundle-only bundle (which first files a pending Claude record, so a stale
+one never counts) and files its report with --record, which applies the same checks and takes only the name claude.
 
 CLI, from the repository root:
   python -m tools.paper.panel <paper_dir> <round_k> [--only NAME,...] [--fidelity] [--allow-private]
@@ -17,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -57,9 +60,9 @@ Reply in Markdown, in exactly this shape, and leave a heading empty when it has 
 """
 
 ROUND2 = """
-This is round <K>. review/response_round<P>.md holds the authors' response to round <P>. For each Major issue of round
-<P>, decide whether the response and the revised manuscript resolve it. Repeat every unresolved one under Major with
-its original id; do not repeat resolved ones.
+This is round <K>. review/round<P>_<referee>.md holds each referee's round <P> report, and review/response_round<P>.md
+the authors' response to them. For each Major issue in those reports, decide whether the response and the revised
+manuscript resolve it. Repeat every unresolved one under Major with its original id; do not repeat resolved ones.
 """
 
 FIDELITY_BRIEF = """# Fidelity brief (Korean edition)
@@ -91,19 +94,25 @@ Reply in Markdown, in exactly this shape, and leave a heading empty when it has 
 """
 
 
+_REJECTED = re.compile(r"(?im)^#{1,6}\s*Verdict\b[:\s*]*(REJECT|NOT FAITHFUL)\b")
+
+
 def _stem(round_k: int, name: str, fidelity: bool) -> str:
     return f"fidelity_{name}" if fidelity else f"round{round_k}_{name}"
 
 
 def record(paper_dir: Path, round_k: int, name: str, status: str, report_md: str, *, fidelity: bool = False,
            reset_at: str | None = None, version: str | None = None, raw: Path | None = None) -> Path:
-    """Write review/<stem>.md and review/<stem>.json for one reviewer. An "ok" with an empty report is "empty", and
-    one without `## Major`/`## Minor` headings is "error": neither is ever read as no objections."""
+    """Write review/<stem>.md and review/<stem>.json for one reviewer. An "ok" with an empty report is "empty"; one
+    without both `## Major` and `## Minor` headings, or whose verdict is REJECT / NOT FAITHFUL while `## Major` is
+    empty, is "error": none of them is ever read as no objections."""
     if status == "ok" and not report_md.strip():
         status = "empty"
     elif status == "ok" and not debate.has_report_headings(report_md):
         status = "error"
     parsed = debate.parse_report(report_md) if status == "ok" else {"major": [], "minor": []}
+    if status == "ok" and not parsed["major"] and _REJECTED.search(report_md):
+        status = "error"                              # the objections sit somewhere the parser does not read
     review = paper_dir / "review"
     review.mkdir(parents=True, exist_ok=True)
     stem = _stem(round_k, name, fidelity)
@@ -116,7 +125,8 @@ def record(paper_dir: Path, round_k: int, name: str, status: str, report_md: str
 
 
 def make_round_bundle(paper_dir: Path, round_k: int, *, fidelity: bool = False, allow_private: bool = False) -> Path:
-    """A fresh bundle with REVIEW_BRIEF.md and, from round 2 on, the authors' response to the previous round."""
+    """A fresh bundle with REVIEW_BRIEF.md and, from round 2 on, every report of the previous round and the authors'
+    response to it."""
     prev = paper_dir / "review" / f"response_round{round_k - 1}.md"
     if not fidelity and round_k > 1 and not prev.is_file():
         raise ValueError(f"{prev} is missing: round {round_k} needs the authors' response to round {round_k - 1}")
@@ -128,7 +138,8 @@ def make_round_bundle(paper_dir: Path, round_k: int, *, fidelity: bool = False, 
         brief = brief.replace("<K>", str(round_k)).replace("<P>", str(round_k - 1))
         if round_k > 1:
             (where / "review").mkdir(exist_ok=True)
-            shutil.copy2(prev, where / "review" / prev.name)
+            for src in [prev, *sorted((paper_dir / "review").glob(f"round{round_k - 1}_*.md"))]:
+                shutil.copy2(src, where / "review" / src.name)
     (where / "REVIEW_BRIEF.md").write_text(brief, encoding="utf-8", newline="\n")
     return where
 
@@ -174,10 +185,15 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         if args.bundle_only:
+            # Until --record claude overwrites it, the gate reads this round's Claude review as REVIEW_INCOMPLETE.
+            record(args.paper_dir, args.round_k, "claude", "error",
+                   "pending: the Claude referee has not filed its report\n", fidelity=args.fidelity)
             print(make_round_bundle(args.paper_dir, args.round_k, fidelity=args.fidelity,
                                     allow_private=args.allow_private))
         elif args.record:
             name, report = args.record
+            if name != "claude":
+                raise ValueError(f"--record files only the Claude referee's report; {name} is recorded by run_panel")
             path = record(args.paper_dir, args.round_k, name, "ok", Path(report).read_text(encoding="utf-8"),
                           fidelity=args.fidelity)
             print(path, json.loads(path.read_text(encoding="utf-8"))["status"])

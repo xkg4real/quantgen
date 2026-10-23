@@ -1034,8 +1034,13 @@ def test_debate_codex_report_and_auth():
         res = run_referee(_codex(), tmp, "Review.", tmp / "out",
                           runner=_fake_runner(result=done, last_message=_SAMPLE_REPORT))
         assert res.status == "ok" and res.report_md == _SAMPLE_REPORT.strip(), res
-        # A report without `## Major`/`## Minor` headings is malformed, never "no objections".
+        # A report without both `## Major` and `## Minor` headings is malformed, never "no objections".
         assert has_report_headings(_SAMPLE_REPORT) and not has_report_headings("**Major**: none. Looks fine.")
+        for half in ("## Main issues\n- M1: estimator biased\n## Minor\n- m1\n", "# Major\n- M1: x\n## Minor\n",
+                     "**Major**\n- M1: x\n\n## Minor\n- m1\n", "## Major\n- M1: x\n"):
+            assert not has_report_headings(half), half
+            res = run_referee(_codex(), tmp, "Review.", tmp / "out", runner=_fake_runner(result=done, last_message=half))
+            assert res.status == "error", (half, res)
         res = run_referee(_codex(), tmp, "Review.", tmp / "out",
                           runner=_fake_runner(result=done, last_message="Looks fine to me."))
         assert res.status == "error", res
@@ -1045,6 +1050,31 @@ def test_debate_codex_report_and_auth():
         done = _subprocess.CompletedProcess([], 1, "", "ERROR: 401 Unauthorized: not logged in\n")
         res = run_referee(_codex(), tmp, "Review.", tmp / "out", runner=_fake_runner(result=done))
         assert res.status == "auth_failed", res
+
+
+def test_debate_codex_relative_paths_still_reach_the_report():
+    """The workflow passes repo-relative paths, while Codex runs with the bundle as cwd: a relative
+    --output-last-message would land under the bundle and the report would be lost."""
+    from tools.debate import run_referee
+
+    def cwd_runner(argv, *, input=None, cwd=None, timeout=None):       # writes relative to its cwd, as a child does
+        if "--version" in argv:
+            return _subprocess.CompletedProcess(argv, 0, "fake-cli 1.0\n", "")
+        target = _Path(cwd) / argv[argv.index("--output-last-message") + 1]
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(_SAMPLE_REPORT, encoding="utf-8")
+        return _subprocess.CompletedProcess(argv, 0, "", "")
+
+    saved = os.getcwd()
+    with _tempfile.TemporaryDirectory() as tmp:
+        try:
+            os.chdir(tmp)
+            _Path("bundle").mkdir()
+            res = run_referee(_codex(), _Path("bundle"), "Review.", _Path("papers/x/review/raw/round1"),
+                              runner=cwd_runner)
+        finally:
+            os.chdir(saved)
+    assert res.status == "ok" and res.report_md == _SAMPLE_REPORT.strip(), res
 
 
 def test_debate_agy_envelope_ok():
@@ -1348,6 +1378,10 @@ def test_b5_release_needs_owner_review_the_signoff_and_clean_checks():
 # --------------------------------------------------------------------------- #
 # Task 5 (2/4): the referee panel
 # --------------------------------------------------------------------------- #
+import contextlib  # noqa: E402
+import io  # noqa: E402
+
+
 def test_b5_panel_records_every_referee_and_never_reads_silence_as_ok():
     from tools import debate
     from tools.paper import bundle, panel
@@ -1391,6 +1425,9 @@ def test_b5_panel_records_every_referee_and_never_reads_silence_as_ok():
             (d / "review" / "response_round1.md").write_text("M1: fixed in results-2.\n", encoding="utf-8")
             panel.run_panel(d, 2)
             assert (b / "review" / "response_round1.md").is_file() and "round 2" in briefs[-1], briefs[-1]
+            # round 2 sees every round-1 report, so a major the response leaves out is still in front of the referee
+            assert all((b / "review" / f"round1_{n}.md").is_file() for n in names), sorted(b.rglob("*.md"))
+            assert "review/round1_<referee>.md" in briefs[-1], briefs[-1]
             assert set(panel.run_panel(d, 2, fidelity=True)) == agy and briefs[-1].startswith("# Fidelity brief")
             assert "claims.yaml" in briefs[-1], "the fidelity review rechecks the claims against the Korean"
             debate.run_referee = crash
@@ -1399,7 +1436,29 @@ def test_b5_panel_records_every_referee_and_never_reads_silence_as_ok():
             assert p.name == "round1_claude.json" and json.loads(p.read_text(encoding="utf-8"))["major"] == []
             p = panel.record(d, 1, "claude", "ok", "Looks fine.")
             assert json.loads(p.read_text(encoding="utf-8"))["status"] == "error", "a headingless report is not ok"
+            for bad in ("# Verdict: ACCEPT\n\n## Main issues\n- M1: estimator biased\n## Minor\n- m1: typo\n",
+                        "# Verdict: ACCEPT\n\n# Major\n- M1: estimator biased\n## Minor\n- m1: typo\n",
+                        "# Verdict: REJECT\n\nThe estimator is wrong.\n\n## Major\n\n## Minor\n\n- m1: typo\n",
+                        "# Verdict: **NOT FAITHFUL**\n\n## Major\n\n## Minor\n"):
+                p = panel.record(d, 1, "claude", "ok", bad, fidelity="FAITHFUL" in bad)
+                assert json.loads(p.read_text(encoding="utf-8"))["status"] == "error", bad
             _b5_refused(lambda: panel.run_panel(d, 1, only=["nobody"]), "unknown referee")
+            # --record files only the Claude referee; a CLI referee's record comes from run_panel alone
+            report = root / "report.md"
+            report.write_text("# Verdict: ACCEPT\n\n## Major\n\n## Minor\n", encoding="utf-8")
+            cli_rec = d / "review" / f"round1_{names[0]}.json"
+            before = cli_rec.read_bytes()
+            claude_rec = d / "review" / "round1_claude.json"
+            panel.record(d, 1, "claude", "ok", report.read_text(encoding="utf-8"))     # a stale "no objections"
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                assert panel.main([str(d), "1", "--record", names[0], str(report)]) == 1
+                assert cli_rec.read_bytes() == before, "--record overwrote a CLI referee's record"
+                # --bundle-only first files a pending Claude record, so a stale one never counts as this round's
+                assert panel.main([str(d), "1", "--bundle-only"]) == 0
+                assert json.loads(claude_rec.read_text(encoding="utf-8"))["status"] == "error"
+                assert "pending" in (d / "review" / "round1_claude.md").read_text(encoding="utf-8")
+                assert panel.main([str(d), "1", "--record", "claude", str(report)]) == 0
+            assert json.loads(claude_rec.read_text(encoding="utf-8"))["status"] == "ok"
         finally:
             bundle.make_bundle, debate.run_referee = saved
 

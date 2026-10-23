@@ -3,7 +3,7 @@
 `run_referee` runs one referee CLI (Codex or Antigravity `agy`) headless, with a disposable review bundle as
 cwd, and classifies the outcome. Any status but `ok` makes the round REVIEW_INCOMPLETE; it is never read as
 "no objections". `parse_report` splits a Markdown report into its `## Major` and `## Minor` issues, and
-`has_report_headings` is the test every report must pass before it counts as `ok`.
+`has_report_headings` (both headings present) is the test every report must pass before it counts as `ok`.
 """
 from __future__ import annotations
 
@@ -49,8 +49,9 @@ _ID_RE = re.compile(r"\**\s*((?i:major|minor)-\d+|[Mm]-?\d+)\b")
 
 
 def has_report_headings(md: str) -> bool:
-    """True when the report has a `## Major` or `## Minor` heading; anything else is malformed, never "no objections"."""
-    return bool(_HEADING_RE.search(md or ""))
+    """True when the report has both a `## Major` and a `## Minor` heading. Anything else (one of them, `# Major`,
+    `**Major**`, `## Main issues`) is malformed, never "no objections": parse_report drops text under other headings."""
+    return {h.lower() for h in _HEADING_RE.findall(md or "")} == {"major", "minor"}
 
 
 def _run(argv, *, input=None, cwd=None, timeout=None):
@@ -107,7 +108,8 @@ def run_referee(ref: Referee, bundle: Path, prompt: str, out_dir: Path, *, timeo
     from stdin (`-`), which keeps it away from cmd.exe quoting in the npm `codex.cmd` shim.
     """
     runner = runner or _run
-    out_dir = Path(out_dir)
+    # Absolute: the child runs with the bundle as cwd, so a relative --output-last-message would land under it.
+    bundle, out_dir = Path(bundle).resolve(), Path(out_dir).resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
     exe = shutil.which(ref.exe)
     if exe is None:
