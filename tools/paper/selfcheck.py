@@ -1204,6 +1204,147 @@ def test_bundle_contents_code_and_local_note_refusal():
         assert sorted(dest.iterdir()) == before, "a refused bundle left a folder behind"
 
 
+# --------------------------------------------------------------------------- #
+# Task 5 (1/4): release states and the index
+# --------------------------------------------------------------------------- #
+import json  # noqa: E402  (each Task 5 block imports what it uses; a repeated import is harmless)
+import tempfile  # noqa: E402
+from pathlib import Path  # noqa: E402
+
+import yaml  # noqa: E402
+
+_B5_ROOT = Path(__file__).resolve().parents[2]
+_B5_NOW = "2026-10-23T00:00:00Z"
+
+
+def _b5_paper(root: Path, paper_id: str, status: str = "") -> Path:
+    d = root / paper_id
+    (d / "review").mkdir(parents=True)
+    if status:
+        (d / "STATUS").write_text(status + "\n", encoding="utf-8")
+    return d
+
+
+def _b5_record(d: Path, stem: str, name: str, status: str = "ok", major: tuple = ()) -> None:
+    (d / "review" / f"{stem}.json").write_text(json.dumps({
+        "name": name, "status": status, "reset_at": None, "version": None, "raw": None,
+        "major": [{"id": m, "text": "probe"} for m in major], "minor": []}), encoding="utf-8")
+
+
+def _b5_reviewers() -> tuple[list[str], list[str]]:
+    """(round reviewers, fidelity reviewers): Claude plus tools.debate.DEFAULT_REFEREES, whatever their names."""
+    from tools.debate import DEFAULT_REFEREES
+    return (["claude", *(r.name for r in DEFAULT_REFEREES)],
+            ["claude", *(r.name for r in DEFAULT_REFEREES if r.kind == "agy")])
+
+
+def _b5_refused(fn, needle: str) -> None:
+    try:
+        fn()
+    except ValueError as exc:
+        assert needle in str(exc), f"refusal {exc!r} does not mention {needle!r}"
+    else:
+        raise AssertionError(f"not refused (expected {needle!r})")
+
+
+def test_b5_index_lists_only_released_non_fixture_papers():
+    from tools.paper import index as IX
+    with tempfile.TemporaryDirectory() as name:
+        root = Path(name)
+        for pid, title, status in (("2026-10-01-alpha", "Alpha", "RELEASED"), ("2026-10-02-beta", "Beta", "OWNER_REVIEW"),
+                                   ("fixture-2026-10-03-gamma", "Gamma", "RELEASED")):
+            d = _b5_paper(root, pid, status)
+            (d / "meta.yaml").write_text(yaml.safe_dump({
+                "title_en": title, "title_ko": f"{title} KO", "abstract_en": f"abstract of {title}",
+                "abstract_ko": f"{title} 초록", "status_note": "exploratory"}, allow_unicode=True), encoding="utf-8")
+            (d / "review" / "signoff.json").write_text(json.dumps({"released_utc": _B5_NOW}), encoding="utf-8")
+        out = IX.rebuild_index(root)
+        text = out.read_text(encoding="utf-8")
+        assert out == root / "INDEX.md"
+        assert "## Alpha" in text and "Alpha KO" in text and "abstract of Alpha" in text and "Alpha 초록" in text, text
+        assert "(2026-10-01-alpha/en/paper_en.pdf)" in text and "(2026-10-01-alpha/ko/paper_ko.pdf)" in text, text
+        assert "Beta" not in text and "Gamma" not in text, "only RELEASED, non-fixture papers are listed"
+        assert b"\r\n" not in out.read_bytes()
+    with tempfile.TemporaryDirectory() as name:
+        assert "_No released papers yet._" in IX.rebuild_index(Path(name)).read_text(encoding="utf-8")
+
+
+def test_b5_review_gate_and_status_file():
+    from tools.paper import index as IX
+    rounds, fidelity = _b5_reviewers()
+    cli = rounds[1]
+    with tempfile.TemporaryDirectory() as name:
+        d = _b5_paper(Path(name), "2026-10-23-gate")
+        assert IX.review_gate(d) == "DRAFT" and IX.update_status(d) == "DRAFT" and IX.read_status(d) == "DRAFT"
+        for n in rounds:
+            _b5_record(d, f"round1_{n}", n)
+        assert IX.review_gate(d) == "REVIEW_INCOMPLETE", "a missing fidelity review must not pass"
+        for n in fidelity:
+            _b5_record(d, f"fidelity_{n}", n)
+        assert IX.review_gate(d) == "OWNER_REVIEW"
+        for status in ("quota", "missing_cli", "auth_failed", "timeout", "error", "empty"):
+            _b5_record(d, f"round1_{cli}", cli, status=status)
+            assert IX.review_gate(d) == "REVIEW_INCOMPLETE", f"{status} was read as no objections"
+        sub = d / "review" / "substitution.json"
+        sub.write_text(json.dumps({f"round1_{cli}": {"by": "claude-second-read", "owner_words": " ", "utc": _B5_NOW}}),
+                       encoding="utf-8")
+        assert IX.review_gate(d) == "REVIEW_INCOMPLETE", "a substitution without the owner's words counts for nothing"
+        sub.write_text(json.dumps({cli: {"by": "claude-second-read", "owner_words": "Use a second Claude read.",
+                                         "utc": _B5_NOW}}), encoding="utf-8")
+        assert IX.review_gate(d) == "REVIEW_INCOMPLETE", "a substitution names one record, not a reviewer"
+        sub.write_text(json.dumps({f"round1_{cli}": {"by": "claude-second-read",
+                                                     "owner_words": "Use a second Claude read.", "utc": _B5_NOW}}),
+                       encoding="utf-8")
+        assert IX.review_gate(d) == "OWNER_REVIEW"
+        _b5_record(d, "round2_claude", "claude", major=("M1",))
+        assert IX.review_gate(d) == "BLOCKED_MAJOR", "the latest round decides, and a major blocks"
+        for n in rounds:
+            if n != cli:
+                _b5_record(d, f"round2_{n}", n)
+        assert IX.review_gate(d) == "REVIEW_INCOMPLETE", "the round-1 substitution does not cover round 2"
+        _b5_record(d, f"fidelity_{fidelity[-1]}", fidelity[-1], major=("M1",))
+        assert IX.update_status(d) == "BLOCKED_MAJOR" and (d / "STATUS").read_bytes() == b"BLOCKED_MAJOR\n"
+
+
+def test_b5_release_needs_owner_review_the_signoff_and_clean_checks():
+    from tools.paper import approval, claims, consistency
+    from tools.paper import index as IX
+    rounds, fidelity = _b5_reviewers()
+    saved = approval.check, claims.check, consistency.check
+    try:
+        approval.check = claims.check = consistency.check = lambda paper_dir: []
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            d = _b5_paper(root, "2026-10-23-release", "BLOCKED_MAJOR")
+            for n in rounds:
+                _b5_record(d, f"round1_{n}", n)
+            for n in fidelity:
+                _b5_record(d, f"fidelity_{n}", n)
+            for rel in ("en/paper_en.pdf", "ko/paper_ko.pdf"):
+                (d / rel).parent.mkdir(parents=True, exist_ok=True)
+                (d / rel).write_bytes(b"%PDF-1.7\n")
+            _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "not OWNER_REVIEW")
+            assert IX.update_status(d) == "OWNER_REVIEW"
+            _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "meta.yaml")
+            (d / "meta.yaml").write_text(yaml.safe_dump({k: "x" for k in IX.META_KEYS}), encoding="utf-8")
+            _b5_refused(lambda: IX.release(d, "Looks good to me.", _B5_NOW), IX.SIGNOFF)
+            approval.check = lambda paper_dir: ["scope/protocol.md changed after approval"]
+            _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "changed after approval")
+            approval.check = lambda paper_dir: []
+            (d / "ko" / "paper_ko.pdf").unlink()
+            _b5_refused(lambda: IX.release(d, IX.SIGNOFF, _B5_NOW), "ko/paper_ko.pdf")
+            (d / "ko" / "paper_ko.pdf").write_bytes(b"%PDF-1.7\n")
+            assert IX.read_status(d) == "OWNER_REVIEW", "a refused release changed STATUS"
+            signoff = IX.release(d, IX.SIGNOFF + ".", _B5_NOW)
+            assert IX.read_status(d) == "RELEASED"
+            rec = json.loads(signoff.read_text(encoding="utf-8"))
+            assert rec["owner_words"] == IX.SIGNOFF + "." and rec["released_utc"] == _B5_NOW, rec
+            assert "2026-10-23-release" in (root / "INDEX.md").read_text(encoding="utf-8")
+            _b5_refused(lambda: IX.update_status(d), "RELEASED")
+    finally:
+        approval.check, claims.check, consistency.check = saved
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
