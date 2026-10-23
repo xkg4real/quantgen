@@ -80,7 +80,9 @@ owner's quant career portfolio, so every step prefers correct and honestly label
    - `REVIEW_INCOMPLETE`: see "Referee failures and the Codex quota".
    - `BLOCKED_MAJOR`: show the major issues. The two-round limit stops the work; it never clears a veto. Further
      work is the owner's call.
-   - `REFUSED` or `STOPPED`: show the reason and stop.
+   - `REFUSED` or `STOPPED`: show the reason and stop. A full run refuses a paper whose `review/` already holds
+     records, because an earlier run's records would be read as its own: offer `rereview`, or the owner moves
+     `review/` aside by hand. A rereview refuses a round older than the latest one on disk.
 
 ## Referee failures and the Codex quota
 

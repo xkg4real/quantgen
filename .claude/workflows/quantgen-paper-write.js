@@ -49,10 +49,10 @@ const STAGE = {
   properties: { ok: { type: 'boolean' }, summary: { type: 'string' }, problems: LIST },
 }
 const GATE = {
-  type: 'object', required: ['approval_exit', 'approval_output', 'prereg_tracked', 'prereg_clean', 'status'],
+  type: 'object', required: ['approval_exit', 'approval_output', 'prereg_tracked', 'prereg_clean', 'status', 'reviewed'],
   properties: {
     approval_exit: { type: 'integer' }, approval_output: { type: 'string' },
-    prereg_tracked: { type: 'boolean' }, prereg_clean: { type: 'boolean' }, status: { type: 'string' },
+    prereg_tracked: { type: 'boolean' }, prereg_clean: { type: 'boolean' }, status: { type: 'string' }, reviewed: LIST,
   },
 }
 const PANEL = {
@@ -66,8 +66,9 @@ const blockers = []
 const resets = []
 const stop = (stage, r) => ({ status: 'STOPPED', paper_id: PID, stage, problems: r ? r.problems : [`the ${stage} agent returned nothing`], blockers })
 
-const statusOf = (label, ph) => agent(say(
-  `Run python -m tools.paper.index gate ${REL} and return the one word it prints as status. Change nothing else.`,
+// The gate reads the round just run (--round), never whatever round is highest on disk.
+const statusOf = (k, label, ph) => agent(say(
+  `Run python -m tools.paper.index gate ${REL} --round ${k} and return the one word it prints as status. Change nothing else.`,
 ), { label, phase: ph, schema: STATUS })
 
 const claimsCheck = (label, ph) => agent(say(
@@ -100,7 +101,7 @@ async function panelRound(k, only, fidelity, tag, ph) {
   if (!only || cli.length) jobs.push(async () => { out = await cliPanel(k, cli, fidelity, `${tag}-cli`, ph); return out })
   await parallel(jobs)
   if (out) resets.push(...(out.reset_at || []))
-  return statusOf(`${tag}-gate`, ph)
+  return statusOf(k, `${tag}-gate`, ph)
 }
 
 const revise = k => say(
@@ -119,12 +120,22 @@ const gate = await agent(say(
   `2. git ls-files --error-unmatch ${REL}/scope/prereg.json   -> prereg_tracked = (exit code 0).`,
   `3. git status --porcelain -- ${REL}/scope   -> prereg_clean = (no output).`,
   `4. status = the single line of ${P}/STATUS, or "" when it is absent.`,
+  `5. reviewed = the names of the files in ${P}/review/ that match round*_*.json or fidelity_*.json; [] when there are none or the folder is absent.`,
 ), { label: 'approval-gate', phase: 'Gate', schema: GATE })
 if (!gate) return { status: 'REFUSED', paper_id: PID, reason: 'the approval gate returned nothing' }
 if (gate.approval_exit !== 0 || !gate.prereg_tracked || !gate.prereg_clean) {
   return { status: 'REFUSED', paper_id: PID, reason: 'the scope is not approved as committed: tools.paper.approval check failed, or scope/ is not committed', detail: gate }
 }
 if (gate.status === 'RELEASED') return { status: 'REFUSED', paper_id: PID, reason: 'the paper is RELEASED; reopen it by hand first' }
+// Review records from an earlier run would be read as this run's: a full run starts only on a paper without any.
+if (!Array.isArray(gate.reviewed)) return { status: 'REFUSED', paper_id: PID, reason: 'the approval gate did not list the review records' }
+if (MODE === 'full' && gate.reviewed.length) {
+  return { status: 'REFUSED', paper_id: PID, reason: `${REL}/review already holds review records (${gate.reviewed.join(', ')}); a full run would mix them with its own. Use mode "rereview", or move ${REL}/review aside by hand first.` }
+}
+const ROUNDS = gate.reviewed.map(n => /^round(\d+)_/.exec(n)).filter(Boolean).map(m => Number(m[1]))
+if (MODE === 'rereview' && ROUNDS.length && Number(a.round || 1) < Math.max(...ROUNDS)) {
+  return { status: 'REFUSED', paper_id: PID, reason: `round ${Number(a.round || 1)} is older than the latest review round ${Math.max(...ROUNDS)}; rereview that round instead` }
+}
 
 if (MODE === 'full') {
   // 6. Implementation, only what the approved protocol proposes
@@ -133,8 +144,8 @@ if (MODE === 'full') {
     'Stage 6, implementation: only what the approved protocol proposes.',
     `Read ${P}/scope/protocol.md (Proposed new code) and ${P}/scope/prereg.json (new_code). If they propose no reusable repository module, change nothing and return ok=true with summary "no new code".`,
     'Otherwise implement exactly the proposed reusable modules, test first. Each gets an acceptance module exposing tests() -> list[(name, fn)], registered in tests/run_all.py through a lazy import inside a function (an ImportError becomes one NOT_RUN entry). Paper-specific code does not belong here; it goes in study/ in the next stage. UI and Primer integration is out of scope.',
-    'Run python tests/run_all.py --suite <each suite you touched> and python -m tests.macro_m0_harness: neither may show a FAIL. If a defect turns up in a file pinned by a frozen study, fix it on the main line and say in the summary that the study of record runs from the tag studies-of-record-2026-10-23.',
-    'Commit the new modules, their tests, tests/run_all.py and qa/acceptance_results.json together.',
+    'While you work, python tests/run_all.py --suite <each suite you touched> is fine, but each --suite run rewrites qa/acceptance_results.json with its own rows alone. Before you commit, run the full python tests/run_all.py (no --suite; about 11 minutes) and python -m tests.macro_m0_harness: neither may show a FAIL. If a defect turns up in a file pinned by a frozen study, fix it on the main line and say in the summary that the study of record runs from the tag studies-of-record-2026-10-23.',
+    'Commit the new modules, their tests, tests/run_all.py and the qa/acceptance_results.json that the full run wrote, together; never commit that file from a --suite run.',
   ), { label: 'implement', phase: 'Implement', schema: STAGE })
   if (!impl || !impl.ok) return stop('implement', impl)
 
@@ -271,7 +282,7 @@ if (revised) {
 phase('Build')
 const fin = await agent(say(
   'Final stage: the release state.',
-  `1. Run python -m tools.paper.index gate ${REL}; status = the word it prints.`,
+  `1. Run python -m tools.paper.index gate ${REL} --round ${k}; status = the word it prints.`,
   `2. problems = what python -m tools.paper.consistency ${REL} and python -m tools.paper.claims ${REL} print, if either fails.`,
   `3. Commit ${REL}/review and ${REL}/STATUS.`,
   'Never write RELEASED: only the owner\'s sign-off does that, through python -m tools.paper.index release.',

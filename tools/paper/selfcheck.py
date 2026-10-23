@@ -1600,9 +1600,11 @@ const [script, scenarioFile] = process.argv.slice(2)
 const sc = JSON.parse(readFileSync(scenarioFile, 'utf8'))
 const src = readFileSync(script, 'utf8').replace(/^export const meta\b/m, 'const meta')
 const calls = []
+const prompts = {}
 const agent = async (prompt, opts = {}) => {
   if (typeof prompt !== 'string' || prompt.length < 40) throw new Error(`prompt too short for ${opts.label}`)
   calls.push(opts.label)
+  prompts[opts.label] = prompt
   const r = Object.prototype.hasOwnProperty.call(sc.responses, opts.label) ? sc.responses[opts.label] : sc.default
   return r === undefined ? null : JSON.parse(JSON.stringify(r))
 }
@@ -1621,9 +1623,9 @@ try {
   const run = new Function('agent', 'parallel', 'pipeline', 'phase', 'log', 'args', 'budget', 'workflow',
     'return (async () => {\n' + src + '\n})()')
   const result = await run(agent, parallel, pipeline, noop, noop, sc.args, budget, async () => { throw new Error('nested') })
-  out = { calls, result }
+  out = { calls, prompts, result }
 } catch (e) {
-  out = { calls, error: String((e && e.message) || e) }
+  out = { calls, prompts, error: String((e && e.message) || e) }
 }
 process.stdout.write(JSON.stringify(out))
 """
@@ -1695,12 +1697,20 @@ def test_b5_workflow_scripts_follow_the_rules_and_their_gates_hold():
     run = _b5_run(research, {"args": research_args("2026-10-23-probe"), "responses": halted, "default": ok})
     assert run["result"]["status"] == "STOPPED" and run["calls"] == ["scope"], run
 
-    gate = {"approval_exit": 0, "approval_output": "", "prereg_tracked": True, "prereg_clean": True, "status": "DRAFT"}
+    gate = {"approval_exit": 0, "approval_output": "", "prereg_tracked": True, "prereg_clean": True, "status": "DRAFT",
+            "reviewed": []}
     quiet = {"exit_code": 0, "statuses": {}, "reset_at": []}
     write_args = {"paper_id": "2026-10-23-probe", "root": "C:/repo", "now_utc": _B5_NOW, "mode": "full"}
-    for broken in (dict(gate, approval_exit=1), dict(gate, prereg_tracked=False), dict(gate, prereg_clean=False)):
+    no_list = {k: v for k, v in gate.items() if k != "reviewed"}
+    for broken in (dict(gate, approval_exit=1), dict(gate, prereg_tracked=False), dict(gate, prereg_clean=False),
+                   no_list, dict(gate, reviewed=["round2_claude.json", "fidelity_gemini_agy.json"])):
         run = _b5_run(write, {"args": write_args, "responses": {"approval-gate": broken}, "default": ok})
         assert run["result"]["status"] == "REFUSED" and run["calls"] == ["approval-gate"], run
+    # a rereview never judges an older round than the latest one on disk
+    run = _b5_run(write, {"args": dict(write_args, mode="rereview", round=1, only=["gpt"]),
+                          "responses": {"approval-gate": dict(gate, reviewed=["round1_claude.json", "round2_claude.json"])},
+                          "default": ok})
+    assert run["result"]["status"] == "REFUSED" and run["calls"] == ["approval-gate"], run
     answers = {"approval-gate": gate, "r1-cli": quiet, "r1-gate": {"status": "BLOCKED_MAJOR"},
                "r2-cli": {"exit_code": 0, "statuses": {}, "reset_at": ["2026-10-27 19:16"]},
                "r2-gate": {"status": "REVIEW_INCOMPLETE"}, "ko1-cli": quiet, "ko1-gate": {"status": "REVIEW_INCOMPLETE"},
@@ -1710,11 +1720,17 @@ def test_b5_workflow_scripts_follow_the_rules_and_their_gates_hold():
                             "r1-claude", "r1-cli", "r1-gate", "revise-r1", "claims-r1", "r2-claude", "r2-cli", "r2-gate",
                             "translate-ko", "ko1-claude", "ko1-cli", "ko1-gate", "build", "final-status"], run["calls"]
     assert run["result"]["status"] == "REVIEW_INCOMPLETE" and run["result"]["reset_at"] == ["2026-10-27 19:16"], run
+    # every gate reads the round just run, never whatever round is highest on disk
+    for label, k in (("r1-gate", 1), ("r2-gate", 2), ("ko1-gate", 2), ("final-status", 2)):
+        assert f"python -m tools.paper.index gate papers/2026-10-23-probe --round {k}" in run["prompts"][label], label
+    # Stage 6 commits only the record of a full run: a --suite run rewrites the file with its own rows alone
+    assert "full python tests/run_all.py (no --suite" in run["prompts"]["implement"], run["prompts"]["implement"]
     run = _b5_run(write, {"args": write_args, "responses": dict(answers, **{"r2-gate": {"status": "BLOCKED_MAJOR"}}),
                           "default": ok})
     assert run["result"]["status"] == "BLOCKED_MAJOR" and "translate-ko" not in run["calls"], run
     run = _b5_run(write, {"args": dict(write_args, mode="rereview", round=1, only=["gpt"]),
-                          "responses": dict(answers, **{"r1-gate": {"status": "OWNER_REVIEW"},
+                          "responses": dict(answers, **{"approval-gate": dict(gate, reviewed=["round1_claude.json"]),
+                                                        "r1-gate": {"status": "OWNER_REVIEW"},
                                                         "final-status": {"status": "OWNER_REVIEW", "problems": []}}),
                           "default": ok})
     assert run["calls"] == ["approval-gate", "r1-cli", "r1-gate", "final-status"], run["calls"]
