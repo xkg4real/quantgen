@@ -451,6 +451,41 @@ def test_consistency_follows_input_into_table_files():
     assert "qnum sec:results: count differs en/ko {'sharpe_2y': (3, 2)}" in probs, probs
 
 
+def test_approval_detects_changed_scope_file():
+    """The write workflow's deterministic refusal: a scope file changed, removed or added after approval."""
+    from tools.paper import approval as A
+    tmp = _Path(_tempfile.mkdtemp(prefix="qgappr_"))
+    (tmp / "scope").mkdir()
+    for name in ("questions.md", "protocol.md", "prereg.json"):
+        (tmp / "scope" / name).write_text(f"{name}\n", encoding="utf-8")
+    assert A.check(tmp) == ["scope/approval.json missing: the owner has not approved this scope"]
+    for words in ("", "   "):
+        try:
+            A.approve(tmp, words, "2026-10-23T00:00:00Z")
+        except ValueError:
+            continue
+        raise AssertionError(f"approved with owner words {words!r}")
+    record = A.approve(tmp, "I approve this scope as written", "2026-10-23T00:00:00Z")
+    assert record == tmp / "scope" / "approval.json" and A.check(tmp) == []
+    saved = _json.loads(record.read_text(encoding="utf-8"))
+    assert sorted(saved["files"]) == ["scope/prereg.json", "scope/protocol.md", "scope/questions.md"], saved
+    assert saved["owner_words"] == "I approve this scope as written" and saved["approved_utc"] == "2026-10-23T00:00:00Z"
+
+    def cli() -> int:
+        return _subprocess.run([_sys.executable, "-m", "tools.paper.approval", "check", str(tmp)], cwd=_ROOT,
+                               capture_output=True, text=True, encoding="utf-8").returncode
+
+    assert cli() == 0
+    (tmp / "scope" / "protocol.md").write_text("protocol.md\none more variant\n", encoding="utf-8")
+    assert A.check(tmp) == ["scope/protocol.md changed after approval"], A.check(tmp)
+    assert cli() == 1
+    (tmp / "scope" / "protocol.md").write_text("protocol.md\n", encoding="utf-8")
+    assert A.check(tmp) == []                                   # restored byte for byte
+    (tmp / "scope" / "questions.md").unlink()
+    (tmp / "scope" / "extra.md").write_text("x\n", encoding="utf-8")
+    assert A.check(tmp) == ["scope/questions.md removed after approval", "scope/extra.md added after approval"]
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
