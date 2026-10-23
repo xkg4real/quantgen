@@ -54,14 +54,19 @@ MUTATING_URL_WORDS = ("order", "withdraw", "transfer", "deposit")
 # order-shaped names: OrderBook.place/fill/cancel/reject/cancel_all_open, Evaluator.sweep_cancellations,
 # and the bare `fill_order` / `cancel_order` handlers of ui/trading_page.py that call `runtime.book`.
 ALLOWED_BARE_CALLS = {"ui/trading_page.py": {"fill_order", "cancel_order"}}
-# Only the engine package (and the macro engine feed named in the rulings) may import the book itself.
-ORDERS_IMPORTERS_ALLOWED = ("core/engine/", "core/skills/macro_daily.py", "core/skills/pipeline.py")
+# Only the engine package (and the macro engine feed named in the rulings) may import the book itself, plus the
+# paper studies under papers/, which may read the simulated fill model (spec 2026-10-23 section 3.4). An entry ending
+# in "/" is a folder, the others are single files; `rel.startswith(ORDERS_IMPORTERS_ALLOWED)` covers both.
+ORDERS_IMPORTERS_ALLOWED = ("core/engine/", "core/skills/macro_daily.py", "core/skills/pipeline.py", "papers/")
 ORDERS_NAMES = {"OrderBook", "SimulatedOrder", "OrderStatus", "order_id"}
 WORKFLOW_YAML = ROOT / "core" / "skills" / "macro_workflows"
+SCAN_TREES = ("tools", "papers")          # the paper pipeline and the paper studies (spec 2026-10-23 section 3.4)
 
 
-def _scan_files() -> list[Path]:
-    files = runtime_py() + sorted(p for p in (ROOT / "docs").glob("*.py"))
+def _scan_files(root: Path = ROOT) -> list[Path]:
+    files = runtime_py() + sorted(p for p in (root / "docs").glob("*.py"))
+    for top in SCAN_TREES:
+        files += sorted(p for p in (root / top).rglob("*.py") if "__pycache__" not in p.parts)
     return [p for p in files if p.is_file()]
 
 
@@ -73,8 +78,8 @@ def _strings_in(node: ast.AST) -> list[str]:
     return out
 
 
-def _offences(path: Path) -> list[str]:
-    rel = path.relative_to(ROOT).as_posix()
+def _offences(path: Path, root: Path = ROOT) -> list[str]:
+    rel = path.relative_to(root).as_posix()
     code = _code_only(path)
     low = code.lower()
     hits = [f"{rel}: {n!r}" for n in FORBIDDEN_TEXT_CI if n in low]
@@ -129,7 +134,7 @@ def _yaml_offences(path: Path) -> list[str]:
 
 
 def test_t_ro_01_no_order_cancel_withdrawal_or_transfer_path():
-    """Static scan of core/, data/, ui/, config.py, main.py, docs/*.py and the macro workflow YAML."""
+    """Static scan of core/, data/, ui/, config.py, main.py, docs/*.py, tools/, papers/ and the macro workflow YAML."""
     files = _scan_files()
     assert len(files) > 50, "scan scope collapsed"
     hits = [h for p in files for h in _offences(p)]
@@ -142,11 +147,12 @@ test_t_ro_01_no_order_cancel_withdrawal_or_transfer_path.test_ids = ["T-RO-01"]
 
 
 def test_t_ro_01_orders_module_reached_only_through_the_engine():
-    """`core/engine/orders` is imported only inside the engine package (plus the macro engine feed)."""
+    """`core/engine/orders` is imported only inside the engine package (plus the macro engine feed and the paper
+    studies under papers/)."""
     offenders = []
     for path in _scan_files():
         rel = path.relative_to(ROOT).as_posix()
-        if rel.startswith(ORDERS_IMPORTERS_ALLOWED[0]) or rel in ORDERS_IMPORTERS_ALLOWED:
+        if rel.startswith(ORDERS_IMPORTERS_ALLOWED):
             continue
         tree = ast.parse(path.read_text(encoding="utf-8"))
         for node in ast.walk(tree):
@@ -164,6 +170,26 @@ def test_t_ro_01_orders_module_reached_only_through_the_engine():
 
 
 test_t_ro_01_orders_module_reached_only_through_the_engine.test_ids = ["T-RO-01"]
+
+
+def test_t_ro_01_scan_reaches_tools_and_papers():
+    """The order-path scan covers the paper pipeline (tools/) and the paper studies (papers/), and papers/ is the only
+    new allowed importer of the simulated book (spec 2026-10-23 section 3.4)."""
+    probes = {"tools/paper/probe.py": "def f(client):\n    return client.place_order(1)\n",
+              "papers/2026-01-01-probe/study/run.py": "import ccxt\n",
+              "papers/2026-01-01-probe/study/__pycache__/stale.py": "import ccxt\n"}
+    with tempfile.TemporaryDirectory() as name:
+        tmp = Path(name)
+        for rel, text in probes.items():
+            (tmp / rel).parent.mkdir(parents=True, exist_ok=True)
+            (tmp / rel).write_text(text, encoding="utf-8")
+        scanned = sorted(p.relative_to(tmp).as_posix() for p in _scan_files(tmp) if tmp in p.parents)
+        assert scanned == ["papers/2026-01-01-probe/study/run.py", "tools/paper/probe.py"], scanned
+        hits = [h for rel in scanned for h in _offences(tmp / rel, tmp)]
+    assert any(".place_order()" in h for h in hits) and any("import ccxt" in h for h in hits), hits
+    assert "papers/2026-01-01-probe/study/run.py".startswith(ORDERS_IMPORTERS_ALLOWED)
+    assert not "tools/paper/study.py".startswith(ORDERS_IMPORTERS_ALLOWED)
+    assert any(p.relative_to(ROOT).as_posix().startswith("tools/") for p in _scan_files()), "the real tools/ tree is not scanned"
 
 
 def test_t_ro_01_artifact_writers_stamp_read_only():
