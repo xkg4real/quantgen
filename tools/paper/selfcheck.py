@@ -1404,6 +1404,143 @@ def test_b5_panel_records_every_referee_and_never_reads_silence_as_ok():
             bundle.make_bundle, debate.run_referee = saved
 
 
+# --------------------------------------------------------------------------- #
+# Task 5 (3/4): the two workflow scripts
+# --------------------------------------------------------------------------- #
+import re  # noqa: E402
+import shutil  # noqa: E402
+import subprocess  # noqa: E402
+
+from tests.notrun import NotRun  # noqa: E402
+
+_B5_WORKFLOWS = _B5_ROOT / ".claude" / "workflows"
+_B5_HARNESS = r"""
+import { readFileSync } from 'node:fs'
+const [script, scenarioFile] = process.argv.slice(2)
+const sc = JSON.parse(readFileSync(scenarioFile, 'utf8'))
+const src = readFileSync(script, 'utf8').replace(/^export const meta\b/m, 'const meta')
+const calls = []
+const agent = async (prompt, opts = {}) => {
+  if (typeof prompt !== 'string' || prompt.length < 40) throw new Error(`prompt too short for ${opts.label}`)
+  calls.push(opts.label)
+  const r = Object.prototype.hasOwnProperty.call(sc.responses, opts.label) ? sc.responses[opts.label] : sc.default
+  return r === undefined ? null : JSON.parse(JSON.stringify(r))
+}
+const parallel = async thunks => Promise.all(thunks.map(t => (async () => t())().catch(() => null)))
+const pipeline = async (items, ...stages) => Promise.all(items.map(async (item, i) => {
+  let v = item
+  for (const s of stages) { try { v = await s(v, item, i) } catch { return null } }
+  return v
+}))
+const noop = () => {}
+Date.now = () => { throw new Error('Date.now() is not available in a workflow') }
+Math.random = () => { throw new Error('Math.random() is not available in a workflow') }
+const budget = { total: null, spent: () => 0, remaining: () => Infinity }
+let out
+try {
+  const run = new Function('agent', 'parallel', 'pipeline', 'phase', 'log', 'args', 'budget', 'workflow',
+    'return (async () => {\n' + src + '\n})()')
+  const result = await run(agent, parallel, pipeline, noop, noop, sc.args, budget, async () => { throw new Error('nested') })
+  out = { calls, result }
+} catch (e) {
+  out = { calls, error: String((e && e.message) || e) }
+}
+process.stdout.write(JSON.stringify(out))
+"""
+
+
+def _b5_static(name: str) -> None:
+    """The Workflow tool rules: meta first and a pure literal, no clock or randomness, no I/O, phases that match."""
+    src = (_B5_WORKFLOWS / name).read_text(encoding="utf-8")
+    for bad in ("Date.now", "new Date(", "Math.random", "require(", "process.", "readFile", "writeFile"):
+        assert bad not in src, f"{name}: {bad} is not allowed in a workflow script"
+    assert not re.search(r"^\s*import\s", src, re.M), f"{name}: a workflow script imports nothing"
+    m = re.match(r"export const meta = (\{.*?\n\})\n", src, re.S)
+    assert m, f"{name}: must begin with export const meta = {{...}}"
+    lit = re.sub(r"'(?:[^'\\\n]|\\.)*'", "''", m.group(1))
+    for bad in ("`", "${", "...", "("):
+        assert bad not in lit, f"{name}: meta is not a pure literal ({bad!r})"
+    idents = set(re.findall(r":\s*([A-Za-z_$][\w$]*)", lit)) - {"true", "false", "null"}
+    assert not idents, f"{name}: meta refers to {sorted(idents)}"
+    assert f"name: '{name[:-3]}'" in m.group(1), f"{name}: meta.name must be the file stem"
+    titles = re.findall(r"title: '([^']+)'", m.group(1))
+    body = src[m.end():]
+    used = set(re.findall(r"\bphase\('([^']+)'\)", body)) | set(re.findall(r"\bphase: '([^']+)'", body))
+    assert used == set(titles), f"{name}: phase() titles {sorted(used)} differ from meta.phases {titles}"
+
+
+def _b5_run(name: str, scenario: dict) -> dict:
+    with tempfile.TemporaryDirectory() as tmp:
+        harness, scen = Path(tmp) / "harness.mjs", Path(tmp) / "scenario.json"
+        harness.write_text(_B5_HARNESS, encoding="utf-8")
+        scen.write_text(json.dumps(scenario, ensure_ascii=False), encoding="utf-8")
+        done = subprocess.run([shutil.which("node"), str(harness), str(_B5_WORKFLOWS / name), str(scen)],
+                              capture_output=True, text=True, encoding="utf-8", timeout=60)
+    assert done.returncode == 0, done.stderr
+    return json.loads(done.stdout)
+
+
+def test_b5_workflow_scripts_follow_the_rules_and_their_gates_hold():
+    research, write = "quantgen-paper-research.js", "quantgen-paper-write.js"
+    _b5_static(research)
+    _b5_static(write)
+    if not shutil.which("node"):
+        raise NotRun("OWNER: node.js is not on PATH; the control-flow half of this test needs it")
+    ok = {"ok": True, "summary": "stub", "problems": []}
+    ref = {"key": "newey1987simple", "type": "article", "authors": ["Whitney K. Newey", "Kenneth D. West"],
+           "year": 1987, "title": "A Simple, Positive Semi-Definite Covariance Matrix", "class": "published", "why": "HAC"}
+    found = {"refs": [ref], "notes_file": "notes.md"}
+    research_answers = {
+        "scope": {"ok": True, "title": "Probe", "section6_rows": [16], "modules": [], "questions": ["q1"],
+                  "implemented": "yes", "searchers": ["canonical", "recent", "owner_materials"], "problems": []},
+        "search-canonical": found, "search-recent": found, "search-owner_materials": found, "search-gaps": found,
+        "literature-critic": {"gaps": []},
+        "claims-check": {"ok": True, "supported": 1, "unread": 0, "unsupported": 0, "problems": []},
+        "protocol": {"ok": True, "summary_md": "summary", "proposed_code": [], "problems": []},
+    }
+
+    def research_args(paper_id):
+        return {"topic": "probe", "paper_id": paper_id, "today": "2026-10-23", "now_utc": _B5_NOW, "root": "C:/repo"}
+
+    bad = _b5_run(research, {"args": research_args("2026-10-22-probe"), "responses": {}, "default": ok})
+    assert "args must be" in bad.get("error", "") and bad["calls"] == [], bad
+    run = _b5_run(research, {"args": research_args("2026-10-23-probe"), "responses": research_answers, "default": ok})
+    assert run.get("result", {}).get("status") == "AWAITING_APPROVAL", run
+    assert run["calls"] == ["scope", "search-canonical", "search-recent", "search-owner_materials", "literature-critic",
+                            "literature-merge", "refs-verify", "claims-check", "integration", "protocol"], run["calls"]
+    gaps = dict(research_answers, **{"literature-critic": {"gaps": ["the published version of the working paper"]}})
+    run = _b5_run(research, {"args": research_args("fixture-2026-10-23-probe"), "responses": gaps, "default": ok})
+    assert "search-owner_materials" not in run["calls"] and "search-gaps" in run["calls"], run["calls"]
+    halted = dict(research_answers, scope=dict(research_answers["scope"], ok=False, problems=["exists"]))
+    run = _b5_run(research, {"args": research_args("2026-10-23-probe"), "responses": halted, "default": ok})
+    assert run["result"]["status"] == "STOPPED" and run["calls"] == ["scope"], run
+
+    gate = {"approval_exit": 0, "approval_output": "", "prereg_tracked": True, "prereg_clean": True, "status": "DRAFT"}
+    quiet = {"exit_code": 0, "statuses": {}, "reset_at": []}
+    write_args = {"paper_id": "2026-10-23-probe", "root": "C:/repo", "now_utc": _B5_NOW, "mode": "full"}
+    for broken in (dict(gate, approval_exit=1), dict(gate, prereg_tracked=False), dict(gate, prereg_clean=False)):
+        run = _b5_run(write, {"args": write_args, "responses": {"approval-gate": broken}, "default": ok})
+        assert run["result"]["status"] == "REFUSED" and run["calls"] == ["approval-gate"], run
+    answers = {"approval-gate": gate, "r1-cli": quiet, "r1-gate": {"status": "BLOCKED_MAJOR"},
+               "r2-cli": {"exit_code": 0, "statuses": {}, "reset_at": ["2026-10-27 19:16"]},
+               "r2-gate": {"status": "REVIEW_INCOMPLETE"}, "ko1-cli": quiet, "ko1-gate": {"status": "REVIEW_INCOMPLETE"},
+               "final-status": {"status": "REVIEW_INCOMPLETE", "problems": []}}
+    run = _b5_run(write, {"args": write_args, "responses": answers, "default": ok})
+    assert run["calls"] == ["approval-gate", "implement", "study", "figures", "draft-en", "claims-en",
+                            "r1-claude", "r1-cli", "r1-gate", "revise-r1", "claims-r1", "r2-claude", "r2-cli", "r2-gate",
+                            "translate-ko", "ko1-claude", "ko1-cli", "ko1-gate", "build", "final-status"], run["calls"]
+    assert run["result"]["status"] == "REVIEW_INCOMPLETE" and run["result"]["reset_at"] == ["2026-10-27 19:16"], run
+    run = _b5_run(write, {"args": write_args, "responses": dict(answers, **{"r2-gate": {"status": "BLOCKED_MAJOR"}}),
+                          "default": ok})
+    assert run["result"]["status"] == "BLOCKED_MAJOR" and "translate-ko" not in run["calls"], run
+    run = _b5_run(write, {"args": dict(write_args, mode="rereview", round=1, only=["gpt"]),
+                          "responses": dict(answers, **{"r1-gate": {"status": "OWNER_REVIEW"},
+                                                        "final-status": {"status": "OWNER_REVIEW", "problems": []}}),
+                          "default": ok})
+    assert run["calls"] == ["approval-gate", "r1-cli", "r1-gate", "final-status"], run["calls"]
+    assert run["result"]["status"] == "OWNER_REVIEW", run
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
