@@ -486,6 +486,129 @@ def test_approval_detects_changed_scope_file():
     assert A.check(tmp) == ["scope/questions.md removed after approval", "scope/extra.md added after approval"]
 
 
+# --------------------------------------------------------------------------- #
+# Task 3: refs.yaml verification, the claims gate and study runs (offline)
+# --------------------------------------------------------------------------- #
+import tempfile                    # noqa: E402
+from pathlib import Path           # noqa: E402
+
+import yaml                        # noqa: E402
+
+_REFS_NOW = "2026-10-23T00:00:00Z"
+_REFS_KCARRY = {"key": "koijen2018carry", "type": "article",
+                "authors": ["Koijen, Ralph S. J.", "Moskowitz, Tobias J.", "Pedersen, Lasse Heje", "Vrugt, Evert B."],
+                "year": 2018, "title": "Carry", "venue": "Journal of Financial Economics", "volume": 127,
+                "pages": "197-225", "doi": "10.1016/j.jfineco.2017.11.002", "class": "published"}
+_REFS_KCARRY_URL = "https://api.crossref.org/works/10.1016/j.jfineco.2017.11.002"
+_REFS_CROSSREF = {"status": "ok", "message": {"DOI": "10.1016/j.jfineco.2017.11.002", "title": ["Carry"]}}
+_REFS_ATOM = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <entry>
+    <id>http://arxiv.org/abs/2101.00001v2</id>
+    <title>An Offline
+      Fixture Title</title>
+  </entry>
+</feed>
+"""
+
+
+def _refs_fetcher(table: dict):
+    """Offline stand-in for refs.default_fetch: answers from `table`, records every URL asked."""
+    calls = []
+
+    def fetch(url):
+        calls.append(url)
+        return table.get(url)
+
+    fetch.calls = calls
+    return fetch
+
+
+def test_refs_crossref_record_ok_and_mismatch():
+    from tools.paper import refs as R
+    fetch = _refs_fetcher({_REFS_KCARRY_URL: _REFS_CROSSREF})
+    rec = R.verify_entry(dict(_REFS_KCARRY), fetch=fetch, now_utc=_REFS_NOW)
+    assert fetch.calls == [_REFS_KCARRY_URL], fetch.calls
+    assert rec == {"method": "doi", "url": _REFS_KCARRY_URL, "retrieved_utc": _REFS_NOW, "fetched_title": "Carry",
+                   "ok": True}, rec
+    wrong = dict(_REFS_KCARRY, title="Carry Trades Everywhere")
+    assert R.verify_entry(wrong, fetch=fetch, now_utc=_REFS_NOW)["ok"] is False
+    gone = R.verify_entry(dict(_REFS_KCARRY), fetch=_refs_fetcher({}), now_utc=_REFS_NOW)   # unreachable or 404
+    assert gone["ok"] is False and gone["fetched_title"] == "", gone
+    # Crossref escapes HTML entities and keeps markup in titles; neither makes a correct DOI entry fail
+    amp = {"status": "ok", "message": {"title": ["Carry &amp; <i>Value</i>"]}}
+    rec = R.verify_entry(dict(_REFS_KCARRY, title="Carry & Value"), fetch=_refs_fetcher({_REFS_KCARRY_URL: amp}),
+                         now_utc=_REFS_NOW)
+    assert rec["ok"] is True and rec["fetched_title"] == "Carry & <i>Value</i>", rec
+
+
+def test_refs_arxiv_atom_fixture():
+    from tools.paper import refs as R
+    parsed = R.parse_arxiv_atom(_REFS_ATOM)
+    assert parsed == {"entries": [{"id": "http://arxiv.org/abs/2101.00001v2",
+                                   "title": "An Offline Fixture Title"}]}, parsed
+    url = "http://export.arxiv.org/api/query?id_list=2101.00001"
+    entry = {"key": "fixture2021", "type": "misc", "authors": ["Doe, Jane"], "year": 2021,
+             "title": "An offline fixture title", "arxiv": "2101.00001", "class": "working_paper"}
+    rec = R.verify_entry(entry, fetch=_refs_fetcher({url: parsed}), now_utc=_REFS_NOW)
+    assert rec["method"] == "arxiv" and rec["url"] == url and rec["ok"] is True, rec
+    other = dict(entry, arxiv="2101.00002")          # the feed answers for a different id
+    rec = R.verify_entry(other, fetch=_refs_fetcher({"http://export.arxiv.org/api/query?id_list=2101.00002": parsed}),
+                         now_utc=_REFS_NOW)
+    assert rec["ok"] is False, rec
+
+
+def test_refs_verify_file_records_manual_and_problems():
+    from tools.paper import refs as R
+    book = {"key": "hamilton1994", "type": "book", "authors": ["Hamilton, James D."], "year": 1994,
+            "title": "Time Series Analysis", "venue": "Princeton University Press",
+            "url": "https://press.princeton.edu/", "class": "book"}
+    fetch = _refs_fetcher({_REFS_KCARRY_URL: _REFS_CROSSREF})
+    with tempfile.TemporaryDirectory(prefix="qgrefs_") as d:
+        path = Path(d) / "refs.yaml"
+        path.write_text(yaml.safe_dump([dict(_REFS_KCARRY), book], allow_unicode=True, sort_keys=False),
+                        encoding="utf-8")
+        problems = R.verify_file(path, fetch=fetch, now_utc=_REFS_NOW)
+        assert problems == ["hamilton1994: not verified (manual: fetched '')"], problems
+        assert b"\r\n" not in path.read_bytes(), "refs.yaml is rewritten with LF line ends"
+        saved = R.load_refs(path)
+        assert saved[0]["verified"]["ok"] is True and saved[1]["verified"]["method"] == "manual", saved
+        saved[1]["verified"].update(ok=True, fetched_title="Time Series Analysis")     # the agent's manual check
+        path.write_text(yaml.safe_dump(saved, allow_unicode=True, sort_keys=False), encoding="utf-8")
+        assert R.verify_file(path, fetch=fetch, now_utc="2026-10-24T00:00:00Z") == []
+        kept = R.load_refs(path)[1]["verified"]
+        assert kept["ok"] is True and kept["retrieved_utc"] == _REFS_NOW, kept
+        assert R.ref_problems([dict(book)]) == ["hamilton1994: no verified record"]
+
+
+def test_refs_write_bib_and_schema_refusals():
+    from tools.paper import refs as R
+    with tempfile.TemporaryDirectory(prefix="qgrefs_") as d:
+        bib = Path(d) / "refs.bib"
+        R.write_bib([dict(_REFS_KCARRY, title="Carry & Value_Spread")], bib)
+        assert bib.read_bytes().decode("utf-8") == (
+            "@article{koijen2018carry,\n"
+            "  author = {Koijen, Ralph S. J. and Moskowitz, Tobias J. and Pedersen, Lasse Heje and Vrugt, Evert B.},\n"
+            "  year = {2018},\n"
+            "  title = {{Carry \\& Value\\_Spread}},\n"
+            "  journal = {Journal of Financial Economics},\n"
+            "  volume = {127},\n"
+            "  pages = {197--225},\n"
+            "  doi = {10.1016/j.jfineco.2017.11.002},\n"
+            "}\n"), bib.read_bytes()
+        path = Path(d) / "refs.yaml"
+        for bad, needle in (([_REFS_KCARRY, dict(_REFS_KCARRY)], "duplicate key"),
+                            ([dict(_REFS_KCARRY, **{"class": "slides"})], "class 'slides'"),
+                            ([dict(_REFS_KCARRY, authors=[])], "missing ['authors']")):
+            path.write_text(yaml.safe_dump(bad, sort_keys=False), encoding="utf-8")
+            try:
+                R.load_refs(path)
+            except ValueError as exc:
+                assert needle in str(exc), exc
+            else:
+                raise AssertionError(f"load_refs accepted an entry with {needle}")
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
