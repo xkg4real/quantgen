@@ -275,6 +275,182 @@ def test_numbers_refuses_bad_keys_missing_fields_and_nonfinite_values():
     assert not (tmp / "n.json").exists() and not (tmp / "n.tex").exists(), "a refused entry must write nothing"
 
 
+_EN_TEX = r"""\documentclass[11pt,a4paper]{article}
+\usepackage{qgpaper}
+\input{../study/numbers.tex}
+\begin{document}
+\begin{abstract}
+% id: abstract-1
+Twelve-month carry earns a Sharpe ratio of \qnum{sharpe_2y}.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+% id: intro-1
+Carry trades earn a risk premium \citep{lustig2011}; Section~\ref{sec:results} reports its size.
+
+\section{Data}\label{sec:data}
+% id: data-1
+The sample spans \qnum{n_months} months.
+\begin{tabular}{@{}lr@{}}
+\toprule
+Statistic & Value \\ \midrule
+Months & \qnum{n_months} \\[2pt]
+\bottomrule
+\end{tabular}
+
+\section{Results}\label{sec:results}
+% id: results-1
+The Sharpe ratio is \qnum{sharpe_2y} \citep{lustig2011,fama1984}, with $t = 2.1$ and an $R^2$ of \qnum{r2_10y} (Table~\ref{tab:res1}).
+
+% id: results-2
+Standard errors follow \citet[p.~1035]{hansen1982}.
+\begin{table}[t]\centering
+\caption{Main estimates}\label{tab:res1}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Horizon & Sharpe ratio \\ \cmidrule(lr){1-2}
+Long & \qnum{sharpe_2y} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\includegraphics[width=0.8\linewidth]{figures/fig_1}
+
+\section{Robustness}\label{sec:robustness}
+% id: robustness-1
+The model is
+\begin{equation}\label{eq:carry1}
+r_{t+1} = \alpha + 2\beta x_t + \varepsilon_{t+1},
+\end{equation}
+and \eqref{eq:carry1} holds with \[ \hat\beta_{10} > 0. \]
+\end{document}
+"""
+
+_KO_TEX = r"""\documentclass[11pt,a4paper]{article}
+\usepackage{kotex}
+\usepackage{qgpaper}
+\input{../study/numbers.tex}
+\begin{document}
+\begin{abstract}
+% id: abstract-1
+열두 달 캐리 전략의 샤프 비율은 \qnum{sharpe_2y}이다.
+\end{abstract}
+
+\section{서론}\label{sec:intro}
+% id: intro-1
+캐리 트레이드는 위험 프리미엄을 얻는다 \citep{lustig2011}. 그 크기는 \ref{sec:results}절에서 보고한다.
+
+\section{자료}\label{sec:data}
+% id: data-1
+표본은 \qnum{n_months}개월에 걸친다.
+\begin{tabular}{@{}lr@{}}
+\toprule
+통계량 & 값 \\ \midrule
+개월 수 & \qnum{n_months} \\[2pt]
+\bottomrule
+\end{tabular}
+
+\section{결과}\label{sec:results}
+% id: results-1
+샤프 비율은 \qnum{sharpe_2y}이며 \citep{lustig2011,fama1984}, $t = 2.1$이고 $R^2$는 \qnum{r2_10y}이다(표~\ref{tab:res1}).
+
+% id: results-2
+표준오차는 \citet[p.~1035]{hansen1982}를 따른다.
+\begin{table}[t]\centering
+\caption{주요 추정치}\label{tab:res1}
+\begin{tabular}{@{}lr@{}}
+\toprule
+기간 & 샤프 비율 \\ \cmidrule(lr){1-2}
+장기 & \qnum{sharpe_2y} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\includegraphics[width=0.8\linewidth]{figures/fig_1}
+
+\section{강건성}\label{sec:robustness}
+% id: robustness-1
+모형은 다음과 같다.
+\begin{equation}\label{eq:carry1}
+r_{t+1} = \alpha + 2\beta x_t + \varepsilon_{t+1},
+\end{equation}
+그리고 \eqref{eq:carry1}은 \[ \hat\beta_{10} > 0 \]에서 성립한다.
+\end{document}
+"""
+_TABLE_TEX = r"""\begin{tabular}{@{}lr@{}}
+\specialrule{.8pt}{0pt}{0pt}
+Horizon & Sharpe ratio \\ \cline{1-2}
+Long & \qnum{sharpe_2y} \\
+\bottomrule
+\end{tabular}
+"""
+
+
+def _consistency(*ko_edits) -> list[str]:
+    """check() on the fixture pair after applying (old, new) replacements to the Korean edition."""
+    from tools.paper import consistency as C
+    ko = _KO_TEX
+    for old, new in ko_edits:
+        assert ko.count(old) == 1, old
+        ko = ko.replace(old, new)
+    tmp = _Path(_tempfile.mkdtemp(prefix="qgcons_"))
+    for ed, text in (("en", _EN_TEX), ("ko", ko)):
+        (tmp / ed).mkdir()
+        (tmp / ed / f"paper_{ed}.tex").write_text(text, encoding="utf-8")
+    return C.check(tmp)
+
+
+def test_consistency_clean_pair_passes():
+    """Math, \\qnum, \\cite[p.~1035], \\ref, \\label, colspecs, \\cmidrule(lr){1-2}, \\\\[2pt] and graphics options
+    are not bare numbers, and a faithful pair has no problem."""
+    from tools.paper import consistency as C
+    assert _consistency() == [], _consistency()
+    assert C.check(_Path(_tempfile.mkdtemp(prefix="qgcons_"))) == ["en/paper_en.tex missing", "ko/paper_ko.tex missing"]
+
+
+def test_consistency_bare_digit_in_results_and_tables():
+    probs = _consistency(("$t = 2.1$이고", "t 값은 2.1이고"))
+    assert probs and all(p.startswith("bare number ko sec:results: ") and "2.1" in p for p in probs), probs
+    probs = _consistency((r"개월 수 & \qnum{n_months}", "개월 수 & 120"))
+    assert any(p.startswith("bare number ko tabular: ") and "120" in p for p in probs), probs
+    assert "qnum sec:data: count differs en/ko {'n_months': (2, 1)}" in probs, probs
+
+
+def test_consistency_missing_cite_key_in_ko():
+    probs = _consistency((r"\citep{lustig2011,fama1984}", r"\citep{lustig2011}"))
+    assert probs == ["cite sec:results: only in en ['fama1984'], only in ko []"], probs
+
+
+def test_consistency_per_section_qnum_count_drift():
+    probs = _consistency((r"샤프 비율은 \qnum{sharpe_2y}이며", "샤프 비율은 높으며"))
+    assert probs == ["qnum sec:results: count differs en/ko {'sharpe_2y': (2, 1)}"], probs
+    # the same total, moved to another section, is still a drift in both sections
+    probs = _consistency((r"$R^2$는 \qnum{r2_10y}이다", "$R^2$는 높다"),
+                         (r"\qnum{n_months}개월에 걸친다.", r"\qnum{n_months}개월에 걸친다(\qnum{r2_10y})."))
+    assert probs == ["qnum sec:data: count differs en/ko {'r2_10y': (0, 1)}",
+                     "qnum sec:results: count differs en/ko {'r2_10y': (1, 0)}"], probs
+
+
+def test_consistency_dropped_paragraph_id():
+    probs = _consistency(("% id: results-2\n", ""))
+    assert probs == ["ids: ko lacks paragraph ids ['results-2']"], probs
+
+
+def test_consistency_follows_input_into_table_files():
+    """A table \\input from <edition>/tables/ is checked where it appears; \\cline and \\specialrule are layout."""
+    from tools.paper import consistency as C
+    tmp = _Path(_tempfile.mkdtemp(prefix="qgcons_"))
+    anchor = r"\includegraphics[width=0.8\linewidth]{figures/fig_1}"
+    for ed, text in (("en", _EN_TEX), ("ko", _KO_TEX)):
+        (tmp / ed / "tables").mkdir(parents=True)
+        (tmp / ed / "tables" / "main.tex").write_text(_TABLE_TEX, encoding="utf-8")
+        (tmp / ed / f"paper_{ed}.tex").write_text(text.replace(anchor, "\\input{tables/main}\n" + anchor),
+                                                  encoding="utf-8")
+    assert C.check(tmp) == [], C.check(tmp)
+    (tmp / "ko" / "tables" / "main.tex").write_text(_TABLE_TEX.replace(r"\qnum{sharpe_2y}", "0.81"), encoding="utf-8")
+    probs = C.check(tmp)
+    assert any(p.startswith("bare number ko tabular: ") and "0.81" in p for p in probs), probs
+    assert "qnum sec:results: count differs en/ko {'sharpe_2y': (3, 2)}" in probs, probs
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
