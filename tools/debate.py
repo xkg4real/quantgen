@@ -32,6 +32,13 @@ class RefereeResult:
     raw_path: Path | None
     reset_at: str | None      # quota only: machine-local "YYYY-MM-DDTHH:MM" parsed from Codex's message
     version: str | None
+    note: str = ""            # why a non-ok run failed, when the runner can tell (panel.record files it)
+
+
+# Sent to every CLI referee, in the prompt and in each REVIEW_BRIEF.md (tools.paper.panel). Headless agy auto-denies a
+# shell command and then replies empty (status SUCCESS, response ""), so it is told up front.
+NO_SHELL = ("Do not run any shell command: commands are blocked in this sandbox. Read the files with your "
+            "file-reading and search tools only. Your final message must be the full Markdown report itself.")
 
 
 DEFAULT_REFEREES = [
@@ -138,7 +145,7 @@ def run_referee(ref: Referee, bundle: Path, prompt: str, out_dir: Path, *, timeo
         return RefereeResult(ref.name, "timeout", "", raw, None, version)
     out, err = _text(proc.stdout), _text(proc.stderr)
     raw = _save_raw(out_dir, ref, argv, version, proc.returncode, out, err)
-    report = ""
+    report, note = "", ""
     if ref.kind == "codex":
         report = last.read_text(encoding="utf-8").strip() if last.is_file() else ""
     else:
@@ -148,13 +155,19 @@ def run_referee(ref: Referee, bundle: Path, prompt: str, out_dir: Path, *, timeo
             envelope = None
         if isinstance(envelope, dict) and envelope.get("status") == "SUCCESS":
             report = str(envelope.get("response") or "").strip()
+            denied = envelope.get("denied_actions")
+            if not report and isinstance(denied, list) and denied:
+                kinds = sorted({str(d.get("action")) for d in denied if isinstance(d, dict)})
+                what = "a shell command" if kinds == ["command"] else "action(s) " + ", ".join(kinds)
+                note = (f"agy denied {what} and replied empty: headless mode cannot approve tools, "
+                        "so the referee left no report")
     if proc.returncode == 0 and has_report_headings(report):
         return RefereeResult(ref.name, "ok", report, raw, None, version)
     text = out + "\n" + err
     if _QUOTA_RE.search(text):
-        return RefereeResult(ref.name, "quota", report, raw, _reset_at(text), version)
+        return RefereeResult(ref.name, "quota", report, raw, _reset_at(text), version, note)
     status = "auth_failed" if _AUTH_RE.search(text) else "error"
-    return RefereeResult(ref.name, status, report, raw, None, version)
+    return RefereeResult(ref.name, status, report, raw, None, version, note)
 
 
 _STARTS = [re.compile(p) for p in (

@@ -1188,6 +1188,37 @@ def test_debate_agy_malformed_and_nonzero():
             assert res.status == "error", (done.stdout, res)
 
 
+def test_debate_agy_denied_command_is_an_error_with_a_note():
+    """The dry run's failure: agy tried a shell command, headless mode auto-denied it, the envelope said SUCCESS
+    with an empty response. Still an error (fail-closed), now with a note the owner can read."""
+    from tools import debate
+    from tools.paper import panel
+    stderr = 'jetski: no output produced — a tool required the "command" permission that headless mode cannot prompt for\n'
+    envelope = {"conversation_id": "c-2", "status": "SUCCESS", "response": "", "num_turns": 1,
+                "denied_actions": [{"action": "command", "display_name": "RunCommand"}]}
+    with _tempfile.TemporaryDirectory() as tmp:
+        tmp = _Path(tmp)
+        done = _subprocess.CompletedProcess([], 0, _json.dumps(envelope) + "\n", stderr)
+        res = debate.run_referee(_agy(), tmp, "Review.", tmp / "out", runner=_fake_runner(result=done))
+        assert res.status == "error" and res.report_md == "", res
+        assert "agy denied a shell command and replied empty" in res.note, res
+        rec = panel.record(tmp, 1, res.name, res.status, res.report_md, note=res.note, raw=res.raw_path)
+        data = _json.loads(rec.read_text(encoding="utf-8"))
+        assert data["status"] == "error" and "denied a shell command" in data["note"], data
+        assert "denied a shell command" in (tmp / "review" / "round1_gemini_agy.md").read_text(encoding="utf-8")
+        # no denial: an empty reply is still an error, with no such note; a denial beside a real report is ok
+        for env, status, note in (({**envelope, "denied_actions": []}, "error", False),
+                                  ({**envelope, "response": _SAMPLE_REPORT}, "ok", False)):
+            done = _subprocess.CompletedProcess([], 0, _json.dumps(env) + "\n", "")
+            res = debate.run_referee(_agy(), tmp, "Review.", tmp / "out", runner=_fake_runner(result=done))
+            assert res.status == status and not res.note, (env, res)
+        # a denial of something other than a command is described as what it was
+        env = {**envelope, "denied_actions": [{"action": "write"}]}
+        done = _subprocess.CompletedProcess([], 0, _json.dumps(env) + "\n", "")
+        res = debate.run_referee(_agy(), tmp, "Review.", tmp / "out", runner=_fake_runner(result=done))
+        assert res.status == "error" and "write" in res.note and "shell command" not in res.note, res
+
+
 def test_debate_parse_report():
     from tools.debate import parse_report
     rep = parse_report(_SAMPLE_REPORT)
@@ -1521,7 +1552,7 @@ def test_b5_panel_records_every_referee_and_never_reads_silence_as_ok():
         briefs = []
 
         def fake_run(ref, bundle_dir, prompt, out_dir, **kwargs):
-            assert bundle_dir == b and "REVIEW_BRIEF.md" in prompt and len(prompt) < 200, prompt
+            assert bundle_dir == b and "REVIEW_BRIEF.md" in prompt and len(prompt) < 400, prompt
             briefs.append((b / "REVIEW_BRIEF.md").read_text(encoding="utf-8"))
             return replies[ref.name]
 
@@ -1551,6 +1582,13 @@ def test_b5_panel_records_every_referee_and_never_reads_silence_as_ok():
             assert "review/round1_<referee>.md" in briefs[-1], briefs[-1]
             assert set(panel.run_panel(d, 2, fidelity=True)) == agy and briefs[-1].startswith("# Fidelity brief")
             assert "claims.yaml" in briefs[-1], "the fidelity review rechecks the claims against the Korean"
+            (agy_name,) = agy                               # a referee's note reaches its record
+            replies[agy_name] = debate.RefereeResult(name=agy_name, status="error", report_md="", raw_path=None,
+                                                     reset_at=None, version="1.0",
+                                                     note="agy denied a shell command and replied empty")
+            assert panel.run_panel(d, 1, only=[agy_name]) == {agy_name: "error"}
+            rec = json.loads((d / "review" / f"round1_{agy_name}.json").read_text(encoding="utf-8"))
+            assert rec["note"] == "agy denied a shell command and replied empty", rec
             debate.run_referee = crash
             assert set(panel.run_panel(d, 1).values()) == {"error"}, "a crashed runner must still leave a record"
             p = panel.record(d, 1, "claude", "ok", "# Verdict: ACCEPT\n\n## Major\n\n## Minor\n\n- m1: Fine.\n")
@@ -1582,6 +1620,37 @@ def test_b5_panel_records_every_referee_and_never_reads_silence_as_ok():
             assert json.loads(claude_rec.read_text(encoding="utf-8"))["status"] == "ok"
         finally:
             bundle.make_bundle, debate.run_referee = saved
+
+
+def test_b5_prompt_and_briefs_tell_the_referees_not_to_run_shell_commands():
+    """Headless agy auto-denies shell commands and then replies empty, so the prompt and every REVIEW_BRIEF.md
+    (round 1, round 2, fidelity) say up front: read with the file tools, and make the final message the report."""
+    from tools import debate
+    from tools.paper import bundle, panel
+    notice = debate.NO_SHELL
+    assert notice.startswith("Do not run any shell command") and "full Markdown report itself" in notice, notice
+    assert notice in panel.PROMPT and "REVIEW_BRIEF.md" in panel.PROMPT, panel.PROMPT
+    saved = bundle.make_bundle
+    with tempfile.TemporaryDirectory() as name:
+        root = Path(name)
+        d, b = root / "2026-10-23-brief", root / "bundle"
+        (d / "review").mkdir(parents=True)
+        b.mkdir()
+        (d / "review" / "response_round1.md").write_text("M1: fixed.\n", encoding="utf-8")
+        for n in [r.name for r in debate.DEFAULT_REFEREES]:
+            (d / "review" / f"round1_{n}.md").write_text("# Verdict: ACCEPT\n", encoding="utf-8")
+        try:
+            bundle.make_bundle = lambda paper_dir, round_k, allow_private=False, dest_root=None: b
+            for round_k, fidelity in ((1, False), (2, False), (1, True)):
+                panel.make_round_bundle(d, round_k, fidelity=fidelity)
+                brief = (b / "REVIEW_BRIEF.md").read_text(encoding="utf-8")
+                assert brief.count(notice) == 1 and "<NO_SHELL>" not in brief, (round_k, fidelity, brief)
+                # the Claude agent's bundle must not say it: that agent runs shell commands (--bundle-only, --record)
+                panel.make_round_bundle(d, round_k, fidelity=fidelity, for_cli=False)
+                brief = (b / "REVIEW_BRIEF.md").read_text(encoding="utf-8")
+                assert "shell" not in brief and "<NO_SHELL>" not in brief, (round_k, fidelity, brief)
+        finally:
+            bundle.make_bundle = saved
 
 
 # --------------------------------------------------------------------------- #
