@@ -696,6 +696,182 @@ def test_claims_gate_fails_on_unread_unsupported_missing_and_unverified():
         assert C.check(Path(d) / "nowhere") == ["missing en/paper_en.tex", "missing claims.yaml", "missing refs.yaml"]
 
 
+import contextlib                  # noqa: E402
+import os                          # noqa: E402
+import subprocess                  # noqa: E402
+
+_STUDY_RUN_PY = b"SEED = 7\n"
+
+
+def _study_git(root: Path, *args: str) -> str:
+    return subprocess.run(["git", *args], cwd=root, check=True, capture_output=True,
+                          encoding="utf-8").stdout.strip()
+
+
+def _study_commit(root: Path, message: str) -> None:
+    _study_git(root, "add", "-A")
+    _study_git(root, "commit", "-q", "-m", message)
+
+
+@contextlib.contextmanager
+def _study_sandbox():
+    """(repo root, paper dir) in a throwaway git repo under %TEMP%; never the real repo.
+    Restores NEXTGEN_FICC_CACHE, which start_run() sets."""
+    if shutil.which("git") is None:
+        raise NotRun("OWNER: git is not on PATH")
+    saved = os.environ.get("NEXTGEN_FICC_CACHE")
+    try:
+        with tempfile.TemporaryDirectory(prefix="qgstudy_", ignore_cleanup_errors=True) as d:
+            root = Path(d).resolve()
+            _study_git(root, "init", "-q")
+            _study_git(root, "config", "user.name", "selfcheck")
+            _study_git(root, "config", "user.email", "selfcheck@example.invalid")
+            _study_git(root, "config", "core.autocrlf", "false")
+            paper = root / "papers" / "2026-10-23-demo"
+            (paper / "scope").mkdir(parents=True)
+            (paper / "study").mkdir()
+            (paper / "study" / "run.py").write_bytes(_STUDY_RUN_PY)
+            _study_commit(root, "paper skeleton")
+            yield root, paper
+    finally:
+        if saved is None:
+            os.environ.pop("NEXTGEN_FICC_CACHE", None)
+        else:
+            os.environ["NEXTGEN_FICC_CACHE"] = saved
+
+
+def _study_prereg(root: Path, paper: Path, pinned: dict | None = None, *, key: str = "pinned_code") -> None:
+    """scope/prereg.json in the shape the research workflow writes, committed."""
+    prereg = {"paper_id": paper.name, "created_utc": "2026-10-23T00:00:00Z", "run_kind": "confirmatory", "seed": 7,
+              "protocol_sha256": "0" * 64, "claims": [], "variants": [], "holdout": None, key: pinned or {},
+              "new_code": [], "ledger_family": f"PAPER-{paper.name}"}
+    (paper / "scope" / "prereg.json").write_text(json.dumps(prereg) + "\n", encoding="utf-8")
+    _study_commit(root, "prereg")
+
+
+def _study_refused(S, paper: Path, kind: str, needle: str, now: str = "2026-10-23T02:00:00Z") -> None:
+    try:
+        S.start_run(paper, kind=kind, seed=1, command="selfcheck", now_utc=now)
+    except S.StudyRefused as exc:
+        assert needle in str(exc), exc
+    else:
+        raise AssertionError(f"start_run(kind={kind}) was not refused ({needle})")
+
+
+def test_study_refuses_without_a_committed_unmodified_prereg():
+    from tools.paper import study as S
+    with _study_sandbox() as (root, paper):
+        _study_refused(S, paper, "exploratory", "is not committed at HEAD")                 # no prereg at all
+        (paper / "scope" / "prereg.json").write_text('{"pinned_code": {}}\n', encoding="utf-8")
+        _study_refused(S, paper, "exploratory", "is not committed at HEAD")                 # present, untracked
+        _study_git(root, "add", "-A")
+        _study_refused(S, paper, "exploratory", "is not committed at HEAD")                 # staged, not committed
+        _study_git(root, "commit", "-q", "-m", "prereg")
+        ctx = S.start_run(paper, kind="exploratory", seed=1, command="selfcheck", now_utc="2026-10-23T01:00:00Z")
+        assert ctx.run_dir.is_dir() and ctx.clean is True, ctx
+        (paper / "scope" / "prereg.json").write_text('{"pinned_code": {"x": "y"}}\n', encoding="utf-8")
+        _study_refused(S, paper, "exploratory", "differs from HEAD")
+
+
+def test_study_refuses_when_a_pinned_file_changed():
+    from tools.paper import study as S
+    with _study_sandbox() as (root, paper):
+        _study_prereg(root, paper, key="pinned")                     # a misnamed key is refused, never ignored
+        _study_refused(S, paper, "exploratory", "lacks pinned_code")
+        _study_prereg(root, paper, {"papers/2026-10-23-demo/study/run.py": hashlib.sha256(_STUDY_RUN_PY).hexdigest()})
+        S.start_run(paper, kind="confirmatory", seed=1, command="selfcheck", now_utc="2026-10-23T01:00:00Z")
+        (paper / "study" / "run.py").write_bytes(b"SEED = 8\n")
+        _study_commit(root, "edit the pinned study code")
+        _study_refused(S, paper, "exploratory", "pinned papers/2026-10-23-demo/study/run.py")
+
+
+def test_study_refuses_a_dirty_tree_for_prespecified_and_confirmatory_runs():
+    from tools.paper import study as S
+    with _study_sandbox() as (root, paper):
+        _study_prereg(root, paper)
+        (root / "notes.txt").write_text("uncommitted\n", encoding="utf-8")
+        for kind in ("prespecified", "confirmatory"):
+            _study_refused(S, paper, kind, "working tree is dirty")
+        ctx = S.start_run(paper, kind="exploratory", seed=1, command="selfcheck", now_utc="2026-10-23T03:00:00Z")
+        assert ctx.clean is False, ctx
+        _study_commit(root, "notes")
+        ctx = S.start_run(paper, kind="confirmatory", seed=1, command="selfcheck", now_utc="2026-10-23T04:00:00Z")
+        assert ctx.clean is True and ctx.kind == "confirmatory", ctx
+        _study_refused(S, paper, "replication", "kind 'replication' not in")
+
+
+def test_study_run_dir_is_never_overwritten_and_manifest_is_complete():
+    from tools.paper import study as S
+    with _study_sandbox() as (root, paper):
+        _study_prereg(root, paper)
+        head = _study_git(root, "rev-parse", "HEAD")
+        ctx = S.start_run(paper, kind="prespecified", seed=11, command="python study/run.py",
+                          now_utc="2026-10-23T05:06:07Z")
+        assert ctx.run_id == f"20261023T050607Z-{head[:7]}", ctx.run_id
+        assert ctx.run_dir == paper / "study" / "runs" / ctx.run_id, ctx.run_dir
+        assert os.environ["NEXTGEN_FICC_CACHE"] == str(paper / "study" / "cache")
+        assert S.paper_ledger_dir(paper) == paper / "study" / "ledgers"
+        raw = b"date,value\n2026-10-22,4.31\n"
+        assert S.freeze_input(ctx, "dgs10.csv", raw, vintage="FRED as of 2026-10-23").read_bytes() == raw
+        for name, data, needle in (("dgs10.csv", b"date,value\n", "already frozen"),
+                                   ("../escape.csv", raw, "plain file name")):
+            try:
+                S.freeze_input(ctx, name, data)
+            except S.StudyRefused as exc:
+                assert needle in str(exc), exc
+            else:
+                raise AssertionError(f"freeze_input accepted {name}")
+        try:
+            S.finish(ctx, {"beta": 0.5}, qualification="significant")
+        except S.StudyRefused as exc:
+            assert "qualification" in str(exc), exc
+        else:
+            raise AssertionError("finish accepted an unknown qualification")
+        manifest_path = S.finish(ctx, {"beta": 0.5, "n": 250}, qualification="qualified", config={"calendar": "NYSE"})
+        assert b"\r\n" not in manifest_path.read_bytes(), "MANIFEST.json is written with LF line ends"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        for key in ("run_id", "kind", "seed", "command", "started_utc", "qualification", "inputs", "vintages",
+                    "git", "prereg_sha256", "study_code", "python", "packages", "timezone", "config",
+                    "ficc_cache", "results_sha256"):
+            assert key in manifest, key
+        assert manifest["inputs"] == {"dgs10.csv": hashlib.sha256(raw).hexdigest()}, manifest["inputs"]
+        assert manifest["vintages"] == {"dgs10.csv": "FRED as of 2026-10-23"}, manifest["vintages"]
+        assert manifest["git"] == {"commit": head, "clean": True}, manifest["git"]
+        assert manifest["study_code"] == {"run.py": hashlib.sha256(_STUDY_RUN_PY).hexdigest()}, manifest["study_code"]
+        assert set(manifest["packages"]) == {"numpy", "scipy", "pandas"}, manifest["packages"]
+        assert (manifest["seed"], manifest["kind"], manifest["qualification"]) == (11, "prespecified", "qualified")
+        body = (ctx.run_dir / "results.json").read_bytes()
+        assert manifest["results_sha256"] == hashlib.sha256(body).hexdigest()
+        try:
+            S.finish(ctx, {"beta": 0.6}, qualification="qualified")
+        except S.StudyRefused as exc:
+            assert "already finished" in str(exc), exc
+        else:
+            raise AssertionError("a finished run was written twice")
+        assert json.loads((ctx.run_dir / "results.json").read_text(encoding="utf-8")) == {"beta": 0.5, "n": 250}
+        _study_refused(S, paper, "exploratory", "runs are never overwritten", now="2026-10-23T05:06:07Z")
+
+
+def test_study_compare_runs_within_and_beyond_tolerance():
+    from tools.paper import study as S
+    with tempfile.TemporaryDirectory(prefix="qgcmp_") as d:
+        def run(name, results, inputs):
+            p = Path(d) / name
+            p.mkdir()
+            (p / "results.json").write_text(json.dumps(results), encoding="utf-8")
+            (p / "MANIFEST.json").write_text(json.dumps({"inputs": inputs}), encoding="utf-8")
+            return p
+        a = run("a", {"beta": 0.5, "rows": [1.0, 2.0], "label": "carry"}, {"x.csv": "aa"})
+        b = run("b", {"beta": 0.5 * (1 + 1e-12), "rows": [1.0, 2.0], "label": "carry"}, {"x.csv": "aa"})
+        assert S.compare_runs(a, b) == []
+        c = run("c", {"beta": 0.5001, "rows": [1.0], "label": "value", "extra": 1}, {"x.csv": "bb"})
+        problems = S.compare_runs(a, c)
+        for needle in ("inputs differ", "results.beta: 0.5 != 0.5001", "results.rows: length 2 != 1",
+                       "results.extra: present in one run only", "results.label: 'carry' != 'value'"):
+            assert any(needle in p for p in problems), (needle, problems)
+        assert S.compare_runs(a, c, rtol=1e-3) != []          # the input and shape differences remain
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
