@@ -4,9 +4,9 @@ The upgraded, personal-use successor to NEXTGEN. Same body — the rule engine,
 simulated order book and KRX data layer all survive intact (the skill cockpit
 moved to TRADEGEN on 2026-10-23) — with the one organ the client build was
 contractually forbidden from having:
-**an opinion**. QUANTGEN computes analysis, ranks outcomes, and recommends. On
-the macro overlay it recommends only what a frozen gate has passed, and today
-nothing has: see
+**an opinion**. QUANTGEN computes and validates analysis and ranks outcomes; on
+the macro overlay it displays a recommendation only for what a frozen gate has
+passed, and today nothing has: see
 [Macro integration](#macro-integration-quant-council-specification-v20).
 
 Version 2 widens the desk. The equity surfaces (Quant Lab, Portfolio, Signals)
@@ -31,9 +31,29 @@ before any card runs. Macro sizes risk and never sets direction; nothing
 exceeds 1.0×; nothing places an order. Beside it sits the tech-fund research
 register. Both live inside the Macro page; neither added a rail entry.
 
-This is a personal instrument, not a client deliverable. It is not for
-commercial distribution, and every trading decision it informs remains the
-operator's own.
+QUANTGEN is a quantitative finance research application: models, estimation,
+validation, FICC pricing, portfolio theory, backtests and gates. It goes no
+further than paper trading, and there is no broker order path in this
+repository. It is a personal instrument, not a client deliverable and not for
+commercial distribution, and nothing in it is investment advice.
+
+**Split from TRADEGEN (2026-10-23).** On 2026-10-23 this repository was copied
+byte for byte to `Desktop/TRADEGEN` (959 files, identical sha256), and the two
+programs separated. TRADEGEN is developed in its own session for real-money
+trading within Korean law; QUANTGEN keeps the research. Phase 1 of the split
+removed the NEXTGEN trading-skills cockpit and the crypto regime score from
+QUANTGEN, and rewrote the trade-idea text of the AI prompts and the weekly
+FICC note as academic research commentary; TRADEGEN keeps the originals. The
+LAZYOWEN accounts leave `paper_live/` only after the H2 holdout readout.
+QUANTGEN has been under git since the split (baseline `eacd57d`). The two
+frozen studies, the GROKTEAM-BOOK forward look and the paper_live H2 cost-gate
+holdout, read out only from a local git clone at the annotated tag
+`studies-of-record-2026-10-23` on `eacd57d`, so this main line is free to
+change, and `tests/frozen_guard.py` checks the tag and the tagged pins. The
+split is specified in
+`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md`
+and mapped file by file in
+`research_notes/QUANTGEN TRADEGEN split map/split_map.md`.
 
 ---
 
@@ -750,6 +770,38 @@ Skills, Runs and the 72-skill catalogue) moved to TRADEGEN on 2026-10-23. The
 macro overlay does not run through this engine: each v2 book has its own
 runtime state (see [Statuses](#statuses)). The navigation rail scrolls, so all
 sixteen entries are reachable at the 620 px minimum window height.
+
+## Research papers
+
+QUANTGEN's research output is a series of formal papers. Each covers its
+topic's origin literature, the current state of the art, how QUANTGEN
+implements the method, and a reproducible study, and each comes in two
+complete editions, English and Korean, typeset in LaTeX (Tectonic 0.17.0).
+Papers live in the top-level `papers/` folder, one folder per paper
+(`papers/<YYYY-MM-DD-slug>/`), and `papers/INDEX.md` lists only released
+papers. The pipeline is specified in section 5 of the split spec and is not
+built yet, so no paper exists. Its rules hold from the first paper:
+
+- **Scope before work.** `/quantgen-paper <topic>` writes the scope: the
+  research questions, how QUANTGEN implements the method, and an analysis
+  protocol that labels every claim exploratory, pre-specified on historical
+  data, or confirmatory. Nothing is built or run until the owner approves the
+  scope, and a scope file changed after approval stops the write workflow.
+- **Every citation is checked.** References are verified against doi.org,
+  Crossref or the arXiv API, and each cited claim has a row in `claims.yaml`
+  with its locator. An unread or unsupported claim blocks release.
+- **Every number has a source.** Study runs are immutable and record their
+  inputs, code and environment in `MANIFEST.json`; the text takes numbers only
+  from `numbers.json`, and an offline rerun must reproduce them.
+- **Three referees.** Claude, GPT (Codex CLI) and Gemini (Antigravity CLI)
+  referee each round. A referee that returns nothing leaves the paper
+  `REVIEW_INCOMPLETE`, never "no objections".
+- **Disclosure and sign-off.** Every paper carries an AI-assistance statement
+  and a not-investment-advice note, and is released only after the owner has
+  read it and accepts every claim.
+
+A paper that uses a frozen study cites its readout from the tagged snapshot;
+it never reruns the study on the main line.
 
 ## Setup
 

@@ -1,4 +1,4 @@
-"""QUANTGEN — the operator's personal quant trading application.
+"""QUANTGEN — the operator's quantitative finance research application.
 
 Built on the NEXTGEN base (its rule engine, simulated order book and KRX data
 layer survive intact; the skill cockpit moved to TRADEGEN on 2026-10-23) and

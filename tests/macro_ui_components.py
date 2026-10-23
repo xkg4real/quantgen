@@ -146,6 +146,20 @@ def test_readme_carries_both_disclaimers_and_no_stale_counts():
     assert "MACRO-R06-US" in text and "REJECT (instrument: US shares via KIS, 50 bp, daily)" in text
 
 
+def test_readme_and_package_name_the_research_identity():
+    """Split spec 4.1 A4: pyproject, the main.py docstring and the README intro call QUANTGEN a quantitative
+    finance research application; the README carries the split note and the Research papers section."""
+    for rel in ("pyproject.toml", "main.py", "README.md"):
+        text = (ROOT / rel).read_text(encoding="utf-8")
+        assert "personal quant trading application" not in text, rel
+        assert "quantitative finance research application" in text, rel
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "ranks outcomes, and recommends" not in readme
+    assert "**Split from TRADEGEN (2026-10-23).**" in readme
+    assert "`studies-of-record-2026-10-23`" in readme
+    assert "\n## Research papers\n" in readme
+
+
 if __name__ == "__main__":
     from tests.macro_acceptance import run_module
     raise SystemExit(run_module(globals()))
