@@ -424,7 +424,7 @@ QG-TACTICAL vs TACT-NOGATE as a new freeze. LAZYOWEN's ledger rows stay.
      they correspond to, with page numbers. Slides, lecture notes and the
      owner's unpublished notes are not cited.
 3. **Reference and claim verification.**
-   - `tools/paper/verify_bib.py` queries doi.org/Crossref and the arXiv API.
+   - `tools/paper/refs.py` (`python -m tools.paper.refs verify|bib`) queries doi.org/Crossref and the arXiv API.
      It writes a `verified` record per entry: method, URL, retrieval date and
      fetched title. Entries it can't reach (SSRN often blocks bots; books
      have no DOI) are marked `manual` with a URL and are checked by an agent.
@@ -514,7 +514,8 @@ QG-TACTICAL vs TACT-NOGATE as a new freeze. LAZYOWEN's ledger rows stay.
         --output-last-message <file>` (the bundle is not a git repo);
       - `<agy path> -p … --model <id> --sandbox --disable-slash-commands
         --output-format json --print-timeout <t>`. The `agy` path is absolute
-        and set in config, because `agy` may not be on PATH in every shell.
+        (`tools/debate.py`, overridable by the `QUANTGEN_AGY` environment
+        variable), because `agy` may not be on PATH in every shell.
         The JSON envelope supplies `status`, and its `response` is the
         Markdown report.
     - **Prompt.** The prompt is short and points at the files, which avoids
@@ -564,8 +565,10 @@ QG-TACTICAL vs TACT-NOGATE as a new freeze. LAZYOWEN's ledger rows stay.
     - It parses `.log`/`.blg`, and fails on undefined references or
       citations, `Missing character`, BibTeX errors or overfull boxes over
       10 pt.
-    - It records the sha256 of every font file used. Malgun Gothic and
-      함초롬바탕 are system fonts, so the PDF is reproducible on this machine.
+    - It records the sha256 of every font file used, with the Tectonic
+      version, the bundle URL and the PDF's sha256, in `en/build.json` and
+      `ko/build.json`. Malgun Gothic and 함초롬바탕 are system fonts, so the
+      PDF is reproducible on this machine.
       Before any public release, the font files are swapped for OFL fonts kept
       in `tools/paper/fonts/`.
 13. **Index.** `papers/INDEX.md` lists only released papers: title, both
@@ -577,17 +580,22 @@ QG-TACTICAL vs TACT-NOGATE as a new freeze. LAZYOWEN's ledger rows stay.
 ```
 papers/INDEX.md
 papers/<paper_id>/
-  scope/   questions.md, integration.md, protocol.md, prereg.json, approval.json
-  refs.bib, claims.yaml
-  study/   run.py, data/, runs/<run_id>/{results.*, MANIFEST.json}, numbers.json, numbers.tex
+  scope/   questions.md, literature.md, lit_*.md, integration.md, protocol.md, prereg.json, approval.json
+  refs.yaml, refs.bib, claims.yaml, meta.yaml, .gitignore
+  study/   run.py, data/, runs/<run_id>/{results.json, MANIFEST.json}, ledgers/, cache/ (ignored),
+           numbers.json, numbers.tex
   common/  equations and shared tables (*.tex)
-  en/      paper_en.tex, figures/, paper_en.pdf
-  ko/      paper_ko.tex, figures/, paper_ko.pdf
-  review/  round<k>_<model>.md, response_round<k>.md, fidelity_ko.md
+  en/      paper_en.tex, figures/, tables/, paper_en.pdf, build.json
+  ko/      paper_ko.tex, figures/, tables/, paper_ko.pdf, build.json
+  review/  round<k>_<name>.{md,json}, fidelity_<name>.{md,json}, response_round<k>.md,
+           substitution.json, signoff.json, raw/
   STATUS   (DRAFT | REVIEW_INCOMPLETE | BLOCKED_MAJOR | OWNER_REVIEW | RELEASED)
 tools/__init__.py, tools/debate.py
-tools/paper/ __init__.py, template_en.tex, template_ko.tex, glossary_ko.yaml,
-             verify_bib.py, consistency.py, build.py, selfcheck.py
+tools/paper/ __init__.py, qgpaper.sty, template_en.tex, template_ko.tex, glossary_ko.yaml,
+             build.py, numbers.py, consistency.py, approval.py, refs.py, claims.py, study.py,
+             bundle.py, panel.py, index.py, selfcheck.py
+.claude/skills/quantgen-paper/SKILL.md
+.claude/workflows/quantgen-paper-research.js, quantgen-paper-write.js
 ```
 
 ### 5.5 Tests and the first run
@@ -597,7 +605,7 @@ It covers:
 - `\qnum` keys with digits;
 - `consistency.py` catching a planted bare digit, a missing citation key, a
   per-section macro-count drift and a dropped paragraph id;
-- `verify_bib.py` on an offline fixture;
+- `refs.py` (reference verification) on an offline fixture;
 - `debate.py` handling a missing CLI, a timeout, malformed output and a
   non-zero exit.
 
@@ -645,7 +653,7 @@ runs at the next launch.
 |---|---|
 | An edit silently changes frozen behaviour | Readouts run only from the tagged snapshot. `frozen_guard` checks the tag, the tagged pins, that no early look exists, and the library versions. |
 | TRADEGEN writes into QUANTGEN's state or takes a second look | Hard prerequisites in the TRADEGEN brief (section 3.2) |
-| Hallucinated or unsupported citations | `verify_bib.py` records plus the `claims.yaml` gate; `unread` blocks release |
+| Hallucinated or unsupported citations | `refs.py` verification records plus the `claims.yaml` gate; `unread` blocks release |
 | Numbers drift from results | `numbers.json` provenance, `\qnum` only, bare-digit check, offline rerun |
 | The Korean edition says something different | Shared math and tables, aligned paragraph ids, bilingual fidelity review, the same release gate |
 | A referee CLI fails | `REVIEW_INCOMPLETE`; never read as "no objections" |

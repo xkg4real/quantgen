@@ -779,8 +779,9 @@ implements the method, and a reproducible study, and each comes in two
 complete editions, English and Korean, typeset in LaTeX (Tectonic 0.17.0).
 Papers live in the top-level `papers/` folder, one folder per paper
 (`papers/<YYYY-MM-DD-slug>/`), and `papers/INDEX.md` lists only released
-papers. The pipeline is specified in section 5 of the split spec and is not
-built yet, so no paper exists. Its rules hold from the first paper:
+papers. The pipeline is specified in section 5 of the split spec and built in
+`tools/paper/`, `.claude/workflows/` and `.claude/skills/quantgen-paper/`; no
+paper is released yet. Its rules hold from the first paper:
 
 - **Scope before work.** `/quantgen-paper <topic>` writes the scope: the
   research questions, how QUANTGEN implements the method, and an analysis
@@ -849,7 +850,7 @@ Optional: `QUANTGEN_MACRO_DIR` moves the macro state out of `~/.nextgen/macro`.
 
 ```bash
 python tests/run_all.py                  # every suite; writes qa/acceptance_results.json
-python tests/run_all.py --suite macro    # one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam or guard
+python tests/run_all.py --suite macro    # one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam, guard or papers
 python tests/run_all.py --milestone M8   # the exit set of a milestone (tests/macro_registry.csv)
 python -m tests.macro_acceptance         # resync the registry's implemented_in column
 ```
@@ -869,11 +870,12 @@ exit code; the exit code is 0 only when nothing failed. The summary line reads
 | quant | `tests/quant_acceptance.py` | Monte Carlo, optimizer, signal and backtest invariants; GARCH parameter recovery, unit-variance t shocks, guardrail flags, likelihood ordering against GBM and normal-GARCH, forecast convergence, the drift modes, the bounded-innovation and martingale checks, the LR null size, interval coverage, every chart renders | 53 PASS |
 | ficc | `tests/ficc_acceptance.py` | Bootstrap round-trips, monotone discount factors, Nelson-Siegel fits, PCA, duration and KRD, carry and roll, scenario convexity, swap and swaption parity, Black ↔ Bachelier, caps and floors, Garman-Kohlhagen, SABR, CIP, the carry backtest, CIR and Hull-White, structured products, narratives (the weekly rates and FX note free of position language on every branch, the report prompts free of trade ideas), every chart renders | 57 PASS |
 | expansion | `tests/expansion_acceptance.py` | Fake KIS and crypto transports for every new asset domain, the gate's own checks (a planted edge passes, noise is rejected, the deflated Sharpe orders them, the distribution loop calibrates), the t+1 causality of every strategy family, the five-year rule counted in whole years, the table cost floor and the Strategy Lab's withheld verdict below it, the module self-checks and the Crypto page self-check | 20 PASS |
-| macro | `tests/macro_acceptance.py` over `tests/macro_*.py` | The v2 build, below | 420 PASS / 121 NOT_RUN |
+| macro | `tests/macro_acceptance.py` over `tests/macro_*.py` | The v2 build, below | 421 PASS / 121 NOT_RUN |
 | paper | `tests/paper_live_acceptance.py` | The paper_live harness after the 2026-10-18/19 fixes, offline: costs from QUANTGEN's table and KRX ETF tick floor, LSE refused rather than proxied, the per-account cost gate in `Engine._open`, the 5-minute C3 account retired, no resume from another config's state, frozen price snapshots (exact round trip, sha refusal), post-session prices by window dates, session hours from `core.markets` across clock changes and holidays, only complete pulls frozen, the same-day replay's archived code, the power line, one ledger trial per configuration, the pre-registered gate and fidelity tests, the Strategy Lab ledger, concurrent ledger appends, the refused late freeze and the report outcomes block | 21 PASS |
 | grokteam | `grokteam/selfcheck.py` | The GROKTEAM BOOK desk (Kalshi KXBTCD paper benchmark of the Grok trading-team guide), offline: the Kalshi fee and payoff with the fee inside the stake, SIZE (half Kelly, 6% cap, $50 floor), the GARCH-t digital, no look-ahead in hourly bars or quotes, the 30-minute quote lookback, the stationarity warning not skipping, each account's entry rule, the cluster t and the one-sided skill p, the verdict precedence, the forward window blinded until its one look (VOID and unsettled events withhold it), Python patch updates not voiding the freeze, the sha-checked cache and the new ledger family | 17 PASS |
 | guard | `tests/frozen_guard.py` | The frozen-study guard, by git and hashlib only (no `paper_live` or `grokteam` import): the tag `studies-of-record-2026-10-23` peels to `eacd57d`, the tagged tree's pinned files match PREREG and its H2 files match `frozen_rule`, no `FORWARD_LOOK.json` on the main line before 2027-02-01 01:00 UTC, and the numpy/scipy/pandas pins while a readout is pending (with a check of the pending rule itself) | 5 PASS |
-| **Total** | `tests/run_all.py` | | 699/820 passed, 0 failed, 121 not run (2026-10-23) |
+| papers | `tools/paper/selfcheck.py` | The research-paper pipeline, offline: the Tectonic log gate and both templates compiled from the cache (Korean fonts by path, build record), digit-safe `\qnum` numbers, the EN/KO consistency check (paragraph ids, per-section numbers and citations, bare digits in results and in input-ed tables), scope approval hashes, Crossref/arXiv reference records, the claims gate, study-run refusals and manifests, the referee runner (quota, timeout, malformed reports) and bundle, release states and the index, the two workflow scripts and the skill | 43 PASS |
+| **Total** | `tests/run_all.py` | | 743/864 passed, 0 failed, 121 not run (2026-10-23) |
 
 The macro group (new in v2) discovers every `tests/macro_*.py` module,
 wraps each test in a hermetic guard, and brackets the run with T-HERM-01 (every
@@ -885,7 +887,7 @@ md5-listed in `tests/fixtures/macro/MANIFEST.csv`.
 
 | Modules | Covers | Checks (PASS / NOT_RUN) |
 |---|---|---|
-| `macro_m0_*` (harness, instruments, integration, rules, schemas) | Rules store, DO-NOT-BUILD predicates, schemas and validator, instrument books and tick floors, read-only scans | 37 / 2 |
+| `macro_m0_*` (harness, instruments, integration, rules, schemas) | Rules store, DO-NOT-BUILD predicates, schemas and validator, instrument books and tick floors, read-only scans | 38 / 2 |
 | `macro_m1_*` (books, calendars, fixtures, integration, pit) | Point-in-time store, contracts and staleness, effective-dated calendars, lag audit | 68 / 14 |
 | `macro_m2_*` (costed, risk) | `min()` composition and bounds, hedge state, concentration, ladder, costed paths | 24 / 21 |
 | `macro_m3_estimators` | The seven estimators, QLIKE / DM / MCS, the B5 and estimator gates | 12 / 8 |
