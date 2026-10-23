@@ -918,6 +918,258 @@ def test_study_compare_runs_within_and_beyond_tolerance():
         assert S.compare_runs(a, c, rtol=1e-3) != []          # the input and shape differences remain
 
 
+# --------------------------------------------------------------------------- #
+# Task 4: referee runner (tools/debate.py) and review bundle (tools/paper/bundle.py).
+# A fake runner stands in for every CLI call; no test starts the real codex or agy.
+# --------------------------------------------------------------------------- #
+import json as _json                      # noqa: E402
+import subprocess as _subprocess          # noqa: E402
+import sys as _sys                        # noqa: E402
+import tempfile as _tempfile              # noqa: E402
+import time as _time                      # noqa: E402
+from pathlib import Path as _Path         # noqa: E402
+
+_QUOTA_MSG = ("ERROR: You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit "
+              "https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 27th, 2026 7:16 PM.\n")
+_SAMPLE_REPORT = """# Referee report
+
+## Summary
+The paper is clear.
+
+## Major
+### M1. Holdout overlaps the estimation window
+- **Problem.** The holdout starts before the freeze.
+- **Fix.** Move it after the freeze.
+
+### M2. Missing dependence correction
+Newey-West lags are not stated.
+
+## Minor
+- **m1.** Typo in the second table.
+- Units of the spread are missing.
+
+## Verdict
+ACCEPT WITH CHANGES
+"""
+
+
+def _fake_runner(*, result=None, exc=None, last_message=None, calls=None):
+    """Stands in for debate._run: answers `--version`, then returns `result` or raises `exc`."""
+    def runner(argv, *, input=None, cwd=None, timeout=None):
+        if "--version" in argv:
+            return _subprocess.CompletedProcess(argv, 0, "fake-cli 1.0\n", "")
+        if calls is not None:
+            calls.append({"argv": list(argv), "input": input, "cwd": cwd, "timeout": timeout})
+        if exc is not None:
+            raise exc
+        if last_message is not None:
+            _Path(argv[argv.index("--output-last-message") + 1]).write_text(last_message, encoding="utf-8")
+        return result
+    return runner
+
+
+def _refuse_runner(argv, **_kw):
+    raise AssertionError(f"runner called for a missing CLI: {argv}")
+
+
+def _codex():
+    from tools.debate import Referee
+    return Referee("gpt_codex", "codex", None, _sys.executable)      # an exe that exists; never started
+
+
+def _agy():
+    from tools.debate import Referee
+    return Referee("gemini_agy", "agy", "gemini-4-argon-high", _sys.executable)
+
+
+def test_debate_missing_cli():
+    from tools.debate import Referee, run_referee
+    with _tempfile.TemporaryDirectory() as tmp:
+        tmp = _Path(tmp)
+        absent = Referee("gemini_agy", "agy", "gemini-4-argon-high", str(tmp / "absent" / "agy.exe"))
+        res = run_referee(absent, tmp, "Review.", tmp / "out", runner=_refuse_runner)
+        assert (res.status, res.report_md, res.raw_path, res.version) == ("missing_cli", "", None, None), res
+        res = run_referee(_codex(), tmp, "Review.", tmp / "out",
+                          runner=_fake_runner(exc=FileNotFoundError("codex")))
+        assert res.status == "missing_cli", res
+
+
+def test_debate_timeout_and_codex_command():
+    from tools.debate import run_referee
+    with _tempfile.TemporaryDirectory() as tmp:
+        tmp, calls = _Path(tmp), []
+        bundle, out = tmp / "bundle", tmp / "out"
+        bundle.mkdir()
+        res = run_referee(_codex(), bundle, "Read PROMPT.md and review the paper.", out, timeout_s=30,
+                          runner=_fake_runner(exc=_subprocess.TimeoutExpired(["codex"], 90), calls=calls))
+        assert res.status == "timeout" and res.report_md == "" and res.version == "fake-cli 1.0", res
+        assert res.raw_path is not None and res.raw_path.is_file(), res
+        (call,) = calls
+        assert call["argv"] == [_sys.executable, "exec", "--skip-git-repo-check", "--sandbox", "read-only",
+                                "-C", str(bundle), "--output-last-message",
+                                str(out / "gpt_codex_last_message.md"), "-"], call["argv"]
+        assert call["input"] == "Read PROMPT.md and review the paper.", call
+        assert call["cwd"] == str(bundle) and call["timeout"] == 90, call
+
+
+def test_debate_codex_quota_reset_time():
+    from tools.debate import run_referee
+    with _tempfile.TemporaryDirectory() as tmp:
+        tmp = _Path(tmp)
+        done = _subprocess.CompletedProcess([], 1, "", _QUOTA_MSG)
+        res = run_referee(_codex(), tmp, "Review.", tmp / "out", runner=_fake_runner(result=done))
+        assert res.status == "quota" and res.reset_at == "2026-10-27T19:16", res
+        raw = _json.loads(res.raw_path.read_text(encoding="utf-8"))
+        assert raw["returncode"] == 1 and "usage limit" in raw["stderr"] and raw["version"] == "fake-cli 1.0", raw
+        done = _subprocess.CompletedProcess([], 1, "", "You have reached your usage limit.\n")
+        res = run_referee(_codex(), tmp, "Review.", tmp / "out", runner=_fake_runner(result=done))
+        assert res.status == "quota" and res.reset_at is None, res
+
+
+def test_debate_codex_report_and_auth():
+    from tools.debate import has_report_headings, run_referee
+    with _tempfile.TemporaryDirectory() as tmp:
+        tmp = _Path(tmp)
+        done = _subprocess.CompletedProcess([], 0, "", "")
+        res = run_referee(_codex(), tmp, "Review.", tmp / "out",
+                          runner=_fake_runner(result=done, last_message=_SAMPLE_REPORT))
+        assert res.status == "ok" and res.report_md == _SAMPLE_REPORT.strip(), res
+        # A report without `## Major`/`## Minor` headings is malformed, never "no objections".
+        assert has_report_headings(_SAMPLE_REPORT) and not has_report_headings("**Major**: none. Looks fine.")
+        res = run_referee(_codex(), tmp, "Review.", tmp / "out",
+                          runner=_fake_runner(result=done, last_message="Looks fine to me."))
+        assert res.status == "error", res
+        # No last message this time: the stale file from the run above must not be read back.
+        res = run_referee(_codex(), tmp, "Review.", tmp / "out", runner=_fake_runner(result=done))
+        assert res.status == "error" and res.report_md == "", res
+        done = _subprocess.CompletedProcess([], 1, "", "ERROR: 401 Unauthorized: not logged in\n")
+        res = run_referee(_codex(), tmp, "Review.", tmp / "out", runner=_fake_runner(result=done))
+        assert res.status == "auth_failed", res
+
+
+def test_debate_agy_envelope_ok():
+    from tools.debate import run_referee
+    with _tempfile.TemporaryDirectory() as tmp:
+        tmp, calls = _Path(tmp), []
+        envelope = {"conversation_id": "c-1", "status": "SUCCESS", "response": _SAMPLE_REPORT,
+                    "duration_seconds": 5.2, "num_turns": 1, "usage": {"total_tokens": 10}}
+        done = _subprocess.CompletedProcess([], 0, _json.dumps(envelope) + "\n", "")
+        res = run_referee(_agy(), tmp, "Read PROMPT.md.", tmp / "out", runner=_fake_runner(result=done, calls=calls))
+        assert res.status == "ok" and res.report_md == _SAMPLE_REPORT.strip(), res
+        (call,) = calls
+        assert call["argv"] == [_sys.executable, "-p", "Read PROMPT.md.", "--model", "gemini-4-argon-high",
+                                "--sandbox", "--disable-slash-commands", "--output-format", "json",
+                                "--print-timeout", "1500s"], call["argv"]
+        assert call["input"] is None and call["cwd"] == str(tmp) and call["timeout"] == 1560, call
+
+
+def test_debate_agy_malformed_and_nonzero():
+    from tools.debate import run_referee
+    with _tempfile.TemporaryDirectory() as tmp:
+        tmp = _Path(tmp)
+        cases = [
+            _subprocess.CompletedProcess([], 0, "{not json", ""),
+            _subprocess.CompletedProcess([], 0, _json.dumps({"status": "ERROR", "response": _SAMPLE_REPORT}), ""),
+            _subprocess.CompletedProcess([], 0, _json.dumps(["SUCCESS", _SAMPLE_REPORT]), ""),
+            _subprocess.CompletedProcess([], 2, _json.dumps({"status": "SUCCESS", "response": _SAMPLE_REPORT}),
+                                         "agent crashed\n"),
+        ]
+        for done in cases:
+            res = run_referee(_agy(), tmp, "Review.", tmp / "out", runner=_fake_runner(result=done))
+            assert res.status == "error", (done.stdout, res)
+
+
+def test_debate_parse_report():
+    from tools.debate import parse_report
+    rep = parse_report(_SAMPLE_REPORT)
+    assert [i["id"] for i in rep["major"]] == ["M1", "M2"], rep
+    assert "holdout starts before the freeze" in rep["major"][0]["text"], rep
+    assert rep["major"][1]["text"].endswith("Newey-West lags are not stated."), rep
+    assert [i["id"] for i in rep["minor"]] == ["m1", "m2"], rep
+    assert rep["minor"][1]["text"] == "Units of the spread are missing.", rep
+    rep = parse_report("## MAJOR issues\n1. First problem\n   detail line\n2. Second problem\n## Minor\nNone.\n")
+    assert rep["major"] == [{"id": "M1", "text": "First problem\ndetail line"},
+                            {"id": "M2", "text": "Second problem"}], rep
+    assert rep["minor"] == [], rep
+    rep = parse_report("# Verdict: REJECT\n\n## Major\n\n- M1: The t statistic ignores autocorrelation.\n\n## Minor\n")
+    assert rep["major"] == [{"id": "M1", "text": "M1: The t statistic ignores autocorrelation."}], rep
+    assert parse_report("Looks fine to me.") == {"major": [], "minor": []}
+
+
+def test_debate_run_kills_process_tree():
+    """The default runner kills grandchildren that hold the pipes; plain subprocess.run would block ~120 s."""
+    from tools import debate
+    child = ("import subprocess, sys, time; "
+             "subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(120)'], "
+             "stdout=sys.stdout, stderr=sys.stderr); time.sleep(120)")
+    started = _time.monotonic()
+    try:
+        debate._run([_sys.executable, "-c", child], timeout=3)
+    except _subprocess.TimeoutExpired:
+        pass
+    else:
+        raise AssertionError("the 120 s child finished inside a 3 s timeout")
+    assert _time.monotonic() - started < 60, "pipes still held: the process tree was not killed"
+
+
+def test_bundle_contents_code_and_local_note_refusal():
+    import yaml
+    from tools.paper.bundle import make_bundle
+    with _tempfile.TemporaryDirectory() as tmp:
+        tmp = _Path(tmp)
+        repo = tmp / "repo"
+        paper = repo / "papers" / "fixture_paper"
+        refs = [{"key": "hull2018", "class": "book"}, {"key": "owner_notes_w3", "class": "local_note"}]
+        prereg = {"pinned_code": {"core/quant/carry_model.py": "0" * 64},
+                  "new_code": ["core/quant/not_written_yet.py", "../outside.py"]}
+        files = {
+            "en/paper_en.tex": "% id: intro-1\nHello.\n",
+            "ko/paper_ko.tex": "% id: intro-1\n안녕.\n",
+            "common/model.tex": "\\begin{equation}x\\end{equation}\n",
+            "study/run.py": "print('run')\n",
+            "study/numbers.json": "{}\n",
+            "study/data/raw.csv": "a,b\n",
+            "study/runs/20261101T000000Z_aaaaaaa/MANIFEST.json": '{"run": "old"}\n',
+            "study/runs/20261101T000000Z_aaaaaaa/results.json": '{"run": "old"}\n',
+            "study/runs/20261102T000000Z_bbbbbbb/MANIFEST.json": '{"run": "new"}\n',
+            "study/runs/20261102T000000Z_bbbbbbb/results.json": '{"run": "new"}\n',
+            "scope/approval.json": "{}\n",
+            "scope/protocol.md": "# Protocol\n",
+            "scope/prereg.json": _json.dumps(prereg) + "\n",
+            "review/round1_gpt_codex.md": "old review\n",
+            "refs.bib": "@book{hull2018, title={Options}}\n",
+            "refs.yaml": yaml.safe_dump(refs),
+            "claims.yaml": yaml.safe_dump([{"id": "c1", "paragraph_id": "lit-1", "source_key": "hull2018",
+                                            "locator": "p. 1", "support": "text", "status": "supported"}]),
+        }
+        for rel, text in files.items():
+            (paper / rel).parent.mkdir(parents=True, exist_ok=True)
+            (paper / rel).write_text(text, encoding="utf-8")
+        (repo / "core" / "quant").mkdir(parents=True)
+        (repo / "core" / "quant" / "carry_model.py").write_text("def carry(): ...\n", encoding="utf-8")
+        (tmp / "outside.py").write_text("SECRET = 1\n", encoding="utf-8")
+        dest = tmp / "bundles"
+        bundle = make_bundle(paper, 1, dest_root=dest)
+        assert bundle.parent == dest and bundle.name.startswith("qg_fixture_paper_r1_"), bundle
+        got = {p.relative_to(bundle).as_posix() for p in bundle.rglob("*") if p.is_file()}
+        assert got == {"en/paper_en.tex", "ko/paper_ko.tex", "common/model.tex", "study/run.py",
+                       "study/numbers.json", "study/runs/20261102T000000Z_bbbbbbb/MANIFEST.json",
+                       "study/runs/20261102T000000Z_bbbbbbb/results.json", "refs.bib", "refs.yaml",
+                       "claims.yaml", "scope/prereg.json", "code/core/quant/carry_model.py"}, got
+        assert make_bundle(paper, 1, dest_root=dest) != bundle, "each round gets a fresh folder"
+        (paper / "claims.yaml").write_text(yaml.safe_dump([
+            {"id": "c2", "paragraph_id": "model-1", "source_key": "owner_notes_w3", "locator": "slide 4",
+             "support": "quoted derivation", "status": "supported"}]), encoding="utf-8")
+        try:
+            make_bundle(paper, 2, dest_root=dest)
+        except ValueError as exc:
+            assert "owner_notes_w3" in str(exc), exc
+        else:
+            raise AssertionError("a claim backed by a local_note entered the bundle")
+        allowed = make_bundle(paper, 2, allow_private=True, dest_root=dest)
+        assert (allowed / "claims.yaml").is_file()
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
