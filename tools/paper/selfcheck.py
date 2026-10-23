@@ -695,6 +695,45 @@ def test_claims_gate_fails_on_unread_unsupported_missing_and_unverified():
             C.check(paper)
         assert C.check(Path(d) / "nowhere") == ["missing en/paper_en.tex", "missing claims.yaml", "missing refs.yaml"]
 
+        def variant(name, rows, *edits):
+            p = _claims_paper(Path(d) / name, rows)
+            t = p / "en" / "paper_en.tex"
+            text = t.read_text(encoding="utf-8")
+            for old, new in edits:
+                assert old in text, old
+                text = text.replace(old, new)
+            t.write_text(text, encoding="utf-8")
+            return C.check(p)
+
+        # a section is named by the first \label{sec:..} anywhere in its \section chunk, never by the section before it
+        assert [(s, p) for s, p, _ in C.paragraphs(
+            "\\section{A}\\label{sec:intro}\n% id: intro-1\nx\n\\section{Results}\n% id: results-1\ny \\citet{ghost}")
+        ] == [("intro", "intro-1"), ("", "results-1")]
+        assert [(s, p) for s, p, _ in C.paragraphs(
+            "\\section{Results}\n% id: results-1\ny \\citet{ghost}\n\\label{sec:results}")] == [("results", "results-1")]
+        unlabelled = "\\section{Results} has no \\label{sec:...}; the claims gate cannot tell which section it is"
+        assert variant("nolabel", _CLAIM_ROWS, ("\\section{Results}\\label{sec:results}", "\\section{Results}")) \
+            == [unlabelled]
+        assert variant("lateid", [c1, c2], ("\\section{Results}\\label{sec:results}\n", "\\section{Results}\n"),
+                       ("ranking used here.", "ranking used here.\n\\label{sec:results}")) \
+            == ["results-1: \\cite{koijen2018carry} has no supported claims.yaml row"]
+        # labels that match no gated section leave the gate with nothing to check, which is a problem in itself
+        assert variant("renamed", _CLAIM_ROWS, ("{sec:literature}", "{sec:related}"), ("{sec:results}", "{sec:method}")) \
+            == ["no `% id:` paragraph falls in a gated section (sec:literature, sec:model, sec:results)"]
+        # a cite in a gated section but outside every `% id:` paragraph cannot have a claims row
+        assert variant("loose", _CLAIM_ROWS, ("% id: results-1\n", "\\Citet{ghost2020} opens the section.\n% id: results-1\n")) \
+            == ["sec:results: \\cite{ghost2020} outside an id'd paragraph"]
+        noids = variant("noids", _CLAIM_ROWS, ("% id: results-1\n", ""))
+        assert "sec:results: \\cite{koijen2018carry} outside an id'd paragraph" in noids, noids
+        assert "claim c3: paragraph 'results-1' not in en/paper_en.tex" in noids, noids
+        # every refs.yaml entry needs an ok record naming a url, whether or not a claims row uses it
+        paper = _claims_paper(Path(d) / "unused", _CLAIM_ROWS)
+        refs = yaml.safe_load((paper / "refs.yaml").read_text(encoding="utf-8"))
+        refs.append({"key": "unused2020", "type": "misc", "authors": ["Doe, Jane"], "year": 2020,
+                     "title": "Never cited", "class": "working_paper"})
+        (paper / "refs.yaml").write_text(yaml.safe_dump(refs, sort_keys=False), encoding="utf-8")
+        assert C.check(paper) == ["unused2020: no verified record"], C.check(paper)
+
 
 import contextlib                  # noqa: E402
 import os                          # noqa: E402
@@ -827,6 +866,13 @@ def test_study_run_dir_is_never_overwritten_and_manifest_is_complete():
             assert "qualification" in str(exc), exc
         else:
             raise AssertionError("finish accepted an unknown qualification")
+        try:
+            S.finish(ctx, {"beta": 0.5}, qualification="qualified", config={"cache": paper})    # a Path is not JSON
+        except TypeError:
+            pass
+        else:
+            raise AssertionError("finish accepted a config that is not JSON")
+        assert list(ctx.run_dir.iterdir()) == [], "a failed finish leaves no file behind, so the run can be finished"
         manifest_path = S.finish(ctx, {"beta": 0.5, "n": 250}, qualification="qualified", config={"calendar": "NYSE"})
         assert b"\r\n" not in manifest_path.read_bytes(), "MANIFEST.json is written with LF line ends"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

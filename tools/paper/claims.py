@@ -6,10 +6,16 @@ release, and so does a row whose paragraph id no longer exists.
 claims.yaml: a list of rows {id, paragraph_id, source_key, locator, support, status}; locator and
 support may stay empty only while the status is not `supported`.
 
-A paragraph runs from its `% id: <section>-<n>` line to the next id line or \\section. Its section
-is the first `\\label{sec:...}` after the latest \\section, so subsection labels do not move it.
-An \\input of a file inside the paper folder (for example tables/<name>) is read as part of the
-paragraph it sits in.
+The gate also reports every refs.yaml entry without an ok verified record that names a url, whether
+or not a claims row uses it, so a reference added while drafting cannot reach release unverified.
+
+A paragraph runs from its `% id: <section>-<n>` line to the next id line or \\section. A section is
+a \\section and everything up to the next one, named by the first `\\label{sec:...}` anywhere in it
+(as tools.paper.consistency does), so subsection labels do not move it. A \\section without such a
+label is a problem, and so is a paper in which no paragraph falls in a gated section (the labels in
+GATED), because the gate would then check nothing. A cite in a gated section outside every id'd
+paragraph is a problem too: no claims row can name it. An \\input of a file inside the paper folder
+(for example tables/<name>) is read as part of the paragraph it sits in.
 
 CLI: python -m tools.paper.claims <paper_dir>   (exit 1 on any problem)
 """
@@ -22,7 +28,7 @@ from pathlib import Path
 import yaml
 
 from tools.paper.consistency import inline_inputs
-from tools.paper.refs import load_refs
+from tools.paper.refs import load_refs, ref_problems
 
 GATED = ("literature", "model", "results")
 STATUSES = ("supported", "unread", "unsupported")
@@ -34,24 +40,35 @@ COMMENT_RE = re.compile(r"(?<!\\)%.*")
 CITE_RE = re.compile(r"\\[Cc]ite[a-zA-Z]*\*?\s*(?:\[[^\]]*\]\s*){0,2}\{([^}]*)\}")
 
 
+def _scan(tex: str):
+    r"""(paragraphs, loose, unlabelled). `loose` is (section, text) per section: its text outside every id'd
+    paragraph, \section line included. `unlabelled` is the \section line of each section without a `sec:` label.
+    The text before the first \section is section ""."""
+    chunks = [[]]
+    for line in tex.splitlines():
+        code = None if ID_RE.match(line) else COMMENT_RE.sub("", line)      # None marks an id line
+        if code is not None and SECTION_RE.search(code):
+            chunks.append([])
+        chunks[-1].append((line, code))
+    out, loose, unlabelled = [], [], []
+    for k, chunk in enumerate(chunks):
+        labels = [m.group(1) for _, code in chunk if code is not None for m in LABEL_RE.finditer(code)]
+        if k and not labels:
+            unlabelled.append(chunk[0][1].strip())
+        section, current, free = (labels or [""])[0], None, []
+        for line, code in chunk:
+            if code is None:
+                current = (section, ID_RE.match(line).group(1), [])
+                out.append(current)
+            else:
+                (free if current is None else current[2]).append(code)
+        loose.append((section, "\n".join(free)))
+    return [(s, pid, "\n".join(lines)) for s, pid, lines in out], loose, unlabelled
+
+
 def paragraphs(tex: str) -> list[tuple[str, str, str]]:
     """(section label without `sec:`, paragraph id, text without comments) in document order."""
-    out, section, pending, current = [], "", False, None
-    for line in tex.splitlines():
-        m = ID_RE.match(line)
-        if m:
-            current = (section, m.group(1), [])
-            out.append(current)
-            continue
-        code = COMMENT_RE.sub("", line)
-        if SECTION_RE.search(code):
-            pending, current = True, None
-        label = LABEL_RE.search(code)
-        if pending and label:
-            section, pending = label.group(1), False
-        elif current is not None:
-            current[2].append(code)
-    return [(s, pid, "\n".join(lines)) for s, pid, lines in out]
+    return _scan(tex)[0]
 
 
 def cite_keys(text: str) -> list[str]:
@@ -67,17 +84,20 @@ def check(paper_dir: Path) -> list[str]:
     if missing:
         return [f"missing {p.relative_to(paper_dir).as_posix()}" for p in missing]
     try:
-        refs = {e["key"]: e for e in load_refs(refs_path)}
+        entries = load_refs(refs_path)
     except ValueError as exc:
         return [str(exc)]
+    refs = {e["key"]: e for e in entries}
     rows = yaml.safe_load(claims_path.read_text(encoding="utf-8")) or []
     if not isinstance(rows, list) or not all(isinstance(r, dict) for r in rows):
         return ["claims.yaml must be a list of mappings"]
     lines = [ln if ID_RE.match(ln) else inline_inputs(COMMENT_RE.sub("", ln), tex_path.parent, paper_dir)
              for ln in tex_path.read_text(encoding="utf-8").splitlines()]
-    paras = paragraphs("\n".join(lines))
+    paras, loose, unlabelled = _scan("\n".join(lines))
     pids = {pid for _, pid, _ in paras}
-    problems, seen, supported = [], set(), set()
+    problems, seen, supported = ref_problems(entries), set(), set()
+    problems += [f"{head} has no \\label{{sec:...}}; the claims gate cannot tell which section it is"
+                 for head in unlabelled]
     for r in rows:
         rid, status = r.get("id", "?"), r.get("status")
         absent = [f for f in ROW_FIELDS
@@ -100,11 +120,16 @@ def check(paper_dir: Path) -> list[str]:
             problems.append(f"claim {rid}: source {ref['key']} is not verified ok")
         if status == "supported" and not absent:
             supported.add((r["paragraph_id"], r["source_key"]))
+    if not any(section in GATED for section, _, _ in paras):
+        problems.append("no `% id:` paragraph falls in a gated section (" + ", ".join(f"sec:{g}" for g in GATED) + ")")
     for section, pid, text in paras:
         if section in GATED:
             for key in cite_keys(text):
                 if (pid, key) not in supported:
                     problems.append(f"{pid}: \\cite{{{key}}} has no supported claims.yaml row")
+    for section, text in loose:
+        if section in GATED:
+            problems += [f"sec:{section}: \\cite{{{key}}} outside an id'd paragraph" for key in cite_keys(text)]
     return problems
 
 

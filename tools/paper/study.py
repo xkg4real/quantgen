@@ -145,11 +145,12 @@ def finish(ctx: RunContext, results: dict, *, qualification: str, config: dict |
         "timezone": {"tzname": list(time.tzname), "utc_offset_s": -time.timezone},
         "config": config or {}, "ficc_cache": str(study / "cache"), "results_sha256": _sha(body),
     }
+    # serialised before any file exists, so a config that is not JSON raises with nothing written
+    mbody = json.dumps(manifest, indent=2, ensure_ascii=False).encode("utf-8")
     try:
-        with open(ctx.run_dir / "results.json", "xb") as fh:
-            fh.write(body)
-        with open(ctx.run_dir / "MANIFEST.json", "x", encoding="utf-8", newline="\n") as fh:
-            json.dump(manifest, fh, indent=2, ensure_ascii=False)
+        for name, data in (("results.json", body), ("MANIFEST.json", mbody)):
+            with open(ctx.run_dir / name, "xb") as fh:
+                fh.write(data)
     except FileExistsError as exc:
         raise StudyRefused(f"{ctx.run_dir} is already finished") from exc
     return ctx.run_dir / "MANIFEST.json"
