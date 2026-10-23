@@ -223,6 +223,58 @@ def warm() -> int:
     return B.main([str(root)])
 
 
+# --------------------------------------------------------------------------- #
+# Task 2: numbers.py, consistency.py, approval.py
+# --------------------------------------------------------------------------- #
+import json as _json              # noqa: E402  (this block's own imports, so it needs nothing from the header)
+import re as _re                  # noqa: E402
+import subprocess as _subprocess  # noqa: E402
+import sys as _sys                # noqa: E402
+import tempfile as _tempfile      # noqa: E402
+from pathlib import Path as _Path  # noqa: E402
+
+_ROOT = _Path(__file__).resolve().parents[2]
+
+
+def _num(value, fmt):
+    return dict(value=value, fmt=fmt, source="study/runs/r1/results.json:x", selection="all", units="ratio")
+
+
+def test_numbers_digit_keys_roundtrip():
+    """\\qnum keys with digits and underscores round-trip: entries -> numbers.tex and numbers.json -> same text."""
+    from tools.paper import numbers as N
+    tmp = _Path(_tempfile.mkdtemp(prefix="qgnum_"))
+    entries = {"sharpe_2y": _num(0.8123, "{:.2f}"), "r2_10y": _num(0.04567, "{:.3f}"),
+               "hit_rate_5d": _num(0.5312, "{:.1%}"), "beta_1m": _num(-0.5, "{:.2f}"), "n_obs": _num(1234, "{:,d}")}
+    N.write_numbers(entries, tmp / "study" / "numbers.json", tmp / "study" / "numbers.tex")
+    tex = (tmp / "study" / "numbers.tex").read_bytes().decode("utf-8")
+    assert "\r" not in tex, "numbers.tex must be written with LF line ends"
+    defs = dict(_re.findall(r"(?m)^\\expandafter\\def\\csname qg@num@([a-z0-9_]+)\\endcsname\{(.*)\}$", tex))
+    assert defs == {"sharpe_2y": "0.81", "r2_10y": "0.046", "hit_rate_5d": r"53.1\%", "beta_1m": r"\ensuremath{-}0.50",
+                    "n_obs": "1,234"}, defs
+    rows = N.load_numbers(tmp / "study" / "numbers.json")
+    assert set(rows) == set(entries), rows
+    for key, entry in entries.items():
+        assert {k: rows[key][k] for k in entry} == entry, (key, rows[key])
+    assert rows["hit_rate_5d"]["text"] == "53.1%" and rows["beta_1m"]["text"] == "-0.50"
+
+
+def test_numbers_refuses_bad_keys_missing_fields_and_nonfinite_values():
+    from tools.paper import numbers as N
+    tmp = _Path(_tempfile.mkdtemp(prefix="qgnum_"))
+    bad = [{"Sharpe_2y": _num(1.0, "{:.2f}")}, {"sharpe-2y": _num(1.0, "{:.2f}")}, {"sharpe 2y": _num(1.0, "{:.2f}")},
+           {"sharpe_2y\n": _num(1.0, "{:.2f}")}, {"": _num(1.0, "{:.2f}")},
+           {"ok_1": {"value": 1.0, "fmt": "{:.2f}"}},
+           {"ok_1": _num(float("nan"), "{:.2f}")}, {"ok_1": _num(float("inf"), "{:.2f}")}]
+    for entries in bad:
+        try:
+            N.write_numbers(entries, tmp / "n.json", tmp / "n.tex")
+        except ValueError:
+            continue
+        raise AssertionError(f"accepted {entries}")
+    assert not (tmp / "n.json").exists() and not (tmp / "n.tex").exists(), "a refused entry must write nothing"
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
