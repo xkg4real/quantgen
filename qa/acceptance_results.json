@@ -2,13 +2,13 @@
   {
     "test": "safety/test_08_no_broker_order_path",
     "status": "PASS",
-    "seconds": 0.1224,
+    "seconds": 0.1222,
     "detail": ""
   },
   {
     "test": "safety/test_09_no_account_credentials_requested",
     "status": "PASS",
-    "seconds": 0.0529,
+    "seconds": 0.0552,
     "detail": ""
   },
   {
@@ -20,37 +20,37 @@
   {
     "test": "safety/test_14_page_resize_handler_matches_the_flet_api",
     "status": "PASS",
-    "seconds": 0.0052,
+    "seconds": 0.005,
     "detail": ""
   },
   {
     "test": "safety/test_15_views_are_cached_across_navigation",
     "status": "PASS",
-    "seconds": 0.0006,
+    "seconds": 0.0004,
     "detail": ""
   },
   {
     "test": "safety/test_16_every_source_file_is_utf8_readable",
     "status": "PASS",
-    "seconds": 0.0479,
+    "seconds": 0.043,
     "detail": ""
   },
   {
     "test": "safety/test_17_tests_never_read_without_an_encoding",
     "status": "PASS",
-    "seconds": 0.0074,
+    "seconds": 0.0086,
     "detail": ""
   },
   {
     "test": "safety/test_18_eodhd_is_gone_from_the_runtime",
     "status": "PASS",
-    "seconds": 1.7542,
+    "seconds": 1.7567,
     "detail": ""
   },
   {
     "test": "safety/test_21_krx_gateway_degrades_with_a_reason",
     "status": "PASS",
-    "seconds": 1.3683,
+    "seconds": 1.2622,
     "detail": ""
   },
   {
@@ -68,7 +68,7 @@
   {
     "test": "engine/test_02_halt_requires_manual_acknowledgement_before_arming",
     "status": "PASS",
-    "seconds": 0.0001,
+    "seconds": 0.0,
     "detail": ""
   },
   {
@@ -92,13 +92,13 @@
   {
     "test": "engine/test_06_disarmed_engine_never_fires",
     "status": "PASS",
-    "seconds": 0.0002,
+    "seconds": 0.001,
     "detail": ""
   },
   {
     "test": "engine/test_07_stale_quote_halts_the_engine",
     "status": "PASS",
-    "seconds": 0.0132,
+    "seconds": 0.0103,
     "detail": ""
   },
   {
@@ -110,7 +110,7 @@
   {
     "test": "engine/test_09_duplicate_trigger_is_not_placed_twice",
     "status": "PASS",
-    "seconds": 0.0002,
+    "seconds": 0.0001,
     "detail": ""
   },
   {
@@ -122,19 +122,19 @@
   {
     "test": "engine/test_11_per_order_cap_rejects",
     "status": "PASS",
-    "seconds": 0.0001,
+    "seconds": 0.0002,
     "detail": ""
   },
   {
     "test": "engine/test_12_daily_cap_counts_prior_orders",
     "status": "PASS",
-    "seconds": 0.0002,
+    "seconds": 0.0004,
     "detail": ""
   },
   {
     "test": "engine/test_13_rejected_orders_do_not_consume_the_daily_budget",
     "status": "PASS",
-    "seconds": 0.0001,
+    "seconds": 0.0003,
     "detail": ""
   },
   {
@@ -194,7 +194,7 @@
   {
     "test": "engine/test_23_validation_reports_every_field_at_once",
     "status": "PASS",
-    "seconds": 0.0,
+    "seconds": 0.0001,
     "detail": ""
   },
   {
@@ -236,13 +236,13 @@
   {
     "test": "engine/test_30_runtime_increments_trigger_count_once_per_fire",
     "status": "PASS",
-    "seconds": 0.0143,
+    "seconds": 0.0139,
     "detail": ""
   },
   {
     "test": "engine/test_31_concurrent_ticks_cannot_double_place",
     "status": "PASS",
-    "seconds": 0.0128,
+    "seconds": 0.0108,
     "detail": ""
   },
   {
@@ -254,13 +254,13 @@
   {
     "test": "engine/test_33_restart_reloads_the_book_but_not_the_armed_mode",
     "status": "PASS",
-    "seconds": 0.0289,
+    "seconds": 0.0236,
     "detail": ""
   },
   {
     "test": "engine/test_34_disarmed_runtime_fires_nothing",
     "status": "PASS",
-    "seconds": 0.0058,
+    "seconds": 0.0056,
     "detail": ""
   },
   {
@@ -284,13 +284,13 @@
   {
     "test": "engine/test_38_rule_store_round_trips_decimals_exactly",
     "status": "PASS",
-    "seconds": 0.0119,
+    "seconds": 0.0123,
     "detail": ""
   },
   {
     "test": "engine/test_39_saving_a_new_revision_keeps_the_previous_one",
     "status": "PASS",
-    "seconds": 0.0054,
+    "seconds": 0.0064,
     "detail": ""
   },
   {
@@ -314,13 +314,13 @@
   {
     "test": "engine/test_43_feed_maps_provider_symbols_back_to_the_rules_own_symbol",
     "status": "PASS",
-    "seconds": 0.0064,
+    "seconds": 0.0073,
     "detail": ""
   },
   {
     "test": "engine/test_44_feed_groups_all_fmp_symbols_into_one_provider_call",
     "status": "PASS",
-    "seconds": 0.0,
+    "seconds": 0.0001,
     "detail": ""
   },
   {
@@ -344,7 +344,7 @@
   {
     "test": "engine/test_48_fmp_client_throttles_repeat_fetches_of_one_symbol",
     "status": "PASS",
-    "seconds": 0.0,
+    "seconds": 0.0001,
     "detail": ""
   },
   {
@@ -434,13 +434,13 @@
   {
     "test": "engine/test_65_closed_venues_are_not_fetched",
     "status": "PASS",
-    "seconds": 0.0077,
+    "seconds": 0.0073,
     "detail": ""
   },
   {
     "test": "engine/test_66_an_unchanged_verdict_is_logged_once_not_every_tick",
     "status": "PASS",
-    "seconds": 0.0122,
+    "seconds": 0.016,
     "detail": ""
   },
   {
@@ -494,7 +494,7 @@
   {
     "test": "engine/test_75_holiday_check_is_a_constant_time_lookup",
     "status": "PASS",
-    "seconds": 0.0194,
+    "seconds": 0.0197,
     "detail": ""
   },
   {
@@ -506,55 +506,55 @@
   {
     "test": "engine/test_77_a_transient_miss_is_skipped_and_counted_then_recovers",
     "status": "PASS",
-    "seconds": 0.0153,
+    "seconds": 0.0146,
     "detail": ""
   },
   {
     "test": "engine/test_78_a_miss_that_outlasts_the_grace_halts_and_still_needs_a_manual_rearm",
     "status": "PASS",
-    "seconds": 0.0143,
+    "seconds": 0.0121,
     "detail": ""
   },
   {
     "test": "engine/test_79_a_grace_of_zero_halts_on_the_first_miss",
     "status": "PASS",
-    "seconds": 0.0104,
+    "seconds": 0.0072,
     "detail": ""
   },
   {
     "test": "engine/test_80_a_plan_refusal_halts_at_once_whatever_the_grace",
     "status": "PASS",
-    "seconds": 0.0105,
+    "seconds": 0.009,
     "detail": ""
   },
   {
     "test": "engine/test_81_history_clients_share_the_retrying_session_and_quote_clients_do_not",
     "status": "PASS",
-    "seconds": 0.0343,
+    "seconds": 0.0251,
     "detail": ""
   },
   {
     "test": "engine/test_82_a_get_survives_two_bad_gateways_but_a_429_a_500_and_a_post_are_sent_once",
     "status": "PASS",
-    "seconds": 2.1235,
+    "seconds": 2.5415,
     "detail": ""
   },
   {
     "test": "engine/test_83_a_feed_that_fails_most_passes_still_runs_out_of_grace",
     "status": "PASS",
-    "seconds": 0.0223,
+    "seconds": 0.0264,
     "detail": ""
   },
   {
     "test": "engine/test_84_arming_starts_a_fresh_grace_window",
     "status": "PASS",
-    "seconds": 0.0222,
+    "seconds": 0.0214,
     "detail": ""
   },
   {
     "test": "engine/test_85_time_spent_fetching_counts_against_the_quote",
     "status": "PASS",
-    "seconds": 0.0119,
+    "seconds": 0.0116,
     "detail": ""
   },
   {
@@ -566,13 +566,13 @@
   {
     "test": "engine/test_87_the_dashboard_names_a_symbol_the_armed_engine_cannot_see",
     "status": "PASS",
-    "seconds": 0.0181,
+    "seconds": 0.0182,
     "detail": ""
   },
   {
     "test": "engine/test_88_the_grace_setting_is_capped",
     "status": "PASS",
-    "seconds": 0.0012,
+    "seconds": 0.0007,
     "detail": ""
   },
   {
@@ -584,13 +584,13 @@
   {
     "test": "engine/test_90_a_venue_that_opens_mid_pass_does_not_halt_for_a_quote_never_asked_for",
     "status": "PASS",
-    "seconds": 0.0091,
+    "seconds": 0.0081,
     "detail": ""
   },
   {
     "test": "engine/test_91_arming_an_armed_engine_does_not_reset_the_grace",
     "status": "PASS",
-    "seconds": 0.0173,
+    "seconds": 0.0183,
     "detail": ""
   },
   {
@@ -602,7 +602,7 @@
   {
     "test": "engine/test_93_a_cap_rejection_does_not_block_the_rule_after_the_cap_clears",
     "status": "PASS",
-    "seconds": 0.0003,
+    "seconds": 0.0004,
     "detail": ""
   },
   {
@@ -614,25 +614,25 @@
   {
     "test": "ui/test_control_attribute_assignments_exist",
     "status": "PASS",
-    "seconds": 0.3085,
+    "seconds": 0.2925,
     "detail": ""
   },
   {
     "test": "ui/test_control_keywords_exist",
     "status": "PASS",
-    "seconds": 0.4209,
+    "seconds": 0.2686,
     "detail": ""
   },
   {
     "test": "ui/test_page_methods_exist",
     "status": "PASS",
-    "seconds": 0.1788,
+    "seconds": 0.3055,
     "detail": ""
   },
   {
     "test": "ui/test_theme_tokens_referenced_by_ui_exist",
     "status": "PASS",
-    "seconds": 0.2213,
+    "seconds": 0.1709,
     "detail": ""
   },
   {
@@ -650,55 +650,55 @@
   {
     "test": "quant/test_auto_routing_falls_back_to_labeled_synthetic",
     "status": "PASS",
-    "seconds": 0.0015,
+    "seconds": 0.0017,
     "detail": ""
   },
   {
     "test": "quant/test_backtest_costs_only_hurt",
     "status": "PASS",
-    "seconds": 0.0028,
+    "seconds": 0.0027,
     "detail": ""
   },
   {
     "test": "quant/test_backtest_exposure_and_drawdown_sane",
     "status": "PASS",
-    "seconds": 0.0023,
+    "seconds": 0.0017,
     "detail": ""
   },
   {
     "test": "quant/test_backtest_has_no_lookahead",
     "status": "PASS",
-    "seconds": 0.0005,
+    "seconds": 0.0002,
     "detail": ""
   },
   {
     "test": "quant/test_backtest_rejects_inverted_ma_params",
     "status": "PASS",
-    "seconds": 0.001,
+    "seconds": 0.0007,
     "detail": ""
   },
   {
     "test": "quant/test_bounded_t_draws_respect_the_bound_and_keep_the_shape",
     "status": "PASS",
-    "seconds": 0.3021,
+    "seconds": 0.2559,
     "detail": ""
   },
   {
     "test": "quant/test_deep_analysis_without_key_degrades_without_network",
     "status": "PASS",
-    "seconds": 0.0,
+    "seconds": 0.0001,
     "detail": ""
   },
   {
     "test": "quant/test_drift_modes_are_ordered_and_documented",
     "status": "PASS",
-    "seconds": 1.832,
+    "seconds": 1.6968,
     "detail": ""
   },
   {
     "test": "quant/test_drift_zero_centres_the_cone_and_sample_reproduces_the_mean",
     "status": "PASS",
-    "seconds": 1.1269,
+    "seconds": 1.1473,
     "detail": ""
   },
   {
@@ -710,7 +710,7 @@
   {
     "test": "quant/test_every_chart_renders_a_data_uri_image",
     "status": "PASS",
-    "seconds": 2.0481,
+    "seconds": 1.8942,
     "detail": ""
   },
   {
@@ -722,55 +722,55 @@
   {
     "test": "quant/test_fmp_history_asks_for_dividend_adjusted_closes_and_reports_refusals_honestly",
     "status": "PASS",
-    "seconds": 0.0005,
+    "seconds": 0.0004,
     "detail": ""
   },
   {
     "test": "quant/test_frontier_is_traced_and_cloud_is_dominated",
     "status": "PASS",
-    "seconds": 0.0694,
+    "seconds": 0.0504,
     "detail": ""
   },
   {
     "test": "quant/test_garch_forecast_variance_converges_to_unconditional",
     "status": "PASS",
-    "seconds": 0.4425,
+    "seconds": 0.4106,
     "detail": ""
   },
   {
     "test": "quant/test_garch_narrative_states_persistence_and_nu",
     "status": "PASS",
-    "seconds": 0.9523,
+    "seconds": 0.8354,
     "detail": ""
   },
   {
     "test": "quant/test_garch_recovers_parameters_on_simulated_series",
     "status": "PASS",
-    "seconds": 0.6965,
+    "seconds": 0.6936,
     "detail": ""
   },
   {
     "test": "quant/test_garch_respects_bounds_and_flags_on_gbm_series",
     "status": "PASS",
-    "seconds": 0.2773,
+    "seconds": 0.2754,
     "detail": ""
   },
   {
     "test": "quant/test_garch_scaled_t_shocks_have_unit_variance",
     "status": "PASS",
-    "seconds": 0.1405,
+    "seconds": 0.1485,
     "detail": ""
   },
   {
     "test": "quant/test_garch_t_beats_normal_and_gbm_on_clustered_series",
     "status": "PASS",
-    "seconds": 0.4342,
+    "seconds": 0.468,
     "detail": ""
   },
   {
     "test": "quant/test_gsq_pricing_without_session_explains_itself",
     "status": "PASS",
-    "seconds": 0.0001,
+    "seconds": 0.0,
     "detail": ""
   },
   {
@@ -782,25 +782,25 @@
   {
     "test": "quant/test_history_cache_serves_a_rerun_without_asking_the_provider_again",
     "status": "PASS",
-    "seconds": 0.0898,
+    "seconds": 0.0919,
     "detail": ""
   },
   {
     "test": "quant/test_horizon_vol_describes_the_bounded_paths",
     "status": "PASS",
-    "seconds": 1.7956,
+    "seconds": 1.7663,
     "detail": ""
   },
   {
     "test": "quant/test_interval_coverage_on_simulated_t_garch",
     "status": "PASS",
-    "seconds": 19.467,
+    "seconds": 17.8608,
     "detail": ""
   },
   {
     "test": "quant/test_intervals_reaching_a_bound_are_flagged",
     "status": "PASS",
-    "seconds": 0.3686,
+    "seconds": 0.3377,
     "detail": ""
   },
   {
@@ -812,133 +812,133 @@
   {
     "test": "quant/test_lr_is_nonnegative_and_correctly_sized_under_the_null",
     "status": "PASS",
-    "seconds": 28.2406,
+    "seconds": 25.3702,
     "detail": ""
   },
   {
     "test": "quant/test_martingale_correction_matches_quadrature_and_the_normal_closed_form",
     "status": "PASS",
-    "seconds": 0.5925,
+    "seconds": 0.6031,
     "detail": ""
   },
   {
     "test": "quant/test_max_weight_cap_is_respected",
     "status": "PASS",
-    "seconds": 0.0073,
+    "seconds": 0.0064,
     "detail": ""
   },
   {
     "test": "quant/test_mc_all_models_run",
     "status": "PASS",
-    "seconds": 0.4549,
+    "seconds": 0.3675,
     "detail": ""
   },
   {
     "test": "quant/test_mc_default_model_is_garch_t_seeded_and_reproducible",
     "status": "PASS",
-    "seconds": 1.5236,
+    "seconds": 1.4854,
     "detail": ""
   },
   {
     "test": "quant/test_mc_fan_percentiles_are_ordered",
     "status": "PASS",
-    "seconds": 0.1529,
+    "seconds": 0.117,
     "detail": ""
   },
   {
     "test": "quant/test_mc_is_seeded_and_reproducible",
     "status": "PASS",
-    "seconds": 0.8282,
+    "seconds": 0.7432,
     "detail": ""
   },
   {
     "test": "quant/test_mc_jump_degrades_to_gbm_without_outliers",
     "status": "PASS",
-    "seconds": 0.0033,
+    "seconds": 0.0032,
     "detail": ""
   },
   {
     "test": "quant/test_mc_target_probability_brackets",
     "status": "PASS",
-    "seconds": 0.5738,
+    "seconds": 0.4898,
     "detail": ""
   },
   {
     "test": "quant/test_mc_var_and_cvar_are_coherent",
     "status": "PASS",
-    "seconds": 0.1752,
+    "seconds": 0.1765,
     "detail": ""
   },
   {
     "test": "quant/test_mc_zero_drift_lowers_median_on_positive_drift_series",
     "status": "PASS",
-    "seconds": 1.0841,
+    "seconds": 1.0103,
     "detail": ""
   },
   {
     "test": "quant/test_narratives_state_their_numbers",
     "status": "PASS",
-    "seconds": 0.3135,
+    "seconds": 0.3053,
     "detail": ""
   },
   {
     "test": "quant/test_optimizer_objectives_actually_optimize",
     "status": "PASS",
-    "seconds": 0.0104,
+    "seconds": 0.0183,
     "detail": ""
   },
   {
     "test": "quant/test_optimizer_weights_are_a_long_only_allocation",
     "status": "PASS",
-    "seconds": 0.0193,
+    "seconds": 0.0187,
     "detail": ""
   },
   {
     "test": "quant/test_rate_modes_make_the_discounted_price_a_martingale_for_every_model",
     "status": "PASS",
-    "seconds": 7.2698,
+    "seconds": 7.0824,
     "detail": ""
   },
   {
     "test": "quant/test_risk_parity_equalizes_risk_contributions",
     "status": "PASS",
-    "seconds": 0.0104,
+    "seconds": 0.0101,
     "detail": ""
   },
   {
     "test": "quant/test_risk_var_cvar_bounds",
     "status": "PASS",
-    "seconds": 0.0144,
+    "seconds": 0.0145,
     "detail": ""
   },
   {
     "test": "quant/test_risk_vol_and_drawdown_match_numpy_whatever_engine",
     "status": "PASS",
-    "seconds": 0.009,
+    "seconds": 0.0119,
     "detail": ""
   },
   {
     "test": "quant/test_rsi_stays_in_bounds",
     "status": "PASS",
-    "seconds": 0.0011,
+    "seconds": 0.0015,
     "detail": ""
   },
   {
     "test": "quant/test_signal_scores_and_weights_are_bounded",
     "status": "PASS",
-    "seconds": 0.0017,
+    "seconds": 0.0021,
     "detail": ""
   },
   {
     "test": "quant/test_signals_read_the_trend_direction",
     "status": "PASS",
-    "seconds": 0.0018,
+    "seconds": 0.0022,
     "detail": ""
   },
   {
     "test": "quant/test_synthetic_is_deterministic_per_symbol",
     "status": "PASS",
-    "seconds": 0.0023,
+    "seconds": 0.0025,
     "detail": ""
   },
   {
@@ -950,31 +950,31 @@
   {
     "test": "quant/test_unknown_drift_raises",
     "status": "PASS",
-    "seconds": 0.0008,
+    "seconds": 0.001,
     "detail": ""
   },
   {
     "test": "ficc/test_atm_straddle_is_twice_the_atm_payer",
     "status": "PASS",
-    "seconds": 0.0178,
+    "seconds": 0.0083,
     "detail": ""
   },
   {
     "test": "ficc/test_black_and_bachelier_agree_atm_and_implied_vols_round_trip",
     "status": "PASS",
-    "seconds": 0.0007,
+    "seconds": 0.0003,
     "detail": ""
   },
   {
     "test": "ficc/test_bond_analyze_requires_exactly_one_of_price_or_yield",
     "status": "PASS",
-    "seconds": 0.0048,
+    "seconds": 0.0054,
     "detail": ""
   },
   {
     "test": "ficc/test_bond_carry_roll_is_a_holding_period_pnl",
     "status": "PASS",
-    "seconds": 0.014,
+    "seconds": 0.0154,
     "detail": ""
   },
   {
@@ -986,7 +986,7 @@
   {
     "test": "ficc/test_bond_duration_matches_numeric_derivative",
     "status": "PASS",
-    "seconds": 0.0002,
+    "seconds": 0.0003,
     "detail": ""
   },
   {
@@ -998,43 +998,43 @@
   {
     "test": "ficc/test_bond_krd_sums_to_dv01",
     "status": "PASS",
-    "seconds": 0.0076,
+    "seconds": 0.0088,
     "detail": ""
   },
   {
     "test": "ficc/test_bond_par_prices_at_100_and_yield_round_trips",
     "status": "PASS",
-    "seconds": 0.0008,
+    "seconds": 0.0011,
     "detail": ""
   },
   {
     "test": "ficc/test_bond_scenarios_show_convexity",
     "status": "PASS",
-    "seconds": 0.0058,
+    "seconds": 0.0082,
     "detail": ""
   },
   {
     "test": "ficc/test_bond_z_spread_round_trips",
     "status": "PASS",
-    "seconds": 0.0064,
+    "seconds": 0.0071,
     "detail": ""
   },
   {
     "test": "ficc/test_cap_is_sum_of_caplets_and_cap_minus_floor_is_the_swap",
     "status": "PASS",
-    "seconds": 0.005,
+    "seconds": 0.0036,
     "detail": ""
   },
   {
     "test": "ficc/test_carry_backtest_is_sane_and_costs_only_hurt",
     "status": "PASS",
-    "seconds": 0.04,
+    "seconds": 0.0452,
     "detail": ""
   },
   {
     "test": "ficc/test_carry_table_inverts_usd_base_pairs",
     "status": "PASS",
-    "seconds": 0.0007,
+    "seconds": 0.0006,
     "detail": ""
   },
   {
@@ -1058,25 +1058,25 @@
   {
     "test": "ficc/test_curve_ns_fit_is_tight",
     "status": "PASS",
-    "seconds": 0.0225,
+    "seconds": 0.0233,
     "detail": ""
   },
   {
     "test": "ficc/test_curve_pca_explains_level_first",
     "status": "PASS",
-    "seconds": 0.0052,
+    "seconds": 0.0041,
     "detail": ""
   },
   {
     "test": "ficc/test_curve_report_uses_allowed_regime_and_shape_strings",
     "status": "PASS",
-    "seconds": 0.0625,
+    "seconds": 0.0466,
     "detail": ""
   },
   {
     "test": "ficc/test_data_auto_degrades_to_synthetic_naming_the_provider",
     "status": "PASS",
-    "seconds": 0.0136,
+    "seconds": 0.0088,
     "detail": ""
   },
   {
@@ -1088,31 +1088,31 @@
   {
     "test": "ficc/test_data_shapes_are_clean",
     "status": "PASS",
-    "seconds": 0.0028,
+    "seconds": 0.0019,
     "detail": ""
   },
   {
     "test": "ficc/test_data_synthetic_is_deterministic_and_labeled",
     "status": "PASS",
-    "seconds": 0.0019,
+    "seconds": 0.0016,
     "detail": ""
   },
   {
     "test": "ficc/test_data_synthetic_never_touches_the_cache",
     "status": "PASS",
-    "seconds": 0.0006,
+    "seconds": 0.0008,
     "detail": ""
   },
   {
     "test": "ficc/test_dcd_enhanced_yield_beats_the_plain_deposit",
     "status": "PASS",
-    "seconds": 0.0085,
+    "seconds": 0.0096,
     "detail": ""
   },
   {
     "test": "ficc/test_every_fchart_renders_a_data_uri_image",
     "status": "PASS",
-    "seconds": 3.0517,
+    "seconds": 2.6952,
     "detail": ""
   },
   {
@@ -1136,37 +1136,37 @@
   {
     "test": "ficc/test_gk_implied_vol_round_trips",
     "status": "PASS",
-    "seconds": 0.007,
+    "seconds": 0.0062,
     "detail": ""
   },
   {
     "test": "ficc/test_gk_parity_and_delta_bounds",
     "status": "PASS",
-    "seconds": 0.0007,
+    "seconds": 0.0005,
     "detail": ""
   },
   {
     "test": "ficc/test_hedge_sheet_sizes_spot_swaps_and_futures",
     "status": "PASS",
-    "seconds": 0.001,
+    "seconds": 0.0007,
     "detail": ""
   },
   {
     "test": "ficc/test_horizon_pv_var_is_a_non_negative_loss",
     "status": "PASS",
-    "seconds": 0.1512,
+    "seconds": 0.1245,
     "detail": ""
   },
   {
     "test": "ficc/test_implied_vol_outside_no_arb_raises",
     "status": "PASS",
-    "seconds": 0.0003,
+    "seconds": 0.0002,
     "detail": ""
   },
   {
     "test": "ficc/test_macro_briefs_are_json_payloads",
     "status": "PASS",
-    "seconds": 0.001,
+    "seconds": 0.0008,
     "detail": ""
   },
   {
@@ -1178,43 +1178,43 @@
   {
     "test": "ficc/test_macro_sheet_offline_auto_is_loudly_synthetic_and_fred_raises",
     "status": "PASS",
-    "seconds": 0.0152,
+    "seconds": 0.013,
     "detail": ""
   },
   {
     "test": "ficc/test_narratives_state_their_numbers",
     "status": "PASS",
-    "seconds": 0.0295,
+    "seconds": 0.0352,
     "detail": ""
   },
   {
     "test": "ficc/test_ppn_fair_below_issue_with_positive_participation",
     "status": "PASS",
-    "seconds": 0.0003,
+    "seconds": 0.0004,
     "detail": ""
   },
   {
     "test": "ficc/test_ratesim_cir_stays_non_negative",
     "status": "PASS",
-    "seconds": 0.1337,
+    "seconds": 0.1328,
     "detail": ""
   },
   {
     "test": "ficc/test_ratesim_hull_white_matches_the_curve_at_t0",
     "status": "PASS",
-    "seconds": 0.0231,
+    "seconds": 0.028,
     "detail": ""
   },
   {
     "test": "ficc/test_ratesim_is_seeded_and_reproducible",
     "status": "PASS",
-    "seconds": 0.0479,
+    "seconds": 0.0386,
     "detail": ""
   },
   {
     "test": "ficc/test_ratesim_vasicek_reverts_to_theta",
     "status": "PASS",
-    "seconds": 0.4835,
+    "seconds": 0.4539,
     "detail": ""
   },
   {
@@ -1226,37 +1226,37 @@
   {
     "test": "ficc/test_reverse_convertible_coupon_beats_the_zcb_rate",
     "status": "PASS",
-    "seconds": 0.0041,
+    "seconds": 0.0031,
     "detail": ""
   },
   {
     "test": "ficc/test_sabr_reproduces_its_quotes",
     "status": "PASS",
-    "seconds": 0.0417,
+    "seconds": 0.0507,
     "detail": ""
   },
   {
     "test": "ficc/test_smile_ordering_follows_the_risk_reversal",
     "status": "PASS",
-    "seconds": 0.0016,
+    "seconds": 0.0022,
     "detail": ""
   },
   {
     "test": "ficc/test_steepener_note_warns_about_convexity",
     "status": "PASS",
-    "seconds": 0.008,
+    "seconds": 0.0096,
     "detail": ""
   },
   {
     "test": "ficc/test_strike_from_delta_round_trips",
     "status": "PASS",
-    "seconds": 0.0015,
+    "seconds": 0.0013,
     "detail": ""
   },
   {
     "test": "ficc/test_swap_at_par_has_zero_pv_and_payer_dv01_positive",
     "status": "PASS",
-    "seconds": 0.0075,
+    "seconds": 0.0092,
     "detail": ""
   },
   {
@@ -1280,25 +1280,25 @@
   {
     "test": "ficc/test_weekly_note_has_no_position_language",
     "status": "PASS",
-    "seconds": 0.0038,
+    "seconds": 0.0039,
     "detail": ""
   },
   {
     "test": "ficc/test_weekly_strategy_ranks_positive_carry_first",
     "status": "PASS",
-    "seconds": 0.0369,
+    "seconds": 0.0452,
     "detail": ""
   },
   {
     "test": "ficc/test_weekly_strategy_states_its_views",
     "status": "PASS",
-    "seconds": 0.0004,
+    "seconds": 0.0008,
     "detail": ""
   },
   {
     "test": "expansion/kis_markets_paging_and_shapes",
     "status": "PASS",
-    "seconds": 0.0027,
+    "seconds": 0.0029,
     "detail": ""
   },
   {
@@ -1316,133 +1316,133 @@
   {
     "test": "expansion/crypto_client_refusals_and_router",
     "status": "PASS",
-    "seconds": 0.0016,
+    "seconds": 0.0021,
     "detail": ""
   },
   {
     "test": "expansion/history_auto_degrades_without_keys",
     "status": "PASS",
-    "seconds": 0.0019,
+    "seconds": 0.0024,
     "detail": ""
   },
   {
     "test": "expansion/etf_page_adjusted_sleeves",
     "status": "PASS",
-    "seconds": 0.0717,
+    "seconds": 0.0758,
     "detail": ""
   },
   {
     "test": "expansion/gate_noise_vs_edge",
     "status": "PASS",
-    "seconds": 9.3518,
+    "seconds": 9.05,
     "detail": ""
   },
   {
     "test": "expansion/strategies_are_causal",
     "status": "PASS",
-    "seconds": 0.2067,
+    "seconds": 0.1997,
     "detail": ""
   },
   {
     "test": "expansion/gate_whole_years_and_cost_floor",
     "status": "PASS",
-    "seconds": 0.002,
+    "seconds": 0.0016,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_kis_markets",
     "status": "PASS",
-    "seconds": 0.0208,
+    "seconds": 0.0182,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_crypto_client",
     "status": "PASS",
-    "seconds": 0.0251,
+    "seconds": 0.0233,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_validate",
     "status": "PASS",
-    "seconds": 48.4273,
+    "seconds": 47.0184,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_strategies",
     "status": "PASS",
-    "seconds": 0.353,
+    "seconds": 0.3448,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_strategy_lab",
     "status": "PASS",
-    "seconds": 0.6103,
+    "seconds": 0.6339,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_equity_deriv",
     "status": "PASS",
-    "seconds": 0.3192,
+    "seconds": 0.3278,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_curve_models",
     "status": "PASS",
-    "seconds": 1.1786,
+    "seconds": 1.2302,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_fx_styles",
     "status": "PASS",
-    "seconds": 0.0973,
+    "seconds": 0.1005,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_vol_products",
     "status": "PASS",
-    "seconds": 0.2133,
+    "seconds": 0.1893,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_crypto_analytics",
     "status": "PASS",
-    "seconds": 9.3532,
+    "seconds": 9.5265,
     "detail": ""
   },
   {
     "test": "expansion/selfcheck_crypto_page",
     "status": "PASS",
-    "seconds": 0.3481,
+    "seconds": 0.3668,
     "detail": ""
   },
   {
     "test": "macro/test_t_herm_01_every_touchpoint_raises",
     "status": "PASS",
-    "seconds": 0.0701,
+    "seconds": 0.0786,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_harness/test_every_macro_module_runs_alone_under_the_guard",
     "status": "PASS",
-    "seconds": 0.0292,
+    "seconds": 0.0346,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_harness/test_gate_bootstrap_b_is_not_leaked_by_the_expansion_suite",
     "status": "PASS",
-    "seconds": 0.0005,
+    "seconds": 0.0007,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_harness/test_manifest_lists_every_fixture_with_a_matching_md5",
     "status": "PASS",
-    "seconds": 0.0117,
+    "seconds": 0.0132,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_harness/test_manifest_loader_refuses_unlisted_absent_changed_and_unlicensed",
     "status": "PASS",
-    "seconds": 0.0213,
+    "seconds": 0.0318,
     "detail": ""
   },
   {
@@ -1454,37 +1454,37 @@
   {
     "test": "macro/macro_m0_harness/test_registry_has_unique_ids_and_valid_columns",
     "status": "PASS",
-    "seconds": 0.004,
+    "seconds": 0.0046,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_harness/test_registry_implemented_in_matches_test_ids",
     "status": "PASS",
-    "seconds": 0.0063,
+    "seconds": 0.0176,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_harness/test_runner_records_not_run_as_a_third_status",
     "status": "PASS",
-    "seconds": 0.01,
+    "seconds": 0.0104,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_harness/test_t_ro_01_artifact_writers_stamp_read_only",
     "status": "PASS",
-    "seconds": 0.012,
+    "seconds": 0.0152,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_harness/test_t_ro_01_no_order_cancel_withdrawal_or_transfer_path",
     "status": "PASS",
-    "seconds": 3.3883,
+    "seconds": 3.4908,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_harness/test_t_ro_01_orders_module_reached_only_through_the_engine",
     "status": "PASS",
-    "seconds": 1.3951,
+    "seconds": 1.1683,
     "detail": ""
   },
   {
@@ -1551,176 +1551,176 @@
   {
     "test": "macro/macro_m0_instruments/test_study_reads_the_gate_cost_table",
     "status": "PASS",
-    "seconds": 0.0154,
+    "seconds": 0.014,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_integration/test_validate_card_header_wires_schema_instruments_and_dnb",
     "status": "PASS",
-    "seconds": 0.0628,
+    "seconds": 0.0796,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_rules/test_basis_01_exposure_basis_predicates",
     "status": "PASS",
-    "seconds": 0.0013,
+    "seconds": 0.0018,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_rules/test_cap_01_rule_object_bounds",
     "status": "PASS",
-    "seconds": 0.0013,
+    "seconds": 0.0014,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_rules/test_cap_01_store_blocks_pass_bounds",
     "status": "PASS",
-    "seconds": 0.1781,
+    "seconds": 0.1936,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_rules/test_config_hash_stable_and_canonical",
     "status": "PASS",
-    "seconds": 0.0804,
+    "seconds": 0.1025,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_rules/test_dnb_01_each_refused_shape",
     "status": "PASS",
-    "seconds": 0.035,
+    "seconds": 0.0336,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_rules/test_dnb_01_item_labels_and_split",
     "status": "PASS",
-    "seconds": 0.0694,
+    "seconds": 0.0617,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_rules/test_governance_chain_append_verify_tamper",
     "status": "PASS",
-    "seconds": 0.7911,
+    "seconds": 0.819,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_rules/test_m0_15_e_labels_bootstrap_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0096,
+    "seconds": 0.0062,
     "detail": "",
     "reason": "REFDATA: qf3_dnb_classes.py and QF3 variant series absent"
   },
   {
     "test": "macro/macro_m0_rules/test_macro_dir_env_override",
     "status": "PASS",
-    "seconds": 0.0005,
+    "seconds": 0.0002,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_rules/test_owner_01_registry_refs_and_ruling",
     "status": "PASS",
-    "seconds": 0.2782,
+    "seconds": 0.4593,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_schemas/test_field_classes_and_quarantine",
     "status": "PASS",
-    "seconds": 0.0364,
+    "seconds": 0.0385,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_schemas/test_fixture_listing_md5",
     "status": "PASS",
-    "seconds": 0.0011,
+    "seconds": 0.0009,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_schemas/test_repro_01a_provenance_and_canonical_json",
     "status": "PASS",
-    "seconds": 0.2684,
+    "seconds": 0.269,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_schemas/test_schema_01_examples_validate",
     "status": "PASS",
-    "seconds": 0.0916,
+    "seconds": 0.0882,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_schemas/test_schema_02_card_field_set",
     "status": "PASS",
-    "seconds": 0.066,
+    "seconds": 0.0596,
     "detail": ""
   },
   {
     "test": "macro/macro_m0_schemas/test_schema_03_rule_outputs_declared",
     "status": "PASS",
-    "seconds": 0.0409,
+    "seconds": 0.0435,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_books/test_book_ids_and_default_books",
     "status": "PASS",
-    "seconds": 0.0151,
+    "seconds": 0.0123,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_books/test_causes_merge_and_acknowledge",
     "status": "PASS",
-    "seconds": 0.1272,
+    "seconds": 0.1247,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_books/test_ever_armed_warmup_and_retire",
     "status": "PASS",
-    "seconds": 0.0553,
+    "seconds": 0.0568,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_books/test_lag_audit_and_schema_failure_need_operator_rearm",
     "status": "PASS",
-    "seconds": 0.2017,
+    "seconds": 0.2158,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_books/test_ops_halt_counters_scope_and_auto_rearm",
     "status": "PASS",
-    "seconds": 0.2042,
+    "seconds": 0.1937,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_books/test_persistence_round_trip_and_governance_chain",
     "status": "PASS",
-    "seconds": 0.1693,
+    "seconds": 0.1599,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_books/test_risk_cycle_refusal_window_rearm_and_cap",
     "status": "PASS",
-    "seconds": 0.2605,
+    "seconds": 0.236,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_books/test_runtime_entry_validates_against_macro_state_schema",
     "status": "PASS",
-    "seconds": 0.1224,
+    "seconds": 0.108,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_calendars/test_cal01_calendar_change_governance_event",
     "status": "PASS",
-    "seconds": 1.7873,
+    "seconds": 1.7384,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_calendars/test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed",
     "status": "PASS",
-    "seconds": 0.4724,
+    "seconds": 0.4547,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_calendars/test_cal01_unsigned_refused_signed_accepted",
     "status": "PASS",
-    "seconds": 2.182,
+    "seconds": 2.1538,
     "detail": ""
   },
   {
@@ -1733,32 +1733,32 @@
   {
     "test": "macro/macro_m1_calendars/test_cal02_coverage_warn_page_halt",
     "status": "PASS",
-    "seconds": 3.6416,
+    "seconds": 3.3848,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_calendars/test_close01_decision_time_and_bound",
     "status": "PASS",
-    "seconds": 0.1156,
+    "seconds": 0.1329,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_calendars/test_close02_effective_dated_clocks",
     "status": "PASS",
-    "seconds": 1.0953,
+    "seconds": 1.1444,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_calendars/test_close02_on_the_real_signed_files_is_owner_input",
     "status": "NOT_RUN",
-    "seconds": 0.2224,
+    "seconds": 0.2093,
     "detail": "",
     "reason": "OWNER: core/calendars/data/*.yaml are unsigned drafts; T-CLOSE-02 on the real KRX/NYSE files waits for the owner's sign-off (Saturday closes, pre-2016 CSAT window, CSAT dates, random-end extensions)"
   },
   {
     "test": "macro/macro_m1_calendars/test_event_store_shape_and_artifact",
     "status": "PASS",
-    "seconds": 0.0532,
+    "seconds": 0.0579,
     "detail": ""
   },
   {
@@ -1782,14 +1782,14 @@
   {
     "test": "macro/macro_m1_calendars/test_print01_real_kospi_close_2026_03_09",
     "status": "NOT_RUN",
-    "seconds": 0.001,
+    "seconds": 0.0013,
     "detail": "",
     "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m1_calendars/test_publication_h15_h10_vix_avail_timing",
     "status": "PASS",
-    "seconds": 0.2372,
+    "seconds": 0.3923,
     "detail": ""
   },
   {
@@ -1802,26 +1802,26 @@
   {
     "test": "macro/macro_m1_calendars/test_regime01_point_clauses_and_fail_closed",
     "status": "PASS",
-    "seconds": 0.1195,
+    "seconds": 0.1395,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_calendars/test_sat01_real_kospi_completeness_and_variance_ratio",
     "status": "NOT_RUN",
-    "seconds": 0.0012,
+    "seconds": 0.0011,
     "detail": "",
     "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m1_calendars/test_sat01_saturday_sessions_and_completeness",
     "status": "PASS",
-    "seconds": 0.0091,
+    "seconds": 0.0114,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_calendars/test_tz01_cross_time_zone",
     "status": "PASS",
-    "seconds": 0.0124,
+    "seconds": 0.0102,
     "detail": ""
   },
   {
@@ -1833,25 +1833,25 @@
   {
     "test": "macro/macro_m1_calendars/test_xmkt01_same_instant_closes",
     "status": "PASS",
-    "seconds": 0.1361,
+    "seconds": 0.1321,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_fixtures/test_acquisition_csv_integrity",
     "status": "PASS",
-    "seconds": 0.0018,
+    "seconds": 0.0015,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_fixtures/test_every_required_fixture_is_generated_or_registered",
     "status": "PASS",
-    "seconds": 0.5287,
+    "seconds": 0.5089,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_fixtures/test_g_dsr_01_reproduces_bldp",
     "status": "PASS",
-    "seconds": 0.0163,
+    "seconds": 0.0134,
     "detail": ""
   },
   {
@@ -1863,7 +1863,7 @@
   {
     "test": "macro/macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0041,
+    "seconds": 0.0037,
     "detail": "",
     "reason": "REFDATA: F01 krx_kospi_official_close_1997-01-03_2026-10-02.csv (krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv); F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv); F16 yahoo_KRWX_2004_2026-10-01.csv (yahoo_KRWX_2004_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv); F20 QX_DLA_postpatch.csv (QX_DLA_postpatch.csv not in tests/fixtures/macro/MANIFEST.csv); F27 krx_005930_000660_closes_mcap.csv (krx_005930_000660_closes_mcap.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
@@ -1889,37 +1889,37 @@
   {
     "test": "macro/macro_m1_fixtures/test_kis_quote_check_refuses_without_credentials",
     "status": "PASS",
-    "seconds": 0.0333,
+    "seconds": 0.0165,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_fixtures/test_macro_fixtures_generates_provenance_and_freezes_md5",
     "status": "PASS",
-    "seconds": 0.9999,
+    "seconds": 0.9847,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_fixtures/test_macro_fixtures_refuses_when_reference_dir_absent",
     "status": "PASS",
-    "seconds": 0.0211,
+    "seconds": 0.0209,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_fixtures/test_no_golden_test_passes_on_its_fixture_gate_alone",
     "status": "PASS",
-    "seconds": 0.6502,
+    "seconds": 0.4571,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_fixtures/test_synth_b5_bands_and_concentration_bounds",
     "status": "PASS",
-    "seconds": 0.0002,
+    "seconds": 0.0001,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_fixtures/test_t_pbo_01_noise_control_reproduces",
     "status": "PASS",
-    "seconds": 4.5293,
+    "seconds": 4.5078,
     "detail": ""
   },
   {
@@ -1931,25 +1931,25 @@
   {
     "test": "macro/macro_m1_integration/test_calendar_coverage_halt_through_the_book_runtime",
     "status": "PASS",
-    "seconds": 0.0958,
+    "seconds": 0.0803,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_integration/test_clocks_adapter_resolves_registry_schedules_on_signed_calendars",
     "status": "PASS",
-    "seconds": 0.7135,
+    "seconds": 0.7317,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_integration/test_data_hook_history_status_and_instruments_agree_with_pit",
     "status": "PASS",
-    "seconds": 0.0094,
+    "seconds": 0.0083,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_integration/test_fixture_generator_instants_from_calendars_and_check_fixture_on_csv",
     "status": "PASS",
-    "seconds": 0.0311,
+    "seconds": 0.0271,
     "detail": ""
   },
   {
@@ -1961,13 +1961,13 @@
   {
     "test": "macro/macro_m1_integration/test_stamping_and_lag_audit_on_the_calendar_adapter",
     "status": "PASS",
-    "seconds": 0.0058,
+    "seconds": 0.0051,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_integration/test_unsigned_shipped_calendars_fail_acting_inputs_closed",
     "status": "PASS",
-    "seconds": 0.0707,
+    "seconds": 0.0742,
     "detail": ""
   },
   {
@@ -1979,32 +1979,32 @@
   {
     "test": "macro/macro_m1_pit/test_avail_01_official_calendars_are_owner_signed",
     "status": "NOT_RUN",
-    "seconds": 0.0001,
+    "seconds": 0.0,
     "detail": "",
     "reason": "OWNER: signed historical KRX / NYSE / FED / SIFMA calendar files (2015, 2025) absent; the golden table above runs on the stub clocks (core/calendars, package B)"
   },
   {
     "test": "macro/macro_m1_pit/test_bar_01_a_bar_or_stale_carry_is_never_a_close",
     "status": "PASS",
-    "seconds": 0.0251,
+    "seconds": 0.0277,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_bar_02_dispute_is_not_a_failure_and_vendor_missing",
     "status": "PASS",
-    "seconds": 0.0079,
+    "seconds": 0.0058,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_close_01_data_clauses_quarantine_and_stamping",
     "status": "PASS",
-    "seconds": 0.0096,
+    "seconds": 0.0078,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_fix_01_post_close_fixtures_only",
     "status": "PASS",
-    "seconds": 0.0398,
+    "seconds": 0.038,
     "detail": ""
   },
   {
@@ -2024,31 +2024,31 @@
   {
     "test": "macro/macro_m1_pit/test_h10_01_dexkous_never_read_by_production",
     "status": "PASS",
-    "seconds": 0.0014,
+    "seconds": 0.0009,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_h10_02_strict_h10_publication",
     "status": "PASS",
-    "seconds": 0.0282,
+    "seconds": 0.0239,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_h15_01_strict_h15_and_treasury_channel",
     "status": "PASS",
-    "seconds": 0.005,
+    "seconds": 0.0045,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_history_cache_b_marks_a_running_bar_provisional",
     "status": "PASS",
-    "seconds": 0.0122,
+    "seconds": 0.0107,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_lag_01_independent_audit_raises_or_halts",
     "status": "PASS",
-    "seconds": 0.0043,
+    "seconds": 0.003,
     "detail": ""
   },
   {
@@ -2060,7 +2060,7 @@
   {
     "test": "macro/macro_m1_pit/test_miss_01_calendar_offsets_and_the_october_gap",
     "status": "PASS",
-    "seconds": 0.0109,
+    "seconds": 0.0092,
     "detail": ""
   },
   {
@@ -2073,26 +2073,26 @@
   {
     "test": "macro/macro_m1_pit/test_print_01_circuit_breaker_print_is_never_a_close",
     "status": "PASS",
-    "seconds": 0.0047,
+    "seconds": 0.0031,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_print_01_real_kospi_close_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0001,
+    "seconds": 0.0,
     "detail": "",
     "reason": "REFDATA: Yahoo ^KS11 history to 2026-03-09 (-5.96% close, -8.11% 10:31 print) not local"
   },
   {
     "test": "macro/macro_m1_pit/test_prov_01_cache_regression_replays_the_incident",
     "status": "PASS",
-    "seconds": 0.0146,
+    "seconds": 0.0112,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_prov_01_store_read_trace",
     "status": "PASS",
-    "seconds": 0.0284,
+    "seconds": 0.034,
     "detail": ""
   },
   {
@@ -2105,31 +2105,31 @@
   {
     "test": "macro/macro_m1_pit/test_ro_02_kis_client_accepts_only_allowlisted_quotation_paths",
     "status": "PASS",
-    "seconds": 0.2185,
+    "seconds": 0.2113,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_role_01_counters_halt_scope_and_role_actions",
     "status": "PASS",
-    "seconds": 0.0047,
+    "seconds": 0.0103,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_role_02_registration_refusals_and_contract",
     "status": "PASS",
-    "seconds": 1.5217,
+    "seconds": 1.696,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_ser_01_named_series_and_futures_roll_days",
     "status": "PASS",
-    "seconds": 0.014,
+    "seconds": 0.0217,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_ser_02_every_referenced_id_is_registered_with_a_contract",
     "status": "PASS",
-    "seconds": 0.0096,
+    "seconds": 0.0091,
     "detail": ""
   },
   {
@@ -2142,19 +2142,19 @@
   {
     "test": "macro/macro_m1_pit/test_stale_01_schedule_aware_clauses_and_local_smoke",
     "status": "PASS",
-    "seconds": 4.115,
+    "seconds": 4.1988,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_syn_01_synthetic_rejected_for_acting_allowed_for_context",
     "status": "PASS",
-    "seconds": 0.2347,
+    "seconds": 0.2764,
     "detail": ""
   },
   {
     "test": "macro/macro_m1_pit/test_vix_01_close_timing_by_channel",
     "status": "PASS",
-    "seconds": 0.0046,
+    "seconds": 0.0044,
     "detail": ""
   },
   {
@@ -2166,7 +2166,7 @@
   {
     "test": "macro/macro_m2_costed/test_block_indices_schemes",
     "status": "PASS",
-    "seconds": 0.2498,
+    "seconds": 0.225,
     "detail": ""
   },
   {
@@ -2178,35 +2178,35 @@
   {
     "test": "macro/macro_m2_costed/test_cost01_r4b_goldens_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0035,
+    "seconds": 0.0033,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m2_costed/test_g_kr_06_cap15_reference_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0009,
+    "seconds": 0.0008,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m2_costed/test_g_lad_01_reference_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0031,
+    "seconds": 0.0032,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F24 results/QX_DLA_ladder.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m2_costed/test_g_lad_02_reference_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0031,
+    "seconds": 0.003,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F24 results/QX_DLA_ladder.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m2_costed/test_g_lad_03_reference_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.003,
+    "seconds": 0.0031,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F24 results/QX_DLA_ladder.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
@@ -2220,219 +2220,219 @@
   {
     "test": "macro/macro_m2_costed/test_gate_boot_margin",
     "status": "PASS",
-    "seconds": 1.0512,
+    "seconds": 1.0569,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_costed/test_kr_golden_window_scores_from_2016_01_04_after_a_20_return_warm_up",
     "status": "PASS",
-    "seconds": 0.0092,
+    "seconds": 0.0087,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_costed/test_pw_block_ar1_textbook_and_floors",
     "status": "PASS",
-    "seconds": 0.2525,
+    "seconds": 0.1845,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_costed/test_reference_mode_refused_from_core_and_tests",
     "status": "PASS",
-    "seconds": 0.0535,
+    "seconds": 0.0436,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_costed/test_reference_mode_static_core_never_imports",
     "status": "PASS",
-    "seconds": 2.0961,
+    "seconds": 2.1117,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_costed/test_research_bootstrap_deterministic_and_share",
     "status": "PASS",
-    "seconds": 0.3174,
+    "seconds": 0.3294,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_costed/test_v12_check_verdict_ordering",
     "status": "PASS",
-    "seconds": 5.9198,
+    "seconds": 5.8646,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_costed/test_v12_statistics_helpers",
     "status": "PASS",
-    "seconds": 0.0011,
+    "seconds": 0.0014,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_costed/test_vt_weights_research_builder",
     "status": "PASS",
-    "seconds": 0.009,
+    "seconds": 0.011,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_apply_hedge_state_clamps_only_the_hedge_legs",
     "status": "PASS",
-    "seconds": 0.0026,
+    "seconds": 0.002,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_cap_01_overlay_layer_cannot_emit_zero",
     "status": "PASS",
-    "seconds": 0.0003,
+    "seconds": 0.0002,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_cap_02_min_composition_10000_seeded_draws",
     "status": "PASS",
-    "seconds": 0.1682,
+    "seconds": 0.1633,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_cap_02_stack_card_clause_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0001,
+    "seconds": 0.0002,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv absent: the stack card's share of days at <= 0.25x total exposure (31.0%) and rebound capture (11.2%) are M7 clauses on KOSPI history (section 9.0b)"
   },
   {
     "test": "macro/macro_m2_risk/test_corr_01_date_aligned_pairs_synthetic",
     "status": "PASS",
-    "seconds": 0.0015,
+    "seconds": 0.0022,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_corr_01_plus_0_53_at_2026_09_30_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0021,
+    "seconds": 0.0024,
     "detail": "",
     "reason": "REFDATA: F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv); F18 USEPUINDXD.csv (USEPUINDXD.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_g_kr_01_buy_and_hold_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0008,
+    "seconds": 0.0009,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_g_kr_02_vt20_gross_and_net_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0007,
+    "seconds": 0.0009,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_g_kr_02b_delta_sharpe_shares_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0007,
+    "seconds": 0.0008,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_g_kr_02c_static_book_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0007,
+    "seconds": 0.0008,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_g_kr_03_window_returns_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0009,
+    "seconds": 0.0008,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_g_kr_04_weights_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0006,
+    "seconds": 0.0008,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_g_kr_06_cap_1_5_reference_mode_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0007,
+    "seconds": 0.0008,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_g_us_01_vt15_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0012,
+    "seconds": 0.0015,
     "detail": "",
     "reason": "REFDATA: F10 french_daily_regional_mom.csv (french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_g_us_01b_static_book_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0012,
+    "seconds": 0.0014,
     "detail": "",
     "reason": "REFDATA: F10 french_daily_regional_mom.csv (french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_g_us_01c_ewma_challenger_deferred_to_m3",
     "status": "NOT_RUN",
-    "seconds": 0.0013,
+    "seconds": 0.0018,
     "detail": "",
     "reason": "REFDATA: F10 french_daily_regional_mom.csv (french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_hedge_01_reasons_failure_flags_and_fx_credit",
     "status": "PASS",
-    "seconds": 8.0505,
+    "seconds": 8.2793,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_hedge_01_stale_inputs_never_halt_and_change_no_exposure",
     "status": "PASS",
-    "seconds": 5.7443,
+    "seconds": 5.8376,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_i_02_korea_window_replays_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0011,
+    "seconds": 0.0013,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_label_01_causal_boundary_and_null_safe",
     "status": "PASS",
-    "seconds": 4.1051,
+    "seconds": 4.2817,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0022,
+    "seconds": 0.0024,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)"
   },
   {
     "test": "macro/macro_m2_risk/test_lag_02_shifted_input_changes_vt_and_trips_lag_audit",
     "status": "PASS",
-    "seconds": 0.0922,
+    "seconds": 0.1025,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_miss_02_exception_scope_vt_and_compose_halt_ops_hedge_state_never",
     "status": "PASS",
-    "seconds": 0.1318,
+    "seconds": 0.1287,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_risk_module_reexports_and_no_wall_clock",
     "status": "PASS",
-    "seconds": 0.0008,
+    "seconds": 0.0007,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_role_02_spx_failing_sets_hedge_credit_off_through_corr63",
     "status": "PASS",
-    "seconds": 1.7864,
+    "seconds": 1.7799,
     "detail": ""
   },
   {
@@ -2445,43 +2445,43 @@
   {
     "test": "macro/macro_m2_risk/test_vt_01_sma20_simple_returns_ddof1_and_the_formula",
     "status": "PASS",
-    "seconds": 0.1369,
+    "seconds": 0.1401,
     "detail": ""
   },
   {
     "test": "macro/macro_m2_risk/test_vt_01_warmup_stale_carry_degenerate_and_armed_mapping",
     "status": "PASS",
-    "seconds": 0.1992,
+    "seconds": 0.1952,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_causality_no_lookahead",
     "status": "PASS",
-    "seconds": 5.9087,
+    "seconds": 5.8837,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_comb_is_half_sum_and_fails_when_either_leg_fails",
     "status": "PASS",
-    "seconds": 4.8315,
+    "seconds": 4.8981,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_dm_hln_factor_and_legacy_dm_unchanged",
     "status": "PASS",
-    "seconds": 0.0113,
+    "seconds": 0.0023,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_estimator_gate_reads_through_pit_and_is_schema_valid",
     "status": "PASS",
-    "seconds": 4.7462,
+    "seconds": 4.6575,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache",
     "status": "NOT_RUN",
-    "seconds": 0.2628,
+    "seconds": 0.2605,
     "detail": "",
     "reason": "REFDATA: yahoo_SPY_2015-12_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
@@ -2495,14 +2495,14 @@
   {
     "test": "macro/macro_m3_estimators/test_g_b5_04_display_labels_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0005,
+    "seconds": 0.0006,
     "detail": "",
     "reason": "REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m3_estimators/test_g_est_04_sizing_books_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0006,
+    "seconds": 0.0005,
     "detail": "",
     "reason": "REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
@@ -2516,38 +2516,38 @@
   {
     "test": "macro/macro_m3_estimators/test_range_proxy_and_quality_flag",
     "status": "PASS",
-    "seconds": 0.0019,
+    "seconds": 0.002,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_sized_book_timing_cost_and_cap",
     "status": "PASS",
-    "seconds": 0.0258,
+    "seconds": 0.0338,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_sma20_and_ewma_definitions",
     "status": "PASS",
-    "seconds": 0.0174,
+    "seconds": 0.0235,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_t_b5_01_kospi_golden_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0012,
+    "seconds": 0.0015,
     "detail": "",
     "reason": "REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m3_estimators/test_t_b5_01_switch_refusals_and_registry",
     "status": "PASS",
-    "seconds": 0.0508,
+    "seconds": 0.052,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_t_b5_01_synthetic_clauses_and_bands",
     "status": "PASS",
-    "seconds": 0.0436,
+    "seconds": 0.0391,
     "detail": ""
   },
   {
@@ -2560,26 +2560,26 @@
   {
     "test": "macro/macro_m3_estimators/test_t_est_01_mcs_synthetic_companion",
     "status": "PASS",
-    "seconds": 1.1681,
+    "seconds": 1.1077,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_t_est_02_christoffersen_lines_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0015,
+    "seconds": 0.0013,
     "detail": "",
     "reason": "REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m3_estimators/test_t_est_02_stage1_report_structure",
     "status": "PASS",
-    "seconds": 0.1945,
+    "seconds": 0.1891,
     "detail": ""
   },
   {
     "test": "macro/macro_m3_estimators/test_t_est_04_fallback_to_sma20_no_blend",
     "status": "PASS",
-    "seconds": 12.6164,
+    "seconds": 12.299,
     "detail": ""
   },
   {
@@ -2591,19 +2591,19 @@
   {
     "test": "macro/macro_m4_integration/test_estimator_harness_sma20_is_risk_layer_sma_vol",
     "status": "PASS",
-    "seconds": 0.1089,
+    "seconds": 0.1054,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_integration/test_s3_rulings_static_and_costed_uses_gate_stats",
     "status": "PASS",
-    "seconds": 0.1738,
+    "seconds": 0.1763,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_integration/test_vol_state_from_vt_and_gate_validates_against_the_schema",
     "status": "PASS",
-    "seconds": 3.9866,
+    "seconds": 3.7703,
     "detail": ""
   },
   {
@@ -2615,31 +2615,31 @@
   {
     "test": "macro/macro_m4_sleeves/test_basis_01_vt_never_on_ls_sleeves",
     "status": "PASS",
-    "seconds": 0.0007,
+    "seconds": 0.0005,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_books_recommended_not_run_and_specification_stack",
     "status": "PASS",
-    "seconds": 0.0022,
+    "seconds": 0.0013,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_cost_01_both_legs_for_ls_sleeves",
     "status": "PASS",
-    "seconds": 0.0005,
+    "seconds": 0.0004,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_dm_gate_acting_read_and_refusals",
     "status": "PASS",
-    "seconds": 1.5803,
+    "seconds": 1.5817,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_dm_kernel_reproduces_techfund_sample",
     "status": "PASS",
-    "seconds": 0.0022,
+    "seconds": 0.0024,
     "detail": ""
   },
   {
@@ -2652,14 +2652,14 @@
   {
     "test": "macro/macro_m4_sleeves/test_g_intl_01_regional_wml",
     "status": "NOT_RUN",
-    "seconds": 0.0014,
+    "seconds": 0.0008,
     "detail": "",
     "reason": "REFDATA: french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m4_sleeves/test_g_mom_01_02_08_french_mom_daily",
     "status": "NOT_RUN",
-    "seconds": 0.0008,
+    "seconds": 0.0007,
     "detail": "",
     "reason": "REFDATA: french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
@@ -2680,19 +2680,19 @@
   {
     "test": "macro/macro_m4_sleeves/test_inverse_vol_weights_kernels_and_pit_path",
     "status": "PASS",
-    "seconds": 0.3541,
+    "seconds": 0.3292,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_no_renormalisation_and_sign_preserved",
     "status": "PASS",
-    "seconds": 0.0068,
+    "seconds": 0.007,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_prior_01_admissibility_and_base_weights",
     "status": "PASS",
-    "seconds": 0.0003,
+    "seconds": 0.0004,
     "detail": ""
   },
   {
@@ -2705,69 +2705,69 @@
   {
     "test": "macro/macro_m4_sleeves/test_prior_01_reject_reweight_logged_once",
     "status": "PASS",
-    "seconds": 0.0225,
+    "seconds": 0.0253,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_r03_01_french_fixture_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0011,
+    "seconds": 0.0012,
     "detail": "",
     "reason": "REFDATA: french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m4_sleeves/test_r03_01_sleeve_vol_scale_acting_read",
     "status": "PASS",
-    "seconds": 1.0324,
+    "seconds": 0.8383,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_r03_01_vs_formula_synthetic",
     "status": "PASS",
-    "seconds": 0.0431,
+    "seconds": 0.0478,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_r03_01_vs_reproduces_techfund_rows",
     "status": "PASS",
-    "seconds": 0.0012,
+    "seconds": 0.0014,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_r03_01_years_line_and_ledger_row_synthetic",
     "status": "PASS",
-    "seconds": 0.003,
+    "seconds": 0.0032,
     "detail": ""
   },
   {
     "test": "macro/macro_m4_sleeves/test_r05_reversal_quality_flow_fixed_one",
     "status": "PASS",
-    "seconds": 0.0108,
+    "seconds": 0.0129,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_books/test_book_03_li_eligibility_and_lookthrough_x_l",
     "status": "PASS",
-    "seconds": 0.0004,
+    "seconds": 0.0005,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_books/test_caps_01_real_kodex_basket_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0,
+    "seconds": 0.0001,
     "detail": "",
     "reason": "REFDATA: KODEX 200 PDF history (KIS or KRX; section 9.5 M5) absent: the 2-Oct-2026 basket is not on this machine (docs/asset_expansion/cache/yf_069500.KS.csv is the ETF price only); the arithmetic clause ran on the inline basket with s(005930) = 0.298 and pair 0.538"
   },
   {
     "test": "macro/macro_m5_books/test_caps_01_synthetic_basket_bounds_and_by_book",
     "status": "PASS",
-    "seconds": 0.0305,
+    "seconds": 0.0358,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_books/test_g_lad_01_literal_ladder_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0,
+    "seconds": 0.0001,
     "detail": "",
     "reason": "REFDATA: G-LAD-01: QX_DLA_ladder.csv (F24), F13 / U1 and the literal v1.2 rule text (.v1.2_INTEGRATION_backup.md, F-21) absent; never reconstructed from the cycle counts; tests/reference/reference_mode.literal_ladder stays the stub"
   },
@@ -2795,19 +2795,19 @@
   {
     "test": "macro/macro_m5_books/test_halt_01_hard_stop_cycle_exact_15pct",
     "status": "PASS",
-    "seconds": 0.3589,
+    "seconds": 0.3339,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_books/test_halt_01_ops_breach_cure_and_lag_audit_causes",
     "status": "PASS",
-    "seconds": 0.3082,
+    "seconds": 0.2642,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_books/test_i_04_ladder_steps_reset_block_and_placement",
     "status": "PASS",
-    "seconds": 0.124,
+    "seconds": 0.1358,
     "detail": ""
   },
   {
@@ -2820,7 +2820,7 @@
   {
     "test": "macro/macro_m5_books/test_miss_02_exceptions_in_concentration_bound_and_ladder_halt_ops",
     "status": "PASS",
-    "seconds": 0.1199,
+    "seconds": 0.1183,
     "detail": ""
   },
   {
@@ -2833,55 +2833,55 @@
   {
     "test": "macro/macro_m5_books/test_mono_01_no_reallocation_property_seed_11",
     "status": "PASS",
-    "seconds": 0.1996,
+    "seconds": 0.1937,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_books/test_ops_nav_counter_heartbeat_operator_kill_and_card_trio",
     "status": "PASS",
-    "seconds": 0.2985,
+    "seconds": 0.3156,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_books/test_shared_names_and_no_wall_clock",
     "status": "PASS",
-    "seconds": 0.0459,
+    "seconds": 0.0404,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_books/test_step_05_idempotent_halt_flat_minus_16",
     "status": "PASS",
-    "seconds": 0.3643,
+    "seconds": 0.3613,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_books/test_weight_book_ledger_nav_matches_costed_path_and_persists",
     "status": "PASS",
-    "seconds": 0.5445,
+    "seconds": 0.519,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_fills_events/test_annot01_annotation_never_changes_exposure_and_requests_snapshot",
     "status": "PASS",
-    "seconds": 0.1886,
+    "seconds": 0.1724,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_fills_events/test_annot01_pit_read_path_context_role_never_fails",
     "status": "PASS",
-    "seconds": 0.0089,
+    "seconds": 0.0079,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_fills_events/test_bar01_r27_bar_convention_refuses_bar_closes",
     "status": "PASS",
-    "seconds": 0.0077,
+    "seconds": 0.0071,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_fills_events/test_fill01_official_close_fill_random_end_and_refusals",
     "status": "PASS",
-    "seconds": 0.0494,
+    "seconds": 0.0555,
     "detail": ""
   },
   {
@@ -2894,7 +2894,7 @@
   {
     "test": "macro/macro_m5_fills_events/test_fill02_limit_lock_both_sides_carry_and_halt_days",
     "status": "PASS",
-    "seconds": 0.0232,
+    "seconds": 0.0259,
     "detail": ""
   },
   {
@@ -2913,26 +2913,26 @@
   {
     "test": "macro/macro_m5_fills_events/test_g_r08_01_spell_count_smoke_then_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0382,
+    "seconds": 0.0347,
     "detail": "",
     "reason": "REFDATA: FRED VIXCLS / VXVCLS 2007-12-04 -> 2026-09-30 (QX_DLB_r08.csv basis) for the 132-spell golden; the Yahoo cache SMOKE above is vendor data and never asserted"
   },
   {
     "test": "macro/macro_m5_fills_events/test_i06_evaluator_blocked_for_new_entries_only",
     "status": "PASS",
-    "seconds": 0.0015,
+    "seconds": 0.0012,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_fills_events/test_i06_event_windows_cancelled_delayed_bok_and_artifact",
     "status": "PASS",
-    "seconds": 0.0891,
+    "seconds": 0.0809,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_fills_events/test_i06b_i06c_gap_tags_var_scale_and_no_weight_change",
     "status": "PASS",
-    "seconds": 0.1044,
+    "seconds": 0.1033,
     "detail": ""
   },
   {
@@ -2952,7 +2952,7 @@
   {
     "test": "macro/macro_m5_integration/test_event_calendar_and_context_log_reach_disk_through_write_artifact_only",
     "status": "PASS",
-    "seconds": 3.0267,
+    "seconds": 2.9949,
     "detail": ""
   },
   {
@@ -2965,91 +2965,91 @@
   {
     "test": "macro/macro_m5_integration/test_ladder_block_and_post_rearm_cap_flow_into_gross_evaluator_ledger_and_macro_state",
     "status": "PASS",
-    "seconds": 0.3835,
+    "seconds": 0.3588,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_integration/test_macro_state_takes_the_risk_layer_bound_registry_runtime_gap_tags_and_annotation",
     "status": "PASS",
-    "seconds": 0.1087,
+    "seconds": 0.0943,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_integration/test_r18_neutralise_hook_persists_on_the_books_and_reaches_overlay_decisions",
     "status": "PASS",
-    "seconds": 0.2164,
+    "seconds": 0.1768,
     "detail": ""
   },
   {
     "test": "macro/macro_m5_integration/test_s4_rulings_no_wall_clock_nothing_above_one_halted_outside_min_engine_untouched",
     "status": "PASS",
-    "seconds": 0.2991,
+    "seconds": 0.1134,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_break_01_framework_change_neutralises_and_starts_a_forward_record",
     "status": "PASS",
-    "seconds": 0.1036,
+    "seconds": 0.0956,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_break_01_market_structure_sync_is_complete_and_idempotent",
     "status": "PASS",
-    "seconds": 0.4598,
+    "seconds": 0.4668,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_break_01_reanchor_only_on_declared_events_and_the_v12_flag_is_logged",
     "status": "PASS",
-    "seconds": 0.152,
+    "seconds": 0.14,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_break_01_research_log_is_write_only_and_the_statistical_leg_is_gated",
     "status": "PASS",
-    "seconds": 0.1122,
+    "seconds": 0.1154,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_builders_produce_schema_valid_artifacts_from_synthetic_producers",
     "status": "PASS",
-    "seconds": 0.3283,
+    "seconds": 0.2808,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_ctx_01_regime_read_is_relabelled_descriptive",
     "status": "PASS",
-    "seconds": 0.0144,
+    "seconds": 0.0098,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_ctx_01_runtime_guard_refuses_acting_callers",
     "status": "PASS",
-    "seconds": 0.0205,
+    "seconds": 0.0156,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_ctx_01_static_import_scan_and_positive_controls",
     "status": "PASS",
-    "seconds": 1.124,
+    "seconds": 1.3519,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_ctx_02_calculators",
     "status": "PASS",
-    "seconds": 0.0172,
+    "seconds": 0.0178,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_ctx_02_failure_paths_label_and_never_halt",
     "status": "PASS",
-    "seconds": 2.6817,
+    "seconds": 2.4759,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_ctx_02_items_vintages_live_and_sheet",
     "status": "PASS",
-    "seconds": 3.6784,
+    "seconds": 3.4782,
     "detail": ""
   },
   {
@@ -3069,49 +3069,49 @@
   {
     "test": "macro/macro_m6_context/test_hedge_01_built_macro_state_with_stale_usd_proxy",
     "status": "PASS",
-    "seconds": 1.3898,
+    "seconds": 1.399,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_i_06c_kr_2026_11_26_state_validates_and_a_context_field_never_halts",
     "status": "PASS",
-    "seconds": 0.2883,
+    "seconds": 0.2528,
     "detail": ""
   },
   {
     "test": "macro/macro_m6_context/test_m6_rulings_static",
     "status": "PASS",
-    "seconds": 0.0634,
+    "seconds": 0.056,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cardp/test_band_01_shapes_floor_and_midpoint",
     "status": "PASS",
-    "seconds": 0.0083,
+    "seconds": 0.0081,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cardp/test_cardp_static_invariants",
     "status": "PASS",
-    "seconds": 0.0362,
+    "seconds": 0.0328,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cardp/test_dnh_01_do_no_harm_cap_only_lowers",
     "status": "PASS",
-    "seconds": 0.0134,
+    "seconds": 0.0151,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cardp/test_epis_01_builder_on_known_drawdowns_and_open_bear",
     "status": "PASS",
-    "seconds": 0.0463,
+    "seconds": 0.0411,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cardp/test_epis_01_counts_on_official_closes_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0015,
+    "seconds": 0.0012,
     "detail": "",
     "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
@@ -3125,7 +3125,7 @@
   {
     "test": "macro/macro_m7_cardp/test_es_01_sign_convention_identical_to_S_rejects",
     "status": "PASS",
-    "seconds": 0.736,
+    "seconds": 0.7141,
     "detail": ""
   },
   {
@@ -3172,7 +3172,7 @@
   {
     "test": "macro/macro_m7_cardp/test_gate_04_second_failure_ends_evaluation_and_every_attempt_is_logged",
     "status": "PASS",
-    "seconds": 5.2954,
+    "seconds": 4.9394,
     "detail": ""
   },
   {
@@ -3185,7 +3185,7 @@
   {
     "test": "macro/macro_m7_cardp/test_i05_synthetic_end_to_end_protective_passes_noise_does_not",
     "status": "PASS",
-    "seconds": 3.9541,
+    "seconds": 3.5475,
     "detail": ""
   },
   {
@@ -3198,7 +3198,7 @@
   {
     "test": "macro/macro_m7_cardp/test_line_episodes_nan_fail_closed_pc3_event_log_and_one_attempts_chain",
     "status": "PASS",
-    "seconds": 0.33,
+    "seconds": 0.2975,
     "detail": ""
   },
   {
@@ -3210,26 +3210,26 @@
   {
     "test": "macro/macro_m7_cardp/test_placebo_01_fragility_arithmetic_and_synthetic_lookahead_control",
     "status": "PASS",
-    "seconds": 0.2944,
+    "seconds": 0.2301,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cardp/test_placebo_01_noise_overlay_family_passes_pc1_rarely",
     "status": "PASS",
-    "seconds": 2.5854,
+    "seconds": 2.52,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cardp/test_placebo_01_positive_control_fixture_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0012,
+    "seconds": 0.0015,
     "detail": "",
     "reason": "REFDATA: KR_SOX_KRW_gate_B3.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m7_cardp/test_placebo_02_probe_isolation",
     "status": "PASS",
-    "seconds": 1.3823,
+    "seconds": 1.3924,
     "detail": ""
   },
   {
@@ -3249,44 +3249,44 @@
   {
     "test": "macro/macro_m7_cards/test_book01_printed_lines_of_a_card",
     "status": "PASS",
-    "seconds": 0.0792,
+    "seconds": 0.0723,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_book02_kospi_vt20_execution_variants_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0017,
+    "seconds": 0.0014,
     "detail": "",
     "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m7_cards/test_cap02_stack_card_dormant_today_generated_at_two_pass_factors_product_refused",
     "status": "PASS",
-    "seconds": 0.0114,
+    "seconds": 0.0103,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_card01_class_change_is_a_revision_claim_change_is_a_new_card",
     "status": "PASS",
-    "seconds": 0.0615,
+    "seconds": 0.0539,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_card01_commit_md5_cover_immutable_and_budget_on_synthetic_frozen_store",
     "status": "PASS",
-    "seconds": 0.0891,
+    "seconds": 0.0835,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_card01_commit_refusals_before_the_freeze_and_with_nulls",
     "status": "PASS",
-    "seconds": 0.0517,
+    "seconds": 0.0442,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_card01_displayed_as_iff_pass_and_disposition_table",
     "status": "PASS",
-    "seconds": 0.0002,
+    "seconds": 0.0001,
     "detail": ""
   },
   {
@@ -3299,53 +3299,53 @@
   {
     "test": "macro/macro_m7_cards/test_freeze_refuses_with_exactly_the_three_reasons_here",
     "status": "PASS",
-    "seconds": 0.0689,
+    "seconds": 0.0616,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_freeze_success_path_and_mismatch_detection_on_a_synthetic_package",
     "status": "PASS",
-    "seconds": 0.3015,
+    "seconds": 0.2079,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_i16_r06_kr_verdict_conditions_recorded_and_formal_run_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0094,
+    "seconds": 0.0101,
     "detail": "",
     "reason": "REFDATA: KRX official KOSPI closes from 1997-01-03 (F01), ECOS BOK_CALL_RATE (F02); OWNER: KODEX 200 listing date, sleeves.KR.notional_nav, git anchor; package NOT_FROZEN -- the formal R-06 KR verdict is computed blind, never here"
   },
   {
     "test": "macro/macro_m7_cards/test_r03_01_revisions_committed_before_their_runs_lowest_passing_acts",
     "status": "NOT_RUN",
-    "seconds": 0.2474,
+    "seconds": 0.2528,
     "detail": "",
     "reason": "REFDATA: French Mom daily 1990-01-02..2026-08-31 and QX_EX1_qf3_trial_corr_diff.csv (dSR +0.273, deflated 0.98 / 0.947)"
   },
   {
     "test": "macro/macro_m7_cards/test_r04_01_record_and_pooled_route_closed",
     "status": "NOT_RUN",
-    "seconds": 0.0093,
+    "seconds": 0.0105,
     "detail": "",
     "reason": "REFDATA: QF3 26-trial ledger series (deflated add-on 0.77 +- 0.02 at N_equiv 6.3)"
   },
   {
     "test": "macro/macro_m7_cards/test_r06_us_registered_reject_never_rerun",
     "status": "PASS",
-    "seconds": 0.0148,
+    "seconds": 0.0179,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_r14_01_header_needs_multi_line_lines_and_the_diversification_claim",
     "status": "NOT_RUN",
-    "seconds": 0.0423,
+    "seconds": 0.0395,
     "detail": "",
     "reason": "REFDATA: the 12 index series 2001-26 (SR 0.449; corr 0.03 / 0.34-0.36); COUNCIL: the index list (F-10)"
   },
   {
     "test": "macro/macro_m7_cards/test_registry_every_card_not_run_and_drafts_in_sync",
     "status": "PASS",
-    "seconds": 0.0183,
+    "seconds": 0.0194,
     "detail": ""
   },
   {
@@ -3357,19 +3357,19 @@
   {
     "test": "macro/macro_m7_cards/test_repro01b_results_md5_stable_volatile_excluded_nan_null_chain_and_archive",
     "status": "PASS",
-    "seconds": 0.2506,
+    "seconds": 0.2272,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_step01_header_mechanics_and_binding_share_of_a_synthetic_ladder",
     "status": "PASS",
-    "seconds": 0.0089,
+    "seconds": 0.013,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_step02_binding_shares_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0,
+    "seconds": 0.0001,
     "detail": "",
     "reason": "REFDATA: QX_EX1_ladder.csv inputs (KOSPI VT20 3 bp 1997-04-15..2026-10-02 ~19%; US VT15 5 bp ~10%)"
   },
@@ -3383,91 +3383,91 @@
   {
     "test": "macro/macro_m7_cards/test_step04_placement_share_0p10_invariant_step_0p1001_specification_only",
     "status": "PASS",
-    "seconds": 0.0051,
+    "seconds": 0.0091,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_cards/test_study_runner_dry_listing_offline_and_formal_runs_refused",
     "status": "NOT_RUN",
-    "seconds": 0.1285,
+    "seconds": 0.1194,
     "detail": "",
     "reason": "REFDATA: KRX official closes 1997-2026 (F01), BOK_CALL_RATE (F02), French files, QX_* tables; OWNER: notional, git anchor (I-07 card lines, I-09 episode counts, I-16 formal verdict / header md5 / results md5)"
   },
   {
     "test": "macro/macro_m7_cards/test_zz_legacy_cards_and_shipped_store_untouched",
     "status": "PASS",
-    "seconds": 0.0221,
+    "seconds": 0.0192,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_integration/test_commit_header_reads_the_family_ledger_and_the_package_state",
     "status": "PASS",
-    "seconds": 0.0675,
+    "seconds": 0.0751,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_integration/test_freeze_manifest_covers_every_harness_source_and_refuses_here",
     "status": "PASS",
-    "seconds": 0.0221,
+    "seconds": 0.0149,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0009,
+    "seconds": 0.0005,
     "detail": "",
     "reason": "REFDATA: F10 french_daily_mom_1990-01-02_2026-08-31.csv; F22 QX_EX1_qf3_trial_corr_diff.csv; F23 QX_DLB_power_se.csv / QX_DLB_power_sim.csv / QX_DLB_r03_dsr.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); R-03 net of 50 bp on both legs (SR 0.6723, T 9,233, HAC SE 0.0716) on the R-03 ledger"
   },
   {
     "test": "macro/macro_m7_integration/test_g_kr_l01_l13_korea_long_history_goldens_after_the_freeze_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0009,
+    "seconds": 0.0008,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv; F21 QX_DLA_korea_grid.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); v12_check reproductions of the R-06 KR long history (I-07 Level-1), the formal run on F01 (I-16); the cap-1.5 variant of G-KR-L13 only through tests/reference"
   },
   {
     "test": "macro/macro_m7_integration/test_g_lad_04_invariants_only_book_with_and_without_the_hard_stop_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0005,
+    "seconds": 0.0004,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); section 9.4 item 10 pending: the invariants-only recommended KOSPI book with and without the -15% hard stop (HALT count, MDD, Sharpe) printed beside D2"
   },
   {
     "test": "macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0012,
+    "seconds": 0.001,
     "detail": "",
     "reason": "REFDATA: U1 french_daily_5f_2x3.csv + yahoo_GSPC_1990_2026-10-01.csv; F13 yahoo_KS11_1996-12_2026-10-02.csv; F23 QX_DLB_power_se.csv / QX_DLB_power_sim.csv / QX_DLB_r03_dsr.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); SE(dSR) NW10 / QS / bootstrap ladder of US VT15 and KOSPI VT20 vs S, 300 paths per cell"
   },
   {
     "test": "macro/macro_m7_integration/test_g_us_f01_f10_us_fixture_goldens_after_the_freeze_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0005,
+    "seconds": 0.0004,
     "detail": "",
     "reason": "REFDATA: U1 french_daily_5f_2x3.csv + yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); U1 = French Mkt-RF 1990-02 -> 2026-08 spliced with ^GSPC Sep-2026 (loader not written)"
   },
   {
     "test": "macro/macro_m7_integration/test_i07_formal_evaluation_chain_on_a_synthetic_card",
     "status": "PASS",
-    "seconds": 48.3903,
+    "seconds": 47.0651,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_integration/test_one_home_psr_underpowered_rule_by_q_and_holm",
     "status": "PASS",
-    "seconds": 0.0121,
+    "seconds": 0.0178,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_integration/test_rulings_scan_no_clock_no_gate_read_no_kish_no_new_dependency_no_card_keyed_convention",
     "status": "PASS",
-    "seconds": 0.5633,
+    "seconds": 0.5249,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_integration/test_study_runner_refuses_formal_runs_and_commits_with_reasons_and_writes_nothing",
     "status": "PASS",
-    "seconds": 0.0935,
+    "seconds": 0.0818,
     "detail": ""
   },
   {
@@ -3480,7 +3480,7 @@
   {
     "test": "macro/macro_m7_integration/test_t_est_05_counted_switch_refused_without_revision_and_row_accepted_with_the_proof",
     "status": "PASS",
-    "seconds": 0.2492,
+    "seconds": 0.2419,
     "detail": ""
   },
   {
@@ -3493,81 +3493,81 @@
   {
     "test": "macro/macro_m7_ledger/test_adoption_is_a_revision_and_a_package_freeze_event_never_a_row",
     "status": "PASS",
-    "seconds": 0.035,
+    "seconds": 0.0344,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_dsr02_units_daily_monthly_agree_and_annualised_sr_raises",
     "status": "PASS",
-    "seconds": 0.0701,
+    "seconds": 0.0764,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_ledger01_chain_tamper_quick_checks_and_hash_at_run",
     "status": "PASS",
-    "seconds": 0.0748,
+    "seconds": 0.0939,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_ledger01_refusals_and_null_distribution_runs",
     "status": "PASS",
-    "seconds": 0.0157,
+    "seconds": 0.0119,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_ledger_family_filing_by_rule_or_correlation",
     "status": "PASS",
-    "seconds": 0.0032,
+    "seconds": 0.0029,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_ledger_seeds_load_with_null_values_and_report_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0232,
+    "seconds": 0.0179,
     "detail": "",
     "reason": "REFDATA: ledger seed rows from QX_* files (161 rows across 4 families: QX_EX1_qf3_trial_corr_diff.csv, R4/R4b golden files, QX_DLA_*, QX_DLB_*, QX_EX1 ladders; run_utc anchors need a git commit, section 9.4 item 15)"
   },
   {
     "test": "macro/macro_m7_ledger/test_module_has_no_wall_clock_and_no_config_import",
     "status": "PASS",
-    "seconds": 0.0239,
+    "seconds": 0.0314,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_neff01_e_of_n_and_n_equiv_round_trip",
     "status": "PASS",
-    "seconds": 2.9148,
+    "seconds": 2.8396,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_neff01_qf3_26_trial_matrix_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0029,
+    "seconds": 0.0028,
     "detail": "",
     "reason": "REFDATA: QX_EX1_qf3_trial_corr_diff.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m7_ledger/test_neff01_synthetic_block_panel_clusters_emax_padding_and_max",
     "status": "PASS",
-    "seconds": 1.3668,
+    "seconds": 1.2419,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_sel01_a_rows_touching_the_span_before_the_commit_give_f_neff",
     "status": "PASS",
-    "seconds": 1.1848,
+    "seconds": 1.0481,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_sel01_b_configuration_fixed_before_any_row_touched_its_span_gives_f_1_only_anchored",
     "status": "PASS",
-    "seconds": 0.2164,
+    "seconds": 0.193,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_sel01_c_d_declared_factor_refused_both_verdict_inputs_printed_card_o_gated",
     "status": "PASS",
-    "seconds": 1.2089,
+    "seconds": 1.141,
     "detail": ""
   },
   {
@@ -3580,149 +3580,149 @@
   {
     "test": "macro/macro_m7_ledger/test_sel01_f_g_h_own_rows_excluded_readings_max_and_two_rows",
     "status": "PASS",
-    "seconds": 0.3526,
+    "seconds": 0.3031,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_step3_01_end_to_end_from_the_matrix_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0015,
+    "seconds": 0.0012,
     "detail": "",
     "reason": "REFDATA: QX_EX1_qf3_trial_corr_diff.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m7_ledger/test_step3_01_inline_numbers_r03_pass_borderline_r04_fail",
     "status": "PASS",
-    "seconds": 1.0391,
+    "seconds": 0.8904,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_ledger/test_step3_02_no_ledger_hash_refused_and_no_kish_anywhere",
     "status": "PASS",
-    "seconds": 3.5362,
+    "seconds": 3.315,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_block_rule_pw_psi_floor_fallback_pc3",
     "status": "PASS",
-    "seconds": 0.0113,
+    "seconds": 0.0114,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_dsr01_bldp_psr_units",
     "status": "PASS",
-    "seconds": 0.0011,
+    "seconds": 0.0021,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_dsr02_units_daily_monthly_and_refusal",
     "status": "PASS",
-    "seconds": 0.0146,
+    "seconds": 0.0183,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_lw_boot_null_centred_and_deterministic",
     "status": "PASS",
-    "seconds": 0.5186,
+    "seconds": 0.5714,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_pbo01_kospi_vt_grid_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0012,
+    "seconds": 0.0013,
     "detail": "",
     "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m7_stats/test_pbo01_noise_control_200_panels_and_objectives",
     "status": "PASS",
-    "seconds": 19.3618,
+    "seconds": 19.5676,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_power01_arithmetic_synth",
     "status": "PASS",
-    "seconds": 0.0476,
+    "seconds": 0.0501,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_power01_fixture_ses_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0031,
+    "seconds": 0.0037,
     "detail": "",
     "reason": "REFDATA: U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m7_stats/test_power02_power_block_required",
     "status": "PASS",
-    "seconds": 0.0007,
+    "seconds": 0.0011,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_printed_lines_by_hl_lo_and_verdict_class",
     "status": "PASS",
-    "seconds": 0.0066,
+    "seconds": 0.0071,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_pzero01_count_zero_prints_floor",
     "status": "PASS",
-    "seconds": 0.0601,
+    "seconds": 0.0727,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_se01_hac_white_noise_and_ar_ladder",
     "status": "PASS",
-    "seconds": 1.345,
+    "seconds": 1.5416,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_se01_r03_french_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0012,
+    "seconds": 0.0011,
     "detail": "",
     "reason": "REFDATA: F10 french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m7_stats/test_stats_mirrors_store_and_module_is_a_pure_leaf",
     "status": "PASS",
-    "seconds": 0.0307,
+    "seconds": 0.0313,
     "detail": ""
   },
   {
     "test": "macro/macro_m7_stats/test_underpow01_scope",
     "status": "PASS",
-    "seconds": 0.0014,
+    "seconds": 0.0021,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_demote_01_trigger_text_and_a_protective_record_never_demotes",
     "status": "PASS",
-    "seconds": 0.1254,
+    "seconds": 0.111,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_demote_02_every_statistical_trigger_reads_whole_book_nav",
     "status": "PASS",
-    "seconds": 3.8964,
+    "seconds": 4.2208,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_demote_03_false_demotion_budget_on_the_20_shift_panel",
     "status": "PASS",
-    "seconds": 12.0324,
+    "seconds": 12.222,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_demote_04_operational_triggers_demote_immediately",
     "status": "PASS",
-    "seconds": 0.2998,
+    "seconds": 0.2872,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_demote_05_no_forward_record_raises_a_verdict",
     "status": "PASS",
-    "seconds": 0.0766,
+    "seconds": 0.0791,
     "detail": ""
   },
   {
@@ -3735,45 +3735,45 @@
   {
     "test": "macro/macro_m8_forward/test_g_ref_02_s2_goldens_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.001,
+    "seconds": 0.0009,
     "detail": "",
     "reason": "REFDATA: french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m8_forward/test_i14_calibrate_record_monitor_demote_end_to_end",
     "status": "PASS",
-    "seconds": 0.1005,
+    "seconds": 0.1124,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_record_append_only_no_backfill_live_only",
     "status": "PASS",
-    "seconds": 0.046,
+    "seconds": 0.0462,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_ref_01_s1_retired_refusal_book_display_only",
     "status": "PASS",
-    "seconds": 1.1171,
+    "seconds": 1.3489,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_ref_02_s2_retired_refusal_book_and_the_s2_momentum_clause",
     "status": "PASS",
-    "seconds": 1.281,
+    "seconds": 1.126,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_task_m8_11_french_1926_daily_file_owner",
     "status": "NOT_RUN",
-    "seconds": 0.0002,
+    "seconds": 0.0001,
     "detail": "",
     "reason": "OWNER: French Data Library daily Mkt-RF / RF 1926-07 -> 2026-08 (french_daily_mktrf_rf_1926-07_2026-08.csv): acquire (HTTP 403), record licence, owner and md5 in MANIFEST.csv"
   },
   {
     "test": "macro/macro_m8_forward/test_trend_01_header_declares_everything_before_the_run",
     "status": "PASS",
-    "seconds": 0.0048,
+    "seconds": 0.0059,
     "detail": ""
   },
   {
@@ -3786,13 +3786,13 @@
   {
     "test": "macro/macro_m8_forward/test_trend_03_korea_instance_refused_kospi_trend_context_only",
     "status": "PASS",
-    "seconds": 0.0207,
+    "seconds": 0.0179,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_trend_04_multiplier_only_in_its_forward_sim_book",
     "status": "PASS",
-    "seconds": 0.8942,
+    "seconds": 0.9834,
     "detail": ""
   },
   {
@@ -3804,13 +3804,13 @@
   {
     "test": "macro/macro_m8_forward/test_usfut_01_registered_once_second_50bp_book_raises",
     "status": "PASS",
-    "seconds": 0.0162,
+    "seconds": 0.0161,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_forward/test_usfut_02_settling_run_logic_and_the_1926_fixture_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0057,
+    "seconds": 0.0045,
     "detail": "",
     "reason": "REFDATA: french_daily_mktrf_rf_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
@@ -3823,7 +3823,7 @@
   {
     "test": "macro/macro_m8_forward/test_usfut_04_monthly_and_banded_50bp_are_logged_trials_never_a_revision",
     "status": "PASS",
-    "seconds": 0.0208,
+    "seconds": 0.033,
     "detail": ""
   },
   {
@@ -3842,49 +3842,49 @@
   {
     "test": "macro/macro_m8_integration/test_default_hooks_display_refusal_and_forward_sim_and_never_feed_a_weight_book",
     "status": "PASS",
-    "seconds": 2.5531,
+    "seconds": 2.611,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_integration/test_forward_monitor_hook_demotes_locks_out_and_admissions_refuse",
     "status": "PASS",
-    "seconds": 2.4508,
+    "seconds": 2.7127,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_integration/test_verdict_filter_reads_the_package_state_and_app_start_never_raises",
     "status": "PASS",
-    "seconds": 0.069,
+    "seconds": 0.064,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_card_03_verdict_integrity_refuses_edits_broken_chains_and_mismatches",
     "status": "PASS",
-    "seconds": 2.5209,
+    "seconds": 3.0022,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_close_01_workflow_never_starts_before_06_40_30z_and_one_artifact_per_decision",
     "status": "PASS",
-    "seconds": 1.9005,
+    "seconds": 2.1928,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_default_nav_values_the_book_on_official_closes_only",
     "status": "PASS",
-    "seconds": 0.078,
+    "seconds": 0.0818,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_default_services_reads_the_effective_store_with_owner_rulings",
     "status": "PASS",
-    "seconds": 0.067,
+    "seconds": 0.0717,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache",
     "status": "PASS",
-    "seconds": 12.0004,
+    "seconds": 13.9228,
     "detail": ""
   },
   {
@@ -3897,153 +3897,153 @@
   {
     "test": "macro/macro_m8_pipeline/test_i01_mechanics_five_artifacts_gates_by_role_and_feed_scope",
     "status": "PASS",
-    "seconds": 1.6398,
+    "seconds": 1.7777,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_i03_book_separation_static_and_runtime",
     "status": "PASS",
-    "seconds": 1.5924,
+    "seconds": 1.9113,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_i06c_acting_field_failure_halts_described_books_display_failure_never",
     "status": "PASS",
-    "seconds": 4.7222,
+    "seconds": 5.5555,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_obs_02_missed_decisions_paged_at_app_start_and_books_carry_weights",
     "status": "PASS",
-    "seconds": 1.6204,
+    "seconds": 1.8918,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_obs_03_page_alerts_persist_until_acknowledged",
     "status": "PASS",
-    "seconds": 0.0227,
+    "seconds": 0.0453,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_obs_04_acting_step_errors_block_feed_count_and_halt_at_the_limit",
     "status": "PASS",
-    "seconds": 16.2255,
+    "seconds": 18.7437,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_obs_05_governance_chain_verified_at_app_start",
     "status": "PASS",
-    "seconds": 1.6653,
+    "seconds": 1.9204,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_replay_01_reproduces_the_artifacts_byte_for_byte",
     "status": "PASS",
-    "seconds": 2.4572,
+    "seconds": 3.0022,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_scope_01_b_forward_books_fail_closed_never_halt_and_hedge_credit_off",
     "status": "PASS",
-    "seconds": 2.3249,
+    "seconds": 2.6588,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_scope_01_c_d_nav_minus_16_halts_its_own_book_risk",
     "status": "PASS",
-    "seconds": 2.4267,
+    "seconds": 2.8557,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_scope_01_e_f_hedge_exception_and_context_log_failure_halt_nothing",
     "status": "PASS",
-    "seconds": 3.0395,
+    "seconds": 3.7202,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_scope_01_g_admission_binds_the_series_to_the_recommended_book_and_its_failure_halts_it",
     "status": "PASS",
-    "seconds": 2.5649,
+    "seconds": 3.0812,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_scope_01_h_and_a_input_failures_halt_the_specification_book_only",
     "status": "PASS",
-    "seconds": 4.8714,
+    "seconds": 5.7329,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_verdict_filter_refuses_unversioned_and_admits_nothing_today",
     "status": "PASS",
-    "seconds": 1.2752,
+    "seconds": 1.6305,
     "detail": ""
   },
   {
     "test": "macro/macro_m8_pipeline/test_yaml_loads_with_the_strict_runner_and_the_legacy_parser_is_untouched",
     "status": "PASS",
-    "seconds": 0.1068,
+    "seconds": 0.1123,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_lab/test_i11_fan_pit_grades_the_lab_garch_t_fan",
     "status": "PASS",
-    "seconds": 10.2666,
+    "seconds": 11.574,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_lab/test_i11_fit_clause_expanding_windows",
     "status": "PASS",
-    "seconds": 8.5511,
+    "seconds": 9.9279,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_lab/test_i11_gate_mechanics_true_dgp_passes_misspecified_fails",
     "status": "PASS",
-    "seconds": 0.8663,
+    "seconds": 0.9802,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_lab/test_i11_grade_lab_end_to_end_synthetic",
     "status": "PASS",
-    "seconds": 28.0636,
+    "seconds": 30.477,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_lab/test_i11_kospi_oos_2016_26_thresholds_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0017,
+    "seconds": 0.0018,
     "detail": "",
     "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m9_lab/test_i11_no_sizing_module_reads_lab",
     "status": "PASS",
-    "seconds": 0.295,
+    "seconds": 0.3128,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_lab/test_i11_replay_kospi_path_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0011,
+    "seconds": 0.0006,
     "detail": "",
     "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
   {
     "test": "macro/macro_m9_lab/test_i11_replay_synthetic_companion",
     "status": "PASS",
-    "seconds": 0.0009,
+    "seconds": 0.0005,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_lab/test_i11_tails_envelope_lines_and_periods",
     "status": "PASS",
-    "seconds": 1.8208,
+    "seconds": 1.9099,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_lab/test_smoke_grading_on_local_closes_runs_offline_and_is_labelled_vendor_data",
     "status": "PASS",
-    "seconds": 54.5762,
+    "seconds": 58.5754,
     "detail": ""
   },
   {
@@ -4056,13 +4056,13 @@
   {
     "test": "macro/macro_m9_lab/test_t_crypto_01_clock_annualisation_and_no_crypto_sleeve",
     "status": "PASS",
-    "seconds": 0.0098,
+    "seconds": 0.0102,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_lab/test_t_fx_01_fx_card_without_a_declared_instrument_is_refused",
     "status": "PASS",
-    "seconds": 0.0114,
+    "seconds": 0.0146,
     "detail": ""
   },
   {
@@ -4075,31 +4075,31 @@
   {
     "test": "macro/macro_m9_lab/test_t_repro_01c_lab_outputs_reproducible_under_the_seed",
     "status": "PASS",
-    "seconds": 2.1537,
+    "seconds": 2.3209,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_scenarios/test_i11_no_sizing_module_reads_scenarios_or_lab",
     "status": "PASS",
-    "seconds": 0.4177,
+    "seconds": 0.3094,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_scenarios/test_letf_identity_on_a_synthetic_path",
     "status": "PASS",
-    "seconds": 0.0118,
+    "seconds": 0.0136,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_scenarios/test_library_names_brent_anchors_from_the_spec_and_owner_nulls",
     "status": "PASS",
-    "seconds": 0.0105,
+    "seconds": 0.0106,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_scenarios/test_scenario_brent_history_refdata",
     "status": "NOT_RUN",
-    "seconds": 0.0011,
+    "seconds": 0.0015,
     "detail": "",
     "reason": "REFDATA: DCOILBRENTEU.csv not in tests/fixtures/macro/MANIFEST.csv"
   },
@@ -4127,67 +4127,67 @@
   {
     "test": "macro/macro_m9_scenarios/test_sep_band_dispersion_matches_the_band_at_the_horizon",
     "status": "PASS",
-    "seconds": 1.7321,
+    "seconds": 1.9043,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_scenarios/test_shock_window_on_the_current_book_synthetic_companion",
     "status": "PASS",
-    "seconds": 0.0126,
+    "seconds": 0.0172,
     "detail": ""
   },
   {
     "test": "macro/macro_m9_scenarios/test_t_repro_01c_scenarios_identical_paths_under_the_seed",
     "status": "PASS",
-    "seconds": 0.4562,
+    "seconds": 0.4517,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_data/test_backlog_registry_counts_keys_only_and_never_acting",
     "status": "PASS",
-    "seconds": 0.139,
+    "seconds": 0.1189,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_data/test_council_pages_offline_with_one_parsing_data_block",
     "status": "PASS",
-    "seconds": 0.0512,
+    "seconds": 0.044,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_data/test_council_reports_copied_with_both_disclaimers_verbatim",
     "status": "PASS",
-    "seconds": 0.0054,
+    "seconds": 0.0044,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_data/test_dnb_tf_predicates_refuse_shapes_and_pass_allow_lists",
     "status": "PASS",
-    "seconds": 0.0163,
+    "seconds": 0.0218,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_data/test_flows_log_records_not_available_and_never_emits_a_direction",
     "status": "PASS",
-    "seconds": 0.9778,
+    "seconds": 1.152,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_data/test_tf_brief_tables_cite_r3_and_xs_statuses",
     "status": "PASS",
-    "seconds": 0.0097,
+    "seconds": 0.009,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_data/test_tf_manifest_sha256_every_shipped_file",
     "status": "PASS",
-    "seconds": 0.234,
+    "seconds": 0.2105,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_data/test_tf_row_counts_register_classes_nodes_goldens",
     "status": "PASS",
-    "seconds": 0.0142,
+    "seconds": 0.0106,
     "detail": ""
   },
   {
@@ -4200,115 +4200,115 @@
   {
     "test": "macro/macro_tf_gov/test_cry1_study_runs_offline_end_to_end_on_the_local_caches",
     "status": "PASS",
-    "seconds": 30.1624,
+    "seconds": 31.3177,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov10_contamination_log_append_only_and_overlap",
     "status": "PASS",
-    "seconds": 0.063,
+    "seconds": 0.0799,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov10_incubation_counts_from_the_first_recorded_session_never_backfilled",
     "status": "PASS",
-    "seconds": 0.002,
+    "seconds": 0.0032,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov11_s_beta_book_and_the_prior_252_session_beta_window",
     "status": "PASS",
-    "seconds": 0.0007,
+    "seconds": 0.0015,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov1_primary_statistic_long_only_vs_ew_capped_reported_sign_split_revise",
     "status": "PASS",
-    "seconds": 0.0013,
+    "seconds": 0.0016,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov2_bh_fdr_and_holm_on_known_p_vectors",
     "status": "PASS",
-    "seconds": 0.0004,
+    "seconds": 0.0005,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov2_spa_power_on_a_planted_rule_and_family_gate",
     "status": "PASS",
-    "seconds": 0.5175,
+    "seconds": 0.6452,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov2_spa_size_on_pure_noise_rule_families",
     "status": "PASS",
-    "seconds": 10.2576,
+    "seconds": 11.9833,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov2_trial_registry_append_only_global_n_and_composite_count",
     "status": "PASS",
-    "seconds": 0.0219,
+    "seconds": 0.037,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov3_attribution_recovers_beta_alpha_and_labels_a_factor_tilt",
     "status": "PASS",
-    "seconds": 0.1007,
+    "seconds": 0.0988,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov4_pw_block_dd2_floors_at_10_and_twice_the_holding_period",
     "status": "PASS",
-    "seconds": 0.0076,
+    "seconds": 0.0058,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov5_min_track_record_line_against_the_history",
     "status": "PASS",
-    "seconds": 0.0004,
+    "seconds": 0.0005,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov6_expected_live_is_0p6_x_oos_and_no_0p4_multiplier_exists",
     "status": "PASS",
-    "seconds": 1.5023,
+    "seconds": 1.4476,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov7_break_even_screen_on_the_reference_constants",
     "status": "PASS",
-    "seconds": 0.0083,
+    "seconds": 0.0059,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov8_planning_haircuts_are_a_labelled_proposal_beside_the_council_values",
     "status": "PASS",
-    "seconds": 0.0018,
+    "seconds": 0.0014,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_gov9_stress_table_windows_and_worst_rolling_relative_loss",
     "status": "PASS",
-    "seconds": 0.0054,
+    "seconds": 0.0049,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_inv1_decide_at_close_fill_at_official_close_on_the_costed_engine",
     "status": "PASS",
-    "seconds": 0.0101,
+    "seconds": 0.0105,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_inv5_no_name_level_stop_path_in_tf_books_or_the_fill_model",
     "status": "PASS",
-    "seconds": 0.0161,
+    "seconds": 0.0146,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_gov/test_krx_cards_refuse_without_the_panel_and_drafts_carry_typed_nulls",
     "status": "PASS",
-    "seconds": 0.0739,
+    "seconds": 0.0683,
     "detail": ""
   },
   {
@@ -4321,49 +4321,49 @@
   {
     "test": "macro/macro_tf_gov/test_tf_gov_and_runner_rulings_scan_no_clock_no_gate_read_no_new_dependency",
     "status": "PASS",
-    "seconds": 0.0515,
+    "seconds": 0.0649,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_integration/test_flows_log_is_a_protected_context_module",
     "status": "PASS",
-    "seconds": 0.9322,
+    "seconds": 1.2507,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_integration/test_fs2_reads_its_r03_scale_from_sleeves_and_fails_closed_without_it",
     "status": "PASS",
-    "seconds": 0.4273,
+    "seconds": 0.5385,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_integration/test_tf_card_drafts_are_buildable_rule_objects_and_mutations_are_refused",
     "status": "PASS",
-    "seconds": 0.0044,
+    "seconds": 0.0048,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_integration/test_tf_drafts_validate_against_the_council_header_where_fields_overlap",
     "status": "PASS",
-    "seconds": 0.0066,
+    "seconds": 0.0069,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_band_01_hysteresis_turnover_and_capacity",
     "status": "PASS",
-    "seconds": 0.0006,
+    "seconds": 0.001,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_be_01_break_even_recomputed_from_lab_rows",
     "status": "PASS",
-    "seconds": 0.0186,
+    "seconds": 0.0206,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_book_01_base_and_filtered_books",
     "status": "PASS",
-    "seconds": 0.0024,
+    "seconds": 0.0018,
     "detail": ""
   },
   {
@@ -4375,55 +4375,55 @@
   {
     "test": "macro/macro_tf_screens/test_book_01_end_to_end_on_a_seeded_panel",
     "status": "PASS",
-    "seconds": 0.0273,
+    "seconds": 0.0274,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_book_01_rebalance_hold_stuck_and_delisting_stress",
     "status": "PASS",
-    "seconds": 0.0021,
+    "seconds": 0.0023,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_book_01_tf_modules_are_pure_library_code",
     "status": "PASS",
-    "seconds": 0.0389,
+    "seconds": 0.0478,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_ca_01_split_like_rule_and_dil_lit",
     "status": "PASS",
-    "seconds": 0.0013,
+    "seconds": 0.0014,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_fs_02_constrained_momentum_is_forward_sim_only",
     "status": "PASS",
-    "seconds": 0.0016,
+    "seconds": 0.0018,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_fs_05_reversal_guard_excludes_last_months_top_decile",
     "status": "PASS",
-    "seconds": 0.0003,
+    "seconds": 0.0004,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_gold_01_screen_constants_pinned_with_their_basis",
     "status": "PASS",
-    "seconds": 0.0054,
+    "seconds": 0.0066,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_gold_02_pair_share_recomputed_from_the_lab_columns",
     "status": "PASS",
-    "seconds": 0.0053,
+    "seconds": 0.0056,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_idx_01_rebuilt_kospi_definition",
     "status": "PASS",
-    "seconds": 0.0005,
+    "seconds": 0.0004,
     "detail": ""
   },
   {
@@ -4443,25 +4443,25 @@
   {
     "test": "macro/macro_tf_screens/test_lock_01_limit_lock_at_each_krx_limit_era",
     "status": "PASS",
-    "seconds": 0.0039,
+    "seconds": 0.0035,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_lock_01_regime_tag_source_and_audit",
     "status": "PASS",
-    "seconds": 0.0004,
+    "seconds": 0.0005,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_ml_01_l0_composite_structure",
     "status": "PASS",
-    "seconds": 0.001,
+    "seconds": 0.0009,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_risk_01_cap_weights_respect_every_cap",
     "status": "PASS",
-    "seconds": 0.0017,
+    "seconds": 0.0014,
     "detail": ""
   },
   {
@@ -4473,19 +4473,19 @@
   {
     "test": "macro/macro_tf_screens/test_scr_01_f4_cut_size_and_ordinal_stability",
     "status": "PASS",
-    "seconds": 0.0076,
+    "seconds": 0.0062,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_scr_01_features_and_attention_fade_on_a_synthetic_panel",
     "status": "PASS",
-    "seconds": 0.0013,
+    "seconds": 0.0015,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_scr_01_quantile_groups_top_frac_and_flags",
     "status": "PASS",
-    "seconds": 0.0031,
+    "seconds": 0.0028,
     "detail": ""
   },
   {
@@ -4509,67 +4509,67 @@
   {
     "test": "macro/macro_tf_screens/test_univ_01_all_large_and_rx05",
     "status": "PASS",
-    "seconds": 0.0025,
+    "seconds": 0.0028,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_univ_01_codes_and_the_five_class_classifier",
     "status": "PASS",
-    "seconds": 0.0002,
+    "seconds": 0.0003,
     "detail": ""
   },
   {
     "test": "macro/macro_tf_screens/test_univ_01_each_condition_excludes_a_constructed_name_on_t_minus_1",
     "status": "PASS",
-    "seconds": 0.0008,
+    "seconds": 0.0009,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_components/test_data_table_column_count_numeric_flags_controls_and_ragged_rows",
     "status": "PASS",
-    "seconds": 0.0009,
+    "seconds": 0.0011,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_components/test_every_verdict_disposition_engine_and_input_chip_carries_its_word",
     "status": "PASS",
-    "seconds": 0.002,
+    "seconds": 0.0018,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_components/test_flet_api_guard_passes_with_the_warning_token",
     "status": "PASS",
-    "seconds": 1.1062,
+    "seconds": 0.8888,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_components/test_multiplier_bar_draws_fill_floor_and_vt_ticks_and_prints_the_numbers",
     "status": "PASS",
-    "seconds": 0.0005,
+    "seconds": 0.0008,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_components/test_multiplier_bar_fails_closed_without_numbers",
     "status": "PASS",
-    "seconds": 0.0004,
+    "seconds": 0.0006,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_components/test_open_path_on_a_missing_file_returns_the_selectable_path",
     "status": "PASS",
-    "seconds": 0.0002,
+    "seconds": 0.0003,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_components/test_readme_and_package_name_the_research_identity",
     "status": "PASS",
-    "seconds": 0.0027,
+    "seconds": 0.0117,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_components/test_readme_carries_both_disclaimers_and_no_stale_counts",
     "status": "PASS",
-    "seconds": 0.0008,
+    "seconds": 0.0009,
     "detail": ""
   },
   {
@@ -4581,7 +4581,7 @@
   {
     "test": "macro/macro_ui_components/test_shell_fixes_runs_page_delegates_and_the_rail_scrolls",
     "status": "PASS",
-    "seconds": 0.0037,
+    "seconds": 0.0035,
     "detail": ""
   },
   {
@@ -4593,193 +4593,193 @@
   {
     "test": "macro/macro_ui_overlay/test_a_disarmed_tile_for_each_book",
     "status": "PASS",
-    "seconds": 0.0072,
+    "seconds": 0.0107,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_a_live_page_alert_shows_and_acknowledges_from_the_dry_run_view",
     "status": "PASS",
-    "seconds": 1.4316,
+    "seconds": 1.5627,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_alerts_are_ordered_page_then_warn_then_info_and_acknowledge_goes_to_core",
     "status": "PASS",
-    "seconds": 0.0101,
+    "seconds": 0.0141,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_descriptive_read_caption_volatility_labels_and_no_regime_state",
     "status": "PASS",
-    "seconds": 0.0148,
+    "seconds": 0.0194,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_every_owner_decision_d1_to_d6_is_listed_with_value_and_status",
     "status": "PASS",
-    "seconds": 0.2525,
+    "seconds": 0.2322,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_fail_closed_no_state_or_invalid_state_shows_an_error_notice_and_no_numbers",
     "status": "PASS",
-    "seconds": 0.0228,
+    "seconds": 0.0223,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_fixtures_are_valid_artifacts",
     "status": "PASS",
-    "seconds": 0.0028,
+    "seconds": 0.0021,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_halted_banner_names_class_reason_since_and_rearm_not_before_and_acknowledges",
     "status": "PASS",
-    "seconds": 0.0211,
+    "seconds": 0.021,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_null_volatility_labels_say_why",
     "status": "PASS",
-    "seconds": 0.0025,
+    "seconds": 0.0021,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_refusal_book_labels_sit_on_their_own_line_not_in_a_table_row",
     "status": "PASS",
-    "seconds": 0.0097,
+    "seconds": 0.0091,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_the_composition_line_carries_the_artifact_numbers",
     "status": "PASS",
-    "seconds": 0.0152,
+    "seconds": 0.017,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_the_dry_run_chip_needs_backtest_and_the_marker",
     "status": "PASS",
-    "seconds": 0.0263,
+    "seconds": 0.0361,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_the_flet_api_guard_passes_on_the_new_ui_modules",
     "status": "PASS",
-    "seconds": 1.0206,
+    "seconds": 1.0444,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_the_overlay_view_runs_one_worker_at_a_time",
     "status": "PASS",
-    "seconds": 0.8888,
+    "seconds": 0.9131,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_the_run_button_dry_run_writes_only_the_temp_macro_dir_and_the_view_renders_it",
     "status": "PASS",
-    "seconds": 12.538,
+    "seconds": 15.0419,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_overlay/test_view_selector_hosts_the_overlay_view_and_reads_nothing_into_home",
     "status": "PASS",
-    "seconds": 0.6023,
+    "seconds": 0.6492,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_rulings/test_owner_items_replay_owner_rulings_from_the_macro_dir",
     "status": "PASS",
-    "seconds": 0.6582,
+    "seconds": 0.5233,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_build_as_insurance_is_a_disposition_chip_never_a_verdict_chip",
     "status": "PASS",
-    "seconds": 0.0435,
+    "seconds": 0.0561,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_cards_view_fails_closed_on_a_broken_chain_or_bad_inputs",
     "status": "PASS",
-    "seconds": 0.0235,
+    "seconds": 0.0225,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_cards_view_registry_and_empty_verdicts_every_card_not_run_with_a_reason_gate_not_frozen",
     "status": "PASS",
-    "seconds": 0.0349,
+    "seconds": 0.0399,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_forward_sim_and_refusal_groups_are_not_a_recommendation_and_never_success",
     "status": "PASS",
-    "seconds": 0.0243,
+    "seconds": 0.0368,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_new_ui_modules_pass_the_flet_api_guard",
     "status": "PASS",
-    "seconds": 0.8743,
+    "seconds": 1.177,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_quant_lab_fit_caption_and_grading_strip",
     "status": "PASS",
-    "seconds": 0.0067,
+    "seconds": 0.008,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_quant_lab_run_shows_caption_and_the_stored_grade",
     "status": "PASS",
-    "seconds": 0.2644,
+    "seconds": 0.3478,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_research_dnb_37_plus_17_resolutions_12_and_open_buttons_point_at_files",
     "status": "PASS",
-    "seconds": 0.1332,
+    "seconds": 0.1405,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_research_register_group_filter_table_and_detail",
     "status": "PASS",
-    "seconds": 0.4038,
+    "seconds": 0.2194,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_research_view_fails_closed_without_the_record",
     "status": "PASS",
-    "seconds": 0.0002,
+    "seconds": 0.0004,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_research_weight_table_all_50_rows_korea_22_caption_verbatim",
     "status": "PASS",
-    "seconds": 0.1287,
+    "seconds": 0.1215,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_signals_page_header_notice",
     "status": "PASS",
-    "seconds": 0.0116,
+    "seconds": 0.0016,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_strategy_lab_builds_with_foreign_cards_in_a_temp_cards_dir",
     "status": "PASS",
-    "seconds": 0.0306,
+    "seconds": 0.0349,
     "detail": ""
   },
   {
     "test": "macro/macro_ui_views/test_techfund_drafts_not_run_with_reasons_and_cry1_vendor_label",
     "status": "PASS",
-    "seconds": 0.0283,
+    "seconds": 0.0414,
     "detail": ""
   },
   {
     "test": "macro/test_t_herm_02_shipped_trees_and_home_untouched",
     "status": "PASS",
-    "seconds": 0.0386,
+    "seconds": 0.0497,
     "detail": ""
   },
   {
@@ -4791,127 +4791,127 @@
   {
     "test": "paper/test_02_lse_is_refused_not_charged_a_proxy_rate",
     "status": "PASS",
-    "seconds": 0.0091,
+    "seconds": 0.0166,
     "detail": ""
   },
   {
     "test": "paper/test_03_krx_etf_pays_the_tick_floor_at_the_traded_price",
     "status": "PASS",
-    "seconds": 0.0035,
+    "seconds": 0.0041,
     "detail": ""
   },
   {
     "test": "paper/test_04_gate_refuses_a_move_that_cannot_pay_twice_the_round_trip",
     "status": "PASS",
-    "seconds": 0.0065,
+    "seconds": 0.0068,
     "detail": ""
   },
   {
     "test": "paper/test_05_gate_is_off_unless_the_account_declares_it",
     "status": "PASS",
-    "seconds": 0.0034,
+    "seconds": 0.0038,
     "detail": ""
   },
   {
     "test": "paper/test_06_no_probability_means_the_perfect_forecast_bound_on_the_daily_sigma",
     "status": "PASS",
-    "seconds": 0.0058,
+    "seconds": 0.0068,
     "detail": ""
   },
   {
     "test": "paper/test_07_five_minute_trend_is_not_a_live_account",
     "status": "PASS",
-    "seconds": 0.0015,
+    "seconds": 0.0017,
     "detail": ""
   },
   {
     "test": "paper/test_08_a_state_file_from_another_config_is_not_resumed",
     "status": "PASS",
-    "seconds": 0.0177,
+    "seconds": 0.0153,
     "detail": ""
   },
   {
     "test": "paper/test_09_snapshots_round_trip_exactly_and_refuse_a_changed_file",
     "status": "PASS",
-    "seconds": 0.0311,
+    "seconds": 0.0301,
     "detail": ""
   },
   {
     "test": "paper/test_09b_only_a_complete_pull_is_frozen_and_a_short_snapshot_is_refused",
     "status": "PASS",
-    "seconds": 0.0246,
+    "seconds": 0.0334,
     "detail": ""
   },
   {
     "test": "paper/test_10_post_session_prices_are_fetched_by_the_window_dates",
     "status": "PASS",
-    "seconds": 0.0011,
+    "seconds": 0.001,
     "detail": ""
   },
   {
     "test": "paper/test_11_session_hours_follow_local_clocks_and_holidays",
     "status": "PASS",
-    "seconds": 0.3454,
+    "seconds": 0.2864,
     "detail": ""
   },
   {
     "test": "paper/test_12_same_day_replay_uses_the_code_each_run_ran",
     "status": "PASS",
-    "seconds": 0.0086,
+    "seconds": 0.0082,
     "detail": ""
   },
   {
     "test": "paper/test_13_the_power_line_uses_quantgens_convention",
     "status": "PASS",
-    "seconds": 0.0031,
+    "seconds": 0.0027,
     "detail": ""
   },
   {
     "test": "paper/test_14_every_account_is_one_trial_in_its_family_ledger",
     "status": "PASS",
-    "seconds": 0.1115,
+    "seconds": 0.1103,
     "detail": ""
   },
   {
     "test": "paper/test_15_the_gate_test_uses_exactly_the_planned_holdout_sessions",
     "status": "PASS",
-    "seconds": 0.0657,
+    "seconds": 0.0552,
     "detail": ""
   },
   {
     "test": "paper/test_16_fidelity_rule_run_match_and_exploratory_label",
     "status": "PASS",
-    "seconds": 0.0311,
+    "seconds": 0.0288,
     "detail": ""
   },
   {
     "test": "paper/test_17_strategy_lab_registers_real_runs_only",
     "status": "PASS",
-    "seconds": 0.044,
+    "seconds": 0.0371,
     "detail": ""
   },
   {
     "test": "paper/test_18_concurrent_registrations_keep_the_ledger_chain",
     "status": "PASS",
-    "seconds": 0.5532,
+    "seconds": 0.5123,
     "detail": ""
   },
   {
     "test": "paper/test_19_a_late_freeze_is_refused",
     "status": "PASS",
-    "seconds": 0.0291,
+    "seconds": 0.0375,
     "detail": ""
   },
   {
     "test": "paper/test_20_outcomes_name_the_worst_asset_across_accounts",
     "status": "PASS",
-    "seconds": 0.0271,
+    "seconds": 0.0317,
     "detail": ""
   },
   {
     "test": "grokteam/test_accounts_settle_and_path",
     "status": "PASS",
-    "seconds": 0.0083,
+    "seconds": 0.0084,
     "detail": ""
   },
   {
@@ -4923,25 +4923,25 @@
   {
     "test": "grokteam/test_cache_is_sha_checked",
     "status": "PASS",
-    "seconds": 0.0249,
+    "seconds": 0.0198,
     "detail": ""
   },
   {
     "test": "grokteam/test_calibration_recovers_identity",
     "status": "PASS",
-    "seconds": 0.0105,
+    "seconds": 0.0111,
     "detail": ""
   },
   {
     "test": "grokteam/test_digital_probability",
     "status": "PASS",
-    "seconds": 0.0008,
+    "seconds": 0.001,
     "detail": ""
   },
   {
     "test": "grokteam/test_entry_rules",
     "status": "PASS",
-    "seconds": 0.003,
+    "seconds": 0.0035,
     "detail": ""
   },
   {
@@ -4953,25 +4953,25 @@
   {
     "test": "grokteam/test_forward_window_is_blinded_until_the_one_look",
     "status": "PASS",
-    "seconds": 0.0019,
+    "seconds": 0.0027,
     "detail": ""
   },
   {
     "test": "grokteam/test_ledger_rows_new_family_only",
     "status": "PASS",
-    "seconds": 0.0466,
+    "seconds": 0.0476,
     "detail": ""
   },
   {
     "test": "grokteam/test_model_sees_only_closed_bars",
     "status": "PASS",
-    "seconds": 0.4654,
+    "seconds": 0.4892,
     "detail": ""
   },
   {
     "test": "grokteam/test_no_paper_live_import",
     "status": "PASS",
-    "seconds": 0.0118,
+    "seconds": 0.0135,
     "detail": ""
   },
   {
@@ -4983,67 +4983,67 @@
   {
     "test": "grokteam/test_skill_one_sided_direction",
     "status": "PASS",
-    "seconds": 0.0075,
+    "seconds": 0.0129,
     "detail": ""
   },
   {
     "test": "grokteam/test_stationarity_warning_is_not_a_skip",
     "status": "PASS",
-    "seconds": 0.8741,
+    "seconds": 1.0712,
     "detail": ""
   },
   {
     "test": "grokteam/test_strike_table_reads_decision_and_fill_candles_only",
     "status": "PASS",
-    "seconds": 0.0163,
+    "seconds": 0.0248,
     "detail": ""
   },
   {
     "test": "grokteam/test_verdict_rules",
     "status": "PASS",
-    "seconds": 0.0001,
+    "seconds": 0.0,
     "detail": ""
   },
   {
     "test": "grokteam/test_version_pin_ignores_python_patch",
     "status": "PASS",
-    "seconds": 0.005,
+    "seconds": 0.0042,
     "detail": ""
   },
   {
     "test": "guard/test_a_tag_is_annotated_and_peels_to_the_baseline",
     "status": "PASS",
-    "seconds": 0.1071,
+    "seconds": 0.1276,
     "detail": ""
   },
   {
     "test": "guard/test_b_tagged_pins_match_prereg_and_frozen_rule",
     "status": "PASS",
-    "seconds": 0.9756,
+    "seconds": 1.0564,
     "detail": ""
   },
   {
     "test": "guard/test_c_no_forward_look_before_it_opens",
     "status": "PASS",
-    "seconds": 0.0001,
+    "seconds": 0.0002,
     "detail": ""
   },
   {
     "test": "guard/test_d_library_versions_match_the_pins_while_a_readout_is_pending",
     "status": "PASS",
-    "seconds": 0.0645,
+    "seconds": 0.0695,
     "detail": ""
   },
   {
     "test": "guard/test_d_pending_readouts_retire_only_when_all_three_are_in",
     "status": "PASS",
-    "seconds": 0.0243,
+    "seconds": 0.0146,
     "detail": ""
   },
   {
     "test": "papers/test_approval_detects_changed_scope_file",
     "status": "PASS",
-    "seconds": 0.3181,
+    "seconds": 0.3635,
     "detail": ""
   },
   {
@@ -5053,57 +5053,69 @@
     "detail": ""
   },
   {
+    "test": "papers/test_claims_gate_fails_on_unread_unsupported_missing_and_unverified",
+    "status": "PASS",
+    "seconds": 0.1914,
+    "detail": ""
+  },
+  {
+    "test": "papers/test_claims_gate_passes_on_a_supported_paper",
+    "status": "PASS",
+    "seconds": 0.0167,
+    "detail": ""
+  },
+  {
     "test": "papers/test_compile_template_en",
     "status": "PASS",
-    "seconds": 1.631,
+    "seconds": 2.8082,
     "detail": ""
   },
   {
     "test": "papers/test_compile_template_ko",
     "status": "PASS",
-    "seconds": 5.894,
+    "seconds": 6.705,
     "detail": ""
   },
   {
     "test": "papers/test_compile_undefined_number_key_is_a_failure",
     "status": "PASS",
-    "seconds": 0.2357,
+    "seconds": 0.2724,
     "detail": ""
   },
   {
     "test": "papers/test_consistency_bare_digit_in_results_and_tables",
     "status": "PASS",
-    "seconds": 0.0224,
+    "seconds": 0.0178,
     "detail": ""
   },
   {
     "test": "papers/test_consistency_clean_pair_passes",
     "status": "PASS",
-    "seconds": 0.0175,
+    "seconds": 0.0164,
     "detail": ""
   },
   {
     "test": "papers/test_consistency_dropped_paragraph_id",
     "status": "PASS",
-    "seconds": 0.0084,
+    "seconds": 0.0082,
     "detail": ""
   },
   {
     "test": "papers/test_consistency_follows_input_into_table_files",
     "status": "PASS",
-    "seconds": 0.0226,
+    "seconds": 0.0274,
     "detail": ""
   },
   {
     "test": "papers/test_consistency_missing_cite_key_in_ko",
     "status": "PASS",
-    "seconds": 0.0071,
+    "seconds": 0.0087,
     "detail": ""
   },
   {
     "test": "papers/test_consistency_per_section_qnum_count_drift",
     "status": "PASS",
-    "seconds": 0.0138,
+    "seconds": 0.0139,
     "detail": ""
   },
   {
@@ -5115,13 +5127,13 @@
   {
     "test": "papers/test_numbers_digit_keys_roundtrip",
     "status": "PASS",
-    "seconds": 0.0066,
+    "seconds": 0.0071,
     "detail": ""
   },
   {
     "test": "papers/test_numbers_refuses_bad_keys_missing_fields_and_nonfinite_values",
     "status": "PASS",
-    "seconds": 0.0007,
+    "seconds": 0.0009,
     "detail": ""
   },
   {
@@ -5140,6 +5152,60 @@
     "test": "papers/test_parse_log_sorts_errors_from_warnings",
     "status": "PASS",
     "seconds": 0.0001,
+    "detail": ""
+  },
+  {
+    "test": "papers/test_refs_arxiv_atom_fixture",
+    "status": "PASS",
+    "seconds": 0.0018,
+    "detail": ""
+  },
+  {
+    "test": "papers/test_refs_crossref_record_ok_and_mismatch",
+    "status": "PASS",
+    "seconds": 0.0001,
+    "detail": ""
+  },
+  {
+    "test": "papers/test_refs_verify_file_records_manual_and_problems",
+    "status": "PASS",
+    "seconds": 0.0206,
+    "detail": ""
+  },
+  {
+    "test": "papers/test_refs_write_bib_and_schema_refusals",
+    "status": "PASS",
+    "seconds": 0.0328,
+    "detail": ""
+  },
+  {
+    "test": "papers/test_study_compare_runs_within_and_beyond_tolerance",
+    "status": "PASS",
+    "seconds": 0.0455,
+    "detail": ""
+  },
+  {
+    "test": "papers/test_study_refuses_a_dirty_tree_for_prespecified_and_confirmatory_runs",
+    "status": "PASS",
+    "seconds": 2.0453,
+    "detail": ""
+  },
+  {
+    "test": "papers/test_study_refuses_when_a_pinned_file_changed",
+    "status": "PASS",
+    "seconds": 1.8114,
+    "detail": ""
+  },
+  {
+    "test": "papers/test_study_refuses_without_a_committed_unmodified_prereg",
+    "status": "PASS",
+    "seconds": 1.6219,
+    "detail": ""
+  },
+  {
+    "test": "papers/test_study_run_dir_is_never_overwritten_and_manifest_is_complete",
+    "status": "PASS",
+    "seconds": 1.4187,
     "detail": ""
   }
 ]
