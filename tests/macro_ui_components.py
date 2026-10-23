@@ -160,6 +160,21 @@ def test_readme_and_package_name_the_research_identity():
     assert "\n## Research papers\n" in readme
 
 
+def test_readme_labels_the_grokbot_study_with_the_legality_rating():
+    """Split spec 4.1 A5 (D1): the GrokBot section names the study of record, its one look, TRADEGEN's copy as not
+    the record, and the Kalshi rating in the legality report's own words."""
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    _, sep, section = readme.partition("\n## GrokBot: the GROKTEAM-BOOK study of record\n")
+    assert sep, "GrokBot section missing"
+    section = section.split("\n## ", 1)[0]
+    for phrase in ("research-only", "study of record", "2027-02-01", "TRADEGEN's copy is not the record",
+                   '"grey, treat as illegal"', "No Korean court or regulator has", "medium-low",
+                   "reports/Korean resident trading venue legality.md"):
+        assert phrase in section, phrase
+    report = (ROOT / "reports" / "Korean resident trading venue legality.md").read_text(encoding="utf-8")
+    assert "**Grey, treat as illegal.**" in report, "the legality report no longer carries the Kalshi rating"
+
+
 if __name__ == "__main__":
     from tests.macro_acceptance import run_module
     raise SystemExit(run_module(globals()))

@@ -803,6 +803,38 @@ built yet, so no paper exists. Its rules hold from the first paper:
 A paper that uses a frozen study cites its readout from the tagged snapshot;
 it never reruns the study on the main line.
 
+## GrokBot: the GROKTEAM-BOOK study of record
+
+`grokteam/` ("GrokBot") is a research-only benchmark of an outside LLM-bot
+trading guide, lazyowen's 7-bot Grok guide (published 2026-10-20). Its BOOK
+desk paper-replays the guide's BOOK and SIZE rules on Kalshi KXBTCD hourly
+bitcoin binaries against a seasonal GARCH-t digital probability. It reads
+public market data only, places no order on any venue, and nothing in
+`core/`, `data/`, `ui/` or `paper_live/` imports it.
+
+- **The study of record.** QUANTGEN holds the GROKTEAM-BOOK study of record,
+  pre-registered and frozen on 2026-10-22. `prereg.check()` pins 10 files,
+  the rules, the accounts, the verdict, the model digest and the
+  numpy/scipy/pandas/Python versions.
+- **One look.** The forward look is taken once, on or after 2027-02-01
+  01:00 UTC, by the first full `python -m grokteam.book` run in a local git clone at
+  the tag `studies-of-record-2026-10-23`, never on this main line. On the main
+  line `grokteam.prereg` reports VOID once a pinned file changes. That is
+  expected, because the record runs from the tag.
+- **TRADEGEN's copy is not the record.** TRADEGEN keeps a working duplicate.
+  Its brief keeps the duplicate's forward events permanently blinded and
+  forbids it to take the look or to register trials in QUANTGEN's ledgers.
+- **Venue legality.** For a Korean resident, Kalshi's non-sports event
+  contracts are rated **"grey, treat as illegal"**. Korea is absent from
+  Kalshi's restricted list, but its Member Agreement §VI excludes members for
+  whom trading is unlawful where they live, and the police reasoning used
+  against Korean Polymarket users fits. No Korean court or regulator has
+  ruled on Kalshi, and the confidence is medium-low. Kalshi sports contracts
+  are rated illegal. Source:
+  `reports/Korean resident trading venue legality.md` (2026-10-23),
+  compliance matrix rows 2 and 3. The study is a benchmark, not a reason to
+  open a Kalshi account.
+
 ## Setup
 
 1. Python 3.10+
@@ -817,7 +849,7 @@ Optional: `QUANTGEN_MACRO_DIR` moves the macro state out of `~/.nextgen/macro`.
 
 ```bash
 python tests/run_all.py                  # every suite; writes qa/acceptance_results.json
-python tests/run_all.py --suite macro    # one suite: cockpit, engine, ui, quant, ficc, expansion, macro, paper or grokteam
+python tests/run_all.py --suite macro    # one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam or guard
 python tests/run_all.py --milestone M8   # the exit set of a milestone (tests/macro_registry.csv)
 python -m tests.macro_acceptance         # resync the registry's implemented_in column
 ```
@@ -831,16 +863,17 @@ exit code; the exit code is 0 only when nothing failed. The summary line reads
 
 | Group | Suite | What it covers | Checks |
 |---|---|---|---|
-| cockpit | `tests/acceptance.py` | The inherited NEXTGEN cockpit, including the read-only scans (no order path, no account credentials requested, Settings shows presence not values) | 47 PASS |
+| safety | `tests/acceptance.py` | The read-only scans kept from the NEXTGEN cockpit suite (no broker order path, no account credentials requested, Settings shows presence not values), the resize handler and the view cache, UTF-8 sources and explicit encodings, EODHD gone from the runtime, the KRX gateway's per-provider status | 10 PASS |
 | engine | `tests/engine_acceptance.py` | The DISARMED→ARMED→HALTED engine, rules, the simulated order book, the quote path, one live order per rule, a cap-rejected trigger retrying once its cap clears | 92 PASS |
 | ui | `tests/flet_api_guard.py` | Every `page.<method>()`, every checked Flet control keyword and attribute, and every `pal.<token>` in `ui/*.py` exists in Flet 0.85.2 and the palette | 4 PASS |
 | quant | `tests/quant_acceptance.py` | Monte Carlo, optimizer, signal and backtest invariants; GARCH parameter recovery, unit-variance t shocks, guardrail flags, likelihood ordering against GBM and normal-GARCH, forecast convergence, the drift modes, the bounded-innovation and martingale checks, the LR null size, interval coverage, every chart renders | 53 PASS |
-| ficc | `tests/ficc_acceptance.py` | Bootstrap round-trips, monotone discount factors, Nelson-Siegel fits, PCA, duration and KRD, carry and roll, scenario convexity, swap and swaption parity, Black ↔ Bachelier, caps and floors, Garman-Kohlhagen, SABR, CIP, the carry backtest, CIR and Hull-White, structured products, narratives, every chart renders | 56 PASS |
-| expansion | `tests/expansion_acceptance.py` | Fake KIS and crypto transports for every new asset domain, the gate's own checks (a planted edge passes, noise is rejected, the deflated Sharpe orders them, the distribution loop calibrates), the t+1 causality of every strategy family, the five-year rule counted in whole years, the table cost floor and the Strategy Lab's withheld verdict below it, the module self-checks | 19 PASS |
-| macro | `tests/macro_acceptance.py` over `tests/macro_*.py` | The v2 build, below | 418 PASS / 121 NOT_RUN |
+| ficc | `tests/ficc_acceptance.py` | Bootstrap round-trips, monotone discount factors, Nelson-Siegel fits, PCA, duration and KRD, carry and roll, scenario convexity, swap and swaption parity, Black ↔ Bachelier, caps and floors, Garman-Kohlhagen, SABR, CIP, the carry backtest, CIR and Hull-White, structured products, narratives (the weekly rates and FX note free of position language on every branch, the report prompts free of trade ideas), every chart renders | 57 PASS |
+| expansion | `tests/expansion_acceptance.py` | Fake KIS and crypto transports for every new asset domain, the gate's own checks (a planted edge passes, noise is rejected, the deflated Sharpe orders them, the distribution loop calibrates), the t+1 causality of every strategy family, the five-year rule counted in whole years, the table cost floor and the Strategy Lab's withheld verdict below it, the module self-checks and the Crypto page self-check | 20 PASS |
+| macro | `tests/macro_acceptance.py` over `tests/macro_*.py` | The v2 build, below | 420 PASS / 121 NOT_RUN |
 | paper | `tests/paper_live_acceptance.py` | The paper_live harness after the 2026-10-18/19 fixes, offline: costs from QUANTGEN's table and KRX ETF tick floor, LSE refused rather than proxied, the per-account cost gate in `Engine._open`, the 5-minute C3 account retired, no resume from another config's state, frozen price snapshots (exact round trip, sha refusal), post-session prices by window dates, session hours from `core.markets` across clock changes and holidays, only complete pulls frozen, the same-day replay's archived code, the power line, one ledger trial per configuration, the pre-registered gate and fidelity tests, the Strategy Lab ledger, concurrent ledger appends, the refused late freeze and the report outcomes block | 21 PASS |
 | grokteam | `grokteam/selfcheck.py` | The GROKTEAM BOOK desk (Kalshi KXBTCD paper benchmark of the Grok trading-team guide), offline: the Kalshi fee and payoff with the fee inside the stake, SIZE (half Kelly, 6% cap, $50 floor), the GARCH-t digital, no look-ahead in hourly bars or quotes, the 30-minute quote lookback, the stationarity warning not skipping, each account's entry rule, the cluster t and the one-sided skill p, the verdict precedence, the forward window blinded until its one look (VOID and unsettled events withhold it), Python patch updates not voiding the freeze, the sha-checked cache and the new ledger family | 17 PASS |
-| **Total** | `tests/run_all.py` | | 727/848 passed, 0 failed, 121 not run (2026-10-22) |
+| guard | `tests/frozen_guard.py` | The frozen-study guard, by git and hashlib only (no `paper_live` or `grokteam` import): the tag `studies-of-record-2026-10-23` peels to `eacd57d`, the tagged tree's pinned files match PREREG and its H2 files match `frozen_rule`, no `FORWARD_LOOK.json` on the main line before 2027-02-01 01:00 UTC, and the numpy/scipy/pandas pins while a readout is pending (with a check of the pending rule itself) | 5 PASS |
+| **Total** | `tests/run_all.py` | | 699/820 passed, 0 failed, 121 not run (2026-10-23) |
 
 The macro group (new in v2) discovers every `tests/macro_*.py` module,
 wraps each test in a hermetic guard, and brackets the run with T-HERM-01 (every
@@ -863,7 +896,7 @@ md5-listed in `tests/fixtures/macro/MANIFEST.csv`.
 | `macro_m8_*` (forward, integration, pipeline) | `macro_daily`, alerts, replay, app start, forward records and demotion, FORWARD-SIM and refusal books | 40 / 7 |
 | `macro_m9_*` (lab, scenarios) | Quant Lab self-grading, scenario library, SEP band | 17 / 8 |
 | `macro_tf_*` (data, gov, integration, screens) | Tech-fund data and manifest, DNB-TF predicates, screens and books, governance, CRY-1 | 59 / 4 |
-| `macro_ui_*` | The v2 tokens and shared components, the Macro page views, the README claims, the effective rules store | 40 / 0 |
+| `macro_ui_*` | The v2 tokens and shared components, the Macro page views, the README claims (disclaimers, research identity, GrokBot labelling), the effective rules store | 42 / 0 |
 
 The whole suite is hermetic: it patches the network touchpoints to raise, so
 it can never spend a quota or call the Claude API, and it proves that `auto`
