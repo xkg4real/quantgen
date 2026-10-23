@@ -1094,6 +1094,20 @@ def test_debate_parse_report():
     rep = parse_report("# Verdict: REJECT\n\n## Major\n\n- M1: The t statistic ignores autocorrelation.\n\n## Minor\n")
     assert rep["major"] == [{"id": "M1", "text": "M1: The t statistic ignores autocorrelation."}], rep
     assert parse_report("Looks fine to me.") == {"major": [], "minor": []}
+    # Other report shapes are still objections, never "no objections" (spec 5.1); only an explicit none is empty.
+    rep = parse_report("## Major\n\n**M1. Holdout overlaps the freeze.** The holdout starts before the freeze.\n\n"
+                       "**M2. Missing correction.** Newey-West lags are not stated.\n\n## Minor\nNone.\n")
+    assert [i["id"] for i in rep["major"]] == ["M1", "M2"] and rep["minor"] == [], rep
+    assert "starts before the freeze" in rep["major"][0]["text"], rep
+    for body, needle in (("The holdout starts before the freeze.", "holdout starts"),
+                         ("| id | issue |\n|----|-------|\n| M1 | Holdout overlaps |", "Holdout overlaps"),
+                         ("  - M1: indented bullet", "indented bullet")):
+        rep = parse_report(f"## Major\n\n{body}\n\n## Minor\nNone.\n")
+        assert len(rep["major"]) == 1 and needle in rep["major"][0]["text"] and rep["minor"] == [], (body, rep)
+    for none in ("None.\n\n---", "**None**", "N/A", "No major issues."):
+        assert parse_report(f"## Major\n{none}\n## Minor\n") == {"major": [], "minor": []}, none
+    rep = parse_report("## Major\n- M2: explicit\n- positional second\n- third\n")
+    assert [i["id"] for i in rep["major"]] == ["M2", "M2-2", "M3"], rep      # ids are unique within a section
 
 
 def test_debate_run_kills_process_tree():
@@ -1153,7 +1167,9 @@ def test_bundle_contents_code_and_local_note_refusal():
         assert bundle.parent == dest and bundle.name.startswith("qg_fixture_paper_r1_"), bundle
         got = {p.relative_to(bundle).as_posix() for p in bundle.rglob("*") if p.is_file()}
         assert got == {"en/paper_en.tex", "ko/paper_ko.tex", "common/model.tex", "study/run.py",
-                       "study/numbers.json", "study/runs/20261102T000000Z_bbbbbbb/MANIFEST.json",
+                       "study/numbers.json", "study/runs/20261101T000000Z_aaaaaaa/MANIFEST.json",
+                       "study/runs/20261101T000000Z_aaaaaaa/results.json",
+                       "study/runs/20261102T000000Z_bbbbbbb/MANIFEST.json",
                        "study/runs/20261102T000000Z_bbbbbbb/results.json", "refs.bib", "refs.yaml",
                        "claims.yaml", "scope/prereg.json", "code/core/quant/carry_model.py"}, got
         assert make_bundle(paper, 1, dest_root=dest) != bundle, "each round gets a fresh folder"
@@ -1168,6 +1184,24 @@ def test_bundle_contents_code_and_local_note_refusal():
             raise AssertionError("a claim backed by a local_note entered the bundle")
         allowed = make_bundle(paper, 2, allow_private=True, dest_root=dest)
         assert (allowed / "claims.yaml").is_file()
+        # A git-ignored local file named in the prereg (.env with API keys) must never reach the referees.
+        if shutil.which("git") is None:
+            raise NotRun("OWNER: git is not on PATH")
+        _subprocess.run(["git", "init", "-q", str(repo)], check=True, capture_output=True)
+        (repo / ".gitignore").write_text(".env\n", encoding="utf-8")
+        (repo / ".env").write_text("FMP_API_KEY=not-a-real-key\n", encoding="utf-8")
+        inside_repo = make_bundle(paper, 3, allow_private=True, dest_root=dest)    # a repo, no ignored file named
+        assert (inside_repo / "code" / "core" / "quant" / "carry_model.py").is_file(), inside_repo
+        prereg["new_code"].append(".env")
+        (paper / "scope" / "prereg.json").write_text(_json.dumps(prereg) + "\n", encoding="utf-8")
+        before = sorted(dest.iterdir())
+        try:
+            make_bundle(paper, 4, allow_private=True, dest_root=dest)
+        except ValueError as exc:
+            assert ".env" in str(exc), exc
+        else:
+            raise AssertionError("a git-ignored .env named in prereg.json entered the bundle")
+        assert sorted(dest.iterdir()) == before, "a refused bundle left a folder behind"
 
 
 if __name__ == "__main__":

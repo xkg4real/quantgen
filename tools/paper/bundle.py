@@ -1,15 +1,19 @@
 """Review bundle for one referee round (spec 5.3 step 10).
 
-A fresh, disposable temp folder holding the manuscript (en/, ko/, common/), study/numbers.json, the latest
-run's MANIFEST.json and results.json, the study code (study/*.py), scope/prereg.json with every repository
-file it pins or adds (pinned_code, new_code) under code/<path>, and refs.yaml, refs.bib and claims.yaml.
-Referees run with it as cwd, never the repo. Raw data, the other scope files and review files stay out. A claim
-backed by the owner's private notes (refs class `local_note`) refuses the bundle unless the owner allows it.
+A fresh, disposable temp folder holding the manuscript (en/, ko/, common/), study/numbers.json, the
+MANIFEST.json and results.json of every run under study/runs (numbers.json cites the online run, which the
+later offline rerun does not replace, so the latest run alone would hide the numbers' source), the study code
+(study/*.py), scope/prereg.json with every repository file it pins or adds (pinned_code, new_code) under
+code/<path>, and refs.yaml, refs.bib and claims.yaml. Referees run with it as cwd, never the repo. Raw data,
+the other scope files and review files stay out. A claim backed by the owner's private notes (refs class
+`local_note`) refuses the bundle unless the owner allows it, and so does a prereg path that git ignores
+(.env and other local config could hold API keys; the bundle goes to OpenAI and Google).
 """
 from __future__ import annotations
 
 import json
 import shutil
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -37,8 +41,21 @@ def _study_code(paper_dir: Path) -> list[tuple[Path, str]]:
     for rel in [*(data.get("pinned_code") or {}), *(data.get("new_code") or [])]:
         src = (root / rel).resolve()
         if root in src.parents and src.is_file():
-            out.append((src, f"code/{src.relative_to(root).as_posix()}"))
+            posix = src.relative_to(root).as_posix()
+            if _git_ignored(root, posix):
+                raise ValueError(f"{posix}: prereg.json names a git-ignored file (local config may hold secrets); "
+                                 "it cannot enter a bundle sent to the referees")
+            out.append((src, f"code/{posix}"))
     return out
+
+
+def _git_ignored(root: Path, rel: str) -> bool:
+    """True when git says `rel` is ignored. Not a repository (exit 128) or git missing: nothing to check against."""
+    try:
+        return subprocess.run(["git", "-C", str(root), "check-ignore", "-q", "--", rel],
+                              capture_output=True).returncode == 0
+    except OSError:
+        return False
 
 
 def make_bundle(paper_dir: Path, round_k: int, *, allow_private: bool = False,
@@ -50,6 +67,7 @@ def make_bundle(paper_dir: Path, round_k: int, *, allow_private: bool = False,
     if private:
         raise ValueError(f"claims.yaml cites private local_note sources {private}; "
                          "pass allow_private=True only with the owner's consent")
+    code = _study_code(paper_dir)                          # may refuse; do it before any folder exists
     if dest_root is not None:
         Path(dest_root).mkdir(parents=True, exist_ok=True)
     bundle = Path(tempfile.mkdtemp(prefix=f"qg_{paper_dir.name}_r{round_k}_", dir=dest_root))
@@ -59,10 +77,10 @@ def make_bundle(paper_dir: Path, round_k: int, *, allow_private: bool = False,
     study = paper_dir / "study"
     picks = [study / "numbers.json", paper_dir / "refs.yaml", paper_dir / "refs.bib", paper_dir / "claims.yaml",
              *sorted(study.glob("*.py"))]
-    runs = sorted(p for p in (study / "runs").glob("*") if p.is_dir())   # run ids sort by time
-    if runs:
-        picks += [runs[-1] / "MANIFEST.json", runs[-1] / "results.json"]
-    copies = [(src, src.relative_to(paper_dir).as_posix()) for src in picks] + _study_code(paper_dir)
+    for run in (study / "runs").glob("*"):                 # every run: numbers.json may cite any of them
+        if run.is_dir():
+            picks += [run / "MANIFEST.json", run / "results.json"]
+    copies = [(src, src.relative_to(paper_dir).as_posix()) for src in picks] + code
     for src, rel in copies:
         if src.is_file():
             dst = bundle / rel
