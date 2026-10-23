@@ -1,5 +1,5 @@
 """Cross-asset macro sheet and its descriptive read — the inputs of the daily
-commentary and the weekly rates/FX strategy note. CONTEXT only (v2.0, section
+commentary and the weekly rates and FX note. CONTEXT only (v2.0, section
 3.6; TASK-M6-01): the 18 indicators are context inputs, the z-scores are causal
 display values, and the `Regime` read is a descriptive read — not a regime model
 (P19): five threshold rules, no probabilities, no latent state, no smoothing. It

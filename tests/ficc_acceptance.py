@@ -662,12 +662,48 @@ def test_weekly_strategy_states_its_views():
                                                 fx.carry_table(*_carry_inputs())))
     assert "Duration:" in t and "Curve:" in t and "FX:" in t and "Carry:" in t
     assert f"{_report().descriptors['2s10s'] / BP:+.0f}bp" in t
+    assert "Litterman & Scheinkman (1991)" in t and "Koijen, Moskowitz, Pedersen & Vrugt (2018)" in t
+    assert "trailing 252-session mean" in t and "change over the week (5 sessions)" in t
+    assert t.endswith("This note is descriptive and makes no recommendation."), t[-200:]
     _clean(insights.narrate_weekly_strategy(_sheet()))
 
 
+def test_weekly_note_has_no_position_language():
+    """The weekly note is an academic descriptive read (spec 4.1 A3): no position
+    word appears as a whole word, on any branch of the function, and the Macro
+    page button names it a note."""
+    import dataclasses
+    import re
+    from pathlib import Path
+    words = re.compile(r"\b(long|short|run|fund|funded|size|cut|entry|lean|fade|buy|sell)\b",
+                       re.IGNORECASE)
+    sheet, rows = _sheet(), fx.carry_table(*_carry_inputs())
+    # every carry negative, and the lowest carry-to-vol given the top score: the
+    # no-positive-carry branch and the carry-plus-momentum sentence both render.
+    negative = [dataclasses.replace(r, carry=c, carry_to_vol=c / r.vol_3m)
+                for r in rows for c in [-abs(r.carry) - 0.001]]
+    worst = min(negative, key=lambda r: r.carry_to_vol)
+    negative = [dataclasses.replace(r, score=99.0) if r is worst else r for r in negative]
+    notes = [insights.narrate_weekly_strategy(sheet),
+             insights.narrate_weekly_strategy(sheet, carry_rows=negative)]
+    notes += [insights.narrate_weekly_strategy(sheet, dataclasses.replace(_report(), regime=g), rows)
+              for g in macro.CURVE_REGIMES]
+    assert "no currency has positive carry against USD" in notes[1], notes[1]
+    assert "carry-plus-momentum score" in notes[1], notes[1]
+    for text in notes:
+        hits = words.findall(text)
+        assert not hits, f"position language {sorted(set(hits))}: {text}"
+    page = (Path(__file__).resolve().parents[1] / "ui" / "macro_page.py").read_text(encoding="utf-8")
+    assert '"weekly": ("Weekly rates and FX note", "weekly_fi_fx_strategy")' in page   # the button names a note
+
+
 def test_report_prompt_and_deep_analysis_degrade_without_network():
+    from core.quant.insights import _SYSTEM
     assert insights.report_prompt("daily_market_commentary")
     assert insights.report_prompt("weekly_fi_fx_strategy") and insights.report_prompt("bond") == ""
+    for text in (*insights.REPORT_PROMPTS.values(), _SYSTEM):      # research commentary (spec 4.1 A3)
+        assert "Positioning" not in text and "trade expression" not in text, text
+        assert "do not recommend" in text, text
     saved = config.anthropic_key
     config.anthropic_key = lambda: ""
     try:
@@ -741,9 +777,10 @@ def test_bond_carry_roll_is_a_holding_period_pnl():
     assert abs(cr.breakeven_bp) < 200, "a 3m breakeven in the hundreds of bp is a unit bug"
 
 
-def test_weekly_strategy_names_a_positive_carry_long():
-    """The carry line must be a carry trade: whenever some currency earns positive
-    carry the named long has positive carry, whatever the momentum score says."""
+def test_weekly_strategy_ranks_positive_carry_first():
+    """The carry line names, whenever some currency earns positive carry, the highest
+    carry-to-volatility among the positive-carry currencies, whatever the momentum
+    score says."""
     from core.ficc import data, fx, macro, insights
     sheet = macro.macro_sheet(source="synthetic")
     spots = {p: data.synthetic_fx(p) for p in ("EURUSD", "USDJPY", "GBPUSD", "AUDUSD",
@@ -755,9 +792,10 @@ def test_weekly_strategy_names_a_positive_carry_long():
     positive = [r for r in rows if r.carry > 0]
     if positive:
         best = max(positive, key=lambda r: r.carry_to_vol)
-        assert f"long {best.ccy}" in text, text[text.index("Carry:"):][:200]
+        assert f"among currencies with positive carry is {best.ccy} (" in text, \
+            text[text.index("Carry:"):][:400]
     else:
-        assert "no currency in the basket earns positive carry" in text
+        assert "no currency has positive carry against USD" in text
 
 def tests():
     return [(name, fn) for name, fn in sorted(globals().items())

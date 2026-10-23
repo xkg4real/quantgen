@@ -3,7 +3,7 @@
 "Macro sheet" (default): pick a source, press Refresh, and the page shows the
 descriptive-read chips (a descriptive read, not a regime model, P19), the headline levels, the indicator table (last, 1d/1w/1m changes, 1y z-score
 and percentile), the z-score chart, and an analysis card. "Daily market
-commentary" and "Weekly rates/FX strategy" swap that card for the report's
+commentary" and "Weekly rates and FX note" swap that card for the report's
 local narrative and a deep-analysis panel with the matching `kind`, routed
 through `core.ficc.insights.deep_analysis` so the report-format instructions
 are appended to whatever the operator asks.
@@ -48,7 +48,7 @@ _BUILDERS = {"overlay": build_overlay_view, "cards": build_cards_view,     # vie
 DESCRIPTIVE_CAPTION = DESCRIPTIVE_READ_NOTE[:1].upper() + DESCRIPTIVE_READ_NOTE[1:]
 _REPORTS = {
     "daily": ("Daily market commentary", "daily_market_commentary"),
-    "weekly": ("Weekly rates/FX strategy", "weekly_fi_fx_strategy"),
+    "weekly": ("Weekly rates and FX note", "weekly_fi_fx_strategy"),
 }
 
 

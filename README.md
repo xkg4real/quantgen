@@ -12,8 +12,8 @@ nothing has: see
 Version 2 widens the desk. The equity surfaces (Quant Lab, Portfolio, Signals)
 stay as they were; five FICC surfaces now sit first in the rail, built for the
 world the OTM FICC & Quant curriculum lives in — rates and FX derivatives,
-treasuries and credit, pricing, structuring, and the weekly rates/FX strategy
-read.
+treasuries and credit, pricing, structuring, and the weekly rates and FX
+note.
 
 Version 3 widens the asset coverage and adds the gate that decides what is
 offered. Four surfaces — **Derivatives, ETF, Crypto, Strategy Lab** — sit on
@@ -55,9 +55,9 @@ real rates — labelled "Descriptive read — not a regime model (P19)": it is
 threshold rules on z-scores and 20-session changes, it feeds nothing (no book,
 no signal, no engine), and it is never shown beside the v2 volatility labels.
 The z-score colouring is display only. Two buttons write the club's homework:
-**Daily market commentary** and **Weekly rates/FX strategy** — a local
-narrative immediately, and the Claude deep read with a strategist's report
-format when a key is set.
+**Daily market commentary** and **Weekly rates and FX note** — a local
+narrative immediately, and the Claude deep read with a research-commentary
+report format when a key is set.
 
 ### Rates — curve, swaps, swaptions, short-rate simulation
 
@@ -668,15 +668,20 @@ Every result ends in an **Analysis** card:
 
 1. **Local narrative** (always) — a deterministic written read of the computed
    numbers. No network, no key, and it never invents a number that wasn't
-   computed upstream. The FICC narratives speak the desk's language: the curve
-   regime in basis points, the swaption premium in bp of notional, the carry
-   long and its funder with carry-to-vol.
+   computed upstream. The FICC narratives state each measure with its
+   definition and window: the curve regime in basis points, the swaption
+   premium in bp of notional, the carry cross-section by carry-to-volatility.
+   The weekly rates and FX note is an academic descriptive read (level, slope
+   and curvature after Litterman & Scheinkman 1991; carry after Koijen,
+   Moskowitz, Pedersen & Vrugt 2018) and closes by stating that it makes no
+   recommendation.
 2. **Deep analysis** (with `ANTHROPIC_API_KEY`) — the same structured payload
-   goes to the Claude API for a generative read in the voice of a sell-side
-   rates/FX strategist: cross-metric tensions, sensitivity, the trade
-   expression, what would invalidate the view. The Macro page's two report
-   buttons append a report format (headline, rates, FX, positioning with
-   levels) to whatever question you attach.
+   goes to the Claude API for research commentary in the voice of an academic
+   research analyst: cross-metric tensions, sensitivity to assumptions and
+   windows, what would revise the reading. It describes and does not
+   recommend. The Macro page's two report buttons append a report format
+   (headline, rates, FX, observations, what would revise the reading) to
+   whatever question you attach.
 
 Model defaults to `claude-sonnet-5`; override with `QUANTGEN_AI_MODEL`.
 

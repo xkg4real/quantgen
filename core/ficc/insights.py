@@ -8,9 +8,10 @@ around the equity module's Claude call — the HTTP code lives there, once.
 Every `narrate_*` takes the result dataclass its page already has and returns
 one paragraph. Rates are printed in percent, changes and spreads in basis
 points, money with thousands separators and no decimals. Nothing here fetches
-data; `narrate_weekly_strategy` is a strategist's read of the numbers it is
-handed, not a forecast. `report_prompt(kind)` is the format instruction the
-Daily/Weekly report buttons append to the operator's question.
+data; `narrate_weekly_strategy` is an academic descriptive read of the numbers
+it is handed: no position language, no forecast, no recommendation.
+`report_prompt(kind)` is the research-commentary format the Daily/Weekly report
+buttons append to the operator's question.
 
 Result types are duck-typed at runtime (TYPE_CHECKING imports only) so this
 module imports even when a sibling pricer is missing.
@@ -406,94 +407,102 @@ def narrate_daily_brief(sheet: MacroSheet) -> str:
     return " ".join(lines)
 
 
+_CURVE_MOVE = {"parallel up": "a parallel rise", "parallel down": "a parallel fall",
+               "unchanged": "unchanged"}
+
+
+def _curve_move(regime: str, n: int) -> str:
+    """A `curves._regime` label as a measured move: 'bear steepener' -> 'bear
+    steepening over 20 sessions'."""
+    tone, _, kind = regime.partition(" ")
+    what = (f"{tone} {kind[:-2]}ing" if kind in ("steepener", "flattener")
+            else _CURVE_MOVE.get(regime, regime))
+    return f"{what} over {n} sessions"
+
+
+def _sd(z: float) -> str:
+    """A 1y z-score in words, with its window (`core.ficc.macro._Z_WINDOW`)."""
+    return (f"{abs(z):.1f} standard deviations {'above' if z >= 0 else 'below'} its trailing "
+            f"252-session mean")
+
+
 def narrate_weekly_strategy(sheet: MacroSheet, curve_report: CurveReport | None = None,
                             carry_rows: list[CarryRow] | None = None) -> str:
-    """Sell-side tone: a duration, a curve and an FX view, each hung on a number.
-    Rules are deliberately simple and stated with the number that drives them."""
+    """Academic descriptive read: formal and third person, each measure stated with
+    its definition and window, no position language and no forecast, closing with
+    one sentence that the note makes no recommendation. The Duration:/Curve:/FX:/
+    Carry: prefixes are kept for the tests and the report layout."""
     r = sheet.row
     ten, slope = r("DGS10"), r("T10Y2Y")
-    lines = [f"Weekly rates/FX strategy, data to {sheet.as_of}. {sheet.regime.summary}"]
+    lines = [f"Weekly rates and FX note, data to {sheet.as_of}. {sheet.regime.summary}"]
 
-    # Duration: where the 10y sits in its 1y range decides the lean.
+    # Duration: the 10y level, its 1y z-score and its 1-week change.
     if ten is not None:
-        z, lvl, w = ten.z_1y, _level(ten), _chg(ten, "chg_1w")
-        if z > 1.0:
-            view = (f"Duration: lean long. The 10y at {lvl} is {z:+.1f} sigma above its 1y "
-                    f"mean after {w} on the week; the entry is the level, the risk is a "
-                    f"rising-breakeven trend (breakevens are currently "
-                    f"{sheet.regime.inflation}).")
-        elif z < -1.0:
-            view = (f"Duration: stay short or underweight. The 10y at {lvl} is {z:+.1f} sigma "
-                    f"below its 1y mean ({w} on the week); rallies from here need a risk-off "
-                    f"tape to persist; the tape is currently {sheet.regime.risk}.")
-        else:
-            view = (f"Duration: neutral. The 10y at {lvl} sits {z:+.1f} sigma from its 1y "
-                    f"mean ({w} on the week), not enough to pay for a directional position.")
-        lines.append(view)
+        lines.append(f"Duration: The 10-year Treasury yield stands at {_level(ten)}, "
+                     f"{_sd(ten.z_1y)}, following a {_chg(ten, 'chg_1w')} change over the "
+                     f"week (5 sessions).")
 
-    # Curve: the regime and the level of 2s10s.
+    # Curve: level, slope and curvature (Litterman & Scheinkman 1991) and the 2s10s regime.
     if curve_report is not None:
-        s10 = curve_report.descriptors["2s10s"]
-        ds = curve_report.changes.get("2s10s", 0.0)
-        regime, win = curve_report.regime, f"{curve_report.lookback} sessions"
+        d = curve_report.descriptors
+        lines.append(
+            f"Curve: On the observable proxies for the level, slope and curvature factors of "
+            f"Litterman & Scheinkman (1991), the curve has a level (mean of the 2y, 5y and 10y "
+            f"par yields) of {_pct(d['level'])}, a slope (2s10s, 10y minus 2y) of "
+            f"{d['2s10s'] / BP:+.0f}bp and a curvature (2s5s10s butterfly, twice the 5y minus "
+            f"the 2y and the 10y) of {_bp(d['2s5s10s_fly'])}. The slope changed by "
+            f"{_bp(curve_report.changes.get('2s10s'))}, which the 2s10s regime classifies as "
+            f"{_curve_move(curve_report.regime, curve_report.lookback)} (bull or bear as "
+            f"yields fell or rose, steepening or flattening as 2s10s widened or narrowed, "
+            f"each beyond 5bp). The 5y5y forward rate is {_pct(d['5y5y'])}, a measured spread "
+            f"of {_bp(d['5y5y'] - d['level'])} to the 2y/5y/10y level.")
     elif slope is not None:
-        s10, ds = slope.last, (slope.chg_1m or 0.0)
-        regime, win = sheet.regime.curve, "a month"
-    else:
-        s10 = None
-    if s10 is not None:
-        if "steepener" in regime:
-            trade = "run steepeners"
-        elif "flattener" in regime:
-            trade = "run flatteners"
-        else:
-            trade = "no curve trade"
-        line = (f"Curve: {trade}. 2s10s at {s10 / BP:+.0f}bp has moved {_bp(ds)} over {win}, "
-                f"a {regime}")
-        if curve_report is not None:
-            d = curve_report.descriptors
-            term = ("still carries a term premium" if d["5y5y"] > d["level"]
-                    else "is priced for cuts")
-            line += (f"; 5y5y at {_pct(d['5y5y'])} against a 2y/5y/10y level of "
-                     f"{_pct(d['level'])} says the long end {term}")
-        lines.append(line + ".")
+        lines.append(
+            f"Curve: The slope of the Treasury curve, measured by 2s10s (10y minus 2y), stands "
+            f"at {slope.last / BP:+.0f}bp after a {_chg(slope, 'chg_1m')} change over 21 "
+            f"sessions; the 2s10s regime classifies the move as "
+            f"{_curve_move(sheet.regime.curve, 20)} (bull or bear as yields fell or rose, "
+            f"steepening or flattening as 2s10s widened or narrowed, each beyond 5bp).")
 
-    # FX: the dollar regime, then the carry ranking if there is one.
+    # FX: the broad dollar by its regime, change and z-score.
     usd = r("DTWEXBGS")
     if usd is not None:
-        lean = {"strong": "USD longs against low-yielders",
-                "weak": "fading dollar strength into high-carry currencies"
-                }.get(sheet.regime.dollar, "range trades rather than trend")
-        lines.append(f"FX: the broad dollar is {sheet.regime.dollar} at {_level(usd)} "
-                     f"({_chg(usd, 'chg_1m')} over a month, z {usd.z_1y:+.1f}); in a "
-                     f"{sheet.regime.risk} tape that favours {lean}.")
+        lines.append(f"FX: The broad trade-weighted dollar index stands at {_level(usd)}, "
+                     f"{_chg(usd, 'chg_1m')} over 21 sessions and {_sd(usd.z_1y)}; its regime "
+                     f"is classified as {sheet.regime.dollar} (strong or weak for a 21-session "
+                     f"change beyond 1.5% in either direction, range otherwise).")
+
+    # Carry: a cross-sectional observation, ranked by carry-to-volatility.
     if carry_rows:
-        # A carry trade is named by its carry: the long is the best carry-to-vol
-        # among positive-carry currencies, the funder the most negative carry.
-        # The carry-plus-momentum score is reported beside it, never instead of it.
         by_ctv = sorted(carry_rows, key=lambda x: x.carry_to_vol, reverse=True)
         positive = [x for x in by_ctv if x.carry > 0]
         top = positive[0] if positive else by_ctv[0]
         low = min(carry_rows, key=lambda x: x.carry)
         best = max(carry_rows, key=lambda x: x.score)
+        line = (f"Carry: Following Koijen, Moskowitz, Pedersen & Vrugt (2018), carry is the "
+                f"return earned if the spot rate is unchanged, here the interest-rate "
+                f"differential against USD; carry-to-volatility divides it by the annualised "
+                f"63-session realised volatility. In the cross-section of {len(carry_rows)} "
+                f"currencies against USD, ")
         if positive:
-            head = (f"Carry: long {top.ccy} ({_pct(top.carry)} p.a., carry-to-vol "
-                    f"{top.carry_to_vol:+.2f}) funded in {low.ccy} ({_pct(low.carry)})")
+            line += (f"the highest carry-to-volatility among currencies with positive carry is "
+                     f"{top.ccy} ({_pct(top.carry)} p.a., carry-to-volatility "
+                     f"{top.carry_to_vol:+.2f}, realised volatility {top.vol_3m * 100:.0f}%)")
         else:
-            head = (f"Carry: no currency in the basket earns positive carry against USD; "
-                    f"the least negative is {top.ccy} ({_pct(top.carry)} p.a.), the funder "
-                    f"of choice {low.ccy} ({_pct(low.carry)})")
-        tail = (f"; size for {top.vol_3m * 100:.0f}% realised vol"
-                + (" and cut if risk turns off." if sheet.regime.risk != "risk-off"
-                   else ", and keep it small while risk is off."))
+            line += (f"no currency has positive carry against USD; the highest "
+                     f"carry-to-volatility is {top.ccy} ({_pct(top.carry)} p.a., "
+                     f"carry-to-volatility {top.carry_to_vol:+.2f})")
+        line += f", and the lowest carry is {low.ccy} ({_pct(low.carry)} p.a.)."
         if best.ccy != top.ccy:
-            tail += (f" On carry plus momentum the top score is {best.ccy} "
-                     f"({best.score:+.2f}, momentum {best.mom_3m * 100:+.1f}%), a trend "
-                     f"call rather than a carry call.")
-        lines.append(head + tail)
+            line += (f" On the composite carry-plus-momentum score (carry-to-volatility plus "
+                     f"the 63-session spot return over volatility) the highest-ranked "
+                     f"currency is {best.ccy} ({best.score:+.2f}, 63-session spot return "
+                     f"{best.mom_3m * 100:+.1f}%), so the two rankings differ.")
+        lines.append(line)
     if sheet.synthetic_ids:
-        lines.append(f"Caveat: {len(sheet.synthetic_ids)} inputs are SYNTHETIC; the views "
-                     "above describe simulated data.")
+        lines.append(f"Data note: {len(sheet.synthetic_ids)} inputs are SYNTHETIC (simulated), "
+                     "so the quantities above describe the generator, not the market.")
+    lines.append("This note is descriptive and makes no recommendation.")
     return " ".join(lines)
 
 
@@ -539,26 +548,34 @@ def narrate_structured(p) -> str:
 # --------------------------------------------------------------------------- #
 REPORT_PROMPTS: dict[str, str] = {
     "daily_market_commentary": (
-        "Write a daily market commentary in this format: a one-line headline; a 'Rates' "
-        "paragraph (levels in percent, 1d and 1w changes in bp, the curve regime); an 'FX' "
-        "paragraph (broad dollar, the majors, the risk regime); then 'Positioning ideas': two "
-        "or three trades, each with an entry level, a stop and a target given as numbers taken "
-        "from the payload (e.g. a stop one week's move beyond the entry, a target at the 1y "
-        "mean implied by the z-score), and the observation that would invalidate it. Date the "
+        "Write a daily market commentary as research commentary, in a formal, third-person "
+        "register, in this format: a one-line headline; a 'Rates' paragraph (levels in "
+        "percent, 1-day and 1-week changes in bp, the 20-session curve classification); an "
+        "'FX' paragraph (broad dollar, the majors, the volatility and credit read); then "
+        "'Observations': the two or three quantities in the payload that are most extended "
+        "against their trailing 252-session distribution, each stated with its definition "
+        "and window, and the observation that would revise the reading. Describe, do not "
+        "recommend: no trades, positions, entry or exit levels, sizing or forecasts. Date the "
         "note to as_of and flag any ids listed under synthetic_ids as simulated."),
     "weekly_fi_fx_strategy": (
-        "Write a weekly fixed-income and FX strategy note in this format: a one-line headline; "
-        "'Duration view', 'Curve view' and 'FX view' paragraphs, each anchored to a number in "
-        "the payload (10y level and z-score, 2s10s and its change, 5y5y, the dollar's 1m change, "
-        "the carry ranking); a 'Positioning' list of two to four trades with entry, stop and "
-        "target as numbers derived from the payload and the size rationale; and 'Risks to the "
-        "view' naming the data that would flip each call. Date it to as_of and flag any "
-        "synthetic_ids as simulated."),
+        "Write a weekly fixed-income and FX research note in a formal, third-person, "
+        "journal-style register, in this format: a one-line headline; 'Duration', 'Curve' and "
+        "'FX' paragraphs, each anchored to a number in the payload and stating the measure's "
+        "definition and window (the 10y level and its z-score against the trailing "
+        "252-session mean, the 1-week change in bp, the level, slope and curvature of the "
+        "curve in the sense of Litterman & Scheinkman (1991), the 5y5y forward as a measured "
+        "spread to the 2y/5y/10y level, the dollar's 1-month change, the carry-to-volatility "
+        "cross-section with carry as defined by Koijen, Moskowitz, Pedersen & Vrugt (2018)); "
+        "an 'Interpretation' paragraph on where the measures agree or disagree and which "
+        "assumption or window they are most sensitive to; and 'What would revise this "
+        "reading', naming the data that would change each description. Describe, do not "
+        "recommend: no trades, positions, entry or exit levels, sizing or forecasts. Date it "
+        "to as_of and flag any synthetic_ids as simulated."),
 }
 
 
 def report_prompt(kind: str) -> str:
-    """Format instruction appended to the operator's question for report kinds."""
+    """Research-commentary format appended to the operator's question for report kinds."""
     return REPORT_PROMPTS.get(kind, "")
 
 
@@ -680,7 +697,7 @@ if __name__ == "__main__":
     t = clean(narrate_bond(neg))
     assert "yields must fall 3.5bp" in t and "rise -3.5bp" not in t and "-0.300" in t
 
-    # (3) regime labels never supply the direction of a causal sentence.
+    # (3) the sign of z picks the word; regime labels never become a causal claim.
     def _sheet(z: float, risk: str, inflation: str):
         row = SimpleNamespace(last=0.04, unit="pct", z_1y=z, pct_1y=0.5, chg_1d=0.0,
                               chg_1w=0.0, chg_1m=0.0)
@@ -689,11 +706,11 @@ if __name__ == "__main__":
         return SimpleNamespace(as_of="2026-01-01", regime=reg, synthetic_ids=(),
                                row=lambda i: row if i == "DGS10" else None)
     t = narrate_weekly_strategy(_sheet(-1.5, "risk-on", "falling"))
-    assert "need a risk-off tape to persist; the tape is currently risk-on" in t
-    assert "need risk-on" not in t
+    assert "1.5 standard deviations below its trailing 252-session mean" in t, t
+    assert t.endswith("This note is descriptive and makes no recommendation."), t
     t = narrate_weekly_strategy(_sheet(1.5, "risk-on", "falling"))
-    assert "a rising-breakeven trend (breakevens are currently falling)" in t
-    assert "falling breakeven trend" not in t
+    assert "1.5 standard deviations above its trailing 252-session mean" in t, t
+    assert "tape" not in t and "lean" not in t, t
 
     # (4) stale OECD rate dates are named; absent fields are ignored.
     stale = [SimpleNamespace(**{**vars(r), "rate_date": "2025-12-01", "rate_stale": True})
