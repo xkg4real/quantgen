@@ -1345,6 +1345,65 @@ def test_b5_release_needs_owner_review_the_signoff_and_clean_checks():
         approval.check, claims.check, consistency.check = saved
 
 
+# --------------------------------------------------------------------------- #
+# Task 5 (2/4): the referee panel
+# --------------------------------------------------------------------------- #
+def test_b5_panel_records_every_referee_and_never_reads_silence_as_ok():
+    from tools import debate
+    from tools.paper import bundle, panel
+    names = [r.name for r in debate.DEFAULT_REFEREES]
+    agy = {r.name for r in debate.DEFAULT_REFEREES if r.kind == "agy"}
+    saved = bundle.make_bundle, debate.run_referee
+    with tempfile.TemporaryDirectory() as name:
+        root = Path(name)
+        d, b = root / "2026-10-23-panel", root / "bundle"
+        (d / "review").mkdir(parents=True)
+        b.mkdir()
+        replies = {n: debate.RefereeResult(name=n, status="ok", report_md="  \n", raw_path=None, reset_at=None,
+                                           version="1.0") for n in names}
+        replies[names[0]] = debate.RefereeResult(name=names[0], status="quota", report_md="", raw_path=None,
+                                                 reset_at="2026-10-27 19:16", version=None)
+        briefs = []
+
+        def fake_run(ref, bundle_dir, prompt, out_dir, **kwargs):
+            assert bundle_dir == b and "REVIEW_BRIEF.md" in prompt and len(prompt) < 200, prompt
+            briefs.append((b / "REVIEW_BRIEF.md").read_text(encoding="utf-8"))
+            return replies[ref.name]
+
+        def crash(*args, **kwargs):
+            raise RuntimeError("runner died")
+
+        try:
+            bundle.make_bundle = lambda paper_dir, round_k, allow_private=False, dest_root=None: b
+            debate.run_referee = fake_run
+            got = panel.run_panel(d, 1)
+            assert got == {names[0]: "quota", **{n: "empty" for n in names[1:]}}, got
+            rec = json.loads((d / "review" / f"round1_{names[0]}.json").read_text(encoding="utf-8"))
+            assert rec["status"] == "quota" and rec["reset_at"] == "2026-10-27 19:16" and rec["major"] == [], rec
+            replies[names[0]] = debate.RefereeResult(
+                name=names[0], status="ok", raw_path=None, reset_at=None, version="1.0",
+                report_md="# Verdict: REJECT\n\n## Major\n\n- M1: The t statistic ignores autocorrelation.\n\n"
+                          "## Minor\n\n- m1: A typo.\n")
+            assert panel.run_panel(d, 1, only=[names[0]]) == {names[0]: "ok"}
+            rec = json.loads((d / "review" / f"round1_{names[0]}.json").read_text(encoding="utf-8"))
+            assert len(rec["major"]) == 1 and len(rec["minor"]) == 1, rec
+            _b5_refused(lambda: panel.run_panel(d, 2), "response_round1.md")
+            (d / "review" / "response_round1.md").write_text("M1: fixed in results-2.\n", encoding="utf-8")
+            panel.run_panel(d, 2)
+            assert (b / "review" / "response_round1.md").is_file() and "round 2" in briefs[-1], briefs[-1]
+            assert set(panel.run_panel(d, 2, fidelity=True)) == agy and briefs[-1].startswith("# Fidelity brief")
+            assert "claims.yaml" in briefs[-1], "the fidelity review rechecks the claims against the Korean"
+            debate.run_referee = crash
+            assert set(panel.run_panel(d, 1).values()) == {"error"}, "a crashed runner must still leave a record"
+            p = panel.record(d, 1, "claude", "ok", "# Verdict: ACCEPT\n\n## Major\n\n## Minor\n\n- m1: Fine.\n")
+            assert p.name == "round1_claude.json" and json.loads(p.read_text(encoding="utf-8"))["major"] == []
+            p = panel.record(d, 1, "claude", "ok", "Looks fine.")
+            assert json.loads(p.read_text(encoding="utf-8"))["status"] == "error", "a headingless report is not ok"
+            _b5_refused(lambda: panel.run_panel(d, 1, only=["nobody"]), "unknown referee")
+        finally:
+            bundle.make_bundle, debate.run_referee = saved
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:] == ["--warm"]:
