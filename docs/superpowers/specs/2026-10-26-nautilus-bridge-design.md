@@ -3,21 +3,23 @@
 Date: 2026-10-26.
 
 Status:
-- **Revision 3 (after Claude referee round 2; GPT and Gemini pending).**
+- **Revision 4 (after Claude referee round 3; GPT and Gemini pending).**
   - Five Claude personas (security, quant, QA, ops, governance) form one referee under D6
     (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:46`). Round 1, on Revision 1:
-    1 REJECT, 4 ACCEPT WITH CHANGES. Round 2, on Revision 2: security AGREE, 4 ACCEPT WITH CHANGES; no blocker,
-    12 major and 25 minor new issues, 4 still open from round 1, and the moderator's C-5 and C-6. This revision
-    applies every ruling of `docs/superpowers/specs/2026-10-26-nautilus-review/round2_rulings.md`; Appendix B maps
-    each issue of both rounds.
+    1 REJECT, 4 ACCEPT WITH CHANGES. Round 2, on Revision 2: security AGREE, 4 ACCEPT WITH CHANGES. Round 3, on
+    Revision 3: security, QA and governance AGREE, quant and ops ACCEPT WITH CHANGES; no blocker, 3 major and 30
+    minor new issues, and the moderator's C-7 and C-8. This revision applies every ruling of
+    `docs/superpowers/specs/2026-10-26-nautilus-review/round3_rulings.md`; Appendix B maps each issue of all rounds.
   - GPT (Codex CLI) and Gemini (`agy`) have not run: REVIEW_INCOMPLETE until both run on this revision, or the owner
     records a substitute in Appendix B.
-  - Step 1a is done: the Claude rounds are ruled and applied, so Steps 2 to 7 may start on the branch (section 9).
-    Step 1b is open: GPT and Gemini, and the owner's approval with answers to O1 to O15 (section 2); it gates Step 7A.
+  - Step 1a is open: a Claude round 4 on Revision 4, which the moderator closes under C-8 (a round with only minor
+    issues is applied and closes Step 1a; a new major reopens it). Steps 2 to 7 start on the branch when it closes
+    (section 9). Step 1b is open: GPT and Gemini, and the owner's approval with answers to O1 to O15 (section 2); it
+    gates Step 7A.
   - Owner approval: **not given**. Owner sign-off sentence (Step 7A): **none recorded**.
-- Next: Step 2 on the branch; in parallel, GPT and Gemini on Revision 3 and the owner's rulings (Step 1b).
+- Next: Claude round 4 on Revision 4; in parallel, GPT and Gemini and the owner's rulings (Step 1b).
 
-Inputs (QUANTGEN code at `6f7c610`, unchanged at HEAD `7112351`, which adds only this spec and the review folder;
+Inputs (QUANTGEN code at `6f7c610`, unchanged at HEAD `4f5f18b`, which adds only this spec and the review folder;
 branch `claude/amazing-gauss-tdiguu`): in `research_notes/QUANTGEN Nautilus bridge map/`, `00_synthesis.md` ("synth",
 with the critic findings K1 to K15 in its section 10), `01_nautilus_backtest_api.md` (map01),
 `02_quantgen_gate_ledger_lab.md` (map02), `03_pilot_and_parity.md` (map03, SPY before 2004-12-01 only) and
@@ -25,11 +27,11 @@ with the critic findings K1 to K15 in its section 10), `01_nautilus_backtest_api
 `docs/superpowers/specs/2026-10-26-nautilus-review/round<k>_claude_<persona>.md` with their rulings.
 
 Citation keys:
-- `file:line` is a QUANTGEN path at `7112351`; code lines are unchanged since `f5742ab`.
+- `file:line` is a QUANTGEN path at `4f5f18b`; code lines are unchanged since `f5742ab`.
 - `nt:<path>:<line>` is `nautilus_trader` 1.231.0 in `scratch:ntvenv/lib/python3.13/site-packages/nautilus_trader/`.
 - `map0N §n`, `synth §n`, `K<n>` and referee ids (`SECURITY-1`, `QA-R2-4`, ...) point into the inputs.
 - `scratch:` is `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/`;
-  `scratch:rev2_probe/` and `scratch:rev3_probe/` hold the Revision-2 and Revision-3 probes, on synthetic data only.
+  `scratch:rev2_probe/` to `scratch:rev4_probe/` hold the Revision-2 to Revision-4 probes, on synthetic data only.
 - UNVERIFIED marks anything nobody in this session could check.
 
 ## Owner context
@@ -50,10 +52,12 @@ needed. Of-record runs, that is, rows in `~/.nextgen/macro/ledgers` (map02 §3.1
 `owner_confirmed`, written at Step 7A.3 after the Windows evidence exists and quoting the table and code digests (6.6;
 GOVERNANCE-R2-2).
 
-Branch work does not wait (Step 1a; GOVERNANCE-R2-1): Steps 2 to 7 run on the section 2 defaults, and where the owner
-later rules otherwise, the affected branch work is redone or deleted before Step 7A. Pilots wait for, in this order:
-(1) Step 1b, that is, the GPT and Gemini rounds, or a substitute the owner records in Appendix B, and the owner's
-approval in the Status block; (2) the sign-off sentence and the rest of Step 7A (section 9).
+Branch work does not wait for Step 1b (GOVERNANCE-R2-1): once Step 1a closes, Steps 2 to 7 run on the section 2
+defaults, and where the owner later rules otherwise, the affected branch work is redone or deleted before Step 7A.
+Pilots wait for, in this order: (1) Step 1b, that is, the GPT and Gemini rounds, or a substitute the owner records in
+Appendix B, and the owner's approval, recorded verbatim in the Status block with its channel and date in the form "I
+approve spec 2026-10-26 revision <n> on the section 2 defaults, except: <O-number: ruling>. Geon Koh, <date>."
+(GOVERNANCE-R3-5); (2) the sign-off sentence and the rest of Step 7A (section 9).
 
 ## 1. Purpose and scope
 
@@ -93,12 +97,12 @@ it until the owner rules. O1 to O12 come from synth §3.1, O13 from K5, O14 and 
 | O5 | Parity bars: the corrected bars of 5.4, or the original 98% / 0.99 / 0.05. | Corrected bars, with the commission check P7 hard (QUANT-5); the original bars printed next to them. | Too strict: a false WITHHELD on engine noise; measured margins are 100x on correlation and 7.7x on Sharpe (5.4.3). Kept original: a forgotten 2x cost passes all three original bars (synth §7.3). |
 | O6 | Pilot-1 registration table (10.1). | As 10.1. The start is 2004-12-01: map 03 already computed all 12 settings on 1995 to 2004, so an earlier start would make pilot 1 exploratory (GOVERNANCE-5). | Ledger rows are immutable (`core/quant/gate_ledger.py:337-355`); a wrong key field leaves 12 permanent extra trials in E1. |
 | O7 | Realism leg (fill delay): in scope? | **Deferred** by ruling C-1: no latency code, no `timing_lag` rows, no realism fixture. | If the owner wants a realism number, a later spec adds it with its own registration. Nothing to undo. |
-| O8 | Referees: wait for GPT (Codex quota resets 2026-10-30 14:40; `docs/superpowers/plans/2026-10-23-execution-record.md:158`) and Gemini (`agy`; `tools/debate.py:46-47`), or record a substitute. | Wait (Step 1b). Claude's rounds 1 and 2 are done (Step 1a); no substitute is recorded. | Step 1b ends about four days later; Steps 2 to 7 go ahead meanwhile on the branch. A missing referee is REVIEW_INCOMPLETE, never "no objections" (map04 R24). |
+| O8 | Referees: wait for GPT (Codex quota resets 2026-10-30 14:40; `docs/superpowers/plans/2026-10-23-execution-record.md:158`) and Gemini (`agy`; `tools/debate.py:46-47`), or record a substitute. | Wait (Step 1b). Claude's rounds 1 to 3 are ruled and applied; round 4 closes Step 1a (C-8); no substitute is recorded. | Step 1b ends about four days later; Steps 2 to 7 go ahead meanwhile on the branch. A missing referee is REVIEW_INCOMPLETE, never "no objections" (map04 R24). |
 | O9 | Windows environment and its location. | Base interpreter `%LOCALAPPDATA%\quantgen\py313` (python.org per-user install), venv `%LOCALAPPDATA%\quantgen\ntvenv`, firewall rule `QUANTGEN-nautilus-block-out` (4.4), the `.env` line of 3.4, timings at Step 7A. The Windows closure unpacks to about 506 MB, 0.5 to 0.6 GB with bytecode (OPS-14). The owner's global interpreter is the Microsoft Store Python 3.13 (`docs/asset_expansion/study.log:27, 29`; `grokteam/prereg.py:87-88`; UNVERIFIED until Step 7A prints `sys.executable`); it never creates the venv or runs pip for the bridge, and R-03 refuses a venv built on it (6.7; OPS-R2-2). | Owner time. A venv inside OneDrive would sync about 0.6 GB. |
 | O10 | Where pilots and the suite of record run. | The owner's Windows machine, against the production ledger; of-record mode is tied to it by the host fingerprint and the egress record (5.3.2). Linux rehearses on synthetic data only. | Exporting `E1.jsonl` and copying back the extended chain risks a fork. |
 | O11 | Trial count; row counts of `E1.jsonl` and `C3.jsonl` (UNVERIFIED today). | `n_trials = family N_raw after registration + U`; U counts the study's documented configurations (`study_configs`, 6.6) whose `config_id` is absent from the family ledger (QUANT-4). Four counts printed. Of-record mode refuses a missing, empty or broken family ledger (R-15). | Over-counting lowers the DSR, the conservative direction. If `E1.jsonl` is missing or empty on the owner's machine, pilot 1 waits for the owner's ruling on how that ledger starts. |
 | O12 | How a WITHHELD result appears in Strategy Lab. | Deferred. Outputs live in `docs/nautilus_bridge/runs/<bridge_run_id>/`, which the Lab does not read (`ui/strategy_lab_page.py:31`). | The owner reads results from files. No card ever says WITHHELD (5.5). |
-| O13 | May the child tolerate what the kernel and the Rust core load in every backtest? `from nautilus_trader.backtest.engine import BacktestEngine` loads 7 `nautilus_trader.live.*` modules (`nt:system/kernel.py:75-77`) and `nautilus_trader.core.nautilus_pyo3` with 35 compiled submodules, among them `binance`, `bybit`, `okx`, `polymarket`, `interactive_brokers`, `network`, `live` and `sandbox`. | Tolerate the import census of a per-platform golden baseline recorded from F1 and F2 (5.2.7). The census is drift detection only: it cannot see use of a module already loaded (SECURITY-2); the egress layer (4.4) bounds use. A run that imports a module outside the baseline's Nautilus or third-party sets, or any `nautilus_trader.adapters` or `.network` module, is invalid. | Ruled unacceptable: no 1.231.0 backtest runs, and the bridge stops. Tolerated wrongly: a loaded Rust client could try a socket; the egress layer makes it fail, and Step 7A's probe shows that on Windows. |
+| O13 | May the child tolerate what the kernel and the Rust core load in every backtest? `from nautilus_trader.backtest.engine import BacktestEngine` loads 7 `nautilus_trader.live.*` modules (`nt:system/kernel.py:75-77`) and `nautilus_trader.core.nautilus_pyo3` with 35 compiled submodules, among them `binance`, `bybit`, `okx`, `polymarket`, `interactive_brokers`, `network`, `live` and `sandbox`. | Tolerate the import census of a per-platform golden baseline recorded from F1 and F2 (5.2.7). The census is drift detection only: it cannot see use of a module already loaded (SECURITY-2); the egress layer (4.4) bounds use. A run whose Nautilus or third-party import set differs from the baseline's, in either direction, or that imports any `nautilus_trader.adapters` or `.network` module, is invalid (QA-R3-12). | Ruled unacceptable: no 1.231.0 backtest runs, and the bridge stops. Tolerated wrongly: a loaded Rust client could try a socket; the egress layer makes it fail, and Step 7A's probe shows that on Windows. |
 | O14 | Pilot-2 registration table (10.2). It writes 5 permanent rows into C3, which also holds paper_live's trend rows (`paper_live/engine.py:64-69`). | As 10.2. | As O6, in C3. |
 | O15 | A configured venv off its pins (versions, Python minor, wheel identity): FAIL or NotRun in the suite? | FAIL (synth §4 default 5). A blank key stays NotRun. | A FAIL in the suite of record until the venv is fixed. NotRun would hide an engine change. |
 
@@ -134,8 +138,9 @@ it until the owner rules. O1 to O12 come from synth §3.1, O13 from K5, O14 and 
 - Tests write ledgers only to temp dirs (`core/quant/gate_ledger.py:927-933`). Every `nautilus` suite test runs inside a
   guard that digests, before and after, `~/.nextgen/macro/ledgers`, the production ledger dir `config.macro_dir() /
   "ledgers"` resolved once when the suite starts (`.env` may move it; `config.py:176-178`), and the repo's
-  `docs/nautilus_bridge/`, and fails on any change (QA-1, QA-R2-13; L1-32). A test that sets `QUANTGEN_MACRO_DIR`
-  restores it in `finally`.
+  `docs/nautilus_bridge/`, and fails on any change (QA-1, QA-R2-13; L1-32). Having resolved those paths, the guard
+  sets `QUANTGEN_MACRO_DIR` to a fresh temp dir for each test and restores it in `finally`, so a default ledger path
+  inside a test lands in a temp dir; `macro_dir()` reads the variable on every call (GOVERNANCE-R3-2).
 
 ### 3.4 No-new-dependency shape
 
@@ -166,7 +171,7 @@ golden value was measured in high precision; cross-precision equality is UNVERIF
 
 - The house locale is cp949 (`docs/superpowers/plans/2026-10-23-quantgen-paper-pipeline.md:19`). The child runs with
   `-X utf8`, because `-I` ignores `PYTHONUTF8`, and an absolute script path. At import, `tools/nautilus/runner.py`
-  reconfigures `sys.stdout` and `sys.stderr` to UTF-8 with `errors="replace"`, as `tests/run_all.py:35-38` does.
+  reconfigures `sys.stdout` and `sys.stderr` to UTF-8 with `errors="replace"`, as `tests/run_all.py:35-39` does.
 - In `tools/nautilus/` and the new tests: every `open`, `read_text` and `write_text` passes `encoding="utf-8"`, and text
   writes pass `newline="\n"`; every text-mode `subprocess` call, `git` included, passes `encoding="utf-8",
   errors="replace"`; every `csv.writer` passes `lineterminator="\n"`, because it writes `"\r\n"` otherwise.
@@ -190,18 +195,19 @@ golden value was measured in high precision; cross-precision equality is UNVERIF
 - Pilot 1's window is SPY from 2004-12-01; pilot 2's is the whole BTC-USD cache. Neither is computed on before
   registration (map02 §0 finding 4; map04 R23). Every rehearsal Claude runs uses synthetic data only; map 03's
   pre-2004 SPY probe is cited (5.4.3) and recorded in 10.4, never repeated (GOVERNANCE-5).
-- The runner refuses by content, not by name (GOVERNANCE-4, QA-17, GOVERNANCE-R2-3; R-10). In rehearsal it refuses a
-  prices file whose md5 equals a pinned real file's (SPY or BTC-USD), whatever its `end`, and one whose resolved path is
-  the cache's `yf_SPY.csv` or `yf_BTC-USD.csv`; DGS3MO is allowed only as the cash series. A real-data rehearsal would
-  need its own owner ruling and 10.4 row. Both modes apply `start` and `end` to each line's date text before any price
-  value is parsed (5.3.2 step 5).
+- The runner refuses by place and by content (GOVERNANCE-4, QA-17, GOVERNANCE-R2-3, GOVERNANCE-R3-3; R-10). In
+  rehearsal a prices file must resolve (`normcase(realpath)`) under `tempfile.gettempdir()`, so no file of
+  `docs/asset_expansion/cache/` is accepted, and a byte copy, whose md5 equals a pinned real file's (SPY or BTC-USD),
+  is refused whatever its `end`; DGS3MO is allowed only as the cash series. A real-data rehearsal would need its own
+  owner ruling and 10.4 row. Both modes apply `start` and `end` to each line's date text before any price value is
+  parsed (5.3.2 step 5).
 
 ### 3.10 Ledger append-only
 
 Ledgers are append-only and hash-chained; a duplicate `config_id` never replaces the first row
 (`core/quant/gate_ledger.py:337-355`). Every variant is registered before its first engine run. Of-record mode needs
 an existing, non-empty family ledger whose chain verifies, and never creates one (GOVERNANCE-3; R-15). No bridge code
-edits `core/quant/gate_ledger.py` or another harness source (`core/quant/gate_package.py:35-37`); helpers live in
+edits `core/quant/gate_ledger.py` or another harness source (`core/quant/gate_package.py:36-38`); helpers live in
 `tools/nautilus/`.
 
 ### 3.11 Standing house rules
@@ -223,7 +229,8 @@ of-record mode needs a passing probe in the same run and a matching Step 7A reco
 ### 4.1 Two processes
 
 - **Parent: the runner**, in the global interpreter (numpy 2.3.5, pandas 2.3.3, scipy 1.18.0). It imports QUANTGEN
-  read-only (`config`, `core.quant.strategies`, `core.quant.validate`, `core.quant.gate_ledger`), loads
+  read-only (`config`, `core.quant.strategies`, `core.quant.validate`, `core.quant.gate_ledger`, and
+  `core.quant.gate_package` for `HARNESS_SOURCES`, 6.6), loads
   `docs/asset_expansion_study.py` by path for P0 (5.3.2 step 7), never imports `nautilus_trader` (rule C2), and reads
   the venv's own files for versions and the wheel identity (6.7) through `tools/nautilus/launch.py`.
 - **Child: the sandbox**, in the pinned venv, one process per (column, cost level). It imports only what 5.2.2 allows.
@@ -253,14 +260,15 @@ of-record mode needs a passing probe in the same run and a matching Step 7A reco
 
 Every child, whether the sandbox, the egress probe or a test stub, starts through one function, `run_child`, in
 `tools/nautilus/launch.py`, which also holds the venv and wheel-identity reads (6.7) and the census parser (5.2.7) and
-is built at Step 3 (QA-R2-5).
+is built at Step 3 (QA-R2-5). At Step 5 it gains `fixture_inputs(name) -> (input_bytes, bars_bytes)` for F1, F1r, F2
+and N1, the one builder that L2-4, L2-5a, L2-5b, `--fixtures`, `--write-goldens` and L1-33 use (QA-R3-1).
 
 | Item | Value | Item | Value |
 |---|---|---|---|
 | argv, POSIX | `[<unshare>, "-rn", <venv python>, "-I", "-B", "-X", "utf8", "-X", "importtime", <abs sandbox.py>, "run", "--in", <tempdir>]` | argv, Windows | the same without `<unshare>, "-rn"` |
 | argv variants | `--check-env` and `--guard-selftest` replace the last three items with that flag and drop `"-X", "importtime"`. The egress probe replaces script and mode with `<abs tools/nautilus/egress_probe.py>` and drops `"-X", "importtime"`. A rehearsal `--child-cmd` replaces the items from `<venv python>` to the script path (5.3.1); its first item must be absolute, and its directory is the `<venv bin dir>` of the env rows. | unshare | `shutil.which("unshare")`, resolved once per run; it must exist and `unshare -rn true` must exit 0, else R-14 |
 | venv python | `QUANTGEN_NAUTILUS_PYTHON`, resolved as 6.7 says | process | `subprocess.Popen(argv, cwd=<tempdir>, env=<env>, stdin=DEVNULL, stdout=PIPE, stderr=PIPE, text=True, encoding="utf-8", errors="replace")`, with `start_new_session=True` on POSIX and `creationflags=subprocess.CREATE_NEW_PROCESS_GROUP` on Windows. Everything from `Popen` to the end of `communicate` sits in `try/except BaseException`, which kills the tree, drains with `communicate(timeout=30)` and re-raises, so a `KeyboardInterrupt` leaves no child (OPS-R2-4). |
-| timeout | `communicate(timeout=900)`, or the `timeout` a rehearsal test passes (5.3.1). On expiry: Windows `taskkill /T /F /PID <pid>`, POSIX `os.killpg(pid, SIGKILL)`; then `communicate(timeout=30)` drains; the run is INVALID (C-06). This extends `tools/debate.py:64-79` (OPS-1). | cwd | `os.path.realpath(tempfile.mkdtemp(prefix="qgnb_"))`; the parent creates `<tempdir>/home` and `<tempdir>/tmp` first |
+| timeout | `communicate(timeout=900)`, or the `timeout` a rehearsal test passes (5.3.1). On expiry: Windows `taskkill /T /F /PID <pid>`, POSIX `os.killpg(pid, SIGKILL)`; then `communicate(timeout=30)` drains; the run is INVALID (C-06). This extends `tools/debate.py:64-78` (OPS-1). | cwd | `os.path.realpath(tempfile.mkdtemp(prefix="qgnb_"))`; the parent creates `<tempdir>/home` and `<tempdir>/tmp` first |
 | env, Windows | `SYSTEMROOT` (copied), `PATH` = `<venv Scripts dir>;` + `os.environ["SYSTEMROOT"]` + `\System32` (an env dict is not expanded; OPS-R2-8), `USERPROFILE` and `HOME` = `<tempdir>\home`, `TEMP` and `TMP` = `<tempdir>\tmp` | env, POSIX | `PATH` = `<venv bin dir>:/usr/bin:/bin`, `HOME` = `<tempdir>/home`, `TMPDIR` = `<tempdir>/tmp`, `LANG` and `LC_ALL` = `C.UTF-8` |
 | env, never | any `.env` key, `NAUTILUS_PATH`, any `PYTHON*` variable, any other inherited variable; the builder asserts the dict holds exactly its branch's keys (C-10) | output | `import time:` lines of stderr form the census (5.2.7); the last 4,000 characters of the rest of each stream go into the run record |
 | return code | read by the parent (5.2.1); on Windows a code at or above `0xC0000000` is also recorded as NTSTATUS hex, such as `0xC0000409` | cleanup | `shutil.rmtree(<tempdir>, onexc=...)`, up to 3 attempts 0.5 s apart; it never changes the status; leftovers go into the run record (OPS-9) |
@@ -289,10 +297,10 @@ The static scan cannot bind the Rust core, whose network clients load in every b
 - **Step 7A record.** `runner --egress-record` writes `docs/nautilus_bridge/egress/<platform tag>.json`: `schema`
   (`"nautilus-bridge-egress/1"`), `platform_tag`, `venv_python`, `base_python` (`pyvenv.cfg` `executable`), `layer`
   (`"unshare -rn"` or the rule name), `probe`, `recorded_utc`, and `control_connect`, the parent's own connect to
-  1.1.1.1:443 (`{"ok": bool, "error": str}`), which must succeed so the record proves the rule, not an outage; it is
-  the only network call the runner makes. Of-record mode refuses unless the file exists, `probe.blocked` and
-  `control_connect.ok` are true, and `venv_python`, `base_python` and `layer` equal the current run's, paths compared as
-  4.3 says (R-14).
+  1.1.1.1:443 (`{"ok": bool, "error": str}`), which must succeed so the record proves the rule, not an outage; it and
+  the hand-off report's copy (5.3.1) are the only network calls the runner makes. Of-record mode refuses unless the file
+  exists, `probe.blocked` and `control_connect.ok` are true, and `venv_python`, `base_python` and `layer` equal the
+  current run's, paths compared as 4.3 says (R-14).
 
 ## 5. Component design
 
@@ -407,10 +415,11 @@ first statement of `on_start`, and sets `strategy_started = True` as the last (C
 
 Shared rules:
 - Decisions use `float(close_str)`, which equals the parent's rounded float. On every bar the child checks
-  `bar.ts_event` against the file's timestamp and `bar.close == Price.from_str(close_str)`. The actor logs and
-  re-raises an `on_bar` exception (`nt:common/actor.pyx:4588-4591`): measured, a `ValueError` planted at bar 5 of F1
-  ends the child with exit 1 (`scratch:rev3_probe/variants.py`), an INVALID run by C-06 (QA-R2-11). So a failed check
-  appends its reason to the port's `invalid_reasons` and returns, and the reason reaches the manifest (C-12).
+  `bar.ts_event` against the file's timestamp and `bar.close == Price.from_str(close_str)`. The actor logs and re-raises
+  an `on_bar` exception (`nt:common/actor.pyx:4588-4591`): measured, a `ValueError` planted at bar 5 of F1 ends the
+  child with exit 1 (`scratch:rev3_probe/variants.py`; `scratch:rev4_probe/sandbox_raise.py`), an INVALID run by C-06
+  (QA-R2-11). So a failed check appends its reason, which begins with its section-7 id (`"C-12: ..."`; QA-R3-8), to the
+  port's `invalid_reasons` and returns, and the reason reaches the manifest.
 - A decision is logged on every decision bar, with its margin. The strategy trades only when the decision differs from
   the held state, never topping up or trimming: QUANTGEN charges no turnover for drift (`core/quant/strategies.py:88`).
 - Entry: buy `q = floor(cash / (P (1 + c s)))` in `Decimal`, with `cash` the account's USD balance, `P =
@@ -425,8 +434,8 @@ Shared rules:
 
 | Port | Decision rule | Child margin |
 |---|---|---|
-| `TrendSwitchPort` (`rule`, `lookback` L, `step` s) | Bar counter i starts at 0 on the first panel row; decision bars `i >= L and (i - L) % s == 0` (`core/quant/strategies.py:146-147, 176`). `sma`: `on = P[i] > total / L`, `total` a plain left-to-right loop over `P[i-L+1 : i+1]`, not `sum()`, which Python 3.12 and later compensates (measured on 3.13: `sum([1e16, 1.0, -1e16])` is 1.0, the loop 0.0). `tsmom`: `on = (P[i] / P[i-L] - 1.0) > 0.0`, the study's raw form, because `pnl_matrix` passes no rate (`:180-181, 384`). | `sma`: `abs(P[i] - mean) / P[i]`; `tsmom`: `abs(P[i] / P[i-L] - 1.0)` |
-| `CryptoTrendPort` (`hysteresis` h, `lookbacks`, `mas`; pilot defaults (7, 14, 21, 28) and (10, 20, 50, 100, 200)) | Warm-up `max(max(lookbacks), max(mas))`, then a decision every bar. Votes `sign(P[i] - P[i-k])` per k in `lookbacks` and `sign(P[i] - mean(P[i-n+1 : i+1]))` per n in `mas`, `sign(x) = (x > 0) - (x < 0)`; `comp = sum(votes) / len(votes)`; state 1 if `comp > h`, 0 if `comp < -h`, else unchanged (`core/quant/strategies.py:343-347`). | the smallest `abs(P[i] - ref) / P[i]` over the votes |
+| `TrendSwitchPort` (`rule`, `lookback` L, `step` s) | Bar counter i starts at 0 on the first panel row; decision bars `i >= L and (i - L) % s == 0` (`core/quant/strategies.py:146-147, 176`). `sma`: `on = P[i] > mean`, `mean = plain_mean(P[i-L+1 : i+1])`, a plain left-to-right loop (5.2.9), not `sum()`, which Python 3.12 and later compensates (measured on 3.13: `sum([1e16, 1.0, -1e16])` is 1.0, the loop 0.0). `tsmom`: `on = (P[i] / P[i-L] - 1.0) > 0.0`, the study's raw form, because `pnl_matrix` passes no rate (`:180-181, 384`). | `sma`: `abs(P[i] - mean) / P[i]`; `tsmom`: `abs(P[i] / P[i-L] - 1.0)` |
+| `CryptoTrendPort` (`hysteresis` h, `lookbacks`, `mas`; pilot defaults (7, 14, 21, 28) and (10, 20, 50, 100, 200)) | Warm-up `max(max(lookbacks), max(mas))`, then a decision every bar. Votes `sign(P[i] - P[i-k])` per k in `lookbacks` and `sign(P[i] - plain_mean(P[i-n+1 : i+1]))` per n in `mas`, the same loop (QA-R3-9), `sign(x) = (x > 0) - (x < 0)`; `comp = sum(votes) / len(votes)`; state 1 if `comp > h`, 0 if `comp < -h`, else unchanged (`core/quant/strategies.py:343-347`). | the smallest `abs(P[i] - ref) / P[i]` over the votes |
 
 #### 5.2.6 Outputs (in the temp dir, UTF-8, LF, `csv.writer(..., lineterminator="\n")`)
 
@@ -446,8 +455,12 @@ The child marks the run invalid (exit 10) when: `is_backtest_force_stop()` is tr
 (`nt:common/component.pyx:619-620`); bars seen are fewer than bars fed, or `get_result().backtest_end` is earlier
 than the last bar; any order is not FILLED (`order.status.name != "FILLED"`), with no exemption; any `OrderDenied` or
 `OrderRejected` (counted in `on_order_denied` and `on_order_rejected`); an order was in flight on a decision bar; the
-port's `invalid_reasons` is non-empty or `strategy_started` is false. `run` resets the force-stop flag at the start
-(`nt:backtest/engine.pyx:1621-1622`; K14); one process per run stays, for the `random` reseed.
+port's `invalid_reasons` is non-empty or `strategy_started` is false. Each reason begins with its section-7 id, such
+as `"C-01: forced stop"` (QA-R3-8). `run` resets the force-stop flag at the start (`nt:backtest/engine.pyx:1621-1622`;
+K14); one process per run stays, for the `random` reseed. The parent re-derives C-01 to C-04 and C-15 from the
+manifest (`result.force_stop`; `bars_seen` against `input.bars_fed`, and `backtest_end` against `input.last_ts`;
+`orders_not_filled`; `denied` and `rejected`; `strategy_started`) and marks the run INVALID with that id even when
+`valid` is true and the exit code is 0 (QA-R3-2).
 
 **Import census (SECURITY-2, QA-11, OPS-7).** The sandbox may not touch `sys.modules` (rule F), so the parent runs
 `run` with `-X importtime` and reads the census from stderr: each line starting `import time:` splits on `|`, and its
@@ -463,8 +476,10 @@ lies under `nautilus_trader.adapters` or `nautilus_trader.network`, or its NT or
 baseline's (`tools/nautilus/golden/modules_<platform tag>.json`). STD names may differ between 3.13.x patch levels and
 platforms (QA-11). A platform's baseline is the union of its F1 and F2 censuses: Step 6 records Linux's, Step 7A
 Windows'. Across platforms the NT sets must be equal, and the TP sets may differ only by `uvloop*` (POSIX only) and
-`colorama*` (Windows only). `--record-baseline` prints that diff and never overwrites a baseline; Claude reviews the
-Windows diff in the next session, before any pilot (OPS-7).
+`colorama*` (Windows only). `--record-baseline` prints that diff and never overwrites a baseline: an existing equal one
+gives "unchanged" and exit 0; a different one writes nothing, prints its diff and the line
+`Remove-Item tools\nautilus\golden\modules_<tag>.json`, to run only after Claude has reviewed that diff, and exits 2
+(OPS-R3-2). Claude reviews the Windows diff in the next session, before any pilot (OPS-7).
 
 #### 5.2.8 Path containment (SECURITY-3)
 
@@ -479,9 +494,11 @@ repo's `.env`; exit 20.
 
 Normative for structure, not for every line: the import block (verbatim), the classes and functions, the statement that
 holds each guard, and how rule F is met (no `__init__` and no `super()`, the fee closure, `inside`, `platform.uname()`).
-`...` marks a body that 5.2.3 to 5.2.8 specify. Filled in, it reproduces F1, F2 and N1 and both self-checks under
-`unshare -rn`, gives no scan hit, and is the positive control of 8.5 (`scratch:rev3_probe/skeleton.py`, `fill.py`,
-`sandbox_r3.py`, `scan3.py`).
+`...` marks a body that 5.2.3 to 5.2.8 specify. Revision 4 adds `plain_mean` (QA-R3-9), the id at the head of each
+reason (QA-R3-8) and the `__main__` guard (SECURITY-R3-1; `__name__` is a `Name`, not an `Attribute`, so F3 does not
+apply). Filled in, it reproduces F1, F2 and N1 and both self-checks under `unshare -rn`, exits 20 on each of 65
+refusal cases of 6.1 and 5.2.8 (L2-5a, L2-5b), gives no scan hit, and is the positive control of 8.5
+(`scratch:rev4_probe/skeleton.py`, `fill.py`, `sandbox_r4.py`, `drive.py`, `scan4.py`).
 
 ```python
 import argparse
@@ -514,6 +531,11 @@ def inside(root, name):                             # 5.2.8: builds every path t
     if p.parent != root:
         raise Refused(name)
     return p
+def plain_mean(xs):                                 # 5.2.5, both ports: a left-to-right loop, never sum()
+    total = 0.0
+    for x in xs:
+        total += x
+    return total / len(xs)
 def require_backtest_environment(env):              # 5.2.5 (C-2)
     if env is not Environment.BACKTEST:
         raise RuntimeError(f"kernel environment {env.name}, not BACKTEST")
@@ -554,7 +576,7 @@ class Port(Strategy):                               # no __init__: Strategy's ow
     def on_bar(self, bar):                          # never raises: Nautilus re-raises, which ends the child
         self.i += 1
         if bar.ts_event != self.config.ts[self.i] or bar.close != Price.from_str(self.config.closes[self.i]):
-            self.invalid_reasons.append(f"bar {self.i} differs from bars.csv")
+            self.invalid_reasons.append(f"C-12: bar {self.i} differs from bars.csv")   # id first (QA-R3-8)
             return
         ...                                         # one onbar_equity row; decision, margin = self.decide(self.i)
         ...                                         # in-flight check (C-13); side and fee-inclusive Decimal q (5.2.5)
@@ -574,12 +596,12 @@ class CryptoTrendPort(Port):
         ...
 def run(root):                                      # exit 0, 10 or 20 (5.2.1)
     inp = json.loads(inside(root, "input.json").read_text(encoding="utf-8"))
-    ...                                             # 6.1 checks, bars_sha256, n_bars, timestamps: raise Refused
+    ...                                             # every rule of 6.1, one by one (L2-5a): raise Refused
     engine = build_engine()
     engine.add_venue(..., fee_model=make_fee_model(inp["cost_bps"], inp["stress"]), allow_cash_borrowing=False)
     ...                                             # add_instrument; add_data (5.2.4); port.strategy_started = False;
     engine.run()                                    # add_strategy(TrendSwitchPort(TrendSwitchConfig(...))) or crypto
-    ...                                             # 5.2.7 checks; the four files of 5.2.6 through inside(); dispose
+    ...                                             # 5.2.7 checks as "C-nn: ..." reasons; 5.2.6's files; dispose
     return 0 if valid else 10
 def check_env():                                    # --check-env: one JSON line, no file (5.2.1)
     engine = build_engine()
@@ -618,7 +640,8 @@ def main():
         return run(root)
     except Refused:
         return 20
-exit(main())
+if __name__ == "__main__":                          # SECURITY-R3-1: __name__ is a Name, not an Attribute (F3)
+    exit(main())
 ```
 
 ### 5.3 `tools/nautilus/runner.py`
@@ -632,48 +655,56 @@ exit(main())
 
 | Mode | Ledger | Data | Tree | Outputs |
 |---|---|---|---|---|
-| `--rehearsal` | `--ledger-dir`, required; its `normcase(realpath)` must lie under that of `tempfile.gettempdir()` | synthetic only; the content refusals of 3.9 (GOVERNANCE-R2-3) | recorded, never refused (QA-R2-1) | `--out-dir`, required, under the temp dir by the same rule |
+| `--rehearsal` | `--ledger-dir`, required; its `normcase(realpath)` must lie under that of `tempfile.gettempdir()` | synthetic only: `prices_file` under the temp dir by the same rule, and the md5 refusal of 3.9 (GOVERNANCE-R3-3) | recorded, never refused (QA-R2-1) | `--out-dir`, required, under the temp dir by the same rule |
 | `--of-record` | `config.macro_dir() / "ledgers"` (`config.py:176-178`); `--ledger-dir` and `--out-dir` refused | the pinned files of the table | clean (5.3.2 step 2) | `docs/nautilus_bridge/runs/<bridge_run_id>/`, from the repo root, never the working directory |
 
 - `--check-env` runs `sandbox.py --check-env` and `--guard-selftest` and the venv checks of 6.7 (exit 0 on a match, 2
   otherwise). `--egress-record` writes 4.4's record. `--timing` prints the `BacktestEngine` import time (the cumulative
   `-X importtime` figure of `nautilus_trader.backtest.engine`) and the wall time of 12 synthetic runs of 5,600 bars.
-  `--fingerprint` prints 6.6's host fingerprint, `table_sha256` and `code_sha256`. `--fixtures` runs 8.2's F1, F2 and
-  N1 through the launch contract against their goldens (6.8); `--record-baseline` then writes the census baseline only
-  if all three match, else exits 2 and writes nothing (OPS-R2-1); `--write-goldens` writes the goldens, on Linux only,
-  never over an existing file (QA-R2-6). `--handoff-report` (OPS-8) writes `docs/nautilus_bridge/handoff/<platform
-  tag>.json`: the `--check-env` and `--guard-selftest` JSON; the parent's `sys.executable`, `sys._base_executable` and
-  `sys.version`; each fixture's result, diff against its golden and child tails; the census diff against the Linux
-  baseline; both timings; each part records its own error instead of stopping. Only `--egress-record`,
-  `--record-baseline`, `--write-goldens` and `--handoff-report` write files.
-- Pure steps (QA-1, QA-7, QA-R2-1, GOVERNANCE-R2-4). Steps 0 to 2 and step 4's record match are functions with
-  explicit roots: `take_lock(out_root, table_bytes, ledger_paths, rerun_of)` (R-16, R-17), `check_table(table, mode,
-  ledger_dir, hostname, repo_root)` (R-11, R-15), `check_tree(repo_root, anchor_fn, git_exe)` (R-01, R-02) and
-  `check_egress_record(record_dir, run_facts)` (R-14). Of-record mode calls them with fixed arguments; tests call them
-  on temp roots. In rehearsal, `check_tree`'s result is recorded, never refused, and a missing git records null.
+  `--fingerprint` prints 6.6's host fingerprint, `table_sha256` and `code_sha256`. `--fixtures` runs 8.2's F1, F2 and N1
+  through the launch contract against their goldens (6.8); `--record-baseline` then writes the census baseline only if
+  all three match, else exits 2 and writes nothing (OPS-R2-1), and treats an existing baseline as 5.2.7 says;
+  `--write-goldens` writes the goldens, on Linux only, never over an existing file (QA-R2-6). `--handoff-report` (OPS-8)
+  writes `docs/nautilus_bridge/handoff/<tag>.json`, `<tag>` being the parent's `sysconfig.get_platform()` with `-` and
+  `.` replaced by `_`, so `win_amd64` even without a venv (OPS-R3-4): the `--check-env` and `--guard-selftest` JSON; the
+  parent's `sys.executable`, `sys._base_executable` and `sys.version`; a fresh probe and parent control connect, in the
+  egress record's shape; on Windows the output of `netsh advfirewall firewall show rule name=QUANTGEN-nautilus-block-out
+  verbose`; each fixture's result, diff against its golden and child tails; the census diff against the Linux baseline;
+  both timings; the FAIL rows and every `nautilus/*` row of `qa/acceptance_results.json`, with that file's mtime; each
+  part records its own error instead of stopping. Only `--egress-record`, `--record-baseline`, `--write-goldens` and
+  `--handoff-report` write files; `--egress-record` and `--handoff-report` overwrite theirs, and git keeps the history
+  (OPS-R3-2).
+- Pure steps (QA-1, QA-7, QA-R2-1, GOVERNANCE-R2-4). Steps 0 to 2 and step 4's record match are functions with explicit
+  roots: `take_lock(out_root, table_sha256, ledger_paths, rerun_of)` (R-16, R-17), `check_table(table, mode, ledger_dir,
+  hostname, repo_root)` (R-11, R-15), `check_tree(repo_root, anchor_fn, git_exe)`, whose findings
+  `tree_refusal(findings, mode) -> "R-01" | "R-02" | None` judges (QA-R3-7), and `check_egress_record(record_dir,
+  run_facts)` (R-14); step 7's comparison is `check_p0a(study_module, cache_dir, arrays)` (R-13), which `run()` calls
+  with the study module it loaded. Of-record mode calls them with fixed arguments; tests call them on temp roots. In
+  rehearsal, `tree_refusal` returns None, the findings are recorded, and a missing git records null.
 - Test seams (QA-R2-2). `run(table_path, *, mode, ledger_dir=None, out_dir=None, child_cmd=None, probe_cmd=None,
   hooks=None, timeout=900, register_fn=gate_ledger.register_trial, score_fn=validate.score_strategy, rerun_of=None,
   reason=None)`. `child_cmd` (CLI `--child-cmd`, a JSON list) replaces the argv items from `<venv python>` to the script
   path; the runner appends the mode arguments. With it, step 3 launches the stub's `--check-env` and `--guard-selftest`
   and skips the venv file reads, the census judgement is skipped, and the run record says `stub_child: true` and a
-  card's `rules.engine` `STUB`. `probe_cmd` replaces the probe's argv; `hooks` maps `after_step<n>` (n = 0 to 17) or
-  `child_started` (called after `Popen`, before `communicate`) to a callable; `register_fn` and `score_fn` replace
-  `register_trial` and `score_strategy`; `timeout` replaces 900 s. Of-record mode refuses every seam during argument
-  validation, before step 0 writes anything (R-11). Claude never runs of-record mode (Step 2); a call refused in
-  argument validation is not a run.
+  card's `rules.engine` `STUB`. `probe_cmd` replaces the probe's argv; the runner never derives it from `child_cmd`, and
+  every layer-1 runner test passes both (QA-R3-5). `hooks` maps `after_step<n>` (n = 0 to 17) or `child_started` (called
+  after `Popen`, before `communicate`) to a callable; `register_fn` and `score_fn` replace `register_trial` and
+  `score_strategy`; `timeout` replaces 900 s. Of-record mode refuses every seam during argument validation, before step
+  0 writes anything (R-11). Claude never runs of-record mode (Step 2); a call refused in argument validation is not a
+  run.
 
 #### 5.3.2 Order of operations (of-record)
 
 | Step | What the runner does | Refusal |
 |---|---|---|
-| 0 Lock, freshness, re-run | Takes the table lock (5.3.5); reads every earlier record of the table, best effort (`UNREADABLE` otherwise), and applies the re-run policy (5.3.5); reads the modification times of `<ledger dir>/C3.jsonl` and the family ledger | R-16: lock held, or a write under 600 s ago; R-17 |
-| 1 Table, of-record identity | Loads the table with `utf-8-sig`; validates it against 6.6; checks `grid` equals `S.grid_from(**axes)` element by element (`core/quant/strategies.py:392-398`) and the pilot values (capital `"1000000"`, 9 price decimals, volume `"1000000000"`, seed 42); checks that `owner_confirmed` quotes this table's `table_sha256` and the tree's `code_sha256` (6.6; GOVERNANCE-R2-2); checks the family ledger exists, holds a row and verifies, and `host_fingerprint` equals this host's | R-11; R-15 |
-| 2 Git | `check_tree`: runs `git status --porcelain=v1 -z --untracked-files=all`; every entry must be untracked (`??`) under `docs/nautilus_bridge/runs/`. Runs `gate_ledger.repo_anchor()` (`core/quant/gate_ledger.py:122-131`) and `git rev-parse HEAD`; the shas must match. When the anchor is UNVERSIONED, HEAD resolves and `.git` is a directory, the message says "the branch ref is packed; a new commit (the hand-off commit) writes the loose ref" (OPS-3); when `.git` is a file, it names a worktree. Records the sha. | R-01; R-02 (both of-record only) |
+| 0 Lock, freshness, re-run | Parses the table only to compute `table_sha256` (6.6; not JSON: R-11); takes the table lock (5.3.5); reads every earlier record of the table, best effort (`UNREADABLE` otherwise), and applies the re-run policy (5.3.5); reads the modification times of `<ledger dir>/C3.jsonl` and the family ledger | R-16: lock held, or a write under 600 s ago; R-17 |
+| 1 Table, of-record identity | Loads the table with `utf-8-sig`; validates it against 6.6; checks `grid` equals `S.grid_from(**axes)` element by element (`core/quant/strategies.py:392-398`) and the pilot values (capital `"1000000"`, 9 price decimals, volume `"1000000000"`, seed 42); checks that `owner_confirmed` quotes this table's `table_sha256` and the tree's `code_sha256` (6.6; GOVERNANCE-R2-2); checks the family ledger exists, holds a row and verifies, and `host_fingerprint` equals this host's; when `reference_card` is set, checks the md5 of its bytes against `reference_card_md5` (QUANT-R3-3) | R-11; R-15 |
+| 2 Git | `check_tree`, judged by `tree_refusal`: runs `git status --porcelain=v1 -z --untracked-files=all`; every entry must be untracked (`??`) under `docs/nautilus_bridge/runs/`. Runs `gate_ledger.repo_anchor()` (`core/quant/gate_ledger.py:122-131`) and `git rev-parse HEAD`; the shas must match. When the anchor is UNVERSIONED, HEAD resolves and `.git` is a directory, the message says "the branch ref is packed: run `git commit --allow-empty -m "nautilus: re-anchor"`, then `git push`" (OPS-3, OPS-R3-9); when `.git` is a file, it names a worktree. Records the sha. | R-01; R-02 (both of-record only) |
 | 3 Venv | Resolves the venv and reads its files (6.7); runs `--check-env` (Python 3.13.x, environment `BACKTEST`, precision recorded) and `--guard-selftest` (exit 0 and the five outcomes of 5.2.1; QA-R2-10), recording both JSON lines; checks the parent has no `nautilus-trader` distribution (`importlib.metadata.distribution` raises `PackageNotFoundError`; not `find_spec`, which rule E flags in `tools/` when given a `nautilus` string); records the parent's `pyarrow` version or null | R-03 |
 | 4 Egress | Linux: `unshare -rn true`. Runs the probe; of-record also matches the Step 7A record (4.4) | R-14 |
 | 5 Data | Checks the price file's md5; keeps the header and the lines whose leading date text lies in `[start, end]`, before any value is parsed; reads the kept text as the study does (first column as index, `parse_dates=True`, `.iloc[:, 0]`, `dropna()`, values above zero; `docs/asset_expansion_study.py:68-79`); requires 300 rows or more (`:138-145`) and strictly increasing unique dates; `closes = np.round(raw, 9)`, the one rounding of the bridge, with the round trip of 5.2.4 asserted; records `rounding_changed` (any close changed) (QUANT-R2-7) | R-04 (missing, unreadable, md5); R-05 |
-| 6 Cash rate (K8) | Pilot 1: checks the md5 of `docs/asset_expansion/cache/fred_DGS3MO.csv` (`661722143f24930a29b58c535d227c1b`); reads it as `study.fred` does (`read_csv(index_col=0, parse_dates=True).iloc[:, 0]`, `pd.to_datetime` index; `docs/asset_expansion_study.py:94-104`), then `rf = DGS3MO.dropna().reindex(dates, method="ffill") / 100 / 252` (`:150`), so a blank on a bond-market holiday takes the prior value (QUANT-R2-1). Never copies the study's silent 3% fallback or leading-NaN fill (`:148-153`) | R-06: missing, unreadable, md5, or a NaN left after the fill (a session before the first observation) |
-| 7 P0a (QUANT-1) | Loads `docs/asset_expansion_study.py` by path (`importlib.util.spec_from_file_location`); its import only creates existing folders and reconfigures stdout (`:41-58`), verified to leave the tree unchanged. Asserts `study.REFRESH is False` (`:844`). Writes a trimmed cache in the run's temp dir (step 5's kept lines under the study's file name; a DGS3MO copy for pilot 1) and sets `study.CACHE` to it, so `_cached` and `fred` never reach a download branch (`:68-79, 94-104`). Builds `pn = study.panel({symbol: study.yf(symbol)}, start=start)` and, for pilot 1, `study.rf_daily(pd.to_datetime(pn.dates))` (`:138-153`). Requires byte equality of `pn.dates`, of `np.round(pn.prices[:, 0], 9)` and of rf with the runner's arrays. No signal, return or statistic is computed. | R-13 |
+| 6 Cash rate (K8) | Pilot 1: checks the md5 of `docs/asset_expansion/cache/fred_DGS3MO.csv` (`661722143f24930a29b58c535d227c1b`); reads it as `study.fred` does (`read_csv(index_col=0, parse_dates=True).iloc[:, 0]`, `pd.to_datetime` index; `docs/asset_expansion_study.py:94-104`), then `rf = DGS3MO.dropna().reindex(dates, method="ffill") / 100 / 252` (`:150`), so a blank on a bond-market holiday takes the prior value (QUANT-R2-1). Never copies the study's silent 3% fallback or leading-NaN fill (`:148-153`). Pilot 2 (`rf_file` null): `rf = 0.0`, the study's default (`docs/asset_expansion_study.py:175`); the overlay of 5.3.3 is zero and R-06 does not apply (QUANT-R3-2) | R-06: missing, unreadable, md5, or a NaN left after the fill (a session before the first observation) |
+| 7 P0a (QUANT-1) | Loads `docs/asset_expansion_study.py` by path (`importlib.util.spec_from_file_location`); its import only creates existing folders and reconfigures stdout (`:41-58`), verified to leave the tree unchanged. Asserts `study.REFRESH is False` (`:844`). Writes a trimmed cache in the run's temp dir (step 5's kept lines under the study's file name; a DGS3MO copy for pilot 1) and sets `study.CACHE` to it, so `_cached` and `fred` never reach a download branch (`:68-79, 94-104`). Builds `pn = study.panel({symbol: study.yf(symbol)}, start=start)` and, for pilot 1, `study.rf_daily(pd.to_datetime(pn.dates))` (`:138-153`). `check_p0a` requires byte equality of `pn.dates`, of `np.round(pn.prices[:, 0], 9)` and of rf with the runner's arrays (QA-R3-7). No signal, return or statistic is computed. | R-13 |
 | 8 Cost (K15) | `floor, classes = validate.cost_floor_bp([symbol])` (`core/quant/validate.py:115-121`) | R-07: `floor` None, or the table's `cost_bps` below it |
 | 9 Gate | Snapshots `validate.GATE` with `copy.deepcopy` | R-08: `GATE["bootstrap_B"] != 2000` |
 | 10 Ledger | `family_ledger(family_id, ledger_dir)`; records `hash()` and `n_raw` | R-09: `verify_chain()` fails |
@@ -713,19 +744,29 @@ QUANTGEN reference `pnl_qg`, `pnl_stress_qg` and `turnover_qg` have the same sha
 
 #### 5.3.5 Run lifecycle (OPS-2, OPS-6, OPS-10, OPS-15, QA-6, QA-18)
 
-- `bridge_run_id` = `NB-<UTC as %Y%m%dT%H%M%S%fZ>-<first 8 hex of sha256(table bytes)>`, such as
+- `bridge_run_id` = `NB-<UTC as %Y%m%dT%H%M%S%fZ>-<first 8 hex of table_sha256>`, such as
   `NB-20261026T143012123456Z-1a2b3c4d`; it sits outside every result hash. The folder `<out root>/<bridge_run_id>/`,
   made with `mkdir(exist_ok=False)`, holds `run.json` and any `<card_id>.json`; a re-run never overwrites a card.
-- Lock: `<out root>/.locks/<first 16 hex of sha256(table bytes)>.lock`, held for the whole run with a non-blocking OS
+- `table_sha256` (6.6), never the file's raw bytes, names the table in the run id, the lock, `earlier_runs` and R-17, so
+  a new `owner_confirmed` or a BOM and CRLF re-save is still the same table; the record keeps both digests (6.3;
+  OPS-R3-5, QA-R3-3).
+- Lock: `<out root>/.locks/<first 16 hex of table_sha256>.lock`, held for the whole run with a non-blocking OS
   byte lock (`msvcrt.LK_NBLCK`; `fcntl.LOCK_EX | fcntl.LOCK_NB`), as `core/quant/gate_ledger.py:244-262` locks; a held
   lock refuses with "another runner is active" (R-16). `docs/nautilus_bridge/.gitignore` holds `runs/.locks/`.
-- The run record is written by `write_record(path, obj)` (OPS-R2-3): `mkstemp` in the same folder, `fsync`, then
-  `os.replace`, retried up to 10 times over 5 s on `PermissionError` (OneDrive, Defender and the indexer open new
-  files). Writes right after registration (`IN_PROGRESS`) and after each child are best effort: a failure goes into
-  `record_write_failures` and never changes the status. The final write sits in a `try/finally` that catches
-  `BaseException` (`KeyboardInterrupt` writes `ABORTED`, G-07); if it still fails, it writes `run.final.<pid>.json`
-  beside the record, and the `STATUS` line names that file. Earlier `<out root>/*/run.json` of the same table SHA-256
-  are read at step 0 into `earlier_runs`; each `IN_PROGRESS` or `ABORTED` one is printed.
+- The run record is written by `write_record(path, obj, *, replace=os.replace, sleep=time.sleep)` (OPS-R2-3, QA-R3-7):
+  `mkstemp` in the same folder, `fsync`, then `os.replace`, retried up to 10 times over 5 s on `PermissionError`
+  (OneDrive, Defender and the indexer open new files). Writes right after registration (`IN_PROGRESS`) and after each
+  child are best effort: a failure goes into `record_write_failures` and never changes the status. The final write sits
+  in a `try/finally` that catches `BaseException` (`KeyboardInterrupt` writes `ABORTED`, G-07); if it still fails, it
+  writes `run.final.<pid>.json` beside the record, and the `STATUS` line names that file. Earlier `<out
+  root>/*/run.json` of the same `table_sha256` are read at step 0 into `earlier_runs`; each `IN_PROGRESS` or `ABORTED`
+  one is printed. `run()` returns its exit code, 5 after `ABORTED` included, and never re-raises; the CLI maps the code
+  to `SystemExit` (QA-R3-6).
+- Sleep (OPS-R3-8): on Windows the runner calls `ctypes.windll.kernel32.SetThreadExecutionState(0x80000001)`
+  (`ES_CONTINUOUS | ES_SYSTEM_REQUIRED`) at step 0 and `SetThreadExecutionState(0x80000000)` after the final record.
+  Windows drops the request when the process exits, so nothing needs restoring and no admin right is needed (UNVERIFIED
+  here: no Windows host). `ctypes` is banned in the sandbox only (rule F1), and T-RO-01's `FORBIDDEN_IMPORTS` lacks it
+  (`tests/macro_m0_harness.py:38-42`).
 - Re-runs (OPS-R2-7): a run is refused (R-17) unless every earlier record of the table is `IN_PROGRESS`, `ABORTED`,
   `ERROR`, or `WITHHELD` for C-06 reasons only, or `--rerun-of <bridge_run_id> --reason "<text>"` is passed; the new
   record names that run in `supersedes`. The card of record is the latest `CARD_WRITTEN` card that no later record
@@ -742,7 +783,7 @@ QUANTGEN reference `pnl_qg`, `pnl_stress_qg` and `turnover_qg` have the same sha
 
 Per column, at 1x and 2x unless the row says otherwise. Every hard failure withholds the verdict for the whole grid,
 because CSCV and the DSR dispersion need every column (map03 §3.3). Reports print the owner's original bars next to
-the corrected ones. `c_leg = cost_bps x stress / 1e4` is defined once and used in P6, P7 and P10; P6 excludes bar T-1,
+the corrected ones. `c_leg = cost_bps x stress / 1e4` is defined once and used in P7 and P10; P6 excludes bar T-1,
 and P7 covers every fill. `L1-n` and `L2-n` are the tests of 8.3 and 8.4.
 
 | ID | Check | Owner bar | Corrected bar | Kind | Control |
@@ -754,13 +795,13 @@ and P7 covers every fill. `L1-n` and `L2-n` are the tests of 8.3 and 8.4.
 | P4 | Bars with a fill, excluding bar T-1, equal `{t < T-1 : abs(Δw(t)) > 0}` | none | equal | hard | L1-2 (N2) |
 | P5 | max abs(fill price / close - 1) | none | <= 1e-6 | warning | L1-2 (planted warning) |
 | P6 | Turnover ratio: sum of `TV` over sum of abs(Δw) | none | in [0.99, 1.005] | warning | L1-2 |
-| P7 | Commission recomputed in the parent (QUANT-5, QUANT-R2-3): per fill, `expected = last_qty x last_px x Decimal(cost_bps) x Decimal(s) / 10000`, with `cost_bps` from the table and `s` the leg's nominal stress (1 or 2) from the runner's own loop, never from `input.json` or the child; `input.json` and the manifest must echo both values | none | per fill `commission == cents(expected) / 100` and `commission_ccy == "USD"`, so the totals are equal | hard | L1-2 (N7; the 0.125 tie) |
+| P7 | Commission recomputed in the parent (QUANT-5, QUANT-R2-3): per fill, `expected = last_qty x last_px x Decimal(cost_bps) x Decimal(s) / 10000`, with `cost_bps` from the table and `s` the leg's nominal stress (1 or 2) from the runner's own loop, never from `input.json` or the child; `input.json` and the manifest must echo both values | none | per fill `Decimal(commission) * 100 == cents(expected)` and `commission_ccy == "USD"`, so the totals are equal | hard | L1-2 (N7; the 0.125 tie) |
 | P8 | abs(MDD(R) - MDD(pnl)) on compounded curves | none | <= 0.005 | warning | L1-2 |
 | P9 | Tracking error, std(R - pnl, ddof=1) x sqrt(252) | none | <= 0.001 | warning | L1-2 |
 | P10 | Daily gap, per row (QUANT-9) | none | abs(R - pnl) <= (c_leg/(1 + c_leg) + P(t)/E-(t)) (abs(r) + c_leg) + rf(t) + 1e-9, with r = r(t+1) | warning | L1-2 (F1) |
 | P11 | Nautilus's own selection: `walk_forward` on `pnl_nt`; per origin its chosen column against `wf_qg.chosen`, with the QUANTGEN in-sample Sharpe gap of each mismatch (QUANT-3) | none | reported | diagnostic, never withholds | L1-2 (N4) |
 | P12 | P2 and P3 on the selection-matched OOS series: `wf_qg.pnl` against `wf_nt.pnl`, and `pnl_stress` likewise (5.4.2) | none | as P2 and P3 | hard | L1-2 (N7 at 2x) |
-| P13 | Completeness: the child's checks (5.2.7), the census, the reconciliation (5.3.3), the input SHA-256 and the ledger-hash echo | none | all pass | hard | L1-27 |
+| P13 | Completeness: the child's checks and the parent's re-derivation of C-01 to C-04 and C-15 (5.2.7), the census, the reconciliation (5.3.3), the input SHA-256 and the ledger-hash echo | none | all pass | hard | L1-27 |
 
 P1's QUANTGEN margin is computed in the parent from QUANTGEN's own arrays (QA-19): `sma`, `abs(P[i] - S._sma(P,
 L)[i]) / P[i]` with QUANTGEN's cumulative-sum SMA (`core/quant/strategies.py:111-116`); `tsmom`, `abs(P[i] / P[i-L] -
@@ -795,7 +836,7 @@ passing (`scratch:referee_quant/tie_probe_fast.py`); map 03's pre-2004 columns 4
 |---|---|---|---|---|---|---|---|
 | Real SPY `sma/210/21`, $1M, 9 dp, CASH, fee-inclusive sizing | 1995-01-03 to 2004-11-30, 2,497 sessions | agreement 109/109; corr 0.99999995; ΔSR -0.00006 (1x), +0.00013 (2x) | map03 §4.2 | All 12 settings x 1x and 2x | same | min corr 0.99999901; max abs ΔSR 0.0013; agreement 100%; max daily gap 3.80 bp | map03 §4.3 |
 | Walk-forward selection | same, embargo 21 | the same column at all 14 origins; OOS corr 0.99999996; ΔSR +0.00004 (1x), +0.00036 (2x) | map03 §4.4 | Crypto trend, 5 hysteresis values, 10 and 20 bp | 1,500 synthetic days | agreement 100% on 1,300 decisions; min corr 0.99999984; max abs ΔSR 0.0003 | map03 §4.5 |
-| F1, F2 and N1; the 5.2.9 skeleton, filled, under `unshare -rn` | hand-built | fills, commissions and final cash match hand arithmetic to the cent; N1 as 8.2; both self-checks behave; exit 20 for volume, capital, precision, SHA-256 and a linked `input.json` | map03 §6; `scratch:rev3_probe/sandbox_r3.py`, `variants.py` | Failure modes | pre-2004 SPY | 2 dp: TE 0.085%/yr, passes; thin volume: run stopped at bar 211; 1-session latency: corr 0.98295, ΔSR -0.098, fails | map03 §4.2 |
+| F1, F2 and N1; the 5.2.9 skeleton, filled, under `unshare -rn` | hand-built | fills, commissions and final cash match hand arithmetic to the cent; N1 as 8.2, its reasons C-01 and C-02 re-derived from the manifest; both self-checks behave; exit 20 for 63 single-field perturbations of 6.1 (QA-R3-4), a non-JSON and a linked `input.json`; one census for all three (942 names) | map03 §6; `scratch:rev4_probe/sandbox_r4.py`, `drive.py`, `drive.out` | Failure modes | pre-2004 SPY | 2 dp: TE 0.085%/yr, passes; thin volume: run stopped at bar 211; 1-session latency: corr 0.98295, ΔSR -0.098, fails | map03 §4.2 |
 
 How loose the owner's bars are (synth §7.3, 109 single-block flips on `sma/210/21` at 50 bp): corr < 0.99 catches
 27.5% of flips and abs ΔSR > 0.05 catches 16.5% (63% pass both), while corr < 0.9999 catches 100%; a 2x engine that
@@ -814,7 +855,7 @@ Only when every hard check of 5.4.1 passes, at both cost levels, for every colum
 |---|---|---|---|
 | 1 Walk-forwards | `wf_qg` and `wf_nt` as 5.4.2. | 2 Benchmark | `bench = P[1:] / P[:-1] - 1` (one column), aligned with `wf_qg.dates` as the study does (`docs/asset_expansion_study.py:186-190`), uncosted; P0b has checked it. |
 | 3 Trial counts (QUANT-4) | `len_grid`; `family_n_raw` after registration; `market_n_raw` (rows whose `market` equals the table's); `U`, the number of `study_configs` (6.6) whose `config_id`, computed with `gate_ledger.config_id` from a row built as 6.4 builds one, is absent from the family ledger after registration; `n_trials = family_n_raw + U`. All printed and stored. | 4 Score both | `sc_qg = score_fn(wf_qg, grid=grid, full_pnl=pnl_qg, n_trials=n_trials, bench_daily=bench, seed=11, domain=<table domain or None>)`, and `sc_nt` likewise from `wf_nt` and `pnl_nt` (`core/quant/validate.py:492-533`). Pilot 2 passes `domain={"hysteresis": (0.0, 0.889)}` (`docs/asset_expansion_study.py:339`). |
-| 5 Agreement, reference | `parity.gate_predicates(score, gate) -> dict[str, bool]` recomputes, from the GATE snapshot, exactly the predicates `_decide_strategy` reads (`core/quant/validate.py:536-622`; QUANT-R2-2): `ci_pos`, `dsr_ok`, `dsr_finite`, `pbo_meaningful` (`n_configs >= pbo_min_configs`), `flat` (`prob_loss_oos <= prob_loss_max`), `pbo_ok` and `pbo_reject` as `:576-577` compute them (below 8 configurations raw PBO is never read), `oos_is_ok`, `stress_ok`, `years_ok`, `plateau_ok`, `sample_ok`, `floor_ok`, `n_years_ok`, `sessions_ok`, `mtr_ok` (`n_sessions >= min_track_record(sr_oos, ci_level)`, `:156, 584`), `has_bench` (`isfinite(bench_p)`, `:557`) and `bench_ok`. `parity.agree(sc_qg, sc_nt, gate)` allows a card only if both scores have `has_bench` (both pilots name a benchmark; else WITHHELD "benchmark test dropped"), equal decisions and equal predicate dicts; otherwise WITHHELD "decision mismatch" (G-02). Pilot 2 (QUANT-R2-5): `sc_qg` must reproduce the stored card `S_C3_crypto_trend_btcusd`: `chosen_last`, `n_trades`, `n_sessions` and `n_years` exactly; `sr_oos`, `ci90`, `oos_is`, `sr_stress`, `years_positive`, `plateau`, `pbo`, `prob_loss_oos` and `bench_p` exactly when 5.3.2 step 5 recorded `rounding_changed` false, else within 1e-6 (`bench_p` within 1/2000, one bootstrap draw); otherwise WITHHELD "reference drift" (G-08). Both scores, both predicate dicts and the comparison go into the run record. | 6 GATE | Assert `validate.GATE == gate_snapshot` (G-04). |
+| 5 Agreement, reference | `parity.gate_predicates(score, gate) -> dict[str, bool]` recomputes, from the GATE snapshot, exactly the predicates `_decide_strategy` reads (`core/quant/validate.py:536-622`; QUANT-R2-2): `ci_pos`, `dsr_ok`, `dsr_finite`, `pbo_meaningful` (`n_configs >= pbo_min_configs`), `flat` (`prob_loss_oos <= prob_loss_max`), `pbo_ok` and `pbo_reject` as `:576-577` compute them (below 8 configurations raw PBO is never read), `oos_is_ok`, `stress_ok`, `years_ok`, `plateau_ok`, `sample_ok`, `floor_ok`, `n_years_ok`, `sessions_ok`, `mtr_ok` (`n_sessions >= min_track_record(sr_oos, ci_level)`, `:156, 584`), `has_bench` (`isfinite(bench_p)`, `:557`) and `bench_ok`. `parity.agree(sc_qg, sc_nt, gate)` allows a card only if both scores have `has_bench` (both pilots name a benchmark; else WITHHELD "benchmark test dropped"), equal decisions and equal predicate dicts; otherwise WITHHELD "decision mismatch" (G-02). Pilot 2 (QUANT-R2-5, QUANT-R3-1, QUANT-R3-3): `parity.reference_drift(sc_qg, wf_qg, ref)` lists every field where `sc_qg` fails to reproduce `ref`, the stats of the table's md5-pinned `reference_card` (`S_C3_crypto_trend_btcusd`): `chosen_last`, `n_trades` and `n_sessions` exactly; the card's `n_years` against `len({d[:4] for d in wf_qg.dates})`, the calendar-years rule that wrote it, with today's whole-year `sc_qg.n_years` (`core/quant/validate.py:421-437`) recorded beside it; `sr_oos`, `ci90`, `oos_is`, `sr_stress`, `years_positive`, `plateau`, `pbo` and `prob_loss_oos` within 1e-9 (absolute); `bench_p` within 1/2000, one bootstrap draw. It never compares `lines`, `reason` or `revise_target` text, whose wording changed. A non-empty list gives WITHHELD "reference drift" (G-08). Both scores, both predicate dicts and the comparison go into the run record. | 6 GATE | Assert `validate.GATE == gate_snapshot` (G-04). |
 | 7 Ledger | `assert_hash_at_run(ledger, hash_after_registration)` (`core/quant/gate_ledger.py:389-396`); a raise means the ledger moved after registration: no card, WITHHELD (G-05). | 8 Card | `card.to_json()` of the card of 6.5, written by the bridge to `<run folder>/<card_id>.json` through `open(path, "x", encoding="utf-8", newline="\n")`; never `ModelCard.save`, which overwrites and writes platform newlines (`:830-834`; OPS-12), and never into `docs/asset_expansion/cards/`. |
 | 9 Record | The final run record with the card's path and md5; status `CARD_WRITTEN` (QA-9). |  |  |
 
@@ -902,6 +943,9 @@ package. "Denied name" means in `NAUTILUS_DENIED_NAMES` (`NAUTILUS_BRIDGE_ONLY_N
 | F5 (SECURITY-3) | sandbox | any call `X.<m>(...)` with `m` in `SANDBOX_FILE_METHODS` whose receiver `X` is not a call to `Name("inside")` |
 | F6 | sandbox | any call whose callee is in `SANDBOX_OS_CALLS` |
 
+Rule E is fail-closed against the sandbox's own text: maintainers keep its diagnostics free of every denied prefix and
+name, so no error message names, say, `nautilus_pyo3` (SECURITY-R3-2).
+
 Two new tests after `tests/macro_m0_harness.py:192`, both with `test_ids = ["T-RO-01"]`:
 - `test_t_ro_01_nautilus_confined_to_the_sandbox` builds a temp tree in the pattern of
   `test_t_ro_01_scan_reaches_tools_and_papers` (`tests/macro_m0_harness.py:175-192`) and asserts the controls of 8.5.
@@ -915,7 +959,8 @@ Two new tests after `tests/macro_m0_harness.py:192`, both with `test_ids = ["T-R
   NAUTILUS_ORDER_VERBS, IMPORT_MACHINERY, SANDBOX_BANNED_MODULES, SANDBOX_BANNED_NAMES, SANDBOX_FILE_METHODS,
   SANDBOX_OS_CALLS}` must give `70bcf50fbce5637a1854413618b6b9827c04dc10a59a0a25d274b4be1941da6c`. Both carry the
   comment "a change needs an owner ruling recorded in spec 2026-10-26 §5.6"; both were computed from the constants
-  above in `scratch:rev2_probe/scan/scan_proto.py` and again in `scratch:rev3_probe/scan3.py`.
+  above in `scratch:rev2_probe/scan/scan_proto.py` and again in `scratch:rev3_probe/scan3.py` and
+  `scratch:rev4_probe/scan4.py`.
 
 `tests/acceptance.py::runtime_py()` is not extended; `tools/` is outside test_08 and test_09
 (`tests/acceptance.py:50-75`), which stay unchanged and must keep passing.
@@ -928,8 +973,8 @@ Two new tests after `tests/macro_m0_harness.py:192`, both with `test_ids = ["T-R
   that never stops the other suites. `tests()` gains `[(f"nautilus/{n}", f) for n, f in nautilus_tests()]` last; the
   `--suite` help (`tests/run_all.py:131`) gains `nautilus`. The file is CRLF: Edit tool only.
 - Layer-1 tests always run. Layer-2 tests raise `NotRun("OWNER: Nautilus venv not configured
-  (QUANTGEN_NAUTILUS_PYTHON)")` when the key is blank, and `NotRun("OWNER: QUANTGEN_NAUTILUS_PYTHON points to a
-  missing file")` when the resolved path does not exist. A venv off its pins is a FAIL (O15).
+  (QUANTGEN_NAUTILUS_PYTHON)")` when the key is blank, and `NotRun(f"OWNER: QUANTGEN_NAUTILUS_PYTHON points to a
+  missing file: {value!r}")` when the resolved path does not exist (OPS-R3-9). A venv off its pins is a FAIL (O15).
 
 ### 5.8 Registry rows, README and the file table
 
@@ -943,7 +988,7 @@ unchanged; at Step 10 the owner's Windows full run fills that row and the Total 
 | File | Change | Step |
 |---|---|---|
 | `requirements-nautilus.txt`; `.env.example` (heading and the line of 3.4) | new, LF; edit | 3 |
-| `tools/nautilus/__init__.py` (empty), `egress_probe.py`, `launch.py` (4.3, 5.2.7, 6.7; QA-R2-5) | new | 3 |
+| `tools/nautilus/__init__.py` (empty), `egress_probe.py`, `launch.py` (4.3, 5.2.7, 6.7; QA-R2-5; `fixture_inputs`, QA-R3-1) | new | 3; `fixture_inputs` 5 |
 | `tools/nautilus/sandbox.py` | new; the only order-placing file | 3 (`--check-env`, `--guard-selftest`), 5 |
 | `tools/nautilus/runner.py`; `tools/nautilus/parity.py` | new | 6; 7 |
 | `tools/nautilus/golden/env_pins.json` | new; both platforms, computed offline (6.7) | 3 |
@@ -984,7 +1029,8 @@ The runner, not the child, asserts a registration table's pilot values (5.3.2 st
 | `n_bars`, `bars_sha256` | int, str | 1 to 100,000, the rows of `bars.csv`; 64 lower-case hex, the SHA-256 of its bytes | |
 | `ledger_hash_after_registration` | str | 32 lower-case hex | the hash of 5.3.2 step 12 |
 
-`bars.csv`: header `i,ts_ns,close`, LF, one row per bar, `close` with exactly `price_precision` decimals. The ledger
+`bars.csv`: header `i,ts_ns,close`, LF, one row per bar, `i` counting from 0, `ts_ns` strictly increasing, `close`
+above zero with exactly `price_precision` decimals. The ledger
 hash cannot exist before registration, so a child that echoes it was launched after registration (QA-6). Fixtures,
 which register nothing, pass `gate_ledger.ledger_hash([])`, the hash of an empty ledger.
 
@@ -996,7 +1042,7 @@ which register nothing, pass `gate_ledger.ledger_hash([])`, the hash of an empty
 | `precision` | `HIGH_PRECISION`, `FIXED_PRECISION`, `QUANTITY_MAX`, `PRICE_MAX` | `environment`, `strategy_started` | `engine.kernel.environment.name`; whether the port passed its `on_start` guard |
 | `input` | `input_json_sha256`, `bars_sha256`, `bars_fed`, `first_ts`, `last_ts`, and echoes of `cost_bps`, `stress` and `ledger_hash_after_registration` | `engine` | `run_analysis` false, `log_level` "ERROR", `log_colors` false, `account_type` "CASH", `oms_type` "NETTING", `allow_cash_borrowing` false, `bar_execution` true, `fill_seed` 42 |
 | `result` | `bars_seen`, `iterations`, `backtest_end` (int ns or null), `force_stop`, `orders_total`, `orders_filled`, `denied`, `rejected`, `orders_not_filled` (ids), `account_balance_usd` (`f"{balance.as_decimal():.2f}"`; QA-R2-6), `final_qty` (str), `stats_pnls_empty` (`get_result().stats_pnls` is empty: a witness that the analyzer did not run, QA-12) | `hashes` | SHA-256 of `fills.csv`, `decisions.csv`, `onbar_equity.csv` |
-| `valid`, `invalid_reasons` | the child's own verdict (5.2.7) |  |  |
+| `valid`, `invalid_reasons` | the child's own verdict (5.2.7); each reason begins with its section-7 id (QA-R3-8) |  |  |
 
 No field holds a time of day. Versions, the wheel identity and the census come from the parent (6.7, 5.2.7).
 
@@ -1006,11 +1052,11 @@ No field holds a time of day. Versions, the wheel identity and the census come f
 |---|---|---|---|
 | `schema`, `read_only` | `"nautilus-bridge-run/2"`, `true` | `bridge_run_id`, `mode`, `pilot`, `stub_child` | 5.3.5; `rehearsal` or `of-record`; `E1-SPY`, `C3-BTCUSD` or `rehearsal`; bool |
 | `status`, `withheld_reasons` | `IN_PROGRESS`, `CARD_WRITTEN`, `WITHHELD`, `REFUSED_REGISTRATION`, `ERROR` or `ABORTED`; failed check ids and messages, `"decision mismatch"`, `"benchmark test dropped"`, `"reference drift"` or `"ledger moved after registration"` | `earlier_runs`, `supersedes`, `rerun_reason` | `{bridge_run_id, status}` of earlier records of the same table, read at step 0 (`UNREADABLE` when unreadable); 5.3.5 |
-| `times` | `started_utc`, `registered_utc`, `first_child_utc`, `finished_utc`, ISO UTC with microseconds | `git`, `table` | `head`, `anchor`, `clean`, `porcelain_exempt`; path, SHA-256 and the full table |
+| `times` | `started_utc`, `registered_utc`, `first_child_utc`, `finished_utc`, ISO UTC with microseconds | `git`, `table` | `head`, `anchor`, `clean`, `porcelain_exempt`; path, `raw_sha256` of its bytes, `table_sha256` (6.6) and the full table (OPS-R3-5) |
 | `data`, `provenance` | `prices_file`, `prices_md5`, `rf_file`, `rf_md5` or null, `start`, `end`, `sessions`, `rounding_changed`; the P0a and P0b results | `costs` | `cost_bps`, `floor_bp`, `classes`, `stress` (2.0), `source` (`"validate.cost_floor_bp"`) |
 | `venv`, `egress`, `engine` | 6.7's reads; the parent's `pyarrow` version or null, `sys.executable`, `sys._base_executable` and `sys.version` (OPS-R2-2); the probe JSON, layer and record path, raw and normalised (4.3); the `--check-env` and `--guard-selftest` JSON | `registration` | `family_id`, `ledger_path`, `hash_before`, `hash_after`, `n_raw_before`, `n_raw_after`, `market_n_raw`, `rows`: `{col, config_id, row_md5, appended}` |
 | `children` | per child: `col`, `stress`, `returncode` (with NTSTATUS hex), `seconds`, `manifest`, `census_sha256`, `fills` (all rows), `stdout_tail`, `stderr_tail` (census lines removed) | `census` | platform tag to the one sorted census, identical for every valid child |
-| `parity` | per column and cost level: P0b to P10 and P13 values and flags; P11 per origin; P12 at 1x and 2x; `owner_bars`; `hard_pass`; `failed` | `gate` | `trial_counts` {`len_grid`, `family_n_raw`, `market_n_raw`, `U`, `n_trials`}; `quantgen` and `nautilus`, each {`decision`, `reason`, `revise_target`, `predicates`, `stats`}; `agree`; `reference` (pilot 2, G-08); `selection` |
+| `parity` | per column and cost level: P0b to P10 and P13 values and flags; P11 per origin; P12 at 1x and 2x; `owner_bars`; `hard_pass`; `failed` | `gate` | `trial_counts` {`len_grid`, `family_n_raw`, `market_n_raw`, `U`, `n_trials`}; `quantgen` and `nautilus`, each {`decision`, `reason`, `revise_target`, `predicates`, `stats`}; `agree`; `reference` (pilot 2, G-08: the drift list, both year counts); `selection` |
 | `card`, `cleanup_leftovers`, `record_write_failures` | `path` and the md5 of the bytes on disk, or null; 4.3; 5.3.5 |  |  |
 
 Fills are kept in full; daily returns are not stored, because 5.3.3 rebuilds them exactly from the fills and the
@@ -1055,18 +1101,23 @@ except the last two, which only of-record mode requires.
 | Field | Type | Meaning | Field | Type | Meaning |
 |---|---|---|---|---|---|
 | `pilot` | str | `E1-SPY`, `C3-BTCUSD` or `rehearsal` | `family_id`, `rule`, `market` | str | `E1`/`C3`; the same; `US`/`CRYPTO` |
-| `strategy`, `symbol`, `instrument` | str | `trend_switch`/`crypto_trend`; QUANTGEN symbol (`SPY`, `BTC-USD`); Nautilus instrument | `prices_file`, `prices_md5` | str | repo-relative path (absolute only in rehearsal); md5 of its bytes |
+| `strategy`, `symbol`, `instrument` | str | `trend_switch`/`crypto_trend`; QUANTGEN symbol (`SPY`, `BTC-USD`); Nautilus instrument | `prices_file`, `prices_md5` | str | repo-relative path; in rehearsal absolute and under the temp dir (3.9); md5 of its bytes |
 | `start`, `end` | str | ISO dates, inclusive; both filter the panel (5.3.2 step 5) | `rf_file`, `rf_md5` | str or null | DGS3MO for pilot 1; null for pilot 2 |
 | `axes`, `grid` | object, list | `grid_from` keywords; the expanded grid | `cost_bps`, `embargo` | float, int |  |
 | `capital_usd`, `price_precision`, `size_precision`, `volume`, `fill_seed` | str, int, int, str, int | of-record asserts `"1000000"`, 9, 0 or 8, `"1000000000"`, 42 | `domain` | object or null | pilot 2: `{"hysteresis": [0.0, 0.889]}` |
 | `hypothesis`, `claim_label`, `card_id` | str | `claim_label` text is fixed by 10.1 and 10.2 | `study_configs` | list | each `{source, symbols, cost_bps, params}`: a configuration the study ran and never registered |
+| `reference_card`, `reference_card_md5` | str or null | pilot 2: the stored card G-08 compares with, and the md5 of its bytes (10.2; QUANT-R3-3); null otherwise |  |  |  |
 | `owner_confirmed` | str | `"<name>, <date>, table <16 hex>, code <16 hex>"`, the first 16 hex of `table_sha256` and `code_sha256` as `--fingerprint` prints them; written by the owner at Step 7A.3 (GOVERNANCE-R2-2) | `host_fingerprint` | str | `sha256((socket.gethostname() + "\n" + first_row["row_md5"]).encode("utf-8")).hexdigest()`, `first_row` the family ledger's first row; printed by `--fingerprint` |
 
 `table_sha256` is the SHA-256 of `json.dumps(t, sort_keys=True, separators=(",", ":"), ensure_ascii=False)` in UTF-8,
-`t` the table without `owner_confirmed` and `host_fingerprint`. `code_sha256` is the SHA-256 of the sorted lines
-`"<repo-relative path>,<sha256 of its bytes>"`, joined with `"\n"`, over `tools/nautilus/**/*.py`,
-`tools/nautilus/golden/*.json` and `requirements-nautilus.txt`; `.gitattributes` is `* -text`, so bytes match across
-platforms. Of-record mode recomputes both and refuses a mismatch with `owner_confirmed` (R-11).
+`t` the table without `owner_confirmed` and `host_fingerprint`; it names the table everywhere (5.3.5). `code_sha256`
+is the SHA-256 of the sorted lines `"<path>,<sha256 of its bytes>"`, `<path>` being
+`path.relative_to(repo_root).as_posix()` (OPS-R3-6), joined with `"\n"`, over `tools/nautilus/**/*.py`,
+`tools/nautilus/golden/*.json`, `requirements-nautilus.txt`, the files of `core.quant.gate_package.HARNESS_SOURCES`,
+imported so the list has one home (`core/quant/gate_package.py:36-38`), `docs/asset_expansion_study.py` and
+`config.py` (GOVERNANCE-R3-1): an edit to the gate, the study or the ledger-dir rule needs a new `owner_confirmed`.
+`.gitattributes` is `* -text`, so bytes and digests match across platforms. Of-record mode recomputes both digests and
+refuses a mismatch with `owner_confirmed` (R-11).
 
 ### 6.7 Venv reads and the wheel identity (QA-10, OPS-4, OPS-7, OPS-13)
 
@@ -1108,7 +1159,8 @@ in `tests/fixtures/nautilus/`, md5-listed in its `MANIFEST.csv` and read through
 - `F1.json`, `F2.json`, `N1.json`: `{schema: "nautilus-bridge-golden/1", fixture, status ("valid" or "invalid"),
   exit_code, bars_fed, bars_seen, force_stop, fills: [{date, side, qty, price, commission}], final_cash, final_qty,
   invalid_reasons}`, with `date` the UTC date of `ts_event`. Integers and strings compare exactly; `price` exactly as
-  the string at the instrument's precision; money (`commission`, `final_cash`) within 0.005. `runner --fixtures
+  the string at the instrument's precision (F1's `"100.000000000"`, not 8.2's display `100.00`); money (`commission`,
+  `final_cash`) within 0.005; `invalid_reasons` by their leading ids (QA-R3-8). `runner --fixtures
   --write-goldens` writes them from 8.2's inputs on Linux, never over an existing file, and L1-33 checks them against
   8.2's tables (QA-R2-6).
 - `modules_<platform tag>.json`: `{schema: "nautilus-bridge-census/1", platform_tag, python, recorded_from: ["F1",
@@ -1123,37 +1175,37 @@ runner prints (OPS-R2-6; "-": the run record is the answer). `L1-n` and `L2-n` a
 | # | Condition | Caught by | Written; exit or status | Control | Remedy |
 |---|---|---|---|---|---|
 | R-01 | Tracked change, or an untracked path outside `docs/nautilus_bridge/runs/` (of-record) | 5.3.2 step 2 | nothing; 2 | L1-6 | commit or remove the printed paths |
-| R-02 | Git missing, anchor UNVERSIONED (packed refs or worktree, named), or anchor sha differs from HEAD (of-record) | step 2 | nothing; 2 | L1-6 | packed ref: `git commit --allow-empty -m "nautilus: re-anchor"`; worktree: use the main clone |
-| R-03 | Venv key unset, malformed or missing; `pyvenv.cfg` checks, a Store-Python base included; versions, Python minor or wheel identity off the pins; the guard self-test misbehaved (QA-R2-10); `nautilus-trader` installed in the parent | step 3 | nothing; 2 | L1-17, L1-22, L1-27, L2-1 | the `.env` line of 3.4; `<py313>\python.exe -m venv` and the offline install (5.1); for the parent, the printed `python -m pip uninstall -y` line of the closure's packages absent from `requirements.txt` |
+| R-02 | Git missing, anchor UNVERSIONED (packed refs or worktree, named), or anchor sha differs from HEAD (of-record) | step 2 | nothing; 2 | L1-6 | packed ref: `git commit --allow-empty -m "nautilus: re-anchor"`, then `git push` (OPS-R3-9); worktree: use the main clone |
+| R-03 | Venv key unset, malformed or missing; `pyvenv.cfg` checks, a Store-Python base included; versions, Python minor or wheel identity off the pins; the guard self-test misbehaved (QA-R2-10); `nautilus-trader` installed in the parent | step 3 | nothing; 2 | L1-17, L1-22, L1-27, L2-1 | the `.env` line of 3.4; `<py313>\python.exe -m venv` and the offline install (5.1); for the parent exactly three lines (OPS-R3-1): `python -m pip uninstall -y nautilus-trader`, `python -m pip check`, and `python -c "import numpy, pandas, scipy; print(numpy.__version__, pandas.__version__, scipy.__version__)"`, which must print `2.3.5 2.3.3 1.18.0`; other closure packages are reported, never uninstalled; if `pip check` or a version is off: stop, an owner ruling |
 | R-04 | Price file missing, unreadable, or md5 differs | step 5 | nothing; 2 | L1-7 | restore the pinned bytes; new bytes need an owner ruling |
 | R-05 | Panel under 300 rows, unsorted or duplicated dates (N5), or a close failing the round trip of 5.2.4 | step 5 | nothing; 2 | L1-7 | as R-04 |
 | R-06 | DGS3MO missing, unreadable, off its md5, or a NaN left after the fill | step 6 | nothing; 2 | L1-7 | as R-04 |
 | R-07 | Uncosted symbol, or table cost below `cost_floor_bp` | step 8 | nothing; 2 | L1-8 | a table cost at or above the printed floor |
 | R-08 | `GATE["bootstrap_B"] != 2000` | step 9 | nothing; 2 | L1-18 | restore `GATE` (`git diff core/quant/validate.py`) |
 | R-09 | Ledger chain broken | steps 1, 10 | nothing; 2 | L1-4 | stop; an owner ruling |
-| R-10 | Rehearsal: ledger or output dir outside the temp dir; the content refusals of 3.9 | 5.3.1, step 5 | nothing; 2 | L1-9 | temp dirs; synthetic data only |
-| R-11 | Table schema, grid or pilot values wrong; of-record `owner_confirmed` missing or not quoting this table's and tree's digests; a test seam in of-record mode | argument validation; step 1 | nothing; 2 | L1-19 | fix the printed field; after a change, `--fingerprint` and a new `owner_confirmed` (7A.3) |
+| R-10 | Rehearsal: ledger dir, output dir or prices file outside the temp dir; a prices file with a pinned md5 (3.9) | 5.3.1, step 5 | nothing; 2 | L1-9 | temp dirs; synthetic data only |
+| R-11 | Table not JSON, or its schema, grid or pilot values wrong; `reference_card_md5` off; of-record `owner_confirmed` missing or not quoting this table's and tree's digests; a test seam in of-record mode | argument validation; steps 0, 1 | nothing; 2 | L1-19, L1-29 | fix the printed field; after a change, `--fingerprint` and a new `owner_confirmed` (7A.3) |
 | R-12 | `register_trial` raises | step 11 | run record with the rows appended so far; 3, `REFUSED_REGISTRATION` | L1-26 | read the traceback; the rows stay; re-run under R-17 |
 | R-13 | P0a: dates, closes or rf differ from the study's loaders | step 7 | nothing; 2 | L1-20 | stop; an owner ruling |
 | R-14 | Linux without a working `unshare -rn`; the probe connected; of-record without a matching egress record | step 4 | nothing; 2 | L1-23, L2-9 | Linux: a host with user namespaces. Windows: `Get-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out \| Get-NetFirewallApplicationFilter` and `Get-NetFirewallProfile \| Select Name, Enabled` (a third-party firewall can disable these rules); then `--egress-record` |
 | R-15 | Of-record: family ledger missing, empty or broken; host fingerprint differs | step 1 | nothing; 2 | L1-24 | the owner rules how the ledger starts (O11); `--fingerprint` on this host |
 | R-16 | Another runner holds the table lock; `C3.jsonl` or the family ledger modified under 600 s ago | step 0 | nothing; 2 | L1-25 | wait the printed seconds, or end the runner holding the printed lock |
-| R-17 | An earlier record of the table that is not `IN_PROGRESS`, `ABORTED`, `ERROR` or a C-06-only `WITHHELD`, and no `--rerun-of` (5.3.5; OPS-R2-7) | step 0 | nothing; 2 | L1-5 | `--rerun-of <id> --reason "<text>"` |
-| C-01 | Forced stop | child | manifest `valid: false`; child 10, run INVALID | L2-3 (N1) | - |
-| C-02 | Bars seen fewer than bars fed, or `backtest_end` before the last bar | child | same | L2-3 (N1) | - |
-| C-03 | An order not FILLED | child | same | L1-27 (doctored manifest); reason: at volume 1e9 every MARKET order fills on its bar | - |
-| C-04 | An order denied or rejected | child | same | L1-27 (doctored manifest); reason: on bar-only data the risk engine skips MARKET checks (5.2.5) | - |
+| R-17 | An earlier record of the same `table_sha256` that is not `IN_PROGRESS`, `ABORTED`, `ERROR` or a C-06-only `WITHHELD`, and no `--rerun-of` (5.3.5; OPS-R2-7) | step 0 | nothing; 2 | L1-5 | `--rerun-of <id> --reason "<text>"` |
+| C-01 | Forced stop | child; parent re-derives (5.2.7) | manifest `valid: false`; child 10, run INVALID | L2-3 (N1); L1-27 | - |
+| C-02 | Bars seen fewer than bars fed, or `backtest_end` before the last bar | child; parent re-derives | same | L2-3 (N1); L1-27 | - |
+| C-03 | An order not FILLED | child; parent re-derives | same | L1-27 (doctored manifest, `valid: true`, exit 0; QA-R3-2); reason: at volume 1e9 every MARKET order fills on its bar | - |
+| C-04 | An order denied or rejected | child; parent re-derives | same | L1-27 (as C-03); reason: on bar-only data the risk engine skips MARKET checks (5.2.5) | - |
 | C-05 | Input schema, range, SHA-256, volume above `QUANTITY_MAX`, capital above `PRICE_MAX`, precision above `FIXED_PRECISION`, or path containment | child, before the engine | stderr only; 20 | L2-5a, L2-5b | - |
 | C-06 | Non-zero exit (an `on_bar` raise included, 5.2.5), timeout (tree killed), missing output, unparsable JSON | parent | child tails in the run record; run INVALID | L1-27, L2-10 | - |
 | C-07 | Manifest precision or environment differs from `--check-env` | parent | run record; run INVALID | L1-27 | - |
-| C-08 | Census outside the baseline, or an `adapters` or `network` module (5.2.7) | parent | run record, with the names; run INVALID | L1-12 | Claude reviews the names (5.2.7) |
+| C-08 | Census NT or TP set differing from the baseline's, either way, or an `adapters` or `network` module (5.2.7; QA-R3-12) | parent | run record, with the names; run INVALID | L1-12 | Claude reviews the names (5.2.7) |
 | C-09 | Reconciliation off, or a fill off a bar timestamp | parent | run record; run INVALID | L1-27 | - |
 | C-10 | The built child environment holds a key outside the contract | parent, before launch | nothing launched; run INVALID | L1-16 | - |
 | C-11 | The manifest's `input.bars_sha256` differs from the parent's | parent | run record; run INVALID | L1-27 | - |
 | C-12 | `bar.ts_event` or `bar.close` differs from the input row | child | manifest `valid: false`; 10 | reason: bars are built from the rows they are compared with; only an engine change reaches it, which the identity pin excludes | - |
 | C-13 | An order in flight on a decision bar | child | same | reason: without latency every order settles within its bar (5.2.3) | - |
 | C-14 | The manifest's ledger-hash echo differs from the run's | parent | run record; run INVALID | L1-27 | - |
-| C-15 | Environment not BACKTEST, or `strategy_started` false | child, parent | manifest or `--check-env`; 10, run INVALID | L2-8, L1-27 | - |
+| C-15 | Environment not BACKTEST, or `strategy_started` false | child; parent re-derives | manifest or `--check-env`; 10, run INVALID | L2-8, L1-27 (as C-03) | - |
 | G-01 | Any run INVALID (P13), or any hard check P0b, P1 to P4, P7, P12 failing | parity | run record, no card; 1, `WITHHELD` | L1-2, L1-13 | - |
 | G-02 | Decisions or predicate dicts differ between `sc_qg` and `sc_nt`, or a score lacks `has_bench` | 5.5 step 5 | run record with both scores, no card; 1, `WITHHELD` ("decision mismatch", "benchmark test dropped") | L1-2 (N8) | - |
 | G-03 | `walk_forward` or `score_strategy` raises anywhere after registration, in parity (P11, P12) or scoring (`core/quant/validate.py:366-367`) | 5.4, 5.5 | run record with the exception, no card; 1, `WITHHELD` | L1-31 | - |
@@ -1161,9 +1213,10 @@ runner prints (OPS-R2-6; "-": the run record is the answer). `L1-n` and `L2-n` a
 | G-05 | `assert_hash_at_run` raises: the ledger moved after registration | 5.5 step 7 | run record, no card; 1, `WITHHELD` | L1-26 | - |
 | G-06 | An unexpected exception after registration | runner | run record with the traceback; 4, `ERROR` | L1-26 | - |
 | G-07 | `KeyboardInterrupt` after registration | runner | run record; 5, `ABORTED` | L1-26, L1-27 | re-run under R-17 |
-| G-08 | Pilot 2: `sc_qg` does not reproduce the stored card (QUANT-R2-5) | 5.5 step 5 | run record, no card; 1, `WITHHELD` ("reference drift") | L1-29 | - |
+| G-08 | Pilot 2: `reference_drift` is not empty: `sc_qg` does not reproduce the stored card (QUANT-R2-5, QUANT-R3-1) | 5.5 step 5 | run record, no card; 1, `WITHHELD` ("reference drift") | L1-29, L2-12 | - |
 
-Warnings P5, P6, P8, P9 and P10 never withhold. A rehearsal with a stub child skips the census judgement (5.3.1).
+Warnings P5, P6, P8, P9 and P10 never withhold. A rehearsal with a stub child skips the census judgement (5.3.1). In
+R-14's Remedy, `\|` is table escaping: the runner prints a plain `|` (OPS-R3-9).
 
 ## 8. Testing strategy
 
@@ -1178,11 +1231,16 @@ No test compares a wall-clock field.
 
 **Stub child** (`tests/nautilus_stub_child.py`; QA-R2-2), launched as `[sys.executable, "-I", <abs stub>, <flags>]`
 through `child_cmd`. In `run` mode it reads `input.json` and `bars.csv`, applies 5.2.5's rule and fee-inclusive Decimal
-sizing, fills every order at its bar's close, rounds each commission with `cents` (5.4.1), and writes the four files of
-5.2.6 with every manifest field of 6.2 and every echo, so a correct table passes every hard check as with the sandbox;
-it answers `--check-env` and `--guard-selftest` as the sandbox does. Flags select failure modes: `--exit 1`, `--sleep
-<s>`, `--no-manifest`, `--bad-json`, `--doctor <C-03|C-04|C-07|C-09|C-11|C-14|C-15>`, `--fee-1x` (N7) and
-`--selftest-wrong` (QA-R2-10).
+sizing, with `plain_mean` for every moving average (QA-R3-9), fills every order at its bar's close, rounds each
+commission with `cents` (5.4.1), and writes the four files of 5.2.6 with every manifest field of 6.2 and every echo, so
+a correct table passes every hard check as with the sandbox; it answers `--check-env` and `--guard-selftest` as the
+sandbox does, and `--probe` with `{"blocked": true, "errno": 101, "error": "stub"}` and exit 0 (QA-R3-5). Flags select
+failure modes: `--exit 1`, `--sleep <s>`, `--no-manifest`, `--bad-json`, `--doctor
+<C-01|C-02|C-03|C-04|C-07|C-09|C-11|C-14|C-15>`, each writing `valid: true` and exiting 0 so that only the parent's own
+check can catch it (QA-R3-2), `--fee-1x` (N7) and `--selftest-wrong` (QA-R2-10). On Windows, whether the Store
+Python's `sys.executable`, an app-execution alias, starts under 4.3's minimal environment is UNVERIFIED until Step 7A;
+the fallback launches the stub, which needs only the standard library, with `%LOCALAPPDATA%\quantgen\py313\python.exe`
+(QA-R3-10).
 
 ### 8.2 Fixtures and golden values (map03 §6)
 
@@ -1236,22 +1294,25 @@ Hand check: 49,950 / (50,500 x 1.001) = 0.9881207901, floored to 8 decimals 0.98
 
 | ID | Setup | Expected outcome | Layer |
 |---|---|---|---|
-| N1 | F1 with volume `"4000"` and 2 price decimals | as measured (QA-2): `fills.csv` has 1 row, BUY 1,000 @ 100.00, commission 500.00; account 904,501.00; quantity 1,000; 4 of 12 bars seen; force stop true; exit 10 (C-01, C-02). The second fill event, 9,000 @ 100.01, never reached `on_order_filled`; the -89.45 balance appears only in the log (map03 §2.11) | 2 |
+| N1 | F1 with volume `"4000"` and 2 price decimals | as measured (QA-2): `fills.csv` has 1 row, BUY 1,000 @ 100.00, commission 500.00; account 904,501.00; quantity 1,000; 4 of 12 bars seen; force stop true; exit 10 with reasons `C-01: forced stop` and `C-02: bars seen fewer than bars fed`, which the parent re-derives (5.2.7). The second fill event, 9,000 @ 100.01, never reached `on_order_filled`; the -89.45 balance appears only in the log (map03 §2.11) | 2 |
 | N2 | F1 inputs; QUANTGEN weights with one decision flipped | P1 < 1, P2 and P4 fail; WITHHELD | 1 |
 | N3 | retired: the realism fixture (C-1) | none | none |
 | N4 | QUANTGEN pair of identical columns; the Nautilus copy of the higher-index column raised by 1e-6 on every row (K3's 1512/1638 case) | P11 reports mismatches with QUANTGEN gap 0; nothing withholds; the card uses QUANTGEN's selection | 1 |
 | N5 | A panel with one duplicated date; one with two dates swapped | R-05 before registration | 1 |
-| N6 | Stress (QUANT-10, QA-R2-12): `synth_prices(2026, 5500, 80.0, 650.0, planted=range(252, 5292, 252))` with `synth_rf(5500)` (below); every planted bar is a decision bar of all 12 columns; the pilot-1 grid at 50 bp; 1x and 2x | every hard check passes; worst corr and abs ΔSR printed next to the bars and map 03's (0.99999901, 0.0013) | 2 |
+| N6 | Stress (QUANT-10, QA-R2-12): `synth_prices(2026, 5500, 80.0, 650.0, planted=range(252, 5292, 252))` with `synth_rf(5500)` (below); every planted bar is a decision bar of all 12 columns; the pilot-1 grid at 50 bp; 1x and 2x | every hard check passes (UNVERIFIED until Step 7; QA-R3-11); worst corr and abs ΔSR printed next to the bars and map 03's (0.99999901, 0.0013) | 2 |
 | N7 | (i) `pnl_stress_nt` replaced by QUANTGEN's 1x matrix on `synth_prices(11, 1500, 100.0, 150.0)`, pilot-1 grid at 50 bp; (ii) F1 at stress 2 with every commission halved; (iii) F1's 2x leg whose `input.json` and manifest say stress `"1"`; (iv) the series of (i) with `pnl_nt = pnl_qg + 0.0001` on every row | (i) P3 and P12 at 2x reported (QA-R2-12); (ii) and (iii) P7 fails, (iii) because the expectation takes stress 2 from the runner's loop (QUANT-R2-3); (iv) correlations pass, P3 and P12's Sharpe check fail | 1 |
 | N8 | `parity.agree` on hand-built `StrategyScore` pairs near pilot 2's stored values (QUANT-R2-2): (a) 5 configurations, PBO 0.19 against 0.21; (b) 12 configurations, both REJECT on the benchmark, `prob_loss_oos` 0.09 against 0.11; (c) 5 configurations, `prob_loss_oos` 0.09 against 0.11; (d) `bench_p` NaN on both | (a) card; (b) and (c) WITHHELD "decision mismatch"; (d) WITHHELD "benchmark test dropped" (measured: `scratch:rev3_probe/agree_probe.py`) | 1 |
 
 The F1 and F2 goldens were verified in high precision at volume 1e12, and at 1e9 under `unshare -rn` with the filled
-skeleton of 5.2.9 (5.4.3). Step 7A re-verifies them in standard precision.
+skeleton of 5.2.9 in Revisions 3 and 4 (5.4.3). Step 7A re-verifies them in standard precision.
 
 **Synthetic series** (QA-R2-12): numpy 2.3.5's `default_rng`; dates `pd.bdate_range("2001-01-02", periods=n)` at 21:00
 UTC. N6 runs from 79.53 to 556.04 (maximum 677.47); L2-7 is `synth_prices(7, 1500, 100.0, 150.0)` with `synth_rf(1500)`.
-On Linux the md5s of `.tobytes()` are `adb735b9c3b6f1bab8e1728c38fff608` (N6) and `7b53fe601255972348aa60eccad550b7`
-(L2-7); Windows `exp` may differ in the last bit, so tests assert outcomes, never these md5s.
+L2-12 (QUANT-R3-2) is `synth_prices(5, 1600, 400.0, 60000.0)` on `pd.date_range("2001-01-01", periods=1600, freq="D")`,
+bars at 00:00 UTC the next day, no cash rate; it runs from 398.59 to 60,000.00 (maximum 60,450.91) and every close
+passes the 9-decimal round trip. On Linux the md5s of `.tobytes()` are `adb735b9c3b6f1bab8e1728c38fff608` (N6),
+`7b53fe601255972348aa60eccad550b7` (L2-7) and `c68986bf632dea074edb5c8ccef76a7d` (L2-12); Windows `exp` may differ in
+the last bit, so tests assert outcomes, never these md5s.
 
 ```python
 def synth_prices(seed, n, p0, p1, planted=()):                     # volatility clusters in 250-bar blocks
@@ -1272,36 +1333,37 @@ def synth_rf(n):                                                   # stepped: 0,
 | 2 | Parity functions: N2, N4, N7, N8 (through `parity.agree`); the P10 bound on F1 and F1r; the P1 exemption with a planted 1e-10 QUANTGEN margin, and a 2e-9 margin that is not exempt; P7's tie (a 0.13 commission passes, 0.12 fails); a planted P5 warning still writes a card. |
 | 3 | Ordering, with the stub child: it exits 1 unless every `config_id` of the table is in the ledger and `input.json` carries the post-registration hash; the run passes when every child returns 0, and every `config_id` was in the ledger before the first child started. |
 | 4 | A broken chain in the temp ledger stops the runner before any child starts (R-09). |
-| 5 | A second run of the same table without `rerun_of` refuses (R-17); after `os.utime` sets the ledger's mtime back 601 s (QA-R2-3) and with `rerun_of` and `reason`, it appends 0 rows, records `appended: false` for every row, and names the first run in `earlier_runs` and `supersedes`; a planted `IN_PROGRESS` record is printed. |
-| 6 | R-01 and R-02 through `check_tree` on a temp git repository: a modified tracked file and an untracked file outside `runs/` refuse; an untracked file under `runs/` passes; a `.git` file (worktree) and `git pack-refs --all` each refuse with their own message; in rehearsal the same states are recorded, not refused. Without git: `NotRun("OWNER: git not on PATH")`. |
+| 5 | Built at Step 7, when a first run can end `CARD_WRITTEN` (QA-R3-1). A second run of the same table without `rerun_of` refuses (R-17), and so does the same table with a new `owner_confirmed`, or re-saved with a BOM and CRLF (OPS-R3-5, QA-R3-3); after `os.utime` sets the ledger's mtime back 601 s (QA-R2-3) and with `rerun_of` and `reason`, it appends 0 rows, records `appended: false` for every row, and names the first run in `earlier_runs` and `supersedes`; a planted `IN_PROGRESS` record is printed. |
+| 6 | R-01 and R-02 through `check_tree` and `tree_refusal` on a temp git repository: a modified tracked file and an untracked file outside `runs/` refuse; an untracked file under `runs/` passes; a `.git` file (worktree) and `git pack-refs --all` each refuse with their own message; in rehearsal `tree_refusal` returns None for the same findings. Without git: `NotRun("OWNER: git not on PATH")`. |
 | 7 | R-04 (missing, unreadable, doctored md5), R-05 (N5; a close failing the round trip) and R-06 (missing, doctored md5, leading NaN) on synthetic files; a blank DGS3MO value on a mid-series session takes the prior value and P0a passes (QUANT-R2-1); no 3% fallback (K8). |
 | 8 | R-07 for an uncosted symbol (`"VOD.L"`) and for 40 bp on SPY (K15). |
-| 9 | R-10: a ledger or output dir outside the temp dir (after `normcase(realpath)`); a synthetic file whose md5 the test plants as the pinned BTC md5; one planted as the pinned SPY md5 with `end` 2004-11-30 (GOVERNANCE-R2-3); a table naming the cache's `yf_SPY.csv` or `yf_BTC-USD.csv`, refused by path before any read. No real price file is read. |
-| 10 | K9: the bridge row's `config_id` for SPY `sma/126/21` at 50.0 equals the one `ui.strategy_lab_page.register_trials` writes into another temp ledger; the same for BTC-USD `hysteresis 0.222` at 10.0 in C3. |
+| 9 | R-10: a ledger or output dir outside the temp dir (after `normcase(realpath)`); a synthetic file whose md5 the test plants as the pinned BTC md5; one planted as the pinned SPY md5 with `end` 2004-11-30 (GOVERNANCE-R2-3); a table naming any tracked file of `docs/asset_expansion/cache/`, such as `yf_SPY.csv` or `binance_BTCUSDT.csv`, refused by path before any read (GOVERNANCE-R3-3). No real price file is read. |
+| 10 | K9: the bridge row's `config_id` for SPY `sma/127/21` at 50.0 equals the one `ui.strategy_lab_page.register_trials` writes with `ledger_dir=<another temp dir>` passed explicitly (`ui/strategy_lab_page.py:55-67`); the same for BTC-USD `hysteresis 0.333` at 10.0 in C3. Neither is a pilot configuration (GOVERNANCE-R3-2). |
 | 11 | `RegisterResult` handling: the recorded `row_md5` equals `row["row_md5"]` for an appended row and for a duplicate. |
-| 12 | Census judgement on doctored stderr: an extra TP name and `nautilus_trader.adapters.binance` each make the run INVALID; an extra STD name does not. |
+| 12 | Census judgement on doctored stderr: an extra TP name, a missing TP name (QA-R3-12) and `nautilus_trader.adapters.binance` each make the run INVALID; an extra STD name does not. |
 | 13 | A parity failure writes no card and exactly one WITHHELD record into a temp output dir. |
 | 14 | `GATE` is deep-equal before and after a synthetic end-to-end scoring; a `score_fn` that mutates `GATE` gives G-04, exit 4 and no card. |
 | 15 | Encoding (AST) over `tools/nautilus/*.py` and the new tests: `encoding=` on every `open` (modes with `b` exempt; QA-R2-14), `read_text`, `write_text` and text-mode `subprocess` call; `lineterminator="\n"` on every `csv.writer`; no CSV the parent or fixtures write contains `b"\r"`. |
 | 16 | The launch builder, given `os_name` `"nt"` and `"posix"`, builds exactly 4.3's argv and environment, with `unshare` on POSIX and each platform's process-group flag; `home` and `tmp` exist; an extra key gives C-10. No process starts. |
 | 17 | Venv reads on a fake venv dir: `%VAR%` and `~` expansion, a control character, a wrong file name, `include-system-site-packages = true`, a Windows `executable` equal to the parent's or a `home` under `WindowsApps`, a version off its pin (R-03); the committed `RECORD` fixtures give `a448cd20...` and `47d274d7...`, 764 entries each (QA-R2-14). |
 | 18 | R-08 with `GATE["bootstrap_B"]` set to 300 inside `try/finally`. |
-| 19 | R-11 through `check_table`: a missing field, a wrong type, of-record pilot values off, a grid that differs from `grid_from(axes)`, a key field edited and a sandbox byte changed after `owner_confirmed` (GOVERNANCE-R2-2); `run(mode="of-record", child_cmd=...)` refuses in argument validation, and `docs/nautilus_bridge/runs/.locks` is not created. |
-| 20 | P0 on a synthetic cache dir: equal arrays pass; a doctored `study.rf_daily` refuses with R-13; a doctored benchmark withholds (P0b). |
+| 19 | R-11 through `check_table`: a missing field, a wrong type, of-record pilot values off, a grid that differs from `grid_from(axes)`, a key field edited, a sandbox byte and a `core/quant/validate.py` byte changed after `owner_confirmed` (GOVERNANCE-R2-2, GOVERNANCE-R3-1); a `PureWindowsPath`-built path list gives the same `code_sha256` (OPS-R3-6); `run(mode="of-record", child_cmd=...)` refuses in argument validation, and `docs/nautilus_bridge/runs/.locks` is not created. |
+| 20 | P0 on a synthetic cache dir, through `check_p0a`: equal arrays pass; a doctored `study.rf_daily` refuses with R-13; a doctored benchmark withholds (P0b). |
 | 21 | `select_matched` on QUANTGEN's own matrices reproduces `wf_qg` field by field, bit for bit (5.4.2). |
-| 22 | The global interpreter has no `nautilus-trader` distribution and cannot import `nautilus_trader` (FAIL otherwise); `pyarrow` presence is reported only. |
+| 22 | The global interpreter has no `nautilus-trader` distribution and cannot import `nautilus_trader` (FAIL otherwise, with R-03's three remedy lines; OPS-R3-1); `pyarrow` presence is reported only. |
 | 23 | R-14: a stub probe printing `{"blocked": false}` refuses; `check_egress_record` refuses a record with another `base_python` and, on Windows, accepts one differing only in case or slash direction (4.3). |
 | 24 | R-15 through `check_table` on temp dirs: a missing ledger, an empty one, and a host fingerprint off by one character each refuse. |
 | 25 | R-16 through `take_lock`: a held lock refuses; a `C3.jsonl` touched now refuses, one touched 601 s ago passes (QA-R2-3). |
 | 26 | Lifecycle: `IN_PROGRESS` is on disk after registration; a hook raising `KeyboardInterrupt` gives `ABORTED`, exit 5; a hook appending a row after registration gives G-05 (Step 7); a hook raising `ValueError` gives G-06; a `register_fn` raising on the third row gives R-12 with two rows recorded. |
-| 27 | Child failures: stubs that exit 1, sleep past `timeout=3` (the tree is killed and the call returns), write no manifest, or write invalid JSON (C-06); a `child_started` hook raising `KeyboardInterrupt` while a sleeping stub runs gives `ABORTED`, exit 5, and the temp dir is removed (OPS-R2-4); a stub whose `--guard-selftest` prints one wrong outcome gives R-03 (QA-R2-10); doctored manifests for C-03, C-04, C-07, C-09, C-11, C-14 and C-15. |
+| 27 | Child failures: stubs that exit 1, sleep past `timeout=3` (the tree is killed and the call returns), write no manifest, or write invalid JSON (C-06); a `child_started` hook raising `KeyboardInterrupt` while a sleeping stub runs gives `ABORTED`, exit 5, and the temp dir is removed (OPS-R2-4); a stub whose `--guard-selftest` prints one wrong outcome gives R-03 (QA-R2-10); doctored manifests (`valid: true`, exit 0) for C-01, C-02, C-03, C-04, C-07, C-09, C-11, C-14 and C-15, each giving its own id in the run record (QA-R3-2). |
 | 28 | Card and record: the record's card md5 equals the md5 of the card's bytes; `results_file` is the run id; the card has no `b"\r"`; writing a card to an existing path raises. |
-| 29 | U count: both pilot tables' `study_configs` equal the stored cards' grids, symbols and costs (read-only reads of `docs/asset_expansion/cards/`, plus 10.2's run 2/3 values); on a temp ledger with planted rows, `n_trials = family_n_raw + U`. Protocol (QUANT-R2-5): each table's `embargo`, `cost_bps`, `grid` and `domain`, and 5.5's benchmark expression, equal the study's calls (`docs/asset_expansion_study.py:271-279, 329-343`, read with `ast` and `study.COST`), and pilot 2's equal the stored card's `rules` and `costs`; G-08's comparison on hand-built scores (exact; within 1e-6 when `rounding_changed`) and on one field off. |
+| 29 | U count: both pilot tables' `study_configs` equal the stored cards' grids, symbols and costs (read-only reads of `docs/asset_expansion/cards/`, plus 10.2's run 2/3 values); on a temp ledger with planted rows, `n_trials = family_n_raw + U`. Protocol (QUANT-R2-5): each table's `embargo`, `cost_bps`, `grid` and `domain`, and 5.5's benchmark expression, equal the study's calls (`docs/asset_expansion_study.py:271-279, 329-343`, read with `ast` and `study.COST`), and pilot 2's equal the stored card's `rules` and `costs`. G-08 (QUANT-R3-1, QUANT-R3-3): `reference_drift` on hand-built scores whose OOS dates run from 2016-10-14 to 2026-09-25, with the reference's `n_years` 11 and `sc_qg.n_years` 9: all else equal gives no drift; `n_sessions` off by one, or a float off by 2e-9, gives drift; pilot 2's `reference_card_md5` equals the md5 of the card's bytes. |
 | 30 | A written card carries `claim_label`, the engine text of 6.5, `parity_scope` and `stats.quantgen_score`; each table's `claim_label` starts with "exploratory", "pre-specified on historical data" or "confirmatory" (QUANT-R2-4). |
 | 31 | G-03: a 400-row synthetic matrix makes `walk_forward` raise; the run is WITHHELD and the reason names the `walk_forward` exception (QA-R2-2). |
 | 32 | The guard of 3.3 wraps every test; a last test compares the digests taken when the suite started (QA-1). |
-| 33 | The committed F1, F2 and N1 goldens equal 8.2's tables, typed into the test (QA-R2-6). |
-| 34 | `write_record` with an `os.replace` seam raising `PermissionError` twice, then succeeding: written, status unchanged; always raising: intermediate writes are skipped and listed, the final write falls back to `run.final.<pid>.json` (OPS-R2-3). |
+| 33 | The committed F1, F2 and N1 goldens equal 8.2's tables, typed into the test with prices at 9 decimals and reasons by id (QA-R2-6, QA-R3-8). |
+| 34 | `write_record` with a `replace` seam raising `PermissionError` twice and a no-op `sleep` (QA-R3-7), then succeeding: written, status unchanged; always raising: intermediate writes are skipped and listed, the final write falls back to `run.final.<pid>.json` (OPS-R2-3). |
+| 35 | `--record-baseline`'s existing-baseline rule (5.2.7; OPS-R3-2) on a temp golden dir: an equal baseline gives exit 0 "unchanged"; a different one gives exit 2, the diff and the `Remove-Item` line, and leaves the file's bytes unchanged. |
 
 ### 8.4 Layer-2 tests
 
@@ -1309,17 +1371,19 @@ def synth_rf(n):                                                   # stepped: 0,
 |---|---|---|---|
 | 1 | `--check-env` and the parent's reads: pins and identity match; precision reported; environment `BACKTEST`. | 2 | F1 and F2 match their goldens; the manifest shows `run_analysis` false and `stats_pnls_empty` true (K6, QA-12). |
 | 3 | N1 matches its golden. | 4 | Determinism: F1 and F2 each run in two separate processes and give the same `fills.csv` SHA-256. |
-| 5a | Exit 20 before the engine is built: volume `int(QUANTITY_MAX) + 1`, capital `int(PRICE_MAX) + 1` (QA-R2-8) and `price_precision = FIXED_PRECISION + 1`, read from `--check-env` at run time (QA-14); a doctored `bars_sha256`. Always runs. | 5b | `input.json` linked to the repo's `.env` (SECURITY-3): exit 20. On WinError 1314, `NotRun("OWNER: enable Developer Mode, or accept this NotRun")` (OPS-R2-5). |
-| 6 | The F1 and F2 censuses match the platform baseline under 5.2.7's rule. | 7 | A synthetic end-to-end rehearsal (8.2): `synth_prices(7, 1500, 100.0, 150.0)`, `synth_rf(1500)`, `grid_from(rule=["sma", "tsmom"], lookback=[126, 252], step=[21])` at 50 bp, embargo 21, temp ledger and outputs; a card whose decision is in `validate.DECISIONS`, both scores in the run record. |
+| 5a | Exit 20 before the engine is built, for one single-field perturbation of F1's input per 6.1 rule (QA-R3-4): an unknown field; each field missing; a wrong type; each range bound, the maxima `int(QUANTITY_MAX) + 1`, `int(PRICE_MAX) + 1` (QA-R2-8) and `FIXED_PRECISION + 1` read from `--check-env` at run time (QA-14); the schema string; close decimals, `n_bars`, row index and non-increasing timestamps; the hash formats and a doctored `bars_sha256`. Always runs; 63 such cases measured (5.4.3). | 5b | `input.json` linked to the repo's `.env` (SECURITY-3): exit 20. On WinError 1314, `NotRun("OWNER: enable Developer Mode, or accept this NotRun")` (OPS-R2-5). |
+| 6 | The F1 and F2 censuses match the platform baseline under 5.2.7's rule. | 7 | A synthetic end-to-end rehearsal (8.2): `synth_prices(7, 1500, 100.0, 150.0)`, `synth_rf(1500)`, `grid_from(rule=["sma", "tsmom"], lookback=[126, 252], step=[21])` at 50 bp, embargo 21, temp ledger and outputs; a card whose decision is in `validate.DECISIONS`, or a WITHHELD record naming the differing predicate and its two values, which go into the execution record; never a new seed chosen after the result (UNVERIFIED until Step 7; QA-R3-11); both scores in the run record. |
 | 8 | `--guard-selftest` exits 0: SANDBOX, LIVE and `LiveClock()` raised; BACKTEST and `TestClock()` passed (C-2). | 9 | The egress probe through the launch contract reports `blocked: true`. |
 | 10 | `<venv python> -I -c "import time; time.sleep(120)"` through the launcher with timeout 3 returns within 15 s; the temp dir can be deleted, so no child survives (OPS-1). | 11 | N6 (QUANT-10). |
+| 12 | Crypto rehearsal through the runner (QUANT-R3-2): the L2-12 series (8.2), the pilot-2 grid, embargo 1, `domain`, 10 bp, `rf_file` null, temp ledger and outputs; a card, or a WITHHELD record naming its reason, with both scores (UNVERIFIED until Step 7); then `reference_drift` against a reference the test builds with `validate.score_strategy` on QUANTGEN's matrix is empty. |  |  |
 
 ### 8.5 Scan controls (`test_t_ro_01_nautilus_confined_to_the_sandbox`)
 
 All in a temp tree, scanned with `_offences(path, tmp)`. Expected hits are exact multisets of tags (QA-15): a letter is
 a `[nautilus:<rule>]` hit, `TEXT` an existing `FORBIDDEN_TEXT_CI` hit, `CALL` an existing `FORBIDDEN_CALLS` hit. They
-were measured with `scratch:rev3_probe/scan3.py`, the Revision-2 prototype with the skeleton of 5.2.9, verbatim, as
-the sandbox positive control. Every "sandbox +" control is that file plus the listed code.
+were measured with `scratch:rev4_probe/scan4.py`, the Revision-2 prototype with the skeleton of 5.2.9, verbatim, as
+the sandbox positive control; the filled sandbox gives no hit either. Every "sandbox +" control is that file plus the
+listed code, inserted before its `if __name__` guard; each gives the multiset Revision 3 measured.
 
 | Control | Path and content | Expected hits | Control | Path and content | Expected hits |
 |---|---|---|---|---|---|
@@ -1358,14 +1422,14 @@ synthetic data and temp ledgers only.
 
 | Step | Who, what | Done when |
 |---|---|---|
-| 1a Claude rounds | Claude drafts; the Claude referee rounds run and are ruled; Claude applies the rulings. | Each report is saved as `docs/superpowers/specs/2026-10-26-nautilus-review/round<k>_<name>.md` with its rulings file, and every issue has a ruling in Appendix B. Steps 2 to 7 may then start on the branch, on the section 2 defaults, with synthetic data and temp ledgers (GOVERNANCE-R2-1). Done for rounds 1 and 2. |
-| 1b Outside review and approval | GPT and Gemini review, or the owner records a substitute in Appendix B; the owner approves. Required before Step 7A, not before Step 2. | Their reports and rulings are saved and mapped in Appendix B; the Status block carries the owner's approval line and answers to O1 to O15; branch work that an answer different from its default affects is redone or deleted. |
-| 2 Plan and dry run | Claude: `docs/superpowers/plans/2026-10-<dd>-nautilus-bridge.md` in the house format (Global Constraints, a file table, RED/GREEN steps for Steps 3 to 7). Global Constraints = all of section 3, verbatim (GOVERNANCE-13), plus: Claude never runs of-record mode (GOVERNANCE-R2-4; 5.3.1) and writes ledger rows only under the system temp dir; no Claude commit includes `qa/acceptance_results.json` (`docs/superpowers/plans/2026-10-23-quantgen-paper-pipeline.md:30`); Claude reads no real BTC price and no SPY row on or after 2004-12-01; no global `pip install`. Dry run (QA-21): the plan's own RED steps, run in a scratch clone with `scratch:ntvenv`; nothing is built twice. | The plan exists; its RED steps fail for the reason each states in the scratch clone; in the real repo `git status` shows no change beyond the plan file, and `qa/acceptance_results.json` keeps its md5. |
+| 1a Claude rounds | Claude drafts; the Claude referee rounds run and are ruled; Claude applies the rulings. | Each report is saved as `docs/superpowers/specs/2026-10-26-nautilus-review/round<k>_<name>.md` with its rulings file, and every issue has a ruling in Appendix B. Done when the moderator closes the Claude debate under C-8: after round 4, a round with only minor issues is applied and closes it, and a new major reopens it (GOVERNANCE-R3-6). Steps 2 to 7 then start on the branch, on the section 2 defaults, with synthetic data and temp ledgers (GOVERNANCE-R2-1). Rounds 1 to 3 are ruled and applied. |
+| 1b Outside review and approval | GPT and Gemini review, or the owner records a substitute in Appendix B; the owner approves. Required before Step 7A, not before Step 2. | Their reports and rulings are saved and mapped in Appendix B; the Status block carries the owner's approval in the form of the Owner context, verbatim with its channel and date, and answers to O1 to O15; branch work that an answer different from its default affects is redone or deleted. |
+| 2 Plan and dry run | Claude: `docs/superpowers/plans/2026-10-<dd>-nautilus-bridge.md` in the house format (Global Constraints, a file table, RED/GREEN steps for Steps 3 to 7); it names the spec revision it implements (GOVERNANCE-R3-6). Global Constraints = all of section 3, verbatim (GOVERNANCE-13), plus: Claude never runs of-record mode (GOVERNANCE-R2-4; 5.3.1) and writes ledger rows only under the system temp dir; no Claude commit includes `qa/acceptance_results.json` (`docs/superpowers/plans/2026-10-23-quantgen-paper-pipeline.md:30`); Claude reads no real BTC price and no SPY row on or after 2004-12-01; the pinned md5s come from this spec, and Claude never opens or hashes `yf_SPY.csv`, `yf_BTC-USD.csv`, `binance_BTCUSDT.csv` or `upbit_KRW-BTC.csv` (GOVERNANCE-R3-3); Claude never writes or edits `owner_confirmed` or `host_fingerprint` (GOVERNANCE-R3-5); no global `pip install`. Dry run (QA-21): the plan's own RED steps, run in a scratch clone with `scratch:ntvenv`; nothing is built twice. | The plan exists; its RED steps fail for the reason each states in the scratch clone; in the real repo `git status` shows no change beyond the plan file, and `qa/acceptance_results.json` keeps its md5. |
 | 3 Environment | Claude on Linux (the Windows half is Step 7A): `requirements-nautilus.txt` (5.1); `.env.example`; `tools/nautilus/__init__.py`; `sandbox.py` with `--check-env` and `--guard-selftest`; `egress_probe.py`; `launch.py` (QA-R2-5); `env_pins.json` with both platforms and the `RECORD` fixtures (6.7); `docs/nautilus_bridge/.gitignore`. | The file pins 5.1's 16 distributions with hashes; `pip install --require-hashes --only-binary=:all: --no-cache-dir -r requirements-nautilus.txt` succeeds in a fresh scratch venv and `pip check` is clean; `launch.py`'s identity read gives `a448cd20...` with 764 entries; under `unshare -rn`, `--check-env` reports Python 3.13.x, `HIGH_PRECISION` true and environment `BACKTEST`, `--guard-selftest` exits 0, and the probe reports `blocked: true`; the global interpreter still reports numpy 2.3.5, pandas 2.3.3, scipy 1.18.0 and no `nautilus_trader`; `requirements.txt`, `requirements-dev.txt` and `pyproject.toml` are byte-identical. |
 | 4 Guard | Claude, on ruling O2's default (in effect outside the branch only after the sign-off): 5.6; the suite registration (5.7); the registry resync and README text of 5.8. | Both new tests pass; every control of 8.5 gives exactly its multiset; the real tree and the real sandbox give no hit; test_08 and test_09 are unchanged and pass; `python -m tests.macro_acceptance` has resynced row 12 and `test_registry_implemented_in_matches_test_ids` passes; L1-15, L1-16, L1-17, L1-22 and L1-32 pass; through the wrapper, `--suite nautilus` reports its layer-2 tests NOT_RUN, not PASS, with `QUANTGEN_NAUTILUS_PYTHON` unset; the README Total row is unchanged. |
-| 5 Sandbox | Claude: section 5.2 in full, in the structure of 5.2.9. | In the Linux venv under `unshare -rn`, L2-1, L2-4, L2-5a, L2-5b and L2-8 to L2-10 pass; no code path uses `AT_THE_CLOSE`, `allow_cash_borrowing=True`, `LatencyModel`, the `PortfolioAnalyzer` or a report as equity; the real sandbox gives no scan hit; layer-2 tests report NotRun without the venv. |
-| 6 Runner | Claude: section 5.3. | L1-1, L1-3 to L1-12, L1-16 to L1-19, L1-20's P0a cases, L1-22 to L1-27 (L1-26 without its G-05 case), L1-33 and L1-34 pass; `--write-goldens` has written F1, F2 and N1, and `--record-baseline` `modules_manylinux_2_35_x86_64.json`, the union of the F1 and F2 censuses; L2-2, L2-3 and L2-6 pass (QA-R2-5); on F1 and F1r the rebuilt R matches 8.2 to 1e-7; the run record carries the post-registration ledger hash, both data md5s, the venv reads and every child manifest. |
-| 7 Parity and gate | Claude, synthetic data only (GOVERNANCE-5): sections 5.4 and 5.5; both pilot tables without their owner fields; `docs/nautilus_bridge/RUNBOOK_windows.md`. | L1-2, L1-13, L1-14, L1-20's P0b case, L1-21, L1-26's G-05 case and L1-28 to L1-31 pass; L2-7 and L2-11 pass; `GATE` is unchanged after every run; N6 reports its worst corr and abs ΔSR next to the bars and map 03's. Real-data parity evidence stays map 03's (5.4.3), never repeated. |
+| 5 Sandbox | Claude: section 5.2 in full, in the structure of 5.2.9. | `launch.fixture_inputs` builds F1, F1r, F2 and N1 (QA-R3-1); in the Linux venv under `unshare -rn`, L2-1, L2-4, L2-5a, L2-5b and L2-8 to L2-10 pass; no code path uses `AT_THE_CLOSE`, `allow_cash_borrowing=True`, `LatencyModel`, the `PortfolioAnalyzer` or a report as equity; the real sandbox gives no scan hit; layer-2 tests report NotRun without the venv. |
+| 6 Runner | Claude: section 5.3. | L1-1, L1-3, L1-4, L1-6 to L1-12, L1-16 to L1-19, L1-20's P0a cases, L1-22 to L1-27 (L1-26 without its G-05 case) and L1-33 to L1-35 pass; `--write-goldens` has written F1, F2 and N1, and `--record-baseline` `modules_manylinux_2_35_x86_64.json`, the union of the F1 and F2 censuses; L2-2, L2-3 and L2-6 pass (QA-R2-5); on F1 and F1r the rebuilt R matches 8.2 to 1e-7; the run record carries the post-registration ledger hash, both data md5s, the venv reads and every child manifest. |
+| 7 Parity and gate | Claude, synthetic data only (GOVERNANCE-5): sections 5.4 and 5.5; both pilot tables without their owner fields; `docs/nautilus_bridge/RUNBOOK_windows.md`. | L1-2, L1-5 (QA-R3-1), L1-13, L1-14, L1-20's P0b case, L1-21, L1-26's G-05 case and L1-28 to L1-31 pass; L2-7, L2-11 and L2-12 pass (QUANT-R3-2); `GATE` is unchanged after every run; N6 reports its worst corr and abs ΔSR next to the bars and map 03's. Real-data parity evidence stays map 03's (5.4.3), never repeated. |
 
 **Step 7A. Hand-off (K2, OPS-8, GOVERNANCE-11, GOVERNANCE-R2-2, GOVERNANCE-R2-5).** After Step 1b. Claude, then the
 owner, in this order; the runbook file repeats it.
@@ -1373,8 +1437,12 @@ owner, in this order; the runbook file repeats it.
    Claude records it verbatim in the Status block, commits, and asks the owner for approval to push; on approval,
    Claude pushes. Any Claude commit leaves `qa/acceptance_results.json` byte-identical and says so.
 2. In the main clone, in a normal (not elevated) PowerShell, the owner runs the lines below one at a time, with the
-   python.org installer downloaded into the current folder; on a red error he skips to the last line (OPS-R2-1). Never a
-   whole-tree `checkout`, `reset`, `stash` or `clean` in the main repo
+   python.org installer downloaded into `$q`, never into the clone (OPS-R3-3); on a red error he skips to the last line
+   (OPS-R2-1). Re-entry (OPS-R3-2): if `$q\py313\python.exe` exists from an earlier attempt, he skips from the registry
+   line to the `pip download` line, because the listed row is that install; the `venv`, install and runner lines are
+   safe to repeat, the firewall rule is created only when absent, and `--record-baseline` treats an existing baseline as
+   5.2.7 says. No line of this block has run in this session (UNVERIFIED until Step 7A). Never a whole-tree `checkout`,
+   `reset`, `stash` or `clean` in the main repo
    (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:89-91`); `git switch` rewrites only
    files that differ, and the branch leaves `docs/asset_expansion/cache/` alone; never a worktree, which gives
    UNVERSIONED rows (same file :85-87). The installer options and its `/log` switch are as python.org documents them
@@ -1382,18 +1450,19 @@ owner, in this order; the runbook file repeats it.
    interpreter's pip downloads the wheels before the firewall rule exists; the global pip never runs (OPS-R2-2).
    ```
    git fetch origin; if ($LASTEXITCODE) { throw "fetch" }
+   git merge-base --is-ancestor origin/main origin/claude/amazing-gauss-tdiguu; if ($LASTEXITCODE) { throw "main has moved: ask Claude to merge origin/main into the branch first" }
    git switch claude/amazing-gauss-tdiguu; if ($LASTEXITCODE) { throw "switch" }
-   $q = Join-Path $env:LOCALAPPDATA "quantgen"; $q                         # note the printed path
-   Get-ItemProperty HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | ? DisplayName -like "Python 3.13*"
-   #   any row is a python.org 3.13 already registered: stop and report it (the Store package is not listed there)
-   Get-AuthenticodeSignature .\python-3.13.<x>-amd64.exe | Format-List Status, SignerCertificate   # Valid; Python Software Foundation (UNVERIFIED)
-   $p = Start-Process .\python-3.13.<x>-amd64.exe -Wait -PassThru -ArgumentList "/quiet", "InstallAllUsers=0", "TargetDir=$q\py313", "PrependPath=0", "Include_launcher=0", "Shortcuts=0", "/log", "$q\py313-install.log"
+   $q = Join-Path $env:LOCALAPPDATA "quantgen"; New-Item -ItemType Directory -Force $q | Out-Null; $q   # note the printed path
+   $u = "Microsoft\Windows\CurrentVersion\Uninstall\*"; Get-ItemProperty "HKCU:\Software\$u", "HKLM:\Software\$u", "HKLM:\Software\WOW6432Node\$u" -ErrorAction SilentlyContinue | ? DisplayName -like "Python 3.13*"
+   #   first attempt: any row is a python.org 3.13 already registered; stop and report it (the Store package is not listed there)
+   $inst = "$q\python-3.13.<x>-amd64.exe"; if ((Get-AuthenticodeSignature $inst).Status -ne "Valid") { throw "signature" }   # signer: Python Software Foundation (UNVERIFIED)
+   $p = Start-Process $inst -Wait -PassThru -ArgumentList "/quiet", "InstallAllUsers=0", "TargetDir=$q\py313", "PrependPath=0", "Include_launcher=0", "Shortcuts=0", "/log", "$q\py313-install.log"
    if ($p.ExitCode -ne 0) { throw "installer exit $($p.ExitCode); see $q\py313-install.log" }
    & "$q\py313\python.exe" -m pip download --require-hashes --only-binary=:all: --no-deps -r requirements-nautilus.txt -d "$q\wheels"; if ($LASTEXITCODE) { throw "download" }
    & "$q\py313\python.exe" -m venv "$q\ntvenv"; if ($LASTEXITCODE) { throw "venv" }
    # the PowerShell install line of the requirements-nautilus.txt header (5.1), followed by: if ($LASTEXITCODE) { throw "install" }
    # elevated PowerShell, same Windows account, the printed path written out in full; then close that window:
-   New-NetFirewallRule -DisplayName "QUANTGEN-nautilus-block-out" -Direction Outbound -Action Block -Program "<printed path>\py313\python.exe" -Profile Any
+   if (-not (Get-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out -ErrorAction SilentlyContinue)) { New-NetFirewallRule -DisplayName "QUANTGEN-nautilus-block-out" -Direction Outbound -Action Block -Program "<printed path>\py313\python.exe" -Profile Any }
    # back in the normal window: add the .env line of 3.4 with the owner's path, then:
    python -B -m tools.nautilus.runner --check-env; if ($LASTEXITCODE) { throw "check-env" }
    python -B -m tools.nautilus.runner --egress-record; if ($LASTEXITCODE) { throw "egress" }
@@ -1404,32 +1473,37 @@ owner, in this order; the runbook file repeats it.
    python -B -m tools.nautilus.runner --fingerprint --table docs\nautilus_bridge\registration\pilot2_C3_btcusd.json
    python -B -m tools.nautilus.runner --handoff-report                      # always, last, whatever failed above
    ```
-3. The owner commits and pushes `docs/nautilus_bridge/handoff/<tag>.json` whatever happened (OPS-8). If every line
+3. The owner commits and pushes `docs/nautilus_bridge/handoff/win_amd64.json` whatever happened (OPS-8). If every line
    passed, he also pastes each fingerprint into its table's `host_fingerprint`, writes `owner_confirmed` as `"Geon Koh,
    <date>, table <16 hex>, code <16 hex>"` from the printed digests, which approves of-record runs of that table
-   (GOVERNANCE-R2-2), and commits the Windows census baseline, the egress record, both tables and the results file as
-   one change group; that commit also writes the branch's loose ref (OPS-3).
-4. Claude reviews the hand-off report and the census diff in the next session and records the review in Appendix B. No
-   pilot runs before that review. A code change after a failed Step 7A needs a new sign-off sentence and a new
+   (GOVERNANCE-R2-2), and commits as one change group `tools/nautilus/golden/modules_win_amd64.json`,
+   `docs/nautilus_bridge/egress/win_amd64.json`, both tables and `qa/acceptance_results.json` (GOVERNANCE-R3-4), each
+   named in `git add`, never `git add -A` (OPS-R3-3); that commit also writes the branch's loose ref (OPS-3).
+4. Claude reviews the hand-off report and the census diff in the next session, recomputes `code_sha256` on Linux at
+   the 7A.3 commit and compares it with both tables' `owner_confirmed` (OPS-R3-6), and records the review in Appendix
+   B. No pilot runs before that review. A code change after a failed Step 7A needs a new sign-off sentence and a new
    `owner_confirmed`.
 5. The owner pulls Claude's review commit with `git pull --ff-only` before Step 8; the pilots anchor to that HEAD, and
    the run record stores it (GOVERNANCE-R2-5).
-- Merge (GOVERNANCE-R2-5): the owner merges the branch into `main` (`origin/main`, `716bf77`, the branch's base) with a
-  merge commit he makes himself, never a squash or a rebase, and keeps the branch ref, so every ledger anchor stays
-  reachable.
+- Merge (GOVERNANCE-R2-5, OPS-R3-7): after Step 10 the owner merges the branch into `main` (`origin/main`, `716bf77`
+  today, the branch's base) with a merge commit he makes himself, never a squash or a rebase, and keeps the branch ref,
+  so every ledger anchor stays reachable: `git switch main`, `git pull --ff-only`, `git merge --no-ff
+  claude/amazing-gauss-tdiguu`, `git push origin main`. Until then the clone stays on the branch; readouts wait, or run
+  from a separate clone, never during a pilot (3.8).
 - Done when: on Windows, `--check-env` reports the pinned versions, the `win_amd64` identity `47d274d7...` with 764
   entries, `HIGH_PRECISION` false and `FIXED_PRECISION` 9, and `--guard-selftest` behaves; the egress record shows
   `probe.blocked` and `control_connect.ok` true; F1, F2 and N1 run through the exact launch contract and match their
   goldens (K1), or the hand-off stops and no pilot runs; the census diff obeys 5.2.7 and Claude has reviewed it; the
   hand-off report holds the import time and the time of 12 synthetic runs of 5,600 bars; the full run shows 0 FAIL with
-  the `nautilus` layer-2 tests PASS, L2-5b the only NotRun allowed (OPS-R2-5); frozen_guard (a), (b) and (d) pass;
+  the `nautilus` layer-2 tests PASS, L2-5b the only NotRun allowed (OPS-R2-5), and the stub children start, through
+  `sys.executable` or the recorded py313 fallback (8.1; QA-R3-10); frozen_guard (a), (b) and (d) pass;
   `repo_anchor()` returns `git:<the 7A.5 HEAD>`; `git status --porcelain` is empty.
 
 | Step | Who, what | Done when |
 |---|---|---|
-| 8 Pilot 1 | The owner runs `python -B -m tools.nautilus.runner --table docs/nautilus_bridge/registration/pilot1_E1_spy.json --of-record`, never while the suite or a readout runs, with power plugged in, sleep off, updates paused (in Settings; no stable command, UNVERIFIED) and a console that stays open (OPS-6), after `powercfg /change standby-timeout-ac 0` and `powercfg /change hibernate-timeout-ac 0`, restoring the old values afterwards (OPS-8); a re-run follows 5.3.5 (R-17); Claude reads the outputs after the owner pushes them. | E1 holds the 12 `config_id`s, appended or already present, and recorded; every manifest echoes the post-registration ledger hash, and `registered_utc` precedes `first_child_utc`; every hard check passes for all 12 columns at 1x and 2x, or a WITHHELD record names the failing check; if parity passed, the run folder holds `NB_E1_trend_spy.json` with the decision both engines reached, the four trial counts, the manifest hashes and the selection used, or a WITHHELD record says "decision mismatch"; the owner has committed and pushed the run folder. |
+| 8 Pilot 1 | The owner runs `python -B -m tools.nautilus.runner --table docs/nautilus_bridge/registration/pilot1_E1_spy.json --of-record`, never while the suite or a readout runs, with power plugged in, updates paused (in Settings; no stable command, UNVERIFIED) and a console that stays open (OPS-6); the runner itself keeps the machine awake (5.3.5; OPS-R3-8); a re-run follows 5.3.5 (R-17); Claude reads the outputs after the owner pushes them. | E1 holds the 12 `config_id`s, appended or already present, and recorded; every manifest echoes the post-registration ledger hash, the evidence that every child ran after registration (QA-R3-12); every hard check passes for all 12 columns at 1x and 2x, or a WITHHELD record names the failing check; if parity passed, the run folder holds `NB_E1_trend_spy.json` with the decision both engines reached, the four trial counts, the manifest hashes and the selection used, or a WITHHELD record says "decision mismatch"; the owner has committed and pushed the run folder. |
 | 9 Pilot 2 | The owner, only if pilot 1 passed parity. | Step 8's conditions hold for 5 columns at 10 and 20 bp; `NB_C3_crypto_trend_btcusd.json` reports PBO for information only, and over-search uses the share of splits where the in-sample winner loses (`core/quant/validate.py:576`; map02 §2.5). |
-| 10 Close-out | The owner runs the full suite on Windows and updates the README counts and Total row from it (C-4); Claude writes `docs/superpowers/plans/2026-10-<dd>-nautilus-bridge-execution-record.md` with every ruling made, its cost if wrong, and the data-access history of 10.4. | The Windows full run shows 0 FAIL with the `nautilus` suite counted; `qa/acceptance_results.json` is committed from that run only; frozen_guard (a), (b) and (d) pass there; run folders and the execution record are committed; `git diff` against the Step 7A commit shows no change under `paper_live/`, `grokteam/`, `docs/asset_expansion/cards/` or the harness sources of `core/quant/gate_package.py:35-37`. |
+| 10 Close-out | The owner runs the full suite on Windows and updates the README counts and Total row from it (C-4); Claude writes `docs/superpowers/plans/2026-10-<dd>-nautilus-bridge-execution-record.md` with every ruling made, its cost if wrong, and the data-access history of 10.4. | The Windows full run shows 0 FAIL with the `nautilus` suite counted; `qa/acceptance_results.json` is committed only from an owner's Windows full run (Step 7A.2 and this step), never from Linux (GOVERNANCE-R3-4); frozen_guard (a), (b) and (d) pass there; run folders and the execution record are committed; `git diff` against the 7A.5 HEAD that the pilot run records store shows no change under `paper_live/`, `grokteam/`, `docs/asset_expansion/cards/` or the harness sources of `core/quant/gate_package.py:36-38` (GOVERNANCE-R3-1, GOVERNANCE-R3-7). |
 
 ## 10. Pilots
 
@@ -1458,10 +1532,10 @@ From the row counts alone: 38 origins, the first OOS session at row 777, and 4,7
 |---|---|---|---|---|---|
 | Family, rule, market | `C3`, `"C3"`, `"CRYPTO"` | `ui/strategy_lab_page.py:50-52` | Price file | `docs/asset_expansion/cache/yf_BTC-USD.csv`, md5 `bc76f530ff24ab445367fe826150bc10`; `start` 2014-09-17, `end` 2026-09-25, the whole file, 7-day calendar | map03 §5.1; `docs/asset_expansion_study.py:731` |
 | Grid | `grid_from(hysteresis=[0.0, 0.222, 0.444, 0.667, 0.889])`; study defaults for lookbacks and MAs; domain (0, 0.889) | `docs/asset_expansion_study.py:333, 339` | Params per row | `{"hysteresis", "symbols": ["BTC-USD"], "cost_bps": 10.0}` | 6.4 |
-| Cash rate; cost | none; 10 bp per side from `cost_floor_bp(["BTC-USD"])`, stress 20 bp, flat, no weekend term | `docs/asset_expansion_study.py:335-343`; `core/quant/validate.py:78` | Embargo, benchmark | 1; BTC buy-and-hold, uncosted | `docs/asset_expansion_study.py:334, 337` |
+| Cash rate; cost | none: `rf_file` null, so `rf = 0.0` (5.3.2 step 6); 10 bp per side from `cost_floor_bp(["BTC-USD"])`, stress 20 bp, flat, no weekend term | `docs/asset_expansion_study.py:335-343`; `core/quant/validate.py:78` | Embargo, benchmark | 1; BTC buy-and-hold, uncosted | `docs/asset_expansion_study.py:334, 337` |
 | Capital, account, instrument | $1,000,000 USD and 0 BTC; CASH with `base_currency=None`; spot `CurrencyPair`, 9 price and 8 size decimals | 5.2.3 | `study_configs` | BTC-USD runs 2 and 3: hysteresis 0.05, 0.1, 0.2, 0.3, 0.4, 0.5 at 10.0 (6); KRW-BTC: the 5 lattice values at 10.0, symbols `["KRW-BTC"]`. The BTC-USD lattice equals the bridge's own rows and never counts in U. Whether runs 2 and 3 also ran on KRW-BTC is UNVERIFIED; the card's ledger note names BTC-USD only. | `docs/asset_expansion/cards/S_C3_crypto_trend_btcusd.json` (`trials.ledger`), `S_C3_crypto_trend_krwbtc.json` |
 | Trial count; ledger | `C3 N_raw after registration + U`, U at most 11; C3 also holds paper_live US and KR trend rows (K12); `C3.jsonl` must exist, hold a row and verify (R-15) | O11 | Claim label; card | `"pre-specified on historical data, engine replication: stored card S_C3_crypto_trend_btcusd on the same file and configurations, grid revised on this file; not new evidence about the rule"`; `NB_C3_crypto_trend_btcusd` | QUANT-6, QUANT-R2-4; 6.5 |
-| Precondition | pilot 1 passed every hard parity check | synth §2.2 |  |  |  |
+| Precondition | pilot 1 passed every hard parity check | synth §2.2 | Reference card | `reference_card` `docs/asset_expansion/cards/S_C3_crypto_trend_btcusd.json`, `reference_card_md5` `d0bb0882fb51dec361cf2ddb160186bb` (G-08) | QUANT-R3-3 |
 
 With 5 columns, PBO is reported only (`core/quant/validate.py:68, 576`). On a 365-day calendar the five-year rule binds
 before the 1,260-session rule (map03 §5.2).
@@ -1484,7 +1558,8 @@ inputs equal the study's and `sc_qg` reproduces the stored card (G-08), the expe
 it: the engines' scores differing in any gate predicate (5.5 step 5), which withholds "decision mismatch" rather than
 carding; and `n_trials` exceeding 11 once U and the paper_live rows count (O11), though the
 inverted stored DSR stays at or above 0.9997 up to N = 1,000 (quant referee's note). A non-PASS with parity passing
-would be a finding to investigate, not a reason to tune anything.
+would be a finding to investigate, not a reason to tune anything. The card will report 9 whole years where the stored
+card reports 11 calendar years; the gate's five-year rule passes either way (QUANT-R3-1).
 
 ### 10.4 Data-access history
 
@@ -1498,6 +1573,7 @@ This list goes verbatim into the execution record (map04 R23).
 | 2026-10-26 | synthesis and critic | the same pre-2004 window and map 03's saved matrices | 109 single-block flips; walk-forward ties (K3) | none |
 | 2026-10-26 | round-1 referees, Revision-2 probes | synthetic series only; the study module imported without reading data; no real BTC price | fixtures, ties, cost gaps, scan rules, egress | none |
 | 2026-10-26 | round-2 referees, Revision-3 probes | synthetic series; `fred_DGS3MO.csv` (its NaN pattern); the stored cards' statistics; the first 3 lines of `yf_SPY.csv` (1995) and 4 pre-2004-12-01 dates in it (QA referee); no BTC price, no SPY row from 2004-12-01 | rf fill, gate predicates, rounding, `Money`, fixtures, scan | none |
+| 2026-10-26 | round-3 referees, Revision-4 probes | synthetic series and calendars; the stored cards' JSON (statistics, line text, the S_C3 card's md5); `study.log`, `manifest.json` and `results.md`; the names and sizes, not the content, of `binance_BTCUSDT.csv` and `upbit_KRW-BTC.csv`; no price row of a real series | the `n_years` rule, `cents`, fixtures, 6.1 refusals, scan, remedies, digests | none |
 | Steps 3 to 7 | Claude | synthetic series only | rehearsals | temp only |
 
 Claim labels in the house protocol's terms (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:442-452`):
@@ -1514,7 +1590,7 @@ engine replication of a stored card. Neither is confirmatory. Each card carries 
 | 7 | A forced stop or thin volume truncates a run that returns normally. | C-01 to C-03; fee-inclusive sizing; volume 2.5e8 at the close. | 8 | Someone reads `PortfolioAnalyzer` or the account report as equity. | `run_analysis=False` with the `stats_pnls_empty` witness; returns rebuilt from fills. |
 | 9 | The owner's original bars pass real bugs (5.4.3). | Corrected bars (O5); P4; P7 hard. | 10 | Engine noise picks different walk-forward columns (K3), or the verdict depends on one engine (C-3). | QUANTGEN's selection on both matrices (5.4.2); both scored, card only on agreement (5.5). |
 | 11 | A convention mismatch looks like an engine error, or an input error passes parity. | One shared rounded array; checked bars; P0 against the study's loaders. | 12 | Yahoo restates adjusted history, or the DGS3MO file changes. | md5 pins; refusals (R-04, R-06). |
-| 13 | An unregistered look at a pilot window. | Content refusals (R-10); synthetic-only Claude rehearsals; registration before any child; 10.4. | 14 | Pilot rows anchor a commit without the code (K2), or of-record runs on the wrong machine. | Step 7A; R-01, R-02; host fingerprint, existing ledger, egress record (R-14, R-15). |
+| 13 | An unregistered look at a pilot window. | Place and content refusals (R-10); synthetic-only Claude rehearsals; registration before any child; 10.4. | 14 | Pilot rows anchor a commit without the code (K2), or of-record runs on the wrong machine. | Step 7A; R-01, R-02; host fingerprint, existing ledger, egress record (R-14, R-15). |
 | 15 | Replica rows get a different `config_id` (K9), or the trial count is wrong (QUANT-4, K12). | The Lab's exact params expression (L1-10); `N_raw + U`, four counts stored. | 16 | Pilot 1 ends non-PASS and is read as a bridge failure, or the grid is tuned after seeing it. | 10.3 states the expectation; any change is a new registration. |
 | 17 | API churn: 1.231.0 is the last 1.x release. | Exact pin with hashes; all Nautilus calls in one file. | 18 | The Linux `run_all.py` rewrites the results file (K13). | 8.6. |
 | 19 | A pilot runs alongside the suite, a readout or another runner. | 3.8; the table lock; the freshness refusal (R-16). | 20 | LGPL-3.0 duties if QUANTGEN is conveyed; FSCMA questions if results are published. | The README forbids distribution (`README.md:924-929`); publication needs an owner review; FSCMA is UNVERIFIED (map04 §8). |
@@ -1534,9 +1610,11 @@ its thresholds, the ledger code or the study.
 ## 13. Open questions
 
 Only questions that the defaults of section 2 do not settle:
-1. **Windows facts (Step 7A answers them):** does the venv launcher run with the minimal environment; does the firewall
-   rule bind the interpreter the redirector starts; are F1 and F2 identical in standard precision; is the Windows
-   identity install-method independent; what are the import and run times? All UNVERIFIED.
+1. **Windows facts (Step 7A answers them):** does the venv launcher run with the minimal environment, and does the
+   Store Python's `sys.executable` start the stub child with it (else the py313 fallback of 8.1; QA-R3-10); does the
+   firewall rule bind the interpreter the redirector starts; are F1 and F2 identical in standard precision; is the
+   Windows identity install-method independent; does the Store Python redirect the temp dir, so that the rehearsal
+   temp-root checks refuse (ops referee's note); what are the import and run times? All UNVERIFIED.
 2. **The owner's ledgers:** do `E1.jsonl` and `C3.jsonl` exist with rows on the owner's machine? If not, R-15 blocks
    that pilot until the owner rules.
 3. **Outside this spec:** should a gate-package freeze hash the E1 and C3 ledgers (no caller passes them today; map02
@@ -1569,16 +1647,16 @@ unless the owner records a substitution. The Claude referee ran with the repo cl
 holds no `.env` (GOVERNANCE-12). Reports (`round<k>_claude_<persona>.md`, 2026-10-26) and rulings
 (`round<k>_rulings.md`) are in `docs/superpowers/specs/2026-10-26-nautilus-review/`.
 
-| Referee | Channel | Round 1 (Revision 1) | Round 2 (Revision 2) |
-|---|---|---|---|
-| Claude, security | subagent in the repo clone | REJECT (1 blocker) | AGREE (2 minor) |
-| Claude, quant | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (2 major, 5 minor) |
-| Claude, QA | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (5 major, 9 minor) |
-| Claude, ops | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (2 major, 6 minor) |
-| Claude, governance | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (3 major, 3 minor) |
-| GPT | Codex CLI (quota resets 2026-10-30 14:40) | pending | pending |
-| Gemini | `agy` on the owner's machine | pending | pending |
-| Owner-recorded substitute | | none | none |
+| Referee | Channel | Round 1 (Revision 1) | Round 2 (Revision 2) | Round 3 (Revision 3) |
+|---|---|---|---|---|
+| Claude, security | subagent in the repo clone | REJECT (1 blocker) | AGREE (2 minor) | AGREE, pressed (2 minor) |
+| Claude, quant | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (2 major, 5 minor) | ACCEPT WITH CHANGES (1 major, 2 minor) |
+| Claude, QA | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (5 major, 9 minor) | AGREE (12 minor) |
+| Claude, ops | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (2 major, 6 minor) | ACCEPT WITH CHANGES (2 major, 7 minor) |
+| Claude, governance | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (3 major, 3 minor) | AGREE (7 minor) |
+| GPT | Codex CLI (quota resets 2026-10-30 14:40) | pending | pending | pending |
+| Gemini | `agy` on the owner's machine | pending | pending | pending |
+| Owner-recorded substitute | | none | none | none |
 
 **Round 1 issues** (rulings in `round1_rulings.md`; none rejected; C-n are the moderator's own items).
 
@@ -1643,7 +1721,9 @@ the rulings' tally says 26 minor. Four round-1 issues were still open and are cl
 Round 2, applied with a stated interpretation:
 - QUANT-R2-5 (G-08 "exactly"): `sc_qg` scores the 9-decimal closes of QUANT-R2-7, so it can equal a card computed on
   unrounded closes bit for bit only if no close changed. G-08 is exact when `rounding_changed` is false, and otherwise
-  uses the referee's tolerances (1e-6; one bootstrap draw for `bench_p`) on the float fields (5.5 step 5).
+  uses the referee's tolerances (1e-6; one bootstrap draw for `bench_p`) on the float fields. Superseded in Revision 4
+  by QUANT-R3-1 and QUANT-R3-3: `n_years` by the calendar-year rule, every float within 1e-9 whatever
+  `rounding_changed` says, and no exact float comparison (5.5 step 5).
 - SECURITY-R2-1 (F4 wording): F4 keeps its `Subscript` scope. Read alone, "an Attribute chain rooted at a module alias"
   would flag every `json.dumps`.
 - QA-R2-2 with QUANT-R2-2: one scorer seam, `score_fn`, serves L1-14 and the run-level case; N8 tests the pure
@@ -1656,7 +1736,36 @@ Round 2, applied with a stated interpretation:
   Revision 3 has 1,663 (+10.9 percent; +23 percent in bytes, mostly the skeleton of 5.2.9,
   the Step 7A commands and the series code that C-5, OPS-R2-1 and QA-R2-12 require).
 
-**Round 3.** GPT and Gemini review Revision 3. Their issues and the owner's rulings go here.
+**Round 3 issues** (rulings in `round3_rulings.md`; none rejected). 3 major and 30 minor new issues, and the
+moderator's C-7 and C-8; QUANT-R2-5(b), the one earlier issue still open, closes with QUANT-R3-1.
+
+| Issue | Sev. | Ruling | Addressed in | Issue | Sev. | Ruling | Addressed in | Issue | Sev. | Ruling | Addressed in |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| C-7 | minor | ACCEPT (moderator): Revision 3's nine deviations stand | Appendix B (round 2) | C-8 | minor | ACCEPT (moderator): close after round 4 | Status, Owner context, O8, Step 1a | QUANT-R3-1 | major | ACCEPT (first option) | 5.5 step 5, 6.3, 7 G-08, 8.3 test 29, 10.3, Appendix B |
+| QUANT-R3-2 | minor | ACCEPT | 5.3.2 step 6, 8.2 series, 8.4 test 12, 10.2, Step 7 | QUANT-R3-3 | minor | ACCEPT | 5.3.2 step 1, 5.5 step 5, 6.6, 7 R-11 and G-08, 8.3 test 29, 10.2 | OPS-R3-1 | major | ACCEPT | 7 R-03, 8.3 test 22 |
+| OPS-R3-2 | major | ACCEPT | 5.2.7, 5.3.1, 8.3 test 35, Step 7A.2 | OPS-R3-3 | minor | ACCEPT | Step 7A.2, 7A.3 | OPS-R3-4 | minor | ACCEPT | 4.4, 5.3.1 `--handoff-report` |
+| OPS-R3-5 | minor | ACCEPT | 5.3.1, 5.3.2 step 0, 5.3.5, 6.3, 6.6, 7 R-17, 8.3 test 5 | OPS-R3-6 | minor | ACCEPT | 6.6, 8.3 test 19, Step 7A.4 | OPS-R3-7 | minor | ACCEPT | Step 7A.2, Merge |
+| OPS-R3-8 | minor | ACCEPT (`SetThreadExecutionState`) | 5.3.5, Step 8 | OPS-R3-9 | minor | ACCEPT | 3.7, 4.3, 5.3.2 step 2, 5.7, 7 R-02 and R-14 | QA-R3-1 | minor | ACCEPT | 4.3, 5.8, 8.3 test 5, Steps 5 to 7 |
+| QA-R3-2 | minor | ACCEPT | 5.2.7, 5.4.1 P13, 7 C-01 to C-04 and C-15, 8.1, 8.3 test 27 | QA-R3-3 | minor | ACCEPT (as OPS-R3-5) | 5.3.5, 6.6, 8.3 test 5 | QA-R3-4 | minor | ACCEPT | 5.2.9, 5.4.3, 6.1, 8.4 test 5a |
+| QA-R3-5 | minor | ACCEPT | 5.3.1, 8.1 | QA-R3-6 | minor | ACCEPT | 5.3.5 | QA-R3-7 | minor | ACCEPT | 5.3.1, 5.3.2 steps 2 and 7, 5.3.5, 8.3 tests 6, 20, 34 |
+| QA-R3-8 | minor | ACCEPT | 5.2.5, 5.2.7, 5.2.9, 6.2, 6.8, 8.2 N1, 8.3 test 33 | QA-R3-9 | minor | ACCEPT | 5.2.5, 5.2.9, 8.1 | QA-R3-10 | minor | ACCEPT | 8.1, 13.1, Step 7A |
+| QA-R3-11 | minor | ACCEPT | 8.2 N6, 8.4 tests 7 and 12 | QA-R3-12 | minor | ACCEPT | O13, 8.3 test 12, Step 8 | SECURITY-R3-1 | minor | ACCEPT | 5.2.9, 8.5 |
+| SECURITY-R3-2 | minor | no change; one sentence | 5.6 | GOVERNANCE-R3-1 | minor | ACCEPT | 4.1, 6.6, 8.3 test 19, Step 10 | GOVERNANCE-R3-2 | minor | ACCEPT | 3.3, 8.3 test 10 |
+| GOVERNANCE-R3-3 | minor | ACCEPT | 3.9, 5.3.1, 6.6, 7 R-10, 8.3 test 9, Step 2 | GOVERNANCE-R3-4 | minor | ACCEPT | Step 7A.3, Step 10 | GOVERNANCE-R3-5 | minor | ACCEPT | Owner context, Steps 1b and 2 |
+| GOVERNANCE-R3-6 | minor | ACCEPT | Status, Steps 1a and 2, 10.4, Appendix B | GOVERNANCE-R3-7 | minor | ACCEPT | 3.10, Step 10 |  |  |  |  |
+
+Round 3, applied with a stated interpretation:
+- Choices the referee left open: L1-5 moves to Step 7 (QA-R3-1's first option); G-08's comparison is the pure
+  `parity.reference_drift`, so L1-29 and L2-12 call it directly (QUANT-R3-1, QUANT-R3-2); L2-12's dates start
+  2001-01-01; the hand-off tag on Linux is `linux_x86_64`, not the wheel's `manylinux_2_35_x86_64` (OPS-R3-4).
+- QA-R3-2: `--doctor` also takes C-01 and C-02, so every check the parent re-derives has a layer-1 control.
+- GOVERNANCE-R3-6 with C-8: Step 1a is open again, so Steps 2 to 7 wait for round 4 to close it.
+- Applied from referee notes, not issues: P6 does not use `c_leg`, and P7 is stated in `Decimal` (quant); goldens hold
+  prices at 9 decimals (QA); 13.1 asks whether the Store Python redirects the temp dir (ops).
+- C-6 growth: Revision 3 had 1,663 lines; Revision 4 has 1,772 (+6.6 percent), mostly this table, the
+  Step 7A re-entry lines and the new tests and seams.
+
+**Outside review.** GPT and Gemini review the current revision. Their issues and the owner's rulings go here.
 
 | Issue | Raised by | Ruling | Addressed in |
 |---|---|---|---|
