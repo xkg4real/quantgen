@@ -1,0 +1,41 @@
+== head
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts2/verify_ui_issues.py", line 60, in <module>
+    note = next(x for x in texts(h) if x.startswith("Shocks move"))
+StopIteration
+== patched_v1
+{
+ "4_narrative_sentence": "Over a 1m horizon carry is -0.356 and roll-down -0.078 per 100, -0.434 in total, so the bond matures inside the horizon, so no yield move changes this hold-to-maturity result.",
+ "5_errors_before_after_clear": [
+  [
+   "Fill only one of Price and Yield.",
+   "Fill only one of Price and Yield."
+  ],
+  [
+   "Fill only one of Price and Yield.",
+   null
+  ]
+ ],
+ "6_negative_yields": {
+  "freq 1 y -35": "No z-spread in [-0.5, 2.0] reproduces 8370.0660.",
+  "freq 1 y -38": "No z-spread in [-0.5, 2.0] reproduces 13313.8090.",
+  "freq 1 y -39": "No z-spread in [-0.5, 2.0] reproduces 15624.4845.",
+  "freq 1 y -45": "No z-spread in [-0.5, 2.0] reproduces 43417.5961.",
+  "freq 1 y -49.99": "No z-spread in [-0.5, 2.0] reproduces 111385.8514.",
+  "freq 2 y -35": "ok",
+  "freq 2 y -38": "ok",
+  "freq 2 y -39": "No z-spread in [-0.5, 2.0] reproduces 8529.4285.",
+  "freq 2 y -45": "No z-spread in [-0.5, 2.0] reproduces 17993.5701.",
+  "freq 2 y -49.99": "No z-spread in [-0.5, 2.0] reproduces 34317.4855.",
+  "freq 4 y -35": "ok",
+  "freq 4 y -38": "ok",
+  "freq 4 y -39": "ok",
+  "freq 4 y -45": "No z-spread in [-0.5, 2.0] reproduces 13011.4161.",
+  "freq 4 y -49.99": "No z-spread in [-0.5, 2.0] reproduces 22721.8244."
+ },
+ "7_echo": "Computed for: Calculator & risk · coupon 4.5% · maturity 10y · 2x coupons · price 99.1235 (yield computed) · notional 1,000,000 · curve Auto (FRED, else synthetic)",
+ "7_chip": "curve: SYNTHETIC (simulated, dated 2026-10-27)",
+ "13_notice_head": "Shocks move the curve's continuously-compounded zero rates with the z-spread held, not this bond's yield: +100bp of zero is about +102.2bp of its yield to first order; convexity then trims losses and ",
+ "13_row_yield_move_bp": 103.16,
+ "13_flat_ratio_bp": 102.25
+}

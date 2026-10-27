@@ -1,0 +1,305 @@
+$ (cwd=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head) python3 -B /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head tests.bonds_screen_acceptance /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/logs2/head__bonds_screen_acceptance_xrun.json
+rc=0
+FAIL test_a_quote_too_far_from_the_curve_names_the_field (0.368s) AssertionError: []
+FAIL test_a_run_uses_the_inputs_of_its_click (0.282s) AssertionError: {'Bonds': 'Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.', 'Price': '95.000', 'Yield': '6.178%', 'Macaulay': '7.76y', 'Modified': '7.52', 'Convexity': '69.9', 'DV01': '715', 'z-spread': '-155.4bp', 'Carry (
+FAIL test_carry_roll_for_a_bond_maturing_inside_the_horizon (0.001s) AssertionError: (0.08333333333333333, -2.2952168901404564, -0.0035502234737895266)
+FAIL test_chart_left_titles_use_the_palette_text_colour (0.008s) AssertionError: black
+FAIL test_clearing_one_of_price_and_yield_clears_the_pair_error (0.013s) AssertionError:
+FAIL test_curve_lagging_in_a_shared_cache_is_refetched (0.003s) AssertionError: CurveSnapshot(date='2026-10-27', source='FRED', tenors=(0.08333333333333333, 0.25, 0.5, 1.0, 2.0, 3.0, 5.0, 7.0, 10.0, 20.0, 30.0), par_yields=(0.043, 0.0425, 0.042, 0.04, 0.0372, 0.0375, 0.038, 0.039, 0.0397, 0.045, 0.0437), note='')
+PASS test_duration_convexity_dv01_by_finite_differences (0.001s)
+FAIL test_echo_keeps_the_typed_digits_and_names_the_served_curve (0.214s) StopIteration:
+FAIL test_edit_after_run_marks_the_result_and_revert_unmarks (0.216s) StopIteration:
+FAIL test_every_input_has_a_change_handler (0.001s) AssertionError: Coupon % has no on_change handler
+FAIL test_failed_fred_reasons_keep_the_cause_once (4.838s) AssertionError: FRED served 0/11 tenors (DGS1MO: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS1MO
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS1MO (Caused by ProxyError('Unable to connect
+FAIL test_fred_fetch_is_bounded_and_a_hung_batch_is_not_retried_per_id (0.001s) AssertionError: DataReader takes no timeout
+FAIL test_hedge_798_x_08_over_65_side_rounding_and_residual (0.014s) KeyError: 'Position DV01 (calculator)'
+FAIL test_hedge_override_is_named_and_warned (0.013s) KeyError: 'Position DV01 (override)'
+FAIL test_lagging_refetch_is_tried_once_per_cache_entry (0.003s) AssertionError: []
+FAIL test_late_failure_does_not_replace_a_newer_result (0.232s) AssertionError: ['Bonds', 'Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.', 'FRED served 0/11 tenors (DGS1MO: FICCError: offline (late); DGS3MO: FICCError: offline (late); DGS6MO: FICCError: offline (late); DGS1: FICCError:
+FAIL test_missing_tenor_note_describes_the_interpolation (0.001s) AssertionError: Missing tenors: DGS20.
+FAIL test_named_shocks_bite_at_their_own_tenors_on_a_partial_curve (0.009s) AssertionError: ('bear steepener', 7.0, 8.928571428571429)
+FAIL test_narrative_for_a_bond_maturing_inside_the_horizon (0.002s) AssertionError: The 5.50% 1m bond (coupon paid 2x a year) prices at 102.370 per 100 for a yield of 4.500%: Macaulay duration 0.08y, modified 0.08, convexity 0.0. On 1,000,000 notional the DV01 is 8 per bp; a +100bp parallel move costs roughly 834 before convexity. Key-rate risk is concentrated at 3m (9 per bp, 100%
+FAIL test_narrative_separates_yield_dv01_from_zero_curve_scenarios (0.004s) AssertionError:
+FAIL test_newest_run_wins_when_runs_finish_out_of_order (0.213s) AssertionError:
+PASS test_par_premium_discount_and_ytm_inversion (0.266s)
+FAIL test_price_yield_exclusive_with_field_errors (0.018s) AssertionError:
+PASS test_request_table_21_rows_match_independent_formulas (1.238s)
+FAIL test_required_fields_have_no_silent_default (0.247s) AssertionError: ('Coupon %', [])
+FAIL test_rounding_is_half_away_from_zero_as_decided (0.001s) AttributeError: module 'core.ficc.bonds' has no attribute 'round_contracts'
+FAIL test_scenario_notice_reports_this_curves_yield_move (0.147s) StopIteration:
+FAIL test_scenario_pnl_is_reprice_times_notional_with_zero_rate_shocks (0.147s) AssertionError:
+PASS test_slow_batch_with_an_http_error_is_still_retried_per_id (0.251s)
+FAIL test_stale_carried_forward_and_bad_unit_curves_are_flagged (0.212s) StopIteration:
+FAIL test_synthetic_and_fred_are_labelled_apart_with_a_mocked_fetch (0.225s) AssertionError:
+FAIL test_tiny_maturity_prices_instead_of_index_error (0.001s) IndexError: index -1 is out of bounds for axis 0 with size 0
+FAIL test_zero_negative_nan_inf_and_comma_inputs (0.447s) AssertionError: -0.000%
+not_run=0
+4/33 passed
+
+--- stderr ---
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 863, in test_a_quote_too_far_from_the_curve_names_the_field
+    assert msg and msg[0].startswith("Yield % -45 is too far from the SYNTHETIC curve"), _errors(h)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: []
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 846, in test_a_run_uses_the_inputs_of_its_click
+    assert s["Price"] == "100.000" and s["Yield"] == "4.500%", s
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'Bonds': 'Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.', 'Price': '95.000', 'Yield': '6.178%', 'Macaulay': '7.76y', 'Modified': '7.52', 'Convexity': '69.9', 'DV01': '715', 'z-spread': '-155.4bp', 'Carry (3m)': '-0.870', 'Roll-down': '-0.071', 'Carry + roll': '-0.941', 'Breakeven': '-13.2bp'}
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 404, in test_carry_roll_for_a_bond_maturing_inside_the_horizon
+    assert abs(cr.total - want) < 1e-9, (T, cr.total, want)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (0.08333333333333333, -2.2952168901404564, -0.0035502234737895266)
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 925, in test_chart_left_titles_use_the_palette_text_colour
+    assert t and mc.to_hex(t[0].get_color()) == mc.to_hex(pal.text), t[0].get_color()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: black
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 854, in test_clearing_one_of_price_and_yield_clears_the_pair_error
+    assert h.tf["Price (per 100)"].error and h.tf["Yield %"].error
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 606, in test_curve_lagging_in_a_shared_cache_is_refetched
+    assert snap.date == today and abs(snap.par_yields[k10] - 0.0405) < 1e-12, snap
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CurveSnapshot(date='2026-10-27', source='FRED', tenors=(0.08333333333333333, 0.25, 0.5, 1.0, 2.0, 3.0, 5.0, 7.0, 10.0, 20.0, 30.0), par_yields=(0.043, 0.0425, 0.042, 0.04, 0.0372, 0.0375, 0.038, 0.039, 0.0397, 0.045, 0.0437), note='')
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 872, in test_echo_keeps_the_typed_digits_and_names_the_served_curve
+    echo = next(t for t in _texts(h) if t.startswith("Computed for:"))
+StopIteration
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 776, in test_edit_after_run_marks_the_result_and_revert_unmarks
+    echo = next(t for t in _texts(h) if t.startswith("Computed for:"))
+StopIteration
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 767, in test_every_input_has_a_change_handler
+    assert f.on_change is not None, f"{label} has no on_change handler"
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Coupon % has no on_change handler
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 701, in test_failed_fred_reasons_keep_the_cause_once
+    assert msg.startswith("FRED served 0/11 tenors (DGS1MO, DGS3MO, ") and "DGS30: " in msg, msg
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: FRED served 0/11 tenors (DGS1MO: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS1MO
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS1MO (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))); DGS3MO: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS3MO
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS3MO (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))); DGS6MO: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS6MO
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS6MO (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))); DGS1: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS1
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS1 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))); DGS2: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS2 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))); DGS3: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS3
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS3 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))); DGS5: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS5
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS5 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))); DGS7: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS7
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS7 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))); DGS10: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS10 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))); DGS20: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS20
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS20 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden'))); DGS30: RemoteDataError: Unable to read URL: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS30
+Exception:
+HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Max retries exceeded with url: /graph/fredgraph.csv?id=DGS30 (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))).
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 625, in test_fred_fetch_is_bounded_and_a_hung_batch_is_not_retried_per_id
+    out = data._fred_fetch(["DGS10"], "2026-01-01")
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head/core/ficc/data.py", line 168, in _fred_fetch
+    df = _pdr.DataReader(ids, "fred", start)
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 620, in no_timeout
+    raise AssertionError("DataReader takes no timeout")
+AssertionError: DataReader takes no timeout
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 494, in test_hedge_798_x_08_over_65_side_rounding_and_residual
+    assert s["Position DV01 (calculator)"] == "798.19" and s["Futures DV01"] == "81.25"
+           ~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'Position DV01 (calculator)'
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 531, in test_hedge_override_is_named_and_warned
+    assert s["Position DV01 (override)"] == "798.00"
+           ~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'Position DV01 (override)'
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 734, in test_lagging_refetch_is_tried_once_per_cache_entry
+    assert calls == [["DGS30"]], calls
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: []
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 832, in test_late_failure_does_not_replace_a_newer_result
+    assert _stats(h).get("Price") == "100.000", _texts(h)[:4]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ['Bonds', 'Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.', 'FRED served 0/11 tenors (DGS1MO: FICCError: offline (late); DGS3MO: FICCError: offline (late); DGS6MO: FICCError: offline (late); DGS1: FICCError: offline (late); DGS2: FICCError: offline (late); DGS3: FICCError: offline (late); DGS5: FICCError: offline (late); DGS7: FICCError: offline (late); DGS10: FICCError: offline (late); DGS20: FICCError: offline (late); DGS30: FICCError: offline (late)).']
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 675, in test_missing_tenor_note_describes_the_interpolation
+    assert 20.0 not in panel.tenors and panel.note.startswith("Missing tenors: DGS20;"), panel.note
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Missing tenors: DGS20.
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 466, in test_named_shocks_bite_at_their_own_tenors_on_a_partial_curve
+    assert abs((float(sc.zero(k)) - float(crv.zero(k))) / BP - bp) < 1e-6, \
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('bear steepener', 7.0, 8.928571428571429)
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 896, in test_narrative_for_a_bond_maturing_inside_the_horizon
+    assert "in total, so no yield move changes this hold-to-maturity result: the bond matures " \
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           "inside the horizon." in t, t
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: The 5.50% 1m bond (coupon paid 2x a year) prices at 102.370 per 100 for a yield of 4.500%: Macaulay duration 0.08y, modified 0.08, convexity 0.0. On 1,000,000 notional the DV01 is 8 per bp; a +100bp parallel move costs roughly 834 before convexity. Key-rate risk is concentrated at 3m (9 per bp, 100% of the total). Against the curve the bond trades at a z-spread of -5.0bp (curve price 102.365). Over a 3m horizon carry is +0.074 and roll-down -2.370 per 100, -2.295 in total, so carry and roll are negative and yields must fall 2751.0bp over the horizon just to break even.
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 909, in test_narrative_separates_yield_dv01_from_zero_curve_scenarios
+    assert "per bp of the bond's own yield" in t and "zero-curve scenarios" in t
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 803, in test_newest_run_wins_when_runs_finish_out_of_order
+    assert "107.982" not in _texts(h) and h.ring.visible is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 259, in test_price_yield_exclusive_with_field_errors
+    assert msg and "Price (per 100)" in msg[0] and "Yield %" in msg[0] and "both are filled" in msg[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 313, in test_required_fields_have_no_silent_default
+    assert "Price" not in s and f"{label}: required." in _texts(h), (label, _errors(h))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('Coupon %', [])
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 518, in test_rounding_is_half_away_from_zero_as_decided
+    assert bonds.round_contracts(n) == _ind_round(n) == k, (n, bonds.round_contracts(n))
+           ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'core.ficc.bonds' has no attribute 'round_contracts'
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 886, in test_scenario_notice_reports_this_curves_yield_move
+    note = next(t for t in _texts(h) if t.startswith("Shocks move"))
+StopIteration
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 449, in test_scenario_pnl_is_reprice_times_notional_with_zero_rate_shocks
+    assert "Shock (bp, cc zero rates)" in texts and "P&L % of MV" in texts
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 568, in test_stale_carried_forward_and_bad_unit_curves_are_flagged
+    banner = next(t for t in _texts(h) if t.startswith("Curve check"))
+StopIteration
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 548, in test_synthetic_and_fred_are_labelled_apart_with_a_mocked_fetch
+    assert "FRED" in chip_.value and "newest obs" in chip_.value and _token_of(chip_) == "success"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 325, in test_tiny_maturity_prices_instead_of_index_error
+    assert abs(bonds.price_from_yield(b, 0.045) - 102.5) < 1e-6
+               ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head/core/ficc/bonds.py", line 89, in price_from_yield
+    return float(np.sum(_pv_terms(bond, ytm)[1]))
+                        ~~~~~~~~~^^^^^^^^^^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head/core/ficc/bonds.py", line 83, in _pv_terms
+    t, cf = cashflows(bond)
+            ~~~~~~~~~^^^^^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head/core/ficc/bonds.py", line 71, in cashflows
+    cf[-1] += bond.face
+    ~~^^^^
+IndexError: index -1 is out of bounds for axis 0 with size 0
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py", line 37, in <module>
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched/tests/bonds_screen_acceptance.py", line 276, in test_zero_negative_nan_inf_and_comma_inputs
+    assert s["Yield"] == "0.000%", s["Yield"]
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: -0.000%

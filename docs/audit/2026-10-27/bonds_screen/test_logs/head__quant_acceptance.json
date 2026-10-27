@@ -1,0 +1,320 @@
+[
+ {
+  "test": "test_a_panel_mixing_total_and_price_return_series_is_called_out",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_align_histories_requires_overlap",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_auto_routing_falls_back_to_labeled_synthetic",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_backtest_costs_only_hurt",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_backtest_exposure_and_drawdown_sane",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_backtest_has_no_lookahead",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_backtest_rejects_inverted_ma_params",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_bounded_t_draws_respect_the_bound_and_keep_the_shape",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.16
+ },
+ {
+  "test": "test_deep_analysis_without_key_degrades_without_network",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_drift_modes_are_ordered_and_documented",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.603
+ },
+ {
+  "test": "test_drift_zero_centres_the_cone_and_sample_reproduces_the_mean",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.469
+ },
+ {
+  "test": "test_each_loader_states_its_return_convention",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.159
+ },
+ {
+  "test": "test_every_chart_renders_a_data_uri_image",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.95
+ },
+ {
+  "test": "test_explicit_provider_without_key_raises_not_simulates",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_fmp_history_asks_for_dividend_adjusted_closes_and_reports_refusals_honestly",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "test_frontier_is_traced_and_cloud_is_dominated",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.039
+ },
+ {
+  "test": "test_garch_forecast_variance_converges_to_unconditional",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.266
+ },
+ {
+  "test": "test_garch_narrative_states_persistence_and_nu",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.659
+ },
+ {
+  "test": "test_garch_recovers_parameters_on_simulated_series",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.366
+ },
+ {
+  "test": "test_garch_respects_bounds_and_flags_on_gbm_series",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.15
+ },
+ {
+  "test": "test_garch_scaled_t_shocks_have_unit_variance",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.111
+ },
+ {
+  "test": "test_garch_t_beats_normal_and_gbm_on_clustered_series",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.252
+ },
+ {
+  "test": "test_gsq_pricing_without_session_explains_itself",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_gsq_status_is_coherent",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_history_cache_serves_a_rerun_without_asking_the_provider_again",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "test_horizon_vol_describes_the_bounded_paths",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.734
+ },
+ {
+  "test": "test_interval_coverage_on_simulated_t_garch",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 11.296
+ },
+ {
+  "test": "test_intervals_reaching_a_bound_are_flagged",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.219
+ },
+ {
+  "test": "test_load_history_rejects_blank_and_unknown_source",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_lr_is_nonnegative_and_correctly_sized_under_the_null",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 14.903
+ },
+ {
+  "test": "test_martingale_correction_matches_quadrature_and_the_normal_closed_form",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.273
+ },
+ {
+  "test": "test_max_weight_cap_is_respected",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "test_mc_all_models_run",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.233
+ },
+ {
+  "test": "test_mc_default_model_is_garch_t_seeded_and_reproducible",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.822
+ },
+ {
+  "test": "test_mc_fan_percentiles_are_ordered",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.089
+ },
+ {
+  "test": "test_mc_is_seeded_and_reproducible",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.468
+ },
+ {
+  "test": "test_mc_jump_degrades_to_gbm_without_outliers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_mc_target_probability_brackets",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.371
+ },
+ {
+  "test": "test_mc_var_and_cvar_are_coherent",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.136
+ },
+ {
+  "test": "test_mc_zero_drift_lowers_median_on_positive_drift_series",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.708
+ },
+ {
+  "test": "test_narratives_state_their_numbers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.149
+ },
+ {
+  "test": "test_optimizer_objectives_actually_optimize",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "test_optimizer_weights_are_a_long_only_allocation",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.013
+ },
+ {
+  "test": "test_rate_modes_make_the_discounted_price_a_martingale_for_every_model",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 5.835
+ },
+ {
+  "test": "test_risk_parity_equalizes_risk_contributions",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "test_risk_var_cvar_bounds",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_risk_vol_and_drawdown_match_numpy_whatever_engine",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_rsi_stays_in_bounds",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_signal_scores_and_weights_are_bounded",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_signals_read_the_trend_direction",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_synthetic_is_deterministic_per_symbol",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_the_cache_knows_when_a_market_may_be_trading",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_unknown_drift_raises",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ }
+]

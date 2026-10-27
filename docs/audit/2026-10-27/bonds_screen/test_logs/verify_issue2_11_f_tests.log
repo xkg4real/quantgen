@@ -1,0 +1,12 @@
+== head
+FAIL test_edit_after_run_marks_the_result_and_revert_unmarks ImportError cannot import name 'STALE_TEXT' from 'ui.bonds_page' (/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head/ui/bonds_page.py)
+FAIL test_newest_run_wins_when_runs_finish_out_of_order AssertionError 
+PASS test_late_failure_does_not_replace_a_newer_result
+FAIL test_a_run_uses_the_inputs_of_its_click ImportError cannot import name 'STALE_TEXT' from 'ui.bonds_page' (/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/head/ui/bonds_page.py)
+FAIL late_failure_v2 (reviewer) AssertionError ['Bonds', 'Price, yield, duration and convexity; key-rate DV01s, z-spread and carry/roll off the UST curve; curve scenarios; a Treasury-futures hedge.', 'FRED served 0/11 tenors (DGS1MO: FICCError: of
+== patched_v1
+PASS test_edit_after_run_marks_the_result_and_revert_unmarks
+PASS test_newest_run_wins_when_runs_finish_out_of_order
+PASS test_late_failure_does_not_replace_a_newer_result
+PASS test_a_run_uses_the_inputs_of_its_click
+PASS late_failure_v2 (reviewer)

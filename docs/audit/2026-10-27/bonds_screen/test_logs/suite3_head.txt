@@ -1,0 +1,2 @@
+head tests.expansion_acceptance: SUMMARY pass=20 fail=0 not_run=0 total=20
+head tests.macro_acceptance: SUMMARY pass=419 fail=1 not_run=122 total=542

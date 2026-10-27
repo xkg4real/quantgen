@@ -1,0 +1,5 @@
+$ (cwd=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched) python3 -B -m core.ficc.bonds
+rc=0
+ok
+
+--- stderr ---
