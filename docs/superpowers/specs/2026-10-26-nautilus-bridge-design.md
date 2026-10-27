@@ -3,25 +3,28 @@
 Date: 2026-10-26.
 
 Status:
-- **Revision 5 (after Claude referee round 4; targeted round 5 by ops and security; GPT and Gemini pending).**
+- **Revision 6 (Claude debate closed after round 5; GPT and Gemini pending, Step 1b).**
   - Five Claude personas (security, quant, QA, ops, governance) form one referee under D6
     (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:46`). Round 1, on Revision 1:
     1 REJECT, 4 ACCEPT WITH CHANGES. Round 2, on Revision 2: security AGREE, 4 ACCEPT WITH CHANGES. Round 3, on
     Revision 3: security, QA and governance AGREE, quant and ops ACCEPT WITH CHANGES. Round 4, on Revision 4:
     security, quant, QA and governance AGREE, ops ACCEPT WITH CHANGES; no blocker, 1 major (OPS-R4-1, the Step 7A
-    re-entry) and 21 minor new issues, and the moderator's C-9. This revision applies every ruling of
-    `docs/superpowers/specs/2026-10-26-nautilus-review/round4_rulings.md`; Appendix B maps each issue of all rounds.
-  - GPT (Codex CLI) and Gemini (`agy`) have not run: REVIEW_INCOMPLETE until both run on this revision, or the owner
-    records a substitute in Appendix B.
-  - Step 1a is open: under C-8, round 4's major reopened it, so the ops and security personas, whose lens covers Step
-    7A and the egress layer, run a targeted round 5 on Revision 5; quant, QA and governance agreed in round 4 and run
-    no round 5. If round 5 raises no major, the moderator closes Step 1a (`round4_rulings.md` §1). Steps 2 to 7 start
-    on the branch when it closes (section 9). Step 1b is open: GPT and Gemini, and the owner's approval with answers
-    to O1 to O15 (section 2); it gates Step 7A.
+    re-entry) and 21 minor new issues, and the moderator's C-9. Round 5, targeted, on Revision 5: ops and security
+    AGREE; no blocker, no major, 7 minor new issues. This revision applies every ruling of
+    `docs/superpowers/specs/2026-10-26-nautilus-review/round5_rulings.md`; Appendix B maps each issue of all rounds.
+  - Step 1a is done. Round 5 raised only minor issues, so under C-8 the moderator applied them in this revision and
+    closed the Claude debate without a further round (`round5_rulings.md` §1). Final Claude verdicts: security AGREE
+    (rounds 2 to 5), quant AGREE (round 4), QA AGREE (rounds 3 and 4), governance AGREE (rounds 3 and 4), ops AGREE
+    (round 5). Steps 2 to 7 start now on the branch, on the section 2 defaults, with synthetic data and temp ledgers
+    (GOVERNANCE-R2-1; section 9).
+  - Step 1b is open. GPT (Codex CLI) and Gemini (`agy`) have reviewed no revision, because neither CLI exists in the
+    cloud container: REVIEW_INCOMPLETE until both run on the owner's machine (Codex quota back 2026-10-30 14:40), or
+    the owner records a substitute in Appendix B. Step 1b also needs the owner's approval with answers to O1 to O15
+    (section 2). Step 7A waits for Step 1b.
   - Owner approval: **not given**. Owner sign-off sentence (Step 7A): **none recorded**.
-- Next: Claude round 5 (ops and security) on Revision 5; in parallel, GPT and Gemini and the owner's rulings (Step 1b).
+- Next: Step 2 (the plan) on the branch; in parallel, GPT and Gemini and the owner's rulings (Step 1b).
 
-Inputs (QUANTGEN code at `6f7c610`, unchanged at HEAD `588c847`, which adds only this spec and the review folder;
+Inputs (QUANTGEN code at `6f7c610`, unchanged at HEAD `b7f991a`, which adds only this spec and the review folder;
 branch `claude/amazing-gauss-tdiguu`): in `research_notes/QUANTGEN Nautilus bridge map/`, `00_synthesis.md` ("synth",
 with the critic findings K1 to K15 in its section 10), `01_nautilus_backtest_api.md` (map01),
 `02_quantgen_gate_ledger_lab.md` (map02), `03_pilot_and_parity.md` (map03, SPY before 2004-12-01 only) and
@@ -29,7 +32,7 @@ with the critic findings K1 to K15 in its section 10), `01_nautilus_backtest_api
 `docs/superpowers/specs/2026-10-26-nautilus-review/round<k>_claude_<persona>.md` with their rulings.
 
 Citation keys:
-- `file:line` is a QUANTGEN path at `588c847`; code lines are unchanged since `f5742ab`.
+- `file:line` is a QUANTGEN path at `b7f991a`; code lines are unchanged since `f5742ab`.
 - `nt:<path>:<line>` is `nautilus_trader` 1.231.0 in `scratch:ntvenv/lib/python3.13/site-packages/nautilus_trader/`.
 - `map0N §n`, `synth §n`, `K<n>` and referee ids (`SECURITY-1`, `QA-R2-4`, ...) point into the inputs.
 - `scratch:` is `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/`;
@@ -98,7 +101,7 @@ it until the owner rules. O1 to O12 come from synth §3.1, O13 from K5, O14 and 
 | O5 | Parity bars: the corrected bars of 5.4, or the original 98% / 0.99 / 0.05. | Corrected bars, with the commission check P7 hard (QUANT-5); the original bars printed next to them. | Too strict: a false WITHHELD on engine noise; measured margins are 100x on correlation and 7.7x on Sharpe (5.4.3). Kept original: a forgotten 2x cost passes all three original bars (synth §7.3). |
 | O6 | Pilot-1 registration table (10.1). | As 10.1. The start is 2004-12-01: map 03 already computed all 12 settings on 1995 to 2004, so an earlier start would make pilot 1 exploratory (GOVERNANCE-5). | Ledger rows are immutable (`core/quant/gate_ledger.py:337-355`); a wrong key field leaves 12 permanent extra trials in E1. |
 | O7 | Realism leg (fill delay): in scope? | **Deferred** by ruling C-1: no latency code, no `timing_lag` rows, no realism fixture. | If the owner wants a realism number, a later spec adds it with its own registration. Nothing to undo. |
-| O8 | Referees: wait for GPT (Codex quota resets 2026-10-30 14:40; `docs/superpowers/plans/2026-10-23-execution-record.md:158`) and Gemini (`agy`; `tools/debate.py:46-47`), or record a substitute. | Wait (Step 1b). Claude's rounds 1 to 4 are ruled and applied; a targeted round 5 (ops, security) closes Step 1a unless it raises a major (`round4_rulings.md` §1); no substitute is recorded. | Step 1b ends about four days later; Steps 2 to 7 go ahead meanwhile on the branch. A missing referee is REVIEW_INCOMPLETE, never "no objections" (map04 R24). |
+| O8 | Referees: wait for GPT (Codex quota resets 2026-10-30 14:40; `docs/superpowers/plans/2026-10-23-execution-record.md:158`) and Gemini (`agy`; `tools/debate.py:46-47`), or record a substitute. | Wait (Step 1b). Claude's rounds 1 to 5 are ruled and applied, and Step 1a is done: round 5 raised only minor issues, so the moderator closed the Claude debate (`round5_rulings.md` §1). Neither CLI exists in the cloud container, so both run on the owner's machine; no substitute is recorded. | Step 1b ends about four days later; Steps 2 to 7 go ahead meanwhile on the branch. A missing referee is REVIEW_INCOMPLETE, never "no objections" (map04 R24). |
 | O9 | Windows environment and its location. | Base interpreter `%LOCALAPPDATA%\quantgen\py313` (python.org per-user install), venv `%LOCALAPPDATA%\quantgen\ntvenv`, firewall rule `QUANTGEN-nautilus-block-out` (4.4), the `.env` line of 3.4, timings at Step 7A. The Windows closure unpacks to about 506 MB, 0.5 to 0.6 GB with bytecode (OPS-14). The owner's global interpreter is the Microsoft Store Python 3.13 (`docs/asset_expansion/study.log:27, 29`; `grokteam/prereg.py:87-88`; UNVERIFIED until Step 7A prints `sys.executable`); it never creates the venv or runs pip for the bridge, and R-03 refuses a venv built on it (6.7; OPS-R2-2). | Owner time. A venv inside OneDrive would sync about 0.6 GB. |
 | O10 | Where pilots and the suite of record run. | The owner's Windows machine, against the production ledger; of-record mode is tied to it by the host fingerprint and the egress record (5.3.2). Linux rehearses on synthetic data only. | Exporting `E1.jsonl` and copying back the extended chain risks a fork. |
 | O11 | Trial count; row counts of `E1.jsonl` and `C3.jsonl` (UNVERIFIED today). | `n_trials = family N_raw after registration + U`; U counts the study's documented configurations (`study_configs`, 6.6) whose `config_id` is absent from the family ledger (QUANT-4). Four counts printed. Of-record mode refuses a missing, empty or broken family ledger (R-15). | Over-counting lowers the DSR, the conservative direction. If `E1.jsonl` is missing or empty on the owner's machine, pilot 1 waits for the owner's ruling on how that ledger starts. |
@@ -304,7 +307,8 @@ The static scan cannot bind the Rust core, whose network clients load in every b
   (`"unshare -rn"` or the rule name), `probe`, `recorded_utc`, and `control_connect`, the parent's own connect to
   1.1.1.1:443 (`{"ok": bool, "error": str}`), which must succeed so the record proves the rule, not an outage; it and
   the hand-off report's copy (5.3.1) are the only network calls the runner makes. `--egress-record` writes the record,
-  then exits 2 (R-14) unless `probe.blocked` and `control_connect.ok` are both true (SECURITY-R4-3). Of-record mode
+  then exits 2 (R-14) unless `probe.blocked` and `control_connect.ok` are both true (SECURITY-R4-3); when the control
+  connect failed, it prints the control error before R-14's remedy (OPS-R5-4). Of-record mode
   refuses unless the file exists, `probe.blocked` and `control_connect.ok` are true, and `venv_python`, `base_python`
   and `layer` equal the current run's, paths compared as 4.3 says (R-14).
 
@@ -491,9 +495,11 @@ Windows'. Across platforms the NT sets must be equal, and the TP sets may differ
 ls-files --error-unmatch <path>` exits 0): an existing equal one gives "unchanged" and exit 0; a different one writes
 nothing, prints its diff and the removal line, `Remove-Item tools\nautilus\golden\modules_<tag>.json` on Windows or `rm
 tools/nautilus/golden/modules_<tag>.json` on Linux (OPS-R4-5), to run only after Claude has reviewed that diff, and
-exits 2 (OPS-R3-2). An untracked baseline is a leftover of a failed attempt: it is replaced and its diff printed
-(OPS-R4-2). The rule lives in the pure `record_baseline(golden_dir, tag, census, *, tracked) -> (exit, diff_lines)`,
-which the CLI calls with `tracked` from `git ls-files` (QA-R4-4). Claude reviews the Windows diff in the next session,
+exits 2 (OPS-R3-2). An untracked baseline is a leftover of a failed attempt: it is replaced, its diff is printed, and
+the exit is 0 (OPS-R4-2, OPS-R5-3). A tracked path with no file, as after the printed removal line (git still lists
+the path until a commit removes it), is written, with exit 0 (OPS-R5-3). The rule lives in the pure
+`record_baseline(golden_dir, tag, census, *, tracked) -> (exit, diff_lines)`, which the CLI calls with `tracked` from
+`git ls-files` (QA-R4-4). Claude reviews the Windows diff in the next session,
 before any pilot (OPS-7).
 
 #### 5.2.8 Path containment (SECURITY-3)
@@ -1003,6 +1009,10 @@ Two new tests after `tests/macro_m0_harness.py:192`, both with `test_ids = ["T-R
 - Layer-1 tests always run. Layer-2 tests raise `NotRun("OWNER: Nautilus venv not configured
   (QUANTGEN_NAUTILUS_PYTHON)")` when the key is blank, and `NotRun(f"OWNER: QUANTGEN_NAUTILUS_PYTHON points to a
   missing file: {value!r}")` when the resolved path does not exist (OPS-R3-9). A venv off its pins is a FAIL (O15).
+- On Windows the module holds `ctypes.windll.kernel32.SetThreadExecutionState(0x80000001)` (`ES_CONTINUOUS |
+  ES_SYSTEM_REQUIRED`) while its layer-2 tests run and calls `SetThreadExecutionState(0x80000000)` in a `finally`
+  after them, because only runs that go through `run()` hold the runner's request (5.3.5), and the Step 7A suite starts
+  more than 100 children (OPS-R5-5).
 
 ### 5.8 Registry rows, README and the file table
 
@@ -1215,7 +1225,7 @@ runner prints (OPS-R2-6; "-": the run record is the answer). `L1-n` and `L2-n` a
 | R-11 | Table not JSON, or its schema, grid or pilot values wrong; `reference_card_md5` off; of-record `owner_confirmed` missing or not quoting this table's and tree's digests; a test seam in of-record mode; of-record `C3-BTCUSD` with a null `reference_card` (QUANT-R4-2), or without an of-record `E1-SPY` record whose parity passed for all 12 columns at both cost levels under the same `code_sha256` (GOVERNANCE-R4-4) | argument validation; steps 0, 1 | nothing; 2 | L1-19, L1-29 | fix the printed field; after a change, `--fingerprint` and a new `owner_confirmed` (7A.3); pilot 1 first (Step 8) |
 | R-12 | `register_trial` raises | step 11 | run record with the rows appended so far; 3, `REFUSED_REGISTRATION` | L1-26 | read the traceback; the rows stay; re-run under R-17 |
 | R-13 | P0a: dates, closes or rf differ from the study's loaders | step 7 | nothing; 2 | L1-20 | stop; an owner ruling |
-| R-14 | Linux without a working `unshare -rn`; the probe connected; of-record without a matching egress record | step 4; `--egress-record` (SECURITY-R4-3) | nothing (`--egress-record`: its record); 2 | L1-23, L2-9 | Linux: a host with user namespaces. Windows: `Get-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out \| Get-NetFirewallApplicationFilter` and `Get-NetFirewallProfile \| Select Name, Enabled` (a third-party firewall can disable these rules); if the filter's `Program` is not `<printed path>\py313\python.exe`, or the rule is disabled or not `-Profile Any`, the elevated firewall line of 7A.2 again, which removes the rule by name before creating it (OPS-R4-2, SECURITY-R4-3); then `--egress-record` |
+| R-14 | Linux without a working `unshare -rn`; the probe connected; `--egress-record` whose parent control connect failed (OPS-R5-4); of-record without a matching egress record | step 4; `--egress-record` (SECURITY-R4-3) | nothing (`--egress-record`: its record); 2 | L1-23, L2-9 | Control connect failed, either platform: the runner prints the control error first, then "this network does not reach 1.1.1.1:443, so the record cannot prove the rule; run Step 7A on a network that does, or ask Claude" (OPS-R5-4). Linux: a host with user namespaces. Windows: `Get-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out \| Get-NetFirewallApplicationFilter` and `Get-NetFirewallProfile \| Select Name, Enabled` (a third-party firewall can disable these rules); if the filter's `Program` is not `<printed path>\py313\python.exe`, or the rule is disabled or not `-Profile Any`, the two elevated firewall lines of 7A.2 again, the first removing the rule by name and the second creating it (OPS-R4-2, SECURITY-R4-3); then `--egress-record` |
 | R-15 | Of-record: family ledger missing, empty or broken; host fingerprint differs | step 1 | nothing; 2 | L1-24 | the owner rules how the ledger starts (O11); `--fingerprint` on this host |
 | R-16 | Another runner holds the table lock; `C3.jsonl` or the family ledger modified under 600 s ago | step 0 | nothing; 2 | L1-25 | wait the printed seconds, or end the runner holding the printed lock |
 | R-17 | An earlier record of the same `table_sha256` that is not `IN_PROGRESS`, `ABORTED`, `ERROR` or a C-06-only `WITHHELD`, and no `--rerun-of` (5.3.5; OPS-R2-7) | step 0 | nothing; 2 | L1-5 | `--rerun-of <id> --reason "<text>"` |
@@ -1392,7 +1402,7 @@ def synth_rf(n):                                                   # stepped: 0,
 | 32 | The guard of 3.3 wraps every test; a last test compares the digests taken when the suite started (QA-1). |
 | 33 | The committed F1, F2 and N1 goldens equal 8.2's tables, typed into the test with prices at each fixture's precision and reasons by id (QA-R2-6, QA-R3-8). |
 | 34 | `write_record` with a `replace` seam raising `PermissionError` twice and a no-op `sleep` (QA-R3-7), then succeeding: written, status unchanged; always raising: intermediate writes are skipped and listed, the final write falls back to `run.final.<pid>.json` (OPS-R2-3). |
-| 35 | `record_baseline` (5.2.7; OPS-R3-2, QA-R4-4) on a temp golden dir: a tracked equal baseline gives exit 0 "unchanged"; a tracked different one gives exit 2, the diff and the removal line, and leaves the file's bytes unchanged; an untracked different one is replaced and its diff printed (OPS-R4-2). |
+| 35 | `record_baseline` (5.2.7; OPS-R3-2, QA-R4-4) on a temp golden dir: a tracked equal baseline gives exit 0 "unchanged"; a tracked different one gives exit 2, the diff and the removal line, and leaves the file's bytes unchanged; an untracked different one is replaced and its diff printed, exit 0 (OPS-R4-2, OPS-R5-3); a tracked path with no file, as after the removal line, is written, exit 0 (OPS-R5-3). |
 | 36 | `--fingerprint` (GOVERNANCE-R4-1), with the 3.3 guard's temp `QUANTGEN_MACRO_DIR`: on both committed pilot tables it prints both digests and `host_fingerprint` null with the reason, and exits 0; on a copy whose `prices_file` names a missing file it still exits 0, so it reads no data. |
 
 ### 8.4 Layer-2 tests
@@ -1452,8 +1462,8 @@ synthetic data and temp ledgers only.
 
 | Step | Who, what | Done when |
 |---|---|---|
-| 1a Claude rounds | Claude drafts; the Claude referee rounds run and are ruled; Claude applies the rulings. | Each report is saved as `docs/superpowers/specs/2026-10-26-nautilus-review/round<k>_<name>.md` with its rulings file, and every issue has a ruling in Appendix B. Done when the moderator closes the Claude debate under C-8: a round with only minor issues is applied and closes it, and a new major reopens it (GOVERNANCE-R3-6). Round 4's major (OPS-R4-1) reopened it; a targeted round 5 by ops and security on Revision 5 closes it if it raises no major (`round4_rulings.md` §1). Steps 2 to 7 then start on the branch, on the section 2 defaults, with synthetic data and temp ledgers (GOVERNANCE-R2-1). Rounds 1 to 4 are ruled and applied. |
-| 1b Outside review and approval | GPT and Gemini review, or the owner records a substitute in Appendix B; the owner approves. Required before Step 7A, not before Step 2. | Their reports and rulings are saved and mapped in Appendix B; the Status block carries the owner's approval in the form of the Owner context, verbatim with its channel and date, and answers to O1 to O15; branch work that an answer different from its default affects is redone or deleted. |
+| 1a Claude rounds (**done**) | Claude drafts; the Claude referee rounds run and are ruled; Claude applies the rulings. | Each report is saved as `docs/superpowers/specs/2026-10-26-nautilus-review/round<k>_<name>.md` with its rulings file, and every issue has a ruling in Appendix B. Done when the moderator closes the Claude debate under C-8: a round with only minor issues is applied and closes it, and a new major reopens it (GOVERNANCE-R3-6). Round 4's major (OPS-R4-1) reopened it; the targeted round 5 by ops and security on Revision 5 raised only minor issues, which Revision 6 applies. **Done**: the moderator closed the Claude debate after round 5 (`round5_rulings.md` §1); rounds 1 to 5 are ruled and applied. Steps 2 to 7 start now on the branch, on the section 2 defaults, with synthetic data and temp ledgers (GOVERNANCE-R2-1). |
+| 1b Outside review and approval | GPT and Gemini review on the owner's machine, as neither CLI exists in the cloud container, or the owner records a substitute in Appendix B; the owner approves. Required before Step 7A, not before Step 2. | Their reports and rulings are saved and mapped in Appendix B; the Status block carries the owner's approval in the form of the Owner context, verbatim with its channel and date, and answers to O1 to O15; branch work that an answer different from its default affects is redone or deleted. |
 | 2 Plan and dry run | Claude: `docs/superpowers/plans/2026-10-<dd>-nautilus-bridge.md` in the house format (Global Constraints, a file table, RED/GREEN steps for Steps 3 to 7); it names the spec revision it implements (GOVERNANCE-R3-6). Global Constraints = all of section 3, verbatim (GOVERNANCE-13), plus: Claude never runs of-record mode (GOVERNANCE-R2-4; 5.3.1) and writes ledger rows only under the system temp dir; no Claude commit includes `qa/acceptance_results.json` (`docs/superpowers/plans/2026-10-23-quantgen-paper-pipeline.md:30`); Claude reads no real BTC price and no SPY row on or after 2004-12-01; the pinned md5s come from this spec, and Claude never opens or hashes `yf_SPY.csv`, `yf_BTC-USD.csv`, `binance_BTCUSDT.csv` or `upbit_KRW-BTC.csv` (GOVERNANCE-R3-3); Claude never writes or edits `owner_confirmed` or `host_fingerprint` in a committed table (`docs/nautilus_bridge/registration/`); tests write them only into tables under the system temp dir (GOVERNANCE-R3-5, GOVERNANCE-R4-3); no global `pip install`. Dry run (QA-21): the plan's own RED steps, run in a scratch clone with `scratch:ntvenv`; nothing is built twice. | The plan exists; its RED steps fail for the reason each states in the scratch clone; in the real repo `git status` shows no change beyond the plan file, and `qa/acceptance_results.json` keeps its md5. |
 | 3 Environment | Claude on Linux (the Windows half is Step 7A): `requirements-nautilus.txt` (5.1); `.env.example`; `tools/nautilus/__init__.py`; `sandbox.py` with `--check-env` and `--guard-selftest`; `egress_probe.py`; `launch.py` (QA-R2-5); `env_pins.json` with both platforms and the `RECORD` fixtures (6.7); `docs/nautilus_bridge/.gitignore`. | The file pins 5.1's 16 distributions with hashes; `pip install --require-hashes --only-binary=:all: --no-cache-dir -r requirements-nautilus.txt` succeeds in a fresh scratch venv and `pip check` is clean; `launch.py`'s identity read gives `a448cd20...` with 764 entries; under `unshare -rn`, `--check-env` reports Python 3.13.x, `HIGH_PRECISION` true and environment `BACKTEST`, `--guard-selftest` exits 0, and the probe reports `blocked: true`; the global interpreter still reports numpy 2.3.5, pandas 2.3.3, scipy 1.18.0 and no `nautilus_trader`; `requirements.txt`, `requirements-dev.txt` and `pyproject.toml` are byte-identical. |
 | 4 Guard | Claude, on ruling O2's default (in effect outside the branch only after the sign-off): 5.6; the suite registration (5.7); the registry resync and README text of 5.8. | Both new tests pass; every control of 8.5 gives exactly its multiset; the real tree and the real sandbox give no hit; test_08 and test_09 are unchanged and pass; `python -m tests.macro_acceptance` has resynced row 12 and `test_registry_implemented_in_matches_test_ids` passes; L1-15, L1-16, L1-17, L1-22 and L1-32 pass; through the wrapper, `--suite nautilus` reports its layer-2 tests NOT_RUN, not PASS, with `QUANTGEN_NAUTILUS_PYTHON` unset; the README Total row is unchanged. |
@@ -1468,19 +1478,25 @@ owner, in this order; the runbook file repeats it.
    has moved, merges `origin/main` into the branch first, so the sentence covers the merged branch (GOVERNANCE-R4-2).
    Claude records it verbatim in the Status block, commits, and asks the owner for approval to push; on approval, Claude
    pushes. Any Claude commit leaves `qa/acceptance_results.json` byte-identical and says so.
-2. In the main clone, in a normal (not elevated) PowerShell, with power plugged in (OPS-R4-5), the owner runs the lines
-   below one at a time; the python.org installer, at the 3.13 patch the runbook pins, is downloaded into `$q`, never
-   into the clone (OPS-R3-3, OPS-R4-5); on a red error he skips to the last line (OPS-R2-1). The pull line brings
-   Claude's fixes and a new sign-off into a re-entry (OPS-R4-1). Re-entry (OPS-R3-2, OPS-R4-1): if `$q\py313\python.exe`
-   exists from an earlier attempt, the listed registry row is that install, and he skips from the registry line to the
-   `venv` line when `$q\wheels` exists, because the offline `--require-hashes` install re-checks every hash, and to the
-   `pip download` line only while no `QUANTGEN-nautilus-block-out` rule exists, because the rule blocks that
-   interpreter's pip. If the install line, never passed before, then fails, the folder is incomplete: he deletes
-   `$q\wheels` and re-enters, which reaches the download line, as no rule exists before a first passing install. The
-   `venv`, install and runner lines are safe to repeat, the firewall line removes any rule of that name before it
-   creates the rule (OPS-R4-2), and `--record-baseline` treats an existing baseline as 5.2.7 says. No line of this block
-   has run in this session (UNVERIFIED until Step 7A). Never a whole-tree `checkout`, `reset`, `stash` or `clean` in the
-   main repo (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:89-91`); `git switch`
+2. In the main clone, in a normal (not elevated) PowerShell, with power plugged in (OPS-R4-5; the runner and the
+   suite's layer-2 tests also keep the machine awake, 5.3.5 and 5.7; OPS-R5-5), the owner runs the lines below one at
+   a time; the python.org installer, at the 3.13 patch the runbook pins, is downloaded into `$q`, never into the clone
+   (OPS-R3-3, OPS-R4-5). A throw in the five git lines stops the block: he sends Claude the message, because the
+   hand-off needs the branch (OPS-R5-2). On a red error in any later line he skips to the last line (OPS-R2-1). The
+   fast-forward line, the fifth git line, brings Claude's fixes and a new sign-off into a re-entry (OPS-R4-1,
+   OPS-R5-2). Re-entry (OPS-R3-2, OPS-R4-1, OPS-R5-1, SECURITY-R5-1): if `$q\py313\python.exe` exists from an earlier
+   attempt, the listed registry row is that install, and he skips from the registry line to the rule check line, whose
+   output shows whether the `QUANTGEN-nautilus-block-out` rule exists (empty output: no rule). While no rule exists, he
+   goes on to the `pip download` line whatever `$q\wheels` holds, because pip reuses every finished file whose hash it
+   verifies; the rule exists only after an install has passed, because a red error at the install line skips to the
+   last line. Once the rule exists, he re-enters at the `venv` line, because the rule blocks that interpreter's pip and
+   the offline `--require-hashes` install re-checks every hash; if `$q\wheels` is then missing, he first runs the
+   elevated `Remove-NetFirewallRule` line alone and re-enters at the download line. That a normal window can read the
+   rule is UNVERIFIED; if it cannot, he takes the rule to exist once the elevated lines have run. The `venv`, install
+   and runner lines are safe to repeat, the first firewall line removes any rule of that name before the second creates
+   the rule (OPS-R4-2), and `--record-baseline` treats an existing baseline as 5.2.7 says. No line of this block has run
+   in this session (UNVERIFIED until Step 7A). Never a whole-tree `checkout`, `reset`, `stash` or `clean` in the main
+   repo (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:89-91`); `git switch`
    rewrites only files that differ, and the branch leaves `docs/asset_expansion/cache/` alone; never a worktree, which
    gives UNVERSIONED rows (same file :85-87). The download URL, the installer options and its `/log` switch are as
    python.org documents them (UNVERIFIED on the owner's machine); the base interpreter has the same 3.13 minor as the
@@ -1491,21 +1507,25 @@ owner, in this order; the runbook file repeats it.
    git merge-base --is-ancestor origin/main origin/claude/amazing-gauss-tdiguu; if ($LASTEXITCODE) { throw "main has moved: ask Claude to merge origin/main into the branch first" }
    git merge-base --is-ancestor main origin/claude/amazing-gauss-tdiguu; if ($LASTEXITCODE) { throw "local main has unpushed commits: push them, then ask Claude to merge origin/main" }
    git switch claude/amazing-gauss-tdiguu; if ($LASTEXITCODE) { throw "switch" }
-   git pull --ff-only; if ($LASTEXITCODE) { throw "pull: ask Claude" }
+   git merge --ff-only origin/claude/amazing-gauss-tdiguu; if ($LASTEXITCODE) { throw "fast-forward: ask Claude" }
    $q = Join-Path $env:LOCALAPPDATA "quantgen"; New-Item -ItemType Directory -Force $q | Out-Null; $q   # note the printed path
    $u = "Microsoft\Windows\CurrentVersion\Uninstall\*"; Get-ItemProperty "HKCU:\Software\$u", "HKLM:\Software\$u", "HKLM:\Software\WOW6432Node\$u" -ErrorAction SilentlyContinue | ? DisplayName -like "Python 3.13*"
    #   first attempt: any row is a python.org 3.13 already registered; stop and report it (the Store package is not listed there)
    $v = "3.13.<x>"; $inst = "$q\python-$v-amd64.exe"   # <x>: the patch RUNBOOK_windows.md pins
-   Invoke-WebRequest -Uri "https://www.python.org/ftp/python/$v/python-$v-amd64.exe" -OutFile $inst
+   $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri "https://www.python.org/ftp/python/$v/python-$v-amd64.exe" -OutFile $inst
    if ((Get-AuthenticodeSignature $inst).Status -ne "Valid") { throw "signature" }   # signer: Python Software Foundation (UNVERIFIED)
    $p = Start-Process $inst -Wait -PassThru -ArgumentList "/quiet", "InstallAllUsers=0", "TargetDir=$q\py313", "PrependPath=0", "Include_launcher=0", "Shortcuts=0", "/log", "$q\py313-install.log"
    if ($p.ExitCode -ne 0) { throw "installer exit $($p.ExitCode); see $q\py313-install.log" }
+   Get-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out -ErrorAction SilentlyContinue   # rule check
+   #   empty output (always on a first attempt): no rule, go on to the next line; a rule listed: skip to the venv line,
+   #   unless $q\wheels is missing: then the elevated Remove-NetFirewallRule line alone first, then the next line
    & "$q\py313\python.exe" -m pip download --require-hashes --only-binary=:all: --no-deps -r requirements-nautilus.txt -d "$q\wheels"; if ($LASTEXITCODE) { throw "download" }
    & "$q\py313\python.exe" -m venv "$q\ntvenv"; if ($LASTEXITCODE) { throw "venv" }
    # the PowerShell install line of the requirements-nautilus.txt header (5.1), followed by: if ($LASTEXITCODE) { throw "install" }
-   # elevated PowerShell, same Windows account, the printed path written out in full; then close that window:
-   Remove-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out -ErrorAction SilentlyContinue; New-NetFirewallRule -DisplayName "QUANTGEN-nautilus-block-out" -Direction Outbound -Action Block -Program "<printed path>\py313\python.exe" -Profile Any
-   # back in the normal window: add the .env line of 3.4 with the owner's path, then:
+   # elevated PowerShell, same Windows account, the printed path written out in full; both lines, then close that window:
+   Remove-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out -ErrorAction SilentlyContinue
+   New-NetFirewallRule -DisplayName "QUANTGEN-nautilus-block-out" -Direction Outbound -Action Block -Program "<printed path>\py313\python.exe" -Profile Any
+   # back in the normal window: add the .env line of 3.4 with the owner's path if absent, then:
    python -B -m tools.nautilus.runner --check-env; if ($LASTEXITCODE) { throw "check-env" }
    python -B -m tools.nautilus.runner --egress-record; if ($LASTEXITCODE) { throw "egress" }
    python -B -m tools.nautilus.runner --fixtures --record-baseline; if ($LASTEXITCODE) { throw "fixtures" }
@@ -1513,9 +1533,10 @@ owner, in this order; the runbook file repeats it.
    python tests/run_all.py; if ($LASTEXITCODE) { throw "suite" }
    python -B -m tools.nautilus.runner --fingerprint --table docs\nautilus_bridge\registration\pilot1_E1_spy.json; if ($LASTEXITCODE) { throw "fingerprint" }
    python -B -m tools.nautilus.runner --fingerprint --table docs\nautilus_bridge\registration\pilot2_C3_btcusd.json; if ($LASTEXITCODE) { throw "fingerprint" }
-   python -B -m tools.nautilus.runner --handoff-report                      # always, last, whatever failed above
+   python -B -m tools.nautilus.runner --handoff-report                      # always, last, whatever failed after the git lines
    ```
-3. The owner commits and pushes `docs/nautilus_bridge/handoff/win_amd64.json` whatever happened (OPS-8). A null host
+3. The owner commits and pushes `docs/nautilus_bridge/handoff/win_amd64.json` whatever happened after the five git lines
+   (OPS-8, OPS-R5-2). A null host
    fingerprint stops here (R-15, O11). If every line passed, he also pastes each fingerprint into its table's
    `host_fingerprint`, writes `owner_confirmed` as `"Geon Koh, <date>, table <16 hex>, code <16 hex>"` from the printed
    digests, which approves of-record runs of that table (GOVERNANCE-R2-2), and commits as one change group
@@ -1622,6 +1643,7 @@ This list goes verbatim into the execution record (map04 R23).
 | 2026-10-26 | round-2 referees, Revision-3 probes | synthetic series; `fred_DGS3MO.csv` (its NaN pattern); the stored cards' statistics; the first 3 lines of `yf_SPY.csv` (1995) and 4 pre-2004-12-01 dates in it (QA referee); no BTC price, no SPY row from 2004-12-01 | rf fill, gate predicates, rounding, `Money`, fixtures, scan | none |
 | 2026-10-26 | round-3 referees, Revision-4 probes | synthetic series and calendars; the stored cards' JSON (statistics, line text, the S_C3 card's md5); `study.log`, `manifest.json` and `results.md`; the names and sizes, not the content, of `binance_BTCUSDT.csv` and `upbit_KRW-BTC.csv`; no price row of a real series | the `n_years` rule, `cents`, fixtures, 6.1 refusals, scan, remedies, digests | none |
 | 2026-10-26 | round-4 referees | synthetic series; the four KRX ETF caches and `fred_DGS3MO.csv` (quant referee, re-scoring the stored `S_E1_trend_krx` grid, raw and 9-decimal); stored cards' JSON; no SPY row from 2004-12-01, no BTC price | G-08 rules on a stored card, P0a stand-ins, digests | none |
+| 2026-10-26 | round-5 referees (ops, security) | closure wheels installed offline into scratch venvs, throwaway git repositories, extracts of this spec; lines 27 and 29 of `docs/asset_expansion/study.log` (the owner's profile path); no price file, no price cache, no ledger | pip and git re-entry, both pins, the 8.5 controls | none |
 | Steps 3 to 7 | Claude | synthetic series only | rehearsals | temp only |
 
 Claim labels in the house protocol's terms (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:442-452`):
@@ -1662,7 +1684,8 @@ Only questions that the defaults of section 2 do not settle:
    Python's `sys.executable` start the stub child with it (else the py313 fallback of 8.1; QA-R3-10); does the firewall
    rule bind the interpreter the redirector starts; are F1 and F2 identical in standard precision; is the Windows
    identity install-method independent; does the Store Python redirect the temp dir (3.9's two-form temp root accepts
-   either answer; OPS-R4-4); what are the import and run times? All UNVERIFIED.
+   either answer; OPS-R4-4); can a normal window read the firewall rule (7A.2's rule check; OPS-R5-1); does the
+   owner's network reach 1.1.1.1:443 (R-14; OPS-R5-4); what are the import and run times? All UNVERIFIED.
 2. **The owner's ledgers:** do `E1.jsonl` and `C3.jsonl` exist with rows on the owner's machine? If not, R-15 blocks
    that pilot until the owner rules.
 3. **Outside this spec:** should a gate-package freeze hash the E1 and C3 ledgers (no caller passes them today; map02
@@ -1695,16 +1718,16 @@ unless the owner records a substitution. The Claude referee ran with the repo cl
 holds no `.env` (GOVERNANCE-12). Reports (`round<k>_claude_<persona>.md`, 2026-10-26) and rulings
 (`round<k>_rulings.md`) are in `docs/superpowers/specs/2026-10-26-nautilus-review/`.
 
-| Referee | Channel | Round 1 (Revision 1) | Round 2 (Revision 2) | Round 3 (Revision 3) | Round 4 (Revision 4) |
-|---|---|---|---|---|---|
-| Claude, security | subagent in the repo clone | REJECT (1 blocker) | AGREE (2 minor) | AGREE, pressed (2 minor) | AGREE (3 minor) |
-| Claude, quant | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (2 major, 5 minor) | ACCEPT WITH CHANGES (1 major, 2 minor) | AGREE (3 minor) |
-| Claude, QA | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (5 major, 9 minor) | AGREE (12 minor) | AGREE (6 minor) |
-| Claude, ops | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (2 major, 6 minor) | ACCEPT WITH CHANGES (2 major, 7 minor) | ACCEPT WITH CHANGES (1 major, 4 minor) |
-| Claude, governance | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (3 major, 3 minor) | AGREE (7 minor) | AGREE (5 minor) |
-| GPT | Codex CLI (quota resets 2026-10-30 14:40) | pending | pending | pending | pending |
-| Gemini | `agy` on the owner's machine | pending | pending | pending | pending |
-| Owner-recorded substitute | | none | none | none | none |
+| Referee | Channel | Round 1 (Revision 1) | Round 2 (Revision 2) | Round 3 (Revision 3) | Round 4 (Revision 4) | Round 5 (Revision 5, targeted) |
+|---|---|---|---|---|---|---|
+| Claude, security | subagent in the repo clone | REJECT (1 blocker) | AGREE (2 minor) | AGREE, pressed (2 minor) | AGREE (3 minor) | AGREE (2 minor) |
+| Claude, quant | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (2 major, 5 minor) | ACCEPT WITH CHANGES (1 major, 2 minor) | AGREE (3 minor) | not run (AGREE in round 4) |
+| Claude, QA | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (5 major, 9 minor) | AGREE (12 minor) | AGREE (6 minor) | not run (AGREE in round 4) |
+| Claude, ops | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (2 major, 6 minor) | ACCEPT WITH CHANGES (2 major, 7 minor) | ACCEPT WITH CHANGES (1 major, 4 minor) | AGREE (5 minor) |
+| Claude, governance | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (3 major, 3 minor) | AGREE (7 minor) | AGREE (5 minor) | not run (AGREE in round 4) |
+| GPT | Codex CLI on the owner's machine (quota resets 2026-10-30 14:40) | pending | pending | pending | pending | pending |
+| Gemini | `agy` on the owner's machine | pending | pending | pending | pending | pending |
+| Owner-recorded substitute | | none | none | none | none | none |
 
 **Round 1 issues** (rulings in `round1_rulings.md`; none rejected; C-n are the moderator's own items).
 
@@ -1814,8 +1837,8 @@ Round 3, applied with a stated interpretation:
   Step 7A re-entry lines and the new tests and seams.
 
 **Round 4 issues** (rulings in `round4_rulings.md`; none rejected). 1 major and 21 minor new issues, and the
-moderator's C-9; OPS-R3-2(a), the one earlier issue still open, closes with OPS-R4-1. Ops and security run a targeted
-round 5 on Revision 5 (Status).
+moderator's C-9; OPS-R3-2(a), the one earlier issue still open, closes with OPS-R4-1. Ops and security ran a targeted
+round 5 on Revision 5 (below).
 
 | Issue | Sev. | Ruling | Addressed in | Issue | Sev. | Ruling | Addressed in | Issue | Sev. | Ruling | Addressed in |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -1841,6 +1864,40 @@ Round 4, applied with a stated interpretation:
   skeleton and both pins are unchanged.
 - C-6 growth: Revision 4 had 1,772 lines; Revision 5 has 1,849 (+4.3 percent; +6.5 percent in bytes), mostly this
   table, the Step 7A lines and the new test cases.
+
+**Round 5 issues** (targeted: ops and security on Revision 5; rulings in `round5_rulings.md`; none rejected). Both
+AGREE; no blocker, no major, 7 minor new issues; nothing open from earlier rounds. Under C-8 the moderator applied them
+in Revision 6 and closed Step 1a without a further round (`round5_rulings.md` §1; Status, O8, Step 1a).
+
+| Issue | Sev. | Ruling | Addressed in | Issue | Sev. | Ruling | Addressed in | Issue | Sev. | Ruling | Addressed in |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| OPS-R5-1 | minor | ACCEPT (one fix with SECURITY-R5-1): the re-entry key is whether the rule exists, shown by a rule check line | Step 7A.2, 13.1 | OPS-R5-2 | minor | ACCEPT: a throw in the five git lines stops the block; `git merge --ff-only origin/claude/amazing-gauss-tdiguu` | Steps 7A.2 and 7A.3 | OPS-R5-3 | minor | ACCEPT: exit 0 for a replaced untracked baseline and for a tracked path with no file | 5.2.7, 8.3 test 35 |
+| OPS-R5-4 | minor | ACCEPT: the control-connect remedy, the control error printed first | 4.4, 7 R-14, 13.1 | OPS-R5-5 | minor | ACCEPT: "if absent"; the layer-2 tests hold `ES_CONTINUOUS` and `ES_SYSTEM_REQUIRED`; `$ProgressPreference` | 5.7, Step 7A.2 | SECURITY-R5-1 | minor | ACCEPT (as OPS-R5-1) | Step 7A.2, 7 R-14 |
+| SECURITY-R5-2 | minor | ACCEPT; already met (below) | Step 7A.2, unchanged |  |  |  |  |  |  |  |  |
+
+Round 5, applied with a stated interpretation:
+- OPS-R5-1 with SECURITY-R5-1: the observable key replaces Revision 5's `$q\wheels` key and its delete-and-re-enter
+  sentence, and so supersedes the round-4 interpretation of OPS-R4-1 above. The ruling's "elevated
+  `Remove-NetFirewallRule` line" needs a line of its own, so the firewall line becomes two elevated lines, remove and
+  then create, and R-14's remedy names both. The rule check sits just before the download line, so a first attempt runs
+  it too and sees no rule. That a normal window can read the rule is UNVERIFIED (13.1). The ruling does not include
+  the referee's other two proposals, a stop after a second failure of the same line and wheel and dist-info listings
+  in the hand-off report, so they are not applied: a red error still skips to the hand-off, and a re-entry before the
+  rule exists downloads only the files still missing.
+- OPS-R5-2: the throw text is the referee's, "fast-forward: ask Claude"; Revision 5's "pull line" is now "the
+  fast-forward line"; the hand-off line's comment and 7A.3's "whatever happened" now exclude a stop in the git lines.
+- OPS-R5-3: the referee's optional 7A.4 `git rm` of a changed tracked baseline is not in the ruling and is not applied.
+- OPS-R5-4: R-14's Condition column also names the failed control connect, which `--egress-record` already refuses
+  (SECURITY-R4-3); the probe target stays fixed.
+- OPS-R5-5: the ruling takes the suite-held request, not the referee's Settings sentence: `0x80000001` while the
+  layer-2 tests run, reset with `0x80000000` in a `finally`.
+- SECURITY-R5-2: Revision 5's line already read `python -B -m tools.nautilus.runner --fixtures --record-baseline; if
+  ($LASTEXITCODE) { throw "fixtures" }`, as Revision 4's did and as the ops walk-through records; appending the throw
+  again would duplicate it, so the line is unchanged and the ruling is met.
+- Also updated: the Inputs and citation keys now name HEAD `b7f991a`, which adds only this spec and the review folder;
+  10.4 gains the round-5 referees' row.
+- C-6 growth: Revision 5 had 1,849 lines; Revision 6 has 1,906 (+3.1 percent; +3.3 percent in bytes), mostly
+  this table and the Step 7A lines.
 
 **Outside review.** GPT and Gemini review the current revision. Their issues and the owner's rulings go here.
 
