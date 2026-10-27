@@ -21,7 +21,13 @@ Status:
     cloud container: REVIEW_INCOMPLETE until both run on the owner's machine (Codex quota back 2026-10-30 14:40), or
     the owner records a substitute in Appendix B. Step 1b also needs the owner's approval with answers to O1 to O15
     (section 2). Step 7A waits for Step 1b.
-  - Owner approval: **not given**. Owner sign-off sentence (Step 7A): **none recorded**.
+  - Owner approval: **not given** (the whole spec). Owner sign-off sentence (Step 7A): **none recorded**.
+  - Owner rulings received (verbatim, with channel and date):
+    - **O1 approved**, 2026-10-27, Claude Code chat (cloud session), in Korean: "아뇨, Nautilus로 옮기는 걸 목표로
+      하고 있습니다. 따라서 pyarrow를 포함한 새 의존성을 승인합니다." (English: "No, the goal is to move to
+      Nautilus. Therefore I approve the new dependencies, including pyarrow.") This answers O1 only; the venv shape
+      of O1's default (separate hash-pinned venv, global interpreter unchanged) stays the design. O2 to O15 remain
+      open.
 - Next: Step 2 (the plan) on the branch; in parallel, GPT and Gemini and the owner's rulings (Step 1b).
 
 Inputs (QUANTGEN code at `6f7c610`, unchanged at HEAD `b7f991a`, which adds only this spec and the review folder;
