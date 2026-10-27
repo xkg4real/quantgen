@@ -1747,3 +1747,144 @@ P09는 오른쪽 날짜를 하루 밀어 둔 합성 데이터다. 하네스가 �
 +    raise SystemExit(run_module(globals()))
 ```
 
+<!-- verifier-section -->
+
+## 독립 검증 결과
+
+검증 대상: 조사자 보고서 `docs/audit/2026-10-27/c01_v01_cache_and_vendors.md`와 구조화 결과의 발견 12건.
+기준 커밋은 HEAD `4665e6e`다. `527cdf2` 이후 `core data ui tools tests docs/asset_expansion_study.py`는 바뀌지 않았다(`git diff --stat 527cdf2 HEAD` 출력이 비어 있음). 조사자가 인용한 줄 번호는 모두 실제 코드와 맞았다.
+
+### 방법
+- 조사자 스크립트는 쓰지 않았다. 재현을 새로 작성했다. 위치는 `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_c01_v01_cache_and_vendors/`다(`v01`~`v09b`). 출력은 같은 이름의 `.out` 파일에 있다.
+- 공통 가드 `vguard.py`는 dotenv를 스텁으로 바꿔 `.env`를 읽지 않게 한다. 소켓을 막고, HOME과 캐시를 임시 폴더로 돌리고, 공급자 키 환경변수를 지운다.
+- 금지 파일 4개는 열지 않았다. 테스트 실행기 `run_tests.py`에는 그 파일 이름을 여는 호출을 막는 가드를 넣었다(`builtins.open`, `io.open`, `os.open`). 동작은 `guardtest.py`로 확인했다. 패치 트리 `ptree/`는 `git archive`로 만들되 pathspec으로 그 4개 경로를 뺐다. 금지 파일을 읽는 테스트 2개는 건너뛰었다(`macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache`, `macro_ui_overlay/test_the_run_button_dry_run_writes_only_the_temp_macro_dir_and_the_view_renders_it`).
+- `tests/run_all.py`는 실행하지 않았다. 추적 파일은 하나도 고치지 않았다(`git status` 출력이 비어 있음).
+
+### 판정표
+
+| id | 유지 여부 | 정정 판정 | 정정 심각도 | 근거 |
+|---|---|---|---|---|
+| C01-01 | 유지 | 사실 | P2 (그대로) | `v01_history_cache.py`: NaN, inf, 음수, 역순, 중복, 1행, 0행 파일과 기호가 다른 파일(MSFT/KIS)이 모두 `SERVED`였다. 재요청은 0회였다. 쓰기 경로가 inf 종가를 `Infinity` 토큰으로 저장한다(`core/quant/history.py:452`). 따라서 D-01의 inf가 실제로 캐시에 들어오는 경로다. |
+| C01-02 | 유지 | 사실 | P2 (그대로) | `v02_ficc_cache.py`: NaN, inf, 2행, 역순, 순서가 어긋난 행이 모두 `source=FRED`로 나갔다. DGS2의 inf는 `CurvePanel`까지 전파됐다(`all finite: False`). 단서가 있다. 저장소 안의 쓰기 경로는 이런 파일을 만들지 않는다. `_fred_fetch`의 CSV 경로가 비유한 값을 빼고(`data.py:189`), 새 수신은 `sorted`와 `_MIN_OBS`를 거친다(`:486-487`). 유입 경로는 수기 편집과 외부 손상뿐이다. acting 경로는 PIT `ingest`가 비유한 값을 거부해 막힌다(`pit.py:569`). '누락된 가드'에 해당하므로 P2를 유지한다. |
+| C01-03 | 유지 | 사실 | P2 (그대로) | `v03_mtime.py`: 바이트는 같고 mtime만 다르게 했다. US `vt_status`가 ok(0.845)와 `fail_closed`(0.0) 사이에서 바뀐다. 15:00Z에 받은 장중 행은 `provisional_intraday`인데, 01:00Z에 복사하면 `vendor_close`가 된다. 기준선 FAIL(`tests/macro_m8_pipeline.py:871`)과 baseline2 PASS도 확인했다. 보강 증거는 아래 1번에 있다. |
+| C01-04 | 유지 | 사실(코드 동작). 서버가 거절하는 방식만 추정 | P2 (그대로) | `v04_kis_token.py`: KEY_B로 바꿔도 KEY_A 토큰을 보냈고 발급은 0회였다. `EGW00123` 거절이 3회 반복됐고 파일은 남았다. 권한은 0644였다. 파일에는 키나 도메인을 나타내는 필드가 없다(`access_token`, `expires_at`뿐). |
+| V01-01 | 유지 | 사실 | **P1로 상향** | 아래 2번. |
+| V01-02 | 유지 | 사실 | **P3로 하향** | 아래 3번. |
+| V01-03 | 유지 | 사실 | P2 (그대로) | ECOS·KOSIS 수집 코드가 없다. `grep -rniI "ecos\|kosis"`로 찾으면 소비 코드, 레지스트리, 캘린더만 나온다. 보강: KIS 쪽 `USDKRW_1530_SNAPSHOT`(레지스트리 `source: KIS`, `series_registry.yaml:330-343`)을 쓰는 코드도 없다. 그래서 15:30 환율은 KIS 키가 있어도 fail-closed다. |
+| C01-05 | 유지 | 사실 | P3 | `v02`: 새로 받은 `Series`와 캐시에서 읽은 `Series`가 `==`로 같다. `retrieved_at` 필드가 없다. 이력 캐시 note는 시간대 없는 로컬 시각이다(`history.py:437`). |
+| C01-06 | 유지 | 사실 | P3 | 코드로 확인했다. 이력은 만료 뒤 수신에 실패하면 그 오류를 그대로 올린다(`history.py:445-447`). FICC `auto`는 SYNTHETIC을 돌려준다(`data.py:539-543`, 재현 값 0.0365). D03-07과 같은 사실이다. |
+| C01-07 | 유지 | 사실 | P3 | `v07_may_be_trading.py`: 2026-10-19부터 168시간 중 '장중' 판정 시간은 YFINANCE SPY 123, ^VIX 123, FMP SPY 35, KIS 005930 40, KIS Y0101 123, CRYPTO 168이다. 조사자 숫자와 같다. |
+| C01-08 | 유지 | 사실(일부 추정) | P3 | 코드로 확인했다. `_MEM`에 상한이 없다(`data.py:216`). payload 키는 `['rows','ts']`뿐이다(`v02`). `_MASTER_CACHE`는 기한 없이 유지된다(`kis_markets.py:651-670`). DART 캐시 쓰기는 원자적이지 않다(`opendart_client.py:104-113`). |
+| C01-09 | 유지 | 사실 | P3 | `asset_expansion_study.py:79`의 `name.startswith("_") is False`는 `yf_`, `fred_` 등 모든 이름에서 True다. 그래서 `s[s>0]`가 항상 적용된다. `yf_CL_F.csv:4933`의 `2020-04-20,-37.63…` 행이 조용히 빠진다. |
+
+### 세부 근거와 정정
+
+**1. C01-03 보강과 일부 정정.** 저장소가 연구 캐시의 실제 수신 시각을 이미 적어 두었다. `tests/macro_m1_pit.py:395-399`에 "the local research cache (docs/asset_expansion/cache) was written 2026-09-25 ~16:30Z mid US session"이라고 되어 있다.
+- 허용 파일 `yf__VIX.csv`의 마지막 행은 `2026-09-25,15.04`다. `v03b_real_vix.py`로 같은 행을 PIT에 넣었다. 수신 시각을 기록된 16:30Z로 주면 `provisional_intraday`다. 이 환경의 mtime(2026-10-01 00:00Z)이나 새 clone 시각을 주면 `first_release`다.
+- 따라서 baseline2의 I-01 PASS는 장중 값이 확정치로 바뀐 상태에서 나온 결과다.
+- 조사자는 "실제 수신 시각은 소유자만 안다"고 했는데, 일부만 맞다. 9-25 세션에 받은 파일의 후보 값(2026-09-25T16:30Z)이 저장소에 있다. 어느 파일이 그 세션에 받아졌는지는 소유자가 확인해야 한다(미검증).
+- 패치 트리에서 확인한 결과(`v03_tree.py`): 매니페스트가 있으면 mtime과 상관없이 15:00Z 행이 `provisional_intraday`로 남는다. 매니페스트가 없으면 최신 행을 뺀다. 그래도 mtime이 시계보다 늦으면 여전히 `fail_closed`다. `RETRIEVAL.json`을 채우기 전까지 I-01은 실행 환경에 따라 결과가 달라진다.
+
+**2. V01-01을 P1로 상향.**
+- 재현(`v05_kimchi.py`): 참 프리미엄을 +2.00%로 두었다. DEXKOUS는 10일 전(2026-10-16)에서 끊기고 그사이 원화가 1.5% 약해진다. 화면 값은 +3.53%로 나온다. note는 여전히 "a few hours of FX drift"라고 쓴다.
+- 공표 주기: H.10은 매주 월요일 16:15 ET에 지난주 일별 값을 낸다. 연준 H.10 About 페이지 내용을 웹 검색으로 확인했다. federalreserve.gov와 fred.stlouisfed.org는 DNS 실패로 직접 열지 못했다. 레지스트리에도 같은 규칙이 있다(`H10: monday_after_week_else_next_fed_business_day`, `series_registry.yaml:19`).
+- 따라서 쓰이는 환율의 나이는 늘 3~10일이다. 가장자리 사례가 아니다.
+- 이 값은 Crypto 주 화면의 `stat("Kimchi premium")`(`ui/crypto_page.py:163`)에 나간다. 절댓값이 3을 넘으면 빨간색으로 표시된다. 심각도 규칙의 "사용자에게 보이는 틀린 숫자"이므로 P1이다.
+- 조사자 수정안은 부분 수정이다. 같은 시나리오를 패치 트리에서 일요일(2026-10-25) 기준으로 돌렸다(`v05b_kimchi_patched.py`). 마지막 날짜가 2026-10-20으로 당겨지고 값은 +2.61%다. 4일 묵은 환율을 아직 쓰고 있다. 화면 값은 5일 전 것인데 날짜 표시가 없다.
+- 일간 환율로 바꾸고 날짜를 표시해야 한다. 아래 diff를 조사자 패치 위에 더한다.
+
+```diff
+--- a/ui/crypto_page.py
++++ b/ui/crypto_page.py
+@@ def _live(days: int) -> dict:
+-    from core.ficc.data import load_series
++    from core.ficc.data import FICCError, load_fx_spot, load_series
+     from data.crypto.crypto_client import BinancePublic, UpbitPublic
+@@
+-    fx = load_series("DEXKOUS", source="auto", days=days + 100)
++    try:    # V-01: a daily USD/KRW first (Yahoo USDKRW=X, same day); FRED DEXKOUS is weekly (H.10, Mondays)
++        fx = load_fx_spot("USDKRW", source="yfinance", days=days + 100)
++    except FICCError:
++        fx = load_series("DEXKOUS", source="auto", days=days + 100)
+@@ def analyze(*, days: int = 730, source: str = "live") -> dict:
+-    out["kimchi"] = CA.kimchi_premium(d["upbit"], d["binance"], d["usdkrw"], max_fx_age_days=4)
++    out["kimchi"] = CA.kimchi_premium(d["upbit"], d["binance"], d["usdkrw"], max_fx_age_days=3)
+@@
+-                stat("Kimchi premium", f"{kp.last_pct:+.2f}%", token="error" if abs(kp.last_pct) > 3 else "text"),
++                stat(f"Kimchi premium ({kp.dates[-1]})", f"{kp.last_pct:+.2f}%",
++                     token="error" if abs(kp.last_pct) > 3 else "text", tooltip=kp.note),
+```
+
+- 추가 회귀 테스트(제안): `test_v01_crypto_page_prices_the_premium_at_a_daily_fx`. `UpbitPublic`, `BinancePublic`, `load_fx_spot`, `load_series`를 가짜로 바꾼다. BTC는 2026-10-26까지, Yahoo 환율은 평일마다, DEXKOUS는 2026-10-16까지 둔다. `analyze(source="live")`를 부른 뒤 세 가지를 단언한다.
+  - `a["usdkrw_source"] == "YFINANCE"`
+  - `a["kimchi"].dates[-1] == "2026-10-26"`
+  - `a["kimchi"].fx_age_days_last <= 3`
+- 원본 코드에서는 출처가 `FRED`이고 나이가 10이므로 이 테스트가 실패한다.
+
+**3. V01-02를 P3로 하향.**
+- 교차 공급자 비교 도구가 없다는 것은 사실이다. 그러나 런타임 수치가 틀리는 결함이 아니라 QA 도구의 공백이다.
+- 운영 경로에는 같은 시리즈의 공식값 대 공급사 값 대조가 이미 있다. `pit_value`가 `_dispute`로 표시하고(`pit.py:420`), `macro_daily`가 `INPUT_DISPUTED` 경고를 낸다(`macro_daily.py:509-511`). `reconcile()`(`pit.py:611-630`)은 테스트(`tests/macro_m1_pit.py:448-486`)에서만 호출된다.
+- 하네스 `selftest` 11/11 PASS를 패치 트리에서 다시 확인했다. fetch 단계는 공급자 접속이 금지되어 실행하지 않았다.
+
+**4. USDT/USD 기저.** 김치 프리미엄은 BTCUSDT를 USD와 1:1로 다룬다. 조사자 보고서에는 결함으로 없지만 data_flow 보고서 DF-06(P3)이 이미 다룬다. 여기서는 다시 올리지 않는다. 크기만 재현했다(`v08_usdt_basis.py`). USDT가 0.998 USD면 −0.20pp, 0.990이면 −1.02pp, 0.970이면 −3.06pp다.
+
+### 제안 패치와 회귀 테스트 검증
+- `proposed_c01_v01.diff`(CRLF 보존본)는 HEAD에 `git apply --check`로 적용된다. 보고서 부록 A 본문(LF)은 CRLF 파일 2개(`core/quant/history.py`, `tests/run_all.py`)에서 실패한다. `--ignore-whitespace`를 주면 통과한다. 보고서에 이미 적힌 내용이다(사실).
+- 새 회귀 테스트 7건을 독립 실행기로 다시 돌렸다. 원본 코드에서는 0/7 PASS였다. 실패 원인은 결함 자체이거나 아직 없는 속성이다. 패치 트리에서는 7/7 PASS였다.
+- 기존 테스트 회귀도 확인했다. 15개 모듈을 원본과 패치 트리에서 같은 실행기로 돌렸다(quant, ficc, engine, expansion, macro_m0_harness, m1_pit, m1_integration, m1_fixtures, m6_context, m8_forward, m8_integration, m8_pipeline, m9_lab, m9_scenarios, ui_overlay).
+  - 원본: PASS 362, FAIL 1, NOT_RUN 26, SKIP 2.
+  - 패치 트리: PASS 369(기존 362 + 새 7), FAIL 1, NOT_RUN 26, SKIP 2.
+  - 기존 테스트의 결과 차이는 0건이다.
+  - FAIL 1건(`engine/test_82_a_get_survives_two_bad_gateways…`)은 두 트리에서 같다. 원인은 검증 가드가 127.0.0.1 로컬 서버 접속까지 막은 것이다.
+- 수정안 검토:
+  - C01-01, C01-02: 올바르다. 잔여 위험(키가 없는 v1 파일의 기호 불일치)은 조사자가 적은 대로 남는다.
+  - C01-03: 올바르다. 잔여 사항은 위 1번과 같다. 덧붙일 점이 있다. 패치는 연구를 실행할 때 입력 CSV 전체의 sha256을 `manifest.json`에 적는다. 여기에는 금지 파일 4개(다른 프로젝트의 공개 전 파일럿 기간 데이터)의 해시도 들어간다. 소유자가 이를 원하는지 정해야 한다. 원하지 않으면 `INPUTS`에서 그 4개를 빼는 목록을 둔다.
+  - C01-04: 올바르다. `retry=False`에서도 `_drop_token()`이 먼저 불려 파일이 지워진다. 의도한 동작이다. 다음 호출이 새 토큰을 받는다.
+  - V01-01: 부분 수정이다(위 2번).
+  - V01-02: 하네스는 읽기 전용 클라이언트만 쓴다(`_loaders`). 문제없다.
+
+### 조사자가 놓친 발견사항 (1건)
+
+**C01-10 · P2 · 사실 · PIT 저장소가 읽을 때 무결성을 다시 검사하지 않는다. 편집된 행은 정정 수신으로도 복구되지 않는다**
+
+| 항목 | 내용 |
+|---|---|
+| 파일·함수·라인 | `core/ficc/pit.py` `PITStore.rows` :252-268. 읽을 때는 `_decode(json.loads(line))`만 한다(:263). `append`는 :284-300이고, 중복 판단을 저장된 해시 문자열 `self._hashes`로 한다(:292). 해시 검사는 쓸 때만 한다(:288-289). 조사자는 캐시 지도 D7에 "읽을 때 재검사 없음"이라고 적었지만 결함으로 올리지 않았다. |
+| 재현 단계 | `python3 -B /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_c01_v01_cache_and_vendors/v09_pit_read_unverified.py`. 임시 PIT 저장소에 VIXCLS 40행을 `P.ingest`로 넣는다. JSONL 마지막 행의 value만 18.9에서 99.0으로 바꾸고 `content_hash`는 그대로 둔다. 손 편집, 잘못된 병합, 다른 사본에서 일부를 복구한 경우가 이런 상태를 만든다. 새 `PITStore`로 읽고 `pit_value`를 부른다. 그다음 원래 행을 다시 `ingest`한다. |
+| 기대 결과 | 해시가 맞지 않는 행은 읽을 때 `PITError`로 거부한다(fail-closed). 참값을 다시 받으면 저장된다. |
+| 실제 결과 | 읽은 값은 99.0이다. `content_hash == content_hash(row)`가 False인데도 그대로 통과한다. `pit_value`는 PITValue 99.0을 돌려준다. 참값을 다시 받으면 `appended 0`이다. 저장된 옛 해시와 같아서 'unchanged'로만 기록되기 때문이다. 그래서 99.0이 계속 남는다. |
+| 영향 | PIT 저장소는 acting 입력의 원천이다. Macro 화면의 live 실행이 `MD.run_decision(MD.default_services(config.macro_dir(), …))`로 이 저장소를 읽는다(`ui/macro_state_panel.py:733`). 손상되거나 편집된 값이 경고 없이 결정에 들어간다. 정정 수신으로도 복구되지 않는다. 쓸 때의 해시 검사(:288)와 '행은 고치지 않고 정정은 새 행으로' 규칙이 읽는 쪽에서는 보장되지 않는다. 비유한 값(JSON `NaN`)도 같은 길로 들어온다. 실제 손상 빈도는 측정하지 않았다. |
+| 수정안 | 아래 diff. 원래의 줄 손상 처리와 같은 fail-closed 방식이다. |
+| 회귀 테스트 | `tests/macro_m1_pit.py::test_c01_pit_store_refuses_a_row_altered_after_writing`. 40행을 넣고 마지막 줄의 value를 99.0으로 바꾸되 `content_hash`는 유지한다. `_raises(lambda: P.PITStore(root, registry=REG, clocks=CLK).rows("VIXCLS"), P.PITError, "content_hash")`로 단언한다. value를 `NaN`으로 바꾼 줄은 "non-finite"로 거부되는지 단언한다. 원본 코드에서는 `rows()`가 99.0을 돌려주므로 실패한다(`v09`). 수정 뒤에는 통과한다(`v09b`). |
+
+```diff
+--- a/core/ficc/pit.py
++++ b/core/ficc/pit.py
+@@ -260,7 +260,15 @@ class PITStore:
+                         if not line:
+                             continue
+                         try:
+-                            out.append(_decode(json.loads(line)))
++                            row = _decode(json.loads(line))
+                         except Exception as exc:
+                             raise PITError(f"{p}:{n}: corrupt store line ({exc})") from exc
++                        # C-01: the write-side hash check (append) is repeated on read; an edited row fails closed
++                        if row.get("content_hash") != content_hash(row):
++                            raise PITError(f"{p}:{n}: content_hash does not match the stored row (edited or corrupt); "
++                                           "rows are never mutated, a correction is a new row")
++                        v = row.get("value")
++                        if v is not None and not (isinstance(v, (int, float)) and math.isfinite(v)):
++                            raise PITError(f"{p}:{n}: non-finite value in the store")
++                        out.append(row)
+             self._rows[series_id] = out
+```
+
+수정안 검증: 같은 내용을 monkeypatch(`pit_rows_fix.py`)로 원본 코드에 씌워 확인했다.
+- `v09b_with_fix.py`의 결과는 `refused on read: …/VIXCLS.jsonl:40: content_hash does not match the stored row`다.
+- PIT 관련 11개 모듈을 돌렸다(m1_pit, m1_integration, m1_fixtures, m6_context, m8_integration, m8_pipeline, m8_forward, m9_lab, m9_scenarios, ui_overlay, ficc). 결과는 PASS 186, FAIL 0, NOT_RUN 26, SKIP 2다. 원본과 결과 차이는 0건이다. 정상적으로 기록된 행(파생 행 포함)은 해시가 그대로 다시 계산된다.
+
+### 미검증으로 남은 것
+- 이 절에서 새로 미검증으로 남긴 것은 두 가지다.
+  - 실제 KIS 서버가 다른 키나 도메인의 토큰을 어떤 코드로 거절하는지.
+  - 9-25 세션 파일 각각의 실제 수신 시각(소유자 확인 필요).
+- 금지 파일을 읽는 I-01은 원본과 패치 모두 실행하지 않았다.

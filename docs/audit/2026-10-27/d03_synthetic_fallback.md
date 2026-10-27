@@ -573,3 +573,60 @@ D-03의 근본 원인은 `auto`에 두 번째 실제 공급자가 없다는 점�
 - R7 판정·등급 칩(D03-09): `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/d03_synthetic_fallback/r7_verdicts_on_synthetic.py`
 - R8 오래된 캐시 대 합성(D03-07): `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/d03_synthetic_fallback/r8_stale_cache_vs_synthetic.py`
 - R9 FX 명시 공급자(D03-10): `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/d03_synthetic_fallback/r9_fx_explicit_yahoo.py`
+
+<!-- verifier-section -->
+
+## 독립 검증 결과
+
+검증자: d03_synthetic_fallback 적대적 검증. 저장소의 추적 파일은 고치지 않았다(`git status` 깨끗함). `.env`는 없고 열지 않았다. 네트워크는 소켓 단계에서 막았다. 재현 스크립트는 투자자 스크립트와 별개로 새로 썼다. 위치: `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_d03_synthetic_fallback/` (하네스 `vh.py`, 재현 `v1`~`v11`, 수정안 검증용 스크래치 사본 `crypto_page_fixed.py`, `macro_fixed.py`).
+
+### 1. 발견사항별 판정
+
+| id | 유지 여부 | 정정 판정 | 정정 심각도 | 근거 |
+|---|---|---|---|---|
+| D03-01 | 유지 | 사실 | P1 | `v1_crypto.py`. 다른 스텁(실제 환율 1400, 실제 프리미엄 +2.00%)으로도 재현된다. 김치 프리미엄 **+1277.95%**, `a['source']='LIVE'`, 칩 `source: LIVE`(#6daa45 녹색), `USD/KRW: SYNTHETIC`(#9eabb2 muted), 합성 배너 없음, 페이로드 키에 `usdkrw_source` 없음, 해설에 SYNTHETIC 없음. 코드 `ui/crypto_page.py:52,57,63,118,156-159` 그대로. 수정안 7.1을 스크래치 사본에 적용해 돌렸다(`v9_fix_crypto.py`). 회귀 assertion은 수정 전 False, 수정 후 True다. FRED가 살아 있으면 `FRED DEXKOUS`, 프리미엄 1.96%로 정상이다. 데모 경로도 정상이다. 보완할 점: `narrative()`와 화면 worker는 `kp is None`에서 `AttributeError`가 난다. diff 없이 산문으로만 적혀 있다. 회귀 테스트에 `narrative(a)` 호출과 화면 렌더가 예외 없이 끝나는지도 넣어야 한다 |
+| D03-02 | 유지 | 사실 | P2 | `v2_macro.py`. 실제 데이터는 2026-10-22까지다. `VIXCLS` 하나만 실패해도 `as_of`가 2026-10-27(오늘)로 바뀐다. 판독은 neutral→risk-on으로 바뀌고 `regime.summary`에 SYNTHETIC이 없다. 해설은 "Daily read for 2026-10-27"이다. 원인은 `core/ficc/macro.py:223`. 수정안 7.2를 스크래치 사본에 적용했다(`v10_fix_macro.py`). 두 회귀 assertion이 수정 전 False, 수정 후 True다. 기존 테스트 `tests/ficc_acceptance.py:528`(전부 합성일 때 `r.last_date == sheet.as_of`)과도 충돌하지 않는다. 배너가 있으므로 P2가 맞다 |
+| D03-03 | 유지 | 사실 | P2 | `v3_narratives.py`. 오프라인 `auto`에서 rates curve 해설만 SYNTHETIC을 말한다. swap, swaption, cap, sim과 Quant Lab 해설은 말하지 않는다. 배너는 모두 있다. `analysis_panel(` 호출 지점 19곳은 grep으로 확인했다. 작은 정정: "source 필드는 `YieldCurve`뿐"이라고 했지만 `CurveReport`도 `snapshot.source`로 출처를 갖는다. 결론에는 영향이 없다 |
+| D03-04 | 유지 | 사실(프롬프트)·추정(AI 출력) | P2 | `core/quant/insights.py:263-282`의 `_SYSTEM`에는 synthetic, simulated, source 규칙이 없다(`v4_deep.py`, 요청을 가로챘고 전송하지 않음). 다만 swap 페이로드는 이미 `curve_source: SYNTHETIC`을 담고 있고, note에도 `(SYNTHETIC)`이 있다. 이 화면에서는 위험이 작다. 더 강한 근거는 따로 찾았다(`v11_fx_option_payload.py`). Yahoo는 살아 있고 FRED만 실패하면 `fx_option` 페이로드에 SYNTHETIC 표시가 **전혀 없다**. 출처 키는 `spot_source`뿐이다. 그래서 프롬프트 규칙만으로는 부족하다. 수정안의 `synthetic_inputs` 표준 키가 반드시 필요하다. P2 유지 |
+| D03-05 | 유지 | 사실 | P2 | `v5_deriv.py`. (a) Y0112 행이 없으면 `rate=0.0300`, `rate_source='input'`이다. 추가 사실: (b) KIS가 Y0112 행을 빈 값으로 주면 `KM._f("")`가 `None`이고 결과는 (a)와 같다. 해설은 "fair value at 3.00% (input) … rich by 4 bp"이고, 실제 CD 3.45%에서는 1 bp다. 페이로드에는 실제 CD일 때도 `rate_source`가 없다. 수정안과 회귀 테스트는 맞다 |
+| D03-06 | 유지 | 사실 | P3 | `v8_p3s.py`. DGS10 실데이터는 4.1516, 대체값은 0.0380이다(109배). DEXKOUS는 1390.54 대 103.41이다. `Series`에는 `unit`이 없다. `Y0101`, `FX@KRW`, `NAS:AAPL`은 KIS가 없으면 GBM 주가형 합성이 된다. **회귀 테스트가 틀렸다.** 수정안대로면 FRED 금리는 `unit="pct"`, 합성 금리는 `unit="decimal"`이다. 그래서 `live.unit == syn.unit`은 수정 후에도 실패한다. 대안 비율 조건(0.2~5)도 109배라서 실패한다. 아래 정정 테스트로 바꿔야 한다 |
+| D03-07 | 유지 | 사실 | P3 | `v8_p3s.py`. 2시간 된 실제 캐시가 있고 TTL은 1시간이며 FRED가 실패하는 조건이다. 결과는 `SYNTHETIC` 0.0380이다. **수정안에 위험이 있다.** 오래된 행을 `source="FRED"`로 돌려주면, 모든 화면이 SYNTHETIC일 때만 배너를 띄운다(`ui/rates_page.py:84-87`, `ui/fx_page.py:105-110` 등). 출처 칩도 녹색이다. 그러면 오래된 값이 실시간 FRED처럼 보인다(P1급 새 경로). 화면에 보이는 상태(예: `source="FRED (STALE)"` 또는 `status` 필드와 경고 배너)가 필요하다. 이를 확인하는 UI 회귀 테스트도 함께 넣어야 한다 |
+| D03-08 | 유지 | 사실 | P3 | `v1` 칩 색으로 확인했다(LIVE #6daa45, SYNTHETIC #9eabb2). `ui/components.py:30`의 `chip` 기본 토큰은 muted, `ui/rates_page.py:91`도 같다 |
+| D03-09 | 유지 | 사실 | P3 | `ui/strategy_lab_page.py:98-104,249-251`, `ui/quant_lab_page.py:333`을 코드로 확인했다. Quant Lab 화면 재현에서 등급 블록이 합성 실행과 같은 영역에 그려지는 경로도 확인했다. 수정안 보완: 보류된 경우 칩(`:249-250`)은 사유가 비용이라고 가정한다. 그래서 합성 때문에 보류되면 "35 bp < table 35 bp"처럼 틀린 문구가 나온다. 칩 문구도 사유별로 나눠야 한다. `payload()`는 보류 시 `decision="WITHHELD"`를 쓰므로(`:152`) 회귀 assertion은 맞다 |
+| D03-10 | 유지 | 사실 | P3 | `v8_p3s.py`. `_rate(blank,"USD","yfinance")`는 `SYNTHETIC` 0.0364를 돌려주고, 같은 조건의 spot은 `FICCError`다. 수정안이 내는 `FICCError`는 `ui/fx_page.py:383`이 잡는다. 안전하다 |
+
+기타 정정(3장 표): README의 "키와 네트워크가 모두 없으면 모든 화면이 합성으로 동작"이라는 주장을 '오류(부분)'로 본 판정은 유지한다. 다만 투자자가 든 근거(FX만 합성인 Crypto)는 다른 시나리오다. 네트워크가 전혀 없으면 Crypto `live`는 Upbit 호출에서 예외가 나고 오류 배너만 뜬다. 합성으로 자동 전환되지 않는다(`ui/crypto_page.py:48`, `:147-150`). 이것이 README 문장과 직접 어긋나는 근거다.
+
+통제 확인(사실): `core/ficc/pit.py:408-409` `synthetic_rejected`, `core/ficc/context_log.py:501-503,841-842`, `ui/strategy_lab_page.py:60-61`, `docs/asset_expansion_study.py:397-399`, Quant Lab `_risk_free`의 오류색 "assumed" 칩(`ui/quant_lab_page.py:80-99`). 모두 코드와 일치한다. `core/quant/history.py::_cached`는 실패 시 오래된 캐시로 대체하지 않고 예외를 낸다(`:402-446`).
+
+### 2. 투자자가 놓친 발견사항
+
+#### D03-V01 · P1 · 사실 — FRED가 곡선 일부 만기만 주면 장기물을 평평하게 늘린 값을 `source: FRED`(녹색)로 보이고, "Missing tenors" 사유는 화면에 나오지 않는다
+
+| 필드 | 내용 |
+|---|---|
+| 파일·함수·라인 | `core/ficc/data.py:571-596` `_treasury_from_fred`. 11개 중 6개 이상이고 2y·10y가 있으면 `source="FRED"`, `note="Missing tenors: …"`로 돌려준다(`:594-595`). `core/ficc/curves.py:293-297` `_par_at`는 끝에서 고정한다("a grid ending at 20y reports its 20y as '30y'"). 그 값을 `:342` `5s30s`가 쓴다. 화면: `ui/rates_page.py:84-87` `_synthetic_notice`는 SYNTHETIC일 때만 note를 보인다. `:90-91` `_src_chip`은 녹색이다. 같은 패널을 쓰는 `ui/bonds_page.py:120-126`, `ui/structuring_page.py:137-141`도 SYNTHETIC일 때만 note를 보인다 |
+| 재현 | `python3 -B …/verify_d03_synthetic_fallback/v7_partial_curve.py`. FRED 스텁은 DGS20, DGS30만 실패시킨다(나머지는 4.30~4.15%, 20y 4.60%, 30y 4.65%). `_run_curve`와 `_run_swap(30y)`를 가짜 page로 실행한다 |
+| 기대 결과 | 부분 곡선이라는 경고를 배너로 띄운다("Missing tenors: DGS20, DGS30"). 늘린 구간에 기대는 지표(5s30s, 30y 스왑)는 "n/a"로 두거나 거부한다 |
+| 실제 결과 | 전체 곡선에서는 5s30s +80.0bp, 30y 스왑 par 4.706%. 부분 곡선에서는 **5s30s +30.0bp**(실제로는 5s10s), **30y 스왑 par 4.215%**(49bp 낮음). 칩은 `source: FRED`, `curve: FRED`다. 화면 어디에도 "Missing tenors"나 extrapolation이 없다. curve 페이로드에만 note가 있다(`:148`), swap 페이로드에는 없다(`:192`) |
+| 영향 | 그럴듯한 틀린 숫자가 실데이터 라벨을 달고 나온다. 성격은 D03-01과 같은 부류다(열화 데이터를 실데이터로 표시). 수치가 그럴듯해서 오히려 알아차리기 어렵다. 트리거는 FRED의 id별 부분 실패다. requests 경로는 id마다 GET을 한 번씩 보내고, 실패하면 id별로 재시도한다(`core/ficc/data.py:178-196,463-472`). 실제 발생 빈도는 미검증이다 |
+| 수정안 | (1) 화면 공통 도우미가 부분 곡선을 경고한다. `ui/rates_page.py`:<br>`def _synthetic_notice(source, note, what):`<br>`-    if source != "SYNTHETIC": return []`<br>`-    return [notice(f"Synthetic {what}: {note}", "error", …)]`<br>`+    if source == "SYNTHETIC": return [notice(f"Synthetic {what}: {note}", "error", icon=ft.Icons.SCIENCE_OUTLINED)]`<br>`+    if "Missing tenors" in (note or ""): return [notice(f"Partial {what}: {note} Beyond the last served tenor the curve is held flat; long-end numbers are not market values.", "warning")]`<br>`+    return []`<br>`ui/bonds_page.py:122`과 `ui/structuring_page.py:139`에도 같은 규칙을 둔다. (2) `core/ficc/curves.py:339`: `p = {t: (_par_at(snap, t) if t <= max(snap.tenors) + 1e-9 else float("nan")) …}`로 바꾼다. 화면은 NaN을 "n/a"로 보인다. (3) 스왑, 스왑션, 채권 만기가 마지막 제공 만기를 넘으면 `FICCError("beyond the longest served tenor …")`를 낸다 |
+| 회귀 테스트 | `test_d03_partial_fred_curve_is_labelled`: DGS20, DGS30만 실패하는 FRED 스텁(TTL 0). `blocks = _run_curve(...)`의 텍스트에 대해 `assert any("Missing tenors: DGS20, DGS30" in t for t in texts)`, 그리고 `5s30s` 타일 값 `== "n/a"`. `_run_swap(tenor_text="30y")`는 `FICCError`를 내거나 경고 배너를 포함한다. 수정 전에는 "Missing tenors"가 화면에 없어서 실패한다(v7로 확인) |
+
+#### D03-V02 · P2 · 사실 — Structuring 기본 상품(USD/KRW 이중통화예금)은 KRW 예금을 UST 곡선으로 할인하면서 화면에 "plain KRW deposit at 4.10%"라고 쓴다. KIS KRW 곡선 로더는 있지만 쓰이지 않는다
+
+| 필드 | 내용 |
+|---|---|
+| 파일·함수·라인 | `ui/structuring_page.py:49-51`(dcd 기본값 base USD, quote KRW), `:269-270`(항상 `load_treasury_curve`, 즉 UST), `:103-107` `_price`, `:157` 칩 `curve: FRED`(녹색). `core/ficc/structured.py:251-297` `dual_currency_deposit`는 `curve_dom`을 "the curve's currency"로 쓴다. `:296-297` note는 "against a plain {quote_ccy} deposit at {dep_rate}"다. 단순화 사실은 모듈 docstring(`ui/structuring_page.py:11-12`)에만 있고 화면에는 없다. KRW 곡선은 이미 있다: `core/ficc/curve_models.py:242-256` `krw_curve_panel()`(KIS CD 91d + KTB 1~30y, `data/kis_markets.py:62-63`). 하지만 grep 결과 UI 호출이 0건이다 |
+| 재현 | `python3 -B …/verify_d03_synthetic_fallback/v6_dcd_proxy.py`. 평평한 곡선, 기본 term sheet(spot 1350, strike 1300, vol 9%, USD 4.5%, 3m) |
+| 기대 결과 | KRW 예금은 KRW 곡선으로 할인한다(KIS 설정 시 `krw_curve_panel`). 없으면 "UST curve used as a proxy for KRW" 경고를 띄우고, note에서 "plain KRW deposit"라는 말을 쓰지 않는다 |
+| 실제 결과 | UST 4.10% 곡선: "enhanced yield **5.26%** against a plain KRW deposit at **4.10%**". KRW 수준 2.60% 곡선이었다면 "4.09% against … 2.60%"다. 화면 칩은 `curve: FRED`, `as of 2026-10-23`이다. UST나 proxy 경고는 없다(`any UST/proxy warning: False`) |
+| 영향 | 기본 상품에서 항상 일어난다. 원화 예금 금리라고 적힌 숫자가 실제로는 미국 국채 금리다. 제시 수익률은 약 117bp 높게 나온다. 포워드도 KRW-USD 금리차 대신 UST-USD 차이로 계산된다. 공정가는 구조상 `100−margin`(99.75)에 고정돼 있어서 오류가 수익률 쪽으로만 드러난다. 모듈 docstring에 단순화라고 적혀 있고, D03-05처럼 가정값의 라벨이 잘못된 부류라서 P2로 둔다. 소유자 메모("FICC를 KIS에서")와 직접 연결된다 |
+| 수정안 | `ui/structuring_page.py` worker:<br>`-                panel = load_treasury_curve(source=source.value or "auto")`<br>`+                qccy = (fields["dcd"]["quote_ccy"].value or "").strip().upper() if k == "dcd" else "USD"`<br>`+                if qccy == "KRW" and config.kis_ready():`<br>`+                    from core.ficc.curve_models import krw_curve_panel`<br>`+                    panel = krw_curve_panel()`<br>`+                else:`<br>`+                    panel = load_treasury_curve(source=source.value or "auto")`<br>`+                    if qccy not in ("", "USD"):`<br>`+                        panel = replace(panel, note=f"UST curve used as a proxy for {qccy}: not a {qccy} quote. " + panel.note)`<br>`_render`는 note가 "proxy"를 담으면 `notice(panel.note, "warning")`를 띄운다. `structured.dual_currency_deposit`의 note 문구는 곡선 출처를 받아 "plain deposit on the {curve_label} curve"로 쓴다. `krw_curve_panel` 실패는 화면 오류로 보이고, 조용히 UST로 바꾸지 않는다 |
+| 회귀 테스트 | `test_d03_dcd_krw_is_not_priced_as_ust_silently`: (a) KIS 미설정, FRED 스텁(UST 4.10%)으로 dcd를 실행한다. 화면 텍스트에 `"UST curve used as a proxy for KRW"`가 있어야 한다. `"plain KRW deposit at 4.10%"`는 없어야 한다. (b) `KISMarkets.krw_yield_daily` 스텁(KRW 2.60% 평평)과 `config.kis_ready=True`에서 칩은 `curve: KIS`이고 `abs(report.coupon - 0.0409) < 5e-4`이다. 수정 전에는 (a)의 경고 문구가 없어서 실패한다(v6로 확인) |
+
+### 3. 소유자 메모 관련 메모(짧게)
+
+- KRW 금리 곡선은 KIS 경로가 코드에 이미 있다(`core/ficc/curve_models.py:242`). D03-V02와 D03-05(CD 91d)의 수정은 이 경로를 쓰면 된다. 실제 KIS 응답은 미검증이다.
+- USD/KRW는 D03-01 수정안(KIS `FX@KRW` → FRED `DEXKOUS` 명시 호출 → 거부)이 맞다고 본다. 스크래치 사본으로 동작을 확인했다. FRED `DEXKOUS`의 발표 지연(H.10 주간 발표로 알려짐)은 이번에 확인하지 않았다(네트워크 미사용, 미검증). 그래서 KIS를 먼저 쓰는 순서가 더 낫다는 판단은 추정이다.
+- BTC는 KIS 코드에 경로가 없다(grep). Upbit/Binance 공개 API만 있다(`data/crypto/crypto_client.py`). KIS API 자체에 가상자산이 없는지는 문서로 확인하지 않았다(미검증).

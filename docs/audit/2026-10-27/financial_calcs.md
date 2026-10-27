@@ -547,3 +547,179 @@ BTC 관련 계산(김치 프리미엄 등)은 이 차원에서 다루지 않았�
 | `r08_equity_deriv.py` | 베이시스 배당, LETF 드래그, MFIV 이산화, Sharpe 정의, 테너 관례, FX PA 델타 |
 | `r09_stub_periods.py` | 스텁 발생 가중의 par·PV·캡 ATM·RC 쿠폰 영향 |
 | `refpkgs/` | QuantLib 1.44, arch 8.0.0(스크래치 전용 설치) |
+
+<!-- verifier-section -->
+
+## 독립 검증 결과
+
+- 검증자: financial_calcs 차원의 적대적 검증자. 감사 전용이다. 저장소 파일은 하나도 바꾸지 않았다(검증 뒤 `find -newer`로 변경 0건 확인).
+- 방법: 인용된 코드를 직접 읽고 실제 라인을 다시 찾았다. P0~P2는 모두 재현을 새로 썼다. P3는 코드 읽기와 일부 재실행으로 확인했다. 수정안은 메모리 안에서만 적용해 보았다(monkeypatch). 회귀 테스트가 수정 전에 실패하고 수정 후에 통과하는지 확인했다.
+- 데이터: 합성 곡선·합성 가격만 썼다. 시장 데이터 API는 부르지 않았다. 금지 파일 4개는 열지 않았다. 웹은 pypbo `pbo.py` 한 파일만 읽었다(`phi = 1.0 if lam <= 0`, `w_bar = r/(N+1)` 확인).
+- 재현 스크립트: `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_financial_calcs/` 아래 `v01_steepener.py`, `v02_stub.py`, `v02_fix_check.py`, `v03_to_v14.py`, `v06_test_check.py`, `v07_pbo.py`, `m02_portfolio_logmean.py`, `m03_crypto_annualisation.py`, `m04_cap_atm.py`. 각 결과는 같은 이름의 `.out`이다.
+
+### 1. 발견사항별 판정
+
+| id | 유지 여부 | 정정 판정 | 정정 심각도 | 근거 |
+|---|---|---|---|---|
+| FC-01 | 유지 | 사실(크기는 곡선·변동성 가정에 달림=추정) | P1 | `core/ficc/structured.py:311-325`의 `max(L·spread, floor)`, `min(cpn, cap)`를 확인했다. 자체 검사 곡선에서 +2.8039/+4.3980을 그대로 재현했다(독립 수치적분과 차이 0). 조사자의 패치도 적분과 1e-13 안에서 같다. 단 "UI 기본 입력에서"라는 크기는 자체 검사 곡선 기준이다. 화면이 실제로 쓰는 합성 곡선에서는 +0.77/+1.65다. 또 조사자 6장의 "CMS 볼록성 조정은 FC-01의 반대 방향 효과"는 오류다. 볼록성 조정도 공정가치를 올린다(신규 M-01) |
+| FC-02 | 유지 | 사실 | P1 | `curves.py:41-48, 110-116`을 확인했다. 다른 곡선에서 재현했다. 18m −101.0bp, 6m −185.0bp, 3m −270.0bp, 2.5y −71.0bp이고 정수 만기는 0bp다. `rates_page.py:160-162`는 "18m"을 받는다. 수정안을 메모리 안에서 적용했다. 회귀 테스트는 수정 전에 실패하고(par 2.9506% 대 3.9606%) 수정 후에 통과한다. 관련 인수 테스트 33개는 수정 후에도 33/33 통과한다. RC 쪽 hunk(`:213`)는 꼭 필요하다. 그것을 빼면 18m RC의 공정가치가 99.00이 아니라 101.24가 된다. 수정 전 RC 값은 내부적으로 일관된다. 그러므로 "RC 쿠폰 영향"은 가격 오류가 아니다. 연 쿠폰 표기 문제다. 빠진 부분: `swaps.analyze_swap`의 `carry_1y`(`:161-163`)가 스텁 기간 대신 1/freq를 쓴다. 스티프너 payoff grid(`:354`)는 `n/freq`를 그대로 쓴다 |
+| FC-03 | 유지 | 사실 | P2 | `bonds.py:80-99`는 모든 현금흐름의 PV다. 즉 dirty 가격이다. 문서 `:12-14`의 "clean-ish"는 틀렸다. clean 99.995604를 넣으면 4.106187%(+10.6bp)가 나온다. 제안한 `accrued_interest`는 0.666667이고, 그 값을 더하면 ytm이 정확히 4%다. 화면 기본값 10y(정수 만기)에서는 경과이자가 0이라 드러나지 않는다 |
+| FC-04 | 유지 | 사실(KRW 금리 수준은 가정) | P2 | `ui/structuring_page.py:269-271`은 항상 UST 곡선을 쓴다. 증강 수익률 4.8683% 대 4.0980%를 재현했다. 다만 두 가지는 과장이다. (1) "EQ(KOSPI200)도 같다": UI는 PPN·RC의 통화를 항상 USD로 둔다. KOSPI200을 고르는 칸도 없다. (2) 화면 부제(`:295-297`)에 "priced off the latest UST par curve"가 이미 있다. 그래서 P2가 맞다 |
+| FC-05 | 유지 | 사실(스왑 스프레드 크기는 미검증) | P2 | `data.py:66-67`의 `_TREASURY_IDS`(DGS*)만 곡선이 된다. `rates_page.py:94-96`, `:156-181`을 확인했다. 화면 칩은 "curve: FRED"와 "1/yr both legs"뿐이다 |
+| FC-06 | 유지(회귀 테스트는 정정 필요) | 사실(배당 크기는 추정) | P2 | `derivatives_page.py:121-122`는 `div_pts` 없이 부른다. −125.0bp와 −6.325%, 배당 반영 시 0bp와 2.800%를 재현했다. 그러나 제안한 회귀 테스트 두 개는 결함을 잡지 못한다. ① `basis_report(..., div_pts=5)` 테스트는 코어가 이미 `div_pts`를 받으므로 수정 전에도 통과한다. ② 합성 보드 테스트는 합성 theo에 배당이 없다. 그래서 수정 전후 모두 +7.10bp이고 "0bp 근처"가 둘 다 실패한다(`v06_test_check.out`). 정정안: theo = S(1+rτ)−5, price = theo인 보드 fixture에서 `snapshot`의 `basis.mispricing_bp`가 수정 전 약 −125bp, 수정 후 0±1e-9인지 검사한다. 참고: 수정 후 공정가치는 KIS 이론가와 같아진다. 독립 추정이 아니라는 점을 화면에 적어야 한다 |
+| FC-07 | 유지 | 사실 | P2 | `validate.py:264`, `gate_stats.py:723`의 `logits < 0`을 확인했다. G=9에서 0.405 대 0.516을 그대로 재현했다(시드 7, 40개). G=11은 0.415 대 0.513이다. 짝수 G는 동점이 없어 같다. pypbo가 `<= 0`인 것을 원문에서 확인했다. 고정값 테스트(`macro_m7_stats.py:255`, `macro_m1_fixtures.py:290`)는 G=10이라 수정의 영향이 없다 |
+| FC-08 | 유지 | 사실 | P3 | `gjr.py:115, 176`. Hansen skew-t의 E[z²1{z<0}]는 ν=6, λ=−0.3에서 0.6048, λ=−0.1에서 0.5372, λ=0에서 0.5000이다. skew-t는 crypto scorecard(`core/crypto/analytics.py:254`)에서만 쓰인다 |
+| FC-09 | 유지 | 사실 | P3 | `garch.py:478`의 `k = 4 if dist == "t" else 3`, `:547` `delta_aic_vs_gbm`. GBM은 μ를 세고 GARCH는 μ를 세지 않는다. 2만큼 GARCH에 유리하다 |
+| FC-10 | 유지 | 사실 | P3 | `montecarlo.py:145-149`. 분산 비율은 모수에 달렸다(λ=0.2, μJ=−3%, σJ=4%에서 1.128). 결론은 같다 |
+| FC-11 | 유지 | 사실(시장 관례 크기는 추정) | P3 | `common.py:25-39`, `fx.py:10-14`, `fx.py:168-179`를 읽어 확인했다 |
+| FC-12 | 유지 | 사실 | P3 | OTM 콜 `black76(0.03,0.04,0,0.2).d1 = +inf`, OTM 풋(F>K) `d1 = −inf`. `equity_deriv.py:491`은 항상 None이다 |
+| FC-13 | 유지 | 사실 | P3 | `convention="cont"`에서 공정가치는 연속복리인데 `implied_rate`는 단리 2.8054%다 |
+| FC-14 | 유지 | 사실 | P3 | 같은 일간 손익에서 CAGR/vol 0.210, 게이트식 0.286 |
+| FC-15 | 유지 | 사실 | P3 | 테스트가 대부분 항등식이라는 핵심 주장은 맞다. "관련 83건: PASS 78, NOT_RUN 5"는 선택 규칙이 없어 재현할 수 없다. baseline2에는 ficc 57 PASS, quant 53 PASS가 있다. 이름이 나온 NOT_RUN 5건은 실제로 NOT_RUN이다(macro 그룹) |
+| FC-16 | 유지 | 사실 | P3 | `structured.py`에 autocall·barrier·knock 용어가 0건이다. README도 주장하지 않는다 |
+
+### 2. 놓친 발견사항
+
+#### M-01 · P2 · 사실 — 스티프너 경고가 볼록성 편향의 방향을 거꾸로 말한다
+
+| 항목 | 내용 |
+|---|---|
+| ID | M-01 |
+| 심각도 | P2. 화면 해설과 AI 페이로드에 나가는 잘못된 판단 문구다. 숫자 오차 자체는 FC-01과 겹친다 |
+| 판정 | 사실 |
+| 파일·함수·라인 | `core/ficc/structured.py:332-336`(docstring: "overstates the value of a long-CMS coupon"), `:372-374`(화면 문구: "so the coupon leg is overstated"). 이 문구는 `core/ficc/insights.py:541-542`(`narrate_structured`가 `p.note`를 붙임) → `ui/structuring_page.py:208-210` 해설 패널과 `:204` 페이로드로 나간다 |
+| 재현 단계 | `python3 -B .../verify_financial_calcs/v01_steepener.py`의 마지막 블록. Hull(OFOD, "Convexity, timing and quanto adjustments")의 CMS 볼록성 근사 E[y_T] ≈ y0 − ½y0²σ²T·G''(y0)/G'(y0)를 쓴다. 두 금리 모두 Black vol 20%로 둔다. 자체 검사 곡선의 10y·2y 포워드 스왑금리에 적용한다 |
+| 기대 결과 | G'<0이고 G''>0이므로 조정은 양수다. 10y 조정이 2y 조정보다 크다. 그래서 볼록성 조정을 빼면 롱 스프레드 쿠폰은 과소평가된다. 화면은 "쿠폰 과소, 공정가치는 하한, 마진은 상한"이라고 말해야 한다 |
+| 실제 결과 | 스프레드 조정은 t0=1~4년에서 +3.24, +6.57, +10.00, +13.56bp다. 4배 레버리지 쿠폰의 PV는 floor를 무시하고 +1.13/100이다. 코드 경고는 반대로 "coupon leg is overstated"라고 말한다. floor 시간가치 누락(FC-01)도 같은 방향(공정가치 과소)이다. 두 누락이 합쳐져 마진이 더 커 보인다. 그런데 화면은 사용자에게 마진이 작아 보인다는 쪽으로 읽게 한다 |
+| 영향 | 판매사 마진 판단의 방향이 틀린다. 조사자 보고서 6장의 "볼록성은 FC-01의 반대 방향 효과"도 같은 오해다 |
+| 수정안 | 아래 diff(문구 정정). 선택: Hull 근사나 선형 TSR로 볼록성 조정을 넣고 `spread_nvol`(FC-01)과 함께 쓴다 |
+| 회귀 테스트 | `ficc/test_steepener_warning_names_the_right_direction`: `st = steepener_note(c, maturity=5.0)`에서 `"overstated" not in st.note`이고 `"UNDERSTATE" in st.note`. 수정 전에는 실패하고 후에는 통과한다. 기존 `test_steepener_note_warns_about_convexity`(`"convexity" in note`)는 계속 통과한다 |
+
+```diff
+--- a/core/ficc/structured.py
++++ b/core/ficc/structured.py
+@@ -333,4 +333,6 @@ def steepener_note(...):
+     period start. NO convexity adjustment: forward CMS rates are used as if they
+-    were martingales under the payment measure, which overstates the value of a
+-    long-CMS coupon. Nothing is solved; margin = issue_price − fair is reported."""
++    were martingales under the payment measure. The CMS convexity adjustment is
++    positive and larger at 10y than at 2y, so leaving it out UNDERSTATES a
++    long-spread coupon: fair value is a lower bound, the margin an upper bound."""
+@@ -372,3 +374,4 @@
+             f"WARNING: coupons are priced off the FORWARD curve with NO convexity adjustment "
+-            f"(CMS forwards taken as unbiased), so the coupon leg is overstated; a "
+-            f"replication-based CMS convexity correction is not applied.")
++            f"(CMS forwards taken as unbiased) and the floor/cap at intrinsic value; both "
++            f"omissions UNDERSTATE the coupon leg, so fair value is low and the margin "
++            f"is overstated.")
+```
+
+#### M-02 · P2 · 사실 — 포트폴리오 최적화가 로그수익률 평균을 기대수익률로 쓴다
+
+| 항목 | 내용 |
+|---|---|
+| ID | M-02 |
+| 심각도 | P2. Portfolio 화면의 "return %/yr", Sharpe, 최대 Sharpe 비중이 체계적으로 틀린다. 변동성이 큰 자산(BTC 등)을 섞을수록 오차가 커진다 |
+| 판정 | 사실 |
+| 파일·함수·라인 | `core/quant/risk.py:150-154`(`np.diff(np.log(px))`, `mean = R.mean(axis=0) * TRADING_DAYS`), `:163-170` `portfolio_point`(`ret = w @ mean_returns`, Sharpe = (ret−rf)/vol). `core/quant/optimize.py:75, 83-86, 94`(max-Sharpe 목적함수가 같은 μ 사용). 화면 `ui/portfolio_page.py:148`(`return {ann_return}%/yr`), `:170`, `:184`(AI 페이로드) |
+| 재현 단계 | `python3 -B .../verify_financial_calcs/m02_portfolio_logmean.py`. 두 자산 GBM: 산술 μ=(8%, 40%), σ=(15%, 60%), ρ=0.2. (a) 40년 합성 표본으로 `align_histories`와 `portfolio_point`를 부른다. (b) 모집단 값을 `BasketStats`에 넣고 `optimize_portfolio`를 부른다 |
+| 기대 결과 | Markowitz 입력은 산술 기대수익률(단순수익률 평균)이다. 화면 수익률은 산술 평균이거나, 아니면 포트폴리오 자체의 로그 성장률이어야 한다 |
+| 실제 결과 | (a) 50/50 표본: 코드 "return" 12.69%. 같은 표본의 일간 리밸런싱 산술평균은 22.34%, 로그 성장률은 17.04%다. 코드 Sharpe는 0.298, 산술 Sharpe는 0.595다. 코드 값은 기하 성장률보다도 4.35%p 낮다(분산 효과가 빠짐). (b) 모집단: 최대 Sharpe 비중이 코드에서 (0.746, 0.254), 산술 입력에서 (0.604, 0.396)이다. 코드 포트폴리오의 표시 수익률은 10.71%, 실제 산술은 16.12%, 로그 성장은 13.99%다 |
+| 영향 | 수익률·Sharpe가 낮게 보인다. 최적 비중이 고변동 자산에서 멀어지는 쪽으로 치우친다. 효율적 프런티어(`optimize.py:107`)도 같은 μ를 쓴다 |
+| 수정안 | 아래 diff. 평균·공분산을 단순수익률로 계산한다. `BasketStats.returns`는 다른 소비처가 있으므로 로그로 둔다. 화면 라벨을 "exp. return (arith.)"로 바꾼다. `strategies.py:364`의 자체 `BasketStats`도 같은 규칙으로 맞춘다. `tests/quant_acceptance.py`에서 μ나 비중을 고정한 값이 있으면 다시 산출한다 |
+| 회귀 테스트 | `quant/test_basket_mean_is_arithmetic`: 합성 두 자산에서 `abs(stats.mean_returns − np.expm1(R).mean(0)*252).max() < 1e-12`, 그리고 `portfolio_point(w, stats)[0] == w @ stats.mean_returns`. 수정 전에는 로그 평균이라 실패하고, 후에는 통과한다 |
+
+```diff
+--- a/core/quant/risk.py
++++ b/core/quant/risk.py
+@@ -150,8 +150,11 @@ def align_histories(histories):
+         cols.append(np.diff(np.log(px)))
+     R = np.column_stack(cols)                          # (T-1, N)
+-    mean = R.mean(axis=0) * TRADING_DAYS
+-    cov = np.cov(R, rowvar=False, ddof=1) * TRADING_DAYS
++    # Mean-variance needs arithmetic moments: the mean of log returns sits ½σ² lower
++    # per asset, and w·μ_log drops the diversification return.
++    S = np.expm1(R)
++    mean = S.mean(axis=0) * TRADING_DAYS
++    cov = np.cov(S, rowvar=False, ddof=1) * TRADING_DAYS
+```
+
+#### M-03 · P2 · 사실 — 24시간 가상자산 일봉(연 365개)을 252로 연율화한다: 백테스트·Monte Carlo·게이트
+
+| 항목 | 내용 |
+|---|---|
+| ID | M-03 |
+| 심각도 | P2. d01_d02 보고서 D12-11(P2)과 뿌리가 같다. D12-11은 `risk.py`와 MC 변동성만 다루었다. 그리고 "금융계산 감사 단위와 조율"로 넘겼다. 이 차원의 조사자는 이를 다루지 않았다. 여기서 범위를 넓힌다 |
+| 판정 | 사실 |
+| 파일·함수·라인 | `core/quant/backtest.py:128-132`(`n_years = n/252`, `√252`, `×252`). `core/quant/montecarlo.py:113-116`(`_calibrate`), `:239-241`(`rate_daily = value/252`를 365개 봉 경로에 적용). `core/quant/validate.py:137-143`(`sharpe` √252). 화면 `ui/signals_page.py:165`(Sharpe), `:184`(ann_vol 페이로드), `ui/quant_lab_page.py:259`("Horizon (sessions)" 126), `:316-317`. 가상자산 경로: `core/quant/history.py:284-292, 333-335, 497-498`. 코드 안에 이미 `core/calendars/clocks.py:30` `ANNUALISATION_DAYS={'CRYPTO': 365}`가 있지만 이 경로들은 쓰지 않는다. Crypto 화면(`ui/crypto_page.py:75-76`)만 365로 바꾼다 |
+| 재현 단계 | `python3 -B .../verify_financial_calcs/m03_crypto_annualisation.py`. 3년치 매일 봉, σ=80%, `source="UPBIT"`, `KRW-BTC` 합성 History로 `run_backtest(momentum 5, 비용 0)`와 `run_monte_carlo(gbm, premium)`를 돌린다 |
+| 기대 결과 | 연간 봉 수(365)로 연율화한다. 수익률은 달력 기간으로 연율화한다 |
+| 실제 결과 | 백테스트: ann_vol 0.4724 대 0.5686(×0.831), Sharpe 0.427 대 0.514, ann_return 9.53% 대 달력 CAGR 14.09%. 게이트 `validate.sharpe`도 0.427이다. Quant Lab: "Vol (ann.)" 64.2% 대 77.2%. 126 "sessions"는 BTC에서 4.1개월이다(주식은 6개월). 같은 기간 premium 드리프트가 3.56%로 적용된다. 달력 기준이면 2.45%다(1.45배) |
+| 영향 | BTC의 변동성·Sharpe·연 수익률이 Signals·Quant Lab·게이트에서 17~32% 낮게 보인다. MC 드리프트는 과대하다. 같은 BTC라도 Crypto 화면과 숫자가 다르다(data_flow B11) |
+| 수정안 | 봉 간격에서 연간 봉 수를 정하고 각 계산에 넘긴다(아래 diff). `montecarlo._calibrate`, `rate_daily`, `risk.analyze_history`, `validate.sharpe` 호출부에 같은 `ppy`를 넘긴다. Quant Lab 라벨을 "Horizon (bars)"로 바꾸고 달력 기간을 함께 보인다 |
+| 회귀 테스트 | `quant/test_crypto_bars_annualise_on_365`: 위 합성 History에서 `abs(bt.ann_vol − std(sd)·√365) < 1e-12`, `abs(bt.ann_return − calendar CAGR) < 1e-3`, 그리고 `run_monte_carlo(..., model="gbm").sigma_annual`이 `std(log r)·√365`와 같다. 수정 전에는 실패하고 후에는 통과한다. 주식 History(평일만)에서는 값이 그대로다 |
+
+```diff
+--- a/core/quant/history.py
++++ b/core/quant/history.py
+@@ -47,2 +47,13 @@
+ TRADING_DAYS = 252
++
++
++def periods_per_year(history: "History") -> int:
++    """Bars per year for annualising: 365 when the series prints every calendar
++    day (24/7 crypto: more than 300 bars per 365 calendar days), else 252."""
++    from datetime import date
++    if len(history.dates) < 30:
++        return TRADING_DAYS
++    span = (date.fromisoformat(history.dates[-1]) - date.fromisoformat(history.dates[0])).days
++    return 365 if span > 0 and (len(history.dates) - 1) * 365.0 / span > 300 else TRADING_DAYS
+--- a/core/quant/backtest.py
++++ b/core/quant/backtest.py
+@@ -128,5 +128,6 @@
+-    n_years = max(strat_daily.size / TRADING_DAYS, 1e-9)
++    ppy = periods_per_year(history)
++    n_years = max(strat_daily.size / ppy, 1e-9)
+@@
+-    vol = float(np.std(strat_daily, ddof=1)) * np.sqrt(TRADING_DAYS)
+-    sharpe = (float(np.mean(strat_daily)) * TRADING_DAYS) / vol if vol > 0 else 0.0
++    vol = float(np.std(strat_daily, ddof=1)) * np.sqrt(ppy)
++    sharpe = (float(np.mean(strat_daily)) * ppy) / vol if vol > 0 else 0.0
+```
+
+#### M-04 · P3 · 사실 — 캡의 "ATM" 행사가가 빠진 첫 캡렛 기간을 포함한다
+
+| 항목 | 내용 |
+|---|---|
+| ID | M-04 |
+| 심각도 | P3. docstring(`swaps.py:388`)에 적힌 관례다. 하지만 화면은 "(ATM)"이라고 표시한다. 기본 5y에서는 오차가 작다 |
+| 판정 | 사실 |
+| 파일·함수·라인 | `core/ficc/swaps.py:392`(`atm = par_swap_rate(curve, tenor, freq=freq, start=start)`: [start, start+tenor] 전체). `:398-399`(t0=0 캡렛은 제외). 화면 `ui/rates_page.py`의 캡 결과 "Strike … (ATM)" |
+| 재현 단계 | `python3 -B .../verify_financial_calcs/m04_cap_atm.py`. 두 곡선에서 1y·2y·5y 분기 캡의 보고 ATM과 실제 캡렛 묶음의 포워드(Σ τ·DF·fwd / Σ τ·DF)를 비교한다. 같은 행사가로 cap − floor도 계산한다 |
+| 기대 결과 | ATM 행사가에서 cap − floor = 0이다(캡렛 묶음의 포워드 스왑금리) |
+| 실제 결과 | 상승 곡선: 1y −6.2bp, 5y −3.9bp. cap − floor는 1y에서 +451(캡 1,847, 1백만당), 5y에서 +1,678(캡 21,632)이다. 앞단 역전 곡선: 1y +14.6bp, 5y +5.4bp. 1y cap − floor는 −1,054(캡 1,238)다 |
+| 영향 | 짧은 만기의 "ATM" 캡 프리미엄과 그릭스가 실제 ATM과 다르다. 앞단이 가파를수록 커진다 |
+| 수정안 | 아래 diff. 기존 고정 테스트(`swaps.py:508`의 자체 검사, `tests/ficc_acceptance.py:361`의 `cap.strike == par_swap_rate(c, 5.0, freq=4)`)는 새 정의로 바꾼다 |
+| 회귀 테스트 | `ficc/test_cap_atm_is_the_caplet_strip_forward`: `cap = price_cap_floor(c, 1.0, None, vol=0.008)`, `flo = price_cap_floor(c, 1.0, cap.strike, vol=0.008, cap=False)`에서 `abs(cap.premium − flo.premium) < 1e-6`. 수정 전에는 +451이라 실패하고, 후에는 통과한다 |
+
+```diff
+--- a/core/ficc/swaps.py
++++ b/core/ficc/swaps.py
+@@ -392,6 +392,11 @@ def price_cap_floor(...):
+-    atm = par_swap_rate(curve, tenor, freq=freq, start=start)
+-    K = atm if strike is None else float(strike)
+     ends = coupon_times(start + tenor, freq, start)
+     starts = [start] + [float(t) for t in ends[:-1]]
++    kept = [(t0, float(t1)) for t0, t1 in zip(starts, ends) if t0 > 1e-12]
++    if not kept:
++        raise FICCError("Every caplet of this cap is already fixed; nothing to price.")
++    wts = [(t1 - t0) * curve.df(t1) for t0, t1 in kept]
++    atm = sum(w * curve.fwd(t0, t1) for w, (t0, t1) in zip(wts, kept)) / sum(wts)
++    K = atm if strike is None else float(strike)
+```
+
+### 3. 기타 정정
+
+- FC-01 크기: "UI 기본 입력에서 +2.80~+4.40"은 자체 검사 곡선 기준이다. 화면은 FRED 곡선 또는 합성 곡선을 쓴다. 이 환경의 합성 곡선(앞단 9.6%, 역전)에서는 +0.77(50bp)과 +1.65(70bp)다. 방향은 같다.
+- FC-02 수정안의 범위: RC hunk 없이 `annuity`만 고치면 18m RC의 공정가치가 99.00이 아니라 101.24가 된다. 세 hunk를 함께 적용해야 한다. `analyze_swap.carry_1y`와 스티프너 payoff grid도 같은 스텁 규칙으로 맞춰야 한다.
+- FC-06 회귀 테스트: 위 표대로 다시 설계해야 한다. 제안된 두 테스트는 수정 전후를 구분하지 못한다.

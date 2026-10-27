@@ -702,3 +702,160 @@
 | `proposed_d04_d05.diff` | 적용용 diff(CRLF 보존). `proposed_d04_d05.clean.diff`는 읽기용 |
 | `subset_orig.log`, `subset_tree.log` | 원본·패치 사본 테스트 결과 |
 | `orig/`, `tree/` | `git archive HEAD` 사본(원본, 패치본). `docs/asset_expansion/cache` 제외 |
+
+<!-- verifier-section -->
+
+## 독립 검증 결과
+
+검증 대상: `d04_d05_timestamps`(조사자 보고서 `docs/audit/2026-10-27/d04_d05_timestamps.md`). 이번 검증에서 추적 파일은 하나도 고치지 않았다. `.env`는 열지 않았고 시장 데이터 API도 호출하지 않았다. 금지 캐시 4개는 열지 않았다. 사본을 만들 때 `docs/asset_expansion/cache` 폴더는 통째로 뺐다. `~/.nextgen` 아래에도 아무것도 쓰지 않았고 `git status`는 깨끗하다.
+
+### 1. 방법
+
+1. 인용된 코드를 직접 읽었다. 줄 번호는 모두 맞았다: `kis_client.py:133`, `:269`, `:322`, `:324`; `macro.py:223`; `evaluator.py:261`, `:215`; `pit.py:549-555`, `:580-582`; `gateway.py:82`; `krx_market_client.py:64-69`, `:181`, `:204`, `:226`; `ui/macro_page.py:43`, `:161`; `insights.py:361`, `:388`, `:437`, `:559`, `:573`.
+2. 조사자 스크립트는 쓰지 않았다. 재현은 새로 작성했다(`v1`~`v5`). 실제 `KRXGateway()` 생성자, `QuoteFeed`, `Evaluator`, `EngineRuntime` 루프를 그대로 썼다. KIS 응답만 스텁으로 바꿨다.
+3. KIS 공식 샘플을 확인했다. `raw.githubusercontent.com/koreainvestment/open-trading-api/main/examples_llm/domestic_stock/*/chk_*.py`를 내려받아 필드를 셌다.
+   - `inquire_price`: 82개 필드. 시세 시각(time of day) 필드는 없다. `temp_stop_yn`은 있다.
+   - `inquire_index_price`: 36개 필드. `prdy_ctrt`는 없고 `bstp_nmix_prdy_ctrt`가 있다.
+   - `inquire_asking_price_exp_ccn`: 84개 필드. `aspr_acpt_hour`(호가 접수 시간)가 있다.
+   - `inquire_ccnl`: `stck_cntg_hour`(체결 시간)가 있다.
+   - 조사자 주장과 일치한다.
+4. 패치 검증용으로 `git archive HEAD` 사본 네 벌을 만들었다.
+   - `orig`: 원본
+   - `tree`: 조사자 패치
+   - `tree2`: `tree`에 거래정지 처리 대안을 더한 것
+   - `fut`: `orig`에 미래 시각 가드를 더한 것
+   - 저장소에서는 `git apply --check`만 했고 통과했다. 적용은 하지 않았다.
+
+### 2. 판정 표
+
+| id | 유지 여부 | 정정 판정 | 정정 심각도 | 근거 |
+|---|---|---|---|---|
+| D05-01 | 유지 | 사실 | P1 | v1: `quote().as_of`는 호출 전후 시각 t0와 t1 사이의 수신 시각이다. `quote()`가 payload에서 읽는 키 9개에 시각 키는 없다. 거래정지 시세(`temp_stop_yn=Y`, 거래량 0)가 11:00 KST에 신선도 검사를 통과해 FIRED됐고 모의주문 1건이 생겼다. 같은 가격에 전일 15:30 시각을 넣으면 SKIPPED, 10분 전 시각을 넣으면 HALTED다. KIS 경로가 `feed.py:25-31`의 "시각을 지어내지 않는다" 계약을 깬다. `evaluator._freshness` docstring의 "거래정지는 SKIP" 의도도 무력화된다. 수정 방향은 맞다. 하지만 부작용이 있다(D0405-V02) |
+| D04-01 | 유지 | 사실 | P2 | v2: 행 날짜가 {10-16, 10-22, 10-23}인데 `as_of`는 `2026-10-23`이다. `MacroSheet` 필드 6개에 지연 정보가 없고 `note`는 빈 문자열이다. 서술문은 "Daily read for 2026-10-23."으로 시작하고 10-16을 언급하지 않는다. 표 열에 날짜가 없다. AI 페이로드 `rows`에는 `last_date`가 있어 일부 완화된다. 맥락 전용 화면이라(T-CTX-01) P2가 맞다 |
+| D04-02 | 유지 | 사실 | P2 | v2: `MacroRow` 13개 필드와 `Series` 6개 필드에 수신·발표 시각이 없다. `_MEM`의 ts는 `load_many`(`data.py:513-544`)에서 버려진다. FRED API·ALFRED 제안은 타당하다. 공식 문서는 이번에도 열어 확인하지 못했다 |
+| D05-02 | 범위를 줄여 유지 | 사실(코드). 실제 발생은 추정 | **P3** (P2에서 하향) | v1: 대체 경로 행의 `as_of`는 수신 시각이고 `BAS_DD`는 무시된다(코드 사실). 하지만 게이트웨이는 늘 `basDd=오늘`을 요청한다(`gateway.py:72` → `all_quotes("ALL")` → `_session_date(None)`). 조사자 재현은 스텁이 요청과 다른 날짜(10-23) 행을 돌려주는 인위적 조건이다. 서드파티 문서에는 KRX Open API 일별 자료가 매일 08:00 KST에 갱신된다고 적혀 있다(공식 확인은 못 함). 그렇다면 장중에는 오늘 행이 오지 않는다. 그러면 엔진이 지난 종가로 체결하는 경로는 사실상 없다. 남는 것은 장 마감 뒤 같은 날 행에 "as of 수신 시각"이 찍히는 화면 표시 오류뿐이다. 그래서 P3다. 수정안의 `_close_utc(BAS_DD or day)`에도 문제가 있다. 같은 날 장중 행이 오면 오늘 15:30이라는 미래 시각을 찍는다. 미래 시각 가드(D0405-V01)가 없으면 이 행은 신선도 검사를 통과한다. `min(_close_utc(...), _now())`를 권장한다 |
+| D05-03 | 유지 | 사실 | **P3** (P2에서 하향) | v4: `obs_utc = available_at_utc = retrieved_at_utc = 06:45Z`이고 `available_at_source="published"`다. 하지만 지금 이 경로를 부르는 생산 코드가 없다. `_provider_rows`에 `pit_store=`를 넘기는 생산 코드는 0곳이다(grep). `macro_daily.dry_run`의 `DRY_RUN_CACHE` 6개 시리즈(`macro_daily.py:86-90`)에도 quote_snapshot이 없다. 잠재 결함이라 P3다 |
+| D04-03 | 유지 | 사실 | P3 | `PITValue`(`pit.py:56-76`)와 `_raw_item`(`context_log.py:551-558`)은 세 시각을 따로 둔다. 화면 타일 열(`ui/macro_state_panel.py:491`)에는 available·retrieved가 없다 |
+| D05-04 | 유지 | 사실 | P3 | v1: FIRED 주문의 `as_of`는 None이다. `orders.py:67` 필드 주석과 맞지 않는다. 생산 코드에서 `as_of=`를 넣는 곳은 복원 코드(`orders.py:246`)뿐이다 |
+| D05-05 | 유지 | 추정 | P3 | v1: 공식 필드만 있는 응답에서 `change_pct`가 None이다. 공식 샘플 36개 필드에 `prdy_ctrt`가 없는 것도 확인했다. 실응답은 확인하지 못해서 추정을 유지한다 |
+| D05-06 | 유지 | 사실 | P3 | `kis_markets.py:220`, `:273`, `:457`, `:568`은 `date.today()`이고, `:390`, `:430`은 시간대 없는 `datetime.now()`다. 확인했다 |
+| D0405-T1 | 유지 | 사실 | P3 | `ficc_acceptance.py:528`은 합성 시트에서만 `last_date == as_of`를 본다. `engine_acceptance.py`의 test_81은 `KISClient.quote()`를 부르지만 `retry` 인자만 확인한다. baseline2 결과에서 test_35, test_81, test_macro_rows는 PASS다. `test_kis_quote_check_owner_record`는 NOT_RUN이다 |
+
+### 3. 수정안과 회귀 테스트 검증
+
+- 새 회귀 테스트 10개: `orig`에서 10개 모두 FAIL, `tree`에서 10개 모두 PASS다(`reg_orig_tree.log`). 실패 원인도 의도한 것이다. 예: `AttributeError: oldest_date`, `_kst_stamp` 없음, `as_of` 단언 실패.
+- 관련 기존 테스트 묶음(조사자 `run_subset.py`):
+  - `orig`: PASS 253, NOT_RUN 31
+  - `tree`: PASS 253(새 10개 별도), NOT_RUN 31
+  - 회귀 0건이다.
+- 하지만 기존 묶음은 아래 부작용을 시험하지 않는다. v3는 실제 `EngineRuntime`에서 KRX 규칙 2개를 11:00 KST에 5틱 돌린 결과다. 두 규칙 모두 조건은 맞지 않는 상태다.
+
+| 사본 | 거래정지 1종목 + 정상 1종목 | 비유동 종목(호가 3분간 변화 없음) |
+|---|---|---|
+| `orig` | ARMED. 둘 다 SKIPPED | ARMED |
+| `tree`(조사자 패치) | 유예 3틱 뒤 **엔진 전체 HALTED** | 첫 틱에 **엔진 전체 HALTED**(나이가 120초 초과) |
+| `tree2`(정지 대안) | ARMED. 정지 종목만 SKIPPED("before today's open") | HALTED(소유자 결정 필요) |
+
+- D04 쪽 패치(`macro.py`, `data.py`, `insights.py`, `ui/macro_page.py`)는 맞다. `pal.warning`(`core/theme.py:24`)과 `chip(..., tooltip=)`(`ui/components.py:30`)이 실제로 있는 것도 확인했다. D03-02와 같은 줄을 고치므로 둘 중 하나만 적용해야 한다(조사자 주의 1에 동의).
+
+### 4. 놓친 발견사항
+
+#### D0405-V01 엔진 신선도 가드가 미래 시각 시세를 "신선"으로 통과시킨다
+
+| 필드 | 내용 |
+|---|---|
+| ID | D0405-V01 |
+| 심각도 | P2 (가드 누락. 지금 공급자 중에는 미래 시각을 만드는 곳이 없어 잠재 상태다) |
+| 판정 | 사실 |
+| 파일·함수·라인 | `core/engine/evaluator.py` `Evaluator._freshness` `:261-315`: `age`는 `:283`에서 구하고, 상한 비교만 있다(`:295`, `:310`). 하한 검사는 없다. `Quote.age_seconds` `:62-67`. `core/engine/feed.py` `_to_datetime` `:55-75`: 시간대 없는 값을 UTC로 읽는다(`:60`, `:73`). 대조: FICC 캐시는 미래 ts를 이미 거부한다(`core/ficc/data.py:262` `0 <= time.time() - ts`) |
+| 재현 단계 | `python3 -B …/verify_d04_d05_timestamps/v5_future_stamp.py`. now = 2026-10-27 01:00Z(10:00 KST, KRX 장중). (a) `as_of = now + 6h`로 평가한다. (b) 대조: 55분 전(올바른 UTC). (c) `_to_datetime("2026-10-27 09:05:00")`(KST 09:05를 뜻함)로 평가한다 |
+| 기대 결과 | 허용 오차(예: 60초)보다 앞선 시각은 신선하지 않다. 엔진이 거절한다 |
+| 실제 결과 | (a) age −21600초 → **FIRED**. (b) HALTED(정상). (c) 09:05Z(=18:05 KST)로 해석된다. age −29100초 → **FIRED**. 55분 묵은 가격이 체결된다 |
+| 영향 | 지금 엔진 공급자는 모두 UTC를 준다. KIS는 수신 시각 UTC, KRX는 수신 시각 UTC, FMP는 epoch를 UTC로 바꾼다. 그래서 잠재 상태다. 하지만 D-05를 고쳐 거래소 시각을 들이면 사정이 달라진다. 시간대 실수 한 번(KST naive를 UTC로 읽기)이면 최대 9시간 앞선 시각이 생긴다. 그 시세는 얼마나 묵었든 늘 통과한다. 조사자 수정안의 `_close_utc`도 같은 날 장중 행에 미래 시각을 찍을 수 있다. D-05 수정과 함께 넣어야 하는 가드다 |
+| 수정안 | 아래 diff(`proposed_future_guard.diff`). `evaluator.py`는 CRLF다. 여기서는 LF로 보였다 |
+| 회귀 테스트 | `test_future_stamped_quote_is_never_fresh`: `as_of = now + 8h05m`이면 `outcome != FIRED`, 사유에 `"future"`, 주문 0건. `now + 30s`이면 FIRED(허용 오차 안). `orig`에서 FAIL, `fut`에서 PASS(`reg_future.log`). `fut`에서도 기존 묶음은 PASS 253 / NOT_RUN 31로 회귀 0건(`subset_fut.log`) |
+
+```diff
+--- orig/core/engine/evaluator.py
++++ fut/core/engine/evaluator.py
+@@ -67,6 +67,9 @@
+         return (now - stamp).total_seconds()
+ 
+ 
++_FUTURE_SKEW_S = 60.0          # a provider clock may lead ours a little; more is an error
++
++
+ @dataclass(frozen=True)
+ class Decision:
+     rule_id: str
+@@ -281,6 +284,11 @@
+         below still catches a feed that is simply dead.
+         """
+         age = quote.age_seconds(now=now)
++        if age < -_FUTURE_SKEW_S:
++            # A stamp ahead of the clock is a broken feed or a timezone bug (a naive local time read as UTC),
++            # never a fresh print: without this a negative age passes every bound below.
++            return Outcome.HALTED, (f"{rule.symbol} quote is stamped {-age:.0f}s in the future "
++                                    f"(clock or timezone error; tolerance {_FUTURE_SKEW_S:.0f}s)")
+         market = markets.get(rule.market)
+         session = market.session if market is not None else None
+```
+
+#### D0405-V02 조사자의 D-05 패치는 한 종목 문제로 엔진 전체를 멈춘다
+
+| 필드 | 내용 |
+|---|---|
+| ID | D0405-V02 |
+| 심각도 | P2 |
+| 판정 | 사실. 지금 코드의 결함이 아니라 제안 패치의 결함이다. 조사자는 "주의 2"에서 거래정지만 짧게 언급했다. 비유동 종목 문제와 evaluator 설계와의 충돌은 놓쳤다 |
+| 파일·함수·라인 | 조사자 diff `data/krx/kis_client.py` `quote()`: `temp_stop_yn == "Y"`이면 `as_of=""`, 아니면 `aspr_acpt_hour`를 `as_of`로 쓴다. 영향이 닿는 곳: `core/engine/evaluator.py:182-191`(시세 없음 → 유예 뒤 전역 halt), `:310-313`(장중 120초 초과 → 전역 halt), docstring `:274-281`("a halt is global while the problem is one venue … skips rather than halts"). `core/markets.py:71`(KRX 120초), `:219-226`(`NEXTGEN_MAX_AGE_<CODE>`). `core/engine/runtime.py:343-351`. `config.py:194`(유예 3틱) |
+| 재현 단계 | `python3 -B …/v3_patch_side_effects.py <사본>`을 `orig`, `tree`, `tree2`에 대해 실행한다. 회귀 테스트는 `python3 -B …/run_reg.py <사본> …/regression_suspension.py`로 돌린다 |
+| 기대 결과 | 한 종목 문제는 그 종목만 SKIP한다. 엔진은 ARMED를 유지한다 |
+| 실제 결과 | `tree`: 거래정지 1종목 때문에 3틱(약 15초) 뒤 엔진 전체가 HALTED된다. 호가 시각이 3분 전인 비유동 종목이 있으면 첫 틱에 HALTED된다. `orig`는 거래정지 종목에서 FIRED한다(D05-01). `tree2`는 ARMED이고 정지 종목만 SKIPPED다 |
+| 영향 | 패치를 그대로 적용하면 정상 종목과 미국 규칙까지 멈춘다. 호가가 2분 넘게 안 바뀌는 소형주를 하나만 넣어도 장중에 엔진이 자주 멈출 수 있다. 이는 `aspr_acpt_hour`가 마지막 호가 변경 시각이라는 가정에 기댄 추정이고 실측하지 못했다. 대안으로 제시된 `stck_cntg_hour`(체결 시간)는 더 위험하다. 종가 단일가(15:20~15:30)와 VI 단일가(2분 이상) 동안은 체결이 없어 120초를 넘긴다. 그러면 같은 전역 halt가 난다(추정, KRX 시장 구조 기준) |
+| 수정안 | (1) 거래정지 종목은 `as_of`를 직전 세션 종가(15:30 KST)로 찍는다. 그러면 `_freshness`가 "before today's open"으로 SKIP한다(아래 diff, 조사자 패치 위에 적용). (2) 비유동 종목은 소유자가 정한다. 선택지 (a): 기존 장치인 `NEXTGEN_MAX_AGE_KRX`를 올린다. 선택지 (b): 오늘 체결이 있었는데 장중 상한만 넘은 경우를 종목별 SKIP으로 바꾸고, 전역 halt는 hard 상한(5일)에만 남긴다. (3) 조사자 테스트 `test_d05_suspended_or_unstamped_kis_quote_has_no_as_of_and_the_feed_refuses_it`의 거래정지 부분을 (1)에 맞게 고친다. 시각이 없는 경우의 단언(`as_of == ""`, 피드 거절)은 그대로 둔다 |
+| 회귀 테스트 | `test_d05_one_suspended_krx_symbol_does_not_halt_the_engine`: `EngineRuntime`, 규칙 2개(정지 1, 정상 1), 시계를 11:00:05 KST로 고정하고 5틱 돈다. 단언: `rt.state.mode.value == "ARMED"`, 정지 종목 결정이 `skipped`이고 사유에 `"before today's open"`, 정지 종목 주문 0건. `orig` FAIL(정지 종목 체결), `tree` FAIL(HALTED), `tree2` PASS(`reg_suspension.log`) |
+
+```diff
+--- tree/data/krx/kis_client.py   (조사자 패치 적용본)
++++ tree2/data/krx/kis_client.py
+@@ -284,9 +284,13 @@
+-        stamp = None
+-        if str(out.get("temp_stop_yn") or "").strip().upper() != "Y":
+-            stamp = self.exchange_time(code, datetime.fromisoformat(fetched))
++        receipt = datetime.fromisoformat(fetched)
++        if str(out.get("temp_stop_yn") or "").strip().upper() == "Y":
++            # suspended: the price is a previous session's; date it to that close so the engine SKIPs this one
++            # symbol ("before today's open", evaluator._freshness) instead of a missing quote that halts every rule
++            stamp = _kst_stamp("153000", receipt)
++        else:
++            stamp = self.exchange_time(code, receipt)
+```
+
+### 5. 이 차원 밖의 관찰 (미검증)
+
+- `data/krx/kis_client.py:265`는 `market_cap=_f(out.get("hts_avls"))`다. KIS `hts_avls`(HTS 시가총액)가 억원 단위라면 문제가 생긴다. KRX 대체 경로의 `MKTCAP`(원)와 단위가 달라 KRX 화면 시가총액이 10^8배 차이 날 수 있다. 공식 단위 표기는 찾지 못했다. 단위 담당 차원에서 실응답으로 확인해야 한다.
+
+### 6. 재현 파일
+
+모두 `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_d04_d05_timestamps/` 아래에 있다. 저장소 밖이다.
+
+| 파일 | 내용 |
+|---|---|
+| `vh.py` | 하네스: 네트워크 차단, 키 제거, FICC 캐시 끔 |
+| `v1_d05_kis.py` / `.log` | D05-01, D05-02, D05-04, D05-05 (10/10 재현) |
+| `v2_d04_macro.py` / `.log` | D04-01, D04-02 (8/8 재현) |
+| `v3_patch_side_effects.py` / `.log`, `v3_tree2.log` | D0405-V02 (`orig`, `tree`, `tree2` 비교) |
+| `v4_pit.py` / `.log` | D05-03 |
+| `v5_future_stamp.py` / `.log` | D0405-V01 |
+| `run_reg.py`, `reg_orig_tree.log`, `regression_future.py`, `reg_future.log`, `regression_suspension.py`, `reg_suspension.log` | 수정 전 FAIL, 수정 후 PASS 확인 |
+| `subset_orig.log`, `subset_tree.log`, `subset_fut.log` | 기존 테스트 묶음 회귀 확인 |
+| `proposed_future_guard.diff`, `proposed_suspension_alt.diff` | 제안 diff |
+| `kis_docs_dl/` | KIS 공식 샘플 4개(텍스트로 저장, 실행하지 않음) |
+| `orig/`, `tree/`, `tree2/`, `fut/` | 사본 |
+
+### 7. 웹 출처
+
+- KIS 공식 샘플: [chk_inquire_price.py](https://raw.githubusercontent.com/koreainvestment/open-trading-api/main/examples_llm/domestic_stock/inquire_price/chk_inquire_price.py), [chk_inquire_index_price.py](https://raw.githubusercontent.com/koreainvestment/open-trading-api/main/examples_llm/domestic_stock/inquire_index_price/chk_inquire_index_price.py), [chk_inquire_asking_price_exp_ccn.py](https://raw.githubusercontent.com/koreainvestment/open-trading-api/main/examples_llm/domestic_stock/inquire_asking_price_exp_ccn/chk_inquire_asking_price_exp_ccn.py), [chk_inquire_ccnl.py](https://raw.githubusercontent.com/koreainvestment/open-trading-api/main/examples_llm/domestic_stock/inquire_ccnl/chk_inquire_ccnl.py)
+- KRX Open API 갱신 시각(서드파티, 공식 아님): [openkrx-mcp](https://github.com/RealYoungk/openkrx-mcp), [glama OpenKRX MCP](https://glama.ai/mcp/servers/utqetst3bt)
+- KIS 시가총액 단위가 공식 문서에 적혀 있지 않다는 언급: [AlgoLab KIS 시가총액 순위](https://algolab.co.kr/blog/kis-api-market-cap-rank-fhpst01740000-2026)

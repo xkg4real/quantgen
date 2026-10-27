@@ -1067,3 +1067,71 @@ def main(argv=None) -> int:
 if __name__ == "__main__":
     sys.exit(main())
 ```
+
+<!-- verifier-section -->
+
+## 독립 검증 결과
+
+- 검증자: p01_performance 적대적 검증. 감사만 했다. 추적 파일은 고치지 않았다(`git status` 깨끗함).
+- 재현 스크립트와 로그는 모두 `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_p01_performance/` 아래에 있다(`v*.py`, `m*.py`, 같은 이름의 `.log`). 하네스 `venv.py`는 HOME·캐시·장부를 작업 폴더로 돌린다. `data.net.session`의 실호출을 막는다. 자격증명은 `DUMMY`다.
+- 비밀정보: `.env`를 열지 않았다. 다만 첫 스크립트(`v01_lab_chart.py`)는 `dotenv` 차단을 넣기 전에 실행했다. 그 프로세스에서 `config`의 `load_dotenv()`가 돌았을 수 있다. 출력은 없었고, 합성 데이터만 썼고, 네트워크도 쓰지 않았다. 그 뒤 스크립트는 모두 `dotenv`를 빈 함수로 바꿔서 실행했다.
+- 금지 파일 4개는 열지 않았다. 실데이터 확인에는 허용된 캐시 CSV만 썼다(GLD, IAU, XLE, XLB, XLK, QQQ, VIXY, NG_F, ZC_F, ZN_F, ZF_F, GC_F, SI_F, TLT, 005930.KS, 005935.KS).
+- 웹 조사는 하지 않았다. yfinance 과거 버전은 PyPI wheel을 내려받아 소스만 읽었다. 실행하지 않았다(`dl_yf/`).
+
+### 발견사항별 판정
+
+| id | 유지 여부 | 정정 판정 | 정정 심각도 | 근거 |
+|---|---|---|---|---|
+| P01-01 | 유지 | 사실 | P1 | `v01_lab_chart.py`: trend_switch·xs_momentum·pairs 세 계열 모두 `equity_chart`에서 `ValueError ... (722,) and (723,)`가 난다(pairs는 738/739). 실제 페이지에서 Run을 누르면 예외가 작업자 밖으로 나가고 `busy.visible=True`로 남는다. 추가로 확인한 점: 실패할 때마다 matplotlib figure가 1개씩 닫히지 않는다. 25번 실패하면 열린 figure가 25개다(`m03_fig_leak.log`). `_fig()` 뒤, `_to_image()`의 `plt.close` 전에 예외가 나기 때문이다. 수정안과 회귀 테스트는 타당하다. 실패 전 `busy=True`로 FAIL, 수정 후 PASS |
+| P01-02 | 유지 | 사실 | P2 | `v02_pbo.py`: (5000,12) S=16에서 현재 구현 7.1~8.8초, A-1 0.14~0.28초. (5000,24)는 9.7초 대 0.40초. 무작위·동일열·공통요인 입력에서 `pbo`·`prob_loss`·`n_splits`가 완전히 같다. Δslope는 7.6e-15 이하다. 상수 현금열이 있는 입력만 다르다(0.000 대 0.098). 이 차이는 P01-11 규칙 때문이고 의도된 것이다. A-1을 메모리에서만 적용하고 기존 테스트 2개를 돌렸다. 둘 다 PASS(`v02b_patched_tests.log`). 주의할 점: 완전 일치는 시드를 고정한 입력에서만 보장된다. 거의 같은 값끼리는 1e-16 차이로 순위가 바뀔 수 있다. A-1은 K×S×G 배열을 만든다(G=12면 약 20 MB). 큰 G에서는 나눠서 계산해야 한다 |
+| P01-03 | 유지 | 사실 | P2 | `v03_kis.py`(가짜 KIS, 100행/쪽, 지연 0): 504일 6건 0.60초, 5000일 50건 6.01초. 작업자 4개로 5종목×504일을 받아도 30건 3.60초다. 즉 30×0.12초 바닥 그대로다. 속도 제한을 지키려는 설계상 비용이다. 수정안 (1) 간격 유지, (2) 긴 창 재사용, (3) 겹침을 검사한 뒤 꼬리만 갱신하는 방식은 타당하다 |
+| P01-04 | 유지 | 사실(요청 수). 실제 시리즈 수는 추정 | P2 | `v04_kis_markets.py`: 2.5pt 간격 전체 격자 마스터, spot 1126에서 160개 시리즈, 320건 38.34초. 호가를 빼면 160건 19.23초. `index_daily(600)`는 두 번째 호출도 12건이다. 합계 335건은 코드와 맞는다(1+1+320+1+12). 회귀 테스트 2번(`test_option_chain_skips_books_only_when_they_cannot_answer`)은 설계가 모순이다. 호가를 생략할지는 요청 전에 로컬 시계로 정해야 한다. 그런데 테스트는 응답의 `aspr_acpt_hour`를 쓴다. 시계 주입(`now=`)으로 바꿔야 한다. 참고(추정): 38초에 걸쳐 순차로 받기 때문에 같은 보드의 시세 시각이 최대 38초 벌어진다. `as_of`는 루프가 끝난 뒤의 시각이다(`data/kis_markets.py:429`) |
+| P01-05 | 유지 | 사실 | P2 | `v05_double_click.py`: 실제 스레드에서 Optimize를 0.05초 간격으로 두 번 누르면 작업자 2개, `load_history` 10회, `button.disabled=False`다. `busy.visible = True` 패턴은 15개 파일에 있다. 추가 근거: 겹친 Strategy Lab 실행 2개가 끝난 뒤 사전 등록 게이트 `V.GATE["bootstrap_B"]`가 2000으로 돌아오지 않는다(V-P01-M3) |
+| P01-06 | 유지 | 사실 | P3 | `v06_fmp_seq.py`(지연 150ms, 디스크 캐시 끔): 순차 1/5/20종목은 0.16/0.76/3.06초다. 작업자 4개는 0.15/0.31/0.78초다. 결과는 같다. 다만 수정안 A-3을 Yahoo에 적용하면 yfinance 1.4 미만에서 안전하지 않다. requirements는 `>=0.2`를 허용한다(V-P01-M1). 크립토 `_throttle`에 잠금이 없다는 지적은 맞다(`data/crypto/crypto_client.py:105-109`) |
+| P01-07 | 유지 | 사실 | P3 | `core/quant/history.py:427`의 키에 `days`가 들어 있다. A-2 전제는 FMP·KIS에서 성립한다. 둘 다 오늘부터 거슬러 받고, 수정주가는 공급자 쪽 값이다. 따라서 꼬리가 짧은 요청의 결과와 같다. 기존 테스트 `tests/quant_acceptance.py:129-130`과 충돌한다(보고서에 적혀 있다). 그 테스트의 가짜 공급자 `synthetic_history`는 꼬리가 짧은 요청 결과와 같지 않을 수 있다. 그래서 테스트 고정값도 함께 바꿔야 한다 |
+| P01-08 | 유지 | 사실 | P3 | `v08_may_be_trading.py`: 1주 15분 간격 표본에서 Yahoo TLT·GC=F 73.2%(=123/168), FMP QQQ 22.3%다. 재현된다. 하지만 수정안 A-6은 Yahoo의 비USD 크립토 쌍(ETH-EUR, BTC-JPY)을 73.2%에서 22.3%로 바꾼다. 24시간 시장을 미국 장 시간으로 판정하게 된다. 정규식을 `^[A-Z]{1,5}(-[A-Z])?$`로 좁혀야 한다(V-P01-M2). 회귀 테스트에 ETH-EUR 사례를 더해야 한다 |
+| P01-09 | 유지 | 사실 | P3 | `index_daily`를 다시 불러도 12건이 나간다(`v04`). `crypto_client.py`에는 캐시가 없다(grep). `_yf_fetch`는 `threads=False`다(`core/ficc/data.py:200`). FRED는 id마다 따로 요청한다(`:177`) |
+| P01-10 | 유지 | 사실 | P3 | `v10_period.log`: `_period_for(5000)='10y'`, `_period_for(1261)='10y'`. 참고로 `_period_for(504)='2y'`는 약 502세션이라 504보다 적다 |
+| P01-11 | 유지(상향) | 사실 | P2 | 함수 수준(`v11_flat_sharpe.py`): 상수 현금열의 Sharpe는 3.47e16~4.65e16이다. walk-forward는 처음 두 원점에서 현금열을 고른다. 상수열이 있으면 PBO는 0.0이다. 보고서는 "실데이터 미관측(추정)"이라고 했다. 이 판단은 틀렸다(`v11b_real_cash_columns.py`). 허용 캐시 VIXY에 trend_switch를 돌리면 평탄한 IS 셀이 40개다. 26개 원점 중 12개가 전액 현금 설정을 고른다. XLE/XLB pairs에서도 1개 원점이 그렇다. 화면 숫자도 바뀐다(`v11c_guard_effect.py`). VIXY의 OOS Sharpe는 현재 −0.418, 0분산 규칙을 넣으면 −0.292다. DSR은 0.034 대 0.074다. 두 사례 모두 결정은 바뀌지 않았다. 실데이터에서 보이는 숫자가 부동소수 잡음에 좌우되므로 P2다. 연구 기록 카드(`S_V1_vix_rolldown`)가 영향을 받는지는 미검증이다. `yf_SPY.csv`가 필요해서 돌리지 않았다 |
+| P01-12 | 유지 | 사실 | P3 | `v12_dupes.py`(합성 QQQ, QQQ, TLT): `det(corr)=-4.4e-16`, min_vol 0.334/0.334/0.331, max_sharpe 0.012/0.012/0.976, converged=True |
+| P01-13 | 유지(수정안 정정) | 사실(측정). 수정안 효과는 오류 | P3 | `v13_import.py`: `import main`은 3.09~3.65초다. 하지만 시작 화면 `ui.macro_page` 하나만 임포트해도 2.66~2.70초다. 이때 이미 scipy.stats와 `core.quant.garch`를 읽는다(`v13b`). importtime 기준으로 `core.ficc.insights → core.quant.insights` 1.21초, 그 안의 garch 0.75초다(`v13c_importtime.log`). 보고서가 원인으로 본 "bonds 경로 1.81초"는 bonds가 먼저 임포트되어 누적 시간이 그쪽에 잡힌 것일 뿐이다. 페이지를 늦게 임포트해도 0.5초 안팎밖에 줄지 않는다(추정). 정정한 수정안: `core/quant/insights.py:30-35`의 타입용 임포트(BacktestResult, MCResult, OptimizedPortfolio, RiskReport, SignalReport)를 `if TYPE_CHECKING:` 아래로 옮긴다. 이 파일은 `from __future__ import annotations`를 쓰므로 주석에만 쓰이는 이름이다. `LR_5PCT`·`NU_NORMAL`은 `_narrate_garch` 안에서 임포트한다. 회귀 테스트: 새 인터프리터에서 `import ui.macro_page` 후 `"core.quant.garch" not in sys.modules` |
+
+추가 측정(누락 점검). 투자자가 재지 않은 화면의 CPU 시간을 합성 입력, 기본값으로 쟀다(`m01_compute_screens.log`). Quant Lab MC 0.08~0.28초, 파생 합성 보드 0.04~0.11초, Rates 시뮬 0.29~0.35초, Structuring 0.12초, ETF 0.06초, Crypto 0.25초였다. 병목은 없다. pyplot 차트 도우미를 8개 스레드에서 25회씩 동시에 불러도 오류 0건, PNG 불일치 0건이었다(`m02_pyplot_threads.log`). P01-05의 "pyplot 스레드 위험"은 재현되지 않았다(추정 유지).
+
+### 투자자가 놓친 발견사항
+
+#### V-P01-M1 · P2 · 추정 — 수정안 A-3(Yahoo 동시 수집)은 yfinance 1.4 미만에서 결과를 잃는다
+
+| 항목 | 내용 |
+|---|---|
+| 파일·함수·라인 | 부록 A-3 `load_histories`(ThreadPoolExecutor로 `load_history` 동시 호출) → `core/quant/history.py:272` `yf_history` → `core/ficc/data.py:194-200` `_yf_fetch`(`_yf.download(..., threads=False)`). 허용 버전은 `requirements.txt:13`·`pyproject.toml:16`의 `yfinance>=0.2` |
+| 재현 단계 | `pip download yfinance==<v> --no-deps`로 0.2.54, 0.2.66, 1.0, 1.2.0, 1.3.0, 1.4.0, 1.5.2, 1.6.0을 받아 `unzip -p <whl> yfinance/multi.py`의 소스만 읽었다(실행 안 함). 0.2.54~1.3.0은 `download()`가 시작할 때 전역 `shared._DFS = {}`, `shared._ERRORS = {}`로 초기화한다(0.2.54 `multi.py:141-143`). 끝에서는 `_pd.concat(shared._DFS.values(), ...)`로 결과를 만든다(`:214-219`). 1.4.0부터는 호출마다 `_DownloadCtx`를 쓴다. 클라우드 설치본은 1.7.0이라 문제가 드러나지 않는다 |
+| 기대 결과 | 허용되는 모든 yfinance 버전에서 동시 수집 결과가 순차 수집과 같다 |
+| 실제 결과 | (추정) 1.4 미만에서 스레드 B의 초기화가 스레드 A가 넣은 종목을 지운다. 그러면 A의 `_yf_fetch`가 `{}`나 다른 종목 열을 돌려준다. `yf_history`는 `.get(symbol)`이 비어 `HistoryError("... returned only 0 usable sessions")`를 낸다 |
+| 영향 | A-3을 적용한 뒤 Portfolio·Strategy Lab의 Yahoo 기호에서 간헐적 실패가 난다. 소유자 PC의 yfinance 버전은 모른다. 현재 코드(순차 수집)에는 문제가 없다. 제안된 패치가 만드는 위험이다 |
+| 수정안 | `requirements.txt:13`과 `pyproject.toml:16`을 `yfinance>=1.4`로 올린다. 또는 `load_histories`에서 YFINANCE로 가는 기호를 풀에서 빼고 `_yf_fetch(list, period)` 한 번으로 묶는다(`threads=min(4, n)`). 예: `-yfinance>=0.2` / `+yfinance>=1.4   # download() keeps per-call state from 1.4.0; load_histories calls it from several threads` |
+| 회귀 테스트 | `tests/quant_acceptance.py::test_parallel_yahoo_needs_per_call_download_state`: requirements.txt와 pyproject의 yfinance 하한이 1.4 이상인지 단언한다. 설치된 `yfinance.__version__ >= 1.4`도 단언한다. 그리고 가짜 `_yf_fetch`로 동시 진입 수를 잰다. `__version__`을 "1.3.0"으로 바꾸면 `load_histories`가 최대 동시 진입 1이어야 한다. 현재 저장소(하한 0.2)에서는 FAIL, 수정 후 PASS |
+
+#### V-P01-M2 · P3 · 사실(함수 수준), FMP의 BTCUSD·EURUSD 제공 여부는 추정 — FMP 크립토·FX 기호를 미국 주식 장 시간으로 판정한다. A-6은 같은 오류를 Yahoo 크립토로 넓힌다
+
+| 항목 | 내용 |
+|---|---|
+| 파일·함수·라인 | `core/quant/history.py:374` `if provider == "FMP" and "." not in s: venue = "US"`. `:493-512` auto 라우팅: `BTCUSD`·`EURUSD`는 KRX·크립토·Yahoo·KIS 모양이 아니어서 FMP로 간다. 부록 A-6 |
+| 재현 단계 | `m04_fmp_crypto_venue.py`: 시계를 토요일 2026-10-24 12:00Z로 고정하고 가짜 `fmp_history`를 쓴다. `load_history("BTCUSD")`를 부르고, 5.5시간 뒤 다시 부른다. `v08_may_be_trading.py`: A-6을 메모리에서만 적용한다 |
+| 기대 결과 | 크립토(24/7)와 FX(평일 24시간)는 받은 시점의 마지막 봉이 진행 중일 수 있다. 그러니 `provisional_intraday`로 표시하고 10분 TTL을 써야 한다 |
+| 실제 결과 | BTCUSD·EURUSD 첫 응답의 status가 `''`다(진행 중 표시 없음). 5.5시간 뒤 호출도 캐시에서 나온다(`cached`). FMP EURUSD는 수요일 02:00Z(아시아 장)에 "장 아님"으로 판정된다. Yahoo `EURUSD=X`는 True다. A-6을 적용하면 Yahoo ETH-EUR·BTC-JPY의 장중 판정 비율이 73.2%에서 22.3%로 떨어진다 |
+| 영향 | FMP 형식의 크립토·FX 기호는 최대 6시간(TTL) 묵은 시계열이 될 수 있다. 진행 중인 봉이 종가처럼 남는다. 화면 칩에 "cached"가 보이므로 완전히 숨겨지지는 않는다. A-6을 그대로 적용하면 같은 문제가 Yahoo 비USD 크립토에도 생긴다 |
+| 수정안 | `-    if provider == "FMP" and "." not in s:` / `+    if provider == "FMP" and re.fullmatch(r"[A-Z]{1,5}(-[A-Z])?", s):` / `         venue = "US"` / `+    elif provider == "FMP" and "." not in s:` / `+        return True                   # FX (EURUSD) and crypto (BTCUSD) trade outside US hours: keep the short TTL`. A-6은 `elif provider == "YFINANCE" and re.fullmatch(r"[A-Z]{1,5}(-[A-Z])?", s): venue = "US"`로 좁힌다(`re`는 이미 임포트되어 있다) |
+| 회귀 테스트 | `tests/quant_acceptance.py::test_the_cache_knows_when_a_market_may_be_trading`에 추가: `_may_be_trading("FMP","BTCUSD", 토 12:00Z) is True`, `_may_be_trading("FMP","EURUSD", 수 02:00Z) is True`, `_may_be_trading("FMP","QQQ", 토 12:00Z) is False`. A-6 적용 시 `_may_be_trading("YFINANCE","ETH-EUR", 화 03:00Z) is True`, `("YFINANCE","TLT", 화 03:00Z) is False`. 첫 단언은 현재 FAIL, 수정 후 PASS |
+
+#### V-P01-M3 · P3 · 사실 — Strategy Lab이 사전 등록 게이트를 잠금 없이 바꾼다. 겹친 실행 뒤 원래 값으로 돌아오지 않는다
+
+| 항목 | 내용 |
+|---|---|
+| 파일·함수·라인 | `ui/strategy_lab_page.py:124-129`: `saved_b = V.GATE["bootstrap_B"]`, `V.GATE["bootstrap_B"] = bootstrap_B`, `finally`에서 복원한다. 주석은 "a Lab run must not leave it changed"다. `core/quant/validate.py:54`의 기본값은 `bootstrap_B: 2000`이다. `:501`과 `:520`이 이 전역을 읽는다 |
+| 재현 단계 | `v05_double_click.py` 2부: 합성 데이터로 `run_family` 스레드 2개를 0.15초 간격으로 시작한다. `score_strategy`는 0.3초 늦춘다 |
+| 기대 결과 | 실행이 끝난 뒤 `V.GATE["bootstrap_B"] == 2000` |
+| 실제 결과 | `GATE bootstrap_B before: 2000`, `after two overlapping Lab runs: 100`. 실행 B가 A가 바꾼 값을 저장하고, 마지막에 그 값으로 복원한다. UI 기본값이면 1000으로 남는다 |
+| 영향 | P01-05(재클릭 미차단)에서 이어지는 결과다. 지금 UI에서 이 전역을 읽는 곳은 Lab뿐이다. Lab은 매번 자기 값을 넣으므로 화면 숫자는 바뀌지 않는다. 같은 프로세스에서 이 값을 읽는 다른 코드는 잘못된 B를 쓴다. 지금은 `validate.py:880-898` 자체 점검뿐이다. 사전 등록 규칙도 깨진다. 두 실행의 B가 다르면 한 실행의 CI가 다른 실행의 B로 계산될 수 있다 |
+| 수정안 | 전역을 바꾸지 말고 인자로 넘긴다. `validate.py`: `score_strategy(..., domain=None, bootstrap_B: Optional[int] = None)`, `B = int(bootstrap_B or GATE["bootstrap_B"])`를 두고 `:501`·`:520`에서 `B=B`를 쓴다. `strategy_lab_page.py:124-129`: save/set/restore를 지운다. 그 자리에 `sc = V.score_strategy(wf, grid=grid, full_pnl=M, n_trials=len(grid), bench_daily=bench, bootstrap_B=bootstrap_B)` |
+| 회귀 테스트 | `tests/macro_ui_views.py::test_two_overlapping_lab_runs_leave_the_gate_unchanged`: 합성 `run_family` 스레드 2개를 겹치게 돌린다. `score_strategy`는 늦춘다. 끝난 뒤 `V.GATE["bootstrap_B"] == 2000`을 단언한다. 각 결과의 `sr_oos`·`ci90`이 순차 실행 결과와 같아야 한다. 현재 FAIL(100), 수정 후 PASS |

@@ -1,125 +1,125 @@
-test,kind,implemented_after_data,note
-macro/macro_m0_instruments/test_book01_real_sleeve_notional_is_owner_input,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m0_rules/test_m0_15_e_labels_bootstrap_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=1; stmts=4
-macro/macro_m1_calendars/test_cal02_2027_files_signed_before_2026_11_01,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m1_calendars/test_close02_on_the_real_signed_files_is_owner_input,smoke_then_notrun,no (stays NOT_RUN),asserts_before=1; stmts=3
-macro/macro_m1_calendars/test_print01_real_kospi_close_2026_03_09,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m1_calendars/test_regime01_full_range_expected_values_file,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m1_calendars/test_sat01_real_kospi_completeness_and_variance_ratio,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=2; stmts=7
-macro/macro_m1_fixtures/test_kis_quote_check_owner_record,conditional,yes,asserts_before=2; stmts=3
-macro/macro_m1_pit/test_avail_01_official_calendars_are_owner_signed,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m1_pit/test_fix_01_regeneration_at_level_1_tolerance_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m1_pit/test_g_post_01_m1_data_rows_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=1; stmts=2
-macro/macro_m1_pit/test_miss_01_cpi_yoy_3_353_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m1_pit/test_print_01_real_kospi_close_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m1_pit/test_ro_02_app_key_can_trade_is_an_owner_attestation,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m1_pit/test_stale_01_g_stale_01_reference_table_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m2_costed/test_cost01_r4b_goldens_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=7
-macro/macro_m2_costed/test_g_kr_06_cap15_reference_refdata,conditional,yes,asserts_before=0; stmts=4
-macro/macro_m2_costed/test_g_lad_01_reference_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m2_costed/test_g_lad_02_reference_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m2_costed/test_g_lad_03_reference_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m2_costed/test_g_mom_07_reference_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m2_risk/test_cap_02_stack_card_clause_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m2_risk/test_corr_01_plus_0_53_at_2026_09_30_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m2_risk/test_g_kr_01_buy_and_hold_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=1
-macro/macro_m2_risk/test_g_kr_02_vt20_gross_and_net_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=1
-macro/macro_m2_risk/test_g_kr_02b_delta_sharpe_shares_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=1
-macro/macro_m2_risk/test_g_kr_02c_static_book_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=1
-macro/macro_m2_risk/test_g_kr_03_window_returns_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=1
-macro/macro_m2_risk/test_g_kr_04_weights_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=1
-macro/macro_m2_risk/test_g_kr_06_cap_1_5_reference_mode_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m2_risk/test_g_us_01_vt15_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=1
-macro/macro_m2_risk/test_g_us_01b_static_book_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=1
-macro/macro_m2_risk/test_g_us_01c_ewma_challenger_deferred_to_m3,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m2_risk/test_i_02_korea_window_replays_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=1
-macro/macro_m2_risk/test_label_01_kospi_elevated_stressed_and_us_normal_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m2_risk/test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache,conditional,no (FAIL tripwire: assertion not written),asserts_before=4; stmts=4
-macro/macro_m3_estimators/test_g_b5_03_us_market_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m3_estimators/test_g_b5_04_display_labels_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m3_estimators/test_g_est_04_sizing_books_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m3_estimators/test_g_us_01c_ewma_challenger_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m3_estimators/test_t_b5_01_kospi_golden_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m3_estimators/test_t_est_01_i_10_dlb_t1a_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=3
-macro/macro_m3_estimators/test_t_est_02_christoffersen_lines_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m4_sleeves/test_g_book_01_mom_strev_rmw,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m4_sleeves/test_g_intl_01_regional_wml,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m4_sleeves/test_g_mom_01_02_08_french_mom_daily,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m4_sleeves/test_g_mom_03_04_05_06_french_mom_and_market,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m4_sleeves/test_g_mom_07_reference_mode,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m4_sleeves/test_prior_01_mapping_clause_owner,conditional,yes,asserts_before=4; stmts=9
-macro/macro_m4_sleeves/test_r03_01_french_fixture_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m5_books/test_caps_01_real_kodex_basket_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_books/test_g_lad_01_literal_ladder_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_books/test_g_lad_02_qf4_eleven_session_fix_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_books/test_g_lad_03_sensitivity_lines_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_books/test_g_post_01_pair_implied_share_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_books/test_i_04b_kospi_1997_2026_reentry_and_pinned_count_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_books/test_mono_01_i01_fixture_clause_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_fills_events/test_fill01_qf1_tracking_error_golden_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_fills_events/test_fill02_real_000660_closes_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_fills_events/test_g_r08_01_spell_count_smoke_then_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=1; stmts=3
-macro/macro_m5_fills_events/test_task_m5_14_halt_count_pin_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_fills_events/test_task_m5_15_event_conditional_variance_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m5_integration/test_g_r08_02_cardp_reject_record_is_on_file_never_reproduced,smoke_then_notrun,no (stays NOT_RUN),asserts_before=3; stmts=5
-macro/macro_m6_context/test_ctx_02_live_snapshot_sources_owner,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m6_context/test_ctx_section_11_context_values_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cardp/test_epis_01_counts_on_official_closes_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=3
-macro/macro_m7_cardp/test_epis_02_pc4_on_the_korea_definitive_cell_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cardp/test_es_02_korea_long_history_es_lines_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cardp/test_excess_01_bok_call_rate_ecos_code_is_owner_input,smoke_then_notrun,no (stays NOT_RUN),asserts_before=1; stmts=3
-macro/macro_m7_cardp/test_excess_01_px2_reproduction_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m7_cardp/test_gate_01_placebo_counts_and_controls_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cardp/test_gate_03_negative_controls_in_detail_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cardp/test_i05_full_sample_lag_audit_over_compliant_goldens_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cardp/test_i08_acceptance_test_on_the_frozen_reference_data_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cardp/test_placebo_01_positive_control_fixture_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m7_cardp/test_rlayer_01_card_book_convention_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m7_cardp/test_trough_01_post_trough_and_cost_episodes_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cards/test_book02_kospi_vt20_execution_variants_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m7_cards/test_card01_formal_headers_owner_blocked,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cards/test_i16_r06_kr_verdict_conditions_recorded_and_formal_run_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=7; stmts=10
-macro/macro_m7_cards/test_r03_01_revisions_committed_before_their_runs_lowest_passing_acts,smoke_then_notrun,no (stays NOT_RUN),asserts_before=6; stmts=7
-macro/macro_m7_cards/test_r04_01_record_and_pooled_route_closed,smoke_then_notrun,no (stays NOT_RUN),asserts_before=5; stmts=10
-macro/macro_m7_cards/test_r14_01_header_needs_multi_line_lines_and_the_diversification_claim,smoke_then_notrun,no (stays NOT_RUN),asserts_before=4; stmts=9
-macro/macro_m7_cards/test_step02_binding_shares_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cards/test_step03_dsr_vs_no_steps_reference_run_pending,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_cards/test_study_runner_dry_listing_offline_and_formal_runs_refused,smoke_then_notrun,no (stays NOT_RUN),asserts_before=16; stmts=5
-macro/macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=1
-macro/macro_m7_integration/test_g_kr_l01_l13_korea_long_history_goldens_after_the_freeze_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=1; stmts=3
-macro/macro_m7_integration/test_g_lad_04_invariants_only_book_with_and_without_the_hard_stop_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=1; stmts=2
-macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=1; stmts=3
-macro/macro_m7_integration/test_g_us_f01_f10_us_fixture_goldens_after_the_freeze_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=1; stmts=3
-macro/macro_m7_integration/test_t_est_03_comb_sized_book_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_integration/test_t_gate_02_us_vt15_after_the_freeze_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=1; stmts=3
-macro/macro_m7_ledger/test_ledger_seeds_load_with_null_values_and_report_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=8; stmts=12
-macro/macro_m7_ledger/test_neff01_qf3_26_trial_matrix_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=1; stmts=4
-macro/macro_m7_ledger/test_sel01_e_card_run_f_vs_acceptance_report_f_after_freeze,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m7_ledger/test_step3_01_end_to_end_from_the_matrix_refdata,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=2
-macro/macro_m7_stats/test_pbo01_kospi_vt_grid_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m7_stats/test_power01_fixture_ses_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m7_stats/test_se01_r03_french_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m8_forward/test_g_ref_01_s1_goldens_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m8_forward/test_g_ref_02_s2_goldens_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m8_forward/test_task_m8_11_french_1926_daily_file_owner,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m8_forward/test_trend_02_french_monthly_and_us_vt15_goldens_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=3
-macro/macro_m8_forward/test_usfut_02_settling_run_logic_and_the_1926_fixture_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=10; stmts=20
-macro/macro_m8_forward/test_usfut_05_dla_u2_reproduction_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m8_pipeline/test_i01_golden_clauses_refdata,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m9_lab/test_i11_kospi_oos_2016_26_thresholds_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m9_lab/test_i11_replay_kospi_path_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m9_lab/test_t_crypto_01_asof_join_with_staleness_labels_owner,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m9_lab/test_t_fx_01_granularity_floor_needs_the_contract_multiplier_owner,smoke_then_notrun,no (stays NOT_RUN),asserts_before=4; stmts=8
-macro/macro_m9_scenarios/test_scenario_brent_history_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m9_scenarios/test_scenario_kospi_jul_2026_path_refdata,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_m9_scenarios/test_scenario_latest_sep_table_owner,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_m9_scenarios/test_scenario_oil_2022_anchor_owner,stub_unconditional,no (stays NOT_RUN),asserts_before=0; stmts=1
-macro/macro_tf_gov/test_cry1_cut_time_sensitivity_needs_intraday_candles,conditional,no (FAIL tripwire: assertion not written),asserts_before=0; stmts=4
-macro/macro_tf_gov/test_krx_tech_fund_card_formal_runs_need_the_krx_panel,smoke_then_notrun,no (stays NOT_RUN),asserts_before=0; stmts=2
-macro/macro_tf_screens/test_idx_02_rebuilt_kospi_check_values_need_the_krx_panel,smoke_then_notrun,no (stays NOT_RUN),asserts_before=2; stmts=6
-macro/macro_tf_screens/test_krx_01_screen_card_runs_need_the_krx_panel,smoke_then_notrun,no (stays NOT_RUN),asserts_before=1; stmts=2
-papers/test_compile_template_en,conditional,yes (tectonic present),tectonic lookup (tools/paper/build.py)
-papers/test_compile_template_ko,conditional,yes (tectonic present),tectonic lookup (tools/paper/build.py)
-papers/test_compile_undefined_number_key_is_a_failure,conditional,yes (tectonic present),tectonic lookup (tools/paper/build.py)
+test,where,kind,checks_now,after_data,note
+macro/macro_m0_instruments/test_book01_real_sleeve_notional_is_owner_input,tests/macro_m0_instruments.py:267,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m0_rules/test_m0_15_e_labels_bootstrap_refdata,tests/macro_m0_rules.py:412,smoke_then_notrun,1,stays_not_run,no assertion on the real data is written
+macro/macro_m1_calendars/test_cal02_2027_files_signed_before_2026_11_01,tests/macro_m1_calendars.py:621,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m1_calendars/test_close02_on_the_real_signed_files_is_owner_input,tests/macro_m1_calendars.py:357,smoke_then_notrun,1,stays_not_run,no assertion on the real data is written
+macro/macro_m1_calendars/test_print01_real_kospi_close_2026_03_09,tests/macro_m1_calendars.py:382,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m1_calendars/test_regime01_full_range_expected_values_file,tests/macro_m1_calendars.py:670,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m1_calendars/test_sat01_real_kospi_completeness_and_variance_ratio,tests/macro_m1_calendars.py:712,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata,tests/macro_m1_fixtures.py:303,smoke_then_notrun,2,stays_not_run,no assertion on the real data is written
+macro/macro_m1_fixtures/test_kis_quote_check_owner_record,tests/macro_m1_fixtures.py:483,conditional_can_pass,2,can_pass,asserts read_only and app_key_can_trade on each owner record (tests/macro_m1_fixtures.py:489-492)
+macro/macro_m1_pit/test_avail_01_official_calendars_are_owner_signed,tests/macro_m1_pit.py:581,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m1_pit/test_fix_01_regeneration_at_level_1_tolerance_refdata,tests/macro_m1_pit.py:405,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m1_pit/test_g_post_01_m1_data_rows_refdata,tests/macro_m1_pit.py:413,smoke_then_notrun,1,stays_not_run,no assertion on the real data is written
+macro/macro_m1_pit/test_miss_01_cpi_yoy_3_353_refdata,tests/macro_m1_pit.py:875,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m1_pit/test_print_01_real_kospi_close_refdata,tests/macro_m1_pit.py:545,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m1_pit/test_ro_02_app_key_can_trade_is_an_owner_attestation,tests/macro_m1_pit.py:1089,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m1_pit/test_stale_01_g_stale_01_reference_table_refdata,tests/macro_m1_pit.py:647,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m2_costed/test_cost01_r4b_goldens_refdata,tests/macro_m2_costed.py:120,fixture_check_then_notrun,0,real_data_assert_then_not_run,"asserts G-KR-02 stock35/x2_70bp on F13, then raise NotRun (tests/macro_m2_costed.py:128-129)"
+macro/macro_m2_costed/test_g_kr_06_cap15_reference_refdata,tests/macro_m2_costed.py:381,fixture_check_then_notrun,0,stays_not_run_pending_golden,G-KR-06 rows are pre_patch_pending in goldens.csv:239-240; assert_golden -> Row.want raises NotRun PENDING (tests/golden_tools.py:123-126)
+macro/macro_m2_costed/test_g_lad_01_reference_refdata,tests/macro_m2_costed.py:409,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m2_costed/test_g_lad_02_reference_refdata,tests/macro_m2_costed.py:413,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m2_costed/test_g_lad_03_reference_refdata,tests/macro_m2_costed.py:417,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m2_costed/test_g_mom_07_reference_refdata,tests/macro_m2_costed.py:393,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m2_risk/test_cap_02_stack_card_clause_refdata,tests/macro_m2_risk.py:159,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m2_risk/test_corr_01_plus_0_53_at_2026_09_30_refdata,tests/macro_m2_risk.py:394,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m2_risk/test_g_kr_01_buy_and_hold_refdata,tests/macro_m2_risk.py:728,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m2_risk/test_g_kr_02_vt20_gross_and_net_refdata,tests/macro_m2_risk.py:735,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m2_risk/test_g_kr_02b_delta_sharpe_shares_refdata,tests/macro_m2_risk.py:742,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m2_risk/test_g_kr_02c_static_book_refdata,tests/macro_m2_risk.py:749,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m2_risk/test_g_kr_03_window_returns_refdata,tests/macro_m2_risk.py:756,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m2_risk/test_g_kr_04_weights_refdata,tests/macro_m2_risk.py:763,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m2_risk/test_g_kr_06_cap_1_5_reference_mode_refdata,tests/macro_m2_risk.py:770,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m2_risk/test_g_us_01_vt15_refdata,tests/macro_m2_risk.py:779,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m2_risk/test_g_us_01b_static_book_refdata,tests/macro_m2_risk.py:786,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m2_risk/test_g_us_01c_ewma_challenger_deferred_to_m3,tests/macro_m2_risk.py:793,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m2_risk/test_i_02_korea_window_replays_refdata,tests/macro_m2_risk.py:802,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m2_risk/test_label_01_kospi_elevated_stressed_and_us_normal_refdata,tests/macro_m2_risk.py:342,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m2_risk/test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata,tests/macro_m2_risk.py:289,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache,tests/macro_m3_estimators.py:540,fail_tripwire,4,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m3_estimators/test_g_b5_03_us_market_refdata,tests/macro_m3_estimators.py:559,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m3_estimators/test_g_b5_04_display_labels_refdata,tests/macro_m3_estimators.py:567,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m3_estimators/test_g_est_04_sizing_books_refdata,tests/macro_m3_estimators.py:594,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m3_estimators/test_g_us_01c_ewma_challenger_refdata,tests/macro_m3_estimators.py:602,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m3_estimators/test_t_b5_01_kospi_golden_refdata,tests/macro_m3_estimators.py:531,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m3_estimators/test_t_est_01_i_10_dlb_t1a_refdata,tests/macro_m3_estimators.py:575,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m3_estimators/test_t_est_02_christoffersen_lines_refdata,tests/macro_m3_estimators.py:585,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m4_sleeves/test_g_book_01_mom_strev_rmw,tests/macro_m4_sleeves.py:704,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m4_sleeves/test_g_intl_01_regional_wml,tests/macro_m4_sleeves.py:695,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m4_sleeves/test_g_mom_01_02_08_french_mom_daily,tests/macro_m4_sleeves.py:670,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m4_sleeves/test_g_mom_03_04_05_06_french_mom_and_market,tests/macro_m4_sleeves.py:678,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m4_sleeves/test_g_mom_07_reference_mode,tests/macro_m4_sleeves.py:687,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m4_sleeves/test_prior_01_mapping_clause_owner,tests/macro_m4_sleeves.py:384,conditional_can_pass,6,can_pass_no_new_assert,after TAG_STATUS == 'confirmed' the test falls through with no assertion on the confirmed mapping (tests/macro_m4_sleeves.py:380-382)
+macro/macro_m4_sleeves/test_r03_01_french_fixture_refdata,tests/macro_m4_sleeves.py:218,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m5_books/test_caps_01_real_kodex_basket_refdata,tests/macro_m5_books.py:182,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_books/test_g_lad_01_literal_ladder_refdata,tests/macro_m5_books.py:688,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_books/test_g_lad_02_qf4_eleven_session_fix_refdata,tests/macro_m5_books.py:692,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_books/test_g_lad_03_sensitivity_lines_refdata,tests/macro_m5_books.py:696,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_books/test_g_post_01_pair_implied_share_refdata,tests/macro_m5_books.py:192,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_books/test_i_04b_kospi_1997_2026_reentry_and_pinned_count_refdata,tests/macro_m5_books.py:403,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_books/test_mono_01_i01_fixture_clause_refdata,tests/macro_m5_books.py:671,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_fills_events/test_fill01_qf1_tracking_error_golden_refdata,tests/macro_m5_fills_events.py:139,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_fills_events/test_fill02_real_000660_closes_refdata,tests/macro_m5_fills_events.py:220,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_fills_events/test_g_r08_01_spell_count_smoke_then_refdata,tests/macro_m5_fills_events.py:389,smoke_then_notrun,1,stays_not_run,no assertion on the real data is written
+macro/macro_m5_fills_events/test_task_m5_14_halt_count_pin_refdata,tests/macro_m5_fills_events.py:596,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_fills_events/test_task_m5_15_event_conditional_variance_refdata,tests/macro_m5_fills_events.py:604,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m5_integration/test_g_r08_02_cardp_reject_record_is_on_file_never_reproduced,tests/macro_m5_integration.py:299,smoke_then_notrun,3,stays_not_run,no assertion on the real data is written
+macro/macro_m6_context/test_ctx_02_live_snapshot_sources_owner,tests/macro_m6_context.py:416,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m6_context/test_ctx_section_11_context_values_refdata,tests/macro_m6_context.py:407,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cardp/test_epis_01_counts_on_official_closes_refdata,tests/macro_m7_cardp.py:304,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m7_cardp/test_epis_02_pc4_on_the_korea_definitive_cell_refdata,tests/macro_m7_cardp.py:726,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cardp/test_es_02_korea_long_history_es_lines_refdata,tests/macro_m7_cardp.py:740,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cardp/test_excess_01_bok_call_rate_ecos_code_is_owner_input,tests/macro_m7_cardp.py:351,smoke_then_notrun,1,unclear_may_fail,asserts the leg is MissingInput with an OWNER detail (tests/macro_m7_cardp.py:353-354); once the ECOS code exists that assertion is expected to fail (not reproduced)
+macro/macro_m7_cardp/test_excess_01_px2_reproduction_refdata,tests/macro_m7_cardp.py:360,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m7_cardp/test_gate_01_placebo_counts_and_controls_refdata,tests/macro_m7_cardp.py:712,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cardp/test_gate_03_negative_controls_in_detail_refdata,tests/macro_m7_cardp.py:719,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cardp/test_i05_full_sample_lag_audit_over_compliant_goldens_refdata,tests/macro_m7_cardp.py:693,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cardp/test_i08_acceptance_test_on_the_frozen_reference_data_refdata,tests/macro_m7_cardp.py:704,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cardp/test_placebo_01_positive_control_fixture_refdata,tests/macro_m7_cardp.py:475,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m7_cardp/test_rlayer_01_card_book_convention_refdata,tests/macro_m7_cardp.py:748,smoke_then_notrun,1,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cardp/test_trough_01_post_trough_and_cost_episodes_refdata,tests/macro_m7_cardp.py:733,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cards/test_book02_kospi_vt20_execution_variants_refdata,tests/macro_m7_cards.py:473,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cards/test_card01_formal_headers_owner_blocked,tests/macro_m7_cards.py:338,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cards/test_i16_r06_kr_verdict_conditions_recorded_and_formal_run_refdata,tests/macro_m7_cards.py:811,smoke_then_notrun,7,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cards/test_r03_01_revisions_committed_before_their_runs_lowest_passing_acts,tests/macro_m7_cards.py:574,smoke_then_notrun,6,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cards/test_r04_01_record_and_pooled_route_closed,tests/macro_m7_cards.py:605,smoke_then_notrun,6,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cards/test_r14_01_header_needs_multi_line_lines_and_the_diversification_claim,tests/macro_m7_cards.py:626,smoke_then_notrun,8,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cards/test_step02_binding_shares_refdata,tests/macro_m7_cards.py:525,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cards/test_step03_dsr_vs_no_steps_reference_run_pending,tests/macro_m7_cards.py:532,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_cards/test_study_runner_dry_listing_offline_and_formal_runs_refused,tests/macro_m7_cards.py:759,smoke_then_notrun,20,stays_not_run,no assertion on the real data is written
+macro/macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata,tests/macro_m7_integration.py:436,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m7_integration/test_g_kr_l01_l13_korea_long_history_goldens_after_the_freeze_refdata,tests/macro_m7_integration.py:408,fail_tripwire,1,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m7_integration/test_g_lad_04_invariants_only_book_with_and_without_the_hard_stop_refdata,tests/macro_m7_integration.py:443,fail_tripwire,1,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata,tests/macro_m7_integration.py:427,fail_tripwire,1,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m7_integration/test_g_us_f01_f10_us_fixture_goldens_after_the_freeze_refdata,tests/macro_m7_integration.py:418,fail_tripwire,1,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m7_integration/test_t_est_03_comb_sized_book_refdata,tests/macro_m7_integration.py:464,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_integration/test_t_gate_02_us_vt15_after_the_freeze_refdata,tests/macro_m7_integration.py:452,smoke_then_notrun,1,stays_not_run,no assertion on the real data is written
+macro/macro_m7_ledger/test_ledger_seeds_load_with_null_values_and_report_refdata,tests/macro_m7_ledger.py:550,smoke_then_notrun,9,stays_not_run,no assertion on the real data is written
+macro/macro_m7_ledger/test_neff01_qf3_26_trial_matrix_refdata,tests/macro_m7_ledger.py:242,fail_tripwire,1,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m7_ledger/test_sel01_e_card_run_f_vs_acceptance_report_f_after_freeze,tests/macro_m7_ledger.py:509,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_ledger/test_step3_01_end_to_end_from_the_matrix_refdata,tests/macro_m7_ledger.py:284,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_m7_stats/test_pbo01_kospi_vt_grid_refdata,tests/macro_m7_stats.py:291,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_stats/test_power01_fixture_ses_refdata,tests/macro_m7_stats.py:168,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m7_stats/test_se01_r03_french_refdata,tests/macro_m7_stats.py:95,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m8_forward/test_g_ref_01_s1_goldens_refdata,tests/macro_m8_forward.py:828,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m8_forward/test_g_ref_02_s2_goldens_refdata,tests/macro_m8_forward.py:838,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m8_forward/test_task_m8_11_french_1926_daily_file_owner,tests/macro_m8_forward.py:609,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m8_forward/test_trend_02_french_monthly_and_us_vt15_goldens_refdata,tests/macro_m8_forward.py:538,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m8_forward/test_usfut_02_settling_run_logic_and_the_1926_fixture_refdata,tests/macro_m8_forward.py:580,smoke_then_notrun,12,stays_not_run,no assertion on the real data is written
+macro/macro_m8_forward/test_usfut_05_dla_u2_reproduction_refdata,tests/macro_m8_forward.py:697,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m8_pipeline/test_i01_golden_clauses_refdata,tests/macro_m8_pipeline.py:249,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m9_lab/test_i11_kospi_oos_2016_26_thresholds_refdata,tests/macro_m9_lab.py:341,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m9_lab/test_i11_replay_kospi_path_refdata,tests/macro_m9_lab.py:399,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m9_lab/test_t_crypto_01_asof_join_with_staleness_labels_owner,tests/macro_m9_lab.py:562,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m9_lab/test_t_fx_01_granularity_floor_needs_the_contract_multiplier_owner,tests/macro_m9_lab.py:620,smoke_then_notrun,4,stays_not_run,no assertion on the real data is written
+macro/macro_m9_scenarios/test_scenario_brent_history_refdata,tests/macro_m9_scenarios.py:314,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m9_scenarios/test_scenario_kospi_jul_2026_path_refdata,tests/macro_m9_scenarios.py:304,fixture_check_then_notrun,0,stays_not_run,no assertion on the real data is written
+macro/macro_m9_scenarios/test_scenario_latest_sep_table_owner,tests/macro_m9_scenarios.py:323,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_m9_scenarios/test_scenario_oil_2022_anchor_owner,tests/macro_m9_scenarios.py:332,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_tf_gov/test_cry1_cut_time_sensitivity_needs_intraday_candles,tests/macro_tf_gov.py:626,fail_tripwire,0,fail,AssertionError ('not implemented' / 'unreachable' / `assert absent`) once the input is listed
+macro/macro_tf_gov/test_krx_tech_fund_card_formal_runs_need_the_krx_panel,tests/macro_tf_gov.py:567,stub_unconditional,0,stays_not_run,no assertion on the real data is written
+macro/macro_tf_screens/test_idx_02_rebuilt_kospi_check_values_need_the_krx_panel,tests/macro_tf_screens.py:878,smoke_then_notrun,2,stays_not_run,no assertion on the real data is written
+macro/macro_tf_screens/test_krx_01_screen_card_runs_need_the_krx_panel,tests/macro_tf_screens.py:891,smoke_then_notrun,1,stays_not_run,no assertion on the real data is written
+papers/test_compile_template_en,tools/paper/selfcheck.py:110-113 (_compile),conditional_can_pass,0,can_pass,tectonic found -> the compile assertions run; PASS in qa/acceptance_results.json (owner machine)
+papers/test_compile_template_ko,tools/paper/selfcheck.py:110-113 (_compile),conditional_can_pass,0,can_pass,tectonic found -> the compile assertions run; PASS in qa/acceptance_results.json (owner machine)
+papers/test_compile_undefined_number_key_is_a_failure,tools/paper/selfcheck.py:110-113 (_compile),conditional_can_pass,0,can_pass,tectonic found -> the compile assertions run; PASS in qa/acceptance_results.json (owner machine)

@@ -582,3 +582,81 @@
  
  if __name__ == "__main__":
 ```
+
+<!-- verifier-section -->
+
+## 독립 검증 결과
+
+- 검증자: 적대적 검증(functional_completeness). 대상 HEAD `4665e6e`. `527cdf2` 이후 바뀐 것은 감사 문서뿐이다(`git diff 527cdf2 HEAD --stat -- '*.py' '*.txt' '*.toml'`는 docs/audit만 보여 줌).
+- 원칙: 추적 파일은 고치지 않았다(`git status` 비어 있음). 재현 스크립트는 모두 `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_functional_completeness/`에 있다. 패치는 `git archive HEAD`로 만든 같은 폴더의 `patched/` 사본에만 적용했다.
+- 금지 캐시 파일 4개는 열지 않았다. 그 파일을 읽는 코드는 `core/skills/macro_daily.py:86-88`의 `dry_run`뿐이다. 이번 실행은 어느 것도 dry run 버튼을 누르지 않았다(화면 전환만).
+- 네트워크 주의: 조사자 `_hermetic.py`는 Python `socket`만 막는다. yfinance 1.7은 curl_cffi를 써서 이 차단을 우회한다. 실제로 막은 것은 클라우드 프록시(403)다. 검증 중 Settings의 "Test FICC data access" 버튼을 한 번 눌러 Yahoo `EURUSD=X` 요청이 한 번 시도됐다. 프록시가 403으로 거절했고 데이터는 받지 않았다. 조사자의 "네트워크 시도는 전부 차단됐다" 문장은 "소켓 수준 차단 + 프록시 거절"로 고쳐 읽어야 한다. 조사자의 `drive_pages` 로그에는 curl 실패 흔적이 없다.
+
+### 1. 발견사항별 판정
+
+| id | 유지 여부 | 정정 판정 | 정정 심각도 | 근거 |
+|---|---|---|---|---|
+| FC-01 | 유지 | 사실 | P1 | 직접 재현(`v_fc01.py`): 7개 계열 모두 `ValueError: x and y must have same first dimension` ((722,) vs (723,) 등). 예외가 worker 밖으로 나가고 `ring.visible=True`, 이미지 0개. 원인 `core/quant/strategies.py:93-94`(`[1.0]+cumprod`, n+1점), `ui/xcharts.py:72-78`, try는 `ui/strategy_lab_page.py:231-240`만 감쌈. 실데이터 표시 실행(`v_fc01_ledger.py`): E1 장부 12행 기록 뒤 실패. 같은 종목 재실행은 0행 추가(config_id 중복 제거, `core/quant/gate_ledger.py:338-345`), 다른 종목은 +12행. Flet 0.85.2 `Page.run_thread`는 `loop.run_in_executor`로 넘기므로 예외는 회수되지 않는 Future에 남는다(화면 표시 없음은 코드로 확인, 로그 여부는 미검증) |
+| FC-02 | 유지 | 사실 | P2 | `v_fc02.py`: statsmodels를 숨기면 정상성 AR(1) 계열도 `adf_p=nan`, 판정 "no rejection of a unit root". 있으면 p=2.3e-10, "mean-reverting". `requirements.txt`·`pyproject.toml`에 statsmodels 없음. PyPI 확인: gs-quant 2.2.1은 `statsmodels>=0.14.5`, 1.0.0도 `statsmodels>=0.13.0`을 요구한다. 따라서 위험은 gs-quant가 빠지거나 설치 실패할 때만이다(원 클라우드 기준 실행이 그 경우였고 3건 FAIL, `baseline_results.json`) |
+| FC-03 | 유지 | 사실 | P2 | grep: `krw_yield_daily`·`krw_curve_panel`의 앱 호출처 없음(`curve_models.py`와 `docs/asset_expansion_study.py`뿐). `bond_daily`는 `core/quant/history.py:311`에서 쓰인다(조사자 문장과 모순 없음). `_SOURCES`는 auto/fred/synthetic뿐(`ui/rates_page.py:43`, `ui/bonds_page.py:29`, `ui/structuring_page.py:32`). KRW 단기금리 `core/ficc/data.py:628` 월간 OECD. 계산 오류가 아니라 기능 공백이지만, 소유자 메모가 직접 요구한 연결이라 P2 유지 |
+| FC-04 | 유지(심각도 하향) | 사실 | P3 | `crypto_trend(` 호출처는 Strategy Lab 격자(`ui/strategy_lab_page.py:42`)뿐이고 Crypto 화면은 판정 칩뿐(`ui/crypto_page.py:94-96`). 그러나 틀린 숫자도, 빠진 방어도 없다. FC-05와 같은 "README 대 화면" 불일치다. 앱 자체 문구 "PASS is offered by default"(`ui/strategy_lab_page.py:203-204`)는 "offered"를 점수표 노출로 쓴다. README "Offered as a signal"의 의미는 추정이다 |
+| FC-05 | 유지 | 사실 | P3 | 코드 확인: `pricing_kernel`은 self-check(`core/ficc/equity_deriv.py:617`)만 호출. vertical 수는 payload(`ui/derivatives_page.py:187`)에만 있고 화면 타일은 butterfly만(`:251-252`). `butterfly_signal` 화면 호출 없음. `stationarity_share` Crypto 화면 없음. `_study_chips`는 SPY·KODEX 200 고정(`ui/quant_lab_page.py:165-187`) |
+| FC-06 | 유지 | 사실 | P3 | `tests/expansion_acceptance.py:323-345`의 UI self-check는 strategy_lab(코어 `run_family`만, `ui/strategy_lab_page.py:320-330`)과 crypto뿐. 8개 페이지 self-check는 HEAD에서도 모두 통과(오프라인, 합성만 사용 확인). Run 클릭 테스트는 Quant Lab(`tests/macro_ui_views.py:332`)과 매크로 오버레이뿐 |
+| FC-07 | 유지 | 사실 | P3 | `README.md:878` 743/864·papers 43. `qa/acceptance_results.json` 870건: PASS 749, NOT_RUN 121, papers 49. `main.py:8-9` 모형 목록에 garch_t 없음(`core/quant/montecarlo.py:66` 기본값). "repository under git" 문자열과 이를 단언하는 테스트 6곳 확인. `core/ficc/macro_artifacts.py:33` `GIT_HASH = "UNVERSIONED"` |
+| FC-08 | 유지 | 사실 | P3 | `ui/signals_page.py:114-115` 기본 "10", `:136-139` 그대로 전달, 결과 칩에 비용 없음. 단, 부수 주장 "ETF 화면은 비용표를 쓴다"는 **오류**다. `ui/etf_page.py:84`는 `3.0 if is_krx else 50.0`을 하드코딩한다(아래 MF-02) |
+
+### 2. 수정안·회귀 테스트 점검
+
+- 부록 A diff는 `proposed_fixes.diff`와 같다(CR 제거 후 `diff` 동일). 깨끗한 사본에 `git apply`로 적용된다.
+- 조사자 `regression_tests.py`를 HEAD와 사본에서 직접 돌렸다. HEAD: 6건 FAIL(FC-01 3건, FC-02 2건, FC-03 1건), self-check 1건 PASS. 사본: 7건 모두 PASS. 사본에서 expansion `tests()` 30건 통과, Flet API guard 통과(MF-01·MF-02 패치 포함).
+- FC-01 수정은 맞다. `equity_chart`가 뒤 n점을 쓰면 점 i가 날짜 i 수익 뒤의 자본이다. ETF 호출(`ui/etf_page.py:238`)은 길이가 이미 같아 영향 없다. 다만 worker 감싸기는 Strategy Lab에만 했다. 같은 구조가 다른 6개 화면에 있다(MF-01).
+- FC-02 수정은 맞다(`math`는 `core/crypto/analytics.py:29`에서 이미 import).
+- FC-03 수정은 기계적으로 동작한다(가짜 KIS로 bootstrap·NS·Svensson 곡선, 스왑 모두 실행, "Synthetic" 문구 없음). 주의 3가지. (1) 스왑 가격기는 KTB 국채 곡선으로 annual/annual 단일 곡선 par를 낸다. 이것은 KRW IRS(CD 3개월, 분기) 호가가 아니다. 화면 칩은 `1/yr both legs`, `curve: KIS`만 보여 준다. "KTB government curve, not a KRW IRS quote" 표시가 필요하다. (2) Bonds·Structuring 부제는 패치 뒤에도 "UST curve"라고 쓴다(`ui/bonds_page.py:234`, `ui/structuring_page.py:296`). (3) Structuring DCD 기본값은 USD/KRW로 KRW 예금을 UST 곡선으로 할인한다. 이 문제는 `financial_calcs.md`가 다룬다. FC-03 패치는 그 해결의 전제가 된다.
+- FC-04 안 B 테스트는 README 수정 전 실패, 후 통과가 자명하다. 안 A 코드는 없다(미검증).
+- FC-05 회귀 테스트 두 개는 이름과 단언만 있고 코드가 없다(미검증).
+- FC-06에서 추가하는 self-check 8개는 HEAD에서도 통과한다. 즉 버그 회귀 테스트가 아니라 커버리지 추가다. 실패 전/통과 후 조건은 `strategy_lab_run_renders_every_family`에만 성립한다.
+- FC-08: `check_signals_patch.py`를 사본에 돌렸다. AAPL 빈칸 → "cost 50 bp/side (table)", 005930 → 35, 입력 10 → "(typed)". HEAD에는 이 칩이 없어 테스트가 실패한다.
+
+### 3. 조사자가 놓친 발견사항
+
+#### MF-01 · P2 · 사실 — v3·주식 화면 6곳도 렌더링이 try 밖이다. Crypto는 Days < 200이면 멈춘다
+
+| 항목 | 내용 |
+|---|---|
+| ID | MF-01 |
+| 심각도 | P2 (사용자 입력 경계 조건 + 빠진 방어) |
+| 판정 | 사실(Crypto는 재현, 나머지 5곳은 구조를 코드로 확인) |
+| 파일·함수·라인 | `ui/crypto_page.py:145-201` worker. try는 `analyze`(`:146-150`)만 감싸고 렌더링(`:151-199`)은 밖이다. `:177-179` `np.convolve(px, ones(200)/200, "valid")`에 NaN 199개를 붙인다. `ui/xcharts.py:14-22` `lines_chart`는 `x[-y.size:]`로 그린다. 같은 구조: `ui/derivatives_page.py:212-276`, `ui/etf_page.py:188-248`, `ui/portfolio_page.py:100-198`, `ui/signals_page.py:133-198`, `ui/quant_lab_page.py:273-380`, `ui/strategy_lab_page.py:230-277`. 대조: FICC 화면은 렌더링까지 try 안에 있다(`ui/rates_page.py:456-466`, `ui/fx_page.py:380-389`, `ui/bonds_page.py:104-222`, `ui/macro_page.py:190-201`, `ui/macro_state_panel.py:695-705`) |
+| 재현 단계 | `python3 -B -W ignore /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_functional_completeness/v_crypto_days.py` (`_live`를 LIVE로 표시한 잘린 합성 dict로 바꿈, 네트워크 없음) |
+| 기대 결과 | Days=180이면 SMA200을 비우거나 안내를 띄우고, 진행 링이 멈춘다 |
+| 실제 결과 | Days 730·365: 정상(이미지 3). Days 199·180·120: `ValueError ... (199,) and (201,)`, `(180,) and (220,)`, `(120,) and (280,)`가 worker 밖으로 나간다. `ring.visible=True`, 이미지 0, 오류 안내 없음 |
+| 영향 | Days는 자유 입력이다. 실데이터에서 200 미만을 넣으면 Crypto 화면이 빈 패널과 도는 링으로 멈춘다. 다른 5개 화면도 렌더링 예외 하나면 같은 상태가 된다. FC-01 수정은 Strategy Lab만 막는다. 덧붙여 합성 소스에서는 Days가 무시된다(`_synthetic()`는 늘 900일, `ui/crypto_page.py:26-29, 61`) |
+| 수정안 | Crypto: 길이를 맞추는 `_sma` 도우미와 `worker()`→`work()` 감싸기. 사본 검증: Days 120~730 모두 이미지 3, 링 꺼짐, self-check·Flet guard 통과. 나머지 5개 화면에도 같은 감싸기(또는 `ui/components`에 공용 `guarded(page, host, busy, work)`)를 적용한다.<br>```diff\n--- a/ui/crypto_page.py\n+++ b/ui/crypto_page.py\n@@ -131,6 +131,14 @@\n+def _sma(px: np.ndarray, w: int) -> np.ndarray:\n+    \"\"\"Trailing w-day mean aligned to px (NaN before the first full window; all NaN when px is shorter than w).\"\"\"\n+    px = np.asarray(px, dtype=float)\n+    if px.size < w:\n+        return np.full(px.size, np.nan)\n+    return np.concatenate([np.full(w - 1, np.nan), np.convolve(px, np.ones(w) / w, mode=\"valid\")])\n+\n+\n def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -> ft.Control:\n@@ -144,6 +152,13 @@\n         def worker():\n             try:\n+                work()\n+            except Exception as exc:                  # a render failure must not leave the ring spinning on an empty panel\n+                host.controls = [notice(f\"{type(exc).__name__}: {exc}\", \"error\", icon=ft.Icons.ERROR_OUTLINE)]\n+                busy.visible = False; page.update()\n+\n+        def work():\n+            try:\n                 a = analyze(days=int(float(days.value or \"730\")), source=source.value or \"live\")\n@@ -174,9 +189,8 @@\n             px = a[\"btc\"]\n-            sma50 = np.convolve(px, np.ones(50) / 50, mode=\"valid\"); sma200 = np.convolve(px, np.ones(200) / 200, mode=\"valid\")\n-            blocks.append(card(xc.lines_chart(a[\"btc_dates\"], {\"BTCUSDT\": px, \"SMA50\": np.concatenate([np.full(49, np.nan), sma50]),\n-                                                              \"SMA200\": np.concatenate([np.full(199, np.nan), sma200])}, title=\"BTCUSDT with 50/200-day averages\")))\n+            blocks.append(card(xc.lines_chart(a[\"btc_dates\"], {\"BTCUSDT\": px, \"SMA50\": _sma(px, 50), \"SMA200\": _sma(px, 200)},\n+                                              title=\"BTCUSDT with 50/200-day averages\")))\n```<br>원본: `.../verify_functional_completeness/mf01_crypto.diff` |
+| 회귀 테스트 | `tests/expansion_acceptance.py::test_crypto_page_short_window_renders`: `_live`를 180일 가짜로 바꾸고 Run → 새는 예외 없음, `ring.visible is False`, `ft.Image` ≥ 1. 추가로 `test_v3_pages_render_failure_becomes_a_notice`: crypto·derivatives·etf·portfolio·signals·quant_lab 각각 차트 함수를 `RuntimeError("chart exploded")`로 바꾸면 그 문구의 안내가 보이고 링이 꺼진다. HEAD 실패(예외 유출), 패치 후 통과(Crypto는 사본에서 확인) |
+
+#### MF-02 · P2 · 사실 — P10 틱 하한이 Strategy Lab·ETF 백테스트에 없다. ETF 화면은 비용을 하드코딩한다
+
+| 항목 | 내용 |
+|---|---|
+| ID | MF-02 |
+| 심각도 | P2 (게이트 판정 입력의 비용 규칙 누락, 저가 등록 종목에 한정) |
+| 판정 | 사실(코드·재현). 252670의 현재 가격은 미검증 |
+| 파일·함수·라인 | `ui/strategy_lab_page.py:92-103` `run_family`는 `V.cost_floor_bp`(`core/quant/validate.py:115-121`, 표 값만)를 쓴다. 틱 하한 `core/quant/instruments.py:168-181` `cost_per_side`의 호출처는 `core/skills/macro_daily.py:577`, `core/quant/card_lines.py:195`뿐이다. `ui/etf_page.py:84` `cost = 3.0 if out["is_krx"] else 50.0`. 규칙: `README.md:445-453`(P10 "A tick floor can only raise a cost … 252670 at ₩69 is charged at least 72 bp per side"), `run_family` docstring "the gate never lowers the cost assumption" |
+| 재현 단계 | `python3 -B -W ignore .../verify_functional_completeness/v_tickfloor.py`; `v_mf02b.py`(252670 합성 계열을 마지막 종가 ₩69로 축척하고 KIS로 표시, 네트워크 없음); `v_etf_cost.py` |
+| 기대 결과 | 252670 마지막 종가 ₩69면 비용 ≥ 73.86 bp/측. 3 bp 입력은 판정 보류. ETF 화면은 게이트 표(`cost_class`)와 같은 행을 쓴다 |
+| 실제 결과 | `cost_per_side("252670")`: ₩69 → 73.86, ₩300 → 18.07, ₩1000 → 6.40, ₩2500 → 11.40 bp(tick_floor). Strategy Lab은 ₩69에서도 3.00 bp를 쓰고, 3 bp 입력도 보류하지 않는다. ETF 화면은 6자리 코드 모두 3.0: 122630·005930은 게이트 표로 35(krx_stock)인데 3.0 |
+| 영향 | 저가 레버리지·인버스 ETF의 Strategy Lab 판정(DSR, 2× 비용, PASS/REJECT)과 장부의 `cost_bps`가 규칙보다 최대 약 25배 낮은 비용으로 계산된다. 지금은 FC-01 때문에 판정이 화면에 안 나오지만, FC-01을 고치면 보인다. ETF 화면은 차트 제목에 "3 bp per side"를 표시하므로 숨긴 것은 아니다. FC-08의 "Strategy Lab과 ETF는 비용표를 쓴다"는 ETF 부분이 틀리고, 둘 다 틱 하한은 없다 |
+| 수정안 | Strategy Lab: 이력을 먼저 읽고 등록 종목이면 마지막 종가의 틱 하한으로 floor를 올린다(합성은 제외). 사본 검증: ₩69 → 73.86 bp, 3 bp 입력 → 보류, 합성 069500 → 3.0 유지, self-check·expansion 30건 통과. 한계: 마지막 종가 근사다. 정확히는 날짜별 비용 벡터가 필요하다(미검증). 보류 문구의 "table rate"도 "table rate or tick floor"로 바꾼다. ETF: `V.cost_floor_bp([code])[0]`와 같은 틱 하한 도우미를 쓰고(도우미는 `core/quant/instruments.py`로 옮겨 공유), 행이 없으면 슬리브를 비우고 이유를 표시한다.<br>```diff\n--- a/ui/strategy_lab_page.py\n+++ b/ui/strategy_lab_page.py\n@@ -82,6 +82,20 @@\n+def _tick_floor_bp(symbol: str, hist) -> float:\n+    \"\"\"P10 / R-26: max(table, commission + half a tick / price) for an instrument QUANTGEN registers, at the\n+    latest close (as macro_daily prices it; the floor only raises). 0 outside the registry or on synthetic data,\n+    whose price level is not a market price.\"\"\"\n+    from core.quant import instruments as INS\n+    code = symbol.strip().upper().split(\".\")[0]\n+    if code not in INS.INSTRUMENTS or hist.source == \"SYNTHETIC\":\n+        return 0.0\n+    try:\n+        return INS.cost_per_side(code, price=float(hist.prices()[-1])).bp\n+    except INS.NotTradable:\n+        return 0.0\n+\n+\n@@ -91,9 +105,12 @@\n     floor, classes = V.cost_floor_bp(symbols)\n     uncosted = [s for s, c in classes.items() if c is None]\n+    if cost_bps is None and floor is None:\n+        raise ValueError(f\"QUANTGEN has no cost row for {', '.join(uncosted)}; type a cost to run a sensitivity\")\n+    hists = [load_history(s, source=source, days=days) for s in symbols]\n+    if floor is not None:                     # P10: the tick floor can only raise the table rate\n+        floor = max([floor] + [_tick_floor_bp(s, h) for s, h in zip(symbols, hists)])\n     if cost_bps is None:\n-        if floor is None:\n-            raise ValueError(f\"QUANTGEN has no cost row for {', '.join(uncosted)}; type a cost to run a sensitivity\")\n         cost_bps = floor\n@@ -101,7 +118,6 @@\n-    hists = [load_history(s, source=source, days=days) for s in symbols]\n     pn = S.align_panel(hists)\n```<br>원본: `.../verify_functional_completeness/mf02_strategy_lab.diff` |
+| 회귀 테스트 | `tests/expansion_acceptance.py::test_strategy_lab_charges_the_tick_floor`: `load_history`를 마지막 종가 ₩69의 KIS 표시 계열로 바꾸고 `run_family("trend_switch", ["252670"])["cost_bps"] >= 73.8`; `cost_bps=3.0`이면 `r["withheld"]`가 비어 있지 않음; 합성 069500은 3.0. HEAD: 3.00·보류 없음(실패). 사본: 73.86·보류(통과). ETF: `test_etf_sleeve_cost_follows_the_gate_table`: 합성 122630의 `sleeves["cost_bps"] == 35.0` |
+
+### 4. 미검증
+
+- 실제 Flet 창에서 `run_thread` 예외가 로그로 남는지(FC-01, MF-01). 동기 가짜 page로만 확인했다.
+- 252670의 현재 시장 가격과 KIS 수정주가 기준 가격 수준(MF-02의 실제 차이 크기).
+- 날짜별 비용 벡터가 `pnl_matrix`·`walk_forward`·장부 `cost_bps`(스칼라 가정)와 맞물리는지.
+- 나머지 5개 화면(MF-01)의 실데이터 렌더링 예외 유발 조건. 구조만 확인했다.
+- FC-03 패치의 실제 KIS 응답·KTB 관행. FC-04 안 A, FC-05 테스트 코드.
+
+### 5. 검증 스크립트
+
+모두 `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_functional_completeness/` 아래: `v_fc01.py`(FC-01 코어 길이·페이지 상태), `v_fc01_ledger.py`(장부 선등록·중복 제거), `v_fc02.py`(statsmodels 유무, `HIDE_SM=1`), `v_fc03_patch.py`(FC-03 패치 경로, `AUDIT_ROOT=…/patched`), `inv_regression_tests.py`(조사자 테스트 재실행), `inv_drive_pages.py`·`drive_pages_verify.log`(12개 화면 재구동), `v_payloads.py`(전 화면 Deep analysis payload 직렬화: 32건 모두 정상), `v_cards.py`(카드 34개 선택: 오류 0), `v_crypto_days.py`(MF-01), `v_tickfloor.py`·`v_mf02.py`·`v_mf02b.py`·`v_etf_cost.py`(MF-02), `run_expansion.py`(사본 expansion 30/30), `mf01_crypto.diff`, `mf02_strategy_lab.diff`.

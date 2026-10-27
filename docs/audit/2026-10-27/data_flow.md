@@ -343,3 +343,110 @@ Sources (웹 검색): [FRED IR3TIB01KRM156N](https://fred.stlouisfed.org/series/
 - KIS 클라이언트가 기기 로컬 날짜를 쓸 때(KST가 아닌 기기) 생기는 경계 영향은 재현하지 않았다.
 - 기존 테스트는 8개 모듈만 스크래치 사본에서 돌렸다. 사본에 docs/와 main.py가 없어 FAIL 4건, 임포트 실패 2건이 두 사본 모두에서 났다. 해당 테스트의 패치 영향은 미검증이다. 전체 870건은 실행하지 않았다(run_all.py 금지).
 - Signals·ETF 화면의 진행 중 봉 표시는 diff에 넣지 않았다(Quant Lab, Portfolio만).
+
+<!-- verifier-section -->
+
+## 독립 검증 결과
+
+검증자: data_flow 차원 적대적 검증. 작업 위치 `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_data_flow/`.
+
+- 기준: HEAD `4665e6e`. `859a983` 이후 바뀐 것은 `docs/audit/` 문서뿐이다. 코드는 같다(`git diff --stat`로 확인).
+- 재현은 조사자 스크립트를 다시 돌린 것이 아니다. 하네스(`_vh.py`)와 재현 스크립트(`v01`~`v08`)를 새로 썼다. 가짜 전송은 가능한 한 낮은 층에 넣었다. 예: `KISMarkets._get`, `crypto_client._get`.
+- 시장 데이터 API는 호출하지 않았다. `.env`는 열지 않았다. 금지 CSV 4개는 열지도, 복사하지도 않았다. 복사본을 만들 때 `tar --exclude`로 뺐다.
+- 웹 확인: Binance 공식 문서(GitHub raw)는 "startTime/endTime이 없으면 가장 최근 kline을 돌려준다"고만 쓴다. 마지막 kline이 아직 열린 봉이라는 문장은 없다. `developers.binance.com`, `docs.upbit.com`은 DNS 실패로 막혔다. FRED `IR3TIB01KRM156N`은 검색 요약만 봤다(Feb-2026 관측, 2026-03-16 갱신).
+- 제안 diff는 저장소 사본 2개 중 하나(`full_patched`)에만 적용했다(`git apply --ignore-whitespace`, 12개 파일 모두 깨끗하게 적용). 기존 테스트 12개 모듈을 프로세스 안에서 돌렸다. 매크로 묶음을 포함한다. 결과는 원본·패치 모두 PASS 720 / FAIL 3 / NOT_RUN 144이다. 비PASS 목록은 한 줄도 다르지 않다. FAIL 3건은 환경 문제다(네트워크 차단, `paper_live` 제외, 로컬 캐시 dry run).
+- 조사자 회귀 테스트 8개: 저장소에서 8 FAIL, 패치 사본에서 8 PASS. 다시 확인했다.
+- 작업 중 실수가 하나 있었다. 백그라운드 명령의 작업 폴더가 틀려서, 저장소 루트에 추적되지 않는 로그 파일 1개(`subset_full_patched.log`, 115바이트, 오류 문구만 있음)가 생겼다. 바로 스크래치로 옮겼다. 추적 파일은 바뀌지 않았고 `git status`는 깨끗하다.
+
+### 발견사항별 판정
+
+| id | 유지 여부 | 정정 판정 | 정정 심각도 | 근거 |
+|---|---|---|---|---|
+| DF-01 | 유지 | 사실 | P2 | `v01`: `_get` 층을 가짜로 바꾸고, 화면 기본값인 `source="auto"`로 `Y0101`을 불렀다. 결과는 `History(symbol='I:Y0101', source='KIS', note='', adjustment='')`. 수익률이 3.50%에서 2.49%로 떨어지는 경로(채권 랠리)인데 `analyze_history`는 ann_return −0.171, mdd −0.291, Sharpe −2.22를 낸다. 같은 경로에서 3년 무이표채는 +3.08%다. min_vol 비중은 수익률 계열에 0.859. MC median 2.29("가격"). `convention_warning`은 ''. 경고 문구는 코드 어디에도 없다. 입력 화면 힌트는 "AAPL or 005930"이라 사용자가 금리 코드를 직접 넣어야 생긴다. 그래서 P2가 맞다. diff와 테스트는 맞다. 다만 `_YAHOO_YIELDS`는 4개 티커뿐이다. `^VIX` 같은 비투자 지수 수준은 여전히 가격으로 들어간다(범위 밖, 기록만). |
+| DF-02 | 부분 유지 | 사실(포트폴리오 공분산) / 오류(현행 Strategy Lab 계열의 미래 정보 주장) | P2 | `v02`: 069500–QQQ 최근 505세션의 같은 날짜 상관은 0.164, KRX(t)–US(t−1)은 0.351이다. 끝 기준 비중첩 5세션 상관은 0.428이다. 10년(2,501세션)은 0.174 대 0.451. 같은 시장 대조쌍(QQQ–TLT, 069500–229200)에는 이런 격차가 없다. min_vol 비중은 [0.158, 0.842]에서 5세션 공분산으로 바꾸면 [0.028, 0.972]가 된다. 그러므로 포트폴리오 부분은 사실이다. 보고서의 "5세션 0.538"은 표본 시작 위상에 따라 달라진다(같은 데이터에서 0.428~0.538). `v02b`: 앱의 실제 계열을 KRX 2개+미국 3개 패널(2012년 이후 2,578세션)에서 돌렸다. 미국 열을 1세션 늦춘 "정보 일치" 정렬과 비교한 Sharpe는 xs_momentum 0.967 대 1.009, trend_switch 1.014 대 1.121, risk_parity 1.031 대 1.076, vol_target 1.040 대 1.044다. 조사자가 잰 pairs도 −0.15 대 −0.15. 시차 정보로 얻는 이득이 없다. Sharpe 2.94→0.47은 앱에 없는 토이 규칙의 숫자다. 이 때문에 "혼합 패널이면 PASS/REJECT 보류" 수정안은 과하다. KRX+BTC 같은 정당한 월간 리밸런싱 실행까지 판정을 막는다. 공분산 수정과 note는 유지하고, Strategy Lab에서는 note만 보이는 쪽을 권한다. 테스트는 공분산·note 부분만 남긴다. |
+| DF-03 | 유지 | 사실 | P2(P3에서 상향) | `v03`: 시각을 2026-10-27 09:53 UTC로 고정했다. 가짜 kline의 close time은 23:59:59.999로 현재보다 미래다. 그대로 실제 `ui.crypto_page.analyze`를 돌렸다. `btc_dates[-1]`과 김치 프리미엄 마지막 날짜가 모두 열린 오늘 봉이다. 펀딩 연율은 10.950%가 아니라 10.429%로 나온다. 패치 사본에서는 10.950%이고 마지막 날짜가 2026-10-26이다. `History.status`를 읽는 코드는 ui·core에 0곳이다(grep). 00:00~16:00 UTC(KST 09:00~01:00)에는 매번 오늘 펀딩이 1~2회차만 들어간다. 그래서 화면 대표값 "Funding (ann.)"과 백분위·flag가 체계적으로 아래로 치우친다. 크기는 작다(실데이터 약 −0.05~−0.11%p). 하지만 일상 사용에서 표시 숫자에 생기는 가드 누락이므로 P2가 맞다. 공급자가 마지막에 열린 봉을 준다는 점은 문서로 확인하지 못했다(추정). 코드에 필터가 없다는 점은 사실이다. 수정안은 맞다. `test_df03_quant_lab_says_intraday`는 소스 문자열 검색이라 약하다. 주석만 있어도 통과한다. |
+| DF-04 | 유지 | 추정 | P3 | `v04`: `_ffill_rates`는 2026-03-02·03-13·03-16·03-31 모두 2026-02-01자 값을 쓴다. 발표일(16일) 기준이면 03-02·03-13에는 1월 값이어야 한다. 메커니즘은 사실이다. 발표 시점은 검색 요약 1건뿐이라 추정이다. 코드 주석(`core/ficc/data.py:618` "run 6-8 months behind")을 보면 과거 실제 이용 가능 시점이 더 늦었을 수 있다. 그렇다면 고정 21일 규칙 자체도 가정이다. ALFRED `realtime_start`로 확인해야 한다. 테스트는 수정 전 0.0325를 반환해 FAIL, 수정 후 PASS(확인). |
+| DF-05 | 유지 | 사실 | P3 | `v05`: 허용 캐시 `yf_CL_F.csv`를 실제 `yf_history`에 통과시켰다. note는 'Yahoo adjusted close', adjustment는 ''이다. `ZN=F`, `GC=F`도 같은 note다. −37.63 행은 사라지고 worst_day −0.6017(2020-04-17→04-21)이 남는다. 이는 롤 때문이 아니라 D-01 제거 때문이다. 롤 흔적은 04-21→04-22다. 보고서도 그렇게 썼다. note 수정은 맞다. 다만 중기 제안("`continuous_futures`를 `load_history`에 연결")은 그대로 따르면 안 된다. 아래 MF-02의 스플라이스 결함을 들여온다. |
+| DF-06 | 유지 | 사실 | P3 | 코드 확인: `core/crypto/analytics.py:82`, `:102`, `:106-107`. 그런데 수정안이 화면에 닿지 않는다. `ui/crypto_page.py`에는 `note` 참조가 0개다. `KimchiPremium.note`는 화면·해설·페이로드 어디에도 나가지 않는다. 차트 제목(`ui/crypto_page.py:171` "Binance × USD/KRW")도 그대로다. 패치 사본에서도 마찬가지임을 확인했다. 회귀 테스트는 note 문자열만 보므로, 사용자에게 보이는 변화가 없어도 통과한다. 고칠 곳: 차트 제목을 "Upbit KRW-BTC vs Binance BTCUSDT (USDT taken as USD) × USD/KRW"로 바꾸고, `narrative`에 USDT 문장을 넣고, `payload["kimchi"]`에 `"quote_ccy": "USDT"`를 넣는다. 테스트는 `narrative(a)`와 `payload(a)`에 'USDT'가 있는지 단언해야 한다. |
+
+### 놓친 발견사항
+
+#### MF-01 (P2, 사실): FX 캐리 표와 AI 페이로드가 몇 달 묵은 월간 금리를 현재 값처럼 보여 준다
+- **파일·함수·라인:** `ui/fx_page.py` `do_carry` 표 `:345-350`, AI 페이로드 행 `:355-358`, `analysis_panel` `:368-370`. `core/ficc/fx.py` `CarryRow` `:283-295`, `_STALE_DAYS=45` `:51`, `_stale` `:342-343`, `carry_table` `:346-371`. `core/ficc/insights.py` `narrate_carry` `:288-293`. `core/ficc/data.py:616-632`(JPY·KRW·AUD·CAD·CHF는 OECD 월간 계열만 있고, 주석이 "6-8 months behind"라고 씀).
+- **재현:** `python3 -B -W ignore v06_stale_carry.py`. FRED 응답 모양의 합성 Series를 쓴다. USD SOFR 일간은 2026-10-22까지, KRW 월간은 2026-02-01까지, JPY 월간은 2026-03-01까지. `carry_table`을 부르고, 표 셀과 페이로드 행은 `ui/fx_page.py`와 똑같은 식으로 다시 만든다.
+- **기대 결과:** 표와 AI 페이로드에 금리 관측일이 있고, 묵은 값이 표시된다. 묵음 판정은 빈도를 안다. 발표될 수 있는 최신 월간 값은 묵은 값이 아니다.
+- **실제 결과:** KRW는 `rate_date=2026-02-01`, `rate_stale=True`. 그러나 표 셀은 `['USDKRW','KRW','2.78%','4.20%','-1.42%']`로 날짜도 표시도 없다. 페이로드 키는 `carry, carry_to_vol, ccy, mom_3m, pair, rate_ccy, rate_usd, score, spot, vol_3m`뿐이다. `rate_date`, `rate_stale`가 없다. 묵음 사실은 로컬 해설 문단 끝 한 문장에만 나온다. Claude 심층 분석에는 페이로드만 간다. 마지막 리밸런싱은 묵은 금리로 순위를 매겨 롱 KRW, 숏 JPY다. 반대 방향 오탐도 있다. 10-23 시점에 나올 수 있는 최신 월간 값(2026-09-01자)도 52일 > 45일이라 `rate_stale=True`가 된다. 그래서 이 플래그는 "최신 발표"와 "8개월 묵음"을 구분하지 못한다.
+- **영향:** 9개 통화 중 5개의 Rate·Carry·Score 열이 달 단위로 묵은 값일 수 있다. 표만 보면 알 수 없다. AI 해설은 묵은 캐리를 현재 캐리로 설명할 수 있다. "Latest basket" 롱·숏도 그 값에 기댄다.
+- **수정안:**
+```diff
+--- a/core/ficc/fx.py
++++ b/core/ficc/fx.py
+@@ def _stale(rate_date: str, spot_date: str) -> bool:
+-def _stale(rate_date: str, spot_date: str) -> bool:
+-    return (date.fromisoformat(spot_date) - date.fromisoformat(rate_date)).days > _STALE_DAYS
++def _stale(rate_date: str, spot_date: str, *, monthly: bool = False) -> bool:
++    """Daily: > 45 days behind the spot. Monthly (period average dated the 1st, published after month-end):
++    stale only when older than two months before the spot's month (the latest publishable average is missing)."""
++    rd, sd = date.fromisoformat(rate_date), date.fromisoformat(spot_date)
++    if monthly:
++        y, m = sd.year, sd.month - 2
++        if m <= 0:
++            y, m = y - 1, m + 12
++        return rd < date(y, m, 1)
++    return (sd - rd).days > _STALE_DAYS
+@@ def carry_table(...)
+-                             rate_stale=_stale(rs.last_date, s.last_date)
+-                             or _stale(usd.last_date, s.last_date)))
++                             rate_stale=_stale(rs.last_date, s.last_date, monthly="monthly" in rs.note.lower())
++                             or _stale(usd.last_date, s.last_date, monthly="monthly" in usd.note.lower())))
+--- a/ui/fx_page.py
++++ b/ui/fx_page.py
+@@ do_carry
+-            ["Pair", "Ccy", "Spot", "Rate", "USD rate", "Carry", "3m vol", "Carry/vol",
++            ["Pair", "Ccy", "Spot", "Rate", "Rate date", "USD rate", "Carry", "3m vol", "Carry/vol",
+              "3m mom", "Score"],
+-            [[r.pair, r.ccy, _px(r.spot), f"{r.rate_ccy * 100:.2f}%", f"{r.rate_usd * 100:.2f}%",
++            [[r.pair, r.ccy, _px(r.spot), f"{r.rate_ccy * 100:.2f}%",
++              r.rate_date + (" (stale)" if r.rate_stale else ""), f"{r.rate_usd * 100:.2f}%",
+@@
+-                      "carry_to_vol": r.carry_to_vol, "mom_3m": r.mom_3m, "score": r.score}
++                      "carry_to_vol": r.carry_to_vol, "mom_3m": r.mom_3m, "score": r.score,
++                      "rate_date": r.rate_date, "rate_stale": r.rate_stale}
+```
+  `fx.py` 자체 검사(`:539-542`)의 기대값은 새 규칙에 맞춰 다시 확인해야 한다.
+- **회귀 테스트:** `ficc/test_mf01_monthly_staleness_is_frequency_aware`. KRW 월간이 2026-09-01까지이고 spot이 2026-10-23까지면 `carry_table(...)`의 KRW 행 `rate_stale is False`. 2026-02-01까지면 `True`. 수정 전에는 첫 단언이 FAIL이다. `ui/test_mf01_fx_payload_has_rate_date`: 표 셀과 페이로드 행 생성을 순수 함수 `_carry_cells(rows)`, `_carry_payload_rows(rows)`로 빼고 단언한다. 셀에 '2026-02-01 (stale)'이 있고 페이로드 행에 `rate_date`, `rate_stale`가 있어야 한다. 수정 전에는 키가 없어 FAIL이다.
+
+#### MF-02 (P3, 사실): `KISMarkets.continuous_futures`가 "만기 5세션 전" 대신 다음 계약의 6번째 세션에서 롤한다
+- **파일·함수·라인:** `data/kis_markets.py` `continuous_futures` `:291-317`. 결함 줄은 `:305` `cutoff = nxt.dates[min(5, len(nxt) - 1)]`. note는 `:317` "5 sessions before each expiry". 호출처는 0곳이다(grep). DF-05 수정안이 연결을 권한다.
+- **재현:** `python3 -B -W ignore v07_continuous_futures.py`. 가짜 `futures_daily`로 분기 계약 5개(상장 후 1년 만기)를 만든다. 실제 함수처럼 같은 504세션 창에서 받는다. 각 날짜의 수익률을 원계약 수익률과 맞춰서 어느 계약에서 왔는지 찾는다(`v07_out.txt` 끝).
+- **기대 결과:** 각 계약을 만기 5세션 전까지 쓴다. C1은 2025-12-04 무렵까지 쓰인다.
+- **실제 결과:** 2024-12-12부터 C1, 2025-03-19부터 C2(만기 2026-03-12), 2025-06-18부터 C3, 2025-09-17부터 C4, 2025-12-17부터 C5(만기 2026-12-10). C1 만기보다 약 9개월 앞서 롤한다. 2026-06-01의 값은 근월물 C3가 아니라 C5에서 온다.
+- **영향:** 지금은 죽은 코드라 화면 영향이 없다. 연결하면 "연속 근월물" 이름으로 유동성 낮은 원월물 가격이 수익률·변동성·MC에 들어간다. note가 실제 규칙과 다르다.
+- **수정안:** 기준을 다음 계약의 상장일이 아니라 현재 계약의 마지막 거래일로 바꾼다. 마스터의 만기일을 쓰는 것이 정석이다(`index_futures_contracts`·`commodity_futures_contracts`).
+```diff
+-            cutoff = nxt.dates[min(5, len(nxt) - 1)] if nxt else "9999-12-31"
++            # roll 5 sessions before THIS contract's last session when it expired inside the window;
++            # a contract still trading at the window end is the front month and is kept
++            expired = nxt is not None and s.dates[-1] < nxt.dates[-1]
++            cutoff = s.dates[max(0, len(s) - 5)] if expired else "9999-12-31"
+```
+- **회귀 테스트:** `expansion/test_mf02_continuous_futures_rolls_before_expiry`. 위 가짜 계약 5개로 만든 결과에서, 각 날짜의 원계약은 그 날짜보다 5세션 넘게 남은 만기 중 가장 가까운 계약이어야 한다. 예: 2026-06-01은 C3에서 와야 한다. 수정 전에는 C5라서 FAIL이다.
+
+#### MF-03 (P3, 사실): `convention_warning`의 처방("005930.KS로 Yahoo 총수익")이 `auto`에서는 작동하지 않는다
+- **파일·함수·라인:** `core/quant/history.py` `convention_warning` `:105-117`(처방 문구 `:116-117`), `_looks_krx` `:321-325`(`.KS` 포함), `load_history` `:491-496`(auto에서 KRX는 KIS, 키가 없으면 SYNTHETIC). Strategy Lab 힌트는 `ui/strategy_lab_page.py:218`.
+- **재현:** `python3 -B -W ignore v08_convention_advice.py`(공급자 함수를 가짜로 바꿈).
+- **기대 결과:** 경고의 처방대로 하면 경고가 사라진다. 그게 안 되면 문구가 "Data source를 yfinance로"까지 말해야 한다.
+- **실제 결과:** KIS 키가 있으면 `005930.KS`도 KIS split으로 가고 경고가 그대로 남는다. KIS 키가 없으면 SYNTHETIC이 된다. 키 없이도 받을 수 있는 Yahoo는 한 번도 호출되지 않는다(호출 기록은 KIS 2회뿐).
+- **영향:** 사용자가 처방을 따라도 혼합 수익률 기준이 남는다. 키가 없는 환경에서는 실데이터 대신 합성을 받는다(합성 표시는 D-03 범위에서 따로 있음).
+- **수정안:** 문구를 `"Yahoo for total return (set Data source to yfinance; a KRX code as 005930.KS)"`로 바꾼다. 또는 사용자가 `.KS/.KQ`를 직접 입력했고 KIS가 없을 때 `auto`가 Yahoo로 보내게 한다.
+- **회귀 테스트:** `quant/test_mf03_convention_advice_names_the_source`: `'yfinance' in convention_warning([total_h, split_h])`. 수정 전 FAIL.
+
+### 재현 산출물
+`v01_yield_as_price.py` → `v01_out.txt`. `v02_nonsync.py` → `v02_out.txt`. `v02b_app_families.py` → `v02b_out.txt`. `v03_running_bar.py` → `v03_out.txt`, `v03_after_out.txt`(패치 사본). `v04_monthly_lag.py` → `v04_out.txt`. `v05_cl_f.py` → `v05_out.txt`. `v06_stale_carry.py` → `v06_out.txt`. `v07_continuous_futures.py` → `v07_out.txt`. `v08_convention_advice.py` → `v08_out.txt`. 회귀 재실행: `regression_rerun.txt`, `regression_full_patched.txt`. 기존 테스트: `run_subset_v.py` → `subset_full_orig.log`, `subset_full_patched.log`. 모두 `/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/audit_work/verify_data_flow/` 아래에 있다.
+
+### 미검증
+- Binance·Upbit 일봉 API가 마지막 행으로 열린 봉을 주는지(공식 문서에 명시 없음, Upbit 문서는 DNS 차단).
+- OECD 월간 금리의 과거 실제 공표 시점(ALFRED 미조회).
+- 실제 Flet 화면 렌더링(코드와 예외 경로로만 확인).
+
+Sources: [Binance spot REST API docs](https://raw.githubusercontent.com/binance/binance-spot-api-docs/master/rest-api.md), [FRED IR3TIB01KRM156N](https://fred.stlouisfed.org/series/IR3TIB01KRM156N)
