@@ -731,6 +731,477 @@ def test_l2_10_timeout_kills_the_child_tree():
 
 
 # --------------------------------------------------------------------------- #
+# Plan Task 3 (spec Step 5): the sandbox and fixture_inputs
+# --------------------------------------------------------------------------- #
+EMPTY_LEDGER_HASH = "d751713988987e9331980363e24189ce"      # gate_ledger.ledger_hash([]): the md5 of "[]" (6.1)
+INPUT_KEYS = frozenset({"schema", "strategy", "params", "instrument", "capital_usd", "cost_bps", "stress",
+                        "fill_seed", "price_precision", "size_precision", "volume", "n_bars", "bars_sha256",
+                        "ledger_hash_after_registration"})                            # C5: exactly these 14
+F1_DATES = ("2001-01-02", "2001-01-03", "2001-01-04", "2001-01-05", "2001-01-08", "2001-01-09", "2001-01-10",
+            "2001-01-11", "2001-01-12", "2001-01-15", "2001-01-16", "2001-01-17")   # weekdays; bars 21:00 UTC
+F2_DATES = tuple(f"2021-01-{d:02d}" for d in range(1, 12))                          # bars 00:00 UTC next day
+F1_PRICES = (97, 98, 99, 100, 104, 96, 95, 99, 101, 103, 98, 97)
+F2_PRICES = (50000, 51000, 52000, 53000, 52600, 50000, 49000, 50500, 52000, 51000, 50800)
+F1_INPUT = {"schema": "nautilus-bridge-input/2", "strategy": "trend_switch",
+            "params": {"rule": "sma", "lookback": 3, "step": 2}, "instrument": "SPY", "capital_usd": "1005001",
+            "cost_bps": "50", "stress": "1", "fill_seed": 42, "price_precision": 9, "size_precision": 0,
+            "volume": "1000000000", "n_bars": 12,
+            "bars_sha256": "29844d2fd9185e1d303a1f56f981ccac3bb8f840e0064a8c920f0ef2bffaf93c",
+            "ledger_hash_after_registration": EMPTY_LEDGER_HASH}
+F2_INPUT = {"schema": "nautilus-bridge-input/2", "strategy": "crypto_trend",
+            "params": {"hysteresis": 0.2, "lookbacks": [1, 2], "mas": [2, 3]}, "instrument": "BTC/USD",
+            "capital_usd": "53053", "cost_bps": "10", "stress": "1", "fill_seed": 42, "price_precision": 9,
+            "size_precision": 8, "volume": "1000000000", "n_bars": 11,
+            "bars_sha256": "44b665f8590413aaaea02f2faa5f50e304c5432d7b84e5972aec8183b562bb25",
+            "ledger_hash_after_registration": EMPTY_LEDGER_HASH}
+N1_BARS_SHA256 = "a9e3bf5523d4536c93ae8431b7599fd5a83d70abe7e62bb4ecf224b73671ef39"
+SANDBOX_IMPORTS = """import argparse
+import csv
+import hashlib
+import json
+import math
+import platform
+from decimal import ROUND_FLOOR, Decimal
+from pathlib import Path
+from sys import argv, exit
+from nautilus_trader.backtest.engine import BacktestEngine
+from nautilus_trader.backtest.models import FeeModel, FillModel
+from nautilus_trader.common import Environment
+from nautilus_trader.common.component import LiveClock, TestClock, is_backtest_force_stop
+from nautilus_trader.config import BacktestEngineConfig, LoggingConfig, StrategyConfig
+from nautilus_trader.model.currencies import BTC, USD
+from nautilus_trader.model.data import Bar, BarType
+from nautilus_trader.model.enums import AccountType, OmsType, OrderSide, TimeInForce
+from nautilus_trader.model.identifiers import InstrumentId, Symbol, TraderId, Venue
+from nautilus_trader.model.instruments import CurrencyPair, Equity
+from nautilus_trader.model.objects import (FIXED_PRECISION, HIGH_PRECISION, PRICE_MAX, QUANTITY_MAX, Money, Price,
+                                           Quantity)
+from nautilus_trader.trading.strategy import Strategy
+"""                                                                                  # spec 5.2.9, verbatim
+SANDBOX_DEFS = ("Refused", "inside", "plain_mean", "require_backtest_environment", "require_backtest_clock",
+                "make_fee_model", "build_engine", "PortConfig", "TrendSwitchConfig", "CryptoTrendConfig", "Port",
+                "TrendSwitchPort", "CryptoTrendPort", "run", "check_env", "guard_selftest", "main")   # 5.2.9's order
+ORDER_CALL = "submit" + "_order"          # the one exempt call, spelled so this file holds no T-RO-01 token (3.11)
+PORT_METHODS = {"on_start", "on_bar", "place", "on_order_filled", "on_order_denied", "on_order_rejected"}
+EXCLUDED_TEXT = ("AT_THE_CLOSE", "LatencyModel", "latency_model", "PortfolioAnalyzer", "analyzer", "report",
+                 "MARGIN", "BacktestNode", "ParquetDataCatalog", "catalog", "streaming", "log_level_file",
+                 "modify_order", "cancel_order", "close_position", "market_exit")   # and ORDER_CALL + "_list"
+VENUE_KEYWORDS = {"oms_type": "OmsType.NETTING", "account_type": "AccountType.CASH", "bar_execution": "True",
+                  "bar_adaptive_high_low_ordering": "False", "allow_cash_borrowing": "False"}   # spec 5.2.3
+OUTPUTS = ["decisions.csv", "fills.csv", "manifest.json", "onbar_equity.csv"]       # spec 5.2.6
+MANIFEST_KEYS = {"schema", "read_only", "mode", "python", "system", "machine", "precision", "environment",
+                 "strategy_started", "input", "engine", "result", "hashes", "valid", "invalid_reasons"}   # C6
+MANIFEST_RESULT_KEYS = {"bars_seen", "iterations", "backtest_end", "force_stop", "orders_total", "orders_filled",
+                        "denied", "rejected", "orders_not_filled", "account_balance_usd", "final_qty",
+                        "stats_pnls_empty"}
+MANIFEST_ENGINE = {"run_analysis": False, "log_level": "ERROR", "log_colors": False, "account_type": "CASH",
+                   "oms_type": "NETTING", "allow_cash_borrowing": False, "bar_execution": True, "fill_seed": 42}
+FILLS_HEADER = "ts_event,order_side,last_qty,last_px,commission,commission_ccy,trade_id,venue_order_id"
+F_TABLES = {   # spec 8.2: per fill (bar, side, last_qty, last_px at 9 decimals, commission); decisions (bar, action)
+    "F1": {"fills": [(3, "BUY", "10000", "100.000000000", "5000.00"), (5, "SELL", "10000", "96.000000000", "4800.00"),
+                     (7, "BUY", "9600", "99.000000000", "4752.00"), (11, "SELL", "9600", "97.000000000", "4656.00")],
+           "decisions": [(3, "buy"), (5, "sell"), (7, "buy"), (9, "hold"), (11, "sell")],
+           "balance": "926593.00"},
+    "F2": {"fills": [(3, "BUY", "1.00000000", "53000.000000000", "53.00"),
+                     (5, "SELL", "1.00000000", "50000.000000000", "50.00"),
+                     (7, "BUY", "0.98812079", "50500.000000000", "49.90"),
+                     (9, "SELL", "0.98812079", "51000.000000000", "50.39")],
+           "decisions": [(3, "buy"), (4, "hold"), (5, "sell"), (6, "hold"), (7, "buy"), (8, "hold"), (9, "sell"),
+                         (10, "hold")],
+           "balance": "50343.77"},
+}
+
+
+def _bar_ns(day: str, crypto: bool) -> int:
+    """8.2's bar time, computed with datetime (launch uses integer day arithmetic): 21:00 UTC on the date, or 00:00
+    UTC on the next calendar day for the crypto fixture."""
+    from datetime import date, datetime, timedelta, timezone
+    d = date.fromisoformat(day) + timedelta(days=1 if crypto else 0)
+    return int(datetime(d.year, d.month, d.day, 0 if crypto else 21, tzinfo=timezone.utc).timestamp()) * 10**9
+
+
+def _canonical(obj: dict) -> bytes:
+    """C1's input.json bytes."""
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+
+
+def _sandbox_run(python: Path, raw: bytes, bars: bytes, *, prepare: Callable[[Path], None] | None = None,
+                 in_arg: Callable[[Path], str] = str) -> tuple[launch.ChildResult, dict[str, bytes]]:
+    """`sandbox.py run --in <in_arg(temp dir)>` through the launch contract, with these input.json and bars.csv
+    bytes; `prepare(tmp)` may change the temp dir first. Returns the ChildResult and the bytes of every file the
+    child left in the temp dir (input.json and bars.csv excluded); the temp dir is removed."""
+    tmp = launch.make_tempdir()
+    try:
+        (tmp / "input.json").write_bytes(raw)
+        (tmp / "bars.csv").write_bytes(bars)
+        if prepare is not None:
+            prepare(tmp)
+        child = launch.build_launch(["run", "--in", in_arg(tmp)], tempdir=tmp, venv_python=python,
+                                    unshare=launch.resolve_unshare())
+        result = launch.run_child(child)
+        out = {p.name: p.read_bytes() for p in sorted(tmp.iterdir())
+               if p.is_file() and not p.is_symlink() and p.name not in ("input.json", "bars.csv")}
+    finally:
+        left = launch.cleanup_tempdir(tmp)
+    assert left == [], left
+    return result, out
+
+
+def _positive_control(python: Path, name: str) -> dict[str, bytes]:
+    """The unperturbed fixture runs: exit 0 and the four output files of 5.2.6."""
+    raw, bars = launch.fixture_inputs(name)
+    result, out = _sandbox_run(python, raw, bars)
+    assert result.returncode == 0 and sorted(out) == OUTPUTS, (
+        f"positive control {name}: exit {result.returncode}, files {sorted(out)}, stderr {result.stderr_tail[-300:]!r}")
+    return out
+
+
+def _refused_before_engine(label: str, reason: str, result: launch.ChildResult, out: dict[str, bytes]) -> None:
+    """C-05 (section 7): exit 20, no file written, and the last stderr line "C-05: <reason>"."""
+    last = (result.stderr_tail.strip().splitlines() or [""])[-1]
+    assert (result.returncode, out, last) == (20, {}, f"C-05: {reason}"), (
+        f"{label}: exit {result.returncode}, files {sorted(out)}, stderr {result.stderr_tail[-300:]!r}")
+
+
+def _check_env_precision(python: Path) -> dict:
+    """The precision block that `sandbox.py --check-env` prints, read at run time (QA-14)."""
+    tmp = launch.make_tempdir()
+    try:
+        result = launch.run_child(launch.build_launch(["--check-env"], tempdir=tmp, venv_python=python,
+                                                      unshare=launch.resolve_unshare()))
+    finally:
+        left = launch.cleanup_tempdir(tmp)
+    assert result.returncode == 0 and left == [], (result.returncode, left, result.stderr_tail[-300:])
+    return json.loads(result.stdout)["precision"]
+
+
+def _check_run(name: str, raw: bytes, bars: bytes, result: launch.ChildResult, out: dict[str, bytes]) -> dict:
+    """A valid run of fixture F1 or F2: exit 0; C6's manifest with every echo and hash; 8.2's fills and decisions."""
+    table = F_TABLES[name]
+    assert result.returncode == 0 and not result.timed_out and sorted(out) == OUTPUTS, (
+        f"{name}: exit {result.returncode}, files {sorted(out)}, stderr {result.stderr_tail[-300:]!r}")
+    assert out["manifest.json"].endswith(b"}\n") and all(b"\r" not in v for v in out.values()), name
+    m = json.loads(out["manifest.json"])
+    inp = json.loads(raw)
+    ts = [int(line.split(",")[1]) for line in bars.decode("utf-8").splitlines()[1:]]
+    assert set(m) == MANIFEST_KEYS and set(m["result"]) == MANIFEST_RESULT_KEYS, sorted(m)
+    assert (m["schema"], m["read_only"], m["mode"], m["environment"]) == (
+        "nautilus-bridge-manifest/2", True, "run", "BACKTEST"), m
+    assert m["engine"] == MANIFEST_ENGINE and m["strategy_started"] is True, m["engine"]
+    assert m["input"] == {"input_json_sha256": hashlib.sha256(raw).hexdigest(), "bars_sha256": inp["bars_sha256"],
+                          "bars_fed": len(ts), "first_ts": ts[0], "last_ts": ts[-1], "cost_bps": inp["cost_bps"],
+                          "stress": inp["stress"],
+                          "ledger_hash_after_registration": inp["ledger_hash_after_registration"]}, m["input"]
+    assert m["hashes"] == {f: hashlib.sha256(out[f]).hexdigest() for f in OUTPUTS if f != "manifest.json"}
+    r = m["result"]
+    assert (m["valid"], m["invalid_reasons"], r["bars_seen"], r["backtest_end"], r["force_stop"]) == (
+        True, [], len(ts), ts[-1], False), (m["invalid_reasons"], r)
+    assert (r["orders_total"], r["orders_filled"], r["denied"], r["rejected"], r["orders_not_filled"]) == (
+        4, 4, 0, 0, []), r
+    assert (r["account_balance_usd"], r["final_qty"], r["stats_pnls_empty"]) == (table["balance"], "0", True), r
+    fills = out["fills.csv"].decode("utf-8").splitlines()
+    assert fills[0] == FILLS_HEADER, fills[0]
+    got = [(ts.index(int(f[0])), f[1], f[2], f[3], f[4], f[5]) for f in (row.split(",") for row in fills[1:])]
+    assert got == [(*row, "USD") for row in table["fills"]], got
+    decisions = out["decisions.csv"].decode("utf-8").splitlines()
+    assert decisions[0] == "i,ts_event,decision,margin,action", decisions[0]
+    got = [(int(d[0]), d[4]) for d in (row.split(",") for row in decisions[1:])]
+    assert got == table["decisions"], got
+    equity = out["onbar_equity.csv"].decode("utf-8").splitlines()
+    assert equity[0] == "i,ts_event,close,cash,qty,equity_pre" and len(equity) - 1 == len(ts), equity[:2]
+    return m
+
+
+def _link(name: str, target: Callable[[Path], Path]) -> Callable[[Path], None]:
+    """prepare(tmp): replace tmp/name by a symbolic link to target(tmp); WinError 1314 is a NotRun (OPS-R2-5)."""
+    def prepare(tmp: Path) -> None:
+        path, to = tmp / name, target(tmp)
+        if path.exists():
+            path.unlink()
+        try:
+            os.symlink(to, path, target_is_directory=to.is_dir())
+        except OSError as exc:
+            if getattr(exc, "winerror", None) == 1314:
+                raise NotRun("OWNER: enable Developer Mode, or accept this NotRun") from exc
+            raise
+    return prepare
+
+
+def _put(key: str, value) -> Callable[[dict], None]:
+    def change(inp: dict) -> None:
+        inp[key] = value
+    return change
+
+
+def _put_param(key: str, value) -> Callable[[dict], None]:
+    def change(inp: dict) -> None:
+        inp["params"][key] = value
+    return change
+
+
+def _drop(key: str) -> Callable[[dict], None]:
+    def change(inp: dict) -> None:
+        del inp[key]
+    return change
+
+
+def _swap_ts(text: str) -> str:
+    """bars.csv with the timestamps of rows 3 and 4 swapped."""
+    lines = text.split("\n")
+    a, b = lines[4].split(","), lines[5].split(",")
+    a[1], b[1] = b[1], a[1]
+    lines[4], lines[5] = ",".join(a), ",".join(b)
+    return "\n".join(lines)
+
+
+def _repeat_ts(text: str) -> str:
+    """bars.csv whose row 4 repeats row 3's timestamp."""
+    lines = text.split("\n")
+    a, b = lines[4].split(","), lines[5].split(",")
+    b[1] = a[1]
+    lines[5] = ",".join(b)
+    return "\n".join(lines)
+
+
+def _l2_05a_cases(precision: dict) -> list[tuple[str, str, str, Callable[[dict], None] | None,
+                                                 Callable[[str], str] | None]]:
+    """(rule, label, base fixture, change to input.json, change to bars.csv): one single-field perturbation per rule
+    of spec 6.1 (QA-R3-4), each refused by its own rule; the maxima come from --check-env (QA-14). A bars.csv change
+    re-hashes bars_sha256, so only the rule named fails."""
+    qmax, pmax, fp = int(precision["QUANTITY_MAX"]), int(precision["PRICE_MAX"]), precision["FIXED_PRECISION"]
+    field = "unknown or missing field"
+    cases = [(field, "unknown field", "F1", _put("extra", 1), None)]
+    cases += [(field, f"missing {k}", "F1", _drop(k), None) for k in sorted(INPUT_KEYS)]
+    cases += [(rule, label, "F1", change, None) for rule, label, change in (
+        ("schema", "schema /1", _put("schema", "nautilus-bridge-input/1")),
+        ("strategy", "strategy pairs", _put("strategy", "pairs")),
+        ("params fields", "trend params under crypto_trend", _put("strategy", "crypto_trend")),
+        ("params is not an object", "params a list", _put("params", [])),
+        ("params fields", "params extra key", _put_param("x", 1)),
+        ("params.rule", "params.rule ema", _put_param("rule", "ema")),
+        ("params.lookback or params.step", "lookback 0", _put_param("lookback", 0)),
+        ("params.lookback or params.step", "lookback 5001", _put_param("lookback", 5001)),
+        ("params.lookback or params.step", "lookback a string", _put_param("lookback", "3")),
+        ("params.lookback or params.step", "lookback a bool", _put_param("lookback", True)),
+        ("params.lookback or params.step", "step 0", _put_param("step", 0)),
+        ("params.lookback or params.step", "step 5001", _put_param("step", 5001)),
+        ("instrument", "instrument QQQ", _put("instrument", "QQQ")),
+        ("capital_usd", "capital 0", _put("capital_usd", "0")),
+        ("capital_usd", "capital PRICE_MAX + 1", _put("capital_usd", str(pmax + 1))),
+        ("capital_usd", "capital an int", _put("capital_usd", 1005001)),
+        ("capital_usd", "capital leading zero", _put("capital_usd", "01005001")),
+        ("capital_usd", "capital 4301 digits", _put("capital_usd", "1" * 4301)),
+        ("cost_bps", "cost_bps -1", _put("cost_bps", "-1")),
+        ("cost_bps", "cost_bps 1000.5", _put("cost_bps", "1000.5")),
+        ("cost_bps", "cost_bps a float", _put("cost_bps", 50.0)),
+        ("cost_bps", "cost_bps NaN", _put("cost_bps", "NaN")),
+        ("cost_bps", "cost_bps empty", _put("cost_bps", "")),
+        ("stress", "stress 0", _put("stress", "0")),
+        ("stress", "stress 3", _put("stress", "3")),
+        ("stress", "stress an int", _put("stress", 1)),
+        ("fill_seed", "fill_seed -1", _put("fill_seed", -1)),
+        ("fill_seed", "fill_seed 2**32", _put("fill_seed", 2**32)),
+        ("fill_seed", "fill_seed a float", _put("fill_seed", 42.0)),
+        ("price_precision", "price_precision -1", _put("price_precision", -1)),
+        ("price_precision", "price_precision FIXED_PRECISION + 1", _put("price_precision", fp + 1)),
+        ("size_precision", "size_precision -1", _put("size_precision", -1)),
+        ("size_precision", "size_precision FIXED_PRECISION + 1", _put("size_precision", fp + 1)),
+        ("size_precision", "SPY size_precision 8", _put("size_precision", 8)),
+        ("volume", "volume 0", _put("volume", "0")),
+        ("volume", "volume QUANTITY_MAX + 1", _put("volume", str(qmax + 1))),
+        ("volume", "volume an int", _put("volume", 1000000000)),
+        ("n_bars", "n_bars 0", _put("n_bars", 0)),
+        ("n_bars", "n_bars 100001", _put("n_bars", 100001)),
+        ("n_bars differs from bars.csv", "n_bars 11", _put("n_bars", 11)),
+        ("bars_sha256 differs from bars.csv", "bars_sha256 doctored", _put("bars_sha256", "0" * 64)),
+        ("bars_sha256 format", "bars_sha256 upper case", _put("bars_sha256", F1_INPUT["bars_sha256"].upper())),
+        ("bars_sha256 format", "bars_sha256 63 hex", _put("bars_sha256", F1_INPUT["bars_sha256"][:63])),
+        ("ledger_hash_after_registration format", "ledger hash not hex",
+         _put("ledger_hash_after_registration", "xyz")),
+        ("ledger_hash_after_registration format", "ledger hash 31 hex",
+         _put("ledger_hash_after_registration", EMPTY_LEDGER_HASH[:31])),
+        ("ledger_hash_after_registration format", "ledger hash upper case",
+         _put("ledger_hash_after_registration", EMPTY_LEDGER_HASH.upper())))]
+    cases += [(rule, label, "F1", None, change) for rule, label, change in (
+        ("close 3", "close with 2 decimals at 9", lambda t: t.replace("100.000000000", "100.00", 1)),
+        ("close 3", "close with 10 decimals", lambda t: t.replace("100.000000000", "100.0000000000", 1)),
+        ("close 3", "close zero", lambda t: t.replace("100.000000000", "0.000000000", 1)),
+        ("close 3", "close above PRICE_MAX", lambda t: t.replace("100.000000000", f"{pmax + 1}.000000000", 1)),
+        ("bars.csv header", "header i,ts,close", lambda t: t.replace("i,ts_ns,close", "i,ts,close", 1)),
+        ("bars.csv line ends", "CRLF line ends", lambda t: t.replace("\n", "\r\n")),
+        ("bars.csv line ends", "no final newline", lambda t: t[:-1]),
+        ("timestamps not strictly increasing", "timestamps swapped", _swap_ts),
+        ("timestamps not strictly increasing", "timestamp repeated", _repeat_ts),
+        ("bars.csv row 3", "row index 4 for 3", lambda t: t.replace("\n3,", "\n4,", 1)))]
+    cases += [(rule, label, "F2", change, None) for rule, label, change in (
+        ("params.hysteresis", "hysteresis 1.0", _put_param("hysteresis", 1.0)),
+        ("params.hysteresis", "hysteresis -0.1", _put_param("hysteresis", -0.1)),
+        ("params.hysteresis", "hysteresis an int", _put_param("hysteresis", 0)),
+        ("params.lookbacks", "lookbacks empty", _put_param("lookbacks", [])),
+        ("params.lookbacks", "lookbacks item 5001", _put_param("lookbacks", [1, 5001])),
+        ("params.mas", "mas 17 items", _put_param("mas", [2] * 17)),
+        ("params.mas", "mas item 0", _put_param("mas", [0, 3])))]
+    return cases
+
+
+def test_px_fixture_inputs_follow_6_1_and_8_2():
+    """Spec 8.2, 6.1, C1 and C5 (QA-R3-1): launch.fixture_inputs builds F1, F1r, F2 and N1 as C1's canonical
+    input.json bytes with exactly the 14 fields, and LF bars.csv bytes whose rows, timestamps (21:00 UTC on
+    weekdays from 2001-01-02; 00:00 UTC the day after each date from 2021-01-01) and closes are 8.2's; the ledger
+    hash is an empty ledger's; F1r's child inputs are F1's; N1 is F1 with volume "4000" and 2 price decimals; any
+    other name is a KeyError."""
+    from core.quant import gate_ledger
+    assert launch.FIXTURES == ("F1", "F1r", "F2", "N1"), launch.FIXTURES
+    assert gate_ledger.ledger_hash([]) == EMPTY_LEDGER_HASH
+    built = {name: launch.fixture_inputs(name) for name in launch.FIXTURES}
+    for name, (raw, bars) in built.items():
+        assert launch.fixture_inputs(name) == (raw, bars), f"{name}: two calls differ"
+        inp = json.loads(raw)
+        assert raw == _canonical(inp) and set(inp) == INPUT_KEYS, (name, raw[:80])
+        assert b"\r" not in raw + bars and bars.endswith(b"\n") and not raw.endswith(b"\n"), name
+        assert inp["bars_sha256"] == hashlib.sha256(bars).hexdigest(), name
+        crypto = name == "F2"
+        dates, prices = (F2_DATES, F2_PRICES) if crypto else (F1_DATES, F1_PRICES)
+        decimals = "0" * inp["price_precision"]
+        want = ["i,ts_ns,close"] + [f"{i},{_bar_ns(d, crypto)},{c}.{decimals}"
+                                    for i, (d, c) in enumerate(zip(dates, prices))]
+        assert bars.decode("utf-8").split("\n") == want + [""], (name, bars[:120])
+    assert json.loads(built["F1"][0]) == F1_INPUT and json.loads(built["F2"][0]) == F2_INPUT
+    assert built["F1r"] == built["F1"]
+    n1 = json.loads(built["N1"][0])
+    assert n1 == {**F1_INPUT, "volume": "4000", "price_precision": 2, "bars_sha256": N1_BARS_SHA256}, n1
+    assert (_bar_ns("2001-01-02", False), _bar_ns("2021-01-01", True)) == (978469200000000000, 1609545600000000000)
+    for other in ("F3", "f1", "N2", ""):
+        try:
+            launch.fixture_inputs(other)
+        except KeyError:
+            continue
+        raise AssertionError(f"fixture_inputs({other!r}) did not raise KeyError")
+
+
+def test_px_sandbox_avoids_excluded_constructs():
+    """Spec Step 5 done-when, 5.2.3, 5.2.5, 5.2.9 (C-5) and 5.6: sandbox.py keeps 5.2.9's import block verbatim and
+    its classes and functions in order, with no __init__ and no super(); on_start starts with the clock guard and
+    ends by setting strategy_started; Port.place's one statement is the one order call; no code path uses
+    AT_THE_CLOSE, allow_cash_borrowing=True, a latency model, the PortfolioAnalyzer, a report as equity, a MARGIN
+    account or another order verb; the venue is NETTING and CASH with bar execution, FillModel(1.0, 0.0, seed) and
+    the fee closure; the engine runs without the analyzer at log level ERROR without colours; orders are MARKET GTC;
+    and the real sandbox gives no T-RO-01 hit."""
+    from tests.acceptance import _code_only
+    from tests.macro_m0_harness import _offences
+    source = launch.SANDBOX.read_text(encoding="utf-8")
+    assert SANDBOX_IMPORTS in source, "sandbox.py lost 5.2.9's import block"
+    tree = ast.parse(source)
+    defs = [n.name for n in tree.body if isinstance(n, (ast.ClassDef, ast.FunctionDef))]
+    order = [n for n in defs if n in SANDBOX_DEFS]
+    assert order == list(SANDBOX_DEFS), f"sandbox.py keeps 5.2.9's classes and functions in order: {order}"
+    classes = {n.name: n for n in tree.body if isinstance(n, ast.ClassDef)}
+    port = {f.name: f for f in classes["Port"].body if isinstance(f, ast.FunctionDef)}
+    assert set(port) == PORT_METHODS, sorted(port)
+    assert [ast.unparse(s) for s in port["place"].body] == [f"self.{ORDER_CALL}(order)"], ast.unparse(port["place"])
+    start = port["on_start"].body
+    assert (ast.unparse(start[0]), ast.unparse(start[-1])) == (
+        "require_backtest_clock(self.clock)", "self.strategy_started = True"), ast.unparse(port["on_start"])
+    for cls in ("TrendSwitchPort", "CryptoTrendPort"):
+        assert [f.name for f in classes[cls].body if isinstance(f, ast.FunctionDef)] == ["decide"], cls
+    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+    functions = {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+    attrs = {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
+    assert "__init__" not in functions and "super" not in names and "state" not in attrs, "rule F3; map03 2.5"
+    code = _code_only(launch.SANDBOX)
+    assert code.count(ORDER_CALL) == 1, code.count(ORDER_CALL)
+    excluded = [w for w in (*EXCLUDED_TEXT, ORDER_CALL + "_list") if w in code]
+    assert excluded == [], excluded
+    every_call = [n for n in ast.walk(tree) if isinstance(n, ast.Call)]
+
+    def callee(c: ast.Call) -> str:
+        return c.func.id if isinstance(c.func, ast.Name) else c.func.attr if isinstance(c.func, ast.Attribute) else ""
+    kw: dict[str, list[str]] = {}
+    for c in every_call:
+        for k in c.keywords:
+            kw.setdefault(k.arg, []).append(ast.unparse(k.value))
+    flags = (kw["allow_cash_borrowing"], kw["run_analysis"], kw["log_level"], kw["log_colors"], kw["time_in_force"])
+    assert flags == (["False"], ["False"], ["'ERROR'"], ["False"], ["TimeInForce.GTC"]), flags
+    named = {n: [c for c in every_call if callee(c) == n] for n in ("add_venue", "FillModel", ORDER_CALL, "place")}
+    assert {n: len(v) for n, v in named.items()} == dict.fromkeys(named, 1), {n: len(v) for n, v in named.items()}
+    venue = {k.arg: ast.unparse(k.value) for k in named["add_venue"][0].keywords}
+    assert {k: venue.get(k) for k in VENUE_KEYWORDS} == VENUE_KEYWORDS, venue
+    assert venue["fee_model"] == "make_fee_model(inp['cost_bps'], inp['stress'])", venue["fee_model"]
+    fill = {k.arg: ast.unparse(k.value) for k in named["FillModel"][0].keywords}
+    assert (fill.get("prob_fill_on_limit"), fill.get("prob_slippage"), "random_seed" in fill) == (
+        "1.0", "0.0", True), fill
+    factory = sorted({callee(c) for c in every_call
+                      if isinstance(c.func, ast.Attribute) and ast.unparse(c.func.value) == "self.order_factory"})
+    assert factory == ["market"], factory
+    assert _offences(launch.SANDBOX) == [], _offences(launch.SANDBOX)
+
+
+def test_l2_04_fills_identical_across_processes():
+    """L2-4 (spec 3.5): F1 and F2 each run in two separate processes through the launch contract and give the same
+    fills.csv SHA-256; every output file and both import censuses are identical too; each run is valid, its
+    manifest has C6's fields, echoes and hashes, and its fills and decisions are 8.2's."""
+    python = layer2()
+    for name in ("F1", "F2"):
+        raw, bars = launch.fixture_inputs(name)
+        runs = [_sandbox_run(python, raw, bars) for _ in range(2)]
+        for result, out in runs:
+            _check_run(name, raw, bars, result, out)
+        (r1, o1), (r2, o2) = runs
+        assert hashlib.sha256(o1["fills.csv"]).hexdigest() == hashlib.sha256(o2["fills.csv"]).hexdigest(), name
+        assert o1 == o2, [f for f in OUTPUTS if o1[f] != o2[f]]
+        assert r1.census == r2.census and len(r1.census) > 100, (name, len(r1.census), len(r2.census))
+
+
+def test_l2_05a_refusals_exit_20_before_the_engine():
+    """L2-5a (spec 6.1, 7 C-05; QA-R3-4, QA-14, QA-R2-8): F1 and F2 unperturbed exit 0; then each single-field
+    perturbation of 6.1, an input.json that is not JSON and a bars.csv that is not UTF-8 exit 20 with no file written
+    and the refusing rule on stderr ("C-05: input refused: <rule>"); QUANTITY_MAX, PRICE_MAX and FIXED_PRECISION are
+    read from --check-env at run time."""
+    python = layer2()
+    for name in ("F1", "F2"):
+        _positive_control(python, name)
+    cases = _l2_05a_cases(_check_env_precision(python))
+    for rule, label, name, change, bars_change in cases:
+        raw, bars = launch.fixture_inputs(name)
+        inp = json.loads(raw)
+        if bars_change is not None:
+            bars = bars_change(bars.decode("utf-8")).encode("utf-8")
+            inp["bars_sha256"] = hashlib.sha256(bars).hexdigest()
+        if change is not None:
+            change(inp)
+        result, out = _sandbox_run(python, _canonical(inp), bars)
+        _refused_before_engine(label, f"input refused: {rule}", result, out)
+    raw, bars = launch.fixture_inputs("F1")
+    result, out = _sandbox_run(python, b"{not json", bars)
+    _refused_before_engine("input.json not JSON", "input refused: input.json is not UTF-8 JSON", result, out)
+    inp, bad = json.loads(raw), bars[:-1] + b"\xff\n"
+    inp["bars_sha256"] = hashlib.sha256(bad).hexdigest()
+    result, out = _sandbox_run(python, _canonical(inp), bad)
+    _refused_before_engine("bars.csv not UTF-8", "input refused: bars.csv is not UTF-8", result, out)
+    print(f"  {len(cases) + 2} perturbations refused with exit 20")
+
+
+def test_l2_05b_input_linked_to_env_refused():
+    """L2-5b (spec 5.2.8; SECURITY-3): with input.json a symbolic link to the repo's .env, the sandbox exits 20 with
+    no file written, before it opens anything; so it does with bars.csv linked there, and with a --in that is
+    relative or that is not its own resolve() (a link to the temp dir). F1 unlinked exits 0. Without the right to
+    make a link on Windows (WinError 1314): NotRun (OPS-R2-5)."""
+    python = layer2()
+    _positive_control(python, "F1")
+    raw, bars = launch.fixture_inputs("F1")
+    in_rule = "run needs --in <an absolute directory equal to its own resolve()>"
+    for label, reason, prepare, in_arg in (
+            ("input.json linked to the repo's .env", "input refused: input.json",
+             _link("input.json", lambda tmp: ROOT / ".env"), str),
+            ("bars.csv linked to the repo's .env", "input refused: bars.csv",
+             _link("bars.csv", lambda tmp: ROOT / ".env"), str),
+            ("--in .", in_rule, None, lambda tmp: "."),
+            ("--in a link to the temp dir", in_rule, _link("alias", lambda tmp: tmp), lambda tmp: str(tmp / "alias"))):
+        result, out = _sandbox_run(python, raw, bars, prepare=prepare, in_arg=in_arg)
+        _refused_before_engine(label, reason, result, out)
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 def main(argv: list[str] | None = None) -> int:

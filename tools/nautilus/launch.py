@@ -432,3 +432,54 @@ def cleanup_tempdir(tempdir: Path) -> list[str]:
         return sorted(str(p) for p in Path(tempdir).rglob("*")) or [str(tempdir)]
     except OSError:
         return [str(tempdir)]
+
+
+# --------------------------------------------------------------------------- #
+# Fixtures F1, F1r, F2 and N1 (spec 8.2, 6.1; QA-R3-1): the one builder of their child inputs
+# --------------------------------------------------------------------------- #
+FIXTURES = ("F1", "F1r", "F2", "N1")
+_FIXTURE_CLOSES = {"F1": (97, 98, 99, 100, 104, 96, 95, 99, 101, 103, 98, 97),
+                   "F2": (50000, 51000, 52000, 53000, 52600, 50000, 49000, 50500, 52000, 51000, 50800)}
+
+
+def _fixture_ts(name: str) -> list[int]:
+    """The bar timestamps (ns) of a fixture (spec 8.2, 5.2.4): F1, F1r and N1 at 21:00 UTC on the 12 weekdays from
+    2001-01-02; F2 at 00:00 UTC on the calendar day after each of its 11 dates from 2021-01-01."""
+    from datetime import date, timedelta
+    if name == "F2":
+        days = [date(2021, 1, 2) + timedelta(days=k) for k in range(len(_FIXTURE_CLOSES["F2"]))]
+        hour = 0
+    else:
+        days, d = [], date(2001, 1, 2)
+        while len(days) < len(_FIXTURE_CLOSES["F1"]):
+            if d.weekday() < 5:
+                days.append(d)
+            d += timedelta(days=1)
+        hour = 21
+    return [((d - date(1970, 1, 1)).days * 86400 + hour * 3600) * 10**9 for d in days]
+
+
+def fixture_inputs(name: str) -> tuple[bytes, bytes]:
+    """(input.json bytes, bars.csv bytes) of fixture `name` (spec 8.2 and 6.1), the one builder that L2-4, L2-5a,
+    L2-5b, --fixtures, --write-goldens and L1-33 use (QA-R3-1). input.json is C1's canonical JSON, no trailing
+    newline; bars.csv is LF. ledger_hash_after_registration is gate_ledger.ledger_hash([]), the hash of an empty
+    ledger, since fixtures register nothing (6.1). F1r's child inputs are F1's: F1r differs only in the parent's rf,
+    0.0001 per session (QUANT-R2-6). N1 is F1 with volume "4000" and 2 price decimals. KeyError for another name."""
+    if name not in FIXTURES:
+        raise KeyError(name)
+    from core.quant.gate_ledger import ledger_hash
+    crypto = name == "F2"
+    p = 2 if name == "N1" else 9
+    closes = _FIXTURE_CLOSES["F2" if crypto else "F1"]
+    rows = ["i,ts_ns,close"] + [f"{i},{t},{c:.{p}f}" for i, (t, c) in enumerate(zip(_fixture_ts(name), closes))]
+    bars = ("\n".join(rows) + "\n").encode("utf-8")
+    if crypto:
+        head = {"strategy": "crypto_trend", "params": {"hysteresis": 0.2, "lookbacks": [1, 2], "mas": [2, 3]},
+                "instrument": "BTC/USD", "capital_usd": "53053", "cost_bps": "10", "size_precision": 8}
+    else:
+        head = {"strategy": "trend_switch", "params": {"rule": "sma", "lookback": 3, "step": 2},
+                "instrument": "SPY", "capital_usd": "1005001", "cost_bps": "50", "size_precision": 0}
+    inp = {**head, "schema": "nautilus-bridge-input/2", "stress": "1", "fill_seed": 42, "price_precision": p,
+           "volume": "4000" if name == "N1" else "1000000000", "n_bars": len(closes),
+           "bars_sha256": hashlib.sha256(bars).hexdigest(), "ledger_hash_after_registration": ledger_hash([])}
+    return json.dumps(inp, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8"), bars
