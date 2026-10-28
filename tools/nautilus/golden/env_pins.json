@@ -1,0 +1,27 @@
+{
+ "platforms": {
+  "manylinux_2_35_x86_64": {
+   "python_minor": "3.13",
+   "record_digest_sha256": "a448cd20501f6050edba17cf0e6fe8771e94e454213ece96ed936c15548f03f9",
+   "record_entries": 764,
+   "versions": {
+    "nautilus_trader": "1.231.0",
+    "numpy": "2.3.5",
+    "pandas": "2.3.3"
+   },
+   "wheel_tag": "cp313-cp313-manylinux_2_35_x86_64"
+  },
+  "win_amd64": {
+   "python_minor": "3.13",
+   "record_digest_sha256": "47d274d79b85a43b79917e9b993fa3e68ebf68138c4a8b86527c5902cf439555",
+   "record_entries": 764,
+   "versions": {
+    "nautilus_trader": "1.231.0",
+    "numpy": "2.3.5",
+    "pandas": "2.3.3"
+   },
+   "wheel_tag": "cp313-cp313-win_amd64"
+  }
+ },
+ "schema": "nautilus-bridge-env-pins/1"
+}
