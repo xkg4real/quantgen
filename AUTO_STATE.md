@@ -1,19 +1,19 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-10-29T02:21:02+09:00
-source_branch: claude/relaxed-cerf-az755o
-source_head: 2b2cbbc
-upstream: none
-patch_base: 2b2cbbc
+created_at: 2026-10-29T02:47:47+09:00
+source_branch: claude/handoff-protocol
+source_head: 9a7652d
+upstream: origin/claude/handoff-protocol
+patch_base: 9a7652d
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
 usage_pct: unknown
 usage_resets_at: unknown
-session: 3b15d155-c074-5a85-b79d-23d422f86afa
+session: 8f165c8e-feba-56fb-b3cd-f95d05bc0c7c
 snapshot_key: none
-current_md_updated_at: 2026-10-28T21:22:00+09:00
+current_md_updated_at: 2026-10-29T02:46:09+09:00
 current_md_status: idle
 ---
 
@@ -26,7 +26,6 @@ current_md_status: idle
 ## 최근 커밋
 
 ```
-2b2cbbc Merge pull request #6 from xkg4real/claude/handoff-protocol
 9a7652d Handoff: third review round — normalised ledger IDs, ledger history, re-runnable --done, session guards
 7b21cd8 Handoff: LEDGER of finished work, usage cycles, and a read-back check on every publish
 a298b9d Handoff: second review round — keyed snapshots respect another task's handoff, --key always recorded
@@ -41,6 +40,7 @@ cd54677 Handoff: auto_snapshot.py pushes a no-model git snapshot (AUTO_STATE.md)
 fdc1728 Owner rulings recorded verbatim (calendar implementation conditionally approved pending the audit file; R1-R5); remaining-work bulletin updated in Markdown, Word and the flow chart
 ca3a657 Remaining-work bulletin in Markdown and Word, with a swimlane flow chart (Claude, owner, mixed)
 b15eb76 Roadmap review: remaining work split into Claude, owner and mixed categories, each with its sequence number and prerequisites
+e9da3d4 Owner ruling O1 recorded (new dependencies incl. pyarrow approved); review of the owner's QUANTGEN roadmap with an adoption plan and the rewritten remaining-work bulletin
 ```
 
 ## 푸시되지 않은 커밋
