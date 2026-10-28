@@ -1202,6 +1202,1046 @@ def test_l2_05b_input_linked_to_env_refused():
 
 
 # --------------------------------------------------------------------------- #
+# Plan Task 4 (spec Step 6): the runner, the stub child, goldens and the census baseline
+# --------------------------------------------------------------------------- #
+STUB = ROOT / "tests" / "nautilus_stub_child.py"
+GOLDEN_DIR = ROOT / "tools" / "nautilus" / "golden"
+ONE_SMA = {"rule": ["sma"], "lookback": [126], "step": [21]}            # a one-column grid: two children
+REHEARSAL_LIKE = {                                                       # the fields of 10.1 and 10.2 a table copies
+    "E1-SPY": {"family_id": "E1", "rule": "E1", "market": "US", "strategy": "trend_switch", "symbol": "SPY",
+               "instrument": "SPY", "axes": {"rule": ["sma", "tsmom"], "lookback": [126, 210, 252], "step": [21, 42]},
+               "cost_bps": 50.0, "embargo": 21, "size_precision": 0, "domain": None, "card_id": "NB_E1_trend_spy",
+               "claim_label": "pre-specified on historical data; the SPY series was used inside S_E1_trend_us with "
+                              "the same 12-setting grid; not confirmatory"},
+    "C3-BTCUSD": {"family_id": "C3", "rule": "C3", "market": "CRYPTO", "strategy": "crypto_trend",
+                  "symbol": "BTC-USD", "instrument": "BTC/USD", "axes": {"hysteresis": [0.0, 0.222, 0.444, 0.667, 0.889]},
+                  "cost_bps": 10.0, "embargo": 1, "size_precision": 8, "domain": {"hysteresis": [0.0, 0.889]},
+                  "card_id": "NB_C3_crypto_trend_btcusd",
+                  "claim_label": "pre-specified on historical data, engine replication: stored card "
+                                 "S_C3_crypto_trend_btcusd on the same file and configurations, grid revised on "
+                                 "this file; not new evidence about the rule"}}
+SPEC_FILLS = {   # spec 8.2: (bar, side, last_qty, last_px, commission) of F1 and F2
+    "F1": ((3, "BUY", "10000", "100.000000000", "5000.00"), (5, "SELL", "10000", "96.000000000", "4800.00"),
+           (7, "BUY", "9600", "99.000000000", "4752.00"), (11, "SELL", "9600", "97.000000000", "4656.00")),
+    "F2": ((3, "BUY", "1.00000000", "53000.000000000", "53.00"), (5, "SELL", "1.00000000", "50000.000000000", "50.00"),
+           (7, "BUY", "0.98812079", "50500.000000000", "49.90"), (9, "SELL", "0.98812079", "51000.000000000", "50.39"))}
+SPEC_R = {       # spec 8.2: Nautilus R (to 1e-7) and the QUANTGEN pnl of F1, F1r and F2
+    "F1": (0, 0, 0, 0.0348258, -0.0769230, -0.0050000, 0, 0.0151256, 0.0198010, -0.0485413, -0.0102036),
+    "F1r": (0.0001, 0.0001, 0.0001, 0.0348258, -0.0769230, -0.0049005, 0.0001, 0.0151256, 0.0198010, -0.0485413,
+            -0.0102035),
+    "F2": (0, 0, 0, -0.0085386, -0.0494297, -0.0010000, 0, 0.0286743, -0.0192308, -0.0009999)}
+SPEC_PNL = {
+    "F1": (0, 0, 0, 0.0350000, -0.0769231, -0.0050000, 0, 0.0152020, 0.0198020, -0.0485437, -0.0102041),
+    "F1r": (0.0001, 0.0001, 0.0001, 0.0350000, -0.0769231, -0.0049000, 0.0001, 0.0152020, 0.0198020, -0.0485437,
+            -0.0102041),
+    "F2": (0, 0, 0, -0.0085472, -0.0494297, -0.0010000, 0, 0.0287030, -0.0192308, -0.0010000)}
+GOLDEN_SPEC = {  # spec 8.2 and 6.8, typed in: prices at each fixture's precision, dates of ts_event in UTC
+    "F1": {"schema": "nautilus-bridge-golden/1", "fixture": "F1", "status": "valid", "exit_code": 0, "bars_fed": 12,
+           "bars_seen": 12, "force_stop": False,
+           "fills": [{"date": "2001-01-05", "side": "BUY", "qty": "10000", "price": "100.000000000", "commission": "5000.00"},
+                     {"date": "2001-01-09", "side": "SELL", "qty": "10000", "price": "96.000000000", "commission": "4800.00"},
+                     {"date": "2001-01-11", "side": "BUY", "qty": "9600", "price": "99.000000000", "commission": "4752.00"},
+                     {"date": "2001-01-17", "side": "SELL", "qty": "9600", "price": "97.000000000", "commission": "4656.00"}],
+           "final_cash": "926593.00", "final_qty": "0", "invalid_reasons": []},
+    "F2": {"schema": "nautilus-bridge-golden/1", "fixture": "F2", "status": "valid", "exit_code": 0, "bars_fed": 11,
+           "bars_seen": 11, "force_stop": False,
+           "fills": [{"date": "2021-01-05", "side": "BUY", "qty": "1.00000000", "price": "53000.000000000", "commission": "53.00"},
+                     {"date": "2021-01-07", "side": "SELL", "qty": "1.00000000", "price": "50000.000000000", "commission": "50.00"},
+                     {"date": "2021-01-09", "side": "BUY", "qty": "0.98812079", "price": "50500.000000000", "commission": "49.90"},
+                     {"date": "2021-01-11", "side": "SELL", "qty": "0.98812079", "price": "51000.000000000", "commission": "50.39"}],
+           "final_cash": "50343.77", "final_qty": "0", "invalid_reasons": []},
+    "N1": {"schema": "nautilus-bridge-golden/1", "fixture": "N1", "status": "invalid", "exit_code": 10, "bars_fed": 12,
+           "bars_seen": 4, "force_stop": True,
+           "fills": [{"date": "2001-01-05", "side": "BUY", "qty": "1000", "price": "100.00", "commission": "500.00"}],
+           "final_cash": "904501.00", "final_qty": "1000",
+           "invalid_reasons": ["C-01: forced stop", "C-02: bars seen fewer than bars fed"]}}
+
+
+def _runner():
+    """tools.nautilus.runner, imported by each test that needs it, so a missing runner fails only Task 4's tests."""
+    from tools.nautilus import runner
+    return runner
+
+
+def stub_python() -> str:
+    """sys.executable, unless it lies under WindowsApps (the Store python) and the dedicated
+    %LOCALAPPDATA%\\quantgen\\py313\\python.exe exists: then that file (8.1; QA-R3-10)."""
+    py313 = Path(os.environ.get("LOCALAPPDATA") or "/nonexistent") / "quantgen" / "py313" / "python.exe"
+    parts = [p.lower() for p in Path(os.path.normcase(os.path.realpath(sys.executable))).parts]
+    return str(py313) if "windowsapps" in parts and py313.is_file() else sys.executable
+
+
+def stub_cmd(*flags: str) -> list[str]:
+    return [stub_python(), "-I", str(STUB), *flags]
+
+
+def stub_probe_cmd() -> list[str]:
+    return stub_cmd("--probe")
+
+
+def synth_prices(seed, n, p0, p1, planted=()):                       # spec 8.2, verbatim
+    import numpy as np
+    lr = np.random.default_rng(seed).normal(0.0, np.where(np.arange(n) // 250 % 2 == 0, 0.008, 0.02))
+    lr += (np.log(p1 / p0) - lr.sum()) / n                         # drift from about p0 to about p1
+    for k, i in enumerate(planted):
+        lr[i] = np.log(1.1 if k % 2 == 0 else 0.9)                 # planted +10 % and -10 % days
+    return np.round(p0 * np.exp(np.cumsum(lr)), 9)
+
+
+def synth_rf(n):                                                   # stepped: 0, 2, 5 and 1 % a year
+    import numpy as np
+    return np.repeat([0.0, 0.02, 0.05, 0.01], -(-n // 4))[:n] / 252
+
+
+def _bdates(n: int) -> list[str]:
+    """Spec 8.2's calendar: pd.bdate_range("2001-01-02", periods=n)."""
+    import pandas as pd
+    return [d.strftime("%Y-%m-%d") for d in pd.bdate_range("2001-01-02", periods=n)]
+
+
+def _md5(path: Path) -> str:
+    return hashlib.md5(path.read_bytes()).hexdigest()
+
+
+def _write_prices(path: Path, dates: Sequence[str], prices) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("Date,Close\n" + "".join(f"{d},{p:.9f}\n" for d, p in zip(dates, prices)), encoding="utf-8",
+                    newline="\n")
+    return _md5(path)
+
+
+def _write_rf(path: Path, dates: Sequence[str], rf) -> str:
+    """A DGS3MO-shaped file: percent a year (rf * 252 * 100); a None value is a blank, as FRED leaves holidays."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    rows = "".join(f"{d},{'' if x is None else repr(float(x) * 252 * 100)}\n" for d, x in zip(dates, rf))
+    path.write_text("DATE,DGS3MO\n" + rows, encoding="utf-8", newline="\n")
+    return _md5(path)
+
+
+def write_rehearsal_table(tmp: Path, *, like: str = "E1-SPY", prices, dates: Sequence[str], rf=None, **fields) -> Path:
+    """The prices file, the DGS3MO-shaped file when rf is given, and <tmp>/table.json: a 6.6 table with pilot
+    "rehearsal" and every other field from pilot `like` (10.1 or 10.2), study_configs [], no reference card, md5s
+    computed, no owner field; `fields` override any key (a new `axes` without `grid` recomputes the grid). Written
+    without sort_keys: the axes keys keep the study's call order, which fixes the grid's column order (spec 5.3.2 step 1)."""
+    from core.quant import strategies as S
+    t = {"schema": "nautilus-bridge-table/1", "pilot": "rehearsal", **REHEARSAL_LIKE[like],
+         "prices_file": str(tmp / "prices.csv"), "prices_md5": _write_prices(tmp / "prices.csv", dates, prices),
+         "start": dates[0], "end": dates[-1], "rf_file": None, "rf_md5": None, "capital_usd": "1000000",
+         "price_precision": 9, "volume": "1000000000", "fill_seed": 42,
+         "hypothesis": "synthetic rehearsal: both engines give the same matrix", "study_configs": [],
+         "reference_card": None, "reference_card_md5": None}
+    if rf is not None:
+        t.update(rf_file=str(tmp / "DGS3MO.csv"), rf_md5=_write_rf(tmp / "DGS3MO.csv", dates, rf))
+    t.update(fields)
+    t["grid"] = fields["grid"] if "grid" in fields else S.grid_from(**t["axes"])
+    path = tmp / "table.json"
+    path.write_text(json.dumps(t, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+    return path
+
+
+def run_rehearsal(table: Path, tmp: Path, *, flags: Sequence[str] = (), **run_kwargs) -> tuple[int, dict | None]:
+    """runner.run in rehearsal mode with the stub child and the stub probe, ledger and outputs under tmp; returns
+    the exit code and the newest run.json under tmp/out (None when no run folder holds one)."""
+    code = _runner().run(table, mode="rehearsal", ledger_dir=tmp / "ledgers", out_dir=tmp / "out",
+                         child_cmd=stub_cmd(*flags), probe_cmd=stub_probe_cmd(), **run_kwargs)
+    runs = sorted((tmp / "out").glob("NB-*/run.json"))
+    return code, (json.loads(runs[-1].read_text(encoding="utf-8")) if runs else None)
+
+
+def _small_table(tmp: Path, *, n: int = 320, axes: dict | None = None, with_rf: bool = True, **fields) -> Path:
+    """A synthetic SPY-like rehearsal table: synth_prices(7, n, 100, 150), synth_rf(n), one sma column by default."""
+    return write_rehearsal_table(tmp, prices=synth_prices(7, n, 100.0, 150.0), dates=_bdates(n),
+                                 rf=synth_rf(n) if with_rf else None, axes=axes or ONE_SMA, **fields)
+
+
+def _captured(fn: Callable[[], object]) -> tuple[object, str]:
+    """fn() with stdout captured: (its result, what it printed)."""
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        out = fn()
+    return out, buf.getvalue()
+
+
+def _step_hooks(seen: list[int]) -> dict:
+    """after_step0 .. after_step17, each appending its step number to `seen`."""
+    return {f"after_step{n}": (lambda _ctx, n=n: seen.append(n)) for n in range(18)}
+
+
+def _plain_row(rule: str, k: int) -> dict:
+    return {"rule": rule, "params": {"k": k}, "timing_class": "COMPLIANT", "span": ["2001-01-02", "2002-03-01"],
+            "market": "US", "run_utc": "2026-10-28T00:00:00Z", "phase": "research", "script": "tests/nautilus_acceptance.py"}
+
+
+def _code_root(dst: Path) -> Path:
+    """A temp copy of every file code_sha256 reads, so of-record checks run on a temp repository root."""
+    for p in _runner().code_paths(ROOT):
+        target = dst / p.relative_to(ROOT)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(p.read_bytes())
+    return dst
+
+
+def _of_record_table(path: Path, pilot: str, code: str, **fields) -> Path:
+    """An of-record table under the system temp dir only (GOVERNANCE-R3-5), whose owner_confirmed quotes its own
+    table_sha256 and `code`. It names the pilot's files; check_table never opens a data file."""
+    from core.quant import strategies as S
+    runner = _runner()
+    e1 = pilot == "E1-SPY"
+    t = {"schema": "nautilus-bridge-table/1", "pilot": pilot, **REHEARSAL_LIKE[pilot],
+         "prices_file": "docs/asset_expansion/cache/" + ("yf_SPY.csv" if e1 else "yf_BTC-USD.csv"),
+         "prices_md5": runner.PINNED_REAL_MD5["SPY" if e1 else "BTC-USD"],
+         "start": "2004-12-01" if e1 else "2014-09-17", "end": "2026-09-25",
+         "rf_file": "docs/asset_expansion/cache/fred_DGS3MO.csv" if e1 else None,
+         "rf_md5": "661722143f24930a29b58c535d227c1b" if e1 else None, "capital_usd": "1000000", "price_precision": 9,
+         "volume": "1000000000", "fill_seed": 42, "hypothesis": "of-record shape, temp only", "study_configs": [],
+         "reference_card": None, "reference_card_md5": None, "host_fingerprint": "0" * 64}
+    t.update(fields)
+    t["grid"] = fields["grid"] if "grid" in fields else S.grid_from(**t["axes"])
+    t.setdefault("owner_confirmed", f"Geon Koh, 2026-10-28, table {runner.table_sha256(t)[:16]}, code {code[:16]}")
+    path.write_text(json.dumps(t, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+    return path
+
+
+def _fixture_series(name: str):
+    """(capital, ts, closes) of an 8.2 fixture, from launch.fixture_inputs (C2)."""
+    import numpy as np
+    raw, bars = launch.fixture_inputs(name)
+    rows = [r.split(",") for r in bars.decode("utf-8").splitlines()[1:]]
+    return json.loads(raw)["capital_usd"], [int(r[1]) for r in rows], np.array([float(r[2]) for r in rows])
+
+
+def test_l1_01_return_reconstruction_f1_f1r_f2():
+    """L1-1 (5.3.3): R rebuilt from 8.2's fills matches 8.2's Nautilus R on F1, F1r and F2 to 1e-7, with the cash
+    overlay on F1r; the final cash, the fill bars and TV (the bar T-1 fill dropped) follow; QUANTGEN's simulate gives
+    8.2's pnl; a fill off every bar timestamp is C-09."""
+    import numpy as np
+    from decimal import Decimal
+    from core.quant import strategies as S
+    runner = _runner()
+    rebuilt = {}
+    for name in ("F1", "F1r", "F2"):
+        capital, ts, closes = _fixture_series("F2" if name == "F2" else "F1")
+        rf = np.full(len(ts), 0.0001 if name == "F1r" else 0.0)
+        fills = [{"ts_event": ts[b], "order_side": side, "last_qty": Decimal(q), "last_px": Decimal(px),
+                  "commission": Decimal(c), "commission_ccy": "USD", "trade_id": f"T{k}", "venue_order_id": f"O{k}"}
+                 for k, (b, side, q, px, c) in enumerate(SPEC_FILLS["F2" if name == "F2" else "F1"])]
+        rb = rebuilt[name] = runner.rebuild_returns(fills, closes, ts, rf, Decimal(capital))
+        assert rb.R.shape == (len(ts) - 1,) and np.max(np.abs(rb.R - np.array(SPEC_R[name]))) <= 1e-7, (name, rb.R)
+        assert rb.E_minus[0] == float(capital) and rb.fill_bars == [3, 5, 7, 9 if name == "F2" else 11], rb.fill_bars
+        if name == "F2":
+            W = S.crypto_trend(closes, lookbacks=(1, 2), mas=(2, 3), hysteresis=0.2)
+            pnl, _ = S.simulate(closes, W, cost_bps=10.0, cash_daily=rf)
+            assert rb.final_cash.quantize(Decimal("0.000001")) == Decimal("50343.770395"), rb.final_cash
+            assert np.flatnonzero(rb.TV).tolist() == [3, 5, 7, 9], rb.TV
+        else:
+            W = S.trend_switch(closes, rule="sma", lookback=3, step=2)
+            pnl, turnover = S.simulate(closes, W, cost_bps=50.0, cash_daily=rf)
+            assert turnover.tolist() == [0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0], turnover
+            assert rb.final_cash == Decimal("926593") and np.flatnonzero(rb.TV).tolist() == [3, 5, 7], rb.TV
+            assert abs(rb.TV[3] - 1_000_000 / 1_005_001) < 1e-12, rb.TV[3]
+        assert np.max(np.abs(pnl - np.array(SPEC_PNL[name]))) <= 1e-7, (name, pnl)
+    moved = np.abs(rebuilt["F1r"].R - rebuilt["F1"].R)
+    assert all(moved[t] < 1e-8 for t in (3, 4, 7, 8, 9)), moved
+    capital, ts, closes = _fixture_series("F1")
+    off = [{"ts_event": ts[3] + 1, "order_side": "BUY", "last_qty": Decimal(1), "last_px": Decimal(100),
+            "commission": Decimal("0.50"), "commission_ccy": "USD", "trade_id": "T", "venue_order_id": "O"}]
+    _invalid(lambda: runner.rebuild_returns(off, closes, ts, np.zeros(len(ts)), Decimal(capital)), "C-09")
+
+
+def test_l1_03_children_start_after_registration():
+    """L1-3 (QA-6, QA-R4-4, QA-R4-5): with the stub child, a child_started hook finds every config_id of the table in
+    the temp ledger and input.json's ledger hash equal to family_ledger(...).hash(); no child exits 1; the record
+    carries the post-registration hash, both data md5s and every child manifest echoing it."""
+    from core.quant import gate_ledger
+    with tempfile.TemporaryDirectory(prefix="qgnb_l103_") as name:
+        tmp = Path(name)
+        table = _small_table(tmp, axes={"rule": ["sma", "tsmom"], "lookback": [126], "step": [21]})
+        t = json.loads(table.read_text(encoding="utf-8"))
+        expected = {gate_ledger.config_id({"rule": "E1", "params": dict(g, symbols=["SPY"], cost_bps=50.0),
+                                           "timing_class": "COMPLIANT"}) for g in t["grid"]}
+        seen = []
+
+        def started(lc):
+            ledger = gate_ledger.family_ledger("E1", tmp / "ledgers")
+            rows = ledger.rows()
+            inp = json.loads((Path(lc.cwd) / "input.json").read_text(encoding="utf-8"))
+            seen.append(({r["config_id"] for r in rows}, inp["ledger_hash_after_registration"], ledger.hash(rows),
+                         inp["stress"]))
+        (code, rec), out = _captured(lambda: run_rehearsal(table, tmp, hooks={"child_started": started}))
+        assert rec is not None and len(seen) == 4, out[-2000:]
+        assert all(ids == expected and echoed == now for ids, echoed, now, _ in seen), seen
+        assert [s for *_, s in seen] == ["1", "2", "1", "2"], seen
+        assert [c["returncode"] for c in rec["children"]] == [0, 0, 0, 0], rec["children"]
+        assert all(c["invalid"] == [] for c in rec["children"]), [c["invalid"] for c in rec["children"]]
+        reg = rec["registration"]
+        assert reg["hash_after"] == seen[0][1] and (reg["n_raw_before"], reg["n_raw_after"]) == (0, 2), reg
+        assert {r["config_id"] for r in reg["rows"]} == expected and all(r["appended"] for r in reg["rows"]), reg
+        assert all(c["manifest"]["input"]["ledger_hash_after_registration"] == reg["hash_after"]
+                   for c in rec["children"])
+        assert all(isinstance(rec["times"][k], str) for k in ("registered_utc", "first_child_utc")), rec["times"]
+        assert (rec["data"]["prices_md5"], rec["data"]["rf_md5"]) == (t["prices_md5"], t["rf_md5"]), rec["data"]
+        assert rec["stub_child"] is True and rec["provenance"]["p0a"]["passed"] is True and rec["census"] == {}
+
+
+def test_l1_04_broken_chain_stops_before_children():
+    """L1-4 (R-09): a broken chain in the temp family ledger refuses at step 10, before registration and before any
+    child; the ledger's bytes are unchanged and no run folder exists."""
+    from core.quant import gate_ledger
+    with tempfile.TemporaryDirectory(prefix="qgnb_l104_") as name:
+        tmp = Path(name)
+        table = _small_table(tmp)
+        ledger = gate_ledger.family_ledger("E1", tmp / "ledgers")
+        gate_ledger.register_trial(ledger, _plain_row("E1", 1))
+        ledger.path.write_bytes(ledger.path.read_bytes().replace(b'"US"', b'"KR"'))   # row_md5 no longer matches
+        old = time.time() - 700
+        os.utime(ledger.path, (old, old))                                               # not R-16's freshness
+        before, steps, started = ledger.path.read_bytes(), [], []
+        hooks = {**_step_hooks(steps), "child_started": started.append}
+        (code, rec), out = _captured(lambda: run_rehearsal(table, tmp, hooks=hooks))
+        assert (code, rec) == (2, None) and "R-09: " in out, out[-2000:]
+        assert out.splitlines()[-1] == "STATUS REFUSED exit=2 record=-", out[-500:]
+        assert steps == list(range(10)) and started == [], (steps, started)
+        assert ledger.path.read_bytes() == before and not list((tmp / "out").glob("NB-*"))
+
+
+def test_l1_06_tree_refusals_r01_r02():
+    """L1-6 (5.3.2 step 2): check_tree and tree_refusal on a temp git repository: a modified tracked file and an
+    untracked file outside docs/nautilus_bridge/runs/ refuse (R-01), an untracked file under runs/ passes, a worktree
+    and packed refs refuse with their own messages (R-02), git missing is R-02; rehearsal returns None for each."""
+    from core.quant import gate_ledger
+    runner = _runner()
+    git = shutil.which("git")
+    if git is None:
+        raise NotRun("OWNER: git not on PATH")
+    with tempfile.TemporaryDirectory(prefix="qgnb_l106_") as name:
+        tmp, repo = Path(name), Path(name) / "repo"
+
+        def g(*args: str) -> str:
+            out = subprocess.run([git, "-c", "user.name=qgnb", "-c", "user.email=qgnb@example.invalid", "-c",
+                                  "commit.gpgsign=false", *args], cwd=repo, capture_output=True, encoding="utf-8",
+                                 errors="replace", timeout=60)
+            assert out.returncode == 0, (args, out.stderr)
+            return out.stdout
+
+        def judge(root: Path = repo):
+            found = runner.check_tree(root, gate_ledger.repo_anchor, git)
+            assert runner.tree_refusal(found, "rehearsal") is None, found
+            return found, runner.tree_refusal(found, "of-record")
+        repo.mkdir()
+        g("init", "-q", "-b", "main")
+        (repo / "a.txt").write_text("a\n", encoding="utf-8", newline="\n")
+        g("add", "a.txt")
+        g("commit", "-q", "-m", "a")
+        found, rid = judge()
+        assert rid is None and found["clean"] and found["anchor"] == f"git:{g('rev-parse', 'HEAD').strip()}", found
+        runs = repo / "docs" / "nautilus_bridge" / "runs" / "NB-x"
+        runs.mkdir(parents=True)
+        (runs / "run.json").write_text("{}\n", encoding="utf-8", newline="\n")
+        found, rid = judge()
+        assert rid is None and found["porcelain_exempt"] == ["?? docs/nautilus_bridge/runs/NB-x/run.json"], found
+        (repo / "a.txt").write_text("b\n", encoding="utf-8", newline="\n")
+        found, rid = judge()
+        assert rid == "R-01" and found["offending"] == [" M a.txt"], found
+        g("checkout", "--", "a.txt")
+        (repo / "b.txt").write_text("b\n", encoding="utf-8", newline="\n")
+        found, rid = judge()
+        assert rid == "R-01" and found["offending"] == ["?? b.txt"], found
+        (repo / "b.txt").unlink()
+        g("worktree", "add", "-q", str(tmp / "wt"))
+        found, rid = judge(tmp / "wt")
+        assert rid == "R-02" and "worktree" in found["anchor_problem"], found
+        g("pack-refs", "--all")
+        found, rid = judge()
+        assert rid == "R-02" and "packed" in found["anchor_problem"], found
+        assert 'git commit --allow-empty -m "nautilus: re-anchor"' in found["anchor_problem"], found
+        found = runner.check_tree(repo, gate_ledger.repo_anchor, None)
+        assert found["head"] is None and runner.tree_refusal(found, "of-record") == "R-02", found
+        assert runner.tree_refusal(found, "rehearsal") is None
+
+
+def test_l1_07_data_refusals_r04_r05_r06():
+    """L1-7 (5.3.2 steps 5 and 6): R-04 (missing, unreadable, doctored md5), R-05 (N5's duplicated and swapped
+    dates, under 300 rows, a close failing the round trip), R-06 (missing, doctored md5, a NaN before the first
+    observation; no 3 % fallback, K8) on synthetic files; a blank DGS3MO value mid-series takes the prior value and
+    P0a then passes (QUANT-R2-1); run() refuses R-04 and R-06 at their steps."""
+    import numpy as np
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l107_") as name:
+        tmp = Path(name)
+        n, dates = 320, _bdates(320)
+        prices = synth_prices(7, n, 100.0, 150.0)
+        kw = {"start": dates[0], "end": dates[-1], "instrument": "SPY", "mode": "rehearsal"}
+        good = _write_prices(tmp / "p.csv", dates, prices)
+        p = runner.load_prices(tmp / "p.csv", md5=good, **kw)
+        assert p.dates == tuple(dates) and p.closes.tobytes() == prices.tobytes() and not p.rounding_changed
+        assert p.ts[:2] == [978469200 * 10**9, 978555600 * 10**9] and p.md5 == good, p.ts[:2]
+        cut = runner.load_prices(tmp / "p.csv", md5=good, **dict(kw, start=dates[10], end=dates[-11]))
+        assert cut.dates == tuple(dates[10:-10]), len(cut.dates)
+        _refused(lambda: runner.load_prices(tmp / "missing.csv", md5=good, **kw), "R-04")
+        _refused(lambda: runner.load_prices(tmp / "p.csv", md5="0" * 32, **kw), "R-04")
+        (tmp / "bad.csv").write_bytes(b"\xff\xfe garbage")
+        _refused(lambda: runner.load_prices(tmp / "bad.csv", md5=_md5(tmp / "bad.csv"), **kw), "R-04")
+        for label, ds, ps in (("299 rows", dates[:299], prices[:299]),
+                              ("duplicated", dates[:150] + [dates[149]] + dates[151:], prices),
+                              ("swapped", dates[:150] + [dates[151], dates[150]] + dates[152:], prices)):
+            md5 = _write_prices(tmp / f"{label}.csv", ds, ps)
+            exc = _refused(lambda: runner.load_prices(tmp / f"{label}.csv", md5=md5, **kw), "R-05")
+            assert ("300" in exc.message) == (label == "299 rows"), (label, exc)
+        runner.check_round_trip(prices)
+        _refused(lambda: runner.check_round_trip(np.array([100.0, 0.1 + 0.2])), "R-05")
+        rf = synth_rf(n)
+        rmd5 = _write_rf(tmp / "r.csv", dates, rf)
+        got, data = runner.load_rf(tmp / "r.csv", md5=rmd5, dates=p.dates)
+        assert data == (tmp / "r.csv").read_bytes() and np.max(np.abs(got - rf)) < 1e-15, np.max(np.abs(got - rf))
+        _refused(lambda: runner.load_rf(tmp / "missing.csv", md5=rmd5, dates=p.dates), "R-06")
+        _refused(lambda: runner.load_rf(tmp / "r.csv", md5="0" * 32, dates=p.dates), "R-06")
+        late = _write_rf(tmp / "late.csv", dates[5:], rf[5:])
+        _refused(lambda: runner.load_rf(tmp / "late.csv", md5=late, dates=p.dates), "R-06")
+        blank = [None if k == 100 else x for k, x in enumerate(rf)]
+        bmd5 = _write_rf(tmp / "blank.csv", dates, blank)
+        got, _ = runner.load_rf(tmp / "blank.csv", md5=bmd5, dates=p.dates)
+        assert got[100] == got[99] and not np.isnan(got).any(), got[98:102]
+        for sub, fields, rid, upto in (("r04", {"prices_md5": "0" * 32}, "R-04", 4),
+                                       ("r06", {"rf_md5": "0" * 32}, "R-06", 5)):
+            steps = []
+            table = _small_table(tmp / sub, **fields)
+            (code, rec), out = _captured(lambda: run_rehearsal(table, tmp / sub, hooks=_step_hooks(steps)))
+            assert (code, rec) == (2, None) and f"{rid}: " in out and steps == list(range(upto + 1)), (rid, steps)
+        steps = []
+        table = _small_table(tmp / "blank", with_rf=False, rf_file=str(tmp / "blank.csv"), rf_md5=bmd5)
+
+        def stop(_ctx):
+            steps.append(7)
+            raise RuntimeError("stop after P0a (planted)")
+        (code, rec), out = _captured(lambda: run_rehearsal(table, tmp / "blank", hooks={"after_step7": stop}))
+        assert (code, rec) == (2, None) and steps == [7] and "stop after P0a (planted)" in out, out[-2000:]
+        assert not (tmp / "blank" / "ledgers" / "E1.jsonl").exists()
+
+
+def test_l1_08_cost_refusals_r07():
+    """L1-8 (K15): R-07 for an uncosted symbol (VOD.L) and for 40 bp on SPY; through run(), at step 8."""
+    runner = _runner()
+    exc = _refused(lambda: runner.check_cost("VOD.L", 50.0), "R-07")
+    assert "VOD.L" in exc.message, exc
+    exc = _refused(lambda: runner.check_cost("SPY", 40.0), "R-07")
+    assert "below the floor 50" in exc.message, exc
+    assert runner.check_cost("SPY", 50.0) == (50.0, {"SPY": "us"})
+    assert runner.check_cost("BTC-USD", 10.0) == (10.0, {"BTC-USD": "crypto"})
+    with tempfile.TemporaryDirectory(prefix="qgnb_l108_") as name:
+        tmp, steps = Path(name), []
+        table = _small_table(tmp, cost_bps=40.0)
+        (code, rec), out = _captured(lambda: run_rehearsal(table, tmp, hooks=_step_hooks(steps)))
+        assert (code, rec) == (2, None) and "R-07: cost_bps 40 is below the floor 50 bp for SPY" in out, out[-2000:]
+        assert steps == list(range(8)) and not (tmp / "ledgers" / "E1.jsonl").exists(), steps
+
+
+def test_l1_09_place_and_content_refusals_r10():
+    """L1-9 (3.9; GOVERNANCE-R2-3, GOVERNANCE-R3-3, QA-R4-2): R-10 for a ledger or output dir outside the temp root
+    (argument validation, nothing created); for a synthetic file whose md5 is planted as the pinned BTC md5, and one
+    planted as the pinned SPY md5 with end 2004-11-30 (step 5); for a table naming a tracked file of
+    docs/asset_expansion/cache/ with prices_md5 of 32 zeros, by check_table and by run() with no after_step1 hook,
+    so the place is judged before any hash; for a reference card outside the temp root. No real file is read."""
+    runner = _runner()
+    locks = ROOT / "docs" / "nautilus_bridge" / "runs" / ".locks"
+    had_locks = locks.exists()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l109_") as name:
+        tmp = Path(name)
+        table = _small_table(tmp / "a")
+        outside = Path.home() / "qgnb_not_a_temp_dir"
+        for kw in ({"ledger_dir": outside, "out_dir": tmp / "out"},
+                   {"ledger_dir": tmp / "ledgers", "out_dir": ROOT / "docs" / "nautilus_bridge" / "runs"}):
+            steps = []
+            code, out = _captured(lambda: runner.run(table, mode="rehearsal", child_cmd=stub_cmd(),
+                                                     probe_cmd=stub_probe_cmd(), hooks=_step_hooks(steps), **kw))
+            assert code == 2 and "R-10: rehearsal needs --ledger-dir and --out-dir inside the temp root" in out, out
+            assert steps == [], steps
+        assert not outside.exists() and locks.exists() == had_locks
+        md5 = json.loads(table.read_text(encoding="utf-8"))["prices_md5"]
+        saved = dict(runner.PINNED_REAL_MD5)
+        try:
+            for symbol, sub, fields in (("BTC-USD", "a", {}), ("SPY", "b", {"end": "2004-11-30"})):
+                runner.PINNED_REAL_MD5.update(saved)
+                runner.PINNED_REAL_MD5[symbol] = md5                       # the synthetic file, planted as the pin
+                planted = _small_table(tmp / sub, **fields)
+                steps = []
+                (code, rec), out = _captured(lambda: run_rehearsal(planted, tmp / sub, hooks=_step_hooks(steps)))
+                assert (code, rec) == (2, None) and "is a byte copy of a pinned real series" in out, out[-2000:]
+                assert "R-10: " in out and steps == [0, 1, 2, 3, 4], steps
+        finally:
+            runner.PINNED_REAL_MD5.clear()
+            runner.PINNED_REAL_MD5.update(saved)
+        for k, rel in enumerate(("docs/asset_expansion/cache/yf_SPY.csv", "docs/asset_expansion/cache/binance_BTCUSDT.csv")):
+            for j, value in enumerate((rel, str(ROOT / rel))):
+                sub = tmp / f"cache{k}{j}"
+                bad = _small_table(sub, prices_file=value, prices_md5="0" * 32)
+                exc = _refused(lambda: runner.check_table(bad, "rehearsal", sub / "ledgers", "qgnb-host", ROOT), "R-10")
+                assert repr(value) in exc.message, exc
+                steps = []
+                (code, rec), out = _captured(lambda: run_rehearsal(bad, sub, hooks=_step_hooks(steps)))
+                assert (code, rec) == (2, None) and "R-10: " in out and steps == [0], (steps, out[-1000:])
+        card = "docs/asset_expansion/cards/S_C3_crypto_trend_btcusd.json"
+        bad = _small_table(tmp / "card", reference_card=str(ROOT / card), reference_card_md5="0" * 32)
+        _refused(lambda: runner.check_table(bad, "rehearsal", tmp / "ledgers", "qgnb-host", ROOT), "R-10")
+
+
+def test_l1_10_config_id_equals_strategy_lab():
+    """L1-10 (K9): the bridge row's config_id for SPY sma/127/21 at 50.0 (E1) and BTC-USD hysteresis 0.333 at 10.0
+    (C3) equals the one ui.strategy_lab_page.register_trials writes with ledger_dir given explicitly; neither is a
+    pilot configuration (GOVERNANCE-R3-2). An int cost would be another configuration."""
+    import ui.strategy_lab_page as lab
+    from core.quant import gate_ledger
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l110_") as name:
+        tmp, dates = Path(name), _bdates(320)
+        for like, family, theta, cost, symbol in (
+                ("E1-SPY", "trend_switch", {"rule": "sma", "lookback": 127, "step": 21}, 50.0, "SPY"),
+                ("C3-BTCUSD", "crypto_trend", {"hysteresis": 0.333}, 10.0, "BTC-USD")):
+            table = {**REHEARSAL_LIKE[like], "pilot": "rehearsal", "cost_bps": cost}
+            row = runner.ledger_row(table, theta, span=(dates[0], dates[-1]), run_utc="2026-10-28T00:00:00Z",
+                                    anchor=gate_ledger.repo_anchor(), bridge_run_id="NB-x")
+            bridge = gate_ledger.register_trial(gate_ledger.family_ledger(row["rule"], tmp / "bridge"), row,
+                                                script=runner.SCRIPT)
+            n = lab.register_trials(family, [symbol], [theta], cost, dates, ["YAHOO"], ledger_dir=tmp / f"lab_{like}")
+            lab_row = gate_ledger.family_ledger(lab.FAMILY_ID[family], tmp / f"lab_{like}").rows()[0]
+            assert n == 1 and lab_row["config_id"] == bridge.row["config_id"], (lab_row, bridge.row)
+            assert bridge.row["params"] == dict(theta, symbols=[symbol], cost_bps=cost), bridge.row["params"]
+            assert type(bridge.row["params"]["cost_bps"]) is float and bridge.row["run_kind"] == "variant"
+            assert bridge.row["source"] == ("nautilus-bridge rehearsal; engines quantgen.simulate + nautilus_trader "
+                                            "1.231.0; run NB-x"), bridge.row["source"]
+            as_int = dict(row, params=dict(row["params"], cost_bps=int(cost)))
+            assert gate_ledger.config_id(as_int) != bridge.row["config_id"]
+
+
+def test_l1_11_register_result_row_md5():
+    """L1-11 (A-1): the recorded row_md5 is result.row["row_md5"] for an appended row and for a duplicate, never
+    RegisterResult's third element, which on an append is the md5 of the line (the next row's prev_row_md5)."""
+    from core.quant import gate_ledger
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l111_") as name:
+        ledger = gate_ledger.family_ledger("E1", Path(name))
+        first = gate_ledger.register_trial(ledger, _plain_row("E1", 1))
+        second = gate_ledger.register_trial(ledger, _plain_row("E1", 2))
+        dup = gate_ledger.register_trial(ledger, dict(_plain_row("E1", 1), run_utc="2026-10-28T01:00:00Z"))
+        rows = ledger.rows()
+        assert first.appended and second.appended and not dup.appended and len(rows) == 2
+        assert first.row_md5 != first.row["row_md5"] and first.row_md5 == rows[1]["prev_row_md5"]
+        assert dup.row_md5 == dup.row["row_md5"] == rows[0]["row_md5"]
+        got = [runner.registration_entry(col, r) for col, r in enumerate((first, second, dup))]
+        assert got == [{"col": 0, "config_id": rows[0]["config_id"], "row_md5": rows[0]["row_md5"], "appended": True},
+                       {"col": 1, "config_id": rows[1]["config_id"], "row_md5": rows[1]["row_md5"], "appended": True},
+                       {"col": 2, "config_id": rows[0]["config_id"], "row_md5": rows[0]["row_md5"], "appended": False}]
+
+
+def test_l1_12_census_judgement():
+    """L1-12 (5.2.7; QA-R3-12): on a census parsed from doctored -X importtime stderr, an extra TP name, a missing TP
+    name, an extra NT name and nautilus_trader.adapters.binance (even in the baseline) each give C-08; an extra STD
+    name does not."""
+    runner = _runner()
+    base = ["_io", "_sysconfigdata__linux_x86_64-linux-gnu", "json", "json.decoder", "msgspec", "nautilus_trader",
+            "nautilus_trader.backtest.engine", "numpy", "numpy._core", "pandas", "sitecustomize"]
+    stderr = "import time: self [us] | cumulative | imported package\n" + "".join(
+        f"import time:        1 |          1 |   {n}\n" for n in reversed(base)) + "ValueError: boom\n"
+    census, rest = launch.parse_census(stderr)
+    assert census == base and rest == "ValueError: boom\n", (census, rest)
+    assert [runner.census_class(n) for n in ("nautilus_trader.model", "zoneinfo", "_sysconfigdata_x", "uvloop")] == [
+        "NT", "STD", "STD", "TP"]
+    assert runner.judge_census(census, base) == []
+    assert runner.judge_census(census + ["zoneinfo", "zoneinfo._common"], base) == []
+    assert runner.judge_census(census + ["plotly"], base) == ["C-08: TP names added: plotly"]
+    assert runner.judge_census([n for n in census if n != "msgspec"], base) == ["C-08: TP names missing: msgspec"]
+    assert runner.judge_census(census + ["nautilus_trader.live.node"], base) == [
+        "C-08: NT names added: nautilus_trader.live.node"]
+    binance = "nautilus_trader.adapters.binance"
+    assert runner.judge_census(census + [binance], base + [binance]) == [f"C-08: denied modules imported: {binance}"]
+
+
+def test_l1_18_gate_bootstrap_b_refusal_r08():
+    """L1-18: with GATE["bootstrap_B"] set to 300 inside try/finally, run() refuses R-08 at step 9, before
+    registration; GATE is restored."""
+    from core.quant import validate
+    with tempfile.TemporaryDirectory(prefix="qgnb_l118_") as name:
+        tmp, steps = Path(name), []
+        table = _small_table(tmp)
+        saved = validate.GATE["bootstrap_B"]
+        try:
+            validate.GATE["bootstrap_B"] = 300
+            (code, rec), out = _captured(lambda: run_rehearsal(table, tmp, hooks=_step_hooks(steps)))
+        finally:
+            validate.GATE["bootstrap_B"] = saved
+        assert (code, rec) == (2, None) and "R-08: GATE['bootstrap_B'] is 300, not 2000" in out, out[-2000:]
+        assert steps == list(range(9)) and validate.GATE["bootstrap_B"] == 2000, steps
+        assert not (tmp / "ledgers" / "E1.jsonl").exists()
+
+
+def test_l1_19_table_refusals_r11():
+    """L1-19 (6.6; GOVERNANCE-R2-2, GOVERNANCE-R3-1, GOVERNANCE-R4-4, OPS-R3-6): R-11 through check_table for a
+    table that is not JSON, a missing or unknown field, a wrong type and a grid that differs from grid_from(axes);
+    of-record: a pilot value off, a key field edited and a sandbox byte or a core/quant/validate.py byte changed
+    after owner_confirmed; a PureWindowsPath-built path list gives the same code_sha256; run(mode="of-record") with
+    a seam refuses in argument validation and creates no runs/.locks; of-record C3-BTCUSD on a temp root refuses
+    without a reference card, without an of-record E1-SPY record and with one WITHHELD for a parity failure."""
+    runner = _runner()
+    locks = ROOT / "docs" / "nautilus_bridge" / "runs" / ".locks"
+    had_locks = locks.exists()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l119_") as name:
+        tmp = Path(name)
+        table = _small_table(tmp / "r")
+        good = json.loads(table.read_text(encoding="utf-8"))
+        assert runner.check_table(table, "rehearsal", tmp / "ledgers", "qgnb-host", ROOT) == good
+
+        def variant(change) -> Path:
+            t = json.loads(json.dumps(good))
+            change(t)
+            path = tmp / "variant.json"
+            path.write_text(json.dumps(t), encoding="utf-8", newline="\n")
+            return path
+        (tmp / "notjson.json").write_text("{not json\n", encoding="utf-8", newline="\n")
+        for path in (tmp / "notjson.json", variant(lambda t: t.pop("embargo")), variant(lambda t: t.update(x=1)),
+                     variant(lambda t: t.update(embargo="21")), variant(lambda t: t["grid"].pop()),
+                     variant(lambda t: t.update(pilot="E1-SPY")), variant(lambda t: t.update(price_precision=2)),
+                     variant(lambda t: t["grid"][0].update(lookback=0))):
+            _refused(lambda: runner.check_table(path, "rehearsal", tmp / "ledgers", "qgnb-host", ROOT), "R-11")
+        root = _code_root(tmp / "root")
+        code = runner.code_sha256(root)
+        assert code == runner.code_sha256(ROOT)
+        win_root = PureWindowsPath("C:/Users/o/QUANTGEN")
+        paths = runner.code_paths(ROOT)
+        win = [win_root / PureWindowsPath(p.relative_to(ROOT).as_posix()) for p in paths]
+        by_win = dict(zip(win, paths))
+        assert runner.code_digest(win_root, win, lambda w: by_win[w].read_bytes()) == code
+        e1 = _of_record_table(tmp / "e1.json", "E1-SPY", code)
+        chk = lambda path: runner.check_table(path, "of-record", tmp / "ledgers", "qgnb-host", root)   # noqa: E731
+        assert "does not exist" in _refused(lambda: chk(e1), "R-15").message      # R-11 passed, R-15 is next
+        exc = _refused(lambda: chk(_of_record_table(tmp / "cap.json", "E1-SPY", code, capital_usd="999999")), "R-11")
+        assert "capital_usd" in exc.message, exc
+        t = json.loads(e1.read_text(encoding="utf-8"))
+        t["embargo"] = 22
+        (tmp / "edited.json").write_text(json.dumps(t), encoding="utf-8", newline="\n")
+        assert "owner_confirmed" in _refused(lambda: chk(tmp / "edited.json"), "R-11").message
+        for rel in ("tools/nautilus/sandbox.py", "core/quant/validate.py"):
+            orig = (root / rel).read_bytes()
+            (root / rel).write_bytes(orig + b"\n")
+            try:
+                assert "owner_confirmed" in _refused(lambda: chk(e1), "R-11").message, rel
+            finally:
+                (root / rel).write_bytes(orig)
+        for seam in ({"child_cmd": stub_cmd()}, {"probe_cmd": stub_probe_cmd()}, {"hooks": {}}, {"timeout": 3},
+                     {"ledger_dir": tmp / "ledgers"}, {"register_fn": lambda *a, **k: None}):
+            code_, out = _captured(lambda: runner.run(e1, mode="of-record", **seam))
+            assert code_ == 2 and "R-11: of-record mode takes no test seam" in out, (seam, out[-500:])
+        assert locks.exists() == had_locks
+        card = "docs/asset_expansion/cards/S_C3_crypto_trend_btcusd.json"
+        (root / card).parent.mkdir(parents=True, exist_ok=True)
+        (root / card).write_bytes(b'{"card": "a temp stand-in"}\n')
+        c3 = _of_record_table(tmp / "c3.json", "C3-BTCUSD", code, reference_card=card,
+                              reference_card_md5=_md5(root / card))
+        nocard = _of_record_table(tmp / "c3n.json", "C3-BTCUSD", code)
+        assert "reference_card" in _refused(lambda: chk(nocard), "R-11").message
+        assert "E1-SPY" in _refused(lambda: chk(c3), "R-11").message
+        e1_record = {"mode": "of-record", "pilot": "E1-SPY", "status": "WITHHELD", "table": {"code_sha256": code},
+                     "parity": {"hard_pass": False}, "registration": {"rows": [{}] * 12}}
+        run_dir = root / "docs" / "nautilus_bridge" / "runs" / "NB-20261101T000000000000Z-00000000"
+        run_dir.mkdir(parents=True)
+        (run_dir / "run.json").write_text(json.dumps(e1_record), encoding="utf-8", newline="\n")
+        assert "E1-SPY" in _refused(lambda: chk(c3), "R-11").message
+        e1_record.update(status="WITHHELD", parity={"hard_pass": True})
+        (run_dir / "run.json").write_text(json.dumps(e1_record), encoding="utf-8", newline="\n")
+        assert "C3.jsonl does not exist" in _refused(lambda: chk(c3), "R-15").message   # the precondition holds
+
+
+def test_l1_20a_p0a_against_the_study_loaders():
+    """L1-20, P0a cases (QUANT-1, QA-R4-1): check_p0a on a synthetic cache dir: equal arrays pass and return the
+    study's panel; a doctored study.rf_daily or a doctored close refuses R-13; a cache dir without yf_SPY.csv, and
+    one without fred_DGS3MO.csv, refuse R-13 while the stand-in records the blocked download; REFRESH true is R-13;
+    sys.modules holds no stand-in afterwards."""
+    import numpy as np
+    runner = _runner()
+    study = runner.load_study(ROOT)
+    with tempfile.TemporaryDirectory(prefix="qgnb_l120_") as name:
+        tmp = Path(name)
+        n, dates = 320, _bdates(320)
+        cache = tmp / "cache"
+        md5 = _write_prices(cache / "yf_SPY.csv", dates, synth_prices(7, n, 100.0, 150.0))
+        rmd5 = _write_rf(cache / "fred_DGS3MO.csv", dates, synth_rf(n))
+        p = runner.load_prices(cache / "yf_SPY.csv", md5=md5, start=dates[0], end=dates[-1], instrument="SPY",
+                               mode="rehearsal")
+        rf, _ = runner.load_rf(cache / "fred_DGS3MO.csv", md5=rmd5, dates=p.dates)
+        arrays = {"symbol": "SPY", "start": dates[0], "dates": p.dates, "closes": p.closes, "rf": rf}
+        pn = runner.check_p0a(study, cache, arrays)
+        assert tuple(pn.dates) == p.dates and pn.prices.shape == (n, 1) and study.CACHE == cache
+        assert runner.check_p0a(study, cache, dict(arrays, rf=None)).dates == pn.dates      # pilot 2: no rf
+
+        def no_stand_ins() -> bool:
+            return not any(isinstance(sys.modules.get(m), runner._Blocked)
+                           for m in ("yfinance", "pandas_datareader", "pandas_datareader.data"))
+        assert no_stand_ins()
+        real = study.rf_daily
+        try:
+            study.rf_daily = lambda index: real(index) + 1e-12
+            assert "rf differ" in _refused(lambda: runner.check_p0a(study, cache, arrays), "R-13").message
+        finally:
+            study.rf_daily = real
+        closes = p.closes.copy()
+        closes[200] += 1e-9
+        assert "closes differ" in _refused(lambda: runner.check_p0a(study, cache, dict(arrays, closes=closes)),
+                                           "R-13").message
+        (tmp / "no_yf").mkdir()
+        shutil.copy(cache / "fred_DGS3MO.csv", tmp / "no_yf" / "fred_DGS3MO.csv")
+        exc = _refused(lambda: runner.check_p0a(study, tmp / "no_yf", arrays), "R-13")
+        assert "yfinance.download" in exc.message and no_stand_ins(), exc
+        (tmp / "no_fred").mkdir()
+        shutil.copy(cache / "yf_SPY.csv", tmp / "no_fred" / "yf_SPY.csv")
+        exc = _refused(lambda: runner.check_p0a(study, tmp / "no_fred", arrays), "R-13")
+        assert "rf differ" in exc.message and "pandas_datareader.data" in exc.message and no_stand_ins(), exc
+        study.REFRESH = True
+        try:
+            _refused(lambda: runner.check_p0a(study, cache, arrays), "R-13")
+        finally:
+            study.REFRESH = False
+        assert np.array_equal(pn.prices[:, 0], p.raw)
+
+
+def test_l1_23_egress_refusals_r14():
+    """L1-23 (SECURITY-1, R-14): a stub probe printing {"blocked": false} refuses at step 4; check_egress_record
+    refuses a missing record, another base_python, an unblocked probe, a failed control connect and another layer,
+    and on Windows accepts paths differing only in case or slash direction (4.3)."""
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l123_") as name:
+        tmp, steps = Path(name), []
+        table = _small_table(tmp)
+        probe = tmp / "open_probe.py"
+        probe.write_text("print('{\"blocked\": false, \"errno\": null, \"error\": \"\"}')\n", encoding="utf-8",
+                         newline="\n")
+        code, out = _captured(lambda: runner.run(table, mode="rehearsal", ledger_dir=tmp / "ledgers",
+                                                 out_dir=tmp / "out", child_cmd=stub_cmd(),
+                                                 probe_cmd=[stub_python(), "-I", str(probe)], hooks=_step_hooks(steps)))
+        assert code == 2 and "R-14: the egress probe was not blocked" in out and steps == [0, 1, 2, 3], out[-2000:]
+        nt = os.name == "nt"
+        facts = {"venv_python": r"C:\Users\o\AppData\Local\quantgen\ntvenv\Scripts\python.exe" if nt
+                 else "/opt/qg/ntvenv/bin/python",
+                 "base_python": r"C:\Users\o\AppData\Local\quantgen\py313\python.exe" if nt else "/usr/bin/python3.13",
+                 "layer": runner.LAYER}
+        record_dir = tmp / "egress"
+        record_dir.mkdir()
+        _refused(lambda: runner.check_egress_record(record_dir, facts), "R-14")
+        base = {"schema": "nautilus-bridge-egress/1", "platform_tag": launch.host_tag(), **facts,
+                "probe": {"blocked": True, "errno": 101, "error": "unreachable"},
+                "recorded_utc": "2026-10-28T00:00:00.000000Z", "control_connect": {"ok": True, "error": ""}}
+
+        def put(**changes) -> None:
+            (record_dir / f"{launch.host_tag()}.json").write_text(json.dumps({**base, **changes}), encoding="utf-8",
+                                                                  newline="\n")
+        put()
+        runner.check_egress_record(record_dir, facts)
+        for changes, word in (({"base_python": facts["base_python"] + "x"}, "base_python"),
+                              ({"probe": {"blocked": False, "errno": None, "error": ""}}, "does not prove"),
+                              ({"control_connect": {"ok": False, "error": "timeout"}}, "does not prove"),
+                              ({"layer": "something else"}, "layer")):
+            put(**changes)
+            assert word in _refused(lambda: runner.check_egress_record(record_dir, facts), "R-14").message, changes
+        if nt:
+            put(**{k: facts[k].upper().replace("\\", "/") for k in ("venv_python", "base_python")})
+            runner.check_egress_record(record_dir, facts)
+
+
+def test_l1_24_ledger_and_host_refusals_r15():
+    """L1-24 (GOVERNANCE-3; R-15): of-record check_table on temp dirs refuses a missing family ledger, an empty one
+    and a host fingerprint off by one character (R-15), and a broken chain (R-09); with the right fingerprint the
+    whole of-record table check passes. host_fingerprint is 6.6's sha256, None for a ledger without a row."""
+    from core.quant import gate_ledger
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l124_") as name:
+        tmp = Path(name)
+        root = _code_root(tmp / "root")
+        code, ledgers = runner.code_sha256(root), tmp / "ledgers"
+        chk = lambda path: runner.check_table(path, "of-record", ledgers, "qgnb-host", root)   # noqa: E731
+        table = _of_record_table(tmp / "t.json", "E1-SPY", code)
+        assert "does not exist" in _refused(lambda: chk(table), "R-15").message
+        ledgers.mkdir()
+        (ledgers / "E1.jsonl").write_bytes(b"")
+        assert "holds no row" in _refused(lambda: chk(table), "R-15").message
+        ledger = gate_ledger.family_ledger("E1", ledgers)
+        gate_ledger.register_trial(ledger, _plain_row("E1", 1))
+        fp = runner.host_fingerprint("qgnb-host", ledger)
+        assert fp == hashlib.sha256(("qgnb-host\n" + ledger.rows()[0]["row_md5"]).encode("utf-8")).hexdigest()
+        assert runner.host_fingerprint("qgnb-host", gate_ledger.family_ledger("C3", ledgers)) is None
+        t = json.loads(table.read_text(encoding="utf-8"))
+        for value, rid in ((fp[:-1] + ("0" if fp[-1] != "0" else "1"), "R-15"), (fp, None)):
+            t["host_fingerprint"] = value                    # outside table_sha256, so owner_confirmed still holds
+            table.write_text(json.dumps(t), encoding="utf-8", newline="\n")
+            if rid:
+                assert "host_fingerprint" in _refused(lambda: chk(table), rid).message
+            else:
+                assert chk(table) == t
+        raw = ledger.path.read_bytes()
+        ledger.path.write_bytes(raw.replace(b'"US"', b'"KR"'))
+        _refused(lambda: chk(table), "R-09")
+
+
+def test_l1_25_lock_and_freshness_r16():
+    """L1-25 (5.3.5; QA-R2-3, QA-R4-6): take_lock refuses while another handle holds the table lock (flock, not
+    lockf, so it conflicts inside one process) and passes after release; a C3.jsonl or family ledger touched now
+    refuses, one touched 601 s ago passes; a refused take_lock leaves no lock behind."""
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l125_") as name:
+        tmp = Path(name)
+        out, sha = tmp / "out", "ab" * 32
+        c3, e1 = tmp / "ledgers" / "C3.jsonl", tmp / "ledgers" / "E1.jsonl"
+        lock, earlier = runner.take_lock(out, sha, [c3, e1], None)
+        assert earlier == [] and lock.path == out / ".locks" / f"{sha[:16]}.lock"
+        try:
+            assert "another runner is active" in _refused(lambda: runner.take_lock(out, sha, [c3, e1], None),
+                                                          "R-16").message
+        finally:
+            lock.release()
+        runner.take_lock(out, sha, [c3, e1], None)[0].release()
+        old = time.time() - 601
+        for path in (c3, e1):
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(b"")
+            assert "wait" in _refused(lambda: runner.take_lock(out, sha, [c3, e1], None), "R-16").message, path
+            os.utime(path, (old, old))
+            runner.take_lock(out, sha, [c3, e1], None)[0].release()
+
+
+def test_l1_26a_lifecycle_records_and_exits():
+    """L1-26 without its G-05 case (5.3.5; G-06, G-07, R-12): IN_PROGRESS is on disk after registration; a hook
+    raising KeyboardInterrupt gives ABORTED, exit 5; a hook raising ValueError gives ERROR, exit 4, G-06 with the
+    traceback; a register_fn raising on the third row gives R-12, REFUSED_REGISTRATION, exit 3, two rows recorded."""
+    from core.quant import gate_ledger
+    with tempfile.TemporaryDirectory(prefix="qgnb_l126_") as name:
+        tmp, seen = Path(name), []
+        table = _small_table(tmp / "a")
+
+        def at12(ctx):
+            rec = json.loads((ctx.run_dir / "run.json").read_text(encoding="utf-8"))
+            seen.append((rec["status"], rec["registration"]["hash_after"], ctx.hash_after_registration,
+                         len(rec["children"])))
+            raise KeyboardInterrupt
+        (code, rec), out = _captured(lambda: run_rehearsal(table, tmp / "a", hooks={"after_step12": at12}))
+        h = rec["registration"]["hash_after"]
+        assert seen == [("IN_PROGRESS", h, h, 0)] and (code, rec["status"]) == (5, "ABORTED"), (seen, out[-1000:])
+        assert rec["error"]["message"] == "G-07: KeyboardInterrupt after registration", rec["error"]
+        assert out.splitlines()[-1] == f"STATUS ABORTED exit=5 record={tmp / 'a' / 'out' / rec['bridge_run_id'] / 'run.json'}"
+        table = _small_table(tmp / "c")
+
+        def boom(_ctx):
+            raise ValueError("planted after step 13")
+        (code, rec), out = _captured(lambda: run_rehearsal(table, tmp / "c", hooks={"after_step13": boom}))
+        assert (code, rec["status"], rec["children"]) == (4, "ERROR", []), out[-1000:]
+        assert rec["error"]["message"] == "G-06: ValueError: planted after step 13" and "boom" in rec["error"]["traceback"]
+        table = _small_table(tmp / "d", axes={"rule": ["sma"], "lookback": [126, 210, 252], "step": [21]})
+        calls = []
+
+        def third(ledger, row, *, script=None):
+            calls.append(row)
+            if len(calls) == 3:
+                raise OSError("disk full (planted)")
+            return gate_ledger.register_trial(ledger, row, script=script)
+        (code, rec), out = _captured(lambda: run_rehearsal(table, tmp / "d", register_fn=third))
+        assert (code, rec["status"]) == (3, "REFUSED_REGISTRATION"), out[-1000:]
+        assert rec["error"]["message"] == "R-12: register_trial raised OSError: disk full (planted)", rec["error"]
+        assert [r["col"] for r in rec["registration"]["rows"]] == [0, 1] and rec["children"] == []
+        assert gate_ledger.family_ledger("E1", tmp / "d" / "ledgers").n_raw == 2
+
+
+def test_l1_27_child_failures_and_doctored_manifests():
+    """L1-27 (section 7): stubs that exit 1, sleep past timeout=3 (the tree is killed and the call returns), write
+    no manifest or write invalid JSON give C-06; a child_started hook raising KeyboardInterrupt while a sleeping stub
+    runs gives ABORTED, exit 5, and the temp dir is removed (OPS-R2-4); a wrong --guard-selftest outcome gives R-03
+    (QA-R2-10); doctored manifests (valid true, exit 0) give their own id (QA-R3-2)."""
+    dirs: list[Path] = []
+
+    def rehearse(*flags: str, **kw):
+        tmp = Path(tempfile.mkdtemp(prefix="qgnb_l127_"))
+        dirs.append(tmp)
+        (code, rec), out = _captured(lambda: run_rehearsal(_small_table(tmp), tmp, flags=flags, **kw))
+        return code, rec, out
+    try:
+        for flags, want in ((("--exit", "1"), "C-06: exit 1"), (("--sleep", "60"), "C-06: timed out after 3 s"),
+                            (("--no-manifest",), "C-06: manifest.json missing"),
+                            (("--bad-json",), "C-06: manifest.json missing or not a JSON object")):
+            started = time.monotonic()
+            code, rec, out = rehearse(*flags, timeout=3)
+            assert rec is not None and len(rec["children"]) == 2, (flags, out[-1000:])
+            assert all(any(r.startswith(want) for r in c["invalid"]) for c in rec["children"]), (
+                flags, [c["invalid"] for c in rec["children"]])
+            assert time.monotonic() - started < 60 and rec["cleanup_leftovers"] == [], flags
+        cwds = []
+
+        def interrupt(lc):
+            cwds.append(lc.cwd)
+            raise KeyboardInterrupt
+        code, rec, out = rehearse("--sleep", "60", hooks={"child_started": interrupt})
+        assert (code, rec["status"]) == (5, "ABORTED") and len(cwds) == 1 and not Path(cwds[0]).exists(), out[-1000:]
+        assert out.splitlines()[-1].startswith("STATUS ABORTED exit=5 record=")
+        code, rec, out = rehearse("--selftest-wrong")
+        assert (code, rec) == (2, None) and "R-03: --guard-selftest misbehaved" in out, out[-1000:]
+        for cid in ("C-01", "C-02", "C-03", "C-04", "C-07", "C-09", "C-11", "C-14", "C-15"):
+            code, rec, out = rehearse("--doctor", cid)
+            assert rec is not None and len(rec["children"]) == 2, (cid, out[-1000:])
+            for c in rec["children"]:
+                assert c["returncode"] == 0 and c["manifest"]["valid"] is True, (cid, c["returncode"])
+                assert any(r.startswith(f"{cid}: ") for r in c["invalid"]), (cid, c["invalid"])
+    finally:
+        for d in dirs:
+            shutil.rmtree(d, ignore_errors=True)
+
+
+def test_l1_33_goldens_equal_the_spec_tables():
+    """L1-33 (QA-R2-6, QA-R3-8): the committed F1, F2 and N1 goldens, in C1's JSON bytes, equal 8.2's tables typed
+    in above, compared as 6.8 says (strings and integers exactly, money within 0.005, reasons by id)."""
+    runner = _runner()
+    for name, want in GOLDEN_SPEC.items():
+        raw = (GOLDEN_DIR / f"{name}.json").read_bytes()
+        got = json.loads(raw)
+        assert raw == (json.dumps(got, indent=1, sort_keys=True, ensure_ascii=False) + "\n").encode("utf-8"), name
+        assert set(got) == set(want) and runner.compare_golden(got, want) == [], (
+            name, runner.compare_golden(got, want))
+    f1, n1 = GOLDEN_SPEC["F1"], GOLDEN_SPEC["N1"]
+    assert runner.compare_golden(dict(f1, final_cash="926593.004"), f1) == []
+    assert runner.compare_golden(dict(f1, final_cash="926593.006"), f1) == [
+        "final_cash: '926593.006' != '926593.00'"]
+    assert runner.compare_golden(dict(f1, fills=[dict(f1["fills"][0], price="100.00")] + f1["fills"][1:]), f1) == [
+        "fill 0 price: '100.00' != '100.000000000'"]
+    assert runner.compare_golden(dict(n1, invalid_reasons=["C-01: other words", "C-02: x"]), n1) == []
+
+
+def test_l1_34_write_record_retries_and_fallback():
+    """L1-34 (OPS-R2-3, QA-R3-7): write_record retries a replace that raises PermissionError twice (no-op sleep) and
+    writes; one that always raises leaves the old bytes and raises after 10 attempts; a run whose every record write
+    fails lists the intermediate writes and falls back to run.final.<pid>.json, which the STATUS line names."""
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l134_") as name:
+        tmp = Path(name)
+        path = tmp / "w" / "run.json"
+        path.parent.mkdir()
+        path.write_text("{}\n", encoding="utf-8", newline="\n")
+        calls, sleeps = [], []
+
+        def flaky(src, dst):
+            calls.append(src)
+            if len(calls) <= 2:
+                raise PermissionError(13, "held by the indexer (planted)")
+            os.replace(src, dst)
+        obj = {"status": "IN_PROGRESS", "children": [1, 2]}
+        runner.write_record(path, obj, replace=flaky, sleep=sleeps.append)
+        assert json.loads(path.read_text(encoding="utf-8")) == obj and len(calls) == 3 and sleeps == [0.5, 0.5]
+        assert b"\r" not in path.read_bytes() and sorted(p.name for p in path.parent.iterdir()) == ["run.json"]
+
+        def never(src, dst):
+            raise PermissionError(13, "always held (planted)")
+        try:
+            runner.write_record(path, {"status": "ERROR"}, replace=never, sleep=sleeps.append)
+        except PermissionError:
+            pass
+        else:
+            raise AssertionError("write_record did not raise after 10 attempts")
+        assert json.loads(path.read_text(encoding="utf-8")) == obj and len(sleeps) == 2 + 9, len(sleeps)
+        assert sorted(p.name for p in path.parent.iterdir()) == ["run.json"]
+        table = _small_table(tmp / "r")
+        real = runner.write_record
+        runner.write_record = lambda p, o, **kw: real(p, o, replace=never, sleep=lambda _s: None)
+        try:
+            def stop(_ctx):
+                raise KeyboardInterrupt
+            (code, rec), out = _captured(lambda: run_rehearsal(table, tmp / "r", hooks={"after_step15": stop}))
+        finally:
+            runner.write_record = real
+        finals = list((tmp / "r" / "out").glob("NB-*/run.final.*.json"))
+        assert (code, rec) == (5, None) and [f.name for f in finals] == [f"run.final.{os.getpid()}.json"], out[-1000:]
+        final = json.loads(finals[0].read_text(encoding="utf-8"))
+        assert final["status"] == "ABORTED" and len(final["children"]) == 2, final["status"]
+        assert [f.split(":")[0] for f in final["record_write_failures"]] == [
+            "IN_PROGRESS", "child 0 x1", "child 0 x2", "final"], final["record_write_failures"]
+        assert out.splitlines()[-1] == f"STATUS ABORTED exit=5 record={finals[0]}", out[-500:]
+
+
+def test_l1_35_record_baseline_rules():
+    """L1-35 (5.2.7; OPS-R3-2, OPS-R4-2, OPS-R5-3, QA-R4-4): record_baseline on a temp golden dir: a new file is
+    written in C1's bytes; a tracked equal baseline gives exit 0 "unchanged"; a tracked different one gives exit 2,
+    the diff and the removal line and leaves the bytes; an untracked different one is replaced, its diff printed,
+    exit 0; a tracked path with no file, as after the removal line, is written, exit 0."""
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l135_") as name:
+        golden = Path(name)
+        census = ["_io", "json", "msgspec", "nautilus_trader", "nautilus_trader.backtest.engine"]
+        path = golden / "modules_test_tag.json"
+        assert runner.record_baseline(golden, "test_tag", census, tracked=False, python="3.13.17") == (
+            0, ["+ STD _io", "+ STD json", "+ TP msgspec", "+ NT nautilus_trader",
+                "+ NT nautilus_trader.backtest.engine", "written modules_test_tag.json"])
+        written = json.loads(path.read_text(encoding="utf-8"))
+        assert written == {"schema": "nautilus-bridge-census/1", "platform_tag": "test_tag", "python": "3.13.17",
+                           "recorded_from": ["F1", "F2"], "census": census}, written
+        before = path.read_bytes()
+        assert before == (json.dumps(written, indent=1, sort_keys=True, ensure_ascii=False) + "\n").encode("utf-8")
+        assert runner.record_baseline(golden, "test_tag", list(reversed(census)), tracked=True) == (0, ["unchanged"])
+        code, lines = runner.record_baseline(golden, "test_tag", census + ["plotly"], tracked=True)
+        removal = ("Remove-Item tools\\nautilus\\golden\\modules_test_tag.json" if os.name == "nt"
+                   else "rm tools/nautilus/golden/modules_test_tag.json")
+        assert code == 2 and lines[0] == "+ TP plotly" and lines[-1] == removal and path.read_bytes() == before, lines
+        assert runner.record_baseline(golden, "test_tag", census[:-1], tracked=False) == (
+            0, ["- NT nautilus_trader.backtest.engine", "written modules_test_tag.json"])
+        assert json.loads(path.read_text(encoding="utf-8"))["census"] == census[:-1]
+        path.unlink()
+        code, lines = runner.record_baseline(golden, "test_tag", census, tracked=True)
+        assert code == 0 and lines[-1] == "written modules_test_tag.json" and path.is_file(), lines
+
+
+def test_l2_02_f1_f2_match_goldens():
+    """L2-2 (K6, QA-12): F1 and F2 through the exact launch contract match their committed goldens and 8.2; each
+    manifest is valid with run_analysis false and stats_pnls_empty true."""
+    python = layer2()
+    runner = _runner()
+    unshare = launch.resolve_unshare()
+    for name in ("F1", "F2"):
+        got = runner.run_fixture(name, python, unshare)
+        want = json.loads((GOLDEN_DIR / f"{name}.json").read_text(encoding="utf-8"))
+        assert runner.compare_golden(got["golden"], want) == [], (name, runner.compare_golden(got["golden"], want))
+        assert runner.compare_golden(got["golden"], GOLDEN_SPEC[name]) == [], name
+        m = got["manifest"]
+        assert got["result"].returncode == 0 and m["valid"] is True, (name, got["result"].stderr_tail[-500:])
+        assert m["engine"]["run_analysis"] is False and m["result"]["stats_pnls_empty"] is True, m["engine"]
+
+
+def test_l2_03_n1_matches_golden():
+    """L2-3 (QA-2): N1 (volume 4000, 2 price decimals) matches its golden: one fill, a forced stop, 4 of 12 bars,
+    exit 10 with C-01 and C-02, which the parent re-derives from the manifest (5.2.7)."""
+    python = layer2()
+    runner = _runner()
+    got = runner.run_fixture("N1", python, launch.resolve_unshare())
+    want = json.loads((GOLDEN_DIR / "N1.json").read_text(encoding="utf-8"))
+    assert runner.compare_golden(got["golden"], want) == [] and runner.compare_golden(got["golden"], GOLDEN_SPEC["N1"]) == []
+    raw, bars = launch.fixture_inputs("N1")
+    _, ts, _ = _fixture_series("N1")
+    m = got["manifest"]
+    reasons = runner.manifest_reasons(m, n_bars=12, first_ts=ts[0], last_ts=ts[-1],
+                                      bars_sha256=hashlib.sha256(bars).hexdigest(),
+                                      input_sha256=hashlib.sha256(raw).hexdigest(),
+                                      ledger_hash=json.loads(raw)["ledger_hash_after_registration"],
+                                      check_env={"precision": m["precision"], "environment": "BACKTEST"})
+    assert [r.split(":")[0] for r in reasons] == ["C-01", "C-02"], reasons
+
+
+def test_l2_06_census_matches_platform_baseline():
+    """L2-6 (5.2.7; QA-R3-12): the F1 and F2 import censuses match this platform's committed baseline under 5.2.7's
+    rule (NT and TP sets equal, no adapters or network module)."""
+    python = layer2()
+    runner = _runner()
+    tag = launch.read_venv(python)["wheel"]["platform_tag"]
+    path = GOLDEN_DIR / f"modules_{tag}.json"
+    assert path.is_file(), f"no census baseline {path.name}: runner --fixtures --record-baseline records it"
+    rec = json.loads(path.read_text(encoding="utf-8"))
+    assert (rec["schema"], rec["platform_tag"], rec["recorded_from"]) == ("nautilus-bridge-census/1", tag, ["F1", "F2"])
+    assert rec["census"] == sorted(set(rec["census"])), "the census is sorted and unique"
+    unshare = launch.resolve_unshare()
+    for name in ("F1", "F2"):
+        got = runner.run_fixture(name, python, unshare)
+        assert got["census"] and runner.judge_census(got["census"], rec["census"]) == [], (
+            name, runner.judge_census(got["census"], rec["census"]))
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 def main(argv: list[str] | None = None) -> int:
