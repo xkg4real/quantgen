@@ -570,6 +570,43 @@ def test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed():
 test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed.test_ids = ["T-CAL-01"]
 
 
+def test_cal01_owner_sign_tool_on_a_copy():
+    """tools/sign_calendars on a signature-stripped copy of the shipped files: the signed files load with the signer
+    on every row, md5 and MANIFEST row in step; a placeholder signer, a re-sign and a wrong fingerprint are refused
+    and leave the files untouched."""
+    import shutil
+    from tools import sign_calendars as T
+    with tempfile.TemporaryDirectory() as tmp:
+        data_dir = Path(tmp) / "data"
+        shutil.copytree(store.DATA_DIR, data_dir)
+        for path in data_dir.glob("*.yaml"):
+            doc = store.read_yaml(path)
+            if path.name == store.MANIFEST:
+                for row in doc["rows"]:
+                    row["md5"] = row["signed_off_by"] = None
+            else:
+                doc["signed_off_by"] = doc["signed_utc"] = doc["md5"] = None
+            path.write_text(T._dump(doc), encoding="utf-8")
+        before = {p.name: p.read_bytes() for p in data_dir.glob("*.yaml")}
+        _raises(lambda: T.sign(T.CAL02_FILES, "SIMULATION - not a signature", data_dir=data_dir), T.SignRefused)
+        _raises(lambda: T.sign(["holidays_KRX"], "owner:test", data_dir=data_dir, expect={"holidays_KRX": "0" * 32}),
+                T.SignRefused)
+        assert {p.name: p.read_bytes() for p in data_dir.glob("*.yaml")} == before
+        done = T.sign(T.CAL02_FILES, "owner:test", data_dir=data_dir, now=lambda: U(2026, 10, 29, 3))
+        assert [r["signed_utc"] for r in done] == ["2026-10-29T03:00:00Z"] * 4
+        cal, manifest = CalendarSet(data_dir), store.read_yaml(data_dir / store.MANIFEST)
+        rows = {r["file"]: r for r in manifest["rows"]}
+        for fid in T.CAL02_FILES:
+            f = cal.file(fid)
+            assert f.signed_off_by == "owner:test" and all(r["signed_off_by"] == "owner:test" for r in f.rows)
+            assert rows[f"{fid}.yaml"]["md5"] == f.md5 and rows[f"{fid}.yaml"]["version"] == f.version
+        assert cal.refusal("kr_sessions") is not None                               # unnamed files stay unsigned
+        _raises(lambda: T.sign(["holidays_KRX"], "owner:test", data_dir=data_dir), T.SignRefused)
+
+
+test_cal01_owner_sign_tool_on_a_copy.test_ids = ["T-CAL-01", "T-CAL-02"]
+
+
 def test_cal01_calendar_change_governance_event():
     from core.rules.governance import read_events, verify_chain
     cal = fixture_set()

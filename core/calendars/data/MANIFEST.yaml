@@ -18,13 +18,14 @@ rows:
   - T-TZ-02
   - T-CAL-02
 - file: holidays_NYSE.yaml
-  version: 0.1.0-draft
+  version: 1.0.0
   md5: null
   signed_off_by: null
   test_ids:
   - T-CLOSE-01
   - T-CLOSE-02
   - T-TZ-01
+  - T-CAL-02
 - file: holidays_FED.yaml
   version: 1.0.0
   md5: null
