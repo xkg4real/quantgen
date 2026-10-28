@@ -60,8 +60,10 @@ function instruction(w: SessionRateLimit, key: string, isSnapshotPushed: boolean
     'start no new work or subagents. Commit and run git push -u origin HEAD on the work branch. Then follow',
     "the handoff protocol in CLAUDE.md: write the handoff document from the handoff branch's TEMPLATE.md with",
     `status: handoff, reason: ${reasonOf(w)}, ${PCT_FIELDS[w.kind] ?? 'usage_weekly_pct'}: ${pct},`,
-    `usage_resets_at: ${w.resetsAt ?? 'unknown'}, and publish it with`,
-    `python3 tools/handoff/push_handoff.py <file> --key ${key}.`,
+    `usage_resets_at: ${w.resetsAt ?? 'unknown'}, done_ids and next_ids (roadmap IDs, none of next_ids already`,
+    'in the ledger), and publish it with',
+    `python3 tools/handoff/push_handoff.py <file> --key ${key}, adding a --done row for each roadmap ID finished`,
+    'since the last ledger entry.',
     isSnapshotPushed
       ? 'A machine snapshot of the git state is already on the branch as AUTO_STATE.md.'
       : 'The machine snapshot could not be pushed, so the document is the only record: make it complete.',
