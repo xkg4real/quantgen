@@ -15,6 +15,7 @@ const PUBLISHED = /push_handoff: \S+ at [0-9a-f]{7} \(handoff /
 // Set while a handoff is owed and the model has not yet published one this session.
 let pending: string | undefined
 let lastPoke: number | undefined
+let isPoking = false
 
 const reasonOf = (w: SessionRateLimit) => REASONS[w.kind] ?? 'usage_limit_weekly'
 
@@ -36,11 +37,18 @@ async function snapshot($: EngineInterface, args: string[], stdin?: string) {
   return undefined
 }
 
+// One at a time: parallel tool calls must not each start the script.
 async function periodic($: EngineInterface) {
-  const now = await $.clock.now()
-  if ((lastPoke !== undefined && now - lastPoke < POKE_MS) || !(await hasScripts($))) return
-  lastPoke = now
-  await snapshot($, ['--reason', 'periodic', '--min-interval', String(PERIODIC_SECONDS)])
+  if (isPoking) return
+  isPoking = true
+  try {
+    const now = await $.clock.now()
+    if ((lastPoke !== undefined && now - lastPoke < POKE_MS) || !(await hasScripts($))) return
+    lastPoke = now
+    await snapshot($, ['--reason', 'periodic', '--min-interval', String(PERIODIC_SECONDS)])
+  } finally {
+    isPoking = false
+  }
 }
 
 function instruction(w: SessionRateLimit, key: string, isSnapshotPushed: boolean): string {
@@ -61,11 +69,24 @@ function instruction(w: SessionRateLimit, key: string, isSnapshotPushed: boolean
   ].join(' ')
 }
 
+function blockedInstruction(w: SessionRateLimit): string {
+  return [
+    `${w.kind === 'seven_day' ? 'Weekly' : 'Five-hour'} usage is at ${w.percentUsed.toFixed(1)}%.`,
+    "Another task's handoff, or another agent's lock, holds the handoff branch, so this session cannot hand",
+    'off there. Finish only the step in progress, commit and run git push -u origin HEAD on the work branch,',
+    'start no new work, and tell the owner where the work stands.',
+  ].join(' ')
+}
+
 async function handOff($: EngineInterface, w: SessionRateLimit, key: string) {
   const ran = await snapshot($, [
     '--reason', reasonOf(w), '--key', key, '--pct', w.percentUsed.toFixed(1), '--resets-at', w.resetsAt ?? 'unknown',
   ])
-  if (ran?.exitCode === 10) return // a handoff for this window is already published
+  if (ran?.exitCode === 10) return // this window's handoff is published and not yet returned
+  if (ran?.exitCode === 11) {
+    $.prompt.submit({ text: blockedInstruction(w) }).catch(() => undefined)
+    return
+  }
   pending = instruction(w, key, ran?.exitCode === 0)
   $.ui.toast(`${w.kind} usage ${w.percentUsed.toFixed(1)}%: handing off to the handoff branch`)
   // Should the turn never start, the prompt.compose hook below still carries the instruction.
@@ -92,7 +113,8 @@ export const register: Register = on => {
   // A recent snapshot is on the branch even when a session stops without warning, mid-turn included.
   on('turn.complete', async ($, e, next) => {
     const result = await next(e)
-    if (e.agentId === undefined) void periodic($).catch(() => undefined)
+    // A failed turn is classic.StopFailure's to record.
+    if (e.agentId === undefined && e.reason !== 'error') void periodic($).catch(() => undefined)
     return result
   })
 

@@ -11,7 +11,8 @@ states and this script enforces:
   remote one is moved, byte for byte, to `archive/<updated_at>-<task>.md` in the same commit.
 - A rejected push (someone else wrote first) is retried from a fresh fetch, so the lock check sees their
   write.
-- `--key` adds a `handoff-key:` trailer to the commit, which marks a usage window as handed off.
+- `--key` adds a `handoff-key:` trailer to the commit (an empty commit when the document is already there),
+  which marks a usage window as handed off while CURRENT.md stays `handoff` or `taken`.
 
 Exit codes: 0 published, 2 bad input, 3 refused (locked, unreadable, or an untaken handoff of another
 task), 4 git or network failure. Every publish, and a re-publish of the same document, prints
@@ -95,6 +96,16 @@ def is_unreadable(raw: bytes, fields: dict[str, str]) -> bool:
     return bool(raw.strip()) and fields.get("status", "").lower() not in STATUSES
 
 
+def key_recorded(ref: str, key: str) -> bool:
+    return bool(git("log", ref, "-1", "--format=%H", "--fixed-strings", f"--grep=handoff-key: {key}", check=False))
+
+
+def handed_off(ref: str, key: str) -> bool:
+    """Whether this usage window's handoff is still outstanding: keyed on the branch and not yet returned."""
+    _, fields = remote_fields(ref)
+    return fields.get("status", "").lower() in ("handoff", "taken") and key_recorded(ref, key)
+
+
 def archive_name(parent: str, fields: dict[str, str]) -> str:
     stamp = re.sub(r"[^0-9T]", "", fields.get("updated_at", ""))[:13] or "undated"
     task = re.sub(r"[^a-z0-9._-]+", "-", fields.get("task", "task").lower()).strip("-") or "task"
@@ -123,6 +134,10 @@ def commit_files(parent: str, files: dict[str, bytes | None], message: str) -> s
         os.unlink(index)
     if tree == git("rev-parse", f"{parent}^{{tree}}"):
         return parent
+    return make_commit(tree, parent, message)
+
+
+def make_commit(tree: str, parent: str, message: str) -> str:
     # commit-tree ignores commit.gpgSign, so carry the setting over by hand
     sign = ["-S"] if git("config", "--bool", "commit.gpgSign", check=False) == "true" else []
     return git("commit-tree", *sign, tree, "-p", parent, "-m", message)
@@ -188,8 +203,10 @@ def publish(path: Path, remote: str, branch: str, force: bool, message: str | No
             print(f"push_handoff: {why}.", file=sys.stderr)
             return 3
         commit = build_commit(parent, new_raw, new, msg)
+        if commit == parent and key and not key_recorded(parent, key):
+            commit = make_commit(git("rev-parse", f"{parent}^{{tree}}"), parent, msg)
         if commit == parent or push_commit(remote, branch, commit):
-            print(f"push_handoff: {branch} at {commit[:7]} ({new['status']} {new['task']})")
+            print(f"push_handoff: {branch} at {commit[:7]} ({new['status'].lower()} {new['task']})")
             return 0
     print("push_handoff: the remote kept moving; gave up after 3 attempts", file=sys.stderr)
     return 4

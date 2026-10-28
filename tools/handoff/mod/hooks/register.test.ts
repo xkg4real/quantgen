@@ -150,3 +150,23 @@ test('a turn that fails on the rate limit pushes a snapshot with the last messag
   expect(snapshots(runs, 'rate_limit_error').length).toBe(1)
   expect(stdins[runs.findIndex(r => r.includes('rate_limit_error'))]).toContain('editing core/x.py')
 })
+
+test('when another task holds the branch, the prompt asks to push and tell the owner', async ($, on) => {
+  const { prompts } = engine(on, { exitCode: 11 })
+  await $.session.measure(measure(98.2))
+  await settle()
+  expect(prompts.length).toBe(1)
+  expect(prompts[0]).toContain('tell the owner')
+  expect(prompts[0]).not.toContain('status: handoff')
+  expect(await isPending($)).toBe(false)
+})
+
+test('a failed turn leaves the record to StopFailure; parallel tool calls start one script', async ($, on) => {
+  const { runs } = engine(on)
+  await $.turn.complete({ ...turn(), reason: 'error' as const })
+  await settle()
+  expect(snapshots(runs, 'periodic').length).toBe(0)
+  await Promise.all([1, 2, 3].map(() => $.tool.call({ tool: 'Bash', command: 'ls' })))
+  await settle()
+  expect(snapshots(runs, 'periodic').length).toBe(1)
+})

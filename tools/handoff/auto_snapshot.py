@@ -7,14 +7,16 @@ a hook passes it in. AUTO_STATE.patch holds, byte for byte, the diff of tracked 
 newest commit of this branch that the remote has) to the working tree, so it carries unpushed commits too;
 untracked files are listed by name only, since their content may hold secrets.
 
-AUTO_STATE.md belongs to the task CURRENT.md names: a snapshot without --key from a clone on another branch
-than CURRENT.md's `work_branch` (while that task is checkpoint, handoff or taken) is skipped, so one session
-cannot overwrite the record of another.
+AUTO_STATE.md belongs to the task CURRENT.md names. A clone on another branch than CURRENT.md's `work_branch`
+leaves it alone while that task is `handoff` or `taken` (or CURRENT.md is unreadable), and, without --key,
+while it is `checkpoint`, so one session cannot overwrite the record of another. A throttled run that loses a
+push race stops: what won is newer.
 
 Callers:
 - the handoff-usage-watch mod at the usage threshold (`--reason usage_limit_weekly --key ...`); exit 10 tells
-  it that a handoff for that window is already published (a CURRENT.md commit carries `handoff-key: <key>`,
-  which `push_handoff.py --key` writes);
+  it that the handoff for that window is published and still outstanding (`push_handoff.py --key` wrote the
+  `handoff-key: <key>` trailer, and CURRENT.md is `handoff` or `taken`); exit 11 that another task's handoff
+  or lock holds the branch, so this session cannot hand off there;
 - the same mod during work, throttled (`--reason periodic --min-interval 1800`): it pushes only when the git
   state changed and the interval has passed, so the branch holds a recent snapshot even when a session stops
   without warning;
@@ -22,7 +24,8 @@ Callers:
   limit, or the service turning requests away under load, which the hook input does not tell apart, so
   CURRENT.md's status is left as it is.
 
-Exit codes: 0 pushed or nothing to do, 10 window already handed off, 4 git or network failure.
+Exit codes: 0 pushed or nothing to do, 10 window already handed off, 11 another task holds the branch
+(--key runs only), 4 git or network failure.
 """
 from __future__ import annotations
 
@@ -34,7 +37,8 @@ import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from push_handoff import GitError, commit_files, fetch, front_matter, git, git_bytes, push_commit
+from push_handoff import (GitError, commit_files, fetch, git, git_bytes, handed_off, is_unreadable, push_commit,
+                          remote_fields)
 
 KST = timezone(timedelta(hours=9))
 PATCH_LIMIT = 2 * 1024 * 1024
@@ -45,10 +49,8 @@ def now_kst() -> str:
     return datetime.now(KST).replace(microsecond=0).isoformat()
 
 
-def handed_off(ref: str, key: str) -> bool:
-    """Whether a commit that wrote CURRENT.md carries this window's key."""
-    return bool(git("log", ref, "-1", "--format=%H", "--fixed-strings", f"--grep=handoff-key: {key}",
-                    "--", "CURRENT.md", check=False))
+# Plain diff output whatever the user's git config says (prefixes, colour, external tools, textconv).
+PLAIN_DIFF = ("--no-color", "--no-ext-diff", "--no-textconv", "--src-prefix=a/", "--dst-prefix=b/", "--no-relative")
 
 
 def patch_base(remote: str) -> str:
@@ -93,8 +95,8 @@ def snapshot(args: argparse.Namespace, hook: dict, parent: str) -> tuple[dict[st
     unpushed = git("log", "--oneline", f"{base}..HEAD", check=False) if base else "(원격에 있는 기준 커밋 없음)"
     status = git("status", "--porcelain")
     untracked = [line[3:] for line in status.splitlines() if line.startswith("??")]
-    diff = git_bytes("diff", base or "HEAD", "--binary")
-    current = front_matter(git("show", f"{parent}:CURRENT.md", check=False))
+    diff = git_bytes("diff", *PLAIN_DIFF, "--binary", base or "HEAD")
+    _, current = remote_fields(parent)
 
     patch = diff if diff and len(diff) <= PATCH_LIMIT else None
     patch_note = ("AUTO_STATE.patch (`git apply AUTO_STATE.patch` on patch_base)" if patch and base
@@ -132,7 +134,7 @@ def snapshot(args: argparse.Namespace, hook: dict, parent: str) -> tuple[dict[st
         "## 최근 커밋", "", fence(git("log", "--oneline", "-15")), "",
         "## 푸시되지 않은 커밋", "", fence(unpushed), "",
         "## 커밋되지 않은 변경", "", fence(status), "",
-        "`patch_base` 이후 바뀐 파일 (푸시 안 된 커밋 포함):", "", fence(git("diff", base or "HEAD", "--stat")), "",
+        "`patch_base` 이후 바뀐 파일 (푸시 안 된 커밋 포함):", "", fence(git("diff", *PLAIN_DIFF, "--stat", base or "HEAD")), "",
         f"전체 diff: {patch_note}", "",
     ]
     if untracked:
@@ -148,7 +150,7 @@ def snapshot(args: argparse.Namespace, hook: dict, parent: str) -> tuple[dict[st
 
 
 def fingerprint() -> str:
-    parts = (git_bytes("rev-parse", "HEAD"), git_bytes("status", "--porcelain"), git_bytes("diff", "HEAD", "--binary"))
+    parts = (git_bytes("rev-parse", "HEAD"), git_bytes("status", "--porcelain"), git_bytes("diff", *PLAIN_DIFF, "--binary", "HEAD"))
     return hashlib.sha256(b"\0".join(parts)).hexdigest()
 
 
@@ -163,17 +165,20 @@ def run(args: argparse.Namespace) -> int:
         if state.get("fingerprint") == mark or time.time() - state.get("pushed_at", 0) < args.min_interval:
             return 0
 
-    for _ in range(3):
+    for attempt in range(3):
+        if attempt and args.min_interval:
+            return 0  # the branch moved under a throttled run: a fresher snapshot or handoff is on top
         parent = fetch(args.remote, args.branch)
         if args.key and handed_off(parent, args.key):
-            print(f"auto_snapshot: a handoff for {args.key} is already on {args.branch}")
+            print(f"auto_snapshot: the handoff for {args.key} is already on {args.branch}")
             return 10
-        current = front_matter(git("show", f"{parent}:CURRENT.md", check=False))
+        raw, current = remote_fields(parent)
         owner = current.get("work_branch", "none")
-        if not args.key and current.get("status", "").lower() in ("checkpoint", "handoff", "taken") \
-                and owner not in ("", "none") and owner != branch:
-            print(f"auto_snapshot: AUTO_STATE.md belongs to {owner} ({current.get('task')}); skipped")
-            return 0
+        guarded = ("handoff", "taken") if args.key else ("checkpoint", "handoff", "taken")
+        if is_unreadable(raw, current) or (current.get("status", "").lower() in guarded
+                                           and owner not in ("", "none") and owner != branch):
+            print(f"auto_snapshot: the branch belongs to {owner} ({current.get('task')}); skipped")
+            return 11 if args.key else 0
         files, message = snapshot(args, hook, parent)
         commit = commit_files(parent, files, message)
         if commit == parent or push_commit(args.remote, args.branch, commit):
