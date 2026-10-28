@@ -116,6 +116,73 @@ def layer2() -> Path:
     return python
 
 
+def test_l1_15_encoding_rules_hold():
+    """L1-15 (spec 8.3 and 3.7; QA-R2-14): in tools/nautilus/*.py and tests/nautilus_*.py every open (a constant
+    binary mode exempt), read_text and write_text passes encoding="utf-8" (or "utf-8-sig"), every text write newline=,
+    every text-mode subprocess call encoding="utf-8" and errors="replace", every csv writer lineterminator="\\n"; no
+    committed bridge CSV, no file launch.fixture_inputs builds (plan Task 3) and no bars.csv runner.bars_bytes builds
+    (plan Task 4; the one CSV the parent writes) holds a carriage return."""
+    planted = {'open(p, "w")': 2, "p.read_text()": 1, 'p.write_text(s, encoding="utf-8")': 1,
+               "subprocess.run(a, text=True)": 1, "csv.writer(fh)": 1, 'open(p, "rb")': 0,
+               'p.read_text(encoding="utf-8-sig")': 0, 'p.write_text(s, encoding="utf-8", newline="\\n")': 0,
+               'subprocess.run(a, text=True, encoding="utf-8", errors="replace")': 0,
+               "subprocess.run(a, capture_output=True)": 0, 'csv.writer(fh, lineterminator="\\n")': 0,
+               'inside(root, "fills.csv").open("w", encoding="utf-8", newline="")': 0}
+    for snippet, want in planted.items():
+        got = encoding_offences(snippet, "planted.py")
+        assert len(got) == want, (snippet, got)
+    files = sorted((ROOT / "tools" / "nautilus").glob("*.py")) + sorted((ROOT / "tests").glob("nautilus_*.py"))
+    assert ROOT / "tools" / "nautilus" / "launch.py" in files and Path(__file__).resolve() in files, files
+    hits = [h for p in files for h in encoding_offences(p.read_text(encoding="utf-8"), p.relative_to(ROOT).as_posix())]
+    assert not hits, "encoding rules of spec 3.7 broken:\n  " + "\n  ".join(hits)
+    csvs = sorted((ROOT / "tests" / "fixtures" / "nautilus").glob("*.csv")) + sorted((ROOT / "tools" / "nautilus").rglob("*.csv"))
+    assert csvs, "no committed bridge CSV"
+    bad = [p.relative_to(ROOT).as_posix() for p in csvs if b"\r" in p.read_bytes()]
+    from tools.nautilus import launch
+    build = getattr(launch, "fixture_inputs", None)
+    bad += [f"fixture_inputs({n!r})" for n in getattr(launch, "FIXTURES", ()) if build and b"\r" in b"".join(build(n))]
+    if (ROOT / "tools" / "nautilus" / "runner.py").is_file():          # plan Task 4: the parent's bars.csv (C3, C10)
+        import numpy as np
+        from tools.nautilus import runner
+        if b"\r" in runner.bars_bytes(np.array([1.0, 2.0]), [1, 2]):
+            bad.append("runner.bars_bytes")
+    assert not bad, f"carriage returns in {bad}"
+
+
+def encoding_offences(source: str, rel: str) -> list[str]:
+    """The AST rules of L1-15 (spec 3.7) over one file's source: "<rel>:<line>: <call>() <problem>" per broken call.
+    A mode is the `mode=` keyword or the first positional string that looks like one; `open` and `fdopen` default to
+    "r", `read_text` reads, `write_text` writes. A subprocess call is in text mode when it passes `text=True`,
+    `universal_newlines=True`, `encoding=` or `errors=`."""
+    import ast
+    import re
+    out = []
+    for node in ast.walk(ast.parse(source)):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        name = func.id if isinstance(func, ast.Name) else func.attr if isinstance(func, ast.Attribute) else ""
+        kw = {k.arg: (k.value.value if isinstance(k.value, ast.Constant) else k.value) for k in node.keywords if k.arg}
+        where = f"{rel}:{node.lineno}: {name}()"
+        if name in ("open", "fdopen", "read_text", "write_text"):
+            modes = [a.value for a in node.args if isinstance(a, ast.Constant) and isinstance(a.value, str)
+                     and re.fullmatch(r"[rwxab+t]{1,3}", a.value)]
+            mode = {"read_text": "r", "write_text": "w"}.get(name, kw.get("mode", modes[0] if modes else "r"))
+            if isinstance(mode, str) and "b" in mode:
+                continue
+            if kw.get("encoding") not in ("utf-8", "utf-8-sig"):
+                out.append(f'{where} without encoding="utf-8"')
+            if (not isinstance(mode, str) or set(mode) & set("wxa+")) and kw.get("newline") not in ("\n", ""):
+                out.append(f'{where} writes text without newline="\\n"')
+        elif name in ("run", "Popen", "check_output", "check_call", "call") and (
+                kw.get("text") is True or kw.get("universal_newlines") is True or "encoding" in kw or "errors" in kw):
+            if kw.get("encoding") != "utf-8" or kw.get("errors") != "replace":
+                out.append(f'{where} in text mode without encoding="utf-8", errors="replace"')
+        elif name in ("writer", "DictWriter") and kw.get("lineterminator") != "\n":
+            out.append(f'{where} without lineterminator="\\n"')
+    return out
+
+
 def tests() -> list[tuple[str, Callable[[], None]]]:
     """Every module-level test_* sorted by name, LAST_TEST excepted; then LAST_TEST. Each one guarded."""
     guard_roots()
