@@ -81,12 +81,12 @@
 
 | 파일 | 지금 상태 | 쓰는 곳 | 서명하지 않았을 때 | 서명 문서 |
 |---|---|---|---|---|
-| `holidays_JPX.yaml` | 0행, 기간 없음 | JP 결정 시계, KR 공분산(닛케이) | JP 시계와 닛케이 종가 입력이 막힘 | 5차 감사(준비 중) |
-| `holidays_SSE.yaml` | 0행, 기간 없음 | CN 결정 시계, KR 공분산(상하이) | 같음 | 5차 감사(준비 중) |
-| `holidays_HKEX.yaml` | 0행, 기간 없음 | HK 결정 시계, KR 공분산(HSI) | 같음 | 5차 감사(준비 중) |
-| `holidays_TWSE.yaml` | 0행, 기간 없음 | TW 결정 시계, KR 공분산(TAIEX) | 같음 | 5차 감사(준비 중) |
-| `holidays_CME.yaml` | 0행, 기간 없음 | CME 선물(`CME_micro_ES`), T-AVAIL-01 | CME 휴장일 판단 불가 | 5차 감사(준비 중) |
-| `market_closes.yaml` | 3행(SSE 15:00, HKEX 16:00, TWSE 13:30), 출처 없음 | CN·HK·TW 마감 시각 | CN·HK·TW 시계가 막힘 | 5차 감사(준비 중) |
+| `holidays_JPX.yaml` | 0행, 기간 없음 | JP 결정 시계, KR 공분산(닛케이) | JP 시계와 닛케이 종가 입력이 막힘 | `13_calendar_batch5.md`, 양식 `14_signing_form_batch5.md` |
+| `holidays_SSE.yaml` | 0행, 기간 없음 | CN 결정 시계, KR 공분산(상하이) | 같음 | `13_calendar_batch5.md`, 양식 `14_signing_form_batch5.md` |
+| `holidays_HKEX.yaml` | 0행, 기간 없음 | HK 결정 시계, KR 공분산(HSI) | 같음 | `13_calendar_batch5.md`, 양식 `14_signing_form_batch5.md` |
+| `holidays_TWSE.yaml` | 0행, 기간 없음 | TW 결정 시계, KR 공분산(TAIEX) | 같음 | `13_calendar_batch5.md`, 양식 `14_signing_form_batch5.md` |
+| `holidays_CME.yaml` | 0행, 기간 없음 | CME 선물(`CME_micro_ES`), T-AVAIL-01 | CME 휴장일 판단 불가 | `13_calendar_batch5.md`, 양식 `14_signing_form_batch5.md` |
+| `market_closes.yaml` | 3행(SSE 15:00, HKEX 16:00, TWSE 13:30), 출처 없음 | CN·HK·TW 마감 시각 | CN·HK·TW 시계가 막힘 | `13_calendar_batch5.md`, 양식 `14_signing_form_batch5.md` |
 | `release_calendar.yaml` | 파일 없음(코드만 반영) | BLS·BEA 발표일(CPI, 고용, PCE, 실업수당) | BLS·BEA 입력이 막힘 | 공식 일정 사이트 접근 필요(아래) |
 
 - **미서명 파일이 KR 북을 멈추지는 않습니다.** 공분산에만 쓰이는 입력은 실패하면 최대 5번의 결정 동안 마지막 값을 '오래됨' 표시와 함께 쓰고, 그 뒤에는 공분산에서 빠집니다(스펙 L1877).

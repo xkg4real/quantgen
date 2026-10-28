@@ -1,0 +1,396 @@
+file_id: holidays_CME
+version: 1.0.0
+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/13_calendar_batch5.md); refused at load until the owner
+  signs (R-20 rule 6, T-CAL-01)
+covers:
+  from: '2025-01-01'
+  to: '2027-12-31'
+coverage_calendar: CME
+signed_off_by: null
+signed_utc: null
+md5: null
+how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
+  / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+  MANIFEST.yaml row with a new test id
+unverified:
+- 'the set is CME equity index futures (ES, MES): a business day has a regular daily settlement; other CME products (rates,
+  energy) keep different holiday hours'
+- early_close times are the equity trading halt in America/Chicago (12:15 CT); the settlement is 12:00 CT
+- 2027 rows follow the signed NYSE list (C) until CME publishes its 2027 schedule
+- rows before 2025 are a later version
+owner_must_sign:
+- CME Group holiday calendar, with licence, owner and md5 (spec section 9.5)
+rows:
+- effective_from: '2025-01-01'
+  effective_to: '2025-01-01'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025-new-years-advisory.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-01-01'
+  kind: closed
+  name: New Year's Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2025-01-09'
+  effective_to: '2025-01-09'
+  source_url: https://www.cmegroup.com/content/dam/cmegroup/notices/ser/2025/01/ser-9499r.pdf ; https://www.cmegroup.com/notices/clearing/2025/01/25-012.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-01-09'
+  kind: closed
+  name: National Day of Mourning (President Carter)
+  evidence: 'A: CME SER-9499R and clearing advisory 25-012: equity open only to 08:30 CT (NYSE closed for the National Day
+    of Mourning) and settlement prices copied forward from 2025-01-08; no new settlement'
+- effective_from: '2025-01-20'
+  effective_to: '2025-01-20'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/mlk-day-holiday-settlement-times-2025.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-01-20'
+  kind: closed
+  name: Martin Luther King, Jr. Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2025-02-17'
+  effective_to: '2025-02-17'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/presidents-day-holiday-settlement-times-2025.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-02-17'
+  kind: closed
+  name: Washington's Birthday
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2025-04-18'
+  effective_to: '2025-04-18'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/2025-good-friday-clearing-advisory.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-04-18'
+  kind: closed
+  name: Good Friday
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2025-05-26'
+  effective_to: '2025-05-26'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/memorial-day-holiday-settlement-times-2025.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-05-26'
+  kind: closed
+  name: Memorial Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2025-06-19'
+  effective_to: '2025-06-19'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/juneteenth-day-settlement-times-2025.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-06-19'
+  kind: closed
+  name: Juneteenth
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2025-07-03'
+  effective_to: '2025-07-03'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://www.cmegroup.com/tools-information/holiday-calendar/files/us-independence-day-settlement-times-2024.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-07-03'
+  kind: early_close
+  name: 'day before Independence Day (CME equity: halt 12:15 CT, settlement 12:00 CT)'
+  close_local: '12:15'
+  evidence: 'B: trade date per CME''s 2025 holiday page; halt 12:15 CT (brokers) and 12:00 CT settlement as in CME''s 2023
+    and 2024 notices'
+- effective_from: '2025-07-04'
+  effective_to: '2025-07-04'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-07-04'
+  kind: closed
+  name: Independence Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2025-09-01'
+  effective_to: '2025-09-01'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/labor-day-holiday-settlement-times-2025.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-09-01'
+  kind: closed
+  name: Labor Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2025-11-27'
+  effective_to: '2025-11-27'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/thanksgiving-holiday-settlement-times-2025.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-11-27'
+  kind: closed
+  name: Thanksgiving Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2025-11-28'
+  effective_to: '2025-11-28'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/thanksgiving-holiday-settlement-times-2025.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-11-28'
+  kind: early_close
+  name: 'day after Thanksgiving (CME equity: halt 12:15 CT, settlement 12:00 CT)'
+  close_local: '12:15'
+  evidence: 'A: CME settlement notice, equity settles 12:00 CT; B: halt 12:15 CT (brokers); Globex was down from 20:40 CT
+    on 11-27 to about 07:30 CT for a data-centre outage, the session then traded'
+- effective_from: '2025-12-24'
+  effective_to: '2025-12-24'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/christmas-holiday-settlement-times-2025.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-12-24'
+  kind: early_close
+  name: 'Christmas Eve (CME equity: halt 12:15 CT, settlement 12:00 CT)'
+  close_local: '12:15'
+  evidence: 'A: CME notice, equity settles 12:00 CT; the 12:15 CT trading halt is from brokers and CME''s earlier schedules
+    (B), not from CME''s own 2025-2026 text'
+- effective_from: '2025-12-25'
+  effective_to: '2025-12-25'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/christmas-holiday-settlement-times-2025.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2025-12-25'
+  kind: closed
+  name: Christmas Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2026-01-01'
+  effective_to: '2026-01-01'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/new-years-eve-holiday-settlement-times-2026.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-01-01'
+  kind: closed
+  name: New Year's Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2026-01-19'
+  effective_to: '2026-01-19'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/mlk-day-holiday-settlement-times-2026.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-01-19'
+  kind: closed
+  name: Martin Luther King, Jr. Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2026-02-16'
+  effective_to: '2026-02-16'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/presidents-day-holiday-settlement-times-2026.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-02-16'
+  kind: closed
+  name: Washington's Birthday
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2026-04-03'
+  effective_to: '2026-04-03'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/2026-good-friday-clearing-advisory.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-04-03'
+  kind: closed
+  name: Good Friday
+  evidence: 'A: CME Good Friday clearing advisory: equities open for an abbreviated session (to about 08:15 CT, jobs-report
+    day) but not settled; the 2026-04-02 settlement is rolled forward'
+- effective_from: '2026-05-25'
+  effective_to: '2026-05-25'
+  source_url: https://iqhelp.dtn.com/memorial-day-holiday-service-hours-2026/
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-05-25'
+  kind: closed
+  name: Memorial Day
+  evidence: 'B: no settlement (DTN: the Tuesday 2026-05-26 trade date opens Sunday); CME''s own notice not seen'
+- effective_from: '2026-06-19'
+  effective_to: '2026-06-19'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/juneteenth-day-settlement-times-2026.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-06-19'
+  kind: closed
+  name: Juneteenth
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2026-07-03'
+  effective_to: '2026-07-03'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/us-independence-day-settlement-times-2026.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-07-03'
+  kind: closed
+  name: Independence Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2026-09-07'
+  effective_to: '2026-09-07'
+  source_url: https://support.tradovate.com/s/article/2026-Holiday-Trading-Hours-Tradovate?language=en_US
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-09-07'
+  kind: closed
+  name: Labor Day
+  evidence: 'B: no settlement (Tradovate: equity halt 12:00 CT, resume 17:00 CT); CME''s own notice not seen'
+- effective_from: '2026-11-26'
+  effective_to: '2026-11-26'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/thanksgiving-holiday-settlement-times-2026.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-11-26'
+  kind: closed
+  name: Thanksgiving Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2026-11-27'
+  effective_to: '2026-11-27'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/thanksgiving-holiday-settlement-times-2026.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-11-27'
+  kind: early_close
+  name: 'day after Thanksgiving (CME equity: halt 12:15 CT, settlement 12:00 CT)'
+  close_local: '12:15'
+  evidence: 'A: CME notice, equity settles 12:00 CT; the 12:15 CT trading halt is from brokers and CME''s earlier schedules
+    (B), not from CME''s own 2025-2026 text'
+- effective_from: '2026-12-24'
+  effective_to: '2026-12-24'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/christmas-holiday-settlement-times-2026.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-12-24'
+  kind: early_close
+  name: 'Christmas Eve (CME equity: halt 12:15 CT, settlement 12:00 CT)'
+  close_local: '12:15'
+  evidence: 'A: CME notice, equity settles 12:00 CT; the 12:15 CT trading halt is from brokers and CME''s earlier schedules
+    (B), not from CME''s own 2025-2026 text'
+- effective_from: '2026-12-25'
+  effective_to: '2026-12-25'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/christmas-holiday-settlement-times-2026.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2026-12-25'
+  kind: closed
+  name: Christmas Day
+  evidence: 'B: Christmas full close (third-party calendars); CME''s 2026 notice excerpt covered only 12-24'
+- effective_from: '2027-01-01'
+  effective_to: '2027-01-01'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/new-years-eve-holiday-settlement-times-2027.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-01-01'
+  kind: closed
+  name: New Year's Day
+  evidence: 'A: CME notice: no settlement prices derived for that date (a holiday Globex session''s trades go to the next
+    trade date)'
+- effective_from: '2027-01-18'
+  effective_to: '2027-01-18'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-01-18'
+  kind: closed
+  name: Martin Luther King, Jr. Day
+  evidence: 'C: CME''s 2027 schedule is not out; CME equity matched the NYSE list on every 2025-2026 date, so this row follows
+    the signed holidays_NYSE v1.0.0'
+- effective_from: '2027-02-15'
+  effective_to: '2027-02-15'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-02-15'
+  kind: closed
+  name: Washington's Birthday
+  evidence: 'C: CME''s 2027 schedule is not out; CME equity matched the NYSE list on every 2025-2026 date, so this row follows
+    the signed holidays_NYSE v1.0.0'
+- effective_from: '2027-03-26'
+  effective_to: '2027-03-26'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-03-26'
+  kind: closed
+  name: Good Friday
+  evidence: 'C: CME''s 2027 schedule is not out; CME equity matched the NYSE list on every 2025-2026 date, so this row follows
+    the signed holidays_NYSE v1.0.0'
+- effective_from: '2027-05-31'
+  effective_to: '2027-05-31'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-05-31'
+  kind: closed
+  name: Memorial Day
+  evidence: 'C: CME''s 2027 schedule is not out; CME equity matched the NYSE list on every 2025-2026 date, so this row follows
+    the signed holidays_NYSE v1.0.0'
+- effective_from: '2027-06-18'
+  effective_to: '2027-06-18'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-06-18'
+  kind: closed
+  name: Juneteenth
+  evidence: 'C: CME''s 2027 schedule is not out; CME equity matched the NYSE list on every 2025-2026 date, so this row follows
+    the signed holidays_NYSE v1.0.0'
+- effective_from: '2027-07-05'
+  effective_to: '2027-07-05'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-07-05'
+  kind: closed
+  name: Independence Day
+  evidence: 'C: CME''s 2027 schedule is not out; CME equity matched the NYSE list on every 2025-2026 date, so this row follows
+    the signed holidays_NYSE v1.0.0'
+- effective_from: '2027-09-06'
+  effective_to: '2027-09-06'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-09-06'
+  kind: closed
+  name: Labor Day
+  evidence: 'C: CME''s 2027 schedule is not out; CME equity matched the NYSE list on every 2025-2026 date, so this row follows
+    the signed holidays_NYSE v1.0.0'
+- effective_from: '2027-11-25'
+  effective_to: '2027-11-25'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-11-25'
+  kind: closed
+  name: Thanksgiving Day
+  evidence: 'C: CME''s 2027 schedule is not out; CME equity matched the NYSE list on every 2025-2026 date, so this row follows
+    the signed holidays_NYSE v1.0.0'
+- effective_from: '2027-11-26'
+  effective_to: '2027-11-26'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-11-26'
+  kind: early_close
+  name: 'day after Thanksgiving (CME equity: halt 12:15 CT, settlement 12:00 CT)'
+  close_local: '12:15'
+  evidence: 'C: CME''s 2027 schedule is not out; CME equity matched the NYSE list on every 2025-2026 date, so this row follows
+    the signed holidays_NYSE v1.0.0'
+- effective_from: '2027-12-24'
+  effective_to: '2027-12-24'
+  source_url: https://www.cmegroup.com/tools-information/holiday-calendar.html ; https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: null
+  date: '2027-12-24'
+  kind: closed
+  name: Christmas Day
+  evidence: 'C: CME''s 2027 schedule is not out; CME equity matched the NYSE list on every 2025-2026 date, so this row follows
+    the signed holidays_NYSE v1.0.0'
