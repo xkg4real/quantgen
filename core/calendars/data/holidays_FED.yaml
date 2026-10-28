@@ -6,9 +6,9 @@ covers:
   from: '2015-01-01'
   to: '2027-12-31'
 coverage_calendar: FED
-signed_off_by: null
-signed_utc: null
-md5: null
+signed_off_by: Geon Koh
+signed_utc: '2026-10-28T06:35:52Z'
+md5: 6c69a8acd75a44ed6c527c2f676b58aa
 how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
   MANIFEST.yaml row with a new test id
@@ -23,7 +23,7 @@ rows:
   effective_to: '2015-01-01'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2015-01-01'
   kind: closed
   name: New Year's Day
@@ -32,7 +32,7 @@ rows:
   effective_to: '2015-01-19'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2015-01-19'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -41,7 +41,7 @@ rows:
   effective_to: '2015-02-16'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2015-02-16'
   kind: closed
   name: Washington's Birthday
@@ -50,7 +50,7 @@ rows:
   effective_to: '2015-05-25'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2015-05-25'
   kind: closed
   name: Memorial Day
@@ -59,7 +59,7 @@ rows:
   effective_to: '2015-07-03'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2015-07-03'
   kind: closed
   name: Independence Day
@@ -68,7 +68,7 @@ rows:
   effective_to: '2015-09-07'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2015-09-07'
   kind: closed
   name: Labor Day
@@ -77,7 +77,7 @@ rows:
   effective_to: '2015-10-12'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2015-10-12'
   kind: closed
   name: Columbus Day
@@ -86,7 +86,7 @@ rows:
   effective_to: '2015-11-11'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2015-11-11'
   kind: closed
   name: Veterans Day
@@ -95,7 +95,7 @@ rows:
   effective_to: '2015-11-26'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2015-11-26'
   kind: closed
   name: Thanksgiving Day
@@ -104,7 +104,7 @@ rows:
   effective_to: '2015-12-25'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2015-12-25'
   kind: closed
   name: Christmas Day
@@ -113,7 +113,7 @@ rows:
   effective_to: '2016-01-01'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2016-01-01'
   kind: closed
   name: New Year's Day
@@ -122,7 +122,7 @@ rows:
   effective_to: '2016-01-18'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2016-01-18'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -131,7 +131,7 @@ rows:
   effective_to: '2016-02-15'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2016-02-15'
   kind: closed
   name: Washington's Birthday
@@ -140,7 +140,7 @@ rows:
   effective_to: '2016-05-30'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2016-05-30'
   kind: closed
   name: Memorial Day
@@ -149,7 +149,7 @@ rows:
   effective_to: '2016-07-04'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2016-07-04'
   kind: closed
   name: Independence Day
@@ -158,7 +158,7 @@ rows:
   effective_to: '2016-09-05'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2016-09-05'
   kind: closed
   name: Labor Day
@@ -167,7 +167,7 @@ rows:
   effective_to: '2016-10-10'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2016-10-10'
   kind: closed
   name: Columbus Day
@@ -176,7 +176,7 @@ rows:
   effective_to: '2016-11-11'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2016-11-11'
   kind: closed
   name: Veterans Day
@@ -185,7 +185,7 @@ rows:
   effective_to: '2016-11-24'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2016-11-24'
   kind: closed
   name: Thanksgiving Day
@@ -194,7 +194,7 @@ rows:
   effective_to: '2016-12-26'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2016-12-26'
   kind: closed
   name: Christmas Day
@@ -203,7 +203,7 @@ rows:
   effective_to: '2017-01-02'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-01-02'
   kind: closed
   name: New Year's Day
@@ -212,7 +212,7 @@ rows:
   effective_to: '2017-01-16'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-01-16'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -221,7 +221,7 @@ rows:
   effective_to: '2017-01-20'
   source_url: https://www.op-f.org/media/0i0pw22x/federal-reserve-board-holidays.pdf
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-01-20'
   kind: closed
   name: Inauguration Day (Board closed)
@@ -230,7 +230,7 @@ rows:
   effective_to: '2017-02-20'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-02-20'
   kind: closed
   name: Washington's Birthday
@@ -239,7 +239,7 @@ rows:
   effective_to: '2017-05-29'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-05-29'
   kind: closed
   name: Memorial Day
@@ -248,7 +248,7 @@ rows:
   effective_to: '2017-07-04'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-07-04'
   kind: closed
   name: Independence Day
@@ -257,7 +257,7 @@ rows:
   effective_to: '2017-09-04'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-09-04'
   kind: closed
   name: Labor Day
@@ -266,7 +266,7 @@ rows:
   effective_to: '2017-10-09'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-10-09'
   kind: closed
   name: Columbus Day
@@ -275,7 +275,7 @@ rows:
   effective_to: '2017-11-10'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-11-10'
   kind: closed
   name: Veterans Day
@@ -284,7 +284,7 @@ rows:
   effective_to: '2017-11-23'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-11-23'
   kind: closed
   name: Thanksgiving Day
@@ -293,7 +293,7 @@ rows:
   effective_to: '2017-12-25'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2017-12-25'
   kind: closed
   name: Christmas Day
@@ -302,7 +302,7 @@ rows:
   effective_to: '2018-01-01'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-01-01'
   kind: closed
   name: New Year's Day
@@ -311,7 +311,7 @@ rows:
   effective_to: '2018-01-15'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-01-15'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -320,7 +320,7 @@ rows:
   effective_to: '2018-02-19'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-02-19'
   kind: closed
   name: Washington's Birthday
@@ -329,7 +329,7 @@ rows:
   effective_to: '2018-05-28'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-05-28'
   kind: closed
   name: Memorial Day
@@ -338,7 +338,7 @@ rows:
   effective_to: '2018-07-04'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-07-04'
   kind: closed
   name: Independence Day
@@ -347,7 +347,7 @@ rows:
   effective_to: '2018-09-03'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-09-03'
   kind: closed
   name: Labor Day
@@ -356,7 +356,7 @@ rows:
   effective_to: '2018-10-08'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-10-08'
   kind: closed
   name: Columbus Day
@@ -365,7 +365,7 @@ rows:
   effective_to: '2018-11-12'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-11-12'
   kind: closed
   name: Veterans Day
@@ -374,7 +374,7 @@ rows:
   effective_to: '2018-11-22'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-11-22'
   kind: closed
   name: Thanksgiving Day
@@ -383,7 +383,7 @@ rows:
   effective_to: '2018-12-05'
   source_url: https://www.federalreserve.gov/newsevents/pressreleases/other20181203a.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-12-05'
   kind: closed
   name: National Day of Mourning, President G.H.W. Bush (Board closed)
@@ -392,7 +392,7 @@ rows:
   effective_to: '2018-12-24'
   source_url: https://www.federalreserve.gov/newsevents/2018-december.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-12-24'
   kind: closed
   name: Executive order closing federal offices (Christmas Eve)
@@ -401,7 +401,7 @@ rows:
   effective_to: '2018-12-25'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2018-12-25'
   kind: closed
   name: Christmas Day
@@ -410,7 +410,7 @@ rows:
   effective_to: '2019-01-01'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-01-01'
   kind: closed
   name: New Year's Day
@@ -419,7 +419,7 @@ rows:
   effective_to: '2019-01-21'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-01-21'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -428,7 +428,7 @@ rows:
   effective_to: '2019-02-18'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-02-18'
   kind: closed
   name: Washington's Birthday
@@ -437,7 +437,7 @@ rows:
   effective_to: '2019-05-27'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-05-27'
   kind: closed
   name: Memorial Day
@@ -446,7 +446,7 @@ rows:
   effective_to: '2019-07-04'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-07-04'
   kind: closed
   name: Independence Day
@@ -455,7 +455,7 @@ rows:
   effective_to: '2019-09-02'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-09-02'
   kind: closed
   name: Labor Day
@@ -464,7 +464,7 @@ rows:
   effective_to: '2019-10-14'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-10-14'
   kind: closed
   name: Columbus Day
@@ -473,7 +473,7 @@ rows:
   effective_to: '2019-11-11'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-11-11'
   kind: closed
   name: Veterans Day
@@ -482,7 +482,7 @@ rows:
   effective_to: '2019-11-28'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-11-28'
   kind: closed
   name: Thanksgiving Day
@@ -491,7 +491,7 @@ rows:
   effective_to: '2019-12-24'
   source_url: https://trumpwhitehouse.archives.gov/presidential-actions/executive-order-providing-closing-executive-departments-agencies-federal-government-december-24-2019/
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-12-24'
   kind: closed
   name: Executive order closing federal offices (Christmas Eve)
@@ -500,7 +500,7 @@ rows:
   effective_to: '2019-12-25'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2019-12-25'
   kind: closed
   name: Christmas Day
@@ -509,7 +509,7 @@ rows:
   effective_to: '2020-01-01'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-01-01'
   kind: closed
   name: New Year's Day
@@ -518,7 +518,7 @@ rows:
   effective_to: '2020-01-20'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-01-20'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -527,7 +527,7 @@ rows:
   effective_to: '2020-02-17'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-02-17'
   kind: closed
   name: Washington's Birthday
@@ -536,7 +536,7 @@ rows:
   effective_to: '2020-05-25'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-05-25'
   kind: closed
   name: Memorial Day
@@ -545,7 +545,7 @@ rows:
   effective_to: '2020-07-03'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-07-03'
   kind: closed
   name: Independence Day
@@ -554,7 +554,7 @@ rows:
   effective_to: '2020-09-07'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-09-07'
   kind: closed
   name: Labor Day
@@ -563,7 +563,7 @@ rows:
   effective_to: '2020-10-12'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-10-12'
   kind: closed
   name: Columbus Day
@@ -572,7 +572,7 @@ rows:
   effective_to: '2020-11-11'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-11-11'
   kind: closed
   name: Veterans Day
@@ -581,7 +581,7 @@ rows:
   effective_to: '2020-11-26'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-11-26'
   kind: closed
   name: Thanksgiving Day
@@ -590,7 +590,7 @@ rows:
   effective_to: '2020-12-24'
   source_url: Board calendar December 2020
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-12-24'
   kind: closed
   name: Executive order closing federal offices (Christmas Eve)
@@ -599,7 +599,7 @@ rows:
   effective_to: '2020-12-25'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2020-12-25'
   kind: closed
   name: Christmas Day
@@ -608,7 +608,7 @@ rows:
   effective_to: '2021-01-01'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-01-01'
   kind: closed
   name: New Year's Day
@@ -617,7 +617,7 @@ rows:
   effective_to: '2021-01-18'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-01-18'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -626,7 +626,7 @@ rows:
   effective_to: '2021-01-20'
   source_url: https://www.federalreserve.gov/foia/chair-powell-calendar-012021.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-01-20'
   kind: closed
   name: Inauguration Day (Board closed)
@@ -635,7 +635,7 @@ rows:
   effective_to: '2021-02-15'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-02-15'
   kind: closed
   name: Washington's Birthday
@@ -644,7 +644,7 @@ rows:
   effective_to: '2021-05-31'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-05-31'
   kind: closed
   name: Memorial Day
@@ -653,7 +653,7 @@ rows:
   effective_to: '2021-06-18'
   source_url: https://www.federalreserve.gov/newsevents/pressreleases/other20210617b.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-06-18'
   kind: closed
   name: Juneteenth National Independence Day
@@ -662,7 +662,7 @@ rows:
   effective_to: '2021-07-05'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-07-05'
   kind: closed
   name: Independence Day
@@ -671,7 +671,7 @@ rows:
   effective_to: '2021-09-06'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-09-06'
   kind: closed
   name: Labor Day
@@ -680,7 +680,7 @@ rows:
   effective_to: '2021-10-11'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-10-11'
   kind: closed
   name: Columbus Day
@@ -689,7 +689,7 @@ rows:
   effective_to: '2021-11-11'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-11-11'
   kind: closed
   name: Veterans Day
@@ -698,7 +698,7 @@ rows:
   effective_to: '2021-11-25'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-11-25'
   kind: closed
   name: Thanksgiving Day
@@ -707,7 +707,7 @@ rows:
   effective_to: '2021-12-24'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-12-24'
   kind: closed
   name: Christmas Day
@@ -716,7 +716,7 @@ rows:
   effective_to: '2021-12-31'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2021-12-31'
   kind: closed
   name: New Year's Day
@@ -725,7 +725,7 @@ rows:
   effective_to: '2022-01-17'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2022-01-17'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -734,7 +734,7 @@ rows:
   effective_to: '2022-02-21'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2022-02-21'
   kind: closed
   name: Washington's Birthday
@@ -743,7 +743,7 @@ rows:
   effective_to: '2022-05-30'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2022-05-30'
   kind: closed
   name: Memorial Day
@@ -752,7 +752,7 @@ rows:
   effective_to: '2022-06-20'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2022-06-20'
   kind: closed
   name: Juneteenth National Independence Day
@@ -761,7 +761,7 @@ rows:
   effective_to: '2022-07-04'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2022-07-04'
   kind: closed
   name: Independence Day
@@ -770,7 +770,7 @@ rows:
   effective_to: '2022-09-05'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2022-09-05'
   kind: closed
   name: Labor Day
@@ -779,7 +779,7 @@ rows:
   effective_to: '2022-10-10'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2022-10-10'
   kind: closed
   name: Columbus Day
@@ -788,7 +788,7 @@ rows:
   effective_to: '2022-11-11'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2022-11-11'
   kind: closed
   name: Veterans Day
@@ -797,7 +797,7 @@ rows:
   effective_to: '2022-11-24'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2022-11-24'
   kind: closed
   name: Thanksgiving Day
@@ -806,7 +806,7 @@ rows:
   effective_to: '2022-12-26'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2022-12-26'
   kind: closed
   name: Christmas Day
@@ -815,7 +815,7 @@ rows:
   effective_to: '2023-01-02'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-01-02'
   kind: closed
   name: New Year's Day
@@ -824,7 +824,7 @@ rows:
   effective_to: '2023-01-16'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-01-16'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -833,7 +833,7 @@ rows:
   effective_to: '2023-02-20'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-02-20'
   kind: closed
   name: Washington's Birthday
@@ -842,7 +842,7 @@ rows:
   effective_to: '2023-05-29'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-05-29'
   kind: closed
   name: Memorial Day
@@ -851,7 +851,7 @@ rows:
   effective_to: '2023-06-19'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-06-19'
   kind: closed
   name: Juneteenth National Independence Day
@@ -860,7 +860,7 @@ rows:
   effective_to: '2023-07-04'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-07-04'
   kind: closed
   name: Independence Day
@@ -869,7 +869,7 @@ rows:
   effective_to: '2023-09-04'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-09-04'
   kind: closed
   name: Labor Day
@@ -878,7 +878,7 @@ rows:
   effective_to: '2023-10-09'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-10-09'
   kind: closed
   name: Columbus Day
@@ -887,7 +887,7 @@ rows:
   effective_to: '2023-11-10'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-11-10'
   kind: closed
   name: Veterans Day
@@ -896,7 +896,7 @@ rows:
   effective_to: '2023-11-23'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-11-23'
   kind: closed
   name: Thanksgiving Day
@@ -905,7 +905,7 @@ rows:
   effective_to: '2023-12-25'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2023-12-25'
   kind: closed
   name: Christmas Day
@@ -914,7 +914,7 @@ rows:
   effective_to: '2024-01-01'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-01-01'
   kind: closed
   name: New Year's Day
@@ -923,7 +923,7 @@ rows:
   effective_to: '2024-01-15'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-01-15'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -932,7 +932,7 @@ rows:
   effective_to: '2024-02-19'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-02-19'
   kind: closed
   name: Washington's Birthday
@@ -941,7 +941,7 @@ rows:
   effective_to: '2024-05-27'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-05-27'
   kind: closed
   name: Memorial Day
@@ -950,7 +950,7 @@ rows:
   effective_to: '2024-06-19'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-06-19'
   kind: closed
   name: Juneteenth National Independence Day
@@ -959,7 +959,7 @@ rows:
   effective_to: '2024-07-04'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-07-04'
   kind: closed
   name: Independence Day
@@ -968,7 +968,7 @@ rows:
   effective_to: '2024-09-02'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-09-02'
   kind: closed
   name: Labor Day
@@ -977,7 +977,7 @@ rows:
   effective_to: '2024-10-14'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-10-14'
   kind: closed
   name: Columbus Day
@@ -986,7 +986,7 @@ rows:
   effective_to: '2024-11-11'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-11-11'
   kind: closed
   name: Veterans Day
@@ -995,7 +995,7 @@ rows:
   effective_to: '2024-11-28'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-11-28'
   kind: closed
   name: Thanksgiving Day
@@ -1004,7 +1004,7 @@ rows:
   effective_to: '2024-12-24'
   source_url: https://www.federalreserve.gov/newsevents/2024-december.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-12-24'
   kind: closed
   name: Executive order closing federal offices (Christmas Eve)
@@ -1013,7 +1013,7 @@ rows:
   effective_to: '2024-12-25'
   source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2024-12-25'
   kind: closed
   name: Christmas Day
@@ -1022,7 +1022,7 @@ rows:
   effective_to: '2025-01-01'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-01-01'
   kind: closed
   name: New Year's Day
@@ -1031,7 +1031,7 @@ rows:
   effective_to: '2025-01-09'
   source_url: https://www.federalreserve.gov/newsevents/2025-january.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-01-09'
   kind: closed
   name: National Day of Mourning, President Carter (Board closed)
@@ -1040,7 +1040,7 @@ rows:
   effective_to: '2025-01-20'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-01-20'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -1049,7 +1049,7 @@ rows:
   effective_to: '2025-02-17'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-02-17'
   kind: closed
   name: Washington's Birthday
@@ -1058,7 +1058,7 @@ rows:
   effective_to: '2025-05-26'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-05-26'
   kind: closed
   name: Memorial Day
@@ -1067,7 +1067,7 @@ rows:
   effective_to: '2025-06-19'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-06-19'
   kind: closed
   name: Juneteenth National Independence Day
@@ -1076,7 +1076,7 @@ rows:
   effective_to: '2025-07-04'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-07-04'
   kind: closed
   name: Independence Day
@@ -1085,7 +1085,7 @@ rows:
   effective_to: '2025-09-01'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-09-01'
   kind: closed
   name: Labor Day
@@ -1094,7 +1094,7 @@ rows:
   effective_to: '2025-10-13'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-10-13'
   kind: closed
   name: Columbus Day
@@ -1103,7 +1103,7 @@ rows:
   effective_to: '2025-11-11'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-11-11'
   kind: closed
   name: Veterans Day
@@ -1112,7 +1112,7 @@ rows:
   effective_to: '2025-11-27'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-11-27'
   kind: closed
   name: Thanksgiving Day
@@ -1121,7 +1121,7 @@ rows:
   effective_to: '2025-12-24'
   source_url: https://www.federalreserve.gov/newsevents/2025-december.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-12-24'
   kind: closed
   name: Executive order closing federal offices (Christmas Eve)
@@ -1130,7 +1130,7 @@ rows:
   effective_to: '2025-12-25'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-12-25'
   kind: closed
   name: Christmas Day
@@ -1139,7 +1139,7 @@ rows:
   effective_to: '2025-12-26'
   source_url: https://www.federalreserve.gov/newsevents/2025-december.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2025-12-26'
   kind: closed
   name: Executive order closing federal offices (day after Christmas)
@@ -1148,7 +1148,7 @@ rows:
   effective_to: '2026-01-01'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-01-01'
   kind: closed
   name: New Year's Day
@@ -1157,7 +1157,7 @@ rows:
   effective_to: '2026-01-19'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-01-19'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -1166,7 +1166,7 @@ rows:
   effective_to: '2026-02-16'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-02-16'
   kind: closed
   name: Washington's Birthday
@@ -1175,7 +1175,7 @@ rows:
   effective_to: '2026-05-25'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-05-25'
   kind: closed
   name: Memorial Day
@@ -1184,7 +1184,7 @@ rows:
   effective_to: '2026-06-19'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-06-19'
   kind: closed
   name: Juneteenth National Independence Day
@@ -1193,7 +1193,7 @@ rows:
   effective_to: '2026-07-03'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-07-03'
   kind: closed
   name: Independence Day
@@ -1202,7 +1202,7 @@ rows:
   effective_to: '2026-09-07'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-09-07'
   kind: closed
   name: Labor Day
@@ -1211,7 +1211,7 @@ rows:
   effective_to: '2026-10-12'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-10-12'
   kind: closed
   name: Columbus Day
@@ -1220,7 +1220,7 @@ rows:
   effective_to: '2026-11-11'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-11-11'
   kind: closed
   name: Veterans Day
@@ -1229,7 +1229,7 @@ rows:
   effective_to: '2026-11-26'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-11-26'
   kind: closed
   name: Thanksgiving Day
@@ -1238,7 +1238,7 @@ rows:
   effective_to: '2026-12-25'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2026-12-25'
   kind: closed
   name: Christmas Day
@@ -1247,7 +1247,7 @@ rows:
   effective_to: '2027-01-01'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-01-01'
   kind: closed
   name: New Year's Day
@@ -1256,7 +1256,7 @@ rows:
   effective_to: '2027-01-18'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-01-18'
   kind: closed
   name: Birthday of Martin Luther King, Jr.
@@ -1265,7 +1265,7 @@ rows:
   effective_to: '2027-02-15'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-02-15'
   kind: closed
   name: Washington's Birthday
@@ -1274,7 +1274,7 @@ rows:
   effective_to: '2027-05-31'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-05-31'
   kind: closed
   name: Memorial Day
@@ -1283,7 +1283,7 @@ rows:
   effective_to: '2027-06-18'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-06-18'
   kind: closed
   name: Juneteenth National Independence Day
@@ -1292,7 +1292,7 @@ rows:
   effective_to: '2027-07-05'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-07-05'
   kind: closed
   name: Independence Day
@@ -1301,7 +1301,7 @@ rows:
   effective_to: '2027-09-06'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-09-06'
   kind: closed
   name: Labor Day
@@ -1310,7 +1310,7 @@ rows:
   effective_to: '2027-10-11'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-10-11'
   kind: closed
   name: Columbus Day
@@ -1319,7 +1319,7 @@ rows:
   effective_to: '2027-11-11'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-11-11'
   kind: closed
   name: Veterans Day
@@ -1328,7 +1328,7 @@ rows:
   effective_to: '2027-11-25'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-11-25'
   kind: closed
   name: Thanksgiving Day
@@ -1337,7 +1337,7 @@ rows:
   effective_to: '2027-12-24'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-12-24'
   kind: closed
   name: Christmas Day
@@ -1346,7 +1346,7 @@ rows:
   effective_to: '2027-12-31'
   source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
   retrieved_at_utc: '2026-10-28T05:31:09Z'
-  signed_off_by: null
+  signed_off_by: Geon Koh
   date: '2027-12-31'
   kind: closed
   name: New Year's Day (January 1, 2028 falls on Saturday; Board closed)

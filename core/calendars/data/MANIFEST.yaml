@@ -10,8 +10,8 @@ change_control:
 rows:
 - file: holidays_KRX.yaml
   version: 1.0.0
-  md5: null
-  signed_off_by: null
+  md5: ec68c21ffe77581fd51b2b4291be658a
+  signed_off_by: Geon Koh
   test_ids:
   - T-CLOSE-02
   - T-SAT-01
@@ -19,8 +19,8 @@ rows:
   - T-CAL-02
 - file: holidays_NYSE.yaml
   version: 1.0.0
-  md5: null
-  signed_off_by: null
+  md5: 6ab0a539ee0461c20f8ee0d1ca50b395
+  signed_off_by: Geon Koh
   test_ids:
   - T-CLOSE-01
   - T-CLOSE-02
@@ -28,8 +28,8 @@ rows:
   - T-CAL-02
 - file: holidays_FED.yaml
   version: 1.0.0
-  md5: null
-  signed_off_by: null
+  md5: 6c69a8acd75a44ed6c527c2f676b58aa
+  signed_off_by: Geon Koh
   test_ids:
   - T-H15-01
   - T-H10-02
@@ -37,8 +37,8 @@ rows:
   - T-CAL-02
 - file: holidays_SIFMA.yaml
   version: 1.0.0
-  md5: null
-  signed_off_by: null
+  md5: 219f2a46ff84b405552c0e958e39fede
+  signed_off_by: Geon Koh
   test_ids:
   - T-STALE-01
   - T-H15-01
