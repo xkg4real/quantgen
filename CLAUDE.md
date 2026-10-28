@@ -19,4 +19,7 @@ read both once with `git show origin/handoff:README.md` and `git show origin/han
   matching `reason`, publish, and start no new work.
 - Publish with `python3 tools/handoff/push_handoff.py <file>`; keep the file in your scratchpad, not in the
   repository. Exit code 3 means another agent holds the task: stop and tell the owner.
+- `AUTO_STATE.md` on the same branch is written without the model by `tools/handoff/auto_snapshot.py` (git
+  state only); never edit it by hand. Where the owner has turned on the `tools/handoff/mod` mod, it pushes that
+  snapshot and tells you when weekly usage reaches 98%: hand off as it says.
 - No secrets in the document: name `.env` variables, never their values.

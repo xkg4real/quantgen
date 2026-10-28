@@ -1,0 +1,5 @@
+{
+  "name": "handoff-usage-watch",
+  "version": "0.1.0",
+  "description": "At 98% weekly usage, pushes a git snapshot to the handoff branch and asks Claude to write the handoff before the limit stops it"
+}
