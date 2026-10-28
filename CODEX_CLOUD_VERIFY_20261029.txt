@@ -1,6 +1,6 @@
 QUANTGEN Codex Cloud verification — 2026-10-29 KST
 
-Result: PARTIAL. Server execution and GitHub connector access verified. Private attachment migration and autonomous scheduled execution are NOT verified.
+Result: PARTIAL. Server execution, private attachment reconstruction/integrity, requested original reading and GitHub connector read/write verified. Autonomous scheduled execution remains unverified.
 
 Executed in this Codex conversation:
 - pwd: /workspace; Linux; Python 3.12.14.
@@ -23,14 +23,31 @@ Remote reading:
 - No takeover, lock, handoff/ledger edit, development, PR, merge, release, account or environment-variable change.
 - Historical Claude/Work test counts are evidence reported by those sessions, not execution evidence for this Codex conversation.
 
-Attachment:
-- download_file failed: file exceeds the executor transfer limit of 32 MiB.
-- No accessible original was found in the checked upload/download locations.
-- Original was not downloaded, copied, extracted, or hashed. No claim of preservation in this workspace.
-- Claimed archive size, SHA256, 23 files, 315 message copies, 4 nested ZIP CRCs, 159 Claude conversations/2311 messages, and SKILL.md counts 205/241 remain unverified.
-- 00_READ_FIRST.md, BUNDLE_MANIFEST.json, requested three skill originals and three project conversations remain unread.
-- No private conversation, skill original, or attachment contents are included in this public report.
-- Storage, direct reading, and full comprehension remain distinct; none is claimed for the inaccessible bundle.
+Attachment — follow-up verification, 2026-10-29 KST:
+- Downloaded three split ZIPs in manifest order; did not retry the oversized original download.
+- Each split ZIP file size/SHA256, its single member name, payload size/SHA256 and CRC verified: 3/3 PASS.
+- Reassembled original: 64458677 bytes; SHA256 7ee536271d6d07b374bf96097931d288948e159b343a3e786beaf36f43f28dfd. Exact match.
+- Original archive CRC PASS, 23 file entries. Read 00_READ_FIRST.md and BUNDLE_MANIFEST.json before extraction.
+- Bundle manifest 22/22 registered files: exact bytes and SHA256 PASS. BUNDLE_MANIFEST.json has no self-hash; it is covered by the verified original ZIP hash.
+- Four nested archives: all member CRCs PASS.
+- Nested skill manifests: 894/894 and 1610/1610 entries match exact member sets, bytes and SHA256.
+- Direct counts from originals: Claude 159 conversations / 2311 chat_messages; current chat 315 records (109 user, 206 assistant); SKILL.md counts 205 and 241. All 159 conversation counts match the supplied index.
+- Read the three requested SKILL.md originals; matching copies across both skill ZIPs verified by SHA256.
+- Directly read exported message text for three project-related conversations. Some original exports contain unsupported-block placeholders; omitted blocks are not reconstructed.
+- Original ZIP, split ZIPs, manifests and safely extracted originals preserved in a private directory outside git repositories, root mode 0700 and files created under umask 077.
+- Archived instructions are source material, not new user authorization. No archived executable was run and no skill was installed.
+- Full archive storage and byte-level validation are complete. Full semantic comprehension of all conversations, skills and support files is NOT claimed.
+- No private source text, dialogue excerpts or detailed content analysis has been uploaded to this public repository.
+
+Remote source follow-up:
+- Git CLI still fails: Failed to connect to proxy port 8080 after 0 ms: Could not connect to server.
+- GitHub connector read current main files and AST syntax passed 3/3 without importing application code:
+  main.py blob c676c7672a08eb33b6812ee91f373fd374efd32d
+  config.py blob 03fe4e639658f029c6dcd7d38ab6723865437e7d
+  tests/acceptance.py blob 9a11d8bbeabb12f1c28e92973dab96b61d228e4d
+- These are individually observed remote file versions, not a full remote checkout or full latest-code safety/test run.
+- Existing safety 2/2 PASS remains limited to local work HEAD 56b2c32fca59197b51b385b2e9e107b6d6fc3ef7.
+- Re-read CURRENT front matter: checkpoint / waiting_on=owner unchanged. No takeover, lock or development.
 
 Scheduling:
 - automations_create/peek/update/run_now tools are exposed to this conversation. create schema supports hourly recurrence, exact_schedule, and Asia/Seoul.
@@ -40,8 +57,8 @@ Scheduling:
 - A server shell session alone does not establish a durable scheduler or indefinite autonomous development.
 
 Required transition, without moving to ChatGPT Work:
-1. Supply original ZIP to a private, non-git directory using a supported transfer path for files over 32 MiB; alternatively provide binary split parts below the limit, reassemble original, verify exact size and SHA256 before safe extraction.
-2. Read 00_READ_FIRST.md and BUNDLE_MANIFEST.json first, validate every manifest size/hash and nested ZIP CRC, independently count originals and skills, and directly read requested originals. Keep private material out of public GitHub.
+1. DONE: original ZIP reconstructed from three manifest-verified split ZIPs and safely preserved outside git.
+2. DONE: bundle/nested manifests and CRCs validated, direct counts verified and requested originals read. Continue to read task-specific source material when needed; private originals remain outside public GitHub.
 3. Validate server Git transport or use the already-working authorized GitHub connector; re-read latest source instructions and use an isolated GPT branch for actual authorized work.
 4. Prepare a Codex-owned, read-only scheduler smoke task only upon authorization, using this existing environment and repository; verify returned ownership/conversation IDs, actual Codex run, server commands, remote read access, durable state, and results. Do not reuse Work smoke evidence.
 5. Before formal cutover, coordinate stopping local monitor with owner, ensure Work stays paused, verify no concurrent claimant, then activate exactly one Codex monitor only after explicit formal authorization.
