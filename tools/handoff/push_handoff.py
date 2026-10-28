@@ -6,23 +6,28 @@ states and this script enforces:
 
 - A document whose remote copy says `status: taken` by another agent is a lock; it is not overwritten
   without `--force`. A remote CURRENT.md whose front matter cannot be read counts as locked too.
-- A `status: handoff` that nobody has taken yet is not archived away by a document for another task.
+- A `status: handoff` that nobody has taken yet is not archived away by a document for another task, and
+  neither is another session's live `checkpoint` (one updated within its stale_after_hours).
 - When the new document names a different `task` than the remote one (and the remote one is not idle), the
   remote one is moved, byte for byte, to `archive/<updated_at>-<task>.md` in the same commit.
 - A rejected push (someone else wrote first) is retried from a fresh fetch, so the lock check sees their
   write.
 - `--key` adds a `handoff-key:` trailer to the commit (an empty commit when the document is already there),
-  which marks a usage window as handed off while CURRENT.md stays `handoff` or `taken`.
+  which marks a usage window as handed off while CURRENT.md stays `handoff`, `taken` or `returned`.
 - LEDGER.md is the append-only record of finished work, one row per roadmap ID
   (docs/nautilus_bridge/REMAINING_WORK_*.md). Each `--done "id | what | files | commit | check"` appends a row,
-  stamped with the time, the usage cycle and the writer, in the same commit as CURRENT.md. An ID already in the
-  ledger is refused, so finished work is not done twice; so is a `next_ids` entry that is already done, a
-  `done_ids` entry with no row, and a row whose commit is not on the remote.
+  stamped with the time, the usage cycle and the writer, in the same commit as CURRENT.md. IDs are compared
+  normalised (NFKC, one kind of hyphen, no Markdown marks), and the ledger's whole history counts: a row removed
+  by hand, or a deleted LEDGER.md, is put back on the next publish. An ID already recorded by another writer or
+  commit is refused, so finished work is not done twice; the same row again is skipped, so a publish can be
+  re-run. A `next_ids` entry that is already done, a `done_ids` entry with no row, an ID that does not read as
+  one, and a row whose commit is not on the remote are input errors.
 - After the push, the commit is read back from the remote: its CURRENT.md must be the bytes that were sent
   and its LEDGER.md must hold the new rows.
 
-Exit codes: 0 published and verified, 2 bad input, 3 refused (locked, unreadable, an untaken handoff of another
-task, or work already in the ledger), 4 git or network failure, or a read-back that did not match. Every
+Exit codes: 0 published and verified, 2 bad input (fix it and publish again), 3 refused (locked, unreadable, an
+untaken handoff or a live checkpoint of another task, or an ID another writer already recorded), 4 git or
+network failure, or a read-back that did not match (the push may have landed: run --show and --ledger). Every
 publish, and a re-publish of the same document, prints `push_handoff: <branch> at <sha> (<status> <task>)`.
 
     python3 tools/handoff/push_handoff.py path/to/handoff.md [--key seven_day@<resets_at>] [--done "..."]...
@@ -38,6 +43,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import unicodedata
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -47,6 +53,9 @@ KST = timezone(timedelta(hours=9))
 # The owner's weekly usage limit refills on Tuesdays at 17:00 KST; a cycle is named by the Tuesday it began.
 REFILL_WEEKDAY, REFILL_HOUR = 1, 17
 LEDGER = "LEDGER.md"
+_DASHES = re.compile(r"[\u2010-\u2015\u2212\ufe58\ufe63\uff0d]")
+ID_SEPARATORS = re.compile(r"[\s,\uff0c\u3001;\uff1b\u25b6\u2192>\[\]]+")
+ID_SHAPE = re.compile(r"^[0-9a-z][0-9a-z.\-/]*$")
 LEDGER_SKELETON = ("# 완료 기록 (LEDGER)\n\n"
                    "| id | 완료 시각 (KST) | 주기 | 누가 | 한 일 | 바뀐 파일 | 커밋 | 확인 방법과 결과 |\n"
                    "|---|---|---|---|---|---|---|---|\n")
@@ -117,9 +126,31 @@ def key_recorded(ref: str, key: str) -> bool:
 
 
 def handed_off(ref: str, key: str) -> bool:
-    """Whether this usage window's handoff is still outstanding: keyed on the branch and not yet returned."""
+    """Whether this usage window was handed off: keyed on the branch, and CURRENT.md still that handoff, GPT's lock
+    on it, or GPT's return of it (until Claude publishes its own document again)."""
     _, fields = remote_fields(ref)
-    return fields.get("status", "").lower() in ("handoff", "taken") and key_recorded(ref, key)
+    return fields.get("status", "").lower() in ("handoff", "taken", "returned") and key_recorded(ref, key)
+
+
+def is_stale(fields: dict[str, str]) -> bool:
+    """Whether the document has gone without an update for longer than its stale_after_hours (3 if unset)."""
+    try:
+        updated = datetime.fromisoformat(fields.get("updated_at", ""))
+        hours = float(fields.get("stale_after_hours") or 3)
+    except ValueError:
+        return False
+    if updated.tzinfo is None:
+        updated = updated.replace(tzinfo=KST)
+    return datetime.now(KST) - updated > timedelta(hours=hours)
+
+
+def same_writer(old: dict[str, str], new: dict[str, str]) -> bool:
+    """Whether two documents come from the same session or the same work branch."""
+    for k in ("session", "work_branch"):
+        a, b = old.get(k, "").strip(), new.get(k, "").strip()
+        if a and a == b and a.lower() not in ("none", "unknown") and not a.startswith("<"):
+            return True
+    return False
 
 
 def cycle_of(t: datetime) -> str:
@@ -132,20 +163,46 @@ def cycle_of(t: datetime) -> str:
     return start.date().isoformat()
 
 
-def id_list(value: str | None) -> list[str]:
-    return [x for x in (v.strip() for v in (value or "").split(",")) if x and x.lower() != "none"]
+def norm_id(s: str) -> str:
+    """The form IDs are compared in: NFKC (`③` reads as `3`, full-width as ASCII), one hyphen, no Markdown marks."""
+    s = _DASHES.sub("-", unicodedata.normalize("NFKC", s))
+    return re.sub(r"[\s`*_]", "", s).casefold()
+
+
+def id_tokens(value: str | None) -> list[str]:
+    """The IDs of a done_ids / next_ids value as written, whatever separates them (commas, spaces, arrows)."""
+    return [x.strip() for x in ID_SEPARATORS.split(value or "") if x.strip() and x.strip().lower() != "none"]
+
+
+
+def cells_of(line: str) -> list[str]:
+    return [c.strip() for c in line.strip().strip("|").split("|")]
 
 
 def ledger_rows(text: str) -> dict[str, str]:
-    """Row id -> row, for every data row of LEDGER.md's table."""
+    """Normalised id -> row, for every row below LEDGER.md's table header (the first row of an id wins)."""
     rows: dict[str, str] = {}
+    in_table = False
     for line in text.splitlines():
-        if not line.lstrip().startswith("|"):
+        cells = cells_of(line)
+        if not in_table:
+            in_table = len(cells) >= 8 and all(c and set(c) <= set("-: ") for c in cells)
             continue
-        rid = line.strip().strip("|").split("|")[0].strip()
-        if rid and rid != "id" and not set(rid) <= set("-: "):
-            rows.setdefault(rid, line.strip())
+        if len(cells) >= 8 and cells[0]:
+            rows.setdefault(norm_id(cells[0]), line.strip())
     return rows
+
+
+def ledger_history(ref: str) -> tuple[dict[str, str], str]:
+    """Every row any committed LEDGER.md on `ref` has held, oldest first, and the newest text the file had."""
+    seen: dict[str, str] = {}
+    last = ""
+    for sha in reversed(git("log", "--format=%H", ref, "--", LEDGER, check=False).split()):
+        text = git("show", f"{sha}:{LEDGER}", check=False)
+        last = text or last
+        for rid, row in ledger_rows(text).items():
+            seen.setdefault(rid, row)
+    return seen, last
 
 
 def done_rows(specs: list[str], by: str, when: datetime) -> list[tuple[str, str, list[str]]]:
@@ -157,7 +214,7 @@ def done_rows(specs: list[str], by: str, when: datetime) -> list[tuple[str, str,
             raise ValueError(f"--done needs five non-empty fields 'id | what | files | commit | check': {spec!r}")
         rid, what, files, commits, check = cells
         row = "| " + " | ".join([rid, when.isoformat(), cycle_of(when), by, what, files, commits, check]) + " |"
-        out.append((rid, row, [c.strip() for c in commits.split(",") if c.strip()]))
+        out.append((norm_id(rid), row, [c.strip() for c in commits.split(",") if c.strip()]))
     return out
 
 
@@ -167,24 +224,39 @@ def on_remote(sha: str) -> bool:
     return bool(git("branch", "-r", "--contains", sha, check=False))
 
 
-def ledger_problem(existing: dict[str, str], rows: list[tuple[str, str, list[str]]],
-                   new: dict[str, str]) -> tuple[int, str] | None:
-    """(exit code, why) when the document and the --done rows disagree with the ledger, else None."""
+def ledger_problem(known: dict[str, str], rows: list[tuple[str, str, list[str]]],
+                   new: dict[str, str]) -> tuple[list[tuple[str, str, list[str]]], tuple[int, str] | None]:
+    """The --done rows still to append, and (exit code, why) when the document or a row disagrees with the ledger.
+
+    A row the same writer already recorded with the same commit is a repeat of this command and is skipped, so a
+    publish can be re-run safely; any other row for a recorded ID is refused."""
+    fresh = []
     ids = [rid for rid, _, _ in rows]
-    for rid in ids:
-        if rid in existing:
-            return 3, (f"{rid} is already in LEDGER.md: {existing[rid]}. Finished work is not done again; if the "
-                       f"owner asked for more on it, record it under a new ID such as {rid}/2")
     if len(set(ids)) != len(ids):
-        return 2, "the same ID is given twice in --done"
-    known = set(existing) | set(ids)
-    done_again = [i for i in id_list(new.get("next_ids")) if i in known]
+        return [], (2, "the same ID is given twice in --done")
+    for rid, row, commits in rows:
+        if rid not in known:
+            fresh.append((rid, row, commits))
+            continue
+        old, mine = cells_of(known[rid]), cells_of(row)
+        if len(old) >= 8 and old[3].lower() == mine[3].lower() and old[6].replace(" ", "") == mine[6].replace(" ", ""):
+            continue
+        return [], (3, f"{mine[0]} is already in LEDGER.md: {known[rid]}. Finished work is not done again; if "
+                       f"the owner asked for more on it, record it under a new ID such as {mine[0]}/2")
+    written = [cells_of(row)[0] for _, row, _ in rows] + id_tokens(new.get("next_ids")) + id_tokens(new.get("done_ids"))
+    odd = [t for t in written if not ID_SHAPE.match(norm_id(t))]
+    if odd:
+        return [], (2, f"{', '.join(odd)} does not read as a roadmap ID; write IDs as in REMAINING_WORK, "
+                       "separated by commas")
+    done = set(known) | set(ids)
+    done_again = [t for t in id_tokens(new.get("next_ids")) if norm_id(t) in done]
     if done_again:
-        return 3, f"next_ids lists finished work ({', '.join(done_again)}); take it out of the document"
-    unrecorded = [i for i in id_list(new.get("done_ids")) if i not in known]
+        return [], (2, f"next_ids lists finished work ({', '.join(done_again)}); take it out of the document and "
+                       "publish again")
+    unrecorded = [t for t in id_tokens(new.get("done_ids")) if norm_id(t) not in done]
     if unrecorded:
-        return 2, f"done_ids lists {', '.join(unrecorded)} with no LEDGER.md row; pass a --done for each"
-    return None
+        return [], (2, f"done_ids lists {', '.join(unrecorded)} with no LEDGER.md row; pass a --done for each")
+    return fresh, None
 
 
 def archive_name(parent: str, fields: dict[str, str]) -> str:
@@ -255,10 +327,15 @@ def refusal(old_raw: bytes, old: dict[str, str], new: dict[str, str]) -> str | N
     if status == "taken" and old.get("from", "").lower() != new["from"].lower():
         return (f"locked: {old.get('from')} took '{old.get('task')}' at {old.get('updated_at')}. "
                 "Wait for status: returned, or pass --force with the owner's say-so")
-    if status == "handoff" and old.get("task") not in (None, "", "none") and old.get("task") != new["task"]:
+    other_task = old.get("task") not in (None, "", "none") and old.get("task") != new["task"]
+    if status == "handoff" and other_task:
         return (f"'{old.get('task')}' was handed off at {old.get('updated_at')} and nobody has taken it; publishing "
                 f"'{new['task']}' would archive it out of the next agent's sight. Resume that task, wait for "
                 "status: taken, or pass --force with the owner's say-so")
+    if status == "checkpoint" and other_task and not is_stale(old) and not same_writer(old, new):
+        return (f"'{old.get('task')}' is another session's live checkpoint (updated {old.get('updated_at')}, "
+                f"{old.get('work_branch')}); publishing '{new['task']}' would archive it. Ask the owner, or pass "
+                "--force with the owner's say-so")
     return None
 
 
@@ -309,25 +386,45 @@ def publish(path: Path, remote: str, branch: str, force: bool, message: str | No
         if why:
             print(f"push_handoff: {why}.", file=sys.stderr)
             return 3
+        # A ledger row is never lost: a deleted LEDGER.md comes back as its last version, and rows removed by
+        # hand are put back from history.
         ledger_text = git("show", f"{parent}:{LEDGER}", check=False)
-        problem = ledger_problem(ledger_rows(ledger_text), rows, new)
+        history, last_text = ledger_history(parent)
+        current = ledger_text or last_text
+        current_rows = ledger_rows(current)
+        lost = [row for rid, row in history.items() if rid not in current_rows]
+        fresh, problem = ledger_problem({**history, **current_rows}, rows, new)
         if problem:
             print(f"push_handoff: {problem[1]}.", file=sys.stderr)
             return problem[0]
         ledger = None
-        if rows:
-            base = ledger_text + "\n" if ledger_text else LEDGER_SKELETON
-            ledger = (base + "".join(row + "\n" for _, row, _ in rows)).encode()
+        if fresh or lost or current != ledger_text:
+            if current != ledger_text:
+                print("push_handoff: LEDGER.md was deleted on the branch; restored from its last version",
+                      file=sys.stderr)
+            if lost:
+                print(f"push_handoff: LEDGER.md had lost {len(lost)} row(s) an earlier version held; put back: "
+                      + "; ".join(lost), file=sys.stderr)
+            base = current + "\n" if current else LEDGER_SKELETON
+            ledger = (base + "".join(r + "\n" for r in lost) + "".join(row + "\n" for _, row, _ in fresh)).encode()
         commit = build_commit(parent, new_raw, new, msg, ledger)
         if commit == parent and key and not key_recorded(parent, key):
             commit = make_commit(git("rev-parse", f"{parent}^{{tree}}"), parent, msg)
         if commit == parent or push_commit(remote, branch, commit):
-            if not read_back(remote, branch, commit, new_raw, [rid for rid, _, _ in rows]):
-                print(f"push_handoff: {remote}/{branch} does not hold what was sent ({commit[:7]}); "
-                      "run --show and publish again", file=sys.stderr)
+            try:
+                verified = read_back(remote, branch, commit, new_raw, [rid for rid, _, _ in rows])
+            except GitError as e:
+                print(f"push_handoff: pushed {commit[:7]} but could not read it back ({e}); run --show and --ledger "
+                      "before publishing again (re-running the same --done is safe)", file=sys.stderr)
                 return 4
+            if not verified:
+                print(f"push_handoff: {remote}/{branch} does not hold what was sent ({commit[:7]}); "
+                      "run --show and --ledger, then publish again", file=sys.stderr)
+                return 4
+            skipped = len(rows) - len(fresh)
             print(f"push_handoff: {branch} at {commit[:7]} ({new['status'].lower()} {new['task']}), "
-                  f"verified on {remote}" + (f"; ledger +{len(rows)}" if rows else ""))
+                  f"verified on {remote}" + (f"; ledger +{len(fresh)}" if rows else "")
+                  + (f" ({skipped} already recorded)" if skipped else ""))
             return 0
     print("push_handoff: the remote kept moving; gave up after 3 attempts", file=sys.stderr)
     return 4
@@ -345,9 +442,15 @@ def show(remote: str, branch: str) -> int:
 
 
 def print_ledger_tip(remote: str, branch: str) -> None:
-    rows = list(ledger_rows(git("show", f"refs/remotes/{remote}/{branch}:{LEDGER}", check=False)).values())
+    ref = f"refs/remotes/{remote}/{branch}"
+    tip = ledger_rows(git("show", f"{ref}:{LEDGER}", check=False))
+    rows = list(tip.values())
     print(f"# cycle now: {cycle_of(datetime.now(KST))}; ledger: {len(rows)} rows" +
           (f", last: {rows[-1]}" if rows else ""))
+    lost = [row for rid, row in ledger_history(ref)[0].items() if rid not in tip]
+    if lost:
+        print(f"# WARNING: LEDGER.md lost {len(lost)} row(s) an earlier version held (the next publish puts them "
+              "back): " + "; ".join(lost))
 
 
 def show_ledger(remote: str, branch: str) -> int:

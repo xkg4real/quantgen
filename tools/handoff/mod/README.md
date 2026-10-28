@@ -9,10 +9,10 @@ What it does, in a repository that has `tools/handoff/auto_snapshot.py`:
   (`AUTO_STATE.md`) to the `handoff` branch, then submits a prompt telling Claude to finish the current step,
   push the work branch, write `CURRENT.md` with `status: handoff` and publish it with
   `tools/handoff/push_handoff.py --key <window>`. Until a publish prints `(handoff …)`, the instruction also
-  rides in the system prompt. Each session asks once per weekly window. While that window's handoff is
-  outstanding (its `handoff-key:` trailer is on the branch and `CURRENT.md` is `handoff` or `taken`), later
-  sessions stay quiet; once it is returned, a session crossing 98% hands off its own work. When another task's
-  handoff or lock holds the branch, the prompt says so and asks Claude to push and tell the owner instead.
+  rides in the system prompt. Each session asks once per weekly window. Once that window is handed off (its
+  `handoff-key:` trailer is on the branch and `CURRENT.md` is that `handoff`, GPT's `taken` lock, or GPT's
+  `returned` document), later sessions stay quiet until the window resets. When another task's handoff, lock
+  or live checkpoint holds the branch, the prompt says so and asks Claude to push and tell the owner instead.
 - **During work:** a throttled snapshot after main-thread turns and tool calls (the script runs at most every
   5 minutes and pushes at most every 30, only when the git state changed), so the branch holds a recent state
   even when a session stops without warning. Only a session on `CURRENT.md`'s `work_branch` refreshes it.

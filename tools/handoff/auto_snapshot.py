@@ -8,8 +8,8 @@ newest commit of this branch that the remote has) to the working tree, so it car
 untracked files are listed by name only, since their content may hold secrets.
 
 AUTO_STATE.md belongs to the task CURRENT.md names. A clone on another branch than CURRENT.md's `work_branch`
-leaves it alone while that task is `handoff` or `taken` (or CURRENT.md is unreadable), and, without --key,
-while it is `checkpoint`, so one session cannot overwrite the record of another. A throttled run that loses a
+leaves it alone while that task is `handoff`, `taken` or `checkpoint` (a --key run only a live checkpoint),
+or while CURRENT.md is unreadable, so one session cannot overwrite the record of another. A throttled run that loses a
 push race stops: what won is newer.
 
 Callers:
@@ -37,8 +37,8 @@ import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from push_handoff import (GitError, commit_files, fetch, git, git_bytes, handed_off, is_unreadable, push_commit,
-                          remote_fields)
+from push_handoff import (GitError, commit_files, fetch, git, git_bytes, handed_off, is_stale, is_unreadable,
+                          push_commit, remote_fields)
 
 KST = timezone(timedelta(hours=9))
 PATCH_LIMIT = 2 * 1024 * 1024
@@ -174,9 +174,10 @@ def run(args: argparse.Namespace) -> int:
             return 10
         raw, current = remote_fields(parent)
         owner = current.get("work_branch", "none")
-        guarded = ("handoff", "taken") if args.key else ("checkpoint", "handoff", "taken")
-        if is_unreadable(raw, current) or (current.get("status", "").lower() in guarded
-                                           and owner not in ("", "none") and owner != branch):
+        status = current.get("status", "").lower()
+        # A --key run may replace another branch's checkpoint only once that checkpoint has gone stale.
+        guarded = ("handoff", "taken") + (("checkpoint",) if not args.key or not is_stale(current) else ())
+        if is_unreadable(raw, current) or (status in guarded and owner not in ("", "none") and owner != branch):
             print(f"auto_snapshot: the branch belongs to {owner} ({current.get('task')}); skipped")
             return 11 if args.key else 0
         files, message = snapshot(args, hook, parent)

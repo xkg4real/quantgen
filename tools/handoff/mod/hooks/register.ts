@@ -84,7 +84,7 @@ async function handOff($: EngineInterface, w: SessionRateLimit, key: string) {
   const ran = await snapshot($, [
     '--reason', reasonOf(w), '--key', key, '--pct', w.percentUsed.toFixed(1), '--resets-at', w.resetsAt ?? 'unknown',
   ])
-  if (ran?.exitCode === 10) return // this window's handoff is published and not yet returned
+  if (ran?.exitCode === 10) return // this window is already handed off (handoff, taken or returned)
   if (ran?.exitCode === 11) {
     $.prompt.submit({ text: blockedInstruction(w) }).catch(() => undefined)
     return
