@@ -104,6 +104,19 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
 
     > 감사는 누가 어떻게 하는겁니까? 일단 앞서 말한 4가지 문서에 대한 서명을 기반으로 원래 하려던 일을 다시 재개하면서 제 질문에 답변해주세요.
 
+### ①-2b: 달력 감사 2차 (kr_sessions · publication_schedules · source_skipped)
+
+> 네 3가지 먼저 감사하겠습니다.
+
+- **해석:** 직전 답변에서 언급한 세 파일로 이해했습니다. `kr_sessions`는 수능일(11/19) 대비이고, `publication_schedules`와
+  `source_skipped`는 US 데이터 입력용입니다.
+- **반영:** 감사 결과와 제안 파일을 `docs/audit/2026-10-27/04_calendar_batch2.md`와 `calendar_batch2/`에 냈습니다.
+  `core/calendars/data/`는 바꾸지 않았습니다.
+- **같은 종류의 테스트 정비:** `tests/macro_m9_lab.py`의 KR 시계 가정을 서명 전후 모두 맞게 고쳤습니다.
+- **소유자 결정 대기:**
+  1. 제안 승인
+  2. 서명(보고서 5절 양식)
+
 ### ①-4: R1~R5
 
 **R1.** 시장 출시의 의미
