@@ -13,8 +13,8 @@
 | `TEMPLATE.md` | `CURRENT.md`의 양식 | 양식을 바꿀 때만 수정 |
 | `AGENTS.md` | GPT(와 다른 에이전트)가 이 브랜치를 읽는 규칙 | 사람 |
 | `archive/` | 끝났거나 새 작업으로 교체된 인수인계 문서 보관 | 교체하는 에이전트 |
-| `AUTO_STATE.md` | 스크립트가 모델 없이 만든 git 상태 스냅샷(브랜치, 커밋, 커밋 안 된 변경, 마지막 메시지). 사용량 한도 직전, 한도 오류로 턴이 실패했을 때, 작업 중 주기적으로(30분 간격, 상태가 바뀐 경우만) 갱신 | `tools/handoff/auto_snapshot.py` |
-| `AUTO_STATE.patch` | 위 스냅샷 시점에 커밋되지 않은 변경(추적 중인 파일만)의 diff | 같은 스크립트 |
+| `AUTO_STATE.md` | 스크립트가 모델 없이 만든 git 상태 스냅샷(브랜치, 커밋, 커밋 안 된 변경, 마지막 메시지). 사용량 한도 직전, 한도 오류로 턴이 실패했을 때, 작업 중 주기적으로(30분 간격, 상태가 바뀐 경우만) 갱신합니다. `CURRENT.md`의 `work_branch`에서 작업하는 세션만 갱신합니다. | `tools/handoff/auto_snapshot.py` |
+| `AUTO_STATE.patch` | `patch_base`(원격에 있는 커밋)부터 스냅샷 시점의 작업 트리까지의 diff. 푸시 안 된 커밋과 커밋 안 된 변경(추적 중인 파일만)이 함께 들어 있습니다. | 같은 스크립트 |
 
 ## 상태값
 
@@ -31,10 +31,13 @@
 **말없이 끊긴 경우:** `status: checkpoint`, `waiting_on: none`인데 `CURRENT.md`의
 `updated_at`과 `AUTO_STATE.md`의 `created_at`이 둘 다 `stale_after_hours`보다 오래
 갱신되지 않았다면, Claude가 인수인계를 쓰지 못하고 끊긴 것으로 봅니다.
-`AUTO_STATE.md`의 `reason: rate_limit_error`는 한도에 걸렸을 가능성이 높다는 신호입니다.
-하지만 서비스가 일시적으로 바빠서 생긴 오류일 수도 있으므로, 이것만으로 이어받지는 않습니다. 이때는 `handoff`와 똑같이 이어받고, `reason: stale`로 기록합니다.
+이때는 `handoff`와 똑같이 이어받고, `reason: stale`로 기록합니다.
 `waiting_on`이 `owner`, `ci`, `review`이면 Claude가 무언가를 기다리는 중이므로
-이어받지 않습니다.
+이어받지 않습니다. 스냅샷은 git 상태가 바뀔 때만 올라가므로, Claude는 파일을 바꾸지 않는
+긴 작업 전에 checkpoint를 올리거나 `waiting_on`을 적습니다.
+
+`AUTO_STATE.md`의 `reason: rate_limit_error`는 한도에 걸렸을 가능성이 높다는 신호입니다.
+하지만 서비스가 일시적으로 바빠서 생긴 오류일 수도 있으므로, 이것만으로 이어받지는 않습니다.
 
 ## 흐름
 
@@ -59,3 +62,5 @@ Claude 복귀 ──▶ CURRENT.md 읽기 → returned면 이어받기, taken이
 - 시각은 모두 한국 시간(+09:00)의 ISO 8601로 적습니다. 예: `2026-10-28T21:30:00+09:00`
 - 비밀 값(API 키, 토큰, 계좌번호)은 절대 적지 않습니다. `.env`의 변수 이름만 적습니다.
 - 커밋 메시지는 `handoff: <status> <작업명>` 형식으로 씁니다.
+- 앞부분(front matter)은 `key: value` 한 줄씩 씁니다. 값에 따옴표를 붙이거나 줄을 들여쓰지
+  않습니다. 읽을 수 없는 `CURRENT.md`는 잠긴 것으로 취급되어, 다른 에이전트가 손대지 못합니다.

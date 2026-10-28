@@ -7,7 +7,7 @@ updated_at: <YYYY-MM-DDTHH:MM:SS+09:00>
 stale_after_hours: 3          # 이 시간 넘게 갱신이 없으면 말없이 끊긴 것으로 봄
 waiting_on: none              # none | owner | ci | review
 work_branch: <claude/... 또는 gpt/...>
-work_commit: <작업 브랜치의 마지막 커밋 해시 7자리>
+work_commit: <작업 브랜치의 마지막 커밋 해시 7자리. 원격에 push된 커밋이어야 함>
 uncommitted_changes: no       # yes면 5절에 무엇이 커밋되지 않았는지 적음
 pr: none                      # PR 번호 또는 none
 usage_weekly_pct: unknown     # 기록 시점의 주간 사용량(%) 또는 unknown
@@ -86,7 +86,7 @@ session: <Claude 세션 링크 또는 GPT 대화 식별자>
 너는 xkg4real/quantgen 레포의 "<작업 제목>" 작업을 이어받는다.
 1. handoff 브랜치의 CURRENT.md와 AGENTS.md를 먼저 읽어라.
 2. CURRENT.md의 status를 taken으로, from을 gpt로 바꾸고 updated_at을 갱신해 handoff 브랜치에 push해라.
-3. <work_branch>의 <work_commit>에서 gpt/<task> 브랜치를 만들어 작업해라.
+3. AGENTS.md 2절 4번에 따라 시작 지점을 정해 gpt/<task> 브랜치를 만들어 작업해라. 보통은 <work_branch>의 <work_commit>이다.
 4. <이 작업에 필요한 구체적 지시>
 5. 작업 단위가 끝날 때마다 CURRENT.md를 같은 양식으로 갱신해라. 끝나거나 멈출 때는 status를 returned로 바꿔라.
 ```
