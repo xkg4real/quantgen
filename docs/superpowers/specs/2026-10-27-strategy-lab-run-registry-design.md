@@ -111,6 +111,15 @@ English rendering (Claude's translation; the Korean text governs, as the log sta
 > trial history is reflected, and the reasons. I will decide whether to change the verdict criteria after the
 > overfitting-correction criterion has been validated separately.
 
+Addendum found on 2026-10-28. The owner's Google Drive copy of `REMAINING_WORK_2026-10-27.docx` (modified
+2026-10-27T08:38:43Z) carries one more sentence in the R3 cell, after the text above. It is not in the chat ruling and
+is recorded in the rulings log as an addendum:
+
+> 기존 실행 기록의 마이그레이션 가능성, 중복 기록 방지, 재현성, 데이터 무결성, 테스트 계획도 함께 제시해주세요.
+
+English rendering: "Please also present the feasibility of migrating existing run records, prevention of duplicate
+records, reproducibility, data integrity and a test plan." Rows T19 to T23 of section 2 trace it.
+
 The rulings log splits the work into five stages (`OWNER_RULINGS_LOG.md:82-88`;
 `docs/nautilus_bridge/REMAINING_WORK_2026-10-27.md:95-120`):
 
@@ -199,6 +208,11 @@ Three things are kept apart.
 | T16 | 판정이 달라지는 사례와 그 근거 | the cases that would flip, with reasons | 6.6 (time-bounded card counts); 7.2 A, E and F; 7.3 |
 | T17 | 과최적화 보정 기준의 타당성을 별도로 검증 | validate the correction criterion separately | section 8; 8.8 (freeze before the of-record report) |
 | T18 | 그 후 판정 기준 변경 여부를 결정 | the owner decides afterwards | 8.5 (recommendation only); 9.7 step 9; 10.2 B |
+| T19 | 기존 실행 기록의 마이그레이션 가능성 (addendum) | can existing run records be migrated | 9.6 (read-only: LEDGER_ONLY trials computed on the fly from the family ledgers; fields never invented; C3 BACKFILL only after Q9); 3.13 |
+| T20 | 중복 기록 방지 (addendum) | no duplicate records | 5.2 (a second STARTED or FINISHED for one `run_id` is refused under the lock; a duplicate run ID is retried with a new token); 4.2 rows 1 and 6 (identical re-runs and semantic duplicates add no N_raw); T-RUNREG-02, T-RUNREG-05 |
+| T21 | 재현성 (addendum) | reproducibility | 3.3 to 3.5 (code identity, behaviour fingerprint, `data_md5`); 5.4 "Environment"; 9.6 (each report stores the family hash and `n_raw`, so `snapshot(hash)` re-proves it); 8.6 (seeds); T-RUNREG-08 (identical bytes for one `as_of`), T-RUNREG-10 |
+| T22 | 데이터 무결성 (addendum) | data integrity | 5.2 (canonical JSON, `row_md5` chain, `verify_chain` on every read and append, fail closed, never repaired; lock; segments and outages); 6.6 (stored cards never recomputed; MD5s unchanged); T-RUNREG-02, T-RUNREG-04, T-RUNREG-07 |
+| T23 | 테스트 계획 (addendum) | a test plan | 9.3 (T-RUNREG-00 to -12) and 9.4 (suite registration, registry rows) |
 
 ---
 
