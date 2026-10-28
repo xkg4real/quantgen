@@ -68,3 +68,12 @@ Required transition, without moving to ChatGPT Work:
 
 Write verification scope:
 Exactly one non-secret report file on gpt/codex-cloud-verify-20261029, created from main via GitHub connector. This is API-backed remote commit/write verification, not successful CLI git push verification. Commit SHA and remote read-back evidence will be reported in chat after completion.
+
+Later network and latest-source verification (2026-10-29 KST):
+- Runtime policy HTTP proxy is http://proxy:8080; TCP CONNECT proxy is http://proxy:8088. Inherited HTTP/HTTPS proxy selectors match port 8080. Different protocol endpoints do not establish a misconfiguration.
+- Default shell connection probe reported PermissionError: [Errno 1] Operation not permitted. Tool-supported network-enabled execution with unchanged inherited proxy succeeded: git ls-remote origin main -> ce10fe7598f200ed259617fa6ee6b7da33d1c141.
+- No proxy/environment/security policy edits, proxy removal, direct internet route or port substitution were used.
+- Fetched current main into a separate sparse checkout, excluding protected cache paths, .env, paper_live and grokteam. Observed HEAD ce10fe7598f200ed259617fa6ee6b7da33d1c141.
+- On that latest main: existing no_broker_order_path and no_account_credentials_requested checks 2/2 PASS; AST on main.py, config.py, tests/acceptance.py 3/3 PASS. Checkout clean after tests.
+- No functional project modification was made because CURRENT is checkpoint/waiting_on=owner. Automated functional development is not certified by these checks.
+- Continued write verification modifies only this same report on the GPT verification branch; CLI commit/push and independent remote read-back are checked separately after this commit.
