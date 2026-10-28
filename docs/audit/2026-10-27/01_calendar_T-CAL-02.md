@@ -163,30 +163,17 @@ KRX 29행, NYSE 37행, FED 137행, SIFMA 45행입니다.
 
 ## 6. 서명 후에도 남는 것 (이번 범위 밖)
 
-1. **4개 파일만 서명해도 KR 실행 입력은 계속 막힙니다. US는 결정 시계만 풀립니다.** 기한 조항은 충족됩니다.
-   (2026-10-29 정정)
-   - **KR:** `kr_sessions`가 미서명이라 결정 시계부터 막힙니다. 시장이 풀리려면 `kr_sessions`, `kr_regime_tags`,
-     `publication_schedules`, `source_skipped`도 서명되어야 합니다.
-   - **US:** 결정 시계(`MARKET_FILES["US"]`)는 `holidays_NYSE` 하나만 읽습니다. 그래서 서명 뒤에는 다음이 바뀝니다.
-     - US 결정 시각과 개장 여부가 계산되고, `arm_precondition("US")`가 참이 됩니다.
-     - H.15·H.10처럼 `publication_schedules`로 시점을 정하는 입력은 계속 막힙니다. `status("US")`도 계속 미서명입니다.
-     - 지금은 US 북이 없어서(D5 미정) 실제로 무장(ARM)되는 북은 없습니다.
-   - 처음 보고서에는 "US 실행 입력도 풀리지 않는다"고 적었습니다. 가짜 서명 사본에서 실제로 돌려 보니 결정 시계는 풀렸습니다.
+1. **4개 파일만 서명해서는 KR·US 실행 입력이 풀리지 않습니다.** 기한 조항은 충족되지만 시장은 계속 막혀 있습니다.
+   - KR은 `kr_sessions`, `kr_regime_tags`, `publication_schedules`, `source_skipped`도 서명되어야 합니다.
+   - US는 `publication_schedules`, `source_skipped`도 서명되어야 합니다.
 2. **KRX 2027년 공식 공지(보통 12월)가 나오면 다시 대조합니다.** 임시공휴일이 추가되는 등 차이가 있으면 새 버전(1.0.1)과 새 서명이 필요합니다.
 3. **아직 나오지 않은 임시 휴무**(예: 2026·2027년 성탄 전날 행정명령, 국가애도일)는 변경 통제 절차에 따라 새 버전으로 반영합니다.
 4. **KRX 1995~2025년 휴장일**은 이 파일에 없습니다. T-CLOSE-02 골든값(2015, 2016, 2025년)에 필요하며 다음 버전 과제입니다.
-5. `tests/macro_m1_calendars.py`의 `test_cal02_2027_files_signed_before_2026_11_01`은 원래 무조건 NOT_RUN이었습니다.
-   2026-10-29에 서명 상태를 읽는 검사로 바꿨습니다. 4개 파일이 미서명이면 NOT_RUN이고, 서명되면 다음을 실제로 검사합니다.
+5. `tests/macro_m1_calendars.py`의 `test_cal02_2027_files_signed_before_2026_11_01`은 지금 무조건 NOT_RUN입니다.
+   서명 뒤에는 다음 세 가지를 실제로 검사하도록 바꿉니다(서명 후 구현 단계에 포함).
    - 4개 파일이 로드되는지
-   - 서명자가 하나인지
    - `signed_utc`가 2026-11-01T00:00:00Z보다 이른지
    - `covers.to`가 2027-12-31 이후인지
-   - MANIFEST 행에 `T-CAL-02`가 있는지
-   - CAL-01~CAL-07 날짜가 들어 있는지
-
-   함께 바꾼 테스트는 두 개입니다.
-   - `test_cal01_shipped_drafts_...`: 서명된 4개 파일은 로드되어야 하고, 나머지 파일은 모두 미서명이어야 합니다.
-   - `test_close02_on_the_real_signed_files_...`: NYSE 파일이 서명되면 T-CLOSE-02의 US 조항 3개를 실제 파일로 검사합니다.
 
 ---
 
@@ -204,38 +191,14 @@ KRX 29행, NYSE 37행, FED 137행, SIFMA 45행입니다.
 > 나 ○○○은 `docs/audit/2026-10-27/01_calendar_T-CAL-02.md`와 `proposed/holidays_{KRX,NYSE,FED,SIFMA}.yaml`(v1.0.0)의
 > 날짜와 출처를 확인했으며, 이 4개 파일에 서명합니다. 표기: `<signed_off_by 값>`. CAL-14: 포함 / 제외.
 
-**그 뒤 Claude가 할 일.** 소유자 승인 후 같은 브랜치에서 진행합니다. 1~4번은 `apply_signature.py` 명령 하나로 합니다(2026-10-29 준비).
+**그 뒤 Claude가 할 일.** 소유자 승인 후 같은 브랜치에서 진행합니다.
 
-1. `proposed/` 4개 파일을 `core/calendars/data/`로 옮깁니다. CAL-14를 제외하시면 해당 3행을 빼고 옮깁니다.
+1. `proposed/` 4개 파일을 `core/calendars/data/`로 옮깁니다. CAL-14를 제외하시면 해당 3행을 빼고 다시 생성합니다.
 2. 모든 행과 파일 머리에 `signed_off_by`를 쓰고, `signed_utc`(소유자 메시지 시각, UTC)를 씁니다.
-3. `md5`를 계산합니다(`store.content_md5`, `python -m core.calendars.store`가 출력하는 값과 같음).
+3. `md5`를 계산합니다(`python -m core.calendars.store`가 출력하는 content md5).
 4. `MANIFEST.yaml`의 해당 행을 갱신합니다. version은 1.0.0이고 md5와 서명자를 넣으며, test_ids에 `T-CAL-02`를 추가합니다.
-5. 테스트(`tests/macro_m1_calendars.py`, 6절 5번에서 미리 바꿈)를 돌린 뒤 커밋하고 푸시합니다.
-   소유자 서명 문장 원문은 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`에 기록합니다.
-6. 거버넌스 로그에 `calendar_change` 이벤트를 남깁니다(`record_calendar_changes`). 운영 로그는 소유자 PC의
-   `<macro_dir>/governance_events.jsonl`에 있어 이 저장소에는 없습니다. 소유자 PC에서 `--governance-log`로 남깁니다.
-
-```
-python docs/audit/2026-10-27/calendar_T-CAL-02/apply_signature.py --signer "<signed_off_by 값>" \
-    --signed-utc <소유자 메시지 시각, 예: 2026-10-29T01:23:45Z> --cal14 include
-```
-
-**스크립트가 하는 확인.**
-
-- **승인한 파일인지 대조합니다.** `proposed/` 4개 파일의 content md5가 검토한 값과 다르면 서명하지 않습니다.
-  검토한 값은 커밋 0849ca9 기준이고, 스크립트의 `REVIEWED_MD5`에 고정되어 있습니다.
-- **서명 정보를 검사합니다.** 다음 경우에는 서명하지 않습니다.
-  - 서명자가 비어 있을 때
-  - 실제 폴더에 자리표시자 서명자("SIMULATION", "DRY RUN", "TEST-FIXTURE")를 쓰려 할 때. 자리표시자는 임시 사본에만 쓸 수 있습니다.
-  - `signed_utc`가 미래이거나 기한(2026-11-01T00:00:00Z) 이후일 때
-- **서명 뒤 실제 로더로 다시 읽습니다.**
-  - 4개 파일이 로드되는지, 감사 날짜가 맞는지(조기폐장 시각 포함) 확인합니다.
-  - 나머지 12개 파일의 로드 상태가 바뀌지 않았는지 확인합니다.
-
-임시 사본에 대해 두 가지 CAL-14 선택(포함·제외)으로 모두 돌려 봤고, 둘 다 통과했습니다.
-가짜 서명한 사본으로 매크로 테스트 모듈 34개를 서명 전과 비교했습니다. 결과가 달라진 것은 위 6절 5번의 테스트 3개뿐이었습니다.
-서명 전에도 실패하던 3건은 서명 뒤에도 똑같이 실패했습니다. 2건은 이 클라우드 환경에 `flet`이 없어서이고,
-1건은 `test_dry_run_end_to_end_on_the_local_cache`입니다.
+5. `test_cal02_...`를 실제 검사로 바꾸고 테스트를 돌린 뒤 커밋하고 푸시합니다.
+6. 거버넌스 로그에 `calendar_change` 이벤트를 남깁니다(`record_calendar_changes`).
 
 ---
 
