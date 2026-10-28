@@ -12,6 +12,7 @@ rows:
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-CLOSE-02
   - T-SAT-01
@@ -20,6 +21,7 @@ rows:
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-CLOSE-01
   - T-CLOSE-02
@@ -28,6 +30,7 @@ rows:
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-H15-01
   - T-H10-02
@@ -36,6 +39,7 @@ rows:
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-STALE-01
   - T-H15-01
@@ -43,48 +47,56 @@ rows:
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-VIX-01
 - file: holidays_CME.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-AVAIL-01
 - file: holidays_JPX.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-XMKT-01
 - file: holidays_SSE.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-XMKT-01
 - file: holidays_HKEX.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-XMKT-01
 - file: holidays_TWSE.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-XMKT-01
 - file: holidays_ECOS.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-ROLE-02
 - file: kr_sessions.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-CLOSE-01
   - T-CLOSE-02
@@ -93,12 +105,14 @@ rows:
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-XMKT-01
 - file: publication_schedules.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-H15-01
   - T-H10-02
@@ -108,11 +122,13 @@ rows:
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-STALE-01
 - file: kr_regime_tags.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
+  signed_utc: null
   test_ids:
   - T-REGIME-01

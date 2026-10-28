@@ -9,9 +9,11 @@ coverage_calendar: NYSE
 signed_off_by: null
 signed_utc: null
 md5: null
-how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
-  / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
-  MANIFEST.yaml row with a new test id
+how_to_sign: verify every row against its official source, fill source_url, retrieved_at_utc and signed_off_by on every
+  row, set version, status (without the word UNSIGNED), signed_off_by, signed_utc (quoted 'YYYY-MM-DDTHH:MM:SSZ', before
+  2026-10-31T15:00:00Z for the deadline files) and sign_off_statement at file level with md5 null, set md5 to the content
+  md5 printed by `python -m core.calendars.store`, and fill the matching MANIFEST.yaml row (version, md5, signed_off_by and
+  signed_utc equal to the file) with a new test id
 unverified:
 - dates derived by rule (Good Friday via the Gregorian Easter algorithm); early closes 13:00 ET by the usual pattern
 - 2027 must be signed before 2026-11-01

@@ -150,10 +150,16 @@ test_stamping_and_lag_audit_on_the_calendar_adapter.test_ids = ["T-CLOSE-01", "T
 
 
 # --------------------------------------------------------------------------- #
-# T-CAL-01: the shipped drafts are unsigned -> every acting read fails closed, the alert names the calendar
+# T-CAL-01: an unsigned calendar set -> every acting read fails closed, the alert names the calendar
 # --------------------------------------------------------------------------- #
 def test_unsigned_shipped_calendars_fail_acting_inputs_closed():
-    unsigned = CalendarClocks(REG, cal=store.CalendarSet())              # the shipped drafts, refused at load
+    """Runs on an explicitly unsigned fixture set, never on the shipped files: the owner's sign-off of
+    core/calendars/data/ must not turn this test red (audit 2026-10-27 M-2)."""
+    docs = fixture_docs()
+    for d in docs.values():
+        d["signed_off_by"] = None                                        # an unsigned set, whatever the shipped files are
+    unsigned_cal = fixture_set("integration_unsigned", docs)
+    unsigned = CalendarClocks(REG, cal=unsigned_cal)                     # refused at load
     st = P.PITStore(_tmp(), registry=REG, clocks=unsigned)
     st.append([_row("KOSPI_OFFICIAL_CLOSE", 7003.74, OCT2, avail=DECISION, retrieved=U(2026, 10, 2, 6, 41))])
     ctx = P.RunContext(DECISION, U(2026, 10, 2, 7))
@@ -173,7 +179,7 @@ def test_unsigned_shipped_calendars_fail_acting_inputs_closed():
                              registry=REG, clocks=unsigned), store.CalendarUnsigned)
     acting = P.to_value(st.rows("KOSPI_OFFICIAL_CLOSE")[0], role="acting_exposure", books=("specification:KR",))
     _raises(lambda: L.lag_audit([acting], ctx, "KR", REG, unsigned), store.CalendarUnsigned)
-    assert not store.arm_precondition(OCT2, "KR", cal=store.CalendarSet())    # no book can ARM
+    assert not store.arm_precondition(OCT2, "KR", cal=unsigned_cal)          # no book can ARM
 
 
 test_unsigned_shipped_calendars_fail_acting_inputs_closed.test_ids = ["T-CAL-01"]

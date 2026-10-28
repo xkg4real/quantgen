@@ -11,8 +11,8 @@
     "from": "2026-01-01",
     "to": "2027-12-31"
    },
-   "holidays": 29,
-   "special_sessions": 2
+   "holidays": 33,
+   "special_sessions": 4
   },
   "US": {
    "calendar": "XNYS",

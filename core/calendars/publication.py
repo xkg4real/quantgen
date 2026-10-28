@@ -154,6 +154,7 @@ def publication_instant(series, obs_date: date, *, cal: CalendarSet | None = Non
             monday += timedelta(days=1)
         instant = _instant(monday, t, tz)
     elif rule == "same_day":
+        business_day(s["calendar"], obs_date, cal=cal)       # the publisher's calendar must be signed and cover D (T-CAL-01)
         instant = _instant(obs_date, t, tz)
     elif rule == "channel_posting_time":
         if s.get("posting_utc"):

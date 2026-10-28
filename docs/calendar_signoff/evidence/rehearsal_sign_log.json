@@ -1,0 +1,131 @@
+{
+ "signed_utc": "2026-10-28T07:16:59Z",
+ "signer": "REHEARSAL",
+ "steps": [
+  {
+   "step": "1-2",
+   "file": "holidays_KRX",
+   "rows": 33,
+   "rows_with_checked_source": 29,
+   "rows_marked_not_checked_or_kept": 0
+  },
+  {
+   "step": "1-2",
+   "file": "holidays_NYSE",
+   "rows": 37,
+   "rows_with_checked_source": 37,
+   "rows_marked_not_checked_or_kept": 0
+  },
+  {
+   "step": "1-2",
+   "file": "holidays_FED",
+   "rows": 138,
+   "rows_with_checked_source": 22,
+   "rows_marked_not_checked_or_kept": 115
+  },
+  {
+   "step": "1-2",
+   "file": "holidays_SIFMA",
+   "rows": 50,
+   "rows_with_checked_source": 44,
+   "rows_marked_not_checked_or_kept": 0
+  },
+  {
+   "step": "1-2",
+   "file": "kr_sessions",
+   "rows": 23,
+   "rows_with_checked_source": 1,
+   "rows_marked_not_checked_or_kept": 21
+  }
+ ],
+ "md5": {
+  "holidays_FED": "9800221672a427707d362e3bb211cbea",
+  "holidays_KRX": "894b4f5434c75745c7acf2ad9e39c660",
+  "holidays_NYSE": "a0eda258edb52b90bfd38702e9fdf2f5",
+  "holidays_SIFMA": "0f7f851857371324fc022a98174269fb",
+  "kr_sessions": "11aad8a403e698d5e3bb2ceb10a872af"
+ },
+ "after": {
+  "holidays_CBOE": [
+   "REFUSED",
+   "0.1.0-draft",
+   "3ca28a0f35512fd9573e4a5dfc765c5d"
+  ],
+  "holidays_CME": [
+   "REFUSED",
+   "0.1.0-draft",
+   "93742c51cca2c93fbf42ba4ab13032bf"
+  ],
+  "holidays_ECOS": [
+   "REFUSED",
+   "0.1.0-draft",
+   "3a214bc64aabc78323d3ccbafdf532b2"
+  ],
+  "holidays_FED": [
+   "signed",
+   "1.0.0",
+   "9800221672a427707d362e3bb211cbea"
+  ],
+  "holidays_HKEX": [
+   "REFUSED",
+   "0.1.0-draft",
+   "f8ec8d92e68ad4dbb0ff74a27edd3954"
+  ],
+  "holidays_JPX": [
+   "REFUSED",
+   "0.1.0-draft",
+   "9f773b0e024697566780dee9ec4c73b8"
+  ],
+  "holidays_KRX": [
+   "signed",
+   "1.0.0",
+   "894b4f5434c75745c7acf2ad9e39c660"
+  ],
+  "holidays_NYSE": [
+   "signed",
+   "1.0.0",
+   "a0eda258edb52b90bfd38702e9fdf2f5"
+  ],
+  "holidays_SIFMA": [
+   "signed",
+   "1.0.0",
+   "0f7f851857371324fc022a98174269fb"
+  ],
+  "holidays_SSE": [
+   "REFUSED",
+   "0.1.0-draft",
+   "2620623e92442b96c982e9f2dcdc620d"
+  ],
+  "holidays_TWSE": [
+   "REFUSED",
+   "0.1.0-draft",
+   "afe7790c71e268f9b78ed5a8133e50e3"
+  ],
+  "kr_regime_tags": [
+   "REFUSED",
+   "0.1.0-draft",
+   "4275b04c671f0977b05242d23abde364"
+  ],
+  "kr_sessions": [
+   "signed",
+   "1.0.0",
+   "11aad8a403e698d5e3bb2ceb10a872af"
+  ],
+  "market_closes": [
+   "REFUSED",
+   "0.1.0-draft",
+   "eee147567e845059ee13675a38ade71e"
+  ],
+  "publication_schedules": [
+   "REFUSED",
+   "0.1.0-draft",
+   "91a75581c61149867d2bf23c91148348"
+  ],
+  "source_skipped": [
+   "REFUSED",
+   "0.1.0-draft",
+   "8d8c229d267d4273fde43deaf9a38096"
+  ]
+ },
+ "commit_message_draft": "holidays_KRX v1.0.0 md5 894b4f5434c75745c7acf2ad9e39c660 signed_utc 2026-10-28T07:16:59Z by REHEARSAL\nholidays_NYSE v1.0.0 md5 a0eda258edb52b90bfd38702e9fdf2f5 signed_utc 2026-10-28T07:16:59Z by REHEARSAL\nholidays_FED v1.0.0 md5 9800221672a427707d362e3bb211cbea signed_utc 2026-10-28T07:16:59Z by REHEARSAL\nholidays_SIFMA v1.0.0 md5 0f7f851857371324fc022a98174269fb signed_utc 2026-10-28T07:16:59Z by REHEARSAL\nkr_sessions v1.0.0 md5 11aad8a403e698d5e3bb2ceb10a872af signed_utc 2026-10-28T07:16:59Z by REHEARSAL"
+}

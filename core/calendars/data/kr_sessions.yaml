@@ -9,9 +9,11 @@ coverage_calendar: KRX
 signed_off_by: null
 signed_utc: null
 md5: null
-how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
-  / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
-  MANIFEST.yaml row with a new test id
+how_to_sign: verify every row against its official source, fill source_url, retrieved_at_utc and signed_off_by on every
+  row, set version, status (without the word UNSIGNED), signed_off_by, signed_utc (quoted 'YYYY-MM-DDTHH:MM:SSZ', before
+  2026-10-31T15:00:00Z for the deadline files) and sign_off_statement at file level with md5 null, set md5 to the content
+  md5 printed by `python -m core.calendars.store`, and fill the matching MANIFEST.yaml row (version, md5, signed_off_by and
+  signed_utc equal to the file) with a new test id
 unverified:
 - CSAT dates
 - regular open eras
@@ -178,6 +180,16 @@ rows:
   kind: csat_day
   date: '2026-11-19'
   unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+- effective_from: '2027-11-18'
+  effective_to: '2027-11-18'
+  source_url: 'https://www.korea.kr/briefing/pressReleaseView.do?newsId=156692078'
+  retrieved_at_utc: '2026-10-28T05:31:58Z'
+  signed_off_by: null
+  kind: csat_day
+  date: '2027-11-18'
+  unverified: '2026-10-28 공식 출처 대조(WebSearch 발췌만, 원문 직접 열람은 차단): 교육부 보도자료(2025-06-01 발표) "2028학년도 대학수학능력시험은 2027년 11월
+    18일(목)에 시행됩니다". 공식 공지 전(근거 기재): KRX의 수능일 매매시간 변경 공지는 2027년 11월에 나온다. 창 10:00-16:30은 config
+    csat_session_kst(KRX 관행: 2025-11-13 정규장 10:00~16:30)를 따른다. 평가원 시행 기본계획(2027년 3월 예상) 전이라 날짜 변경 가능성이 0은 아니다. 2025-06-01 발표는 언론(kukinews, kbmaeil, dhnews)과 KDI 경제정보센터 재게시로 확인된다. 소유자는 서명할 때 korea.kr newsId=156692078이 그 보도자료인지 열고, 다르면 정확한 URL로 바꾼다'
 - effective_from: '1995-01-01'
   effective_to: '1998-12-06'
   source_url: null

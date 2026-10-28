@@ -9,12 +9,19 @@ coverage_calendar: FED
 signed_off_by: null
 signed_utc: null
 md5: null
-how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
-  / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
-  MANIFEST.yaml row with a new test id
+how_to_sign: verify every row against its official source, fill source_url, retrieved_at_utc and signed_off_by on every
+  row, set version, status (without the word UNSIGNED), signed_off_by, signed_utc (quoted 'YYYY-MM-DDTHH:MM:SSZ', before
+  2026-10-31T15:00:00Z for the deadline files) and sign_off_statement at file level with md5 null, set md5 to the content
+  md5 printed by `python -m core.calendars.store`, and fill the matching MANIFEST.yaml row (version, md5, signed_off_by and
+  signed_utc equal to the file) with a new test id
 unverified:
 - derived by the federal holiday rule with Saturday -> Friday observance (the Board's H.10 practice, brief F-6); owner confirms
   against the Board's holiday schedule
+- 'checked 2026-10-28 against federalreserve.gov K.8 and frbservices.org by WebSearch excerpts only (direct reading
+  blocked): every 2026 and 2027 row matches; 2027-12-31 added (CAL-05: K.8 lists it as Board closed, Reserve Banks open,
+  corrected from December 31, 2028 on 2026-07-08). Saturday holidays close the Board on the Friday while the Reserve
+  Banks (Fedwire, FedACH) stay open; this set feeds the Board publication schedule (fed_business_day), so those Fridays
+  are closed here. The owner reads the current k8.htm at sign-off'
 owner_must_sign:
 - Federal Reserve Board holiday schedule 2015 .. 2027 (K.8 / federalreserve.gov)
 rows:
@@ -1251,3 +1258,12 @@ rows:
   kind: closed
   name: Christmas Day
   unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+- effective_from: '2027-12-31'
+  effective_to: '2027-12-31'
+  source_url: 'https://www.federalreserve.gov/aboutthefed/k8.htm'
+  retrieved_at_utc: '2026-10-28T05:33:59Z'
+  signed_off_by: null
+  date: '2027-12-31'
+  kind: closed
+  name: 'New Year''s Day (observed; 2028-01-01 is a Saturday): Board closed, Reserve Banks open'
+  unverified: '2026-10-28 공식 출처 대조(WebSearch 발췌만, 원문 직접 열람은 차단: WebFetch ENOTFOUND): K.8 각주 "Board of Governors closed December 31, 2027; Federal Reserve Banks open"; K.8 갱신 기록 2026-07-08(관측일을 December 31, 2028에서 December 31, 2027로 정정). 2026-07-08 이전 사본에는 2028 오기가 남아 있다. 이 파일의 토→금 규칙(2021-12-31 행)과 같다. NYSE는 이날 개장한다(holidays_NYSE에 2028 신정 휴장 없음). 소유자가 서명할 때 현재 k8.htm으로 확인한다'

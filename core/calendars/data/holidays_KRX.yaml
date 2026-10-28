@@ -9,11 +9,19 @@ coverage_calendar: KRX
 signed_off_by: null
 signed_utc: null
 md5: null
-how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
-  / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
-  MANIFEST.yaml row with a new test id
+how_to_sign: verify every row against its official source, fill source_url, retrieved_at_utc and signed_off_by on every
+  row, set version, status (without the word UNSIGNED), signed_off_by, signed_utc (quoted 'YYYY-MM-DDTHH:MM:SSZ', before
+  2026-10-31T15:00:00Z for the deadline files) and sign_off_statement at file level with md5 null, set md5 to the content
+  md5 printed by `python -m core.calendars.store`, and fill the matching MANIFEST.yaml row (version, md5, signed_off_by and
+  signed_utc equal to the file) with a new test id
 unverified:
-- 'every date: cross-checked against exchange_calendars XKRX only'
+- 'every date: cross-checked against exchange_calendars XKRX; XKRX 4.13.2 lacks 2026-06-03, 2026-07-17, 2027-05-03 and
+  2027-07-19 (added 2026-10-28 from the KRX notices, 「관공서의 공휴일에 관한 규정」 대통령령 제36290호 and the 2027 월력요항; see
+  those rows)'
+- '2026 rows and 2027-01-01 were checked on 2026-10-28 against KRX, KASI and government sources by WebSearch excerpts only
+  (direct reading blocked); the owner reads the sources at sign-off'
+- 2027 rows other than 2027-01-01 follow the public-holiday regulation and the 2027 월력요항 until the KRX 2027 휴장일 notice
+  (expected December 2026); re-verify then and re-sign as v1.0.1 on any difference
 - no CSAT day carried here (see kr_sessions)
 - 2027 must be signed before 2026-11-01 (spec L2101)
 owner_must_sign:
@@ -100,6 +108,24 @@ rows:
   name: KRX holiday (name from the KRX notice at sign-off)
   unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
     the owner replaces source_url with the exchange notice at sign-off'
+- effective_from: '2026-06-03'
+  effective_to: '2026-06-03'
+  source_url: 'https://strn.krx.co.kr/corebbs5/BHPSTRN0401/list | https://www.nec.go.kr/site/nec/ex/bbs/View.do?cbIdx=1104&bcIdx=289351 | https://www.mpm.go.kr/mpm/info/infoService/BizService02/'
+  retrieved_at_utc: '2026-10-28T05:31:34Z'
+  signed_off_by: null
+  date: '2026-06-03'
+  kind: closed
+  name: '제9회 전국동시지방선거 (임기만료 선거일, 관공서 공휴일)'
+  unverified: '2026-10-28 공식 출처 대조(WebSearch 발췌만, 원문 직접 열람은 차단: WebFetch ENOTFOUND, 프록시 403): 중앙선관위 선거일 2026-06-03(수); 임기만료 선거일은 관공서 공휴일(규정 제2조, 인사혁신처 공휴일제도); KRX 공매도 모의거래인증시스템 게시판 ''2026년 6월 3일(수요일)은 지방선거일로 임시공휴일 입니다''(2026-06-01 게시). KRX 2026-05-20 휴장 보도자료 원문은 krx.co.kr에서 찾지 못했다(언론 보도만). exchange_calendars 4.13.2 XKRX에는 없다. 소유자가 서명할 때 KRX 공지 원문으로 확인한다'
+- effective_from: '2026-07-17'
+  effective_to: '2026-07-17'
+  source_url: 'https://www.korea.kr/briefing/pressReleaseView.do?newsId=156758983 | https://law.go.kr/LSW/lsRvsRsnListP.do?lsId=002404&chrClsCd=010102 | https://strn.krx.co.kr/corebbs5/BHPSTRN0401/list'
+  retrieved_at_utc: '2026-10-28T05:31:34Z'
+  signed_off_by: null
+  date: '2026-07-17'
+  kind: closed
+  name: '제헌절 (공휴일 재지정: 「공휴일에 관한 법률」 개정, 「관공서의 공휴일에 관한 규정」 대통령령 제36290호)'
+  unverified: '2026-10-28 공식 출처 대조(WebSearch 발췌만, 원문 직접 열람은 차단: WebFetch ENOTFOUND, 프록시 403): 인사혁신처 보도자료 ''올해부터 노동절, 제헌절 공휴일로''; 대통령령 제36290호(2026-04-30 일부개정. 시행일은 출처가 갈린다: 법령 미러 머리글 ''[시행 2026.05.11.]'', 2026-10-28 검토 검색의 인사처 보도 발췌 ''노동절 2026-05-01, 제헌절 2026-05-11 시행''. 소유자가 law.go.kr 부칙으로 확인한다); KRX 모의거래 게시판 ''2026년 7월 17일(금요일)은 제헌절 로 임시공휴일 입니다''(2026-07-10 게시; 제헌절은 임시공휴일이 아니라 공휴일 재지정이다. 2026-10-28 재검색에서는 이 게시 문구를 재현하지 못했고, 휴장 사실은 KRX 2026-05-20 휴장 공지 보도(bizwatch 2026-05-20)로 확인된다). KRX 2026 올빼미공시 안내 표에는 7/17 행이 없다(개정 전 작성으로 보임). exchange_calendars 4.13.2 XKRX에는 없다. 소유자가 서명할 때 KRX 공지 원문으로 확인한다'
 - effective_from: '2026-08-17'
   effective_to: '2026-08-17'
   source_url: null
@@ -210,6 +236,15 @@ rows:
   name: KRX holiday (name from the KRX notice at sign-off)
   unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
     the owner replaces source_url with the exchange notice at sign-off'
+- effective_from: '2027-05-03'
+  effective_to: '2027-05-03'
+  source_url: 'https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431 | https://law.go.kr/LSW/lsRvsRsnListP.do?lsId=002404&chrClsCd=010102'
+  retrieved_at_utc: '2026-10-28T05:29:52Z'
+  signed_off_by: null
+  date: '2027-05-03'
+  kind: closed
+  name: '노동절(5/1 토) 대체공휴일'
+  unverified: '2026-10-28 공식 출처 대조(WebSearch 발췌만, 원문 직접 열람은 차단: WebFetch ENOTFOUND, 프록시 403): 2027 월력요항 ''5월 1~3일(노동절, 일요일 및 노동절 대체공휴일)''; 규정 제3조(대통령령 제36290호) 대체공휴일 조항. KRX 2027 휴장일 공지(보통 12월) 전이다. 근거: 2027 월력요항(우주항공청 2026-06-29)과 KRX 휴장 규정(관공서 공휴일 휴장). exchange_calendars 4.13.2 XKRX에는 없다. KRX 공지가 나오면 다시 대조하고, 다르면 v1.0.1로 재서명한다'
 - effective_from: '2027-05-05'
   effective_to: '2027-05-05'
   source_url: null
@@ -230,6 +265,15 @@ rows:
   name: KRX holiday (name from the KRX notice at sign-off)
   unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
     the owner replaces source_url with the exchange notice at sign-off'
+- effective_from: '2027-07-19'
+  effective_to: '2027-07-19'
+  source_url: 'https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431 | https://law.go.kr/LSW/lsRvsRsnListP.do?lsId=002404&chrClsCd=010102'
+  retrieved_at_utc: '2026-10-28T05:29:52Z'
+  signed_off_by: null
+  date: '2027-07-19'
+  kind: closed
+  name: '제헌절(7/17 토) 대체공휴일'
+  unverified: '2026-10-28 공식 출처 대조(WebSearch 발췌만, 원문 직접 열람은 차단: WebFetch ENOTFOUND, 프록시 403): 2027 월력요항 대체공휴일(제헌절) 7월 19일(월), 연휴 7/17~19; 규정 제3조. KRX 2027 휴장일 공지(보통 12월) 전이다. 근거: 2027 월력요항(우주항공청 2026-06-29)과 KRX 휴장 규정(관공서 공휴일 휴장). exchange_calendars 4.13.2 XKRX에는 없다. KRX 공지가 나오면 다시 대조하고, 다르면 v1.0.1로 재서명한다'
 - effective_from: '2027-08-16'
   effective_to: '2027-08-16'
   source_url: null
