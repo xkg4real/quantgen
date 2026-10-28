@@ -438,7 +438,8 @@ def guard_roots() -> tuple[Path, ...]
 def digest_roots(roots: Sequence[Path]) -> dict[str, str]          # {path: md5 of bytes} of every file; {} if absent
 def guarded(name: str, fn: Callable[[], None]) -> Callable[[], None]
     # digests before; QUANTGEN_MACRO_DIR = a fresh tempfile.mkdtemp(prefix="qgnb_macro_"), restored (or removed) in
-    # finally; digests after; AssertionError naming every changed path. On nt, a test whose name starts "test_l2_"
+    # finally, which then digests after and raises AssertionError naming every changed path, also when the test
+    # raised NotRun or failed (that exception becomes its __context__). On nt, a test whose name starts "test_l2_"
     # runs between SetThreadExecutionState(0x80000001) and SetThreadExecutionState(0x80000000) in finally (5.7).
     # The wrapper carries `nautilus_guarded = True`.
 def layer2() -> Path
@@ -652,7 +653,9 @@ def parity_and_gate(ctx: RunContext) -> Outcome
 # Task 4's module-level internals that Task 5 calls, with the signatures and behaviour of Task 4's text (Task 5 edits
 # runner.py only at its four anchors, File Structure):
 PRICE_DECIMALS = 9; CRYPTO_DEFAULTS: dict; GOLDEN_FIXTURES = ("F1", "F2", "N1"); EGRESS_SCHEMA: str; LAYER: str
-REMEDY: dict; S (core.quant.strategies); pd (pandas)
+REMEDY: dict; S (core.quant.strategies); pd (pandas); REPO_ROOT = launch.REPO_ROOT
+# with the module imports Task 5's block uses without importing them: argparse, json, os, shutil, socket, subprocess,
+# sys, time, traceback, datetime and timezone, Any and Callable, Path, np (numpy), gate_ledger, launch, BridgeRefusal
 def refuse(rid: str, message: str) -> BridgeRefusal                  # with REMEDY[rid]
 def load_table(path: Path) -> tuple[dict, bytes]                     # utf-8-sig; R-11 unless one JSON object
 def _check_place(t: dict, mode: str, repo_root: Path) -> None
@@ -677,6 +680,10 @@ def input_bytes(table: dict, theta: dict, stress: int, bars: bytes, n_bars: int,
 def bar_timestamps(dates: Sequence[str], instrument: str) -> list[int]
 def ledger_row(table: dict, theta: dict, *, span: Sequence[str], run_utc: str, anchor: str, bridge_run_id: str) -> dict
 def load_study(repo_root: Path) -> types.ModuleType
+def fixtures_mode(*, record: bool = False, write: bool = False, golden_dir: Path = launch.GOLDEN_DIR,
+                  repo_root: Path = REPO_ROOT) -> int                # --fixtures [--record-baseline | --write-goldens]
+def check_env_mode() -> int                                          # --check-env
+def egress_record_mode(repo_root: Path = REPO_ROOT) -> int           # --egress-record
 # Behaviour Task 5 relies on: _after_registration copies Outcome.withheld_reasons into the record and finishes with
 # the Outcome's status and exit code; _new_record starts parity, gate, card and error at None; step 7 sets
 # provenance = {"p0a": ..., "p0b": None}; a WITHHELD record whose reasons all start "C-06" is re-runnable without
@@ -701,7 +708,8 @@ def reference_drift(sc_qg: validate.StrategyScore, wf_qg: validate.WalkForward, 
 def hand_off(ctx: "RunContext") -> "Outcome"
     # steps 16 and 17: P0b to P13 per column and cost level, wf_qg and wf_nt, trial counts, both scores, agreement,
     # G-01 to G-05 and G-08, the card (open(path, "x", encoding="utf-8", newline="\n")); sets ctx.record["parity"],
-    # ctx.record["gate"] and ctx.record["card"]; calls the after_step16 and after_step17 hooks
+    # ctx.record["gate"] and ctx.record["card"]; calls the after_step16 and after_step17 hooks; prints the worst P2 and
+    # P3 next to both bars, the trial counts, both decisions and every reason before Task 4's STATUS line (5.4.1, 5.5)
 def corr(a, b) -> float
     # Pearson (P2, P12); a pair of constant series counts 1.0 when equal to 1e-12 and NaN otherwise: a column that never
     # trades with rf = 0 gives R = pnl = 0 on every row, and validate.sharpe gives 0.0 for both, so P3 holds too
@@ -717,7 +725,11 @@ Run record `run.json` (6.3) [4, completed by 5]; ledger row (6.4) [4]; card (6.5
 
 ## Count Ledger
 
-The baseline moves before Task 1 (②-1's `statsmodels` line, PT-07's calendar tests in `tests/macro_m1_calendars.py`, possibly the Bonds patch's suite), so every full-suite count is a delta from the baseline that Task 1 Step 0 re-measures through the wrapper with the key unset and writes to `$S/t1_baseline.json`: `B` = `<P>/<N> passed, <F> failed, <R> not run` (N rows, R NOT_RUN), `M` its `macro/` rows, and its FAIL set (expected: `papers/test_debate_run_kills_process_tree` alone, as the container has no `taskkill`; any other FAIL is recorded with its detail and kept as part of `B`). `H` is the count of `python3 -B -m tests.macro_m0_harness`, 12 at `fa28059`; where a task writes `12/12` or `14/14`, read `H/H` and `H+2/H+2` if Task 1 Step 0 measures another `H`. The `nautilus` suite starts at 0 rows, so its counts are absolute. "Key unset" means `QUANTGEN_NAUTILUS_PYTHON` is not set (layer 2 NOT_RUN); "key set" means `QUANTGEN_NAUTILUS_PYTHON="$NTPY"` on the command line. A task's full run is correct when, compared row by row with `$S/t1_baseline.json` (Plan rules, Result files), it adds exactly the cumulative rows below with their statuses, removes none and changes none, so its FAIL set is `B`'s.
+The baseline moves before Task 1 (②-1's `statsmodels` line, PT-07's calendar tests in `tests/macro_m1_calendars.py`, possibly the Bonds patch's suite), so every full-suite count is a delta from the baseline that Task 1 Step 0 re-measures through the wrapper on a cache-free copy (below) with the key unset and writes to `$S/t1_baseline.json`: `B` = `<P>/<N> passed, <F> failed, <R> not run` (N rows, R NOT_RUN), `M` its `macro/` rows, and its FAIL set (expected: `papers/test_debate_run_kills_process_tree`, as the container has no `taskkill`, and `macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache`, as the copy has no `yf_SPY.csv`; any other FAIL is recorded with its detail and kept as part of `B`). `H` is the count of `python3 -B -m tests.macro_m0_harness`, 12 at `fa28059`; where a task writes `12/12` or `14/14`, read `H/H` and `H+2/H+2` if Task 1 Step 0 measures another `H`. The `nautilus` suite starts at 0 rows, so its counts are absolute. "Key unset" means `QUANTGEN_NAUTILUS_PYTHON` is not set (layer 2 NOT_RUN); "key set" means `QUANTGEN_NAUTILUS_PYTHON="$NTPY"` on the command line. A task's full run is correct when, compared row by row with `$S/t1_baseline.json` (Plan rules, Result files), it adds exactly the cumulative rows below with their statuses, removes none and changes none, so its FAIL set is `B`'s; the only exception is the clock and sign-off rows below.
+
+**Cache-free copy (every full run, `B` included; Global Constraints, Step 2 additions).** Three `macro` rows open protected caches when the files are present: `macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache` (the last 900 rows of `yf_SPY.csv`, `core/skills/macro_daily.py:86-88, 1395-1414`), `macro/macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache` (every row of `yf_SPY.csv`, `docs/vol_backtest.py:59-62`) and `macro/macro_tf_gov/test_cry1_study_runs_offline_end_to_end_on_the_local_caches` (`binance_BTCUSDT.csv` and `upbit_KRW-BTC.csv`, `docs/techfund_study.py:72-75`). So no full run uses the real clone. Each runs through `$S/full_run.sh <name>` (written at Task 1 Step 0, kept outside the repository; a later session copies it with `run_baseline.py`): a fresh `git clone` of the real clone at `$S/full_<name>` (so `.git` and the owner's tag serve the `guard` suite), the real clone's uncommitted task paths copied over, the four protected files deleted unopened, then the wrapper copy `$S/run_copy_<name>.py`, whose `sys.path` entry is that clone, writing `$S/<name>.json`, with the key unset. In `B` and every later full run the three rows are FAIL (`AssertionError: `), NOT_RUN and NOT_RUN (NotRun reasons `REFDATA: yahoo_SPY_2015-12_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv` and `REFDATA: docs/asset_expansion/cache/binance_BTCUSDT.csv (local vendor cache) absent`). Measured 2026-10-28 with `full_run.sh` on `659898b`: `749/876 passed, 2 failed, 125 not run`, 548 `macro` rows, FAIL set the dry run and `papers/test_debate_run_kills_process_tree`, the five `guard` rows PASS; against the real-clone run of 2026-10-26 (`$S/baseline2_results.json`) no other row common to both changed. `--suite nautilus` runs and the module CLIs stay in the real clone: no `nautilus` test opens a cache file (L1-9 names two cache paths and is refused before any open).
+
+**Clock and sign-off rows (PT-07, `d865c7f`).** Two `macro` rows of `B` depend on the wall clock or on the owner's signature of the five PT-07 calendar files (`holidays_KRX`, `holidays_NYSE`, `holidays_FED`, `holidays_SIFMA`, `kr_sessions`), not on the bridge. `macro/macro_m1_calendars/test_cal02_2027_files_signed_before_2026_11_01` is NOT_RUN before 2026-10-31T15:00:00Z while a file is unsigned, FAIL (`OVERDUE ...`) at or after it, and PASS once all five are signed (`tests/macro_m1_calendars.py:764, 780-810`). `macro/macro_m1_calendars/test_close02_on_the_real_signed_files` is NOT_RUN until they are signed, then PASS (`d865c7f`'s signing rehearsal: `22/0/5` to `24/0/3`, these two rows). A full run whose comparison differs from the expected only in these two rows is correct when the task's notes name each change's cause: the deadline passed after Step 0, or the owner's signing commit (by hash) landed. Its FAIL set is then `B`'s plus or minus `test_cal02_2027_files_signed_before_2026_11_01`. A change in any other row still stops the task before its commit, and the executor reports it to the owner.
 
 ### Rows per task
 
@@ -850,6 +862,105 @@ Cross-task decisions
   The counts in every task's GREEN steps equal the Count Ledger.
 - **Spec deviations to record** in the Step 10 execution record and in the spec's next revision: T1 CI 7, T1 CI 9, T2 CI 4, T3 CI 1, T5 CI 1 and T5 CI 3.
 
+### Stage B review rulings (2026-10-28)
+
+Review fixes, Task 1 region (2026-10-28; verified in the scratch copy `$S/plan_step2/review/fix_task1/repo`, a `git archive` of `659898b` with the four protected caches deleted unopened, plus Task 1's files)
+- **T1-R1 (guard after-digest).** Ruling: `guarded` now takes its after-digest inside `finally`, after it restores QUANTGEN_MACRO_DIR. It raises its AssertionError there, so an exception already in flight (NotRun or a failure) becomes that error's `__context__`. L1-32 gains a probe that appends to a guarded file and then raises NotRun; the probe must get the AssertionError naming the file, and a NotRun that escapes the guard FAILs L1-32. C8's comment says the same. Measured: the reproduction now gives `AssertionError ... context: NotRun`. The old guard paired with the new L1-32 FAILs with `a ledger append followed by NotRun passed as NOT_RUN`. Key unset gives `8/12`, key set `12/12`. The module's md5 is now `059691438a0adb121c782fb0d3f4dc9b` (696 lines), and Step 18 expects `2868 insertions`. The RED outputs of Steps 3, 5 and 10 do not change. - cost if wrong: low. A test that writes a guarded file now reports the guard's FAIL instead of its own NotRun or FAIL detail, which is the stricter reading of spec 3.3. The original exception stays in the traceback as context.
+- **T1-R2 (negative controls).** Ruling: L1-16 adds four kinds of case. First, `build_launch` raises its three ValueErrors: for a relative child_cmd, for an empty child_cmd, and when there is no child_cmd and no venv_python. Second, `resolve_unshare("posix")` raises its two R-14s: one with `shutil.which` patched to return None, one with `subprocess.run` patched to return `subprocess.CompletedProcess(cmd, 1, ...)`. Third, `resolve_unshare("nt") is None`. The finding's fix (1) proposed a tiny script that exits 1 instead of the CompletedProcess. That was rejected because L1-16 also runs at Step 7A on Windows, where a POSIX script cannot be executed. L1-17 adds three R-03 cases: from `venv_root` for a python outside bin or Scripts, from `read_venv` for a missing pyvenv.cfg, and from `read_venv` for two nautilus_trader dist-info dirs. Each asserts its own message. L1-17 also adds `venv_mismatches` with requirements and env_pins.json apart. The finding's example (5) gives only the requirements line, because reads of 2.3.5 match env_pins.json. So the one-line case keeps those reads against requirements 2.3.6, and the two-line case uses reads of 2.3.4 against requirements 2.3.6. Eight mutations of `launch.py`, each of a refusal branch, all FAIL. `launch.py` is unchanged (md5 `c55ca113ea950f2333cd143be9a9b747`), and Task 2's `encoding_offences` finds nothing in the edited module. - cost if wrong: low. The cases run in milliseconds and patch only module attributes, which they restore in `finally`.
+- **T1-R3 (markers).** Ruling: Task 1's six bare `CONTRACT ISSUE n` markers now read `Plan ruling T1 CI n`; they sit at the Interfaces bullet, the Counts paragraph, Step 4 and Step 14. The finding's second half, renaming Tasks 2 to 5's markers with their own prefixes, belongs to those regions and is not done here. - cost if wrong: none.
+- **T1-R4 (spec deviations to record).** Ruling: two items join the 'Spec deviations to record' list for the Step 10 execution record and the spec's next revision. (a) Task 1 creates `tests/nautilus_acceptance.py` at spec Step 3, although spec 5.8's file table names Steps 4 to 7. (b) `.env.example` gains the heading, three comment lines without `%` and the line, where spec 3.4 says "a heading and one line". Task 1's verified notes name both. The list's own line is outside this region, so this bullet carries the addition. - cost if wrong: none. Neither item changes a count, and neither changes a byte that another task pins.
+- **X-1 (cache-free full runs; blocker confirmed).** Ruling: option (b). Three existing `macro` rows read protected caches during a full run in the real clone. `test_dry_run_end_to_end_on_the_local_cache` reads the last 900 rows of `yf_SPY.csv`. `test_g_b5_02_spy_refdata_with_smoke_on_local_cache` reads every row of `yf_SPY.csv`. `test_cry1_study_runs_offline_end_to_end_on_the_local_caches` reads `binance_BTCUSDT.csv` and `upbit_KRW-BTC.csv`. A grep of `tests/` and the code they call found no other reader of the four files. Every full run, `B` included, now goes through `$S/full_run.sh <name>`, which Task 1 Step 0 writes. The script makes a `git clone` of the real clone at `$S/full_<name>`, so `.git` and the owner's tag serve the `guard` suite. It copies the real clone's uncommitted paths over, excluding the four caches, and replays deletions. It deletes the four caches unopened, then runs a wrapper copy pointed at the clone with the key unset. Tested twice. On a tiny repo, it copied a modified, a deleted and an untracked path, and the modified protected file was excluded. Then one full run of `659898b` gave `749/876 passed, 2 failed, 125 not run` with 548 `macro` rows. Its FAIL set was the dry run and `papers/test_debate_run_kills_process_tree`. The five `guard` rows passed, and `qa/acceptance_results.json` stayed `16c9baa5...`. Against the real-clone run of 2026-10-26, only the dry-run row (PASS to FAIL) and the CRY-1 row (PASS to NOT_RUN) changed among the rows common to both. The Count Ledger records the procedure and the three rows' statuses: FAIL, NOT_RUN and NOT_RUN. This region changes Task 1 Steps 0 and 16 and the Count Ledger. Other regions still need matching edits. The Plan rules bullets 'Suite runs' and 'Result files' should name `full_run.sh` and have a later session copy it. Task 2 Step 15, Task 3 Step 10, Task 4 Step 10 and Task 5 Step 14 should call `bash "$S/full_run.sh" <their result name>` in place of `python3 -B $S/run_baseline.py $S/<name>.json`. Those edits lie outside this region and are not made here. `--suite` runs and module CLIs stay in the real clone; the four files absent leave the 57 `nautilus` rows unchanged (crosscut copy: `44/57`, `57/57`). Option (a), an owner ruling, cannot be obtained before Task 1 and was not chosen. - cost if wrong: if a later task still runs its full run in the real clone, its dry-run and CRY-1 rows differ from `B`, and the task stops before its commit. That failure is loud, never a silent miscount. The copy would hide another row's dependence on the four files, but none was found.
+- **X-2 (clock and sign-off rows; major confirmed).** Ruling: the Count Ledger names two rows whose status depends on the wall clock or on the owner's signature of PT-07's five calendar files. The first is `macro/macro_m1_calendars/test_cal02_2027_files_signed_before_2026_11_01`. It is NOT_RUN now (measured 2026-10-28), FAIL (`OVERDUE`) from 2026-10-31T15:00:00Z while unsigned, and PASS once all five files are signed. The second is `macro/macro_m1_calendars/test_close02_on_the_real_signed_files`, which is NOT_RUN and becomes PASS once the files are signed. `d865c7f`'s signing rehearsal flipped only these two (`22/0/5` to `24/0/3`). The unsigned cases in m1_integration, m7_cards and m9_lab run on fixture sets, not on the shipped files. A change confined to these two rows does not stop a task when its cause, the deadline or the signing commit's hash, is named in the task notes. Task 1 Step 16 prints these rows on their own line, and Tasks 2 to 5's comparisons should do the same; that is for their regions. The alternative, re-measuring `B` after the deadline or a signing commit, was rejected: after Task 1's commit a re-measured run would carry bridge rows, and the named-row rule needs no extra 10-minute run. - cost if wrong: a third row that the deadline or the signing flips stops a task before its commit. The executor then reports it to the owner, and nothing is miscounted.
+Review findings on Task 2 (fix pass, 2026-10-28; measured in `$S/plan_step2/review/fix_task2/`, which holds copies of the Task 2, Task 4 and Task 5 review clones and an archive of HEAD `659898b`. The edited plan's Task 2 blocks rebuild byte-identical files to the checked copy.)
+- **T2-m1.** Ruling: Step 13's key-unset block gains L1-22's report line `  pyarrow in the global interpreter: None` between the L1-17 and L1-22 PASS lines, as Task 1's expected outputs already show. "Exactly these lines" then holds (measured through a copy of the wrapper). - cost if wrong: none. Without the line, a line-for-line check would stop at a correct run.
+- **T2-m2 (amends T2 CI 3).** Ruling: bars.csv is the one CSV the parent writes. `runner.bars_bytes` (C10) builds it by joining its rows itself, without a csv writer, so the `lineterminator` rule does not reach it. T2 CI 3's sentence "The `lineterminator` rule covers the runner's bars.csv statically" is withdrawn. Once `tools/nautilus/runner.py` exists, L1-15 also asserts that `runner.bars_bytes` on a two-bar input holds no carriage return, as spec 8.3 #15 asks ("no CSV the parent or fixtures write"). Measured:
+  - L1-15 passes at the Task 2, Task 4 and Task 5 states.
+  - With the key unset, the module counts stay `9/13`, `32/42` and `44/57`. With the key set at Task 2 it gives `13/13`.
+  - A CRLF mutation of `bars_bytes` fails L1-15 with `carriage returns in ['runner.bars_bytes']`.
+
+  Task 2's numstat for `tests/nautilus_acceptance.py` becomes 67. - cost if wrong: a `runner.py` that exists but does not import now fails L1-15 as well as Task 4's tests. Task 4 creates the file whole at its Step 4, so no planned step passes through that state.
+- **T2-m3 (refines T1 CI 7).** Ruling: rule A reads spec 5.6's "its enclosing function" as the nearest enclosing def or lambda. `_rule_a`'s walk-up therefore stops at `ast.Lambda` too. A `self.submit_order` wrapped in a lambda inside `place` is no longer exempt; a nested def already was not. The docstring also names T1 CI 7's no-node case. This is a reading of 5.6, not a deviation. Measured: the lambda probe now gives the text, call and A hits. The 51 multisets, the real tree (0 hits) and Task 3's sandbox (no hit) are unchanged, and the harness gives `14/14`. - cost if wrong: none for the planned sandbox, whose call sits directly in `place`. The other reading exempts an indirect order call that 5.6 does not name.
+- **T2-m4.** Ruling: each expected output states what it leaves out:
+  - Step 3's registry FAIL line is abbreviated, and its timing is omitted.
+  - Step 9's RED run discards stderr and shows the blank line before the summary.
+  - Steps 7, 13 and 14 quote the summary line that `git diff --stat` ends with.
+
+  Counts, test names and exception texts were already right (measured). - cost if wrong: none.
+- **T2-m5.** Ruling: the Files list names both ways a Task 1 file may be corrected: Step 8 (a scan hit, C2 or C3) and Step 10 (an L1-15 hit, C1). Step 16 already allows both. - cost if wrong: none.
+- **T2-m6.** Ruling: Step 7's line-end check reads `tests/macro_m0_harness.py` as well as `tests/macro_registry.csv`, because the Plan rules keep both LF. - cost if wrong: none.
+- **T2-m7.** Ruling: spec 5.6 asks for its rationale to be quoted, so both T-RO-01 docstrings quote it in full. That includes the GOVERNANCE-10 clause with its citation and the sentence "The council spec is not edited." The harness numstat becomes 491 insertions. Measured: the harness module gives `14/14` and `tests.macro_m1_fixtures` gives `13/15`. - cost if wrong: none.
+- **T2-m8.** Ruling: `nautilus_tests()` calls `bridge_tests()` inside its `try`. A failure during collection now becomes the same single FAIL row `import` ("does not import or collect") and never stops the other suites, which spec 5.7 asks of an import failure. One example is `guard_roots()`, which reads `config` at the first `tests()` call. This departs from a literal copy of `papers_tests` by one moved line, and the numstat stays 17/2. Record it with the spec deviations in the Step 10 execution record. Measured with `guard_roots` patched to raise: before the change `run_all.tests()` raised; after it, `run_all.tests()` returns every other suite plus `nautilus/import`. - cost if wrong: none. The failure stays visible as a FAIL row.
+- **X8 (commits between tasks; review X-3).** Ruling: other work streams may commit to the branch between tasks. Four did while this plan was written (`049306c`, `f4085cd`, `d865c7f`, `659898b`), and all four wrote under `docs/nautilus_bridge/`. The rule has four parts:
+  - While a task is in progress, from its Step 1 to its commit, no other work stream commits to the branch or writes under `docs/nautilus_bridge/`.
+  - A task's Step 1 accepts the previous task's commit. It also accepts a later HEAD if `git diff --name-only <previous task's commit> HEAD` lists no path of the File Structure table (this plan's own file excepted).
+  - If any listed path lies outside `docs/nautilus_bridge/`, the task re-measures the baseline that its full run is compared with, through the wrapper with the key unset. The task's Count Ledger delta does not change.
+  - Task 2 Step 1 implements this: it writes `$S/t2_baseline.json`, and Step 15 reads it. The Plan rules and Step 1 of Tasks 3 to 5 lie outside the Task 2 region, and this ruling governs them until their own text says so.
+
+  - cost if wrong: a commit under `docs/nautilus_bridge/` that a suite does read would show as an unexpected row in the task's full-run comparison, and the task would stop before its commit. A re-measure that was not needed costs about 10 minutes.
+- **X9 (repository state; review X-5).** Ruling: Task 2's verified-before-writing note now records the `tests/` changes of `d865c7f` and a re-check at HEAD `659898b`. Plan status ("integrated ... at HEAD `f4085cd`") and Task 3's note ("HEAD has since moved to `049306c`") lie outside the Task 2 region. The facts as of 2026-10-28:
+  - The plan was committed at `24fd6a5`, and PT-07 landed at `d865c7f`.
+  - At `659898b`, the full suite collects 876 rows (870 at `b7f991a`), 548 of them `macro` (reference `M` 542). `H` is still 12, the registry is in sync, and today's scan gives 0 hits over 154 files.
+  - `659898b` itself changed only `docs/nautilus_bridge/`: two registers, the progress chart, and evidence scripts that the T-RO-01 scan does not read (it reads only `docs/*.py`).
+
+  Task 1 Step 0 re-measures `B`, `M` and `H`, so no expected output depends on these sentences. - cost if wrong: none.
+Findings of the Task 3 review
+- **T3-1 (review).** Ruling: `run` keeps its pre-set port state, and only the stated reason and the code comment change. An `on_start` that raises propagates out of `engine.run()`. Measured on a copy of `659898b` with Tasks 1 to 3 applied: a `RuntimeError` planted after the clock guard gave exit 1, no file and C-06 in the parent. The lines therefore serve only a port whose `on_start` is never called, and only then can the child reach C-15 with exit 10. A non-BACKTEST kernel also ends as C-06, because `build_engine` raises. The comment now reads `# on_start sets them again; kept if it never runs (C-15)`. - cost if wrong: none for behaviour. The lines are dead on every path the engine takes today, and dropping them instead would change the sandbox for no gain.
+- **T3-2 (review).** Ruling: Task 3 declares a fourth departure from 5.2.9. The eleven module-level definitions between `CryptoTrendPort` and `run` hold the bodies that 5.2.9's `run` leaves as `...`: `FIELDS`, `need`, `is_int`, `int_text`, `is_hex`, `check_params`, `check_input`, `make_instrument`, `write_csv`, `write_outputs` and `child_reasons`. 5.2.9's "the classes and functions" is read as the skeleton's names in their order, which `SANDBOX_DEFS` checks in relative order. This also corrects T3 CI 1, which says two lines change: three lines of 5.2.9's `main` change. Both `return 20` lines become `ap.exit(20, ...)`, and `except Refused:` becomes `except Refused as exc:`. - cost if wrong: if the owner reads 5.2.9 as a list of every module-level definition, the helpers are inlined into `run`, which then breaks the 60-line rule. Behaviour does not change.
+- **T3-3 (review).** Ruling: three inputs used to crash the sandbox with exit 1, and it now refuses them with exit 20.
+  - `check_input` adds `need(inp["instrument"] != "SPY" or inp["size_precision"] == 0, "size_precision")`, because `Equity` holds whole shares only (5.2.3).
+  - `check_input` adds `need(Decimal(f[2]) <= PRICE_MAX, f"close {k}")`, because `Price.from_str` raises above `PRICE_MAX`.
+  - `int_text` tests `len(x) <= 20` before `int(x)`, because `int()` raises past 4300 digits.
+
+  L2-5a gains the cases `SPY size_precision 8`, `capital 4301 digits` and `close above PRICE_MAX`, for 80 perturbations and 83 children. Before the fix, each case gave exit 1 (measured). Re-measured on a copy of `659898b` with Tasks 1 and 2 applied: the sandbox has 346 lines and sha256 `fdbc0e51aa3e1abff737d96292c636ada8b82f59b8ffe4131c6471d202475b4e`, with numstat 249/8. The test block's numstat is 471/0. Step 6's ast check still prints `['main', 'run']`. Step 7 gives `80 perturbations` and 5/5. Step 8 is unchanged. Step 9 gives 11/18, 18/18, 14/14 and `test_08 test_09 ok`. Step 10's key-unset `--suite nautilus` run gives 11/18. `qa/acceptance_results.json` keeps md5 `16c9baa5`. The plan's code blocks are byte-equal to the files measured. Cross-field overflows are not added, because 6.1 is a per-field table. One example is an order sized above `QUANTITY_MAX` (measured exit 1, fail closed as C-06). Neither Task 4 nor Task 5 reads Task 3's line counts, the sandbox hash or the perturbation count, and their tables use `size_precision` 0 for SPY. - cost if wrong: if the owner wants 6.1's literal ranges, the SPY and close rules come out, and those inputs again crash with exit 1, which fails closed as C-06. The runner never sends them.
+- **T3-4 (review).** Ruling: Task 3's five bare "CONTRACT ISSUE 1" and "CONTRACT ISSUE 2" markers become references to rulings T3 CI 1 and T3 CI 2, so they no longer collide with the same numbers used in Tasks 1, 2 and 4. Checked: each marker matched its ruling, and no Task 4 or Task 5 block redefines a Task 3 module-level name of `tests/nautilus_acceptance.py`. - cost if wrong: none.
+- **T3-5 (review).** Ruling: the size claim is corrected, and the case table is not split. Every new function except `_l2_05a_cases` (79 lines, a data table) is under 60 lines, with `run` at 59 and `check_input` at 40. - cost if wrong: none. A split would only move lines.
+- **T3-6 (review).** Ruling: the Task 3 header no longer says what the latest HEAD changes. It names `d865c7f` and `659898b`, and it says that no step depends on HEAD, because Steps 1 and 11 read `git status` live and Step 10 counts deltas. The count for `docs/nautilus_bridge/` now reads 7 tracked files at `fa28059` and 19 at `659898b`. `659898b` adds two registers and ten evidence scripts and updates the chart; none of these files mentions `nautilus` or is in a scanned path. - cost if wrong: none. A later HEAD makes the parenthesis stale again, but no step reads it.
+- **Spec deviations to record (additions from the Task 3 review).** T3-2 goes next to T3 CI 1: helpers outside 5.2.9's list, and three changed lines of `main`. T3-1: the child reaches C-15 with exit 10 only when `on_start` is not called, because a raising `on_start` and a non-BACKTEST kernel both end as C-06. T3-3: two refusals beyond 6.1. SPY needs `size_precision` 0, and a close may not exceed `PRICE_MAX`.
+Review fixes, Task 4 region (2026-10-28; verified in $S/plan_step2/review/fix_task4/repo; runner.py keeps md5 `01b576997547d17d8f318fb67f26bac6`, so Task 5 Step 7's md5 claim still holds)
+- **T4-R1.** Ruling: Step 2's key-unset RED expectation includes the stdout line `  pyarrow in the global interpreter: None`. The passing L1-22 prints it between the 20a and 23 FAIL lines, and `grep -v '^PASS'` keeps it. The command stays as it is. - cost if wrong: none; otherwise an executor stops at one unexplained line.
+- **T4-R2.** Ruling: Task 4's prose cites its contract issues as "Plan ruling T4 CI n", because bare "CONTRACT ISSUE n" numbers collide across Tasks 1 to 5. The committed docstring of `write_rehearsal_table` cites the rule itself (spec 5.3.2 step 1: `grid` equals `grid_from(**axes)`), not a plan item. The docstring stays one line, so the 1,040-line test block, Step 12's `4095 insertions` and Task 5's numstat do not change. - cost if wrong: none.
+- **T4-R3.** Ruling: L1-3 asserts only that `times.registered_utc` and `times.first_child_utc` are set, as strings. Spec 8.1 forbids comparing wall-clock fields, and the `child_started` hook already proves the order of registration and children (QA-R4-4, QA-R4-5). One line replaces one line. Measured on the scratch copy: L1-3 PASS, and the module without the key gave `32/42 passed, 0 failed, 10 not run`. - cost if wrong: none for ordering. A child that starts before the ledger holds every config_id still fails the hook assertion.
+- **T4-R4 (rejected).** Ruling: an exit 20 stays `C-06: exit 20` in the leg's `invalid`, and the child's `C-05: ...` stderr line stays in the child record's `stderr_tail`. Spec section 7 has the child report C-05 on stderr only, and it records a non-zero exit seen by the parent as C-06, with the child tails in the run record. T3 CI 1 puts the refused rule on that stderr line. Re-running such a WITHHELD without --rerun-of cannot select an outcome: the parent builds input.json deterministically from the same table, so the refusal repeats until the bridge is fixed. Changing `_judge_leg` would also change runner.py's md5, which Task 5 Step 7 relies on. - cost if wrong: a refused-input run's `withheld_reasons` read C-06, so a reader must open `stderr_tail` to see which input rule refused it.
+- **T4-R5.** Ruling: `_earlier_runs` (R-17, `earlier_runs`) and `e1_parity_passed` (GOVERNANCE-R4-4) read only `<out root>/*/run.json`, as spec 5.3.5 names it, and never a `run.final.<pid>.json` fallback. No code change. When a STATUS line names a fallback file, the owner renames it to `run.json` in its run folder, so that it replaces the intermediate record, before any re-run of that table or any pilot-2 run. This is a spec gap: record it in the Step 10 execution record and in the spec's next revision, so that 5.3.5 names the fallback for both readers. - cost if wrong: until the rename, a run that ended CARD_WRITTEN or WITHHELD reads as IN_PROGRESS or is missing. R-17 then lets a re-run start without --rerun-of, and the new record lacks `supersedes`. An E1 record that fell back blocks pilot 2 with R-11, so that case fails safe.
+- **T4-R6.** Ruling: `--write-goldens` never judges an existing golden. It prints each fixture's judgement line and exits 0 once it has written the missing goldens without overwriting any file. Spec 5.3.1 and 6.8 give it only the write and no-overwrite duties, and 5.3.5's exit 0 means "a mode's success". Step 5's QA-R2-6 repeat now uses `tail -7`, so any drift shows as a `differs:` line, and Step 6's `--record-baseline`, L2-2 and L2-3 all fail on a drift. Measured on the scratch copy: three `matches its golden` lines, three `exists; never overwritten` lines, `STATUS OK exit=0 record=-`, exit 0. No code change. - cost if wrong: an owner who reads only the exit code of `--write-goldens` misses a drift, but the next `--fixtures`, L2-2 and L2-3 still FAIL on it.
+- **X8 (review T4-R7).** Ruling: three 5.3.1 modes, `--fingerprint`, `--timing` and `--handoff-report`, move from spec Step 6 ("Claude: section 5.3") to plan Task 5 (spec Step 7), which replaces Task 4's `main` (C10, File Structure). Task 4's commit therefore holds all of 5.3 except these three modes. This is a spec deviation: record it in the Step 10 execution record and in the spec's next revision. - cost if wrong: none functionally. Step 6's done-when names none of the three modes, and L1-36 (`--fingerprint`) is a Step 7 done-when item; the only effect is that the Step 6 commit is not the whole of 5.3.
+- **T4-R8.** Ruling: `_step3` resolves `unshare -rn true` (`launch.resolve_unshare`, R-14) because the venv self-check children of step 3 already run under it, while spec 5.3.2 lists that check at step 4. A host without user namespaces is therefore refused R-14 at step 3, and step 4 only runs the probe. Task 4's verified notes say so. No code change. - cost if wrong: none. The refusal id, exit code and remedy are the same; only the step whose hook fired last differs, and no test asserts that.
+- **X-4 (review).** Ruling: C10's internals list adds `REPO_ROOT = launch.REPO_ROOT`, `fixtures_mode`, `check_env_mode` and `egress_record_mode` with Task 4's signatures. It also adds the module imports that Task 5's Step 7 block uses without importing them: argparse, json, os, shutil, socket, subprocess, sys, time, traceback, datetime, timezone, Any, Callable, Path, np, gate_ledger, launch and BridgeRefusal. Checked by an AST comparison of Task 5's runner block with Task 4's: Task 5 uses no other Task 4 name that C10 lacks. This changes plan text only. - cost if wrong: none; it completes T5 CI 5's claim.
+- **X-6 (review).** Ruling: right after `git clone /home/user/quantgen $S/clone_<task>`, every scratch clone deletes, unopened, the four cache files the checkout wrote: `rm -f "$S/clone_<task>"/docs/asset_expansion/cache/{yf_SPY.csv,yf_BTC-USD.csv,binance_BTCUSDT.csv,upbit_KRW-BTC.csv}`. Task 4 Step 7 now does this. Task 5 Step 17, in Task 5's region, applies the same line, after which the hand-off report's `git` part lists the four paths as deleted in `git status --porcelain=v1`. Neither `--egress-record` nor `--handoff-report` reads these files (measured: `--egress-record` exit 0 in such a clone). - cost if wrong: none for these two modes; without the deletion, a later suite or macro command run in a scratch clone would read the files.
+Review findings on Task 5 (region 7857 to the end)
+- **T5-1 (scratch clones never check out the four cache files).** Ruling: every scratch clone of `/home/user/quantgen` is sparse. The recipe is `git clone -q --no-checkout`, then `git sparse-checkout set --no-cone '/*'` with one `'!/docs/asset_expansion/cache/<name>'` pattern for each of `yf_SPY.csv`, `yf_BTC-USD.csv`, `binance_BTCUSDT.csv` and `upbit_KRW-BTC.csv`, then `git checkout -q`. Task 5 Step 17 spells it out and checks that `git ls-files -t` shows the four as skip-worktree entries (`4`). A plain clone writes all four files. The first `git status` after a checkout then re-reads every file whose mtime falls in the index's last second (git 2.43, strace). That breaks the house rule and GOVERNANCE-R3-3. Whether the cache files are among those re-read depends on timing: the reviewer saw 43 cache files opened, and one fresh clone made for this fix opened 319 files elsewhere and none in the cache. Either way the fix is needed, because the plain clone itself writes the four files. The Plan rules' `git clone /home/user/quantgen $S/clone_<task>` and Task 4's `--egress-record` clone are read as this recipe. Both lie outside this region and are not edited here. Measured on a scratch copy, with two other cache files excluded:
+  - strace over the clone, `sparse-checkout`, `checkout`, `status` and `ls-files -t` shows the excluded files never opened (`ls-files` only lstats the absent paths);
+  - `git status --porcelain=v1` prints nothing;
+  - `--handoff-report` gives `parts with an error: none`, F1/F2/N1 `(0, [])`/`(0, [])`/`(10, [])`, census diff `[]`, the probe blocked, 12 timing runs and the git part's status `[]`, in 23 s.
+
+  - cost if wrong: none for the report, which reads none of the four files. If some git version ignored the patterns, Step 17's check would print `0` instead of `4`, but the files would already have been written by then.
+- **T5-2 (hand_off prints its summary).** Ruling: `parity._print_summary` prints the following before Task 4's STATUS line, on every hand-off outcome (CARD_WRITTEN, WITHHELD and G-04's ERROR):
+  - the worst P2 and P3 next to the corrected bars and the owner's bars;
+  - the five trial counts, once scoring ran;
+  - both decisions;
+  - every reason.
+
+  This is what spec 5.4.1 ("Reports print the owner's original bars next to the corrected ones") and 5.5 step 3 ("All printed and stored") require. C11's `hand_off` comment says so; that is an Interface Contract edit. The STATUS line stays last, so L1-13, L1-14 and every `splitlines()[-1]` assertion still hold. The tests capture the runner's stdout, so Steps 3, 6 and 10 print nothing new. Together with T5-3, parity.py's md5 becomes `71258dfa6e253e07b51fa4d939bb3b8e`; the runner's `bffca79a...` is unchanged. Measured on the scratch copy:
+  - the 15 Task 5 tests: 12/15 with the key unset and 15/15 with it set, with the same four printed lines;
+  - the module: 44/57 and 57/57;
+  - the harness 14/14, `token lines: 1`, and L1-15 with L1-32 2/2.
+
+  - cost if wrong: none beyond three to five extra console lines per run.
+- **T5-3 (markers).** Ruling: Task 5's prose "CONTRACT ISSUE n" markers now read "ruling T5 CI n", and Task 4's reads "ruling T4 CI 1". `parity.corr`'s docstring cites "plan ruling T5 CI 1". Every marker already agreed with its ruling; only the label changes. - cost if wrong: none.
+- **T5-4 (G-02 and G-03 through the hand-off).** Ruling: no test name is added, so the Count Ledger stands. Two existing tests gain a case each:
+  - **L1-2** (spec section 7's G-02 control) adds a card-table rehearsal whose `score_fn` returns sc_nt with decision "REJECT". It asserts WITHHELD, exit 1, no card, and exactly one reason, `G-02: decision mismatch: quantgen <d>, nautilus REJECT; predicates differ: none`, where `<d>` is read from the record and is not REJECT. It also asserts `gate.agree` is `{"ok": false, "reason": "decision mismatch"}`.
+  - **L1-31** (G-03's control) adds a card-table rehearsal whose `score_fn` raises. It asserts exactly one reason, `G-03: score_strategy raised ValueError: planted in score_fn`, with `hard_pass` true, `gate.quantgen` null and `n_trials` 4.
+
+  The block grows from 619 to 640 lines. Step 2's numstat check therefore reads 640 insertions, which supersedes X2's 619. Its md5 on Task 4's scratch file becomes `3ee44de50bf4433063a392fef18d241d`; that was re-measured, and the old block still reproduces `baffe756...`. Step 3's RED lines for both tests are unchanged (measured). Mutation check: changing the wording of `_mismatch_text` or of `_score`'s G-03 text makes both tests FAIL. - cost if wrong: about 5 s more per module run.
+- **T5-5 (P7 and input.json).** Ruling: no code change and no spec deviation. Spec 5.4.1 says "input.json and the manifest must echo both values", and three pieces together meet that:
+  - Task 4's `input_bytes` writes `cost_text(cost_bps)` and `str(stress)` from the same loop whose stress P7 uses;
+  - C-11 (`manifest_reasons`) checks the manifest's `input_json_sha256` against those bytes, and a mismatch is a P13 reason;
+  - `p7` checks the manifest's own two echoes.
+
+  Step 4 now says so. The 'Spec deviations to record' list is unchanged. - cost if wrong: none, because a wrong input.json value would also fail P7's per-fill commission recomputation.
+- **T5-6 (the runner loaded twice from the command line).** Ruling: Step 4 states that `python -B -m tools.nautilus.runner` loads the runner twice, as `__main__` and as `tools.nautilus.runner` (confirmed with `-X importtime`). This is safe for three reasons: `_after_registration` reads the Outcome by attribute only, parity raises nothing, and parity tests only generic types with `isinstance`. Step 12 adds a command-line rehearsal (L1-2's card table in a temp dir, the real sandbox, about 13 s). It expects the three summary lines and `STATUS CARD_WRITTEN exit=0`, which is what was measured. - cost if wrong: a later `isinstance` check or `except` clause on a runner class across the two copies would break only the command-line path, and Step 12's rehearsal would show it.
+- **T5-7 (timeouts; key order).** Ruling: Steps 10 and 14 tell the executor to give the key-set runs a 600 s timeout or to run them in the background (measured: 108 s for the 15 tests, 3 min 46 s for the module). Step 7 says the hand-off report's parts are computed in order, but the file lists them with sorted keys, because `write_record` sorts them. - cost if wrong: none.
+
 ## Coverage
 
 | Spec step | Done-when item (spec section 9) | Task and step |
@@ -908,6 +1019,7 @@ Cross-task decisions
 - `$S/closure/requirements-nautilus.body.txt`: 37 lines, ASCII, LF, sha256 `49c1cee13798cbc92104bd398af422f611334db1f79260231c0c357fd7d0b5e4`. Header plus body: 43 lines, sha256 `7a720e247bf1a5708aa19e79c1291b6baef87c837719c669ebe5f24e4a4a7e0e`. Its offline `--require-hashes` install into a fresh venv took 24 s; `pip check` printed `No broken requirements found.`; the 4 layer-2 tests pass against that venv too.
 - `--check-env` on Linux printed `HIGH_PRECISION` true, `FIXED_PRECISION` 16, `QUANTITY_MAX` 34028236692093.0, `PRICE_MAX` 17014118346046.0, `environment` `BACKTEST`, one stdout line, empty stderr. The win_amd64 values in L2-1's table (9, 18446744073.0, 9223372036.0) are the comments of that wheel's `core/rust/model.pxd` (`scratch:critic_win/`), UNVERIFIED until Step 7A, where a mismatch is a FAIL (spec 3.6).
 - The task was dry-run in that order in scratch clones of `fa28059`: every RED and GREEN output below is the observed one, with the paths of the real clone. Through the launch contract, Task 1's `run --in <tmp>` exited 20 with an import census of 942 names (spec 5.4.3: 942). A key-set module run took 6 to 20 s; L2-10 takes about 3 s.
+- Two departures from the spec's literal text, for the Step 10 execution record and the spec's next revision (Plan ruling T1-R4, with the deviations the Plan rulings list): spec 5.8's file table schedules `tests/nautilus_acceptance.py` for Steps 4 to 7, and this task (spec Step 3) creates it with 12 tests, registered only at Task 2 (File Structure); spec 3.4 says `.env.example` gains "a heading and one line", and Step 7 adds the heading, three comment lines without `%` and the line.
 
 **Files:**
 - Create: `tools/nautilus/__init__.py` (0 bytes), `tools/nautilus/launch.py`, `tools/nautilus/egress_probe.py`, `tools/nautilus/sandbox.py` (Task 1 part), `tools/nautilus/golden/env_pins.json`, `requirements-nautilus.txt`, `tests/fixtures/nautilus/MANIFEST.csv`, `tests/fixtures/nautilus/nautilus_trader-1.231.0.manylinux_2_35_x86_64.RECORD`, `tests/fixtures/nautilus/nautilus_trader-1.231.0.win_amd64.RECORD`, `docs/nautilus_bridge/.gitignore`. All new files are ASCII with LF line ends.
@@ -918,9 +1030,9 @@ Cross-task decisions
 **Interfaces:**
 - Consumes: `config._clean`, `config.macro_dir` (`config.py:32-39, 176-178`); `tests.notrun.NotRun`, `require_fixture` (`tests/notrun.py:25-30, 68-79`); `dotenv.dotenv_values` (the global interpreter's python-dotenv, test only); `$NTPY` and the wheels in `$S/closure/`.
 - Produces, by Interface Contract name: C1 (`BridgeRefusal`, `ChildInvalid`; the JSON-bytes rule for `env_pins.json`; platform and host tags; PEP 503 keys); C2, all of it except `FIXTURES` and `fixture_inputs` (Task 3); C3 for `--check-env` and `--guard-selftest`, and `run --in <dir>` exiting 20 for every input; C4; C7 (`env_pins.json`, both `RECORD` fixtures and `MANIFEST.csv`); C8's Task 1 block (`ROOT`, `FIXTURE_MANIFEST`, `LAST_TEST`, `guard_roots`, `digest_roots`, `guarded`, `layer2`, `tests`, the CLI).
-- Produces beyond the contract as first drafted (C2 now lists the `launch` names, C8 `_refused` and `_invalid`; Plan rulings): `launch.PARENT_NAUTILUS_REMEDY` (CONTRACT ISSUE 1), `launch.CREATE_NEW_PROCESS_GROUP = 0x00000200` (CONTRACT ISSUE 2), `launch.PINNED`, `launch.VENV_FIX`, `launch.STORE_FIX`; `egress_probe.probe(host="1.1.1.1", port=443, timeout=3) -> dict`; test helpers `_refused`, `_invalid`, `_fake_venv`, `_launch_venv`, `_gone` and the module constants of `tests/nautilus_acceptance.py`.
+- Produces beyond the contract as first drafted (C2 now lists the `launch` names, C8 `_refused` and `_invalid`; Plan rulings): `launch.PARENT_NAUTILUS_REMEDY` (Plan ruling T1 CI 1), `launch.CREATE_NEW_PROCESS_GROUP = 0x00000200` (Plan ruling T1 CI 2), `launch.PINNED`, `launch.VENV_FIX`, `launch.STORE_FIX`; `egress_probe.probe(host="1.1.1.1", port=443, timeout=3) -> dict`; test helpers `_refused`, `_invalid`, `_fake_venv`, `_launch_venv`, `_gone` and the module constants of `tests/nautilus_acceptance.py`.
 
-**Counts (Count Ledger as deltas, CONTRACT ISSUE 4).** Step 0 measures the full-suite baseline `B` = `<P>/<N> passed, <F> failed, <R> not run`, with `M` macro rows and the FAIL set. Task 1's delta is 0 everywhere: the full suite through the wrapper stays `B` row for row (`nautilus` is not registered until Task 2; `macro` stays `M`); `python3 -B -m tests.macro_m0_harness` stays `12/12 passed, 0 failed, 0 not run`; the new module CLI gives `8/12 passed, 0 failed, 4 not run` with the key unset and `12/12 passed, 0 failed, 0 not run` with `QUANTGEN_NAUTILUS_PYTHON="$NTPY"` (absolute: the suite starts at 0). Reference example only: on 2026-10-26 at `b7f991a`, `B` was `745/870 passed, 1 failed, 124 not run`, `M` 542, FAIL set `papers/test_debate_run_kills_process_tree`.
+**Counts (Count Ledger as deltas, Plan ruling T1 CI 4).** Step 0 measures the full-suite baseline `B` = `<P>/<N> passed, <F> failed, <R> not run`, with `M` macro rows and the FAIL set. Task 1's delta is 0 everywhere: the full suite through the wrapper stays `B` row for row (`nautilus` is not registered until Task 2; `macro` stays `M`); `python3 -B -m tests.macro_m0_harness` stays `12/12 passed, 0 failed, 0 not run`; the new module CLI gives `8/12 passed, 0 failed, 4 not run` with the key unset and `12/12 passed, 0 failed, 0 not run` with `QUANTGEN_NAUTILUS_PYTHON="$NTPY"` (absolute: the suite starts at 0). Reference example only: on 2026-10-26 at `b7f991a`, `B` was `745/870 passed, 1 failed, 124 not run`, `M` 542, FAIL set `papers/test_debate_run_kills_process_tree`.
 
 Every command block below starts with the line `S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; NTPY=$S/ntvenv_hash/bin/python; cd /home/user/quantgen` (a later session puts its own scratchpad in `S`); the blocks repeat it.
 
@@ -935,15 +1047,37 @@ test -x "$NTPY" || { python3 -m venv "$S/ntvenv_hash" && "$NTPY" -m pip install 
 "$NTPY" -I -c "import nautilus_trader, numpy, pandas; print(nautilus_trader.__version__, numpy.__version__, pandas.__version__)"
 unshare -rn true && echo "unshare ok"
 ```
-  Expected: the HEAD line (record it; `fa28059` or a later commit); `git status --short` lists the paths already modified or untracked (record them: Step 18 leaves them unstaged; empty at `fa28059`); `tag`; `16c9baa5a1777853521d485d5078e456  qa/acceptance_results.json`; `2.3.5 2.3.3 1.18.0 0.15.0`; `1.231.0 2.3.5 2.3.3`; `unshare ok`. Then the full suite, through the wrapper only, started with the Bash tool's `run_in_background` (about 10 minutes; nothing else from QUANTGEN runs meanwhile, T-HERM-02):
+  Expected: the HEAD line (record it; `fa28059` or a later commit); `git status --short` lists the paths already modified or untracked (record them: Step 18 leaves them unstaged; empty at `fa28059`); `tag`; `16c9baa5a1777853521d485d5078e456  qa/acceptance_results.json`; `2.3.5 2.3.3 1.18.0 0.15.0`; `1.231.0 2.3.5 2.3.3`; `unshare ok`. Then the full suite, through the wrapper only and never in the real clone: three `macro` rows open `yf_SPY.csv`, `binance_BTCUSDT.csv` and `upbit_KRW-BTC.csv` when they are present, so every full run of this plan, `B` included, runs on a cache-free scratch clone (Count Ledger, Cache-free copy). First write the helper, outside the repository:
 ```bash
 S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; NTPY=$S/ntvenv_hash/bin/python; cd /home/user/quantgen
-python3 -B "$S/run_baseline.py" "$S/t1_baseline.json" > "$S/t1_baseline.log" 2>&1; echo "exit $?"
+cat > "$S/full_run.sh" <<'EOF'
+#!/bin/bash
+# full_run.sh <name>: one full-suite run (key unset) of the real clone's working tree on a cache-free scratch clone
+# $S/full_<name>; rows to $S/<name>.json (plan Count Ledger, "Cache-free copy"). Never opens the four caches.
+set -euo pipefail
+S=$(cd "$(dirname "$0")" && pwd); NAME=$1; REPO=${2:-/home/user/quantgen}; C="$S/full_$NAME"
+CACHES='^docs/asset_expansion/cache/(yf_SPY|yf_BTC-USD|binance_BTCUSDT|upbit_KRW-BTC)\.csv$'
+rm -rf "$C" && git clone -q "$REPO" "$C"
+{ git -C "$REPO" diff --name-only --diff-filter=d -z HEAD; git -C "$REPO" ls-files -o --exclude-standard -z; } |
+    { grep -zvE "$CACHES" || true; } | tar -C "$REPO" -c --null -T - | tar -C "$C" -x
+git -C "$REPO" diff --name-only --diff-filter=D -z HEAD | (cd "$C" && xargs -0 -r rm -f --)
+rm -f "$C"/docs/asset_expansion/cache/{yf_SPY,yf_BTC-USD,binance_BTCUSDT,upbit_KRW-BTC}.csv
+sed "s#\"/home/user/quantgen\"#\"$C\"#" "$S/run_baseline.py" > "$S/run_copy_$NAME.py"
+grep -qF "\"$C\"" "$S/run_copy_$NAME.py"
+cd "$C" && env -u QUANTGEN_NAUTILUS_PYTHON python3 -B "$S/run_copy_$NAME.py" "$S/$NAME.json"
+EOF
+bash -n "$S/full_run.sh" && echo "full_run.sh ok"
+```
+  Expected: `full_run.sh ok`. Then start the run with the Bash tool's `run_in_background` (about 10 minutes; nothing else from QUANTGEN runs meanwhile, T-HERM-02):
+```bash
+S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; NTPY=$S/ntvenv_hash/bin/python; cd /home/user/quantgen
+bash "$S/full_run.sh" t1_baseline > "$S/t1_baseline.log" 2>&1; echo "exit $?"
 ```
   When it has finished:
 ```bash
 S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; NTPY=$S/ntvenv_hash/bin/python; cd /home/user/quantgen
 tail -1 "$S/t1_baseline.log"; md5sum qa/acceptance_results.json
+ls "$S/full_t1_baseline/docs/asset_expansion/cache" | grep -cE '^(yf_SPY|yf_BTC-USD|binance_BTCUSDT|upbit_KRW-BTC)\.csv$'
 python3 - "$S/t1_baseline.json" <<'EOF'
 import json, sys
 from collections import Counter
@@ -954,7 +1088,7 @@ print("FAIL", sorted(r["test"] for r in rows if r["status"] == "FAIL"))
 EOF
 python3 -B -m tests.macro_m0_harness | tail -1
 ```
-  Expected: the wrapper's last line `<P>/<N> passed, <F> failed, <R> not run; <path of t1_baseline.json>`; the md5 unchanged (`16c9baa5...`); the `B = ...` line (record `B`, `M` and the FAIL set in the task's execution notes; `nautilus rows 0`); `12/12 passed, 0 failed, 0 not run`. The expected FAIL set is `['papers/test_debate_run_kills_process_tree']` (no `taskkill` in the container). Any other FAIL is recorded with its detail as part of `B`: Task 1 does not fix it, and Step 16 requires the same row status. Every later count in this task is `B` plus the deltas above.
+  Expected: the wrapper's last line `<P>/<N> passed, <F> failed, <R> not run; <path of t1_baseline.json>`; the md5 unchanged (`16c9baa5...`); `0` (none of the four caches is in the copy); the `B = ...` line (record `B`, `M` and the FAIL set in the task's execution notes; `nautilus rows 0`); `12/12 passed, 0 failed, 0 not run`. The expected FAIL set is `['macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache', 'papers/test_debate_run_kills_process_tree']` (the copy has no `yf_SPY.csv`; the container has no `taskkill`), with `macro/macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache` and `macro/macro_tf_gov/test_cry1_study_runs_offline_end_to_end_on_the_local_caches` NOT_RUN (Count Ledger, Cache-free copy); from 2026-10-31T15:00:00Z, while the PT-07 calendar files are unsigned, `macro/macro_m1_calendars/test_cal02_2027_files_signed_before_2026_11_01` FAILs too (Count Ledger, Clock and sign-off rows). Any other FAIL is recorded with its detail as part of `B`: Task 1 does not fix it, and Step 16 requires the same row status. Every later count in this task is `B` plus the deltas above.
 
 - [ ] **Step 1: Create the package marker.** Create `tools/nautilus/__init__.py` as an empty (0-byte) file.
 ```bash
@@ -963,7 +1097,7 @@ python3 -B -c "import tools.nautilus; print('ok')"
 ```
   Expected: `ok`.
 
-- [ ] **Step 2: Write the failing suite module.** Create `tests/nautilus_acceptance.py` with exactly this content (LF; md5 `e149f34c4a3d73aa5371c6a425c97f58`). Test names are the Count Ledger's; helpers never start with `test_`. L2-10 keeps spec 8.4's child (`<venv python> -I -c ... time.sleep(120)` through the launcher, timeout 3, back within 15 s, temp dir deletable) and adds a sleeping grandchild and a pid file, so the tree kill is checked on Linux too (`/proc`), where a live process does not block the deletion. L1-17's variable expansion uses `$VAR` on POSIX and `%VAR%` on Windows, as `os.path.expandvars` expands per platform (C2, spec 6.7).
+- [ ] **Step 2: Write the failing suite module.** Create `tests/nautilus_acceptance.py` with exactly this content (LF; md5 `059691438a0adb121c782fb0d3f4dc9b`). Test names are the Count Ledger's; helpers never start with `test_`. L2-10 keeps spec 8.4's child (`<venv python> -I -c ... time.sleep(120)` through the launcher, timeout 3, back within 15 s, temp dir deletable) and adds a sleeping grandchild and a pid file, so the tree kill is checked on Linux too (`/proc`), where a live process does not block the deletion. L1-17's variable expansion uses `$VAR` on POSIX and `%VAR%` on Windows, as `os.path.expandvars` expands per platform (C2, spec 6.7). `guarded` digests after the test in `finally`, so a write before a NotRun or a failure is a FAIL (spec 3.3; L1-32 probes it); L1-16 and L1-17 reach every refusal branch of `launch.py` that Task 1 writes (Plan rulings T1-R1, T1-R2).
 ```python
 """Suite `nautilus`: the NautilusTrader bridge (spec docs/superpowers/specs/2026-10-26-nautilus-bridge-design.md).
 
@@ -1036,7 +1170,8 @@ def digest_roots(roots: Sequence[Path]) -> dict[str, str]:
 
 def guarded(name: str, fn: Callable[[], None]) -> Callable[[], None]:
     """Digests the guard roots before and after `fn`; while it runs, QUANTGEN_MACRO_DIR names a fresh temp dir, and
-    on Windows a layer-2 test keeps the machine awake (spec 5.7). The first call records the suite-start digests."""
+    on Windows a layer-2 test keeps the machine awake (spec 5.7). The first call records the suite-start digests.
+    The after-digest is taken in `finally`, so a write is a FAIL even when `fn` raised NotRun or failed."""
     def run() -> None:
         global _SUITE_START
         roots = guard_roots()
@@ -1060,9 +1195,10 @@ def guarded(name: str, fn: Callable[[], None]) -> Callable[[], None]:
             else:
                 os.environ["QUANTGEN_MACRO_DIR"] = saved
             shutil.rmtree(macro_tmp, ignore_errors=True)
-        after = digest_roots(roots)
-        changed = sorted(k for k in before.keys() | after.keys() if before.get(k) != after.get(k))
-        assert not changed, f"{name} changed guarded files (spec 3.3): {changed}"
+            after = digest_roots(roots)
+            changed = sorted(k for k in before.keys() | after.keys() if before.get(k) != after.get(k))
+            if changed:                 # replaces an exception in flight, which becomes its __context__
+                raise AssertionError(f"{name} changed guarded files (spec 3.3): {changed}")
     run.__name__ = name
     run.nautilus_guarded = True
     return run
@@ -1212,7 +1348,8 @@ SELFTEST = {"backtest": "passed", "live": "raised", "live_clock": "raised", "san
 def test_l1_16_launch_builder_matches_the_contract():
     """L1-16: given os_name "nt" and "posix", build_launch builds exactly 4.3's argv and environment, with unshare on
     POSIX and each platform's process-group flag, and starts no process; make_tempdir creates home and tmp; a key
-    outside the contract, or one missing, is C-10."""
+    outside the contract, or one missing, is C-10; a child_cmd that is empty or relative, or no child_cmd and no venv
+    python, is a ValueError; resolve_unshare is R-14 without unshare on PATH or when `unshare -rn true` fails."""
     tmp = launch.make_tempdir()
     try:
         assert tmp.name.startswith("qgnb_") and str(tmp) == os.path.realpath(tmp), tmp
@@ -1237,7 +1374,7 @@ def test_l1_16_launch_builder_matches_the_contract():
 
         def no_process(*_a, **_k):
             raise AssertionError("build_launch started a process")
-        saved = (subprocess.Popen, subprocess.run)
+        saved = (subprocess.Popen, subprocess.run, shutil.which)
         subprocess.Popen = subprocess.run = no_process
         try:
             def build(mode, os_name, **kw):
@@ -1265,8 +1402,20 @@ def test_l1_16_launch_builder_matches_the_contract():
                 assert got.cwd == str(tmp), (n, got.cwd)
                 assert got.popen_kwargs == {**pipes, **group[os_name]}, (n, got.popen_kwargs)
             _refused(lambda: build(["--check-env"], "posix", unshare=None), "R-14")
+            for bad in ({"child_cmd": ["python3"]}, {"child_cmd": []}, {}):
+                try:
+                    build(run_args, "posix", unshare=un, venv_python=None, **bad)
+                except ValueError:
+                    continue
+                raise AssertionError(f"build_launch accepted venv_python=None with {bad}")
+            shutil.which = lambda _name: None
+            assert "not on PATH" in _refused(lambda: launch.resolve_unshare("posix"), "R-14").message
+            shutil.which = lambda _name: un
+            subprocess.run = lambda cmd, **_kw: subprocess.CompletedProcess(cmd, 1, "", "unshare: not permitted\n")
+            assert "exited 1" in _refused(lambda: launch.resolve_unshare("posix"), "R-14").message
+            assert launch.resolve_unshare("nt") is None
         finally:
-            subprocess.Popen, subprocess.run = saved
+            subprocess.Popen, subprocess.run, shutil.which = saved
         launch.assert_env_contract(posix_env, "posix")
         launch.assert_env_contract(nt_env, "nt")
         _invalid(lambda: launch.assert_env_contract({**posix_env, "PYTHONPATH": "/p"}, "posix"), "C-10")
@@ -1282,7 +1431,8 @@ def test_l1_16_launch_builder_matches_the_contract():
 def test_l1_17_venv_reads_and_wheel_identity():
     """L1-17: venv reads on fake venv dirs (variable and ~ expansion, a control character, a relative path, a wrong
     file name, include-system-site-packages = true, a Windows venv on the parent's or the Store's interpreter, a
-    version, minor, tag or RECORD off its pin: R-03); the committed RECORD fixtures give both pinned identities.
+    python outside bin or Scripts, no pyvenv.cfg, two nautilus_trader dist-info dirs, a version, minor, tag or RECORD
+    off its pin, requirements and env_pins.json apart: R-03); the committed RECORD fixtures give both identities.
     On POSIX the variable is $VAR, on Windows %VAR% (os.path.expandvars, spec 6.7)."""
     linux = require_fixture(LINUX_RECORD, manifest=FIXTURE_MANIFEST).read_text(encoding="utf-8")
     win = require_fixture(WIN_RECORD, manifest=FIXTURE_MANIFEST).read_text(encoding="utf-8")
@@ -1330,7 +1480,23 @@ def test_l1_17_venv_reads_and_wheel_identity():
         mac = _fake_venv(tmp / "mac", os_name="posix", record=linux, tag="cp313-cp313-macosx_14_0_arm64")
         bad = launch.venv_mismatches(launch.read_venv(mac, os_name="posix", parent_base_executable=base))
         assert len(bad) == 1 and bad[0].startswith("R-03: platform_tag: found macosx_14_0_arm64"), bad
-        # pyvenv.cfg refusals
+        want = {**EXPECTED_VERSIONS, "numpy": "2.3.6"}         # requirements-nautilus.txt and env_pins.json apart
+        assert launch.venv_mismatches(reads, pins, want) == ["R-03: numpy: found 2.3.5, expected 2.3.6"]
+        skew = {**reads, "versions": {**reads["versions"], "numpy": "2.3.4"}}
+        assert launch.venv_mismatches(skew, pins, want) == ["R-03: numpy: found 2.3.4, expected 2.3.6",
+                                                            "R-03: numpy (env_pins.json): found 2.3.4, expected 2.3.5"]
+        # layout and pyvenv.cfg refusals
+        exc = _refused(lambda: launch.read_venv(tmp / "lin" / "x" / "python", os_name="posix",
+                                                parent_base_executable=base), "R-03")
+        assert "not in Scripts or bin" in exc.message, exc
+        nocfg = _fake_venv(tmp / "nocfg", os_name="posix", record=linux, tag="cp313-cp313-manylinux_2_35_x86_64")
+        (tmp / "nocfg" / "pyvenv.cfg").unlink()
+        exc = _refused(lambda: launch.read_venv(nocfg, os_name="posix", parent_base_executable=base), "R-03")
+        assert "no pyvenv.cfg" in exc.message, exc
+        two = _fake_venv(tmp / "two", os_name="posix", record=linux, tag="cp313-cp313-manylinux_2_35_x86_64")
+        (tmp / "two" / "lib" / "python3.13" / "site-packages" / "nautilus_trader-9.dist-info").mkdir()
+        exc = _refused(lambda: launch.read_venv(two, os_name="posix", parent_base_executable=base), "R-03")
+        assert "2 nautilus_trader dist-info dirs" in exc.message, exc
         sys_site = _fake_venv(tmp / "sys", os_name="posix", record=linux, tag="cp313-cp313-manylinux_2_35_x86_64",
                               cfg={"include-system-site-packages": "true"})
         _refused(lambda: launch.read_venv(sys_site, os_name="posix", parent_base_executable=base), "R-03")
@@ -1388,7 +1554,7 @@ def test_l1_22_global_interpreter_has_no_nautilus():
 def test_l1_32_every_test_guarded_and_ledgers_unchanged():
     """L1-32: the guard of 3.3 wraps every test, this test runs last, the guarded files equal the digests taken when
     the suite started, QUANTGEN_MACRO_DIR is a fresh temp dir inside each test, and a write under a guarded root is
-    a FAIL that names the file (QA-1, QA-R2-13)."""
+    a FAIL that names the file, also when the test then raises NotRun (QA-1, QA-R2-13)."""
     global _ROOTS
     import config
     entries = tests()
@@ -1417,6 +1583,16 @@ def test_l1_32_every_test_guarded_and_ledgers_unchanged():
                 assert str(root / "E1.jsonl") in str(exc), exc
             else:
                 raise AssertionError("a ledger append inside a guarded test passed")
+
+            def appends_then_not_run():
+                appends()
+                raise NotRun("OWNER: probe")
+            try:
+                guarded("probe_appends_not_run", appends_then_not_run)()
+            except AssertionError as exc:
+                assert str(root / "E1.jsonl") in str(exc) and isinstance(exc.__context__, NotRun), exc
+            except NotRun:
+                raise AssertionError("a ledger append followed by NotRun passed as NOT_RUN") from None
         finally:
             _ROOTS = saved_roots
     assert len(set(seen)) == 2 and mine not in seen and not any(Path(s).exists() for s in seen), seen
@@ -1628,7 +1804,7 @@ python3 -B -m tests.nautilus_acceptance; echo "exit $?"
 ```
   Expected: a traceback ending `ImportError: cannot import name 'launch' from 'tools.nautilus' (/home/user/quantgen/tools/nautilus/__init__.py)`, then `exit 1`. All 12 tests are RED here.
 
-- [ ] **Step 4: Implement `tools/nautilus/launch.py`** (spec 4.3, 5.2.7, 6.7; C1, C2) with exactly this content (LF; md5 `c55ca113ea950f2333cd143be9a9b747`). Every function is short enough to give in full. Exit and error ids: `R-03` (`resolve_venv_python`, `venv_root`, `read_venv`, `venv_mismatches`), `R-14` (`resolve_unshare`; `build_launch` on POSIX without `unshare`), `C-10` (`assert_env_contract`, called by `build_launch`). CONTRACT ISSUE 2: `build_launch` uses `ntpath` or `posixpath` by `os_name`, and `creationflags=CREATE_NEW_PROCESS_GROUP` (0x200, the Windows value), so L1-16 builds both platforms' launches on either host. CONTRACT ISSUE 3: the Microsoft Store test of `read_venv` is a case-insensitive substring test on the strings `pyvenv.cfg` records; the equality with the parent's `sys._base_executable` compares `normcase(realpath)` as C2 says. CONTRACT ISSUE 1: `PARENT_NAUTILUS_REMEDY` holds R-03's three remedy lines for the parent.
+- [ ] **Step 4: Implement `tools/nautilus/launch.py`** (spec 4.3, 5.2.7, 6.7; C1, C2) with exactly this content (LF; md5 `c55ca113ea950f2333cd143be9a9b747`). Every function is short enough to give in full. Exit and error ids: `R-03` (`resolve_venv_python`, `venv_root`, `read_venv`, `venv_mismatches`), `R-14` (`resolve_unshare`; `build_launch` on POSIX without `unshare`), `C-10` (`assert_env_contract`, called by `build_launch`). Plan ruling T1 CI 2: `build_launch` uses `ntpath` or `posixpath` by `os_name`, and `creationflags=CREATE_NEW_PROCESS_GROUP` (0x200, the Windows value), so L1-16 builds both platforms' launches on either host. Plan ruling T1 CI 3: the Microsoft Store test of `read_venv` is a case-insensitive substring test on the strings `pyvenv.cfg` records; the equality with the parent's `sys._base_executable` compares `normcase(realpath)` as C2 says. Plan ruling T1 CI 1: `PARENT_NAUTILUS_REMEDY` holds R-03's three remedy lines for the parent.
 ```python
 """The launch contract of the NautilusTrader bridge (spec 2026-10-26 sections 4.3, 5.2.7 and 6.7).
 
@@ -2461,7 +2637,7 @@ versions 3.13 {"nautilus-trader": "1.231.0", "numpy": "2.3.5", "pandas": "2.3.3"
 /usr/bin/unshare -rn egress_probe.py -> exit 0 {"blocked": true, "errno": 101, "error": "OSError: [Errno 101] Network is unreachable"} census 0 left []
 /usr/bin/unshare -rn sandbox.py run -> exit 20 - census 942 left []
 ```
-  (a census count other than 942 is recorded, not a Task 1 failure: the census baseline is Task 4's); then `2.3.5 2.3.3 1.18.0 None`; then six lines `<file>: OK` for `requirements.txt`, `requirements-dev.txt`, `pyproject.toml`, `config.py`, `tests/run_all.py` and `README.md` (byte-identical to Step 0, CONTRACT ISSUE 5).
+  (a census count other than 942 is recorded, not a Task 1 failure: the census baseline is Task 4's); then `2.3.5 2.3.3 1.18.0 None`; then six lines `<file>: OK` for `requirements.txt`, `requirements-dev.txt`, `pyproject.toml`, `config.py`, `tests/run_all.py` and `README.md` (byte-identical to Step 0, Plan ruling T1 CI 5).
 
 - [ ] **Step 15: Guard checks (T-RO-01 before its amendment).**
 ```bash
@@ -2475,11 +2651,11 @@ print([p.relative_to(ROOT).as_posix() for p in files], [h for p in files for h i
 ```
   Expected: `12/12 passed, 0 failed, 0 not run`; `['tools/nautilus/__init__.py', 'tools/nautilus/egress_probe.py', 'tools/nautilus/launch.py', 'tools/nautilus/sandbox.py'] []`. test_08 and test_09 scan `runtime_py()` only and the flet guard `ui/` only; their rows are checked in Step 16's full run (unchanged from Step 0).
 
-- [ ] **Step 16: Run the full suite through the wrapper and compare it with Step 0 (delta 0).** Background run, as in Step 0:
+- [ ] **Step 16: Run the full suite through the wrapper and compare it with Step 0 (delta 0).** Background run on a cache-free copy, as in Step 0; the copy carries this task's uncommitted files:
 ```bash
 S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; NTPY=$S/ntvenv_hash/bin/python; cd /home/user/quantgen
 md5sum qa/acceptance_results.json
-python3 -B "$S/run_baseline.py" "$S/t1_after.json" > "$S/t1_after.log" 2>&1; echo "exit $?"
+bash "$S/full_run.sh" t1_after > "$S/t1_after.log" 2>&1; echo "exit $?"
 ```
   When it has finished:
 ```bash
@@ -2488,12 +2664,16 @@ tail -1 "$S/t1_after.log"; md5sum qa/acceptance_results.json
 python3 - "$S/t1_baseline.json" "$S/t1_after.json" <<'EOF'
 import json, sys
 a, b = ({r["test"]: r["status"] for r in json.load(open(p, encoding="utf-8"))} for p in sys.argv[1:3])
+clock = {"macro/macro_m1_calendars/test_cal02_2027_files_signed_before_2026_11_01",
+         "macro/macro_m1_calendars/test_close02_on_the_real_signed_files"}   # Count Ledger, clock and sign-off rows
+changed = sorted((k, a[k], b[k]) for k in a.keys() & b.keys() if a[k] != b[k])
 print("added", sorted(set(b) - set(a)))
 print("removed", sorted(set(a) - set(b)))
-print("changed", sorted((k, a[k], b[k]) for k in a.keys() & b.keys() if a[k] != b[k]))
+print("changed", [c for c in changed if c[0] not in clock])
+print("clock and sign-off rows changed", [c for c in changed if c[0] in clock])
 EOF
 ```
-  Expected: the summary is `B` exactly (only the results path after `;` differs); the md5 is `16c9baa5a1777853521d485d5078e456` before and after; `added []`, `removed []`, `changed []` (so `safety/test_08_no_broker_order_path`, `safety/test_09_no_account_credentials_requested`, the `ui/` rows and every `macro/macro_m0_harness/test_t_ro_01_*` row keep Step 0's PASS).
+  Expected: the summary is `B` exactly (only the results path after `;` differs); the md5 is `16c9baa5a1777853521d485d5078e456` before and after; `added []`, `removed []`, `changed []` and `clock and sign-off rows changed []`, or a change in those rows whose cause the task's notes name (Count Ledger) (so `safety/test_08_no_broker_order_path`, `safety/test_09_no_account_credentials_requested`, the `ui/` rows and every `macro/macro_m0_harness/test_t_ro_01_*` row keep Step 0's PASS).
 
 - [ ] **Step 17: Line ends and untouched files.**
 ```bash
@@ -2541,14 +2721,14 @@ Claude-Session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 EOF
 git show --stat HEAD | tail -1; git status --short; md5sum qa/acceptance_results.json
 ```
-  Expected: the staged `git status --short` shows `M  .env.example` and `A  ` for the other 11 paths; `12 files changed, 2826 insertions(+)`; then only Step 0's pre-existing paths (empty at `fa28059`); `16c9baa5a1777853521d485d5078e456  qa/acceptance_results.json`. No push.
+  Expected: the staged `git status --short` shows `M  .env.example` and `A  ` for the other 11 paths; `12 files changed, 2868 insertions(+)`; then only Step 0's pre-existing paths (empty at `fa28059`); `16c9baa5a1777853521d485d5078e456  qa/acceptance_results.json`. No push.
 
 ---
 
 ### Task 2: Guard (spec Step 4): the T-RO-01 amendment, the `nautilus` suite registration, registry and README
 
 **Verified before writing (2026-10-28, HEAD `fa28059` on `claude/amazing-gauss-tdiguu`). Files were read in the real clone. Every run happened in the scratch clone `$S/plan_step2/task2/clone`. Nothing in the repository was touched.**
-- **Repository state.** The working tree is clean, and `md5sum qa/acceptance_results.json` prints `16c9baa5a1777853521d485d5078e456`. `studies-of-record-2026-10-23` is the owner's real annotated tag (object `6e7c1f7`, which peels to `eacd57d`); it is never pushed, moved or deleted. `requirements.txt` carries `statsmodels>=0.14.2` (`6054b33`). No file under `tests/` has changed since `b7f991a`.
+- **Repository state.** The working tree is clean, and `md5sum qa/acceptance_results.json` prints `16c9baa5a1777853521d485d5078e456`. `studies-of-record-2026-10-23` is the owner's real annotated tag (object `6e7c1f7`, which peels to `eacd57d`); it is never pushed, moved or deleted. `requirements.txt` carries `statsmodels>=0.14.2` (`6054b33`). Since `b7f991a`, files under `tests/` changed only at `d865c7f` (PT-07, after `fa28059`): `tests/macro_m1_calendars.py`, `tests/macro_m1_integration.py`, `tests/macro_m9_lab.py` and the registry rows of T-CAL-01, T-CAL-02 and T-CLOSE-02. Re-checked at HEAD `659898b` (2026-10-28, scratch copy `$S/plan_step2/review/fix_task2/head`): no other file this task edits or cites by line number has changed since `fa28059`; registry row 12 is still T-RO-01 with 5 entries, and the registry is in sync (`implemented_in rows changed: 0`); the harness module gives `12/12`; today's scan gives 0 hits over 154 files; the full suite collects 876 rows, 548 of them `macro`.
 - **`tests/macro_m0_harness.py`** is LF and ASCII before this task; the `§` that spec 5.6 writes in a comment makes it UTF-8.
   - Imports are at :9-17 and include no `hashlib`. `FORBIDDEN_CALLS` is at :44-50. `ALLOWED_BARE_CALLS` is at :56; spec 5.6 inserts the new constants after it.
   - `_scan_files` (:66-70) scans `runtime_py()`, `docs/*.py`, `tools/` and `papers/`.
@@ -2590,33 +2770,35 @@ git show --stat HEAD | tail -1; git status --short; md5sum qa/acceptance_results
 - Modify `tests/nautilus_acceptance.py` (Task 1's file, LF): add `encoding_offences` and `test_l1_15_encoding_rules_hold` before `def tests(`.
 - Modify `tests/run_all.py` (CRLF, Edit tool only): add `nautilus_tests()`, make the `nautilus/` term the last term of `tests()`, and extend the `--suite` help.
 - Modify `README.md` (CRLF, Edit tool only): extend the `--suite` comment (:853) and add the `nautilus` row before the Total row. The Total row does not change.
-- Modify only if Step 10 flags one: a Task 1 file and line that breaks C1, by adding the missing keyword.
+- Modify only if Step 8 or Step 10 flags one: a Task 1 file and line that breaks C2 or C3 (Step 8, a scan hit, corrected in that file and not in the rules) or C1 (Step 10, an L1-15 hit, corrected by adding the missing keyword).
 - Test: `tests/macro_m0_harness.py` (suite `macro`) and `tests/nautilus_acceptance.py` (suite `nautilus`, registered here).
 
 **Interfaces:**
 - **Consumes:**
   - C1: the encoding convention that L1-15 enforces.
   - C2: `tools/nautilus/launch.py` exists. `FIXTURES` and `fixture_inputs` (added at Task 3) are read through `getattr`.
-  - C3: `tools/nautilus/sandbox.py` exists as Task 1 left it, with no `submit_order` node (CONTRACT ISSUE 5).
+  - C10: `runner.bars_bytes` (added at Task 4), which L1-15 calls only once `tools/nautilus/runner.py` exists.
+  - C3: `tools/nautilus/sandbox.py` exists as Task 1 left it, with no `submit_order` node (Plan ruling T2 CI 5).
   - C4: `tools/nautilus/egress_probe.py` is scanned as the "egress probe" control of 8.5.
   - C8: `ROOT`, `tests()`, the guard, the NotRun reasons of `layer2()`, and the CLI with `-k`.
   - The Count Ledger rows of Tasks 1 and 2, and Test inventory row 2.
 - **Produces:** no Interface Contract item. For Tasks 3 to 5:
   - The amended `tests.macro_m0_harness._offences(path: Path, root: Path = ROOT) -> list[str]` (rules A to F; every new hit starts `[nautilus:<rule>]`) and the constants of spec 5.6. Every later bridge file must pass them; Task 3's filled sandbox is checked by `test_t_ro_01_nautilus_confined_to_the_sandbox`.
-  - `tests.nautilus_acceptance.encoding_offences(source: str, rel: str) -> list[str]` and L1-15. Every later `tools/nautilus/*.py` and `tests/nautilus_*.py` must pass them, and L1-15 starts checking `launch.fixture_inputs` once Task 3 adds it.
+  - `tests.nautilus_acceptance.encoding_offences(source: str, rel: str) -> list[str]` and L1-15. Every later `tools/nautilus/*.py` and `tests/nautilus_*.py` must pass them, and L1-15 starts checking `launch.fixture_inputs` once Task 3 adds it and `runner.bars_bytes` once Task 4 adds `tools/nautilus/runner.py`.
   - `tests.run_all.nautilus_tests()`. From this task on, the full run counts `nautilus/<test>` rows.
 
 - [ ] **Step 1: Confirm the starting point.** (Plan rules, Result files: this step reads the baseline file that Task 1 Step 0 writes, `$S/t1_baseline.json`.)
 ```bash
 S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; NTPY=$S/ntvenv_hash/bin/python; cd /home/user/quantgen
 git log -1 --format='%h %s'; git status --short; md5sum qa/acceptance_results.json
+T1=$(git log -1 --format=%h --fixed-strings --grep='Nautilus bridge, plan Task 1 (spec Step 3)'); echo "Task 1 commit $T1"; git diff --name-only "$T1" HEAD
 python3 -B -m tests.macro_m0_harness | tail -1
 env -u QUANTGEN_NAUTILUS_PYTHON python3 -B -m tests.nautilus_acceptance | tail -1
 python3 -B -c "import tests.macro_m0_harness as H; print(sum(len(H._offences(p)) for p in H._scan_files()), 'hits')"
 python3 -B -c "import json, sys; r = json.load(open(sys.argv[1], encoding='utf-8')); n = len(r); p = sum(x['status'] == 'PASS' for x in r); f = sum(x['status'] == 'FAIL' for x in r); print(f'B = {p}/{n} passed, {f} failed, {n - p - f} not run;', sum(x['test'].startswith('macro/') for x in r), 'macro rows')" $S/t1_baseline.json
 ```
   Expected:
-  - HEAD is Task 1's commit.
+  - HEAD is Task 1's commit, and `Task 1 commit <hash>` is followed by no path. Other work streams may commit between tasks (Plan rulings, X8): a later HEAD is accepted when the listed paths include no path of the File Structure table (this plan's own file excepted); such a path stops the task. If a listed path lies outside `docs/nautilus_bridge/`, the suite may have moved since `$S/t1_baseline.json`: re-measure the baseline now as Task 1 Step 0 does, into `$S/t2_baseline.json` (wrapper, key unset, about 10 minutes, in the background; nothing else from QUANTGEN runs meanwhile), read `B` from it with this step's last command, and use it in place of `$S/t1_baseline.json` at Step 15. Task 2's delta does not change.
   - `git status --short` prints nothing. Any line it does print is a path no task owns: write it down and never stage it.
   - `16c9baa5a1777853521d485d5078e456`.
   - `H/H passed, 0 failed, 0 not run`, where H is the harness count (12 at `fa28059`; the Count Ledger's `H`, not `M`, the macro row count).
@@ -2626,7 +2808,7 @@ python3 -B -c "import json, sys; r = json.load(open(sys.argv[1], encoding='utf-8
 
   A FAIL in the harness module, or any hit, stops the task: it belongs to the task that caused it.
 
-- [ ] **Step 2: Write the failing T-RO-01 tests.** Make two edits to `tests/macro_m0_harness.py` with the Edit tool. The file is LF and stays LF. (CONTRACT ISSUE 2: this module is the scanner. Its tests name the forbidden tokens in the 8.5 controls and in the embedded skeleton, as its own `FORBIDDEN_TEXT_CI` already does. `tests/` is outside every scan.)
+- [ ] **Step 2: Write the failing T-RO-01 tests.** Make two edits to `tests/macro_m0_harness.py` with the Edit tool. The file is LF and stays LF. (Plan ruling T2 CI 2: this module is the scanner. Its tests name the forbidden tokens in the 8.5 controls and in the embedded skeleton, as its own `FORBIDDEN_TEXT_CI` already does. `tests/` is outside every scan.)
 
   Edit A. Current text:
 ```python
@@ -2863,8 +3045,10 @@ def test_t_ro_01_nautilus_confined_to_the_sandbox():
     (`core/engine/orders.py:90, 169, 253-257`). The amendment lets exactly one file place such orders, through exactly
     one call, and closes two holes of today's scan: it compares only the first dotted component of an import
     (`tests/macro_m0_harness.py:90-96`), and it misses seven Nautilus order verbs (map04 §3.2). It is the first
-    exemption for a forbidden token or call in T-RO-01's history (GOVERNANCE-10) [...]. After it, a T-RO-01 PASS means
-    'no order path outside the one sandbox call'."
+    exemption for a forbidden token or call in T-RO-01's history (GOVERNANCE-10): the 2026-10-23 spec widened the scan
+    to `tools/` and `papers/` and allowed one importer, but exempted no forbidden token
+    (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:177-181`). After it, a T-RO-01 PASS
+    means 'no order path outside the one sandbox call'. The council spec is not edited."
 
     Every control of spec 8.5 gives exactly its multiset of tags in a temp tree, and the real sandbox exists and gives
     no hit (QA-12)."""
@@ -2911,8 +3095,10 @@ def test_t_ro_01_nautilus_allowlist_pinned():
     (`core/engine/orders.py:90, 169, 253-257`). The amendment lets exactly one file place such orders, through exactly
     one call, and closes two holes of today's scan: it compares only the first dotted component of an import
     (`tests/macro_m0_harness.py:90-96`), and it misses seven Nautilus order verbs (map04 §3.2). It is the first
-    exemption for a forbidden token or call in T-RO-01's history (GOVERNANCE-10) [...]. After it, a T-RO-01 PASS means
-    'no order path outside the one sandbox call'."
+    exemption for a forbidden token or call in T-RO-01's history (GOVERNANCE-10): the 2026-10-23 spec widened the scan
+    to `tools/` and `papers/` and allowed one importer, but exempted no forbidden token
+    (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:177-181`). After it, a T-RO-01 PASS
+    means 'no order path outside the one sandbox call'. The council spec is not edited."
 
     SECURITY-5: the allow-list and the rule lists are pinned by hash, so neither widens without an owner ruling; the
     seven order verbs are forbidden in every file, the sandbox included (rule B)."""
@@ -2948,7 +3134,7 @@ assert H._SANDBOX_SKELETON == "\n".join(lines[i + 1:j]) + "\n", "skeleton differ
 print("skeleton verbatim", hashlib.md5(H._SANDBOX_SKELETON.encode("utf-8")).hexdigest())
 EOF
 ````
-  Expected for the first command: tracebacks, then exactly these three FAIL lines among the PASS lines, then `exit=1`. The two new tests fail with `NameError` because the constants do not exist yet. The registry test fails because both tests carry `test_ids = ["T-RO-01"]` and row 12 has not been resynced.
+  Expected for the first command: tracebacks (on stderr), then these three FAIL lines among the PASS lines, then `exit=1`. The registry line is abbreviated below at `'...'` (it quotes both full `implemented_in` values), and its timing, such as ` (1.8s)`, is left out. The two new tests fail with `NameError` because the constants do not exist yet. The registry test fails because both tests carry `test_ids = ["T-RO-01"]` and row 12 has not been resynced.
 ```
 FAIL test_registry_implemented_in_matches_test_ids AssertionError: registry out of sync (python -m tests.macro_acceptance resyncs it): T-RO-01: 'tests/macro_m0_harness.py::test_t_ro_01_artifact_writers_stamp_read_only;...' != '...'
 FAIL test_t_ro_01_nautilus_allowlist_pinned NameError: name 'NAUTILUS_SANDBOX' is not defined (0.0s)
@@ -3066,16 +3252,16 @@ def _identifiers(node: ast.AST) -> tuple[str | None, ...]:
 
 
 def _rule_a(tree: ast.AST, rel: str, hits: list[str]) -> list[str]:
-    """Rule A (SECURITY-7), sandbox only. Exempt only when exactly one node names submit_order and it is
-    `self.submit_order` called inside a method (a function directly in a class body): then its text hit and its call
-    hit are dropped. Otherwise every hit stands, plus one A hit."""
+    """Rule A (SECURITY-7), sandbox only. No node names submit_order: no hit (ruling T1 CI 7). Exactly one, and it is
+    `self.submit_order` called with a method (a def directly in a class body) as its nearest enclosing def or lambda:
+    its text hit and its call hit are dropped. Otherwise every hit stands, plus one A hit."""
     found = [n for n in ast.walk(tree) if any("submit_order" in (s or "").lower() for s in _identifiers(n))]
     if not found:
         return hits
     parents = {child: node for node in ast.walk(tree) for child in ast.iter_child_nodes(node)}
     node, call = found[0], parents.get(found[0])
     method = call
-    while method is not None and not isinstance(method, (ast.FunctionDef, ast.AsyncFunctionDef)):
+    while method is not None and not isinstance(method, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda)):
         method = parents.get(method)
     if (len(found) == 1 and isinstance(node, ast.Attribute) and node.attr == "submit_order"
             and isinstance(node.value, ast.Name) and node.value.id == "self"
@@ -3166,6 +3352,7 @@ def _nautilus_offences(tree: ast.AST, rel: str, hits: list[str]) -> list[str]:
 ```
   How the rules map to spec 5.6:
   - **Import names.** These are full dotted names, so `nautilus_trader.adapters.x` is judged in full and not by its first component.
+  - **A** reads "its enclosing function" as the nearest enclosing def or lambda, so `self.submit_order` wrapped in a lambda or a nested def inside `place` is not exempt.
   - **C3** also refuses `import m as x`, because "any `as` alias" is one of its offences.
   - **E outside the sandbox** fires on a string containing `nautilus`, which covers every denied prefix.
   - **The sandbox's own strings** are checked against every denied prefix and name.
@@ -3186,12 +3373,12 @@ cd /home/user/quantgen; python3 -B -m tests.macro_m0_harness; echo "exit=$?"
 cd /home/user/quantgen; python3 -B -m tests.macro_acceptance
 git diff --stat tests/macro_registry.csv
 python3 -c "import csv; r = {x['test_id']: x for x in csv.DictReader(open('tests/macro_registry.csv', encoding='utf-8', newline=''))}; print('\n'.join(r['T-RO-01']['implemented_in'].split(';')))"
-python3 -c "b = open('tests/macro_registry.csv', 'rb').read(); assert b'\r' not in b; print('LF ok')"
+python3 -c "b = open('tests/macro_registry.csv', 'rb').read() + open('tests/macro_m0_harness.py', 'rb').read(); assert b'\r' not in b; print('LF ok')"
 python3 -B -m tests.macro_m0_harness | tail -1
 ```
   Expected:
   - `implemented_in rows changed: 1`.
-  - ` 1 file changed, 1 insertion(+), 1 deletion(-)`.
+  - `git diff --stat` ends with ` 1 file changed, 1 insertion(+), 1 deletion(-)`.
   - These seven lines:
 ```
 tests/macro_m0_harness.py::test_t_ro_01_artifact_writers_stamp_read_only
@@ -3202,7 +3389,7 @@ tests/macro_m0_harness.py::test_t_ro_01_orders_module_reached_only_through_the_e
 tests/macro_m5_integration.py::test_s4_rulings_no_wall_clock_nothing_above_one_halted_outside_min_engine_untouched
 tests/macro_m8_pipeline.py::test_yaml_loads_with_the_strict_runner_and_the_legacy_parser_is_untouched
 ```
-  - `LF ok`.
+  - `LF ok` (both files).
   - `14/14 passed, 0 failed, 0 not run` (in general `H+2/H+2`).
 
   If the command reports any other number of changed rows, run `git checkout tests/macro_registry.csv`, then stop and report. Step 1 showed the registry in sync, so only row 12 may change, and no other row is ever committed by this task.
@@ -3221,17 +3408,18 @@ python3 -B -c "from tests.flet_api_guard import tests; [f() for _, f in tests()]
   - `test_08 test_09 ok`.
   - `flet guard ok 4`.
 
-  A hit in a Task 1 file breaks C2 or C3 (CONTRACT ISSUE 5). Correct it in that file, not in the rules, and name the file in Step 16.
+  A hit in a Task 1 file breaks C2 or C3 (Plan ruling T2 CI 5). Correct it in that file, not in the rules, and name the file in Step 16.
 
 - [ ] **Step 9: Write the failing L1-15 test.** In `tests/nautilus_acceptance.py`, Task 1's LF file, use the Edit tool to insert the function below directly before the line that starts `def tests(` (C8's collector), with two blank lines on each side. Notes:
-  - CONTRACT ISSUE 3: spec 8.3 #15's "no CSV the parent or fixtures write" covers writers that do not exist until Tasks 3 and 4. The test checks the committed bridge CSVs now, and every `launch.fixture_inputs(name)` for `name` in `launch.FIXTURES` once Task 3 adds them. The `lineterminator` rule covers every later CSV writer statically.
-  - CONTRACT ISSUE 4: C1's `newline="\n"` is enforced, and `newline=""` is accepted. That is the csv module's documented form, which the filled sandbox uses, and it writes the same bytes.
+  - Plan ruling T2 CI 3: spec 8.3 #15's "no CSV the parent or fixtures write" covers writers that do not exist until Tasks 3 and 4. The test checks the committed bridge CSVs now, every `launch.fixture_inputs(name)` for `name` in `launch.FIXTURES` once Task 3 adds them, and the bytes of `runner.bars_bytes` (C10) once Task 4 adds `tools/nautilus/runner.py`. bars.csv is the one CSV the parent writes, and `bars_bytes` joins its rows itself, without a csv writer, so the `lineterminator` rule, which covers the sandbox's and the stub child's csv writers statically, does not reach it (Plan rulings, T2-m2).
+  - Plan ruling T2 CI 4: C1's `newline="\n"` is enforced, and `newline=""` is accepted. That is the csv module's documented form, which the filled sandbox uses, and it writes the same bytes.
 ```python
 def test_l1_15_encoding_rules_hold():
     """L1-15 (spec 8.3 and 3.7; QA-R2-14): in tools/nautilus/*.py and tests/nautilus_*.py every open (a constant
     binary mode exempt), read_text and write_text passes encoding="utf-8" (or "utf-8-sig"), every text write newline=,
     every text-mode subprocess call encoding="utf-8" and errors="replace", every csv writer lineterminator="\\n"; no
-    committed bridge CSV, and no file launch.fixture_inputs builds (plan Task 3), holds a carriage return."""
+    committed bridge CSV, no file launch.fixture_inputs builds (plan Task 3) and no bars.csv runner.bars_bytes builds
+    (plan Task 4; the one CSV the parent writes) holds a carriage return."""
     planted = {'open(p, "w")': 2, "p.read_text()": 1, 'p.write_text(s, encoding="utf-8")': 1,
                "subprocess.run(a, text=True)": 1, "csv.writer(fh)": 1, 'open(p, "rb")': 0,
                'p.read_text(encoding="utf-8-sig")': 0, 'p.write_text(s, encoding="utf-8", newline="\\n")': 0,
@@ -3251,15 +3439,21 @@ def test_l1_15_encoding_rules_hold():
     from tools.nautilus import launch
     build = getattr(launch, "fixture_inputs", None)
     bad += [f"fixture_inputs({n!r})" for n in getattr(launch, "FIXTURES", ()) if build and b"\r" in b"".join(build(n))]
+    if (ROOT / "tools" / "nautilus" / "runner.py").is_file():          # plan Task 4: the parent's bars.csv (C3, C10)
+        import numpy as np
+        from tools.nautilus import runner
+        if b"\r" in runner.bars_bytes(np.array([1.0, 2.0]), [1, 2]):
+            bad.append("runner.bars_bytes")
     assert not bad, f"carriage returns in {bad}"
 ```
   Run it:
 ```bash
-cd /home/user/quantgen; env -u QUANTGEN_NAUTILUS_PYTHON python3 -B -m tests.nautilus_acceptance -k test_l1_15; echo "exit=$?"
+cd /home/user/quantgen; env -u QUANTGEN_NAUTILUS_PYTHON python3 -B -m tests.nautilus_acceptance -k test_l1_15 2>/dev/null; echo "exit=$?"
 ```
-  Expected (CONTRACT ISSUE 8: the FAIL detail is `<exception type>: <message>`):
+  Expected (Plan ruling T2 CI 8: the FAIL detail is `<exception type>: <message>`; the traceback goes to stderr, discarded here):
 ```
 FAIL test_l1_15_encoding_rules_hold NameError: name 'encoding_offences' is not defined
+
 0/1 passed, 1 failed, 0 not run
 exit=1
 ```
@@ -3338,17 +3532,17 @@ def tests():
 
 
 def nautilus_tests():
-    """Suite `nautilus` (tests/nautilus_acceptance.py; spec 2026-10-26 section 5.7), imported here: an import failure
-    is one FAIL row named `import` and never stops the other suites."""
+    """Suite `nautilus` (tests/nautilus_acceptance.py; spec 2026-10-26 section 5.7), imported here: an import or
+    collection failure is one FAIL row named `import` and never stops the other suites."""
     try:
         from tests.nautilus_acceptance import tests as bridge_tests
+        return bridge_tests()
     except Exception as exc:
-        reason = f"tests.nautilus_acceptance does not import ({type(exc).__name__}: {exc})"
+        reason = f"tests.nautilus_acceptance does not import or collect ({type(exc).__name__}: {exc})"
 
         def import_failed():
             raise RuntimeError(reason)
         return [("import", import_failed)]
-    return bridge_tests()
 
 
 def tests():
@@ -3377,14 +3571,15 @@ md5sum qa/acceptance_results.json
 ```
   Expected:
   - `CRLF ok`.
-  - ` 1 file changed, 17 insertions(+), 2 deletions(-)`, then `1`.
-  - The import-failure path prints `FAIL import RuntimeError: tests.nautilus_acceptance does not import (ModuleNotFoundError: import of tests.nautilus_acceptance halted; None in sys.modules)`.
+  - `git diff --stat` ends with ` 1 file changed, 17 insertions(+), 2 deletions(-)`; then `1`.
+  - The import-failure path prints `FAIL import RuntimeError: tests.nautilus_acceptance does not import or collect (ModuleNotFoundError: import of tests.nautilus_acceptance halted; None in sys.modules)`.
   - Both md5 lines print `16c9baa5a1777853521d485d5078e456`.
   - The key-unset run prints exactly these lines, then `exit=0`. This satisfies spec Step 4's done-when: the layer-2 tests report NOT_RUN, not PASS.
 ```
 PASS nautilus/test_l1_15_encoding_rules_hold
 PASS nautilus/test_l1_16_launch_builder_matches_the_contract
 PASS nautilus/test_l1_17_venv_reads_and_wheel_identity
+  pyarrow in the global interpreter: None
 PASS nautilus/test_l1_22_global_interpreter_has_no_nautilus
 NOT_RUN nautilus/test_l2_01_check_env_pins_identity_precision OWNER: Nautilus venv not configured (QUANTGEN_NAUTILUS_PYTHON)
 NOT_RUN nautilus/test_l2_08_guard_selftest_outcomes OWNER: Nautilus venv not configured (QUANTGEN_NAUTILUS_PYTHON)
@@ -3418,11 +3613,11 @@ python3 -B -m tests.macro_ui_components | tail -1
 ```
   Expected:
   - `CRLF ok`.
-  - ` 1 file changed, 2 insertions(+), 1 deletion(-)`, then `0`: the Total row is unchanged.
+  - `git diff --stat` ends with ` 1 file changed, 2 insertions(+), 1 deletion(-)`; then `0`: the Total row is unchanged.
   - Three consecutive line numbers: `877:| papers ...`, `878:| nautilus ...` and `879:| **Total** ...` at `fa28059`.
   - `11/11 passed, 0 failed, 0 not run`, the same as before the edit.
 
-- [ ] **Step 15: Run the full suite. Expect baseline plus Task 2's delta.** (CONTRACT ISSUE 7.) The full run takes about 10 minutes. Start it in the background and wait. Nothing else from QUANTGEN may run meanwhile (T-HERM-02; spec 3.8).
+- [ ] **Step 15: Run the full suite. Expect baseline plus Task 2's delta.** (Plan ruling T2 CI 7.) The full run takes about 10 minutes. Start it in the background and wait. Nothing else from QUANTGEN may run meanwhile (T-HERM-02; spec 3.8).
 ```bash
 S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; cd /home/user/quantgen; md5sum qa/acceptance_results.json
 env -u QUANTGEN_NAUTILUS_PYTHON python3 -B $S/run_baseline.py $S/nb_task2_full.json > $S/nb_task2_full.log 2>&1   # in the background
@@ -3436,14 +3631,14 @@ python3 -c "import json, sys; S = sys.argv[1]; old = {r['test']: r['status'] for
   Expected:
   - **Summary line.** It is B plus this task's delta: 15 more rows, 11 more PASS, the same FAIL count, 4 more NOT_RUN. With B = `P/N passed, F failed, R not run` from Step 1, it reads `P+11/N+15 passed, F failed, R+4 not run; .../nb_task2_full.json`. Reference example, from the 2026-10-26 baseline: `756/885 passed, 1 failed, 128 not run`. The only FAIL is B's environment-only `papers/test_debate_run_kills_process_tree`.
   - **md5.** `16c9baa5a1777853521d485d5078e456`.
-  - **Comparison.** `removed []`, `changed []`, macro rows equal to B's plus 2 (reference 544), and `added` exactly:
+  - **Comparison.** If Step 1 re-measured the baseline, the command reads `/t2_baseline.json` in place of `/t1_baseline.json`, and B is that file's. `removed []`, `changed []`, macro rows equal to B's plus 2 (reference 544), and `added` exactly:
 ```
 added [('macro/macro_m0_harness/test_t_ro_01_nautilus_allowlist_pinned', 'PASS'), ('macro/macro_m0_harness/test_t_ro_01_nautilus_confined_to_the_sandbox', 'PASS'), ('nautilus/test_l1_15_encoding_rules_hold', 'PASS'), ('nautilus/test_l1_16_launch_builder_matches_the_contract', 'PASS'), ('nautilus/test_l1_17_venv_reads_and_wheel_identity', 'PASS'), ('nautilus/test_l1_22_global_interpreter_has_no_nautilus', 'PASS'), ('nautilus/test_l1_32_every_test_guarded_and_ledgers_unchanged', 'PASS'), ('nautilus/test_l2_01_check_env_pins_identity_precision', 'NOT_RUN'), ('nautilus/test_l2_08_guard_selftest_outcomes', 'NOT_RUN'), ('nautilus/test_l2_09_egress_probe_blocked', 'NOT_RUN'), ('nautilus/test_l2_10_timeout_kills_the_child_tree', 'NOT_RUN'), ('nautilus/test_px_census_parser_reads_importtime_lines', 'PASS'), ('nautilus/test_px_egress_probe_imports_json_and_socket_only', 'PASS'), ('nautilus/test_px_env_example_and_env_pins', 'PASS'), ('nautilus/test_px_requirements_nautilus_pins_and_header', 'PASS')]
 ```
 
   Any other difference stops the task before the commit.
 
-- [ ] **Step 16: Commit.** (CONTRACT ISSUE 6: no path is exempt any more by default; the spec and this plan are committed.)
+- [ ] **Step 16: Commit.** (Plan ruling T2 CI 6: no path is exempt any more by default; the spec and this plan are committed.)
 ```bash
 cd /home/user/quantgen; git status --short; md5sum qa/acceptance_results.json
 ```
@@ -3482,9 +3677,9 @@ git show --numstat --format='%h %s' HEAD; git status --short
   Expected numstat, assuming two blank lines around each block inserted into `tests/nautilus_acceptance.py`:
 ```
 2	1	README.md
-487	1	tests/macro_m0_harness.py
+491	1	tests/macro_m0_harness.py
 1	1	tests/macro_registry.csv
-61	0	tests/nautilus_acceptance.py
+67	0	tests/nautilus_acceptance.py
 17	2	tests/run_all.py
 ```
   Afterwards `git status --short` prints nothing, apart from the paths Step 1 recorded. No push.
@@ -3493,14 +3688,15 @@ git show --numstat --format='%h %s' HEAD; git status --short
 
 ### Task 3: Sandbox (spec Step 5): section 5.2 in full, `fixture_inputs`
 
-**Verified before writing (2026-10-28, a scratch clone of HEAD `fa28059` holding this plan's Task 1 and Task 2 drafts, `$S/plan_step2/task3/clone`; nothing in the real clone touched; HEAD has since moved to `049306c`, which changes only `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` and a chart):**
+**Verified before writing (2026-10-28, a scratch clone of HEAD `fa28059` holding this plan's Task 1 and Task 2 drafts, `$S/plan_step2/task3/clone`; nothing in the real clone touched. HEAD has since moved on, to `659898b` by 2026-10-28 through PT-07's calendar commit `d865c7f`. No step depends on the HEAD named here: Steps 1 and 11 read `git status` live and Step 10 counts deltas. A review re-ran Steps 1 to 9 and Step 10's `--suite nautilus` runs on a copy of `d865c7f` holding Tasks 1 and 2, and after its fixes re-ran Steps 6 to 9 and Step 10's key-unset `--suite nautilus` run on a copy of `659898b`):**
 - Every expected output below comes from a full dry run of these steps in that clone: Steps 1 to 9 as written, and Step 10's `--suite nautilus` runs through a copy of the wrapper pointed at the clone. Step 10's full run was not repeated there. Its counts are Task 1 Step 0's baseline plus the Count Ledger delta.
 - **What this task builds on from Task 1** (beyond C2 and C8): `tools/nautilus/sandbox.py` holds 5.2.9's import block verbatim and its functions, with `run` a stub that raises `Refused` (exit 20). `tools/nautilus/launch.py` imports `hashlib` and `json` at module level and ends with `cleanup_tempdir`. `tests/nautilus_acceptance.py` has the banner `# CLI` directly above `def main(`, and imports `ast`, `hashlib`, `json`, `os`, `Path`, `Callable`, `NotRun` and `launch` at module level. Step 1 checks these names. No Task 1 private helper (`_launch_venv`, `_refused`, `_fake_venv`) is used.
 - **What it builds on from Task 2**: `tests/macro_m0_harness.py::_offences` applies rules A to F of spec 5.6. `test_t_ro_01_nautilus_confined_to_the_sandbox` asserts that the real `tools/nautilus/sandbox.py` exists and gives no hit, so it must still pass once this task adds the one order call. `test_l1_15_encoding_rules_hold` scans `tools/nautilus/*.py` and `tests/nautilus_*.py` for spec 3.7's rules. It reads `launch.FIXTURES` with `getattr`, so it passes before this task and, after Step 4, also checks the fixture bytes for `\r`.
-- **Spec 5.2.9 governs structure, not every line** (spec :520-529). The sandbox below keeps 5.2.9's import block verbatim and its definitions in order (`Refused` to `main`, spec :554-672), with every line 5.2.9 shows. It fills each `...` from 5.2.3 to 5.2.8. It departs from the skeleton only in the three places below, each for the reason given; a comment and the spelling `return 0 if not reasons else 10` are not counted:
-  - `main` (spec :666-669) returns 20 silently on a refusal. But section 7 C-05 says "stderr only; 20" (spec :1242), and rule F1 allows only `from sys import argv, exit`, so the sandbox cannot reach `sys.stderr`. `argparse.ArgumentParser.exit(20, message)` writes the message to stderr and exits 20, and the sandbox already imports `argparse`. **CONTRACT ISSUE 1.**
+- **Spec 5.2.9 governs structure, not every line** (spec :520-529). The sandbox below keeps 5.2.9's import block verbatim and its definitions in order (`Refused` to `main`, spec :554-672), with every line 5.2.9 shows. It fills each `...` from 5.2.3 to 5.2.8. It departs from the skeleton only in the four places below, each for the reason given; a comment and the spelling `return 0 if not reasons else 10` are not counted:
+  - `main` (spec :666-669) returns 20 silently on a refusal. But section 7 C-05 says "stderr only; 20" (spec :1242), and rule F1 allows only `from sys import argv, exit`, so the sandbox cannot reach `sys.stderr`. `argparse.ArgumentParser.exit(20, message)` writes the message to stderr and exits 20, and the sandbox already imports `argparse`. So three lines of `main` change: both `return 20` lines become `ap.exit(20, ...)`, and `except Refused:` becomes `except Refused as exc:` for the second message (ruling T3 CI 1, as corrected by ruling T3-2).
   - `run` reads `input.json` with `read_text` (spec :625). But an `input.json` that is not JSON must exit 20 (8.4 test 5a, spec :1420; 5.4.3, spec :878), and the manifest needs the SHA-256 of the bytes (6.2). So `run` reads the bytes and turns a `ValueError` into `Refused`.
-  - `run` sets the port's six state attributes (and `denied`, `rejected`) before `add_strategy`, in addition to 5.2.9's `strategy_started = False`. `on_start` sets them again. Without this, an `on_start` that raised (C-15) would make the 5.2.7 checks fail on `port.i` and crash (exit 1, C-06), instead of writing a manifest with `C-15` (exit 10).
+  - `run` sets the port's six state attributes (and `denied`, `rejected`) before `add_strategy`, in addition to 5.2.9's `strategy_started = False`. `on_start` sets them again. These lines matter only for a port whose `on_start` is never called: `child_reasons` can then still read `port.i` and write a manifest with `C-15` (exit 10). An `on_start` that raises, the clock guard's `RuntimeError` included, propagates out of `engine.run()` (`Component.start` re-raises, spec 5.2.5), so the child exits 1 and writes no file: C-06 in the parent. Measured with a `RuntimeError` planted after the clock guard, on F1: exit 1, no file, stderr ending `RuntimeError: planted on_start failure`. A kernel that is not BACKTEST makes `build_engine` raise, with the same result. So in this sandbox the child's C-15 exit-10 path is reached only when `on_start` is not called; the parent's own C-15 re-derivation from the manifest (L1-27) is unaffected (ruling T3-1).
+  - Module-level helpers that the skeleton does not have hold the bodies that 5.2.9's `run` leaves as `...`: `FIELDS`, `need`, `is_int`, `int_text`, `is_hex`, `check_params`, `check_input`, `make_instrument`, `write_csv`, `write_outputs` and `child_reasons`, eleven definitions placed between `CryptoTrendPort` and `run`. They keep `run` at 59 lines. This plan reads 5.2.9's "the classes and functions" as the skeleton's names in their order, not as a ban on helpers. `test_px_sandbox_avoids_excluded_constructs` checks exactly that: it compares `SANDBOX_DEFS` in relative order (ruling T3-2).
 - **Rule F holds** (spec :949-961, :979-984):
   - The sandbox calls `SANDBOX_FILE_METHODS` methods only on `inside(...)`. That list includes `replace` and `open`, so the code never calls `str.replace`.
   - It names no `SANDBOX_BANNED_NAMES` entry, no dunder attribute and no `SANDBOX_OS_CALLS` callee.
@@ -3512,25 +3708,32 @@ git show --numstat --format='%h %s' HEAD; git status --short
   - **F2** exits 0. Fills: BUY `1.00000000` @ 53000, fee 53.00 (bar 3); SELL `1.00000000` @ 50000, fee 50.00 (bar 5); BUY `0.98812079` @ 50500, fee 49.90 (bar 7); SELL `0.98812079` @ 51000, fee 50.39 (bar 9). Balance `50343.77`. Decisions: 3 buy, 4 hold, 5 sell, 6 hold, 7 buy, 8 hold, 9 sell, 10 hold.
   - **N1** exits 10. One fill: BUY 1000 @ `100.00`, fee 500.00. 4 bars seen, force stop, balance `904501.00`, quantity `1000`. Reasons `C-01: forced stop` and `C-02: bars seen fewer than bars fed`. Its stderr holds the engine's `Stopping backtest from AccountBalanceNegative(balance=-89.45, currency=USD)` line (map03 §2.11).
   - **Determinism**: two processes on the same input give byte-identical output files, stdout and stderr, and the same 942-name census. Trade ids are deterministic (`T-474e28fcce475f55-005`, `SIM-1-001`). One run takes 1.1 to 2.1 s.
-- **L2-5a builds 77 perturbations.** Spec 8.4 test 5a counted 63. This list adds:
+- **Two refusals go beyond 6.1's table, and one guard keeps a refusal at exit 20** (ruling T3-3). Before them, each of these inputs crashed the child with exit 1 (C-06 in the parent; measured):
+  - SPY with `size_precision` 1 to `FIXED_PRECISION`, which 6.1's range admits. `Equity` holds whole shares only (5.2.3), so the engine rejects the bar volume built at the input's precision (`RuntimeError: invalid bar.volume.precision=8 did not match instrument.size_precision=0`). `check_input` now refuses it under `size_precision`.
+  - A close above `PRICE_MAX`, which 6.1 ("above zero") admits: `Price.from_str` raises `ValueError`. `check_input` now refuses it under `close <k>`.
+  - An integer string of more than 4300 digits in `capital_usd`, `volume` or a `ts_ns`: `int()` raises `ValueError` before the range test. `int_text` now tests `len(x) <= 20` first; no value in range has more than 19 digits.
+
+  A cross-field overflow that 6.1 does not state still ends as C-06, fail closed: F1 with `capital_usd` equal to `PRICE_MAX` and its closes scaled by 10^-9 sizes an order above `QUANTITY_MAX`, and `on_bar` raises (measured: exit 1). The runner sends none of these inputs.
+- **L2-5a builds 80 perturbations.** Spec 8.4 test 5a counted 63. This list adds:
   - the lower bounds that 6.1 implies;
   - two hash-format cases;
   - `stress "0"` and `fill_seed` as a float;
   - a repeated timestamp and a missing final newline;
   - `lookbacks` item 5001;
-  - a `bars.csv` that is not UTF-8.
+  - a `bars.csv` that is not UTF-8;
+  - `SPY size_precision 8`, `capital 4301 digits` and `close above PRICE_MAX`, one case for each refusal above.
 
-  Each case was measured to be refused by its own rule, and the stderr line names that rule, so the test asserts the rule and not only the exit code. L2-5a starts 80 children and takes about 90 s on Linux. L2-4 takes about 8 s, L2-5b about 10 s, and the whole module with the key set about 1 min 50 s.
+  Each case was measured to be refused by its own rule, and the stderr line names that rule, so the test asserts the rule and not only the exit code. L2-5a starts 83 children and takes about 90 s on Linux. L2-4 takes about 8 s, L2-5b about 10 s, and the whole module with the key set about 1 min 50 s.
 - **`test_px_sandbox_avoids_excluded_constructs` was mutation-checked.** Each of these eleven planted defects makes it FAIL: `allow_cash_borrowing=True`, `AT_THE_CLOSE`, a `latency_model` argument, `run_analysis=True`, `prob_slippage=0.5`, `AccountType.MARGIN`, a limit order, a second order call, an account report, the clock guard moved out of first place, and an `__init__` with `super()`.
 - **Guards outside the bridge are unaffected.** `test_08` and `test_09` scan `runtime_py()`: `core/`, `data/`, `ui/`, `main.py` and `config.py` (`tests/acceptance.py:50-56, 62-75`), so `tools/` is outside them. `tests/flet_api_guard.py:40` reads `ui/*.py` only. Step 9 runs `test_08` and `test_09` anyway.
-- **`docs/nautilus_bridge/` holds 7 tracked files at HEAD**, which the 3.3 guard digests. No test of this task writes there. L2-5b links to `ROOT / ".env"`, which the clone lacks and the sandbox never opens: `inside` refuses the link before any read.
+- **`docs/nautilus_bridge/` holds tracked files that the 3.3 guard digests**: 7 at `fa28059`, 19 at `659898b` (two registers and ten evidence scripts added, the chart updated). No test of this task writes there. L2-5b links to `ROOT / ".env"`, which the clone lacks and the sandbox never opens: `inside` refuses the link before any read.
 - **QUANTGEN's rules** are at `core/quant/strategies.py:162-187` (`trend_switch`: decision bars `i >= L` and `(i - L) % s == 0`) and `:330-348` (`crypto_trend`: the state stays unchanged while the composite lies within the hysteresis band). The crypto port keeps that state in `self.held`, because map03 §2.5 forbids the name `state`.
-- **Text and size rules**: the new tests hold no T-RO-01 text token (plan rule "Bridge text"); the order call is spelled `"submit" + "_order"`. No line exceeds 120 characters, and every new function is under 60 lines (`run` 59, `check_input` 38).
+- **Text and size rules**: the new tests hold no T-RO-01 text token (plan rule "Bridge text"); the order call is spelled `"submit" + "_order"`. No line exceeds 120 characters, and every new function except `_l2_05a_cases`, a case table of 79 lines, is under 60 lines (`run` 59, `check_input` 40).
 
 **Files:**
 - Modify: `tools/nautilus/sandbox.py`. Step 6 writes the whole file. Of Task 1's definitions only `run` (the stub) and `main` (the C-05 stderr line) change; 5.2.9's ports and the 6.1 checks are added.
 - Modify: `tools/nautilus/launch.py`. Append only: `FIXTURES`, `_FIXTURE_CLOSES`, `_fixture_ts`, `fixture_inputs` (51 lines).
-- Modify: `tests/nautilus_acceptance.py`. Insert only: the Task 3 block before the `# CLI` banner (468 lines).
+- Modify: `tests/nautilus_acceptance.py`. Insert only: the Task 3 block before the `# CLI` banner (471 lines).
 - Test: `tests/nautilus_acceptance.py` (suite `nautilus`, registered at Task 2):
   - layer 1: `test_px_fixture_inputs_follow_6_1_and_8_2`, `test_px_sandbox_avoids_excluded_constructs`;
   - layer 2: `test_l2_04_fills_identical_across_processes`, `test_l2_05a_refusals_exit_20_before_the_engine`, `test_l2_05b_input_linked_to_env_refused`.
@@ -3547,8 +3750,8 @@ git show --numstat --format='%h %s' HEAD; git status --short
   - `core.quant.gate_ledger.ledger_hash`.
 - Produces:
   - C2: `FIXTURES` and `fixture_inputs(name) -> tuple[bytes, bytes]`.
-  - C3: `run --in <dir>` in full (exit 0, 10 or 20), with the four output files of C3 and the manifest of C6. On exit 20, no file is written and the last stderr line is `C-05: <reason>` (**CONTRACT ISSUE 1**).
-  - Module-level names in `tests/nautilus_acceptance.py` that Task 4 may reuse and must not redefine (**CONTRACT ISSUE 2**): `_sandbox_run`, `_check_run`, `_positive_control`, `_refused_before_engine`, `_check_env_precision`, `_canonical`, `_link`, `EMPTY_LEDGER_HASH`, `INPUT_KEYS`, `F1_INPUT`, `F2_INPUT`, `F_TABLES`, `OUTPUTS`, `MANIFEST_KEYS`, `MANIFEST_RESULT_KEYS`, `MANIFEST_ENGINE`, `FILLS_HEADER`, `ORDER_CALL`.
+  - C3: `run --in <dir>` in full (exit 0, 10 or 20), with the four output files of C3 and the manifest of C6. On exit 20, no file is written and the last stderr line is `C-05: <reason>` (ruling T3 CI 1).
+  - Module-level names in `tests/nautilus_acceptance.py` that Task 4 may reuse and must not redefine (ruling T3 CI 2): `_sandbox_run`, `_check_run`, `_positive_control`, `_refused_before_engine`, `_check_env_precision`, `_canonical`, `_link`, `EMPTY_LEDGER_HASH`, `INPUT_KEYS`, `F1_INPUT`, `F2_INPUT`, `F_TABLES`, `OUTPUTS`, `MANIFEST_KEYS`, `MANIFEST_RESULT_KEYS`, `MANIFEST_ENGINE`, `FILLS_HEADER`, `ORDER_CALL`.
 
 Every command below is one line, run after the prefix `S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; NTPY=$S/ntvenv_hash/bin/python; cd /home/user/quantgen && ` (plan rules). The module CLI prints a traceback on stderr before each `FAIL` line, and a blank line before its summary line.
 
@@ -3568,7 +3771,7 @@ Every command below is one line, run after the prefix `S=/tmp/claude-0/-home-use
 # --------------------------------------------------------------------------- #
 def main(
 ```
-  `new_string` is the block below, then two blank lines, then the same four lines. The block uses the module's own imports and adds none. `_refused_before_engine`, L2-5a and L2-5b assert the stderr line of **CONTRACT ISSUE 1**.
+  `new_string` is the block below, then two blank lines, then the same four lines. The block uses the module's own imports and adds none. `_refused_before_engine`, L2-5a and L2-5b assert the stderr line of ruling T3 CI 1.
 ```python
 # --------------------------------------------------------------------------- #
 # Plan Task 3 (spec Step 5): the sandbox and fixture_inputs
@@ -3830,6 +4033,7 @@ def _l2_05a_cases(precision: dict) -> list[tuple[str, str, str, Callable[[dict],
         ("capital_usd", "capital PRICE_MAX + 1", _put("capital_usd", str(pmax + 1))),
         ("capital_usd", "capital an int", _put("capital_usd", 1005001)),
         ("capital_usd", "capital leading zero", _put("capital_usd", "01005001")),
+        ("capital_usd", "capital 4301 digits", _put("capital_usd", "1" * 4301)),
         ("cost_bps", "cost_bps -1", _put("cost_bps", "-1")),
         ("cost_bps", "cost_bps 1000.5", _put("cost_bps", "1000.5")),
         ("cost_bps", "cost_bps a float", _put("cost_bps", 50.0)),
@@ -3845,6 +4049,7 @@ def _l2_05a_cases(precision: dict) -> list[tuple[str, str, str, Callable[[dict],
         ("price_precision", "price_precision FIXED_PRECISION + 1", _put("price_precision", fp + 1)),
         ("size_precision", "size_precision -1", _put("size_precision", -1)),
         ("size_precision", "size_precision FIXED_PRECISION + 1", _put("size_precision", fp + 1)),
+        ("size_precision", "SPY size_precision 8", _put("size_precision", 8)),
         ("volume", "volume 0", _put("volume", "0")),
         ("volume", "volume QUANTITY_MAX + 1", _put("volume", str(qmax + 1))),
         ("volume", "volume an int", _put("volume", 1000000000)),
@@ -3864,6 +4069,7 @@ def _l2_05a_cases(precision: dict) -> list[tuple[str, str, str, Callable[[dict],
         ("close 3", "close with 2 decimals at 9", lambda t: t.replace("100.000000000", "100.00", 1)),
         ("close 3", "close with 10 decimals", lambda t: t.replace("100.000000000", "100.0000000000", 1)),
         ("close 3", "close zero", lambda t: t.replace("100.000000000", "0.000000000", 1)),
+        ("close 3", "close above PRICE_MAX", lambda t: t.replace("100.000000000", f"{pmax + 1}.000000000", 1)),
         ("bars.csv header", "header i,ts,close", lambda t: t.replace("i,ts_ns,close", "i,ts,close", 1)),
         ("bars.csv line ends", "CRLF line ends", lambda t: t.replace("\n", "\r\n")),
         ("bars.csv line ends", "no final newline", lambda t: t[:-1]),
@@ -4037,7 +4243,7 @@ def test_l2_05b_input_linked_to_env_refused():
         result, out = _sandbox_run(python, raw, bars, prepare=prepare, in_arg=in_arg)
         _refused_before_engine(label, reason, result, out)
 ```
-  Then `git diff --numstat tests/nautilus_acceptance.py` prints 468 insertions, 0 deletions and the path (tab-separated).
+  Then `git diff --numstat tests/nautilus_acceptance.py` prints 471 insertions, 0 deletions and the path (tab-separated).
 
 - [ ] **Step 3: Run the new tests and watch them fail.**
   - Key unset: `python3 -B -m tests.nautilus_acceptance -k test_px_fixture_inputs -k test_px_sandbox_avoids -k test_l2_04 -k test_l2_05`. Expected, exit 1:
@@ -4126,7 +4332,7 @@ FAIL test_px_sandbox_avoids_excluded_constructs AssertionError: sandbox.py keeps
 0/4 passed, 4 failed, 0 not run
 ```
 
-- [ ] **Step 6: Write the sandbox (spec 5.2 in the structure of 5.2.9).** Replace the whole of `tools/nautilus/sandbox.py` with exactly this content (Write tool; UTF-8, LF, one final newline). The lines that differ from 5.2.9's skeleton are in `run` (the byte read and the port-state lines) and in `main` (the two `ap.exit(20, ...)` lines, **CONTRACT ISSUE 1**); the notes above give the reasons.
+- [ ] **Step 6: Write the sandbox (spec 5.2 in the structure of 5.2.9).** Replace the whole of `tools/nautilus/sandbox.py` with exactly this content (Write tool; UTF-8, LF, one final newline). The lines that differ from 5.2.9's skeleton are in `run` (the byte read and the port-state lines), in `main` (the two `ap.exit(20, ...)` lines and `except Refused as exc:`, ruling T3 CI 1) and in the module-level helpers between `CryptoTrendPort` and `run`, which hold the bodies 5.2.9 leaves as `...`; `check_input` also makes the refusals of ruling T3-3. The notes above give the reasons.
 ```python
 """The NautilusTrader sandbox child (spec 2026-10-26 section 5.2), run only in the hash-pinned venv and launched only
 through tools/nautilus/launch.py:
@@ -4279,8 +4485,8 @@ def need(ok, what):                                 # one rule of 6.1; a refusal
         raise Refused(what)
 def is_int(x, lo, hi):
     return type(x) is int and lo <= x <= hi
-def int_text(x, lo, hi):
-    return type(x) is str and x.isascii() and x.isdigit() and x == str(int(x)) and lo <= int(x) <= hi
+def int_text(x, lo, hi):                            # len first: int() raises past 4300 digits
+    return type(x) is str and len(x) <= 20 and x.isascii() and x.isdigit() and x == str(int(x)) and lo <= int(x) <= hi
 def is_hex(x, n):
     return type(x) is str and len(x) == n and all(ch in "0123456789abcdef" for ch in x)
 def check_params(inp):                              # 6.1, row params
@@ -4310,6 +4516,7 @@ def check_input(inp, bars_bytes):                   # 6.1, one rule at a time ->
     need(is_int(inp["fill_seed"], 0, 2**32 - 1), "fill_seed")
     need(is_int(inp["price_precision"], 0, FIXED_PRECISION), "price_precision")
     need(is_int(inp["size_precision"], 0, FIXED_PRECISION), "size_precision")
+    need(inp["instrument"] != "SPY" or inp["size_precision"] == 0, "size_precision")   # Equity: whole shares (5.2.3)
     need(int_text(inp["volume"], 1, QUANTITY_MAX), "volume")
     need(is_int(inp["n_bars"], 1, 100000), "n_bars")
     need(is_hex(inp["bars_sha256"], 64), "bars_sha256 format")
@@ -4330,6 +4537,7 @@ def check_input(inp, bars_bytes):                   # 6.1, one rule at a time ->
         whole, dot, frac = f[2].partition(".")
         need(whole.isascii() and whole.isdigit() and (len(frac) == p and frac.isascii() and frac.isdigit()
                                                       if p else dot == "") and Decimal(f[2]) > 0, f"close {k}")
+        need(Decimal(f[2]) <= PRICE_MAX, f"close {k}")   # Price.from_str raises above PRICE_MAX
         closes.append(f[2])
         ts.append(int(f[1]))
     need(all(b > a for a, b in zip(ts, ts[1:])), "timestamps not strictly increasing")
@@ -4400,7 +4608,7 @@ def run(root):                                      # exit 0, 10 or 20 (5.2.1)
     else:
         port = CryptoTrendPort(CryptoTrendConfig(**common, **inp["params"]))
     port.i, port.held, port.fills, port.decisions, port.equity, port.invalid_reasons = -1, 0, [], [], [], []
-    port.denied = port.rejected = 0                 # on_start sets these again; a start that raised keeps them
+    port.denied = port.rejected = 0                 # on_start sets them again; kept if it never runs (C-15)
     port.strategy_started = False
     engine.add_strategy(port)
     engine.run()
@@ -4474,8 +4682,8 @@ if __name__ == "__main__":                          # SECURITY-R3-1: __name__ is
     exit(main())
 ```
   Checks:
-  - `wc -l tools/nautilus/sandbox.py` prints `344 tools/nautilus/sandbox.py`.
-  - `sha256sum tools/nautilus/sandbox.py` prints `979cf7cdc4b537eb791680f92d66bbbaa3fd007d89461254ce04b50e58939a29  tools/nautilus/sandbox.py`.
+  - `wc -l tools/nautilus/sandbox.py` prints `346 tools/nautilus/sandbox.py`.
+  - `sha256sum tools/nautilus/sandbox.py` prints `fdbc0e51aa3e1abff737d96292c636ada8b82f59b8ffe4131c6471d202475b4e  tools/nautilus/sandbox.py`.
   - Only `run` and `main` of Task 1's definitions changed: `python3 -B -c "import ast, subprocess; old = subprocess.run(['git', 'show', 'HEAD:tools/nautilus/sandbox.py'], capture_output=True, encoding='utf-8', errors='replace').stdout; new = open('tools/nautilus/sandbox.py', encoding='utf-8').read(); seg = lambda src: {n.name: ast.get_source_segment(src, n) for n in ast.parse(src).body if isinstance(n, (ast.FunctionDef, ast.ClassDef))}; o, n = seg(old), seg(new); print(sorted(k for k in o if o[k] != n.get(k)))"` prints `['main', 'run']`.
 
 - [ ] **Step 7: Run the new tests and watch them pass.**
@@ -4483,7 +4691,7 @@ if __name__ == "__main__":                          # SECURITY-R3-1: __name__ is
   - Key set (about 1 min 45 s): `QUANTGEN_NAUTILUS_PYTHON="$NTPY" python3 -B -m tests.nautilus_acceptance -k test_px_fixture_inputs -k test_px_sandbox_avoids -k test_l2_04 -k test_l2_05`. Expected, exit 0:
 ```
 PASS test_l2_04_fills_identical_across_processes
-  77 perturbations refused with exit 20
+  80 perturbations refused with exit 20
 PASS test_l2_05a_refusals_exit_20_before_the_engine
 PASS test_l2_05b_input_linked_to_env_refused
 PASS test_px_fixture_inputs_follow_6_1_and_8_2
@@ -4573,7 +4781,7 @@ Claude-Session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 EOF
 git show --stat HEAD
 ```
-  Expected `git show --stat HEAD`: `3 files changed`. `tests/nautilus_acceptance.py` has 468 insertions and `tools/nautilus/launch.py` 51, neither with a deletion. `tools/nautilus/sandbox.py` has 247 insertions and 8 deletions, measured against Task 1's draft text; the figures differ if Task 1's docstring or stub differ. Do not push. `qa/acceptance_results.json` is not staged and keeps its md5.
+  Expected `git show --stat HEAD`: `3 files changed`. `tests/nautilus_acceptance.py` has 471 insertions and `tools/nautilus/launch.py` 51, neither with a deletion. `tools/nautilus/sandbox.py` has 249 insertions and 8 deletions, measured against Task 1's draft text; the figures differ if Task 1's docstring or stub differ. Do not push. `qa/acceptance_results.json` is not staged and keeps its md5.
 
 ---
 
@@ -4585,12 +4793,12 @@ git show --stat HEAD
 - `core/quant/strategies.py`: `simulate` `:69-90`, `trend_switch` `:162-187`, `crypto_trend` `:330-348`, `pnl_matrix` `:379-389`, `grid_from` `:392-398`, which expands its keywords in their order. `core/quant/validate.py`: `GATE["bootstrap_B"]` 2000 (`:53-54`); `cost_floor_bp` (`:115-121`) gives `(50.0, {'SPY': 'us'})`, `(None, {'VOD.L': None})`, `(10.0, {'BTC-USD': 'crypto'})`. `core/quant/gate_package.py:36-38` `HARNESS_SOURCES`; importing that module takes 1.1 s, so `code_paths` imports it lazily.
 - `docs/asset_expansion_study.py`: its import (`:41-58`) inserts the repo root into `sys.path`, reconfigures stdout and `mkdir(exist_ok=True)`s existing folders; loading it by path took 1.3 s and left `git status` empty. `_cached` `:68-79` reads `CACHE / "yf_<symbol>.csv"` (`=`, `^`, `:`, `/` replaced); `fred` `:94-104`; `panel` `:138-145`; `rf_daily` `:148-153` catches every exception and returns 0.03/252, so a blocked `fred` download shows up as an rf mismatch (R-13), which L1-20a uses; the pilot-1 grid is `grid_from(rule=..., lookback=..., step=...)` at `:274` (rule-major); `REFRESH = False` at `:844`.
 - `ui/strategy_lab_page.py`: `FAMILY_ID` `:50`, `register_trials` `:55-77` with the params expression `:75-76`; importing it imports flet (2.2 s, present in the container). `config.py:32-39` (`_clean`), `:176-178` (`macro_dir`).
-- Task 1's draft `launch.run_child` calls `on_started()` with no argument (C2), so the runner calls the `child_started` hook as `lambda: hook(lc)`. Task 1 also defines `launch.VENV_FIX` and `launch.PARENT_NAUTILUS_REMEDY`, which the runner prints as R-03 remedies, and the test helpers `_refused` and `_invalid` (CONTRACT ISSUE 5).
+- Task 1's draft `launch.run_child` calls `on_started()` with no argument (C2), so the runner calls the `child_started` hook as `lambda: hook(lc)`. Task 1 also defines `launch.VENV_FIX` and `launch.PARENT_NAUTILUS_REMEDY`, which the runner prints as R-03 remedies, and the test helpers `_refused` and `_invalid` (Plan ruling T4 CI 5).
 - Through the Task 3 sandbox and the exact launch contract, `--fixtures` measured F1 exit 0, F2 exit 0, N1 exit 10, each with a 942-name census (508 TP, 243 STD, 191 NT; no `nautilus_trader.adapters` or `.network` module); N1 is spec 8.2's row exactly (BUY 1000 @ `100.00`, 500.00, account 904501.00, `final_qty` `1000`, 4 of 12 bars, force stop, C-01 and C-02); F1 and F2 `final_qty` `0`. A real-venv rehearsal through the runner (synthetic 1,500 bars, 4 columns) gave valid children, a census equal to the baseline, and a minimum correlation of 0.99999905 between the rebuilt R and QUANTGEN's pnl at 2x.
 - The container: `/usr/bin/unshare -rn true` exits 0; under it the probe gets errno 101; the parent itself reaches 1.1.1.1:443, so `--egress-record` exits 0 here.
 - `float(f"{y:.9f}") == y` held for every `np.round(x, 9)` tried (the synthetic series and 200,000 random values in [1e6, 1e8]); R-05's round-trip refusal is therefore tested on the pure `check_round_trip` with `0.1 + 0.2`.
-- A registration table written with `sort_keys=True` reorders `axes` and so the grid: pilot 1's rule-major grid is then refused R-11 (measured) (CONTRACT ISSUE 1).
-- Readings of the spec, without a contract change: of-record asserts the pilot values (6.6, "of-record asserts"); both modes require `price_precision` 9 (5.3.2 step 5 rounds to 9 decimals) and 6.1's child ranges; a rehearsal `rf_file` lies inside the temp root or is exactly `docs/asset_expansion/cache/fred_DGS3MO.csv` (3.9, "DGS3MO is allowed only as the cash series"); of-record with a seam, `--ledger-dir` or `--out-dir` is R-11 and rehearsal directories outside the temp root are R-10 (5.3.1); at of-record step 1 a broken family ledger is R-09 and a missing or empty one R-15; any exception before registration prints its traceback tail and `STATUS REFUSED exit=2` (5.3.5); the non-run modes end `STATUS OK` or `STATUS REFUSED`.
+- A registration table written with `sort_keys=True` reorders `axes` and so the grid: pilot 1's rule-major grid is then refused R-11 (measured) (Plan ruling T4 CI 1).
+- Readings of the spec, without a contract change: of-record asserts the pilot values (6.6, "of-record asserts"); both modes require `price_precision` 9 (5.3.2 step 5 rounds to 9 decimals) and 6.1's child ranges; a rehearsal `rf_file` lies inside the temp root or is exactly `docs/asset_expansion/cache/fred_DGS3MO.csv` (3.9, "DGS3MO is allowed only as the cash series"); of-record with a seam, `--ledger-dir` or `--out-dir` is R-11 and rehearsal directories outside the temp root are R-10 (5.3.1); at of-record step 1 a broken family ledger is R-09 and a missing or empty one R-15; any exception before registration prints its traceback tail and `STATUS REFUSED exit=2` (5.3.5); the non-run modes end `STATUS OK` or `STATUS REFUSED`; `unshare -rn true` is resolved in `_step3`, not at step 4, because the venv self-check children already run under it, so a host without user namespaces is refused R-14 at step 3 (Plan ruling T4-R8); `_earlier_runs` and `e1_parity_passed` read only `<out root>/*/run.json`, as 5.3.5 names it, never a `run.final.<pid>.json` fallback (Plan ruling T4-R5).
 - `tests/macro_m0_harness.py` with Task 2's amendment gives no hit on `runner.py` (`14/14 passed`); `tests/` is not scanned, and the new test code and stub carry no T-RO-01 token either. test_08 and test_09 read `runtime_py()` only (`tests/acceptance.py:50-75`), which Task 4 does not touch; no `ui/` file changes, so the flet guard is not concerned.
 - Timing: the module without the key took 17 s; with the key 2 min 2 s (the 3 new layer-2 tests about 25 s).
 
@@ -4602,8 +4810,8 @@ git show --stat HEAD
 - Not touched: `tools/nautilus/launch.py`, `tools/nautilus/sandbox.py`, `tests/run_all.py`, `README.md`, `tests/macro_m0_harness.py`, `tests/macro_registry.csv`, `requirements*.txt`, `pyproject.toml`, `config.py`, `qa/acceptance_results.json`.
 
 **Interfaces:**
-- Consumes: C1 (`BridgeRefusal`, `ChildInvalid`, the JSON-bytes rule, `launch.host_tag()`); C2 (`REPO_ROOT`, `SANDBOX`, `EGRESS_PROBE`, `GOLDEN_DIR`, `TIMEOUT_S`, `TAIL_CHARS`, `venv_key`, `resolve_venv_python`, `read_venv`, `venv_mismatches`, `expected_versions`, `parent_nautilus`, `parent_pyarrow`, `make_tempdir`, `resolve_unshare`, `build_launch`, `run_child`, `parse_census`, `cleanup_tempdir`, `fixture_inputs`), with Task 1's `VENV_FIX` and `PARENT_NAUTILUS_REMEDY`; C3 and C6 (the sandbox's modes, exit codes, output files and manifest); C4 (the probe's one JSON line); C8's Task 1 block (`ROOT`, `guarded`, `layer2`, `tests`) and Task 1's `_refused`, `_invalid` (CONTRACT ISSUE 5); `gate_ledger`, `validate`, `strategies`, `gate_package.HARNESS_SOURCES`, `config.macro_dir`, `ui.strategy_lab_page.register_trials` (read-only).
-- Produces: C5 (`input_bytes` writes it); C7 (the three goldens and the Linux census baseline); C8's Task 4 additions (`STUB`, `stub_python`, `stub_cmd`, `stub_probe_cmd`, `synth_prices`, `synth_rf`, `write_rehearsal_table` (written without `sort_keys`, CONTRACT ISSUE 1), `run_rehearsal`); C9 (the stub child); C10's Task 4 part: the CLI, exit codes and STATUS line, `STATUSES`, `main`, `run`, `table_sha256`, `code_sha256`, `host_fingerprint`, `bridge_run_id`, `TableLock`, `take_lock`, `check_table`, `check_tree`, `tree_refusal`, `check_egress_record`, `check_p0a` (CONTRACT ISSUE 2), `judge_census`, `record_baseline` (CONTRACT ISSUE 3), `write_record`, `parse_fills`, `parse_decisions`, `parse_equity`, `Rebuilt`, `rebuild_returns`, `Leg`, `RunContext`, `Outcome`, `parity_and_gate` (body exactly C10's `raise NotImplementedError(...)`); C12's run record (6.3) and ledger row (6.4), and the reading of earlier E1 records' `parity.hard_pass` (CONTRACT ISSUE 4).
+- Consumes: C1 (`BridgeRefusal`, `ChildInvalid`, the JSON-bytes rule, `launch.host_tag()`); C2 (`REPO_ROOT`, `SANDBOX`, `EGRESS_PROBE`, `GOLDEN_DIR`, `TIMEOUT_S`, `TAIL_CHARS`, `venv_key`, `resolve_venv_python`, `read_venv`, `venv_mismatches`, `expected_versions`, `parent_nautilus`, `parent_pyarrow`, `make_tempdir`, `resolve_unshare`, `build_launch`, `run_child`, `parse_census`, `cleanup_tempdir`, `fixture_inputs`), with Task 1's `VENV_FIX` and `PARENT_NAUTILUS_REMEDY`; C3 and C6 (the sandbox's modes, exit codes, output files and manifest); C4 (the probe's one JSON line); C8's Task 1 block (`ROOT`, `guarded`, `layer2`, `tests`) and Task 1's `_refused`, `_invalid` (Plan ruling T4 CI 5); `gate_ledger`, `validate`, `strategies`, `gate_package.HARNESS_SOURCES`, `config.macro_dir`, `ui.strategy_lab_page.register_trials` (read-only).
+- Produces: C5 (`input_bytes` writes it); C7 (the three goldens and the Linux census baseline); C8's Task 4 additions (`STUB`, `stub_python`, `stub_cmd`, `stub_probe_cmd`, `synth_prices`, `synth_rf`, `write_rehearsal_table` (written without `sort_keys`; Plan ruling T4 CI 1), `run_rehearsal`); C9 (the stub child); C10's Task 4 part: the CLI, exit codes and STATUS line, `STATUSES`, `main`, `run`, `table_sha256`, `code_sha256`, `host_fingerprint`, `bridge_run_id`, `TableLock`, `take_lock`, `check_table`, `check_tree`, `tree_refusal`, `check_egress_record`, `check_p0a` (Plan ruling T4 CI 2), `judge_census`, `record_baseline` (Plan ruling T4 CI 3), `write_record`, `parse_fills`, `parse_decisions`, `parse_equity`, `Rebuilt`, `rebuild_returns`, `Leg`, `RunContext`, `Outcome`, `parity_and_gate` (body exactly C10's `raise NotImplementedError(...)`); C12's run record (6.3) and ledger row (6.4), and the reading of earlier E1 records' `parity.hard_pass` (Plan ruling T4 CI 4).
 - Produces, beyond the contract: in `runner.py` the constants (`PINNED_REAL_MD5`, `LAYER`, `REMEDY`, `SCRIPT`, `PRICE_DECIMALS`, `FRESH_S`, `PILOTS`, `PILOT_VALUES`, `SHAPES`, `TABLE_TYPES`, `GOLDEN_FIXTURES`) and `refuse`, `temp_roots`, `inside_temp_root`, `code_paths`, `code_digest`, `load_table`, `e1_parity_passed`, `venv_python_from_key`, `launch_once`, `check_venv`, `run_probe`, `control_connect`, `Prices`, `bar_timestamps`, `check_round_trip`, `load_prices`, `load_rf`, `load_study`, `check_cost`, `check_gate`, `ledger_row`, `registration_entry`, `census_class`, `census_diff`, `load_baseline`, `reconcile`, `manifest_reasons`, `child_params`, `cost_text`, `bars_bytes`, `input_bytes`, `utc_date`, `golden_of`, `compare_golden`, `run_fixture`, `fixtures_mode`, `check_env_mode`, `egress_record_mode`; in the tests `GOLDEN_DIR`, `ONE_SMA`, `REHEARSAL_LIKE`, `SPEC_FILLS`, `SPEC_R`, `SPEC_PNL`, `GOLDEN_SPEC`, `_runner`, `_bdates`, `_md5`, `_write_prices`, `_write_rf`, `_small_table`, `_captured`, `_step_hooks`, `_plain_row`, `_code_root`, `_of_record_table`, `_fixture_series`. Task 5 uses `RunContext`, `Leg`, `Outcome`, the rehearsal helpers, `GOLDEN_SPEC` and `REHEARSAL_LIKE`.
 
 **Counts (Count Ledger as deltas from `B`, the full-suite baseline Task 1 Step 0 recorded in `$S/t1_baseline.json`).** Task 4 adds 24 `nautilus` rows: 21 layer 1 (PASS) and 3 layer 2 (NOT_RUN with the key unset). After Task 4 the `nautilus` suite is 42 rows: `32/42 passed, 0 failed, 10 not run` with the key unset, `42/42 passed, 0 failed, 0 not run` with `QUANTGEN_NAUTILUS_PYTHON="$NTPY"` (absolute: the suite started at 0). The full suite through the wrapper is `B` plus Tasks 2 to 4: +44 rows, +34 PASS, +10 NOT_RUN, the FAIL count and FAIL set of `B` unchanged; `macro` stays `M + 2` (Task 2). `python3 -B -m tests.macro_m0_harness` stays `14/14 passed, 0 failed, 0 not run`. Reference example only: from 2026-10-26's `B` = `745/870 passed, 1 failed, 124 not run`, this is the ledger's `779/914 passed, 1 failed, 134 not run`.
@@ -4742,7 +4950,7 @@ def write_rehearsal_table(tmp: Path, *, like: str = "E1-SPY", prices, dates: Seq
     """The prices file, the DGS3MO-shaped file when rf is given, and <tmp>/table.json: a 6.6 table with pilot
     "rehearsal" and every other field from pilot `like` (10.1 or 10.2), study_configs [], no reference card, md5s
     computed, no owner field; `fields` override any key (a new `axes` without `grid` recomputes the grid). Written
-    without sort_keys: the axes keys keep the study's call order, which fixes the grid's column order (CONTRACT ISSUE 1)."""
+    without sort_keys: the axes keys keep the study's call order, which fixes the grid's column order (spec 5.3.2 step 1)."""
     from core.quant import strategies as S
     t = {"schema": "nautilus-bridge-table/1", "pilot": "rehearsal", **REHEARSAL_LIKE[like],
          "prices_file": str(tmp / "prices.csv"), "prices_md5": _write_prices(tmp / "prices.csv", dates, prices),
@@ -4898,7 +5106,7 @@ def test_l1_03_children_start_after_registration():
         assert {r["config_id"] for r in reg["rows"]} == expected and all(r["appended"] for r in reg["rows"]), reg
         assert all(c["manifest"]["input"]["ledger_hash_after_registration"] == reg["hash_after"]
                    for c in rec["children"])
-        assert rec["times"]["registered_utc"] < rec["times"]["first_child_utc"], rec["times"]
+        assert all(isinstance(rec["times"][k], str) for k in ("registered_utc", "first_child_utc")), rec["times"]
         assert (rec["data"]["prices_md5"], rec["data"]["rf_md5"]) == (t["prices_md5"], t["rf_md5"]), rec["data"]
         assert rec["stub_child"] is True and rec["provenance"]["p0a"]["passed"] is True and rec["census"] == {}
 
@@ -5666,7 +5874,7 @@ S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratch
 python3 -B -m tests.nautilus_acceptance 2>/dev/null | grep -v '^PASS'
 QUANTGEN_NAUTILUS_PYTHON="$NTPY" python3 -B -m tests.nautilus_acceptance 2>/dev/null | grep -E '^FAIL test_l2|passed'
 ```
-  Expected without the key: 21 lines `FAIL test_l1_<nn>_... ImportError: cannot import name 'runner' from 'tools.nautilus' (/home/user/quantgen/tools/nautilus/__init__.py)`, one per new layer-1 test (01, 03, 04, 06 to 12, 18, 19, 20a, 23 to 27, 33 to 35), then the 10 `NOT_RUN test_l2_... OWNER: Nautilus venv not configured (QUANTGEN_NAUTILUS_PYTHON)` lines, an empty line and `11/42 passed, 21 failed, 10 not run`. L1-15 and L1-32 still pass (the block obeys spec 3.7, and no test touches a guarded root). With the key (about 1.5 minutes): the same 21 FAIL lines plus `FAIL test_l2_02_f1_f2_match_goldens`, `FAIL test_l2_03_n1_matches_golden` and `FAIL test_l2_06_census_matches_platform_baseline` with the same ImportError, and `18/42 passed, 24 failed, 0 not run`.
+  Expected without the key: 21 lines `FAIL test_l1_<nn>_... ImportError: cannot import name 'runner' from 'tools.nautilus' (/home/user/quantgen/tools/nautilus/__init__.py)`, one per new layer-1 test (01, 03, 04, 06 to 12, 18, 19, 20a, 23 to 27, 33 to 35), with the stdout line `  pyarrow in the global interpreter: None` of the passing L1-22 between the 20a and 23 lines (`grep -v '^PASS'` keeps it), then the 10 `NOT_RUN test_l2_... OWNER: Nautilus venv not configured (QUANTGEN_NAUTILUS_PYTHON)` lines, an empty line and `11/42 passed, 21 failed, 10 not run`. L1-15 and L1-32 still pass (the block obeys spec 3.7, and no test touches a guarded root). With the key (about 1.5 minutes): the same 21 FAIL lines plus `FAIL test_l2_02_f1_f2_match_goldens`, `FAIL test_l2_03_n1_matches_golden` and `FAIL test_l2_06_census_matches_platform_baseline` with the same ImportError, and `18/42 passed, 24 failed, 0 not run`.
 
 - [ ] **Step 3: Create the stub child.** Create `tests/nautilus_stub_child.py` with this exact content (LF):
 ```python
@@ -5918,7 +6126,7 @@ F1 0 True 926593.00 0 [['BUY', '10000', '100.000000000', '5000.00'], ['SELL', '1
 F2 0 True 50343.77 0 [['BUY', '1.00000000', '53000.000000000', '53.00'], ['SELL', '1.00000000', '50000.000000000', '50.00'], ['BUY', '0.98812079', '50500.000000000', '49.90'], ['SELL', '0.98812079', '51000.000000000', '50.39']] []
 ```
 
-- [ ] **Step 4: Create the runner.** Create `tools/nautilus/runner.py` with this exact content (LF). Every function is under 60 lines. It holds spec 5.3: the CLI, argument validation, steps 0 to 15 as one pure function or one short step function each, the census judgement, `record_baseline`, `write_record`, the run lifecycle with its `try/finally`, and the `parity_and_gate` seam whose body is exactly C10's; Task 5 replaces only that body. CONTRACT ISSUE 2 is in `check_p0a` (its `arrays` also carry `symbol` and `start`; it returns the Panel), CONTRACT ISSUE 3 in `record_baseline`'s `python` keyword, CONTRACT ISSUE 4 in `e1_parity_passed`.
+- [ ] **Step 4: Create the runner.** Create `tools/nautilus/runner.py` with this exact content (LF). Every function is under 60 lines. It holds spec 5.3: the CLI, argument validation, steps 0 to 15 as one pure function or one short step function each, the census judgement, `record_baseline`, `write_record`, the run lifecycle with its `try/finally`, and the `parity_and_gate` seam whose body is exactly C10's; Task 5 replaces only that body. Plan ruling T4 CI 2 is in `check_p0a` (its `arrays` also carry `symbol` and `start`; it returns the Panel), T4 CI 3 in `record_baseline`'s `python` keyword, T4 CI 4 in `e1_parity_passed`.
 ```python
 """The parent of the NautilusTrader bridge (spec 2026-10-26 section 5.3), run in the global interpreter.
 
@@ -7708,9 +7916,9 @@ S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratch
 QUANTGEN_NAUTILUS_PYTHON="$NTPY" python3 -B -m tools.nautilus.runner --fixtures --write-goldens; echo "exit $?"
 md5sum tools/nautilus/golden/F1.json tools/nautilus/golden/F2.json tools/nautilus/golden/N1.json
 QUANTGEN_NAUTILUS_PYTHON="$NTPY" python3 -B -m tests.nautilus_acceptance -k l1_33 -k l2_02 -k l2_03 -k l2_06 2>/dev/null | grep -E '^(PASS|FAIL)|passed'
-QUANTGEN_NAUTILUS_PYTHON="$NTPY" python3 -B -m tools.nautilus.runner --fixtures --write-goldens | tail -4
+QUANTGEN_NAUTILUS_PYTHON="$NTPY" python3 -B -m tools.nautilus.runner --fixtures --write-goldens | tail -7
 ```
-  Expected: `F1: exit 0, census 942 names, differs: no golden file`, the same for F2 and `N1: exit 10, ...`, then `written F1.json`, `written F2.json`, `written N1.json`, `STATUS OK exit=0 record=-`, `exit 0`; the md5s `6525ecbe771351571469df533c1c3c6c`, `85199e69206182532ac8b5080e0b0150`, `0fc7830cf871e00a2f3a6cc891ceff03`; `PASS` for L1-33, L2-2 and L2-3, `FAIL test_l2_06_...` as in Step 4, `3/4 passed, 1 failed, 0 not run`; the repeat prints `F1.json exists; never overwritten` (the same for F2 and N1) and `STATUS OK exit=0 record=-` (QA-R2-6).
+  Expected: `F1: exit 0, census 942 names, differs: no golden file`, the same for F2 and `N1: exit 10, ...`, then `written F1.json`, `written F2.json`, `written N1.json`, `STATUS OK exit=0 record=-`, `exit 0`; the md5s `6525ecbe771351571469df533c1c3c6c`, `85199e69206182532ac8b5080e0b0150`, `0fc7830cf871e00a2f3a6cc891ceff03`; `PASS` for L1-33, L2-2 and L2-3, `FAIL test_l2_06_...` as in Step 4, `3/4 passed, 1 failed, 0 not run`; the repeat prints the three judgement lines (`F1: exit 0, census 942 names, matches its golden`, F2 likewise, `N1: exit 10, census 942 names, matches its golden`), then `F1.json exists; never overwritten` (the same for F2 and N1) and `STATUS OK exit=0 record=-` (QA-R2-6). `--write-goldens` judges no existing golden: its exit 0 says only that nothing was overwritten, so a drift shows here as a `differs:` line, and Step 6's `--record-baseline` then refuses with exit 2 (Plan ruling T4-R6).
 
 - [ ] **Step 6: Record the Linux census baseline.**
 ```bash
@@ -7743,11 +7951,12 @@ print({k: len(v) for k, v in rec["census"].items()}, rec["egress"]["probe"]["blo
 EOF
 rm -rf "$T"
 rm -rf "$S/clone_task4"; git clone -q /home/user/quantgen "$S/clone_task4" && cp tools/nautilus/runner.py "$S/clone_task4/tools/nautilus/"
+rm -f "$S/clone_task4"/docs/asset_expansion/cache/{yf_SPY.csv,yf_BTC-USD.csv,binance_BTCUSDT.csv,upbit_KRW-BTC.csv}
 (cd "$S/clone_task4" && QUANTGEN_NAUTILUS_PYTHON="$NTPY" python3 -B -m tools.nautilus.runner --egress-record | tail -1; echo "exit ${PIPESTATUS[0]}")
 rm -rf "$S/clone_task4"
 git status --short
 ```
-  Expected: three JSON lines (`{"environment": "BACKTEST", "machine": "x86_64", "precision": {"FIXED_PRECISION": 16, "HIGH_PRECISION": true, "PRICE_MAX": 17014118346046.0, "QUANTITY_MAX": 34028236692093.0}, "python": "3.13.17", "schema": "nautilus-bridge-check-env/1", "system": "Linux"}`, the five self-test outcomes, and the venv python, `python_minor` `3.13`, the three pinned versions and the wheel identity `a448cd20...`, 764 entries), `STATUS OK exit=0 record=-`, `exit 0`; without the key `STATUS REFUSED exit=2 record=-` after `R-03: QUANTGEN_NAUTILUS_PYTHON is not set` and its remedy, `exit 2`. The rehearsal (about 5 s) ends `G-06: NotImplementedError: spec 5.4 and 5.5 are plan Task 5` and `STATUS ERROR exit=4 record=<T>/out/NB-<UTC>-<8 hex>/run.json`, `exit 4` (Task 5 fills the seam); the record shows `ERROR False 1 32 True True`, `a448cd20 {'nautilus-trader': '1.231.0', 'numpy': '2.3.5', 'pandas': '2.3.3'}`, `[(0, 1, 0, [], True), (0, 2, 0, [], True)]` and `{'manylinux_2_35_x86_64': 942} True`: the post-registration ledger hash, both data md5s, the venv reads and every child manifest (spec Step 6 done-when). `--egress-record` runs only in the scratch clone (plan rules): its last line is `STATUS OK exit=0 record=<S>/clone_task4/docs/nautilus_bridge/egress/linux_x86_64.json`, `exit 0`, when the container reaches 1.1.1.1:443 (measured 2026-10-28); where it does not, the output shows `control connect failed: ...`, the network line, the R-14 line and `STATUS REFUSED exit=2 record=...`, also a correct result. The real clone's `git status --short` shows only Task 4's paths (Step 12) and the pre-existing ones.
+  Expected: three JSON lines (`{"environment": "BACKTEST", "machine": "x86_64", "precision": {"FIXED_PRECISION": 16, "HIGH_PRECISION": true, "PRICE_MAX": 17014118346046.0, "QUANTITY_MAX": 34028236692093.0}, "python": "3.13.17", "schema": "nautilus-bridge-check-env/1", "system": "Linux"}`, the five self-test outcomes, and the venv python, `python_minor` `3.13`, the three pinned versions and the wheel identity `a448cd20...`, 764 entries), `STATUS OK exit=0 record=-`, `exit 0`; without the key `STATUS REFUSED exit=2 record=-` after `R-03: QUANTGEN_NAUTILUS_PYTHON is not set` and its remedy, `exit 2`. The rehearsal (about 5 s) ends `G-06: NotImplementedError: spec 5.4 and 5.5 are plan Task 5` and `STATUS ERROR exit=4 record=<T>/out/NB-<UTC>-<8 hex>/run.json`, `exit 4` (Task 5 fills the seam); the record shows `ERROR False 1 32 True True`, `a448cd20 {'nautilus-trader': '1.231.0', 'numpy': '2.3.5', 'pandas': '2.3.3'}`, `[(0, 1, 0, [], True), (0, 2, 0, [], True)]` and `{'manylinux_2_35_x86_64': 942} True`: the post-registration ledger hash, both data md5s, the venv reads and every child manifest (spec Step 6 done-when). `--egress-record` runs only in the scratch clone (plan rules), from which the `rm -f` line has deleted the four cache files unopened (Plan ruling X-6; the mode reads none of them): its last line is `STATUS OK exit=0 record=<S>/clone_task4/docs/nautilus_bridge/egress/linux_x86_64.json`, `exit 0`, when the container reaches 1.1.1.1:443 (measured 2026-10-28); where it does not, the output shows `control connect failed: ...`, the network line, the R-14 line and `STATUS REFUSED exit=2 record=...`, also a correct result. The real clone's `git status --short` shows only Task 4's paths (Step 12) and the pre-existing ones.
 
 - [ ] **Step 8: The module in both key states.**
 ```bash
@@ -7857,7 +8066,7 @@ git show --stat HEAD | tail -1; git status --short; md5sum qa/acceptance_results
 ### Task 5: Parity, gate, pilot tables, runbook (spec Step 7): sections 5.4 and 5.5, the two registration tables, `RUNBOOK_windows.md`
 
 **Verified before writing (2026-10-28, at HEAD `049306c`, then `f4085cd`, which adds only `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`: no Task 5 step reads or writes it, and the 3.3 guard sees it unchanged; dry run in the scratch clones `$S/plan_step2/task5/clone` (GREEN) and `$S/plan_step2/task5/red` (RED), both copies of Task 4's scratch clone: commit `48ec6eb` "scratch: Tasks 1-3 drafts" plus Task 4's draft, `tools/nautilus/runner.py` md5 `01b576997547d17d8f318fb67f26bac6`, `tests/nautilus_acceptance.py` md5 `8694bc609a52865257309d513d234297`, `tests/nautilus_stub_child.py` md5 `9ff240c01117062c36189839ee072d63`; the real clone was not touched, and no real price row was read):**
-- **Task 4's hand-over** (line numbers of that draft). `parity_and_gate` raises `NotImplementedError("spec 5.4 and 5.5 are plan Task 5")` (`tools/nautilus/runner.py:1068-1070`). `_after_registration` (`:1486-1508`) calls it after the `after_step15` hook; an `Exception` becomes G-06 (ERROR, exit 4), a `BaseException` G-07 (ABORTED, exit 5); otherwise it copies `Outcome.withheld_reasons` into the record (`:1507`) and finishes with the Outcome's status and exit code. `_new_record` (`:1227-1234`) starts `parity`, `gate`, `card` and `error` at None, and step 7 sets `provenance = {"p0a": ..., "p0b": None}` (`:1362`). `_earlier_runs` (`:242-259`) lets a WITHHELD record be re-run without `--rerun-of` only when every withheld reason starts with `C-06` (`:252-253`), so P13's reasons keep the leg's own C-id first (**CONTRACT ISSUE 4**). `e1_parity_passed` (`:412-423`) reads `rec["parity"]["hard_pass"] is True` with 12 registration rows, so `parity.hard_pass` is one bool over every column at both cost levels (P0b and P12 included). `_check_values` (`:360-396`) requires `grid == S.grid_from(**axes)`, whose column order follows the axes' key order (`:389-390`), and study_configs entries with exactly the keys `source, symbols, cost_bps, params` (`:393-394`). `write_rehearsal_table` writes tables without `sort_keys` for that reason (`tests/nautilus_acceptance.py:1228-1246`, Task 4's CONTRACT ISSUE 1); the two pilot tables follow the same rule. `main` (`:1733-1769`) knows four modes.
+- **Task 4's hand-over** (line numbers of that draft). `parity_and_gate` raises `NotImplementedError("spec 5.4 and 5.5 are plan Task 5")` (`tools/nautilus/runner.py:1068-1070`). `_after_registration` (`:1486-1508`) calls it after the `after_step15` hook; an `Exception` becomes G-06 (ERROR, exit 4), a `BaseException` G-07 (ABORTED, exit 5); otherwise it copies `Outcome.withheld_reasons` into the record (`:1507`) and finishes with the Outcome's status and exit code. `_new_record` (`:1227-1234`) starts `parity`, `gate`, `card` and `error` at None, and step 7 sets `provenance = {"p0a": ..., "p0b": None}` (`:1362`). `_earlier_runs` (`:242-259`) lets a WITHHELD record be re-run without `--rerun-of` only when every withheld reason starts with `C-06` (`:252-253`), so P13's reasons keep the leg's own C-id first (ruling T5 CI 4). `e1_parity_passed` (`:412-423`) reads `rec["parity"]["hard_pass"] is True` with 12 registration rows, so `parity.hard_pass` is one bool over every column at both cost levels (P0b and P12 included). `_check_values` (`:360-396`) requires `grid == S.grid_from(**axes)`, whose column order follows the axes' key order (`:389-390`), and study_configs entries with exactly the keys `source, symbols, cost_bps, params` (`:393-394`). `write_rehearsal_table` writes tables without `sort_keys` for that reason (`tests/nautilus_acceptance.py:1228-1246`, ruling T4 CI 1); the two pilot tables follow the same rule. `main` (`:1733-1769`) knows four modes.
 - **Gate, read only.** `validate.walk_forward` (`core/quant/validate.py:345-381`) sets `first = w_is if T - w_is >= w_oos + embargo else min_is`, raises `ValueError(f"need at least {first + embargo + 21} sessions for one walk-forward step, got {T}")` (`:365-367`), and per origin slices `a, b = o + embargo, min(o + embargo + w_oos, T)` and picks `np.nanargmax(_col_sharpe(M[max(0, o - w_is):o]))` (`:370-377`); `WalkForward` is a frozen dataclass (`:332-342`); `_col_sharpe` is `:268-270`. `_decide_strategy` (`:536-622`) reads exactly the 18 predicates of `parity.gate_predicates`: `ci90[0] > 0` and `dsr >= dsr_min` (`:578`), `isfinite(dsr)` (`:593`), `pbo_meaningful` and `flat` (`:544-545`), `pbo_ok` and `pbo_reject` (`:576-577`), the five engine checks (`:579-583`), `min_track_record` (`:584`), the trade floor, whole years and sessions (`:585-586`), `has_bench` (`:557`) and `bench_ok` (`:592`). `score_strategy` is `:492-533`; `ModelCard.to_json` is `:827-828`, and `ModelCard.save` (`:830-834`) overwrites, so the bridge never calls it.
 - **Ledger.** `FamilyLedger.snapshot(hash)` (`core/quant/gate_ledger.py:323-330`) returns the registration-time prefix, on which U is counted; `assert_hash_at_run` (`:389-396`) raises `LedgerRefused` (`:87`) when the ledger moved; `config_id` (`:168-171`) hashes `ROW_SET_KEY` with absent keys as None, so a study configuration's row `{rule, params, timing_class}` gives the Lab's id.
 - **Strategies.** `S._sma` (`core/quant/strategies.py:111-116`) needs a 2-D array (`np.vstack` of a `(1,)` zero row and a 1-D series raises), so P1's QUANTGEN margins call it on `P[:, None]`. `crypto_trend`'s defaults `(7, 14, 21, 28)` and `(10, 20, 50, 100, 200)` (`:330-331`) equal the runner's `CRYPTO_DEFAULTS`. `Panel` is a frozen dataclass (`:40-48`), so L1-20b replaces `ctx.study_pn` with `dataclasses.replace`.
@@ -7874,11 +8083,11 @@ git show --stat HEAD | tail -1; git status --short; md5sum qa/acceptance_results
 - Not touched: every CRLF file (`tests/run_all.py`, `README.md`, `requirements.txt`, `pyproject.toml`, `config.py`), `tools/nautilus/{launch,sandbox,egress_probe}.py`, `tests/nautilus_stub_child.py`, the goldens, `core/`, `docs/asset_expansion/`, `paper_live/`, `grokteam/`, and `qa/acceptance_results.json` (md5 `16c9baa5a1777853521d485d5078e456` before and after every step).
 
 **Interfaces:**
-- Consumes: C1 (`BridgeRefusal`, section-7 ids, the JSON bytes of `write_record`, host and platform tags); C2 (`make_tempdir`, `build_launch`, `run_child`, `cleanup_tempdir`, `resolve_unshare`, `read_venv`, `venv_mismatches`, `parent_nautilus`, `parent_pyarrow`, `host_tag`, `EGRESS_PROBE`, `GOLDEN_DIR`, `TIMEOUT_S`); C3 and C6 (the child's modes, the manifest's `input.cost_bps` and `input.stress` echoes); C8's Task 4 helpers (`stub_python`, `stub_cmd`, `stub_probe_cmd`, `synth_prices`, `synth_rf`, `write_rehearsal_table`, `run_rehearsal`) and Task 4's private test helpers of **CONTRACT ISSUE 5**; C10 (`run` and its hooks, `RunContext`, `Leg`, `Outcome`, `rebuild_returns`, `table_sha256`, `code_sha256`, `host_fingerprint`, `judge_census`, `write_record`) and the Task 4 runner internals of **CONTRACT ISSUE 5**; `core.quant.validate`, `core.quant.gate_ledger`, `core.quant.strategies` and the study module, read only.
+- Consumes: C1 (`BridgeRefusal`, section-7 ids, the JSON bytes of `write_record`, host and platform tags); C2 (`make_tempdir`, `build_launch`, `run_child`, `cleanup_tempdir`, `resolve_unshare`, `read_venv`, `venv_mismatches`, `parent_nautilus`, `parent_pyarrow`, `host_tag`, `EGRESS_PROBE`, `GOLDEN_DIR`, `TIMEOUT_S`); C3 and C6 (the child's modes, the manifest's `input.cost_bps` and `input.stress` echoes); C8's Task 4 helpers (`stub_python`, `stub_cmd`, `stub_probe_cmd`, `synth_prices`, `synth_rf`, `write_rehearsal_table`, `run_rehearsal`) and Task 4's private test helpers of ruling T5 CI 5; C10 (`run` and its hooks, `RunContext`, `Leg`, `Outcome`, `rebuild_returns`, `table_sha256`, `code_sha256`, `host_fingerprint`, `judge_census`, `write_record`) and the Task 4 runner internals of ruling T5 CI 5; `core.quant.validate`, `core.quant.gate_ledger`, `core.quant.strategies` and the study module, read only.
 - Produces: C11 in full (`cents`, `select_matched`, `gate_predicates`, `agree`, `reference_drift`, `hand_off`); C10's Task 5 part (the seam's body; `--fingerprint --table <t>`, `--timing`, `--handoff-report`); C12's card (6.5), the run record's `parity`, `gate`, `card` and `provenance.p0b` (6.3), the hand-off report and the two registration tables (6.6).
-- Produces beyond the contract: in `parity`, the constants `BARS`, `OWNER_BARS`, `HARD`, `WARNINGS`, `ENGINE_TEXT`, `SELECTION_TEXT`, `PARITY_SCOPE`, `PARITY_BARS_TEXT`, `CLAIM_PREFIXES`, `STUDY_BENCH`, `CITATIONS`, `REFERENCE_FLOATS`, `PROTOCOL_KEYS` and the functions `plain`, `corr` (**CONTRACT ISSUE 1**), `mdd`, `pair_checks`, `decision_bars`, `qg_margins`, `p1`, `p7`, `leg_checks`, `study_benchmark`, `p0b`, `p11`, `p12`, `study_config_ids`, `trial_counts`, `card_rules` (**CONTRACT ISSUE 2**), `parity_summary`, `build_card`, `write_card`, `check_parity`; in `runner`, `HANDOFF_SCHEMA` (`"nautilus-bridge-handoff/1"`), `BRANCH`, `TIMING_BARS`, `TIMING_ENGINE`, `TIMING_GRID`, `FIREWALL_COMMANDS`, `fingerprint_mode` (**CONTRACT ISSUE 3**), `timing_inputs`, `import_micros`, `run_timing`, `timing_mode`, `handoff_report`, `handoff_mode` and their private helpers.
+- Produces beyond the contract: in `parity`, the constants `BARS`, `OWNER_BARS`, `HARD`, `WARNINGS`, `ENGINE_TEXT`, `SELECTION_TEXT`, `PARITY_SCOPE`, `PARITY_BARS_TEXT`, `CLAIM_PREFIXES`, `STUDY_BENCH`, `CITATIONS`, `REFERENCE_FLOATS`, `PROTOCOL_KEYS` and the functions `plain`, `corr` (ruling T5 CI 1), `mdd`, `pair_checks`, `decision_bars`, `qg_margins`, `p1`, `p7`, `leg_checks`, `study_benchmark`, `p0b`, `p11`, `p12`, `study_config_ids`, `trial_counts`, `card_rules` (ruling T5 CI 2), `parity_summary`, `build_card`, `write_card`, `check_parity`; in `runner`, `HANDOFF_SCHEMA` (`"nautilus-bridge-handoff/1"`), `BRANCH`, `TIMING_BARS`, `TIMING_ENGINE`, `TIMING_GRID`, `FIREWALL_COMMANDS`, `fingerprint_mode` (ruling T5 CI 3), `timing_inputs`, `import_micros`, `run_timing`, `timing_mode`, `handoff_report`, `handoff_mode` and their private helpers.
 
-**Withheld reasons and exit codes** (section 7; the record's `withheld_reasons`, **CONTRACT ISSUE 4**): a leg that failed P13 contributes its own `C-nn: ...` reasons with ` (column <c> (<theta>), <s>x)` appended (G-01); a failed hard check `P0b`, `P1` to `P4`, `P7` or `P12` contributes `P<n>: ...` (G-01); `G-03: walk_forward raised ...`, `G-03: walk_forward (P11, Nautilus's own selection) raised ...` or `G-03: score_strategy raised ...`; `G-02: decision mismatch: quantgen <d>, nautilus <d>; predicates differ: <name> <qg>/<nt>, ...` or `G-02: benchmark test dropped`; `G-08: reference drift: <fields>`; `G-05: ledger moved after registration: <LedgerRefused>`. Any of them gives WITHHELD, exit 1, no card. G-04 (`GATE` differs from the snapshot, checked at the end of every hand-off) gives ERROR, exit 4, no card, with `record["error"]["message"]` = `G-04: GATE differs from its snapshot after scoring: [<keys>]`. Otherwise CARD_WRITTEN, exit 0. Warnings P5, P6, P8, P9 and P10 go into `record["parity"]["warnings"]` and the card's `stats.parity` and never withhold. An unexpected exception inside `hand_off` stays Task 4's G-06 (ERROR, 4); a `KeyboardInterrupt` G-07 (ABORTED, 5).
+**Withheld reasons and exit codes** (section 7; the record's `withheld_reasons`, ruling T5 CI 4): a leg that failed P13 contributes its own `C-nn: ...` reasons with ` (column <c> (<theta>), <s>x)` appended (G-01); a failed hard check `P0b`, `P1` to `P4`, `P7` or `P12` contributes `P<n>: ...` (G-01); `G-03: walk_forward raised ...`, `G-03: walk_forward (P11, Nautilus's own selection) raised ...` or `G-03: score_strategy raised ...`; `G-02: decision mismatch: quantgen <d>, nautilus <d>; predicates differ: <name> <qg>/<nt>, ...` or `G-02: benchmark test dropped`; `G-08: reference drift: <fields>`; `G-05: ledger moved after registration: <LedgerRefused>`. Any of them gives WITHHELD, exit 1, no card. G-04 (`GATE` differs from the snapshot, checked at the end of every hand-off) gives ERROR, exit 4, no card, with `record["error"]["message"]` = `G-04: GATE differs from its snapshot after scoring: [<keys>]`. Otherwise CARD_WRITTEN, exit 0. Warnings P5, P6, P8, P9 and P10 go into `record["parity"]["warnings"]` and the card's `stats.parity` and never withhold. An unexpected exception inside `hand_off` stays Task 4's G-06 (ERROR, 4); a `KeyboardInterrupt` G-07 (ABORTED, 5).
 
 **Counts (Count Ledger as deltas).** Task 1 Step 0 measured the full-suite baseline B = `<P>/<N> passed, <F> failed, <R> not run`. At Task 4's commit, where this task starts, the full suite through the wrapper is `<P+34>/<N+44> passed, <F> failed, <R+10> not run`, and the module CLI gives `32/42 passed, 0 failed, 10 not run` (key unset). Task 5 adds 15 `nautilus` rows (12 layer 1 PASS, 3 layer 2 NOT_RUN with the key unset) and no `macro` row. After Task 5: full suite `<P+46>/<N+59> passed, <F> failed, <R+13> not run` with B's FAIL set; `--suite nautilus` `44/57 passed, 0 failed, 13 not run` (key unset) and `57/57 passed, 0 failed, 0 not run` (key set), absolute, because the suite started at 0; `python3 -B -m tests.macro_m0_harness` stays `14/14 passed, 0 failed, 0 not run`. Reference example only: with B = `745/870 passed, 1 failed, 124 not run` (2026-10-26), the Task 5 row is `791/929 passed, 1 failed, 137 not run`.
 
@@ -7901,7 +8110,7 @@ Expected: HEAD is Task 4's commit; `git status` lists only the paths Task 1 Step
 # --------------------------------------------------------------------------- #
 def main(argv: list[str] | None = None) -> int:
 ```
-and `new_string` is the block below followed by the same four lines. The block uses Task 4's helpers `_runner`, `_bdates`, `_md5`, `_small_table`, `_captured`, `_plain_row`, `_fixture_series` and `SPEC_FILLS` (**CONTRACT ISSUE 5**). Every new test is guarded by `tests()`; temp dirs only; no real price file is read (L1-29 reads the four stored cards' JSON and the study's source with `ast`, and loads the study module as Task 4's `load_study` does). With Task 4's file at md5 `8694bc609a52865257309d513d234297`, the result has md5 `baffe7564cb291040d81028f859f39b9`. Both were measured on Task 4's scratch clone, which carried an earlier draft of Task 3's test block (Plan status), so the file built from this plan has other md5s; the check is then `git diff --numstat tests/nautilus_acceptance.py`, which prints 619 insertions and 0 deletions.
+and `new_string` is the block below followed by the same four lines. The block uses Task 4's helpers `_runner`, `_bdates`, `_md5`, `_small_table`, `_captured`, `_plain_row`, `_fixture_series` and `SPEC_FILLS` (ruling T5 CI 5). Every new test is guarded by `tests()`; temp dirs only; no real price file is read (L1-29 reads the four stored cards' JSON and the study's source with `ast`, and loads the study module as Task 4's `load_study` does). With Task 4's file at md5 `8694bc609a52865257309d513d234297`, the result has md5 `3ee44de50bf4433063a392fef18d241d`. Both were measured on Task 4's scratch clone, which carried an earlier draft of Task 3's test block (Plan status), so the file built from this plan has other md5s; the check is then `git diff --numstat tests/nautilus_acceptance.py`, which prints 640 insertions and 0 deletions (Plan rulings, T5-4: X2's 619 was the count before L1-2 and L1-31 gained their hand-off cases).
 ```python
 # --------------------------------------------------------------------------- #
 # Plan Task 5 (spec Step 7): parity, selection, gate hand-off, card, pilot tables and the three new runner modes
@@ -8030,7 +8239,9 @@ def test_l1_02_parity_functions():
     """L1-2 (5.4.1, 5.5; N2, N4, N7, N8): F1 and F1r meet 8.2's assertions (P1 = 1, P4, P7) and stay inside the P10
     bound; N2 fails P1, P2 and P4; the P1 exemption takes a 1e-10 QUANTGEN margin, not 2e-9; P7's tie (0.13 passes,
     0.12 fails) and N7 (ii) to (iv); N4's P11 mismatches at gap 0 with QUANTGEN's selection kept; N8 through
-    parity.agree; a planted P5 warning still writes a card."""
+    parity.agree; a planted P5 warning still writes a card; a Nautilus score planted REJECT is WITHHELD with the
+    hand-off's full G-02 text."""
+    import dataclasses
     import numpy as np
     from decimal import Decimal
     from core.quant import strategies as S, validate
@@ -8107,11 +8318,21 @@ def test_l1_02_parity_functions():
         f = leg.fills[0]
         f["last_px"] = (f["last_px"] * Decimal("1.000002")).quantize(Decimal("0.000000001"))
         f["commission"] = Decimal(parity.cents(f["last_qty"] * f["last_px"] * Decimal("0.005"))) / 100
+    scores = []
+
+    def nautilus_rejects(wf, **kw):          # G-02 through the hand-off: the second score (sc_nt) says REJECT
+        scores.append(validate.score_strategy(wf, **kw))
+        return dataclasses.replace(scores[-1], decision="REJECT") if len(scores) == 2 else scores[-1]
     with tempfile.TemporaryDirectory(prefix="qgnb_l102_") as name:
         tmp = Path(name)
         code, rec, out = _rehearse(_card_table(tmp), tmp, hooks={"after_step15": plant_p5})
         assert (code, rec["status"]) == (0, "CARD_WRITTEN"), out[-1500:]
         assert [w for w in rec["parity"]["warnings"] if w.startswith("P5: column 0")] and rec["parity"]["hard_pass"]
+        code, rec, out = _rehearse(_card_table(tmp / "g02"), tmp / "g02", score_fn=nautilus_rejects)
+        q = rec["gate"]["quantgen"]["decision"]
+        want = f"G-02: decision mismatch: quantgen {q}, nautilus REJECT; predicates differ: none"
+        assert (code, rec["status"], rec["card"], rec["withheld_reasons"]) == (1, "WITHHELD", None, [want]), out[-1500:]
+        assert q != "REJECT" and rec["gate"]["agree"] == {"ok": False, "reason": "decision mismatch"}, rec["gate"]
 
 
 def test_l1_05_rerun_policy_r17():
@@ -8404,7 +8625,11 @@ def test_l1_30_card_labels_and_engine_text():
 
 def test_l1_31_walk_forward_raise_g03():
     """L1-31 (G-03; QA-R2-2): a 400-row synthetic table makes walk_forward raise after registration; the run is
-    WITHHELD, exit 1, and the reason names the walk_forward exception."""
+    WITHHELD, exit 1, and the reason names the walk_forward exception; a score_fn that raises on the card table is
+    WITHHELD the same way, naming score_strategy, after every hard check passed."""
+
+    def raises(wf, **kw):
+        raise ValueError("planted in score_fn")
     with tempfile.TemporaryDirectory(prefix="qgnb_l131_") as name:
         tmp = Path(name)
         code, rec, out = _rehearse(_small_table(tmp, n=400), tmp)
@@ -8412,6 +8637,11 @@ def test_l1_31_walk_forward_raise_g03():
         want = "G-03: walk_forward raised ValueError: need at least 546 sessions for one walk-forward step, got 399"
         assert rec["withheld_reasons"] == [want] and rec["gate"]["error"] == want, rec["withheld_reasons"]
         assert rec["parity"]["hard_pass"] is False and rec["parity"]["failed"] == [], rec["parity"]["failed"]
+        code, rec, out = _rehearse(_card_table(tmp / "score"), tmp / "score", score_fn=raises)
+        want = "G-03: score_strategy raised ValueError: planted in score_fn"
+        assert (code, rec["status"], rec["card"], rec["withheld_reasons"]) == (1, "WITHHELD", None, [want]), out[-1500:]
+        assert rec["parity"]["hard_pass"] is True and rec["gate"]["error"] == want and rec["gate"]["quantgen"] is None
+        assert rec["gate"]["trial_counts"]["n_trials"] == 4, rec["gate"]["trial_counts"]
 
 
 def test_l1_36_fingerprint_reads_no_data():
@@ -8556,8 +8786,8 @@ FAIL test_l2_12_crypto_rehearsal_reference ImportError: cannot import name 'pari
 ```
 L2-7 and L2-11 reach step 16 through the real sandbox and end ERROR (G-06), so the record's `parity` is None. The second command takes about 50 s.
 
-- [ ] **Step 4: Write `tools/nautilus/parity.py`** (spec 5.4 and 5.5; C11) with exactly this content (Write tool; UTF-8, LF; md5 `660377b31b61f22ed5d784ae609b2d08`). Every function is under 60 lines, so all are given in full. It imports `tools.nautilus.runner` at module level for `cost_text`, `child_params`, `PRICE_DECIMALS`, `Leg`, `RunContext` and `Outcome`; the runner imports `parity` only inside `parity_and_gate`, so loading either module first works. Steps 16 and 17 in `hand_off`, as numbered steps of spec 5.4 and 5.5:
-  1. `check_parity`: per (column, cost level), in key order, P13 from the leg (Task 4's `Leg.invalid` and `Leg.rebuilt`); for a valid leg P1 (decision bars equal 5.2.5's, every mismatch exempt only below a 1e-9 QUANTGEN margin), P2 and P3 (`pair_checks`), P4 (fill bars without bar T-1 equal the bars with `abs(dw) > 0`), P5, P6, P7 (`p7`: `Decimal(commission) * 100 == cents(qty * px * cost * stress / 1e4)`, USD, and the manifest's echo of `cost_text(cost_bps)` and the runner's own stress), P8, P9, P10; then P0b (`p0b` on `ctx.study_pn.prices`). Hard failures become withheld reasons (G-01), warnings a list.
+- [ ] **Step 4: Write `tools/nautilus/parity.py`** (spec 5.4 and 5.5; C11) with exactly this content (Write tool; UTF-8, LF; md5 `71258dfa6e253e07b51fa4d939bb3b8e`). Every function is under 60 lines, so all are given in full. It imports `tools.nautilus.runner` at module level for `cost_text`, `child_params`, `PRICE_DECIMALS`, `Leg`, `RunContext` and `Outcome`; the runner imports `parity` only inside `parity_and_gate`, so loading either module first works. A command-line run (`python -B -m tools.nautilus.runner`, the of-record path) loads the runner twice, as `__main__` and, through this import, as `tools.nautilus.runner`: `hand_off` then returns the second copy's `Outcome`, which `_after_registration` reads by attribute only, and parity raises no runner exception class, so the two copies never meet in an `isinstance` or an `except` (Plan rulings, T5-6; Step 12 rehearses that path). Steps 16 and 17 in `hand_off`, as numbered steps of spec 5.4 and 5.5:
+  1. `check_parity`: per (column, cost level), in key order, P13 from the leg (Task 4's `Leg.invalid` and `Leg.rebuilt`); for a valid leg P1 (decision bars equal 5.2.5's, every mismatch exempt only below a 1e-9 QUANTGEN margin), P2 and P3 (`pair_checks`), P4 (fill bars without bar T-1 equal the bars with `abs(dw) > 0`), P5, P6, P7 (`p7`: `Decimal(commission) * 100 == cents(qty * px * cost * stress / 1e4)`, USD, and the manifest's echo of `cost_text(cost_bps)` and the runner's own stress; `input.json` holds both by construction, because Task 4's `input_bytes` writes them from the same loop, and the manifest's `input_json_sha256` echo ties the child to those bytes (C-11, a P13 reason), so `p7` reads only the manifest; Plan rulings, T5-5), P8, P9, P10; then P0b (`p0b` on `ctx.study_pn.prices`). Hard failures become withheld reasons (G-01), warnings a list.
   2. `_walk_forwards`: `wf_qg = walk_forward(pnl_qg, dates[1:], turnover, pnl_stress, embargo)`; a raise is G-03. When every leg passed P13: `wf_nt = select_matched(...)`, P12 at 1x and 2x, then P11 from `walk_forward` on the Nautilus matrices (a raise there is G-03 too).
   3. `hard_pass` = no hard failure, no G-03 and P12 computed. Only then, `_score`: the benchmark from the rounded closes aligned with `wf_qg.dates` as the study does; trial counts on `ledger.snapshot(hash_after_registration)` (G-05 if no prefix has that hash); both scores through `ctx.score_fn` with `seed=11`, the table's domain as tuples and `n_trials = family_n_raw + U` (a raise is G-03).
   4. The record's `parity`, `provenance.p0b` and `gate` (`trial_counts`, `quantgen`, `nautilus`, `selection`, `error`), all made JSON-ready by `plain`; then the `after_step16` hook.
@@ -8565,7 +8795,7 @@ L2-7 and L2-11 reach step 16 through the real sandbox and end ERROR (G-06), so t
   6. G-04: `validate.GATE` against the snapshot, after every hand-off; a difference is ERROR, exit 4, before any card.
   7. When both scores exist: `assert_hash_at_run` (G-05).
   8. No reason left: `build_card` (6.5; `rules.engine` "STUB" with a stub child) and `write_card` (`open(path, "x", encoding="utf-8", newline="\n")`), and `record["card"] = {"path", "md5"}`.
-  9. The `after_step17` hook; the Outcome (CARD_WRITTEN 0, or WITHHELD 1 with the reasons). Task 4's lifecycle writes the final record.
+  9. The `after_step17` hook; `_print_summary` (5.4.1 and 5.5 step 3: the worst P2 and P3 next to the corrected and the owner's bars, the trial counts, both decisions and every reason, printed before Task 4's STATUS line, also on G-04); the Outcome (CARD_WRITTEN 0, or WITHHELD 1 with the reasons). Task 4's lifecycle writes the final record.
 ```python
 """Parity checks and the gate hand-off of the NautilusTrader bridge (spec 2026-10-26 sections 5.4 and 5.5).
 
@@ -8638,8 +8868,8 @@ def cents(x) -> int:
 
 
 def corr(a, b) -> float:
-    """Pearson correlation; a pair of constant series counts 1.0 when equal to 1e-12 and NaN otherwise (CONTRACT
-    ISSUE 1: a column that never trades with rf = 0 gives R = pnl = 0 on every row)."""
+    """Pearson correlation; a pair of constant series counts 1.0 when equal to 1e-12 and NaN otherwise (plan ruling
+    T5 CI 1: a column that never trades with rf = 0 gives R = pnl = 0 on every row)."""
     a, b = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
     if a.size < 2 or not (np.all(np.isfinite(a)) and np.all(np.isfinite(b))):
         return float("nan")
@@ -9024,6 +9254,24 @@ def _reference(ctx: "R.RunContext", sc_qg, wf_qg) -> dict:
             "n_years_whole": sc_qg.n_years}
 
 
+def _print_summary(rec: dict, reasons: Sequence[str]) -> None:
+    """Printed before Task 4's STATUS line (5.4.1, 5.5 step 3): the worst P2 and P3 next to the corrected and the
+    owner's bars, the trial counts, both decisions and every reason the run ends without a card."""
+    p, g = rec["parity"], rec["gate"]
+    legs = [x for x in p["legs"] if x["P13"]["pass"]]
+    worst_corr = min((x["P2"]["value"] for x in legs), default=None)
+    worst_dsr = max((x["P3"]["value"] for x in legs), default=None)
+    print(f"parity: hard_pass {p['hard_pass']}; worst corr {worst_corr} (bar {BARS['P2']}, owner {OWNER_BARS['P2']}); "
+          f"worst abs dSR {worst_dsr} (bar {BARS['P3']}, owner {OWNER_BARS['P3']})")
+    if g["trial_counts"] is not None:
+        print("trial counts: " + ", ".join(f"{k} {g['trial_counts'][k]}"
+                                           for k in ("len_grid", "family_n_raw", "market_n_raw", "U", "n_trials")))
+    print(f"decisions: quantgen {(g['quantgen'] or {}).get('decision')}, "
+          f"nautilus {(g['nautilus'] or {}).get('decision')}")
+    for r in reasons:
+        print(f"reason: {r}")
+
+
 def hand_off(ctx: "R.RunContext") -> "R.Outcome":
     """Steps 16 and 17 (5.4, 5.5): parity, selection, both scores, agreement, reference, GATE, ledger, card."""
     rec, gate = ctx.record, ctx.gate_snapshot
@@ -9056,6 +9304,7 @@ def hand_off(ctx: "R.RunContext") -> "R.Outcome":
         diff = sorted(k for k in set(gate) | set(validate.GATE) if gate.get(k) != validate.GATE.get(k))
         rec["error"] = {"message": f"G-04: GATE differs from its snapshot after scoring: {diff}", "traceback": ""}
         _hook(ctx, 17)
+        _print_summary(rec, reasons + [rec["error"]["message"]])
         return R.Outcome("ERROR", 4, reasons + [rec["error"]["message"]])
     if card_ok:
         try:
@@ -9067,6 +9316,7 @@ def hand_off(ctx: "R.RunContext") -> "R.Outcome":
         path = ctx.run_dir / f"{card.card_id}.json"
         rec["card"] = {"path": str(path), "md5": write_card(path, card.to_json())}
     _hook(ctx, 17)
+    _print_summary(rec, reasons)
     if rec["card"] is not None:
         return R.Outcome("CARD_WRITTEN", 0, [])
     return R.Outcome("WITHHELD", 1, reasons)
@@ -9124,9 +9374,9 @@ FAIL test_l1_36_fingerprint_reads_no_data FileNotFoundError: [Errno 2] No such f
   3. Task 4's `main`, the whole function (its text below is `old_string`), is replaced by the block after it (`new_string`): the three modes, then the new `main`.
 
   Behaviour and exit codes:
-  - `--fingerprint --table <t>` (`fingerprint_mode`): a table that is not JSON is R-11 (exit 2, nothing printed but the refusal). Otherwise it prints `table_sha256 <64 hex>` and `code_sha256 <64 hex>` first, then validates the table with Task 4's `_check_place(t, "of-record")`, `_check_fields(t, "fingerprint")` (both owner fields optional) and `_check_values(t, "of-record")`; a failure is R-11, exit 2 after the digests (**CONTRACT ISSUE 3**). It opens no `prices_file`, `rf_file` or `reference_card`. It prints `host_fingerprint <64 hex>` from `config.macro_dir() / "ledgers" / "<family>.jsonl"`, or `host_fingerprint null (<reason>; R-15, O11)` when that ledger is missing, empty or broken; then `owner_confirmed form: <name>, <YYYY-MM-DD>, table <16 hex>, code <16 hex>` and `STATUS OK exit=0 record=-`.
+  - `--fingerprint --table <t>` (`fingerprint_mode`): a table that is not JSON is R-11 (exit 2, nothing printed but the refusal). Otherwise it prints `table_sha256 <64 hex>` and `code_sha256 <64 hex>` first, then validates the table with Task 4's `_check_place(t, "of-record")`, `_check_fields(t, "fingerprint")` (both owner fields optional) and `_check_values(t, "of-record")`; a failure is R-11, exit 2 after the digests (ruling T5 CI 3). It opens no `prices_file`, `rf_file` or `reference_card`. It prints `host_fingerprint <64 hex>` from `config.macro_dir() / "ledgers" / "<family>.jsonl"`, or `host_fingerprint null (<reason>; R-15, O11)` when that ledger is missing, empty or broken; then `owner_confirmed form: <name>, <YYYY-MM-DD>, table <16 hex>, code <16 hex>` and `STATUS OK exit=0 record=-`.
   - `--timing` (`timing_mode`): R-03 (exit 2) without a venv on its pins; else 12 sandbox runs of 5,600 bars (pilot 1's grid at 50 bp on spec 8.2's generator, seed 2026, 80 to 650, business days from 2001-01-02, 1x, the empty-ledger hash) through the exact launch contract, one JSON line `{"bars", "runs", "exit_codes", "seconds", "total_s", "timed_module", "import_us"}`, `import_us` being the cumulative `-X importtime` microseconds of `nautilus_trader.backtest.engine` in the first run; exit 0 when the 12 runs exit 0 and that line was found, else `STATUS REFUSED exit=2`. It writes nothing.
-  - `--handoff-report` (`handoff_mode`): writes `docs/nautilus_bridge/handoff/<host tag>.json` through `write_record` (overwritten; git keeps the history), schema `nautilus-bridge-handoff/1`, parts in order `parent`, `git` (HEAD, `origin/claude/amazing-gauss-tdiguu`, `git status --porcelain=v1`), `venv`, `unshare`, `venv_mismatches`, `check_env`, `guard_selftest`, `stub_interpreter` (the suite's own `stub_python()`), `egress` (a fresh probe and the parent's control connect, in the egress record's shape), `firewall` (the three `powershell -NoProfile -NonInteractive -Command ... | Format-List` commands on Windows, `{"skipped": ...}` elsewhere), `fixtures` (F1, F2, N1: golden diff, exit code, census, tails), `census` (diff and C-08 judgement of the F1+F2 union against the Linux baseline), `timing`, `suite` (the FAIL rows and every `nautilus/*` row of `qa/acceptance_results.json`, with its mtime). Each part records `{"error", "traceback"}` instead of stopping. Exit 0 when the file is written (it prints `parts with an error: ...`), else `STATUS ERROR exit=4 record=-`. It writes into the repository, so Claude runs it only in a scratch clone (Step 17).
+  - `--handoff-report` (`handoff_mode`): writes `docs/nautilus_bridge/handoff/<host tag>.json` through `write_record` (overwritten; git keeps the history), schema `nautilus-bridge-handoff/1`, parts computed in this order (the file lists its keys sorted, because `write_record` sorts them) `parent`, `git` (HEAD, `origin/claude/amazing-gauss-tdiguu`, `git status --porcelain=v1`), `venv`, `unshare`, `venv_mismatches`, `check_env`, `guard_selftest`, `stub_interpreter` (the suite's own `stub_python()`), `egress` (a fresh probe and the parent's control connect, in the egress record's shape), `firewall` (the three `powershell -NoProfile -NonInteractive -Command ... | Format-List` commands on Windows, `{"skipped": ...}` elsewhere), `fixtures` (F1, F2, N1: golden diff, exit code, census, tails), `census` (diff and C-08 judgement of the F1+F2 union against the Linux baseline), `timing`, `suite` (the FAIL rows and every `nautilus/*` row of `qa/acceptance_results.json`, with its mtime). Each part records `{"error", "traceback"}` instead of stopping. Exit 0 when the file is written (it prints `parts with an error: ...`), else `STATUS ERROR exit=4 record=-`. It writes into the repository, so Claude runs it only in a scratch clone (Step 17).
   - Any other combination of modes prints the usage and `STATUS REFUSED exit=2 record=-`; `--fingerprint` needs `--table` and neither `--rehearsal` nor `--of-record`.
 
   `old_string` (Task 4's `main`):
@@ -9621,7 +9871,7 @@ L2-7: CARD_WRITTEN; quantgen INSUFFICIENT_DATA, nautilus INSUFFICIENT_DATA; wors
 N6: worst corr 0.99999962 (bar 0.9999, map 03 0.99999901); worst abs dSR 0.00058 (bar 0.01, map 03 0.0013); CARD_WRITTEN
 L2-12: CARD_WRITTEN; quantgen INSUFFICIENT_DATA, nautilus INSUFFICIENT_DATA; reference n_years 3 calendar, 2 whole
 ```
-The whole module gives `44/57 passed, 0 failed, 13 not run` (key unset, about 35 s) and `57/57 passed, 0 failed, 0 not run` (key set, about 3.5 min). Spec Step 7's done-when: L1-2, L1-5, L1-13, L1-14, L1-20's P0b case, L1-21, L1-26's G-05 case, L1-28 to L1-31, L1-36, L2-7, L2-11 and L2-12 pass; GATE is unchanged after every run (L1-14 and the G-04 check in every hand-off); N6 printed its worst corr and abs ΔSR next to the bars and map 03's. The L2-7, L2-11 and L2-12 lines go into the execution record (spec Step 10). If a later run of L2-7 ends WITHHELD, it must name the differing predicates and their two values (G-02), and nobody picks a new seed after the result (QA-R3-11).
+The whole module gives `44/57 passed, 0 failed, 13 not run` (key unset, about 35 s) and `57/57 passed, 0 failed, 0 not run` (key set, about 4 min). The key-set commands outlast or approach the Bash tool's 2-minute default (the first takes about 110 s): run each with a 600 s timeout or in the background and wait. Spec Step 7's done-when: L1-2, L1-5, L1-13, L1-14, L1-20's P0b case, L1-21, L1-26's G-05 case, L1-28 to L1-31, L1-36, L2-7, L2-11 and L2-12 pass; GATE is unchanged after every run (L1-14 and the G-04 check in every hand-off); N6 printed its worst corr and abs ΔSR next to the bars and map 03's. The L2-7, L2-11 and L2-12 lines go into the execution record (spec Step 10). If a later run of L2-7 ends WITHHELD, it must name the differing predicates and their two values (G-02), and nobody picks a new seed after the result (QA-R3-11).
 
 - [ ] **Step 11: Write `docs/nautilus_bridge/RUNBOOK_windows.md`** (spec 9 Step 7A, 5.8's file table; OPS-R4-5) with exactly this content (Write tool; UTF-8, LF, ASCII; md5 `df14943a64529da46963e093aff30a76`), then check its PowerShell block against spec 7A.2.
 
@@ -9835,9 +10085,11 @@ Expected: `runbook block = spec 7A.2 (31 lines), 3.13.14 pinned`.
 S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; NTPY=$S/ntvenv_hash/bin/python; cd /home/user/quantgen
 T=$(mktemp -d); for t in pilot1_E1_spy pilot2_C3_btcusd; do QUANTGEN_MACRO_DIR=$T python3 -B -m tools.nautilus.runner --fingerprint --table docs/nautilus_bridge/registration/$t.json; echo "exit $?"; done; rmdir $T
 QUANTGEN_NAUTILUS_PYTHON="$NTPY" python3 -B -m tools.nautilus.runner --timing; echo "exit $?"
+T=$(mktemp -d); python3 -B -c "import sys; from pathlib import Path; from tests.nautilus_acceptance import _card_table; _card_table(Path(sys.argv[1]))" $T
+QUANTGEN_NAUTILUS_PYTHON="$NTPY" python3 -B -m tools.nautilus.runner --table $T/table.json --rehearsal --ledger-dir $T/ledgers --out-dir $T/out; echo "exit $?"; rm -rf $T
 git status --short --untracked-files=all
 ```
-Expected: for each table five lines, `table_sha256` as Step 9 states, `code_sha256 <64 hex>` (the same for both tables; it changes with every byte of the files 6.6 lists), `host_fingerprint null (the family ledger <T>/ledgers/E1.jsonl does not exist; R-15, O11)` (C3.jsonl for pilot 2), `owner_confirmed form: <name>, <YYYY-MM-DD>, table d76d2d7301ffe92c, code <16 hex>` (`e2ec073c309cbfc7` for pilot 2), `STATUS OK exit=0 record=-`, then `exit 0`. `--timing` prints one JSON line with `"runs": 12`, `"bars": 5600`, twelve exit codes 0 and an integer `import_us` (dry run: 15.2 s in all, import 0.86 s), then `STATUS OK exit=0 record=-` and `exit 0`. `git status` is unchanged by these commands (Step 15 lists it).
+Expected: for each table five lines, `table_sha256` as Step 9 states, `code_sha256 <64 hex>` (the same for both tables; it changes with every byte of the files 6.6 lists), `host_fingerprint null (the family ledger <T>/ledgers/E1.jsonl does not exist; R-15, O11)` (C3.jsonl for pilot 2), `owner_confirmed form: <name>, <YYYY-MM-DD>, table d76d2d7301ffe92c, code <16 hex>` (`e2ec073c309cbfc7` for pilot 2), `STATUS OK exit=0 record=-`, then `exit 0`. `--timing` prints one JSON line with `"runs": 12`, `"bars": 5600`, twelve exit codes 0 and an integer `import_us` (dry run: 15.2 s in all, import 0.86 s), then `STATUS OK exit=0 record=-` and `exit 0`. The command-line rehearsal (L1-2's card table, temp dir only, the real sandbox, about 13 s) loads the runner twice, as an of-record run does (Step 4): it prints `parity: hard_pass True; worst corr 0.9999996759227314 (bar 0.9999, owner 0.99); worst abs dSR 0.0007459028820184788 (bar 0.01, owner 0.05)`, `trial counts: len_grid 4, family_n_raw 4, market_n_raw 4, U 0, n_trials 4` and `decisions: quantgen INSUFFICIENT_DATA, nautilus INSUFFICIENT_DATA` (the hand-off's summary), then `STATUS CARD_WRITTEN exit=0 record=<T>/out/NB-<UTC>-<8 hex>/run.json` and `exit 0`. `git status` is unchanged by these commands (Step 15 lists it).
 
 - [ ] **Step 13: Guard checks.**
 ```bash
@@ -9856,7 +10108,7 @@ python3 -B $S/run_baseline.py $S/task5_nautilus.json --suite nautilus 2>/dev/nul
 QUANTGEN_NAUTILUS_PYTHON="$NTPY" python3 -B $S/run_baseline.py $S/task5_nautilus_key.json --suite nautilus 2>/dev/null | tail -1
 md5sum qa/acceptance_results.json
 ```
-Expected: `16c9baa5a1777853521d485d5078e456  qa/acceptance_results.json` twice; `44/57 passed, 0 failed, 13 not run; <S>/task5_nautilus.json` and `57/57 passed, 0 failed, 0 not run; <S>/task5_nautilus_key.json`. Then the full run, in the background (about 10 minutes; wait for it before anything else):
+Expected: `16c9baa5a1777853521d485d5078e456  qa/acceptance_results.json` twice; `44/57 passed, 0 failed, 13 not run; <S>/task5_nautilus.json` and `57/57 passed, 0 failed, 0 not run; <S>/task5_nautilus_key.json` (the key-set run takes about 4 min: a 600 s timeout or the background, as in Step 10). Then the full run, in the background (about 10 minutes; wait for it before anything else):
 ```bash
 S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; NTPY=$S/ntvenv_hash/bin/python; cd /home/user/quantgen
 python3 -B $S/run_baseline.py $S/task5_full.json > $S/task5_full.log 2>&1; tail -1 $S/task5_full.log; grep '^FAIL' $S/task5_full.log; md5sum qa/acceptance_results.json
@@ -9908,15 +10160,16 @@ git log -1 --format='%h %s'; git status --short --untracked-files=all; md5sum qa
 ```
 Expected: the new commit on `claude/amazing-gauss-tdiguu`; `git status` shows only Step 1's lines; `16c9baa5a1777853521d485d5078e456  qa/acceptance_results.json`. No push.
 
-- [ ] **Step 17: Run `--handoff-report` once in a scratch clone of the commit** (it writes into the repository; spec Step 7A runs it on Windows), then delete the clone.
+- [ ] **Step 17: Run `--handoff-report` once in a scratch clone of the commit** (it writes into the repository; spec Step 7A runs it on Windows), then delete the clone. The clone is sparse (Plan rulings, T5-1): it never checks out `yf_SPY.csv`, `yf_BTC-USD.csv`, `binance_BTCUSDT.csv` or `upbit_KRW-BTC.csv`, so neither the checkout nor the report's `git status` opens or hashes them. A plain `git clone` writes all four, and the first `git status` after a checkout re-reads every file whose mtime falls in the index's last second (racily clean; git 2.43, measured with strace), which can include the cache directory.
 ```bash
 S=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad; NTPY=$S/ntvenv_hash/bin/python; cd /home/user/quantgen
-rm -rf $S/clone_task5 && git clone -q /home/user/quantgen $S/clone_task5 && cd $S/clone_task5
+rm -rf $S/clone_task5 && git clone -q --no-checkout /home/user/quantgen $S/clone_task5 && cd $S/clone_task5 && git sparse-checkout set --no-cone '/*' '!/docs/asset_expansion/cache/yf_SPY.csv' '!/docs/asset_expansion/cache/yf_BTC-USD.csv' '!/docs/asset_expansion/cache/binance_BTCUSDT.csv' '!/docs/asset_expansion/cache/upbit_KRW-BTC.csv' && git checkout -q
+git ls-files -t docs/asset_expansion/cache | grep -c '^S '
 T=$(mktemp -d); QUANTGEN_NAUTILUS_PYTHON="$NTPY" QUANTGEN_MACRO_DIR=$T python3 -B -m tools.nautilus.runner --handoff-report; echo "exit $?"
 python3 -c "
 import json; r = json.load(open('docs/nautilus_bridge/handoff/linux_x86_64.json', encoding='utf-8'))
 print(r['schema'], [k for k, v in r.items() if isinstance(v, dict) and 'error' in v])
-print({n: (f['returncode'], f['diff']) for n, f in r['fixtures'].items()}, r['census']['diff'], r['egress']['probe']['blocked'], r['timing']['runs'])"
+print({n: (f['returncode'], f['diff']) for n, f in r['fixtures'].items()}, r['census']['diff'], r['egress']['probe']['blocked'], r['timing']['runs'], r['git']['status']['stdout'])"
 cd /home/user/quantgen && rm -rf $S/clone_task5 $T && md5sum qa/acceptance_results.json
 ```
-Expected: `parts with an error: none`, `STATUS OK exit=0 record=<S>/clone_task5/docs/nautilus_bridge/handoff/linux_x86_64.json`, `exit 0`; then `nautilus-bridge-handoff/1 []`, `{'F1': (0, []), 'F2': (0, []), 'N1': (10, [])} [] True 12`; the md5 unchanged. The `git` part names the scratch clone's HEAD (the new commit) and its `origin/claude/amazing-gauss-tdiguu` (the real clone's branch). The real clone's `docs/nautilus_bridge/` gains nothing.
+Expected: `4` (the four cache files are skip-worktree entries, never written); `parts with an error: none`, `STATUS OK exit=0 record=<S>/clone_task5/docs/nautilus_bridge/handoff/linux_x86_64.json`, `exit 0`; then `nautilus-bridge-handoff/1 []`, `{'F1': (0, []), 'F2': (0, []), 'N1': (10, [])} [] True 12 []` (the last `[]` is the clone's `git status --porcelain=v1`); the md5 unchanged. The `git` part names the scratch clone's HEAD (the new commit) and its `origin/claude/amazing-gauss-tdiguu` (the real clone's branch). The real clone's `docs/nautilus_bridge/` gains nothing.

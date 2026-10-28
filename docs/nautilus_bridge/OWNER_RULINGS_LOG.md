@@ -188,3 +188,26 @@ C3 exists=True rows=17 chain OK
 - **테스트:** 34개 모듈에서 PASS→FAIL은 0건입니다.
   - `macro_m1_calendars`: 16/0/5에서 22/0/5가 됐습니다. 5개 파일을 서명한 리허설에서는 24/0/3입니다.
 - **마감:** 2026-10-31T15:00:00Z(2026-11-01 00:00 KST).
+
+## Claude 자진 보고 (2026-10-28): 보호 캐시 파일과 클라우드 전체 실행
+
+②-2 계획 B단계의 교차 검토(X-1)에서 확인된 사실입니다.
+
+- **무엇이 있었나:** 기존 macro 테스트 3개가 보호 캐시 파일을 엽니다.
+  - `macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache`: `yf_SPY.csv`, `core/skills/macro_daily.py:86-88`의 `DRY_RUN_CACHE`
+  - `macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache`: `yf_SPY.csv`, `docs/vol_backtest.py:59-62`
+  - `macro_tf_gov/test_cry1_study_runs_offline_end_to_end_on_the_local_caches`: `binance_BTCUSDT.csv`, `upbit_KRW-BTC.csv`
+- 2026-10-26의 클라우드 기준선 전체 실행 2회(`docs/audit/2026-10-27/artifacts/run_all_cloud_run1.log`, `run2.log`)는 실제
+  클론에서 래퍼로 돌았습니다. 그래서 이 세 테스트가 보호 파일을 읽었습니다.
+- **Claude가 본 것:** 테스트 이름, PASS/FAIL, 집계뿐입니다. 로그에 가격 값은 나오지 않습니다(run1의 dry-run 실패 상세는
+  빈 `AssertionError`).
+- **규칙과의 관계:** Nautilus 스펙 9절 2행(Step 2 추가 규칙)의 "Claude reads no real BTC price and no SPY row on or after
+  2004-12-01"과 "never opens or hashes ..." 문구에 어긋납니다. 테스트 프로세스가 파일을 열었기 때문입니다.
+- **그 뒤의 실행:** 감사, Bonds, 달력, 오류 목록 작업의 모듈 실행은 네 파일을 열지 않고 지운 사본에서 했습니다. 오늘 실제
+  클론에서 직접 돌린 것은 `macro_m1_calendars`, `macro_m1_integration`, `macro_m1_pit`뿐이고, 셋 다 보호 파일을 읽지
+  않습니다.
+- **앞으로:** 계획의 모든 전체 실행을 네 파일을 열지 않고 지운 사본에서 합니다. 세 테스트의 상태는 장부에 고정해
+  둡니다(계획 "Stage B review rulings", X-1, 방안 (b)).
+- **소유자 판단이 필요한 점:** 2026-10-26의 두 실행이 파일럿 1·2의 표본외 보호에 영향을 주는지입니다. Claude는 PASS/FAIL만
+  봤으므로 설계 오염은 없다고 봅니다. 다만 스펙 10.4의 "Steps 3 to 7: synthetic series only" 기록과 별개로, 이 사실을
+  실행 기록에 남길지 정해 주십시오.
