@@ -323,6 +323,51 @@ def test_fixture_generator_instants_from_calendars_and_check_fixture_on_csv():
 test_fixture_generator_instants_from_calendars_and_check_fixture_on_csv.test_ids = ["T-FIX-01"]
 
 
+# --------------------------------------------------------------------------- #
+# BLS / BEA release dates from the signed release_calendar file (owner-approved plan A; spec L1448, L1851)
+# --------------------------------------------------------------------------- #
+def _release_docs() -> dict:
+    from tests.macro_m1_calendars import NY, _doc, _row
+    docs = fixture_docs()
+    docs["publication_schedules"]["rows"].append(
+        _row(schedule_id="BEA", rule="release_calendar", calendar="FED", time="08:30", tz=NY))
+    rel = lambda release, period, day: _row(release=release, period=period, release_date=day, time="08:30", tz=NY,
+                                            effective_from=day, effective_to=day)
+    docs["release_calendar"] = _doc("release_calendar", ("2025-01-01", "2027-12-31"), "WEEKDAYS", [
+        rel("CPI", "2027-02-01", "2027-03-10"), rel("EMPSIT", "2027-02-01", "2027-03-05"),
+        rel("PIO", "2027-01-01", "2027-02-25"), rel("CLAIMS", "2026-10-17", "2026-10-22")])
+    return docs
+
+
+def test_release_calendar_supplies_bls_bea_release_dates():
+    clk = CalendarClocks(REG, cal=fixture_set("release_calendar", _release_docs()))
+    assert clk.publication_instant("CPIAUCSL", date(2027, 2, 1)) == U(2027, 3, 10, 13, 30)      # 08:30 EST
+    assert clk.publication_instant("CPILFESL", date(2027, 2, 1)) == U(2027, 3, 10, 13, 30)
+    assert clk.publication_instant("PAYEMS", date(2027, 2, 1)) == U(2027, 3, 5, 13, 30)
+    assert clk.publication_instant("UNRATE", date(2027, 2, 1)) == U(2027, 3, 5, 13, 30)
+    assert clk.publication_instant("PCEPILFE", date(2027, 1, 1)) == U(2027, 2, 25, 13, 30)
+    assert clk.publication_instant("ICSA", date(2026, 10, 17)) == U(2026, 10, 22, 12, 30)      # 08:30 EDT
+    # a period with no row has no release date: the observation stays unpublished (never an estimated date)
+    _raises(lambda: clk.publication_instant("CPIAUCSL", date(2027, 3, 1)), KeyError)
+    # ingest stamps the calendar-bound instant; a row retrieved before it is a provisional print
+    st = P.PITStore(_tmp(), registry=REG, clocks=clk)
+    P.ingest(st, "CPIAUCSL", [(date(2027, 2, 1), 331.2)], source="FRED", retrieved_at_utc=U(2027, 3, 10, 14),
+             registry=REG, clocks=clk)
+    row = st.rows("CPIAUCSL")[0]
+    assert row["available_at_utc"] == U(2027, 3, 10, 13, 30) and row["available_at_source"] == "calendar_bound"
+    early = P.PITStore(_tmp(), registry=REG, clocks=clk)
+    P.ingest(early, "PCEPILFE", [(date(2027, 1, 1), 127.0)], source="FRED", retrieved_at_utc=U(2027, 2, 25, 13),
+             registry=REG, clocks=clk)
+    assert early.rows("PCEPILFE")[0]["value_status"] == "provisional_intraday"
+    # without the release_calendar file the BLS/BEA series stay closed; other schedules are untouched
+    plain = CalendarClocks(REG, cal=fixture_set())
+    _raises(lambda: plain.publication_instant("CPIAUCSL", date(2027, 2, 1)), store.CalendarUnsigned)
+    assert plain.publication_instant("DGS10", date(2026, 10, 1)) == clk.publication_instant("DGS10", date(2026, 10, 1))
+
+
+test_release_calendar_supplies_bls_bea_release_dates.test_ids = ["T-AVAIL-01"]
+
+
 if __name__ == "__main__":
     from tests.macro_acceptance import run_module
     raise SystemExit(run_module(globals()))

@@ -8,7 +8,9 @@ the series registry: the registry names each series' schedule id, obs calendar a
 `publication_schedules` file governs the rule, time and tz of that schedule (effective-dated rows). A schedule with
 no scheduled instant (LIVE_QUOTE, AS_POSTED, DERIVED) answers None. Unsigned or uncovered calendars raise
 `CalendarUnsigned` / `CalendarCoverageError`; `core.ficc.contracts` turns either into `CalendarUnavailable`
-(every acting input fails closed, brief F-5).
+(every acting input fails closed, brief F-5). A series with a registry `release` (CPI, EMPSIT, PIO, CLAIMS) gets its
+`release_dates` from the signed `release_calendar` file (spec L1448); a period with no row has no release date and
+stays unpublished.
 """
 from __future__ import annotations
 
@@ -16,7 +18,7 @@ from datetime import date, datetime
 
 from core.calendars import clocks as _clocks
 from core.calendars import publication as _pub
-from core.calendars.store import CalendarSet
+from core.calendars.store import CalendarSet, CalendarUnsigned, default
 
 # registry `schedules` id -> signed publication_schedules `schedule_id` (None: no scheduled instant)
 SCHEDULE_IDS = {
@@ -26,7 +28,9 @@ SCHEDULE_IDS = {
     "BLS": "BLS", "BEA": "BEA", "ECOS_1530": "ECOS_USDKRW", "KODEX_PDF": "KODEX200_PDF",
     "LIVE_QUOTE": None, "AS_POSTED": None, "DERIVED": None,
 }
-_SERIES_KEYS = ("channel", "obs_calendar", "release_event_type", "grace_publication_bdays", "market", "frequency")
+_SERIES_KEYS = ("channel", "obs_calendar", "release_event_type", "grace_publication_bdays", "market", "frequency",
+                "release")
+RELEASE_FILE = "release_calendar"
 
 
 def registry_schedule(registry, series_id: str) -> dict | None:
@@ -42,6 +46,22 @@ def registry_schedule(registry, series_id: str) -> dict | None:
         return None
     out = {"schedule_id": sid, "series_id": series_id}
     out.update({k: s[k] for k in _SERIES_KEYS if s.get(k) is not None})
+    return out
+
+
+def release_dates(release: str, *, cal: CalendarSet | None = None) -> dict[str, str]:
+    """{period: release_date} of one release from the signed `release_calendar` file (ISO dates; the period is the
+    FRED observation date: the first of the month, or the week-ending Saturday for CLAIMS)."""
+    cal = cal or default()
+    out: dict[str, str] = {}
+    for row in cal.file(RELEASE_FILE).rows:
+        if row.get("release") != release:
+            continue
+        if row["period"] in out:
+            raise CalendarUnsigned(f"{RELEASE_FILE}: two rows for {release} period {row['period']}")
+        out[row["period"]] = row["release_date"]
+    if not out:
+        raise CalendarUnsigned(f"{RELEASE_FILE}: no rows for release {release!r}")
     return out
 
 
@@ -62,6 +82,14 @@ class CalendarClocks:
     def schedule(self, series_id: str) -> dict | None:
         return registry_schedule(self.registry, series_id)
 
+    def _dated(self, series_id: str) -> dict | None:
+        """The schedule with its release dates when the series has a registry `release` (read only where an instant
+        is computed; a monthly next-observation date needs no release calendar)."""
+        s = self.schedule(series_id)
+        if s is not None and s.get("release") and "release_dates" not in s:
+            s["release_dates"] = release_dates(s["release"], cal=self.cal)
+        return s
+
     # -- the five methods -------------------------------------------------------
     def is_session(self, market: str, d: date) -> bool:
         return _clocks.is_session(market, d, cal=self.cal)
@@ -70,7 +98,7 @@ class CalendarClocks:
         return _clocks.close_print_bound_utc(market, session_date, cal=self.cal)
 
     def publication_instant(self, series_id: str, obs_date: date) -> datetime | None:
-        s = self.schedule(series_id)
+        s = self._dated(series_id)
         return None if s is None else _pub.publication_instant(s, obs_date, cal=self.cal, events=self.events)
 
     def next_expected_obs(self, series_id: str, obs_date: date) -> date | None:
@@ -100,8 +128,8 @@ class CalendarClocks:
 
     def usable_at(self, series_id: str, obs_date: date, market: str) -> datetime | None:
         """The first decision of `market` that may read the datum dated `obs_date` (None: live quote / as posted)."""
-        s = self.schedule(series_id)
+        s = self._dated(series_id)
         return None if s is None else _pub.usable_at(s, obs_date, market, cal=self.cal)
 
 
-__all__ = ["CalendarClocks", "SCHEDULE_IDS", "registry_schedule"]
+__all__ = ["CalendarClocks", "RELEASE_FILE", "SCHEDULE_IDS", "registry_schedule", "release_dates"]
