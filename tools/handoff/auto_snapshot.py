@@ -2,21 +2,27 @@
 
 No model is involved, so this still works when the usage limit has stopped the model. CURRENT.md (the
 model-written handoff: intent, grounds, next steps) is never touched; AUTO_STATE.md beside it records what git
-can tell: branch, HEAD, recent commits, unpushed commits, uncommitted changes (AUTO_STATE.patch holds the diff
-of tracked files; untracked files are listed by name only, since their content may hold secrets), and the
-model's last message when a hook passes it in.
+can tell: branch, HEAD, recent commits, unpushed commits, uncommitted changes, and the model's last message when
+a hook passes it in. AUTO_STATE.patch holds, byte for byte, the diff of tracked files from `patch_base` (the
+newest commit of this branch that the remote has) to the working tree, so it carries unpushed commits too;
+untracked files are listed by name only, since their content may hold secrets.
+
+AUTO_STATE.md belongs to the task CURRENT.md names: a snapshot without --key from a clone on another branch
+than CURRENT.md's `work_branch` (while that task is checkpoint, handoff or taken) is skipped, so one session
+cannot overwrite the record of another.
 
 Callers:
-- the handoff-usage-watch mod, at the usage threshold (`--reason usage_limit_weekly --key ...`); exit 10 tells
-  it the key was already handled on the branch, by this or an earlier session;
-- the Stop settings hook, throttled (`--reason periodic --min-interval 1800 --hook-stdin`): it pushes only when
-  the git state changed and the interval has passed, so the branch always holds a recent snapshot even when a
-  session stops without warning;
-- the StopFailure settings hook (`--reason rate_limit_error --hook-stdin`) when a turn fails with a rate-limit
-  error: a usage limit, or the service turning requests away under load, which the hook input does not tell
-  apart, so CURRENT.md's status is left as it is.
+- the handoff-usage-watch mod at the usage threshold (`--reason usage_limit_weekly --key ...`); exit 10 tells
+  it that a handoff for that window is already published (a CURRENT.md commit carries `handoff-key: <key>`,
+  which `push_handoff.py --key` writes);
+- the same mod during work, throttled (`--reason periodic --min-interval 1800`): it pushes only when the git
+  state changed and the interval has passed, so the branch holds a recent snapshot even when a session stops
+  without warning;
+- the same mod when a turn fails with a rate-limit error (`--reason rate_limit_error --hook-stdin`): a usage
+  limit, or the service turning requests away under load, which the hook input does not tell apart, so
+  CURRENT.md's status is left as it is.
 
-Exit codes: 0 pushed or nothing to do, 10 key already on the branch, 4 git or network failure.
+Exit codes: 0 pushed or nothing to do, 10 window already handed off, 4 git or network failure.
 """
 from __future__ import annotations
 
@@ -28,7 +34,7 @@ import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from push_handoff import GitError, commit_files, fetch, front_matter, git, push_commit
+from push_handoff import GitError, commit_files, fetch, front_matter, git, git_bytes, push_commit
 
 KST = timezone(timedelta(hours=9))
 PATCH_LIMIT = 2 * 1024 * 1024
@@ -39,8 +45,20 @@ def now_kst() -> str:
     return datetime.now(KST).replace(microsecond=0).isoformat()
 
 
-def key_on_branch(ref: str, key: str) -> bool:
-    return bool(git("log", ref, "-1", "--format=%H", "--fixed-strings", f"--grep=handoff-key: {key}", check=False))
+def handed_off(ref: str, key: str) -> bool:
+    """Whether a commit that wrote CURRENT.md carries this window's key."""
+    return bool(git("log", ref, "-1", "--format=%H", "--fixed-strings", f"--grep=handoff-key: {key}",
+                    "--", "CURRENT.md", check=False))
+
+
+def patch_base(remote: str) -> str:
+    """The newest commit of HEAD's history that the remote has: merge-base with the upstream, else the default branch."""
+    upstream = git("rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}", check=False)
+    for ref in (upstream, f"refs/remotes/{remote}/HEAD", f"refs/remotes/{remote}/main"):
+        base = git("merge-base", "HEAD", ref, check=False) if ref else ""
+        if base:
+            return base
+    return ""
 
 
 def state_file() -> Path:
@@ -71,17 +89,16 @@ def snapshot(args: argparse.Namespace, hook: dict, parent: str) -> tuple[dict[st
     branch = git("rev-parse", "--abbrev-ref", "HEAD")
     head = git("rev-parse", "--short=7", "HEAD")
     upstream = git("rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}", check=False)
-    unpushed = git("log", "--oneline", f"{upstream}..HEAD", check=False) if upstream else "(upstream 없음)"
+    base = patch_base(args.remote)
+    unpushed = git("log", "--oneline", f"{base}..HEAD", check=False) if base else "(원격에 있는 기준 커밋 없음)"
     status = git("status", "--porcelain")
     untracked = [line[3:] for line in status.splitlines() if line.startswith("??")]
-    diff = git("diff", "HEAD", "--binary")
+    diff = git_bytes("diff", base or "HEAD", "--binary")
     current = front_matter(git("show", f"{parent}:CURRENT.md", check=False))
 
-    patch: bytes | None = None
-    if diff:
-        data = (diff + "\n").encode()
-        patch = data if len(data) <= PATCH_LIMIT else None
-    patch_note = ("AUTO_STATE.patch (`git apply AUTO_STATE.patch` on source_head)" if patch
+    patch = diff if diff and len(diff) <= PATCH_LIMIT else None
+    patch_note = ("AUTO_STATE.patch (`git apply AUTO_STATE.patch` on patch_base)" if patch and base
+                  else "AUTO_STATE.patch (on source_head, which the remote does not have)" if patch
                   else "too large; see diff --stat" if diff else "none")
 
     message = (hook.get("last_assistant_message") or "").strip()
@@ -95,13 +112,14 @@ def snapshot(args: argparse.Namespace, hook: dict, parent: str) -> tuple[dict[st
         "source_branch": branch,
         "source_head": head,
         "upstream": upstream or "none",
-        "unpushed_commits": str(len(unpushed.splitlines())) if upstream else "unknown",
+        "patch_base": base[:7] if base else "none",
+        "unpushed_commits": str(len(unpushed.splitlines())) if base else "unknown",
         "uncommitted_files": str(len(status.splitlines())),
         "patch": patch_note,
         "usage_pct": args.pct or "unknown",
         "usage_resets_at": args.resets_at or "unknown",
         "session": args.session or hook.get("session_id") or "unknown",
-        "handoff_key": args.key or "none",
+        "snapshot_key": args.key or "none",
         "current_md_updated_at": current.get("updated_at", "none"),
         "current_md_status": current.get("status", "none"),
     }
@@ -113,7 +131,8 @@ def snapshot(args: argparse.Namespace, hook: dict, parent: str) -> tuple[dict[st
         "확인하세요.", "",
         "## 최근 커밋", "", fence(git("log", "--oneline", "-15")), "",
         "## 푸시되지 않은 커밋", "", fence(unpushed), "",
-        "## 커밋되지 않은 변경", "", fence(status), "", fence(git("diff", "HEAD", "--stat")), "",
+        "## 커밋되지 않은 변경", "", fence(status), "",
+        "`patch_base` 이후 바뀐 파일 (푸시 안 된 커밋 포함):", "", fence(git("diff", base or "HEAD", "--stat")), "",
         f"전체 diff: {patch_note}", "",
     ]
     if untracked:
@@ -125,17 +144,18 @@ def snapshot(args: argparse.Namespace, hook: dict, parent: str) -> tuple[dict[st
 
     files: dict[str, bytes | None] = {"AUTO_STATE.md": "\n".join(body).encode(), "AUTO_STATE.patch": patch}
     title = f"handoff: auto {args.reason} {branch}@{head}"
-    return files, title + (f"\n\nhandoff-key: {args.key}\n" if args.key else "\n")
+    return files, title + (f"\n\nsnapshot-key: {args.key}\n" if args.key else "\n")
 
 
 def fingerprint() -> str:
-    parts = (git("rev-parse", "HEAD"), git("status", "--porcelain"), git("diff", "HEAD", "--binary"))
-    return hashlib.sha256("\0".join(parts).encode()).hexdigest()
+    parts = (git_bytes("rev-parse", "HEAD"), git_bytes("status", "--porcelain"), git_bytes("diff", "HEAD", "--binary"))
+    return hashlib.sha256(b"\0".join(parts)).hexdigest()
 
 
 def run(args: argparse.Namespace) -> int:
     hook = hook_input(args.hook_stdin)
-    if git("rev-parse", "--abbrev-ref", "HEAD") == args.branch:
+    branch = git("rev-parse", "--abbrev-ref", "HEAD")
+    if branch == args.branch:
         return 0
     state = read_state()
     mark = fingerprint()
@@ -145,9 +165,15 @@ def run(args: argparse.Namespace) -> int:
 
     for _ in range(3):
         parent = fetch(args.remote, args.branch)
-        if args.key and key_on_branch(parent, args.key):
-            print(f"auto_snapshot: {args.key} is already on {args.branch}")
+        if args.key and handed_off(parent, args.key):
+            print(f"auto_snapshot: a handoff for {args.key} is already on {args.branch}")
             return 10
+        current = front_matter(git("show", f"{parent}:CURRENT.md", check=False))
+        owner = current.get("work_branch", "none")
+        if not args.key and current.get("status", "").lower() in ("checkpoint", "handoff", "taken") \
+                and owner not in ("", "none") and owner != branch:
+            print(f"auto_snapshot: AUTO_STATE.md belongs to {owner} ({current.get('task')}); skipped")
+            return 0
         files, message = snapshot(args, hook, parent)
         commit = commit_files(parent, files, message)
         if commit == parent or push_commit(args.remote, args.branch, commit):
@@ -162,7 +188,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--reason", required=True,
                     choices=["usage_limit_weekly", "usage_limit_5h", "rate_limit_error", "periodic", "manual"])
-    ap.add_argument("--key", help="once-per-window key, written as a 'handoff-key:' commit trailer")
+    ap.add_argument("--key", help="once-per-window key: exit 10 when a handoff carrying it is already published")
     ap.add_argument("--pct", help="usage percent that triggered this")
     ap.add_argument("--resets-at", help="when that usage window resets")
     ap.add_argument("--session", help="session id or link")

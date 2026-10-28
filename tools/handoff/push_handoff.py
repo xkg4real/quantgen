@@ -5,15 +5,19 @@ temporary index, so this is safe to run from a hook while an agent is mid-edit. 
 states and this script enforces:
 
 - A document whose remote copy says `status: taken` by another agent is a lock; it is not overwritten
-  without `--force`.
+  without `--force`. A remote CURRENT.md whose front matter cannot be read counts as locked too.
+- A `status: handoff` that nobody has taken yet is not archived away by a document for another task.
 - When the new document names a different `task` than the remote one (and the remote one is not idle), the
-  remote one is moved to `archive/<updated_at>-<task>.md` in the same commit.
+  remote one is moved, byte for byte, to `archive/<updated_at>-<task>.md` in the same commit.
 - A rejected push (someone else wrote first) is retried from a fresh fetch, so the lock check sees their
   write.
+- `--key` adds a `handoff-key:` trailer to the commit, which marks a usage window as handed off.
 
-Exit codes: 0 published, 2 bad input, 3 locked by another agent, 4 git or network failure.
+Exit codes: 0 published, 2 bad input, 3 refused (locked, unreadable, or an untaken handoff of another
+task), 4 git or network failure. Every publish, and a re-publish of the same document, prints
+`push_handoff: <branch> at <sha> (<status> <task>)`.
 
-    python3 tools/handoff/push_handoff.py path/to/handoff.md
+    python3 tools/handoff/push_handoff.py path/to/handoff.md [--key seven_day@<resets_at>]
     python3 tools/handoff/push_handoff.py --show            # print the remote CURRENT.md front matter
 """
 from __future__ import annotations
@@ -35,26 +39,30 @@ class GitError(RuntimeError):
     pass
 
 
-def git(*args: str, env: dict | None = None, input_bytes: bytes | None = None, check: bool = True) -> str:
+def git_bytes(*args: str, env: dict | None = None, input_bytes: bytes | None = None, check: bool = True) -> bytes:
     proc = subprocess.run(["git", *args], capture_output=True, input=input_bytes,
                           env={**os.environ, **(env or {})})
     if check and proc.returncode != 0:
         raise GitError(f"git {' '.join(args)}: {proc.stderr.decode(errors='replace').strip()}")
-    return proc.stdout.decode(errors="replace").strip()
+    return proc.stdout
+
+
+def git(*args: str, env: dict | None = None, input_bytes: bytes | None = None, check: bool = True) -> str:
+    return git_bytes(*args, env=env, input_bytes=input_bytes, check=check).decode(errors="replace").strip()
 
 
 def front_matter(text: str) -> dict[str, str]:
-    """Flat `key: value  # comment` lines between the leading `---` fences."""
-    lines = text.splitlines()
+    """Flat `key: value  # comment` lines between the leading `---` fences; keys lower-cased, quotes dropped."""
+    lines = text.lstrip("﻿").lstrip().splitlines()
     if not lines or lines[0].strip() != "---":
         return {}
     fields: dict[str, str] = {}
     for line in lines[1:]:
         if line.strip() == "---":
             return fields
-        m = re.match(r"^([A-Za-z0-9_]+):\s*(.*?)\s*(?:#.*)?$", line)
+        m = re.match(r"^\s*([A-Za-z0-9_]+)\s*:\s*(.*?)\s*(?:#.*)?$", line)
         if m:
-            fields[m.group(1)] = m.group(2)
+            fields[m.group(1).lower()] = m.group(2).strip("\"'")
     return {}
 
 
@@ -74,14 +82,27 @@ def fetch(remote: str, branch: str) -> str:
     return git("rev-parse", f"refs/remotes/{remote}/{branch}")
 
 
-def remote_current(parent: str) -> str:
-    return git("show", f"{parent}:CURRENT.md", check=False)
+def remote_current(parent: str) -> bytes:
+    return git_bytes("show", f"{parent}:CURRENT.md", check=False)
 
 
-def archive_name(fields: dict[str, str]) -> str:
+def remote_fields(parent: str) -> tuple[bytes, dict[str, str]]:
+    raw = remote_current(parent)
+    return raw, front_matter(raw.decode(errors="replace"))
+
+
+def is_unreadable(raw: bytes, fields: dict[str, str]) -> bool:
+    return bool(raw.strip()) and fields.get("status", "").lower() not in STATUSES
+
+
+def archive_name(parent: str, fields: dict[str, str]) -> str:
     stamp = re.sub(r"[^0-9T]", "", fields.get("updated_at", ""))[:13] or "undated"
     task = re.sub(r"[^a-z0-9._-]+", "-", fields.get("task", "task").lower()).strip("-") or "task"
-    return f"archive/{stamp}-{task}.md"
+    name, n = f"archive/{stamp}-{task}.md", 1
+    while subprocess.run(["git", "cat-file", "-e", f"{parent}:{name}"], capture_output=True).returncode == 0:
+        n += 1
+        name = f"archive/{stamp}-{task}-{n}.md"
+    return name
 
 
 def commit_files(parent: str, files: dict[str, bytes | None], message: str) -> str:
@@ -119,64 +140,87 @@ def push_commit(remote: str, branch: str, commit: str) -> bool:
     return True
 
 
-def build_commit(parent: str, new_text: str, new: dict[str, str], message: str) -> str:
-    old_text = remote_current(parent)
-    old = front_matter(old_text)
+def build_commit(parent: str, new_raw: bytes, new: dict[str, str], message: str) -> str:
+    old_raw, old = remote_fields(parent)
     files: dict[str, bytes | None] = {}
-    if old and old.get("status") != "idle" and old.get("task") not in (None, "", "none") \
+    if old and old.get("status", "").lower() != "idle" and old.get("task") not in (None, "", "none") \
             and old.get("task") != new["task"]:
-        files[archive_name(old)] = old_text.encode()
-    files["CURRENT.md"] = new_text.encode()
+        files[archive_name(parent, old)] = old_raw
+    files["CURRENT.md"] = new_raw
     return commit_files(parent, files, message)
 
 
-def publish(path: Path, remote: str, branch: str, force: bool, message: str | None) -> int:
-    new_text = path.read_text(encoding="utf-8")
-    new = front_matter(new_text)
+def refusal(old_raw: bytes, old: dict[str, str], new: dict[str, str]) -> str | None:
+    """Why the remote document must not be replaced by `new`, or None."""
+    status = old.get("status", "").lower()
+    if is_unreadable(old_raw, old):
+        return ("the remote CURRENT.md has no readable front matter; read it with "
+                "`git show origin/handoff:CURRENT.md` and fix it, or pass --force with the owner's say-so")
+    if status == "taken" and old.get("from", "").lower() != new["from"].lower():
+        return (f"locked: {old.get('from')} took '{old.get('task')}' at {old.get('updated_at')}. "
+                "Wait for status: returned, or pass --force with the owner's say-so")
+    if status == "handoff" and old.get("task") not in (None, "", "none") and old.get("task") != new["task"]:
+        return (f"'{old.get('task')}' was handed off at {old.get('updated_at')} and nobody has taken it; publishing "
+                f"'{new['task']}' would archive it out of the next agent's sight. Resume that task, wait for "
+                "status: taken, or pass --force with the owner's say-so")
+    return None
+
+
+def publish(path: Path, remote: str, branch: str, force: bool, message: str | None, key: str | None) -> int:
+    new_raw = path.read_bytes()
+    new = front_matter(new_raw.decode("utf-8-sig", errors="replace"))
     missing = [k for k in REQUIRED if not new.get(k)]
     if missing:
         print(f"push_handoff: {path} front matter lacks {', '.join(missing)}", file=sys.stderr)
         return 2
-    if new["status"] not in STATUSES:
+    if new["status"].lower() not in STATUSES:
         print(f"push_handoff: status '{new['status']}' is not one of {sorted(STATUSES)}", file=sys.stderr)
         return 2
     msg = message or f"handoff: {new['status']} {new['task']}"
+    if key:
+        msg += f"\n\nhandoff-key: {key}\n"
 
     for _ in range(3):
         parent = fetch(remote, branch)
-        old = front_matter(remote_current(parent))
-        if old.get("status") == "taken" and old.get("from") != new["from"] and not force:
-            print(f"push_handoff: locked — {old.get('from')} took '{old.get('task')}' at {old.get('updated_at')}. "
-                  "Wait for status: returned, or pass --force with the owner's say-so.", file=sys.stderr)
+        old_raw, old = remote_fields(parent)
+        why = None if force else refusal(old_raw, old, new)
+        if why:
+            print(f"push_handoff: {why}.", file=sys.stderr)
             return 3
-        commit = build_commit(parent, new_text, new, msg)
-        if commit == parent:
-            print(f"push_handoff: remote already holds this document ({parent[:7]})")
-            return 0
-        if push_commit(remote, branch, commit):
-            print(f"push_handoff: {branch} -> {commit[:7]} ({new['status']} {new['task']})")
+        commit = build_commit(parent, new_raw, new, msg)
+        if commit == parent or push_commit(remote, branch, commit):
+            print(f"push_handoff: {branch} at {commit[:7]} ({new['status']} {new['task']})")
             return 0
     print("push_handoff: the remote kept moving; gave up after 3 attempts", file=sys.stderr)
     return 4
+
+
+def show(remote: str, branch: str) -> int:
+    raw, fields = remote_fields(fetch(remote, branch))
+    if is_unreadable(raw, fields):
+        print("status: unreadable (CURRENT.md front matter could not be parsed; treat it as taken)")
+        return 3
+    for k, v in fields.items():
+        print(f"{k}: {v}")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("file", nargs="?", type=Path, help="handoff document to publish as CURRENT.md")
     ap.add_argument("--show", action="store_true", help="print the remote CURRENT.md front matter and exit")
-    ap.add_argument("--force", action="store_true", help="overwrite a 'taken' lock held by another agent")
+    ap.add_argument("--force", action="store_true", help="publish over a lock or an untaken handoff (owner's say-so)")
+    ap.add_argument("--key", help="usage-window key, written as a 'handoff-key:' commit trailer")
     ap.add_argument("--remote", default="origin")
     ap.add_argument("--branch", default="handoff")
     ap.add_argument("-m", "--message")
     args = ap.parse_args(argv)
     try:
         if args.show:
-            for k, v in front_matter(remote_current(fetch(args.remote, args.branch))).items():
-                print(f"{k}: {v}")
-            return 0
+            return show(args.remote, args.branch)
         if not args.file:
             ap.error("give a handoff document, or --show")
-        return publish(args.file, args.remote, args.branch, args.force, args.message)
+        return publish(args.file, args.remote, args.branch, args.force, args.message, args.key)
     except GitError as e:
         print(f"push_handoff: {e}", file=sys.stderr)
         return 4

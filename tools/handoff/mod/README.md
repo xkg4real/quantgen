@@ -7,11 +7,13 @@ What it does, in a repository that has `tools/handoff/auto_snapshot.py`:
 
 - **At 98% weekly usage** (`session.measure`, `seven_day` window): pushes a no-model git snapshot
   (`AUTO_STATE.md`) to the `handoff` branch, then submits a prompt telling Claude to finish the current step,
-  write `CURRENT.md` with `status: handoff` and publish it with `tools/handoff/push_handoff.py`. Until that
-  publish runs, the instruction also rides in the system prompt. It fires once per weekly window, keyed by
-  the window's reset time, across sessions (the key is a commit trailer on the `handoff` branch).
-- **After each main-thread turn:** a throttled snapshot (at most every 30 minutes, only when the git state
-  changed), so the branch holds a recent state even when a session stops without warning.
+  push the work branch, write `CURRENT.md` with `status: handoff` and publish it with
+  `tools/handoff/push_handoff.py --key <window>`. Until a publish prints `(handoff …)`, the instruction also
+  rides in the system prompt. Each session asks once per weekly window; a window counts as handed off once a
+  `CURRENT.md` commit on the branch carries its `handoff-key:` trailer, and later sessions then stay quiet.
+- **During work:** a throttled snapshot after main-thread turns and tool calls (the script runs at most every
+  5 minutes and pushes at most every 30, only when the git state changed), so the branch holds a recent state
+  even when a session stops without warning. Only a session on `CURRENT.md`'s `work_branch` refreshes it.
 - **When a turn fails with a rate-limit error** (`classic.StopFailure`): a last snapshot with the model's final
   message. The model cannot run at that point; the script can.
 
