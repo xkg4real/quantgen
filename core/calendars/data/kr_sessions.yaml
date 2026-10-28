@@ -1,22 +1,25 @@
 file_id: kr_sessions
-version: 0.1.0-draft
-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
-  DISARMED until the owner verifies and signs
+version: 1.0.0
+status: AUDITED, UNSIGNED - proposed v1.0.0 from the calendar audit (docs/audit/2026-10-27/04_calendar_batch2.md); refused
+  at load until the owner signs (R-20 rule 6, T-CAL-01)
 covers:
   from: '1995-01-01'
   to: '2027-12-31'
 coverage_calendar: KRX
-signed_off_by: null
-signed_utc: null
-md5: null
+signed_off_by: Geon Koh
+signed_utc: '2026-10-28T08:47:25Z'
+md5: e72837e0c7b08a3cdacdd322c52669cc
 how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
   MANIFEST.yaml row with a new test id
 unverified:
-- CSAT dates
-- regular open eras
-- lunch-break last date
-- pre-2016 CSAT window (config placeholder 10:00-16:00 governs until a signed csat_window row exists)
+- 'CSAT trading hours come from the rules-store config (+1 h: 10:00-16:30 KST since 2016-08-01, confirmed by the 2023-2025
+  KRX notices); KRX publishes each year''s CSAT-day notice 2-3 weeks before the exam'
+- 'pre-2016-08-01 CSAT window: config placeholder 10:00-16:00 (the +1 h pattern on the 09:00-15:00 session); no csat_window
+  row signed'
+- 'CSAT days before 2008 are not listed: whether KRX shifted hours on those days is not established'
+- 'saturday_close rows (Saturday sessions before 1998-12-12) are absent: a pre-1998 Saturday decision fails closed (CalendarUnsigned)'
+- 'random_end_extension rows (conditional random end before 2015-06-15) are absent: no extension is assumed'
 owner_must_sign:
 - 'saturday_close rows (saturday_session_close_kst, from_krx_notice): without them decision_time_utc on a pre-1998-12-12 Saturday
   raises CalendarUnsigned (never the weekday close)'
@@ -26,181 +29,200 @@ owner_must_sign:
 notes: 'row kinds: csat_day{date}; saturday_close{close_kst}; random_end_extension{session_date, extension_s}; lunch_break{window_kst};
   regular_open{open_kst}; csat_window{window_kst}; csat_closing_call{window_kst}'
 rows:
-- effective_from: '2008-11-13'
-  effective_to: '2008-11-13'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2008-11-13'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2009-11-12'
-  effective_to: '2009-11-12'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2009-11-12'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2010-11-18'
-  effective_to: '2010-11-18'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2010-11-18'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2011-11-10'
-  effective_to: '2011-11-10'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2011-11-10'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2012-11-08'
-  effective_to: '2012-11-08'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2012-11-08'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2013-11-07'
-  effective_to: '2013-11-07'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2013-11-07'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2014-11-13'
-  effective_to: '2014-11-13'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2014-11-13'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2015-11-12'
-  effective_to: '2015-11-12'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2015-11-12'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2016-11-17'
-  effective_to: '2016-11-17'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2016-11-17'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2017-11-23'
-  effective_to: '2017-11-23'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2017-11-23'
-  unverified: postponed from 2017-11-16 (Pohang earthquake); both dates appear in the cross-check
-- effective_from: '2018-11-15'
-  effective_to: '2018-11-15'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2018-11-15'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2019-11-14'
-  effective_to: '2019-11-14'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2019-11-14'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2020-12-03'
-  effective_to: '2020-12-03'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2020-12-03'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2021-11-18'
-  effective_to: '2021-11-18'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2021-11-18'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2022-11-17'
-  effective_to: '2022-11-17'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2022-11-17'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2023-11-16'
-  effective_to: '2023-11-16'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2023-11-16'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2024-11-14'
-  effective_to: '2024-11-14'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2024-11-14'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
-- effective_from: '2025-11-13'
-  effective_to: '2025-11-13'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2025-11-13'
-  unverified: the spec's example date (L2013)
-- effective_from: '2026-11-19'
-  effective_to: '2026-11-19'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  kind: csat_day
-  date: '2026-11-19'
-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
 - effective_from: '1995-01-01'
   effective_to: '1998-12-06'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.hankookilbo.com/news/article/199812240073584153; https://biz.heraldcorp.com/article/967855
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
   kind: regular_open
   open_kst: 09:30
-  unverified: 'UNVERIFIED: cross-check shows a 09:30 open before 1998-12-07 (brief F-17)'
+  evidence: 'A: 1995-01 이후 오전장 09:30~11:30; 1998-12-07에 09:00으로 변경'
 - effective_from: '1998-12-07'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.hankookilbo.com/news/article/199812240073584153; https://biz.heraldcorp.com/article/967855
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
   kind: regular_open
   open_kst: 09:00
-  unverified: 'UNVERIFIED: 09:00 KST regular open; the effective date comes from the KRX notice'
+  evidence: 'A: 1998-12-07부터 오전장 09:00 시작(30분 앞당김); 그 전 09:30'
 - effective_from: '1995-01-01'
+  effective_to: '1998-12-06'
+  source_url: https://biz.heraldcorp.com/article/967855; https://www.hankookilbo.com/news/article/199812240073584153
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: lunch_break
+  window_kst:
+  - '11:30'
+  - '13:00'
+  evidence: 'A: 오전장 09:30~11:30, 오후장 13:00~15:00 (1995-01 ~ 1998-12-06)'
+- effective_from: '1998-12-07'
   effective_to: '2000-05-21'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.hankookilbo.com/news/article/199812240073584153; https://www.hankookilbo.com/news/article/200005130027413996
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
   kind: lunch_break
   window_kst:
   - '12:00'
   - '13:00'
-  unverified: 'UNVERIFIED: lunch break until May-2000 (spec L2016); the exact last date from the KRX notice'
+  evidence: 'A: 1998-12-07 오전장 09:00~12:00(점심 30분 단축); 2000-05-22 점심 휴장 폐지'
+- effective_from: '2008-11-13'
+  effective_to: '2008-11-13'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2008-11-13'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2009-11-12'
+  effective_to: '2009-11-12'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2009-11-12'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2010-11-18'
+  effective_to: '2010-11-18'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2010-11-18'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2011-11-10'
+  effective_to: '2011-11-10'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2011-11-10'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2012-11-08'
+  effective_to: '2012-11-08'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2012-11-08'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2013-11-07'
+  effective_to: '2013-11-07'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2013-11-07'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2014-11-13'
+  effective_to: '2014-11-13'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2014-11-13'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2015-11-12'
+  effective_to: '2015-11-12'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2015-11-12'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2016-11-17'
+  effective_to: '2016-11-17'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2016-11-17'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2017-11-23'
+  effective_to: '2017-11-23'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2017-11-23'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치; 포항 지진으로 11-16에서 연기'
+- effective_from: '2018-11-15'
+  effective_to: '2018-11-15'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2018-11-15'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2019-11-14'
+  effective_to: '2019-11-14'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2019-11-14'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2020-12-03'
+  effective_to: '2020-12-03'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2020-12-03'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치; 코로나19로 11-19에서 연기'
+- effective_from: '2021-11-18'
+  effective_to: '2021-11-18'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2021-11-18'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2022-11-17'
+  effective_to: '2022-11-17'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2022-11-17'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2023-11-16'
+  effective_to: '2023-11-16'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2023-11-16'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2024-11-14'
+  effective_to: '2024-11-14'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2024-11-14'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2025-11-13'
+  effective_to: '2025-11-13'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2025-11-13'
+  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
+- effective_from: '2026-11-19'
+  effective_to: '2026-11-19'
+  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98;
+    https://www.etoday.co.kr/news/view/2390974
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2026-11-19'
+  evidence: 'A: 교육부 발표 2024-08-16; KRX 수능일 시간 공지는 보통 2~3주 전'
+- effective_from: '2027-11-18'
+  effective_to: '2027-11-18'
+  source_url: https://www.hangyo.com/news/article.html?no=104640; https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
+  retrieved_at_utc: '2026-10-28T07:30:00Z'
+  signed_off_by: Geon Koh
+  kind: csat_day
+  date: '2027-11-18'
+  evidence: 'A: 교육부 발표(2028학년도 수능 2027-11-18 목); KRX 시간 공지는 2027년 11월 초 예상'
