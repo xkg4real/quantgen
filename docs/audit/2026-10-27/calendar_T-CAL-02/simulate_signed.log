@@ -1,0 +1,52 @@
+load
+  [ok] holidays_KRX loads, v1.0.0, covers 2026-01-01..2027-12-31: None
+  [ok] holidays_NYSE loads, v1.0.0, covers 2025-01-01..2027-12-31: None
+  [ok] holidays_FED loads, v1.0.0, covers 2015-01-01..2027-12-31: None
+  [ok] holidays_SIFMA loads, v1.0.0, covers 2025-01-01..2027-12-31: None
+KRX (is_session False = closed)
+  [ok] is_session KR 2026-06-03: False
+  [ok] is_session KR 2026-07-17: False
+  [ok] is_session KR 2027-05-03: False
+  [ok] is_session KR 2027-07-19: False
+  [ok] is_session KR 2027-02-09: False
+  [ok] is_session KR 2027-12-27: False
+  [ok] is_session KR 2027-12-31: False
+  [ok] is_session KR 2026-06-04: True
+  [ok] is_session KR 2027-05-04: True
+  [ok] is_session KR 2027-07-20: True
+  [ok] is_session KR 2027-12-30: True
+NYSE
+  [ok] nyse_holiday 2027-03-26: True
+  [ok] nyse_holiday 2027-06-18: True
+  [ok] nyse_holiday 2027-12-24: True
+  [ok] nyse_holiday 2027-12-31: False
+FED (fed_business_day False = Board closed)
+  [ok] fed_business_day 2027-12-31: False
+  [ok] fed_business_day 2025-01-09: False
+  [ok] fed_business_day 2025-12-26: False
+  [ok] fed_business_day 2027-12-30: True
+  [ok] fed_business_day 2021-06-18: False
+  [ok] fed_business_day 2027-07-05: False
+SIFMA
+  [ok] sifma_status 2026-04-03: 'early_close'
+  [ok] sifma_status 2026-04-02: 'open'
+  [ok] sifma_status 2027-03-25: 'early_close'
+  [ok] sifma_status 2027-03-26: 'closed'
+  [ok] sifma_status 2027-05-28: 'early_close'
+  [ok] sifma_status 2027-07-02: 'early_close'
+  [ok] sifma_status 2027-12-23: 'early_close'
+  [ok] sifma_status 2027-12-31: 'early_close'
+  [ok] sifma_status 2025-01-09: 'early_close'
+  [ok] SIFMA 2026-04-03 close time: '12:00'
+market status on 2026-10-28 (every file of the copy carries the simulated signer)
+  KR: signed=True sessions_left=289 covers_to=2027-12-31 alerts=[]
+  [ok] KR signed: True
+  US: signed=True sessions_left=292 covers_to=2027-12-31 alerts=[]
+  [ok] US signed: True
+coverage horizon of the 2027 files: first decision date that warns (<= 60 left) / pages (<= 20 left)
+  holidays_KRX     warn from 2027-10-05  page from 2027-12-01
+  holidays_NYSE    warn from 2027-10-06  page from 2027-12-02
+  holidays_FED     warn from 2027-10-01  page from 2027-12-01
+  holidays_SIFMA   warn from 2027-10-04  page from 2027-12-02
+
+0 failure(s)

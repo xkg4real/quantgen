@@ -1,0 +1,373 @@
+file_id: holidays_KRX
+version: 1.0.0
+status: AUDITED, UNSIGNED - proposed v1.0.0 from the T-CAL-02 audit (docs/audit/2026-10-27/01_calendar_T-CAL-02.md); refused
+  at load until the owner signs (R-20 rule 6, T-CAL-01)
+covers:
+  from: '2026-01-01'
+  to: '2027-12-31'
+coverage_calendar: KRX
+signed_off_by: null
+signed_utc: null
+md5: null
+how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
+  / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+  MANIFEST.yaml row with a new test id
+unverified:
+- '2027 rows: from the 2027 월력요항 (관보) and the KRX holiday rule; KRX publishes its own 2027 notice in December 2026. A difference
+  (e.g. an added temporary holiday) is a new version with a new signature'
+- temporary holidays designated after the audit date are not in this file (change control)
+- '1995-2025 rows are not in this file yet (T-CLOSE-02 needs 2015, 2016 and 2025): a later version'
+owner_must_sign:
+- KRX holiday list 1995-01-01 .. 2027-12-31 from the KRX notices (substitute and election holidays)
+- signed_off_by on every row and at file level; md5; MANIFEST row
+rows:
+- effective_from: '2026-01-01'
+  effective_to: '2026-01-01'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-01-01'
+  kind: closed
+  name: 신정 (New Year's Day)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-02-16'
+  effective_to: '2026-02-16'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-02-16'
+  kind: closed
+  name: 설날 연휴 (Seollal)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-02-17'
+  effective_to: '2026-02-17'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-02-17'
+  kind: closed
+  name: 설날 (Seollal)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-02-18'
+  effective_to: '2026-02-18'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-02-18'
+  kind: closed
+  name: 설날 연휴 (Seollal)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-03-02'
+  effective_to: '2026-03-02'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-03-02'
+  kind: closed
+  name: 삼일절 대체공휴일 (Independence Movement Day, substitute)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-05-01'
+  effective_to: '2026-05-01'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-05-01'
+  kind: closed
+  name: 노동절 (Labour Day)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-05-05'
+  effective_to: '2026-05-05'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-05-05'
+  kind: closed
+  name: 어린이날 (Children's Day)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-05-25'
+  effective_to: '2026-05-25'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-05-25'
+  kind: closed
+  name: 부처님오신날 대체공휴일 (Buddha's Birthday, substitute)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-06-03'
+  effective_to: '2026-06-03'
+  source_url: https://www.dailian.co.kr/news/view2/1646567/%ED%95%9C%EA%B5%AD%EA%B1%B0%EB%9E%98%EC%86%8C-%EC%A7%80%EB%B0%A9%EC%84%A0%EA%B1%B0%EC%9D%BC%EC%A0%9C%ED%97%8C%EC%A0%88-%EC%A6%9D%EC%8B%9C-%ED%9C%B4%EC%9E%A5-2026;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-06-03'
+  kind: closed
+  name: 제9회 전국동시지방선거일 (local elections)
+  evidence: 'A: KRX announced the closure on 2026-05-20 (reported); no 069500.KS / 005930.KS bar that day (docs/asset_expansion/cache);
+    absent from exchange_calendars 4.13.2, which the draft copied'
+- effective_from: '2026-07-17'
+  effective_to: '2026-07-17'
+  source_url: https://www.dailian.co.kr/news/view2/1646567/%ED%95%9C%EA%B5%AD%EA%B1%B0%EB%9E%98%EC%86%8C-%EC%A7%80%EB%B0%A9%EC%84%A0%EA%B1%B0%EC%9D%BC%EC%A0%9C%ED%97%8C%EC%A0%88-%EC%A6%9D%EC%8B%9C-%ED%9C%B4%EC%9E%A5-2026;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-07-17'
+  kind: closed
+  name: 제헌절 (Constitution Day)
+  evidence: 'A: KRX announced the closure on 2026-05-20 (reported); no 069500.KS / 005930.KS bar that day (docs/asset_expansion/cache);
+    absent from exchange_calendars 4.13.2, which the draft copied'
+- effective_from: '2026-08-17'
+  effective_to: '2026-08-17'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-08-17'
+  kind: closed
+  name: 광복절 대체공휴일 (Liberation Day, substitute)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-09-24'
+  effective_to: '2026-09-24'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-09-24'
+  kind: closed
+  name: 추석 연휴 (Chuseok)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-09-25'
+  effective_to: '2026-09-25'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-09-25'
+  kind: closed
+  name: 추석 (Chuseok)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-10-05'
+  effective_to: '2026-10-05'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-10-05'
+  kind: closed
+  name: 개천절 대체공휴일 (National Foundation Day, substitute)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-10-09'
+  effective_to: '2026-10-09'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-10-09'
+  kind: closed
+  name: 한글날 (Hangeul Day)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-12-25'
+  effective_to: '2026-12-25'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-12-25'
+  kind: closed
+  name: 기독탄신일 (Christmas Day)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2026-12-31'
+  effective_to: '2026-12-31'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2026-12-31'
+  kind: closed
+  name: 연말 휴장일 (year-end closure)
+  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
+    XKRX and python-holidays KR agree'
+- effective_from: '2027-01-01'
+  effective_to: '2027-01-01'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-01-01'
+  kind: closed
+  name: 신정 (New Year's Day)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-02-08'
+  effective_to: '2027-02-08'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-02-08'
+  kind: closed
+  name: 설날 연휴 (Seollal)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-02-09'
+  effective_to: '2027-02-09'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-02-09'
+  kind: closed
+  name: 설날 대체공휴일 (Seollal, substitute)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-03-01'
+  effective_to: '2027-03-01'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-03-01'
+  kind: closed
+  name: 삼일절 (Independence Movement Day)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-05-03'
+  effective_to: '2027-05-03'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-05-03'
+  kind: closed
+  name: 노동절 대체공휴일 (Labour Day, substitute)
+  evidence: 'B: 2027 월력요항 (관보 2026-06-29): Labour Day and Constitution Day are public holidays from 2026, both fall on Saturday
+    in 2027, so the substitute Monday is a public holiday; python-holidays KR agrees; absent from exchange_calendars 4.13.2;
+    KRX 2027 notice expected Dec 2026'
+- effective_from: '2027-05-05'
+  effective_to: '2027-05-05'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-05-05'
+  kind: closed
+  name: 어린이날 (Children's Day)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-05-13'
+  effective_to: '2027-05-13'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-05-13'
+  kind: closed
+  name: 부처님오신날 (Buddha's Birthday)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-07-19'
+  effective_to: '2027-07-19'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-07-19'
+  kind: closed
+  name: 제헌절 대체공휴일 (Constitution Day, substitute)
+  evidence: 'B: 2027 월력요항 (관보 2026-06-29): Labour Day and Constitution Day are public holidays from 2026, both fall on Saturday
+    in 2027, so the substitute Monday is a public holiday; python-holidays KR agrees; absent from exchange_calendars 4.13.2;
+    KRX 2027 notice expected Dec 2026'
+- effective_from: '2027-08-16'
+  effective_to: '2027-08-16'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-08-16'
+  kind: closed
+  name: 광복절 대체공휴일 (Liberation Day, substitute)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-09-14'
+  effective_to: '2027-09-14'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-09-14'
+  kind: closed
+  name: 추석 연휴 (Chuseok)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-09-15'
+  effective_to: '2027-09-15'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-09-15'
+  kind: closed
+  name: 추석 (Chuseok)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-09-16'
+  effective_to: '2027-09-16'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-09-16'
+  kind: closed
+  name: 추석 연휴 (Chuseok)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-10-04'
+  effective_to: '2027-10-04'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-10-04'
+  kind: closed
+  name: 개천절 대체공휴일 (National Foundation Day, substitute)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-10-11'
+  effective_to: '2027-10-11'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-10-11'
+  kind: closed
+  name: 한글날 대체공휴일 (Hangeul Day, substitute)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-12-27'
+  effective_to: '2027-12-27'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-12-27'
+  kind: closed
+  name: 기독탄신일 대체공휴일 (Christmas Day, substitute)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
+- effective_from: '2027-12-31'
+  effective_to: '2027-12-31'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T05:31:09Z'
+  signed_off_by: null
+  date: '2027-12-31'
+  kind: closed
+  name: 연말 휴장일 (year-end closure)
+  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
+    Dec 2026'
