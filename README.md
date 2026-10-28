@@ -29,16 +29,18 @@
 | `taken` | 다른 에이전트가 이어받아 작업 중 (잠금) | Claude는 끼어들지 않고 `returned`를 기다리거나 사용자에게 묻습니다. |
 | `returned` | 이어받은 에이전트가 일을 끝냈거나 멈추고 돌려줌 | Claude가 다음 세션 시작 때 읽고 이어갑니다. |
 
-**말없이 끊긴 경우:** `status: checkpoint`, `waiting_on: none`인데 `CURRENT.md`의
-`updated_at`과 `AUTO_STATE.md`의 `created_at`이 둘 다 `stale_after_hours`보다 오래
-갱신되지 않았다면, Claude가 인수인계를 쓰지 못하고 끊긴 것으로 봅니다.
-이때는 `handoff`와 똑같이 이어받고, `reason: stale`로 기록합니다.
-`waiting_on`이 `owner`, `ci`, `review`이면 Claude가 무언가를 기다리는 중이므로
-이어받지 않습니다. 스냅샷은 git 상태가 바뀔 때만 올라가므로, Claude는 파일을 바꾸지 않는
-긴 작업 전에 checkpoint를 올리거나 `waiting_on`을 적습니다.
+**말없이 끊긴 경우:** 아래 세 조건이 모두 맞으면, Claude가 한도에 걸려 인수인계를 쓰지 못하고
+멈춘 것으로 봅니다. 이때는 `handoff`와 똑같이 이어받고 `reason: stale`로 기록합니다.
 
-`AUTO_STATE.md`의 `reason: rate_limit_error`는 한도에 걸렸을 가능성이 높다는 신호입니다.
-하지만 서비스가 일시적으로 바빠서 생긴 오류일 수도 있으므로, 이것만으로 이어받지는 않습니다.
+1. `status: checkpoint`이고 `waiting_on: none`
+2. `AUTO_STATE.md`의 `reason: rate_limit_error`이고, 그 `created_at`이 `CURRENT.md`의 `updated_at`보다 나중
+   (턴이 한도 오류로 끝났다는 기록)
+3. 그 뒤로 `CURRENT.md`도 `AUTO_STATE.md`도 `stale_after_hours`보다 오래 갱신되지 않음
+
+셋 중 하나라도 아니면 이어받지 않고, 사용자에게 알린 뒤 계속 확인합니다. 오래 갱신되지 않은 것만으로는
+Claude가 아직 일하는 중이거나 사용자를 기다리는 중일 수 있기 때문입니다. `rate_limit_error`도 서비스가
+잠시 바빠서 생긴 오류일 수 있어서, 그 뒤로 갱신이 없는지까지 봅니다. Claude는 사용량이 남은 채
+사용자를 기다릴 때 `waiting_on: owner`를 적습니다.
 
 ## 주간 일정 (사용자가 정한 것)
 
@@ -55,9 +57,10 @@
 ## 작업 ID와 완료 기록
 
 - 작업 ID는 `docs/nautilus_bridge/REMAINING_WORK_*.md`(최신 날짜)의 순서 표기(`③-1`, `③-2` 등)를 씁니다.
-  한 항목을 나눠서 끝내면 `③-2/a`, `③-2/b`처럼 씁니다.
-- `CURRENT.md`의 `done_ids`에는 끝낸 ID, `next_ids`에는 남은 ID를 적습니다. `next_ids`에는
-  `LEDGER.md`에 이미 있는 ID를 넣지 않습니다.
+  한 항목을 나눠서 끝내면 `③-2/a`, `③-2/b`처럼 씁니다. ID는 꾸밈 없이 씁니다(백틱, 굵게 표시 없이,
+  하이픈은 키보드의 `-`).
+- `CURRENT.md`의 `done_ids`에는 끝낸 ID, `next_ids`에는 남은 ID를 쉼표로 구분해 적습니다.
+  `next_ids`에는 `LEDGER.md`에 이미 있는 ID를 넣지 않습니다.
 - 작업을 시작하기 전에 `LEDGER.md`에서 그 ID와 바뀐 파일을 찾아봅니다. 이미 있으면 다시 하지 않습니다.
 
 ## 흐름

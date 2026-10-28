@@ -5,7 +5,7 @@ from: claude                  # 마지막으로 이 문서를 쓴 에이전트: 
 task: <작업명-영문-소문자>     # 예: nautilus-step3
 cycle: <YYYY-MM-DD>           # 이번 주기가 시작된 화요일 날짜(17:00 KST 기준)
 done_ids: none                # 이 작업에서 끝낸 로드맵 ID. 쉼표로 구분. 모두 LEDGER.md에 있어야 함
-next_ids: none                # 남은 로드맵 ID를 순서대로. LEDGER.md에 이미 있는 ID는 넣지 않음
+next_ids: none                # 남은 로드맵 ID를 순서대로, 쉼표로 구분. LEDGER.md에 이미 있는 ID는 넣지 않음
 updated_at: <YYYY-MM-DDTHH:MM:SS+09:00>
 stale_after_hours: 3          # 이 시간 넘게 갱신이 없으면 말없이 끊긴 것으로 봄
 waiting_on: none              # none | owner | ci | review
