@@ -13,6 +13,8 @@
 | `TEMPLATE.md` | `CURRENT.md`의 양식 | 양식을 바꿀 때만 수정 |
 | `AGENTS.md` | GPT(와 다른 에이전트)가 이 브랜치를 읽는 규칙 | 사람 |
 | `archive/` | 끝났거나 새 작업으로 교체된 인수인계 문서 보관 | 교체하는 에이전트 |
+| `AUTO_STATE.md` | 스크립트가 모델 없이 만든 git 상태 스냅샷(브랜치, 커밋, 커밋 안 된 변경, 마지막 메시지). 사용량 한도 직전, 한도 오류로 턴이 실패했을 때, 작업 중 주기적으로(30분 간격, 상태가 바뀐 경우만) 갱신 | `tools/handoff/auto_snapshot.py` |
+| `AUTO_STATE.patch` | 위 스냅샷 시점에 커밋되지 않은 변경(추적 중인 파일만)의 diff | 같은 스크립트 |
 
 ## 상태값
 
@@ -26,9 +28,11 @@
 | `taken` | 다른 에이전트가 이어받아 작업 중 (잠금) | Claude는 끼어들지 않고 `returned`를 기다리거나 사용자에게 묻습니다. |
 | `returned` | 이어받은 에이전트가 일을 끝냈거나 멈추고 돌려줌 | Claude가 다음 세션 시작 때 읽고 이어갑니다. |
 
-**말없이 끊긴 경우:** `status: checkpoint`, `waiting_on: none`인데 `updated_at`이
-`stale_after_hours`보다 오래 갱신되지 않았다면, Claude가 인수인계를 쓰지 못하고
-끊긴 것으로 봅니다. 이때는 `handoff`와 똑같이 이어받고, `reason: stale`로 기록합니다.
+**말없이 끊긴 경우:** `status: checkpoint`, `waiting_on: none`인데 `CURRENT.md`의
+`updated_at`과 `AUTO_STATE.md`의 `created_at`이 둘 다 `stale_after_hours`보다 오래
+갱신되지 않았다면, Claude가 인수인계를 쓰지 못하고 끊긴 것으로 봅니다.
+`AUTO_STATE.md`의 `reason: rate_limit_error`는 한도에 걸렸을 가능성이 높다는 신호입니다.
+하지만 서비스가 일시적으로 바빠서 생긴 오류일 수도 있으므로, 이것만으로 이어받지는 않습니다. 이때는 `handoff`와 똑같이 이어받고, `reason: stale`로 기록합니다.
 `waiting_on`이 `owner`, `ci`, `review`이면 Claude가 무언가를 기다리는 중이므로
 이어받지 않습니다.
 

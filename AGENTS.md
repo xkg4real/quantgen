@@ -11,7 +11,7 @@
 | 조건 | 행동 |
 |---|---|
 | `status: handoff` | 이어받습니다 (2절). |
-| `status: checkpoint`, `waiting_on: none`, `updated_at`이 `stale_after_hours`보다 오래됨 | Claude가 말없이 끊긴 것으로 보고 이어받습니다. `reason: stale`로 적습니다. |
+| `status: checkpoint`, `waiting_on: none`, `CURRENT.md`의 `updated_at`과 `AUTO_STATE.md`의 `created_at`이 둘 다 `stale_after_hours`보다 오래됨 | Claude가 말없이 끊긴 것으로 보고 이어받습니다. `reason: stale`로 적습니다. |
 | `status: checkpoint` (위 조건이 아님) | 아무것도 하지 않습니다. |
 | `status: taken`, `from:`이 내가 아님 | 다른 에이전트가 작업 중이므로 아무것도 하지 않습니다. |
 | `status: idle` 또는 `returned` | 아무것도 하지 않습니다. |
@@ -22,7 +22,10 @@
    `updated_at`을 지금 시각으로 고쳐 `handoff` 브랜치에 커밋하고 push합니다.
    커밋 메시지: `handoff: taken <task>`. push가 거절되면(다른 쪽이 먼저 바꿨다면)
    최신 `CURRENT.md`를 다시 읽고 1절부터 다시 판단합니다.
-2. `CURRENT.md` 9절의 지시문을 첫 지시로 삼고 0~8절을 모두 읽습니다.
+2. `CURRENT.md` 9절의 지시문을 첫 지시로 삼고 0~8절을 모두 읽습니다. `AUTO_STATE.md`도
+   읽습니다. 이 파일의 `created_at`이 `CURRENT.md`의 `updated_at`보다 나중이면, 그 사이에
+   생긴 커밋과 커밋되지 않은 변경이 여기에 있습니다. `AUTO_STATE.patch`가 있으면
+   `source_head` 커밋 위에 `git apply AUTO_STATE.patch`로 그 변경을 되살릴 수 있습니다.
 3. 2절 "근거"에 적힌 파일을 직접 엽니다. 문서의 요약만 믿지 말고 원문을 확인합니다.
 4. `work_branch`의 `work_commit`에서 `gpt/<task>` 브랜치를 새로 만들어 작업합니다.
    Claude의 작업 브랜치와 `main`에는 직접 push하지 않습니다.
