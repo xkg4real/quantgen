@@ -2,7 +2,10 @@
 status: checkpoint            # idle | checkpoint | handoff | taken | returned
 reason: milestone             # milestone | usage_limit_weekly | usage_limit_5h | session_end | manual | stale
 from: claude                  # 마지막으로 이 문서를 쓴 에이전트: claude | gpt
-task: <작업명-영문-소문자>     # 예: t-cal-02-calendar-audit
+task: <작업명-영문-소문자>     # 예: nautilus-step3
+cycle: <YYYY-MM-DD>           # 이번 주기가 시작된 화요일 날짜(17:00 KST 기준)
+done_ids: none                # 이 작업에서 끝낸 로드맵 ID. 쉼표로 구분. 모두 LEDGER.md에 있어야 함
+next_ids: none                # 남은 로드맵 ID를 순서대로. LEDGER.md에 이미 있는 ID는 넣지 않음
 updated_at: <YYYY-MM-DDTHH:MM:SS+09:00>
 stale_after_hours: 3          # 이 시간 넘게 갱신이 없으면 말없이 끊긴 것으로 봄
 waiting_on: none              # none | owner | ci | review
@@ -47,9 +50,9 @@ session: <Claude 세션 링크 또는 GPT 대화 식별자>
 
 ## 4. 진행 상황
 
-- [x] <끝난 일> — 근거 커밋 `<해시>`
-- [ ] <진행 중인 일> ← **여기서 멈춤**
-- [ ] <남은 일>
+- [x] <ID> <끝난 일> — 커밋 `<해시>`, LEDGER 기록함
+- [ ] <ID> <진행 중인 일> ← **여기서 멈춤**
+- [ ] <ID> <남은 일>
 
 **마지막으로 통과한 검증:**
 
@@ -64,9 +67,11 @@ session: <Claude 세션 링크 또는 GPT 대화 식별자>
 
 ## 6. 다음 할 일 (순서대로)
 
-1. <구체적인 첫 단계. 실행할 명령이 있으면 그대로 적음>
-2. <두 번째 단계>
-3. <세 번째 단계>
+각 항목에 로드맵 ID와 그 문서의 완료 기준을 함께 적습니다. `LEDGER.md`에 이미 있는 ID는 적지 않습니다.
+
+1. <ID> <구체적인 첫 단계. 실행할 명령이 있으면 그대로 적음> — 완료 기준: <로드맵의 완료 기준>
+2. <ID> <두 번째 단계> — 완료 기준: <...>
+3. <ID> <세 번째 단계> — 완료 기준: <...>
 
 ## 7. 주의사항 / 하지 말 것
 
@@ -84,11 +89,11 @@ session: <Claude 세션 링크 또는 GPT 대화 식별자>
 
 ```
 너는 xkg4real/quantgen 레포의 "<작업 제목>" 작업을 이어받는다.
-1. handoff 브랜치의 CURRENT.md와 AGENTS.md를 먼저 읽어라.
+1. handoff 브랜치의 CURRENT.md, AGENTS.md, LEDGER.md를 먼저 읽어라. LEDGER.md에 있는 ID는 다시 하지 마라.
 2. CURRENT.md의 status를 taken으로, from을 gpt로 바꾸고 updated_at을 갱신해 handoff 브랜치에 push해라.
-3. AGENTS.md 2절 4번에 따라 시작 지점을 정해 gpt/<task> 브랜치를 만들어 작업해라. 보통은 <work_branch>의 <work_commit>이다.
+3. AGENTS.md 2절 5번에 따라 시작 지점을 정해 gpt/<task> 브랜치를 만들어 작업해라. 보통은 <work_branch>의 <work_commit>이다.
 4. <이 작업에 필요한 구체적 지시>
-5. 작업 단위가 끝날 때마다 CURRENT.md를 같은 양식으로 갱신해라. 끝나거나 멈출 때는 status를 returned로 바꿔라.
+5. ID 하나를 끝낼 때마다 LEDGER.md에 한 줄을 덧붙이고 CURRENT.md를 같은 양식으로 갱신해라. 끝나거나 멈출 때, 늦어도 화요일 17:00(KST) 전에 status를 returned로 바꿔라.
 ```
 
 ## 10. 결과 확인 방법
