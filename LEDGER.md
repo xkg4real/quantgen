@@ -17,3 +17,4 @@ Claude와 GPT가 끝낸 작업을 한 줄씩 쌓는 기록입니다. 같은 작�
 
 | id | 완료 시각 (KST) | 주기 | 누가 | 한 일 | 바뀐 파일 | 커밋 | 확인 방법과 결과 |
 |---|---|---|---|---|---|---|---|
+| ①-2 | 2026-10-29T02:56:18+09:00 | 2026-10-27 | claude | 2027년 KRX·NYSE·FED·SIFMA 휴장일 감사 후 소유자 서명(Geon Koh, 2026-10-28T06:35:52Z), PR #7로 main 병합(98ccae6) | core/calendars/data/holidays_KRX.yaml, holidays_NYSE.yaml, holidays_FED.yaml, holidays_SIFMA.yaml, MANIFEST.yaml, tests/macro_m1_calendars.py, docs/audit/2026-10-27/01~03 | 3917bc0 | python -m tests.macro_m1_calendars 18/22 통과·실패 0·미실행 4, test_cal02_2027_files_signed_before_2026_11_01 PASS (2026-10-29 재실행) |
