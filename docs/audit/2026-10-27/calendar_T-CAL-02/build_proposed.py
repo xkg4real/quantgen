@@ -1,14 +1,15 @@
 """Build the proposed v1.0.0 holiday files for the T-CAL-02 audit (docs/audit/2026-10-27/01_calendar_T-CAL-02.md).
 
-Reads the shipped drafts in core/calendars/data/, applies the audited change list below and writes the result to
-proposed/ next to this script, plus proposed.diff. It never touches core/calendars/data/ and never writes a
-signature: signed_off_by, signed_utc and md5 stay null on every file and every row (spec L2100; the owner signs).
+Reads the v0.1.0 drafts as committed before the audit (git DRAFT_REF), applies the audited change list below and
+writes the result to proposed/ next to this script, plus proposed.diff. It never touches core/calendars/data/ and
+never writes a signature: signed_off_by, signed_utc and md5 stay null on every file and every row (spec L2100; the owner signs).
 
     python docs/audit/2026-10-27/calendar_T-CAL-02/build_proposed.py
 """
 from __future__ import annotations
 
 import difflib
+import subprocess
 import sys
 from pathlib import Path
 
@@ -18,6 +19,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[3]
 DATA = REPO / "core" / "calendars" / "data"
 OUT = HERE / "proposed"
+DRAFT_REF = "1f63f91"                   # the last commit before the audit: core/calendars/data at v0.1.0-draft
 AUDIT_UTC = "2026-10-28T05:31:09Z"
 REPORT = "docs/audit/2026-10-27/01_calendar_T-CAL-02.md"
 VERSION = "1.0.0"
@@ -146,15 +148,14 @@ FED_ADDED = {
                    "https://www.federalreserve.gov/newsevents/pressreleases/other20181203a.htm", EVID_A,
                    "Board offices closed, scheduled releases postponed to Dec 6; H.10 DEXKOUS blank"),
     "2018-12-24": ("Executive order closing federal offices (Christmas Eve)",
-                   "https://www.federalreserve.gov/newsevents/2018-december.htm", EVID_C,
-                   "executive order confirmed; Board closure inferred; H.10 DEXKOUS blank"),
+                   "https://www.federalreserve.gov/newsevents/2018-december.htm", EVID_A,
+                   "executive order; Board closure confirmed by the owner 2026-10-28 (CAL-14); H.10 DEXKOUS blank"),
     "2019-12-24": ("Executive order closing federal offices (Christmas Eve)",
                    "https://trumpwhitehouse.archives.gov/presidential-actions/executive-order-providing-closing-"
-                   "executive-departments-agencies-federal-government-december-24-2019/", EVID_C,
-                   "executive order confirmed; Board closure inferred (H.10 DEXKOUS has a value, which the Banks "
-                   "certify, so it does not decide the Board's status)"),
-    "2020-12-24": ("Executive order closing federal offices (Christmas Eve)", "Board calendar December 2020 (to confirm)",
-                   EVID_C, "order not found by search; H.10 DEXKOUS blank"),
+                   "executive-departments-agencies-federal-government-december-24-2019/", EVID_A,
+                   "executive order; Board closure confirmed by the owner 2026-10-28 (CAL-14)"),
+    "2020-12-24": ("Executive order closing federal offices (Christmas Eve)", "Board calendar December 2020",
+                   EVID_A, "Board closure confirmed by the owner 2026-10-28 (CAL-14); H.10 DEXKOUS blank"),
     "2021-01-20": ("Inauguration Day (Board closed)", "https://www.federalreserve.gov/foia/chair-powell-calendar-012021.htm",
                    EVID_A, "Chair's calendar: 'Board holiday - Inauguration Day'; H.10 DEXKOUS blank"),
     "2024-12-24": ("Executive order closing federal offices (Christmas Eve)",
@@ -265,8 +266,6 @@ def build_fed(doc: dict) -> dict:
     doc["unverified"] = [
         "set semantics: days the Board of Governors is closed (they move H.15 and H.10); Reserve Bank payment "
         "services may be open on some of them",
-        "class C rows (2018-12-24, 2019-12-24, 2020-12-24) are inferred Board closures; they only make H.15 and "
-        "H.10 data available later, never earlier",
         "closures ordered after the audit date (e.g. a Christmas Eve executive order for 2026 or 2027) are a new version",
     ]
     doc["rows"] = _sorted(rows)
@@ -303,7 +302,8 @@ def main() -> int:
     diffs = []
     for name, build in BUILDERS.items():
         src = DATA / f"holidays_{name}.yaml"
-        old_text = src.read_text(encoding="utf-8")
+        old_text = subprocess.run(["git", "show", f"{DRAFT_REF}:core/calendars/data/{src.name}"], cwd=REPO, check=True,
+                                  capture_output=True, text=True, encoding="utf-8").stdout
         doc = build(yaml.safe_load(old_text))
         doc["version"] = VERSION
         doc["status"] = (f"AUDITED, UNSIGNED - proposed v{VERSION} from the T-CAL-02 audit ({REPORT}); refused at "

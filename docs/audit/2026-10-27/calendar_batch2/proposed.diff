@@ -1,0 +1,938 @@
+--- a/core/calendars/data/kr_sessions.yaml
++++ b/core/calendars/data/kr_sessions.yaml
+@@ -1,7 +1,7 @@
+ file_id: kr_sessions
+-version: 0.1.0-draft
+-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
+-  DISARMED until the owner verifies and signs
++version: 1.0.0
++status: AUDITED, UNSIGNED - proposed v1.0.0 from the calendar audit (docs/audit/2026-10-27/04_calendar_batch2.md); refused
++  at load until the owner signs (R-20 rule 6, T-CAL-01)
+ covers:
+   from: '1995-01-01'
+   to: '2027-12-31'
+@@ -13,10 +13,13 @@
+   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+   MANIFEST.yaml row with a new test id
+ unverified:
+-- CSAT dates
+-- regular open eras
+-- lunch-break last date
+-- pre-2016 CSAT window (config placeholder 10:00-16:00 governs until a signed csat_window row exists)
++- 'CSAT trading hours come from the rules-store config (+1 h: 10:00-16:30 KST since 2016-08-01, confirmed by the 2023-2025
++  KRX notices); KRX publishes each year''s CSAT-day notice 2-3 weeks before the exam'
++- 'pre-2016-08-01 CSAT window: config placeholder 10:00-16:00 (the +1 h pattern on the 09:00-15:00 session); no csat_window
++  row signed'
++- 'CSAT days before 2008 are not listed: whether KRX shifted hours on those days is not established'
++- 'saturday_close rows (Saturday sessions before 1998-12-12) are absent: a pre-1998 Saturday decision fails closed (CalendarUnsigned)'
++- 'random_end_extension rows (conditional random end before 2015-06-15) are absent: no extension is assumed'
+ owner_must_sign:
+ - 'saturday_close rows (saturday_session_close_kst, from_krx_notice): without them decision_time_utc on a pre-1998-12-12 Saturday
+   raises CalendarUnsigned (never the weekday close)'
+@@ -26,181 +29,200 @@
+ notes: 'row kinds: csat_day{date}; saturday_close{close_kst}; random_end_extension{session_date, extension_s}; lunch_break{window_kst};
+   regular_open{open_kst}; csat_window{window_kst}; csat_closing_call{window_kst}'
+ rows:
+-- effective_from: '2008-11-13'
+-  effective_to: '2008-11-13'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2008-11-13'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2009-11-12'
+-  effective_to: '2009-11-12'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2009-11-12'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2010-11-18'
+-  effective_to: '2010-11-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2010-11-18'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2011-11-10'
+-  effective_to: '2011-11-10'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2011-11-10'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2012-11-08'
+-  effective_to: '2012-11-08'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2012-11-08'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2013-11-07'
+-  effective_to: '2013-11-07'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2013-11-07'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2014-11-13'
+-  effective_to: '2014-11-13'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2014-11-13'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2015-11-12'
+-  effective_to: '2015-11-12'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2015-11-12'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2016-11-17'
+-  effective_to: '2016-11-17'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2016-11-17'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2017-11-23'
+-  effective_to: '2017-11-23'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2017-11-23'
+-  unverified: postponed from 2017-11-16 (Pohang earthquake); both dates appear in the cross-check
+-- effective_from: '2018-11-15'
+-  effective_to: '2018-11-15'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2018-11-15'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2019-11-14'
+-  effective_to: '2019-11-14'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2019-11-14'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2020-12-03'
+-  effective_to: '2020-12-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2020-12-03'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2021-11-18'
+-  effective_to: '2021-11-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2021-11-18'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2022-11-17'
+-  effective_to: '2022-11-17'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2022-11-17'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2023-11-16'
+-  effective_to: '2023-11-16'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2023-11-16'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2024-11-14'
+-  effective_to: '2024-11-14'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2024-11-14'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+-- effective_from: '2025-11-13'
+-  effective_to: '2025-11-13'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2025-11-13'
+-  unverified: the spec's example date (L2013)
+-- effective_from: '2026-11-19'
+-  effective_to: '2026-11-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  kind: csat_day
+-  date: '2026-11-19'
+-  unverified: 'UNVERIFIED: date from memory of the KRX CSAT-day notices; owner confirms'
+ - effective_from: '1995-01-01'
+   effective_to: '1998-12-06'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.hankookilbo.com/news/article/199812240073584153; https://biz.heraldcorp.com/article/967855
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   kind: regular_open
+   open_kst: 09:30
+-  unverified: 'UNVERIFIED: cross-check shows a 09:30 open before 1998-12-07 (brief F-17)'
++  evidence: 'A: 1995-01 이후 오전장 09:30~11:30; 1998-12-07에 09:00으로 변경'
+ - effective_from: '1998-12-07'
+   effective_to: null
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.hankookilbo.com/news/article/199812240073584153; https://biz.heraldcorp.com/article/967855
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   kind: regular_open
+   open_kst: 09:00
+-  unverified: 'UNVERIFIED: 09:00 KST regular open; the effective date comes from the KRX notice'
++  evidence: 'A: 1998-12-07부터 오전장 09:00 시작(30분 앞당김); 그 전 09:30'
+ - effective_from: '1995-01-01'
++  effective_to: '1998-12-06'
++  source_url: https://biz.heraldcorp.com/article/967855; https://www.hankookilbo.com/news/article/199812240073584153
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: lunch_break
++  window_kst:
++  - '11:30'
++  - '13:00'
++  evidence: 'A: 오전장 09:30~11:30, 오후장 13:00~15:00 (1995-01 ~ 1998-12-06)'
++- effective_from: '1998-12-07'
+   effective_to: '2000-05-21'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.hankookilbo.com/news/article/199812240073584153; https://www.hankookilbo.com/news/article/200005130027413996
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   kind: lunch_break
+   window_kst:
+   - '12:00'
+   - '13:00'
+-  unverified: 'UNVERIFIED: lunch break until May-2000 (spec L2016); the exact last date from the KRX notice'
++  evidence: 'A: 1998-12-07 오전장 09:00~12:00(점심 30분 단축); 2000-05-22 점심 휴장 폐지'
++- effective_from: '2008-11-13'
++  effective_to: '2008-11-13'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2008-11-13'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2009-11-12'
++  effective_to: '2009-11-12'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2009-11-12'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2010-11-18'
++  effective_to: '2010-11-18'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2010-11-18'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2011-11-10'
++  effective_to: '2011-11-10'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2011-11-10'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2012-11-08'
++  effective_to: '2012-11-08'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2012-11-08'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2013-11-07'
++  effective_to: '2013-11-07'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2013-11-07'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2014-11-13'
++  effective_to: '2014-11-13'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2014-11-13'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2015-11-12'
++  effective_to: '2015-11-12'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2015-11-12'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2016-11-17'
++  effective_to: '2016-11-17'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2016-11-17'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2017-11-23'
++  effective_to: '2017-11-23'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2017-11-23'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치; 포항 지진으로 11-16에서 연기'
++- effective_from: '2018-11-15'
++  effective_to: '2018-11-15'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2018-11-15'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2019-11-14'
++  effective_to: '2019-11-14'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2019-11-14'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2020-12-03'
++  effective_to: '2020-12-03'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2020-12-03'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치; 코로나19로 11-19에서 연기'
++- effective_from: '2021-11-18'
++  effective_to: '2021-11-18'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2021-11-18'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2022-11-17'
++  effective_to: '2022-11-17'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2022-11-17'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2023-11-16'
++  effective_to: '2023-11-16'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2023-11-16'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2024-11-14'
++  effective_to: '2024-11-14'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2024-11-14'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2025-11-13'
++  effective_to: '2025-11-13'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2025-11-13'
++  evidence: 'A: 연도별 수능 목록과 당시 보도 일치'
++- effective_from: '2026-11-19'
++  effective_to: '2026-11-19'
++  source_url: https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98;
++    https://www.etoday.co.kr/news/view/2390974
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2026-11-19'
++  evidence: 'A: 교육부 발표 2024-08-16; KRX 수능일 시간 공지는 보통 2~3주 전'
++- effective_from: '2027-11-18'
++  effective_to: '2027-11-18'
++  source_url: https://www.hangyo.com/news/article.html?no=104640; https://ko.wikipedia.org/wiki/%EC%97%B0%EB%8F%84%EB%B3%84_%EB%8C%80%ED%95%99%EC%88%98%ED%95%99%EB%8A%A5%EB%A0%A5%EC%8B%9C%ED%97%98
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  kind: csat_day
++  date: '2027-11-18'
++  evidence: 'A: 교육부 발표(2028학년도 수능 2027-11-18 목); KRX 시간 공지는 2027년 11월 초 예상'
+--- a/core/calendars/data/publication_schedules.yaml
++++ b/core/calendars/data/publication_schedules.yaml
+@@ -1,7 +1,7 @@
+ file_id: publication_schedules
+-version: 0.1.0-draft
+-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
+-  DISARMED until the owner verifies and signs
++version: 1.0.0
++status: AUDITED, UNSIGNED - proposed v1.0.0 from the calendar audit (docs/audit/2026-10-27/04_calendar_batch2.md); refused
++  at load until the owner signs (R-20 rule 6, T-CAL-01)
+ covers:
+   from: '1995-01-01'
+   to: '2027-12-31'
+@@ -13,37 +13,45 @@
+   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+   MANIFEST.yaml row with a new test id
+ unverified:
+-- VIXCLS_FRED declared lag
+-- KODEX200_PDF instant
+-- BLS/BEA release dates
++- publisher times (H.15 16:15, H.10 Monday 16:15, Treasury 18:00, Cboe 16:15 ET) are the spec's values; the publisher pages
++  were not re-read (network policy)
++- 'dependencies outside this file: VIXCLS_CBOE needs holidays_CBOE and ECOS_USDKRW needs holidays_ECOS (both empty); BLS and
++  BEA need release dates from the M5 event store. Those series fail closed until then'
++- VIXCLS_FRED lag and KODEX200_PDF instant are the spec's conservative defaults until the owner's measurement
+ owner_must_sign:
+ - the two M1 measurements (FRED VIX posting lag over 20 sessions; KODEX 200 basket instant)
+ - BLS and BEA release calendars
+ rows:
+ - effective_from: null
+   effective_to: null
+-  source_url: 'spec L1299 / time.publication.H15: ''16:15 ET on the next Fed business day'''
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 'https://www.federalreserve.gov/releases/h15/; spec L1299 / time.publication.H15: ''16:15 ET on the next Fed
++    business day'''
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: H15
+   rule: next_bday_after_obs
+   calendar: FED
+   time: '16:15'
+   tz: America/New_York
++  evidence: 'B: spec L1299; H.15 daily update on the next Fed business day; 16:15 ET not re-read on the publisher page (network
++    policy)'
+ - effective_from: null
+   effective_to: null
+-  source_url: spec L1301 / time.publication.H10
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/releases/h10/; spec L1301 / time.publication.H10
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: H10
+   rule: monday_after_week
+   calendar: FED
+   time: '16:15'
+   tz: America/New_York
++  evidence: 'B: spec L1301; weekly release on Monday for the previous week, next business day when Monday is a Board holiday;
++    16:15 ET not re-read on the publisher page'
+ - effective_from: null
+   effective_to: null
+-  source_url: 'spec L1300 / time.publication.TREASURY_PAR: ''usually by 18:00 ET on D''; the logged posting time is available_at'
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 'https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics; spec L1300 / time.publication.TREASURY_PAR:
++    ''usually by 18:00 ET on D''; the logged posting time is available_at'
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: TREASURY_PAR
+   rule: same_day
+@@ -51,42 +59,46 @@
+   time: '18:00'
+   tz: America/New_York
+   log_posting_time: true
++  evidence: 'B: spec L1300: ''usually available ... by 6:00 PM''; the logged first-seen posting time is the record''s available_at'
+ - effective_from: null
+   effective_to: null
+-  source_url: spec L1297 / time.publication.BLS
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.bls.gov/schedule/; spec L1297 / time.publication.BLS
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: BLS
+   rule: release_calendar
+   calendar: FED
+   time: 08:30
+   tz: America/New_York
+-  unverified: 'release dates: owner supplies the BLS schedule (release_dates)'
++  evidence: 'B: spec L1297: 08:30 ET; release dates come from the M5 event store (none here: the BLS series fail closed until
++    then)'
+ - effective_from: null
+   effective_to: null
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.bea.gov/news/schedule
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: BEA
+   rule: release_calendar
+   calendar: FED
+   time: 08:30
+   tz: America/New_York
+-  unverified: 'release dates: owner supplies the BEA schedule'
++  evidence: 'B: spec L1851: BEA release calendar; release dates from the M5 event store'
+ - effective_from: null
+   effective_to: null
+-  source_url: spec L1302 / time.publication.VIXCLS official_close 16:15 ET (value timing; labelled)
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.cboe.com/tradable_products/vix/; spec L1302 / time.publication.VIXCLS official_close 16:15 ET (value
++    timing; labelled)
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: VIXCLS_CBOE
+   rule: same_day
+   calendar: CBOE
+   time: '16:15'
+   tz: America/New_York
++  evidence: 'B: spec L1302: official close 16:15 ET; needs holidays_CBOE, which has no rows yet'
+ - effective_from: null
+   effective_to: null
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://fred.stlouisfed.org/series/VIXCLS
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: VIXCLS_FRED
+   rule: channel_posting_time
+@@ -95,84 +107,93 @@
+   tz: America/New_York
+   declared_lag_bdays: 1
+   declared_time: 09:00
+-  unverified: 'UNVERIFIED declared lag: usable from the US close of D+1, never D (brief F-23) until the 20-session FRED last_updated
+-    measurement (TASK-M1-23, OWNER)'
++  evidence: 'B: spec brief F-23: declared lag D+1 (conservative default) until the 20-session FRED last_updated measurement
++    (TASK-M1-23, owner)'
+ - effective_from: null
+   effective_to: '2016-07-31'
+-  source_url: spec L1305 / time.publication.ECOS_USDKRW close_1500_until 2016-08-01
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ecos.bok.or.kr/ (731Y003 / 0000003); spec L1305 / time.publication.ECOS_USDKRW close_1500_until 2016-08-01
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: ECOS_USDKRW
+   rule: same_day
+   calendar: ECOS
+   time: '15:00'
+   tz: Asia/Seoul
++  evidence: 'B: spec L1305: 15:00 KST before 2016-08-01, 15:30 after; needs holidays_ECOS, which has no rows yet'
+ - effective_from: '2016-08-01'
+   effective_to: null
+-  source_url: 'spec L1305: 15:30 KST close; a timestamped 15:30:00 snapshot from 2026-07-06'
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 'https://ecos.bok.or.kr/ (731Y003 / 0000003); spec L1305: 15:30 KST close; a timestamped 15:30:00 snapshot from
++    2026-07-06'
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: ECOS_USDKRW
+   rule: same_day
+   calendar: ECOS
+   time: '15:30'
+   tz: Asia/Seoul
++  evidence: 'B: spec L1305: 15:00 KST before 2016-08-01, 15:30 after; needs holidays_ECOS, which has no rows yet'
+ - effective_from: null
+   effective_to: null
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: spec L1411
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: KODEX200_PDF
+   rule: next_bday_after_obs
+   calendar: KRX
+   time: 08:00
+   tz: Asia/Seoul
+-  unverified: 'default, judgment (spec L1411): 08:00 KST on the next KRX session until measured (TASK-M1-23, OWNER)'
++  evidence: 'B: default, judgment: 08:00 KST on the next KRX session until measured (TASK-M1-23, owner)'
+ - effective_from: null
+   effective_to: null
+   source_url: 'spec L1852: a market close is published at its close-print bound (R-20)'
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: MARKET_CLOSE_KR
+   rule: market_close
+   market: KR
++  evidence: 'A: spec L1852 (a close is published at its close-print bound; R-20)'
+ - effective_from: null
+   effective_to: null
+   source_url: 'spec L1852: a market close is published at its close-print bound (R-20)'
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: MARKET_CLOSE_US
+   rule: market_close
+   market: US
++  evidence: 'A: spec L1852 (a close is published at its close-print bound; R-20)'
+ - effective_from: null
+   effective_to: null
+   source_url: 'spec L1852: a market close is published at its close-print bound (R-20)'
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: MARKET_CLOSE_JP
+   rule: market_close
+   market: JP
++  evidence: 'A: spec L1852 (a close is published at its close-print bound; R-20)'
+ - effective_from: null
+   effective_to: null
+   source_url: 'spec L1852: a market close is published at its close-print bound (R-20)'
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: MARKET_CLOSE_CN
+   rule: market_close
+   market: CN
++  evidence: 'A: spec L1852 (a close is published at its close-print bound; R-20)'
+ - effective_from: null
+   effective_to: null
+   source_url: 'spec L1852: a market close is published at its close-print bound (R-20)'
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: MARKET_CLOSE_HK
+   rule: market_close
+   market: HK
++  evidence: 'A: spec L1852 (a close is published at its close-print bound; R-20)'
+ - effective_from: null
+   effective_to: null
+   source_url: 'spec L1852: a market close is published at its close-print bound (R-20)'
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   schedule_id: MARKET_CLOSE_TW
+   rule: market_close
+   market: TW
++  evidence: 'A: spec L1852 (a close is published at its close-print bound; R-20)'
+--- a/core/calendars/data/source_skipped.yaml
++++ b/core/calendars/data/source_skipped.yaml
+@@ -1,7 +1,7 @@
+ file_id: source_skipped
+-version: 0.1.0-draft
+-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
+-  DISARMED until the owner verifies and signs
++version: 1.0.0
++status: AUDITED, UNSIGNED - proposed v1.0.0 from the calendar audit (docs/audit/2026-10-27/04_calendar_batch2.md); refused
++  at load until the owner signs (R-20 rule 6, T-CAL-01)
+ covers:
+   from: '2015-01-01'
+   to: '2027-12-31'
+@@ -13,186 +13,189 @@
+   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+   MANIFEST.yaml row with a new test id
+ unverified:
+-- series mapping of the spec's dates inferred from the local cache, never at run time
++- DTWEXBGS rows rest on the spec's list (no local DTWEXBGS file)
++- future source gaps (a KRW-only H.10 blank, a Board weather closure) are added as a new version
+ owner_must_sign:
+ - the source-exception list per series, with the Good-Friday years (T-STALE-01 b)
+ rows:
+ - effective_from: '2017-01-20'
+   effective_to: '2017-01-20'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: spec L1854 list; docs/asset_expansion/cache/fred_DEXKOUS.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   series: DEXKOUS
+   date: '2017-01-20'
+   reason: H.10 not published (spec L1854 list)
+-  unverified: 'evidence: local cache docs/asset_expansion/cache/fred_DEXKOUS.csv is blank on this date (brief F-7); owner
+-    confirms from the Board'
++  evidence: 'A: DEXKOUS blank in the local cache; also a Board closure in holidays_FED v1.0.0 (redundant, harmless)'
+ - effective_from: '2018-12-05'
+   effective_to: '2018-12-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: spec L1854 list; docs/asset_expansion/cache/fred_DEXKOUS.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   series: DEXKOUS
+   date: '2018-12-05'
+   reason: H.10 not published (spec L1854 list)
+-  unverified: 'evidence: local cache docs/asset_expansion/cache/fred_DEXKOUS.csv is blank on this date (brief F-7); owner
+-    confirms from the Board'
++  evidence: 'A: DEXKOUS blank in the local cache; also a Board closure in holidays_FED v1.0.0 (redundant, harmless)'
++- effective_from: '2018-12-24'
++  effective_to: '2018-12-24'
++  source_url: docs/asset_expansion/cache/fred_DEXKOUS.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: DEXKOUS
++  date: '2018-12-24'
++  reason: blank in the local DEXKOUS cache; not in the spec list
++  evidence: 'A: DEXKOUS blank in the local cache; also a Board closure in holidays_FED v1.0.0 (redundant, harmless)'
++- effective_from: '2019-01-14'
++  effective_to: '2019-01-14'
++  source_url: docs/asset_expansion/cache/fred_DEXKOUS.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: DEXKOUS
++  date: '2019-01-14'
++  reason: blank in the local DEXKOUS cache; not in the spec list
++  evidence: 'A: DEXKOUS blank in the local cache on a Board business day (KRW-only gap)'
++- effective_from: '2019-02-20'
++  effective_to: '2019-02-20'
++  source_url: docs/asset_expansion/cache/fred_DEXKOUS.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: DEXKOUS
++  date: '2019-02-20'
++  reason: blank in the local DEXKOUS cache; not in the spec list
++  evidence: 'A: DEXKOUS blank in the local cache on a Board business day (KRW-only gap)'
+ - effective_from: '2020-11-27'
+   effective_to: '2020-11-27'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: spec L1854 list; docs/asset_expansion/cache/fred_DEXKOUS.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   series: DEXKOUS
+   date: '2020-11-27'
+   reason: H.10 not published (spec L1854 list)
+-  unverified: 'evidence: local cache docs/asset_expansion/cache/fred_DEXKOUS.csv is blank on this date (brief F-7); owner
+-    confirms from the Board'
++  evidence: 'A: DEXKOUS blank in the local cache on a Board business day (KRW-only gap)'
+ - effective_from: '2020-12-24'
+   effective_to: '2020-12-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: spec L1854 list; docs/asset_expansion/cache/fred_DEXKOUS.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   series: DEXKOUS
+   date: '2020-12-24'
+   reason: H.10 not published (spec L1854 list)
+-  unverified: 'evidence: local cache docs/asset_expansion/cache/fred_DEXKOUS.csv is blank on this date (brief F-7); owner
+-    confirms from the Board'
+-- effective_from: '2018-12-24'
+-  effective_to: '2018-12-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DEXKOUS
+-  date: '2018-12-24'
+-  reason: blank in the local DEXKOUS cache; not in the spec list
+-  unverified: 'evidence: local cache docs/asset_expansion/cache/fred_DEXKOUS.csv is blank on this date (brief F-7); owner
+-    confirms from the Board'
+-- effective_from: '2019-01-14'
+-  effective_to: '2019-01-14'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DEXKOUS
+-  date: '2019-01-14'
+-  reason: blank in the local DEXKOUS cache; not in the spec list
+-  unverified: 'evidence: local cache docs/asset_expansion/cache/fred_DEXKOUS.csv is blank on this date (brief F-7); owner
+-    confirms from the Board'
+-- effective_from: '2019-02-20'
+-  effective_to: '2019-02-20'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DEXKOUS
+-  date: '2019-02-20'
+-  reason: blank in the local DEXKOUS cache; not in the spec list
+-  unverified: 'evidence: local cache docs/asset_expansion/cache/fred_DEXKOUS.csv is blank on this date (brief F-7); owner
+-    confirms from the Board'
++  evidence: 'A: DEXKOUS blank in the local cache; also a Board closure in holidays_FED v1.0.0 (redundant, harmless)'
+ - effective_from: '2021-01-20'
+   effective_to: '2021-01-20'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: docs/asset_expansion/cache/fred_DEXKOUS.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   series: DEXKOUS
+   date: '2021-01-20'
+   reason: blank in the local DEXKOUS cache; not in the spec list
+-  unverified: 'evidence: local cache docs/asset_expansion/cache/fred_DEXKOUS.csv is blank on this date (brief F-7); owner
+-    confirms from the Board'
++  evidence: 'A: DEXKOUS blank in the local cache; also a Board closure in holidays_FED v1.0.0 (redundant, harmless)'
+ - effective_from: '2016-01-22'
+   effective_to: '2016-01-22'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: spec L1854 (DC storm closures 2016-01-22 and 2018-03-02; QF2-A3, DLA-S1)
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   series: DTWEXBGS
+   date: '2016-01-22'
+   reason: DC storm closure / Board closed (spec L1854)
+-  unverified: 'UNVERIFIED: no local DTWEXBGS file'
++  evidence: 'B: spec list; no local DTWEXBGS file to check'
+ - effective_from: '2018-03-02'
+   effective_to: '2018-03-02'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: spec L1854 (DC storm closures 2016-01-22 and 2018-03-02; QF2-A3, DLA-S1)
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   series: DTWEXBGS
+   date: '2018-03-02'
+   reason: DC storm closure / Board closed (spec L1854)
+-  unverified: 'UNVERIFIED: no local DTWEXBGS file'
++  evidence: 'B: spec list; no local DTWEXBGS file to check'
+ - effective_from: '2018-12-05'
+   effective_to: '2018-12-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: spec L1854 (DC storm closures 2016-01-22 and 2018-03-02; QF2-A3, DLA-S1)
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
+   signed_off_by: null
+   series: DTWEXBGS
+   date: '2018-12-05'
+   reason: DC storm closure / Board closed (spec L1854)
+-  unverified: 'UNVERIFIED: no local DTWEXBGS file'
++  evidence: 'B: spec list; no local DTWEXBGS file to check; also a Board closure in holidays_FED v1.0.0'
+ - effective_from: '2016-03-25'
+   effective_to: '2016-03-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DGS10
++  source_url: spec L1854 (Good-Friday bond-market closures); docs/asset_expansion/cache/fred_DGS3MO.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: H.15
+   date: '2016-03-25'
+-  reason: Good Friday bond-market closure (H.15 blank)
+-  unverified: 'evidence: H.15 series blank on these Good Fridays in the local cache (brief F-7); 2021, 2023, 2026 had values'
++  reason: 'Good Friday SIFMA full close: no H.15 rates for that date (every H.15 series)'
++  evidence: 'A: H.15 DGS3MO blank in the local cache that day; 2015, 2021, 2023, 2026 had values (early closes)'
+ - effective_from: '2017-04-14'
+   effective_to: '2017-04-14'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DGS10
++  source_url: spec L1854 (Good-Friday bond-market closures); docs/asset_expansion/cache/fred_DGS3MO.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: H.15
+   date: '2017-04-14'
+-  reason: Good Friday bond-market closure (H.15 blank)
+-  unverified: 'evidence: H.15 series blank on these Good Fridays in the local cache (brief F-7); 2021, 2023, 2026 had values'
++  reason: 'Good Friday SIFMA full close: no H.15 rates for that date (every H.15 series)'
++  evidence: 'A: H.15 DGS3MO blank in the local cache that day; 2015, 2021, 2023, 2026 had values (early closes)'
+ - effective_from: '2018-03-30'
+   effective_to: '2018-03-30'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DGS10
++  source_url: spec L1854 (Good-Friday bond-market closures); docs/asset_expansion/cache/fred_DGS3MO.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: H.15
+   date: '2018-03-30'
+-  reason: Good Friday bond-market closure (H.15 blank)
+-  unverified: 'evidence: H.15 series blank on these Good Fridays in the local cache (brief F-7); 2021, 2023, 2026 had values'
++  reason: 'Good Friday SIFMA full close: no H.15 rates for that date (every H.15 series)'
++  evidence: 'A: H.15 DGS3MO blank in the local cache that day; 2015, 2021, 2023, 2026 had values (early closes)'
+ - effective_from: '2019-04-19'
+   effective_to: '2019-04-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DGS10
++  source_url: spec L1854 (Good-Friday bond-market closures); docs/asset_expansion/cache/fred_DGS3MO.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: H.15
+   date: '2019-04-19'
+-  reason: Good Friday bond-market closure (H.15 blank)
+-  unverified: 'evidence: H.15 series blank on these Good Fridays in the local cache (brief F-7); 2021, 2023, 2026 had values'
++  reason: 'Good Friday SIFMA full close: no H.15 rates for that date (every H.15 series)'
++  evidence: 'A: H.15 DGS3MO blank in the local cache that day; 2015, 2021, 2023, 2026 had values (early closes)'
+ - effective_from: '2020-04-10'
+   effective_to: '2020-04-10'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DGS10
++  source_url: spec L1854 (Good-Friday bond-market closures); docs/asset_expansion/cache/fred_DGS3MO.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: H.15
+   date: '2020-04-10'
+-  reason: Good Friday bond-market closure (H.15 blank)
+-  unverified: 'evidence: H.15 series blank on these Good Fridays in the local cache (brief F-7); 2021, 2023, 2026 had values'
++  reason: 'Good Friday SIFMA full close: no H.15 rates for that date (every H.15 series)'
++  evidence: 'A: H.15 DGS3MO blank in the local cache that day; 2015, 2021, 2023, 2026 had values (early closes)'
+ - effective_from: '2022-04-15'
+   effective_to: '2022-04-15'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DGS10
++  source_url: spec L1854 (Good-Friday bond-market closures); docs/asset_expansion/cache/fred_DGS3MO.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: H.15
+   date: '2022-04-15'
+-  reason: Good Friday bond-market closure (H.15 blank)
+-  unverified: 'evidence: H.15 series blank on these Good Fridays in the local cache (brief F-7); 2021, 2023, 2026 had values'
++  reason: 'Good Friday SIFMA full close: no H.15 rates for that date (every H.15 series)'
++  evidence: 'A: H.15 DGS3MO blank in the local cache that day; 2015, 2021, 2023, 2026 had values (early closes)'
+ - effective_from: '2024-03-29'
+   effective_to: '2024-03-29'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DGS10
++  source_url: spec L1854 (Good-Friday bond-market closures); docs/asset_expansion/cache/fred_DGS3MO.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: H.15
+   date: '2024-03-29'
+-  reason: Good Friday bond-market closure (H.15 blank)
+-  unverified: 'evidence: H.15 series blank on these Good Fridays in the local cache (brief F-7); 2021, 2023, 2026 had values'
++  reason: 'Good Friday SIFMA full close: no H.15 rates for that date (every H.15 series)'
++  evidence: 'A: H.15 DGS3MO blank in the local cache that day; 2015, 2021, 2023, 2026 had values (early closes)'
+ - effective_from: '2025-04-18'
+   effective_to: '2025-04-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  series: DGS10
++  source_url: spec L1854 (Good-Friday bond-market closures); docs/asset_expansion/cache/fred_DGS3MO.csv
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: H.15
+   date: '2025-04-18'
+-  reason: Good Friday bond-market closure (H.15 blank)
+-  unverified: 'evidence: H.15 series blank on these Good Fridays in the local cache (brief F-7); 2021, 2023, 2026 had values'
++  reason: 'Good Friday SIFMA full close: no H.15 rates for that date (every H.15 series)'
++  evidence: 'A: H.15 DGS3MO blank in the local cache that day; 2015, 2021, 2023, 2026 had values (early closes)'
++- effective_from: '2027-03-26'
++  effective_to: '2027-03-26'
++  source_url: holidays_SIFMA v1.0.0 (2027-03-26 closed); spec L1854
++  retrieved_at_utc: '2026-10-28T07:30:00Z'
++  signed_off_by: null
++  series: H.15
++  date: '2027-03-26'
++  reason: 'Good Friday SIFMA full close: no H.15 rates for that date (every H.15 series)'
++  evidence: 'B: expected from the signed SIFMA calendar; a BLS reschedule onto that day would make it an early close (then
++    remove this row in a new version)'

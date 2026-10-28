@@ -1,0 +1,37 @@
+load (one row per tag per date, no gap, no overlap)
+  [ok] kr_regime_tags loads: None
+  [ok] full tag set on every date 1995-01-01..2027-12-31 (12053 dates)
+T-REGIME-01 point clauses (spec L2098)
+  [ok] price_limit 1997-06-02: 0.08
+  [ok] price_limit 1998-06-01: 0.12
+  [ok] price_limit 1999-06-01: 0.15
+  [ok] price_limit 2015-06-15: 0.3
+  [ok] fx_regime 1997-10-01: 'peg_1997'
+  [ok] etf_available 2002-01-02: False
+  [ok] short_sale_ban 2024-06-03: True
+  [ok] sell_tax_pct 2026-10-02: 0.2
+  [ok] sell_tax_pct 2025-06-02: 0.15
+  [ok] short_sale_ban 2022-06-03: False
+  [ok] short_sale_regime 2022-06-03: 'partial_ban_non_index'
+  [ok] saturday_session 1997-06-07: True
+  [ok] saturday_session 1998-12-12: False
+  [ok] close_time_kst 2026-10-02: '15:30'
+  [ok] random_end 2026-10-02: 'unconditional_le_30s'
+  [ok] usdkrw_onshore_hours 2026-10-02: '24h'
+  [ok] value_up 2024-02-26: 'post_value_up_2024_02_26'
+audited changes
+  [ok] lunch_break 1997-06-02 (RT-01): '11:30-13:00'
+  [ok] lunch_break 1999-06-01: '12:00-13:00'
+  [ok] short_sale_ban 2011-08-10 (RT-02): True
+  [ok] short_sale_regime 2012-06-01 (financials): 'partial_ban_financials'
+  [ok] short_sale_regime 2014-01-02: 'none'
+  [ok] random_end 2000-06-01 (RT-03): 'none'
+  [ok] random_end 2010-06-01: 'conditional'
+  [ok] fx_regime 1996-06-03 (RT-04): 'market_average_rate'
+  [ok] fx_regime 1998-06-01: 'free_float'
+  [ok] price_limit 1995-02-01 stays null: None
+KR market status on 2026-10-28 (every KR file now signed or simulated)
+  KR: signed=True refused=[] sessions_left=289
+  [ok] KR signed: True
+
+0 failure(s)

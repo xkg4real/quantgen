@@ -645,15 +645,16 @@ series:
     schedule: BEA
     publication_schedule: {calendar: BEA, time: "08:30", tz: America/New_York}
     release_event_type: BEA_RELEASE
+    release: PIO
     read_as_of_vintage: true
     bindings: [{role: risk_model}]
-  PCEPI:    {<<: *fred_monthly, obs_calendar: BEA, schedule: BEA, release_event_type: BEA_RELEASE, bindings: [{role: context}]}
-  CPIAUCSL: {<<: *fred_monthly, missing_months: ["2025-10-01"], bindings: [{role: context}]}
-  CPILFESL: {<<: *fred_monthly, missing_months: ["2025-10-01"], bindings: [{role: context}]}
-  UNRATE:   {<<: *fred_monthly, unit: pct, missing_months: ["2025-10-01"], bindings: [{role: context}]}
-  SAHMREALTIME: {<<: *fred_monthly, unit: pct, channel: "FRED (in-house Sahm is the derived series; vendor value across the gap is vendor_derived_across_gap)", bindings: [{role: context}]}
-  PAYEMS:   {<<: *fred_monthly, unit: thousands, bindings: [{role: context}]}
-  ICSA:     {<<: *fred_monthly, frequency: weekly, unit: count, bindings: [{role: context}]}
+  PCEPI:    {<<: *fred_monthly, release: PIO, obs_calendar: BEA, schedule: BEA, release_event_type: BEA_RELEASE, bindings: [{role: context}]}
+  CPIAUCSL: {<<: *fred_monthly, release: CPI, missing_months: ["2025-10-01"], bindings: [{role: context}]}
+  CPILFESL: {<<: *fred_monthly, release: CPI, missing_months: ["2025-10-01"], bindings: [{role: context}]}
+  UNRATE:   {<<: *fred_monthly, release: EMPSIT, unit: pct, missing_months: ["2025-10-01"], bindings: [{role: context}]}
+  SAHMREALTIME: {<<: *fred_monthly, release: EMPSIT, unit: pct, channel: "FRED (in-house Sahm is the derived series; vendor value across the gap is vendor_derived_across_gap)", bindings: [{role: context}]}
+  PAYEMS:   {<<: *fred_monthly, release: EMPSIT, unit: thousands, bindings: [{role: context}]}
+  ICSA:     {<<: *fred_monthly, release: CLAIMS, frequency: weekly, unit: count, bindings: [{role: context}]}
   FEDFUNDS: {<<: *as_posted, unit: pct, bindings: [{role: context}]}
   DFEDTARU: {<<: *as_posted, unit: pct, release_event_type: FOMC_STATEMENT, bindings: [{role: context}]}
   USEPUINDXD: {<<: *as_posted, unit: level, bindings: [{role: context}]}
