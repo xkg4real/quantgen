@@ -246,3 +246,25 @@ No line of the 7A.2 PowerShell block has run on Windows (UNVERIFIED until Step 7
 - **The plan's Task 1 Step 0 heredoc** still shows the plain-clone `full_run.sh`. T5-1 governs, and the script in use differs from that text (ruling 1). The plan's next revision should print the sparse script.
 - **The plan's Result-files list** names no ③-6 files (ruling 15), and X8's third part has no Task 4 Step 1 text to apply it (ruling 16). Both are plan wording only.
 - **Exit code.** `full_run.sh` exits 1 on every correct run while B has its two FAILs. A reader must check the counts, not the exit code. This is cosmetic.
+## After ③-6: `main` merged into the branch (`614dca4`, 2026-10-29)
+
+PR #4 (this branch into `main`) showed conflicts after PR #7 merged into `main` at 2026-10-28T17:54:58Z. PR #7 carries the owner-signed calendars: `holidays_KRX`, `holidays_NYSE`, `holidays_FED` and `holidays_SIFMA` v1.0.0 signed by Geon Koh at 2026-10-28T06:35:52Z (`3917bc0`), then `kr_sessions` and the rest of the KR and US sets. The owner asked Claude to decide by the two latest T-CAL-02 sessions (`docs/nautilus_bridge/OWNER_RULINGS_LOG.md`, "PR #4 충돌 해결").
+
+- **Decision.** `main`'s signed calendars win, byte for byte. `core/calendars/data/`, `core/calendars/store.py`, `core/calendars/publication.py`, `data/calendars/KRX.json`, `data/calendars/index.json` and the three calendar test modules now equal `origin/main`. This withdraws PT-07 (`d865c7f`, unsigned). Its `store.py` would have refused the signed files, because they carry no `sign_off_statement` and no MANIFEST `signed_utc`. `tests/macro_registry.csv` is `main`'s file plus this branch's T-RO-01 row. `docs/calendar_signoff/SIGNING_KIT_2026-10-28.md` is marked superseded.
+- **Bridge files.** No file under `tools/nautilus/`, `tests/nautilus_acceptance.py`, `tests/fixtures/nautilus/` or `requirements-nautilus.txt` changed in the merge.
+- **Full run after the merge.** `bash $S/full_run.sh m1_full` on a clone of `614dca4`, key unset, started 2026-10-28T18:07:48Z: `792/931 passed, 2 failed, 137 not run`.
+  - The four caches were skip-worktree (`4`) and absent.
+  - The FAIL set is B's two rows.
+  - PASS to FAIL: 0.
+- **Against `t6_full.json`.**
+  - All differences are `macro_m1_calendars` and `macro_m1_integration` rows.
+  - 8 PT-07 rows removed (7 PASS, 1 NOT_RUN).
+  - 4 `main` rows added (3 PASS, 1 NOT_RUN): `test_cal01_owner_sign_tool_on_a_copy`, `test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed`, `test_close02_on_the_real_signed_files_is_owner_input` (NOT_RUN) and `test_release_calendar_supplies_bls_bea_release_dates`.
+  - 1 row changed: `test_cal02_2027_files_signed_before_2026_11_01` NOT_RUN to PASS (the files are signed).
+  - So 935 − 8 + 4 = 931 rows and 795 − 7 + 3 + 1 = 792 PASS.
+  - The 57 `nautilus` rows are unchanged (44 PASS, 13 NOT_RUN). The 14 `macro_m0_harness` rows pass. There are 546 `macro` rows.
+- **What this changes above.**
+  - The X-2 clock and sign-off rows are settled: `test_cal02` passes, and the deadline no longer threatens Step 7A.2's 0-FAIL done-when.
+  - The calendar precondition under "Hand-off state for Step 7A" and the ①-2 item under "Open owner decisions" are closed.
+  - The bridge's Count Ledger deltas still hold against the new baseline: every bridge row is unchanged.
+- **Results file.** `qa/acceptance_results.json` stayed `16c9baa5a1777853521d485d5078e456`.
