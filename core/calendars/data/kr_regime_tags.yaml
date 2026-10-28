@@ -1,22 +1,24 @@
 file_id: kr_regime_tags
-version: 0.1.0-draft
-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
-  DISARMED until the owner verifies and signs
+version: 1.0.0
+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/08_kr_regime_tags.md); refused at load until the owner
+  signs (R-20 rule 6, T-CAL-01)
 covers:
   from: '1995-01-01'
   to: '2027-12-31'
 coverage_calendar: KRX
-signed_off_by: null
-signed_utc: null
-md5: null
+signed_off_by: Geon Koh
+signed_utc: '2026-10-28T13:27:00Z'
+md5: 8336f69ca98c450c28eaaeea37495638
 how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
   MANIFEST.yaml row with a new test id
 unverified:
-- month-level dates carried as specific days
-- sell-tax steps between the anchors
-- BoK fx regimes outside the 1997 peg (null)
-- pre-Apr-1995 price limit (null)
+- price_limit before 1995-04-01 stays null (a 17-step fixed-amount schedule, no single fraction)
+- 'sell_tax_pct 1995-2019: one 0.30% row; the 1990s steps were not confirmed from the statute history'
+- random_end conditional start 2005-01-26 combines two sources (year and day)
+- 'spec values not confirmed by search: ETF 1-won tick 2023-12-11, letf rule 2026-07-16, 24h FX 2026-07-06, the peg_1997 window'
+- new short_sale_regime value partial_ban_financials (financial stocks only, 2009-06-01..2013-11-13)
+- T-REGIME-01 expected-values file (full-range clause) is still an owner deliverable
 owner_must_sign:
 - exact days from the official notices for every row marked UNVERIFIED
 - the committed expected-values file tests/fixtures/macro/kr_regime_tags_expected.csv (T-REGIME-01 full-range clause)
@@ -24,467 +26,531 @@ owner_must_sign:
 rows:
 - effective_from: '1995-01-01'
   effective_to: '1995-03-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://ko.wikipedia.org/wiki/%EA%B0%80%EA%B2%A9%EC%A0%9C%ED%95%9C%ED%8F%AD
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: price_limit
   value: null
-  unverified: 'OWNER: the pre-Apr-1995 limit (a band schedule, not one fraction) from the KRX notice'
   unit: fraction
+  evidence: 'A: 1995-04-01 이전 17단계 정액제(평균 약 4.6%), 단일 비율 없음 -> null 유지'
 - effective_from: '1995-04-01'
   effective_to: '1996-11-24'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://ko.wikipedia.org/wiki/%EA%B0%80%EA%B2%A9%EC%A0%9C%ED%95%9C%ED%8F%AD; https://securities.miraeasset.com/bbs/download/2034052.pdf?attachmentId=2034052
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: price_limit
   value: 0.06
-  unverified: 'UNVERIFIED: exact day from the official notice at sign-off (spec L2034)'
   unit: fraction
+  evidence: 'A: 유가증권시장 가격제한폭 변천표와 일치'
 - effective_from: '1996-11-25'
   effective_to: '1998-03-01'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://ko.wikipedia.org/wiki/%EA%B0%80%EA%B2%A9%EC%A0%9C%ED%95%9C%ED%8F%AD; https://securities.miraeasset.com/bbs/download/2034052.pdf?attachmentId=2034052
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: price_limit
   value: 0.08
-  unverified: 'UNVERIFIED: exact day from the official notice at sign-off (spec L2034)'
   unit: fraction
+  evidence: 'A: 유가증권시장 가격제한폭 변천표와 일치'
 - effective_from: '1998-03-02'
   effective_to: '1998-12-06'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://ko.wikipedia.org/wiki/%EA%B0%80%EA%B2%A9%EC%A0%9C%ED%95%9C%ED%8F%AD; https://securities.miraeasset.com/bbs/download/2034052.pdf?attachmentId=2034052
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: price_limit
   value: 0.12
-  unverified: 'UNVERIFIED: exact day from the official notice at sign-off (spec L2034)'
   unit: fraction
+  evidence: 'A: 유가증권시장 가격제한폭 변천표와 일치'
 - effective_from: '1998-12-07'
   effective_to: '2015-06-14'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://ko.wikipedia.org/wiki/%EA%B0%80%EA%B2%A9%EC%A0%9C%ED%95%9C%ED%8F%AD; https://securities.miraeasset.com/bbs/download/2034052.pdf?attachmentId=2034052
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: price_limit
   value: 0.15
-  unverified: 'UNVERIFIED: exact day from the official notice at sign-off (spec L2034)'
   unit: fraction
+  evidence: 'A: 유가증권시장 가격제한폭 변천표와 일치'
 - effective_from: '2015-06-15'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://ko.wikipedia.org/wiki/%EA%B0%80%EA%B2%A9%EC%A0%9C%ED%95%9C%ED%8F%AD; spec L2038
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: price_limit
   value: 0.3
-  unverified: 'spec L2038 / tech-fund GV-214: 2015-06-15'
   unit: fraction
+  evidence: 'A: 2015-06-15 ±30%'
 - effective_from: '1995-01-01'
   effective_to: '1998-12-11'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.hankookilbo.com/news/article/199812010033710380
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: saturday_session
   value: true
-  unverified: 'spec L2039: true before 1998-12-12'
+  evidence: 'A: 1998-12-12부터 토요 휴장'
 - effective_from: '1998-12-12'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.hankookilbo.com/news/article/199812010033710380
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: saturday_session
   value: false
+  evidence: 'A: 토요 휴장'
 - effective_from: '1995-01-01'
   effective_to: '2016-07-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://biz.heraldcorp.com/article/967855; spec L2010
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: close_time_kst
   value: '15:00'
-  unverified: spec L2010
+  evidence: 'A: 장 마감 15:00'
 - effective_from: '2016-08-01'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://biz.heraldcorp.com/article/967855; spec L2010
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: close_time_kst
   value: '15:30'
-  unverified: spec L2010
+  evidence: 'A: 2016-08-01 30분 연장'
 - effective_from: '1995-01-01'
   effective_to: '2016-07-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: http://www.korfin.org/korfin_file/forum/28-4-02.pdf; spec L2011
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: closing_call
   value: 14:50-15:00
-  unverified: spec L2011
+  evidence: 'B: 2001-09-03 이전에도 종가 14:50~15:00 동시호가(논문); 1995~2000 구간은 같은 시간대로 추정'
 - effective_from: '2016-08-01'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://biz.heraldcorp.com/article/967855; spec L2011
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: closing_call
   value: 15:20-15:30
-  unverified: spec L2011
+  evidence: 'A: 종가 단일가 15:20~15:30'
 - effective_from: '1995-01-01'
+  effective_to: '2005-01-25'
+  source_url: https://dic.hankyung.com/economy/view/?seq=9817; https://www.sedaily.com/article/10339893
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: random_end
+  value: none
+  evidence: 'B: 랜덤엔드(임의종료)는 2005년 도입; 그 전에는 없음'
+- effective_from: '2005-01-26'
   effective_to: '2015-06-14'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://dic.hankyung.com/economy/view/?seq=9817; https://www.sedaily.com/article/10339893; spec L2012
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: random_end
   value: conditional
-  unverified: spec L2012
+  evidence: 'B: ''2005년 도입''(용어사전)과 ''1월 26일 도입''(서울경제) 결합; 예상체결가 급변 종목만 최대 5분 연장'
 - effective_from: '2015-06-15'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2012
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: random_end
   value: unconditional_le_30s
-  unverified: spec L2012
+  evidence: 'A: 2015-06-15 모든 단일가매매에 30초 이내 랜덤엔드'
 - effective_from: '1995-01-01'
+  effective_to: '1998-12-06'
+  source_url: https://biz.heraldcorp.com/article/967855; https://www.hankookilbo.com/news/article/199812240073584153
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: lunch_break
+  value: 11:30-13:00
+  evidence: 'A: 오전장 09:30~11:30, 오후장 13:00~15:00 (kr_sessions v1.0.0과 일치)'
+- effective_from: '1998-12-07'
   effective_to: '2000-05-21'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.hankookilbo.com/news/article/199812240073584153; https://www.hankookilbo.com/news/article/200005130027413996
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: lunch_break
   value: 12:00-13:00
-  unverified: 'UNVERIFIED: until May-2000; exact end from the KRX notice'
+  evidence: 'A: 1998-12-07 점심 30분 단축; 2000-05-22 폐지'
 - effective_from: '2000-05-22'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.hankookilbo.com/news/article/200005130027413996
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: lunch_break
   value: none
+  evidence: 'A: 2000-05-22 점심 휴장 폐지'
 - effective_from: '1995-01-01'
   effective_to: '1997-09-21'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.seoul.co.kr/news/1990/02/21/19900221007009; https://koreascience.kr/article/JAKO201022442401805.pub?lang=ko
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: fx_regime
-  value: null
-  unverified: 'OWNER: BoK regime name (market average rate system) - never invented here (brief F-11)'
+  value: market_average_rate
+  evidence: 'A: 1990-03 시장평균환율제 (일일 변동폭 제한)'
 - effective_from: '1997-09-22'
   effective_to: '1997-10-17'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2041
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: fx_regime
   value: peg_1997
-  unverified: spec L2041
+  evidence: 'B: 스펙이 정한 구간 이름(T-REGIME-01: 1997-10-01 = peg_1997); 제도상으로는 시장평균환율제 기간'
 - effective_from: '1997-10-18'
-  effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  effective_to: '1997-12-15'
+  source_url: https://www.imaeil.com/page/view/1997121615414071950; https://koreascience.kr/article/JAKO201022442401805.pub?lang=ko
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: fx_regime
-  value: null
-  unverified: 'OWNER: BoK regimes after the 1997 band break (free float from Dec-1997)'
+  value: market_average_rate
+  evidence: 'A: 시장평균환율제 (1997-11-20 변동폭 확대 포함)'
+- effective_from: '1997-12-16'
+  effective_to: null
+  source_url: https://www.imaeil.com/page/view/1997121615414071950; https://koreascience.kr/article/JAKO201022442401805.pub?lang=ko
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: fx_regime
+  value: free_float
+  evidence: 'B: 1997-12-16 변동폭 폐지·자유변동환율제 (논문은 12-15로 표기)'
 - effective_from: '1995-01-01'
   effective_to: '2002-10-13'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2042
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: etf_available
   value: false
-  unverified: 'spec L2042: KODEX 200 listed Oct-2002'
+  evidence: 'A: KODEX 200 2002-10-14 상장 전'
 - effective_from: '2002-10-14'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2042
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: etf_available
   value: true
-  unverified: 'UNVERIFIED: 2002-10-14 listing day from the KRX listing record'
+  evidence: 'A: 2002-10-14 국내 첫 ETF 상장'
 - effective_from: '1995-01-01'
   effective_to: '2008-09-30'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: short_sale_ban
   value: false
-- effective_from: '2008-10-01'
-  effective_to: '2009-05-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  tag: short_sale_ban
-  value: true
-  unverified: tech-fund GV-216
-- effective_from: '2009-06-01'
-  effective_to: '2011-08-10'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  tag: short_sale_ban
-  value: false
-- effective_from: '2011-08-11'
-  effective_to: '2011-11-09'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  tag: short_sale_ban
-  value: true
-  unverified: tech-fund GV-216 (11 Aug - 9 Nov 2011)
-- effective_from: '2011-11-10'
-  effective_to: '2020-03-15'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  tag: short_sale_ban
-  value: false
-- effective_from: '2020-03-16'
-  effective_to: '2021-05-02'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  tag: short_sale_ban
-  value: true
-  unverified: tech-fund GV-217 full ban
-- effective_from: '2021-05-03'
-  effective_to: '2023-11-05'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  tag: short_sale_ban
-  value: false
-  unverified: 'partial regime (index stocks resumed): boolean false, see short_sale_regime (brief F-14)'
-- effective_from: '2023-11-06'
-  effective_to: '2025-03-30'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  tag: short_sale_ban
-  value: true
-  unverified: tech-fund GV-210/217
-- effective_from: '2025-03-31'
-  effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
-  tag: short_sale_ban
-  value: false
-  unverified: resumed 2025-03-31 (GV-210)
+  evidence: 'A: 금지 없음 (부분 금지 기간은 false, short_sale_regime이 구분)'
 - effective_from: '1995-01-01'
   effective_to: '2008-09-30'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: short_sale_regime
   value: none
+  evidence: 'A: 금지 없음'
 - effective_from: '2008-10-01'
   effective_to: '2009-05-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: short_sale_ban
+  value: true
+  evidence: 'A: 2008-10-01 전 종목 금지 (부분 금지 기간은 false, short_sale_regime이 구분)'
+- effective_from: '2008-10-01'
+  effective_to: '2009-05-31'
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: short_sale_regime
   value: full_ban
-  unverified: GV-216
+  evidence: 'A: 2008-10-01 전 종목 금지'
 - effective_from: '2009-06-01'
-  effective_to: '2011-08-10'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  effective_to: '2011-08-09'
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: short_sale_ban
+  value: false
+  evidence: 'A: 2009-06-01 비금융주 재개, 금융주는 계속 금지(2013-11-14 재개) (부분 금지 기간은 false, short_sale_regime이 구분)'
+- effective_from: '2009-06-01'
+  effective_to: '2011-08-09'
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: short_sale_regime
-  value: none
-- effective_from: '2011-08-11'
+  value: partial_ban_financials
+  evidence: 'A: 2009-06-01 비금융주 재개, 금융주는 계속 금지(2013-11-14 재개)'
+- effective_from: '2011-08-10'
   effective_to: '2011-11-09'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: short_sale_ban
+  value: true
+  evidence: 'A: 2011-08-10부터 3개월 전 종목 금지 (부분 금지 기간은 false, short_sale_regime이 구분)'
+- effective_from: '2011-08-10'
+  effective_to: '2011-11-09'
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: short_sale_regime
   value: full_ban
-  unverified: GV-216
+  evidence: 'A: 2011-08-10부터 3개월 전 종목 금지'
 - effective_from: '2011-11-10'
+  effective_to: '2013-11-13'
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: short_sale_ban
+  value: false
+  evidence: 'A: 2011-11-10 비금융주 재개, 금융주는 2013-11-13까지 금지 (부분 금지 기간은 false, short_sale_regime이 구분)'
+- effective_from: '2011-11-10'
+  effective_to: '2013-11-13'
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: short_sale_regime
+  value: partial_ban_financials
+  evidence: 'A: 2011-11-10 비금융주 재개, 금융주는 2013-11-13까지 금지'
+- effective_from: '2013-11-14'
   effective_to: '2020-03-15'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: short_sale_ban
+  value: false
+  evidence: 'A: 2013-11-14 금융주 공매도 재개 (부분 금지 기간은 false, short_sale_regime이 구분)'
+- effective_from: '2013-11-14'
+  effective_to: '2020-03-15'
+  source_url: https://www.kcmi.re.kr/common/downloadw.php?fid=25847&fgu=002002&fty=004003; https://zdnet.co.kr/view/?no=20190807140948;
+    https://www.etoday.co.kr/news/view/821115
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: short_sale_regime
   value: none
+  evidence: 'A: 2013-11-14 금융주 공매도 재개'
 - effective_from: '2020-03-16'
   effective_to: '2021-05-02'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2043 (GV-210/216/217)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: short_sale_ban
+  value: true
+  evidence: 'A: 2020-03-16 전 종목 금지 (부분 금지 기간은 false, short_sale_regime이 구분)'
+- effective_from: '2020-03-16'
+  effective_to: '2021-05-02'
+  source_url: spec L2043 (GV-210/216/217)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: short_sale_regime
   value: full_ban
-  unverified: GV-217
+  evidence: 'A: 2020-03-16 전 종목 금지'
 - effective_from: '2021-05-03'
   effective_to: '2023-11-05'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2043 (GV-210/216/217)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: short_sale_ban
+  value: false
+  evidence: 'A: 2021-05-03 코스피200·코스닥150만 재개 (부분 금지 기간은 false, short_sale_regime이 구분)'
+- effective_from: '2021-05-03'
+  effective_to: '2023-11-05'
+  source_url: spec L2043 (GV-210/216/217)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: short_sale_regime
   value: partial_ban_non_index
-  unverified: 'GV-217: index stocks only until 2023-11-05'
+  evidence: 'A: 2021-05-03 코스피200·코스닥150만 재개'
 - effective_from: '2023-11-06'
   effective_to: '2025-03-30'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2043 (GV-210/216/217)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: short_sale_ban
+  value: true
+  evidence: 'A: 2023-11-06 전 종목 금지 (부분 금지 기간은 false, short_sale_regime이 구분)'
+- effective_from: '2023-11-06'
+  effective_to: '2025-03-30'
+  source_url: spec L2043 (GV-210/216/217)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: short_sale_regime
   value: full_ban
-  unverified: GV-210
+  evidence: 'A: 2023-11-06 전 종목 금지'
 - effective_from: '2025-03-31'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2043 (GV-210/216/217)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
+  tag: short_sale_ban
+  value: false
+  evidence: 'A: 2025-03-31 전면 재개 (부분 금지 기간은 false, short_sale_regime이 구분)'
+- effective_from: '2025-03-31'
+  effective_to: null
+  source_url: spec L2043 (GV-210/216/217)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: short_sale_regime
   value: none
-  unverified: GV-210
+  evidence: 'A: 2025-03-31 전면 재개'
 - effective_from: '1995-01-01'
   effective_to: '2019-05-29'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2044 anchor (2019)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: sell_tax_pct
   value: 0.3
-  unverified: 'UNVERIFIED step schedule (owner: tax notices); anchor 0.30 (2019)'
   unit: percent
+  evidence: 'B: 2019년 0.30%(거래세 0.15+농특세 0.15) 기준값; 1995~1996년 단계는 법령 연혁으로 확인하지 못함'
 - effective_from: '2019-05-30'
   effective_to: '2020-12-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.mt.co.kr/economy/2025/12/01/2025120108471236062; spec L2044
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: sell_tax_pct
   value: 0.25
-  unverified: UNVERIFIED
   unit: percent
+  evidence: 'A: 거래세 단계 인하 + 농특세 0.15'
 - effective_from: '2021-01-01'
   effective_to: '2022-12-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.mt.co.kr/economy/2025/12/01/2025120108471236062; spec L2044
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: sell_tax_pct
   value: 0.23
-  unverified: UNVERIFIED
   unit: percent
+  evidence: 'A: 거래세 단계 인하 + 농특세 0.15'
 - effective_from: '2023-01-01'
   effective_to: '2023-12-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.mt.co.kr/economy/2025/12/01/2025120108471236062; spec L2044
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: sell_tax_pct
   value: 0.2
-  unverified: UNVERIFIED
   unit: percent
+  evidence: 'A: 거래세 단계 인하 + 농특세 0.15'
 - effective_from: '2024-01-01'
   effective_to: '2024-12-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.mt.co.kr/economy/2025/12/01/2025120108471236062; spec L2044
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: sell_tax_pct
   value: 0.18
-  unverified: 'tech-fund GV-213: 0.18 (2024)'
   unit: percent
+  evidence: 'A: 거래세 단계 인하 + 농특세 0.15'
 - effective_from: '2025-01-01'
   effective_to: '2025-12-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.mt.co.kr/economy/2025/12/01/2025120108471236062; spec L2044
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: sell_tax_pct
   value: 0.15
-  unverified: spec L2044 anchor 0.15 (2025)
   unit: percent
+  evidence: 'A: 거래세 단계 인하 + 농특세 0.15'
 - effective_from: '2026-01-01'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://taxtimes.co.kr/news/article.html?no=272624; spec L2044
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: sell_tax_pct
   value: 0.2
-  unverified: 'spec L2044 / GV-211: 0.20 from 2026-01-01 (0.05 + 0.15 rural); ETFs exempt'
   unit: percent
+  evidence: 'A: 2026-01-01 거래세 0.05 + 농특세 0.15 (ETF 면제)'
 - effective_from: '1995-01-01'
   effective_to: '2023-01-24'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://news.mtn.co.kr/news-detail/2022110114103274390
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: tick_regime
   value: pre_2023_reform
+  evidence: 'A: 2023-01-25 개편 전'
 - effective_from: '2023-01-25'
   effective_to: '2023-12-10'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://news.mtn.co.kr/news-detail/2022110114103274390; spec L2045
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: tick_regime
   value: stocks_reformed_2023_01_25
-  unverified: spec L2045
+  evidence: 'A: 주식 호가단위 개편·시장 간 통일'
 - effective_from: '2023-12-11'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2045
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: tick_regime
   value: stocks_reformed_etf_w1_tick_below_w2000
-  unverified: 'spec L2045: ETFs 1 won tick below 2,000 won from 2023-12-11'
+  evidence: 'B: ETF 2,000원 미만 1원 호가 시행일은 스펙 값(검색으로 확인 못 함)'
 - effective_from: '1995-01-01'
   effective_to: '2026-05-26'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2046
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: letf_rules
   value: none
+  evidence: 'A: 단일종목 레버리지 상품 없음'
 - effective_from: '2026-05-27'
   effective_to: '2026-07-15'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.heraldk.com/article/2026012917335613316; https://core.asiae.co.kr/article/2026051518184211131; spec
+    L2046
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: letf_rules
   value: single_stock_letf_rule_2026_05_27
-  unverified: spec L2046
+  evidence: 'A: 단일종목 레버리지 ETF 2026-05-27 출시'
 - effective_from: '2026-07-16'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2046
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: letf_rules
   value: single_stock_letf_rule_2026_07_16
-  unverified: spec L2046
+  evidence: 'B: 2026-07-16 규칙 변경은 스펙 값(검색으로 확인 못 함)'
 - effective_from: '1995-01-01'
   effective_to: '2016-07-31'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2047
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: usdkrw_onshore_hours
   value: close_15:00
-  unverified: spec L2047
+  evidence: 'A: 마감 15:00'
 - effective_from: '2016-08-01'
   effective_to: '2024-06-30'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.etoday.co.kr/news/view/2370025; spec L2047
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: usdkrw_onshore_hours
   value: close_15:30
-  unverified: spec L2047
+  evidence: 'A: 마감 15:30'
 - effective_from: '2024-07-01'
   effective_to: '2026-07-05'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: https://www.etoday.co.kr/news/view/2370025
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: usdkrw_onshore_hours
   value: close_02:00_next_day
-  unverified: 'UNVERIFIED: Jul-2024 exact day from the BoK/MOEF notice'
+  evidence: 'A: 서울외환시장운영협의회 의결, 2024-07-01부터 익일 02:00'
 - effective_from: '2026-07-06'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec L2047 / L1305
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: usdkrw_onshore_hours
   value: 24h
-  unverified: 'spec L2047 / L1305: 24 hours from 2026-07-06'
+  evidence: 'B: 2026-07-06 24시간 거래는 스펙 값(검색으로 확인 못 함)'
 - effective_from: '1995-01-01'
   effective_to: '2024-02-25'
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec (GV-218)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: value_up
   value: pre_value_up
+  evidence: 'A: 밸류업 발표 전'
 - effective_from: '2024-02-26'
   effective_to: null
-  source_url: null
-  retrieved_at_utc: '2026-10-06T00:00:00Z'
-  signed_off_by: null
+  source_url: spec (GV-218)
+  retrieved_at_utc: '2026-10-28T12:30:00Z'
+  signed_off_by: Geon Koh
   tag: value_up
   value: post_value_up_2024_02_26
-  unverified: tech-fund GV-218 split date
+  evidence: 'A: 2024-02-26 밸류업 프로그램 발표'

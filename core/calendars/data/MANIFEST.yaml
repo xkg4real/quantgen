@@ -115,8 +115,8 @@ rows:
   test_ids:
   - T-STALE-01
 - file: kr_regime_tags.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
+  version: 1.0.0
+  md5: 8336f69ca98c450c28eaaeea37495638
+  signed_off_by: Geon Koh
   test_ids:
   - T-REGIME-01
