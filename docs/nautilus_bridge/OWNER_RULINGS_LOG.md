@@ -117,6 +117,24 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
   1. 제안 승인
   2. 서명(보고서 5절 양식)
 
+- **완료 (2026-10-28):**
+  - **서명:** 소유자가 2차 서명서를 보냈습니다(원문은 `docs/audit/2026-10-27/05_signature_batch2.md`). 제안을 반영하고 서명을 기록했습니다.
+    서명자 Geon Koh, 시각 2026-10-28T08:47:25Z입니다.
+  - **결과:** US는 signed=True입니다. KR은 `kr_regime_tags`만 남았습니다.
+
+### ①-2c: VIX·BLS·BEA·ECOS 입력 개방
+
+> 이와 동시에 VIX BLS BEA ECOS 입력도 뚫을 수 있도록 해주세요.
+
+- **반영 (달력으로 풀리는 것):** `holidays_CBOE`와 `holidays_ECOS` 제안본(v1.0.0)을 냈습니다(`docs/audit/2026-10-27/06_calendar_batch3.md`).
+  - CBOE는 서명된 NYSE 휴장일을, ECOS는 서명된 KRX 휴장일을 따릅니다.
+  - 모의 서명 검증 12/12를 통과했습니다. ECOS forward_sim 읽기가 MissingInput에서 PITValue로 바뀝니다.
+- **설계안 (승인 필요):** BLS·BEA는 발표일 목록이 필요합니다. 그래서 코드, 시리즈 레지스트리, 새 서명 파일을 바꿔야 합니다.
+  A안(release_calendar)을 권장합니다.
+- **소유자 결정 대기:**
+  1. CBOE·ECOS 서명
+  2. BLS·BEA A안 승인
+
 ### ①-4: R1~R5
 
 **R1.** 시장 출시의 의미

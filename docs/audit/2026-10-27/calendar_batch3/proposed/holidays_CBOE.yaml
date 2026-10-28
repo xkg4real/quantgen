@@ -1,0 +1,406 @@
+file_id: holidays_CBOE
+version: 1.0.0
+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/06_calendar_batch3.md); refused at load until the owner
+  signs (R-20 rule 6, T-CAL-01)
+covers:
+  from: '2025-01-01'
+  to: '2027-12-31'
+coverage_calendar: CBOE
+signed_off_by: null
+signed_utc: null
+md5: null
+how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
+  / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+  MANIFEST.yaml row with a new test id
+unverified:
+- the 2026+ Cboe holiday GTH sessions give VIX prints on some NYSE holidays; this calendar is the regular-session official
+  close (VIXCLS), so those days stay closed
+- early-close times are the 2025-12-24 Cboe notice pattern (13:15 ET); Cboe's own notice for each date governs
+- a Cboe-only closure (none seen 2025-2026) is a new version
+owner_must_sign:
+- Cboe holiday list (VIX official close calendar), with licence, owner and md5 (spec section 9.5)
+rows:
+- effective_from: '2025-01-01'
+  effective_to: '2025-01-01'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-01-01'
+  kind: closed
+  name: New Year's Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-01-09'
+  effective_to: '2025-01-09'
+  source_url: https://www.businesswire.com/news/home/20241230579727/en
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-01-09'
+  kind: closed
+  name: National Day of Mourning (President Carter)
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-01-20'
+  effective_to: '2025-01-20'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-01-20'
+  kind: closed
+  name: Martin Luther King, Jr. Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-02-17'
+  effective_to: '2025-02-17'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-02-17'
+  kind: closed
+  name: Washington's Birthday
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-04-18'
+  effective_to: '2025-04-18'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-04-18'
+  kind: closed
+  name: Good Friday
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-05-26'
+  effective_to: '2025-05-26'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-05-26'
+  kind: closed
+  name: Memorial Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-06-19'
+  effective_to: '2025-06-19'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-06-19'
+  kind: closed
+  name: Juneteenth
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-07-04'
+  effective_to: '2025-07-04'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-07-04'
+  kind: closed
+  name: Independence Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-09-01'
+  effective_to: '2025-09-01'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-09-01'
+  kind: closed
+  name: Labor Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-11-27'
+  effective_to: '2025-11-27'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-11-27'
+  kind: closed
+  name: Thanksgiving Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-12-25'
+  effective_to: '2025-12-25'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-12-25'
+  kind: closed
+  name: Christmas Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2026-01-01'
+  effective_to: '2026-01-01'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-01-01'
+  kind: closed
+  name: New Year's Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2026-01-19'
+  effective_to: '2026-01-19'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-01-19'
+  kind: closed
+  name: Martin Luther King, Jr. Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2026-02-16'
+  effective_to: '2026-02-16'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-02-16'
+  kind: closed
+  name: Washington's Birthday
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2026-04-03'
+  effective_to: '2026-04-03'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-04-03'
+  kind: closed
+  name: Good Friday
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2026-05-25'
+  effective_to: '2026-05-25'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-05-25'
+  kind: closed
+  name: Memorial Day
+  evidence: 'B: Cboe ran a GTH session on this holiday (yfinance ^VIX shows a print) but no regular session, so no 16:15 ET
+    official close; yfinance ^VIX cache blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2026-06-19'
+  effective_to: '2026-06-19'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx;
+    https://www.cboe.com/notices/content/?id=60091
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-06-19'
+  kind: closed
+  name: Juneteenth
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2026-07-03'
+  effective_to: '2026-07-03'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-07-03'
+  kind: closed
+  name: Independence Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2026-09-07'
+  effective_to: '2026-09-07'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx;
+    https://www.cboe.com/notices/content/?id=61299
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-09-07'
+  kind: closed
+  name: Labor Day
+  evidence: 'B: Cboe ran a GTH session on this holiday (yfinance ^VIX shows a print) but no regular session, so no 16:15 ET
+    official close; yfinance ^VIX cache blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2026-11-26'
+  effective_to: '2026-11-26'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-11-26'
+  kind: closed
+  name: Thanksgiving Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2026-12-25'
+  effective_to: '2026-12-25'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-12-25'
+  kind: closed
+  name: Christmas Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2027-01-01'
+  effective_to: '2027-01-01'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-01-01'
+  kind: closed
+  name: New Year's Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2027-01-18'
+  effective_to: '2027-01-18'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-01-18'
+  kind: closed
+  name: Martin Luther King, Jr. Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2027-02-15'
+  effective_to: '2027-02-15'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-02-15'
+  kind: closed
+  name: Washington's Birthday
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2027-03-26'
+  effective_to: '2027-03-26'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-03-26'
+  kind: closed
+  name: Good Friday
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2027-05-31'
+  effective_to: '2027-05-31'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-05-31'
+  kind: closed
+  name: Memorial Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2027-06-18'
+  effective_to: '2027-06-18'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-06-18'
+  kind: closed
+  name: Juneteenth
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2027-07-05'
+  effective_to: '2027-07-05'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-07-05'
+  kind: closed
+  name: Independence Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2027-09-06'
+  effective_to: '2027-09-06'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-09-06'
+  kind: closed
+  name: Labor Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2027-11-25'
+  effective_to: '2027-11-25'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-11-25'
+  kind: closed
+  name: Thanksgiving Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2027-12-24'
+  effective_to: '2027-12-24'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-12-24'
+  kind: closed
+  name: Christmas Day
+  evidence: 'A: Cboe options follow the NYSE holiday list; no regular session, no 16:15 ET official close; yfinance ^VIX cache
+    blank on the other NYSE holidays 2025-01..2026-09'
+- effective_from: '2025-07-03'
+  effective_to: '2025-07-03'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx;
+    https://www.cboe.com/notices/content/?id=57451
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-07-03'
+  kind: early_close
+  close_local: '13:15'
+  name: day before Independence Day (VIX/SPX options regular trading until 13:15 ET)
+  evidence: 'B: on NYSE 13:00 early-close days Cboe C1 SPX/VIX options trade to 13:15 ET (2025-12-24 notice); the VIXCLS publication
+    instant stays 16:15 ET (later, never earlier)'
+- effective_from: '2025-11-28'
+  effective_to: '2025-11-28'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx;
+    https://www.cboe.com/notices/content/?id=57451
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-11-28'
+  kind: early_close
+  close_local: '13:15'
+  name: day after Thanksgiving (VIX/SPX options regular trading until 13:15 ET)
+  evidence: 'B: on NYSE 13:00 early-close days Cboe C1 SPX/VIX options trade to 13:15 ET (2025-12-24 notice); the VIXCLS publication
+    instant stays 16:15 ET (later, never earlier)'
+- effective_from: '2025-12-24'
+  effective_to: '2025-12-24'
+  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx;
+    https://www.cboe.com/notices/content/?id=57451
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2025-12-24'
+  kind: early_close
+  close_local: '13:15'
+  name: Christmas Eve (VIX/SPX options regular trading until 13:15 ET)
+  evidence: 'B: on NYSE 13:00 early-close days Cboe C1 SPX/VIX options trade to 13:15 ET (2025-12-24 notice); the VIXCLS publication
+    instant stays 16:15 ET (later, never earlier)'
+- effective_from: '2026-11-27'
+  effective_to: '2026-11-27'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx;
+    https://www.cboe.com/notices/content/?id=57451
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-11-27'
+  kind: early_close
+  close_local: '13:15'
+  name: day after Thanksgiving (VIX/SPX options regular trading until 13:15 ET)
+  evidence: 'B: on NYSE 13:00 early-close days Cboe C1 SPX/VIX options trade to 13:15 ET (2025-12-24 notice); the VIXCLS publication
+    instant stays 16:15 ET (later, never earlier)'
+- effective_from: '2026-12-24'
+  effective_to: '2026-12-24'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx;
+    https://www.cboe.com/notices/content/?id=57451
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2026-12-24'
+  kind: early_close
+  close_local: '13:15'
+  name: Christmas Eve (VIX/SPX options regular trading until 13:15 ET)
+  evidence: 'B: on NYSE 13:00 early-close days Cboe C1 SPX/VIX options trade to 13:15 ET (2025-12-24 notice); the VIXCLS publication
+    instant stays 16:15 ET (later, never earlier)'
+- effective_from: '2027-11-26'
+  effective_to: '2027-11-26'
+  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx;
+    https://www.cboe.com/notices/content/?id=57451
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: null
+  date: '2027-11-26'
+  kind: early_close
+  close_local: '13:15'
+  name: day after Thanksgiving (VIX/SPX options regular trading until 13:15 ET)
+  evidence: 'B: on NYSE 13:00 early-close days Cboe C1 SPX/VIX options trade to 13:15 ET (2025-12-24 notice); the VIXCLS publication
+    instant stays 16:15 ET (later, never earlier)'
