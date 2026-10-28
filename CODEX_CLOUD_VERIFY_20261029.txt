@@ -1,0 +1,53 @@
+QUANTGEN Codex Cloud verification — 2026-10-29 KST
+
+Result: PARTIAL. Server execution and GitHub connector access verified. Private attachment migration and autonomous scheduled execution are NOT verified.
+
+Executed in this Codex conversation:
+- pwd: /workspace; Linux; Python 3.12.14.
+- Observed clock: 2026-10-28 18:30:27 UTC / 2026-10-29 03:30:27 KST.
+- Existing managed environment connected/running; network policy enforced. No environment configuration was changed.
+- Local repository /workspace/quantgen, origin https://github.com/xkg4real/quantgen.git, branch work, HEAD 56b2c32fca59197b51b385b2e9e107b6d6fc3ef7, clean before and after checks.
+- Local checkout predates current remote work. These tests do not certify latest main or Claude branches.
+- Existing tests.acceptance.test_08_no_broker_order_path and test_09_no_account_credentials_requested: 2/2 PASS.
+- ast.parse on main.py, config.py, tests/acceptance.py: 3/3 PASS, no application import or bytecode writes.
+- No full suite, frozen-study/holdout readout, protected-cache access, .env access, real ledger execution, or TRADEGEN modification.
+
+Remote reading:
+- Git CLI ls-remote failed: Failed to connect to proxy port 8080 after 0 ms: Could not connect to server.
+- Personal GitHub connector successfully accessed xkg4real/quantgen (public).
+- Read handoff root CURRENT.md, README.md, TEMPLATE.md, AGENTS.md, LEDGER.md, AUTO_STATE.md; main CLAUDE.md and README opening project boundaries.
+- main AGENTS.md returned GitHub API 404 Not Found.
+- CURRENT blob 12f128c012e42327d250bd6b87c0a0a7e95c9509: checkpoint, waiting_on=owner, cycle=2026-10-27, updated_at=2026-10-29T03:19:12+09:00, stale_after_hours=120.
+- CURRENT identifies work_branch=claude/amazing-gauss-tdiguu, work_commit=abc7217; roadmap III-1 through III-6 recorded complete, next_ids=none.
+- AUTO_STATE reason=periodic refers to a different source branch. It is not authority to resume CURRENT work.
+- No takeover, lock, handoff/ledger edit, development, PR, merge, release, account or environment-variable change.
+- Historical Claude/Work test counts are evidence reported by those sessions, not execution evidence for this Codex conversation.
+
+Attachment:
+- download_file failed: file exceeds the executor transfer limit of 32 MiB.
+- No accessible original was found in the checked upload/download locations.
+- Original was not downloaded, copied, extracted, or hashed. No claim of preservation in this workspace.
+- Claimed archive size, SHA256, 23 files, 315 message copies, 4 nested ZIP CRCs, 159 Claude conversations/2311 messages, and SKILL.md counts 205/241 remain unverified.
+- 00_READ_FIRST.md, BUNDLE_MANIFEST.json, requested three skill originals and three project conversations remain unread.
+- No private conversation, skill original, or attachment contents are included in this public report.
+- Storage, direct reading, and full comprehension remain distinct; none is claimed for the inaccessible bundle.
+
+Scheduling:
+- automations_create/peek/update/run_now tools are exposed to this conversation. create schema supports hourly recurrence, exact_schedule, and Asia/Seoul.
+- Read-only peek confirmed legacy Work automation 6ae23b659ca88191b2eb89656cec731b is disabled, next_run_time=null. No execution history was returned; this does not prove it never ran.
+- No automation was created, enabled, updated, or run. Codex-owned scheduled execution, repository/environment binding, persistence and unattended delivery are untested.
+- User reports local quantgen-handoff-monitor ACTIVE; local PC state is not independently verified or modified.
+- A server shell session alone does not establish a durable scheduler or indefinite autonomous development.
+
+Required transition, without moving to ChatGPT Work:
+1. Supply original ZIP to a private, non-git directory using a supported transfer path for files over 32 MiB; alternatively provide binary split parts below the limit, reassemble original, verify exact size and SHA256 before safe extraction.
+2. Read 00_READ_FIRST.md and BUNDLE_MANIFEST.json first, validate every manifest size/hash and nested ZIP CRC, independently count originals and skills, and directly read requested originals. Keep private material out of public GitHub.
+3. Validate server Git transport or use the already-working authorized GitHub connector; re-read latest source instructions and use an isolated GPT branch for actual authorized work.
+4. Prepare a Codex-owned, read-only scheduler smoke task only upon authorization, using this existing environment and repository; verify returned ownership/conversation IDs, actual Codex run, server commands, remote read access, durable state, and results. Do not reuse Work smoke evidence.
+5. Before formal cutover, coordinate stopping local monitor with owner, ensure Work stays paused, verify no concurrent claimant, then activate exactly one Codex monitor only after explicit formal authorization.
+6. Production window: Thursday 00:00 KST through next Tuesday before 17:00, hourly on the hour. Window guards run before GitHub access. Persist cycle, handoff ID, execution ID, completion/return state and next eligible Thursday in durable storage.
+7. Treat checkpoint/idle, waiting_on=owner/ci/review and another claimant as no-takeover states. Before any eventual eligible takeover, validate all source/state and atomically claim using expected SHA, then remote read-back.
+8. After processing and returning an eligible handoff, postpone the scheduler itself to next Thursday 00:00 and verify, so no GitHub polling occurs until then. Persist deduplication by cycle and handoff ID; fail closed if persistence or schedule update cannot be verified.
+
+Write verification scope:
+Exactly one non-secret report file on gpt/codex-cloud-verify-20261029, created from main via GitHub connector. This is API-backed remote commit/write verification, not successful CLI git push verification. Commit SHA and remote read-back evidence will be reported in chat after completion.
