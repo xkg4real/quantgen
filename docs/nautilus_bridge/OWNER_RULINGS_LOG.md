@@ -211,3 +211,19 @@ C3 exists=True rows=17 chain OK
 - **소유자 판단이 필요한 점:** 2026-10-26의 두 실행이 파일럿 1·2의 표본외 보호에 영향을 주는지입니다. Claude는 PASS/FAIL만
   봤으므로 설계 오염은 없다고 봅니다. 다만 스펙 10.4의 "Steps 3 to 7: synthetic series only" 기록과 별개로, 이 사실을
   실행 기록에 남길지 정해 주십시오.
+
+## 2026-10-28, Claude Code 채팅: ③-4 진행, K-g, ②-5
+
+> 3-4 진행, K-G는 (가), 2-5도 승인, 해당 작업 예상완료시간도 같이 말해줘
+
+- **③-4:** Nautilus Task 4(러너, 원장 선등록)를 시작합니다. ③-1~③-3은 e83ff6f, 76295d0, 321b829에서 끝났습니다.
+- **K-g (가):** 계획대로 진행합니다. 러너는 기준점이 UNVERSIONED이면 원장에 쓰기 전에 R-02로 거절합니다. 해결은
+  스펙의 re-anchor 빈 커밋입니다.
+  - `core/quant/gate_ledger.py`는 동결 하네스 파일입니다(`core/quant/gate_package.py:36` `HARNESS_SOURCES`). 그래서
+    `repo_anchor()` 수정은 이번 작업에서 하지 않습니다.
+  - Strategy Lab 쪽 K-g는 따로 다룹니다. 원장 행에 UNVERSIONED가 기록되는 문제이고, 검증 패키지 변경이므로 나중에
+    소유자 승인을 받아 처리합니다.
+- **②-5 승인:** `docs/nautilus_bridge/KNOWN_ERRORS_REGISTER_2026-10-28.md` 4.1의 대기열 순서를 승인받았습니다.
+  - Claude의 해석: 순서가 승인된 것입니다. 4.4의 소유자 결정 항목은 각각 따로 정해야 합니다. 예를 들어 Bonds 패치
+    적용과 ⑦-4 세 가지, §12의 각 항목이 그렇습니다. 결정이 필요 없는 Claude 단독 단계는 순서대로 진행합니다.
+  - 대기열 2단계(스크래치 전용 diff 보존)는 끝났습니다(22bdc16, 420af64).
