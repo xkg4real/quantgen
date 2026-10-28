@@ -1,0 +1,152 @@
+diff --git a/core/calendars/adapter.py b/core/calendars/adapter.py
+index 43cc8d4..e00afa7 100644
+--- a/core/calendars/adapter.py
++++ b/core/calendars/adapter.py
+@@ -9,8 +9,8 @@ the series registry: the registry names each series' schedule id, obs calendar a
+ no scheduled instant (LIVE_QUOTE, AS_POSTED, DERIVED) answers None. Unsigned or uncovered calendars raise
+ `CalendarUnsigned` / `CalendarCoverageError`; `core.ficc.contracts` turns either into `CalendarUnavailable`
+ (every acting input fails closed, brief F-5). A series with a registry `release` (CPI, EMPSIT, PIO, CLAIMS) gets its
+-`release_dates` from the signed `release_calendar` file (spec L1448); a period with no row has no release date and
+-stays unpublished.
++`release_dates`, and each period its own wall time, from the signed `release_calendar` file (spec L1448); a
++period with no row has no release date and stays unpublished.
+ """
+ from __future__ import annotations
+ 
+@@ -49,22 +49,30 @@ def registry_schedule(registry, series_id: str) -> dict | None:
+     return out
+ 
+ 
+-def release_dates(release: str, *, cal: CalendarSet | None = None) -> dict[str, str]:
+-    """{period: release_date} of one release from the signed `release_calendar` file (ISO dates; the period is the
+-    FRED observation date: the first of the month, or the week-ending Saturday for CLAIMS)."""
++def release_rows(release: str, *, cal: CalendarSet | None = None) -> dict[str, dict]:
++    """{period: row} of one release from the signed `release_calendar` file. The period is the FRED observation date
++    (the first of the month, or the week-ending Saturday for CLAIMS); the row's release_date, time and tz are the
++    publisher's local date and wall time."""
+     cal = cal or default()
+-    out: dict[str, str] = {}
++    out: dict[str, dict] = {}
+     for row in cal.file(RELEASE_FILE).rows:
+         if row.get("release") != release:
+             continue
+         if row["period"] in out:
+             raise CalendarUnsigned(f"{RELEASE_FILE}: two rows for {release} period {row['period']}")
+-        out[row["period"]] = row["release_date"]
++        if not (isinstance(row.get("time"), str) and isinstance(row.get("tz"), str)):
++            raise CalendarUnsigned(f"{RELEASE_FILE}: {release} period {row['period']} needs a quoted time and a tz")
++        out[row["period"]] = row
+     if not out:
+         raise CalendarUnsigned(f"{RELEASE_FILE}: no rows for release {release!r}")
+     return out
+ 
+ 
++def release_dates(release: str, *, cal: CalendarSet | None = None) -> dict[str, str]:
++    """{period: release_date} of one release (ISO dates; see `release_rows`)."""
++    return {period: row["release_date"] for period, row in release_rows(release, cal=cal).items()}
++
++
+ class CalendarClocks:
+     """`clocks` for the data layer over a `CalendarSet` (default: the shipped set) and a registry (default: the
+     shipped registry). `events` (an iterable of release events) moves or removes publication instants."""
+@@ -82,12 +90,17 @@ class CalendarClocks:
+     def schedule(self, series_id: str) -> dict | None:
+         return registry_schedule(self.registry, series_id)
+ 
+-    def _dated(self, series_id: str) -> dict | None:
++    def _dated(self, series_id: str, obs_date: date) -> dict | None:
+         """The schedule with its release dates when the series has a registry `release` (read only where an instant
+-        is computed; a monthly next-observation date needs no release calendar)."""
++        is computed; a monthly next-observation date needs no release calendar). The period's own row also sets the
++        wall time and zone: BEA published some releases at 10:00 ET."""
+         s = self.schedule(series_id)
+         if s is not None and s.get("release") and "release_dates" not in s:
+-            s["release_dates"] = release_dates(s["release"], cal=self.cal)
++            rows = release_rows(s["release"], cal=self.cal)
++            s["release_dates"] = {period: row["release_date"] for period, row in rows.items()}
++            row = rows.get(obs_date.isoformat())
++            if row is not None:
++                s["time"], s["tz"] = row["time"], row["tz"]
+         return s
+ 
+     # -- the five methods -------------------------------------------------------
+@@ -98,7 +111,7 @@ class CalendarClocks:
+         return _clocks.close_print_bound_utc(market, session_date, cal=self.cal)
+ 
+     def publication_instant(self, series_id: str, obs_date: date) -> datetime | None:
+-        s = self._dated(series_id)
++        s = self._dated(series_id, obs_date)
+         return None if s is None else _pub.publication_instant(s, obs_date, cal=self.cal, events=self.events)
+ 
+     def next_expected_obs(self, series_id: str, obs_date: date) -> date | None:
+@@ -128,8 +141,8 @@ class CalendarClocks:
+ 
+     def usable_at(self, series_id: str, obs_date: date, market: str) -> datetime | None:
+         """The first decision of `market` that may read the datum dated `obs_date` (None: live quote / as posted)."""
+-        s = self._dated(series_id)
++        s = self._dated(series_id, obs_date)
+         return None if s is None else _pub.usable_at(s, obs_date, market, cal=self.cal)
+ 
+ 
+-__all__ = ["CalendarClocks", "RELEASE_FILE", "SCHEDULE_IDS", "registry_schedule", "release_dates"]
++__all__ = ["CalendarClocks", "RELEASE_FILE", "SCHEDULE_IDS", "registry_schedule", "release_dates", "release_rows"]
+diff --git a/core/calendars/publication.py b/core/calendars/publication.py
+index a390d9e..b686fa7 100644
+--- a/core/calendars/publication.py
++++ b/core/calendars/publication.py
+@@ -260,7 +260,9 @@ def usable_at(series, obs_date: date, market: str, *, cal: CalendarSet | None =
+             probe += timedelta(days=1)
+         raise ValueError(f"no {market} decision within 60 days admits the {other} close of {obs_date}")
+     instant = publication_instant(s, obs_date, cal=cal)
+-    probe = obs_date
++    # every market's close falls on its session's UTC date: no session before the day ahead of publication can
++    # qualify, and a monthly release may come 60+ days after its reference month (BEA in the 2025 shutdown: 113)
++    probe = max(obs_date, instant.date() - timedelta(days=1))
+     for _ in range(60):
+         if clocks.is_session(market, probe, cal=cal) and not (us_dated and obs_date > probe - timedelta(days=1)):
+             bound = clocks.close_print_bound_utc(market, probe, cal=cal)
+diff --git a/core/calendars/store.py b/core/calendars/store.py
+index 03fd367..aa4d65f 100644
+--- a/core/calendars/store.py
++++ b/core/calendars/store.py
+@@ -50,7 +50,8 @@ MARKET_FILES = {
+ # Every file whose coverage a market's decisions depend on (clock files + regime tags + publication files).
+ COVERAGE_FILES = {
+     "KR": MARKET_FILES["KR"] + ("kr_regime_tags", "publication_schedules", "source_skipped"),
+-    "US": MARKET_FILES["US"] + ("holidays_FED", "holidays_SIFMA", "publication_schedules", "source_skipped"),
++    "US": MARKET_FILES["US"] + ("holidays_FED", "holidays_SIFMA", "publication_schedules", "source_skipped",
++                                "release_calendar"),
+     "JP": MARKET_FILES["JP"], "CN": MARKET_FILES["CN"], "HK": MARKET_FILES["HK"], "TW": MARKET_FILES["TW"],
+ }
+ MARKET_HOLIDAY_SET = {"KR": "KRX", "US": "NYSE", "JP": "JPX", "CN": "SSE", "HK": "HKEX", "TW": "TWSE"}
+diff --git a/tests/macro_m1_integration.py b/tests/macro_m1_integration.py
+index 874a696..0b73d31 100644
+--- a/tests/macro_m1_integration.py
++++ b/tests/macro_m1_integration.py
+@@ -331,11 +331,12 @@ def _release_docs() -> dict:
+     docs = fixture_docs()
+     docs["publication_schedules"]["rows"].append(
+         _row(schedule_id="BEA", rule="release_calendar", calendar="FED", time="08:30", tz=NY))
+-    rel = lambda release, period, day: _row(release=release, period=period, release_date=day, time="08:30", tz=NY,
+-                                            effective_from=day, effective_to=day)
++    rel = lambda release, period, day, time="08:30": _row(release=release, period=period, release_date=day, time=time,
++                                                          tz=NY, effective_from=day, effective_to=day)
+     docs["release_calendar"] = _doc("release_calendar", ("2025-01-01", "2027-12-31"), "WEEKDAYS", [
+         rel("CPI", "2027-02-01", "2027-03-10"), rel("EMPSIT", "2027-02-01", "2027-03-05"),
+-        rel("PIO", "2027-01-01", "2027-02-25"), rel("CLAIMS", "2026-10-17", "2026-10-22")])
++        rel("PIO", "2027-01-01", "2027-02-25"), rel("CLAIMS", "2026-10-17", "2026-10-22"),
++        rel("PIO", "2025-11-01", "2026-01-22", "10:00")])
+     return docs
+ 
+ 
+@@ -347,6 +348,10 @@ def test_release_calendar_supplies_bls_bea_release_dates():
+     assert clk.publication_instant("UNRATE", date(2027, 2, 1)) == U(2027, 3, 5, 13, 30)
+     assert clk.publication_instant("PCEPILFE", date(2027, 1, 1)) == U(2027, 2, 25, 13, 30)
+     assert clk.publication_instant("ICSA", date(2026, 10, 17)) == U(2026, 10, 22, 12, 30)      # 08:30 EDT
++    # a row's own wall time governs (BEA: October-November 2025 at 10:00 ET), and a release 82 days after its month
++    # still finds its first KRX decision
++    assert clk.publication_instant("PCEPILFE", date(2025, 11, 1)) == U(2026, 1, 22, 15, 0)      # 10:00 EST
++    assert clk.usable_at("PCEPILFE", date(2025, 11, 1), "KR") == clk.close_print_bound_utc("KR", date(2026, 1, 23))
+     # a period with no row has no release date: the observation stays unpublished (never an estimated date)
+     _raises(lambda: clk.publication_instant("CPIAUCSL", date(2027, 3, 1)), KeyError)
+     # ingest stamps the calendar-bound instant; a row retrieved before it is a provisional print
