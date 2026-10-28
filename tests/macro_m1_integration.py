@@ -14,9 +14,12 @@ from __future__ import annotations
 
 import csv
 import inspect
+import shutil
 import tempfile
 from datetime import date, datetime, timezone
 from pathlib import Path
+
+import yaml
 
 import config
 from core.calendars import publication, store
@@ -149,11 +152,28 @@ def test_stamping_and_lag_audit_on_the_calendar_adapter():
 test_stamping_and_lag_audit_on_the_calendar_adapter.test_ids = ["T-CLOSE-01", "T-LAG-01"]
 
 
+def _unsigned_shipped_set() -> store.CalendarSet:
+    """The shipped calendar files with every signature removed: the T-CAL-01 path on the real content, whatever the
+    owner has signed so far (the shipped tree itself is only read)."""
+    data_dir = _tmp("m1int_unsigned_") / "data"
+    shutil.copytree(store.DATA_DIR, data_dir)
+    for path in data_dir.glob("*.yaml"):
+        doc = store.read_yaml(path)
+        if path.name == store.MANIFEST:
+            for row in doc["rows"]:
+                row["md5"] = row["signed_off_by"] = None
+        else:
+            doc["signed_off_by"] = doc["signed_utc"] = doc["md5"] = None
+        path.write_text(yaml.safe_dump(doc, sort_keys=False, allow_unicode=True, width=120), encoding="utf-8")
+    return store.CalendarSet(data_dir)
+
+
 # --------------------------------------------------------------------------- #
-# T-CAL-01: the shipped drafts are unsigned -> every acting read fails closed, the alert names the calendar
+# T-CAL-01: unsigned calendars -> every acting read fails closed, the alert names the calendar
 # --------------------------------------------------------------------------- #
 def test_unsigned_shipped_calendars_fail_acting_inputs_closed():
-    unsigned = CalendarClocks(REG, cal=store.CalendarSet())              # the shipped drafts, refused at load
+    unsigned_set = _unsigned_shipped_set()
+    unsigned = CalendarClocks(REG, cal=unsigned_set)                    # the shipped content, refused at load
     st = P.PITStore(_tmp(), registry=REG, clocks=unsigned)
     st.append([_row("KOSPI_OFFICIAL_CLOSE", 7003.74, OCT2, avail=DECISION, retrieved=U(2026, 10, 2, 6, 41))])
     ctx = P.RunContext(DECISION, U(2026, 10, 2, 7))
@@ -173,7 +193,7 @@ def test_unsigned_shipped_calendars_fail_acting_inputs_closed():
                              registry=REG, clocks=unsigned), store.CalendarUnsigned)
     acting = P.to_value(st.rows("KOSPI_OFFICIAL_CLOSE")[0], role="acting_exposure", books=("specification:KR",))
     _raises(lambda: L.lag_audit([acting], ctx, "KR", REG, unsigned), store.CalendarUnsigned)
-    assert not store.arm_precondition(OCT2, "KR", cal=store.CalendarSet())    # no book can ARM
+    assert not store.arm_precondition(OCT2, "KR", cal=unsigned_set)            # no book can ARM
 
 
 test_unsigned_shipped_calendars_fail_acting_inputs_closed.test_ids = ["T-CAL-01"]
