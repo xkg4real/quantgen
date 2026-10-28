@@ -84,26 +84,50 @@ def archive_name(fields: dict[str, str]) -> str:
     return f"archive/{stamp}-{task}.md"
 
 
-def build_commit(parent: str, new_text: str, new: dict[str, str], message: str) -> str:
-    old_text = remote_current(parent)
-    old = front_matter(old_text)
+def commit_files(parent: str, files: dict[str, bytes | None], message: str) -> str:
+    """A commit on `parent` with `files` written (None removes the path); `parent` itself when nothing changes."""
     fd, index = tempfile.mkstemp(prefix="handoff-index-")
     os.close(fd)
     env = {"GIT_INDEX_FILE": index}
     try:
         git("read-tree", parent, env=env)
-        if old and old.get("status") != "idle" and old.get("task") not in (None, "", "none") \
-                and old.get("task") != new["task"]:
-            blob = git("hash-object", "-w", "--stdin", input_bytes=old_text.encode())
-            git("update-index", "--add", "--cacheinfo", f"100644,{blob},{archive_name(old)}", env=env)
-        blob = git("hash-object", "-w", "--stdin", input_bytes=new_text.encode())
-        git("update-index", "--add", "--cacheinfo", f"100644,{blob},CURRENT.md", env=env)
+        for path, data in files.items():
+            if data is None:
+                git("update-index", "--force-remove", path, env=env)
+            else:
+                blob = git("hash-object", "-w", "--stdin", input_bytes=data)
+                git("update-index", "--add", "--cacheinfo", f"100644,{blob},{path}", env=env)
         tree = git("write-tree", env=env)
     finally:
         os.unlink(index)
     if tree == git("rev-parse", f"{parent}^{{tree}}"):
         return parent
-    return git("commit-tree", tree, "-p", parent, "-m", message)
+    # commit-tree ignores commit.gpgSign, so carry the setting over by hand
+    sign = ["-S"] if git("config", "--bool", "commit.gpgSign", check=False) == "true" else []
+    return git("commit-tree", *sign, tree, "-p", parent, "-m", message)
+
+
+def push_commit(remote: str, branch: str, commit: str) -> bool:
+    """True once pushed; False when the remote moved on (re-fetch and rebuild); GitError on other failures."""
+    push = subprocess.run(["git", "push", "-q", remote, f"{commit}:refs/heads/{branch}"],
+                          capture_output=True, text=True)
+    if push.returncode == 0:
+        return True
+    if "rejected" in push.stderr or "non-fast-forward" in push.stderr:
+        return False
+    with_retries(lambda: git("push", "-q", remote, f"{commit}:refs/heads/{branch}"))
+    return True
+
+
+def build_commit(parent: str, new_text: str, new: dict[str, str], message: str) -> str:
+    old_text = remote_current(parent)
+    old = front_matter(old_text)
+    files: dict[str, bytes | None] = {}
+    if old and old.get("status") != "idle" and old.get("task") not in (None, "", "none") \
+            and old.get("task") != new["task"]:
+        files[archive_name(old)] = old_text.encode()
+    files["CURRENT.md"] = new_text.encode()
+    return commit_files(parent, files, message)
 
 
 def publish(path: Path, remote: str, branch: str, force: bool, message: str | None) -> int:
@@ -129,13 +153,7 @@ def publish(path: Path, remote: str, branch: str, force: bool, message: str | No
         if commit == parent:
             print(f"push_handoff: remote already holds this document ({parent[:7]})")
             return 0
-        push = subprocess.run(["git", "push", "-q", remote, f"{commit}:refs/heads/{branch}"],
-                              capture_output=True, text=True)
-        if push.returncode == 0:
-            print(f"push_handoff: {branch} -> {commit[:7]} ({new['status']} {new['task']})")
-            return 0
-        if "rejected" not in push.stderr and "non-fast-forward" not in push.stderr:
-            with_retries(lambda: git("push", "-q", remote, f"{commit}:refs/heads/{branch}"))
+        if push_commit(remote, branch, commit):
             print(f"push_handoff: {branch} -> {commit[:7]} ({new['status']} {new['task']})")
             return 0
     print("push_handoff: the remote kept moving; gave up after 3 attempts", file=sys.stderr)
