@@ -2242,6 +2242,646 @@ def test_l2_06_census_matches_platform_baseline():
 
 
 # --------------------------------------------------------------------------- #
+# Plan Task 5 (spec Step 7): parity, selection, gate hand-off, card, pilot tables and the three new runner modes
+# --------------------------------------------------------------------------- #
+REGISTRATION = ROOT / "docs" / "nautilus_bridge" / "registration"
+PILOT_TABLES = {"E1-SPY": REGISTRATION / "pilot1_E1_spy.json", "C3-BTCUSD": REGISTRATION / "pilot2_C3_btcusd.json"}
+CARDS = ROOT / "docs" / "asset_expansion" / "cards"
+CARD_AXES = {"rule": ["sma", "tsmom"], "lookback": [126, 252], "step": [21]}   # the L2-7 grid: four columns
+PILOT1_AXES = {"rule": ["sma", "tsmom"], "lookback": [126, 210, 252], "step": [21, 42]}
+PILOT2_AXES = {"hysteresis": [0.0, 0.222, 0.444, 0.667, 0.889]}
+ENGINE_6_5 = ("per-column event-driven replication (nautilus_trader 1.231.0 BacktestEngine, same-bar close); "
+              "walk-forward column switches are not executed in either engine")
+SCOPE_6_5 = "parity validates the engine, not the data; P0 ties the inputs to the study's loaders"
+F1_DECISIONS = ((3, 1, "buy"), (5, 0, "sell"), (7, 1, "buy"), (9, 1, "hold"), (11, 0, "sell"))      # spec 8.2
+N8_BASE = {"sr_oos": 1.19, "se_lo": 0.3, "ci90": (0.72, 1.64), "sr_is": 1.3, "oos_is": 0.9, "dsr": 0.9999, "pbo": 0.19,
+           "pbo_slope": 0.0, "prob_loss_oos": 0.0, "sr_stress": 1.16, "turnover_annual": 10.0, "n_trades": 144,
+           "n_sessions": 3634, "years_positive": 0.82, "n_years": 11, "max_year_share": 0.2, "plateau": 1.0,
+           "edge": False, "regime": {}, "total_return": 5.0, "max_drawdown": -0.5, "haircut_sr": 0.7, "bench_sr": 0.9,
+           "n_trials": 11, "n_configs": 5, "bench_diff": 0.3, "bench_p": 0.07}     # near pilot 2's stored card (N8)
+
+
+def _parity():
+    """tools.nautilus.parity, imported by each test that needs it, so a missing module fails only Task 5's tests."""
+    from tools.nautilus import parity
+    return parity
+
+
+def _days(n: int) -> list[str]:
+    """Spec 8.2's crypto calendar: pd.date_range("2001-01-01", periods=n, freq="D")."""
+    import pandas as pd
+    return [d.strftime("%Y-%m-%d") for d in pd.date_range("2001-01-01", periods=n, freq="D")]
+
+
+def _card_table(tmp: Path, **fields) -> Path:
+    """A synthetic SPY-like table whose stub-child rehearsal ends CARD_WRITTEN: synth_prices(7, 1000, 100, 150),
+    synth_rf(1000), the four columns of CARD_AXES at 50 bp, embargo 21."""
+    return write_rehearsal_table(tmp, prices=synth_prices(7, 1000, 100.0, 150.0), dates=_bdates(1000),
+                                 rf=synth_rf(1000), axes=CARD_AXES, **fields)
+
+
+def _rehearse(table: Path, tmp: Path, **kw) -> tuple[int, dict | None, str]:
+    """run_rehearsal with stdout captured: (exit code, the newest run.json, what the runner printed)."""
+    (code, rec), out = _captured(lambda: run_rehearsal(table, tmp, **kw))
+    return code, rec, out
+
+
+def _f1_leg(stress: int, *, rf, commissions=None, echo_stress=None):
+    """A Leg of F1 (spec 8.2) from its golden fills, rebuilt by the runner; commissions and the manifest's stress echo
+    can be planted."""
+    from decimal import Decimal
+    runner = _runner()
+    capital, ts, closes = _fixture_series("F1")
+    fills = [{"ts_event": ts[b], "order_side": side, "last_qty": Decimal(q), "last_px": Decimal(px),
+              "commission": Decimal(c if commissions is None else commissions[k]), "commission_ccy": "USD",
+              "trade_id": f"T{k}", "venue_order_id": f"O{k}"} for k, (b, side, q, px, c) in enumerate(SPEC_FILLS["F1"])]
+    decisions = [{"i": i, "ts_event": ts[i], "decision": d, "margin": 0.0, "action": a} for i, d, a in F1_DECISIONS]
+    manifest = {"input": {"cost_bps": "50", "stress": str(echo_stress or stress)}}
+    rebuilt = runner.rebuild_returns(fills, closes, ts, rf, Decimal(capital))
+    return runner.Leg(0, stress, {}, manifest, fills, decisions, [], rebuilt, [])
+
+
+def _f1_checks(leg, weights, rf) -> dict:
+    """parity.leg_checks on F1 with QUANTGEN's pnl at the leg's cost level from `weights`."""
+    from core.quant import strategies as S
+    _, _, closes = _fixture_series("F1")
+    pnl, turnover = S.simulate(closes, weights[:, None], cost_bps=50.0 * leg.stress, cash_daily=rf)
+    return _parity().leg_checks(leg, strategy="trend_switch", theta={"rule": "sma", "lookback": 3, "step": 2},
+                                closes=closes, rf=rf, weights=weights, pnl=pnl, turnover=turnover, cost_bps=50.0)
+
+
+def _failed(x: dict) -> list[str]:
+    return [p for p in _parity().HARD if p in x and not x[p]["pass"]]
+
+
+def _qg_matrices(closes, fn, grid, cost: float, rf):
+    """QUANTGEN's pnl, pnl at 2x and turnover, column by column as the runner's step 13 computes them."""
+    import numpy as np
+    from core.quant import strategies as S
+    cols = [S.simulate(closes, np.asarray(fn(closes, **g), dtype=float), cost_bps=cost, cash_daily=rf) for g in grid]
+    stress = [S.simulate(closes, np.asarray(fn(closes, **g), dtype=float), cost_bps=2 * cost, cash_daily=rf)[0]
+              for g in grid]
+    return np.column_stack([c[0] for c in cols]), np.column_stack(stress), np.column_stack([c[1] for c in cols])
+
+
+def _same_wf(a, b) -> list[str]:
+    """The fields where two WalkForward objects differ, arrays compared by their bytes."""
+    import numpy as np
+    out = []
+    for k in ("dates", "origins", "chosen", "n_configs", "note"):
+        out += [k] if getattr(a, k) != getattr(b, k) else []
+    for k in ("pnl", "pnl_stress", "turnover", "is_sharpes"):
+        x, y = np.asarray(getattr(a, k)), np.asarray(getattr(b, k))
+        out += [k] if x.shape != y.shape or x.dtype != y.dtype or x.tobytes() != y.tobytes() else []
+    return out
+
+
+def _reference_stats(closes, dates, grid, *, cost: float, embargo: int, n_trials: int, domain) -> tuple:
+    """The stored-card reference as the study built it (L2-12, L1-29): asdict(score_strategy) of QUANTGEN's matrix,
+    plus chosen_last, with n_years by the calendar-years rule that wrote the stored cards. Returns (stats, sc, wf)."""
+    import numpy as np
+    from dataclasses import asdict
+    from core.quant import strategies as S, validate
+    pnl, stress, turnover = _qg_matrices(closes, S.crypto_trend, grid, cost, np.zeros(len(closes)))
+    wf = validate.walk_forward(pnl, dates[1:], turnover=turnover, pnl_stress=stress, embargo=embargo)
+    bench = dict(zip(dates[1:], closes[1:] / closes[:-1] - 1.0))
+    sc = validate.score_strategy(wf, grid=grid, full_pnl=pnl, n_trials=n_trials,
+                                 bench_daily=np.array([bench[d] for d in wf.dates]), seed=11, domain=domain)
+    stats = {k: v for k, v in asdict(sc).items() if k not in ("lines", "regime")}
+    stats.update(chosen_last=grid[wf.chosen[-1]], n_years=len({d[:4] for d in wf.dates}))
+    return stats, sc, wf
+
+
+def _write_card_file(path: Path, stats: dict) -> str:
+    path.write_text(json.dumps({"card_id": "S_REHEARSAL_reference", "stats": stats}, indent=1, ensure_ascii=False),
+                    encoding="utf-8", newline="\n")
+    return _md5(path)
+
+
+def _crypto_table(tmp: Path, n: int, **fields) -> Path:
+    """A synthetic BTC-like table (spec 8.2's L2-12 generator, n days from 2001-01-01), pilot 2's grid, no rf."""
+    return write_rehearsal_table(tmp, like="C3-BTCUSD", prices=synth_prices(5, n, 400.0, 60000.0), dates=_days(n),
+                                 axes=PILOT2_AXES, **fields)
+
+
+def test_l1_02_parity_functions():
+    """L1-2 (5.4.1, 5.5; N2, N4, N7, N8): F1 and F1r meet 8.2's assertions (P1 = 1, P4, P7) and stay inside the P10
+    bound; N2 fails P1, P2 and P4; the P1 exemption takes a 1e-10 QUANTGEN margin, not 2e-9; P7's tie (0.13 passes,
+    0.12 fails) and N7 (ii) to (iv); N4's P11 mismatches at gap 0 with QUANTGEN's selection kept; N8 through
+    parity.agree; a planted P5 warning still writes a card; a Nautilus score planted REJECT is WITHHELD with the
+    hand-off's full G-02 text."""
+    import dataclasses
+    import numpy as np
+    from decimal import Decimal
+    from core.quant import strategies as S, validate
+    parity = _parity()
+    _, ts, closes = _fixture_series("F1")
+    W = np.asarray(S.trend_switch(closes, rule="sma", lookback=3, step=2), dtype=float)[:, 0]
+    for rf in (np.zeros(12), np.full(12, 0.0001)):                      # F1, F1r: 8.2's assertions
+        x = _f1_checks(_f1_leg(1, rf=rf), W, rf)
+        assert x["P1"]["value"] == 1.0 and x["P10"]["rows_over"] == [] and x["P4"]["pass"] and x["P7"]["pass"], x
+        assert x["P4"]["fill_bars"] == [3, 5, 7] and abs(x["P10"]["max_gap"] - 1.742e-4) < 1e-6, x["P10"]
+    flipped = W.copy()
+    flipped[9:11] = 0.0                                                 # N2: the hold at bar 9 flipped to off
+    x = _f1_checks(_f1_leg(1, rf=np.zeros(12)), flipped, np.zeros(12))
+    assert x["P1"]["value"] < 1 and {"P1", "P2", "P4"} <= set(_failed(x)), x
+    margins = np.full(12, 0.5)
+    for planted, exempt in ((1e-10, True), (2e-9, False)):
+        margins[9] = planted
+        got = parity.p1(_f1_leg(1, rf=np.zeros(12)).decisions, flipped, margins, [3, 5, 7, 9, 11])
+        assert got["pass"] is exempt and got["mismatches"] == [9] and len(got["exempt"]) == int(exempt), got
+    tie = [{"last_qty": Decimal(25), "last_px": Decimal("1.00"), "commission": Decimal(c), "commission_ccy": "USD"}
+           for c in ("0.13", "0.12")]
+    echo = {"input": {"cost_bps": "50", "stress": "1"}}
+    assert parity.cents(Decimal("0.125")) == 13 and parity.p7(tie[:1], echo, cost_bps=50.0, stress=1)["pass"]
+    assert not parity.p7(tie[1:], echo, cost_bps=50.0, stress=1)["pass"]
+    half = [c for *_, c in SPEC_FILLS["F1"]]                            # 1x commissions on a 2x leg
+    x = _f1_checks(_f1_leg(2, rf=np.zeros(12), commissions=half), W, np.zeros(12))
+    assert x["P7"]["bad_fills"] == [0, 1, 2, 3] and x["P7"]["echo"] is True and "P7" in _failed(x), x["P7"]   # N7 (ii)
+    x = _f1_checks(_f1_leg(2, rf=np.zeros(12), commissions=half, echo_stress=1), W, np.zeros(12))
+    assert x["P7"]["bad_fills"] == [0, 1, 2, 3] and x["P7"]["echo"] is False, x["P7"]               # N7 (iii)
+    n = 1500
+    dates, closes2 = _bdates(n)[1:], synth_prices(11, n, 100.0, 150.0)
+    grid = S.grid_from(**PILOT1_AXES)
+    pnl, stress, turnover = _qg_matrices(closes2, S.trend_switch, grid, 50.0, 0.0)
+    wf_qg = validate.walk_forward(pnl, dates, turnover=turnover, pnl_stress=stress, embargo=21)
+    wf_i = parity.select_matched(pnl, pnl, turnover, dates, wf_qg, embargo=21)                       # N7 (i)
+    p12_i = parity.p12(wf_qg, wf_i)
+    p3_2x = [parity.pair_checks(pnl[:, g], stress[:, g])["abs_dsr"] for g in range(len(grid))]
+    print(f"N7 (i): P12 2x {p12_i['2x']}; P3 at 2x per column, max {max(p3_2x):.5f} (bar 0.01)")
+    assert p12_i["1x"]["pass"] and not p12_i["2x"]["pass"] and max(p3_2x) > parity.BARS["P3"], (p12_i, p3_2x)
+    shifted = pnl + 0.0001                                                                            # N7 (iv)
+    wf_iv = parity.select_matched(shifted, stress + 0.0001, turnover, dates, wf_qg, embargo=21)
+    pairs = [parity.pair_checks(shifted[:, g], pnl[:, g]) for g in range(len(grid))]
+    assert all(p["corr"] >= parity.BARS["P2"] and p["abs_dsr"] > parity.BARS["P3"] for p in pairs), pairs
+    p12_iv = parity.p12(wf_qg, wf_iv)["1x"]
+    assert p12_iv["corr"] >= parity.BARS["P2"] and p12_iv["abs_dsr"] > parity.BARS["P3"] and not p12_iv["pass"], p12_iv
+    base = np.random.default_rng(3).normal(0.0004, 0.01, size=(1000, 1))                            # N4
+    M = np.hstack([base, base])
+    Mn = M.copy()
+    Mn[:, 1] += 1e-6
+    d4 = _bdates(1001)[1:]
+    wf4 = validate.walk_forward(M, d4, turnover=np.zeros_like(M), pnl_stress=M, embargo=21)
+    own = validate.walk_forward(Mn, d4, turnover=np.zeros_like(M), pnl_stress=Mn, embargo=21)
+    rep = parity.p11(wf4, own)
+    assert rep and all(r["quantgen"] == 0 and r["nautilus"] == 1 and r["is_sharpe_gap"] == 0.0 for r in rep), rep
+    matched = parity.select_matched(Mn, Mn, np.zeros_like(M), d4, wf4, embargo=21)
+    assert matched.chosen == wf4.chosen and parity.p12(wf4, matched)["1x"]["pass"], matched.chosen
+
+    def scored(**kw):
+        s = validate.StrategyScore(**dict(N8_BASE, **kw))
+        validate._decide_strategy(s)
+        return s
+    gate = validate.GATE
+    assert parity.agree(scored(pbo=0.19), scored(pbo=0.21), gate) == (True, None)                     # N8 (a)
+    assert parity.agree(scored(n_configs=12, bench_p=0.5, prob_loss_oos=0.09),
+                        scored(n_configs=12, bench_p=0.5, prob_loss_oos=0.11), gate) == (False, "decision mismatch")
+    assert parity.agree(scored(prob_loss_oos=0.09), scored(prob_loss_oos=0.11), gate) == (False, "decision mismatch")
+    assert parity.agree(scored(bench_p=float("nan")), scored(bench_p=float("nan")), gate) == (
+        False, "benchmark test dropped")
+    preds = parity.gate_predicates(scored(), gate)
+    assert len(preds) == 18 and all(type(v) is bool for v in preds.values()), preds
+
+    def plant_p5(ctx):                       # one fill 2e-6 above its close; its commission recomputed, so P7 holds
+        leg = ctx.legs[(0, 1)]
+        f = leg.fills[0]
+        f["last_px"] = (f["last_px"] * Decimal("1.000002")).quantize(Decimal("0.000000001"))
+        f["commission"] = Decimal(parity.cents(f["last_qty"] * f["last_px"] * Decimal("0.005"))) / 100
+    scores = []
+
+    def nautilus_rejects(wf, **kw):          # G-02 through the hand-off: the second score (sc_nt) says REJECT
+        scores.append(validate.score_strategy(wf, **kw))
+        return dataclasses.replace(scores[-1], decision="REJECT") if len(scores) == 2 else scores[-1]
+    with tempfile.TemporaryDirectory(prefix="qgnb_l102_") as name:
+        tmp = Path(name)
+        code, rec, out = _rehearse(_card_table(tmp), tmp, hooks={"after_step15": plant_p5})
+        assert (code, rec["status"]) == (0, "CARD_WRITTEN"), out[-1500:]
+        assert [w for w in rec["parity"]["warnings"] if w.startswith("P5: column 0")] and rec["parity"]["hard_pass"]
+        code, rec, out = _rehearse(_card_table(tmp / "g02"), tmp / "g02", score_fn=nautilus_rejects)
+        q = rec["gate"]["quantgen"]["decision"]
+        want = f"G-02: decision mismatch: quantgen {q}, nautilus REJECT; predicates differ: none"
+        assert (code, rec["status"], rec["card"], rec["withheld_reasons"]) == (1, "WITHHELD", None, [want]), out[-1500:]
+        assert q != "REJECT" and rec["gate"]["agree"] == {"ok": False, "reason": "decision mismatch"}, rec["gate"]
+
+
+def test_l1_05_rerun_policy_r17():
+    """L1-5 (5.3.5; OPS-R2-7, OPS-R3-5, QA-R3-3, QA-R2-3): after a first run ends CARD_WRITTEN, the same table
+    refuses with R-17, also with a new owner_confirmed and re-saved with a BOM and CRLF; with --rerun-of and a reason
+    it appends 0 rows, records appended false for every row, names the first run in earlier_runs and supersedes, and
+    prints a planted IN_PROGRESS record."""
+    from core.quant import gate_ledger
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l105_") as name:
+        tmp = Path(name)
+        table = _card_table(tmp)
+        code, first, out = _rehearse(table, tmp)
+        assert (code, first["status"]) == (0, "CARD_WRITTEN"), out[-1500:]
+        ledger = tmp / "ledgers" / "E1.jsonl"
+        old = time.time() - 601
+        os.utime(ledger, (old, old))                    # R-16's freshness passes from here on (QA-R2-3)
+        t = json.loads(table.read_text(encoding="utf-8"))
+        sha = runner.table_sha256(t)
+        signed = tmp / "signed.json"
+        confirmed = f"Geon Koh, 2026-10-28, table {sha[:16]}, code {'0' * 16}"
+        signed.write_text(json.dumps(dict(t, owner_confirmed=confirmed), indent=1, ensure_ascii=False),
+                          encoding="utf-8", newline="\n")
+        bom = tmp / "bom.json"
+        crlf = json.dumps(t, indent=1, ensure_ascii=False).replace("\n", "\r\n")
+        bom.write_bytes(b"\xef\xbb\xbf" + crlf.encode("utf-8"))
+        for path in (table, signed, bom):
+            code, rec, out = _rehearse(path, tmp)
+            assert code == 2 and rec["bridge_run_id"] == first["bridge_run_id"], (path.name, out[-800:])
+            assert f"R-17: earlier runs of this table: {first['bridge_run_id']} CARD_WRITTEN" in out, out[-800:]
+        planted = tmp / "out" / f"NB-20000101T000000000000Z-{sha[:8]}"
+        planted.mkdir()
+        (planted / "run.json").write_text(json.dumps({"bridge_run_id": planted.name, "status": "IN_PROGRESS",
+                                                      "table": {"table_sha256": sha}}), encoding="utf-8", newline="\n")
+        code, rec, out = _rehearse(table, tmp, rerun_of=first["bridge_run_id"], reason="L1-5 re-run")
+        assert code == 0 and rec["bridge_run_id"] != first["bridge_run_id"], out[-1500:]
+        assert f"earlier run {planted.name} ended IN_PROGRESS" in out, out[-1500:]
+        assert rec["supersedes"] == first["bridge_run_id"] and rec["rerun_reason"] == "L1-5 re-run", rec["supersedes"]
+        assert {e["bridge_run_id"] for e in rec["earlier_runs"]} == {first["bridge_run_id"], planted.name}
+        reg = rec["registration"]
+        assert reg["n_raw_before"] == reg["n_raw_after"] == 4 and not any(r["appended"] for r in reg["rows"]), reg
+        assert gate_ledger.family_ledger("E1", tmp / "ledgers").n_raw == 4
+
+
+def test_l1_13_parity_failure_withholds_without_card():
+    """L1-13 (G-01): a parity failure (the stub's --fee-1x charges 1x at stress 2, N7) writes no card and exactly one
+    WITHHELD record into the temp output dir, exit 1."""
+    with tempfile.TemporaryDirectory(prefix="qgnb_l113_") as name:
+        tmp = Path(name)
+        code, rec, out = _rehearse(_small_table(tmp, n=600), tmp, flags=("--fee-1x",))
+        assert (code, rec["status"], rec["card"]) == (1, "WITHHELD", None), out[-1500:]
+        assert any(r.startswith("P7: column 0 (rule=sma, lookback=126, step=21), 2x") for r in rec["withheld_reasons"])
+        assert rec["parity"]["hard_pass"] is False and rec["gate"]["quantgen"] is None, rec["gate"]
+        assert sorted(p.name for p in (tmp / "out").iterdir() if p.name != ".locks") == [rec["bridge_run_id"]]
+        assert sorted(p.name for p in (tmp / "out" / rec["bridge_run_id"]).iterdir()) == ["run.json"]
+        assert out.splitlines()[-1].startswith("STATUS WITHHELD exit=1 record=")
+
+
+def test_l1_14_gate_unchanged_and_g04():
+    """L1-14 (5.5 step 6): GATE is deep-equal before and after a synthetic end-to-end scoring that writes a card; a
+    score_fn that mutates GATE gives G-04: ERROR, exit 4, no card."""
+    import copy
+    from core.quant import validate
+    saved = copy.deepcopy(validate.GATE)
+
+    def mutating(wf, **kw):
+        validate.GATE["dsr_min"] = 0.5
+        return validate.score_strategy(wf, **kw)
+    try:
+        with tempfile.TemporaryDirectory(prefix="qgnb_l114_") as name:
+            tmp = Path(name)
+            code, rec, out = _rehearse(_card_table(tmp / "a"), tmp / "a")
+            assert (code, rec["status"]) == (0, "CARD_WRITTEN") and validate.GATE == saved, out[-1500:]
+            code, rec, out = _rehearse(_card_table(tmp / "b"), tmp / "b", score_fn=mutating)
+            assert (code, rec["status"], rec["card"]) == (4, "ERROR", None), out[-1500:]
+            want = "G-04: GATE differs from its snapshot after scoring: ['dsr_min']"
+            assert rec["error"]["message"] == want, rec["error"]
+            assert not list((tmp / "b" / "out" / rec["bridge_run_id"]).glob("NB_*.json"))
+            assert out.splitlines()[-1].startswith("STATUS ERROR exit=4 record=")
+    finally:
+        validate.GATE.clear()
+        validate.GATE.update(saved)
+
+
+def test_l1_20b_p0b_benchmark_withholds():
+    """L1-20's P0b case (5.4.1; QUANT-1): the benchmark from the runner's rounded closes equals the study's
+    expression on the study's prices, byte for byte; a doctored study panel (one price moved by 1e-6 after step 15)
+    withholds with P0b, exit 1, and the record's provenance says so."""
+    import dataclasses
+    from types import SimpleNamespace
+    import numpy as np
+    parity = _parity()
+    closes = synth_prices(7, 600, 100.0, 150.0)
+    assert parity.p0b("trend_switch", closes, closes[:, None])["pass"] and parity.p0b("crypto_trend", closes,
+                                                                                    closes[:, None])["pass"]
+    for strategy, text in parity.STUDY_BENCH.items():
+        pn = SimpleNamespace(prices=closes[:, None])
+        expected = np.asarray(eval(text, {"pn": pn}))                # the study's own text, evaluated
+        assert parity.study_benchmark(strategy, closes[:, None]).tobytes() == expected.tobytes(), strategy
+
+    def doctor(ctx):
+        prices = np.array(ctx.study_pn.prices, dtype=float)
+        prices[300, 0] += 1e-6
+        ctx.study_pn = dataclasses.replace(ctx.study_pn, prices=prices)
+    with tempfile.TemporaryDirectory(prefix="qgnb_l120b_") as name:
+        tmp = Path(name)
+        code, rec, out = _rehearse(_small_table(tmp / "a", n=600), tmp / "a")
+        assert rec["provenance"]["p0b"]["pass"] is True, rec["provenance"]
+        assert not any(r.startswith("P0b") for r in rec["withheld_reasons"]), rec["withheld_reasons"]
+        code, rec, out = _rehearse(_small_table(tmp / "b", n=600), tmp / "b", hooks={"after_step15": doctor})
+        assert (code, rec["status"], rec["card"]) == (1, "WITHHELD", None), out[-1500:]
+        assert rec["provenance"]["p0b"] == {"pass": False, "rows": 599, "study_rows": 599, "first_difference": 299}
+        assert any(r.startswith("P0b: the benchmark differs") for r in rec["withheld_reasons"]), rec["withheld_reasons"]
+
+
+def test_l1_21_select_matched_reproduces_wf_qg():
+    """L1-21 (5.4.2): select_matched on QUANTGEN's own matrices reproduces walk_forward's result field by field, bit
+    for bit, for pilot 1's grid (embargo 21, with a cash rate) and pilot 2's (embargo 1)."""
+    import numpy as np
+    from core.quant import strategies as S, validate
+    parity = _parity()
+    cases = (("trend", synth_prices(7, 1500, 100.0, 150.0), _bdates(1500), S.trend_switch, PILOT1_AXES, 50.0,
+              synth_rf(1500), 21),
+             ("crypto", synth_prices(5, 1600, 400.0, 60000.0), _days(1600), S.crypto_trend, PILOT2_AXES, 10.0,
+              np.zeros(1600), 1))
+    for label, closes, dates, fn, axes, cost, rf, embargo in cases:
+        grid = S.grid_from(**axes)
+        pnl, stress, turnover = _qg_matrices(closes, fn, grid, cost, rf)
+        wf = validate.walk_forward(pnl, dates[1:], turnover=turnover, pnl_stress=stress, embargo=embargo)
+        got = parity.select_matched(pnl, stress, turnover, dates[1:], wf, embargo=embargo)
+        assert len(wf.origins) > 3 and _same_wf(got, wf) == [], (label, _same_wf(got, wf))
+
+
+def test_l1_26b_ledger_moved_g05():
+    """L1-26's G-05 case (5.5 step 7): an after_step16 hook that appends a row to the family ledger after
+    registration makes assert_hash_at_run raise: WITHHELD "ledger moved after registration", exit 1, no card."""
+    from core.quant import gate_ledger
+    with tempfile.TemporaryDirectory(prefix="qgnb_l126b_") as name:
+        tmp = Path(name)
+
+        def append(ctx):
+            gate_ledger.register_trial(ctx.ledger, _plain_row("E1", 99), script="tests/nautilus_acceptance.py")
+        code, rec, out = _rehearse(_card_table(tmp), tmp, hooks={"after_step16": append})
+        assert (code, rec["status"], rec["card"]) == (1, "WITHHELD", None), out[-1500:]
+        assert [r for r in rec["withheld_reasons"] if r.startswith("G-05: ledger moved after registration: E1:")], (
+            rec["withheld_reasons"])
+        assert gate_ledger.family_ledger("E1", tmp / "ledgers").n_raw == 5
+        assert not list((tmp / "out" / rec["bridge_run_id"]).glob("NB_*.json"))
+
+
+def test_l1_28_card_and_record_bytes():
+    """L1-28 (5.5 steps 8 and 9; QA-9, OPS-12): the record's card md5 equals the md5 of the card's bytes; results_file
+    is the run id; the card has no carriage return; writing a card to an existing path raises."""
+    parity = _parity()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l128_") as name:
+        tmp = Path(name)
+        code, rec, out = _rehearse(_card_table(tmp), tmp)
+        assert (code, rec["status"]) == (0, "CARD_WRITTEN"), out[-1500:]
+        path = Path(rec["card"]["path"])
+        raw = path.read_bytes()
+        assert path.parent.name == rec["bridge_run_id"] and path.name == "NB_E1_trend_spy.json", path
+        assert rec["card"]["md5"] == hashlib.md5(raw).hexdigest() and b"\r" not in raw
+        card = json.loads(raw.decode("utf-8"))
+        assert (card["results_file"], card["results_md5"]) == (rec["bridge_run_id"], ""), card["results_file"]
+        assert card["card_id"] == "NB_E1_trend_spy", card["card_id"]
+        assert card["decision"] == rec["gate"]["nautilus"]["decision"] == rec["gate"]["quantgen"]["decision"]
+        try:
+            parity.write_card(path, "{}")
+        except FileExistsError:
+            pass
+        else:
+            raise AssertionError("write_card overwrote an existing card")
+        assert path.read_bytes() == raw
+
+
+def test_l1_29_trial_counts_protocol_and_reference_drift():
+    """L1-29 (QUANT-4, QUANT-R2-5, QUANT-R3-1, QUANT-R3-3, QUANT-R4-1): both pilot tables' study_configs equal the
+    stored cards' grids, symbols and costs and 10.2's run 2/3 values; n_trials = family_n_raw + U on planted rows;
+    each table's embargo, cost, grid, domain and the benchmark expression equal the study's calls; reference_drift on
+    hand-built scores; pilot 2's reference md5; a stub rehearsal whose reference moves one float by 2e-9 is WITHHELD
+    "reference drift", exit 1."""
+    import ast
+    import numpy as np
+    from core.quant import gate_ledger, validate
+    parity, runner = _parity(), _runner()
+    tables = {k: json.loads(p.read_text(encoding="utf-8-sig")) for k, p in PILOT_TABLES.items()}
+    cards = {n: json.loads((CARDS / f"{n}.json").read_text(encoding="utf-8")) for n in (
+        "S_E1_trend_us", "S_E1_trend_krx", "S_C3_crypto_trend_btcusd", "S_C3_crypto_trend_krwbtc")}
+
+    def from_card(c):
+        return [(sorted(c["universe"]["symbols"]), c["costs"]["cost_bps"], g) for g in c["rules"]["grid"]]
+    have = {k: [(c["symbols"], c["cost_bps"], c["params"]) for c in t["study_configs"]] for k, t in tables.items()}
+    assert have["E1-SPY"] == from_card(cards["S_E1_trend_us"]) + from_card(cards["S_E1_trend_krx"])
+    runs23 = [(["BTC-USD"], 10.0, {"hysteresis": h}) for h in (0.05, 0.1, 0.2, 0.3, 0.4, 0.5)]
+    assert have["C3-BTCUSD"] == runs23 + from_card(cards["S_C3_crypto_trend_krwbtc"])
+    ledger_note = cards["S_C3_crypto_trend_btcusd"]["trials"]["ledger"][0]
+    assert "run 2/3: hysteresis [0.05, 0.1, 0.2, 0.3, 0.4, 0.5]" in ledger_note, ledger_note
+    t1 = tables["E1-SPY"]
+    with tempfile.TemporaryDirectory(prefix="qgnb_l129_") as name:
+        ledger = gate_ledger.family_ledger("E1", Path(name))
+        for g in t1["grid"][:3]:                                    # three bridge rows
+            gate_ledger.register_trial(ledger, runner.ledger_row(t1, g, span=("2004-12-01", "2026-09-25"),
+                                                                 run_utc="2026-10-28T00:00:00Z", anchor="UNVERSIONED",
+                                                                 bridge_run_id="NB-test"))
+        for c in t1["study_configs"][:2] + t1["study_configs"][12:13]:    # two US Lab rows and one KRX row
+            params = dict(c["params"], symbols=sorted(c["symbols"]), cost_bps=float(c["cost_bps"]))
+            gate_ledger.register_trial(ledger, dict(_plain_row("E1", 0), params=params,
+                                                    market="US" if c["cost_bps"] == 50.0 else "KR"))
+        counts = parity.trial_counts(t1, ledger.rows())
+    assert {k: counts[k] for k in ("len_grid", "family_n_raw", "market_n_raw", "U", "n_trials")} == {
+        "len_grid": 12, "family_n_raw": 6, "market_n_raw": 5, "U": 21, "n_trials": 27}, counts
+    assert len(set(parity.study_config_ids(t1))) == 24 and len(set(parity.study_config_ids(tables["C3-BTCUSD"]))) == 11
+    study = runner.load_study(ROOT)
+    tree = ast.parse((ROOT / "docs" / "asset_expansion_study.py").read_text(encoding="utf-8"))
+    fns = {f.name: f for f in tree.body if isinstance(f, ast.FunctionDef)}
+
+    def calls(fn, name):
+        return [n for n in ast.walk(fns[fn]) if isinstance(n, ast.Call) and ast.unparse(n.func).endswith(name)]
+
+    def bench_text(fn):
+        return [ast.unparse(n.value) for n in ast.walk(fns[fn]) if isinstance(n, ast.Assign)
+                and ast.unparse(n.targets[0]) == "bench"][0]
+    for fn, pilot, cost_key, strategy in (("run_trend", "E1-SPY", "us", "trend_switch"),
+                                          ("run_crypto_trend", "C3-BTCUSD", "crypto", "crypto_trend")):
+        t = tables[pilot]
+        axes = {k.arg: ast.literal_eval(k.value) for k in calls(fn, "grid_from")[0].keywords}
+        card_kw = {k.arg: k.value for k in calls(fn, "strategy_card")[0].keywords}
+        domain = ast.literal_eval(card_kw["domain"]) if "domain" in card_kw else None
+        assert t["axes"] == axes and t["grid"] == runner.S.grid_from(**axes) and list(t["axes"]) == list(axes), pilot
+        assert t["embargo"] == ast.literal_eval(card_kw["embargo"]) and t["cost_bps"] == study.COST[cost_key], pilot
+        cost_text = ast.unparse(card_kw["cost_bps"])
+        assert cost_text in ("COST[cost_key]", f"COST[{cost_key!r}]"), cost_text
+        assert (t["domain"] is None and domain is None) or {k: tuple(v) for k, v in t["domain"].items()} == domain
+        assert bench_text(fn) == parity.STUDY_BENCH[strategy], (fn, bench_text(fn))
+    ref_card = cards["S_C3_crypto_trend_btcusd"]
+    t2 = tables["C3-BTCUSD"]
+    assert (t2["grid"], t2["embargo"], t2["cost_bps"]) == (ref_card["rules"]["grid"], ref_card["rules"]["embargo"],
+                                                          ref_card["costs"]["cost_bps"])
+    assert t2["reference_card_md5"] == _md5(ROOT / t2["reference_card"]) == "d0bb0882fb51dec361cf2ddb160186bb"
+    dates = tuple(d.strftime("%Y-%m-%d") for d in runner.pd.date_range("2016-10-14", "2026-09-25", freq="D"))
+    wf = validate.WalkForward(dates=dates, pnl=np.zeros(len(dates)), pnl_stress=np.zeros(len(dates)),
+                              turnover=np.zeros(len(dates)), origins=(756,), chosen=(0,), is_sharpes=np.zeros((1, 5)),
+                              n_configs=5)
+    sc = validate.StrategyScore(**dict(N8_BASE, n_years=9, n_sessions=len(dates)))
+    grid = runner.S.grid_from(**PILOT2_AXES)
+    ref = dict(N8_BASE, n_years=11, n_sessions=len(dates), ci90=[0.72, 1.64], chosen_last={"hysteresis": 0.0})
+    assert parity.reference_drift(sc, wf, grid, ref) == []
+    assert parity.reference_drift(sc, wf, grid, dict(ref, n_sessions=len(dates) + 1)) == ["n_sessions"]
+    assert parity.reference_drift(sc, wf, grid, dict(ref, sr_oos=1.19 + 2e-9)) == ["sr_oos"]
+    assert parity.reference_drift(sc, wf, grid, dict(ref, ci90=[0.72, 1.64 - 2e-9], n_years=9)) == ["n_years", "ci90"]
+    n, crypto = 900, runner.S.grid_from(**PILOT2_AXES)
+    closes, days = synth_prices(5, n, 400.0, 60000.0), _days(n)
+    stats, _sc, _wf = _reference_stats(closes, days, crypto, cost=10.0, embargo=1, n_trials=5,
+                                       domain={"hysteresis": (0.0, 0.889)})
+    with tempfile.TemporaryDirectory(prefix="qgnb_l129e_") as name:
+        tmp = Path(name)
+        card = tmp / "reference_card.json"
+        md5 = _write_card_file(card, dict(stats, sr_oos=stats["sr_oos"] + 2e-9))
+        code, rec, out = _rehearse(_crypto_table(tmp, n, reference_card=str(card), reference_card_md5=md5), tmp)
+        assert (code, rec["status"], rec["card"]) == (1, "WITHHELD", None), out[-1500:]
+        assert rec["gate"]["reference"]["drift"] == ["sr_oos"], rec["gate"]["reference"]
+        assert "G-08: reference drift: sr_oos" in rec["withheld_reasons"], rec["withheld_reasons"]
+
+
+def test_l1_30_card_labels_and_engine_text():
+    """L1-30 (6.5; QUANT-6, QUANT-11, QUANT-R2-4): a written card carries the claim label, the engine text (STUB with
+    the stub child, 6.5's text otherwise), parity_scope and stats.quantgen_score; every committed table's claim_label
+    starts with "exploratory", "pre-specified on historical data" or "confirmatory"."""
+    parity = _parity()
+    for pilot, path in PILOT_TABLES.items():
+        t = json.loads(path.read_text(encoding="utf-8-sig"))
+        assert t["pilot"] == pilot and t["claim_label"].startswith(parity.CLAIM_PREFIXES), (pilot, t["claim_label"])
+        assert "owner_confirmed" not in t and "host_fingerprint" not in t, pilot          # GOVERNANCE-R4-3
+        assert parity.card_rules(t, stub_child=False)["engine"] == ENGINE_6_5
+    with tempfile.TemporaryDirectory(prefix="qgnb_l130_") as name:
+        tmp = Path(name)
+        table = _card_table(tmp)
+        t = json.loads(table.read_text(encoding="utf-8"))
+        code, rec, out = _rehearse(table, tmp)
+        assert (code, rec["status"]) == (0, "CARD_WRITTEN"), out[-1500:]
+        card = json.loads(Path(rec["card"]["path"]).read_text(encoding="utf-8"))
+        assert card["rules"] == parity.card_rules(t, stub_child=True) and card["rules"]["engine"] == "STUB", card["rules"]
+        assert card["rules"]["claim_label"] == t["claim_label"] and card["rules"]["parity_scope"] == SCOPE_6_5
+        assert card["hypothesis"] == f"{t['claim_label']}: {t['hypothesis']}" and card["kind"] == "strategy"
+        q = card["stats"]["quantgen_score"]
+        assert q["decision"] == card["decision"] and "lines" not in q and q["n_configs"] == 4, q
+        assert card["stats"]["parity"]["hard_pass"] is True and card["trials"]["N_planned"] == 4, card["trials"]
+        assert card["decision"] in ("PASS", "REVISE", "REJECT", "INSUFFICIENT_DATA")
+
+
+def test_l1_31_walk_forward_raise_g03():
+    """L1-31 (G-03; QA-R2-2): a 400-row synthetic table makes walk_forward raise after registration; the run is
+    WITHHELD, exit 1, and the reason names the walk_forward exception; a score_fn that raises on the card table is
+    WITHHELD the same way, naming score_strategy, after every hard check passed."""
+
+    def raises(wf, **kw):
+        raise ValueError("planted in score_fn")
+    with tempfile.TemporaryDirectory(prefix="qgnb_l131_") as name:
+        tmp = Path(name)
+        code, rec, out = _rehearse(_small_table(tmp, n=400), tmp)
+        assert (code, rec["status"], rec["card"]) == (1, "WITHHELD", None), out[-1500:]
+        want = "G-03: walk_forward raised ValueError: need at least 546 sessions for one walk-forward step, got 399"
+        assert rec["withheld_reasons"] == [want] and rec["gate"]["error"] == want, rec["withheld_reasons"]
+        assert rec["parity"]["hard_pass"] is False and rec["parity"]["failed"] == [], rec["parity"]["failed"]
+        code, rec, out = _rehearse(_card_table(tmp / "score"), tmp / "score", score_fn=raises)
+        want = "G-03: score_strategy raised ValueError: planted in score_fn"
+        assert (code, rec["status"], rec["card"], rec["withheld_reasons"]) == (1, "WITHHELD", None, [want]), out[-1500:]
+        assert rec["parity"]["hard_pass"] is True and rec["gate"]["error"] == want and rec["gate"]["quantgen"] is None
+        assert rec["gate"]["trial_counts"]["n_trials"] == 4, rec["gate"]["trial_counts"]
+
+
+def test_l1_36_fingerprint_reads_no_data():
+    """L1-36 (GOVERNANCE-R4-1), with the 3.3 guard's temp QUANTGEN_MACRO_DIR: --fingerprint on both committed pilot
+    tables prints table_sha256, code_sha256 and host_fingerprint null with the reason and exits 0; on a copy whose
+    prices_file names a missing file it still exits 0; an invalid table exits 2 after printing both digests."""
+    runner = _runner()
+    code_sha = runner.code_sha256(ROOT)
+    with tempfile.TemporaryDirectory(prefix="qgnb_l136_") as name:
+        tmp = Path(name)
+        missing = tmp / "missing.json"
+        t = json.loads(PILOT_TABLES["E1-SPY"].read_text(encoding="utf-8"))
+        missing.write_text(json.dumps(dict(t, prices_file="docs/asset_expansion/cache/yf_NOT_THERE.csv"), indent=1),
+                           encoding="utf-8", newline="\n")
+        bad = tmp / "bad.json"
+        bad.write_text(json.dumps(dict(t, cost_bps=40.0, pilot="E1-SPY", volume="5")), encoding="utf-8", newline="\n")
+        for path in (*PILOT_TABLES.values(), missing, bad):
+            table = json.loads(path.read_text(encoding="utf-8-sig"))
+            code, out = _captured(lambda: runner.main(["--fingerprint", "--table", str(path)]))
+            lines = out.splitlines()
+            assert lines[:2] == [f"table_sha256 {runner.table_sha256(table)}", f"code_sha256 {code_sha}"], lines
+            if path == bad:
+                assert code == 2 and lines[-1] == "STATUS REFUSED exit=2 record=-" and "R-11" in out, out
+                continue
+            ledger = Path(os.environ["QUANTGEN_MACRO_DIR"]) / "ledgers" / f"{table['family_id']}.jsonl"
+            want = f"host_fingerprint null (the family ledger {ledger} does not exist; R-15, O11)"
+            assert code == 0 and lines[2] == want, lines
+            assert lines[-1] == "STATUS OK exit=0 record=-", lines
+
+
+def test_l2_07_synthetic_end_to_end_rehearsal():
+    """L2-7 (8.4; QA-R3-11): synth_prices(7, 1500, 100, 150) and synth_rf(1500), the four columns of CARD_AXES at
+    50 bp, embargo 21, through the real sandbox: every hard check passes, both scores are in the run record, and the
+    run ends with a card whose decision is in validate.DECISIONS and whose engine text is 6.5's, or WITHHELD naming
+    the differing predicates with their two values (G-02); never a new seed after the result."""
+    from core.quant import validate
+    layer2()
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l207_") as name:
+        tmp = Path(name)
+        table = write_rehearsal_table(tmp, prices=synth_prices(7, 1500, 100.0, 150.0), dates=_bdates(1500),
+                                      rf=synth_rf(1500), axes=CARD_AXES)
+        (code, out) = _captured(lambda: runner.run(table, mode="rehearsal", ledger_dir=tmp / "ledgers",
+                                                   out_dir=tmp / "out"))
+        rec = json.loads(next((tmp / "out").glob("NB-*/run.json")).read_text(encoding="utf-8"))
+        assert rec["stub_child"] is False and rec["parity"]["hard_pass"] is True, (rec["withheld_reasons"], out[-1500:])
+        assert rec["gate"]["quantgen"]["stats"] and rec["gate"]["nautilus"]["stats"] and len(rec["children"]) == 8
+        worst = min(x["P2"]["value"] for x in rec["parity"]["legs"])
+        print(f"L2-7: {rec['status']}; quantgen {rec['gate']['quantgen']['decision']}, nautilus "
+              f"{rec['gate']['nautilus']['decision']}; worst corr {worst}")
+        if code == 0:
+            card = json.loads(Path(rec["card"]["path"]).read_text(encoding="utf-8"))
+            assert card["decision"] in validate.DECISIONS and card["rules"]["engine"] == ENGINE_6_5, card["rules"]
+        else:
+            assert code == 1 and rec["withheld_reasons"] and all(
+                r.startswith("G-02: decision mismatch: ") for r in rec["withheld_reasons"]), rec["withheld_reasons"]
+
+
+def test_l2_11_n6_stress():
+    """L2-11 (N6; QUANT-10, QA-R2-12): synth_prices(2026, 5500, 80, 650, planted every 252 bars from 252) with
+    synth_rf(5500), pilot 1's 12 columns at 50 bp, 1x and 2x through the real sandbox: every hard check passes; the
+    worst correlation and absolute Sharpe gap are printed next to the bars and map 03's (0.99999901, 0.0013)."""
+    layer2()
+    runner = _runner()
+    with tempfile.TemporaryDirectory(prefix="qgnb_l211_") as name:
+        tmp = Path(name)
+        table = write_rehearsal_table(tmp, prices=synth_prices(2026, 5500, 80.0, 650.0, planted=range(252, 5292, 252)),
+                                      dates=_bdates(5500), rf=synth_rf(5500), axes=PILOT1_AXES)
+        (code, out) = _captured(lambda: runner.run(table, mode="rehearsal", ledger_dir=tmp / "ledgers",
+                                                   out_dir=tmp / "out"))
+        rec = json.loads(next((tmp / "out").glob("NB-*/run.json")).read_text(encoding="utf-8"))
+        legs = rec["parity"]["legs"]
+        worst_corr, worst_dsr = min(x["P2"]["value"] for x in legs), max(x["P3"]["value"] for x in legs)
+        print(f"N6: worst corr {worst_corr:.8f} (bar 0.9999, map 03 0.99999901); worst abs dSR {worst_dsr:.5f} "
+              f"(bar 0.01, map 03 0.0013); {rec['status']}")
+        assert len(legs) == 24 and rec["parity"]["hard_pass"] is True, (rec["parity"]["failed"], out[-1500:])
+        assert code in (0, 1) and all(r.startswith("G-02") for r in rec["withheld_reasons"]), rec["withheld_reasons"]
+
+
+def test_l2_12_crypto_rehearsal_reference():
+    """L2-12 (QUANT-R3-2, QUANT-R4-1): the L2-12 series (8.2), pilot 2's grid, embargo 1, domain, 10 bp, no cash
+    rate, through the real sandbox, with a temp reference card built as the stored card was built: both scores in
+    the record and gate.reference holding an empty drift list; a card, or WITHHELD naming its reason (G-02 only);
+    the same reference with the whole-year n_years left in gives exactly ["n_years"]."""
+    layer2()
+    parity, runner = _parity(), _runner()
+    n, grid = 1600, runner.S.grid_from(**PILOT2_AXES)
+    closes, days = synth_prices(5, n, 400.0, 60000.0), _days(n)
+    stats, sc, wf = _reference_stats(closes, days, grid, cost=10.0, embargo=1, n_trials=5,
+                                     domain={"hysteresis": (0.0, 0.889)})
+    whole = dict(stats, n_years=sc.n_years)                    # the whole-year count left in
+    assert parity.reference_drift(sc, wf, grid, whole) == ["n_years"], (sc.n_years, stats["n_years"])
+    with tempfile.TemporaryDirectory(prefix="qgnb_l212_") as name:
+        tmp = Path(name)
+        card = tmp / "reference_card.json"
+        md5 = _write_card_file(card, stats)
+        table = _crypto_table(tmp, n, reference_card=str(card), reference_card_md5=md5)
+        (code, out) = _captured(lambda: runner.run(table, mode="rehearsal", ledger_dir=tmp / "ledgers",
+                                                   out_dir=tmp / "out"))
+        rec = json.loads(next((tmp / "out").glob("NB-*/run.json")).read_text(encoding="utf-8"))
+        assert rec["parity"]["hard_pass"] is True and rec["gate"]["reference"]["drift"] == [], (
+            rec["withheld_reasons"], rec["gate"]["reference"], out[-1500:])
+        gate = rec["gate"]
+        assert gate["quantgen"]["stats"]["n_sessions"] == stats["n_sessions"] and gate["nautilus"]["stats"], gate
+        print(f"L2-12: {rec['status']}; quantgen {gate['quantgen']['decision']}, nautilus {gate['nautilus']['decision']}; "
+              f"reference n_years {gate['reference']['n_years_calendar']} calendar, "
+              f"{gate['reference']['n_years_whole']} whole")
+        assert code in (0, 1) and all(r.startswith("G-02") for r in rec["withheld_reasons"]), rec["withheld_reasons"]
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 def main(argv: list[str] | None = None) -> int:

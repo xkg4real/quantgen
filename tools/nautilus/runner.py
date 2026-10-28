@@ -3,11 +3,12 @@
     python -B -m tools.nautilus.runner --table <t> --rehearsal --ledger-dir <tmp> --out-dir <tmp> [--child-cmd <json>]
     python -B -m tools.nautilus.runner --table <t> --of-record [--rerun-of <id> --reason <text>]
     python -B -m tools.nautilus.runner --check-env | --egress-record | --fixtures [--record-baseline | --write-goldens]
+    python -B -m tools.nautilus.runner --fingerprint --table <t> | --timing | --handoff-report
 
 A run registers every variant in its family ledger before any child starts, computes QUANTGEN's reference matrices
 with `simulate`, starts one child per (column, cost level) through the launch contract of launch.py, rebuilds each
 child's daily returns from its fills (5.3.3) and checks every child (section 7). Steps 16 and 17 (parity, gate and
-card) sit behind `parity_and_gate`, which plan Task 5 fills. Exit codes: 0 card written, a clean rehearsal or a
+card) sit behind `parity_and_gate`, in tools/nautilus/parity.py. Exit codes: 0 card written, a clean rehearsal or a
 mode's success; 1 WITHHELD; 2 refused before registration; 3 refused at registration; 4 ERROR; 5 ABORTED. The last
 console line of every mode is `STATUS <status> exit=<n> record=<path or ->`. The runner never imports the engine
 (spec 5.6 rule C2); it reads the venv's own files through launch.py.
@@ -1066,8 +1067,9 @@ class Outcome:
 
 
 def parity_and_gate(ctx: RunContext) -> Outcome:
-    """Steps 16 and 17 (spec 5.4, 5.5): plan Task 5 replaces this body with parity.hand_off(ctx)."""
-    raise NotImplementedError("spec 5.4 and 5.5 are plan Task 5")
+    """Steps 16 and 17 (spec 5.4, 5.5): tools/nautilus/parity.py."""
+    from tools.nautilus import parity
+    return parity.hand_off(ctx)
 
 
 # --------------------------------------------------------------------------- #
@@ -1730,6 +1732,239 @@ def egress_record_mode(repo_root: Path = REPO_ROOT) -> int:
     return 2
 
 
+# --------------------------------------------------------------------------- #
+# Modes added by plan Task 5: --fingerprint, --timing, --handoff-report (5.3.1)
+# --------------------------------------------------------------------------- #
+HANDOFF_SCHEMA = "nautilus-bridge-handoff/1"
+BRANCH = "claude/amazing-gauss-tdiguu"
+TIMING_BARS, TIMING_ENGINE = 5600, "nautilus_trader.backtest.engine"
+TIMING_GRID = {"rule": ["sma", "tsmom"], "lookback": [126, 210, 252], "step": [21, 42]}      # pilot 1's 12 columns
+FIREWALL_COMMANDS = (                               # 5.3.1 (OPS-R4-3): Format-List output is English and ASCII
+    "Get-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out | Format-List DisplayName, Enabled, Direction, "
+    "Action, Profile",
+    "Get-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out | Get-NetFirewallApplicationFilter | Format-List "
+    "Program",
+    "Get-NetFirewallProfile | Format-List Name, Enabled")
+
+
+def fingerprint_mode(table_path: Path, repo_root: Path = REPO_ROOT) -> int:
+    """--fingerprint (GOVERNANCE-R4-1): prints table_sha256 and code_sha256 once the table parses, then validates it
+    against 6.6 with both owner fields optional (R-11, exit 2), opens no prices_file, rf_file or reference_card, and
+    prints host_fingerprint, or null with the reason, from the production family ledger; exit 0."""
+    try:
+        t, _ = load_table(table_path)
+    except BridgeRefusal as exc:
+        return _print_refusal(exc)
+    tsha, code = table_sha256(t), code_sha256(repo_root)
+    print(f"table_sha256 {tsha}")
+    print(f"code_sha256 {code}")
+    try:
+        _check_place(t, "of-record", repo_root)
+        _check_fields(t, "fingerprint")
+        _check_values(t, "of-record")
+    except BridgeRefusal as exc:
+        return _print_refusal(exc)
+    import config
+    ledger = gate_ledger.family_ledger(t["family_id"], config.macro_dir() / "ledgers")
+    try:
+        found = host_fingerprint(socket.gethostname(), ledger) if ledger.path.is_file() else None
+        why = (f"the family ledger {ledger.path} does not exist" if not ledger.path.is_file()
+               else f"the family ledger {ledger.path} holds no row")
+    except gate_ledger.LedgerRefused as exc:
+        found, why = None, f"the family ledger {ledger.path} does not verify: {exc}"
+    print(f"host_fingerprint {found}" if found else f"host_fingerprint null ({why}; R-15, O11)")
+    print(f"owner_confirmed form: <name>, <YYYY-MM-DD>, table {tsha[:16]}, code {code[:16]}")
+    print("STATUS OK exit=0 record=-")
+    return 0
+
+
+def timing_inputs(n_bars: int = TIMING_BARS) -> list[tuple[bytes, bytes]]:
+    """(input.json, bars.csv) of the 12 synthetic --timing runs: pilot 1's grid at 50 bp on 5,600 business days of
+    spec 8.2's generator (seed 2026, 80 to 650), 9 decimals, the fixtures' empty-ledger hash (6.1)."""
+    rng = np.random.default_rng(2026)
+    lr = rng.normal(0.0, np.where(np.arange(n_bars) // 250 % 2 == 0, 0.008, 0.02))
+    lr += (np.log(650.0 / 80.0) - lr.sum()) / n_bars
+    closes = np.round(80.0 * np.exp(np.cumsum(lr)), PRICE_DECIMALS)
+    dates = [d.strftime("%Y-%m-%d") for d in pd.bdate_range("2001-01-02", periods=n_bars)]
+    bars = bars_bytes(closes, bar_timestamps(dates, "SPY"))
+    table = {"strategy": "trend_switch", "instrument": "SPY", "capital_usd": "1000000", "cost_bps": 50.0,
+             "fill_seed": 42, "size_precision": 0, "volume": "1000000000"}
+    return [(input_bytes(table, theta, 1, bars, n_bars, gate_ledger.ledger_hash([])), bars)
+            for theta in S.grid_from(**TIMING_GRID)]
+
+
+def import_micros(stderr: str, module: str = TIMING_ENGINE) -> int | None:
+    """The cumulative -X importtime figure, in microseconds, of `module` in a child's stderr; None if absent."""
+    for line in stderr.splitlines():
+        fields = line.split("|")
+        if line.startswith("import time:") and len(fields) == 3 and fields[2].strip() == module:
+            return int(fields[1])
+    return None
+
+
+def run_timing(python: Path, unshare: str | None) -> dict:
+    """--timing's numbers: 12 sandbox runs of 5,600 bars through the exact launch contract, wall time each, and the
+    BacktestEngine import time read from the first run's -X importtime lines."""
+    seconds, codes, micros = [], [], None
+    for raw, bars in timing_inputs():
+        tmp = launch.make_tempdir()
+        try:
+            (tmp / "input.json").write_bytes(raw)
+            (tmp / "bars.csv").write_bytes(bars)
+            started = time.perf_counter()
+            res = launch.run_child(launch.build_launch(["run", "--in", str(tmp)], tempdir=tmp, venv_python=python,
+                                                       unshare=unshare))
+            seconds.append(round(time.perf_counter() - started, 3))
+            codes.append(res.returncode)
+            micros = micros if micros is not None else import_micros(res.stderr)
+        finally:
+            launch.cleanup_tempdir(tmp)
+    return {"bars": TIMING_BARS, "runs": len(seconds), "exit_codes": codes, "seconds": seconds,
+            "total_s": round(sum(seconds), 3), "timed_module": TIMING_ENGINE, "import_us": micros}
+
+
+def timing_mode() -> int:
+    """--timing (5.3.1): prints run_timing's JSON; exit 0 when all 12 runs exit 0 and the import line was found."""
+    try:
+        python, _reads, unshare = _venv_for_mode()
+    except BridgeRefusal as exc:
+        return _print_refusal(exc)
+    out = run_timing(python, unshare)
+    print(json.dumps(out, sort_keys=True))
+    ok = out["import_us"] is not None and out["exit_codes"] == [0] * len(out["exit_codes"]) and out["runs"] == 12
+    print(f"STATUS {'OK' if ok else 'REFUSED'} exit={0 if ok else 2} record=-")
+    return 0 if ok else 2
+
+
+def _part(report: dict, name: str, fn: Callable[[], Any]) -> Any:
+    """One part of the hand-off report: its value, or its own error, never a stop (5.3.1)."""
+    try:
+        report[name] = fn()
+    except Exception as exc:                        # noqa: BLE001 - each part records its own error
+        report[name] = {"error": f"{type(exc).__name__}: {exc}", "traceback": traceback.format_exc()[-2000:]}
+    return report[name]
+
+
+def _git_lines(repo_root: Path, *args: str) -> dict:
+    git = shutil.which("git")
+    if git is None:
+        return {"error": "git is not on PATH"}
+    res = _git(git, repo_root, *args)
+    return {"exit": res.returncode, "stdout": res.stdout.splitlines(), "stderr": res.stderr.strip()[-500:]}
+
+
+def _powershell(command: str) -> dict:
+    res = subprocess.run(["powershell", "-NoProfile", "-NonInteractive", "-Command", command], stdin=subprocess.DEVNULL,
+                         capture_output=True, encoding="utf-8", errors="replace", timeout=120)
+    return {"command": command, "exit": res.returncode, "stdout": res.stdout.splitlines(), "stderr": res.stderr[-500:]}
+
+
+def _fixture_part(python: Path, unshare: str | None, golden_dir: Path) -> dict:
+    out = {}
+    for name in GOLDEN_FIXTURES:
+        run_ = run_fixture(name, python, unshare)
+        path = Path(golden_dir) / f"{name}.json"
+        want = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+        res = run_["result"]
+        out[name] = {"golden": run_["golden"], "diff": ["no golden file"] if want is None else compare_golden(
+            run_["golden"], want), "returncode": res.returncode, "ntstatus": res.ntstatus, "census": res.census,
+            "stdout_tail": res.stdout_tail, "stderr_tail": res.stderr_tail}
+    return out
+
+
+def _suite_rows(repo_root: Path) -> dict:
+    path = Path(repo_root) / "qa" / "acceptance_results.json"
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    mtime = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    return {"path": str(path), "mtime_utc": mtime, "rows": [r for r in rows if r.get("status") == "FAIL"
+                                                            or str(r.get("test", "")).startswith("nautilus/")]}
+
+
+def _need(python: Path | None) -> Path:
+    if python is None:
+        raise RuntimeError("no venv python: see the venv part")
+    return python
+
+
+def _venv_part() -> dict:
+    python = venv_python_from_key()
+    return {"python": str(python), "reads": launch.read_venv(python)}
+
+
+def _child_json(mode_args: list[str], python: Path, unshare: str | None) -> dict:
+    res, out = launch_once(mode_args, python=python, child_cmd=None, unshare=unshare, timeout=launch.TIMEOUT_S)
+    return {"returncode": res.returncode, "json": out, "stdout_tail": res.stdout_tail, "stderr_tail": res.stderr_tail}
+
+
+def _stub_part() -> dict:
+    from tests.nautilus_acceptance import stub_python          # the interpreter the suite's stub children use (8.1)
+    return {"python": stub_python(), "sys_executable": sys.executable}
+
+
+def _egress_part(python: Path, venv: dict, unshare: str | None) -> dict:
+    probe = launch_once([], python=python, child_cmd=None, unshare=unshare, timeout=60, script=launch.EGRESS_PROBE)[1]
+    return {"schema": EGRESS_SCHEMA, "platform_tag": launch.host_tag(), "venv_python": str(python),
+            "base_python": venv["reads"]["pyvenv"]["executable"], "layer": LAYER, "probe": probe,
+            "recorded_utc": _utc_now(), "control_connect": control_connect()}
+
+
+def _firewall_part():
+    if os.name != "nt":
+        return {"skipped": f"not Windows ({launch.host_tag()})"}
+    return [_powershell(c) for c in FIREWALL_COMMANDS]
+
+
+def _census_part(fixtures: dict, golden_dir: Path) -> dict:
+    union = sorted(set(fixtures["F1"]["census"]) | set(fixtures["F2"]["census"]))
+    linux = load_baseline("manylinux_2_35_x86_64", golden_dir)
+    return {"against": "modules_manylinux_2_35_x86_64.json", "union_F1_F2": len(union),
+            "diff": census_diff(linux or [], union), "judgement": judge_census(union, linux or [])}
+
+
+def handoff_report(repo_root: Path = REPO_ROOT, golden_dir: Path = launch.GOLDEN_DIR) -> dict:
+    """The Step 7A hand-off report (5.3.1; OPS-8): every part in order, each recording its own error, never a stop."""
+    rep: dict = {"schema": HANDOFF_SCHEMA, "host_tag": launch.host_tag(), "recorded_utc": _utc_now()}
+    _part(rep, "parent", lambda: {"sys_executable": sys.executable, "sys_base_executable": sys._base_executable,
+                                  "sys_version": sys.version, "nautilus_trader": launch.parent_nautilus(),
+                                  "pyarrow": launch.parent_pyarrow()})
+    _part(rep, "git", lambda: {"head": _git_lines(repo_root, "rev-parse", "HEAD"),
+                               "origin_branch": _git_lines(repo_root, "rev-parse", f"origin/{BRANCH}"),
+                               "status": _git_lines(repo_root, "status", "--porcelain=v1")})
+    venv = _part(rep, "venv", _venv_part)
+    python = Path(venv["python"]) if "python" in venv else None
+    unshare = _part(rep, "unshare", launch.resolve_unshare)
+    unshare = unshare if isinstance(unshare, str) else None
+    _part(rep, "venv_mismatches", lambda: launch.venv_mismatches(venv["reads"]))
+    _part(rep, "check_env", lambda: _child_json(["--check-env"], _need(python), unshare))
+    _part(rep, "guard_selftest", lambda: _child_json(["--guard-selftest"], _need(python), unshare))
+    _part(rep, "stub_interpreter", _stub_part)
+    _part(rep, "egress", lambda: _egress_part(_need(python), venv, unshare))
+    _part(rep, "firewall", _firewall_part)
+    fixtures = _part(rep, "fixtures", lambda: _fixture_part(_need(python), unshare, golden_dir))
+    _part(rep, "census", lambda: _census_part(fixtures, golden_dir))
+    _part(rep, "timing", lambda: run_timing(_need(python), unshare))
+    _part(rep, "suite", lambda: _suite_rows(repo_root))
+    return rep
+
+
+def handoff_mode(repo_root: Path = REPO_ROOT) -> int:
+    """--handoff-report: writes docs/nautilus_bridge/handoff/<host tag>.json (overwritten; git keeps the history)."""
+    from tools.nautilus import parity
+    report = handoff_report(repo_root)
+    path = Path(repo_root) / "docs" / "nautilus_bridge" / "handoff" / f"{launch.host_tag()}.json"
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        write_record(path, parity.plain(report))
+    except Exception as exc:                        # noqa: BLE001
+        print(f"the hand-off report could not be written: {type(exc).__name__}: {exc}")
+        print("STATUS ERROR exit=4 record=-")
+        return 4
+    failed = sorted(k for k, v in report.items() if isinstance(v, dict) and "error" in v)
+    print(f"parts with an error: {', '.join(failed) or 'none'}")
+    print(f"STATUS OK exit=0 record={path}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="python -B -m tools.nautilus.runner")
     ap.add_argument("--table")
@@ -1745,13 +1980,24 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--fixtures", action="store_true")
     ap.add_argument("--record-baseline", action="store_true")
     ap.add_argument("--write-goldens", action="store_true")
+    ap.add_argument("--fingerprint", action="store_true", help="with --table: table_sha256, code_sha256, host_fingerprint")
+    ap.add_argument("--timing", action="store_true")
+    ap.add_argument("--handoff-report", action="store_true")
     a = ap.parse_args(argv)
-    modes = [bool(a.table), a.check_env, a.egress_record, a.fixtures]
-    if sum(modes) != 1 or (a.table and a.rehearsal == a.of_record) or (
+    run_mode = bool(a.table) and not a.fingerprint
+    modes = [run_mode, a.fingerprint, a.check_env, a.egress_record, a.fixtures, a.timing, a.handoff_report]
+    if sum(modes) != 1 or (run_mode and a.rehearsal == a.of_record) or (a.fingerprint and (
+            not a.table or a.rehearsal or a.of_record)) or (
             (a.record_baseline or a.write_goldens) and not a.fixtures) or (a.record_baseline and a.write_goldens):
         ap.print_usage()
         print("STATUS REFUSED exit=2 record=-")
         return 2
+    if a.fingerprint:
+        return fingerprint_mode(Path(a.table))
+    if a.timing:
+        return timing_mode()
+    if a.handoff_report:
+        return handoff_mode()
     if a.check_env:
         return check_env_mode()
     if a.egress_record:
