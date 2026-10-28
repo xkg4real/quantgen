@@ -93,6 +93,16 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
     - 서명 양식 `docs/audit/2026-10-27/02_signing_form_T-CAL-02.md`를 만들었습니다.
     - 소유자가 직접 실행하는 서명 도구 `tools/sign_calendars.py`를 만들었습니다.
   - **서명:** Claude는 서명하지 않았습니다. 소유자가 도구를 실행하거나, 서명 문장을 Claude에게 보냅니다.
+- **완료 (2026-10-28, 소유자 서명):**
+  - **서명:** 소유자가 서명서를 채팅으로 보냈습니다(원문은 `docs/audit/2026-10-27/03_signature_T-CAL-02.md`).
+    Claude가 서명 도구로 기록했습니다. 서명자 Geon Koh, 시각 2026-10-28T06:35:52Z입니다.
+  - **검증:** 4개 파일 모두 로드됩니다. `test_cal02_2027_files_signed_before_2026_11_01`가 PASS입니다.
+  - **서명 후 상태:** US는 결정 시각 계산과 ARM 전제조건이 열렸습니다. 다만 `publication_schedules`와 `source_skipped`가
+    서명 전이라 H.15·H.10·Treasury 입력은 계속 fail-closed입니다. KR은 `kr_sessions`·`kr_regime_tags`·`publication_schedules`·
+    `source_skipped`가 서명 전이라 계속 막혀 있습니다.
+  - **소유자 질문(원문):**
+
+    > 감사는 누가 어떻게 하는겁니까? 일단 앞서 말한 4가지 문서에 대한 서명을 기반으로 원래 하려던 일을 다시 재개하면서 제 질문에 답변해주세요.
 
 ### ①-4: R1~R5
 
