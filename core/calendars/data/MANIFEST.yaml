@@ -44,9 +44,9 @@ rows:
   - T-H15-01
   - T-CAL-02
 - file: holidays_CBOE.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
+  version: 1.0.0
+  md5: 5d9724d67cca74db7fa3b490bf805c78
+  signed_off_by: Geon Koh
   test_ids:
   - T-VIX-01
 - file: holidays_CME.yaml
@@ -80,9 +80,9 @@ rows:
   test_ids:
   - T-XMKT-01
 - file: holidays_ECOS.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
+  version: 1.0.0
+  md5: 603170d21048f8b81649324996887595
+  signed_off_by: Geon Koh
   test_ids:
   - T-ROLE-02
 - file: kr_sessions.yaml

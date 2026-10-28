@@ -135,6 +135,13 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
   1. CBOE·ECOS 서명
   2. BLS·BEA A안 승인
 
+- **완료 (2026-10-28, CBOE·ECOS 서명):** 소유자가 3차 서명서를 보냈습니다(원문은 `docs/audit/2026-10-27/07_signature_batch3.md`).
+  - **서명:** Geon Koh, 시각 2026-10-28T11:28:41Z입니다.
+  - **결과:**
+    - ECOS forward_sim 읽기가 열렸습니다(PITValue).
+    - VIX 데이터 지연 판단이 동작합니다.
+    - BLS·BEA는 A안 승인을 기다리고 있습니다(그 전까지 수집 단계에서 막힘).
+
 ### ①-4: R1~R5
 
 **R1.** 시장 출시의 의미
