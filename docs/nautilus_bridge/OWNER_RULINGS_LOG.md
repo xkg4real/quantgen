@@ -249,7 +249,7 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
   2. 중복 커밋 `9679923`은 작업 브랜치 기록에 남기고, 되돌림 커밋(`10a1d65`)으로 내용만 상쇄했습니다.
      그 브랜치로 열린 PR #8(변경 파일 0개)은 닫았습니다.
   3. handoff 브랜치 `LEDGER.md`에 ①-2를 기록했습니다(`ebe89d6`). `CURRENT.md`는 ③ 자리 그대로 두었습니다.
-  4. 서명 대장 `docs/audit/2026-10-27/12_signature_register.md`를 만들었습니다.
-  5. 미서명 6개 파일의 감사와 서명 양식을 냈습니다. `13_calendar_batch5.md`와 `14_signing_form_batch5.md`입니다.
+  4. 서명 대장 `docs/audit/2026-10-27/13_signature_register.md`를 만들었습니다.
+  5. 미서명 6개 파일의 감사와 서명 양식을 냈습니다. `13_calendar_batch6.md`와 `15_signing_form_batch6.md`입니다.
      `core/calendars/data/`는 바꾸지 않았습니다.
-- **소유자 결정 대기:** 5차 서명서(HK-01, SSE-27, TW-27, CME-01, SCOPE 확인란 포함)
+- **소유자 결정 대기:** 6차 서명서(HK-01, SSE-27, TW-27, CME-01, SCOPE 확인란 포함)

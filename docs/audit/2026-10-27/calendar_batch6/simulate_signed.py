@@ -4,7 +4,7 @@ loader, the decision clocks and the cross-market rule, with a SIMULATED signatur
 Copies core/calendars/data/ to a temporary directory, swaps in proposed/, raises those six MANIFEST rows to 1.0.0 and
 signs only those six copies with the placeholder "SIMULATION - not a signature". core/calendars/data/ is only read.
 
-    python docs/audit/2026-10-27/calendar_batch5/simulate_signed.py
+    python docs/audit/2026-10-27/calendar_batch6/simulate_signed.py
 """
 from __future__ import annotations
 

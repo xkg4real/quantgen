@@ -1,6 +1,6 @@
-# 서명 양식: 달력 5차 (JPX · SSE · HKEX · TWSE · CME 휴장일, market_closes)
+# 서명 양식: 달력 6차 (JPX · SSE · HKEX · TWSE · CME 휴장일, market_closes)
 
-- **근거:** 감사 보고서 `13_calendar_batch5.md`
+- **근거:** 감사 보고서 `13_calendar_batch6.md`
 - **기한:** 없습니다. T-CAL-02 기한(11/1)은 1차 서명으로 이미 충족했습니다.
 - **원칙:** 서명은 소유자가 합니다. 라이브러리와 빌드는 서명하지 않습니다(spec L2100).
 - **서명하면 열리는 것:** JP·CN·HK·TW 결정 시계, KR 공분산의 닛케이·상하이·항셍·가권 종가, CME 영업일 판단
@@ -12,16 +12,16 @@
 
 | # | 파일 | 버전 | 행 | 기간 | 초안 지문(content md5) | 등급 A / B / C |
 |---|---|---|---|---|---|---|
-| 1 | `holidays_JPX.yaml` | 1.0.0 | 54 | 2025-01-01 ~ 2027-12-31 | `565be7be1165dad2d056f227c3a99934` | 47 / 7 / 0 |
-| 2 | `holidays_SSE.yaml` | 1.0.0 | 55 | 2025-01-01 ~ 2027-12-31 | `cf4a66c52d40c0384dfbecf268b424ba` | 37 / 0 / 18 |
-| 3 | `holidays_HKEX.yaml` | 1.0.0 | 51 | 2025-01-01 ~ 2027-12-31 | `03395b6a2bb44a3488b1dd77126cc034` | 31 / 20 / 0 |
-| 4 | `holidays_TWSE.yaml` | 1.0.0 | 57 | 2025-01-01 ~ 2027-12-31 | `2169a8d8e79c8fbb1068b847972c92b7` | 38 / 17 / 2 |
-| 5 | `holidays_CME.yaml` | 1.0.0 | 37 | 2025-01-01 ~ 2027-12-31 | `f229f412d506c0772441c43e7510e414` | 23 / 4 / 10 |
-| 6 | `market_closes.yaml` | 1.0.0 | 4 | 2015-01-01 ~ 2027-12-31 | `41aa8b573adebd6ba1a7ebfbba142f14` | 1 / 3 / 0 |
+| 1 | `holidays_JPX.yaml` | 1.0.0 | 54 | 2025-01-01 ~ 2027-12-31 | `726d4bb7d4f2ea1351dacce1d496aa06` | 47 / 7 / 0 |
+| 2 | `holidays_SSE.yaml` | 1.0.0 | 55 | 2025-01-01 ~ 2027-12-31 | `4573d8a76fad4af2530e9582fb20c9e4` | 37 / 0 / 18 |
+| 3 | `holidays_HKEX.yaml` | 1.0.0 | 51 | 2025-01-01 ~ 2027-12-31 | `a869aea6f8392f8ec7120467e4f6db9e` | 31 / 20 / 0 |
+| 4 | `holidays_TWSE.yaml` | 1.0.0 | 57 | 2025-01-01 ~ 2027-12-31 | `204cba4d72d6b7a69b6c9a6589476b27` | 38 / 17 / 2 |
+| 5 | `holidays_CME.yaml` | 1.0.0 | 37 | 2025-01-01 ~ 2027-12-31 | `587b18d49aaa7bbdd7fd70e2aa1eadb2` | 23 / 4 / 10 |
+| 6 | `market_closes.yaml` | 1.0.0 | 4 | 2015-01-01 ~ 2027-12-31 | `a6c9afcc67a33e9d567e10435fb76c74` | 1 / 3 / 0 |
 
 - **초안 지문:** 서명하기 전 파일 내용의 md5입니다. 검토하신 파일과 서명할 파일이 같은지 확인하는 용도입니다.
 - **최종 md5는 다릅니다:** 서명하면 각 행에 서명자가 들어가므로, 파일에 기록되는 최종 `md5`는 이 값과 달라집니다.
-- **제안 파일 위치:** `docs/audit/2026-10-27/calendar_batch5/proposed/`
+- **제안 파일 위치:** `docs/audit/2026-10-27/calendar_batch6/proposed/`
 - **현재 초안과의 차이:** `proposed.diff`
 
 ---
@@ -29,17 +29,17 @@
 ## 2. 서명 양식 (복사해서 채우세요)
 
 ```
-[QUANTGEN 달력 서명서 · 5차 (JPX · SSE · HKEX · TWSE · CME · market_closes)]
+[QUANTGEN 달력 서명서 · 6차 (JPX · SSE · HKEX · TWSE · CME · market_closes)]
 
 서명자 표기 (signed_off_by): ______________________
 
 서명 대상과 초안 지문:
-  [ ] holidays_JPX.yaml    v1.0.0   565be7be1165dad2d056f227c3a99934
-  [ ] holidays_SSE.yaml    v1.0.0   cf4a66c52d40c0384dfbecf268b424ba
-  [ ] holidays_HKEX.yaml   v1.0.0   03395b6a2bb44a3488b1dd77126cc034
-  [ ] holidays_TWSE.yaml   v1.0.0   2169a8d8e79c8fbb1068b847972c92b7
-  [ ] holidays_CME.yaml    v1.0.0   f229f412d506c0772441c43e7510e414
-  [ ] market_closes.yaml   v1.0.0   41aa8b573adebd6ba1a7ebfbba142f14
+  [ ] holidays_JPX.yaml    v1.0.0   726d4bb7d4f2ea1351dacce1d496aa06
+  [ ] holidays_SSE.yaml    v1.0.0   4573d8a76fad4af2530e9582fb20c9e4
+  [ ] holidays_HKEX.yaml   v1.0.0   a869aea6f8392f8ec7120467e4f6db9e
+  [ ] holidays_TWSE.yaml   v1.0.0   204cba4d72d6b7a69b6c9a6589476b27
+  [ ] holidays_CME.yaml    v1.0.0   587b18d49aaa7bbdd7fd70e2aa1eadb2
+  [ ] market_closes.yaml   v1.0.0   a6c9afcc67a33e9d567e10435fb76c74
 
 확인 사항:
   [ ] 2027년 휴장일과 조기마감 (보고서 4절 그림)
@@ -65,11 +65,11 @@
 
 ### A. Claude에게 맡기기 (1~4차와 같은 방식)
 
-위 양식을 채워 채팅으로 보내 주세요. 서명서를 보내시면 5차 제안을 승인한 것으로 처리합니다. Claude는 다음 순서로 진행합니다.
+위 양식을 채워 채팅으로 보내 주세요. 서명서를 보내시면 6차 제안을 승인한 것으로 처리합니다. Claude는 다음 순서로 진행합니다.
 
-1. `calendar_batch5/proposed/`의 6개 파일을 `core/calendars/data/`로 옮기고, MANIFEST의 해당 행을 1.0.0으로 올립니다.
+1. `calendar_batch6/proposed/`의 6개 파일을 `core/calendars/data/`로 옮기고, MANIFEST의 해당 행을 1.0.0으로 올립니다.
 2. `tools/sign_calendars.py`로 서명을 기록합니다. 기록 전에 `--expect`로 위 초안 지문 6개가 맞는지 확인합니다.
-3. 테스트를 돌립니다. 그다음 서명서 원문을 `15_signature_batch5.md`에 옮기고, 커밋하고 푸시합니다.
+3. 테스트를 돌립니다. 그다음 서명서 원문을 `16_signature_batch6.md`에 옮기고, 커밋하고 푸시합니다.
 
 `signed_utc`는 도구를 실행한 시각입니다.
 
@@ -79,12 +79,12 @@
 
 ```bash
 python -m tools.sign_calendars --signer "<서명자 표기>" \
-  --expect holidays_JPX=565be7be1165dad2d056f227c3a99934 \
-  --expect holidays_SSE=cf4a66c52d40c0384dfbecf268b424ba \
-  --expect holidays_HKEX=03395b6a2bb44a3488b1dd77126cc034 \
-  --expect holidays_TWSE=2169a8d8e79c8fbb1068b847972c92b7 \
-  --expect holidays_CME=f229f412d506c0772441c43e7510e414 \
-  --expect market_closes=41aa8b573adebd6ba1a7ebfbba142f14 \
+  --expect holidays_JPX=726d4bb7d4f2ea1351dacce1d496aa06 \
+  --expect holidays_SSE=4573d8a76fad4af2530e9582fb20c9e4 \
+  --expect holidays_HKEX=a869aea6f8392f8ec7120467e4f6db9e \
+  --expect holidays_TWSE=204cba4d72d6b7a69b6c9a6589476b27 \
+  --expect holidays_CME=587b18d49aaa7bbdd7fd70e2aa1eadb2 \
+  --expect market_closes=a6c9afcc67a33e9d567e10435fb76c74 \
   holidays_JPX holidays_SSE holidays_HKEX holidays_TWSE holidays_CME market_closes
 ```
 

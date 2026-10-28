@@ -4,7 +4,7 @@ Needs exchange_calendars and pandas_market_calendars, which the repository does 
 virtual environment and run this file from there:
 
     python -m venv /tmp/xvenv && /tmp/xvenv/bin/pip install exchange_calendars pandas_market_calendars pyyaml
-    /tmp/xvenv/bin/python -I docs/audit/2026-10-27/calendar_batch5/cross_check.py
+    /tmp/xvenv/bin/python -I docs/audit/2026-10-27/calendar_batch6/cross_check.py
 
 For each market it prints the weekday closures (closed rows) that only the proposed file has and those that only a
 library has, restricted to the library's own range, and the early closes that differ.

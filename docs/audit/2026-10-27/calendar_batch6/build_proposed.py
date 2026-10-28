@@ -1,5 +1,5 @@
 """Build the proposed v1.0.0 holidays_JPX, holidays_SSE, holidays_HKEX, holidays_TWSE, holidays_CME and market_closes
-files (audit report docs/audit/2026-10-27/13_calendar_batch5.md).
+files (audit report docs/audit/2026-10-27/13_calendar_batch6.md).
 
 The five holiday drafts ship with no rows and market_closes with three unsourced rows. The rows below come from the
 exchanges' own notices (grade A), government holiday lists the exchanges follow (grade B) or the statutory rules where
@@ -8,7 +8,7 @@ was read through search-engine excerpts; the cross-check against exchange_calend
 pandas_market_calendars 5.5.0 is in cross_check.py. Nothing under core/calendars/data/ is written and no signature
 is set.
 
-    python docs/audit/2026-10-27/calendar_batch5/build_proposed.py
+    python docs/audit/2026-10-27/calendar_batch6/build_proposed.py
 """
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ REPO = HERE.parents[3]
 OUT = HERE / "proposed"
 DRAFT_REF = "eacd57d"                       # the six drafts are unchanged since the baseline commit
 AUDIT_UTC = "2026-10-28T18:10:00Z"          # when the search excerpts below were read
-REPORT = "docs/audit/2026-10-27/13_calendar_batch5.md"
+REPORT = "docs/audit/2026-10-27/13_calendar_batch6.md"
 VERSION = "1.0.0"
 COVERS = {"from": "2025-01-01", "to": "2027-12-31"}
 

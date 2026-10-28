@@ -1,10 +1,10 @@
-# 달력 5차: 아직 서명되지 않은 6개 파일 (JPX · SSE · HKEX · TWSE · CME 휴장일, market_closes)
+# 달력 6차: 아직 서명되지 않은 6개 파일 (JPX · SSE · HKEX · TWSE · CME 휴장일, market_closes)
 
 - **작성:** 2026-10-29 (자료 확인 2026-10-28 UTC 18:10 기준)
 - **요청:** 소유자 원문 "그나저나, 서명 문서는 어디있나요? 얼른 만들어주세요. 아직 서명되지 않은 파일들도 마찬가지로 미리 제공해주세요."
 - **규칙:** `core/calendars/data/`는 바꾸지 않았고, 서명 필드도 쓰지 않았습니다. 감사 결과, 제안 파일, 서명 양식만 냅니다.
-- **서명 양식:** `14_signing_form_batch5.md`
-- **서명된 10개 파일의 기록:** `12_signature_register.md`
+- **서명 양식:** `15_signing_form_batch6.md`
+- **서명된 10개 파일의 기록:** `13_signature_register.md`
 
 ---
 
@@ -56,7 +56,7 @@
 
 **한계.** 이 세션의 네트워크 정책이 모든 거래소·정부 사이트를 막았습니다. 그래서 공식 문서는 **검색 엔진 발췌로만** 확인했습니다. 각 행의 `source_url`을 서명 전에 직접 열어 보시기를 권합니다.
 
-**독립 교차 확인.** `exchange_calendars 4.13.2`와 `pandas_market_calendars 5.5.0`을 별도 가상환경에서 썼습니다. 둘 다 출처가 아니라 대조용입니다(spec L2003). 스크립트는 `calendar_batch5/cross_check.py`이고, 결과는 `cross_check.log`에 있습니다.
+**독립 교차 확인.** `exchange_calendars 4.13.2`와 `pandas_market_calendars 5.5.0`을 별도 가상환경에서 썼습니다. 둘 다 출처가 아니라 대조용입니다(spec L2003). 스크립트는 `calendar_batch6/cross_check.py`이고, 결과는 `cross_check.log`에 있습니다.
 
 **근거 등급.** 각 행 `evidence` 필드의 맨 앞 글자입니다.
 
@@ -156,11 +156,11 @@
 
 ## 4. 2027년 한눈에
 
-![2027 holiday files proposed for signing, calendar audit 5](calendar_batch5/calendar_2027.png)
+![2027 holiday files proposed for signing, calendar audit 6](calendar_batch6/calendar_2027.png)
 
 - **주황 빗금:** 추정(C)이라 공지가 나오면 다시 확인할 날입니다.
 - **초록:** 조기 마감입니다.
-- **그림 스크립트:** `calendar_batch5/plot_calendar_2027.py` (matplotlib)
+- **그림 스크립트:** `calendar_batch6/plot_calendar_2027.py` (matplotlib)
 
 ---
 
@@ -179,7 +179,7 @@
 
 ## 6. 검증
 
-**모의 서명 검증.** `calendar_batch5/simulate_signed.py`가 다음 순서로 확인합니다.
+**모의 서명 검증.** `calendar_batch6/simulate_signed.py`가 다음 순서로 확인합니다.
 
 1. `core/calendars/data/`를 임시 폴더에 복사합니다.
 2. 6개 파일을 제안본으로 바꾸고, `"SIMULATION - not a signature"`로 가짜 서명합니다.
@@ -222,7 +222,7 @@
 
 ## 7. 소유자 결정 사항
 
-서명 양식(`14_signing_form_batch5.md`)의 확인란과 같은 내용입니다.
+서명 양식(`15_signing_form_batch6.md`)의 확인란과 같은 내용입니다.
 
 | ID | 결정 | 권장 | 이유 |
 |---|---|---|---|
@@ -253,7 +253,7 @@
 
 ## 9. 주요 출처
 
-행마다 `source_url`이 있고, 전체 목록은 `calendar_batch5/build_proposed.py` 앞부분에 있습니다. 대표 출처는 다음과 같습니다.
+행마다 `source_url`이 있고, 전체 목록은 `calendar_batch6/build_proposed.py` 앞부분에 있습니다. 대표 출처는 다음과 같습니다.
 
 - **JPX:**
   - 휴업일 목록 https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
