@@ -1,0 +1,3598 @@
+--- a/core/calendars/data/holidays_KRX.yaml
++++ b/core/calendars/data/holidays_KRX.yaml
+@@ -1,7 +1,7 @@
+ file_id: holidays_KRX
+-version: 0.1.0-draft
+-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
+-  DISARMED until the owner verifies and signs
++version: 1.0.0
++status: AUDITED, UNSIGNED - proposed v1.0.0 from the T-CAL-02 audit (docs/audit/2026-10-27/01_calendar_T-CAL-02.md); refused
++  at load until the owner signs (R-20 rule 6, T-CAL-01)
+ covers:
+   from: '2026-01-01'
+   to: '2027-12-31'
+@@ -13,300 +13,361 @@
+   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+   MANIFEST.yaml row with a new test id
+ unverified:
+-- 'every date: cross-checked against exchange_calendars XKRX only'
+-- no CSAT day carried here (see kr_sessions)
+-- 2027 must be signed before 2026-11-01 (spec L2101)
++- '2027 rows: from the 2027 월력요항 (관보) and the KRX holiday rule; KRX publishes its own 2027 notice in December 2026. A difference
++  (e.g. an added temporary holiday) is a new version with a new signature'
++- temporary holidays designated after the audit date are not in this file (change control)
++- '1995-2025 rows are not in this file yet (T-CLOSE-02 needs 2015, 2016 and 2025): a later version'
+ owner_must_sign:
+ - KRX holiday list 1995-01-01 .. 2027-12-31 from the KRX notices (substitute and election holidays)
+ - signed_off_by on every row and at file level; md5; MANIFEST row
+ rows:
+ - effective_from: '2026-01-01'
+   effective_to: '2026-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-01-01'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 신정 (New Year's Day)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-02-16'
+   effective_to: '2026-02-16'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-02-16'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 설날 연휴 (Seollal)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-02-17'
+   effective_to: '2026-02-17'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-02-17'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 설날 (Seollal)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-02-18'
+   effective_to: '2026-02-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-02-18'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 설날 연휴 (Seollal)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-03-02'
+   effective_to: '2026-03-02'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-03-02'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 삼일절 대체공휴일 (Independence Movement Day, substitute)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-05-01'
+   effective_to: '2026-05-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-05-01'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 노동절 (Labour Day)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-05-05'
+   effective_to: '2026-05-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-05-05'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 어린이날 (Children's Day)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-05-25'
+   effective_to: '2026-05-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-05-25'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 부처님오신날 대체공휴일 (Buddha's Birthday, substitute)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
++- effective_from: '2026-06-03'
++  effective_to: '2026-06-03'
++  source_url: https://www.dailian.co.kr/news/view2/1646567/%ED%95%9C%EA%B5%AD%EA%B1%B0%EB%9E%98%EC%86%8C-%EC%A7%80%EB%B0%A9%EC%84%A0%EA%B1%B0%EC%9D%BC%EC%A0%9C%ED%97%8C%EC%A0%88-%EC%A6%9D%EC%8B%9C-%ED%9C%B4%EC%9E%A5-2026;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-06-03'
++  kind: closed
++  name: 제9회 전국동시지방선거일 (local elections)
++  evidence: 'A: KRX announced the closure on 2026-05-20 (reported); no 069500.KS / 005930.KS bar that day (docs/asset_expansion/cache);
++    absent from exchange_calendars 4.13.2, which the draft copied'
++- effective_from: '2026-07-17'
++  effective_to: '2026-07-17'
++  source_url: https://www.dailian.co.kr/news/view2/1646567/%ED%95%9C%EA%B5%AD%EA%B1%B0%EB%9E%98%EC%86%8C-%EC%A7%80%EB%B0%A9%EC%84%A0%EA%B1%B0%EC%9D%BC%EC%A0%9C%ED%97%8C%EC%A0%88-%EC%A6%9D%EC%8B%9C-%ED%9C%B4%EC%9E%A5-2026;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-07-17'
++  kind: closed
++  name: 제헌절 (Constitution Day)
++  evidence: 'A: KRX announced the closure on 2026-05-20 (reported); no 069500.KS / 005930.KS bar that day (docs/asset_expansion/cache);
++    absent from exchange_calendars 4.13.2, which the draft copied'
+ - effective_from: '2026-08-17'
+   effective_to: '2026-08-17'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-08-17'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 광복절 대체공휴일 (Liberation Day, substitute)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-09-24'
+   effective_to: '2026-09-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-09-24'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 추석 연휴 (Chuseok)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-09-25'
+   effective_to: '2026-09-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-09-25'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 추석 (Chuseok)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-10-05'
+   effective_to: '2026-10-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-10-05'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 개천절 대체공휴일 (National Foundation Day, substitute)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-10-09'
+   effective_to: '2026-10-09'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-10-09'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 한글날 (Hangeul Day)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-12-25'
+   effective_to: '2026-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-12-25'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 기독탄신일 (Christmas Day)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2026-12-31'
+   effective_to: '2026-12-31'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-12-31'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 연말 휴장일 (year-end closure)
++  evidence: 'A: 2026 almanac + KRX rule; no 069500.KS / 005930.KS bar that day (cache to 2026-09-23); pandas_market_calendars
++    XKRX and python-holidays KR agree'
+ - effective_from: '2027-01-01'
+   effective_to: '2027-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-01-01'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 신정 (New Year's Day)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-02-08'
+   effective_to: '2027-02-08'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-02-08'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 설날 연휴 (Seollal)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-02-09'
+   effective_to: '2027-02-09'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-02-09'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 설날 대체공휴일 (Seollal, substitute)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-03-01'
+   effective_to: '2027-03-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-03-01'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 삼일절 (Independence Movement Day)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
++- effective_from: '2027-05-03'
++  effective_to: '2027-05-03'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-05-03'
++  kind: closed
++  name: 노동절 대체공휴일 (Labour Day, substitute)
++  evidence: 'B: 2027 월력요항 (관보 2026-06-29): Labour Day and Constitution Day are public holidays from 2026, both fall on Saturday
++    in 2027, so the substitute Monday is a public holiday; python-holidays KR agrees; absent from exchange_calendars 4.13.2;
++    KRX 2027 notice expected Dec 2026'
+ - effective_from: '2027-05-05'
+   effective_to: '2027-05-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-05-05'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 어린이날 (Children's Day)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-05-13'
+   effective_to: '2027-05-13'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-05-13'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 부처님오신날 (Buddha's Birthday)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
++- effective_from: '2027-07-19'
++  effective_to: '2027-07-19'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-07-19'
++  kind: closed
++  name: 제헌절 대체공휴일 (Constitution Day, substitute)
++  evidence: 'B: 2027 월력요항 (관보 2026-06-29): Labour Day and Constitution Day are public holidays from 2026, both fall on Saturday
++    in 2027, so the substitute Monday is a public holiday; python-holidays KR agrees; absent from exchange_calendars 4.13.2;
++    KRX 2027 notice expected Dec 2026'
+ - effective_from: '2027-08-16'
+   effective_to: '2027-08-16'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-08-16'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 광복절 대체공휴일 (Liberation Day, substitute)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-09-14'
+   effective_to: '2027-09-14'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-09-14'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 추석 연휴 (Chuseok)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-09-15'
+   effective_to: '2027-09-15'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-09-15'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 추석 (Chuseok)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-09-16'
+   effective_to: '2027-09-16'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-09-16'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 추석 연휴 (Chuseok)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-10-04'
+   effective_to: '2027-10-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-10-04'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 개천절 대체공휴일 (National Foundation Day, substitute)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-10-11'
+   effective_to: '2027-10-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-10-11'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 한글날 대체공휴일 (Hangeul Day, substitute)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-12-27'
+   effective_to: '2027-12-27'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-12-27'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 기독탄신일 대체공휴일 (Christmas Day, substitute)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+ - effective_from: '2027-12-31'
+   effective_to: '2027-12-31'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
++    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-12-31'
+   kind: closed
+-  name: KRX holiday (name from the KRX notice at sign-off)
+-  unverified: 'UNVERIFIED cross-check only (exchange_calendars 4.13.2 via data/calendars/*.json, spec L2003: never the source);
+-    the owner replaces source_url with the exchange notice at sign-off'
++  name: 연말 휴장일 (year-end closure)
++  evidence: 'B: 2027 월력요항 + KRX rule; pandas_market_calendars XKRX and python-holidays KR agree; KRX 2027 notice expected
++    Dec 2026'
+--- a/core/calendars/data/holidays_NYSE.yaml
++++ b/core/calendars/data/holidays_NYSE.yaml
+@@ -1,7 +1,7 @@
+ file_id: holidays_NYSE
+-version: 0.1.0-draft
+-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
+-  DISARMED until the owner verifies and signs
++version: 1.0.0
++status: AUDITED, UNSIGNED - proposed v1.0.0 from the T-CAL-02 audit (docs/audit/2026-10-27/01_calendar_T-CAL-02.md); refused
++  at load until the owner signs (R-20 rule 6, T-CAL-01)
+ covers:
+   from: '2025-01-01'
+   to: '2027-12-31'
+@@ -13,347 +13,346 @@
+   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+   MANIFEST.yaml row with a new test id
+ unverified:
+-- dates derived by rule (Good Friday via the Gregorian Easter algorithm); early closes 13:00 ET by the usual pattern
+-- 2027 must be signed before 2026-11-01
++- closures announced after the audit date (e.g. a national day of mourning) are a new version
+ owner_must_sign:
+ - NYSE holiday and early-close list from nyse.com for 1990-01-01 .. 2027-12-31 (T-TZ-01 needs 2006)
+ rows:
+ - effective_from: '2025-01-01'
+   effective_to: '2025-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-01-09'
+   effective_to: '2025-01-09'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.businesswire.com/news/home/20241230579727/en
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-01-09'
+   kind: closed
+   name: National Day of Mourning (President Carter)
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group closure for the national day of mourning (announced 2024-12-30)'
+ - effective_from: '2025-01-20'
+   effective_to: '2025-01-20'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-01-20'
+   kind: closed
+   name: Martin Luther King, Jr. Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-02-17'
+   effective_to: '2025-02-17'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-02-17'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-04-18'
+   effective_to: '2025-04-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-04-18'
+   kind: closed
+   name: Good Friday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-05-26'
+   effective_to: '2025-05-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-05-26'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-06-19'
+   effective_to: '2025-06-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-06-19'
+   kind: closed
+   name: Juneteenth
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-07-04'
+   effective_to: '2025-07-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-07-04'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-09-01'
+   effective_to: '2025-09-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-09-01'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-11-27'
+   effective_to: '2025-11-27'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-11-27'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-12-25'
+   effective_to: '2025-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-01-01'
+   effective_to: '2026-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-01-19'
+   effective_to: '2026-01-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-01-19'
+   kind: closed
+   name: Martin Luther King, Jr. Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-02-16'
+   effective_to: '2026-02-16'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-02-16'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-04-03'
+   effective_to: '2026-04-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-04-03'
+   kind: closed
+   name: Good Friday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-05-25'
+   effective_to: '2026-05-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-05-25'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-06-19'
+   effective_to: '2026-06-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-06-19'
+   kind: closed
+   name: Juneteenth
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-07-03'
+   effective_to: '2026-07-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-07-03'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-09-07'
+   effective_to: '2026-09-07'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-09-07'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-11-26'
+   effective_to: '2026-11-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-11-26'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-12-25'
+   effective_to: '2026-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-01-01'
+   effective_to: '2027-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-01-18'
+   effective_to: '2027-01-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-01-18'
+   kind: closed
+   name: Martin Luther King, Jr. Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-02-15'
+   effective_to: '2027-02-15'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-02-15'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-03-26'
+   effective_to: '2027-03-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-03-26'
+   kind: closed
+   name: Good Friday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-05-31'
+   effective_to: '2027-05-31'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-05-31'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-06-18'
+   effective_to: '2027-06-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-06-18'
+   kind: closed
+   name: Juneteenth
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-07-05'
+   effective_to: '2027-07-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-07-05'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-09-06'
+   effective_to: '2027-09-06'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-09-06'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-11-25'
+   effective_to: '2027-11-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-11-25'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-12-24'
+   effective_to: '2027-12-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-12-24'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-07-03'
+   effective_to: '2025-07-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-07-03'
+   kind: early_close
+   close_local: '13:00'
+   name: day before Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-11-28'
+   effective_to: '2025-11-28'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-11-28'
+   kind: early_close
+   close_local: '13:00'
+   name: day after Thanksgiving
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2025-12-24'
+   effective_to: '2025-12-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2024/NYSE-Group-Announces-2025-2026-and-2027-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-12-24'
+   kind: early_close
+   close_local: '13:00'
+   name: Christmas Eve
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-11-27'
+   effective_to: '2026-11-27'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-11-27'
+   kind: early_close
+   close_local: '13:00'
+   name: day after Thanksgiving
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2026-12-24'
+   effective_to: '2026-12-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-12-24'
+   kind: early_close
+   close_local: '13:00'
+   name: Christmas Eve
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+ - effective_from: '2027-11-26'
+   effective_to: '2027-11-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-11-26'
+   kind: early_close
+   close_local: '13:00'
+   name: day after Thanksgiving
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: NYSE Group holiday and early-close release; pandas_market_calendars NYSE agrees'
+--- a/core/calendars/data/holidays_FED.yaml
++++ b/core/calendars/data/holidays_FED.yaml
+@@ -1,7 +1,7 @@
+ file_id: holidays_FED
+-version: 0.1.0-draft
+-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
+-  DISARMED until the owner verifies and signs
++version: 1.0.0
++status: AUDITED, UNSIGNED - proposed v1.0.0 from the T-CAL-02 audit (docs/audit/2026-10-27/01_calendar_T-CAL-02.md); refused
++  at load until the owner signs (R-20 rule 6, T-CAL-01)
+ covers:
+   from: '2015-01-01'
+   to: '2027-12-31'
+@@ -13,1241 +13,1342 @@
+   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+   MANIFEST.yaml row with a new test id
+ unverified:
+-- derived by the federal holiday rule with Saturday -> Friday observance (the Board's H.10 practice, brief F-6); owner confirms
+-  against the Board's holiday schedule
++- 'set semantics: days the Board of Governors is closed (they move H.15 and H.10); Reserve Bank payment services may be open
++  on some of them'
++- closures ordered after the audit date (e.g. a Christmas Eve executive order for 2026 or 2027) are a new version
+ owner_must_sign:
+ - Federal Reserve Board holiday schedule 2015 .. 2027 (K.8 / federalreserve.gov)
+ rows:
+ - effective_from: '2015-01-01'
+   effective_to: '2015-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2015-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2015-01-19'
+   effective_to: '2015-01-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2015-01-19'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2015-02-16'
+   effective_to: '2015-02-16'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2015-02-16'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2015-05-25'
+   effective_to: '2015-05-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2015-05-25'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2015-07-03'
+   effective_to: '2015-07-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2015-07-03'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2015-09-07'
+   effective_to: '2015-09-07'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2015-09-07'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2015-10-12'
+   effective_to: '2015-10-12'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2015-10-12'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2015-11-11'
+   effective_to: '2015-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2015-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2015-11-26'
+   effective_to: '2015-11-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2015-11-26'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2015-12-25'
+   effective_to: '2015-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2015-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2016-01-01'
+   effective_to: '2016-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2016-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2016-01-18'
+   effective_to: '2016-01-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2016-01-18'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2016-02-15'
+   effective_to: '2016-02-15'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2016-02-15'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2016-05-30'
+   effective_to: '2016-05-30'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2016-05-30'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2016-07-04'
+   effective_to: '2016-07-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2016-07-04'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2016-09-05'
+   effective_to: '2016-09-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2016-09-05'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2016-10-10'
+   effective_to: '2016-10-10'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2016-10-10'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2016-11-11'
+   effective_to: '2016-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2016-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2016-11-24'
+   effective_to: '2016-11-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2016-11-24'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2016-12-26'
+   effective_to: '2016-12-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2016-12-26'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2017-01-02'
+   effective_to: '2017-01-02'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2017-01-02'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2017-01-16'
+   effective_to: '2017-01-16'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2017-01-16'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
++- effective_from: '2017-01-20'
++  effective_to: '2017-01-20'
++  source_url: https://www.op-f.org/media/0i0pw22x/federal-reserve-board-holidays.pdf
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2017-01-20'
++  kind: closed
++  name: Inauguration Day (Board closed)
++  evidence: 'A: Board holiday list; H.10 DEXKOUS blank that day'
+ - effective_from: '2017-02-20'
+   effective_to: '2017-02-20'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2017-02-20'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2017-05-29'
+   effective_to: '2017-05-29'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2017-05-29'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2017-07-04'
+   effective_to: '2017-07-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2017-07-04'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2017-09-04'
+   effective_to: '2017-09-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2017-09-04'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2017-10-09'
+   effective_to: '2017-10-09'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2017-10-09'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2017-11-10'
+   effective_to: '2017-11-10'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2017-11-10'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2017-11-23'
+   effective_to: '2017-11-23'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2017-11-23'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2017-12-25'
+   effective_to: '2017-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2017-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2018-01-01'
+   effective_to: '2018-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2018-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2018-01-15'
+   effective_to: '2018-01-15'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2018-01-15'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2018-02-19'
+   effective_to: '2018-02-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2018-02-19'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2018-05-28'
+   effective_to: '2018-05-28'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2018-05-28'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2018-07-04'
+   effective_to: '2018-07-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2018-07-04'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2018-09-03'
+   effective_to: '2018-09-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2018-09-03'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2018-10-08'
+   effective_to: '2018-10-08'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2018-10-08'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2018-11-12'
+   effective_to: '2018-11-12'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2018-11-12'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2018-11-22'
+   effective_to: '2018-11-22'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2018-11-22'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
++- effective_from: '2018-12-05'
++  effective_to: '2018-12-05'
++  source_url: https://www.federalreserve.gov/newsevents/pressreleases/other20181203a.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2018-12-05'
++  kind: closed
++  name: National Day of Mourning, President G.H.W. Bush (Board closed)
++  evidence: 'A: Board offices closed, scheduled releases postponed to Dec 6; H.10 DEXKOUS blank'
++- effective_from: '2018-12-24'
++  effective_to: '2018-12-24'
++  source_url: https://www.federalreserve.gov/newsevents/2018-december.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2018-12-24'
++  kind: closed
++  name: Executive order closing federal offices (Christmas Eve)
++  evidence: 'A: executive order; Board closure confirmed by the owner 2026-10-28 (CAL-14); H.10 DEXKOUS blank'
+ - effective_from: '2018-12-25'
+   effective_to: '2018-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2018-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2019-01-01'
+   effective_to: '2019-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2019-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2019-01-21'
+   effective_to: '2019-01-21'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2019-01-21'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2019-02-18'
+   effective_to: '2019-02-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2019-02-18'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2019-05-27'
+   effective_to: '2019-05-27'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2019-05-27'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2019-07-04'
+   effective_to: '2019-07-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2019-07-04'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2019-09-02'
+   effective_to: '2019-09-02'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2019-09-02'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2019-10-14'
+   effective_to: '2019-10-14'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2019-10-14'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2019-11-11'
+   effective_to: '2019-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2019-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2019-11-28'
+   effective_to: '2019-11-28'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2019-11-28'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
++- effective_from: '2019-12-24'
++  effective_to: '2019-12-24'
++  source_url: https://trumpwhitehouse.archives.gov/presidential-actions/executive-order-providing-closing-executive-departments-agencies-federal-government-december-24-2019/
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2019-12-24'
++  kind: closed
++  name: Executive order closing federal offices (Christmas Eve)
++  evidence: 'A: executive order; Board closure confirmed by the owner 2026-10-28 (CAL-14)'
+ - effective_from: '2019-12-25'
+   effective_to: '2019-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2019-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2020-01-01'
+   effective_to: '2020-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2020-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2020-01-20'
+   effective_to: '2020-01-20'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2020-01-20'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2020-02-17'
+   effective_to: '2020-02-17'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2020-02-17'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2020-05-25'
+   effective_to: '2020-05-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2020-05-25'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2020-07-03'
+   effective_to: '2020-07-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2020-07-03'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2020-09-07'
+   effective_to: '2020-09-07'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2020-09-07'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2020-10-12'
+   effective_to: '2020-10-12'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2020-10-12'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2020-11-11'
+   effective_to: '2020-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2020-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2020-11-26'
+   effective_to: '2020-11-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2020-11-26'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
++- effective_from: '2020-12-24'
++  effective_to: '2020-12-24'
++  source_url: Board calendar December 2020
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2020-12-24'
++  kind: closed
++  name: Executive order closing federal offices (Christmas Eve)
++  evidence: 'A: Board closure confirmed by the owner 2026-10-28 (CAL-14); H.10 DEXKOUS blank'
+ - effective_from: '2020-12-25'
+   effective_to: '2020-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2020-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2021-01-01'
+   effective_to: '2021-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2021-01-18'
+   effective_to: '2021-01-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-01-18'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
++- effective_from: '2021-01-20'
++  effective_to: '2021-01-20'
++  source_url: https://www.federalreserve.gov/foia/chair-powell-calendar-012021.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2021-01-20'
++  kind: closed
++  name: Inauguration Day (Board closed)
++  evidence: 'A: Chair''s calendar: ''Board holiday - Inauguration Day''; H.10 DEXKOUS blank'
+ - effective_from: '2021-02-15'
+   effective_to: '2021-02-15'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-02-15'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2021-05-31'
+   effective_to: '2021-05-31'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-05-31'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2021-06-18'
+   effective_to: '2021-06-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/newsevents/pressreleases/other20210617b.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-06-18'
+   kind: closed
+   name: Juneteenth National Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: Board offices closed for Juneteenth 2021 (Reserve Bank services operated normally)'
+ - effective_from: '2021-07-05'
+   effective_to: '2021-07-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-07-05'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2021-09-06'
+   effective_to: '2021-09-06'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-09-06'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2021-10-11'
+   effective_to: '2021-10-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-10-11'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2021-11-11'
+   effective_to: '2021-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2021-11-25'
+   effective_to: '2021-11-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-11-25'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2021-12-24'
+   effective_to: '2021-12-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-12-24'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2021-12-31'
+   effective_to: '2021-12-31'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2021-12-31'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2022-01-17'
+   effective_to: '2022-01-17'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2022-01-17'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2022-02-21'
+   effective_to: '2022-02-21'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2022-02-21'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2022-05-30'
+   effective_to: '2022-05-30'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2022-05-30'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2022-06-20'
+   effective_to: '2022-06-20'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2022-06-20'
+   kind: closed
+   name: Juneteenth National Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2022-07-04'
+   effective_to: '2022-07-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2022-07-04'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2022-09-05'
+   effective_to: '2022-09-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2022-09-05'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2022-10-10'
+   effective_to: '2022-10-10'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2022-10-10'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2022-11-11'
+   effective_to: '2022-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2022-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2022-11-24'
+   effective_to: '2022-11-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2022-11-24'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2022-12-26'
+   effective_to: '2022-12-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2022-12-26'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-01-02'
+   effective_to: '2023-01-02'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-01-02'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-01-16'
+   effective_to: '2023-01-16'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-01-16'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-02-20'
+   effective_to: '2023-02-20'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-02-20'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-05-29'
+   effective_to: '2023-05-29'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-05-29'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-06-19'
+   effective_to: '2023-06-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-06-19'
+   kind: closed
+   name: Juneteenth National Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-07-04'
+   effective_to: '2023-07-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-07-04'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-09-04'
+   effective_to: '2023-09-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-09-04'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-10-09'
+   effective_to: '2023-10-09'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-10-09'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-11-10'
+   effective_to: '2023-11-10'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-11-10'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-11-23'
+   effective_to: '2023-11-23'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-11-23'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2023-12-25'
+   effective_to: '2023-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2023-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2024-01-01'
+   effective_to: '2024-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2024-01-15'
+   effective_to: '2024-01-15'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-01-15'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2024-02-19'
+   effective_to: '2024-02-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-02-19'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2024-05-27'
+   effective_to: '2024-05-27'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-05-27'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2024-06-19'
+   effective_to: '2024-06-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-06-19'
+   kind: closed
+   name: Juneteenth National Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2024-07-04'
+   effective_to: '2024-07-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-07-04'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2024-09-02'
+   effective_to: '2024-09-02'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-09-02'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2024-10-14'
+   effective_to: '2024-10-14'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-10-14'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2024-11-11'
+   effective_to: '2024-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2024-11-28'
+   effective_to: '2024-11-28'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-11-28'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
++- effective_from: '2024-12-24'
++  effective_to: '2024-12-24'
++  source_url: https://www.federalreserve.gov/newsevents/2024-december.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2024-12-24'
++  kind: closed
++  name: Executive order closing federal offices (Christmas Eve)
++  evidence: 'A: Board calendar: releases scheduled for Dec 24 published Dec 26'
+ - effective_from: '2024-12-25'
+   effective_to: '2024-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: 5 U.S.C. 6103 + K.8 Saturday/Sunday footnote; https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2024-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
+ - effective_from: '2025-01-01'
+   effective_to: '2025-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
++- effective_from: '2025-01-09'
++  effective_to: '2025-01-09'
++  source_url: https://www.federalreserve.gov/newsevents/2025-january.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2025-01-09'
++  kind: closed
++  name: National Day of Mourning, President Carter (Board closed)
++  evidence: 'A: Board offices closed, releases moved to Jan 10; Reserve Bank payment services open'
+ - effective_from: '2025-01-20'
+   effective_to: '2025-01-20'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-01-20'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2025-02-17'
+   effective_to: '2025-02-17'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-02-17'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2025-05-26'
+   effective_to: '2025-05-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-05-26'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2025-06-19'
+   effective_to: '2025-06-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-06-19'
+   kind: closed
+   name: Juneteenth National Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2025-07-04'
+   effective_to: '2025-07-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-07-04'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2025-09-01'
+   effective_to: '2025-09-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-09-01'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2025-10-13'
+   effective_to: '2025-10-13'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-10-13'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2025-11-11'
+   effective_to: '2025-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2025-11-27'
+   effective_to: '2025-11-27'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-11-27'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
++- effective_from: '2025-12-24'
++  effective_to: '2025-12-24'
++  source_url: https://www.federalreserve.gov/newsevents/2025-december.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2025-12-24'
++  kind: closed
++  name: Executive order closing federal offices (Christmas Eve)
++  evidence: 'A: Board: offices closed Dec 24 and 26, daily and weekly releases published Dec 29'
+ - effective_from: '2025-12-25'
+   effective_to: '2025-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
++- effective_from: '2025-12-26'
++  effective_to: '2025-12-26'
++  source_url: https://www.federalreserve.gov/newsevents/2025-december.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2025-12-26'
++  kind: closed
++  name: Executive order closing federal offices (day after Christmas)
++  evidence: 'A: Board: offices closed Dec 24 and 26, daily and weekly releases published Dec 29'
+ - effective_from: '2026-01-01'
+   effective_to: '2026-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2026-01-19'
+   effective_to: '2026-01-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-01-19'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2026-02-16'
+   effective_to: '2026-02-16'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-02-16'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2026-05-25'
+   effective_to: '2026-05-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-05-25'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2026-06-19'
+   effective_to: '2026-06-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-06-19'
+   kind: closed
+   name: Juneteenth National Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2026-07-03'
+   effective_to: '2026-07-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-07-03'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2026-09-07'
+   effective_to: '2026-09-07'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-09-07'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2026-10-12'
+   effective_to: '2026-10-12'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-10-12'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2026-11-11'
+   effective_to: '2026-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2026-11-26'
+   effective_to: '2026-11-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-11-26'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2026-12-25'
+   effective_to: '2026-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-01-01'
+   effective_to: '2027-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-01-18'
+   effective_to: '2027-01-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-01-18'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-02-15'
+   effective_to: '2027-02-15'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-02-15'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-05-31'
+   effective_to: '2027-05-31'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-05-31'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-06-18'
+   effective_to: '2027-06-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-06-18'
+   kind: closed
+   name: Juneteenth National Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-07-05'
+   effective_to: '2027-07-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-07-05'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-09-06'
+   effective_to: '2027-09-06'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-09-06'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-10-11'
+   effective_to: '2027-10-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-10-11'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-11-11'
+   effective_to: '2027-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-11-25'
+   effective_to: '2027-11-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-11-25'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
+ - effective_from: '2027-12-24'
+   effective_to: '2027-12-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-12-24'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: K.8 holiday table; python-holidays US (observed) agrees'
++- effective_from: '2027-12-31'
++  effective_to: '2027-12-31'
++  source_url: https://www.federalreserve.gov/aboutthefed/k8.htm
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-12-31'
++  kind: closed
++  name: New Year's Day (January 1, 2028 falls on Saturday; Board closed)
++  evidence: 'A: K.8: for a Saturday holiday the Reserve Banks open the preceding Friday but the Board is closed; same treatment
++    as the file''s 2021-12-31 row; the draft generator stopped at 2027 holidays'
+--- a/core/calendars/data/holidays_SIFMA.yaml
++++ b/core/calendars/data/holidays_SIFMA.yaml
+@@ -1,7 +1,7 @@
+ file_id: holidays_SIFMA
+-version: 0.1.0-draft
+-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
+-  DISARMED until the owner verifies and signs
++version: 1.0.0
++status: AUDITED, UNSIGNED - proposed v1.0.0 from the T-CAL-02 audit (docs/audit/2026-10-27/01_calendar_T-CAL-02.md); refused
++  at load until the owner signs (R-20 rule 6, T-CAL-01)
+ covers:
+   from: '2025-01-01'
+   to: '2027-12-31'
+@@ -13,421 +13,533 @@
+   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
+   MANIFEST.yaml row with a new test id
+ unverified:
+-- full closes = federal holidays + Good Friday; 14:00 early closes by the usual SIFMA pattern; all to confirm
++- '2027 dates: SIFMA''s 2027 page was not read directly (network policy); dates from pandas_market_calendars SIFMAUS and two
++  secondary calendars. Good Friday 2027 (Mar 26) is a full close because the March jobs report is due Apr 2; a BLS reschedule
++  onto Mar 26 would turn it into a 12:00 early close (new version)'
++- SIFMA recommendations are voluntary and can change for market conditions (new version when they do)
+ owner_must_sign:
+ - SIFMA holiday recommendations 2015 .. 2027
+ rows:
+ - effective_from: '2025-01-01'
+   effective_to: '2025-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2025-01-20'
+   effective_to: '2025-01-20'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-01-20'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2025-02-17'
+   effective_to: '2025-02-17'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-02-17'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2025-04-18'
+   effective_to: '2025-04-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/news/press-releases/sifma-recommends-an-early-market-close-on-april-17-and-a-full-market-close-on-april-18-in-the-u-s-in-observance-of-good-friday-2025
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-04-18'
+   kind: closed
+   name: Good Friday (bond market closed)
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA recommendation; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2025-05-26'
+   effective_to: '2025-05-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/news/press-releases/sifma-recommends-an-early-market-close-on-may-23-and-a-full-market-close-on-may-26-in-the-u-s-in-observance-of-the-memorial-day-holiday-2025
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-05-26'
+   kind: closed
+   name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA recommendation; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2025-06-19'
+   effective_to: '2025-06-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-06-19'
+   kind: closed
+   name: Juneteenth National Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2025-07-04'
+   effective_to: '2025-07-04'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/news/press-releases/sifma-recommends-an-early-market-close-on-july-3-and-a-full-market-close-on-july-4-in-the-u-s-in-observance-of-the-independence-day-holiday-2025
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-07-04'
+   kind: closed
+   name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA recommendation; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2025-09-01'
+   effective_to: '2025-09-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-09-01'
+   kind: closed
+   name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2025-10-13'
+   effective_to: '2025-10-13'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-10-13'
+   kind: closed
+   name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: bond-market-only holiday; H.15 DGS3MO blank where in cache range'
+ - effective_from: '2025-11-11'
+   effective_to: '2025-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-11-11'
+   kind: closed
+   name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: bond-market-only holiday; H.15 DGS3MO blank where in cache range'
+ - effective_from: '2025-11-27'
+   effective_to: '2025-11-27'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-11-27'
+   kind: closed
+   name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2025-12-25'
+   effective_to: '2025-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2025-12-25'
+   kind: closed
+   name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2026-01-01'
+   effective_to: '2026-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-01-01'
+   kind: closed
+   name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2026-01-19'
+   effective_to: '2026-01-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-01-19'
+   kind: closed
+   name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2026-02-16'
+   effective_to: '2026-02-16'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-02-16'
+   kind: closed
+   name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2026-05-25'
++  effective_to: '2026-05-25'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-05-25'
++  kind: closed
++  name: Memorial Day
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2026-06-19'
++  effective_to: '2026-06-19'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-06-19'
++  kind: closed
++  name: Juneteenth National Independence Day
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2026-07-03'
++  effective_to: '2026-07-03'
++  source_url: https://mondovisione.com/media-and-resources/news/sifma-fixed-income-market-close-recommendations-in-the-us-the-uk-and-japan-2026618/
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-07-03'
++  kind: closed
++  name: Independence Day
++  evidence: 'A: SIFMA recommendation; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2026-09-07'
++  effective_to: '2026-09-07'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-09-07'
++  kind: closed
++  name: Labor Day
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2026-10-12'
++  effective_to: '2026-10-12'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-10-12'
++  kind: closed
++  name: Columbus Day
++  evidence: 'A: bond-market-only holiday; H.15 DGS3MO blank where in cache range'
++- effective_from: '2026-11-11'
++  effective_to: '2026-11-11'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-11-11'
++  kind: closed
++  name: Veterans Day
++  evidence: 'A: bond-market-only holiday; H.15 DGS3MO blank where in cache range'
++- effective_from: '2026-11-26'
++  effective_to: '2026-11-26'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-11-26'
++  kind: closed
++  name: Thanksgiving Day
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2026-12-25'
++  effective_to: '2026-12-25'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-12-25'
++  kind: closed
++  name: Christmas Day
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2027-01-01'
++  effective_to: '2027-01-01'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-01-01'
++  kind: closed
++  name: New Year's Day
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-01-18'
++  effective_to: '2027-01-18'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-01-18'
++  kind: closed
++  name: Birthday of Martin Luther King, Jr.
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-02-15'
++  effective_to: '2027-02-15'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-02-15'
++  kind: closed
++  name: Washington's Birthday
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-03-26'
++  effective_to: '2027-03-26'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-03-26'
++  kind: closed
++  name: Good Friday (bond market closed)
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-05-31'
++  effective_to: '2027-05-31'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-05-31'
++  kind: closed
++  name: Memorial Day
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-06-18'
++  effective_to: '2027-06-18'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-06-18'
++  kind: closed
++  name: Juneteenth National Independence Day
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-07-05'
++  effective_to: '2027-07-05'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-07-05'
++  kind: closed
++  name: Independence Day
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-09-06'
++  effective_to: '2027-09-06'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-09-06'
++  kind: closed
++  name: Labor Day
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-10-11'
++  effective_to: '2027-10-11'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-10-11'
++  kind: closed
++  name: Columbus Day
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-11-11'
++  effective_to: '2027-11-11'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-11-11'
++  kind: closed
++  name: Veterans Day
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-11-25'
++  effective_to: '2027-11-25'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-11-25'
++  kind: closed
++  name: Thanksgiving Day
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-12-24'
++  effective_to: '2027-12-24'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-12-24'
++  kind: closed
++  name: Christmas Day
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2025-01-09'
++  effective_to: '2025-01-09'
++  source_url: https://www.sifma.org/news/press-releases/sifma-recommends-early-market-close-on-january-9-2025-for-the-national-day-of-mourning-in-honor-of-former-president-carter
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2025-01-09'
++  kind: early_close
++  close_local: '14:00'
++  name: National Day of Mourning, President Carter (SIFMA early close)
++  evidence: 'A: SIFMA recommendation; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2025-04-17'
++  effective_to: '2025-04-17'
++  source_url: https://www.sifma.org/news/press-releases/sifma-recommends-an-early-market-close-on-april-17-and-a-full-market-close-on-april-18-in-the-u-s-in-observance-of-good-friday-2025
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2025-04-17'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Good Friday
++  evidence: 'A: SIFMA recommendation; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2025-05-23'
++  effective_to: '2025-05-23'
++  source_url: https://www.sifma.org/news/press-releases/sifma-recommends-an-early-market-close-on-may-23-and-a-full-market-close-on-may-26-in-the-u-s-in-observance-of-the-memorial-day-holiday-2025
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2025-05-23'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Memorial Day
++  evidence: 'A: SIFMA recommendation; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2025-07-03'
++  effective_to: '2025-07-03'
++  source_url: https://www.sifma.org/news/press-releases/sifma-recommends-an-early-market-close-on-july-3-and-a-full-market-close-on-july-4-in-the-u-s-in-observance-of-the-independence-day-holiday-2025
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2025-07-03'
++  kind: early_close
++  close_local: '14:00'
++  name: SIFMA early close recommendation
++  evidence: 'A: SIFMA recommendation; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2025-11-28'
++  effective_to: '2025-11-28'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2025-11-28'
++  kind: early_close
++  close_local: '14:00'
++  name: day after Thanksgiving
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2025-12-24'
++  effective_to: '2025-12-24'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2025-12-24'
++  kind: early_close
++  close_local: '14:00'
++  name: SIFMA early close recommendation
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2025-12-31'
++  effective_to: '2025-12-31'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2025-12-31'
++  kind: early_close
++  close_local: '14:00'
++  name: SIFMA early close recommendation
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2026-04-03'
+   effective_to: '2026-04-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/news/press-releases/sifma-fixed-income-market-close-recommendations-in-the-u-s-the-u-k-and-japan-for-good-friday-easter-monday-holidays-2026
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-04-03'
+-  kind: closed
+-  name: Good Friday (bond market closed)
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2026-05-25'
+-  effective_to: '2026-05-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2026-05-25'
+-  kind: closed
+-  name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2026-06-19'
+-  effective_to: '2026-06-19'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2026-06-19'
+-  kind: closed
+-  name: Juneteenth National Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2026-07-03'
+-  effective_to: '2026-07-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2026-07-03'
+-  kind: closed
+-  name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2026-09-07'
+-  effective_to: '2026-09-07'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2026-09-07'
+-  kind: closed
+-  name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2026-10-12'
+-  effective_to: '2026-10-12'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2026-10-12'
+-  kind: closed
+-  name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2026-11-11'
+-  effective_to: '2026-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2026-11-11'
+-  kind: closed
+-  name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2026-11-26'
+-  effective_to: '2026-11-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2026-11-26'
+-  kind: closed
+-  name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2026-12-25'
+-  effective_to: '2026-12-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2026-12-25'
+-  kind: closed
+-  name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-01-01'
+-  effective_to: '2027-01-01'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-01-01'
+-  kind: closed
+-  name: New Year's Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-01-18'
+-  effective_to: '2027-01-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-01-18'
+-  kind: closed
+-  name: Birthday of Martin Luther King, Jr.
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-02-15'
+-  effective_to: '2027-02-15'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-02-15'
+-  kind: closed
+-  name: Washington's Birthday
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-03-26'
+-  effective_to: '2027-03-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-03-26'
+-  kind: closed
+-  name: Good Friday (bond market closed)
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-05-31'
+-  effective_to: '2027-05-31'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-05-31'
+-  kind: closed
+-  name: Memorial Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-06-18'
+-  effective_to: '2027-06-18'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-06-18'
+-  kind: closed
+-  name: Juneteenth National Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-07-05'
+-  effective_to: '2027-07-05'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-07-05'
+-  kind: closed
+-  name: Independence Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-09-06'
+-  effective_to: '2027-09-06'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-09-06'
+-  kind: closed
+-  name: Labor Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-10-11'
+-  effective_to: '2027-10-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-10-11'
+-  kind: closed
+-  name: Columbus Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-11-11'
+-  effective_to: '2027-11-11'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-11-11'
+-  kind: closed
+-  name: Veterans Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-11-25'
+-  effective_to: '2027-11-25'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-11-25'
+-  kind: closed
+-  name: Thanksgiving Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2027-12-24'
+-  effective_to: '2027-12-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2027-12-24'
+-  kind: closed
+-  name: Christmas Day
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2025-07-03'
+-  effective_to: '2025-07-03'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2025-07-03'
+-  kind: early_close
+-  close_local: '14:00'
+-  name: SIFMA early close recommendation
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2025-11-28'
+-  effective_to: '2025-11-28'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2025-11-28'
+-  kind: early_close
+-  close_local: '14:00'
+-  name: day after Thanksgiving
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2025-12-24'
+-  effective_to: '2025-12-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2025-12-24'
+-  kind: early_close
+-  close_local: '14:00'
+-  name: SIFMA early close recommendation
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
+-- effective_from: '2025-12-31'
+-  effective_to: '2025-12-31'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
+-  signed_off_by: null
+-  date: '2025-12-31'
+-  kind: early_close
+-  close_local: '14:00'
+-  name: SIFMA early close recommendation
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  kind: early_close
++  close_local: '12:00'
++  name: Good Friday (12:00 early close; March employment report)
++  evidence: 'A: SIFMA recommendation; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2026-05-22'
++  effective_to: '2026-05-22'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-05-22'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Memorial Day
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2026-07-02'
++  effective_to: '2026-07-02'
++  source_url: https://mondovisione.com/media-and-resources/news/sifma-fixed-income-market-close-recommendations-in-the-us-the-uk-and-japan-2026618/
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2026-07-02'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Independence Day (observed)
++  evidence: 'A: SIFMA recommendation; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2026-11-27'
+   effective_to: '2026-11-27'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-11-27'
+   kind: early_close
+   close_local: '14:00'
+   name: day after Thanksgiving
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2026-12-24'
+   effective_to: '2026-12-24'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-12-24'
+   kind: early_close
+   close_local: '14:00'
+   name: SIFMA early close recommendation
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
+ - effective_from: '2026-12-31'
+   effective_to: '2026-12-31'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2026-12-31'
+   kind: early_close
+   close_local: '14:00'
+   name: SIFMA early close recommendation
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'A: SIFMA holiday schedule; pandas_market_calendars SIFMAUS agrees'
++- effective_from: '2027-03-25'
++  effective_to: '2027-03-25'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-03-25'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Good Friday
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-05-28'
++  effective_to: '2027-05-28'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-05-28'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Memorial Day
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-07-02'
++  effective_to: '2027-07-02'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-07-02'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Independence Day (observed)
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
+ - effective_from: '2027-11-26'
+   effective_to: '2027-11-26'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-11-26'
+   kind: early_close
+   close_local: '14:00'
+   name: day after Thanksgiving
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
++- effective_from: '2027-12-23'
++  effective_to: '2027-12-23'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
++  signed_off_by: null
++  date: '2027-12-23'
++  kind: early_close
++  close_local: '14:00'
++  name: day before Christmas Day (observed)
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'
+ - effective_from: '2027-12-31'
+   effective_to: '2027-12-31'
+-  source_url: null
+-  retrieved_at_utc: '2026-10-06T00:00:00Z'
++  source_url: https://www.sifma.org/resources/guides-playbooks/holiday-schedule
++  retrieved_at_utc: '2026-10-28T05:31:09Z'
+   signed_off_by: null
+   date: '2027-12-31'
+   kind: early_close
+   close_local: '14:00'
+   name: SIFMA early close recommendation
+-  unverified: 'UNVERIFIED: derived by the statutory holiday rule, not read from the publisher''s schedule; owner confirms'
++  evidence: 'B: SIFMA 2026/2027 recommendations issued 2025-12-17; 2027 dates read from pandas_market_calendars SIFMAUS and
++    two secondary calendars'

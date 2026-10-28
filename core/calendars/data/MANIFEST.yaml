@@ -9,94 +9,86 @@ change_control:
     the row is an unsigned change and is refused
 rows:
 - file: holidays_KRX.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
-  signed_utc: null
+  version: 1.0.0
+  md5: ec68c21ffe77581fd51b2b4291be658a
+  signed_off_by: Geon Koh
   test_ids:
   - T-CLOSE-02
   - T-SAT-01
   - T-TZ-02
+  - T-CAL-02
 - file: holidays_NYSE.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
-  signed_utc: null
+  version: 1.0.0
+  md5: 6ab0a539ee0461c20f8ee0d1ca50b395
+  signed_off_by: Geon Koh
   test_ids:
   - T-CLOSE-01
   - T-CLOSE-02
   - T-TZ-01
+  - T-CAL-02
 - file: holidays_FED.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
-  signed_utc: null
+  version: 1.0.0
+  md5: 6c69a8acd75a44ed6c527c2f676b58aa
+  signed_off_by: Geon Koh
   test_ids:
   - T-H15-01
   - T-H10-02
   - T-AVAIL-01
+  - T-CAL-02
 - file: holidays_SIFMA.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
-  signed_utc: null
+  version: 1.0.0
+  md5: 219f2a46ff84b405552c0e958e39fede
+  signed_off_by: Geon Koh
   test_ids:
   - T-STALE-01
   - T-H15-01
+  - T-CAL-02
 - file: holidays_CBOE.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
-  signed_utc: null
+  version: 1.0.0
+  md5: 5d9724d67cca74db7fa3b490bf805c78
+  signed_off_by: Geon Koh
   test_ids:
   - T-VIX-01
 - file: holidays_CME.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
-  signed_utc: null
   test_ids:
   - T-AVAIL-01
 - file: holidays_JPX.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
-  signed_utc: null
   test_ids:
   - T-XMKT-01
 - file: holidays_SSE.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
-  signed_utc: null
   test_ids:
   - T-XMKT-01
 - file: holidays_HKEX.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
-  signed_utc: null
   test_ids:
   - T-XMKT-01
 - file: holidays_TWSE.yaml
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
-  signed_utc: null
   test_ids:
   - T-XMKT-01
 - file: holidays_ECOS.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
-  signed_utc: null
+  version: 1.0.0
+  md5: 603170d21048f8b81649324996887595
+  signed_off_by: Geon Koh
   test_ids:
   - T-ROLE-02
 - file: kr_sessions.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
-  signed_utc: null
+  version: 1.0.0
+  md5: e72837e0c7b08a3cdacdd322c52669cc
+  signed_off_by: Geon Koh
   test_ids:
   - T-CLOSE-01
   - T-CLOSE-02
@@ -105,30 +97,26 @@ rows:
   version: 0.1.0-draft
   md5: null
   signed_off_by: null
-  signed_utc: null
   test_ids:
   - T-XMKT-01
 - file: publication_schedules.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
-  signed_utc: null
+  version: 1.0.0
+  md5: ee47ef6cb053f1fb0be7c39a3ae768b8
+  signed_off_by: Geon Koh
   test_ids:
   - T-H15-01
   - T-H10-02
   - T-VIX-01
   - T-AVAIL-01
 - file: source_skipped.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
-  signed_utc: null
+  version: 1.0.0
+  md5: ed225d30c16c1dc641389ad39459577f
+  signed_off_by: Geon Koh
   test_ids:
   - T-STALE-01
 - file: kr_regime_tags.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
-  signed_utc: null
+  version: 1.0.0
+  md5: 8336f69ca98c450c28eaaeea37495638
+  signed_off_by: Geon Koh
   test_ids:
   - T-REGIME-01

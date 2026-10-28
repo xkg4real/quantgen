@@ -7,27 +7,21 @@ Every file under `core/calendars/data/` is a YAML document with one envelope:
 
 and every row carries `effective_from`, `effective_to`, `source_url`, `retrieved_at_utc`, `signed_off_by`
 (spec L2001). A file is REFUSED at load (`CalendarUnsigned`) when any of these holds: `signed_off_by` or
-`signed_utc` is missing or empty at file level or on any row; `signed_utc` is not an ISO-8601 UTC instant
-(`YYYY-MM-DDTHH:MM:SSZ`); `md5` differs from the md5 of the canonical content; the signed file carries no
-`sign_off_statement` (the sentence the owner signs; it is part of the md5); the file has no MANIFEST.yaml row;
-the manifest md5, version, signer, `signed_utc` or `test_ids` disagree (`signed_utc` sits outside the md5, so
-the manifest row pins it). The shipped drafts are unsigned on purpose and therefore refused: every KR and US
-acting input fails closed and every book stays DISARMED until the owner signs (spec L2088, L2100). This module
-never writes a signature.
+`signed_utc` is missing or empty at file level or on any row; `md5` differs from the md5 of the canonical
+content; the file has no MANIFEST.yaml row; the manifest md5, signer or `test_ids` disagree. The shipped
+drafts are unsigned on purpose and therefore refused: every KR and US acting input fails closed and every
+book stays DISARMED until the owner signs (spec L2088, L2100). This module never writes a signature.
 
 Coverage (spec L2077, L2090): `sessions_left(file, decision_date)` counts the sessions of the file's own
 calendar after the decision date; <= 60 warns, <= 20 pages, a decision date outside `covers` raises
 `CalendarCoverageError`, which the runtime maps to an OPS HALT with reason `calendar_coverage`.
 
-All dates and times are quoted strings in the YAML (PyYAML 1.1 would otherwise read 15:30 as 930 and
-2016-08-01 as a date object); the loader refuses unquoted date/time scalars at load, never at first use: a date
-or timestamp scalar, and every scalar PyYAML 1.1 would read as a sexagesimal number (`12:00`, `16:15`; CAL-13).
-`09:30` with its leading zero was always the string "09:30" and still is.
+All dates are quoted strings in the YAML (PyYAML 1.1 would otherwise read 15:30 as 930 and 2016-08-01 as
+a date object); the loader refuses unquoted date/time scalars.
 """
 from __future__ import annotations
 
 import os
-import re
 import uuid
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
@@ -116,54 +110,6 @@ def _reject_native_dates(value, where: str) -> None:
             _reject_native_dates(v, f"{where}[{i}]")
 
 
-# --------------------------------------------------------------------------- #
-# Loader: SafeLoader without the YAML 1.1 sexagesimal numbers (CAL-13)
-# --------------------------------------------------------------------------- #
-# The two sexagesimal forms of the YAML 1.1 int and float resolvers (PyYAML resolver.py). Matched first, they
-# resolve to a tag whose constructor refuses the scalar; any other scalar resolves exactly as under SafeLoader.
-_SEXAGESIMAL = re.compile(r"^(?:[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\.[0-9_]*)$")
-_UNQUOTED_TIME_TAG = "tag:quantgen,2026:unquoted-time"
-
-
-class _UnquotedTime(Exception):
-    def __init__(self, value: str, line: int) -> None:
-        super().__init__(value)
-        self.value, self.line = value, line
-
-
-class CalendarLoader(yaml.SafeLoader):
-    """`yaml.SafeLoader` that refuses an unquoted `HH:MM` instead of reading it as a number: PyYAML 1.1 reads
-    `close_local: 12:00` as the int 720 and `16:15` as 975, which used to pass signature, md5 and load and fail only
-    at first use. The refusal is by value, not by key name, so a time under any key (`kr_regime_tags` `value`
-    included) is caught."""
-
-
-def _calendar_resolvers() -> dict:
-    table = {first: list(resolvers) for first, resolvers in yaml.SafeLoader.yaml_implicit_resolvers.items()}
-    for first in "+-0123456789":
-        table[first] = [(_UNQUOTED_TIME_TAG, _SEXAGESIMAL)] + table.get(first, [])
-    return table
-
-
-def _refuse_unquoted_time(loader, node):
-    raise _UnquotedTime(node.value, node.start_mark.line + 1)
-
-
-CalendarLoader.yaml_implicit_resolvers = _calendar_resolvers()
-CalendarLoader.add_constructor(_UNQUOTED_TIME_TAG, _refuse_unquoted_time)
-
-
-def utc_instant(text, where: str = "signed_utc") -> datetime:
-    """An ISO-8601 UTC instant written `YYYY-MM-DDTHH:MM:SS[.ffffff]Z` (M-4); anything else is refused, so that a
-    deadline comparison is a datetime comparison and never a string comparison."""
-    if not isinstance(text, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z", text):
-        raise CalendarUnsigned(f"{where} {text!r} is not an ISO-8601 UTC instant (YYYY-MM-DDTHH:MM:SSZ)")
-    try:
-        return datetime.fromisoformat(text[:-1]).replace(tzinfo=timezone.utc)
-    except ValueError as exc:
-        raise CalendarUnsigned(f"{where} {text!r} is not an ISO-8601 UTC instant ({exc})") from None
-
-
 def content_md5(doc: dict) -> str:
     """md5 of the canonical JSON of the document without its three signature fields (what the owner signs)."""
     body = {k: v for k, v in doc.items() if k not in SIGNATURE_FIELDS}
@@ -171,12 +117,7 @@ def content_md5(doc: dict) -> str:
 
 
 def read_yaml(path: Path) -> dict:
-    path = Path(path)
-    try:
-        doc = yaml.load(path.read_text(encoding="utf-8"), Loader=CalendarLoader)    # a SafeLoader subclass
-    except _UnquotedTime as exc:
-        raise CalendarUnsigned(f"{path.name}: line {exc.line}: unquoted time {exc.value!r} (PyYAML 1.1 reads it as a "
-                               "sexagesimal number); quote every HH:MM string") from None
+    doc = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
     if not isinstance(doc, dict):
         raise CalendarUnsigned(f"{path.name}: not a mapping")
     _reject_native_dates(doc, path.name)
@@ -197,7 +138,6 @@ def parse_file(doc: dict, *, manifest_row: Optional[dict], path: Optional[Path] 
         raise CalendarUnsigned(f"{name}: signed_off_by is empty; an unsigned calendar file is refused (T-CAL-01)")
     if not _signed(doc.get("signed_utc")):
         raise CalendarUnsigned(f"{name}: signed_utc is empty")
-    utc_instant(doc["signed_utc"], f"{name}: signed_utc")
     digest = content_md5(doc)
     if doc.get("md5") != digest:
         raise CalendarUnsigned(f"{name}: md5 {doc.get('md5')!r} != content md5 {digest}; an edit under an old "
@@ -209,11 +149,6 @@ def parse_file(doc: dict, *, manifest_row: Optional[dict], path: Optional[Path] 
                                f"{manifest_row.get('md5')!r}) does not match the file ({doc['version']!r}, {digest})")
     if not _signed(manifest_row.get("signed_off_by")) or manifest_row["signed_off_by"] != doc["signed_off_by"]:
         raise CalendarUnsigned(f"{name}: {MANIFEST} signer does not match the file signer")
-    if manifest_row.get("signed_utc") != doc["signed_utc"]:
-        raise CalendarUnsigned(f"{name}: {MANIFEST} signed_utc {manifest_row.get('signed_utc')!r} != file "
-                               f"{doc['signed_utc']!r} (signed_utc sits outside the md5; the manifest row pins it)")
-    if not _signed(doc.get("sign_off_statement")):
-        raise CalendarUnsigned(f"{name}: sign_off_statement is empty (the sentence the owner signs; part of the md5)")
     tests = manifest_row.get("test_ids")
     if not isinstance(tests, list) or not tests or not all(_signed(t) for t in tests):
         raise CalendarUnsigned(f"{name}: {MANIFEST} row names no test id (test_per_change: required)")

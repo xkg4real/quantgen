@@ -45,6 +45,102 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
     2. 감사 결과를 제시한 뒤 승인된 **달력 구현**을 진행하고 서명 문장을 받습니다.
     3. 공급사 메모는 KIS 접근 가능 여부 조사와 최적 공급사 설계를 감사에 포함합니다. 구현은 설계를 제시한 뒤
        진행합니다.
+- **후속 (2026-10-28):** Claude가 기한(11-01) 안에 끝낼 수 있도록 감사 범위를 좁히는 방안을 제시했습니다.
+  - **방안 A:** 데이터 정확성 감사 중 2027년 KRX·NYSE·FED·SIFMA 4개 파일 부분을 먼저 수행하고, 그 4개 파일에 서명을 받습니다.
+  - **방안 B:** 기한을 연장합니다.
+  - **소유자 판정(원문):**
+
+    > A로 시작하겠습니다. 그리고 지금 작업을 시작해주세요
+
+  - **반영:** 4개 파일의 감사 결과와 제안 패치를 `docs/audit/2026-10-27/01_calendar_T-CAL-02.md`와
+    `docs/audit/2026-10-27/calendar_T-CAL-02/`에 냈습니다. `core/calendars/data/`는 바꾸지 않았습니다.
+  - **소유자 결정 대기 (보고서 7절):**
+    1. 패치 승인
+    2. FED 추정 3건(CAL-14) 포함 여부
+    3. 서명 문장과 `signed_off_by` 표기
+  - **기한:** `signed_utc` < 2026-11-01T00:00:00Z (한국 시간 11월 1일 오전 9시 전).
+- **후속 (2026-10-28, 패치 승인):**
+  - **소유자 판정(원문):**
+
+    > KRX, FED, SIFMA 파일을 위 .md 문서의 발견사항 중에서 제안한 방식(i.e. 2027년 5월 3일 국장 휴무)으로
+    > 수정하세요. 그리고 수정과 동시에 자동으로 서명/승인할 생각이니 수정 이후 작업 완료 보고만 하세요
+
+  - **반영:** 세 파일의 제안본(v1.0.0, CAL-14 추정 3건 포함)을 `core/calendars/data/`에 반영했습니다.
+    `MANIFEST.yaml`의 세 행은 version을 1.0.0으로 바꾸고 test_ids에 T-CAL-02를 더했습니다.
+  - **서명:** Claude는 서명 필드를 쓰지 않았습니다. 소유자가 직접 서명합니다.
+  - **NYSE:** 지시 범위 밖이라 그대로 두었습니다.
+- **후속 (2026-10-28, 테스트 정비):** Claude가 "서명하면 저장소 파일이 서명되지 않았다고 전제한 테스트가 실패한다"고 알리자
+  소유자가 답했습니다.
+  - **소유자 판정(원문):**
+
+    > 네 함께 고치겠습니다.
+
+  - **반영:** 테스트 세 개가 서명 전과 후 모두에서 맞게 동작하도록 고쳤습니다.
+    - `test_cal01_shipped_drafts_are_refused...`: 파일마다 서명 전 초안이면 거부되는지, 서명됐으면 완전한지 확인합니다.
+      반쯤 서명된 파일과 테스트용 서명자는 실패로 처리합니다.
+    - `test_close02_on_the_real_signed_files_is_owner_input`: 서명 상태와 관계없이 미실행으로 남기고, 사유에 아직 필요한 서명이나 데이터 범위를 적습니다.
+    - 통합 테스트 `test_unsigned_shipped_calendars_fail_acting_inputs_closed`: 서명을 지운 임시 복사본으로 검사합니다.
+  - **함께 바꾼 것:** `test_cal02_2027_files_signed_before_2026_11_01`을 실제 검사로 바꿨습니다.
+    네 파일이 모두 서명됐는지, `signed_utc`가 2026-11-01T00:00:00Z보다 이른지, 범위가 2027-12-31까지인지 봅니다.
+- **후속 (2026-10-28, CAL-14 확인과 서명 양식):**
+  - **소유자 판정(원문):**
+
+    > CAL-14 확인 결과 추정한 부분이 맞습니다. 남은 서명 문서 및 서명 양식을 빠르게 제공해주세요.
+
+  - **반영:**
+    - FED의 2018·2019·2020년 12월 24일 3행을 근거 등급 A(소유자 확인)로 올렸습니다.
+    - NYSE v1.0.0(출처만 채움)을 반영했습니다. 이로써 4개 파일이 모두 v1.0.0입니다.
+    - 서명 양식 `docs/audit/2026-10-27/02_signing_form_T-CAL-02.md`를 만들었습니다.
+    - 소유자가 직접 실행하는 서명 도구 `tools/sign_calendars.py`를 만들었습니다.
+  - **서명:** Claude는 서명하지 않았습니다. 소유자가 도구를 실행하거나, 서명 문장을 Claude에게 보냅니다.
+- **완료 (2026-10-28, 소유자 서명):**
+  - **서명:** 소유자가 서명서를 채팅으로 보냈습니다(원문은 `docs/audit/2026-10-27/03_signature_T-CAL-02.md`).
+    Claude가 서명 도구로 기록했습니다. 서명자 Geon Koh, 시각 2026-10-28T06:35:52Z입니다.
+  - **검증:** 4개 파일 모두 로드됩니다. `test_cal02_2027_files_signed_before_2026_11_01`가 PASS입니다.
+  - **서명 후 상태:** US는 결정 시각 계산과 ARM 전제조건이 열렸습니다. 다만 `publication_schedules`와 `source_skipped`가
+    서명 전이라 H.15·H.10·Treasury 입력은 계속 fail-closed입니다. KR은 `kr_sessions`·`kr_regime_tags`·`publication_schedules`·
+    `source_skipped`가 서명 전이라 계속 막혀 있습니다.
+  - **소유자 질문(원문):**
+
+    > 감사는 누가 어떻게 하는겁니까? 일단 앞서 말한 4가지 문서에 대한 서명을 기반으로 원래 하려던 일을 다시 재개하면서 제 질문에 답변해주세요.
+
+### ①-2b: 달력 감사 2차 (kr_sessions · publication_schedules · source_skipped)
+
+> 네 3가지 먼저 감사하겠습니다.
+
+- **해석:** 직전 답변에서 언급한 세 파일로 이해했습니다. `kr_sessions`는 수능일(11/19) 대비이고, `publication_schedules`와
+  `source_skipped`는 US 데이터 입력용입니다.
+- **반영:** 감사 결과와 제안 파일을 `docs/audit/2026-10-27/04_calendar_batch2.md`와 `calendar_batch2/`에 냈습니다.
+  `core/calendars/data/`는 바꾸지 않았습니다.
+- **같은 종류의 테스트 정비:** `tests/macro_m9_lab.py`의 KR 시계 가정을 서명 전후 모두 맞게 고쳤습니다.
+- **소유자 결정 대기:**
+  1. 제안 승인
+  2. 서명(보고서 5절 양식)
+
+- **완료 (2026-10-28):**
+  - **서명:** 소유자가 2차 서명서를 보냈습니다(원문은 `docs/audit/2026-10-27/05_signature_batch2.md`). 제안을 반영하고 서명을 기록했습니다.
+    서명자 Geon Koh, 시각 2026-10-28T08:47:25Z입니다.
+  - **결과:** US는 signed=True입니다. KR은 `kr_regime_tags`만 남았습니다.
+
+### ①-2c: VIX·BLS·BEA·ECOS 입력 개방
+
+> 이와 동시에 VIX BLS BEA ECOS 입력도 뚫을 수 있도록 해주세요.
+
+- **반영 (달력으로 풀리는 것):** `holidays_CBOE`와 `holidays_ECOS` 제안본(v1.0.0)을 냈습니다(`docs/audit/2026-10-27/06_calendar_batch3.md`).
+  - CBOE는 서명된 NYSE 휴장일을, ECOS는 서명된 KRX 휴장일을 따릅니다.
+  - 모의 서명 검증 12/12를 통과했습니다. ECOS forward_sim 읽기가 MissingInput에서 PITValue로 바뀝니다.
+- **설계안 (승인 필요):** BLS·BEA는 발표일 목록이 필요합니다. 그래서 코드, 시리즈 레지스트리, 새 서명 파일을 바꿔야 합니다.
+  A안(release_calendar)을 권장합니다.
+- **소유자 결정 대기:**
+  1. CBOE·ECOS 서명
+  2. BLS·BEA A안 승인
+
+- **완료 (2026-10-28, CBOE·ECOS 서명):** 소유자가 3차 서명서를 보냈습니다(원문은 `docs/audit/2026-10-27/07_signature_batch3.md`).
+  - **서명:** Geon Koh, 시각 2026-10-28T11:28:41Z입니다.
+  - **결과:**
+    - ECOS forward_sim 읽기가 열렸습니다(PITValue).
+    - VIX 데이터 지연 판단이 동작합니다.
+    - BLS·BEA는 A안 승인을 기다리고 있습니다(그 전까지 수집 단계에서 막힘).
 
 ### ①-4: R1~R5
 
@@ -110,6 +206,40 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
 > 예
 
 - **반영:** ②-3(모델 한계 대장)과 ②-4(알려진 오류 목록)를 Nautilus 작업과 함께 진행합니다.
+
+### ①-2d: kr_regime_tags 감사와 BLS·BEA A안 문서
+
+> Kr_regime_tags를 먼저 승인합니다. Bls Bea 열 A안을 따로 정리해서 지난번과 같이 승인양식과 함께 작성해주세요
+
+- **반영:**
+  - `kr_regime_tags` 감사 결과와 제안본(v1.0.0, 58행 → 63행)을 `docs/audit/2026-10-27/08_kr_regime_tags.md`에 냈습니다.
+    - RT-01: 점심 휴장 시간 수정
+    - RT-02: 2011년 공매도 금지 시작일, 금융주 공매도 금지 기간 반영
+    - RT-03: 랜덤엔드 도입 이전 구간
+    - RT-04: 환율제도 이름 채움
+    - 모의 서명 30/30 통과. 전체 테스트에서 새 실패 없음.
+  - BLS·BEA A안 문서와 승인 양식을 `docs/audit/2026-10-27/09_bls_bea_plan_A.md`에 냈습니다.
+  - `core/calendars/data/`, 코드, 레지스트리는 바꾸지 않았습니다.
+- **소유자 결정 대기:**
+  1. `kr_regime_tags` 서명(08 문서 4절)
+  2. A안 승인(09 문서 5절)
+- **완료 (2026-10-28, kr_regime_tags 서명):**
+  - **서명:** 소유자가 4차 서명서를 보냈습니다. 원문은 `docs/audit/2026-10-27/10_signature_batch4.md`에 있습니다.
+    Geon Koh, 2026-10-28T13:27:00Z.
+  - **상태:** KR과 US 모두 `signed=True`입니다. 서명된 달력 파일은 16개 중 10개입니다.
+  - **남은 결정:** BLS·BEA A안 승인(09 문서 5절)
+
+### ①-2e: BLS·BEA A안 승인
+
+- **소유자 판정:** 설계 승인서를 제출했습니다. 원문은 `docs/audit/2026-10-27/11_bls_bea_stage1_status.md`에 있습니다.
+  승인 문장은 "나 Geon Koh는 범위의 A안을 승인합니다."입니다.
+- **반영:**
+  - 어댑터에 발표일 주입을 추가했습니다(`release_dates`).
+  - 레지스트리 8개 시리즈에 `release` 키를 넣었습니다.
+  - 테스트를 추가했습니다(T-AVAIL-01).
+  - US 커버리지 대상 추가는 승인 조건대로 파일 서명과 같은 커밋에 넣습니다.
+- **막힌 것:** 이 세션의 프록시가 BLS·BEA·DOL·FRED 도메인 연결을 아직 거부합니다(403).
+  그래서 `release_calendar.yaml` 작성은 새 세션에서 공식 일정 원문으로 진행합니다.
 
 ### Bonds 화면 검증 요청 (2026-10-27)
 
@@ -246,3 +376,30 @@ C3 exists=True rows=17 chain OK
 - **슬롯 결정(전달됨):** 17:24 UTC에 ①-2 창이 `handoff` 브랜치에 checkpoint를 먼저 올렸습니다. 소유자가 "ㅇㅇ 3으로해"라고
   답해, 인수인계 도구 세션이 그 문서를 `archive/20261029T0240-t-cal-02-sign.md`로 옮기고 `CURRENT.md`를 idle로
   비웠습니다(`handoff` 브랜치 `0266f99`, Claude가 원격에서 확인).
+
+## 2026-10-29, Claude Code 채팅: PR #4 충돌 해결 (소유자 서명 달력 채택)
+
+> 이럴땐 어떻게 해야하나요? 가장 최근 T-CAL-02 세션 두개를 참고해서 결정해주세요. 그리고 나서 원래 Task를 진행해주세요.
+
+(첨부: PR #4의 "This branch has conflicts that must be resolved" 화면. 충돌 파일 11개: `core/calendars/data/`의 MANIFEST와
+holidays_FED·KRX·NYSE·SIFMA, kr_sessions, 이 로그, `tests/macro_m1_calendars.py`, `macro_m1_integration.py`,
+`macro_m9_lab.py`, `macro_registry.csv`)
+
+- **원인:** PR #7(`claude/optimistic-fermi-revc37`, T-CAL-02 세션)이 2026-10-28T17:54:58Z에 `main`으로 병합됐습니다.
+  소유자 서명 달력 10개가 들어 있습니다. 이 브랜치의 PT-07(`d865c7f`)은 같은 파일을 서명 없이 다르게 고친 판입니다.
+- **참고한 두 세션:**
+  - "T-CAL-02 서명 상태 확인"(`session_016uB1jevYKzP1wYYuEAAEUP`): 감사, 서명 도구, 소유자 서명, 테스트를 마쳤습니다
+    (PR #5, PR #7).
+  - "T-CAL-02 세션 연장(서명문서생성)"(`session_016uB1jeWXD51mcf3fjeTN6g`): 서명 전 도구 PR #8을 닫고, 서명 대장을 만들고 있습니다.
+- **결정 (Claude, 소유자 위임):** `main`의 서명본을 그대로 채택하고 PT-07의 달력 변경을 모두 걷어냅니다.
+  - `core/calendars/data/` 전체, `core/calendars/store.py`, `core/calendars/publication.py`, `data/calendars/KRX.json`,
+    `data/calendars/index.json`, 달력 테스트 3개를 `main`과 바이트 단위로 같게 맞췄습니다.
+  - 이유 1: 서명은 md5로 파일 내용에 묶여 있습니다. 한 바이트만 바뀌어도 서명이 무효가 됩니다.
+  - 이유 2: PT-07의 `store.py`는 `sign_off_statement`와 MANIFEST `signed_utc`를 새로 요구합니다. 그대로 두면 `main`의 서명
+    파일이 모두 미서명으로 거부됩니다. 이 파일은 텍스트 충돌이 없어 자동 병합되므로 더 위험했습니다.
+  - 이유 3: ①-2는 `main`에서 끝났습니다(`84e584c`, `test_cal02` PASS). 두 세션의 결과가 PT-07을 대체합니다.
+  - `tests/macro_registry.csv`는 `main` 판에 이 브랜치의 T-RO-01 행(Nautilus Task 2) 하나만 더했습니다.
+  - 이 로그는 양쪽 기록을 모두 남겼습니다(`main`의 ①-2d·①-2e 다음에 이 브랜치의 절).
+  - `docs/calendar_signoff/SIGNING_KIT_2026-10-28.md`에 "대체됨, 이 키트로 서명하지 말 것"을 적었습니다.
+  - PT-07의 로더 강화(CAL-12, CAL-13, CAL-14, M-4)는 서명된 파일과 맞게 다시 설계해야 하므로 별도 제안으로 남깁니다.
+- **마감 해석 차이(KST와 UTC):** 서명 시각 2026-10-28T06:35:52Z가 두 해석의 마감보다 모두 이르므로 더는 문제가 아닙니다.

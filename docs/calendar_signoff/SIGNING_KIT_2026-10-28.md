@@ -1,5 +1,11 @@
 # 캘린더 서명 키트 (2026-10-28)
 
+> **대체됨 (2026-10-29): 이 키트로 서명하지 마십시오.** 소유자는 다른 Claude 세션의 감사본(방안 A, PR #5·#7)에 이미
+> 서명했습니다. `holidays_KRX`·`holidays_NYSE`·`holidays_FED`·`holidays_SIFMA` v1.0.0은 2026-10-28T06:35:52Z(`3917bc0`)에,
+> `kr_sessions`는 감사 2차(`7ea9a1b`)에서 서명됐습니다. 이 브랜치는 `main`을 병합하면서 이 키트가 전제한 PT-07 판(`d865c7f`,
+> 미서명)의 달력 데이터·로더·테스트를 모두 `main`의 서명본으로 되돌렸습니다(`docs/nautilus_bridge/OWNER_RULINGS_LOG.md`,
+> "PR #4 충돌 해결" 절). 아래 내용은 기록으로만 남깁니다. 표의 행과 md5는 지금 저장소의 파일과 맞지 않습니다.
+
 저장 위치: `docs/calendar_signoff/SIGNING_KIT_2026-10-28.md`
 대상 파일 5개: `holidays_KRX`, `holidays_NYSE`, `holidays_FED`, `holidays_SIFMA`, `kr_sessions`
 마감: **2026-10-31T15:00:00Z = 2026-11-01(일) 00:00 KST**
