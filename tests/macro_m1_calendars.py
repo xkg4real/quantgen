@@ -4,7 +4,8 @@ calendar halves of T-H15-01, T-H10-02, T-VIX-01, T-AVAIL-01, I-06b).
 
 Hermetic: every calendar file is a synthetic fixture written into a tempfile directory and signed there by the
 test itself (signer "TEST-FIXTURE (not an owner sign-off)"); the library never writes a signature. The shipped
-drafts under core/calendars/data/ are read only to assert that they are refused. No module global is patched.
+files under core/calendars/data/ are read only to check their signing state (a draft is refused, an owner-signed file
+is complete). No module global is patched.
 """
 from __future__ import annotations
 
@@ -355,11 +356,14 @@ test_close02_effective_dated_clocks.test_ids = ["T-CLOSE-02"]
 
 
 def test_close02_on_the_real_signed_files_is_owner_input():
-    """The same assertions on the shipped files need the owner's signature; the drafts are unsigned."""
-    refused = store.describe()
-    assert refused and all(r["status"] == "REFUSED" for r in refused)
-    raise NotRun("OWNER: core/calendars/data/*.yaml are unsigned drafts; T-CLOSE-02 on the real KRX/NYSE files waits for "
-                 "the owner's sign-off (Saturday closes, pre-2016 CSAT window, CSAT dates, random-end extensions)")
+    """The same assertions on the shipped files need the owner's signed KR and US clock files, with KRX rows back to the
+    2015, 2016 and 2025 golden dates."""
+    live = CalendarSet()
+    unsigned = [f"{f}.yaml" for f in store.MARKET_FILES["KR"] + store.MARKET_FILES["US"] if live.refusal(f) is not None]
+    waiting = (f"unsigned: {', '.join(unsigned)}" if unsigned else
+               f"holidays_KRX.yaml covers from {live.file('holidays_KRX').covers_from}; the goldens need 2015, 2016, 2025")
+    raise NotRun("OWNER: T-CLOSE-02 on the real KRX/NYSE files waits for the owner's sign-off (Saturday closes, pre-2016 "
+                 f"CSAT window, CSAT dates, random-end extensions; {waiting})")
 
 
 test_close02_on_the_real_signed_files_is_owner_input.test_ids = ["T-CLOSE-02"]
@@ -519,26 +523,42 @@ def _unsigned_manifest_set(key, docs):
 
 
 def test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed():
-    """The shipped drafts carry signed_off_by: null -> refused; every KR and US clock raises CalendarUnsigned, which the
-    data layer maps to MissingInput('missing') with fail_closed (brief F-5); no book can ARM."""
+    """Every shipped file is either a draft (signed_off_by, signed_utc and md5 null on the file and its MANIFEST row ->
+    refused) or a complete owner sign-off (loads); a half-signed file fails here. A market whose clock files are not
+    all signed raises CalendarUnsigned, which the data layer maps to MissingInput('missing') with fail_closed (brief
+    F-5), and no book of it can ARM. No shipped signer is a test or simulation placeholder (the build never signs)."""
     live = store.default()
     assert live.data_dir == store.DATA_DIR
+    manifest = store.read_yaml(store.DATA_DIR / "MANIFEST.yaml")
+    rows = {r["file"]: r for r in manifest["rows"]}
+    assert set(rows) == {f"{f}.yaml" for f in live.file_ids()}
+    signed = set()
     for fid in live.file_ids():
-        assert live.refusal(fid), fid
-        raw = store.read_yaml(live.data_dir / f"{fid}.yaml")
-        assert raw.get("signed_off_by") is None and raw.get("md5") is None, fid       # never signed by the build
+        raw, row, reason = store.read_yaml(live.data_dir / f"{fid}.yaml"), rows[f"{fid}.yaml"], live.refusal(fid)
+        if reason is None:
+            f = live.file(fid)
+            assert row["signed_off_by"] == f.signed_off_by and row["md5"] == f.md5, fid
+            assert not any(tag in f.signed_off_by for tag in ("TEST-FIXTURE", "SIMULATION")), (fid, f.signed_off_by)
+            signed.add(fid)
+            continue
+        assert "signed_off_by is empty" in reason, (fid, reason)
+        assert raw.get("signed_off_by") is None and raw.get("signed_utc") is None and raw.get("md5") is None, fid
+        assert row["md5"] is None and row["signed_off_by"] is None, fid
         assert raw.get("unverified") and raw.get("owner_must_sign"), fid
     for market in ("KR", "US", "JP", "CN", "HK", "TW"):
+        if set(store.MARKET_FILES[market]) <= signed:
+            continue
         _raises(lambda: clocks.decision_time_utc(market, date(2026, 10, 2), cal=live), CalendarUnsigned)
         _raises(lambda: clocks.is_session(market, date(2026, 10, 2), cal=live), CalendarUnsigned)
         assert store.arm_precondition(date(2026, 10, 2), market, cal=live) is False
-    _raises(lambda: regime.regime_tags("KR", date(2026, 10, 2), cal=live), CalendarUnsigned)
-    _raises(lambda: publication.publication_instant({"schedule_id": "H15"}, date(2026, 10, 2), cal=live), CalendarUnsigned)
-    assert store.status("KR", date(2026, 10, 2), cal=live)["signed"] is False
-    assert live.version == "unsigned"
-    manifest = store.read_yaml(store.DATA_DIR / "MANIFEST.yaml")
-    assert all(r["md5"] is None and r["signed_off_by"] is None for r in manifest["rows"])
-    assert {r["file"] for r in manifest["rows"]} == {f"{f}.yaml" for f in live.file_ids()}
+    if "kr_regime_tags" not in signed:
+        _raises(lambda: regime.regime_tags("KR", date(2026, 10, 2), cal=live), CalendarUnsigned)
+    if not {"publication_schedules", "holidays_FED"} <= signed:
+        _raises(lambda: publication.publication_instant({"schedule_id": "H15"}, date(2026, 10, 2), cal=live), CalendarUnsigned)
+    if not set(store.COVERAGE_FILES["KR"]) <= signed:
+        assert store.status("KR", date(2026, 10, 2), cal=live)["signed"] is False
+    if manifest.get("signed_off_by") is None:
+        assert live.version == "unsigned"
     # the rules-store paths of section 7 resolve to these files
     from core.rules.macro_rules import load_store
     s = load_store()
@@ -548,6 +568,43 @@ def test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed():
 
 
 test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed.test_ids = ["T-CAL-01"]
+
+
+def test_cal01_owner_sign_tool_on_a_copy():
+    """tools/sign_calendars on a signature-stripped copy of the shipped files: the signed files load with the signer
+    on every row, md5 and MANIFEST row in step; a placeholder signer, a re-sign and a wrong fingerprint are refused
+    and leave the files untouched."""
+    import shutil
+    from tools import sign_calendars as T
+    with tempfile.TemporaryDirectory() as tmp:
+        data_dir = Path(tmp) / "data"
+        shutil.copytree(store.DATA_DIR, data_dir)
+        for path in data_dir.glob("*.yaml"):
+            doc = store.read_yaml(path)
+            if path.name == store.MANIFEST:
+                for row in doc["rows"]:
+                    row["md5"] = row["signed_off_by"] = None
+            else:
+                doc["signed_off_by"] = doc["signed_utc"] = doc["md5"] = None
+            path.write_text(T._dump(doc), encoding="utf-8")
+        before = {p.name: p.read_bytes() for p in data_dir.glob("*.yaml")}
+        _raises(lambda: T.sign(T.CAL02_FILES, "SIMULATION - not a signature", data_dir=data_dir), T.SignRefused)
+        _raises(lambda: T.sign(["holidays_KRX"], "owner:test", data_dir=data_dir, expect={"holidays_KRX": "0" * 32}),
+                T.SignRefused)
+        assert {p.name: p.read_bytes() for p in data_dir.glob("*.yaml")} == before
+        done = T.sign(T.CAL02_FILES, "owner:test", data_dir=data_dir, now=lambda: U(2026, 10, 29, 3))
+        assert [r["signed_utc"] for r in done] == ["2026-10-29T03:00:00Z"] * 4
+        cal, manifest = CalendarSet(data_dir), store.read_yaml(data_dir / store.MANIFEST)
+        rows = {r["file"]: r for r in manifest["rows"]}
+        for fid in T.CAL02_FILES:
+            f = cal.file(fid)
+            assert f.signed_off_by == "owner:test" and all(r["signed_off_by"] == "owner:test" for r in f.rows)
+            assert rows[f"{fid}.yaml"]["md5"] == f.md5 and rows[f"{fid}.yaml"]["version"] == f.version
+        assert cal.refusal("kr_sessions") is not None                               # unnamed files stay unsigned
+        _raises(lambda: T.sign(["holidays_KRX"], "owner:test", data_dir=data_dir), T.SignRefused)
+
+
+test_cal01_owner_sign_tool_on_a_copy.test_ids = ["T-CAL-01", "T-CAL-02"]
 
 
 def test_cal01_calendar_change_governance_event():
@@ -618,9 +675,22 @@ def test_cal02_coverage_warn_page_halt():
 test_cal02_coverage_warn_page_halt.test_ids = ["T-CAL-02"]
 
 
+CAL02_FILES = ("holidays_KRX", "holidays_NYSE", "holidays_FED", "holidays_SIFMA")
+
+
 def test_cal02_2027_files_signed_before_2026_11_01():
-    raise NotRun("OWNER: the 2027 KRX, NYSE, Fed and SIFMA files must be signed before 2026-11-01 (spec L2101); "
-                 "core/calendars/data/holidays_{KRX,NYSE,FED,SIFMA}.yaml are unsigned drafts")
+    """Deadline clause (spec L2101): the shipped 2027 KRX, NYSE, Fed and SIFMA files are signed before 2026-11-01 UTC
+    and cover 2027 to its last day. Not run while any of the four is still an unsigned draft (owner input)."""
+    live = CalendarSet()
+    unsigned = [f"{fid}.yaml" for fid in CAL02_FILES if live.refusal(fid) is not None]
+    if unsigned:
+        raise NotRun("OWNER: the 2027 KRX, NYSE, Fed and SIFMA files must be signed before 2026-11-01 (spec L2101); "
+                     f"unsigned: core/calendars/data/{', '.join(unsigned)}")
+    for fid in CAL02_FILES:
+        f = live.file(fid)
+        assert f.covers_to >= date(2027, 12, 31), (fid, f.covers_to)
+        signed_at = datetime.fromisoformat(f.signed_utc.replace("Z", "+00:00"))
+        assert signed_at.tzinfo is not None and signed_at < U(2026, 11, 1), (fid, f.signed_utc)
 
 
 test_cal02_2027_files_signed_before_2026_11_01.test_ids = ["T-CAL-02"]

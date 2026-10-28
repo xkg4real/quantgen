@@ -1,0 +1,19 @@
+load
+  [ok] holidays_CBOE loads (v1.0.0, 37 rows): None
+  [ok] holidays_ECOS loads (v1.0.0, 33 rows): None
+next expected observation
+  [ok] VIXCLS after 2026-11-25 (Thanksgiving 11-26): datetime.date(2026, 11, 27)
+  [ok] VIXCLS after 2026-05-22 (Memorial Day 05-25): datetime.date(2026, 5, 26)
+  [ok] ECOS after 2026-12-30 (12-31 FX year-end, 01-01): datetime.date(2027, 1, 4)
+  [ok] ECOS after 2027-04-30 (05-03 노동절 대체): datetime.date(2027, 5, 4)
+  [ok] CBOE early close 2026-11-27: '13:15'
+data layer: ingest and non-context reads
+  [ok] ECOS_1530_CLOSE forward_sim read (R-29 nav_fx_backtests): 'PITValue'
+  [ok]   value: 1391.2
+  [ok] VIXCLS context read (R-08): 'PITValue'
+  [ok] VIXCLS staleness check runs (CBOE calendar readable): False
+coverage horizon
+  holidays_CBOE  covers 2025-01-01..2027-12-31; sessions left on 2026-10-28: 295
+  holidays_ECOS  covers 2026-01-01..2027-12-31; sessions left on 2026-10-28: 289
+
+0 failure(s)

@@ -1007,7 +1007,7 @@
  covers:
    from: '2015-01-01'
    to: '2027-12-31'
-@@ -13,1241 +13,1345 @@
+@@ -13,1241 +13,1342 @@
    / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
    MANIFEST.yaml row with a new test id
  unverified:
@@ -1015,8 +1015,6 @@
 -  against the Board's holiday schedule
 +- 'set semantics: days the Board of Governors is closed (they move H.15 and H.10); Reserve Bank payment services may be open
 +  on some of them'
-+- class C rows (2018-12-24, 2019-12-24, 2020-12-24) are inferred Board closures; they only make H.15 and H.10 data available
-+  later, never earlier
 +- closures ordered after the audit date (e.g. a Christmas Eve executive order for 2026 or 2027) are a new version
  owner_must_sign:
  - Federal Reserve Board holiday schedule 2015 .. 2027 (K.8 / federalreserve.gov)
@@ -1515,7 +1513,7 @@
 +  date: '2018-12-24'
 +  kind: closed
 +  name: Executive order closing federal offices (Christmas Eve)
-+  evidence: 'C: executive order confirmed; Board closure inferred; H.10 DEXKOUS blank'
++  evidence: 'A: executive order; Board closure confirmed by the owner 2026-10-28 (CAL-14); H.10 DEXKOUS blank'
  - effective_from: '2018-12-25'
    effective_to: '2018-12-25'
 -  source_url: null
@@ -1644,8 +1642,7 @@
 +  date: '2019-12-24'
 +  kind: closed
 +  name: Executive order closing federal offices (Christmas Eve)
-+  evidence: 'C: executive order confirmed; Board closure inferred (H.10 DEXKOUS has a value, which the Banks certify, so it
-+    does not decide the Board''s status)'
++  evidence: 'A: executive order; Board closure confirmed by the owner 2026-10-28 (CAL-14)'
  - effective_from: '2019-12-25'
    effective_to: '2019-12-25'
 -  source_url: null
@@ -1768,13 +1765,13 @@
 +  evidence: 'A: statutory federal holiday with K.8 observance; python-holidays US (observed) agrees'
 +- effective_from: '2020-12-24'
 +  effective_to: '2020-12-24'
-+  source_url: Board calendar December 2020 (to confirm)
++  source_url: Board calendar December 2020
 +  retrieved_at_utc: '2026-10-28T05:31:09Z'
 +  signed_off_by: null
 +  date: '2020-12-24'
 +  kind: closed
 +  name: Executive order closing federal offices (Christmas Eve)
-+  evidence: 'C: order not found by search; H.10 DEXKOUS blank'
++  evidence: 'A: Board closure confirmed by the owner 2026-10-28 (CAL-14); H.10 DEXKOUS blank'
  - effective_from: '2020-12-25'
    effective_to: '2020-12-25'
 -  source_url: null

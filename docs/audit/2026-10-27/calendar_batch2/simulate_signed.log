@@ -1,0 +1,36 @@
+load
+  [ok] kr_sessions loads (v1.0.0): None
+  [ok] publication_schedules loads (v1.0.0): None
+  [ok] source_skipped loads (v1.0.0): None
+KR clock (kr_sessions + holidays_KRX)
+  [ok] decision_time KR 2026-11-19 (CSAT): datetime.datetime(2026, 11, 19, 7, 30, tzinfo=datetime.timezone.utc)
+  [ok] close_print_bound KR 2026-11-19: datetime.datetime(2026, 11, 19, 7, 30, 30, tzinfo=datetime.timezone.utc)
+  [ok] decision_time KR 2027-11-18 (CSAT, added): datetime.datetime(2027, 11, 18, 7, 30, tzinfo=datetime.timezone.utc)
+  [ok] decision_time KR 2026-11-20 (regular): datetime.datetime(2026, 11, 20, 6, 30, tzinfo=datetime.timezone.utc)
+  [ok] lunch row 1997-06-02: ('11:30', '13:00')
+  [ok] lunch row 1999-06-01: ('12:00', '13:00')
+  [ok] lunch row 2001-06-01: None
+  [ok] decision_time KR 1997-06-02 (holidays_KRX starts 2026): CalendarCoverageError
+publication instants
+  [ok] H15 obs 2026-10-27: datetime.datetime(2026, 10, 28, 20, 15, tzinfo=datetime.timezone.utc)
+  [ok] TREASURY_PAR obs 2026-10-27: datetime.datetime(2026, 10, 27, 22, 0, tzinfo=datetime.timezone.utc)
+  [ok] VIXCLS_CBOE instant obs 2026-10-27 (same day, no calendar lookup): datetime.datetime(2026, 10, 27, 20, 15, tzinfo=datetime.timezone.utc)
+  [ok] VIXCLS next expected obs (obs_calendar CBOE: holidays_CBOE empty): CalendarUnsigned
+  [ok] BLS without release dates: KeyError
+source exceptions (next expected observation skips them)
+  [ok] DGS10 after 2025-04-17: datetime.date(2025, 4, 21)
+  [ok] DGS2 after 2025-04-17: datetime.date(2025, 4, 21)
+  [ok] T10Y2Y after 2025-04-17: datetime.date(2025, 4, 21)
+  [ok] DGS2 after 2027-03-25: datetime.date(2027, 3, 29)
+  [ok] DGS2 after 2026-04-02 (2026 Good Friday had a value): datetime.date(2026, 4, 3)
+  [ok] DEXKOUS after 2019-01-11: datetime.date(2019, 1, 15)
+market status on 2026-10-28
+  US: signed=True refused=[] arm_precondition=True
+  KR: signed=False refused=['kr_regime_tags'] arm_precondition=True
+  [ok] US all coverage files signed: True
+coverage horizon: first decision date that warns / pages
+  kr_sessions            warn from 2027-10-05  page from 2027-12-01
+  publication_schedules  warn from 2027-10-08  page from 2027-12-03
+  source_skipped         warn from 2027-10-08  page from 2027-12-03
+
+0 failure(s)

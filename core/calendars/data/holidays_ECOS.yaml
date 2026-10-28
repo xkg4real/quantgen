@@ -1,19 +1,337 @@
 file_id: holidays_ECOS
-version: 0.1.0-draft
-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
-  DISARMED until the owner verifies and signs
+version: 1.0.0
+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/06_calendar_batch3.md); refused at load until the owner
+  signs (R-20 rule 6, T-CAL-01)
 covers:
-  from: null
-  to: null
+  from: '2026-01-01'
+  to: '2027-12-31'
 coverage_calendar: ECOS
-signed_off_by: null
-signed_utc: null
-md5: null
+signed_off_by: Geon Koh
+signed_utc: '2026-10-28T11:28:41Z'
+md5: 603170d21048f8b81649324996887595
 how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
   MANIFEST.yaml row with a new test id
 unverified:
-- 'no rows: skeleton only'
+- the onshore USD/KRW market trades 24 hours from 2026-07-06 (Mon 06:00 - Sat 06:00); ECOS still posts the 15:30 KST close
+  only on Korean business days, which this calendar lists
+- the 2026 and 2027 year-end closures follow the FX market committee's practice; its notice each December governs
+- 1995-2025 rows are not in this file (as holidays_KRX); history is a later version
 owner_must_sign:
 - BoK ECOS business-day calendar (BOK_CALL_RATE obs_calendar), with licence, owner and md5 (spec section 9.5)
-rows: []
+rows:
+- effective_from: '2026-01-01'
+  effective_to: '2026-01-01'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-01-01'
+  kind: closed
+  name: 신정 (New Year's Day)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-02-16'
+  effective_to: '2026-02-16'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-02-16'
+  kind: closed
+  name: 설날 연휴 (Seollal)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-02-17'
+  effective_to: '2026-02-17'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-02-17'
+  kind: closed
+  name: 설날 (Seollal)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-02-18'
+  effective_to: '2026-02-18'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-02-18'
+  kind: closed
+  name: 설날 연휴 (Seollal)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-03-02'
+  effective_to: '2026-03-02'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-03-02'
+  kind: closed
+  name: 삼일절 대체공휴일 (Independence Movement Day, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-05-01'
+  effective_to: '2026-05-01'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일);
+    https://sports.khan.co.kr/article/201705010829003
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-05-01'
+  kind: closed
+  name: 노동절 (Labour Day)
+  evidence: 'A: 노동절은 2026년부터 공휴일; 그 전에도 은행 휴무(근로자의 날)'
+- effective_from: '2026-05-05'
+  effective_to: '2026-05-05'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-05-05'
+  kind: closed
+  name: 어린이날 (Children's Day)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-05-25'
+  effective_to: '2026-05-25'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-05-25'
+  kind: closed
+  name: 부처님오신날 대체공휴일 (Buddha's Birthday, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-06-03'
+  effective_to: '2026-06-03'
+  source_url: https://www.dailian.co.kr/news/view2/1646567/%ED%95%9C%EA%B5%AD%EA%B1%B0%EB%9E%98%EC%86%8C-%EC%A7%80%EB%B0%A9%EC%84%A0%EA%B1%B0%EC%9D%BC%EC%A0%9C%ED%97%8C%EC%A0%88-%EC%A6%9D%EC%8B%9C-%ED%9C%B4%EC%9E%A5-2026;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-06-03'
+  kind: closed
+  name: 제9회 전국동시지방선거일 (local elections)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-07-17'
+  effective_to: '2026-07-17'
+  source_url: https://www.dailian.co.kr/news/view2/1646567/%ED%95%9C%EA%B5%AD%EA%B1%B0%EB%9E%98%EC%86%8C-%EC%A7%80%EB%B0%A9%EC%84%A0%EA%B1%B0%EC%9D%BC%EC%A0%9C%ED%97%8C%EC%A0%88-%EC%A6%9D%EC%8B%9C-%ED%9C%B4%EC%9E%A5-2026;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-07-17'
+  kind: closed
+  name: 제헌절 (Constitution Day)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-08-17'
+  effective_to: '2026-08-17'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-08-17'
+  kind: closed
+  name: 광복절 대체공휴일 (Liberation Day, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-09-24'
+  effective_to: '2026-09-24'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-09-24'
+  kind: closed
+  name: 추석 연휴 (Chuseok)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-09-25'
+  effective_to: '2026-09-25'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-09-25'
+  kind: closed
+  name: 추석 (Chuseok)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-10-05'
+  effective_to: '2026-10-05'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-10-05'
+  kind: closed
+  name: 개천절 대체공휴일 (National Foundation Day, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-10-09'
+  effective_to: '2026-10-09'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-10-09'
+  kind: closed
+  name: 한글날 (Hangeul Day)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-12-25'
+  effective_to: '2026-12-25'
+  source_url: https://astro.kasi.re.kr/kor/life/post/calendarData?year=2026; KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-12-25'
+  kind: closed
+  name: 기독탄신일 (Christmas Day)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2026-12-31'
+  effective_to: '2026-12-31'
+  source_url: https://www.ytn.co.kr/_ln/0102_202512171452203412; https://v.daum.net/v/20251231095305274
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-12-31'
+  kind: closed
+  name: 연말 휴장일 (year-end closure)
+  evidence: 'A: 서울외환시장운영협의회가 2005년부터 연말 마지막 영업일(12/31)을 휴장으로 운영 (2025-12-31 휴장, 1/2 10:00 개장); KRX 연말 휴장과 같은 날'
+- effective_from: '2027-01-01'
+  effective_to: '2027-01-01'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-01-01'
+  kind: closed
+  name: 신정 (New Year's Day)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-02-08'
+  effective_to: '2027-02-08'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-02-08'
+  kind: closed
+  name: 설날 연휴 (Seollal)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-02-09'
+  effective_to: '2027-02-09'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-02-09'
+  kind: closed
+  name: 설날 대체공휴일 (Seollal, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-03-01'
+  effective_to: '2027-03-01'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-03-01'
+  kind: closed
+  name: 삼일절 (Independence Movement Day)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-05-03'
+  effective_to: '2027-05-03'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-05-03'
+  kind: closed
+  name: 노동절 대체공휴일 (Labour Day, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-05-05'
+  effective_to: '2027-05-05'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-05-05'
+  kind: closed
+  name: 어린이날 (Children's Day)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-05-13'
+  effective_to: '2027-05-13'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-05-13'
+  kind: closed
+  name: 부처님오신날 (Buddha's Birthday)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-07-19'
+  effective_to: '2027-07-19'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-07-19'
+  kind: closed
+  name: 제헌절 대체공휴일 (Constitution Day, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-08-16'
+  effective_to: '2027-08-16'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-08-16'
+  kind: closed
+  name: 광복절 대체공휴일 (Liberation Day, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-09-14'
+  effective_to: '2027-09-14'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-09-14'
+  kind: closed
+  name: 추석 연휴 (Chuseok)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-09-15'
+  effective_to: '2027-09-15'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-09-15'
+  kind: closed
+  name: 추석 (Chuseok)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-09-16'
+  effective_to: '2027-09-16'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-09-16'
+  kind: closed
+  name: 추석 연휴 (Chuseok)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-10-04'
+  effective_to: '2027-10-04'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-10-04'
+  kind: closed
+  name: 개천절 대체공휴일 (National Foundation Day, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-10-11'
+  effective_to: '2027-10-11'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-10-11'
+  kind: closed
+  name: 한글날 대체공휴일 (Hangeul Day, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-12-27'
+  effective_to: '2027-12-27'
+  source_url: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431; https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027;
+    KRX 유가증권시장 업무규정 휴장일 조항(관공서의 공휴일·노동절·연말 휴장일)
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-12-27'
+  kind: closed
+  name: 기독탄신일 대체공휴일 (Christmas Day, substitute)
+  evidence: 'A: 관공서 공휴일·대체공휴일·선거일은 은행과 서울외환시장 휴무; 날짜는 서명된 holidays_KRX v1.0.0과 같음'
+- effective_from: '2027-12-31'
+  effective_to: '2027-12-31'
+  source_url: https://www.ytn.co.kr/_ln/0102_202512171452203412; https://v.daum.net/v/20251231095305274
+  retrieved_at_utc: '2026-10-28T09:30:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-12-31'
+  kind: closed
+  name: 연말 휴장일 (year-end closure)
+  evidence: 'A: 서울외환시장운영협의회가 2005년부터 연말 마지막 영업일(12/31)을 휴장으로 운영 (2025-12-31 휴장, 1/2 10:00 개장); KRX 연말 휴장과 같은 날'

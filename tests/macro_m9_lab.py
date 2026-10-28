@@ -535,9 +535,13 @@ def test_t_crypto_01_clock_annualisation_and_no_crypto_sleeve():
     x = rng.normal(0, 0.02, 2000)
     s = float(np.std(x, ddof=1))
     assert abs(s * math.sqrt(K.annualisation_days("CRYPTO")) / (s * math.sqrt(K.annualisation_days("KR"))) - math.sqrt(365 / 252)) < 1e-12
+    from core.calendars import store as CS
     from core.calendars.store import CalendarUnsigned, CalendarCoverageError, NotASession
-    # the KR clock still fails closed on the unsigned shipped set; CRYPTO did not touch it
-    _raises(lambda: K.decision_time_utc("KR", d), (CalendarUnsigned, CalendarCoverageError, NotASession))
+    # CRYPTO did not touch the KR clock: unsigned KR clock files fail it closed, signed ones give the KRX close
+    if any(CS.CalendarSet().refusal(f) for f in CS.MARKET_FILES["KR"]):
+        _raises(lambda: K.decision_time_utc("KR", d), (CalendarUnsigned, CalendarCoverageError, NotASession))
+    else:
+        assert K.decision_time_utc("KR", d) == U(2026, 10, 2, 6, 30)                     # 15:30 KST
     store, get = _store_get_factory()
     assert get("time.markets.CRYPTO") == {"tz": "UTC", "decision_utc": "00:00:00Z of d+1", "venue_declared": True, "annualisation_days": 365}
     assert get("sleeves.CRYPTO") is None and set(get("sleeves")) == {"US", "KR"} and get("sleeves.CRYPTO.notional_nav") is None
