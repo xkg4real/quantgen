@@ -1,6 +1,6 @@
 file_id: holidays_JPX
 version: 1.0.0
-status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/13_calendar_batch6.md); refused at load until the owner
+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/14_calendar_batch6.md); refused at load until the owner
   signs (R-20 rule 6, T-CAL-01)
 covers:
   from: '2025-01-01'

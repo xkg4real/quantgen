@@ -250,6 +250,14 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
      그 브랜치로 열린 PR #8(변경 파일 0개)은 닫았습니다.
   3. handoff 브랜치 `LEDGER.md`에 ①-2를 기록했습니다(`ebe89d6`). `CURRENT.md`는 ③ 자리 그대로 두었습니다.
   4. 서명 대장 `docs/audit/2026-10-27/13_signature_register.md`를 만들었습니다.
-  5. 미서명 6개 파일의 감사와 서명 양식을 냈습니다. `13_calendar_batch6.md`와 `15_signing_form_batch6.md`입니다.
+  5. 미서명 6개 파일의 감사와 서명 양식을 냈습니다. `14_calendar_batch6.md`와 `15_signing_form_batch6.md`입니다.
      `core/calendars/data/`는 바꾸지 않았습니다.
 - **소유자 결정 대기:** 6차 서명서(HK-01, SSE-27, TW-27, CME-01, SCOPE 확인란 포함)
+- **추가 (2026-10-29, 다른 세션이 전한 소유자 지시):** "release_calendar 감사 결과를 서명문서 세션으로 전달하고, 서명은 그 세션에서 한다."
+  - **전달받은 것:** T-CAL-02 서명 상태 확인 세션(`claude/optimistic-fermi-revc37`)이 감사 커밋 `d1c9296`, `5f669cb`를 보냈습니다.
+  - **반영:**
+    - 이 세션 브랜치에 병합했습니다.
+    - 그 감사가 `calendar_batch5/`와 문서 번호 `12_`를 먼저 썼으므로, 이 세션의 문서를 6차로 바꿨습니다.
+      `13_signature_register.md`, `14_calendar_batch6.md`, `15_signing_form_batch6.md`, `calendar_batch6/`입니다.
+    - `release_calendar` 지문(`1faf621a…`)과 코드 패치 전후 모의 서명(4항목 실패 → 0)을 이 세션에서 다시 확인했습니다.
+  - **소유자 결정 대기:** 5차 서명서(`12_release_calendar.md` 8절)와 6차 서명서(`15_signing_form_batch6.md`)

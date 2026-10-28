@@ -6,7 +6,7 @@
 -status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
 -  DISARMED until the owner verifies and signs
 +version: 1.0.0
-+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/13_calendar_batch6.md); refused at load until the owner
++status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/14_calendar_batch6.md); refused at load until the owner
 +  signs (R-20 rule 6, T-CAL-01)
  covers:
 -  from: null
@@ -530,7 +530,7 @@
 -status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
 -  DISARMED until the owner verifies and signs
 +version: 1.0.0
-+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/13_calendar_batch6.md); refused at load until the owner
++status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/14_calendar_batch6.md); refused at load until the owner
 +  signs (R-20 rule 6, T-CAL-01)
  covers:
 -  from: null
@@ -1073,7 +1073,7 @@
 -status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
 -  DISARMED until the owner verifies and signs
 +version: 1.0.0
-+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/13_calendar_batch6.md); refused at load until the owner
++status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/14_calendar_batch6.md); refused at load until the owner
 +  signs (R-20 rule 6, T-CAL-01)
  covers:
 -  from: null
@@ -1625,7 +1625,7 @@
 -status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
 -  DISARMED until the owner verifies and signs
 +version: 1.0.0
-+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/13_calendar_batch6.md); refused at load until the owner
++status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/14_calendar_batch6.md); refused at load until the owner
 +  signs (R-20 rule 6, T-CAL-01)
  covers:
 -  from: null
@@ -2196,7 +2196,7 @@
 -status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
 -  DISARMED until the owner verifies and signs
 +version: 1.0.0
-+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/13_calendar_batch6.md); refused at load until the owner
++status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/14_calendar_batch6.md); refused at load until the owner
 +  signs (R-20 rule 6, T-CAL-01)
  covers:
 -  from: null
@@ -2601,7 +2601,7 @@
 -status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
 -  DISARMED until the owner verifies and signs
 +version: 1.0.0
-+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/13_calendar_batch6.md); refused at load until the owner
++status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/14_calendar_batch6.md); refused at load until the owner
 +  signs (R-20 rule 6, T-CAL-01)
  covers:
    from: '2015-01-01'

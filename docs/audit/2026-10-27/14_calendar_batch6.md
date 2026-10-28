@@ -5,6 +5,7 @@
 - **규칙:** `core/calendars/data/`는 바꾸지 않았고, 서명 필드도 쓰지 않았습니다. 감사 결과, 제안 파일, 서명 양식만 냅니다.
 - **서명 양식:** `15_signing_form_batch6.md`
 - **서명된 10개 파일의 기록:** `13_signature_register.md`
+- **번호:** 5차는 `release_calendar`입니다(`12_release_calendar.md`, 다른 세션이 감사). 이 문서는 6차이고, 서명 기록은 5차가 `16_`, 6차가 `17_`입니다.
 
 ---
 

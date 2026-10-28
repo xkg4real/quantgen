@@ -14,7 +14,7 @@
 |---|---|---|
 | 서명됨 | **10 / 16** | KRX, NYSE, FED, SIFMA, kr_sessions, publication_schedules, source_skipped, CBOE, ECOS, kr_regime_tags |
 | 미서명 | 6 / 16 | JPX, SSE, HKEX, TWSE, CME, market_closes |
-| 승인됐지만 아직 없는 파일 | 1 | `release_calendar.yaml` (BLS·BEA A안 1단계, `11_bls_bea_stage1_status.md`) |
+| 감사를 마쳤지만 아직 데이터 폴더에 없는 파일 | 1 | `release_calendar.yaml` (BLS·BEA A안 1단계). 감사와 서명 양식은 `12_release_calendar.md` |
 
 - **KR·US 운영에 필요한 달력은 모두 서명됐습니다.**
 - 미서명 6개는 다음 용도에만 쓰입니다.
@@ -81,16 +81,19 @@
 
 | 파일 | 지금 상태 | 쓰는 곳 | 서명하지 않았을 때 | 서명 문서 |
 |---|---|---|---|---|
-| `holidays_JPX.yaml` | 0행, 기간 없음 | JP 결정 시계, KR 공분산(닛케이) | JP 시계와 닛케이 종가 입력이 막힘 | `13_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `holidays_SSE.yaml` | 0행, 기간 없음 | CN 결정 시계, KR 공분산(상하이) | 같음 | `13_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `holidays_HKEX.yaml` | 0행, 기간 없음 | HK 결정 시계, KR 공분산(HSI) | 같음 | `13_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `holidays_TWSE.yaml` | 0행, 기간 없음 | TW 결정 시계, KR 공분산(TAIEX) | 같음 | `13_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `holidays_CME.yaml` | 0행, 기간 없음 | CME 선물(`CME_micro_ES`), T-AVAIL-01 | CME 휴장일 판단 불가 | `13_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `market_closes.yaml` | 3행(SSE 15:00, HKEX 16:00, TWSE 13:30), 출처 없음 | CN·HK·TW 마감 시각 | CN·HK·TW 시계가 막힘 | `13_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `release_calendar.yaml` | 파일 없음(코드만 반영) | BLS·BEA 발표일(CPI, 고용, PCE, 실업수당) | BLS·BEA 입력이 막힘 | 공식 일정 사이트 접근 필요(아래) |
+| `holidays_JPX.yaml` | 0행, 기간 없음 | JP 결정 시계, KR 공분산(닛케이) | JP 시계와 닛케이 종가 입력이 막힘 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
+| `holidays_SSE.yaml` | 0행, 기간 없음 | CN 결정 시계, KR 공분산(상하이) | 같음 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
+| `holidays_HKEX.yaml` | 0행, 기간 없음 | HK 결정 시계, KR 공분산(HSI) | 같음 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
+| `holidays_TWSE.yaml` | 0행, 기간 없음 | TW 결정 시계, KR 공분산(TAIEX) | 같음 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
+| `holidays_CME.yaml` | 0행, 기간 없음 | CME 선물(`CME_micro_ES`), T-AVAIL-01 | CME 휴장일 판단 불가 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
+| `market_closes.yaml` | 3행(SSE 15:00, HKEX 16:00, TWSE 13:30), 출처 없음 | CN·HK·TW 마감 시각 | CN·HK·TW 시계가 막힘 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
+| `release_calendar.yaml` | 감사 완료, 제안 v1.0.0 264행(지문 `1faf621a5b443f1c9f3627c2a98f1054`). 코드 패치 `calendar_batch5/proposed_code.diff`와 함께 반영 | BLS·BEA 발표일(CPI, 고용, PCE, 실업수당) | BLS·BEA 입력이 막힘. 근원 PCE가 없으면 헤지 크레딧이 꺼짐 | `12_release_calendar.md` 8절(5차 서명 양식) |
 
 - **미서명 파일이 KR 북을 멈추지는 않습니다.** 공분산에만 쓰이는 입력은 실패하면 최대 5번의 결정 동안 마지막 값을 '오래됨' 표시와 함께 쓰고, 그 뒤에는 공분산에서 빠집니다(스펙 L1877).
-- **`release_calendar.yaml`:** 소유자 승인서에는 `www.bls.gov`, `www.bea.gov`, `www.dol.gov`를 허용했다고 적혀 있습니다. 하지만 2026-10-29 이 세션에서는 세 곳 모두 접속이 막혔습니다.
+- **`release_calendar.yaml`:**
+  - 다른 세션이 소유자가 올린 BLS·BEA 공식 일정과 ALFRED 기록으로 감사했습니다(`d1c9296`, `5f669cb`).
+  - 이 세션이 다시 돌려 확인했습니다. 지문이 맞고, 현재 코드로는 4항목이 실패하고 코드 패치를 적용하면 0입니다.
+  - 패치는 서명과 같은 커밋에 넣어야 합니다. 서명 없이 `store.py` 부분만 넣으면 US 상태가 미서명으로 떨어지기 때문입니다.
 
 ---
 
