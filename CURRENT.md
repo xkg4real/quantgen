@@ -6,7 +6,7 @@ task: t-cal-02-sign
 cycle: 2026-10-27
 done_ids: none
 next_ids: ①-2
-updated_at: 2026-10-29T03:25:00+09:00
+updated_at: 2026-10-29T02:44:11+09:00
 stale_after_hours: 3
 waiting_on: owner
 work_branch: claude/relaxed-cerf-az755o
