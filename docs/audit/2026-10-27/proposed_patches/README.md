@@ -14,4 +14,10 @@
 | `m02_proposed.diff` | PT-03 | suppliers 검증 절 |
 | `calendars_pt07_audit_versions/proposed_*.diff` | PT-07 | calendars 7.1~7.4. PT-07은 `d865c7f`에서 검토를 거친 판으로 적용됐으므로, 이 사본은 기록용입니다 |
 
-"applies cleanly" 여부는 이 사본을 만든 시점의 HEAD 기준이며, 커밋 메시지에 적었습니다.
+`git apply --check` 결과 (HEAD `32f91e5`, 2026-10-28):
+
+- 그대로 적용됨: `proposed_d01_d02.diff`, `proposed_data_flow.diff`, `sl_all.diff`, `proposed_d04_d05.diff`, `m02_proposed.diff`.
+- 적용 안 됨(의도된 것):
+  - `*_lf.diff` 2개: 읽기용 LF 판이라 CRLF 파일에 적용되지 않습니다.
+  - `proposed_suspension_alt.diff`, `proposed_future_guard.diff`: `proposed_d04_d05.diff`를 먼저 적용한 트리 위의 대안
+    패치입니다(감사 PT-09: "정지 대안과 미래 시각 가드를 함께 넣는다").
