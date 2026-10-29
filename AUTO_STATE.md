@@ -1,11 +1,11 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-10-29T14:11:21+09:00
+created_at: 2026-10-29T14:44:25+09:00
 source_branch: claude/amazing-gauss-tdiguu
-source_head: 45b233f
+source_head: 468d0fb
 upstream: origin/claude/amazing-gauss-tdiguu
-patch_base: 45b233f
+patch_base: 468d0fb
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
@@ -13,7 +13,7 @@ usage_pct: unknown
 usage_resets_at: unknown
 session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
 snapshot_key: none
-current_md_updated_at: 2026-10-29T13:50:05+09:00
+current_md_updated_at: 2026-10-29T14:11:43+09:00
 current_md_status: checkpoint
 ---
 
@@ -26,6 +26,9 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
+468d0fb Merge main (PR #10: overlay UI tests follow the calendar signing state) into the Nautilus branch
+950f25e Merge pull request #10 from xkg4real/claude/relaxed-cerf-az755o
+ace8f3b Overlay UI tests follow the calendar signing state; stale "calendar set is unsigned" line fixed
 45b233f Execution record: the second main merge (0acb9b7, PR #9) and its full run (790/931, 4 failed, 137 not run)
 0acb9b7 Merge main (PR #9: calendar audits 5 and 6, all 17 files and the set 1.0.0 owner-signed) into the Nautilus branch
 e28035f Merge pull request #9 from xkg4real/claude/relaxed-cerf-az755o
@@ -38,9 +41,6 @@ d4e9a42 Owner sign-off (Geon Koh): release_calendar v1.0.0 (calendar audit 5) wi
 324ec31 Calendar audit 5: JPX, SSE, HKEX, TWSE, CME and market_closes proposed v1.0.0 (unsigned) with the signing form
 abc7217 Execution record: the main merge after ③-6 (614dca4) and its cache-free full run (792/931, 2 failed, 137 not run)
 5f669cb Calendar audit 5: full macro suite on the simulated-signed tree (no new failure); clean dry-run log
-614dca4 Merge main (PR #7 owner-signed calendars, PR #3, PR #6) into the Nautilus branch; PT-07 calendar changes withdrawn
-d1c9296 Calendar audit 5: release_calendar proposed v1.0.0 (unsigned) from the owner's official schedules and ALFRED vintages
-8ec8598 Calendar signature register: the 10 signed files, their forms and records, and the 6 still unsigned
 ```
 
 ## 푸시되지 않은 커밋
