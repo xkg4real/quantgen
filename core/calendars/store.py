@@ -17,11 +17,13 @@ calendar after the decision date; <= 60 warns, <= 20 pages, a decision date outs
 `CalendarCoverageError`, which the runtime maps to an OPS HALT with reason `calendar_coverage`.
 
 All dates are quoted strings in the YAML (PyYAML 1.1 would otherwise read 15:30 as 930 and 2016-08-01 as
-a date object); the loader refuses unquoted date/time scalars.
+a date object); the loader refuses native dates and sexagesimal numeric time scalars.
+Quoted times and plain times that YAML already preserves as strings (such as 09:30) remain valid.
 """
 from __future__ import annotations
 
 import os
+import re
 import uuid
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
@@ -117,8 +119,41 @@ def content_md5(doc: dict) -> str:
     return md5_hex(canonical_json(body))
 
 
+class _UnquotedTime(ValueError):
+    pass
+
+
+class CalendarLoader(yaml.SafeLoader):
+    """Reject YAML 1.1 time-to-number coercion without changing the global safe loader."""
+
+
+def _calendar_number(loader, node):
+    if ":" in node.value:
+        raise _UnquotedTime(f"line {node.start_mark.line + 1}: unquoted/numeric time {node.value!r}; quote the time")
+    constructor = (yaml.SafeLoader.construct_yaml_int if node.tag.endswith(":int")
+                   else yaml.SafeLoader.construct_yaml_float)
+    return constructor(loader, node)
+
+
+CalendarLoader.add_constructor("tag:yaml.org,2002:int", _calendar_number)
+CalendarLoader.add_constructor("tag:yaml.org,2002:float", _calendar_number)
+_ISO_UTC = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]+)?(?:Z|\+00:00)$")
+
+
+def _require_utc_instant(value, where: str) -> None:
+    if not isinstance(value, str) or not _ISO_UTC.fullmatch(value):
+        raise CalendarUnsigned(f"{where}: signed_utc must be an ISO-8601 UTC instant")
+    try:
+        datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        raise CalendarUnsigned(f"{where}: signed_utc is not a valid UTC instant") from None
+
+
 def read_yaml(path: Path) -> dict:
-    doc = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    try:
+        doc = yaml.load(Path(path).read_text(encoding="utf-8"), Loader=CalendarLoader)
+    except _UnquotedTime as exc:
+        raise CalendarUnsigned(f"{path.name}: {exc}") from None
     if not isinstance(doc, dict):
         raise CalendarUnsigned(f"{path.name}: not a mapping")
     _reject_native_dates(doc, path.name)
@@ -139,6 +174,7 @@ def parse_file(doc: dict, *, manifest_row: Optional[dict], path: Optional[Path] 
         raise CalendarUnsigned(f"{name}: signed_off_by is empty; an unsigned calendar file is refused (T-CAL-01)")
     if not _signed(doc.get("signed_utc")):
         raise CalendarUnsigned(f"{name}: signed_utc is empty")
+    _require_utc_instant(doc["signed_utc"], name)
     digest = content_md5(doc)
     if doc.get("md5") != digest:
         raise CalendarUnsigned(f"{name}: md5 {doc.get('md5')!r} != content md5 {digest}; an edit under an old "
