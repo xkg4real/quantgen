@@ -3,9 +3,30 @@ import hashlib
 from html import escape
 from io import BytesIO
 import json
+import os
+from pathlib import Path
+import tempfile
 from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
 
 from .runs import export_bytes, validate, canonical
+
+
+def save_desktop_export(filename, data, *, extension):
+    """Write only the explicitly chosen report path; never a data/ledger root."""
+    path=Path(filename)
+    if extension not in {'json','zip'} or path.suffix.lower() != '.'+extension:
+        raise ValueError('Choose the matching report file extension')
+    if path.is_symlink() or any(p.startswith('.env') or p in
+            {'cache','holdout','frozen','paper_live','grokteam','.nextgen'} for p in path.parts):
+        raise ValueError('Protected export destination')
+    temporary=None
+    try:
+        with tempfile.NamedTemporaryFile(dir=path.parent,prefix='.quantgen-export-',delete=False) as stream:
+            temporary=stream.name
+            stream.write(data); stream.flush(); os.fsync(stream.fileno())
+        os.replace(temporary,path)
+    finally:
+        if temporary is not None and os.path.exists(temporary): os.unlink(temporary)
 
 
 def bundle_bytes(run):

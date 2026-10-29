@@ -11,7 +11,7 @@ from tools.status.snapshot import verify
 from core.app_paths import application_root
 from core.research.runs import session_for, export_bytes
 from core.research.markets import load_markets, SPECS
-from core.research.export import bundle_bytes
+from core.research.export import bundle_bytes, save_desktop_export
 
 ROOT = application_root()
 
@@ -100,9 +100,14 @@ class ResearchHome(ft.Column):
     async def download(self, run, *, bundle=False):
         try:
             extension='zip' if bundle else 'json'
-            await ft.FilePicker().save_file(file_name=f"QUANTGEN-{run['run_id']}.{extension}",
+            data=bundle_bytes(run) if bundle else export_bytes(run)
+            filename=await ft.FilePicker().save_file(file_name=f"QUANTGEN-{run['run_id']}.{extension}",
                 file_type=ft.FilePickerFileType.CUSTOM, allowed_extensions=[extension],
-                src_bytes=bundle_bytes(run) if bundle else export_bytes(run))
+                src_bytes=data)
+            # Flet web/mobile writes src_bytes; desktop only selects a path.
+            if filename and not self.host_page.web and not self.host_page.platform.is_mobile():
+                import asyncio
+                await asyncio.to_thread(save_desktop_export,filename,data,extension=extension)
         except Exception:
             self.host_page.show_dialog(ft.AlertDialog(title=_text('내보내기 실패'),
                 content=_text('파일 저장 서비스를 사용할 수 없습니다. 앱 연결을 확인해 주세요.')))
