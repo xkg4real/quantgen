@@ -141,5 +141,37 @@ class ResearchContractTests(unittest.TestCase):
         s=SessionResearch(); self.assertTrue(s.start_market_refresh()); self.assertFalse(s.start_market_refresh())
         s.finish_market_refresh([]); self.assertTrue(s.start_market_refresh())
 
+    def test_desktop_save_writes_selected_file_and_cancel_does_not_write(self):
+        import asyncio
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from unittest.mock import AsyncMock
+        from ui.research_home import ResearchHome
+        page=SimpleNamespace(web=False,platform=SimpleNamespace(is_mobile=lambda:False),show_dialog=unittest.mock.Mock())
+        view=ResearchHome(page,lambda _:None);r,_,_=result_fixture()
+        with TemporaryDirectory() as directory:
+            path=Path(directory)/'result.json'
+            with patch('ui.research_home.ft.FilePicker') as picker:
+                picker.return_value.save_file=AsyncMock(return_value=str(path))
+                asyncio.run(view.download(r))
+                self.assertEqual(read_export(path.read_bytes()),r)
+                picker.return_value.save_file=AsyncMock(return_value=None)
+                with patch('ui.research_home.save_desktop_export',side_effect=AssertionError('cancel wrote')):
+                    asyncio.run(view.download(r))
+            page.show_dialog.assert_not_called()
+
+    def test_web_export_sends_bytes_without_server_file_write(self):
+        import asyncio
+        from unittest.mock import AsyncMock
+        from ui.research_home import ResearchHome
+        page=SimpleNamespace(web=True,show_dialog=unittest.mock.Mock())
+        view=ResearchHome(page,lambda _:None);r,_,_=result_fixture()
+        with patch('ui.research_home.ft.FilePicker') as picker, \
+             patch('ui.research_home.save_desktop_export',side_effect=AssertionError('web wrote server path')):
+            picker.return_value.save_file=AsyncMock(return_value='browser-selected.json')
+            asyncio.run(view.download(r))
+            self.assertEqual(read_export(picker.return_value.save_file.call_args.kwargs['src_bytes']),r)
+        page.show_dialog.assert_not_called()
+
 
 if __name__=='__main__': unittest.main()
