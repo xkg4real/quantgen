@@ -4,13 +4,13 @@ reason: milestone
 from: gpt
 task: rulings-2026-10-29
 cycle: 2026-10-27
-done_ids: ②-5/b, ④-2/a, ①-2/4/a, ⑫-0, ⑫-1/a, ⑫-1/a/2
-next_ids: ①-2/4, ⑫-1, ⑬-2/a
-updated_at: 2026-10-29T07:55:43Z
+done_ids: ②-5/b, ④-2/a, ①-2/4/a, ⑫-0, ⑫-1/a, ⑫-1/a/2, ⑬-2/a
+next_ids: ①-2/4, ⑫-1, ⑫-2, ④-2, ⑨-3a, ⑬-1, ⑬-2
+updated_at: 2026-10-29T07:59:08Z
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/rulings-2026-10-29
-work_commit: 7f44f9f78ac224f66bcb2d71f711d040d881f46d
+work_branch: gpt/research-home-a-f1-20261029
+work_commit: e1271a71d45d5b8b7da095d427b526a5f051349f
 uncommitted_changes: no
 pr: 4
 usage_weekly_pct: 95
@@ -24,6 +24,8 @@ handoff_id: 2026-10-27/rulings-2026-10-29/1cebe23741ffed482a3205e0b3bd4a3c208b0e
 # 인수인계: 소유자 결정(2026-10-29) 반영과 다음 작업(PentPort 감사 반영, 홈/UI 개편 준비)
 
 ## 0. 한 줄 요약
+
+**Codex milestone ⑬-2/a (2026-10-29T07:59:08Z):** A/F1 Research Home·6작업공간·모바일 메뉴와 정직한 미연결 상태 구현; 기존 16경로 유지. Commit e1271a71d45d5b8b7da095d427b526a5f051349f. status/UI 15 PASS + Flet guard 4 + resize/cache 2; Chromium 1600x1200/390x844 확인(엔진 fixture); 한글 glyph 11172/11172; 시세/연구이력 adapter 미연결; full-suite/Windows/배포 NOT_RUN.
 
 **Codex milestone ⑫-1/a/2 (2026-10-29T07:55:43Z):** 상태 출처의 null/list/잘못된 QA 행을 명시적으로 거부하도록 보완. Commit 98a645f1ca1096772aa8a5c9df773a6a8081ac9b. synthetic fixture 9/9 PASS; 원격 branch SHA read-back; 모델/게이트 불변.
 
