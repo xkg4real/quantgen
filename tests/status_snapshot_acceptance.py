@@ -59,7 +59,7 @@ class StatusSnapshotTests(unittest.TestCase):
             with self.assertRaises(StatusError): self.refresh()
 
     def test_duplicate_unknown_and_empty_qa_refuse(self):
-        for rows in [[], [{'test':'x','status':'READY'}],
+        for rows in [[], ['invalid row'], [{'test':'x','status':'READY'}],
                      [{'test':'x','status':'PASS'}, {'test':'x','status':'PASS'}]]:
             self.qa.write_text(json.dumps(rows), encoding='utf-8')
             with self.assertRaises(StatusError): self.refresh()
@@ -67,6 +67,12 @@ class StatusSnapshotTests(unittest.TestCase):
     def test_missing_source_does_not_become_empty_success(self):
         self.qa.unlink()
         with self.assertRaises(OSError): verify(self.root)
+
+    def test_malformed_calendar_shapes_refuse(self):
+        p = self.root / 'core/calendars/data/MANIFEST.yaml'
+        for value in ('null', '[]', 'rows: broken', 'rows: [null]', 'rows: [{}]'):
+            p.write_text(value, encoding='utf-8')
+            with self.assertRaises(StatusError): self.refresh()
 
     def test_generation_time_is_not_observation_time(self):
         s = collect(self.root, '2099-01-01T00:00:00Z')
