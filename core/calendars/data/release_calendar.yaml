@@ -1,0 +1,3040 @@
+file_id: release_calendar
+version: 1.0.0
+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/12_release_calendar.md); refused at load until the owner
+  signs (R-20 rule 6, T-CAL-01)
+covers:
+  from: '2025-01-01'
+  to: '2027-12-31'
+coverage_calendar: FED
+signed_off_by: Geon Koh
+signed_utc: '2026-10-29T02:05:33Z'
+md5: 0d89f161ac0b61712b2c1ed25bc9eadb
+description: 'BLS, BEA and DOL release dates (spec L1448, L1851): one row per release and reference period whose release date
+  falls in the covered range. period = the FRED observation date (first of the month; the week-ending Saturday for CLAIMS);
+  release_date and time are local America/New_York. A period without a row has no release date and stays unpublished (October
+  2025 CPI was cancelled). Releases: CPI -> CPIAUCSL, CPILFESL; EMPSIT -> UNRATE, PAYEMS, SAHMREALTIME; PIO -> PCEPI, PCEPILFE;
+  CLAIMS -> ICSA.'
+how_to_sign: verify every row against its official source, then run `python -m tools.sign_calendars --signer "<name>" --expect
+  release_calendar=<md5> release_calendar` after the file is copied in and its MANIFEST.yaml row added
+unverified:
+- 'CLAIMS 2027 (52 rows, evidence C): FRED listed no 2027 claims dates on 2026-10-28; the rows follow the rule that reproduces
+  every 2025-2026 date outside the 2025 shutdown (Thursday; Wednesday when the Thursday is a federal holiday: 2027-11-10 Veterans
+  Day, 2027-11-24 Thanksgiving); a new version replaces them once DOL publishes'
+- 'evidence B rows (one official record): future dates on a single schedule page (BLS November-December 2026, BEA from 2026-10-29,
+  FRED claims from 2026-10-29) and 2025 BLS dates before the shutdown, which rest on ALFRED alone; a rescheduled or cancelled
+  release is a release event (M5) until a new version'
+- 'CPI September 2025 -> 2025-10-24: ALFRED''s first vintage; the 08:30 ET time is BLS''s standard time, not printed on the
+  saved pages'
+- '1995-2024 release dates are stage 2 (separate approval): those observations stay unpublished'
+owner_must_sign:
+- BLS, BEA and DOL release dates per release and reference period (spec L1448), with the time of day (four BEA releases were
+  at 10:00 ET)
+rows:
+- effective_from: '2025-01-02'
+  effective_to: '2025-01-02'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2024-12-28'
+  release_date: '2025-01-02'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-01-08'
+  effective_to: '2025-01-08'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-01-04'
+  release_date: '2025-01-08'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-01-10'
+  effective_to: '2025-01-10'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2024-12-01'
+  release_date: '2025-01-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-01-15'
+  effective_to: '2025-01-15'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2024-12-01'
+  release_date: '2025-01-15'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-01-16'
+  effective_to: '2025-01-16'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-01-11'
+  release_date: '2025-01-16'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-01-23'
+  effective_to: '2025-01-23'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-01-18'
+  release_date: '2025-01-23'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-01-30'
+  effective_to: '2025-01-30'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-01-25'
+  release_date: '2025-01-30'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-01-31'
+  effective_to: '2025-01-31'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2024-12-01'
+  release_date: '2025-01-31'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2025 schedule agree'
+- effective_from: '2025-02-06'
+  effective_to: '2025-02-06'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-02-01'
+  release_date: '2025-02-06'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-02-07'
+  effective_to: '2025-02-07'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-01-01'
+  release_date: '2025-02-07'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-02-12'
+  effective_to: '2025-02-12'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-01-01'
+  release_date: '2025-02-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-02-13'
+  effective_to: '2025-02-13'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-02-08'
+  release_date: '2025-02-13'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-02-20'
+  effective_to: '2025-02-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-02-15'
+  release_date: '2025-02-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-02-27'
+  effective_to: '2025-02-27'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-02-22'
+  release_date: '2025-02-27'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-02-28'
+  effective_to: '2025-02-28'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-01-01'
+  release_date: '2025-02-28'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2025 schedule agree'
+- effective_from: '2025-03-06'
+  effective_to: '2025-03-06'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-03-01'
+  release_date: '2025-03-06'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-03-07'
+  effective_to: '2025-03-07'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-02-01'
+  release_date: '2025-03-07'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-03-12'
+  effective_to: '2025-03-12'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-02-01'
+  release_date: '2025-03-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-03-13'
+  effective_to: '2025-03-13'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-03-08'
+  release_date: '2025-03-13'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-03-20'
+  effective_to: '2025-03-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-03-15'
+  release_date: '2025-03-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-03-27'
+  effective_to: '2025-03-27'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-03-22'
+  release_date: '2025-03-27'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-03-28'
+  effective_to: '2025-03-28'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-02-01'
+  release_date: '2025-03-28'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2025 schedule agree'
+- effective_from: '2025-04-03'
+  effective_to: '2025-04-03'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-03-29'
+  release_date: '2025-04-03'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-04-04'
+  effective_to: '2025-04-04'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-03-01'
+  release_date: '2025-04-04'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-04-10'
+  effective_to: '2025-04-10'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-04-05'
+  release_date: '2025-04-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-04-10'
+  effective_to: '2025-04-10'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-03-01'
+  release_date: '2025-04-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-04-17'
+  effective_to: '2025-04-17'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-04-12'
+  release_date: '2025-04-17'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-04-24'
+  effective_to: '2025-04-24'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-04-19'
+  release_date: '2025-04-24'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-04-30'
+  effective_to: '2025-04-30'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-03-01'
+  release_date: '2025-04-30'
+  time: '10:00'
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2025 schedule agree; 10:00 ET per BEA (not 08:30)'
+- effective_from: '2025-05-01'
+  effective_to: '2025-05-01'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-04-26'
+  release_date: '2025-05-01'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-05-02'
+  effective_to: '2025-05-02'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-04-01'
+  release_date: '2025-05-02'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-05-08'
+  effective_to: '2025-05-08'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-05-03'
+  release_date: '2025-05-08'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-05-13'
+  effective_to: '2025-05-13'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-04-01'
+  release_date: '2025-05-13'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-05-15'
+  effective_to: '2025-05-15'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-05-10'
+  release_date: '2025-05-15'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-05-22'
+  effective_to: '2025-05-22'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-05-17'
+  release_date: '2025-05-22'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-05-29'
+  effective_to: '2025-05-29'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-05-24'
+  release_date: '2025-05-29'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-05-30'
+  effective_to: '2025-05-30'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-04-01'
+  release_date: '2025-05-30'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2025 schedule agree'
+- effective_from: '2025-06-05'
+  effective_to: '2025-06-05'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-05-31'
+  release_date: '2025-06-05'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-06-06'
+  effective_to: '2025-06-06'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-05-01'
+  release_date: '2025-06-06'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-06-11'
+  effective_to: '2025-06-11'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-05-01'
+  release_date: '2025-06-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-06-12'
+  effective_to: '2025-06-12'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-06-07'
+  release_date: '2025-06-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-06-18'
+  effective_to: '2025-06-18'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-06-14'
+  release_date: '2025-06-18'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-06-26'
+  effective_to: '2025-06-26'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-06-21'
+  release_date: '2025-06-26'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-06-27'
+  effective_to: '2025-06-27'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-05-01'
+  release_date: '2025-06-27'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2025 schedule agree'
+- effective_from: '2025-07-03'
+  effective_to: '2025-07-03'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-06-28'
+  release_date: '2025-07-03'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-07-03'
+  effective_to: '2025-07-03'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-06-01'
+  release_date: '2025-07-03'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-07-10'
+  effective_to: '2025-07-10'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-07-05'
+  release_date: '2025-07-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-07-15'
+  effective_to: '2025-07-15'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-06-01'
+  release_date: '2025-07-15'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-07-17'
+  effective_to: '2025-07-17'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-07-12'
+  release_date: '2025-07-17'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-07-24'
+  effective_to: '2025-07-24'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-07-19'
+  release_date: '2025-07-24'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-07-31'
+  effective_to: '2025-07-31'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-07-26'
+  release_date: '2025-07-31'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-07-31'
+  effective_to: '2025-07-31'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-06-01'
+  release_date: '2025-07-31'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2025 schedule agree'
+- effective_from: '2025-08-01'
+  effective_to: '2025-08-01'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-07-01'
+  release_date: '2025-08-01'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-08-07'
+  effective_to: '2025-08-07'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-08-02'
+  release_date: '2025-08-07'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-08-12'
+  effective_to: '2025-08-12'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-07-01'
+  release_date: '2025-08-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-08-14'
+  effective_to: '2025-08-14'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-08-09'
+  release_date: '2025-08-14'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-08-21'
+  effective_to: '2025-08-21'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-08-16'
+  release_date: '2025-08-21'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-08-28'
+  effective_to: '2025-08-28'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-08-23'
+  release_date: '2025-08-28'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-08-29'
+  effective_to: '2025-08-29'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-07-01'
+  release_date: '2025-08-29'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2025 schedule agree'
+- effective_from: '2025-09-04'
+  effective_to: '2025-09-04'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-08-30'
+  release_date: '2025-09-04'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-09-05'
+  effective_to: '2025-09-05'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-08-01'
+  release_date: '2025-09-05'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-09-11'
+  effective_to: '2025-09-11'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-09-06'
+  release_date: '2025-09-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-09-11'
+  effective_to: '2025-09-11'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-08-01'
+  release_date: '2025-09-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-09-18'
+  effective_to: '2025-09-18'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-09-13'
+  release_date: '2025-09-18'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-09-25'
+  effective_to: '2025-09-25'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-09-20'
+  release_date: '2025-09-25'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-09-26'
+  effective_to: '2025-09-26'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-08-01'
+  release_date: '2025-09-26'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2025 schedule agree'
+- effective_from: '2025-10-24'
+  effective_to: '2025-10-24'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-09-01'
+  release_date: '2025-10-24'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2025-11-20'
+  effective_to: '2025-11-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-09-27'
+  release_date: '2025-11-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-11-20'
+  effective_to: '2025-11-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-10-04'
+  release_date: '2025-11-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-11-20'
+  effective_to: '2025-11-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-10-11'
+  release_date: '2025-11-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-11-20'
+  effective_to: '2025-11-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-10-18'
+  release_date: '2025-11-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-11-20'
+  effective_to: '2025-11-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-10-25'
+  release_date: '2025-11-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-11-20'
+  effective_to: '2025-11-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-11-01'
+  release_date: '2025-11-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-11-20'
+  effective_to: '2025-11-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-11-08'
+  release_date: '2025-11-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-11-20'
+  effective_to: '2025-11-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-11-15'
+  release_date: '2025-11-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-11-20'
+  effective_to: '2025-11-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS; https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-09-01'
+  release_date: '2025-11-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BLS lapse revised-dates page agree'
+- effective_from: '2025-11-26'
+  effective_to: '2025-11-26'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-11-22'
+  release_date: '2025-11-26'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-12-04'
+  effective_to: '2025-12-04'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-11-29'
+  release_date: '2025-12-04'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-12-05'
+  effective_to: '2025-12-05'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-09-01'
+  release_date: '2025-12-05'
+  time: '10:00'
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2025 schedule agree; 10:00 ET per BEA (not 08:30)'
+- effective_from: '2025-12-11'
+  effective_to: '2025-12-11'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-12-06'
+  release_date: '2025-12-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-12-16'
+  effective_to: '2025-12-16'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS; https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-10-01'
+  release_date: '2025-12-16'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BLS lapse revised-dates page agree'
+- effective_from: '2025-12-16'
+  effective_to: '2025-12-16'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS; https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-11-01'
+  release_date: '2025-12-16'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BLS lapse revised-dates page agree'
+- effective_from: '2025-12-18'
+  effective_to: '2025-12-18'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-12-13'
+  release_date: '2025-12-18'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-12-18'
+  effective_to: '2025-12-18'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL; https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-11-01'
+  release_date: '2025-12-18'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BLS lapse revised-dates page agree'
+- effective_from: '2025-12-24'
+  effective_to: '2025-12-24'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-12-20'
+  release_date: '2025-12-24'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2025-12-31'
+  effective_to: '2025-12-31'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2025-12-27'
+  release_date: '2025-12-31'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2025 agree'
+- effective_from: '2026-01-08'
+  effective_to: '2026-01-08'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-01-03'
+  release_date: '2026-01-08'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-01-09'
+  effective_to: '2026-01-09'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS; https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2025-12-01'
+  release_date: '2026-01-09'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BLS lapse revised-dates page agree'
+- effective_from: '2026-01-13'
+  effective_to: '2026-01-13'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL; https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2025-12-01'
+  release_date: '2026-01-13'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BLS lapse revised-dates page agree'
+- effective_from: '2026-01-15'
+  effective_to: '2026-01-15'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-01-10'
+  release_date: '2026-01-15'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-01-22'
+  effective_to: '2026-01-22'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-01-17'
+  release_date: '2026-01-22'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-01-22'
+  effective_to: '2026-01-22'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-10-01'
+  release_date: '2026-01-22'
+  time: '10:00'
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree; 10:00 ET per BEA (not 08:30)'
+- effective_from: '2026-01-22'
+  effective_to: '2026-01-22'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-11-01'
+  release_date: '2026-01-22'
+  time: '10:00'
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree; 10:00 ET per BEA (not 08:30)'
+- effective_from: '2026-01-29'
+  effective_to: '2026-01-29'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-01-24'
+  release_date: '2026-01-29'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-02-05'
+  effective_to: '2026-02-05'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-01-31'
+  release_date: '2026-02-05'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-02-11'
+  effective_to: '2026-02-11'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS; https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-01-01'
+  release_date: '2026-02-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BLS lapse revised-dates page agree'
+- effective_from: '2026-02-12'
+  effective_to: '2026-02-12'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-02-07'
+  release_date: '2026-02-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-02-13'
+  effective_to: '2026-02-13'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL; https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-01-01'
+  release_date: '2026-02-13'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BLS lapse revised-dates page agree'
+- effective_from: '2026-02-19'
+  effective_to: '2026-02-19'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-02-14'
+  release_date: '2026-02-19'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-02-20'
+  effective_to: '2026-02-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2025-12-01'
+  release_date: '2026-02-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree'
+- effective_from: '2026-02-26'
+  effective_to: '2026-02-26'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-02-21'
+  release_date: '2026-02-26'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-03-05'
+  effective_to: '2026-03-05'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-02-28'
+  release_date: '2026-03-05'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-03-06'
+  effective_to: '2026-03-06'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-02-01'
+  release_date: '2026-03-06'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-03-11'
+  effective_to: '2026-03-11'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-02-01'
+  release_date: '2026-03-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-03-12'
+  effective_to: '2026-03-12'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-03-07'
+  release_date: '2026-03-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-03-13'
+  effective_to: '2026-03-13'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-01-01'
+  release_date: '2026-03-13'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree'
+- effective_from: '2026-03-19'
+  effective_to: '2026-03-19'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-03-14'
+  release_date: '2026-03-19'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-03-26'
+  effective_to: '2026-03-26'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-03-21'
+  release_date: '2026-03-26'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-04-02'
+  effective_to: '2026-04-02'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-03-28'
+  release_date: '2026-04-02'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-04-03'
+  effective_to: '2026-04-03'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-03-01'
+  release_date: '2026-04-03'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-04-09'
+  effective_to: '2026-04-09'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-04-04'
+  release_date: '2026-04-09'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-04-09'
+  effective_to: '2026-04-09'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-02-01'
+  release_date: '2026-04-09'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree'
+- effective_from: '2026-04-10'
+  effective_to: '2026-04-10'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-03-01'
+  release_date: '2026-04-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-04-16'
+  effective_to: '2026-04-16'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-04-11'
+  release_date: '2026-04-16'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-04-23'
+  effective_to: '2026-04-23'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-04-18'
+  release_date: '2026-04-23'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-04-30'
+  effective_to: '2026-04-30'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-04-25'
+  release_date: '2026-04-30'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-04-30'
+  effective_to: '2026-04-30'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-03-01'
+  release_date: '2026-04-30'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree'
+- effective_from: '2026-05-07'
+  effective_to: '2026-05-07'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-05-02'
+  release_date: '2026-05-07'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-05-08'
+  effective_to: '2026-05-08'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-04-01'
+  release_date: '2026-05-08'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-05-12'
+  effective_to: '2026-05-12'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-04-01'
+  release_date: '2026-05-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-05-14'
+  effective_to: '2026-05-14'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-05-09'
+  release_date: '2026-05-14'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-05-21'
+  effective_to: '2026-05-21'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-05-16'
+  release_date: '2026-05-21'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-05-28'
+  effective_to: '2026-05-28'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-05-23'
+  release_date: '2026-05-28'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-05-28'
+  effective_to: '2026-05-28'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-04-01'
+  release_date: '2026-05-28'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree'
+- effective_from: '2026-06-04'
+  effective_to: '2026-06-04'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-05-30'
+  release_date: '2026-06-04'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-06-05'
+  effective_to: '2026-06-05'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-05-01'
+  release_date: '2026-06-05'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-06-10'
+  effective_to: '2026-06-10'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-05-01'
+  release_date: '2026-06-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-06-11'
+  effective_to: '2026-06-11'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-06-06'
+  release_date: '2026-06-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-06-18'
+  effective_to: '2026-06-18'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-06-13'
+  release_date: '2026-06-18'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-06-25'
+  effective_to: '2026-06-25'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-06-20'
+  release_date: '2026-06-25'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-06-25'
+  effective_to: '2026-06-25'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-05-01'
+  release_date: '2026-06-25'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree'
+- effective_from: '2026-07-02'
+  effective_to: '2026-07-02'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-06-27'
+  release_date: '2026-07-02'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-07-02'
+  effective_to: '2026-07-02'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-06-01'
+  release_date: '2026-07-02'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-07-09'
+  effective_to: '2026-07-09'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-07-04'
+  release_date: '2026-07-09'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-07-14'
+  effective_to: '2026-07-14'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-06-01'
+  release_date: '2026-07-14'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-07-16'
+  effective_to: '2026-07-16'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-07-11'
+  release_date: '2026-07-16'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-07-23'
+  effective_to: '2026-07-23'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-07-18'
+  release_date: '2026-07-23'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-07-30'
+  effective_to: '2026-07-30'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-07-25'
+  release_date: '2026-07-30'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-07-30'
+  effective_to: '2026-07-30'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-06-01'
+  release_date: '2026-07-30'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree'
+- effective_from: '2026-08-06'
+  effective_to: '2026-08-06'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-08-01'
+  release_date: '2026-08-06'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-08-07'
+  effective_to: '2026-08-07'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-07-01'
+  release_date: '2026-08-07'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-08-12'
+  effective_to: '2026-08-12'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-07-01'
+  release_date: '2026-08-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-08-13'
+  effective_to: '2026-08-13'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-08-08'
+  release_date: '2026-08-13'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-08-20'
+  effective_to: '2026-08-20'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-08-15'
+  release_date: '2026-08-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-08-26'
+  effective_to: '2026-08-26'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-07-01'
+  release_date: '2026-08-26'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree'
+- effective_from: '2026-08-27'
+  effective_to: '2026-08-27'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-08-22'
+  release_date: '2026-08-27'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-09-03'
+  effective_to: '2026-09-03'
+  source_url: https://alfred.stlouisfed.org/series?seid=ICSA; https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-08-29'
+  release_date: '2026-09-03'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and FRED claims calendar 2026 agree'
+- effective_from: '2026-09-04'
+  effective_to: '2026-09-04'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-08-01'
+  release_date: '2026-09-04'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-09-10'
+  effective_to: '2026-09-10'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026; https://alfred.stlouisfed.org/series?seid=ICSA
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-09-05'
+  release_date: '2026-09-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: an ALFRED vintage on that date and FRED claims calendar 2026 agree'
+- effective_from: '2026-09-11'
+  effective_to: '2026-09-11'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-08-01'
+  release_date: '2026-09-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-09-17'
+  effective_to: '2026-09-17'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026; https://alfred.stlouisfed.org/series?seid=ICSA
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-09-12'
+  release_date: '2026-09-17'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: an ALFRED vintage on that date and FRED claims calendar 2026 agree'
+- effective_from: '2026-09-24'
+  effective_to: '2026-09-24'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026; https://alfred.stlouisfed.org/series?seid=ICSA
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-09-19'
+  release_date: '2026-09-24'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: an ALFRED vintage on that date and FRED claims calendar 2026 agree'
+- effective_from: '2026-09-30'
+  effective_to: '2026-09-30'
+  source_url: https://alfred.stlouisfed.org/series?seid=PCEPI; https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-08-01'
+  release_date: '2026-09-30'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: ALFRED first vintage and BEA 2026 schedule agree'
+- effective_from: '2026-10-01'
+  effective_to: '2026-10-01'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026; https://alfred.stlouisfed.org/series?seid=ICSA
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-09-26'
+  release_date: '2026-10-01'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: an ALFRED vintage on that date and FRED claims calendar 2026 agree'
+- effective_from: '2026-10-02'
+  effective_to: '2026-10-02'
+  source_url: https://alfred.stlouisfed.org/series?seid=PAYEMS
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-09-01'
+  release_date: '2026-10-02'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-10-08'
+  effective_to: '2026-10-08'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026; https://alfred.stlouisfed.org/series?seid=ICSA
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-10-03'
+  release_date: '2026-10-08'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: an ALFRED vintage on that date and FRED claims calendar 2026 agree'
+- effective_from: '2026-10-14'
+  effective_to: '2026-10-14'
+  source_url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL
+  retrieved_at_utc: '2026-10-28T17:41:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-09-01'
+  release_date: '2026-10-14'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: ALFRED first vintage only (one official record)'
+- effective_from: '2026-10-15'
+  effective_to: '2026-10-15'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026; https://alfred.stlouisfed.org/series?seid=ICSA
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-10-10'
+  release_date: '2026-10-15'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: an ALFRED vintage on that date and FRED claims calendar 2026 agree'
+- effective_from: '2026-10-22'
+  effective_to: '2026-10-22'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026; https://alfred.stlouisfed.org/series?seid=ICSA
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-10-17'
+  release_date: '2026-10-22'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: an ALFRED vintage on that date and FRED claims calendar 2026 agree'
+- effective_from: '2026-10-29'
+  effective_to: '2026-10-29'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-10-24'
+  release_date: '2026-10-29'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: FRED claims calendar 2026 only (one official record)'
+- effective_from: '2026-10-29'
+  effective_to: '2026-10-29'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-09-01'
+  release_date: '2026-10-29'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2026 schedule only (one official record)'
+- effective_from: '2026-11-05'
+  effective_to: '2026-11-05'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-10-31'
+  release_date: '2026-11-05'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: FRED claims calendar 2026 only (one official record)'
+- effective_from: '2026-11-06'
+  effective_to: '2026-11-06'
+  source_url: https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-10-01'
+  release_date: '2026-11-06'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BLS Employment Situation schedule only (one official record)'
+- effective_from: '2026-11-10'
+  effective_to: '2026-11-10'
+  source_url: https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-10-01'
+  release_date: '2026-11-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BLS CPI schedule only (one official record)'
+- effective_from: '2026-11-12'
+  effective_to: '2026-11-12'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-11-07'
+  release_date: '2026-11-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: FRED claims calendar 2026 only (one official record)'
+- effective_from: '2026-11-19'
+  effective_to: '2026-11-19'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-11-14'
+  release_date: '2026-11-19'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: FRED claims calendar 2026 only (one official record)'
+- effective_from: '2026-11-25'
+  effective_to: '2026-11-25'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-11-21'
+  release_date: '2026-11-25'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: FRED claims calendar 2026 only (one official record)'
+- effective_from: '2026-11-25'
+  effective_to: '2026-11-25'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-10-01'
+  release_date: '2026-11-25'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2026 schedule only (one official record)'
+- effective_from: '2026-12-03'
+  effective_to: '2026-12-03'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-11-28'
+  release_date: '2026-12-03'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: FRED claims calendar 2026 only (one official record)'
+- effective_from: '2026-12-04'
+  effective_to: '2026-12-04'
+  source_url: https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-11-01'
+  release_date: '2026-12-04'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BLS Employment Situation schedule only (one official record)'
+- effective_from: '2026-12-10'
+  effective_to: '2026-12-10'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-12-05'
+  release_date: '2026-12-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: FRED claims calendar 2026 only (one official record)'
+- effective_from: '2026-12-10'
+  effective_to: '2026-12-10'
+  source_url: https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-11-01'
+  release_date: '2026-12-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BLS CPI schedule only (one official record)'
+- effective_from: '2026-12-17'
+  effective_to: '2026-12-17'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-12-12'
+  release_date: '2026-12-17'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: FRED claims calendar 2026 only (one official record)'
+- effective_from: '2026-12-23'
+  effective_to: '2026-12-23'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-11-01'
+  release_date: '2026-12-23'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2026 schedule only (one official record)'
+- effective_from: '2026-12-24'
+  effective_to: '2026-12-24'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-12-19'
+  release_date: '2026-12-24'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: FRED claims calendar 2026 only (one official record)'
+- effective_from: '2026-12-31'
+  effective_to: '2026-12-31'
+  source_url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+  retrieved_at_utc: '2026-10-28T17:42:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2026-12-26'
+  release_date: '2026-12-31'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: FRED claims calendar 2026 only (one official record)'
+- effective_from: '2027-01-07'
+  effective_to: '2027-01-07'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-01-02'
+  release_date: '2027-01-07'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-01-08'
+  effective_to: '2027-01-08'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2026-12-01'
+  release_date: '2027-01-08'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-01-13'
+  effective_to: '2027-01-13'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2026-12-01'
+  release_date: '2027-01-13'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-01-14'
+  effective_to: '2027-01-14'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-01-09'
+  release_date: '2027-01-14'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-01-21'
+  effective_to: '2027-01-21'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-01-16'
+  release_date: '2027-01-21'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-01-28'
+  effective_to: '2027-01-28'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-01-23'
+  release_date: '2027-01-28'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-01-28'
+  effective_to: '2027-01-28'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2026-12-01'
+  release_date: '2027-01-28'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-02-04'
+  effective_to: '2027-02-04'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-01-30'
+  release_date: '2027-02-04'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-02-05'
+  effective_to: '2027-02-05'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-01-01'
+  release_date: '2027-02-05'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-02-11'
+  effective_to: '2027-02-11'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-02-06'
+  release_date: '2027-02-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-02-11'
+  effective_to: '2027-02-11'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-01-01'
+  release_date: '2027-02-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-02-18'
+  effective_to: '2027-02-18'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-02-13'
+  release_date: '2027-02-18'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-02-25'
+  effective_to: '2027-02-25'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-02-20'
+  release_date: '2027-02-25'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-02-25'
+  effective_to: '2027-02-25'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-01-01'
+  release_date: '2027-02-25'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-03-04'
+  effective_to: '2027-03-04'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-02-27'
+  release_date: '2027-03-04'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-03-05'
+  effective_to: '2027-03-05'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-02-01'
+  release_date: '2027-03-05'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-03-10'
+  effective_to: '2027-03-10'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-02-01'
+  release_date: '2027-03-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-03-11'
+  effective_to: '2027-03-11'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-03-06'
+  release_date: '2027-03-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-03-18'
+  effective_to: '2027-03-18'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-03-13'
+  release_date: '2027-03-18'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-03-25'
+  effective_to: '2027-03-25'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-03-20'
+  release_date: '2027-03-25'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-03-31'
+  effective_to: '2027-03-31'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-02-01'
+  release_date: '2027-03-31'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-04-01'
+  effective_to: '2027-04-01'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-03-27'
+  release_date: '2027-04-01'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-04-02'
+  effective_to: '2027-04-02'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-03-01'
+  release_date: '2027-04-02'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-04-08'
+  effective_to: '2027-04-08'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-04-03'
+  release_date: '2027-04-08'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-04-13'
+  effective_to: '2027-04-13'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-03-01'
+  release_date: '2027-04-13'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-04-15'
+  effective_to: '2027-04-15'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-04-10'
+  release_date: '2027-04-15'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-04-22'
+  effective_to: '2027-04-22'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-04-17'
+  release_date: '2027-04-22'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-04-29'
+  effective_to: '2027-04-29'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-04-24'
+  release_date: '2027-04-29'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-04-29'
+  effective_to: '2027-04-29'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-03-01'
+  release_date: '2027-04-29'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-05-06'
+  effective_to: '2027-05-06'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-05-01'
+  release_date: '2027-05-06'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-05-07'
+  effective_to: '2027-05-07'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-04-01'
+  release_date: '2027-05-07'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-05-12'
+  effective_to: '2027-05-12'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-04-01'
+  release_date: '2027-05-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-05-13'
+  effective_to: '2027-05-13'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-05-08'
+  release_date: '2027-05-13'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-05-20'
+  effective_to: '2027-05-20'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-05-15'
+  release_date: '2027-05-20'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-05-27'
+  effective_to: '2027-05-27'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-05-22'
+  release_date: '2027-05-27'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-05-27'
+  effective_to: '2027-05-27'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-04-01'
+  release_date: '2027-05-27'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-06-03'
+  effective_to: '2027-06-03'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-05-29'
+  release_date: '2027-06-03'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-06-04'
+  effective_to: '2027-06-04'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-05-01'
+  release_date: '2027-06-04'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-06-10'
+  effective_to: '2027-06-10'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-06-05'
+  release_date: '2027-06-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-06-10'
+  effective_to: '2027-06-10'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-05-01'
+  release_date: '2027-06-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-06-17'
+  effective_to: '2027-06-17'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-06-12'
+  release_date: '2027-06-17'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-06-24'
+  effective_to: '2027-06-24'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-06-19'
+  release_date: '2027-06-24'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-06-25'
+  effective_to: '2027-06-25'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-05-01'
+  release_date: '2027-06-25'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-07-01'
+  effective_to: '2027-07-01'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-06-26'
+  release_date: '2027-07-01'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-07-02'
+  effective_to: '2027-07-02'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-06-01'
+  release_date: '2027-07-02'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-07-08'
+  effective_to: '2027-07-08'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-07-03'
+  release_date: '2027-07-08'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-07-14'
+  effective_to: '2027-07-14'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-06-01'
+  release_date: '2027-07-14'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-07-15'
+  effective_to: '2027-07-15'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-07-10'
+  release_date: '2027-07-15'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-07-22'
+  effective_to: '2027-07-22'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-07-17'
+  release_date: '2027-07-22'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-07-29'
+  effective_to: '2027-07-29'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-07-24'
+  release_date: '2027-07-29'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-07-29'
+  effective_to: '2027-07-29'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-06-01'
+  release_date: '2027-07-29'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-08-05'
+  effective_to: '2027-08-05'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-07-31'
+  release_date: '2027-08-05'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-08-06'
+  effective_to: '2027-08-06'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-07-01'
+  release_date: '2027-08-06'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-08-11'
+  effective_to: '2027-08-11'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-07-01'
+  release_date: '2027-08-11'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-08-12'
+  effective_to: '2027-08-12'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-08-07'
+  release_date: '2027-08-12'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-08-19'
+  effective_to: '2027-08-19'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-08-14'
+  release_date: '2027-08-19'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-08-25'
+  effective_to: '2027-08-25'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-07-01'
+  release_date: '2027-08-25'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-08-26'
+  effective_to: '2027-08-26'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-08-21'
+  release_date: '2027-08-26'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-09-02'
+  effective_to: '2027-09-02'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-08-28'
+  release_date: '2027-09-02'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-09-03'
+  effective_to: '2027-09-03'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-08-01'
+  release_date: '2027-09-03'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-09-09'
+  effective_to: '2027-09-09'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-09-04'
+  release_date: '2027-09-09'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-09-14'
+  effective_to: '2027-09-14'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-08-01'
+  release_date: '2027-09-14'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-09-16'
+  effective_to: '2027-09-16'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-09-11'
+  release_date: '2027-09-16'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-09-23'
+  effective_to: '2027-09-23'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-09-18'
+  release_date: '2027-09-23'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-09-30'
+  effective_to: '2027-09-30'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-09-25'
+  release_date: '2027-09-30'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-09-30'
+  effective_to: '2027-09-30'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-08-01'
+  release_date: '2027-09-30'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-10-07'
+  effective_to: '2027-10-07'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-10-02'
+  release_date: '2027-10-07'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-10-08'
+  effective_to: '2027-10-08'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-09-01'
+  release_date: '2027-10-08'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-10-14'
+  effective_to: '2027-10-14'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-10-09'
+  release_date: '2027-10-14'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-10-14'
+  effective_to: '2027-10-14'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-09-01'
+  release_date: '2027-10-14'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-10-21'
+  effective_to: '2027-10-21'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-10-16'
+  release_date: '2027-10-21'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-10-28'
+  effective_to: '2027-10-28'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-10-23'
+  release_date: '2027-10-28'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-10-28'
+  effective_to: '2027-10-28'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-09-01'
+  release_date: '2027-10-28'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-11-04'
+  effective_to: '2027-11-04'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-10-30'
+  release_date: '2027-11-04'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-11-05'
+  effective_to: '2027-11-05'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-10-01'
+  release_date: '2027-11-05'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-11-10'
+  effective_to: '2027-11-10'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-11-06'
+  release_date: '2027-11-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; Wednesday
+    because the Thursday is a federal holiday; replace with the DOL dates when published'
+- effective_from: '2027-11-10'
+  effective_to: '2027-11-10'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-10-01'
+  release_date: '2027-11-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-11-18'
+  effective_to: '2027-11-18'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-11-13'
+  release_date: '2027-11-18'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-11-24'
+  effective_to: '2027-11-24'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-11-20'
+  release_date: '2027-11-24'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; Wednesday
+    because the Thursday is a federal holiday; replace with the DOL dates when published'
+- effective_from: '2027-11-24'
+  effective_to: '2027-11-24'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-10-01'
+  release_date: '2027-11-24'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-12-02'
+  effective_to: '2027-12-02'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-11-27'
+  release_date: '2027-12-02'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-12-03'
+  effective_to: '2027-12-03'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/empsit.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: EMPSIT
+  period: '2027-11-01'
+  release_date: '2027-12-03'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS Employment Situation schedule agree'
+- effective_from: '2027-12-09'
+  effective_to: '2027-12-09'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-12-04'
+  release_date: '2027-12-09'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-12-10'
+  effective_to: '2027-12-10'
+  source_url: https://www.bls.gov/schedule/2027/home.htm; https://www.bls.gov/schedule/news_release/cpi.htm
+  retrieved_at_utc: '2026-10-28T17:44:00Z'
+  signed_off_by: Geon Koh
+  release: CPI
+  period: '2027-11-01'
+  release_date: '2027-12-10'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'A: BLS 2027 release calendar and BLS CPI schedule agree'
+- effective_from: '2027-12-16'
+  effective_to: '2027-12-16'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-12-11'
+  release_date: '2027-12-16'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-12-22'
+  effective_to: '2027-12-22'
+  source_url: https://www.bea.gov/news/schedule
+  retrieved_at_utc: '2026-10-28T17:32:00Z'
+  signed_off_by: Geon Koh
+  release: PIO
+  period: '2027-11-01'
+  release_date: '2027-12-22'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'B: BEA 2027 schedule only (one official record)'
+- effective_from: '2027-12-23'
+  effective_to: '2027-12-23'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-12-18'
+  release_date: '2027-12-23'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'
+- effective_from: '2027-12-30'
+  effective_to: '2027-12-30'
+  source_url: 'https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027; rule: Thursday after the week, Wednesday when
+    that Thursday is closed in holidays_FED v1.0.0 (owner-signed)'
+  retrieved_at_utc: '2026-10-28T17:43:00Z'
+  signed_off_by: Geon Koh
+  release: CLAIMS
+  period: '2027-12-25'
+  release_date: '2027-12-30'
+  time: 08:30
+  tz: America/New_York
+  evidence: 'C: no official 2027 claims dates yet (FRED: none on 2026-10-28); Thursday 08:30 ET after the week; replace with
+    the DOL dates when published'

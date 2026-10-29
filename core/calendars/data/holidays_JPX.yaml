@@ -1,19 +1,515 @@
 file_id: holidays_JPX
-version: 0.1.0-draft
-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
-  DISARMED until the owner verifies and signs
+version: 1.0.0
+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/14_calendar_batch6.md); refused at load until the owner
+  signs (R-20 rule 6, T-CAL-01)
 covers:
-  from: null
-  to: null
+  from: '2025-01-01'
+  to: '2027-12-31'
 coverage_calendar: JPX
-signed_off_by: null
-signed_utc: null
-md5: null
+signed_off_by: Geon Koh
+signed_utc: '2026-10-29T02:06:58Z'
+md5: bcc32846cb2e24d5c3a62928c466082f
 how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
   MANIFEST.yaml row with a new test id
 unverified:
-- 'no rows: skeleton only'
+- rows before 2025 (the Korea-covariance span) are a later version
+- '2027 rows graded B: JPX''s 2027 list exists but those rows were read from NAOJ and a secondary list'
+- a closure ordered after the audit date (a change to the National Holidays Act, an outage) is a new version
 owner_must_sign:
 - JPX trading calendar from the Korea-covariance span, with licence, owner and md5 (spec section 9.5)
-rows: []
+rows:
+- effective_from: '2025-01-01'
+  effective_to: '2025-01-01'
+  source_url: https://www.jpx.co.jp/corporate/news/news-releases/0061/20241202-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-01-01'
+  kind: closed
+  name: New Year's Day (元日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-01-02'
+  effective_to: '2025-01-02'
+  source_url: https://www.jpx.co.jp/news/2040/20241230-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-01-02'
+  kind: closed
+  name: Market holiday, New Year (休業日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-01-03'
+  effective_to: '2025-01-03'
+  source_url: https://www.jpx.co.jp/news/2040/20241230-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-01-03'
+  kind: closed
+  name: Market holiday, New Year (休業日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-01-13'
+  effective_to: '2025-01-13'
+  source_url: https://www.jpx.co.jp/english/news/2040/20250110-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-01-13'
+  kind: closed
+  name: Coming of Age Day (成人の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-02-11'
+  effective_to: '2025-02-11'
+  source_url: https://www.jpx.co.jp/news/2040/20250210-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-02-11'
+  kind: closed
+  name: National Foundation Day (建国記念の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-02-24'
+  effective_to: '2025-02-24'
+  source_url: https://www.jpx.co.jp/english/news/2040/20250224-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-02-24'
+  kind: closed
+  name: Substitute holiday, Emperor's Birthday (振替休日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-03-20'
+  effective_to: '2025-03-20'
+  source_url: https://www.jpx.co.jp/english/news/2040/20250319-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-03-20'
+  kind: closed
+  name: Vernal Equinox Day (春分の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-04-29'
+  effective_to: '2025-04-29'
+  source_url: https://www.jpx.co.jp/english/news/2040/20250428-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-04-29'
+  kind: closed
+  name: Showa Day (昭和の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-05-05'
+  effective_to: '2025-05-05'
+  source_url: https://www.jpx.co.jp/english/news/2040/20250502-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-05-05'
+  kind: closed
+  name: Children's Day (こどもの日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-05-06'
+  effective_to: '2025-05-06'
+  source_url: https://www.jpx.co.jp/english/news/2040/20250502-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-05-06'
+  kind: closed
+  name: Substitute holiday, Greenery Day (振替休日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-07-21'
+  effective_to: '2025-07-21'
+  source_url: https://www.jpx.co.jp/english/news/2040/20250718-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-07-21'
+  kind: closed
+  name: Marine Day (海の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-08-11'
+  effective_to: '2025-08-11'
+  source_url: https://www.jpx.co.jp/english/news/2040/20250808-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-08-11'
+  kind: closed
+  name: Mountain Day (山の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-09-15'
+  effective_to: '2025-09-15'
+  source_url: https://www.jpx.co.jp/news/2040/20250912-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-09-15'
+  kind: closed
+  name: Respect for the Aged Day (敬老の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-09-23'
+  effective_to: '2025-09-23'
+  source_url: https://www.jpx.co.jp/english/news/2040/20250922-02.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-09-23'
+  kind: closed
+  name: Autumnal Equinox Day (秋分の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-10-13'
+  effective_to: '2025-10-13'
+  source_url: https://www.jpx.co.jp/news/2040/20251010-02.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-10-13'
+  kind: closed
+  name: Sports Day (スポーツの日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-11-03'
+  effective_to: '2025-11-03'
+  source_url: https://www.jpx.co.jp/english/news/2040/20251031-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-11-03'
+  kind: closed
+  name: Culture Day (文化の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-11-24'
+  effective_to: '2025-11-24'
+  source_url: https://www.jpx.co.jp/news/2040/20251121-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-11-24'
+  kind: closed
+  name: Substitute holiday, Labor Thanksgiving Day (振替休日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2025-12-31'
+  effective_to: '2025-12-31'
+  source_url: https://www.jpx.co.jp/news/2040/20251230-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-12-31'
+  kind: closed
+  name: Market holiday, year end (休業日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-01-01'
+  effective_to: '2026-01-01'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-01-01'
+  kind: closed
+  name: New Year's Day (元日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-01-02'
+  effective_to: '2026-01-02'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html ; https://www.jpx.co.jp/news/2040/20251230-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-01-02'
+  kind: closed
+  name: Market holiday, New Year (休業日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-01-12'
+  effective_to: '2026-01-12'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-01-12'
+  kind: closed
+  name: Coming of Age Day (成人の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-02-11'
+  effective_to: '2026-02-11'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-02-11'
+  kind: closed
+  name: National Foundation Day (建国記念の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-02-23'
+  effective_to: '2026-02-23'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-02-23'
+  kind: closed
+  name: Emperor's Birthday (天皇誕生日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-03-20'
+  effective_to: '2026-03-20'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-03-20'
+  kind: closed
+  name: Vernal Equinox Day (春分の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-04-29'
+  effective_to: '2026-04-29'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-04-29'
+  kind: closed
+  name: Showa Day (昭和の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-05-04'
+  effective_to: '2026-05-04'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html ; https://www.jpx.co.jp/news/2040/20260501-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-05-04'
+  kind: closed
+  name: Greenery Day (みどりの日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-05-05'
+  effective_to: '2026-05-05'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html ; https://www.jpx.co.jp/news/2040/20260501-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-05-05'
+  kind: closed
+  name: Children's Day (こどもの日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-05-06'
+  effective_to: '2026-05-06'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html ; https://www.jpx.co.jp/news/2040/20260501-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-05-06'
+  kind: closed
+  name: Substitute holiday, Constitution Day (振替休日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-07-20'
+  effective_to: '2026-07-20'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-07-20'
+  kind: closed
+  name: Marine Day (海の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-08-11'
+  effective_to: '2026-08-11'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-08-11'
+  kind: closed
+  name: Mountain Day (山の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-09-21'
+  effective_to: '2026-09-21'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html ; https://www.jpx.co.jp/english/news/2040/20260918-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-09-21'
+  kind: closed
+  name: Respect for the Aged Day (敬老の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-09-22'
+  effective_to: '2026-09-22'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html ; https://www.jpx.co.jp/english/news/2040/20260918-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-09-22'
+  kind: closed
+  name: Citizens' holiday (国民の休日, 祝日法第3条第3項)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-09-23'
+  effective_to: '2026-09-23'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html ; https://www.jpx.co.jp/english/news/2040/20260918-01.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-09-23'
+  kind: closed
+  name: Autumnal Equinox Day (秋分の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-10-12'
+  effective_to: '2026-10-12'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-10-12'
+  kind: closed
+  name: Sports Day (スポーツの日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-11-03'
+  effective_to: '2026-11-03'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-11-03'
+  kind: closed
+  name: Culture Day (文化の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-11-23'
+  effective_to: '2026-11-23'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-11-23'
+  kind: closed
+  name: Labor Thanksgiving Day (勤労感謝の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2026-12-31'
+  effective_to: '2026-12-31'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-12-31'
+  kind: closed
+  name: Market holiday, year end (休業日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2027-01-01'
+  effective_to: '2027-01-01'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-01-01'
+  kind: closed
+  name: New Year's Day (元日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2027-01-11'
+  effective_to: '2027-01-11'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-01-11'
+  kind: closed
+  name: Coming of Age Day (成人の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2027-02-11'
+  effective_to: '2027-02-11'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-02-11'
+  kind: closed
+  name: National Foundation Day (建国記念の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2027-02-23'
+  effective_to: '2027-02-23'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-02-23'
+  kind: closed
+  name: Emperor's Birthday (天皇誕生日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2027-03-22'
+  effective_to: '2027-03-22'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html ; https://www.jpx.co.jp/derivatives/rules/holidaytrading/
+    ; https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou271.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-03-22'
+  kind: closed
+  name: Substitute holiday, Vernal Equinox Day (振替休日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2027-04-29'
+  effective_to: '2027-04-29'
+  source_url: https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou271.html ; https://www.nippon.com/ja/japan-data/h02794/
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-04-29'
+  kind: closed
+  name: Showa Day (昭和の日)
+  evidence: 'B: National Holidays Act date, listed by NAOJ''s 2027 calendar (gazette 2026-02-02); JPX''s 2027 list exists
+    but this row was not in the search excerpt'
+- effective_from: '2027-05-03'
+  effective_to: '2027-05-03'
+  source_url: https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou271.html ; https://www.nippon.com/ja/japan-data/h02794/
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-05-03'
+  kind: closed
+  name: Constitution Memorial Day (憲法記念日)
+  evidence: 'B: National Holidays Act date, listed by NAOJ''s 2027 calendar (gazette 2026-02-02); JPX''s 2027 list exists
+    but this row was not in the search excerpt'
+- effective_from: '2027-05-04'
+  effective_to: '2027-05-04'
+  source_url: https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou271.html ; https://www.nippon.com/ja/japan-data/h02794/
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-05-04'
+  kind: closed
+  name: Greenery Day (みどりの日)
+  evidence: 'B: National Holidays Act date, listed by NAOJ''s 2027 calendar (gazette 2026-02-02); JPX''s 2027 list exists
+    but this row was not in the search excerpt'
+- effective_from: '2027-05-05'
+  effective_to: '2027-05-05'
+  source_url: https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou271.html ; https://www.nippon.com/ja/japan-data/h02794/
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-05-05'
+  kind: closed
+  name: Children's Day (こどもの日)
+  evidence: 'B: National Holidays Act date, listed by NAOJ''s 2027 calendar (gazette 2026-02-02); JPX''s 2027 list exists
+    but this row was not in the search excerpt'
+- effective_from: '2027-07-19'
+  effective_to: '2027-07-19'
+  source_url: https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou271.html ; https://www.nippon.com/ja/japan-data/h02794/
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-07-19'
+  kind: closed
+  name: Marine Day (海の日)
+  evidence: 'B: National Holidays Act date, listed by NAOJ''s 2027 calendar (gazette 2026-02-02); JPX''s 2027 list exists
+    but this row was not in the search excerpt'
+- effective_from: '2027-08-11'
+  effective_to: '2027-08-11'
+  source_url: https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou271.html ; https://www.nippon.com/ja/japan-data/h02794/
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-08-11'
+  kind: closed
+  name: Mountain Day (山の日)
+  evidence: 'B: National Holidays Act date, listed by NAOJ''s 2027 calendar (gazette 2026-02-02); JPX''s 2027 list exists
+    but this row was not in the search excerpt'
+- effective_from: '2027-09-20'
+  effective_to: '2027-09-20'
+  source_url: https://www.jpx.co.jp/derivatives/rules/holidaytrading/
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-09-20'
+  kind: closed
+  name: Respect for the Aged Day (敬老の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2027-09-23'
+  effective_to: '2027-09-23'
+  source_url: https://www.jpx.co.jp/derivatives/rules/holidaytrading/ ; https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou271.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-09-23'
+  kind: closed
+  name: Autumnal Equinox Day (秋分の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2027-10-11'
+  effective_to: '2027-10-11'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-10-11'
+  kind: closed
+  name: Sports Day (スポーツの日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2027-11-03'
+  effective_to: '2027-11-03'
+  source_url: https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou271.html ; https://www.nippon.com/ja/japan-data/h02794/
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-11-03'
+  kind: closed
+  name: Culture Day (文化の日)
+  evidence: 'B: National Holidays Act date, listed by NAOJ''s 2027 calendar (gazette 2026-02-02); JPX''s 2027 list exists
+    but this row was not in the search excerpt'
+- effective_from: '2027-11-23'
+  effective_to: '2027-11-23'
+  source_url: https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-11-23'
+  kind: closed
+  name: Labor Thanksgiving Day (勤労感謝の日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'
+- effective_from: '2027-12-31'
+  effective_to: '2027-12-31'
+  source_url: https://www.jpx.co.jp/derivatives/rules/holidaytrading/ ; https://www.jpx.co.jp/corporate/about-jpx/calendar/index.html
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-12-31'
+  kind: closed
+  name: Market holiday, year end (休業日)
+  evidence: 'A: JPX notice (holiday trading runs only on cash-market holidays) or JPX holiday list'

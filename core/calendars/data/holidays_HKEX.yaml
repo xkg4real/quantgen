@@ -1,19 +1,543 @@
 file_id: holidays_HKEX
-version: 0.1.0-draft
-status: UNSIGNED DRAFT - refused at load (R-20 rule 6, T-CAL-01); every KR/US acting input fails closed and every book stays
-  DISARMED until the owner verifies and signs
+version: 1.0.0
+status: AUDITED, UNSIGNED - proposed v1.0.0 (docs/audit/2026-10-27/14_calendar_batch6.md); refused at load until the owner
+  signs (R-20 rule 6, T-CAL-01)
 covers:
-  from: null
-  to: null
+  from: '2025-01-01'
+  to: '2027-12-31'
 coverage_calendar: HKEX
-signed_off_by: null
-signed_utc: null
-md5: null
+signed_off_by: Geon Koh
+signed_utc: '2026-10-29T02:06:58Z'
+md5: 303c93b40e529020c62bd1f149ccf946
 how_to_sign: verify every row against its official source, fill source_url and signed_off_by on every row, set signed_off_by
   / signed_utc at file level, set md5 to the content md5 printed by `python -m core.calendars.store`, and add the matching
   MANIFEST.yaml row with a new test id
 unverified:
-- 'no rows: skeleton only'
+- rows before 2025 (the Korea-covariance span) are a later version
+- half days close at 12:10 (end of the closing auction); severe-weather trading since 2024-09-23 means a typhoon no longer
+  closes the market, but an 'exceptional situation' closure would be a new version
 owner_must_sign:
 - HKEX trading calendar incl. half-day closes, with licence, owner and md5 (spec section 9.5)
-rows: []
+rows:
+- effective_from: '2025-01-01'
+  effective_to: '2025-01-01'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2025.htm ; https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-01-01'
+  kind: closed
+  name: New Year's Day
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2025-01-28'
+  effective_to: '2025-01-28'
+  source_url: https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+    ; https://www.hkex.com.hk/Services/Trading-hours-and-Severe-Weather-Arrangements/Trading-Hours/Securities-Market?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-01-28'
+  kind: early_close
+  name: Lunar New Year's Eve (half day)
+  close_local: '12:10'
+  evidence: 'A: HKEX half-day trading day (no afternoon session); the closing auction runs 12:00 to a random close 12:08-12:10,
+    so the official close is set by 12:10'
+- effective_from: '2025-01-29'
+  effective_to: '2025-01-29'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2025.htm ; https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-01-29'
+  kind: closed
+  name: Lunar New Year's Day
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2025-01-30'
+  effective_to: '2025-01-30'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2025.htm ; https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-01-30'
+  kind: closed
+  name: The second day of Lunar New Year
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2025-01-31'
+  effective_to: '2025-01-31'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2025.htm ; https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-01-31'
+  kind: closed
+  name: The third day of Lunar New Year
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2025-04-04'
+  effective_to: '2025-04-04'
+  source_url: https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+    ; https://www.gov.hk/en/about/abouthk/holiday/2025.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-04-04'
+  kind: closed
+  name: Ching Ming Festival
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2025-04-18'
+  effective_to: '2025-04-18'
+  source_url: https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+    ; https://www.gov.hk/en/about/abouthk/holiday/2025.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-04-18'
+  kind: closed
+  name: Good Friday
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2025-04-21'
+  effective_to: '2025-04-21'
+  source_url: https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+    ; https://www.gov.hk/en/about/abouthk/holiday/2025.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-04-21'
+  kind: closed
+  name: Easter Monday
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2025-05-01'
+  effective_to: '2025-05-01'
+  source_url: https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+    ; https://www.gov.hk/en/about/abouthk/holiday/2025.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-05-01'
+  kind: closed
+  name: Labour Day
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2025-05-05'
+  effective_to: '2025-05-05'
+  source_url: https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+    ; https://www.gov.hk/en/about/abouthk/holiday/2025.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-05-05'
+  kind: closed
+  name: The Birthday of the Buddha
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2025-07-01'
+  effective_to: '2025-07-01'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2025.htm ; https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-07-01'
+  kind: closed
+  name: HKSAR Establishment Day
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2025-10-01'
+  effective_to: '2025-10-01'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2025.htm ; https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-10-01'
+  kind: closed
+  name: National Day
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2025-10-07'
+  effective_to: '2025-10-07'
+  source_url: https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+    ; https://www.gov.hk/en/about/abouthk/holiday/2025.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-10-07'
+  kind: closed
+  name: The day following the Chinese Mid-Autumn Festival
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2025-10-29'
+  effective_to: '2025-10-29'
+  source_url: https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+    ; https://www.gov.hk/en/about/abouthk/holiday/2025.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-10-29'
+  kind: closed
+  name: Chung Yeung Festival
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2025-12-24'
+  effective_to: '2025-12-24'
+  source_url: https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+    ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_166_2025Dec01164633?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-12-24'
+  kind: early_close
+  name: Christmas Eve (half day)
+  close_local: '12:10'
+  evidence: 'A: HKEX half-day trading day (no afternoon session); the closing auction runs 12:00 to a random close 12:08-12:10,
+    so the official close is set by 12:10'
+- effective_from: '2025-12-25'
+  effective_to: '2025-12-25'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2025.htm ; https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-12-25'
+  kind: closed
+  name: Christmas Day
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2025-12-26'
+  effective_to: '2025-12-26'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2025.htm ; https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-12-26'
+  kind: closed
+  name: The first weekday after Christmas Day
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2025-12-31'
+  effective_to: '2025-12-31'
+  source_url: https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2024/ce_SEHK_CT_063_2024.pdf
+    ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_166_2025Dec01164633?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2025-12-31'
+  kind: early_close
+  name: New Year's Eve (half day)
+  close_local: '12:10'
+  evidence: 'A: HKEX half-day trading day (no afternoon session); the closing auction runs 12:00 to a random close 12:08-12:10,
+    so the official close is set by 12:10'
+- effective_from: '2026-01-01'
+  effective_to: '2026-01-01'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-01-01'
+  kind: closed
+  name: New Year's Day
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-02-16'
+  effective_to: '2026-02-16'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_166_2025Dec01164633?sc_lang=en
+    ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-02-16'
+  kind: early_close
+  name: Lunar New Year's Eve (half day)
+  close_local: '12:10'
+  evidence: 'A: HKEX half-day trading day (no afternoon session); the closing auction runs 12:00 to a random close 12:08-12:10,
+    so the official close is set by 12:10'
+- effective_from: '2026-02-17'
+  effective_to: '2026-02-17'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-02-17'
+  kind: closed
+  name: Lunar New Year's Day
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-02-18'
+  effective_to: '2026-02-18'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-02-18'
+  kind: closed
+  name: The second day of Lunar New Year
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-02-19'
+  effective_to: '2026-02-19'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-02-19'
+  kind: closed
+  name: The third day of Lunar New Year
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-04-03'
+  effective_to: '2026-04-03'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-04-03'
+  kind: closed
+  name: Good Friday
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-04-06'
+  effective_to: '2026-04-06'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-04-06'
+  kind: closed
+  name: The day following Ching Ming Festival
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-04-07'
+  effective_to: '2026-04-07'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-04-07'
+  kind: closed
+  name: The day following Easter Monday
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-05-01'
+  effective_to: '2026-05-01'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-05-01'
+  kind: closed
+  name: Labour Day
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-05-25'
+  effective_to: '2026-05-25'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-05-25'
+  kind: closed
+  name: The day following the Birthday of the Buddha
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-06-19'
+  effective_to: '2026-06-19'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-06-19'
+  kind: closed
+  name: Tuen Ng Festival
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-07-01'
+  effective_to: '2026-07-01'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-07-01'
+  kind: closed
+  name: HKSAR Establishment Day
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-10-01'
+  effective_to: '2026-10-01'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-10-01'
+  kind: closed
+  name: National Day
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-10-19'
+  effective_to: '2026-10-19'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-10-19'
+  kind: closed
+  name: The day following Chung Yeung Festival
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-12-24'
+  effective_to: '2026-12-24'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-12-24'
+  kind: early_close
+  name: Christmas Eve (half day)
+  close_local: '12:10'
+  evidence: 'A: HKEX half-day trading day (no afternoon session); the closing auction runs 12:00 to a random close 12:08-12:10,
+    so the official close is set by 12:10'
+- effective_from: '2026-12-25'
+  effective_to: '2026-12-25'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2026.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-12-25'
+  kind: closed
+  name: Christmas Day
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2026-12-31'
+  effective_to: '2026-12-31'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2025/SEHK_CT_075_2025?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2026-12-31'
+  kind: early_close
+  name: New Year's Eve (half day)
+  close_local: '12:10'
+  evidence: 'A: HKEX half-day trading day (no afternoon session); the closing auction runs 12:00 to a random close 12:08-12:10,
+    so the official close is set by 12:10'
+- effective_from: '2027-01-01'
+  effective_to: '2027-01-01'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+    ; https://www.gov.hk/en/about/abouthk/holiday/2027.htm
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-01-01'
+  kind: closed
+  name: New Year's Day
+  evidence: 'A: HKEX holiday-schedule circular lists the date'
+- effective_from: '2027-02-05'
+  effective_to: '2027-02-05'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-02-05'
+  kind: early_close
+  name: Lunar New Year's Eve (half day)
+  close_local: '12:10'
+  evidence: 'A: HKEX half-day trading day (no afternoon session); the closing auction runs 12:00 to a random close 12:08-12:10,
+    so the official close is set by 12:10'
+- effective_from: '2027-02-08'
+  effective_to: '2027-02-08'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-02-08'
+  kind: closed
+  name: The third day of Lunar New Year
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-02-09'
+  effective_to: '2027-02-09'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-02-09'
+  kind: closed
+  name: The fourth day of Lunar New Year (the second day is a Sunday)
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-03-26'
+  effective_to: '2027-03-26'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-03-26'
+  kind: closed
+  name: Good Friday
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-03-29'
+  effective_to: '2027-03-29'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-03-29'
+  kind: closed
+  name: Easter Monday
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-04-05'
+  effective_to: '2027-04-05'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-04-05'
+  kind: closed
+  name: Ching Ming Festival
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-05-13'
+  effective_to: '2027-05-13'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-05-13'
+  kind: closed
+  name: The Birthday of the Buddha
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-06-09'
+  effective_to: '2027-06-09'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-06-09'
+  kind: closed
+  name: Tuen Ng Festival
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-07-01'
+  effective_to: '2027-07-01'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-07-01'
+  kind: closed
+  name: HKSAR Establishment Day
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-09-16'
+  effective_to: '2027-09-16'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-09-16'
+  kind: closed
+  name: The day following the Chinese Mid-Autumn Festival
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-10-01'
+  effective_to: '2027-10-01'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-10-01'
+  kind: closed
+  name: National Day
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-10-08'
+  effective_to: '2027-10-08'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-10-08'
+  kind: closed
+  name: Chung Yeung Festival
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-12-24'
+  effective_to: '2027-12-24'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-12-24'
+  kind: early_close
+  name: Christmas Eve (half day)
+  close_local: '12:10'
+  evidence: 'A: HKEX half-day trading day (no afternoon session); the closing auction runs 12:00 to a random close 12:08-12:10,
+    so the official close is set by 12:10'
+- effective_from: '2027-12-27'
+  effective_to: '2027-12-27'
+  source_url: https://www.gov.hk/en/about/abouthk/holiday/2027.htm ; https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-12-27'
+  kind: closed
+  name: The first weekday after Christmas Day
+  evidence: 'B: HK general holiday (gazette); HKEX''s circular for the year says it follows the gazette but this row was not
+    in the search excerpt'
+- effective_from: '2027-12-31'
+  effective_to: '2027-12-31'
+  source_url: https://www.hkex.com.hk/Services/Circulars-and-Notices/Participant-and-Members-Circulars/SEHK/2026/SEHK_CT_077_2026Jun01162846?sc_lang=en
+  retrieved_at_utc: '2026-10-28T18:10:00Z'
+  signed_off_by: Geon Koh
+  date: '2027-12-31'
+  kind: early_close
+  name: New Year's Eve (half day)
+  close_local: '12:10'
+  evidence: 'A: HKEX half-day trading day (no afternoon session); the closing auction runs 12:00 to a random close 12:08-12:10,
+    so the official close is set by 12:10'

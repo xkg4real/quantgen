@@ -1,0 +1,210 @@
+# Transcription of the official release schedules the owner saved as PDF on 2026-10-28 and uploaded to the audit
+# session (audit report docs/audit/2026-10-27/12_release_calendar.md). The PDFs are page images; every date below
+# was read from them by hand and is cross-checked by build_proposed.py against the ALFRED first-release dates
+# (alfred_first_release.csv, alfred_vintages.csv) wherever the release has already happened.
+#
+# retrieved_at_utc: the BEA and FRED prints carry a header time of 29/10/2026 02:27-02:43 in the owner's time zone
+# (KST, UTC+9), i.e. 2026-10-28 17:27-17:43 UTC; the BLS prints carry none and take the upload time (17:44 UTC).
+# Times are local America/New_York unless stated; FRED lists the claims report at 7:30 am US Central = 08:30 ET.
+
+documents:
+  BLS_CPI:
+    title: BLS Release Calendar - Schedule of Releases for the Consumer Price Index
+    url: https://www.bls.gov/schedule/news_release/cpi.htm
+    upload: ___001.pdf
+    retrieved_at_utc: '2026-10-28T17:44:00Z'
+  BLS_EMPSIT:
+    title: BLS Release Calendar - Schedule of Releases for the Employment Situation
+    url: https://www.bls.gov/schedule/news_release/empsit.htm
+    upload: ___002.pdf
+    retrieved_at_utc: '2026-10-28T17:44:00Z'
+  BLS_LAPSE:
+    title: Revised news release dates following the 2025 and 2026 lapses in appropriations (last modified 2026-02-12)
+    url: https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm
+    upload: ___003.pdf
+    retrieved_at_utc: '2026-10-28T17:44:00Z'
+  BLS_2027:
+    title: BLS Release Calendar, January-December 2027, list view (last modified 2026-10-09)
+    url: https://www.bls.gov/schedule/2027/home.htm
+    upload: ___004.pdf
+    retrieved_at_utc: '2026-10-28T17:44:00Z'
+  BEA_2025:
+    title: Bureau of Economic Analysis Release Schedule, year 2025
+    url: https://www.bea.gov/news/schedule
+    upload: ___005_2025.pdf
+    retrieved_at_utc: '2026-10-28T17:32:00Z'
+  BEA_2026:
+    title: Bureau of Economic Analysis Release Schedule, year 2026
+    url: https://www.bea.gov/news/schedule
+    upload: ___005.pdf
+    retrieved_at_utc: '2026-10-28T17:32:00Z'
+  BEA_2027:
+    title: Bureau of Economic Analysis Release Schedule, year 2027
+    url: https://www.bea.gov/news/schedule
+    upload: ___005_2027.pdf
+    retrieved_at_utc: '2026-10-28T17:32:00Z'
+  FRED_CLAIMS_2025:
+    title: FRED Release Calendar - Unemployment Insurance Weekly Claims Report, 2025 (Releases 1-46 of 46)
+    url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2025
+    upload: ___006_2025.pdf
+    retrieved_at_utc: '2026-10-28T17:42:00Z'
+  FRED_CLAIMS_2026:
+    title: FRED Release Calendar - Unemployment Insurance Weekly Claims Report, 2026 (Releases 1-52 of 52)
+    url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2026
+    upload: ___006_2026_pg1.pdf, ___006_2026_pg2.pdf
+    retrieved_at_utc: '2026-10-28T17:42:00Z'
+  FRED_CLAIMS_2027:
+    title: FRED Release Calendar - Unemployment Insurance Weekly Claims Report, 2027 ("No release dates are available")
+    url: https://fred.stlouisfed.org/releases/calendar?rid=180&y=2027
+    upload: ___006_2027.pdf
+    retrieved_at_utc: '2026-10-28T17:43:00Z'
+  ALFRED:
+    title: ALFRED Observations by Real-Time Period (CPIAUCSL, PAYEMS, PCEPI, ICSA), files created 2026-10-28 12:38-12:41 PM CDT
+    url: https://alfred.stlouisfed.org/series?seid=CPIAUCSL; https://alfred.stlouisfed.org/series?seid=PAYEMS; https://alfred.stlouisfed.org/series?seid=PCEPI; https://alfred.stlouisfed.org/series?seid=ICSA
+    upload: CPIAUCSL_1.xlsx, PAYEMS_1.xlsx, PCEPI_1.xlsx, ICSA_1.xlsx
+    retrieved_at_utc: '2026-10-28T17:41:00Z'
+
+# reference period (first of the month) -> release date, 08:30 ET unless a time is given
+BLS_CPI:
+  '2026-10-01': '2026-11-10'
+  '2026-11-01': '2026-12-10'
+  '2026-12-01': '2027-01-13'
+  '2027-01-01': '2027-02-11'
+  '2027-02-01': '2027-03-10'
+  '2027-03-01': '2027-04-13'
+  '2027-04-01': '2027-05-12'
+  '2027-05-01': '2027-06-10'
+  '2027-06-01': '2027-07-14'
+  '2027-07-01': '2027-08-11'
+  '2027-08-01': '2027-09-14'
+  '2027-09-01': '2027-10-14'
+  '2027-10-01': '2027-11-10'
+  '2027-11-01': '2027-12-10'
+
+BLS_EMPSIT:
+  '2026-10-01': '2026-11-06'
+  '2026-11-01': '2026-12-04'
+  '2026-12-01': '2027-01-08'
+  '2027-01-01': '2027-02-05'
+  '2027-02-01': '2027-03-05'
+  '2027-03-01': '2027-04-02'
+  '2027-04-01': '2027-05-07'
+  '2027-05-01': '2027-06-04'
+  '2027-06-01': '2027-07-02'
+  '2027-07-01': '2027-08-06'
+  '2027-08-01': '2027-09-03'
+  '2027-09-01': '2027-10-08'
+  '2027-10-01': '2027-11-05'
+  '2027-11-01': '2027-12-03'
+
+BLS_2027:
+  CPI:
+    '2026-12-01': '2027-01-13'
+    '2027-01-01': '2027-02-11'
+    '2027-02-01': '2027-03-10'
+    '2027-03-01': '2027-04-13'
+    '2027-04-01': '2027-05-12'
+    '2027-05-01': '2027-06-10'
+    '2027-06-01': '2027-07-14'
+    '2027-07-01': '2027-08-11'
+    '2027-08-01': '2027-09-14'
+    '2027-09-01': '2027-10-14'
+    '2027-10-01': '2027-11-10'
+    '2027-11-01': '2027-12-10'
+  EMPSIT:
+    '2026-12-01': '2027-01-08'
+    '2027-01-01': '2027-02-05'
+    '2027-02-01': '2027-03-05'
+    '2027-03-01': '2027-04-02'
+    '2027-04-01': '2027-05-07'
+    '2027-05-01': '2027-06-04'
+    '2027-06-01': '2027-07-02'
+    '2027-07-01': '2027-08-06'
+    '2027-08-01': '2027-09-03'
+    '2027-09-01': '2027-10-08'
+    '2027-10-01': '2027-11-05'
+    '2027-11-01': '2027-12-03'
+  # federal holidays printed in the 2027 list (cross-check of the signed holidays_FED file)
+  holidays: ['2027-01-01', '2027-01-18', '2027-02-15', '2027-05-31', '2027-06-18', '2027-07-05', '2027-09-06',
+             '2027-10-11', '2027-11-11', '2027-11-25', '2027-12-24', '2027-12-31']
+
+# release: reference period -> revised date (null = cancelled), 08:30 ET
+BLS_LAPSE:
+  EMPSIT:
+    '2025-09-01': {previous: '2025-10-03', revised: '2025-11-20'}
+    '2025-10-01': {previous: '2025-11-07', revised: null, note: 'cancelled; October establishment data published with November (household survey not collected)'}
+    '2025-11-01': {previous: '2025-12-05', revised: '2025-12-16'}
+    '2025-12-01': {previous: '2026-01-09', revised: '2026-01-09', note: NO CHANGE}
+    '2026-01-01': {previous: '2026-02-06', revised: '2026-02-11', note: 2026 lapse}
+  CPI:
+    '2025-10-01': {previous: '2025-11-13', revised: null, note: 'cancelled; no all-items or core index for October 2025'}
+    '2025-11-01': {previous: '2025-12-10', revised: '2025-12-18'}
+    '2025-12-01': {previous: '2026-01-13', revised: '2026-01-13', note: NO CHANGE}
+    '2026-01-01': {previous: '2026-02-11', revised: '2026-02-13', note: 2026 lapse}
+
+# Personal Income and Outlays: reference month -> [release date, time ET]
+BEA_2025:
+  '2024-12-01': ['2025-01-31', '08:30']
+  '2025-01-01': ['2025-02-28', '08:30']
+  '2025-02-01': ['2025-03-28', '08:30']
+  '2025-03-01': ['2025-04-30', '10:00']
+  '2025-04-01': ['2025-05-30', '08:30']
+  '2025-05-01': ['2025-06-27', '08:30']
+  '2025-06-01': ['2025-07-31', '08:30']
+  '2025-07-01': ['2025-08-29', '08:30']
+  '2025-08-01': ['2025-09-26', '08:30']
+  '2025-09-01': ['2025-12-05', '10:00']     # "New Date"
+BEA_2026:
+  '2025-10-01': ['2026-01-22', '10:00']     # "Personal Income and Outlays, October and November 2025", New Date
+  '2025-11-01': ['2026-01-22', '10:00']
+  '2025-12-01': ['2026-02-20', '08:30']     # New Date
+  '2026-01-01': ['2026-03-13', '08:30']     # New Date
+  '2026-02-01': ['2026-04-09', '08:30']     # New Date
+  '2026-03-01': ['2026-04-30', '08:30']
+  '2026-04-01': ['2026-05-28', '08:30']
+  '2026-05-01': ['2026-06-25', '08:30']
+  '2026-06-01': ['2026-07-30', '08:30']
+  '2026-07-01': ['2026-08-26', '08:30']
+  '2026-08-01': ['2026-09-30', '08:30']
+  '2026-09-01': ['2026-10-29', '08:30']
+  '2026-10-01': ['2026-11-25', '08:30']
+  '2026-11-01': ['2026-12-23', '08:30']
+BEA_2027:
+  '2026-12-01': ['2027-01-28', '08:30']
+  '2027-01-01': ['2027-02-25', '08:30']
+  '2027-02-01': ['2027-03-31', '08:30']
+  '2027-03-01': ['2027-04-29', '08:30']
+  '2027-04-01': ['2027-05-27', '08:30']
+  '2027-05-01': ['2027-06-25', '08:30']
+  '2027-06-01': ['2027-07-29', '08:30']
+  '2027-07-01': ['2027-08-25', '08:30']
+  '2027-08-01': ['2027-09-30', '08:30']
+  '2027-09-01': ['2027-10-28', '08:30']
+  '2027-10-01': ['2027-11-24', '08:30']
+  '2027-11-01': ['2027-12-22', '08:30']
+
+# Unemployment Insurance Weekly Claims Report release dates as listed (7:30 am CT = 08:30 ET)
+FRED_CLAIMS_2025: ['2025-01-02', '2025-01-08', '2025-01-16', '2025-01-23', '2025-01-30',
+                   '2025-02-06', '2025-02-13', '2025-02-20', '2025-02-27',
+                   '2025-03-06', '2025-03-13', '2025-03-20', '2025-03-27',
+                   '2025-04-03', '2025-04-10', '2025-04-17', '2025-04-24',
+                   '2025-05-01', '2025-05-08', '2025-05-15', '2025-05-22', '2025-05-29',
+                   '2025-06-05', '2025-06-12', '2025-06-18', '2025-06-26',
+                   '2025-07-03', '2025-07-10', '2025-07-17', '2025-07-24', '2025-07-31',
+                   '2025-08-07', '2025-08-14', '2025-08-21', '2025-08-28',
+                   '2025-09-04', '2025-09-11', '2025-09-18', '2025-09-25',
+                   '2025-11-20', '2025-11-26',
+                   '2025-12-04', '2025-12-11', '2025-12-18', '2025-12-24', '2025-12-31']
+FRED_CLAIMS_2026: ['2026-01-08', '2026-01-15', '2026-01-22', '2026-01-29',
+                   '2026-02-05', '2026-02-12', '2026-02-19', '2026-02-26',
+                   '2026-03-05', '2026-03-12', '2026-03-19', '2026-03-26',
+                   '2026-04-02', '2026-04-09', '2026-04-16', '2026-04-23', '2026-04-30',
+                   '2026-05-07', '2026-05-14', '2026-05-21', '2026-05-28',
+                   '2026-06-04', '2026-06-11', '2026-06-18', '2026-06-25',
+                   '2026-07-02', '2026-07-09', '2026-07-16', '2026-07-23', '2026-07-30',
+                   '2026-08-06', '2026-08-13', '2026-08-20', '2026-08-27',
+                   '2026-09-03', '2026-09-10', '2026-09-17', '2026-09-24',
+                   '2026-10-01', '2026-10-08', '2026-10-15', '2026-10-22', '2026-10-29',
+                   '2026-11-05', '2026-11-12', '2026-11-19', '2026-11-25',
+                   '2026-12-03', '2026-12-10', '2026-12-17', '2026-12-24', '2026-12-31']
+FRED_CLAIMS_2027: []

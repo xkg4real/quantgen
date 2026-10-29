@@ -1,0 +1,66 @@
+load
+  [ok] holidays_JPX loads: None
+  [ok] holidays_SSE loads: None
+  [ok] holidays_HKEX loads: None
+  [ok] holidays_TWSE loads: None
+  [ok] holidays_CME loads: None
+  [ok] market_closes loads: None
+JP (TSE)
+  [ok] 2026-09-22 citizens' holiday: False
+  [ok] 2026-09-24 session: True
+  [ok] 2027-03-22 substitute holiday: False
+  [ok] 2026-12-30 session (no half day): True
+  [ok] decision 2026-10-22: datetime.datetime(2026, 10, 22, 6, 30, tzinfo=datetime.timezone.utc)
+CN (SSE)
+  [ok] 2026-10-07 National Day: False
+  [ok] 2026-10-08 session: True
+  [ok] 2026-10-10 make-up Saturday is not a session: False
+  [ok] 2027-02-12 inferred Spring Festival: False
+  [ok] decision 2026-10-08 (15:00 CST): datetime.datetime(2026, 10, 8, 7, 0, tzinfo=datetime.timezone.utc)
+HK (HKEX)
+  [ok] 2026-10-19 day after Chung Yeung: False
+  [ok] decision 2026-10-22 (CAS end 16:10 HKT): datetime.datetime(2026, 10, 22, 8, 10, tzinfo=datetime.timezone.utc)
+  [ok] decision 2026-12-24 half day (12:10 HKT): datetime.datetime(2026, 12, 24, 4, 10, tzinfo=datetime.timezone.utc)
+  [ok] 2027-12-27 first weekday after Christmas: False
+  [ok] market_closes HK 2016-07-22 (before CAS): ['16:00']
+  [ok] market_closes HK 2016-07-25 (CAS): ['16:10']
+TW (TWSE)
+  [ok] 2026-10-23 typhoon Champi: False
+  [ok] 2026-10-22 session: True
+  [ok] 2025-01-23 settlement-only day: False
+  [ok] decision 2026-10-22 (13:30 TST): datetime.datetime(2026, 10, 22, 5, 30, tzinfo=datetime.timezone.utc)
+CME (equity settlement days)
+  [ok] business_day CME 2026-04-03: False
+  [ok] business_day CME 2026-04-02: True
+  [ok] business_day CME 2025-01-09: False
+  [ok] business_day CME 2025-11-28: True
+  [ok] business_day CME 2027-12-31: True
+  [ok] business_day CME 2027-12-24: False
+  [ok] business_day CME 2026-10-12: True
+  [ok] CME 2025-11-28 halt: '12:15'
+cross-market rule at the KRX close of 2026-10-22 (06:30:30Z bound)
+  [ok] TW same-date close usable: True
+  [ok] JP same-date close usable: False
+  [ok] CN same-date close usable: False
+  [ok] HK same-date close usable: False
+market status on 2026-10-29
+  JP: signed=True sessions_left=286 covers_to=2027-12-31 alerts=[]
+  [ok] JP signed: True
+  [ok] JP ARM precondition: True
+  CN: signed=True sessions_left=288 covers_to=2027-12-31 alerts=[]
+  [ok] CN signed: True
+  [ok] CN ARM precondition: True
+  HK: signed=True sessions_left=292 covers_to=2027-12-31 alerts=[]
+  [ok] HK signed: True
+  [ok] HK ARM precondition: True
+  TW: signed=True sessions_left=286 covers_to=2027-12-31 alerts=[]
+  [ok] TW signed: True
+  [ok] TW ARM precondition: True
+coverage horizon: first decision date that warns (<= 60 left) / pages (<= 20 left)
+  holidays_JPX   warn from 2027-10-04  page from 2027-12-02
+  holidays_SSE   warn from 2027-10-08  page from 2027-12-03
+  holidays_HKEX  warn from 2027-10-06  page from 2027-12-02
+  holidays_TWSE  warn from 2027-10-04  page from 2027-12-01
+  holidays_CME   warn from 2027-10-06  page from 2027-12-02
+
+0 failure(s)

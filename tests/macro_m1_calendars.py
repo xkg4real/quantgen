@@ -559,6 +559,10 @@ def test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed():
         assert store.status("KR", date(2026, 10, 2), cal=live)["signed"] is False
     if manifest.get("signed_off_by") is None:
         assert live.version == "unsigned"
+    else:       # a signed set: every file in it is signed, and the set version is what event_calendar stamps
+        assert signed == set(live.file_ids()), sorted(set(live.file_ids()) - signed)
+        assert manifest.get("signed_utc") and live.version == str(manifest["version"]) != "unsigned"
+        assert not any(tag in manifest["signed_off_by"] for tag in ("TEST-FIXTURE", "SIMULATION"))
     # the rules-store paths of section 7 resolve to these files
     from core.rules.macro_rules import load_store
     s = load_store()
