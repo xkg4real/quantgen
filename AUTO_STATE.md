@@ -1,11 +1,11 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-10-29T13:27:37+09:00
+created_at: 2026-10-29T14:11:21+09:00
 source_branch: claude/amazing-gauss-tdiguu
-source_head: abc7217
+source_head: 45b233f
 upstream: origin/claude/amazing-gauss-tdiguu
-patch_base: abc7217
+patch_base: 45b233f
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
@@ -13,7 +13,7 @@ usage_pct: unknown
 usage_resets_at: unknown
 session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
 snapshot_key: none
-current_md_updated_at: 2026-10-29T03:19:12+09:00
+current_md_updated_at: 2026-10-29T13:50:05+09:00
 current_md_status: checkpoint
 ---
 
@@ -26,21 +26,21 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
+45b233f Execution record: the second main merge (0acb9b7, PR #9) and its full run (790/931, 4 failed, 137 not run)
+0acb9b7 Merge main (PR #9: calendar audits 5 and 6, all 17 files and the set 1.0.0 owner-signed) into the Nautilus branch
+e28035f Merge pull request #9 from xkg4real/claude/relaxed-cerf-az755o
+999dd26 Owner set sign-off (Geon Koh): calendar set 1.0.0 in the MANIFEST header; a signed set requires every file signed
+f8c7467 Owner sign-off (Geon Koh): JPX, SSE, HKEX, TWSE, CME and market_closes v1.0.0 (calendar audit 6); all 17 calendar files signed
+d4e9a42 Owner sign-off (Geon Koh): release_calendar v1.0.0 (calendar audit 5) with the approved code patch; BLS and BEA open
+59ff2cf Batch 6 names fixed (report 14_), fingerprints refreshed; register and rulings log carry the release_calendar handover
+86ff0d2 Merge remote-tracking branch 'origin/claude/optimistic-fermi-revc37' into claude/relaxed-cerf-az755o
+54ec3c7 Rename my calendar audit to batch 6 (docs 13-15) so it does not collide with release_calendar audit 5
+324ec31 Calendar audit 5: JPX, SSE, HKEX, TWSE, CME and market_closes proposed v1.0.0 (unsigned) with the signing form
 abc7217 Execution record: the main merge after ③-6 (614dca4) and its cache-free full run (792/931, 2 failed, 137 not run)
+5f669cb Calendar audit 5: full macro suite on the simulated-signed tree (no new failure); clean dry-run log
 614dca4 Merge main (PR #7 owner-signed calendars, PR #3, PR #6) into the Nautilus branch; PT-07 calendar changes withdrawn
-ce10fe7 Merge pull request #3 from xkg4real/claude/amazing-ride-eancox
-98ccae6 Merge pull request #7 from xkg4real/claude/optimistic-fermi-revc37
-57c6344 ③-6 done: Nautilus execution record (Tasks 1-5 and the final cloud run); owner ruling on the handoff protocol; progress chart
-2b2cbbc Merge pull request #6 from xkg4real/claude/handoff-protocol
-520d0db nautilus: parity checks, gate hand-off, pilot tables and the Windows runbook (plan Task 5, spec Step 7)
-9a7652d Handoff: third review round — normalised ledger IDs, ledger history, re-runnable --done, session guards
-6b6b386 nautilus bridge, plan Task 4 (spec Step 6): runner, stub child, goldens, Linux census
-7b21cd8 Handoff: LEDGER of finished work, usage cycles, and a read-back check on every publish
-185b56c Owner rulings: ③-4 go, K-g option (a), ②-5 queue approved (interpretation recorded)
-420af64 proposed_patches README: record the git apply --check results (the two LF reading copies and the two stacked PT-09 alternatives do not apply to HEAD by design)
-22bdc16 ②-5 queue step 2: preserve the audit's scratch-only proposed diffs (not applied)
-a298b9d Handoff: second review round — keyed snapshots respect another task's handoff, --key always recorded
-cb0edd4 Handoff: fixes from review — fail-closed lock, untaken-handoff guard, byte-exact patch from patch_base
+d1c9296 Calendar audit 5: release_calendar proposed v1.0.0 (unsigned) from the owner's official schedules and ALFRED vintages
+8ec8598 Calendar signature register: the 10 signed files, their forms and records, and the 6 still unsigned
 ```
 
 ## 푸시되지 않은 커밋
