@@ -51,11 +51,11 @@ _MODEL_LABELS = {"vasicek": "Vasicek", "cir": "CIR", "hull_white": "Hull-White"}
 # Formatting and small helpers (UI only — the core stays in decimals)
 # --------------------------------------------------------------------------- #
 def _pct(x: float, d: int = 2) -> str:
-    return f"{x * 100:.{d}f}%"
+    return f"{x * 100:.{d}f}%" if math.isfinite(x) else "n/a"
 
 
 def _bp(x: float) -> str:
-    return f"{x / BP:+.1f}bp"
+    return f"{x / BP:+.1f}bp" if math.isfinite(x) else "n/a"
 
 
 def _money(x: float) -> str:
@@ -83,7 +83,7 @@ def _table(columns: list[str], rows: list[list[str]]) -> ft.Control:
 
 def _synthetic_notice(source: str, note: str, what: str) -> list[ft.Control]:
     if source != "SYNTHETIC":
-        return []
+        return [notice(f"{what.title()} coverage: {note}", "warning")] if note else []
     return [notice(f"Synthetic {what}: {note}", "error", icon=ft.Icons.SCIENCE_OUTLINED)]
 
 
@@ -108,7 +108,7 @@ def _run_curve(page, *, source: str, method: str, lookback: int) -> list[ft.Cont
     except FICCError:                                 # panel too short for PCA
         pca = None
     d, curve = report.descriptors, report.curve
-    blocks = _synthetic_notice(panel.source, panel.note, "curve")
+    blocks = _synthetic_notice(panel.source, curve.note, "curve")
     blocks.append(ft.Row([
         stat("Shape", report.shape), stat("Regime", report.regime, token="accent"),
         stat("2s10s", _bp(d["2s10s"])), stat("5s30s", _bp(d["5s30s"])),
@@ -138,14 +138,14 @@ def _run_curve(page, *, source: str, method: str, lookback: int) -> list[ft.Cont
     payload = {
         "as_of": report.snapshot.date, "source": panel.source, "method": curve.method,
         "shape": report.shape, "regime": report.regime, "lookback": report.lookback,
-        "descriptors": {k: float(v) for k, v in d.items()},
+        "descriptors": {k: float(v) if math.isfinite(v) else None for k, v in d.items()},
         "changes": {k: float(v) for k, v in report.changes.items()},
         "ns": {"method": report.ns.method, "params": [float(x) for x in report.ns.params],
                "rmse": float(report.ns.rmse)},
         "pca_explained": ([float(x) for x in pca.explained] if pca is not None else None),
-        "table": [{k: (float(v) if isinstance(v, float) else v) for k, v in r.items()}
+        "table": [{k: (float(v) if math.isfinite(v) else None) if isinstance(v, float) else v for k, v in r.items()}
                   for r in curve.table()],
-        "note": panel.note,
+        "note": curve.note,
     }
     blocks.append(analysis_panel(page, kind="rates_curve",
                                  narrative=insights.narrate_curve(report, pca),

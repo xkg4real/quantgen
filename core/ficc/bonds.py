@@ -314,6 +314,8 @@ def shocked_curve(curve: YieldCurve, shock: dict[float, float] | float) -> Yield
         return curve.shifted(float(shock))
     keys = sorted(float(k) for k in shock)
     knots = sorted(set(curve.tenors) | set(keys))
+    if curve.observed_max_tenor is not None:
+        knots = [t for t in knots if t <= curve.observed_max_tenor + 1e-9]
     base = np.asarray(curve.zero(np.asarray(knots)), dtype=float)
     bps = np.interp(np.asarray(knots), keys, [shock[k] for k in keys])
     zs = tuple(float(z + b * BP) for z, b in zip(base, bps))

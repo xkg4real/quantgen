@@ -647,9 +647,12 @@ def _treasury_from_fred(days: int) -> CurvePanel:
                         f"percent print.")
     notes = []
     if len(have) < len(_TREASURY_IDS):
+        coverage = ("below the shortest served tenor; beyond the longest served tenor, "
+                    "metrics and prices are unavailable." if max(t for _, t in have) < 30.0 else
+                    "beyond the shortest and longest served tenors.")
         notes.append("Missing tenors: " + ", ".join(i for i in _TREASURY_IDS if i not in rows)
                      + "; the curve interpolates across a gap (log-linear DF) and holds the "
-                       "zero flat beyond the shortest and longest served tenors.")
+                       "zero flat " + coverage)
     newest = dates[-1]
     behind: dict[str, list[str]] = {}
     for i, _ in have:                                 # a tenor whose last print is older

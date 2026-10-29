@@ -32,6 +32,9 @@ That bounded UI work does not authorize a ResearchRun backend, changed gates or 
 | ⑫-0 | Roadmap reconciliation: every audit item maps to an ID or explicit deferral; original IDs preserved | Documentation only |
 | ⑫-1 | PR-A status source: separate QA, calendar/data, gate, study and distribution fields; provenance and stale-input checks; README agrees | Start from main; no QA artifact overwrite |
 | ⑫-1/a | Bounded recorded QA/calendar + declared policy snapshot; fixtures reject contradictory/missing/stale inputs | Frozen gate/study evidence intentionally NOT_INSPECTED; full live adapters deferred |
+| ②-5/c | PT-04 partial FRED coverage: unavailable long-end metrics/prices, truthful UI, synthetic regression checks | Step 7, no owner decision required |
+| ⑫-2/a | PR-B identity/alias matrix and executable characterization tests; design only | Frozen implementation remains unchanged |
+| ⑫-3/a | PR-F safe packaging stage and Linux/Windows CI definitions with honest run evidence | Windows result separate from Linux |
 | ⑫-2 | PR-B canonical instrument/cost mapping; BTCUSD regression and alias matrix | Owner approval of 12.8 / K-f priority / frozen harness required |
 | ⑫-3 | PR-F packaging and CI with explicit environment tiers | Linux/Windows independently reported; never mark Windows tested from Linux |
 | ⑫-4 | Typed formal-gate blockers register | ⑨-2 and ⑨-5; no promotion of NOT_RUN |
@@ -79,7 +82,10 @@ That bounded UI work does not authorize a ResearchRun backend, changed gates or 
 
 PR-A → PR-B → PR-C → PR-D → PR-E is the review sequence in the audit;
 PR-F supports it throughout. Independent work is possible only where the original
-prerequisites permit it. No PR creation, merge or release is authorized by this handoff.
+prerequisites permit it. The original handoff did not authorize merging or release. The owner subsequently authorized
+UI publication on 2026-10-29 ("ui는 사이트에 바로 반영해줘~ 클로드 알려줄때도 자세히 알려주고").
+That applies to UI deployment only; it does not approve frozen harness/gate changes.
+The public website source and hosting access must be identified before deployment.
 The bounded UI shell is the owner's later direct request, not a declaration that PR-B/C/D are done.
 
 ```mermaid

@@ -60,6 +60,7 @@ class YieldCurve:
     method: str = "bootstrap"         # bootstrap | nelson_siegel | svensson | flat | shifted
     note: str = ""
     params: tuple[float, ...] = ()    # NS/NSS parameters when fitted
+    observed_max_tenor: float | None = None  # partial FRED coverage; never inferred from fitted knots
 
     def __post_init__(self) -> None:
         ts = tuple(float(t) for t in self.tenors)
@@ -78,6 +79,9 @@ class YieldCurve:
         t = np.asarray(t, dtype=float)
         if np.any(t < 0):
             raise ValueError("t must be >= 0.")
+        if self.observed_max_tenor is not None and np.any(t > self.observed_max_tenor + 1e-9):
+            raise FICCError(f"Partial {self.source} curve ends at {self.observed_max_tenor:g}y; "
+                            "requested maturity is outside observed coverage (no extrapolated price).")
         ts, zs = np.asarray(self.tenors), np.asarray(self.zeros)
         zt = np.interp(t, ts, ts * zs)                 # linear in z·t between knots
         zt = np.where(t < ts[0], zs[0] * t, zt)        # flat zero beyond the ends
@@ -133,6 +137,8 @@ class YieldCurve:
         xp = [k for k in (lower, tenor, upper) if k is not None]
         fp = [0.0 if k != tenor else 1.0 for k in xp]
         knots = sorted(set(self.tenors) | set(xp))
+        if self.observed_max_tenor is not None:
+            knots = [t for t in knots if t <= self.observed_max_tenor + 1e-9]
         zs = np.asarray(self.zero(np.asarray(knots)), dtype=float)
         zs = zs + np.interp(knots, xp, fp) * bp * BP
         return replace(self, tenors=tuple(knots), zeros=tuple(float(z) for z in zs),
@@ -149,7 +155,8 @@ class YieldCurve:
             d = self.df(t)
             par = self.par_rate(t, 2) if t >= 1.0 else (1.0 / d - 1.0) / t
             rows.append(dict(zip(_TABLE_KEYS, (t, tenor_label(t), self.zero(t), d, par,
-                                               self.fwd(t, t + 1.0)))))
+                                               self.fwd(t, t + 1.0) if self.observed_max_tenor is None
+                                               or t + 1.0 <= self.observed_max_tenor else math.nan))))
         return rows
 
 
@@ -262,17 +269,23 @@ def fit_nelson_siegel(tenors, yields, *, svensson: bool = False) -> NSFit:
 def curve_from_snapshot(snap: CurveSnapshot, *, method: str = "bootstrap") -> YieldCurve:
     """bootstrap: the par yields as given. nelson_siegel / svensson: fit the par
     curve, evaluate it on KEY_TENORS ∪ input tenors, then bootstrap that."""
+    limit = max(snap.tenors) if snap.source == "FRED" and max(snap.tenors) < 30.0 else None
+    note = snap.note
+    if limit is not None:
+        note = (note + f" Partial FRED curve ends at {limit:g}y; longer metrics/prices are unavailable.").strip()
     if method == "bootstrap":
-        return bootstrap_par_curve(snap.tenors, snap.par_yields, date=snap.date,
-                                   source=snap.source, note=snap.note)
+        return replace(bootstrap_par_curve(snap.tenors, snap.par_yields, date=snap.date,
+                                   source=snap.source, note=note), observed_max_tenor=limit)
     if method not in ("nelson_siegel", "svensson"):
         raise FICCError(f"Unknown curve method {method!r}.")
     fit = fit_nelson_siegel(snap.tenors, snap.par_yields, svensson=method == "svensson")
     grid = np.array(sorted(set(KEY_TENORS) | set(float(t) for t in snap.tenors)))
+    if limit is not None:
+        grid = grid[grid <= limit]
     fn = svensson if method == "svensson" else nelson_siegel
     curve = bootstrap_par_curve(grid, fn(grid, *fit.params), date=snap.date, source=snap.source)
-    note = f"{snap.note} {fit.method} fit, rmse {fit.rmse / BP:.1f}bp".strip()
-    return replace(curve, method=method, params=fit.params, note=note)
+    note = f"{note} {fit.method} fit, rmse {fit.rmse / BP:.1f}bp".strip()
+    return replace(curve, method=method, params=fit.params, note=note, observed_max_tenor=limit)
 
 
 # --------------------------------------------------------------------------- #
@@ -292,7 +305,9 @@ class CurveReport:
 
 def _par_at(snap, t: float) -> float:
     """Par yield at tenor t, linearly interpolated over the snapshot grid
-    (clamped at the ends, so a grid ending at 20y reports its 20y as '30y')."""
+    only within observed coverage; an absent endpoint is not an observation."""
+    if t < min(snap.tenors) or t > max(snap.tenors):
+        return math.nan
     return float(np.interp(t, np.asarray(snap.tenors, dtype=float),
                            np.asarray(snap.par_yields, dtype=float)))
 
@@ -300,6 +315,8 @@ def _par_at(snap, t: float) -> float:
 def _shape(snap) -> str:
     p2, p30 = _par_at(snap, 2.0), _par_at(snap, 30.0)
     s = _par_at(snap, 10.0) - p2
+    if not all(math.isfinite(x) for x in (p2, p30, s)):
+        return "n/a (partial curve)"
     if s > 25 * BP:
         return "normal"
     if s < -10 * BP:

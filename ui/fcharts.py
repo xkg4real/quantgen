@@ -74,7 +74,8 @@ def curve_chart(report: CurveReport) -> ft.Image:
     tp = tp[tp <= hi]
     par = np.array([curve.par_rate(x, 2) if x >= 1.0 else (1.0 / curve.df(x) - 1.0) / x
                     for x in tp])
-    fwd = np.array([curve.fwd(x, x + 1.0) for x in t])
+    fwd = np.array([curve.fwd(x, x + 1.0) if curve.observed_max_tenor is None
+                    or x + 1.0 <= curve.observed_max_tenor else np.nan for x in t])
     fn = svensson if report.ns.method == "svensson" else nelson_siegel
     fig, ax = _fig(7.5, 3.2, pal)
     ax.plot(tp, par * 100, color=pal.accent, linewidth=1.6, label="Par (semi-annual)")
