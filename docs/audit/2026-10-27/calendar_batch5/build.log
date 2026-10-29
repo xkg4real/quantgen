@@ -1,0 +1,19 @@
+BLS 2027 calendar holidays == signed holidays_FED 2027 closed dates (12)
+CPI 2025-10-01: ALFRED's first vintage 2025-12-18 has no value (cancelled release): no row
+EMPSIT 2025-10-01: no release of its own; establishment data published with the next month on 2025-12-16 (household survey not collected: UNRATE registry missing_months)
+CLAIMS: 88 FRED release dates up to 2026-10-28 == ALFRED ICSA vintage dates
+CLAIMS rule (Thursday; Wednesday when the Thursday is a FED holiday) reproduces 98 of 105 official 2025-2026 dates; the others are the 2025 shutdown:
+  2025-09-27: rule 2025-10-02 vs 2025-11-20
+  2025-10-04: rule 2025-10-09 vs 2025-11-20
+  2025-10-11: rule 2025-10-16 vs 2025-11-20
+  2025-10-18: rule 2025-10-23 vs 2025-11-20
+  2025-10-25: rule 2025-10-30 vs 2025-11-20
+  2025-11-01: rule 2025-11-06 vs 2025-11-20
+  2025-11-08: rule 2025-11-13 vs 2025-11-20
+CPI: 35 rows 2025-01-15..2027-12-10; evidence {'A': 15, 'B': 20}; 15 periods carried by two records, all agree
+EMPSIT: 36 rows 2025-01-10..2027-12-03; evidence {'A': 17, 'B': 19}; 17 periods carried by two records, all agree
+PIO: 36 rows 2025-01-31..2027-12-22; evidence {'A': 21, 'B': 15}; 21 periods carried by two records, all agree
+CLAIMS: 157 rows 2025-01-02..2027-12-30; evidence {'A': 95, 'B': 10, 'C': 52}; 95 periods carried by two records, all agree
+not 08:30 ET: PIO 2025-03-01 -> 2025-04-30 10:00, PIO 2025-09-01 -> 2025-12-05 10:00, PIO 2025-10-01 -> 2026-01-22 10:00, PIO 2025-11-01 -> 2026-01-22 10:00
+no release date falls on a weekend; one falls on a signed FED closure: CLAIMS 2025-12-20 -> 2025-12-24 (executive-order closure; DOL released anyway, ALFRED and FRED agree)
+release_calendar.yaml: 264 rows ({'CLAIMS': 157, 'EMPSIT': 36, 'CPI': 35, 'PIO': 36}); content md5 1faf621a5b443f1c9f3627c2a98f1054

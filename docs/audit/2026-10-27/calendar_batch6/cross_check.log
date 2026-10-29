@@ -1,0 +1,33 @@
+exchange_calendars 4.13.2 | pandas_market_calendars 5.5.0
+holidays_JPX vs xc:XTKS (to 2027-10-28): proposed 51 closed, library 51
+   only proposed: -
+   only library:  -
+   early closes differ on: - | proposed times: [] library times: []
+holidays_JPX vs pmc:JPX (to 2027-12-31): proposed 54 closed, library 54
+   only proposed: -
+   only library:  -
+   early closes differ on: - | proposed times: [] library times: []
+holidays_SSE vs xc:XSHG (to 2026-12-31): proposed 37 closed, library 37
+   only proposed: -
+   only library:  -
+   early closes differ on: - | proposed times: [] library times: []
+holidays_SSE vs pmc:SSE (to 2027-12-31): proposed 55 closed, library 52
+   only proposed: 2027-02-12 2027-05-04 2027-05-05
+   only library:  -
+   early closes differ on: - | proposed times: [] library times: []
+holidays_HKEX vs xc:XHKG (to 2027-10-28): proposed 41 closed, library 41
+   only proposed: -
+   only library:  -
+   early closes differ on: 2027-12-24 2027-12-31 | proposed times: ['12:10'] library times: ['12:00']
+holidays_HKEX vs pmc:HKEX (to 2027-12-31): proposed 42 closed, library 42
+   only proposed: -
+   only library:  -
+   early closes differ on: 2025-01-28 2025-12-24 2025-12-31 2026-02-16 2026-12-24 2026-12-31 2027-02-05 2027-12-24 2027-12-31 | proposed times: ['12:10'] library times: []
+holidays_TWSE vs xc:XTAI (to 2027-10-28): proposed 55 closed, library 50
+   only proposed: 2026-07-10 2026-10-23 2027-02-02 2027-02-03 2027-04-06
+   only library:  -
+   early closes differ on: - | proposed times: [] library times: []
+holidays_CME vs pmc:CME_Equity (to 2027-12-31): proposed 31 closed, library 7
+   only proposed: 2025-01-20 2025-02-17 2025-04-18 2025-05-26 2025-06-19 2025-07-04 2025-09-01 2025-11-27 2026-01-19 2026-02-16 2026-04-03 2026-05-25 2026-06-19 2026-07-03 2026-09-07 2026-11-26 2027-01-18 2027-02-15 2027-03-26 2027-05-31 2027-06-18 2027-07-05 2027-09-06 2027-11-25
+   only library:  -
+   early closes differ on: 2025-01-20 2025-02-17 2025-04-18 2025-05-26 2025-06-19 2025-07-04 2025-09-01 2025-11-27 2026-01-19 2026-02-16 2026-04-03 2026-05-25 2026-06-19 2026-07-03 2026-09-07 2026-11-26 2027-01-18 2027-02-15 2027-03-26 2027-05-31 2027-06-18 2027-07-05 2027-09-06 2027-11-25 | proposed times: ['12:15'] library times: ['08:15', '12:00']

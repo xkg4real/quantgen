@@ -1,0 +1,32 @@
+load
+  [ok] release_calendar loads (v1.0.0, covers 2025-01-01..2027-12-31): None
+  [ok] rows: 264
+  proposed content md5 (what the owner signs): 1faf621a5b443f1c9f3627c2a98f1054
+every row: publication instant == its own date, time and zone
+  [ok] 407 instants (8 series over their release rows): mismatches: 0
+  [ok] BEA 10:00 ET, EDT: PCEPILFE 2025-03 -> 2025-04-30: datetime.datetime(2025, 4, 30, 14, 0, tzinfo=datetime.timezone.utc)
+  [ok] BEA 10:00 ET, EST: PCEPILFE 2025-10 -> 2026-01-22: datetime.datetime(2026, 1, 22, 15, 0, tzinfo=datetime.timezone.utc)
+  [ok] CLAIMS week of 2026-11-21 -> Wed 2026-11-25 (Thanksgiving): datetime.datetime(2026, 11, 25, 13, 30, tzinfo=datetime.timezone.utc)
+  [ok] CPI 2026-10 -> 2026-11-10 08:30 EST: datetime.datetime(2026, 11, 10, 13, 30, tzinfo=datetime.timezone.utc)
+  [ok] CPIAUCSL 2025-10-01 (no row): 'KeyError (no release date: unpublished)'
+  [ok] CPILFESL 2025-10-01 (no row): 'KeyError (no release date: unpublished)'
+  [ok] PCEPI 2027-12-01 (no row): 'KeyError (no release date: unpublished)'
+  [ok] CPIAUCSL 2024-11-01 (no row): 'KeyError (no release date: unpublished)'
+usable_at at the KRX decision, every monthly row released in the KRX file's span (from 2026-01-02)
+  [ok] usable_at errors over 74 rows (lags of 60+ days need the probe patch): {}
+data layer: ingest stamps and reads
+  [ok] CPIAUCSL 2026-09 available_at (calendar_bound, 08:30 EDT): (datetime.datetime(2026, 10, 14, 12, 30, tzinfo=datetime.timezone.utc), 'calendar_bound')
+  [ok] PCEPILFE risk_model read on 2026-10-28 (Aug obs; Sep due 2026-10-29): 'PITValue'
+  [ok]   obs_date: datetime.date(2026, 8, 1)
+  [ok] PCEPILFE on 2026-11-06 without the Sep obs: stale (missed release): 'stale'
+  [ok] ICSA retrieved before 08:30 ET on release day: provisional print: 'provisional_intraday'
+US coverage with release_calendar
+  [ok] US signed on 2026-10-28: (True, {})
+  US sessions_left=292 covers 2025-01-01..2027-12-31 alerts=[]
+  release_calendar: FED business days left on 2026-10-28: 292
+  2027-10-01: sessions_left=60 alerts=['warn', 'warn']
+  2027-10-08: sessions_left=55 alerts=['warn', 'warn', 'warn', 'warn', 'warn', 'warn']
+  2027-12-01: sessions_left=20 alerts=['warn', 'page', 'warn', 'warn', 'warn', 'page']
+  [ok] core/calendars/data unchanged: True
+
+0 failure(s)

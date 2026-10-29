@@ -50,7 +50,8 @@ MARKET_FILES = {
 # Every file whose coverage a market's decisions depend on (clock files + regime tags + publication files).
 COVERAGE_FILES = {
     "KR": MARKET_FILES["KR"] + ("kr_regime_tags", "publication_schedules", "source_skipped"),
-    "US": MARKET_FILES["US"] + ("holidays_FED", "holidays_SIFMA", "publication_schedules", "source_skipped"),
+    "US": MARKET_FILES["US"] + ("holidays_FED", "holidays_SIFMA", "publication_schedules", "source_skipped",
+                                "release_calendar"),
     "JP": MARKET_FILES["JP"], "CN": MARKET_FILES["CN"], "HK": MARKET_FILES["HK"], "TW": MARKET_FILES["TW"],
 }
 MARKET_HOLIDAY_SET = {"KR": "KRX", "US": "NYSE", "JP": "JPX", "CN": "SSE", "HK": "HKEX", "TW": "TWSE"}
