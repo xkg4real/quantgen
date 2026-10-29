@@ -4,12 +4,12 @@ reason: milestone
 from: gpt
 task: rulings-2026-10-29
 cycle: 2026-10-27
-done_ids: ②-5/b, ④-2/a
+done_ids: ②-5/b, ④-2/a, ①-2/4/a
 next_ids: ①-2/4
-updated_at: 2026-10-29T16:12:27+09:00
+updated_at: 2026-10-29T16:28:49+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/amazing-gauss-tdiguu
+work_branch: gpt/rulings-2026-10-29
 work_commit: 0a91f26
 uncommitted_changes: no
 pr: 4
@@ -24,6 +24,9 @@ handoff_id: 2026-10-27/rulings-2026-10-29/1cebe23741ffed482a3205e0b3bd4a3c208b0e
 # 인수인계: 소유자 결정(2026-10-29) 반영과 다음 작업(PentPort 감사 반영, 홈/UI 개편 준비)
 
 ## 0. 한 줄 요약
+
+**Codex 진행(2026-10-29 16:28 KST):** ①-2/4/a를 `gpt/calendar-loader-20261029`의 `2ff977d6653c3fe53df2e7c75062cf13966da10f`에 push하고 원격 파일을 재확인했습니다. CAL-13/M-4 입력 검증과 선택 검사 51 PASS/12 NOT_RUN, 기존 61건 결과 불변, 서명 파일 17/17 및 세트 1.0.0 호환을 확인했습니다. 전체 suite는 동결 연구/실제 원장 접근 제한 때문에 NOT_RUN이며 ①-2/4 부모 항목은 완료가 아닙니다. LEDGER는 새 하위 항목만 덧붙였습니다. 다음은 최신 로드맵 정리와 승인된 범위의 상태 표시·Home/UI 작업입니다. 아래 Claude 인계 본문은 수신 시점 기록입니다.
+
 
 Claude가 주간 사용량 95%에서 소유자 지시로 조금 일찍 인수인계합니다. 작업 브랜치 `claude/amazing-gauss-tdiguu`의 `0a91f26`은
 원격에 push됐고 원격 반영을 확인했습니다(`git ls-remote` 일치). 커밋되지 않은 변경은 없습니다.
