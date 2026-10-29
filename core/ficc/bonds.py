@@ -10,15 +10,21 @@ by `notional / face`.
 Simplifications, on purpose:
 
   * ACT/365F simple year fractions; no settlement date, no accrued interest —
-    `maturity` is time to maturity in years and prices are clean-ish "per 100"
-    numbers off the cashflow schedule t_i = T − k/freq (t_i > 0).
+    `maturity` is time to maturity in years and prices are full (dirty) PVs
+    "per 100" off the cashflow schedule t_i = T − k/freq (t_i > 0); a clean
+    market quote is not separated from accrued interest.
   * DV01 is reported POSITIVE for a long bond: dv01 = −dP/dy · 1bp · notional/face.
     Key-rate DV01s are central differences of ±1bp triangular zero bumps with
-    the z-spread held fixed; their sum is the parallel *zero* DV01, which sits
-    a factor (1 + y/freq) above the yield DV01 (continuous vs discrete shift).
+    the z-spread held fixed; their sum is the parallel *zero* DV01. It equals
+    (1 + y/freq) × the yield DV01 only when the curve is flat at the bond's own
+    yield (z ≈ 0); on a sloped curve the ratio depends on the curve's shape.
   * Carry funds the full price at the curve's zero rate to the horizon; roll-down
     reprices the bond with maturity − horizon off the unchanged curve, z-spread
-    held. Both are per `face` over the horizon, not annualized.
+    held. Both are per `face` over the horizon, not annualized. A bond maturing
+    inside the horizon is held to maturity: the horizon is cut to its maturity
+    and it has no breakeven yield move.
+  * Scenario shocks move the continuously-compounded ZERO rates (z-spread held),
+    not the bond's own yield: +1bp of zero is about (1 + y/freq) bp of yield.
   * Single-curve: the same curve projects and discounts.
 """
 from __future__ import annotations
@@ -162,8 +168,9 @@ class CarryRoll:
     carry: float                      # per face over the horizon
     rolldown: float
     total: float
-    breakeven_bp: float               # yield rise that wipes out `total`
-    horizon: float = 0.25
+    breakeven_bp: float               # yield rise that wipes out `total`; NaN when the
+                                      # bond matures inside the horizon
+    horizon: float = 0.25             # the horizon actually used: min(requested, maturity)
 
 
 def carry_roll(bond: Bond, curve: YieldCurve, price: float, *,
@@ -181,7 +188,9 @@ def carry_roll(bond: Bond, curve: YieldCurve, price: float, *,
                 h and count three months of carry as curve roll.
     breakeven_bp = total / (modified_duration · price) in bp: the parallel yield
                 rise that wipes the horizon P&L out.
-    A bond that matures inside the horizon rolls to face.
+    A bond that matures inside the horizon is held to maturity: h = maturity,
+    every cashflow is cash in hand (total = Σ cf − price − funding), and the
+    breakeven is NaN — no yield move changes a hold-to-maturity result.
     """
     if horizon <= 0:
         raise ValueError(f"horizon must be positive, got {horizon}.")
@@ -189,23 +198,30 @@ def carry_roll(bond: Bond, curve: YieldCurve, price: float, *,
     h = min(horizon, bond.maturity)
     accrued = bond.coupon * bond.face * h
     funding = float(curve.zero(h)) * price * h
-    if bond.maturity - horizon > 1e-9:
+    times, amounts = cashflows(bond)
+    matures_inside = not bond.maturity - horizon > 1e-9
+    if not matures_inside:
         z = z_spread(bond, curve, price)
-        times, amounts = cashflows(bond)
         keep = times > horizon + 1e-12
         t_aged = times[keep] - horizon
         dirty_aged = float(np.sum(amounts[keep] * curve.df(t_aged) * np.exp(-z * t_aged)))
         # Coupons that fall inside the horizon are cash in hand, not accrual.
-        paid = float(np.sum(amounts[~keep])) - (bond.face if not keep.any() else 0.0)
-        clean_aged = dirty_aged + paid - accrued
+        paid = float(np.sum(amounts[~keep]))
     else:
-        clean_aged = bond.face
+        # Every coupon and the face are paid by the horizon. (Rolling to `face`
+        # dropped the final coupon that the full price includes.)
+        dirty_aged, paid = 0.0, float(np.sum(amounts))
+    clean_aged = dirty_aged + paid - accrued
     carry = accrued - funding
     rolldown = clean_aged - price
     total = carry + rolldown
     slope = modified_duration(bond, ytm) * price          # dP per 1.00 of yield
+    if matures_inside:
+        breakeven = float("nan")
+    else:
+        breakeven = total / slope / BP if slope > 0 else 0.0
     return CarryRoll(carry=carry, rolldown=rolldown, total=total,
-                     breakeven_bp=total / slope / BP if slope > 0 else 0.0, horizon=horizon)
+                     breakeven_bp=breakeven, horizon=h)
 
 
 # --------------------------------------------------------------------------- #
@@ -263,7 +279,7 @@ class ScenarioRow:
     shock_bp: dict[float, float] | float
     new_price: float
     pnl: float                        # currency on notional
-    pnl_pct: float                    # new_price / price − 1
+    pnl_pct: float                    # new_price / price − 1: of market value, not notional
 
 
 def _ramp(t0: float, bp0: float, t1: float, bp1: float) -> dict[float, float]:
@@ -280,6 +296,9 @@ SCENARIO_SHOCKS: dict[str, dict[float, float] | float] = {
     "bull steepener": _ramp(0.25, -50.0, 30.0, 0.0),
     "bear flattener": _ramp(0.25, 50.0, 30.0, 0.0),
     "bull flattener": _ramp(2.0, 0.0, 30.0, -50.0),
+    # A key-rate fly: −12.5bp at 2y and 10y, +25bp at 5y, 0 at every other key
+    # tenor (1y, 3y, 7y, 20y …), i.e. −12.5·KR2 + 25·KR5 − 12.5·KR10 with the
+    # triangular key-rate bumps of `key_rate_dv01`.
     "2y-5y-10y fly": {k: {2.0: -12.5, 5.0: 25.0, 10.0: -12.5}.get(k, 0.0) for k in KEY_TENORS},
 }
 DEFAULT_SCENARIOS: tuple[str, ...] = tuple(SCENARIO_SHOCKS)
@@ -287,20 +306,30 @@ DEFAULT_SCENARIOS: tuple[str, ...] = tuple(SCENARIO_SHOCKS)
 
 def shocked_curve(curve: YieldCurve, shock: dict[float, float] | float) -> YieldCurve:
     """Parallel shift for a float; for a per-tenor dict the bp shocks are linearly
-    interpolated across the curve's own knots (flat beyond the shock's ends)."""
+    interpolated in tenor (flat beyond the shock's ends). The shock's own tenors
+    are added as knots at their interpolated zeros — which leaves the base curve
+    unchanged — so a named scenario has the same shape whatever tenors the data
+    served (the device `YieldCurve.key_rate_shifted` uses)."""
     if isinstance(shock, (int, float)):
         return curve.shifted(float(shock))
-    keys = sorted(shock)
-    bps = np.interp(np.asarray(curve.tenors), keys, [shock[k] for k in keys])
-    zs = tuple(float(z + b * BP) for z, b in zip(curve.zeros, bps))
-    return replace(curve, zeros=zs, method="shifted", note=f"{curve.note} scenario".strip())
+    keys = sorted(float(k) for k in shock)
+    knots = sorted(set(curve.tenors) | set(keys))
+    base = np.asarray(curve.zero(np.asarray(knots)), dtype=float)
+    bps = np.interp(np.asarray(knots), keys, [shock[k] for k in keys])
+    zs = tuple(float(z + b * BP) for z, b in zip(base, bps))
+    return replace(curve, tenors=tuple(knots), zeros=zs, method="shifted",
+                   note=f"{curve.note} scenario".strip())
 
 
 def scenario_pnl(bond: Bond, curve: YieldCurve, price: float, *,
                  scenarios=None) -> list[ScenarioRow]:
     """Full revaluation off the shocked curve with the z-spread held fixed, so
-    convexity shows up naturally. `scenarios`: names from DEFAULT_SCENARIOS, or a
-    {name: shock} dict (float bp or {tenor: bp}); None = all defaults."""
+    convexity shows up naturally. Shocks move the continuously-compounded ZERO
+    rates: +1bp of zero is about (1 + y/freq) bp of the bond's own yield, so to
+    first order a parallel row is that factor times DV01 × bp; convexity then
+    trims losses and adds to gains. P&L = (new − price) × notional/face.
+    `scenarios`: names from DEFAULT_SCENARIOS, or a {name: shock} dict (float bp
+    or {tenor: bp}); None = all defaults."""
     if scenarios is None:
         shocks = SCENARIO_SHOCKS
     elif isinstance(scenarios, dict):
@@ -323,10 +352,29 @@ def scenario_pnl(bond: Bond, curve: YieldCurve, price: float, *,
 def futures_hedge_ratio(position_dv01: float, ctd_dv01_per_contract: float,
                         conversion_factor: float) -> float:
     """Contracts to sell against a long position: position_dv01 × CF / ctd_dv01
-    (the future's DV01 is the CTD's DV01 divided by its conversion factor)."""
+    (the future's DV01 is the CTD's DV01 divided by its conversion factor).
+    Signed: a negative result (a short position's DV01) is contracts to BUY.
+    A DV01 approximation: no CTD switch, basis, delivery option, invoice price
+    or yield beta; `ctd_dv01_per_contract` is currency per bp for one contract's
+    face."""
+    if not all(math.isfinite(v) for v in (position_dv01, ctd_dv01_per_contract,
+                                          conversion_factor)):
+        raise ValueError("Position DV01, CTD DV01 and conversion factor must be finite.")
     if ctd_dv01_per_contract <= 0 or conversion_factor <= 0:
         raise ValueError("CTD DV01 per contract and conversion factor must be positive.")
-    return position_dv01 * conversion_factor / ctd_dv01_per_contract
+    n = position_dv01 * conversion_factor / ctd_dv01_per_contract
+    if not math.isfinite(n):
+        raise ValueError("Hedge ratio overflows; check the DV01 and conversion-factor scales.")
+    return n
+
+
+def round_contracts(n: float) -> int:
+    """Nearest whole contract, halves away from zero (10.5 → 11, −10.5 → −11),
+    not Python's half-to-even round() (10.5 → 10). Exact for |n| < 2**53."""
+    a = abs(n)
+    k = math.floor(a)
+    k = int(k) + (1 if a - k >= 0.5 else 0)
+    return k if n >= 0 else -k
 
 
 # --------------------------------------------------------------------------- #
@@ -400,4 +448,6 @@ if __name__ == "__main__":
     assert abs(scenario_pnl(b, curve, 98.0, scenarios={"zero": 0.0})[0].pnl) < 1e-6
     assert len(scenario_pnl(b, curve, 98.0, scenarios=("+25bp parallel",))) == 1
     assert abs(futures_hedge_ratio(a.dv01, 65.0, 0.8) - a.dv01 * 0.8 / 65.0) < 1e-12
+    assert [round_contracts(x) for x in (10.5, -10.5, 9.5, 8.5, 0.49999999999999994)] == \
+        [11, -11, 10, 9, 0]
     print("ok")

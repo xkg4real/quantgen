@@ -1,0 +1,69 @@
+--- a/ui/strategy_lab_page.py
++++ b/ui/strategy_lab_page.py
+@@ -82,6 +82,20 @@
+     return ledger.n_raw
+ 
+ 
++def _tick_floor_bp(symbol: str, hist) -> float:
++    """P10 / R-26: max(table, commission + half a tick / price) for an instrument QUANTGEN registers, at the
++    latest close (as macro_daily prices it; the floor only raises). 0 outside the registry or on synthetic data,
++    whose price level is not a market price."""
++    from core.quant import instruments as INS
++    code = symbol.strip().upper().split(".")[0]
++    if code not in INS.INSTRUMENTS or hist.source == "SYNTHETIC":
++        return 0.0
++    try:
++        return INS.cost_per_side(code, price=float(hist.prices()[-1])).bp
++    except INS.NotTradable:
++        return 0.0
++
++
+ def run_family(family: str, symbols: list[str], *, source: str = "auto", cost_bps: Optional[float] = None,
+                days: int = 5000, bootstrap_B: int = 1000) -> dict:
+     """`cost_bps=None` charges QUANTGEN's table rate. A typed cost below it still runs, as a cost sensitivity, but
+@@ -91,9 +105,12 @@
+         raise ValueError("No symbols given.")
+     floor, classes = V.cost_floor_bp(symbols)
+     uncosted = [s for s, c in classes.items() if c is None]
++    if cost_bps is None and floor is None:
++        raise ValueError(f"QUANTGEN has no cost row for {', '.join(uncosted)}; type a cost to run a sensitivity")
++    hists = [load_history(s, source=source, days=days) for s in symbols]
++    if floor is not None:                     # P10: the tick floor can only raise the table rate
++        floor = max([floor] + [_tick_floor_bp(s, h) for s, h in zip(symbols, hists)])
+     if cost_bps is None:
+-        if floor is None:
+-            raise ValueError(f"QUANTGEN has no cost row for {', '.join(uncosted)}; type a cost to run a sensitivity")
+         cost_bps = floor
+     withheld = ("" if floor is not None and cost_bps >= floor else
+                 f"No PASS / REJECT: QUANTGEN has no cost row for {', '.join(uncosted)}, so this run is a cost "
+@@ -101,7 +118,6 @@
+                 f"No PASS / REJECT: {cost_bps:g} bp per side is below QUANTGEN's table rate for these symbols "
+                 f"({floor:g} bp; {', '.join(f'{s} {c}' for s, c in classes.items())}), so this run is a cost "
+                 f"sensitivity, not a gate verdict.")
+-    hists = [load_history(s, source=source, days=days) for s in symbols]
+     pn = S.align_panel(hists)
+     if family == "pairs":
+         if pn.prices.shape[1] != 2:
+@@ -227,7 +243,7 @@
+     def run(e=None) -> None:
+         busy.visible = True; host.controls = []; page.update()
+ 
+-        def worker():
++        def work():
+             try:
+                 syms = [s.strip() for s in (symbols.value or "").split(",") if s.strip()]
+                 r = run_family(family.value or "trend_switch", syms, source=source.value or "auto",
+@@ -276,6 +292,13 @@
+                                          payload_fn=lambda p=payload(r): p, deep_fn=insights.deep_analysis))
+             host.controls = blocks; busy.visible = False; page.update()
+ 
++        def worker():
++            try:
++                work()
++            except Exception as exc:                  # a render failure must not leave the ring spinning on an empty panel
++                host.controls = [notice(f"{type(exc).__name__}: {exc}", "error", icon=ft.Icons.ERROR_OUTLINE)]
++                busy.visible = False; page.update()
++
+         page.run_thread(worker)
+ 
+     lab = ft.Column([

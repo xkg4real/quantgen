@@ -1,0 +1,35 @@
+{
+ "4_narrative_sentence": "Over a 1m horizon carry is -0.356 and roll-down -0.078 per 100, -0.434 in total, so no yield move changes this hold-to-maturity result: the bond matures inside the horizon.",
+ "5_errors_before_after_clear": [
+  [
+   "Fill only one of Price and Yield.",
+   "Fill only one of Price and Yield."
+  ],
+  [
+   null,
+   null
+  ]
+ ],
+ "6_negative_yields": {
+  "freq 1 y -35": "Yield % -35 is too far from the SYNTHETIC curve for a z-spread in [-50%, 200%] (continuous, over the curve's zero rates), so the bond cannot be analysed on this curve. No z-spread in [-0.5, 2.0] reproduces 8370.0660.",
+  "freq 1 y -38": "Yield % -38 is too far from the SYNTHETIC curve for a z-spread in [-50%, 200%] (continuous, over the curve's zero rates), so the bond cannot be analysed on this curve. No z-spread in [-0.5, 2.0] reproduces 13313.8090.",
+  "freq 1 y -39": "Yield % -39 is too far from the SYNTHETIC curve for a z-spread in [-50%, 200%] (continuous, over the curve's zero rates), so the bond cannot be analysed on this curve. No z-spread in [-0.5, 2.0] reproduces 15624.4845.",
+  "freq 1 y -45": "Yield % -45 is too far from the SYNTHETIC curve for a z-spread in [-50%, 200%] (continuous, over the curve's zero rates), so the bond cannot be analysed on this curve. No z-spread in [-0.5, 2.0] reproduces 43417.5961.",
+  "freq 1 y -49.99": "Yield % -49.99 is too far from the SYNTHETIC curve for a z-spread in [-50%, 200%] (continuous, over the curve's zero rates), so the bond cannot be analysed on this curve. No z-spread in [-0.5, 2.0] reproduces 111385.8514.",
+  "freq 2 y -35": "ok",
+  "freq 2 y -38": "ok",
+  "freq 2 y -39": "Yield % -39 is too far from the SYNTHETIC curve for a z-spread in [-50%, 200%] (continuous, over the curve's zero rates), so the bond cannot be analysed on this curve. No z-spread in [-0.5, 2.0] reproduces 8529.4285.",
+  "freq 2 y -45": "Yield % -45 is too far from the SYNTHETIC curve for a z-spread in [-50%, 200%] (continuous, over the curve's zero rates), so the bond cannot be analysed on this curve. No z-spread in [-0.5, 2.0] reproduces 17993.5701.",
+  "freq 2 y -49.99": "Yield % -49.99 is too far from the SYNTHETIC curve for a z-spread in [-50%, 200%] (continuous, over the curve's zero rates), so the bond cannot be analysed on this curve. No z-spread in [-0.5, 2.0] reproduces 34317.4855.",
+  "freq 4 y -35": "ok",
+  "freq 4 y -38": "ok",
+  "freq 4 y -39": "ok",
+  "freq 4 y -45": "Yield % -45 is too far from the SYNTHETIC curve for a z-spread in [-50%, 200%] (continuous, over the curve's zero rates), so the bond cannot be analysed on this curve. No z-spread in [-0.5, 2.0] reproduces 13011.4161.",
+  "freq 4 y -49.99": "Yield % -49.99 is too far from the SYNTHETIC curve for a z-spread in [-50%, 200%] (continuous, over the curve's zero rates), so the bond cannot be analysed on this curve. No z-spread in [-0.5, 2.0] reproduces 22721.8244."
+ },
+ "7_echo": "Computed for: Calculator & risk · coupon 4.5% · maturity 10y · 2x coupons · price 99.1234567 (yield computed) · notional 1,000,000 · curve requested Auto (FRED, else synthetic) · served SYNTHETIC (simulated, dated 2026-10-27)",
+ "7_chip": "curve: SYNTHETIC (simulated, dated 2026-10-27)",
+ "13_notice_head": "Shocks move the curve's continuously-compounded zero rates with the z-spread held, not this bond's yield: on this curve the +100bp row moves its yield by +103.2bp (+102.2bp, 100 x (1 + y/f), on a curv",
+ "13_row_yield_move_bp": 103.16,
+ "13_flat_ratio_bp": 102.25
+}

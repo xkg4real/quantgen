@@ -1,0 +1,50 @@
+$ (cwd=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched) python3 -B /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched tests.macro_m1_pit /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/logs2/patched__macro_m1_pit.json
+rc=0
+PASS test_avail_01_golden_availability_table_on_synthetic_calendars (0.001s)
+NOT_RUN test_avail_01_official_calendars_are_owner_signed OWNER: signed historical KRX / NYSE / FED / SIFMA calendar files (2015, 2025) absent; the golden table above runs on the stub clocks (core/calendars, package B)
+PASS test_bar_01_a_bar_or_stale_carry_is_never_a_close (0.009s)
+PASS test_bar_02_dispute_is_not_a_failure_and_vendor_missing (0.003s)
+PASS test_close_01_data_clauses_quarantine_and_stamping (0.004s)
+PASS test_fix_01_post_close_fixtures_only (0.002s)
+NOT_RUN test_fix_01_regeneration_at_level_1_tolerance_refdata REFDATA: /home/claude/quantgen_macro_data/ (CATALOG.md, scripts/, results/QX_DLA_postpatch.csv) absent: golden fixtures cannot be generated or md5-frozen
+NOT_RUN test_g_post_01_m1_data_rows_refdata REFDATA: Yahoo ^KS11, 005930.KS, 000660.KS, KRW=X post-patch files and QX_DLA_postpatch.csv absent (local docs/asset_expansion/cache ends 2026-09-23/25, no ^KS11, no 000660, no KRW=X)
+PASS test_h10_01_dexkous_never_read_by_production (0.0s)
+PASS test_h10_02_strict_h10_publication (0.01s)
+PASS test_h15_01_strict_h15_and_treasury_channel (0.002s)
+PASS test_history_cache_b_marks_a_running_bar_provisional (0.021s)
+PASS test_lag_01_independent_audit_raises_or_halts (0.002s)
+PASS test_lag_02_positional_shift_rejected_on_gapped_series (0.0s)
+PASS test_miss_01_calendar_offsets_and_the_october_gap (0.004s)
+NOT_RUN test_miss_01_cpi_yoy_3_353_refdata REFDATA: FRED CPIAUCSL, UNRATE, SAHMCURRENT snapshot of 2026-10-02 (Aug-2026 CPI YoY 3.353%) absent
+PASS test_print_01_circuit_breaker_print_is_never_a_close (0.001s)
+NOT_RUN test_print_01_real_kospi_close_refdata REFDATA: Yahoo ^KS11 history to 2026-03-09 (-5.96% close, -8.11% 10:31 print) not local
+PASS test_prov_01_cache_regression_replays_the_incident (0.035s)
+PASS test_prov_01_store_read_trace (0.007s)
+NOT_RUN test_ro_02_app_key_can_trade_is_an_owner_attestation OWNER: KIS credentials and the 20-session quote-field check (M1-01); whether the app key can trade is recorded as an owner attestation (default 'unknown'), never probed through a trading path (F-3)
+PASS test_ro_02_kis_client_accepts_only_allowlisted_quotation_paths (0.238s)
+PASS test_role_01_counters_halt_scope_and_role_actions (0.005s)
+PASS test_role_02_registration_refusals_and_contract (1.503s)
+PASS test_ser_01_named_series_and_futures_roll_days (0.004s)
+PASS test_ser_02_every_referenced_id_is_registered_with_a_contract (0.662s)
+NOT_RUN test_stale_01_g_stale_01_reference_table_refdata REFDATA: FRED snapshot DTWEXBGS, DGS10, VIXCLS (2016-01-04 -> 2026-09-25), official 2016-26 calendars and results/QX_DLA_staleness.csv absent; the local fred_DEXKOUS.csv covers the DEXKOUS clauses only (labelled smoke above)
+PASS test_stale_01_schedule_aware_clauses_and_local_smoke (1.805s)
+PASS test_syn_01_synthetic_rejected_for_acting_allowed_for_context (0.283s)
+PASS test_vix_01_close_timing_by_channel (0.002s)
+PASS test_xmkt_01_cross_market_data_clause (0.0s)
+not_run=7
+24/24 passed
+
+--- stderr ---
+Cookie fetch from fc.yahoo.com failed (ConnectionError), continuing without it
+Cookie/crumb fetch failed (ConnectionError), continuing without crumb
+Failed to get ticker 'KOSPI_OFFICIAL_CLOSE' reason: Failed to perform, curl: (7) Failed to connect to query2.finance.yahoo.com:443 over proxy 127.0.0.1 after 0 ms: Could not connect to server. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
+Cookie/crumb fetch failed (ConnectionError), continuing without crumb
+
+1 Failed download:
+['KOSPI_OFFICIAL_CLOSE']: ConnectionError('Failed to perform, curl: (7) Failed to connect to query2.finance.yahoo.com:443 over proxy 127.0.0.1 after 0 ms: Could not connect to server. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+Cookie/crumb fetch failed (ConnectionError), continuing without crumb
+Failed to get ticker '^KS11' reason: Failed to perform, curl: (7) Failed to connect to query2.finance.yahoo.com:443 over proxy 127.0.0.1 after 0 ms: Could not connect to server. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
+Cookie/crumb fetch failed (ConnectionError), continuing without crumb
+
+1 Failed download:
+['^KS11']: ConnectionError('Failed to perform, curl: (7) Failed to connect to query2.finance.yahoo.com:443 over proxy 127.0.0.1 after 0 ms: Could not connect to server. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')

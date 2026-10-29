@@ -1,0 +1,122 @@
+[
+ {
+  "test": "kis_markets_paging_and_shapes",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.122
+ },
+ {
+  "test": "kis_markets_unavailable_without_keys",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "kis_master_parsers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "crypto_client_refusals_and_router",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "history_auto_degrades_without_keys",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "etf_page_adjusted_sleeves",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 2.036
+ },
+ {
+  "test": "gate_noise_vs_edge",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 8.72
+ },
+ {
+  "test": "strategies_are_causal",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.127
+ },
+ {
+  "test": "gate_whole_years_and_cost_floor",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "selfcheck_kis_markets",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.013
+ },
+ {
+  "test": "selfcheck_crypto_client",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.012
+ },
+ {
+  "test": "selfcheck_validate",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 47.548
+ },
+ {
+  "test": "selfcheck_strategies",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.228
+ },
+ {
+  "test": "selfcheck_strategy_lab",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.484
+ },
+ {
+  "test": "selfcheck_equity_deriv",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.221
+ },
+ {
+  "test": "selfcheck_curve_models",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 3.476
+ },
+ {
+  "test": "selfcheck_fx_styles",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.136
+ },
+ {
+  "test": "selfcheck_vol_products",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.182
+ },
+ {
+  "test": "selfcheck_crypto_analytics",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 46.152
+ },
+ {
+  "test": "selfcheck_crypto_page",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 2.74
+ }
+]

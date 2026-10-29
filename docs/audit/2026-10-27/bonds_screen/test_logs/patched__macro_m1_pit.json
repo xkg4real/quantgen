@@ -1,0 +1,181 @@
+[
+ {
+  "test": "test_avail_01_golden_availability_table_on_synthetic_calendars",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_avail_01_official_calendars_are_owner_signed",
+  "status": "NOT_RUN",
+  "detail": "OWNER: signed historical KRX / NYSE / FED / SIFMA calendar files (2015, 2025) absent; the golden table above runs on the stub clocks (core/calendars, package B)"
+ },
+ {
+  "test": "test_bar_01_a_bar_or_stale_carry_is_never_a_close",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.009
+ },
+ {
+  "test": "test_bar_02_dispute_is_not_a_failure_and_vendor_missing",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_close_01_data_clauses_quarantine_and_stamping",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "test_fix_01_post_close_fixtures_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_fix_01_regeneration_at_level_1_tolerance_refdata",
+  "status": "NOT_RUN",
+  "detail": "REFDATA: /home/claude/quantgen_macro_data/ (CATALOG.md, scripts/, results/QX_DLA_postpatch.csv) absent: golden fixtures cannot be generated or md5-frozen"
+ },
+ {
+  "test": "test_g_post_01_m1_data_rows_refdata",
+  "status": "NOT_RUN",
+  "detail": "REFDATA: Yahoo ^KS11, 005930.KS, 000660.KS, KRW=X post-patch files and QX_DLA_postpatch.csv absent (local docs/asset_expansion/cache ends 2026-09-23/25, no ^KS11, no 000660, no KRW=X)"
+ },
+ {
+  "test": "test_h10_01_dexkous_never_read_by_production",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_h10_02_strict_h10_publication",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "test_h15_01_strict_h15_and_treasury_channel",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_history_cache_b_marks_a_running_bar_provisional",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.021
+ },
+ {
+  "test": "test_lag_01_independent_audit_raises_or_halts",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_lag_02_positional_shift_rejected_on_gapped_series",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_miss_01_calendar_offsets_and_the_october_gap",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "test_miss_01_cpi_yoy_3_353_refdata",
+  "status": "NOT_RUN",
+  "detail": "REFDATA: FRED CPIAUCSL, UNRATE, SAHMCURRENT snapshot of 2026-10-02 (Aug-2026 CPI YoY 3.353%) absent"
+ },
+ {
+  "test": "test_print_01_circuit_breaker_print_is_never_a_close",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_print_01_real_kospi_close_refdata",
+  "status": "NOT_RUN",
+  "detail": "REFDATA: Yahoo ^KS11 history to 2026-03-09 (-5.96% close, -8.11% 10:31 print) not local"
+ },
+ {
+  "test": "test_prov_01_cache_regression_replays_the_incident",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.035
+ },
+ {
+  "test": "test_prov_01_store_read_trace",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "test_ro_02_app_key_can_trade_is_an_owner_attestation",
+  "status": "NOT_RUN",
+  "detail": "OWNER: KIS credentials and the 20-session quote-field check (M1-01); whether the app key can trade is recorded as an owner attestation (default 'unknown'), never probed through a trading path (F-3)"
+ },
+ {
+  "test": "test_ro_02_kis_client_accepts_only_allowlisted_quotation_paths",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.238
+ },
+ {
+  "test": "test_role_01_counters_halt_scope_and_role_actions",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "test_role_02_registration_refusals_and_contract",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.503
+ },
+ {
+  "test": "test_ser_01_named_series_and_futures_roll_days",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "test_ser_02_every_referenced_id_is_registered_with_a_contract",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.662
+ },
+ {
+  "test": "test_stale_01_g_stale_01_reference_table_refdata",
+  "status": "NOT_RUN",
+  "detail": "REFDATA: FRED snapshot DTWEXBGS, DGS10, VIXCLS (2016-01-04 -> 2026-09-25), official 2016-26 calendars and results/QX_DLA_staleness.csv absent; the local fred_DEXKOUS.csv covers the DEXKOUS clauses only (labelled smoke above)"
+ },
+ {
+  "test": "test_stale_01_schedule_aware_clauses_and_local_smoke",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.805
+ },
+ {
+  "test": "test_syn_01_synthetic_rejected_for_acting_allowed_for_context",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.283
+ },
+ {
+  "test": "test_vix_01_close_timing_by_channel",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_xmkt_01_cross_market_data_clause",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ }
+]

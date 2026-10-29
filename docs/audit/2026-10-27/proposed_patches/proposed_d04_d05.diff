@@ -1,0 +1,445 @@
+diff -ru -x __pycache__ -x '*.pyc' orig/core/engine/evaluator.py tree/core/engine/evaluator.py
+--- orig/core/engine/evaluator.py	2026-10-27 08:35:48.106901201 +0000
++++ tree/core/engine/evaluator.py	2026-10-27 08:45:45.217386840 +0000
+@@ -212,7 +212,7 @@
+             rule_name=rule.name, symbol=rule.symbol, market=rule.market,
+             side=rule.side, kind=rule.order_kind, quantity=quantity,
+             limit_price=rule.limit_price, notional=notional,
+-            trigger_price=quote.price, created_at=now,
++            trigger_price=quote.price, created_at=now, as_of=quote.as_of,
+         )
+ 
+         # 7. idempotency — cheap pre-check, so a duplicate does not even get
+diff -ru -x __pycache__ -x '*.pyc' orig/core/ficc/data.py tree/core/ficc/data.py
+--- orig/core/ficc/data.py	2026-10-27 08:35:48.107544981 +0000
++++ tree/core/ficc/data.py	2026-10-27 08:35:55.033150085 +0000
+@@ -82,6 +82,7 @@
+     dates: tuple[str, ...]            # ISO dates, ascending
+     values: tuple[float, ...]
+     note: str = ""
++    fetched_at_utc: str = ""          # when the provider answered (a cache hit keeps its file's ts); "" if simulated
+ 
+     def __len__(self) -> int:
+         return len(self.values)
+@@ -532,10 +533,13 @@
+             for i in group:
+                 out[i] = synthetic_series(i, days=days, kind=_synthetic_kind(i))
+             continue
++        t_call = time.time()
+         rows, errors = _provider_rows(prov, group, days)
+         for i in group:
+             if i in rows:
+-                out[i] = _series_from_rows(i, prov, rows[i], days)
++                ts = _MEM.get(_cache_key(prov, i, days), (t_call,))[0]
++                out[i] = replace(_series_from_rows(i, prov, rows[i], days),
++                                 fetched_at_utc=_dt.fromtimestamp(ts, _tz.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
+             elif source == "auto":
+                 out[i] = _degraded(synthetic_series(i, days=days, kind=_synthetic_kind(i)),
+                                    prov, errors[i])
+diff -ru -x __pycache__ -x '*.pyc' orig/core/ficc/insights.py tree/core/ficc/insights.py
+--- orig/core/ficc/insights.py	2026-10-27 08:35:48.107674067 +0000
++++ tree/core/ficc/insights.py	2026-10-27 08:36:23.868437463 +0000
+@@ -385,7 +385,11 @@
+                    else 0.0, reverse=True)[:3]
+     r = sheet.row
+     lines = [
+-        f"Daily read for {sheet.as_of}. Rates: 2y {_level(r('DGS2'))} ({_chg(r('DGS2'))} on "
++        f"Daily read for {sheet.as_of}"
++        + (f" (series end between {sheet.oldest_date} and {sheet.as_of}: "
++           + ", ".join(f"{i} {d}" for i, d in getattr(sheet, "lagging", ())) + ")"
++           if getattr(sheet, "lagging", ()) else "")
++        + f". Rates: 2y {_level(r('DGS2'))} ({_chg(r('DGS2'))} on "
+         f"the day, {_chg(r('DGS2'), 'chg_1w')} on the week), 10y {_level(r('DGS10'))} "
+         f"({_chg(r('DGS10'))}, {_chg(r('DGS10'), 'chg_1w')}), 2s10s {_level(r('T10Y2Y'))} "
+         f"({_chg(r('T10Y2Y'))}); the 20-session curve read (descriptive, not a regime model, P19) is a "
+@@ -556,7 +560,8 @@
+         "against their trailing 252-session distribution, each stated with its definition "
+         "and window, and the observation that would revise the reading. Describe, do not "
+         "recommend: no trades, positions, entry or exit levels, sizing or forecasts. Date the "
+-        "note to as_of and flag any ids listed under synthetic_ids as simulated."),
++        "note to as_of, give a series' own last_date wherever it is listed under lagging, and flag any ids "
++        "listed under synthetic_ids as simulated."),
+     "weekly_fi_fx_strategy": (
+         "Write a weekly fixed-income and FX research note in a formal, third-person, "
+         "journal-style register, in this format: a one-line headline; 'Duration', 'Curve' and "
+@@ -570,7 +575,8 @@
+         "assumption or window they are most sensitive to; and 'What would revise this "
+         "reading', naming the data that would change each description. Describe, do not "
+         "recommend: no trades, positions, entry or exit levels, sizing or forecasts. Date it "
+-        "to as_of and flag any synthetic_ids as simulated."),
++        "to as_of, give a series' own last_date wherever it is listed under lagging, and flag any "
++        "synthetic_ids as simulated."),
+ }
+ 
+ 
+diff -ru -x __pycache__ -x '*.pyc' orig/core/ficc/macro.py tree/core/ficc/macro.py
+--- orig/core/ficc/macro.py	2026-10-27 08:35:48.107717454 +0000
++++ tree/core/ficc/macro.py	2026-10-27 08:36:08.134145937 +0000
+@@ -95,6 +95,8 @@
+     z_1y: float
+     pct_1y: float                     # percentile rank of `last` in the 1y window, 0..1
+     source: str
++    fetched_at_utc: str = ""          # provider answer instant (cache file ts on a hit); "" when simulated
++    lag_bdays: int = 0                # weekdays between last_date and the sheet's as_of (0 = current)
+ 
+ 
+ @dataclass(frozen=True)
+@@ -117,6 +119,8 @@
+     sources: dict[str, int]           # count of rows per source label
+     synthetic_ids: tuple[str, ...]
+     note: str = ""
++    oldest_date: str = ""             # the earliest last_date among the rows (as_of is the latest)
++    lagging: tuple[tuple[str, str], ...] = ()      # (id, last_date) of each live row behind as_of
+ 
+     def row(self, id: str) -> MacroRow | None:
+         return next((r for r in self.rows if r.id == id), None)
+@@ -136,7 +140,8 @@
+     changes = {name: s.change(n) for name, n in _CHANGES}
+     return MacroRow(id=ind.id, label=ind.label, group=ind.group, unit=ind.unit,
+                     last=float(s.last), last_date=s.last_date, **changes,
+-                    z_1y=z, pct_1y=float((x <= x[-1]).mean()), source=s.source)
++                    z_1y=z, pct_1y=float((x <= x[-1]).mean()), source=s.source,
++                    fetched_at_utc=getattr(s, "fetched_at_utc", ""))
+ 
+ 
+ def _weekdays(s: Series) -> Series:
+@@ -220,9 +225,19 @@
+     short = min(len(series[i.id]) for i in INDICATORS)
+     if short < _Z_WINDOW:
+         notes.append(f"Shortest series has {short} obs; z/percentile use fewer than 252.")
+-    return MacroSheet(as_of=max(r.last_date for r in rows), rows=rows,
+-                      regime=_regime_from(series, by_id), sources=sources,
+-                      synthetic_ids=synthetic, note=" ".join(notes))
++    # as_of = the latest LIVE observation (a simulated row is dated today by construction, D03-02); each row keeps
++    # its own last_date and its lag behind as_of, so a weekly H.10 or a lagged OAS series is never hidden (D-04).
++    live = [r.last_date for r in rows if r.source != "SYNTHETIC"] or [r.last_date for r in rows]
++    as_of = max(live)
++    rows = tuple(replace(r, lag_bdays=int(np.busday_count(r.last_date, as_of)) if r.last_date < as_of else 0)
++                 for r in rows)
++    lagging = tuple((r.id, r.last_date) for r in rows if r.lag_bdays > 0 and r.source != "SYNTHETIC")
++    if lagging:
++        notes.append(f"{len(lagging)}/{len(rows)} rows end before {as_of}: "
++                     + ", ".join(f"{i} {d}" for i, d in lagging) + ".")
++    return MacroSheet(as_of=as_of, rows=rows, regime=_regime_from(series, by_id), sources=sources,
++                      synthetic_ids=synthetic, note=" ".join(notes),
++                      oldest_date=min(r.last_date for r in rows), lagging=lagging)
+ 
+ 
+ # --------------------------------------------------------------------------- #
+@@ -245,7 +260,8 @@
+              for k, i in (("2y", "DGS2"), ("10y", "DGS10"), ("30y", "DGS30"),
+                           ("2s10s", "T10Y2Y"), ("10y_real", "DFII10"),
+                           ("10y_breakeven", "T10YIE"))}
+-    return {"as_of": sheet.as_of, "regime": asdict(sheet.regime), "curve": curve,
++    return {"as_of": sheet.as_of, "oldest_date": sheet.oldest_date,
++            "lagging": [list(x) for x in sheet.lagging], "regime": asdict(sheet.regime), "curve": curve,
+             "movers_z": by_z,
+             "movers_1d": [dict(asdict(r), rel_1d=_rel_1d(r)) for r in by_1d],
+             "rows": rows, "sources": dict(sheet.sources),
+diff -ru -x __pycache__ -x '*.pyc' orig/core/ficc/pit.py tree/core/ficc/pit.py
+--- orig/core/ficc/pit.py	2026-10-27 08:35:48.107808162 +0000
++++ tree/core/ficc/pit.py	2026-10-27 08:37:00.067851451 +0000
+@@ -546,18 +546,20 @@
+                     provider_mode=provider_mode, synthetic=synthetic)
+ 
+ 
+-def stamp_quote(series_id: str, obs_date: date, value: float, *, quote_utc: datetime, retrieved_at_utc: datetime,
++def stamp_quote(series_id: str, obs_date: date, value: float, *, quote_utc: datetime | None, retrieved_at_utc: datetime,
+                 source: str, channel: str | None = None, provider_mode: str = "explicit", synthetic: bool = False) -> dict:
+-    """A live quote snapshot: live_snapshot on a quote_snapshot row, available at its stamp."""
+-    return make_row(series_id=series_id, value=float(value), obs_date=obs_date, session_date=None, obs_utc=quote_utc,
+-                    obs_kind="quote_snapshot", value_status="live_snapshot", available_at_utc=quote_utc,
+-                    available_at_source="published", retrieved_at_utc=retrieved_at_utc, vintage=None, source=source,
++    """A live quote snapshot: live_snapshot on a quote_snapshot row, available at its exchange stamp ("published").
++    Without an exchange stamp the receipt instant is used and labelled inferred_from_retrieval (D-05)."""
++    stamp, src = (quote_utc, "published") if quote_utc is not None else (retrieved_at_utc, "inferred_from_retrieval")
++    return make_row(series_id=series_id, value=float(value), obs_date=obs_date, session_date=None, obs_utc=stamp,
++                    obs_kind="quote_snapshot", value_status="live_snapshot", available_at_utc=stamp,
++                    available_at_source=src, retrieved_at_utc=retrieved_at_utc, vintage=None, source=source,
+                     channel=channel, provider_mode=provider_mode, synthetic=synthetic)
+ 
+ 
+ def ingest(store: PITStore, series_id: str, rows, *, source: str, retrieved_at_utc: datetime, registry, clocks,
+            provider_mode: str = "explicit", synthetic: bool = False, print_times: dict | None = None,
+-           ohlcv: dict | None = None, channel: str | None = None) -> IngestReport:
++           ohlcv: dict | None = None, channel: str | None = None, quote_times: dict | None = None) -> IngestReport:
+     """Stamp and append `[(obs_date, value), ...]` by the series' obs_kind (single shot; the M8 workflow schedules
+     it). Flags are returned, never stored. `retrieved_at_utc` is the caller's pinned instant."""
+     series_id = named_series(series_id)
+@@ -578,8 +580,9 @@
+                             ohlcv=(ohlcv or {}).get(obs_date), channel=channel, provider_mode=provider_mode,
+                             synthetic=synthetic)
+         elif kind == "quote_snapshot":
+-            r = stamp_quote(series_id, obs_date, value, quote_utc=retrieved_at_utc, retrieved_at_utc=retrieved_at_utc,
+-                            source=source, channel=channel, provider_mode=provider_mode, synthetic=synthetic)
++            r = stamp_quote(series_id, obs_date, value, quote_utc=(quote_times or {}).get(obs_date),
++                            retrieved_at_utc=retrieved_at_utc, source=source, channel=channel,
++                            provider_mode=provider_mode, synthetic=synthetic)
+         elif kind == "release":
+             r = stamp_release(series_id, obs_date, value, retrieved_at_utc=retrieved_at_utc, source=source,
+                               registry=registry, clocks=clocks, channel=channel, provider_mode=provider_mode,
+diff -ru -x __pycache__ -x '*.pyc' orig/data/krx/gateway.py tree/data/krx/gateway.py
+--- orig/data/krx/gateway.py	2026-10-27 08:35:48.111858134 +0000
++++ tree/data/krx/gateway.py	2026-10-27 08:37:00.066482803 +0000
+@@ -79,7 +79,7 @@
+                     change=row["change"], change_pct=row["change_pct"],
+                     volume=row["volume"], market_cap=row["market_cap"],
+                     high=row["high"], low=row["low"], open=row["open"],
+-                    as_of=row["as_of"], source="KRX",
++                    as_of=row["as_of"], source="KRX", fetched_at=row.get("fetched_at", ""),
+                 )
+                 return Answer(quote, "KRX")
+         return Answer(None, "", ok=False,
+diff -ru -x __pycache__ -x '*.pyc' orig/data/krx/kis_client.py tree/data/krx/kis_client.py
+--- orig/data/krx/kis_client.py	2026-10-27 08:35:48.111880589 +0000
++++ tree/data/krx/kis_client.py	2026-10-27 08:45:19.086582808 +0000
+@@ -10,7 +10,13 @@
+     현재가        /uapi/domestic-stock/v1/quotations/inquire-price
+     일별 시세     /uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice
+     지수          /uapi/domestic-stock/v1/quotations/inquire-index-price
+-    체결          /uapi/domestic-stock/v1/quotations/inquire-ccnl
++    호가 (시각)   /uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn
++
++TIMESTAMPS
++----------
++`Quote.as_of` is the exchange instant of the price (the book's 호가 접수 시간), never the receipt instant; the
++receipt is `Quote.fetched_at`. A quote without an exchange instant has `as_of == ""`, which the engine's feed
++treats as missing data (it never invents a time).
+ 
+ Adding an order path would require a new module, a new credential (account
+ number), and an explicit decision. That is deliberate.
+@@ -118,8 +124,9 @@
+     low: Optional[float]
+     open: Optional[float]
+     currency: str = "KRW"
+-    as_of: str = ""
++    as_of: str = ""          # exchange instant (ISO UTC) of the price; "" when the exchange gave none (never "now")
+     source: str = "KIS"
++    fetched_at: str = ""     # receipt instant (ISO UTC): when this process got the answer
+ 
+ 
+ def _f(value: Any) -> Optional[float]:
+@@ -134,6 +141,24 @@
+     return datetime.now(timezone.utc).isoformat(timespec="seconds")
+ 
+ 
++_KST = timezone(timedelta(hours=9))
++_BOOK_PATH = "/uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn"     # allowlisted (quote check)
++
++
++def _kst_stamp(hhmmss: str, receipt_utc: datetime) -> Optional[datetime]:
++    """A KST time of day from the exchange (HHMMSS) dated on the receipt's KST date; one weekday earlier when that
++    would put it after the receipt (a pre-open answer still shows the previous session). None if unreadable.
++    ponytail: a holiday between sessions dates the stamp later than the truth, never later than today's open."""
++    t = str(hhmmss or "").strip()
++    if len(t) != 6 or not t.isdigit() or int(t[:2]) > 23:
++        return None
++    local = receipt_utc.astimezone(_KST)
++    stamp = local.replace(hour=int(t[:2]), minute=int(t[2:4]), second=int(t[4:]), microsecond=0)
++    while stamp > local or stamp.weekday() >= 5:
++        stamp -= timedelta(days=1)
++    return stamp.astimezone(timezone.utc)
++
++
+ class KISClient:
+     """Thin read-only wrapper. Construction performs no network request."""
+ 
+@@ -255,6 +280,13 @@
+             retry=False,
+         )
+         out = payload.get("output") or {}
++        fetched = _now()
++        # FHKST01010100 carries no time of day (open-trading-api chk_inquire_price: 82 fields, none a time). The
++        # exchange instant is the level-1 book's 호가 접수 시간 (`aspr_acpt_hour`, FHKST01010200); a suspended
++        # issue (temp_stop_yn = Y) has no live price at all. Either way as_of is never the receipt instant (D-05).
++        stamp = None
++        if str(out.get("temp_stop_yn") or "").strip().upper() != "Y":
++            stamp = self.exchange_time(code, datetime.fromisoformat(fetched))
+         return Quote(
+             ticker=code,
+             name=str(out.get("hts_kor_isnm") or "").strip(),
+@@ -266,9 +298,21 @@
+             high=_f(out.get("stck_hgpr")),
+             low=_f(out.get("stck_lwpr")),
+             open=_f(out.get("stck_oprc")),
+-            as_of=_now(),
++            as_of=stamp.isoformat(timespec="seconds") if stamp else "",
++            fetched_at=fetched,
+         )
+ 
++    def exchange_time(self, code: str, receipt_utc: datetime) -> Optional[datetime]:
++        """The KRX book instant of `code` (UTC), or None when KIS gives none or the call fails (fail closed)."""
++        try:
++            payload = self._get(_BOOK_PATH, "FHKST01010200",
++                                {"FID_COND_MRKT_DIV_CODE": _MRKT_STOCK, "FID_INPUT_ISCD": _normalize(code)},
++                                retry=False)
++        except KISError:
++            return None
++        out = payload.get("output1") or payload.get("output") or {}
++        return _kst_stamp(out.get("aspr_acpt_hour"), receipt_utc)
++
+     def daily(self, code: str, *, start: Optional[str] = None,
+               end: Optional[str] = None, adjusted: bool = True) -> list[dict]:
+         """Daily OHLCV. Dates are YYYYMMDD; defaults to the last ~100 sessions."""
+@@ -319,9 +363,10 @@
+             "market": name.upper(),
+             "level": _f(out.get("bstp_nmix_prpr")),
+             "change": _f(out.get("bstp_nmix_prdy_vrss")),
+-            "change_pct": _f(out.get("prdy_ctrt")),
++            "change_pct": _f(out.get("bstp_nmix_prdy_ctrt", out.get("prdy_ctrt"))),
+             "volume": _f(out.get("acml_vol")),
+-            "as_of": _now(),
++            "as_of": "",                 # FHPUP02100000 carries no time of day; never the receipt instant
++            "fetched_at": _now(),
+             "source": "KIS",
+         }
+ 
+diff -ru -x __pycache__ -x '*.pyc' orig/data/krx/krx_market_client.py tree/data/krx/krx_market_client.py
+--- orig/data/krx/krx_market_client.py	2026-10-27 08:35:48.111928949 +0000
++++ tree/data/krx/krx_market_client.py	2026-10-27 08:37:00.065973430 +0000
+@@ -21,7 +21,7 @@
+ 
+ import csv
+ import io
+-from datetime import datetime, timezone
++from datetime import datetime, timedelta, timezone
+ from typing import Optional
+ 
+ import config
+@@ -69,6 +69,14 @@
+     return date or datetime.now().strftime("%Y%m%d")
+ 
+ 
++def _close_utc(yyyymmdd: str) -> str:
++    """The KRX regular-session close (15:30 KST) of a session date, ISO UTC: a whole-market row is that close,
++    never a live print, so its as_of is the close instant and not the receipt (D-05)."""
++    d = datetime.strptime(str(yyyymmdd).strip()[:8], "%Y%m%d")
++    return (d.replace(hour=15, minute=30, tzinfo=timezone(timedelta(hours=9)))
++            .astimezone(timezone.utc).isoformat(timespec="seconds"))
++
++
+ class KRXMarketClient:
+     """Whole-market KRX data. Construction performs no network request."""
+ 
+@@ -148,7 +156,7 @@
+                     continue
+                 try:
+                     for raw in self._api(endpoint, {"basDd": day}):
+-                        out.append(self._from_api(raw, name))
++                        out.append(self._from_api(raw, name, day))
+                 except KRXError:
+                     continue
+             if out:
+@@ -160,9 +168,9 @@
+             })
+         except KRXError:
+             return []
+-        return [q for q in (self._from_csv(r, market) for r in rows) if q]
++        return [q for q in (self._from_csv(r, market, day) for r in rows) if q]
+ 
+-    def _from_api(self, raw: dict, market: str) -> dict:
++    def _from_api(self, raw: dict, market: str, day: str) -> dict:
+         return {
+             "ticker": str(raw.get("ISU_SRT_CD") or "").strip(),
+             "name": str(raw.get("ISU_NM") or "").strip(),
+@@ -178,11 +186,12 @@
+             "market_cap": _f(raw.get("MKTCAP")),
+             "shares": _f(raw.get("LIST_SHRS")),
+             "currency": "KRW",
+-            "as_of": _now(),
++            "as_of": _close_utc(raw.get("BAS_DD") or day),
++            "fetched_at": _now(),
+             "source": "KRX Open API",
+         }
+ 
+-    def _from_csv(self, raw: dict, market: str) -> Optional[dict]:
++    def _from_csv(self, raw: dict, market: str, day: str) -> Optional[dict]:
+         code = (raw.get("종목코드") or "").strip()
+         if not code:
+             return None
+@@ -201,15 +210,17 @@
+             "market_cap": _f(raw.get("시가총액")),
+             "shares": _f(raw.get("상장주식수")),
+             "currency": "KRW",
+-            "as_of": _now(),
++            "as_of": _close_utc(day),
++            "fetched_at": _now(),
+             "source": "KRX",
+         }
+ 
+     def indices(self, *, date: Optional[str] = None) -> list[dict]:
+         if not self.has_key:
+             return []
++        day = _session_date(date)
+         try:
+-            rows = self._api(_API_ENDPOINTS["INDEX"], {"basDd": _session_date(date)})
++            rows = self._api(_API_ENDPOINTS["INDEX"], {"basDd": day})
+         except KRXError:
+             return []
+         out = []
+@@ -223,7 +234,8 @@
+                 "change": _f(raw.get("CMPPREVDD_IDX")),
+                 "change_pct": _f(raw.get("FLUC_RT")),
+                 "volume": _f(raw.get("ACC_TRDVOL")),
+-                "as_of": _now(),
++                "as_of": _close_utc(raw.get("BAS_DD") or day),
++                "fetched_at": _now(),
+                 "source": "KRX Open API",
+             })
+         return out
+diff -ru -x __pycache__ -x '*.pyc' orig/ui/krx_page.py tree/ui/krx_page.py
+--- orig/ui/krx_page.py	2026-10-27 08:35:48.119032413 +0000
++++ tree/ui/krx_page.py	2026-10-27 08:37:00.068546578 +0000
+@@ -113,7 +113,8 @@
+                                           if q.volume else "—"),
+                                 key_value("Market cap", format_compact(q.market_cap, locale, 1)
+                                           if q.market_cap else "—"),
+-                                key_value("Source", f"{answer.source} · as of {q.as_of}"),
++                                key_value("Source", f"{answer.source} · as of "
++                                          f"{q.as_of or 'exchange time unknown'} · fetched {q.fetched_at or '—'}"),
+                             ], spacing=6),
+                         ]
+                     else:
+diff -ru -x __pycache__ -x '*.pyc' orig/ui/macro_page.py tree/ui/macro_page.py
+--- orig/ui/macro_page.py	2026-10-27 08:35:48.119209966 +0000
++++ tree/ui/macro_page.py	2026-10-27 08:45:45.228402288 +0000
+@@ -40,7 +40,7 @@
+ _HEADLINE = ("DGS2", "DGS10", "DGS30", "T10Y2Y", "DFII10", "T10YIE",
+              "VIXCLS", "BAMLH0A0HYM2", "DTWEXBGS")
+ _REGIME_TOKEN = {"risk-on": "success", "risk-off": "error"}
+-_COLUMNS = ("Group", "Indicator", "Last", "1d", "1w", "1m", "3m", "z (1y)", "pct (1y)", "Source")
++_COLUMNS = ("Group", "Indicator", "Last", "Obs date", "1d", "1w", "1m", "3m", "z (1y)", "pct (1y)", "Source")
+ _VIEWS = (("sheet", "Macro sheet"), ("overlay", "Overlay state"), ("cards", "Model cards"),
+           ("research", "Research register"))
+ _BUILDERS = {"overlay": build_overlay_view, "cards": build_cards_view,     # view key -> builder(page);
+@@ -112,6 +112,9 @@
+             rows.append(ft.DataRow(cells=[
+                 cell(r.group, token="muted"), cell(r.label),
+                 cell(_level(r)),
++                ft.DataCell(ft.Text(r.last_date + (f" (-{r.lag_bdays}d)" if r.lag_bdays else ""), size=11,
++                                    color=pal.warning if r.lag_bdays else pal.text,
++                                    tooltip=f"fetched {r.fetched_at_utc or 'n/a'}")),
+                 cell(_chg(r, r.chg_1d), token=sign_token(r.chg_1d)),
+                 cell(_chg(r, r.chg_1w), token=sign_token(r.chg_1w)),
+                 cell(_chg(r, r.chg_1m), token=sign_token(r.chg_1m)),
+@@ -122,7 +125,7 @@
+             ]))
+         dt = ft.DataTable(
+             columns=[ft.DataColumn(ft.Text(c, size=11, color=pal.muted),
+-                                   numeric=i >= 2 and c != "Source")
++                                   numeric=i >= 2 and c not in ("Source", "Obs date"))
+                      for i, c in enumerate(_COLUMNS)],
+             rows=rows, column_spacing=16, heading_row_height=34, data_row_max_height=32)
+         return ft.Row([dt], scroll=ft.ScrollMode.AUTO)
+@@ -158,7 +161,10 @@
+         elif sheet.note:
+             blocks.append(notice(sheet.note, "muted"))
+         rg = sheet.regime
+-        blocks.append(ft.Row([chip(f"as of {sheet.as_of}")]
++        span = (f"latest obs {sheet.as_of}" if sheet.oldest_date in ("", sheet.as_of)
++                else f"obs {sheet.oldest_date} → {sheet.as_of}")
++        blocks.append(ft.Row([chip(span, "warning" if sheet.lagging else "muted",
++                                   tooltip=", ".join(f"{i} {d}" for i, d in sheet.lagging))]
+                              + [chip(f"{src}: {n}", "error" if src == "SYNTHETIC" else "success")
+                                 for src, n in sheet.sources.items()], spacing=6, wrap=True))
+         blocks.append(read_row(rg))

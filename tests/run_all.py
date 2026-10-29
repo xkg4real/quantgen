@@ -43,6 +43,7 @@ from tests.engine_acceptance import tests as engine_tests  # noqa: E402
 from tests.flet_api_guard import tests as ui_tests          # noqa: E402
 from tests.quant_acceptance import tests as quant_tests     # noqa: E402
 from tests.ficc_acceptance import tests as ficc_tests       # noqa: E402
+from tests.bonds_screen_acceptance import tests as bonds_tests   # noqa: E402
 from tests.expansion_acceptance import tests as expansion_tests   # noqa: E402
 from tests.macro_acceptance import tests as macro_tests     # noqa: E402
 from tests.paper_live_acceptance import tests as paper_tests     # noqa: E402
@@ -71,18 +72,34 @@ def papers_tests():
     return selfcheck_tests()
 
 
+def nautilus_tests():
+    """Suite `nautilus` (tests/nautilus_acceptance.py; spec 2026-10-26 section 5.7), imported here: an import or
+    collection failure is one FAIL row named `import` and never stops the other suites."""
+    try:
+        from tests.nautilus_acceptance import tests as bridge_tests
+        return bridge_tests()
+    except Exception as exc:
+        reason = f"tests.nautilus_acceptance does not import or collect ({type(exc).__name__}: {exc})"
+
+        def import_failed():
+            raise RuntimeError(reason)
+        return [("import", import_failed)]
+
+
 def tests():
     return ([(f"safety/{n}", f) for n, f in safety_tests()] +
             [(f"engine/{n}", f) for n, f in engine_tests()] +
             [(f"ui/{n}", f) for n, f in ui_tests()] +
             [(f"quant/{n}", f) for n, f in quant_tests()] +
             [(f"ficc/{n}", f) for n, f in ficc_tests()] +
+            [(f"bonds/{n}", f) for n, f in bonds_tests()] +
             [(f"expansion/{n}", f) for n, f in expansion_tests()] +
             [(f"macro/{n}", f) for n, f in macro_tests()] +
             [(f"paper/{n}", f) for n, f in paper_tests()] +
             [(f"grokteam/{n}", f) for n, f in grokteam_tests()] +
             [(f"guard/{n}", f) for n, f in guard_tests()] +
-            [(f"papers/{n}", f) for n, f in papers_tests()])
+            [(f"papers/{n}", f) for n, f in papers_tests()] +
+            [(f"nautilus/{n}", f) for n, f in nautilus_tests()])
 
 
 def runs_from() -> dict[str, int]:
@@ -128,7 +145,7 @@ def run(entries) -> list[dict]:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--milestone", help="run the exit set of M<k> via tests/macro_registry.csv")
-    parser.add_argument("--suite", help="run one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam, guard or papers")
+    parser.add_argument("--suite", help="run one suite: safety, engine, ui, quant, ficc, bonds, expansion, macro, paper, grokteam, guard, papers or nautilus")
     args = parser.parse_args(argv)
     if args.milestone and not re.fullmatch(r"M(10|[0-9])", args.milestone):
         parser.error("--milestone takes M0..M10")

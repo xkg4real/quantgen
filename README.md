@@ -850,7 +850,7 @@ Optional: `QUANTGEN_MACRO_DIR` moves the macro state out of `~/.nextgen/macro`.
 
 ```bash
 python tests/run_all.py                  # every suite; writes qa/acceptance_results.json
-python tests/run_all.py --suite macro    # one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam, guard or papers
+python tests/run_all.py --suite macro    # one suite: safety, engine, ui, quant, ficc, bonds, expansion, macro, paper, grokteam, guard, papers or nautilus
 python tests/run_all.py --milestone M8   # the exit set of a milestone (tests/macro_registry.csv)
 python -m tests.macro_acceptance         # resync the registry's implemented_in column
 ```
@@ -875,6 +875,7 @@ exit code; the exit code is 0 only when nothing failed. The summary line reads
 | grokteam | `grokteam/selfcheck.py` | The GROKTEAM BOOK desk (Kalshi KXBTCD paper benchmark of the Grok trading-team guide), offline: the Kalshi fee and payoff with the fee inside the stake, SIZE (half Kelly, 6% cap, $50 floor), the GARCH-t digital, no look-ahead in hourly bars or quotes, the 30-minute quote lookback, the stationarity warning not skipping, each account's entry rule, the cluster t and the one-sided skill p, the verdict precedence, the forward window blinded until its one look (VOID and unsettled events withhold it), Python patch updates not voiding the freeze, the sha-checked cache and the new ledger family | 17 PASS |
 | guard | `tests/frozen_guard.py` | The frozen-study guard, by git and hashlib only (no `paper_live` or `grokteam` import): the tag `studies-of-record-2026-10-23` peels to `eacd57d`, the tagged tree's pinned files match PREREG and its H2 files match `frozen_rule`, no `FORWARD_LOOK.json` on the main line before 2027-02-01 01:00 UTC, and the numpy/scipy/pandas pins while a readout is pending (with a check of the pending rule itself) | 5 PASS |
 | papers | `tools/paper/selfcheck.py` | The research-paper pipeline, offline: the Tectonic log gate and both templates compiled from the cache (Korean fonts by path, build record), digit-safe `\qnum` numbers, the EN/KO consistency check (paragraph ids, per-section numbers and citations, bare digits in results and in input-ed tables), scope approval hashes, Crossref/arXiv reference records, the claims gate, study-run refusals and manifests, the referee runner (quota, timeout, malformed reports) and bundle, release states and the index, the two workflow scripts and the skill | 43 PASS |
+| nautilus | `tests/nautilus_acceptance.py` | The NautilusTrader bridge (spec 2026-10-26), research only, on synthetic data: layer 1 runs in this interpreter, where `nautilus_trader` must not be installed; layer 2 runs the sandbox through the hash-pinned venv that `QUANTGEN_NAUTILUS_PYTHON` names, NOT_RUN while that key is blank and FAIL when the venv is off its pins; every test runs inside a guard that keeps the ledgers and `docs/nautilus_bridge/` byte-identical | counted at the Windows run of record |
 | **Total** | `tests/run_all.py` | | 743/864 passed, 0 failed, 121 not run (2026-10-23) |
 
 The macro group (new in v2) discovers every `tests/macro_*.py` module,

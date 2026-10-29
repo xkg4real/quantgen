@@ -40,7 +40,8 @@ def _style(ax, pal, *, grid: bool = True) -> None:
     ax.tick_params(colors=pal.muted, labelsize=8)
     if grid:
         ax.grid(True, color=pal.border, alpha=0.35, linewidth=0.6)
-    ax.title.set_color(pal.text)
+    for loc in ("left", "center", "right"):         # three Text objects; titles here use loc="left"
+        ax.set_title(ax.get_title(loc=loc), loc=loc, color=pal.text)
     ax.xaxis.label.set_color(pal.muted)
     ax.yaxis.label.set_color(pal.muted)
 

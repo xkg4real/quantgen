@@ -1,0 +1,3254 @@
+[
+ {
+  "test": "test_t_herm_01_every_touchpoint_raises",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.034
+ },
+ {
+  "test": "macro_m0_harness/test_every_macro_module_runs_alone_under_the_guard",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "macro_m0_harness/test_gate_bootstrap_b_is_not_leaked_by_the_expansion_suite",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_harness/test_manifest_lists_every_fixture_with_a_matching_md5",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m0_harness/test_manifest_loader_refuses_unlisted_absent_changed_and_unlicensed",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m0_harness/test_registry_covers_every_id_of_the_spec_exit_table",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "macro_m0_harness/test_registry_has_unique_ids_and_valid_columns",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m0_harness/test_registry_implemented_in_matches_test_ids",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "macro_m0_harness/test_runner_records_not_run_as_a_third_status",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.13
+ },
+ {
+  "test": "macro_m0_harness/test_t_ro_01_artifact_writers_stamp_read_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.009
+ },
+ {
+  "test": "macro_m0_harness/test_t_ro_01_no_order_cancel_withdrawal_or_transfer_path",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 2.587
+ },
+ {
+  "test": "macro_m0_harness/test_t_ro_01_orders_module_reached_only_through_the_engine",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.986
+ },
+ {
+  "test": "macro_m0_harness/test_t_ro_01_scan_reaches_tools_and_papers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.018
+ },
+ {
+  "test": "macro_m0_instruments/test_book01_granularity_floor",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_instruments/test_book01_notional_from_sleeve",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_instruments/test_book01_real_sleeve_notional_is_owner_input",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: sleeves.<market>.notional_nav is null in the shipped store; the real commit check cannot run",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_instruments/test_book01_required_fields",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_instruments/test_book01_stock_book_scalar_band_navfx_multi",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_instruments/test_cost02_every_result_at_2x",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_instruments/test_cost02_floor_never_lowers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m0_instruments/test_cost02_owner_inputs_fail_closed",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_instruments/test_cost02_worked_examples",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_instruments/test_cost03_lowering_refused",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m0_instruments/test_study_reads_the_gate_cost_table",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.018
+ },
+ {
+  "test": "macro_m0_integration/test_validate_card_header_wires_schema_instruments_and_dnb",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.067
+ },
+ {
+  "test": "macro_m0_rules/test_basis_01_exposure_basis_predicates",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m0_rules/test_cap_01_rule_object_bounds",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m0_rules/test_cap_01_store_blocks_pass_bounds",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.091
+ },
+ {
+  "test": "macro_m0_rules/test_config_hash_stable_and_canonical",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.079
+ },
+ {
+  "test": "macro_m0_rules/test_dnb_01_each_refused_shape",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.018
+ },
+ {
+  "test": "macro_m0_rules/test_dnb_01_item_labels_and_split",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.023
+ },
+ {
+  "test": "macro_m0_rules/test_governance_chain_append_verify_tamper",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.053
+ },
+ {
+  "test": "macro_m0_rules/test_m0_15_e_labels_bootstrap_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: qf3_dnb_classes.py and QF3 variant series absent",
+  "seconds": 0.013
+ },
+ {
+  "test": "macro_m0_rules/test_macro_dir_env_override",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_rules/test_owner_01_registry_refs_and_ruling",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.163
+ },
+ {
+  "test": "macro_m0_schemas/test_field_classes_and_quarantine",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.011
+ },
+ {
+  "test": "macro_m0_schemas/test_fixture_listing_md5",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m0_schemas/test_repro_01a_provenance_and_canonical_json",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.046
+ },
+ {
+  "test": "macro_m0_schemas/test_schema_01_examples_validate",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.078
+ },
+ {
+  "test": "macro_m0_schemas/test_schema_02_card_field_set",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.067
+ },
+ {
+  "test": "macro_m0_schemas/test_schema_03_rule_outputs_declared",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.041
+ },
+ {
+  "test": "macro_m1_books/test_book_ids_and_default_books",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m1_books/test_causes_merge_and_acknowledge",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.014
+ },
+ {
+  "test": "macro_m1_books/test_ever_armed_warmup_and_retire",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "macro_m1_books/test_lag_audit_and_schema_failure_need_operator_rearm",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.017
+ },
+ {
+  "test": "macro_m1_books/test_ops_halt_counters_scope_and_auto_rearm",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.028
+ },
+ {
+  "test": "macro_m1_books/test_persistence_round_trip_and_governance_chain",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.015
+ },
+ {
+  "test": "macro_m1_books/test_risk_cycle_refusal_window_rearm_and_cap",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.027
+ },
+ {
+  "test": "macro_m1_books/test_runtime_entry_validates_against_macro_state_schema",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.013
+ },
+ {
+  "test": "macro_m1_calendars/test_cal01_calendar_change_governance_event",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.692
+ },
+ {
+  "test": "macro_m1_calendars/test_cal01_shipped_drafts_are_refused_and_acting_inputs_fail_closed",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.446
+ },
+ {
+  "test": "macro_m1_calendars/test_cal01_unsigned_refused_signed_accepted",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.895
+ },
+ {
+  "test": "macro_m1_calendars/test_cal02_2027_files_signed_before_2026_11_01",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: the 2027 KRX, NYSE, Fed and SIFMA files must be signed before 2026-11-01 (spec L2101); core/calendars/data/holidays_{KRX,NYSE,FED,SIFMA}.yaml are unsigned drafts",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_calendars/test_cal02_coverage_warn_page_halt",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 3.007
+ },
+ {
+  "test": "macro_m1_calendars/test_close01_decision_time_and_bound",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.103
+ },
+ {
+  "test": "macro_m1_calendars/test_close02_effective_dated_clocks",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.855
+ },
+ {
+  "test": "macro_m1_calendars/test_close02_on_the_real_signed_files_is_owner_input",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: core/calendars/data/*.yaml are unsigned drafts; T-CLOSE-02 on the real KRX/NYSE files waits for the owner's sign-off (Saturday closes, pre-2016 CSAT window, CSAT dates, random-end extensions)",
+  "seconds": 0.242
+ },
+ {
+  "test": "macro_m1_calendars/test_event_store_shape_and_artifact",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_m1_calendars/test_gap_sessions_values",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_calendars/test_market_ids_and_venue_maps",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_calendars/test_print01_intraday_print_is_never_a_close",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_calendars/test_print01_real_kospi_close_2026_03_09",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_calendars/test_publication_h15_h10_vix_avail_timing",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.201
+ },
+ {
+  "test": "macro_m1_calendars/test_regime01_full_range_expected_values_file",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: tests/fixtures/macro/kr_regime_tags_expected.csv (1995-01-01..2026-12-31, built from the official notices incl. the pre-Apr-1995 price limit, sell-tax steps, BoK fx regimes) is an owner deliverable; the shipped kr_regime_tags.yaml is an unsigned draft",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_calendars/test_regime01_point_clauses_and_fail_closed",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.101
+ },
+ {
+  "test": "macro_m1_calendars/test_sat01_real_kospi_completeness_and_variance_ratio",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_calendars/test_sat01_saturday_sessions_and_completeness",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "macro_m1_calendars/test_tz01_cross_time_zone",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "macro_m1_calendars/test_tz02_event_to_kr_open_gap_session",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_calendars/test_xmkt01_same_instant_closes",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.136
+ },
+ {
+  "test": "macro_m1_fixtures/test_acquisition_csv_integrity",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m1_fixtures/test_every_required_fixture_is_generated_or_registered",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.357
+ },
+ {
+  "test": "macro_m1_fixtures/test_g_dsr_01_reproduces_bldp",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_m1_fixtures/test_g_post_01_arithmetic_identities",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F01 krx_kospi_official_close_1997-01-03_2026-10-02.csv (krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv); F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv); F16 yahoo_KRWX_2004_2026-10-01.csv (yahoo_KRWX_2004_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv); F20 QX_DLA_post",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m1_fixtures/test_golden_helpers_class_and_floor",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_fixtures/test_goldens_csv_integrity",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m1_fixtures/test_kis_quote_check_owner_record",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: KIS quote-field check not run; run docs/kis_quote_check.py with KIS credentials at 15:19:59 KST over ~20 live sessions and record app_key_can_trade (docs/kis_quote_check/<session>.json)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_fixtures/test_kis_quote_check_refuses_without_credentials",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.009
+ },
+ {
+  "test": "macro_m1_fixtures/test_macro_fixtures_generates_provenance_and_freezes_md5",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.055
+ },
+ {
+  "test": "macro_m1_fixtures/test_macro_fixtures_refuses_when_reference_dir_absent",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "macro_m1_fixtures/test_no_golden_test_passes_on_its_fixture_gate_alone",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.368
+ },
+ {
+  "test": "macro_m1_fixtures/test_synth_b5_bands_and_concentration_bounds",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_fixtures/test_t_pbo_01_noise_control_reproduces",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 3.915
+ },
+ {
+  "test": "macro_m1_fixtures/test_tolerance_table_self_test",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_integration/test_calendar_coverage_halt_through_the_book_runtime",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_m1_integration/test_clocks_adapter_resolves_registry_schedules_on_signed_calendars",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.636
+ },
+ {
+  "test": "macro_m1_integration/test_data_hook_history_status_and_instruments_agree_with_pit",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m1_integration/test_fixture_generator_instants_from_calendars_and_check_fixture_on_csv",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m1_integration/test_kis_allowlist_frozen_in_config_covers_the_quote_check",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_integration/test_stamping_and_lag_audit_on_the_calendar_adapter",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m1_integration/test_unsigned_shipped_calendars_fail_acting_inputs_closed",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.054
+ },
+ {
+  "test": "macro_m1_pit/test_avail_01_golden_availability_table_on_synthetic_calendars",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_pit/test_avail_01_official_calendars_are_owner_signed",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: signed historical KRX / NYSE / FED / SIFMA calendar files (2015, 2025) absent; the golden table above runs on the stub clocks (core/calendars, package B)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_pit/test_bar_01_a_bar_or_stale_carry_is_never_a_close",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.006
+ },
+ {
+  "test": "macro_m1_pit/test_bar_02_dispute_is_not_a_failure_and_vendor_missing",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m1_pit/test_close_01_data_clauses_quarantine_and_stamping",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m1_pit/test_fix_01_post_close_fixtures_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m1_pit/test_fix_01_regeneration_at_level_1_tolerance_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: /home/claude/quantgen_macro_data/ (CATALOG.md, scripts/, results/QX_DLA_postpatch.csv) absent: golden fixtures cannot be generated or md5-frozen",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_pit/test_g_post_01_m1_data_rows_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: Yahoo ^KS11, 005930.KS, 000660.KS, KRW=X post-patch files and QX_DLA_postpatch.csv absent (local docs/asset_expansion/cache ends 2026-09-23/25, no ^KS11, no 000660, no KRW=X)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_pit/test_h10_01_dexkous_never_read_by_production",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_pit/test_h10_02_strict_h10_publication",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "macro_m1_pit/test_h15_01_strict_h15_and_treasury_channel",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m1_pit/test_history_cache_b_marks_a_running_bar_provisional",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m1_pit/test_lag_01_independent_audit_raises_or_halts",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m1_pit/test_lag_02_positional_shift_rejected_on_gapped_series",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_pit/test_miss_01_calendar_offsets_and_the_october_gap",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m1_pit/test_miss_01_cpi_yoy_3_353_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: FRED CPIAUCSL, UNRATE, SAHMCURRENT snapshot of 2026-10-02 (Aug-2026 CPI YoY 3.353%) absent",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_pit/test_print_01_circuit_breaker_print_is_never_a_close",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m1_pit/test_print_01_real_kospi_close_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: Yahoo ^KS11 history to 2026-03-09 (-5.96% close, -8.11% 10:31 print) not local",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_pit/test_prov_01_cache_regression_replays_the_incident",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m1_pit/test_prov_01_store_read_trace",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "macro_m1_pit/test_ro_02_app_key_can_trade_is_an_owner_attestation",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: KIS credentials and the 20-session quote-field check (M1-01); whether the app key can trade is recorded as an owner attestation (default 'unknown'), never probed through a trading path (F-3)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_pit/test_ro_02_kis_client_accepts_only_allowlisted_quotation_paths",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.142
+ },
+ {
+  "test": "macro_m1_pit/test_role_01_counters_halt_scope_and_role_actions",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m1_pit/test_role_02_registration_refusals_and_contract",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.426
+ },
+ {
+  "test": "macro_m1_pit/test_ser_01_named_series_and_futures_roll_days",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "macro_m1_pit/test_ser_02_every_referenced_id_is_registered_with_a_contract",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m1_pit/test_stale_01_g_stale_01_reference_table_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: FRED snapshot DTWEXBGS, DGS10, VIXCLS (2016-01-04 -> 2026-09-25), official 2016-26 calendars and results/QX_DLA_staleness.csv absent; the local fred_DEXKOUS.csv covers the DEXKOUS clauses only (labelled smoke above)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m1_pit/test_stale_01_schedule_aware_clauses_and_local_smoke",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.803
+ },
+ {
+  "test": "macro_m1_pit/test_syn_01_synthetic_rejected_for_acting_allowed_for_context",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.071
+ },
+ {
+  "test": "macro_m1_pit/test_vix_01_close_timing_by_channel",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m1_pit/test_xmkt_01_cross_market_data_clause",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_costed/test_block_indices_schemes",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.097
+ },
+ {
+  "test": "macro_m2_costed/test_cost01_engine_conventions",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m2_costed/test_cost01_r4b_goldens_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m2_costed/test_g_kr_06_cap15_reference_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_costed/test_g_lad_01_reference_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F24 results/QX_DLA_ladder.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m2_costed/test_g_lad_02_reference_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F24 results/QX_DLA_ladder.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m2_costed/test_g_lad_03_reference_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F24 results/QX_DLA_ladder.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m2_costed/test_g_mom_07_reference_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F10 french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv; F11 french_monthly_ff_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_costed/test_gate_boot_margin",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.693
+ },
+ {
+  "test": "macro_m2_costed/test_kr_golden_window_scores_from_2016_01_04_after_a_20_return_warm_up",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m2_costed/test_pw_block_ar1_textbook_and_floors",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.036
+ },
+ {
+  "test": "macro_m2_costed/test_reference_mode_refused_from_core_and_tests",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.022
+ },
+ {
+  "test": "macro_m2_costed/test_reference_mode_static_core_never_imports",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.46
+ },
+ {
+  "test": "macro_m2_costed/test_research_bootstrap_deterministic_and_share",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.261
+ },
+ {
+  "test": "macro_m2_costed/test_v12_check_verdict_ordering",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 4.302
+ },
+ {
+  "test": "macro_m2_costed/test_v12_statistics_helpers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m2_costed/test_vt_weights_research_builder",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "macro_m2_risk/test_apply_hedge_state_clamps_only_the_hedge_legs",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m2_risk/test_cap_01_overlay_layer_cannot_emit_zero",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_cap_02_min_composition_10000_seeded_draws",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.163
+ },
+ {
+  "test": "macro_m2_risk/test_cap_02_stack_card_clause_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv absent: the stack card's share of days at <= 0.25x total exposure (31.0%) and rebound capture (11.2%) are M7 clauses on KOSPI history (section 9.0b)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_corr_01_date_aligned_pairs_synthetic",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m2_risk/test_corr_01_plus_0_53_at_2026_09_30_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv); F18 USEPUINDXD.csv (USEPUINDXD.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m2_risk/test_g_kr_01_buy_and_hold_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_g_kr_02_vt20_gross_and_net_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_g_kr_02b_delta_sharpe_shares_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_g_kr_02c_static_book_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_g_kr_03_window_returns_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_g_kr_04_weights_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_g_kr_06_cap_1_5_reference_mode_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_g_us_01_vt15_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F10 french_daily_regional_mom.csv (french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_g_us_01b_static_book_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F10 french_daily_regional_mom.csv (french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_g_us_01c_ewma_challenger_deferred_to_m3",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F10 french_daily_regional_mom.csv (french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_hedge_01_reasons_failure_flags_and_fx_credit",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 2.508
+ },
+ {
+  "test": "macro_m2_risk/test_hedge_01_stale_inputs_never_halt_and_change_no_exposure",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.901
+ },
+ {
+  "test": "macro_m2_risk/test_i_02_korea_window_replays_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_label_01_causal_boundary_and_null_safe",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.392
+ },
+ {
+  "test": "macro_m2_risk/test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m2_risk/test_lag_02_shifted_input_changes_vt_and_trips_lag_audit",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.031
+ },
+ {
+  "test": "macro_m2_risk/test_miss_02_exception_scope_vt_and_compose_halt_ops_hedge_state_never",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.023
+ },
+ {
+  "test": "macro_m2_risk/test_risk_module_reexports_and_no_wall_clock",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_role_02_spx_failing_sets_hedge_credit_off_through_corr63",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.766
+ },
+ {
+  "test": "macro_m2_risk/test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m2_risk/test_vt_01_sma20_simple_returns_ddof1_and_the_formula",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.08
+ },
+ {
+  "test": "macro_m2_risk/test_vt_01_warmup_stale_carry_degenerate_and_armed_mapping",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.095
+ },
+ {
+  "test": "macro_m3_estimators/test_causality_no_lookahead",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 41.528
+ },
+ {
+  "test": "macro_m3_estimators/test_comb_is_half_sum_and_fails_when_either_leg_fails",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 16.941
+ },
+ {
+  "test": "macro_m3_estimators/test_dm_hln_factor_and_legacy_dm_unchanged",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m3_estimators/test_estimator_gate_reads_through_pit_and_is_schema_valid",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.56
+ },
+ {
+  "test": "macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: yahoo_SPY_2015-12_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.004
+ },
+ {
+  "test": "macro_m3_estimators/test_g_b5_03_us_market_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_daily_mktrf_rf_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m3_estimators/test_g_b5_04_display_labels_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m3_estimators/test_g_est_04_sizing_books_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m3_estimators/test_g_us_01c_ewma_challenger_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_daily_mktrf_rf_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m3_estimators/test_range_proxy_and_quality_flag",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m3_estimators/test_sized_book_timing_cost_and_cap",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_m3_estimators/test_sma20_and_ewma_definitions",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.009
+ },
+ {
+  "test": "macro_m3_estimators/test_t_b5_01_kospi_golden_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m3_estimators/test_t_b5_01_switch_refusals_and_registry",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.041
+ },
+ {
+  "test": "macro_m3_estimators/test_t_b5_01_synthetic_clauses_and_bands",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.032
+ },
+ {
+  "test": "macro_m3_estimators/test_t_est_01_i_10_dlb_t1a_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m3_estimators/test_t_est_01_mcs_synthetic_companion",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.012
+ },
+ {
+  "test": "macro_m3_estimators/test_t_est_02_christoffersen_lines_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m3_estimators/test_t_est_02_stage1_report_structure",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.153
+ },
+ {
+  "test": "macro_m3_estimators/test_t_est_04_fallback_to_sma20_no_blend",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 65.756
+ },
+ {
+  "test": "macro_m4_integration/test_apply_overlays_composes_through_risk_layer_compose",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m4_integration/test_estimator_harness_sma20_is_risk_layer_sma_vol",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.044
+ },
+ {
+  "test": "macro_m4_integration/test_s3_rulings_static_and_costed_uses_gate_stats",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.133
+ },
+ {
+  "test": "macro_m4_integration/test_vol_state_from_vt_and_gate_validates_against_the_schema",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.242
+ },
+ {
+  "test": "macro_m4_integration/test_vsresult_has_one_home",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m4_sleeves/test_basis_01_vt_never_on_ls_sleeves",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m4_sleeves/test_books_recommended_not_run_and_specification_stack",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m4_sleeves/test_cost_01_both_legs_for_ls_sleeves",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m4_sleeves/test_dm_gate_acting_read_and_refusals",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.479
+ },
+ {
+  "test": "macro_m4_sleeves/test_dm_kernel_reproduces_techfund_sample",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m4_sleeves/test_g_book_01_mom_strev_rmw",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m4_sleeves/test_g_intl_01_regional_wml",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m4_sleeves/test_g_mom_01_02_08_french_mom_daily",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m4_sleeves/test_g_mom_03_04_05_06_french_mom_and_market",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m4_sleeves/test_g_mom_07_reference_mode",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: French Mom daily files absent; reference mode (cap 2, DM 0x) lives in tests/reference (package D, TASK-M2-07) and is never importable from core/",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m4_sleeves/test_inverse_vol_weights_kernels_and_pit_path",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.1
+ },
+ {
+  "test": "macro_m4_sleeves/test_no_renormalisation_and_sign_preserved",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.006
+ },
+ {
+  "test": "macro_m4_sleeves/test_prior_01_admissibility_and_base_weights",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m4_sleeves/test_prior_01_mapping_clause_owner",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: BL-G07 family mapping of the six composite components is proposed, not confirmed (T-PRIOR-01 'runs on the confirmed mapping'); flow and quality priors unregistered outside Korea flow",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m4_sleeves/test_prior_01_reject_reweight_logged_once",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.009
+ },
+ {
+  "test": "macro_m4_sleeves/test_r03_01_french_fixture_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m4_sleeves/test_r03_01_sleeve_vol_scale_acting_read",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.277
+ },
+ {
+  "test": "macro_m4_sleeves/test_r03_01_vs_formula_synthetic",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.033
+ },
+ {
+  "test": "macro_m4_sleeves/test_r03_01_vs_reproduces_techfund_rows",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m4_sleeves/test_r03_01_years_line_and_ledger_row_synthetic",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m4_sleeves/test_r05_reversal_quality_flow_fixed_one",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.012
+ },
+ {
+  "test": "macro_m5_books/test_book_03_li_eligibility_and_lookthrough_x_l",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_books/test_caps_01_real_kodex_basket_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KODEX 200 PDF history (KIS or KRX; section 9.5 M5) absent: the 2-Oct-2026 basket is not on this machine (docs/asset_expansion/cache/yf_069500.KS.csv is the ETF price only); the arithmetic clause ran on the inline basket with s(005930) = 0.298 and pair 0.538",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_books/test_caps_01_synthetic_basket_bounds_and_by_book",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.026
+ },
+ {
+  "test": "macro_m5_books/test_g_lad_01_literal_ladder_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: G-LAD-01: QX_DLA_ladder.csv (F24), F13 / U1 and the literal v1.2 rule text (.v1.2_INTEGRATION_backup.md, F-21) absent; never reconstructed from the cycle counts; tests/reference/reference_mode.literal_ladder stays the stub",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_books/test_g_lad_02_qf4_eleven_session_fix_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: G-LAD-02: QX_DLA_ladder.csv (F24), F13 / U1 and the literal v1.2 rule text (.v1.2_INTEGRATION_backup.md, F-21) absent; never reconstructed from the cycle counts; tests/reference/reference_mode.literal_ladder stays the stub",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_books/test_g_lad_03_sensitivity_lines_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: G-LAD-03: QX_DLA_ladder.csv (F24), F13 / U1 and the literal v1.2 rule text (.v1.2_INTEGRATION_backup.md, F-21) absent; never reconstructed from the cycle counts; tests/reference/reference_mode.literal_ladder stays the stub",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_books/test_g_post_01_pair_implied_share_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: QX_DLA_postpatch.csv and the 25-Oct-2024 KRX-weight anchor absent; the implied-share formula is DLA section 7's (F-22); pair_share_kospi comes from KRX_MARKET_CAPS_005930_000660_KOSPI in production",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_books/test_halt_01_hard_stop_cycle_exact_15pct",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.054
+ },
+ {
+  "test": "macro_m5_books/test_halt_01_ops_breach_cure_and_lag_audit_causes",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.031
+ },
+ {
+  "test": "macro_m5_books/test_i_04_ladder_steps_reset_block_and_placement",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.045
+ },
+ {
+  "test": "macro_m5_books/test_i_04b_kospi_1997_2026_reentry_and_pinned_count_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv / KRX official closes 1997-04-15 -> 2026-10-02 absent: the re-entry property and the pinned v2 HALT count (TASK-M5-14) run on the frozen fixture through risk_layer.ladder_path; the mechanism ran on the synthetic path",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_books/test_miss_02_exceptions_in_concentration_bound_and_ladder_halt_ops",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_m5_books/test_mono_01_i01_fixture_clause_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: the I-01 fixtures (KR 2026-07-30 / 2026-10-02, US 2026-07-30 / 2026-10-01 artifacts) absent: the property ran on the synthetic I-01-structured book (seed 11)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_books/test_mono_01_no_reallocation_property_seed_11",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.135
+ },
+ {
+  "test": "macro_m5_books/test_ops_nav_counter_heartbeat_operator_kill_and_card_trio",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.023
+ },
+ {
+  "test": "macro_m5_books/test_shared_names_and_no_wall_clock",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.031
+ },
+ {
+  "test": "macro_m5_books/test_step_05_idempotent_halt_flat_minus_16",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.052
+ },
+ {
+  "test": "macro_m5_books/test_weight_book_ledger_nav_matches_costed_path_and_persists",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.074
+ },
+ {
+  "test": "macro_m5_fills_events/test_annot01_annotation_never_changes_exposure_and_requests_snapshot",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.113
+ },
+ {
+  "test": "macro_m5_fills_events/test_annot01_pit_read_path_context_role_never_fails",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m5_fills_events/test_bar01_r27_bar_convention_refuses_bar_closes",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "macro_m5_fills_events/test_fill01_official_close_fill_random_end_and_refusals",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.044
+ },
+ {
+  "test": "macro_m5_fills_events/test_fill01_qf1_tracking_error_golden_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: 15:19 KST KIS snapshot series (QF1, L6018) and KOSPI official closes; the KIS quote field is UNVERIFIED (OWNER: M1-01 quote check)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_fills_events/test_fill02_limit_lock_both_sides_carry_and_halt_days",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.018
+ },
+ {
+  "test": "macro_m5_fills_events/test_fill02_real_000660_closes_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KRX official closes of 000660 for 2026-07-30/31 and the owner-signed stock tick table (OWNER: F-18); the lock rule is asserted on the inline shape above",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_fills_events/test_fill03_inav_residual_flag",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_fills_events/test_g_r08_01_spell_count_smoke_then_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: FRED VIXCLS / VXVCLS 2007-12-04 -> 2026-09-30 (QX_DLB_r08.csv basis) for the 132-spell golden; the Yahoo cache SMOKE above is vendor data and never asserted",
+  "seconds": 0.028
+ },
+ {
+  "test": "macro_m5_fills_events/test_i06_evaluator_blocked_for_new_entries_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m5_fills_events/test_i06_event_windows_cancelled_delayed_bok_and_artifact",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.015
+ },
+ {
+  "test": "macro_m5_fills_events/test_i06b_i06c_gap_tags_var_scale_and_no_weight_change",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.15
+ },
+ {
+  "test": "macro_m5_fills_events/test_task_m5_14_halt_count_pin_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (KOSPI 1997-04-15 -> 2026-10-02 official closes) for the v2 HALT count pin and G-LAD-04 (section 9.4 items 9-10); never changes a default",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_fills_events/test_task_m5_15_event_conditional_variance_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: local KRX hourly bars and daily opens (QF7-A28 basis) for the DM test on the squared opening gap; the 2027-28 post-holiday VaR breach check is pre-registered (OWNER: 2027-28 data). Whatever it shows, no gap flag changes a weight (asserted above)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_integration/test_event_calendar_and_context_log_reach_disk_through_write_artifact_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.979
+ },
+ {
+  "test": "macro_m5_integration/test_g_r08_02_cardp_reject_record_is_on_file_never_reproduced",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: G-R08-02 (L5980) dMDD vs S of the VIX>=VIX3M block as a CARD-P: FRED VIXCLS/VXVCLS 2007-12-04 -> 2026-09-30 (F07), F13 / U1 / F10 absent; the REJECT-in-10-of-10-cells record stays on file, never reproduced",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m5_integration/test_ladder_block_and_post_rearm_cap_flow_into_gross_evaluator_ledger_and_macro_state",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.076
+ },
+ {
+  "test": "macro_m5_integration/test_macro_state_takes_the_risk_layer_bound_registry_runtime_gap_tags_and_annotation",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.02
+ },
+ {
+  "test": "macro_m5_integration/test_r18_neutralise_hook_persists_on_the_books_and_reaches_overlay_decisions",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.039
+ },
+ {
+  "test": "macro_m5_integration/test_s4_rulings_no_wall_clock_nothing_above_one_halted_outside_min_engine_untouched",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.105
+ },
+ {
+  "test": "macro_m6_context/test_break_01_framework_change_neutralises_and_starts_a_forward_record",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.047
+ },
+ {
+  "test": "macro_m6_context/test_break_01_market_structure_sync_is_complete_and_idempotent",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.154
+ },
+ {
+  "test": "macro_m6_context/test_break_01_reanchor_only_on_declared_events_and_the_v12_flag_is_logged",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.077
+ },
+ {
+  "test": "macro_m6_context/test_break_01_research_log_is_write_only_and_the_statistical_leg_is_gated",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.036
+ },
+ {
+  "test": "macro_m6_context/test_builders_produce_schema_valid_artifacts_from_synthetic_producers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.055
+ },
+ {
+  "test": "macro_m6_context/test_ctx_01_regime_read_is_relabelled_descriptive",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.012
+ },
+ {
+  "test": "macro_m6_context/test_ctx_01_runtime_guard_refuses_acting_callers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.012
+ },
+ {
+  "test": "macro_m6_context/test_ctx_01_static_import_scan_and_positive_controls",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.841
+ },
+ {
+  "test": "macro_m6_context/test_ctx_02_calculators",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "macro_m6_context/test_ctx_02_failure_paths_label_and_never_halt",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.681
+ },
+ {
+  "test": "macro_m6_context/test_ctx_02_items_vintages_live_and_sheet",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.488
+ },
+ {
+  "test": "macro_m6_context/test_ctx_02_live_snapshot_sources_owner",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: live KOFIA margin debt / KRX leveraged-ETF AUM (BL-U01), the KOSPI200 MFIV 15:30 KST and the VIX/VIX3M 16:00 ET snapshot provider (section 9.5, M6) and ~20 KIS live sessions are owner inputs",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m6_context/test_ctx_section_11_context_values_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: FRED 2026-10-02 snapshot + ALFRED vintages (DFII10 2.93, T10YIE 2.36, T5YIFR 2.36, THREEFYTP10 1.02, ^MOVE 108.1, T10Y3M +1.07, probit 0.095, SAHMREALTIME -0.07 / UNRATE 4.1, CPI YoY 3.353, Taylor -2.3..-0.4, Brent 113.96 / BZ=F 102.59, DEXJPUS 157.18, BoK 3.00, KOSPI rv21 31.9% p73) absent: section 12 M6 Level-1 clause",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m6_context/test_hedge_01_built_macro_state_with_stale_usd_proxy",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.367
+ },
+ {
+  "test": "macro_m6_context/test_i_06c_kr_2026_11_26_state_validates_and_a_context_field_never_halts",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.067
+ },
+ {
+  "test": "macro_m6_context/test_m6_rulings_static",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.05
+ },
+ {
+  "test": "macro_m7_cardp/test_band_01_shapes_floor_and_midpoint",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m7_cardp/test_cardp_static_invariants",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.025
+ },
+ {
+  "test": "macro_m7_cardp/test_dnh_01_do_no_harm_cap_only_lowers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "macro_m7_cardp/test_epis_01_builder_on_known_drawdowns_and_open_bear",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.022
+ },
+ {
+  "test": "macro_m7_cardp/test_epis_01_counts_on_official_closes_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_epis_02_pc4_on_the_korea_definitive_cell_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KOSPI 1997-04..2026-10-02 official closes (14 of 18 positive, max share 0.174; after the freeze)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_es_01_sign_convention_identical_to_S_rejects",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.434
+ },
+ {
+  "test": "macro_m7_cardp/test_es_02_korea_long_history_es_lines_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KOSPI 1997-2026 official closes with the R4b raw-return flag (dES99 +1.95 pp, dES95_21 +2.9 pp, dCDaR95 +7.1 pp; after the freeze; z values in reference mode only)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_excess_01_bok_call_rate_ecos_code_is_owner_input",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: ECOS statistic code and observation calendar of BOK_CALL_RATE (registry channel)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_excess_01_cash_units_and_missing_day_refusal",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_excess_01_px2_reproduction_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: px2_cash_IRSTCI01KRM156N_monthly.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_gate_01_placebo_counts_and_controls_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KOSPI 1997-2026 official closes (KRX), French daily Mkt-RF/RF 1926-07..2026-08 files, PX2 cash fixture (FRED IRSTCI01KRM156N), QX_EX1 ledger rows and the PX1/EX1 negative-control rule scripts",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_gate_03_negative_controls_in_detail_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KOSPI 1997-2026 official closes (KRX), French daily Mkt-RF/RF 1926-07..2026-08 files, PX2 cash fixture (FRED IRSTCI01KRM156N), QX_EX1 ledger rows and the PX1/EX1 negative-control rule scripts (5-day dSR -0.29, 10-day -0.106, post-shock-week z 1.278 are printed, never asserted)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_gate_04_second_failure_ends_evaluation_and_every_attempt_is_logged",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 2.293
+ },
+ {
+  "test": "macro_m7_cardp/test_i05_full_sample_lag_audit_over_compliant_goldens_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: every COMPLIANT golden backtest fixture of section 9.3 (KOSPI 1997-2026 official closes, French daily files, FRED H.15 / H.10 vintages) is absent; the independent lag audit cannot run",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_i05_synthetic_end_to_end_protective_passes_noise_does_not",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 2.201
+ },
+ {
+  "test": "macro_m7_cardp/test_i08_acceptance_test_on_the_frozen_reference_data_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KOSPI 1997-2026 official closes (KRX), French daily Mkt-RF/RF 1926-07..2026-08 files, PX2 cash fixture (FRED IRSTCI01KRM156N), QX_EX1 ledger rows and the PX1/EX1 negative-control rule scripts; owner inputs sleeves.<market>.notional_nav and the BOK_CALL_RATE ECOS code are null; the folder is not a git repository (no external anchor): the freeze is refused",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_line_episodes_nan_fail_closed_pc3_event_log_and_one_attempts_chain",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.183
+ },
+ {
+  "test": "macro_m7_cardp/test_order_01_verdict_order_and_caps",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_placebo_01_fragility_arithmetic_and_synthetic_lookahead_control",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.207
+ },
+ {
+  "test": "macro_m7_cardp/test_placebo_01_noise_overlay_family_passes_pc1_rarely",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.326
+ },
+ {
+  "test": "macro_m7_cardp/test_placebo_01_positive_control_fixture_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KR_SOX_KRW_gate_B3.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_placebo_02_probe_isolation",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.978
+ },
+ {
+  "test": "macro_m7_cardp/test_rlayer_01_card_book_convention_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KOSPI 1997-2026 official closes (with_risk_layer line: 24 HALTs, MDD -56.4% vs -45.3%; after the freeze)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cardp/test_trough_01_post_trough_and_cost_episodes_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KOSPI 1997-2026 official closes (-6.9 / -15.5 / -31.5 pp vs S; after the freeze)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cards/test_book01_printed_lines_of_a_card",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.065
+ },
+ {
+  "test": "macro_m7_cards/test_book02_kospi_vt20_execution_variants_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m7_cards/test_cap02_stack_card_dormant_today_generated_at_two_pass_factors_product_refused",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.014
+ },
+ {
+  "test": "macro_m7_cards/test_card01_class_change_is_a_revision_claim_change_is_a_new_card",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.015
+ },
+ {
+  "test": "macro_m7_cards/test_card01_commit_md5_cover_immutable_and_budget_on_synthetic_frozen_store",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.021
+ },
+ {
+  "test": "macro_m7_cards/test_card01_commit_refusals_before_the_freeze_and_with_nulls",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.019
+ },
+ {
+  "test": "macro_m7_cards/test_card01_displayed_as_iff_pass_and_disposition_table",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cards/test_card01_formal_headers_owner_blocked",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: sleeves.KR/US.notional_nav null, KODEX 200 listing date unsigned, no git anchor, gate.package NOT_FROZEN: no formal header is committed on this machine",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cards/test_freeze_refuses_with_exactly_the_three_reasons_here",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.029
+ },
+ {
+  "test": "macro_m7_cards/test_freeze_success_path_and_mismatch_detection_on_a_synthetic_package",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.083
+ },
+ {
+  "test": "macro_m7_cards/test_i16_r06_kr_verdict_conditions_recorded_and_formal_run_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KRX official KOSPI closes from 1997-01-03 (F01), ECOS BOK_CALL_RATE (F02); OWNER: KODEX 200 listing date, sleeves.KR.notional_nav, git anchor; package NOT_FROZEN -- the formal R-06 KR verdict is computed blind, never here",
+  "seconds": 0.008
+ },
+ {
+  "test": "macro_m7_cards/test_r03_01_revisions_committed_before_their_runs_lowest_passing_acts",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: French Mom daily 1990-01-02..2026-08-31 and QX_EX1_qf3_trial_corr_diff.csv (dSR +0.273, deflated 0.98 / 0.947)",
+  "seconds": 0.063
+ },
+ {
+  "test": "macro_m7_cards/test_r04_01_record_and_pooled_route_closed",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: QF3 26-trial ledger series (deflated add-on 0.77 +- 0.02 at N_equiv 6.3)",
+  "seconds": 0.008
+ },
+ {
+  "test": "macro_m7_cards/test_r06_us_registered_reject_never_rerun",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.015
+ },
+ {
+  "test": "macro_m7_cards/test_r14_01_header_needs_multi_line_lines_and_the_diversification_claim",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: the 12 index series 2001-26 (SR 0.449; corr 0.03 / 0.34-0.36); COUNCIL: the index list (F-10)",
+  "seconds": 0.02
+ },
+ {
+  "test": "macro_m7_cards/test_registry_every_card_not_run_and_drafts_in_sync",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.013
+ },
+ {
+  "test": "macro_m7_cards/test_repro01b_bootstrap_outputs_bit_identical_same_seed",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cards/test_repro01b_results_md5_stable_volatile_excluded_nan_null_chain_and_archive",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.051
+ },
+ {
+  "test": "macro_m7_cards/test_step01_header_mechanics_and_binding_share_of_a_synthetic_ladder",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.009
+ },
+ {
+  "test": "macro_m7_cards/test_step02_binding_shares_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: QX_EX1_ladder.csv inputs (KOSPI VT20 3 bp 1997-04-15..2026-10-02 ~19%; US VT15 5 bp ~10%)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cards/test_step03_dsr_vs_no_steps_reference_run_pending",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: section 9.4 item 8 R-31 reference run (separate hwm_hard / ref_step) not frozen; KRX official closes absent",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_cards/test_step04_placement_share_0p10_invariant_step_0p1001_specification_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "macro_m7_cards/test_study_runner_dry_listing_offline_and_formal_runs_refused",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KRX official closes 1997-2026 (F01), BOK_CALL_RATE (F02), French files, QX_* tables; OWNER: notional, git anchor (I-07 card lines, I-09 episode counts, I-16 formal verdict / header md5 / results md5)",
+  "seconds": 0.09
+ },
+ {
+  "test": "macro_m7_cards/test_zz_legacy_cards_and_shipped_store_untouched",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.014
+ },
+ {
+  "test": "macro_m7_integration/test_commit_header_reads_the_family_ledger_and_the_package_state",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.028
+ },
+ {
+  "test": "macro_m7_integration/test_freeze_manifest_covers_every_harness_source_and_refuses_here",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.015
+ },
+ {
+  "test": "macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F10 french_daily_mom_1990-01-02_2026-08-31.csv; F22 QX_EX1_qf3_trial_corr_diff.csv; F23 QX_DLB_power_se.csv / QX_DLB_power_sim.csv / QX_DLB_r03_dsr.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); R-03 net of 50 bp on both legs (SR 0.6723, T 9,233, HAC SE 0.0716) on the R-03 ledger",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_integration/test_g_kr_l01_l13_korea_long_history_goldens_after_the_freeze_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv; F21 QX_DLA_korea_grid.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); v12_check reproductions of the R-06 KR long history (I-07 Level-1), the formal run on F01 (I-16); the cap-1.5 variant of G-KR-L13 only through tests/reference",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_integration/test_g_lad_04_invariants_only_book_with_and_without_the_hard_stop_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); section 9.4 item 10 pending: the invariants-only recommended KOSPI book with and without the -15% hard stop (HALT count, MDD, Sharpe) printed beside D2",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: U1 french_daily_5f_2x3.csv + yahoo_GSPC_1990_2026-10-01.csv; F13 yahoo_KS11_1996-12_2026-10-02.csv; F23 QX_DLB_power_se.csv / QX_DLB_power_sim.csv / QX_DLB_r03_dsr.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); SE(dSR) NW10 / QS / bootstrap ladder of US VT15 and KOSPI VT20 vs S, 300 paths per cell",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m7_integration/test_g_us_f01_f10_us_fixture_goldens_after_the_freeze_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: U1 french_daily_5f_2x3.csv + yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); U1 = French Mkt-RF 1990-02 -> 2026-08 spliced with ^GSPC Sep-2026 (loader not written)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_integration/test_i07_formal_evaluation_chain_on_a_synthetic_card",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 31.455
+ },
+ {
+  "test": "macro_m7_integration/test_one_home_psr_underpowered_rule_by_q_and_holm",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.019
+ },
+ {
+  "test": "macro_m7_integration/test_rulings_scan_no_clock_no_gate_read_no_kish_no_new_dependency_no_card_keyed_convention",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.468
+ },
+ {
+  "test": "macro_m7_integration/test_study_runner_refuses_formal_runs_and_commits_with_reasons_and_writes_nothing",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.037
+ },
+ {
+  "test": "macro_m7_integration/test_t_est_03_comb_sized_book_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (OHLC) not in tests/fixtures/macro/MANIFEST.csv: the COMB sized book (KOSPI 2001-26, 3 bp, target 20%, cap 1; vol-of-vol -22% +/- 2 pp vs SMA20, dMDD +2.8 pp, dSR CI [-0.042, +0.039]) runs from M7 on the frozen fixture",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_integration/test_t_est_05_counted_switch_refused_without_revision_and_row_accepted_with_the_proof",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.073
+ },
+ {
+  "test": "macro_m7_integration/test_t_gate_02_us_vt15_after_the_freeze_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: U1 french_daily_5f_2x3.csv + yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b): the v2 verdict on US VT15 50 bp is asserted as a class (INSUFFICIENT_DATA; ES21 +1.65 pp, ES126 +3.8 pp), p_ni printed under R-24 and md5-frozen (section 9.4 item 14); the registered REJECT label stays and the card is never re-run",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_ledger/test_adoption_is_a_revision_and_a_package_freeze_event_never_a_row",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "macro_m7_ledger/test_dsr02_units_daily_monthly_agree_and_annualised_sr_raises",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.027
+ },
+ {
+  "test": "macro_m7_ledger/test_ledger01_chain_tamper_quick_checks_and_hash_at_run",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.013
+ },
+ {
+  "test": "macro_m7_ledger/test_ledger01_refusals_and_null_distribution_runs",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m7_ledger/test_ledger_family_filing_by_rule_or_correlation",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m7_ledger/test_ledger_seeds_load_with_null_values_and_report_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: ledger seed rows from QX_* files (161 rows across 4 families: QX_EX1_qf3_trial_corr_diff.csv, R4/R4b golden files, QX_DLA_*, QX_DLB_*, QX_EX1 ladders; run_utc anchors need a git commit, section 9.4 item 15)",
+  "seconds": 0.005
+ },
+ {
+  "test": "macro_m7_ledger/test_module_has_no_wall_clock_and_no_config_import",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.021
+ },
+ {
+  "test": "macro_m7_ledger/test_neff01_e_of_n_and_n_equiv_round_trip",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 2.007
+ },
+ {
+  "test": "macro_m7_ledger/test_neff01_qf3_26_trial_matrix_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: QX_EX1_qf3_trial_corr_diff.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m7_ledger/test_neff01_synthetic_block_panel_clusters_emax_padding_and_max",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 2.142
+ },
+ {
+  "test": "macro_m7_ledger/test_sel01_a_rows_touching_the_span_before_the_commit_give_f_neff",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.626
+ },
+ {
+  "test": "macro_m7_ledger/test_sel01_b_configuration_fixed_before_any_row_touched_its_span_gives_f_1_only_anchored",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.16
+ },
+ {
+  "test": "macro_m7_ledger/test_sel01_c_d_declared_factor_refused_both_verdict_inputs_printed_card_o_gated",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.885
+ },
+ {
+  "test": "macro_m7_ledger/test_sel01_e_card_run_f_vs_acceptance_report_f_after_freeze",
+  "status": "NOT_RUN",
+  "detail": "NotRun: PENDING: T-SEL-01 (e) runs after the gate freeze (section 9.0b); gate.package.status is NOT_FROZEN and no acceptance report exists on this machine",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_ledger/test_sel01_f_g_h_own_rows_excluded_readings_max_and_two_rows",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.25
+ },
+ {
+  "test": "macro_m7_ledger/test_step3_01_end_to_end_from_the_matrix_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: QX_EX1_qf3_trial_corr_diff.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_ledger/test_step3_01_inline_numbers_r03_pass_borderline_r04_fail",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.536
+ },
+ {
+  "test": "macro_m7_ledger/test_step3_02_no_ledger_hash_refused_and_no_kish_anywhere",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 2.492
+ },
+ {
+  "test": "macro_m7_stats/test_block_rule_pw_psi_floor_fallback_pc3",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "macro_m7_stats/test_dsr01_bldp_psr_units",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m7_stats/test_dsr02_units_daily_monthly_and_refusal",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.014
+ },
+ {
+  "test": "macro_m7_stats/test_lw_boot_null_centred_and_deterministic",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.258
+ },
+ {
+  "test": "macro_m7_stats/test_pbo01_kospi_vt_grid_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_stats/test_pbo01_noise_control_200_panels_and_objectives",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 23.056
+ },
+ {
+  "test": "macro_m7_stats/test_power01_arithmetic_synth",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.044
+ },
+ {
+  "test": "macro_m7_stats/test_power01_fixture_ses_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m7_stats/test_power02_power_block_required",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_stats/test_printed_lines_by_hl_lo_and_verdict_class",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "macro_m7_stats/test_pzero01_count_zero_prints_floor",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.046
+ },
+ {
+  "test": "macro_m7_stats/test_se01_hac_white_noise_and_ar_ladder",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.75
+ },
+ {
+  "test": "macro_m7_stats/test_se01_r03_french_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: F10 french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m7_stats/test_stats_mirrors_store_and_module_is_a_pure_leaf",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.023
+ },
+ {
+  "test": "macro_m7_stats/test_underpow01_scope",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m8_forward/test_demote_01_trigger_text_and_a_protective_record_never_demotes",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.051
+ },
+ {
+  "test": "macro_m8_forward/test_demote_02_every_statistical_trigger_reads_whole_book_nav",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.668
+ },
+ {
+  "test": "macro_m8_forward/test_demote_03_false_demotion_budget_on_the_20_shift_panel",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 5.392
+ },
+ {
+  "test": "macro_m8_forward/test_demote_04_operational_triggers_demote_immediately",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.091
+ },
+ {
+  "test": "macro_m8_forward/test_demote_05_no_forward_record_raises_a_verdict",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.026
+ },
+ {
+  "test": "macro_m8_forward/test_g_ref_01_s1_goldens_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m8_forward/test_g_ref_02_s2_goldens_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m8_forward/test_i14_calibrate_record_monitor_demote_end_to_end",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.036
+ },
+ {
+  "test": "macro_m8_forward/test_record_append_only_no_backfill_live_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m8_forward/test_ref_01_s1_retired_refusal_book_display_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.752
+ },
+ {
+  "test": "macro_m8_forward/test_ref_02_s2_retired_refusal_book_and_the_s2_momentum_clause",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.869
+ },
+ {
+  "test": "macro_m8_forward/test_task_m8_11_french_1926_daily_file_owner",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: French Data Library daily Mkt-RF / RF 1926-07 -> 2026-08 (french_daily_mktrf_rf_1926-07_2026-08.csv): acquire (HTTP 403), record licence, owner and md5 in MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m8_forward/test_trend_01_header_declares_everything_before_the_run",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m8_forward/test_trend_02_french_monthly_and_us_vt15_goldens_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_monthly_ff_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m8_forward/test_trend_03_korea_instance_refused_kospi_trend_context_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.016
+ },
+ {
+  "test": "macro_m8_forward/test_trend_04_multiplier_only_in_its_forward_sim_book",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.591
+ },
+ {
+  "test": "macro_m8_forward/test_trend_mechanics_sma10m_onsets_composition",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m8_forward/test_usfut_01_registered_once_second_50bp_book_raises",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m8_forward/test_usfut_02_settling_run_logic_and_the_1926_fixture_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_daily_mktrf_rf_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_m8_forward/test_usfut_03_promotion_guard_truth_table",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m8_forward/test_usfut_04_monthly_and_banded_50bp_are_logged_trials_never_a_revision",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "macro_m8_forward/test_usfut_05_dla_u2_reproduction_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m8_forward/test_usfut_mechanics_vt_contracts_and_nav_fx_fail_closed",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m8_integration/test_default_hooks_display_refusal_and_forward_sim_and_never_feed_a_weight_book",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.631
+ },
+ {
+  "test": "macro_m8_integration/test_forward_monitor_hook_demotes_locks_out_and_admissions_refuse",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.592
+ },
+ {
+  "test": "macro_m8_integration/test_verdict_filter_reads_the_package_state_and_app_start_never_raises",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.024
+ },
+ {
+  "test": "macro_m8_pipeline/test_card_03_verdict_integrity_refuses_edits_broken_chains_and_mismatches",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.755
+ },
+ {
+  "test": "macro_m8_pipeline/test_close_01_workflow_never_starts_before_06_40_30z_and_one_artifact_per_decision",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.555
+ },
+ {
+  "test": "macro_m8_pipeline/test_default_nav_values_the_book_on_official_closes_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.019
+ },
+ {
+  "test": "macro_m8_pipeline/test_default_services_reads_the_effective_store_with_owner_rulings",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.169
+ },
+ {
+  "test": "macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache",
+  "status": "FAIL",
+  "detail": "AssertionError: ",
+  "seconds": 2.84
+ },
+ {
+  "test": "macro_m8_pipeline/test_i01_golden_clauses_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: I-01 golden clauses (L5688): KRX official KOSPI closes incl. 7,003.74 on 2026-10-02 (F01), the KODEX 200 PDF, the pair and KOSPI market caps, S&P / DGS10 / core PCE vintages / USD proxy and the signed event calendar are absent; vt 0.694 / rv20 28.82% / hedge reasons / gap 2 / bounds 0.755 and 0.685 / vt 0.25 on 2026-07-30 never asserted here",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m8_pipeline/test_i01_mechanics_five_artifacts_gates_by_role_and_feed_scope",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.367
+ },
+ {
+  "test": "macro_m8_pipeline/test_i03_book_separation_static_and_runtime",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.375
+ },
+ {
+  "test": "macro_m8_pipeline/test_i06c_acting_field_failure_halts_described_books_display_failure_never",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.374
+ },
+ {
+  "test": "macro_m8_pipeline/test_obs_02_missed_decisions_paged_at_app_start_and_books_carry_weights",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.424
+ },
+ {
+  "test": "macro_m8_pipeline/test_obs_03_page_alerts_persist_until_acknowledged",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_m8_pipeline/test_obs_04_acting_step_errors_block_feed_count_and_halt_at_the_limit",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 4.486
+ },
+ {
+  "test": "macro_m8_pipeline/test_obs_05_governance_chain_verified_at_app_start",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.463
+ },
+ {
+  "test": "macro_m8_pipeline/test_replay_01_reproduces_the_artifacts_byte_for_byte",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.663
+ },
+ {
+  "test": "macro_m8_pipeline/test_scope_01_b_forward_books_fail_closed_never_halt_and_hedge_credit_off",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.529
+ },
+ {
+  "test": "macro_m8_pipeline/test_scope_01_c_d_nav_minus_16_halts_its_own_book_risk",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.687
+ },
+ {
+  "test": "macro_m8_pipeline/test_scope_01_e_f_hedge_exception_and_context_log_failure_halt_nothing",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.921
+ },
+ {
+  "test": "macro_m8_pipeline/test_scope_01_g_admission_binds_the_series_to_the_recommended_book_and_its_failure_halts_it",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.626
+ },
+ {
+  "test": "macro_m8_pipeline/test_scope_01_h_and_a_input_failures_halt_the_specification_book_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.478
+ },
+ {
+  "test": "macro_m8_pipeline/test_verdict_filter_refuses_unversioned_and_admits_nothing_today",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.534
+ },
+ {
+  "test": "macro_m8_pipeline/test_yaml_loads_with_the_strict_runner_and_the_legacy_parser_is_untouched",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.053
+ },
+ {
+  "test": "macro_m9_lab/test_i11_fan_pit_grades_the_lab_garch_t_fan",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 65.651
+ },
+ {
+  "test": "macro_m9_lab/test_i11_fit_clause_expanding_windows",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 46.123
+ },
+ {
+  "test": "macro_m9_lab/test_i11_gate_mechanics_true_dgp_passes_misspecified_fails",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.199
+ },
+ {
+  "test": "macro_m9_lab/test_i11_grade_lab_end_to_end_synthetic",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 158.637
+ },
+ {
+  "test": "macro_m9_lab/test_i11_kospi_oos_2016_26_thresholds_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m9_lab/test_i11_no_sizing_module_reads_lab",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.201
+ },
+ {
+  "test": "macro_m9_lab/test_i11_replay_kospi_path_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m9_lab/test_i11_replay_synthetic_companion",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_m9_lab/test_i11_tails_envelope_lines_and_periods",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.61
+ },
+ {
+  "test": "macro_m9_lab/test_smoke_grading_on_local_closes_runs_offline_and_is_labelled_vendor_data",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 295.008
+ },
+ {
+  "test": "macro_m9_lab/test_t_crypto_01_asof_join_with_staleness_labels_owner",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: crypto sleeve (R-17 deferred): declare the venue row (UPBIT | BINANCE | COINGECKO, bar close 00:00:00Z of d+1), sleeves.CRYPTO.notional_nav and the CRYPTO consumer bindings before the as-of join exists",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m9_lab/test_t_crypto_01_clock_annualisation_and_no_crypto_sleeve",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.015
+ },
+ {
+  "test": "macro_m9_lab/test_t_fx_01_fx_card_without_a_declared_instrument_is_refused",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "macro_m9_lab/test_t_fx_01_granularity_floor_needs_the_contract_multiplier_owner",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: FX_KRX_USD_futures contract multiplier and roll calendar (R-26 granularity floor; R-17 deferred)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m9_lab/test_t_repro_01c_lab_outputs_reproducible_under_the_seed",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.909
+ },
+ {
+  "test": "macro_m9_scenarios/test_i11_no_sizing_module_reads_scenarios_or_lab",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.221
+ },
+ {
+  "test": "macro_m9_scenarios/test_letf_identity_on_a_synthetic_path",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_m9_scenarios/test_library_names_brent_anchors_from_the_spec_and_owner_nulls",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.009
+ },
+ {
+  "test": "macro_m9_scenarios/test_scenario_brent_history_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: DCOILBRENTEU.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m9_scenarios/test_scenario_kospi_jul_2026_path_refdata",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m9_scenarios/test_scenario_latest_sep_table_owner",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: latest SEP Table 2 (short-rate RMSE band and release date) and a FEDFUNDS history; the stored band is the Dec-2023 +-1.4 pp at 1 year, labelled stale",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m9_scenarios/test_scenario_oil_2022_anchor_owner",
+  "status": "NOT_RUN",
+  "detail": "NotRun: OWNER: t0 of the 2022 oil-shock replay (oil_2022_p20; brief F-16), then the KOSPI / ECOS / DFII10 / DCOILBRENTEU histories (REFDATA)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_m9_scenarios/test_sep_band_dispersion_matches_the_band_at_the_horizon",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.326
+ },
+ {
+  "test": "macro_m9_scenarios/test_shock_window_on_the_current_book_synthetic_companion",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_m9_scenarios/test_t_repro_01c_scenarios_identical_paths_under_the_seed",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.434
+ },
+ {
+  "test": "macro_tf_data/test_backlog_registry_counts_keys_only_and_never_acting",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.025
+ },
+ {
+  "test": "macro_tf_data/test_council_pages_offline_with_one_parsing_data_block",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.027
+ },
+ {
+  "test": "macro_tf_data/test_council_reports_copied_with_both_disclaimers_verbatim",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_data/test_dnb_tf_predicates_refuse_shapes_and_pass_allow_lists",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.015
+ },
+ {
+  "test": "macro_tf_data/test_flows_log_records_not_available_and_never_emits_a_direction",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.865
+ },
+ {
+  "test": "macro_tf_data/test_tf_brief_tables_cite_r3_and_xs_statuses",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_tf_data/test_tf_manifest_sha256_every_shipped_file",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.018
+ },
+ {
+  "test": "macro_tf_data/test_tf_row_counts_register_classes_nodes_goldens",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "macro_tf_gov/test_cry1_cut_time_sensitivity_needs_intraday_candles",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: intraday BTC candles absent from docs/asset_expansion/cache (daily closes only); the 00:00 UTC / 00:00 KST / 21:00 UTC cut-time test of CRY-1 is not run (D-24: not counted as a trial)",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_gov/test_cry1_study_runs_offline_end_to_end_on_the_local_caches",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: docs/asset_expansion/cache/binance_BTCUSDT.csv (local vendor cache) absent",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_gov/test_gov10_contamination_log_append_only_and_overlap",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "macro_tf_gov/test_gov10_incubation_counts_from_the_first_recorded_session_never_backfilled",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_tf_gov/test_gov11_s_beta_book_and_the_prior_252_session_beta_window",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_gov/test_gov1_primary_statistic_long_only_vs_ew_capped_reported_sign_split_revise",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_gov/test_gov2_bh_fdr_and_holm_on_known_p_vectors",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_gov/test_gov2_spa_power_on_a_planted_rule_and_family_gate",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.284
+ },
+ {
+  "test": "macro_tf_gov/test_gov2_spa_size_on_pure_noise_rule_families",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 5.264
+ },
+ {
+  "test": "macro_tf_gov/test_gov2_trial_registry_append_only_global_n_and_composite_count",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "macro_tf_gov/test_gov3_attribution_recovers_beta_alpha_and_labels_a_factor_tilt",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.111
+ },
+ {
+  "test": "macro_tf_gov/test_gov4_pw_block_dd2_floors_at_10_and_twice_the_holding_period",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "macro_tf_gov/test_gov5_min_track_record_line_against_the_history",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_gov/test_gov6_expected_live_is_0p6_x_oos_and_no_0p4_multiplier_exists",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.085
+ },
+ {
+  "test": "macro_tf_gov/test_gov7_break_even_screen_on_the_reference_constants",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_tf_gov/test_gov8_planning_haircuts_are_a_labelled_proposal_beside_the_council_values",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_gov/test_gov9_stress_table_windows_and_worst_rolling_relative_loss",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_tf_gov/test_inv1_decide_at_close_fill_at_official_close_on_the_costed_engine",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "macro_tf_gov/test_inv5_no_name_level_stop_path_in_tf_books_or_the_fill_model",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_tf_gov/test_krx_cards_refuse_without_the_panel_and_drafts_carry_typed_nulls",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.015
+ },
+ {
+  "test": "macro_tf_gov/test_krx_tech_fund_card_formal_runs_need_the_krx_panel",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KRX all-stock daily panel (marcap files 1995-2026: close, high, volume, amount, marcap, shares, market, name class; expected under data/techfund/marcap/) absent",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_gov/test_tf_gov_and_runner_rulings_scan_no_clock_no_gate_read_no_new_dependency",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.038
+ },
+ {
+  "test": "macro_tf_integration/test_flows_log_is_a_protected_context_module",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.678
+ },
+ {
+  "test": "macro_tf_integration/test_fs2_reads_its_r03_scale_from_sleeves_and_fails_closed_without_it",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.136
+ },
+ {
+  "test": "macro_tf_integration/test_tf_card_drafts_are_buildable_rule_objects_and_mutations_are_refused",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "macro_tf_integration/test_tf_drafts_validate_against_the_council_header_where_fields_overlap",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "macro_tf_screens/test_band_01_hysteresis_turnover_and_capacity",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_screens/test_be_01_break_even_recomputed_from_lab_rows",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "macro_tf_screens/test_book_01_base_and_filtered_books",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_screens/test_book_01_delisted_value_is_redeployed_buy_side_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_screens/test_book_01_end_to_end_on_a_seeded_panel",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.016
+ },
+ {
+  "test": "macro_tf_screens/test_book_01_rebalance_hold_stuck_and_delisting_stress",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_screens/test_book_01_tf_modules_are_pure_library_code",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.035
+ },
+ {
+  "test": "macro_tf_screens/test_ca_01_split_like_rule_and_dil_lit",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_screens/test_fs_02_constrained_momentum_is_forward_sim_only",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_screens/test_fs_05_reversal_guard_excludes_last_months_top_decile",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_screens/test_gold_01_screen_constants_pinned_with_their_basis",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_tf_screens/test_gold_02_pair_share_recomputed_from_the_lab_columns",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_tf_screens/test_idx_01_rebuilt_kospi_definition",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_screens/test_idx_02_rebuilt_kospi_check_values_need_the_krx_panel",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KRX marcap panel (rebuilt KOSPI 1,457.46 / 9,120.19 / 5,599.30 need the all-stock file)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_screens/test_krx_01_screen_card_runs_need_the_krx_panel",
+  "status": "NOT_RUN",
+  "detail": "NotRun: REFDATA: KRX marcap panel (all-stock daily panel 1995-2026; SCR-1/SCR-2/SCR-3 cards and the FS-2/FS-5 cells cannot run on this machine)",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_screens/test_lock_01_limit_lock_at_each_krx_limit_era",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_tf_screens/test_lock_01_regime_tag_source_and_audit",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_screens/test_ml_01_l0_composite_structure",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_screens/test_risk_01_cap_weights_respect_every_cap",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_screens/test_risk_01_pair_cap_is_a_display_proposal",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_screens/test_scr_01_f4_cut_size_and_ordinal_stability",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "macro_tf_screens/test_scr_01_features_and_attention_fade_on_a_synthetic_panel",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_screens/test_scr_01_quantile_groups_top_frac_and_flags",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_tf_screens/test_scr_02_dil_lit_float32_tie_rule",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_tf_screens/test_ser_01_daily_basis_ir_and_cost_timing",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_screens/test_ser_01_monthly_basis_series_reproduces_the_lab_form",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_screens/test_univ_01_all_large_and_rx05",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_tf_screens/test_univ_01_codes_and_the_five_class_classifier",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_tf_screens/test_univ_01_each_condition_excludes_a_constructed_name_on_t_minus_1",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_ui_components/test_data_table_column_count_numeric_flags_controls_and_ragged_rows",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_ui_components/test_every_verdict_disposition_engine_and_input_chip_carries_its_word",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_ui_components/test_flet_api_guard_passes_with_the_warning_token",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.706
+ },
+ {
+  "test": "macro_ui_components/test_multiplier_bar_draws_fill_floor_and_vt_ticks_and_prints_the_numbers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_ui_components/test_multiplier_bar_fails_closed_without_numbers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_ui_components/test_open_path_on_a_missing_file_returns_the_selectable_path",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_ui_components/test_readme_and_package_name_the_research_identity",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "macro_ui_components/test_readme_carries_both_disclaimers_and_no_stale_counts",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_ui_components/test_readme_labels_the_grokbot_study_with_the_legality_rating",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_ui_components/test_shell_fixes_runs_page_delegates_and_the_rail_scrolls",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_ui_components/test_warning_token_is_last_with_a_default_and_in_both_palettes",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_ui_overlay/test_a_disarmed_tile_for_each_book",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_ui_overlay/test_a_live_page_alert_shows_and_acknowledges_from_the_dry_run_view",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.343
+ },
+ {
+  "test": "macro_ui_overlay/test_alerts_are_ordered_page_then_warn_then_info_and_acknowledge_goes_to_core",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.009
+ },
+ {
+  "test": "macro_ui_overlay/test_descriptive_read_caption_volatility_labels_and_no_regime_state",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.28
+ },
+ {
+  "test": "macro_ui_overlay/test_every_owner_decision_d1_to_d6_is_listed_with_value_and_status",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.294
+ },
+ {
+  "test": "macro_ui_overlay/test_fail_closed_no_state_or_invalid_state_shows_an_error_notice_and_no_numbers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.018
+ },
+ {
+  "test": "macro_ui_overlay/test_fixtures_are_valid_artifacts",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "macro_ui_overlay/test_halted_banner_names_class_reason_since_and_rearm_not_before_and_acknowledges",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.02
+ },
+ {
+  "test": "macro_ui_overlay/test_null_volatility_labels_say_why",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "macro_ui_overlay/test_refusal_book_labels_sit_on_their_own_line_not_in_a_table_row",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "macro_ui_overlay/test_the_composition_line_carries_the_artifact_numbers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.015
+ },
+ {
+  "test": "macro_ui_overlay/test_the_dry_run_chip_needs_backtest_and_the_marker",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.035
+ },
+ {
+  "test": "macro_ui_overlay/test_the_flet_api_guard_passes_on_the_new_ui_modules",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.632
+ },
+ {
+  "test": "macro_ui_overlay/test_the_overlay_view_runs_one_worker_at_a_time",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.019
+ },
+ {
+  "test": "macro_ui_overlay/test_the_run_button_dry_run_writes_only_the_temp_macro_dir_and_the_view_renders_it",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 3.394
+ },
+ {
+  "test": "macro_ui_overlay/test_view_selector_hosts_the_overlay_view_and_reads_nothing_into_home",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.539
+ },
+ {
+  "test": "macro_ui_rulings/test_owner_items_replay_owner_rulings_from_the_macro_dir",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.429
+ },
+ {
+  "test": "macro_ui_views/test_build_as_insurance_is_a_disposition_chip_never_a_verdict_chip",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.028
+ },
+ {
+  "test": "macro_ui_views/test_cards_view_fails_closed_on_a_broken_chain_or_bad_inputs",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_ui_views/test_cards_view_registry_and_empty_verdicts_every_card_not_run_with_a_reason_gate_not_frozen",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.019
+ },
+ {
+  "test": "macro_ui_views/test_forward_sim_and_refusal_groups_are_not_a_recommendation_and_never_success",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.02
+ },
+ {
+  "test": "macro_ui_views/test_new_ui_modules_pass_the_flet_api_guard",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.71
+ },
+ {
+  "test": "macro_ui_views/test_quant_lab_fit_caption_and_grading_strip",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "macro_ui_views/test_quant_lab_run_shows_caption_and_the_stored_grade",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.273
+ },
+ {
+  "test": "macro_ui_views/test_research_dnb_37_plus_17_resolutions_12_and_open_buttons_point_at_files",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.095
+ },
+ {
+  "test": "macro_ui_views/test_research_register_group_filter_table_and_detail",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.159
+ },
+ {
+  "test": "macro_ui_views/test_research_view_fails_closed_without_the_record",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "macro_ui_views/test_research_weight_table_all_50_rows_korea_22_caption_verbatim",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.089
+ },
+ {
+  "test": "macro_ui_views/test_signals_page_header_notice",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "macro_ui_views/test_strategy_lab_builds_with_foreign_cards_in_a_temp_cards_dir",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.01
+ },
+ {
+  "test": "macro_ui_views/test_techfund_drafts_not_run_with_reasons_and_cry1_vendor_label",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.023
+ },
+ {
+  "test": "test_t_herm_02_shipped_trees_and_home_untouched",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ }
+]

@@ -44,7 +44,7 @@ def coupon_times(maturity: float, freq: int = 2, start: float = 0.0) -> np.ndarr
         raise ValueError(f"maturity {maturity} must exceed start {start}.")
     if freq < 1:
         raise ValueError(f"freq must be >= 1, got {freq}.")
-    n = int(math.ceil((maturity - start) * freq - 1e-9))
+    n = max(1, int(math.ceil((maturity - start) * freq - 1e-9)))   # T itself always pays
     return np.sort(maturity - np.arange(n) / freq)
 
 

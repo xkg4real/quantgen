@@ -1,0 +1,36 @@
+# QUANTGEN audit artifact: environment fixes applied in the cloud Linux container before cloud run 2
+# (NOT the owner's Windows machine). Evidence column = how each line was checked on 2026-10-27.
+# None of these changes touches a tracked file except the local-only tag (a ref, never pushed).
+
+1. Third-party packages installed (flet 0.85.2, yfinance 1.7.0, pandas-datareader 0.11.1, numpy 2.3.5, ...)
+   when    : 2026-10-26 13:35 UTC (package directory mtimes under /usr/local/lib/python3.13/dist-packages)
+   evidence: scratchpad pip.log keeps only the root-user warning and "exit 0"; the full install log and the exact
+             command were not kept (UNVERIFIED). gs-quant (requirements.txt) is NOT installed (import fails),
+             so the install was not a complete `pip install -r requirements.txt`, or that line failed.
+   why     : without flet, tests/run_all.py dies at its module-level import (tests/run_all.py:43 ->
+             tests/flet_api_guard.py:24 `import flet as ft`) before any test runs; yfinance and pandas-datareader
+             are optional imports (core/ficc/data.py:48-55) and do not stop the runner.
+
+2. statsmodels 0.15.0 installed (declared in neither requirements.txt nor pyproject.toml)
+   when    : 2026-10-26 13:56 UTC (dist-info mtime), after cloud run 1
+   evidence: run 1 FAILs expansion/selfcheck_strategies, selfcheck_curve_models, selfcheck_crypto_analytics
+             (NaN from core/quant/strategies.py:266-271 adf_pvalue); run 2 PASSes them.
+
+3. Cache file mtimes backdated to 2026-10-01 in docs/asset_expansion/cache/
+   evidence: stat of the 42 files other than the 4 protected pilot-window files shows mtime 2026-10-01
+             (the 4 protected files were not opened, read, hashed or stat-ed by this audit).
+   why     : core/skills/macro_daily.py:1412 stamps retrieved_at_utc = file st_mtime; the test
+             tests/macro_m8_pipeline.py:846-875 pins the clock at 2026-10-07T09:00Z, so a checkout written
+             after that instant fails closed (FAIL in run 1, PASS in run 2). Reproduced on a synthetic file:
+             audit_work/tests_and_artifacts/repro_dryrun_mtime.py.
+
+4. Local stand-in annotated tag studies-of-record-2026-10-23 -> eacd57d2b0821ad796ab9b66d2d2c96a3d71081f
+   when    : 2026-10-26 18:56 UTC (tagger date)
+   message : "CLOUD QA STAND-IN, local to the Linux container only, never pushed."
+   effect  : guard/test_a, test_b, test_d PASS in run 2 against this stand-in. That PASS says nothing about the
+             tag of record on the owner's Windows clone.
+
+Not fixed (cloud limits, expected):
+   tectonic absent  -> papers/test_compile_template_en, _ko, test_compile_undefined_number_key_is_a_failure NOT_RUN
+   taskkill absent  -> papers/test_debate_run_kills_process_tree FAIL (tools/debate.py:75 is Windows-only)
+   no .env, no keys -> every provider path runs on its keyless / synthetic branch

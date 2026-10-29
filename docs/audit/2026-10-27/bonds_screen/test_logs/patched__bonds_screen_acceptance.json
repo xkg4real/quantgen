@@ -1,0 +1,200 @@
+[
+ {
+  "test": "test_a_quote_too_far_from_the_curve_names_the_field",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.526
+ },
+ {
+  "test": "test_a_run_uses_the_inputs_of_its_click",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.249
+ },
+ {
+  "test": "test_carry_roll_for_a_bond_maturing_inside_the_horizon",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.222
+ },
+ {
+  "test": "test_chart_left_titles_use_the_palette_text_colour",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "test_clearing_one_of_price_and_yield_clears_the_pair_error",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_curve_lagging_in_a_shared_cache_is_refetched",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_duration_convexity_dv01_by_finite_differences",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_echo_keeps_the_typed_digits_and_names_the_served_curve",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.247
+ },
+ {
+  "test": "test_edit_after_run_marks_the_result_and_revert_unmarks",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.204
+ },
+ {
+  "test": "test_every_input_has_a_change_handler",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_failed_fred_reasons_keep_the_cause_once",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.218
+ },
+ {
+  "test": "test_fred_fetch_is_bounded_and_a_hung_batch_is_not_retried_per_id",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.254
+ },
+ {
+  "test": "test_hedge_798_x_08_over_65_side_rounding_and_residual",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.029
+ },
+ {
+  "test": "test_hedge_override_is_named_and_warned",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.027
+ },
+ {
+  "test": "test_lagging_refetch_is_tried_once_per_cache_entry",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "test_late_failure_does_not_replace_a_newer_result",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.232
+ },
+ {
+  "test": "test_missing_tenor_note_describes_the_interpolation",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_named_shocks_bite_at_their_own_tenors_on_a_partial_curve",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.011
+ },
+ {
+  "test": "test_narrative_for_a_bond_maturing_inside_the_horizon",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_narrative_separates_yield_dv01_from_zero_curve_scenarios",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.006
+ },
+ {
+  "test": "test_newest_run_wins_when_runs_finish_out_of_order",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.944
+ },
+ {
+  "test": "test_par_premium_discount_and_ytm_inversion",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.245
+ },
+ {
+  "test": "test_price_yield_exclusive_with_field_errors",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.45
+ },
+ {
+  "test": "test_request_table_21_rows_match_independent_formulas",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.098
+ },
+ {
+  "test": "test_required_fields_have_no_silent_default",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "test_rounding_is_half_away_from_zero_as_decided",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.013
+ },
+ {
+  "test": "test_scenario_notice_reports_this_curves_yield_move",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.155
+ },
+ {
+  "test": "test_scenario_pnl_is_reprice_times_notional_with_zero_rate_shocks",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.147
+ },
+ {
+  "test": "test_slow_batch_with_an_http_error_is_still_retried_per_id",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.251
+ },
+ {
+  "test": "test_stale_carried_forward_and_bad_unit_curves_are_flagged",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.793
+ },
+ {
+  "test": "test_synthetic_and_fred_are_labelled_apart_with_a_mocked_fetch",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.514
+ },
+ {
+  "test": "test_tiny_maturity_prices_instead_of_index_error",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.238
+ },
+ {
+  "test": "test_zero_negative_nan_inf_and_comma_inputs",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.991
+ }
+]
