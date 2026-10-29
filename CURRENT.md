@@ -4,13 +4,13 @@ reason: milestone
 from: gpt
 task: rulings-2026-10-29
 cycle: 2026-10-27
-done_ids: ②-5/b, ④-2/a, ①-2/4/a
-next_ids: ①-2/4
-updated_at: 2026-10-29T16:28:49+09:00
+done_ids: ②-5/b, ④-2/a, ①-2/4/a, ⑫-0
+next_ids: ①-2/4, ⑫-1/a, ⑬-2/a
+updated_at: 2026-10-29T07:37:38Z
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/rulings-2026-10-29
-work_commit: 0a91f26
+work_commit: 7f44f9f78ac224f66bcb2d71f711d040d881f46d
 uncommitted_changes: no
 pr: 4
 usage_weekly_pct: 95
@@ -24,6 +24,8 @@ handoff_id: 2026-10-27/rulings-2026-10-29/1cebe23741ffed482a3205e0b3bd4a3c208b0e
 # 인수인계: 소유자 결정(2026-10-29) 반영과 다음 작업(PentPort 감사 반영, 홈/UI 개편 준비)
 
 ## 0. 한 줄 요약
+
+**Codex milestone ⑫-0 (2026-10-29T07:37:38Z):** 기존 ID 보존, 감사 24항목과 PR-A~F 매핑, 승인/의존성 및 A/F1 UI 한정 범위 정리. Commit 7f44f9f78ac224f66bcb2d71f711d040d881f46d. 원격 branch SHA 일치; 기존 ①–⑪ 의미 유지; 전체 우선순위 승인과 개별 UI 승인을 구분.
 
 **Codex 진행(2026-10-29 16:28 KST):** ①-2/4/a를 `gpt/calendar-loader-20261029`의 `2ff977d6653c3fe53df2e7c75062cf13966da10f`에 push하고 원격 파일을 재확인했습니다. CAL-13/M-4 입력 검증과 선택 검사 51 PASS/12 NOT_RUN, 기존 61건 결과 불변, 서명 파일 17/17 및 세트 1.0.0 호환을 확인했습니다. 전체 suite는 동결 연구/실제 원장 접근 제한 때문에 NOT_RUN이며 ①-2/4 부모 항목은 완료가 아닙니다. LEDGER는 새 하위 항목만 덧붙였습니다. 다음은 최신 로드맵 정리와 승인된 범위의 상태 표시·Home/UI 작업입니다. 아래 Claude 인계 본문은 수신 시점 기록입니다.
 
