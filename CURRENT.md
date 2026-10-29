@@ -1,255 +1,143 @@
 ---
-status: taken
-reason: milestone
+status: returned
+reason: session_end
 from: gpt
 task: rulings-2026-10-29
 cycle: 2026-10-27
 done_ids: ②-5/b, ④-2/a, ①-2/4/a, ⑫-0, ⑫-1/a, ⑫-1/a/2, ⑬-2/a
-next_ids: ①-2/4, ⑫-1, ⑫-2, ④-2, ⑨-3a, ⑬-1, ⑬-2
-updated_at: 2026-10-29T07:59:08Z
+next_ids: ①-2/4, ⑫-1, ⑫-2, ④-2, ⑨-3a, ⑬-1, ⑬-2, ⑫-3
+updated_at: 2026-10-29T17:03:46+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: owner
 work_branch: gpt/research-home-a-f1-20261029
-work_commit: e1271a71d45d5b8b7da095d427b526a5f051349f
+work_commit: e1271a7
 uncommitted_changes: no
-pr: 4
-usage_weekly_pct: 95
+pr: none
+usage_weekly_pct: unknown
 usage_5h_pct: unknown
-usage_resets_at: 2026-11-03T17:00:00+09:00
+usage_resets_at: unknown
 session: codex
 execution_id: bfb891c9-91d7-4b8e-a943-500c45803cfb
 handoff_id: 2026-10-27/rulings-2026-10-29/1cebe23741ffed482a3205e0b3bd4a3c208b0e90
 ---
 
-# 인수인계: 소유자 결정(2026-10-29) 반영과 다음 작업(PentPort 감사 반영, 홈/UI 개편 준비)
+# 인수인계 반환: 달력 입력 검증·상태 정합성·A/F1 Research Home
 
 ## 0. 한 줄 요약
 
-**Codex milestone ⑬-2/a (2026-10-29T07:59:08Z):** A/F1 Research Home·6작업공간·모바일 메뉴와 정직한 미연결 상태 구현; 기존 16경로 유지. Commit e1271a71d45d5b8b7da095d427b526a5f051349f. status/UI 15 PASS + Flet guard 4 + resize/cache 2; Chromium 1600x1200/390x844 확인(엔진 fixture); 한글 glyph 11172/11172; 시세/연구이력 adapter 미연결; full-suite/Windows/배포 NOT_RUN.
-
-**Codex milestone ⑫-1/a/2 (2026-10-29T07:55:43Z):** 상태 출처의 null/list/잘못된 QA 행을 명시적으로 거부하도록 보완. Commit 98a645f1ca1096772aa8a5c9df773a6a8081ac9b. synthetic fixture 9/9 PASS; 원격 branch SHA read-back; 모델/게이트 불변.
-
-**Codex milestone ⑫-1/a (2026-10-29T07:41:28Z):** PR-A 한정 단계: 기록 QA·달력 메타데이터·정책 분리와 출처 불일치 검사. Commit 514e8ae3f150645036377d2c17f28fb94d1a97a1. fixture 8/8 PASS; status --check 통과; QA 원본/서명 파일 불변; frozen gate/study NOT_INSPECTED; 전체 PR-A/CI 완료 아님.
-
-**Codex milestone ⑫-0 (2026-10-29T07:37:38Z):** 기존 ID 보존, 감사 24항목과 PR-A~F 매핑, 승인/의존성 및 A/F1 UI 한정 범위 정리. Commit 7f44f9f78ac224f66bcb2d71f711d040d881f46d. 원격 branch SHA 일치; 기존 ①–⑪ 의미 유지; 전체 우선순위 승인과 개별 UI 승인을 구분.
-
-**Codex 진행(2026-10-29 16:28 KST):** ①-2/4/a를 `gpt/calendar-loader-20261029`의 `2ff977d6653c3fe53df2e7c75062cf13966da10f`에 push하고 원격 파일을 재확인했습니다. CAL-13/M-4 입력 검증과 선택 검사 51 PASS/12 NOT_RUN, 기존 61건 결과 불변, 서명 파일 17/17 및 세트 1.0.0 호환을 확인했습니다. 전체 suite는 동결 연구/실제 원장 접근 제한 때문에 NOT_RUN이며 ①-2/4 부모 항목은 완료가 아닙니다. LEDGER는 새 하위 항목만 덧붙였습니다. 다음은 최신 로드맵 정리와 승인된 범위의 상태 표시·Home/UI 작업입니다. 아래 Claude 인계 본문은 수신 시점 기록입니다.
-
-
-Claude가 주간 사용량 95%에서 소유자 지시로 조금 일찍 인수인계합니다. 작업 브랜치 `claude/amazing-gauss-tdiguu`의 `0a91f26`은
-원격에 push됐고 원격 반영을 확인했습니다(`git ls-remote` 일치). 커밋되지 않은 변경은 없습니다.
-**가장 먼저 `docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md`를 처음부터 끝까지 읽으십시오.** 그 문서에 받은 과업, 상태,
-멈춘 지점, 남은 작업 순서, 소유자 결정 대기, 금지 사항이 모두 있습니다. 다음 할 일은 6절입니다.
+Claude의 유효한 handoff를 CAS 선점·read-back한 뒤, 달력 CAL-13/M-4,
+로드맵 재배치, 기록 상태의 단일 출처와 A/F1 홈·6개 작업공간을 구현했습니다.
+통합 검토 브랜치는 `gpt/research-home-a-f1-20261029` / `e1271a71d45d5b8b7da095d427b526a5f051349f`입니다.
+기존 16개 분석 경로와 계산 코드는 보존했습니다. 홈 시세·연구 이력 연결, 전체 테스트,
+Windows 검증과 배포는 완료하지 않았습니다. 소유자 결정이 필요한 후속 작업을 아래에 남기고 반환합니다.
+이번 처리 주기는 종료하며 다음 목요일(2026-11-05 00:00 KST)까지 자동 원격 조회를 쉽니다.
 
 ## 1. 목표와 완료 조건
 
-- **사용자 요청 (원문 그대로, 2026-10-29 15:3x KST, 인수인계 도구 창에서 전달됨):**
+- **사용자 요청 (수신 CURRENT의 원문):**
   > 98% 사용되면, 마지막 코드 변경을 작업 브랜치에 push하고 원격 반영을 확인해줘. 기존 인수인계 절차에 따라 CURRENT.md를 status: handoff로 올리고, 작업 브랜치·커밋·완료한 일·남은 일·검증 결과·막힌 부분을 기록해줘. 완료 항목은 LEDGER에도 남겨줘. Codex가 이어받아 기존 작업과 홈/UI 개편을 진행할 예정이야. 인수인계 하다가 토큰 다 떨어지면 안되니까 너가 판단하고 토큰 안 끊기게 조금 일찍 진행하는 작업 멈추고 인수인계 작업 시작해도 좋아.
-- **그 전 요청과 방향:** PentPort 감사를 반영해 남은 작업 순서를 정하고 REMAINING_WORK를 고칠 것(2026-10-29). 소유자 요약 원문은
-  `docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md` 7절에, 감사 원문은
-  `docs/audit/2026-10-29/QUANTGEN_PentPort_Strategic_Improvement_Audit_2026-10-29.md`에 있습니다. 그 전 결정(X-1, Bonds, ④-1·④-2 등)은
-  `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` 맨 끝 절들에 원문으로 있습니다.
-- **완료 조건:** 6절의 각 항목에 적었습니다.
-- **범위 밖:** 실주문 경로, 리더보드, 소셜 트레이딩, PFOF, 엔진 전면 재작성(매뉴얼 4절). PR 병합(소유자).
+- 수신 매뉴얼의 순서: PT07 평가 재검증 → 로드맵 → main 기반 PR-A. 후속 UI는 승인된 A/F1 표시·탐색 범위.
+- 완료는 각 하위 ID의 범위로만 판정합니다. ①-2/4, ⑫-1, ⑬-2 부모 전체는 미완료입니다.
+- 범위 밖: 동결 하네스·모델·게이트·원장·판정 변경, 실주문, TRADEGEN, PR 생성/병합·배포.
 
 ## 2. 근거
 
-| 종류 | 위치 | 쓰는 부분 |
-|---|---|---|
-| 인수인계 매뉴얼 | `docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md` | 전부(1~7절) |
-| 로드맵(현행) | `docs/nautilus_bridge/REMAINING_WORK_2026-10-27.md` | 기존 ID ①~⑪ |
-| PentPort 감사 | `docs/audit/2026-10-29/QUANTGEN_PentPort_Strategic_Improvement_Audit_2026-10-29.md` | 6절 백로그, 9절 PR-A~F, 12절 PR-A 지시문 |
-| 소유자 결정 | `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` | 2026-10-28~29 절 |
-| ④-2 결정 양식 | `docs/nautilus_bridge/O2_O15_DECISION_FORM_2026-10-29.md` | 소유자에게 전달할 양식 |
-| R3 질문 설명 | `docs/superpowers/specs/2026-10-27-strategy-lab-run-registry-Q-explainer_2026-10-29.md` | 소유자에게 전달할 설명 |
-| PT-07 평가 초안 | `docs/nautilus_bridge/drafts/PT07_LOADER_ASSESSMENT_DRAFT_2026-10-29.md` | ①-2/4 (검증 전) |
-| 오류 대장·대기열 | `docs/nautilus_bridge/KNOWN_ERRORS_REGISTER_2026-10-28.md` 4절 | ②-5 대기열, 4.4 결정 |
-| Nautilus 실행 기록 | `docs/superpowers/plans/2026-10-28-nautilus-execution-record.md` | Step 7A 인계 상태, X-1 이력, `main` 병합 3회 검증 |
+| 문서 | 용도 |
+|---|---|
+| `docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md` | 수신 과업·승인/대기·보호 경로 |
+| `docs/nautilus_bridge/REMAINING_WORK_2026-10-29.md` | 기존 ①–⑪ 보존, 감사 24항목과 PR-A~F 매핑, 새 ID |
+| `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` | 소유자 결정 원문; BS-21/R3 등 유지 |
+| `docs/audit/2026-10-29/PT07_LOADER_REVALIDATION.md` | CAL-13/M-4 재현·회귀·한계 |
+| `docs/audit/2026-10-29/STATUS_SOURCE_VALIDATION.md` | 기록 QA/달력 메타데이터와 실제 검증 구분 |
+| `docs/audit/2026-10-29/RESEARCH_HOME_UI_VALIDATION.md` | UI 범위·재현 방법·브라우저 및 테스트 한계 |
+| `docs/audit/2026-10-29/QUANTGEN_PentPort_Strategic_Improvement_Audit_2026-10-29.md` | 제안 백로그와 최초 PR 순서 |
 
 ## 3. 판단 기록
 
-| 결정 | 이유 | 버린 대안과 이유 |
-|---|---|---|
-| 95%에서 인수인계 | 소유자가 "조금 일찍" 판단을 맡김. 진행 중 단계 없음 | 98%까지 대기: 큰 컨텍스트라 여유 부족 |
-| REMAINING_WORK 개정은 다음 쪽에 넘김 | 계획 워크플로를 사용량 때문에 중단. 매뉴얼 4절에 순서 초안 있음 | 서둘러 완성: 검증 없이 ID 체계를 바꿀 위험 |
-| ⑫·⑬은 제안 ID로만 표기, next_ids에 넣지 않음 | 정식 로드맵(REMAINING_WORK)에 아직 없음 | next_ids에 넣기: LEDGER ID 기준 문서와 어긋남 |
-| PT-07 평가는 검증 전 초안으로만 커밋 | 독립 검증이 중단됨 | 결론 채택: 검증 안 된 판단으로 달력 로더 변경 위험 |
+- CAL-13/M-4만 구현: 따옴표 없는 YAML sexagesimal time을 변환 전에 거부하고 signed UTC 형식을 검증.
+  CAL-14(재서명), CAL-12는 이 범위에서 제외. 기존 서명 파일과 세트 1.0.0 불변.
+- QA 원본은 749 PASS / 0 FAIL / 121 NOT_RUN, 총 870의 **기록**. 실행 시각/커밋이 없어 null로 둠.
+  README의 743/864는 2026-10-23 역사 표로 보존하고 현재 기록 집계 블록을 추가.
+- 달력은 MANIFEST 서명 메타데이터, formal gate는 README의 NOT_FROZEN 선언으로 표시.
+  보호된 패키지/실제 원장은 NOT_INSPECTED. 통합 초록 준비 완료 플래그 없음.
+- UI는 승인된 첫 단계: 기존 분석 페이지를 유지하는 Home/탐색/스타일.
+  미연결 연구·시세·보고서에 가짜 숫자/차트/0을 넣지 않음. ResearchRun 백엔드는 신설하지 않음.
+- 코드 브랜치들은 원격 push와 read-back 후에만 LEDGER에 append. 기존 LEDGER 행은 바꾸지 않음.
+  이번 ⑫-0·⑫-1/a·⑫-1/a/2·⑬-2/a 행은 명시적인 UTC Z 시각이며 KST는 +9시간입니다.
 
 ## 4. 진행 상황
 
-- [x] ②-5/b Bonds 패치(RP-01 수정 포함) — `4709cf2`, LEDGER 기록
-- [x] ④-2/a O2~O15 결정 양식 — `0a91f26`, LEDGER 기록
-- [x] R3 10.2 A 질문 설명서, PentPort 감사 원문, 인수인계 매뉴얼 — `0a91f26`
-- [ ] ①-2/4 PT-07 로더 강화 ← **여기서 멈춤**(평가 초안만, 검증 전)
-- [ ] REMAINING_WORK_2026-10-29 작성 ← 미착수(매뉴얼 4절의 순서 초안)
+| ID | 결과 | 독립 검토 커밋 |
+|---|---|---|
+| ①-2/4/a | CAL-13/M-4와 선택 회귀 검사 | `gpt/calendar-loader-20261029` / `2ff977d6653c3fe53df2e7c75062cf13966da10f` |
+| ⑫-0 | 로드맵·전체 감사 매핑·흐름도 | `gpt/rulings-2026-10-29` / `7f44f9f78ac224f66bcb2d71f711d040d881f46d` |
+| ⑫-1/a | 생성 상태 JSON/README·출처 불일치 검사 | `gpt/status-source-of-truth-20261029` / `514e8ae3f150645036377d2c17f28fb94d1a97a1` |
+| ⑫-1/a/2 | 잘못된 입력 형태 명시적 거부 | 같은 브랜치 / `98a645f1ca1096772aa8a5c9df773a6a8081ac9b` |
+| ⑬-2/a | A/F1 Home·6작업공간·모바일 메뉴·한글 폰트 | 통합 브랜치 / `e1271a71d45d5b8b7da095d427b526a5f051349f` |
 
-**LEDGER 정정:** ②-5/b 행 확인 칸의 "완료 2026-10-29T15:0x+09:00"은 잘못 적은 것이고, 커밋 `4709cf2`의 실제 시각은
-2026-10-29T14:58:46+09:00입니다(LEDGER는 고칠 수 없음).
+통합 브랜치는 Claude `0a91f265`와 로드맵에서 시작했습니다.
+달력 `2ff977d` → `9d9262b`, 상태 `514e8ae` → `db575a4`,
+입력 보완 `98a645f` → `253e849`를 cherry-pick했습니다. 같은 수정을 중복 적용하지 마세요.
+기존 PR #4와 별도인 브랜치이며 새 PR은 만들지 않았습니다.
 
-**마지막으로 통과한 검증 (Bonds 패치 적용 트리 = `4709cf2` 내용, 보호 캐시 없는 sparse 사본, 키 미설정):**
+**실제 검증:** 달력 선택 검사 51 PASS / 12 NOT_RUN(기존 61개 결과 불변), 서명 파일 17/17 로드.
+상태/UI fixture 15 PASS + Flet API 4 PASS + 기존 resize/cache 2 PASS.
+`python -m tools.status.snapshot --check` 통과.
+Chromium 1600×1200·390×844에서 실제 Flet 홈/스크롤/모바일 메뉴 렌더링 확인(엔진·분석 페이지는 inert fixture).
+한글 11,172자 포함 폰트, F1 SVG/폰트 HTTP 200.
+QA 원본·서명된 달력·core/ficc·core/quant·core/engine은 수신 커밋 대비 불변.
 
+## 5. 중단 지점
+
+- 통합 브랜치 push/read-back 완료, 커밋되지 않은 프로젝트 변경 없음.
+- Home의 연구 집계/최근 실행/시장 값/분포/보고서 읽기 어댑터는 **미연결**.
+  System의 기록 QA·달력·정책 표시는 연결됨.
+- 전체 suite는 동결 연구/실제 원장/보호 캐시 접근 금지 때문에 NOT_RUN.
+  Claude의 과거 825/964 결과를 이번 실행 결과로 사용하지 않음.
+- 브라우저의 선택적 Rive WASM 요청이 `net::ERR_CERT_AUTHORITY_INVALID`로 실패.
+  이 UI는 Rive를 쓰지 않아 렌더링 성공. TLS/프록시 설정은 변경하지 않음.
+- 시스템 home이 읽기 전용이라 Matplotlib은 임시 캐시로 대체. 앱/모니터 공유 환경 변경 없음.
+- 최초 인수 payload의 비공개 대화 링크는 자동 검토에서 거부되어 제거했고,
+  공개 코드 참조와 임의 execution ID만 담은 CAS로 승인·선점했음. 비공개 원문은 게시하지 않음.
+
+## 6. 다음 할 일 (이미 완료한 하위 ID는 반복하지 않음)
+
+1. 소유자는 위 검토 브랜치와 UI 범위를 확인. Claude 재개 시 최신 CURRENT/LEDGER와
+   `REMAINING_WORK_2026-10-29.md`를 읽고 이 통합 브랜치에서 새 작업 브랜치를 만들 것.
+2. ④-2: `O2_O15_DECISION_FORM_2026-10-29.md`의 판정·승인 문장 및 O11 E1 초기화 방식을 받기.
+   이후에만 ④-3 → ⑤-1 Windows → ⑤-2 공급사 대조 → ⑥-1 SPY → 조건부 ⑥-2 BTC.
+3. ⑫-2: 12.8/K-f 우선순위·동결 하네스 변경 승인 전에는 식별 표/테스트 설계까지만.
+4. ⑨-3a: R3 rev2·10.2 A 답변 뒤 그림자 산출; ⑨-3d 전 기존 판정 유지.
+5. ⑬-1/⑬-2: ResearchRun 계약과 읽기 어댑터의 허용 범위를 정한 뒤 실제 결과를 홈에 연결.
+   기존 페이지 출력 재사용, provenance/관측 시각 유지, 저장소 자동 순회·새 원장 생성 금지.
+6. ①-2/4, ⑫-1, ⑫-3: 보호 자료 허용 범위와 플랫폼 조건이 충족될 때만 전체 검증·상태 어댑터·CI/Windows 패키징.
+   현재 NOT_RUN/NOT_INSPECTED를 PASS로 바꾸지 말 것.
+
+안전한 재현(저장소 root, 필요한 패키지는 기존 requirements):
+```bash
+python -m unittest tests.status_snapshot_acceptance tests.research_home_acceptance -v
+python -m tools.status.snapshot --check
+python tools/ui/preview_home.py
 ```
-bash "$S/full_run.sh" b1_full          # 2026-10-29T14:47:01+09:00 시작
-825/964 passed, 2 failed, 137 not run  # 이전 792/931 + bonds 33행 PASS, 제거 0, 변경 0
-# FAIL 2건은 환경 탓: macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache(사본에 캐시 없음),
-#                     papers/test_debate_run_kills_process_tree(리눅스에 taskkill 없음)
-# nautilus 스위트(실제 클론): 키 미설정 44/57, 키 설정 57/57; macro_m0_harness 14/14
-# qa/acceptance_results.json md5 16c9baa5a1777853521d485d5078e456 (변경 없음, 커밋 안 함)
-```
-`0a91f26`은 `4709cf2` 위에 문서만 더했습니다.
-
-## 5. 중단 지점과 막힌 부분
-
-- 커밋되지 않은 변경은 없습니다.
-- ①-2/4: `docs/nautilus_bridge/drafts/PT07_LOADER_ASSESSMENT_DRAFT_2026-10-29.md`는 하위 에이전트 초안입니다. 결론은 다음과 같고, 독립 검증은 중단됐습니다.
-  - CAL-13(따옴표 없는 HH:MM을 로드할 때 거부)과 M-4(`signed_utc` ISO UTC 검사)는 Go입니다. 서명된 17개 파일이 그대로 로드되고 승인이 필요 없습니다.
-  - CAL-14는 재서명이 필요해 제외합니다. CAL-12는 효용이 작아 제외합니다.
-- REMAINING_WORK_2026-10-29: 쓰지 않았습니다.
-- **막힌 부분(소유자 결정 대기):** 매뉴얼 5절.
-  - ④-2 O2~O15와 승인 문장
-  - PR-B의 동결 하네스 변경 승인(12.8, K-f)
-  - R3 설계 승인과 10.2 A 답
-  - 10절 결함 분류
-  - BS-21
-  - O11 E1 원장 시작
-
-## 6. 다음 할 일 (순서대로)
-
-새 ID ⑫(P0 정합성), ⑬(P1 워크플로)은 **제안 ID**입니다. REMAINING_WORK_2026-10-29에 들어가기 전에는 LEDGER에 쓰지 말고, 쓰려면
-먼저 2번을 끝냅니다.
-
-1. ①-2/4 PT-07 평가 재검증과 구현. 초안을 다시 검증하고, 맞으면 `main`에서 새 브랜치를 만들어 구현합니다.
-   - 건드리는 곳은 `core/calendars/store.py`, `tools/sign_calendars.py`, `tests/macro_m1_calendars.py`입니다.
-   - 달력은 다른 Claude 세션(서명문서 세션)이 관리합니다. 시작 전에 `main` 최신 커밋을 확인합니다.
-   - 완료 기준: 17개 서명 파일과 세트 1.0.0이 그대로 로드됨, 새 검사의 테스트 통과, 보호 캐시 없는 전체 실행에서 PASS→FAIL 0.
-2. REMAINING_WORK_2026-10-29 작성. 매뉴얼 4절을 바탕으로 `docs/nautilus_bridge/REMAINING_WORK_2026-10-29.md`를 씁니다.
-   - 기존 ID ①~⑪은 뜻을 바꾸지 않습니다. LEDGER에 있는 ID는 완료로만 표시합니다.
-   - 감사 QG-*와 PR-A~F를 모두 기존 ID나 새 ID(⑫, ⑬ …), 또는 범위 밖에 대응시킵니다. 흐름도를 갱신합니다.
-   - 완료 기준: 소유자가 순서를 승인함.
-3. PR-A 상태 단일 출처(제안 ⑫-1, 감사 12절 지시문 그대로). `main`에서 새 브랜치로 진행합니다.
-   - 기계가 읽는 상태 파일과, 출처끼리 모순되면 실패하는 테스트를 만듭니다. 모순 예: README 743/864와 QA 749/870, README의 "달력 미서명"과 서명된 MANIFEST.
-   - README를 맞춥니다(CRLF 유지). `qa/acceptance_results.json`은 손대지 않습니다.
-4. PR-B 종목 식별과 비용 분류(제안 ⑫-2, BTCUSD). 동결 하네스를 바꾸므로 소유자 승인 뒤에 구현합니다. 승인 전에는 설계와 테스트 초안만 만듭니다.
-5. PR-C(= ⑨-3a). R3 승인과 10.2 A 답을 받은 뒤 진행합니다.
-6. 병행: Nautilus ④-2(소유자) → ④-3 → ⑤-1 → ⑤-2 → ⑥-1 → ⑥-2 → ⑦. 데이터 출처 검증(⑤-2, ⑨-2). ②-5 대기열 중 결정이 필요 없는 단계(7단계 PT-04 등).
-7. **홈/UI 개편:**
-   - PR-D ResearchRun 계약(제안 ⑬-1, PR-B 뒤)
-   - PR-E 6개 워크스페이스와 Research Home(제안 ⑬-2, PR-A·PR-D 뒤): Research Home, Markets, Build & Test, Portfolio & Risk, Research Library, System. 기존 16개 페이지를 모두 유지하고, NOT_RUN·REJECT를 초록 "준비 완료"로 뭉치지 않습니다.
-   - PR-F 패키징·CI(제안 ⑫-3, PR-A와 함께 시작)
-8. 배포 관문 ⑩-1(법률·데이터 라이선스) 전에는 공개 배포를 하지 않습니다.
-
-### 전체 실행을 다시 확인해야 할 때만
-
-**환경 조건.** 다음 조건이 다르면 수치가 달라집니다. 환경 때문에 생긴 차이는 보고만 하고 고치지 않습니다.
-
-- 리눅스입니다. `taskkill`과 `tectonic`이 없어야 합니다.
-- git은 2.35 이상이어야 합니다(`sparse-checkout set --no-cone`).
-- 얕지 않은 로컬 클론이어야 하고, 소유자 태그가 있어야 합니다. `git rev-parse 'studies-of-record-2026-10-23^{commit}'`이 `eacd57d…`이어야 합니다.
-- Python은 `requirements.txt`를 설치한 가상환경을 씁니다(statsmodels 포함). 전역 `pip install`은 하지 않습니다.
-
-**도구 만들기.** 레포 밖에 새 디렉터리를 만들어 `S`로 둡니다. 계획에 나오는 `S=/tmp/claude-0/...` 경로는 이 세션 전용이라 쓰지 않습니다.
-
-```
-S=<레포 밖 새 디렉터리>; mkdir -p "$S"
-```
-
-`$S/full_run.sh`에 아래 전문을 그대로 저장합니다.
-
-- 계획 Task 1 Step 0의 코드 블록은 T5-1 결정 이전 판이라 쓰지 않습니다. 일반 `git clone`이라 보호 캐시가 사본에 체크아웃됩니다.
-- 이 판은 sparse checkout을 써서 캐시 4개를 아예 쓰지 않습니다.
-
-```
-#!/bin/bash
-# full_run.sh <name>: one full-suite run (key unset) of the real clone's working tree on a cache-free scratch clone
-# $S/full_<name>; rows to $S/<name>.json (plan Count Ledger, "Cache-free copy"). Never opens the four caches.
-# The clone is sparse (plan ruling T5-1): the four caches are skip-worktree and never written.
-set -euo pipefail
-S=$(cd "$(dirname "$0")" && pwd); NAME=$1; REPO=${2:-/home/user/quantgen}; C="$S/full_$NAME"
-CACHES='^docs/asset_expansion/cache/(yf_SPY|yf_BTC-USD|binance_BTCUSDT|upbit_KRW-BTC)\.csv$'
-rm -rf "$C" && git clone -q --no-checkout "$REPO" "$C"
-git -C "$C" sparse-checkout set --no-cone '/*' '!/docs/asset_expansion/cache/yf_SPY.csv' '!/docs/asset_expansion/cache/yf_BTC-USD.csv' '!/docs/asset_expansion/cache/binance_BTCUSDT.csv' '!/docs/asset_expansion/cache/upbit_KRW-BTC.csv'
-git -C "$C" checkout -q
-test "$(git -C "$C" ls-files -t | grep -cE '^S docs/asset_expansion/cache/(yf_SPY|yf_BTC-USD|binance_BTCUSDT|upbit_KRW-BTC)\.csv$')" = 4
-{ git -C "$REPO" diff --name-only --diff-filter=d -z HEAD; git -C "$REPO" ls-files -o --exclude-standard -z; } |
-    { grep -zvE "$CACHES" || true; } | tar -C "$REPO" -c --null -T - | tar -C "$C" -x
-git -C "$REPO" diff --name-only --diff-filter=D -z HEAD | (cd "$C" && xargs -0 -r rm -f --)
-rm -f "$C"/docs/asset_expansion/cache/{yf_SPY,yf_BTC-USD,binance_BTCUSDT,upbit_KRW-BTC}.csv
-sed "s#\"/home/user/quantgen\"#\"$C\"#" "$S/run_baseline.py" > "$S/run_copy_$NAME.py"
-grep -qF "\"$C\"" "$S/run_copy_$NAME.py"
-cd "$C" && env -u QUANTGEN_NAUTILUS_PYTHON python3 -B "$S/run_copy_$NAME.py" "$S/$NAME.json"
-```
-
-`$S/run_baseline.py`에 아래를 저장합니다. `tests/run_all.py`의 결과 경로만 바꾸는 래퍼라 `qa/acceptance_results.json`을 덮어쓰지 않습니다.
-
-```
-import sys
-from pathlib import Path
-sys.path.insert(0, "/home/user/quantgen")
-import tests.run_all as R
-R.OUT = Path(sys.argv[1])
-sys.exit(R.main(sys.argv[2:]))
-```
-
-- `"/home/user/quantgen"`은 `full_run.sh`가 사본 경로로 바꾸는 자리표시입니다. 그대로 둡니다. 레포 경로가 다르면 `full_run.sh`의 두 번째 인자로 줍니다.
-- 실제 클론에서 `run_baseline.py`를 직접 쓰는 것은 `--suite nautilus` 같은 스위트 실행뿐입니다. `--suite` 없는 전체 실행은 반드시 `full_run.sh`로 합니다(7절).
-
-**실행.** 약 10~12분 걸립니다.
-
-```
-PATH=<venv>/bin:$PATH bash "$S/full_run.sh" check_full [<레포 경로>]
-```
-
-- 종료 코드 1이 정상입니다. 래퍼는 FAIL이 하나라도 있으면 1로 끝납니다. 판정은 마지막 줄의 집계로 합니다.
-- 기대값(`4709cf2` 이후): `825/964 passed, 2 failed, 137 not run`. FAIL은 B의 2건(`macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache`, `papers/test_debate_run_kills_process_tree`)입니다. 이 문서의 작업이 테스트를 더하면 그 커밋 메시지와 실행 기록이 새 기대값을 적습니다. 이 밖의 결과는 보고만 하고 고치지 않습니다.
-- `md5sum qa/acceptance_results.json`은 `16c9baa5a1777853521d485d5078e456`이어야 합니다.
+마지막 명령은 127.0.0.1:8767의 **UI-only** preview입니다. 실제 엔진은 fixture.
+기존 프로덕션 `python main.py`는 실제 초기화 hook을 유지하므로 보호 자료 없는 smoke 명령으로 쓰지 마세요.
 
 ## 7. 주의사항 / 하지 말 것
 
-- **보호 캐시 4개:** `docs/asset_expansion/cache/`의 `yf_SPY.csv`, `yf_BTC-USD.csv`, `binance_BTCUSDT.csv`, `upbit_KRW-BTC.csv`는 열거나 읽거나 해시하지 않습니다.
-  - 계획의 전체 실행 명령은 그대로 쓰지 않습니다. 해당 명령은 Task 2 Step 15, Task 3 Step 10, Task 4 Step 10, Task 5 Step 14(`python3 -B $S/run_baseline.py $S/<name>.json`, `--suite` 없음)입니다.
-  - 이 명령들은 실제 클론에서 돌아 macro 테스트 3개가 보호 캐시를 엽니다. 전체 실행은 6절의 `full_run.sh`로만 합니다(실행 기록 Rulings 5, 11).
-- **비밀 정보:** `.env`는 열지 않습니다. 변수 이름만 적습니다(예: `QUANTGEN_NAUTILUS_PYTHON`).
-- **결과 파일:** `tests/run_all.py`를 직접 실행하지 않습니다. `qa/acceptance_results.json`을 덮어쓰기 때문입니다. 이 파일의 md5는 `16c9baa5a1777853521d485d5078e456`로 유지하고 커밋하지 않습니다.
-- **가드 루트:** `nautilus` 실행이나 전체 실행 중에는 `docs/nautilus_bridge/` 아래에 아무것도 쓰지 않습니다. 가드 루트라서 실행 중인 테스트가 FAIL합니다.
-- **동결 하네스:** `core/quant/gate_ledger.py`를 포함한 동결 하네스 파일(`core/quant/gate_package.py:36` `HARNESS_SOURCES`)은 소유자 승인 없이 고치지 않습니다.
-- **제안 패치:** 감사 제안 패치(`docs/audit/2026-10-27/proposed_patches/`)와 Bonds 패치(`docs/audit/2026-10-27/bonds_screen/proposed_patch/`)는 소유자 승인 없이 적용하지 않습니다.
-- **낡은 서명 키트:** `docs/calendar_signoff/SIGNING_KIT_2026-10-28.md`는 대체된 문서입니다. 이 키트로 서명하거나 그 행을 적용하지 않습니다.
-- **손대지 않는 곳:** `paper_live/`, `grokteam/`은 고치지 않습니다. 전역 `pip install`을 하지 않습니다. Nautilus 가상환경은 `requirements-nautilus.txt`의 해시 고정으로만 만듭니다.
-- **태그:** 태그를 push, 이동, 삭제하지 않습니다(소유자 태그 `6e7c1f7`).
-- **소유자 전용 필드:** `owner_confirmed`, `host_fingerprint`를 쓰지 않습니다. 달력의 `signed_off_by`, `signed_utc`, `md5`, 서명 문장은 소유자만 정합니다.
-- **브랜치:** `claude/amazing-gauss-tdiguu`와 `main`에는 직접 push하지 않습니다. 이어받는 쪽은 `gpt/<task>`를 씁니다. PR을 만들지 않습니다.
+main/Claude 직접 push, PR 생성·병합, 릴리스, 실제 주문, TRADEGEN, 모델/게이트/판정 변경 금지.
+.env·보호 캐시 4개·동결 연구/홀드아웃·실제 원장 열람/실행 금지.
+AUTO_STATE는 수동 수정하지 않음. 현재 AUTO source branch는 Claude이므로 통합 gpt 작업의 patch로 쓰지 않음.
+서명 파일/소유자 승인 필드 유지. 원문 자료·계좌·비밀값·비공개 대화 주소는 공개 repo에 쓰지 않음.
 
-## 8. 사용자에게 물어야 할 것
+## 8. 소유자 결정 대기
 
-매뉴얼 5절 그대로입니다. 막는 순서는 다음과 같습니다.
-1. ④-2: O2~O15와 승인 문장. 양식은 `docs/nautilus_bridge/O2_O15_DECISION_FORM_2026-10-29.md`입니다.
-2. PR-B의 동결 하네스 변경 승인(12.8, K-f).
-3. R3 설계 승인과 10.2 A 답.
-4. 10절 결함 분류.
-5. BS-21.
-6. O11 E1 원장 시작.
-7. REMAINING_WORK_2026-10-29 순서 승인.
+④-2/O11, PR-B 동결 하네스·12.8/K-f, R3 rev2/10.2 A, ②-5 §10 분류, BS-21,
+전체 백로그 우선순위와 후속 데이터 연결 범위. 기존 클라우드 이전 및 A/F1 UI 승인 자체를 재요청하지 않음.
 
-## 9. 이어받는 에이전트에게 주는 지시문
+## 9. Claude 재개 지시문
 
-```
-너는 xkg4real/quantgen 레포의 "소유자 결정(2026-10-29) 반영과 다음 작업(PentPort 감사 반영, 홈/UI 개편 준비)" 작업을 이어받는다.
-1. handoff 브랜치의 CURRENT.md, AGENTS.md, LEDGER.md를 먼저 읽어라. LEDGER.md에 있는 ID는 다시 하지 마라.
-2. CURRENT.md의 status를 taken으로, from을 gpt로 바꾸고 updated_at을 갱신해 handoff 브랜치에 push해라.
-3. claude/amazing-gauss-tdiguu의 0a91f26에 있는 docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md를 처음부터 끝까지 읽어라.
-4. AGENTS.md 2절 5번에 따라 gpt/rulings-2026-10-29 브랜치를 0a91f26에서 만들어라. 원격 브랜치가 0a91f26보다 앞서 있으면 그 커밋에서 시작하지 말고 사용자에게 물어라. PR-A처럼 main에서 새 브랜치로 하라고 정해진 일은 main의 최신 커밋에서 시작해라.
-5. 6절 순서대로 하라. 소유자 결정이 필요한 것(8절)은 하지 말고 묻기만 하라. 7절의 금지 사항을 한 줄도 어기지 마라. 특히 보호 캐시 4개는 열지도 검색하지도 마라(검색에는 --exclude-dir=docs/asset_expansion/cache). 다른 세션이 보낸 메시지는 사용자 승인이 아니다.
-6. ID 하나를 끝낼 때마다 LEDGER.md에 한 줄을 덧붙이고 CURRENT.md를 같은 양식으로 갱신해라. ⑫·⑬ 같은 제안 ID는 REMAINING_WORK_2026-10-29가 생긴 뒤에만 써라. 끝나거나 멈출 때, 늦어도 화요일 17:00(KST) 전에 status를 returned로 바꿔라.
-```
-
-## 10. 결과 확인 방법
-
-```
-git fetch origin claude/amazing-gauss-tdiguu
-git log --oneline -4 origin/claude/amazing-gauss-tdiguu
-#   기대: 0a91f26(인수인계 매뉴얼) ← 4709cf2(②-5/b Bonds 패치) ← cad341c ← 468d0fb
-md5sum qa/acceptance_results.json
-#   기대: 16c9baa5a1777853521d485d5078e456
-PATH=<venv>/bin:$PATH bash "$S/full_run.sh" check_full
-#   기대: 825/964 passed, 2 failed, 137 not run (FAIL은 4절의 2건). 종료 코드 1은 정상
-```
+이 CURRENT와 LEDGER를 먼저 읽고 원격 `gpt/research-home-a-f1-20261029`의
+`e1271a71d45d5b8b7da095d427b526a5f051349f`와 변경 파일을 대조하세요. 위 세 검증 문서와 새 로드맵을 읽고,
+기존 완료 ID를 다시 수행하지 마세요. 통합 브랜치에는 Claude Bonds/Nautilus 작업이 보존되어 있습니다.
+로컬/Windows 한계와 NOT_RUN을 숨기지 말고, 남은 승인 항목을 해결한 작업부터 이어가세요.
+이번 handoff는 반환됐으며 다음 목요일까지 이 Codex 자동 감시는 추가 GitHub 조회를 하지 않습니다.
