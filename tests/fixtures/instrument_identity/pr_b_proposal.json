@@ -1,0 +1,142 @@
+{
+  "status": "DESIGN_ONLY_NOT_APPROVED",
+  "baseline_commit": "7db616c6d5ccbe82e8d64df04d83cf1d3127e86e",
+  "cases": [
+    {
+      "symbol": "BTCUSD",
+      "current_class": "us",
+      "proposed_class": "crypto",
+      "base": "BTC",
+      "quote": "USD",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "BTC-USD",
+      "current_class": "crypto",
+      "proposed_class": "crypto",
+      "base": "BTC",
+      "quote": "USD",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "BTCUSDT",
+      "current_class": "crypto",
+      "proposed_class": "crypto",
+      "base": "BTC",
+      "quote": "USDT",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "KRW-BTC",
+      "current_class": "crypto",
+      "proposed_class": "crypto",
+      "base": "BTC",
+      "quote": "KRW",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "EURUSD",
+      "current_class": "us",
+      "proposed_class": "fx",
+      "base": "EUR",
+      "quote": "USD",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "EURUSD=X",
+      "current_class": "fx",
+      "proposed_class": "fx",
+      "base": "EUR",
+      "quote": "USD",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "FX@EURUSD",
+      "current_class": "fx",
+      "proposed_class": "fx",
+      "base": "EUR",
+      "quote": "USD",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "NAS:AAPL",
+      "current_class": "us",
+      "proposed_class": "us",
+      "base": "AAPL",
+      "quote": "USD",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "AAPL",
+      "current_class": "us",
+      "proposed_class": "us",
+      "base": "AAPL",
+      "quote": "USD",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "SPY",
+      "current_class": "us",
+      "proposed_class": "us",
+      "base": "SPY",
+      "quote": "USD",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "005930",
+      "current_class": "krx_stock",
+      "proposed_class": "krx_stock",
+      "base": "005930",
+      "quote": "KRW",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "069500",
+      "current_class": "krx_etf",
+      "proposed_class": "krx_etf",
+      "base": "069500",
+      "quote": "KRW",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "252670.KS",
+      "current_class": "krx_etf",
+      "proposed_class": "krx_etf",
+      "base": "252670",
+      "quote": "KRW",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "ES=F",
+      "current_class": "futures",
+      "proposed_class": "futures",
+      "base": "ES",
+      "quote": "USD",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "UNKNOWN",
+      "current_class": "us",
+      "proposed_class": null,
+      "base": null,
+      "quote": null,
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "VOD.L",
+      "current_class": null,
+      "proposed_class": null,
+      "base": "VOD",
+      "quote": "GBP",
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    },
+    {
+      "symbol": "",
+      "current_class": null,
+      "proposed_class": null,
+      "base": null,
+      "quote": null,
+      "required_evidence": "known alias registry or provider instrument metadata; no implicit venue"
+    }
+  ]
+}
