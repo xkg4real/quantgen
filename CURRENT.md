@@ -4,9 +4,9 @@ reason: milestone
 from: gpt
 task: rulings-2026-10-29
 cycle: 2026-10-27
-done_ids: ②-5/b, ④-2/a, ①-2/4/a, ⑫-0, ⑫-1/a
+done_ids: ②-5/b, ④-2/a, ①-2/4/a, ⑫-0, ⑫-1/a, ⑫-1/a/2
 next_ids: ①-2/4, ⑫-1, ⑬-2/a
-updated_at: 2026-10-29T07:41:28Z
+updated_at: 2026-10-29T07:55:43Z
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/rulings-2026-10-29
@@ -24,6 +24,8 @@ handoff_id: 2026-10-27/rulings-2026-10-29/1cebe23741ffed482a3205e0b3bd4a3c208b0e
 # 인수인계: 소유자 결정(2026-10-29) 반영과 다음 작업(PentPort 감사 반영, 홈/UI 개편 준비)
 
 ## 0. 한 줄 요약
+
+**Codex milestone ⑫-1/a/2 (2026-10-29T07:55:43Z):** 상태 출처의 null/list/잘못된 QA 행을 명시적으로 거부하도록 보완. Commit 98a645f1ca1096772aa8a5c9df773a6a8081ac9b. synthetic fixture 9/9 PASS; 원격 branch SHA read-back; 모델/게이트 불변.
 
 **Codex milestone ⑫-1/a (2026-10-29T07:41:28Z):** PR-A 한정 단계: 기록 QA·달력 메타데이터·정책 분리와 출처 불일치 검사. Commit 514e8ae3f150645036377d2c17f28fb94d1a97a1. fixture 8/8 PASS; status --check 통과; QA 원본/서명 파일 불변; frozen gate/study NOT_INSPECTED; 전체 PR-A/CI 완료 아님.
 
