@@ -116,3 +116,20 @@ are preserved; do not ask for blanket migration approval again.
 Sources: `HANDOFF_MANUAL_2026-10-29.md`, `OWNER_RULINGS_LOG.md`, original roadmap,
 `docs/audit/2026-10-29/QUANTGEN_PentPort_Strategic_Improvement_Audit_2026-10-29.md`,
 and the latest handoff CURRENT/LEDGER. Historical test totals are provenance, not a new run.
+
+## Verified continuation checkpoint — 2026-10-29
+
+- Completed bounded follow-ups: ②-5/c PT-04 (`7db616c`, 96 focused PASS);
+  ⑫-2/a design/characterization (`00d32eb`, 3 PASS, 17 aliases).
+- ⑫-3 packaging/CI is **not implemented, not approval-blocked**. It is the next
+  recommended Codex implementation; inspect pyproject dependency/module/resource
+  omissions and test a clean excluded-path install. No workflow run is claimed.
+- UI application candidate: `gpt/ui-apply-main-20261029` / `e46f81f` (UI/status only).
+  Automatic approval review rejected PR creation under the prior explicit no-PR/
+  no-merge instruction. The later UI request was not accepted as a clear override.
+  No PR or main change occurred. The owner clarified the viewed app is local Flet;
+  a PC checkout update and restart are also needed. Public web deployment is unstarted.
+- Core remaining decisions: O2–O15/O11; PR-B frozen harness/12.8/K-f; R3 rev2/10.2 A.
+  These do not prevent ordinary packaging/CI or bounded display-only preparation.
+- The owner requested a private Word/PDF progress report and intends to continue
+  through Codex. See `CONTINUATION_STATUS_2026-10-29.md` for next-task conditions.
