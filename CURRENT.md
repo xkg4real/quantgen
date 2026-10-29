@@ -4,16 +4,16 @@ reason: milestone
 from: claude
 task: rulings-2026-10-29
 cycle: 2026-10-27
-done_ids: ②-5/b
-next_ids: ④-2/a, ①-2/4
-updated_at: 2026-10-29T14:59:04+09:00
+done_ids: ②-5/b, ④-2/a
+next_ids: ①-2/4
+updated_at: 2026-10-29T15:09:53+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/amazing-gauss-tdiguu
-work_commit: 4709cf2
+work_commit: 0a91f26
 uncommitted_changes: no
 pr: 4
-usage_weekly_pct: unknown
+usage_weekly_pct: 95
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-03T17:00:00+09:00
 session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
@@ -23,9 +23,14 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 ## 0. 한 줄 요약
 
-로드맵 ③(Nautilus)은 끝났고 기록돼 있습니다(이전 문서는 `archive/`). 소유자가 2026-10-29에 남은 결정에 답했습니다. 지금은
-세 가지를 진행합니다. ④-2 결정 양식 준비(④-2/a), Bonds 패치 적용(②-5/b, ②-5 대기열 3단계), PT-07 로더 강화의 효용 평가와
-재설계(①-2/4)입니다. 설명 요청(10절 결함, ⑦-4, R3 질문)은 채팅과 문서로 답합니다.
+**주간 사용량 95%(소유자 알림, 2026-10-29 15:10 KST).** 인수인계용 전체 정리는 `docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md`
+(커밋 `0a91f26`)에 있습니다. 이어받는 쪽은 그 문서부터 읽으십시오. 받은 과업, 현재 상태, 멈춘 지점, 남은 작업 순서, 소유자 결정 대기,
+금지 사항이 다 들어 있습니다.
+
+- 끝난 것: ②-5/b Bonds 패치(`4709cf2`), ④-2/a O2~O15 결정 양식, R3 10.2 A 설명서.
+- 남은 것: ①-2/4 PT-07 평가 초안의 재검증과 구현. PentPort 감사를 반영한 `REMAINING_WORK_2026-10-29.md` 작성(매뉴얼 4절의 순서 초안 기준).
+- **LEDGER 정정:** ②-5/b 행 확인 칸의 "완료 2026-10-29T15:0x+09:00"은 잘못 적은 것이고, 커밋 `4709cf2`의 실제 시각은
+  2026-10-29T14:58:46+09:00입니다(LEDGER는 고칠 수 없어 여기에 적음).
 
 ## 1. 목표와 완료 조건
 
@@ -75,9 +80,10 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 - [x] PR #4 세 번째 `main` 병합(`468d0fb`, PR #10 테스트 수정) 검증과 push. 792/931 passed, 2 failed, 137 not run
 - [x] 소유자 결정 기록과 X-1 데이터 접근 이력 문안 — 커밋 `cad341c`
-- [ ] ④-2/a O2~O15 결정 양식 ← 초안과 검증 진행 중(워크플로)
+- [x] ④-2/a O2~O15 결정 양식 — `docs/nautilus_bridge/O2_O15_DECISION_FORM_2026-10-29.md`(커밋 `0a91f26`, 독립 검증 반영), LEDGER 기록함
 - [x] ②-5/b Bonds 패치 적용(RP-01 수정 포함) — 커밋 `4709cf2`, LEDGER 기록함. 825/964 passed, 2 failed, 137 not run(이전 + bonds 33행 PASS)
-- [ ] ①-2/4 PT-07 효용 평가와 재설계 ← 평가 진행 중(워크플로)
+- [ ] ①-2/4 PT-07 효용 평가와 재설계 ← **여기서 멈춤.** 초안 `docs/nautilus_bridge/drafts/PT07_LOADER_ASSESSMENT_DRAFT_2026-10-29.md`(검증 전; 결론 CAL-13·M-4 Go, CAL-14·CAL-12 제외, 승인 불필요)
+- [ ] REMAINING_WORK_2026-10-29 작성 ← 미착수(매뉴얼 4절 초안)
 
 **마지막으로 통과한 검증 (Bonds 패치 적용 작업 트리, `4709cf2`와 같은 내용, 키 미설정):**
 
