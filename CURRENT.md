@@ -1,14 +1,14 @@
 ---
-status: returned
+status: taken
 reason: manual
 from: gpt
-task: owner-continuation-2026-10-29
+task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ②-5/c, ⑫-2/a
-next_ids: ⑫-3, ⑫-2, ⑨-3a, ④-2, ⑬-1, ⑬-2
-updated_at: 2026-10-29T18:03:39.000+09:00
+done_ids: none
+next_ids: ⑫-3, ⑬-1, ⑬-2, ⑨-2, ⑩-1, ⑩-2, ⑪-1
+updated_at: 2026-10-29T18:20:27.000+09:00
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: none
 work_branch: gpt/handoff-continuation-20261029
 work_commit: 45e2d3ecff14f9273d6e97bfc1b6b1c0bd0a5c1a
 uncommitted_changes: no
@@ -17,11 +17,15 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: fd9c9670-910e-460e-92de-c83a8661a364
-handoff_id: 2026-10-27/owner-continuation-2026-10-29/2b2e64c32720af5018c283a6aea7ae1218b16b2b
+execution_id: 6829eea5-c7bf-4ac8-91d5-d03ee12b741e
+handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
-# Owner continuation: verified progress and next implementation
+# Owner-directed product work — ownership notice
+
+Active Codex work explicitly requested by the owner. This update only prevents concurrent takeover. Consolidated results/handoff are deferred at the owner's request. The prior report below is historical, not a new delivery or instruction to resume. UI PR creation/main integration was subsequently authorized for the selected UI scope; frozen research, actual-ledger and TRADEGEN boundaries remain.
+
+# Historical prior report
 
 ## 0. 한 줄 요약
 The owner requested a progress/decision report and intends to continue through Codex
