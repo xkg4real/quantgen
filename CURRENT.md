@@ -1,12 +1,12 @@
 ---
-status: checkpoint
-reason: milestone
+status: handoff
+reason: usage_limit_weekly
 from: claude
 task: rulings-2026-10-29
 cycle: 2026-10-27
 done_ids: ②-5/b, ④-2/a
 next_ids: ①-2/4
-updated_at: 2026-10-29T15:09:53+09:00
+updated_at: 2026-10-29T15:38:29+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/amazing-gauss-tdiguu
@@ -19,99 +19,111 @@ usage_resets_at: 2026-11-03T17:00:00+09:00
 session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 ---
 
-# 인수인계: 소유자 결정(2026-10-29) 반영 — ④-2 양식, Bonds 패치, PT-07 재설계
+# 인수인계: 소유자 결정(2026-10-29) 반영과 다음 작업(PentPort 감사 반영, 홈/UI 개편 준비)
 
 ## 0. 한 줄 요약
 
-**주간 사용량 95%(소유자 알림, 2026-10-29 15:10 KST).** 인수인계용 전체 정리는 `docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md`
-(커밋 `0a91f26`)에 있습니다. 이어받는 쪽은 그 문서부터 읽으십시오. 받은 과업, 현재 상태, 멈춘 지점, 남은 작업 순서, 소유자 결정 대기,
-금지 사항이 다 들어 있습니다.
-
-- 끝난 것: ②-5/b Bonds 패치(`4709cf2`), ④-2/a O2~O15 결정 양식, R3 10.2 A 설명서.
-- 남은 것: ①-2/4 PT-07 평가 초안의 재검증과 구현. PentPort 감사를 반영한 `REMAINING_WORK_2026-10-29.md` 작성(매뉴얼 4절의 순서 초안 기준).
-- **LEDGER 정정:** ②-5/b 행 확인 칸의 "완료 2026-10-29T15:0x+09:00"은 잘못 적은 것이고, 커밋 `4709cf2`의 실제 시각은
-  2026-10-29T14:58:46+09:00입니다(LEDGER는 고칠 수 없어 여기에 적음).
+Claude가 주간 사용량 95%에서 소유자 지시로 조금 일찍 인수인계합니다. 작업 브랜치 `claude/amazing-gauss-tdiguu`의 `0a91f26`은
+원격에 push됐고 원격 반영을 확인했습니다(`git ls-remote` 일치). 커밋되지 않은 변경은 없습니다.
+**가장 먼저 `docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md`를 처음부터 끝까지 읽으십시오.** 그 문서에 받은 과업, 상태,
+멈춘 지점, 남은 작업 순서, 소유자 결정 대기, 금지 사항이 모두 있습니다. 다음 할 일은 6절입니다.
 
 ## 1. 목표와 완료 조건
 
-- **사용자 요청 (원문 그대로):**
-  > (가) 결정으로 진행하겠습니다
-  > 그리고 앞서 말씀하신 부분에 대해선 다음과 같이 답변하겠습니다.
-  >
-  > 1. X-1 공개 여부 포함
-  > 2. 2-5 10절 결함을 한 문장으로 설명해주세요. 10절 결함에 대한 결정은 설명 이후에 진행하겠습니다. Bonds 패치 적용은 진행해주세요. 7-4는 REMAINING WORK에 없는데, 어디서 나온 걸까요? 이것도 한 문장으로 설명해주세요.
-  > 3. 검토하고 다시 설계함으로써 얻는 효용 내지 앱 전체에 대한 이점이 크면 진행하세요. 만약 사용자 승인이 필요하다면 즉시 앱 알림과 함께 이메일로도 알려주세요.
-  > 4. 설명 부탁드립니다.
-  > 5. 4-1 심사가 반드시 필요하다면 보유하고 있는 다른 계정으로 일단 진행은 할텐데, 시간이 조금 걸릴 것 같습니다. 우선 4-2부터 해서 다른 task들을 진행해주세요.
-
-  (`docs/nautilus_bridge/OWNER_RULINGS_LOG.md`, "(가), X-1, ②-5, PT-07 재설계, R3 질문, ④-1과 ④-2" 절)
-- **완료 조건:**
-  - ④-2/a: O2~O15 결정 양식(`docs/nautilus_bridge/O2_O15_DECISION_FORM_2026-10-29.md`)이 스펙 2절, Step 1b, Owner context와 맞고 커밋됨. ④-2 자체(판정과 승인 문장)는 소유자 몫.
-  - ②-5/b: `docs/audit/2026-10-27/bonds_screen/proposed_patch/bonds_screen.diff`가 RP-01 수정과 함께 적용됨. `bonds` 스위트(테스트 33개)가 통과하고, 보호 캐시 없는 전체 실행에서 PASS→FAIL 0.
-  - ①-2/4: 효용 평가 문서가 있고, 효용이 크면 서명 파일을 그대로 로드하는 재설계가 테스트와 함께 들어감. 소유자 승인이 필요하면 앱 알림과 이메일로 알리고 `waiting_on: owner`.
-- **범위 밖:** ④-1 심사(소유자가 다른 계정으로 진행), 10절 결함 분류(소유자 결정 대기), BS-21 조달비용 공식 변경(소유자 결정 대기), PR #4를 `main`에 합치는 일(소유자).
+- **사용자 요청 (원문 그대로, 2026-10-29 15:3x KST, 인수인계 도구 창에서 전달됨):**
+  > 98% 사용되면, 마지막 코드 변경을 작업 브랜치에 push하고 원격 반영을 확인해줘. 기존 인수인계 절차에 따라 CURRENT.md를 status: handoff로 올리고, 작업 브랜치·커밋·완료한 일·남은 일·검증 결과·막힌 부분을 기록해줘. 완료 항목은 LEDGER에도 남겨줘. Codex가 이어받아 기존 작업과 홈/UI 개편을 진행할 예정이야. 인수인계 하다가 토큰 다 떨어지면 안되니까 너가 판단하고 토큰 안 끊기게 조금 일찍 진행하는 작업 멈추고 인수인계 작업 시작해도 좋아.
+- **그 전 요청과 방향:** PentPort 감사를 반영해 남은 작업 순서를 정하고 REMAINING_WORK를 고칠 것(2026-10-29). 소유자 요약 원문은
+  `docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md` 7절에, 감사 원문은
+  `docs/audit/2026-10-29/QUANTGEN_PentPort_Strategic_Improvement_Audit_2026-10-29.md`에 있습니다. 그 전 결정(X-1, Bonds, ④-1·④-2 등)은
+  `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` 맨 끝 절들에 원문으로 있습니다.
+- **완료 조건:** 6절의 각 항목에 적었습니다.
+- **범위 밖:** 실주문 경로, 리더보드, 소셜 트레이딩, PFOF, 엔진 전면 재작성(매뉴얼 4절). PR 병합(소유자).
 
 ## 2. 근거
 
-| 종류 | 위치 | 이 작업에서 쓰는 부분 |
+| 종류 | 위치 | 쓰는 부분 |
 |---|---|---|
-| 로드맵 | `docs/nautilus_bridge/REMAINING_WORK_2026-10-27.md` | ②-5, ④-1, ④-2 |
-| 소유자 결정 | `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` | 맨 끝 2026-10-29 절, "PR #4 충돌 해결" 절 |
-| 오류 대장 | `docs/nautilus_bridge/KNOWN_ERRORS_REGISTER_2026-10-28.md` | 4.1 대기열 3단계(Bonds), 7단계(PT-04), 4.4의 2번(⑦-4), 10절 |
-| Bonds 감사 | `docs/audit/2026-10-27/bonds_screen_audit.md` | 5.6 RP-01, ⑦-4, 패치 표 |
-| Bonds 패치 | `docs/audit/2026-10-27/bonds_screen/proposed_patch/bonds_screen.diff`, `bonds_screen_acceptance.py.txt` | 적용 대상 9개 파일, 테스트 33개 |
-| Nautilus 스펙 | `docs/superpowers/specs/2026-10-26-nautilus-bridge-design.md` | 2절 O1~O15, Step 1b, Appendix B, Owner context |
-| R3 설계 | `docs/superpowers/specs/2026-10-27-strategy-lab-run-registry-design.md` | 10.2 A 질문 |
-| PT-07 | 커밋 `d865c7f`(철회된 판), `docs/audit/2026-10-27-implementation-audit-report.md` PT-07, `docs/audit/2026-10-27/calendars.md` | CAL-12, CAL-13, CAL-14, M-4 |
-| 달력 서명 | `docs/audit/2026-10-27/13_signature_register.md`, `18_signature_set.md`, `tools/sign_calendars.py` | 17개 파일과 세트 1.0.0 서명 |
-| 실행 기록 | `docs/superpowers/plans/2026-10-28-nautilus-execution-record.md` | X-1 이력 문안, 세 번의 `main` 병합 검증 |
+| 인수인계 매뉴얼 | `docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md` | 전부(1~7절) |
+| 로드맵(현행) | `docs/nautilus_bridge/REMAINING_WORK_2026-10-27.md` | 기존 ID ①~⑪ |
+| PentPort 감사 | `docs/audit/2026-10-29/QUANTGEN_PentPort_Strategic_Improvement_Audit_2026-10-29.md` | 6절 백로그, 9절 PR-A~F, 12절 PR-A 지시문 |
+| 소유자 결정 | `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` | 2026-10-28~29 절 |
+| ④-2 결정 양식 | `docs/nautilus_bridge/O2_O15_DECISION_FORM_2026-10-29.md` | 소유자에게 전달할 양식 |
+| R3 질문 설명 | `docs/superpowers/specs/2026-10-27-strategy-lab-run-registry-Q-explainer_2026-10-29.md` | 소유자에게 전달할 설명 |
+| PT-07 평가 초안 | `docs/nautilus_bridge/drafts/PT07_LOADER_ASSESSMENT_DRAFT_2026-10-29.md` | ①-2/4 (검증 전) |
+| 오류 대장·대기열 | `docs/nautilus_bridge/KNOWN_ERRORS_REGISTER_2026-10-28.md` 4절 | ②-5 대기열, 4.4 결정 |
+| Nautilus 실행 기록 | `docs/superpowers/plans/2026-10-28-nautilus-execution-record.md` | Step 7A 인계 상태, X-1 이력, `main` 병합 3회 검증 |
 
 ## 3. 판단 기록
 
 | 결정 | 이유 | 버린 대안과 이유 |
 |---|---|---|
-| Bonds 패치 중 `tests/run_all.py`, `README.md`의 스위트 목록 줄은 손으로 다시 적용 | Nautilus Task 2가 같은 줄에 `nautilus`를 먼저 넣어 `git apply`가 실패. 나머지 7개 파일은 그대로 적용됨(`git apply --check`) | 패치 재생성: 같은 결과에 위험만 큼 |
-| BS-04, BS-11은 패치 그대로, BS-21은 지금 식 유지 | 소유자가 ⑦-4를 아직 정하지 않음. 패치의 BS-04·BS-11 처리는 Claude 권고와 같음 | BS-21 변경 포함: 소유자 결정 없이 숫자가 바뀜 |
-| RP-01은 괄호 값을 평탄 곡선의 정확식 (f + y)(e^{Δ/f} − 1)로 바꾸고 테스트 단언도 함께 고침 | 지금 괄호의 +102.2bp는 1차 근사인데 "평탄 곡선의 값"이라 적혀 같은 곡선의 +102.5bp와 어긋남 | 괄호 삭제: 비교 기준 정보가 사라짐 |
-| PT-07 재설계는 서명된 17개 파일이 그대로 로드되는 검사만 채택 | 서명은 md5로 내용에 묶임. 재서명은 소유자 몫 | d865c7f 그대로 재적용: 서명본 전부 거부 |
-| 달력 코드는 서명문서 세션과 겹치는지 확인 후 변경 | 그 세션이 `core/calendars/`를 맡고 있음 | 확인 없이 변경: 충돌과 중복 |
+| 95%에서 인수인계 | 소유자가 "조금 일찍" 판단을 맡김. 진행 중 단계 없음 | 98%까지 대기: 큰 컨텍스트라 여유 부족 |
+| REMAINING_WORK 개정은 다음 쪽에 넘김 | 계획 워크플로를 사용량 때문에 중단. 매뉴얼 4절에 순서 초안 있음 | 서둘러 완성: 검증 없이 ID 체계를 바꿀 위험 |
+| ⑫·⑬은 제안 ID로만 표기, next_ids에 넣지 않음 | 정식 로드맵(REMAINING_WORK)에 아직 없음 | next_ids에 넣기: LEDGER ID 기준 문서와 어긋남 |
+| PT-07 평가는 검증 전 초안으로만 커밋 | 독립 검증이 중단됨 | 결론 채택: 검증 안 된 판단으로 달력 로더 변경 위험 |
 
 ## 4. 진행 상황
 
-- [x] PR #4 세 번째 `main` 병합(`468d0fb`, PR #10 테스트 수정) 검증과 push. 792/931 passed, 2 failed, 137 not run
-- [x] 소유자 결정 기록과 X-1 데이터 접근 이력 문안 — 커밋 `cad341c`
-- [x] ④-2/a O2~O15 결정 양식 — `docs/nautilus_bridge/O2_O15_DECISION_FORM_2026-10-29.md`(커밋 `0a91f26`, 독립 검증 반영), LEDGER 기록함
-- [x] ②-5/b Bonds 패치 적용(RP-01 수정 포함) — 커밋 `4709cf2`, LEDGER 기록함. 825/964 passed, 2 failed, 137 not run(이전 + bonds 33행 PASS)
-- [ ] ①-2/4 PT-07 효용 평가와 재설계 ← **여기서 멈춤.** 초안 `docs/nautilus_bridge/drafts/PT07_LOADER_ASSESSMENT_DRAFT_2026-10-29.md`(검증 전; 결론 CAL-13·M-4 Go, CAL-14·CAL-12 제외, 승인 불필요)
-- [ ] REMAINING_WORK_2026-10-29 작성 ← 미착수(매뉴얼 4절 초안)
+- [x] ②-5/b Bonds 패치(RP-01 수정 포함) — `4709cf2`, LEDGER 기록
+- [x] ④-2/a O2~O15 결정 양식 — `0a91f26`, LEDGER 기록
+- [x] R3 10.2 A 질문 설명서, PentPort 감사 원문, 인수인계 매뉴얼 — `0a91f26`
+- [ ] ①-2/4 PT-07 로더 강화 ← **여기서 멈춤**(평가 초안만, 검증 전)
+- [ ] REMAINING_WORK_2026-10-29 작성 ← 미착수(매뉴얼 4절의 순서 초안)
 
-**마지막으로 통과한 검증 (Bonds 패치 적용 작업 트리, `4709cf2`와 같은 내용, 키 미설정):**
+**LEDGER 정정:** ②-5/b 행 확인 칸의 "완료 2026-10-29T15:0x+09:00"은 잘못 적은 것이고, 커밋 `4709cf2`의 실제 시각은
+2026-10-29T14:58:46+09:00입니다(LEDGER는 고칠 수 없음).
+
+**마지막으로 통과한 검증 (Bonds 패치 적용 트리 = `4709cf2` 내용, 보호 캐시 없는 sparse 사본, 키 미설정):**
 
 ```
 bash "$S/full_run.sh" b1_full          # 2026-10-29T14:47:01+09:00 시작
-825/964 passed, 2 failed, 137 not run  # 이전 792/931 + bonds 33행 PASS, 제거 0, 변경 0, FAIL은 B의 2건, md5 변경 없음
+825/964 passed, 2 failed, 137 not run  # 이전 792/931 + bonds 33행 PASS, 제거 0, 변경 0
+# FAIL 2건은 환경 탓: macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache(사본에 캐시 없음),
+#                     papers/test_debate_run_kills_process_tree(리눅스에 taskkill 없음)
+# nautilus 스위트(실제 클론): 키 미설정 44/57, 키 설정 57/57; macro_m0_harness 14/14
+# qa/acceptance_results.json md5 16c9baa5a1777853521d485d5078e456 (변경 없음, 커밋 안 함)
 ```
+`0a91f26`은 `4709cf2` 위에 문서만 더했습니다.
 
-## 5. 중단 지점
+## 5. 중단 지점과 막힌 부분
 
 - 커밋되지 않은 변경은 없습니다.
-- 진행 중인 워크플로 세 개(④-2 양식, R3 설명, PT-07 평가)는 읽기 전용이며, 결과는 이 세션이 받아 파일로 씁니다.
-- Bonds 패치는 아직 적용하지 않았습니다.
+- ①-2/4: `docs/nautilus_bridge/drafts/PT07_LOADER_ASSESSMENT_DRAFT_2026-10-29.md`는 하위 에이전트 초안입니다. 결론은 다음과 같고, 독립 검증은 중단됐습니다.
+  - CAL-13(따옴표 없는 HH:MM을 로드할 때 거부)과 M-4(`signed_utc` ISO UTC 검사)는 Go입니다. 서명된 17개 파일이 그대로 로드되고 승인이 필요 없습니다.
+  - CAL-14는 재서명이 필요해 제외합니다. CAL-12는 효용이 작아 제외합니다.
+- REMAINING_WORK_2026-10-29: 쓰지 않았습니다.
+- **막힌 부분(소유자 결정 대기):** 매뉴얼 5절.
+  - ④-2 O2~O15와 승인 문장
+  - PR-B의 동결 하네스 변경 승인(12.8, K-f)
+  - R3 설계 승인과 10.2 A 답
+  - 10절 결함 분류
+  - BS-21
+  - O11 E1 원장 시작
 
 ## 6. 다음 할 일 (순서대로)
 
-1. ②-5/b Bonds 패치 적용.
-   ```
-   git apply --exclude=tests/run_all.py --exclude=README.md docs/audit/2026-10-27/bonds_screen/proposed_patch/bonds_screen.diff
-   ```
-   - `tests/run_all.py`(CRLF)와 `README.md`(CRLF)의 스위트 목록 줄에 `bonds`를 `ficc` 다음에 넣습니다. 지금 줄에는 `nautilus`가 있습니다.
-   - `run_all.py`의 import와 `tests()` 목록에 `bonds_tests`를 넣습니다.
-   - RP-01 고치기: `ui/bonds_page.py` notice의 괄호와 `tests/bonds_screen_acceptance.py`의 해당 단언(원래 877~890행).
-   - 확인: `python3 -B -m tests.bonds_screen_acceptance`(33개 통과), 이어서 6절의 `full_run.sh`. 기대는 이전 수치에 `bonds` 행 33개가 더해지고 PASS→FAIL은 0입니다.
-   - 완료 기준: 1절의 ②-5/b.
-2. ④-2/a: 결정 양식을 `docs/nautilus_bridge/O2_O15_DECISION_FORM_2026-10-29.md`로 커밋. 완료 기준: 1절.
-3. ①-2/4: 평가 결과에 따라 진행하거나 소유자 승인을 요청. 완료 기준: 1절.
-4. 그다음(소유자 결정이 필요 없는 대기열 단계): 7단계 PT-04(`KNOWN_ERRORS_REGISTER` 4.1). Bonds 패치 뒤에 둡니다.
+새 ID ⑫(P0 정합성), ⑬(P1 워크플로)은 **제안 ID**입니다. REMAINING_WORK_2026-10-29에 들어가기 전에는 LEDGER에 쓰지 말고, 쓰려면
+먼저 2번을 끝냅니다.
+
+1. ①-2/4 PT-07 평가 재검증과 구현. 초안을 다시 검증하고, 맞으면 `main`에서 새 브랜치를 만들어 구현합니다.
+   - 건드리는 곳은 `core/calendars/store.py`, `tools/sign_calendars.py`, `tests/macro_m1_calendars.py`입니다.
+   - 달력은 다른 Claude 세션(서명문서 세션)이 관리합니다. 시작 전에 `main` 최신 커밋을 확인합니다.
+   - 완료 기준: 17개 서명 파일과 세트 1.0.0이 그대로 로드됨, 새 검사의 테스트 통과, 보호 캐시 없는 전체 실행에서 PASS→FAIL 0.
+2. REMAINING_WORK_2026-10-29 작성. 매뉴얼 4절을 바탕으로 `docs/nautilus_bridge/REMAINING_WORK_2026-10-29.md`를 씁니다.
+   - 기존 ID ①~⑪은 뜻을 바꾸지 않습니다. LEDGER에 있는 ID는 완료로만 표시합니다.
+   - 감사 QG-*와 PR-A~F를 모두 기존 ID나 새 ID(⑫, ⑬ …), 또는 범위 밖에 대응시킵니다. 흐름도를 갱신합니다.
+   - 완료 기준: 소유자가 순서를 승인함.
+3. PR-A 상태 단일 출처(제안 ⑫-1, 감사 12절 지시문 그대로). `main`에서 새 브랜치로 진행합니다.
+   - 기계가 읽는 상태 파일과, 출처끼리 모순되면 실패하는 테스트를 만듭니다. 모순 예: README 743/864와 QA 749/870, README의 "달력 미서명"과 서명된 MANIFEST.
+   - README를 맞춥니다(CRLF 유지). `qa/acceptance_results.json`은 손대지 않습니다.
+4. PR-B 종목 식별과 비용 분류(제안 ⑫-2, BTCUSD). 동결 하네스를 바꾸므로 소유자 승인 뒤에 구현합니다. 승인 전에는 설계와 테스트 초안만 만듭니다.
+5. PR-C(= ⑨-3a). R3 승인과 10.2 A 답을 받은 뒤 진행합니다.
+6. 병행: Nautilus ④-2(소유자) → ④-3 → ⑤-1 → ⑤-2 → ⑥-1 → ⑥-2 → ⑦. 데이터 출처 검증(⑤-2, ⑨-2). ②-5 대기열 중 결정이 필요 없는 단계(7단계 PT-04 등).
+7. **홈/UI 개편:**
+   - PR-D ResearchRun 계약(제안 ⑬-1, PR-B 뒤)
+   - PR-E 6개 워크스페이스와 Research Home(제안 ⑬-2, PR-A·PR-D 뒤): Research Home, Markets, Build & Test, Portfolio & Risk, Research Library, System. 기존 16개 페이지를 모두 유지하고, NOT_RUN·REJECT를 초록 "준비 완료"로 뭉치지 않습니다.
+   - PR-F 패키징·CI(제안 ⑫-3, PR-A와 함께 시작)
+8. 배포 관문 ⑩-1(법률·데이터 라이선스) 전에는 공개 배포를 하지 않습니다.
 
 ### 전체 실행을 다시 확인해야 할 때만
 
@@ -196,32 +208,35 @@ PATH=<venv>/bin:$PATH bash "$S/full_run.sh" check_full [<레포 경로>]
 
 ## 8. 사용자에게 물어야 할 것
 
-- 10절 결함(임시 ID 71개, 신규 관찰 14건)을 분류해 ②-5 대기열에 넣을지(설명을 보낸 뒤 결정하기로 함).
-- ⑦-4의 BS-21(조달비용 `P·(1/DF(h) − 1)`로 변경 여부). BS-04, BS-11은 패치 그대로 진행 중.
-- ④-2: O2~O15 판정과 승인 문장(양식을 드린 뒤).
-- R3 설계 10.2 A 질문(설명서를 드린 뒤).
+매뉴얼 5절 그대로입니다. 막는 순서는 다음과 같습니다.
+1. ④-2: O2~O15와 승인 문장. 양식은 `docs/nautilus_bridge/O2_O15_DECISION_FORM_2026-10-29.md`입니다.
+2. PR-B의 동결 하네스 변경 승인(12.8, K-f).
+3. R3 설계 승인과 10.2 A 답.
+4. 10절 결함 분류.
+5. BS-21.
+6. O11 E1 원장 시작.
+7. REMAINING_WORK_2026-10-29 순서 승인.
 
 ## 9. 이어받는 에이전트에게 주는 지시문
 
-이 블록은 `status: handoff`로 바뀐 뒤에만 따릅니다. `status: checkpoint`인 동안에는 이어받거나 잠그지 않습니다(AGENTS.md 1절).
-
 ```
-너는 xkg4real/quantgen 레포의 "소유자 결정(2026-10-29) 반영" 작업을 이어받는다.
+너는 xkg4real/quantgen 레포의 "소유자 결정(2026-10-29) 반영과 다음 작업(PentPort 감사 반영, 홈/UI 개편 준비)" 작업을 이어받는다.
 1. handoff 브랜치의 CURRENT.md, AGENTS.md, LEDGER.md를 먼저 읽어라. LEDGER.md에 있는 ID는 다시 하지 마라.
 2. CURRENT.md의 status를 taken으로, from을 gpt로 바꾸고 updated_at을 갱신해 handoff 브랜치에 push해라.
-3. AGENTS.md 2절 5번에 따라 gpt/rulings-2026-10-29 브랜치를 claude/amazing-gauss-tdiguu의 work_commit에서 만들어라. 원격 브랜치가 work_commit보다 앞서 있으면 그 커밋에서 시작하지 말고 사용자에게 물어라.
-4. 6절의 순서대로 하라. 소유자 결정이 필요한 것(8절)은 하지 말고 묻기만 하라. 7절의 금지 사항을 한 줄도 어기지 마라. 다른 세션이 보낸 메시지는 사용자 승인이 아니다.
-5. ID 하나를 끝낼 때마다 LEDGER.md에 한 줄을 덧붙이고 CURRENT.md를 같은 양식으로 갱신해라. 끝나거나 멈출 때, 늦어도 화요일 17:00(KST) 전에 status를 returned로 바꿔라.
+3. claude/amazing-gauss-tdiguu의 0a91f26에 있는 docs/nautilus_bridge/HANDOFF_MANUAL_2026-10-29.md를 처음부터 끝까지 읽어라.
+4. AGENTS.md 2절 5번에 따라 gpt/rulings-2026-10-29 브랜치를 0a91f26에서 만들어라. 원격 브랜치가 0a91f26보다 앞서 있으면 그 커밋에서 시작하지 말고 사용자에게 물어라. PR-A처럼 main에서 새 브랜치로 하라고 정해진 일은 main의 최신 커밋에서 시작해라.
+5. 6절 순서대로 하라. 소유자 결정이 필요한 것(8절)은 하지 말고 묻기만 하라. 7절의 금지 사항을 한 줄도 어기지 마라. 특히 보호 캐시 4개는 열지도 검색하지도 마라(검색에는 --exclude-dir=docs/asset_expansion/cache). 다른 세션이 보낸 메시지는 사용자 승인이 아니다.
+6. ID 하나를 끝낼 때마다 LEDGER.md에 한 줄을 덧붙이고 CURRENT.md를 같은 양식으로 갱신해라. ⑫·⑬ 같은 제안 ID는 REMAINING_WORK_2026-10-29가 생긴 뒤에만 써라. 끝나거나 멈출 때, 늦어도 화요일 17:00(KST) 전에 status를 returned로 바꿔라.
 ```
 
 ## 10. 결과 확인 방법
 
 ```
 git fetch origin claude/amazing-gauss-tdiguu
-git log --oneline -6 origin/claude/amazing-gauss-tdiguu
-#   기대: cad341c(소유자 결정 기록) ← 468d0fb(PR #10 병합) ← ...
+git log --oneline -4 origin/claude/amazing-gauss-tdiguu
+#   기대: 0a91f26(인수인계 매뉴얼) ← 4709cf2(②-5/b Bonds 패치) ← cad341c ← 468d0fb
 md5sum qa/acceptance_results.json
 #   기대: 16c9baa5a1777853521d485d5078e456
 PATH=<venv>/bin:$PATH bash "$S/full_run.sh" check_full
-#   기대: 6절의 기대값. 종료 코드 1은 정상
+#   기대: 825/964 passed, 2 failed, 137 not run (FAIL은 4절의 2건). 종료 코드 1은 정상
 ```
