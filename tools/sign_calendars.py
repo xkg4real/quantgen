@@ -55,6 +55,11 @@ def sign(file_ids: Iterable[str], signer: str, *, data_dir: Path = store.DATA_DI
     for fid in file_ids:
         if not (data_dir / f"{fid}.yaml").is_file():
             raise SignRefused(f"{fid}.yaml: no such file in {data_dir}")
+        # Validate every draft before writing any signature or manifest entry.
+        try:
+            store.read_yaml(data_dir / f"{fid}.yaml")
+        except store.CalendarUnsigned as exc:
+            raise SignRefused(str(exc)) from None
         if current.refusal(fid) is None:
             raise SignRefused(f"{fid}.yaml is already signed; a change is a new version with a new signature")
     if expect:
