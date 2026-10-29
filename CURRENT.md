@@ -4,13 +4,13 @@ reason: manual
 from: gpt
 task: owner-continuation-2026-10-29
 cycle: 2026-10-27
-done_ids: none
+done_ids: ②-5/c
 next_ids: ②-5, ⑫-2, ⑫-3, ⑬-2
-updated_at: 2026-10-29T17:25:25+09:00
+updated_at: 2026-10-29T17:41:44.000+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/research-home-a-f1-20261029
-work_commit: e1271a7
+work_branch: gpt/handoff-continuation-20261029
+work_commit: 7db616c6d5ccbe82e8d64df04d83cf1d3127e86e
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -24,6 +24,8 @@ handoff_id: 2026-10-27/owner-continuation-2026-10-29/2b2e64c32720af5018c283a6aea
 # 인수인계 반환: 달력 입력 검증·상태 정합성·A/F1 Research Home
 
 ## 0. 한 줄 요약
+
+**Continuation milestone 2026-10-29T17:41:44.000+09:00:** ②-5/c — PT-04 partial FRED coverage warning, missing long-end metrics and out-of-coverage pricing refusal. Synthetic tests 6 PASS; existing FICC/Bonds 90 PASS; full/synthetic baseline unchanged; no full suite or protected reads. Work continues. Latest owner clarification: the viewed app is local 127.0.0.1; UI application requested, public hosting not established.
 
 **Owner-directed continuation (2026-10-29T17:25:25+09:00):** The owner explicitly requested immediate continuation of unfinished work. Resume PT-04, PR-B design/test proposal, packaging/CI and permitted UI work. This is a new manual continuation, not automatic reprocessing of the prior returned handoff. Preserve all prior completed IDs and return history. Gate/model/frozen/ledger changes and merge/release remain excluded. The prior return below is historical and superseded by this taken front matter.
 
