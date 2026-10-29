@@ -6,11 +6,11 @@ task: nautilus-step3
 cycle: 2026-10-27
 done_ids: ③-1, ③-2, ③-3, ③-4, ③-5, ③-6
 next_ids: none
-updated_at: 2026-10-29T13:29:55+09:00
+updated_at: 2026-10-29T13:50:05+09:00
 stale_after_hours: 120
 waiting_on: owner
 work_branch: claude/amazing-gauss-tdiguu
-work_commit: abc7217
+work_commit: 45b233f
 uncommitted_changes: no
 pr: 4
 usage_weekly_pct: unknown
@@ -27,6 +27,9 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 push됐습니다(③-6 커밋 `57c6344`). ③-6 전체 실행은 795/935 passed, 2 failed, 138 not run이고, 계획의 Count Ledger와
 행 단위로 일치합니다. 그 뒤 PR #4의 충돌을 풀려고 `main`(소유자 서명 달력, PR #7)을 병합했습니다(`614dca4`). 병합 뒤 전체
 실행은 792/931 passed, 2 failed, 137 not run이고, 차이는 달력 테스트뿐이며 Nautilus 행은 그대로입니다(`abc7217` 실행 기록).
+PR #9(달력 17개와 세트 1.0.0 서명)가 `main`에 들어온 뒤 다시 병합했습니다(`0acb9b7`). 전체 실행은 790/931 passed, 4 failed,
+137 not run입니다. 새 FAIL 2건(`macro_ui_overlay`)은 `main` 자체의 실패로, 깨끗한 `main` 사본에서도 똑같이 납니다. 테스트 수정안은
+제안만 했습니다(8절, `45b233f` 실행 기록).
 다음 일은 모두 소유자 결정이 필요해서 Claude는 소유자를 기다립니다(`waiting_on: owner`).
 
 - **이 문서를 읽는 다른 에이전트에게:** `status: checkpoint`인 동안에는 AGENTS.md 1절에 따라 이어받거나 잠그지 않습니다. 9절의 지시문은 `status: handoff`로 바뀐 뒤에만 따릅니다.
@@ -100,6 +103,8 @@ push됐습니다(③-6 커밋 `57c6344`). ③-6 전체 실행은 795/935 passed,
 - [x] ③-6 클라우드 전체 실행과 실행 기록 — 커밋 `57c6344`, LEDGER 기록함
 - [x] PR #4 충돌 해결: `main` 병합 `614dca4`, 병합 뒤 전체 실행 기록 `abc7217` (로드맵 ID 없음)
 - [x] ①-2/2 기록: 달력 5·6차 서명(다른 세션, `claude/relaxed-cerf-az755o`의 `d4e9a42`, `f8c7467`)을 Claude가 sparse 클론에서 확인하고 LEDGER에 기록
+- [x] PR #4 2차 충돌 해결: PR #9 병합 뒤 `main` 병합 `0acb9b7`(결정 로그만 충돌), 실행 기록 `45b233f`
+- [x] ①-2/3 기록: 세트 1.0.0 서명(`999dd26`, 소유자 위임으로 채운 서명서)
 - [ ] 다음: 소유자 결정 대기 ← **여기서 멈춤** (8절)
 
 이번 주기에 끝난 ①·② 항목도 소유자 지시로 LEDGER에 기록했습니다. ①-1, ①-3, ①-4, ①-5, ②-1~②-4, ②-5/a, ②-6입니다. ①-2는 T-CAL-02 세션이 먼저 기록했습니다(`handoff` 브랜치 `ebe89d6`). 그 세션의 5·6차 서명(달력 17개 전부 서명)은 그 세션의 요청에 따라 Claude가 확인해 ①-2/2로 기록했습니다.
@@ -119,12 +124,21 @@ nautilus 스위트: 키 미설정 44/57, 키 설정 57/57; python3 -B -m tests.m
 qa/acceptance_results.json md5 16c9baa5a1777853521d485d5078e456 (변경 없음)
 ```
 
-**마지막으로 통과한 검증 (`main` 병합 뒤, 614dca4 클론, 키 미설정):**
+**1차 `main` 병합 뒤 검증 (614dca4 클론, 키 미설정):**
 
 ```
 bash "$S/full_run.sh" m1_full          # 2026-10-29T03:07:48+09:00 시작
 792/931 passed, 2 failed, 137 not run  # t6 대비: PT-07 달력 행 8개 제거, main 행 4개 추가, test_cal02 NOT_RUN -> PASS
 nautilus 57행 변화 없음(44 PASS, 13 NOT_RUN); macro_m0_harness 14/14; FAIL은 B의 2건; md5 변경 없음
+```
+
+**마지막 검증 (2차 `main` 병합 뒤, 0acb9b7 클론, 키 미설정):**
+
+```
+bash "$S/full_run.sh" m2_full          # 2026-10-29T13:37:48+09:00 시작
+790/931 passed, 4 failed, 137 not run  # m1 대비 추가·제거 0, PASS -> FAIL 2(macro_ui_overlay, main 자체의 실패)
+nautilus 57행 변화 없음(44 PASS, 13 NOT_RUN); macro_m0_harness 14/14; md5 변경 없음
+macro_ui_overlay: main e28035f 사본 14/16(같은 2건 FAIL), 테스트 수정안 적용 시 16/16
 ```
 
 ## 5. 중단 지점
@@ -135,7 +149,7 @@ nautilus 57행 변화 없음(44 PASS, 13 NOT_RUN); macro_m0_harness 14/14; FAIL�
   - ②-5 대기열(`docs/nautilus_bridge/KNOWN_ERRORS_REGISTER_2026-10-28.md` 4.1) 상태:
     - 끝남: 0단계(②-1, `6054b33`), 2단계(스크래치 diff 보존, `22bdc16`, `420af64`), 4단계(Nautilus ②-2~③-6, `57c6344`까지).
     - 1단계(①-2 달력 서명)는 `main`에서 끝났습니다(소유자 서명 `3917bc0`, 이 브랜치에는 `614dca4`로 병합).
-    - 나머지 달력(5차 `release_calendar`, 6차 JPX·SSE·HKEX·TWSE·CME·`market_closes`)도 서명됐지만 아직 `claude/relaxed-cerf-az755o`(`f8c7467`)에만 있습니다. 그 브랜치가 `main`에 들어오면 PR #4와는 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` 한 파일만 충돌합니다(`git merge-tree` 확인). 양쪽 절을 모두 남기면 풀립니다. 오류 목록 4.1의 1단계 문구와 PT-07 언급은 아직 옛 상태이므로 ②-5를 다시 진행할 때 고칩니다.
+    - 나머지 달력(5차 `release_calendar`, 6차 JPX·SSE·HKEX·TWSE·CME·`market_closes`)과 세트 1.0.0도 서명돼 `main`(PR #9, `e28035f`)에 들어왔고, 이 브랜치에는 `0acb9b7`로 병합됐습니다. 달력 17개가 모두 서명됐습니다.
     - 3단계(Bonds 패치)는 패치 적용 여부와 ⑦-4 세 가지 결정이 필요합니다.
     - 5단계(PT-01·PT-02·K-f)는 12.8 결정과 K-f 앞당김 결정이 필요하고, 동결 하네스 파일(`core/quant/validate.py`, `core/quant/instruments.py`)도 고칩니다.
     - 7단계(PT-04)는 3단계 뒤입니다.
@@ -212,7 +226,7 @@ PATH=<venv>/bin:$PATH bash "$S/full_run.sh" check_full [<레포 경로>]
 ```
 
 - 종료 코드 1이 정상입니다. 래퍼는 FAIL이 하나라도 있으면 1로 끝납니다. 판정은 마지막 줄의 집계로 합니다.
-- 기대값(`614dca4` 이후, 달력 서명됨): `792/931 passed, 2 failed, 137 not run`. FAIL은 1절의 2건입니다. `test_cal02_2027_files_signed_before_2026_11_01`은 PASS입니다. 이 밖의 결과는 보고만 하고 고치지 않습니다.
+- 기대값(`0acb9b7` 이후, 달력 17개와 세트 서명됨): `790/931 passed, 4 failed, 137 not run`. FAIL은 1절의 2건과 `macro_ui_overlay`의 2건(`test_every_owner_decision_d1_to_d6_is_listed_with_value_and_status`, `test_view_selector_hosts_the_overlay_view_and_reads_nothing_into_home`, `main` 자체의 실패, 8절)입니다. 그 테스트 수정이 들어오면 `792/931 passed, 2 failed, 137 not run`이 됩니다. 이 밖의 결과는 보고만 하고 고치지 않습니다.
 - `md5sum qa/acceptance_results.json`은 `16c9baa5a1777853521d485d5078e456`이어야 합니다.
 
 ## 7. 주의사항 / 하지 말 것
@@ -236,6 +250,7 @@ PATH=<venv>/bin:$PATH bash "$S/full_run.sh" check_full [<레포 경로>]
 - **X-1 공개.** 2026-10-26 클라우드 기준선 실행 2회에서 macro 테스트 3개가 보호 캐시 파일을 읽었습니다. Claude는 PASS/FAIL만 봤습니다.
   - 이 사실을 Step 10 실행 기록과 스펙 10.4의 데이터 접근 이력에 남길지 정해 주십시오(`OWNER_RULINGS_LOG.md` "Claude 자진 보고" 절).
   - Claude 권고는 사실대로 기록하는 것입니다. ③-6 실행 기록에는 "Open owner decisions"로 사실만 적어 두었고 결정은 하지 않았습니다.
+- **`macro_ui_overlay` 테스트 2건(`main`의 실패).** 두 테스트는 달력이 미서명이라는 상태를 단언합니다. "Sign the calendar set" 할 일과 Live 툴팁의 "signed calendars"가 그 단언입니다. 17개가 모두 서명되자 UI는 둘 다 맞게 빼서 테스트가 실패합니다. 테스트가 `core.calendars.store.describe()`의 서명 상태를 따르게 하는 수정안(테스트만 9줄)이 `main` 사본에서 16/16입니다. 이 수정안은 서명문서 세션에 전달했습니다. 이 브랜치(PR #4)에 넣을지, `main`에 따로 넣을지 정해 주십시오. `ui/macro_state_panel.py:501`의 "the calendar set is unsigned" 문구도 이제 맞지 않습니다.
 - **PT-07 로더 강화.** PR #4 병합에서 걷어낸 PT-07의 로더 검사(CAL-12 same_day 달력 서명, CAL-13 따옴표 없는 시각 거부, CAL-14 MANIFEST `signed_utc`·서명 문장 고정, M-4 `signed_utc` 형식)를 서명된 파일과 맞게 다시 설계해 제안할지 정해 주십시오. 그대로 다시 넣으면 서명본이 거부됩니다.
 - **②-5 나머지.**
   - 오류 목록 10절(②-3에서 새로 확인한 결함, 임시 ID 71개)을 분류해 순위에 넣을지 정해 주십시오(4.4 머리말, 740행).
@@ -262,11 +277,11 @@ PATH=<venv>/bin:$PATH bash "$S/full_run.sh" check_full [<레포 경로>]
 ```
 git fetch origin claude/amazing-gauss-tdiguu
 git log --oneline -8 origin/claude/amazing-gauss-tdiguu
-#   기대: abc7217(병합 뒤 실행 기록) ← 614dca4(main 병합) ← 57c6344(③-6 실행 기록) ← 520d0db(Task 5) ← 6b6b386(Task 4) ...
+#   기대: 45b233f(2차 병합 뒤 실행 기록) ← 0acb9b7(PR #9 뒤 main 병합) ← abc7217 ← 614dca4(main 병합) ← 57c6344(③-6 실행 기록) ...
 git show --stat 57c6344
 #   기대: docs/superpowers/plans/2026-10-28-nautilus-execution-record.md 추가
 md5sum qa/acceptance_results.json
 #   기대: 16c9baa5a1777853521d485d5078e456
 PATH=<venv>/bin:$PATH bash "$S/full_run.sh" check_full
-#   기대: 792/931 passed, 2 failed, 137 not run (FAIL은 1절의 2건). 종료 코드 1은 정상
+#   기대: 790/931 passed, 4 failed, 137 not run (6절, macro_ui_overlay 수정 뒤에는 792/931, 2 failed). 종료 코드 1은 정상
 ```
