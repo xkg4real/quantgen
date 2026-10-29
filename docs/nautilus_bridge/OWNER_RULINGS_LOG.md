@@ -261,3 +261,14 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
       `13_signature_register.md`, `14_calendar_batch6.md`, `15_signing_form_batch6.md`, `calendar_batch6/`입니다.
     - `release_calendar` 지문(`1faf621a…`)과 코드 패치 전후 모의 서명(4항목 실패 → 0)을 이 세션에서 다시 확인했습니다.
   - **소유자 결정 대기:** 5차 서명서(`12_release_calendar.md` 8절)와 6차 서명서(`15_signing_form_batch6.md`)
+
+### ①-2g: 5차·6차 서명 (2026-10-29, Claude Code 채팅)
+
+- **소유자 판정:** 5차(`release_calendar`)와 6차(JPX·SSE·HKEX·TWSE·CME·market_closes) 서명서를 함께 제출했습니다.
+  원문은 `docs/audit/2026-10-27/16_signature_batch5.md`와 `17_signature_batch6.md`에 있습니다.
+  - **5차 결정:** F-04 넣는다. 코드 패치 F-01·F-02와 `store.py` US 커버리지 추가를 모두 승인했습니다.
+  - **6차 확인:** HK-01, SSE-27, TW-27, CME-01, SCOPE를 모두 확인했습니다.
+- **반영 (5차):**
+  - `release_calendar.yaml` v1.0.0을 데이터 폴더로 옮기고 MANIFEST 행을 추가했습니다.
+  - `proposed_code.diff`를 적용하고 서명을 기록했습니다. Geon Koh, 2026-10-29T02:05:33Z, md5 `0d89f161…`.
+  - US 커버리지 대상에 `release_calendar`가 들어갔고, US는 `signed=True`입니다.

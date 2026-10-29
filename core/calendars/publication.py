@@ -260,7 +260,9 @@ def usable_at(series, obs_date: date, market: str, *, cal: CalendarSet | None = 
             probe += timedelta(days=1)
         raise ValueError(f"no {market} decision within 60 days admits the {other} close of {obs_date}")
     instant = publication_instant(s, obs_date, cal=cal)
-    probe = obs_date
+    # every market's close falls on its session's UTC date: no session before the day ahead of publication can
+    # qualify, and a monthly release may come 60+ days after its reference month (BEA in the 2025 shutdown: 113)
+    probe = max(obs_date, instant.date() - timedelta(days=1))
     for _ in range(60):
         if clocks.is_session(market, probe, cal=cal) and not (us_dated and obs_date > probe - timedelta(days=1)):
             bound = clocks.close_print_bound_utc(market, probe, cal=cal)

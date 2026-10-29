@@ -120,3 +120,9 @@ rows:
   signed_off_by: Geon Koh
   test_ids:
   - T-REGIME-01
+- file: release_calendar.yaml
+  version: 1.0.0
+  md5: 0d89f161ac0b61712b2c1ed25bc9eadb
+  signed_off_by: Geon Koh
+  test_ids:
+  - T-AVAIL-01

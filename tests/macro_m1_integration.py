@@ -331,11 +331,12 @@ def _release_docs() -> dict:
     docs = fixture_docs()
     docs["publication_schedules"]["rows"].append(
         _row(schedule_id="BEA", rule="release_calendar", calendar="FED", time="08:30", tz=NY))
-    rel = lambda release, period, day: _row(release=release, period=period, release_date=day, time="08:30", tz=NY,
-                                            effective_from=day, effective_to=day)
+    rel = lambda release, period, day, time="08:30": _row(release=release, period=period, release_date=day, time=time,
+                                                          tz=NY, effective_from=day, effective_to=day)
     docs["release_calendar"] = _doc("release_calendar", ("2025-01-01", "2027-12-31"), "WEEKDAYS", [
         rel("CPI", "2027-02-01", "2027-03-10"), rel("EMPSIT", "2027-02-01", "2027-03-05"),
-        rel("PIO", "2027-01-01", "2027-02-25"), rel("CLAIMS", "2026-10-17", "2026-10-22")])
+        rel("PIO", "2027-01-01", "2027-02-25"), rel("CLAIMS", "2026-10-17", "2026-10-22"),
+        rel("PIO", "2025-11-01", "2026-01-22", "10:00")])
     return docs
 
 
@@ -347,6 +348,10 @@ def test_release_calendar_supplies_bls_bea_release_dates():
     assert clk.publication_instant("UNRATE", date(2027, 2, 1)) == U(2027, 3, 5, 13, 30)
     assert clk.publication_instant("PCEPILFE", date(2027, 1, 1)) == U(2027, 2, 25, 13, 30)
     assert clk.publication_instant("ICSA", date(2026, 10, 17)) == U(2026, 10, 22, 12, 30)      # 08:30 EDT
+    # a row's own wall time governs (BEA: October-November 2025 at 10:00 ET), and a release 82 days after its month
+    # still finds its first KRX decision
+    assert clk.publication_instant("PCEPILFE", date(2025, 11, 1)) == U(2026, 1, 22, 15, 0)      # 10:00 EST
+    assert clk.usable_at("PCEPILFE", date(2025, 11, 1), "KR") == clk.close_print_bound_utc("KR", date(2026, 1, 23))
     # a period with no row has no release date: the observation stays unpublished (never an estimated date)
     _raises(lambda: clk.publication_instant("CPIAUCSL", date(2027, 3, 1)), KeyError)
     # ingest stamps the calendar-bound instant; a row retrieved before it is a provisional print
