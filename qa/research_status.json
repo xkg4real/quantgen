@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-29T07:39:44.874473+00:00",
+  "scope": "recorded repository evidence; not a test run or deployment verdict",
+  "sources": [
+    {
+      "path": "README.md",
+      "sha256": "d6cbc40e07c9f59c0689c8d7ec7996df9703730316fe0306fad047ed76f4d2ac",
+      "normalization": "LF; generated block excluded"
+    },
+    {
+      "path": "qa/acceptance_results.json",
+      "sha256": "89cd556c9557b5347701527544f80d3210a204196d247fe928f1022622efae86",
+      "normalization": "raw bytes"
+    },
+    {
+      "path": "core/calendars/data/MANIFEST.yaml",
+      "sha256": "8e2b5ada17bca27fd04b5d0e1cf5eafbea7f1d41a6d0211bf2da98f023f4ad1c",
+      "normalization": "raw bytes"
+    }
+  ],
+  "code_test": {
+    "status": "RECORDED",
+    "counts": {
+      "PASS": 749,
+      "FAIL": 0,
+      "NOT_RUN": 121
+    },
+    "total": 870,
+    "run_at": null,
+    "run_commit": null,
+    "note": "QA source does not record run time/commit. Do not infer them from generation."
+  },
+  "data_readiness": {
+    "status": "NOT_VERIFIED",
+    "calendar": {
+      "status": "SIGNED_METADATA",
+      "version": "1.0.0",
+      "files": 17,
+      "signed_at": "2026-10-29T04:29:39Z",
+      "verification": "manifest metadata only; individual calendar payloads not verified here"
+    },
+    "note": "Calendar signatures do not supply missing datasets or data licenses."
+  },
+  "formal_gate": {
+    "status": "NOT_FROZEN",
+    "evidence": "README declaration",
+    "verification": "NOT_INSPECTED",
+    "note": "Frozen gate/package artifacts excluded."
+  },
+  "paper_study": {
+    "status": "NOT_INSPECTED",
+    "note": "Actual ledgers and frozen studies excluded."
+  },
+  "distribution_policy": {
+    "status": "PERSONAL_ONLY",
+    "evidence": "README Regulatory note",
+    "public_release": "NOT_APPROVED"
+  }
+}
