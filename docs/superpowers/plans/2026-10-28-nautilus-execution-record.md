@@ -224,7 +224,7 @@ No line of the 7A.2 PowerShell block has run on Windows (UNVERIFIED until Step 7
 
 ## Open owner decisions (not decided here)
 
-- **The X-1 disclosure** (`docs/nautilus_bridge/OWNER_RULINGS_LOG.md`, "Claude 자진 보고"). On 2026-10-26, before this plan, two real-clone full runs let three existing `macro` tests open protected caches. The owner should decide whether this goes into the Step 10 execution record and its 10.4 data-access history. Claude saw only test names, statuses and counts. This record does not pre-empt that decision.
+- **The X-1 disclosure: decided 2026-10-29, include** (`docs/nautilus_bridge/OWNER_RULINGS_LOG.md`, "(가), X-1, ②-5 …"). The Step 10 execution record and its 10.4 data-access history carry the entry under "Data-access history entry (X-1)" below.
 - **Step 1b** (O1 to O15 and the approval sentence), and the Strategy Lab side of K-g.
 - **①-2:** the calendar signatures, due before 2026-10-31T15:00:00Z.
   - Another Claude session works on ①-2 on `claude/relaxed-cerf-az755o`, from `main`'s calendar audit (option A, PR #5, `0849ca9`). It proposes four v1.0.0 files (without `kr_sessions`) and reads the deadline as `signed_utc` before 2026-11-01T00:00:00Z.
@@ -286,3 +286,26 @@ PR #9 merged into `main` at `e28035f`. It brings calendar audits 5 and 6 (`d4e9a
   - With all 17 files signed, `ui/macro_state_panel.py` correctly drops both.
   - A test-only fix that makes both assertions follow `core.calendars.store.describe()` passes 16/16 on `e28035f`. It is proposed to the owner and to the calendar session, and is not applied here, so the bridge PR does not widen.
   - The line `No event_calendar artifact yet (the calendar set is unsigned).` at `ui/macro_state_panel.py:501` is now stale wording. It is noted, not changed.
+
+## Data-access history entry (X-1), for the Step 10 record and spec 10.4
+
+The owner ruled on 2026-10-29 that this goes into the record ("1. X-1 공개 여부 포함").
+
+- **What happened.** On 2026-10-26, before this plan, two cloud full-suite baseline runs ran in the real clone through the wrapper (`docs/audit/2026-10-27/artifacts/run_all_cloud_run1.log`, `run_all_cloud_run2.log`). Three existing `macro` tests opened protected caches while they ran:
+  - `macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache`: `yf_SPY.csv`
+  - `macro/macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache`: `yf_SPY.csv`
+  - `macro/macro_tf_gov/test_cry1_study_runs_offline_end_to_end_on_the_local_caches`: `binance_BTCUSDT.csv` and `upbit_KRW-BTC.csv`
+- **What Claude saw.** Test names, PASS/FAIL statuses and counts only. No price value appears in either log. Run 1's dry-run failure detail is an empty `AssertionError`.
+- **Rule affected.** Spec section 9, row 2 ("Claude reads no real BTC price and no SPY row on or after 2004-12-01"; "never opens or hashes ..."). The test processes opened the files.
+- **Since then.** Every full run of this plan used a sparse clone where the four caches are skip-worktree and absent (X-1, T5-1): seven runs through ③-6 and three after the `main` merges. No bridge test opens a cache file.
+- **Pilot relevance.** Pilot 1 (SPY) and pilot 2 (BTC-USD) are registered on these series. Claude's view was limited to statuses, so no design choice used their values. This entry exists so a reader of the pilot results can weigh that.
+
+## Third `main` merge (`468d0fb`, 2026-10-29): PR #10, overlay tests fixed
+
+PR #10 (`950f25e`) put the test-only fix into `main`, together with one stale UI line (`ui/macro_state_panel.py:501`). It was proposed in the section above and committed by the calendar session as `ace8f3b`.
+
+- **Merge.** Clean merge into this branch at `468d0fb`.
+- **Full run.** `bash $S/full_run.sh m3_full`, key unset, started 2026-10-29T05:34:28Z: `792/931 passed, 2 failed, 137 not run`.
+  - Against `m2_full`, the two `macro_ui_overlay` rows went from FAIL to PASS, with nothing else changed.
+  - The FAIL set is B's two rows. The 57 `nautilus` rows are unchanged.
+  - `qa/acceptance_results.json` stayed `16c9baa5a1777853521d485d5078e456`.
