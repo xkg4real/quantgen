@@ -3,7 +3,7 @@ on:
   push:
     branches: ['gpt/product-workflow-20261029', 'gpt/ui-apply-main-20261029']
   pull_request:
-    paths: ['pyproject.toml', 'main.py', 'core/app_paths.py', 'core/research/**', 'ui/**', 'tools/status/**', 'tools/packaging/**', 'tests/*research*', '.github/workflows/runtime-smoke.yml']
+    paths: ['pyproject.toml', 'main.py', 'core/app_paths.py', 'core/research/**', 'ui/**', 'tools/status/**', 'tools/packaging/**', 'tests/*research*', 'tests/data_readiness_acceptance.py', 'tests/packaging_policy_acceptance.py', 'core/research/**', '.github/workflows/runtime-smoke.yml']
 permissions:
   contents: read
 jobs:
@@ -49,5 +49,5 @@ jobs:
       - name: Verify bounded source fixtures
         shell: bash
         run: |
-          python -m unittest tests.packaging_policy_acceptance tests.status_snapshot_acceptance tests.research_home_acceptance -v
+          python -m unittest tests.packaging_policy_acceptance tests.status_snapshot_acceptance tests.research_home_acceptance tests.research_contract_acceptance tests.data_readiness_acceptance -v
           python -m tools.status.snapshot --check
