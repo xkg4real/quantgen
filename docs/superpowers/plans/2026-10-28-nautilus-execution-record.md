@@ -268,3 +268,21 @@ PR #4 (this branch into `main`) showed conflicts after PR #7 merged into `main` 
   - The calendar precondition under "Hand-off state for Step 7A" and the ①-2 item under "Open owner decisions" are closed.
   - The bridge's Count Ledger deltas still hold against the new baseline: every bridge row is unchanged.
 - **Results file.** `qa/acceptance_results.json` stayed `16c9baa5a1777853521d485d5078e456`.
+
+## Second `main` merge (`0acb9b7`, 2026-10-29): PR #9, every calendar file and the set signed
+
+PR #9 merged into `main` at `e28035f`. It brings calendar audits 5 and 6 (`d4e9a42`, `f8c7467`) and the set signature 1.0.0 (`999dd26`): all 17 calendar files and the set are signed by Geon Koh.
+
+- **Merge.** Only `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` conflicted. Both sides appended, so both were kept. `core/calendars/` and the calendar tests come from `main` unchanged. No bridge file changed.
+- **Full run.** `bash $S/full_run.sh m2_full` on a clone of `0acb9b7`, key unset, started 2026-10-29T04:37:48Z: `790/931 passed, 4 failed, 137 not run`.
+  - The four caches were skip-worktree (`4`).
+  - Against `m1_full`, 0 rows were added or removed and 2 changed (PASS to FAIL):
+    - `macro/macro_ui_overlay/test_every_owner_decision_d1_to_d6_is_listed_with_value_and_status`
+    - `macro/macro_ui_overlay/test_view_selector_hosts_the_overlay_view_and_reads_nothing_into_home`
+  - The 57 `nautilus` rows are unchanged (44 PASS, 13 NOT_RUN). The 14 `macro_m0_harness` rows pass.
+  - `qa/acceptance_results.json` stayed `16c9baa5a1777853521d485d5078e456`.
+- **The two new FAILs are `main`'s, not the bridge's.** Both fail the same way on a clean sparse clone of `main` at `e28035f` and at `f8c7467` (14/16).
+  - The tests assert the unsigned state: a "Sign the calendar set" owner input, and "signed calendars" in the Live option's tooltip.
+  - With all 17 files signed, `ui/macro_state_panel.py` correctly drops both.
+  - A test-only fix that makes both assertions follow `core.calendars.store.describe()` passes 16/16 on `e28035f`. It is proposed to the owner and to the calendar session, and is not applied here, so the bridge PR does not widen.
+  - The line `No event_calendar artifact yet (the calendar set is unsigned).` at `ui/macro_state_panel.py:501` is now stale wording. It is noted, not changed.
