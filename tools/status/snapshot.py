@@ -52,15 +52,19 @@ def collect(root: Path, generated_at: str) -> dict:
     counts = Counter()
     names = set()
     for row in qa:
-        if row.get('status') not in ('PASS', 'FAIL', 'NOT_RUN') or not row.get('test'):
+        if not isinstance(row, dict) or row.get('status') not in ('PASS', 'FAIL', 'NOT_RUN') or not row.get('test'):
             raise StatusError('unknown or malformed QA result')
         if row['test'] in names:
             raise StatusError('duplicate QA test name')
         names.add(row['test'])
         counts[row['status']] += 1
     manifest = yaml.safe_load(raw[INPUTS[2]])
+    if not isinstance(manifest, dict):
+        raise StatusError('calendar manifest must be an object')
     rows = manifest.get('rows', [])
-    if not rows or len({r['file'] for r in rows}) != len(rows):
+    if (not isinstance(rows, list) or not rows
+            or any(not isinstance(r, dict) or not isinstance(r.get('file'), str) for r in rows)
+            or len({r['file'] for r in rows}) != len(rows)):
         raise StatusError('calendar manifest has missing/duplicate rows')
     signed = bool(manifest.get('signed_off_by') and manifest.get('signed_utc')
                   and all(r.get('signed_off_by') and r.get('md5') for r in rows))
