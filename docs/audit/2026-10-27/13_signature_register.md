@@ -1,6 +1,6 @@
 # 달력 서명 대장
 
-- **작성:** 2026-10-29. 처음 작성한 뒤 같은 날 5차·6차 서명을 반영해 고쳤습니다.
+- **작성:** 2026-10-29. 처음 작성한 뒤 같은 날 5차·6차 서명과 세트 서명을 반영해 고쳤습니다.
 - **목적:** 서명 문서가 여러 파일에 흩어져 있어 한곳에 모았습니다. 무엇을, 언제, 어떤 지문으로 서명했는지 적습니다.
 - **원칙:** 서명은 소유자만 합니다. 이 대장은 기록일 뿐이며, 서명 필드를 쓰지 않습니다(spec L2100).
 
@@ -12,11 +12,13 @@
 |---|---|---|
 | 서명됨 | **17 / 17** | 아래 2절 전부 |
 | 미서명 | 0 | — |
+| 세트 (`MANIFEST.yaml` 파일 머리) | 1.0.0 | 서명됨. `calendar_version` = `1.0.0` (`18_signature_set.md`) |
 
 - **6개 시장(KR, US, JP, CN, HK, TW) 모두 `signed=True`입니다.** 2026-10-29 결정일 기준이고, ARM 전제조건도 참입니다.
 - **BLS·BEA 입력도 열렸습니다.** `release_calendar`가 서명되어 US 커버리지 대상에 들어갔습니다.
-- **세트 전체는 아직 미서명입니다.** `MANIFEST.yaml`의 파일 머리가 미서명이라 `calendar_version`은 `unsigned`로 찍힙니다.
-  - 파일 17개가 모두 서명됐으므로, 세트 버전을 정하는 것은 이제 소유자의 결정입니다.
+- **세트도 서명됐습니다.** 세트 1.0.0은 Geon Koh가 2026-10-29T04:29:39Z에 서명했습니다. 소유자 위임으로 채운 서명서입니다.
+  - 이제 `event_calendar.calendar_version`에 `1.0.0`이 찍힙니다.
+  - 파일을 하나라도 다시 서명하면 세트 버전도 올려 다시 서명합니다.
 
 ---
 
@@ -61,6 +63,7 @@
 | 4차 | kr_regime_tags | `08_kr_regime_tags.md` | 보고서 안 | `10_signature_batch4.md` |
 | 5차 | release_calendar (+ 코드 패치) | `12_release_calendar.md` | 보고서 8절 | `16_signature_batch5.md` |
 | 6차 | JPX, SSE, HKEX, TWSE, CME, market_closes | `14_calendar_batch6.md` | `15_signing_form_batch6.md` | `17_signature_batch6.md` |
+| 세트 | MANIFEST.yaml 파일 머리 (세트 1.0.0) | — | 같은 문서 | `18_signature_set.md` |
 
 **서명서 원문에 남아 있는 소유자 확인 사항**
 
@@ -96,7 +99,7 @@
 
 | 시기 | 대상 | 이유 |
 |---|---|---|
-| 2026년 11~12월 | `holidays_SSE` | 국무원·SSE 2027 공지가 나오면 2027년 추정 18행을 바꿈 |
+| 2026년 11~12월 | `holidays_SSE` | 국무원·SSE 2027 공지가 나오면 2027년 추정 18행을 바꿈. 세트도 1.0.1로 다시 서명 |
 | 2026년 12월 | `holidays_KRX`, `holidays_ECOS` | KRX 2027 휴장 공지와 대조 |
 | 곧 | `holidays_TWSE` | TWSE 2027 일정표가 나오면 결제 전용일 2행 확인 |
 | 2027년 중 | `holidays_CME` | CME 2027 일정이 나오면 2027년 10행 확인 |

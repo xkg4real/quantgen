@@ -1,7 +1,8 @@
-version: 0.1.0-draft
-signed_off_by: null
-signed_utc: null
-status: 'UNSIGNED DRAFT: every row''s md5 and signed_off_by are null; the loader refuses every listed file'
+version: 1.0.0
+signed_off_by: Geon Koh
+signed_utc: '2026-10-29T04:29:39Z'
+status: 'SIGNED SET v1.0.0: all 17 files owner-signed at version 1.0.0 (docs/audit/2026-10-27/18_signature_set.md); re-signing
+  any file raises the set version and needs a new set signature'
 change_control:
   owner_sign_off: required
   test_per_change: required
