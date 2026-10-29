@@ -1,4 +1,4 @@
-"""Central visual tokens for the NEXTGEN desktop interface."""
+"""QUANTGEN A palette. Existing semantic tokens and dark/system modes remain."""
 from __future__ import annotations
 from dataclasses import dataclass
 
@@ -24,7 +24,7 @@ class Palette:
     warning: str = "#d9a441"      # last, with a default: positional constructors keep working (02_ui_design 3)
 
 DARK = Palette("#101417", "#171d21", "#1d252a", "#324047", "#e7ecef", "#9eabb2", "#4f98a3", "#233b40", "#6daa45", "#d1637f", "#071012", "#d9a441")
-LIGHT = Palette("#f5f7f6", "#ffffff", "#edf2f0", "#d2dcda", "#192326", "#647277", "#01696f", "#d8e8e5", "#437a22", "#a12c53", "#ffffff", "#8a5a00")
+LIGHT = Palette("#F7F5F0", "#FFFEFB", "#F1F2EB", "#E2E3DB", "#202823", "#646E68", "#194C40", "#E5EEE8", "#16745F", "#AA543C", "#FFFFFF", "#8a5a00")
 _state = {"mode": DEFAULT_MODE, "palette": DARK}
 
 def palette_for(mode: str, *, system_is_dark: bool = True) -> Palette:
