@@ -43,6 +43,7 @@ from __future__ import annotations
 import flet as ft
 
 import config
+from core.app_paths import assets_directory
 from core.theme import BREAKPOINTS, RADII, TRANSITION_MS, active, set_mode
 from core.engine.feed import QuoteFeed
 from core.engine.runtime import EngineRuntime
@@ -168,10 +169,12 @@ def main(page: ft.Page) -> None:
     def navigate(name: str, *, rebuild: bool = False) -> None:
         # Execution must reflect state that changed elsewhere; everything else
         # keeps its live view so a pipeline survives a tab switch.
-        if rebuild or name == "trading":
+        if rebuild or name in {"trading", "library"}:
             cache.pop(name, None)
         if name not in cache:
             cache[name] = build(name)
+        if name == "home":
+            cache[name].render()  # refresh session observations without abandoning an in-flight fetch
         current["page"] = name
         content.content = ft.Container(cache[name], padding=16 if state["compact"] else 28, expand=True)
         render_nav()
@@ -285,4 +288,4 @@ def main(page: ft.Page) -> None:
 
 
 if __name__ == "__main__":
-    ft.run(main, assets_dir="assets")
+    ft.run(main, assets_dir=assets_directory())

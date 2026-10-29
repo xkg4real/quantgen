@@ -13,6 +13,9 @@ and is assumed 3% otherwise; either way the chip row says which.
 """
 from __future__ import annotations
 
+from core.research.runs import session_for, new_run, completed, failed, utc_now
+from core.research.provenance import code_evidence, runtime_evidence
+
 import json
 import re
 from pathlib import Path
@@ -266,35 +269,47 @@ def build_quant_lab_page(page: ft.Page,
     result_host = ft.Column(spacing=14)
 
     def run(e=None) -> None:
+        # Capture UI inputs before starting a background task.
+        inputs = dict(symbol=symbol.value, source_requested=source.value or "auto", model=model.value or "garch_t",
+                      horizon_days=horizon.value or "126", n_paths=paths.value or "5000", target=target.value,
+                      drift=drift.value or "premium", erp=erp.value or "0", seed=7)
+        research = session_for(page)
+        run_record = new_run(inputs, code=code_evidence(), environment=runtime_evidence())
+        research.put(run_record)
         busy.visible = True
         result_host.controls = []
         page.update()
 
         def worker():
             try:
-                hz = int(float(horizon.value or "126"))
-                np_ = int(float(paths.value or "5000"))
-                tgt = float(target.value) if (target.value or "").strip() else None
-                mode = drift.value or "premium"
+                hz = int(float(inputs["horizon_days"]))
+                np_ = int(float(inputs["n_paths"]))
+                tgt = float(inputs["target"]) if (inputs["target"] or "").strip() else None
+                mode = inputs["drift"]
                 erp_dec = 0.0
                 if mode == "premium":
                     try:
-                        erp_dec = float(erp.value or "0") / 100.0
+                        erp_dec = float(inputs["erp"]) / 100.0
                     except ValueError:
                         raise ValueError(f"ERP % is not a number: {erp.value!r}")
-                rf, rf_chip = (_risk_free(symbol.value or "") if mode in ("premium", "rf")
+                rf, rf_chip = (_risk_free(inputs["symbol"] or "") if mode in ("premium", "rf")
                                else (0.0, None))
-                hist = load_history(symbol.value, source=source.value or "auto")
-                mc = run_monte_carlo(hist, model=model.value or "garch_t",
+                hist = load_history(inputs["symbol"], source=inputs["source_requested"])
+                loaded_at = utc_now()
+                mc = run_monte_carlo(hist, model=inputs["model"],
                                      n_paths=np_, horizon_days=hz, target=tgt,
-                                     drift=mode, rf_rate=rf, erp=erp_dec)
+                                     drift=mode, rf_rate=rf, erp=erp_dec, seed=inputs["seed"])
+                run_record["parameters"]["target"] = tgt
+                research.put(completed(run_record, hist, mc, loaded_at=loaded_at))
             except (HistoryError, ValueError) as exc:
+                research.put(failed(run_record, type(exc).__name__))
                 result_host.controls = [notice(str(exc), "error",
                                                icon=ft.Icons.ERROR_OUTLINE)]
                 busy.visible = False
                 page.update()
                 return
             except Exception as exc:
+                research.put(failed(run_record, type(exc).__name__))
                 result_host.controls = [notice(f"{type(exc).__name__}: {exc}",
                                                "error", icon=ft.Icons.ERROR_OUTLINE)]
                 busy.visible = False
