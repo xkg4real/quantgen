@@ -1,11 +1,11 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-10-29T14:44:25+09:00
+created_at: 2026-10-29T15:31:23+09:00
 source_branch: claude/amazing-gauss-tdiguu
-source_head: 468d0fb
+source_head: 0a91f26
 upstream: origin/claude/amazing-gauss-tdiguu
-patch_base: 468d0fb
+patch_base: 0a91f26
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
@@ -13,7 +13,7 @@ usage_pct: unknown
 usage_resets_at: unknown
 session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
 snapshot_key: none
-current_md_updated_at: 2026-10-29T14:11:43+09:00
+current_md_updated_at: 2026-10-29T15:09:53+09:00
 current_md_status: checkpoint
 ---
 
@@ -26,6 +26,9 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
+0a91f26 Handoff at 95% usage: manual, ④-2 decision form, R3 10.2 A explainer, PT-07 assessment draft, PentPort audit
+4709cf2 ②-5/b: apply the owner-approved Bonds screen patch (queue step 3) with the RP-01 fix
+cad341c Owner rulings 2026-10-29 (X-1 include, Bonds patch approved, PT-07 redesign if worthwhile, ④-2 first); X-1 data-access entry; third main merge verified (792/931)
 468d0fb Merge main (PR #10: overlay UI tests follow the calendar signing state) into the Nautilus branch
 950f25e Merge pull request #10 from xkg4real/claude/relaxed-cerf-az755o
 ace8f3b Overlay UI tests follow the calendar signing state; stale "calendar set is unsigned" line fixed
@@ -38,9 +41,6 @@ d4e9a42 Owner sign-off (Geon Koh): release_calendar v1.0.0 (calendar audit 5) wi
 59ff2cf Batch 6 names fixed (report 14_), fingerprints refreshed; register and rulings log carry the release_calendar handover
 86ff0d2 Merge remote-tracking branch 'origin/claude/optimistic-fermi-revc37' into claude/relaxed-cerf-az755o
 54ec3c7 Rename my calendar audit to batch 6 (docs 13-15) so it does not collide with release_calendar audit 5
-324ec31 Calendar audit 5: JPX, SSE, HKEX, TWSE, CME and market_closes proposed v1.0.0 (unsigned) with the signing form
-abc7217 Execution record: the main merge after ③-6 (614dca4) and its cache-free full run (792/931, 2 failed, 137 not run)
-5f669cb Calendar audit 5: full macro suite on the simulated-signed tree (no new failure); clean dry-run log
 ```
 
 ## 푸시되지 않은 커밋
