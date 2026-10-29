@@ -498,7 +498,7 @@ def _context_tile(ctx: dict | None) -> ft.Control:
 def _calendar_tile(cal: dict | None) -> ft.Control:
     pal = active()
     if cal is None:
-        body, sub = [_line("No event_calendar artifact yet (the calendar set is unsigned).")], "none"
+        body, sub = [_line("No event_calendar artifact yet (a macro_daily run writes one).")], "none"
     else:
         v, iss = verdict_of("event_calendar", cal)
         if v == "refused":
