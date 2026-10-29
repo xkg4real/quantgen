@@ -210,7 +210,11 @@ def test_every_owner_decision_d1_to_d6_is_listed_with_value_and_status():
         j = rows.index(d)
         assert rows[j + 2:j + 6] == [key, value, status, src], (d, rows[j:j + 6])
     assert any(t.startswith("Owner inputs the build needs") for t in found)
-    assert any("Sign the calendar set" in t for t in found) and any("repository under git" in t for t in found)
+    # the calendar item follows the shipped files' signing state (all owner-signed since 2026-10-29)
+    from core.calendars import store as CS
+    unsigned = [r["file"] for r in CS.describe() if r.get("status") != "signed"]
+    assert any("Sign the calendar set" in t for t in found) == bool(unsigned), unsigned
+    assert any("repository under git" in t for t in found)
     assert any(t.startswith("OQ-01 · ") for t in found) and any(t.startswith("XS-01 · ") for t in found)
     # with no artifact the store still lists all six, never hidden
     found = texts(blocks(None, owner=owner))
@@ -279,7 +283,10 @@ def test_view_selector_hosts_the_overlay_view_and_reads_nothing_into_home():
             assert "No macro state yet" in found and P.LIVE_LABEL not in found
             mode = next(c for c in walk(overlay) if isinstance(c, ft.Dropdown) and c.label == "Run macro_daily")
             live = next(o for o in mode.options if o.key == "live")
-            assert live.text == P.LIVE_LABEL and live.disabled and "signed calendars" in live.tooltip
+            assert live.text == P.LIVE_LABEL and live.disabled == bool(P.live_missing())
+            from core.calendars import store as CS
+            unsigned = [r["file"] for r in CS.describe() if r.get("status") != "signed"]
+            assert ("signed calendars" in (live.tooltip or "")) == bool(unsigned), (live.tooltip, unsigned)
             view.value = "sheet"
             view.on_select(None)
             assert switcher.content is sheet
