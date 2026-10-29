@@ -4,13 +4,13 @@ reason: milestone
 from: claude
 task: rulings-2026-10-29
 cycle: 2026-10-27
-done_ids: none
-next_ids: ④-2/a, ②-5/b, ①-2/4
-updated_at: 2026-10-29T14:45:36+09:00
+done_ids: ②-5/b
+next_ids: ④-2/a, ①-2/4
+updated_at: 2026-10-29T14:59:04+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/amazing-gauss-tdiguu
-work_commit: cad341c
+work_commit: 4709cf2
 uncommitted_changes: no
 pr: 4
 usage_weekly_pct: unknown
@@ -76,14 +76,14 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - [x] PR #4 세 번째 `main` 병합(`468d0fb`, PR #10 테스트 수정) 검증과 push. 792/931 passed, 2 failed, 137 not run
 - [x] 소유자 결정 기록과 X-1 데이터 접근 이력 문안 — 커밋 `cad341c`
 - [ ] ④-2/a O2~O15 결정 양식 ← 초안과 검증 진행 중(워크플로)
-- [ ] ②-5/b Bonds 패치 적용 ← 다음
+- [x] ②-5/b Bonds 패치 적용(RP-01 수정 포함) — 커밋 `4709cf2`, LEDGER 기록함. 825/964 passed, 2 failed, 137 not run(이전 + bonds 33행 PASS)
 - [ ] ①-2/4 PT-07 효용 평가와 재설계 ← 평가 진행 중(워크플로)
 
-**마지막으로 통과한 검증 (`468d0fb` 클론, 키 미설정):**
+**마지막으로 통과한 검증 (Bonds 패치 적용 작업 트리, `4709cf2`와 같은 내용, 키 미설정):**
 
 ```
-bash "$S/full_run.sh" m3_full          # 2026-10-29T14:34:28+09:00 시작
-792/931 passed, 2 failed, 137 not run  # FAIL은 B의 2건, nautilus 57행 그대로, md5 변경 없음
+bash "$S/full_run.sh" b1_full          # 2026-10-29T14:47:01+09:00 시작
+825/964 passed, 2 failed, 137 not run  # 이전 792/931 + bonds 33행 PASS, 제거 0, 변경 0, FAIL은 B의 2건, md5 변경 없음
 ```
 
 ## 5. 중단 지점
@@ -169,7 +169,7 @@ PATH=<venv>/bin:$PATH bash "$S/full_run.sh" check_full [<레포 경로>]
 ```
 
 - 종료 코드 1이 정상입니다. 래퍼는 FAIL이 하나라도 있으면 1로 끝납니다. 판정은 마지막 줄의 집계로 합니다.
-- 기대값(`468d0fb` 이후): `792/931 passed, 2 failed, 137 not run`. FAIL은 B의 2건(`macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache`, `papers/test_debate_run_kills_process_tree`)입니다. 이 문서의 작업이 테스트를 더하면 그 커밋 메시지와 실행 기록이 새 기대값을 적습니다. 이 밖의 결과는 보고만 하고 고치지 않습니다.
+- 기대값(`4709cf2` 이후): `825/964 passed, 2 failed, 137 not run`. FAIL은 B의 2건(`macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache`, `papers/test_debate_run_kills_process_tree`)입니다. 이 문서의 작업이 테스트를 더하면 그 커밋 메시지와 실행 기록이 새 기대값을 적습니다. 이 밖의 결과는 보고만 하고 고치지 않습니다.
 - `md5sum qa/acceptance_results.json`은 `16c9baa5a1777853521d485d5078e456`이어야 합니다.
 
 ## 7. 주의사항 / 하지 말 것
