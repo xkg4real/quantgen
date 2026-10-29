@@ -8,8 +8,9 @@ import flet as ft
 
 from core.theme import active
 from tools.status.snapshot import verify
+from core.app_paths import application_root
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = application_root()
 
 
 def recorded_status() -> tuple[dict | None, str]:

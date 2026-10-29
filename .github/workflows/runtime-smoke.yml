@@ -1,0 +1,53 @@
+name: Runtime packaging smoke
+on:
+  push:
+    branches: ['gpt/product-workflow-20261029', 'gpt/ui-apply-main-20261029']
+  pull_request:
+    paths: ['pyproject.toml', 'main.py', 'core/app_paths.py', 'core/research/**', 'ui/**', 'tools/status/**', 'tools/packaging/**', 'tests/*research*', '.github/workflows/runtime-smoke.yml']
+permissions:
+  contents: read
+jobs:
+  installed:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/.env*
+            !/**/.env*
+            !/docs/asset_expansion/cache/
+            !/paper_live/
+            !/grokteam/
+            !/_backup/
+            !/QUANTGEN_techfund_research_bundle/
+            !/**/*.jsonl
+            !/**/holdout/
+            !/**/frozen/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Stage only runtime allowlist and build wheel
+        shell: bash
+        run: |
+          python -m pip install build
+          python tools/packaging/stage.py --output "$RUNNER_TEMP/quantgen-stage"
+          python -m build --wheel --outdir "$RUNNER_TEMP/quantgen-dist" "$RUNNER_TEMP/quantgen-stage"
+          python -m pip install "$RUNNER_TEMP"/quantgen-dist/*.whl
+      - name: Verify installed wheel outside checkout
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP"
+          python "$GITHUB_WORKSPACE/tools/packaging/smoke_installed.py"
+      - name: Verify bounded source fixtures
+        shell: bash
+        run: |
+          python -m unittest tests.packaging_policy_acceptance tests.status_snapshot_acceptance tests.research_home_acceptance -v
+          python -m tools.status.snapshot --check
