@@ -12,15 +12,16 @@ dependencies = [
   "pyyaml>=6.0",
   "requests>=2.31",
   "python-dotenv>=1.0", "tzdata>=2024.1; sys_platform == 'win32'",
-  "numpy>=1.26", "pandas>=2.1", "scipy>=1.11", "matplotlib>=3.8", "gs-quant>=1.0",
+  "numpy>=1.26", "pandas>=2.1", "scipy>=1.11", "statsmodels>=0.14.2", "matplotlib>=3.8", "gs-quant>=1.0",
   "yfinance>=0.2", "pandas-datareader>=0.10",
 ]
 
 [tool.setuptools]
 py-modules = ["main", "config"]
+include-package-data = false
 
 [tool.setuptools.packages.find]
-include = ["core*", "data*", "ui*"]
+include = ["core*", "data*", "ui*", "tools", "tools.status*"]
 exclude = ["_legacy*", "tests*", "qa*"]
 
 [tool.flet]
@@ -30,3 +31,17 @@ app = { module = "main", path = "." }
 default = "assets/icon.png"
 windows = "assets/icon.ico"
 web = "assets/icon_192.png"
+
+[tool.setuptools.package-data]
+"core.calendars" = ["data/*.yaml"]
+"core.ficc" = ["schemas/*.json"]
+"core.skills" = ["macro_workflows/*.yaml"]
+"data" = ["calendars/*.json", "macro/series_registry.yaml", "macro/rules_v2.0.0.json"]
+
+[tool.setuptools.data-files]
+"share/quantgen" = ["README.md"]
+"share/quantgen/qa" = ["qa/research_status.json", "qa/acceptance_results.json"]
+"share/quantgen/core/calendars/data" = ["core/calendars/data/MANIFEST.yaml"]
+"share/quantgen/assets" = ["assets/*.png", "assets/*.ico"]
+"share/quantgen/assets/branding" = ["assets/branding/*.svg"]
+"share/quantgen/assets/fonts" = ["assets/fonts/*.otf", "assets/fonts/*.txt"]
