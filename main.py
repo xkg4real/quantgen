@@ -64,6 +64,7 @@ from ui.rules_page import build_rules_page
 from ui.signals_page import build_signals_page
 from ui.trading_page import build_trading_page
 from ui.settings_page import build_settings_page
+from ui.research_home import build_home_page, build_library_page, build_system_page
 
 LOCALE = "en"
 
@@ -87,13 +88,28 @@ NAV = (
 )
 
 
+# Existing page keys stay stable; these groups only change navigation.
+WORKSPACES = (
+    ("home", "Research Home", ft.Icons.HOME_OUTLINED, ("home",)),
+    ("markets", "Markets", ft.Icons.PUBLIC_OUTLINED,
+     ("macro", "rates", "bonds", "fx", "derivatives", "etf", "crypto", "krx")),
+    ("build", "Build & Test", ft.Icons.SCIENCE_OUTLINED,
+     ("quant", "lab", "signals", "structuring", "trading")),
+    ("risk", "Portfolio & Risk", ft.Icons.PIE_CHART_OUTLINE, ("portfolio",)),
+    ("library", "Research Library", ft.Icons.FOLDER_OPEN_OUTLINED, ("library",)),
+    ("system", "System", ft.Icons.SETTINGS_OUTLINED, ("system", "rules", "settings")),
+)
+
+
 def main(page: ft.Page) -> None:
     page.title = "QUANTGEN"
     page.padding = 0
-    page.theme_mode = ft.ThemeMode.DARK
-    page.window.min_width = 420
+    page.fonts = {"QG Interface": "fonts/qg-interface.otf"}
+    page.theme = ft.Theme(font_family="QG Interface", color_scheme_seed="#194C40")
+    page.theme_mode = ft.ThemeMode.LIGHT
+    page.window.min_width = 320
     page.window.min_height = 620
-    set_mode("dark")
+    set_mode("light")
     pal = active()
     page.bgcolor = pal.bg
 
@@ -105,7 +121,7 @@ def main(page: ft.Page) -> None:
     rule_store = RuleStore()
     engine = EngineRuntime(rule_store, QuoteFeed(gateway))
 
-    current = {"page": "macro"}
+    current = {"page": "home"}
     cache: dict[str, ft.Control] = {}
 
     content = ft.AnimatedSwitcher(
@@ -115,6 +131,12 @@ def main(page: ft.Page) -> None:
 
     # ------------------------------------------------------------------ views
     def build(name: str) -> ft.Control:
+        if name == "home":
+            return build_home_page(page, navigate=navigate)
+        if name == "library":
+            return build_library_page(page, navigate=navigate)
+        if name == "system":
+            return build_system_page(page, navigate=navigate)
         ficc = {"macro": build_macro_page, "rates": build_rates_page,
                 "bonds": build_bonds_page, "fx": build_fx_page,
                 "structuring": build_structuring_page,
@@ -151,75 +173,108 @@ def main(page: ft.Page) -> None:
         if name not in cache:
             cache[name] = build(name)
         current["page"] = name
-        content.content = ft.Container(cache[name], padding=24, expand=True)
+        content.content = ft.Container(cache[name], padding=16 if state["compact"] else 28, expand=True)
         render_nav()
         page.update()
 
     # -------------------------------------------------------------------- nav
-    logo = ft.Container(
-        content=ft.Text("Q", size=20, weight=ft.FontWeight.BOLD, color=pal.on_accent),
-        width=38, height=38, bgcolor=pal.accent, border_radius=RADII["md"],
-        alignment=ft.Alignment.CENTER,
-    )
-    brand = ft.Column([
-        ft.Text("QUANTGEN", weight=ft.FontWeight.BOLD, color=pal.text, size=14),
-        ft.Text("rates · FX · derivatives · ETF · crypto", size=10, color=pal.muted),
-    ], spacing=0)
-    nav_host = ft.Column(spacing=4)
+    def brand():
+        return ft.Row([
+            ft.Container(ft.Image(src="branding/f1-symbol.svg", width=34, height=34,
+                                  semantics_label="QUANTGEN F1 Open Horizon"),
+                         padding=3, bgcolor="#F7F5F0", border_radius=8),
+            ft.Column([ft.Text("QUANTGEN", size=16, weight=ft.FontWeight.W_600, color=pal.text),
+                       ft.Text("RESEARCH WORKSPACE", size=9, color=pal.muted)], spacing=2),
+        ], spacing=10)
+
+    nav_host = ft.Column(spacing=5)
     state = {"compact": False}
+    labels = {key: (label, icon) for key, label, icon in NAV}
+    labels.update(home=("Research Home", ft.Icons.HOME_OUTLINED),
+                  library=("Research Library", ft.Icons.FOLDER_OPEN_OUTLINED),
+                  system=("Project status", ft.Icons.INFO_OUTLINED))
+    # Execution's existing simulated engine is unchanged; its label is explicit.
+    labels["trading"] = ("Execution · simulated", ft.Icons.SPEED_ROUNDED)
+    workspace_title = ft.Text("Research Home", size=13, color=pal.muted)
+
+    def nav_button(label, icon, route, *, selected=False, indent=False, modal=False):
+        def click(e):
+            if modal:
+                page.pop_dialog()
+            navigate(route)
+        return ft.TextButton(
+            ft.Row([ft.Icon(icon, size=17, color=pal.accent if selected else pal.muted),
+                    ft.Text(label, size=12 if indent else 13, color=pal.accent if selected else pal.text,
+                            weight=ft.FontWeight.W_600 if selected else ft.FontWeight.W_400,
+                            expand=True)], spacing=10),
+            on_click=click, data={"route": route}, tooltip=label,
+            style=ft.ButtonStyle(bgcolor=pal.accent_soft if selected else ft.Colors.TRANSPARENT,
+                                 shape=ft.RoundedRectangleBorder(radius=10),
+                                 padding=ft.Padding(24 if indent else 12, 10, 10, 10)),
+            width=196, height=42)
+
+    def nav_controls(*, modal=False):
+        controls = []
+        for key, title, icon, routes in WORKSPACES:
+            selected = current["page"] in routes
+            controls.append(nav_button(title, icon, routes[0], selected=selected, modal=modal))
+            if selected or modal:
+                if len(routes) > 1:
+                    for route in routes:
+                        label, child_icon = labels[route]
+                        controls.append(nav_button(label, child_icon, route,
+                                                   selected=current["page"] == route,
+                                                   indent=True, modal=modal))
+        return controls
 
     def render_nav() -> None:
-        compact = state["compact"]
-        nav_host.controls = []
-        for name, label, icon in NAV:
-            selected = current["page"] == name
-            row = [ft.Icon(icon, size=18,
-                           color=pal.on_accent if selected else pal.muted)]
-            if not compact:
-                row.append(ft.Text(label, size=13,
-                                   weight=ft.FontWeight.W_600 if selected else ft.FontWeight.W_400,
-                                   color=pal.on_accent if selected else pal.text))
-            nav_host.controls.append(ft.Container(
-                content=ft.Row(row, spacing=10,
-                               alignment=ft.MainAxisAlignment.CENTER if compact
-                               else ft.MainAxisAlignment.START),
-                padding=ft.Padding(12, 10, 12, 10),
-                bgcolor=pal.accent if selected else None,
-                border_radius=RADII["md"],
-                ink=True,
-                tooltip=label if compact else None,
-                on_click=lambda e, n=name: navigate(n),
-            ))
+        nav_host.controls = nav_controls()
+        workspace_title.value = next(title for _, title, _, routes in WORKSPACES
+                                     if current["page"] in routes)
+
+    def open_menu(e=None):
+        page.show_dialog(ft.AlertDialog(
+            title=brand(), content=ft.Column(nav_controls(modal=True), spacing=4,
+                                             scroll=ft.ScrollMode.AUTO, width=240, height=480),
+            actions=[ft.TextButton("닫기", on_click=lambda e: page.pop_dialog())],
+            bgcolor=pal.surface, inset_padding=16))
 
     rail = ft.Container(
-        content=ft.Column([
-            ft.Row([logo, brand], spacing=10),
-            ft.Divider(color=pal.border),
-            nav_host,
-        ], spacing=12, scroll=ft.ScrollMode.AUTO),
-        width=220, padding=14, bgcolor=pal.surface,
-    )
+        content=ft.Column([brand(), ft.Container(height=12),
+                           ft.Text("WORKSPACES", size=10, color=pal.muted), nav_host,
+                           ft.Container(height=16),
+                           ft.Text("Personal research\nEvidence before decisions", size=11, color=pal.muted)],
+                          spacing=12, scroll=ft.ScrollMode.AUTO),
+        width=224, padding=14, bgcolor=pal.surface)
+    mobile_bar = ft.Container(ft.Row([
+        ft.IconButton(ft.Icons.MENU_ROUNDED, on_click=open_menu, tooltip="작업공간 메뉴", data="mobile-menu"),
+        brand(),
+    ], spacing=6), padding=ft.Padding(8, 8, 8, 8), bgcolor=pal.surface, visible=False)
+    desktop_bar = ft.Container(ft.Row([
+        workspace_title, ft.Text("PERSONAL RESEARCH", size=10, color=pal.muted),
+    ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=ft.Padding(28, 16, 28, 12))
+    separator = ft.VerticalDivider(width=1, color=pal.border)
 
     def resize(e=None) -> None:
         compact = (page.width or 1200) < BREAKPOINTS["compact"]
         if compact == state["compact"] and e is not None:
-            return                       # nothing to redraw on same-side resizes
+            return
         state["compact"] = compact
-        rail.width = 68 if compact else 220
-        rail.padding = 8 if compact else 14
-        brand.visible = not compact
+        rail.visible = not compact
+        separator.visible = not compact
+        mobile_bar.visible = compact
+        desktop_bar.visible = not compact
+        if isinstance(content.content, ft.Container):
+            content.content.padding = 16 if compact else 28
         render_nav()
         page.update()
 
-    # Flet 0.85 names this `on_resize`; the previous build used `on_resized`,
-    # which is silently accepted and never fires.
+    # Flet 0.85 uses on_resize; keep cached views/engine across resize and navigation.
     page.on_resize = resize
-
-    page.add(ft.Row(
-        [rail, ft.VerticalDivider(width=1, color=pal.border), content],
-        expand=True, spacing=0, vertical_alignment=ft.CrossAxisAlignment.STRETCH,
-    ))
-
+    page.add(ft.Row([
+        rail, separator,
+        ft.Column([mobile_bar, desktop_bar, content], expand=True, spacing=0),
+    ], expand=True, spacing=0, vertical_alignment=ft.CrossAxisAlignment.STRETCH))
     resize()
     navigate(current["page"])
     # v2 M8: governance-chain check + missed decisions, once per process, off the UI thread (rulings 3.13; T-OBS-02/05).
