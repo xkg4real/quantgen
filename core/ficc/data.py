@@ -42,6 +42,7 @@ import re
 import time
 from dataclasses import dataclass, field, replace
 from datetime import date, datetime as _dt, timedelta, timezone as _tz
+from time import monotonic as _monotonic         # durations only; tests pin `time` for the wall clock
 
 import numpy as np
 
@@ -66,6 +67,9 @@ G10_KRW = ("USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "KRW")   # carry uni
 
 _TREASURY_IDS = ("DGS1MO", "DGS3MO", "DGS6MO", "DGS1", "DGS2", "DGS3", "DGS5", "DGS7",
                  "DGS10", "DGS20", "DGS30")
+_CURVE_STALE_BDAYS = 5            # newest curve observation older than this (business days) is flagged
+_CURVE_JUMP = 0.0100              # a latest one-day par move above 100bp is flagged for checking
+_CURVE_10Y_RANGE = (0.001, 0.25)  # a UST 10y par outside 0.1%..25% is a unit or typo error, not a print
 _IBOR_CC = {"EUR": "EZ", "JPY": "JP", "GBP": "GB", "KRW": "KR", "AUD": "AU", "CAD": "CA",
             "CHF": "CH", "USD": "US"}
 _MIN_OBS = 5
@@ -165,7 +169,11 @@ def _fred_fetch(ids: list[str], start: str) -> dict[str, Rows]:
     and '.' observations dropped. Raises on transport failure."""
     ids = list(ids)
     if _pdr is not None:
-        df = _pdr.DataReader(ids, "fred", start)
+        # FredReader, not DataReader: DataReader takes no timeout, so a silent network cost
+        # 30 s x 4 attempts per id. One attempt per id, bounded by HTTP_TIMEOUT_SECONDS.
+        from pandas_datareader.fred import FredReader
+        df = FredReader(ids, start=start, retry_count=0,
+                        timeout=config.HTTP_TIMEOUT_SECONDS).read()
         out: dict[str, Rows] = {}
         for col in df.columns:
             s = df[col].dropna()
@@ -215,6 +223,7 @@ def _yf_fetch(tickers: list[str], period: str) -> dict[str, Rows]:
 # --------------------------------------------------------------------------- #
 _MEM: dict[str, tuple[float, Rows]] = {}
 _CACHE_LIVE_TTL = 600.0     # seconds a file whose last row may still be a running bar is served (TASK-M1-12)
+_LAG_TRIED: dict[str, float] = {}   # cache key -> write time of the entry a lagging-curve refetch already tried
 
 
 def _cache_key(provider: str, id: str, days: int) -> str:
@@ -446,6 +455,16 @@ def _fetch(provider: str, ids: list[str], days: int) -> dict[str, Rows]:
     return _yf_fetch(ids, _period_for(days))
 
 
+def _transport_failure(exc: BaseException) -> bool:
+    """A dead or silent network, not an answer: socket/requests timeouts and connection
+    errors, or pandas_datareader's RemoteDataError wrapping one ('\\nException:\\n'). An HTTP
+    error (a retired id's 404) is an answer and is not one of these."""
+    return (isinstance(exc, (ConnectionError, TimeoutError))      # not OSError: RemoteDataError is one
+            or "\nException:\n" in str(exc)
+            or type(exc).__name__ in ("ConnectTimeout", "ReadTimeout", "Timeout", "ProxyError",
+                                      "ConnectionError"))
+
+
 def _provider_rows(provider: str, ids: list[str], days: int, *, not_before: float | None = None,
                    pit_store=None, retrieved_at_utc=None) -> tuple[dict[str, Rows], dict[str, str]]:
     """Cache-first batch fetch. Never raises: returns (rows by id, failure reason by id).
@@ -472,11 +491,16 @@ def _provider_rows(provider: str, ids: list[str], days: int, *, not_before: floa
     fetched: dict[str, Rows] = {}
     reason = ""
     if missing:
+        t0 = _monotonic()
         try:
             fetched = _fetch(provider, missing, days)
         except Exception as exc:
             reason = f"{type(exc).__name__}: {exc}"
-            if len(missing) > 1:
+            # A failed batch is retried per id (a retired id's HTTP error must not take the sheet
+            # down, however slow the ids before it were); only a transport failure that hung for
+            # the timeout is a dead network, where more timeouts only stall.
+            if len(missing) > 1 and not (_transport_failure(exc) and _monotonic() - t0
+                                         >= 0.5 * float(config.HTTP_TIMEOUT_SECONDS)):
                 for i in missing:                     # ponytail: N calls only on batch failure
                     try:
                         fetched.update(_fetch(provider, [i], days))
@@ -570,9 +594,36 @@ def load_treasury_curve(*, source: str = "auto", days: int = 504) -> CurvePanel:
 
 def _treasury_from_fred(days: int) -> CurvePanel:
     rows, errors = _provider_rows("FRED", list(_TREASURY_IDS), days)
+    # Ids served from a cache entry written before the newest ones (the same key is shared with
+    # other screens, e.g. the Macro sheet) can end before the others: refetch those, once per
+    # cache entry. Ids written together that still end early (FRED's own lag), a refetch with
+    # nothing newer and a failed refetch are not tried again on every Run.
+    newest = max((r[-1][0] for r in rows.values() if r), default="")
+    ts = {i: _MEM[k][0] for i in rows if (k := _cache_key("FRED", i, days)) in _MEM}
+    fresh_ts = max((ts[i] for i, r in rows.items() if i in ts and r and r[-1][0] == newest),
+                   default=0.0)
+    lagging = [i for i, r in rows.items() if float(config.FICC_CACHE_TTL_SECONDS) > 0
+               and r and r[-1][0] < newest and i in ts and ts[i] < fresh_ts - 1.0
+               and _LAG_TRIED.get(_cache_key("FRED", i, days)) != ts[i]]
+    if lagging:
+        for i in lagging:
+            _LAG_TRIED[_cache_key("FRED", i, days)] = ts[i]
+        try:
+            fresh = _fetch("FRED", lagging, days)
+        except Exception:
+            fresh = {}
+        for i in lagging:
+            r = sorted(fresh.get(i) or [])
+            if len(r) >= _MIN_OBS and r[-1][0] > rows[i][-1][0]:
+                rows[i] = r
+                _cache_put(_cache_key("FRED", i, days), r)
     have = [(i, t) for i, t in zip(_TREASURY_IDS, UST_TENORS) if i in rows]
     if len(have) < 6 or "DGS2" not in rows or "DGS10" not in rows:
-        why = "; ".join(f"{i}: {e}" for i, e in errors.items())
+        by: dict[str, list[str]] = {}
+        for i, e in errors.items():                   # one line per distinct reason, not 11 copies
+            text = " ".join(str(e).split()) or "?"    # the cause is after the URL line
+            by.setdefault(re.sub(r"\?id=\w+", "?id=…", text)[:400], []).append(i)
+        why = "; ".join(f"{', '.join(ids)}: {e}" for e, ids in by.items())
         raise FICCError(f"FRED served {len(have)}/{len(_TREASURY_IDS)} tenors ({why}).")
     dates = sorted({d for i, _ in have for d, _ in rows[i]})
     pos = {d: k for k, d in enumerate(dates)}
@@ -589,11 +640,35 @@ def _treasury_from_fred(days: int) -> CurvePanel:
     y, dates = y[keep][-days:], [d for d, k in zip(dates, keep) if k][-days:]
     if len(dates) < _MIN_OBS:
         raise FICCError(f"FRED curve has only {len(dates)} complete rows.")
-    note = ""
+    k10 = [i for i, _ in have].index("DGS10")
+    if not _CURVE_10Y_RANGE[0] < y[-1, k10] < _CURVE_10Y_RANGE[1]:
+        raise FICCError(f"FRED 10y par {y[-1, k10]:.6f} on {dates[-1]} is outside "
+                        f"{_CURVE_10Y_RANGE[0]:.3f}-{_CURVE_10Y_RANGE[1]:.2f}: not a usable "
+                        f"percent print.")
+    notes = []
     if len(have) < len(_TREASURY_IDS):
-        note = "Missing tenors: " + ", ".join(i for i in _TREASURY_IDS if i not in rows) + "."
+        notes.append("Missing tenors: " + ", ".join(i for i in _TREASURY_IDS if i not in rows)
+                     + "; the curve interpolates across a gap (log-linear DF) and holds the "
+                       "zero flat beyond the shortest and longest served tenors.")
+    newest = dates[-1]
+    behind: dict[str, list[str]] = {}
+    for i, _ in have:                                 # a tenor whose last print is older
+        last_i = max(d for d, _ in rows[i])
+        if last_i < newest:
+            behind.setdefault(last_i, []).append(i)
+    if behind:
+        notes.append(f"Carried forward to {newest}: " + "; ".join(
+            f"{', '.join(ids)} last observed {d}" for d, ids in sorted(behind.items())) + ".")
+    lag = int(np.busday_count(newest, date.today().isoformat()))
+    if lag > _CURVE_STALE_BDAYS:
+        notes.append(f"Stale: the newest observation ({newest}) is {lag} business days old.")
+    if len(y) >= 2:
+        jumps = [f"{i} {(y[-1, k] - y[-2, k]) * 1e4:+.0f}bp" for k, (i, _) in enumerate(have)
+                 if abs(y[-1, k] - y[-2, k]) > _CURVE_JUMP]
+        if jumps:
+            notes.append("Check the print: one-day move above 100bp on " + ", ".join(jumps) + ".")
     return CurvePanel(source="FRED", dates=tuple(dates), tenors=tuple(t for _, t in have),
-                      yields=y, note=note)
+                      yields=y, note=" ".join(notes))
 
 
 def load_fx_spot(pair: str, *, source: str = "auto", days: int = 504) -> Series:

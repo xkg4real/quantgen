@@ -109,8 +109,10 @@ def narrate_bond(a: BondAnalytics, scenarios: list[ScenarioRow] | None = None) -
         f"The {name} (coupon paid {b.freq}x a year) prices at {a.price:.3f} per {b.face:g} for "
         f"a yield of {_pct(a.ytm, 3)}: Macaulay duration {a.macaulay:.2f}y, modified "
         f"{a.modified:.2f}, convexity {a.convexity:.1f}.",
-        f"On {_money(b.notional)} notional the DV01 is {_money(a.dv01)} per bp; a +100bp "
-        f"parallel move costs roughly {_money(a.dv01 * 100)} before convexity.",
+        f"On {_money(b.notional)} notional the DV01 is "
+        f"{_money(a.dv01) if abs(a.dv01) >= 100 else f'{a.dv01:,.2f}'} per bp of the bond's "
+        f"own yield; a +100bp move in that yield costs roughly {_money(a.dv01 * 100)} before "
+        f"convexity.",
     ]
     if a.krd:
         t, v = _top(a.krd)
@@ -120,7 +122,10 @@ def narrate_bond(a: BondAnalytics, scenarios: list[ScenarioRow] | None = None) -
     lines.append(f"Against the curve the bond trades at a z-spread of {_bp(a.z_spread)} "
                  f"(curve price {a.curve_price:.3f}).")
     # breakeven_bp has the sign of total: negative carry+roll needs a rally to break even.
-    be = (f"yields can rise {cr.breakeven_bp:.1f}bp before the position loses money"
+    # NaN: the bond matures inside the horizon, so no yield move changes the result.
+    be = ("no yield move changes this hold-to-maturity result: the bond matures "
+          "inside the horizon" if not math.isfinite(cr.breakeven_bp) else
+          f"yields can rise {cr.breakeven_bp:.1f}bp before the position loses money"
           if cr.total >= 0 else
           f"carry and roll are negative and yields must fall {abs(cr.breakeven_bp):.1f}bp "
           f"over the horizon just to break even")
@@ -130,7 +135,8 @@ def narrate_bond(a: BondAnalytics, scenarios: list[ScenarioRow] | None = None) -
     if scenarios:
         worst = min(scenarios, key=lambda r: r.pnl)
         best = max(scenarios, key=lambda r: r.pnl)
-        lines.append(f"Of {len(scenarios)} scenarios the worst is '{worst.name}' at "
+        lines.append(f"Of {len(scenarios)} zero-curve scenarios (z-spread held) the worst is "
+                     f"'{worst.name}' at "
                      f"{_money(worst.pnl, signed=True)} ({worst.pnl_pct * 100:+.2f}%) and the "
                      f"best '{best.name}' at {_money(best.pnl, signed=True)} "
                      f"({best.pnl_pct * 100:+.2f}%).")

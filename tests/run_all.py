@@ -43,6 +43,7 @@ from tests.engine_acceptance import tests as engine_tests  # noqa: E402
 from tests.flet_api_guard import tests as ui_tests          # noqa: E402
 from tests.quant_acceptance import tests as quant_tests     # noqa: E402
 from tests.ficc_acceptance import tests as ficc_tests       # noqa: E402
+from tests.bonds_screen_acceptance import tests as bonds_tests   # noqa: E402
 from tests.expansion_acceptance import tests as expansion_tests   # noqa: E402
 from tests.macro_acceptance import tests as macro_tests     # noqa: E402
 from tests.paper_live_acceptance import tests as paper_tests     # noqa: E402
@@ -91,6 +92,7 @@ def tests():
             [(f"ui/{n}", f) for n, f in ui_tests()] +
             [(f"quant/{n}", f) for n, f in quant_tests()] +
             [(f"ficc/{n}", f) for n, f in ficc_tests()] +
+            [(f"bonds/{n}", f) for n, f in bonds_tests()] +
             [(f"expansion/{n}", f) for n, f in expansion_tests()] +
             [(f"macro/{n}", f) for n, f in macro_tests()] +
             [(f"paper/{n}", f) for n, f in paper_tests()] +
@@ -143,7 +145,7 @@ def run(entries) -> list[dict]:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--milestone", help="run the exit set of M<k> via tests/macro_registry.csv")
-    parser.add_argument("--suite", help="run one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam, guard, papers or nautilus")
+    parser.add_argument("--suite", help="run one suite: safety, engine, ui, quant, ficc, bonds, expansion, macro, paper, grokteam, guard, papers or nautilus")
     args = parser.parse_args(argv)
     if args.milestone and not re.fullmatch(r"M(10|[0-9])", args.milestone):
         parser.error("--milestone takes M0..M10")

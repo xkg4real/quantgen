@@ -850,7 +850,7 @@ Optional: `QUANTGEN_MACRO_DIR` moves the macro state out of `~/.nextgen/macro`.
 
 ```bash
 python tests/run_all.py                  # every suite; writes qa/acceptance_results.json
-python tests/run_all.py --suite macro    # one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam, guard, papers or nautilus
+python tests/run_all.py --suite macro    # one suite: safety, engine, ui, quant, ficc, bonds, expansion, macro, paper, grokteam, guard, papers or nautilus
 python tests/run_all.py --milestone M8   # the exit set of a milestone (tests/macro_registry.csv)
 python -m tests.macro_acceptance         # resync the registry's implemented_in column
 ```

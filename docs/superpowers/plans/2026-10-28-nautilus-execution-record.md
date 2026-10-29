@@ -299,6 +299,7 @@ The owner ruled on 2026-10-29 that this goes into the record ("1. X-1 공개 여
 - **Rule affected.** Spec section 9, row 2 ("Claude reads no real BTC price and no SPY row on or after 2004-12-01"; "never opens or hashes ..."). The test processes opened the files.
 - **Since then.** Every full run of this plan used a sparse clone where the four caches are skip-worktree and absent (X-1, T5-1): seven runs through ③-6 and three after the `main` merges. No bridge test opens a cache file.
 - **Pilot relevance.** Pilot 1 (SPY) and pilot 2 (BTC-USD) are registered on these series. Claude's view was limited to statuses, so no design choice used their values. This entry exists so a reader of the pilot results can weigh that.
+- **Later event (2026-10-29, about 05:50 UTC).** While reviewing the Bonds patch (②-5/b), a Claude sub-agent's first recursive `grep` (`--include='*.csv'`) did not exclude `docs/asset_expansion/cache/`, so the four protected caches were opened by grep. Nothing matched, nothing was printed and nothing was hashed; later searches excluded the folder (`docs/nautilus_bridge/OWNER_RULINGS_LOG.md`, "Claude 자진 보고 (2026-10-29)"). No value from the files reached Claude.
 
 ## Third `main` merge (`468d0fb`, 2026-10-29): PR #10, overlay tests fixed
 
