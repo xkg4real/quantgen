@@ -1,18 +1,18 @@
 ---
-status: taken
+status: checkpoint
 reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: none
 next_ids: ⑫-3, ⑬-1, ⑬-2, ⑨-2, ⑩-1, ⑩-2, ⑪-1
-updated_at: 2026-10-29T18:20:27.000+09:00
+updated_at: 2026-10-29T19:03:00+09:00
 stale_after_hours: 3
-waiting_on: none
-work_branch: gpt/handoff-continuation-20261029
-work_commit: 45e2d3ecff14f9273d6e97bfc1b6b1c0bd0a5c1a
+waiting_on: owner
+work_branch: gpt/ui-apply-main-20261029
+work_commit: fadec1c2e66b78773a3d24463d00794038891638
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/13
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -23,7 +23,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 
 # Owner-directed product work — ownership notice
 
-Active Codex work explicitly requested by the owner. This update only prevents concurrent takeover. Consolidated results/handoff are deferred at the owner's request. The prior report below is historical, not a new delivery or instruction to resume. UI PR creation/main integration was subsequently authorized for the selected UI scope; frozen research, actual-ledger and TRADEGEN boundaries remain.
+Owner-directed work is at a checkpoint; no active development worker will be retained. This is an ownership/lifecycle notice only. Consolidated results/handoff remain private and deferred at the owner's request. Do not take this checkpoint; waiting_on=owner. The prior report below is historical, not a new delivery or instruction to resume. UI PR creation/main integration was subsequently authorized for the selected UI scope; frozen research, actual-ledger and TRADEGEN boundaries remain.
 
 # Historical prior report
 
