@@ -1,20 +1,20 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-10-29T02:54:28+09:00
-source_branch: claude/relaxed-cerf-az755o
-source_head: 9679923
-upstream: origin/claude/relaxed-cerf-az755o
-patch_base: 9679923
+created_at: 2026-10-29T13:27:37+09:00
+source_branch: claude/amazing-gauss-tdiguu
+source_head: abc7217
+upstream: origin/claude/amazing-gauss-tdiguu
+patch_base: abc7217
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
 usage_pct: unknown
 usage_resets_at: unknown
-session: 3b15d155-c074-5a85-b79d-23d422f86afa
+session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
 snapshot_key: none
-current_md_updated_at: 2026-10-29T02:46:09+09:00
-current_md_status: idle
+current_md_updated_at: 2026-10-29T03:19:12+09:00
+current_md_status: checkpoint
 ---
 
 # 자동 스냅샷 (모델 없이 생성)
@@ -26,21 +26,21 @@ current_md_status: idle
 ## 최근 커밋
 
 ```
-9679923 T-CAL-02: signing tool and signature-aware tests, ready for the owner's sentence; no signature written
+abc7217 Execution record: the main merge after ③-6 (614dca4) and its cache-free full run (792/931, 2 failed, 137 not run)
+614dca4 Merge main (PR #7 owner-signed calendars, PR #3, PR #6) into the Nautilus branch; PT-07 calendar changes withdrawn
+ce10fe7 Merge pull request #3 from xkg4real/claude/amazing-ride-eancox
+98ccae6 Merge pull request #7 from xkg4real/claude/optimistic-fermi-revc37
+57c6344 ③-6 done: Nautilus execution record (Tasks 1-5 and the final cloud run); owner ruling on the handoff protocol; progress chart
 2b2cbbc Merge pull request #6 from xkg4real/claude/handoff-protocol
+520d0db nautilus: parity checks, gate hand-off, pilot tables and the Windows runbook (plan Task 5, spec Step 7)
 9a7652d Handoff: third review round — normalised ledger IDs, ledger history, re-runnable --done, session guards
+6b6b386 nautilus bridge, plan Task 4 (spec Step 6): runner, stub child, goldens, Linux census
 7b21cd8 Handoff: LEDGER of finished work, usage cycles, and a read-back check on every publish
+185b56c Owner rulings: ③-4 go, K-g option (a), ②-5 queue approved (interpretation recorded)
+420af64 proposed_patches README: record the git apply --check results (the two LF reading copies and the two stacked PT-09 alternatives do not apply to HEAD by design)
+22bdc16 ②-5 queue step 2: preserve the audit's scratch-only proposed diffs (not applied)
 a298b9d Handoff: second review round — keyed snapshots respect another task's handoff, --key always recorded
 cb0edd4 Handoff: fixes from review — fail-closed lock, untaken-handoff guard, byte-exact patch from patch_base
-f4f0199 Handoff: handoff-usage-watch mod (inert until the owner sets CLAUDE_CODE_PLUGIN_DIRS)
-cd54677 Handoff: auto_snapshot.py pushes a no-model git snapshot (AUTO_STATE.md) to the handoff branch
-3668531 Handoff protocol: CLAUDE.md rules and push_handoff.py publisher for the handoff branch
-56b2c32 Merge pull request #5 from xkg4real/claude/optimistic-fermi-revc37
-0849ca9 T-CAL-02 calendar audit (option A): 2027 KRX, NYSE, FED and SIFMA files checked; proposed v1.0.0 files, no signatures
-1f63f91 Merge pull request #2 from xkg4real/claude/amazing-gauss-tdiguu
-527cdf2 Audit request from the owner stored verbatim; rulings log records its receipt, the owner's notes and the audit-first order
-fdc1728 Owner rulings recorded verbatim (calendar implementation conditionally approved pending the audit file; R1-R5); remaining-work bulletin updated in Markdown, Word and the flow chart
-ca3a657 Remaining-work bulletin in Markdown and Word, with a swimlane flow chart (Claude, owner, mixed)
 ```
 
 ## 푸시되지 않은 커밋
