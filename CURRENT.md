@@ -4,9 +4,9 @@ reason: milestone
 from: gpt
 task: rulings-2026-10-29
 cycle: 2026-10-27
-done_ids: ②-5/b, ④-2/a, ①-2/4/a, ⑫-0
-next_ids: ①-2/4, ⑫-1/a, ⑬-2/a
-updated_at: 2026-10-29T07:37:38Z
+done_ids: ②-5/b, ④-2/a, ①-2/4/a, ⑫-0, ⑫-1/a
+next_ids: ①-2/4, ⑫-1, ⑬-2/a
+updated_at: 2026-10-29T07:41:28Z
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/rulings-2026-10-29
@@ -24,6 +24,8 @@ handoff_id: 2026-10-27/rulings-2026-10-29/1cebe23741ffed482a3205e0b3bd4a3c208b0e
 # 인수인계: 소유자 결정(2026-10-29) 반영과 다음 작업(PentPort 감사 반영, 홈/UI 개편 준비)
 
 ## 0. 한 줄 요약
+
+**Codex milestone ⑫-1/a (2026-10-29T07:41:28Z):** PR-A 한정 단계: 기록 QA·달력 메타데이터·정책 분리와 출처 불일치 검사. Commit 514e8ae3f150645036377d2c17f28fb94d1a97a1. fixture 8/8 PASS; status --check 통과; QA 원본/서명 파일 불변; frozen gate/study NOT_INSPECTED; 전체 PR-A/CI 완료 아님.
 
 **Codex milestone ⑫-0 (2026-10-29T07:37:38Z):** 기존 ID 보존, 감사 24항목과 PR-A~F 매핑, 승인/의존성 및 A/F1 UI 한정 범위 정리. Commit 7f44f9f78ac224f66bcb2d71f711d040d881f46d. 원격 branch SHA 일치; 기존 ①–⑪ 의미 유지; 전체 우선순위 승인과 개별 UI 승인을 구분.
 
