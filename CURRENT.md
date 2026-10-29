@@ -1,14 +1,14 @@
 ---
-status: returned
-reason: session_end
+status: taken
+reason: manual
 from: gpt
-task: rulings-2026-10-29
+task: owner-continuation-2026-10-29
 cycle: 2026-10-27
-done_ids: ②-5/b, ④-2/a, ①-2/4/a, ⑫-0, ⑫-1/a, ⑫-1/a/2, ⑬-2/a
-next_ids: ①-2/4, ⑫-1, ⑫-2, ④-2, ⑨-3a, ⑬-1, ⑬-2, ⑫-3
-updated_at: 2026-10-29T17:03:46+09:00
+done_ids: none
+next_ids: ②-5, ⑫-2, ⑫-3, ⑬-2
+updated_at: 2026-10-29T17:25:25+09:00
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: none
 work_branch: gpt/research-home-a-f1-20261029
 work_commit: e1271a7
 uncommitted_changes: no
@@ -17,13 +17,16 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: bfb891c9-91d7-4b8e-a943-500c45803cfb
-handoff_id: 2026-10-27/rulings-2026-10-29/1cebe23741ffed482a3205e0b3bd4a3c208b0e90
+execution_id: fd9c9670-910e-460e-92de-c83a8661a364
+handoff_id: 2026-10-27/owner-continuation-2026-10-29/2b2e64c32720af5018c283a6aea7ae1218b16b2b
 ---
 
 # 인수인계 반환: 달력 입력 검증·상태 정합성·A/F1 Research Home
 
 ## 0. 한 줄 요약
+
+**Owner-directed continuation (2026-10-29T17:25:25+09:00):** The owner explicitly requested immediate continuation of unfinished work. Resume PT-04, PR-B design/test proposal, packaging/CI and permitted UI work. This is a new manual continuation, not automatic reprocessing of the prior returned handoff. Preserve all prior completed IDs and return history. Gate/model/frozen/ledger changes and merge/release remain excluded. The prior return below is historical and superseded by this taken front matter.
+
 
 Claude의 유효한 handoff를 CAS 선점·read-back한 뒤, 달력 CAL-13/M-4,
 로드맵 재배치, 기록 상태의 단일 출처와 A/F1 홈·6개 작업공간을 구현했습니다.
