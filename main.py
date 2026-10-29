@@ -169,10 +169,12 @@ def main(page: ft.Page) -> None:
     def navigate(name: str, *, rebuild: bool = False) -> None:
         # Execution must reflect state that changed elsewhere; everything else
         # keeps its live view so a pipeline survives a tab switch.
-        if rebuild or name == "trading":
+        if rebuild or name in {"trading", "library"}:
             cache.pop(name, None)
         if name not in cache:
             cache[name] = build(name)
+        if name == "home":
+            cache[name].render()  # refresh session observations without abandoning an in-flight fetch
         current["page"] = name
         content.content = ft.Container(cache[name], padding=16 if state["compact"] else 28, expand=True)
         render_nav()

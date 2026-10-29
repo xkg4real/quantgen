@@ -1,0 +1,3054 @@
+{
+  "schema": "quantgen.data-readiness/1",
+  "registry_version": "2.0.0",
+  "scope": "Inventory, not acquisition/license certification; historical QA is not a current run",
+  "inputs_sha256": {
+    "registry": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
+    "recorded_qa": "89cd556c9557b5347701527544f80d3210a204196d247fe928f1022622efae86"
+  },
+  "series": [
+    {
+      "series_id": "BAA10Y",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "AS_POSTED",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "BAMLH0A0HYM2",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "AS_POSTED",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "BOK_BASE_RATE",
+      "source": "ECOS",
+      "alternatives": [
+        "ECOS"
+      ],
+      "frequency": "event",
+      "unit": "pct",
+      "timezone": "Asia/Seoul",
+      "calendar": "ECOS",
+      "schedule": "AS_POSTED",
+      "production_channel": "ECOS",
+      "history_channel": "ECOS",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "BOK_CALL_RATE",
+      "source": "ECOS",
+      "alternatives": [
+        "ECOS"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "Asia/Seoul",
+      "calendar": "ECOS",
+      "schedule": "AS_POSTED",
+      "production_channel": "ECOS",
+      "history_channel": "ECOS",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "BZ=F",
+      "source": "Yahoo",
+      "alternatives": [
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "USD_per_bbl",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "NYSE_CLOSE",
+      "production_channel": "Yahoo",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "CPIAUCSL",
+      "source": "FRED",
+      "alternatives": [
+        "ALFRED",
+        "FRED"
+      ],
+      "frequency": "monthly",
+      "unit": "index",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "schedule": "BLS",
+      "production_channel": "FRED",
+      "history_channel": "ALFRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "CPILFESL",
+      "source": "FRED",
+      "alternatives": [
+        "ALFRED",
+        "FRED"
+      ],
+      "frequency": "monthly",
+      "unit": "index",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "schedule": "BLS",
+      "production_channel": "FRED",
+      "history_channel": "ALFRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DAX_MONTH_END_CLOSE",
+      "source": "Yahoo",
+      "alternatives": [
+        "Yahoo"
+      ],
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "Europe/Berlin",
+      "calendar": "XETRA",
+      "schedule": "AS_POSTED",
+      "production_channel": "Yahoo",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DCOILBRENTEU",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "USD_per_bbl",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "AS_POSTED",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DEXJPUS",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "JPY_per_USD",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "H10",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DEXKOUS",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "KRW_per_USD",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "H10",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DFEDTARU",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "AS_POSTED",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DFII10",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "FRED_H15",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DGS10",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "FRED_H15",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DGS2",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "FRED_H15",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DGS30",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "FRED_H15",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DM_MKT_RET_24M",
+      "source": "derived",
+      "alternatives": [
+        "derived"
+      ],
+      "frequency": "monthly",
+      "unit": "return",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "DERIVED",
+      "production_channel": "derived",
+      "history_channel": "derived",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DM_MKT_VOL_126",
+      "source": "derived",
+      "alternatives": [
+        "derived"
+      ],
+      "frequency": "daily",
+      "unit": "vol",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "DERIVED",
+      "production_channel": "derived",
+      "history_channel": "derived",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DTB3",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "FRED_H15",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "DTWEXBGS",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "level",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "H10",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "ECOS_1530_CLOSE",
+      "source": "ECOS",
+      "alternatives": [
+        "ECOS"
+      ],
+      "frequency": "daily",
+      "unit": "KRW_per_USD",
+      "timezone": "Asia/Seoul",
+      "calendar": "ECOS",
+      "schedule": "ECOS_1530",
+      "production_channel": "ECOS",
+      "history_channel": "ECOS",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "FEDFUNDS",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "AS_POSTED",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "FTSE100_MONTH_END_CLOSE",
+      "source": "Yahoo",
+      "alternatives": [
+        "Yahoo"
+      ],
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "Europe/London",
+      "calendar": "LSE",
+      "schedule": "AS_POSTED",
+      "production_channel": "Yahoo",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "HSI_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Hong_Kong",
+      "calendar": "HKEX",
+      "schedule": "HK_CLOSE",
+      "production_channel": "KIS",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "HSI_MONTH_END_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "Asia/Hong_Kong",
+      "calendar": "HKEX",
+      "schedule": "HK_CLOSE",
+      "production_channel": "KIS",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "ICSA",
+      "source": "FRED",
+      "alternatives": [
+        "ALFRED",
+        "FRED"
+      ],
+      "frequency": "weekly",
+      "unit": "count",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "schedule": "BLS",
+      "production_channel": "FRED",
+      "history_channel": "ALFRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KODEX200_PDF",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "KRX"
+      ],
+      "frequency": "daily",
+      "unit": "weight",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KODEX_PDF",
+      "production_channel": "KIS",
+      "history_channel": "KIS",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KOSPI200_MFIV_1530",
+      "source": "KRX",
+      "alternatives": [
+        "KRX"
+      ],
+      "frequency": "daily",
+      "unit": "vol_pct",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "LIVE_QUOTE",
+      "production_channel": "KRX",
+      "history_channel": "KRX",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KOSPI200_OFFICIAL_CLOSE",
+      "source": "KRX",
+      "alternatives": [
+        "KRX",
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KRX_CLOSE",
+      "production_channel": "KRX marketplace / KIS",
+      "history_channel": "KRX official closes",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KOSPI_NET_BUY_FOREIGN",
+      "source": "KIS",
+      "alternatives": [
+        "KIS"
+      ],
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "AS_POSTED",
+      "production_channel": "KIS",
+      "history_channel": "KIS",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KOSPI_NET_BUY_INDIVIDUAL",
+      "source": "KIS",
+      "alternatives": [
+        "KIS"
+      ],
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "AS_POSTED",
+      "production_channel": "KIS",
+      "history_channel": "KIS",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KOSPI_NET_BUY_INSTITUTION",
+      "source": "KIS",
+      "alternatives": [
+        "KIS"
+      ],
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "AS_POSTED",
+      "production_channel": "KIS",
+      "history_channel": "KIS",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KOSPI_OFFICIAL_CLOSE",
+      "source": "KRX",
+      "alternatives": [
+        "KRX",
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KRX_CLOSE",
+      "production_channel": "KRX marketplace / KIS",
+      "history_channel": "KRX official closes",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KOSPI_TOTAL_MARKET_CAP",
+      "source": "KRX",
+      "alternatives": [
+        "KRX",
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KRX_CLOSE",
+      "production_channel": "KRX marketplace / KIS",
+      "history_channel": "KRX official closes",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KRX_000660_MARKET_CAP",
+      "source": "KRX",
+      "alternatives": [
+        "KRX",
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KRX_CLOSE",
+      "production_channel": "KRX marketplace / KIS",
+      "history_channel": "KRX official closes",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KRX_000660_OFFICIAL_CLOSE",
+      "source": "KRX",
+      "alternatives": [
+        "KRX",
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KRX_CLOSE",
+      "production_channel": "KRX marketplace / KIS",
+      "history_channel": "KRX official closes",
+      "adjustment_basis": "raw_official_close_plus_effective_dated_corporate_action_factors",
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KRX_005930_MARKET_CAP",
+      "source": "KRX",
+      "alternatives": [
+        "KRX",
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KRX_CLOSE",
+      "production_channel": "KRX marketplace / KIS",
+      "history_channel": "KRX official closes",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KRX_005930_OFFICIAL_CLOSE",
+      "source": "KRX",
+      "alternatives": [
+        "KRX",
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KRX_CLOSE",
+      "production_channel": "KRX marketplace / KIS",
+      "history_channel": "KRX official closes",
+      "adjustment_basis": "raw_official_close_plus_effective_dated_corporate_action_factors",
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KRX_069500_OFFICIAL_CLOSE",
+      "source": "KRX",
+      "alternatives": [
+        "KRX",
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KRX_CLOSE",
+      "production_channel": "KRX marketplace / KIS",
+      "history_channel": "KRX official closes",
+      "adjustment_basis": "raw_official_close_plus_effective_dated_corporate_action_factors",
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KRX_OHLCV",
+      "source": "KRX",
+      "alternatives": [
+        "KRX",
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KRX_CLOSE",
+      "production_channel": "KRX marketplace / KIS",
+      "history_channel": "KRX official closes",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KR_CD91",
+      "source": "ECOS",
+      "alternatives": [
+        "ECOS"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "Asia/Seoul",
+      "calendar": "ECOS",
+      "schedule": "AS_POSTED",
+      "production_channel": "ECOS",
+      "history_channel": "ECOS",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "KR_CPI",
+      "source": "KOSIS",
+      "alternatives": [
+        "KOSIS",
+        "ECOS"
+      ],
+      "frequency": "monthly",
+      "unit": "index",
+      "timezone": "Asia/Seoul",
+      "calendar": "ECOS",
+      "schedule": "AS_POSTED",
+      "production_channel": "KOSIS",
+      "history_channel": "KOSIS",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "MOM_PAPER_LS_SERIES",
+      "source": "derived",
+      "alternatives": [
+        "derived"
+      ],
+      "frequency": "daily",
+      "unit": "return",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "DERIVED",
+      "production_channel": "derived",
+      "history_channel": "derived",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "NIKKEI225_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Tokyo",
+      "calendar": "JPX",
+      "schedule": "JP_CLOSE",
+      "production_channel": "KIS",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "NIKKEI225_MONTH_END_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "Asia/Tokyo",
+      "calendar": "JPX",
+      "schedule": "JP_CLOSE",
+      "production_channel": "KIS",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "PAYEMS",
+      "source": "FRED",
+      "alternatives": [
+        "ALFRED",
+        "FRED"
+      ],
+      "frequency": "monthly",
+      "unit": "thousands",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "schedule": "BLS",
+      "production_channel": "FRED",
+      "history_channel": "ALFRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "PCEPI",
+      "source": "FRED",
+      "alternatives": [
+        "ALFRED",
+        "FRED"
+      ],
+      "frequency": "monthly",
+      "unit": "index",
+      "timezone": "America/New_York",
+      "calendar": "BEA",
+      "schedule": "BEA",
+      "production_channel": "FRED",
+      "history_channel": "ALFRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "PCEPILFE",
+      "source": "FRED",
+      "alternatives": [
+        "ALFRED",
+        "FRED"
+      ],
+      "frequency": "monthly",
+      "unit": "index",
+      "timezone": "America/New_York",
+      "calendar": "BEA",
+      "schedule": "BEA",
+      "production_channel": "FRED",
+      "history_channel": "ALFRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "SAHMREALTIME",
+      "source": "FRED",
+      "alternatives": [
+        "ALFRED",
+        "FRED"
+      ],
+      "frequency": "monthly",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "schedule": "BLS",
+      "production_channel": "FRED",
+      "history_channel": "ALFRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "SHANGHAI_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Shanghai",
+      "calendar": "SSE",
+      "schedule": "CN_CLOSE",
+      "production_channel": "KIS",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "SOX_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "FMP",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "NYSE_CLOSE",
+      "production_channel": "KIS quotes",
+      "history_channel": "FMP EOD; Yahoo secondary",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "SPX_MONTH_END_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "FMP",
+        "Yahoo"
+      ],
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "NYSE_CLOSE",
+      "production_channel": "KIS quotes",
+      "history_channel": "FMP EOD; Yahoo secondary",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "SPX_OFFICIAL_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "FMP",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "NYSE_CLOSE",
+      "production_channel": "KIS quotes",
+      "history_channel": "FMP EOD; Yahoo secondary",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "T10Y2Y",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "FRED_H15",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "T10Y3M",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "FRED_H15",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "T10YIE",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "FRED_H15",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "T5YIFR",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "FRED_H15",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "TAIEX_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Taipei",
+      "calendar": "TWSE",
+      "schedule": "TW_CLOSE",
+      "production_channel": "KIS",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "TAIEX_MONTH_END_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "Yahoo"
+      ],
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "Asia/Taipei",
+      "calendar": "TWSE",
+      "schedule": "TW_CLOSE",
+      "production_channel": "KIS",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "THREEFYTP10",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "AS_POSTED",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "UNRATE",
+      "source": "FRED",
+      "alternatives": [
+        "ALFRED",
+        "FRED"
+      ],
+      "frequency": "monthly",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "schedule": "BLS",
+      "production_channel": "FRED",
+      "history_channel": "ALFRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "US10Y_KIS_QUOTE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "LIVE_QUOTE",
+      "production_channel": "KIS",
+      "history_channel": "TREASURY_PAR; DGS10",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "USDKRW_1530_SNAPSHOT",
+      "source": "KIS",
+      "alternatives": [
+        "KIS"
+      ],
+      "frequency": "daily",
+      "unit": "KRW_per_USD",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "LIVE_QUOTE",
+      "production_channel": "KIS",
+      "history_channel": "ECOS_1530_CLOSE",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "USD_LIVE_PROXY",
+      "source": "Yahoo",
+      "alternatives": [
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "level",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "LIVE_QUOTE",
+      "production_channel": "Yahoo",
+      "history_channel": "DTWEXBGS",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "USEPUINDXD",
+      "source": "FRED",
+      "alternatives": [
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "level",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "AS_POSTED",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "UST_PAR_10Y",
+      "source": "Treasury",
+      "alternatives": [
+        "Treasury"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "SIFMA",
+      "schedule": "TREASURY_PAR",
+      "production_channel": "Treasury",
+      "history_channel": "Treasury",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "US_RF",
+      "source": "French",
+      "alternatives": [
+        "French",
+        "FRED"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "schedule": "AS_POSTED",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "US_SLEEVE_OFFICIAL_CLOSE",
+      "source": "KIS",
+      "alternatives": [
+        "KIS",
+        "FMP",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "USD",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "NYSE_CLOSE",
+      "production_channel": "KIS quotes",
+      "history_channel": "FMP EOD; Yahoo secondary",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "VIXCLS",
+      "source": "FRED",
+      "alternatives": [
+        "FRED",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "vol_pct",
+      "timezone": "America/New_York",
+      "calendar": "CBOE",
+      "schedule": "VIXCLS",
+      "production_channel": "FRED (logged posting time; usable no earlier than the US close of D+1 until 20 sessions are logged, F-21)",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "VKOSPI",
+      "source": "KRX",
+      "alternatives": [
+        "KRX"
+      ],
+      "frequency": "daily",
+      "unit": "vol_pct",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "schedule": "KRX_CLOSE",
+      "production_channel": "KRX",
+      "history_channel": "KRX",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "VXVCLS",
+      "source": "FRED",
+      "alternatives": [
+        "FRED",
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "vol_pct",
+      "timezone": "America/New_York",
+      "calendar": "CBOE",
+      "schedule": "VIXCLS",
+      "production_channel": "FRED",
+      "history_channel": "FRED",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "^MOVE",
+      "source": "Yahoo",
+      "alternatives": [
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "level",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "NYSE_CLOSE",
+      "production_channel": "Yahoo",
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    },
+    {
+      "series_id": "^TNX",
+      "source": "Yahoo",
+      "alternatives": [
+        "Yahoo"
+      ],
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "schedule": "NYSE_CLOSE",
+      "production_channel": null,
+      "history_channel": "Yahoo",
+      "adjustment_basis": null,
+      "inventory_scope": "metadata_only",
+      "acquisition_status": "NOT_VERIFIED",
+      "license_status": "NOT_VERIFIED",
+      "parity_status": "NOT_RUN"
+    }
+  ],
+  "recorded_blockers": [
+    {
+      "test": "macro/macro_m0_instruments/test_book01_real_sleeve_notional_is_owner_input",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: sleeves.<market>.notional_nav is null in the shipped store; the real commit check cannot run"
+    },
+    {
+      "test": "macro/macro_m0_rules/test_m0_15_e_labels_bootstrap_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: qf3_dnb_classes.py and QF3 variant series absent"
+    },
+    {
+      "test": "macro/macro_m1_calendars/test_cal02_2027_files_signed_before_2026_11_01",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: the 2027 KRX, NYSE, Fed and SIFMA files must be signed before 2026-11-01 (spec L2101); core/calendars/data/holidays_{KRX,NYSE,FED,SIFMA}.yaml are unsigned drafts"
+    },
+    {
+      "test": "macro/macro_m1_calendars/test_close02_on_the_real_signed_files_is_owner_input",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: core/calendars/data/*.yaml are unsigned drafts; T-CLOSE-02 on the real KRX/NYSE files waits for the owner's sign-off (Saturday closes, pre-2016 CSAT window, CSAT dates, random-end extensions)"
+    },
+    {
+      "test": "macro/macro_m1_calendars/test_print01_real_kospi_close_2026_03_09",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "krx_kospi_official_close_1997-01-03_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m1_calendars/test_regime01_full_range_expected_values_file",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [
+        "kr_regime_tags_expected.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: tests/fixtures/macro/kr_regime_tags_expected.csv (1995-01-01..2026-12-31, built from the official notices incl. the pre-Apr-1995 price limit, sell-tax steps, BoK fx regimes) is an owner deliverable; the shipped kr_regime_tags.yaml is an unsigned draft"
+    },
+    {
+      "test": "macro/macro_m1_calendars/test_sat01_real_kospi_completeness_and_variance_ratio",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "krx_kospi_official_close_1997-01-03_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "QX_DLA_postpatch.csv",
+        "krx_005930_000660_closes_mcap.csv",
+        "krx_kospi_official_close_1997-01-03_2026-10-02.csv",
+        "yahoo_KRWX_2004_2026-10-01.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F01 krx_kospi_official_close_1997-01-03_2026-10-02.csv (krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv); F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv); F16 yahoo_KRWX_2004_2026-10-01.csv (yahoo_KRWX_2004_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv); F20 QX_DLA_postpatch.csv (QX_DLA_postpatch.csv not in tests/fixtures/macro/MANIFEST.csv); F27 krx_005930_000660_closes_mcap.csv (krx_005930_000660_closes_mcap.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m1_fixtures/test_kis_quote_check_owner_record",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: KIS quote-field check not run; run docs/kis_quote_check.py with KIS credentials at 15:19:59 KST over ~20 live sessions and record app_key_can_trade (docs/kis_quote_check/<session>.json)"
+    },
+    {
+      "test": "macro/macro_m1_pit/test_avail_01_official_calendars_are_owner_signed",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: signed historical KRX / NYSE / FED / SIFMA calendar files (2015, 2025) absent; the golden table above runs on the stub clocks (core/calendars, package B)"
+    },
+    {
+      "test": "macro/macro_m1_pit/test_fix_01_regeneration_at_level_1_tolerance_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_DLA_postpatch.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: /home/claude/quantgen_macro_data/ (CATALOG.md, scripts/, results/QX_DLA_postpatch.csv) absent: golden fixtures cannot be generated or md5-frozen"
+    },
+    {
+      "test": "macro/macro_m1_pit/test_g_post_01_m1_data_rows_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_DLA_postpatch.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: Yahoo ^KS11, 005930.KS, 000660.KS, KRW=X post-patch files and QX_DLA_postpatch.csv absent (local docs/asset_expansion/cache ends 2026-09-23/25, no ^KS11, no 000660, no KRW=X)"
+    },
+    {
+      "test": "macro/macro_m1_pit/test_miss_01_cpi_yoy_3_353_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: FRED CPIAUCSL, UNRATE, SAHMCURRENT snapshot of 2026-10-02 (Aug-2026 CPI YoY 3.353%) absent"
+    },
+    {
+      "test": "macro/macro_m1_pit/test_print_01_real_kospi_close_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: Yahoo ^KS11 history to 2026-03-09 (-5.96% close, -8.11% 10:31 print) not local"
+    },
+    {
+      "test": "macro/macro_m1_pit/test_ro_02_app_key_can_trade_is_an_owner_attestation",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: KIS credentials and the 20-session quote-field check (M1-01); whether the app key can trade is recorded as an owner attestation (default 'unknown'), never probed through a trading path (F-3)"
+    },
+    {
+      "test": "macro/macro_m1_pit/test_stale_01_g_stale_01_reference_table_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_DLA_staleness.csv",
+        "fred_DEXKOUS.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: FRED snapshot DTWEXBGS, DGS10, VIXCLS (2016-01-04 -> 2026-09-25), official 2016-26 calendars and results/QX_DLA_staleness.csv absent; the local fred_DEXKOUS.csv covers the DEXKOUS clauses only (labelled smoke above)"
+    },
+    {
+      "test": "macro/macro_m2_costed/test_cost01_r4b_goldens_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_5f_2x3.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m2_costed/test_g_kr_06_cap15_reference_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m2_costed/test_g_lad_01_reference_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "QX_DLA_ladder.csv",
+        "french_daily_5f_2x3.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F24 results/QX_DLA_ladder.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m2_costed/test_g_lad_02_reference_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "QX_DLA_ladder.csv",
+        "french_daily_5f_2x3.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F24 results/QX_DLA_ladder.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m2_costed/test_g_lad_03_reference_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "QX_DLA_ladder.csv",
+        "french_daily_5f_2x3.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F24 results/QX_DLA_ladder.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m2_costed/test_g_mom_07_reference_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_mom_1990-01-02_2026-08-31.csv",
+        "french_monthly_ff_1926-07_2026-08.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F10 french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv; F11 french_monthly_ff_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_cap_02_stack_card_clause_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv absent: the stack card's share of days at <= 0.25x total exposure (31.0%) and rebound capture (11.2%) are M7 clauses on KOSPI history (section 9.0b)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_corr_01_plus_0_53_at_2026_09_30_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "USEPUINDXD.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv); F18 USEPUINDXD.csv (USEPUINDXD.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_g_kr_01_buy_and_hold_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_g_kr_02_vt20_gross_and_net_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_g_kr_02b_delta_sharpe_shares_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_g_kr_02c_static_book_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_g_kr_03_window_returns_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_g_kr_04_weights_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_g_kr_06_cap_1_5_reference_mode_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_g_us_01_vt15_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_regional_mom.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F10 french_daily_regional_mom.csv (french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_g_us_01b_static_book_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_regional_mom.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F10 french_daily_regional_mom.csv (french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_g_us_01c_ewma_challenger_deferred_to_m3",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_regional_mom.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F10 french_daily_regional_mom.csv (french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_i_02_korea_window_replays_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv); F14 yahoo_GSPC_1990_2026-10-01.csv (yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m2_risk/test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv)"
+    },
+    {
+      "test": "macro/macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_SPY_2015-12_2026-10-01.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: yahoo_SPY_2015-12_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m3_estimators/test_g_b5_03_us_market_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_mktrf_rf_1926-07_2026-08.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_daily_mktrf_rf_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m3_estimators/test_g_b5_04_display_labels_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m3_estimators/test_g_est_04_sizing_books_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m3_estimators/test_g_us_01c_ewma_challenger_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_mktrf_rf_1926-07_2026-08.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_daily_mktrf_rf_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m3_estimators/test_t_b5_01_kospi_golden_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m3_estimators/test_t_est_01_i_10_dlb_t1a_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m3_estimators/test_t_est_02_christoffersen_lines_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m4_sleeves/test_g_book_01_mom_strev_rmw",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_mom_1990-01-02_2026-08-31.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m4_sleeves/test_g_intl_01_regional_wml",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_regional_mom.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_daily_regional_mom.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m4_sleeves/test_g_mom_01_02_08_french_mom_daily",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_mom_1990-01-02_2026-08-31.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m4_sleeves/test_g_mom_03_04_05_06_french_mom_and_market",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_mom_1990-01-02_2026-08-31.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m4_sleeves/test_g_mom_07_reference_mode",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: French Mom daily files absent; reference mode (cap 2, DM 0x) lives in tests/reference (package D, TASK-M2-07) and is never importable from core/"
+    },
+    {
+      "test": "macro/macro_m4_sleeves/test_prior_01_mapping_clause_owner",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: BL-G07 family mapping of the six composite components is proposed, not confirmed (T-PRIOR-01 'runs on the confirmed mapping'); flow and quality priors unregistered outside Korea flow"
+    },
+    {
+      "test": "macro/macro_m4_sleeves/test_r03_01_french_fixture_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_mom_1990-01-02_2026-08-31.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m5_books/test_caps_01_real_kodex_basket_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "yf_069500.KS.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KODEX 200 PDF history (KIS or KRX; section 9.5 M5) absent: the 2-Oct-2026 basket is not on this machine (docs/asset_expansion/cache/yf_069500.KS.csv is the ETF price only); the arithmetic clause ran on the inline basket with s(005930) = 0.298 and pair 0.538"
+    },
+    {
+      "test": "macro/macro_m5_books/test_g_lad_01_literal_ladder_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_DLA_ladder.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: G-LAD-01: QX_DLA_ladder.csv (F24), F13 / U1 and the literal v1.2 rule text (.v1.2_INTEGRATION_backup.md, F-21) absent; never reconstructed from the cycle counts; tests/reference/reference_mode.literal_ladder stays the stub"
+    },
+    {
+      "test": "macro/macro_m5_books/test_g_lad_02_qf4_eleven_session_fix_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_DLA_ladder.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: G-LAD-02: QX_DLA_ladder.csv (F24), F13 / U1 and the literal v1.2 rule text (.v1.2_INTEGRATION_backup.md, F-21) absent; never reconstructed from the cycle counts; tests/reference/reference_mode.literal_ladder stays the stub"
+    },
+    {
+      "test": "macro/macro_m5_books/test_g_lad_03_sensitivity_lines_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_DLA_ladder.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: G-LAD-03: QX_DLA_ladder.csv (F24), F13 / U1 and the literal v1.2 rule text (.v1.2_INTEGRATION_backup.md, F-21) absent; never reconstructed from the cycle counts; tests/reference/reference_mode.literal_ladder stays the stub"
+    },
+    {
+      "test": "macro/macro_m5_books/test_g_post_01_pair_implied_share_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_DLA_postpatch.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: QX_DLA_postpatch.csv and the 25-Oct-2024 KRX-weight anchor absent; the implied-share formula is DLA section 7's (F-22); pair_share_kospi comes from KRX_MARKET_CAPS_005930_000660_KOSPI in production"
+    },
+    {
+      "test": "macro/macro_m5_books/test_i_04b_kospi_1997_2026_reentry_and_pinned_count_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv / KRX official closes 1997-04-15 -> 2026-10-02 absent: the re-entry property and the pinned v2 HALT count (TASK-M5-14) run on the frozen fixture through risk_layer.ladder_path; the mechanism ran on the synthetic path"
+    },
+    {
+      "test": "macro/macro_m5_books/test_mono_01_i01_fixture_clause_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: the I-01 fixtures (KR 2026-07-30 / 2026-10-02, US 2026-07-30 / 2026-10-01 artifacts) absent: the property ran on the synthetic I-01-structured book (seed 11)"
+    },
+    {
+      "test": "macro/macro_m5_fills_events/test_fill01_qf1_tracking_error_golden_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: 15:19 KST KIS snapshot series (QF1, L6018) and KOSPI official closes; the KIS quote field is UNVERIFIED (OWNER: M1-01 quote check)"
+    },
+    {
+      "test": "macro/macro_m5_fills_events/test_fill02_real_000660_closes_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KRX official closes of 000660 for 2026-07-30/31 and the owner-signed stock tick table (OWNER: F-18); the lock rule is asserted on the inline shape above"
+    },
+    {
+      "test": "macro/macro_m5_fills_events/test_g_r08_01_spell_count_smoke_then_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_DLB_r08.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: FRED VIXCLS / VXVCLS 2007-12-04 -> 2026-09-30 (QX_DLB_r08.csv basis) for the 132-spell golden; the Yahoo cache SMOKE above is vendor data and never asserted"
+    },
+    {
+      "test": "macro/macro_m5_fills_events/test_task_m5_14_halt_count_pin_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (KOSPI 1997-04-15 -> 2026-10-02 official closes) for the v2 HALT count pin and G-LAD-04 (section 9.4 items 9-10); never changes a default"
+    },
+    {
+      "test": "macro/macro_m5_fills_events/test_task_m5_15_event_conditional_variance_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: local KRX hourly bars and daily opens (QF7-A28 basis) for the DM test on the squared opening gap; the 2027-28 post-holiday VaR breach check is pre-registered (OWNER: 2027-28 data). Whatever it shows, no gap flag changes a weight (asserted above)"
+    },
+    {
+      "test": "macro/macro_m5_integration/test_g_r08_02_cardp_reject_record_is_on_file_never_reproduced",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: G-R08-02 (L5980) dMDD vs S of the VIX>=VIX3M block as a CARD-P: FRED VIXCLS/VXVCLS 2007-12-04 -> 2026-09-30 (F07), F13 / U1 / F10 absent; the REJECT-in-10-of-10-cells record stays on file, never reproduced"
+    },
+    {
+      "test": "macro/macro_m6_context/test_ctx_02_live_snapshot_sources_owner",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: live KOFIA margin debt / KRX leveraged-ETF AUM (BL-U01), the KOSPI200 MFIV 15:30 KST and the VIX/VIX3M 16:00 ET snapshot provider (section 9.5, M6) and ~20 KIS live sessions are owner inputs"
+    },
+    {
+      "test": "macro/macro_m6_context/test_ctx_section_11_context_values_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: FRED 2026-10-02 snapshot + ALFRED vintages (DFII10 2.93, T10YIE 2.36, T5YIFR 2.36, THREEFYTP10 1.02, ^MOVE 108.1, T10Y3M +1.07, probit 0.095, SAHMREALTIME -0.07 / UNRATE 4.1, CPI YoY 3.353, Taylor -2.3..-0.4, Brent 113.96 / BZ=F 102.59, DEXJPUS 157.18, BoK 3.00, KOSPI rv21 31.9% p73) absent: section 12 M6 Level-1 clause"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_epis_01_counts_on_official_closes_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "krx_kospi_official_close_1997-01-03_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_epis_02_pc4_on_the_korea_definitive_cell_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KOSPI 1997-04..2026-10-02 official closes (14 of 18 positive, max share 0.174; after the freeze)"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_es_02_korea_long_history_es_lines_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KOSPI 1997-2026 official closes with the R4b raw-return flag (dES99 +1.95 pp, dES95_21 +2.9 pp, dCDaR95 +7.1 pp; after the freeze; z values in reference mode only)"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_excess_01_bok_call_rate_ecos_code_is_owner_input",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: ECOS statistic code and observation calendar of BOK_CALL_RATE (registry channel)"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_excess_01_px2_reproduction_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "px2_cash_IRSTCI01KRM156N_monthly.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: px2_cash_IRSTCI01KRM156N_monthly.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_gate_01_placebo_counts_and_controls_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KOSPI 1997-2026 official closes (KRX), French daily Mkt-RF/RF 1926-07..2026-08 files, PX2 cash fixture (FRED IRSTCI01KRM156N), QX_EX1 ledger rows and the PX1/EX1 negative-control rule scripts"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_gate_03_negative_controls_in_detail_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KOSPI 1997-2026 official closes (KRX), French daily Mkt-RF/RF 1926-07..2026-08 files, PX2 cash fixture (FRED IRSTCI01KRM156N), QX_EX1 ledger rows and the PX1/EX1 negative-control rule scripts (5-day dSR -0.29, 10-day -0.106, post-shock-week z 1.278 are printed, never asserted)"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_i05_full_sample_lag_audit_over_compliant_goldens_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: every COMPLIANT golden backtest fixture of section 9.3 (KOSPI 1997-2026 official closes, French daily files, FRED H.15 / H.10 vintages) is absent; the independent lag audit cannot run"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_i08_acceptance_test_on_the_frozen_reference_data_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KOSPI 1997-2026 official closes (KRX), French daily Mkt-RF/RF 1926-07..2026-08 files, PX2 cash fixture (FRED IRSTCI01KRM156N), QX_EX1 ledger rows and the PX1/EX1 negative-control rule scripts; owner inputs sleeves.<market>.notional_nav and the BOK_CALL_RATE ECOS code are null; the folder is not a git repository (no external anchor): the freeze is refused"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_placebo_01_positive_control_fixture_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "KR_SOX_KRW_gate_B3.csv",
+        "MANIFEST.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KR_SOX_KRW_gate_B3.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_rlayer_01_card_book_convention_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KOSPI 1997-2026 official closes (with_risk_layer line: 24 HALTs, MDD -56.4% vs -45.3%; after the freeze)"
+    },
+    {
+      "test": "macro/macro_m7_cardp/test_trough_01_post_trough_and_cost_episodes_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KOSPI 1997-2026 official closes (-6.9 / -15.5 / -31.5 pp vs S; after the freeze)"
+    },
+    {
+      "test": "macro/macro_m7_cards/test_book02_kospi_vt20_execution_variants_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "krx_kospi_official_close_1997-01-03_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m7_cards/test_card01_formal_headers_owner_blocked",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: sleeves.KR/US.notional_nav null, KODEX 200 listing date unsigned, no git anchor, gate.package NOT_FROZEN: no formal header is committed on this machine"
+    },
+    {
+      "test": "macro/macro_m7_cards/test_i16_r06_kr_verdict_conditions_recorded_and_formal_run_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KRX official KOSPI closes from 1997-01-03 (F01), ECOS BOK_CALL_RATE (F02); OWNER: KODEX 200 listing date, sleeves.KR.notional_nav, git anchor; package NOT_FROZEN -- the formal R-06 KR verdict is computed blind, never here"
+    },
+    {
+      "test": "macro/macro_m7_cards/test_r03_01_revisions_committed_before_their_runs_lowest_passing_acts",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_EX1_qf3_trial_corr_diff.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: French Mom daily 1990-01-02..2026-08-31 and QX_EX1_qf3_trial_corr_diff.csv (dSR +0.273, deflated 0.98 / 0.947)"
+    },
+    {
+      "test": "macro/macro_m7_cards/test_r04_01_record_and_pooled_route_closed",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: QF3 26-trial ledger series (deflated add-on 0.77 +- 0.02 at N_equiv 6.3)"
+    },
+    {
+      "test": "macro/macro_m7_cards/test_r14_01_header_needs_multi_line_lines_and_the_diversification_claim",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: the 12 index series 2001-26 (SR 0.449; corr 0.03 / 0.34-0.36); COUNCIL: the index list (F-10)"
+    },
+    {
+      "test": "macro/macro_m7_cards/test_step02_binding_shares_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_EX1_ladder.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: QX_EX1_ladder.csv inputs (KOSPI VT20 3 bp 1997-04-15..2026-10-02 ~19%; US VT15 5 bp ~10%)"
+    },
+    {
+      "test": "macro/macro_m7_cards/test_step03_dsr_vs_no_steps_reference_run_pending",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: section 9.4 item 8 R-31 reference run (separate hwm_hard / ref_step) not frozen; KRX official closes absent"
+    },
+    {
+      "test": "macro/macro_m7_cards/test_study_runner_dry_listing_offline_and_formal_runs_refused",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KRX official closes 1997-2026 (F01), BOK_CALL_RATE (F02), French files, QX_* tables; OWNER: notional, git anchor (I-07 card lines, I-09 episode counts, I-16 formal verdict / header md5 / results md5)"
+    },
+    {
+      "test": "macro/macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "QX_DLB_power_se.csv",
+        "QX_DLB_power_sim.csv",
+        "QX_DLB_r03_dsr.csv",
+        "QX_EX1_qf3_trial_corr_diff.csv",
+        "french_daily_mom_1990-01-02_2026-08-31.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F10 french_daily_mom_1990-01-02_2026-08-31.csv; F22 QX_EX1_qf3_trial_corr_diff.csv; F23 QX_DLB_power_se.csv / QX_DLB_power_sim.csv / QX_DLB_r03_dsr.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); R-03 net of 50 bp on both legs (SR 0.6723, T 9,233, HAC SE 0.0716) on the R-03 ledger"
+    },
+    {
+      "test": "macro/macro_m7_integration/test_g_kr_l01_l13_korea_long_history_goldens_after_the_freeze_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "QX_DLA_korea_grid.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv; F21 QX_DLA_korea_grid.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); v12_check reproductions of the R-06 KR long history (I-07 Level-1), the formal run on F01 (I-16); the cap-1.5 variant of G-KR-L13 only through tests/reference"
+    },
+    {
+      "test": "macro/macro_m7_integration/test_g_lad_04_invariants_only_book_with_and_without_the_hard_stop_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); section 9.4 item 10 pending: the invariants-only recommended KOSPI book with and without the -15% hard stop (HALT count, MDD, Sharpe) printed beside D2"
+    },
+    {
+      "test": "macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "QX_DLB_power_se.csv",
+        "QX_DLB_power_sim.csv",
+        "QX_DLB_r03_dsr.csv",
+        "french_daily_5f_2x3.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: U1 french_daily_5f_2x3.csv + yahoo_GSPC_1990_2026-10-01.csv; F13 yahoo_KS11_1996-12_2026-10-02.csv; F23 QX_DLB_power_se.csv / QX_DLB_power_sim.csv / QX_DLB_r03_dsr.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); SE(dSR) NW10 / QS / bootstrap ladder of US VT15 and KOSPI VT20 vs S, 300 paths per cell"
+    },
+    {
+      "test": "macro/macro_m7_integration/test_g_us_f01_f10_us_fixture_goldens_after_the_freeze_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_5f_2x3.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: U1 french_daily_5f_2x3.csv + yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b); U1 = French Mkt-RF 1990-02 -> 2026-08 spliced with ^GSPC Sep-2026 (loader not written)"
+    },
+    {
+      "test": "macro/macro_m7_integration/test_t_est_03_comb_sized_book_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv (OHLC) not in tests/fixtures/macro/MANIFEST.csv: the COMB sized book (KOSPI 2001-26, 3 bp, target 20%, cap 1; vol-of-vol -22% +/- 2 pp vs SMA20, dMDD +2.8 pp, dSR CI [-0.042, +0.039]) runs from M7 on the frozen fixture"
+    },
+    {
+      "test": "macro/macro_m7_integration/test_t_gate_02_us_vt15_after_the_freeze_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_5f_2x3.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: U1 french_daily_5f_2x3.csv + yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; after the gate freeze (section 9.0b): the v2 verdict on US VT15 50 bp is asserted as a class (INSUFFICIENT_DATA; ES21 +1.65 pp, ES126 +3.8 pp), p_ni printed under R-24 and md5-frozen (section 9.4 item 14); the registered REJECT label stays and the card is never re-run"
+    },
+    {
+      "test": "macro/macro_m7_ledger/test_ledger_seeds_load_with_null_values_and_report_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "QX_EX1_qf3_trial_corr_diff.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: ledger seed rows from QX_* files (161 rows across 4 families: QX_EX1_qf3_trial_corr_diff.csv, R4/R4b golden files, QX_DLA_*, QX_DLB_*, QX_EX1 ladders; run_utc anchors need a git commit, section 9.4 item 15)"
+    },
+    {
+      "test": "macro/macro_m7_ledger/test_neff01_qf3_26_trial_matrix_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "QX_EX1_qf3_trial_corr_diff.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: QX_EX1_qf3_trial_corr_diff.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m7_ledger/test_sel01_e_card_run_f_vs_acceptance_report_f_after_freeze",
+      "recorded_status": "NOT_RUN",
+      "category": "OTHER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "PENDING: T-SEL-01 (e) runs after the gate freeze (section 9.0b); gate.package.status is NOT_FROZEN and no acceptance report exists on this machine"
+    },
+    {
+      "test": "macro/macro_m7_ledger/test_step3_01_end_to_end_from_the_matrix_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "QX_EX1_qf3_trial_corr_diff.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: QX_EX1_qf3_trial_corr_diff.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m7_stats/test_pbo01_kospi_vt_grid_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m7_stats/test_power01_fixture_ses_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_5f_2x3.csv",
+        "yahoo_GSPC_1990_2026-10-01.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: U1 french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv; U1 yahoo_GSPC_1990_2026-10-01.csv not in tests/fixtures/macro/MANIFEST.csv; F13 yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m7_stats/test_se01_r03_french_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_mom_1990-01-02_2026-08-31.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: F10 french_daily_mom_1990-01-02_2026-08-31.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m8_forward/test_g_ref_01_s1_goldens_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "yahoo_KS11_1996-12_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: yahoo_KS11_1996-12_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m8_forward/test_g_ref_02_s2_goldens_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_5f_2x3.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m8_forward/test_task_m8_11_french_1926_daily_file_owner",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_mktrf_rf_1926-07_2026-08.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: French Data Library daily Mkt-RF / RF 1926-07 -> 2026-08 (french_daily_mktrf_rf_1926-07_2026-08.csv): acquire (HTTP 403), record licence, owner and md5 in MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m8_forward/test_trend_02_french_monthly_and_us_vt15_goldens_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_monthly_ff_1926-07_2026-08.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_monthly_ff_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m8_forward/test_usfut_02_settling_run_logic_and_the_1926_fixture_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_mktrf_rf_1926-07_2026-08.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_daily_mktrf_rf_1926-07_2026-08.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m8_forward/test_usfut_05_dla_u2_reproduction_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "french_daily_5f_2x3.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: french_daily_5f_2x3.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m8_pipeline/test_i01_golden_clauses_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: I-01 golden clauses (L5688): KRX official KOSPI closes incl. 7,003.74 on 2026-10-02 (F01), the KODEX 200 PDF, the pair and KOSPI market caps, S&P / DGS10 / core PCE vintages / USD proxy and the signed event calendar are absent; vt 0.694 / rv20 28.82% / hedge reasons / gap 2 / bounds 0.755 and 0.685 / vt 0.25 on 2026-07-30 never asserted here"
+    },
+    {
+      "test": "macro/macro_m9_lab/test_i11_kospi_oos_2016_26_thresholds_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "krx_kospi_official_close_1997-01-03_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m9_lab/test_i11_replay_kospi_path_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "krx_kospi_official_close_1997-01-03_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m9_lab/test_t_crypto_01_asof_join_with_staleness_labels_owner",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: crypto sleeve (R-17 deferred): declare the venue row (UPBIT | BINANCE | COINGECKO, bar close 00:00:00Z of d+1), sleeves.CRYPTO.notional_nav and the CRYPTO consumer bindings before the as-of join exists"
+    },
+    {
+      "test": "macro/macro_m9_lab/test_t_fx_01_granularity_floor_needs_the_contract_multiplier_owner",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: FX_KRX_USD_futures contract multiplier and roll calendar (R-26 granularity floor; R-17 deferred)"
+    },
+    {
+      "test": "macro/macro_m9_scenarios/test_scenario_brent_history_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "DCOILBRENTEU.csv",
+        "MANIFEST.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: DCOILBRENTEU.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m9_scenarios/test_scenario_kospi_jul_2026_path_refdata",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [
+        "MANIFEST.csv",
+        "krx_kospi_official_close_1997-01-03_2026-10-02.csv"
+      ],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv"
+    },
+    {
+      "test": "macro/macro_m9_scenarios/test_scenario_latest_sep_table_owner",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: latest SEP Table 2 (short-rate RMSE band and release date) and a FEDFUNDS history; the stored band is the Dec-2023 +-1.4 pp at 1 year, labelled stale"
+    },
+    {
+      "test": "macro/macro_m9_scenarios/test_scenario_oil_2022_anchor_owner",
+      "recorded_status": "NOT_RUN",
+      "category": "OWNER",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "OWNER: t0 of the 2022 oil-shock replay (oil_2022_p20; brief F-16), then the KOSPI / ECOS / DFII10 / DCOILBRENTEU histories (REFDATA)"
+    },
+    {
+      "test": "macro/macro_tf_gov/test_cry1_cut_time_sensitivity_needs_intraday_candles",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: intraday BTC candles absent from docs/asset_expansion/cache (daily closes only); the 00:00 UTC / 00:00 KST / 21:00 UTC cut-time test of CRY-1 is not run (D-24: not counted as a trial)"
+    },
+    {
+      "test": "macro/macro_tf_gov/test_krx_tech_fund_card_formal_runs_need_the_krx_panel",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KRX all-stock daily panel (marcap files 1995-2026: close, high, volume, amount, marcap, shares, market, name class; expected under data/techfund/marcap/) absent"
+    },
+    {
+      "test": "macro/macro_tf_screens/test_idx_02_rebuilt_kospi_check_values_need_the_krx_panel",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KRX marcap panel (rebuilt KOSPI 1,457.46 / 9,120.19 / 5,599.30 need the all-stock file)"
+    },
+    {
+      "test": "macro/macro_tf_screens/test_krx_01_screen_card_runs_need_the_krx_panel",
+      "recorded_status": "NOT_RUN",
+      "category": "REFDATA",
+      "required_files": [],
+      "current_status": "NOT_RETESTED",
+      "reason": "REFDATA: KRX marcap panel (all-stock daily panel 1995-2026; SCR-1/SCR-2/SCR-3 cards and the FS-2/FS-5 cells cannot run on this machine)"
+    }
+  ],
+  "blocker_counts": {
+    "OWNER": 16,
+    "REFDATA": 104,
+    "OTHER": 1
+  },
+  "acquisition_queue": [
+    {
+      "filename": "DCOILBRENTEU.csv",
+      "affected_tests": [
+        "macro/macro_m9_scenarios/test_scenario_brent_history_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "KR_SOX_KRW_gate_B3.csv",
+      "affected_tests": [
+        "macro/macro_m7_cardp/test_placebo_01_positive_control_fixture_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "MANIFEST.csv",
+      "affected_tests": [
+        "macro/macro_m1_calendars/test_print01_real_kospi_close_2026_03_09",
+        "macro/macro_m1_calendars/test_sat01_real_kospi_completeness_and_variance_ratio",
+        "macro/macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata",
+        "macro/macro_m2_costed/test_cost01_r4b_goldens_refdata",
+        "macro/macro_m2_costed/test_g_kr_06_cap15_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_01_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_02_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_03_reference_refdata",
+        "macro/macro_m2_costed/test_g_mom_07_reference_refdata",
+        "macro/macro_m2_risk/test_corr_01_plus_0_53_at_2026_09_30_refdata",
+        "macro/macro_m2_risk/test_g_kr_01_buy_and_hold_refdata",
+        "macro/macro_m2_risk/test_g_kr_02_vt20_gross_and_net_refdata",
+        "macro/macro_m2_risk/test_g_kr_02b_delta_sharpe_shares_refdata",
+        "macro/macro_m2_risk/test_g_kr_02c_static_book_refdata",
+        "macro/macro_m2_risk/test_g_kr_03_window_returns_refdata",
+        "macro/macro_m2_risk/test_g_kr_04_weights_refdata",
+        "macro/macro_m2_risk/test_g_kr_06_cap_1_5_reference_mode_refdata",
+        "macro/macro_m2_risk/test_g_us_01_vt15_refdata",
+        "macro/macro_m2_risk/test_g_us_01b_static_book_refdata",
+        "macro/macro_m2_risk/test_g_us_01c_ewma_challenger_deferred_to_m3",
+        "macro/macro_m2_risk/test_i_02_korea_window_replays_refdata",
+        "macro/macro_m2_risk/test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
+        "macro/macro_m2_risk/test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata",
+        "macro/macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache",
+        "macro/macro_m3_estimators/test_g_b5_03_us_market_refdata",
+        "macro/macro_m3_estimators/test_g_b5_04_display_labels_refdata",
+        "macro/macro_m3_estimators/test_g_est_04_sizing_books_refdata",
+        "macro/macro_m3_estimators/test_g_us_01c_ewma_challenger_refdata",
+        "macro/macro_m3_estimators/test_t_b5_01_kospi_golden_refdata",
+        "macro/macro_m3_estimators/test_t_est_01_i_10_dlb_t1a_refdata",
+        "macro/macro_m3_estimators/test_t_est_02_christoffersen_lines_refdata",
+        "macro/macro_m4_sleeves/test_g_book_01_mom_strev_rmw",
+        "macro/macro_m4_sleeves/test_g_intl_01_regional_wml",
+        "macro/macro_m4_sleeves/test_g_mom_01_02_08_french_mom_daily",
+        "macro/macro_m4_sleeves/test_g_mom_03_04_05_06_french_mom_and_market",
+        "macro/macro_m4_sleeves/test_r03_01_french_fixture_refdata",
+        "macro/macro_m7_cardp/test_epis_01_counts_on_official_closes_refdata",
+        "macro/macro_m7_cardp/test_excess_01_px2_reproduction_refdata",
+        "macro/macro_m7_cardp/test_placebo_01_positive_control_fixture_refdata",
+        "macro/macro_m7_cards/test_book02_kospi_vt20_execution_variants_refdata",
+        "macro/macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata",
+        "macro/macro_m7_integration/test_g_kr_l01_l13_korea_long_history_goldens_after_the_freeze_refdata",
+        "macro/macro_m7_integration/test_g_lad_04_invariants_only_book_with_and_without_the_hard_stop_refdata",
+        "macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata",
+        "macro/macro_m7_integration/test_g_us_f01_f10_us_fixture_goldens_after_the_freeze_refdata",
+        "macro/macro_m7_integration/test_t_est_03_comb_sized_book_refdata",
+        "macro/macro_m7_integration/test_t_gate_02_us_vt15_after_the_freeze_refdata",
+        "macro/macro_m7_ledger/test_neff01_qf3_26_trial_matrix_refdata",
+        "macro/macro_m7_ledger/test_step3_01_end_to_end_from_the_matrix_refdata",
+        "macro/macro_m7_stats/test_pbo01_kospi_vt_grid_refdata",
+        "macro/macro_m7_stats/test_power01_fixture_ses_refdata",
+        "macro/macro_m7_stats/test_se01_r03_french_refdata",
+        "macro/macro_m8_forward/test_g_ref_01_s1_goldens_refdata",
+        "macro/macro_m8_forward/test_g_ref_02_s2_goldens_refdata",
+        "macro/macro_m8_forward/test_task_m8_11_french_1926_daily_file_owner",
+        "macro/macro_m8_forward/test_trend_02_french_monthly_and_us_vt15_goldens_refdata",
+        "macro/macro_m8_forward/test_usfut_02_settling_run_logic_and_the_1926_fixture_refdata",
+        "macro/macro_m8_forward/test_usfut_05_dla_u2_reproduction_refdata",
+        "macro/macro_m9_lab/test_i11_kospi_oos_2016_26_thresholds_refdata",
+        "macro/macro_m9_lab/test_i11_replay_kospi_path_refdata",
+        "macro/macro_m9_scenarios/test_scenario_brent_history_refdata",
+        "macro/macro_m9_scenarios/test_scenario_kospi_jul_2026_path_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "QX_DLA_korea_grid.csv",
+      "affected_tests": [
+        "macro/macro_m7_integration/test_g_kr_l01_l13_korea_long_history_goldens_after_the_freeze_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "QX_DLA_ladder.csv",
+      "affected_tests": [
+        "macro/macro_m2_costed/test_g_lad_01_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_02_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_03_reference_refdata",
+        "macro/macro_m5_books/test_g_lad_01_literal_ladder_refdata",
+        "macro/macro_m5_books/test_g_lad_02_qf4_eleven_session_fix_refdata",
+        "macro/macro_m5_books/test_g_lad_03_sensitivity_lines_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "QX_DLA_postpatch.csv",
+      "affected_tests": [
+        "macro/macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata",
+        "macro/macro_m1_pit/test_fix_01_regeneration_at_level_1_tolerance_refdata",
+        "macro/macro_m1_pit/test_g_post_01_m1_data_rows_refdata",
+        "macro/macro_m5_books/test_g_post_01_pair_implied_share_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "QX_DLA_staleness.csv",
+      "affected_tests": [
+        "macro/macro_m1_pit/test_stale_01_g_stale_01_reference_table_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "QX_DLB_power_se.csv",
+      "affected_tests": [
+        "macro/macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata",
+        "macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "QX_DLB_power_sim.csv",
+      "affected_tests": [
+        "macro/macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata",
+        "macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "QX_DLB_r03_dsr.csv",
+      "affected_tests": [
+        "macro/macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata",
+        "macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "QX_DLB_r08.csv",
+      "affected_tests": [
+        "macro/macro_m5_fills_events/test_g_r08_01_spell_count_smoke_then_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "QX_EX1_ladder.csv",
+      "affected_tests": [
+        "macro/macro_m7_cards/test_step02_binding_shares_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "QX_EX1_qf3_trial_corr_diff.csv",
+      "affected_tests": [
+        "macro/macro_m7_cards/test_r03_01_revisions_committed_before_their_runs_lowest_passing_acts",
+        "macro/macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata",
+        "macro/macro_m7_ledger/test_ledger_seeds_load_with_null_values_and_report_refdata",
+        "macro/macro_m7_ledger/test_neff01_qf3_26_trial_matrix_refdata",
+        "macro/macro_m7_ledger/test_step3_01_end_to_end_from_the_matrix_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "USEPUINDXD.csv",
+      "affected_tests": [
+        "macro/macro_m2_risk/test_corr_01_plus_0_53_at_2026_09_30_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "fred_DEXKOUS.csv",
+      "affected_tests": [
+        "macro/macro_m1_pit/test_stale_01_g_stale_01_reference_table_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P0"
+    },
+    {
+      "filename": "french_daily_5f_2x3.csv",
+      "affected_tests": [
+        "macro/macro_m2_costed/test_cost01_r4b_goldens_refdata",
+        "macro/macro_m2_costed/test_g_lad_01_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_02_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_03_reference_refdata",
+        "macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata",
+        "macro/macro_m7_integration/test_g_us_f01_f10_us_fixture_goldens_after_the_freeze_refdata",
+        "macro/macro_m7_integration/test_t_gate_02_us_vt15_after_the_freeze_refdata",
+        "macro/macro_m7_stats/test_power01_fixture_ses_refdata",
+        "macro/macro_m8_forward/test_g_ref_02_s2_goldens_refdata",
+        "macro/macro_m8_forward/test_usfut_05_dla_u2_reproduction_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "french_daily_mktrf_rf_1926-07_2026-08.csv",
+      "affected_tests": [
+        "macro/macro_m3_estimators/test_g_b5_03_us_market_refdata",
+        "macro/macro_m3_estimators/test_g_us_01c_ewma_challenger_refdata",
+        "macro/macro_m8_forward/test_task_m8_11_french_1926_daily_file_owner",
+        "macro/macro_m8_forward/test_usfut_02_settling_run_logic_and_the_1926_fixture_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "french_daily_mom_1990-01-02_2026-08-31.csv",
+      "affected_tests": [
+        "macro/macro_m2_costed/test_g_mom_07_reference_refdata",
+        "macro/macro_m4_sleeves/test_g_book_01_mom_strev_rmw",
+        "macro/macro_m4_sleeves/test_g_mom_01_02_08_french_mom_daily",
+        "macro/macro_m4_sleeves/test_g_mom_03_04_05_06_french_mom_and_market",
+        "macro/macro_m4_sleeves/test_r03_01_french_fixture_refdata",
+        "macro/macro_m7_integration/test_g_dsr_02_r03_net_of_cost_golden_refdata",
+        "macro/macro_m7_stats/test_se01_r03_french_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "french_daily_regional_mom.csv",
+      "affected_tests": [
+        "macro/macro_m2_risk/test_g_us_01_vt15_refdata",
+        "macro/macro_m2_risk/test_g_us_01b_static_book_refdata",
+        "macro/macro_m2_risk/test_g_us_01c_ewma_challenger_deferred_to_m3",
+        "macro/macro_m4_sleeves/test_g_intl_01_regional_wml"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "french_monthly_ff_1926-07_2026-08.csv",
+      "affected_tests": [
+        "macro/macro_m2_costed/test_g_mom_07_reference_refdata",
+        "macro/macro_m8_forward/test_trend_02_french_monthly_and_us_vt15_goldens_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "kr_regime_tags_expected.csv",
+      "affected_tests": [
+        "macro/macro_m1_calendars/test_regime01_full_range_expected_values_file"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "krx_005930_000660_closes_mcap.csv",
+      "affected_tests": [
+        "macro/macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P0"
+    },
+    {
+      "filename": "krx_kospi_official_close_1997-01-03_2026-10-02.csv",
+      "affected_tests": [
+        "macro/macro_m1_calendars/test_print01_real_kospi_close_2026_03_09",
+        "macro/macro_m1_calendars/test_sat01_real_kospi_completeness_and_variance_ratio",
+        "macro/macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata",
+        "macro/macro_m7_cardp/test_epis_01_counts_on_official_closes_refdata",
+        "macro/macro_m7_cards/test_book02_kospi_vt20_execution_variants_refdata",
+        "macro/macro_m9_lab/test_i11_kospi_oos_2016_26_thresholds_refdata",
+        "macro/macro_m9_lab/test_i11_replay_kospi_path_refdata",
+        "macro/macro_m9_scenarios/test_scenario_kospi_jul_2026_path_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P0"
+    },
+    {
+      "filename": "px2_cash_IRSTCI01KRM156N_monthly.csv",
+      "affected_tests": [
+        "macro/macro_m7_cardp/test_excess_01_px2_reproduction_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "yahoo_GSPC_1990_2026-10-01.csv",
+      "affected_tests": [
+        "macro/macro_m2_costed/test_cost01_r4b_goldens_refdata",
+        "macro/macro_m2_costed/test_g_lad_01_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_02_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_03_reference_refdata",
+        "macro/macro_m2_risk/test_corr_01_plus_0_53_at_2026_09_30_refdata",
+        "macro/macro_m2_risk/test_g_us_01_vt15_refdata",
+        "macro/macro_m2_risk/test_g_us_01b_static_book_refdata",
+        "macro/macro_m2_risk/test_g_us_01c_ewma_challenger_deferred_to_m3",
+        "macro/macro_m2_risk/test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
+        "macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata",
+        "macro/macro_m7_integration/test_g_us_f01_f10_us_fixture_goldens_after_the_freeze_refdata",
+        "macro/macro_m7_integration/test_t_gate_02_us_vt15_after_the_freeze_refdata",
+        "macro/macro_m7_stats/test_power01_fixture_ses_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "yahoo_KRWX_2004_2026-10-01.csv",
+      "affected_tests": [
+        "macro/macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "yahoo_KS11_1996-12_2026-10-02.csv",
+      "affected_tests": [
+        "macro/macro_m1_fixtures/test_g_post_01_m1_data_rows_refdata",
+        "macro/macro_m2_costed/test_cost01_r4b_goldens_refdata",
+        "macro/macro_m2_costed/test_g_kr_06_cap15_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_01_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_02_reference_refdata",
+        "macro/macro_m2_costed/test_g_lad_03_reference_refdata",
+        "macro/macro_m2_risk/test_cap_02_stack_card_clause_refdata",
+        "macro/macro_m2_risk/test_g_kr_01_buy_and_hold_refdata",
+        "macro/macro_m2_risk/test_g_kr_02_vt20_gross_and_net_refdata",
+        "macro/macro_m2_risk/test_g_kr_02b_delta_sharpe_shares_refdata",
+        "macro/macro_m2_risk/test_g_kr_02c_static_book_refdata",
+        "macro/macro_m2_risk/test_g_kr_03_window_returns_refdata",
+        "macro/macro_m2_risk/test_g_kr_04_weights_refdata",
+        "macro/macro_m2_risk/test_g_kr_06_cap_1_5_reference_mode_refdata",
+        "macro/macro_m2_risk/test_i_02_korea_window_replays_refdata",
+        "macro/macro_m2_risk/test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
+        "macro/macro_m2_risk/test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata",
+        "macro/macro_m3_estimators/test_g_b5_04_display_labels_refdata",
+        "macro/macro_m3_estimators/test_g_est_04_sizing_books_refdata",
+        "macro/macro_m3_estimators/test_t_b5_01_kospi_golden_refdata",
+        "macro/macro_m3_estimators/test_t_est_01_i_10_dlb_t1a_refdata",
+        "macro/macro_m3_estimators/test_t_est_02_christoffersen_lines_refdata",
+        "macro/macro_m5_books/test_i_04b_kospi_1997_2026_reentry_and_pinned_count_refdata",
+        "macro/macro_m5_fills_events/test_task_m5_14_halt_count_pin_refdata",
+        "macro/macro_m7_integration/test_g_kr_l01_l13_korea_long_history_goldens_after_the_freeze_refdata",
+        "macro/macro_m7_integration/test_g_lad_04_invariants_only_book_with_and_without_the_hard_stop_refdata",
+        "macro/macro_m7_integration/test_g_pwr_01_02_gate_power_goldens_refdata",
+        "macro/macro_m7_integration/test_t_est_03_comb_sized_book_refdata",
+        "macro/macro_m7_stats/test_pbo01_kospi_vt_grid_refdata",
+        "macro/macro_m7_stats/test_power01_fixture_ses_refdata",
+        "macro/macro_m8_forward/test_g_ref_01_s1_goldens_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "yahoo_SPY_2015-12_2026-10-01.csv",
+      "affected_tests": [
+        "macro/macro_m3_estimators/test_g_b5_02_spy_refdata_with_smoke_on_local_cache"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    },
+    {
+      "filename": "yf_069500.KS.csv",
+      "affected_tests": [
+        "macro/macro_m5_books/test_caps_01_real_kodex_basket_refdata"
+      ],
+      "status": "NEEDS_SOURCE_AND_RIGHTS",
+      "priority": "P1"
+    }
+  ]
+}

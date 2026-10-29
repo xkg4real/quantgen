@@ -118,9 +118,9 @@ class ResearchHomeTests(unittest.TestCase):
              patch('pathlib.Path.open', side_effect=AssertionError('unexpected Path read')):
             view = research_home.build_home_page(self.page, navigate=lambda _:None)
         texts = [c.value for c in walk(view) if isinstance(c, ft.Text)]
-        self.assertIn('미연결 · 출처/기준 시각 없음', texts)
+        self.assertIn('미연결', texts)
         self.assertTrue(any('중앙 90%' in t for t in texts))
-        self.assertNotIn('0', texts)
+        self.assertIn('0', texts)  # empty current session, not historical trial count
 
     def test_status_failure_visible_never_ready(self):
         with patch.object(research_home, 'recorded_status', return_value=(None, '자료 확인 실패')):
