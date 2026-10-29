@@ -574,16 +574,15 @@ inconclusive, never "refuted".
   data enters only through a re-gate. The local vendor caches
   (`docs/asset_expansion/cache/`, Yahoo / FRED to 2026-09-25) feed the labelled
   dry run only.
-* The calendar files are unsigned, so every live run refuses
-  (`CalendarUnsigned`) and the missed-decision check at app start reports itself
-  unavailable.
+* The calendar MANIFEST records the owner-signed set 1.0.0 (2026-10-29).
+  Signed calendars alone do not establish live data availability or formal gate readiness.
+  Changed/unsigned inputs still refuse with `CalendarUnsigned`.
 
 ### Open owner actions
 
-* Sign the calendar set (`core/calendars/data/*.yaml`, including
-  `kr_regime_tags.yaml`).
-* Place the repository under git (the freeze, header commits and the verdict
-  filter refuse `UNVERSIONED`).
+* Preserve signed calendar set 1.0.0. Any calendar revision requires the existing
+  change-control and re-signing process.
+* Keep work versioned: the freeze, header commits and verdict filter refuse `UNVERSIONED`.
 * Set `sleeves.KR.notional_nav` and `sleeves.US.notional_nav`; decide D5.
 * For the US futures card: the Micro ES contract multiplier, the
   `nav_fx.conversion_instant` and the futures roll calendar; acquire and
@@ -612,7 +611,7 @@ From a shell:
 ```bash
 python -m core.skills.macro_daily --mode dry_run                     # both markets
 python -m core.skills.macro_daily --market KR --mode dry_run --macro-dir <scratch dir>
-python -m core.skills.macro_daily --market KR --mode live            # refuses today: CalendarUnsigned (exit 2)
+python -m core.skills.macro_daily --market KR --mode live            # requires live data and existing governance prerequisites
 ```
 
 A dry run ingests `docs/asset_expansion/cache` as `vendor_close` rows (source
@@ -847,6 +846,26 @@ public market data only, places no order on any venue, and nothing in
 Optional: `QUANTGEN_MACRO_DIR` moves the macro state out of `~/.nextgen/macro`.
 
 ## Verification
+
+<!-- research-status:start -->
+### Recorded repository status
+
+Generated from explicit sources; **not a new test run or overall readiness verdict**.
+
+| Dimension | Recorded evidence |
+|---|---|
+| Code tests | 749/870 PASS; 0 FAIL; 121 NOT_RUN. Run time/commit not supplied by source. |
+| Calendars | 17 signed metadata rows, set 1.0.0; signed 2026-10-29T04:29:39Z. Payload verification is separate. |
+| Data readiness | NOT_VERIFIED; missing reference data remains a separate blocker. |
+| Formal gate | NOT_FROZEN per README; protected package NOT_INSPECTED. |
+| Paper studies | NOT_INSPECTED; no ledger or holdout access. |
+| Distribution | PERSONAL_ONLY; public release NOT_APPROVED. |
+
+Machine-readable evidence: [qa/research_status.json](qa/research_status.json).
+Check: `python -m tools.status.snapshot --check`. Historical dated tables below remain historical.
+<!-- research-status:end -->
+
+The detailed tables below record the historical 2026-10-23 run; they are not the latest QA aggregate.
 
 ```bash
 python tests/run_all.py                  # every suite; writes qa/acceptance_results.json
