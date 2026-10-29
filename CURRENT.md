@@ -6,7 +6,7 @@ task: nautilus-step3
 cycle: 2026-10-27
 done_ids: ③-1, ③-2, ③-3, ③-4, ③-5, ③-6
 next_ids: none
-updated_at: 2026-10-29T13:50:05+09:00
+updated_at: 2026-10-29T14:11:43+09:00
 stale_after_hours: 120
 waiting_on: owner
 work_branch: claude/amazing-gauss-tdiguu
@@ -250,7 +250,7 @@ PATH=<venv>/bin:$PATH bash "$S/full_run.sh" check_full [<레포 경로>]
 - **X-1 공개.** 2026-10-26 클라우드 기준선 실행 2회에서 macro 테스트 3개가 보호 캐시 파일을 읽었습니다. Claude는 PASS/FAIL만 봤습니다.
   - 이 사실을 Step 10 실행 기록과 스펙 10.4의 데이터 접근 이력에 남길지 정해 주십시오(`OWNER_RULINGS_LOG.md` "Claude 자진 보고" 절).
   - Claude 권고는 사실대로 기록하는 것입니다. ③-6 실행 기록에는 "Open owner decisions"로 사실만 적어 두었고 결정은 하지 않았습니다.
-- **`macro_ui_overlay` 테스트 2건(`main`의 실패).** 두 테스트는 달력이 미서명이라는 상태를 단언합니다. "Sign the calendar set" 할 일과 Live 툴팁의 "signed calendars"가 그 단언입니다. 17개가 모두 서명되자 UI는 둘 다 맞게 빼서 테스트가 실패합니다. 테스트가 `core.calendars.store.describe()`의 서명 상태를 따르게 하는 수정안(테스트만 9줄)이 `main` 사본에서 16/16입니다. 이 수정안은 서명문서 세션에 전달했습니다. 이 브랜치(PR #4)에 넣을지, `main`에 따로 넣을지 정해 주십시오. `ui/macro_state_panel.py:501`의 "the calendar set is unsigned" 문구도 이제 맞지 않습니다.
+- **`macro_ui_overlay` 테스트 2건(`main`의 실패).** 두 테스트가 달력 미서명 상태를 단언해서, 17개가 모두 서명된 `main`에서 실패합니다. 서명문서 세션이 Claude의 수정안을 `claude/relaxed-cerf-az755o`의 `ace8f3b`에 넣었습니다(테스트 9줄과 `ui/macro_state_panel.py:501` 문구 1줄, 그 세션 보고 16/16). PR로 `main`에 넣을지는 소유자가 정합니다. 들어오면 PR #4에 `main`을 다시 병합합니다(`git merge-tree`로 충돌 없음 확인). 그 뒤 기대값은 `792/931 passed, 2 failed, 137 not run`입니다. 이 브랜치에는 같은 수정을 따로 넣지 않습니다.
 - **PT-07 로더 강화.** PR #4 병합에서 걷어낸 PT-07의 로더 검사(CAL-12 same_day 달력 서명, CAL-13 따옴표 없는 시각 거부, CAL-14 MANIFEST `signed_utc`·서명 문장 고정, M-4 `signed_utc` 형식)를 서명된 파일과 맞게 다시 설계해 제안할지 정해 주십시오. 그대로 다시 넣으면 서명본이 거부됩니다.
 - **②-5 나머지.**
   - 오류 목록 10절(②-3에서 새로 확인한 결함, 임시 ID 71개)을 분류해 순위에 넣을지 정해 주십시오(4.4 머리말, 740행).
