@@ -1,9 +1,7 @@
 # 달력 서명 대장
 
-- **작성:** 2026-10-29. 기준은 `main` @ `ce10fe7`이며, PR #7(서명 4차까지)과 PR #3을 반영한 상태입니다.
-- **목적:** 서명 문서가 여러 파일에 흩어져 있어 한곳에 모았습니다.
-  - **서명된 파일:** 무엇을, 언제, 어떤 지문으로 서명했는지
-  - **아직 서명되지 않은 파일:** 서명 문서가 어디에 있는지
+- **작성:** 2026-10-29. 처음 작성한 뒤 같은 날 5차·6차 서명을 반영해 고쳤습니다.
+- **목적:** 서명 문서가 여러 파일에 흩어져 있어 한곳에 모았습니다. 무엇을, 언제, 어떤 지문으로 서명했는지 적습니다.
 - **원칙:** 서명은 소유자만 합니다. 이 대장은 기록일 뿐이며, 서명 필드를 쓰지 않습니다(spec L2100).
 
 ---
@@ -12,15 +10,13 @@
 
 | 구분 | 개수 | 파일 |
 |---|---|---|
-| 서명됨 | **10 / 16** | KRX, NYSE, FED, SIFMA, kr_sessions, publication_schedules, source_skipped, CBOE, ECOS, kr_regime_tags |
-| 미서명 | 6 / 16 | JPX, SSE, HKEX, TWSE, CME, market_closes |
-| 감사를 마쳤지만 아직 데이터 폴더에 없는 파일 | 1 | `release_calendar.yaml` (BLS·BEA A안 1단계). 감사와 서명 양식은 `12_release_calendar.md` |
+| 서명됨 | **17 / 17** | 아래 2절 전부 |
+| 미서명 | 0 | — |
 
-- **KR·US 운영에 필요한 달력은 모두 서명됐습니다.**
-- 미서명 6개는 다음 용도에만 쓰입니다.
-  - 일본·중국·홍콩·대만 종가: KR 공분산과 시장 간 시점 규칙(T-XMKT-01)
-  - CME 선물 달력
-- `MANIFEST.yaml`의 파일 머리(전체 세트)는 미서명이라 `calendar_version`은 `unsigned`로 찍힙니다. 16개가 모두 서명되면 세트 버전을 정합니다.
+- **6개 시장(KR, US, JP, CN, HK, TW) 모두 `signed=True`입니다.** 2026-10-29 결정일 기준이고, ARM 전제조건도 참입니다.
+- **BLS·BEA 입력도 열렸습니다.** `release_calendar`가 서명되어 US 커버리지 대상에 들어갔습니다.
+- **세트 전체는 아직 미서명입니다.** `MANIFEST.yaml`의 파일 머리가 미서명이라 `calendar_version`은 `unsigned`로 찍힙니다.
+  - 파일 17개가 모두 서명됐으므로, 세트 버전을 정하는 것은 이제 소유자의 결정입니다.
 
 ---
 
@@ -40,9 +36,16 @@
 | 8 | `holidays_CBOE.yaml` | 1.0.0 | 37 | 2025-01-01 ~ 2027-12-31 | 10-28 11:28:41Z / 20:28 | `5d9724d67cca74db7fa3b490bf805c78` | `83de7f6` |
 | 9 | `holidays_ECOS.yaml` | 1.0.0 | 33 | 2026-01-01 ~ 2027-12-31 | 10-28 11:28:41Z / 20:28 | `603170d21048f8b81649324996887595` | `83de7f6` |
 | 10 | `kr_regime_tags.yaml` | 1.0.0 | 63 | 1995-01-01 ~ 2027-12-31 | 10-28 13:27:00Z / 22:27 | `8336f69ca98c450c28eaaeea37495638` | `31758ad` |
+| 11 | `release_calendar.yaml` | 1.0.0 | 264 | 2025-01-01 ~ 2027-12-31 | 10-29 02:05:33Z / 11:05 | `0d89f161ac0b61712b2c1ed25bc9eadb` | `d4e9a42` |
+| 12 | `holidays_JPX.yaml` | 1.0.0 | 54 | 2025-01-01 ~ 2027-12-31 | 10-29 02:06:58Z / 11:06 | `bcc32846cb2e24d5c3a62928c466082f` | 6차 서명 커밋 |
+| 13 | `holidays_SSE.yaml` | 1.0.0 | 55 | 2025-01-01 ~ 2027-12-31 | 10-29 02:06:58Z / 11:06 | `e456838c578d04ff9ca6ff06ffe9fe9e` | 6차 서명 커밋 |
+| 14 | `holidays_HKEX.yaml` | 1.0.0 | 51 | 2025-01-01 ~ 2027-12-31 | 10-29 02:06:58Z / 11:06 | `303c93b40e529020c62bd1f149ccf946` | 6차 서명 커밋 |
+| 15 | `holidays_TWSE.yaml` | 1.0.0 | 57 | 2025-01-01 ~ 2027-12-31 | 10-29 02:06:58Z / 11:06 | `c3ef95bf79379b716fb52c9f3ec28958` | 6차 서명 커밋 |
+| 16 | `holidays_CME.yaml` | 1.0.0 | 37 | 2025-01-01 ~ 2027-12-31 | 10-29 02:06:58Z / 11:06 | `d707e9533bd61d995803a5ddbe6d8046` | 6차 서명 커밋 |
+| 17 | `market_closes.yaml` | 1.0.0 | 4 | 2015-01-01 ~ 2027-12-31 | 10-29 02:06:58Z / 11:06 | `bceb921be4b1419a3dc17a111ea3cd5d` | 6차 서명 커밋 |
 
 **T-CAL-02 기한 조항:** 1~4번의 서명 시각이 기한(2026-11-01T00:00:00Z)보다 앞섭니다.
-`test_cal02_2027_files_signed_before_2026_11_01`은 PASS입니다(2026-10-29 재실행).
+`test_cal02_2027_files_signed_before_2026_11_01`은 PASS입니다.
 
 ---
 
@@ -56,6 +59,8 @@
 | 2차 | kr_sessions, publication_schedules, source_skipped | `04_calendar_batch2.md` | 보고서 안 | `05_signature_batch2.md` |
 | 3차 | CBOE, ECOS | `06_calendar_batch3.md` | 보고서 6절 | `07_signature_batch3.md` |
 | 4차 | kr_regime_tags | `08_kr_regime_tags.md` | 보고서 안 | `10_signature_batch4.md` |
+| 5차 | release_calendar (+ 코드 패치) | `12_release_calendar.md` | 보고서 8절 | `16_signature_batch5.md` |
+| 6차 | JPX, SSE, HKEX, TWSE, CME, market_closes | `14_calendar_batch6.md` | `15_signing_form_batch6.md` | `17_signature_batch6.md` |
 
 **서명서 원문에 남아 있는 소유자 확인 사항**
 
@@ -74,26 +79,29 @@
   - 공매도, 랜덤엔드, fx_regime 값은 감사안대로 둡니다.
   - 미확인으로 남은 스펙 값은 그대로 둡니다.
   - T-REGIME-01 전 기간 기대값 파일은 별도 과제로 남깁니다.
+- **5차:**
+  - 2027년 실업수당 52행(추정)을 넣습니다(F-04).
+  - 코드 패치 F-01(행별 발표 시각), F-02(`usable_at` 탐색), US 커버리지 추가를 모두 적용합니다.
+  - 2028년 판은 2027-12-22 전에 서명합니다(F-06).
+- **6차:**
+  - HK-01: 홍콩 마감은 16:10, 반일장은 12:10입니다.
+  - SSE-27: 상하이 2027년 18일은 추정이며, 공지가 나오면 다시 서명합니다.
+  - TW-27: 대만 2027 결제 전용일 2일은 추정이고, 2026년 태풍 휴장은 포함합니다.
+  - CME-01: CME는 주가지수 선물 정산일입니다.
+  - SCOPE: 2025년 이전 이력은 이 버전 범위 밖입니다.
 
 ---
 
-## 4. 아직 서명되지 않은 파일
+## 4. 다시 서명해야 하는 일정
 
-| 파일 | 지금 상태 | 쓰는 곳 | 서명하지 않았을 때 | 서명 문서 |
-|---|---|---|---|---|
-| `holidays_JPX.yaml` | 0행, 기간 없음 | JP 결정 시계, KR 공분산(닛케이) | JP 시계와 닛케이 종가 입력이 막힘 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `holidays_SSE.yaml` | 0행, 기간 없음 | CN 결정 시계, KR 공분산(상하이) | 같음 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `holidays_HKEX.yaml` | 0행, 기간 없음 | HK 결정 시계, KR 공분산(HSI) | 같음 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `holidays_TWSE.yaml` | 0행, 기간 없음 | TW 결정 시계, KR 공분산(TAIEX) | 같음 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `holidays_CME.yaml` | 0행, 기간 없음 | CME 선물(`CME_micro_ES`), T-AVAIL-01 | CME 휴장일 판단 불가 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `market_closes.yaml` | 3행(SSE 15:00, HKEX 16:00, TWSE 13:30), 출처 없음 | CN·HK·TW 마감 시각 | CN·HK·TW 시계가 막힘 | `14_calendar_batch6.md`, 양식 `15_signing_form_batch6.md` |
-| `release_calendar.yaml` | 감사 완료, 제안 v1.0.0 264행(지문 `1faf621a5b443f1c9f3627c2a98f1054`). 코드 패치 `calendar_batch5/proposed_code.diff`와 함께 반영 | BLS·BEA 발표일(CPI, 고용, PCE, 실업수당) | BLS·BEA 입력이 막힘. 근원 PCE가 없으면 헤지 크레딧이 꺼짐 | `12_release_calendar.md` 8절(5차 서명 양식) |
-
-- **미서명 파일이 KR 북을 멈추지는 않습니다.** 공분산에만 쓰이는 입력은 실패하면 최대 5번의 결정 동안 마지막 값을 '오래됨' 표시와 함께 쓰고, 그 뒤에는 공분산에서 빠집니다(스펙 L1877).
-- **`release_calendar.yaml`:**
-  - 다른 세션이 소유자가 올린 BLS·BEA 공식 일정과 ALFRED 기록으로 감사했습니다(`d1c9296`, `5f669cb`).
-  - 이 세션이 다시 돌려 확인했습니다. 지문이 맞고, 현재 코드로는 4항목이 실패하고 코드 패치를 적용하면 0입니다.
-  - 패치는 서명과 같은 커밋에 넣어야 합니다. 서명 없이 `store.py` 부분만 넣으면 US 상태가 미서명으로 떨어지기 때문입니다.
+| 시기 | 대상 | 이유 |
+|---|---|---|
+| 2026년 11~12월 | `holidays_SSE` | 국무원·SSE 2027 공지가 나오면 2027년 추정 18행을 바꿈 |
+| 2026년 12월 | `holidays_KRX`, `holidays_ECOS` | KRX 2027 휴장 공지와 대조 |
+| 곧 | `holidays_TWSE` | TWSE 2027 일정표가 나오면 결제 전용일 2행 확인 |
+| 2027년 중 | `holidays_CME` | CME 2027 일정이 나오면 2027년 10행 확인 |
+| **2027-09-30까지** | 2028년 판 전체 | 2027년 10월 초부터 `warn`이 시작되므로 그 전에 서명 |
+| **2027-12-22 전** | `release_calendar` 2028년 판 | 이후 근원 PCE 읽기가 막혀 헤지 크레딧이 꺼짐 |
 
 ---
 

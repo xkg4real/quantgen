@@ -272,3 +272,8 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
   - `release_calendar.yaml` v1.0.0을 데이터 폴더로 옮기고 MANIFEST 행을 추가했습니다.
   - `proposed_code.diff`를 적용하고 서명을 기록했습니다. Geon Koh, 2026-10-29T02:05:33Z, md5 `0d89f161…`.
   - US 커버리지 대상에 `release_calendar`가 들어갔고, US는 `signed=True`입니다.
+- **반영 (6차):**
+  - 6개 파일 v1.0.0을 데이터 폴더로 옮기고 MANIFEST 행을 1.0.0으로 올렸습니다.
+  - `--expect` 지문 6개를 확인한 뒤 서명을 기록했습니다. Geon Koh, 2026-10-29T02:06:58Z.
+  - 달력 파일 17개가 모두 서명되어 로드되고, 6개 시장 모두 `signed=True`입니다.
+  - MANIFEST 파일 머리(세트 버전)는 미서명으로 남아 `calendar_version`은 `unsigned`입니다. 세트 버전은 소유자가 정합니다.

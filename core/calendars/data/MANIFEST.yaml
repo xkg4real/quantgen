@@ -50,33 +50,33 @@ rows:
   test_ids:
   - T-VIX-01
 - file: holidays_CME.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
+  version: 1.0.0
+  md5: d707e9533bd61d995803a5ddbe6d8046
+  signed_off_by: Geon Koh
   test_ids:
   - T-AVAIL-01
 - file: holidays_JPX.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
+  version: 1.0.0
+  md5: bcc32846cb2e24d5c3a62928c466082f
+  signed_off_by: Geon Koh
   test_ids:
   - T-XMKT-01
 - file: holidays_SSE.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
+  version: 1.0.0
+  md5: e456838c578d04ff9ca6ff06ffe9fe9e
+  signed_off_by: Geon Koh
   test_ids:
   - T-XMKT-01
 - file: holidays_HKEX.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
+  version: 1.0.0
+  md5: 303c93b40e529020c62bd1f149ccf946
+  signed_off_by: Geon Koh
   test_ids:
   - T-XMKT-01
 - file: holidays_TWSE.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
+  version: 1.0.0
+  md5: c3ef95bf79379b716fb52c9f3ec28958
+  signed_off_by: Geon Koh
   test_ids:
   - T-XMKT-01
 - file: holidays_ECOS.yaml
@@ -94,9 +94,9 @@ rows:
   - T-CLOSE-02
   - T-SAT-01
 - file: market_closes.yaml
-  version: 0.1.0-draft
-  md5: null
-  signed_off_by: null
+  version: 1.0.0
+  md5: bceb921be4b1419a3dc17a111ea3cd5d
+  signed_off_by: Geon Koh
   test_ids:
   - T-XMKT-01
 - file: publication_schedules.yaml
