@@ -9,7 +9,7 @@
     "canonical_groups": 67,
     "observation_models": 14,
     "initial_reproductions": 5,
-    "additional_reproduced_ids": 6,
+    "additional_reproduced_ids": 7,
     "implemented_canonical_groups": 10
   },
   "aliases": {
@@ -574,10 +574,11 @@
       "source_model": "136. M6-05 펀딩 십분위 이벤트 스터디와 부트스트랩 p",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "NEW-M6-02/a retires IID inference and adds conditional exploratory phase diagnostic; real-market assumptions and historical card validation remain open",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "PARTIAL_IMPLEMENTED",
+      "evidence": "docs/product/FUNDING_INFERENCE_2026-10-30.md"
     },
     {
       "id": "NEW-M6-03",

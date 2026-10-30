@@ -314,7 +314,7 @@ with the numbers:
   (PASS: every criterion, off the grid edge, beats buy-and-hold at p 0.07
   against the 0.10 the claim needs). The Sprint 7 CRY-1 trials re-examined the
   KRW-BTC card; see [Tech-fund research register](#tech-fund-research-register).
-* **Offered as monitors**: funding carry (the BIS sign confirmed), the weekday
+* **Offered as monitors**: funding carry (retrospective association; historical IID confirmation is not reliable), the weekday
   table (no return effect, a weekend-volume cost input), the futures basis
   (reconciles with KIS's theoretical price within the dividend band), the
   kimchi premium, the PCA fly, the LETF drag at realised variance.

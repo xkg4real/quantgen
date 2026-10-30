@@ -5,6 +5,7 @@ import numpy as np
 import config
 from core.crypto import analytics as CA
 from .decay_disclosure import decay_text
+from .funding_disclosure import funding_text, FUNDING_CARD_NOTE
 
 CRYPTO_DAYS = 365
 
@@ -76,6 +77,7 @@ def analyze(*, days: int = 730, source: str = "live", card_loader=None, include_
     out["verdicts"] = {k: cards.get(k, {}).get("decision", "not run") for k in
                        ("M_C1_kimchi", "M_C4_funding", "S_C3_crypto_trend_btcusd", "S_C3_crypto_trend_krwbtc",
                         "D_C2_garch_btc", "D_C2_skewt_btc", "M_C8_ethbtc")}
+    out["verdict_context"] = {"M_C4_funding": FUNDING_CARD_NOTE}
     return out
 
 def narrative(a: dict) -> str:
@@ -87,9 +89,8 @@ def narrative(a: dict) -> str:
         + (f", and its predictive slope on next-week returns is {kp.pred_slope:+.4f} (t {kp.pred_t:+.1f})." if math.isfinite(kp.pred_t) else "."),
     ]
     if fc:
-        parts.append(f"Perpetual funding runs {fc.last_ann_pct:+.1f} % a year on the 7-day mean, the {fc.percentile:.0%} percentile since "
-                     f"{fc.dates[0]} ({fc.flag}); after top-decile funding the next 30 days returned {fc.top_decile_fwd30:+.1%} against "
-                     f"{fc.bottom_decile_fwd30:+.1%} after bottom-decile funding (bootstrap p {fc.bootstrap_p:.2f}).")
+        parts.append(f"Perpetual funding runs {fc.last_ann_pct:+.1f} % a year on the 7-observation mean, "
+                     f"the {fc.percentile:.0%} historical percentile ({fc.flag}). " + funding_text(fc))
     parts.append(f"GARCH(1,1)-t on {g['n']} days of BTCUSDT: ν {g['nu']:.1f}, persistence {g['persistence']:.3f} "
                  f"(half-life {g['half_life']:.0f} days), conditional vol {g['cond_vol_365']:.0%} on a 365-day basis"
                  f"{'' if g['converged'] else '; the solver did not converge'}"
@@ -106,6 +107,7 @@ def payload(a: dict) -> dict:
     return {"source": a["source"], "kimchi": {"last_pct": kp.last_pct, "z": kp.last_z, "mean_pct": kp.mean_pct, "max_pct": kp.max_pct,
                                               "half_life_days": kp.half_life_days, "decay": getattr(kp, "decay", None), "adf_p": kp.adf_p, "pred_t": kp.pred_t, "n": kp.n},
             "funding": ({"last_ann_pct": fc.last_ann_pct, "percentile": fc.percentile, "flag": fc.flag, "top_decile_fwd30": fc.top_decile_fwd30,
-                         "bottom_decile_fwd30": fc.bottom_decile_fwd30, "bootstrap_p": fc.bootstrap_p} if fc else None),
+                         "bottom_decile_fwd30": fc.bottom_decile_fwd30, "bootstrap_p": None, "bootstrap_status": "RETIRED_INVALID_IID",
+                         "diagnostic": getattr(fc, "diagnostic", {}), "interpretation": funding_text(fc)} if fc else None),
             "premium_index": a["premium_index"],
-            "garch": a["garch"], "ethbtc": a["ethbtc"], "weekday": a["weekday"], "verdicts": a["verdicts"]}
+            "garch": a["garch"], "ethbtc": a["ethbtc"], "weekday": a["weekday"], "verdicts": a["verdicts"], "verdict_context": {"M_C4_funding": FUNDING_CARD_NOTE}}

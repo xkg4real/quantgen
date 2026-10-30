@@ -7,6 +7,7 @@ balance read. Nothing here trades, and the page says so.
 """
 from __future__ import annotations
 
+from core.research.funding_disclosure import funding_text
 import math
 from typing import Callable, Optional
 
@@ -52,7 +53,7 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
                 blocks.append(notice("Synthetic data: every series here is simulated.", "error", icon=ft.Icons.SCIENCE_OUTLINED))
             blocks.append(ft.Row([chip(f"source: {a['source']}", "success" if a["source"] == "LIVE" else "muted"),
                                   chip(f"USD/KRW: {a['usdkrw_source']}"), chip(f"{kp.n} premium days")] +
-                                 [chip(f"{k.split('_', 2)[-1]}: {v}", "success" if v == "PASS" else "muted") for k, v in a["verdicts"].items()],
+                                 [chip(f"{k.split('_', 2)[-1]}: {v}" + (" · historical, not revalidated" if k == "M_C4_funding" else ""), "success" if v == "PASS" and k != "M_C4_funding" else "muted") for k, v in a["verdicts"].items()],
                                  spacing=6, wrap=True))
             blocks.append(ft.Row([
                 stat("Kimchi premium", f"{kp.last_pct:+.2f}%", token="error" if abs(kp.last_pct) > 3 else "text"),
@@ -67,6 +68,7 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
             blocks.append(card(xc.lines_chart(kp.dates, {"kimchi premium %": kp.premium_pct}, title="Kimchi premium (Upbit KRW-BTC vs Binance × USD/KRW)",
                                               hlines={"0": 0.0}, pct=True)))
             if fc:
+                blocks.append(notice(funding_text(fc), "accent"))
                 blocks.append(card(xc.lines_chart(fc.dates, {"funding (ann. %)": fc.carry_ann_pct}, title="Perpetual funding, 7-day mean annualised",
                                                   hlines={"0": 0.0}, pct=True)))
             px = a["btc"]

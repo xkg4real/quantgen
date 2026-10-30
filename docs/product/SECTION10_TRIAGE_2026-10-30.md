@@ -112,3 +112,13 @@ interpretation; see `AR1_DECAY_2026-10-30.md`. Missing/non-decaying estimates
 are no longer described as slow reversion. Positive-phi results and pairs
 weights/gates are unchanged. Latest queue: **10/67** corrected, **57**
 remaining groups; 14 observation rows and 15 ambiguous mappings remain.
+
+## Funding inference partial safeguard
+
+NEW-M6-02/a removes the invalid IID p-value, introduces an explicitly conditional
+circular-phase diagnostic, and distinguishes historical funding cards in both UIs,
+AI and exports. See `FUNDING_INFERENCE_2026-10-30.md`. Synthetic independent-null
+300-case fractions below .05: old .3900, exploratory .04333. Real-market assumptions
+and historical validation remain open: **10/67** complete and **57** remaining
+(including NEW-M6-02); **7** additional IDs reproduced. This is a completed sub-scope,
+not closure of the full inference defect.
