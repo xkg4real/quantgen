@@ -51,6 +51,8 @@ class RatesRequest:
                     raise ValueError("Unknown option kind/model")
                 if not math.isfinite(self.vol) or self.vol <= 0: raise ValueError("Volatility must be positive")
                 if parse_tenor(self.tenor) <= 0: raise ValueError("Invalid tenor")
+                if self.kind in {"cap", "floor"} and parse_tenor(self.tenor) <= .25:
+                    raise ValueError("Spot-start quarterly cap/floor needs an unfixed caplet; tenor must exceed 3m")
                 if self.kind == "swaption" and parse_tenor(self.expiry) <= 0: raise ValueError("Invalid expiry")
         if self.tool == "sim":
             if self.model not in {"vasicek", "cir", "hull_white"} or self.instrument not in {"none", "bond", "swap"}:

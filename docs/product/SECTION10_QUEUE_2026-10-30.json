@@ -9,8 +9,8 @@
     "canonical_groups": 67,
     "observation_models": 14,
     "initial_reproductions": 5,
-    "additional_reproduced_ids": 1,
-    "implemented_canonical_groups": 2
+    "additional_reproduced_ids": 3,
+    "implemented_canonical_groups": 4
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -388,10 +388,11 @@
       "source_model": "67. M3-15 캡·플로어 가격기",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Verify focused tests and PR/main integration; other model/convention findings remain open",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "tests/ficc_boundary_acceptance.py"
     },
     {
       "id": "M3-N08",
@@ -465,10 +466,11 @@
       "source_model": "85. M4-08 Fama 회귀(UIP 검정)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Verify focused tests and PR/main integration; other model/convention findings remain open",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "tests/ficc_boundary_acceptance.py"
     },
     {
       "id": "M4-N6",
@@ -740,7 +742,7 @@
       "source_model": "142. M6-11 크립토 공급사 파생 표시값(perp premium, Upbit 보유 평가)",
       "queue": 1,
       "type": "Payload privacy",
-      "next": "Verify PR/main integration; structured account fields removed in Flet and final HTTP boundary; native safeguards retained",
+      "next": "Merged PR22, main450fa00; no actual account/API calls in verification",
       "mapping_needs_disambiguation": false,
       "reproduction": "SYNTHETIC_REPRODUCED",
       "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
