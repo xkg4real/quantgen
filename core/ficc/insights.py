@@ -127,6 +127,8 @@ def narrate_bond(a: BondAnalytics, scenarios: list[ScenarioRow] | None = None) -
     lines.append(f"Over a {tenor_label(cr.horizon)} horizon carry is {cr.carry:+.3f} and "
                  f"roll-down {cr.rolldown:+.3f} per {b.face:g}, {cr.total:+.3f} in total, so "
                  f"{be}.")
+    lines.append("Funding uses price * (1 / DF(h) - 1), with h capped at maturity: "
+                 "a curve-based funding proxy, not an executable repo quote.")
     if scenarios:
         worst = min(scenarios, key=lambda r: r.pnl)
         best = max(scenarios, key=lambda r: r.pnl)
