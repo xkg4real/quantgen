@@ -6,7 +6,7 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T20:34:22.000+09:00
+updated_at: 2026-10-30T21:05:57.688+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ar1-decay-disclosure-20261030
@@ -17,7 +17,7 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: fb4e7f11-2fc5-4222-a172-bdd3812c8392
+execution_id: 89641371-412d-4208-beb9-0e10cdb8d772
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
@@ -25,7 +25,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 최신 결과
-제품 main c9a03ce9a71bf1ab81b733fd4dc40ffa6c2c1117. 현재 source696ee3cb9eaf5190db649be58d46754d865dc5c5 / gpt/ar1-decay-disclosure-20261030. 실행 fb4e7f11-2fc5-4222-a172-bdd3812c8392.
+제품 main c9a03ce9a71bf1ab81b733fd4dc40ffa6c2c1117. 현재 source696ee3cb9eaf5190db649be58d46754d865dc5c5 / gpt/ar1-decay-disclosure-20261030. 실행 89641371-412d-4208-beb9-0e10cdb8d772.
 - N1: PR27 source437ca29c7439b4e27030cca3e86de39abd5538ab → main93f31a3158c4b49a348d9e91f2842e3640605fdc. vol_target/crypto_trend의 종목당 상한, 실제 선택된 OOS 총노출/차입 및1배 벤치마크 범위를 Flet/Qt/AI/JSON·ZIP에 명시. Flet의 초기 equity 날짜 누락도 재현 후 수정. 집중6+기존5검사 PASS,4baseline 계산값 완전 동일. CI41046492566 Windows3.12/3.14·Ubuntu3.12 모두success.
 - NEW-M6-03: PR28 source696ee3c → mainc9a03ce. 음수 안정 AR(1)의 진폭 반감기를 abs(phi)기준으로 정정. MONOTONE/OSCILLATING/NO_MEMORY/NON_DECAYING/NOT_ESTIMATED 구분과 ETF/Crypto UI·해설·AI·내보내기 의미 반영. 집중5+시장/AI/HAC 포함22검사 PASS. 양수4사례 기존값 완전 동일, pairs PnL/turnover/선택/모든점수 동일. 다른strategy함수AST와 validation/ledger파일 불변. CI41048097118 동일3환경 모두success.
 두 PR/source/main/CI를 원격 read-back했고 완료 LEDGER는 append-only c204ac05(N1),2efdc6f7(NEW-M6-03), 최신 blob34b26918149f4573f73e511d14c5dc11a5aaf548까지 재확인했습니다. sapientia 계정 REMAINING WORK4065에 완료 하위 범위만 취소선·현재 집계를 반영했습니다.
@@ -80,7 +80,7 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 O8선택심사,UI/PR/main의 기존승인을 다시 묻거나 승인대기로 되돌리지 않습니다. 실제 연구판정·정식원장·외부공개와 Windows증거/실행확인은 별도입니다. 현재 waiting_on=none은 다음 독립수정이 가능하다는 뜻이며 미실행파일럿을 승인했다는 뜻이 아닙니다.
 
 ## 9. 예약/Claude 재개
-STATE transition=cloud_owns_monitoring, 동일환경/비공개자료/OS RUN.lock을 먼저 검증합니다. 직전 execution fb4e7f11-2fc5-4222-a172-bdd3812c8392, task owner-product-workflow-20261029, 기존handoffID, branch gpt/ar1-decay-disclosure-20261030, source696ee3c가 STATE/원격CURRENT와 일치해야 합니다. 새 execution으로 최신CURRENTblob CAS 후 원격read-back으로만 재개합니다. from=gpt만으로 소유권을 추정하지 않습니다.
+STATE transition=cloud_owns_monitoring, 동일환경/비공개자료/OS RUN.lock을 먼저 검증합니다. 직전 execution 89641371-412d-4208-beb9-0e10cdb8d772, task owner-product-workflow-20261029, 기존handoffID, branch gpt/ar1-decay-disclosure-20261030, source696ee3c가 STATE/원격CURRENT와 일치해야 합니다. 새 execution으로 최신CURRENTblob CAS 후 원격read-back으로만 재개합니다. from=gpt만으로 소유권을 추정하지 않습니다.
 최신main을 받아 새gpt브랜치에서 다음단위를 진행합니다. 직접 미완료작업 때문에 기존hourly예약은 유지하고 다음목요일로 밀지 않습니다. 정상대기알림/새예약/run_now/로컬수정은 하지 않습니다.
 Windows앱: python -m pip install ".[desktop]" ; python -m quantgen_desktop 또는 Start-QUANTGEN-Desktop.cmd. 브라우저:Flet 유지. 실제 사용자PC는 이태스크에서 실행/변경하지 않습니다.
 
@@ -88,3 +88,6 @@ Windows앱: python -m pip install ".[desktop]" ; python -m quantgen_desktop 또�
 N1: python -m unittest tests.strategy_exposure_acceptance tests.desktop_strategy_exposure_acceptance tests.desktop_strategy_acceptance -v (11검사).
 AR1: python -m unittest tests.ar1_decay_acceptance tests.desktop_ar1_decay_acceptance tests.desktop_market_acceptance tests.ai_payload_acceptance tests.crypto_hac_acceptance -v (22검사).
 모든boundedCI3환경success,공개문서의정확한범위를 확인하세요. private reports의 N1/AR1 baseline/evidence,주간누적기록,최신Word는 별도로 보존합니다. 실행종료전STATE/보고서를 원자저장/read-back하고 RUN.lock해제결과를 기록합니다. 다음실행은저장된check point에서이어가며전체요청완료/returned를추정하지마세요.
+
+## 현재 실행 재개
+2026-10-30: 이전 OS 잠금 해제와 저장된 task/handoff/branch/commit을 최신 원격에서 대조했습니다. 새 execution 89641371-412d-4208-beb9-0e10cdb8d772로 재개하여 NEW-M6-02의 합성 재현/보정을 진행합니다. 이전 완료 항목과 O8/O11 경계는 유지합니다.
