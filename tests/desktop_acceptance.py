@@ -18,6 +18,8 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
 from core.research.analysis import AnalysisRequest, execute_analysis, funding_rate
 from core.research.portfolio_analysis import PortfolioRequest, execute_portfolio
 from core.research.bond_analysis import BondRequest, execute_bond
+from core.research.rates_analysis import RatesRequest, execute_rates
+from core.research.fx_analysis import FXRequest, execute_fx
 from core.research.runs import new_run, read_export
 from quantgen_desktop.app import ResearchWindow
 from quantgen_desktop.jobs import Jobs
@@ -52,7 +54,74 @@ def bond_fixture(request):
     return execute_bond(request,curve_loader=lambda **kwargs:panel)
 
 
+def rates_fixture(request):
+    from core.ficc.data import synthetic_curve_panel, load_short_rate
+    panel=synthetic_curve_panel(days=80,seed=23)
+    return execute_rates(request,curve_loader=lambda **kwargs:panel,
+                         rate_loader=lambda c,**kw:load_short_rate(c,source='synthetic',days=120))
+
+
+def fx_fixture(request):
+    from core.ficc.data import synthetic_fx, load_short_rate, load_policy_rates
+    return execute_fx(request,spot_loader=lambda p,**kw:synthetic_fx(p.replace('/',''),days=kw.get('days',120)),
+        rate_loader=lambda c,**kw:load_short_rate(c,source='synthetic',days=120),
+        policy_loader=lambda c,**kw:load_policy_rates(c,source='synthetic',days=kw.get('days',120)))
+
+
 class AnalysisAdapterTests(unittest.TestCase):
+    def test_rates_branches_match_core_and_do_not_fetch_invalid_requests(self):
+        from core.ficc.common import FICCError
+        from core.ficc.curves import analyze_curve
+        from core.ficc.swaps import analyze_swap, price_swaption, price_cap_floor
+        from core.ficc.ratesim import calibrate, simulate
+        for method in ('bootstrap','nelson_siegel','svensson'):
+            out=rates_fixture(RatesRequest(source='synthetic',method=method))
+            direct=analyze_curve(out.panel,method=method,lookback=20)
+            self.assertEqual(out.report.descriptors,direct.descriptors)
+            self.assertIsNotNone(out.pca)
+        for side in (True,False):
+            out=rates_fixture(RatesRequest(tool='swap',tenor='5y5y',pay_fixed=side,fixed_rate=.04))
+            self.assertEqual(out.report.pv,analyze_swap(out.report.swap,out.curve).pv)
+        for kind in ('swaption','cap','floor'):
+            for model,vol in (('black',.3),('bachelier',.008)):
+                q=RatesRequest(tool='option',kind=kind,option_model=model,vol=vol,tenor='5y',strike=.04,pay_fixed=False)
+                out=rates_fixture(q)
+                direct=price_swaption(out.report.swaption,out.curve,vol=vol,model=model) if kind=='swaption' else price_cap_floor(out.curve,5,.04,vol=vol,model=model,cap=kind=='cap')
+                self.assertEqual(out.report.premium,direct.premium)
+        for model,instrument in (('vasicek','none'),('cir','bond'),('hull_white','swap')):
+            q=RatesRequest(tool='sim',model=model,instrument=instrument,horizon=.25,n_paths=100,threshold=.05)
+            out=rates_fixture(q)
+            direct=simulate(calibrate(out.series,model=model),horizon=.25,n_paths=100,threshold=.05,curve=out.curve,seed=7)
+            self.assertEqual(out.report.mean_terminal,direct.mean_terminal)
+            self.assertEqual(out.report.prob_above,direct.prob_above)
+            self.assertEqual(out.horizon_pv is None,instrument=='none')
+        for changes in ({'tool':'bad'},{'tool':'option','vol':float('nan')},{'tool':'swap','tenor':'bad'},
+                        {'tool':'sim','n_paths':100.5},{'tool':'sim','instrument':'bond','horizon':10,'tenor':'5y'}):
+            with self.assertRaises((ValueError,FICCError)):
+                execute_rates(RatesRequest(**changes),curve_loader=lambda **kw:self.fail('provider reached'))
+
+    def test_fx_conventions_typed_rates_delta_strikes_and_carry_match_core(self):
+        from core.ficc import fx
+        for pair in ('EURUSD','USD/KRW'):
+            q=FXRequest(pair=pair,domestic_rate=.04,foreign_rate=.03,market_forward=1.12 if pair=='EURUSD' else 1400)
+            out=fx_fixture(q);d=out.data
+            self.assertEqual(len(out.sources),1)  # typed rates must not fetch a provider
+            self.assertEqual(d['forward'],fx.forward(d['S'],.04,.03,.25))
+            self.assertEqual(d['basis'],fx.implied_basis(d['S'],q.market_forward,.04,.03,.25))
+        for strike,call in (('ATM',True),('25d',False),('1.12',True)):
+            out=fx_fixture(FXRequest(tool='option',strike=strike,call=call));r=out.data['report']
+            direct=fx.garman_kohlhagen(r.spot,r.strike,r.expiry,r.r_dom,r.r_for,r.vol,call)
+            self.assertEqual(r.price,direct.price);self.assertEqual(r.rho_dom,direct.rho_dom)
+            if strike=='25d':self.assertAlmostEqual(r.strike,fx.strike_from_delta(.25,r.spot,r.expiry,r.r_dom,r.r_for,.08,call=False))
+        out=fx_fixture(FXRequest(tool='carry',days=120,cost_bps=7,top_n=4))
+        spots={s.id[:6]:s for s in out.sources[:7]};rates={c:s for c,s in zip(('USD','EUR','JPY','GBP','AUD','CAD','CHF','KRW'),out.sources[7:])}
+        direct=fx.carry_backtest(spots,rates,top_n=4,cost_bps=7,rebalance_days=21)
+        self.assertEqual(list(out.data['backtest'].equity),list(direct.equity))
+        self.assertEqual(out.data['backtest'].top_n,3)
+        for changes in ({'tool':'option','strike':'100d'},{'domestic_rate':float('inf')},{'tool':'carry','top_n':1.5}):
+            with self.assertRaises(ValueError):
+                execute_fx(FXRequest(**changes),spot_loader=lambda *a,**k:self.fail('provider reached'))
+
     def test_bond_price_scenarios_and_hedge_match_existing_core(self):
         from core.ficc.bonds import analyze_bond,scenario_pnl,futures_hedge_ratio
         for tool in ('calc','scenarios','hedge'):
@@ -124,7 +193,8 @@ class NativeDesktopTests(unittest.TestCase):
         self.network=patch('requests.sessions.Session.request',side_effect=AssertionError('network forbidden'))
         self.network.start(); self.addCleanup(self.network.stop)
         self.window=ResearchWindow(auto_refresh=False,market_loader=lambda:[],analysis_runner=fixture_runner,
-                                   portfolio_runner=portfolio_fixture,bond_runner=bond_fixture)
+                                   portfolio_runner=portfolio_fixture,bond_runner=bond_fixture,
+                                   rates_runner=rates_fixture,fx_runner=fx_fixture)
         self.window.show(); self.app.processEvents()
         self.addCleanup(self.cleanup_window)
 
@@ -184,6 +254,45 @@ class NativeDesktopTests(unittest.TestCase):
         b.fields['Price · per 100'].setText('100');b.submit()
         self.assertIn('입력 오류',b.status.text())
         self.assertFalse(w.jobs.busy)
+
+    def test_native_rates_tools_units_locking_and_results(self):
+        w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.rates)
+        pane=w.rates
+        for tool in ('curve','swap','option','sim'):
+            pane.tool.setCurrentIndex(pane.tool.findData(tool))
+            if tool=='sim':pane.fields[tool]['n_paths'].setText('100')
+            pane.submit()
+            self.assertFalse(pane.input_box.isEnabled())
+            self.wait_idle()
+            self.assertTrue(pane.has_result,pane.status.text())
+            self.assertIn('Metrics',pane.tables)
+            self.assertTrue(pane.input_box.isEnabled())
+        pane.tool.setCurrentIndex(pane.tool.findData('option'))
+        pane.fields['option']['option_model'].setCurrentIndex(1)
+        self.assertEqual(pane.fields['option']['vol'].text(),'30')
+        self.assertEqual(pane.make_request().vol,.3)
+        pane.fields['option']['kind'].setCurrentIndex(1)
+        self.assertFalse(pane.fields['option']['expiry'].isEnabled())
+        pane.submit();self.wait_idle()
+        self.assertIn('Caplets',pane.tables)
+        w.theme.setCurrentIndex(1);self.app.processEvents()
+        self.assertTrue(all(c.colors==w.colors for c in pane.charts.values()))
+        pane.fields['option']['tenor'].setText('invalid')
+        pane.submit()
+        self.assertIn('입력 오류',pane.status.text());self.assertFalse(w.jobs.busy)
+
+    def test_native_fx_all_tools_and_invalid_input_clears_stale_result(self):
+        w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.fx)
+        pane=w.fx
+        for tool in ('forward','option','carry'):
+            pane.tool.setCurrentIndex(pane.tool.findData(tool))
+            if tool=='carry':pane.fields[tool]['days'].setText('120')
+            pane.submit();self.wait_idle()
+            self.assertTrue(pane.has_result,pane.status.text())
+            self.assertTrue(pane.charts)
+            self.assertGreater(pane.tables['Data sources'].rowCount(),0)
+        pane.fields['carry']['top_n'].setText('2.5');pane.submit()
+        self.assertIn('입력 오류',pane.status.text());self.assertFalse(pane.has_result)
 
     def test_analysis_navigation_and_native_export_cancel_and_failure(self):
         w=self.window;self.configure_gbm()

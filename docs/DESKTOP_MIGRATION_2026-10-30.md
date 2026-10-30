@@ -22,14 +22,14 @@ commercial distribution; current repository policy remains personal use.
 | Workspace | Working native scope | Limits |
 |---|---|---|
 | Research Home | Session Monte Carlo counts, daily market observations, last computed fan and provenance | Counts exclude portfolio optimizations; no historical ledger scan |
-| Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator, scenario revaluation and futures hedge | Other detailed asset pages remain in Flet; Bonds AI panel pending |
+| Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation and FX forward/smile/carry | Structuring and other asset pages remain in Flet; optional AI panels pending |
 | Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Stored model grades and AI commentary panel not migrated |
 | Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices | Native portfolio export, Signals and paper-execution screens pending |
 | Research Library | Session Monte Carlo results, native JSON and report ZIP save dialog | No persistent history browser; only explicit export |
 | System | Existing bounded recorded-status verification, native theme switch | Credential editing and rule editor pending |
 
 Both Monte Carlo and portfolio use the existing `core.quant` functions. New
-`core.research.analysis` and `portfolio_analysis` adapters capture inputs before
+`core.research` adapters capture inputs before
 workers start. They do not contain replacement pricing/optimization formulas.
 The existing formal gate remains unchanged. Calculation completion retains
 `NOT_RUN`, `PARTIAL`, and `NOT_APPLIED` in ResearchRun exports.
@@ -44,8 +44,9 @@ raw credential-bearing URLs. Failed Monte Carlo runs are retained in the session
 
 ## Remaining migration, in order
 
-1. Rates and FX: map the existing units, source warnings, partial-curve
-   handling, all input branches and risk/chart outputs before porting controls.
+1. Rates/FX native computation branches are ported; live provider acceptance remains pending.
+   The optional AI panels remain in Flet. Rates uses the existing curve coverage policy
+   and does not incorporate the separate Claude PT-04 branch.
 2. Structuring, Derivatives, ETF and Crypto; preserve current models and labels.
 3. Macro sheet and views, Strategy Lab and Signals. Preserve trial registration,
    gate/provenance semantics and approval boundaries; no live stores in tests.
@@ -68,7 +69,8 @@ python -m unittest tests.research_contract_acceptance tests.research_home_accept
 Native fixture tests inject deterministic histories, prohibit network calls and
 patch dotenv loading before importing core modules. They exercise all four
 Monte Carlo models against direct engine results, currency-aware funding/fallback,
-portfolio solvers, Bonds pricing/scenarios/hedge, six native workspaces, background delivery/duplicate exclusion,
+portfolio solvers, Bonds pricing/scenarios/hedge, Rates tool branches and bp/% conversions,
+FX domestic/foreign rates, delta strikes and carry conventions, six native workspaces, background delivery/duplicate exclusion,
 failure redaction, explicit file export/cancel and close-during-work behavior.
 The packaging workflow builds an allowlisted wheel on Windows/Linux and runs
 `tools/packaging/smoke_desktop.py` **outside the checkout** with socket and protected

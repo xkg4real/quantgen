@@ -23,6 +23,8 @@ from core.research.markets import load_markets, SPECS
 from core.research.provenance import code_evidence, runtime_evidence
 from core.research.portfolio_analysis import execute_portfolio
 from core.research.bond_analysis import execute_bond
+from core.research.rates_analysis import execute_rates
+from core.research.fx_analysis import execute_fx
 from core.research.runs import SessionResearch, new_run, failed, export_bytes
 from core.theme import LIGHT, DARK
 from tools.status.snapshot import verify
@@ -75,12 +77,14 @@ def table_rows(t, rows, ids=None):
 
 class ResearchWindow(QMainWindow):
     def __init__(self, *, session=None, market_loader=load_markets,
-                 analysis_runner=execute_analysis, portfolio_runner=execute_portfolio, bond_runner=execute_bond, auto_refresh=True):
+                 analysis_runner=execute_analysis, portfolio_runner=execute_portfolio, bond_runner=execute_bond,
+                 rates_runner=execute_rates, fx_runner=execute_fx, auto_refresh=True):
         super().__init__()
         self.session = session or SessionResearch()
         self.market_loader, self.analysis_runner = market_loader, analysis_runner
         self.portfolio_runner = portfolio_runner
         self.bond_runner = bond_runner
+        self.rates_runner, self.fx_runner = rates_runner, fx_runner
         self.outputs = {}
         self.active_run = None
         self.pending = None
@@ -191,6 +195,8 @@ class ResearchWindow(QMainWindow):
 
     def make_markets(self):
         from .bonds import BondsPane
+        from .rates import RatesPane
+        from .fx import FXPane
         layout = self.page("Markets", "공급자와 관측일을 함께 확인하는 일별 시장 데이터")
         self.market_refresh = QPushButton("시장지표 새로고침")
         self.market_refresh.clicked.connect(self.refresh_markets)
@@ -200,8 +206,12 @@ class ResearchWindow(QMainWindow):
         layout.addWidget(self.market_table)
         layout.addWidget(label("USD 금리는 변화량을 bp로 표시합니다. 나머지는 직전 관측 대비 %입니다. 데이터 권리와 빈티지는 미검증입니다.", "muted"))
         self.bonds=BondsPane();self.bonds.requested.connect(self.run_bond)
-        tabs=QTabWidget();tabs.addTab(self.bonds,'Bonds');layout.addWidget(tabs)
-        layout.addWidget(label("Rates·FX·ETF·Crypto 상세 도구의 네이티브 이전은 진행 중입니다. 기존 Flet 화면은 그대로 사용할 수 있습니다.", "muted"))
+        self.rates=RatesPane(); self.rates.requested.connect(lambda q:self.run_tool('rates',q))
+        self.fx=FXPane(); self.fx.requested.connect(lambda q:self.run_tool('fx',q))
+        self.market_tabs=QTabWidget()
+        for pane,name in ((self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX')):self.market_tabs.addTab(pane,name)
+        layout.addWidget(self.market_tabs)
+        layout.addWidget(label("Structuring·ETF·Crypto 등 남은 상세 도구는 기존 Flet 화면에서 사용할 수 있습니다.", "muted"))
         layout.addStretch()
 
     def make_quant(self):
@@ -300,7 +310,7 @@ class ResearchWindow(QMainWindow):
         inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
-        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Monte Carlo, 포트폴리오 최적화, 세션 위험표, Library·저장, System\n남은 이전: Rates·FX·Structuring 및 자산별 상세 화면, Macro 하위 화면, Strategy Lab, Signals, KRX, 모의매매, 규칙·연결 설정, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
+        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Monte Carlo, 포트폴리오 최적화, 세션 위험표, Library·저장, System\n남은 이전: Structuring 및 자산별 상세 화면, Macro 하위 화면, Strategy Lab, Signals, KRX, 모의매매, 규칙·연결 설정, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
         inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
         layout.addWidget(box)
         layout.addStretch()
@@ -345,6 +355,8 @@ class ResearchWindow(QMainWindow):
             self.portfolio.show_result(value)
         elif self.pending == "bonds":
             self.bonds.show_result(value)
+        elif self.pending in ('rates','fx'):
+            getattr(self,self.pending).show_result(value)
         else:
             self.session.put(value.run)
             self.outputs[value.run["run_id"]] = value
@@ -380,6 +392,8 @@ class ResearchWindow(QMainWindow):
             self.portfolio.status.setText(f"FAILED · {code} · 입력/데이터를 확인하세요.")
         elif self.pending == "bonds":
             self.bonds.status.setText(f"FAILED · {code} · Price/Yield와 곡선 출처를 확인하세요.")
+        elif self.pending in ('rates','fx'):
+            getattr(self,self.pending).status.setText(f"FAILED · {code} · 입력·곡선 범위·데이터 출처를 확인하세요.")
         else:
             self.session.put(failed(self.active_run, code))
             self.analysis_status.setText(f"FAILED · {code} · 입력 또는 데이터 연결을 확인하세요.")
@@ -391,6 +405,7 @@ class ResearchWindow(QMainWindow):
         self.market_refresh.setEnabled(not busy)
         self.portfolio.run.setEnabled(not busy)
         self.bonds.run.setEnabled(not busy)
+        for pane in (self.rates,self.fx):pane.input_box.setEnabled(not busy)
         if not busy:
             self.pending = None
             self.active_run = None
@@ -408,6 +423,15 @@ class ResearchWindow(QMainWindow):
         self.pending='bonds'
         self.bonds.status.setText('채권 계산 중…')
         self.jobs.start(lambda:self.bond_runner(request))
+
+    def run_tool(self, tool, request):
+        if self.jobs.busy:return
+        self.pending=tool
+        pane=getattr(self,tool)
+        pane.clear_result()
+        pane.status.setText('계산 중… 화면을 이동해도 계속됩니다.')
+        runner=getattr(self,tool+'_runner')
+        self.jobs.start(lambda:runner(request))
 
     def refresh_views(self):
         runs = self.session.runs()
@@ -502,7 +526,7 @@ class ResearchWindow(QMainWindow):
             event.ignore()
             self.statusBar().showMessage("진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다.")
             return
-        if self.session.runs() or self.portfolio.chart.output is not None or self.bonds.chart.series:
+        if self.session.runs() or self.portfolio.chart.output is not None or self.bonds.chart.series or self.rates.has_result or self.fx.has_result:
             answer = QMessageBox.question(self, "세션 종료", "저장하지 않은 세션 기록은 사라집니다. 종료할까요?",
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
             if answer != QMessageBox.StandardButton.Yes:

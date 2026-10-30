@@ -1,4 +1,5 @@
 """Native Qt painting of the existing engine's percentile fan. No web view."""
+import math
 from PyQt6.QtCore import QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import QWidget
@@ -121,9 +122,14 @@ class LineChart(QWidget):
         p=QPainter(self);p.setRenderHint(QPainter.RenderHint.Antialiasing);c=self.colors
         p.fillRect(self.rect(),QColor(c.surface))
         if not self.x or not self.series:return
-        xmin,xmax=min(self.x),max(self.x);values=[float(y) for _,ys in self.series for y in ys]
+        pairs=[[(float(x),float(y)) for x,y in zip(self.x,ys) if math.isfinite(float(x)) and math.isfinite(float(y))] for _,ys in self.series]
+        values=[y for points in pairs for x,y in points]
+        if not values:return
+        xmin=min(x for points in pairs for x,y in points);xmax=max(x for points in pairs for x,y in points)
         ymin,ymax=min(values),max(values);pad=max((ymax-ymin)*.05,.001);ymin-=pad;ymax+=pad
-        box=QRectF(65,35,self.width()-90,self.height()-80)
+        columns=max(1,(self.width()-90)//160)
+        top=18+20*math.ceil(len(self.series)/columns)
+        box=QRectF(65,top,self.width()-90,self.height()-top-45)
         def point(x,y):return QPointF(box.left()+(float(x)-xmin)/max(xmax-xmin,1e-9)*box.width(),box.bottom()-(float(y)-ymin)/(ymax-ymin)*box.height())
         for i in range(5):
             y=ymin+(ymax-ymin)*i/4;x=xmin+(xmax-xmin)*i/4
@@ -131,9 +137,14 @@ class LineChart(QWidget):
             p.setPen(QColor(c.muted));p.drawText(QRectF(0,point(xmin,y).y()-8,58,18),Qt.AlignmentFlag.AlignRight,f'{y:,.2f}')
             p.drawText(QRectF(point(x,ymin).x()-25,box.bottom()+5,50,18),Qt.AlignmentFlag.AlignCenter,f'{x:.2f}')
         for index,(name,ys) in enumerate(self.series):
-            color=c.accent if index==0 else c.muted
-            p.setPen(QPen(QColor(color),2,Qt.PenStyle.SolidLine if index==0 else Qt.PenStyle.DashLine))
-            line=QPainterPath(point(self.x[0],ys[0]))
-            for x,y in zip(self.x,ys):line.lineTo(point(x,y))
-            p.drawPath(line);p.drawText(QPointF(65+index*170,20),name)
+            color=(c.accent,'#4474A4','#84649C','#A85F7A','#9C7B30')[index%5]
+            p.setPen(QPen(QColor(color),2))
+            line=QPainterPath();connected=False
+            for x,y in zip(self.x,ys):
+                if not math.isfinite(float(x)) or not math.isfinite(float(y)):
+                    connected=False;continue
+                if connected:line.lineTo(point(x,y))
+                else:line.moveTo(point(x,y));connected=True
+            p.drawPath(line)
+            p.drawText(QPointF(65+(index%columns)*160,18+(index//columns)*20),name)
         p.setPen(QColor(c.muted));p.drawText(QRectF(box.left(),self.height()-22,box.width(),20),Qt.AlignmentFlag.AlignCenter,self.x_label+' · '+self.y_label)
