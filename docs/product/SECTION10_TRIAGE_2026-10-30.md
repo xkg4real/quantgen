@@ -88,3 +88,9 @@ The current machine-readable queue therefore records **6/67** corrected groups,
 **61** remaining groups and **14** observation-model rows. Fifteen ambiguous
 ID mappings remain unresolved. The original five-probe JSON is historical
 evidence and is not overwritten with later results.
+
+The subsequent N-M1-11 wording correction is described in
+`TERMINAL_TARGET_2026-10-30.md`: target probability is the terminal event,
+not pathwise crossing. This raises the latest queue to **7/67** corrected
+groups and **60** remaining groups; the 14 observation rows and 15 ambiguous
+mappings remain open. The solver and simulation mathematics are unchanged.

@@ -9,8 +9,8 @@
     "canonical_groups": 67,
     "observation_models": 14,
     "initial_reproductions": 5,
-    "additional_reproduced_ids": 4,
-    "implemented_canonical_groups": 6
+    "additional_reproduced_ids": 5,
+    "implemented_canonical_groups": 7
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -126,10 +126,11 @@
       "source_model": "5. M1-05 Monte Carlo 엔진과 위험 수치 (run_monte_carlo: 팬, 기간 VaR·CVaR, P(loss), P(target))",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Terminal-target narrative, Flet/Qt labels and Flet AI basis corrected; Monte Carlo math and ResearchRun schema unchanged",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/TERMINAL_TARGET_2026-10-30.md"
     },
     {
       "id": "N1",
