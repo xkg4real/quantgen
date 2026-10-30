@@ -6,7 +6,7 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/N1, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T19:43:35.000+09:00
+updated_at: 2026-10-30T11:05:28.000+00:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/mc-volatility-disclosure-20261030
@@ -17,7 +17,7 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: a0dfb643-a8c7-4daf-bd53-13d9ad9b1341
+execution_id: fb4e7f11-2fc5-4222-a172-bdd3812c8392
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
@@ -125,3 +125,6 @@ UI/PR/main 권한은 이미 해결됐고 native 잔여 구현을 막는 승인 �
 이번 실행은 PR24/25/26의 네 하위 항목 완료를 저장합니다. 전체 요청이나 주간 cycle을 완료/returned 처리하지 않습니다. owner_directed_work는 in_progress, waiting_on=none이며 기존 hourly 예약을 유지합니다. 다음 목요일로 미루지 않습니다. 기존 cycle/returned/next_eligible 이력은 직접 작업을 막는 조건이 아닙니다.
 다음 실행은 STATE transition·환경·OS RUN.lock·최신6문서를 확인하고 저장된 execution/task/handoff/branch/source commit을 원격 CURRENT와 대조한 뒤 새 execution ID의 최신 blob CAS+read-back으로만 재개합니다. 현재 source는 e550187, branch gpt/mc-volatility-disclosure-20261030, execution a0dfb643입니다. 제품 최신 main을 확인하고 N1 전용 gpt 브랜치로 분리하세요. 연구 PR21을 제품 main에 합치지 마세요.
 현재 잠금은 최종 STATE/보고서 원자 저장과 read-back 후 해제합니다. 실제 해제 결과는 STATE.last_owner_work_checkpoint에 기록합니다. 원격/Notion/검증 근거는 private WEEKLY_CONTINUATION_20261030.txt 및 QUANTGEN_Progress_2026-10-30.docx에 정리했습니다. 계정 토큰 잔량은 unknown입니다. 화요일 2026-11-03 16:00 KST 준비/17:00 전 전체 인수인계 조건은 유지합니다.
+
+## 11. 현재 재개 (N1)
+직전 실행 a0dfb643의 task/handoff/branch/e550187와 STATE를 대조하고 새 실행 fb4e7f11-2fc5-4222-a172-bdd3812c8392로 재개합니다. N1 종목당 cap/총노출 표시가 이번 단위이며 기존 Strategy Lab 공유 workflow·양 UI 파일은 이 누락 설명을 위해 수정합니다. 계산·비중·DSR·판정·원장 의미는 유지하고 합성/주입 검사만 수행합니다. 이전 0/10절은 완료 이력입니다.
