@@ -24,9 +24,9 @@ commercial distribution; current repository policy remains personal use.
 | Research Home | Session Monte Carlo counts, daily market observations, last computed fan and provenance | Counts exclude portfolio optimizations; no historical ledger scan |
 | Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary; Derivatives board, ETF sleeves, Crypto analytics and six KRX datasets | Native Macro v2 overlay/cards/register use the existing validated readers; optional AI panels pending. Native ETF/Crypto study cards are explicitly NOT_LOADED |
 | Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Strategy Lab seven-family validation and explicit study-card viewer; AI commentary panel pending |
-| Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices; technical composite and three costed backtests | Explicit JSON/ZIP exports; paper-execution screens pending |
+| Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices; technical composite and three costed backtests | Explicit JSON/ZIP exports; native paper-only runtime controls |
 | Research Library | Session Monte Carlo results, native JSON and report ZIP save dialog | No persistent history browser; only explicit export |
-| System | Existing bounded recorded-status verification, native theme switch | Explicit presence and KRX/FICC/KIS/Crypto probes; rule editor pending |
+| System | Existing bounded recorded-status verification, native theme switch | Explicit presence and KRX/FICC/KIS/Crypto probes; native rule editor with blank financial inputs |
 
 Both Monte Carlo and portfolio use the existing `core.quant` functions. New
 `core.research` adapters capture inputs before
@@ -50,7 +50,7 @@ raw credential-bearing URLs. Failed Monte Carlo runs are retained in the session
 2. Derivatives, ETF, Crypto and KRX native adapters are implemented. Live API acceptance remains pending.
 3. Macro v2 and Strategy Lab are ported; preserve trial registration,
    gate/provenance semantics and approval boundaries; no live stores in tests.
-4. Paper-only Trading, Rules and the optional AI commentary panel. Settings presence/probes are ported.
+4. Paper-only Trading, Rules and Settings are ported. The optional AI commentary panel remains pending.
    No broker order path or TRADEGEN code belongs in this migration.
 5. Keyboard/focus, resize/DPI, installer/icon and actual Windows visual acceptance;
    compare every native route with its retained Flet counterpart.
@@ -62,7 +62,7 @@ preview's scope notices identify where the Flet application is still required.
 ## Verification commands
 
 ```text
-python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.desktop_strategy_acceptance tests.desktop_macro_acceptance tests.packaging_policy_acceptance -v
+python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.desktop_strategy_acceptance tests.desktop_macro_acceptance tests.desktop_paper_acceptance tests.packaging_policy_acceptance -v
 python -m unittest tests.research_contract_acceptance tests.research_home_acceptance -v
 ```
 
@@ -113,3 +113,12 @@ and dispositions remain distinct; no exposure is recomputed from design weights.
 Dry/live actions and acknowledgement use existing prerequisites and stores only on
 explicit clicks; acceptance tests inject fixtures and never execute actual stores.
 Unavailable offline council documents are labelled rather than silently replaced.
+
+Rules and paper controls share a lazy session: no rule/order store opens at desktop startup.
+Blank financial inputs stay blank. Existing validation, revisions, confirmation, activation,
+halt/acknowledgement and simulated fill/cancel behavior remain in the existing core.
+Rule writes require disk read-back; stale edits and failed writes do not report success.
+The editor requires disarming and completion of an in-flight tick before modifications.
+A sidebar emergency stop remains available across all workspaces. Engine callbacks enter
+the GUI through Qt signals; closing disarms/stops the loop and waits for an active provider
+call. Tests use temporary rules/engine files and injected providers; no actual ledger is used.

@@ -94,7 +94,7 @@ class ResearchWindow(QMainWindow):
                  derivatives_runner=execute_derivatives, etf_runner=execute_etf,
                  crypto_runner=execute_crypto, krx_runner=execute_krx,
                  connections_runner=execute_connections, strategy_runner=execute_strategy,
-                 macro_records_runner=execute_macro_records, auto_refresh=True):
+                 macro_records_runner=execute_macro_records, paper_factory=None, auto_refresh=True):
         super().__init__()
         self.session = session or SessionResearch()
         self.market_loader, self.analysis_runner = market_loader, analysis_runner
@@ -113,6 +113,8 @@ class ResearchWindow(QMainWindow):
         self.active_run = None
         self.pending = None
         self.colors = LIGHT
+        from .paper import PaperSession, default_session
+        self.paper_session = PaperSession(self, factory=paper_factory or default_session)
         self.jobs = Jobs(self)
         self.jobs.succeeded.connect(self.job_succeeded)
         self.jobs.failed.connect(self.job_failed)
@@ -155,6 +157,11 @@ class ResearchWindow(QMainWindow):
         rail.addStretch()
         rail.addWidget(label("PERSONAL RESEARCH", "caption"))
         rail.addWidget(label("Native desktop preview\nFlet browser is retained", "muted"))
+        self.paper_halt = QPushButton('모의 엔진 긴급 정지')
+        self.paper_halt.setEnabled(False)
+        self.paper_halt.clicked.connect(lambda: self.paper_session.runtime.halt() if self.paper_session.runtime else None)
+        self.paper_session.changed.connect(lambda: self.paper_halt.setEnabled(self.paper_session.runtime is not None))
+        rail.addWidget(self.paper_halt)
         self.theme = QComboBox()
         self.theme.addItems(["Light · A", "Dark"])
         self.theme.currentIndexChanged.connect(self.change_theme)
@@ -319,12 +326,15 @@ class ResearchWindow(QMainWindow):
         self.portfolio.requested.connect(self.run_portfolio)
         self.signals=SignalsPane();self.signals.requested.connect(lambda q:self.run_tool('signals',q))
         self.risk_tabs=QTabWidget();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
+        from .paper import PaperPane
+        self.paper = PaperPane(self.paper_session)
+        self.risk_tabs.addTab(self.paper, 'Paper Trading')
         layout.addWidget(self.risk_tabs)
         layout.addWidget(label("개별 가격 시뮬레이션 위험", "heading"))
         self.risk_table = table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
         self.risk_table.setMinimumHeight(300)
         layout.addWidget(self.risk_table)
-        layout.addWidget(label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다. 모의매매의 네이티브 이전은 아직 완료되지 않았습니다.", "muted"))
+        layout.addWidget(label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "muted"))
         layout.addStretch()
 
     def make_library(self):
@@ -349,7 +359,12 @@ class ResearchWindow(QMainWindow):
         from .connections import ConnectionsPane
         self.connections = ConnectionsPane()
         self.connections.requested.connect(lambda q: self.run_tool('connections', q))
-        layout.addWidget(self.connections)
+        from .paper import RulesPane
+        self.rules = RulesPane(self.paper_session)
+        self.system_tabs = QTabWidget()
+        self.system_tabs.addTab(self.connections, 'Connections')
+        self.system_tabs.addTab(self.rules, 'Rules')
+        layout.addWidget(self.system_tabs)
         box, inner = panel("프로젝트 상태")
         try:
             status = verify(application_root())
@@ -364,7 +379,7 @@ class ResearchWindow(QMainWindow):
         inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
-        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n남은 이전: Macro v2 하위 화면, 모의매매, 규칙, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
+        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙 연결 완료 / 남은 이전: AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
         inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
         layout.addWidget(box)
         layout.addStretch()
@@ -382,7 +397,7 @@ class ResearchWindow(QMainWindow):
 
     @pyqtSlot()
     def run_analysis(self):
-        if self.jobs.busy:
+        if self.jobs.busy or self.paper_session.jobs.busy:
             return
         try:
             request = AnalysisRequest(symbol=self.symbol.text(), source_requested=self.source.currentData(),
@@ -587,7 +602,7 @@ class ResearchWindow(QMainWindow):
             chart.update()
 
     def closeEvent(self, event):
-        if self.jobs.busy:
+        if self.jobs.busy or self.paper_session.jobs.busy:
             event.ignore()
             self.statusBar().showMessage("진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다.")
             return
@@ -597,6 +612,10 @@ class ResearchWindow(QMainWindow):
             if answer != QMessageBox.StandardButton.Yes:
                 event.ignore()
                 return
+        if not self.paper_session.stop():
+            event.ignore()
+            self.statusBar().showMessage('모의 엔진의 진행 중인 조회가 끝나면 다시 종료해 주세요.')
+            return
         event.accept()
 
 
