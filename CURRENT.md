@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/N-M1-11, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T19:23:03.000+09:00
+updated_at: 2026-10-30T19:24:14.000+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/portfolio-scope-20261030
-work_commit: 71b0c9c179987f20762bb5ab01a8d6c9b813e381
+work_branch: gpt/terminal-target-disclosure-20261030
+work_commit: ec98cbef49f0fca90083dbbe5beca0667d382282
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/24
+pr: pending (PR24 merged)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
