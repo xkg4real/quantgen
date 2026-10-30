@@ -8,7 +8,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from PyQt6.QtCore import Qt, QTimer, pyqtSlot
+from PyQt6.QtCore import Qt, QTimer, pyqtSlot, QByteArray
 from PyQt6.QtGui import QFont, QFontDatabase, QIcon
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialog,
@@ -137,6 +137,8 @@ class ResearchWindow(QMainWindow):
         rail.setSpacing(9)
         brand = QHBoxLayout()
         icon = QSvgWidget(str(application_root()/"assets/branding/f1-symbol.svg"))
+        self.brand_symbol = icon
+        self.brand_symbol_svg = (application_root()/"assets/branding/f1-symbol.svg").read_bytes()
         icon.setFixedSize(38, 38)
         brand.addWidget(icon)
         brand.addWidget(label("QUANTGEN", "brand", wrap=False))
@@ -593,6 +595,11 @@ class ResearchWindow(QMainWindow):
         self.export_status.setText("저장 완료 · " + Path(filename).name)
 
     def change_theme(self, index):
+        # Preserve the F1 geometry; use a legible foreground on dark surfaces.
+        symbol = self.brand_symbol_svg
+        if index:
+            symbol = symbol.replace(b'#194C40', b'#E5EEE8').replace(b'fill="#E5EEE8"', b'fill="#A9C6BD"')
+        self.brand_symbol.load(QByteArray(symbol))
         p = self.colors = DARK if index else LIGHT
         self.setStyleSheet(f"""
           QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; }}
