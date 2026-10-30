@@ -4,9 +4,9 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T19:18:55.000+09:00
+done_ids: ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ②-5/N-M1-11, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-30T19:23:03.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/portfolio-scope-20261030
@@ -28,6 +28,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 수신하면 O8 지시를 읽었다고 명시하고, 적용한 파일·검사 결과·커밋 또는 비공개 변경 상태·남은 실제 제약을 CURRENT와 메인세션에 보고하세요. 공개 반영은 이미 승인된 범위에 한합니다. 이 지시를 저장한 사실은 메인세션의 수신·적용 완료를 뜻하지 않습니다.
 
 ## 0. 현재 결과
+N-M1-09/N-M1-10 완료: PR24 source71b0c9c → main ec98cbef49f0fca90083dbbe5beca0667d382282. CI41039790188 Windows3.12/3.14·Ubuntu3.12 모두 completed success; 원격 PR/main/코드 및 append-only LEDGER dd5e69ea read-back. focused8 PASS, baseline24조합 완전 동일. sapientia Notion에 검증된 두 하위 범위만 취소선/6·61 집계를 반영했습니다. §10는 총6/67그룹 완료,61그룹·14관찰·15모호 ID 매핑이 남습니다. 실제 Windows 육안/실데이터/공식 판정/배포 완료를 뜻하지 않습니다. 다음 단위는 N-M1-11 목표가격 확률을 만기 기준으로 명확히 표현하는 표시 수정이며 기존 Monte Carlo 수치/ResearchRun 계약을 유지합니다.
 N-M1-09/N-M1-10 구현·로컬 검증 완료: source71b0c9c, gpt/portfolio-scope-20261030. 음수/0 초과수익 max-Sharpe 경고, 요청/유효 상한과 선택/비교/frontier 범위를 Flet·Qt·AI·JSON/ZIP에 반영했습니다. focused8검사 PASS; baselineff421ea 대비24조합의 가중치/위험기여/수익/변동성/Sharpe/수렴 완전 동일. _solve/frontier/R-15 AST 불변. 원격 branch read-back 완료; 제품 PR/CI 후 main 반영 예정이며 아직 main 완료로 기록하지 않습니다.
 새 실행 a0dfb643은 직전 실행/작업/인계 ID·branch36df786·OS lock 해제를 대조하고 CAS로 재개합니다. 다음 단위 N-M1-09/N-M1-10의 경고/제약 범위 표시를 제품 main ff421ea에서 별도 gpt 브랜치로 진행합니다. O8 및 기존 완료 작업은 반복하지 않습니다. 기존 solver 목적·가중치·gate는 변경하지 않고 합성 검증과 Flet/Qt 표시·AI/export 근거를 맞춥니다.
 O8 실제 반영 완료: e089e59 + 36df786, draft PR21(연구 브랜치 대상, main 미병합). 스펙 Status/Owner context/O8/Step1b/AppendixB·Windows 런북·결정서·판정록·진행표·실행기록·CI 및 경계 검사를 수정했습니다. 추가 GPT/Gemini는 선택·NOT_PERFORMED이며 미실시만으로 Windows 인계 차단 금지. 기존 Claude 검토·기술/Windows 검증·정식 실행 승인 범위 유지. 일반 승인 범위 수정은 새 일반 사인오프 불필요, 판정/정식 원장/외부 공개는 개별 승인. 임시 원장 20검사 PASS(기존14+새6), CI41032685371 exact36df786에서 Windows/Ubuntu Python3.13 completed success, 2job/원격파일/read-back 확인. 유효 임시 실행조건 검사에 optional 보고서가 없어도 통과하며 R09/R11/R15·호스트·변경 코드/표·freshness·U>24 거부를 보존. 실제 원장/가격/파일럿/owner_confirmed는 실행·부여하지 않았습니다. O11 A2 런타임은 d7b175f 그대로, 등록 명령은 하나입니다.
