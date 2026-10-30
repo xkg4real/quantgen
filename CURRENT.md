@@ -9,10 +9,10 @@ next_ids: ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2
 updated_at: 2026-10-30T21:05:57.688+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/ar1-decay-disclosure-20261030
-work_commit: 696ee3cb9eaf5190db649be58d46754d865dc5c5
+work_branch: gpt/funding-inference-20261030
+work_commit: c9a03ce9a71bf1ab81b733fd4dc40ffa6c2c1117
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/28
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
