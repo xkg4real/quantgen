@@ -1,14 +1,14 @@
 ---
-status: checkpoint
+status: taken
 reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: none
 next_ids: ⑫-3, ⑬-1, ⑬-2, ⑨-2, ⑩-1, ⑩-2, ⑪-1
-updated_at: 2026-10-30T12:12:42.000+09:00
+updated_at: 2026-10-30T13:01:14+09:00
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: none
 work_branch: gpt/f1-web-icons-20261030
 work_commit: 459bed0f9344350a178d61cf331f98fa07e16255
 uncommitted_changes: no
@@ -17,13 +17,13 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: cab88f09-f030-4a9c-9be3-2e09b18e04bc
+execution_id: 1a2e45b4-a6df-43f8-a011-c332797c7b02
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
 # Owner-directed product work — ownership notice
 
-Owner-directed visual work is at a checkpoint; no development worker remains active. The F1 browser-icon follow-up is integrated through PR #15 at main ebb6d61fa8ee7813cca9dbd8df58cea96b80dc05 after bounded Windows/Linux CI. The requested existing public-site restyle is waiting for its source and hosting access; no public-site content or deployment was changed. The owner may provide that access and continue here. This is an ownership/lifecycle notice only; consolidated results and detailed Claude delivery remain private/deferred at the owner's request. Automatic monitoring eligibility and previously completed IDs are unchanged. Research calculations, gates, protected stores, TRADEGEN and shared environment settings remain untouched.
+The owner directly requested continuation: native PyQt6 desktop application, retained Flet browser application, shared calculation core, approved A/F1 design. This manual task resumes the owner's checkpoint; it is not an automatic stale takeover. Work starts from the latest integrated product main (PR #15), preserving earlier handoff records and automatic weekly eligibility. Public-site source is now supplied; its design-only HTML artifact is being validated privately. Hosting deployment awaits the owner's upload/access decision. No research approval fields, frozen work, protected stores, orders, TRADEGEN or shared environment settings may change. Consolidated Claude delivery remains deferred until completion or the owner-requested usage/runtime checkpoint.
 
 # Historical prior report
 
