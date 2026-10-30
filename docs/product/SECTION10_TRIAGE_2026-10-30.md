@@ -77,3 +77,14 @@ These are synthetic arithmetic checks, not live-provider or research validation.
 
 The remaining 66 groups and 14 observation models are not marked corrected.
 The five initial probes do not constitute full §10 reproduction coverage.
+
+## Subsequent verified units
+
+The preceding counts and probe observations describe the initial PR20 slice.
+PR22 corrected NEW-M6-18; PR23 corrected M4-N5 and M3-N07. The portfolio
+disclosure follow-up closes N-M1-09/N-M1-10's missing warnings/constraint scope
+without changing objectives or weights; see `PORTFOLIO_SCOPE_2026-10-30.md`.
+The current machine-readable queue therefore records **6/67** corrected groups,
+**61** remaining groups and **14** observation-model rows. Fifteen ambiguous
+ID mappings remain unresolved. The original five-probe JSON is historical
+evidence and is not overwritten with later results.

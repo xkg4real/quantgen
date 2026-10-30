@@ -33,6 +33,8 @@ class OptimizedPortfolio:
     converged: bool = True
     note: str = ""
     risk_contrib: np.ndarray = field(repr=False, default=None)  # fraction of total risk
+    requested_max_weight: float = 1.0
+    effective_max_weight: float = 1.0
 
 
 @dataclass(frozen=True)
@@ -92,12 +94,21 @@ def optimize_portfolio(stats: BasketStats, *, objective: str = "max_sharpe",
         note = "Weights equalize each asset's contribution to portfolio risk."
 
     ret, vol, sharpe = portfolio_point(w, stats, rf_rate=rf_rate)
+    if objective == "max_sharpe" and np.all(mu <= rf_rate):
+        note = ("No asset has positive estimated excess return over the risk-free rate. "
+                "Maximizing a non-positive Sharpe can favor higher volatility; these "
+                "weights are not evidence of an attractive or low-risk allocation.")
+    if cap != max_weight:
+        note += (" " if note else "") + (
+            f"Requested per-asset cap {max_weight:.10%} was adjusted to {cap:.10%} "
+            "by the existing fully-invested feasibility bound (1/N + 1e-9, at most 1).")
     if not ok:
         note = (note + " " if note else "") + "Solver did not report convergence; treat weights as approximate."
     return OptimizedPortfolio(objective=objective, symbols=stats.symbols,
                               weights=w, ann_return=ret, ann_vol=vol,
                               sharpe=sharpe, converged=ok, note=note.strip(),
-                              risk_contrib=_risk_contributions(w, cov))
+                              risk_contrib=_risk_contributions(w, cov),
+                              requested_max_weight=float(max_weight), effective_max_weight=cap)
 
 
 def efficient_frontier(stats: BasketStats, *, points: int = 25,
