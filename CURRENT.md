@@ -1,14 +1,14 @@
 ---
-status: checkpoint
+status: taken
 reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: none
 next_ids: ⑫-3, ⑬-1, ⑬-2, ⑨-2, ⑩-1, ⑩-2, ⑪-1
-updated_at: 2026-10-29T19:13:45.000+09:00
+updated_at: 2026-10-30T02:59:59.000Z
 stale_after_hours: 3
-waiting_on: owner
+waiting_on: none
 work_branch: gpt/ui-apply-main-20261029
 work_commit: 94121deed56993ae07b1f4e1c10eb0fb99e5a1f8
 uncommitted_changes: no
@@ -17,13 +17,13 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: 6829eea5-c7bf-4ac8-91d5-d03ee12b741e
+execution_id: cab88f09-f030-4a9c-9be3-2e09b18e04bc
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
 # Owner-directed product work — ownership notice
 
-Owner-directed work is at a checkpoint; no active development worker will be retained. This is an ownership/lifecycle notice only. Consolidated results/handoff remain private and deferred at the owner's request. Do not take this checkpoint; waiting_on=owner. The prior report below is historical, not a new delivery or instruction to resume. UI PR creation/main integration was subsequently authorized for the selected UI scope; frozen research, actual-ledger and TRADEGEN boundaries remain.
+The owner resumed this conversation to apply the agreed A/F1 visual identity to the existing public website and browser icons, preserving all website text, figures and behavior. This execution holds the repository work only for F1 icon wiring/packaging; it will start a gpt branch from current main 22ac580. Public-site source/deployment access is being located. This is an ownership/lifecycle notice, not consolidated delivery to Claude; the owner's deferred-handoff instruction remains. No research calculations, gates, protected stores, TRADEGEN or shared environment settings may change.
 
 # Historical prior report
 
