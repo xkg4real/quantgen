@@ -2,7 +2,7 @@
 import math
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QComboBox, QGridLayout, QLineEdit, QPushButton, QStackedWidget, QVBoxLayout, QWidget
-from .charts import LineChart
+from .charts import LineChart, SignedBars
 from core.ficc.common import FICCError
 
 
@@ -75,9 +75,11 @@ class ToolPane(QWidget):
         self.result_layout.setSpacing(16)
         layout.addWidget(self.result)
         self.tool.currentIndexChanged.connect(self.switch)
+        self.forms.setFixedHeight(self.forms.currentWidget().sizeHint().height())
 
     def switch(self, index):
         self.forms.setCurrentIndex(index)
+        self.forms.setFixedHeight(self.forms.currentWidget().sizeHint().height())
         self.clear_result()
         self.status.setText('도구가 변경됐습니다. 다시 실행하세요.')
 
@@ -130,3 +132,11 @@ class ToolPane(QWidget):
         self.text(narrative)
         self.has_result = True
         self.status.setText('계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.')
+
+    def bars(self,name,rows,limit=None):
+        from .app import label
+        self.result_layout.addWidget(label(name,'heading'))
+        chart=SignedBars(rows,limit=limit)
+        chart.colors=self.window().colors
+        self.result_layout.addWidget(chart)
+        self.charts[name]=chart

@@ -20,6 +20,9 @@ from core.research.portfolio_analysis import PortfolioRequest, execute_portfolio
 from core.research.bond_analysis import BondRequest, execute_bond
 from core.research.rates_analysis import RatesRequest, execute_rates
 from core.research.fx_analysis import FXRequest, execute_fx
+from core.research.structuring_analysis import StructuringRequest, execute_structuring
+from core.research.signals_analysis import SignalsRequest, execute_signals
+from core.research.macro_analysis import MacroRequest, execute_macro
 from core.research.runs import new_run, read_export
 from quantgen_desktop.app import ResearchWindow
 from quantgen_desktop.jobs import Jobs
@@ -68,7 +71,61 @@ def fx_fixture(request):
         policy_loader=lambda c,**kw:load_policy_rates(c,source='synthetic',days=kw.get('days',120)))
 
 
+def structuring_fixture(request):
+    from core.ficc.data import synthetic_curve_panel
+    return execute_structuring(request,curve_loader=lambda **kw:synthetic_curve_panel(days=80,seed=23))
+
+
+def signals_fixture(request):
+    return execute_signals(request,history_loader=lambda *a,**kw:history_fixture())
+
+
+def macro_fixture(request):
+    from core.ficc.macro import macro_sheet
+    return execute_macro(request,sheet_loader=lambda **kw:macro_sheet(source='synthetic'))
+
+
 class AnalysisAdapterTests(unittest.TestCase):
+    def test_signals_all_strategies_preserve_costed_backtest(self):
+        from core.quant.backtest import run_backtest
+        from core.quant.signals import compute_signals
+        for tool in ('ma_cross','momentum','rsi_revert'):
+            q=SignalsRequest(tool=tool,fast=10,slow=30 if tool=='ma_cross' else 50,cost_bps=17)
+            out=signals_fixture(q)
+            direct=run_backtest(out.history,strategy=tool,params=q.parameters(),cost_bps=17)
+            self.assertEqual(out.backtest.total_return,direct.total_return)
+            self.assertEqual(out.report,compute_signals(out.history))
+        with self.assertRaises(ValueError):SignalsRequest(fast=60,slow=50).validate()
+
+    def test_macro_narratives_preserve_observations_and_units(self):
+        from core.ficc import insights
+        from quantgen_desktop.macro import level,change
+        from types import SimpleNamespace
+        for tool,narrate in (('sheet',insights.narrate_macro),('daily',insights.narrate_daily_brief),('weekly',insights.narrate_weekly_strategy)):
+            out=macro_fixture(MacroRequest(tool=tool))
+            self.assertEqual(out.narrative,narrate(out.sheet))
+            self.assertTrue(out.sheet.synthetic_ids)
+        self.assertEqual(level(SimpleNamespace(unit='pct',last=.042)),'4.200%')
+        self.assertEqual(change(SimpleNamespace(unit='pct'),.001),'+10.00 bp')
+        self.assertEqual(change(SimpleNamespace(unit='fx'),.001),'0.0010')
+    def test_structuring_terms_optional_coupon_and_futures_hedge_match_existing_core(self):
+        from core.ficc import structured
+        cases=[StructuringRequest(),StructuringRequest(tool='rc',maturity='1y',coupon=.1),
+               StructuringRequest(tool='dcd',maturity='3m',spot=1350,vol=.09,r_for=.045,margin=.25),
+               StructuringRequest(tool='steep',maturity='5y',cap=.05,frequency=2)]
+        for q in cases:
+            q=replace(q,futures_dv01=65)
+            o=structuring_fixture(q);r=o.report
+            if q.tool=='ppn':direct=structured.principal_protected_note(o.curve,spot=1.1,vol=.08,r_for_or_div=.02,maturity=3,notional=1e6,margin=1)
+            elif q.tool=='rc':direct=structured.reverse_convertible(o.curve,spot=1.1,vol=.08,r_for_or_div=.02,maturity=1,notional=1e6,strike_pct=.95,coupon=.1,margin=1)
+            elif q.tool=='dcd':direct=structured.dual_currency_deposit(o.curve,spot=1350,vol=.09,r_for=.045,maturity=.25,notional=1e6,strike=1300,base_ccy='USD',quote_ccy='KRW',margin=.25)
+            else:direct=structured.steepener_note(o.curve,maturity=5,notional=1e6,leverage=4,floor=0,cap=.05,freq=2,issue_price=100)
+            self.assertEqual(r.fair_value,direct.fair_value);self.assertEqual(r.greeks,direct.greeks)
+            hedge=structured.hedge_sheet(direct,curve=o.curve,futures_dv01_per_contract=65)
+            self.assertEqual([h.quantity for h in r.hedge],[h.quantity for h in hedge])
+        with self.assertRaises(ValueError):
+            execute_structuring(StructuringRequest(futures_dv01=0),curve_loader=lambda **kw:self.fail('provider called'))
+
     def test_rates_branches_match_core_and_do_not_fetch_invalid_requests(self):
         from core.ficc.common import FICCError
         from core.ficc.curves import analyze_curve
@@ -194,7 +251,8 @@ class NativeDesktopTests(unittest.TestCase):
         self.network.start(); self.addCleanup(self.network.stop)
         self.window=ResearchWindow(auto_refresh=False,market_loader=lambda:[],analysis_runner=fixture_runner,
                                    portfolio_runner=portfolio_fixture,bond_runner=bond_fixture,
-                                   rates_runner=rates_fixture,fx_runner=fx_fixture)
+                                   rates_runner=rates_fixture,fx_runner=fx_fixture,structuring_runner=structuring_fixture,
+                                   signals_runner=signals_fixture,macro_runner=macro_fixture)
         self.window.show(); self.app.processEvents()
         self.addCleanup(self.cleanup_window)
 
@@ -293,6 +351,30 @@ class NativeDesktopTests(unittest.TestCase):
             self.assertGreater(pane.tables['Data sources'].rowCount(),0)
         pane.fields['carry']['top_n'].setText('2.5');pane.submit()
         self.assertIn('입력 오류',pane.status.text());self.assertFalse(pane.has_result)
+
+    def test_native_structuring_all_products_payoff_hedges_and_units(self):
+        w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.structuring)
+        pane=w.structuring
+        for key in ('ppn','rc','dcd','steep'):
+            pane.tool.setCurrentIndex(pane.tool.findData(key))
+            pane.fields[key]['futures_dv01'].setText('65')
+            pane.submit();self.wait_idle()
+            self.assertTrue(pane.has_result,pane.status.text())
+            self.assertGreater(pane.tables['Leg decomposition'].rowCount(),0)
+            self.assertTrue(pane.charts['Maturity payoff'].series)
+        self.assertIn('bp',pane.charts['Maturity payoff'].x_label)
+
+    def test_native_signals_and_macro_do_not_feed_a_book(self):
+        w=self.window
+        w.signals.submit();self.wait_idle()
+        self.assertTrue(w.signals.has_result,w.signals.status.text())
+        self.assertGreater(w.signals.tables['Signal components'].rowCount(),0)
+        self.assertIn('Costed backtest',w.signals.charts)
+        for tool in ('sheet','daily','weekly'):
+            w.macro.tool.setCurrentIndex(w.macro.tool.findData(tool));w.macro.submit();self.wait_idle()
+            self.assertTrue(w.macro.has_result,w.macro.status.text())
+            self.assertGreater(w.macro.tables['Macro indicators'].rowCount(),10)
+        self.assertEqual(len(w.session.runs()),0)
 
     def test_analysis_navigation_and_native_export_cancel_and_failure(self):
         w=self.window;self.configure_gbm()

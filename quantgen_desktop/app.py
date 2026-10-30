@@ -25,10 +25,13 @@ from core.research.portfolio_analysis import execute_portfolio
 from core.research.bond_analysis import execute_bond
 from core.research.rates_analysis import execute_rates
 from core.research.fx_analysis import execute_fx
+from core.research.structuring_analysis import execute_structuring
+from core.research.signals_analysis import execute_signals
+from core.research.macro_analysis import execute_macro
 from core.research.runs import SessionResearch, new_run, failed, export_bytes
 from core.theme import LIGHT, DARK
 from tools.status.snapshot import verify
-from .charts import FanChart, FrontierChart, LineChart
+from .charts import FanChart, FrontierChart, LineChart, SignedBars
 from .jobs import Jobs
 
 
@@ -55,7 +58,11 @@ def panel(title):
 def table(headers):
     t = QTableWidget(0, len(headers))
     t.setHorizontalHeaderLabels(headers)
-    t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+    if len(headers) <= 7:
+        t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+    else:
+        t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
+        for column,header in enumerate(headers):t.setColumnWidth(column,max(100,min(220,12+len(header)*8)))
     t.verticalHeader().hide()
     t.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
     t.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
@@ -78,13 +85,17 @@ def table_rows(t, rows, ids=None):
 class ResearchWindow(QMainWindow):
     def __init__(self, *, session=None, market_loader=load_markets,
                  analysis_runner=execute_analysis, portfolio_runner=execute_portfolio, bond_runner=execute_bond,
-                 rates_runner=execute_rates, fx_runner=execute_fx, auto_refresh=True):
+                 rates_runner=execute_rates, fx_runner=execute_fx, structuring_runner=execute_structuring,
+                 signals_runner=execute_signals, macro_runner=execute_macro, auto_refresh=True):
         super().__init__()
         self.session = session or SessionResearch()
         self.market_loader, self.analysis_runner = market_loader, analysis_runner
         self.portfolio_runner = portfolio_runner
         self.bond_runner = bond_runner
         self.rates_runner, self.fx_runner = rates_runner, fx_runner
+        self.structuring_runner = structuring_runner
+        self.signals_runner, self.macro_runner = signals_runner, macro_runner
+        self.tool_names = ('rates','fx','structuring','signals','macro')
         self.outputs = {}
         self.active_run = None
         self.pending = None
@@ -197,6 +208,8 @@ class ResearchWindow(QMainWindow):
         from .bonds import BondsPane
         from .rates import RatesPane
         from .fx import FXPane
+        from .structuring import StructuringPane
+        from .macro import MacroPane
         layout = self.page("Markets", "공급자와 관측일을 함께 확인하는 일별 시장 데이터")
         self.market_refresh = QPushButton("시장지표 새로고침")
         self.market_refresh.clicked.connect(self.refresh_markets)
@@ -208,10 +221,12 @@ class ResearchWindow(QMainWindow):
         self.bonds=BondsPane();self.bonds.requested.connect(self.run_bond)
         self.rates=RatesPane(); self.rates.requested.connect(lambda q:self.run_tool('rates',q))
         self.fx=FXPane(); self.fx.requested.connect(lambda q:self.run_tool('fx',q))
+        self.structuring=StructuringPane(); self.structuring.requested.connect(lambda q:self.run_tool('structuring',q))
+        self.macro=MacroPane(); self.macro.requested.connect(lambda q:self.run_tool('macro',q))
         self.market_tabs=QTabWidget()
-        for pane,name in ((self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX')):self.market_tabs.addTab(pane,name)
+        for pane,name in ((self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX'),(self.structuring,'Structuring'),(self.macro,'Macro sheet')):self.market_tabs.addTab(pane,name)
         layout.addWidget(self.market_tabs)
-        layout.addWidget(label("Structuring·ETF·Crypto 등 남은 상세 도구는 기존 Flet 화면에서 사용할 수 있습니다.", "muted"))
+        layout.addWidget(label("Derivatives·ETF·Crypto 등 남은 상세 도구는 기존 Flet 화면에서 사용할 수 있습니다.", "muted"))
         layout.addStretch()
 
     def make_quant(self):
@@ -266,15 +281,18 @@ class ResearchWindow(QMainWindow):
 
     def make_risk(self):
         from .portfolio import PortfolioPane
+        from .signals import SignalsPane
         layout = self.page("Portfolio & Risk", "현재 세션 분석의 분포 위험을 확인하세요.")
         self.portfolio = PortfolioPane()
         self.portfolio.requested.connect(self.run_portfolio)
-        layout.addWidget(self.portfolio)
+        self.signals=SignalsPane();self.signals.requested.connect(lambda q:self.run_tool('signals',q))
+        self.risk_tabs=QTabWidget();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
+        layout.addWidget(self.risk_tabs)
         layout.addWidget(label("개별 가격 시뮬레이션 위험", "heading"))
         self.risk_table = table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
         self.risk_table.setMinimumHeight(300)
         layout.addWidget(self.risk_table)
-        layout.addWidget(label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다. Signals·모의매매의 네이티브 이전은 아직 완료되지 않았습니다.", "muted"))
+        layout.addWidget(label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다. 모의매매의 네이티브 이전은 아직 완료되지 않았습니다.", "muted"))
         layout.addStretch()
 
     def make_library(self):
@@ -310,7 +328,7 @@ class ResearchWindow(QMainWindow):
         inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
-        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Monte Carlo, 포트폴리오 최적화, 세션 위험표, Library·저장, System\n남은 이전: Structuring 및 자산별 상세 화면, Macro 하위 화면, Strategy Lab, Signals, KRX, 모의매매, 규칙·연결 설정, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
+        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Monte Carlo, 포트폴리오, Signals, Library·저장, System\n남은 이전: Derivatives·ETF·Crypto, Macro v2 하위 화면, Strategy Lab, KRX, 모의매매, 규칙·연결 설정, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
         inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
         layout.addWidget(box)
         layout.addStretch()
@@ -355,7 +373,7 @@ class ResearchWindow(QMainWindow):
             self.portfolio.show_result(value)
         elif self.pending == "bonds":
             self.bonds.show_result(value)
-        elif self.pending in ('rates','fx'):
+        elif self.pending in self.tool_names:
             getattr(self,self.pending).show_result(value)
         else:
             self.session.put(value.run)
@@ -392,7 +410,7 @@ class ResearchWindow(QMainWindow):
             self.portfolio.status.setText(f"FAILED · {code} · 입력/데이터를 확인하세요.")
         elif self.pending == "bonds":
             self.bonds.status.setText(f"FAILED · {code} · Price/Yield와 곡선 출처를 확인하세요.")
-        elif self.pending in ('rates','fx'):
+        elif self.pending in self.tool_names:
             getattr(self,self.pending).status.setText(f"FAILED · {code} · 입력·곡선 범위·데이터 출처를 확인하세요.")
         else:
             self.session.put(failed(self.active_run, code))
@@ -405,7 +423,7 @@ class ResearchWindow(QMainWindow):
         self.market_refresh.setEnabled(not busy)
         self.portfolio.run.setEnabled(not busy)
         self.bonds.run.setEnabled(not busy)
-        for pane in (self.rates,self.fx):pane.input_box.setEnabled(not busy)
+        for name in self.tool_names:getattr(self,name).input_box.setEnabled(not busy)
         if not busy:
             self.pending = None
             self.active_run = None
@@ -516,8 +534,11 @@ class ResearchWindow(QMainWindow):
           QTableWidget {{ background: {p.surface}; alternate-background-color: {p.surface_2}; gridline-color: {p.border}; border: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
           QHeaderView::section {{ padding: 8px; border: 0; background: {p.surface_2}; color: {p.muted}; }}
           QScrollArea {{ border: 0; }}
+          QTabWidget::pane {{ border: 0; }}
+          QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 18px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; }}
+          QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; }}
         """)
-        for chart in [*self.findChildren(FanChart), *self.findChildren(FrontierChart), *self.findChildren(LineChart)]:
+        for chart in [*self.findChildren(FanChart), *self.findChildren(FrontierChart), *self.findChildren(LineChart), *self.findChildren(SignedBars)]:
             chart.colors = p
             chart.update()
 
@@ -526,7 +547,7 @@ class ResearchWindow(QMainWindow):
             event.ignore()
             self.statusBar().showMessage("진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다.")
             return
-        if self.session.runs() or self.portfolio.chart.output is not None or self.bonds.chart.series or self.rates.has_result or self.fx.has_result:
+        if self.session.runs() or self.portfolio.chart.output is not None or self.bonds.chart.series or any(getattr(self,n).has_result for n in self.tool_names):
             answer = QMessageBox.question(self, "세션 종료", "저장하지 않은 세션 기록은 사라집니다. 종료할까요?",
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
             if answer != QMessageBox.StandardButton.Yes:

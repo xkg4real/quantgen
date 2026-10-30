@@ -148,3 +148,32 @@ class LineChart(QWidget):
             p.drawPath(line)
             p.drawText(QPointF(65+(index%columns)*160,18+(index//columns)*20),name)
         p.setPen(QColor(c.muted));p.drawText(QRectF(box.left(),self.height()-22,box.width(),20),Qt.AlignmentFlag.AlignCenter,self.x_label+' · '+self.y_label)
+
+
+class SignedBars(QWidget):
+    """A zero-centered display: sign is spatial as well as written."""
+    def __init__(self,rows,*,limit=None,parent=None):
+        super().__init__(parent)
+        self.rows=list(rows);self.colors=LIGHT
+        finite=[abs(float(v)) for _,v in self.rows if math.isfinite(float(v))]
+        self.limit=limit or max([1.,*finite])*1.1
+        self.setMinimumWidth(350)
+        self.setFixedHeight(34+len(self.rows)*28)
+        self.setAccessibleName('Zero-centered values: '+', '.join(f'{n}: {v:+.2f}' for n,v in self.rows))
+
+    def paintEvent(self,event):
+        p=QPainter(self);p.setRenderHint(QPainter.RenderHint.Antialiasing)
+        c=self.colors;p.fillRect(self.rect(),QColor(c.surface))
+        left=min(230,self.width()*.4);right=self.width()-64
+        zero=(left+right)/2;half=(right-left)/2
+        p.setPen(QColor(c.muted));p.drawText(QPointF(zero-4,15),'0')
+        for i,(name,value) in enumerate(self.rows):
+            y=28+i*28
+            p.setPen(QColor(c.text));p.drawText(QRectF(8,y-10,left-16,22),Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter,
+                p.fontMetrics().elidedText(name,Qt.TextElideMode.ElideRight,int(left-16)))
+            p.setPen(QPen(QColor(c.border),1));p.drawLine(QPointF(zero,y-10),QPointF(zero,y+10))
+            if not math.isfinite(float(value)):
+                p.drawText(QPointF(right+10,y+5),'—');continue
+            dx=max(-1,min(1,float(value)/self.limit))*half
+            p.fillRect(QRectF(min(zero,zero+dx),y-6,abs(dx),12),QColor(c.accent))
+            p.setPen(QColor(c.text));p.drawText(QPointF(right+8,y+5),f'{value:+.2f}')
