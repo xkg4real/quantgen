@@ -317,7 +317,7 @@ with the numbers:
 * **Offered as monitors**: funding carry (retrospective association; historical IID confirmation is not reliable), the weekday
   table (no return effect, a weekend-volume cost input), the futures basis
   (reconciles with KIS's theoretical price within the dividend band), the
-  kimchi premium, the PCA fly, the LETF drag at realised variance.
+  kimchi premium, the PCA fly, LETF variance-based proxies (not the historical realised-drag benchmark).
 * **Rejected, and shown as rejected**: the ETF trend switch (protects the
   drawdown, does not beat buy-and-hold on Sharpe), capped vol targeting (the
   Cederburg real-time result — this study's cards on SPY and KODEX 200 at its
