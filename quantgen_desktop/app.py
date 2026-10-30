@@ -29,6 +29,7 @@ from core.research.structuring_analysis import execute_structuring
 from core.research.signals_analysis import execute_signals
 from core.research.macro_analysis import execute_macro
 from core.research.market_analysis import execute_derivatives, execute_etf, execute_crypto, execute_krx
+from core.research.connections import execute_connections
 from core.research.runs import SessionResearch, new_run, failed, export_bytes
 from core.theme import LIGHT, DARK
 from tools.status.snapshot import verify
@@ -89,7 +90,8 @@ class ResearchWindow(QMainWindow):
                  rates_runner=execute_rates, fx_runner=execute_fx, structuring_runner=execute_structuring,
                  signals_runner=execute_signals, macro_runner=execute_macro,
                  derivatives_runner=execute_derivatives, etf_runner=execute_etf,
-                 crypto_runner=execute_crypto, krx_runner=execute_krx, auto_refresh=True):
+                 crypto_runner=execute_crypto, krx_runner=execute_krx,
+                 connections_runner=execute_connections, auto_refresh=True):
         super().__init__()
         self.session = session or SessionResearch()
         self.market_loader, self.analysis_runner = market_loader, analysis_runner
@@ -100,7 +102,8 @@ class ResearchWindow(QMainWindow):
         self.signals_runner, self.macro_runner = signals_runner, macro_runner
         self.derivatives_runner, self.etf_runner = derivatives_runner, etf_runner
         self.crypto_runner, self.krx_runner = crypto_runner, krx_runner
-        self.tool_names = ('rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx')
+        self.connections_runner = connections_runner
+        self.tool_names = ('rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx','connections')
         self.outputs = {}
         self.active_run = None
         self.pending = None
@@ -326,6 +329,10 @@ class ResearchWindow(QMainWindow):
 
     def make_system(self):
         layout = self.page("System", "기록된 근거와 이번 실행 결과를 구분합니다.")
+        from .connections import ConnectionsPane
+        self.connections = ConnectionsPane()
+        self.connections.requested.connect(lambda q: self.run_tool('connections', q))
+        layout.addWidget(self.connections)
         box, inner = panel("프로젝트 상태")
         try:
             status = verify(application_root())
@@ -340,7 +347,7 @@ class ResearchWindow(QMainWindow):
         inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
-        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, 포트폴리오, Signals, Library·저장, System\n남은 이전: Macro v2 하위 화면, Strategy Lab, 모의매매, 규칙·연결 설정, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
+        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, 포트폴리오, Signals, Library·저장, 연결 설정, System\n남은 이전: Macro v2 하위 화면, Strategy Lab, 모의매매, 규칙, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
         inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
         layout.addWidget(box)
         layout.addStretch()
@@ -445,6 +452,7 @@ class ResearchWindow(QMainWindow):
     @pyqtSlot(object)
     def run_portfolio(self, request):
         if self.jobs.busy: return
+        self.portfolio.clear_result()
         self.pending = "portfolio"
         self.portfolio.status.setText("최적화 중… 화면을 이동해도 계속됩니다.")
         self.jobs.start(lambda:self.portfolio_runner(request))
@@ -452,6 +460,7 @@ class ResearchWindow(QMainWindow):
     @pyqtSlot(object)
     def run_bond(self, request):
         if self.jobs.busy:return
+        self.bonds.clear_result()
         self.pending='bonds'
         self.bonds.status.setText('채권 계산 중…')
         self.jobs.start(lambda:self.bond_runner(request))

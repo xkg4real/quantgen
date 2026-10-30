@@ -39,6 +39,9 @@ class BondsPane(QWidget):
         self.scenarios=table(['Scenario','Shock · bp','New price','P&L','P&L %']);self.scenarios.setMinimumHeight(310);layout.addWidget(self.scenarios);self.scenarios.hide()
         self.hedge=label('');layout.addWidget(self.hedge)
         self.notes=label('','muted');layout.addWidget(self.notes)
+        from .report_actions import ReportActions
+        self.exports = ReportActions(self.status)
+        layout.addWidget(self.exports)
 
     def submit(self):
         def number(name,default=None):
@@ -52,6 +55,7 @@ class BondsPane(QWidget):
                 position_dv01=number('Position DV01 · optional'),ctd_dv01=number('CTD DV01 / contract',65),conversion_factor=number('Conversion factor',1))
             q.validate()
         except (ValueError,TypeError):
+            self.clear_result()
             self.status.setText('입력 오류 · 유한한 수치와 유효한 만기·금액을 입력하고 Price/Yield 중 하나만 남기세요.');return
         self.requested.emit(q)
 
@@ -79,3 +83,18 @@ class BondsPane(QWidget):
             f'{o.curve.source} · {o.curve.date} · {o.curve.method} · {len(o.panel)} sessions',
             o.panel.note,o.curve.note,a.note,o.narrative] if n))
         self.status.setText('계산 완료 · 곡선 및 채권 가정을 확인하세요.')
+        self.exports.set_result('bonds', o.request, [
+            {'type': 'provenance', 'source': o.panel.source, 'date': o.curve.date,
+             'curve_source': o.curve.source, 'method': o.curve.method, 'note': o.panel.note},
+            {'type': 'analytics', 'data': a}, {'type': 'scenarios', 'data': o.scenarios},
+            {'type': 'hedge', 'data': o.hedge},
+            {'type': 'price_yield', 'yield_pct': o.yield_axis, 'price': o.price_curve, 'tangent': o.duration_tangent},
+            {'type': 'text', 'text': self.notes.text()}])
+
+    def clear_result(self):
+        self.exports.clear()
+        for widget in (self.metrics, self.krd, self.scenarios):
+            widget.setRowCount(0)
+        self.chart.set_series([], [])
+        self.hedge.setText('')
+        self.notes.setText('')

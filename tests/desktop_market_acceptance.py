@@ -130,7 +130,7 @@ class NativeMarketTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             dest=Path(d)/'crypto.json'
             with patch('quantgen_desktop.tools.QFileDialog.getSaveFileName',return_value=(str(dest),'')):pane.export_result(False)
-            self.assertEqual(json.loads(dest.read_text())['tool'],'crypto')
+            self.assertEqual(json.loads(dest.read_text(encoding='utf-8'))['tool'],'crypto')
             with patch('quantgen_desktop.tools.QFileDialog.getSaveFileName',return_value=('','')):pane.export_result(True)
             self.assertEqual(len(list(Path(d).iterdir())),1)
         pane.fields['crypto']['days'].setText('nan');pane.submit()
@@ -144,6 +144,83 @@ class NativeMarketTests(unittest.TestCase):
         self.assertIn('UNAVAILABLE',p.status.text())
         self.assertFalse(p.has_result)
         self.assertNotIn('SECRET',str(p.sections))
+
+    def test_portfolio_and_bond_exports_capture_numeric_results_and_clear_on_failure(self):
+        from core.research.tool_export import report_bytes
+        w = self.window
+        for name in ('portfolio', 'bonds'):
+            pane = getattr(w, name)
+            pane.source.setCurrentIndex(pane.source.findData('synthetic'))
+            pane.submit(); self.wait_idle()
+            report = pane.exports.report
+            self.assertIsNotNone(report, pane.status.text())
+            self.assertEqual(report['tool'], name)
+            self.assertEqual(report['verdict'], 'NOT_RUN')
+            if name == 'portfolio':
+                values = next(s['data'] for s in report['sections'] if s['type'] == 'portfolios')
+                self.assertEqual(len(values), 4)
+                self.assertAlmostEqual(sum(values['max_sharpe']['weights']), 1)
+            else:
+                values = next(s['data'] for s in report['sections'] if s['type'] == 'analytics')
+                self.assertGreater(values['price'], 0)
+                self.assertEqual(report['parameters']['coupon'], .045)
+            with tempfile.TemporaryDirectory() as d:
+                dest = Path(d) / (name + '.zip')
+                with patch('quantgen_desktop.report_actions.QFileDialog.getSaveFileName', return_value=(str(dest), '')):
+                    pane.exports.save(True)
+                with ZipFile(dest) as z:
+                    self.assertIsNone(z.testzip())
+                    self.assertEqual(json.loads(z.read('analysis.json'))['parameters']['source'], 'synthetic')
+                with patch('quantgen_desktop.report_actions.QFileDialog.getSaveFileName', return_value=('', '')):
+                    pane.exports.save(False)
+                self.assertEqual(len(list(Path(d).iterdir())), 1)
+            if name == 'portfolio': pane.symbols.setText('ONLY_ONE')
+            else: pane.fields['Maturity · years'].setText('nan')
+            pane.submit()
+            self.assertIsNone(pane.exports.report)
+            self.assertFalse(pane.exports.json_button.isEnabled())
+
+    def test_connection_probes_are_explicit_and_failures_stay_unavailable(self):
+        from core.research.connections import ConnectionRequest, execute_connections
+        from unittest.mock import Mock
+        loader = Mock(return_value={'ready': False, 'path': '/quotes', 'reason': 'https://host/?api_key=SECRET'})
+        self.window.connections_runner = lambda q: execute_connections(q, probe_loaders={'krx': loader})
+        self.assertFalse(loader.called)
+        pane = self.window.connections
+        pane.tool.setCurrentIndex(pane.tool.findData('krx'))
+        self.assertFalse(loader.called)
+        pane.submit(); self.wait_idle()
+        loader.assert_called_once_with()
+        self.assertIn('UNAVAILABLE', str(pane.sections))
+        self.assertNotIn('SECRET', str(pane.sections))
+        self.assertEqual(pane.report['verdict'], 'NOT_RUN')
+
+
+class ConnectionAdapterTests(unittest.TestCase):
+    def test_presence_never_copies_credential_values_or_calls_probe(self):
+        from core.research.connections import ConnectionRequest, execute_connections
+        def status():
+            return [{'id': 'kis', 'label': 'KIS', 'ready': True, 'vars': ('KIS_APP_KEY',),
+                     'note': 'Presence only', 'value': 'SECRET'}]
+        out = execute_connections(ConnectionRequest(), status_loaders=[status], probe_loaders={})
+        self.assertEqual(out.rows[0][1], 'CONFIGURED')
+        self.assertIn('KIS_APP_KEY', str(out.rows))
+        self.assertNotIn('SECRET', str(out.rows))
+
+    def test_probe_routes_and_exception_redaction(self):
+        from core.research.connections import ConnectionRequest, execute_connections
+        from unittest.mock import Mock
+        for tool in ('ficc', 'kis', 'crypto'):
+            probe = Mock(return_value={'fixture': {'ok': True, 'detail': 'sample only'}})
+            out = execute_connections(ConnectionRequest(tool), probe_loaders={tool: probe})
+            probe.assert_called_once_with()
+            self.assertEqual(out.rows[0][1], 'REACHABLE')
+        failure = Mock(side_effect=RuntimeError('api_key=SECRET'))
+        out = execute_connections(ConnectionRequest('krx'), probe_loaders={'krx': failure})
+        self.assertEqual(out.rows[0][1], 'UNAVAILABLE')
+        self.assertNotIn('SECRET', str(out.rows))
+        with self.assertRaises(ValueError):
+            execute_connections(ConnectionRequest('submit_order'), probe_loaders={})
 
 
 if __name__=='__main__': unittest.main()

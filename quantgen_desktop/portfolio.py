@@ -39,12 +39,16 @@ class PortfolioPane(QWidget):
         self.correlation=table([]);self.correlation.setMinimumHeight(220);layout.addWidget(label("상관행렬","heading"));layout.addWidget(self.correlation)
         self.notes=label("아직 실행한 분석이 없습니다.","muted");layout.addWidget(self.notes)
         layout.addWidget(label("과거 표본에 대한 최적화이며 미래 수익 보장이나 공식 게이트 판정이 아닙니다. Frontier와 비교 포트폴리오는 원래 화면처럼 별도의 1.0 상한을 사용합니다.","caption"))
+        from .report_actions import ReportActions
+        self.exports = ReportActions(self.status)
+        layout.addWidget(self.exports)
 
     def submit(self):
         request=PortfolioRequest(tuple(s.strip().upper() for s in self.symbols.text().split(',') if s.strip()),
             self.source.currentData(),self.objective.currentData(),self.cap.value(),self.rf.value()/100)
         try:request.validate()
         except ValueError:
+            self.clear_result()
             self.status.setText("서로 다른 2–15개 심볼과 유효한 비중·금리를 입력하세요.")
             return
         self.requested.emit(request)
@@ -66,3 +70,17 @@ class PortfolioPane(QWidget):
             notes.append("요청 상한이 완전투자 조건보다 작아 기존 엔진이 1/N 이상의 유효 상한으로 조정했습니다.")
         self.notes.setText("\n".join(n for n in notes if n))
         self.status.setText("계산 완료 · solver converged="+str(chosen.converged)+" · 공식 투자 판정 없음")
+        self.exports.set_result('portfolio', output.request, [
+            {'type': 'provenance', 'histories': [{'symbol': h.symbol, 'source': h.source,
+                'first_date': h.first_date, 'last_date': h.last_date, 'note': h.note} for h in output.histories]},
+            {'type': 'portfolios', 'data': output.portfolios},
+            {'type': 'frontier', 'data': output.frontier},
+            {'type': 'correlation', 'symbols': chosen.symbols, 'values': output.stats.corr},
+            {'type': 'text', 'text': self.notes.text()}])
+
+    def clear_result(self):
+        self.exports.clear()
+        self.chart.set_output(None)
+        for widget in (self.comparison, self.weights, self.correlation):
+            widget.setRowCount(0)
+        self.notes.setText('')

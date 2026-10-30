@@ -24,9 +24,9 @@ commercial distribution; current repository policy remains personal use.
 | Research Home | Session Monte Carlo counts, daily market observations, last computed fan and provenance | Counts exclude portfolio optimizations; no historical ledger scan |
 | Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary; Derivatives board, ETF sleeves, Crypto analytics and six KRX datasets | Macro v2 subviews remain in Flet; optional AI panels pending. Native ETF/Crypto study cards are explicitly NOT_LOADED |
 | Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Stored model grades and AI commentary panel not migrated |
-| Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices; technical composite and three costed backtests | Native portfolio export and paper-execution screens pending |
+| Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices; technical composite and three costed backtests | Explicit JSON/ZIP exports; paper-execution screens pending |
 | Research Library | Session Monte Carlo results, native JSON and report ZIP save dialog | No persistent history browser; only explicit export |
-| System | Existing bounded recorded-status verification, native theme switch | Provider connection/probe screen and rule editor pending |
+| System | Existing bounded recorded-status verification, native theme switch | Explicit presence and KRX/FICC/KIS/Crypto probes; rule editor pending |
 
 Both Monte Carlo and portfolio use the existing `core.quant` functions. New
 `core.research` adapters capture inputs before
@@ -50,7 +50,7 @@ raw credential-bearing URLs. Failed Monte Carlo runs are retained in the session
 2. Derivatives, ETF, Crypto and KRX native adapters are implemented. Live API acceptance remains pending.
 3. Macro v2 subviews and Strategy Lab. Preserve trial registration,
    gate/provenance semantics and approval boundaries; no live stores in tests.
-4. Paper-only Trading, Rules, Settings and the optional AI commentary panel.
+4. Paper-only Trading, Rules and the optional AI commentary panel. Settings presence/probes are ported.
    No broker order path or TRADEGEN code belongs in this migration.
 5. Keyboard/focus, resize/DPI, installer/icon and actual Windows visual acceptance;
    compare every native route with its retained Flet counterpart.
@@ -92,3 +92,9 @@ sections, code/runtime evidence and a checksum manifest. These use the separate
 `quantgen.analysis-report/1` format: official validation NOT_RUN, reproducibility PARTIAL,
 data rights NOT_VERIFIED. They are not promoted into full ResearchRun records. Save is
 explicit and atomic; cancellation writes nothing, failed reruns clear stale exports.
+
+Portfolio and Bonds now export their numeric results, inputs and source evidence through
+the same explicit report contract. Invalid requests and failed reruns clear stale reports.
+System has a connection pane: presence is CONFIGURED/NOT_CONFIGURED; explicit probes
+report REACHABLE/UNAVAILABLE. No probe runs when opening the app or selecting a tool;
+credential values are excluded. Windows UTF-8 report reads are explicit in tests.
