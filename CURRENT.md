@@ -10,7 +10,7 @@ updated_at: 2026-10-30T21:15:54.375+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/funding-inference-20261030
-work_commit: 07ab7d41a82dbd20e3e5f5d284f6b0580906c1c8
+work_commit: 414ce3e440de0dbe977a6b3856c95f2ea8b57f70
 uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/29
 usage_weekly_pct: unknown
@@ -94,3 +94,5 @@ AR1: python -m unittest tests.ar1_decay_acceptance tests.desktop_ar1_decay_accep
 
 ## NEW-M6-02/a 구현 중간 저장
 source 07ab7d41a82dbd20e3e5f5d284f6b0580906c1c8: invalid IID p retired, exhaustive circular-phase exploratory diagnostic + Flet/Qt/AI/export/historical-card 표시 반영. 합성/주입23검사 PASS, 독립 귀무300회 old117/300 vs phase13/300. 조건부 가정이며 실제시장/기존카드 재검증 아님. PR29 CI 확인 전; 전체 NEW-M6-02 완료 아님. 10/67 완료·57미완료 유지.
+
+PR29 source 414ce3e440de0dbe977a6b3856c95f2ea8b57f70: README 수정으로 stale이 된 상태 스냅샷을 재생성했습니다. 최초 CI41054037012의 설치 smoke 실패 원인은 stale snapshot이며 로컬 status/Home 추가15검사 PASS. 새 HEAD의 CI 완료를 기다립니다.
