@@ -380,7 +380,7 @@ if __name__ == "__main__":
     cr = a.carry_roll
     assert abs(cr.total - cr.carry - cr.rolldown) < 1e-12 and cr.horizon == 0.25
     assert abs(cr.carry - (1.25 - 98.0 * (1.0 / float(curve.df(0.25)) - 1.0))) < 1e-12
-    assert cr.carry < 0                                # 5.10% running yield < 5.17% funding
+    assert cr.carry < 0                                # 5.10% running yield < 5.20% simple funding
     flat_a = analyze_bond(b, ytm=0.05)
     assert "flat" in flat_a.note and abs(flat_a.z_spread) < 1e-10
     assert abs(flat_a.curve_price - 100.0) < 1e-9

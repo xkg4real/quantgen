@@ -6,7 +6,7 @@ import numpy as np
 import dotenv
 with patch.object(dotenv, 'load_dotenv', return_value=False):
     from core.ficc.bonds import Bond, carry_roll, price_from_curve
-    from core.ficc.curves import flat_curve
+    from core.ficc.curves import flat_curve, bootstrap_par_curve
 
 
 class SimpleFundingCurve:
@@ -16,6 +16,25 @@ class SimpleFundingCurve:
 
 
 class BondFundingTests(unittest.TestCase):
+    def test_bootstrapped_money_market_quote_is_the_financing_rate(self):
+        # Preserve the independent quote oracle from the overlapping PR #18.
+        for rate in (.052, 0, -.01):
+            with self.subTest(rate=rate):
+                curve = bootstrap_par_curve([.25, 1, 2], [rate] * 3)
+                result = carry_roll(Bond(coupon=.05, maturity=2), curve, 98, horizon=.25)
+                self.assertAlmostEqual(result.carry, 1.25 - 98 * rate * .25, places=11)
+
+    def test_financed_zero_coupon_redemption_has_zero_net_pnl(self):
+        for rate in (.06, 0, -.02):
+            for maturity in (.1, .25, 1):
+                with self.subTest(rate=rate, maturity=maturity):
+                    curve = flat_curve(rate)
+                    price = 100 * math.exp(-rate * maturity)
+                    result = carry_roll(Bond(coupon=0, maturity=maturity), curve, price,
+                                        horizon=maturity + .1)
+                    self.assertAlmostEqual(result.total, 0, places=11)
+                    self.assertAlmostEqual(price - result.carry, 100, places=11)
+
     def test_simple_repo_repayment_matches_contract_interest(self):
         # A simple rate quote defines repayment P*(1+r*t), independent of a
         # continuous-zero quote or the implementation's discount conversion.
