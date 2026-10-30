@@ -122,3 +122,12 @@ AI and exports. See `FUNDING_INFERENCE_2026-10-30.md`. Synthetic independent-nul
 and historical validation remain open: **10/67** complete and **57** remaining
 (including NEW-M6-02); **7** additional IDs reproduced. This is a completed sub-scope,
 not closure of the full inference defect.
+
+## LETF study-reference correction
+
+M4-N2 (=NEW-M6-08) distinguishes the current AZ variance proxy from the historical
+price-realised drag comparator, scopes historical study evidence to122630, and
+removes the unsupported better-guide claim. Engine outputs are unchanged for all
+five synthetic funds. See `LETF_STUDY_SCOPE_2026-10-30.md`. **11/67** groups
+complete, **56** remain (NEW-M6-02 remains partial);14 observation rows and15
+ambiguous mappings unchanged. Two source IDs reproduce one canonical group.

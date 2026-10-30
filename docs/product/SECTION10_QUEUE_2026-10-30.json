@@ -9,8 +9,8 @@
     "canonical_groups": 67,
     "observation_models": 14,
     "initial_reproductions": 5,
-    "additional_reproduced_ids": 7,
-    "implemented_canonical_groups": 10
+    "additional_reproduced_ids": 9,
+    "implemented_canonical_groups": 11
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -441,10 +441,11 @@
       "source_model": "95. M4-18 ETF 화면의 레버리지·인버스 ETF 드래그 예측(GARCH-t 분산 경로, 직전 분기 분산)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Variance-based AZ proxy distinguished from historical price-realised drag; historical122630 scope only; numerical engine unchanged",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/LETF_STUDY_SCOPE_2026-10-30.md"
     },
     {
       "id": "M4-N3",
@@ -642,10 +643,11 @@
       "source_model": "95. M4-18 ETF 화면의 레버리지·인버스 ETF 드래그 예측(GARCH-t 분산 경로, 직전 분기 분산)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Variance-based AZ proxy distinguished from historical price-realised drag; historical122630 scope only; numerical engine unchanged",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/LETF_STUDY_SCOPE_2026-10-30.md"
     },
     {
       "id": "NEW-M6-09",

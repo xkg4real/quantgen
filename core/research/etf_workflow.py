@@ -11,6 +11,7 @@ from core.quant import strategies as S
 from core.quant.history import HistoryError, load_history, synthetic_history
 from core.quant.validate import load_cards
 from .decay_disclosure import decay_text
+from .letf_disclosure import letf_context, letf_text
 ROOT = Path(__file__).resolve().parents[2]
 
 LETF = {"122630": (2.0, "KODEX 레버리지", 0.0064), "252670": (-2.0, "KODEX 200선물인버스2X", 0.0064),
@@ -90,8 +91,7 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
                 d = letf_drag(beta, forecast_variance(fit, n), fee=fee)
                 rows.append({"sessions": n, "drag_bp": d["drag_bp"], "variance_bp": d["variance_term"] / BP,
                              "fee_bp": d["financing_term"] / BP})
-            # the study (M_E4_letf_drag) found the last quarter's realised variance the better quarterly
-            # reference (MAE 91 bp against 136 bp for the GARCH path): both are shown, the realised one first
+            # A variance-based formula proxy, not the study's observed realised-drag benchmark.
             last_q = letf_drag(beta, np.full(63, float(np.var(r[-63:]))), fee=fee)
             out["letf"] = {"beta": beta, "name": name, "fee": fee, "rows": rows, "cond_vol": fit.cond_vol_last,
                            "uncond_vol": fit.uncond_vol, "nu": fit.nu, "index_source": src, "converged": fit.converged,
@@ -107,6 +107,8 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
         lc = cards.get("M_E4_letf_drag", {})
         out["letf"]["verdict"] = lc.get("decision", "not run")
         out["letf"]["verdict_reason"] = (lc.get("lines") or [lc.get("decision_reason", "")])[0]
+    if "rows" in out.get("letf", {}):
+        out["letf"]["interpretation"] = letf_context(out["letf"])
     return out
 
 def narrative(a: dict) -> str:
@@ -132,13 +134,9 @@ def narrative(a: dict) -> str:
     lt = a.get("letf")
     if lt and "rows" in lt:
         r63 = next(r for r in lt["rows"] if r["sessions"] == 63)
-        parts.append(f"{lt['name']} is a {lt['beta']:+.0f}× fund: at the last quarter's realised vol ({lt['last_quarter_vol']:.1%}) the "
-                     f"Avellaneda–Zhang drag versus {lt['beta']:+.0f}× the index is {lt['last_quarter_drag_bp']:+.0f} bp a quarter; the "
-                     f"GARCH-t variance term structure (conditional vol {lt['cond_vol']:.1%}, ν {lt['nu']:.1f}) puts it at "
-                     f"{r63['drag_bp']:+.0f} bp ({r63['variance_bp']:+.0f} bp from variance, {r63['fee_bp']:+.0f} bp from the fee), "
-                     f"{next(r for r in lt['rows'] if r['sessions'] == 252)['drag_bp']:+.0f} bp over a year: the price of daily rebalancing. "
-                     f"The validation study's verdict on the GARCH forecast is {lt.get('verdict', 'not run')}: the realised last quarter "
-                     f"is the better guide, which is why it is quoted first.")
+        parts.append(f"{lt['name']} ({lt['beta']:+.0f}×): prior-quarter variance AZ proxy "
+                     f"{lt['last_quarter_drag_bp']:+.0f} bp over 63 observations; GARCH variance proxy "
+                     f"{r63['drag_bp']:+.0f} bp over 63 observations. " + letf_text(lt))
     if a.get("data_source") == "SYNTHETIC":
         parts.append("The series is SYNTHETIC; nothing above is market data.")
     return " ".join(parts) or "No history could be loaded."

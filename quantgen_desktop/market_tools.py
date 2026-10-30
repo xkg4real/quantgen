@@ -4,6 +4,7 @@ import numpy as np
 
 from core.research.market_analysis import DerivativesRequest, ETFRequest, CryptoRequest, KRXRequest
 from core.research.funding_disclosure import funding_text
+from core.research.letf_disclosure import letf_text
 from core.research.decay_disclosure import decay_value, decay_text
 from .tools import ToolPane, number, fmt
 
@@ -95,9 +96,11 @@ class ETFPane(ToolPane):
             self.result_table('Constituents', ['Code', 'Name', 'Weight %'], [[r['code'],r['name'],fmt(r['weight_pct'])] for r in rows])
         lt = d.get('letf')
         if lt and lt.get('rows'):
-            self.result_table('Leveraged fund drag · bp', ['Sessions', 'Drag', 'Variance term', 'Fee term'],
+            self.result_table('AZ variance proxies · bp', ['Sessions', 'Proxy', 'Variance term', 'Fee assumption term'],
                 [[r['sessions'], fmt(r['drag_bp']), fmt(r['variance_bp']), fmt(r['fee_bp'])] for r in lt['rows']])
-            self.text(f"Index: {lt['index_source']} · prior-quarter drag {lt['last_quarter_drag_bp']:.2f} bp · GARCH converged={lt['converged']}")
+            self.text(f"Index: {lt['index_source']} · prior-quarter variance AZ proxy {lt['last_quarter_drag_bp']:.2f} bp · GARCH converged={lt['converged']}")
+            self.text(letf_text(lt))
+            self.sections.append({'type':'letf_interpretation', **lt['interpretation']})
         elif lt: self.text('Leveraged drag unavailable · provider or model error. Other results remain available.')
         self.finished(out.narrative)
 

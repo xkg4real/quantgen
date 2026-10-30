@@ -11,6 +11,7 @@ GARCH(1,1)-t variance term structure on the KOSPI200 index (Avellaneda–Zhang).
 """
 from __future__ import annotations
 
+from core.research.letf_disclosure import letf_text
 import math
 from pathlib import Path
 from typing import Callable, Optional
@@ -84,15 +85,16 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                                                     title=f"{a['code']} price vs NAV")))
             lt = a.get("letf")
             if lt and "rows" in lt:
-                blocks.append(ft.Row([stat(f"{lt['name']} drag, last-quarter vol", f"{lt['last_quarter_drag_bp']:+.0f} bp / qtr",
-                                           token="error", tooltip=f"realised vol {lt['last_quarter_vol']:.1%}: the study's better reference")] +
-                                     [stat(f"GARCH drag {r['sessions']}d", f"{r['drag_bp']:+.0f} bp",
+                blocks.append(notice(letf_text(lt), "accent"))
+                blocks.append(ft.Row([stat(f"{lt['name']} AZ proxy · prior-quarter variance", f"{lt['last_quarter_drag_bp']:+.0f} bp / qtr",
+                                           token="error", tooltip=letf_text(lt))] +
+                                     [stat(f"GARCH variance proxy {r['sessions']} sessions", f"{r['drag_bp']:+.0f} bp",
                                            tooltip=f"variance {r['variance_bp']:+.0f} bp, fee {r['fee_bp']:+.0f} bp")
                                       for r in lt["rows"]] + [stat("Index cond. vol", f"{lt['cond_vol']:.1%}"),
                                                               stat("ν", f"{lt['nu']:.1f}"),
-                                                              stat("Study verdict: GARCH drag", lt.get("verdict", "not run"),
-                                                                   token="success" if lt.get("verdict") == "PASS" else "error",
-                                                                   tooltip=lt.get("verdict_reason", ""))], spacing=10, wrap=True))
+                                                              stat("Historical 122630 study · not current validation", lt.get("verdict", "not run"),
+                                                                   token="muted",
+                                                                   tooltip=letf_text(lt) + " " + lt.get("verdict_reason", ""))], spacing=10, wrap=True))
             sl = a.get("sleeves")
             if sl:
                 blocks.append(ft.Row([
