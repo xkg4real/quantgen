@@ -9,10 +9,10 @@ next_ids: ②-5/N1, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩
 updated_at: 2026-10-30T11:05:28.000+00:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/mc-volatility-disclosure-20261030
-work_commit: e55018716b3580ecc81684378d082e9c75cb6304
+work_branch: gpt/strategy-exposure-disclosure-20261030
+work_commit: 6bd4a208020998379a49acaeb1ee4a6fff3c49b3
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/26
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -128,3 +128,5 @@ UI/PR/main 권한은 이미 해결됐고 native 잔여 구현을 막는 승인 �
 
 ## 11. 현재 재개 (N1)
 직전 실행 a0dfb643의 task/handoff/branch/e550187와 STATE를 대조하고 새 실행 fb4e7f11-2fc5-4222-a172-bdd3812c8392로 재개합니다. N1 종목당 cap/총노출 표시가 이번 단위이며 기존 Strategy Lab 공유 workflow·양 UI 파일은 이 누락 설명을 위해 수정합니다. 계산·비중·DSR·판정·원장 의미는 유지하고 합성/주입 검사만 수행합니다. 이전 0/10절은 완료 이력입니다.
+
+N1 원문은 Model26(vol_target)뿐 아니라 Model30(crypto_trend)의 다종목 합산도 포함합니다. 두 계열의 종목당 cap·OOS 총노출·차입/벤치마크 범위를 같은 공유 설명으로 표시합니다. 새 브랜치는 검증된 제품 main6bd4a208에서 분리했습니다.
