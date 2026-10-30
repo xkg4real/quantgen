@@ -19,7 +19,7 @@ from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialo
 from core.app_paths import application_root
 from core.research.analysis import AnalysisRequest, execute_analysis
 from core.research.export import bundle_bytes, save_desktop_export
-from core.research.markets import load_markets
+from core.research.markets import load_markets, SPECS
 from core.research.provenance import code_evidence, runtime_evidence
 from core.research.portfolio_analysis import execute_portfolio
 from core.research.bond_analysis import execute_bond
@@ -173,7 +173,7 @@ class ResearchWindow(QMainWindow):
         layout.addLayout(summary)
         box, inner = panel("주요 시장지표")
         self.home_markets = table(["지표", "관측값", "변화", "상태 · 관측일"])
-        self.home_markets.setMinimumHeight(250)
+        self.home_markets.setMinimumHeight(100)
         inner.addWidget(self.home_markets)
         inner.addWidget(label("일별 관측 · 실시간 아님 · 조회 실패와 오래된 관측은 구분합니다.", "caption"))
         layout.addWidget(box)
@@ -196,7 +196,7 @@ class ResearchWindow(QMainWindow):
         self.market_refresh.clicked.connect(self.refresh_markets)
         layout.addWidget(self.market_refresh)
         self.market_table = table(["지표", "값", "단위", "직전 대비", "공급자", "관측일", "상태"])
-        self.market_table.setMinimumHeight(330)
+        self.market_table.setMinimumHeight(100)
         layout.addWidget(self.market_table)
         layout.addWidget(label("USD 금리는 변화량을 bp로 표시합니다. 나머지는 직전 관측 대비 %입니다. 데이터 권리와 빈티지는 미검증입니다.", "muted"))
         self.bonds=BondsPane();self.bonds.requested.connect(self.run_bond)
@@ -414,6 +414,11 @@ class ResearchWindow(QMainWindow):
         for w, state in zip(self.count_labels, ("COMPLETED", "RUNNING", "FAILED")):
             w.setText(str(sum(r["execution_status"] == state for r in runs)))
         markets = self.session.markets()
+        if not markets:
+            markets=[dict(label=name,symbol=symbol,provider=provider.upper(),unit=unit,
+                value=None,change=None,observation_date=None,
+                status='UNAVAILABLE' if self.session.market_attempted and not self.session.market_loading else 'NOT_LOADED')
+                for name,symbol,provider,unit,_ in SPECS]
         home, details = [], []
         for r in markets:
             v = "—" if r["value"] is None else f"{r['value']:,.2f}"
@@ -425,6 +430,8 @@ class ResearchWindow(QMainWindow):
             home = [["시장 데이터", "—", "—", "미연결 · 새로고침 필요"]]
         table_rows(self.home_markets, home)
         table_rows(self.market_table, details)
+        for widget in (self.home_markets,self.market_table):
+            widget.setFixedHeight(min(350,max(100,widget.horizontalHeader().height()+sum(widget.rowHeight(i) for i in range(widget.rowCount()))+12)))
         table_rows(self.run_table, [[r["parameters"].get("symbol", "—"), r["parameters"].get("model", "—"),
             r["execution_status"], r["verdict"], r["created_at"][:19]] for r in runs], [r["run_id"] for r in runs])
         complete = [r for r in runs if r["execution_status"] == "COMPLETED"]

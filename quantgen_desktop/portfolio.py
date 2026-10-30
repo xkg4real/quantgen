@@ -17,6 +17,7 @@ class PortfolioPane(QWidget):
         layout=QVBoxLayout(self);layout.setContentsMargins(0,0,0,0);layout.setSpacing(20)
         box,inner=panel("포트폴리오 최적화")
         inputs=QGridLayout()
+        for column in range(3):inputs.setColumnStretch(column,1)
         self.symbols=QLineEdit("AAPL, MSFT, NVDA, TLT")
         self.source=QComboBox()
         for v in ("auto","fmp","kis","yfinance","synthetic"):self.source.addItem(v,v)

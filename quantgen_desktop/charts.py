@@ -81,7 +81,7 @@ class FrontierChart(QWidget):
         xmin,xmax=min(xs),max(xs);ymin,ymax=min(ys),max(ys)
         dx=max(xmax-xmin,.001);dy=max(ymax-ymin,.001)
         xmin-=dx*.1;xmax+=dx*.1;ymin-=dy*.1;ymax+=dy*.1
-        box=QRectF(65,24,self.width()-110,self.height()-70)
+        box=QRectF(65,40,self.width()-110,self.height()-86)
         def point(x,y):return QPointF(box.left()+(float(x)-xmin)/(xmax-xmin)*box.width(),box.bottom()-(float(y)-ymin)/(ymax-ymin)*box.height())
         p.setPen(QPen(QColor(c.border),1))
         for i in range(5):
@@ -99,8 +99,11 @@ class FrontierChart(QWidget):
         p.setPen(QPen(QColor(c.accent),2));p.drawPath(line)
         for index,value in enumerate(ports):
             center=point(value.ann_vol,value.ann_return)
-            p.setBrush(QColor(c.surface));p.drawEllipse(center,5,5)
-            p.drawText(QPointF(min(center.x()+8,self.width()-120),max(16,center.y()-8-index*2)),value.objective)
+            color=QColor((c.accent,'#4474A4','#84649C','#A85F7A')[index])
+            p.setPen(QPen(color,2));p.setBrush(color);p.drawEllipse(center,4,4)
+            legend_x=65+index*(self.width()-100)/4
+            p.drawEllipse(QPointF(legend_x,16),3,3)
+            p.setPen(QColor(c.text));p.drawText(QPointF(legend_x+9,20),value.objective)
         p.setPen(QColor(c.muted));p.drawText(QRectF(box.left(),self.height()-24,box.width(),20),Qt.AlignmentFlag.AlignCenter,"Annual volatility → · Y: annual return (historical estimate)")
 
 
