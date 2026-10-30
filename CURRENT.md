@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T08:24:30Z
+updated_at: 2026-10-30T08:28:00Z
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/approved-research-followups-20261030
-work_commit: d7b175f748c52ce297e1b853e8d0b234c2932725
+work_branch: gpt/section10-payload-20261030
+work_commit: ce12459eae1258e03270702092c839758cde91fa
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/21
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -27,7 +27,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 BS-21 완료: PR19 source 941455aa5a0b41d0941325846dab89a05d80b5e1 → main 0cc30c3ed1a7e25f1d06215a858d57bc199e9be6 병합/read-back. 합성 funding 8개, Qt adapter/calculator/export 3개, bond self-check PASS; CI41020717371 Windows3.12/3.14+Ubuntu3.12 success. PR18의 독립 회귀 사례를 보존하여 통합하고 중복 PR을 종료했습니다.
 §10 첫 단위 완료: PR20 source0e7dd782c01707b0bd3cff78c4c7deb837f761eb → main ce12459eae1258e03270702092c839758cde91fa 병합/read-back, CI41022505498 Windows3.12/3.14+Ubuntu3.12 success. 71ID/67그룹/14관찰 초기 목록·순서, 합성 재현5개와 NEW-M6-01 HAC t-stat 교정. 독립 sandwich6사례 old FAIL/new PASS, 표본부족·Qt 회귀 PASS. 나머지66그룹·14관찰, 모호 매핑15개는 미완료.
 O11 A2/a 완료: 연구 브랜치 gpt/approved-research-followups-20261030 @d7b175f748c52ce297e1b853e8d0b234c2932725, draft PR21(대상 claude/amazing-gauss-tdiguu; 병합하지 않음). 등록 전용 명령·원자 intent/receipt·12개 ID 일치·중단 후 prefix 재개·중복/소실/다른 writer/lock 거부와 승인 범위 문서화. 임시 원장 14 tests PASS, CI41025875318 Windows/Ubuntu completed success, 원격 7개 파일 SHA 및 코드 read-back. 실제 원장·가격·파일럿·owner_confirmed는 실행/변경하지 않았습니다. O11/b 실제 Windows 등록, O8 심사 보고서와 Step7A/누적 연구 main signoff는 남았습니다.
-다음 직접 작업: §10 남은 현재 코드 재현/정정. 제품 main ce12459에서 별도 gpt 브랜치로 분리하며 연구 브랜치를 통째로 병합하지 않습니다. 원문/진행/재현/다음 시작점은 private reports/2026-10-30/WEEKLY_CONTINUATION_20261030.txt. 정상 재개는 이전 execution/task/handoff/branch/commit 일치와 새 CAS/read-back이 필요합니다. 직접 미완료 작업은 주간 반환/cooldown으로 막지 않습니다.
+현재 직접 작업: §10 NEW-M6-18 브라우저 Crypto AI payload의 Upbit 보유 내역 제외 및 공유 전송 경계 검증. 가짜 계좌/모의 HTTP만 사용. 다른 §10 항목도 계속 미완료로 보존. 제품 main ce12459에서 별도 gpt 브랜치로 분리하며 연구 브랜치를 통째로 병합하지 않습니다. 원문/진행/재현/다음 시작점은 private reports/2026-10-30/WEEKLY_CONTINUATION_20261030.txt. 정상 재개는 이전 execution/task/handoff/branch/commit 일치와 새 CAS/read-back이 필요합니다. 직접 미완료 작업은 주간 반환/cooldown으로 막지 않습니다.
 ⑬-2/e~j native 구현/자동 검증을 완료했고 PR17을 main a1adf008568aa7475a9db5ff7a5c97b41b0a12fb에 병합했습니다. 소스 e1df541b35b320bf8360e80305503f72a6043ab0, 59 native tests, CI41018384446 Windows3.12/3.14 및 Ubuntu3.12 success; 원격 PR/main read-back 완료. PR16은 중복 방지로 닫았습니다.
 Windows 앱은 PyQt6 선택 실행, 브라우저는 Flet 유지. 6 workspace, 기존 연구 도구, Macro v2/Strategy Lab, Rules/모의 Trading, 명시적 JSON/ZIP, 선택 AI 해설을 연결했습니다. 실제 API/AI·원장 실행·Windows 육안/DPI·서명 installer는 검증하지 않았고 ⑬-2/k는 미완료입니다. 공개 HTML/F1 묶음은 별도 전달됐고 실제 사이트 업로드는 사용자가 맡습니다.
 Notion REMAINING WORK에는 완료한 하위 범위만 취소선 처리했습니다. 사용자 직접 작업은 returned/cooldown 때문에 대기하지 않습니다. 새 승인 전달 페이지(1절 링크)를 실제 읽고 private 보존했으며, §10 분류/순서·BS-21·O11 A2의 후속 구현과 O8 심사/실파일럿 승인 경계를 구분합니다. UI 병합에 해당 연구 변경을 섞지 않았습니다.
