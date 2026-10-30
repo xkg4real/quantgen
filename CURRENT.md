@@ -4,13 +4,13 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ⑦-4/BS-21, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T16:31:00+09:00
+done_ids: ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ②-5/§10, ④-3/O11-A2, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-30T16:38:23.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/bs21-discount-factor-20261030
-work_commit: 556d47c60d578d56d5d08e2c8f9f73c337cdabde
+work_commit: 941455aa5a0b41d0941325846dab89a05d80b5e1
 uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/19
 usage_weekly_pct: unknown
@@ -24,14 +24,15 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 현재 결과
-현재 진행: 승인된 BS-21 조달비용을 price*(1/DF(h)-1)로 수정하고 설명·회귀 검사를 PR19에 올렸습니다. source 556d47c60d578d56d5d08e2c8f9f73c337cdabde 원격 read-back 완료. 합성 funding 6개+Qt adapter/calculator/export 3개=9 PASS, bond module self-check PASS. CI 검증/병합 전이므로 전체 완료로 기록하지 않습니다. UI의 계산 보존 정책은 이 명시 승인 변경 전까지의 UI 이전 범위였습니다. BS-21은 한 공식/설명/격리 회귀 검증 범위로 제한하고 원장·판정·holdout은 변경하지 않습니다.
+BS-21 완료: PR19 source 941455aa5a0b41d0941325846dab89a05d80b5e1 → main 0cc30c3ed1a7e25f1d06215a858d57bc199e9be6 병합/read-back. 합성 funding 8개, Qt adapter/calculator/export 3개, bond self-check PASS; CI41020717371 Windows3.12/3.14+Ubuntu3.12 success. PR18의 독립 회귀 사례를 보존하여 통합하고 중복 PR을 종료했습니다.
+다음 직접 작업: ②-5 §10, ④-3 O11 A2. 최신 연구 원문2da6469의 §10 71개 ID/14개 관찰 모델을 직접 집계, 명시 중복4쌍→67그룹 private SECTION10_INVENTORY.json에 저장. 재현·수정 전체 완료 아님. O11은 코드/스펙 읽기까지이며 실제 E1을 읽거나 초기화하지 않았습니다.
 ⑬-2/e~j native 구현/자동 검증을 완료했고 PR17을 main a1adf008568aa7475a9db5ff7a5c97b41b0a12fb에 병합했습니다. 소스 e1df541b35b320bf8360e80305503f72a6043ab0, 59 native tests, CI41018384446 Windows3.12/3.14 및 Ubuntu3.12 success; 원격 PR/main read-back 완료. PR16은 중복 방지로 닫았습니다.
 Windows 앱은 PyQt6 선택 실행, 브라우저는 Flet 유지. 6 workspace, 기존 연구 도구, Macro v2/Strategy Lab, Rules/모의 Trading, 명시적 JSON/ZIP, 선택 AI 해설을 연결했습니다. 실제 API/AI·원장 실행·Windows 육안/DPI·서명 installer는 검증하지 않았고 ⑬-2/k는 미완료입니다. 공개 HTML/F1 묶음은 별도 전달됐고 실제 사이트 업로드는 사용자가 맡습니다.
 Notion REMAINING WORK에는 완료한 하위 범위만 취소선 처리했습니다. 사용자 직접 작업은 returned/cooldown 때문에 대기하지 않습니다. 새 승인 전달 페이지(1절 링크)를 실제 읽고 private 보존했으며, §10 분류/순서·BS-21·O11 A2의 후속 구현과 O8 심사/실파일럿 승인 경계를 구분합니다. UI 병합에 해당 연구 변경을 섞지 않았습니다.
 
 ## 1. 최신 사용자 결정
 
-- 사용자 요청으로 전달한 [2026-10-30 승인 원문·O8 후속 질문·BS-21 추가 승인](https://app.notion.com/p/4095c916fe0c8173a4dae8156aa03ae4?pvs=204). BS-21 후속 승인 원문이 추가됐습니다. 메인세션이 원문 수신·읽기를 확인했습니다. BS-21 구현은 PR19, O11 A2 및 §10 후속은 별도 진행하며 O8 심사 생략/실파일럿 승인을 추정하지 않습니다.
+- 사용자 요청으로 전달한 [2026-10-30 승인 원문·O8 후속 질문·BS-21 추가 승인](https://app.notion.com/p/4095c916fe0c8173a4dae8156aa03ae4?pvs=204). BS-21 후속 승인 원문이 추가됐습니다. 메인세션이 원문 수신·읽기를 확인했습니다. BS-21 구현·검증·main 반영은 PR19, O11 A2 및 §10 후속은 별도 진행하며 O8 심사 생략/실파일럿 승인을 추정하지 않습니다.
 - Windows 앱은 PyQt6, 브라우저는 기존 Flet 유지. 계산/데이터 코어 공유, A안 + F1.
 - UI 수정, PR 생성, main 병합은 이미 허용됨. 과거의 UI 승인 대기를 되살리지 말 것.
 - 공개 HTML은 사용자가 업로드. 호스팅 접근 요청·배포·공유 환경 변경은 제외.
@@ -50,7 +51,7 @@ Notion REMAINING WORK에는 완료한 하위 범위만 취소선 처리했습니
 - docs/product/DISTRIBUTION_REVIEW_2026-10-29.md
 - docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md
 - tests/desktop_acceptance.py, .github/workflows/runtime-smoke.yml
-- PR #13, #14, #15, #17 (merged); #16 closed superseded; BS-21 #19 CI 진행
+- PR #13, #14, #15, #17 (merged); #16 closed superseded; BS-21 #19 merged
 이전 Claude/Nautilus 연구의 근거는 이전 작업 브랜치의 CONTINUATION_STATUS/REMAINING_WORK/HANDOFF_MANUAL/O2_O15_DECISION_FORM 및 LEDGER에 있습니다. 이 파일들은 현재 제품 main에 모두 들어 있지 않습니다. UI 작업을 이유로 누적 연구 브랜치를 통째로 병합하지 마세요.
 
 ## 3. 검증 근거와 한계
@@ -101,7 +102,7 @@ UI/PR/main 권한은 이미 해결됐고 native 잔여 구현을 막는 승인 �
 
 ## 9. Claude / Codex 재개
 최신 handoff 6문서, STATE와 OS lock을 확인합니다. 예약 재개는 직전 execution/task/handoff ID/branch/commit을 대조한 뒤 새 execution ID CAS+read-back으로만 합니다. 현재 실행 ID는 위 front matter입니다.
-제품 main은 a1adf008568aa7475a9db5ff7a5c97b41b0a12fb(PR17 merged). 구현 source gpt/pyqt6-completion-20261030 @ e1df541b35b320bf8360e80305503f72a6043ab0. UI와 별도 누적 연구 브랜치를 무조건 합치지 않습니다.
+제품 main은 0cc30c3ed1a7e25f1d06215a858d57bc199e9be6(PR19 BS-21 merged, PR17 UI 포함). 구현 source gpt/pyqt6-completion-20261030 @ e1df541b35b320bf8360e80305503f72a6043ab0. UI와 별도 누적 연구 브랜치를 무조건 합치지 않습니다.
 설치/실행: python -m pip install ".[desktop]" ; python -m quantgen_desktop. Windows cmd launcher도 제공. 브라우저는 기존 flet run main.py --web 명령.
 검사: docs/DESKTOP_MIGRATION_2026-10-30.md의 bounded fixture 목록과 최신 CI를 사용. 전체 연구/실제 원장/보호 캐시/holdout 검사 금지.
 주간 전체 인수인계는 계속 누적합니다. 사용자 요청은 완료된 범위/남은 외부 인수/새 승인 연구 범위를 구분하며 다시 승인 대기를 만들지 않습니다.
