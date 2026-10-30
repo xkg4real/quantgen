@@ -4,11 +4,11 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ②-5/NEW-M6-03, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T20:26:59.000+09:00
+done_ids: ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-30T20:34:22.000+09:00
 stale_after_hours: 3
-waiting_on: ci
+waiting_on: none
 work_branch: gpt/ar1-decay-disclosure-20261030
 work_commit: 696ee3cb9eaf5190db649be58d46754d865dc5c5
 uncommitted_changes: no
@@ -21,115 +21,70 @@ execution_id: fb4e7f11-2fc5-4222-a172-bdd3812c8392
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
+
 # QUANTGEN owner-directed product continuation
 
-아래 O8 우선 요청은 완료된 지시 이력으로 보존합니다. 재작업하지 말고 0절의 최신 결과와 6절의 다음 단위를 따르세요.
-
-**메인세션 우선 실행 지시 (2026-10-30):** 현재 작업을 안전하게 저장한 즉시, 아래 1절의 O8 정정을 다른 새 작업보다 우선 적용하세요. 스펙의 Status·O8·Step 1b·Appendix B, Windows 안내서, 관련 승인 문서와 검사에 남은 필수 GPT·Gemini 심사 조건을 정리하세요. GPT·Gemini는 미실시(NOT_PERFORMED)로 유지하고 추가 심사 면제를 Appendix B에 기록하며, 그 미실시만으로 Windows 인계나 후속 절차를 차단하지 않도록 하세요. 기존 Claude 심사 근거와 기술·Windows 통과 조건은 유지합니다. 일반 수정·테스트는 승인 범위에서 진행하고, 연구 판정 기준 변경·정식 원장 기록·외부 공개의 개별 승인 경계는 유지하세요. 이미 승인된 O8 결정을 다시 승인 대기로 돌리지 마세요.
-
-수신하면 O8 지시를 읽었다고 명시하고, 적용한 파일·검사 결과·커밋 또는 비공개 변경 상태·남은 실제 제약을 CURRENT와 메인세션에 보고하세요. 공개 반영은 이미 승인된 범위에 한합니다. 이 지시를 저장한 사실은 메인세션의 수신·적용 완료를 뜻하지 않습니다.
-
-## 0. 현재 결과
-N1 완료: PR27 source437ca29c7439b4e27030cca3e86de39abd5538ab → main93f31a3158c4b49a348d9e91f2842e3640605fdc. vol_target/crypto_trend의 종목당 상한·실제 선택된 OOS 총노출/차입·1배 벤치마크 범위를 Flet/Qt/AI/JSON·ZIP에 표시했습니다. Flet 초기 equity 날짜 누락도 실제 재현 후 수정했습니다. 새6+기존5검사 통과, 기존4실행 계산값 완전 동일. CI41046492566 Windows3.12/3.14·Ubuntu3.12 all success, PR/main read-back. LEDGER c204ac054fb63c395bbbbea7992bdd24283b9e06 append/read-back 완료. sapientia4065 Notion 완료 하위 취소선/9완료·58남음 반영 성공.
-§10 최신9/67그룹 완료·58미완료·14관찰 행·15모호 매핑. 전체 완료나 Windows 수동/실파일럿 검증은 아닙니다. 이전 PR24/25/26 네 항목 및 O8/O11 PR21 기록은 git 이력/LEDGER/아래에서 보존합니다. O8 optional NOT_PERFORMED와 실제 실행 owner guard는 유지합니다.
-다음 직접 단위 NEW-M6-03: Model134/143/148 원문과 현재 half_life/ETF·Crypto 화면을 확인했습니다. φ≤0에서inf가 나와 ETF가 느린 회귀라고 단정합니다. 음수 안정 AR(1)의 진동 진폭 감쇠와 추정 불가/비감쇠를 분리하고 양수 결과/거래비중·게이트·저장 판정은 보존하는 독립 합성 검증을 진행합니다.
+## 0. 최신 결과
+제품 main c9a03ce9a71bf1ab81b733fd4dc40ffa6c2c1117. 현재 source696ee3cb9eaf5190db649be58d46754d865dc5c5 / gpt/ar1-decay-disclosure-20261030. 실행 fb4e7f11-2fc5-4222-a172-bdd3812c8392.
+- N1: PR27 source437ca29c7439b4e27030cca3e86de39abd5538ab → main93f31a3158c4b49a348d9e91f2842e3640605fdc. vol_target/crypto_trend의 종목당 상한, 실제 선택된 OOS 총노출/차입 및1배 벤치마크 범위를 Flet/Qt/AI/JSON·ZIP에 명시. Flet의 초기 equity 날짜 누락도 재현 후 수정. 집중6+기존5검사 PASS,4baseline 계산값 완전 동일. CI41046492566 Windows3.12/3.14·Ubuntu3.12 모두success.
+- NEW-M6-03: PR28 source696ee3c → mainc9a03ce. 음수 안정 AR(1)의 진폭 반감기를 abs(phi)기준으로 정정. MONOTONE/OSCILLATING/NO_MEMORY/NON_DECAYING/NOT_ESTIMATED 구분과 ETF/Crypto UI·해설·AI·내보내기 의미 반영. 집중5+시장/AI/HAC 포함22검사 PASS. 양수4사례 기존값 완전 동일, pairs PnL/turnover/선택/모든점수 동일. 다른strategy함수AST와 validation/ledger파일 불변. CI41048097118 동일3환경 모두success.
+두 PR/source/main/CI를 원격 read-back했고 완료 LEDGER는 append-only c204ac05(N1),2efdc6f7(NEW-M6-03), 최신 blob34b26918149f4573f73e511d14c5dc11a5aaf548까지 재확인했습니다. sapientia 계정 REMAINING WORK4065에 완료 하위 범위만 취소선·현재 집계를 반영했습니다.
+§10 최신 **10/67그룹 완료,57그룹·14관찰 모델 행·15모호 ID 매핑 미완료**입니다. 과거 다른 세션의13관찰/13매핑과 집계 단위 차이는 해소 전입니다. 원문10.1은14개 모델 행입니다.
+전체 요청/주간 cycle을 완료하거나 returned 처리하지 않습니다. 직접 작업은 in_progress, 다음 단위 NEW-M6-02입니다. 실제 Windows 육안/DPI·공급자/AI·실원장/파일럿/owner_confirmed·서명 installer·사이트 배포는 여전히 미실행/미완료입니다.
 
 ## 1. 최신 사용자 결정
+- 직접 요청 작업은 일반 감시의 returned/cooldown/next_eligible_at으로 막지 않습니다. Claude 사용 불가 동안 계속하고 화요일17시 전 또는 런타임 한도 전에 주간 전체 인수인계를 남깁니다. 계정 토큰 잔량은 도구가 없어unknown입니다.
+- PyQt6 Windows 앱, 기존 Flet 브라우저 유지. A안+F1, 공유 계산 코어. UI 변경·PR 생성·검증된 main 병합은 승인됐습니다. 공개 HTML은 사용자가 반영하며 이 태스크는 배포하지 않습니다.
+- O8: GPT/Gemini 추가 심사는 선택·NOT_PERFORMED. 기존 Claude 근거/AppendixB 면제 기록을 사용하며 미실시만으로 Windows 인계를 막지 않습니다. 기존 기술·Windows 조건은 유지합니다. 일반 수정/검사는 승인 범위에서 수행하고 연구판정·정식원장·외부공개는 개별 승인입니다.
+- O11 A2: 가격 읽기 전12개 설정 등록, n_trials=12+U 및U≤24 유지. 실제 Windows등록/Step7A/파일럿과 fresh owner_confirmed는 별개입니다.
+- 현재 기존 게시환경/격리된 대화 사용. 새 환경 게시/이전은 사용자 결정으로 중단. 공유설정/보안/환경변수/TRADEGEN/로컬PC 변경 금지. 로컬 PAUSED 검증 이력 보존.
+- Notion은 sapientia@korea.ac.kr 연결 link_6ae437f712a4819196a7fb9087b1ed2a, REMAINING WORK4065c916-fe0c-80d2-af08-c0e7f68817fa만 사용. Primary/f77은 과거 이력이며 우회 금지.
 
-**O8 절차 정정(2026-10-30):** 추가 GPT·Gemini 심사는 선택 사항·미실시이며 Windows 인계의 선행 차단 조건이 아닙니다. 기존 Claude 심사 기록과 기술·Windows 검증은 유지합니다. 승인 범위의 일반 수정·테스트는 포괄 승인이고, 연구 판정 기준 변경·정식 원장 기록·외부 공개는 개별 승인입니다. 본문에 남은 필수 외부 심사 대기 문구는 이 정정으로 대체합니다.
+## 2. 읽을 근거
+- 제품: docs/product/SECTION10_QUEUE_2026-10-30.json, SECTION10_TRIAGE_2026-10-30.md, STRATEGY_EXPOSURE_2026-10-30.md, AR1_DECAY_2026-10-30.md.
+- 다음 항목 원문: 연구ref2da6469d8b3d45eab61d682555ff630ce1f564f7의 docs/nautilus_bridge/MODEL_LIMITS_REGISTER_2026-10-28.md Model136/148 및 KNOWN_ERRORS_REGISTER_2026-10-28.md §10. 역사적 감사 수치는 새 실행 증거와 구분합니다.
+- UI/계약/배포: docs/DESKTOP_MIGRATION_2026-10-30.md; docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md, PACKAGING_2026-10-29.md, DATA_ACQUISITION_2026-10-29.md, DISTRIBUTION_REVIEW_2026-10-29.md, TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md.
+- O8/O11: 연구 gpt/approved-research-followups-20261030 @36df786cb7b1395cd08bc5db2d1ad9b6244e66f3, draft PR21은 claude/amazing-gauss-tdiguu 대상이며 미병합. 제품main에 통째로 합치지 않습니다.
 
-- 사용자 요청으로 전달한 [2026-10-30 승인 원문·O8 후속 질문·BS-21 추가 승인](https://app.notion.com/p/4095c916fe0c8173a4dae8156aa03ae4?pvs=204). BS-21 후속 승인 원문이 추가됐습니다. 메인세션이 원문 수신·읽기를 확인했습니다. BS-21 구현·검증·main 반영은 PR19, O11 A2 및 §10 후속은 별도 진행하며 후속 O8 면제 승인 원문을 별도로 확인했습니다. 실제 파일럿 승인은 여전히 별도입니다.
-- Windows 앱은 PyQt6, 브라우저는 기존 Flet 유지. 계산/데이터 코어 공유, A안 + F1.
-- UI 수정, PR 생성, main 병합은 이미 허용됨. 과거의 UI 승인 대기를 되살리지 말 것.
-- 공개 HTML은 사용자가 업로드. 호스팅 접근 요청·배포·공유 환경 변경은 제외.
-- 정확성이 우선. 사용량/런타임 제약이 가까우면 새 작업을 시작하지 않고 검증 상태와 Claude 재개 문서를 남김. 실제 계정 사용량은 도구에 없어 unknown.
-- 현재 기존 게시 환경과 이 작업 대화를 사용. 별도 새 환경 게시/이전은 중단된 결정이 유효.
-- 2026-10-30 사용자 최신 지시: 직접 작업은 즉시 계속하고 기존 자동 예약을 매시간 재개용으로 갱신. 동일 예약 ID, DTSTART 2026-10-30 16:00 KST, HOURLY, enabled=true read-back. 로컬 PAUSED와 환경 설정은 유지.
-- 매주 화요일 17:00 KST 전 또는 런타임 한도 전에 그 주 전체 작업을 Claude에게 인계. 이번 11-03 16시 마감 준비/17시 전 반환. 실제 계정 토큰 잔량은 unknown.
-- 과거 Primary/f77 REMAINING WORK의 완료 표시 이력은 보존합니다. 최신 직접 지시는 sapientia 계정만 사용하라는 것이며 현재 대상은 해당 계정 REMAINING WORK4065c916입니다. 검증된 하위 범위만 완료 표시하고 부모/미검증 항목은 유지합니다.
+## 3. 판단 및 검증 한계
+N1은 종목별 전략을 몰래 정규화하는 대신 실제 총노출과 차입·벤치마크 범위를 드러냈습니다. 계산은 불변입니다.
+AR1은 impulse phi^k의 진폭 |phi|^k 반감기이며 음수 안정phi는 부호 진동입니다. 추정 불가/비감쇠를 느린 회귀나 진입 신호로 읽지 않습니다. ADF 실패 처리·차기statsmodels호환성은 별도 이슈입니다. GARCH 반감기/공식판정은 바꾸지 않았습니다.
+모든 검사는 합성/주입/격리 저장소 또는 offscreen 위젯/CI입니다. 실제 Windows 화면·provider·계좌·원장·frozen/holdout 검증을 뜻하지 않습니다.
 
-## 2. 확인할 근거
-현재 Qt 브랜치:
-- docs/DESKTOP_MIGRATION_2026-10-30.md
-- docs/product/PACKAGING_2026-10-29.md
-- docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md
-- docs/product/DATA_ACQUISITION_2026-10-29.md 및 DATA_READINESS_2026-10-29.json
-- docs/product/DISTRIBUTION_REVIEW_2026-10-29.md
-- docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md
-- tests/desktop_acceptance.py, .github/workflows/runtime-smoke.yml
-- PR #13, #14, #15, #17 (merged); #16 closed superseded; BS-21 #19 merged
-이전 Claude/Nautilus 연구의 근거는 이전 작업 브랜치의 CONTINUATION_STATUS/REMAINING_WORK/HANDOFF_MANUAL/O2_O15_DECISION_FORM 및 LEDGER에 있습니다. 이 파일들은 현재 제품 main에 모두 들어 있지 않습니다. UI 작업을 이유로 누적 연구 브랜치를 통째로 병합하지 마세요.
+## 4. 기존 완료 이력
+LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID를 재작업하지 않습니다.
+- PR13/14/15: PR-F packaging, MonteCarlo ResearchRun 관측·출처·export/persistence, A/F1 Home/일별지표adapter, F1favicon.
+- PR17: native 6workspace와 기존 분석/전략/매크로/Rules·모의Trading/선택AI 연결·자동검사. supersededPR16 종료.
+- PR19: BS-21 exact DF funding; PR20 §10초기분류/NEW-M6-01 HAC; PR22 보유내역AI제외; PR23 FamaHAC/빈caplet거부.
+- PR24/25/26: N-M1-09/10 포트폴리오경고/상한범위, N-M1-11 만기목표사건, N-M1-03 변동성의 표본/다음세션/지평평균 의미.
+- 연구PR21: O11등록전용d7b175f + O8 e089e59/36df786. 임시20검사/Windows·Ubuntu3.13 CI41032685371 성공. 실제 실행 미완료.
+- ⑨-2/a 데이터목록/검증도구,⑩-1/a 법률·권리1차준비,⑩-2/a offline범위,⑪-1/a read-only export/consumer조건은 준비 하위 범위입니다. 데이터권리/전문법률/TRADEGEN구현/공개배포 완료가 아닙니다.
+외부 main51bac973 상업출시 방향 README변경은 보존됐으며 법률 검증 증거로 대신 쓰지 않습니다.
 
-## 3. 검증 근거와 한계
-최신 native CI: https://github.com/xkg4real/quantgen/actions/runs/41018384446
-- e1df541에서 Ubuntu Python3.12, Windows Python3.12/3.14 모두 success.
-- allowlist wheel 빌드/설치, checkout 밖 runtime smoke, bounded source fixtures, native 59개 검사와 checkout 밖 Qt smoke.
-- 합성/주입/임시 저장소만 사용. 설치 smoke는 network/protected path access를 차단합니다.
-- 기존 Flet ETF 수정주가/fallback 검사 PASS. 로컬 light/dark와 1000x700 배치 확인, dark F1 대비 수정.
-실제 공급자/AI/계좌/원장, 실제 Windows 화면/DPI, 서명 installer 성공의 증거는 아닙니다. 공식 gate/판정·TRADEGEN·환경/보안 정책을 변경하지 않았습니다.
+## 5. 현재 저장 상태
+제품 브랜치 gpt/ar1-decay-disclosure-20261030 @696ee3cb9eaf5190db649be58d46754d865dc5c5는 원격검증/PR28병합됐고 working tree clean입니다. 다음 단위는 최신main에서 새gpt브랜치로 분리합니다.
+연구 로컬 허용 사본 HEAD2da6469에 published36df786 파일들이 working copy로 보존돼 있으므로 그 HEAD를 최신으로 오인하거나 reset하지 마세요.
+이번 동일 실행에서 기존 전략/시장UI 파일 수정은 N1 노출설명과 AR1 진단오류 정정에 필요했습니다. 이후 같은파일을 고칠 때도 LEDGER의 이미 끝난 범위를 보존합니다.
 
-## 4. 완료한 하위 작업
-- ⑫-3: PR-F runtime wheel/resources/clean Windows·Ubuntu CI. PR13 main 00e0488fd9f7cf7be01b3bcc51de1a5f72727cc7.
-- ⑬-1/a: Monte Carlo ResearchRun 관측 계약, 입력/코드 근거, JSON/report ZIP. verdict NOT_RUN, reproducibility PARTIAL 유지.
-- ⑬-1/b: 명시적 데스크톱 저장 지속성. PR14 main 22ac580bb249e2b42c1d2bfae91d4e47ebc8f743.
-- ⑬-2/b: A/F1 Home의 세션 결과·일별 지표 연결, 원래 Flet 16경로 유지. 시세 미조회/실패/오래됨 구분.
-- ⑬-2/c: F1 favicon/PWA/Apple 아이콘과 호환 의존성. PR15 main ebb6d61fa8ee7813cca9dbd8df58cea96b80dc05.
-- ⑬-2/d: 선택 실행하는 PyQt6 native 부분 구현, draft PR16. Home, Markets, 4개 Monte Carlo, 4개 portfolio objective, Bonds, Rates 4도구, FX 3도구, Structuring 4상품, Signals 3백테스트, Macro sheet/daily/weekly, Library JSON/ZIP, System. 계산은 기존 core를 호출. 단일 작업 큐, GUI-thread 전달, 중복/종료 가드, 오류 category 표시. 전체 native 완료는 아님.
-- ⑨-2/a: 73 series/29 CSV 의존성 목록, receipt 검증·날짜 집합 일치 비교 도구. 원본 데이터 취득 완료가 아님.
-- ⑩-1/a: 법령/데이터 약관 1차 검토와 전문 검토용 체크리스트. 법률 승인 아님.
-- ⑩-2/a: 독립 offline companion 구조/제약 문서와 private prototype. 공개 MVP나 배포 완료 아님.
-- ⑪-1/a: QUANTGEN 측 읽기 전용 export/consumer 인수 조건 문서. TRADEGEN consumer 구현 아님.
-공개 HTML은 별도 private 전달물: 29 links, 71 controls, 4 scripts 유지; 저장된 애니메이션 heading wrapper 9개 정규화 후 의미 텍스트 동일. seeded 계산과 16 strategy cards 동일, light/dark/mobile/menu/FAQ/filter 검증. 원본에 빠진 analytics companion 참조는 보존했으며 사용자가 기존 부속 폴더를 유지해야 합니다.
-
-## 5. 기존 기록과의 관계
-연구 로컬 허용 사본은 HEAD2da6469에 게시된 최신36df786 파일이 working copy로 있으므로 uncommitted_changes=yes입니다. 별도 미게시 코드가 있다는 뜻은 아닙니다. 9개 O8 변경 파일/기존 O11 파일은 remote blob과 일치합니다. 다음 실행은 원격36df786을 기준으로 허용 사본을 만들거나 exact API tree를 사용하며, 이 로컬 HEAD를 최신 코드로 가정하지 마세요. 제품 사본은 gpt/mc-volatility-disclosure-20261030 @e550187이며 원격 main6bd4a208 merge commit과 구분합니다. working tree는 clean입니다.
-이전 CURRENT의 “PR-F 미구현”, “UI PR/merge 승인 없음”, “Home 데이터 미연결”은 위 후속 작업으로 대체됐습니다.
-기존 LEDGER의 ②-5/c PT-04, ⑫-2/a identity 설계, ①-2/4/a 및 이전 연구 결과는 지우지 않습니다. 별도 연구 브랜치 성과와 현재 main을 구분하세요.
-Qt Rates는 현재 제품 main의 curve 함수를 호출합니다. 별도 PT-04 연구 패치를 몰래 포함하지 않았습니다.
-이번 app.py/tools.py/tests/packaging 문서 재수정은 남은 native 화면 연결, 명시적 export, 배포 검증을 위해 필요합니다. 완료된 pricing/solver/gate 결과는 재작성하지 않습니다.
-
-## 6. 다음 실행 순서
-1. ⑬-2/k 실제 Windows 표시/DPI·키보드·파일 대화상자·선택 공급자 확인은 사용자 PC 인수가 필요합니다. 실행 안내 docs/DESKTOP_MIGRATION_2026-10-30.md; Start-QUANTGEN-Desktop.cmd. 서명 installer/공개 배포와 구분합니다.
-2. 승인 연구 후속: BS-21/NEW-M6-01/§10 초기 단위는 완료. O11 A2/a 등록 전용 코드/임시 원장 검증도 완료했습니다. 다음은 §10 남은 현재 코드 재현/정정입니다. 기존 연구 브랜치 근거를 먼저 읽고 UI 변경과 구분합니다. 실파일럿/실원장/동결 연구는 실행하지 않습니다. O8 선택 심사의 미실시만으로 Windows 인계를 막지 않습니다. 기술·Windows 검증은 유지합니다.
-3. ⑬-1/c 전체 모델·과거 이력·canonical identity/공식 gate 연결은 승인 범위/근거별로 진행. 전체 ResearchRun 완료를 주장하지 않습니다.
-4. ⑨-2/b 공식 데이터/rights/vintage, ⑩-1/b 법률·권리, ⑩-2/b 공개 MVP는 외부 근거/관문 이후. AWS 공식 download CONNECT403은 우회하지 않습니다.
-5. ⑪-1/b TRADEGEN consumer는 별도 TRADEGEN 범위이며 현재 태스크에서 변경하지 않습니다.
-6. 다음 개발 단위 N1: Model26의 per-asset cap은 portfolio gross cap이 아닙니다. core/research/strategy_workflow.py의 FAMILIES/run_family/narrative/payload, ui/strategy_lab_page.py, quantgen_desktop/strategy.py를 먼저 읽으세요. 기존 합성 probe는4종목 최대gross4를 재현했습니다. 설명/노출 표시 범위부터 검토하고 비중·cash차입·DSR/게이트·원장 등록을 바꾸지 마세요. synthetic/injected only. 완료한 N-M1-03/09/10/11 및 과거 완료 ID는 반복하지 않습니다.
-7. 화요일 16시부터 주간 전체 완료/미완료를 정리하고 17시 전에 인계. 그 전 직접 미완료 작업은 기존 hourly 예약과 exact 소유권 확인으로 재개합니다.
+## 6. 다음 단위와 남은 일
+1. ②-5/NEW-M6-02: core/crypto/analytics.py funding_carry 및 shared crypto_workflow·Flet·Qt를 원문Model136과 대조합니다. 현재30관측 선행수익은 겹치고 funding분위는 전표본, bootstrap은각그룹iid입니다. 현재의 부호비율을 보정된 유의확률로 쓰면 안 됩니다. 독립 합성 귀무자료로 중첩/군집의 영향을 검증하고 유효추론과 기술통계를 구분하세요. 기존 M_C4저장카드/판정·문턱·실원장은 변경/재실행하지 않습니다. historical300회FPR0.373은 이번 새 재현이 아닙니다.
+2. §10 나머지57그룹/14관찰/15모호매핑 및 감사 우선순위를 이어갑니다. 일부표시정정만으로 전체 통계결함이나부모과업을 완료 처리하지 않습니다.
+3. ⑬-2/k 실제Windows표시/DPI/키보드/파일대화상자/선택provider 검수·서명installer는 실제사용환경 인수가 남습니다. ⑬-1/c 전체모델/과거이력/canonicalidentity·공식gate계약도 별도입니다.
+4. 실제O11Windows등록/Step7A/공급사대조/파일럿과 owner_confirmed,데이터권리/전문법률/AWS외부입력은 완료증거가 없습니다. 이전 AWS download CONNECT403을 우회하지 않습니다. TRADEGEN consumer는 현재태스크 범위밖입니다.
+5. 화요일2026-11-03 16:00KST부터 새큰작업을 시작하지 않고 주간전체완료/미완료/막힌일/테스트/commit/PR/재현/다음단계를 정리해17시전에returned+read-back합니다.
 
 ## 7. 보호 범위
-.env, 보호 캐시 4개, 실제 원장, 동결 연구/사전등록/holdout은 읽거나 해시하거나 변경하지 않습니다.
-공식 gate/판정/owner approval 필드, 실제 주문 경로, TRADEGEN, 공유 환경/보안/네트워크 설정 변경 금지.
-비공개 원문·첨부·보고서를 public repo에 올리지 않습니다. AUTO_STATE 수동 수정 금지.
-미실행·실패·거절을 계산 COMPLETED 또는 하나의 초록 준비 완료 상태로 합치지 않습니다.
+.env/보호캐시4개/실제원장/동결연구/사전등록/holdout을 읽거나해시/변경하지 않습니다. 실주문/TRADEGEN/공식gate·판정/owner승인규칙/공유환경·보안·네트워크설정 변경 금지. AUTO_STATE수동수정 금지. 비공개원문·키·계좌를 public repo에 올리지 않습니다. 테스트는합성/주입/임시저장소만 사용합니다.
 
-## 8. 결정과 외부 의존성
-UI/PR/main 권한은 이미 해결됐고 native 잔여 구현을 막는 승인 대기가 아닙니다.
-수신된 결정: O2–O15 rev6 기본값 + O11 A2/초기12+U(U≤24), O8 추가 외부 심사 선택화 승인, ②-5 §10 정식 범위·순서, BS-21 DF 수정. 이 승인에 대해 재질문하지 않습니다. O8 후속 명시 승인으로 GPT·Gemini 추가 심사는 선택 사항·NOT_PERFORMED이며 기존 Claude 검토를 보존합니다. owner Windows 파일럿 검증·별도 owner_confirmed는 아직 완료 증거가 없습니다. 연구 판정 기준·정식 원장·외부 공개는 개별 승인입니다. PR-B 12.8/K-f/frozen-harness와 R3 rev2/10.2 A는 해당 별도 원문 범위로만 판단합니다.
-공식 데이터 사용권과 전문 법률 의견을 임의로 승인 처리하지 않습니다. PyQt 공개/상업 배포 라이선스도 이후 배포 판단에 포함합니다.
+## 8. 승인 및 외부 의존성
+O8선택심사,UI/PR/main의 기존승인을 다시 묻거나 승인대기로 되돌리지 않습니다. 실제 연구판정·정식원장·외부공개와 Windows증거/실행확인은 별도입니다. 현재 waiting_on=none은 다음 독립수정이 가능하다는 뜻이며 미실행파일럿을 승인했다는 뜻이 아닙니다.
 
-## 9. Claude / Codex 재개
-최신 handoff 6문서, STATE와 OS lock을 확인합니다. 예약 재개는 직전 execution/task/handoff ID/branch/commit을 대조한 뒤 새 execution ID CAS+read-back으로만 합니다. 현재 실행 ID는 위 front matter입니다.
-제품 main은6bd4a208020998379a49acaeb1ee4a6fff3c49b3(PR26까지). 최신 source gpt/mc-volatility-disclosure-20261030 @e55018716b3580ecc81684378d082e9c75cb6304. native 초기 PR17 sourcee1df541 기록은 이력으로 보존합니다. UI와 별도 누적 연구 브랜치를 무조건 합치지 않습니다.
-설치/실행: python -m pip install ".[desktop]" ; python -m quantgen_desktop. Windows cmd launcher도 제공. 브라우저는 기존 flet run main.py --web 명령.
-검사: docs/DESKTOP_MIGRATION_2026-10-30.md의 bounded fixture 목록과 최신 CI를 사용. 전체 연구/실제 원장/보호 캐시/holdout 검사 금지.
-주간 전체 인수인계는 계속 누적합니다. 사용자 요청은 완료된 범위/남은 외부 인수/새 승인 연구 범위를 구분하며 다시 승인 대기를 만들지 않습니다.
+## 9. 예약/Claude 재개
+STATE transition=cloud_owns_monitoring, 동일환경/비공개자료/OS RUN.lock을 먼저 검증합니다. 직전 execution fb4e7f11-2fc5-4222-a172-bdd3812c8392, task owner-product-workflow-20261029, 기존handoffID, branch gpt/ar1-decay-disclosure-20261030, source696ee3c가 STATE/원격CURRENT와 일치해야 합니다. 새 execution으로 최신CURRENTblob CAS 후 원격read-back으로만 재개합니다. from=gpt만으로 소유권을 추정하지 않습니다.
+최신main을 받아 새gpt브랜치에서 다음단위를 진행합니다. 직접 미완료작업 때문에 기존hourly예약은 유지하고 다음목요일로 밀지 않습니다. 정상대기알림/새예약/run_now/로컬수정은 하지 않습니다.
+Windows앱: python -m pip install ".[desktop]" ; python -m quantgen_desktop 또는 Start-QUANTGEN-Desktop.cmd. 브라우저:Flet 유지. 실제 사용자PC는 이태스크에서 실행/변경하지 않습니다.
 
-## 10. 이번 실행의 재개 체크포인트
-이번 실행은 PR24/25/26의 네 하위 항목 완료를 저장합니다. 전체 요청이나 주간 cycle을 완료/returned 처리하지 않습니다. owner_directed_work는 in_progress, waiting_on=none이며 기존 hourly 예약을 유지합니다. 다음 목요일로 미루지 않습니다. 기존 cycle/returned/next_eligible 이력은 직접 작업을 막는 조건이 아닙니다.
-다음 실행은 STATE transition·환경·OS RUN.lock·최신6문서를 확인하고 저장된 execution/task/handoff/branch/source commit을 원격 CURRENT와 대조한 뒤 새 execution ID의 최신 blob CAS+read-back으로만 재개합니다. 현재 source는 e550187, branch gpt/mc-volatility-disclosure-20261030, execution a0dfb643입니다. 제품 최신 main을 확인하고 N1 전용 gpt 브랜치로 분리하세요. 연구 PR21을 제품 main에 합치지 마세요.
-현재 잠금은 최종 STATE/보고서 원자 저장과 read-back 후 해제합니다. 실제 해제 결과는 STATE.last_owner_work_checkpoint에 기록합니다. 원격/Notion/검증 근거는 private WEEKLY_CONTINUATION_20261030.txt 및 QUANTGEN_Progress_2026-10-30.docx에 정리했습니다. 계정 토큰 잔량은 unknown입니다. 화요일 2026-11-03 16:00 KST 준비/17:00 전 전체 인수인계 조건은 유지합니다.
-
-## 11. 현재 재개 (N1)
-직전 실행 a0dfb643의 task/handoff/branch/e550187와 STATE를 대조하고 새 실행 fb4e7f11-2fc5-4222-a172-bdd3812c8392로 재개합니다. N1 종목당 cap/총노출 표시가 이번 단위이며 기존 Strategy Lab 공유 workflow·양 UI 파일은 이 누락 설명을 위해 수정합니다. 계산·비중·DSR·판정·원장 의미는 유지하고 합성/주입 검사만 수행합니다. 이전 0/10절은 완료 이력입니다.
-
-N1 원문은 Model26(vol_target)뿐 아니라 Model30(crypto_trend)의 다종목 합산도 포함합니다. 두 계열의 종목당 cap·OOS 총노출·차입/벤치마크 범위를 같은 공유 설명으로 표시합니다. 새 브랜치는 검증된 제품 main6bd4a208에서 분리했습니다.
-
-## 12. N1 구현/검사 체크포인트
-source437ca29c7439b4e27030cca3e86de39abd5538ab / PR27 원격 push/read-back 완료. vol_target+crypto_trend 종목별 cap, 실제 선택된 OOS 총노출/차입, 1배 벤치마크를 표시합니다. 실제 Flet 검사에서 발견한 날짜322/자산곡선323 오류는 초기자산 날짜를 추가해 수정했습니다. 새6+기존5검사 통과, main6bd4a208 대비 합성4실행의 기존 계산값 완전 동일. strategies/validate/gate_ledger 파일 byte 불변. 현재 CI 대기이며 아직 main 병합·LEDGER 완료 기록은 하지 않았습니다. 다음 소유권은 이 front matter 기준입니다.
-
-## 13. 최신 N1 완료 및 후속 단위
-0절/front matter가 최신입니다. 5/9/10절의 PR26 소스와11/12절 CI대기는 과거 체크포인트입니다. N1은 LEDGER에 완료됐으므로 재작업하지 않습니다. NEW-M6-03은 아직 미완료이며 별도 gpt 브랜치를 검증된 최신 제품 main에서 분리합니다. 현재 OS lock/execution은 fb4e7f11-2fc5-4222-a172-bdd3812c8392입니다. 같은 strategy/UI 파일의 다음 수정은 무한 반감기의 잘못된 의미/표시를 정정하기 위한 것이며 공식 gate/연구판정 변경이 아닙니다.
-
-## 14. NEW-M6-03 검사/PR28
-source696ee3cb9eaf5190db649be58d46754d865dc5c5 원격 push/read-back, PR28 생성. 음수 안정 AR(1) 반감기는 진폭 abs(phi)기준으로 정정; MONOTONE/OSCILLATING/NO_MEMORY/NON_DECAYING/NOT_ESTIMATED 구분. ETF/Crypto Flet·Qt·AI/export에서 느린 회귀/진입 단정 제거. 새5+시장/AI/HAC 회귀 포함22검사 PASS. 양수4사례 기존값 완전 동일, pairs PnL/turnover/선택/모든점수 동일, 다른strategy함수AST/validation·ledger파일 불변. 실제 데이터/원장/저장카드/holdout 미실행. CI 대기이며 아직 main 병합/완료 LEDGER 기록 전입니다.
+## 10. 검증/인계 파일
+N1: python -m unittest tests.strategy_exposure_acceptance tests.desktop_strategy_exposure_acceptance tests.desktop_strategy_acceptance -v (11검사).
+AR1: python -m unittest tests.ar1_decay_acceptance tests.desktop_ar1_decay_acceptance tests.desktop_market_acceptance tests.ai_payload_acceptance tests.crypto_hac_acceptance -v (22검사).
+모든boundedCI3환경success,공개문서의정확한범위를 확인하세요. private reports의 N1/AR1 baseline/evidence,주간누적기록,최신Word는 별도로 보존합니다. 실행종료전STATE/보고서를 원자저장/read-back하고 RUN.lock해제결과를 기록합니다. 다음실행은저장된check point에서이어가며전체요청완료/returned를추정하지마세요.
