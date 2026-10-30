@@ -11,7 +11,7 @@ from t+1, costs on turnover, no look-ahead.
                       the average forward discount (≈ mean foreign rate − USD
                       rate) is positive, short it otherwise
   fama_regression     Fama (1984): Δs_{t+1} on (r_ccy − r_usd), HAC t-stat; a
-                      slope below one is the forward-premium puzzle
+                      slope near zero or positive differs from UIP's −1
 
 User-material refs: Shreve II 9.3.16 p. 385 (PDF 401) for the domestic/foreign
 measures behind the forward premium; 계량2 Ch. 2 (OLS asymptotics for the
@@ -117,8 +117,8 @@ def dollar_carry_backtest(spots: dict[str, Series], rates: dict[str, Series], *,
 @dataclass(frozen=True)
 class FamaRow:
     ccy: str
-    slope: float                      # Δs on (r_ccy − r_usd), monthly; UIP says 1 in this convention? see note
-    t_stat: float
+    slope: float                      # Δs on (r_ccy − r_usd), monthly; UIP predicts −1
+    t_stat: float                     # slope / HAC SE, testing zero (not the UIP value −1)
     n_months: int
     mean_carry: float
 
@@ -127,8 +127,12 @@ def fama_regression(spots: dict[str, Series], rates: dict[str, Series], *, step:
     """Per currency: the next-month log spot change of the foreign currency in
     USD on its rate differential (r_ccy − r_usd). Uncovered interest parity
     predicts a slope of −1 (a higher-rate currency should depreciate by the
-    differential); Fama's puzzle is a slope near zero or positive."""
-    from core.quant.validate import newey_west_t
+    differential); Fama's puzzle is a slope near zero or positive.
+
+    t_stat tests a zero slope using a Bartlett/Newey-West lag-1 sandwich
+    (asymptotic covariance, no finite-sample correction). Monthly observations
+    do not overlap at the default step, but their errors may be dependent.
+    This statistic is not a test against UIP's slope of −1."""
     dates, ccys, P, R, r_usd, i0 = _panel(spots, rates)
     out = []
     idx = np.arange(i0, len(dates) - step, step)
@@ -140,10 +144,14 @@ def fama_regression(spots: dict[str, Series], rates: dict[str, Series], *, step:
         X = np.column_stack([np.ones(x.size), x])
         beta, *_ = np.linalg.lstsq(X, y, rcond=None)
         resid = y - X @ beta
-        # HAC t for the slope via the score series
-        score = resid * (x - x.mean())
-        t = newey_west_t(score, 1) * math.sqrt(x.size) / math.sqrt(np.sum((x - x.mean()) ** 2)) * np.std(score) if np.std(score) > 0 else float("nan")
-        se = math.sqrt(np.sum(resid ** 2) / (x.size - 2) / np.sum((x - x.mean()) ** 2))
+        # Centering x absorbs the intercept. The slope sandwich is the
+        # long-run variance of SUM(resid * x_centered) / SUM(x_centered²)².
+        # The old code tested the mean score (zero by the normal equations),
+        # discarded it, then returned a homoskedastic OLS statistic.
+        centered = x - x.mean()
+        score = resid * centered
+        meat = float(score @ score + score[1:] @ score[:-1])  # 2 * Bartlett weight .5
+        se = math.sqrt(max(meat, 0.0)) / float(centered @ centered)
         out.append(FamaRow(ccy=c, slope=float(beta[1]), t_stat=float(beta[1] / se) if se > 0 else float("nan"),
                            n_months=int(x.size), mean_carry=float(np.mean(R[idx, j] - r_usd[idx]))))
     return out

@@ -386,13 +386,15 @@ def price_cap_floor(curve: YieldCurve, tenor: float, strike: float | None, *, vo
     option expiring at the period start, paid at the period end:
     N·τ·DF(t_end)·option(fwd, K, t_start). strike=None → ATM = par swap rate
     over [start, start + tenor]. Caplets whose rate is already fixed
-    (t_start = 0) are dropped."""
+    (t_start = 0) are dropped. Refuses a schedule with no unfixed caplets."""
     if tenor <= 0 or start < 0 or notional <= 0 or freq < 1:
         raise ValueError("Need tenor > 0, start >= 0, notional > 0, freq >= 1.")
-    atm = par_swap_rate(curve, tenor, freq=freq, start=start)
-    K = atm if strike is None else float(strike)
     ends = coupon_times(start + tenor, freq, start)
     starts = [start] + [float(t) for t in ends[:-1]]
+    if not any(t0 > 1e-12 for t0, _ in zip(starts, ends)):
+        raise FICCError("Cap/floor has no unfixed caplets; extend the tenor or use a forward start.")
+    atm = par_swap_rate(curve, tenor, freq=freq, start=start)
+    K = atm if strike is None else float(strike)
     rows = []
     for t0, t1 in zip(starts, ends):
         if t0 <= 1e-12:
