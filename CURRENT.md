@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/N-M1-03, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T19:34:05.000+09:00
+updated_at: 2026-10-30T19:38:06.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/mc-volatility-disclosure-20261030
-work_commit: 8ebf75d4434cd119a32828607b376662eb1d6cfd
+work_commit: e55018716b3580ecc81684378d082e9c75cb6304
 uncommitted_changes: no
-pr: pending (PR25 merged)
+pr: https://github.com/xkg4real/quantgen/pull/26
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -28,6 +28,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 수신하면 O8 지시를 읽었다고 명시하고, 적용한 파일·검사 결과·커밋 또는 비공개 변경 상태·남은 실제 제약을 CURRENT와 메인세션에 보고하세요. 공개 반영은 이미 승인된 범위에 한합니다. 이 지시를 저장한 사실은 메인세션의 수신·적용 완료를 뜻하지 않습니다.
 
 ## 0. 현재 결과
+N-M1-03 구현/로컬 검사 완료: sourcee55018716b3580ecc81684378d082e9c75cb6304, PR26. Flet·PyQt6·해설·AI에서 sample/next-session/horizon-average volatility 정의를 구분했습니다. 새4검사+기존target5검사(총9) PASS; 엔진/추정기/252연율화/ResearchRun계약은 그대로입니다. 원격 source read-back 완료, CI/main 반영은 아직 대기 중입니다.
 N-M1-11 완료: PR25 source501bce2 → main8ebf75d4434cd119a32828607b376662eb1d6cfd. CI41041014386 Windows3.12/3.14·Ubuntu3.12 모두 completed success; 원격 PR/main 및 append-only LEDGER67715759 read-back, sapientia4065 완료 하위범위 동기화. §10 최신7/67완료·60그룹/14관찰/15모호매핑 남음. 다음 N-M1-03은 동일 Vol 타일이 표본σ와 GARCH 다음 세션σ를 혼용하는 표시 문제입니다. 합성 입력에서 표본12.2461%, 다음세션27.9540%, 지평평균26.8565%를 확인했으며 기존 값/엔진을 유지하고 정의/표시만 고칩니다. branch gpt/mc-volatility-disclosure-20261030은 검증된 main8ebf75d에서 분리했습니다.
 N-M1-11 구현·로컬5검사 PASS: source501bce2555e1a09873d28be8474fde621ba4e5ac, PR25. 만기 목표가격 이상 확률로 Flet/PyQt6·narrative·AI 정의를 정정했습니다. 경로 중 도달50%/만기0%, 아래·동일목표 경로100%/만기50%를 합성 주입으로 구분했습니다. Monte Carlo 모든 함수/클래스 AST와 ResearchRun 계약은 그대로입니다. 원격 source read-back; CI/main 완료는 아직 아닙니다.
 N-M1-09/N-M1-10 완료: PR24 source71b0c9c → main ec98cbef49f0fca90083dbbe5beca0667d382282. CI41039790188 Windows3.12/3.14·Ubuntu3.12 모두 completed success; 원격 PR/main/코드 및 append-only LEDGER dd5e69ea read-back. focused8 PASS, baseline24조합 완전 동일. sapientia Notion에 검증된 두 하위 범위만 취소선/6·61 집계를 반영했습니다. §10는 총6/67그룹 완료,61그룹·14관찰·15모호 ID 매핑이 남습니다. 실제 Windows 육안/실데이터/공식 판정/배포 완료를 뜻하지 않습니다. 다음 단위는 N-M1-11 목표가격 확률을 만기 기준으로 명확히 표현하는 표시 수정이며 기존 Monte Carlo 수치/ResearchRun 계약을 유지합니다.
