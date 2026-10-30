@@ -6,12 +6,12 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: none
 next_ids: ⑫-3, ⑬-1, ⑬-2, ⑨-2, ⑩-1, ⑩-2, ⑪-1
-updated_at: 2026-10-30T13:21:30.000+09:00
+updated_at: 2026-10-30T13:37:20+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/pyqt6-desktop-20261030
-work_commit: 1ce8e57d06b2a9faf3f70f43f6f1c1e59c972a08
-uncommitted_changes: no
+work_commit: f466c4b87747f4387bf3268c494eed026fad3206
+uncommitted_changes: yes
 pr: https://github.com/xkg4real/quantgen/pull/16
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -24,6 +24,10 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # Owner-directed product work — ownership notice
 
 The owner directly requested continuation: native PyQt6 desktop application, retained Flet browser application, shared calculation core, approved A/F1 design. This manual task resumes the owner's checkpoint; it is not an automatic stale takeover. Work starts from the latest integrated product main (PR #15), preserving earlier handoff records and automatic weekly eligibility. The design-only public-site HTML artifact is validated and delivered privately; the owner will upload it and explicitly excluded live website deployment from this task. Native Qt first-slice source is pushed in draft PR #16 with local fixture/installed-wheel checks passed; full screen migration remains in progress. No research approval fields, frozen work, protected stores, orders, TRADEGEN or shared environment settings may change. Consolidated Claude delivery remains deferred until completion or the owner-requested usage/runtime checkpoint.
+
+## Current verified checkpoint
+
+Draft PR #16 contains native Home/Markets/Bonds/Monte Carlo/portfolio/session export. Commit f466c4b87747f4387bf3268c494eed026fad3206 passed runtime packaging CI 41003116686 on Ubuntu Python 3.12 and Windows Python 3.12/3.14. Rates and FX adapters/native panes are now being implemented locally; those additions are not yet pushed or verified. Full desktop parity is incomplete; Flet remains unchanged. The historical report below is superseded for PR-F, Home integration and UI PR/merge authorization; consolidated reconciliation will replace it at this task's handoff.
 
 # Historical prior report
 
