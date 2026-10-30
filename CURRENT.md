@@ -4,14 +4,14 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ⑬-2/e, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T15:15:00+09:00
+done_ids: ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ⑬-2/g, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-30T15:24:50+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/pyqt6-completion-20261030
-work_commit: f88f7ec259f13a93af979dace7b5f2940528555e
-uncommitted_changes: no
+work_commit: 3a1acaf2179fb2d3faff917f035ecf6e8b51282f
+uncommitted_changes: yes
 pr: https://github.com/xkg4real/quantgen/pull/17
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -24,7 +24,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 현재 결과
-최신 진행: f88f7ec259f13a93af979dace7b5f2940528555e 원격 push/read-back, draft PR #17. Derivatives/ETF/Crypto/KRX와 명시적 JSON/ZIP 분석 보고서 구현, native 28개와 기존 Flet ETF 수정주가/fallback 검사 통과. 현재 head의 패키징 CI는 진행 대기이며 전체 이전 완료는 아님. 로컬 wheel build는 개발 venv에 build 모듈이 없어 실행되지 않음; CI는 build 설치를 포함.
+최신 진행: 3a1acaf2179fb2d3faff917f035ecf6e8b51282f 원격 push/read-back, draft PR #17. ⑬-2/e 및 /f 완료: 4개 market 화면·generic export, Portfolio/Bonds 보고서, 명시적 연결 확인. native 32개와 기존 Flet ETF 검사, CI41013528861 Ubuntu3.12/Windows3.12·3.14 모두 success. Windows 테스트 UTF-8 읽기 결함 수정. 실제 API/Windows 육안/전체 이전은 미완료. Strategy Lab native ⑬-2/g는 현재 미커밋 구현+합성 5개 검사 완료, 통합 검증 중.
 사용자가 남은 개발의 즉시 재개를 직접 요청하여 재개했습니다. 자동감시의 next_eligible_at은 이 직접 요청을 차단하지 않습니다. 새로운 실행 ID로 CURRENT를 CAS 선점한 뒤 gpt/pyqt6-completion-20261030에서 남은 native 화면/내보내기/패키징을 진행합니다. 기존 완료 ID는 재처리하지 않습니다.
 공개 사이트용 A/F1 HTML은 내용을 보존해 완성하고 사용자에게 전달했습니다. 실제 사이트 업로드는 사용자가 맡으며 이 작업에서 제외했습니다.
 기존 Flet A/F1 Home, ResearchRun 세션 기록/내보내기, 패키징 CI, F1 브라우저 아이콘은 PR #13/#14/#15로 main에 반영됐습니다.
@@ -82,6 +82,7 @@ Qt Rates는 현재 제품 main의 curve 함수를 호출합니다. 별도 PT-04 
 이번 app.py/tools.py/tests/packaging 문서 재수정은 남은 native 화면 연결, 명시적 export, 배포 검증을 위해 필요합니다. 완료된 pricing/solver/gate 결과는 재작성하지 않습니다.
 
 ## 6. 다음 실행 순서
+현재 우선: ⑬-2/g Strategy Lab 미커밋 변경 통합/원격 검사 → Macro v2 native → Rules/모의 Trading/선택 AI → 전체 대응·실제 Windows 인수. 아래 1번 Derivatives/ETF/Crypto/KRX는 이번 ⑬-2/e 완료로 대체되어 재작업하지 않습니다.
 1. ⑬-2/e: Derivatives, ETF, Crypto를 native로 이전. 기존 UI 내부 계산 조립 로직·출처·단위를 먼저 매핑하고 공유 코어를 사용. 합성 fixture로 입력 가지와 계산값 비교. 실제 계정/저장 카드/보호 원장은 열지 않기.
 2. Macro v2 Overlay/Model cards/Research register, Strategy Lab, KRX, paper Trading, Rules/Settings, optional AI 패널 이전. 레지스트리/판정/모의 엔진 lifetime 의미 보존. UI 이전을 연구 승인 변경으로 확대하지 않기.
 3. portfolio/FICC 등의 native export와 전체 화면 feature parity, keyboard/resize/DPI, Windows 실행/installer·icon 점검. 그 후 기본 데스크톱 실행 방식 전환과 PR16 ready/merge 판단. Flet browser는 유지.
