@@ -9,6 +9,8 @@ description = "QUANTGEN — quantitative finance research application: rates, bo
 requires-python = ">=3.10"
 dependencies = [
   "flet[all]==0.85.2",
+  # Flet 0.85.2 passes openapi_prefix; keep the verified compatible web stack.
+  "fastapi==0.141.1", "starlette==1.6.0",
   "pyyaml>=6.0",
   "requests>=2.31",
   "python-dotenv>=1.0", "tzdata>=2024.1; sys_platform == 'win32'",
@@ -42,6 +44,7 @@ web = "assets/icon_192.png"
 "share/quantgen" = ["README.md"]
 "share/quantgen/qa" = ["qa/research_status.json", "qa/acceptance_results.json"]
 "share/quantgen/core/calendars/data" = ["core/calendars/data/MANIFEST.yaml"]
-"share/quantgen/assets" = ["assets/*.png", "assets/*.ico"]
+"share/quantgen/assets" = ["assets/*.png", "assets/*.ico", "assets/manifest.json"]
+"share/quantgen/assets/icons" = ["assets/icons/*.png"]
 "share/quantgen/assets/branding" = ["assets/branding/*.svg"]
 "share/quantgen/assets/fonts" = ["assets/fonts/*.otf", "assets/fonts/*.txt"]

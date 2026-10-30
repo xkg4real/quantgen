@@ -38,8 +38,16 @@ if "site-packages" not in Path(main.__file__).parts:
 status, error = recorded_status()
 assert status is not None and not error, error
 assets = Path(assets_directory())
-for name in ("branding/f1-symbol.svg", "branding/f1-wordmark.svg", "fonts/qg-interface.otf", "fonts/OFL.txt"):
+for name in ("branding/f1-symbol.svg", "branding/f1-wordmark.svg", "fonts/qg-interface.otf", "fonts/OFL.txt",
+             "favicon.png", "manifest.json", "icons/icon-192.png", "icons/icon-512.png",
+             "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon-192.png"):
     assert (assets / name).is_file(), name
+manifest = json.loads((assets / "manifest.json").read_text())
+assert manifest["name"] == "QUANTGEN"
+for icon in manifest["icons"]:
+    assert (assets / icon["src"]).is_file(), icon["src"]
+import flet_web.fastapi
+assert flet_web.fastapi.FastAPI() is not None  # catch incompatible FastAPI constructor changes
 assert (calendars.DATA_DIR / "MANIFEST.yaml").is_file()
 assert len(list(calendars.DATA_DIR.glob("*.yaml"))) >= 18
 assert any(r.startswith("statsmodels") for r in importlib.metadata.requires("quantgen"))

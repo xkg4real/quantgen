@@ -11,7 +11,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 FILES = {"pyproject.toml", "README.md", "main.py", "config.py", "tools/__init__.py",
-         "qa/research_status.json", "qa/acceptance_results.json"}
+         "qa/research_status.json", "qa/acceptance_results.json", "assets/manifest.json"}
 DATA_PREFIXES = ("core/calendars/data/", "core/ficc/schemas/", "core/skills/macro_workflows/",
                  "data/calendars/")
 DATA_FILES = {"data/macro/series_registry.yaml", "data/macro/rules_v2.0.0.json"}
