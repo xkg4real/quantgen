@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: none
 next_ids: ⑫-3, ⑬-1, ⑬-2, ⑨-2, ⑩-1, ⑩-2, ⑪-1
-updated_at: 2026-10-30T02:59:59.000Z
+updated_at: 2026-10-30T12:09:12.000+09:00
 stale_after_hours: 3
-waiting_on: none
-work_branch: gpt/ui-apply-main-20261029
-work_commit: 94121deed56993ae07b1f4e1c10eb0fb99e5a1f8
+waiting_on: ci
+work_branch: gpt/f1-web-icons-20261030
+work_commit: 459bed0f9344350a178d61cf331f98fa07e16255
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/14
+pr: https://github.com/xkg4real/quantgen/pull/15
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -23,7 +23,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 
 # Owner-directed product work — ownership notice
 
-The owner resumed this conversation to apply the agreed A/F1 visual identity to the existing public website and browser icons, preserving all website text, figures and behavior. This execution holds the repository work only for F1 icon wiring/packaging; it will start a gpt branch from current main 22ac580. Public-site source/deployment access is being located. This is an ownership/lifecycle notice, not consolidated delivery to Claude; the owner's deferred-handoff instruction remains. No research calculations, gates, protected stores, TRADEGEN or shared environment settings may change.
+The owner resumed this conversation to apply the agreed A/F1 visual identity to the existing public website and browser icons, preserving all website text, figures and behavior. This execution holds the repository work only for F1 icon wiring/packaging; its gpt branch starts from main 22ac580 and PR #15 is awaiting bounded Windows/Linux CI. Public-site source/deployment access is being located. This is an ownership/lifecycle notice, not consolidated delivery to Claude; the owner's deferred-handoff instruction remains. No research calculations, gates, protected stores, TRADEGEN or shared environment settings may change.
 
 # Historical prior report
 
