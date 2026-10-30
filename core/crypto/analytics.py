@@ -97,7 +97,9 @@ def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
         xc = z[ok] - z[ok].mean()
         # HAC t for the slope from the moment condition series (overlapping 7-day returns → lag h−1)
         score = resid * xc
-        se = math.sqrt(_hac_var(score, horizon - 1) * ok.sum()) / np.sum(xc ** 2)
+        # _hac_var is the variance of the score MEAN. Recover the variance of
+        # its sum with n**2 before dividing by the regression denominator.
+        se = math.sqrt(_hac_var(score, horizon - 1)) * ok.sum() / np.sum(xc ** 2)
         slope, t = float(beta[1]), float(beta[1] / se) if se > 0 else float("nan")
     return KimchiPremium(dates=tuple(dates), premium_pct=prem, z_1y=z, btc_usd=us, last_pct=float(prem[-1]),
                          last_z=float(z[-1]) if np.isfinite(z[-1]) else 0.0, mean_pct=float(prem.mean()),
@@ -108,6 +110,7 @@ def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
 
 
 def _hac_var(u: np.ndarray, lag: int) -> float:
+    """Bartlett/Newey-West variance of the sample mean, not the long-run variance."""
     u = np.asarray(u, dtype=float)
     n = u.size
     s = float(u @ u) / n
