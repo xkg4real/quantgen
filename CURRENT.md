@@ -4,14 +4,14 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ④-3/O8/a, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T18:20:00+09:00
+done_ids: ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-30T18:23:33+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/approved-research-followups-20261030
-work_commit: e089e59fac2e628fb89e470b929622c0cb0d173c
-uncommitted_changes: no
+work_commit: 36df786cb7b1395cd08bc5db2d1ad9b6244e66f3
+uncommitted_changes: yes
 pr: https://github.com/xkg4real/quantgen/pull/21
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -28,12 +28,13 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 수신하면 O8 지시를 읽었다고 명시하고, 적용한 파일·검사 결과·커밋 또는 비공개 변경 상태·남은 실제 제약을 CURRENT와 메인세션에 보고하세요. 공개 반영은 이미 승인된 범위에 한합니다. 이 지시를 저장한 사실은 메인세션의 수신·적용 완료를 뜻하지 않습니다.
 
 ## 0. 현재 결과
-O8 실제 문서 반영: PR21 e089e59에 스펙 Status/O8/Step1b/AppendixB·런북·판정록·결정서·진행표·실행 기록 및 문서 변경 시 CI 트리거를 반영했습니다. 기존 O11 A2 런타임은 변경하지 않았고 14 임시 원장 검사와 Windows/Linux CI41031917261 success를 확인했습니다. 직접 최신 지시에 맞춰 미실시 심사의 비차단과 R09/R11/R15·호스트·코드/표 변경 거부를 추가 회귀 검사 중입니다. 2026-10-30 최신 사용자 지시로 Notion은 sapientia 연결만 사용합니다. 이전 Primary 기록은 이력으로 보존합니다.
-O8 후속 명시 승인과 우선 적용 지시를 읽었습니다. 기존 연구 gpt 브랜치 d7b175f/PR21을 재개합니다. 비공개 패치 다운로드는 Tunnel connection failed: 403 Forbidden로 실패했으며 우회하지 않았습니다. 읽힌 승인 원문과 현재 스펙/런북/검사를 기준으로 범위가 좁은 문서 정정부터 적용합니다. 패치 전체 대조 완료를 주장하지 않습니다. PR23 완료 기록을 보존한 뒤 기존 O11 PR21에서 문서·관련 검사만 통합하며, 중복 초기화 명령이나 승인 경계 변경을 추가하지 않습니다.
+O8 실제 반영 완료: e089e59 + 36df786, draft PR21(연구 브랜치 대상, main 미병합). 스펙 Status/Owner context/O8/Step1b/AppendixB·Windows 런북·결정서·판정록·진행표·실행기록·CI 및 경계 검사를 수정했습니다. 추가 GPT/Gemini는 선택·NOT_PERFORMED이며 미실시만으로 Windows 인계 차단 금지. 기존 Claude 검토·기술/Windows 검증·정식 실행 승인 범위 유지. 일반 승인 범위 수정은 새 일반 사인오프 불필요, 판정/정식 원장/외부 공개는 개별 승인. 임시 원장 20검사 PASS(기존14+새6), CI41032685371 exact36df786에서 Windows/Ubuntu Python3.13 completed success, 2job/원격파일/read-back 확인. 유효 임시 실행조건 검사에 optional 보고서가 없어도 통과하며 R09/R11/R15·호스트·변경 코드/표·freshness·U>24 거부를 보존. 실제 원장/가격/파일럿/owner_confirmed는 실행·부여하지 않았습니다. O11 A2 런타임은 d7b175f 그대로, 등록 명령은 하나입니다.
+Notion 최신 직접 지시: sapientia@korea.ac.kr 연결만 사용. 해당 계정 REMAINING WORK4065c916과 승인4095c916의 실제 적용 결과를 동기화합니다. 이전 Primary/f77 기록은 이력이며 새 호출은 하지 않습니다. 기존 hourly 예약의 Notion 계정/대상만 최신 지시에 맞춰 갱신/read-back했습니다. 일정/활성화/환경은 유지.
+O8 후속 명시 승인과 우선 적용 지시를 읽고 적용 완료했습니다. 연구 gpt 브랜치 최신36df786/PR21에서 이어갑니다. 비공개 패치 다운로드는 Tunnel connection failed: 403 Forbidden로 실패했으며 우회하지 않았습니다. 읽힌 승인 원문과 현재 스펙/런북/검사를 기준으로 범위가 좁은 문서 정정부터 적용합니다. 패치 전체 대조 완료를 주장하지 않습니다. PR23 완료 기록을 보존한 뒤 기존 O11 PR21에서 문서·관련 검사만 통합하며, 중복 초기화 명령이나 승인 경계 변경을 추가하지 않습니다.
 최신 제품 main ff421ea7c24e53a6e588336199c518f098690561: PR23까지 원격 병합/read-back. §10는 67그룹 중 4그룹(NEW-M6-01, NEW-M6-18, M4-N5, M3-N07) 수정/검증 완료이며 63그룹·14관찰·15개 모호 ID 매핑은 남아 있습니다. 아래 이전 시점별 숫자는 이 최신 집계로 보완됩니다.
 BS-21 완료: PR19 source 941455aa5a0b41d0941325846dab89a05d80b5e1 → main 0cc30c3ed1a7e25f1d06215a858d57bc199e9be6 병합/read-back. 합성 funding 8개, Qt adapter/calculator/export 3개, bond self-check PASS; CI41020717371 Windows3.12/3.14+Ubuntu3.12 success. PR18의 독립 회귀 사례를 보존하여 통합하고 중복 PR을 종료했습니다.
 §10 첫 단위 완료: PR20 source0e7dd782c01707b0bd3cff78c4c7deb837f761eb → main ce12459eae1258e03270702092c839758cde91fa 병합/read-back, CI41022505498 Windows3.12/3.14+Ubuntu3.12 success. 71ID/67그룹/14관찰 초기 목록·순서, 합성 재현5개와 NEW-M6-01 HAC t-stat 교정. 독립 sandwich6사례 old FAIL/new PASS, 표본부족·Qt 회귀 PASS. 나머지66그룹·14관찰, 모호 매핑15개는 미완료.
-O11 A2/a 완료: 연구 브랜치 gpt/approved-research-followups-20261030 @d7b175f748c52ce297e1b853e8d0b234c2932725, draft PR21(대상 claude/amazing-gauss-tdiguu; 병합하지 않음). 등록 전용 명령·원자 intent/receipt·12개 ID 일치·중단 후 prefix 재개·중복/소실/다른 writer/lock 거부와 승인 범위 문서화. 임시 원장 14 tests PASS, CI41025875318 Windows/Ubuntu completed success, 원격 7개 파일 SHA 및 코드 read-back. 실제 원장·가격·파일럿·owner_confirmed는 실행/변경하지 않았습니다. O11/b 실제 Windows 등록과 Step7A/누적 연구 main signoff는 남았습니다. O8 후속 승인 원문을 읽었으며 추가 GPT·Gemini 심사는 선택 사항·NOT_PERFORMED입니다. 관련 문서/검사를 PR21과 대조해 정리합니다.
+O11 A2/a 완료: 연구 브랜치 gpt/approved-research-followups-20261030 @d7b175f748c52ce297e1b853e8d0b234c2932725, draft PR21(대상 claude/amazing-gauss-tdiguu; 병합하지 않음). 등록 전용 명령·원자 intent/receipt·12개 ID 일치·중단 후 prefix 재개·중복/소실/다른 writer/lock 거부와 승인 범위 문서화. 임시 원장 14 tests PASS, CI41025875318 Windows/Ubuntu completed success, 원격 7개 파일 SHA 및 코드 read-back. 실제 원장·가격·파일럿·owner_confirmed는 실행/변경하지 않았습니다. O11/b 실제 Windows 등록과 Step7A/누적 연구 main signoff는 남았습니다. O8 후속 승인 원문을 읽었으며 추가 GPT·Gemini 심사는 선택 사항·NOT_PERFORMED입니다. 관련 문서/검사는 PR21의 e089e59/36df786에 적용했고 검증했습니다.
 NEW-M6-18 완료: PR22 source ed521b1a8b8d0ec1ceb6715a35c03a6d7c0f9585 → main 450fa00eb7739651717c8b6f118076f0a901e469, 원격 PR/main read-back 완료. Crypto/Flet/최종 HTTP의 보유내역 전송 제외, local holdings/metrics/verdict 유지. 3개 요청 경계 +5개 native 검사 PASS; CI41027598333 Windows3.12/3.14+Ubuntu3.12 success. M4-N5/M3-N07 완료: source 468d53e97fa31574c6c2261c5044a1f2886d5c77 → main ff421ea7c24e53a6e588336199c518f098690561(PR23), 8 focused tests PASS(독립 HAC6사례, 기존 Rates/옵션/패리티 포함), CI41029018128 Windows3.12/3.14+Ubuntu3.12 completed success, 원격 PR/main read-back. 다음 직접 작업은 N-M1-09 음수 초과수익 max-Sharpe 경고, N-M1-10 선택 상한/비교표·frontier 제약 범위 표시 검토입니다. 아직 해당 두 항목의 코드는 수정하지 않았습니다. gate/연구 원장/동결 연구/기존 ATM 규약은 변경하지 않습니다. 다른 §10 항목도 계속 미완료로 보존. 조회 중 제품 main이 51bac97366ddac5e063bb6a5f9174e9d05e18be3로 갱신되어 변경 4파일(README/status/tests/snapshot)을 확인하고 보존했습니다. 이 별도 상업 출시 문구/상태 변경은 본 실행 성과나 실제 법률/기술 검증으로 주장하지 않습니다. 최신 main에서 별도 gpt 브랜치로 분리하며 연구 브랜치를 통째로 병합하지 않습니다. 원문/진행/재현/다음 시작점은 private reports/2026-10-30/WEEKLY_CONTINUATION_20261030.txt. 정상 재개는 이전 execution/task/handoff/branch/commit 일치와 새 CAS/read-back이 필요합니다. 직접 미완료 작업은 주간 반환/cooldown으로 막지 않습니다.
 ⑬-2/e~j native 구현/자동 검증을 완료했고 PR17을 main a1adf008568aa7475a9db5ff7a5c97b41b0a12fb에 병합했습니다. 소스 e1df541b35b320bf8360e80305503f72a6043ab0, 59 native tests, CI41018384446 Windows3.12/3.14 및 Ubuntu3.12 success; 원격 PR/main read-back 완료. PR16은 중복 방지로 닫았습니다.
 Windows 앱은 PyQt6 선택 실행, 브라우저는 Flet 유지. 6 workspace, 기존 연구 도구, Macro v2/Strategy Lab, Rules/모의 Trading, 명시적 JSON/ZIP, 선택 AI 해설을 연결했습니다. 실제 API/AI·원장 실행·Windows 육안/DPI·서명 installer는 검증하지 않았고 ⑬-2/k는 미완료입니다. 공개 HTML/F1 묶음은 별도 전달됐고 실제 사이트 업로드는 사용자가 맡습니다.
@@ -87,6 +88,7 @@ Notion REMAINING WORK에는 완료한 하위 범위만 취소선 처리했습니
 공개 HTML은 별도 private 전달물: 29 links, 71 controls, 4 scripts 유지; 저장된 애니메이션 heading wrapper 9개 정규화 후 의미 텍스트 동일. seeded 계산과 16 strategy cards 동일, light/dark/mobile/menu/FAQ/filter 검증. 원본에 빠진 analytics companion 참조는 보존했으며 사용자가 기존 부속 폴더를 유지해야 합니다.
 
 ## 5. 기존 기록과의 관계
+연구 로컬 허용 사본은 HEAD2da6469에 게시된 최신36df786 파일이 working copy로 있으므로 uncommitted_changes=yes입니다. 별도 미게시 코드가 있다는 뜻은 아닙니다. 9개 O8 변경 파일/기존 O11 파일은 remote blob과 일치합니다. 다음 실행은 원격36df786을 기준으로 허용 사본을 만들거나 exact API tree를 사용하며, 이 로컬 HEAD를 최신 코드로 가정하지 마세요. 제품 사본은 gpt/section10-ficc-20261030 @468d53e이며 원격 main ff421ea와 구분합니다.
 이전 CURRENT의 “PR-F 미구현”, “UI PR/merge 승인 없음”, “Home 데이터 미연결”은 위 후속 작업으로 대체됐습니다.
 기존 LEDGER의 ②-5/c PT-04, ⑫-2/a identity 설계, ①-2/4/a 및 이전 연구 결과는 지우지 않습니다. 별도 연구 브랜치 성과와 현재 main을 구분하세요.
 Qt Rates는 현재 제품 main의 curve 함수를 호출합니다. 별도 PT-04 연구 패치를 몰래 포함하지 않았습니다.
@@ -120,4 +122,4 @@ UI/PR/main 권한은 이미 해결됐고 native 잔여 구현을 막는 승인 �
 주간 전체 인수인계는 계속 누적합니다. 사용자 요청은 완료된 범위/남은 외부 인수/새 승인 연구 범위를 구분하며 다시 승인 대기를 만들지 않습니다.
 
 ## 10. 이번 실행의 재개 체크포인트
-원격 code/PR/main과 Notion PR23 완료 범위를 확인했고 append-only LEDGER/STATE를 동기화합니다. private STATE의 owner_directed_work는 in_progress이며 남은 직접 작업을 그대로 둡니다. 다음 실행은 RUN.lock 해제와 직전 execution/task/handoff/branch/commit 일치를 확인한 후 새 execution ID의 CURRENT exact-SHA CAS/read-back으로 이어갑니다. 기존 hourly 예약과 next_eligible_at/cycle/returned 이력은 임의 변경하지 않습니다. 이것은 주간 전체 작업 완료나 Claude 반환 선언이 아닙니다. 계정 토큰 잔량은 알 수 없으며, 다음 실행을 위해 완료 단위의 진행과 남은 범위를 저장합니다.
+원격 제품 PR23/main 및 연구 PR21의 실제 O8 문서/20검사/Windows·Ubuntu CI 완료를 확인했습니다. append-only LEDGER/STATE와 지정 sapientia Notion에 완료 범위만 동기화합니다. private STATE의 owner_directed_work는 in_progress이며 남은 직접 작업을 그대로 둡니다. 다음 실행은 RUN.lock 해제와 직전 execution/task/handoff/branch/commit 일치를 확인한 후 새 execution ID의 CURRENT exact-SHA CAS/read-back으로 이어갑니다. 기존 hourly 예약과 next_eligible_at/cycle/returned 이력은 임의 변경하지 않습니다. 이것은 주간 전체 작업 완료나 Claude 반환 선언이 아닙니다. 계정 토큰 잔량은 알 수 없으며, 다음 실행을 위해 완료 단위의 진행과 남은 범위를 저장합니다.
