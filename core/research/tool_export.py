@@ -17,7 +17,7 @@ def plain(value):
     if isinstance(value, (list,tuple)): return [plain(v) for v in value]
     if hasattr(value, 'tolist'): return plain(value.tolist())
     if isinstance(value, float): return value if math.isfinite(value) else None
-    if isinstance(value, str): return safe_detail(value)
+    if isinstance(value, str): return safe_detail(value, limit=None)
     if value is None or isinstance(value, (bool,int)): return value
     raise TypeError('Unsupported report value')
 

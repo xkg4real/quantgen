@@ -122,7 +122,7 @@ class ToolPane(QWidget):
     def text(self, text, role='muted'):
         from .app import label
         from core.research.presentation import safe_detail
-        text = safe_detail(text)
+        text = safe_detail(text, limit=None)
         self.sections.append({'type':'text','text':text})
         self.result_layout.addWidget(label(text, role))
 

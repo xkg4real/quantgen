@@ -22,7 +22,7 @@ commercial distribution; current repository policy remains personal use.
 | Workspace | Working native scope | Limits |
 |---|---|---|
 | Research Home | Session Monte Carlo counts, daily market observations, last computed fan and provenance | Counts exclude portfolio optimizations; no historical ledger scan |
-| Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary; Derivatives board, ETF sleeves, Crypto analytics and six KRX datasets | Macro v2 subviews remain in Flet; optional AI panels pending. Native ETF/Crypto study cards are explicitly NOT_LOADED |
+| Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary; Derivatives board, ETF sleeves, Crypto analytics and six KRX datasets | Native Macro v2 overlay/cards/register use the existing validated readers; optional AI panels pending. Native ETF/Crypto study cards are explicitly NOT_LOADED |
 | Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Strategy Lab seven-family validation and explicit study-card viewer; AI commentary panel pending |
 | Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices; technical composite and three costed backtests | Explicit JSON/ZIP exports; paper-execution screens pending |
 | Research Library | Session Monte Carlo results, native JSON and report ZIP save dialog | No persistent history browser; only explicit export |
@@ -48,7 +48,7 @@ raw credential-bearing URLs. Failed Monte Carlo runs are retained in the session
    The optional AI panels remain in Flet. Rates uses the existing curve coverage policy
    and does not incorporate the separate Claude PT-04 branch.
 2. Derivatives, ETF, Crypto and KRX native adapters are implemented. Live API acceptance remains pending.
-3. Macro v2 subviews. Strategy Lab is ported; preserve trial registration,
+3. Macro v2 and Strategy Lab are ported; preserve trial registration,
    gate/provenance semantics and approval boundaries; no live stores in tests.
 4. Paper-only Trading, Rules and the optional AI commentary panel. Settings presence/probes are ported.
    No broker order path or TRADEGEN code belongs in this migration.
@@ -62,7 +62,7 @@ preview's scope notices identify where the Flet application is still required.
 ## Verification commands
 
 ```text
-python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.desktop_strategy_acceptance tests.packaging_policy_acceptance -v
+python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.desktop_strategy_acceptance tests.desktop_macro_acceptance tests.packaging_policy_acceptance -v
 python -m unittest tests.research_contract_acceptance tests.research_home_acceptance -v
 ```
 
@@ -105,3 +105,11 @@ registration semantics. This migration does not implement the separate cumulativ
 registry redesign or change gate thresholds. Costs below the table floor keep WITHHELD,
 registered cards retain their recorded refusals, and a failed registration blocks scoring.
 Synthetic tests refuse network, actual ledgers and card-store reads.
+
+Macro v2 uses native searchable record trees over the existing validated readers.
+Missing/quarantined artifacts suppress calculation values and exports while retaining
+alert, owner-input and separately validated calendar diagnostics. Formal verdicts
+and dispositions remain distinct; no exposure is recomputed from design weights.
+Dry/live actions and acknowledgement use existing prerequisites and stores only on
+explicit clicks; acceptance tests inject fixtures and never execute actual stores.
+Unavailable offline council documents are labelled rather than silently replaced.

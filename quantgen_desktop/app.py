@@ -36,6 +36,7 @@ from core.theme import LIGHT, DARK
 from tools.status.snapshot import verify
 from .charts import FanChart, FrontierChart, LineChart, SignedBars
 from .jobs import Jobs
+from .macro_records import execute_macro_records
 
 
 def label(text, role="", *, wrap=True):
@@ -92,7 +93,8 @@ class ResearchWindow(QMainWindow):
                  signals_runner=execute_signals, macro_runner=execute_macro,
                  derivatives_runner=execute_derivatives, etf_runner=execute_etf,
                  crypto_runner=execute_crypto, krx_runner=execute_krx,
-                 connections_runner=execute_connections, strategy_runner=execute_strategy, auto_refresh=True):
+                 connections_runner=execute_connections, strategy_runner=execute_strategy,
+                 macro_records_runner=execute_macro_records, auto_refresh=True):
         super().__init__()
         self.session = session or SessionResearch()
         self.market_loader, self.analysis_runner = market_loader, analysis_runner
@@ -105,7 +107,8 @@ class ResearchWindow(QMainWindow):
         self.crypto_runner, self.krx_runner = crypto_runner, krx_runner
         self.connections_runner = connections_runner
         self.strategy_runner = strategy_runner
-        self.tool_names = ('rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx','connections','strategy')
+        self.macro_records_runner = macro_records_runner
+        self.tool_names = ('rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx','connections','strategy','macro_records')
         self.outputs = {}
         self.active_run = None
         self.pending = None
@@ -234,6 +237,9 @@ class ResearchWindow(QMainWindow):
         self.fx=FXPane(); self.fx.requested.connect(lambda q:self.run_tool('fx',q))
         self.structuring=StructuringPane(); self.structuring.requested.connect(lambda q:self.run_tool('structuring',q))
         self.macro=MacroPane(); self.macro.requested.connect(lambda q:self.run_tool('macro',q))
+        from .macro_records import MacroRecordsPane
+        self.macro_records = MacroRecordsPane()
+        self.macro_records.requested.connect(lambda q:self.run_tool('macro_records',q))
         for name, pane_type in (('derivatives', DerivativesPane), ('etf', ETFPane), ('crypto', CryptoPane), ('krx', KRXPane)):
             pane = pane_type()
             pane.requested.connect(lambda q, n=name:self.run_tool(n,q))
@@ -241,7 +247,7 @@ class ResearchWindow(QMainWindow):
         self.market_tabs=QTabWidget()
         for pane,name in ((self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX'),(self.structuring,'Structuring'),
                           (self.derivatives,'Derivatives'),(self.etf,'ETF'),(self.crypto,'Crypto'),(self.krx,'KRX'),
-                          (self.macro,'Macro sheet')):self.market_tabs.addTab(pane,name)
+                          (self.macro,'Macro sheet'),(self.macro_records,'Macro v2')):self.market_tabs.addTab(pane,name)
         self.market_tabs.setUsesScrollButtons(True)
         layout.addWidget(self.market_tabs)
         layout.addStretch()
@@ -405,8 +411,12 @@ class ResearchWindow(QMainWindow):
             self.bonds.show_result(value)
         elif self.pending in self.tool_names:
             pane = getattr(self,self.pending)
-            pane.show_result(value)
-            pane.bind_output(self.pending, value)
+            try:
+                pane.show_result(value)
+                pane.bind_output(self.pending, value)
+            except Exception as exc:
+                pane.clear_result()
+                pane.status.setText(f'FAILED · 표시 자료 검증 오류 · {type(exc).__name__}')
         else:
             self.session.put(value.run)
             self.outputs[value.run["run_id"]] = value
