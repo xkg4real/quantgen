@@ -100,11 +100,11 @@ def narrative(a: dict) -> str:
     return " ".join(parts)
 
 def payload(a: dict) -> dict:
+    """Market commentary only. Holdings stay in the local read-only display."""
     kp, fc = a["kimchi"], a["funding"]
     return {"source": a["source"], "kimchi": {"last_pct": kp.last_pct, "z": kp.last_z, "mean_pct": kp.mean_pct, "max_pct": kp.max_pct,
                                               "half_life_days": kp.half_life_days, "adf_p": kp.adf_p, "pred_t": kp.pred_t, "n": kp.n},
             "funding": ({"last_ann_pct": fc.last_ann_pct, "percentile": fc.percentile, "flag": fc.flag, "top_decile_fwd30": fc.top_decile_fwd30,
                          "bottom_decile_fwd30": fc.bottom_decile_fwd30, "bootstrap_p": fc.bootstrap_p} if fc else None),
             "premium_index": a["premium_index"],
-            "garch": a["garch"], "ethbtc": a["ethbtc"], "weekday": a["weekday"], "verdicts": a["verdicts"],
-            "holdings": [{k: v for k, v in b.items()} for b in (a.get("balances") or [])]}
+            "garch": a["garch"], "ethbtc": a["ethbtc"], "weekday": a["weekday"], "verdicts": a["verdicts"]}

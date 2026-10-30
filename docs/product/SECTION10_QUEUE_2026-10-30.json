@@ -8,7 +8,9 @@
     "source_ids": 71,
     "canonical_groups": 67,
     "observation_models": 14,
-    "initial_reproductions": 5
+    "initial_reproductions": 5,
+    "additional_reproduced_ids": 1,
+    "implemented_canonical_groups": 2
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -551,7 +553,7 @@
       "source_model": "133. M6-02 김치 프리미엄 7일 예측 회귀(기울기, Newey–West t)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Verify CI and PR/main integration; historical cards are not regenerated",
+      "next": "Merged PR20, main ce12459; historical cards are not regenerated",
       "mapping_needs_disambiguation": false,
       "reproduction": "SYNTHETIC_REPRODUCED",
       "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION"
@@ -738,10 +740,11 @@
       "source_model": "142. M6-11 크립토 공급사 파생 표시값(perp premium, Upbit 보유 평가)",
       "queue": 1,
       "type": "Payload privacy",
-      "next": "Compare Flet and Qt request construction; use fake payloads, no accounts or API calls",
+      "next": "Verify PR/main integration; structured account fields removed in Flet and final HTTP boundary; native safeguards retained",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "tests/ai_payload_acceptance.py; tests/desktop_commentary_acceptance.py"
     },
     {
       "id": "NEW-M6-19",

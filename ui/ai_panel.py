@@ -8,9 +8,9 @@ Layout contract, same on all pages:
     and streams the written result into the same card. Unconfigured or failed,
     the card says exactly why and the page loses nothing else.
 
-The payload the button sends is the payload the caller computed — this module
+The payload the button sends contains the caller's computed market results — this module
 never reaches back into the app for more context, so what the model saw is
-always exactly what the page showed.
+the computed results with private account fields excluded.
 """
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ from typing import Callable
 import flet as ft
 
 from core.quant import insights
+from core.research.ai_payload import filter_analysis_fields
 from core.theme import RADII, active
 from ui.components import chip, notice
 
@@ -43,7 +44,7 @@ def analysis_panel(page: ft.Page, *, kind: str, narrative: str,
         page.update()
 
         def worker():
-            result = deep(kind, payload_fn(), question=question.value or "")
+            result = deep(kind, filter_analysis_fields(payload_fn()), question=question.value or "")
             if result.error:
                 deep_host.controls = [notice(result.error, "error",
                                              icon=ft.Icons.CLOUD_OFF_OUTLINED)]
@@ -71,6 +72,9 @@ def analysis_panel(page: ft.Page, *, kind: str, narrative: str,
         ft.Text(narrative, size=13, color=pal.text, selectable=True),
         ft.Divider(color=pal.border),
         ft.Row([question, button, busy], spacing=10),
+        ft.Text("Deep analysis sends calculated results and your question to Anthropic. "
+                "Account holdings and balances are excluded. Do not include private account details in your question.",
+                size=11, color=pal.muted),
     ]
     if not ready:
         rows.append(ft.Text("Deep analysis needs ANTHROPIC_API_KEY in .env; "
