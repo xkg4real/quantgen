@@ -22,7 +22,7 @@ commercial distribution; current repository policy remains personal use.
 | Workspace | Working native scope | Limits |
 |---|---|---|
 | Research Home | Session Monte Carlo counts, daily market observations, last computed fan and provenance | Counts exclude portfolio optimizations; no historical ledger scan |
-| Markets | Six existing daily observations, dates/provider/status and correct bp/% units | Detailed asset pages remain in Flet |
+| Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator, scenario revaluation and futures hedge | Other detailed asset pages remain in Flet; Bonds AI panel pending |
 | Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Stored model grades and AI commentary panel not migrated |
 | Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices | Native portfolio export, Signals and paper-execution screens pending |
 | Research Library | Session Monte Carlo results, native JSON and report ZIP save dialog | No persistent history browser; only explicit export |
@@ -44,7 +44,7 @@ raw credential-bearing URLs. Failed Monte Carlo runs are retained in the session
 
 ## Remaining migration, in order
 
-1. Rates, Bonds and FX: map the existing units, source warnings, partial-curve
+1. Rates and FX: map the existing units, source warnings, partial-curve
    handling, all input branches and risk/chart outputs before porting controls.
 2. Structuring, Derivatives, ETF and Crypto; preserve current models and labels.
 3. Macro sheet and views, Strategy Lab and Signals. Preserve trial registration,
@@ -68,7 +68,7 @@ python -m unittest tests.research_contract_acceptance tests.research_home_accept
 Native fixture tests inject deterministic histories, prohibit network calls and
 patch dotenv loading before importing core modules. They exercise all four
 Monte Carlo models against direct engine results, currency-aware funding/fallback,
-portfolio solvers, six native workspaces, background delivery/duplicate exclusion,
+portfolio solvers, Bonds pricing/scenarios/hedge, six native workspaces, background delivery/duplicate exclusion,
 failure redaction, explicit file export/cancel and close-during-work behavior.
 The packaging workflow builds an allowlisted wheel on Windows/Linux and runs
 `tools/packaging/smoke_desktop.py` **outside the checkout** with socket and protected

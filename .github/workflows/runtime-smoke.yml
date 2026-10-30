@@ -51,6 +51,9 @@ jobs:
         run: |
           python -m unittest tests.packaging_policy_acceptance tests.status_snapshot_acceptance tests.research_home_acceptance tests.research_contract_acceptance tests.data_readiness_acceptance tests.web_branding_acceptance -v
           python -m tools.status.snapshot --check
+      - name: Install Linux Qt shared libraries for offscreen verification
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libegl1 libopengl0
       - name: Verify native desktop with offline fixtures
         env:
           QT_QPA_PLATFORM: offscreen

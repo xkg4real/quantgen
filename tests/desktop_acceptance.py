@@ -17,6 +17,7 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
     from core.quant.montecarlo import run_monte_carlo
 from core.research.analysis import AnalysisRequest, execute_analysis, funding_rate
 from core.research.portfolio_analysis import PortfolioRequest, execute_portfolio
+from core.research.bond_analysis import BondRequest, execute_bond
 from core.research.runs import new_run, read_export
 from quantgen_desktop.app import ResearchWindow
 from quantgen_desktop.jobs import Jobs
@@ -45,7 +46,28 @@ def portfolio_fixture(request):
     return execute_portfolio(request,history_loader=history)
 
 
+def bond_fixture(request):
+    from core.ficc.data import synthetic_curve_panel
+    panel=synthetic_curve_panel(days=30,seed=23)
+    return execute_bond(request,curve_loader=lambda **kwargs:panel)
+
+
 class AnalysisAdapterTests(unittest.TestCase):
+    def test_bond_price_scenarios_and_hedge_match_existing_core(self):
+        from core.ficc.bonds import analyze_bond,scenario_pnl,futures_hedge_ratio
+        for tool in ('calc','scenarios','hedge'):
+            out=bond_fixture(BondRequest(source='synthetic',tool=tool))
+            a=out.analytics
+            direct=analyze_bond(a.bond,ytm=.045,curve=out.curve)
+            self.assertEqual(a.price,direct.price);self.assertEqual(a.krd,direct.krd)
+            if tool=='scenarios':
+                direct_rows=scenario_pnl(a.bond,out.curve,a.price)
+                self.assertEqual([r.pnl for r in out.scenarios],[r.pnl for r in direct_rows])
+                self.assertEqual(len(out.scenarios),9)
+            if tool=='hedge':self.assertEqual(out.hedge[3],futures_hedge_ratio(a.dv01,65,.8))
+        with self.assertRaises(ValueError):BondRequest(price=100,yield_rate=.04).validate()
+        with self.assertRaises(ValueError):BondRequest(notional=float('nan')).validate()
+        with self.assertRaises(ValueError):BondRequest(tool='hedge',ctd_dv01=0).validate()
     def test_portfolio_adapter_preserves_solver_comparisons_and_warnings(self):
         from core.quant.optimize import optimize_portfolio
         request=PortfolioRequest(('ONE','TWO','THREE'),source='synthetic',max_weight=.5)
@@ -102,7 +124,7 @@ class NativeDesktopTests(unittest.TestCase):
         self.network=patch('requests.sessions.Session.request',side_effect=AssertionError('network forbidden'))
         self.network.start(); self.addCleanup(self.network.stop)
         self.window=ResearchWindow(auto_refresh=False,market_loader=lambda:[],analysis_runner=fixture_runner,
-                                   portfolio_runner=portfolio_fixture)
+                                   portfolio_runner=portfolio_fixture,bond_runner=bond_fixture)
         self.window.show(); self.app.processEvents()
         self.addCleanup(self.cleanup_window)
 
@@ -148,6 +170,20 @@ class NativeDesktopTests(unittest.TestCase):
         self.assertIsNotNone(w.portfolio.chart.output)
         self.assertIn('합성 데이터',w.portfolio.notes.text())
         self.assertTrue(w.portfolio.run.isEnabled())
+
+    def test_native_bonds_calculator_scenarios_hedge_and_input_error(self):
+        w=self.window;w.navigate('markets');b=w.bonds
+        for tool in ('calc','scenarios','hedge'):
+            b.tool.setCurrentIndex(b.tool.findData(tool));b.submit();self.wait_idle()
+            self.assertEqual(b.metrics.rowCount(),12)
+            self.assertEqual(b.krd.rowCount(),9)
+            self.assertTrue(b.chart.series)
+            self.assertIn('합성 곡선',b.notes.text())
+            if tool=='scenarios':self.assertEqual(b.scenarios.rowCount(),9)
+            if tool=='hedge':self.assertIn('실제 주문 없음',b.hedge.text())
+        b.fields['Price · per 100'].setText('100');b.submit()
+        self.assertIn('입력 오류',b.status.text())
+        self.assertFalse(w.jobs.busy)
 
     def test_analysis_navigation_and_native_export_cancel_and_failure(self):
         w=self.window;self.configure_gbm()

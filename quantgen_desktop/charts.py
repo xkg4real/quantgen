@@ -102,3 +102,35 @@ class FrontierChart(QWidget):
             p.setBrush(QColor(c.surface));p.drawEllipse(center,5,5)
             p.drawText(QPointF(min(center.x()+8,self.width()-120),max(16,center.y()-8-index*2)),value.objective)
         p.setPen(QColor(c.muted));p.drawText(QRectF(box.left(),self.height()-24,box.width(),20),Qt.AlignmentFlag.AlignCenter,"Annual volatility → · Y: annual return (historical estimate)")
+
+
+class LineChart(QWidget):
+    def __init__(self,x_label,y_label,parent=None):
+        super().__init__(parent)
+        self.x_label=x_label;self.y_label=y_label;self.series=[];self.x=[];self.colors=LIGHT
+        self.setMinimumSize(350,280)
+        self.setAccessibleName(y_label+' versus '+x_label)
+
+    def set_series(self,x,series):
+        self.x=list(x);self.series=series;self.update()
+
+    def paintEvent(self,event):
+        p=QPainter(self);p.setRenderHint(QPainter.RenderHint.Antialiasing);c=self.colors
+        p.fillRect(self.rect(),QColor(c.surface))
+        if not self.x or not self.series:return
+        xmin,xmax=min(self.x),max(self.x);values=[float(y) for _,ys in self.series for y in ys]
+        ymin,ymax=min(values),max(values);pad=max((ymax-ymin)*.05,.001);ymin-=pad;ymax+=pad
+        box=QRectF(65,35,self.width()-90,self.height()-80)
+        def point(x,y):return QPointF(box.left()+(float(x)-xmin)/max(xmax-xmin,1e-9)*box.width(),box.bottom()-(float(y)-ymin)/(ymax-ymin)*box.height())
+        for i in range(5):
+            y=ymin+(ymax-ymin)*i/4;x=xmin+(xmax-xmin)*i/4
+            p.setPen(QPen(QColor(c.border),1));p.drawLine(point(xmin,y),point(xmax,y))
+            p.setPen(QColor(c.muted));p.drawText(QRectF(0,point(xmin,y).y()-8,58,18),Qt.AlignmentFlag.AlignRight,f'{y:,.2f}')
+            p.drawText(QRectF(point(x,ymin).x()-25,box.bottom()+5,50,18),Qt.AlignmentFlag.AlignCenter,f'{x:.2f}')
+        for index,(name,ys) in enumerate(self.series):
+            color=c.accent if index==0 else c.muted
+            p.setPen(QPen(QColor(color),2,Qt.PenStyle.SolidLine if index==0 else Qt.PenStyle.DashLine))
+            line=QPainterPath(point(self.x[0],ys[0]))
+            for x,y in zip(self.x,ys):line.lineTo(point(x,y))
+            p.drawPath(line);p.drawText(QPointF(65+index*170,20),name)
+        p.setPen(QColor(c.muted));p.drawText(QRectF(box.left(),self.height()-22,box.width(),20),Qt.AlignmentFlag.AlignCenter,self.x_label+' · '+self.y_label)
