@@ -170,8 +170,8 @@ def carry_roll(bond: Bond, curve: YieldCurve, price: float, *,
                horizon: float = 0.25) -> CarryRoll:
     """Horizon P&L (per `face`) with the curve unchanged, split the desk's way.
 
-    carry     = coupon accrued over h − funding, funding = curve.zero(h)·price·h
-                (the whole price financed at the curve's zero rate to h).
+    carry     = coupon accrued over h − funding, funding = price·(1/curve.df(h) − 1)
+                (the whole price financed at the curve-implied simple rate to h).
     rolldown  = clean price of the AGED bond − price. The aged bond is this bond
                 h later: the same cashflows, each h closer, discounted off today's
                 curve with the z-spread held; its dirty price less the coupon
@@ -188,7 +188,7 @@ def carry_roll(bond: Bond, curve: YieldCurve, price: float, *,
     ytm = yield_from_price(bond, price)
     h = min(horizon, bond.maturity)
     accrued = bond.coupon * bond.face * h
-    funding = float(curve.zero(h)) * price * h
+    funding = price * (1.0 / float(curve.df(h)) - 1.0)
     if bond.maturity - horizon > 1e-9:
         z = z_spread(bond, curve, price)
         times, amounts = cashflows(bond)
@@ -374,8 +374,8 @@ if __name__ == "__main__":
     assert abs(sum(a.krd.values()) / a.dv01 - 1.0) < 0.05
     cr = a.carry_roll
     assert abs(cr.total - cr.carry - cr.rolldown) < 1e-12 and cr.horizon == 0.25
-    assert abs(cr.carry - (1.25 - float(curve.zero(0.25)) * 98.0 * 0.25)) < 1e-12
-    assert cr.carry < 0                                # 5.10% running yield < 5.17% funding
+    assert abs(cr.carry - (1.25 - 98.0 * (1.0 / float(curve.df(0.25)) - 1.0))) < 1e-12
+    assert cr.carry < 0                                # 5.10% running yield < 5.20% simple funding
     flat_a = analyze_bond(b, ytm=0.05)
     assert "flat" in flat_a.note and abs(flat_a.z_spread) < 1e-10
     assert abs(flat_a.curve_price - 100.0) < 1e-9
