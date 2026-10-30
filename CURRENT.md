@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T21:05:57.688+09:00
+updated_at: 2026-10-30T21:15:54.375+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/funding-inference-20261030
-work_commit: c9a03ce9a71bf1ab81b733fd4dc40ffa6c2c1117
+work_commit: 07ab7d41a82dbd20e3e5f5d284f6b0580906c1c8
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/29
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -91,3 +91,6 @@ AR1: python -m unittest tests.ar1_decay_acceptance tests.desktop_ar1_decay_accep
 
 ## 현재 실행 재개
 2026-10-30: 이전 OS 잠금 해제와 저장된 task/handoff/branch/commit을 최신 원격에서 대조했습니다. 새 execution 89641371-412d-4208-beb9-0e10cdb8d772로 재개하여 NEW-M6-02의 합성 재현/보정을 진행합니다. 이전 완료 항목과 O8/O11 경계는 유지합니다.
+
+## NEW-M6-02/a 구현 중간 저장
+source 07ab7d41a82dbd20e3e5f5d284f6b0580906c1c8: invalid IID p retired, exhaustive circular-phase exploratory diagnostic + Flet/Qt/AI/export/historical-card 표시 반영. 합성/주입23검사 PASS, 독립 귀무300회 old117/300 vs phase13/300. 조건부 가정이며 실제시장/기존카드 재검증 아님. PR29 CI 확인 전; 전체 NEW-M6-02 완료 아님. 10/67 완료·57미완료 유지.
