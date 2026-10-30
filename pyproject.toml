@@ -18,12 +18,18 @@ dependencies = [
   "yfinance>=0.2", "pandas-datareader>=0.10",
 ]
 
+[project.optional-dependencies]
+desktop = ["PyQt6==6.12.0"]
+
+[project.gui-scripts]
+quantgen-desktop = "quantgen_desktop.app:main"
+
 [tool.setuptools]
 py-modules = ["main", "config"]
 include-package-data = false
 
 [tool.setuptools.packages.find]
-include = ["core*", "data*", "ui*", "tools", "tools.status*"]
+include = ["core*", "data*", "ui*", "quantgen_desktop*", "tools", "tools.status*"]
 exclude = ["_legacy*", "tests*", "qa*"]
 
 [tool.flet]

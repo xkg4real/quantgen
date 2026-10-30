@@ -25,7 +25,7 @@ def allowed(name: str) -> bool:
         return False
     if name in FILES or name in DATA_FILES:
         return True
-    if p.suffix == ".py" and p.parts[0] in ("core", "data", "ui"):
+    if p.suffix == ".py" and p.parts[0] in ("core", "data", "ui", "quantgen_desktop"):
         return True
     if name.startswith("tools/status/") and p.suffix == ".py":
         return True
