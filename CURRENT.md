@@ -1,12 +1,12 @@
 ---
-status: returned
-reason: session_end
+status: taken
+reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-2/e, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T14:00:32+09:00
+updated_at: 2026-10-30T14:50:07+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/pyqt6-desktop-20261030
@@ -17,16 +17,17 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: 1a2e45b4-a6df-43f8-a011-c332797c7b02
+execution_id: 46096aec-0aea-49fd-8d87-7452618c5b51
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
 # QUANTGEN owner-directed product continuation
 
 ## 0. 현재 결과
+사용자가 남은 개발의 즉시 재개를 직접 요청하여 재개했습니다. 자동감시의 next_eligible_at은 이 직접 요청을 차단하지 않습니다. 새로운 실행 ID로 CURRENT를 CAS 선점한 뒤 gpt/pyqt6-completion-20261030에서 남은 native 화면/내보내기/패키징을 진행합니다. 기존 완료 ID는 재처리하지 않습니다.
 공개 사이트용 A/F1 HTML은 내용을 보존해 완성하고 사용자에게 전달했습니다. 실제 사이트 업로드는 사용자가 맡으며 이 작업에서 제외했습니다.
 기존 Flet A/F1 Home, ResearchRun 세션 기록/내보내기, 패키징 CI, F1 브라우저 아이콘은 PR #13/#14/#15로 main에 반영됐습니다.
-PyQt6 데스크톱은 draft PR #16의 검증된 부분 구현입니다. 전체 기능 이전 완료가 아닙니다. 최신 commit c401e0d581d7439cba7580aa6b5d19b0ac6a9beb에서 로컬 native 검사 20개와 Ubuntu 3.12 / Windows 3.12·3.14 CI가 통과했습니다. 이번 실행을 검증된 지점에서 마치고 남은 작업을 명시해 반환합니다. 사용량 수치는 unknown이며 한도 소진을 주장하지 않습니다.
+PyQt6 데스크톱은 draft PR #16의 검증된 부분 구현입니다. 전체 기능 이전 완료가 아닙니다. 최신 commit c401e0d581d7439cba7580aa6b5d19b0ac6a9beb에서 로컬 native 검사 20개와 Ubuntu 3.12 / Windows 3.12·3.14 CI가 통과했습니다. 위 검증은 이전 실행의 결과이며 이번 실행에서 남은 구현을 계속합니다. 사용량 수치는 unknown이며 한도 소진을 주장하지 않습니다.
 
 ## 1. 최신 사용자 결정
 - Windows 앱은 PyQt6, 브라우저는 기존 Flet 유지. 계산/데이터 코어 공유, A안 + F1.
@@ -75,7 +76,7 @@ PyQt6 데스크톱은 draft PR #16의 검증된 부분 구현입니다. 전체 �
 이전 CURRENT의 “PR-F 미구현”, “UI PR/merge 승인 없음”, “Home 데이터 미연결”은 위 후속 작업으로 대체됐습니다.
 기존 LEDGER의 ②-5/c PT-04, ⑫-2/a identity 설계, ①-2/4/a 및 이전 연구 결과는 지우지 않습니다. 별도 연구 브랜치 성과와 현재 main을 구분하세요.
 Qt Rates는 현재 제품 main의 curve 함수를 호출합니다. 별도 PT-04 연구 패치를 몰래 포함하지 않았습니다.
-이번 README/packaging 파일 재수정은 native entry point와 optional extra/resource 경로를 추가하기 위해 필요했습니다.
+이번 app.py/tools.py/tests/packaging 문서 재수정은 남은 native 화면 연결, 명시적 export, 배포 검증을 위해 필요합니다. 완료된 pricing/solver/gate 결과는 재작성하지 않습니다.
 
 ## 6. 다음 실행 순서
 1. ⑬-2/e: Derivatives, ETF, Crypto를 native로 이전. 기존 UI 내부 계산 조립 로직·출처·단위를 먼저 매핑하고 공유 코어를 사용. 합성 fixture로 입력 가지와 계산값 비교. 실제 계정/저장 카드/보호 원장은 열지 않기.
