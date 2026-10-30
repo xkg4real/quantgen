@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑦-4/BS-21, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T16:19:00+09:00
+updated_at: 2026-10-30T16:31:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/bs21-discount-factor-20261030
-work_commit: a1adf008568aa7475a9db5ff7a5c97b41b0a12fb
+work_commit: 556d47c60d578d56d5d08e2c8f9f73c337cdabde
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/19
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -24,14 +24,14 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 현재 결과
-현재 진행: 승인 원문에 명시된 BS-21 조달비용 DF 환산을 별도 gpt/bs21-discount-factor-20261030 브랜치(main a1adf008 시작)에서 작업합니다. UI의 계산 보존 정책은 이 명시 승인 변경 전까지의 UI 이전 범위였습니다. BS-21은 한 공식/설명/격리 회귀 검증 범위로 제한하고 원장·판정·holdout은 변경하지 않습니다.
+현재 진행: 승인된 BS-21 조달비용을 price*(1/DF(h)-1)로 수정하고 설명·회귀 검사를 PR19에 올렸습니다. source 556d47c60d578d56d5d08e2c8f9f73c337cdabde 원격 read-back 완료. 합성 funding 6개+Qt adapter/calculator/export 3개=9 PASS, bond module self-check PASS. CI 검증/병합 전이므로 전체 완료로 기록하지 않습니다. UI의 계산 보존 정책은 이 명시 승인 변경 전까지의 UI 이전 범위였습니다. BS-21은 한 공식/설명/격리 회귀 검증 범위로 제한하고 원장·판정·holdout은 변경하지 않습니다.
 ⑬-2/e~j native 구현/자동 검증을 완료했고 PR17을 main a1adf008568aa7475a9db5ff7a5c97b41b0a12fb에 병합했습니다. 소스 e1df541b35b320bf8360e80305503f72a6043ab0, 59 native tests, CI41018384446 Windows3.12/3.14 및 Ubuntu3.12 success; 원격 PR/main read-back 완료. PR16은 중복 방지로 닫았습니다.
 Windows 앱은 PyQt6 선택 실행, 브라우저는 Flet 유지. 6 workspace, 기존 연구 도구, Macro v2/Strategy Lab, Rules/모의 Trading, 명시적 JSON/ZIP, 선택 AI 해설을 연결했습니다. 실제 API/AI·원장 실행·Windows 육안/DPI·서명 installer는 검증하지 않았고 ⑬-2/k는 미완료입니다. 공개 HTML/F1 묶음은 별도 전달됐고 실제 사이트 업로드는 사용자가 맡습니다.
 Notion REMAINING WORK에는 완료한 하위 범위만 취소선 처리했습니다. 사용자 직접 작업은 returned/cooldown 때문에 대기하지 않습니다. 새 승인 전달 페이지(1절 링크)를 실제 읽고 private 보존했으며, §10 분류/순서·BS-21·O11 A2의 후속 구현과 O8 심사/실파일럿 승인 경계를 구분합니다. UI 병합에 해당 연구 변경을 섞지 않았습니다.
 
 ## 1. 최신 사용자 결정
 
-- 사용자 요청으로 전달한 [2026-10-30 승인 원문·O8 후속 질문·BS-21 추가 승인](https://app.notion.com/p/4095c916fe0c8173a4dae8156aa03ae4?pvs=204). BS-21 후속 승인 원문이 추가됐습니다. 메인세션 수신·구현·검증 여부는 아직 확인되지 않았습니다.
+- 사용자 요청으로 전달한 [2026-10-30 승인 원문·O8 후속 질문·BS-21 추가 승인](https://app.notion.com/p/4095c916fe0c8173a4dae8156aa03ae4?pvs=204). BS-21 후속 승인 원문이 추가됐습니다. 메인세션이 원문 수신·읽기를 확인했습니다. BS-21 구현은 PR19, O11 A2 및 §10 후속은 별도 진행하며 O8 심사 생략/실파일럿 승인을 추정하지 않습니다.
 - Windows 앱은 PyQt6, 브라우저는 기존 Flet 유지. 계산/데이터 코어 공유, A안 + F1.
 - UI 수정, PR 생성, main 병합은 이미 허용됨. 과거의 UI 승인 대기를 되살리지 말 것.
 - 공개 HTML은 사용자가 업로드. 호스팅 접근 요청·배포·공유 환경 변경은 제외.
@@ -50,7 +50,7 @@ Notion REMAINING WORK에는 완료한 하위 범위만 취소선 처리했습니
 - docs/product/DISTRIBUTION_REVIEW_2026-10-29.md
 - docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md
 - tests/desktop_acceptance.py, .github/workflows/runtime-smoke.yml
-- PR #13, #14, #15 (merged), #16 (open draft)
+- PR #13, #14, #15, #17 (merged); #16 closed superseded; BS-21 #19 CI 진행
 이전 Claude/Nautilus 연구의 근거는 이전 작업 브랜치의 CONTINUATION_STATUS/REMAINING_WORK/HANDOFF_MANUAL/O2_O15_DECISION_FORM 및 LEDGER에 있습니다. 이 파일들은 현재 제품 main에 모두 들어 있지 않습니다. UI 작업을 이유로 누적 연구 브랜치를 통째로 병합하지 마세요.
 
 ## 3. 검증 근거와 한계
@@ -96,7 +96,7 @@ Qt Rates는 현재 제품 main의 curve 함수를 호출합니다. 별도 PT-04 
 
 ## 8. 결정과 외부 의존성
 UI/PR/main 권한은 이미 해결됐고 native 잔여 구현을 막는 승인 대기가 아닙니다.
-남아 있는 별도 연구 의사결정: Nautilus O2–O15, PR-B 12.8/K-f/frozen-harness 범위, R3 rev2/10.2 A, ②-5 §10/BS-21 등. 최신 결정 기록을 확인하고 이미 승인된 것은 다시 묻지 않습니다.
+수신된 결정: O2–O15 rev6 기본값 + O11 A2/초기12+U(U≤24), O8 대체심사 기록, ②-5 §10 정식 범위·순서, BS-21 DF 수정. 이 승인에 대해 재질문하지 않습니다. 실제 O8 심사 결과/Appendix B와 owner Windows 파일럿 검증·별도 owner_confirmed는 아직 완료 증거가 없으며, 심사 생략 질문은 면제 승인이 아닙니다. PR-B 12.8/K-f/frozen-harness와 R3 rev2/10.2 A는 해당 별도 원문 범위로만 판단합니다.
 공식 데이터 사용권과 전문 법률 의견을 임의로 승인 처리하지 않습니다. PyQt 공개/상업 배포 라이선스도 이후 배포 판단에 포함합니다.
 
 ## 9. Claude / Codex 재개
