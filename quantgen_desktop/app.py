@@ -28,6 +28,7 @@ from core.research.fx_analysis import execute_fx
 from core.research.structuring_analysis import execute_structuring
 from core.research.signals_analysis import execute_signals
 from core.research.macro_analysis import execute_macro
+from core.research.market_analysis import execute_derivatives, execute_etf, execute_crypto, execute_krx
 from core.research.runs import SessionResearch, new_run, failed, export_bytes
 from core.theme import LIGHT, DARK
 from tools.status.snapshot import verify
@@ -86,7 +87,9 @@ class ResearchWindow(QMainWindow):
     def __init__(self, *, session=None, market_loader=load_markets,
                  analysis_runner=execute_analysis, portfolio_runner=execute_portfolio, bond_runner=execute_bond,
                  rates_runner=execute_rates, fx_runner=execute_fx, structuring_runner=execute_structuring,
-                 signals_runner=execute_signals, macro_runner=execute_macro, auto_refresh=True):
+                 signals_runner=execute_signals, macro_runner=execute_macro,
+                 derivatives_runner=execute_derivatives, etf_runner=execute_etf,
+                 crypto_runner=execute_crypto, krx_runner=execute_krx, auto_refresh=True):
         super().__init__()
         self.session = session or SessionResearch()
         self.market_loader, self.analysis_runner = market_loader, analysis_runner
@@ -95,7 +98,9 @@ class ResearchWindow(QMainWindow):
         self.rates_runner, self.fx_runner = rates_runner, fx_runner
         self.structuring_runner = structuring_runner
         self.signals_runner, self.macro_runner = signals_runner, macro_runner
-        self.tool_names = ('rates','fx','structuring','signals','macro')
+        self.derivatives_runner, self.etf_runner = derivatives_runner, etf_runner
+        self.crypto_runner, self.krx_runner = crypto_runner, krx_runner
+        self.tool_names = ('rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx')
         self.outputs = {}
         self.active_run = None
         self.pending = None
@@ -210,6 +215,7 @@ class ResearchWindow(QMainWindow):
         from .fx import FXPane
         from .structuring import StructuringPane
         from .macro import MacroPane
+        from .market_tools import DerivativesPane, ETFPane, CryptoPane, KRXPane
         layout = self.page("Markets", "공급자와 관측일을 함께 확인하는 일별 시장 데이터")
         self.market_refresh = QPushButton("시장지표 새로고침")
         self.market_refresh.clicked.connect(self.refresh_markets)
@@ -223,10 +229,16 @@ class ResearchWindow(QMainWindow):
         self.fx=FXPane(); self.fx.requested.connect(lambda q:self.run_tool('fx',q))
         self.structuring=StructuringPane(); self.structuring.requested.connect(lambda q:self.run_tool('structuring',q))
         self.macro=MacroPane(); self.macro.requested.connect(lambda q:self.run_tool('macro',q))
+        for name, pane_type in (('derivatives', DerivativesPane), ('etf', ETFPane), ('crypto', CryptoPane), ('krx', KRXPane)):
+            pane = pane_type()
+            pane.requested.connect(lambda q, n=name:self.run_tool(n,q))
+            setattr(self, name, pane)
         self.market_tabs=QTabWidget()
-        for pane,name in ((self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX'),(self.structuring,'Structuring'),(self.macro,'Macro sheet')):self.market_tabs.addTab(pane,name)
+        for pane,name in ((self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX'),(self.structuring,'Structuring'),
+                          (self.derivatives,'Derivatives'),(self.etf,'ETF'),(self.crypto,'Crypto'),(self.krx,'KRX'),
+                          (self.macro,'Macro sheet')):self.market_tabs.addTab(pane,name)
+        self.market_tabs.setUsesScrollButtons(True)
         layout.addWidget(self.market_tabs)
-        layout.addWidget(label("Derivatives·ETF·Crypto 등 남은 상세 도구는 기존 Flet 화면에서 사용할 수 있습니다.", "muted"))
         layout.addStretch()
 
     def make_quant(self):
@@ -328,7 +340,7 @@ class ResearchWindow(QMainWindow):
         inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
-        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Monte Carlo, 포트폴리오, Signals, Library·저장, System\n남은 이전: Derivatives·ETF·Crypto, Macro v2 하위 화면, Strategy Lab, KRX, 모의매매, 규칙·연결 설정, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
+        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, 포트폴리오, Signals, Library·저장, System\n남은 이전: Macro v2 하위 화면, Strategy Lab, 모의매매, 규칙·연결 설정, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
         inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
         layout.addWidget(box)
         layout.addStretch()
@@ -374,7 +386,9 @@ class ResearchWindow(QMainWindow):
         elif self.pending == "bonds":
             self.bonds.show_result(value)
         elif self.pending in self.tool_names:
-            getattr(self,self.pending).show_result(value)
+            pane = getattr(self,self.pending)
+            pane.show_result(value)
+            pane.bind_output(self.pending, value)
         else:
             self.session.put(value.run)
             self.outputs[value.run["run_id"]] = value

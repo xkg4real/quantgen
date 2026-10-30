@@ -22,11 +22,11 @@ commercial distribution; current repository policy remains personal use.
 | Workspace | Working native scope | Limits |
 |---|---|---|
 | Research Home | Session Monte Carlo counts, daily market observations, last computed fan and provenance | Counts exclude portfolio optimizations; no historical ledger scan |
-| Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary | Derivatives/ETF/Crypto and Macro v2 subviews remain in Flet; optional AI panels pending |
+| Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary; Derivatives board, ETF sleeves, Crypto analytics and six KRX datasets | Macro v2 subviews remain in Flet; optional AI panels pending. Native ETF/Crypto study cards are explicitly NOT_LOADED |
 | Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Stored model grades and AI commentary panel not migrated |
 | Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices; technical composite and three costed backtests | Native portfolio export and paper-execution screens pending |
 | Research Library | Session Monte Carlo results, native JSON and report ZIP save dialog | No persistent history browser; only explicit export |
-| System | Existing bounded recorded-status verification, native theme switch | Credential editing and rule editor pending |
+| System | Existing bounded recorded-status verification, native theme switch | Provider connection/probe screen and rule editor pending |
 
 Both Monte Carlo and portfolio use the existing `core.quant` functions. New
 `core.research` adapters capture inputs before
@@ -47,10 +47,10 @@ raw credential-bearing URLs. Failed Monte Carlo runs are retained in the session
 1. Rates/FX native computation branches are ported; live provider acceptance remains pending.
    The optional AI panels remain in Flet. Rates uses the existing curve coverage policy
    and does not incorporate the separate Claude PT-04 branch.
-2. Derivatives, ETF and Crypto; preserve current models and labels.
+2. Derivatives, ETF, Crypto and KRX native adapters are implemented. Live API acceptance remains pending.
 3. Macro v2 subviews and Strategy Lab. Preserve trial registration,
    gate/provenance semantics and approval boundaries; no live stores in tests.
-4. KRX, paper-only Trading, Rules, Settings and the optional AI commentary panel.
+4. Paper-only Trading, Rules, Settings and the optional AI commentary panel.
    No broker order path or TRADEGEN code belongs in this migration.
 5. Keyboard/focus, resize/DPI, installer/icon and actual Windows visual acceptance;
    compare every native route with its retained Flet counterpart.
@@ -62,7 +62,7 @@ preview's scope notices identify where the Flet application is still required.
 ## Verification commands
 
 ```text
-python -m unittest tests.desktop_acceptance tests.packaging_policy_acceptance -v
+python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.packaging_policy_acceptance -v
 python -m unittest tests.research_contract_acceptance tests.research_home_acceptance -v
 ```
 
@@ -77,3 +77,18 @@ The packaging workflow builds an allowlisted wheel on Windows/Linux and runs
 `tools/packaging/smoke_desktop.py` **outside the checkout** with socket and protected
 file access blocked. No live quotes, actual ledgers or frozen studies are tested.
 An offscreen Windows test is not a manual Windows display/DPI acceptance result.
+
+## Market tools and explicit analysis reports
+
+The browser and native Derivatives/ETF/Crypto views now share their original computation
+assembly in `core.research`; pricing functions and formal gates are unchanged. The Flet
+ETF adapter retains its injectable history boundary and adjusted-close fallback. Native
+ETF/Crypto requests do not read study-card stores by default; missing verdicts remain
+NOT_LOADED. Crypto holdings are a separate explicit, read-only opt-in. KRX provider
+refusals remain UNAVAILABLE and cannot be exported as completed calculations.
+
+Successful ToolPane analyses offer JSON and ZIP reports with input snapshots, chart/table
+sections, code/runtime evidence and a checksum manifest. These use the separate
+`quantgen.analysis-report/1` format: official validation NOT_RUN, reproducibility PARTIAL,
+data rights NOT_VERIFIED. They are not promoted into full ResearchRun records. Save is
+explicit and atomic; cancellation writes nothing, failed reruns clear stale exports.

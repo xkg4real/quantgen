@@ -1,7 +1,7 @@
 """Shared native form and result widgets for the FICC tool panes."""
 import math
 from PyQt6.QtCore import pyqtSignal
-from PyQt6.QtWidgets import QComboBox, QGridLayout, QLineEdit, QPushButton, QStackedWidget, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QPushButton, QStackedWidget, QVBoxLayout, QWidget
 from .charts import LineChart, SignedBars
 from core.ficc.common import FICCError
 
@@ -28,6 +28,8 @@ class ToolPane(QWidget):
         super().__init__()
         from .app import label, panel
         self.has_result = False
+        self.report = None
+        self.sections = []
         self.tables = {}
         self.charts = {}
         layout = QVBoxLayout(self)
@@ -74,6 +76,13 @@ class ToolPane(QWidget):
         self.result_layout.setContentsMargins(0, 0, 0, 0)
         self.result_layout.setSpacing(16)
         layout.addWidget(self.result)
+        exports = QHBoxLayout()
+        self.export_json, self.export_zip = QPushButton('분석 JSON 저장'), QPushButton('보고서 ZIP 저장')
+        for button, bundle in ((self.export_json, False), (self.export_zip, True)):
+            button.setEnabled(False)
+            button.clicked.connect(lambda checked=False, b=bundle:self.export_result(b))
+            exports.addWidget(button)
+        layout.addLayout(exports)
         self.tool.currentIndexChanged.connect(self.switch)
         self.forms.setFixedHeight(self.forms.currentWidget().sizeHint().height())
 
@@ -99,6 +108,10 @@ class ToolPane(QWidget):
 
     def clear_result(self):
         self.has_result = False
+        self.report = None
+        self.sections = []
+        self.export_json.setEnabled(False)
+        self.export_zip.setEnabled(False)
         self.tables, self.charts = {}, {}
         while self.result_layout.count():
             item = self.result_layout.takeAt(0)
@@ -108,10 +121,14 @@ class ToolPane(QWidget):
 
     def text(self, text, role='muted'):
         from .app import label
+        from core.research.presentation import safe_detail
+        text = safe_detail(text)
+        self.sections.append({'type':'text','text':text})
         self.result_layout.addWidget(label(text, role))
 
     def result_table(self, name, headers, rows):
         from .app import label, table, table_rows
+        self.sections.append({'type':'table','name':name,'headers':headers,'rows':rows})
         self.result_layout.addWidget(label(name, 'heading'))
         widget = table(headers)
         table_rows(widget, rows)
@@ -121,6 +138,8 @@ class ToolPane(QWidget):
 
     def line(self, name, x, series, x_label, y_label):
         from .app import label
+        x, series = list(x), [(n,list(v)) for n,v in series]
+        self.sections.append({'type':'line','name':name,'x':x,'series':series,'x_label':x_label,'y_label':y_label})
         self.result_layout.addWidget(label(name, 'heading'))
         chart = LineChart(x_label, y_label)
         chart.colors = self.window().colors
@@ -135,8 +154,31 @@ class ToolPane(QWidget):
 
     def bars(self,name,rows,limit=None):
         from .app import label
+        self.sections.append({'type':'bars','name':name,'rows':rows,'limit':limit})
         self.result_layout.addWidget(label(name,'heading'))
         chart=SignedBars(rows,limit=limit)
         chart.colors=self.window().colors
         self.result_layout.addWidget(chart)
         self.charts[name]=chart
+
+    def bind_output(self, name, output):
+        if not self.has_result: return
+        from core.research.tool_export import make_report
+        self.report = make_report(name, output.request, self.sections)
+        self.export_json.setEnabled(True)
+        self.export_zip.setEnabled(True)
+
+    def export_result(self, bundle):
+        if self.report is None: return
+        from pathlib import Path
+        from core.research.export import save_desktop_export
+        from core.research.tool_export import report_bytes
+        extension = 'zip' if bundle else 'json'
+        filename, _ = QFileDialog.getSaveFileName(self, '분석 결과 저장', f"quantgen-{self.report['tool']}.{extension}", f'Report (*.{extension})')
+        if not filename: return
+        try:
+            save_desktop_export(filename, report_bytes(self.report, bundle=bundle), extension=extension)
+        except (OSError, ValueError, TypeError) as exc:
+            self.status.setText(f'저장 실패 · {type(exc).__name__} · 경로와 확장자를 확인하세요.')
+            return
+        self.status.setText('저장 완료 · '+Path(filename).name)
