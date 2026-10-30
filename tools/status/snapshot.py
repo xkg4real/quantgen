@@ -42,7 +42,9 @@ def collect(root: Path, generated_at: str) -> dict:
     declared = outside_block(readme)
     if 'gate.package.status = NOT_FROZEN' not in declared:
         raise StatusError('formal gate declaration changed: review source mapping')
-    if 'personal use only' not in declared or 'Do not distribute it as a product.' not in declared:
+    if ('commercial quantitative finance research application' not in declared
+            or "As of 2026-10-30, QUANTGEN's commercial launch is an owner-approved decision" not in declared
+            or 'personal use only' in declared or 'Do not distribute it as a product.' in declared):
         raise StatusError('distribution declaration changed: owner review required')
     if 'The calendar files are unsigned' in declared:
         raise StatusError('README contradicts current calendar manifest')
@@ -90,8 +92,9 @@ def collect(root: Path, generated_at: str) -> dict:
         'formal_gate': {'status': 'NOT_FROZEN', 'evidence': 'README declaration',
                         'verification': 'NOT_INSPECTED', 'note': 'Frozen gate/package artifacts excluded.'},
         'paper_study': {'status': 'NOT_INSPECTED', 'note': 'Actual ledgers and frozen studies excluded.'},
-        'distribution_policy': {'status': 'PERSONAL_ONLY', 'evidence': 'README Regulatory note',
-                                'public_release': 'NOT_APPROVED'},
+        'distribution_policy': {'status': 'COMMERCIAL', 'evidence': 'README Regulatory note',
+                                'public_release': 'OWNER_APPROVED', 'decision_date': '2026-10-30',
+                                'note': 'Owner launch decision; not regulatory endorsement or technical readiness.'},
     }
 
 
@@ -106,7 +109,7 @@ def render(status: dict) -> str:
         '| Data readiness | NOT_VERIFIED; missing reference data remains a separate blocker. |',
         '| Formal gate | NOT_FROZEN per README; protected package NOT_INSPECTED. |',
         '| Paper studies | NOT_INSPECTED; no ledger or holdout access. |',
-        '| Distribution | PERSONAL_ONLY; public release NOT_APPROVED. |', '',
+        '| Distribution | COMMERCIAL; launch decision OWNER_APPROVED (2026-10-30). |', '',
         'Machine-readable evidence: [qa/research_status.json](qa/research_status.json).',
         'Check: `python -m tools.status.snapshot --check`. Historical dated tables below remain historical.', END])
 

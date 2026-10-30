@@ -1,16 +1,43 @@
 # QUANTGEN
 
+**Quantitative methods for individual traders.**
+
+QUANTGEN is a commercial quantitative finance research application
+built to make systematic, data-driven methods accessible to individual traders.
+Our mission is to bring quantitative research into everyday trading decisions:
+test an idea, understand its assumptions, compare outcomes and evaluate risk
+before committing capital.
+
+**Commercial launch announcement — 2026-10-30.** Following our team's review of
+applicable Korean government guidelines and materials from institutions including
+the Korea Financial Investment Association (KOFIA), we have decided to launch
+QUANTGEN as a commercial product for broad individual adoption.
+
+### What you can do with QUANTGEN
+
+- **Explore markets:** analyze equities, ETFs, rates, bonds, FX, derivatives and
+  crypto through the documented data integrations.
+- **Test ideas:** compare strategies and backtests with explicit transaction
+  costs, benchmarks and validation results.
+- **Understand risk:** use portfolio analysis, Monte Carlo simulation,
+  volatility models and scenario analysis to examine potential outcomes.
+- **Inspect the evidence:** see data sources, assumptions, model limitations
+  and incomplete or rejected results alongside the analysis.
+
+The current application supports research, analysis and paper trading. It has
+no broker order path. Individual users retain control of their trading decisions.
+See [Setup](#setup) to get started and the feature documentation below for
+current capabilities.
+
 **Native desktop preview:** the optional PyQt6 research workspace is available with
 `pip install ".[desktop]"` and `python -m quantgen_desktop`. The browser remains
 Flet. This is a partial migration; see [scope and remaining screens](docs/DESKTOP_MIGRATION_2026-10-30.md).
 
-The upgraded, personal-use successor to NEXTGEN. Same body — the rule engine,
-simulated order book and KRX data layer all survive intact (the skill cockpit
-moved to TRADEGEN on 2026-10-23) — with the one organ the client build was
-contractually forbidden from having:
-**an opinion**. QUANTGEN computes and validates analysis and ranks outcomes; on
-the macro overlay it displays a recommendation only for what a frozen gate has
-passed, and today nothing has: see
+Built on NEXTGEN's rule engine, simulated order book and KRX data layer,
+QUANTGEN computes and validates analysis and ranks outcomes. The skill cockpit
+moved to TRADEGEN on 2026-10-23. The macro overlay displays a recommendation
+only for what a frozen gate has passed; no macro card has passed that gate in
+this build. See
 [Macro integration](#macro-integration-quant-council-specification-v20).
 
 Version 2 widens the desk. The equity surfaces (Quant Lab, Portfolio, Signals)
@@ -35,11 +62,11 @@ before any card runs. Macro sizes risk and never sets direction; nothing
 exceeds 1.0×; nothing places an order. Beside it sits the tech-fund research
 register. Both live inside the Macro page; neither added a rail entry.
 
-QUANTGEN is a quantitative finance research application: models, estimation,
-validation, FICC pricing, portfolio theory, backtests and gates. It goes no
-further than paper trading, and there is no broker order path in this
-repository. It is a personal instrument, not a client deliverable and not for
-commercial distribution, and nothing in it is investment advice.
+QUANTGEN brings models, estimation, validation, FICC pricing, portfolio theory,
+backtests and research gates into one workspace for individual users. Its
+commercial mission is broader access to quantitative methods; the current
+software remains limited to analysis and paper trading, and nothing in it is
+investment advice.
 
 **Split from TRADEGEN (2026-10-23).** On 2026-10-23 this repository was copied
 byte for byte to `Desktop/TRADEGEN` (959 files, identical sha256), and the two
@@ -863,7 +890,7 @@ Generated from explicit sources; **not a new test run or overall readiness verdi
 | Data readiness | NOT_VERIFIED; missing reference data remains a separate blocker. |
 | Formal gate | NOT_FROZEN per README; protected package NOT_INSPECTED. |
 | Paper studies | NOT_INSPECTED; no ledger or holdout access. |
-| Distribution | PERSONAL_ONLY; public release NOT_APPROVED. |
+| Distribution | COMMERCIAL; launch decision OWNER_APPROVED (2026-10-30). |
 
 Machine-readable evidence: [qa/research_status.json](qa/research_status.json).
 Check: `python -m tools.status.snapshot --check`. Historical dated tables below remain historical.
@@ -946,7 +973,13 @@ containers, not matplotlib.
 
 ## Regulatory note
 
-QUANTGEN is built for the operator's personal use only. It intentionally does
-not implement the recommendation-abstinence constraints of the NEXTGEN client
-build, and it is not designed to satisfy Korean FSCMA or US SEC requirements
-for commercial financial software. Do not distribute it as a product.
+As of 2026-10-30, QUANTGEN's commercial launch is an owner-approved decision
+following the team's review of applicable Korean government and KOFIA materials.
+This supersedes the earlier personal-use-only distribution policy. The review
+and launch decision are the team's assessment; they do not represent approval,
+certification or endorsement by the Korean government or KOFIA.
+
+QUANTGEN provides software for quantitative analysis and paper trading.
+It does not place live broker orders or guarantee investment outcomes. Market
+data and connected services remain subject to their providers' applicable terms.
+The software is not legal, tax or investment advice.

@@ -15,7 +15,8 @@ class StatusSnapshotTests(unittest.TestCase):
         (self.root / 'qa').mkdir()
         (self.root / 'core/calendars/data').mkdir(parents=True)
         (self.root / 'README.md').write_text(
-            'personal use only. Do not distribute it as a product.\n'
+            'QUANTGEN is a commercial quantitative finance research application.\n'
+            "As of 2026-10-30, QUANTGEN's commercial launch is an owner-approved decision\n"
             'gate.package.status = NOT_FROZEN\n' + START + END, encoding='utf-8')
         self.qa = self.root / 'qa/acceptance_results.json'
         self.qa.write_text(json.dumps([{'test': 'ok', 'status': 'PASS'},
@@ -34,6 +35,9 @@ class StatusSnapshotTests(unittest.TestCase):
 
     def test_missing_calendar_payload_is_not_claimed_verified(self):
         s = verify(self.root)
+        self.assertEqual(s['distribution_policy']['status'], 'COMMERCIAL')
+        self.assertEqual(s['distribution_policy']['public_release'], 'OWNER_APPROVED')
+        self.assertEqual(s['distribution_policy']['decision_date'], '2026-10-30')
         self.assertEqual(s['data_readiness']['status'], 'NOT_VERIFIED')
         self.assertEqual(s['formal_gate']['verification'], 'NOT_INSPECTED')
         self.assertEqual(s['paper_study']['status'], 'NOT_INSPECTED')
@@ -54,7 +58,9 @@ class StatusSnapshotTests(unittest.TestCase):
     def test_policy_and_calendar_contradictions_refuse(self):
         p = self.root / 'README.md'; t = p.read_text(encoding='utf-8')
         for changed in [t + '\nThe calendar files are unsigned',
-                        t.replace('Do not distribute it as a product.', 'Distribution permitted.')]:
+                        t.replace('owner-approved decision', 'pending decision'),
+                        t.replace('commercial quantitative finance research application', 'research application'),
+                        t + '\npersonal use only. Do not distribute it as a product.']:
             p.write_text(changed, encoding='utf-8')
             with self.assertRaises(StatusError): self.refresh()
 

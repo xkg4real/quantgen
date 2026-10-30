@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-30T04:18:24.877345+00:00",
+  "generated_at": "2026-10-30T08:21:26.418897+00:00",
   "scope": "recorded repository evidence; not a test run or deployment verdict",
   "sources": [
     {
       "path": "README.md",
-      "sha256": "2bf36ad1da8f8b6e3aff14f7c9cc8fa1a0eb51117ba975b8522b7d9b653f1a98",
+      "sha256": "c29433b47319728fef9419f6d5a0c33a4f79af1d5b76e08c6ab62b4f8e111471",
       "normalization": "LF; generated block excluded"
     },
     {
@@ -53,8 +53,10 @@
     "note": "Actual ledgers and frozen studies excluded."
   },
   "distribution_policy": {
-    "status": "PERSONAL_ONLY",
+    "status": "COMMERCIAL",
     "evidence": "README Regulatory note",
-    "public_release": "NOT_APPROVED"
+    "public_release": "OWNER_APPROVED",
+    "decision_date": "2026-10-30",
+    "note": "Owner launch decision; not regulatory endorsement or technical readiness."
   }
 }
