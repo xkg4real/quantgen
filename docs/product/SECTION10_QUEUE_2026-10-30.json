@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 6,
-    "implemented_canonical_groups": 8
+    "implemented_canonical_groups": 9
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -139,10 +139,14 @@
       "source_model": "26. M2-03 변동성 타깃 vol_target (상한형 Moreira–Muir)",
       "queue": 3,
       "type": "Model assumption or convention",
-      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "next": "Per-asset cap and stitched OOS gross/borrowing/benchmark scope disclosed for vol_target and crypto_trend; weights and gates unchanged",
       "mapping_needs_disambiguation": false,
       "reproduction": "SYNTHETIC_REPRODUCED",
-      "correction": "NOT_IMPLEMENTED"
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/STRATEGY_EXPOSURE_2026-10-30.md",
+      "related_source_models": [
+        "30. M2-07 crypto_trend"
+      ]
     },
     {
       "id": "N2",

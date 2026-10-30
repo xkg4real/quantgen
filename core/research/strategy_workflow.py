@@ -10,18 +10,19 @@ import numpy as np
 from core.quant import strategies as S
 from core.quant import validate as V
 from core.quant.history import convention_warning, load_history
+from .strategy_exposure import exposure_summary, exposure_lines
 ROOT = Path(__file__).resolve().parents[2]
 CARDS_DIR = ROOT / "docs" / "asset_expansion" / "cards"
 
 FAMILIES = {
     "trend_switch": ("Trend switch (Faber SMA / MOP sign)", S.trend_switch,
                      S.grid_from(rule=["sma", "tsmom"], lookback=[126, 210, 252], step=[21, 42]), 21),
-    "vol_target": ("Capped volatility target", S.vol_target, S.grid_from(target=[0.08, 0.10, 0.12, 0.15], window=[22, 44], step=[21]), 21),
+    "vol_target": ("Volatility target (per-asset cap)", S.vol_target, S.grid_from(target=[0.08, 0.10, 0.12, 0.15], window=[22, 44], step=[21]), 21),
     "xs_momentum": ("Cross-sectional momentum (long top third)", S.xs_momentum,
                     S.grid_from(lookback=[126, 189, 252], skip=[5, 21], top=[1 / 3], step=[21, 42], long_only=[True]), 21),
     "tsmom": ("Time-series momentum (MOP, long/short)", S.tsmom,
               S.grid_from(lookback=[63, 126, 252], vol_target_ann=[0.20, 0.40], cap=[1.0], step=[21, 42], long_only=[False]), 21),
-    "crypto_trend": ("Crypto short-horizon trend (long/flat)", S.crypto_trend, S.grid_from(hysteresis=[0.05, 0.1, 0.2, 0.3, 0.4, 0.5]), 1),
+    "crypto_trend": ("Crypto short-horizon trend (per-asset 0/1)", S.crypto_trend, S.grid_from(hysteresis=[0.05, 0.1, 0.2, 0.3, 0.4, 0.5]), 1),
     "risk_parity": ("Risk parity across sleeves", S.risk_parity, S.grid_from(window=[125, 250, 500, 750], step=[21, 63]), 63),
     "pairs": ("Pairs (Engle–Granger spread, y then x)", None,
               S.grid_from(formation=[126, 252], trading=[126], entry=[1.5, 2.0, 2.5, 3.0], exit=[0.0], long_only=[False]), 5),
@@ -112,7 +113,9 @@ def run_family(family: str, symbols: list[str], *, source: str = "auto", cost_bp
             "notes": [h.note for h in hists], "convention": convention_warning(hists),
             "panel": pn, "score": sc, "wf": wf, "equity": eq, "bench_equity": beq, "grid": grid,
             "chosen": grid[wf.chosen[-1]] if wf.chosen else {}, "cost_bps": cost_bps, "cost_floor": floor,
-            "withheld": withheld, "ledger_n": ledger_n}
+            "withheld": withheld, "ledger_n": ledger_n,
+            "exposure": exposure_summary(family, pn.prices, dates, grid, fn, wf,
+                                         embargo=embargo, cash_daily=rf)}
 
 def narrative(r: dict) -> str:
     sc = r["score"]
@@ -120,7 +123,7 @@ def narrative(r: dict) -> str:
             f"{len(r['grid'])} configurations = {sc.n_trials} trials): "
             + (f"decision withheld — {r['withheld']} " if r.get("withheld") else f"decision {sc.decision} — {sc.reason}. ") +
             f"The last in-sample winner was {r['chosen']}.")
-    return head + " " + " ".join(sc.lines)
+    return head + " " + " ".join(exposure_lines(r.get("exposure")) + list(sc.lines))
 
 def payload(r: dict) -> dict:
     sc = r["score"]
@@ -129,7 +132,8 @@ def payload(r: dict) -> dict:
             "decision": "WITHHELD" if r.get("withheld") else sc.decision,
             "reason": r.get("withheld") or sc.reason, "revise_target": None if r.get("withheld") else sc.revise_target,
             "stats": {k: v for k, v in sc.__dict__.items() if isinstance(v, (int, float, str, bool, tuple)) and k not in hide},
-            "regime": sc.regime, "lines": sc.lines, "walk_forward": r["wf"].note}
+            "regime": sc.regime, "lines": sc.lines, "walk_forward": r["wf"].note,
+            "exposure": r.get("exposure"), "exposure_notes": exposure_lines(r.get("exposure"))}
 
 def _study_card(c: dict) -> dict:
     """A card with every key the page indexes, read with .get: a file of another shape (a v2 macro card, a header,

@@ -99,3 +99,10 @@ N-M1-03 then distinguishes sample/next-session/horizon-average annualized
 volatility across Flet, PyQt6 and commentary without changing any estimator;
 see `MC_VOLATILITY_2026-10-30.md`. Latest queue: **8/67** corrected, **59**
 remaining groups; 14 observation rows and 15 ambiguous mappings remain open.
+
+N1 now discloses per-asset caps, stitched OOS gross/borrowing and the 1×
+equal-weight benchmark scope for vol_target and crypto_trend; see
+`STRATEGY_EXPOSURE_2026-10-30.md`. Weight/score/ledger math is unchanged.
+The latest queue is **9/67** corrected and **58** remaining groups, with
+14 observation rows and 15 ambiguous mappings still open. A narrow Flet
+initial-equity/date alignment fix is included, not full audit closure.
