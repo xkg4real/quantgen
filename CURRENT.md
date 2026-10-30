@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ④-2/O8/a, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T18:04:00+09:00
+updated_at: 2026-10-30T18:10:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/section10-ficc-20261030
-work_commit: 468d53e97fa31574c6c2261c5044a1f2886d5c77
+work_branch: gpt/approved-research-followups-20261030
+work_commit: d7b175f748c52ce297e1b853e8d0b234c2932725
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/23
+pr: https://github.com/xkg4real/quantgen/pull/21
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -28,7 +28,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 수신하면 O8 지시를 읽었다고 명시하고, 적용한 파일·검사 결과·커밋 또는 비공개 변경 상태·남은 실제 제약을 CURRENT와 메인세션에 보고하세요. 공개 반영은 이미 승인된 범위에 한합니다. 이 지시를 저장한 사실은 메인세션의 수신·적용 완료를 뜻하지 않습니다.
 
 ## 0. 현재 결과
-O8 후속 명시 승인과 우선 적용 지시를 읽었습니다. PR23 완료 기록을 보존한 뒤 기존 O11 PR21에서 문서·관련 검사만 통합하며, 중복 초기화 명령이나 승인 경계 변경을 추가하지 않습니다.
+O8 후속 명시 승인과 우선 적용 지시를 읽었습니다. 기존 연구 gpt 브랜치 d7b175f/PR21을 재개합니다. 비공개 패치 다운로드는 Tunnel connection failed: 403 Forbidden로 실패했으며 우회하지 않았습니다. 읽힌 승인 원문과 현재 스펙/런북/검사를 기준으로 범위가 좁은 문서 정정부터 적용합니다. 패치 전체 대조 완료를 주장하지 않습니다. PR23 완료 기록을 보존한 뒤 기존 O11 PR21에서 문서·관련 검사만 통합하며, 중복 초기화 명령이나 승인 경계 변경을 추가하지 않습니다.
 최신 제품 main ff421ea7c24e53a6e588336199c518f098690561: PR23까지 원격 병합/read-back. §10는 67그룹 중 4그룹(NEW-M6-01, NEW-M6-18, M4-N5, M3-N07) 수정/검증 완료이며 63그룹·14관찰·15개 모호 ID 매핑은 남아 있습니다. 아래 이전 시점별 숫자는 이 최신 집계로 보완됩니다.
 BS-21 완료: PR19 source 941455aa5a0b41d0941325846dab89a05d80b5e1 → main 0cc30c3ed1a7e25f1d06215a858d57bc199e9be6 병합/read-back. 합성 funding 8개, Qt adapter/calculator/export 3개, bond self-check PASS; CI41020717371 Windows3.12/3.14+Ubuntu3.12 success. PR18의 독립 회귀 사례를 보존하여 통합하고 중복 PR을 종료했습니다.
 §10 첫 단위 완료: PR20 source0e7dd782c01707b0bd3cff78c4c7deb837f761eb → main ce12459eae1258e03270702092c839758cde91fa 병합/read-back, CI41022505498 Windows3.12/3.14+Ubuntu3.12 success. 71ID/67그룹/14관찰 초기 목록·순서, 합성 재현5개와 NEW-M6-01 HAC t-stat 교정. 독립 sandwich6사례 old FAIL/new PASS, 표본부족·Qt 회귀 PASS. 나머지66그룹·14관찰, 모호 매핑15개는 미완료.
