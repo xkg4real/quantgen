@@ -9,8 +9,8 @@
     "canonical_groups": 67,
     "observation_models": 14,
     "initial_reproductions": 5,
-    "additional_reproduced_ids": 3,
-    "implemented_canonical_groups": 4
+    "additional_reproduced_ids": 4,
+    "implemented_canonical_groups": 6
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -102,10 +102,11 @@
       "source_model": "23. M1-23 포트폴리오 최적화 (optimize_portfolio, efficient_frontier, 위험 기여)",
       "queue": 3,
       "type": "Model assumption or convention",
-      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "next": "Disclosure complete; existing solver/objectives, M-02 return convention and R-15 preserved",
       "mapping_needs_disambiguation": false,
       "reproduction": "SYNTHETIC_REPRODUCED",
-      "correction": "NOT_IMPLEMENTED"
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/PORTFOLIO_SCOPE_2026-10-30.md"
     },
     {
       "id": "N-M1-10",
@@ -113,10 +114,11 @@
       "source_model": "23. M1-23 포트폴리오 최적화 (optimize_portfolio, efficient_frontier, 위험 기여)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Disclosure complete; existing solver/objectives, M-02 return convention and R-15 preserved",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/PORTFOLIO_SCOPE_2026-10-30.md"
     },
     {
       "id": "N-M1-11",
