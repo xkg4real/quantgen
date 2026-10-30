@@ -30,6 +30,7 @@ from core.research.signals_analysis import execute_signals
 from core.research.macro_analysis import execute_macro
 from core.research.market_analysis import execute_derivatives, execute_etf, execute_crypto, execute_krx
 from core.research.connections import execute_connections
+from core.research.strategy_analysis import execute_strategy
 from core.research.runs import SessionResearch, new_run, failed, export_bytes
 from core.theme import LIGHT, DARK
 from tools.status.snapshot import verify
@@ -91,7 +92,7 @@ class ResearchWindow(QMainWindow):
                  signals_runner=execute_signals, macro_runner=execute_macro,
                  derivatives_runner=execute_derivatives, etf_runner=execute_etf,
                  crypto_runner=execute_crypto, krx_runner=execute_krx,
-                 connections_runner=execute_connections, auto_refresh=True):
+                 connections_runner=execute_connections, strategy_runner=execute_strategy, auto_refresh=True):
         super().__init__()
         self.session = session or SessionResearch()
         self.market_loader, self.analysis_runner = market_loader, analysis_runner
@@ -103,7 +104,8 @@ class ResearchWindow(QMainWindow):
         self.derivatives_runner, self.etf_runner = derivatives_runner, etf_runner
         self.crypto_runner, self.krx_runner = crypto_runner, krx_runner
         self.connections_runner = connections_runner
-        self.tool_names = ('rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx','connections')
+        self.strategy_runner = strategy_runner
+        self.tool_names = ('rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx','connections','strategy')
         self.outputs = {}
         self.active_run = None
         self.pending = None
@@ -245,7 +247,16 @@ class ResearchWindow(QMainWindow):
         layout.addStretch()
 
     def make_quant(self):
-        layout = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
+        outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
+        self.quant_tabs = QTabWidget()
+        outer.addWidget(self.quant_tabs)
+        host = QWidget()
+        layout = QVBoxLayout(host)
+        self.quant_tabs.addTab(host, 'Monte Carlo')
+        from .strategy import StrategyPane
+        self.strategy = StrategyPane()
+        self.strategy.requested.connect(lambda q: self.run_tool('strategy', q))
+        self.quant_tabs.addTab(self.strategy, 'Strategy Lab')
         box, inner = panel("분석 설정")
         form = QGridLayout()
         self.symbol = QLineEdit("AAPL")
@@ -347,7 +358,7 @@ class ResearchWindow(QMainWindow):
         inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
-        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, 포트폴리오, Signals, Library·저장, 연결 설정, System\n남은 이전: Macro v2 하위 화면, Strategy Lab, 모의매매, 규칙, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
+        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n남은 이전: Macro v2 하위 화면, 모의매매, 규칙, AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
         inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
         layout.addWidget(box)
         layout.addStretch()

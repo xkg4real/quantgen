@@ -23,7 +23,7 @@ commercial distribution; current repository policy remains personal use.
 |---|---|---|
 | Research Home | Session Monte Carlo counts, daily market observations, last computed fan and provenance | Counts exclude portfolio optimizations; no historical ledger scan |
 | Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary; Derivatives board, ETF sleeves, Crypto analytics and six KRX datasets | Macro v2 subviews remain in Flet; optional AI panels pending. Native ETF/Crypto study cards are explicitly NOT_LOADED |
-| Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Stored model grades and AI commentary panel not migrated |
+| Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Strategy Lab seven-family validation and explicit study-card viewer; AI commentary panel pending |
 | Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices; technical composite and three costed backtests | Explicit JSON/ZIP exports; paper-execution screens pending |
 | Research Library | Session Monte Carlo results, native JSON and report ZIP save dialog | No persistent history browser; only explicit export |
 | System | Existing bounded recorded-status verification, native theme switch | Explicit presence and KRX/FICC/KIS/Crypto probes; rule editor pending |
@@ -48,7 +48,7 @@ raw credential-bearing URLs. Failed Monte Carlo runs are retained in the session
    The optional AI panels remain in Flet. Rates uses the existing curve coverage policy
    and does not incorporate the separate Claude PT-04 branch.
 2. Derivatives, ETF, Crypto and KRX native adapters are implemented. Live API acceptance remains pending.
-3. Macro v2 subviews and Strategy Lab. Preserve trial registration,
+3. Macro v2 subviews. Strategy Lab is ported; preserve trial registration,
    gate/provenance semantics and approval boundaries; no live stores in tests.
 4. Paper-only Trading, Rules and the optional AI commentary panel. Settings presence/probes are ported.
    No broker order path or TRADEGEN code belongs in this migration.
@@ -62,7 +62,7 @@ preview's scope notices identify where the Flet application is still required.
 ## Verification commands
 
 ```text
-python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.packaging_policy_acceptance -v
+python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.desktop_strategy_acceptance tests.packaging_policy_acceptance -v
 python -m unittest tests.research_contract_acceptance tests.research_home_acceptance -v
 ```
 
@@ -98,3 +98,10 @@ the same explicit report contract. Invalid requests and failed reruns clear stal
 System has a connection pane: presence is CONFIGURED/NOT_CONFIGURED; explicit probes
 report REACHABLE/UNAVAILABLE. No probe runs when opening the app or selecting a tool;
 credential values are excluded. Windows UTF-8 report reads are explicit in tests.
+
+Strategy Lab shares the original seven family grids and cost/registration/scoring workflow
+with Flet. Its native default is synthetic; real-data requests retain the existing
+registration semantics. This migration does not implement the separate cumulative trial
+registry redesign or change gate thresholds. Costs below the table floor keep WITHHELD,
+registered cards retain their recorded refusals, and a failed registration blocks scoring.
+Synthetic tests refuse network, actual ledgers and card-store reads.
