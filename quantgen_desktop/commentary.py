@@ -10,29 +10,24 @@ import json
 from PyQt6.QtWidgets import QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButton,QPlainTextEdit,QLineEdit,QCheckBox
 from core.research.presentation import safe_detail
 from core.research.tool_export import plain
+from core.research.ai_payload import filter_analysis_fields, private_field
 from core.ficc.insights import deep_analysis
 from .jobs import Jobs
 from .report_actions import ReportActions
 
 
 ALLOWED={'monte_carlo','portfolio','bonds','rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx','strategy'}
-PRIVATE_WORDS=('account','balance','holding','credential','secret','api_key','token','authorization','owner_decision')
 
 
 def commentary_payload(report):
     tool=report.get('tool')
     if tool not in ALLOWED or report.get('execution_status')!='COMPLETED':
         raise ValueError('Select a completed calculation report')
-    def filtered(value):
-        if isinstance(value,dict):
-            return {k:filtered(v) for k,v in value.items() if not any(w in str(k).lower() for w in PRIVATE_WORDS)}
-        if isinstance(value,list):return [filtered(v) for v in value]
-        return value
     sections=[]
     for section in report.get('sections',[]):
-        if any(w in str(section.get('name','')).lower() for w in PRIVATE_WORDS):continue
-        sections.append(filtered(section))
-    payload=plain({'tool':tool,'parameters':filtered(report.get('parameters',{})),
+        if private_field(section.get('name','')):continue
+        sections.append(filter_analysis_fields(section))
+    payload=plain({'tool':tool,'parameters':filter_analysis_fields(report.get('parameters',{})),
         'sections':sections,'official_verdict':report.get('verdict','NOT_RUN'),
         'reproducibility':report.get('reproducibility','PARTIAL'),'data_rights':report.get('data_rights','NOT_VERIFIED')})
     raw=json.dumps(payload,ensure_ascii=False,allow_nan=False,sort_keys=True)

@@ -293,7 +293,8 @@ def _payload_to_json(payload: dict) -> str:
         except Exception:
             pass
         return str(o)
-    return json.dumps(payload, default=default)
+    from core.research.ai_payload import filter_analysis_fields
+    return json.dumps(filter_analysis_fields(payload), default=default)
 
 
 def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
