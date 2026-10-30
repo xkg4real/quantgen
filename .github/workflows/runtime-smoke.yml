@@ -11,7 +11,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            python: '3.12'
+          - os: windows-latest
+            python: '3.12'
+          - os: windows-latest
+            python: '3.14'
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     steps:
@@ -33,7 +39,7 @@ jobs:
             !/**/frozen/
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python }}
       - name: Stage only runtime allowlist and build wheel
         shell: bash
         run: |
