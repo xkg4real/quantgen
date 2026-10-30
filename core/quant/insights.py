@@ -67,8 +67,8 @@ def _narrate_garch(mc: MCResult) -> str:
             else "never decays (integrated variance)")
     out = [
         f"Calibration (GARCH(1,1)-{g.dist} on {g.n_obs} sessions): conditional "
-        f"vol today {v(g.cond_vol_last)} against {uncond} "
-        f"and a {mc.horizon_days}-session horizon vol of {v(mc.garch_horizon_vol)}.",
+        f"vol for the next session (annualized) {v(g.cond_vol_last)} against {uncond} "
+        f"and a {mc.horizon_days}-session average forecast vol (annualized) of {v(mc.garch_horizon_vol)}.",
         f"alpha {g.alpha:.3f}, beta {g.beta:.3f}, persistence {g.persistence:.3f} "
         f"— a variance shock {half}.",
     ]
@@ -149,7 +149,7 @@ def narrate_monte_carlo(mc: MCResult) -> str:
         f"{mc.cvar_pct * 100:.1f}%.",
     ]
     lines.append(_narrate_garch(mc) if mc.garch is not None else
-                 f"Calibration: annualized volatility {mc.sigma_annual * 100:.1f}%.")
+                 f"Calibration: historical sample log-return volatility (annualized, 252 sessions) {mc.sigma_annual * 100:.1f}%.")
     if getattr(mc, "bound_note", ""):
         lines.append(mc.bound_note)
     lines.append(_narrate_drift(mc))

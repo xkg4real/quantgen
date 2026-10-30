@@ -94,3 +94,8 @@ The subsequent N-M1-11 wording correction is described in
 not pathwise crossing. This raises the latest queue to **7/67** corrected
 groups and **60** remaining groups; the 14 observation rows and 15 ambiguous
 mappings remain open. The solver and simulation mathematics are unchanged.
+
+N-M1-03 then distinguishes sample/next-session/horizon-average annualized
+volatility across Flet, PyQt6 and commentary without changing any estimator;
+see `MC_VOLATILITY_2026-10-30.md`. Latest queue: **8/67** corrected, **59**
+remaining groups; 14 observation rows and 15 ambiguous mappings remain open.

@@ -22,6 +22,7 @@ from core.research.export import bundle_bytes, save_desktop_export
 from core.research.markets import load_markets, SPECS
 from core.research.provenance import code_evidence, runtime_evidence
 from core.research.portfolio_analysis import execute_portfolio
+from core.research.mc_disclosure import volatility_disclosure
 from core.research.bond_analysis import execute_bond
 from core.research.rates_analysis import execute_rates
 from core.research.fx_analysis import execute_fx
@@ -462,12 +463,18 @@ class ResearchWindow(QMainWindow):
             self.outputs[value.run["run_id"]] = value
             self.quant_chart.set_result(value.result)
             r, h = value.result, value.history
+            vol_info = volatility_disclosure(r)
             table_rows(self.quant_metrics, [("Spot", f"{r.spot:,.2f}"), ("P5 / P50 / P95", f"{r.p05:,.2f} / {r.median_terminal:,.2f} / {r.p95:,.2f}"),
+                (vol_info["label"], f"{vol_info['value']:.1%}"),
                 ("P(loss)", f"{r.prob_loss:.1%}"), ("VaR 95 / CVaR", f"{r.var_pct:.1%} / {r.cvar_pct:.1%}"),
                 ("Paths / horizon / seed", f"{r.n_paths:,} / {r.horizon_days} / {value.run['parameters']['seed']}"),
-                ("P(terminal ≥ target)", "—" if r.prob_target is None else f"{r.prob_target:.1%}")])
+                ("P(terminal ≥ target)", "—" if r.prob_target is None else f"{r.prob_target:.1%}")] +
+                ([("Horizon-average vol (ann.)", f"{r.garch_horizon_vol:.1%}")] if r.garch is not None else []))
             notes = [f"{'합성 데이터 · ' if h.source=='SYNTHETIC' else ''}{h.source} · {h.first_date} → {h.last_date}",
                      h.note, value.funding_note, r.drift_note, r.bound_note, r.jump_note]
+            notes.append(vol_info["description"])
+            if vol_info["horizon_basis"]:
+                notes.append("Horizon-average volatility: " + vol_info["horizon_basis"])
             if r.prob_target is not None:
                 notes.append(f"Target probability: final price >= {r.target:,.2f} after {r.horizon_days} sessions. Only the final session is used.")
             if r.garch is not None:

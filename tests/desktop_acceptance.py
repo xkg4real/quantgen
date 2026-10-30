@@ -376,6 +376,22 @@ class NativeDesktopTests(unittest.TestCase):
             self.assertGreater(w.macro.tables['Macro indicators'].rowCount(),10)
         self.assertEqual(len(w.session.runs()),0)
 
+    def test_native_volatility_labels_distinguish_sample_and_forecast(self):
+        w=self.window;self.configure_gbm()
+        for model in ('gbm','garch_t'):
+            with self.subTest(model=model):
+                w.model.setCurrentIndex(w.model.findData(model));w.run_analysis();self.wait_idle()
+                run=w.session.runs()[0];result=w.outputs[run['run_id']].result
+                rows={w.quant_metrics.item(i,0).text():w.quant_metrics.item(i,1).text()
+                      for i in range(w.quant_metrics.rowCount())}
+                expected='Next-session vol (ann.)' if model=='garch_t' else 'Sample vol (ann.)'
+                self.assertEqual(rows[expected],f'{result.sigma_annual:.1%}')
+                self.assertIn('annualized using 252 sessions',w.quant_notes.text())
+                if model=='garch_t':
+                    self.assertEqual(rows['Horizon-average vol (ann.)'],f'{result.garch_horizon_vol:.1%}')
+                else:self.assertNotIn('Horizon-average vol (ann.)',rows)
+                self.assertEqual(run['verdict'],'NOT_RUN')
+
     def test_terminal_target_label_and_notes_preserve_research_contract(self):
         w=self.window;self.configure_gbm();w.target.setText('100')
         w.run_analysis();self.wait_idle()

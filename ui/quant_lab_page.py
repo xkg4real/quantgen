@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from core.research.runs import session_for, new_run, completed, failed, utc_now
 from core.research.provenance import code_evidence, runtime_evidence
+from core.research.mc_disclosure import volatility_disclosure
 
 import json
 import re
@@ -129,11 +130,12 @@ def _garch_blocks(fit, horizon_vol: float) -> list[ft.Control]:
                        "(the boundary null of the LR tile); 'normal' means the interval includes eta = 0"
                        + ("; greyed: alpha at its bound, the reference distribution is indicative only"
                           if "alpha" in ab else ""))),
-        _stat("Cond vol (ann.)", _fmt_pct(fit.cond_vol_last)),
+        _stat("Next-session vol (ann.)", _fmt_pct(fit.cond_vol_last)),
         _stat("Uncond vol (ann.)", _fmt_pct(fit.uncond_vol),
               token="error" if "omega" in ab else "text",
               tooltip="no interval: the delta method covers 42% to 100% depending on persistence (B2)"),
-        _stat("Horizon vol (ann.)", _fmt_pct(horizon_vol)),
+        _stat("Horizon-average vol (ann.)", _fmt_pct(horizon_vol),
+              tooltip="Annualized forecast RMS across the simulated horizon; 252 sessions/year, using the engine innovation convention."),
         _stat("LR t vs normal", f"{fit.lr_t_vs_normal:.1f}",
               token="success" if (fit.lr_t_vs_normal > LR_5PCT and "alpha" not in ab) else "muted",
               tooltip=(f"5% point of the boundary null (half delta-0, half chi-square(1)): {LR_5PCT}"
@@ -316,6 +318,7 @@ def build_quant_lab_page(page: ft.Page,
                 page.update()
                 return
 
+            vol_info = volatility_disclosure(mc)
             blocks: list[ft.Control] = []
             if hist.source == "SYNTHETIC":
                 blocks.append(notice("Synthetic data: " + hist.note, "error",
@@ -329,7 +332,8 @@ def build_quant_lab_page(page: ft.Page,
                 _stat(f"VaR {mc.var_level * 100:.0f}", f"{mc.var_pct * 100:.1f}%"),
                 _stat("CVaR", f"{mc.cvar_pct * 100:.1f}%"),
                 _stat("Drift (ann.)", f"{mc.mu_annual * 100:+.1f}%"),
-                _stat("Vol (ann.)", f"{mc.sigma_annual * 100:.1f}%"),
+                _stat(vol_info["label"], f"{mc.sigma_annual * 100:.1f}%",
+                      tooltip=vol_info["description"]),
             ] + ([_stat("P(terminal ≥ target)", f"{mc.prob_target * 100:.0f}%",
                         token="success")] if mc.prob_target is not None else []),
                 spacing=10, wrap=True))
@@ -357,6 +361,7 @@ def build_quant_lab_page(page: ft.Page,
                 "model": mc.model, "n_paths": mc.n_paths,
                 "horizon_days": mc.horizon_days, "spot": mc.spot,
                 "drift_annual": mc.mu_annual, "vol_annual": mc.sigma_annual,
+                "volatility_definition": vol_info,
                 "median_terminal": mc.median_terminal,
                 "mean_terminal": mc.mean_terminal,
                 "p05": mc.p05, "p95": mc.p95, "prob_loss": mc.prob_loss,
