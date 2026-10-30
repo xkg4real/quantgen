@@ -6,7 +6,7 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T18:27:25.000+09:00
+updated_at: 2026-10-30T19:06:36.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/approved-research-followups-20261030
@@ -17,7 +17,7 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: 46096aec-0aea-49fd-8d87-7452618c5b51
+execution_id: a0dfb643-a8c7-4daf-bd53-13d9ad9b1341
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
@@ -28,6 +28,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 수신하면 O8 지시를 읽었다고 명시하고, 적용한 파일·검사 결과·커밋 또는 비공개 변경 상태·남은 실제 제약을 CURRENT와 메인세션에 보고하세요. 공개 반영은 이미 승인된 범위에 한합니다. 이 지시를 저장한 사실은 메인세션의 수신·적용 완료를 뜻하지 않습니다.
 
 ## 0. 현재 결과
+새 실행 a0dfb643은 직전 실행/작업/인계 ID·branch36df786·OS lock 해제를 대조하고 CAS로 재개합니다. 다음 단위 N-M1-09/N-M1-10의 경고/제약 범위 표시를 제품 main ff421ea에서 별도 gpt 브랜치로 진행합니다. O8 및 기존 완료 작업은 반복하지 않습니다. 기존 solver 목적·가중치·gate는 변경하지 않고 합성 검증과 Flet/Qt 표시·AI/export 근거를 맞춥니다.
 O8 실제 반영 완료: e089e59 + 36df786, draft PR21(연구 브랜치 대상, main 미병합). 스펙 Status/Owner context/O8/Step1b/AppendixB·Windows 런북·결정서·판정록·진행표·실행기록·CI 및 경계 검사를 수정했습니다. 추가 GPT/Gemini는 선택·NOT_PERFORMED이며 미실시만으로 Windows 인계 차단 금지. 기존 Claude 검토·기술/Windows 검증·정식 실행 승인 범위 유지. 일반 승인 범위 수정은 새 일반 사인오프 불필요, 판정/정식 원장/외부 공개는 개별 승인. 임시 원장 20검사 PASS(기존14+새6), CI41032685371 exact36df786에서 Windows/Ubuntu Python3.13 completed success, 2job/원격파일/read-back 확인. 유효 임시 실행조건 검사에 optional 보고서가 없어도 통과하며 R09/R11/R15·호스트·변경 코드/표·freshness·U>24 거부를 보존. 실제 원장/가격/파일럿/owner_confirmed는 실행·부여하지 않았습니다. O11 A2 런타임은 d7b175f 그대로, 등록 명령은 하나입니다.
 Notion 최신 직접 지시: sapientia@korea.ac.kr 연결만 사용. 해당 계정 REMAINING WORK4065c916과 승인4095c916의 실제 적용 완료 결과를 동기화했습니다. 이전 Primary/f77 기록은 이력이며 새 호출은 하지 않습니다. 기존 hourly 예약의 Notion 계정/대상만 최신 지시에 맞춰 갱신/read-back했습니다. 일정/활성화/환경은 유지.
 O8 후속 명시 승인과 우선 적용 지시를 읽고 적용 완료했습니다. 연구 gpt 브랜치 최신36df786/PR21에서 이어갑니다. 비공개 패치 다운로드는 Tunnel connection failed: 403 Forbidden로 실패했으며 우회하지 않았습니다. 읽힌 승인 원문과 현재 스펙/런북/검사를 기준으로 범위가 좁은 문서 정정과 회귀 검사를 완료했습니다. 패치 전체 대조 완료를 주장하지 않습니다. PR23 완료 기록을 보존한 뒤 기존 O11 PR21에서 문서·관련 검사만 통합하며, 중복 초기화 명령이나 승인 경계 변경을 추가하지 않습니다.
