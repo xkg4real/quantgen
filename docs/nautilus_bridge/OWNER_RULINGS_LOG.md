@@ -505,7 +505,7 @@ holidays_FED·KRX·NYSE·SIFMA, kr_sessions, 이 로그, `tests/macro_m1_calenda
 - **기록:** 실행 기록의 데이터 접근 이력(X-1 항목 아래)에도 같은 사실을 적습니다.
 
 
-## 2026-10-30: 승인 범위 정리 — O2~O15 / O8 / O11 A2
+## 2026-10-30: 승인 범위 정리 — O2~O15 / O8 / O11 A2 (후속 O8 결정 전 이력)
 
 - **출처:** 소유자의 2026-10-30 채팅, 비공개 Notion 승인 기록
   `4095c916-fe0c-8173-a4da-e8156aa03ae4`. 비공개 원문을 공개 저장소에 올리지 말라는 지시에 따라
@@ -518,3 +518,15 @@ holidays_FED·KRX·NYSE·SIFMA, kr_sessions, 이 로그, `tests/macro_m1_calenda
 - `tools/nautilus/register_e1.py`: 등록만 수행하고 원래 runner의 R-15, 소유자 확인, 600초 freshness,
   gate 및 파일럿 2의 E1 parity 선행 조건을 유지합니다. 상세 절차: `O11_A2_REGISTRATION.md`.
 - Step 7A와 누적 연구 브랜치 main 병합 서명은 별도입니다. 이 후속 작업 자체가 서명/심사 완료가 아닙니다.
+
+## 2026-10-30: 후속 O8 선택 심사 결정 적용
+
+- 동일 비공개 승인 페이지의 후속 명시 지시를 확인했습니다. 앞의 질문이나 초기 대체 심사 요청에서
+  면제를 추정한 것이 아닙니다. 비공개 원문은 그대로 보존하며 여기에는 범위 요약만 남깁니다.
+- 추가 GPT·Gemini 심사는 선택 사항이며 둘 다 NOT_PERFORMED입니다. Appendix B에 추가 심사 면제를
+  기록했고, 미실시만으로 Windows 인계·후속 절차를 차단하지 않습니다. 기존 Claude 5라운드와 판정은 유지합니다.
+- 승인 범위의 일반 수정·테스트는 포괄 승인입니다. 연구 판정 기준 변경·정식 원장 기록·외부 공개는
+  개별 승인입니다. 코드/표가 바뀌면 영향받는 기술·Windows 검증을 재수행하고 실제 실행용
+  owner_confirmed를 최신 코드/표에 맞춰야 합니다. 기술 검사나 실행 가드를 완화하지 않습니다.
+- 누적 연구 main 병합·실제 Windows 등록·파일럿·owner_confirmed를 완료하거나 대신 승인한 기록이 아닙니다.
+- O11 등록 명령은 기존 register_e1.py 하나를 유지합니다. 별도 initialize_e1.py는 추가하지 않습니다.

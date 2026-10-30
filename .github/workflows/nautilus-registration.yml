@@ -7,11 +7,17 @@ on:
       - tools/nautilus/register_e1.py
       - tests/nautilus_registration_acceptance.py
       - .github/workflows/nautilus-registration.yml
+      - docs/nautilus_bridge/*.md
+      - docs/superpowers/specs/2026-10-26-nautilus-bridge-design.md
+      - docs/superpowers/plans/2026-10-28-nautilus-execution-record.md
   pull_request:
     paths:
       - tools/nautilus/register_e1.py
       - tests/nautilus_registration_acceptance.py
       - .github/workflows/nautilus-registration.yml
+      - docs/nautilus_bridge/*.md
+      - docs/superpowers/specs/2026-10-26-nautilus-bridge-design.md
+      - docs/superpowers/plans/2026-10-28-nautilus-execution-record.md
 
 permissions:
   contents: read

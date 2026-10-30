@@ -22,8 +22,9 @@ are separate from actual Windows acceptance. Existing C3 is never initialized or
 
 ## Before Step 7A
 
-- Step 1b is done: the GPT and Gemini rounds (or a substitute the owner recorded in Appendix B) and the owner's
-  approval, recorded verbatim in the spec's Status block. Step 7A waits for it.
+- Step 1b records the owner's decisions and implemented exceptions. Additional GPT/Gemini review is optional
+  and NOT_PERFORMED under the explicit 2026-10-30 O8 decision in Appendix B. Its absence alone cannot block
+  Windows hand-off. Existing Claude evidence and every technical/Windows acceptance condition remain.
 - Nothing else from QUANTGEN runs meanwhile: no suite run, no frozen-study readout, no pilot (spec 3.8).
 - Power is plugged in. The runner and the suite's layer-2 tests also keep the machine awake (spec 5.3.5, 5.7).
 
@@ -37,7 +38,9 @@ are separate from actual Windows acceptance. Existing C3 is never initialized or
    has moved, Claude merges `origin/main` into the branch first, so the sentence covers the merged branch.
 3. Claude records the sentence verbatim in the spec's Status block, commits, and asks the owner for approval to push;
    on approval, Claude pushes. Every Claude commit leaves `qa/acceptance_results.json` byte-identical and says so.
-   Any code change after the sentence needs a new sentence.
+   Approved ordinary fixes/tests do not need a repeated general sign-off. Rerun affected technical/Windows
+   validation; code/table changes still require fresh execution `owner_confirmed`. Research verdict changes,
+   formal ledger execution and external publication retain separate approvals.
 
 ## 7A.2 The PowerShell block (the owner)
 
@@ -150,13 +153,16 @@ the `\n` of `\ntvenv` into a newline. This line prints it with your path, ready 
 
 ## 7A.4 Claude's review (the next session)
 
-Claude reviews the hand-off report and the census diff; checks that the commit carrying the current sign-off sentence
-is an ancestor of the 7A.3 commit and that `git diff --name-only <sentence commit> <7A.3 commit>` lists only 7A.3's
-files (the census baseline, the egress record, the hand-off report, both tables and `qa/acceptance_results.json`);
+Claude reviews the hand-off report and census diff. The scoped sign-off must remain an ancestor of the 7A.3
+commit. List intervening changes and verify their approved scope. Ordinary fixes require fresh affected
+technical/Windows evidence, not repeated general approval. Record that exact validation baseline commit;
+from it to 7A.3, only evidence files may change (census baseline, egress record, hand-off report, both tables
+and `qa/acceptance_results.json`);
 recomputes `code_sha256` on Linux at the 7A.3 commit with `python3 -B -m tools.nautilus.runner --fingerprint --table
 <table>` and compares it with both tables' `owner_confirmed`; and records the review in the spec's Appendix B.
-Claude's review commit changes only the spec; a review that needs any other change means Step 7A has failed. No pilot
-runs before that review.
+Claude's review commit changes only the spec. If another change is needed, rerun the affected technical/Windows
+checks and refresh code/table-bound `owner_confirmed`; do not reuse stale execution approval. No pilot runs
+before that review. The O8 waiver changes no R-09/R-11/R-15 or freshness requirement.
 
 ## 7A.5 Before Step 8 (the owner)
 

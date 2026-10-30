@@ -310,3 +310,18 @@ PR #10 (`950f25e`) put the test-only fix into `main`, together with one stale UI
   - Against `m2_full`, the two `macro_ui_overlay` rows went from FAIL to PASS, with nothing else changed.
   - The FAIL set is B's two rows. The 57 `nautilus` rows are unchanged.
   - `qa/acceptance_results.json` stayed `16c9baa5a1777853521d485d5078e456`.
+
+
+
+## 2026-10-30 O8 follow-up applied (documentation; prior test history retained)
+
+The initial Step 1b pending-review statements above describe their historical date. The owner subsequently
+made additional GPT/Gemini review optional, with both NOT_PERFORMED and the waiver in Appendix B.
+Missing optional reports alone no longer block Windows hand-off. Existing Claude review evidence and all
+technical/Windows acceptance conditions remain. Ordinary approved fixes/tests need no repeated general
+approval. Research verdict changes, formal ledger execution and external publication keep separate approval;
+actual execution still needs current code/table-bound owner_confirmed after validation.
+
+The O11 A2 implementation remains register_e1.py; no second initializer was added. This update does not
+claim real Windows registration, engine integration, full-suite rerun, actual pilot or research-main merge.
+Only disposable-ledger regression is run for the documentation integration; consult its exact commit's CI.

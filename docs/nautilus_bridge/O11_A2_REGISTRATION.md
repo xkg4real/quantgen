@@ -74,5 +74,7 @@ owner/freshness guards. Local Linux result: 14 PASS. Windows CI is separate
 from the owner's Windows acceptance; consult the exact commit's check result.
 
 The original private approval remains private. Public scope summaries are in
-OWNER_RULINGS_LOG.md and the spec Status / Appendix B. O8 remains
-REVIEW_INCOMPLETE until an actual substitute report and verdict are recorded.
+OWNER_RULINGS_LOG.md and the spec Status / Appendix B. The subsequent 2026-10-30 O8 decision
+makes additional GPT/Gemini reviews optional / NOT_PERFORMED. Missing optional reports do not block
+Windows hand-off. Existing technical/Windows acceptance and separately recorded actual pilot
+`owner_confirmed` remain mandatory; this documentation does not perform real registration or a pilot.
