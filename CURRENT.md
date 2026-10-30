@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/N1, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T11:05:28.000+00:00
+updated_at: 2026-10-30T20:13:33.000+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: gpt/strategy-exposure-disclosure-20261030
-work_commit: 6bd4a208020998379a49acaeb1ee4a6fff3c49b3
+work_commit: 437ca29c7439b4e27030cca3e86de39abd5538ab
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/27
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -130,3 +130,6 @@ UI/PR/main 권한은 이미 해결됐고 native 잔여 구현을 막는 승인 �
 직전 실행 a0dfb643의 task/handoff/branch/e550187와 STATE를 대조하고 새 실행 fb4e7f11-2fc5-4222-a172-bdd3812c8392로 재개합니다. N1 종목당 cap/총노출 표시가 이번 단위이며 기존 Strategy Lab 공유 workflow·양 UI 파일은 이 누락 설명을 위해 수정합니다. 계산·비중·DSR·판정·원장 의미는 유지하고 합성/주입 검사만 수행합니다. 이전 0/10절은 완료 이력입니다.
 
 N1 원문은 Model26(vol_target)뿐 아니라 Model30(crypto_trend)의 다종목 합산도 포함합니다. 두 계열의 종목당 cap·OOS 총노출·차입/벤치마크 범위를 같은 공유 설명으로 표시합니다. 새 브랜치는 검증된 제품 main6bd4a208에서 분리했습니다.
+
+## 12. N1 구현/검사 체크포인트
+source437ca29c7439b4e27030cca3e86de39abd5538ab / PR27 원격 push/read-back 완료. vol_target+crypto_trend 종목별 cap, 실제 선택된 OOS 총노출/차입, 1배 벤치마크를 표시합니다. 실제 Flet 검사에서 발견한 날짜322/자산곡선323 오류는 초기자산 날짜를 추가해 수정했습니다. 새6+기존5검사 통과, main6bd4a208 대비 합성4실행의 기존 계산값 완전 동일. strategies/validate/gate_ledger 파일 byte 불변. 현재 CI 대기이며 아직 main 병합·LEDGER 완료 기록은 하지 않았습니다. 다음 소유권은 이 front matter 기준입니다.
