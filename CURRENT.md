@@ -10,9 +10,9 @@ updated_at: 2026-10-30T21:23:54.076+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/letf-study-disclosure-20261030
-work_commit: 39d92efb84389f6d7ae40c5502e629d52562d2bf
+work_commit: f72b14745ff223ffab7a80afdd32f35d753ad632
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/30
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -95,3 +95,5 @@ PR29 source 414ce3e440de0dbe977a6b3856c95f2ea8b57f70: README 수정으로 stale�
 
 ## M4-N2 시작
 현재 동일 execution으로 새 gpt/letf-study-disclosure-20261030에서 ETF 분산proxy/연구근거구분을 진행합니다. 이전 완료범위를보존하며 수치계산·기초지수·금리/배당규약은변경하지않습니다.
+
+M4-N2 source f72b14745ff223ffab7a80afdd32f35d753ad632 PR30: 기존5펀드5340값/배열 완전동일, 합성/주입16검사 PASS. ETF proxy/실현drag·역사적122630근거구분 구현, CI확인중. 해당commit병합전에는완료로집계하지않습니다.
