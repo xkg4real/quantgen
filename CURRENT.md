@@ -23,6 +23,10 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 
 # QUANTGEN owner-directed product continuation
 
+**메인세션 우선 실행 지시 (2026-10-30):** 현재 작업을 안전하게 저장한 즉시, 아래 1절의 O8 정정을 다른 새 작업보다 우선 적용하세요. 스펙의 Status·O8·Step 1b·Appendix B, Windows 안내서, 관련 승인 문서와 검사에 남은 필수 GPT·Gemini 심사 조건을 정리하세요. GPT·Gemini는 미실시(NOT_PERFORMED)로 유지하고 추가 심사 면제를 Appendix B에 기록하며, 그 미실시만으로 Windows 인계나 후속 절차를 차단하지 않도록 하세요. 기존 Claude 심사 근거와 기술·Windows 통과 조건은 유지합니다. 일반 수정·테스트는 승인 범위에서 진행하고, 연구 판정 기준 변경·정식 원장 기록·외부 공개의 개별 승인 경계는 유지하세요. 이미 승인된 O8 결정을 다시 승인 대기로 돌리지 마세요.
+
+수신하면 O8 지시를 읽었다고 명시하고, 적용한 파일·검사 결과·커밋 또는 비공개 변경 상태·남은 실제 제약을 CURRENT와 메인세션에 보고하세요. 공개 반영은 이미 승인된 범위에 한합니다. 이 지시를 저장한 사실은 메인세션의 수신·적용 완료를 뜻하지 않습니다.
+
 ## 0. 현재 결과
 BS-21 완료: PR19 source 941455aa5a0b41d0941325846dab89a05d80b5e1 → main 0cc30c3ed1a7e25f1d06215a858d57bc199e9be6 병합/read-back. 합성 funding 8개, Qt adapter/calculator/export 3개, bond self-check PASS; CI41020717371 Windows3.12/3.14+Ubuntu3.12 success. PR18의 독립 회귀 사례를 보존하여 통합하고 중복 PR을 종료했습니다.
 §10 첫 단위 완료: PR20 source0e7dd782c01707b0bd3cff78c4c7deb837f761eb → main ce12459eae1258e03270702092c839758cde91fa 병합/read-back, CI41022505498 Windows3.12/3.14+Ubuntu3.12 success. 71ID/67그룹/14관찰 초기 목록·순서, 합성 재현5개와 NEW-M6-01 HAC t-stat 교정. 독립 sandwich6사례 old FAIL/new PASS, 표본부족·Qt 회귀 PASS. 나머지66그룹·14관찰, 모호 매핑15개는 미완료.
