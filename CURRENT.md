@@ -4,9 +4,9 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T21:15:54.375+09:00
+done_ids: ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ②-5/M4-N2, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-30T21:23:54.076+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/funding-inference-20261030
@@ -25,12 +25,10 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 최신 결과
-제품 main c9a03ce9a71bf1ab81b733fd4dc40ffa6c2c1117. 현재 source696ee3cb9eaf5190db649be58d46754d865dc5c5 / gpt/ar1-decay-disclosure-20261030. 실행 89641371-412d-4208-beb9-0e10cdb8d772.
-- N1: PR27 source437ca29c7439b4e27030cca3e86de39abd5538ab → main93f31a3158c4b49a348d9e91f2842e3640605fdc. vol_target/crypto_trend의 종목당 상한, 실제 선택된 OOS 총노출/차입 및1배 벤치마크 범위를 Flet/Qt/AI/JSON·ZIP에 명시. Flet의 초기 equity 날짜 누락도 재현 후 수정. 집중6+기존5검사 PASS,4baseline 계산값 완전 동일. CI41046492566 Windows3.12/3.14·Ubuntu3.12 모두success.
-- NEW-M6-03: PR28 source696ee3c → mainc9a03ce. 음수 안정 AR(1)의 진폭 반감기를 abs(phi)기준으로 정정. MONOTONE/OSCILLATING/NO_MEMORY/NON_DECAYING/NOT_ESTIMATED 구분과 ETF/Crypto UI·해설·AI·내보내기 의미 반영. 집중5+시장/AI/HAC 포함22검사 PASS. 양수4사례 기존값 완전 동일, pairs PnL/turnover/선택/모든점수 동일. 다른strategy함수AST와 validation/ledger파일 불변. CI41048097118 동일3환경 모두success.
-두 PR/source/main/CI를 원격 read-back했고 완료 LEDGER는 append-only c204ac05(N1),2efdc6f7(NEW-M6-03), 최신 blob34b26918149f4573f73e511d14c5dc11a5aaf548까지 재확인했습니다. sapientia 계정 REMAINING WORK4065에 완료 하위 범위만 취소선·현재 집계를 반영했습니다.
-§10 최신 **10/67그룹 완료,57그룹·14관찰 모델 행·15모호 ID 매핑 미완료**입니다. 과거 다른 세션의13관찰/13매핑과 집계 단위 차이는 해소 전입니다. 원문10.1은14개 모델 행입니다.
-전체 요청/주간 cycle을 완료하거나 returned 처리하지 않습니다. 직접 작업은 in_progress, 다음 단위 NEW-M6-02입니다. 실제 Windows 육안/DPI·공급자/AI·실원장/파일럿/owner_confirmed·서명 installer·사이트 배포는 여전히 미실행/미완료입니다.
+PR29 NEW-M6-02/a source 414ce3e440de0dbe977a6b3856c95f2ea8b57f70 → main 39d92efb84389f6d7ae40c5502e629d52562d2bf. 잘못된 IID p를 사용 중단하고 시간순서·중첩·군집을 보존하는 조건부 순환위상 탐색 진단을 Flet/Qt/AI/JSON·ZIP에 연결했습니다. 저장 카드와 공식 판정은 바꾸지 않았으며 historical/not-revalidated로 구분합니다.
+합성/주입23검사 + snapshot/Home15검사 PASS. 독립 귀무300회 old117/300 대 phase13/300. uniform-phase orbit oracle PASS. 실제시장 가정/기존카드 재검증은 미완료라 NEW-M6-02 부모는 닫지 않았습니다. 총10/67완료·57미완료,14관찰행·15모호매핑 유지.
+최초 CI41054037012는 README로 무효화된 status snapshot 때문에 실패했고414ce3e로 수정했습니다. 최종 CI41054330786 Windows3.12/3.14·Ubuntu3.12 모두success, PR/source/main/append-only LEDGER52707c7 및 Notion sapientia4065 완료하위범위 반영 성공.
+기존 PR27 N1/PR28 AR1 완료를 보존했습니다. 다음 독립 단위 M4-N2(=NEW-M6-08)입니다. 전체요청/주간cycle은 완료 또는returned가 아닙니다.
 
 ## 1. 최신 사용자 결정
 - 직접 요청 작업은 일반 감시의 returned/cooldown/next_eligible_at으로 막지 않습니다. Claude 사용 불가 동안 계속하고 화요일17시 전 또는 런타임 한도 전에 주간 전체 인수인계를 남깁니다. 계정 토큰 잔량은 도구가 없어unknown입니다.
@@ -62,16 +60,13 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 외부 main51bac973 상업출시 방향 README변경은 보존됐으며 법률 검증 증거로 대신 쓰지 않습니다.
 
 ## 5. 현재 저장 상태
-제품 브랜치 gpt/ar1-decay-disclosure-20261030 @696ee3cb9eaf5190db649be58d46754d865dc5c5는 원격검증/PR28병합됐고 working tree clean입니다. 다음 단위는 최신main에서 새gpt브랜치로 분리합니다.
-연구 로컬 허용 사본 HEAD2da6469에 published36df786 파일들이 working copy로 보존돼 있으므로 그 HEAD를 최신으로 오인하거나 reset하지 마세요.
-이번 동일 실행에서 기존 전략/시장UI 파일 수정은 N1 노출설명과 AR1 진단오류 정정에 필요했습니다. 이후 같은파일을 고칠 때도 LEDGER의 이미 끝난 범위를 보존합니다.
+제품 gpt/funding-inference-20261030 @414ce3e440de0dbe977a6b3856c95f2ea8b57f70 원격검증/PR29병합, working tree clean. 기존crypto 계산/표시 수정은 NEW-M6-02/a에 필요했으며 다른crypto 함수AST·validation/ledger source는 불변입니다. 연구로컬 HEAD2da6469에 published36df786 working files 보존, reset금지.
 
 ## 6. 다음 단위와 남은 일
-1. ②-5/NEW-M6-02: core/crypto/analytics.py funding_carry 및 shared crypto_workflow·Flet·Qt를 원문Model136과 대조합니다. 현재30관측 선행수익은 겹치고 funding분위는 전표본, bootstrap은각그룹iid입니다. 현재의 부호비율을 보정된 유의확률로 쓰면 안 됩니다. 독립 합성 귀무자료로 중첩/군집의 영향을 검증하고 유효추론과 기술통계를 구분하세요. 기존 M_C4저장카드/판정·문턱·실원장은 변경/재실행하지 않습니다. historical300회FPR0.373은 이번 새 재현이 아닙니다.
-2. §10 나머지57그룹/14관찰/15모호매핑 및 감사 우선순위를 이어갑니다. 일부표시정정만으로 전체 통계결함이나부모과업을 완료 처리하지 않습니다.
-3. ⑬-2/k 실제Windows표시/DPI/키보드/파일대화상자/선택provider 검수·서명installer는 실제사용환경 인수가 남습니다. ⑬-1/c 전체모델/과거이력/canonicalidentity·공식gate계약도 별도입니다.
-4. 실제O11Windows등록/Step7A/공급사대조/파일럿과 owner_confirmed,데이터권리/전문법률/AWS외부입력은 완료증거가 없습니다. 이전 AWS download CONNECT403을 우회하지 않습니다. TRADEGEN consumer는 현재태스크 범위밖입니다.
-5. 화요일2026-11-03 16:00KST부터 새큰작업을 시작하지 않고 주간전체완료/미완료/막힌일/테스트/commit/PR/재현/다음단계를 정리해17시전에returned+read-back합니다.
+1. ②-5/M4-N2 (=NEW-M6-08): 연구ref2da6469 Model95와 core/research/etf_workflow.py의 prior-quarter variance AZ proxy를 대조. 연구의 더 나은 비교기준은 실제 전분기 가격실현drag이며 현재화면 proxy와 다른 양. 계산값 유지, better-guide/현재입력펀드 검증오인 제거, Flet/Qt/AI/export회귀. M4-N1 기초지수/M4-N3금리·배당은 별도 미완료입니다.
+2. NEW-M6-02/b: 현재조건부 phase 탐색진단의 실제시장 가정·구조변화·사전분위·유효사건수 검증과 역사카드 재검증은 미완료. 공식판정/동결연구는 기존승인범위밖으로 유지하고 새p를 기존gate에 연결하지 않습니다.
+3. §10 나머지57그룹/14관찰/15모호매핑, 전체ResearchRun모델/이력/canonicalidentity, 실제Windows/DPI/provider검수·서명installer, O11실제등록/Step7A/파일럿/owner_confirmed, 데이터권리/전문법률/AWS외부입력은 미완료입니다.
+4. 화요일2026-11-03 16:00부터 주간전체인계를 준비하고17시전에returned+read-back. 직접작업은hourly유지,사용자PC/TRADEGEN/환경설정/새예약 변경금지.
 
 ## 7. 보호 범위
 .env/보호캐시4개/실제원장/동결연구/사전등록/holdout을 읽거나해시/변경하지 않습니다. 실주문/TRADEGEN/공식gate·판정/owner승인규칙/공유환경·보안·네트워크설정 변경 금지. AUTO_STATE수동수정 금지. 비공개원문·키·계좌를 public repo에 올리지 않습니다. 테스트는합성/주입/임시저장소만 사용합니다.
@@ -79,10 +74,8 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 ## 8. 승인 및 외부 의존성
 O8선택심사,UI/PR/main의 기존승인을 다시 묻거나 승인대기로 되돌리지 않습니다. 실제 연구판정·정식원장·외부공개와 Windows증거/실행확인은 별도입니다. 현재 waiting_on=none은 다음 독립수정이 가능하다는 뜻이며 미실행파일럿을 승인했다는 뜻이 아닙니다.
 
-## 9. 예약/Claude 재개
-STATE transition=cloud_owns_monitoring, 동일환경/비공개자료/OS RUN.lock을 먼저 검증합니다. 직전 execution 89641371-412d-4208-beb9-0e10cdb8d772, task owner-product-workflow-20261029, 기존handoffID, branch gpt/ar1-decay-disclosure-20261030, source696ee3c가 STATE/원격CURRENT와 일치해야 합니다. 새 execution으로 최신CURRENTblob CAS 후 원격read-back으로만 재개합니다. from=gpt만으로 소유권을 추정하지 않습니다.
-최신main을 받아 새gpt브랜치에서 다음단위를 진행합니다. 직접 미완료작업 때문에 기존hourly예약은 유지하고 다음목요일로 밀지 않습니다. 정상대기알림/새예약/run_now/로컬수정은 하지 않습니다.
-Windows앱: python -m pip install ".[desktop]" ; python -m quantgen_desktop 또는 Start-QUANTGEN-Desktop.cmd. 브라우저:Flet 유지. 실제 사용자PC는 이태스크에서 실행/변경하지 않습니다.
+## 9. 재개 절차
+STATE/동일환경/private자료/OS RUN.lock을 먼저 검증합니다. execution89641371-412d-4208-beb9-0e10cdb8d772, task owner-product-workflow-20261029, 기존handoffID, gpt/funding-inference-20261030 @414ce3e440de0dbe977a6b3856c95f2ea8b57f70가 로컬/원격에 일치해야 합니다. 최신CURRENTblob CAS+고유새execution 원격read-back 후 최신main에서새gpt브랜치로 다음단위를 진행합니다. from=gpt만으로소유권추정금지. 직접작업 때문에returned/cooldown대기금지. 실제외부승인/연구판정·정식원장·공개경계는유지합니다.
 
 ## 10. 검증/인계 파일
 N1: python -m unittest tests.strategy_exposure_acceptance tests.desktop_strategy_exposure_acceptance tests.desktop_strategy_acceptance -v (11검사).
@@ -96,3 +89,6 @@ AR1: python -m unittest tests.ar1_decay_acceptance tests.desktop_ar1_decay_accep
 source 07ab7d41a82dbd20e3e5f5d284f6b0580906c1c8: invalid IID p retired, exhaustive circular-phase exploratory diagnostic + Flet/Qt/AI/export/historical-card 표시 반영. 합성/주입23검사 PASS, 독립 귀무300회 old117/300 vs phase13/300. 조건부 가정이며 실제시장/기존카드 재검증 아님. PR29 CI 확인 전; 전체 NEW-M6-02 완료 아님. 10/67 완료·57미완료 유지.
 
 PR29 source 414ce3e440de0dbe977a6b3856c95f2ea8b57f70: README 수정으로 stale이 된 상태 스냅샷을 재생성했습니다. 최초 CI41054037012의 설치 smoke 실패 원인은 stale snapshot이며 로컬 status/Home 추가15검사 PASS. 새 HEAD의 CI 완료를 기다립니다.
+
+## 11. 펀딩 검증
+공개 docs/product/FUNDING_INFERENCE_2026-10-30.md, tests/{funding_inference,desktop_funding_inference}_acceptance.py 및 tools/status/funding_null_probe.py 참조. private reports/FUNDING_EVIDENCE.json,FUNDING_NULL_PROBE.json,FUNDING_TESTS.log 보존. 등록만으로자동실행완료를주장하지않습니다.
