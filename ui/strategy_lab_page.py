@@ -28,6 +28,7 @@ from ui.components import card, chip, empty_state, notice, section, stat
 import ui.xcharts as xc
 from core.research.strategy_workflow import FAMILIES, FAMILY_ID, _MARKET, register_trials, narrative, payload, _study_card
 from core.research.strategy_workflow import run_family as _run_family
+from core.research.strategy_exposure import EXPOSURE_HELP, exposure_lines
 
 ROOT = Path(__file__).resolve().parents[1]
 CARDS_DIR = ROOT / "docs" / "asset_expansion" / "cards"
@@ -127,6 +128,7 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
                 busy.visible = False; page.update(); return
             sc = r["score"]
             blocks: list[ft.Control] = []
+            blocks.extend(notice(line, "accent") for line in exposure_lines(r.get("exposure")))
             if "SYNTHETIC" in r["sources"]:
                 blocks.append(notice("Synthetic data in the panel: the verdict below is a toy.", "error", icon=ft.Icons.SCIENCE_OUTLINED))
             if r.get("convention"):
@@ -157,7 +159,11 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
                      tooltip=f"difference {sc.bench_diff:+.2f}, one-sided p {sc.bench_p:.2f}" if math.isfinite(sc.bench_p) else ""),
                 stat("Haircut SR", f"{sc.haircut_sr:.2f}"),
             ], spacing=10, wrap=True))
-            blocks.append(card(xc.equity_chart(r["wf"].dates, r["equity"], r["bench_equity"], title=f"{r['label']}: out-of-sample equity")))
+            # equity_curve includes initial wealth 1 before the first OOS return.
+            # Give that point its preceding price date; never drop an OOS return.
+            first = r["panel"].dates.index(r["wf"].dates[0])
+            equity_dates = (r["panel"].dates[first - 1], *r["wf"].dates)
+            blocks.append(card(xc.equity_chart(equity_dates, r["equity"], r["bench_equity"], title=f"{r['label']}: out-of-sample equity")))
             blocks.append(card(ft.Column([ft.Text("• " + ln, size=12, color=pal.text, selectable=True) for ln in sc.lines], spacing=4)))
             blocks.append(analysis_panel(page, kind="strategy_gate", narrative=narrative(r),
                                          payload_fn=lambda p=payload(r): p, deep_fn=insights.deep_analysis))
@@ -167,6 +173,7 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
 
     lab = ft.Column([
         ft.Text("Run a family through the gate", size=15, weight=ft.FontWeight.W_600, color=pal.text),
+        notice(EXPOSURE_HELP, "accent"),
         ft.Row([family, symbols, source, cost, days, ft.Button("Run", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy],
                spacing=10, wrap=True),
         host,

@@ -1,6 +1,7 @@
 """Native Strategy Lab. Existing costs, trials and gate decisions stay distinct."""
 from core.research.strategy_analysis import StrategyRequest
 from core.research.strategy_workflow import FAMILIES, narrative, payload
+from core.research.strategy_exposure import EXPOSURE_HELP, exposure_lines
 from .tools import ToolPane, number, fmt
 
 
@@ -16,6 +17,7 @@ class StrategyPane(ToolPane):
         from .app import label
         self.input_box.layout().addWidget(label('실데이터 실행은 기존 연구 원장에 시행을 기록합니다. 합성 실행은 기록하지 않습니다. '
             '현재 Lab의 DSR 시행 수는 이번 그리드 수입니다. 누적 원장 기반 전환은 별도 작업입니다.', 'caption'))
+        self.input_box.layout().addWidget(label(EXPOSURE_HELP, 'caption'))
 
     def make_request(self):
         if self.tool.currentData() == 'cards':
@@ -42,6 +44,8 @@ class StrategyPane(ToolPane):
                   f"sources={', '.join(d['sources'])} · {len(d['panel'])} shared sessions · {d['cost_bps']:g} bp/side")
         if 'SYNTHETIC' in d['sources']:
             self.text('SYNTHETIC · 아래 점수는 합성 시연입니다. 공식 연구카드 판정이 아닙니다.')
+        for line in exposure_lines(d.get('exposure')):
+            self.text(line)
         self.text(f"Decision: {safe['decision']} · {safe['reason']}")
         self.text(f"Grid/DSR trials {len(d['grid'])}/{sc.n_trials} · cumulative ledger configurations {d['ledger_n']}\n"
                   f"Walk-forward: {wf.note} · last in-sample winner: {d['chosen']}")
