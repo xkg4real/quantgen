@@ -1,4 +1,4 @@
-# Native PyQt6 desktop migration — first verified slice
+# Native PyQt6 desktop migration — native workflows and acceptance status
 
 The desktop now has a separate native Qt entry point. Browser access still uses
 the existing Flet `main.py`; neither its routes nor calculation engines changed.
@@ -22,8 +22,8 @@ commercial distribution; current repository policy remains personal use.
 | Workspace | Working native scope | Limits |
 |---|---|---|
 | Research Home | Session Monte Carlo counts, daily market observations, last computed fan and provenance | Counts exclude portfolio optimizations; no historical ledger scan |
-| Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary; Derivatives board, ETF sleeves, Crypto analytics and six KRX datasets | Native Macro v2 overlay/cards/register use the existing validated readers; optional AI panels pending. Native ETF/Crypto study cards are explicitly NOT_LOADED |
-| Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Strategy Lab seven-family validation and explicit study-card viewer; AI commentary panel pending |
+| Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary; Derivatives board, ETF sleeves, Crypto analytics and six KRX datasets | Native Macro v2 overlay/cards/register use the existing validated readers; optional AI commentary is in Research Library. Native ETF/Crypto study cards are explicitly NOT_LOADED |
+| Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Strategy Lab seven-family validation and explicit study-card viewer; optional AI commentary is in Research Library |
 | Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices; technical composite and three costed backtests | Explicit JSON/ZIP exports; native paper-only runtime controls |
 | Research Library | Session Monte Carlo results, native JSON and report ZIP save dialog | No persistent history browser; only explicit export |
 | System | Existing bounded recorded-status verification, native theme switch | Explicit presence and KRX/FICC/KIS/Crypto probes; native rule editor with blank financial inputs |
@@ -45,12 +45,12 @@ raw credential-bearing URLs. Failed Monte Carlo runs are retained in the session
 ## Remaining migration, in order
 
 1. Rates/FX native computation branches are ported; live provider acceptance remains pending.
-   The optional AI panels remain in Flet. Rates uses the existing curve coverage policy
+   The optional AI commentary uses the existing backend. Rates uses the existing curve coverage policy
    and does not incorporate the separate Claude PT-04 branch.
 2. Derivatives, ETF, Crypto and KRX native adapters are implemented. Live API acceptance remains pending.
 3. Macro v2 and Strategy Lab are ported; preserve trial registration,
    gate/provenance semantics and approval boundaries; no live stores in tests.
-4. Paper-only Trading, Rules and Settings are ported. The optional AI commentary panel remains pending.
+4. Paper-only Trading, Rules and Settings are ported. Optional AI commentary is available in Research Library.
    No broker order path or TRADEGEN code belongs in this migration.
 5. Keyboard/focus, resize/DPI, installer/icon and actual Windows visual acceptance;
    compare every native route with its retained Flet counterpart.
@@ -62,7 +62,7 @@ preview's scope notices identify where the Flet application is still required.
 ## Verification commands
 
 ```text
-python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.desktop_strategy_acceptance tests.desktop_macro_acceptance tests.desktop_paper_acceptance tests.packaging_policy_acceptance -v
+python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.desktop_strategy_acceptance tests.desktop_macro_acceptance tests.desktop_paper_acceptance tests.desktop_commentary_acceptance tests.packaging_policy_acceptance -v
 python -m unittest tests.research_contract_acceptance tests.research_home_acceptance -v
 ```
 
@@ -122,3 +122,34 @@ The editor requires disarming and completion of an in-flight tick before modific
 A sidebar emergency stop remains available across all workspaces. Engine callbacks enter
 the GUI through Qt signals; closing disarms/stops the loop and waits for an active provider
 call. Tests use temporary rules/engine files and injected providers; no actual ledger is used.
+
+## Optional AI commentary
+
+Research Library lists completed calculation snapshots. Preview and a separate explicit
+send action precede every request through the existing Anthropic backend. Opening the app,
+navigating, calculating or preparing the preview makes no AI call. Connection settings,
+Macro v2 owner records, Rules and paper stores are excluded; account/holdings sections are
+removed from eligible reports. Questions and returned diagnostics are redacted for common
+credential forms. Daily/weekly macro requests retain the existing report-format prompts.
+Responses remain AI commentary, not gate results; errors clear stale response exports.
+All acceptance responses are injected. No real API/key availability is claimed.
+
+## Windows launch and remaining acceptance
+
+After installing `.[desktop]`, run `Start-QUANTGEN-Desktop.cmd` from this checkout (or
+`python -m quantgen_desktop`). The launcher selects the checkout `.venv` first, then the
+existing `%LOCALAPPDATA%\QUANTGEN\venv`; it does not install dependencies or edit PATH.
+Browser use remains `flet run main.py --web --host 127.0.0.1 --port 8550`.
+
+CI proves an installed wheel starts outside the checkout and bounded fixture tests pass
+on Windows Python 3.12/3.14 and Ubuntu 3.12. It is not a signed Windows installer or a real
+monitor/DPI acceptance. Before treating this preview as the default replacement, check:
+
+- Windows 100%, 125%, 150% scaling: six workspaces, sidebar, long record tables, keyboard focus.
+- Light/dark mode, window resize, F1 taskbar icon and saved JSON/ZIP dialogs.
+- Synthetic calculation and rule/paper flow; optional real providers only with valid user rights.
+- Closing during a job keeps the window; closing an armed paper session stops its loop.
+- Flet browser launch remains available independently.
+
+Remaining external work: live-provider/AI acceptance, manual Windows visual/DPI verification
+and any chosen standalone signed installer. These are not marked complete by offscreen CI.

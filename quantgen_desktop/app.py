@@ -94,7 +94,7 @@ class ResearchWindow(QMainWindow):
                  derivatives_runner=execute_derivatives, etf_runner=execute_etf,
                  crypto_runner=execute_crypto, krx_runner=execute_krx,
                  connections_runner=execute_connections, strategy_runner=execute_strategy,
-                 macro_records_runner=execute_macro_records, paper_factory=None, auto_refresh=True):
+                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True):
         super().__init__()
         self.session = session or SessionResearch()
         self.market_loader, self.analysis_runner = market_loader, analysis_runner
@@ -108,6 +108,7 @@ class ResearchWindow(QMainWindow):
         self.connections_runner = connections_runner
         self.strategy_runner = strategy_runner
         self.macro_records_runner = macro_records_runner
+        self.commentary_runner = commentary_runner
         self.tool_names = ('rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx','connections','strategy','macro_records')
         self.outputs = {}
         self.active_run = None
@@ -352,7 +353,29 @@ class ResearchWindow(QMainWindow):
         self.export_status = label("현재 저장 대상은 Monte Carlo 실행입니다. 자동 저장되지 않으며 경로는 직접 선택합니다.", "muted")
         layout.addWidget(self.export_status)
         layout.addWidget(label("재현성 PARTIAL · 데이터 빈티지/라이선스 미검증 · 비용 NOT_APPLIED · 검증 NOT_RUN\n동결 연구·과거 원장·비밀 설정을 탐색하지 않습니다.", "caption"))
+        from .commentary import CommentaryPane
+        options = {'runner': self.commentary_runner} if self.commentary_runner else {}
+        self.commentary = CommentaryPane(self.commentary_sources, **options)
+        layout.addWidget(self.commentary)
         layout.addStretch()
+
+    def commentary_sources(self):
+        """Only explicit calculation results, never stores/settings/owner records."""
+        result=[]
+        for run in self.session.runs():
+            if run['execution_status'] != 'COMPLETED': continue
+            result.append(('Monte Carlo · '+str(run['parameters'].get('symbol','')), {
+                'tool':'monte_carlo','execution_status':'COMPLETED','verdict':run['verdict'],
+                'reproducibility':run['reproducibility'],'parameters':run['parameters'],
+                'sections':[{'type':'metrics','data':run['metrics']},{'type':'data','data':run['data']}]}))
+        for name in ('portfolio','bonds'):
+            report=getattr(self,name).exports.report
+            if report:result.append((name,report))
+        for name in self.tool_names:
+            if name in {'connections','macro_records'}: continue
+            report=getattr(self,name).report
+            if report and report.get('parameters',{}).get('tool')!='cards':result.append((name,report))
+        return result
 
     def make_system(self):
         layout = self.page("System", "기록된 근거와 이번 실행 결과를 구분합니다.")
@@ -379,7 +402,7 @@ class ResearchWindow(QMainWindow):
         inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
-        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙 연결 완료 / 남은 이전: AI 분석 패널\n브라우저: 기존 Flet 앱을 유지합니다."))
+        inner.addWidget(label("PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다."))
         inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
         layout.addWidget(box)
         layout.addStretch()
@@ -602,7 +625,7 @@ class ResearchWindow(QMainWindow):
             chart.update()
 
     def closeEvent(self, event):
-        if self.jobs.busy or self.paper_session.jobs.busy:
+        if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy:
             event.ignore()
             self.statusBar().showMessage("진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다.")
             return

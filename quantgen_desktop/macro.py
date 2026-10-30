@@ -19,7 +19,7 @@ class MacroPane(ToolPane):
             [('sheet','Macro sheet'),('daily','Daily commentary'),('weekly','Weekly rates & FX')],
             [('auto','Auto · synthetic fallback'),('fred','Live providers only · no fallback'),('synthetic','Synthetic demo')],
             {k:[] for k in ('sheet','daily','weekly')})
-        self.status.setText('이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 Flet에 유지됩니다.')
+        self.status.setText('이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 Markets의 Macro v2 탭에서 확인합니다.')
 
     def make_request(self):
         return MacroRequest(tool=self.tool.currentData(),source=self.source.currentData())

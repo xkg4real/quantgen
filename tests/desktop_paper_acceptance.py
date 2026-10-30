@@ -93,6 +93,21 @@ class NativePaperTests(unittest.TestCase):
             with self.assertRaises(OSError):p.save()
         self.assertEqual(s.store.get(old.id),old)
 
+    def test_rule_pause_while_armed_preserves_latest_trigger_count(self):
+        s=self.open();r=fixture_rule().confirm().activate();s.save(r)
+        s.runtime.arm();p=self.window.rules;p.rules.selectRow(0)
+        newer=replace(r,trigger_count=2);s.store.save(newer)
+        s.pause(r)
+        self.assertEqual(s.store.get(r.id).trigger_count,2)
+        self.assertEqual(s.store.get(r.id).status,RuleStatus.PAUSED)
+        self.assertEqual(s.runtime.mode,EngineMode.ARMED)
+
+    def test_failed_pause_persistence_halts_engine(self):
+        s=self.open();r=fixture_rule().confirm().activate();s.save(r);s.runtime.arm()
+        with patch.object(s.store,'_flush',return_value=None):
+            with self.assertRaises(OSError):s.pause(r)
+        self.assertEqual(s.runtime.mode,EngineMode.HALTED)
+
     def test_halt_is_global_and_ack_never_rearms(self):
         s=self.open();s.runtime.arm();self.assertEqual(s.runtime.mode,EngineMode.ARMED)
         self.assertFalse(self.window.rules.form.isEnabled())

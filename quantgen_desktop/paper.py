@@ -71,6 +71,28 @@ class PaperSession(QObject):
         self.changed.emit()
         return rule
 
+    def pause(self, rule):
+        # A pause is available even while armed. Serialize against a live tick
+        # so an old UI snapshot cannot overwrite its new trigger count.
+        if self.runtime is None: raise ValueError('Open the session first')
+        if not self.runtime._tick_lock.acquire(blocking=False):
+            raise ValueError('A tick is finishing; use emergency stop or retry pause')
+        try:
+            latest=self.store.get(rule.id)
+            if latest is None or latest.status is not RuleStatus.ACTIVE:
+                raise ValueError('Rule is no longer active; reload')
+            paused=latest.with_status(RuleStatus.PAUSED)
+            self.store.save(paused)
+            try:
+                payload=json.loads(self.store.path.read_text(encoding='utf-8'))
+                if to_dict(paused) not in payload.get('rules',[]): raise OSError('Pause read-back mismatch')
+            except Exception:
+                self.runtime.halt(detail='Rule pause could not be persisted')
+                raise OSError('Pause persistence verification failed; engine halted') from None
+            self.changed.emit()
+        finally:
+            self.runtime._tick_lock.release()
+
     def delete(self, rule):
         self.editable()
         if self.store.get(rule.id) != rule: raise ValueError('Rule changed; reload it')
@@ -266,7 +288,8 @@ class RulesPane(QWidget):
 
     def change_status(self):
         rule=self.selected()
-        if rule.status is RuleStatus.ACTIVE:new=RuleStatus.PAUSED
+        if rule.status is RuleStatus.ACTIVE:
+            self.session.pause(rule);self.status.setText('PAUSED');return
         elif rule.status in (RuleStatus.CONFIRMED,RuleStatus.PAUSED) and rule.is_confirmed and validate(rule).ok:new=RuleStatus.ACTIVE
         else:raise ValueError('Confirm a valid rule before activation')
         self.session.save(rule.with_status(new),rule);self.status.setText(new.value+' · 엔진 Arm은 별도입니다.')
@@ -293,7 +316,8 @@ class PaperPane(QWidget):
             ('tick','한 번 평가',session.tick),('reset','모의 기록 초기화',self.reset)]:
             b=QPushButton(title);b.clicked.connect(lambda checked=False,f=fn:self.guard(f));actions.addWidget(b);self.buttons[key]=b
         layout.addLayout(actions)
-        self.dashboard=QPlainTextEdit();self.dashboard.setReadOnly(True);self.dashboard.setMinimumHeight(200);layout.addWidget(self.dashboard)
+        self.dashboard=label('아직 세션을 읽지 않았습니다.');layout.addWidget(self.dashboard)
+        self.venues=table(['Market','Trading state','Reason','Active rules']);self.venues.setMinimumHeight(150);layout.addWidget(self.venues)
         self.orders=table(['ID','Symbol','Side','Quantity','Kind','Trigger','Limit']);self.orders.setMinimumHeight(200);layout.addWidget(self.orders)
         settle=QHBoxLayout()
         for title,fn in [('선택 모의 체결',lambda:self.settle(True)),('선택 모의 취소',lambda:self.settle(False))]:
@@ -317,7 +341,15 @@ class PaperPane(QWidget):
         if runtime is None:return
         self.buttons['tick'].setEnabled(not self.session.jobs.busy)
         d=runtime.dashboard()
-        self.dashboard.setPlainText(safe_detail(json.dumps({k:v for k,v in d.items() if k!='open_orders'},default=str,ensure_ascii=False,indent=2),limit=None))
+        counts=d['orders_today']
+        self.dashboard.setText(safe_detail(
+            f"{d['describe']}\nActive rules {d['active_rules']} / {d['total_rules']} · Fired today {d['fired_today']} · Rejected {d['rejected_today']}\n"
+            f"Simulated orders · Open {counts['OPEN']} · Filled {counts['FILLED']} · Cancelled {counts['CANCELLED']} · Rejected {counts['REJECTED']}\n"
+            f"Today's notional {d['notional_today']} · Last evaluation {d['last_tick'] or 'not run'}\n"
+            f"{d['halt_detail'] or ''}\n"+
+            '\n'.join(f'Quote unavailable: {symbol} · {misses} attempts · {reason}' for symbol,misses,reason in d['degraded'])+
+            ('\nStale calendars: '+str(d['calendar_stale']) if d['calendar_stale'] else ''),limit=None))
+        table_rows(self.venues,[[v['code'], 'OPEN' if v['open'] else 'CLOSED' if v['open'] is False else 'UNKNOWN',safe_detail(v['why'] or v['describe']),v['rules']] for v in d['venues']])
         self.buttons['ack'].setEnabled(d['needs_ack']);self.buttons['arm'].setEnabled(not d['needs_ack'] and runtime.mode is not EngineMode.ARMED)
         selected=self.orders.item(self.orders.currentRow(),0) if self.orders.currentRow()>=0 else None
         ident=selected.text() if selected else None
