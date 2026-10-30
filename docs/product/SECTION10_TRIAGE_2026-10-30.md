@@ -106,3 +106,9 @@ equal-weight benchmark scope for vol_target and crypto_trend; see
 The latest queue is **9/67** corrected and **58** remaining groups, with
 14 observation rows and 15 ambiguous mappings still open. A narrow Flet
 initial-equity/date alignment fix is included, not full audit closure.
+
+NEW-M6-03 corrects negative stable AR(1) amplitude half-life and its ETF/Crypto
+interpretation; see `AR1_DECAY_2026-10-30.md`. Missing/non-decaying estimates
+are no longer described as slow reversion. Positive-phi results and pairs
+weights/gates are unchanged. Latest queue: **10/67** corrected, **57**
+remaining groups; 14 observation rows and 15 ambiguous mappings remain.

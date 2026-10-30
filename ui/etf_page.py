@@ -25,6 +25,7 @@ from core.quant import insights
 from core.quant import strategies as S
 from core.quant.history import HistoryError, load_history, synthetic_history
 from core.quant.validate import load_cards
+from core.research.decay_disclosure import decay_value, decay_text
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
@@ -74,8 +75,9 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                 ], spacing=10, wrap=True))
             ps = a.get("premium_stats")
             if ps:
+                blocks.append(notice(decay_text(ps.get('decay')), "accent"))
                 blocks.append(ft.Row([chip(f"premium z {ps['z']:+.2f}", "accent"), chip(f"|premium| mean {ps['abs_mean']:.2f}%"),
-                                      chip(f"half-life {ps['half_life']:.0f} sessions"), chip(f"ADF p {ps['adf_p']:.3f}"),
+                                      chip(f"AR(1) amplitude half-life {decay_value(ps.get('decay'))} observations"), chip(f"ADF p {ps['adf_p']:.3f}"),
                                       chip(f"source: {a['data_source']}", "success" if a["data_source"] != "SYNTHETIC" else "muted")],
                                      spacing=6, wrap=True))
                 blocks.append(card(xc.premium_chart(a["dates"], a["price"], a["nav"], a["premium_pct"],

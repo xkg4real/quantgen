@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 6,
-    "implemented_canonical_groups": 9
+    "implemented_canonical_groups": 10
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -585,10 +585,11 @@
       "source_model": "134. M6-03 평균회귀 진단(ADF p, AR(1) 반감기) 공용 함수",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "AR1 impulse-amplitude half-life handles stable negative phi; explicit statuses and ETF/Crypto display/AI/export semantics; gate/stored grades unchanged",
       "mapping_needs_disambiguation": false,
       "reproduction": "SYNTHETIC_REPRODUCED",
-      "correction": "NOT_IMPLEMENTED"
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/AR1_DECAY_2026-10-30.md"
     },
     {
       "id": "NEW-M6-04",

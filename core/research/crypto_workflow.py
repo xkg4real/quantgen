@@ -4,6 +4,7 @@ import math
 import numpy as np
 import config
 from core.crypto import analytics as CA
+from .decay_disclosure import decay_text
 
 CRYPTO_DAYS = 365
 
@@ -81,7 +82,7 @@ def narrative(a: dict) -> str:
     kp, fc, g = a["kimchi"], a["funding"], a["garch"]
     parts = [
         f"Korea pays {kp.last_pct:+.2f} % against the world price for bitcoin ({kp.last_z:+.1f} standard deviations from its one-year mean; "
-        f"average {kp.mean_pct:+.2f} %, peak {kp.max_pct:.1f} % since {kp.dates[0]}); the premium's half-life is {kp.half_life_days:.0f} days "
+        f"average {kp.mean_pct:+.2f} %, peak {kp.max_pct:.1f} % since {kp.dates[0]}); {decay_text(getattr(kp, "decay", None))} "
         f"(ADF p = {kp.adf_p:.3f}). It is a signal, not a trade: remittance limits, the Travel Rule and the 2027 tax close the arbitrage"
         + (f", and its predictive slope on next-week returns is {kp.pred_slope:+.4f} (t {kp.pred_t:+.1f})." if math.isfinite(kp.pred_t) else "."),
     ]
@@ -94,7 +95,7 @@ def narrative(a: dict) -> str:
                  f"{'' if g['converged'] else '; the solver did not converge'}"
                  f"{'; at bound: ' + ', '.join(g['at_bound']) if g['at_bound'] else ''}. The validation study's verdict for this fan on "
                  f"Bitcoin is {a['verdicts']['D_C2_garch_btc']}.")
-    parts.append(f"ln(ETH/BTC): {a['ethbtc']['verdict']} (ADF p {a['ethbtc']['adf_p']:.3f}, half-life {a['ethbtc']['half_life_days']:.0f} days).")
+    parts.append(f"ln(ETH/BTC): {a['ethbtc']['verdict']} (ADF p {a['ethbtc']['adf_p']:.3f}). {decay_text(a['ethbtc'].get('decay'))}")
     if a["source"] == "SYNTHETIC":
         parts.append("All series are SYNTHETIC.")
     return " ".join(parts)
@@ -103,7 +104,7 @@ def payload(a: dict) -> dict:
     """Market commentary only. Holdings stay in the local read-only display."""
     kp, fc = a["kimchi"], a["funding"]
     return {"source": a["source"], "kimchi": {"last_pct": kp.last_pct, "z": kp.last_z, "mean_pct": kp.mean_pct, "max_pct": kp.max_pct,
-                                              "half_life_days": kp.half_life_days, "adf_p": kp.adf_p, "pred_t": kp.pred_t, "n": kp.n},
+                                              "half_life_days": kp.half_life_days, "decay": getattr(kp, "decay", None), "adf_p": kp.adf_p, "pred_t": kp.pred_t, "n": kp.n},
             "funding": ({"last_ann_pct": fc.last_ann_pct, "percentile": fc.percentile, "flag": fc.flag, "top_decile_fwd30": fc.top_decile_fwd30,
                          "bottom_decile_fwd30": fc.bottom_decile_fwd30, "bootstrap_p": fc.bootstrap_p} if fc else None),
             "premium_index": a["premium_index"],

@@ -10,6 +10,7 @@ from core.ficc.equity_deriv import letf_drag
 from core.quant import strategies as S
 from core.quant.history import HistoryError, load_history, synthetic_history
 from core.quant.validate import load_cards
+from .decay_disclosure import decay_text
 ROOT = Path(__file__).resolve().parents[2]
 
 LETF = {"122630": (2.0, "KODEX 레버리지", 0.0064), "252670": (-2.0, "KODEX 200선물인버스2X", 0.0064),
@@ -55,7 +56,7 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
         prem = out["premium_pct"]
         out["premium_stats"] = {"last": float(prem[-1]), "mean": float(prem.mean()), "sd": float(prem.std(ddof=1)),
                                 "z": float((prem[-1] - prem.mean()) / prem.std(ddof=1)) if prem.std(ddof=1) > 0 else 0.0,
-                                "adf_p": S.adf_pvalue(prem), "half_life": S.half_life(prem),
+                                "adf_p": S.adf_pvalue(prem), "half_life": S.half_life(prem), "decay": S.ar1_decay(prem),
                                 "abs_mean": float(np.abs(prem).mean())}
     # sleeve rules on the fund's own history, with a costed summary
     if px.size > 300:
@@ -118,10 +119,8 @@ def narrative(a: dict) -> str:
     ps = a.get("premium_stats")
     if ps:
         parts.append(f"Over {len(a['dates'])} sessions the premium averaged {ps['mean']:+.2f} % (|premium| {ps['abs_mean']:.2f} %), "
-                     f"today's reading sits {ps['z']:+.1f} standard deviations from that mean; ADF p = {ps['adf_p']:.3f} and "
-                     f"the half-life is {ps['half_life']:.0f} sessions, so " +
-                     ("a discount reverts within days, which is why the flagship trackers carry no tradeable premium after a 4–5 bp round trip."
-                      if ps["half_life"] < 5 else "the deviation is slow-moving enough to matter for entry timing."))
+                     f"today's reading sits {ps['z']:+.1f} standard deviations from that mean; ADF p = {ps['adf_p']:.3f}. "
+                     + decay_text(ps.get('decay')))
     sl = a.get("sleeves")
     if sl:
         parts.append(f"On this fund's own history the 10-month trend switch earned Sharpe {sl['trend']['sharpe']:.2f} "

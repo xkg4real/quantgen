@@ -21,6 +21,7 @@ from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
 import ui.xcharts as xc
 from core.research.crypto_workflow import _synthetic, _live, analyze, narrative, payload, CRYPTO_DAYS
+from core.research.decay_disclosure import decay_value, decay_text
 
 
 def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -> ft.Control:
@@ -42,6 +43,8 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
                 busy.visible = False; page.update(); return
             kp, fc, g = a["kimchi"], a["funding"], a["garch"]
             blocks: list[ft.Control] = []
+            blocks.append(notice(decay_text(getattr(kp, "decay", None)), "accent"))
+            blocks.append(notice("ETH/BTC: " + decay_text(a['ethbtc'].get('decay')), "accent"))
             blocks.append(notice("Read-only: QUANTGEN never submits crypto orders, never holds a wallet key, and never assumes an "
                                  "account on an unregistered foreign exchange. Binance is public data only.", "accent",
                                  icon=ft.Icons.LOCK_OUTLINE))
@@ -53,7 +56,8 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
                                  spacing=6, wrap=True))
             blocks.append(ft.Row([
                 stat("Kimchi premium", f"{kp.last_pct:+.2f}%", token="error" if abs(kp.last_pct) > 3 else "text"),
-                stat("Premium z (1y)", f"{kp.last_z:+.2f}"), stat("Half-life", f"{kp.half_life_days:.0f} d"),
+                stat("Premium z (1y)", f"{kp.last_z:+.2f}"),
+                stat("AR(1) amplitude half-life", decay_value(getattr(kp, "decay", None)), tooltip=decay_text(getattr(kp, "decay", None)) + " Unit: observations."),
                 stat("Funding (ann.)", f"{fc.last_ann_pct:+.1f}%" if fc else "n/a", token="error" if fc and fc.flag != "normal" else "text",
                      tooltip=fc.flag if fc else ""),
                 stat("Funding pct", f"{fc.percentile:.0%}" if fc else "n/a"),
