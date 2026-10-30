@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/NEW-M6-03, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T20:18:46.000+09:00
+updated_at: 2026-10-30T20:26:59.000+09:00
 stale_after_hours: 3
-waiting_on: none
+waiting_on: ci
 work_branch: gpt/ar1-decay-disclosure-20261030
-work_commit: 93f31a3158c4b49a348d9e91f2842e3640605fdc
+work_commit: 696ee3cb9eaf5190db649be58d46754d865dc5c5
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/28
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -130,3 +130,6 @@ source437ca29c7439b4e27030cca3e86de39abd5538ab / PR27 원격 push/read-back 완�
 
 ## 13. 최신 N1 완료 및 후속 단위
 0절/front matter가 최신입니다. 5/9/10절의 PR26 소스와11/12절 CI대기는 과거 체크포인트입니다. N1은 LEDGER에 완료됐으므로 재작업하지 않습니다. NEW-M6-03은 아직 미완료이며 별도 gpt 브랜치를 검증된 최신 제품 main에서 분리합니다. 현재 OS lock/execution은 fb4e7f11-2fc5-4222-a172-bdd3812c8392입니다. 같은 strategy/UI 파일의 다음 수정은 무한 반감기의 잘못된 의미/표시를 정정하기 위한 것이며 공식 gate/연구판정 변경이 아닙니다.
+
+## 14. NEW-M6-03 검사/PR28
+source696ee3cb9eaf5190db649be58d46754d865dc5c5 원격 push/read-back, PR28 생성. 음수 안정 AR(1) 반감기는 진폭 abs(phi)기준으로 정정; MONOTONE/OSCILLATING/NO_MEMORY/NON_DECAYING/NOT_ESTIMATED 구분. ETF/Crypto Flet·Qt·AI/export에서 느린 회귀/진입 단정 제거. 새5+시장/AI/HAC 회귀 포함22검사 PASS. 양수4사례 기존값 완전 동일, pairs PnL/turnover/선택/모든점수 동일, 다른strategy함수AST/validation·ledger파일 불변. 실제 데이터/원장/저장카드/holdout 미실행. CI 대기이며 아직 main 병합/완료 LEDGER 기록 전입니다.
