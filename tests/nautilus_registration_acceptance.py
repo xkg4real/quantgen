@@ -195,6 +195,67 @@ class RegistrationAcceptance(unittest.TestCase):
         with self.assertRaisesRegex(R.BridgeRefusal, "R-16"):
             R.take_lock(self.out, R.table_sha256(t), [self.ledger.path], None)
 
+    def approved_temp_table(self):
+        """Synthetic approval only in memory; never write a production table."""
+        self.run_a2()
+        t = json.loads(self.table.read_text())
+        t["host_fingerprint"] = R.host_fingerprint("o8-test-host", self.ledger)
+        t["owner_confirmed"] = (f"Test fixture, 2026-10-30, table {R.table_sha256(t)[:16]}, "
+                                f"code {'a' * 16}")
+        return t
+
+    def check_temp_execution_guards(self, t, *, code="a" * 64):
+        # Exercise the existing refusal checks without pricing, engines, real
+        # source fingerprints or an of-record runner invocation.
+        with patch.object(R, "code_sha256", return_value=code):
+            R._check_fields(t, "of-record")
+            R._check_of_record(t, self.ledger_dir, "o8-test-host", self.repo)
+
+    def test_o8_optional_reports_do_not_block_valid_temporary_guard_check(self):
+        t = self.approved_temp_table()
+        before = self.ledger.path.read_bytes()
+        self.check_temp_execution_guards(t)
+        self.assertEqual(before, self.ledger.path.read_bytes())
+        self.assertFalse((self.repo / "docs").exists())  # no referee report files
+        self.assertNotIn("owner_confirmed", json.loads(self.table.read_text()))
+
+    def test_o8_waiver_does_not_accept_missing_or_empty_ledger(self):
+        t = self.approved_temp_table()
+        self.ledger.path.unlink()
+        with self.assertRaisesRegex(R.BridgeRefusal, "R-15.*does not exist"):
+            self.check_temp_execution_guards(t)
+        self.ledger.path.write_bytes(b"")
+        with self.assertRaisesRegex(R.BridgeRefusal, "R-15.*holds no row"):
+            self.check_temp_execution_guards(t)
+
+    def test_o8_waiver_does_not_accept_broken_chain(self):
+        t = self.approved_temp_table()
+        bad = self.ledger.path.read_bytes().replace(b'"US"', b'"ZZ"', 1)
+        self.ledger.path.write_bytes(bad)
+        with self.assertRaisesRegex(R.BridgeRefusal, "R-09"):
+            self.check_temp_execution_guards(t)
+        self.assertEqual(bad, self.ledger.path.read_bytes())
+
+    def test_o8_waiver_does_not_accept_a_different_host(self):
+        t = self.approved_temp_table()
+        t["host_fingerprint"] = "f" * 64
+        with self.assertRaisesRegex(R.BridgeRefusal, "R-15.*host_fingerprint"):
+            self.check_temp_execution_guards(t)
+
+    def test_o8_waiver_does_not_accept_changed_code_or_table(self):
+        t = self.approved_temp_table()
+        with self.assertRaisesRegex(R.BridgeRefusal, "R-11.*owner_confirmed"):
+            self.check_temp_execution_guards(t, code="b" * 64)
+        t["capital_usd"] = str(float(t["capital_usd"]) + 1)
+        with self.assertRaisesRegex(R.BridgeRefusal, "R-11.*owner_confirmed"):
+            self.check_temp_execution_guards(t)
+
+    def test_o11_study_count_over_24_is_still_refused_before_registration(self):
+        self.mutate_table(lambda t: t["study_configs"].append(copy.deepcopy(t["study_configs"][0])))
+        with self.assertRaisesRegex(ValueError, "24 documented"):
+            self.run_a2()
+        self.assertFalse(self.ledger.path.exists())
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

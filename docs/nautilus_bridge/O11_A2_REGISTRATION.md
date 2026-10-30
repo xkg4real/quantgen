@@ -78,3 +78,11 @@ OWNER_RULINGS_LOG.md and the spec Status / Appendix B. The subsequent 2026-10-30
 makes additional GPT/Gemini reviews optional / NOT_PERFORMED. Missing optional reports do not block
 Windows hand-off. Existing technical/Windows acceptance and separately recorded actual pilot
 `owner_confirmed` remain mandatory; this documentation does not perform real registration or a pilot.
+
+O8 boundary regression extends the same disposable-ledger suite to 20 tests. A
+valid synthetic guard check needs no referee report files. Missing/empty ledger,
+broken chain, different host, changed code/table with stale approval and more
+than 24 study configurations remain refused. Synthetic approval exists only
+in memory; no production table receives `owner_confirmed`. The earlier 14-test
+result and the added six tests are distinct; Windows results require the exact
+revision's CI and do not replace the owner's Windows acceptance.
