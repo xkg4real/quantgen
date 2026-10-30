@@ -4,14 +4,14 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ⑬-2/j, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T15:59:41+09:00
+done_ids: ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-30T16:14:59+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/pyqt6-completion-20261030
-work_commit: 3451adb6054c9c8e7a7272137e4c92fc107d44fc
-uncommitted_changes: yes
+work_commit: e1df541b35b320bf8360e80305503f72a6043ab0
+uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/17
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -24,11 +24,9 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 현재 결과
-최신 진행: 3451adb6054c9c8e7a7272137e4c92fc107d44fc 원격 read-back, draft PR17. ⑬-2/e·f·g·h·i 완료. Rules/모의 Trading 기존 core 보존; 52 native tests 및 CI41016916931 Windows/Ubuntu success. Notion i 취소선 반영. ⑬-2/j 선택 AI 해설·통합 검증 미커밋, 현재 58개 통합 검사 통과. 실제 API/원장/Windows 육안/전체 이전은 미완료.
-사용자가 남은 개발의 즉시 재개를 직접 요청하여 재개했습니다. 자동감시의 next_eligible_at은 이 직접 요청을 차단하지 않습니다. 새로운 실행 ID로 CURRENT를 CAS 선점한 뒤 gpt/pyqt6-completion-20261030에서 남은 native 화면/내보내기/패키징을 진행합니다. 기존 완료 ID는 재처리하지 않습니다.
-공개 사이트용 A/F1 HTML은 내용을 보존해 완성하고 사용자에게 전달했습니다. 실제 사이트 업로드는 사용자가 맡으며 이 작업에서 제외했습니다.
-기존 Flet A/F1 Home, ResearchRun 세션 기록/내보내기, 패키징 CI, F1 브라우저 아이콘은 PR #13/#14/#15로 main에 반영됐습니다.
-PyQt6 데스크톱은 draft PR #16의 검증된 부분 구현입니다. 전체 기능 이전 완료가 아닙니다. 최신 commit c401e0d581d7439cba7580aa6b5d19b0ac6a9beb에서 로컬 native 검사 20개와 Ubuntu 3.12 / Windows 3.12·3.14 CI가 통과했습니다. 위 검증은 이전 실행의 결과이며 이번 실행에서 남은 구현을 계속합니다. 사용량 수치는 unknown이며 한도 소진을 주장하지 않습니다.
+⑬-2/e~j native 구현/자동 검증을 완료했고 PR17을 main a1adf008568aa7475a9db5ff7a5c97b41b0a12fb에 병합했습니다. 소스 e1df541b35b320bf8360e80305503f72a6043ab0, 59 native tests, CI41018384446 Windows3.12/3.14 및 Ubuntu3.12 success; 원격 PR/main read-back 완료. PR16은 중복 방지로 닫았습니다.
+Windows 앱은 PyQt6 선택 실행, 브라우저는 Flet 유지. 6 workspace, 기존 연구 도구, Macro v2/Strategy Lab, Rules/모의 Trading, 명시적 JSON/ZIP, 선택 AI 해설을 연결했습니다. 실제 API/AI·원장 실행·Windows 육안/DPI·서명 installer는 검증하지 않았고 ⑬-2/k는 미완료입니다. 공개 HTML/F1 묶음은 별도 전달됐고 실제 사이트 업로드는 사용자가 맡습니다.
+Notion REMAINING WORK에는 완료한 하위 범위만 취소선 처리했습니다. 사용자 직접 작업은 returned/cooldown 때문에 대기하지 않습니다. 새 승인 전달 페이지(1절 링크)를 실제 읽고 private 보존했으며, §10 분류/순서·BS-21·O11 A2의 후속 구현과 O8 심사/실파일럿 승인 경계를 구분합니다. UI 병합에 해당 연구 변경을 섞지 않았습니다.
 
 ## 1. 최신 사용자 결정
 
@@ -55,14 +53,12 @@ PyQt6 데스크톱은 draft PR #16의 검증된 부분 구현입니다. 전체 �
 이전 Claude/Nautilus 연구의 근거는 이전 작업 브랜치의 CONTINUATION_STATUS/REMAINING_WORK/HANDOFF_MANUAL/O2_O15_DECISION_FORM 및 LEDGER에 있습니다. 이 파일들은 현재 제품 main에 모두 들어 있지 않습니다. UI 작업을 이유로 누적 연구 브랜치를 통째로 병합하지 마세요.
 
 ## 3. 검증 근거와 한계
-최신 Qt Actions: https://github.com/xkg4real/quantgen/actions/runs/41004952793
-- Windows Python 3.14 job 123897634125: completed/success
-- Ubuntu Python 3.12 job 123897634272: completed/success
-- Windows Python 3.12 job 123897634360: completed/success
-각 job은 allowlist wheel 빌드/설치, checkout 밖 runtime smoke, bounded source fixtures, native 20 tests, checkout 밖 native smoke를 통과했습니다.
-최초 Ubuntu Qt CI의 libEGL.so.1 누락은 CI job에 libegl1/libopengl0를 설치하도록 수정했고 이후 통과했습니다. 게시 환경 설정은 바꾸지 않았습니다.
-로컬 검사와 화면 캡처는 합성/주입 데이터입니다. 실제 시장 API 성공, 실제 Windows 육안/DPI, 서명 installer 또는 모든 연구 gate 통과의 증거가 아닙니다. 기존 provider probe의 CONNECT 403은 별도 제약으로 남습니다.
-가격·최적화·공식 gate 코드는 변경하지 않았습니다. README provenance digest 갱신은 기록된 테스트 수 변경이 아닙니다.
+최신 native CI: https://github.com/xkg4real/quantgen/actions/runs/41018384446
+- e1df541에서 Ubuntu Python3.12, Windows Python3.12/3.14 모두 success.
+- allowlist wheel 빌드/설치, checkout 밖 runtime smoke, bounded source fixtures, native 59개 검사와 checkout 밖 Qt smoke.
+- 합성/주입/임시 저장소만 사용. 설치 smoke는 network/protected path access를 차단합니다.
+- 기존 Flet ETF 수정주가/fallback 검사 PASS. 로컬 light/dark와 1000x700 배치 확인, dark F1 대비 수정.
+실제 공급자/AI/계좌/원장, 실제 Windows 화면/DPI, 서명 installer 성공의 증거는 아닙니다. 공식 gate/판정·TRADEGEN·환경/보안 정책을 변경하지 않았습니다.
 
 ## 4. 완료한 하위 작업
 - ⑫-3: PR-F runtime wheel/resources/clean Windows·Ubuntu CI. PR13 main 00e0488fd9f7cf7be01b3bcc51de1a5f72727cc7.
@@ -84,14 +80,12 @@ Qt Rates는 현재 제품 main의 curve 함수를 호출합니다. 별도 PT-04 
 이번 app.py/tools.py/tests/packaging 문서 재수정은 남은 native 화면 연결, 명시적 export, 배포 검증을 위해 필요합니다. 완료된 pricing/solver/gate 결과는 재작성하지 않습니다.
 
 ## 6. 다음 실행 순서
-현재 우선: ⑬-2/j 선택 AI 및 전체 기능 대응·패키징 검증 → 실제 Windows 인수와 주간 인수인계. e·f·g·h·i 완료 범위는 재작업하지 않습니다.
-1. ⑬-2/e: Derivatives, ETF, Crypto를 native로 이전. 기존 UI 내부 계산 조립 로직·출처·단위를 먼저 매핑하고 공유 코어를 사용. 합성 fixture로 입력 가지와 계산값 비교. 실제 계정/저장 카드/보호 원장은 열지 않기.
-2. Macro v2 Overlay/Model cards/Research register, Strategy Lab, KRX, paper Trading, Rules/Settings, optional AI 패널 이전. 레지스트리/판정/모의 엔진 lifetime 의미 보존. UI 이전을 연구 승인 변경으로 확대하지 않기.
-3. portfolio/FICC 등의 native export와 전체 화면 feature parity, keyboard/resize/DPI, Windows 실행/installer·icon 점검. 그 후 기본 데스크톱 실행 방식 전환과 PR16 ready/merge 판단. Flet browser는 유지.
-4. ⑬-1/c: cross-model/historical ResearchRun과 canonical identity/공식 gate 연결은 별도 증거와 연구 승인 범위에 맞춰 진행.
-5. ⑨-2/b: official data/rights/vintage 증거 취득. 네트워크 정책을 우회하지 않기.
-6. ⑩-1/b·⑩-2/b: 전문 법률 검토·데이터 권리·배포 허용 범위 후 공개 서비스 판단.
-7. ⑪-1/b: 별도 TRADEGEN 작업에서 consumer 격리·dedup 검증. 이 태스크는 TRADEGEN을 변경하지 않음.
+1. ⑬-2/k 실제 Windows 표시/DPI·키보드·파일 대화상자·선택 공급자 확인은 사용자 PC 인수가 필요합니다. 실행 안내 docs/DESKTOP_MIGRATION_2026-10-30.md; Start-QUANTGEN-Desktop.cmd. 서명 installer/공개 배포와 구분합니다.
+2. 새 승인 원문 수신 후 연구 후속: §10 현재 코드 재현/중복 ID 분류·순서, BS-21 조달비용 DF 환산, ④-3 O11 A2 registration-only 초기화. 기존 연구 브랜치 근거를 먼저 읽고 UI 변경과 구분합니다. 실파일럿/실원장/동결 연구는 실행하지 않습니다. O8 심사 생략은 승인된 것으로 보지 않습니다.
+3. ⑬-1/c 전체 모델·과거 이력·canonical identity/공식 gate 연결은 승인 범위/근거별로 진행. 전체 ResearchRun 완료를 주장하지 않습니다.
+4. ⑨-2/b 공식 데이터/rights/vintage, ⑩-1/b 법률·권리, ⑩-2/b 공개 MVP는 외부 근거/관문 이후. AWS 공식 download CONNECT403은 우회하지 않습니다.
+5. ⑪-1/b TRADEGEN consumer는 별도 TRADEGEN 범위이며 현재 태스크에서 변경하지 않습니다.
+6. 화요일 16시부터 주간 전체 완료/미완료를 정리하고 17시 전에 인계. 그 전 직접 미완료 작업은 기존 hourly 예약과 exact 소유권 확인으로 재개합니다.
 
 ## 7. 보호 범위
 .env, 보호 캐시 4개, 실제 원장, 동결 연구/사전등록/holdout은 읽거나 해시하거나 변경하지 않습니다.
@@ -105,9 +99,8 @@ UI/PR/main 권한은 이미 해결됐고 native 잔여 구현을 막는 승인 �
 공식 데이터 사용권과 전문 법률 의견을 임의로 승인 처리하지 않습니다. PyQt 공개/상업 배포 라이선스도 이후 배포 판단에 포함합니다.
 
 ## 9. Claude / Codex 재개
-최신 handoff CURRENT/README/TEMPLATE/AGENTS/LEDGER/AUTO_STATE를 읽고 exact SHA CAS + 새 execution ID 원격 read-back으로 소유권 확인 후 시작합니다.
-Qt source 시작점: gpt/pyqt6-desktop-20261030 @ c401e0d581d7439cba7580aa6b5d19b0ac6a9beb. 새 gpt 브랜치에서 이어갑니다.
-설치/실행: python -m pip install ".[desktop]" ; python -m quantgen_desktop.
-검사: python -m unittest tests.desktop_acceptance -v. packaging CI는 실제 최신 commit의 결과로 확인합니다.
-현재 main ebb6d61...에는 PR16 내용이 아직 없습니다. 기존 Flet 앱 제거/재설치 요구 금지.
-원래 자동 주기 next_eligible_at=2026-11-05T00:00:00+09:00은 이번 직접 요청 작업으로 초기화하지 않습니다. 이미 처리한 ID/commit을 보존하고 중복 작업하지 않습니다.
+최신 handoff 6문서, STATE와 OS lock을 확인합니다. 예약 재개는 직전 execution/task/handoff ID/branch/commit을 대조한 뒤 새 execution ID CAS+read-back으로만 합니다. 현재 실행 ID는 위 front matter입니다.
+제품 main은 a1adf008568aa7475a9db5ff7a5c97b41b0a12fb(PR17 merged). 구현 source gpt/pyqt6-completion-20261030 @ e1df541b35b320bf8360e80305503f72a6043ab0. UI와 별도 누적 연구 브랜치를 무조건 합치지 않습니다.
+설치/실행: python -m pip install ".[desktop]" ; python -m quantgen_desktop. Windows cmd launcher도 제공. 브라우저는 기존 flet run main.py --web 명령.
+검사: docs/DESKTOP_MIGRATION_2026-10-30.md의 bounded fixture 목록과 최신 CI를 사용. 전체 연구/실제 원장/보호 캐시/holdout 검사 금지.
+주간 전체 인수인계는 계속 누적합니다. 사용자 요청은 완료된 범위/남은 외부 인수/새 승인 연구 범위를 구분하며 다시 승인 대기를 만들지 않습니다.
