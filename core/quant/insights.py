@@ -154,7 +154,7 @@ def narrate_monte_carlo(mc: MCResult) -> str:
         lines.append(mc.bound_note)
     lines.append(_narrate_drift(mc))
     if mc.prob_target is not None and mc.target:
-        lines.append(f"Probability of reaching the {mc.target:,.2f} target: "
+        lines.append(f"Probability of finishing at or above {mc.target:,.2f} after {mc.horizon_days} sessions: "
                      f"{mc.prob_target * 100:.0f}%.")
     if mc.jump_note:
         lines.append(mc.jump_note)

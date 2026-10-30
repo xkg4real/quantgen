@@ -376,6 +376,19 @@ class NativeDesktopTests(unittest.TestCase):
             self.assertGreater(w.macro.tables['Macro indicators'].rowCount(),10)
         self.assertEqual(len(w.session.runs()),0)
 
+    def test_terminal_target_label_and_notes_preserve_research_contract(self):
+        w=self.window;self.configure_gbm();w.target.setText('100')
+        w.run_analysis();self.wait_idle()
+        run=w.session.runs()[0];result=w.outputs[run['run_id']].result
+        rows={w.quant_metrics.item(i,0).text():w.quant_metrics.item(i,1).text()
+              for i in range(w.quant_metrics.rowCount())}
+        self.assertEqual(rows['P(terminal ≥ target)'],f'{result.prob_target:.1%}')
+        self.assertNotIn('P(target)',rows)
+        self.assertIn('final price >= 100.00 after 5 sessions',w.quant_notes.text())
+        self.assertEqual(run['verdict'],'NOT_RUN')
+        self.assertEqual(run['parameters']['target'],100)
+        self.assertEqual(set(run['metrics']),{'spot','p05','p50','p95','prob_loss','var_pct','cvar_pct'})
+
     def test_analysis_navigation_and_native_export_cancel_and_failure(self):
         w=self.window;self.configure_gbm()
         w.run_analysis();w.navigate('home');self.wait_idle()

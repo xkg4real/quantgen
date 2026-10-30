@@ -49,7 +49,7 @@ that repaints on every refresh cannot be reasoned about, and cannot be tested.
 The result object carries the percentile fan (not the raw path matrix — 10,000
 paths × 252 steps is ~20 MB nobody reads), the terminal distribution, and the
 risk numbers read off it: VaR, CVaR, probability of loss, probability of
-reaching a target.
+finishing at or above a target at the final simulated session.
 """
 from __future__ import annotations
 

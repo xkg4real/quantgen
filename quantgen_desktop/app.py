@@ -465,9 +465,11 @@ class ResearchWindow(QMainWindow):
             table_rows(self.quant_metrics, [("Spot", f"{r.spot:,.2f}"), ("P5 / P50 / P95", f"{r.p05:,.2f} / {r.median_terminal:,.2f} / {r.p95:,.2f}"),
                 ("P(loss)", f"{r.prob_loss:.1%}"), ("VaR 95 / CVaR", f"{r.var_pct:.1%} / {r.cvar_pct:.1%}"),
                 ("Paths / horizon / seed", f"{r.n_paths:,} / {r.horizon_days} / {value.run['parameters']['seed']}"),
-                ("P(target)", "—" if r.prob_target is None else f"{r.prob_target:.1%}")])
+                ("P(terminal ≥ target)", "—" if r.prob_target is None else f"{r.prob_target:.1%}")])
             notes = [f"{'합성 데이터 · ' if h.source=='SYNTHETIC' else ''}{h.source} · {h.first_date} → {h.last_date}",
                      h.note, value.funding_note, r.drift_note, r.bound_note, r.jump_note]
+            if r.prob_target is not None:
+                notes.append(f"Target probability: final price >= {r.target:,.2f} after {r.horizon_days} sessions. Only the final session is used.")
             if r.garch is not None:
                 fit = r.garch
                 notes.append(f"GARCH fit: alpha={fit.alpha:.4f}, beta={fit.beta:.4f}, nu={fit.nu:.3f}")
