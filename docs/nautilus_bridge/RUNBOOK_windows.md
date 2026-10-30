@@ -12,6 +12,14 @@ Windows build of it exists. That python.org serves this file at the URL of the d
 cloud container cannot reach python.org. If the download line fails, stop and ask Claude to pin another 3.13 patch
 here; changing this file changes no digest (it is not in `code_sha256`, spec 6.6).
 
+## O11 A2 addendum (2026-10-30)
+
+The owner approved the registration-only E1 initialization path described in
+[O11_A2_REGISTRATION.md](O11_A2_REGISTRATION.md). Complete that bounded step on the owner's Windows machine
+before pilot price reads if E1 is missing/empty. Keep its receipt private. It does not satisfy the independent
+review, Step 7A, host verification or `owner_confirmed` requirements below. The cloud's temporary-ledger tests
+are separate from actual Windows acceptance. Existing C3 is never initialized or rewritten by A2.
+
 ## Before Step 7A
 
 - Step 1b is done: the GPT and Gemini rounds (or a substitute the owner recorded in Appendix B) and the owner's
@@ -112,7 +120,7 @@ the `\n` of `\ntvenv` into a newline. This line prints it with your path, ready 
   the only `nautilus/*` NOT_RUN allowed (it needs Developer Mode for a symbolic link).
 - `--fingerprint` (each table): `table_sha256`, `code_sha256`, then `host_fingerprint <64 hex>`; a
   `host_fingerprint null (...)` stops here (R-15, O11): the family ledger is missing or empty on this machine, and
-  the owner rules how it starts.
+  follow the separately approved O11 A2 procedure for E1; unresolved C3 still stops. Do not bypass R-15.
 - `--handoff-report`: writes `docs\nautilus_bridge\handoff\win_amd64.json`, each part with its own result or error.
 
 ## 7A.3 Commit what Step 7A produced (the owner)

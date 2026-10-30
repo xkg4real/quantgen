@@ -3,6 +3,16 @@
 Date: 2026-10-26.
 
 Status:
+- **2026-10-30 owner addendum (O11 A2; implementation on the research branch).**
+  O2–O15 revision-6 defaults are accepted, with the O8 substitution request and O11 A2 exception recorded below.
+  The approval source is the owner's 2026-10-30 chat, recorded in the private Notion approval page
+  `4095c916-fe0c-8173-a4da-e8156aa03ae4`. Its original text remains private; this public addendum is a scope summary.
+  O11 A2 permits registration of pilot 1's 12 E1 configurations on the owner's Windows machine before reading
+  prices. Initial `n_trials = 12 + U`, `U <= 24`. See `docs/nautilus_bridge/O11_A2_REGISTRATION.md`.
+  The implementation and temporary-ledger checks do not establish an actual Windows registration, pilot result,
+  `owner_confirmed`, Step 1b review completion, Step 7A or the cumulative research-main merge sign-off.
+  O8: a substitute review was requested; the referee, report and verdict are not supplied. REVIEW_INCOMPLETE.
+  Historical revision-6 status immediately below is retained as dated history, superseded only by this scope.
 - **Revision 6 (Claude debate closed after round 5; GPT and Gemini pending, Step 1b).**
   - Five Claude personas (security, quant, QA, ops, governance) form one referee under D6
     (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:46`). Round 1, on Revision 1:
@@ -21,14 +31,15 @@ Status:
     cloud container: REVIEW_INCOMPLETE until both run on the owner's machine (Codex quota back 2026-10-30 14:40), or
     the owner records a substitute in Appendix B. Step 1b also needs the owner's approval with answers to O1 to O15
     (section 2). Step 7A waits for Step 1b.
-  - Owner approval: **not given** (the whole spec). Owner sign-off sentence (Step 7A): **none recorded**.
+  - Historical owner approval at revision 6 drafting: **not given**. See the 2026-10-30 addendum for received scope.
+    Owner sign-off sentence (Step 7A cumulative merge): **none recorded**.
   - Owner rulings received (verbatim, with channel and date):
     - **O1 approved**, 2026-10-27, Claude Code chat (cloud session), in Korean: "아뇨, Nautilus로 옮기는 걸 목표로
       하고 있습니다. 따라서 pyarrow를 포함한 새 의존성을 승인합니다." (English: "No, the goal is to move to
       Nautilus. Therefore I approve the new dependencies, including pyarrow.") This answers O1 only; the venv shape
       of O1's default (separate hash-pinned venv, global interpreter unchanged) stays the design. O2 to O15 remain
-      open.
-- Next: Step 2 (the plan) on the branch; in parallel, GPT and Gemini and the owner's rulings (Step 1b).
+      open at that time; see the 2026-10-30 addendum.
+- Historical next: Step 2 (the plan) on the branch; in parallel, GPT and Gemini and the owner's rulings (Step 1b).
 
 Inputs (QUANTGEN code at `6f7c610`, unchanged at HEAD `b7f991a`, which adds only this spec and the review folder;
 branch `claude/amazing-gauss-tdiguu`): in `research_notes/QUANTGEN Nautilus bridge map/`, `00_synthesis.md` ("synth",
@@ -110,7 +121,7 @@ it until the owner rules. O1 to O12 come from synth §3.1, O13 from K5, O14 and 
 | O8 | Referees: wait for GPT (Codex quota resets 2026-10-30 14:40; `docs/superpowers/plans/2026-10-23-execution-record.md:158`) and Gemini (`agy`; `tools/debate.py:46-47`), or record a substitute. | Wait (Step 1b). Claude's rounds 1 to 5 are ruled and applied, and Step 1a is done: round 5 raised only minor issues, so the moderator closed the Claude debate (`round5_rulings.md` §1). Neither CLI exists in the cloud container, so both run on the owner's machine; no substitute is recorded. | Step 1b ends about four days later; Steps 2 to 7 go ahead meanwhile on the branch. A missing referee is REVIEW_INCOMPLETE, never "no objections" (map04 R24). |
 | O9 | Windows environment and its location. | Base interpreter `%LOCALAPPDATA%\quantgen\py313` (python.org per-user install), venv `%LOCALAPPDATA%\quantgen\ntvenv`, firewall rule `QUANTGEN-nautilus-block-out` (4.4), the `.env` line of 3.4, timings at Step 7A. The Windows closure unpacks to about 506 MB, 0.5 to 0.6 GB with bytecode (OPS-14). The owner's global interpreter is the Microsoft Store Python 3.13 (`docs/asset_expansion/study.log:27, 29`; `grokteam/prereg.py:87-88`; UNVERIFIED until Step 7A prints `sys.executable`); it never creates the venv or runs pip for the bridge, and R-03 refuses a venv built on it (6.7; OPS-R2-2). | Owner time. A venv inside OneDrive would sync about 0.6 GB. |
 | O10 | Where pilots and the suite of record run. | The owner's Windows machine, against the production ledger; of-record mode is tied to it by the host fingerprint and the egress record (5.3.2). Linux rehearses on synthetic data only. | Exporting `E1.jsonl` and copying back the extended chain risks a fork. |
-| O11 | Trial count; row counts of `E1.jsonl` and `C3.jsonl` (UNVERIFIED today). | `n_trials = family N_raw after registration + U`; U counts the study's documented configurations (`study_configs`, 6.6) whose `config_id` is absent from the family ledger (QUANT-4). Four counts printed. Of-record mode refuses a missing, empty or broken family ledger (R-15). | Over-counting lowers the DSR, the conservative direction. If `E1.jsonl` is missing or empty on the owner's machine, pilot 1 waits for the owner's ruling on how that ledger starts. |
+| O11 | Trial count; row counts of `E1.jsonl` and `C3.jsonl` (UNVERIFIED today). | `n_trials = family N_raw after registration + U`; U counts the study's documented configurations (`study_configs`, 6.6) whose `config_id` is absent from the family ledger (QUANT-4). Four counts printed. Of-record mode refuses a missing, empty or broken family ledger (R-15). | Over-counting lowers the DSR, the conservative direction. 2026-10-30 ruling: A2 registration-only can initialize missing/empty E1 with pilot 1's 12 configurations before price reads; initial N_raw=12 and U<=24. Existing history is preserved/refused, never reset. Owner Windows verification and subsequent owner_confirmed remain required; see O11_A2_REGISTRATION.md. |
 | O12 | How a WITHHELD result appears in Strategy Lab. | Deferred. Outputs live in `docs/nautilus_bridge/runs/<bridge_run_id>/`, which the Lab does not read (`ui/strategy_lab_page.py:31`). | The owner reads results from files. No card ever says WITHHELD (5.5). |
 | O13 | May the child tolerate what the kernel and the Rust core load in every backtest? `from nautilus_trader.backtest.engine import BacktestEngine` loads 7 `nautilus_trader.live.*` modules (`nt:system/kernel.py:75-77`) and `nautilus_trader.core.nautilus_pyo3` with 35 compiled submodules, among them `binance`, `bybit`, `okx`, `polymarket`, `interactive_brokers`, `network`, `live` and `sandbox`. | Tolerate the import census of a per-platform golden baseline recorded from F1 and F2 (5.2.7). The census is drift detection only: it cannot see use of a module already loaded (SECURITY-2); the egress layer (4.4) bounds use. A run whose Nautilus or third-party import set differs from the baseline's, in either direction, or that imports any `nautilus_trader.adapters` or `.network` module, is invalid (QA-R3-12). | Ruled unacceptable: no 1.231.0 backtest runs, and the bridge stops. Tolerated wrongly: a loaded Rust client could try a socket; the egress layer makes it fail, and Step 7A's probe shows that on Windows. |
 | O14 | Pilot-2 registration table (10.2). It writes 5 permanent rows into C3, which also holds paper_live's trend rows (`paper_live/engine.py:64-69`). | As 10.2. | As O6, in C3. |
@@ -1594,7 +1605,7 @@ run is a new trial.
 | Params per row | `{"rule", "lookback", "step", "symbols": ["SPY"], "cost_bps": 50.0}` | 6.4 | Cash rate | DGS3MO / 100 / 252, forward-filled, `fred_DGS3MO.csv` md5 `661722143f24930a29b58c535d227c1b`, no fallback | K8 |
 | Cost | 50 bp per side from `cost_floor_bp(["SPY"])`; stress 100 bp | `core/quant/validate.py:78, 115-121` | Embargo, benchmark | 21; SPY buy-and-hold, uncosted | `docs/asset_expansion_study.py:275, 278` |
 | Capital, account, instrument | $1,000,000; CASH, NETTING; `Equity`, whole shares, 9 dp; fee-inclusive sizing | 5.2.3, 5.2.5 | Gate | `GATE` unchanged: 756 / 126 / 504, B 2000, seed 11 | `core/quant/validate.py:53-74` |
-| `study_configs` | `S_E1_trend_us`: the 12 settings with symbols `["GLD", "QQQ", "SPY", "TLT"]` at 50.0; `S_E1_trend_krx`: the 12 settings with `["069500.KS", "132030.KS", "152380.KS", "229200.KS"]` at 3.0 | `docs/asset_expansion/cards/S_E1_trend_us.json`, `S_E1_trend_krx.json` | Trial count; ledger | `E1 N_raw after registration + U`, U at most 24; `E1.jsonl` must exist, hold a row and verify (R-15) | O11; 5.5 step 3 |
+| `study_configs` | `S_E1_trend_us`: the 12 settings with symbols `["GLD", "QQQ", "SPY", "TLT"]` at 50.0; `S_E1_trend_krx`: the 12 settings with `["069500.KS", "132030.KS", "152380.KS", "229200.KS"]` at 3.0 | `docs/asset_expansion/cards/S_E1_trend_us.json`, `S_E1_trend_krx.json` | Trial count; ledger | `E1 N_raw after registration + U`, U at most 24; approved A2 initializes 12 rows before price reads when E1 is missing/empty. Of-record still requires a nonempty verified ledger (R-15) | O11; 5.5 step 3 |
 | Claim label; card | `"pre-specified on historical data; the SPY series was used inside S_E1_trend_us with the same 12-setting grid; not confirmatory"`; `NB_E1_trend_spy` | QUANT-6, QUANT-R2-4; 6.5 | Before registration | md5 pins, date checks, 9-decimal rounding and P0a only; no signal, return or statistic | 3.9 |
 
 From the row counts alone: 38 origins, the first OOS session at row 777, and 4,711 OOS sessions, about 18.7 years
@@ -1718,6 +1729,11 @@ Revision 1's own findings: A-1 (two meanings of `RegisterResult.row_md5`; the br
 bars checked, 5.2.5); A-4 (the study's 0.03-percent leading DGS3MO fill; the bridge refuses NaN, R-06); A-5 (moot, C-1).
 
 ## Appendix B: referee rounds
+
+**2026-10-30 O8 update:** the owner requested a substitute review. No named substitute, report or verdict has
+been supplied in the received evidence. Record this as REVIEW_INCOMPLETE; do not substitute implementation tests
+for independent review or interpret the later question about review necessity as a waiver. The O11 A2 scope
+summary in Status is an owner decision, not a completed referee report. Private original: approval-page ID above.
 
 Each referee reviews the current revision. A referee who returns nothing is REVIEW_INCOMPLETE, never "no objections",
 unless the owner records a substitution. The Claude referee ran with the repo clone as its working directory; the clone

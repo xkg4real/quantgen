@@ -1,0 +1,50 @@
+name: Nautilus A2 registration (temporary ledgers)
+
+on:
+  push:
+    branches: [gpt/approved-research-followups-20261030]
+    paths:
+      - tools/nautilus/register_e1.py
+      - tests/nautilus_registration_acceptance.py
+      - .github/workflows/nautilus-registration.yml
+  pull_request:
+    paths:
+      - tools/nautilus/register_e1.py
+      - tests/nautilus_registration_acceptance.py
+      - .github/workflows/nautilus-registration.yml
+
+permissions:
+  contents: read
+
+jobs:
+  temporary-ledger-acceptance:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /core/
+            /config.py
+            /config/
+            /data/*.py
+            /tools/__init__.py
+            /tools/nautilus/
+            /tests/__init__.py
+            /tests/nautilus_registration_acceptance.py
+            /docs/nautilus_bridge/registration/pilot1_E1_spy.json
+            !.env
+            !*.jsonl
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install isolated test dependencies
+        run: python -m pip install "numpy==2.3.5" "pandas==2.3.3" "scipy==1.18.0" "python-dotenv>=1.0" "requests>=2.31"
+      - name: Test metadata registration and recovery only
+        run: python -B -m unittest tests.nautilus_registration_acceptance -v
