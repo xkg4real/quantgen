@@ -12,7 +12,7 @@ class PackagingScopeTests(unittest.TestCase):
                 self.assertFalse(allowed(name))
 
     def test_runtime_resources_and_status_are_explicit(self):
-        for name in ("core/app_paths.py", "tools/status/snapshot.py", "assets/fonts/qg-interface.otf",
+        for name in ("core/app_paths.py", "quantgen_desktop/app.py", "tools/status/snapshot.py", "assets/fonts/qg-interface.otf",
                      "assets/favicon.png", "assets/manifest.json", "assets/icons/icon-192.png",
                      "assets/branding/f1-symbol.svg", "core/calendars/data/MANIFEST.yaml",
                      "qa/research_status.json", "data/macro/series_registry.yaml"):

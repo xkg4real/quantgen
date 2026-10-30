@@ -1,5 +1,9 @@
 # QUANTGEN
 
+**Native desktop preview:** the optional PyQt6 research workspace is available with
+`pip install ".[desktop]"` and `python -m quantgen_desktop`. The browser remains
+Flet. This is a partial migration; see [scope and remaining screens](docs/DESKTOP_MIGRATION_2026-10-30.md).
+
 The upgraded, personal-use successor to NEXTGEN. Same body — the rule engine,
 simulated order book and KRX data layer all survive intact (the skill cockpit
 moved to TRADEGEN on 2026-10-23) — with the one organ the client build was
