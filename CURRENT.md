@@ -4,11 +4,11 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ②-5/N1, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T20:13:33.000+09:00
+done_ids: ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ②-5/NEW-M6-03, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-30T20:18:46.000+09:00
 stale_after_hours: 3
-waiting_on: ci
+waiting_on: none
 work_branch: gpt/strategy-exposure-disclosure-20261030
 work_commit: 437ca29c7439b4e27030cca3e86de39abd5538ab
 uncommitted_changes: no
@@ -30,15 +30,9 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 수신하면 O8 지시를 읽었다고 명시하고, 적용한 파일·검사 결과·커밋 또는 비공개 변경 상태·남은 실제 제약을 CURRENT와 메인세션에 보고하세요. 공개 반영은 이미 승인된 범위에 한합니다. 이 지시를 저장한 사실은 메인세션의 수신·적용 완료를 뜻하지 않습니다.
 
 ## 0. 현재 결과
-최신 제품 main **6bd4a208020998379a49acaeb1ee4a6fff3c49b3**, 현재 소스 **e55018716b3580ecc81684378d082e9c75cb6304** / gpt/mc-volatility-disclosure-20261030. 실행 ID a0dfb643-a8c7-4daf-bd53-13d9ad9b1341. 이번 실행은 아래 세 PR/네 항목을 실제 구현·검사·병합했습니다.
-- PR24 source71b0c9c → main ec98cbef: N-M1-09 음수/0 초과수익 max-Sharpe 경고, N-M1-10 요청/유효 상한과 선택/비교/frontier/cloud 범위를 Flet·Qt·AI·JSON/ZIP에 표시. focused8 PASS; baseline24조합 가중치/위험기여/수익/변동성/Sharpe/수렴 완전 동일, _solve/frontier/R-15 AST 불변. CI41039790188 3job success.
-- PR25 source501bce2 → main8ebf75d: N-M1-11 목표가격 확률을 만기 이상 사건으로 narrative/Flet/Qt/AI에 명시. 경로 중 터치와 만기 확률의 차이·아래/동일/미지정 목표·UI 포함5검사 PASS. MC 함수/클래스 AST·ResearchRun 계약 불변. CI41041014386 3job success.
-- PR26 sourcee550187 → main6bd4a208: N-M1-03 sample/next-session/horizon-average 연율화 변동성을 Flet·Qt·해설·AI에 구분. 새4+target회귀5검사 총9 PASS; 실제 합성4모형/Flet payload/native worker 확인. 엔진/추정기/252연율화/ResearchRun 계약 불변. CI41042183749 3job success.
-모든 CI는 exact source HEAD에서 Windows Python3.12/3.14 및 Ubuntu3.12의 completed success이며 PR/main/code를 원격 read-back했습니다. 완료 기록은 append-only LEDGER dd5e69ea(PR24),67715759(PR25),222bc749(PR26)이며 마지막 blob6748d07b도 read-back했습니다. sapientia@korea.ac.kr 연결의 REMAINING WORK4065에 실제 완료 하위 범위만 취소선 처리했습니다.
-**§10 최신 집계: 8/67그룹 완료,59그룹·14관찰 모델 행·15개 모호 ID 매핑은 미완료.** 기존 다른 세션의13관찰/13매핑과 집계 단위 차이는 아직 해소되지 않았으며 원문10.1은 서로 다른14모델 행을 명시합니다.
-이전 완료: 제품 PR13/14/15/17/19/20/22/23(패키징, native UI, BS-21, HAC, private AI payload, FICC 경계)와 연구 O11/O8 PR21을 보존했습니다. O8는 e089e59+36df786에서 실제 문서/20검사/CI41032685371 완료. 추가 GPT/Gemini는 선택·NOT_PERFORMED, 그 자체로 Windows 인계 차단 금지. O11 A2 등록명령d7b175f의 가격 전12개/12+U/U≤24 및 실제 실행 승인 guard는 그대로입니다. 연구 PR21은 draft/연구브랜치 대상이며 main에 통째로 병합하지 않았습니다.
-실제 Windows 육안/DPI, 공급자/AI/실원장/파일럿/owner_confirmed, 설치서명 및 배포는 미실행·미완료입니다. 공개 HTML은 사용자가 업로드합니다. 이번 패치는 그 완료를 의미하지 않습니다.
-다음 직접 작업은 N1의 종목당 cap과 총노출 범위 표시/합성 검증입니다. 최신 Model26/현재 strategy_workflow·Flet/Qt를 읽고 별도 gpt 브랜치에서 진행하며 비중 정규화/목적·판정·실제 원장 변경은 하지 않습니다. 상세 주간 기록과 최신 Word는 private reports/2026-10-30/ 아래에 있습니다.
+N1 완료: PR27 source437ca29c7439b4e27030cca3e86de39abd5538ab → main93f31a3158c4b49a348d9e91f2842e3640605fdc. vol_target/crypto_trend의 종목당 상한·실제 선택된 OOS 총노출/차입·1배 벤치마크 범위를 Flet/Qt/AI/JSON·ZIP에 표시했습니다. Flet 초기 equity 날짜 누락도 실제 재현 후 수정했습니다. 새6+기존5검사 통과, 기존4실행 계산값 완전 동일. CI41046492566 Windows3.12/3.14·Ubuntu3.12 all success, PR/main read-back. LEDGER c204ac054fb63c395bbbbea7992bdd24283b9e06 append/read-back 완료. sapientia4065 Notion 완료 하위 취소선/9완료·58남음 반영 성공.
+§10 최신9/67그룹 완료·58미완료·14관찰 행·15모호 매핑. 전체 완료나 Windows 수동/실파일럿 검증은 아닙니다. 이전 PR24/25/26 네 항목 및 O8/O11 PR21 기록은 git 이력/LEDGER/아래에서 보존합니다. O8 optional NOT_PERFORMED와 실제 실행 owner guard는 유지합니다.
+다음 직접 단위 NEW-M6-03: Model134/143/148 원문과 현재 half_life/ETF·Crypto 화면을 확인했습니다. φ≤0에서inf가 나와 ETF가 느린 회귀라고 단정합니다. 음수 안정 AR(1)의 진동 진폭 감쇠와 추정 불가/비감쇠를 분리하고 양수 결과/거래비중·게이트·저장 판정은 보존하는 독립 합성 검증을 진행합니다.
 
 ## 1. 최신 사용자 결정
 
@@ -133,3 +127,6 @@ N1 원문은 Model26(vol_target)뿐 아니라 Model30(crypto_trend)의 다종목
 
 ## 12. N1 구현/검사 체크포인트
 source437ca29c7439b4e27030cca3e86de39abd5538ab / PR27 원격 push/read-back 완료. vol_target+crypto_trend 종목별 cap, 실제 선택된 OOS 총노출/차입, 1배 벤치마크를 표시합니다. 실제 Flet 검사에서 발견한 날짜322/자산곡선323 오류는 초기자산 날짜를 추가해 수정했습니다. 새6+기존5검사 통과, main6bd4a208 대비 합성4실행의 기존 계산값 완전 동일. strategies/validate/gate_ledger 파일 byte 불변. 현재 CI 대기이며 아직 main 병합·LEDGER 완료 기록은 하지 않았습니다. 다음 소유권은 이 front matter 기준입니다.
+
+## 13. 최신 N1 완료 및 후속 단위
+0절/front matter가 최신입니다. 5/9/10절의 PR26 소스와11/12절 CI대기는 과거 체크포인트입니다. N1은 LEDGER에 완료됐으므로 재작업하지 않습니다. NEW-M6-03은 아직 미완료이며 별도 gpt 브랜치를 검증된 최신 제품 main에서 분리합니다. 현재 OS lock/execution은 fb4e7f11-2fc5-4222-a172-bdd3812c8392입니다. 같은 strategy/UI 파일의 다음 수정은 무한 반감기의 잘못된 의미/표시를 정정하기 위한 것이며 공식 gate/연구판정 변경이 아닙니다.
