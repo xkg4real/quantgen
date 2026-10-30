@@ -9,10 +9,10 @@ next_ids: ②-5/M4-N2, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, �
 updated_at: 2026-10-30T21:23:54.076+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/funding-inference-20261030
-work_commit: 414ce3e440de0dbe977a6b3856c95f2ea8b57f70
+work_branch: gpt/letf-study-disclosure-20261030
+work_commit: 39d92efb84389f6d7ae40c5502e629d52562d2bf
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/29
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -92,3 +92,6 @@ PR29 source 414ce3e440de0dbe977a6b3856c95f2ea8b57f70: README 수정으로 stale�
 
 ## 11. 펀딩 검증
 공개 docs/product/FUNDING_INFERENCE_2026-10-30.md, tests/{funding_inference,desktop_funding_inference}_acceptance.py 및 tools/status/funding_null_probe.py 참조. private reports/FUNDING_EVIDENCE.json,FUNDING_NULL_PROBE.json,FUNDING_TESTS.log 보존. 등록만으로자동실행완료를주장하지않습니다.
+
+## M4-N2 시작
+현재 동일 execution으로 새 gpt/letf-study-disclosure-20261030에서 ETF 분산proxy/연구근거구분을 진행합니다. 이전 완료범위를보존하며 수치계산·기초지수·금리/배당규약은변경하지않습니다.
