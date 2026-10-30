@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-2/e, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-30T14:50:07+09:00
+updated_at: 2026-10-30T15:15:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/pyqt6-desktop-20261030
-work_commit: c401e0d581d7439cba7580aa6b5d19b0ac6a9beb
+work_branch: gpt/pyqt6-completion-20261030
+work_commit: f88f7ec259f13a93af979dace7b5f2940528555e
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/16
+pr: https://github.com/xkg4real/quantgen/pull/17
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -24,6 +24,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 현재 결과
+최신 진행: f88f7ec259f13a93af979dace7b5f2940528555e 원격 push/read-back, draft PR #17. Derivatives/ETF/Crypto/KRX와 명시적 JSON/ZIP 분석 보고서 구현, native 28개와 기존 Flet ETF 수정주가/fallback 검사 통과. 현재 head의 패키징 CI는 진행 대기이며 전체 이전 완료는 아님. 로컬 wheel build는 개발 venv에 build 모듈이 없어 실행되지 않음; CI는 build 설치를 포함.
 사용자가 남은 개발의 즉시 재개를 직접 요청하여 재개했습니다. 자동감시의 next_eligible_at은 이 직접 요청을 차단하지 않습니다. 새로운 실행 ID로 CURRENT를 CAS 선점한 뒤 gpt/pyqt6-completion-20261030에서 남은 native 화면/내보내기/패키징을 진행합니다. 기존 완료 ID는 재처리하지 않습니다.
 공개 사이트용 A/F1 HTML은 내용을 보존해 완성하고 사용자에게 전달했습니다. 실제 사이트 업로드는 사용자가 맡으며 이 작업에서 제외했습니다.
 기존 Flet A/F1 Home, ResearchRun 세션 기록/내보내기, 패키징 CI, F1 브라우저 아이콘은 PR #13/#14/#15로 main에 반영됐습니다.
@@ -35,7 +36,9 @@ PyQt6 데스크톱은 draft PR #16의 검증된 부분 구현입니다. 전체 �
 - 공개 HTML은 사용자가 업로드. 호스팅 접근 요청·배포·공유 환경 변경은 제외.
 - 정확성이 우선. 사용량/런타임 제약이 가까우면 새 작업을 시작하지 않고 검증 상태와 Claude 재개 문서를 남김. 실제 계정 사용량은 도구에 없어 unknown.
 - 현재 기존 게시 환경과 이 작업 대화를 사용. 별도 새 환경 게시/이전은 중단된 결정이 유효.
-- 기존 자동 감시와 로컬 PAUSED 상태는 이번 개발 작업에서 변경하지 않음.
+- 2026-10-30 사용자 최신 지시: 직접 작업은 즉시 계속하고 기존 자동 예약을 매시간 재개용으로 갱신. 동일 예약 ID, DTSTART 2026-10-30 16:00 KST, HOURLY, enabled=true read-back. 로컬 PAUSED와 환경 설정은 유지.
+- 매주 화요일 17:00 KST 전 또는 런타임 한도 전에 그 주 전체 작업을 Claude에게 인계. 이번 11-03 16시 마감 준비/17시 전 반환. 실제 계정 토큰 잔량은 unknown.
+- 사용자 확인된 Notion REMAINING WORK(f77eb54f-725c-82b8-becb-81d7d61704bd)에 완료 범위 취소선과 현재 순서/종류를 반영. 기존 13개 하위 범위는 기록 근거로 완료, 전체 연구 검증 재실행 주장 없음. 새 작업도 완료 즉시 갱신.
 
 ## 2. 확인할 근거
 현재 Qt 브랜치:
