@@ -3,6 +3,7 @@ from dataclasses import asdict
 import numpy as np
 
 from core.research.market_analysis import DerivativesRequest, ETFRequest, CryptoRequest, KRXRequest
+from core.research.funding_disclosure import funding_text
 from core.research.decay_disclosure import decay_value, decay_text
 from .tools import ToolPane, number, fmt
 
@@ -128,6 +129,11 @@ class CryptoPane(ToolPane):
             ('BTC conditional vol · 365 days',fmt(g['cond_vol_365'],'pct')), ('GARCH nu',fmt(g['nu'])),
             ('GARCH persistence',fmt(g['persistence'])), ('Converged',str(g['converged'])), ('At bound',', '.join(g['at_bound']))])
         self.line('Kimchi premium', range(len(kp.dates)), [('Premium %',kp.premium_pct)], 'Days', 'Premium · %')
+        if fc:
+            self.text(funding_text(fc))
+            self.sections.append({'type': 'funding_diagnostic', 'bootstrap_p': None,
+                                  'bootstrap_status': 'RETIRED_INVALID_IID',
+                                  'diagnostic': getattr(fc, 'diagnostic', {})})
         if fc: self.line('Perpetual funding', range(len(fc.dates)), [('7-day mean annualized %',fc.carry_ann_pct)], 'Days', 'Annualized · %')
         else: self.text('Funding unavailable · insufficient or invalid funding history.')
         px = d['btc']; series=[('BTCUSDT',px)]
