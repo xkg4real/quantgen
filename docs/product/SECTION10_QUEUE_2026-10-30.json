@@ -1,0 +1,874 @@
+{
+  "schema": "quantgen-section10-triage/1",
+  "source_ref": "2da6469d8b3d45eab61d682555ff630ce1f564f7",
+  "source_path": "docs/nautilus_bridge/KNOWN_ERRORS_REGISTER_2026-10-28.md#10",
+  "status": "PARTIAL_TRIAGE_NOT_FULL_CORRECTION",
+  "ordering_note": "Queue is Codex's approved prioritization proposal, not an override of protected scope or owner decision rules.",
+  "counts": {
+    "source_ids": 71,
+    "canonical_groups": 67,
+    "observation_models": 14,
+    "initial_reproductions": 5
+  },
+  "aliases": {
+    "NEW-M6-06": "M4-N1",
+    "NEW-M6-07": "M4-N3",
+    "NEW-M6-08": "M4-N2",
+    "NEW-M6-09": "N2"
+  },
+  "entries": [
+    {
+      "id": "N-M1-01",
+      "canonical_id": "N-M1-01",
+      "source_model": "17. M1-17 Kupiec·Christoffersen VaR 백테스트",
+      "queue": 1,
+      "type": "Gate/ledger boundary",
+      "next": "Reproduce and compare in isolation; do not change frozen harness, stored grades or decision rules",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N-M1-02",
+      "canonical_id": "N-M1-02",
+      "source_model": "9. M1-09 블록 부트스트랩 경로 모형",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N-M1-03",
+      "canonical_id": "N-M1-03",
+      "source_model": "5. M1-05 Monte Carlo 엔진과 위험 수치 (run_monte_carlo: 팬, 기간 VaR·CVaR, P(loss), P(target))",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N-M1-04",
+      "canonical_id": "N-M1-04",
+      "source_model": "8. M1-08 점프 확산 경로 모형 (3σ 분할, 문서상 'Merton')",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N-M1-05",
+      "canonical_id": "N-M1-05",
+      "source_model": "13. M1-13 lab 변동성 입력 (SMA20, 확장창 GJR-t 예측)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N-M1-06",
+      "canonical_id": "N-M1-06",
+      "source_model": "13. M1-13 lab 변동성 입력 (SMA20, 확장창 GJR-t 예측)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N-M1-07",
+      "canonical_id": "N-M1-07",
+      "source_model": "22. M1-22 역사 구간 재현과 LETF 경로 항등식 (replay, letf_path_return)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N-M1-09",
+      "canonical_id": "N-M1-09",
+      "source_model": "23. M1-23 포트폴리오 최적화 (optimize_portfolio, efficient_frontier, 위험 기여)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N-M1-10",
+      "canonical_id": "N-M1-10",
+      "source_model": "23. M1-23 포트폴리오 최적화 (optimize_portfolio, efficient_frontier, 위험 기여)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N-M1-11",
+      "canonical_id": "N-M1-11",
+      "source_model": "5. M1-05 Monte Carlo 엔진과 위험 수치 (run_monte_carlo: 팬, 기간 VaR·CVaR, P(loss), P(target))",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N1",
+      "canonical_id": "N1",
+      "source_model": "26. M2-03 변동성 타깃 vol_target (상한형 Moreira–Muir)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N2",
+      "canonical_id": "N2",
+      "source_model": "30. M2-07 가상자산 단기 추세 crypto_trend (Liu–Tsyvinski / Detzel 표결)",
+      "queue": 1,
+      "type": "Gate/ledger boundary",
+      "next": "Reproduce and compare in isolation; do not change frozen harness, stored grades or decision rules",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N3",
+      "canonical_id": "N3",
+      "source_model": "24. M2-01 일간 손익 시뮬레이터 (strategies.simulate · equity_curve · summary · align_panel)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N4",
+      "canonical_id": "N4",
+      "source_model": "32. M2-09 격자 손익 행렬과 walk-forward 선택 (pnl_matrix · grid_from · walk_forward)",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N5",
+      "canonical_id": "N5",
+      "source_model": "29. M2-06 페어 pairs (Engle–Granger 스프레드) + half_life + adf_pvalue",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N6",
+      "canonical_id": "N6",
+      "source_model": "29. M2-06 페어 pairs (Engle–Granger 스프레드) + half_life + adf_pvalue",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N7",
+      "canonical_id": "N7",
+      "source_model": "37. M2-14 전략 게이트 판정 규칙 (score_strategy · _decide_strategy · GATE · plateau_share · year_stats · regime_split)",
+      "queue": 1,
+      "type": "Gate/ledger boundary",
+      "next": "Reproduce and compare in isolation; do not change frozen harness, stored grades or decision rules",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N8",
+      "canonical_id": "N8",
+      "source_model": "39. M2-16 분포 검증 루프 (score_distribution · kupiec · christoffersen · traffic_light · coverage_check · pit_tests · crps · dm_test)",
+      "queue": 1,
+      "type": "Gate/ledger boundary",
+      "next": "Reproduce and compare in isolation; do not change frozen harness, stored grades or decision rules",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N9",
+      "canonical_id": "N9",
+      "source_model": "37. M2-14 전략 게이트 판정 규칙 (score_strategy · _decide_strategy · GATE · plateau_share · year_stats · regime_split)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N10",
+      "canonical_id": "N10",
+      "source_model": "29. M2-06 페어 pairs (Engle–Granger 스프레드) + half_life + adf_pvalue",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N11",
+      "canonical_id": "N11",
+      "source_model": "50. M2-28 단일 종목 규칙 백테스트 (backtest.run_backtest: ma_cross · momentum · rsi_revert)",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N12",
+      "canonical_id": "N12",
+      "source_model": "35. M2-12 디플레이티드 Sharpe DSR (expected_max_sharpe · deflated_sharpe)",
+      "queue": 1,
+      "type": "Gate/ledger boundary",
+      "next": "Reproduce and compare in isolation; do not change frozen harness, stored grades or decision rules",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N13",
+      "canonical_id": "N13",
+      "source_model": "37. M2-14 전략 게이트 판정 규칙 (score_strategy · _decide_strategy · GATE · plateau_share · year_stats · regime_split)",
+      "queue": 1,
+      "type": "Gate/ledger boundary",
+      "next": "Reproduce and compare in isolation; do not change frozen harness, stored grades or decision rules",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N14",
+      "canonical_id": "N14",
+      "source_model": "25. M2-02 추세 전환 trend_switch (Faber SMA / MOP 부호)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N15",
+      "canonical_id": "N15",
+      "source_model": "45. M2-22 3단계 디플레이트 ΔSR·선택계수 f와 시행 원장 (gate_ledger.step3 · selection_factor · FamilyLedger · repo_anchor)",
+      "queue": 1,
+      "type": "Gate/ledger boundary",
+      "next": "Reproduce and compare in isolation; do not change frozen harness, stored grades or decision rules",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N17",
+      "canonical_id": "N17",
+      "source_model": "51. M2-29 기술 신호 합성 점수 (signals.compute_signals · sma · ema · rsi · macd)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "N18",
+      "canonical_id": "N18",
+      "source_model": "45. M2-22 3단계 디플레이트 ΔSR·선택계수 f와 시행 원장 (gate_ledger.step3 · selection_factor · FamilyLedger · repo_anchor)",
+      "queue": 1,
+      "type": "Gate/ledger boundary",
+      "next": "Reproduce and compare in isolation; do not change frozen harness, stored grades or decision rules",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M3-N01",
+      "canonical_id": "M3-N01",
+      "source_model": "69. M3-17 단기금리 닫힌식 할인채와 모형 곡선",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M3-N02",
+      "canonical_id": "M3-N02",
+      "source_model": "74. M3-22 PCA 중립 2-5-10 버터플라이 신호",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M3-N03",
+      "canonical_id": "M3-N03",
+      "source_model": "68. M3-16 단기금리 모형 보정 (Vasicek·CIR·Hull–White)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M3-N04",
+      "canonical_id": "M3-N04",
+      "source_model": "65. M3-13 Black-76·Bachelier 옵션식과 내재변동성",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M3-N05",
+      "canonical_id": "M3-N05",
+      "source_model": "68. M3-16 단기금리 모형 보정 (Vasicek·CIR·Hull–White)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M3-N06",
+      "canonical_id": "M3-N06",
+      "source_model": "57. M3-05 곡선 요약 지표·모양·국면 분류",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M3-N07",
+      "canonical_id": "M3-N07",
+      "source_model": "67. M3-15 캡·플로어 가격기",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M3-N08",
+      "canonical_id": "M3-N08",
+      "source_model": "71. M3-19 시평 재평가 VaR·CVaR",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M3-N09",
+      "canonical_id": "M3-N09",
+      "source_model": "70. M3-18 단기금리 경로 시뮬레이션",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N1",
+      "canonical_id": "M4-N1",
+      "source_model": "95. M4-18 ETF 화면의 레버리지·인버스 ETF 드래그 예측(GARCH-t 분산 경로, 직전 분기 분산)",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N2",
+      "canonical_id": "M4-N2",
+      "source_model": "95. M4-18 ETF 화면의 레버리지·인버스 ETF 드래그 예측(GARCH-t 분산 경로, 직전 분기 분산)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N3",
+      "canonical_id": "M4-N3",
+      "source_model": "94. M4-17 레버리지 ETF 드래그 식(Avellaneda–Zhang 2010)",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N4",
+      "canonical_id": "M4-N4",
+      "source_model": "92. M4-15 박스 스프레드 조달금리",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N5",
+      "canonical_id": "M4-N5",
+      "source_model": "85. M4-08 Fama 회귀(UIP 검정)",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N6",
+      "canonical_id": "M4-N6",
+      "source_model": "78. M4-01 FX 선도(CIP)·선도 포인트·암시 베이시스·캐리",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N7",
+      "canonical_id": "M4-N7",
+      "source_model": "93. M4-16 델타 헤지 손익 시뮬레이션(감마 항등식, GBM·GARCH-t 엔진)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N8",
+      "canonical_id": "M4-N8",
+      "source_model": "81. M4-04 SABR(Hagan 2002) 스마일 보정·보간",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N9",
+      "canonical_id": "M4-N9",
+      "source_model": "90. M4-13 모형무관 내재변동성(MFIV, Cboe 스트립)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N10",
+      "canonical_id": "M4-N10",
+      "source_model": "87. M4-10 옵션 보드 내재변동성(Cboe 암시 선도 + Black-76 역산 + KIS IV 대조)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N11",
+      "canonical_id": "M4-N11",
+      "source_model": "100. M4-23 CMS 10y−2y 스티프너 노트",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "M4-N12",
+      "canonical_id": "M4-N12",
+      "source_model": "88. M4-11 풋-콜 패리티 잔차와 정적 차익(수직·버터플라이) 검사",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-01",
+      "canonical_id": "NEW-M6-01",
+      "source_model": "133. M6-02 김치 프리미엄 7일 예측 회귀(기울기, Newey–West t)",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Verify CI and PR/main integration; historical cards are not regenerated",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION"
+    },
+    {
+      "id": "NEW-M6-02",
+      "canonical_id": "NEW-M6-02",
+      "source_model": "136. M6-05 펀딩 십분위 이벤트 스터디와 부트스트랩 p",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-03",
+      "canonical_id": "NEW-M6-03",
+      "source_model": "134. M6-03 평균회귀 진단(ADF p, AR(1) 반감기) 공용 함수",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-04",
+      "canonical_id": "NEW-M6-04",
+      "source_model": "144. M6-13 ETF 슬리브 표본 내 요약(추세 전환, 변동성 목표, 매수 보유)",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-05",
+      "canonical_id": "NEW-M6-05",
+      "source_model": "144. M6-13 ETF 슬리브 표본 내 요약(추세 전환, 변동성 목표, 매수 보유)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-06",
+      "canonical_id": "M4-N1",
+      "source_model": "95. M4-18 ETF 화면의 레버리지·인버스 ETF 드래그 예측(GARCH-t 분산 경로, 직전 분기 분산)",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-07",
+      "canonical_id": "M4-N3",
+      "source_model": "94. M4-17 레버리지 ETF 드래그 식(Avellaneda–Zhang 2010)",
+      "queue": 2,
+      "type": "Numerical result or missing-result display",
+      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-08",
+      "canonical_id": "M4-N2",
+      "source_model": "95. M4-18 ETF 화면의 레버리지·인버스 ETF 드래그 예측(GARCH-t 분산 경로, 직전 분기 분산)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-09",
+      "canonical_id": "N2",
+      "source_model": "30. M2-07 가상자산 단기 추세 crypto_trend (Liu–Tsyvinski / Detzel 표결)",
+      "queue": 1,
+      "type": "Gate/ledger boundary",
+      "next": "Reproduce and compare in isolation; do not change frozen harness, stored grades or decision rules",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-10",
+      "canonical_id": "NEW-M6-10",
+      "source_model": "138. M6-07 요일 표(요일 효과, 주말 거래대금)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-11",
+      "canonical_id": "NEW-M6-11",
+      "source_model": "147. M6-17 FICC 로컬 해설(core/ficc/insights.py, 결정적 문장)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-12",
+      "canonical_id": "NEW-M6-12",
+      "source_model": "149. M6-19 AI 심층 분석(Claude 서술, 모델 아님)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-13",
+      "canonical_id": "NEW-M6-13",
+      "source_model": "135. M6-04 펀딩 캐리 연율화, 백분위, 과밀 플래그",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-14",
+      "canonical_id": "NEW-M6-14",
+      "source_model": "142. M6-11 크립토 공급사 파생 표시값(perp premium, Upbit 보유 평가)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-15",
+      "canonical_id": "NEW-M6-15",
+      "source_model": "132. M6-01 김치 프리미엄 수준과 1년 z",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-16",
+      "canonical_id": "NEW-M6-16",
+      "source_model": "146. M6-16 Quant 로컬 해설(core/quant/insights.py, 결정적 문장)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-17",
+      "canonical_id": "NEW-M6-17",
+      "source_model": "145. M6-15 KRX·KIS 공급사 지표 표시(모델 아님)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-18",
+      "canonical_id": "NEW-M6-18",
+      "source_model": "142. M6-11 크립토 공급사 파생 표시값(perp premium, Upbit 보유 평가)",
+      "queue": 1,
+      "type": "Payload privacy",
+      "next": "Compare Flet and Qt request construction; use fake payloads, no accounts or API calls",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-19",
+      "canonical_id": "NEW-M6-19",
+      "source_model": "149. M6-19 AI 심층 분석(Claude 서술, 모델 아님)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-20",
+      "canonical_id": "NEW-M6-20",
+      "source_model": "139. M6-08 BTC GARCH(1,1)-t 화면 적합과 365일 환산",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-21",
+      "canonical_id": "NEW-M6-21",
+      "source_model": "140. M6-09 GARCH 롤링 스코어카드(GARCH-t, GJR-t, GJR-skew-t 대 EWMA)",
+      "queue": 3,
+      "type": "Model assumption or convention",
+      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-22",
+      "canonical_id": "NEW-M6-22",
+      "source_model": "142. M6-11 크립토 공급사 파생 표시값(perp premium, Upbit 보유 평가)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": true,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "NEW-M6-23",
+      "canonical_id": "NEW-M6-23",
+      "source_model": "30. M2-07 가상자산 단기 추세 crypto_trend (Liu–Tsyvinski / Detzel 표결)",
+      "queue": 4,
+      "type": "Disclosure, provenance or compatibility",
+      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "NOT_RUN",
+      "correction": "NOT_IMPLEMENTED"
+    }
+  ],
+  "observations": [
+    {
+      "model": "102. 매크로 시트 지표 통계(18개 지표 변화·z·백분위, 브리프 무버 순위)",
+      "observation": "신규 관찰(rel_1d 분모 0 근처 폭주, 감사 행 없음)",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "104. PIT 저장소와 as-of 읽기(pit_value, pit_window, 순위, 분쟁 판정)",
+      "observation": "신규 관찰(pit_window 합성·auto 미거부, 잠재, 감사 행 없음)",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "110. 독립 지연 감사(lag_audit)",
+      "observation": "신규 관찰(창 행 미감사·백테스트 공급사 기준 불일치, 감사 행 없음)",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "114. R-09 헤지 유효성 상태(hedge_state, corr63, 근원 PCE)",
+      "observation": "신규 관찰: apply_hedge_state 미연결(감사 행 없음)",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "115. R-07 한국 집중도 한도(ETF 투시, MSCI 25/50)",
+      "observation": "신규 관찰(미연결, 감사 행 없음)",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "117. 북 런타임 상태기계(ARM/DISARM/HALT)와 북 NAV 평가",
+      "observation": "신규 관찰(NAV 분배금 미반영, 감사 행 없음)",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "119. R-13 맥락 로그 계산기(Sahm, probit, Taylor, VRP, rv21, SMA10m, 난류)",
+      "observation": "신규 관찰(KOSPI 추세 월말 지연, probit 계수 원천 미대조)",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "121. R-28 추세 축과 R-29 미국 선물 vt(FORWARD-SIM 표시 북)",
+      "observation": "신규 관찰(vt_us·월말 창 간격·최신성 미검사, 감사 행 없음)",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "122. R-11·R-12 거부 북(refusal books, 표시 전용)",
+      "observation": "신규 관찰(창 상태·최신성 미검사, 감사 행 없음)",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "130. CRY-1 대조 실험(크립토 카드 C3 추세, 공급사 캐시)",
+      "observation": "신규 관찰(CRY-1 표시값 √252)",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "150. N-01 Execution 가격 조건 규칙 평가기와 시세 신선도 가드(모의주문, 모델 아님)",
+      "observation": "신규(미등재): 일 한도 UTC 날짜 경계",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "151. N-02 화면 데모·대체용 합성 데이터(FX 현물, Crypto 데모, KOSPI200 데모 보드와 지수 경로)",
+      "observation": "신규(미등재): Derivatives 데모 만기 칩·고정 베이시스",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "153. N-04 R-19 데이터 계약 검사와 역할별 실패 동작, 연속 실패 HALT 카운터",
+      "observation": "신규(미등재) 3건: 단조 조항 미작동, 위반 사유 소실, NAV 라인 계약 없음",
+      "current_reproduction": "NOT_RUN"
+    },
+    {
+      "model": "156. N-07 KOSPI200 만기일 규칙, 근월물 선택, 연속 선물 스플라이스(data/kis_markets.py)",
+      "observation": "신규(미등재): 만기일 휴장 미조정, 대체 근월물 코드 고정",
+      "current_reproduction": "NOT_RUN"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "before_code_ref": "0cc30c3ed1a7e25f1d06215a858d57bc199e9be6",
+  "before": {
+    "mode": "synthetic_read_only",
+    "seed": 81030,
+    "findings": {
+      "N-M1-01": {
+        "n": 200,
+        "exceptions": 0,
+        "alpha": 0.01,
+        "current_p": 0.15521848968468407,
+        "likelihood_ratio_p": 0.04496013210612092,
+        "note": "Boundary statistic differs; no stored grade or gate rule changed."
+      },
+      "N1": {
+        "assets": 4,
+        "per_asset_cap": 1,
+        "max_gross_exposure": 4.0,
+        "note": "A per-asset cap is not a portfolio gross-exposure limit."
+      },
+      "N-M1-09": {
+        "weights": [
+          1.3755408733880023e-17,
+          1.0,
+          0.0
+        ],
+        "sharpe": -0.19999999999999998,
+        "converged": true,
+        "note_from_optimizer": "",
+        "note": "Negative-Sharpe optimum is not an arithmetic failure; warning/model choice needs separate handling."
+      },
+      "NEW-M6-01": {
+        "observations": 443,
+        "current_t": 5.263133750117731,
+        "sandwich_t": 0.25005903082588476,
+        "ratio": 21.047565179849204,
+        "sqrt_n": 21.047565179849187
+      },
+      "NEW-M6-03": {
+        "generating_phi": -0.7,
+        "current_half_life": "infinite",
+        "note": "Stationary alternating process; infinite output must not imply non-stationarity."
+      }
+    },
+    "actual_data_or_ledgers_used": false,
+    "corrections_applied": false
+  },
+  "after_hac_correction": {
+    "observations": 443,
+    "current_t": 0.25005903082588493,
+    "sandwich_t": 0.25005903082588476,
+    "ratio": 1.0000000000000007,
+    "sqrt_n": 21.047565179849187
+  },
+  "unchanged_diagnostics": [
+    "N-M1-01",
+    "N1",
+    "N-M1-09",
+    "NEW-M6-03"
+  ]
+}
