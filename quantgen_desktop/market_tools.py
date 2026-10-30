@@ -3,6 +3,7 @@ from dataclasses import asdict
 import numpy as np
 
 from core.research.market_analysis import DerivativesRequest, ETFRequest, CryptoRequest, KRXRequest
+from core.research.decay_disclosure import decay_value, decay_text
 from .tools import ToolPane, number, fmt
 
 
@@ -74,7 +75,11 @@ class ETFPane(ToolPane):
         if d.get('quote'): self.result_table('Quote', ['Field', 'Value'], list(d['quote'].items()))
         if d.get('premium_stats'):
             self.line('NAV premium', range(len(d['dates'])), [('Premium %', d['premium_pct'])], 'Observations', 'Premium · %')
-            self.result_table('Premium statistics', ['Metric', 'Value'], [(k, fmt(v)) for k,v in d['premium_stats'].items()])
+            ps = d['premium_stats']
+            self.result_table('Premium statistics', ['Metric', 'Value'],
+                [(k, fmt(v)) for k,v in ps.items() if k not in {'decay','half_life'}] +
+                [('AR(1) amplitude half-life · observations',decay_value(ps.get('decay')))])
+            self.text(decay_text(ps.get('decay')))
         sleeves = d.get('sleeves')
         if sleeves:
             self.result_table('Descriptive sleeve backtests', ['Sleeve', 'Sharpe', 'Max drawdown', 'Study decision'],
@@ -113,8 +118,11 @@ class CryptoPane(ToolPane):
         self.text(f"{d['source']} · USD/KRW: {d['usdkrw_source']} · {d['btc_dates'][0]} → {d['btc_dates'][-1]}\n"
                   f"Public market analysis · no order submission · study cards: {out.study_status}")
         if d['source']=='SYNTHETIC': self.text('SYNTHETIC · 모든 시계열은 합성 데이터입니다.')
+        self.text(decay_text(getattr(kp, "decay", None)))
+        self.text('ETH/BTC: ' + decay_text(d['ethbtc'].get('decay')))
         self.result_table('Premium / volatility', ['Metric', 'Value'], [
-            ('Kimchi premium · %',fmt(kp.last_pct)), ('Premium z',fmt(kp.last_z)), ('Half life · days',fmt(kp.half_life_days)),
+            ('Kimchi premium · %',fmt(kp.last_pct)), ('Premium z',fmt(kp.last_z)),
+            ('AR(1) amplitude half-life · observations',decay_value(getattr(kp, "decay", None))),
             ('Funding annualized · %', fmt(fc.last_ann_pct) if fc else 'UNAVAILABLE'),
             ('Funding percentile', fmt(fc.percentile,'pct') if fc else 'UNAVAILABLE'),
             ('BTC conditional vol · 365 days',fmt(g['cond_vol_365'],'pct')), ('GARCH nu',fmt(g['nu'])),
@@ -126,7 +134,9 @@ class CryptoPane(ToolPane):
         for n in (50,200):
             if len(px)>=n: series.append((f'SMA{n}', np.r_[np.full(n-1,np.nan),np.convolve(px,np.ones(n)/n,mode='valid')]))
         self.line('Bitcoin',range(len(px)),series,'Calendar days','USDT per BTC')
-        self.result_table('ETH/BTC', ['Metric','Value'],list(d['ethbtc'].items()))
+        self.result_table('ETH/BTC', ['Metric','Value'],
+            [(k,v) for k,v in d['ethbtc'].items() if k not in {'decay','half_life_days'}] +
+            [('AR(1) amplitude half-life · observations',decay_value(d['ethbtc'].get('decay')))])
         self.result_table('Weekday observations', ['Day','n','Mean return %','Vol %','Mean volume'],
             [[r['day'],r['n'],fmt(r['mean_ret_pct']),fmt(r['vol_pct']),fmt(r['mean_volume'])] for r in d['weekday']['rows']])
         self.text(f"Weekday Bonferroni p={d['weekday']['return_effect_p_bonferroni']:.4g} · weekend volume ratio={d['weekday']['weekend_volume_ratio']:.3f}")

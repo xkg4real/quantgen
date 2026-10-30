@@ -34,7 +34,7 @@ from typing import Optional, Sequence
 import numpy as np
 from scipy import stats as sps
 
-from core.quant.strategies import adf_pvalue, half_life
+from core.quant.strategies import adf_pvalue, half_life, ar1_decay
 from core.quant.validate import newey_west_t
 
 CRYPTO_DAYS = 365
@@ -64,6 +64,7 @@ class KimchiPremium:
     pred_t: float = 0.0                # Newey–West t (lag 6)
     n: int = 0
     note: str = ""
+    decay: dict = field(default_factory=dict)
 
 
 def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
@@ -104,7 +105,7 @@ def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
     return KimchiPremium(dates=tuple(dates), premium_pct=prem, z_1y=z, btc_usd=us, last_pct=float(prem[-1]),
                          last_z=float(z[-1]) if np.isfinite(z[-1]) else 0.0, mean_pct=float(prem.mean()),
                          max_pct=float(prem.max()), adf_p=adf_pvalue(prem), half_life_days=half_life(prem),
-                         pred_slope=slope, pred_t=t, n=int(prem.size),
+                         decay=ar1_decay(prem), pred_slope=slope, pred_t=t, n=int(prem.size),
                          note=("USD/KRW forward-filled by date (FRED noon fixing vs UTC-midnight closes: a few hours "
                                "of FX drift); a positive premium means Korea pays more than the world price."))
 
@@ -174,7 +175,7 @@ def eth_btc_test(eth: dict[str, float], btc: dict[str, float]) -> dict:
     dates, (e, b) = _align(eth, btc)
     x = np.log(e / b)
     return {"n": len(dates), "last_ratio": float(e[-1] / b[-1]), "adf_p": adf_pvalue(x),
-            "half_life_days": half_life(x), "z_2y": float((x[-1] - x[-730:].mean()) / x[-730:].std(ddof=1)) if x.size > 100 else float("nan"),
+            "half_life_days": half_life(x), "decay": ar1_decay(x), "z_2y": float((x[-1] - x[-730:].mean()) / x[-730:].std(ddof=1)) if x.size > 100 else float("nan"),
             "verdict": ("mean-reverting at 5 %" if adf_pvalue(x) < 0.05 else "no rejection of a unit root (the expected null)")}
 
 
