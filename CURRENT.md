@@ -4,15 +4,15 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+done_ids: ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T16:52:23.000+09:00
+updated_at: 2026-10-31T16:55:55.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/claude-diagnostics-website-record-20261031
-work_commit: 13d16ae551cea65b6ac20a02a04e812de7745838
+work_commit: f369559c94a43f193e6afd5fe37f9f5f86e29bc8
 uncommitted_changes: no
-pr: none (PR46 merged; website metadata preparing)
+pr: none (PR46 and metadata PR48 merged)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -25,7 +25,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 최신 검증 결과
-2026-10-31 추가 완료: ⑬-8/b2/a 캐리바스켓 한영해설 PR43 sourcedf7ccd8f21815933ff48e105d8e6bac77937b4cf → main9d55e2ba350054759055c2f85b4332993a047e8d; 로컬41검사/CI41179628495 Windows3.12/3.14·Ubuntu success. ⑬-8/b2/b Rates곡선/PCA·스왑·금리옵션·시뮬레이션 결과해설 PR44 source32d80824432bb28373c3c1aa17b14af60aa92cb5 → main8c9b2fc090285dfcb5a1b019685052949ced8f44; 로컬38검사/CI41179930472 세환경success. 수치·분기·합성고지·보조환산불가·원문보고서를보존합니다. sapientia4065 Notion하위두항목취소선/read-back. 부모13-8/b2 및 Bonds/Portfolio·원본모형/provider주석·인라인문구·실제Windows/DPI는미완료. PR45는43/44웹검토 JSON두파일기록(source7759137873917fd003413f409f85638d1f00b3a1→mainc3a0613eaa6d26620d871b28f28e5ba349ff1ac9)으로runtime CI대상아님;전달queued/no receipt,웹적용/배포미검증. 이전전체완료이력보존,§10은15/67완료52미완료·14관찰15모호매핑으로불변. 이는진행체크포인트이며전체완료/주간returned/Claude수신확인이아닙니다.
+2026-10-31T16:55:55.000+09:00: ⑬-9/a Claude 연결오류 분류·원문비노출·PyQt6/Flet EN/KO안내와⑨-2/c Nautilus/데이터공급자역할설명 완료. PR46 source c47f6c0a116cad919b403568d377408452cdab69 → main 13d16ae551cea65b6ac20a02a04e812de7745838;최종24API/privacy/양UI언어검사와47문서경계검사PASS,Runtime41181892399 Windows3.12/3.14·Ubuntu3.12 모두success,문서41181892438 success. 키/실계정/사용자Windows 실제연결은NOT_RUN이며13-9/b미완료. 새Nautilus설명은공급자전체교체/연구main통합/파일럿완료가아님. PR21은연구0510719로병합,제품main과구분. 외부UI PR42 main d77d996병합과인계문서확인/보존. sapientia4065에13-9/a·9-2/c취소선/read-back;부모범위미완료. PR48 메타데이터 sourcef369559c94a43f193e6afd5fe37f9f5f86e29bc8→main91f6a588389282332a05b26f017eb2c84f86af47,문서CI41182415013 success. 웹사이트전달queued/no receipt,실제웹적용/배포미확인. 이전13-8캐리/Rates·§10 15/67완료이력보존;다음13-8/b2/c 및M4-N3. 전체완료/주간returned/Claude수신확인이아닌안전재개체크포인트.
 
 ## 1. 최신 사용자 결정
 - 직접 요청 작업은 일반 감시의 returned/cooldown/next_eligible_at으로 막지 않습니다. Claude 사용 불가 동안 계속하고 화요일17시 전 또는 런타임 한도 전에 주간 전체 인수인계를 남깁니다. 계정 토큰 잔량은 도구가 없어unknown입니다.
@@ -57,7 +57,7 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 외부 main51bac973 상업출시 방향 README변경은 보존됐으며 법률 검증 증거로 대신 쓰지 않습니다.
 
 ## 5. 현재 저장 상태
-제품 gpt/language-website-records-20261031 @7759137873917fd003413f409f85638d1f00b3a1 원격검증. 최신mainc3a0613eaa6d26620d871b28f28e5ba349ff1ac9; PR43/44코드와PR45문서병합검증,미병합PR없음/트리clean. 연구 로컬HEAD2da6469 및published36df786 workingfiles보존/reset금지. 원문/표시구분은fx_narrative.py와rates_narrative.py;copy/가격/진단공식기준/실행승인불변. UI PR42는별도세션이main d77d996에병합·검증했고;handoff/UI_SESSION_CURRENT.md의최신source/검사/범위를최종주간인계시함께읽습니다.
+제품 gpt/claude-diagnostics-website-record-20261031 @f369559c94a43f193e6afd5fe37f9f5f86e29bc8 원격검증/clean. 최신검증main91f6a588389282332a05b26f017eb2c84f86af47;PR46코드/PR48문서병합. 연구로컬원본은보존. 실제사용자키와WindowsAPI 연결미검증이며설정파일/계정접근없음. 같은실행156c744e-dca7-4925-9aa6-b968fcc8c353의마지막저장점이며STATE의잠금해제검증후만다음실행재개.
 
 ## 6. 다음 단위와 남은 일
 1. ⑬-8/b2/c 최우선: Bonds/Portfolio 및 다른 authored해설과모형주석/인라인문구의표시번역. 완료된캐리/금리결과해설은LEDGER와docs/product/{CARRY,RATES}_LANGUAGE_2026-10-31.md참조,재작업금지. 병합된PR42의공통localization·보고서통합시 명시적localized variant·영문원문·보고서증거보존계약유지. 실제Windows/DPI/provider검수는NOT_RUN이며별도. 새로운언어변경을새gpt브랜치에서진행하고숫자/분기/누락/원문보고서보존검사.
@@ -73,7 +73,7 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 O8선택심사,UI/PR/main의 기존승인을 다시 묻거나 승인대기로 되돌리지 않습니다. 실제 연구판정·정식원장·외부공개와 Windows증거/실행확인은 별도입니다. 현재 waiting_on=none은 다음 독립수정이 가능하다는 뜻이며 미실행파일럿을 승인했다는 뜻이 아닙니다.
 
 ## 9. 재개 절차
-STATE/기대환경/private 접근과OS RUN.lock 검증. 직전 execution fd53d6e3-3f1f-47ea-b2f8-738edbf6634c, task owner-product-workflow-20261029,고정handoffID,gpt/language-website-records-20261031 @7759137873917fd003413f409f85638d1f00b3a1가STATE와최신CURRENT에일치하고직전잠금해제기록확인후 새execution ID로최신blob CAS및원격read-back. 소유권불명/다른taken이면중단. 다음⑬-8/b2/c는최신검증main에서새gpt브랜치로진행. 다른UI세션draftPR42를선점/임의병합하지않음. 실제외부승인·연구판정·정식원장·공개경계유지.
+STATE/기대환경/private 접근과OS RUN.lock 확인. 직전execution 156c744e-dca7-4925-9aa6-b968fcc8c353,task owner-product-workflow-20261029,고정handoffID,gpt/claude-diagnostics-website-record-20261031 @f369559c94a43f193e6afd5fe37f9f5f86e29bc8를STATE와최신CURRENT에대조하고잠금해제검증후새execution으로최신blob CAS/read-back. 다음새gpt브랜치에서13-8/b2/c;main에병합된PR42의locale/report계약과PR46오류진단보존.13-9/b실제API연결은사용자설치본확인이필요하며독립개발차단조건이아님. 최신연구CURRENT/소유권과실행승인조건유지;이문서로파일럿이나owner_confirmed부여없음.
 
 ## 10. 검증·인계 파일
 PR31 source55dae2f→maind4670f3,CI41172791664:22검사PASS,3기존펀드27결과필드동일. livemasterCONNECT403은미해결검수이며우회안함.
@@ -181,3 +181,11 @@ source c47f6c0a116cad919b403568d377408452cdab69 push/read-back. main의외부PR4
 
 ## PR46 완료 및 웹사이트 기록 준비
 ⑬-9/a·⑨-2/c source c47f6c0a116cad919b403568d377408452cdab69 → main 13d16ae551cea65b6ac20a02a04e812de7745838 원격검증. Runtime41181892399 세환경/문서41181892438 success. 24연결/privacy/양UI언어 및47문서경계검사PASS. LEDGER5978482/read-back, sapientia4065 완료하위취소선성공. 실제13-9/b 사용자키/API 연결 NOT_RUN;13-8/b2/c 등기존미완료보존. 새metadata브랜치 gpt/claude-diagnostics-website-record-20261031는PR46의웹검토JSON만추가예정. 전달도구부재queued/no receipt,웹적용/배포미검증. UI_SESSION_CURRENT 최신ddaaa6be에PR42 main d77d996 및runtime41181029682/문서41181029690 성공 기록확인;별도세션이력보존.
+
+## 이전 체크포인트 보존
+### PR43/44/45 시점 검증 결과
+2026-10-31 추가 완료: ⑬-8/b2/a 캐리바스켓 한영해설 PR43 sourcedf7ccd8f21815933ff48e105d8e6bac77937b4cf → main9d55e2ba350054759055c2f85b4332993a047e8d; 로컬41검사/CI41179628495 Windows3.12/3.14·Ubuntu success. ⑬-8/b2/b Rates곡선/PCA·스왑·금리옵션·시뮬레이션 결과해설 PR44 source32d80824432bb28373c3c1aa17b14af60aa92cb5 → main8c9b2fc090285dfcb5a1b019685052949ced8f44; 로컬38검사/CI41179930472 세환경success. 수치·분기·합성고지·보조환산불가·원문보고서를보존합니다. sapientia4065 Notion하위두항목취소선/read-back. 부모13-8/b2 및 Bonds/Portfolio·원본모형/provider주석·인라인문구·실제Windows/DPI는미완료. PR45는43/44웹검토 JSON두파일기록(source7759137873917fd003413f409f85638d1f00b3a1→mainc3a0613eaa6d26620d871b28f28e5ba349ff1ac9)으로runtime CI대상아님;전달queued/no receipt,웹적용/배포미검증. 이전전체완료이력보존,§10은15/67완료52미완료·14관찰15모호매핑으로불변. 이는진행체크포인트이며전체완료/주간returned/Claude수신확인이아닙니다.
+
+
+## 최종 저장·재현
+PR46 검사: QT_QPA_PLATFORM=offscreen python -m unittest tests.ai_connection_acceptance tests.ai_payload_acceptance tests.desktop_commentary_acceptance tests.desktop_language_acceptance -v (24PASS), python -m unittest tests.compliance_acceptance tests.compliance_export_acceptance (47PASS). mock/합성/임시/offscreen;실제인증키불필요·dotenv차단. 비공개CLAUDE_CONNECTION_EVIDENCE.json·주간Word/TXT·NEXT_SAFE_START를원격/STATE와대조보관. 사용자문제의실제연결성공은미확인;401활성API키/워크스페이스/환경변수우선순위,404모델설정,결제·한도·서비스/통신을구분. 계정토큰잔량unknown,기존hourly예약변경/중복/run_now없음. 주간반환아님;다음정상소유권재개필요.
