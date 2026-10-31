@@ -161,3 +161,6 @@ PR40 sourceae768dc → mergebea069f; CI41177922111 all3 jobs success, PR merge r
 
 ## ⑬-8/b2/a PR43 원격 저장
 캐리바스켓 해설/포지션/오래된금리경고/알려진 엔진주석의한영표시구현, sourcedf7ccd8f21815933ff48e105d8e6bac77937b4cf push/read-back. 합성/offscreen41검사PASS(캐리6·FX6·언어7·desktop22), 숫자/부호/단위/원문보고서/표값/equity불변. unknown note원문보존. CI대기이며아직완료ID아님. UI draftPR42공통언어변경과통합시이회귀검사를유지해야함;해당draft는미수정.
+
+## ⑬-8/b2/b 금리 해설 착수
+PR43 캐리코드 CI대기는독립추적. 검증된source df7ccd8에서새gpt/rates-language-20261031을만들어곡선/스왑/금리옵션/단기금리시뮬레이션의 authored해설표시를확장. 기존 rates.py는원문보고서를보존하며표시variant만연결하기위해수정. 계산코어·판정·시뮬레이션결과·연구실행승인불변. 해당하위ID LEDGER에없음. 공통localization/tools는UI draftPR42와겹치므로수정하지않음.
