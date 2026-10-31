@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/M4-N1, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T14:23:30+09:00
+updated_at: 2026-10-31T14:29:26.879+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/letf-study-disclosure-20261030
-work_commit: f72b14745ff223ffab7a80afdd32f35d753ad632
+work_branch: gpt/letf-underlying-index-20261031
+work_commit: 55dae2fd7e6deeefa4a0a41f67f6b19d2d35e146
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/30
+pr: https://github.com/xkg4real/quantgen/pull/31
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -92,3 +92,5 @@ M4-N2 source f72b14745ff223ffab7a80afdd32f35d753ad632 PR30: 기존5펀드5340값
 
 ## 2026-10-31 재개
 사용자 직접 재개 지시에 따라 M4-N1 기초지수 식별자·출처 검증부터 진행합니다. 기존 PR29/30 완료와 O8/O11 범위를 보존합니다. 코드 변경 전 소유권 CAS 및 원격 read-back을 수행합니다.
+
+M4-N1 source55dae2fd7e6deeefa4a0a41f67f6b19d2d35e146: KOSDAQ150 공식master exact-name 해석, 공급자 실패시 NOT_RUN, 명시demo만합성.22검사PASS/3기존펀드27결과필드동일. PR31 CI대기, main미병합. 공식master실조회CONNECT403으로 live검수NOT_RUN;우회없음. 원격source read-back완료.
