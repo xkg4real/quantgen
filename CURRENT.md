@@ -6,7 +6,7 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T16:55:55.000+09:00
+updated_at: 2026-10-31T17:06:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/claude-diagnostics-website-record-20261031
@@ -17,7 +17,7 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: 156c744e-dca7-4925-9aa6-b968fcc8c353
+execution_id: 2c7037f9-6ae8-44a3-9bb9-3fea78d21c63
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
@@ -189,3 +189,7 @@ source c47f6c0a116cad919b403568d377408452cdab69 push/read-back. main의외부PR4
 
 ## 최종 저장·재현
 PR46 검사: QT_QPA_PLATFORM=offscreen python -m unittest tests.ai_connection_acceptance tests.ai_payload_acceptance tests.desktop_commentary_acceptance tests.desktop_language_acceptance -v (24PASS), python -m unittest tests.compliance_acceptance tests.compliance_export_acceptance (47PASS). mock/합성/임시/offscreen;실제인증키불필요·dotenv차단. 비공개CLAUDE_CONNECTION_EVIDENCE.json·주간Word/TXT·NEXT_SAFE_START를원격/STATE와대조보관. 사용자문제의실제연결성공은미확인;401활성API키/워크스페이스/환경변수우선순위,404모델설정,결제·한도·서비스/통신을구분. 계정토큰잔량unknown,기존hourly예약변경/중복/run_now없음. 주간반환아님;다음정상소유권재개필요.
+
+
+## 2026-10-31 Bonds/Portfolio 언어 작업 재개
+직전 execution156c744e-dca7-4925-9aa6-b968fcc8c353 및 task/handoff/branch/source·STATE 잠금해제를 대조했습니다. 새 execution2c7037f9-6ae8-44a3-9bb9-3fea78d21c63로 13-8/b2/c를 재개합니다. 최신 main의 새 gpt 브랜치에서 Bonds/Portfolio 자체 해설을 표시 전용 번역하며 PR42 locale/report·PR46 오류진단 계약을 보존합니다. 실제 Windows 검수와 부모13-8 완료는 별도입니다.
