@@ -6,6 +6,7 @@ from core.research.market_analysis import DerivativesRequest, ETFRequest, Crypto
 from core.research.funding_disclosure import funding_text
 from core.research.letf_disclosure import letf_text, letf_unavailable_text
 from core.research.decay_disclosure import decay_value, decay_text
+from core.research.quote_coverage import quote_coverage_text
 from .tools import ToolPane, number, fmt
 
 
@@ -51,7 +52,12 @@ class DerivativesPane(ToolPane):
             ('Mean P&L · bp', fmt(sim.mean_pnl_bp)), ('SE · bp', fmt(sim.se_bp)), ('CVaR95 · bp', fmt(sim.cvar95_bp)),
             ('Hedge volatility', fmt(sim.sigma_hedge, 'pct')), ('Break-even realised vol', fmt(sim.breakeven_vol, 'pct')),
             ('Identity slope / R²', f'{sim.identity_slope:.4f} / {sim.identity_r2:.4f}')])
-        self.result_table('Static arbitrage checks', ['Check', 'Value'], list(s['arbitrage'].items()))
+        coverage = s['quote_coverage']
+        self.result_table('Static arbitrage checks', ['Check', 'Violations', 'Tests', 'Status'],
+            [(key, str(check['violations']) if check['tests'] else 'NOT_RUN', check['tests'], check['status'])
+             for key, check in coverage['static'].items()])
+        self.text(quote_coverage_text(coverage))
+        self.sections.append({'type': 'quote_coverage', **coverage})
         self.finished(out.narrative)
 
 

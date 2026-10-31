@@ -9,8 +9,8 @@
     "canonical_groups": 67,
     "observation_models": 14,
     "initial_reproductions": 5,
-    "additional_reproduced_ids": 11,
-    "implemented_canonical_groups": 12
+    "additional_reproduced_ids": 12,
+    "implemented_canonical_groups": 13
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -554,10 +554,11 @@
       "source_model": "88. M4-11 풋-콜 패리티 잔차와 정적 차익(수직·버터플라이) 검사",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Live quote quality/manual Windows acceptance NOT_RUN. Raw numeric checks and historical study verdicts unchanged.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED",
+      "evidence": "docs/product/QUOTE_COVERAGE_2026-10-31.md"
     },
     {
       "id": "NEW-M6-01",
