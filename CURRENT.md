@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-1/b, ②-5/M3-N04, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T05:46:28.781Z
+updated_at: 2026-10-31T05:50:35.079Z
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/swaption-aux-conversion-20261031
-work_commit: 118041443385cdd05fae0929172cf8eccd4b86a3
+work_commit: 4e84e992f68cf02208c2e4fff121de883dd5c99c
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/33
+pr: https://github.com/xkg4real/quantgen/pull/35
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -107,3 +107,6 @@ M4-N12 source e5a09e5beea84f48cf037f1b2d715f4904f3f341 원격read-back, PR32 생
 ## PR33 저장 및 M3-N04 시작
 ②-1/b sourceb20f9b1749b483e5430b5280a8e65a0d87f3854e 원격read-back, PR33 CI대기. 정규화15의존성 완전일치·합성OLS/ADF스모크PASS. PR33은별도pending이며아직완료아님.
 같은execution은 독립M3-N04를새gpt/swaption-aux-conversion-20261031(main1180414기준)에서진행. Model65와현행price_swaption에서보조normal↔Black환산3실패를합성재현. 선택모형가격/그릭스·기존변동성역산거부규칙은보존하고보조환산불가만N/A·null/사유로분리. LEDGER에M3-N04완료기록없음확인;이전M3-N07은다른caplet입력범위.
+
+## M3-N04 원격 저장
+source4e84e992f68cf02208c2e4fff121de883dd5c99c 원격read-back 후 PR35 생성. 11focused/UI/export/boundary+기존3pricing검사 PASS;정상24사례의기존모든필드exact동일·다른swaps함수AST동일. 기본모형입력거부유지. CI대기라아직완료ID아님.
