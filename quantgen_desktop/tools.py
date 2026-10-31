@@ -120,12 +120,17 @@ class ToolPane(QWidget):
                 item.widget().hide()
                 item.widget().deleteLater()
 
-    def text(self, text, role='muted'):
+    def text(self, text, role='muted', *, localized=None):
         from .app import label
         from core.research.presentation import safe_detail
         text = safe_detail(text, limit=None)
         self.sections.append({'type':'text','text':text})
-        self.result_layout.addWidget(label(text, role))
+        widget = label(text, role)
+        if localized:
+            widget.localized_text = {key: safe_detail(value, limit=None) for key, value in localized.items()}
+        self.result_layout.addWidget(widget)
+        widget.retranslate()
+        return widget
 
     def result_table(self, name, headers, rows):
         from .app import label, table, table_rows
@@ -150,10 +155,12 @@ class ToolPane(QWidget):
         self.result_layout.addWidget(chart)
         self.charts[name] = chart
 
-    def finished(self, narrative):
+    def finished(self, narrative, *, localized=None):
         from .app import label
-        self.result_layout.addWidget(label('Analysis narrative · original source language retained', 'caption'))
-        self.text(narrative)
+        notice = ('Analysis narrative · display language; original retained in export' if localized else
+                  'Analysis narrative · original source language retained')
+        self.result_layout.addWidget(label(notice, 'caption'))
+        self.text(narrative, localized=localized)
         self.has_result = True
         self.status.setText('계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.')
 

@@ -525,6 +525,23 @@ _PAIRS += '\nAnalysis narrative · original source language retained|분석 해�
 
 _PAIRS += '\nUS 10-year yield|미국 10년 금리\nBitcoin|비트코인\n'
 
+_PAIRS += r'''
+Analysis narrative · display language; original retained in export|분석 해설 · 선택 언어로 표시하며 내보내기에는 원문 유지
+Flat rates across tenors · typed rates: {rates}|모든 만기에 동일 금리 적용 · 직접 입력한 금리: {rates}
+Delta strike uses ATM vol, then reprices at SABR vol. ATM means delta-neutral straddle.|델타 행사가격은 ATM 변동성으로 구한 뒤 SABR 변동성으로 다시 가격을 산출합니다. ATM은 델타 중립 스트래들을 뜻합니다.
+{ccy} domestic rate|{ccy} 국내 금리
+{ccy} foreign rate|{ccy} 외국 금리
+Forward points|선물환 포인트
+Pip size|핍 크기
+Carry · long {ccy} / year|{ccy} 매수 연간 캐리
+Implied basis|내재 베이시스
+Market forward|시장 선물환
+Forwards|선물환
+Points|포인트
+Volatility · %|변동성 · %
+Observations · {start} → {end}|관측 · {start} → {end}
+'''
+
 EN, KO = {}, {}
 TEMPLATES = []
 for line in (_PAIRS + _TERMS).strip().splitlines():

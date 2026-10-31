@@ -15,11 +15,15 @@ class UiLabel(QLabel):
         self.retranslate()
 
     def setText(self, text):
+        if str(text) != self.source_text:
+            self.localized_text = {}
         self.source_text = str(text)
         self.retranslate()
 
     def retranslate(self):
-        super().setText(display(self, self.source_text))
+        language = getattr(self.window(), 'ui_language', None)
+        localized = getattr(self, 'localized_text', {}).get(language)
+        super().setText(localized if localized is not None else display(self, self.source_text))
 
     def event(self, event):
         result = super().event(event)

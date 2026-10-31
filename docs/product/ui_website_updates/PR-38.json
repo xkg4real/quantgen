@@ -1,0 +1,58 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "queued_at": "2026-10-31T15:38:00+09:00",
+    "blocker": "No supported cross-chat send/handoff operation is available in the current tool set.",
+    "sent_at": null,
+    "receipt": null
+  },
+  "website_application": {
+    "status": "not_reviewed",
+    "commit": null,
+    "checks": [],
+    "deployment_status": "not_verified",
+    "deployment_url": null
+  },
+  "id": "quantgen-ui-pr-38",
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/38",
+    "head_commit": "743521d6d2660fd4b8ee1ef357ede1073fc8fe7a",
+    "merge_commit": "579aadb8fd219a25b543ea8c9a2c803d3a2cbece",
+    "changed_files": [
+      "core/ficc/fx.py",
+      "core/ficc/sabr_diagnostics.py",
+      "core/research/fx_analysis.py",
+      "core/ficc/insights.py",
+      "quantgen_desktop/fx.py",
+      "ui/fx_page.py",
+      "tests/sabr_diagnostics_acceptance.py",
+      "tests/desktop_sabr_diagnostics_acceptance.py"
+    ]
+  },
+  "summary_ko": [
+    "SABR 수렴과 호가 적합 잔차·모수 경계·가격 행사가 외삽을 구분합니다.",
+    "독립/차익 검증은 NOT_RUN을 유지하며, 기존904가격/적합 결과필드는 완전히 동일합니다."
+  ],
+  "website_impact": {
+    "classification": "shared_browser_change",
+    "review_status": "required",
+    "browser_code_changed": true,
+    "browser_sources_to_check": [
+      "ui/fx_page.py"
+    ],
+    "requested_actions_ko": [
+      "실제 웹사이트 구현에 해당 화면이 있는지 확인하고 필요 범위만 별도 적용/검사한다.",
+      "네이티브 언어 선택 코드를 Flet에 그대로 복사하거나 공개 배포를 완료로 가정하지 않는다."
+    ]
+  },
+  "verification": {
+    "ci_url": "https://github.com/xkg4real/quantgen/actions/runs/41175905734",
+    "ci_result": "success",
+    "local_tests_passed": 32,
+    "manual_windows_display_acceptance": "NOT_RUN",
+    "live_website_acceptance": "NOT_RUN"
+  }
+}
