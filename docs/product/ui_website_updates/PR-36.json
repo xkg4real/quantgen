@@ -1,0 +1,68 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-ui-pr-36",
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/36",
+    "head_commit": "6d8477144dfc60c62880c131e67c3a66da7b0220",
+    "merge_commit": "73131c9e74b9ec61fca88845cbdad1525ebceef9",
+    "changed_files": [
+      "quantgen_desktop/charts.py",
+      "tests/desktop_chart_rendering_acceptance.py",
+      ".github/workflows/runtime-smoke.yml",
+      "docs/product/UI_RENDERING_2026-10-31.md"
+    ]
+  },
+  "summary_ko": [
+    "Monte Carlo 및 선형 차트에서 큰 가격 숫자의 앞자리가 잘리는 문제 수정",
+    "좁은 포트폴리오 차트의 범례 겹침 및 하단 설명 잘림 수정",
+    "글꼴·창 폭에 맞춘 여백, 범례 줄바꿈과 최소 차트 높이 확보"
+  ],
+  "website_impact": {
+    "classification": "native_only_source_change",
+    "review_status": "required",
+    "browser_code_changed": false,
+    "browser_sources_to_check": [
+      "ui/qcharts.py",
+      "ui/fcharts.py",
+      "ui/xcharts.py"
+    ],
+    "surfaces": [
+      "Monte Carlo percentile fan",
+      "Portfolio efficient frontier",
+      "Line chart labels and legends"
+    ],
+    "known_source_difference": "The retained Flet browser renders Matplotlib PNGs; ui/qcharts.py saves with bbox_inches=tight. The native fix uses Qt font metrics and cannot be copied directly into browser code.",
+    "requested_actions_ko": [
+      "실제 웹사이트의 해당 차트 구현과 연결 경로를 확인한다.",
+      "좁은 화면, 큰 가격 숫자, 긴 범례 및 100%·125%·150% 배율에서 잘림·겹침·선명도를 점검한다.",
+      "동일한 문제가 있으면 웹 구현에 맞게 즉시 수정하고 테스트·커밋·확인 URL을 기록한다.",
+      "적용이 불필요하면 근거와 함께 not_applicable로 기록한다. 배포 여부는 별도로 확인한다."
+    ]
+  },
+  "verification": {
+    "distinct_local_tests_passed": 39,
+    "chart_regressions": 4,
+    "offscreen_scale_factors": [1, 1.25, 1.5],
+    "ci_url": "https://github.com/xkg4real/quantgen/actions/runs/41174694061",
+    "ci_result": "success",
+    "ci_platforms": ["Windows Python 3.12", "Windows Python 3.14", "Ubuntu Python 3.12"],
+    "manual_windows_display_acceptance": "NOT_RUN",
+    "live_website_acceptance": "NOT_RUN"
+  },
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "queued_at": "2026-10-31T15:04:58+09:00",
+    "blocker": "The current tool set has no supported send_message_to_thread or handoff_thread operation.",
+    "sent_at": null,
+    "receipt": null
+  },
+  "website_application": {
+    "status": "not_reviewed",
+    "commit": null,
+    "checks": [],
+    "deployment_status": "not_verified",
+    "deployment_url": null
+  }
+}
