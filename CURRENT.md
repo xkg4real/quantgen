@@ -6,11 +6,11 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/M4-N12, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T14:33:23.262+09:00
+updated_at: 2026-10-31T14:34:49.846+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/letf-underlying-index-20261031
-work_commit: 55dae2fd7e6deeefa4a0a41f67f6b19d2d35e146
+work_branch: gpt/option-quote-coverage-20261031
+work_commit: d4670f3bb738147a48a5dafe34dad7628e3fe3e4
 uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/31
 usage_weekly_pct: unknown
@@ -94,3 +94,6 @@ M4-N1 source55dae2fd7e6deeefa4a0a41f67f6b19d2d35e146: KOSDAQ150 공식master exa
 
 ## PR31 검증 확정
 위 CI대기 기록은 이력입니다. PR31은 main d4670f3로 병합·원격검증됐고 LEDGER에 M4-N1만 추가했습니다. 다음 작업은 M4-N12 (Model88); 현재 엔진 count를 보존하고 검사수·NOT_RUN/PARTIAL을 양UI/AI/export에 표시합니다. 연구판정/SVI/실제원장 미변경.
+
+## M4-N12 작업 시작
+PR31 완료 뒤 최신main d4670f3에서 gpt/option-quote-coverage-20261031 생성. Model88의 zero-coverage, 1/2 strike, one-sided 사례를 다룹니다. core/ficc/equity_deriv 수치/판정은 보존하고 공유 표시·payload 및 Flet/Qt/내보내기 상태만 수정합니다.
