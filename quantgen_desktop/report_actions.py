@@ -1,4 +1,5 @@
 """Explicit report saving shared by standalone native result views."""
+from .translations import display
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QFileDialog
 from core.research.tool_export import make_report, report_bytes
 from core.research.export import save_desktop_export
@@ -30,7 +31,7 @@ class ReportActions(QWidget):
         if self.report is None:
             return
         extension = 'zip' if bundle else 'json'
-        filename, _ = QFileDialog.getSaveFileName(self, '분석 결과 저장',
+        filename, _ = QFileDialog.getSaveFileName(self, display(self, '분석 결과 저장'),
             f"quantgen-{self.report['tool']}.{extension}", f'Report (*.{extension})')
         if not filename:
             return

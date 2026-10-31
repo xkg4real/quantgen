@@ -296,7 +296,7 @@ class NativeDesktopTests(unittest.TestCase):
         self.assertEqual(w.portfolio.comparison.rowCount(),4)
         self.assertEqual(w.portfolio.correlation.columnCount(),4)
         self.assertIsNotNone(w.portfolio.chart.output)
-        self.assertIn('합성 데이터',w.portfolio.notes.text())
+        self.assertIn('Synthetic data',w.portfolio.notes.text())
         self.assertTrue(w.portfolio.run.isEnabled())
 
     def test_native_bonds_calculator_scenarios_hedge_and_input_error(self):
@@ -306,11 +306,11 @@ class NativeDesktopTests(unittest.TestCase):
             self.assertEqual(b.metrics.rowCount(),12)
             self.assertEqual(b.krd.rowCount(),9)
             self.assertTrue(b.chart.series)
-            self.assertIn('합성 곡선',b.notes.text())
+            self.assertIn('Synthetic curve',b.notes.text())
             if tool=='scenarios':self.assertEqual(b.scenarios.rowCount(),9)
-            if tool=='hedge':self.assertIn('실제 주문 없음',b.hedge.text())
+            if tool=='hedge':self.assertIn('no real orders',b.hedge.text())
         b.fields['Price · per 100'].setText('100');b.submit()
-        self.assertIn('입력 오류',b.status.text())
+        self.assertIn('Input error',b.status.text())
         self.assertFalse(w.jobs.busy)
 
     def test_native_rates_tools_units_locking_and_results(self):
@@ -337,7 +337,7 @@ class NativeDesktopTests(unittest.TestCase):
         self.assertTrue(all(c.colors==w.colors for c in pane.charts.values()))
         pane.fields['option']['tenor'].setText('invalid')
         pane.submit()
-        self.assertIn('입력 오류',pane.status.text());self.assertFalse(w.jobs.busy)
+        self.assertIn('Input error',pane.status.text());self.assertFalse(w.jobs.busy)
 
     def test_native_fx_all_tools_and_invalid_input_clears_stale_result(self):
         w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.fx)
@@ -350,7 +350,7 @@ class NativeDesktopTests(unittest.TestCase):
             self.assertTrue(pane.charts)
             self.assertGreater(pane.tables['Data sources'].rowCount(),0)
         pane.fields['carry']['top_n'].setText('2.5');pane.submit()
-        self.assertIn('입력 오류',pane.status.text());self.assertFalse(pane.has_result)
+        self.assertIn('Input error',pane.status.text());self.assertFalse(pane.has_result)
 
     def test_native_structuring_all_products_payoff_hedges_and_units(self):
         w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.structuring)
@@ -423,7 +423,7 @@ class NativeDesktopTests(unittest.TestCase):
             self.assertEqual(len(list(Path(d).iterdir())),1)
             with patch('quantgen_desktop.app.QFileDialog.getSaveFileName',return_value=(str(Path(d)/'.env.json'),'')):
                 w.export_selected(False)
-            self.assertIn('저장 실패',w.export_status.text())
+            self.assertIn('Save failed',w.export_status.text())
             self.assertFalse((Path(d)/'.env.json').exists())
 
     def test_failure_is_recorded_and_provider_message_is_not_exposed(self):

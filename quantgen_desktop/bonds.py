@@ -89,7 +89,7 @@ class BondsPane(QWidget):
             {'type': 'analytics', 'data': a}, {'type': 'scenarios', 'data': o.scenarios},
             {'type': 'hedge', 'data': o.hedge},
             {'type': 'price_yield', 'yield_pct': o.yield_axis, 'price': o.price_curve, 'tangent': o.duration_tangent},
-            {'type': 'text', 'text': self.notes.text()}])
+            {'type': 'text', 'text': self.notes.source_text}])
 
     def clear_result(self):
         self.exports.clear()

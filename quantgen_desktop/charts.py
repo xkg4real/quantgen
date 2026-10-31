@@ -6,6 +6,7 @@ from PyQt6.QtGui import QColor, QFontMetricsF, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import QWidget
 
 from core.theme import LIGHT
+from .translations import display
 
 
 @dataclass
@@ -114,7 +115,7 @@ class FanChart(_CartesianChart):
 
     def _footer_text(self):
         r = getattr(self, 'result', None)
-        return f"0 → {r.horizon_days} sessions · P5 / P25 / P50 / P75 / P95" if r else ""
+        return display(self, f"0 → {r.horizon_days} sessions · P5 / P25 / P50 / P75 / P95") if r else ""
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -123,7 +124,7 @@ class FanChart(_CartesianChart):
         painter.fillRect(self.rect(), QColor(p.surface))
         if self.result is None:
             painter.setPen(QColor(p.muted))
-            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, "분석을 실행하면 P5–P95 분포가 표시됩니다.")
+            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, display(self, "분석을 실행하면 P5–P95 분포가 표시됩니다."))
             return
         r = self.result
         lo, hi = min(r.fan[5]), max(r.fan[95])
@@ -171,16 +172,16 @@ class FrontierChart(_CartesianChart):
 
     def _legend_names(self):
         output = getattr(self, 'output', None)
-        return [v.objective for v in output.portfolios.values()] if output else []
+        return [display(self, v.objective) for v in output.portfolios.values()] if output else []
 
     def _footer_text(self):
-        return "Annual volatility → · Y: annual return (historical estimate)"
+        return display(self, "Annual volatility → · Y: annual return (historical estimate)")
 
     def paintEvent(self,event):
         p=QPainter(self);p.setRenderHint(QPainter.RenderHint.Antialiasing)
         c=self.colors;p.fillRect(self.rect(),QColor(c.surface))
         if self.output is None:
-            p.setPen(QColor(c.muted));p.drawText(self.rect(),Qt.AlignmentFlag.AlignCenter,"분석 후 효율적 프런티어가 표시됩니다.");return
+            p.setPen(QColor(c.muted));p.drawText(self.rect(),Qt.AlignmentFlag.AlignCenter,display(self, "분석 후 효율적 프런티어가 표시됩니다."));return
         o=self.output;f=o.frontier;ports=list(o.portfolios.values())
         xs=[*f.cloud_vols,*f.vols,*[v.ann_vol for v in ports]]
         ys=[*f.cloud_rets,*f.rets,*[v.ann_return for v in ports]]
@@ -225,10 +226,10 @@ class LineChart(_CartesianChart):
         self.x=list(x);self.series=series;self._reserve_text_space();self.update()
 
     def _legend_names(self):
-        return [name for name,_ in getattr(self,'series',())]
+        return [display(self, name) for name,_ in getattr(self,'series',())]
 
     def _footer_text(self):
-        return getattr(self,'x_label','')+' · '+getattr(self,'y_label','')
+        return display(self, getattr(self,'x_label',''))+' · '+display(self, getattr(self,'y_label',''))
 
     def paintEvent(self,event):
         p=QPainter(self);p.setRenderHint(QPainter.RenderHint.Antialiasing);c=self.colors

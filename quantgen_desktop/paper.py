@@ -9,6 +9,7 @@ from datetime import datetime
 from decimal import Decimal, InvalidOperation
 import json
 
+from .translations import display
 from PyQt6.QtCore import QObject, Qt, pyqtSignal
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QFormLayout,
     QLineEdit, QComboBox, QCheckBox, QPushButton, QMessageBox, QPlainTextEdit,
@@ -282,8 +283,8 @@ class RulesPane(QWidget):
     def confirm(self):
         self.save();rule=self.base;report=can_confirm(rule)
         if not report.ok:raise ValueError('Fix the blocking fields before confirmation')
-        text=rule.summary()+'\n\n'+'\n'.join(i.message for i in report.warnings)+'\n\n확인은 엔진을 활성화하지 않습니다.'
-        if QMessageBox.question(self,'규칙 확인',text,QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,QMessageBox.StandardButton.No)!=QMessageBox.StandardButton.Yes:return
+        text=rule.summary()+'\n\n'+'\n'.join(i.message for i in report.warnings)+'\n\n'+display(self, '확인은 엔진을 활성화하지 않습니다.')
+        if QMessageBox.question(self,display(self,'규칙 확인'),text,QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,QMessageBox.StandardButton.No)!=QMessageBox.StandardButton.Yes:return
         result=self.session.save(rule.confirm(),rule);self.load_rule(result);self.status.setText('CONFIRMED · 활성화는 별도입니다.')
 
     def change_status(self):
@@ -296,7 +297,7 @@ class RulesPane(QWidget):
 
     def delete_selected(self):
         rule=self.selected()
-        if QMessageBox.question(self,'규칙 삭제',rule.name+' 및 변경 이력을 삭제할까요?',QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,QMessageBox.StandardButton.No)==QMessageBox.StandardButton.Yes:
+        if QMessageBox.question(self,display(self,'규칙 삭제'),display(self,rule.name+' 및 변경 이력을 삭제할까요?'),QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,QMessageBox.StandardButton.No)==QMessageBox.StandardButton.Yes:
             self.session.delete(rule);self.new()
 
     def history(self):
@@ -370,5 +371,5 @@ class PaperPane(QWidget):
 
     def reset(self):
         self.session.editable()
-        if QMessageBox.question(self,'모의 기록 초기화','모의 주문·판정·교차 이력을 초기화할까요? 규칙은 유지됩니다.',QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,QMessageBox.StandardButton.No)==QMessageBox.StandardButton.Yes:
+        if QMessageBox.question(self,display(self,'모의 기록 초기화'),display(self,'모의 주문·판정·교차 이력을 초기화할까요? 규칙은 유지됩니다.'),QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,QMessageBox.StandardButton.No)==QMessageBox.StandardButton.Yes:
             self.session.runtime.reset_practice()
