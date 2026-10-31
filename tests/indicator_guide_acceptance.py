@@ -18,7 +18,7 @@ import numpy as np
 with patch.object(dotenv,'load_dotenv',return_value=False):
     from core.education.indicators import (INDICATORS,ChartSeries,historical_case,indicator_values,
                                            counterexamples,selection)
-    from core.education.chart import chart_svg,learning_bundle
+    from core.education.chart import chart_svg,learning_bundle,reading_text
     from core.quant.signals import sma,ema,rsi,macd
 from core.i18n import LocaleContext,locale_choices,numeric_presentation
 from core.ui_messages import MESSAGES
@@ -66,6 +66,17 @@ class IndicatorGuideTests(unittest.TestCase):
         prefix=replace(series,dates=series.dates[:100],closes=series.closes[:100])
         whole,short=indicator_values(series),indicator_values(prefix)
         for name in short:np.testing.assert_equal(short[name],whole[name][:100])
+
+    def test_cursor_reading_uses_selected_observations_and_cached_values_are_read_only(self):
+        _,series,_=historical_case(('sma','rsi'))
+        ctx=LocaleContext('en_US');values=indicator_values(series)
+        self.assertIn('not enough observations',reading_text(series,('sma','rsi'),0,ctx))
+        last=len(series.dates)-1
+        comparison='above' if values['SMA20'][last]>values['SMA50'][last] else 'below'
+        self.assertIn('SMA20 is '+comparison+' SMA50',reading_text(series,('sma',),last,ctx))
+        self.assertNotIn('RSI',reading_text(series,('sma',),last,ctx))
+        self.assertIs(values,indicator_values(series))
+        with self.assertRaises(ValueError):values['SMA20'][last]=0
 
     def test_selection_and_counterexamples_have_explicit_common_dates_and_hindsight(self):
         self.assertEqual(selection(('macd','sma','sma')),('sma','macd'))
@@ -128,7 +139,7 @@ class LocaleAndRightsTests(unittest.TestCase):
         self.assertEqual(LocaleContext('en_US').text('FAILED · ProviderError · 입력/데이터를 확인하세요.'),
                          'FAILED · ProviderError · Check inputs/data.')
         self.assertEqual(LocaleContext('ko_KR').text('Yield %'),'수익률 %')
-        self.assertIn('USD',LocaleContext('en_US').money(1,'USD')+'USD')
+        self.assertEqual(LocaleContext('en_US').money(1234.5,'USD'),'$1,234.50')
 
     def test_rights_inventory_covers_all_registered_and_home_items_without_grants(self):
         record=display_rights()

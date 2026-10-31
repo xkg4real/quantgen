@@ -1,79 +1,130 @@
-"""Translate presentation text in place without rebuilding views or input values."""
-from PyQt6.QtCore import QLocale, Qt, QSignalBlocker
-from PyQt6.QtWidgets import (QLabel,QPushButton,QComboBox,QLineEdit,QTabWidget,
-                             QTableWidget,QTreeWidget,QWidget)
-from core.i18n import numeric_presentation
+"""Per-window display translation, without rebuilding forms or rerunning jobs."""
+from PyQt6.QtCore import QObject, QEvent, QSignalBlocker, QTimer, Qt, QLocale
+from PyQt6.QtWidgets import (QAbstractButton, QComboBox, QLabel, QLineEdit,
+                             QTableWidget, QTabWidget, QPlainTextEdit, QWidget)
+from .translations import display
+
+CAPTION_ROLE = Qt.ItemDataRole.UserRole + 802
 
 
-class LocalizedLabel(QLabel):
-    def setText(self,text):
-        ctx=getattr(self.window(),'ctx',None)
-        translated=ctx.text(text) if ctx else str(text)
-        self._qg_translations={'text':(str(text),translated)}
-        super().setText(translated)
+class UiLabel(QLabel):
+    """Retain the original message for exports and later language changes."""
+    def __init__(self, text='', parent=None):
+        super().__init__(parent)
+        self.source_text = str(text)
+        self.retranslate()
+
+    def setText(self, text):
+        if str(text) != self.source_text:
+            self.localized_text = {}
+        self.source_text = str(text)
+        self.retranslate()
+
+    def retranslate(self):
+        language = getattr(self.window(), 'ui_language', None)
+        localized = getattr(self, 'localized_text', {}).get(language)
+        super().setText(localized if localized is not None else display(self, self.source_text))
+
+    def event(self, event):
+        result = super().event(event)
+        if event.type() == QEvent.Type.ParentChange and hasattr(self, 'source_text'):
+            self.retranslate()
+        return result
 
 
-class LocalizedButton(QPushButton):
-    def setText(self,text):
-        ctx=getattr(self.window(),'ctx',None)
-        translated=ctx.text(text) if ctx else str(text)
-        self._qg_translations={'text':(str(text),translated)}
-        super().setText(translated)
+class LanguageController(QObject):
+    """Translate authored chrome only. Input text, item data and reports stay raw.
 
+    Qt layout/model notifications cover late results and dynamic button text.
+    Source and rendered text are stored separately, so switching is reversible.
+    A queued pass is coalesced and signals are blocked while display text changes.
+    """
+    def __init__(self, window):
+        super().__init__(window)
+        self.window = window
+        self.pending = self.applying = False
+        self.apply()
 
-class LanguageBinder:
-    def __init__(self,window):
-        self.window=window
+    def schedule(self, *args):
+        if not self.applying and not self.pending:
+            self.pending = True
+            QTimer.singleShot(0, self.apply)
 
-    def value(self,widget,key,value,ctx,*,numeric=False):
-        fields=getattr(widget,'_qg_translations',{})
-        source,last=fields.get(key,(value,None))
-        if value!=last:source=value
-        translated=ctx.text(source)
-        if numeric:translated=numeric_presentation(translated,ctx)
-        fields[key]=(source,translated)
-        widget._qg_translations=fields
-        return translated
+    def eventFilter(self, watched, event):
+        if event.type() in (QEvent.Type.LayoutRequest, QEvent.Type.ChildAdded,
+                            QEvent.Type.PolishRequest):
+            self.schedule()
+        return False
 
-    def apply(self,ctx):
-        window=self.window
-        window.setLocale(QLocale(str(ctx.locale)))
-        window.setLayoutDirection(Qt.LayoutDirection.RightToLeft if ctx.rtl else Qt.LayoutDirection.LeftToRight)
-        for widget in window.findChildren(QLabel)+window.findChildren(QPushButton):
-            widget.setText(self.value(widget,'text',widget.text(),ctx))
-        for widget in window.findChildren(QLineEdit):
-            widget.setPlaceholderText(self.value(widget,'placeholder',widget.placeholderText(),ctx))
-        for widget in window.findChildren(QWidget):
-            for key,getter,setter in (('tooltip',widget.toolTip,widget.setToolTip),
-                    ('accessibleName',widget.accessibleName,widget.setAccessibleName),
-                    ('accessibleDescription',widget.accessibleDescription,widget.setAccessibleDescription)):
-                value=getter()
-                if value:setter(self.value(widget,key,value,ctx))
-        for widget in window.findChildren(QComboBox):
-            if widget.property('localePicker'):continue
-            blocker=QSignalBlocker(widget)
-            for index in range(widget.count()):
-                widget.setItemText(index,self.value(widget,('item',index),widget.itemText(index),ctx))
-            del blocker
-        for widget in window.findChildren(QTabWidget):
-            for index in range(widget.count()):
-                widget.setTabText(index,self.value(widget,('tab',index),widget.tabText(index),ctx))
-        for table in window.findChildren(QTableWidget):
-            blocker=QSignalBlocker(table)
-            for column in range(table.columnCount()):
-                item=table.horizontalHeaderItem(column)
-                if item:item.setText(self.value(table,('header',column),item.text(),ctx))
-            for row in range(table.rowCount()):
-                for column in range(table.columnCount()):
-                    item=table.item(row,column)
-                    header=table.horizontalHeaderItem(column)
-                    identity=header and header.text() in {'Symbol','Code','ID','Name','Venue','종목·통화쌍','이름','종목','시장 코드'}
-                    if item:item.setText(self.value(item,'text',item.text(),ctx,numeric=not identity))
-            del blocker
-        for tree in window.findChildren(QTreeWidget):
-            item=tree.headerItem()
-            for column in range(tree.columnCount()):
-                item.setText(column,self.value(tree,('header',column),item.text(column),ctx))
+    def _text(self, widget, key, current, setter):
+        cache = getattr(widget, '_qg_display_sources', {})
+        source, rendered = cache.get(key, (current, current))
+        if current != rendered:
+            source = current
+        translated = display(widget, source)
+        if key == 'text' and widget.property('nav'):
+            translated = translated.replace('&&', '&').replace('&', '&&')
+        cache[key] = (source, translated)
+        widget._qg_display_sources = cache
+        if current != translated:
+            setter(translated)
+
+    def apply(self):
+        if self.applying:
+            return
+        self.pending = False
+        self.applying = True
+        ctx = getattr(self.window, "ctx", None)
+        if ctx:
+            self.window.setLocale(QLocale(str(ctx.locale)))
+            self.window.setLayoutDirection(Qt.LayoutDirection.RightToLeft if ctx.rtl else Qt.LayoutDirection.LeftToRight)
+        try:
+            for widget in [self.window, *self.window.findChildren(QWidget)]:
+                if not getattr(widget, '_qg_watched', False):
+                    widget.installEventFilter(self)
+                    widget._qg_watched = True
+                    if isinstance(widget, (QComboBox, QTableWidget)):
+                        model = widget.model()
+                        model.dataChanged.connect(self.schedule)
+                        model.headerDataChanged.connect(self.schedule)
+                        model.rowsInserted.connect(self.schedule)
+                        model.modelReset.connect(self.schedule)
+                with QSignalBlocker(widget):
+                    if isinstance(widget, UiLabel):
+                        widget.retranslate()
+                    elif isinstance(widget, QLabel):
+                        self._text(widget, 'text', widget.text(), widget.setText)
+                    elif isinstance(widget, QAbstractButton):
+                        self._text(widget, 'text', widget.text(), widget.setText)
+                    elif isinstance(widget, QComboBox) and not widget.isEditable():
+                        for i in range(widget.count()):
+                            self._text(widget, ('item', i), widget.itemText(i),
+                                       lambda text, i=i: widget.setItemText(i, text))
+                    elif isinstance(widget, QTabWidget):
+                        for i in range(widget.count()):
+                            self._text(widget, ('tab', i), widget.tabText(i),
+                                       lambda text, i=i: widget.setTabText(i, text))
+                    elif isinstance(widget, QTableWidget):
+                        for i in range(widget.columnCount()):
+                            item = widget.horizontalHeaderItem(i)
+                            if item:
+                                self._text(widget, ('header', i), item.text(), item.setText)
+                        # Only explicitly tagged metric captions; never symbols,
+                        # order IDs, numbers or provider-supplied values.
+                        for column in widget.property('localized_columns') or ():
+                            for row in range(widget.rowCount()):
+                                item = widget.item(row, column)
+                                if item and item.data(CAPTION_ROLE) is not None:
+                                    item.setText(display(widget, item.data(CAPTION_ROLE)))
+                    if isinstance(widget, (QLineEdit, QPlainTextEdit)):
+                        self._text(widget, 'placeholder', widget.placeholderText(), widget.setPlaceholderText)
+                    self._text(widget, 'accessible', widget.accessibleName(), widget.setAccessibleName)
+                    self._text(widget, 'tooltip', widget.toolTip(), widget.setToolTip)
+                if hasattr(widget, '_reserve_text_space'):
+                    widget._reserve_text_space()
+                    widget.update()
+        finally:
+            self.applying = False
 
 
 def locale_picker(ctx,parent=None):

@@ -1,5 +1,7 @@
 """One aligned educational series for every selected indicator. No network/stores."""
 from dataclasses import dataclass
+from functools import lru_cache
+from types import MappingProxyType
 from pathlib import Path
 import csv
 import hashlib
@@ -101,6 +103,7 @@ def from_history(history):
     return ChartSeries(history.symbol, tuple(history.dates), tuple(history.closes), history.source).validate()
 
 
+@lru_cache(maxsize=8)
 def indicator_values(series):
     series.validate()
     px = np.asarray(series.closes, dtype=float)
@@ -125,9 +128,12 @@ def indicator_values(series):
     macd_line, macd_signal = line.copy(), signal.copy()
     macd_line[:25] = np.nan
     macd_signal[:33] = np.nan
-    return {'SMA20':sma(px,20),'SMA50':sma(px,50),'EMA12':fast,'EMA26':slow,
+    values={'SMA20':sma(px,20),'SMA50':sma(px,50),'EMA12':fast,'EMA26':slow,
             'RSI14':rs,'MACD':macd_line,'Signal':macd_signal,'Histogram':macd_line-macd_signal,
             'BB20':middle,'Upper':middle+2*std,'Lower':middle-2*std}
+    # Cursor movement reuses calculations; callers cannot corrupt cached values.
+    for value in values.values():value.setflags(write=False)
+    return MappingProxyType(values)
 
 
 def counterexamples(series, keys, *, limit=4):

@@ -1,4 +1,5 @@
 """Shared native form and result widgets for the FICC tool panes."""
+from .translations import display
 import math
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QPushButton, QStackedWidget, QVBoxLayout, QWidget
@@ -119,18 +120,25 @@ class ToolPane(QWidget):
                 item.widget().hide()
                 item.widget().deleteLater()
 
-    def text(self, text, role='muted'):
+    def text(self, text, role='muted', *, localized=None):
         from .app import label
         from core.research.presentation import safe_detail
         text = safe_detail(text, limit=None)
         self.sections.append({'type':'text','text':text})
-        self.result_layout.addWidget(label(text, role))
+        widget = label(text, role)
+        if localized:
+            widget.localized_text = {key: safe_detail(value, limit=None) for key, value in localized.items()}
+        self.result_layout.addWidget(widget)
+        widget.retranslate()
+        return widget
 
     def result_table(self, name, headers, rows):
         from .app import label, table, table_rows
         self.sections.append({'type':'table','name':name,'headers':headers,'rows':rows})
         self.result_layout.addWidget(label(name, 'heading'))
         widget = table(headers)
+        if headers and headers[0] == 'Metric':
+            widget.setProperty('localized_columns', [0])
         table_rows(widget, rows)
         widget.setMinimumHeight(min(400, max(120, 45+len(rows)*32)))
         self.result_layout.addWidget(widget)
@@ -147,8 +155,12 @@ class ToolPane(QWidget):
         self.result_layout.addWidget(chart)
         self.charts[name] = chart
 
-    def finished(self, narrative):
-        self.text(narrative)
+    def finished(self, narrative, *, localized=None):
+        from .app import label
+        notice = ('Analysis narrative · display language; original retained in export' if localized else
+                  'Analysis narrative · original source language retained')
+        self.result_layout.addWidget(label(notice, 'caption'))
+        self.text(narrative, localized=localized)
         self.has_result = True
         self.status.setText('계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.')
 
@@ -174,7 +186,7 @@ class ToolPane(QWidget):
         from core.research.export import save_desktop_export
         from core.research.tool_export import report_bytes
         extension = 'zip' if bundle else 'json'
-        filename, _ = QFileDialog.getSaveFileName(self, '분석 결과 저장', f"quantgen-{self.report['tool']}.{extension}", f'Report (*.{extension})')
+        filename, _ = QFileDialog.getSaveFileName(self, display(self, '분석 결과 저장'), f"quantgen-{self.report['tool']}.{extension}", f'Report (*.{extension})')
         if not filename: return
         try:
             save_desktop_export(filename, report_bytes(self.report, bundle=bundle,locale=getattr(self.window(),'ctx',None)), extension=extension)

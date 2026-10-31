@@ -6,7 +6,7 @@ import flet as ft
 from core.theme import active
 from core.i18n import LocaleContext
 from core.education.indicators import INDICATORS, selection, historical_case, counterexamples, from_history
-from core.education.chart import chart_svg, cursor_text, learning_bundle
+from core.education.chart import chart_svg, cursor_text, reading_text, learning_bundle
 
 
 class IndicatorGuide(ft.Column):
@@ -40,6 +40,7 @@ class IndicatorGuide(ft.Column):
     def move_cursor(self,index,*,draw=True):
         self.cursor=max(0,min(len(self.series.closes)-1,int(float(index))))
         self.readout.value=cursor_text(self.series,self.keys,self.cursor,self.ctx)
+        self.reading.value=reading_text(self.series,self.keys,self.cursor,self.ctx)
         self.slider.value=self.cursor
         if draw:self.draw_chart()
         self.update_if_mounted()
@@ -94,6 +95,7 @@ class IndicatorGuide(ft.Column):
             semantics_label=ctx.t('guide')+' · '+self.series.symbol,
             tooltip=cursor_text(self.series,self.keys,self.cursor,ctx))
         self.readout=text(cursor_text(self.series,self.keys,self.cursor,ctx),12)
+        self.reading=text(reading_text(self.series,self.keys,self.cursor,ctx))
         self.slider=ft.Slider(min=0,max=len(self.series.closes)-1,divisions=len(self.series.closes)-1,
                               value=self.cursor,on_change=lambda e:self.move_cursor(e.control.value,draw=False),
                               on_change_end=lambda e:self.move_cursor(e.control.value),tooltip=ctx.t('cursor'))
@@ -108,9 +110,9 @@ class IndicatorGuide(ft.Column):
                 on_select=self.choose_case))
         controls += [text(ctx.t('why_sample')+' · '+ctx.t('why_'+self.case_name),12,True),
             text((ctx.t('historical_source') if not self.external else self.series.source)+'\n'+self.series.symbol+' · '+ctx.date(self.series.dates[0])+' → '+ctx.date(self.series.dates[-1]),11,True),
-            self.image,self.readout,self.slider,
+            self.image,self.readout,self.slider,self.reading,
             text(ctx.t('no_ohlcv_close' if self.external else 'no_ohlcv'),12,True)]
-        if len(self.keys)>1:controls += [text(ctx.t('combination'),17),text(ctx.t('combination_text'))]
+        if self.keys:controls += [text(ctx.t('line_styles'),12,True)]
         if not self.keys:controls.append(text(ctx.t('no_selection'),13,True))
         for spec in INDICATORS:
             if spec.key not in self.keys:continue

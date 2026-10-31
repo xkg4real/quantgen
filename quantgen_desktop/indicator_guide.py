@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (QWidget,QVBoxLayout,QHBoxLayout,QGridLayout,QComboB
 
 from core.i18n import LocaleContext
 from core.education.indicators import INDICATORS, historical_case, counterexamples, from_history, selection
-from core.education.chart import chart_svg, cursor_text, learning_bundle, plot_bounds
+from core.education.chart import chart_svg, cursor_text, reading_text, learning_bundle, plot_bounds
 
 
 class TechnicalChart(QSvgWidget):
@@ -16,7 +16,6 @@ class TechnicalChart(QSvgWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.series=None;self.keys=();self.ctx=LocaleContext();self.cursor=0
-        self.signature=None
         self.setMouseTracking(True)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setMinimumWidth(350)
@@ -109,6 +108,7 @@ class IndicatorGuide(QWidget):
         self.readout=label('');layout.addWidget(self.readout)
         self.slider=QSlider(Qt.Orientation.Horizontal);self.slider.valueChanged.connect(self.move_cursor);layout.addWidget(self.slider)
         self.ohlcv_notice=label('','caption');layout.addWidget(self.ohlcv_notice)
+        self.line_styles=label('','caption');layout.addWidget(self.line_styles)
         self.combination=label('');layout.addWidget(self.combination)
         self.explanations=QWidget();self.explanation_layout=QVBoxLayout(self.explanations)
         self.explanation_layout.setContentsMargins(0,0,0,0);layout.addWidget(self.explanations)
@@ -153,7 +153,7 @@ class IndicatorGuide(QWidget):
         self.intro.setText(ctx.t('guide_intro'));self.steps.setText(ctx.t('guide_steps'))
         self.choose_label.setText(ctx.t('select_indicators'))
         for spec in INDICATORS:
-            button=self.buttons[spec.key];button.setText(spec.letter+'  '+ctx.t(spec.key))
+            button=self.buttons[spec.key];button.setText(('✓  ' if spec.key in self.keys else '')+spec.letter+'  '+ctx.t(spec.key))
             button.setAccessibleName(ctx.t(spec.key));button.setToolTip(ctx.t(spec.key+'_meaning'))
         self.selected_label.setText(ctx.t('selected_count',count=len(self.keys)))
         self.clear.setText(ctx.t('clear_selection'))
@@ -167,11 +167,13 @@ class IndicatorGuide(QWidget):
         self.slider.blockSignals(True);self.slider.setRange(0,len(self.series.closes)-1)
         self.slider.setValue(self.cursor);self.slider.setAccessibleName(ctx.t('cursor'));self.slider.blockSignals(False)
         self.ohlcv_notice.setText(ctx.t('no_ohlcv_close' if self.external else 'no_ohlcv') if not self.series.ohlc else '')
+        self.line_styles.setText(ctx.t('line_styles') if self.keys else '')
         self.combination.setText(ctx.t('combination')+'\n'+ctx.t('combination_text') if len(self.keys)>1 else ctx.t('no_selection') if not self.keys else '')
         self.clear_layout(self.explanation_layout)
         for spec in INDICATORS:
             if spec.key not in self.keys:continue
             box,inner=panel(spec.letter+'  '+ctx.t(spec.key))
+            box.setStyleSheet('QFrame#panel { border-left: 4px solid '+spec.color+'; }')
             for field in ('meaning','look','interpret','limit'):
                 inner.addWidget(label(ctx.t(field),'heading'))
                 inner.addWidget(label(ctx.t(spec.key+'_'+field)))
@@ -190,6 +192,7 @@ class IndicatorGuide(QWidget):
         self.cursor=max(0,min(len(self.series.closes)-1,int(index)))
         self.chart.set_chart(self.series,self.keys,self.ctx,self.cursor)
         self.readout.setText(cursor_text(self.series,self.keys,self.cursor,self.ctx))
+        self.combination.setText(reading_text(self.series,self.keys,self.cursor,self.ctx) if self.keys else self.ctx.t('no_selection'))
         self.slider.blockSignals(True);self.slider.setValue(self.cursor);self.slider.blockSignals(False)
 
     def save_report(self):

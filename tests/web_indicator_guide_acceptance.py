@@ -41,8 +41,8 @@ class BrowserIndicatorGuideTests(unittest.TestCase):
         self.assertEqual(other.keys,())
 
     def test_real_history_explorer_reuses_input_dates_and_not_a_teaching_sample(self):
-        from tests.desktop_acceptance import history_fixture
-        history=history_fixture()
+        from datetime import date,timedelta
+        history=History('FIXTURE','SYNTHETIC',tuple((date(2020,1,1)+timedelta(days=i)).isoformat() for i in range(80)),tuple(100+i*.1 for i in range(80)))
         guide=IndicatorGuide(self.page,history=history);guide.toggle('macd');guide.toggle('bb')
         self.assertEqual(guide.case_name,'research')
         self.assertEqual(guide.series.dates,history.dates)

@@ -11,6 +11,8 @@ import dotenv
 with patch.object(dotenv,'load_dotenv',return_value=False):
     from quantgen_desktop.app import ResearchWindow
 from PyQt6.QtWidgets import QApplication,QLabel,QFileDialog
+from PyQt6.QtCore import QSettings,Qt
+from PyQt6.QtGui import QColor,QKeyEvent
 from core.i18n import LocaleContext
 
 
@@ -22,7 +24,7 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         deny=patch('requests.sessions.Session.request',side_effect=AssertionError('Network forbidden'))
         deny.start();self.addCleanup(deny.stop)
         self.provider=Mock(side_effect=AssertionError('Provider forbidden'))
-        self.window=ResearchWindow(auto_refresh=False,market_loader=self.provider,connections_runner=self.provider)
+        self.window=ResearchWindow(auto_refresh=False,locale='ko_KR',market_loader=self.provider,connections_runner=self.provider)
         self.window.resize(1000,800);self.window.show();self.app.processEvents()
         self.addCleanup(self.window.deleteLater);self.addCleanup(self.window.hide)
 
@@ -80,6 +82,37 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         pane.set_locale(LocaleContext('en_US'))
         self.assertIn('Daily',pane.tree.topLevelItem(0).child(0).text(2))
         self.provider.assert_not_called()
+
+    def test_vector_chart_background_keyboard_and_selection_survive_theme_resize(self):
+        w=self.window;w.guide_open.click();guide=w.indicator_guide
+        for key in guide.buttons:guide.buttons[key].click()
+        for theme in (0,1):
+            w.change_theme(theme)
+            for width in (1000,1360):
+                w.resize(width,800);self.app.processEvents()
+                chart=guide.chart;pixmap=chart.grab();image=pixmap.toImage();dpr=pixmap.devicePixelRatio()
+                colour=image.pixelColor(round((chart.width()-30)*dpr),round((chart.height()-15)*dpr))
+                self.assertEqual(colour,QColor(w.colors.surface))
+                self.assertEqual(guide.keys,('sma','ema','rsi','macd','bb'))
+        guide.chart.keyPressEvent(QKeyEvent(QKeyEvent.Type.KeyPress,Qt.Key.Key_Home,Qt.KeyboardModifier.NoModifier))
+        self.assertEqual(guide.cursor,0)
+        guide.chart.keyPressEvent(QKeyEvent(QKeyEvent.Type.KeyPress,Qt.Key.Key_End,Qt.KeyboardModifier.NoModifier))
+        self.assertEqual(guide.cursor,len(guide.series.closes)-1)
+        w.guide_open.click();self.assertTrue(guide.isHidden())
+        w.guide_open.click();self.assertEqual(guide.keys,('sma','ema','rsi','macd','bb'))
+
+    def test_region_preference_round_trips_without_changing_financial_inputs(self):
+        with tempfile.TemporaryDirectory() as folder:
+            store=QSettings(str(Path(folder)/'locale.ini'),QSettings.Format.IniFormat)
+            w=self.window;w.language_store=store;w.target.setText('1234.50')
+            w.locale_picker.setCurrentIndex(w.locale_picker.findData('de_DE'));store.sync()
+            self.assertEqual(store.value('ui/locale'),'de_DE')
+            self.assertEqual(store.value('ui/language'),'en')
+            self.assertEqual(w.target.text(),'1234.50')
+            restored=ResearchWindow(auto_refresh=False,locale=store.value('ui/locale'),language_store=store)
+            self.addCleanup(restored.deleteLater)
+            self.assertEqual(str(restored.ctx.locale),'de_DE')
+            self.assertEqual(restored.ctx.number(1234.5),'1.234,50')
 
 
 if __name__=='__main__':unittest.main()

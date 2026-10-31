@@ -1,6 +1,6 @@
 """Searchable rights inventory. Selecting rows never requests market data."""
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget,QVBoxLayout,QLineEdit,QTreeWidget,QTreeWidgetItem
+from PyQt6.QtWidgets import QWidget,QVBoxLayout,QLineEdit,QTreeWidget,QTreeWidgetItem,QHeaderView
 from core.i18n import LocaleContext
 from core.research.display_rights import display_rights,policy_detail
 
@@ -14,6 +14,11 @@ class DataRightsPane(QWidget):
         self.intro=label('');layout.addWidget(self.intro)
         self.search=QLineEdit();self.search.textChanged.connect(self.filter);layout.addWidget(self.search)
         self.tree=QTreeWidget();self.tree.setColumnCount(4);self.tree.setMinimumHeight(300)
+        self.tree.setTextElideMode(Qt.TextElideMode.ElideRight)
+        self.tree.setStyleSheet('QTreeWidget::item { padding: 4px 8px; }')
+        for column in range(3):self.tree.header().setSectionResizeMode(column,QHeaderView.ResizeMode.ResizeToContents)
+        self.tree.header().setSectionResizeMode(3,QHeaderView.ResizeMode.Stretch)
+        self.tree.header().setMinimumSectionSize(130)
         self.tree.setRootIsDecorated(True);self.tree.itemSelectionChanged.connect(self.choose);layout.addWidget(self.tree)
         self.detail=label('');layout.addWidget(self.detail)
         self.legal=label('','caption');layout.addWidget(self.legal)
@@ -29,6 +34,7 @@ class DataRightsPane(QWidget):
             group=QTreeWidgetItem([label]);self.tree.addTopLevelItem(group)
             for row in self.record[key]:
                 item=QTreeWidgetItem([row['series_id'],row['source'],ctx.t('daily') if row['frequency']=='daily' else ctx.text(row['frequency']),ctx.t(row['outcome'])])
+                for column in range(4):item.setToolTip(column,item.text(column))
                 item.setData(0,Qt.ItemDataRole.UserRole,row);group.addChild(item)
             group.setExpanded(key=='home')
         for column in range(4):self.tree.resizeColumnToContents(column)

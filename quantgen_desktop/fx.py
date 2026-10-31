@@ -1,6 +1,7 @@
 """Native forward/carry, SABR-smile option and G10+KRW carry basket."""
 from core.research.fx_analysis import FXRequest
 from .tools import ToolPane, number, fmt
+from .fx_narrative import fx_korean, sabr_korean
 
 
 class FXPane(ToolPane):
@@ -76,9 +77,10 @@ class FXPane(ToolPane):
                 self.result_table('SABR quote residuals', ['Point','Strike','Quoted vol %','Fitted vol %','Residual · vol points'],
                     [[p['label'],fmt(p['strike']),f"{p['quoted_vol']*100:.6f}",f"{p['fitted_vol']*100:.6f}",
                       f"{p['residual_vol_points']:+.6f}"] for p in diag['residuals']])
-                self.text(diagnostic_text(diag))
+                self.text(diagnostic_text(diag), localized={'ko': sabr_korean(diag)})
                 self.sections.append(dict(type='sabr_diagnostics', **diag))
                 self.text(f'SABR beta=1 · alpha={fit.alpha:.5f} · rho={fit.rho:.5f} · nu={fit.nu:.5f}\n'
                           'Delta strike uses ATM vol, then reprices at SABR vol. ATM means delta-neutral straddle.')
         self.result_table('Metrics',['Metric','Value'],metrics)
-        self.finished(out.narrative)
+        korean = fx_korean(out)
+        self.finished(out.narrative, localized={'ko': korean} if korean is not None else None)
