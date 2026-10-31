@@ -1,7 +1,7 @@
 """Native forward/carry, SABR-smile option and G10+KRW carry basket."""
 from core.research.fx_analysis import FXRequest
 from .tools import ToolPane, number, fmt
-from .fx_narrative import fx_korean, sabr_korean
+from .fx_narrative import fx_korean, sabr_korean, carry_note_korean
 
 
 class FXPane(ToolPane):
@@ -49,7 +49,10 @@ class FXPane(ToolPane):
             self.line('Carry equity', range(len(bt.dates)), [('Basket',bt.equity),('Equal-weight long',bt.bench_equity)],
                       f'Sessions · {bt.dates[0]} → {bt.dates[-1]}','Equity · starts at 1')
             _,longs,shorts = bt.positions[-1]
-            self.text(f'Long: {", ".join(longs)}\nShort: {", ".join(shorts)}\n{bt.n_rebalances} rebalances · every {q.rebalance_days} sessions · {bt.cost_bps:g} bp per side · top/bottom {bt.top_n}\n{bt.note}')
+            self.text(f'Long: {", ".join(longs)}\nShort: {", ".join(shorts)}\n{bt.n_rebalances} rebalances · every {q.rebalance_days} sessions · {bt.cost_bps:g} bp per side · top/bottom {bt.top_n}\n{bt.note}',
+                      localized={'ko': f'매수: {", ".join(longs)}\n매도: {", ".join(shorts)}\n'
+                                 f'{bt.n_rebalances}회 리밸런싱 · {q.rebalance_days}개 거래일마다 · '
+                                 f'편도 {bt.cost_bps:g} bp · 상/하위 {bt.top_n}\n{carry_note_korean(bt.note)}'})
         else:
             metrics = [('Pair',d['pair']),('Spot',fmt(d['S'])),('Forward',fmt(d['forward'])),
                        (f"{d['quote']} domestic rate",fmt(d['rd'],'pct')),(f"{d['base']} foreign rate",fmt(d['rf'],'pct'))]

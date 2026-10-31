@@ -5,6 +5,67 @@ the original English report. No pricing, calibration or validation is performed.
 """
 from core.ficc.common import BP, tenor_label
 from core.ficc.insights import _pair, _px, _pct, _bp
+import re
+
+
+def carry_note_korean(note):
+    """Translate only the known engine disclosure; retain unknown source notes."""
+    match = re.fullmatch(
+        r'(?P<ccys>\d+) ccys vs USD, long/short (?P<k>\d+) each at ±1/(?P=k); '
+        r'(?P<n>\d+) observations from (?P<date>\d{4}-\d{2}-\d{2}) '
+        r'\(first date every rate is known\); rates ffilled by date, monthly '
+        r'averages with a one-observation lag; accrual 1/(?P<year>\d+) per observation; '
+        r'no lookahead\.(?: top_n clipped from (?P<requested>\d+) to (?P<actual>\d+)\.)?', note)
+    if match is None:
+        return note
+    d = match.groupdict()
+    result = (f"USD 대비 {d['ccys']}개 통화, 매수/매도 각각 {d['k']}개에 ±1/{d['k']} 비중; "
+              f"{d['date']}부터 {d['n']}개 관측 (모든 금리를 알 수 있는 첫 날짜). "
+              "금리는 날짜에 맞춰 마지막 알려진 값으로 채우며, 월평균은 한 관측만큼 지연합니다. "
+              f"관측당 이자 누적 1/{d['year']}; 미래 정보 사용 없음.")
+    if d['requested'] is not None:
+        result += f" top_n을 {d['requested']}에서 {d['actual']}으로 제한했습니다."
+    return result
+
+
+def carry_korean(rows, backtest=None):
+    """Display the existing ranking and costed backtest, without recomputing it."""
+    if not rows:
+        return '읽을 캐리 결과가 없습니다.'
+    ranked = sorted(rows, key=lambda r: r.score, reverse=True)
+    top, bottom = ranked[0], ranked[-1]
+    hi = max(rows, key=lambda r: r.carry)
+    lines = [
+        f"USD 대비 {len(rows)}개 통화 중 캐리·모멘텀 합산 점수가 가장 높은 통화는 "
+        f"{top.ccy} ({top.score:+.2f}: 연 캐리 {_pct(top.carry)}, "
+        f"3개월 변동성 {top.vol_3m*100:.1f}%, 모멘텀 {top.mom_3m*100:+.1f}%)이며, "
+        f"가장 낮은 통화는 {bottom.ccy} ({bottom.score:+.2f}: 캐리 {_pct(bottom.carry)}, "
+        f"모멘텀 {bottom.mom_3m*100:+.1f}%)입니다.",
+        f"캐리 자체가 가장 높은 통화는 {hi.ccy}, {_pct(hi.carry)} "
+        f"({hi.pair} 현물 {_px(hi.spot)}), 캐리/변동성 {hi.carry_to_vol:+.2f}입니다. "
+        "캐리와 모멘텀은 해당 통화를 매수한 기준이며, USD가 앞에 오는 역방향 호가는 이미 변환했습니다.",
+    ]
+    if backtest is not None:
+        b = backtest
+        bench = float(b.bench_equity[-1])-1 if len(b.bench_equity) else float('nan')
+        lines.append(
+            f"상·하위 {b.top_n}개 통화 매수/매도 캐리바스켓은 거래 회전량당 {b.cost_bps:.0f}bp 비용으로 "
+            f"{b.n_rebalances}회 리밸런싱하여 {len(b.dates)}개 거래일 동안 "
+            f"{float(b.equity[-1])-1:+.1%} 수익률을 기록했습니다 "
+            f"(연환산 {_pct(b.ann_return,1)}, 변동성 {b.ann_vol*100:.1f}%, "
+            f"샤프 비율 {b.sharpe:.2f}, 최대 낙폭 {b.max_drawdown*100:.1f}%). "
+            f"모든 통화를 동일 비중으로 매수한 비교 수익률은 {bench:+.1%}입니다.")
+        if b.positions:
+            _, longs, shorts = b.positions[-1]
+            lines.append(f"최근 바스켓: 매수 {', '.join(longs)}; 매도 {', '.join(shorts)}.")
+        if b.note:
+            lines.append(carry_note_korean(b.note))
+    stale = [r for r in rows if getattr(r, 'rate_stale', False) and getattr(r, 'rate_date', '')]
+    if stale:
+        lines.append(', '.join(f'{r.ccy} ({r.rate_date})' for r in stale)
+                     + '의 캐리는 오늘 금리가 아닌 표시된 날짜의 관측 금리로 계산했습니다 '
+                       '(OECD 월별 시계열은 지연됩니다).')
+    return ' '.join(lines)
 
 
 def sabr_korean(d):
@@ -27,6 +88,8 @@ def sabr_korean(d):
 def fx_korean(out):
     """Translate supported authored prose; return None for untranslated tools."""
     d, q = out.data, out.request
+    if q.tool == 'carry':
+        return carry_korean(d['rows'], d.get('backtest'))
     if q.tool == 'forward':
         pair = _pair(d['pair']); base, quote = pair[:3], pair[4:]
         spot, forward, carry, basis = d['S'], d['forward'], d['carry'], d['basis']
