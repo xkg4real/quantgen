@@ -6,11 +6,11 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/M4-N8, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T15:08:37.387+09:00
+updated_at: 2026-10-31T15:12:04.889+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/sabr-fit-diagnostics-20261031
-work_commit: 2333ba9763f6f931fa4c9c5e03282568431c8c4c
+work_commit: 8eee035ddb1ec12f2d531fdb1423e2dc41541142
 uncommitted_changes: no
 pr: 38
 usage_weekly_pct: unknown
@@ -129,3 +129,6 @@ M4-N8 새브랜치 gpt/sabr-fit-diagnostics-20261031은검증된최신main94659f
 
 ## M4-N8 source 저장
 source2333ba9763f6f931fa4c9c5e03282568431c8c4c 원격read-back 완료. 7집중/양UI/export + 기존22desktop검사 및3delta/smile검사 PASS;4fit/40price보고서904기존필드exact동일. solver/가격/공식판정불변. PR/CI대기이며아직완료ID집계전. 다음13-8/UI-L10N 직접요청은별도범위로이어갑니다.
+
+## M4-N8 CI 보완
+초기CI41175373129에서SciPy버전별active_mask차이로2fixture실패를확인. source8eee035는모수값/실제bounds/경계거리도독립노출하고테스트는선택된solver의실제mask와대조합니다. 임의near-bound임계값없음;7집중검사재통과/904기존필드exact동일. 최종CI41175575101대기. 현재main2999296의외부PR36/37차트/사이트인계규칙추가는보존합니다.
