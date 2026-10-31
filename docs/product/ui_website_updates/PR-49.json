@@ -1,0 +1,60 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-ui-pr-49",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "queued_at": "2026-10-31T17:18:00+09:00",
+    "blocker": "No supported cross-chat messaging operation in this session.",
+    "sent_at": null,
+    "receipt": null
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/49",
+    "head_commit": "22f52dc9adaeb27e44028b0cadee3c4f76d48b0b",
+    "merge_commit": "4c51ab96e1f61a101fa8a76d024689830bf5d099",
+    "changed_files": [
+      "quantgen_desktop/bonds.py",
+      "quantgen_desktop/portfolio.py",
+      "quantgen_desktop/bonds_portfolio_narrative.py",
+      "tests/desktop_bonds_portfolio_language_acceptance.py"
+    ]
+  },
+  "summary_ko": [
+    "Windows 앱의 Bonds/Portfolio 긴 결과 해설과 펀딩·헤지·상한·비양수 Sharpe·수렴·수익률 규약 경고에 명시적 한영 표시를 연결합니다.",
+    "표시 숫자·분기·원문 보고서와 공급자 주석을 보존하며 언어 변경만으로 계산/조회/AI를 재실행하지 않습니다."
+  ],
+  "website_impact": {
+    "classification": "native_only_source_change",
+    "review_status": "required",
+    "browser_code_changed": false,
+    "browser_sources_to_check": [
+      "ui/bonds_page.py",
+      "ui/portfolio_page.py",
+      "core/i18n.py"
+    ],
+    "requested_actions_ko": [
+      "웹에서 같은 Bonds/Portfolio 결과를 제공하는 경우 해설과 조건부 경고의 언어 전환을 별도 구현·검수합니다.",
+      "공급자 원문/식별자·표시 숫자·저장한 정규 근거를 보존하고 PyQt 위젯 코드를 웹에 복사하지 않습니다.",
+      "소개 사이트만 제공하는 경우 실제 소스 확인 후 해당 없음의 근거를 남깁니다. 실제 배포는 별도입니다."
+    ]
+  },
+  "website_application": {
+    "status": "not_reviewed",
+    "commit": null,
+    "checks": [],
+    "deployment_status": "not_verified",
+    "deployment_url": null
+  },
+  "verification": {
+    "ci_url": "https://github.com/xkg4real/quantgen/actions/runs/41183600974",
+    "ci_result": "success",
+    "ci_source_commit": "22f52dc9adaeb27e44028b0cadee3c4f76d48b0b",
+    "local_tests_passed": 57,
+    "compliance_tests_passed": 47,
+    "baseline_report_cases_unchanged": 11,
+    "manual_windows_display_acceptance": "NOT_RUN",
+    "live_website_acceptance": "NOT_RUN"
+  }
+}
