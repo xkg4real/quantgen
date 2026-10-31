@@ -6,12 +6,12 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T16:40:00+09:00
+updated_at: 2026-10-31T07:40:51.000Z
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/language-website-records-20261031
-work_commit: 7759137873917fd003413f409f85638d1f00b3a1
-uncommitted_changes: no
+work_branch: gpt/claude-connection-fix-20261031
+work_commit: c3a0613eaa6d26620d871b28f28e5ba349ff1ac9
+uncommitted_changes: yes
 pr: none (last merged PR45; code PR43/44)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -173,3 +173,5 @@ PR43/44와문서PR45 source/merge/LEDGER/Notion하위완료를read-back. executi
 
 ## 최신 직접 요청: Claude API 연결 오류 및 Nautilus 범위
 사용자가 Windows 앱 내부 Claude AI 해설의 API 키 거절을 확인했습니다. 직전 fd53 실행/task/handoff/branch/source/잠금해제와 같은 ref의6문서를 검증하고 execution 156c744e-dca7-4925-9aa6-b968fcc8c353로 CAS 재개합니다. 먼저 ⑬-9/a: 오류 유형별 안전한 진단·안내/회귀검사, ⑨-2/c: 데이터 공급자와 Nautilus 독립 백테스트 엔진의 역할/연구 통합 상태 설명을 수행합니다. 실제 키/계정 권한 확인은 하지 않고 연결 복구로 주장하지 않습니다. 기존 13-8/b2/c와 후속 작업은 보존합니다. PR21 연구 병합은 외부의 완료로 관측했으며 연구/실행 소유권을 가져오지 않습니다.
+
+⑬-9/a 및⑨-2/c: 최신 main c3a0613에서 새 gpt/claude-connection-fix-20261031. core/quant/insights.py의 이전 payload privacy 변경은보존하고오류분류/원문비노출범위만수정. nativecommentary.py는기존명시적전송/실패시report미생성범위보존하며오류메시지EN/KO표시연결. LEDGER에이하위ID없음확인. 테스트진행중/아직완료아님.
