@@ -98,3 +98,6 @@ Claude 복귀 ──▶ CURRENT.md와 LEDGER.md 읽기 → returned면 GPT가 �
 그 문서가 가리키는 UI 브랜치의 최신 커밋·PR·검증·미완료 범위를 함께 전달하세요.
 PR36/37의 기존 완료 범위와 draft PR42의 진행 중 범위를 구분합니다.
 이 문서는 보조 자료이며 CURRENT.md의 task/execution/소유권·정식 연구 원장을 변경하지 않습니다.
+
+웹사이트 UI 후속 작업은 [WEBSITE_AWS_HANDOFF.md](WEBSITE_AWS_HANDOFF.md)에 있습니다.
+사용자가 이미 로그인된 「웹사이트 작업공간(AWS)」에서 직접 이어갑니다. UI 세션의 별도 로그인은 취소됐으며 이쪽에서 새 인증을 요청하지 않습니다.
