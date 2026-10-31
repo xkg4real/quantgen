@@ -244,6 +244,8 @@ def _run_option(page, *, source: str, kind: str, expiry_text: str, tenor_text: s
             "vega": rep.vega, "vega_unit": rep.vega_unit, "theta_1d": rep.theta_1d,
             "other_model_vol": (rep.other_model_vol if math.isfinite(rep.other_model_vol)
                                 else None),
+            "other_model_status": rep.other_model_status,
+            "other_model_reason": rep.other_model_reason,
             "curve_date": curve.date, "curve_source": panel.source, "note": rep.note,
         }
         blocks.append(analysis_panel(page, kind="rates_swaption",

@@ -89,6 +89,9 @@ class RatesPane(ToolPane):
             self.text(f'{q.option_model} · '+(fmt(q.vol,'bp')+' normal' if q.option_model=='bachelier' else fmt(q.vol,'pct')+' Black')+
                       f' · {q.notional:,.0f} notional\n{r.note}')
             if q.kind == 'swaption':
+                self.sections.append({'type':'comparison_volatility',
+                    'status':r.other_model_status, 'reason':r.other_model_reason,
+                    'value':r.other_model_vol if math.isfinite(r.other_model_vol) else None})
                 metrics += [('Forward',fmt(r.forward,'pct')),('Annuity',fmt(r.annuity)),('Delta · per +1bp',fmt(r.delta)),
                     ('Gamma · per bp²',fmt(r.gamma)),(f'Vega · {r.vega_unit}',fmt(r.vega)),('Theta · 1 day',fmt(r.theta_1d)),
                     ('Other-model vol',fmt(r.other_model_vol,'pct' if q.option_model=='bachelier' else 'bp'))]
