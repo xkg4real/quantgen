@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "ff45b810740d2c7828b9da6c2b3b09aacb911cc5d479c11a09f4cebd6c7cc2cb",
+    ".github/workflows/runtime-smoke.yml": "ac1b755e91a13bb0226daef4e03efab2fb3591de62e795d3ec8714b38c473904",
     "README.md": "3d5109bbf91644ca6dcddd4ff609d72f1819c0e54d0a8eac2b75ddd4e244e54e",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -120,7 +120,7 @@
     "core/quant/gjr.py": "7b2748c341507af6e4fdd169fd1bc5482d38bcde5dd76966a1962d0cdee23a9a",
     "core/quant/gsq.py": "ffd0d27b2b33964af2df2cbb5024e0f47c654ffd18e0169e5b80dac3d2430211",
     "core/quant/history.py": "aede01ea742c4e281a492ffafd0017a4e26941a418815d89e41a60240e7200fc",
-    "core/quant/insights.py": "9a5dc20181247e6b7e76041a16e3dae8bd0c2afc029e2aebabf8010571b052f1",
+    "core/quant/insights.py": "61f947a4534af5867903dbdb91c2b55cb27834603d50d2f2cb7346800759a9ad",
     "core/quant/instruments.py": "5a228fb771d040cae8f3e4cf7869bd044728c81654b090d70faf67e3b5d3d013",
     "core/quant/lab.py": "d5e44e575a256328155cc84df0514f480f8d55eed0d04bd6d3b1172a70bd90c8",
     "core/quant/montecarlo.py": "e123196db3093ae9915f812e7e1821be4ab4116a194f1a1b4484bf57796b0f85",
@@ -138,6 +138,7 @@
     "core/quant/validate.py": "68bc480f655d8297ae5326e08c3a19d36cdabf569452b93c97be5f634d239cf9",
     "core/quant/vol_estimators.py": "f33fb5f8d9be92d1d29e7e2cc9c8779ebf405908a7eb0ce7c1ca46941dffa1bb",
     "core/research/__init__.py": "64635429f4f12e50995889c34ed183a070545fc25ae5fa4c9dbe52a8ebf4ab0b",
+    "core/research/ai_connection.py": "42ade5f6dcc473f8fefdc53190c4927a74dc56d1b3e58ad5246227cbd3473294",
     "core/research/ai_payload.py": "05aa6047d4275789b1e4fe2ba571bc3caf5a276392d3a3314e36c949b3f92422",
     "core/research/analysis.py": "f3867004882d212f49a702b9bfe201a006e56fd0a76f138397a1bcbb11942808",
     "core/research/bond_analysis.py": "0d7b40defdd580db677226483b4a1cc6bf1e5919ea1e9ca39d691376c0b1263f",
@@ -225,7 +226,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "5cc0a2f7d46b0e7d3280d3f30104ab33655b85924fb57dbdf497bf2ae8976918",
+    "docs/compliance/FACTS.md": "8cd86b0a3534bd2760efe747322373ddcc6a8f5524e8485cebb3916b9a15942a",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "fe76f5dc8fb85e691d1c33140a1b01481d8ba851c43398ac99b00effbf981fe8",
@@ -234,6 +235,7 @@
     "docs/product/BS21_FUNDING_2026-10-30.md": "a8060c8d57b2532eed9b06c429a97568c77a3ba3c9e0370f273e1d3ac9bc8c4d",
     "docs/product/CARRY_LANGUAGE_2026-10-31.md": "7cf0c8152b053bfaeaf44dd72e7244acb076426ae5618fd20291eb2b2b26a691",
     "docs/product/CHART_C_DESIGN_2026-10-31.md": "0cc5d7a5ce5eb2eb77a61884d53d1a23bf4268f337c7bcd595be6621942e6d80",
+    "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "1cb449ab4976d82574d778f3089758f69240d1f12d40b21e42131ba79e166ae5",
     "docs/product/FUNDING_INFERENCE_2026-10-30.md": "ea1ef423c1d2d3601f82c301536709fa66292595faee72dbd283ad49c5d87952",
@@ -244,6 +246,7 @@
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "93cb4a5e32351be439393177c78017bc5bd5cd538f585812e992d74aaced08bc",
     "docs/product/MC_VOLATILITY_2026-10-30.md": "92dc8a14c6884ea57936f9f187e9b87d1120b426ac0fe2f8767867617ef6837f",
     "docs/product/NATIVE_LANGUAGE_2026-10-31.md": "c9b68cf82c3a9bf858d9e0649871116f7d618a86ae8e4ba12dab87872db8fe32",
+    "docs/product/NAUTILUS_AND_DATA_SOURCES_2026-10-31.md": "b2b0fdb675bd2e04e79863d872fc6101f40a10744b5bd0516da17957a26e7936",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
@@ -259,7 +262,7 @@
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
     "docs/product/UI_LOCALIZATION.md": "905b5ea1fd261d8a501d9b36d75677620ebc9582d89f0585a722e357c5cfd6b7",
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
-    "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "8211087fbc35db1f1b8b3b341387a165c328bc5e18b1d556dd3d492694ed781a",
+    "docs/product/UI_SESSION_PROGRESS_2026-10-31.md": "6f8fd39bdfc77df266095c1e46170c1a679e3267d200a0fc3f6995b196dd0de4",
     "docs/product/UI_WEBSITE_SYNC.md": "37b62baa94dece046c08e70c01d49e4658937cbaa21d3b980c9fcb9099913363",
     "main.py": "e8efbfab86cc633764132fb27379e7543239f216be589861192b55cbde7a7f18",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
@@ -270,7 +273,7 @@
     "quantgen_desktop/bonds.py": "f01f99a151a0ffd6030c1671554514804460fbb5c7d3672dc1075bdfb12f65a5",
     "quantgen_desktop/chart_study.py": "8b083a56e71ba47b8c26030d0a50618fd4b1e70d27cace5c3ff0400a1d450303",
     "quantgen_desktop/charts.py": "abc3382ca861b9e7ed0c876ee0bf7cc47ece79c6a1964f5f026702ebbb7adbb7",
-    "quantgen_desktop/commentary.py": "5ab808a5ac5448c148bbec6e06695ffc8db01fb608dda2f3cfb4c052d2f0282e",
+    "quantgen_desktop/commentary.py": "4b5d02a17b5621db28c24a3f54a37106837239d7fe55aa7f376e677f80d0845f",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
     "quantgen_desktop/fx.py": "c57c76ab44edc66bfd4451e6b75abf7d92ba38806cbfc8685c8cba3c287322d9",
@@ -296,7 +299,8 @@
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
-    "tests/ai_payload_acceptance.py": "f34d2019240276b8b73d2fee122810d1e7b2204872da1bb02c9748669452a11f",
+    "tests/ai_connection_acceptance.py": "03aecec6afe99e8e38bb689a2bf2e0cc13ac64eea769b6343be813650888a7c8",
+    "tests/ai_payload_acceptance.py": "2989ffcbc806c4a31f2795adaca8be20c90f47ea4140cfab5fe600a976cc5a4e",
     "tests/ar1_decay_acceptance.py": "8283f51b60967f30950af4ec7ecfda48f52c9bb605b2dc8231fc26b3549b63ab",
     "tests/bond_funding_acceptance.py": "dfd5760cec1f4e32cfccdae4f73cf8d4a38ea72650af612587e981c8058db02c",
     "tests/chart_c_theme_acceptance.py": "4190f9a6bd66e16ae37b526be1707885e3ae0f4d30b9c2d98d2363e5087aaf21",
@@ -308,7 +312,7 @@
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "3f3c0ee0e38d946647a7ae2448af8d0496c2dea779a81be4cfd8734b84a61834",
-    "tests/desktop_commentary_acceptance.py": "1e13e178a30df3fd19dd473e01b3db6a8b52dcfa0fff4d1eaa9ed65696731fae",
+    "tests/desktop_commentary_acceptance.py": "23fd186a1562c440d1cf79ee8a9e1169ebeb499da93caec54141415410db7821",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_indicator_guide_acceptance.py": "6d90f6df5eac7fb0930278d7f38e1e216e30831bbaae02b06293f4fcbe7c532d",
@@ -430,7 +434,7 @@
     "tools/ui/preview_home.py": "67e18b0f780f3c3a7c5901e0e0af68d3c1eca9e441dd3e5ac491af4d4e482775",
     "tools/ui/subset_font.py": "8cc63bd9b0952b955b425b69d8523c6f64d85b5baa52f502c56a8d31f54b899a",
     "ui/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "ui/ai_panel.py": "c07cbf37b50a88904c2ebdc6d7afb321cdc9d45563f9a63c0aeccda9d2d0e7be",
+    "ui/ai_panel.py": "92e83a1414a7667ba28b3d6f023716b1390318d16f7158c8ea63d1f7c9758151",
     "ui/bonds_page.py": "93db57961b326872584c3b01600356a1eea9f882c3da55035196b2c1ae691881",
     "ui/chart_study.py": "503ad1e97211fa899cfc77a42dfdd4627c8a5169ed459901872af6875a5192c7",
     "ui/components.py": "41be9f3117f80c1677308355702758897f6d9d30654eb5a4d229d0bf7702a4fd",
@@ -464,163 +468,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4c9561c2b4764f28c763b9d956df2bd6def8517226636322cea0c4652126cee4",
-      "source_digest": "8049659cdfeaff4327570ee57aad1ad5a2c6b3ff99fc87729f7e07badb084440",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.789772+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "d5e3bfafa63eedac6b92418ea168bc07550cbd6fa279887ca866a2f320bc7a85",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.091419+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "2": {
       "document_sha256": "8a8915a728f0bd28f95fa46082cde5efd96739cb14bf69e69ad9205841c6cbe0",
-      "source_digest": "8049659cdfeaff4327570ee57aad1ad5a2c6b3ff99fc87729f7e07badb084440",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.792997+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "d5e3bfafa63eedac6b92418ea168bc07550cbd6fa279887ca866a2f320bc7a85",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.107274+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "f7d0f9cc2ba6f7a420134a8ddf618d92163f44491673a0b6a96449058ac832f0",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.795651+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "e5ccf6fb3a757fc2b1eed45e15771e0e46bd3575a3c8351b1e7a294202de493e",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.110137+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "4": {
       "document_sha256": "7d0f3373b9815cd9db634f28323c8c90bc7e78cd09cf40d757e98adfc3ac1dd7",
-      "source_digest": "dffd68c20d405bab786a5351df8d168673d0c5a4c53f3de18e10dc3e240c0e8e",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.798646+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "ba6aa3ab742ae2cdd57f86563ecff5c4ebc279c06037e0fab8661416f8711fd1",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.113334+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "66baa71e509f2f8f4dadb328ceec304afe593e493d804abdf7b010f51fa3621f",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.801205+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "71de16562c6c7abc994942e3758f14ebeb275cca70df97c546f248e648f77939",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.115738+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "6": {
       "document_sha256": "fae1be1112448c78bde79274a691143bdadcb4623853f26798735cf71b20973a",
-      "source_digest": "a4f263af58670ee50ba704eadc69cd0f31ae52763bd8b10fdd170d361e513f59",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.804295+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "6defacedd0394f9ba0242ec849baccf473b94b6ac37725cbd66ba39ef8968780",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.119481+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "7": {
       "document_sha256": "d255a134f4e97cd65a7b3a4676b26a0f6e655e823ab23f971d477235df751931",
-      "source_digest": "8049659cdfeaff4327570ee57aad1ad5a2c6b3ff99fc87729f7e07badb084440",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.807027+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "d5e3bfafa63eedac6b92418ea168bc07550cbd6fa279887ca866a2f320bc7a85",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.122317+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "8": {
       "document_sha256": "06dbba68f23aa6e2aec1125b031a7486b863296ec51a15481a893ea62253f232",
-      "source_digest": "a4f263af58670ee50ba704eadc69cd0f31ae52763bd8b10fdd170d361e513f59",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.809798+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "6defacedd0394f9ba0242ec849baccf473b94b6ac37725cbd66ba39ef8968780",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.126005+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "9": {
       "document_sha256": "81e96f0f623036ca1b290ddf8508a9ff8e6cc8b0fca380a939abc529a4dfb747",
-      "source_digest": "33b9c885f30caec90c6210f3dd7dbbb4a4469c59f67d6c2a3c341e0739c59dbd",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.812861+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "e393da21ae0d26b0ee2345356a43a3ab790706aba05984fcd24e83957facfba4",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.128940+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "10": {
       "document_sha256": "9b4f832a3c5363e29f704dbf3f3f89bf13aef9be27298cd14b8d3fe4533685cb",
-      "source_digest": "5603e7440faec24d453c05931c30ef2ca2affc1b8514a83d3f1977d713786857",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.815627+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "0e82407c59c7ba2ab88428f6dc6a9f8851235d32ea8e1791ff4f162149641e6e",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.131527+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "486918f49f76ebb6735ef1c4117b0031ce5900e8088c629b7674854109f2c937",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.818755+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "4637a48651f3033812aa190a05ae3c5766fe96c2f9564c9ca3d9ec1a36ca1926",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.134683+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "12": {
       "document_sha256": "7f3aed235693c66f0f32fc3c62a988658dadbea65f2c314ccc111d06c8c2d675",
-      "source_digest": "dc3ca6337f4c5977e632c9b20982fcea6ca5f72fa149c80a3a15656d3b92492c",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.821364+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "6551a0efc5903122a98e3dc072ea188c5ea9ea1aaf0ee0cbb02d0d6b517a744e",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.136930+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "13": {
       "document_sha256": "1ae2381d67147472a0b3a8b89ccf44d493925ad72430091bd67376635d137186",
-      "source_digest": "33b9c885f30caec90c6210f3dd7dbbb4a4469c59f67d6c2a3c341e0739c59dbd",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.824464+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "e393da21ae0d26b0ee2345356a43a3ab790706aba05984fcd24e83957facfba4",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.139485+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "14": {
       "document_sha256": "b955cd3fbada10bf18fc428f54264fbed7623176c9e4ac19b5307c3531affd74",
-      "source_digest": "33b9c885f30caec90c6210f3dd7dbbb4a4469c59f67d6c2a3c341e0739c59dbd",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.827044+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "e393da21ae0d26b0ee2345356a43a3ab790706aba05984fcd24e83957facfba4",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.142061+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "15": {
       "document_sha256": "926245ec0903d7f5fb0759e513e010154ff32bd2db6df3a95b816cce610b6e65",
-      "source_digest": "33b9c885f30caec90c6210f3dd7dbbb4a4469c59f67d6c2a3c341e0739c59dbd",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.829791+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "e393da21ae0d26b0ee2345356a43a3ab790706aba05984fcd24e83957facfba4",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.144804+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "7f1c6b3e2fc0ac83cab7869475c40370b2daf53aea030bc5b14fcb8604149480",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.832306+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "081d05d697667fd3d41a9e03ddcd3c7328e6e42566552a31fb2a0e392a7634e5",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.147673+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "a4f263af58670ee50ba704eadc69cd0f31ae52763bd8b10fdd170d361e513f59",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.834976+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "6defacedd0394f9ba0242ec849baccf473b94b6ac37725cbd66ba39ef8968780",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.150853+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "8049659cdfeaff4327570ee57aad1ad5a2c6b3ff99fc87729f7e07badb084440",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.837566+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "d5e3bfafa63eedac6b92418ea168bc07550cbd6fa279887ca866a2f320bc7a85",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.153056+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "19": {
       "document_sha256": "550ebe0e687e42986c399f50bf2fb9da524c3e6bc53df0437f48c63a672d03e9",
-      "source_digest": "eaeb9b6121301c85f29843886e4246a433443235711c7ec3c1cbbbd1eb3041ed",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.840131+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "8071329576a1d10cc251175513e8145259064384f324137ad6c972a00a20bd6b",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.155682+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     },
     "20": {
       "document_sha256": "40c60347005959a09fc475243ffb06f7571203892a39137e471f5a2bea9c7c11",
-      "source_digest": "8049659cdfeaff4327570ee57aad1ad5a2c6b3ff99fc87729f7e07badb084440",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme source-delta review",
-      "review_note": "Reviewed C layout, cached figure recolouring, ui/theme QSettings and Flet session storage, SVG font family, 28 chart factories and bounded Chromium/Qt evidence against all 20 policies. Updated 01/04/07/12-15/19/20 and FACTS; no new app dependencies or provider calls on theme change. Retained review-required and publication BLOCKED; actual website CSS/deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:51:33.842668+00:00",
-      "source_commit": "d77d99660132f71b50c19b42cc6d76dc4b5f9a79"
+      "source_digest": "d5e3bfafa63eedac6b92418ea168bc07550cbd6fa279887ca866a2f320bc7a85",
+      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
+      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
+      "reviewed_at": "2026-10-31T07:53:43.158153+00:00",
+      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
     }
   }
 }

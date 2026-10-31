@@ -19,9 +19,26 @@ from typing import Callable
 import flet as ft
 
 from core.quant import insights
+from core.i18n import LocaleContext
+from core.research.ai_connection import error_message
 from core.research.ai_payload import filter_analysis_fields
 from core.theme import RADII, active
 from ui.components import chip, notice
+
+
+class _ErrorNotice(ft.Container):
+    """Re-render diagnostics on language changes without sending another request."""
+    def __init__(self, result, page):
+        super().__init__()
+        self.result = result
+        ctx = getattr(page, 'qg_locale', None)
+        self.render_locale(ctx if isinstance(ctx, LocaleContext) else LocaleContext('en_US'))
+
+    def render_locale(self, ctx):
+        self.ctx = ctx
+        code = getattr(self.result, 'error_code', '')
+        message = error_message(code, ctx.language, getattr(self.result, 'http_status', None)) if code else self.result.error
+        self.content = notice(message, 'error', icon=ft.Icons.CLOUD_OFF_OUTLINED)
 
 
 def analysis_panel(page: ft.Page, *, kind: str, narrative: str,
@@ -46,8 +63,7 @@ def analysis_panel(page: ft.Page, *, kind: str, narrative: str,
         def worker():
             result = deep(kind, filter_analysis_fields(payload_fn()), question=question.value or "")
             if result.error:
-                deep_host.controls = [notice(result.error, "error",
-                                             icon=ft.Icons.CLOUD_OFF_OUTLINED)]
+                deep_host.controls = [_ErrorNotice(result, page)]
             else:
                 deep_host.controls = [
                     ft.Row([chip(f"engine: {result.engine}", "accent")], spacing=6),

@@ -99,3 +99,9 @@ comparison was blocked by 403, so exact website token matching is an AWS task.
 All website chart surfaces, existing Auto/Light/Dark behavior and mobile checks
 are explicitly queued in the shared AWS handoff. A stored handoff is not a sent
 chat message or a verified website deployment.
+
+C implementation PR: [#47](https://github.com/xkg4real/quantgen/pull/47).
+The branch integrates main PR46 (13d16ae) and retains its safe Claude diagnostics
+and no-extra-request language handling. The allowlisted C wheel passed installed
+app/native smoke and new helper imports outside checkout.
+Website queue: [PR-47](ui_website_updates/PR-47.json).
