@@ -8,6 +8,7 @@ from core.research.letf_disclosure import letf_text, letf_unavailable_text
 from core.research.decay_disclosure import decay_value, decay_text
 from core.research.quote_coverage import quote_coverage_text
 from .tools import ToolPane, number, fmt
+from .market_diagnostics_language import decay_korean, funding_korean, coverage_korean
 
 
 class DerivativesPane(ToolPane):
@@ -56,7 +57,8 @@ class DerivativesPane(ToolPane):
         self.result_table('Static arbitrage checks', ['Check', 'Violations', 'Tests', 'Status'],
             [(key, str(check['violations']) if check['tests'] else 'NOT_RUN', check['tests'], check['status'])
              for key, check in coverage['static'].items()])
-        self.text(quote_coverage_text(coverage))
+        coverage_source = quote_coverage_text(coverage)
+        self.text(coverage_source, localized={'en': coverage_source, 'ko': coverage_korean(coverage)})
         self.sections.append({'type': 'quote_coverage', **coverage})
         self.finished(out.narrative)
 
@@ -87,7 +89,8 @@ class ETFPane(ToolPane):
             self.result_table('Premium statistics', ['Metric', 'Value'],
                 [(k, fmt(v)) for k,v in ps.items() if k not in {'decay','half_life'}] +
                 [('AR(1) amplitude half-life · observations',decay_value(ps.get('decay')))])
-            self.text(decay_text(ps.get('decay')))
+            decay_source = decay_text(ps.get('decay'))
+            self.text(decay_source, localized={'en': decay_source, 'ko': decay_korean(ps.get('decay'))})
         sleeves = d.get('sleeves')
         if sleeves:
             self.result_table('Descriptive sleeve backtests', ['Sleeve', 'Sharpe', 'Max drawdown', 'Study decision'],
@@ -130,8 +133,11 @@ class CryptoPane(ToolPane):
         self.text(f"{d['source']} · USD/KRW: {d['usdkrw_source']} · {d['btc_dates'][0]} → {d['btc_dates'][-1]}\n"
                   f"Public market analysis · no order submission · study cards: {out.study_status}")
         if d['source']=='SYNTHETIC': self.text('SYNTHETIC · 모든 시계열은 합성 데이터입니다.')
-        self.text(decay_text(getattr(kp, "decay", None)))
-        self.text('ETH/BTC: ' + decay_text(d['ethbtc'].get('decay')))
+        decay_source = decay_text(getattr(kp, "decay", None))
+        self.text(decay_source, localized={'en': decay_source, 'ko': decay_korean(getattr(kp, 'decay', None))})
+        eth_decay_source = 'ETH/BTC: ' + decay_text(d['ethbtc'].get('decay'))
+        self.text(eth_decay_source, localized={'en': eth_decay_source,
+                                             'ko': 'ETH/BTC: ' + decay_korean(d['ethbtc'].get('decay'))})
         self.result_table('Premium / volatility', ['Metric', 'Value'], [
             ('Kimchi premium · %',fmt(kp.last_pct)), ('Premium z',fmt(kp.last_z)),
             ('AR(1) amplitude half-life · observations',decay_value(getattr(kp, "decay", None))),
@@ -141,7 +147,8 @@ class CryptoPane(ToolPane):
             ('GARCH persistence',fmt(g['persistence'])), ('Converged',str(g['converged'])), ('At bound',', '.join(g['at_bound']))])
         self.line('Kimchi premium', range(len(kp.dates)), [('Premium %',kp.premium_pct)], 'Days', 'Premium · %')
         if fc:
-            self.text(funding_text(fc))
+            funding_source = funding_text(fc)
+            self.text(funding_source, localized={'en': funding_source, 'ko': funding_korean(fc)})
             self.sections.append({'type': 'funding_diagnostic', 'bootstrap_p': None,
                                   'bootstrap_status': 'RETIRED_INVALID_IID',
                                   'diagnostic': getattr(fc, 'diagnostic', {})})
