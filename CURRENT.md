@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/M4-N8, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T15:43:00+09:00
+updated_at: 2026-10-31T15:46:30+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/fx-language-20261031
-work_commit: f24463f4bf9fa637318dd1f1683c375d5387eef4
+work_commit: ae768dc607a961bf71a8d4c57c6cd629ec78ba71
 uncommitted_changes: no
-pr: none (PR39 merged)
+pr: https://github.com/xkg4real/quantgen/pull/40
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -145,3 +145,6 @@ Commit 6a82337de447279372a351185bda855b581c3c51 remote ref read-back; PR39 open.
 
 ## 13-8/a completed; continue 13-8/b1 FX display prose
 PR39 source6a82337 → mainf24463f; all CI41177249869 jobs success and merge read-back. LEDGER16b493d read-back. sapientia Notion 13-8/a struck, parent13-8 and b remain incomplete. New gpt/fx-language-20261031 from mainf24463f for native forward/option/SABR Korean prose, preserving original narratives and reports. No core pricing/verdict changes. UI→website records38/39 are privately prepared, delivery queued/unavailable; will include reviewable records with this unit.
+
+## 13-8/b1 PR40 pending CI
+Native FX forward/option/SABR Korean prose implemented sourceae768dc607a961bf71a8d4c57c6cd629ec78ba71, remote branch read-back. Six focused tests compare all displayed numeric tokens/branches, missing evidence, language switch and unchanged reports; local6+7language+1SABR+22desktop=36PASS. Included queued website records for PR38/39 with verified merges/CI; no delivery receipt, no deployment. Carry/other narratives and actual Windows remain incomplete. Await PR40 CI before merge/completion/Notion strike.
