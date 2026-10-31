@@ -27,11 +27,21 @@ The owner also requested replacing the Flet desktop launch icon with QUANTGEN. m
 
 New compliance workflow required a truthful source/document delta review. 01–20 current-state sections, FACTS and source-review were updated for education, locale preferences, exports, rights, Babel/Unicode notices and limited accessibility. All publication/contract/operational gaps remain BLOCKED/review-required; this is no legal approval.
 
-## Work to retain and complete
+## C implementation and continuation
 
-PR42 is complete. Current follow-up is `gpt/chart-c-theme-20261031`, initially based on merged main `d77d9966`, in the same isolated UI worktree. C splits, native theme persistence, cached Flet theme repaint and common matplotlib chart wrappers are being implemented/tested. Do not report this follow-up as merged before its own PR/checks. Physical Windows display/input/installer and live Flutter browser visual acceptance remain; broader language packs/professional review and remaining legacy narratives are not marked complete. Main-session narrative work continues independently.
+PR42 is complete. C follow-up PR47: https://github.com/xkg4real/quantgen/pull/47
+- Branch: gpt/chart-c-theme-20261031
+- Current source head: 83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0
+- Integrates main PR46 (13d16ae551cea65b6ac20a02a04e812de7745838), preserving safe Claude diagnostics and source boundaries.
+- C chart-left/interpretation-right (2:1) layout is implemented in native guide, Quant/Portfolio/Bonds and common ToolPane, and all 28 Flet chart factories. Narrow layouts stack. Existing chart types/data/axis limits/canonical records are preserved.
+- Native Light/Dark persists in QSettings ui/theme. Flet toggles its session theme and repaints cached controls/figures, preserving inputs and results without rerunning analysis.
+- Brand ivory/forest palette; actual quantgeneration.com CSS tokens still require AWS comparison (direct request blocked 403).
+- Local evidence: 230 bounded runtime checks; 16 final Home/theme/guide checks after glyph/refresh fixes; 29 after main diagnostics integration; 47 compliance checks. All 28 Flet factory theme paths exercised. C wheel installed outside checkout and app/native/helper imports passed.
+- Actual Qt 1600×1050 C light/dark captures and local Chromium/Flet 1600×1100 + 390×1000 were inspected. Fixed SVG Korean glyphs (single registered font family), duplicate guide introduction and Home refresh losing selected language. These are local fixture screenshots, not deployed website acceptance.
+- Runtime CI 41182434131 and document CI 41182434140 are running; inspect their final results and PR head before merge. Merge is not yet claimed in this checkpoint.
+- Design: docs/product/CHART_C_DESIGN_2026-10-31.md. Website follow-up: docs/product/ui_website_updates/PR-47.json.
 
-After the C-theme follow-up, update this supplement with exact source/merge and CI. Do not repeat completed PR36/37 work or restart the guide from its early draft checkpoints. Do not mutate CURRENT merely to include this supplement.
+Physical Windows display/input/installer/taskbar, full keyboard/screenreader acceptance, additional professionally reviewed language packs and remaining main-session narrative translations remain separate. Do not repeat completed PR36/37/42 work. Do not mutate CURRENT or research ledger to incorporate this supplement.
 
 ## Completed prior work
 
@@ -45,4 +55,4 @@ The owner explicitly says website UI must be continued in the already authentica
 Supported tools lack cross-chat send/wake: shared handoff is saved, delivery remains queued without receipt, and site application/deployment is unverified. A saved GitHub document is not a sent chat message.
 No actual ledgers, protected cache, holdout/frozen study or order paths were executed.
 
-C follow-up evidence so far: native 1600×1050 light/dark captures exist at /workspace/artifacts/quantgen-ui/chart-c-light.png and chart-c-dark.png. 22 equity/FICC chart factories rendered and switched themes; 10 C/guide regression checks passed. Actual local Chromium/Flet testing is now underway and found SVG CJK fallback and late Home text issues being fixed. First browser fixture accidentally ran Home auto-refresh; the fixture was stopped and changed to stub ui.research_home.load_markets plus forbid requests. No successful provider observation is claimed from those blocked calls. The live site CSS request is blocked by the proxy (403); AWS must verify actual tokens and apply C to every site chart. WEBSITE_AWS_HANDOFF.md contains this explicit owner instruction. The public site has Auto/Light/Dark controls, verified by the web reader, but exact CSS values are unverified here.
+Browser fixture note: the first fixture accidentally triggered Home auto-refresh; its blocked provider requests produced no verified live observations. It was stopped and replaced with inert provider/engine hooks plus request blocking. Final visual evidence uses the corrected fixture.
