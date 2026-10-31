@@ -7,7 +7,7 @@
 ## 사용자 요청과 범위
 
 소개사이트의 UI 버그를 찾아 수정합니다. 사용자는 이 작업을 「웹사이트 작업공간(AWS)」에서 이어서 처리한다고 했습니다.
-앱의 별도 네 가지 UI 작업은 UI 세션의 draft PR42이며, 웹사이트 작업과 구분합니다.
+앱의 네 가지 UI 작업은 UI 세션에서 계속 진행하는 PR42입니다. 사용자는 웹사이트 UI 작업을 AWS 세션으로 넘기되 앱 UI 수정을 중단하지 말라고 재확인했습니다.
 UI 코드 수정은 소유자가 별도 컨펌 없이 진행하도록 허용했고 완료 후 변경·검증 보고를 요구했습니다.
 
 ## 1. 기존 AWS 로그인과 호스팅 소스 확인
@@ -55,15 +55,17 @@ UI 코드 수정은 소유자가 별도 컨펌 없이 진행하도록 허용했�
   - UI→웹사이트 인계 규칙과 `docs/product/ui_website_updates/PR-36.json`.
 
 진행 중인 앱 변경:
-- Draft PR42 https://github.com/xkg4real/quantgen/pull/42
+- PR42 https://github.com/xkg4real/quantgen/pull/42
 - 브랜치 `gpt/indicator-guide-20261031`
-- 최초 원격 체크포인트 `29f4a80ec386f0518f79783a5bf693d0b98efae9`; 반드시 PR의 실제 최신 head를 다시 확인하세요.
-- `docs/product/UI_SESSION_PROGRESS_2026-10-31.md`
-- `core/education/chart.py`, `core/education/indicators.py`, `ui/indicator_guide.py`, `quantgen_desktop/indicator_guide.py`
-- 홈 지표 6개 + 등록 시리즈 73개 이용 조건: `core/research/display_rights.json`.
-- 한국어/영어 UI·명시적 영어 fallback과 CLDR 지역 형식 기반. 다국어 번역 전체 검수 완료를 주장하지 않습니다.
-- 기존 Home/desktop/packaging 31 PASS. 새 가이드·브라우저·네이티브 회귀 17개는 UI 세션에서 로컬 통과했으나 최초 체크포인트 이후 변경이므로 최신 커밋의 실제 포함 여부를 확인하세요.
-- 아직 draft이며 시각 검수·후속 통합/CI·main 병합은 남아 있습니다. 이 PR을 배포 완료본으로 취급하지 마세요.
+- 최신 저장 소스 `afffa4a7706052125df95dea42f76dab79d2b679`; PR의 실제 최신 head/병합 상태를 확인하세요.
+- 검토 가능한 PR이며 현재 CI https://github.com/xkg4real/quantgen/actions/runs/41180136658 는 진행 중입니다. main 병합 전 이 문서만 보고 배포 완료로 취급하지 마세요.
+- 앱 통합 검사 63개, 최종 가이드/차트 150% 배율 검사 24개 통과. 설치 wheel과 앱/네이티브 smoke 통과. 앱 light/dark 캡처에서 차트 배경과 이용조건 표 겹침 수정 확인.
+- `docs/product/ui_website_updates/PR-42.json`에 웹 후속 항목이 있습니다.
+- 디자인/데이터 형식: `docs/product/INDICATOR_GUIDE_DESIGN.md`
+- 번역·fallback·검수 기준: `docs/product/UI_LOCALIZATION.md`
+- 이용권 검토: `docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md`, `core/research/display_rights.json`
+- 한국어/영어만 제공되는 UI 번역과 714개 CLDR 지역 형식을 구분하세요. 교육 표본에 실제 OHLCV가 없고 이용권 검토는 게시 승인/법률 의견이 아닙니다.
+- 실제 Windows와 live Flet 브라우저 시각 검수는 별도 미완료입니다. 소개사이트 수정/배포는 이 AWS 작업공간의 실제 소스·검증·배포 증거로 보고하세요.
 
 ## 5. 완료 보고와 상태 기록
 
