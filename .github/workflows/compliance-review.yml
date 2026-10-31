@@ -1,0 +1,70 @@
+name: Compliance document review
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Monday 09:00 Asia/Seoul. GitHub schedules use UTC and may be delayed.
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compliance-review-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  consistency:
+    name: Document and source consistency
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/.env*
+            !/**/.env*
+            !/.aws/
+            !/.codex/
+            !/.agents/
+            !/.claude/
+            !/paper_live/
+            !/grokteam/
+            !/_backup/
+            !/research_notes/
+            !/reports/
+            !/QUANTGEN_Quant_Council_2026-10-03/
+            !/QUANTGEN_techfund_research_bundle/
+            !/docs/asset_expansion/cache/
+            !/**/*.jsonl
+            !/docs/**/holdout/
+            !/docs/**/frozen/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exercise stale-source, document and privacy boundaries
+        run: python -m unittest tests.compliance_acceptance -v
+      - name: Check source and document review fingerprints
+        if: always()
+        run: python -m tools.compliance.check --check --report-dir "$RUNNER_TEMP/compliance-review"
+      - name: Write compact job summary
+        if: always()
+        shell: bash
+        run: |
+          if test -f "$RUNNER_TEMP/compliance-review/report.md"; then
+            cat "$RUNNER_TEMP/compliance-review/report.md" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Preserve actionable review report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compliance-review-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/compliance-review/
+          if-no-files-found: error
+          retention-days: 30
