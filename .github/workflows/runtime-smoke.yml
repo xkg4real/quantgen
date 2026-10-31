@@ -66,7 +66,7 @@ jobs:
         shell: bash
         run: |
           python -m pip install "PyQt6==6.12.0"
-          python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.desktop_strategy_acceptance tests.desktop_macro_acceptance tests.desktop_paper_acceptance tests.desktop_commentary_acceptance tests.desktop_portfolio_scope_acceptance tests.desktop_strategy_exposure_acceptance tests.desktop_ar1_decay_acceptance tests.desktop_funding_inference_acceptance tests.desktop_letf_disclosure_acceptance tests.desktop_letf_index_acceptance tests.desktop_quote_coverage_acceptance tests.desktop_swaption_conversion_acceptance tests.desktop_sabr_diagnostics_acceptance tests.desktop_language_acceptance -v
+          python -m unittest tests.desktop_acceptance tests.desktop_market_acceptance tests.desktop_strategy_acceptance tests.desktop_macro_acceptance tests.desktop_paper_acceptance tests.desktop_commentary_acceptance tests.desktop_portfolio_scope_acceptance tests.desktop_strategy_exposure_acceptance tests.desktop_ar1_decay_acceptance tests.desktop_funding_inference_acceptance tests.desktop_letf_disclosure_acceptance tests.desktop_letf_index_acceptance tests.desktop_quote_coverage_acceptance tests.desktop_swaption_conversion_acceptance tests.desktop_sabr_diagnostics_acceptance tests.desktop_language_acceptance tests.desktop_fx_language_acceptance -v
           cd "$RUNNER_TEMP"
           python "$GITHUB_WORKSPACE/tools/packaging/smoke_desktop.py"
       - name: Verify native chart text layout
