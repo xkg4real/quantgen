@@ -1,0 +1,57 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-ui-pr-44",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "queued_at": "2026-10-31T16:21:05.000+09:00",
+    "blocker": "No supported cross-chat send/handoff operation is available in the current tool set.",
+    "sent_at": null,
+    "receipt": null
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/44",
+    "head_commit": "32d80824432bb28373c3c1aa17b14af60aa92cb5",
+    "merge_commit": "8c9b2fc090285dfcb5a1b019685052949ced8f44",
+    "changed_files": [
+      ".github/workflows/runtime-smoke.yml",
+      "docs/product/RATES_LANGUAGE_2026-10-31.md",
+      "quantgen_desktop/rates.py",
+      "quantgen_desktop/rates_narrative.py",
+      "tests/desktop_rates_language_acceptance.py"
+    ]
+  },
+  "summary_ko": [
+    "Native Rates 곡선/PCA·스왑·금리옵션·시뮬레이션 결과 해설의 한국어 표시를 추가했습니다.",
+    "수치·조건 분기·합성 고지·보조환산 불가·원문보고서를 보존합니다. 원본 모형/provider 주석과 기타 인라인 문구는 미완료 범위입니다."
+  ],
+  "website_impact": {
+    "classification": "native_only_source_change",
+    "review_status": "required",
+    "browser_code_changed": false,
+    "browser_sources_to_check": [
+      "ui/rates_page.py",
+      "core/ficc/insights.py"
+    ],
+    "requested_actions_ko": [
+      "실제 사이트에 해당 분석 화면이 존재하는지 확인한 뒤 필요한 언어 범위만 별도로 적용·검사합니다.",
+      "공통언어 작업을 통합할 때 명시적 표시variant·원문보고서·숫자와 연구판정을 보존합니다."
+    ]
+  },
+  "website_application": {
+    "status": "not_reviewed",
+    "commit": null,
+    "checks": [],
+    "deployment_status": "not_verified",
+    "deployment_url": null
+  },
+  "verification": {
+    "ci_url": "https://github.com/xkg4real/quantgen/actions/runs/41179930472",
+    "ci_result": "success",
+    "ci_source_commit": "32d80824432bb28373c3c1aa17b14af60aa92cb5",
+    "local_tests_passed": 38,
+    "manual_windows_display_acceptance": "NOT_RUN",
+    "live_website_acceptance": "NOT_RUN"
+  }
+}

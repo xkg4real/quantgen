@@ -1,0 +1,59 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-ui-pr-43",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "queued_at": "2026-10-31T16:21:05.000+09:00",
+    "blocker": "No supported cross-chat send/handoff operation is available in the current tool set.",
+    "sent_at": null,
+    "receipt": null
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/43",
+    "head_commit": "df7ccd8f21815933ff48e105d8e6bac77937b4cf",
+    "merge_commit": "9d55e2ba350054759055c2f85b4332993a047e8d",
+    "changed_files": [
+      ".github/workflows/runtime-smoke.yml",
+      "docs/product/CARRY_LANGUAGE_2026-10-31.md",
+      "quantgen_desktop/fx.py",
+      "quantgen_desktop/fx_narrative.py",
+      "quantgen_desktop/translations.py",
+      "tests/desktop_carry_language_acceptance.py",
+      "tests/desktop_fx_language_acceptance.py"
+    ]
+  },
+  "summary_ko": [
+    "Native 캐리바스켓 순위·백테스트·포지션·금리 관측일 경고의 한영 표시를 연결했습니다.",
+    "숫자·비용·원문보고서·표값·equity를 보존하고 알려지지 않은 출처 주석은 그대로 표시합니다."
+  ],
+  "website_impact": {
+    "classification": "native_only_source_change",
+    "review_status": "required",
+    "browser_code_changed": false,
+    "browser_sources_to_check": [
+      "ui/fx_page.py",
+      "core/ficc/insights.py"
+    ],
+    "requested_actions_ko": [
+      "실제 사이트에 해당 분석 화면이 존재하는지 확인한 뒤 필요한 언어 범위만 별도로 적용·검사합니다.",
+      "공통언어 작업을 통합할 때 명시적 표시variant·원문보고서·숫자와 연구판정을 보존합니다."
+    ]
+  },
+  "website_application": {
+    "status": "not_reviewed",
+    "commit": null,
+    "checks": [],
+    "deployment_status": "not_verified",
+    "deployment_url": null
+  },
+  "verification": {
+    "ci_url": "https://github.com/xkg4real/quantgen/actions/runs/41179628495",
+    "ci_result": "success",
+    "ci_source_commit": "df7ccd8f21815933ff48e105d8e6bac77937b4cf",
+    "local_tests_passed": 41,
+    "manual_windows_display_acceptance": "NOT_RUN",
+    "live_website_acceptance": "NOT_RUN"
+  }
+}
