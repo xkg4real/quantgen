@@ -37,11 +37,11 @@ class IndicatorGuide(ft.Column):
     def choose_case(self,e):
         self.requested_case=e.control.value;self.render();self.update_if_mounted()
 
-    def move_cursor(self,index):
+    def move_cursor(self,index,*,draw=True):
         self.cursor=max(0,min(len(self.series.closes)-1,int(float(index))))
         self.readout.value=cursor_text(self.series,self.keys,self.cursor,self.ctx)
         self.slider.value=self.cursor
-        self.draw_chart()
+        if draw:self.draw_chart()
         self.update_if_mounted()
 
     def draw_chart(self):
@@ -95,7 +95,8 @@ class IndicatorGuide(ft.Column):
             tooltip=cursor_text(self.series,self.keys,self.cursor,ctx))
         self.readout=text(cursor_text(self.series,self.keys,self.cursor,ctx),12)
         self.slider=ft.Slider(min=0,max=len(self.series.closes)-1,divisions=len(self.series.closes)-1,
-                              value=self.cursor,on_change=lambda e:self.move_cursor(e.control.value),tooltip=ctx.t('cursor'))
+                              value=self.cursor,on_change=lambda e:self.move_cursor(e.control.value,draw=False),
+                              on_change_end=lambda e:self.move_cursor(e.control.value),tooltip=ctx.t('cursor'))
         controls=[text(ctx.t('guide_intro')),text(ctx.t('guide_steps'),12,True),
             text(ctx.t('select_indicators'),17),ft.ResponsiveRow(buttons,spacing=10,run_spacing=10),
             ft.Row([text(ctx.t('selected_count',count=len(self.keys)),12,True),

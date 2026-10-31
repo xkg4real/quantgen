@@ -45,18 +45,21 @@ main session's eventual Claude handoff.
 Initial existing suite: 31 tests ran; two expected integration failures exposed
 the changed default Home language and an eager bundled-sample read during Flet
 Home construction. The expectation now uses Korean, and the Flet guide is lazy
-until explicitly opened. The rerun is being checked; do not copy a PASS count
-from this checkpoint without its final evidence.
+until explicitly opened. The rerun passed all 31 tests. Dedicated calculation/provenance/locale/rights,
+Flet callbacks and native guide/export tests subsequently passed 17 tests.
+The 17-test source and vector-cursor/report-integrity follow-ups are saved in
+the next checkpoint; final combined CI and visual acceptance remain pending.
 
 Still required: dedicated calculation/alignment, sample-integrity, UI binding,
 locale/no-input-reset, report, rights and packaging regressions; desktop/browser
 visual inspection at narrow widths and light/dark themes; code review, CI and
 PR merge. Audit legacy translation coverage and any new chart layout defects.
 
-The site was readable through web search at quantgeneration.com. Its actual
-source repository/path has not been established; the owner was asked. The
-executor's network policy does not list the domain. Do not bypass that policy,
-guess a production bucket, or claim a deployment. The app work remains independent.
+The owner will continue website work in the already-authenticated AWS session.
+Website tasks are saved at handoff:WEBSITE_AWS_HANDOFF.md. The UI session's
+separate temporary login was cancelled; do not request another login here.
+The deployed source/hosting is still unverified in this session. No website
+modification or deployment is claimed. The app work remains independent.
 
 ## Main-session/Claude handoff
 

@@ -3,11 +3,17 @@ from html import escape
 import math
 from io import BytesIO
 import json
+import hashlib
 from zipfile import ZipFile, ZIP_DEFLATED
 
 from core.i18n import LocaleContext
 from core.theme import LIGHT
 from .indicators import INDICATORS, BY_KEY, selection, indicator_values, counterexamples
+
+
+def plot_bounds(series,ctx,width):
+    largest=max(abs(v) for v in series.closes)*1.2
+    return max(76,len(ctx.number(largest,4 if series.unit=='EUR per USD' else 2))*7+18),width-20
 
 
 def chart_svg(series, keys=(), *, locale=None, colors=LIGHT, width=960, cursor=None, chart_type='line'):
@@ -26,8 +32,7 @@ def chart_svg(series, keys=(), *, locale=None, colors=LIGHT, width=960, cursor=N
     legend_rows=max(1,math.ceil(len(legends)/max(1,(width-24)//210)))
     top=12+legend_rows*24
     # Reserve measured-by-glyph-budget space for large prices and locale separators.
-    largest=max(abs(v) for v in series.closes)*1.2
-    left,right=max(76,len(ctx.number(largest,4 if series.unit=='EUR per USD' else 2))*7+18),width-20
+    left,right=plot_bounds(series,ctx,width)
     area=right-left
     height=top+280+(len(panels)-1)*145+42
     parts=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">',
@@ -47,7 +52,6 @@ def chart_svg(series, keys=(), *, locale=None, colors=LIGHT, width=960, cursor=N
         text(lx+20,ly,visible,color,size=11)
     x=lambda i:left+area*i/max(1,len(series.closes)-1)
     index=max(0,min(len(series.closes)-1,int(cursor))) if cursor is not None else None
-    cursor_line_top=top+18
     for number,panel in enumerate(panels):
         ytop=top+20 if number==0 else top+280+(number-1)*145+20
         ybottom=ytop+(240 if number==0 else 104)
@@ -154,8 +158,10 @@ def learning_bundle(series, keys, meta, *, case_name, locale=None, cursor=None):
                 case=case_name,symbol=series.symbol,first_date=series.dates[0],last_date=series.dates[-1],
                 selected_indicators=list(selected),source=meta,education_only=True,verdict='NOT_RUN',
                 counterexamples=examples)
+    record['input_sha256']=hashlib.sha256(json.dumps(list(zip(series.dates,series.closes)),separators=(',',':'),allow_nan=False).encode()).hexdigest()
+    files={'report.html':body.encode(),'education.json':(json.dumps(record,ensure_ascii=False,indent=2)+'\n').encode()}
+    files['MANIFEST.json']=json.dumps({'format':'quantgen.indicator-education/1','files':{name:{'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()} for name,data in files.items()}},indent=2).encode()
     out=BytesIO()
     with ZipFile(out,'w',ZIP_DEFLATED) as archive:
-        archive.writestr('report.html',body.encode())
-        archive.writestr('education.json',(json.dumps(record,ensure_ascii=False,indent=2)+'\n').encode())
+        for name,data in files.items():archive.writestr(name,data)
     return out.getvalue()

@@ -1,12 +1,13 @@
 """Native reference indicator guide and reusable market-history explorer."""
 from PyQt6.QtCore import QByteArray, Qt, pyqtSignal
+from PyQt6.QtGui import QPainter, QColor, QPen
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QWidget,QVBoxLayout,QHBoxLayout,QGridLayout,QComboBox,
                             QPushButton,QSlider,QFileDialog)
 
 from core.i18n import LocaleContext
 from core.education.indicators import INDICATORS, historical_case, counterexamples, from_history, selection
-from core.education.chart import chart_svg, cursor_text, learning_bundle
+from core.education.chart import chart_svg, cursor_text, learning_bundle, plot_bounds
 
 
 class TechnicalChart(QSvgWidget):
@@ -15,19 +16,24 @@ class TechnicalChart(QSvgWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.series=None;self.keys=();self.ctx=LocaleContext();self.cursor=0
+        self.signature=None
         self.setMouseTracking(True)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setMinimumWidth(350)
 
     def set_chart(self, series, keys, ctx, cursor):
+        changed=self.series is not series or self.keys!=tuple(keys) or self.ctx!=ctx
         self.series,self.keys,self.ctx,self.cursor=series,tuple(keys),ctx,int(cursor)
-        self.redraw()
+        if changed:self.redraw()
+        else:self.update()
+        description=cursor_text(self.series,self.keys,self.cursor,self.ctx)
+        self.setAccessibleDescription(description);self.setToolTip(description)
 
     def redraw(self):
         if self.series is None:return
         from core.theme import LIGHT
         colors=getattr(self.window(),'colors',LIGHT)
-        svg=chart_svg(self.series,self.keys,locale=self.ctx,colors=colors,width=self.width(),cursor=self.cursor)
+        svg=chart_svg(self.series,self.keys,locale=self.ctx,colors=colors,width=self.width())
         self.load(QByteArray(svg.encode()))
         self.setFixedHeight(int(self.renderer().viewBoxF().height()))
         description=cursor_text(self.series,self.keys,self.cursor,self.ctx)
@@ -41,9 +47,23 @@ class TechnicalChart(QSvgWidget):
 
     def mouseMoveEvent(self,event):
         if self.series:
-            fraction=(event.position().x()-76)/max(1,self.width()-96)
+            left,right=plot_bounds(self.series,self.ctx,self.width())
+            fraction=(event.position().x()-left)/max(1,right-left)
             self.cursor_changed.emit(max(0,min(len(self.series.closes)-1,round(fraction*(len(self.series.closes)-1)))))
         super().mouseMoveEvent(event)
+
+    def paintEvent(self,event):
+        super().paintEvent(event)
+        if self.series is None:return
+        from core.theme import LIGHT
+        colors=getattr(self.window(),'colors',LIGHT)
+        left,right=plot_bounds(self.series,self.ctx,self.width())
+        x=left+(right-left)*self.cursor/max(1,len(self.series.closes)-1)
+        columns=max(1,(self.width()-24)//210)
+        import math
+        top=12+math.ceil((len(self.keys)+1)/columns)*24+18
+        painter=QPainter(self);painter.setPen(QPen(QColor(colors.muted),1,Qt.PenStyle.DashLine))
+        painter.drawLine(round(x),top,round(x),self.height()-36)
 
     def keyPressEvent(self,event):
         if self.series and event.key() in (Qt.Key.Key_Left,Qt.Key.Key_Right,Qt.Key.Key_Home,Qt.Key.Key_End):
