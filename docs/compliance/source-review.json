@@ -226,7 +226,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "ebf76fcdbc7c20daffc845a5b07cd2bcd804d5a8469bc1996097511fd19d0cfa",
+    "docs/compliance/FACTS.md": "dbc6c98cc0eebbf19f476c0fcb2b13cdea3d7d2eb30a0c4d55b7f5f6924f66ef",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "fe76f5dc8fb85e691d1c33140a1b01481d8ba851c43398ac99b00effbf981fe8",
@@ -278,7 +278,7 @@
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
     "quantgen_desktop/fx.py": "c57c76ab44edc66bfd4451e6b75abf7d92ba38806cbfc8685c8cba3c287322d9",
     "quantgen_desktop/fx_narrative.py": "caec5b4b3a62b50c358f329c75e0ebab951ac783eab1a87d0c61883e127f50f8",
-    "quantgen_desktop/indicator_guide.py": "b75a2019c36b2c3f1c3e5aa8bcd6d9ac5c68b3aa7790ce8e6a4d72b9b0f0e08c",
+    "quantgen_desktop/indicator_guide.py": "c613421bd6e0ac16e35addb14537a0908206f8eb98c3dafcbb6a59ffb9e8fee6",
     "quantgen_desktop/jobs.py": "2a0764c9c4f767a2c93d49b0fe929a1ad655d2195acc0c9a371f6229a1aa5ac1",
     "quantgen_desktop/localization.py": "2927801b702787e2c962319693e4dd1f6db4ecc9543c5e23e2d757ea9c0b1fb1",
     "quantgen_desktop/macro.py": "da1a47070db478379bc7ac3881fe3398f9a5d1d60c314f28882d06d9e94467d4",
@@ -303,7 +303,7 @@
     "tests/ai_payload_acceptance.py": "2989ffcbc806c4a31f2795adaca8be20c90f47ea4140cfab5fe600a976cc5a4e",
     "tests/ar1_decay_acceptance.py": "8283f51b60967f30950af4ec7ecfda48f52c9bb605b2dc8231fc26b3549b63ab",
     "tests/bond_funding_acceptance.py": "dfd5760cec1f4e32cfccdae4f73cf8d4a38ea72650af612587e981c8058db02c",
-    "tests/chart_c_theme_acceptance.py": "f7adf30bea2d565c12786445fd547386a0c30421b6bb5e65d479ceeada882b6d",
+    "tests/chart_c_theme_acceptance.py": "a442300aaa20ddc93af66473e68f1eee17f1ac5df717668f5a00051f4f312a37",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
@@ -468,163 +468,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4c9561c2b4764f28c763b9d956df2bd6def8517226636322cea0c4652126cee4",
-      "source_digest": "d1cef0442eaba0e82700df9ec7613d6aee378419471a954c157d8c9e9d6baffc",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:46.715917+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "0cda5e7580aba866ffd16e2eb1db5b89af750b799ad592bd0c6a74ec3c786791",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.094394+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "2": {
       "document_sha256": "8a8915a728f0bd28f95fa46082cde5efd96739cb14bf69e69ad9205841c6cbe0",
-      "source_digest": "d1cef0442eaba0e82700df9ec7613d6aee378419471a954c157d8c9e9d6baffc",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:46.996906+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "0cda5e7580aba866ffd16e2eb1db5b89af750b799ad592bd0c6a74ec3c786791",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.097798+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "403b960210d5406490313f23b2a56ef90f13b1759e15493dc7cfda99ac504d2d",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.011455+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "8eff3d4b17858d731f08e38b3211b0beb93675b03ababe201950b24a783601c8",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.100576+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "4": {
       "document_sha256": "7d0f3373b9815cd9db634f28323c8c90bc7e78cd09cf40d757e98adfc3ac1dd7",
-      "source_digest": "b08cac055425d3c094534dd8e3d4b20f21376221541ebf5036065e17bee55615",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.016380+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "7b17981f506a1d39c66d333b19193bdaa4d9f86475b7ee61dcb76e06c85a5805",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.104997+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "47fe5b4dd107df39a1323e913a244af888f84b185c05515c66b4dee80138d592",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.025660+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "80d7f6342edaf2d39a6edb1835c054ea969981a2db8253f332acbb6fa41260a4",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.108036+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "6": {
       "document_sha256": "fae1be1112448c78bde79274a691143bdadcb4623853f26798735cf71b20973a",
-      "source_digest": "4723f7235e47b67c8c4b6f6b6cabe6c0410bb35522307498ff86a767af91b24a",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.029523+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "430ea96b3a6f29cd88e0707149e6fe7d0d9c239632bf73566e15a037f3c3a1d0",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.110330+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "7": {
       "document_sha256": "d255a134f4e97cd65a7b3a4676b26a0f6e655e823ab23f971d477235df751931",
-      "source_digest": "d1cef0442eaba0e82700df9ec7613d6aee378419471a954c157d8c9e9d6baffc",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.032355+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "0cda5e7580aba866ffd16e2eb1db5b89af750b799ad592bd0c6a74ec3c786791",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.114283+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "8": {
       "document_sha256": "06dbba68f23aa6e2aec1125b031a7486b863296ec51a15481a893ea62253f232",
-      "source_digest": "4723f7235e47b67c8c4b6f6b6cabe6c0410bb35522307498ff86a767af91b24a",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.041493+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "430ea96b3a6f29cd88e0707149e6fe7d0d9c239632bf73566e15a037f3c3a1d0",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.116764+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "9": {
       "document_sha256": "81e96f0f623036ca1b290ddf8508a9ff8e6cc8b0fca380a939abc529a4dfb747",
-      "source_digest": "be1ff6fab469ed3c49a2e5ff36e04e1b1ab269568cf78dbd770533d7dc3d22ec",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.044951+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "bd4a2aca5189fb266c3965616570387ae5c4d2daf66dc7ac5ec1714f550854f5",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.119455+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "10": {
       "document_sha256": "9b4f832a3c5363e29f704dbf3f3f89bf13aef9be27298cd14b8d3fe4533685cb",
-      "source_digest": "56cf5794c497109d212b7b41d399d329ffda3b786544b171f8631fba34e85d32",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.052856+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "0aeed080655074144f3e52860b1b2610254f31312f09f6e6dfd23afa50be8ced",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.121948+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "c2b0f95b091f4177aabca3a723b7f7dda518ab7361c565c7881400fb44beea8a",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.059077+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "83ae63d63aaf31956fd548da02b2076f387e99f8ea13a2cf3a5823d1d7bfdb6e",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.125236+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "12": {
       "document_sha256": "7f3aed235693c66f0f32fc3c62a988658dadbea65f2c314ccc111d06c8c2d675",
-      "source_digest": "75f6a742e90e51debb1322239718a68643063700177af79f7e0daa423d5553fe",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.073742+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "b2eb641e548b1687d9f7700c78d0fbe11cec22efaf85b6f75bc356e2e316f85e",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.133152+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "13": {
       "document_sha256": "1ae2381d67147472a0b3a8b89ccf44d493925ad72430091bd67376635d137186",
-      "source_digest": "be1ff6fab469ed3c49a2e5ff36e04e1b1ab269568cf78dbd770533d7dc3d22ec",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.076993+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "bd4a2aca5189fb266c3965616570387ae5c4d2daf66dc7ac5ec1714f550854f5",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.136113+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "14": {
       "document_sha256": "b955cd3fbada10bf18fc428f54264fbed7623176c9e4ac19b5307c3531affd74",
-      "source_digest": "be1ff6fab469ed3c49a2e5ff36e04e1b1ab269568cf78dbd770533d7dc3d22ec",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.089839+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "bd4a2aca5189fb266c3965616570387ae5c4d2daf66dc7ac5ec1714f550854f5",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.138707+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "15": {
       "document_sha256": "926245ec0903d7f5fb0759e513e010154ff32bd2db6df3a95b816cce610b6e65",
-      "source_digest": "be1ff6fab469ed3c49a2e5ff36e04e1b1ab269568cf78dbd770533d7dc3d22ec",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.092976+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "bd4a2aca5189fb266c3965616570387ae5c4d2daf66dc7ac5ec1714f550854f5",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.142151+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "7e0a204ad8b8803dea11b2cc0d89d1f831d9b1e4c95f316cf2d08e48ad50d87c",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.096440+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "39a54c8235b53a088d2f3b89b0c6cd814a7cdf120b03851f00281756bd7004cc",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.144811+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "4723f7235e47b67c8c4b6f6b6cabe6c0410bb35522307498ff86a767af91b24a",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.099679+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "430ea96b3a6f29cd88e0707149e6fe7d0d9c239632bf73566e15a037f3c3a1d0",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.148032+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "d1cef0442eaba0e82700df9ec7613d6aee378419471a954c157d8c9e9d6baffc",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.108542+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "0cda5e7580aba866ffd16e2eb1db5b89af750b799ad592bd0c6a74ec3c786791",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.152851+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "19": {
       "document_sha256": "550ebe0e687e42986c399f50bf2fb9da524c3e6bc53df0437f48c63a672d03e9",
-      "source_digest": "472a6516dc5c51898669eecbdca3099077b29dc725e944d3462523d285117b45",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.113469+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "7c1c3fbb7e51f2d181b8b3a1618e6d94fe357999ca75654862cc75c40028648c",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.156244+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     },
     "20": {
       "document_sha256": "40c60347005959a09fc475243ffb06f7571203892a39137e471f5a2bea9c7c11",
-      "source_digest": "d1cef0442eaba0e82700df9ec7613d6aee378419471a954c157d8c9e9d6baffc",
-      "reviewed_by": "Codex QUANTGEN UI session / measured Windows intrinsic-width review",
-      "review_note": "Reviewed all 20 current-state documents against the measured layout-only fix: Windows viewport 764 versus study 969 and intrinsic minimum 966. Ignore preferred content width hints in the C frame while preserving explicit minimum widths and add the measured regression fixture. FACTS distinguishes this cause from event settling. No storage, transmission, financial evidence or publication state changes.",
-      "reviewed_at": "2026-10-31T08:13:47.116555+00:00",
-      "source_commit": "593a1415c91675e1334c9e0796ab3aa1fe0678c9"
+      "source_digest": "0cda5e7580aba866ffd16e2eb1db5b89af750b799ad592bd0c6a74ec3c786791",
+      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
+      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
+      "reviewed_at": "2026-10-31T08:19:47.160039+00:00",
+      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
     }
   }
 }

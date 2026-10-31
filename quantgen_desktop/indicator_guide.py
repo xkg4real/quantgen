@@ -3,7 +3,7 @@ from PyQt6.QtCore import QByteArray, Qt, pyqtSignal
 from PyQt6.QtGui import QPainter, QColor, QPen
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QWidget,QVBoxLayout,QHBoxLayout,QGridLayout,QComboBox,
-                            QPushButton,QSlider,QFileDialog,QTabWidget)
+                            QPushButton,QSlider,QFileDialog,QTabWidget,QSizePolicy,QLayout)
 
 from core.i18n import LocaleContext
 from core.education.indicators import INDICATORS, historical_case, counterexamples, from_history, selection
@@ -81,6 +81,10 @@ class IndicatorGuide(QWidget):
         self.keys=();self.external=from_history(history) if history else None
         self.series=None;self.cursor=0;self.meta={};self.case_name='2020'
         layout=QVBoxLayout(self);layout.setContentsMargins(0,12,0,0);layout.setSpacing(14)
+        # The guide is embedded in a scroll page: long translated labels must
+        # wrap within its viewport instead of setting the entire page width.
+        self.setSizePolicy(QSizePolicy.Policy.Ignored,QSizePolicy.Policy.Preferred)
+        layout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         self.intro=label('');layout.addWidget(self.intro)
         self.steps=label('','caption');layout.addWidget(self.steps)
         box,inner=panel('')

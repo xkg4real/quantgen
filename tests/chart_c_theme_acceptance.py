@@ -111,8 +111,8 @@ class NativeStudyTests(unittest.TestCase):
     def test_responsive_split_and_dark_restart_preserve_the_same_observations(self):
         import tempfile
         from pathlib import Path
-        from PyQt6.QtCore import QSettings
-        from PyQt6.QtWidgets import QBoxLayout
+        from PyQt6.QtCore import QSettings, QSize
+        from PyQt6.QtWidgets import QBoxLayout, QLabel
         from PyQt6.QtTest import QTest
         with patch.object(dotenv,'load_dotenv',return_value=False):
             from quantgen_desktop.app import ResearchWindow
@@ -122,6 +122,10 @@ class NativeStudyTests(unittest.TestCase):
             self.addCleanup(window.deleteLater);self.addCleanup(window.hide)
             window.resize(1600,1000);window.show();window.guide_open.click()
             guide=window.indicator_guide;guide.buttons['rsi'].click();guide.move_cursor(45)
+            class WideReadingHint(QLabel):
+                def minimumSizeHint(self): return QSize(966, 40)
+            text=WideReadingHint('A long reading wraps within the available guide width. ' * 3)
+            text.setWordWrap(True);guide.layout().addWidget(text)
             self.app.processEvents()
             before=(guide.keys,guide.series.dates,guide.cursor)
             self.assertEqual(guide.study.split.direction(),QBoxLayout.Direction.LeftToRight)
@@ -138,6 +142,8 @@ class NativeStudyTests(unittest.TestCase):
                         guide.study.width(), guide.study.minimumSizeHint().width())
             self.assertEqual(guide.study.split.direction(),QBoxLayout.Direction.TopToBottom,
                              f'window/viewport/guide/min/study/min={geometry}')
+            self.assertLessEqual(guide.width(),window.stack.currentWidget().viewport().width())
+            self.assertLessEqual(text.width(),guide.width())
             reopened=ResearchWindow(auto_refresh=False,theme_mode=settings.value('ui/theme'))
             self.addCleanup(reopened.deleteLater)
             self.assertEqual(reopened.colors,DARK)
