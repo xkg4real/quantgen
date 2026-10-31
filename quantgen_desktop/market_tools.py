@@ -4,7 +4,7 @@ import numpy as np
 
 from core.research.market_analysis import DerivativesRequest, ETFRequest, CryptoRequest, KRXRequest
 from core.research.funding_disclosure import funding_text
-from core.research.letf_disclosure import letf_text
+from core.research.letf_disclosure import letf_text, letf_unavailable_text
 from core.research.decay_disclosure import decay_value, decay_text
 from .tools import ToolPane, number, fmt
 
@@ -101,7 +101,9 @@ class ETFPane(ToolPane):
             self.text(f"Index: {lt['index_source']} · prior-quarter variance AZ proxy {lt['last_quarter_drag_bp']:.2f} bp · GARCH converged={lt['converged']}")
             self.text(letf_text(lt))
             self.sections.append({'type':'letf_interpretation', **lt['interpretation']})
-        elif lt: self.text('Leveraged drag unavailable · provider or model error. Other results remain available.')
+        elif lt:
+            self.text(letf_unavailable_text(lt))
+            self.sections.append({'type': 'letf_unavailable', **lt})
         self.finished(out.narrative)
 
 

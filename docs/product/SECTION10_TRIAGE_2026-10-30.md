@@ -131,3 +131,12 @@ removes the unsupported better-guide claim. Engine outputs are unchanged for all
 five synthetic funds. See `LETF_STUDY_SCOPE_2026-10-30.md`. **11/67** groups
 complete, **56** remain (NEW-M6-02 remains partial);14 observation rows and15
 ambiguous mappings unchanged. Two source IDs reproduce one canonical group.
+
+## LETF index routing correction
+
+M4-N1 (=NEW-M6-06) maps the five funds to KOSPI200 or KOSDAQ150, resolves
+the latter from an exact official master name, and refuses missing/ambiguous
+inputs instead of substituting KOSPI200 or synthetic data. See
+`LETF_INDEX_2026-10-31.md`. **12/67** groups implemented, **55** remain;
+14 observation rows and15 ambiguous mappings unchanged. Live master/provider
+and manual Windows acceptance remain NOT_RUN; the funding parent stays open.

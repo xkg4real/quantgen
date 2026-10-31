@@ -10,6 +10,8 @@ def letf_context(lt):
         'fee_assumption': lt['fee'],
         'dividends': 'OMITTED',
         'current_proxy_validation': 'NOT_RUN',
+        **{key: lt[key] for key in ('underlying_index', 'index_code', 'index_source',
+                                   'index_mapping_source', 'index_status', 'calculation_status')},
     }
 
 
@@ -18,5 +20,12 @@ def letf_text(lt):
             "This is not observed fund/index realised drag or the study's prior-quarter realised-drag benchmark. "
             "The stored M_E4 study concerns historical 122630; it does not validate this fund, sample or variance proxy. "
             f"Index input: {lt['index_source']}. Current assumptions: rate=0, annual fee={lt['fee']:.2%}, dividends omitted. "
-            "Underlying-index mapping, funding/dividend terms and real-market validation remain separate limitations. "
+            "The selected index is a variance input, not the fund's realised futures benchmark. "
+            "Funding/dividend terms and real-market validation remain separate limitations. "
             "Do not use these proxies as fund-deviation forecasts or holding recommendations.")
+
+
+def letf_unavailable_text(lt):
+    return (f"LETF calculation NOT_RUN · required index: {lt['underlying_index']}. "
+            f"{lt['error']} Other ETF results remain available. "
+            "Synthetic index data are used only in explicit Synthetic demo mode.")
