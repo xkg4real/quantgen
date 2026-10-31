@@ -215,9 +215,9 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "5275701cb2474765001e18a8154d84131d46619e7937c9f90855009e1672c3cc",
+    "docs/compliance/FACTS.md": "f0149a19b77c44f4b5ed7ecd0a3aa666827bb732ec03ecabb87d4e857c939e20",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
-    "docs/compliance/README.md": "d25dc2bac2cad02a314f26190452b1383b8df8c3976bb6e99d603c14b73050e8",
+    "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "fb279c91c7f2b384ec59c03e872e5ed04c98819828f47646813d7af471e3db09",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -240,6 +240,7 @@
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
     "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
+    "docs/product/UI_WEBSITE_SYNC.md": "37b62baa94dece046c08e70c01d49e4658937cbaa21d3b980c9fcb9099913363",
     "main.py": "9674fb758c2d285b984bef7cf3e833afb5c38babda596343949bfec906b25d1a",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
     "pyproject.toml": "8414c32535febc4afd54685e3b1cf2dd8584e237a7a8b82457052c94dd8b1e05",
@@ -420,163 +421,163 @@
   "reviews": {
     "1": {
       "document_sha256": "7f5ffc3cedf7cc5281fec3b5bc8c366aa9152bcb061e2899b0a7868dd15ec30d",
-      "source_digest": "7bf94c1cee0cf0519efb99c76adcfc9e59feea35a1b5fe52e25e266bd2168a06",
+      "source_digest": "b2114924ee380d325110809c8ac87b1c8287dd16e56beb69a5a0643319a85c8b",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.956577+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.689378+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "2": {
       "document_sha256": "d856068e65f1a51509a967dfff01528cd22b160badde56fec6d57539e8ef9c54",
-      "source_digest": "7bf94c1cee0cf0519efb99c76adcfc9e59feea35a1b5fe52e25e266bd2168a06",
+      "source_digest": "b2114924ee380d325110809c8ac87b1c8287dd16e56beb69a5a0643319a85c8b",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.958017+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.690798+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "3": {
       "document_sha256": "c34d96603e327a679ddf6f6b21ceb351a1fdcb6269e63783a1c37784b9da9200",
-      "source_digest": "fd747657eebdb7e4e16e41e5ed02ef8505e8b07169492a6ec5d06466551ca0e4",
+      "source_digest": "0529054feff38cfaf27ac8e351d8d9d53e64f4289f264571d066671d4647f7cc",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.959023+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.691724+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "4": {
       "document_sha256": "55b8a11fd2085a5d9583fb8537ee74c84c864d94cf6a6231ca4eabb52b64d110",
-      "source_digest": "f2ca8dd06d9f2eeec6392926113d176572c2cea21ee16b484d1abc57e0bfc719",
+      "source_digest": "bf1544d99b4d8fb09acc504cdeca83beda23da25940e3062a0773c92a76c3e14",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.959982+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.692608+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "5": {
       "document_sha256": "2052fd84dd9ec893e79864fafe9b7b8be1b0a261602a5a9a3c7cd64a58dcbe4a",
-      "source_digest": "c9f22cd2bfd4a863dfec46d81f3ac8598388a97815e4e54a7158de9414d32d88",
+      "source_digest": "a71ce9b8d39f7e5726db8b93aa260156b7845609a5de108ece42efe8695385c5",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.960829+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.693501+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "6": {
       "document_sha256": "3a637558527c79efc05c991dbd431fb08ac7fc7fea322655ff8dc1715b02f6f5",
-      "source_digest": "3ad24894e09ccded4e3d9225eff8406adad66679cd906a93383aa4c3bf7510bb",
+      "source_digest": "45bff1fd7bab03489073d9ef04a20c507a554caf5a9ef54f4e8d837e8bbd3963",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.961769+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.694413+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "7": {
       "document_sha256": "6e0eef1bbf393c1514a7cca6b11c0d59e7680d1b58dde6695edcd9980a98f955",
-      "source_digest": "7bf94c1cee0cf0519efb99c76adcfc9e59feea35a1b5fe52e25e266bd2168a06",
+      "source_digest": "b2114924ee380d325110809c8ac87b1c8287dd16e56beb69a5a0643319a85c8b",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.962639+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.695454+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "8": {
       "document_sha256": "a11456f99df7fc0c9944d80d7d5bd28f3250961891e0dee77d0d4a3fb490062a",
-      "source_digest": "3ad24894e09ccded4e3d9225eff8406adad66679cd906a93383aa4c3bf7510bb",
+      "source_digest": "45bff1fd7bab03489073d9ef04a20c507a554caf5a9ef54f4e8d837e8bbd3963",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.963509+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.696455+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "9": {
       "document_sha256": "96f5f056d7097e66c9385da384fce9a5217d5379e2e0d6186b4335a695d0860c",
-      "source_digest": "933a05d2491ab907ad4fbb9d8926bd620c7e0b4d07977db61e70c35b8447c26c",
+      "source_digest": "309f327ee504a547f8915533b3af674b81e61dcee68ceeb88f4902ae3b0121c4",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.964359+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.697328+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "10": {
       "document_sha256": "c8a08c343b6c0315057fc16351c249fc50c86f6ef129a2019af6045a64e163fc",
-      "source_digest": "6b9bbcf1ca8b0dac5e25c5dc7894dc984304996c095dc664a242a77ebdd81c7e",
+      "source_digest": "f44d87398abcccdef3769828ef33ce6c323c99c5723ba8c8f920abd57ca27153",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.965248+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.698291+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "11": {
       "document_sha256": "3da5dbb517cd7526b735b2a383d7bed83ebb82e743e7ef126333c1f4eba92791",
-      "source_digest": "dba475158a74dd153d78c6eac2947ad81a0f787e45409a9775e4fde2b3651aca",
+      "source_digest": "fb4495dc1977d8be5d47a8c6baee11714ecb7b93055ccc0746a32f2bd08ae2e0",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.966075+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.699154+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "12": {
       "document_sha256": "eb02768ceaddc3b42fb61f6611b637540df35c7c1ce21eda511c32ae55353927",
-      "source_digest": "f18bbb3d44a9f496bd29b9ff01ba09dfbe3c712c103ece77de5ca9c567fc71d9",
+      "source_digest": "26318ad9af5c149b329a7d27319c305a26fe7da4c46492c9fa469e5176b302ad",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.966908+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.700140+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "13": {
       "document_sha256": "5dfdd84db17f907ef6cb2b83cad73489bc5332652e7a460c0228521726d40980",
-      "source_digest": "933a05d2491ab907ad4fbb9d8926bd620c7e0b4d07977db61e70c35b8447c26c",
+      "source_digest": "309f327ee504a547f8915533b3af674b81e61dcee68ceeb88f4902ae3b0121c4",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.967833+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.701009+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "14": {
       "document_sha256": "646d2cb4d8fe00ef3e325ea9d37ff1d25f809c81e5070acbc27b6c5222403968",
-      "source_digest": "933a05d2491ab907ad4fbb9d8926bd620c7e0b4d07977db61e70c35b8447c26c",
+      "source_digest": "309f327ee504a547f8915533b3af674b81e61dcee68ceeb88f4902ae3b0121c4",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.968638+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.701885+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "15": {
       "document_sha256": "e52d8257bd0df6cf81e19ae4bc2a95d34c63a5a128bf8c04cc7cd68ec59e9631",
-      "source_digest": "933a05d2491ab907ad4fbb9d8926bd620c7e0b4d07977db61e70c35b8447c26c",
+      "source_digest": "309f327ee504a547f8915533b3af674b81e61dcee68ceeb88f4902ae3b0121c4",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.969473+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.702750+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "16": {
       "document_sha256": "7a464b15daddf26401d9c25824b65bd6c3dbc92dd78741f289b5a1cb31b5d2c7",
-      "source_digest": "a8b7c0a55ae55575647a7ffdd22ebbef85503861d6a046a717b98b7c122bbf88",
+      "source_digest": "f0d69e9453e362205e25b5d1d3f756da4cc2a4c98fc9a4dffb7f587225244b89",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.970292+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.703719+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "17": {
       "document_sha256": "0d93d44c03cd7221713bdd5721484ca61c4c708926218d2f93687235cbf29860",
-      "source_digest": "3ad24894e09ccded4e3d9225eff8406adad66679cd906a93383aa4c3bf7510bb",
+      "source_digest": "45bff1fd7bab03489073d9ef04a20c507a554caf5a9ef54f4e8d837e8bbd3963",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.971161+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.704604+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "18": {
       "document_sha256": "42c4757135df8949f2886d58c92d1ae04d5f14817346c941af60736492f67f2a",
-      "source_digest": "7bf94c1cee0cf0519efb99c76adcfc9e59feea35a1b5fe52e25e266bd2168a06",
+      "source_digest": "b2114924ee380d325110809c8ac87b1c8287dd16e56beb69a5a0643319a85c8b",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.971988+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.705503+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "19": {
       "document_sha256": "f0f0cc79bdc686fa3adcd0d3d17d597349f44007965f5933fcfe92a9f686ff9b",
-      "source_digest": "98bd0c3619d515b6d5fa117c8fcc85e5d3d851304242cb5c209413b640522ce4",
+      "source_digest": "2a43e5df60921646f3b45520f932dc4bd929ca6c6745d477039e157a24ed71e6",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.972824+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.706406+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     },
     "20": {
       "document_sha256": "2b77833f04c332f3d3ba166f9261dedc25b275ce4d86cc986b7a2487ca9b69ab",
-      "source_digest": "7bf94c1cee0cf0519efb99c76adcfc9e59feea35a1b5fe52e25e266bd2168a06",
+      "source_digest": "b2114924ee380d325110809c8ac87b1c8287dd16e56beb69a5a0643319a85c8b",
       "reviewed_by": "Codex download package review",
-      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
-      "reviewed_at": "2026-10-31T06:10:21.973661+00:00",
-      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
+      "review_note": "Reviewed 20 documents and download delivery against main 2999296. The new UI handoff documentation does not change application data processing; verified Word/source correspondence, 30-day generated-only artifact upload, and preserved draft publication blocks.",
+      "reviewed_at": "2026-10-31T06:13:41.707312+00:00",
+      "source_commit": "6abbf61c7e4e663dab420e7fd75c5b8292b8b640"
     }
   }
 }
