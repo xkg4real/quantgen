@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T19:05:00+09:00
+updated_at: 2026-10-31T19:11:17+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/market-diagnostics-language-20261031
-work_commit: ab6f79455da994d19d0e3b0a4415d5e32a4f4b04
-uncommitted_changes: yes
-pr: none (market diagnostic language unit in local verification)
+work_commit: c3e69ccc058b5c0c59c147d2fa65ba5ea3b52372
+uncommitted_changes: no
+pr: 51 (CI pending)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -25,7 +25,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 최신 검증 결과
-2026-10-31T16:55:55.000+09:00: ⑬-9/a Claude 연결오류 분류·원문비노출·PyQt6/Flet EN/KO안내와⑨-2/c Nautilus/데이터공급자역할설명 완료. PR46 source c47f6c0a116cad919b403568d377408452cdab69 → main 13d16ae551cea65b6ac20a02a04e812de7745838;최종24API/privacy/양UI언어검사와47문서경계검사PASS,Runtime41181892399 Windows3.12/3.14·Ubuntu3.12 모두success,문서41181892438 success. 키/실계정/사용자Windows 실제연결은NOT_RUN이며13-9/b미완료. 새Nautilus설명은공급자전체교체/연구main통합/파일럿완료가아님. PR21은연구0510719로병합,제품main과구분. 외부UI PR42 main d77d996병합과인계문서확인/보존. sapientia4065에13-9/a·9-2/c취소선/read-back;부모범위미완료. PR48 메타데이터 sourcef369559c94a43f193e6afd5fe37f9f5f86e29bc8→main91f6a588389282332a05b26f017eb2c84f86af47,문서CI41182415013 success. 웹사이트전달queued/no receipt,실제웹적용/배포미확인. 이전13-8캐리/Rates·§10 15/67완료이력보존;다음13-8/b2/c 및M4-N3. 전체완료/주간returned/Claude수신확인이아닌안전재개체크포인트.
+PR49 Bonds/Portfolio 결과해설 한영화(source22f52dc→main4c51ab9),57+문서47검사/11기존보고서사례동일,Runtime41183600974 3환경·문서41183600882 success,LEDGER/Notion하위완료read-back. PR50 website-review 기록(source5e3c060→mainab6f794),문서CI41184351725 success,LEDGER f26afccc존재;전달queued/no receipt,웹반영미검증. 이전실행 종료체크포인트누락은current_claim/CURRENT/source일치와OS실제해제로복구. 새실행0a573fe3-202c-4136-b998-173c31e3652e은13-8/b2/c/b/a 진단고지한영화를sourcec3e69ccc058b5c0c59c147d2fa65ba5ea3b52372로push/read-back,PR51 CI대기. 로컬33회귀+문서47검사PASS,이전4사례parameters/raw sections/report sections exact동일. 부모13-8 전체·실제Windows/API연결은미완료.
 
 ## 1. 최신 사용자 결정
 - 직접 요청 작업은 일반 감시의 returned/cooldown/next_eligible_at으로 막지 않습니다. Claude 사용 불가 동안 계속하고 화요일17시 전 또는 런타임 한도 전에 주간 전체 인수인계를 남깁니다. 계정 토큰 잔량은 도구가 없어unknown입니다.
@@ -57,14 +57,15 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 외부 main51bac973 상업출시 방향 README변경은 보존됐으며 법률 검증 증거로 대신 쓰지 않습니다.
 
 ## 5. 현재 저장 상태
-제품 gpt/claude-diagnostics-website-record-20261031 @f369559c94a43f193e6afd5fe37f9f5f86e29bc8 원격검증/clean. 최신검증main91f6a588389282332a05b26f017eb2c84f86af47;PR46코드/PR48문서병합. 연구로컬원본은보존. 실제사용자키와WindowsAPI 연결미검증이며설정파일/계정접근없음. 같은실행156c744e-dca7-4925-9aa6-b968fcc8c353의마지막저장점이며STATE의잠금해제검증후만다음실행재개.
+제품 gpt/market-diagnostics-language-20261031 @c3e69ccc058b5c0c59c147d2fa65ba5ea3b52372 원격push/read-back 및로컬clean. PR51 CI대기. 파일:quantgen_desktop/market_diagnostics_language.py,market_tools.py,tests/desktop_market_diagnostics_language_acceptance.py,docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md, runtimeCI,complianceFACTS/source-review. 계산/API/기존report원문/식별자불변. 현재execution 0a573fe3-202c-4136-b998-173c31e3652e;새실행은최신CURRENT·STATE/OS잠금검증후CAS로재개.
 
 ## 6. 다음 단위와 남은 일
-1. ⑬-8/b2/c 최우선: Bonds/Portfolio 및 다른 authored해설과모형주석/인라인문구의표시번역. 완료된캐리/금리결과해설은LEDGER와docs/product/{CARRY,RATES}_LANGUAGE_2026-10-31.md참조,재작업금지. 병합된PR42의공통localization·보고서통합시 명시적localized variant·영문원문·보고서증거보존계약유지. 실제Windows/DPI/provider검수는NOT_RUN이며별도. 새로운언어변경을새gpt브랜치에서진행하고숫자/분기/누락/원문보고서보존검사.
-2. M4-N3 금리/배당 규약(연구Model94/95) 및 NEW-M6-02/b 실제시장 조건부phase가정/역사카드 검증 미완료. core letf_drag 기존TR형태는 보존되어 있고 호출부 r=0·fee고정 및 가격지수/배당범위는 명시적 가정 설계가 필요. 탐색p를기존gate로연결하거나동결카드를재채점하지않음.
-3. §10나머지52그룹/14관찰/15모호매핑, 전체ResearchRun모델/이력/canonicalidentity, 실제Windows/DPI/provider검수·서명installer, O11실제등록/Step7A/파일럿/owner_confirmed, 데이터권리/전문법률/AWS외부입력 미완료.
-4. UI website records PR38/39/40/43/44는 repo에 저장. 전달도구 부재로 queued, receipt없음. 실제 웹적용/배포 NOT_VERIFIED이며 완료로 보고하지않음.
-5. 화요일2026-11-03 16:00부터 주간전체인계준비,17시전returned+read-back. 직접작업hourly유지. 과거returned/cooldown만으로직접작업차단금지. 새예약/run_now/사용자PC/TRADEGEN/환경설정변경금지.
+1. ⑬-8/b2/c/b/a PR51의Windows3.12/3.14·Ubuntu3.12와문서CI를확인하고성공시expectedhead로PR병합/read-back. 이후LEDGERappend/Notion해당하위취소선/웹사이트기록. 현재미완료이며부모13-8/b2/c/b도미완료.
+2. ⑬-8/b2/c/b/b: LETF·기타모델본문/모형주석/인라인표시. 완료된FX/캐리/Rates/Bonds/Portfolio/진단고지범위는재작업하지않음. 실제Windows/DPI/설치본/공급자·Flet parity 별도미완료.
+3. M4-N3 금리/배당규약: private M4_N3_NEXT_SCOPE.json은read-only분석이며구현없음. 기존letf_drag는금리항포함이나호출부r=0,fee고정과가격지수배당범위의명시가정설계필요. 역사카드/판정/원장변경금지. §10은15/67그룹완료52미완료,14관찰15모호매핑.
+4. 13-9/b 실제Windows Claude API연결은NOT_RUN. PR46오류분류완료는실키복구증거아님. O11실제Windows등록/Step7A/파일럿/fresh owner_confirmed,전체ResearchRun모델/이력·서명installer,외부데이터권리/법률/AWS입력미완료.
+5. UI웹전달기록38/39/40/43/44/46/49는지원전송도구부재로queued/no receipt. 웹적용/배포미검증. 사용자HTML직접반영범위유지.
+6. 2026-11-03 16:00 주간전체인계준비/17시전returned+read-back. 미완료직접작업hourly유지;새예약/run_now/사용자PC·TRADEGEN·공유설정변경금지.
 
 ## 7. 보호 범위
 .env/보호캐시4개/실제원장/동결연구/사전등록/holdout을 읽거나해시/변경하지 않습니다. 실주문/TRADEGEN/공식gate·판정/owner승인규칙/공유환경·보안·네트워크설정 변경 금지. AUTO_STATE수동수정 금지. 비공개원문·키·계좌를 public repo에 올리지 않습니다. 테스트는합성/주입/임시저장소만 사용합니다.
@@ -73,7 +74,7 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 O8선택심사,UI/PR/main의 기존승인을 다시 묻거나 승인대기로 되돌리지 않습니다. 실제 연구판정·정식원장·외부공개와 Windows증거/실행확인은 별도입니다. 현재 waiting_on=none은 다음 독립수정이 가능하다는 뜻이며 미실행파일럿을 승인했다는 뜻이 아닙니다.
 
 ## 9. 재개 절차
-STATE/기대환경/private 접근과OS RUN.lock 확인. 직전execution 156c744e-dca7-4925-9aa6-b968fcc8c353,task owner-product-workflow-20261029,고정handoffID,gpt/claude-diagnostics-website-record-20261031 @f369559c94a43f193e6afd5fe37f9f5f86e29bc8를STATE와최신CURRENT에대조하고잠금해제검증후새execution으로최신blob CAS/read-back. 다음새gpt브랜치에서13-8/b2/c;main에병합된PR42의locale/report계약과PR46오류진단보존.13-9/b실제API연결은사용자설치본확인이필요하며독립개발차단조건이아님. 최신연구CURRENT/소유권과실행승인조건유지;이문서로파일럿이나owner_confirmed부여없음.
+최신STATE의transition·기대환경/private접근검증,OS RUN.lock 배타획득. 저장execution 0a573fe3-202c-4136-b998-173c31e3652e / task owner-product-workflow-20261029 / 고정handoffID / gpt/market-diagnostics-language-20261031 / sourcec3e69ccc058b5c0c59c147d2fa65ba5ea3b52372를최신같은ref6문서와STATE에대조. 이전잠금이해제된경우에만새ID로CURRENT최신blobCAS/read-back후재개. PR51 CI/merge부터확인하고LEDGER중복완료방지. O8선택심사/NOT_PERFORMED와O11 12등록·n_trials12+U·U≤24·실행승인조건유지. from=gpt만으로소유판정금지.
 
 ## 10. 검증·인계 파일
 PR31 source55dae2f→maind4670f3,CI41172791664:22검사PASS,3기존펀드27결과필드동일. livemasterCONNECT403은미해결검수이며우회안함.
@@ -212,3 +213,24 @@ JSON 한 파일 source5e3c0606a13daace4e490adaddf5ca43a0ea2d0b 원격read-back, 
 
 
 ⑬-8/b2/c/b/a: 新 gpt/market-diagnostics-language-20261031 at verified mainab6f794. market_diagnostics_language.py의3표시helper와market_tools.py의5진단고지연결, focused4검사PASS;NaN차트증거비교를직렬화비교로수정, interactive종료없는합성검사. 문서47검사PASS/공개BLOCKED. 더넓은회귀와baseline비교진행중;아직원격source/완료ID없음. 로컬변경은해당2코드+새검사+product문서+runtimeCI+FACTS/source-review입니다. Notion하위진행중read-back.
+
+
+## 이전 체크포인트 요약 보존 — PR46/48 및 PR49/50 복구 전
+## 0. 최신 검증 결과
+2026-10-31T16:55:55.000+09:00: ⑬-9/a Claude 연결오류 분류·원문비노출·PyQt6/Flet EN/KO안내와⑨-2/c Nautilus/데이터공급자역할설명 완료. PR46 source c47f6c0a116cad919b403568d377408452cdab69 → main 13d16ae551cea65b6ac20a02a04e812de7745838;최종24API/privacy/양UI언어검사와47문서경계검사PASS,Runtime41181892399 Windows3.12/3.14·Ubuntu3.12 모두success,문서41181892438 success. 키/실계정/사용자Windows 실제연결은NOT_RUN이며13-9/b미완료. 새Nautilus설명은공급자전체교체/연구main통합/파일럿완료가아님. PR21은연구0510719로병합,제품main과구분. 외부UI PR42 main d77d996병합과인계문서확인/보존. sapientia4065에13-9/a·9-2/c취소선/read-back;부모범위미완료. PR48 메타데이터 sourcef369559c94a43f193e6afd5fe37f9f5f86e29bc8→main91f6a588389282332a05b26f017eb2c84f86af47,문서CI41182415013 success. 웹사이트전달queued/no receipt,실제웹적용/배포미확인. 이전13-8캐리/Rates·§10 15/67완료이력보존;다음13-8/b2/c 및M4-N3. 전체완료/주간returned/Claude수신확인이아닌안전재개체크포인트.
+
+
+## 5. 현재 저장 상태
+제품 gpt/claude-diagnostics-website-record-20261031 @f369559c94a43f193e6afd5fe37f9f5f86e29bc8 원격검증/clean. 최신검증main91f6a588389282332a05b26f017eb2c84f86af47;PR46코드/PR48문서병합. 연구로컬원본은보존. 실제사용자키와WindowsAPI 연결미검증이며설정파일/계정접근없음. 같은실행156c744e-dca7-4925-9aa6-b968fcc8c353의마지막저장점이며STATE의잠금해제검증후만다음실행재개.
+
+
+## 6. 다음 단위와 남은 일
+1. ⑬-8/b2/c 최우선: Bonds/Portfolio 및 다른 authored해설과모형주석/인라인문구의표시번역. 완료된캐리/금리결과해설은LEDGER와docs/product/{CARRY,RATES}_LANGUAGE_2026-10-31.md참조,재작업금지. 병합된PR42의공통localization·보고서통합시 명시적localized variant·영문원문·보고서증거보존계약유지. 실제Windows/DPI/provider검수는NOT_RUN이며별도. 새로운언어변경을새gpt브랜치에서진행하고숫자/분기/누락/원문보고서보존검사.
+2. M4-N3 금리/배당 규약(연구Model94/95) 및 NEW-M6-02/b 실제시장 조건부phase가정/역사카드 검증 미완료. core letf_drag 기존TR형태는 보존되어 있고 호출부 r=0·fee고정 및 가격지수/배당범위는 명시적 가정 설계가 필요. 탐색p를기존gate로연결하거나동결카드를재채점하지않음.
+3. §10나머지52그룹/14관찰/15모호매핑, 전체ResearchRun모델/이력/canonicalidentity, 실제Windows/DPI/provider검수·서명installer, O11실제등록/Step7A/파일럿/owner_confirmed, 데이터권리/전문법률/AWS외부입력 미완료.
+4. UI website records PR38/39/40/43/44는 repo에 저장. 전달도구 부재로 queued, receipt없음. 실제 웹적용/배포 NOT_VERIFIED이며 완료로 보고하지않음.
+5. 화요일2026-11-03 16:00부터 주간전체인계준비,17시전returned+read-back. 직접작업hourly유지. 과거returned/cooldown만으로직접작업차단금지. 새예약/run_now/사용자PC/TRADEGEN/환경설정변경금지.
+
+
+## 9. 재개 절차
+STATE/기대환경/private 접근과OS RUN.lock 확인. 직전execution 156c744e-dca7-4925-9aa6-b968fcc8c353,task owner-product-workflow-20261029,고정handoffID,gpt/claude-diagnostics-website-record-20261031 @f369559c94a43f193e6afd5fe37f9f5f86e29bc8를STATE와최신CURRENT에대조하고잠금해제검증후새execution으로최신blob CAS/read-back. 다음새gpt브랜치에서13-8/b2/c;main에병합된PR42의locale/report계약과PR46오류진단보존.13-9/b실제API연결은사용자설치본확인이필요하며독립개발차단조건이아님. 최신연구CURRENT/소유권과실행승인조건유지;이문서로파일럿이나owner_confirmed부여없음.
