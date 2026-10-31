@@ -4,9 +4,9 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ②-1/b, ②-5/M3-N04, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T05:50:35.079Z
+done_ids: ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ②-5/M4-N8, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-31T05:55:23.793Z
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/swaption-aux-conversion-20261031
@@ -24,8 +24,8 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 
 # QUANTGEN owner-directed product continuation
 
-## 0. 최신 결과
-PR31 M4-N1 main d4670f3 및 PR32 M4-N12 main118041443385cdd05fae0929172cf8eccd4b86a3 병합·PR/main/source read-back 완료. PR32 sourcee5a09e5,19검사/3579기존값동일, CI41173538906 Windows3.12/3.14·Ubuntu3.12 success. 최신13/67그룹 완료54미완료,14관찰행15모호매핑. Notion sapientia4065 완료범위동기화. 현재 다음 단위②-1/b requirements의statsmodels 누락을 pyproject와일치시킴. 그 다음 M3-N04 보조환산실패로스왑션전체실패를합성3사례재현(아직미수정). 전체주기반환아님.
+## 0. 최신 검증 결과
+2026-10-31 이번 재개에서 네 단위 완료·main 병합: PR31 M4-N1(기초지수),PR32 M4-N12(호가검사수),PR33 ②-1/b(statsmodels),PR35 M3-N04(스왑션보조환산). 각각 Windows3.12/3.14·Ubuntu3.12 CI success와 PR/main/source read-back. 최종 main94659fdd528efb34598a72b7017eda74f7d221ff, 현재 source4e84e992f68cf02208c2e4fff121de883dd5c99c. 최신14/67그룹 완료53미완료,14관찰행15모호매핑. sapientia4065 완료하위범위 동기화. M4-N8은 합성4사례 재현만 했으며 구현미완료. 이번은 안전 체크포인트이며 주기/전체과업 반환·완료가 아닙니다.
 
 ## 1. 최신 사용자 결정
 - 직접 요청 작업은 일반 감시의 returned/cooldown/next_eligible_at으로 막지 않습니다. Claude 사용 불가 동안 계속하고 화요일17시 전 또는 런타임 한도 전에 주간 전체 인수인계를 남깁니다. 계정 토큰 잔량은 도구가 없어unknown입니다.
@@ -57,13 +57,13 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 외부 main51bac973 상업출시 방향 README변경은 보존됐으며 법률 검증 증거로 대신 쓰지 않습니다.
 
 ## 5. 현재 저장 상태
-제품 gpt/letf-study-disclosure-20261030 @f72b14745ff223ffab7a80afdd32f35d753ad632 원격검증/PR30병합, working tree clean. shared ETF/market UI 파일은 M4-N2에필요한의미구분만변경했고계산엔진·공식판정·원장은유지했습니다. 연구로컬 HEAD2da6469에 published36df786 workingfiles보존,reset금지.
+제품 gpt/swaption-aux-conversion-20261031 @4e84e992f68cf02208c2e4fff121de883dd5c99c 원격검증, PR35 main94659fd 병합. PR33 requirements 변경도 main e1ce746으로 선행 병합돼 보존됨. 작업트리 clean, 미완료코드패치없음. 연구로컬 HEAD2da6469에 published36df786 workingfiles보존,reset금지. 실제pilot/owner_confirmed/원장 실행 없음.
 
 ## 6. 다음 단위와 남은 일
-1. ②-5/M4-N1 (=NEW-M6-06): 연구ref2da6469 MODEL_LIMITS_REGISTER Model95, core/research/etf_workflow.py와data/kis_markets.py를대조하세요. 현재코스닥150펀드에도KOSPI200분산을사용합니다. 공급사가실제로지원하는지수식별자/출처를확인하고잘못된대용을없애되식별자를추정하지마세요. 합성/주입검사,양UI/AI/export출처검증. M4-N3금리·배당은별도입니다.
-2. NEW-M6-02/b: 실제시장에조건부phase가정적합성·구조변화·사전분위·유효사건수·역사카드재검증은미완료.새탐색p를기존gate로연결금지. M4-N3 rate=0/dividends omitted, M4-N10역사지수대용도미해결입니다.
-3. §10나머지56그룹/14관찰/15모호매핑, 전체ResearchRun모델/이력/canonicalidentity, 실제Windows/DPI/provider검수·서명installer, O11실제등록/Step7A/파일럿/owner_confirmed, 데이터권리/전문법률/AWS외부입력 미완료.
-4. 화요일2026-11-03 16:00부터 주간전체인계준비,17시전returned+read-back. 직접작업hourly유지,사용자PC/TRADEGEN/환경설정/새예약변경금지.
+1. ②-5/M4-N8: 연구ref2da6469 Model81 및 core/ficc/fx.py calibrate_sabr, core/ficc/insights.py narrate_fx_option, Flet ui/fx_page.py, native core/research/fx_analysis.py와quantgen_desktop/fx.py. solver success를 적합품질/차익없음 통과로 읽는 표시를 분리하세요. 합성1주 RR=-3% BF=2%는 converged=True,nu=5경계,RMSE0.766508vp. 그 외 rho=.999경계사례 재현. 기존 Hagan/가격/solver계산·연구판정 유지; 독립잔차검증·양UI/AI/export·명시적 적용범위부터. 아직코드미수정이고공식품질임계값을임의로정하지않습니다.
+2. M4-N3 금리/배당 규약 및 NEW-M6-02/b 실제시장 조건부phase가정/역사카드 검증은 미완료. 탐색p를기존gate로연결하거나동결카드를재채점하지마세요.
+3. §10나머지53그룹/14관찰/15모호매핑, 전체ResearchRun모델/이력/canonicalidentity, 실제Windows/DPI/provider검수·서명installer, O11실제등록/Step7A/파일럿/owner_confirmed, 데이터권리/전문법률/AWS외부입력 미완료.
+4. 화요일2026-11-03 16:00부터 주간전체인계준비,17시전returned+read-back. 직접작업hourly유지. 과거returned/cooldown만으로직접작업차단금지. 새예약/run_now/사용자PC/TRADEGEN/환경설정변경금지.
 
 ## 7. 보호 범위
 .env/보호캐시4개/실제원장/동결연구/사전등록/holdout을 읽거나해시/변경하지 않습니다. 실주문/TRADEGEN/공식gate·판정/owner승인규칙/공유환경·보안·네트워크설정 변경 금지. AUTO_STATE수동수정 금지. 비공개원문·키·계좌를 public repo에 올리지 않습니다. 테스트는합성/주입/임시저장소만 사용합니다.
@@ -72,15 +72,20 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 O8선택심사,UI/PR/main의 기존승인을 다시 묻거나 승인대기로 되돌리지 않습니다. 실제 연구판정·정식원장·외부공개와 Windows증거/실행확인은 별도입니다. 현재 waiting_on=none은 다음 독립수정이 가능하다는 뜻이며 미실행파일럿을 승인했다는 뜻이 아닙니다.
 
 ## 9. 재개 절차
-STATE/동일환경/private자료/OS RUN.lock을먼저검증합니다. 직전executionb74c1273-7a32-4e2e-8fe5-8b880ac24c42, task owner-product-workflow-20261029,기존handoffID, gpt/letf-study-disclosure-20261030 @f72b14745ff223ffab7a80afdd32f35d753ad632가로컬/원격에일치해야합니다. OS잠금해제확인뒤최신CURRENTblob CAS+고유새execution원격read-back후최신main에서새gpt브랜치로다음단위를진행합니다. from=gpt만으로추정금지. 직접작업때문에returned/cooldown대기금지. 실제외부승인/연구판정·정식원장·공개경계유지.
+STATE/동일환경/private자료/OS RUN.lock을먼저검증합니다. 직전execution b74c1273-7a32-4e2e-8fe5-8b880ac24c42, task owner-product-workflow-20261029, 기존handoffID, gpt/swaption-aux-conversion-20261031 @4e84e992f68cf02208c2e4fff121de883dd5c99c가로컬/원격에일치해야합니다. OS잠금해제확인뒤최신CURRENTblob CAS+고유새execution원격read-back후최신main에서새gpt브랜치로M4-N8진행. from=gpt만으로추정금지. latestmain을직접검증하고오래된origin/main을시작점으로쓰지마세요. 이전단위는LEDGER로중복확인. 실제외부승인/연구판정·정식원장·공개경계유지.
 
-## 10. 검증/인계 파일
-PR29: python -m unittest tests.funding_inference_acceptance tests.desktop_funding_inference_acceptance tests.crypto_hac_acceptance tests.ai_payload_acceptance tests.desktop_market_acceptance -v (23PASS); status_snapshot/research_home15PASS; tools.status.snapshot --check PASS.
-PR30: python -m unittest tests.letf_disclosure_acceptance tests.desktop_letf_disclosure_acceptance tests.desktop_ar1_decay_acceptance tests.desktop_market_acceptance -v (16PASS).
-공개docs/product/FUNDING_INFERENCE_2026-10-30.md와LETF_STUDY_SCOPE_2026-10-30.md, SECTION10_QUEUE/TRIAGE를참조. private reports의FUNDING/LETF evidence·baseline·주간기록·최신Word와NEXT_SAFE_START보존. 새로운검사/실제Windows육안·실데이터확인으로오인하지마세요. 실행종료전STATE/read-back과RUN.lock해제기록을남기고다음예약에서검증후이어갑니다.
+## 10. 검증·인계 파일
+PR31 source55dae2f→maind4670f3,CI41172791664:22검사PASS,3기존펀드27결과필드동일. livemasterCONNECT403은미해결검수이며우회안함.
+PR32 sourcee5a09e5→main1180414,CI41173538906:19검사PASS,기존3579값/배열동일. quoted-mid검사수/NOT_RUN/PARTIAL만구분,거래차익/공식판정통과아님.
+PR33 sourceb20f9b1→maine1ce746,CI41173902523:15runtime의존성정규화동일,합성OLS/ADF PASS. 기존pyproject>=0.14.2와requirements일치,동결환경변경없음.
+PR35 source4e84e99→main94659fd,CI41174151348:11집중/UI/경계+기존3pricing PASS;정상24사례기존모든필드동일. 다른swaps함수AST불변. 보조환산불가만UNAVAILABLE·null,기본입력거부/가격식/역산범위유지.
+각 docs/product/{LETF_INDEX,QUOTE_COVERAGE,SWAPTION_CONVERSION}_2026-10-31.md와SECTION10_QUEUE/TRIAGE,tests/해당acceptance를참조. 비공개 reports/2026-10-31의 evidence JSON·WEEKLY_CONTINUATION_20261031.txt·QUANTGEN_Progress_2026-10-31.docx·NEXT_SAFE_START_20261031.json에 상세재개근거를 보관합니다. 실제Windows육안/실공급자/파일럿완료나Claude가이미읽었다는증거가아닙니다. 예약등록으로자동실행성공주장금지.
 
 ## 11. 펀딩 검증
 공개 docs/product/FUNDING_INFERENCE_2026-10-30.md, tests/{funding_inference,desktop_funding_inference}_acceptance.py 및 tools/status/funding_null_probe.py 참조. private reports/FUNDING_EVIDENCE.json,FUNDING_NULL_PROBE.json,FUNDING_TESTS.log 보존. 등록만으로자동실행완료를주장하지않습니다.
+
+## 시점별 과거 진행 이력
+아래 대기/시작 문구는 당시 기록이며 최신 상태는 위0·5·6·9·10절과LEDGER를 따릅니다.
 
 ## M4-N2 시작
 현재 동일 execution으로 새 gpt/letf-study-disclosure-20261030에서 ETF 분산proxy/연구근거구분을 진행합니다. 이전 완료범위를보존하며 수치계산·기초지수·금리/배당규약은변경하지않습니다.
@@ -110,3 +115,6 @@ M4-N12 source e5a09e5beea84f48cf037f1b2d715f4904f3f341 원격read-back, PR32 생
 
 ## M3-N04 원격 저장
 source4e84e992f68cf02208c2e4fff121de883dd5c99c 원격read-back 후 PR35 생성. 11focused/UI/export/boundary+기존3pricing검사 PASS;정상24사례의기존모든필드exact동일·다른swaps함수AST동일. 기본모형입력거부유지. CI대기라아직완료ID아님.
+
+## 2026-10-31 최종 체크포인트
+PR31/32/33/35 각완료범위를LEDGER에append하고 read-back했습니다. 최신done_ids/next_ids와재개branch/commit은위frontmatter가권위기록입니다. M4-N8은read-only합성재현만이며다음실행이유효소유권재개절차를거친뒤구현합니다. 전체요청완료·주간returned처리가아니며직접작업hourly를유지합니다.
