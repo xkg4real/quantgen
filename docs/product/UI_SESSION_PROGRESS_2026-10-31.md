@@ -1,69 +1,72 @@
-# UI session checkpoint — 2026-10-31
+# UI implementation and handoff — 2026-10-31
 
-Status: implementation in progress; this checkpoint is not a completion claim.
-Branch: `gpt/indicator-guide-20261031`, starting from main `579aadb8fd219a25b543ea8c9a2c803d3a2cbece`.
+Source PR: https://github.com/xkg4real/quantgen/pull/42
+Branch: `gpt/indicator-guide-20261031`. Read the actual PR head and checks for the
+current merge/CI state; this document is versioned with the implementation.
 
-The owner requested four connected tasks: a historical technical-indicator guide
-on Home; a registered-market-data display/rights review; a shared selection and
-chart grammar for guide and actual market histories; consistent multilingual UI,
-regional formatting and reports. The owner also confirmed the introduction site
-is **https://quantgeneration.com/** and requested including all UI work in the
-main session's eventual Claude handoff.
+The owner requires app UI work to continue in the UI session. Website work for
+**https://quantgeneration.com/** belongs to **웹사이트 작업공간(AWS)**, whose
+existing authentication should be used there. Do not start a new AWS login in
+this session. Include this UI work in the main session's Claude handoff.
 
-## Already merged before this checkpoint
+## Implemented app work
 
-- PR #36, main `73131c9`: native chart tick clipping, legend overlap and footer
-  fixes. 39 distinct local tests and Windows 3.12/3.14 + Ubuntu 3.12 CI passed.
-  Physical Windows display acceptance remains pending.
-- PR #37, main `2999296`: UI→website handoff instructions and PR-36 queue record.
-  Chat messaging/wake tools are unavailable; queued does not mean sent/deployed.
+- Home technical-indicator guide with visible multi-select SMA, EMA, RSI, MACD
+  and Bollinger choices, one common historical instrument/period, price overlays
+  and separate aligned RSI/MACD panels. Signals uses the same component on its
+  actual loaded history. No substituted educational data enters research results.
+- Selection letters/colours, solid/dashed line conventions, mouse/keyboard/slider
+  reading, same-date interpretation, four-part explanations, selection reasons,
+  limitations and explicit hindsight counterexamples. Reports save locally on
+  request with canonical education metadata and a checksum manifest.
+- 1,247 attributed USD/EUR reference observations from 2018–2022, checksum-pinned
+  to a source revision. DEXUSEU reciprocal/four-decimal rounding is explicit;
+  observed OHLCV is absent and never fabricated.
+- Six Home plus 73 registered-series usage review with 13 provider policies and
+  source links. Classification is a review status, not legal/publication approval.
+- Per-window/page locale structure, Korean/English catalogues and explicit English
+  fallback for other regional choices. 714 CLDR formats do not mean 714 translated
+  languages. Native preferences persist, and main-session language/FX/carry work
+  is preserved. Financial inputs, canonical evidence and existing jobs survive
+  language changes.
+- Actual visual fixes: SVG background now covers the complete Qt chart; source
+  columns have adequate spacing and elision/tooltips; duplicate guide introduction
+  was removed and the collapse button states the current action.
 
-## Current implementation, not yet accepted
+Design: `INDICATOR_GUIDE_DESIGN.md`. Translation rules and remaining coverage:
+`UI_LOCALIZATION.md`. Rights evidence: `MARKET_DISPLAY_RIGHTS_2026-10-31.md`.
 
-- Shared `core.education`: one aligned series per selection, SMA20/50, EMA12/26,
-  Wilder RSI14, MACD12/26/9 and BB20±2 population SD. Real observed OHLC/volume
-  are optional; none is synthesized from closing/reference values.
-- An offline, checksum-pinned 2018–2022 sample has 1,247 actual historical
-  USD/EUR reference observations from a pinned public-domain Fed/FRED mirror.
-  The mirror inverts DEXUSEU and rounds to four decimals. Attribution and the
-  transformation are explicit. This is not exchange OHLC or live data.
-- Native and Flet guides, Home entry points and market-history explorers in
-  Signals share vector rendering, selection state, colours and time axes.
-  Explanations include meaning, where to look, interpretation and limits;
-  annotations show hindsight counterexamples without a trading/gate verdict.
-- Data-usage review: six Home observations, 73 registry series and 13 provider
-  policies. Free/paid, live/delayed, retention, export/redistribution, derived use,
-  attribution and costs remain separate fields. Most uses are conditional,
-  need replacement, or need further verification. This is not legal clearance.
-- Per-view locale contexts, Korean/English baseline catalogues, explicit English
-  fallback for missing packs, 714 CLDR regional choices, localized report views,
-  in-place UI bindings and 42 generated legacy presentation templates. Wider
-  translation packs and independent language review are not claimed complete.
+## Verification
 
-## Verification state and next work
+- 63 integration checks passed on the combined guide/main-language implementation.
+- After the final selected-date reading refinement, 24 guide/chart checks passed
+  at 150% scale, including painted background pixels, keyboard cursor, common
+  dates, prefix invariance, provenance and explicit local report export.
+- Inspected 1100×820 light and 1000×700 dark/150% native captures.
+- Allowlisted wheel build and installed application/native smoke passed outside
+  checkout, including the sample, provenance, rights inventory and locale data.
+- Full runtime-smoke source/native suites and GitHub Windows 3.12/3.14 + Ubuntu
+  3.12 checks are required for the current PR head. Consult the PR for live results;
+  neither a queued CI run nor this document establishes a successful merge.
 
-Initial existing suite: 31 tests ran; two expected integration failures exposed
-the changed default Home language and an eager bundled-sample read during Flet
-Home construction. The expectation now uses Korean, and the Flet guide is lazy
-until explicitly opened. The rerun passed all 31 tests. Dedicated calculation/provenance/locale/rights,
-Flet callbacks and native guide/export tests subsequently passed 17 tests.
-The 17-test source and vector-cursor/report-integrity follow-ups are saved in
-the next checkpoint; final combined CI and visual acceptance remain pending.
+## Remaining acceptance and website follow-up
 
-Still required: dedicated calculation/alignment, sample-integrity, UI binding,
-locale/no-input-reset, report, rights and packaging regressions; desktop/browser
-visual inspection at narrow widths and light/dark themes; code review, CI and
-PR merge. Audit legacy translation coverage and any new chart layout defects.
+Physical Windows input/display/installer checks and live Flet browser visual
+acceptance remain. Korean/English are the shipped catalogues; additional language
+packs and professional review require the documented checks. Legacy model
+narratives beyond the main session's completed translations remain its ongoing
+work and are explicitly displayed as source-language prose where applicable.
 
-The owner will continue website work in the already-authenticated AWS session.
-Website tasks are saved at handoff:WEBSITE_AWS_HANDOFF.md. The UI session's
-separate temporary login was cancelled; do not request another login here.
-The deployed source/hosting is still unverified in this session. No website
-modification or deployment is claimed. The app work remains independent.
+Website follow-up is in `ui_website_updates/PR-42.json` and the shared `handoff`
+branch's `WEBSITE_AWS_HANDOFF.md`. Current tools cannot send messages to another
+Codex chat: the record is queued, without a delivery receipt. Website source
+application and actual deployment must be reported separately by the AWS session.
 
-## Main-session/Claude handoff
+## Prior completed work and consolidated handoff
 
-Include this branch's final commit/PR, checks, remaining items and the existing
-website queue in the next consolidated Claude handoff. Keep the main session's
-task/execution ID, research ledger, ownership and formal approval boundaries.
-The UI session has not run actual ledgers, holdouts, orders or protected caches.
+PR36 (`73131c9`) fixed native large-price ticks, legends and footers, with 39 local
+checks plus Windows/Ubuntu CI. PR37 (`2999296`) added the immediate UI→website
+follow-up workflow. The shared `handoff/UI_SESSION_CURRENT.md` links these and PR42
+for the main session's consolidated Claude handoff. Do not replace its active
+CURRENT task/execution ownership or research ledger. This UI work does not run
+actual ledgers, holdouts, protected caches or order paths.
