@@ -5,6 +5,8 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QLineEdit, QCombo
 from core.research.portfolio_analysis import PortfolioRequest
 from core.research.portfolio_disclosure import cap_label, portfolio_disclosure
 from .charts import FrontierChart
+from .bonds_portfolio_narrative import (portfolio_notes, portfolio_scope_korean,
+                                       model_note_korean, display_variants)
 
 
 class PortfolioPane(QWidget):
@@ -74,6 +76,11 @@ class PortfolioPane(QWidget):
             *[f"{o}: {p.note}" for o,p in output.portfolios.items() if p.note], output.narrative, disclosure['summary']]
         if synthetic:notes.insert(0,"합성 데이터: "+", ".join(synthetic)+" · 투자 배분이 아닌 계산 시연입니다.")
         self.notes.setText("\n".join(n for n in notes if n))
+        display_variants(self.notes, portfolio_notes(output,'en',disclosure),
+                         portfolio_notes(output,'ko',disclosure))
+        display_variants(self.scope, self.scope.source_text,
+                         portfolio_scope_korean(output.portfolios,output.request.objective)
+                         + '\n' + model_note_korean(output.portfolios['max_sharpe'].note))
         self.status.setText("계산 완료 · solver converged="+str(chosen.converged)+" · 공식 투자 판정 없음")
         self.exports.set_result('portfolio', output.request, [
             {'type': 'provenance', 'histories': [{'symbol': h.symbol, 'source': h.source,
