@@ -15,15 +15,17 @@ class ChartStudy(QWidget):
         self.split.setContentsMargins(0, 0, 0, 0)
         self.split.setSpacing(18)
         for widget, stretch in ((chart, 2), (reading, 1)):
-            widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+            # Intrinsic image/text hints are preferred widths, not a reason to
+            # make the whole scroll page wider than its viewport.
+            widget.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+            if widget.layout() is not None:
+                widget.layout().setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
             self.split.addWidget(widget, stretch, Qt.AlignmentFlag.AlignTop)
         self.reflow()
 
     def minimumSizeHint(self):
         size = super().minimumSizeHint()
-        size.setWidth(max(self.chart_area.minimumSizeHint().width(),
-                          self.reading_area.minimumSizeHint().width(),
-                          self.chart_area.minimumWidth(), self.reading_area.minimumWidth()))
+        size.setWidth(max(self.chart_area.minimumWidth(), self.reading_area.minimumWidth()))
         return size
 
     def reflow(self):

@@ -85,6 +85,29 @@ class NativeStudyTests(unittest.TestCase):
         scroll.resize(1200, 500); self.app.processEvents()
         self.assertEqual(study.split.direction(), QBoxLayout.Direction.LeftToRight)
 
+    def test_intrinsic_reading_hint_does_not_widen_the_scroll_viewport(self):
+        from PyQt6.QtCore import QSize
+        from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QLabel, QBoxLayout
+        from quantgen_desktop.chart_study import ChartStudy
+        class Reading(QWidget):
+            def minimumSizeHint(self): return QSize(966, 100)
+        reading = Reading(); QVBoxLayout(reading).addWidget(QLabel('Interpretation'))
+        study = ChartStudy(QLabel('Chart'), reading)
+        body = QWidget(); QVBoxLayout(body).addWidget(study)
+        scroll = QScrollArea(); scroll.setWidgetResizable(True); scroll.setWidget(body)
+        self.addCleanup(scroll.deleteLater); self.addCleanup(scroll.hide)
+        scroll.resize(764, 500); scroll.show()
+        self.app.processEvents(); self.app.processEvents()
+        self.assertLessEqual(study.width(), scroll.viewport().width())
+        self.assertLessEqual(reading.width(), study.width())
+        self.assertEqual(study.split.direction(), QBoxLayout.Direction.TopToBottom)
+        scroll.resize(700, 500)
+        self.app.processEvents(); self.app.processEvents()
+        self.assertLessEqual(study.width(), scroll.viewport().width())
+        self.assertEqual(study.split.direction(), QBoxLayout.Direction.TopToBottom)
+        scroll.resize(1200, 500); self.app.processEvents()
+        self.assertEqual(study.split.direction(), QBoxLayout.Direction.LeftToRight)
+
     def test_responsive_split_and_dark_restart_preserve_the_same_observations(self):
         import tempfile
         from pathlib import Path
