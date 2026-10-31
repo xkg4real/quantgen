@@ -10,6 +10,15 @@
 앱의 네 가지 UI 작업 PR42는 병합되었고, C형·다크모드 후속은 PR47입니다. 사용자는 웹사이트 UI 작업을 AWS 세션으로 넘기되 앱 UI 수정을 중단하지 말라고 재확인했습니다.
 UI 코드 수정은 소유자가 별도 컨펌 없이 진행하도록 허용했고 완료 후 변경·검증 보고를 요구했습니다.
 
+## 앱 변경 완료 — AWS에서 이어받을 확정 기준
+
+- PR47 https://github.com/xkg4real/quantgen/pull/47 — main 병합 완료: **8c0fb632add442fd1f4d79baea239c21255324d1**.
+- 검증 source: **74ae598b8beea50c52221f5934bcd9a298b123f8**, main PR52까지 통합.
+- Runtime 41193496809의 Windows Python 3.12/3.14·Ubuntu Python 3.12 및 Document 41193496681 모두 SUCCESS.
+- 앱 C형/라이트·다크 작업은 완료했습니다. 아래 **사이트의 모든 차트** 적용·실제 CSS 대조·UI 버그 수정·배포는 AWS 후속입니다.
+- 메인/Claude 완료 인계: [UI_SESSION_CURRENT.md](UI_SESSION_CURRENT.md). 사용자 명령에 따라 크레딧 소진 전 체크포인트를 저장하고 완료 상태로 갱신했습니다.
+- 채팅 직접 전송 도구가 없어 전달 영수증은 없습니다. 이 기록 저장을 AWS 수신·사이트 배포 완료로 표시하지 않습니다.
+
 ## 1. 기존 AWS 로그인과 호스팅 소스 확인
 
 - 이 AWS 세션의 기존 설정: 프로필 `quantgen`, 프로젝트 리전 `ap-southeast-2`.
@@ -82,7 +91,7 @@ UI 코드 수정은 소유자가 별도 컨펌 없이 진행하도록 허용했�
 - 실제 배포 CSS의 라이트/다크 색상 토큰을 추출해서 앱의 브랜드 토큰과 대조해주세요. UI 실행 환경은 사이트 HTML/CSS 직접 접속이 프록시 403으로 차단되어 정확한 색상값을 검증하지 못했습니다. 앱의 현재 light 기준은 #F7F5F0/#FFFEFB/#194C40입니다. 실제 사이트 값을 확인한 근거 없이 일치한다고 보고하지 않습니다.
 - 사이트 기존 Auto/Light/Dark 컨트롤 및 데이터·시드·수학·과거 판정을 유지합니다. 다크 전환 시 축·범례·커서·해설·PNG/SVG/Canvas까지 함께 다시 그려 밝은 차트가 남지 않게 합니다.
 - 모든 차트 인벤토리별 C 적용/라이트/다크/모바일/키보드/배포 확인 증거를 남깁니다.
-- 앱 후속 PR47: https://github.com/xkg4real/quantgen/pull/47 · 브랜치 gpt/chart-c-theme-20261031 · head 74ae598b8beea50c52221f5934bcd9a298b123f8. C 배치와 테마 전환 구현/로컬 검증 완료, CI 41193496809·41193496681 확인 후 병합 예정입니다.
+- 앱 후속 PR47: https://github.com/xkg4real/quantgen/pull/47 · 브랜치 gpt/chart-c-theme-20261031 · head 74ae598b8beea50c52221f5934bcd9a298b123f8. C 배치·다크모드 구현과 최종 CI를 완료하고 main 8c0fb632add442fd1f4d79baea239c21255324d1로 병합했습니다.
 - Qt 공통 분석 도구·가이드·Quant/Portfolio/Bonds 및 Flet 28개 차트 생성기에 적용했습니다. Qt는 ui/theme 복원, Flet는 입력/분석을 유지하는 캐시 재도색입니다.
 - 230 로컬 회귀 + 최종 16 집중 + 메인 통합 29 검사, 문서 47 검사, 설치 wheel smoke 통과. 실제 로컬 Chromium에서 한글 SVG 글꼴과 Home 갱신 번역도 수정했습니다.
 - 참조: docs/product/CHART_C_DESIGN_2026-10-31.md 및 docs/product/ui_website_updates/PR-47.json. 정확한 사이트 토큰 대조와 사이트 전체 차트 수정/배포는 이 AWS 작업공간에서 계속합니다.
@@ -101,4 +110,4 @@ UI 코드 수정은 소유자가 별도 컨펌 없이 진행하도록 허용했�
 
 앱 최종 통합: main PR49(4c51ab96e1f61a101fa8a76d024689830bf5d099)의 채권·포트폴리오 한국어/영어 해설을 C형 우측 읽기 영역에 보존했습니다. 관련 13개 검사가 통과했습니다. Windows 너비 문제는 내부 차트뿐 아니라 바깥 IndicatorGuide의 최소폭 제약도 해제하여 수정했습니다. 내부/바깥 966px 기본 너비 조건에서 guide와 텍스트가 viewport에 들어와야 하는 회귀검사를 포함한 로컬 17개가 통과했습니다. 이전 실패 실행과 혼동하지 말고 위 최신 head/CI 결과를 확인하세요.
 
-최신 보존 체크포인트: 앱은 main PR52(d789691)까지 통합했고 최신 head는 74ae598b8beea50c52221f5934bcd9a298b123f8입니다. 이전 C 구현 head의 Windows 3.12/3.14·Ubuntu CI는 모두 통과했으며 최신 시장 진단 번역 통합본의 10개 로컬 검사도 통과했습니다. 현재 head CI의 최종 결과/병합 SHA는 PR47에서 확인하세요. 사용자가 토큰 소진 전에 메인에 진행 내용을 보존하라고 명령하여 UI_SESSION_CURRENT.md에 완료/진행/다음 단계와 알림 전달 상태를 즉시 기록했습니다.
+최신 보존 체크포인트: 앱은 main PR52(d789691)까지 통합했고 최신 head는 74ae598b8beea50c52221f5934bcd9a298b123f8입니다. 이전 C 구현 head의 Windows 3.12/3.14·Ubuntu CI는 모두 통과했으며 최신 시장 진단 번역 통합본의 10개 로컬 검사도 통과했습니다. 최종 head의 Runtime CI 41193496809에서 Windows 3.12·3.14·Ubuntu 3.12 모두 통과했고 Document CI 41193496681도 통과했습니다. main 병합은 8c0fb632add442fd1f4d79baea239c21255324d1입니다. 사용자가 토큰 소진 전에 메인에 진행 내용을 보존하라고 명령하여 UI_SESSION_CURRENT.md에 완료/진행/다음 단계와 알림 전달 상태를 즉시 기록했습니다.
