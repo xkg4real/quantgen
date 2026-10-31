@@ -65,6 +65,29 @@ class AiPayloadTests(unittest.TestCase):
         self.assertEqual(runner.call_args.args[1], {"price": 42})
         self.assertIn("holdings", source)
 
+    def test_flet_error_keeps_local_narrative_and_shows_safe_action(self):
+        from core.research.ai_connection import error_message
+        message = error_message('AUTHENTICATION', http_status=401)
+        runner = Mock(return_value=insights.Analysis('', 'fixture', message, 'AUTHENTICATION', 401))
+        page = Mock(); page.run_thread.side_effect = lambda worker: worker()
+        with patch.object(insights, 'ai_ready', return_value=True):
+            panel = analysis_panel(page, kind='portfolio', narrative='Local computed explanation',
+                                   payload_fn=lambda: {'price':42}, deep_fn=runner)
+        rows = panel.content.controls
+        next(c for c in rows[3].controls if isinstance(c, ft.Button)).on_click(None)
+        self.assertEqual(rows[1].value, 'Local computed explanation')
+        self.assertIn('ANTHROPIC_API_KEY', str(rows[-1].controls))
+        from ui.localization import translate_controls
+        from core.i18n import LocaleContext
+        banner = rows[-1].controls[0]
+        translate_controls(banner, LocaleContext('ko_KR'))
+        self.assertIn('인증 실패', banner.content.content.controls[1].value)
+        translate_controls(banner, LocaleContext('en_US'))
+        self.assertIn('authentication failed', banner.content.content.controls[1].value)
+        self.assertNotIn('인증 실패', banner.content.content.controls[1].value)
+        self.assertFalse(rows[3].controls[-1].visible)
+        runner.assert_called_once()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -71,6 +71,19 @@ class NativeCommentaryTests(unittest.TestCase):
         p.submit();self.wait();self.assertIsNone(p.report_actions.report)
         self.assertNotIn('sensitive',p.status.text());self.assertNotIn('key=hidden',p.status.text())
 
+    def test_auth_error_translates_on_switch_without_retry_or_success_export(self):
+        from core.research.ai_connection import error_message
+        p=self.prepare();before=deepcopy(p.payload)
+        self.runner.return_value=Analysis('', 'fixture-model', error_message('AUTHENTICATION'),
+                                          'AUTHENTICATION', 401)
+        p.consent.setChecked(True);p.submit();self.wait()
+        self.window.ui_language='ko';p.status.retranslate()
+        self.assertIn('인증 실패',p.status.text());self.assertIn('HTTP 401',p.status.text())
+        self.window.ui_language='en';p.status.retranslate()
+        self.assertIn('authentication failed',p.status.text());self.assertNotIn('인증',p.status.text())
+        self.assertEqual(p.output.toPlainText(),'');self.assertIsNone(p.report_actions.report)
+        self.assertEqual(p.payload,before);self.runner.assert_called_once()
+
     def test_daily_prompt_kind_and_close_guard(self):
         gate=threading.Event()
         def runner(*a,**kw):gate.wait(2);return Analysis('daily fixture','fixture')

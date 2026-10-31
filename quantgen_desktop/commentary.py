@@ -8,6 +8,7 @@ import hashlib
 import json
 
 from PyQt6.QtWidgets import QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButton,QPlainTextEdit,QLineEdit,QCheckBox
+from core.research.ai_connection import error_message
 from core.research.presentation import safe_detail
 from core.research.tool_export import plain
 from core.research.ai_payload import filter_analysis_fields, private_field
@@ -91,7 +92,11 @@ class CommentaryPane(QWidget):
         self.jobs.start(lambda:self.runner(kind,payload,question=question))
 
     def finished(self,result):
-        if result.error:self.failed(safe_detail(result.error));return
+        if result.error:
+            code = getattr(result, 'error_code', '')
+            localized = ('AI 해설 실패 · ' + error_message(code, 'ko', getattr(result, 'http_status', None))) if code else None
+            self.failed(safe_detail(result.error), localized=localized)
+            return
         text=safe_detail(result.text,limit=None)
         self.output.setPlainText(text)
         digest=hashlib.sha256(json.dumps(self.completed_payload,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
@@ -99,5 +104,8 @@ class CommentaryPane(QWidget):
             [{'type':'text','text':text},{'type':'text','text':'AI-generated commentary · '+safe_detail(result.engine)+' · official verdict unchanged'}])
         self.status.setText('AI 해설 완료 · '+safe_detail(result.engine)+' · 공식 판정은 원래 기록을 유지합니다.')
 
-    def failed(self,error):
+    def failed(self,error, *, localized=None):
         self.output.clear();self.report_actions.clear();self.status.setText('AI FAILED · '+safe_detail(error))
+        if localized:
+            self.status.localized_text = {'ko': localized}
+            self.status.retranslate()

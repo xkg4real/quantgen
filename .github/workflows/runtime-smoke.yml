@@ -55,7 +55,7 @@ jobs:
       - name: Verify bounded source fixtures
         shell: bash
         run: |
-          python -m unittest tests.packaging_policy_acceptance tests.status_snapshot_acceptance tests.research_home_acceptance tests.research_contract_acceptance tests.data_readiness_acceptance tests.web_branding_acceptance tests.bond_funding_acceptance tests.crypto_hac_acceptance tests.ai_payload_acceptance tests.ficc_boundary_acceptance tests.swaption_conversion_acceptance tests.sabr_diagnostics_acceptance tests.portfolio_scope_acceptance tests.terminal_target_acceptance tests.mc_volatility_acceptance tests.strategy_exposure_acceptance tests.ar1_decay_acceptance tests.funding_inference_acceptance tests.letf_disclosure_acceptance tests.letf_index_acceptance tests.quote_coverage_acceptance -v
+          python -m unittest tests.packaging_policy_acceptance tests.status_snapshot_acceptance tests.research_home_acceptance tests.research_contract_acceptance tests.data_readiness_acceptance tests.web_branding_acceptance tests.bond_funding_acceptance tests.crypto_hac_acceptance tests.ai_payload_acceptance tests.ai_connection_acceptance tests.ficc_boundary_acceptance tests.swaption_conversion_acceptance tests.sabr_diagnostics_acceptance tests.portfolio_scope_acceptance tests.terminal_target_acceptance tests.mc_volatility_acceptance tests.strategy_exposure_acceptance tests.ar1_decay_acceptance tests.funding_inference_acceptance tests.letf_disclosure_acceptance tests.letf_index_acceptance tests.quote_coverage_acceptance -v
           python -m tools.status.snapshot --check
       - name: Install Linux Qt shared libraries for offscreen verification
         if: runner.os == 'Linux'

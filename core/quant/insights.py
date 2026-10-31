@@ -27,6 +27,7 @@ except Exception:                                    # pragma: no cover
     _requests = None
 
 import config
+from core.research.ai_connection import error_message, response_error, transport_error
 from core.quant.backtest import BacktestResult
 from core.quant.garch import LR_5PCT, NU_NORMAL
 from core.quant.montecarlo import MCResult
@@ -43,9 +44,12 @@ class Analysis:
     text: str
     engine: str                       # "local" or the Claude model id
     error: str = ""                   # non-empty when the AI call failed
+    error_code: str = ""              # safe diagnostic category, never provider text
+    http_status: int | None = None
 
 
 def ai_ready() -> bool:
+    """Configuration presence only; does not verify API authentication."""
     return bool(config.anthropic_key()) and _requests is not None
 
 
@@ -301,11 +305,14 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
     """Send a structured result to Claude. Returns Analysis with error set (and
     empty text) when unconfigured or the call fails — the caller already has
     the local narrative, so failure here degrades, never blocks."""
+    def failure(code, engine="none", status=None):
+        return Analysis("", engine, error_message(code, http_status=status), code, status)
+
     key = config.anthropic_key()
     if not key:
-        return Analysis("", "none", error="ANTHROPIC_API_KEY is not configured.")
+        return failure("NOT_CONFIGURED")
     if _requests is None:
-        return Analysis("", "none", error="The requests package is not installed.")
+        return failure("DEPENDENCY")
     model = config.ai_model()
     user_msg = (f"Analysis type: {kind}\n\nComputed results:\n"
                 f"{_payload_to_json(payload)}")
@@ -321,22 +328,21 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
             timeout=60,
         )
     except Exception as exc:
-        return Analysis("", model, error=f"Claude API request failed: {exc}")
-    if resp.status_code == 401:
-        return Analysis("", model, error="Claude API rejected the key (HTTP 401).")
+        return failure(transport_error(exc), model)
     if resp.status_code != 200:
-        detail = ""
         try:
-            detail = resp.json().get("error", {}).get("message", "")[:200]
+            body = resp.json()
         except Exception:
-            pass
-        return Analysis("", model, error=f"Claude API answered HTTP {resp.status_code}. {detail}".strip())
+            body = None
+        return failure(response_error(resp.status_code, body), model, resp.status_code)
     try:
         blocks = resp.json().get("content", [])
+        if not isinstance(blocks, list):
+            return failure("INVALID_RESPONSE", model)
         text = "\n\n".join(b.get("text", "") for b in blocks
-                           if b.get("type") == "text").strip()
+                           if isinstance(b, dict) and b.get("type") == "text").strip()
     except Exception:
-        return Analysis("", model, error="Claude API returned an unreadable body.")
+        return failure("INVALID_RESPONSE", model)
     if not text:
-        return Analysis("", model, error="Claude API returned no text.")
+        return failure("INVALID_RESPONSE", model)
     return Analysis(text, model)
