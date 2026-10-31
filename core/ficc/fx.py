@@ -244,6 +244,7 @@ class SABRFit:
     nu: float
     rmse: float                       # in vol units
     converged: bool
+    active_bounds: tuple[str, ...] | None = None  # solver metadata; not a quality verdict
 
 
 def calibrate_sabr(F: float, T: float, strikes, vols, *, beta: float = 1.0) -> SABRFit:
@@ -269,7 +270,10 @@ def calibrate_sabr(F: float, T: float, strikes, vols, *, beta: float = 1.0) -> S
                 best = res
     a, r, n = (float(x) for x in best.x)
     rmse = float(math.sqrt(np.mean(best.fun**2)))
-    return SABRFit(alpha=a, beta=beta, rho=r, nu=n, rmse=rmse, converged=bool(best.success))
+    active_bounds = tuple(f"{name} {'lower' if mask < 0 else 'upper'}"
+                          for name, mask in zip(('alpha', 'rho', 'nu'), best.active_mask) if mask)
+    return SABRFit(alpha=a, beta=beta, rho=r, nu=n, rmse=rmse,
+                   converged=bool(best.success), active_bounds=active_bounds)
 
 
 def smile_curve(fit: SABRFit, F: float, T: float, strikes: np.ndarray) -> np.ndarray:

@@ -109,5 +109,7 @@ def execute_fx(request, *, spot_loader=None, rate_loader=None, policy_loader=Non
         report = fx.garman_kohlhagen(S, K, T, rd, rf, vol, request.call)
         grid = np.linspace(min(points[0].strike, K)*.98, max(points[-1].strike, K)*1.02, 80)
         data.update(points=points, fit=fit, report=report, grid=grid, vols=fx.smile_curve(fit, F, T, grid))
-        narrative = insights.narrate_fx_option(report, points, fit)
+        from core.ficc.sabr_diagnostics import fit_diagnostics
+        data['sabr_diagnostics'] = fit_diagnostics(fit, F, T, points, pricing_strike=K)
+        narrative = insights.narrate_fx_option(report, points, fit, diagnostics=data['sabr_diagnostics'])
     return FXOutput(request, data, tuple(sources), narrative)

@@ -26,6 +26,7 @@ import numpy as np
 import flet as ft
 
 from core.ficc import fx, insights
+from core.ficc.sabr_diagnostics import fit_diagnostics, diagnostic_text, diagnostic_tone
 from core.ficc.common import BP, FICCError, parse_tenor, tenor_label
 from core.ficc.data import (G10_KRW, Series, load_fx_spot, load_policy_rates,
                             load_short_rate)
@@ -251,6 +252,7 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
         K = _strike(strike.value, S, T, rd, rf, v_atm, call)
         vol_k = float(fx.smile_curve(fit, F, T, np.array([K]))[0])
         gk = fx.garman_kohlhagen(S, K, T, rd, rf, vol_k, call)
+        diag = fit_diagnostics(fit, F, T, pts, pricing_strike=K)
         grid = np.linspace(min(pts[0].strike, K) * 0.98, max(pts[-1].strike, K) * 1.02, 80)
         vols = fx.smile_curve(fit, F, T, grid)
 
@@ -274,15 +276,20 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
         ], spacing=10, wrap=True))
         blocks.append(ft.Row(_chips(spot_s, rd_s, rf_s) + [
             chip(f"{'call' if call else 'put'} {tenor_label(T)}", "accent"),
-            chip(f"SABR rho {fit.rho:+.2f} · nu {fit.nu:.2f} · rmse {fit.rmse * 100:.3f} vp",
-                 "accent" if fit.converged else "error",
-                 tooltip="Hagan lognormal SABR, beta fixed at 1"),
+            chip(f"SABR solver {diag['solver_status']} · rho {fit.rho:+.3f} · nu {fit.nu:.3f}",
+                 diagnostic_tone(diag), tooltip="Solver status only; independent validation NOT_RUN"),
         ], spacing=6, wrap=True))
         blocks.append(card(fcharts.smile_chart(grid, vols, pts, F)))
         blocks.append(card(_table(
             ["Point", "Strike", "Vol", "Spot delta"],
             [[x.label, _px(x.strike), f"{x.vol * 100:.2f}%", f"{x.delta:+.3f}"] for x in pts])))
+        blocks.append(notice(diagnostic_text(diag), diagnostic_tone(diag)))
+        blocks.append(card(_table(
+            ["Point", "Quoted vol %", "Fitted vol %", "Residual · vol points"],
+            [[r["label"], f"{r['quoted_vol']*100:.6f}", f"{r['fitted_vol']*100:.6f}",
+              f"{r['residual_vol_points']:+.6f}"] for r in diag["residuals"]])))
         payload = {
+            "sabr_diagnostics": diag,
             "pair": p, "spot": S, "spot_source": spot_s.source, "forward": F,
             "expiry_years": T, "strike": K, "call": call, "r_dom": rd, "r_for": rf,
             "vol_used": vol_k, "price": gk.price, "price_pct_spot": gk.price_pct_spot,
@@ -296,7 +303,7 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
                      "rmse": fit.rmse, "converged": fit.converged},
         }
         blocks.append(analysis_panel(
-            page, kind="fx_option", narrative=insights.narrate_fx_option(gk, pts, fit),
+            page, kind="fx_option", narrative=insights.narrate_fx_option(gk, pts, fit, diagnostics=diag),
             payload_fn=lambda d=payload: d))
         return blocks
 

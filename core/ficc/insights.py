@@ -227,7 +227,7 @@ def narrate_fx_forward(pair: str, spot: float, fwd: float, points: float, carry:
 
 
 def narrate_fx_option(gk: GKReport, smile_points: tuple[SmilePoint, ...] | None = None,
-                      sabr: SABRFit | None = None) -> str:
+                      sabr: SABRFit | None = None, *, diagnostics=None) -> str:
     kind = "call" if gk.call else "put"
     lines = [
         f"A {tenor_label(gk.expiry)} {kind} struck at {_px(gk.strike)} on spot {_px(gk.spot)} "
@@ -249,9 +249,11 @@ def narrate_fx_option(gk: GKReport, smile_points: tuple[SmilePoint, ...] | None 
                          + f"; the 25d risk reversal is {skew:+.2f} vol points, so the market "
                            f"pays up for {lean}.")
     if sabr is not None:
-        lines.append(f"SABR (beta {sabr.beta:g}) fits with alpha {sabr.alpha:.4f}, rho "
-                     f"{sabr.rho:+.2f}, nu {sabr.nu:.2f}, rmse {sabr.rmse * 100:.3f} vol points"
-                     + ("." if sabr.converged else "; the solver did not converge."))
+        from .sabr_diagnostics import fit_diagnostics, diagnostic_text
+        if diagnostics is None:
+            diagnostics = fit_diagnostics(sabr, gk.forward, gk.expiry, smile_points,
+                                          pricing_strike=gk.strike)
+        lines.append(diagnostic_text(diagnostics))
     return " ".join(lines)
 
 
