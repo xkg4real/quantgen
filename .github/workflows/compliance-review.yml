@@ -1,0 +1,96 @@
+name: Compliance document review
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Monday 09:00 Asia/Seoul. GitHub schedules use UTC and may be delayed.
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compliance-review-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  consistency:
+    name: Document and source consistency
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/.env*
+            !/**/.env*
+            !/.aws/
+            !/.codex/
+            !/.agents/
+            !/.claude/
+            !/paper_live/
+            !/grokteam/
+            !/_backup/
+            !/research_notes/
+            !/reports/
+            !/QUANTGEN_Quant_Council_2026-10-03/
+            !/QUANTGEN_techfund_research_bundle/
+            !/docs/asset_expansion/cache/
+            !/**/*.jsonl
+            !/docs/**/holdout/
+            !/docs/**/frozen/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exercise stale-source, document and privacy boundaries
+        run: python -m unittest tests.compliance_acceptance tests.compliance_export_acceptance -v
+      - name: Check source and document review fingerprints
+        if: always()
+        run: python -m tools.compliance.check --check --report-dir "$RUNNER_TEMP/compliance-review"
+      - name: Write compact job summary
+        if: always()
+        shell: bash
+        run: |
+          if test -f "$RUNNER_TEMP/compliance-review/report.md"; then
+            cat "$RUNNER_TEMP/compliance-review/report.md" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Preserve actionable review report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compliance-review-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/compliance-review/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Install editable document export dependency
+        run: python -m pip install --disable-pip-version-check "python-docx==1.2.0"
+      - name: Build and verify downloadable document package
+        env:
+          COMPLIANCE_EXPORT_REF: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python -m tools.compliance.export --output "$RUNNER_TEMP/quantgen-compliance-delivery" --repository-ref "$COMPLIANCE_EXPORT_REF"
+          python -m tools.compliance.verify --directory "$RUNNER_TEMP/quantgen-compliance-delivery"
+      - name: Upload downloadable policies and editable forms
+        id: documents
+        uses: actions/upload-artifact@v4
+        with:
+          name: QUANTGEN_Compliance_20_Documents-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/quantgen-compliance-delivery/
+            !${{ runner.temp }}/quantgen-compliance-delivery/QUANTGEN_Compliance_20_Documents.zip
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+      - name: Show verified package download link
+        env:
+          COMPLIANCE_ARTIFACT_URL: ${{ steps.documents.outputs.artifact-url }}
+        run: |
+          echo "### Download policies and editable forms" >> "$GITHUB_STEP_SUMMARY"
+          echo "[Download the ZIP package]($COMPLIANCE_ARTIFACT_URL)" >> "$GITHUB_STEP_SUMMARY"
+          echo "20 Word documents + 20 separate Word forms; review drafts; retained for 30 days. Sign in to GitHub with repository access." >> "$GITHUB_STEP_SUMMARY"
