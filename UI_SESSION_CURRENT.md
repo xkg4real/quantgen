@@ -6,9 +6,9 @@ Owner instruction (2026-10-31): app UI work continues in this UI session; websit
 
 - Branch: `gpt/indicator-guide-20261031`
 - Saved source: `13308a63113743f9b4f8d6a4cf1473a9f7e7e166`
-- PR42: https://github.com/xkg4real/quantgen/pull/42 — ready for review; not yet merged at this checkpoint.
+- PR42: https://github.com/xkg4real/quantgen/pull/42 — merged at `d77d99660132f71b50c19b42cc6d76dc4b5f9a79` after all three runtime jobs and document CI passed.
 - Main integrated through `c3a0613eaa6d26620d871b28f28e5ba349ff1ac9`, preserving PR39 language persistence, PR40 FX, PR43 carry and PR44 rates translations.
-- Current runtime CI: https://github.com/xkg4real/quantgen/actions/runs/41181029682 (in progress at this checkpoint). Document CI: https://github.com/xkg4real/quantgen/actions/runs/41181029690.
+- Passed CI: runtime https://github.com/xkg4real/quantgen/actions/runs/41181029682 (Windows 3.12/3.14 + Ubuntu 3.12), documents https://github.com/xkg4real/quantgen/actions/runs/41181029690.
 - Local: 226 runtime checks passed (104 source, 97 native, five chart, 20 guide/locale), plus 47 compliance/document-export checks. Icon follow-up passed 16 focused Home/language/packaging checks. Guide/chart tests also ran at 150%; installed wheel/application/native smoke passed outside checkout. Native light/dark captures inspected at 1100×820 and 1000×700/150%.
 - Detailed, versioned progress: docs/product/UI_SESSION_PROGRESS_2026-10-31.md.
 - Design/source evidence: INDICATOR_GUIDE_DESIGN.md, UI_LOCALIZATION.md and MARKET_DISPLAY_RIGHTS_2026-10-31.md under docs/product/.
@@ -19,7 +19,7 @@ The sample is 1,247 actual 2018–2022 USD/EUR daily reference observations with
 
 ## Latest owner additions
 
-The owner requested multiple original chart design proposals and explicitly said to continue without waiting for their answer. Four visual concepts were generated and displayed in this chat: A warm light research, B dark terminal with stacked indicators, C split chart/teaching cards, D synchronized asset matrix. A for the default chart and C for education are the working directions, not owner approval of every mockup detail. Concepts contain illustrative data; they are not actual app screenshots or research evidence. Preserve the existing QUANTGEN logo in implementation.
+The owner requested multiple original chart design proposals and explicitly said to continue without waiting for their answer. Four visual concepts were generated and displayed in this chat: A warm light research, B dark terminal with stacked indicators, C split chart/teaching cards, D synchronized asset matrix. The owner subsequently explicitly selected **C for all charts**, matching the website colour mood, and requested app dark mode. The previous A-default proposal is superseded. Concepts contain illustrative data; they are not actual app screenshots or research evidence. Preserve the existing QUANTGEN logo in implementation.
 
 Local board: /workspace/artifacts/quantgen-ui/chart-design-studies-ABCD.png (copy of generated image retained in this UI workspace; another workspace may need the owner-visible image). B/D are design studies, not implemented screens.
 
@@ -29,9 +29,9 @@ New compliance workflow required a truthful source/document delta review. 01–2
 
 ## Work to retain and complete
 
-Finish current-head CI and remaining regression diagnosis, then merge only if successful. Preserve newer main-session narrative changes if main advances. Physical Windows display/input/installer and live Flutter browser visual acceptance remain; broader language packs/professional review and remaining legacy narratives are not marked complete. Main-session narrative work continues independently.
+PR42 is complete. Current follow-up is `gpt/chart-c-theme-20261031`, initially based on merged main `d77d9966`, in the same isolated UI worktree. C splits, native theme persistence, cached Flet theme repaint and common matplotlib chart wrappers are being implemented/tested. Do not report this follow-up as merged before its own PR/checks. Physical Windows display/input/installer and live Flutter browser visual acceptance remain; broader language packs/professional review and remaining legacy narratives are not marked complete. Main-session narrative work continues independently.
 
-After merge, update this supplement with exact source/merge and CI. Do not repeat completed PR36/37 work or restart the guide from its early draft checkpoints. Do not mutate CURRENT merely to include this supplement.
+After the C-theme follow-up, update this supplement with exact source/merge and CI. Do not repeat completed PR36/37 work or restart the guide from its early draft checkpoints. Do not mutate CURRENT merely to include this supplement.
 
 ## Completed prior work
 
@@ -44,3 +44,5 @@ Confirmed site: https://quantgeneration.com/. Read WEBSITE_AWS_HANDOFF.md and th
 The owner explicitly says website UI must be continued in the already authenticated AWS session while app UI continues here. The UI session's temporary AWS login was cancelled; do not request another login here.
 Supported tools lack cross-chat send/wake: shared handoff is saved, delivery remains queued without receipt, and site application/deployment is unverified. A saved GitHub document is not a sent chat message.
 No actual ledgers, protected cache, holdout/frozen study or order paths were executed.
+
+C follow-up evidence so far: native 1600×1050 light/dark captures exist at /workspace/artifacts/quantgen-ui/chart-c-light.png and chart-c-dark.png. 22 equity/FICC chart factories rendered and switched themes; 10 C/guide regression checks passed. Actual local Chromium/Flet testing is now underway and found SVG CJK fallback and late Home text issues being fixed. First browser fixture accidentally ran Home auto-refresh; the fixture was stopped and changed to stub ui.research_home.load_markets plus forbid requests. No successful provider observation is claimed from those blocked calls. The live site CSS request is blocked by the proxy (403); AWS must verify actual tokens and apply C to every site chart. WEBSITE_AWS_HANDOFF.md contains this explicit owner instruction. The public site has Auto/Light/Dark controls, verified by the web reader, but exact CSS values are unverified here.
