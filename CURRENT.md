@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/M4-N8, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T15:00:11.252+09:00
+updated_at: 2026-10-31T15:01:07.651+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/swaption-aux-conversion-20261031
-work_commit: 4e84e992f68cf02208c2e4fff121de883dd5c99c
+work_branch: gpt/sabr-fit-diagnostics-20261031
+work_commit: 94659fdd528efb34598a72b7017eda74f7d221ff
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/35
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -121,3 +121,5 @@ PR31/32/33/35 각완료범위를LEDGER에append하고 read-back했습니다. 최
 
 ## M4-N8 재개
 동일 task/handoff/직전execution/branch/source와 STATE·원격을대조했고 OS배타잠금을확보했습니다. 새execution cb2e35fa-92a3-456c-b504-843a0d13c0ef로CAS재개. 기존 FX/insights파일은앞선기능구현을보존하고M4-N8의SABR진단표시범위만수정합니다. AUTO_STATE는다른Claude브랜치기록이므로사용하지않습니다.
+
+M4-N8 새브랜치 gpt/sabr-fit-diagnostics-20261031은검증된최신main94659fd에서시작. 기존solver의active_mask를진단정보로노출하고잔차/3점3모수/외삽을표시할계획. 수치적합함수와공식품질판정기준은유지합니다.
