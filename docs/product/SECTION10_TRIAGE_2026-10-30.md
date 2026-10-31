@@ -140,3 +140,12 @@ inputs instead of substituting KOSPI200 or synthetic data. See
 `LETF_INDEX_2026-10-31.md`. **12/67** groups implemented, **55** remain;
 14 observation rows and15 ambiguous mappings unchanged. Live master/provider
 and manual Windows acceptance remain NOT_RUN; the funding parent stays open.
+
+## Option quote coverage correction
+
+M4-N12 preserves the existing inequality counts but distinguishes an unperformed
+check from a tested zero. Parity/vertical/butterfly coverage is explicit in Flet,
+Qt, AI and exports, including insufficient and one-sided samples. See
+`QUOTE_COVERAGE_2026-10-31.md`. **13/67** groups implemented, **54** remain;
+14 observation rows and15 ambiguous mappings unchanged. No formal study
+decision, SVI result or engine calculation is changed.

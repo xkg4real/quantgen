@@ -8,6 +8,7 @@ import config
 from core.ficc import equity_deriv as ED
 from core.ficc.common import BP, FICCError
 from core.ficc.swaps import black76
+from .quote_coverage import quote_coverage, quote_coverage_text, static_payload
 
 def synthetic_board(F: float = 1126.0, T: float = 20 / 365, r: float = 0.032, seed: int = 3):
     """A smile-shaped board with two-sided quotes, for the demo and the tests."""
@@ -108,12 +109,11 @@ def snapshot(*, source: str = "kis", expiry: str = "", rate_pct: Optional[float]
                                   rate=rate, engine=engine, garch_fit=garch_fit, n_paths=n_paths, seed=7)
     out.update(F=F, k0=k0, points=pts, reconcile=rec, parity=par, arbitrage=arb, svi=fit, atm=atm, mfiv=mv, rnd=rnd,
                box=box, basis=basis, sigma_h=sigma_h, hedge=sim, garch=garch_fit, n_quotes=len(quotes))
+    out['quote_coverage'] = quote_coverage(arb, par)
     return out
 
 def narrative(s: dict) -> str:
     fq, b, fit, sim = s["futures"], s["basis"], s["svi"], s["hedge"]
-    par_within = [x["within"] for x in s["parity"] if x["within"] is not None]
-    within = (sum(par_within) / len(par_within)) if par_within else float("nan")
     mv = s["mfiv"]
     txt = [
         f"Board {s['expiry']} (expires {s['expiry_date']}, {s['T'] * 365:.0f} days) with {s['n_quotes']} strikes; the "
@@ -131,8 +131,7 @@ def narrative(s: dict) -> str:
         f"{', arbitrage-free' if fit.arbitrage_free else ', with a butterfly-arbitrage region'}.",
         (f"Model-free implied vol {mv['vol']:.1%} over {mv['n_strikes']} strikes (VKOSPI-style strip)."
          if mv.get("n_strikes") else f"Model-free variance not computed: {mv.get('error', '')}"),
-        f"Put–call parity holds within half the summed spread on {within:.0%} of near strikes; butterfly violations on quoted "
-        f"mids: {s['arbitrage']['call_butterfly']} calls, {s['arbitrage']['put_butterfly']} puts.",
+        quote_coverage_text(s['quote_coverage']),
         (f"The ATM box implies a KRW funding rate of {s['box']['rate']:.2%} against {s['rate']:.2%} "
          f"({(s['box']['rate'] - s['rate']) / BP:+.0f} bp)." if s["box"] else "No ATM box could be priced from the mids."),
         f"Hedge simulation ({sim.engine}, {sim.n_paths:,} paths, {sim.horizon} sessions): selling the ATM option at σ_h = "
@@ -157,7 +156,8 @@ def payload(s: dict) -> dict:
             "atm_iv": s["atm"].iv, "mfiv": s["mfiv"].get("vol"), "iv_reconcile": s["reconcile"],
             "svi": {"a": fit.a, "b": fit.b, "rho": fit.rho, "m": fit.m, "sigma": fit.sigma, "rmse_volpts": fit.rmse_volpts,
                     "min_g": fit.min_g, "arbitrage_free": fit.arbitrage_free},
-            "static_arbitrage": s["arbitrage"], "box_rate": s["box"]["rate"] if s["box"] else None,
+            "static_arbitrage": static_payload(s['arbitrage'], s['quote_coverage']),
+            "parity_check": s['quote_coverage']['parity'], "box_rate": s["box"]["rate"] if s["box"] else None,
             "rnd": {"integral": s["rnd"]["integral"], "mean": s["rnd"]["mean"]},
             "hedge": {"engine": sim.engine, "sigma_hedge": sim.sigma_hedge, "mean_pnl_bp": sim.mean_pnl_bp, "se_bp": sim.se_bp,
                       "cvar95_bp": sim.cvar95_bp, "breakeven_vol": sim.breakeven_vol, "identity_slope": sim.identity_slope,
