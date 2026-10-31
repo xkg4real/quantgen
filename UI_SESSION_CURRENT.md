@@ -31,14 +31,14 @@ New compliance workflow required a truthful source/document delta review. 01–2
 
 PR42 is complete. C follow-up PR47: https://github.com/xkg4real/quantgen/pull/47
 - Branch: gpt/chart-c-theme-20261031
-- Current source head: 593003ffe6c2587e8b996c2890e34e117f6a8742
-- Integrates main PR46 (13d16ae551cea65b6ac20a02a04e812de7745838), preserving safe Claude diagnostics and source boundaries.
+- Current source head: 59fa8e19f02d371e84c48d422c9ef7c091dd3a76
+- Integrates main through PR49 (4c51ab96e1f61a101fa8a76d024689830bf5d099), preserving PR46 safe Claude diagnostics, PR48 handoff record and PR49 bond/portfolio translations with original records intact.
 - C chart-left/interpretation-right (2:1) layout is implemented in native guide, Quant/Portfolio/Bonds and common ToolPane, and all 28 Flet chart factories. Narrow layouts stack. Existing chart types/data/axis limits/canonical records are preserved.
 - Native Light/Dark persists in QSettings ui/theme. Flet toggles its session theme and repaints cached controls/figures, preserving inputs and results without rerunning analysis.
 - Brand ivory/forest palette; actual quantgeneration.com CSS tokens still require AWS comparison (direct request blocked 403).
 - Local evidence: 230 bounded runtime checks; 16 final Home/theme/guide checks after glyph/refresh fixes; 29 after main diagnostics integration; 47 compliance checks. All 28 Flet factory theme paths exercised. C wheel installed outside checkout and app/native/helper imports passed.
 - Actual Qt 1600×1050 C light/dark captures and local Chromium/Flet 1600×1100 + 390×1000 were inspected. Fixed SVG Korean glyphs (single registered font family), duplicate guide introduction and Home refresh losing selected language. These are local fixture screenshots, not deployed website acceptance.
-- Runtime CI 41183790432 and document CI 41183790415 are running; inspect their final results and PR head before merge. Merge is not yet claimed in this checkpoint.
+- Runtime CI 41184372444 and document CI 41184372446 are running; inspect their final results and PR head before merge. Merge is not yet claimed in this checkpoint.
 - Design: docs/product/CHART_C_DESIGN_2026-10-31.md. Website follow-up: docs/product/ui_website_updates/PR-47.json.
 
 Physical Windows display/input/installer/taskbar, full keyboard/screenreader acceptance, additional professionally reviewed language packs and remaining main-session narrative translations remain separate. Do not repeat completed PR36/37/42 work. Do not mutate CURRENT or research ledger to incorporate this supplement.
@@ -57,4 +57,4 @@ No actual ledgers, protected cache, holdout/frozen study or order paths were exe
 
 Browser fixture note: the first fixture accidentally triggered Home auto-refresh; its blocked provider requests produced no verified live observations. It was stopped and replaced with inert provider/engine hooks plus request blocking. Final visual evidence uses the corrected fixture.
 
-Final responsive diagnosis: earlier Windows runs measured window/viewport/guide/study widths of 1000/764/969/969, with a 966 px intrinsic study minimum. Event-loop settling alone did not fix this. The current C frame ignores intrinsic image/text width hints, removes automatic child layout width constraints and preserves explicitly assigned minimum widths. Regression fixtures cover the exact 966/764 condition and wide→narrow→wide changes. Seventeen focused checks passed after this fix; fresh 1600×1050 native light/dark captures show the 827×672 chart with the C reading column. The Home summary fan also uses C. Current runtime CI is still running; document CI passed. Inspect the final head/runs above before merge.
+Final responsive diagnosis: Windows measured window/viewport/guide/study 1000/764/969/969 with a 966 px intrinsic study minimum. Event-loop settling alone did not fix it. The C frame now ignores intrinsic image/text width hints, removes automatic child width constraints and preserves explicit minima. The enclosing IndicatorGuide also uses a shrinkable/no-constraint layout: fixing the inner study alone left the outer guide at 969 px. Regression fixtures inject the measured 966 px hint inside and outside the C frame and require guide/text to fit the viewport; assertions were not skipped or weakened. Seventeen final viewport/guide/painting tests passed, then 13 tests passed after main PR49 integration. Previous failing runs are superseded; current CI is the head/runs above. Home's original summary fan also uses C. Updated native screenshots and prior real Chromium light/dark/mobile fixture evidence are retained in this workspace.
