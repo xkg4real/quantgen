@@ -31,14 +31,14 @@ New compliance workflow required a truthful source/document delta review. 01–2
 
 PR42 is complete. C follow-up PR47: https://github.com/xkg4real/quantgen/pull/47
 - Branch: gpt/chart-c-theme-20261031
-- Current source head: 442d465ed1b09277a53b5a9e4722ea34aa82a946
+- Current source head: 593a1415c91675e1334c9e0796ab3aa1fe0678c9
 - Integrates main PR46 (13d16ae551cea65b6ac20a02a04e812de7745838), preserving safe Claude diagnostics and source boundaries.
 - C chart-left/interpretation-right (2:1) layout is implemented in native guide, Quant/Portfolio/Bonds and common ToolPane, and all 28 Flet chart factories. Narrow layouts stack. Existing chart types/data/axis limits/canonical records are preserved.
 - Native Light/Dark persists in QSettings ui/theme. Flet toggles its session theme and repaints cached controls/figures, preserving inputs and results without rerunning analysis.
 - Brand ivory/forest palette; actual quantgeneration.com CSS tokens still require AWS comparison (direct request blocked 403).
 - Local evidence: 230 bounded runtime checks; 16 final Home/theme/guide checks after glyph/refresh fixes; 29 after main diagnostics integration; 47 compliance checks. All 28 Flet factory theme paths exercised. C wheel installed outside checkout and app/native/helper imports passed.
 - Actual Qt 1600×1050 C light/dark captures and local Chromium/Flet 1600×1100 + 390×1000 were inspected. Fixed SVG Korean glyphs (single registered font family), duplicate guide introduction and Home refresh losing selected language. These are local fixture screenshots, not deployed website acceptance.
-- Runtime CI 41182767827 and document CI 41182767853 are running; inspect their final results and PR head before merge. Merge is not yet claimed in this checkpoint.
+- Runtime CI 41183246127 and document CI 41183246113 are running; inspect their final results and PR head before merge. Merge is not yet claimed in this checkpoint.
 - Design: docs/product/CHART_C_DESIGN_2026-10-31.md. Website follow-up: docs/product/ui_website_updates/PR-47.json.
 
 Physical Windows display/input/installer/taskbar, full keyboard/screenreader acceptance, additional professionally reviewed language packs and remaining main-session narrative translations remain separate. Do not repeat completed PR36/37/42 work. Do not mutate CURRENT or research ledger to incorporate this supplement.
@@ -58,3 +58,5 @@ No actual ledgers, protected cache, holdout/frozen study or order paths were exe
 Browser fixture note: the first fixture accidentally triggered Home auto-refresh; its blocked provider requests produced no verified live observations. It was stopped and replaced with inert provider/engine hooks plus request blocking. Final visual evidence uses the corrected fixture.
 
 Final C responsive fix: initial Windows CI found the horizontal minimum-width sum could keep the guide above its stack breakpoint. Reproduced with a scroll viewport (698 px viewport, 918 px stuck study); changed the study minimum to one column and removed the layout's automatic width constraint. It now uses 680 px and stacks, returning to two columns at 1200 px. Sixteen focused native/guide/painting checks passed afterward. Final CI uses the head and run IDs above; this is not a bypass or weakened assertion.
+
+Latest continuation: Home's original summary fan also uses C. After the minimum-width fix, Ubuntu CI passed but the Windows full-window resize assertion still fired before nested resize events settled; current acceptance runs the Qt event loop for 150 ms and keeps the same narrow-layout assertion with geometry diagnostics. Thirty-eight native/C/guide/painting tests passed locally. Final head and fresh CI IDs above supersede earlier failed CI; do not merge based on an earlier run.
