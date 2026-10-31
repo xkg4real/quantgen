@@ -4,15 +4,15 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ②-5/M4-N8, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T15:51:30+09:00
+done_ids: ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ⑬-8/b2, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-31T15:53:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/fx-language-20261031
 work_commit: ed51d9d8d23b068c2ced3a77ed88bd74b72d32e0
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/41
+pr: none (last merged PR41; code PR40)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -25,7 +25,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 최신 검증 결과
-2026-10-31 이번 재개에서 네 단위 완료·main 병합: PR31 M4-N1(기초지수),PR32 M4-N12(호가검사수),PR33 ②-1/b(statsmodels),PR35 M3-N04(스왑션보조환산). 각각 Windows3.12/3.14·Ubuntu3.12 CI success와 PR/main/source read-back. 최종 main94659fdd528efb34598a72b7017eda74f7d221ff, 현재 source4e84e992f68cf02208c2e4fff121de883dd5c99c. 최신14/67그룹 완료53미완료,14관찰행15모호매핑. sapientia4065 완료하위범위 동기화. M4-N8은 합성4사례 재현만 했으며 구현미완료. 이번은 안전 체크포인트이며 주기/전체과업 반환·완료가 아닙니다.
+2026-10-31 추가 완료: PR38 M4-N8 SABR 진단(source743521d → main579aadb; CI41175905734), PR39 13-8/a Windows 언어 선택·저장·기본UI(source6a82337 → mainf24463f; CI41177249869), PR40 13-8/b1 FX 선물환·옵션·SABR 한국어 해설(sourceae768dc → mainbea069f; CI41177922111). 세 CI 모두 Windows3.12/3.14·Ubuntu3.12 success. PR41은 PR40 웹사이트검토 JSON 한 파일만 추가(sourceed51d9d → main712e5e9), JSON/원격참조 검증; runtime CI대상아님. 이전PR31/32/33/35 완료도 보존. 최신15/67그룹 완료52미완료·14관찰행15모호매핑. Notion sapientia4065 검증된 하위범위만 취소선. 부모13-8·다른 해설·실제Windows 검수와 전체과업은 미완료. 이 실행의 안전 체크포인트이며 주기 returned/Claude수신확인이 아닙니다.
 
 ## 1. 최신 사용자 결정
 - 직접 요청 작업은 일반 감시의 returned/cooldown/next_eligible_at으로 막지 않습니다. Claude 사용 불가 동안 계속하고 화요일17시 전 또는 런타임 한도 전에 주간 전체 인수인계를 남깁니다. 계정 토큰 잔량은 도구가 없어unknown입니다.
@@ -37,7 +37,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 
 ## 2. 읽을 근거
 - 제품: docs/product/SECTION10_QUEUE_2026-10-30.json, SECTION10_TRIAGE_2026-10-30.md, STRATEGY_EXPOSURE_2026-10-30.md, AR1_DECAY_2026-10-30.md.
-- 다음 항목 원문: 연구ref2da6469d8b3d45eab61d682555ff630ce1f564f7의 docs/nautilus_bridge/MODEL_LIMITS_REGISTER_2026-10-28.md Model136/148 및 KNOWN_ERRORS_REGISTER_2026-10-28.md §10. 역사적 감사 수치는 새 실행 증거와 구분합니다.
+- 기존 감사 원문: 연구ref2da6469d8b3d45eab61d682555ff630ce1f564f7의 docs/nautilus_bridge/MODEL_LIMITS_REGISTER_2026-10-28.md Model136/148 및 KNOWN_ERRORS_REGISTER_2026-10-28.md §10. 역사적 감사 수치는 새 실행 증거와 구분합니다.
 - UI/계약/배포: docs/DESKTOP_MIGRATION_2026-10-30.md; docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md, PACKAGING_2026-10-29.md, DATA_ACQUISITION_2026-10-29.md, DISTRIBUTION_REVIEW_2026-10-29.md, TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md.
 - O8/O11: 연구 gpt/approved-research-followups-20261030 @36df786cb7b1395cd08bc5db2d1ad9b6244e66f3, draft PR21은 claude/amazing-gauss-tdiguu 대상이며 미병합. 제품main에 통째로 합치지 않습니다.
 
@@ -57,13 +57,14 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 외부 main51bac973 상업출시 방향 README변경은 보존됐으며 법률 검증 증거로 대신 쓰지 않습니다.
 
 ## 5. 현재 저장 상태
-제품 gpt/swaption-aux-conversion-20261031 @4e84e992f68cf02208c2e4fff121de883dd5c99c 원격검증, PR35 main94659fd 병합. PR33 requirements 변경도 main e1ce746으로 선행 병합돼 보존됨. 작업트리 clean, 미완료코드패치없음. 연구로컬 HEAD2da6469에 published36df786 workingfiles보존,reset금지. 실제pilot/owner_confirmed/원장 실행 없음.
+제품 gpt/fx-language-20261031 @ed51d9d8d23b068c2ced3a77ed88bd74b72d32e0 원격검증. PR40 코드ae768dc/mainbea069f, PR41문서main712e5e9770e33144e11157380f99f830d8da8fe5. 작업트리 clean; 미완료 코드패치 없음. 표시 언어와 source/숫자/식별자/보고서·판정 분리. 검증 및 다음 항목의 비공개 evidence와 주간Word/TXT 체크포인트를 영속 저장합니다. 연구로컬HEAD2da6469/published36df786 workingfiles 그대로,reset금지. 실제pilot/owner_confirmed/원장 실행 없음.
 
 ## 6. 다음 단위와 남은 일
-1. ②-5/M4-N8: 연구ref2da6469 Model81 및 core/ficc/fx.py calibrate_sabr, core/ficc/insights.py narrate_fx_option, Flet ui/fx_page.py, native core/research/fx_analysis.py와quantgen_desktop/fx.py. solver success를 적합품질/차익없음 통과로 읽는 표시를 분리하세요. 합성1주 RR=-3% BF=2%는 converged=True,nu=5경계,RMSE0.766508vp. 그 외 rho=.999경계사례 재현. 기존 Hagan/가격/solver계산·연구판정 유지; 독립잔차검증·양UI/AI/export·명시적 적용범위부터. 아직코드미수정이고공식품질임계값을임의로정하지않습니다.
-2. M4-N3 금리/배당 규약 및 NEW-M6-02/b 실제시장 조건부phase가정/역사카드 검증은 미완료. 탐색p를기존gate로연결하거나동결카드를재채점하지마세요.
-3. §10나머지53그룹/14관찰/15모호매핑, 전체ResearchRun모델/이력/canonicalidentity, 실제Windows/DPI/provider검수·서명installer, O11실제등록/Step7A/파일럿/owner_confirmed, 데이터권리/전문법률/AWS외부입력 미완료.
-4. 화요일2026-11-03 16:00부터 주간전체인계준비,17시전returned+read-back. 직접작업hourly유지. 과거returned/cooldown만으로직접작업차단금지. 새예약/run_now/사용자PC/TRADEGEN/환경설정변경금지.
+1. ⑬-8/b2 최우선: FX carry, Rates/Bonds/Portfolio 및 다른 authored 해설/진단 문구를 한·영 선택과 연결. docs/product/NATIVE_LANGUAGE_2026-10-31.md, FX_LANGUAGE_2026-10-31.md 및 quantgen_desktop/localization.py/translations.py/fx_narrative.py/tools.py를 읽고 source/표시 분리 패턴 재사용. 긴 원문/공급자·저장 기록·외부AI/사용자 입력은 무조건 번역하지 않음. 숫자·정밀도·부호·분기·NOT_RUN·보고서 원문 보존을 검사. 실제 Windows/DPI 수동 인수는 별도 NOT_RUN. 후보목록 NATIVE_LANGUAGE_REMAINING.json은 비공개에 있고 모두UI문구인 것은 아님.
+2. M4-N3 금리/배당 규약(연구Model94/95) 및 NEW-M6-02/b 실제시장 조건부phase가정/역사카드 검증 미완료. core letf_drag 기존TR형태는 보존되어 있고 호출부 r=0·fee고정 및 가격지수/배당범위는 명시적 가정 설계가 필요. 탐색p를기존gate로연결하거나동결카드를재채점하지않음.
+3. §10나머지52그룹/14관찰/15모호매핑, 전체ResearchRun모델/이력/canonicalidentity, 실제Windows/DPI/provider검수·서명installer, O11실제등록/Step7A/파일럿/owner_confirmed, 데이터권리/전문법률/AWS외부입력 미완료.
+4. UI website records PR38/39/40은 repo에 저장. 전달도구 부재로 queued, receipt없음. 실제 웹적용/배포 NOT_VERIFIED이며 완료로 보고하지않음.
+5. 화요일2026-11-03 16:00부터 주간전체인계준비,17시전returned+read-back. 직접작업hourly유지. 과거returned/cooldown만으로직접작업차단금지. 새예약/run_now/사용자PC/TRADEGEN/환경설정변경금지.
 
 ## 7. 보호 범위
 .env/보호캐시4개/실제원장/동결연구/사전등록/holdout을 읽거나해시/변경하지 않습니다. 실주문/TRADEGEN/공식gate·판정/owner승인규칙/공유환경·보안·네트워크설정 변경 금지. AUTO_STATE수동수정 금지. 비공개원문·키·계좌를 public repo에 올리지 않습니다. 테스트는합성/주입/임시저장소만 사용합니다.
@@ -151,3 +152,6 @@ Native FX forward/option/SABR Korean prose implemented sourceae768dc607a961bf71a
 
 ## 13-8/b1 completed; website-review record only
 PR40 sourceae768dc → mergebea069f; CI41177922111 all3 jobs success, PR merge read-back. LEDGER85367e7/read-back and sapientia Notion b1 completion synced; parent remains incomplete. Documentation-only sourceed51d9d8d23b068c2ced3a77ed88bd74b72d32e0 pushed/read-back, PR41 adds PR40 website-review JSON with verified source/merge/CI. JSON verified and runtime code unchanged; delivery queued/no receipt. Next priority13-8/b2 carry/other authored narratives, then M4-N3. Actual Windows/manual/provider/pilot requirements remain separate.
+
+## 다음 예약 재개 조건 — cb2e35fa-92a3-456c-b504-843a0d13c0ef
+저장 실행 cb2e35fa-92a3-456c-b504-843a0d13c0ef / owner-product-workflow-20261029 / 고정handoff ID / gpt/fx-language-20261031 / sourceed51d9d8d23b068c2ced3a77ed88bd74b72d32e0 를 STATE와 이 문서에서 대조. 이번 실행의 OS잠금 해제 기록을 확인하고 새 execution ID로 최신blob CAS/read-back 후 다음 새gpt브랜치 생성. from=gpt만으로 소유권 판단금지. 승인된 미완료 직접작업은 계속 hourly 대상이며, 계정 토큰 잔량은 unknown. 기존 completed IDs·commits·localPAUSED·cycle/returned이력을 보존.
