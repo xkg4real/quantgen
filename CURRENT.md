@@ -4,13 +4,13 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ②-5/M4-N12, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T05:40:53.765Z
+done_ids: ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ②-1/b, ②-5/M3-N04, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-31T05:45:04.595Z
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/option-quote-coverage-20261031
-work_commit: e5a09e5beea84f48cf037f1b2d715f4904f3f341
+work_branch: gpt/requirements-statsmodels-20261031
+work_commit: 118041443385cdd05fae0929172cf8eccd4b86a3
 uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/32
 usage_weekly_pct: unknown
@@ -25,7 +25,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 최신 결과
-PR31 M4-N1 (=NEW-M6-06) source55dae2fd7e6deeefa4a0a41f67f6b19d2d35e146 → main d4670f3bb738147a48a5dafe34dad7628e3fe3e4. 22검사PASS,3기존펀드27결과필드동일. CI41172791664 Windows3.12/3.14·Ubuntu3.12 success와PR/main/source read-back 완료. 공식 KOSDAQ150 master exact-name 해석·실패시 NOT_RUN·양UI/AI/export 구현. 공식master 실조회 CONNECT403;live공급자 검수완료를 주장하지 않음. 최신12/67그룹 완료55미완료,14관찰행15모호매핑 유지. 다음 M4-N12: 검사대상0인데초록0/nan%인 옵션호가 표시를 합성재현했으며 아직코드미수정. 전체주기반환아님.
+PR31 M4-N1 main d4670f3 및 PR32 M4-N12 main118041443385cdd05fae0929172cf8eccd4b86a3 병합·PR/main/source read-back 완료. PR32 sourcee5a09e5,19검사/3579기존값동일, CI41173538906 Windows3.12/3.14·Ubuntu3.12 success. 최신13/67그룹 완료54미완료,14관찰행15모호매핑. Notion sapientia4065 완료범위동기화. 현재 다음 단위②-1/b requirements의statsmodels 누락을 pyproject와일치시킴. 그 다음 M3-N04 보조환산실패로스왑션전체실패를합성3사례재현(아직미수정). 전체주기반환아님.
 
 ## 1. 최신 사용자 결정
 - 직접 요청 작업은 일반 감시의 returned/cooldown/next_eligible_at으로 막지 않습니다. Claude 사용 불가 동안 계속하고 화요일17시 전 또는 런타임 한도 전에 주간 전체 인수인계를 남깁니다. 계정 토큰 잔량은 도구가 없어unknown입니다.
@@ -100,3 +100,6 @@ PR31 완료 뒤 최신main d4670f3에서 gpt/option-quote-coverage-20261031 생�
 
 ## PR32 저장
 M4-N12 source e5a09e5beea84f48cf037f1b2d715f4904f3f341 원격read-back, PR32 생성. 합성/주입/offscreen19검사 PASS, 기존3579값/배열 exact동일. NOT_RUN/PARTIAL·검사수·null을 Flet/Qt/AI/export에 표시; engine/공식판정 미변경. CI41173538906 진행 중으로 아직 병합/완료처리하지 않음. 다음 독립설치 항목 ②-1/b: main requirements에 statsmodels 누락(pyproject>=0.14.2); 읽기 확인만, 아직 코드 미수정.
+
+## ②-1/b 시작
+최신main1180414에서 새 gpt/requirements-statsmodels-20261031. requirements와pyproject를정규화비교했으며 유일한차이는statsmodels누락. 기존>=0.14.2만추가하고동결의존성/연구환경은변경하지않습니다. PR32 완료기록은LEDGER 1f6f739에보존.
