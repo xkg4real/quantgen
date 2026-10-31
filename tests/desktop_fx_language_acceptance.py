@@ -88,7 +88,7 @@ class FXLanguageTests(unittest.TestCase):
 
     def test_unsupported_narrative_is_explicitly_not_translated(self):
         from types import SimpleNamespace
-        out = SimpleNamespace(request=SimpleNamespace(tool='carry'), data={})
+        out = SimpleNamespace(request=SimpleNamespace(tool='unknown'), data={})
         self.assertIsNone(fx_korean(out))
 
 

@@ -7,6 +7,23 @@ import re
 from string import Formatter
 
 _PAIRS = r'''
+Best score|최고 점수
+Highest carry|최고 캐리
+Basket return|바스켓 수익률
+Equal-weight long return|동일 비중 매수 수익률
+Carry ranking|캐리 순위
+CCY|통화
+USD rate|USD 금리
+Carry|캐리
+3m vol|3개월 변동성
+Carry/vol|캐리/변동성
+3m momentum|3개월 모멘텀
+Rate date|금리 관측일
+Stale|오래된 관측 여부
+Carry equity|캐리바스켓 누적 가치
+Basket|바스켓
+Equal-weight long|동일 비중 매수
+Equity · starts at 1|누적 가치 · 시작값 1
 Language|언어
 Research Home|연구 홈
 Markets|시장
