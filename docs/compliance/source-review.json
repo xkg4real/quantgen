@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "35f3b60571f546d4e43ee789e30eccaa07a94ee02dad3236292e9f2e48249717",
+    ".github/workflows/runtime-smoke.yml": "c9ea40758e6594719b402f1d7d73ccbc3b319bc96b2e06e50d26ae353f4f60df",
     "README.md": "3d5109bbf91644ca6dcddd4ff609d72f1819c0e54d0a8eac2b75ddd4e244e54e",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -226,12 +226,13 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "5a0f3b3195001230b75c2548f3b0c6101ac7914ab820dd130f873cfbb885dbb5",
+    "docs/compliance/FACTS.md": "48ed71132b78a8174db8fc38f7e30ecfd59e99eefdcb873a2b77a5254d5935e5",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "fe76f5dc8fb85e691d1c33140a1b01481d8ba851c43398ac99b00effbf981fe8",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
+    "docs/product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md": "469c32828b75b54797bf1ac81a8645688452bce5f0cf7c69132e7236f96f8e59",
     "docs/product/BS21_FUNDING_2026-10-30.md": "a8060c8d57b2532eed9b06c429a97568c77a3ba3c9e0370f273e1d3ac9bc8c4d",
     "docs/product/CARRY_LANGUAGE_2026-10-31.md": "7cf0c8152b053bfaeaf44dd72e7244acb076426ae5618fd20291eb2b2b26a691",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
@@ -269,7 +270,8 @@
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
     "quantgen_desktop/app.py": "d8fe2c93d8306f3b4457b92d817b31ce984410ec02319ba886a9c360b7cc5c3c",
-    "quantgen_desktop/bonds.py": "db2bf591f326319b1c566715532c72ffd5ddc6dc1b4a39c3778091074b66ef7b",
+    "quantgen_desktop/bonds.py": "d285a83524ed784669bc25d448f97ccffc720872717e367468639d2684b2e301",
+    "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
     "quantgen_desktop/charts.py": "abc3382ca861b9e7ed0c876ee0bf7cc47ece79c6a1964f5f026702ebbb7adbb7",
     "quantgen_desktop/commentary.py": "4b5d02a17b5621db28c24a3f54a37106837239d7fe55aa7f376e677f80d0845f",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
@@ -283,7 +285,7 @@
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
     "quantgen_desktop/market_tools.py": "cee656dd028cdc8d82e6daa409ad673cf4efe542474dd5fbc39dbd2ff7d0a420",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
-    "quantgen_desktop/portfolio.py": "2b4f3ccb0e6151c3d095e65c6bfdb50d17c1529d3c010bbd2eca21a6e1551f70",
+    "quantgen_desktop/portfolio.py": "5f8cb559332e9d402ca1a856b72d77bbd124765efd6fb8796679c6e884b3ed8e",
     "quantgen_desktop/rates.py": "f98d6db2d305ee12264c7a758af8a9951b2b9bb6a27686c4a0a29cc215038ddf",
     "quantgen_desktop/rates_narrative.py": "ba72992fba5226961c7d6f7cd6c58009677f629fa4cf617a712b6d564d024f0e",
     "quantgen_desktop/report_actions.py": "fbf48c2350434f8c4e953fd1efd99ed666f60e74e6da5154bb529a43ec50115d",
@@ -307,6 +309,7 @@
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_acceptance.py": "a6f7da6c1c95e52940f32af4c0a82d1653faa9e827cef380cdd760203dd7a9a9",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
+    "tests/desktop_bonds_portfolio_language_acceptance.py": "8429bf7fcb8b9ab8c0ed306052135f2afc0501247c51a1c5fabb68ad8e9c319b",
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "3f3c0ee0e38d946647a7ae2448af8d0496c2dea779a81be4cfd8734b84a61834",
     "tests/desktop_commentary_acceptance.py": "23fd186a1562c440d1cf79ee8a9e1169ebeb499da93caec54141415410db7821",
@@ -463,163 +466,163 @@
   "reviews": {
     "1": {
       "document_sha256": "8aed99540deeffba0a658e8b0266422e902a2905c36a0259fa6fc62bdee196b9",
-      "source_digest": "63343e8d12f102eb5cc949b567ed47df871c5bf9d43b8fa3c604673cbcf57aa4",
+      "source_digest": "faec66d06dcba9667bc344c0c96c5c78ccfd9e0ba49fc0b11f9ce4c8096297b4",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.269135+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.809244+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "2": {
       "document_sha256": "8a8915a728f0bd28f95fa46082cde5efd96739cb14bf69e69ad9205841c6cbe0",
-      "source_digest": "63343e8d12f102eb5cc949b567ed47df871c5bf9d43b8fa3c604673cbcf57aa4",
+      "source_digest": "faec66d06dcba9667bc344c0c96c5c78ccfd9e0ba49fc0b11f9ce4c8096297b4",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.271352+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.811407+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "c8d9cd8a5928f5446a6cf011eae3dea7ab18897f59b854b6035b78b1f3bd7833",
+      "source_digest": "e24af3feee1be4459a2754a10a6f76fad0acafecdaa3e44324c0769a13760f0b",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.274308+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.813427+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "4": {
       "document_sha256": "b82f011f11c76d073ec1fd6b69ace6209a04eec33f80b8202960e30354533fb1",
-      "source_digest": "202683bd52b9a26332c747a56dc97a714bfef7910133d009664b6fc8cdcdbf23",
+      "source_digest": "f1f0275368e174131de761638e419cfbeae504e6207b6dfe4f82931fd4dc03c2",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.276197+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.815538+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "c4680414677a10057c53217c8159a7df5272d0b2f816c8405b2d77ce2dd95d34",
+      "source_digest": "a067eeae540eb4a22b46528729d43e4acb913a94493e57f27d0f67b4325d2178",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.278314+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.817437+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "6": {
       "document_sha256": "fae1be1112448c78bde79274a691143bdadcb4623853f26798735cf71b20973a",
-      "source_digest": "e430217cc5819f5b7a68c3a79bf9576c9abbceb1b427e2f05858e28cae9e5ccf",
+      "source_digest": "6dc82038813d209bd3aa78eec3f2bba168f7a79d694a3792ded2c5c3f936a0f7",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.281818+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.819513+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "7": {
       "document_sha256": "bf40480dab21b4ee70d5f43fccd0901c41320f5d55994358fafe634432f882de",
-      "source_digest": "63343e8d12f102eb5cc949b567ed47df871c5bf9d43b8fa3c604673cbcf57aa4",
+      "source_digest": "faec66d06dcba9667bc344c0c96c5c78ccfd9e0ba49fc0b11f9ce4c8096297b4",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.283796+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.821857+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "8": {
       "document_sha256": "06dbba68f23aa6e2aec1125b031a7486b863296ec51a15481a893ea62253f232",
-      "source_digest": "e430217cc5819f5b7a68c3a79bf9576c9abbceb1b427e2f05858e28cae9e5ccf",
+      "source_digest": "6dc82038813d209bd3aa78eec3f2bba168f7a79d694a3792ded2c5c3f936a0f7",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.285838+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.824052+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "9": {
       "document_sha256": "81e96f0f623036ca1b290ddf8508a9ff8e6cc8b0fca380a939abc529a4dfb747",
-      "source_digest": "e175898f05cf5825d0b941a51c7f86dff13e65ce84610c9489cbaf5a2b692404",
+      "source_digest": "b7b0e1e48480d7498a8db416d3bcbbb73f567aff8e66efe9fdc333e98f5724c2",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.288726+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.826339+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "10": {
       "document_sha256": "9b4f832a3c5363e29f704dbf3f3f89bf13aef9be27298cd14b8d3fe4533685cb",
-      "source_digest": "1e24e802321eac14d7dda0393ec651dd8d1aa5a4f5ae8ad6940231e44ce61daa",
+      "source_digest": "e3db51c8009edc6fb8431f2c71927f3ed6f54d34a9999e4166c963f45c7c04b3",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.290844+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.828343+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "8980bb352c34416f770f6eab442ae5041cf22f3cd50fb961212b41f0acf9547d",
+      "source_digest": "3b37dc1e81fd61c981d61c29372d7bea785c1d161fc0097427d681cf1235a3e8",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.292902+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.830289+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "12": {
       "document_sha256": "b0e7ca79d070052cdb8d1a41f9b28b0e34f21849c0ea0a57280b03975e86e0be",
-      "source_digest": "45f5189934079bc3e3b8bbb8cb1468c194af83c25fa5a2b6c6b742a8ba5b0247",
+      "source_digest": "7a5536b6293cdc34bb900a68294c3daa670227f9f6cf5774d04052c7907af8a6",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.295732+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.834415+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "13": {
       "document_sha256": "3d2fed72d37ef03ca3feefc720abd0d649ef75d5a0c2ce8b25450ab4b4b0ec9b",
-      "source_digest": "e175898f05cf5825d0b941a51c7f86dff13e65ce84610c9489cbaf5a2b692404",
+      "source_digest": "b7b0e1e48480d7498a8db416d3bcbbb73f567aff8e66efe9fdc333e98f5724c2",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.298674+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.837827+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "14": {
       "document_sha256": "92986ae8223ae0a06175b298632063f4c149c2ebf2442b72ebf089435b67d4ab",
-      "source_digest": "e175898f05cf5825d0b941a51c7f86dff13e65ce84610c9489cbaf5a2b692404",
+      "source_digest": "b7b0e1e48480d7498a8db416d3bcbbb73f567aff8e66efe9fdc333e98f5724c2",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.300564+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.839910+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "15": {
       "document_sha256": "082f561cfae23b92009828b4923338f1bb7f2b25cdf4fbe2735690bb3f41d1bf",
-      "source_digest": "e175898f05cf5825d0b941a51c7f86dff13e65ce84610c9489cbaf5a2b692404",
+      "source_digest": "b7b0e1e48480d7498a8db416d3bcbbb73f567aff8e66efe9fdc333e98f5724c2",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.303329+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.842310+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "fbaf9a0b7de17db91156353dc79c40398d23f550881291cab85d604afd46ebb7",
+      "source_digest": "f2aa012951f5d586b78a725c96d93b5f9a508838be37577fa5dca24b296611d8",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.305270+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.844520+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "e430217cc5819f5b7a68c3a79bf9576c9abbceb1b427e2f05858e28cae9e5ccf",
+      "source_digest": "6dc82038813d209bd3aa78eec3f2bba168f7a79d694a3792ded2c5c3f936a0f7",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.307242+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.846521+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "63343e8d12f102eb5cc949b567ed47df871c5bf9d43b8fa3c604673cbcf57aa4",
+      "source_digest": "faec66d06dcba9667bc344c0c96c5c78ccfd9e0ba49fc0b11f9ce4c8096297b4",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.309364+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.848647+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "19": {
       "document_sha256": "04e1e27363b5fc80895558adcfd9dd633b5154d68ba908d06fd4997a12f3a086",
-      "source_digest": "1b4817813fa832fe04eca9bc003e11f0122edfb75cebc69042caef7d46a8cf31",
+      "source_digest": "e2a99382da09592fd43670a327971bc05b145d9861fc9bd899c8f610f520c0ab",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.311280+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.851541+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     },
     "20": {
       "document_sha256": "105ad061af92fc03db0f78c435699994f63ccf77805c47eb27ccdc8c0523aad1",
-      "source_digest": "63343e8d12f102eb5cc949b567ed47df871c5bf9d43b8fa3c604673cbcf57aa4",
+      "source_digest": "faec66d06dcba9667bc344c0c96c5c78ccfd9e0ba49fc0b11f9ce4c8096297b4",
       "reviewed_by": "Codex source/document consistency review",
-      "review_note": "Reviewed all 20 document scopes against bounded Claude error classification, no raw error display, EN/KO diagnostics, preserved payload and consent boundaries, and Nautilus/provider explanation. No new data recipients, permissions, pricing, storage, release approval or live acceptance; see FACTS Claude connection section. Preserve existing PR42 review and review-required publication status.",
-      "reviewed_at": "2026-10-31T07:45:27.314075+00:00",
-      "source_commit": "d79ad7025bd4379c92be35aeeab3cc697e361381"
+      "review_note": "Compared all twenty current policy scopes against local Bonds/Portfolio authored display variants. Preserved report evidence, numbers, raw provider notes, existing transmission paths, persistent settings, billing terms, rights and approvals. Physical Windows accessibility and Flet parity still require separate testing. Policy drafts and publication blockers retained.",
+      "reviewed_at": "2026-10-31T08:11:12.854108+00:00",
+      "source_commit": "91f6a588389282332a05b26f017eb2c84f86af47"
     }
   }
 }

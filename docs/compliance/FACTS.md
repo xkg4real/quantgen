@@ -91,3 +91,16 @@ PR42와 통합된 메인 변경(PR39/40/43/44, SABR 진단)의 공개 소스 차
 추가 SDK인 Babel의 BSD-3-Clause·Unicode-3.0 고지는 실제 설치한 2.18.0 배포본에서 확인했으며 [권리대장](19-licenses.md)에 조건을 남겼다. 전체 전이 의존성·시장자료 상업 표시·소개사이트 적용을 승인한 것으로 확대하지 않는다. 공개 소스 검사에서 새 회원가입·서비스 청구·광고메일·연령확인·전체 삭제 서비스가 추가되지 않았음을 확인한 범위만 기록한다.
 
 앱 아이콘 후속: Flet Windows 창의 런타임 icon, Qt 애플리케이션 기본 아이콘 및 Windows 앱 식별자를 기존 QUANTGEN 자산으로 지정했다. 새 이미지·브랜드 권리를 만들거나 기존 사용권 상태를 변경하지 않는다. 외부 전송·지속 사용자 데이터·계약 변화는 없으며 실제 Windows 작업표시줄/고정 바로가기의 수동 검증은 남아 있다.
+
+### Native Bonds/Portfolio language follow-up
+
+[Bonds/Portfolio result text](../product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md)
+now has explicit English/Korean display variants, including funding-proxy,
+non-positive Sharpe, convergence and differing-cap warnings. Existing computed
+numbers, canonical report sections, symbols and unknown provider text stay
+intact. This source delta adds no data collection, external translation request,
+SDK, persistent setting, billing, marketing or deletion behavior. It changes no
+operator facts, price terms, research approvals or data rights. The twenty
+policy scopes were compared with this bounded display change; their
+`review-required` status and actual Windows/accessibility/website limitations
+remain. Source/document consistency is not publication approval.

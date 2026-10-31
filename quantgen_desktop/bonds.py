@@ -3,6 +3,7 @@ from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QWidget,QVBoxLayout,QGridLayout,QLineEdit,QComboBox,QPushButton
 from core.research.bond_analysis import BondRequest
 from .charts import LineChart
+from .bonds_portfolio_narrative import bond_notes, hedge_text, display_variants
 
 
 class BondsPane(QWidget):
@@ -82,6 +83,8 @@ class BondsPane(QWidget):
             ('합성 곡선 · 현재 시장 데이터 아님' if o.panel.source=='SYNTHETIC' else o.panel.source),
             f'{o.curve.source} · {o.curve.date} · {o.curve.method} · {len(o.panel)} sessions',
             o.panel.note,o.curve.note,a.note,o.narrative] if n))
+        display_variants(self.notes, bond_notes(o,'en'), bond_notes(o,'ko'))
+        display_variants(self.hedge, hedge_text(o.hedge,'en'), hedge_text(o.hedge,'ko'))
         self.status.setText('계산 완료 · 곡선 및 채권 가정을 확인하세요.')
         self.exports.set_result('bonds', o.request, [
             {'type': 'provenance', 'source': o.panel.source, 'date': o.curve.date,
