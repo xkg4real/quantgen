@@ -1,4 +1,4 @@
-"""QUANTGEN A palette. Existing semantic tokens and dark/system modes remain."""
+"""QUANTGEN brand palette for the common C chart design. Existing semantic tokens and dark/system modes remain."""
 from __future__ import annotations
 from dataclasses import dataclass
 
@@ -23,7 +23,7 @@ class Palette:
     on_accent: str
     warning: str = "#d9a441"      # last, with a default: positional constructors keep working (02_ui_design 3)
 
-DARK = Palette("#101417", "#171d21", "#1d252a", "#324047", "#e7ecef", "#9eabb2", "#4f98a3", "#233b40", "#6daa45", "#d1637f", "#071012", "#d9a441")
+DARK = Palette("#101915", "#17231D", "#1E2D25", "#34483C", "#EAF1E9", "#A7B8AC", "#91C5AC", "#284437", "#9AC47D", "#E79A83", "#0C2118", "#E5BE74")
 LIGHT = Palette("#F7F5F0", "#FFFEFB", "#F1F2EB", "#E2E3DB", "#202823", "#646E68", "#194C40", "#E5EEE8", "#16745F", "#AA543C", "#FFFFFF", "#8a5a00")
 _state = {"mode": DEFAULT_MODE, "palette": DARK}
 

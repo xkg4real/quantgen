@@ -40,6 +40,9 @@ class LocalizedRoot(ft.Row):
         self.host_page=page
 
     def before_update(self):
+        from core.theme import set_mode
+        from .theme_controller import apply_palette
+        apply_palette(self,set_mode(getattr(self.host_page,'qg_theme','light')))
         translate_controls(self,getattr(self.host_page,'qg_locale',LocaleContext()))
 
 

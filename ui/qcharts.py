@@ -47,19 +47,17 @@ def _style(ax, pal, *, grid: bool = True) -> None:
 
 def _fig(w: float, h: float, pal):
     fig, ax = plt.subplots(figsize=(w, h), dpi=DPI)
+    fig._qg_palette = pal
     fig.patch.set_facecolor(pal.surface)
     _style(ax, pal)
     return fig, ax
 
 
-def _to_image(fig, *, expand: bool = True) -> ft.Image:
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png", bbox_inches="tight",
-                facecolor=fig.get_facecolor())
+def _to_image(fig, *, expand: bool = True) -> ft.Control:
+    from ui.chart_study import FigureStudy
+    result = FigureStudy(fig, expand=expand)
     plt.close(fig)
-    b64 = base64.b64encode(buf.getvalue()).decode("ascii")
-    return ft.Image(src=f"data:image/png;base64,{b64}",
-                    fit=ft.BoxFit.CONTAIN, expand=expand)
+    return result
 
 
 def _thin_dates(dates, n_ticks: int = 6):
@@ -70,7 +68,7 @@ def _thin_dates(dates, n_ticks: int = 6):
 
 
 # --------------------------------------------------------------------------- #
-def price_chart(history: History, *, sma_windows: tuple[int, ...] = (50, 200)) -> ft.Image:
+def price_chart(history: History, *, sma_windows: tuple[int, ...] = (50, 200)) -> ft.Control:
     pal = active()
     px = history.prices()
     fig, ax = _fig(7.5, 2.9, pal)
@@ -91,7 +89,7 @@ def price_chart(history: History, *, sma_windows: tuple[int, ...] = (50, 200)) -
     return _to_image(fig)
 
 
-def fan_chart(history: History, mc: MCResult, *, tail_sessions: int = 90) -> ft.Image:
+def fan_chart(history: History, mc: MCResult, *, tail_sessions: int = 90) -> ft.Control:
     pal = active()
     px = history.prices()[-tail_sessions:]
     fig, ax = _fig(7.5, 3.2, pal)
@@ -119,7 +117,7 @@ def fan_chart(history: History, mc: MCResult, *, tail_sessions: int = 90) -> ft.
     return _to_image(fig)
 
 
-def terminal_histogram(mc: MCResult) -> ft.Image:
+def terminal_histogram(mc: MCResult) -> ft.Control:
     pal = active()
     fig, ax = _fig(7.5, 2.6, pal)
     ax.hist(mc.terminal, bins=60, color=pal.accent, alpha=0.85,
@@ -137,7 +135,7 @@ def terminal_histogram(mc: MCResult) -> ft.Image:
     return _to_image(fig)
 
 
-def equity_chart(bt: BacktestResult) -> ft.Image:
+def equity_chart(bt: BacktestResult) -> ft.Control:
     pal = active()
     fig, ax = _fig(7.5, 3.0, pal)
     x = np.arange(bt.equity.size)
@@ -159,7 +157,7 @@ def equity_chart(bt: BacktestResult) -> ft.Image:
 
 
 def frontier_chart(frontier: Frontier,
-                   marked: list[OptimizedPortfolio] | None = None) -> ft.Image:
+                   marked: list[OptimizedPortfolio] | None = None) -> ft.Control:
     pal = active()
     fig, ax = _fig(7.5, 3.4, pal)
     sc = ax.scatter(frontier.cloud_vols * 100, frontier.cloud_rets * 100,
@@ -189,7 +187,7 @@ def frontier_chart(frontier: Frontier,
     return _to_image(fig)
 
 
-def corr_heatmap(corr: np.ndarray, symbols: tuple[str, ...]) -> ft.Image:
+def corr_heatmap(corr: np.ndarray, symbols: tuple[str, ...]) -> ft.Control:
     pal = active()
     n = len(symbols)
     fig, ax = _fig(max(3.4, 0.65 * n + 1.6), max(2.8, 0.55 * n + 1.2), pal)
@@ -208,7 +206,7 @@ def corr_heatmap(corr: np.ndarray, symbols: tuple[str, ...]) -> ft.Image:
     return _to_image(fig, expand=False)
 
 
-def cond_vol_chart(history: History, fit: GarchFit, *, window: int = 20) -> ft.Image:
+def cond_vol_chart(history: History, fit: GarchFit, *, window: int = 20) -> ft.Control:
     """Annualised GARCH conditional vol against rolling realised vol, with the
     unconditional level dashed. Both series are aligned on the return dates."""
     pal = active()

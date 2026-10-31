@@ -36,12 +36,14 @@ class PortfolioPane(QWidget):
         inner.addWidget(self.status);layout.addWidget(box)
         self.scope=label("선택한 목적에만 입력 상한이 적용됩니다. 나머지 목적·Frontier·무작위 구름의 종목당 상한은 100%입니다.","caption")
         layout.addWidget(self.scope)
-        self.chart=FrontierChart();layout.addWidget(self.chart)
+        self.chart=FrontierChart()
         self.comparison=table(["Objective","연율 수익률","연율 변동성","Sharpe","수렴","종목당 상한 / 범위"]);self.comparison.setMinimumHeight(200);layout.addWidget(self.comparison)
         self.weights=table(["Symbol","Weight","Risk contribution"]);self.weights.setMinimumHeight(230);layout.addWidget(self.weights)
         self.correlation=table([]);self.correlation.setMinimumHeight(220);layout.addWidget(label("상관행렬","heading"));layout.addWidget(self.correlation)
-        self.notes=label("아직 실행한 분석이 없습니다.","muted");layout.addWidget(self.notes)
+        self.notes=label("아직 실행한 분석이 없습니다.","muted")
         layout.addWidget(label("과거 표본에 대한 최적화이며 미래 수익 보장이나 공식 게이트 판정이 아닙니다. 모든 결과는 롱온리·완전투자이며 equal_weight는 1/N 고정 비중입니다.","caption"))
+        from .chart_study import ChartStudy
+        layout.insertWidget(2,ChartStudy(self.chart,self.notes))
         from .report_actions import ReportActions
         self.exports = ReportActions(self.status)
         layout.addWidget(self.exports)

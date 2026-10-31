@@ -100,7 +100,7 @@ class ResearchWindow(QMainWindow):
                  derivatives_runner=execute_derivatives, etf_runner=execute_etf,
                  crypto_runner=execute_crypto, krx_runner=execute_krx,
                  connections_runner=execute_connections, strategy_runner=execute_strategy,
-                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None, locale=None):
+                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None, locale=None, theme_mode="light"):
         super().__init__()
         self.ctx = LocaleContext(locale or ("ko_KR" if language == "ko" else "en_US"))
         self.ui_language = self.ctx.language
@@ -175,7 +175,9 @@ class ResearchWindow(QMainWindow):
         self.paper_session.changed.connect(lambda: self.paper_halt.setEnabled(self.paper_session.runtime is not None))
         rail.addWidget(self.paper_halt)
         self.theme = QComboBox()
-        self.theme.addItems(["Light · A", "Dark"])
+        self.theme.addItems(["Light", "Dark"])
+        self.theme.setAccessibleName("Theme")
+        self.theme.setCurrentIndex(1 if theme_mode=="dark" else 0)
         self.theme.currentIndexChanged.connect(self.change_theme)
         rail.addWidget(self.theme)
         rail.addWidget(label("Language", "caption"))
@@ -194,7 +196,7 @@ class ResearchWindow(QMainWindow):
         self.make_risk()
         self.make_library()
         self.make_system()
-        self.change_theme(0)
+        self.change_theme(self.theme.currentIndex())
         self.navigate("home")
         self.localizer = LanguageController(self)
         self.refresh_views()
@@ -356,13 +358,13 @@ class ResearchWindow(QMainWindow):
         layout.addWidget(box)
         box, inner = panel("분포와 근거")
         self.quant_chart = FanChart()
-        inner.addWidget(self.quant_chart)
         self.quant_metrics = table(["지표", "값"])
         self.quant_metrics.setProperty("localized_columns", [0])
         self.quant_metrics.setMinimumHeight(280)
         inner.addWidget(self.quant_metrics)
         self.quant_notes = label("아직 실행한 분석이 없습니다.", "muted")
-        inner.addWidget(self.quant_notes)
+        from .chart_study import ChartStudy
+        inner.insertWidget(0, ChartStudy(self.quant_chart,self.quant_notes))
         inner.addWidget(label("계산 완료 ≠ 투자 검증. 이 화면은 NOT_RUN 판정을 유지하며 주문이나 전략 원장을 생성하지 않습니다.", "caption"))
         layout.addWidget(box)
         layout.addStretch()
@@ -698,6 +700,8 @@ class ResearchWindow(QMainWindow):
             symbol = symbol.replace(b'#194C40', b'#E5EEE8').replace(b'fill="#E5EEE8"', b'fill="#A9C6BD"')
         self.brand_symbol.load(QByteArray(symbol))
         p = self.colors = DARK if index else LIGHT
+        if self.language_store is not None:
+            self.language_store.setValue("ui/theme", "dark" if index else "light")
         self.setStyleSheet(f"""
           QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; }}
           QFrame#sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
@@ -764,6 +768,7 @@ def main():
     if families: app.setFont(QFont(families[0], 10))
     settings = QSettings("QUANTGEN", "QUANTGEN")
     window = ResearchWindow(language=settings.value("ui/language", "en"),
-                            locale=settings.value("ui/locale", None), language_store=settings)
+                            locale=settings.value("ui/locale", None), language_store=settings,
+                            theme_mode=settings.value("ui/theme", "light"))
     window.show()
     return app.exec()

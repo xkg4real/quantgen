@@ -3,7 +3,7 @@ from PyQt6.QtCore import QByteArray, Qt, pyqtSignal
 from PyQt6.QtGui import QPainter, QColor, QPen
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QWidget,QVBoxLayout,QHBoxLayout,QGridLayout,QComboBox,
-                            QPushButton,QSlider,QFileDialog)
+                            QPushButton,QSlider,QFileDialog,QTabWidget)
 
 from core.i18n import LocaleContext
 from core.education.indicators import INDICATORS, historical_case, counterexamples, from_history, selection
@@ -104,18 +104,25 @@ class IndicatorGuide(QWidget):
         layout.addWidget(box)
         self.why=label('','muted');layout.addWidget(self.why)
         self.source=label('','caption');layout.addWidget(self.source)
-        self.chart=TechnicalChart();self.chart.cursor_changed.connect(self.move_cursor);layout.addWidget(self.chart)
-        self.readout=label('');layout.addWidget(self.readout)
-        self.slider=QSlider(Qt.Orientation.Horizontal);self.slider.valueChanged.connect(self.move_cursor);layout.addWidget(self.slider)
-        self.ohlcv_notice=label('','caption');layout.addWidget(self.ohlcv_notice)
-        self.line_styles=label('','caption');layout.addWidget(self.line_styles)
-        self.combination=label('');layout.addWidget(self.combination)
-        self.explanations=QWidget();self.explanation_layout=QVBoxLayout(self.explanations)
-        self.explanation_layout.setContentsMargins(0,0,0,0);layout.addWidget(self.explanations)
-        self.fail_title=label('','heading');layout.addWidget(self.fail_title)
-        self.fail_note=label('','caption');layout.addWidget(self.fail_note)
+        self.chart_area=QWidget();chart_layout=QVBoxLayout(self.chart_area)
+        chart_layout.setContentsMargins(0,0,0,0)
+        self.reading_area=QWidget();reading_layout=QVBoxLayout(self.reading_area)
+        reading_layout.setContentsMargins(0,0,0,0);reading_layout.setSpacing(14)
+        from .chart_study import ChartStudy
+        self.study=ChartStudy(self.chart_area,self.reading_area)
+        layout.addWidget(self.study)
+        self.chart=TechnicalChart();self.chart.cursor_changed.connect(self.move_cursor);chart_layout.addWidget(self.chart)
+        self.readout=label('');chart_layout.addWidget(self.readout)
+        self.slider=QSlider(Qt.Orientation.Horizontal);self.slider.valueChanged.connect(self.move_cursor);chart_layout.addWidget(self.slider)
+        self.ohlcv_notice=label('','caption');chart_layout.addWidget(self.ohlcv_notice)
+        self.line_styles=label('','caption');chart_layout.addWidget(self.line_styles)
+        self.combination=label('');reading_layout.addWidget(self.combination)
+        self.explanations=QTabWidget();reading_layout.addWidget(self.explanations)
+        self.fail_title=label('','heading');reading_layout.addWidget(self.fail_title)
+        self.fail_note=label('','caption');reading_layout.addWidget(self.fail_note)
         self.event_host=QWidget();self.event_layout=QVBoxLayout(self.event_host)
-        self.event_layout.setContentsMargins(0,0,0,0);layout.addWidget(self.event_host)
+        self.event_layout.setContentsMargins(0,0,0,0);reading_layout.addWidget(self.event_host)
+        reading_layout.addStretch()
         self.export=QPushButton();self.export.clicked.connect(self.save_report);layout.addWidget(self.export)
         self.notice=label('','caption');layout.addWidget(self.notice)
         self.render()
@@ -169,7 +176,10 @@ class IndicatorGuide(QWidget):
         self.ohlcv_notice.setText(ctx.t('no_ohlcv_close' if self.external else 'no_ohlcv') if not self.series.ohlc else '')
         self.line_styles.setText(ctx.t('line_styles') if self.keys else '')
         self.combination.setText(ctx.t('combination')+'\n'+ctx.t('combination_text') if len(self.keys)>1 else ctx.t('no_selection') if not self.keys else '')
-        self.clear_layout(self.explanation_layout)
+        focused=(
+            self.explanations.currentWidget().property('indicator') if self.explanations.currentWidget() else None)
+        while self.explanations.count():
+            old=self.explanations.widget(0);self.explanations.removeTab(0);old.deleteLater()
         for spec in INDICATORS:
             if spec.key not in self.keys:continue
             box,inner=panel(spec.letter+'  '+ctx.t(spec.key))
@@ -177,7 +187,9 @@ class IndicatorGuide(QWidget):
             for field in ('meaning','look','interpret','limit'):
                 inner.addWidget(label(ctx.t(field),'heading'))
                 inner.addWidget(label(ctx.t(spec.key+'_'+field)))
-            self.explanation_layout.addWidget(box)
+            box.setProperty('indicator',spec.key)
+            self.explanations.addTab(box,spec.letter+' '+spec.key.upper())
+            if spec.key==focused:self.explanations.setCurrentWidget(box)
         self.fail_title.setText(ctx.t('failed_signals'));self.fail_note.setText(ctx.t('failure_note'))
         self.clear_layout(self.event_layout)
         self.events=counterexamples(self.series,self.keys)

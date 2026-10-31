@@ -14,7 +14,7 @@ import flet as ft
 with patch.object(dotenv, 'load_dotenv', return_value=False):
     import main as app
 from ui import research_home
-from core.theme import LIGHT, set_mode
+from core.theme import LIGHT, DARK, set_mode
 
 
 def walk(value, seen=None):
@@ -111,6 +111,33 @@ class ResearchHomeTests(unittest.TestCase):
             self.go('home'); self.go('quant')
         self.assertIs(first, self.built['quant'])
         self.assertEqual(self.calls['quant'], 1)
+
+    def test_theme_switch_preserves_cached_analysis_without_restart(self):
+        self.addCleanup(set_mode, 'light')
+        self.go('quant'); first = self.built['quant']
+        self.page.qg_change_theme('dark')
+        self.assertEqual(self.page.theme_mode, ft.ThemeMode.DARK)
+        self.assertEqual(self.page.bgcolor, DARK.bg)
+        self.go('home'); self.go('quant')
+        self.assertIs(first, self.built['quant'])
+        self.assertEqual(self.calls['quant'], 1)
+        self.page.qg_change_theme('light')
+        self.assertEqual(self.page.bgcolor, LIGHT.bg)
+        self.EngineRuntime.assert_called_once()
+
+    def test_home_refresh_reapplies_selected_language_and_theme(self):
+        from core.i18n import LocaleContext
+        self.addCleanup(set_mode, 'light')
+        self.page.qg_locale = LocaleContext('ko_KR')
+        self.page.qg_theme = 'dark'
+        view = research_home.build_home_page(self.page, navigate=lambda _: None)
+        view.render()
+        view.before_update()
+        texts = [c.value for c in walk(view) if isinstance(c, ft.Text)]
+        self.assertIn('리서치 홈', texts)
+        self.assertNotIn('Research Home', texts)
+        cards = [c for c in walk(view) if isinstance(c, ft.Container) and c.bgcolor]
+        self.assertTrue(any(c.bgcolor == DARK.surface for c in cards))
 
     def test_home_construction_has_no_io_or_jobs(self):
         # Home itself is display-only; no provider, status-file or store reads.

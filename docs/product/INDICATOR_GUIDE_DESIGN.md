@@ -6,6 +6,10 @@ SMA, EMA, RSI, MACD and Bollinger bands; selections can be combined or cleared.
 The existing Signals workspace uses the same guide with its actual loaded
 `History`, so its dates and prices are never replaced with an educational sample.
 
+The owner selected [C format](CHART_C_DESIGN_2026-10-31.md): chart left and
+interpretation right when wide; stack when narrow. Both app themes use the
+QUANTGEN ivory/forest palette.
+
 ## Screen and interaction
 
 Order: introduction → choices and sample → selection reason/source → chart and
@@ -88,5 +92,6 @@ CSV/provenance, rights inventory, Babel formatting and native shell outside chec
 
 Native screenshots were inspected at 1100×820 light and 1000×700 dark with
 150% scaling. Physical Windows display/input/installer acceptance remains a
-separate check. The Flet guide has callback tests; live Flutter browser visual
-acceptance and `quantgeneration.com` source/deployment are separate AWS work.
+separate check. The Flet guide has callback tests and local Linux Chromium visual checks at
+1600×1100 and 390×1000, including C layout, dark mode and Korean glyphs.
+The actual `quantgeneration.com` source/deployment remains separate AWS work.

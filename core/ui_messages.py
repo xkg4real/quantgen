@@ -4,6 +4,13 @@ New language packs must cover every key and retain named placeholders. Canonical
 instrument IDs, indicator abbreviations and research verdict codes do not change.
 """
 _PAIRS = {
+ 'chart_result': ('계산 결과 차트', 'Computed result chart'),
+ 'chart_axes': ('축의 단위·범위와 관측 구간을 먼저 확인하세요.', 'Check axis units, scale and observation period first.'),
+ 'chart_compare': ('범례와 같은 색의 계열을 같은 축·구간에서 비교하세요.', 'Compare legend series over the same axes and interval.'),
+ 'chart_limits': ('원자료·표본·모형의 한계는 결과 해설을 함께 확인하세요. 차트 표시가 미래 수익이나 검증 통과를 뜻하지 않습니다.', 'Read the result notes for data, sample and model limitations. A chart is not a return forecast or validation pass.'),
+ 'theme': ('화면 테마', 'Appearance'),
+ 'theme_light': ('라이트', 'Light'),
+ 'theme_dark': ('다크', 'Dark'),
  'home': ('리서치 홈', 'Research Home'),
  'markets': ('시장', 'Markets'),
  'build': ('설계·검증', 'Build & Test'),

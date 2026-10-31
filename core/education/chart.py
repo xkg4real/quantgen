@@ -41,7 +41,7 @@ def chart_svg(series, keys=(), *, locale=None, colors=LIGHT, width=960, cursor=N
            '<title>'+escape(ctx.t('guide')+' · '+series.symbol)+'</title>',
            '<desc>'+escape(ctx.t('education_only'))+'</desc>',
            f'<rect width="{width}" height="{height}" rx="12" fill="{colors.surface}"/>',
-           '<g font-family="QG Interface,Noto Sans CJK KR,Segoe UI,sans-serif" font-size="12">']
+           '<g font-family="QG Interface" font-size="12">']
     def text(x,y,value,color=None,anchor='start',size=12):
         parts.append(f'<text x="{x:.2f}" y="{y:.2f}" fill="{color or colors.text}" text-anchor="{anchor}" font-size="{size}">{escape(str(value))}</text>')
     def line(x1,y1,x2,y2,color,width=1,dash=''):

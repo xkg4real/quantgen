@@ -10,10 +10,11 @@ from core.education.chart import chart_svg, cursor_text, reading_text, learning_
 
 
 class IndicatorGuide(ft.Column):
-    def __init__(self,page,*,history=None):
+    def __init__(self,page,*,history=None,embedded=False):
         super().__init__(spacing=14,horizontal_alignment=ft.CrossAxisAlignment.STRETCH)
+        self.embedded=embedded
         self.host_page=page;self.ctx=getattr(page,'qg_locale',LocaleContext())
-        self.keys=();self.requested_case='auto';self.series=None;self.cursor=0
+        self.keys=();self.focus_key=None;self.requested_case='auto';self.series=None;self.cursor=0
         self.external=from_history(history) if history else None
         self.mounted=False;self.render()
 
@@ -22,6 +23,9 @@ class IndicatorGuide(ft.Column):
 
     def render_locale(self,ctx):
         self.ctx=ctx;self.render()
+
+    def render_theme(self,palette):
+        if getattr(self,'palette',None)!=palette or getattr(self,'viewport',None)!=getattr(self.host_page,'width',None):self.render()
 
     def update_if_mounted(self):
         if self.mounted:self.update()
@@ -33,6 +37,9 @@ class IndicatorGuide(ft.Column):
 
     def clear_selection(self,e=None):
         self.keys=();self.render();self.update_if_mounted()
+
+    def choose_detail(self,e):
+        self.focus_key=e.control.value;self.render();self.update_if_mounted()
 
     def choose_case(self,e):
         self.requested_case=e.control.value;self.render();self.update_if_mounted()
@@ -64,7 +71,7 @@ class IndicatorGuide(ft.Column):
             self.notice.value=self.ctx.t('save_failed');self.update_if_mounted()
 
     def render(self):
-        ctx=self.ctx;pal=active()
+        ctx=self.ctx;pal=active();self.palette=pal;self.viewport=getattr(self.host_page,'width',None)
         def text(value,size=14,muted=False):return ft.Text(value,size=size,color=pal.muted if muted else pal.text,selectable=True)
         old_date=self.series.dates[self.cursor] if self.series else None
         if self.external:
@@ -88,10 +95,11 @@ class IndicatorGuide(ft.Column):
         selected_chips=[ft.Chip(label=text(ctx.t(spec.key),12),on_delete=lambda e,k=spec.key:self.toggle(k))
                         for spec in INDICATORS if spec.key in self.keys]
         self.chart_width=max(350,min(1100,int((getattr(self.host_page,'width',None) or 1000)-(360 if (getattr(self.host_page,'width',None) or 1000)>=700 else 64))))
+        if self.chart_width>=768:self.chart_width=max(350,int((self.chart_width-18)*2/3))
         svg=chart_svg(self.series,self.keys,locale=ctx,colors=pal,width=self.chart_width,cursor=self.cursor)
         height=int(re.search(r'height="(\d+)"',svg).group(1))
         self.image=ft.Image(src='data:image/svg+xml;base64,'+base64.b64encode(svg.encode()).decode(),
-            fit=ft.BoxFit.CONTAIN,width=self.chart_width,height=height,
+            fit=ft.BoxFit.CONTAIN,aspect_ratio=self.chart_width/height,
             semantics_label=ctx.t('guide')+' · '+self.series.symbol,
             tooltip=cursor_text(self.series,self.keys,self.cursor,ctx))
         self.readout=text(cursor_text(self.series,self.keys,self.cursor,ctx),12)
@@ -110,22 +118,33 @@ class IndicatorGuide(ft.Column):
                 on_select=self.choose_case))
         controls += [text(ctx.t('why_sample')+' · '+ctx.t('why_'+self.case_name),12,True),
             text((ctx.t('historical_source') if not self.external else self.series.source)+'\n'+self.series.symbol+' · '+ctx.date(self.series.dates[0])+' → '+ctx.date(self.series.dates[-1]),11,True),
-            self.image,self.readout,self.slider,self.reading,
+            ]
+        chart_controls=[self.image,self.readout,self.slider,
             text(ctx.t('no_ohlcv_close' if self.external else 'no_ohlcv'),12,True)]
-        if self.keys:controls += [text(ctx.t('line_styles'),12,True)]
-        if not self.keys:controls.append(text(ctx.t('no_selection'),13,True))
+        if self.keys:chart_controls += [text(ctx.t('line_styles'),12,True)]
+        reading_controls=[self.reading]
+        if not self.keys:reading_controls.append(text(ctx.t('no_selection'),13,True))
+        if self.focus_key not in self.keys:self.focus_key=next(iter(self.keys),None)
+        if len(self.keys)>1:
+            reading_controls.append(ft.Dropdown(label=ctx.t('select_indicators'),value=self.focus_key,
+                options=[ft.dropdown.Option(spec.key,spec.letter+' '+ctx.t(spec.key)) for spec in INDICATORS if spec.key in self.keys],
+                on_select=self.choose_detail))
         for spec in INDICATORS:
-            if spec.key not in self.keys:continue
+            if spec.key != self.focus_key:continue
             items=[text(spec.letter+'  '+ctx.t(spec.key),17)]
             for field in ('meaning','look','interpret','limit'):
                 items += [text(ctx.t(field),13,True),text(ctx.t(spec.key+'_'+field))]
-            controls.append(ft.Container(ft.Column(items,spacing=10),padding=18,bgcolor=pal.surface_2,
+            reading_controls.append(ft.Container(ft.Column(items,spacing=10),padding=18,bgcolor=pal.surface_2,
                 border=ft.Border.all(1,pal.border),border_radius=12))
-        controls += [text(ctx.t('failed_signals'),17),text(ctx.t('failure_note'),12,True)]
+        reading_controls += [text(ctx.t('failed_signals'),17),text(ctx.t('failure_note'),12,True)]
         self.events=counterexamples(self.series,self.keys)
-        controls += [ft.TextButton(ctx.t('event',date=ctx.date(e['date']),indicator=ctx.t(e['indicator']),change=ctx.percent(e['change'])),
+        reading_controls += [ft.TextButton(ctx.t('event',date=ctx.date(e['date']),indicator=ctx.t(e['indicator']),change=ctx.percent(e['change'])),
                 on_click=lambda event,i=e['index']:self.move_cursor(i)) for e in self.events]
-        if self.keys and not self.events:controls.append(text(ctx.t('no_events'),12,True))
+        if self.keys and not self.events:reading_controls.append(text(ctx.t('no_events'),12,True))
+        from .chart_study import study_row
+        self.study=study_row(ft.Column(chart_controls,spacing=12),ft.Column(reading_controls,spacing=14))
+        controls.append(self.study)
         self.notice=text(ctx.t('education_only'),12,True)
         controls += [ft.Button(ctx.t('report'),on_click=self.download,icon=ft.Icons.DOWNLOAD_OUTLINED),self.notice]
+        controls[0].visible=not self.embedded
         self.controls=controls

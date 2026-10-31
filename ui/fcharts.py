@@ -61,7 +61,7 @@ def _date_axis(ax, dates) -> None:
 # --------------------------------------------------------------------------- #
 # Curves
 # --------------------------------------------------------------------------- #
-def curve_chart(report: CurveReport) -> ft.Image:
+def curve_chart(report: CurveReport) -> ft.Control:
     """Par, zero and 1y-forward curves off the fitted `YieldCurve`, the NS/NSS
     fit dotted, and the snapshot's par yields as markers."""
     pal = active()
@@ -93,7 +93,7 @@ def curve_chart(report: CurveReport) -> ft.Image:
 
 
 def curve_history_chart(panel: CurvePanel,
-                        tenors: Sequence[float] = (2.0, 10.0, 30.0)) -> ft.Image:
+                        tenors: Sequence[float] = (2.0, 10.0, 30.0)) -> ft.Control:
     pal = active()
     grid = np.asarray(panel.tenors, dtype=float)
     fig, ax = _fig(7.5, 2.9, pal)
@@ -110,7 +110,7 @@ def curve_history_chart(panel: CurvePanel,
     return _to_image(fig)
 
 
-def pca_chart(pca: PCAResult) -> ft.Image:
+def pca_chart(pca: PCAResult) -> ft.Control:
     pal = active()
     fig, ax = _fig(7.5, 2.9, pal)
     colours = (pal.accent, pal.success, pal.error, pal.muted)
@@ -130,7 +130,7 @@ def pca_chart(pca: PCAResult) -> ft.Image:
 # --------------------------------------------------------------------------- #
 # Bonds & swaps
 # --------------------------------------------------------------------------- #
-def krd_chart(krd: dict[float, float], title: str = "Key-rate DV01") -> ft.Image:
+def krd_chart(krd: dict[float, float], title: str = "Key-rate DV01") -> ft.Control:
     pal = active()
     tenors = sorted(krd)
     vals = np.array([krd[t] for t in tenors], dtype=float)
@@ -145,7 +145,7 @@ def krd_chart(krd: dict[float, float], title: str = "Key-rate DV01") -> ft.Image
     return _to_image(fig)
 
 
-def scenario_chart(rows: Sequence[ScenarioRow]) -> ft.Image:
+def scenario_chart(rows: Sequence[ScenarioRow]) -> ft.Control:
     pal = active()
     pnl = np.array([r.pnl for r in rows], dtype=float)
     fig, ax = _fig(7.5, max(2.4, 0.32 * len(rows) + 1.0), pal)
@@ -165,7 +165,7 @@ def scenario_chart(rows: Sequence[ScenarioRow]) -> ft.Image:
     return _to_image(fig)
 
 
-def price_yield_chart(bond: Bond, ytm: float) -> ft.Image:
+def price_yield_chart(bond: Bond, ytm: float) -> ft.Control:
     """Price against yield ±300bp with the duration tangent at `ytm`; the gap
     between curve and tangent is the convexity."""
     pal = active()
@@ -187,7 +187,7 @@ def price_yield_chart(bond: Bond, ytm: float) -> ft.Image:
     return _to_image(fig)
 
 
-def caplet_chart(report: CapFloorReport) -> ft.Image:
+def caplet_chart(report: CapFloorReport) -> ft.Control:
     pal = active()
     c = np.asarray(report.caplets, dtype=float).reshape(-1, 4)
     starts, ends, fwds, prem = c.T
@@ -216,7 +216,7 @@ def caplet_chart(report: CapFloorReport) -> ft.Image:
 # --------------------------------------------------------------------------- #
 # FX
 # --------------------------------------------------------------------------- #
-def smile_chart(strikes, vols, points: Sequence[SmilePoint], forward: float) -> ft.Image:
+def smile_chart(strikes, vols, points: Sequence[SmilePoint], forward: float) -> ft.Control:
     pal = active()
     fig, ax = _fig(7.5, 2.9, pal)
     ax.plot(np.asarray(strikes, dtype=float), np.asarray(vols, dtype=float) * 100,
@@ -235,7 +235,7 @@ def smile_chart(strikes, vols, points: Sequence[SmilePoint], forward: float) -> 
     return _to_image(fig)
 
 
-def fx_spot_chart(series: Series, forward_points_line=None) -> ft.Image:
+def fx_spot_chart(series: Series, forward_points_line=None) -> ft.Control:
     """`forward_points_line`: a forward outright (float) drawn as a dashed level,
     or (tenor_years, forward) pairs drawn as the forward curve extending past
     the last spot at 252 sessions per year."""
@@ -260,7 +260,7 @@ def fx_spot_chart(series: Series, forward_points_line=None) -> ft.Image:
     return _to_image(fig)
 
 
-def carry_equity_chart(bt: CarryBacktest) -> ft.Image:
+def carry_equity_chart(bt: CarryBacktest) -> ft.Control:
     pal = active()
     fig, ax = _fig(7.5, 3.0, pal)
     x = np.arange(bt.equity.size)
@@ -279,7 +279,7 @@ def carry_equity_chart(bt: CarryBacktest) -> ft.Image:
     return _to_image(fig)
 
 
-def carry_bar_chart(rows: Sequence[CarryRow]) -> ft.Image:
+def carry_bar_chart(rows: Sequence[CarryRow]) -> ft.Control:
     pal = active()
     x = np.arange(len(rows))
     carry = np.array([r.carry for r in rows], dtype=float) * 100
@@ -303,7 +303,7 @@ def carry_bar_chart(rows: Sequence[CarryRow]) -> ft.Image:
 # --------------------------------------------------------------------------- #
 # Structured, simulation, macro
 # --------------------------------------------------------------------------- #
-def payoff_chart(product) -> ft.Image:
+def payoff_chart(product) -> ft.Control:
     """Duck-typed on ProductReport: `payoff_grid` of (underlying level, payoff
     per 100), plus `product`, `issue_price` and `fair_value` when present."""
     pal = active()
@@ -331,7 +331,7 @@ def payoff_chart(product) -> ft.Image:
     return _to_image(fig)
 
 
-def rate_fan_chart(sim: RateSimResult) -> ft.Image:
+def rate_fan_chart(sim: RateSimResult) -> ft.Control:
     pal = active()
     fig, ax = _fig(7.5, 3.0, pal)
     t = sim.times
@@ -356,7 +356,7 @@ def rate_fan_chart(sim: RateSimResult) -> ft.Image:
     return _to_image(fig)
 
 
-def horizon_pv_hist(hpv: HorizonPV) -> ft.Image:
+def horizon_pv_hist(hpv: HorizonPV) -> ft.Control:
     pal = active()
     fig, ax = _fig(7.5, 2.6, pal)
     ax.hist(hpv.pvs, bins=40, color=pal.accent, alpha=0.85, edgecolor=pal.surface)
@@ -371,7 +371,7 @@ def horizon_pv_hist(hpv: HorizonPV) -> ft.Image:
     return _to_image(fig)
 
 
-def macro_z_chart(sheet: MacroSheet) -> ft.Image:
+def macro_z_chart(sheet: MacroSheet) -> ft.Control:
     """Horizontal bars of 1y z-scores, coloured by group; synthetic rows hatched."""
     pal = active()
     colours = {"rates": pal.accent, "credit": pal.error, "fx": pal.success, "risk": pal.muted}
