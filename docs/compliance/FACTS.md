@@ -111,3 +111,18 @@ C형 Windows CI 후속: 긴 플랫폼 글꼴의 가로 최소폭 합계가 스�
 Windows 후속 수치: 1000px 창의 viewport는 764px인데 guide/study는 969px, study 최소 힌트는 966px였습니다. 이벤트 대기만으로는 해결되지 않았습니다. C형 컨테이너의 이미지·텍스트 폭 힌트를 실제 최소폭으로 강제하지 않고, 수동 지정한 최소폭은 유지하도록 수정했습니다. 966px 해설 힌트/764px viewport를 별도 회귀 fixture로 고정합니다. 데이터·저장·전송 및 정책 상태 변화는 없습니다.
 
 최종 가이드 경계 보완: study 최소 힌트를 0으로 줄여도 Windows에서 상위 guide 최소 힌트 969px가 페이지 폭을 유지했습니다. 가이드 컨테이너에도 화면 폭에 맞게 줄어드는 정책을 적용하고 자동 레이아웃 최소폭을 해제합니다. 전체 창 시험에 966px 기본 너비의 줄바꿈 설명을 가이드 바깥쪽 내용으로 추가하여 guide와 설명이 viewport 안에 들어오는지 함께 검사합니다.
+
+### Native Bonds/Portfolio language follow-up
+
+[Bonds/Portfolio result text](../product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md)
+now has explicit English/Korean display variants, including funding-proxy,
+non-positive Sharpe, convergence and differing-cap warnings. Existing computed
+numbers, canonical report sections, symbols and unknown provider text stay
+intact. This source delta adds no data collection, external translation request,
+SDK, persistent setting, billing, marketing or deletion behavior. It changes no
+operator facts, price terms, research approvals or data rights. The twenty
+policy scopes were compared with this bounded display change; their
+`review-required` status and actual Windows/accessibility/website limitations
+remain. Source/document consistency is not publication approval.
+
+C형 최종 통합 시 main PR48/49(4c51ab9)의 인계 기록과 채권·포트폴리오 한/영 결과 표현을 보존했습니다. display_variants는 원본 source_text·내보내기·수치·경고를 유지하고 C형의 기존 notes 위젯을 재사용합니다. 이 한정된 소스 차이를 20개 문서와 대조했으며 저장·전송·거래·정책 공개 상태 변화는 없습니다.

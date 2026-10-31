@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "ac1b755e91a13bb0226daef4e03efab2fb3591de62e795d3ec8714b38c473904",
+    ".github/workflows/runtime-smoke.yml": "312e90a05fe24f4ccb49abf0ad9fb61c2a482e9f035666de4f25cc99f1ec3abf",
     "README.md": "3d5109bbf91644ca6dcddd4ff609d72f1819c0e54d0a8eac2b75ddd4e244e54e",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -226,12 +226,13 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "dbc6c98cc0eebbf19f476c0fcb2b13cdea3d7d2eb30a0c4d55b7f5f6924f66ef",
+    "docs/compliance/FACTS.md": "0953991e4284de95e5e33b285ff6bcd079785b8f785bc3804d1179ff702f92f0",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "fe76f5dc8fb85e691d1c33140a1b01481d8ba851c43398ac99b00effbf981fe8",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
+    "docs/product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md": "469c32828b75b54797bf1ac81a8645688452bce5f0cf7c69132e7236f96f8e59",
     "docs/product/BS21_FUNDING_2026-10-30.md": "a8060c8d57b2532eed9b06c429a97568c77a3ba3c9e0370f273e1d3ac9bc8c4d",
     "docs/product/CARRY_LANGUAGE_2026-10-31.md": "7cf0c8152b053bfaeaf44dd72e7244acb076426ae5618fd20291eb2b2b26a691",
     "docs/product/CHART_C_DESIGN_2026-10-31.md": "4ef295e78271c6335666df6ac1456459235a0a0b35ddfd9de813952e524221ae",
@@ -270,7 +271,8 @@
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
     "quantgen_desktop/app.py": "faf72d902d98407c6f0a4d3b0b2662f6f56bd2691521e4ce6ddba1529b2b0444",
-    "quantgen_desktop/bonds.py": "f01f99a151a0ffd6030c1671554514804460fbb5c7d3672dc1075bdfb12f65a5",
+    "quantgen_desktop/bonds.py": "98e50ea1a2040e420fb783a457dd615e005522da56dc94ef86bfbd01fc254e3f",
+    "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
     "quantgen_desktop/chart_study.py": "031c70ef5b77a65f683b1de38fd6c91038a0a469f49414405a5272dc1587cc96",
     "quantgen_desktop/charts.py": "abc3382ca861b9e7ed0c876ee0bf7cc47ece79c6a1964f5f026702ebbb7adbb7",
     "quantgen_desktop/commentary.py": "4b5d02a17b5621db28c24a3f54a37106837239d7fe55aa7f376e677f80d0845f",
@@ -285,7 +287,7 @@
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
     "quantgen_desktop/market_tools.py": "cee656dd028cdc8d82e6daa409ad673cf4efe542474dd5fbc39dbd2ff7d0a420",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
-    "quantgen_desktop/portfolio.py": "99578d71c0fc7509417c7e88f67e1f8ad48f3a617e479d3c8a474ef5db23c693",
+    "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
     "quantgen_desktop/rates.py": "f98d6db2d305ee12264c7a758af8a9951b2b9bb6a27686c4a0a29cc215038ddf",
     "quantgen_desktop/rates_narrative.py": "ba72992fba5226961c7d6f7cd6c58009677f629fa4cf617a712b6d564d024f0e",
     "quantgen_desktop/report_actions.py": "fbf48c2350434f8c4e953fd1efd99ed666f60e74e6da5154bb529a43ec50115d",
@@ -310,6 +312,7 @@
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_acceptance.py": "a6f7da6c1c95e52940f32af4c0a82d1653faa9e827cef380cdd760203dd7a9a9",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
+    "tests/desktop_bonds_portfolio_language_acceptance.py": "8429bf7fcb8b9ab8c0ed306052135f2afc0501247c51a1c5fabb68ad8e9c319b",
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "3f3c0ee0e38d946647a7ae2448af8d0496c2dea779a81be4cfd8734b84a61834",
     "tests/desktop_commentary_acceptance.py": "23fd186a1562c440d1cf79ee8a9e1169ebeb499da93caec54141415410db7821",
@@ -468,163 +471,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4c9561c2b4764f28c763b9d956df2bd6def8517226636322cea0c4652126cee4",
-      "source_digest": "0cda5e7580aba866ffd16e2eb1db5b89af750b799ad592bd0c6a74ec3c786791",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.094394+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "ed64d079f461a2de1dd9d9d0020fdad7f1a1494760eede9a1a42064cabf14d2a",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.509538+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "2": {
       "document_sha256": "8a8915a728f0bd28f95fa46082cde5efd96739cb14bf69e69ad9205841c6cbe0",
-      "source_digest": "0cda5e7580aba866ffd16e2eb1db5b89af750b799ad592bd0c6a74ec3c786791",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.097798+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "ed64d079f461a2de1dd9d9d0020fdad7f1a1494760eede9a1a42064cabf14d2a",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.514287+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "8eff3d4b17858d731f08e38b3211b0beb93675b03ababe201950b24a783601c8",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.100576+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "64ef876f8ccbd4225e1f532f131389cdc70c5230e62172d22abcde00bdc53bb4",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.517101+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "4": {
       "document_sha256": "7d0f3373b9815cd9db634f28323c8c90bc7e78cd09cf40d757e98adfc3ac1dd7",
-      "source_digest": "7b17981f506a1d39c66d333b19193bdaa4d9f86475b7ee61dcb76e06c85a5805",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.104997+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "1d6178538b0cf22abf2927f8bee0a64b95e3f43cd2a976faafacb7e83fe0a334",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.520025+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "80d7f6342edaf2d39a6edb1835c054ea969981a2db8253f332acbb6fa41260a4",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.108036+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "72b5636bbb68cdb9b0d69da8487593ae2e1730c0e7edc01353e440e5bb0bd792",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.523338+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "6": {
       "document_sha256": "fae1be1112448c78bde79274a691143bdadcb4623853f26798735cf71b20973a",
-      "source_digest": "430ea96b3a6f29cd88e0707149e6fe7d0d9c239632bf73566e15a037f3c3a1d0",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.110330+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "bd96abd5515648a5a84e7c2ed8af0cfd0d298fcbe7c158777772c4174fe92ff7",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.525935+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "7": {
       "document_sha256": "d255a134f4e97cd65a7b3a4676b26a0f6e655e823ab23f971d477235df751931",
-      "source_digest": "0cda5e7580aba866ffd16e2eb1db5b89af750b799ad592bd0c6a74ec3c786791",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.114283+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "ed64d079f461a2de1dd9d9d0020fdad7f1a1494760eede9a1a42064cabf14d2a",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.528513+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "8": {
       "document_sha256": "06dbba68f23aa6e2aec1125b031a7486b863296ec51a15481a893ea62253f232",
-      "source_digest": "430ea96b3a6f29cd88e0707149e6fe7d0d9c239632bf73566e15a037f3c3a1d0",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.116764+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "bd96abd5515648a5a84e7c2ed8af0cfd0d298fcbe7c158777772c4174fe92ff7",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.531410+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "9": {
       "document_sha256": "81e96f0f623036ca1b290ddf8508a9ff8e6cc8b0fca380a939abc529a4dfb747",
-      "source_digest": "bd4a2aca5189fb266c3965616570387ae5c4d2daf66dc7ac5ec1714f550854f5",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.119455+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "fe8ce833492da463495a8af4ee20bdd94dfda1bd580753e7981a51a5ea1a2a55",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.534396+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "10": {
       "document_sha256": "9b4f832a3c5363e29f704dbf3f3f89bf13aef9be27298cd14b8d3fe4533685cb",
-      "source_digest": "0aeed080655074144f3e52860b1b2610254f31312f09f6e6dfd23afa50be8ced",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.121948+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "79022a6eecc53914ee7da3e96bd38916c1ddd00f4b5f3badfd6b8adf08a78482",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.538016+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "83ae63d63aaf31956fd548da02b2076f387e99f8ea13a2cf3a5823d1d7bfdb6e",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.125236+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "babe6267464ac0cd88307a24392cfdebb58038280f7959742245db40a1d769d7",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.541092+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "12": {
       "document_sha256": "7f3aed235693c66f0f32fc3c62a988658dadbea65f2c314ccc111d06c8c2d675",
-      "source_digest": "b2eb641e548b1687d9f7700c78d0fbe11cec22efaf85b6f75bc356e2e316f85e",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.133152+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "db9fa1e40ee81acfa4eb7cd3142bfa96047b0483bc2dd1841b2936e121af9649",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.547114+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "13": {
       "document_sha256": "1ae2381d67147472a0b3a8b89ccf44d493925ad72430091bd67376635d137186",
-      "source_digest": "bd4a2aca5189fb266c3965616570387ae5c4d2daf66dc7ac5ec1714f550854f5",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.136113+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "fe8ce833492da463495a8af4ee20bdd94dfda1bd580753e7981a51a5ea1a2a55",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.550055+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "14": {
       "document_sha256": "b955cd3fbada10bf18fc428f54264fbed7623176c9e4ac19b5307c3531affd74",
-      "source_digest": "bd4a2aca5189fb266c3965616570387ae5c4d2daf66dc7ac5ec1714f550854f5",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.138707+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "fe8ce833492da463495a8af4ee20bdd94dfda1bd580753e7981a51a5ea1a2a55",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.553250+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "15": {
       "document_sha256": "926245ec0903d7f5fb0759e513e010154ff32bd2db6df3a95b816cce610b6e65",
-      "source_digest": "bd4a2aca5189fb266c3965616570387ae5c4d2daf66dc7ac5ec1714f550854f5",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.142151+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "fe8ce833492da463495a8af4ee20bdd94dfda1bd580753e7981a51a5ea1a2a55",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.559166+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "39a54c8235b53a088d2f3b89b0c6cd814a7cdf120b03851f00281756bd7004cc",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.144811+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "8b6814b23d7739c6d5a9c23b036b895a69e31991d6b3216f6d1369c32da03fc6",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.561752+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "430ea96b3a6f29cd88e0707149e6fe7d0d9c239632bf73566e15a037f3c3a1d0",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.148032+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "bd96abd5515648a5a84e7c2ed8af0cfd0d298fcbe7c158777772c4174fe92ff7",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.566444+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "0cda5e7580aba866ffd16e2eb1db5b89af750b799ad592bd0c6a74ec3c786791",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.152851+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "ed64d079f461a2de1dd9d9d0020fdad7f1a1494760eede9a1a42064cabf14d2a",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.569383+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "19": {
       "document_sha256": "550ebe0e687e42986c399f50bf2fb9da524c3e6bc53df0437f48c63a672d03e9",
-      "source_digest": "7c1c3fbb7e51f2d181b8b3a1618e6d94fe357999ca75654862cc75c40028648c",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.156244+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "8a9925bb5dee2f0457e7eafef8f849c6c9a143aba83f54f5891f09a0ee7a6f0b",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.574698+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     },
     "20": {
       "document_sha256": "40c60347005959a09fc475243ffb06f7571203892a39137e471f5a2bea9c7c11",
-      "source_digest": "0cda5e7580aba866ffd16e2eb1db5b89af750b799ad592bd0c6a74ec3c786791",
-      "reviewed_by": "Codex QUANTGEN UI session / full-guide viewport review",
-      "review_note": "Reviewed all 20 current-state policies against extending the measured responsive fix to the enclosing guide, whose 969 px minimum persisted after the C study minimum was removed. Full-window regression now injects a 966 px wrapped-label hint and verifies both guide and text fit the viewport. No change to financial values, selections, storage, transmission, licenses or publication status.",
-      "reviewed_at": "2026-10-31T08:19:47.160039+00:00",
-      "source_commit": "593003ffe6c2587e8b996c2890e34e117f6a8742"
+      "source_digest": "ed64d079f461a2de1dd9d9d0020fdad7f1a1494760eede9a1a42064cabf14d2a",
+      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
+      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
+      "reviewed_at": "2026-10-31T08:22:06.580550+00:00",
+      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
     }
   }
 }
