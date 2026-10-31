@@ -411,161 +411,161 @@
       "document_sha256": "d37ea099e5d1cf0a78fafa03afab5b28a9573b74c7c4e96d8878a879fda5ae4f",
       "source_digest": "5b261867beb758516f2ff70d83a254af63727d2c65ee0e121bed6e69f7e00843",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.413498+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.043159+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "2": {
       "document_sha256": "ef4fd7f9e4e2eafd39d0405795b1f82fc6793b8b88300e6617bab5cb11b292ee",
       "source_digest": "5b261867beb758516f2ff70d83a254af63727d2c65ee0e121bed6e69f7e00843",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.414934+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.044660+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "3": {
       "document_sha256": "295daaded376e8d4bf9f807e040e9859ce07016dd3cc3e2c6f255f1f8e783913",
       "source_digest": "c8e5bc33125d482148c674b5e7fb47a05e929a8165258851b15899d02be829f5",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.417871+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.045687+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "4": {
       "document_sha256": "dfbee01987608f6c6e4cba96cfa0e76a50d3ad69b0071ee68d26343d070ec88a",
       "source_digest": "37a1f02d751cdc7c758ea0f7b1002b4a5b04f7abdf4bd59c6525de3316f172b7",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.419054+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.046788+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "5": {
       "document_sha256": "78a498f6920a2ca83bd2598d292f68d2ef12167fb110df13ed0ba1f474b8fd76",
       "source_digest": "2ed6320904df443e8f508d50fbc23f426a7059b086630f546e65f527928f34bc",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.419990+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.047710+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "6": {
       "document_sha256": "d52115d4d1cf6166e7206302bcd77ded6f5d3917c54963c00c6eff3534af6964",
       "source_digest": "26b7cbd62c27da71d9d9b39728c20902a48c814feac3b835851e55191d769091",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.421283+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.049246+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "7": {
       "document_sha256": "6e0eef1bbf393c1514a7cca6b11c0d59e7680d1b58dde6695edcd9980a98f955",
       "source_digest": "5b261867beb758516f2ff70d83a254af63727d2c65ee0e121bed6e69f7e00843",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.422338+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.050363+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "8": {
       "document_sha256": "36191ef6605cace2f38ea29119796662b4d96953bc603c2428ac3538e233d8c0",
       "source_digest": "26b7cbd62c27da71d9d9b39728c20902a48c814feac3b835851e55191d769091",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.423354+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.051481+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "9": {
       "document_sha256": "96f5f056d7097e66c9385da384fce9a5217d5379e2e0d6186b4335a695d0860c",
       "source_digest": "548a2200b1a6392ffdcc7310b4a5450d6f7aa70b5299b3ef01323d9d4c3f1ba4",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.424310+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.052503+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "10": {
       "document_sha256": "f7c081ff0c2324612cb756992bf270be0996ae4220b6bce22778cc14d894dcfb",
       "source_digest": "02dd0e498a33ec71b03849f7c19edcd6097d868bb8c3c479fd4f8779e75d5b79",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.425265+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.053489+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "11": {
       "document_sha256": "3da5dbb517cd7526b735b2a383d7bed83ebb82e743e7ef126333c1f4eba92791",
       "source_digest": "d41ac2b412b07c85c169ea3f698e1fc44451c95cfb7a3376ddb92811cb0b018e",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.426315+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.054543+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "12": {
       "document_sha256": "8f66998699e5497093f70a8089beb1ce412695634e2aa6ec9c6c3d8e050e4049",
       "source_digest": "d44c831bf26f2e5cd27d02fe568dc66d74615a159e9271697ced9c5dff3d06be",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.427354+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.055561+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "13": {
       "document_sha256": "5dfdd84db17f907ef6cb2b83cad73489bc5332652e7a460c0228521726d40980",
       "source_digest": "548a2200b1a6392ffdcc7310b4a5450d6f7aa70b5299b3ef01323d9d4c3f1ba4",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.428436+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.056615+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "14": {
       "document_sha256": "7bcedfa89f32e4adcd6a46625d79ea29fcd04428bf48a29c42dcf369582edb2a",
       "source_digest": "548a2200b1a6392ffdcc7310b4a5450d6f7aa70b5299b3ef01323d9d4c3f1ba4",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.429414+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.057625+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "15": {
       "document_sha256": "e52d8257bd0df6cf81e19ae4bc2a95d34c63a5a128bf8c04cc7cd68ec59e9631",
       "source_digest": "548a2200b1a6392ffdcc7310b4a5450d6f7aa70b5299b3ef01323d9d4c3f1ba4",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.430609+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.058769+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "16": {
       "document_sha256": "0ee1e3ac78d2fb27c5efa503602e1414d93ab6ec8fabd04c22c6d973f1d481fc",
       "source_digest": "fd70050752ed9d20495479f1d40e24f1dd50ae433bafe1c0e8ec658cd93dedbf",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.431565+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.059681+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "17": {
       "document_sha256": "ce3c14ad05c5868600009ebb04e87890f6eedc09fcc34ab63e27a2cbba2ebf10",
       "source_digest": "26b7cbd62c27da71d9d9b39728c20902a48c814feac3b835851e55191d769091",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.432528+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.060814+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "18": {
       "document_sha256": "3fb8d193a3e97d20df95f6f852929a41dbc1dc33d0256b9323b5b112faa63612",
       "source_digest": "5b261867beb758516f2ff70d83a254af63727d2c65ee0e121bed6e69f7e00843",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.433495+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.061822+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "19": {
       "document_sha256": "f0f0cc79bdc686fa3adcd0d3d17d597349f44007965f5933fcfe92a9f686ff9b",
       "source_digest": "42cf92892ba9aa3dbc64bcf9635a21dba0e405bcae4e21e98d93890fdcb81e63",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.434517+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.062819+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     },
     "20": {
       "document_sha256": "7af0f39754b74d0bae7f2750a04a0b86bd2d0530392c8ffae564e0d2d1649016",
       "source_digest": "5b261867beb758516f2ff70d83a254af63727d2c65ee0e121bed6e69f7e00843",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed source-document consistency and final Word/HTML quote rendering; 20 policy drafts retain unresolved operating evidence and publication blocks.",
-      "reviewed_at": "2026-10-31T05:47:49.435455+00:00",
-      "source_commit": "5665236a703914b6855f01a67b550325f23c8f92"
+      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:48:13.063769+00:00",
+      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
     }
   }
 }
