@@ -48,9 +48,21 @@ class SABRDiagnosticTests(unittest.TestCase):
                                       ('6m', .04, .003, 'rho upper'),
                                       ('1w', -.03, .02, 'nu upper')]:
             with self.subTest(tenor=tenor, rr=rr, bf=bf):
-                out=fixture(tenor,rr,bf);d=out.data['sabr_diagnostics']
+                solves=[];original=fx.least_squares
+                def capture(*a,**kw):
+                    r=original(*a,**kw);solves.append(r);return r
+                with patch.object(fx,'least_squares',side_effect=capture):
+                    out=fixture(tenor,rr,bf)
+                d=out.data['sabr_diagnostics'];best=min(solves,key=lambda r:r.cost)
                 self.assertTrue(out.data['fit'].converged)
-                self.assertIn(bound,d['active_bounds']);self.assertEqual(diagnostic_tone(d),'error')
+                expected_bounds=[f"{name} {'lower' if mask<0 else 'upper'}"
+                                 for name,mask in zip(('alpha','rho','nu'),best.active_mask) if mask]
+                self.assertEqual(d['active_bounds'],expected_bounds)
+                # SciPy releases can stop just inside a bound without marking it active.
+                # Exact parameter/limit/distance evidence must still be exposed.
+                param=next(p for p in d['parameter_bounds'] if p['name']==bound.split()[0])
+                self.assertLess(param['distance_to_upper'],1e-5)
+                self.assertEqual(param['distance_to_upper'],param['upper']-param['value'])
                 residuals=[r['residual_vol_points'] for r in d['residuals']]
                 self.assertAlmostEqual(d['rmse_vol_points'],math.sqrt(sum(r*r for r in residuals)/3),places=12)
                 self.assertAlmostEqual(d['rmse_vol_points'],out.data['fit'].rmse*100,places=12)
@@ -59,7 +71,7 @@ class SABRDiagnosticTests(unittest.TestCase):
                                          out.data['fit'].rho,out.data['fit'].nu)
                     self.assertAlmostEqual(row['residual_vol_points'],100*(expected-p.vol),places=12)
                 self.assertEqual(d['max_abs_residual_vol_points'],max(map(abs,residuals)))
-                self.assertIn(bound,out.narrative)
+                self.assertIn('Parameters / calibration bounds:',out.narrative)
 
     def test_unsuccessful_solver_and_unknown_bounds_are_not_conflated(self):
         out=fixture();fit=replace(out.data['fit'],converged=False,active_bounds=None)

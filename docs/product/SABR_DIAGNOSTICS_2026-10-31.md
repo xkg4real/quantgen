@@ -9,6 +9,9 @@ All report optimizer success. Historical audit results are separate evidence.
 
 `SABRFit.active_bounds` now carries the selected SciPy result's `active_mask`;
 this is the solver's existing tolerance, not an invented near-bound threshold.
+SciPy versions can stop just inside a bound without marking it active. Exact
+parameter values, existing solver limits and distances to those limits are
+therefore exposed independently of that flag. No near-bound verdict is invented.
 Legacy constructed fits without this metadata say "not reported", not "none".
 The shared diagnostic computes quoted/fitted volatility and signed residuals
 in vol points (100×volatility units), their RMSE and maximum absolute value.
