@@ -4,15 +4,15 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+done_ids: ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T16:11:51.000+09:00
+updated_at: 2026-10-31T16:16:25.000+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/carry-language-20261031
-work_commit: df7ccd8f21815933ff48e105d8e6bac77937b4cf
+work_branch: gpt/rates-language-20261031
+work_commit: 32d80824432bb28373c3c1aa17b14af60aa92cb5
 uncommitted_changes: no
-pr: 43 (CI pending)
+pr: 44 (CI pending; PR43 merged)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -25,6 +25,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 최신 검증 결과
+최신 추가: 캐리바스켓 언어하위작업 ⑬-8/b2/a PR43 df7ccd8 → main9d55e2b 완료. 로컬41검사 및 CI41179628495 Windows3.12/3.14·Ubuntu 모두success. Notion하위항목취소선완료. 금리해설 ⑬-8/b2/b source32d8082 원격저장/PR44, 로컬38PASS이며CI대기라아직미완료.
 2026-10-31 추가 완료: PR38 M4-N8 SABR 진단(source743521d → main579aadb; CI41175905734), PR39 13-8/a Windows 언어 선택·저장·기본UI(source6a82337 → mainf24463f; CI41177249869), PR40 13-8/b1 FX 선물환·옵션·SABR 한국어 해설(sourceae768dc → mainbea069f; CI41177922111). 세 CI 모두 Windows3.12/3.14·Ubuntu3.12 success. PR41은 PR40 웹사이트검토 JSON 한 파일만 추가(sourceed51d9d → main712e5e9), JSON/원격참조 검증; runtime CI대상아님. 이전PR31/32/33/35 완료도 보존. 최신15/67그룹 완료52미완료·14관찰행15모호매핑. Notion sapientia4065 검증된 하위범위만 취소선. 부모13-8·다른 해설·실제Windows 검수와 전체과업은 미완료. 이 실행의 안전 체크포인트이며 주기 returned/Claude수신확인이 아닙니다.
 
 ## 1. 최신 사용자 결정
@@ -164,3 +165,6 @@ PR40 sourceae768dc → mergebea069f; CI41177922111 all3 jobs success, PR merge r
 
 ## ⑬-8/b2/b 금리 해설 착수
 PR43 캐리코드 CI대기는독립추적. 검증된source df7ccd8에서새gpt/rates-language-20261031을만들어곡선/스왑/금리옵션/단기금리시뮬레이션의 authored해설표시를확장. 기존 rates.py는원문보고서를보존하며표시variant만연결하기위해수정. 계산코어·판정·시뮬레이션결과·연구실행승인불변. 해당하위ID LEDGER에없음. 공통localization/tools는UI draftPR42와겹치므로수정하지않음.
+
+## PR43 완료 / PR44 저장
+캐리 sourcedf7ccd8f21815933ff48e105d8e6bac77937b4cf / merge9d55e2ba350054759055c2f85b4332993a047e8d 및 LEDGER5656bedd/read-back, sapientia Notion b2/a취소선반영. 금리 source32d80824432bb28373c3c1aa17b14af60aa92cb5 /gpt/rates-language-20261031 원격검증/PR44.8금리언어+1보조환산UI+7언어+22desktop=38PASS;곡선fit/PCA누락·양방향swap·양모형option·보조환산불가·3시뮬레이션/조건부PV·원문보고서보존검사. 원본모형/provider주석·다른인라인문구및Bonds/Portfolio/실제Windows는미완료. UI웹사이트기록43/44는병합결과확인후동일세션에기록;전달도구없음queued.
