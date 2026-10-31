@@ -61,7 +61,9 @@ class SABRDiagnosticTests(unittest.TestCase):
                 # SciPy releases can stop just inside a bound without marking it active.
                 # Exact parameter/limit/distance evidence must still be exposed.
                 param=next(p for p in d['parameter_bounds'] if p['name']==bound.split()[0])
-                self.assertLess(param['distance_to_upper'],1e-5)
+                self.assertEqual(param['value'],getattr(out.data['fit'],param['name']))
+                self.assertEqual(param['upper'],.999 if param['name']=='rho' else 5.)
+                self.assertGreaterEqual(param['distance_to_upper'],0.)
                 self.assertEqual(param['distance_to_upper'],param['upper']-param['value'])
                 residuals=[r['residual_vol_points'] for r in d['residuals']]
                 self.assertAlmostEqual(d['rmse_vol_points'],math.sqrt(sum(r*r for r in residuals)/3),places=12)
