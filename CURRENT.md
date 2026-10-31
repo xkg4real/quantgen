@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T19:19:00+09:00
+updated_at: 2026-10-31T19:21:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/market-diagnostics-language-20261031
-work_commit: c3e69ccc058b5c0c59c147d2fa65ba5ea3b52372
+work_branch: gpt/market-diagnostics-website-record-20261031
+work_commit: 6a47cc8692a18b505fecf549013252ce61e94e68
 uncommitted_changes: no
-pr: 51 (merged; website record pending)
+pr: 52 (metadata CI pending)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -238,3 +238,7 @@ STATE/기대환경/private 접근과OS RUN.lock 확인. 직전execution 156c744e
 
 ## PR51 검증 완료
 13-8/b2/c/b/a sourcec3e69ccc058b5c0c59c147d2fa65ba5ea3b52372 → mainccf6654b7da1221e2b6bf09e019ecb6223c1e966 병합/read-back. Runtime41191720514 3환경 및문서41191720334 success;로컬33·문서47검사PASS;이전4사례parameters/raw sections/report sections exact동일. LEDGER 03d9e2c3c7741de049ff71b4276065576f3b5a6c append/read-back. 다음13-8/b2/c/b/b기타모델/LETF/인라인. 현재Notion완료와PR51웹검토기록을동기화중이며부모/실제Windows/Flet parity미완료.
+
+
+## PR51 웹사이트 기록 저장
+메타데이터 source6a47cc8692a18b505fecf549013252ce61e94e68 원격read-back, PR52 생성. JSON파싱/diff PASS. Notion13-8/b2/c/b/a 취소선/부모미완료 read-back 확인. 실제전달queued/no receipt,웹적용/배포미검증;다음본문미완료는private NATIVE_LANGUAGE_NEXT_AFTER_PR51.json 48후보(원문/사용자/공급자구분필요,모두번역대상이아님) 참조. 별도UI PR47 source59fa8e19는open/미병합으로조회,소유권/구현을변경하지않음.
