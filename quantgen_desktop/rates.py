@@ -119,4 +119,6 @@ class RatesPane(ToolPane):
                 self.line('Horizon PV distribution', (edges[:-1]+edges[1:])/2, [('Count',counts)], 'PV','Paths per bin')
                 self.text(hp.note)
         self.result_table('Metrics', ['Metric','Value'], metrics)
-        self.finished(out.narrative)
+        from .rates_narrative import rates_korean
+        korean = rates_korean(out)
+        self.finished(out.narrative, localized={'ko': korean} if korean is not None else None)
