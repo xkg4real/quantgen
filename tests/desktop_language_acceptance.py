@@ -39,7 +39,7 @@ class NativeLanguageTests(unittest.TestCase):
         self.drain()
         texts = [v.text() for v in w.findChildren(QLabel)]
         texts += [v.text() for v in w.findChildren(QAbstractButton)]
-        self.assertFalse([t for t in texts if re.search('[가-힣]', t)])
+        self.assertFalse([t for t in texts if re.search('[가-힣]', re.sub(r'https?://\S+', '', t))])
         self.assertEqual(w.nav['home'].text(), 'Research Home')
         self.assertIn('US 10-year yield', [w.home_markets.item(i, 0).text() for i in range(w.home_markets.rowCount())])
         self.assertEqual(w.rates.fields['option']['vol'].accessibleName(), 'Normal volatility · bp')
@@ -53,8 +53,8 @@ class NativeLanguageTests(unittest.TestCase):
         w.fx.tool.setCurrentIndex(w.fx.tool.findData('option'))
         w.fx.fields['option']['strike'].setText('1.2345')
         request = w.fx.make_request()
-        fields = [(v, v.text()) for v in w.findChildren(QLineEdit)]
-        combos = [(v, v.currentData(), v.currentIndex()) for v in w.findChildren(QComboBox) if v is not w.language]
+        fields = [(v, v.text()) for v in w.findChildren(QLineEdit) if v is not w.locale_picker.lineEdit()]
+        combos = [(v, v.currentData(), v.currentIndex()) for v in w.findChildren(QComboBox) if v is not w.language and not v.property("localePicker")]
         with patch.object(w.jobs, 'start', side_effect=AssertionError('language must not start jobs')):
             for language in ('ko', 'en', 'ko', 'en'):
                 w.set_language(language); self.drain()

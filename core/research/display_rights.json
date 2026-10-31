@@ -1,0 +1,1440 @@
+{
+  "format": "quantgen.display-rights-review/1",
+  "checked_on": "2026-10-31",
+  "publication_authorization": false,
+  "legal_opinion": false,
+  "home": [
+    {
+      "label": "S&P 500",
+      "series_id": "^GSPC",
+      "source": "Yahoo/yfinance",
+      "frequency": "daily",
+      "policy": "yahoo",
+      "outcome": "rights_replace"
+    },
+    {
+      "label": "KOSPI",
+      "series_id": "^KS11",
+      "source": "Yahoo/yfinance",
+      "frequency": "daily",
+      "policy": "yahoo",
+      "outcome": "rights_replace"
+    },
+    {
+      "label": "USD / KRW",
+      "series_id": "DEXKOUS",
+      "source": "FRED / Federal Reserve Board",
+      "frequency": "daily",
+      "policy": "fed_public",
+      "outcome": "rights_conditional"
+    },
+    {
+      "label": "US 10Y Treasury",
+      "series_id": "DGS10",
+      "source": "FRED / Federal Reserve Board",
+      "frequency": "daily",
+      "policy": "fed_public",
+      "outcome": "rights_conditional"
+    },
+    {
+      "label": "VIX",
+      "series_id": "VIXCLS",
+      "source": "FRED / Cboe",
+      "frequency": "daily",
+      "policy": "cboe",
+      "outcome": "rights_conditional"
+    },
+    {
+      "label": "Bitcoin",
+      "series_id": "BTC-USD",
+      "source": "Yahoo/yfinance",
+      "frequency": "daily",
+      "policy": "yahoo",
+      "outcome": "rights_replace"
+    }
+  ],
+  "registered_series": [
+    {
+      "series_id": "BAA10Y",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "BAMLH0A0HYM2",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "BOK_BASE_RATE",
+      "source": "ECOS",
+      "frequency": "event",
+      "unit": "pct",
+      "timezone": "Asia/Seoul",
+      "calendar": "ECOS",
+      "policy": "ECOS",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "BOK_CALL_RATE",
+      "source": "ECOS",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "Asia/Seoul",
+      "calendar": "ECOS",
+      "policy": "ECOS",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "BZ=F",
+      "source": "Yahoo",
+      "frequency": "daily",
+      "unit": "USD_per_bbl",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "yahoo",
+      "outcome": "rights_replace",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "CPIAUCSL",
+      "source": "FRED",
+      "frequency": "monthly",
+      "unit": "index",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "CPILFESL",
+      "source": "FRED",
+      "frequency": "monthly",
+      "unit": "index",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DAX_MONTH_END_CLOSE",
+      "source": "Yahoo",
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "Europe/Berlin",
+      "calendar": "XETRA",
+      "policy": "yahoo",
+      "outcome": "rights_replace",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DCOILBRENTEU",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "USD_per_bbl",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DEXJPUS",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "JPY_per_USD",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DEXKOUS",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "KRW_per_USD",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fed_public",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DFEDTARU",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DFII10",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DGS10",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fed_public",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DGS2",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DGS30",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DM_MKT_RET_24M",
+      "source": "derived",
+      "frequency": "monthly",
+      "unit": "return",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "derived",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DM_MKT_VOL_126",
+      "source": "derived",
+      "frequency": "daily",
+      "unit": "vol",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "derived",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DTB3",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "DTWEXBGS",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "level",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "ECOS_1530_CLOSE",
+      "source": "ECOS",
+      "frequency": "daily",
+      "unit": "KRW_per_USD",
+      "timezone": "Asia/Seoul",
+      "calendar": "ECOS",
+      "policy": "ECOS",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "FEDFUNDS",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "FTSE100_MONTH_END_CLOSE",
+      "source": "Yahoo",
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "Europe/London",
+      "calendar": "LSE",
+      "policy": "yahoo",
+      "outcome": "rights_replace",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "HSI_CLOSE",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Hong_Kong",
+      "calendar": "HKEX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "HSI_MONTH_END_CLOSE",
+      "source": "KIS",
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "Asia/Hong_Kong",
+      "calendar": "HKEX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "ICSA",
+      "source": "FRED",
+      "frequency": "weekly",
+      "unit": "count",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KODEX200_PDF",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "weight",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KOSPI200_MFIV_1530",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "vol_pct",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KOSPI200_OFFICIAL_CLOSE",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KOSPI_NET_BUY_FOREIGN",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KOSPI_NET_BUY_INDIVIDUAL",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KOSPI_NET_BUY_INSTITUTION",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KOSPI_OFFICIAL_CLOSE",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KOSPI_TOTAL_MARKET_CAP",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KRX_000660_MARKET_CAP",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KRX_000660_OFFICIAL_CLOSE",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KRX_005930_MARKET_CAP",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KRX_005930_OFFICIAL_CLOSE",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KRX_069500_OFFICIAL_CLOSE",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KRX_OHLCV",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "KRW",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KR_CD91",
+      "source": "ECOS",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "Asia/Seoul",
+      "calendar": "ECOS",
+      "policy": "ECOS",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "KR_CPI",
+      "source": "KOSIS",
+      "frequency": "monthly",
+      "unit": "index",
+      "timezone": "Asia/Seoul",
+      "calendar": "ECOS",
+      "policy": "KOSIS",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "MOM_PAPER_LS_SERIES",
+      "source": "derived",
+      "frequency": "daily",
+      "unit": "return",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "derived",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "NIKKEI225_CLOSE",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Tokyo",
+      "calendar": "JPX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "NIKKEI225_MONTH_END_CLOSE",
+      "source": "KIS",
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "Asia/Tokyo",
+      "calendar": "JPX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "PAYEMS",
+      "source": "FRED",
+      "frequency": "monthly",
+      "unit": "thousands",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "PCEPI",
+      "source": "FRED",
+      "frequency": "monthly",
+      "unit": "index",
+      "timezone": "America/New_York",
+      "calendar": "BEA",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "PCEPILFE",
+      "source": "FRED",
+      "frequency": "monthly",
+      "unit": "index",
+      "timezone": "America/New_York",
+      "calendar": "BEA",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "SAHMREALTIME",
+      "source": "FRED",
+      "frequency": "monthly",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "SHANGHAI_CLOSE",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Shanghai",
+      "calendar": "SSE",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "SOX_CLOSE",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "SPX_MONTH_END_CLOSE",
+      "source": "KIS",
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "SPX_OFFICIAL_CLOSE",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "T10Y2Y",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "T10Y3M",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "T10YIE",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "T5YIFR",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "TAIEX_CLOSE",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "index_points",
+      "timezone": "Asia/Taipei",
+      "calendar": "TWSE",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "TAIEX_MONTH_END_CLOSE",
+      "source": "KIS",
+      "frequency": "month_end",
+      "unit": "index_points",
+      "timezone": "Asia/Taipei",
+      "calendar": "TWSE",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "THREEFYTP10",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "UNRATE",
+      "source": "FRED",
+      "frequency": "monthly",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "BLS",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "US10Y_KIS_QUOTE",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "USDKRW_1530_SNAPSHOT",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "KRW_per_USD",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "USD_LIVE_PROXY",
+      "source": "Yahoo",
+      "frequency": "daily",
+      "unit": "level",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "yahoo",
+      "outcome": "rights_replace",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "USEPUINDXD",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "level",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "UST_PAR_10Y",
+      "source": "Treasury",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "SIFMA",
+      "policy": "Treasury",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "US_RF",
+      "source": "French",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "FED",
+      "policy": "French",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "US_SLEEVE_OFFICIAL_CLOSE",
+      "source": "KIS",
+      "frequency": "daily",
+      "unit": "USD",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "VIXCLS",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "vol_pct",
+      "timezone": "America/New_York",
+      "calendar": "CBOE",
+      "policy": "cboe",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "VKOSPI",
+      "source": "KRX",
+      "frequency": "daily",
+      "unit": "vol_pct",
+      "timezone": "Asia/Seoul",
+      "calendar": "KRX",
+      "policy": "kis_krx",
+      "outcome": "rights_conditional",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "VXVCLS",
+      "source": "FRED",
+      "frequency": "daily",
+      "unit": "vol_pct",
+      "timezone": "America/New_York",
+      "calendar": "CBOE",
+      "policy": "fred_other",
+      "outcome": "rights_verify",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "^MOVE",
+      "source": "Yahoo",
+      "frequency": "daily",
+      "unit": "level",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "yahoo",
+      "outcome": "rights_replace",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    },
+    {
+      "series_id": "^TNX",
+      "source": "Yahoo",
+      "frequency": "daily",
+      "unit": "pct",
+      "timezone": "America/New_York",
+      "calendar": "NYSE",
+      "policy": "yahoo",
+      "outcome": "rights_replace",
+      "evidence_scope": "provider-level; dataset-specific rights remain unverified"
+    }
+  ],
+  "policies": {
+    "yahoo": {
+      "outcome": "rights_replace",
+      "summary": {
+        "ko": "현재 Yahoo 경로는 공개 서비스용 권리가 확인되지 않아 계약된 공급처로 대체가 필요합니다.",
+        "en": "The current Yahoo route has no verified public-service rights; replace it with a licensed source."
+      },
+      "free_service": {
+        "ko": "무료 공개 표시도 별도 권리 확인이 필요합니다.",
+        "en": "Free public display still requires applicable rights."
+      },
+      "paid_service": {
+        "ko": "개인용 API 접근을 유료 서비스 권리로 사용할 수 없습니다.",
+        "en": "Personal API access is not a paid-service licence."
+      },
+      "realtime_delayed": {
+        "ko": "거래소별 지연이 다르며 지연 데이터도 권리 검토 대상입니다.",
+        "en": "Delays vary by exchange; delayed data also requires rights review."
+      },
+      "storage": {
+        "ko": "캐시·저장 허용 범위와 기간을 서면 확인합니다.",
+        "en": "Confirm permitted caching, retention and scope in writing."
+      },
+      "export": {
+        "ko": "원시값·차트·다운로드의 재배포 권리를 각각 확인합니다.",
+        "en": "Confirm redistribution rights for values, charts and downloads separately."
+      },
+      "derived": {
+        "ko": "가공 통계·해설이라고 자동 면제되지 않습니다.",
+        "en": "Derived statistics or commentary are not automatically exempt."
+      },
+      "attribution": {
+        "ko": "Yahoo·원권리자·관측일·실제 지연 정보를 표시합니다.",
+        "en": "Identify Yahoo, original owners, observation dates and actual delay."
+      },
+      "fees": {
+        "ko": "공개 표시·재배포 공급계약 견적 필요. 무료 API 사용료와 별개입니다.",
+        "en": "Obtain a public-display/redistribution quote; API access costs are separate."
+      },
+      "evidence": [
+        "https://help.yahoo.com/kb/SLN2310.html",
+        "https://ranaroussi.github.io/yfinance/"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "fed_public": {
+      "outcome": "rights_conditional",
+      "summary": {
+        "ko": "해당 연준 원자료는 출처 표시 요청이 있는 공개 자료입니다. 실제 FRED 접근 조건과 표시 범위를 함께 확인합니다.",
+        "en": "These Board-origin series are public-domain data with citation requested; check FRED access terms and the intended display scope."
+      },
+      "free_service": {
+        "ko": "원자료의 공개 범위·출처 표시 조건 충족 후 가능합니다.",
+        "en": "Possible after original-source scope and attribution conditions are met."
+      },
+      "paid_service": {
+        "ko": "공개 원자료의 이용과 API 이용 조건을 구분합니다.",
+        "en": "Distinguish original-data reuse from API conditions."
+      },
+      "realtime_delayed": {
+        "ko": "일별 공표값입니다. 실시간 거래 호가가 아니며 공표 지연·수정 가능성을 표시합니다.",
+        "en": "Daily published observations, not live tradable quotes; disclose publication lag and revisions."
+      },
+      "storage": {
+        "ko": "원자료 권리와 API 약관, 빈티지·수집일을 함께 기록합니다.",
+        "en": "Record source rights, API terms, vintage and retrieval date."
+      },
+      "export": {
+        "ko": "출처·단위·관측일·가공 내역을 유지합니다.",
+        "en": "Retain source, units, dates and transformations."
+      },
+      "derived": {
+        "ko": "가공 결과는 연준의 공식 평가나 예측으로 표시하지 않습니다.",
+        "en": "Do not present transformations as Board-endorsed assessments or forecasts."
+      },
+      "attribution": {
+        "ko": "Federal Reserve Board, 시리즈 코드·단위·관측일 및 FRED 경로를 표시합니다.",
+        "en": "Cite the Board, series ID, units, observation date and FRED route."
+      },
+      "fees": {
+        "ko": "원자료 공개 이용과 별도 상용 API 계약 비용은 다릅니다.",
+        "en": "Public-source reuse and any separate commercial API charges differ."
+      },
+      "evidence": [
+        "https://www.federalreserve.gov/disclaimer.htm",
+        "https://fred.stlouisfed.org/series/DEXKOUS",
+        "https://fred.stlouisfed.org/series/DGS10",
+        "https://fred.stlouisfed.org/docs/api/terms_of_use.html"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "fred_other": {
+      "outcome": "rights_verify",
+      "summary": {
+        "ko": "FRED는 전달 경로이며 시리즈별 원권리자가 다릅니다. 개별 노트·라이선스를 추가 확인해야 합니다.",
+        "en": "FRED is a delivery route; original rights vary by series. Check each series note and licence."
+      },
+      "free_service": {
+        "ko": "개별 시리즈의 원권리·표시 조건을 확인합니다.",
+        "en": "Verify original rights and display conditions per series."
+      },
+      "paid_service": {
+        "ko": "유료·간접 수익 서비스의 권리 범위를 별도 확인합니다.",
+        "en": "Confirm rights for paid or indirectly monetized services."
+      },
+      "realtime_delayed": {
+        "ko": "등록 주기·공표 지연과 실제 공급 시각을 구분합니다.",
+        "en": "Distinguish registered frequency, publication lag and delivery time."
+      },
+      "storage": {
+        "ko": "계약의 캐시·보관 범위 미확인.",
+        "en": "Caching and retention scope are unverified."
+      },
+      "export": {
+        "ko": "다운로드와 재배포 권리 미확인.",
+        "en": "Download and redistribution rights are unverified."
+      },
+      "derived": {
+        "ko": "원자료의 가공·파생 이용 조건을 승계합니다.",
+        "en": "Derived use inherits source-specific conditions."
+      },
+      "attribution": {
+        "ko": "FRED 및 시리즈별 원출처·단위·관측일을 표시합니다.",
+        "en": "Cite FRED, the series source, units and observation dates."
+      },
+      "fees": {
+        "ko": "시리즈별 계약·요금 추가 확인.",
+        "en": "Series-specific agreements and costs need verification."
+      },
+      "evidence": [
+        "https://fred.stlouisfed.org/docs/api/terms_of_use.html",
+        "https://fred.stlouisfed.org/legal/"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "cboe": {
+      "outcome": "rights_conditional",
+      "summary": {
+        "ko": "VIXCLS는 Cboe 저작권 자료입니다. FRED의 재인쇄 허가는 이 앱의 재배포 계약을 대신하지 않습니다.",
+        "en": "VIXCLS is Cboe copyrighted material. FRED reprint permission does not establish this app's redistribution licence."
+      },
+      "free_service": {
+        "ko": "무료 공개 서비스도 Cboe·공급처의 표시 권리를 확인합니다.",
+        "en": "Confirm Cboe/provider display rights for free public services too."
+      },
+      "paid_service": {
+        "ko": "의도한 서비스에 맞는 별도 라이선스가 필요합니다.",
+        "en": "Obtain a licence covering the intended service."
+      },
+      "realtime_delayed": {
+        "ko": "현재 종가·일별 시리즈와 실시간 지수 피드는 별개입니다.",
+        "en": "The current daily closing series differs from a real-time index feed."
+      },
+      "storage": {
+        "ko": "저장·기간·파생자료 보관 범위를 계약에서 확인합니다.",
+        "en": "Confirm storage, retention and derived-data retention in the agreement."
+      },
+      "export": {
+        "ko": "차트·표·다운로드·외부 데이터 제공을 각각 계약에 포함합니다.",
+        "en": "Cover charts, tables, downloads and external data access separately."
+      },
+      "derived": {
+        "ko": "파생 분석과 지수 상표의 이용 범위를 확인합니다.",
+        "en": "Check derived-analysis and index trademark scope."
+      },
+      "attribution": {
+        "ko": "Cboe·VIX·FRED·관측일 및 종가/지연 구분을 표시합니다.",
+        "en": "Identify Cboe, VIX, FRED, observation date and closing/delayed status."
+      },
+      "fees": {
+        "ko": "피드·지수·재배포 조건별 견적 필요.",
+        "en": "Quote required for feed, index and redistribution scope."
+      },
+      "evidence": [
+        "https://fred.stlouisfed.org/series/VIXCLS",
+        "https://www.cboe.com/data/global-indices-feed",
+        "https://www.cboe.com/data/market-data-services/document-library"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "kis_krx": {
+      "outcome": "rights_conditional",
+      "summary": {
+        "ko": "개인 자산 투자용 API와 제3자 앱·웹 표시 권리는 다릅니다. 거래소·코스콤과 공급처 계약을 확인해야 합니다.",
+        "en": "Personal-investment APIs differ from third-party app/web display rights. Confirm exchange/Koscom and provider agreements."
+      },
+      "free_service": {
+        "ko": "무료라도 제3자 제공·표시 계약 여부를 확인합니다.",
+        "en": "Confirm third-party display/provision rights even when free."
+      },
+      "paid_service": {
+        "ko": "제휴·시세정보이용·재배포 계약 범위가 필요합니다.",
+        "en": "Affiliate, market-data and redistribution scope must be covered."
+      },
+      "realtime_delayed": {
+        "ko": "실시간·20분 지연·종가 모두 이용 목적과 계약을 구분합니다.",
+        "en": "Distinguish real-time, 20-minute-delayed and end-of-day uses and agreements."
+      },
+      "storage": {
+        "ko": "저장 기간·캐시·감사·종료 후 처리 조건 확인.",
+        "en": "Confirm retention, caching, audit and termination handling."
+      },
+      "export": {
+        "ko": "고객 다운로드·원시값 API·보고서 배포 권리 별도 확인.",
+        "en": "Check customer downloads, raw-data APIs and report distribution separately."
+      },
+      "derived": {
+        "ko": "가공·비표시 분석·파생 데이터 권리도 포함해 확인합니다.",
+        "en": "Include derived and non-display analytical usage."
+      },
+      "attribution": {
+        "ko": "공급처·KRX·관측시각·실제 지연 표시를 계약대로 적용합니다.",
+        "en": "Apply provider/KRX attribution, timestamps and actual-delay notices per contract."
+      },
+      "fees": {
+        "ko": "거래소·코스콤·공급처의 이용자/상품/용도별 견적 필요.",
+        "en": "Exchange/Koscom/provider quote depends on users, products and usage."
+      },
+      "evidence": [
+        "https://apiportal.koreainvestment.com/about-open-api",
+        "https://apiportal.koreainvestment.com/provider",
+        "https://openapi.krx.co.kr/contents/OPP/DATA/OPPDATA003.jsp"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "fmp": {
+      "outcome": "rights_conditional",
+      "summary": {
+        "ko": "개인용 플랜은 서비스 표시 계약이 아닙니다. 공개·내부 다중 사용자·상용 이용 범위를 별도 확인합니다.",
+        "en": "Personal plans do not establish service-display rights. Confirm public, internal multi-user and commercial scope."
+      },
+      "free_service": {
+        "ko": "무료 웹사이트도 표시 이용에 해당할 수 있습니다.",
+        "en": "A free website may still constitute display use."
+      },
+      "paid_service": {
+        "ko": "상용 표시·재배포 계약과 거래소 요구사항 확인.",
+        "en": "Confirm commercial display/redistribution terms and exchange requirements."
+      },
+      "realtime_delayed": {
+        "ko": "실시간·지연·종가 데이터셋 및 사용자 분류를 계약에 명시합니다.",
+        "en": "Specify real-time, delayed or end-of-day datasets and user classification."
+      },
+      "storage": {
+        "ko": "캐시·보관 범위를 서면 계약에서 확인합니다.",
+        "en": "Confirm caching/retention in the written agreement."
+      },
+      "export": {
+        "ko": "다운로드·재배포는 표시와 구분해 확인합니다.",
+        "en": "Confirm downloads and redistribution separately from display."
+      },
+      "derived": {
+        "ko": "FMP 약관은 파생 정보도 다루므로 분석이라고 면제하지 않습니다.",
+        "en": "Terms address derived information; analysis is not automatically exempt."
+      },
+      "attribution": {
+        "ko": "계약상 출처·거래소·시각 표시를 준수합니다.",
+        "en": "Follow contractual source, exchange and time notices."
+      },
+      "fees": {
+        "ko": "표시·재배포 견적 필요. 구독 가격만으로 판단하지 않습니다.",
+        "en": "Display/redistribution quote required; subscription price alone is insufficient."
+      },
+      "evidence": [
+        "https://site.financialmodelingprep.com/terms-of-service",
+        "https://site.financialmodelingprep.com/insights/platform/can-you-use-fmp-data-in-a-public-app-website-or-client-dashboard"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "ECOS": {
+      "outcome": "rights_verify",
+      "summary": {
+        "ko": "자료별 이용 조건·계약과 원권리 범위를 추가 확인해야 합니다.",
+        "en": "Verify dataset-specific terms, contracts and original rights."
+      },
+      "free_service": {
+        "ko": "무료 표시 허용 범위 미확인.",
+        "en": "Free-display scope is unverified."
+      },
+      "paid_service": {
+        "ko": "상용·유료 서비스 이용 범위 미확인.",
+        "en": "Commercial/paid-service scope is unverified."
+      },
+      "realtime_delayed": {
+        "ko": "실제 공표·갱신 주기와 실시간·지연 이용 조건 확인.",
+        "en": "Confirm publication/update frequency and live/delayed usage terms."
+      },
+      "storage": {
+        "ko": "캐시·저장·삭제 조건 확인 필요.",
+        "en": "Confirm caching, storage and deletion conditions."
+      },
+      "export": {
+        "ko": "재배포·다운로드·보고서 제공 조건 확인 필요.",
+        "en": "Confirm redistribution, download and report conditions."
+      },
+      "derived": {
+        "ko": "가공·비표시 분석과 원권리 승계 범위를 확인합니다.",
+        "en": "Confirm derived/non-display use and inherited rights."
+      },
+      "attribution": {
+        "ko": "출처·시각·지연·원권리자 표시 의무 확인 필요.",
+        "en": "Verify source, timestamp, delay and original-owner notices."
+      },
+      "fees": {
+        "ko": "서비스 범위에 따른 계약·비용 추가 확인. 공개 접근은 무제한 이용권이 아닙니다.",
+        "en": "Confirm agreements and costs for the scope; public access is not unlimited permission."
+      },
+      "evidence": [
+        "https://ecos.bok.or.kr/"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "KOSIS": {
+      "outcome": "rights_verify",
+      "summary": {
+        "ko": "자료별 이용 조건·계약과 원권리 범위를 추가 확인해야 합니다.",
+        "en": "Verify dataset-specific terms, contracts and original rights."
+      },
+      "free_service": {
+        "ko": "무료 표시 허용 범위 미확인.",
+        "en": "Free-display scope is unverified."
+      },
+      "paid_service": {
+        "ko": "상용·유료 서비스 이용 범위 미확인.",
+        "en": "Commercial/paid-service scope is unverified."
+      },
+      "realtime_delayed": {
+        "ko": "실제 공표·갱신 주기와 실시간·지연 이용 조건 확인.",
+        "en": "Confirm publication/update frequency and live/delayed usage terms."
+      },
+      "storage": {
+        "ko": "캐시·저장·삭제 조건 확인 필요.",
+        "en": "Confirm caching, storage and deletion conditions."
+      },
+      "export": {
+        "ko": "재배포·다운로드·보고서 제공 조건 확인 필요.",
+        "en": "Confirm redistribution, download and report conditions."
+      },
+      "derived": {
+        "ko": "가공·비표시 분석과 원권리 승계 범위를 확인합니다.",
+        "en": "Confirm derived/non-display use and inherited rights."
+      },
+      "attribution": {
+        "ko": "출처·시각·지연·원권리자 표시 의무 확인 필요.",
+        "en": "Verify source, timestamp, delay and original-owner notices."
+      },
+      "fees": {
+        "ko": "서비스 범위에 따른 계약·비용 추가 확인. 공개 접근은 무제한 이용권이 아닙니다.",
+        "en": "Confirm agreements and costs for the scope; public access is not unlimited permission."
+      },
+      "evidence": [
+        "https://kosis.kr/"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "Treasury": {
+      "outcome": "rights_verify",
+      "summary": {
+        "ko": "자료별 이용 조건·계약과 원권리 범위를 추가 확인해야 합니다.",
+        "en": "Verify dataset-specific terms, contracts and original rights."
+      },
+      "free_service": {
+        "ko": "무료 표시 허용 범위 미확인.",
+        "en": "Free-display scope is unverified."
+      },
+      "paid_service": {
+        "ko": "상용·유료 서비스 이용 범위 미확인.",
+        "en": "Commercial/paid-service scope is unverified."
+      },
+      "realtime_delayed": {
+        "ko": "실제 공표·갱신 주기와 실시간·지연 이용 조건 확인.",
+        "en": "Confirm publication/update frequency and live/delayed usage terms."
+      },
+      "storage": {
+        "ko": "캐시·저장·삭제 조건 확인 필요.",
+        "en": "Confirm caching, storage and deletion conditions."
+      },
+      "export": {
+        "ko": "재배포·다운로드·보고서 제공 조건 확인 필요.",
+        "en": "Confirm redistribution, download and report conditions."
+      },
+      "derived": {
+        "ko": "가공·비표시 분석과 원권리 승계 범위를 확인합니다.",
+        "en": "Confirm derived/non-display use and inherited rights."
+      },
+      "attribution": {
+        "ko": "출처·시각·지연·원권리자 표시 의무 확인 필요.",
+        "en": "Verify source, timestamp, delay and original-owner notices."
+      },
+      "fees": {
+        "ko": "서비스 범위에 따른 계약·비용 추가 확인. 공개 접근은 무제한 이용권이 아닙니다.",
+        "en": "Confirm agreements and costs for the scope; public access is not unlimited permission."
+      },
+      "evidence": [
+        "https://home.treasury.gov/"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "French": {
+      "outcome": "rights_verify",
+      "summary": {
+        "ko": "자료별 이용 조건·계약과 원권리 범위를 추가 확인해야 합니다.",
+        "en": "Verify dataset-specific terms, contracts and original rights."
+      },
+      "free_service": {
+        "ko": "무료 표시 허용 범위 미확인.",
+        "en": "Free-display scope is unverified."
+      },
+      "paid_service": {
+        "ko": "상용·유료 서비스 이용 범위 미확인.",
+        "en": "Commercial/paid-service scope is unverified."
+      },
+      "realtime_delayed": {
+        "ko": "실제 공표·갱신 주기와 실시간·지연 이용 조건 확인.",
+        "en": "Confirm publication/update frequency and live/delayed usage terms."
+      },
+      "storage": {
+        "ko": "캐시·저장·삭제 조건 확인 필요.",
+        "en": "Confirm caching, storage and deletion conditions."
+      },
+      "export": {
+        "ko": "재배포·다운로드·보고서 제공 조건 확인 필요.",
+        "en": "Confirm redistribution, download and report conditions."
+      },
+      "derived": {
+        "ko": "가공·비표시 분석과 원권리 승계 범위를 확인합니다.",
+        "en": "Confirm derived/non-display use and inherited rights."
+      },
+      "attribution": {
+        "ko": "출처·시각·지연·원권리자 표시 의무 확인 필요.",
+        "en": "Verify source, timestamp, delay and original-owner notices."
+      },
+      "fees": {
+        "ko": "서비스 범위에 따른 계약·비용 추가 확인. 공개 접근은 무제한 이용권이 아닙니다.",
+        "en": "Confirm agreements and costs for the scope; public access is not unlimited permission."
+      },
+      "evidence": [
+        "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "Upbit": {
+      "outcome": "rights_verify",
+      "summary": {
+        "ko": "자료별 이용 조건·계약과 원권리 범위를 추가 확인해야 합니다.",
+        "en": "Verify dataset-specific terms, contracts and original rights."
+      },
+      "free_service": {
+        "ko": "무료 표시 허용 범위 미확인.",
+        "en": "Free-display scope is unverified."
+      },
+      "paid_service": {
+        "ko": "상용·유료 서비스 이용 범위 미확인.",
+        "en": "Commercial/paid-service scope is unverified."
+      },
+      "realtime_delayed": {
+        "ko": "실제 공표·갱신 주기와 실시간·지연 이용 조건 확인.",
+        "en": "Confirm publication/update frequency and live/delayed usage terms."
+      },
+      "storage": {
+        "ko": "캐시·저장·삭제 조건 확인 필요.",
+        "en": "Confirm caching, storage and deletion conditions."
+      },
+      "export": {
+        "ko": "재배포·다운로드·보고서 제공 조건 확인 필요.",
+        "en": "Confirm redistribution, download and report conditions."
+      },
+      "derived": {
+        "ko": "가공·비표시 분석과 원권리 승계 범위를 확인합니다.",
+        "en": "Confirm derived/non-display use and inherited rights."
+      },
+      "attribution": {
+        "ko": "출처·시각·지연·원권리자 표시 의무 확인 필요.",
+        "en": "Verify source, timestamp, delay and original-owner notices."
+      },
+      "fees": {
+        "ko": "서비스 범위에 따른 계약·비용 추가 확인. 공개 접근은 무제한 이용권이 아닙니다.",
+        "en": "Confirm agreements and costs for the scope; public access is not unlimited permission."
+      },
+      "evidence": [
+        "https://docs.upbit.com/kr/docs/terms"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "Binance": {
+      "outcome": "rights_verify",
+      "summary": {
+        "ko": "자료별 이용 조건·계약과 원권리 범위를 추가 확인해야 합니다.",
+        "en": "Verify dataset-specific terms, contracts and original rights."
+      },
+      "free_service": {
+        "ko": "무료 표시 허용 범위 미확인.",
+        "en": "Free-display scope is unverified."
+      },
+      "paid_service": {
+        "ko": "상용·유료 서비스 이용 범위 미확인.",
+        "en": "Commercial/paid-service scope is unverified."
+      },
+      "realtime_delayed": {
+        "ko": "실제 공표·갱신 주기와 실시간·지연 이용 조건 확인.",
+        "en": "Confirm publication/update frequency and live/delayed usage terms."
+      },
+      "storage": {
+        "ko": "캐시·저장·삭제 조건 확인 필요.",
+        "en": "Confirm caching, storage and deletion conditions."
+      },
+      "export": {
+        "ko": "재배포·다운로드·보고서 제공 조건 확인 필요.",
+        "en": "Confirm redistribution, download and report conditions."
+      },
+      "derived": {
+        "ko": "가공·비표시 분석과 원권리 승계 범위를 확인합니다.",
+        "en": "Confirm derived/non-display use and inherited rights."
+      },
+      "attribution": {
+        "ko": "출처·시각·지연·원권리자 표시 의무 확인 필요.",
+        "en": "Verify source, timestamp, delay and original-owner notices."
+      },
+      "fees": {
+        "ko": "서비스 범위에 따른 계약·비용 추가 확인. 공개 접근은 무제한 이용권이 아닙니다.",
+        "en": "Confirm agreements and costs for the scope; public access is not unlimited permission."
+      },
+      "evidence": [
+        "https://github.com/binance/binance-public-data/blob/master/TERMS_AND_CONDITIONS.md"
+      ],
+      "checked_on": "2026-10-31"
+    },
+    "derived": {
+      "outcome": "rights_verify",
+      "summary": {
+        "ko": "파생 지표는 모든 입력 데이터의 조건을 승계합니다. 입력 권리가 미확인이면 공개 이용 가능으로 올리지 않습니다.",
+        "en": "Derived indicators inherit all input-data conditions. Unverified input rights prevent a public-use clearance."
+      },
+      "free_service": {
+        "ko": "개별 시리즈의 원권리·표시 조건을 확인합니다.",
+        "en": "Verify original rights and display conditions per series."
+      },
+      "paid_service": {
+        "ko": "유료·간접 수익 서비스의 권리 범위를 별도 확인합니다.",
+        "en": "Confirm rights for paid or indirectly monetized services."
+      },
+      "realtime_delayed": {
+        "ko": "등록 주기·공표 지연과 실제 공급 시각을 구분합니다.",
+        "en": "Distinguish registered frequency, publication lag and delivery time."
+      },
+      "storage": {
+        "ko": "계약의 캐시·보관 범위 미확인.",
+        "en": "Caching and retention scope are unverified."
+      },
+      "export": {
+        "ko": "다운로드와 재배포 권리 미확인.",
+        "en": "Download and redistribution rights are unverified."
+      },
+      "derived": {
+        "ko": "원자료의 가공·파생 이용 조건을 승계합니다.",
+        "en": "Derived use inherits source-specific conditions."
+      },
+      "attribution": {
+        "ko": "FRED 및 시리즈별 원출처·단위·관측일을 표시합니다.",
+        "en": "Cite FRED, the series source, units and observation dates."
+      },
+      "fees": {
+        "ko": "시리즈별 계약·요금 추가 확인.",
+        "en": "Series-specific agreements and costs need verification."
+      },
+      "evidence": [
+        "docs/product/DATA_READINESS_2026-10-29.json"
+      ],
+      "checked_on": "2026-10-31"
+    }
+  },
+  "legal_review": {
+    "sources": [
+      "https://www.fsc.go.kr/no010101/82887",
+      "https://law.go.kr/법령/자본시장과금융투자업에관한법률/제101조"
+    ],
+    "scope_ko": "교육 도구·일반 해설·개별 투자 조언을 실제 기능과 수익모델로 구분해야 합니다. 유료 양방향·개별 상담, 성과 광고·보장 표현, 개인정보·국외 처리 등은 별도 법률 검토 대상입니다. 면책 문구만으로 업종 분류가 결정되지 않습니다.",
+    "scope_en": "Assess education, general commentary and individualized advice against actual features and monetization. Paid interactive/individual advice, performance advertising/guarantees, privacy and cross-border processing need separate legal review; disclaimers alone do not determine classification."
+  }
+}

@@ -29,7 +29,7 @@ def save_desktop_export(filename, data, *, extension):
         if temporary is not None and os.path.exists(temporary): os.unlink(temporary)
 
 
-def bundle_bytes(run):
+def bundle_bytes(run, *, locale=None):
     validate(run)
     raw=export_bytes(run)
     evidence=escape(json.dumps(run,ensure_ascii=False,indent=2))
@@ -39,6 +39,11 @@ def bundle_bytes(run):
 <h1>QUANTGEN — ResearchRun</h1><p>Personal research. Execution completion is separate from investment validation.
 P5–P95 is the central 90% simulated range, not a guarantee or confidence interval.
 Reproducibility is PARTIAL: unknown vintage, rights and code state remain explicit.</p><pre>'''+evidence+'</pre>').encode()
+    if locale is not None:
+        from core.i18n import LocaleContext
+        ctx=locale if isinstance(locale,LocaleContext) else LocaleContext(locale)
+        from .localized_report import localized_html
+        report=localized_html(run,ctx,title='QUANTGEN — ResearchRun')
     files={'research-run.json':raw,'report.html':report}
     files['MANIFEST.json']=(canonical({'format':'quantgen.research-bundle/1','files':
         {name:dict(bytes=len(data),sha256=hashlib.sha256(data).hexdigest()) for name,data in files.items()}})+'\n').encode()

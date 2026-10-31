@@ -65,6 +65,8 @@ class ResearchHome(ft.Column):
         self.research = session_for(page)
         self.selected = None
         self.mounted = False
+        self.indicator_guide=None
+        self.guide_host=ft.Container(visible=False)
         self.render()
 
     def did_mount(self):
@@ -100,7 +102,7 @@ class ResearchHome(ft.Column):
     async def download(self, run, *, bundle=False):
         try:
             extension='zip' if bundle else 'json'
-            data=bundle_bytes(run) if bundle else export_bytes(run)
+            data=bundle_bytes(run,locale=getattr(self.host_page,'qg_locale',None)) if bundle else export_bytes(run)
             filename=await ft.FilePicker().save_file(file_name=f"QUANTGEN-{run['run_id']}.{extension}",
                 file_type=ft.FilePickerFileType.CUSTOM, allowed_extensions=[extension],
                 src_bytes=data)
@@ -120,6 +122,9 @@ class ResearchHome(ft.Column):
             content=_text(steps,14),actions=[ft.TextButton('분석 화면 열기',on_click=open_view)]))
 
     def render(self):
+        from core.i18n import LocaleContext
+        ctx=getattr(self.host_page,'qg_locale',LocaleContext())
+        if self.indicator_guide is not None:self.indicator_guide.render_locale(ctx)
         pal = active(); navigate = self.navigate
         runs = self.research.runs(); markets = self.research.markets()
         complete = [r for r in runs if r['execution_status'] == 'COMPLETED']
@@ -197,8 +202,11 @@ class ResearchHome(ft.Column):
             ft.Column([_text('YOUR RESEARCH, IN PERSPECTIVE', 11, muted=True), _text('Research Home', 30, bold=True),
                        _text('관측된 시장과 내가 실행한 연구를 한눈에 확인하세요.', 14, muted=True)], spacing=7),
             ft.ResponsiveRow(summary, spacing=16, run_spacing=16),
+            _panel(ctx.t('guide'),[
+                _text(ctx.t('guide_intro'),14,muted=True),
+                ft.Button(ctx.t('start_guide'),on_click=self.toggle_indicator_guide),self.guide_host]),
             ft.ResponsiveRow([recent, actions], spacing=20, run_spacing=20),
-            _panel('주요 시장지표', [refresh_button, ft.ResponsiveRow(tiles, spacing=12, run_spacing=12)],
+            _panel('주요 시장지표', [refresh_button, ft.TextButton(ctx.t('data_rights'),on_click=lambda e:navigate('system')),ft.ResponsiveRow(tiles, spacing=12, run_spacing=12)],
                    subtitle='일별 관측값 · 공급자 캐시가 사용될 수 있습니다. 관측일을 확인하세요. 공개 재배포 권리는 별도입니다.'),
             ft.ResponsiveRow([
                 _panel('가능성을 하나의 숫자로 좁히지 마세요', dist_controls, subtitle='DISTRIBUTION & EVIDENCE', col={'xs':12,'lg':8}),
@@ -216,6 +224,14 @@ class ResearchHome(ft.Column):
             ],wrap=True)],subtitle='API 키 없이 흐름 익히기 · 합성 데이터 표시를 확인하세요'),
             _text('QUANTGEN / Personal research workspace · 세션 종료 전 필요한 결과를 JSON으로 저장하세요.', 11, muted=True),
         ]
+
+    def toggle_indicator_guide(self,e=None):
+        if self.indicator_guide is None:
+            from .indicator_guide import IndicatorGuide
+            self.indicator_guide=IndicatorGuide(self.host_page)
+            self.guide_host.content=self.indicator_guide
+        self.guide_host.visible=not self.guide_host.visible
+        if self.mounted:self.update()
 
 
 def build_home_page(page: ft.Page, *, navigate: Callable) -> ft.Control:
@@ -241,6 +257,8 @@ def build_library_page(page: ft.Page, *, navigate: Callable) -> ft.Control:
 
 
 def build_system_page(page: ft.Page, *, navigate: Callable) -> ft.Control:
+    from .localization import LanguageSettings
+    from .data_rights import DataRightsPanel
     status, error = recorded_status()
     rows = []
     if error:
@@ -260,6 +278,8 @@ def build_system_page(page: ft.Page, *, navigate: Callable) -> ft.Control:
         ]
     return ft.Column([
         _text('System', 30, bold=True), _text('기록된 근거와 현재 연결을 구분해 확인하세요.', 14, muted=True),
+        _panel('언어·지역',[LanguageSettings(page)]),
+        _panel('시장 데이터 이용 조건',[DataRightsPanel(page)]),
         _panel('기록된 프로젝트 상태', rows),
         _panel('설정과 규칙', [ft.Row([_link('데이터 연결 설정', 'settings', navigate),
                                        _link('모의 실행 규칙', 'rules', navigate)], wrap=True)]),

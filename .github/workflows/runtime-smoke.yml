@@ -3,7 +3,7 @@ on:
   push:
     branches: ['gpt/product-workflow-20261029', 'gpt/ui-apply-main-20261029']
   pull_request:
-    paths: ['pyproject.toml', 'requirements.txt', 'assets/**', 'tests/web_branding_acceptance.py', 'main.py', 'core/app_paths.py', 'core/ficc/bonds.py', 'core/ficc/insights.py', 'tests/bond_funding_acceptance.py', 'core/crypto/analytics.py', 'tests/crypto_hac_acceptance.py', 'tests/ai_payload_acceptance.py', 'core/quant/insights.py', 'core/quant/optimize.py', 'tests/portfolio_scope_acceptance.py', 'core/quant/montecarlo.py', 'tests/terminal_target_acceptance.py', 'tests/mc_volatility_acceptance.py', 'tests/strategy_exposure_acceptance.py', 'tests/ar1_decay_acceptance.py', 'core/crypto/funding_diagnostic.py', 'tests/funding_inference_acceptance.py', 'tests/letf_disclosure_acceptance.py', 'tests/letf_index_acceptance.py', 'tests/quote_coverage_acceptance.py', 'data/kis_markets.py', 'core/ficc/fx_styles.py', 'core/ficc/fx.py', 'core/ficc/sabr_diagnostics.py', 'tests/sabr_diagnostics_acceptance.py', 'core/ficc/swaps.py', 'tests/ficc_boundary_acceptance.py', 'tests/swaption_conversion_acceptance.py', 'core/research/**', 'ui/**', 'quantgen_desktop/**', 'tests/desktop*', 'tools/status/**', 'tools/packaging/**', 'tests/*research*', 'tests/data_readiness_acceptance.py', 'tests/packaging_policy_acceptance.py', '.github/workflows/runtime-smoke.yml']
+    paths: ['pyproject.toml', 'requirements.txt', 'assets/**', 'tests/web_branding_acceptance.py', 'main.py', 'core/app_paths.py', 'core/ficc/bonds.py', 'core/ficc/insights.py', 'tests/bond_funding_acceptance.py', 'core/crypto/analytics.py', 'tests/crypto_hac_acceptance.py', 'tests/ai_payload_acceptance.py', 'core/quant/insights.py', 'core/quant/optimize.py', 'tests/portfolio_scope_acceptance.py', 'core/quant/montecarlo.py', 'tests/terminal_target_acceptance.py', 'tests/mc_volatility_acceptance.py', 'tests/strategy_exposure_acceptance.py', 'tests/ar1_decay_acceptance.py', 'core/crypto/funding_diagnostic.py', 'tests/funding_inference_acceptance.py', 'tests/letf_disclosure_acceptance.py', 'tests/letf_index_acceptance.py', 'tests/quote_coverage_acceptance.py', 'data/kis_markets.py', 'core/ficc/fx_styles.py', 'core/ficc/fx.py', 'core/ficc/sabr_diagnostics.py', 'tests/sabr_diagnostics_acceptance.py', 'core/ficc/swaps.py', 'tests/ficc_boundary_acceptance.py', 'tests/swaption_conversion_acceptance.py', 'core/research/**', 'core/education/**', 'core/i18n.py', 'core/ui*messages.py', 'tests/indicator_guide_acceptance.py', 'tests/web_indicator_guide_acceptance.py', 'ui/**', 'quantgen_desktop/**', 'tests/desktop*', 'tools/status/**', 'tools/packaging/**', 'tests/*research*', 'tests/data_readiness_acceptance.py', 'tests/packaging_policy_acceptance.py', '.github/workflows/runtime-smoke.yml']
 permissions:
   contents: read
 jobs:
@@ -73,3 +73,7 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: python -m unittest tests.desktop_chart_rendering_acceptance -v
+      - name: Verify indicator education and locale contracts
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest tests.indicator_guide_acceptance tests.web_indicator_guide_acceptance tests.desktop_indicator_guide_acceptance -v
