@@ -9,8 +9,8 @@
     "canonical_groups": 67,
     "observation_models": 14,
     "initial_reproductions": 5,
-    "additional_reproduced_ids": 13,
-    "implemented_canonical_groups": 14
+    "additional_reproduced_ids": 14,
+    "implemented_canonical_groups": 15
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -511,10 +511,11 @@
       "source_model": "81. M4-04 SABR(Hagan 2002) 스마일 보정·보간",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Solver convergence, active bounds and quote residuals separated; independent/arbitrage validation and manual Windows/live acceptance remain NOT_RUN.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED",
+      "evidence": "docs/product/SABR_DIAGNOSTICS_2026-10-31.md"
     },
     {
       "id": "M4-N9",

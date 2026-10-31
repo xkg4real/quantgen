@@ -158,3 +158,12 @@ comparison instead of losing the full report. See `SWAPTION_CONVERSION_2026-10-3
 Public pricing and inversion formulas/refusals remain unchanged. **14/67** groups
 implemented, **53** remain;14 observation rows and15 ambiguous mappings remain.
 Manual Windows and live-market validation are separate and NOT_RUN.
+
+## SABR fit diagnostics
+
+M4-N8 separates solver convergence, optimizer active bounds, per-quote residuals
+and strike extrapolation in Flet, Qt, AI and exports. A three-quote/three-parameter
+fit does not validate wings or establish arbitrage freedom. No fit-quality
+threshold, solver, price or research gate changed. See
+`SABR_DIAGNOSTICS_2026-10-31.md`. Latest: **15/67** implemented groups, **52**
+remaining; 14 observation rows and15 ambiguous mappings remain open.

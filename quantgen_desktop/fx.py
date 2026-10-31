@@ -71,8 +71,14 @@ class FXPane(ToolPane):
                     ('Domestic rho / bp',fmt(r.rho_dom*.0001)),('Foreign rho / bp',fmt(r.rho_for*.0001))]
                 self.line('SABR smile',d['grid'],[('Volatility',d['vols']*100)],'Strike','Volatility · %')
                 self.result_table('Smile quotes',['Point','Strike','Volatility','Spot delta'],[[p.label,fmt(p.strike),fmt(p.vol,'pct'),fmt(p.delta)] for p in d['points']])
+                from core.ficc.sabr_diagnostics import diagnostic_text
+                diag = d['sabr_diagnostics']
+                self.result_table('SABR quote residuals', ['Point','Strike','Quoted vol %','Fitted vol %','Residual · vol points'],
+                    [[p['label'],fmt(p['strike']),f"{p['quoted_vol']*100:.6f}",f"{p['fitted_vol']*100:.6f}",
+                      f"{p['residual_vol_points']:+.6f}"] for p in diag['residuals']])
+                self.text(diagnostic_text(diag))
+                self.sections.append(dict(type='sabr_diagnostics', **diag))
                 self.text(f'SABR beta=1 · alpha={fit.alpha:.5f} · rho={fit.rho:.5f} · nu={fit.nu:.5f}\n'
-                          f'Converged={fit.converged} · RMSE={fit.rmse*100:.5f} vol points\n'
                           'Delta strike uses ATM vol, then reprices at SABR vol. ATM means delta-neutral straddle.')
         self.result_table('Metrics',['Metric','Value'],metrics)
         self.finished(out.narrative)
