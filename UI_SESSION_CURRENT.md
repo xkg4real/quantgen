@@ -2,6 +2,21 @@
 
 Owner instruction (2026-10-31): app UI work continues in this UI session; website work belongs to 웹사이트 작업공간(AWS). Include UI-session changes in the main session's Claude handoff. This supplement does not transfer CURRENT ownership or modify its execution ID, research gates or ledger.
 
+## Owner-requested checkpoint before resource exhaustion
+
+Latest owner instructions: “작업이 완료되면 QUANTGEN 메인세션에다가 알리세요” and “토큰 다 쓰기 전에 만약에 다못끝내면 일단 중지하고 메인세션에 너가 지금까지 한거 쭉 알려줘. 토큰 다 떨어지기 전에 전달해야해”.
+
+Checkpoint is saved now, before ending this UI session. Do not wait for resource exhaustion to retain progress. No new UI scope is being started; remaining work is final CI verification, merge if clean/passing, and this completion record. If interrupted, stop implementation and continue from the exact saved head below.
+
+- Saved implementation: PR47 / gpt/chart-c-theme-20261031 / 74ae598b8beea50c52221f5934bcd9a298b123f8.
+- Base integrated: main through PR52 d7896914ee5b363ee745ef327f1ff295028edb5e.
+- Working tree: /workspace/work/quantgen-ui-guide-20261031, clean after saved commits. Another workspace can fetch the remote branch; it does not need these scratch paths.
+- Completed UI: C frame across native Home fan, guide, Quant/Portfolio/Bonds and common tools; all 28 Flet chart factories; ivory/forest themes; persistent native dark mode; cached Flet repaint without resetting input/results; responsive guide/reading width fixes; Korean SVG font and late Home translation fixes. Earlier PR42 guide/rights/locale/runtime-logo work is merged.
+- Verification before latest main integration: runtime CI 41184372444 passed Windows 3.12, Windows 3.14 and Ubuntu 3.12; documents 41184372446 passed. Latest PR52 integration passed 10 local focused checks and source/document consistency. Final current-head CI is 41193496809 plus document run 41193496681. At this checkpoint Windows 3.12 has passed; Windows 3.14 and Ubuntu are still finishing. Do not infer a merge from this checkpoint.
+- Explicit next step: inspect final jobs for that exact head. If all pass, check current main/mergeability and merge PR47; preserve any subsequent main work and review source/document deltas if integration is needed. Then record merge SHA and final checks here and in WEBSITE_AWS_HANDOFF.md.
+- Website follow-up remains with the already authenticated AWS workspace. Exact deployed CSS and all site chart changes/application/deployment are separate and not verified here. No new AWS login requested.
+- Main-session notification status: **queued in shared handoff, no cross-chat message receipt**. Available tools were searched again after the owner's instruction; they can read threads but cannot send/wake an existing thread. This file is durable handoff evidence, not proof that the main chat received a message. Include it in the consolidated Claude handoff; do not replace CURRENT ownership or the research ledger.
+
 ## Current implementation
 
 - Branch: `gpt/indicator-guide-20261031`
@@ -31,14 +46,14 @@ New compliance workflow required a truthful source/document delta review. 01–2
 
 PR42 is complete. C follow-up PR47: https://github.com/xkg4real/quantgen/pull/47
 - Branch: gpt/chart-c-theme-20261031
-- Current source head: 59fa8e19f02d371e84c48d422c9ef7c091dd3a76
-- Integrates main through PR49 (4c51ab96e1f61a101fa8a76d024689830bf5d099), preserving PR46 safe Claude diagnostics, PR48 handoff record and PR49 bond/portfolio translations with original records intact.
+- Current source head: 74ae598b8beea50c52221f5934bcd9a298b123f8
+- Integrates main through PR52 (d7896914ee5b363ee745ef327f1ff295028edb5e), preserving PR46 safe Claude diagnostics, PR49 bond/portfolio translations and PR51 market diagnostics, plus their website records. Original calculations and reports are intact.
 - C chart-left/interpretation-right (2:1) layout is implemented in native guide, Quant/Portfolio/Bonds and common ToolPane, and all 28 Flet chart factories. Narrow layouts stack. Existing chart types/data/axis limits/canonical records are preserved.
 - Native Light/Dark persists in QSettings ui/theme. Flet toggles its session theme and repaints cached controls/figures, preserving inputs and results without rerunning analysis.
 - Brand ivory/forest palette; actual quantgeneration.com CSS tokens still require AWS comparison (direct request blocked 403).
 - Local evidence: 230 bounded runtime checks; 16 final Home/theme/guide checks after glyph/refresh fixes; 29 after main diagnostics integration; 47 compliance checks. All 28 Flet factory theme paths exercised. C wheel installed outside checkout and app/native/helper imports passed.
 - Actual Qt 1600×1050 C light/dark captures and local Chromium/Flet 1600×1100 + 390×1000 were inspected. Fixed SVG Korean glyphs (single registered font family), duplicate guide introduction and Home refresh losing selected language. These are local fixture screenshots, not deployed website acceptance.
-- Runtime CI 41184372444 and document CI 41184372446 are running; inspect their final results and PR head before merge. Merge is not yet claimed in this checkpoint.
+- Runtime CI 41193496809 and document CI 41193496681 are running; inspect their final results and PR head before merge. Merge is not yet claimed in this checkpoint.
 - Design: docs/product/CHART_C_DESIGN_2026-10-31.md. Website follow-up: docs/product/ui_website_updates/PR-47.json.
 
 Physical Windows display/input/installer/taskbar, full keyboard/screenreader acceptance, additional professionally reviewed language packs and remaining main-session narrative translations remain separate. Do not repeat completed PR36/37/42 work. Do not mutate CURRENT or research ledger to incorporate this supplement.
