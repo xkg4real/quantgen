@@ -4,15 +4,15 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+done_ids: ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T07:40:51.000Z
+updated_at: 2026-10-31T16:52:23.000+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/claude-connection-fix-20261031
-work_commit: c47f6c0a116cad919b403568d377408452cdab69
+work_branch: gpt/claude-diagnostics-website-record-20261031
+work_commit: 13d16ae551cea65b6ac20a02a04e812de7745838
 uncommitted_changes: no
-pr: 46 (CI pending)
+pr: none (PR46 merged; website metadata preparing)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -57,10 +57,10 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 외부 main51bac973 상업출시 방향 README변경은 보존됐으며 법률 검증 증거로 대신 쓰지 않습니다.
 
 ## 5. 현재 저장 상태
-제품 gpt/language-website-records-20261031 @7759137873917fd003413f409f85638d1f00b3a1 원격검증. 최신mainc3a0613eaa6d26620d871b28f28e5ba349ff1ac9; PR43/44코드와PR45문서병합검증,미병합PR없음/트리clean. 연구 로컬HEAD2da6469 및published36df786 workingfiles보존/reset금지. 원문/표시구분은fx_narrative.py와rates_narrative.py;copy/가격/진단공식기준/실행승인불변. UI draftPR42는별도소유작업이고미완료;handoff/UI_SESSION_CURRENT.md의최신source/검사/범위를최종주간인계시함께읽습니다.
+제품 gpt/language-website-records-20261031 @7759137873917fd003413f409f85638d1f00b3a1 원격검증. 최신mainc3a0613eaa6d26620d871b28f28e5ba349ff1ac9; PR43/44코드와PR45문서병합검증,미병합PR없음/트리clean. 연구 로컬HEAD2da6469 및published36df786 workingfiles보존/reset금지. 원문/표시구분은fx_narrative.py와rates_narrative.py;copy/가격/진단공식기준/실행승인불변. UI PR42는별도세션이main d77d996에병합·검증했고;handoff/UI_SESSION_CURRENT.md의최신source/검사/범위를최종주간인계시함께읽습니다.
 
 ## 6. 다음 단위와 남은 일
-1. ⑬-8/b2/c 최우선: Bonds/Portfolio 및 다른 authored해설과모형주석/인라인문구의표시번역. 완료된캐리/금리결과해설은LEDGER와docs/product/{CARRY,RATES}_LANGUAGE_2026-10-31.md참조,재작업금지. draftPR42의공통localization·보고서통합시 명시적localized variant·영문원문·보고서증거보존계약유지. 실제Windows/DPI/provider검수는NOT_RUN이며별도. 새로운언어변경을새gpt브랜치에서진행하고숫자/분기/누락/원문보고서보존검사.
+1. ⑬-8/b2/c 최우선: Bonds/Portfolio 및 다른 authored해설과모형주석/인라인문구의표시번역. 완료된캐리/금리결과해설은LEDGER와docs/product/{CARRY,RATES}_LANGUAGE_2026-10-31.md참조,재작업금지. 병합된PR42의공통localization·보고서통합시 명시적localized variant·영문원문·보고서증거보존계약유지. 실제Windows/DPI/provider검수는NOT_RUN이며별도. 새로운언어변경을새gpt브랜치에서진행하고숫자/분기/누락/원문보고서보존검사.
 2. M4-N3 금리/배당 규약(연구Model94/95) 및 NEW-M6-02/b 실제시장 조건부phase가정/역사카드 검증 미완료. core letf_drag 기존TR형태는 보존되어 있고 호출부 r=0·fee고정 및 가격지수/배당범위는 명시적 가정 설계가 필요. 탐색p를기존gate로연결하거나동결카드를재채점하지않음.
 3. §10나머지52그룹/14관찰/15모호매핑, 전체ResearchRun모델/이력/canonicalidentity, 실제Windows/DPI/provider검수·서명installer, O11실제등록/Step7A/파일럿/owner_confirmed, 데이터권리/전문법률/AWS외부입력 미완료.
 4. UI website records PR38/39/40/43/44는 repo에 저장. 전달도구 부재로 queued, receipt없음. 실제 웹적용/배포 NOT_VERIFIED이며 완료로 보고하지않음.
@@ -178,3 +178,6 @@ PR43/44와문서PR45 source/merge/LEDGER/Notion하위완료를read-back. executi
 
 ## Claude 진단 PR46 원격 저장
 source c47f6c0a116cad919b403568d377408452cdab69 push/read-back. main의외부PR42(d77d996)를작업브랜치에보존통합. 새양UI EN/KO 오류진단/비노출/분류구현과Nautilus역할문서. 최종로컬24API/privacy/UI/language검사 PASS,문서경계47검사PASS. 초기CI는소스검토기준갱신필요로실패했으며실제20문서범위를대조하고FACTS/기준기록갱신;정합성PASS/공개BLOCKED유지. 최종CI대기,아직완료ID아님. 실제키·사용자PC/API 성공NOT_RUN.
+
+## PR46 완료 및 웹사이트 기록 준비
+⑬-9/a·⑨-2/c source c47f6c0a116cad919b403568d377408452cdab69 → main 13d16ae551cea65b6ac20a02a04e812de7745838 원격검증. Runtime41181892399 세환경/문서41181892438 success. 24연결/privacy/양UI언어 및47문서경계검사PASS. LEDGER5978482/read-back, sapientia4065 완료하위취소선성공. 실제13-9/b 사용자키/API 연결 NOT_RUN;13-8/b2/c 등기존미완료보존. 새metadata브랜치 gpt/claude-diagnostics-website-record-20261031는PR46의웹검토JSON만추가예정. 전달도구부재queued/no receipt,웹적용/배포미검증. UI_SESSION_CURRENT 최신ddaaa6be에PR42 main d77d996 및runtime41181029682/문서41181029690 성공 기록확인;별도세션이력보존.
