@@ -6,7 +6,7 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T16:24:11.000+09:00
+updated_at: 2026-10-31T16:40:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/language-website-records-20261031
@@ -17,7 +17,7 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: fd53d6e3-3f1f-47ea-b2f8-738edbf6634c
+execution_id: 156c744e-dca7-4925-9aa6-b968fcc8c353
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
@@ -39,7 +39,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 - 제품: docs/product/SECTION10_QUEUE_2026-10-30.json, SECTION10_TRIAGE_2026-10-30.md, STRATEGY_EXPOSURE_2026-10-30.md, AR1_DECAY_2026-10-30.md.
 - 기존 감사 원문: 연구ref2da6469d8b3d45eab61d682555ff630ce1f564f7의 docs/nautilus_bridge/MODEL_LIMITS_REGISTER_2026-10-28.md Model136/148 및 KNOWN_ERRORS_REGISTER_2026-10-28.md §10. 역사적 감사 수치는 새 실행 증거와 구분합니다.
 - UI/계약/배포: docs/DESKTOP_MIGRATION_2026-10-30.md; docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md, PACKAGING_2026-10-29.md, DATA_ACQUISITION_2026-10-29.md, DISTRIBUTION_REVIEW_2026-10-29.md, TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md.
-- O8/O11: 연구 gpt/approved-research-followups-20261030 @36df786cb7b1395cd08bc5db2d1ad9b6244e66f3, draft PR21은 claude/amazing-gauss-tdiguu 대상이며 미병합. 제품main에 통째로 합치지 않습니다.
+- O8/O11: 연구 gpt/approved-research-followups-20261030 @36df786cb7b1395cd08bc5db2d1ad9b6244e66f3, PR21은 2026-10-31T16:19:56+09:00에 claude/amazing-gauss-tdiguu로 병합(0510719995e0ec3dfda8f113f826f43ca1821c6b); main 통합/실제 파일럿 완료가 아님. 제품main에 통째로 합치지 않습니다.
 
 ## 3. 판단 및 검증 한계
 N1은 종목별 전략을 몰래 정규화하는 대신 실제 총노출과 차입·벤치마크 범위를 드러냈습니다. 계산은 불변입니다.
@@ -170,3 +170,6 @@ PR43 캐리코드 CI대기는독립추적. 검증된source df7ccd8에서새gpt/r
 
 ## 2026-10-31T16:24:11.000+09:00 안전 재개 체크포인트
 PR43/44와문서PR45 source/merge/LEDGER/Notion하위완료를read-back. execution fd53d6e3-3f1f-47ea-b2f8-738edbf6634c, branch gpt/language-website-records-20261031, source7759137873917fd003413f409f85638d1f00b3a1. 계정토큰잔량unknown. 주간전체반환아님,직접미완료작업hourly유지. 다음예약은STATE의잠금해제검증후새ID로CAS재개합니다. 기존예약은Asia/Seoul HOURLY BYMINUTE0/BYSECOND0 enabled로읽었고변경/중복/run_now없음;자동실행성공증거로주장하지않음. 비공개evidence/주간Word·TXT/다음시작점파일에보존. 웹사이트실제전달/배포미확인.
+
+## 최신 직접 요청: Claude API 연결 오류 및 Nautilus 범위
+사용자가 Windows 앱 내부 Claude AI 해설의 API 키 거절을 확인했습니다. 직전 fd53 실행/task/handoff/branch/source/잠금해제와 같은 ref의6문서를 검증하고 execution 156c744e-dca7-4925-9aa6-b968fcc8c353로 CAS 재개합니다. 먼저 ⑬-9/a: 오류 유형별 안전한 진단·안내/회귀검사, ⑨-2/c: 데이터 공급자와 Nautilus 독립 백테스트 엔진의 역할/연구 통합 상태 설명을 수행합니다. 실제 키/계정 권한 확인은 하지 않고 연결 복구로 주장하지 않습니다. 기존 13-8/b2/c와 후속 작업은 보존합니다. PR21 연구 병합은 외부의 완료로 관측했으며 연구/실행 소유권을 가져오지 않습니다.
