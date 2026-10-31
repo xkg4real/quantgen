@@ -77,6 +77,14 @@ class AiPayloadTests(unittest.TestCase):
         next(c for c in rows[3].controls if isinstance(c, ft.Button)).on_click(None)
         self.assertEqual(rows[1].value, 'Local computed explanation')
         self.assertIn('ANTHROPIC_API_KEY', str(rows[-1].controls))
+        from ui.localization import translate_controls
+        from core.i18n import LocaleContext
+        banner = rows[-1].controls[0]
+        translate_controls(banner, LocaleContext('ko_KR'))
+        self.assertIn('인증 실패', banner.content.content.controls[1].value)
+        translate_controls(banner, LocaleContext('en_US'))
+        self.assertIn('authentication failed', banner.content.content.controls[1].value)
+        self.assertNotIn('인증 실패', banner.content.content.controls[1].value)
         self.assertFalse(rows[3].controls[-1].visible)
         runner.assert_called_once()
 

@@ -8,8 +8,8 @@ It does not use the Claude desktop/web login or subscription as API credentials.
 Previously, HTTP 401 displayed only "rejected the key"; other failures displayed
 raw provider messages and transport exceptions. Errors now have a safe category,
 HTTP status when received, and an actionable message. Provider bodies and exception
-text are not displayed. Native messages follow the selected English/Korean language;
-Flet receives the same English diagnostic from the shared API boundary.
+text are not displayed. Native and Flet messages follow the selected English/Korean
+language without resending the request when the language changes.
 
 | Result | Next action |
 | --- | --- |
