@@ -6,7 +6,7 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/M4-N8, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T05:55:23.793Z
+updated_at: 2026-10-31T15:00:11.252+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/swaption-aux-conversion-20261031
@@ -17,7 +17,7 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: b74c1273-7a32-4e2e-8fe5-8b880ac24c42
+execution_id: cb2e35fa-92a3-456c-b504-843a0d13c0ef
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
@@ -72,7 +72,7 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 O8선택심사,UI/PR/main의 기존승인을 다시 묻거나 승인대기로 되돌리지 않습니다. 실제 연구판정·정식원장·외부공개와 Windows증거/실행확인은 별도입니다. 현재 waiting_on=none은 다음 독립수정이 가능하다는 뜻이며 미실행파일럿을 승인했다는 뜻이 아닙니다.
 
 ## 9. 재개 절차
-STATE/동일환경/private자료/OS RUN.lock을먼저검증합니다. 직전execution b74c1273-7a32-4e2e-8fe5-8b880ac24c42, task owner-product-workflow-20261029, 기존handoffID, gpt/swaption-aux-conversion-20261031 @4e84e992f68cf02208c2e4fff121de883dd5c99c가로컬/원격에일치해야합니다. OS잠금해제확인뒤최신CURRENTblob CAS+고유새execution원격read-back후최신main에서새gpt브랜치로M4-N8진행. from=gpt만으로추정금지. latestmain을직접검증하고오래된origin/main을시작점으로쓰지마세요. 이전단위는LEDGER로중복확인. 실제외부승인/연구판정·정식원장·공개경계유지.
+STATE/동일환경/private자료/OS RUN.lock을먼저검증합니다. 직전execution cb2e35fa-92a3-456c-b504-843a0d13c0ef, task owner-product-workflow-20261029, 기존handoffID, gpt/swaption-aux-conversion-20261031 @4e84e992f68cf02208c2e4fff121de883dd5c99c가로컬/원격에일치해야합니다. OS잠금해제확인뒤최신CURRENTblob CAS+고유새execution원격read-back후최신main에서새gpt브랜치로M4-N8진행. from=gpt만으로추정금지. latestmain을직접검증하고오래된origin/main을시작점으로쓰지마세요. 이전단위는LEDGER로중복확인. 실제외부승인/연구판정·정식원장·공개경계유지.
 
 ## 10. 검증·인계 파일
 PR31 source55dae2f→maind4670f3,CI41172791664:22검사PASS,3기존펀드27결과필드동일. livemasterCONNECT403은미해결검수이며우회안함.
@@ -118,3 +118,6 @@ source4e84e992f68cf02208c2e4fff121de883dd5c99c 원격read-back 후 PR35 생성. 
 
 ## 2026-10-31 최종 체크포인트
 PR31/32/33/35 각완료범위를LEDGER에append하고 read-back했습니다. 최신done_ids/next_ids와재개branch/commit은위frontmatter가권위기록입니다. M4-N8은read-only합성재현만이며다음실행이유효소유권재개절차를거친뒤구현합니다. 전체요청완료·주간returned처리가아니며직접작업hourly를유지합니다.
+
+## M4-N8 재개
+동일 task/handoff/직전execution/branch/source와 STATE·원격을대조했고 OS배타잠금을확보했습니다. 새execution cb2e35fa-92a3-456c-b504-843a0d13c0ef로CAS재개. 기존 FX/insights파일은앞선기능구현을보존하고M4-N8의SABR진단표시범위만수정합니다. AUTO_STATE는다른Claude브랜치기록이므로사용하지않습니다.
