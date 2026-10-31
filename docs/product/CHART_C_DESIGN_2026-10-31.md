@@ -31,7 +31,7 @@ tokens before describing an exact site/app match.
 | Surface | Shared implementation |
 | --- | --- |
 | Qt Home/Signals guide | indicator_guide.py and chart_study.ChartStudy |
-| Qt Quant, Portfolio, Bonds | existing chart + canonical narrative in ChartStudy |
+| Qt Home fan, Quant, Portfolio, Bonds | existing chart + canonical narrative in ChartStudy |
 | Qt common analysis tools | ToolPane result and narrative in ChartStudy |
 | Flet Home/Signals | indicator_guide.py and study_row |
 | Flet equity (7), FICC (15), extended (6) factories | qcharts._to_image → FigureStudy, shared C reading area |

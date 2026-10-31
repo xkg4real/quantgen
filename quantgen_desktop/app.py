@@ -263,9 +263,9 @@ class ResearchWindow(QMainWindow):
         layout.addWidget(box)
         box, inner = panel("가능성을 하나의 숫자로 좁히지 마세요")
         self.home_chart = FanChart()
-        inner.addWidget(self.home_chart)
         self.home_summary = label("분석을 실행하면 최신 결과와 데이터 근거가 연결됩니다.")
-        inner.addWidget(self.home_summary)
+        from .chart_study import ChartStudy
+        inner.addWidget(ChartStudy(self.home_chart,self.home_summary))
         b = QPushButton("Quant Lab에서 연구 시작 →")
         b.clicked.connect(lambda:self.navigate("quant"))
         inner.addWidget(b)

@@ -90,6 +90,7 @@ class NativeStudyTests(unittest.TestCase):
         from pathlib import Path
         from PyQt6.QtCore import QSettings
         from PyQt6.QtWidgets import QBoxLayout
+        from PyQt6.QtTest import QTest
         with patch.object(dotenv,'load_dotenv',return_value=False):
             from quantgen_desktop.app import ResearchWindow
         with tempfile.TemporaryDirectory() as folder:
@@ -105,8 +106,15 @@ class NativeStudyTests(unittest.TestCase):
             self.assertEqual(settings.value('ui/theme'),'dark')
             self.assertEqual(window.colors,DARK)
             self.assertEqual((guide.keys,guide.series.dates,guide.cursor),before)
-            window.resize(1000,800);self.app.processEvents()
-            self.assertEqual(guide.study.split.direction(),QBoxLayout.Direction.TopToBottom)
+            window.resize(1000,800)
+            # Native window and nested scroll/layout resize events can be queued
+            # separately on Windows; let the actual event loop settle them.
+            QTest.qWait(150)
+            geometry = (window.width(), window.stack.currentWidget().viewport().width(),
+                        guide.width(), guide.minimumSizeHint().width(),
+                        guide.study.width(), guide.study.minimumSizeHint().width())
+            self.assertEqual(guide.study.split.direction(),QBoxLayout.Direction.TopToBottom,
+                             f'window/viewport/guide/min/study/min={geometry}')
             reopened=ResearchWindow(auto_refresh=False,theme_mode=settings.value('ui/theme'))
             self.addCleanup(reopened.deleteLater)
             self.assertEqual(reopened.colors,DARK)
