@@ -415,161 +415,161 @@
       "document_sha256": "7f5ffc3cedf7cc5281fec3b5bc8c366aa9152bcb061e2899b0a7868dd15ec30d",
       "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.496549+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.385552+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "2": {
       "document_sha256": "48eae0cd242ff2310fbbd6e43aca01b55b74cca177fbd2f24ed27470ef1ac977",
       "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.498048+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.386878+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "3": {
-      "document_sha256": "78898452f97b134a49a19ad7a33219afb2a494a491a0bdbbf80ebcd658f7fafa",
+      "document_sha256": "7239fe38364ae8e9ffdf2f4540ee7812b45a7ec3c781682b7fa9fffa24367e97",
       "source_digest": "2fb4d02ad504df46cf6f90ecf1e67cad7da518b103b36a44d7decf267813af05",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.499152+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.388132+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "4": {
-      "document_sha256": "aa1d97c64748ec08bd654322bcc47e9aa7ae9a01b2c1df17a170e6cfe84b3702",
+      "document_sha256": "55b8a11fd2085a5d9583fb8537ee74c84c864d94cf6a6231ca4eabb52b64d110",
       "source_digest": "a0464a81af2e2639cd199c44e21812de7692348f8bcb2e5956334d3a941473a8",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.500105+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.389085+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "5": {
-      "document_sha256": "706eb3989daf31eb414555233c3577b584bc045c139d87e56963daed16af2316",
+      "document_sha256": "2052fd84dd9ec893e79864fafe9b7b8be1b0a261602a5a9a3c7cd64a58dcbe4a",
       "source_digest": "8963e5c230b8e143b55dba5e67fd4a000ce3f40af81ddeacc01c91989b3d935e",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.501064+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.389951+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "6": {
-      "document_sha256": "eb955f72cf4386b5ddeb3d0720b8583f0921f2542a88c32ca65c1f9ff928fb45",
+      "document_sha256": "3a637558527c79efc05c991dbd431fb08ac7fc7fea322655ff8dc1715b02f6f5",
       "source_digest": "6835d0c3781ffddc4c5fe103ae8b0a8994e558afabe9e6b3798feb18af55ba53",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.501953+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.390873+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "7": {
       "document_sha256": "6e0eef1bbf393c1514a7cca6b11c0d59e7680d1b58dde6695edcd9980a98f955",
       "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.502867+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.391823+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "8": {
       "document_sha256": "31622698c62ed209d6c3cdbe3d4c3a5edec9668cbe6fd25b11b1dd34cd0cc49f",
       "source_digest": "6835d0c3781ffddc4c5fe103ae8b0a8994e558afabe9e6b3798feb18af55ba53",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.503848+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.392701+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "9": {
       "document_sha256": "96f5f056d7097e66c9385da384fce9a5217d5379e2e0d6186b4335a695d0860c",
       "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.504882+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.393544+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "10": {
       "document_sha256": "fef0ba2446f9c6e5c300df8c4fc0f19441f2f17653477672f92709bfdcf85368",
       "source_digest": "c70532c00167956c86ecb65484f2f3aee8dba2bd3d70144b7dd93d27f90b1035",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.505819+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.394375+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "11": {
       "document_sha256": "3da5dbb517cd7526b735b2a383d7bed83ebb82e743e7ef126333c1f4eba92791",
       "source_digest": "6452090c2bbaba498684a6258f5a64a5e66d15d8a73a5138d0e56e58a386ed53",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.506742+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.395239+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "12": {
       "document_sha256": "8a2a395c564c5aad636ef439f5ed3c43b9dd0157ec643b42afd64bb8fbab2492",
       "source_digest": "13069386b627b11024cb3a65d898c7ed00c8d9c1cbc1875814a99d572ae73b90",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.507739+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.396055+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "13": {
       "document_sha256": "5dfdd84db17f907ef6cb2b83cad73489bc5332652e7a460c0228521726d40980",
       "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.508863+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.396885+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "14": {
       "document_sha256": "646d2cb4d8fe00ef3e325ea9d37ff1d25f809c81e5070acbc27b6c5222403968",
       "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.509782+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.397714+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "15": {
       "document_sha256": "e52d8257bd0df6cf81e19ae4bc2a95d34c63a5a128bf8c04cc7cd68ec59e9631",
       "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.510831+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.398773+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "16": {
       "document_sha256": "7a464b15daddf26401d9c25824b65bd6c3dbc92dd78741f289b5a1cb31b5d2c7",
       "source_digest": "7c6fe2a4c73dcbca7fdba6217da0b2239937d3b817ac8ae62655b659d2f91481",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.511969+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.399628+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "17": {
       "document_sha256": "0d93d44c03cd7221713bdd5721484ca61c4c708926218d2f93687235cbf29860",
       "source_digest": "6835d0c3781ffddc4c5fe103ae8b0a8994e558afabe9e6b3798feb18af55ba53",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.512883+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.400631+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "18": {
       "document_sha256": "42c4757135df8949f2886d58c92d1ae04d5f14817346c941af60736492f67f2a",
       "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.513727+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.401515+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "19": {
       "document_sha256": "f0f0cc79bdc686fa3adcd0d3d17d597349f44007965f5933fcfe92a9f686ff9b",
       "source_digest": "6b69418646d1d805804436b20f3b4e270a4a75e5aeade1252488b7270e12cd2d",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.514646+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.402348+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     },
     "20": {
       "document_sha256": "2b77833f04c332f3d3ba166f9261dedc25b275ce4d86cc986b7a2487ca9b69ab",
       "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:51:52.515646+00:00",
-      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
+      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:52:26.403214+00:00",
+      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
     }
   }
 }
