@@ -6,7 +6,7 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T15:53:00+09:00
+updated_at: 2026-10-31T07:08:03.000Z
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/fx-language-20261031
@@ -17,7 +17,7 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: cb2e35fa-92a3-456c-b504-843a0d13c0ef
+execution_id: fd53d6e3-3f1f-47ea-b2f8-738edbf6634c
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
@@ -73,7 +73,7 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 O8선택심사,UI/PR/main의 기존승인을 다시 묻거나 승인대기로 되돌리지 않습니다. 실제 연구판정·정식원장·외부공개와 Windows증거/실행확인은 별도입니다. 현재 waiting_on=none은 다음 독립수정이 가능하다는 뜻이며 미실행파일럿을 승인했다는 뜻이 아닙니다.
 
 ## 9. 재개 절차
-STATE/동일환경/private자료/OS RUN.lock을먼저검증합니다. 직전execution cb2e35fa-92a3-456c-b504-843a0d13c0ef, task owner-product-workflow-20261029, 기존handoffID, gpt/swaption-aux-conversion-20261031 @4e84e992f68cf02208c2e4fff121de883dd5c99c가로컬/원격에일치해야합니다. OS잠금해제확인뒤최신CURRENTblob CAS+고유새execution원격read-back후최신main에서새gpt브랜치로M4-N8진행. from=gpt만으로추정금지. latestmain을직접검증하고오래된origin/main을시작점으로쓰지마세요. 이전단위는LEDGER로중복확인. 실제외부승인/연구판정·정식원장·공개경계유지.
+최신 frontmatter의 execution/task/handoff/work_branch/work_commit을 STATE와 대조하고 OS잠금 해제 기록을 확인한 뒤 새execution으로 최신CURRENTblob CAS와원격read-back을 수행합니다. from=gpt만으로 판단하지 않습니다. 현재 새execution fd53d6e3-3f1f-47ea-b2f8-738edbf6634c; 다음단위 ⑬-8/b2/a 캐리바스켓 표시 번역. 원문보고서·숫자·ID·계산보존. UI 보조세션 draftPR42는 다른 작업이며 변경을 덮어쓰지 않습니다.
 
 ## 10. 검증·인계 파일
 PR31 source55dae2f→maind4670f3,CI41172791664:22검사PASS,3기존펀드27결과필드동일. livemasterCONNECT403은미해결검수이며우회안함.
@@ -155,3 +155,6 @@ PR40 sourceae768dc → mergebea069f; CI41177922111 all3 jobs success, PR merge r
 
 ## 다음 예약 재개 조건 — cb2e35fa-92a3-456c-b504-843a0d13c0ef
 저장 실행 cb2e35fa-92a3-456c-b504-843a0d13c0ef / owner-product-workflow-20261029 / 고정handoff ID / gpt/fx-language-20261031 / sourceed51d9d8d23b068c2ced3a77ed88bd74b72d32e0 를 STATE와 이 문서에서 대조. 이번 실행의 OS잠금 해제 기록을 확인하고 새 execution ID로 최신blob CAS/read-back 후 다음 새gpt브랜치 생성. from=gpt만으로 소유권 판단금지. 승인된 미완료 직접작업은 계속 hourly 대상이며, 계정 토큰 잔량은 unknown. 기존 completed IDs·commits·localPAUSED·cycle/returned이력을 보존.
+
+## ⑬-8/b2/a 캐리바스켓 재개
+직전 cb2e35fa-92a3-456c-b504-843a0d13c0ef, task/handoff/branch/source 및 OS잠금 해제를검증하여 fd53d6e3-3f1f-47ea-b2f8-738edbf6634c로재개. 최신main712e5e9에서새gpt브랜치예정. 기존 fx_narrative/fx/translations/tests는선물환·옵션범위를보존하면서캐리해설/상태의표시번역을확장하기위해다시수정합니다. ⑬-8/b2/a는LEDGER에없으며부모13-8/b2는여전히미완료. 별도UI draftPR42는core/i18n및공통localization변경중이므로해당파일을수정하지않고통합주의사항을인계합니다.
