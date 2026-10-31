@@ -76,4 +76,4 @@ jobs:
       - name: Verify indicator education and locale contracts
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.indicator_guide_acceptance tests.web_indicator_guide_acceptance tests.desktop_indicator_guide_acceptance -v
+        run: python -m unittest tests.indicator_guide_acceptance tests.web_indicator_guide_acceptance tests.desktop_indicator_guide_acceptance tests.chart_c_theme_acceptance -v

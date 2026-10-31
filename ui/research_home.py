@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Callable
 
 import flet as ft
+from core.i18n import LocaleContext
 
 from core.theme import active
 from tools.status.snapshot import verify
@@ -68,6 +69,13 @@ class ResearchHome(ft.Column):
         self.indicator_guide=None
         self.guide_host=ft.Container(visible=False)
         self.render()
+
+    def before_update(self):
+        from ui.localization import translate_controls
+        from ui.theme_controller import apply_palette
+        from core.theme import set_mode
+        apply_palette(self,set_mode(getattr(self.host_page,'qg_theme','light')))
+        translate_controls(self,getattr(self.host_page,'qg_locale',LocaleContext()))
 
     def did_mount(self):
         self.mounted = True
@@ -198,13 +206,14 @@ class ResearchHome(ft.Column):
         dist_controls.append(_text('P5–P95: 시뮬레이션 분포의 중앙 90% 구간. 수익 보장이나 95% 신뢰구간이 아닙니다.', 12, muted=True))
         refresh_button = ft.Button('조회 중…' if self.research.market_loading else '시장지표 새로고침',
                                    icon=ft.Icons.REFRESH, on_click=self.refresh_markets, disabled=self.research.market_loading)
+        self.guide_button=ft.Button(ctx.t('hide_guide' if self.guide_host.visible else 'start_guide'),on_click=self.toggle_indicator_guide)
         self.controls = [
             ft.Column([_text('YOUR RESEARCH, IN PERSPECTIVE', 11, muted=True), _text('Research Home', 30, bold=True),
                        _text('관측된 시장과 내가 실행한 연구를 한눈에 확인하세요.', 14, muted=True)], spacing=7),
             ft.ResponsiveRow(summary, spacing=16, run_spacing=16),
             _panel(ctx.t('guide'),[
                 _text(ctx.t('guide_intro'),14,muted=True),
-                ft.Button(ctx.t('start_guide'),on_click=self.toggle_indicator_guide),self.guide_host]),
+                self.guide_button,self.guide_host]),
             ft.ResponsiveRow([recent, actions], spacing=20, run_spacing=20),
             _panel('주요 시장지표', [refresh_button, ft.TextButton(ctx.t('data_rights'),on_click=lambda e:navigate('system')),ft.ResponsiveRow(tiles, spacing=12, run_spacing=12)],
                    subtitle='일별 관측값 · 공급자 캐시가 사용될 수 있습니다. 관측일을 확인하세요. 공개 재배포 권리는 별도입니다.'),
@@ -228,9 +237,10 @@ class ResearchHome(ft.Column):
     def toggle_indicator_guide(self,e=None):
         if self.indicator_guide is None:
             from .indicator_guide import IndicatorGuide
-            self.indicator_guide=IndicatorGuide(self.host_page)
+            self.indicator_guide=IndicatorGuide(self.host_page,embedded=True)
             self.guide_host.content=self.indicator_guide
         self.guide_host.visible=not self.guide_host.visible
+        self.guide_button.content=getattr(self.host_page,'qg_locale',LocaleContext()).t('hide_guide' if self.guide_host.visible else 'start_guide')
         if self.mounted:self.update()
 
 

@@ -28,7 +28,7 @@
 
 | 주제 | 관찰과 한계 | 근거 |
 |---|---|---|
-| 차트 | 공통 Flet 차트 이미지에 결과별 대체 설명이 없다. 네이티브 차트 접근성 이름은 실제 수치·변화 설명의 충분성을 보장하지 않는다. | [Flet 차트 생성기](../../ui/qcharts.py), [네이티브 차트](../../quantgen_desktop/charts.py) |
+| 차트 | 공통 Flet 차트 이미지는 C형 읽기 영역에 제목·축·범례·한계를 제공한다. 이는 전체 관측값의 동등한 대체 표나 스크린리더 검증이 아니다. 네이티브 차트 접근성 이름은 실제 수치·변화 설명의 충분성을 보장하지 않는다. | [Flet 차트 생성기](../../ui/qcharts.py), [네이티브 차트](../../quantgen_desktop/charts.py) |
 | 대비 | 대표 텍스트 색상쌍은 충분한 대비를 보이지만 입력 테두리 등 전체 상태·화면의 적합성은 확인되지 않았다. | [팔레트](../../core/theme.py), [검사 양식](14-contrast.md) |
 | 키보드 | 직접 메서드를 호출하는 이동 테스트는 실제 Tab·스크린리더 검증이 아니다. Windows·DPI·포커스 수동 검증이 남아 있다. | [데스크톱 검증](../../tests/desktop_acceptance.py), [남은 검증](../DESKTOP_MIGRATION_2026-10-30.md) |
 | 네이티브 차트 표시 | 글꼴 치수에 따른 축 여백·범례/각주 줄바꿈·눈금 밀도로 텍스트 잘림과 겹침을 개선했다. 긴 범례의 전체 이름은 툴팁에 제공한다. 화면 표시 개선이 키보드·스크린리더 동등 접근을 입증하지는 않는다. | [차트 구현](../../quantgen_desktop/charts.py), [합성 렌더링 검사와 남은 실제 환경 검증](../product/UI_RENDERING_2026-10-31.md) |
@@ -94,6 +94,26 @@ PR42와 통합된 메인 변경(PR39/40/43/44, SABR 진단)의 공개 소스 차
 
 앱 아이콘 후속: Flet Windows 창의 런타임 icon, Qt 애플리케이션 기본 아이콘 및 Windows 앱 식별자를 기존 QUANTGEN 자산으로 지정했다. 새 이미지·브랜드 권리를 만들거나 기존 사용권 상태를 변경하지 않는다. 외부 전송·지속 사용자 데이터·계약 변화는 없으며 실제 Windows 작업표시줄/고정 바로가기의 수동 검증은 남아 있다.
 
+## C형 차트·테마 후속 검토 — 2026-10-31
+
+기준은 병합된 PR42 d77d996과 C형 작업 트리의 차이입니다. 새 UI 모듈과 색상·배치·설정 저장·글꼴 변경을 01–20의 현재 상태 및 정책·양식과 대조했습니다. 관련 문서 01/04/07/12–15/19/20에 후속 사실을 추가했습니다. 나머지 문서의 가격·사업자·동의·회원가입·환불·연령·메일·운영 증빙에는 이 소스 차이로 변경할 근거가 없습니다. 공개 준비의 BLOCKED 및 문서 review-required를 유지합니다.
+
+- [공통 C형 구성](../product/CHART_C_DESIGN_2026-10-31.md)은 Qt 공통 분석 도구·Quant·Portfolio·Bonds·가이드와 Flet의 28개 차트 생성기를 연결합니다. 기존 팬·선·막대·산점·히트맵 종류, 계산·축 범위·정규 기록을 유지합니다.
+- [Qt 설정](../../quantgen_desktop/app.py)에 ui/theme을 추가합니다. Flet는 page.qg_theme 세션 상태입니다. [재도색](../../ui/theme_controller.py)은 캐시된 제어와 [Matplotlib 그림](../../ui/chart_study.py)을 유지하며 데이터 조회·모델 재실행을 호출하지 않습니다.
+- 교육 SVG는 등록된 QG Interface 단일 글꼴 가족을 사용합니다. 새 글꼴·이미지·라이선스·앱 배포 의존성은 없습니다. 다크 팔레트 대비를 14번에 갱신했습니다.
+- Qt offscreen, Linux 로컬 Chromium/Flet 1600×1100 및 390×1000에서 C형·다크·한글 표시를 확인했습니다. 브라우저 fixture는 실제 계좌·엔진·시장 공급자 조회를 차단한 로컬 검증입니다. 초기 fixture의 자동 Home 갱신은 차단된 공급자 요청을 시도하여 이후 명시적 stub으로 교체했습니다. 실제 서비스 데이터·사이트 배포 검증으로 사용하지 않습니다.
+- quantgeneration.com 텍스트는 확인했으나 배포 CSS 토큰은 직접 요청이 403으로 막혀 대조하지 못했습니다. 앱은 기존 아이보리/숲색 브랜드를 적용하며 실제 사이트 토큰·전체 차트 적용은 AWS 작업공간의 확인 항목입니다.
+
+C형 통합 시 main PR46(13d16ae)의 안전한 Claude 오류 분류·한국어 표시와 Nautilus 역할 문서를 함께 보존했습니다. 원문 오류/키 비노출, 명시적 기존 전송, 언어 변경 시 추가 요청 없음의 경계를 대조했으며 이 절 앞의 연결 진단 검토와 일치합니다. 정합성 기준선은 두 변경이 결합된 작업 파일을 대상으로 갱신합니다.
+
+C형 Windows CI 후속: 긴 플랫폼 글꼴의 가로 최소폭 합계가 스크롤 영역을 넓게 고정하여 세로 배치 전환을 막는 현상을 재현했습니다. ChartStudy가 한 열의 최소폭을 보고하도록 수정하고 1200→700→1200 폭에서 가로/세로 전환과 스크롤 영역의 실제 폭을 검사합니다. 데이터·저장·전송·정책 상태 변화는 없습니다.
+
+같은 C형 프레임을 Home의 기존 팬 차트와 요약에도 적용했습니다. 원래 관측·계산·요약을 이동한 배치 변경입니다. 네이티브 회귀검사는 Windows에서 창→스크롤→자식의 크기 이벤트가 처리되도록 실제 Qt 이벤트 루프를 150ms 진행한 뒤 동일한 좁은 배치 조건을 검사합니다. 조건을 완화하거나 Windows 검사를 제외하지 않습니다.
+
+Windows 후속 수치: 1000px 창의 viewport는 764px인데 guide/study는 969px, study 최소 힌트는 966px였습니다. 이벤트 대기만으로는 해결되지 않았습니다. C형 컨테이너의 이미지·텍스트 폭 힌트를 실제 최소폭으로 강제하지 않고, 수동 지정한 최소폭은 유지하도록 수정했습니다. 966px 해설 힌트/764px viewport를 별도 회귀 fixture로 고정합니다. 데이터·저장·전송 및 정책 상태 변화는 없습니다.
+
+최종 가이드 경계 보완: study 최소 힌트를 0으로 줄여도 Windows에서 상위 guide 최소 힌트 969px가 페이지 폭을 유지했습니다. 가이드 컨테이너에도 화면 폭에 맞게 줄어드는 정책을 적용하고 자동 레이아웃 최소폭을 해제합니다. 전체 창 시험에 966px 기본 너비의 줄바꿈 설명을 가이드 바깥쪽 내용으로 추가하여 guide와 설명이 viewport 안에 들어오는지 함께 검사합니다.
+
 ### Native Bonds/Portfolio language follow-up
 
 [Bonds/Portfolio result text](../product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md)
@@ -106,3 +126,7 @@ operator facts, price terms, research approvals or data rights. The twenty
 policy scopes were compared with this bounded display change; their
 `review-required` status and actual Windows/accessibility/website limitations
 remain. Source/document consistency is not publication approval.
+
+C형 최종 통합 시 main PR48/49(4c51ab9)의 인계 기록과 채권·포트폴리오 한/영 결과 표현을 보존했습니다. display_variants는 원본 source_text·내보내기·수치·경고를 유지하고 C형의 기존 notes 위젯을 재사용합니다. 이 한정된 소스 차이를 20개 문서와 대조했으며 저장·전송·거래·정책 공개 상태 변화는 없습니다.
+
+C형 병합 직전 통합: main PR50–52(d789691)의 웹 인계 기록과 시장 진단 한영 표시를 함께 보존했습니다. ToolPane의 기존 text(localized=...) 경로를 사용하며 AR(1)·펀딩·호가 수치, 원문 경고와 NOT_RUN·정규 보고서가 유지됩니다. 20개 정책 범위와 대조했고 신규 저장·요청·승인 상태 변화는 없습니다.

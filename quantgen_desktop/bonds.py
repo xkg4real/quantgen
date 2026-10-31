@@ -35,11 +35,13 @@ class BondsPane(QWidget):
         self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);inner.addWidget(self.run)
         self.status=label('곡선 출처와 관측일을 함께 표시합니다.','muted');inner.addWidget(self.status);layout.addWidget(box)
         self.metrics=table(['Metric','Value']);self.metrics.setMinimumHeight(360);layout.addWidget(self.metrics)
-        self.chart=LineChart('Yield (%)','Price per 100');layout.addWidget(self.chart)
+        self.chart=LineChart('Yield (%)','Price per 100')
         self.krd=table(['Key tenor · years','DV01 · currency / bp']);self.krd.setMinimumHeight(260);layout.addWidget(self.krd)
         self.scenarios=table(['Scenario','Shock · bp','New price','P&L','P&L %']);self.scenarios.setMinimumHeight(310);layout.addWidget(self.scenarios);self.scenarios.hide()
         self.hedge=label('');layout.addWidget(self.hedge)
-        self.notes=label('','muted');layout.addWidget(self.notes)
+        self.notes=label('','muted')
+        from .chart_study import ChartStudy
+        layout.insertWidget(2,ChartStudy(self.chart,self.notes))
         from .report_actions import ReportActions
         self.exports = ReportActions(self.status)
         layout.addWidget(self.exports)

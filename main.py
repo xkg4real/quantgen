@@ -107,6 +107,7 @@ WORKSPACES = (
 
 def main(page: ft.Page) -> None:
     page.qg_locale=LocaleContext('ko_KR')
+    page.qg_theme='light'
     page.title = "QUANTGEN"
     # Runtime Flet windows use their host icon unless explicitly overridden.
     page.window.icon = str(Path(assets_directory()) / "icon.ico")
@@ -260,18 +261,18 @@ def main(page: ft.Page) -> None:
     mobile_bar = ft.Container(ft.Row([
         ft.IconButton(ft.Icons.MENU_ROUNDED, on_click=open_menu, tooltip="작업공간 메뉴", data="mobile-menu"),
         brand(),
+        ft.IconButton(ft.Icons.DARK_MODE_OUTLINED,tooltip='화면 테마',on_click=lambda e:change_theme('dark' if page.qg_theme=='light' else 'light'),data='theme-toggle'),
         ft.IconButton(ft.Icons.LANGUAGE,tooltip='언어·지역',on_click=lambda e:navigate('system')),
     ], spacing=6), padding=ft.Padding(8, 8, 8, 8), bgcolor=pal.surface, visible=False)
     desktop_bar = ft.Container(ft.Row([
         workspace_title, ft.Text("PERSONAL RESEARCH", size=10, color=pal.muted),
+        ft.IconButton(ft.Icons.DARK_MODE_OUTLINED,tooltip='화면 테마',on_click=lambda e:change_theme('dark' if page.qg_theme=='light' else 'light'),data='theme-toggle'),
         ft.IconButton(ft.Icons.LANGUAGE,tooltip='언어·지역',on_click=lambda e:navigate('system')),
     ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=ft.Padding(28, 16, 28, 12))
     separator = ft.VerticalDivider(width=1, color=pal.border)
 
     def resize(e=None) -> None:
         compact = (page.width or 1200) < BREAKPOINTS["compact"]
-        if compact == state["compact"] and e is not None:
-            return
         state["compact"] = compact
         rail.visible = not compact
         separator.visible = not compact
@@ -288,6 +289,19 @@ def main(page: ft.Page) -> None:
         rail, separator,
         ft.Column([mobile_bar, desktop_bar, content], expand=True, spacing=0),
     ], expand=True, spacing=0, vertical_alignment=ft.CrossAxisAlignment.STRETCH)
+    def change_theme(value):
+        nonlocal pal
+        from ui.theme_controller import apply_palette
+        page.qg_theme=value
+        pal=set_mode(value)
+        page.theme_mode=ft.ThemeMode.DARK if value=='dark' else ft.ThemeMode.LIGHT
+        page.bgcolor=pal.bg
+        for view in cache.values():apply_palette(view,pal)
+        apply_palette(root,pal)
+        render_nav()
+        translate_controls(root,page.qg_locale)
+        page.update()
+    page.qg_change_theme=change_theme
     def change_locale(value):
         page.qg_locale=LocaleContext(value)
         for view in cache.values():translate_controls(view,page.qg_locale)

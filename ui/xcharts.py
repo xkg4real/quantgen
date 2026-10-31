@@ -12,7 +12,7 @@ from ui.qcharts import _fig, _thin_dates, _to_image, plt
 
 
 def lines_chart(dates: Sequence[str], series: dict[str, np.ndarray], *, title: str = "", ylabel: str = "",
-                hlines: Optional[dict[str, float]] = None, height: float = 3.2, pct: bool = False) -> ft.Image:
+                hlines: Optional[dict[str, float]] = None, height: float = 3.2, pct: bool = False) -> ft.Control:
     pal = active()
     fig, ax = _fig(9.5, height, pal)
     colours = [pal.accent, pal.text, pal.success, pal.error, pal.muted]
@@ -32,7 +32,7 @@ def lines_chart(dates: Sequence[str], series: dict[str, np.ndarray], *, title: s
     return _to_image(fig)
 
 
-def smile_chart(points, fit=None, F: float = 0.0, *, title: str = "Implied volatility") -> ft.Image:
+def smile_chart(points, fit=None, F: float = 0.0, *, title: str = "Implied volatility") -> ft.Control:
     """App IV (Black-76 inversion) vs the exchange's IV per strike, with the SVI curve."""
     from core.ficc.equity_deriv import svi_vol
     pal = active()
@@ -54,7 +54,7 @@ def smile_chart(points, fit=None, F: float = 0.0, *, title: str = "Implied volat
     return _to_image(fig)
 
 
-def density_chart(rnd: dict, *, p_samples: Optional[np.ndarray] = None, title: str = "Risk-neutral density") -> ft.Image:
+def density_chart(rnd: dict, *, p_samples: Optional[np.ndarray] = None, title: str = "Risk-neutral density") -> ft.Control:
     pal = active()
     fig, ax = _fig(9.5, 3.0, pal)
     K, f = rnd["strikes"], rnd["density"]
@@ -70,7 +70,7 @@ def density_chart(rnd: dict, *, p_samples: Optional[np.ndarray] = None, title: s
 
 
 def equity_chart(dates: Sequence[str], equity: np.ndarray, bench: Optional[np.ndarray] = None, *,
-                 title: str = "Equity", labels: tuple[str, str] = ("strategy", "benchmark")) -> ft.Image:
+                 title: str = "Equity", labels: tuple[str, str] = ("strategy", "benchmark")) -> ft.Control:
     pal = active()
     fig, ax = _fig(9.5, 3.2, pal)
     x = np.arange(len(dates))
@@ -87,7 +87,7 @@ def equity_chart(dates: Sequence[str], equity: np.ndarray, bench: Optional[np.nd
 
 
 def bars_chart(labels: Sequence[str], values: Sequence[float], *, title: str = "", vmax: float = 100.0,
-               annotate: Optional[Sequence[str]] = None) -> ft.Image:
+               annotate: Optional[Sequence[str]] = None) -> ft.Control:
     pal = active()
     fig, ax = _fig(9.5, 0.45 * len(labels) + 0.8, pal)
     y = np.arange(len(labels))
@@ -105,7 +105,7 @@ def bars_chart(labels: Sequence[str], values: Sequence[float], *, title: str = "
 
 
 def premium_chart(dates: Sequence[str], price: np.ndarray, nav: np.ndarray, premium_pct: np.ndarray,
-                  *, title: str = "Price vs NAV") -> ft.Image:
+                  *, title: str = "Price vs NAV") -> ft.Control:
     pal = active()
     fig, (a1, a2) = plt.subplots(2, 1, figsize=(9.5, 4.2), dpi=110, sharex=True,
                                  gridspec_kw={"height_ratios": [2, 1]})

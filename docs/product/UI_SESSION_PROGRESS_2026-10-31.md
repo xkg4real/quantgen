@@ -61,8 +61,8 @@ Design: `INDICATOR_GUIDE_DESIGN.md`. Translation rules and remaining coverage:
 
 ## Remaining acceptance and website follow-up
 
-Physical Windows input/display/installer checks and live Flet browser visual
-acceptance remain. Korean/English are the shipped catalogues; additional language
+Physical Windows input/display/installer checks remain. The C follow-up adds
+actual local Flet browser visual checks; website deployment remains unverified. Korean/English are the shipped catalogues; additional language
 packs and professional review require the documented checks. Legacy model
 narratives beyond the main session's completed translations remain its ongoing
 work and are explicitly displayed as source-language prose where applicable.
@@ -80,3 +80,28 @@ follow-up workflow. The shared `handoff/UI_SESSION_CURRENT.md` links these and P
 for the main session's consolidated Claude handoff. Do not replace its active
 CURRENT task/execution ownership or research ledger. This UI work does not run
 actual ledgers, holdouts, protected caches or order paths.
+
+## Owner-selected C format and dark-mode follow-up
+
+PR42 was merged as d77d99660132f71b50c19b42cc6d76dc4b5f9a79 after runtime CI
+41181029682 and document CI 41181029690 passed. It includes the guide, locale
+structure, market-rights inventory and QUANTGEN runtime icon assignment.
+
+The owner then selected C. [The common design](CHART_C_DESIGN_2026-10-31.md) covers
+all shared app chart paths, native theme persistence and existing Flet result
+repainting. Existing chart types and calculations are preserved. Working branch:
+gpt/chart-c-theme-20261031. See its PR for final head/CI/merge status.
+
+C verification: 230 bounded runtime checks, followed by 16 focused checks after
+Home/font fixes; 28 chart factories switched themes. Inspected Qt 1600×1050
+light/dark and local Chromium 1600×1100 plus 390×1000 captures. Actual site CSS
+comparison was blocked by 403, so exact website token matching is an AWS task.
+All website chart surfaces, existing Auto/Light/Dark behavior and mobile checks
+are explicitly queued in the shared AWS handoff. A stored handoff is not a sent
+chat message or a verified website deployment.
+
+C implementation PR: [#47](https://github.com/xkg4real/quantgen/pull/47).
+The branch integrates main PR46 (13d16ae) and retains its safe Claude diagnostics
+and no-extra-request language handling. The allowlisted C wheel passed installed
+app/native smoke and new helper imports outside checkout.
+Website queue: [PR-47](ui_website_updates/PR-47.json).

@@ -76,7 +76,13 @@ class ToolPane(QWidget):
         self.result_layout = QVBoxLayout(self.result)
         self.result_layout.setContentsMargins(0, 0, 0, 0)
         self.result_layout.setSpacing(16)
-        layout.addWidget(self.result)
+        self.result_reading=QWidget()
+        self.result_reading_layout=QVBoxLayout(self.result_reading)
+        self.result_reading_layout.setContentsMargins(0,0,0,0)
+        from .chart_study import ChartStudy
+        self.study=ChartStudy(self.result,self.result_reading)
+        layout.addWidget(self.study)
+        self.result_reading.hide()
         exports = QHBoxLayout()
         self.export_json, self.export_zip = QPushButton('분석 JSON 저장'), QPushButton('보고서 ZIP 저장')
         for button, bundle in ((self.export_json, False), (self.export_zip, True)):
@@ -114,6 +120,10 @@ class ToolPane(QWidget):
         self.export_json.setEnabled(False)
         self.export_zip.setEnabled(False)
         self.tables, self.charts = {}, {}
+        while self.result_reading_layout.count():
+            item=self.result_reading_layout.takeAt(0)
+            if item.widget():item.widget().hide();item.widget().deleteLater()
+        self.result_reading.hide()
         while self.result_layout.count():
             item = self.result_layout.takeAt(0)
             if item.widget():
@@ -159,8 +169,11 @@ class ToolPane(QWidget):
         from .app import label
         notice = ('Analysis narrative · display language; original retained in export' if localized else
                   'Analysis narrative · original source language retained')
-        self.result_layout.addWidget(label(notice, 'caption'))
-        self.text(narrative, localized=localized)
+        self.result_reading_layout.addWidget(label(notice, 'caption'))
+        narrative_widget=self.text(narrative, localized=localized)
+        self.result_layout.removeWidget(narrative_widget)
+        self.result_reading_layout.addWidget(narrative_widget)
+        self.result_reading.show()
         self.has_result = True
         self.status.setText('계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.')
 
