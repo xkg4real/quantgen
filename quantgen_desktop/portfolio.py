@@ -82,7 +82,7 @@ class PortfolioPane(QWidget):
             {'type': 'constraint_scope', 'data': disclosure},
             {'type': 'frontier', 'data': output.frontier},
             {'type': 'correlation', 'symbols': chosen.symbols, 'values': output.stats.corr},
-            {'type': 'text', 'text': self.notes.text()}])
+            {'type': 'text', 'text': self.notes.source_text}])
 
     def clear_result(self):
         self.exports.clear()

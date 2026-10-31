@@ -1,4 +1,5 @@
 """Shared native form and result widgets for the FICC tool panes."""
+from .translations import display
 import math
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QPushButton, QStackedWidget, QVBoxLayout, QWidget
@@ -131,6 +132,8 @@ class ToolPane(QWidget):
         self.sections.append({'type':'table','name':name,'headers':headers,'rows':rows})
         self.result_layout.addWidget(label(name, 'heading'))
         widget = table(headers)
+        if headers and headers[0] == 'Metric':
+            widget.setProperty('localized_columns', [0])
         table_rows(widget, rows)
         widget.setMinimumHeight(min(400, max(120, 45+len(rows)*32)))
         self.result_layout.addWidget(widget)
@@ -148,6 +151,8 @@ class ToolPane(QWidget):
         self.charts[name] = chart
 
     def finished(self, narrative):
+        from .app import label
+        self.result_layout.addWidget(label('Analysis narrative · original source language retained', 'caption'))
         self.text(narrative)
         self.has_result = True
         self.status.setText('계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.')
@@ -174,7 +179,7 @@ class ToolPane(QWidget):
         from core.research.export import save_desktop_export
         from core.research.tool_export import report_bytes
         extension = 'zip' if bundle else 'json'
-        filename, _ = QFileDialog.getSaveFileName(self, '분석 결과 저장', f"quantgen-{self.report['tool']}.{extension}", f'Report (*.{extension})')
+        filename, _ = QFileDialog.getSaveFileName(self, display(self, '분석 결과 저장'), f"quantgen-{self.report['tool']}.{extension}", f'Report (*.{extension})')
         if not filename: return
         try:
             save_desktop_export(filename, report_bytes(self.report, bundle=bundle), extension=extension)
