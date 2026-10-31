@@ -749,7 +749,14 @@ class ResearchWindow(QMainWindow):
 
 
 def main():
+    if sys.platform == "win32":
+        import ctypes
+        set_app_id = ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID
+        set_app_id.argtypes = [ctypes.c_wchar_p]
+        set_app_id.restype = ctypes.c_long
+        set_app_id("QUANTGEN.Desktop")
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon(str(application_root()/"assets/icon.png")))
     app.setApplicationName("QUANTGEN")
     app.setOrganizationName("QUANTGEN")
     font_id = QFontDatabase.addApplicationFont(str(application_root()/"assets/fonts/qg-interface.otf"))

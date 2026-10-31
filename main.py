@@ -41,6 +41,7 @@ TWO FIXES INHERITED FROM NEXTGEN REMAIN LOAD-BEARING
 from __future__ import annotations
 
 import flet as ft
+from pathlib import Path
 
 import config
 from core.app_paths import assets_directory
@@ -107,6 +108,8 @@ WORKSPACES = (
 def main(page: ft.Page) -> None:
     page.qg_locale=LocaleContext('ko_KR')
     page.title = "QUANTGEN"
+    # Runtime Flet windows use their host icon unless explicitly overridden.
+    page.window.icon = str(Path(assets_directory()) / "icon.ico")
     page.padding = 0
     page.fonts = {"QG Interface": "fonts/qg-interface.otf"}
     page.theme = ft.Theme(font_family="QG Interface", color_scheme_seed="#194C40")

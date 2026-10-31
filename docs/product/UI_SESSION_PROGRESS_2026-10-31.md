@@ -35,6 +35,12 @@ this session. Include this UI work in the main session's Claude handoff.
   geometry, persisted fallback-language notice and regional existing-chart ticks
   are also corrected.
 
+- Desktop branding: Flet Windows runtime explicitly uses the shipped QUANTGEN
+  ICO; native QApplication gets the QUANTGEN icon and a Windows app identity
+  so dialogs/taskbar can inherit the brand. Existing build icons are retained.
+  User-owned installed executables/shortcuts still require updated source/build
+  and restart; actual Windows taskbar/pinned-shortcut acceptance remains pending.
+
 Design: `INDICATOR_GUIDE_DESIGN.md`. Translation rules and remaining coverage:
 `UI_LOCALIZATION.md`. Rights evidence: `MARKET_DISPLAY_RIGHTS_2026-10-31.md`.
 

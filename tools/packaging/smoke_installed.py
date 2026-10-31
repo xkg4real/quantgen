@@ -39,7 +39,7 @@ status, error = recorded_status()
 assert status is not None and not error, error
 assets = Path(assets_directory())
 for name in ("branding/f1-symbol.svg", "branding/f1-wordmark.svg", "fonts/qg-interface.otf", "fonts/OFL.txt",
-             "favicon.png", "manifest.json", "icons/icon-192.png", "icons/icon-512.png",
+             "icon.png", "icon.ico", "favicon.png", "manifest.json", "icons/icon-192.png", "icons/icon-512.png",
              "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon-192.png"):
     assert (assets / name).is_file(), name
 manifest = json.loads((assets / "manifest.json").read_text())
