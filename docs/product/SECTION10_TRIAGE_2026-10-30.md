@@ -149,3 +149,12 @@ Qt, AI and exports, including insufficient and one-sided samples. See
 `QUOTE_COVERAGE_2026-10-31.md`. **13/67** groups implemented, **54** remain;
 14 observation rows and15 ambiguous mappings unchanged. No formal study
 decision, SVI result or engine calculation is changed.
+
+## Swaption comparison-volatility failure isolation
+
+M3-N04 retains valid primary-model prices and Greeks when optional cross-model
+inversion is unavailable. The UI, narrative and exports disclose the missing
+comparison instead of losing the full report. See `SWAPTION_CONVERSION_2026-10-31.md`.
+Public pricing and inversion formulas/refusals remain unchanged. **14/67** groups
+implemented, **53** remain;14 observation rows and15 ambiguous mappings remain.
+Manual Windows and live-market validation are separate and NOT_RUN.

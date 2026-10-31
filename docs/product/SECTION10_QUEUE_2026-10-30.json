@@ -9,8 +9,8 @@
     "canonical_groups": 67,
     "observation_models": 14,
     "initial_reproductions": 5,
-    "additional_reproduced_ids": 12,
-    "implemented_canonical_groups": 13
+    "additional_reproduced_ids": 13,
+    "implemented_canonical_groups": 14
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -363,10 +363,11 @@
       "source_model": "65. M3-13 Black-76·Bachelier 옵션식과 내재변동성",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Auxiliary inversion may remain unavailable; primary price retained. Manual Windows/live quotes NOT_RUN; inversion/valuation formulas unchanged.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED",
+      "evidence": "docs/product/SWAPTION_CONVERSION_2026-10-31.md"
     },
     {
       "id": "M3-N05",
