@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "deployed_and_public_response_verified",
+  "site": "https://quantgeneration.com/",
+  "revision": "2026-10-31.1",
+  "deployed_at": "2026-10-31T07:26:02.288067+00:00",
+  "old_sha256": "eb392040377722562ee5d5ca175629c2156186c5bd55a3aec9792dce8b2a643f",
+  "new_sha256": "d3dcc4f48dd2355fc7e748f30b75135992043a0e9933dc13f40d7355d624ca02",
+  "local_review_commit": "5cd022145bf34d993fbcc7f92242895b57cf2598",
+  "validation": {
+    "status": "passed",
+    "source_sha256": "d3dcc4f48dd2355fc7e748f30b75135992043a0e9933dc13f40d7355d624ca02",
+    "responsive_cases": 7,
+    "motion_and_theme_cases": 4,
+    "large_price_cases": 4,
+    "data_checksums_preserved": true,
+    "study_engine_gates_font_unchanged": true,
+    "rendered_counts": {
+      "units": 34,
+      "mini_units": 34,
+      "grades": 9
+    },
+    "inactive_features_not_tested": [
+      "copy buttons (hidden)",
+      "external links (none active)",
+      "downloads (none active)"
+    ],
+    "zoom_method": "CSS viewport/device scale emulation, not manual browser zoom",
+    "font_note": "Existing body/display/mono fallbacks preserved. Unused embedded QG Interface definition explicitly load-tested successfully."
+  },
+  "public_content": {
+    "checked_at": "2026-10-31T07:27:19.599202+00:00",
+    "url": "https://quantgeneration.com/",
+    "status": 200,
+    "cf_cache_status": "DYNAMIC",
+    "style_blocks": 2,
+    "inline_script_blocks": 3,
+    "styles_match": true,
+    "inline_scripts_match": true,
+    "stale_saved_asset_present": false,
+    "edge_external_scripts": [
+      "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092"
+    ],
+    "revision_present": true
+  },
+  "scope": "Initial introduction-site UI bugs only; later C-style chart unification, PR42/47 feature ports, and authenticated web application are NOT implemented.",
+  "owner_stop": true
+}
