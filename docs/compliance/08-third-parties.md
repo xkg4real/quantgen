@@ -44,7 +44,7 @@
 | 웹·UI | `flet[all]==0.85.2`, `fastapi==0.141.1`, `starlette==1.6.0` | 실제 설치되는 런타임·전이 의존성·쿠키·정적 자원 요청·서버 로그 조사 |
 | 네이티브 UI | 선택 의존성 `PyQt6==6.12.0` | 선택한 배포 방식의 PyQt·Qt 라이선스와 의무 확인. 소스 공개·상업 라이선스 필요 여부를 설치 가능성으로 판단하지 않음 |
 | HTTP·설정 | `requests>=2.31`, `python-dotenv>=1.0`, `pyyaml>=6.0`, Windows용 `tzdata>=2024.1` | TLS 검증, URL 내 키, 환경파일 보호, 파서 사용 및 전이 의존성 확인 |
-| 수치·도표 | `numpy>=1.26`, `pandas>=2.1`, `scipy>=1.11`, `statsmodels>=0.14.2`, `matplotlib>=3.8` | 라이선스·귀속, 공급망·취약점 및 실제 로드 버전 기록. `statsmodels`는 `pyproject.toml` 선언에 존재 |
+| 수치·도표 | `numpy>=1.26`, `pandas>=2.1`, `scipy>=1.11`, `statsmodels>=0.14.2`, `matplotlib>=3.8` | 라이선스·귀속, 공급망·취약점 및 실제 로드 버전 기록. `statsmodels`는 `pyproject.toml`과 `requirements.txt` 양쪽에 선언 |
 | 금융 SDK | `gs-quant>=1.0`, `yfinance>=0.2`, `pandas-datareader>=0.10` | 패키지 라이선스와 원격 서비스 약관을 별도 확인 |
 | 개발 전용 | `exchange_calendars>=4.13`, `reportlab>=4.0`, `pypdf>=4.0`, `pypdfium2>=4.0` | `requirements-dev.txt` 선언. 문서 생성·달력 작업 환경과 최종 배포물 포함 여부 확인 |
 | 빌드 | `setuptools>=68` | 빌드 시점 버전·출처·생성 아티팩트 해시 기록 |

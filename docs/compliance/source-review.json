@@ -4,10 +4,10 @@
   "scope": "named source/document consistency review; not legal or operational certification",
   "source_state": "HEAD commit identifier plus observed working-tree fingerprints; not a clean-checkout attestation",
   "registry_sha256": "d1a62050d33e6c53ac9027db0eb8661317a4aec7fc7eb7b10488cf709b0b8f0f",
-  "profile_sha256": "e947c5bfbe664638d5a4b9990e934e30acae6ac7d339f12fb9c28d771a02950b",
+  "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "c9092cf951345b6a656cf307eb9b5c822d0268f180c33fef70b96c427ca2c5d3",
-    ".github/workflows/runtime-smoke.yml": "02f1c7c03a3ba9af77f590e0077e3c0ec1d03d231456a4f3f77ef6e873c6aad4",
+    ".github/workflows/runtime-smoke.yml": "efcb35e620065a4bc7c6bb983046be9b80efc41a7dbe56eb2cbbbcee29aeaa9b",
     "README.md": "3d5109bbf91644ca6dcddd4ff609d72f1819c0e54d0a8eac2b75ddd4e244e54e",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -95,7 +95,7 @@
     "core/ficc/schemas/model_card_header.macro.v2.0.json": "109bf18cb8d91370395a889d7ae804b65c8d8adc3fb179e2b61d800f31c67965",
     "core/ficc/schemas/overlay_decision.v2.0.json": "c90b28326b900afa98fb66b86ebb81c30dbd554f1048851ad2ca391d6063def7",
     "core/ficc/structured.py": "2e5ac55b70b839792e63b676844b402ea0e83151a735aa64d6ed7ea7e867718a",
-    "core/ficc/swaps.py": "55e417668af2c84663fe2c2fe4ac2f633afe283b25826c82aae23b05799470e1",
+    "core/ficc/swaps.py": "0f14e36c17a558bd5a38f2a486355e2186fbd7ad4aa9ba900b65316c3df22f29",
     "core/ficc/vol_products.py": "e81f1df20e6f83e11159412edfb1b5cc45b24e742653c8e1cc39164793728f12",
     "core/markets.py": "0477d1af9f064f69e2619f22b2672af45dd88cba346d83704e9ed3e9c7dcf088",
     "core/numfmt.py": "12ed43176eb802c9d1f08ef5cdcd9e6b97466f8fe5b162abc47ca7791dd8e600",
@@ -215,10 +215,10 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "28c21935a6265fa82d7eeb845b86d17db508c9cddd2be9cc2e8687608624665b",
+    "docs/compliance/FACTS.md": "608dcba4d48ad27c8457ba8abfc375f717429c1043a3714c628d105948dd6ed7",
     "docs/compliance/PIPELINE.md": "ed0f2d7cac81abbcefcb4b98dc48fc454b84f186928e61ae4863bc3b2cda13c4",
-    "docs/compliance/README.md": "c128df66ac9cc7d44b6d7a533555c369d68691ef1b150eaaeda2ebf395fef394",
-    "docs/compliance/RELEASE_GAPS.md": "c4141ebaab77816c11ed08c034f34d9268b60efb63863cda8893f64338092c0b",
+    "docs/compliance/README.md": "a0e56f394b6fc3d0991fbc676fe3422e02d7670c551b8b6a8eaf1cdc6f14cdf0",
+    "docs/compliance/RELEASE_GAPS.md": "fb279c91c7f2b384ec59c03e872e5ed04c98819828f47646813d7af471e3db09",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
     "docs/product/BS21_FUNDING_2026-10-30.md": "a8060c8d57b2532eed9b06c429a97568c77a3ba3c9e0370f273e1d3ac9bc8c4d",
@@ -234,8 +234,9 @@
     "docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md": "ad9177b241178d7427f77caa8b7de6f14390610d41d2959c87dd03b1093fd189",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "ef53503ccc63793179addd80c472d41eb4e176c3b9cbde3c16a3383b3077ed88",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "06f00a572df0d3626b1bfe0e46e5c2f728d5e51c6b448530eecf3dddddc1967c",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
+    "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
     "main.py": "9674fb758c2d285b984bef7cf3e833afb5c38babda596343949bfec906b25d1a",
@@ -255,14 +256,14 @@
     "quantgen_desktop/market_tools.py": "cee656dd028cdc8d82e6daa409ad673cf4efe542474dd5fbc39dbd2ff7d0a420",
     "quantgen_desktop/paper.py": "8837cdf969f29452b3207e0cc4f46808c8cb63ab69335bf09eddec6d4d50627c",
     "quantgen_desktop/portfolio.py": "e5caf279b865187ebf792bd9deae4139fd1baa3cf1d4a03f5a051e858f2c426d",
-    "quantgen_desktop/rates.py": "864d1f74aee15080d7eb618cd2753e9e25f7884429bdf99bbe915f89ada6892a",
+    "quantgen_desktop/rates.py": "4b1ff3fec7ff83bee2f05a0d2dd14bc2d0271fa8264c73f181b7126fce5f8e41",
     "quantgen_desktop/report_actions.py": "ca1349fde3356ba41447d5a7c7a9e2cc8a575bd0356491fcc78431e089cc86c3",
     "quantgen_desktop/signals.py": "0fc7a96dc793eb2c8c2fbee292c7267b498a554c820f0789bd6a62e5e5048050",
     "quantgen_desktop/strategy.py": "7acb99505fd6f48fa9636644ba6cf81c68039ee24ad8f80e3857bf23a0565e52",
     "quantgen_desktop/structuring.py": "247ef7c5f315214b82506613183d1b9b0076b7735ecb4fc4183fe55b74ded1a3",
     "quantgen_desktop/tools.py": "2b32021f81d4862068c28dceb9a50e858348827ddfd29359242cd8841d8e2e14",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
-    "requirements.txt": "790babdad6a51e697550ff0e61db4838dc9e03db71685282c784c66c22f22a56",
+    "requirements.txt": "ef98a427eaa0b5a8e75f60cf4fc6cf825ee33e8dddee329b02675f2ae4f30f25",
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
@@ -285,6 +286,7 @@
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
+    "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
     "tests/ficc_acceptance.py": "101e26e68f97b5cb4a8bf2a5498a300498a9c44627d219559d1fcbd5228ed813",
@@ -347,6 +349,7 @@
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
     "tests/status_snapshot_acceptance.py": "99069a5d339077750897ba439d83f1e895b418c8a6416c8ddfdfba5876f9fe47",
     "tests/strategy_exposure_acceptance.py": "3451a355e400ea2bc98c02c401a5b5680a187b190a6b52547ccf868b84867e01",
+    "tests/swaption_conversion_acceptance.py": "62a4994aa046a463559f463cd87b6873235a3d80684df515be2fd74bb8ff338a",
     "tests/terminal_target_acceptance.py": "e4bd3e974ee8012a5c06c8f24313b869f4beac1d3268209057c1e3b44f7e4e30",
     "tests/web_branding_acceptance.py": "4cf27700af4187bfce7f055584c09468e99fdc6682c2a5aaec9afb72703efde5",
     "tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -399,7 +402,7 @@
     "ui/portfolio_page.py": "dafb8f336dffa002992c4cac3c8817ef66346cade02855c5f9bbbee1bc0b56a2",
     "ui/qcharts.py": "6216701f845634a78e8bd8d1e64087551289f5d786de6dbb1201dd175aa47ed7",
     "ui/quant_lab_page.py": "e15a5c11d00a2a7c2c3034cc69e9e6c1fc6b852fda61bc8a78d2d7050b2ca457",
-    "ui/rates_page.py": "7bdd203f491c1fdf5315bbd2dda1126c16fcc68ccc4e185e3244f5367f988a4f",
+    "ui/rates_page.py": "db14860546d2fb8e48e3f441affa7a18a84190e9202eacecf8eee66d869bf31a",
     "ui/research_home.py": "cbe985d718813f7915eb2300253e3539279cf7292b8632aa1433a469cca6b2b6",
     "ui/research_view.py": "cf9f3a905aace4617c6582aad9213e8e4aff859ed07b9a97316d3431809ba10d",
     "ui/rules_page.py": "cfd9ef27c9ae2c0b5279ad46de8026b73aad711846b6c743e7e978c09482315b",
@@ -413,163 +416,163 @@
   "reviews": {
     "1": {
       "document_sha256": "7f5ffc3cedf7cc5281fec3b5bc8c366aa9152bcb061e2899b0a7868dd15ec30d",
-      "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
+      "source_digest": "ded1a7ca2e7578d68de811af70c1a091e557c96787c9a08322e35039dfe6d1af",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.385552+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.229960+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "2": {
-      "document_sha256": "48eae0cd242ff2310fbbd6e43aca01b55b74cca177fbd2f24ed27470ef1ac977",
-      "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
+      "document_sha256": "d856068e65f1a51509a967dfff01528cd22b160badde56fec6d57539e8ef9c54",
+      "source_digest": "ded1a7ca2e7578d68de811af70c1a091e557c96787c9a08322e35039dfe6d1af",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.386878+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.231341+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "3": {
-      "document_sha256": "7239fe38364ae8e9ffdf2f4540ee7812b45a7ec3c781682b7fa9fffa24367e97",
-      "source_digest": "2fb4d02ad504df46cf6f90ecf1e67cad7da518b103b36a44d7decf267813af05",
+      "document_sha256": "c34d96603e327a679ddf6f6b21ceb351a1fdcb6269e63783a1c37784b9da9200",
+      "source_digest": "60dcf899f4a4ccffce85a044912af328da84accd73b48be371e1e173ab7022a9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.388132+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.232307+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "4": {
       "document_sha256": "55b8a11fd2085a5d9583fb8537ee74c84c864d94cf6a6231ca4eabb52b64d110",
-      "source_digest": "a0464a81af2e2639cd199c44e21812de7692348f8bcb2e5956334d3a941473a8",
+      "source_digest": "3207ab06fb1cb0d6c36c39f7d990626cf16503f1213c4a16063c13a1f9180f0a",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.389085+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.233128+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "5": {
       "document_sha256": "2052fd84dd9ec893e79864fafe9b7b8be1b0a261602a5a9a3c7cd64a58dcbe4a",
-      "source_digest": "8963e5c230b8e143b55dba5e67fd4a000ce3f40af81ddeacc01c91989b3d935e",
+      "source_digest": "9a13af25730f3f00177e31dd10e3f0efd148c62402a595bd1150517069b75451",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.389951+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.233957+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "6": {
       "document_sha256": "3a637558527c79efc05c991dbd431fb08ac7fc7fea322655ff8dc1715b02f6f5",
-      "source_digest": "6835d0c3781ffddc4c5fe103ae8b0a8994e558afabe9e6b3798feb18af55ba53",
+      "source_digest": "7a3ef81a4d12b8c81d721c023203ac2291822e5d266121f88d827bd50fdeee8e",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.390873+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.234890+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "7": {
       "document_sha256": "6e0eef1bbf393c1514a7cca6b11c0d59e7680d1b58dde6695edcd9980a98f955",
-      "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
+      "source_digest": "ded1a7ca2e7578d68de811af70c1a091e557c96787c9a08322e35039dfe6d1af",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.391823+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.235751+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "8": {
-      "document_sha256": "31622698c62ed209d6c3cdbe3d4c3a5edec9668cbe6fd25b11b1dd34cd0cc49f",
-      "source_digest": "6835d0c3781ffddc4c5fe103ae8b0a8994e558afabe9e6b3798feb18af55ba53",
+      "document_sha256": "67f3f59d743dc0f98bf916f23a809834bd02cbe9ab9eecd1884ed6c3fb5d9b00",
+      "source_digest": "7a3ef81a4d12b8c81d721c023203ac2291822e5d266121f88d827bd50fdeee8e",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.392701+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.236601+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "9": {
       "document_sha256": "96f5f056d7097e66c9385da384fce9a5217d5379e2e0d6186b4335a695d0860c",
-      "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
+      "source_digest": "24bbe476a4814d9a74cf9ecdbef343ac8238771ac1b0d817a00b35e5ac982645",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.393544+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.237464+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "10": {
-      "document_sha256": "fef0ba2446f9c6e5c300df8c4fc0f19441f2f17653477672f92709bfdcf85368",
-      "source_digest": "c70532c00167956c86ecb65484f2f3aee8dba2bd3d70144b7dd93d27f90b1035",
+      "document_sha256": "c8a08c343b6c0315057fc16351c249fc50c86f6ef129a2019af6045a64e163fc",
+      "source_digest": "1a181152b69f5d5d0b38175aa8cdaf870787c0676786f515eda38f81ab12f396",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.394375+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.238321+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "11": {
       "document_sha256": "3da5dbb517cd7526b735b2a383d7bed83ebb82e743e7ef126333c1f4eba92791",
-      "source_digest": "6452090c2bbaba498684a6258f5a64a5e66d15d8a73a5138d0e56e58a386ed53",
+      "source_digest": "4c539e1996c355a838a063492f54ca9bc71e6c5433db38fce822ce78aa821104",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.395239+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.239165+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "12": {
-      "document_sha256": "8a2a395c564c5aad636ef439f5ed3c43b9dd0157ec643b42afd64bb8fbab2492",
-      "source_digest": "13069386b627b11024cb3a65d898c7ed00c8d9c1cbc1875814a99d572ae73b90",
+      "document_sha256": "eb02768ceaddc3b42fb61f6611b637540df35c7c1ce21eda511c32ae55353927",
+      "source_digest": "6bbb4946c4d2d46680c9279af6bd49668a6c4a628ac314ca14f4e319e822db8d",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.396055+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.240069+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "13": {
       "document_sha256": "5dfdd84db17f907ef6cb2b83cad73489bc5332652e7a460c0228521726d40980",
-      "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
+      "source_digest": "24bbe476a4814d9a74cf9ecdbef343ac8238771ac1b0d817a00b35e5ac982645",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.396885+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.240891+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "14": {
       "document_sha256": "646d2cb4d8fe00ef3e325ea9d37ff1d25f809c81e5070acbc27b6c5222403968",
-      "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
+      "source_digest": "24bbe476a4814d9a74cf9ecdbef343ac8238771ac1b0d817a00b35e5ac982645",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.397714+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.241699+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "15": {
       "document_sha256": "e52d8257bd0df6cf81e19ae4bc2a95d34c63a5a128bf8c04cc7cd68ec59e9631",
-      "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
+      "source_digest": "24bbe476a4814d9a74cf9ecdbef343ac8238771ac1b0d817a00b35e5ac982645",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.398773+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.242506+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "16": {
       "document_sha256": "7a464b15daddf26401d9c25824b65bd6c3dbc92dd78741f289b5a1cb31b5d2c7",
-      "source_digest": "7c6fe2a4c73dcbca7fdba6217da0b2239937d3b817ac8ae62655b659d2f91481",
+      "source_digest": "93ad223d4cc672193d8188e666c10d4a8913b0c346ea2e2e7c4b43e1e76153a7",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.399628+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.243412+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "17": {
       "document_sha256": "0d93d44c03cd7221713bdd5721484ca61c4c708926218d2f93687235cbf29860",
-      "source_digest": "6835d0c3781ffddc4c5fe103ae8b0a8994e558afabe9e6b3798feb18af55ba53",
+      "source_digest": "7a3ef81a4d12b8c81d721c023203ac2291822e5d266121f88d827bd50fdeee8e",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.400631+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.244326+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "18": {
       "document_sha256": "42c4757135df8949f2886d58c92d1ae04d5f14817346c941af60736492f67f2a",
-      "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
+      "source_digest": "ded1a7ca2e7578d68de811af70c1a091e557c96787c9a08322e35039dfe6d1af",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.401515+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.245139+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "19": {
       "document_sha256": "f0f0cc79bdc686fa3adcd0d3d17d597349f44007965f5933fcfe92a9f686ff9b",
-      "source_digest": "6b69418646d1d805804436b20f3b4e270a4a75e5aeade1252488b7270e12cd2d",
+      "source_digest": "51a6b6b63fe6c440ec5ee508e48eaf4911293d848670dc868301fff775dca4ea",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.402348+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.245951+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     },
     "20": {
       "document_sha256": "2b77833f04c332f3d3ba166f9261dedc25b275ce4d86cc986b7a2487ca9b69ab",
-      "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
+      "source_digest": "ded1a7ca2e7578d68de811af70c1a091e557c96787c9a08322e35039dfe6d1af",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed all policy templates after latest main option-coverage update and user-supplied operator/Cloudflare details; corrected Korean legal-name wording; registration, contact, pricing-source and operational publication evidence remain unresolved.",
-      "reviewed_at": "2026-10-31T05:52:26.403214+00:00",
-      "source_commit": "7d61c576e49e3b867091a04c6930f64cb8c4b874"
+      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
+      "reviewed_at": "2026-10-31T05:56:22.246835+00:00",
+      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
     }
   }
 }

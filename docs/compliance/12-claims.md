@@ -10,6 +10,7 @@ QUANTGEN의 제품 화면, README, 소개·판매 자료, 연구 보고서, AI �
 - README의 기록된 QA 집계는 새 테스트 실행이나 전체 출시 적합성 판정이 아니다. `NOT_RUN`을 `PASS`와 합치지 않는다.
 - UI의 P5–P95는 시뮬레이션 분포의 중앙 90% 구간이다. 95% 신뢰구간·손실 방지·수익 보장으로 표현하지 않는다.
 - 옵션 호가 검사는 실제 수행 분모와 `NOT_RUN`·`PARTIAL`을 함께 표시한다. 미검사 자료의 null이나 부분 검사에서의 0을 전체 무위반·실거래 차익 검증·공식 연구 통과로 해석하지 않는다.
+- 스왑션 주모델 가격·Greeks의 정상 계산과 보조 모델 변동성 환산의 `UNAVAILABLE`은 별도 상태다. 보조 결과를 0으로 만들거나 주가격 전체가 실패했다고 표시하지 않는다.
 - 네이티브 이행 문서에는 이전 개인 사용 정책을 가리키는 문장이 남아 있다. 상업 출시 결정과의 불일치로 기록하고 현재 정책을 확정한 뒤 문서 간 표현을 정리해야 한다.
 
 ## 정책 또는 구현 기준
@@ -51,6 +52,7 @@ QUANTGEN의 제품 화면, README, 소개·판매 자료, 연구 보고서, AI �
 | QG-CLAIM-003 | P5–P95 | 중앙 90% 시뮬레이션 구간; 신뢰구간·보장 표현 금지 |
 | QG-CLAIM-004 | 개인 사용 전용이라는 과거 설명 | 현행 상업 정책과 불일치; 문서 수정 검토 필요 |
 | QG-CLAIM-005 | 옵션 호가의 위반 0건·검사 상태 | 콜·풋별 실제 검사 분모·적격 호가 범위·NOT_RUN/null·PARTIAL 구분. quoted-mid 품질 검사에 한정하며 실거래 가능 차익·공식 연구 판정으로 확장 금지 |
+| QG-CLAIM-006 | 스왑션 가격 성공과 모델 간 환산 상태 | 주가격·Greeks와 비교 변동성의 COMPUTED/UNAVAILABLE를 구분. 보조 NaN/null과 이유를 유지하고 0·근사값·주가격 전체 실패로 대체하지 않음 |
 
 이 표는 주장 승인 완료 대장이 아니다. 실제 증거와 검토자를 연결한 뒤 판정한다.
 
@@ -68,5 +70,6 @@ QUANTGEN의 제품 화면, README, 소개·판매 자료, 연구 보고서, AI �
 - [네이티브 시뮬레이션 구간 고지](../../quantgen_desktop/app.py)
 - [AI 생성 표시·공식 판정 보존](../../quantgen_desktop/commentary.py)
 - [옵션 검사 상태와 분모](../../core/research/quote_coverage.py), [전송·연구 흐름](../../core/research/derivatives_workflow.py), [호가 검사 변경 기록](../product/QUOTE_COVERAGE_2026-10-31.md)
+- [스왑션 주가격과 비교 결과](../../core/ficc/swaps.py), [Flet 결과](../../ui/rates_page.py), [네이티브 결과](../../quantgen_desktop/rates.py), [환산 상태 변경 근거](../product/SWAPTION_CONVERSION_2026-10-31.md)
 - [과거 개인 사용 정책 문구가 남은 이행 문서](../DESKTOP_MIGRATION_2026-10-30.md)
 - 법령·표시광고 관련 공식 근거는 [공식 출처 대장](SOURCES.md)을 따른다.

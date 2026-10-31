@@ -229,9 +229,45 @@
     "note": "운영 국가와 실제 개인정보 보관·접근 국가는 다르며 계약과 인프라로 확인해야 함"
   },
   "pricing_source": {
-    "reference": "사용자가 지정한 첨부 문서 22페이지",
-    "source_available": false,
-    "status": "unverified",
-    "note": "현재 접근 가능한 첨부에서 요금 문서를 확인하지 못해 금액과 주기를 추정하지 않음"
+    "reference": "2026-10-31 사용자가 이 작업에서 직접 제공한 요금 설명",
+    "source_available": true,
+    "original_page_22_seen": false,
+    "status": "user_provided",
+    "note": "가격·세금·월 자동갱신·Team최대5인 반영. 상품기능·청구일·체험·추가환불·결제/해지 구현은 별도 확인"
+  },
+  "pricing": {
+    "currency": "KRW",
+    "vat_included": true,
+    "billing_period": "monthly",
+    "automatic_renewal": true,
+    "plans": [
+      {
+        "id": "research",
+        "name": "Research",
+        "monthly_total": 29000,
+        "maximum_users": null,
+        "included_features": null
+      },
+      {
+        "id": "pro",
+        "name": "Pro",
+        "monthly_total": 59000,
+        "maximum_users": null,
+        "included_features": null
+      },
+      {
+        "id": "team_pilot",
+        "name": "Team Pilot",
+        "monthly_total": 290000,
+        "maximum_users": 5,
+        "included_features": null
+      }
+    ],
+    "free_trial": null,
+    "initial_charge_date_rule": null,
+    "renewal_charge_date_rule": null,
+    "cancellation_path": null,
+    "additional_refund_policy": "under_discussion",
+    "mandatory_consumer_rights": "법정 청약철회·하자·환급 권리를 축소하거나 협의 중으로 유보하지 않음"
   }
 }
