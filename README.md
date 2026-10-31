@@ -89,3 +89,12 @@ Claude 복귀 ──▶ CURRENT.md와 LEDGER.md 읽기 → returned면 GPT가 �
 - 커밋 메시지는 `handoff: <status> <작업명>` 형식으로 씁니다.
 - 앞부분(front matter)은 `key: value` 한 줄씩 씁니다. 값에 따옴표를 붙이거나 줄을 들여쓰지
   않습니다. 읽을 수 없는 `CURRENT.md`는 잠긴 것으로 취급되어, 다른 에이전트가 손대지 못합니다.
+
+
+## UI 세션 동반 인수인계 (2026-10-31)
+
+사용자가 UI 세션의 작업도 메인 세션의 Claude 인수인계에 포함하라고 요청했습니다.
+최종 통합 인수인계 전에 [UI_SESSION_CURRENT.md](UI_SESSION_CURRENT.md)를 읽고,
+그 문서가 가리키는 UI 브랜치의 최신 커밋·PR·검증·미완료 범위를 함께 전달하세요.
+PR36/37의 기존 완료 범위와 draft PR42의 진행 중 범위를 구분합니다.
+이 문서는 보조 자료이며 CURRENT.md의 task/execution/소유권·정식 연구 원장을 변경하지 않습니다.
