@@ -1,7 +1,7 @@
 # QUANTGEN 정책 작성의 코드 근거
 
 - 기준일: 2026-10-31 한국시간
-- 코드 기준: `94659fd`
+- 코드 기준: `73131c9`
 - 범위: 실행 진입점, `core/`, `data/`, `ui/`, `quantgen_desktop/`, 의존성·자산 선언과 관련 문서. 실제 운영 서버·사업자 계약·판매 사이트는 이 소스 검사로 확인되지 않는다.
 
 ## 기능과 정보 흐름
@@ -29,6 +29,7 @@
 | 차트 | 공통 Flet 차트 이미지에 결과별 대체 설명이 없다. 네이티브 차트 접근성 이름은 실제 수치·변화 설명의 충분성을 보장하지 않는다. | [Flet 차트 생성기](../../ui/qcharts.py), [네이티브 차트](../../quantgen_desktop/charts.py) |
 | 대비 | 대표 텍스트 색상쌍은 충분한 대비를 보이지만 입력 테두리 등 전체 상태·화면의 적합성은 확인되지 않았다. | [팔레트](../../core/theme.py), [검사 양식](14-contrast.md) |
 | 키보드 | 직접 메서드를 호출하는 이동 테스트는 실제 Tab·스크린리더 검증이 아니다. Windows·DPI·포커스 수동 검증이 남아 있다. | [데스크톱 검증](../../tests/desktop_acceptance.py), [남은 검증](../DESKTOP_MIGRATION_2026-10-30.md) |
+| 네이티브 차트 표시 | 글꼴 치수에 따른 축 여백·범례/각주 줄바꿈·눈금 밀도로 텍스트 잘림과 겹침을 개선했다. 긴 범례의 전체 이름은 툴팁에 제공한다. 화면 표시 개선이 키보드·스크린리더 동등 접근을 입증하지는 않는다. | [차트 구현](../../quantgen_desktop/charts.py), [합성 렌더링 검사와 남은 실제 환경 검증](../product/UI_RENDERING_2026-10-31.md) |
 | 옵션 검사 상태 | 검사를 수행할 표본이 없으면 `NOT_RUN`·null, 한쪽만 검사하면 `PARTIAL`을 표시하고 실제 검사 분모를 함께 전달한다. 이는 quoted-mid 품질 검사이며 실거래 차익 검증이나 공식 연구 판정이 아니다. | [검사 범위 표현](../../core/research/quote_coverage.py), [연구 흐름](../../core/research/derivatives_workflow.py), [변경 근거](../product/QUOTE_COVERAGE_2026-10-31.md) |
 | 스왑션 비교 결과 | 주모델 가격·Greeks가 유효해도 보조 모델 간 변동성 환산은 `UNAVAILABLE`일 수 있다. 내부 NaN·내보내기 null 및 이유를 전달하며 0이나 주가격 전체 실패로 표시하지 않는다. | [스왑션 계산](../../core/ficc/swaps.py), [변경 근거](../product/SWAPTION_CONVERSION_2026-10-31.md) |
 | 권리 | Noto CJK 파생 폰트와 OFL 고지가 있다. PyQt6 배포 방식, 개별 이미지 제작·허락, 시장데이터 상업 이용·재배포·AI 전송권은 별도 증빙이 필요하다. | [폰트 기록](../../assets/fonts/README.txt), [OFL](../../assets/fonts/OFL.txt), [의존성](../../pyproject.toml), [권리대장](19-licenses.md) |

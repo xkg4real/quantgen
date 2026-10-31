@@ -1,6 +1,6 @@
 # QUANTGEN 운영 정책 20종과 변경 점검
 
-이 묶음은 사진의 20개 항목을 QUANTGEN의 정책 본문, 작성·처리 양식, 구현 기준으로 옮긴 저장소 관리 문서다. 기준일은 **2026-10-31 한국시간**, 코드 기준은 `94659fd`이다. 각 문서의 `양식` 절을 복사하여 사용할 수 있다. 문서와 파이프라인의 관리 방법은 [PIPELINE.md](PIPELINE.md)에 있다.
+이 묶음은 사진의 20개 항목을 QUANTGEN의 정책 본문, 작성·처리 양식, 구현 기준으로 옮긴 저장소 관리 문서다. 기준일은 **2026-10-31 한국시간**, 코드 기준은 `73131c9`이다. 각 문서의 `양식` 절을 복사하여 사용할 수 있다. 문서와 파이프라인의 관리 방법은 [PIPELINE.md](PIPELINE.md)에 있다.
 
 문서의 현재 상태는 **검토용 초안 / 공개 승인 전**이다. 사업자·요금·보유기간·국외이전 계약 등 확인되지 않은 사실은 `{{...}}`로 남겼다. 구현되지 않은 화면·동의·삭제 기능은 구현 완료로 표현하지 않았다. 문서 구조 점검 PASS는 공개 준비, 법적 적합성, 접근성 인증을 뜻하지 않는다. [확인된 동작](FACTS.md), [남은 조치](RELEASE_GAPS.md), [공식 근거](SOURCES.md)를 함께 사용한다.
 
@@ -55,6 +55,9 @@
 python -m pip install "python-docx==1.2.0"
 python -m tools.compliance.check --check
 python -m tools.compliance.export --output /tmp/quantgen-compliance-delivery
+python -m tools.compliance.verify --directory /tmp/quantgen-compliance-delivery
 ```
 
 Word 생성 의존성은 문서 내보내기용이며 제품 실행·자동 정합성 검사에는 필요하지 않다. 치환필드 목록 `FIELD_INDEX.csv`에는 빈값만 있으며 실제 개인정보를 입력한 요청서는 저장소에 반영하지 않는다. 생성물의 `MANIFEST.json`으로 문서 원본과 파일 해시를 대조할 수 있다. 생성된 Word·HTML을 직접 수정하기보다는 저장소 원본을 고친 뒤 다시 생성한다. Word 표와 페이지 배치는 설치된 글꼴·편집기에 따라 달라질 수 있다.
+
+GitHub에서 받으려면 문서 점검 Actions의 성공 실행을 열고 **Artifacts → QUANTGEN_Compliance_20_Documents-실행ID-시도번호**를 누른다. GitHub 로그인이 필요하며 기존 저장소 접근 권한이 적용된다. 보관기간은 30일이다. 실행 요약에도 실제 다운로드 링크가 표시된다. 다운로드 ZIP에는 Word 본문 20개와 별도 Word 양식 20개가 들어 있다. 로컬·클라우드 내부 `/workspace/...` 경로는 사용자 PC에서 저장할 수 있는 다운로드 첨부가 아니다.

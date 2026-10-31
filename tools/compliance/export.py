@@ -22,8 +22,9 @@ from .check import ROOT, check, collect, markdown as report_markdown, registry, 
 SUPPLEMENTS = ("README.md", "FACTS.md", "RELEASE_GAPS.md", "SOURCES.md", "PIPELINE.md",
                "registry.json", "release-profile.json", "source-review.json")
 PIPELINE_FILES = ("tools/__init__.py", "tools/compliance/__init__.py",
-                  "tools/compliance/check.py", "tools/compliance/export.py",
-                  "tests/compliance_acceptance.py", ".github/workflows/compliance-review.yml")
+                  "tools/compliance/check.py", "tools/compliance/export.py", "tools/compliance/verify.py",
+                  "tests/compliance_acceptance.py", "tests/compliance_export_acceptance.py",
+                  ".github/workflows/compliance-review.yml")
 
 
 def form_section(text: str) -> str:

@@ -8,6 +8,7 @@ Python 3.11 이상과 표준 라이브러리만 사용한다. QUANTGEN 실행 �
 
 ```bash
 python -m unittest tests.compliance_acceptance -v
+python -m unittest tests.compliance_export_acceptance -v
 python -m tools.compliance.check --check --report-dir .compliance-report
 ```
 
@@ -88,6 +89,21 @@ python -m tools.compliance.check --record-publication-review \
 [compliance-review.yml](../../.github/workflows/compliance-review.yml)은 모든 PR, `main` 변경, 수동 실행, **매주 월요일 오전 9시 한국시간**에 실행한다. GitHub 예약 실행은 지연될 수 있으며 워크플로가 기본 브랜치에 있어야 예약이 활성화된다. 보고서가 바뀌었다고 정책 문구를 자동 수정하거나 댓글·메일을 발송하지 않는다. GitHub 알림은 이용자의 기존 설정을 따른다.
 
 워크플로는 읽기 권한만 사용하고 계좌·운영 비밀을 전달하지 않는다. 테스트와 지문 검사를 수행하고 성공·실패 모두 작업 요약 및 30일 보관 보고서 artifact를 남긴다. 구조 오류나 잘못된 설정도 가능한 범위에서 실패 보고서로 남긴다. 체크아웃 자체가 실패하거나 보고서 경로를 쓸 수 없는 경우에는 작업 로그가 근거다.
+
+### Word 문서와 양식 다운로드
+
+테스트와 정합성 검사가 성공하면 별도 문서 생성용 `python-docx==1.2.0`을 설치하고 본문 Word 20개·작성 양식 Word 20개·양식 원본·통합 HTML·점검 결과를 생성한다. 이 문서 생성 단계만 패키지 설치 네트워크가 필요하며 정합성 검사 자체는 계속 오프라인이다. 공개 준비가 `BLOCKED`인 경우에도 검토용 문서를 받을 수 있지만, 정합성 실패 시 새 패키지를 배포하지 않는다.
+
+업로드 전 파일 수·포함된 원본·MANIFEST 해시·Word 내부 ZIP·패키지 ZIP의 무결성을 검사한다. 업로드 대상은 exporter가 명시적 허용목록으로 만든 새 출력 폴더뿐이다. 원본 저장소나 운영 자료 폴더를 업로드하지 않는다. `source/.github`의 재현용 워크플로를 보존하기 위해 이 생성 폴더에만 숨김파일 포함을 허용한다. 내장 ZIP은 업로드에서 제외하여 실제 다운로드 ZIP에 문서·양식이 바로 들어가게 한다.
+
+GitHub Actions 실행 화면의 **Artifacts**에서 `QUANTGEN_Compliance_20_Documents-실행ID-시도번호`를 누르거나 실행 요약의 다운로드 링크를 사용한다. 저장소 접근 권한이 있는 GitHub 계정으로 로그인해야 한다. 문서 패키지는 **30일간 보관**하며, 만료 후에는 새 성공 실행에서 다시 생성한다. `/workspace/...`는 실행 환경 내부 경로이므로 다운로드 링크로 안내하지 않는다.
+
+```bash
+python -m tools.compliance.verify --directory /tmp/quantgen-compliance-delivery
+python -m tools.compliance.verify --archive /path/to/downloaded-package.zip
+```
+
+다운로드 패키지 검증기는 표준 라이브러리만 사용하며 파일을 추출하거나 원본 프로그램을 실행하지 않고 검사한다. 다운로드 artifact 생성은 문서의 공개 승인이나 제품 출시를 뜻하지 않는다.
 
 소스 변경 후 문서를 확인하지 않은 PR은 `Document and source consistency` 검사에 실패한다. 이를 병합 필수 검사로 강제하려면 저장소 관리자가 GitHub 브랜치 보호 또는 ruleset에 이 검사를 추가해야 한다. 이 문서 묶음은 관리 설정을 자동 변경하지 않는다. PR 워크플로를 같은 PR에서 고칠 수 있다는 GitHub의 신뢰 경계도 존재한다. 정당한 검토가 필요한 곳에는 보호된 검토 정책과 담당자 승인을 함께 운영한다.
 

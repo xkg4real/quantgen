@@ -6,8 +6,8 @@
   "registry_sha256": "d1a62050d33e6c53ac9027db0eb8661317a4aec7fc7eb7b10488cf709b0b8f0f",
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
-    ".github/workflows/compliance-review.yml": "c9092cf951345b6a656cf307eb9b5c822d0268f180c33fef70b96c427ca2c5d3",
-    ".github/workflows/runtime-smoke.yml": "efcb35e620065a4bc7c6bb983046be9b80efc41a7dbe56eb2cbbbcee29aeaa9b",
+    ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
+    ".github/workflows/runtime-smoke.yml": "602a9d1bc1cbe7e6d4ca140cf4495b7e949428d676c0f19584ed40748f63eaa8",
     "README.md": "3d5109bbf91644ca6dcddd4ff609d72f1819c0e54d0a8eac2b75ddd4e244e54e",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -215,9 +215,9 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "608dcba4d48ad27c8457ba8abfc375f717429c1043a3714c628d105948dd6ed7",
-    "docs/compliance/PIPELINE.md": "ed0f2d7cac81abbcefcb4b98dc48fc454b84f186928e61ae4863bc3b2cda13c4",
-    "docs/compliance/README.md": "a0e56f394b6fc3d0991fbc676fe3422e02d7670c551b8b6a8eaf1cdc6f14cdf0",
+    "docs/compliance/FACTS.md": "5275701cb2474765001e18a8154d84131d46619e7937c9f90855009e1672c3cc",
+    "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
+    "docs/compliance/README.md": "d25dc2bac2cad02a314f26190452b1383b8df8c3976bb6e99d603c14b73050e8",
     "docs/compliance/RELEASE_GAPS.md": "fb279c91c7f2b384ec59c03e872e5ed04c98819828f47646813d7af471e3db09",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -239,6 +239,7 @@
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
+    "docs/product/UI_RENDERING_2026-10-31.md": "f006b261d10a28594dc3b31d05424ac144004ca4edca18646ca00b5c0f8a19f6",
     "main.py": "9674fb758c2d285b984bef7cf3e833afb5c38babda596343949bfec906b25d1a",
     "mindmap/QUANTGEN Macro Neural Link.html": "4dbf731539d418aa67553bd5fd393dfc55550fac737ef89ca4c18c813f7c76c5",
     "pyproject.toml": "8414c32535febc4afd54685e3b1cf2dd8584e237a7a8b82457052c94dd8b1e05",
@@ -246,7 +247,7 @@
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
     "quantgen_desktop/app.py": "353a78cd92e775a193737eeb74eab5b5a6f9aa421942936f7015ce0dab2cbbd2",
     "quantgen_desktop/bonds.py": "0b22b658895cc1c573915d603d66692526bf8e4cae8d0954e28f97c89fed11d5",
-    "quantgen_desktop/charts.py": "842483bd479f0885860c5fd644fccdbbcbae3b4a2263525fb8b82ca5ed519e86",
+    "quantgen_desktop/charts.py": "c4083027cec2a5555a6a9509b8baa01088a0c5a477c07c89d63b73e0576e9f9b",
     "quantgen_desktop/commentary.py": "5ab808a5ac5448c148bbec6e06695ffc8db01fb608dda2f3cfb4c052d2f0282e",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
     "quantgen_desktop/fx.py": "c4b7e9b1f19d213e7dba79eec72670b08aae72707527c085d6357b388a7d8005",
@@ -271,10 +272,12 @@
     "tests/ar1_decay_acceptance.py": "8283f51b60967f30950af4ec7ecfda48f52c9bb605b2dc8231fc26b3549b63ab",
     "tests/bond_funding_acceptance.py": "dfd5760cec1f4e32cfccdae4f73cf8d4a38ea72650af612587e981c8058db02c",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
+    "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_acceptance.py": "ed7f20ebbba4a6810e776c4890f3123b28aff7e0d5885847f9ac10ece620456c",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
+    "tests/desktop_chart_rendering_acceptance.py": "58eaa2f685cf0ca915e82009d9b22c2400710e1bd91e0ac67d15f389189cfd28",
     "tests/desktop_commentary_acceptance.py": "1e13e178a30df3fd19dd473e01b3db6a8b52dcfa0fff4d1eaa9ed65696731fae",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_letf_disclosure_acceptance.py": "f70b5bfffb5562aa1f08a7f2417769adb7e91a926816b494c48f4045a79c19f4",
@@ -355,7 +358,8 @@
     "tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "tools/compliance/__init__.py": "8590668dafad720c57b4632730cc13d8c192d8db8644252be38f4a1ee2881906",
     "tools/compliance/check.py": "0dd133380a056d929745bebec9ce3995d8a36e8571e4f2dd73277a36f3c1d944",
-    "tools/compliance/export.py": "8e7966f51fddd6eb78107078498308bc4bef1da2d7fadd642e75d24f7e1649ff",
+    "tools/compliance/export.py": "01cc9f26bb84cbde8b292719aa86ddcc778e22a0c6c93dac5c5a6167330d1dbf",
+    "tools/compliance/verify.py": "a7dbb729bfca7bb4bc6070d808173ce6b19db2a2327f4754dc2cfe770c5e8132",
     "tools/debate.py": "5c790556d790d2dec14fe53dfeccc74e519ab6886555bcbfdbec6ce02e8a126d",
     "tools/handoff/auto_snapshot.py": "e79e3cc15572b0c4fae50784784f9fd234c75440d812104d0abf393bb2571cc6",
     "tools/handoff/mod/hooks/register.test.ts": "2709a0beb01e94689c5be2118f266138ad24b990648afbd58de8086e4d5628fb",
@@ -416,163 +420,163 @@
   "reviews": {
     "1": {
       "document_sha256": "7f5ffc3cedf7cc5281fec3b5bc8c366aa9152bcb061e2899b0a7868dd15ec30d",
-      "source_digest": "ded1a7ca2e7578d68de811af70c1a091e557c96787c9a08322e35039dfe6d1af",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.229960+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "7bf94c1cee0cf0519efb99c76adcfc9e59feea35a1b5fe52e25e266bd2168a06",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.956577+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "2": {
       "document_sha256": "d856068e65f1a51509a967dfff01528cd22b160badde56fec6d57539e8ef9c54",
-      "source_digest": "ded1a7ca2e7578d68de811af70c1a091e557c96787c9a08322e35039dfe6d1af",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.231341+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "7bf94c1cee0cf0519efb99c76adcfc9e59feea35a1b5fe52e25e266bd2168a06",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.958017+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "3": {
       "document_sha256": "c34d96603e327a679ddf6f6b21ceb351a1fdcb6269e63783a1c37784b9da9200",
-      "source_digest": "60dcf899f4a4ccffce85a044912af328da84accd73b48be371e1e173ab7022a9",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.232307+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "fd747657eebdb7e4e16e41e5ed02ef8505e8b07169492a6ec5d06466551ca0e4",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.959023+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "4": {
       "document_sha256": "55b8a11fd2085a5d9583fb8537ee74c84c864d94cf6a6231ca4eabb52b64d110",
-      "source_digest": "3207ab06fb1cb0d6c36c39f7d990626cf16503f1213c4a16063c13a1f9180f0a",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.233128+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "f2ca8dd06d9f2eeec6392926113d176572c2cea21ee16b484d1abc57e0bfc719",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.959982+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "5": {
       "document_sha256": "2052fd84dd9ec893e79864fafe9b7b8be1b0a261602a5a9a3c7cd64a58dcbe4a",
-      "source_digest": "9a13af25730f3f00177e31dd10e3f0efd148c62402a595bd1150517069b75451",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.233957+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "c9f22cd2bfd4a863dfec46d81f3ac8598388a97815e4e54a7158de9414d32d88",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.960829+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "6": {
       "document_sha256": "3a637558527c79efc05c991dbd431fb08ac7fc7fea322655ff8dc1715b02f6f5",
-      "source_digest": "7a3ef81a4d12b8c81d721c023203ac2291822e5d266121f88d827bd50fdeee8e",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.234890+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "3ad24894e09ccded4e3d9225eff8406adad66679cd906a93383aa4c3bf7510bb",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.961769+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "7": {
       "document_sha256": "6e0eef1bbf393c1514a7cca6b11c0d59e7680d1b58dde6695edcd9980a98f955",
-      "source_digest": "ded1a7ca2e7578d68de811af70c1a091e557c96787c9a08322e35039dfe6d1af",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.235751+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "7bf94c1cee0cf0519efb99c76adcfc9e59feea35a1b5fe52e25e266bd2168a06",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.962639+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "8": {
-      "document_sha256": "67f3f59d743dc0f98bf916f23a809834bd02cbe9ab9eecd1884ed6c3fb5d9b00",
-      "source_digest": "7a3ef81a4d12b8c81d721c023203ac2291822e5d266121f88d827bd50fdeee8e",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.236601+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "document_sha256": "a11456f99df7fc0c9944d80d7d5bd28f3250961891e0dee77d0d4a3fb490062a",
+      "source_digest": "3ad24894e09ccded4e3d9225eff8406adad66679cd906a93383aa4c3bf7510bb",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.963509+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "9": {
       "document_sha256": "96f5f056d7097e66c9385da384fce9a5217d5379e2e0d6186b4335a695d0860c",
-      "source_digest": "24bbe476a4814d9a74cf9ecdbef343ac8238771ac1b0d817a00b35e5ac982645",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.237464+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "933a05d2491ab907ad4fbb9d8926bd620c7e0b4d07977db61e70c35b8447c26c",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.964359+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "10": {
       "document_sha256": "c8a08c343b6c0315057fc16351c249fc50c86f6ef129a2019af6045a64e163fc",
-      "source_digest": "1a181152b69f5d5d0b38175aa8cdaf870787c0676786f515eda38f81ab12f396",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.238321+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "6b9bbcf1ca8b0dac5e25c5dc7894dc984304996c095dc664a242a77ebdd81c7e",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.965248+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "11": {
       "document_sha256": "3da5dbb517cd7526b735b2a383d7bed83ebb82e743e7ef126333c1f4eba92791",
-      "source_digest": "4c539e1996c355a838a063492f54ca9bc71e6c5433db38fce822ce78aa821104",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.239165+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "dba475158a74dd153d78c6eac2947ad81a0f787e45409a9775e4fde2b3651aca",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.966075+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "12": {
       "document_sha256": "eb02768ceaddc3b42fb61f6611b637540df35c7c1ce21eda511c32ae55353927",
-      "source_digest": "6bbb4946c4d2d46680c9279af6bd49668a6c4a628ac314ca14f4e319e822db8d",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.240069+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "f18bbb3d44a9f496bd29b9ff01ba09dfbe3c712c103ece77de5ca9c567fc71d9",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.966908+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "13": {
       "document_sha256": "5dfdd84db17f907ef6cb2b83cad73489bc5332652e7a460c0228521726d40980",
-      "source_digest": "24bbe476a4814d9a74cf9ecdbef343ac8238771ac1b0d817a00b35e5ac982645",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.240891+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "933a05d2491ab907ad4fbb9d8926bd620c7e0b4d07977db61e70c35b8447c26c",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.967833+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "14": {
       "document_sha256": "646d2cb4d8fe00ef3e325ea9d37ff1d25f809c81e5070acbc27b6c5222403968",
-      "source_digest": "24bbe476a4814d9a74cf9ecdbef343ac8238771ac1b0d817a00b35e5ac982645",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.241699+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "933a05d2491ab907ad4fbb9d8926bd620c7e0b4d07977db61e70c35b8447c26c",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.968638+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "15": {
       "document_sha256": "e52d8257bd0df6cf81e19ae4bc2a95d34c63a5a128bf8c04cc7cd68ec59e9631",
-      "source_digest": "24bbe476a4814d9a74cf9ecdbef343ac8238771ac1b0d817a00b35e5ac982645",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.242506+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "933a05d2491ab907ad4fbb9d8926bd620c7e0b4d07977db61e70c35b8447c26c",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.969473+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "16": {
       "document_sha256": "7a464b15daddf26401d9c25824b65bd6c3dbc92dd78741f289b5a1cb31b5d2c7",
-      "source_digest": "93ad223d4cc672193d8188e666c10d4a8913b0c346ea2e2e7c4b43e1e76153a7",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.243412+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "a8b7c0a55ae55575647a7ffdd22ebbef85503861d6a046a717b98b7c122bbf88",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.970292+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "17": {
       "document_sha256": "0d93d44c03cd7221713bdd5721484ca61c4c708926218d2f93687235cbf29860",
-      "source_digest": "7a3ef81a4d12b8c81d721c023203ac2291822e5d266121f88d827bd50fdeee8e",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.244326+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "3ad24894e09ccded4e3d9225eff8406adad66679cd906a93383aa4c3bf7510bb",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.971161+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "18": {
       "document_sha256": "42c4757135df8949f2886d58c92d1ae04d5f14817346c941af60736492f67f2a",
-      "source_digest": "ded1a7ca2e7578d68de811af70c1a091e557c96787c9a08322e35039dfe6d1af",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.245139+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "7bf94c1cee0cf0519efb99c76adcfc9e59feea35a1b5fe52e25e266bd2168a06",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.971988+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "19": {
       "document_sha256": "f0f0cc79bdc686fa3adcd0d3d17d597349f44007965f5933fcfe92a9f686ff9b",
-      "source_digest": "51a6b6b63fe6c440ec5ee508e48eaf4911293d848670dc868301fff775dca4ea",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.245951+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "98bd0c3619d515b6d5fa117c8fcc85e5d3d851304242cb5c209413b640522ce4",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.972824+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     },
     "20": {
       "document_sha256": "2b77833f04c332f3d3ba166f9261dedc25b275ce4d86cc986b7a2487ca9b69ab",
-      "source_digest": "ded1a7ca2e7578d68de811af70c1a091e557c96787c9a08322e35039dfe6d1af",
-      "reviewed_by": "Codex source and document review",
-      "review_note": "Reviewed 20 documents against latest main 94659fd including dependency parity and primary-versus-comparison volatility; integrated operator identity, Cloudflare and three user-confirmed VAT-inclusive monthly auto-renewal prices. Additional refunds and other unresolved operational evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:56:22.246835+00:00",
-      "source_commit": "ce0954f6d7d065f852948d9d0efbc742d6f5a7db"
+      "source_digest": "7bf94c1cee0cf0519efb99c76adcfc9e59feea35a1b5fe52e25e266bd2168a06",
+      "reviewed_by": "Codex download package review",
+      "review_note": "Reviewed all 20 drafts against main 73131c9 and the new verified Word artifact delivery: generated-only upload, 30-day retention, hash/CRC/source correspondence and failure gates. Public operating approvals remain unresolved.",
+      "reviewed_at": "2026-10-31T06:10:21.973661+00:00",
+      "source_commit": "87baa08a41d6a79fa183084be87cb1cf4bc8e129"
     }
   }
 }

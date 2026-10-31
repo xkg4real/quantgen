@@ -46,7 +46,7 @@
 | HTTP·설정 | `requests>=2.31`, `python-dotenv>=1.0`, `pyyaml>=6.0`, Windows용 `tzdata>=2024.1` | TLS 검증, URL 내 키, 환경파일 보호, 파서 사용 및 전이 의존성 확인 |
 | 수치·도표 | `numpy>=1.26`, `pandas>=2.1`, `scipy>=1.11`, `statsmodels>=0.14.2`, `matplotlib>=3.8` | 라이선스·귀속, 공급망·취약점 및 실제 로드 버전 기록. `statsmodels`는 `pyproject.toml`과 `requirements.txt` 양쪽에 선언 |
 | 금융 SDK | `gs-quant>=1.0`, `yfinance>=0.2`, `pandas-datareader>=0.10` | 패키지 라이선스와 원격 서비스 약관을 별도 확인 |
-| 개발 전용 | `exchange_calendars>=4.13`, `reportlab>=4.0`, `pypdf>=4.0`, `pypdfium2>=4.0` | `requirements-dev.txt` 선언. 문서 생성·달력 작업 환경과 최종 배포물 포함 여부 확인 |
+| 개발 전용 | `exchange_calendars>=4.13`, `reportlab>=4.0`, `pypdf>=4.0`, `pypdfium2>=4.0`; 다운로드 문서 생성용 `python-docx==1.2.0` | 앞 네 패키지는 `requirements-dev.txt` 선언. `python-docx`는 문서 패키지 생성 workflow에서 별도 설치. 문서 생성·달력 작업 환경과 전이 의존성·최종 배포물 포함 여부 확인 |
 | 빌드 | `setuptools>=68` | 빌드 시점 버전·출처·생성 아티팩트 해시 기록 |
 
 이는 선언 기준 목록이다. 하한 버전은 실제 설치 버전이 아니므로 릴리스 환경에서 고정된 해결 결과·패키지 해시·전이 의존성 목록을 별도 보관한다. 현재 SBOM·취약점 스캔이 완료되었다고 표시하지 않는다.
