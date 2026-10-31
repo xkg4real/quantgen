@@ -9,10 +9,10 @@ next_ids: ⑬-8/b2/c/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10
 updated_at: 2026-10-31T19:05:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/bonds-portfolio-website-record-20261031
-work_commit: 5e3c0606a13daace4e490adaddf5ca43a0ea2d0b
-uncommitted_changes: no
-pr: 50 (merged; recovery verified)
+work_branch: gpt/market-diagnostics-language-20261031
+work_commit: ab6f79455da994d19d0e3b0a4415d5e32a4f4b04
+uncommitted_changes: yes
+pr: none (market diagnostic language unit in local verification)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -209,3 +209,6 @@ JSON 한 파일 source5e3c0606a13daace4e490adaddf5ca43a0ea2d0b 원격read-back, 
 
 ## 2026-10-31 19:05 KST 안전 재개
 직전 execution2c7037f9-6ae8-44a3-9bb9-3fea78d21c63의최종체크포인트미저장상태를확인했습니다. OS잠금실제해제/로컬clean, CURRENT·STATE current_claim의task/handoff/branch/source5e3c060 일치, PR50병합과LEDGER f26afccc존재를검증하여새execution0a573fe3-202c-4136-b998-173c31e3652e로CAS재개합니다. 완료ID⑬-8/ui-handoff-49를복구반영하며기존행은수정하지않습니다. 다음⑬-8/b2/c/b/a: ETF/Crypto/Derivatives의AR(1)·funding·quoted-mid 고지표시한영화. 기존market_tools.py는숫자/보고서/기능보존하에이표시범위만변경. 전체내러티브/부모범위미완료.
+
+
+⑬-8/b2/c/b/a: 新 gpt/market-diagnostics-language-20261031 at verified mainab6f794. market_diagnostics_language.py의3표시helper와market_tools.py의5진단고지연결, focused4검사PASS;NaN차트증거비교를직렬화비교로수정, interactive종료없는합성검사. 문서47검사PASS/공개BLOCKED. 더넓은회귀와baseline비교진행중;아직원격source/완료ID없음. 로컬변경은해당2코드+새검사+product문서+runtimeCI+FACTS/source-review입니다. Notion하위진행중read-back.
