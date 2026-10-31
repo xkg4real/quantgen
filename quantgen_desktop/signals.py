@@ -28,6 +28,9 @@ class SignalsPane(ToolPane):
         self.result_table('Signal components',['Component','Signed score','Weight','Observed value','Reason'],
             [[c.label,f'{c.score:+.2f}',fmt(c.weight,'pct'),c.value,c.reason] for c in r.components])
         self.line('Price history',range(len(h.dates)),[('Close',h.closes)],'Observations','Price')
+        from .indicator_guide import IndicatorGuide
+        self.indicator_explorer=IndicatorGuide(locale=getattr(self.window(),'ctx',None),history=h)
+        self.result_layout.addWidget(self.indicator_explorer)
         self.line('Costed backtest',range(len(b.dates)),[('Strategy',b.equity),('Buy & hold',b.bench_equity)],
                   f'Sessions · {b.dates[0]} → {b.dates[-1]}','Equity · starts at 1')
         self.result_table('Backtest metrics',['Metric','Value'],[

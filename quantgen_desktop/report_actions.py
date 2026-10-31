@@ -35,7 +35,7 @@ class ReportActions(QWidget):
         if not filename:
             return
         try:
-            save_desktop_export(filename, report_bytes(self.report, bundle=bundle), extension=extension)
+            save_desktop_export(filename, report_bytes(self.report, bundle=bundle,locale=getattr(self.window(),'ctx',None)), extension=extension)
         except (OSError, ValueError, TypeError) as exc:
             self.status.setText(f'저장 실패 · {type(exc).__name__} · 경로와 확장자를 확인하세요.')
             return

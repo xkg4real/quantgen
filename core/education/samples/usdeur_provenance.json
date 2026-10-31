@@ -1,0 +1,21 @@
+{
+  "symbol": "USD/EUR",
+  "unit": "EUR per USD",
+  "provider": "Federal Reserve Board H.10 / FRED DEXUSEU",
+  "source_url": "https://www.federalreserve.gov/releases/h10/",
+  "series_url": "https://fred.stlouisfed.org/series/DEXUSEU",
+  "mirror_url": "https://raw.githubusercontent.com/datasets/exchange-rates/c28e171e36a46bd2941cf66156acd8efaf9906f5/data/daily.csv",
+  "mirror_commit": "c28e171e36a46bd2941cf66156acd8efaf9906f5",
+  "mirror_csv_sha256": "5f82c543467ae6398e766fb110fe57abe446b95c4ad13b2eaca8954911c6259d",
+  "data_sha256": "ff054ab3bd9fc0ae96d48e602de9112c60bf414aa6e8a60416d69b98e31274ec",
+  "license": "Public domain, citation requested; mirror PDDL",
+  "rights_url": "https://www.federalreserve.gov/disclaimer.htm",
+  "retrieved_at": "2026-10-31",
+  "frequency": "daily_reference_rate",
+  "timezone": "America/New_York",
+  "observation_basis": "Reciprocal of New York noon USD-per-EUR buying rate; rounded historical reference rate, not exchange close or OHLCV",
+  "contains_ohlcv": false,
+  "synthetic": false,
+  "mirror_notice": "Public domain status relies on original Board data and series-level source notices, not a blanket FRED API licence.",
+  "transformation": "The pinned mirror inverts DEXUSEU and rounds it to 4 decimal places; values are retained exactly as mirrored."
+}

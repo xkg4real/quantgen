@@ -34,10 +34,12 @@ from core.research.connections import execute_connections
 from core.research.strategy_analysis import execute_strategy
 from core.research.runs import SessionResearch, new_run, failed, export_bytes
 from core.theme import LIGHT, DARK
+from core.i18n import LocaleContext
 from tools.status.snapshot import verify
 from .charts import FanChart, FrontierChart, LineChart, SignedBars
 from .jobs import Jobs
 from .macro_records import execute_macro_records
+from .localization import LocalizedLabel as QLabel, LocalizedButton as QPushButton
 
 
 def label(text, role="", *, wrap=True):
@@ -95,8 +97,12 @@ class ResearchWindow(QMainWindow):
                  derivatives_runner=execute_derivatives, etf_runner=execute_etf,
                  crypto_runner=execute_crypto, krx_runner=execute_krx,
                  connections_runner=execute_connections, strategy_runner=execute_strategy,
-                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True):
+                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True,
+                 locale='ko_KR'):
         super().__init__()
+        from .localization import LanguageBinder
+        self.ctx=LocaleContext(locale)
+        self.localizer=LanguageBinder(self)
         self.session = session or SessionResearch()
         self.market_loader, self.analysis_runner = market_loader, analysis_runner
         self.portfolio_runner = portfolio_runner
@@ -144,7 +150,7 @@ class ResearchWindow(QMainWindow):
         brand.addWidget(icon)
         brand.addWidget(label("QUANTGEN", "brand", wrap=False))
         rail.addLayout(brand)
-        rail.addSpacing(34)
+        rail.addSpacing(12)
         self.stack = QStackedWidget()
         self.nav = {}
         routes = (("home", "Research Home"), ("markets", "Markets"),
@@ -170,6 +176,9 @@ class ResearchWindow(QMainWindow):
         self.theme.addItems(["Light · A", "Dark"])
         self.theme.currentIndexChanged.connect(self.change_theme)
         rail.addWidget(self.theme)
+        self.language_button=QPushButton(self.ctx.t('language'))
+        self.language_button.clicked.connect(lambda:self.navigate('system'))
+        rail.addWidget(self.language_button)
         outer.addWidget(sidebar)
         outer.addWidget(self.stack, 1)
         self.make_home()
@@ -210,11 +219,25 @@ class ResearchWindow(QMainWindow):
             summary.addWidget(box)
             self.count_labels.append(number)
         layout.addLayout(summary)
+        box,inner=panel(self.ctx.t('guide'))
+        inner.addWidget(label(self.ctx.t('guide_intro')))
+        self.guide_open=QPushButton(self.ctx.t('start_guide'))
+        self.guide_open.setProperty('primary',True)
+        inner.addWidget(self.guide_open)
+        from .indicator_guide import IndicatorGuide
+        self.indicator_guide=IndicatorGuide(locale=self.ctx)
+        self.indicator_guide.hide()
+        self.guide_open.clicked.connect(lambda:self.indicator_guide.setVisible(not self.indicator_guide.isVisible()))
+        inner.addWidget(self.indicator_guide)
+        layout.addWidget(box)
         box, inner = panel("주요 시장지표")
         self.home_markets = table(["지표", "관측값", "변화", "상태 · 관측일"])
         self.home_markets.setMinimumHeight(100)
         inner.addWidget(self.home_markets)
         inner.addWidget(label("일별 관측 · 실시간 아님 · 조회 실패와 오래된 관측은 구분합니다.", "caption"))
+        rights_button=QPushButton(self.ctx.t('data_rights'))
+        rights_button.clicked.connect(self.open_data_rights)
+        inner.addWidget(rights_button)
         layout.addWidget(box)
         box, inner = panel("가능성을 하나의 숫자로 좁히지 마세요")
         self.home_chart = FanChart()
@@ -382,6 +405,15 @@ class ResearchWindow(QMainWindow):
 
     def make_system(self):
         layout = self.page("System", "기록된 근거와 이번 실행 결과를 구분합니다.")
+        from .localization import locale_picker
+        box,inner=panel(self.ctx.t('language'))
+        self.locale_picker=locale_picker(self.ctx)
+        self.locale_picker.setAccessibleName(self.ctx.t('language'))
+        self.locale_picker.currentIndexChanged.connect(self.change_language)
+        inner.addWidget(self.locale_picker)
+        self.locale_notice=label(self.ctx.t('language_coverage'),'caption')
+        inner.addWidget(self.locale_notice)
+        layout.addWidget(box)
         from .connections import ConnectionsPane
         self.connections = ConnectionsPane()
         self.connections.requested.connect(lambda q: self.run_tool('connections', q))
@@ -390,6 +422,9 @@ class ResearchWindow(QMainWindow):
         self.system_tabs = QTabWidget()
         self.system_tabs.addTab(self.connections, 'Connections')
         self.system_tabs.addTab(self.rules, 'Rules')
+        from .data_rights import DataRightsPane
+        self.data_rights=DataRightsPane(self.ctx)
+        self.system_tabs.addTab(self.data_rights,self.ctx.t('data_rights'))
         layout.addWidget(self.system_tabs)
         box, inner = panel("프로젝트 상태")
         try:
@@ -413,6 +448,24 @@ class ResearchWindow(QMainWindow):
     def navigate(self, route):
         self.stack.setCurrentIndex(self.route_indices[route])
         for name, button in self.nav.items(): button.setChecked(name == route)
+
+    def open_data_rights(self):
+        self.navigate('system')
+        self.system_tabs.setCurrentWidget(self.data_rights)
+
+    def change_language(self,index):
+        value=self.locale_picker.itemData(index)
+        if not value:return
+        self.ctx=LocaleContext(value)
+        self.data_rights.set_locale(self.ctx)
+        self.indicator_guide.set_locale(self.ctx)
+        self.guide_open.setText(self.ctx.t('start_guide'))
+        self.language_button.setText(self.ctx.t('language'))
+        self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
+        from .indicator_guide import IndicatorGuide
+        for pane in self.findChildren(IndicatorGuide):
+            if pane is not self.indicator_guide:pane.set_locale(self.ctx)
+        self.localizer.apply(self.ctx)
 
     @pyqtSlot()
     def refresh_markets(self):
@@ -558,7 +611,7 @@ class ResearchWindow(QMainWindow):
         for r in markets:
             v = "—" if r["value"] is None else f"{r['value']:,.2f}"
             change = "—" if r["change"] is None else f"{r['change']:+.2f} {'bp' if r['unit']=='%' else '%'}"
-            observed = r["observation_date"] or "—"
+            observed = self.ctx.date(r["observation_date"])
             home.append([r["label"], v, change, f"{r['status']} · {observed}"])
             details.append([r["label"], v, r["unit"], change, r["provider"], observed, r["status"]])
         if not home:
@@ -568,7 +621,7 @@ class ResearchWindow(QMainWindow):
         for widget in (self.home_markets,self.market_table):
             widget.setFixedHeight(min(350,max(100,widget.horizontalHeader().height()+sum(widget.rowHeight(i) for i in range(widget.rowCount()))+12)))
         table_rows(self.run_table, [[r["parameters"].get("symbol", "—"), r["parameters"].get("model", "—"),
-            r["execution_status"], r["verdict"], r["created_at"][:19]] for r in runs], [r["run_id"] for r in runs])
+            r["execution_status"], r["verdict"], self.ctx.timestamp(r["created_at"])] for r in runs], [r["run_id"] for r in runs])
         complete = [r for r in runs if r["execution_status"] == "COMPLETED"]
         table_rows(self.risk_table, [[r["parameters"]["symbol"], r["parameters"]["model"],
             f"{r['metrics']['prob_loss']:.1%}", f"{r['metrics']['var_pct']:.1%}", f"{r['metrics']['cvar_pct']:.1%}",
@@ -579,6 +632,7 @@ class ResearchWindow(QMainWindow):
             self.home_summary.setText(f"{r['parameters']['symbol']} · {r['parameters']['model']} · {r['data']['source']}\n"
                 f"P5 {r['metrics']['p05']:,.2f} / P50 {r['metrics']['p50']:,.2f} / P95 {r['metrics']['p95']:,.2f}\n"
                 f"관측 {r['data']['last_observation']} · 판정 {r['verdict']} · 재현성 {r['reproducibility']}")
+        self.localizer.apply(self.ctx)
 
     def export_selected(self, bundle):
         row = self.run_table.currentRow()
@@ -591,12 +645,12 @@ class ResearchWindow(QMainWindow):
             self.export_status.setText("실행이 끝난 뒤 저장하세요.")
             return
         extension = "zip" if bundle else "json"
-        filename, _ = QFileDialog.getSaveFileName(self, "ResearchRun 저장", f"quantgen-{run_id}.{extension}",
+        filename, _ = QFileDialog.getSaveFileName(self, self.ctx.text("ResearchRun 저장"), f"quantgen-{run_id}.{extension}",
                                                  f"Research report (*.{extension})")
         if not filename:
             return
         try:
-            data = bundle_bytes(run) if bundle else export_bytes(run)
+            data = bundle_bytes(run,locale=self.ctx) if bundle else export_bytes(run)
             save_desktop_export(filename, data, extension=extension)
         except (OSError, ValueError, TypeError) as exc:
             self.export_status.setText(f"저장 실패: {type(exc).__name__} · 경로와 확장자를 확인하세요.")
@@ -639,6 +693,8 @@ class ResearchWindow(QMainWindow):
         for chart in [*self.findChildren(FanChart), *self.findChildren(FrontierChart), *self.findChildren(LineChart), *self.findChildren(SignedBars)]:
             chart.colors = p
             chart.update()
+        from .indicator_guide import TechnicalChart
+        for chart in self.findChildren(TechnicalChart):chart.redraw()
 
     def closeEvent(self, event):
         if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy:
@@ -646,7 +702,7 @@ class ResearchWindow(QMainWindow):
             self.statusBar().showMessage("진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다.")
             return
         if self.session.runs() or self.portfolio.chart.output is not None or self.bonds.chart.series or any(getattr(self,n).has_result for n in self.tool_names):
-            answer = QMessageBox.question(self, "세션 종료", "저장하지 않은 세션 기록은 사라집니다. 종료할까요?",
+            answer = QMessageBox.question(self, self.ctx.text("세션 종료"), self.ctx.text("저장하지 않은 세션 기록은 사라집니다. 종료할까요?"),
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
             if answer != QMessageBox.StandardButton.Yes:
                 event.ignore()

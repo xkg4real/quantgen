@@ -45,6 +45,8 @@ import flet as ft
 import config
 from core.app_paths import assets_directory
 from core.theme import BREAKPOINTS, RADII, TRANSITION_MS, active, set_mode
+from core.i18n import LocaleContext
+from ui.localization import translate_controls, LocalizedRoot
 from core.engine.feed import QuoteFeed
 from core.engine.runtime import EngineRuntime
 from core.rules.store import RuleStore
@@ -103,6 +105,7 @@ WORKSPACES = (
 
 
 def main(page: ft.Page) -> None:
+    page.qg_locale=LocaleContext('ko_KR')
     page.title = "QUANTGEN"
     page.padding = 0
     page.fonts = {"QG Interface": "fonts/qg-interface.otf"}
@@ -162,7 +165,7 @@ def main(page: ft.Page) -> None:
             return build_rules_page(page, rule_store,
                                     on_changed=lambda: cache.pop("trading", None))
         if name == "krx":
-            return build_krx_page(page, gateway, locale=LOCALE,
+            return build_krx_page(page, gateway, locale=page.qg_locale.language,
                                   on_open_settings=lambda: navigate("settings"))
         return build_settings_page(page)
 
@@ -175,6 +178,7 @@ def main(page: ft.Page) -> None:
             cache[name] = build(name)
         if name == "home":
             cache[name].render()  # refresh session observations without abandoning an in-flight fetch
+        translate_controls(cache[name],page.qg_locale)
         current["page"] = name
         content.content = ft.Container(cache[name], padding=16 if state["compact"] else 28, expand=True)
         render_nav()
@@ -201,6 +205,7 @@ def main(page: ft.Page) -> None:
     workspace_title = ft.Text("Research Home", size=13, color=pal.muted)
 
     def nav_button(label, icon, route, *, selected=False, indent=False, modal=False):
+        label=page.qg_locale.text(label)
         def click(e):
             if modal:
                 page.pop_dialog()
@@ -232,8 +237,8 @@ def main(page: ft.Page) -> None:
 
     def render_nav() -> None:
         nav_host.controls = nav_controls()
-        workspace_title.value = next(title for _, title, _, routes in WORKSPACES
-                                     if current["page"] in routes)
+        workspace_title.value = page.qg_locale.text(next(title for _, title, _, routes in WORKSPACES
+                                     if current["page"] in routes))
 
     def open_menu(e=None):
         page.show_dialog(ft.AlertDialog(
@@ -252,9 +257,11 @@ def main(page: ft.Page) -> None:
     mobile_bar = ft.Container(ft.Row([
         ft.IconButton(ft.Icons.MENU_ROUNDED, on_click=open_menu, tooltip="작업공간 메뉴", data="mobile-menu"),
         brand(),
+        ft.IconButton(ft.Icons.LANGUAGE,tooltip='언어·지역',on_click=lambda e:navigate('system')),
     ], spacing=6), padding=ft.Padding(8, 8, 8, 8), bgcolor=pal.surface, visible=False)
     desktop_bar = ft.Container(ft.Row([
         workspace_title, ft.Text("PERSONAL RESEARCH", size=10, color=pal.muted),
+        ft.IconButton(ft.Icons.LANGUAGE,tooltip='언어·지역',on_click=lambda e:navigate('system')),
     ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), padding=ft.Padding(28, 16, 28, 12))
     separator = ft.VerticalDivider(width=1, color=pal.border)
 
@@ -274,10 +281,18 @@ def main(page: ft.Page) -> None:
 
     # Flet 0.85 uses on_resize; keep cached views/engine across resize and navigation.
     page.on_resize = resize
-    page.add(ft.Row([
+    root=LocalizedRoot(page,[
         rail, separator,
         ft.Column([mobile_bar, desktop_bar, content], expand=True, spacing=0),
-    ], expand=True, spacing=0, vertical_alignment=ft.CrossAxisAlignment.STRETCH))
+    ], expand=True, spacing=0, vertical_alignment=ft.CrossAxisAlignment.STRETCH)
+    def change_locale(value):
+        page.qg_locale=LocaleContext(value)
+        for view in cache.values():translate_controls(view,page.qg_locale)
+        render_nav();translate_controls(root,page.qg_locale)
+        page.rtl=page.qg_locale.rtl
+        page.update()
+    page.qg_change_locale=change_locale
+    page.add(root)
     resize()
     navigate(current["page"])
     # v2 M8: governance-chain check + missed decisions, once per process, off the UI thread (rulings 3.13; T-OBS-02/05).
