@@ -29,6 +29,7 @@ from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
 import ui.xcharts as xc
 from core.research.derivatives_workflow import synthetic_board, snapshot, narrative, payload
+from core.research.quote_coverage import butterfly_display, quote_coverage_text
 
 _SOURCES = [("kis", "KIS live (KOSPI200 board)"), ("synthetic", "Synthetic demo board")]
 _ENGINES = [("gbm", "GBM at the ATM vol"), ("garch_t", "GARCH(1,1)-t on the index history")]
@@ -63,14 +64,15 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
                 host.controls = [notice(f"{type(exc).__name__}: {exc}", "error", icon=ft.Icons.ERROR_OUTLINE)]
                 busy.visible = False; page.update(); return
             b, fit, sim, rec = s["basis"], s["svi"], s["hedge"], s["reconcile"]
+            butterfly_value, butterfly_token = butterfly_display(s['quote_coverage'])
             blocks: list[ft.Control] = []
             if s["source"] != "kis":
                 blocks.append(notice("Synthetic board: a smile-shaped demo chain, not market quotes.", "error",
                                      icon=ft.Icons.SCIENCE_OUTLINED))
             if not s.get("live_quotes", True):
                 blocks.append(notice(f"Market closed: these are the last prints of {s['session']}, struck at different moments, "
-                                     "not quotes. The parity, butterfly and reconciliation figures are indicative until the "
-                                     "09:00–15:45 KST session.", "error", icon=ft.Icons.NIGHTLIGHT_OUTLINED))
+                                     "not quotes. Checks requiring two-sided quotes remain NOT_RUN without sufficient coverage.",
+                                     "error", icon=ft.Icons.NIGHTLIGHT_OUTLINED))
             blocks.append(ft.Row([chip(f"expiry {s['expiry']} → {s['expiry_date']}"), chip(f"as of {s['as_of']}"),
                                   chip(f"prices of {s.get('session', '?')}"), chip(f"rate {s['rate']:.2%} ({s['rate_source']})"),
                                   chip(f"{s['n_quotes']} strikes"),
@@ -90,11 +92,12 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
                                                        token="error" if fit.rmse_volpts > 1.0 else "text"),
                 stat("IV gap vs KIS", f"{rec['median_volpts']:.2f} pts", token="success" if rec["ok"] else "error",
                      tooltip="median |σ_app − σ_KIS| on quoted strikes within ±15 % of F; gate 0.5"),
-                stat("Butterfly viol.", f"{s['arbitrage']['call_butterfly'] + s['arbitrage']['put_butterfly']}",
-                     token="error" if s["arbitrage"]["call_butterfly"] + s["arbitrage"]["put_butterfly"] else "success"),
+                stat("Butterfly viol.", butterfly_value, token=butterfly_token,
+                     tooltip=quote_coverage_text(s['quote_coverage'])),
                 stat("Box rate", f"{s['box']['rate']:.2%}" if s["box"] else "n/a"),
                 stat("RND ∫", f"{s['rnd']['integral']:.3f}"),
             ], spacing=10, wrap=True))
+            blocks.append(notice(quote_coverage_text(s['quote_coverage']), "accent"))
             blocks.append(card(xc.smile_chart(s["points"], fit, s["F"], title=f"KOSPI200 {s['expiry']} smile")))
             p_samples = None
             if s.get("garch") is not None:
