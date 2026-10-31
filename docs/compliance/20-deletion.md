@@ -4,7 +4,7 @@
 - 버전: 1.0
 - 기준일: 2026-10-31
 - 상태: review-required
-- 관리 주체: {{operator.legal_name}}
+- 관리 주체: (주)넥스트제너레이션
 - 문의: {{operator.support_email}}
 
 ## 적용 범위와 현재 상태
@@ -82,7 +82,7 @@
 
 ### F20-03 결과 통지문
 
-> {{operator.legal_name}} 개인정보 요청 처리 결과  
+> (주)넥스트제너레이션 개인정보 요청 처리 결과  
 > 접수 ID: {{deletion.case_id}} / 요청일: {{deletion.requested_at_timezone}}  
 > 상태: {{deletion.result_status}}  
 > 처리한 자료·범위·처리일: {{deletion.completed_scope_date}}  

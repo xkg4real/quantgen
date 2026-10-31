@@ -4,7 +4,7 @@
 - 버전: 1.0
 - 기준일: 2026-10-31
 - 상태: review-required
-- 관리 주체: {{operator.legal_name}}
+- 관리 주체: (주)넥스트제너레이션
 - 문의: {{operator.support_email}}
 
 ## 적용 범위와 현재 상태
@@ -51,7 +51,7 @@
 
 ### F17-02 법정대리인 동의 안내·확인서 — 해당 정책 선택 시에만 사용
 
-> 개인정보처리자: {{operator.legal_name}} / 문의: {{operator.support_email}}  
+> 개인정보처리자: (주)넥스트제너레이션 / 문의: {{operator.support_email}}  
 > 아동을 식별하기 위한 최소 정보: {{child.minimal_identifier}}  
 > 처리 목적·항목·보유기간: {{child.processing_purpose_fields_retention}}  
 > 법정대리인 동의가 필요한 처리: {{child.consent_scope}}  

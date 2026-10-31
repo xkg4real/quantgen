@@ -17,7 +17,7 @@ QUANTGEN은 현재 시장 데이터 분석, 백테스트·시뮬레이션·연�
 
 ### 제1조 사업자와 약관의 범위
 
-이 약관은 {{operator.legal_name}}(이하 “운영자”)가 제공하는 QUANTGEN {{service.contract_name_and_version}}의 이용 조건을 정합니다. 사업자 정보, 문의처, 제공 기능, 지원 환경, 요금 및 환불 조건은 이용자가 계약 전에 확인할 수 있는 화면에 표시합니다. 개인정보 처리는 별도 [개인정보 처리방침](01-privacy-policy.md)에 따릅니다.
+이 약관은 (주)넥스트제너레이션(이하 “운영자”)가 제공하는 QUANTGEN {{service.contract_name_and_version}}의 이용 조건을 정합니다. 사업자 정보, 문의처, 제공 기능, 지원 환경, 요금 및 환불 조건은 이용자가 계약 전에 확인할 수 있는 화면에 표시합니다. 개인정보 처리는 별도 [개인정보 처리방침](01-privacy-policy.md)에 따릅니다.
 
 ### 제2조 서비스 내용과 제공 환경
 
@@ -85,7 +85,7 @@ QUANTGEN은 현재 시장 데이터 분석, 백테스트·시뮬레이션·연�
 
 | 필드 | 표시·보관할 값 |
 | --- | --- |
-| 판매자·계약 식별자 | {{operator.legal_name}} / {{contract.offer_id}} |
+| 판매자·계약 식별자 | (주)넥스트제너레이션 / {{contract.offer_id}} |
 | 상품·버전·제공 범위 | {{contract.product_version}} / 지원되는 실제 기능·프리뷰 제외·포함 여부 |
 | 환경·외부 계정 요구사항 | 운영체제, 인터넷, API 제공자, 별도 비용 링크 |
 | 총 지급액·세금·기간 | {{pricing.total_price_and_currency}} / {{pricing.tax_inclusion}} / 시작·종료 조건 |

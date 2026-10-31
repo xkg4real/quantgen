@@ -4,10 +4,10 @@
   "scope": "named source/document consistency review; not legal or operational certification",
   "source_state": "HEAD commit identifier plus observed working-tree fingerprints; not a clean-checkout attestation",
   "registry_sha256": "d1a62050d33e6c53ac9027db0eb8661317a4aec7fc7eb7b10488cf709b0b8f0f",
-  "profile_sha256": "85cfa53b7ea2b4f9aa8dcbacaef20f79bc98a7c32790d51293166dbb2e29b4a5",
+  "profile_sha256": "e947c5bfbe664638d5a4b9990e934e30acae6ac7d339f12fb9c28d771a02950b",
   "sources": {
     ".github/workflows/compliance-review.yml": "c9092cf951345b6a656cf307eb9b5c822d0268f180c33fef70b96c427ca2c5d3",
-    ".github/workflows/runtime-smoke.yml": "d54897696a9c5d242e6d4c113143ba7a2264a28a6278df4625d75065c37b2d1d",
+    ".github/workflows/runtime-smoke.yml": "02f1c7c03a3ba9af77f590e0077e3c0ec1d03d231456a4f3f77ef6e873c6aad4",
     "README.md": "3d5109bbf91644ca6dcddd4ff609d72f1819c0e54d0a8eac2b75ddd4e244e54e",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -139,7 +139,7 @@
     "core/research/connections.py": "f634fe608bcfca39c3841ee7e4bf25524ba4cba8e28658d957d56725c2c56a04",
     "core/research/crypto_workflow.py": "10a848f9be7c323a179b664f4b6b25c733244bb32e533bb3b373f63969538deb",
     "core/research/decay_disclosure.py": "98f68bb2b8f8a0ac051865a76313855a323890a4adacd9abe9d0c025c0a934ce",
-    "core/research/derivatives_workflow.py": "64f78a397c4d54547aff1e47b9124e81be9aa8aad491d486df46ff6770565968",
+    "core/research/derivatives_workflow.py": "0597ee855c13663bd4d851320c68115482c3a41e4ea5f68b8f2ca35b91cd70e6",
     "core/research/etf_workflow.py": "c52c9de43fd818b0a5583941ac09ced6f66e17bcdc82f5fdebd84d2e97758f5b",
     "core/research/export.py": "b167cd91fcbc61adfcbb428b94409f047c4736388e47f50c961d6af7ae75c25d",
     "core/research/funding_disclosure.py": "2f6c9a3e8f9815d3e724689320c60ccb1c2d6ae97787743d7d7440b45900ffbb",
@@ -154,6 +154,7 @@
     "core/research/portfolio_disclosure.py": "2e93f4c753c3bfa73bc11f468ac1eac3fb7d0c5be18191590e41efcf1a79e24c",
     "core/research/presentation.py": "3eccfd7e49ace9b1a39b3a8f89538c528439ad90125119c7ac262b35ca135e37",
     "core/research/provenance.py": "b7dbb0ee71a0df7809304110bf1c259289122d37af269da0e29ef3f5e7dbc8db",
+    "core/research/quote_coverage.py": "92145030da624f6cca4696e4ea40384c2791fdeb2185abaf3000c24cd62ca0b9",
     "core/research/rates_analysis.py": "ac1bf95230a9f875a7f59cec1fd09c586ab70f39a49c0abae71cba0c230ab217",
     "core/research/runs.py": "480df15cf6ab9458743dcce4eba05b1f1e534e7635756a7c6353ebee5965f6f4",
     "core/research/signals_analysis.py": "8b04c725a5c650d7a3d6ddcf6f5f7bc7437dd98179e2fa8b792b1cfa07d8c03c",
@@ -214,10 +215,10 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "f7deaeaf3f5c08bfd6b7e44845d7c6ea7c399a5242377dc85cab46b27d4de11f",
+    "docs/compliance/FACTS.md": "28c21935a6265fa82d7eeb845b86d17db508c9cddd2be9cc2e8687608624665b",
     "docs/compliance/PIPELINE.md": "ed0f2d7cac81abbcefcb4b98dc48fc454b84f186928e61ae4863bc3b2cda13c4",
-    "docs/compliance/README.md": "72b7c9654bfed34c37cd24cabc62df0fdc96830e4ec85ebbd62a0f244652b339",
-    "docs/compliance/RELEASE_GAPS.md": "db389e1098ddad9407bc38c621b83f2e5f40760524c292d62e9b62c5e97b4046",
+    "docs/compliance/README.md": "c128df66ac9cc7d44b6d7a533555c369d68691ef1b150eaaeda2ebf395fef394",
+    "docs/compliance/RELEASE_GAPS.md": "c4141ebaab77816c11ed08c034f34d9268b60efb63863cda8893f64338092c0b",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
     "docs/product/BS21_FUNDING_2026-10-30.md": "a8060c8d57b2532eed9b06c429a97568c77a3ba3c9e0370f273e1d3ac9bc8c4d",
@@ -229,10 +230,11 @@
     "docs/product/MC_VOLATILITY_2026-10-30.md": "92dc8a14c6884ea57936f9f187e9b87d1120b426ac0fe2f8767867617ef6837f",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
+    "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md": "ad9177b241178d7427f77caa8b7de6f14390610d41d2959c87dd03b1093fd189",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "67acadced3f90a09e45acfbf951f996404b0ed3d3c7605958cb4ab35a9bb5e6e",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "ef53503ccc63793179addd80c472d41eb4e176c3b9cbde3c16a3383b3077ed88",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
     "docs/product/TRADEGEN_READ_ONLY_BRIEF_2026-10-29.md": "eeb6a1394c46fd67859dc5c8066d9adc125802efa24c29add93b5d8528404314",
@@ -250,7 +252,7 @@
     "quantgen_desktop/jobs.py": "2a0764c9c4f767a2c93d49b0fe929a1ad655d2195acc0c9a371f6229a1aa5ac1",
     "quantgen_desktop/macro.py": "da1a47070db478379bc7ac3881fe3398f9a5d1d60c314f28882d06d9e94467d4",
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
-    "quantgen_desktop/market_tools.py": "80637da3b1c0a838078485746c7b321ddbfbd7ec80e4175a00e27df7f51fa5fc",
+    "quantgen_desktop/market_tools.py": "cee656dd028cdc8d82e6daa409ad673cf4efe542474dd5fbc39dbd2ff7d0a420",
     "quantgen_desktop/paper.py": "8837cdf969f29452b3207e0cc4f46808c8cb63ab69335bf09eddec6d4d50627c",
     "quantgen_desktop/portfolio.py": "e5caf279b865187ebf792bd9deae4139fd1baa3cf1d4a03f5a051e858f2c426d",
     "quantgen_desktop/rates.py": "864d1f74aee15080d7eb618cd2753e9e25f7884429bdf99bbe915f89ada6892a",
@@ -280,6 +282,7 @@
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
+    "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
@@ -336,6 +339,7 @@
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
+    "tests/quote_coverage_acceptance.py": "09d727791eb18d44955a0324058439c0d63777af94b5ca18f8a1ced7eb6cec86",
     "tests/reference/__init__.py": "981465fb05d87f128a0b80cc4b8122a83335ee0994ce5b4d3ee3bdbe72bc6e9c",
     "tests/reference/reference_mode.py": "f79ad9f482323344ee20c6685edf08b8abd64f11dfad25ab40cd132ad9339c37",
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
@@ -384,7 +388,7 @@
     "ui/bonds_page.py": "93db57961b326872584c3b01600356a1eea9f882c3da55035196b2c1ae691881",
     "ui/components.py": "41be9f3117f80c1677308355702758897f6d9d30654eb5a4d229d0bf7702a4fd",
     "ui/crypto_page.py": "6829f7aedd678196a1bb1853044789d7bca0ac40b724006d35ead19942c65101",
-    "ui/derivatives_page.py": "dd159440520b306a638f031d8cbc2a8ea726a5b761218b8e617106c168af5165",
+    "ui/derivatives_page.py": "ed659a96def9e1b9bddbd0295c6357c47418fb4ba11778a1aecc817c352e1359",
     "ui/etf_page.py": "e6989e0383b4672d557d6eb45b9ed29e5f12ba2054f9df865ba0c88cba1f7438",
     "ui/fcharts.py": "bcdb6bd855e04b2a0af05743d19ad9f545bb36ab26847a1e8d0df4ae87fd2fde",
     "ui/fx_page.py": "eba4653c99c44b4daff314a9f854cc9a1f7fc32465a413e15e35e32526c193b4",
@@ -408,164 +412,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "d37ea099e5d1cf0a78fafa03afab5b28a9573b74c7c4e96d8878a879fda5ae4f",
-      "source_digest": "5b261867beb758516f2ff70d83a254af63727d2c65ee0e121bed6e69f7e00843",
+      "document_sha256": "7f5ffc3cedf7cc5281fec3b5bc8c366aa9152bcb061e2899b0a7868dd15ec30d",
+      "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.043159+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.496549+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "2": {
-      "document_sha256": "ef4fd7f9e4e2eafd39d0405795b1f82fc6793b8b88300e6617bab5cb11b292ee",
-      "source_digest": "5b261867beb758516f2ff70d83a254af63727d2c65ee0e121bed6e69f7e00843",
+      "document_sha256": "48eae0cd242ff2310fbbd6e43aca01b55b74cca177fbd2f24ed27470ef1ac977",
+      "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.044660+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.498048+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "3": {
-      "document_sha256": "295daaded376e8d4bf9f807e040e9859ce07016dd3cc3e2c6f255f1f8e783913",
-      "source_digest": "c8e5bc33125d482148c674b5e7fb47a05e929a8165258851b15899d02be829f5",
+      "document_sha256": "78898452f97b134a49a19ad7a33219afb2a494a491a0bdbbf80ebcd658f7fafa",
+      "source_digest": "2fb4d02ad504df46cf6f90ecf1e67cad7da518b103b36a44d7decf267813af05",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.045687+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.499152+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "4": {
-      "document_sha256": "dfbee01987608f6c6e4cba96cfa0e76a50d3ad69b0071ee68d26343d070ec88a",
-      "source_digest": "37a1f02d751cdc7c758ea0f7b1002b4a5b04f7abdf4bd59c6525de3316f172b7",
+      "document_sha256": "aa1d97c64748ec08bd654322bcc47e9aa7ae9a01b2c1df17a170e6cfe84b3702",
+      "source_digest": "a0464a81af2e2639cd199c44e21812de7692348f8bcb2e5956334d3a941473a8",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.046788+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.500105+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "5": {
-      "document_sha256": "78a498f6920a2ca83bd2598d292f68d2ef12167fb110df13ed0ba1f474b8fd76",
-      "source_digest": "2ed6320904df443e8f508d50fbc23f426a7059b086630f546e65f527928f34bc",
+      "document_sha256": "706eb3989daf31eb414555233c3577b584bc045c139d87e56963daed16af2316",
+      "source_digest": "8963e5c230b8e143b55dba5e67fd4a000ce3f40af81ddeacc01c91989b3d935e",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.047710+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.501064+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "6": {
-      "document_sha256": "d52115d4d1cf6166e7206302bcd77ded6f5d3917c54963c00c6eff3534af6964",
-      "source_digest": "26b7cbd62c27da71d9d9b39728c20902a48c814feac3b835851e55191d769091",
+      "document_sha256": "eb955f72cf4386b5ddeb3d0720b8583f0921f2542a88c32ca65c1f9ff928fb45",
+      "source_digest": "6835d0c3781ffddc4c5fe103ae8b0a8994e558afabe9e6b3798feb18af55ba53",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.049246+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.501953+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "7": {
       "document_sha256": "6e0eef1bbf393c1514a7cca6b11c0d59e7680d1b58dde6695edcd9980a98f955",
-      "source_digest": "5b261867beb758516f2ff70d83a254af63727d2c65ee0e121bed6e69f7e00843",
+      "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.050363+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.502867+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "8": {
-      "document_sha256": "36191ef6605cace2f38ea29119796662b4d96953bc603c2428ac3538e233d8c0",
-      "source_digest": "26b7cbd62c27da71d9d9b39728c20902a48c814feac3b835851e55191d769091",
+      "document_sha256": "31622698c62ed209d6c3cdbe3d4c3a5edec9668cbe6fd25b11b1dd34cd0cc49f",
+      "source_digest": "6835d0c3781ffddc4c5fe103ae8b0a8994e558afabe9e6b3798feb18af55ba53",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.051481+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.503848+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "9": {
       "document_sha256": "96f5f056d7097e66c9385da384fce9a5217d5379e2e0d6186b4335a695d0860c",
-      "source_digest": "548a2200b1a6392ffdcc7310b4a5450d6f7aa70b5299b3ef01323d9d4c3f1ba4",
+      "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.052503+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.504882+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "10": {
-      "document_sha256": "f7c081ff0c2324612cb756992bf270be0996ae4220b6bce22778cc14d894dcfb",
-      "source_digest": "02dd0e498a33ec71b03849f7c19edcd6097d868bb8c3c479fd4f8779e75d5b79",
+      "document_sha256": "fef0ba2446f9c6e5c300df8c4fc0f19441f2f17653477672f92709bfdcf85368",
+      "source_digest": "c70532c00167956c86ecb65484f2f3aee8dba2bd3d70144b7dd93d27f90b1035",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.053489+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.505819+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "11": {
       "document_sha256": "3da5dbb517cd7526b735b2a383d7bed83ebb82e743e7ef126333c1f4eba92791",
-      "source_digest": "d41ac2b412b07c85c169ea3f698e1fc44451c95cfb7a3376ddb92811cb0b018e",
+      "source_digest": "6452090c2bbaba498684a6258f5a64a5e66d15d8a73a5138d0e56e58a386ed53",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.054543+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.506742+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "12": {
-      "document_sha256": "8f66998699e5497093f70a8089beb1ce412695634e2aa6ec9c6c3d8e050e4049",
-      "source_digest": "d44c831bf26f2e5cd27d02fe568dc66d74615a159e9271697ced9c5dff3d06be",
+      "document_sha256": "8a2a395c564c5aad636ef439f5ed3c43b9dd0157ec643b42afd64bb8fbab2492",
+      "source_digest": "13069386b627b11024cb3a65d898c7ed00c8d9c1cbc1875814a99d572ae73b90",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.055561+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.507739+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "13": {
       "document_sha256": "5dfdd84db17f907ef6cb2b83cad73489bc5332652e7a460c0228521726d40980",
-      "source_digest": "548a2200b1a6392ffdcc7310b4a5450d6f7aa70b5299b3ef01323d9d4c3f1ba4",
+      "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.056615+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.508863+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "14": {
-      "document_sha256": "7bcedfa89f32e4adcd6a46625d79ea29fcd04428bf48a29c42dcf369582edb2a",
-      "source_digest": "548a2200b1a6392ffdcc7310b4a5450d6f7aa70b5299b3ef01323d9d4c3f1ba4",
+      "document_sha256": "646d2cb4d8fe00ef3e325ea9d37ff1d25f809c81e5070acbc27b6c5222403968",
+      "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.057625+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.509782+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "15": {
       "document_sha256": "e52d8257bd0df6cf81e19ae4bc2a95d34c63a5a128bf8c04cc7cd68ec59e9631",
-      "source_digest": "548a2200b1a6392ffdcc7310b4a5450d6f7aa70b5299b3ef01323d9d4c3f1ba4",
+      "source_digest": "7d6834f7fb3568a027535ebf79627042c24582bb545eb67f305dbb55cd50da1a",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.058769+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.510831+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "16": {
-      "document_sha256": "0ee1e3ac78d2fb27c5efa503602e1414d93ab6ec8fabd04c22c6d973f1d481fc",
-      "source_digest": "fd70050752ed9d20495479f1d40e24f1dd50ae433bafe1c0e8ec658cd93dedbf",
+      "document_sha256": "7a464b15daddf26401d9c25824b65bd6c3dbc92dd78741f289b5a1cb31b5d2c7",
+      "source_digest": "7c6fe2a4c73dcbca7fdba6217da0b2239937d3b817ac8ae62655b659d2f91481",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.059681+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.511969+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "17": {
-      "document_sha256": "ce3c14ad05c5868600009ebb04e87890f6eedc09fcc34ab63e27a2cbba2ebf10",
-      "source_digest": "26b7cbd62c27da71d9d9b39728c20902a48c814feac3b835851e55191d769091",
+      "document_sha256": "0d93d44c03cd7221713bdd5721484ca61c4c708926218d2f93687235cbf29860",
+      "source_digest": "6835d0c3781ffddc4c5fe103ae8b0a8994e558afabe9e6b3798feb18af55ba53",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.060814+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.512883+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "18": {
-      "document_sha256": "3fb8d193a3e97d20df95f6f852929a41dbc1dc33d0256b9323b5b112faa63612",
-      "source_digest": "5b261867beb758516f2ff70d83a254af63727d2c65ee0e121bed6e69f7e00843",
+      "document_sha256": "42c4757135df8949f2886d58c92d1ae04d5f14817346c941af60736492f67f2a",
+      "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.061822+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.513727+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "19": {
       "document_sha256": "f0f0cc79bdc686fa3adcd0d3d17d597349f44007965f5933fcfe92a9f686ff9b",
-      "source_digest": "42cf92892ba9aa3dbc64bcf9635a21dba0e405bcae4e21e98d93890fdcb81e63",
+      "source_digest": "6b69418646d1d805804436b20f3b4e270a4a75e5aeade1252488b7270e12cd2d",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.062819+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.514646+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     },
     "20": {
-      "document_sha256": "7af0f39754b74d0bae7f2750a04a0b86bd2d0530392c8ffae564e0d2d1649016",
-      "source_digest": "5b261867beb758516f2ff70d83a254af63727d2c65ee0e121bed6e69f7e00843",
+      "document_sha256": "2b77833f04c332f3d3ba166f9261dedc25b275ce4d86cc986b7a2487ca9b69ab",
+      "source_digest": "eba8a46f842d11a6826f3e5f0261f76de6e4e30ddc93f3ec30a40c6b82eab8b9",
       "reviewed_by": "Codex source and document review",
-      "review_note": "Final review of 20 Korean policies/forms, source behavior, legal-source crosschecks and 31 passing mutation tests; Word/HTML preview checked; all unresolved operating facts and publication evidence remain blocked.",
-      "reviewed_at": "2026-10-31T05:48:13.063769+00:00",
-      "source_commit": "07e3743d5169b03ec5504dcb8cdfb888e5dab5cb"
+      "review_note": "Reviewed latest main 1180414 quote coverage against all 20 policy documents, updated claims and contrast guidance, and incorporated user-provided Next Generation operator identity and Cloudflare declarations; registration, contact, pricing source and operating evidence remain unresolved.",
+      "reviewed_at": "2026-10-31T05:51:52.515646+00:00",
+      "source_commit": "d59545417c9df69f34c139aee9d959a0f28e4eba"
     }
   }
 }

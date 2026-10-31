@@ -17,7 +17,7 @@
 
 ### 이용자에게 공개할 정책
 
-**판매자와 상품.** {{operator.legal_name}}는 {{pricing.plan_name}}을 {{pricing.total_price_and_currency}}에 제공합니다. 제공 기간, 포함 기능, 결제 주기, 자동 갱신 여부, 외부 API 별도 비용은 구매 화면과 계약 확인서에 표시합니다. 문의·청약철회·해지는 {{operator.support_email}} 또는 {{billing.cancellation_url}}로 신청할 수 있습니다. 미구현 URL을 작동하는 경로로 표시하지 않습니다.
+**판매자와 상품.** (주)넥스트제너레이션는 {{pricing.plan_name}}을 {{pricing.total_price_and_currency}}에 제공합니다. 제공 기간, 포함 기능, 결제 주기, 자동 갱신 여부, 외부 API 별도 비용은 구매 화면과 계약 확인서에 표시합니다. 문의·청약철회·해지는 {{operator.support_email}} 또는 {{billing.cancellation_url}}로 신청할 수 있습니다. 미구현 URL을 작동하는 경로로 표시하지 않습니다.
 
 **법정 청약철회.** 전자상거래법이 적용되는 계약은 원칙적으로 계약내용에 관한 서면을 받은 날부터 7일 이내에 철회할 수 있으며, 공급이 더 늦으면 공급받거나 공급이 시작된 날을 기준으로 법정 기간을 계산합니다. 서면 미교부·주소 누락·청약철회 방해가 있는 경우에는 법에서 정한 별도 기산점을 적용합니다. 운영자가 더 유리하게 정한 조건은 {{billing.additional_refund_benefit}}에 명시합니다.
 

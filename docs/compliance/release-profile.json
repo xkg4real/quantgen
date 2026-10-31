@@ -3,9 +3,9 @@
   "jurisdiction": "KR",
   "scope": "공개 전 운영자가 사실과 증빙으로 확정할 정보. null과 unverified는 미확정이며 정합성 검사 통과가 이 값을 승인하지 않는다.",
   "operator": {
-    "legal_name": null,
-    "representative": null,
-    "address": null,
+    "legal_name": "(주)넥스트제너레이션",
+    "representative": "고건",
+    "address": "서울특별시 성북구 안암로 145",
     "business_registration": null,
     "ecommerce_registration": null,
     "privacy_contact": null,
@@ -214,5 +214,24 @@
       "observed_issue": "Current commercial README and older personal-use/runtime status language need reconciliation before publication.",
       "source_reference": "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md"
     }
+  },
+  "operator_information_source": {
+    "provided_on": "2026-10-31",
+    "source": "사용자가 이 작업에서 제공한 정보; 사업자등록 증빙 검증은 별도",
+    "address_provisional": true
+  },
+  "deployment": {
+    "service_country": "대한민국",
+    "hosting_provider": "Cloudflare",
+    "hosting_product": null,
+    "contracting_entity": null,
+    "personal_data_processing_countries": null,
+    "note": "운영 국가와 실제 개인정보 보관·접근 국가는 다르며 계약과 인프라로 확인해야 함"
+  },
+  "pricing_source": {
+    "reference": "사용자가 지정한 첨부 문서 22페이지",
+    "source_available": false,
+    "status": "unverified",
+    "note": "현재 접근 가능한 첨부에서 요금 문서를 확인하지 못해 금액과 주기를 추정하지 않음"
   }
 }

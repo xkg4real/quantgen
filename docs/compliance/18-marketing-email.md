@@ -4,7 +4,7 @@
 - 버전: 1.0
 - 기준일: 2026-10-31
 - 상태: review-required
-- 관리 주체: {{operator.legal_name}}
+- 관리 주체: (주)넥스트제너레이션
 - 문의: {{operator.support_email}}
 
 ## 적용 범위와 현재 상태
@@ -35,7 +35,7 @@
 ### F18-01 광고성 이메일 수신 동의
 
 > [ ] **선택: QUANTGEN 광고성 이메일 수신에 동의합니다.**  
-> 발신·처리 주체: {{operator.legal_name}}  
+> 발신·처리 주체: (주)넥스트제너레이션  
 > 목적: {{marketing.email_purpose}}  
 > 수집·이용 항목: {{marketing.email_fields}}  
 > 보유·이용기간: {{marketing.consent_retention}}  
@@ -49,12 +49,12 @@
 
 ```text
 제목: (광고) QUANTGEN {{marketing.campaign_title}}
-발신자: {{operator.legal_name}} <{{marketing.sender_email}}>
+발신자: (주)넥스트제너레이션 <{{marketing.sender_email}}>
 
 {{marketing.campaign_body}}
 
-발신자: {{operator.legal_name}}
-사업장 주소: {{operator.address}}
+발신자: (주)넥스트제너레이션
+사업장 주소: 서울특별시 성북구 안암로 145
 연락처: {{operator.support_email}} / {{operator.support_phone}}
 
 수신 이유: {{marketing.consent_reason_and_date}}

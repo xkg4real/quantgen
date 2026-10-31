@@ -20,7 +20,7 @@ Strategy Lab의 `Cost bp/side` 등은 백테스트에 반영하는 **가정 거�
 
 확정 후 게시할 가격 안내 양식:
 
-> 판매자: {{operator.legal_name}} · 상품: {{pricing.plan_name}}  
+> 판매자: (주)넥스트제너레이션 · 상품: {{pricing.plan_name}}  
 > 최종 결제액: {{pricing.currency}} {{pricing.vat_inclusive_total}} (세금 {{pricing.tax_description}})  
 > 제공 기간·범위: {{pricing.service_period_and_scope}}  
 > 결제 주기·자동 갱신: {{pricing.billing_cycle_and_renewal}}  
