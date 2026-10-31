@@ -10,9 +10,9 @@ updated_at: 2026-10-31T07:40:51.000Z
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/claude-connection-fix-20261031
-work_commit: c3a0613eaa6d26620d871b28f28e5ba349ff1ac9
-uncommitted_changes: yes
-pr: none (last merged PR45; code PR43/44)
+work_commit: c47f6c0a116cad919b403568d377408452cdab69
+uncommitted_changes: no
+pr: 46 (CI pending)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -175,3 +175,6 @@ PR43/44와문서PR45 source/merge/LEDGER/Notion하위완료를read-back. executi
 사용자가 Windows 앱 내부 Claude AI 해설의 API 키 거절을 확인했습니다. 직전 fd53 실행/task/handoff/branch/source/잠금해제와 같은 ref의6문서를 검증하고 execution 156c744e-dca7-4925-9aa6-b968fcc8c353로 CAS 재개합니다. 먼저 ⑬-9/a: 오류 유형별 안전한 진단·안내/회귀검사, ⑨-2/c: 데이터 공급자와 Nautilus 독립 백테스트 엔진의 역할/연구 통합 상태 설명을 수행합니다. 실제 키/계정 권한 확인은 하지 않고 연결 복구로 주장하지 않습니다. 기존 13-8/b2/c와 후속 작업은 보존합니다. PR21 연구 병합은 외부의 완료로 관측했으며 연구/실행 소유권을 가져오지 않습니다.
 
 ⑬-9/a 및⑨-2/c: 최신 main c3a0613에서 새 gpt/claude-connection-fix-20261031. core/quant/insights.py의 이전 payload privacy 변경은보존하고오류분류/원문비노출범위만수정. nativecommentary.py는기존명시적전송/실패시report미생성범위보존하며오류메시지EN/KO표시연결. LEDGER에이하위ID없음확인. 테스트진행중/아직완료아님.
+
+## Claude 진단 PR46 원격 저장
+source c47f6c0a116cad919b403568d377408452cdab69 push/read-back. main의외부PR42(d77d996)를작업브랜치에보존통합. 새양UI EN/KO 오류진단/비노출/분류구현과Nautilus역할문서. 최종로컬24API/privacy/UI/language검사 PASS,문서경계47검사PASS. 초기CI는소스검토기준갱신필요로실패했으며실제20문서범위를대조하고FACTS/기준기록갱신;정합성PASS/공개BLOCKED유지. 최종CI대기,아직완료ID아님. 실제키·사용자PC/API 성공NOT_RUN.
