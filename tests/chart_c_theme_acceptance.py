@@ -67,6 +67,24 @@ class NativeStudyTests(unittest.TestCase):
         from PyQt6.QtWidgets import QApplication
         cls.app=QApplication.instance() or QApplication([])
 
+    def test_wide_minimum_hints_cannot_trap_the_scroll_area_above_breakpoint(self):
+        from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QLabel, QBoxLayout
+        from quantgen_desktop.chart_study import ChartStudy
+        chart, reading = QLabel('chart'), QLabel('reading')
+        chart.setMinimumWidth(480); reading.setMinimumWidth(420)
+        study = ChartStudy(chart, reading)
+        body = QWidget(); QVBoxLayout(body).addWidget(study)
+        scroll = QScrollArea(); scroll.setWidgetResizable(True); scroll.setWidget(body)
+        self.addCleanup(scroll.deleteLater); self.addCleanup(scroll.hide)
+        scroll.resize(1200, 500); scroll.show(); self.app.processEvents()
+        self.assertEqual(study.split.direction(), QBoxLayout.Direction.LeftToRight)
+        scroll.resize(700, 500)
+        self.app.processEvents(); self.app.processEvents()
+        self.assertLessEqual(study.width(), scroll.viewport().width())
+        self.assertEqual(study.split.direction(), QBoxLayout.Direction.TopToBottom)
+        scroll.resize(1200, 500); self.app.processEvents()
+        self.assertEqual(study.split.direction(), QBoxLayout.Direction.LeftToRight)
+
     def test_responsive_split_and_dark_restart_preserve_the_same_observations(self):
         import tempfile
         from pathlib import Path

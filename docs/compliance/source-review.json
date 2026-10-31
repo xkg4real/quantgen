@@ -226,7 +226,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "8cd86b0a3534bd2760efe747322373ddcc6a8f5524e8485cebb3916b9a15942a",
+    "docs/compliance/FACTS.md": "e2846d12906b93e80c5111b49b8ffd0c23ce403ef942fe23b22915783902b79a",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "fe76f5dc8fb85e691d1c33140a1b01481d8ba851c43398ac99b00effbf981fe8",
@@ -271,7 +271,7 @@
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
     "quantgen_desktop/app.py": "3ddfd7046441b77d4cab8647da163ac653fbddda771b22228a0dcac50934f9da",
     "quantgen_desktop/bonds.py": "f01f99a151a0ffd6030c1671554514804460fbb5c7d3672dc1075bdfb12f65a5",
-    "quantgen_desktop/chart_study.py": "8b083a56e71ba47b8c26030d0a50618fd4b1e70d27cace5c3ff0400a1d450303",
+    "quantgen_desktop/chart_study.py": "5bf3497b49244504f2e3e31f314eb6e3545755f4933749447ab564503054228b",
     "quantgen_desktop/charts.py": "abc3382ca861b9e7ed0c876ee0bf7cc47ece79c6a1964f5f026702ebbb7adbb7",
     "quantgen_desktop/commentary.py": "4b5d02a17b5621db28c24a3f54a37106837239d7fe55aa7f376e677f80d0845f",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
@@ -303,7 +303,7 @@
     "tests/ai_payload_acceptance.py": "2989ffcbc806c4a31f2795adaca8be20c90f47ea4140cfab5fe600a976cc5a4e",
     "tests/ar1_decay_acceptance.py": "8283f51b60967f30950af4ec7ecfda48f52c9bb605b2dc8231fc26b3549b63ab",
     "tests/bond_funding_acceptance.py": "dfd5760cec1f4e32cfccdae4f73cf8d4a38ea72650af612587e981c8058db02c",
-    "tests/chart_c_theme_acceptance.py": "4190f9a6bd66e16ae37b526be1707885e3ae0f4d30b9c2d98d2363e5087aaf21",
+    "tests/chart_c_theme_acceptance.py": "243662842e9b9af87b2deb481b87c729e40b65b719199500af68a64d1460388f",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
@@ -468,163 +468,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4c9561c2b4764f28c763b9d956df2bd6def8517226636322cea0c4652126cee4",
-      "source_digest": "d5e3bfafa63eedac6b92418ea168bc07550cbd6fa279887ca866a2f320bc7a85",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.091419+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "a65e1b900d73e59fae86993bc7157a1225aa7b158711d364914125d12c6ec770",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.284972+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "2": {
       "document_sha256": "8a8915a728f0bd28f95fa46082cde5efd96739cb14bf69e69ad9205841c6cbe0",
-      "source_digest": "d5e3bfafa63eedac6b92418ea168bc07550cbd6fa279887ca866a2f320bc7a85",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.107274+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "a65e1b900d73e59fae86993bc7157a1225aa7b158711d364914125d12c6ec770",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.288108+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "e5ccf6fb3a757fc2b1eed45e15771e0e46bd3575a3c8351b1e7a294202de493e",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.110137+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "d51d26f6fdf84d6e599b8be32464d6a863c88975de2a8782038a5bc6e2b40241",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.294551+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "4": {
       "document_sha256": "7d0f3373b9815cd9db634f28323c8c90bc7e78cd09cf40d757e98adfc3ac1dd7",
-      "source_digest": "ba6aa3ab742ae2cdd57f86563ecff5c4ebc279c06037e0fab8661416f8711fd1",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.113334+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "adde94810f2d9be19549b3c9ecf4f76a5fb677afe0cf1a31446715dc60da1719",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.298497+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "71de16562c6c7abc994942e3758f14ebeb275cca70df97c546f248e648f77939",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.115738+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "2c6a24bb01d5c9e4d8fa55f0181173503bab8c90834e5cf397c841983c815cfc",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.303556+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "6": {
       "document_sha256": "fae1be1112448c78bde79274a691143bdadcb4623853f26798735cf71b20973a",
-      "source_digest": "6defacedd0394f9ba0242ec849baccf473b94b6ac37725cbd66ba39ef8968780",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.119481+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "fcbdc5d73b6115e85784a31ec701c761712673e1a2cdad446a7e274c5bc1a4a7",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.314830+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "7": {
       "document_sha256": "d255a134f4e97cd65a7b3a4676b26a0f6e655e823ab23f971d477235df751931",
-      "source_digest": "d5e3bfafa63eedac6b92418ea168bc07550cbd6fa279887ca866a2f320bc7a85",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.122317+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "a65e1b900d73e59fae86993bc7157a1225aa7b158711d364914125d12c6ec770",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.317736+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "8": {
       "document_sha256": "06dbba68f23aa6e2aec1125b031a7486b863296ec51a15481a893ea62253f232",
-      "source_digest": "6defacedd0394f9ba0242ec849baccf473b94b6ac37725cbd66ba39ef8968780",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.126005+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "fcbdc5d73b6115e85784a31ec701c761712673e1a2cdad446a7e274c5bc1a4a7",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.322872+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "9": {
       "document_sha256": "81e96f0f623036ca1b290ddf8508a9ff8e6cc8b0fca380a939abc529a4dfb747",
-      "source_digest": "e393da21ae0d26b0ee2345356a43a3ab790706aba05984fcd24e83957facfba4",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.128940+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "2481bed1813b32d373ec0bbbfd27d9704af733ef30f7b9dd0ab8322ffcdc81f5",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.325712+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "10": {
       "document_sha256": "9b4f832a3c5363e29f704dbf3f3f89bf13aef9be27298cd14b8d3fe4533685cb",
-      "source_digest": "0e82407c59c7ba2ab88428f6dc6a9f8851235d32ea8e1791ff4f162149641e6e",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.131527+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "bf8f536c0b61b4a88021e8d9878b197362b80f23cffd023eb710c3b7674fcd87",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.328471+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "4637a48651f3033812aa190a05ae3c5766fe96c2f9564c9ca3d9ec1a36ca1926",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.134683+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "9e711a100f94d0e938a0c73bb0059a386f6b05ac22a3cb2b5e6abd925db2171d",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.332071+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "12": {
       "document_sha256": "7f3aed235693c66f0f32fc3c62a988658dadbea65f2c314ccc111d06c8c2d675",
-      "source_digest": "6551a0efc5903122a98e3dc072ea188c5ea9ea1aaf0ee0cbb02d0d6b517a744e",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.136930+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "7b71cbf7d0339c5748c7936eed2ba48a4883e8d8b710bb602d692ee1805b1375",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.334806+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "13": {
       "document_sha256": "1ae2381d67147472a0b3a8b89ccf44d493925ad72430091bd67376635d137186",
-      "source_digest": "e393da21ae0d26b0ee2345356a43a3ab790706aba05984fcd24e83957facfba4",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.139485+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "2481bed1813b32d373ec0bbbfd27d9704af733ef30f7b9dd0ab8322ffcdc81f5",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.339089+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "14": {
       "document_sha256": "b955cd3fbada10bf18fc428f54264fbed7623176c9e4ac19b5307c3531affd74",
-      "source_digest": "e393da21ae0d26b0ee2345356a43a3ab790706aba05984fcd24e83957facfba4",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.142061+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "2481bed1813b32d373ec0bbbfd27d9704af733ef30f7b9dd0ab8322ffcdc81f5",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.344277+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "15": {
       "document_sha256": "926245ec0903d7f5fb0759e513e010154ff32bd2db6df3a95b816cce610b6e65",
-      "source_digest": "e393da21ae0d26b0ee2345356a43a3ab790706aba05984fcd24e83957facfba4",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.144804+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "2481bed1813b32d373ec0bbbfd27d9704af733ef30f7b9dd0ab8322ffcdc81f5",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.346639+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "081d05d697667fd3d41a9e03ddcd3c7328e6e42566552a31fb2a0e392a7634e5",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.147673+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "9c51156c0a8e2c9735d1ddf9c7b8751e5c7c71b49356832a0fcbb5b718bcab9d",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.350018+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "6defacedd0394f9ba0242ec849baccf473b94b6ac37725cbd66ba39ef8968780",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.150853+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "fcbdc5d73b6115e85784a31ec701c761712673e1a2cdad446a7e274c5bc1a4a7",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.353339+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "d5e3bfafa63eedac6b92418ea168bc07550cbd6fa279887ca866a2f320bc7a85",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.153056+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "a65e1b900d73e59fae86993bc7157a1225aa7b158711d364914125d12c6ec770",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.356655+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "19": {
       "document_sha256": "550ebe0e687e42986c399f50bf2fb9da524c3e6bc53df0437f48c63a672d03e9",
-      "source_digest": "8071329576a1d10cc251175513e8145259064384f324137ad6c972a00a20bd6b",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.155682+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "5a37244f600a5038cc3aa1606a539d224b42053837c02a6ad5f7c9aca3dd0f08",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.359423+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     },
     "20": {
       "document_sha256": "40c60347005959a09fc475243ffb06f7571203892a39137e471f5a2bea9c7c11",
-      "source_digest": "d5e3bfafa63eedac6b92418ea168bc07550cbd6fa279887ca866a2f320bc7a85",
-      "reviewed_by": "Codex QUANTGEN UI session / C-theme and PR46 integration review",
-      "review_note": "Reviewed all 20 documents against C layout and dark-mode storage/paint changes plus main PR46 safe AI diagnostics. Retained existing provider/payload boundaries, no diagnostic secrets, no request on locale/theme changes, existing licensing/deletion/operational gaps and publication BLOCKED. Updated source facts and related policies; actual website deployment and physical Windows/screenreader acceptance are not established.",
-      "reviewed_at": "2026-10-31T07:53:43.158153+00:00",
-      "source_commit": "f6f63af7f1ac19393be34777cab30a6d073c72c7"
+      "source_digest": "a65e1b900d73e59fae86993bc7157a1225aa7b158711d364914125d12c6ec770",
+      "reviewed_by": "Codex QUANTGEN UI session / native responsive minimum review",
+      "review_note": "Reviewed all 20 current-state policies against the layout-only follow-up: reproduced platform minimum widths trapping C study above its breakpoint, adjusted layout minimum hints and added a width-transition regression. Updated FACTS and retained accessibility limits. No changes to transmissions, fields, storage, rights, prices, consent or operational evidence; all review-required and publication BLOCKED states preserved.",
+      "reviewed_at": "2026-10-31T07:59:12.362812+00:00",
+      "source_commit": "83bb8cce49e0b08e79078e57a1dd71b56e6ec4b0"
     }
   }
 }
