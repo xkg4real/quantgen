@@ -4,15 +4,15 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T19:21:00+09:00
+updated_at: 2026-10-31T19:23:02.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/market-diagnostics-website-record-20261031
 work_commit: 6a47cc8692a18b505fecf549013252ce61e94e68
 uncommitted_changes: no
-pr: 52 (metadata CI pending)
+pr: 51,52 (merged)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -25,7 +25,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 최신 검증 결과
-PR49 Bonds/Portfolio 결과해설 한영화(source22f52dc→main4c51ab9),57+문서47검사/11기존보고서사례동일,Runtime41183600974 3환경·문서41183600882 success,LEDGER/Notion하위완료read-back. PR50 website-review 기록(source5e3c060→mainab6f794),문서CI41184351725 success,LEDGER f26afccc존재;전달queued/no receipt,웹반영미검증. 이전실행 종료체크포인트누락은current_claim/CURRENT/source일치와OS실제해제로복구. 새실행0a573fe3-202c-4136-b998-173c31e3652e은13-8/b2/c/b/a 진단고지한영화를sourcec3e69ccc058b5c0c59c147d2fa65ba5ea3b52372로push/read-back,PR51 CI대기. 로컬33회귀+문서47검사PASS,이전4사례parameters/raw sections/report sections exact동일. 부모13-8 전체·실제Windows/API연결은미완료.
+2026-10-31T19:23:02.000+09:00: PR51 시장 진단 안내 한영화(sourcec3e69ccc058b5c0c59c147d2fa65ba5ea3b52372→mainccf6654b7da1221e2b6bf09e019ecb6223c1e966) 완료. 로컬33·문서47검사PASS,이전4사례parameters/raw sections/report sections exact동일;Runtime41191720514 Windows3.12/3.14·Ubuntu3.12 및문서41191720334 success. LEDGER03d9e2c/Notion13-8/b2/c/b/a 취소선read-back;부모13-8미완료. PR52 웹검토JSON(source6a47cc8692a18b505fecf549013252ce61e94e68→maind7896914ee5b363ee745ef327f1ff295028edb5e),문서CI41192390657 success/LEDGER09f749c read-back. PR49/50 완료와이전실행체크포인트누락복구도확인/보존. 원본보고서·숫자·외부원문·검정한계·NOT_RUN유지. 웹전달queued/no receipt,사이트미배포;실제Windows/사용자Claude API연결은NOT_RUN. 다음기타모델본문/LETF/inline,이후M4-N3. 전체완료·주간returned·Claude수신확인이아닌안전재개체크포인트.
 
 ## 1. 최신 사용자 결정
 - 직접 요청 작업은 일반 감시의 returned/cooldown/next_eligible_at으로 막지 않습니다. Claude 사용 불가 동안 계속하고 화요일17시 전 또는 런타임 한도 전에 주간 전체 인수인계를 남깁니다. 계정 토큰 잔량은 도구가 없어unknown입니다.
@@ -57,15 +57,16 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 외부 main51bac973 상업출시 방향 README변경은 보존됐으며 법률 검증 증거로 대신 쓰지 않습니다.
 
 ## 5. 현재 저장 상태
-제품 gpt/market-diagnostics-language-20261031 @c3e69ccc058b5c0c59c147d2fa65ba5ea3b52372 원격push/read-back 및로컬clean. PR51 CI대기. 파일:quantgen_desktop/market_diagnostics_language.py,market_tools.py,tests/desktop_market_diagnostics_language_acceptance.py,docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md, runtimeCI,complianceFACTS/source-review. 계산/API/기존report원문/식별자불변. 현재execution 0a573fe3-202c-4136-b998-173c31e3652e;새실행은최신CURRENT·STATE/OS잠금검증후CAS로재개.
+제품 gpt/market-diagnostics-website-record-20261031 @6a47cc8692a18b505fecf549013252ce61e94e68 원격push/read-back/clean. 최신검증maind7896914ee5b363ee745ef327f1ff295028edb5e;PR51코드·PR52문서병합. 현재execution 0a573fe3-202c-4136-b998-173c31e3652e의저장점. private MARKET_DIAGNOSTICS_LANGUAGE_EVIDENCE.json·PR-51-WEBSITE-QUEUE.json·주간TXT/Word·NEXT_SAFE_START에근거보관. 이전2c703실행종료체크포인트누락은OS잠금실제해제와원격/current_claim/branch/source 일치로복구했으며이력보존. 마지막STATE원자저장/OS잠금해제확인후다음실행재개.
 
 ## 6. 다음 단위와 남은 일
-1. ⑬-8/b2/c/b/a PR51의Windows3.12/3.14·Ubuntu3.12와문서CI를확인하고성공시expectedhead로PR병합/read-back. 이후LEDGERappend/Notion해당하위취소선/웹사이트기록. 현재미완료이며부모13-8/b2/c/b도미완료.
-2. ⑬-8/b2/c/b/b: LETF·기타모델본문/모형주석/인라인표시. 완료된FX/캐리/Rates/Bonds/Portfolio/진단고지범위는재작업하지않음. 실제Windows/DPI/설치본/공급자·Flet parity 별도미완료.
-3. M4-N3 금리/배당규약: private M4_N3_NEXT_SCOPE.json은read-only분석이며구현없음. 기존letf_drag는금리항포함이나호출부r=0,fee고정과가격지수배당범위의명시가정설계필요. 역사카드/판정/원장변경금지. §10은15/67그룹완료52미완료,14관찰15모호매핑.
-4. 13-9/b 실제Windows Claude API연결은NOT_RUN. PR46오류분류완료는실키복구증거아님. O11실제Windows등록/Step7A/파일럿/fresh owner_confirmed,전체ResearchRun모델/이력·서명installer,외부데이터권리/법률/AWS입력미완료.
-5. UI웹전달기록38/39/40/43/44/46/49는지원전송도구부재로queued/no receipt. 웹적용/배포미검증. 사용자HTML직접반영범위유지.
-6. 2026-11-03 16:00 주간전체인계준비/17시전returned+read-back. 미완료직접작업hourly유지;새예약/run_now/사용자PC·TRADEGEN·공유설정변경금지.
+1. ⑬-8/b2/c/b/b: 기타모델본문/LETF·모형주석/inline 표시. private NATIVE_LANGUAGE_NEXT_AFTER_PR51.json의48callsite는후보만이며외부원문/사용자내용/역사근거를무조건번역하지않음. 새gpt브랜치·원본report/numeric/식별자보존회귀검사필요. FX/캐리/Rates/Bonds/Portfolio와AR1/funding/quoted-mid 진단완료범위재작업금지.
+2. 실제Windows/DPI/설치본/provider/Flet parity 및13-9/b Claude API실연결은별도미완료. 원문과후속화면번역/서명installer/전체ResearchRun모델·이력/canonical identity도별도.
+3. M4-N3금리/배당규약은private M4_N3_NEXT_SCOPE.json의read-only분석상태. core letf_drag 금리항은존재하지만호출부r=0·fee고정·가격지수배당가정범위설계필요. 역사카드/판정/원장변경금지. §10은15/67그룹완료52미완료,14관찰15모호매핑.
+4. O11실제Windows등록/Step7A/파일럿/fresh owner_confirmed와데이터권리/전문법률/AWS외부입력미완료. O8추가심사선택·NOT_PERFORMED 및기술/Windows통과조건유지.
+5. 별도UI PR47(source59fa8e19,open/미병합으로확인)은C차트/다크모드세션소유. UI_SESSION_CURRENT.md의새결과를다음최종통합인계전에읽되선점/임의병합하지않음. PR42기존main통합보존.
+6. UI웹전달38/39/40/43/44/46/49/51기록은queued/no receipt. 실제웹적용/배포는미검증. 새인증/사이트실배포없음.
+7. 2026-11-03 16:00주간전체인계준비/17시전returned+read-back. 직접미완료작업hourly유지;새예약/run_now/사용자PC·TRADEGEN·공유설정변경금지.
 
 ## 7. 보호 범위
 .env/보호캐시4개/실제원장/동결연구/사전등록/holdout을 읽거나해시/변경하지 않습니다. 실주문/TRADEGEN/공식gate·판정/owner승인규칙/공유환경·보안·네트워크설정 변경 금지. AUTO_STATE수동수정 금지. 비공개원문·키·계좌를 public repo에 올리지 않습니다. 테스트는합성/주입/임시저장소만 사용합니다.
@@ -74,7 +75,7 @@ LEDGER 전체가 기준입니다. 이번 완료 N1/NEW-M6-03과 과거 완료 ID
 O8선택심사,UI/PR/main의 기존승인을 다시 묻거나 승인대기로 되돌리지 않습니다. 실제 연구판정·정식원장·외부공개와 Windows증거/실행확인은 별도입니다. 현재 waiting_on=none은 다음 독립수정이 가능하다는 뜻이며 미실행파일럿을 승인했다는 뜻이 아닙니다.
 
 ## 9. 재개 절차
-최신STATE의transition·기대환경/private접근검증,OS RUN.lock 배타획득. 저장execution 0a573fe3-202c-4136-b998-173c31e3652e / task owner-product-workflow-20261029 / 고정handoffID / gpt/market-diagnostics-language-20261031 / sourcec3e69ccc058b5c0c59c147d2fa65ba5ea3b52372를최신같은ref6문서와STATE에대조. 이전잠금이해제된경우에만새ID로CURRENT최신blobCAS/read-back후재개. PR51 CI/merge부터확인하고LEDGER중복완료방지. O8선택심사/NOT_PERFORMED와O11 12등록·n_trials12+U·U≤24·실행승인조건유지. from=gpt만으로소유판정금지.
+STATE transition·기대환경/private접근과OS RUN.lock확인. 저장execution 0a573fe3-202c-4136-b998-173c31e3652e / task owner-product-workflow-20261029 / 고정handoffID / gpt/market-diagnostics-website-record-20261031 / source6a47cc8692a18b505fecf549013252ce61e94e68를최신같은ref6문서·STATE와대조. 이전잠금해제검증뒤새ID로최신CURRENT blob CAS/read-back. 검증된main에서다음새gpt브랜치로⑬-8/b2/c/b/b를진행하며PR47별도세션의합법변경을보존. LEDGER완료ID/파일대조,새단위마다테스트/push/read-back/CURRENT/appendLEDGER/Notion하위취소선. O11가격읽기전12등록·n_trials12+U·U≤24및실행승인유지. from=gpt만으로소유판정금지.
 
 ## 10. 검증·인계 파일
 PR31 source55dae2f→maind4670f3,CI41172791664:22검사PASS,3기존펀드27결과필드동일. livemasterCONNECT403은미해결검수이며우회안함.
@@ -242,3 +243,7 @@ STATE/기대환경/private 접근과OS RUN.lock 확인. 직전execution 156c744e
 
 ## PR51 웹사이트 기록 저장
 메타데이터 source6a47cc8692a18b505fecf549013252ce61e94e68 원격read-back, PR52 생성. JSON파싱/diff PASS. Notion13-8/b2/c/b/a 취소선/부모미완료 read-back 확인. 실제전달queued/no receipt,웹적용/배포미검증;다음본문미완료는private NATIVE_LANGUAGE_NEXT_AFTER_PR51.json 48후보(원문/사용자/공급자구분필요,모두번역대상이아님) 참조. 별도UI PR47 source59fa8e19는open/미병합으로조회,소유권/구현을변경하지않음.
+
+
+## 2026-10-31T19:23:02.000+09:00 저장·재현
+PR51검사: QT_QPA_PLATFORM=offscreen python -m unittest tests.desktop_market_diagnostics_language_acceptance tests.desktop_ar1_decay_acceptance tests.desktop_funding_inference_acceptance tests.desktop_quote_coverage_acceptance tests.desktop_market_acceptance tests.desktop_language_acceptance tests.desktop_bonds_portfolio_language_acceptance -v (33PASS). python -m unittest tests.compliance_acceptance tests.compliance_export_acceptance -v (47PASS). 이전ab6f794의market_tools를같은4합성/주입결과에적용하여parameters/raw sections/report sections exact동일. 실제provider/.env/보호cache/원장사용없음. private주간TXT/Word와다음시작점갱신. 계정토큰잔량unknown;예약등록으로미래자동실행성공을주장하지않음.
