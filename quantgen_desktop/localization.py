@@ -1,5 +1,5 @@
 """Per-window display translation, without rebuilding forms or rerunning jobs."""
-from PyQt6.QtCore import QObject, QEvent, QSignalBlocker, QTimer, Qt
+from PyQt6.QtCore import QObject, QEvent, QSignalBlocker, QTimer, Qt, QLocale
 from PyQt6.QtWidgets import (QAbstractButton, QComboBox, QLabel, QLineEdit,
                              QTableWidget, QTabWidget, QPlainTextEdit, QWidget)
 from .translations import display
@@ -62,6 +62,8 @@ class LanguageController(QObject):
         if current != rendered:
             source = current
         translated = display(widget, source)
+        if key == 'text' and widget.property('nav'):
+            translated = translated.replace('&&', '&').replace('&', '&&')
         cache[key] = (source, translated)
         widget._qg_display_sources = cache
         if current != translated:
@@ -72,6 +74,10 @@ class LanguageController(QObject):
             return
         self.pending = False
         self.applying = True
+        ctx = getattr(self.window, "ctx", None)
+        if ctx:
+            self.window.setLocale(QLocale(str(ctx.locale)))
+            self.window.setLayoutDirection(Qt.LayoutDirection.RightToLeft if ctx.rtl else Qt.LayoutDirection.LeftToRight)
         try:
             for widget in [self.window, *self.window.findChildren(QWidget)]:
                 if not getattr(widget, '_qg_watched', False):
@@ -113,8 +119,24 @@ class LanguageController(QObject):
                     if isinstance(widget, (QLineEdit, QPlainTextEdit)):
                         self._text(widget, 'placeholder', widget.placeholderText(), widget.setPlaceholderText)
                     self._text(widget, 'accessible', widget.accessibleName(), widget.setAccessibleName)
+                    self._text(widget, 'tooltip', widget.toolTip(), widget.setToolTip)
                 if hasattr(widget, '_reserve_text_space'):
                     widget._reserve_text_space()
                     widget.update()
         finally:
             self.applying = False
+
+
+def locale_picker(ctx,parent=None):
+    from core.i18n import locale_choices
+    picker=QComboBox(parent)
+    picker.setProperty('localePicker',True)
+    picker.setEditable(True);picker.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+    picker.setMaxVisibleItems(14);picker.setMinimumWidth(180);picker.setMaximumWidth(480)
+    picker.completer().setFilterMode(Qt.MatchFlag.MatchContains)
+    picker.completer().setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+    choices=list(locale_choices())
+    priority=[('ko_KR','한국어 · 대한민국'),('en_US','English · United States')]
+    for key,label in priority+[(k,n) for k,n in choices if k not in {'ko_KR','en_US'}]:picker.addItem(label,key)
+    index=picker.findData(str(ctx.locale));picker.setCurrentIndex(max(0,index))
+    return picker

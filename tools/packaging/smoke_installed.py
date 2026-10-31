@@ -39,7 +39,7 @@ status, error = recorded_status()
 assert status is not None and not error, error
 assets = Path(assets_directory())
 for name in ("branding/f1-symbol.svg", "branding/f1-wordmark.svg", "fonts/qg-interface.otf", "fonts/OFL.txt",
-             "favicon.png", "manifest.json", "icons/icon-192.png", "icons/icon-512.png",
+             "icon.png", "icon.ico", "favicon.png", "manifest.json", "icons/icon-192.png", "icons/icon-512.png",
              "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon-192.png"):
     assert (assets / name).is_file(), name
 manifest = json.loads((assets / "manifest.json").read_text())
@@ -52,4 +52,14 @@ assert (calendars.DATA_DIR / "MANIFEST.yaml").is_file()
 assert len(list(calendars.DATA_DIR.glob("*.yaml"))) >= 18
 assert any(r.startswith("statsmodels") for r in importlib.metadata.requires("quantgen"))
 assert build_home_page(SimpleNamespace(), navigate=lambda _: None) is not None
+from core.education.indicators import historical_case,indicator_values
+from core.education.chart import chart_svg
+from core.i18n import LocaleContext
+from core.research.display_rights import display_rights
+_, sample, provenance = historical_case(('rsi','macd'))
+assert sample.symbol == 'USD/EUR' and not sample.ohlc
+assert len(indicator_values(sample)['RSI14']) == len(sample.dates)
+assert '<svg' in chart_svg(sample,('rsi','macd'),locale=LocaleContext('ko_KR'))
+assert len(display_rights()['registered_series']) == 73
+assert LocaleContext('de_DE').number(1234.5) == '1.234,50'
 print(json.dumps({"status": "PASS", "platform": sys.platform, "scope": "installed imports, Home, recorded status, assets and calendar payload presence", "version": importlib.metadata.version("quantgen"), "live_providers": "NOT_RUN", "engine_start": "NOT_RUN"}))

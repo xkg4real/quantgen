@@ -9,6 +9,12 @@ from core.theme import LIGHT
 from .translations import display
 
 
+def _axis_number(widget,value,digits=2,*,percent=False,group=True):
+    ctx=getattr(widget.window(),'ctx',None)
+    if ctx:return ctx.percent(value,digits) if percent else ctx.number(value,digits)
+    return format(value,('.'+str(digits)+'%') if percent else (',' if group else '')+'.'+str(digits)+'f')
+
+
 @dataclass
 class _ChartLayout:
     plot: QRectF
@@ -132,7 +138,7 @@ class FanChart(_CartesianChart):
         lo -= pad
         hi += pad
         ticks = [lo+(hi-lo)*i/4 for i in range(5)]
-        labels = [f"{value:,.1f}" for value in ticks]
+        labels = [_axis_number(self,value,1) for value in ticks]
         footer = self._footer_text()
         layout = _chart_layout(self, labels, footer=footer)
         box = layout.plot
@@ -188,8 +194,8 @@ class FrontierChart(_CartesianChart):
         xmin,xmax=min(xs),max(xs);ymin,ymax=min(ys),max(ys)
         dx=max(xmax-xmin,.001);dy=max(ymax-ymin,.001)
         xmin-=dx*.1;xmax+=dx*.1;ymin-=dy*.1;ymax+=dy*.1
-        y_labels=[f"{ymin+(ymax-ymin)*i/4:.1%}" for i in range(5)]
-        x_labels=[f"{xmin+(xmax-xmin)*i/4:.1%}" for i in range(5)]
+        y_labels=[_axis_number(self,ymin+(ymax-ymin)*i/4,1,percent=True) for i in range(5)]
+        x_labels=[_axis_number(self,xmin+(xmax-xmin)*i/4,1,percent=True) for i in range(5)]
         footer=self._footer_text()
         layout=_chart_layout(self,y_labels,x_labels,self._legend_names(),footer)
         box=layout.plot
@@ -240,8 +246,8 @@ class LineChart(_CartesianChart):
         if not values:return
         xmin=min(x for points in pairs for x,y in points);xmax=max(x for points in pairs for x,y in points)
         ymin,ymax=min(values),max(values);pad=max((ymax-ymin)*.05,.001);ymin-=pad;ymax+=pad
-        y_labels=[f'{ymin+(ymax-ymin)*i/4:,.2f}' for i in range(5)]
-        x_labels=[f'{xmin+(xmax-xmin)*i/4:.2f}' for i in range(5)]
+        y_labels=[_axis_number(self,ymin+(ymax-ymin)*i/4) for i in range(5)]
+        x_labels=[_axis_number(self,xmin+(xmax-xmin)*i/4,group=False) for i in range(5)]
         footer=self._footer_text()
         layout=_chart_layout(self,y_labels,x_labels,self._legend_names(),footer)
         box=layout.plot

@@ -12,6 +12,7 @@ dependencies = [
   # Flet 0.85.2 passes openapi_prefix; keep the verified compatible web stack.
   "fastapi==0.141.1", "starlette==1.6.0",
   "pyyaml>=6.0",
+  "Babel>=2.17,<3",
   "requests>=2.31",
   "python-dotenv>=1.0", "tzdata>=2024.1; sys_platform == 'win32'",
   "numpy>=1.26", "pandas>=2.1", "scipy>=1.11", "statsmodels>=0.14.2", "matplotlib>=3.8", "gs-quant>=1.0",
@@ -41,6 +42,8 @@ windows = "assets/icon.ico"
 web = "assets/icon_192.png"
 
 [tool.setuptools.package-data]
+"core.education" = ["samples/*.csv", "samples/*.json"]
+"core.research" = ["display_rights.json"]
 "core.calendars" = ["data/*.yaml"]
 "core.ficc" = ["schemas/*.json"]
 "core.skills" = ["macro_workflows/*.yaml"]

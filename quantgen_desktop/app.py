@@ -34,6 +34,7 @@ from core.research.connections import execute_connections
 from core.research.strategy_analysis import execute_strategy
 from core.research.runs import SessionResearch, new_run, failed, export_bytes
 from core.theme import LIGHT, DARK
+from core.i18n import LocaleContext
 from tools.status.snapshot import verify
 from .charts import FanChart, FrontierChart, LineChart, SignedBars
 from .jobs import Jobs
@@ -99,9 +100,10 @@ class ResearchWindow(QMainWindow):
                  derivatives_runner=execute_derivatives, etf_runner=execute_etf,
                  crypto_runner=execute_crypto, krx_runner=execute_krx,
                  connections_runner=execute_connections, strategy_runner=execute_strategy,
-                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None):
+                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None, locale=None):
         super().__init__()
-        self.ui_language = language if language in ("en", "ko") else "en"
+        self.ctx = LocaleContext(locale or ("ko_KR" if language == "ko" else "en_US"))
+        self.ui_language = self.ctx.language
         self.language_store = language_store
         self.session = session or SessionResearch()
         self.market_loader, self.analysis_runner = market_loader, analysis_runner
@@ -150,7 +152,7 @@ class ResearchWindow(QMainWindow):
         brand.addWidget(icon)
         brand.addWidget(label("QUANTGEN", "brand", wrap=False))
         rail.addLayout(brand)
-        rail.addSpacing(34)
+        rail.addSpacing(12)
         self.stack = QStackedWidget()
         self.nav = {}
         routes = (("home", "Research Home"), ("markets", "Markets"),
@@ -194,21 +196,20 @@ class ResearchWindow(QMainWindow):
         self.make_system()
         self.change_theme(0)
         self.navigate("home")
-        self.refresh_views()
         self.localizer = LanguageController(self)
+        self.refresh_views()
         if auto_refresh:
             QTimer.singleShot(0, self.refresh_markets)
 
     def set_language(self, language):
         if language not in ("en", "ko"):
             raise ValueError("Unsupported UI language")
-        self.ui_language = language
-        if self.language.currentData() != language:
-            self.language.setCurrentIndex(self.language.findData(language))
-            return
-        self.localizer.apply()
-        if self.language_store is not None:
-            self.language_store.setValue("ui/language", language)
+        value = "ko_KR" if language == "ko" else "en_US"
+        index = self.locale_picker.findData(value)
+        self.locale_picker.blockSignals(True)
+        self.locale_picker.setCurrentIndex(index)
+        self.locale_picker.blockSignals(False)
+        self.change_language(index)
 
     def page(self, title, subtitle):
         scroll = QScrollArea()
@@ -236,12 +237,27 @@ class ResearchWindow(QMainWindow):
             summary.addWidget(box)
             self.count_labels.append(number)
         layout.addLayout(summary)
+        box,inner=panel(self.ctx.t('guide'))
+        inner.addWidget(label(self.ctx.t('guide_intro')))
+        self.guide_open=QPushButton(self.ctx.t('start_guide'))
+        self.guide_open.setProperty('primary',True)
+        inner.addWidget(self.guide_open)
+        from .indicator_guide import IndicatorGuide
+        self.indicator_guide=IndicatorGuide(locale=self.ctx)
+        self.indicator_guide.intro.hide()
+        self.indicator_guide.hide()
+        self.guide_open.clicked.connect(self.toggle_indicator_guide)
+        inner.addWidget(self.indicator_guide)
+        layout.addWidget(box)
         box, inner = panel("주요 시장지표")
         self.home_markets = table(["지표", "관측값", "변화", "상태 · 관측일"])
         self.home_markets.setProperty("localized_columns", [0])
         self.home_markets.setMinimumHeight(100)
         inner.addWidget(self.home_markets)
         inner.addWidget(label("일별 관측 · 실시간 아님 · 조회 실패와 오래된 관측은 구분합니다.", "caption"))
+        rights_button=QPushButton(self.ctx.t('data_rights'))
+        rights_button.clicked.connect(self.open_data_rights)
+        inner.addWidget(rights_button)
         layout.addWidget(box)
         box, inner = panel("가능성을 하나의 숫자로 좁히지 마세요")
         self.home_chart = FanChart()
@@ -411,6 +427,15 @@ class ResearchWindow(QMainWindow):
 
     def make_system(self):
         layout = self.page("System", "기록된 근거와 이번 실행 결과를 구분합니다.")
+        from .localization import locale_picker
+        box,inner=panel(self.ctx.t('language'))
+        self.locale_picker=locale_picker(self.ctx)
+        self.locale_picker.setAccessibleName(self.ctx.t('language'))
+        self.locale_picker.currentIndexChanged.connect(self.change_language)
+        inner.addWidget(self.locale_picker)
+        self.locale_notice=label(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'),'caption')
+        inner.addWidget(self.locale_notice)
+        layout.addWidget(box)
         from .connections import ConnectionsPane
         self.connections = ConnectionsPane()
         self.connections.requested.connect(lambda q: self.run_tool('connections', q))
@@ -419,6 +444,9 @@ class ResearchWindow(QMainWindow):
         self.system_tabs = QTabWidget()
         self.system_tabs.addTab(self.connections, 'Connections')
         self.system_tabs.addTab(self.rules, 'Rules')
+        from .data_rights import DataRightsPane
+        self.data_rights=DataRightsPane(self.ctx)
+        self.system_tabs.addTab(self.data_rights,self.ctx.t('data_rights'))
         layout.addWidget(self.system_tabs)
         box, inner = panel("프로젝트 상태")
         try:
@@ -442,6 +470,35 @@ class ResearchWindow(QMainWindow):
     def navigate(self, route):
         self.stack.setCurrentIndex(self.route_indices[route])
         for name, button in self.nav.items(): button.setChecked(name == route)
+
+    def open_data_rights(self):
+        self.navigate('system')
+        self.system_tabs.setCurrentWidget(self.data_rights)
+
+    def toggle_indicator_guide(self):
+        self.indicator_guide.setVisible(self.indicator_guide.isHidden())
+        self.guide_open.setText(self.ctx.t('start_guide' if self.indicator_guide.isHidden() else 'hide_guide'))
+
+    def change_language(self,index):
+        value=self.locale_picker.itemData(index)
+        if not value:return
+        self.ctx=LocaleContext(value)
+        self.ui_language=self.ctx.language
+        self.language.blockSignals(True)
+        self.language.setCurrentIndex(self.language.findData(self.ui_language))
+        self.language.blockSignals(False)
+        self.data_rights.set_locale(self.ctx)
+        self.indicator_guide.set_locale(self.ctx)
+        self.guide_open.setText(self.ctx.t('start_guide' if self.indicator_guide.isHidden() else 'hide_guide'))
+        self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
+        from .indicator_guide import IndicatorGuide
+        for pane in self.findChildren(IndicatorGuide):
+            if pane is not self.indicator_guide:pane.set_locale(self.ctx)
+        self.refresh_views()
+        if self.language_store is not None:
+            self.language_store.setValue("ui/language", self.ui_language)
+            self.language_store.setValue("ui/locale", str(self.ctx.locale))
+        self.localizer.apply()
 
     @pyqtSlot()
     def refresh_markets(self):
@@ -585,9 +642,10 @@ class ResearchWindow(QMainWindow):
                 for name,symbol,provider,unit,_ in SPECS]
         home, details = [], []
         for r in markets:
-            v = "—" if r["value"] is None else f"{r['value']:,.2f}"
-            change = "—" if r["change"] is None else f"{r['change']:+.2f} {'bp' if r['unit']=='%' else '%'}"
-            observed = r["observation_date"] or "—"
+            v = self.ctx.number(r["value"])
+            change = "—" if r["change"] is None else (("+" if r["change"] >= 0 else "") +
+                (self.ctx.number(r["change"]) + " bp" if r["unit"] == "%" else self.ctx.percent(r["change"]/100, 2)))
+            observed = self.ctx.date(r["observation_date"])
             home.append([r["label"], v, change, f"{r['status']} · {observed}"])
             details.append([r["label"], v, r["unit"], change, r["provider"], observed, r["status"]])
         if not home:
@@ -597,7 +655,7 @@ class ResearchWindow(QMainWindow):
         for widget in (self.home_markets,self.market_table):
             widget.setFixedHeight(min(350,max(100,widget.horizontalHeader().height()+sum(widget.rowHeight(i) for i in range(widget.rowCount()))+12)))
         table_rows(self.run_table, [[r["parameters"].get("symbol", "—"), r["parameters"].get("model", "—"),
-            r["execution_status"], r["verdict"], r["created_at"][:19]] for r in runs], [r["run_id"] for r in runs])
+            r["execution_status"], r["verdict"], self.ctx.timestamp(r["created_at"])] for r in runs], [r["run_id"] for r in runs])
         complete = [r for r in runs if r["execution_status"] == "COMPLETED"]
         table_rows(self.risk_table, [[r["parameters"]["symbol"], r["parameters"]["model"],
             f"{r['metrics']['prob_loss']:.1%}", f"{r['metrics']['var_pct']:.1%}", f"{r['metrics']['cvar_pct']:.1%}",
@@ -608,6 +666,7 @@ class ResearchWindow(QMainWindow):
             self.home_summary.setText(f"{r['parameters']['symbol']} · {r['parameters']['model']} · {r['data']['source']}\n"
                 f"P5 {r['metrics']['p05']:,.2f} / P50 {r['metrics']['p50']:,.2f} / P95 {r['metrics']['p95']:,.2f}\n"
                 f"관측 {r['data']['last_observation']} · 판정 {r['verdict']} · 재현성 {r['reproducibility']}")
+        self.localizer.apply()
 
     def export_selected(self, bundle):
         row = self.run_table.currentRow()
@@ -625,7 +684,7 @@ class ResearchWindow(QMainWindow):
         if not filename:
             return
         try:
-            data = bundle_bytes(run) if bundle else export_bytes(run)
+            data = bundle_bytes(run,locale=self.ctx) if bundle else export_bytes(run)
             save_desktop_export(filename, data, extension=extension)
         except (OSError, ValueError, TypeError) as exc:
             self.export_status.setText(f"저장 실패: {type(exc).__name__} · 경로와 확장자를 확인하세요.")
@@ -668,6 +727,8 @@ class ResearchWindow(QMainWindow):
         for chart in [*self.findChildren(FanChart), *self.findChildren(FrontierChart), *self.findChildren(LineChart), *self.findChildren(SignedBars)]:
             chart.colors = p
             chart.update()
+        from .indicator_guide import TechnicalChart
+        for chart in self.findChildren(TechnicalChart):chart.redraw()
 
     def closeEvent(self, event):
         if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy:
@@ -688,13 +749,21 @@ class ResearchWindow(QMainWindow):
 
 
 def main():
+    if sys.platform == "win32":
+        import ctypes
+        set_app_id = ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID
+        set_app_id.argtypes = [ctypes.c_wchar_p]
+        set_app_id.restype = ctypes.c_long
+        set_app_id("QUANTGEN.Desktop")
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon(str(application_root()/"assets/icon.png")))
     app.setApplicationName("QUANTGEN")
     app.setOrganizationName("QUANTGEN")
     font_id = QFontDatabase.addApplicationFont(str(application_root()/"assets/fonts/qg-interface.otf"))
     families = QFontDatabase.applicationFontFamilies(font_id)
     if families: app.setFont(QFont(families[0], 10))
     settings = QSettings("QUANTGEN", "QUANTGEN")
-    window = ResearchWindow(language=settings.value("ui/language", "en"), language_store=settings)
+    window = ResearchWindow(language=settings.value("ui/language", "en"),
+                            locale=settings.value("ui/locale", None), language_store=settings)
     window.show()
     return app.exec()

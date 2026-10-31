@@ -30,7 +30,7 @@ def make_report(tool, request, sections):
                 code=code_evidence(), environment=runtime_evidence())
 
 
-def report_bytes(report, *, bundle=False):
+def report_bytes(report, *, bundle=False, locale=None):
     if report.get('format') != 'quantgen.analysis-report/1' or report.get('verdict') != 'NOT_RUN':
         raise ValueError('Unsupported report contract')
     raw = (json.dumps(report,ensure_ascii=False,indent=2,allow_nan=False)+'\n').encode()
@@ -41,6 +41,11 @@ def report_bytes(report, *, bundle=False):
             '<h1>QUANTGEN — '+escape(report['tool'])+'</h1><p>Personal research. Calculation completed; official validation NOT_RUN. '
             'Reproducibility PARTIAL. Non-finite observations are null. This report does not approve a model or a trade.</p><pre>'
             +escape(raw.decode())+'</pre>').encode()
+    if locale is not None:
+        from core.i18n import LocaleContext
+        from .localized_report import localized_html
+        ctx=locale if isinstance(locale,LocaleContext) else LocaleContext(locale)
+        html=localized_html(report,ctx,title='QUANTGEN · '+ctx.text(report['tool']))
     files={'analysis.json':raw,'report.html':html}
     files['MANIFEST.json']=json.dumps({'files':{n:{'bytes':len(d),'sha256':hashlib.sha256(d).hexdigest()} for n,d in files.items()}},indent=2).encode()
     out=BytesIO()

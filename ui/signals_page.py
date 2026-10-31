@@ -155,6 +155,8 @@ def build_signals_page(page: ft.Page,
                 blocks.append(notice("Synthetic data: " + hist.note, "error",
                                      icon=ft.Icons.SCIENCE_OUTLINED))
             blocks.append(card(qcharts.price_chart(hist)))
+            from .indicator_guide import IndicatorGuide
+            blocks.append(card(IndicatorGuide(page,history=hist)))
             blocks.append(card(_signal_block(report)))
             wr = (f"{bt.win_rate * 100:.0f}%" if bt.win_rate is not None else "—")
             blocks.append(ft.Row([

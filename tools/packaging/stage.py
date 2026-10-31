@@ -14,7 +14,7 @@ FILES = {"pyproject.toml", "README.md", "main.py", "config.py", "tools/__init__.
          "qa/research_status.json", "qa/acceptance_results.json", "assets/manifest.json"}
 DATA_PREFIXES = ("core/calendars/data/", "core/ficc/schemas/", "core/skills/macro_workflows/",
                  "data/calendars/")
-DATA_FILES = {"data/macro/series_registry.yaml", "data/macro/rules_v2.0.0.json"}
+DATA_FILES = {"data/macro/series_registry.yaml", "data/macro/rules_v2.0.0.json", "core/research/display_rights.json"}
 
 
 def allowed(name: str) -> bool:
@@ -28,6 +28,9 @@ def allowed(name: str) -> bool:
     if p.suffix == ".py" and p.parts[0] in ("core", "data", "ui", "quantgen_desktop"):
         return True
     if name.startswith("tools/status/") and p.suffix == ".py":
+        return True
+    if name in {'core/education/samples/usdeur_daily.csv',
+                'core/education/samples/usdeur_provenance.json'}:
         return True
     if name.startswith(DATA_PREFIXES) and p.suffix in (".yaml", ".json"):
         return True

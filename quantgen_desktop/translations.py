@@ -593,4 +593,7 @@ def translate(text, language):
 
 
 def display(widget, text):
-    return translate(text, getattr(widget.window(), 'ui_language', None))
+    window = widget.window()
+    translated = translate(text, getattr(window, 'ui_language', None))
+    ctx = getattr(window, 'ctx', None)
+    return ctx.text(text) if ctx and translated == str(text) else translated

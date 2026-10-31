@@ -78,7 +78,7 @@ class ResearchHomeTests(unittest.TestCase):
 
     def test_default_home_no_analysis_build_and_start_hook_once(self):
         self.assertEqual(self.calls, {})
-        self.assertTrue(any(isinstance(c, ft.Text) and c.value == 'Research Home' for c in self.controls()))
+        self.assertTrue(any(isinstance(c, ft.Text) and c.value == '리서치 홈' for c in self.controls()))
         self.assertEqual(self.page.theme_mode, ft.ThemeMode.LIGHT)
         self.assertEqual(self.page.bgcolor, LIGHT.bg)
         self.start.assert_called_once_with(background=True)
