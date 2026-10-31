@@ -1,5 +1,7 @@
 # QUANTGEN 정책 작성의 코드 근거
 
+2026-10-31 추가 표시 검토: 네이티브 ETF/Crypto/Derivatives의 AR(1)·펀딩·호가 검사 안내에 로컬 한영 문구를 연결했습니다. 원본 보고서·수치·미실시 상태·외부 진단 원문 및 기존 전송/저장 경로는 보존합니다. `quantgen_desktop/market_diagnostics_language.py`, `market_tools.py`와 `docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md`가 근거입니다. 실제 Windows 시각/DPI·Flet 동등성·외부 서비스 검증 또는 공개 승인은 별도입니다.
+
 - 기준일: 2026-10-31 한국시간
 - 코드 기준: `c7d2e2d` 및 이 변경의 문서 작업 트리. 검토 fingerprint는 `source-review.json` 참조
 - 범위: 실행 진입점, `core/`, `data/`, `ui/`, `quantgen_desktop/`, 의존성·자산 선언과 관련 문서. 실제 운영 서버·사업자 계약·판매 사이트는 이 소스 검사로 확인되지 않는다.
@@ -126,3 +128,5 @@ policy scopes were compared with this bounded display change; their
 remain. Source/document consistency is not publication approval.
 
 C형 최종 통합 시 main PR48/49(4c51ab9)의 인계 기록과 채권·포트폴리오 한/영 결과 표현을 보존했습니다. display_variants는 원본 source_text·내보내기·수치·경고를 유지하고 C형의 기존 notes 위젯을 재사용합니다. 이 한정된 소스 차이를 20개 문서와 대조했으며 저장·전송·거래·정책 공개 상태 변화는 없습니다.
+
+C형 병합 직전 통합: main PR50–52(d789691)의 웹 인계 기록과 시장 진단 한영 표시를 함께 보존했습니다. ToolPane의 기존 text(localized=...) 경로를 사용하며 AR(1)·펀딩·호가 수치, 원문 경고와 NOT_RUN·정규 보고서가 유지됩니다. 20개 정책 범위와 대조했고 신규 저장·요청·승인 상태 변화는 없습니다.

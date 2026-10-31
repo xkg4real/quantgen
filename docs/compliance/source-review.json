@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "312e90a05fe24f4ccb49abf0ad9fb61c2a482e9f035666de4f25cc99f1ec3abf",
+    ".github/workflows/runtime-smoke.yml": "27b1f18b0b9ddfb102f67a9ac614269f47a8254b71d5faebce60d31ebb458fbf",
     "README.md": "3d5109bbf91644ca6dcddd4ff609d72f1819c0e54d0a8eac2b75ddd4e244e54e",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -226,7 +226,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "0953991e4284de95e5e33b285ff6bcd079785b8f785bc3804d1179ff702f92f0",
+    "docs/compliance/FACTS.md": "c13806accdbb79811c3088d8046ee6675759f554df63b5826625dbfbe11cb751",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "fe76f5dc8fb85e691d1c33140a1b01481d8ba851c43398ac99b00effbf981fe8",
@@ -244,6 +244,7 @@
     "docs/product/INDICATOR_GUIDE_DESIGN.md": "cf664a34fefd8506e356ca2f261ddc6acbce168d370d1f7d504393d94acca484",
     "docs/product/LETF_INDEX_2026-10-31.md": "7c10b178f33c59f2afb2783c94413cc2c949ba3d5f0e7b4412246d0da1f54693",
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
+    "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "93cb4a5e32351be439393177c78017bc5bd5cd538f585812e992d74aaced08bc",
     "docs/product/MC_VOLATILITY_2026-10-30.md": "92dc8a14c6884ea57936f9f187e9b87d1120b426ac0fe2f8767867617ef6837f",
     "docs/product/NATIVE_LANGUAGE_2026-10-31.md": "c9b68cf82c3a9bf858d9e0649871116f7d618a86ae8e4ba12dab87872db8fe32",
@@ -285,7 +286,8 @@
     "quantgen_desktop/localization.py": "2927801b702787e2c962319693e4dd1f6db4ecc9543c5e23e2d757ea9c0b1fb1",
     "quantgen_desktop/macro.py": "da1a47070db478379bc7ac3881fe3398f9a5d1d60c314f28882d06d9e94467d4",
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
-    "quantgen_desktop/market_tools.py": "cee656dd028cdc8d82e6daa409ad673cf4efe542474dd5fbc39dbd2ff7d0a420",
+    "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
+    "quantgen_desktop/market_tools.py": "3f59adebcd89eb3c849737f2b9d9e126240e47c03469d9ad85d3c873ad9190f5",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
     "quantgen_desktop/rates.py": "f98d6db2d305ee12264c7a758af8a9951b2b9bb6a27686c4a0a29cc215038ddf",
@@ -324,6 +326,7 @@
     "tests/desktop_letf_index_acceptance.py": "a5bc0f194c44d154dfbab81dccc4661f0ddade92ba34c906ed5172de7d60e664",
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
+    "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
@@ -471,163 +474,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4c9561c2b4764f28c763b9d956df2bd6def8517226636322cea0c4652126cee4",
-      "source_digest": "ed64d079f461a2de1dd9d9d0020fdad7f1a1494760eede9a1a42064cabf14d2a",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.509538+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "9ef14757f413f8433351e6835467f32b5c9aa414b89ef8b50e56c68076de8e3d",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.518988+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "2": {
       "document_sha256": "8a8915a728f0bd28f95fa46082cde5efd96739cb14bf69e69ad9205841c6cbe0",
-      "source_digest": "ed64d079f461a2de1dd9d9d0020fdad7f1a1494760eede9a1a42064cabf14d2a",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.514287+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "9ef14757f413f8433351e6835467f32b5c9aa414b89ef8b50e56c68076de8e3d",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.522430+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "64ef876f8ccbd4225e1f532f131389cdc70c5230e62172d22abcde00bdc53bb4",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.517101+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "58b01543873cd2afb6847890621efc340032ca3bfa2975622dc2a23432124c91",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.525264+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "4": {
       "document_sha256": "7d0f3373b9815cd9db634f28323c8c90bc7e78cd09cf40d757e98adfc3ac1dd7",
-      "source_digest": "1d6178538b0cf22abf2927f8bee0a64b95e3f43cd2a976faafacb7e83fe0a334",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.520025+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "b5b3cf45c886f03114a812cc97d9b71c7cd51143aa1771683af94241f7a29699",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.527671+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "72b5636bbb68cdb9b0d69da8487593ae2e1730c0e7edc01353e440e5bb0bd792",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.523338+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "23abd3f687136ff3c7b12f3f44c5dadad8e915202436192f32885f8101506d6d",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.530805+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "6": {
       "document_sha256": "fae1be1112448c78bde79274a691143bdadcb4623853f26798735cf71b20973a",
-      "source_digest": "bd96abd5515648a5a84e7c2ed8af0cfd0d298fcbe7c158777772c4174fe92ff7",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.525935+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "0a5c09f7f77ddc5f6c5c8032976a6f4a33a6c8c5c4b93d64e902e724ca2c53c2",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.534183+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "7": {
       "document_sha256": "d255a134f4e97cd65a7b3a4676b26a0f6e655e823ab23f971d477235df751931",
-      "source_digest": "ed64d079f461a2de1dd9d9d0020fdad7f1a1494760eede9a1a42064cabf14d2a",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.528513+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "9ef14757f413f8433351e6835467f32b5c9aa414b89ef8b50e56c68076de8e3d",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.537237+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "8": {
       "document_sha256": "06dbba68f23aa6e2aec1125b031a7486b863296ec51a15481a893ea62253f232",
-      "source_digest": "bd96abd5515648a5a84e7c2ed8af0cfd0d298fcbe7c158777772c4174fe92ff7",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.531410+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "0a5c09f7f77ddc5f6c5c8032976a6f4a33a6c8c5c4b93d64e902e724ca2c53c2",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.542800+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "9": {
       "document_sha256": "81e96f0f623036ca1b290ddf8508a9ff8e6cc8b0fca380a939abc529a4dfb747",
-      "source_digest": "fe8ce833492da463495a8af4ee20bdd94dfda1bd580753e7981a51a5ea1a2a55",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.534396+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "8110548bda070492ab4753e1543e9e2b30065b1efef20cb98dffd6f4ff895df2",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.545444+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "10": {
       "document_sha256": "9b4f832a3c5363e29f704dbf3f3f89bf13aef9be27298cd14b8d3fe4533685cb",
-      "source_digest": "79022a6eecc53914ee7da3e96bd38916c1ddd00f4b5f3badfd6b8adf08a78482",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.538016+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "9b4b2232889bb44d6d512cff5a5969457b310c0b03e3eb53a5761797449f372c",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.547655+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "babe6267464ac0cd88307a24392cfdebb58038280f7959742245db40a1d769d7",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.541092+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "029f92f745c0c6cf193766f447fd1e8546e09efbea6212e61e338888305c2d66",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.551346+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "12": {
       "document_sha256": "7f3aed235693c66f0f32fc3c62a988658dadbea65f2c314ccc111d06c8c2d675",
-      "source_digest": "db9fa1e40ee81acfa4eb7cd3142bfa96047b0483bc2dd1841b2936e121af9649",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.547114+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "9fdfef4b645a446ac4b0b89ae32db7199a18c3b5b96fc2459562887999f9d849",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.553867+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "13": {
       "document_sha256": "1ae2381d67147472a0b3a8b89ccf44d493925ad72430091bd67376635d137186",
-      "source_digest": "fe8ce833492da463495a8af4ee20bdd94dfda1bd580753e7981a51a5ea1a2a55",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.550055+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "8110548bda070492ab4753e1543e9e2b30065b1efef20cb98dffd6f4ff895df2",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.557704+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "14": {
       "document_sha256": "b955cd3fbada10bf18fc428f54264fbed7623176c9e4ac19b5307c3531affd74",
-      "source_digest": "fe8ce833492da463495a8af4ee20bdd94dfda1bd580753e7981a51a5ea1a2a55",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.553250+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "8110548bda070492ab4753e1543e9e2b30065b1efef20cb98dffd6f4ff895df2",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.565539+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "15": {
       "document_sha256": "926245ec0903d7f5fb0759e513e010154ff32bd2db6df3a95b816cce610b6e65",
-      "source_digest": "fe8ce833492da463495a8af4ee20bdd94dfda1bd580753e7981a51a5ea1a2a55",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.559166+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "8110548bda070492ab4753e1543e9e2b30065b1efef20cb98dffd6f4ff895df2",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.568105+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "8b6814b23d7739c6d5a9c23b036b895a69e31991d6b3216f6d1369c32da03fc6",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.561752+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "bfd923609a5f01ddae7d2e077959d8da497d5fe1a769dd73e52545e43e8696a2",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.579237+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "bd96abd5515648a5a84e7c2ed8af0cfd0d298fcbe7c158777772c4174fe92ff7",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.566444+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "0a5c09f7f77ddc5f6c5c8032976a6f4a33a6c8c5c4b93d64e902e724ca2c53c2",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.583324+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "ed64d079f461a2de1dd9d9d0020fdad7f1a1494760eede9a1a42064cabf14d2a",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.569383+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "9ef14757f413f8433351e6835467f32b5c9aa414b89ef8b50e56c68076de8e3d",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.586209+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "19": {
       "document_sha256": "550ebe0e687e42986c399f50bf2fb9da524c3e6bc53df0437f48c63a672d03e9",
-      "source_digest": "8a9925bb5dee2f0457e7eafef8f849c6c9a143aba83f54f5891f09a0ee7a6f0b",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.574698+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "8aece21146a7acf8367e72b499e655bc8c0d723152eb3855f8211797b56d5195",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.589231+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     },
     "20": {
       "document_sha256": "40c60347005959a09fc475243ffb06f7571203892a39137e471f5a2bea9c7c11",
-      "source_digest": "ed64d079f461a2de1dd9d9d0020fdad7f1a1494760eede9a1a42064cabf14d2a",
-      "reviewed_by": "Codex QUANTGEN UI session / final C and main PR49 integration review",
-      "review_note": "Reviewed all 20 policy scopes against final C viewport constraints and integration of main PR48/49. Bond/portfolio display variants preserve original source_text, canonical exports, warnings and computed numbers in the same notes widgets. Retained existing data rights, storage and request boundaries, operator facts and publication BLOCKED. Source facts retain both main translation evidence and measured Windows layout diagnosis.",
-      "reviewed_at": "2026-10-31T08:22:06.580550+00:00",
-      "source_commit": "a91a4d83ccdc498d1ab987ca08d2492df3b02357"
+      "source_digest": "9ef14757f413f8433351e6835467f32b5c9aa414b89ef8b50e56c68076de8e3d",
+      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
+      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
+      "reviewed_at": "2026-10-31T10:36:27.591360+00:00",
+      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
     }
   }
 }
