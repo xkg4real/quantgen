@@ -31,14 +31,18 @@ this session. Include this UI work in the main session's Claude handoff.
   language changes.
 - Actual visual fixes: SVG background now covers the complete Qt chart; source
   columns have adequate spacing and elision/tooltips; duplicate guide introduction
-  was removed and the collapse button states the current action.
+  was removed and the collapse button states the current action. Wide-chart cursor
+  geometry, persisted fallback-language notice and regional existing-chart ticks
+  are also corrected.
 
 Design: `INDICATOR_GUIDE_DESIGN.md`. Translation rules and remaining coverage:
 `UI_LOCALIZATION.md`. Rights evidence: `MARKET_DISPLAY_RIGHTS_2026-10-31.md`.
 
 ## Verification
 
-- 63 integration checks passed on the combined guide/main-language implementation.
+- 226 local runtime checks passed: 104 source fixtures, 97 native regressions
+  (including the main rates suite), five chart-painting checks and 20 education/locale
+  checks. These are current bounded tests, not the historical QA ledger totals.
 - After the final selected-date reading refinement, 24 guide/chart checks passed
   at 150% scale, including painted background pixels, keyboard cursor, common
   dates, prefix invariance, provenance and explicit local report export.

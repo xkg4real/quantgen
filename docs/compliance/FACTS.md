@@ -1,7 +1,7 @@
 # QUANTGEN 정책 작성의 코드 근거
 
 - 기준일: 2026-10-31 한국시간
-- 코드 기준: `2999296`
+- 코드 기준: `c7d2e2d` 및 이 변경의 문서 작업 트리. 검토 fingerprint는 `source-review.json` 참조
 - 범위: 실행 진입점, `core/`, `data/`, `ui/`, `quantgen_desktop/`, 의존성·자산 선언과 관련 문서. 실제 운영 서버·사업자 계약·판매 사이트는 이 소스 검사로 확인되지 않는다.
 
 ## 기능과 정보 흐름
@@ -57,3 +57,20 @@
 | 추가 환불 정책 | 운영자와 협의 필요. 법정 청약철회·하자·환급 권리는 미정으로 유보하거나 축소하지 않음. 상품별 기능·체험·청구일·해지 경로 등은 아직 제공되지 않음 |
 | 서비스 운영 국가 | 대한민국 |
 | 호스팅 업체 | Cloudflare. Workers·Pages·R2 등 제품, 계약 법인, 원본 서버·로그·백업·국외 접근 및 처리 국가·보유기간은 미확정. 대한민국에서 운영한다는 정보만으로 모든 데이터가 국내에 보관된다고 표시하지 않음 |
+
+## 앱 UI 변경 — 2026-10-31 소스·문서 정합성 검토
+
+PR42와 통합된 메인 변경(PR39/40/43/44, SABR 진단)의 공개 소스 차이를 검토했다. 01–20 문서의 현재 상태·영향 항목을 대조했으며 요금·사업자·계약·보유기간·연령·운영 배포의 미확정값은 그대로 둔다. 이 기록은 법률 검토나 출시 승인, 실제 사이트·스크린리더 검사 결과가 아니다.
+
+| 확인한 변화 | 근거와 범위 |
+|---|---|
+| 교육 가이드 | [교육 모듈](../../core/education/indicators.py), [차트·ZIP](../../core/education/chart.py). 동봉한 공개 과거 자료를 로컬에서 읽고 계산. 고정 종목·기간을 공유하며 실패 사례는 이후 5개 관측을 이용한 사후 설명. 거래·연구 판정 생성 없음 |
+| 자료 출처 | [provenance](../../core/education/samples/usdeur_provenance.json)의 Board H.10/FRED DEXUSEU, 고정 mirror와 해시. 역수·네 자리 반올림된 참조 환율이며 거래소 종가·OHLCV가 아님. CSV·provenance JSON은 기본 소스 fingerprint 대상이 아니므로 별도 데이터 해시/packaging 검사와 연결 |
+| 설정 저장 | [앱](../../quantgen_desktop/app.py)의 QSettings QUANTGEN/QUANTGEN에 ui/language·ui/locale. [Flet](../../ui/localization.py)의 언어는 page 세션 상태. 외부 번역 API·광고/분석 추적·새 계좌/인증 요청 추가 없음 |
+| 번역 범위 | [다국어 기준](../product/UI_LOCALIZATION.md). 한국어·영어 2개 문구 묶음, Babel 2.18의 714개 지역 형식. 그 외 언어는 영어 대체 표시를 고지. 미번역 모델·외부 서술과 실제 OS 대화상자는 별도 범위 |
+| 내보내기 | [현지화 보고서](../../core/research/localized_report.py), [내보내기](../../core/research/tool_export.py). 읽기용 HTML을 별도 추가하고 정규 JSON 식별자·수치·판정은 유지. 교육 ZIP은 HTML·메타데이터·해시 manifest이며 verdict NOT_RUN. 사용자가 저장한 사본은 별도 관리 |
+| 시장자료 표시 | [검토 문서](../product/MARKET_DISPLAY_RIGHTS_2026-10-31.md)와 [목록](../../core/research/display_rights.json). Home 6개와 등록 73개, 제공 정책 13개. 조건/대체/추가 확인을 구분하며 publication_authorization·legal_opinion은 false |
+| 차트·접근성 | [디자인/검증 범위](../product/INDICATOR_GUIDE_DESIGN.md). SVG title·desc, 날짜 커서·값·해석, 문자·체크·선종류 구분. 배경·큰 화면 좌표·범례 및 지역 축 표시 수정. 기존 차트 전부의 대체 설명·대비나 실제 브라우저/Windows/스크린리더 완료가 아님 |
+| 통합한 메인 변경 | [SABR 근거](../product/SABR_DIAGNOSTICS_2026-10-31.md), [FX](../product/FX_LANGUAGE_2026-10-31.md), [캐리](../product/CARRY_LANGUAGE_2026-10-31.md), [금리](../product/RATES_LANGUAGE_2026-10-31.md). 진단은 수렴·잔차·경계·외삽과 독립/차익 검증 NOT_RUN을 구별. 번역은 화면 표현이며 정규 기록과 연구 게이트를 변경하지 않음 |
+
+추가 SDK인 Babel의 BSD-3-Clause·Unicode-3.0 고지는 실제 설치한 2.18.0 배포본에서 확인했으며 [권리대장](19-licenses.md)에 조건을 남겼다. 전체 전이 의존성·시장자료 상업 표시·소개사이트 적용을 승인한 것으로 확대하지 않는다. 공개 소스 검사에서 새 회원가입·서비스 청구·광고메일·연령확인·전체 삭제 서비스가 추가되지 않았음을 확인한 범위만 기록한다.
