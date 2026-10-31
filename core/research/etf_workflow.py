@@ -11,12 +11,15 @@ from core.quant import strategies as S
 from core.quant.history import HistoryError, load_history, synthetic_history
 from core.quant.validate import load_cards
 from .decay_disclosure import decay_text
-from .letf_disclosure import letf_context, letf_text
+from .letf_disclosure import letf_context, letf_text, letf_unavailable_text
 ROOT = Path(__file__).resolve().parents[2]
 
 LETF = {"122630": (2.0, "KODEX 레버리지", 0.0064), "252670": (-2.0, "KODEX 200선물인버스2X", 0.0064),
         "114800": (-1.0, "KODEX 인버스", 0.0064), "233740": (2.0, "KODEX 코스닥150레버리지", 0.0064),
         "251340": (-1.0, "KODEX 코스닥150선물인버스", 0.0064)}
+
+LETF_INDEX = {"122630": "KOSPI200", "252670": "KOSPI200", "114800": "KOSPI200",
+              "233740": "KOSDAQ150", "251340": "KOSDAQ150"}
 
 _CARD_FOR = {"trend": ("S_E1_trend_krx", "S_E1_trend_us"), "vol": ("S_E2_voltarget_kodex200", "S_E2_voltarget_spy")}
 
@@ -75,15 +78,33 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
     c = _clean(code)
     if c in LETF:
         beta, name, fee = LETF[c]
+        index = LETF_INDEX[c]
+        lt = {"beta": beta, "name": name, "fee": fee, "underlying_index": index,
+              "index_code": None, "index_source": None, "index_mapping_source": None,
+              "index_status": "UNAVAILABLE", "calculation_status": "NOT_RUN"}
+        out["letf"] = lt
         try:
-            if km is not None:
-                idx = km.index_daily("2001", days=600)
-                r = np.diff(np.log(np.asarray(idx.close)))
-                src = "KOSPI200 (KIS)"
-            else:
-                h = synthetic_history("KOSPI200", days=600)
+            if source == "synthetic":
+                h = synthetic_history(index, days=600)
                 r = h.log_returns()
-                src = "synthetic index"
+                lt.update(index_source=f"SYNTHETIC {index} demo (not market data)", index_status="SYNTHETIC",
+                          index_mapping_source="EXPLICIT_SYNTHETIC_DEMO")
+            elif km is not None:
+                from data.kis_markets import domestic_index_code
+                index_code = domestic_index_code(index)
+                lt.update(index_code=index_code, index_mapping_source=("KIS_IDXCODE_MASTER_EXACT_NAME"
+                          if index == "KOSDAQ150" else "EXISTING_KIS_KOSPI200_MAPPING"))
+                idx = km.index_daily(index_code, days=600)
+                prices = np.asarray(idx.close, dtype=float)
+                if (idx.symbol != f"INDEX:{index_code}" or idx.source != "KIS" or
+                        prices.ndim != 1 or prices.size < 64 or not np.all(np.isfinite(prices)) or
+                        np.any(prices <= 0) or len(idx.dates) != prices.size or
+                        list(idx.dates) != sorted(set(idx.dates))):
+                    raise ValueError("Invalid underlying-index history")
+                r = np.diff(np.log(prices))
+                lt.update(index_source=f"{index} (KIS; code={index_code})", index_status="AVAILABLE")
+            else:
+                raise HistoryError("No supported real underlying-index provider")
             from core.quant.garch import fit_garch, forecast_variance
             fit = fit_garch(r, dist="t", profile=False)
             rows = []
@@ -93,11 +114,13 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
                              "fee_bp": d["financing_term"] / BP})
             # A variance-based formula proxy, not the study's observed realised-drag benchmark.
             last_q = letf_drag(beta, np.full(63, float(np.var(r[-63:]))), fee=fee)
-            out["letf"] = {"beta": beta, "name": name, "fee": fee, "rows": rows, "cond_vol": fit.cond_vol_last,
-                           "uncond_vol": fit.uncond_vol, "nu": fit.nu, "index_source": src, "converged": fit.converged,
-                           "last_quarter_drag_bp": last_q["drag_bp"], "last_quarter_vol": float(np.sqrt(np.var(r[-63:]) * 252))}
-        except Exception as exc:
-            out["letf"] = {"beta": beta, "name": name, "error": f"{type(exc).__name__}: {exc}"}
+            lt.update(rows=rows, cond_vol=fit.cond_vol_last, uncond_vol=fit.uncond_vol, nu=fit.nu,
+                      converged=fit.converged, calculation_status="COMPUTED",
+                      last_quarter_drag_bp=last_q["drag_bp"], last_quarter_vol=float(np.sqrt(np.var(r[-63:]) * 252)))
+        except Exception:
+            # Do not expose provider exception URLs/credentials or create a demo fallback.
+            lt["error"] = ("Required index history or exact code mapping unavailable; no substitute index used."
+                           if lt["index_status"] == "UNAVAILABLE" else "Index model calculation failed.")
     # the study's verdict for the sleeve families
     cards = {c["card_id"]: c for c in (card_loader or load_cards)(ROOT / "docs" / "asset_expansion" / "cards")}
     pick = 0 if out["is_krx"] else 1
@@ -137,6 +160,8 @@ def narrative(a: dict) -> str:
         parts.append(f"{lt['name']} ({lt['beta']:+.0f}×): prior-quarter variance AZ proxy "
                      f"{lt['last_quarter_drag_bp']:+.0f} bp over 63 observations; GARCH variance proxy "
                      f"{r63['drag_bp']:+.0f} bp over 63 observations. " + letf_text(lt))
+    elif lt:
+        parts.append(letf_unavailable_text(lt))
     if a.get("data_source") == "SYNTHETIC":
         parts.append("The series is SYNTHETIC; nothing above is market data.")
     return " ".join(parts) or "No history could be loaded."

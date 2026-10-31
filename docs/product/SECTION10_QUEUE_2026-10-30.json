@@ -9,8 +9,8 @@
     "canonical_groups": 67,
     "observation_models": 14,
     "initial_reproductions": 5,
-    "additional_reproduced_ids": 9,
-    "implemented_canonical_groups": 11
+    "additional_reproduced_ids": 11,
+    "implemented_canonical_groups": 12
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -430,10 +430,11 @@
       "source_model": "95. M4-18 ETF 화면의 레버리지·인버스 ETF 드래그 예측(GARCH-t 분산 경로, 직전 분기 분산)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Live KIS master/price acceptance NOT_RUN; unavailable rather than substitute. M4-N3/M4-N10 remain separate.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED",
+      "evidence": "docs/product/LETF_INDEX_2026-10-31.md"
     },
     {
       "id": "M4-N2",
@@ -621,10 +622,11 @@
       "source_model": "95. M4-18 ETF 화면의 레버리지·인버스 ETF 드래그 예측(GARCH-t 분산 경로, 직전 분기 분산)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Live KIS master/price acceptance NOT_RUN; unavailable rather than substitute. M4-N3/M4-N10 remain separate.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED",
+      "evidence": "docs/product/LETF_INDEX_2026-10-31.md"
     },
     {
       "id": "NEW-M6-07",

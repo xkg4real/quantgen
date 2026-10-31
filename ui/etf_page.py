@@ -7,11 +7,11 @@ premium, and the constituent basket. US ETFs come through the history router
 (FMP closes adjusted for splits and dividends) without NAV. The sleeve rules
 never run on the raw NAV-series close: for a KRX fund they use KIS 수정주가, so
 a unit split is not booked as a crash. The leveraged-fund drag uses the app's
-GARCH(1,1)-t variance term structure on the KOSPI200 index (Avellaneda–Zhang).
+GARCH(1,1)-t variance term structure on the fund's mapped index (Avellaneda–Zhang).
 """
 from __future__ import annotations
 
-from core.research.letf_disclosure import letf_text
+from core.research.letf_disclosure import letf_text, letf_unavailable_text
 import math
 from pathlib import Path
 from typing import Callable, Optional
@@ -95,6 +95,8 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                                                               stat("Historical 122630 study · not current validation", lt.get("verdict", "not run"),
                                                                    token="muted",
                                                                    tooltip=letf_text(lt) + " " + lt.get("verdict_reason", ""))], spacing=10, wrap=True))
+            elif lt:
+                blocks.append(notice(letf_unavailable_text(lt), "error"))
             sl = a.get("sleeves")
             if sl:
                 blocks.append(ft.Row([
