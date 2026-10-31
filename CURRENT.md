@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ②-5/M4-N12, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T14:34:49.846+09:00
+updated_at: 2026-10-31T05:40:53.765Z
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/option-quote-coverage-20261031
-work_commit: d4670f3bb738147a48a5dafe34dad7628e3fe3e4
+work_commit: e5a09e5beea84f48cf037f1b2d715f4904f3f341
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/31
+pr: https://github.com/xkg4real/quantgen/pull/32
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -97,3 +97,6 @@ M4-N1 source55dae2fd7e6deeefa4a0a41f67f6b19d2d35e146: KOSDAQ150 공식master exa
 
 ## M4-N12 작업 시작
 PR31 완료 뒤 최신main d4670f3에서 gpt/option-quote-coverage-20261031 생성. Model88의 zero-coverage, 1/2 strike, one-sided 사례를 다룹니다. core/ficc/equity_deriv 수치/판정은 보존하고 공유 표시·payload 및 Flet/Qt/내보내기 상태만 수정합니다.
+
+## PR32 저장
+M4-N12 source e5a09e5beea84f48cf037f1b2d715f4904f3f341 원격read-back, PR32 생성. 합성/주입/offscreen19검사 PASS, 기존3579값/배열 exact동일. NOT_RUN/PARTIAL·검사수·null을 Flet/Qt/AI/export에 표시; engine/공식판정 미변경. CI41173538906 진행 중으로 아직 병합/완료처리하지 않음. 다음 독립설치 항목 ②-1/b: main requirements에 statsmodels 누락(pyproject>=0.14.2); 읽기 확인만, 아직 코드 미수정.
