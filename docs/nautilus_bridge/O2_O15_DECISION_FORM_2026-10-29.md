@@ -8,20 +8,27 @@
 - 판정록 = `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` · 로드맵 = `docs/nautilus_bridge/REMAINING_WORK_2026-10-27.md`
 - runner = `tools/nautilus/runner.py` · 런북 = `docs/nautilus_bridge/RUNBOOK_windows.md`
 
-## 0. ④-2는 무엇이고 왜 필요한가
+## 0. 현재 적용 상태 — 후속 O8 결정 반영
+
+2026-10-30 O2–O15 기본값/O11 A2 및 후속 O8 결정을 수신했습니다. 동일 결정을 다시 묻지 않습니다.
+추가 GPT·Gemini 심사는 선택 사항·NOT_PERFORMED이며 미실시만으로 Windows 인계를 막지 않습니다.
+기존 Claude 검토와 기술·Windows 조건은 유지합니다. 승인된 일반 수정·테스트는 포괄 승인이고,
+연구 판정 기준 변경·정식 원장 기록·외부 공개는 개별 승인입니다. 실제 파일럿 owner_confirmed는 별도입니다.
+
+## 0a. 최초 결정 양식의 설명 (후속 결정으로 갱신)
 
 - ④-2는 스펙 2절의 질문 O2~O15에 답하고, 스펙 승인 문장을 쓰는 단계입니다(로드맵:116, spec:22-23).
 - 이 답이 없으면 Step 7A(Windows 인계)를 시작할 수 없습니다(spec:23, spec:1480). 파일럿도 이 승인 뒤에만 돕니다(spec:66-70).
-- 다만 답만으로는 7A가 열리지 않습니다. O8(외부 심사)도 끝나거나 대체 심사가 기록돼야 합니다(spec:1472).
+- O8 추가 외부 심사는 선택 사항입니다. 미실시만으로 7A를 막지 않지만 모든 기술·Windows 조건은 충족해야 합니다.
 - main 병합은 더 뒤입니다. 7A.1의 사인오프 문장이 따로 필요하고(spec:57-60), 병합은 Step 10 뒤에 소유자가 직접 합니다(spec:1562).
 - ④-1(GPT·Gemini 심사)이 반드시 먼저일 필요는 없습니다. 스펙은 심사와 소유자 판정을 함께 진행하도록 둡니다(spec:31).
 - 스펙은 소유자가 Appendix B에 대체 심사를 기록하는 길도 둡니다(spec:20-22, spec:67-68, spec:1472, spec:1722-1723).
-- 다만 빠진 심사자는 REVIEW_INCOMPLETE(심사 미완)로 남습니다. "이견 없음"으로 읽지 않습니다(spec:110 O8, spec:1722).
+- 선택 심사자는 NOT_PERFORMED(미실시)로 남습니다. "이견 없음"이나 PASS로 읽지 않습니다.
 - O1(새 의존성)은 이미 승인되어 Status에 기록돼 있습니다(spec:26-30, 판정록:13-18). 아래에서 다시 묻지 않습니다.
 - 브랜치는 이미 기본값대로 Steps 3~7을 끝냈습니다(spec:18-19, 기록:15-19). Linux에서 venv를 켠 `nautilus` 테스트는 57/57 PASS입니다(기록:146).
 - Claude는 실제 원장에 쓰는 실행(기록용, of-record)을 한 번도 돌리지 않았습니다(기록:37).
 - 기본값과 다르게 답한 항목은 ④-3에서 브랜치를 고치거나 지웁니다(spec:1472, 로드맵:102).
-- 나중에 ④-1 심사로 스펙이 바뀌어 revision이 올라가면, 승인 문장을 새 revision으로 다시 받아야 할 수 있습니다. 스펙은 이 경우를 따로 정하지 않습니다. 그때 Claude는 바뀐 O만 다시 여쭙겠습니다(Claude 제안).
+- 승인 범위 안의 일반 수정·테스트는 반복 일반 사인오프 없이 진행합니다. 판정 기준·정식 원장·외부 공개는 개별 승인, 기술·Windows 검증과 최신 owner_confirmed는 별도입니다.
 
 ## 1. 항목별 결정
 
@@ -75,17 +82,13 @@
 - **비용 칸:** 나중 스펙이 따로 더합니다. 되돌릴 것이 없습니다(spec:109).
 - [ ] 기본값 수락  [ ] 다르게: ____
 
-### O8. 외부 심사자
-- **질문:** GPT·Gemini 심사를 기다릴까요, 대체 심사를 기록할까요, 생략할까요?
-- **기본값:** 기다립니다(Step 1b). Codex 쿼터는 2026-10-30 14:40에 돌아옵니다. 두 CLI 모두 클라우드에 없어 소유자 PC에서 돌립니다. 기록된 대체 심사는 없습니다(spec:110).
-- **현재 상태:** Appendix B에서 GPT와 Gemini는 모두 pending이고, 대체 심사는 none입니다(spec:1734-1736). Claude 심사는 5라운드로 끝났습니다. 다섯 페르소나는 한 심사자로 셉니다(spec:7-8, spec:15-17).
-- **선택지:**
-  - **기다림:** 소유자 PC에서 Codex(GPT)와 `agy`(Gemini)를 돌립니다. Claude가 판정해 스펙에 반영합니다(로드맵:130). 소유자의 다른 계정 Codex로 돌려도 GPT 심사로 봅니다(Claude 해석). 둘 중 하나만 돌면 나머지는 REVIEW_INCOMPLETE로 남습니다(spec:1722).
-  - **대체:** Appendix B의 "Owner-recorded substitute" 줄(spec:1736)에 대체 심사를 적습니다. 예를 들면 소유자의 다른 계정으로 돌린 다른 회사 모델의 심사, 또는 사람 검토자입니다.
-  - **생략:** 빠진 심사자를 REVIEW_INCOMPLETE로 기록하고 진행합니다(spec:1722). 스펙의 Step 1b 완료 조건(spec:1472)에 없는 길이므로, ④-3에서 그 문구를 고칩니다.
-- **Claude 권고: 기다림, 늦어지면 대체.** Claude 다섯 페르소나는 한 심사자로 셉니다(spec:7-8). 그래서 Claude가 다 함께 놓친 것을 잡을 장치는 외부 심사뿐입니다. 브랜치 작업은 이미 끝났으므로, 기다려서 늦어지는 것은 Step 7A 이후입니다(기록:209-212). 다른 Claude 계정의 심사는 독립성을 거의 늘리지 않습니다(spec:7-8).
-- **비용 칸:** 스펙(10-26 작성)은 약 나흘 지연으로 봤습니다. 지금은 쿼터가 돌아오는 10-30 14:40 이후 심사 시간만큼 늦어집니다. 빠진 심사자는 REVIEW_INCOMPLETE입니다(spec:110).
-- [ ] 기본값 수락 = 기다림  [ ] 대체: ____  [ ] 생략, REVIEW_INCOMPLETE 기록
+### O8. 추가 외부 심사 — 결정 완료
+- 2026-10-30 후속 명시 승인: GPT·Gemini 추가 심사는 선택 사항이며 둘 다 NOT_PERFORMED입니다.
+- Appendix B에 면제 결정을 기록합니다. 미실시만으로 Windows 인계·후속 절차를 차단하지 않습니다.
+- 기존 Claude 심사 5라운드를 보존하며 기술·Windows 통과 조건도 그대로 유지합니다.
+- 연구 판정 기준 변경·정식 원장 기록·외부 공개는 개별 승인입니다. 실제 파일럿은 최신 코드/표의
+  owner_confirmed 및 기존 실행 가드를 통과해야 합니다. 면제가 심사 PASS나 파일럿 승인은 아닙니다.
+- 초기 기다림/대체/생략 선택 양식은 git 이력에 보존합니다. 이 결정을 다시 승인 대기로 돌리지 않습니다.
 
 ### O9. Windows 환경과 위치
 - **질문:** Windows에서 브리지 전용 파이썬과 venv를 어디에 둘까요?
@@ -155,7 +158,7 @@
 - **비용 칸:** venv를 고칠 때까지 기록용 테스트에 FAIL이 남습니다(spec:117).
 - [ ] 기본값 수락  [ ] 다르게: ____
 
-## 2. 승인 문장
+## 2. 최초 승인 양식 (역사적 참고; 수신한 결정을 다시 요구하지 않음)
 
 스펙이 정한 형식입니다(spec:68-69). Claude가 채널·날짜와 함께 원문 그대로 Status에 기록합니다(spec:68, spec:1472).
 
@@ -173,11 +176,11 @@
 
 > I approve spec 2026-10-26 revision 6 on the section 2 defaults, except: O11: E1 starts with a registration-only step that writes the 12 pilot-1 rows to E1 before any price is read (n_trials = 12 + U, U at most 24). Geon Koh, 2026-10-29.
 
-**혼동 주의.** 이 문장은 7A.1의 사인오프 문장이 아닙니다. 사인오프는 나중에 따로 받습니다. 사인오프 형식은 "I approve spec 2026-10-26 revision <n>, the T-RO-01 exemption of its section 5.6 and the merge of claude/amazing-gauss-tdiguu into main. Geon Koh, <date>."입니다(spec:59-60). 사인오프 뒤에 코드가 바뀌면 사인오프를 다시 받습니다(spec:60-61).
+**혼동 주의.** 이 문장은 7A.1의 사인오프 문장이 아닙니다. 사인오프는 나중에 따로 받습니다. 사인오프 형식은 "I approve spec 2026-10-26 revision <n>, the T-RO-01 exemption of its section 5.6 and the merge of claude/amazing-gauss-tdiguu into main. Geon Koh, <date>."입니다(spec:59-60). 승인 범위 내 일반 수정은 반복 일반 사인오프를 요구하지 않습니다. 영향받는 기술·Windows 검증과 최신 실행용 owner_confirmed는 다시 확인합니다.
 
-## 3. 한 번에 답하기
+## 3. 최초 응답 예시 (역사적 참고; 현재 O8 결정은 위 0절/1절)
 
-아래 한 줄을 고쳐서 보내 주시면 됩니다.
+아래는 승인 수신 전 안내의 이력입니다. 현재 사용자에게 재제출을 요구하지 않습니다.
 
 > ④-2: O2~O15 기본값 수락. 예외: O8 = (기다림 / 대체: ____ / 생략), O11 = (A2 / A1 / 보류 / 다른 방법: ____). 승인 문장: "I approve spec 2026-10-26 revision 6 on the section 2 defaults, except: O11: ____. Geon Koh, 2026-10-__."
 
@@ -186,3 +189,4 @@ O8을 "대체"나 "생략"으로 고르시면 승인 문장의 except에 `O8: __
 Claude 권고를 그대로 따르실 때:
 
 > ④-2: O2~O15 기본값 수락. O8 = 기다림(소유자 다른 계정의 Codex 포함). O11 = A2. 승인 문장: "I approve spec 2026-10-26 revision 6 on the section 2 defaults, except: O11: E1 starts with a registration-only step that writes the 12 pilot-1 rows to E1 before any price is read (n_trials = 12 + U, U at most 24). Geon Koh, 2026-10-29."
+
