@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "jurisdiction": "KR",
+  "scope": "공개 전 운영자가 사실과 증빙으로 확정할 정보. null과 unverified는 미확정이며 정합성 검사 통과가 이 값을 승인하지 않는다.",
+  "operator": {
+    "legal_name": "(주)넥스트제너레이션",
+    "representative": "고건",
+    "address": "서울특별시 성북구 안암로 145",
+    "business_registration": null,
+    "ecommerce_registration": null,
+    "privacy_contact": null,
+    "refund_contact": null,
+    "support_email": null,
+    "support_phone": null
+  },
+  "requirements": {
+    "privacy_review": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "retention_schedule": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "third_party_contracts": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "international_transfer": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "cookie_audit": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "consent_ui": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "data_minimization": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "pricing_and_refunds": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "business_disclosure": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "child_scope": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "marketing_email": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "deletion": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "accessibility": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "asset_licenses": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "dependency_licenses": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "data_licenses": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "financial_regulatory_review": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    },
+    "claims_and_testimonials": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null
+    }
+  },
+  "known_findings": {
+    "kis-token-plaintext": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null,
+      "observed_issue": "KIS bearer token is persisted as a local plaintext JSON file; storage/permissions and disclosure need review.",
+      "source_reference": "data/krx/kis_client.py"
+    },
+    "flet-upbit-implicit-read": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null,
+      "observed_issue": "Flet research refresh can query configured Upbit balances without the native default-OFF control.",
+      "source_reference": "core/research/crypto_workflow.py"
+    },
+    "ai-free-text-transfer": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null,
+      "observed_issue": "Structured AI payload filters do not establish that arbitrary user question text is free of personal information.",
+      "source_reference": "core/quant/insights.py"
+    },
+    "flet-ai-consent-gap": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null,
+      "observed_issue": "Native AI offers preview and an unchecked consent control; Flet consent parity needs review.",
+      "source_reference": "ui/ai_panel.py"
+    },
+    "deletion-not-implemented": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null,
+      "observed_issue": "No general privacy-erasure workflow was found in inspected runtime code; practice reset and cache freshness are not complete erasure.",
+      "source_reference": "core/engine/runtime.py"
+    },
+    "accessibility-not-validated": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null,
+      "observed_issue": "Whole-app screen-reader/keyboard/contrast acceptance is not established by token measurements.",
+      "source_reference": "docs/compliance/13-alternative-text.md"
+    },
+    "licensing-not-confirmed": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null,
+      "observed_issue": "Commercial PyQt6, third-party package, image/font, and market-data rights require evidence for the distribution model.",
+      "source_reference": "docs/compliance/19-licenses.md"
+    },
+    "commercial-policy-conflicts": {
+      "status": "unverified",
+      "evidence": null,
+      "reviewed_by": null,
+      "reviewed_on": null,
+      "rationale": null,
+      "observed_issue": "Current commercial README and older personal-use/runtime status language need reconciliation before publication.",
+      "source_reference": "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md"
+    }
+  },
+  "operator_information_source": {
+    "provided_on": "2026-10-31",
+    "source": "사용자가 이 작업에서 제공한 정보; 사업자등록 증빙 검증은 별도",
+    "address_provisional": true
+  },
+  "deployment": {
+    "service_country": "대한민국",
+    "hosting_provider": "Cloudflare",
+    "hosting_product": null,
+    "contracting_entity": null,
+    "personal_data_processing_countries": null,
+    "note": "운영 국가와 실제 개인정보 보관·접근 국가는 다르며 계약과 인프라로 확인해야 함"
+  },
+  "pricing_source": {
+    "reference": "2026-10-31 사용자가 이 작업에서 직접 제공한 요금 설명",
+    "source_available": true,
+    "original_page_22_seen": false,
+    "status": "user_provided",
+    "note": "가격·세금·월 자동갱신·Team최대5인 반영. 상품기능·청구일·체험·추가환불·결제/해지 구현은 별도 확인"
+  },
+  "pricing": {
+    "currency": "KRW",
+    "vat_included": true,
+    "billing_period": "monthly",
+    "automatic_renewal": true,
+    "plans": [
+      {
+        "id": "research",
+        "name": "Research",
+        "monthly_total": 29000,
+        "maximum_users": null,
+        "included_features": null
+      },
+      {
+        "id": "pro",
+        "name": "Pro",
+        "monthly_total": 59000,
+        "maximum_users": null,
+        "included_features": null
+      },
+      {
+        "id": "team_pilot",
+        "name": "Team Pilot",
+        "monthly_total": 290000,
+        "maximum_users": 5,
+        "included_features": null
+      }
+    ],
+    "free_trial": null,
+    "initial_charge_date_rule": null,
+    "renewal_charge_date_rule": null,
+    "cancellation_path": null,
+    "additional_refund_policy": "under_discussion",
+    "mandatory_consumer_rights": "법정 청약철회·하자·환급 권리를 축소하거나 협의 중으로 유보하지 않음"
+  }
+}

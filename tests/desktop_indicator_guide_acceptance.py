@@ -88,9 +88,10 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         for key in guide.buttons:guide.buttons[key].click()
         for theme in (0,1):
             w.change_theme(theme)
-            for width in (1000,1360):
+            for width in (1000,1360,2400):
                 w.resize(width,800);self.app.processEvents()
                 chart=guide.chart;pixmap=chart.grab();image=pixmap.toImage();dpr=pixmap.devicePixelRatio()
+                self.assertEqual(int(chart.renderer().viewBoxF().width()),chart.width())
                 colour=image.pixelColor(round((chart.width()-30)*dpr),round((chart.height()-15)*dpr))
                 self.assertEqual(colour,QColor(w.colors.surface))
                 self.assertEqual(guide.keys,('sma','ema','rsi','macd','bb'))
@@ -113,6 +114,7 @@ class NativeIndicatorGuideTests(unittest.TestCase):
             self.addCleanup(restored.deleteLater)
             self.assertEqual(str(restored.ctx.locale),'de_DE')
             self.assertEqual(restored.ctx.number(1234.5),'1.234,50')
+            self.assertEqual(restored.locale_notice.text(),restored.ctx.t('language_fallback'))
 
 
 if __name__=='__main__':unittest.main()

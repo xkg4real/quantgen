@@ -23,7 +23,7 @@ def chart_svg(series, keys=(), *, locale=None, colors=LIGHT, width=960, cursor=N
     series.validate()
     selected = selection(keys)
     ctx = locale or LocaleContext()
-    width = max(350,min(1800,int(width)))
+    width = max(350,int(width))
     if chart_type not in {'line','candles'} or (chart_type=='candles' and not series.ohlc):
         raise ValueError('Observed OHLC bars required for candle view')
     values = indicator_values(series)

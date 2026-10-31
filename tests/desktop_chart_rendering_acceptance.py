@@ -79,6 +79,18 @@ class ChartRenderingTests(unittest.TestCase):
             for other in legends[i+1:]:
                 self.assertFalse(rect.intersects(other), (rect, other))
 
+    def test_regional_axis_text_keeps_value_and_fits_the_measured_margin(self):
+        from core.i18n import LocaleContext
+        chart=charts.FanChart();chart.ctx=LocaleContext('fr_FR');chart.resize(350,280)
+        result=SimpleNamespace(horizon_days=5,fan={
+            p:[123456789*(1+(p-50)*.0005*i) for i in range(6)]
+            for p in (5,25,50,75,95)})
+        chart.set_result(result)
+        records=self.painted_text(chart)
+        self.assert_inside(chart,records)
+        self.assertIn('123\u202f456\u202f789,0',[text for text,_ in records])
+        self.assertIs(chart.result,result)
+
     def test_long_series_names_and_large_ticks_fit_after_font_and_width_changes(self):
         name = 'A long financial series name that must stay readable'
         chart = charts.LineChart('Sessions', 'Price / NAV')

@@ -433,7 +433,7 @@ class ResearchWindow(QMainWindow):
         self.locale_picker.setAccessibleName(self.ctx.t('language'))
         self.locale_picker.currentIndexChanged.connect(self.change_language)
         inner.addWidget(self.locale_picker)
-        self.locale_notice=label(self.ctx.t('language_coverage'),'caption')
+        self.locale_notice=label(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'),'caption')
         inner.addWidget(self.locale_notice)
         layout.addWidget(box)
         from .connections import ConnectionsPane
