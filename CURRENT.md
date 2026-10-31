@@ -4,15 +4,15 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ⑬-8/b2/c, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T17:12:00+09:00
+done_ids: ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ⑬-8/b2/c/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-31T17:18:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/bonds-portfolio-language-20261031
 work_commit: 22f52dc9adaeb27e44028b0cadee3c4f76d48b0b
 uncommitted_changes: no
-pr: 49 (CI pending)
+pr: 49 (merged; website metadata pending)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -197,3 +197,7 @@ PR46 검사: QT_QPA_PLATFORM=offscreen python -m unittest tests.ai_connection_ac
 
 ## Bonds/Portfolio source 저장
 13-8/b2/c/a source22f52dc9adaeb27e44028b0cadee3c4f76d48b0b 원격read-back 및 PR49 생성. 57 합성/offscreen 회귀검사, 기존11사례 보고서입력/sections/원문 exact보존, 문서47검사 PASS. Windows3.12/3.14·Ubuntu3.12 CI 대기; 아직 완료ID 아님. 새언어본문·펀딩·헤지·상한·비양수Sharpe·수렴·배당규약 경고만표시번역. provider원문·계산·판정 보존;기타inline/실제Windows/Flet parity 미완료. 재개권위 branch/source/execution은 frontmatter를 사용하며 과거5·9절의156c 기록은 이전체크포인트입니다.
+
+
+## 13-8/b2/c/a 검증 완료
+PR49 source22f52dc9adaeb27e44028b0cadee3c4f76d48b0b → main4c51ab96e1f61a101fa8a76d024689830bf5d099 병합/read-back. Runtime41183600974 Windows3.12/3.14·Ubuntu3.12 모두success;문서41183600882 success. 로컬57+문서47검사와이전11사례 report입력/sections/원문exact보존. 완료범위는Bonds/Portfolio 결과해설·알려진모형경고뿐이며부모13-8와다른inline/모형/Flet parity·실제Windows/DPI미완료. 웹사이트기록은지원전송도구부재로queued. M4-N3는원문Models94/95를읽고금리항호출누락을확인했으며아직구현없음.
