@@ -4,9 +4,9 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
-next_ids: ②-5/M4-N1, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-10-31T14:29:26.879+09:00
+done_ids: ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
+next_ids: ②-5/M4-N12, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
+updated_at: 2026-10-31T14:33:23.262+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/letf-underlying-index-20261031
@@ -25,10 +25,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN owner-directed product continuation
 
 ## 0. 최신 결과
-제품 main 8e4c593616a77ad5dc2911ab212b1c615d9673af; 현재 gpt/letf-study-disclosure-20261030 @f72b14745ff223ffab7a80afdd32f35d753ad632. 실행b74c1273-7a32-4e2e-8fe5-8b880ac24c42.
-PR29 NEW-M6-02/a source414ce3e → main39d92ef: invalid IID funding p 사용 중단, 조건부 순환위상 탐색진단 및 Flet/Qt/AI/export·역사카드구분.23합성/주입 +15상태/Home검사PASS. 독립귀무300회 old117/300 대 phase13/300. CI41054330786 세환경success. 실제시장 가정·역사카드재검증은 미완료라 부모NEW-M6-02는열어둡니다. 최초CI snapshot stale실패는414ce3e로수정했습니다.
-PR30 M4-N2 (=NEW-M6-08) sourcef72b14745ff223ffab7a80afdd32f35d753ad632 → main8e4c593616a77ad5dc2911ab212b1c615d9673af: ETF분산proxy와 역사적가격실현drag비교기준구분, 현재펀드/표본검증오인제거.16검사PASS,5펀드5340기존값/배열동일, CI41055665129 세환경success.
-두PR/source/main/append-only LEDGER52707c7와411890f 및Notion sapientia4065 완료하위항목반영을확인했습니다. 최신 **11/67그룹완료·56미완료**,14관찰행·15모호매핑. 전체프로젝트진척률이아니며전체요청/주간cycle은완료·returned가아닙니다.
+PR31 M4-N1 (=NEW-M6-06) source55dae2fd7e6deeefa4a0a41f67f6b19d2d35e146 → main d4670f3bb738147a48a5dafe34dad7628e3fe3e4. 22검사PASS,3기존펀드27결과필드동일. CI41172791664 Windows3.12/3.14·Ubuntu3.12 success와PR/main/source read-back 완료. 공식 KOSDAQ150 master exact-name 해석·실패시 NOT_RUN·양UI/AI/export 구현. 공식master 실조회 CONNECT403;live공급자 검수완료를 주장하지 않음. 최신12/67그룹 완료55미완료,14관찰행15모호매핑 유지. 다음 M4-N12: 검사대상0인데초록0/nan%인 옵션호가 표시를 합성재현했으며 아직코드미수정. 전체주기반환아님.
 
 ## 1. 최신 사용자 결정
 - 직접 요청 작업은 일반 감시의 returned/cooldown/next_eligible_at으로 막지 않습니다. Claude 사용 불가 동안 계속하고 화요일17시 전 또는 런타임 한도 전에 주간 전체 인수인계를 남깁니다. 계정 토큰 잔량은 도구가 없어unknown입니다.
@@ -94,3 +91,6 @@ M4-N2 source f72b14745ff223ffab7a80afdd32f35d753ad632 PR30: 기존5펀드5340값
 사용자 직접 재개 지시에 따라 M4-N1 기초지수 식별자·출처 검증부터 진행합니다. 기존 PR29/30 완료와 O8/O11 범위를 보존합니다. 코드 변경 전 소유권 CAS 및 원격 read-back을 수행합니다.
 
 M4-N1 source55dae2fd7e6deeefa4a0a41f67f6b19d2d35e146: KOSDAQ150 공식master exact-name 해석, 공급자 실패시 NOT_RUN, 명시demo만합성.22검사PASS/3기존펀드27결과필드동일. PR31 CI대기, main미병합. 공식master실조회CONNECT403으로 live검수NOT_RUN;우회없음. 원격source read-back완료.
+
+## PR31 검증 확정
+위 CI대기 기록은 이력입니다. PR31은 main d4670f3로 병합·원격검증됐고 LEDGER에 M4-N1만 추가했습니다. 다음 작업은 M4-N12 (Model88); 현재 엔진 count를 보존하고 검사수·NOT_RUN/PARTIAL을 양UI/AI/export에 표시합니다. 연구판정/SVI/실제원장 미변경.
