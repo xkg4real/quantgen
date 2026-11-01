@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "27b1f18b0b9ddfb102f67a9ac614269f47a8254b71d5faebce60d31ebb458fbf",
+    ".github/workflows/runtime-smoke.yml": "ee1ea4dd3d530fe2bf2209fde48dac74c647f459f20def9efdeeb1077b933588",
     "README.md": "3d5109bbf91644ca6dcddd4ff609d72f1819c0e54d0a8eac2b75ddd4e244e54e",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -143,7 +143,7 @@
     "core/research/analysis.py": "f3867004882d212f49a702b9bfe201a006e56fd0a76f138397a1bcbb11942808",
     "core/research/bond_analysis.py": "0d7b40defdd580db677226483b4a1cc6bf1e5919ea1e9ca39d691376c0b1263f",
     "core/research/connections.py": "f634fe608bcfca39c3841ee7e4bf25524ba4cba8e28658d957d56725c2c56a04",
-    "core/research/crypto_workflow.py": "10a848f9be7c323a179b664f4b6b25c733244bb32e533bb3b373f63969538deb",
+    "core/research/crypto_workflow.py": "c84aeb06fff2e5e552ed208d134f86ebc6a0fa626949830fdfd407413b2c8e85",
     "core/research/decay_disclosure.py": "98f68bb2b8f8a0ac051865a76313855a323890a4adacd9abe9d0c025c0a934ce",
     "core/research/derivatives_workflow.py": "0597ee855c13663bd4d851320c68115482c3a41e4ea5f68b8f2ca35b91cd70e6",
     "core/research/display_rights.py": "e59554e140ee5ea994812bcaca083c622d94bac1513411bdca58824b6f20e6fb",
@@ -396,6 +396,7 @@
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
     "tests/research_home_acceptance.py": "471b9f74e6978b6420d2daa1cff231410261fe22fcdaa8d7e197bb00f4c1a8f8",
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
+    "tests/runtime_syntax_acceptance.py": "174dd84c35a1085a271baa27c0a8e651b519af0e348d912e62a6453027d94e7e",
     "tests/sabr_diagnostics_acceptance.py": "934edacf62c87d572930e9f824120c22dd98dfe0ddc5257e08645b704670e07f",
     "tests/status_snapshot_acceptance.py": "99069a5d339077750897ba439d83f1e895b418c8a6416c8ddfdfba5876f9fe47",
     "tests/strategy_exposure_acceptance.py": "3451a355e400ea2bc98c02c401a5b5680a187b190a6b52547ccf868b84867e01",
@@ -474,163 +475,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4c9561c2b4764f28c763b9d956df2bd6def8517226636322cea0c4652126cee4",
-      "source_digest": "9ef14757f413f8433351e6835467f32b5c9aa414b89ef8b50e56c68076de8e3d",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.518988+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "084de6913aaeb79128914c5e0ed3bcc44ed7d3e3e691e3509f5dc538123f6c54",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.172424+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "2": {
       "document_sha256": "8a8915a728f0bd28f95fa46082cde5efd96739cb14bf69e69ad9205841c6cbe0",
-      "source_digest": "9ef14757f413f8433351e6835467f32b5c9aa414b89ef8b50e56c68076de8e3d",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.522430+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "084de6913aaeb79128914c5e0ed3bcc44ed7d3e3e691e3509f5dc538123f6c54",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.175551+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "58b01543873cd2afb6847890621efc340032ca3bfa2975622dc2a23432124c91",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.525264+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "b31e43b7da08d0a83d02b9b0e1a583a2a8c156a19fad6abd4a4893370ae9a584",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.178925+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "4": {
       "document_sha256": "7d0f3373b9815cd9db634f28323c8c90bc7e78cd09cf40d757e98adfc3ac1dd7",
-      "source_digest": "b5b3cf45c886f03114a812cc97d9b71c7cd51143aa1771683af94241f7a29699",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.527671+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "32a36b6ce894bfcc27d74c56259153423b489e394b1feb2615eb29707deecac3",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.181525+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "23abd3f687136ff3c7b12f3f44c5dadad8e915202436192f32885f8101506d6d",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.530805+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "f44d588e8bc3c82238387b359f94c11741337435591dd992f8e024c73104fc63",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.185038+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "6": {
       "document_sha256": "fae1be1112448c78bde79274a691143bdadcb4623853f26798735cf71b20973a",
-      "source_digest": "0a5c09f7f77ddc5f6c5c8032976a6f4a33a6c8c5c4b93d64e902e724ca2c53c2",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.534183+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "cb5229a1f16ca76a70a091a01517022a3440b00b84cf147fbbc7732ed6160467",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.188346+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "7": {
       "document_sha256": "d255a134f4e97cd65a7b3a4676b26a0f6e655e823ab23f971d477235df751931",
-      "source_digest": "9ef14757f413f8433351e6835467f32b5c9aa414b89ef8b50e56c68076de8e3d",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.537237+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "084de6913aaeb79128914c5e0ed3bcc44ed7d3e3e691e3509f5dc538123f6c54",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.191322+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "8": {
       "document_sha256": "06dbba68f23aa6e2aec1125b031a7486b863296ec51a15481a893ea62253f232",
-      "source_digest": "0a5c09f7f77ddc5f6c5c8032976a6f4a33a6c8c5c4b93d64e902e724ca2c53c2",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.542800+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "cb5229a1f16ca76a70a091a01517022a3440b00b84cf147fbbc7732ed6160467",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.194522+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "9": {
       "document_sha256": "81e96f0f623036ca1b290ddf8508a9ff8e6cc8b0fca380a939abc529a4dfb747",
-      "source_digest": "8110548bda070492ab4753e1543e9e2b30065b1efef20cb98dffd6f4ff895df2",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.545444+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "8e04a4a7886198f4f3b64b222b807360e816497071aa33496913a6d2ae041aa4",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.197176+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "10": {
       "document_sha256": "9b4f832a3c5363e29f704dbf3f3f89bf13aef9be27298cd14b8d3fe4533685cb",
-      "source_digest": "9b4b2232889bb44d6d512cff5a5969457b310c0b03e3eb53a5761797449f372c",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.547655+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "4344d00c0482d2383e3e9b4a8d0d02685e70686a84fdbb774635408d81804963",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.200157+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "029f92f745c0c6cf193766f447fd1e8546e09efbea6212e61e338888305c2d66",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.551346+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "6dca30b06622a72edd536732fe9979e81ed6d8365c4c67052e20fb5ef7e605cd",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.202775+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "12": {
       "document_sha256": "7f3aed235693c66f0f32fc3c62a988658dadbea65f2c314ccc111d06c8c2d675",
-      "source_digest": "9fdfef4b645a446ac4b0b89ae32db7199a18c3b5b96fc2459562887999f9d849",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.553867+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "f9b2b0916ce3484be1bb22ebb0f2decbced87ad4adfeaa295bb5968bdf622f5b",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.206210+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "13": {
       "document_sha256": "1ae2381d67147472a0b3a8b89ccf44d493925ad72430091bd67376635d137186",
-      "source_digest": "8110548bda070492ab4753e1543e9e2b30065b1efef20cb98dffd6f4ff895df2",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.557704+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "8e04a4a7886198f4f3b64b222b807360e816497071aa33496913a6d2ae041aa4",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.208980+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "14": {
       "document_sha256": "b955cd3fbada10bf18fc428f54264fbed7623176c9e4ac19b5307c3531affd74",
-      "source_digest": "8110548bda070492ab4753e1543e9e2b30065b1efef20cb98dffd6f4ff895df2",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.565539+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "8e04a4a7886198f4f3b64b222b807360e816497071aa33496913a6d2ae041aa4",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.211673+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "15": {
       "document_sha256": "926245ec0903d7f5fb0759e513e010154ff32bd2db6df3a95b816cce610b6e65",
-      "source_digest": "8110548bda070492ab4753e1543e9e2b30065b1efef20cb98dffd6f4ff895df2",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.568105+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "8e04a4a7886198f4f3b64b222b807360e816497071aa33496913a6d2ae041aa4",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.214588+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "bfd923609a5f01ddae7d2e077959d8da497d5fe1a769dd73e52545e43e8696a2",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.579237+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "93198bd6705690c5bb95cfc054d07391d8812b79826618cfe7759627d22d3d09",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.217592+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "0a5c09f7f77ddc5f6c5c8032976a6f4a33a6c8c5c4b93d64e902e724ca2c53c2",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.583324+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "cb5229a1f16ca76a70a091a01517022a3440b00b84cf147fbbc7732ed6160467",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.220308+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "9ef14757f413f8433351e6835467f32b5c9aa414b89ef8b50e56c68076de8e3d",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.586209+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "084de6913aaeb79128914c5e0ed3bcc44ed7d3e3e691e3509f5dc538123f6c54",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.222467+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "19": {
       "document_sha256": "550ebe0e687e42986c399f50bf2fb9da524c3e6bc53df0437f48c63a672d03e9",
-      "source_digest": "8aece21146a7acf8367e72b499e655bc8c0d723152eb3855f8211797b56d5195",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.589231+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "6d6625defc818c02b2e6f3fb5c7c45c8f5a7c0427362c7f092363a10378ce246",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.224624+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     },
     "20": {
       "document_sha256": "40c60347005959a09fc475243ffb06f7571203892a39137e471f5a2bea9c7c11",
-      "source_digest": "9ef14757f413f8433351e6835467f32b5c9aa414b89ef8b50e56c68076de8e3d",
-      "reviewed_by": "Codex QUANTGEN UI session / C and main PR52 integration review",
-      "review_note": "Reviewed all 20 policy scopes against integration of main PR50-52 market diagnostic display variants and website records with the already verified C layout. ToolPane localized text preserves AR(1), funding and quote numbers, original diagnostic reasons, NOT_RUN and canonical reports. Existing request/storage/rights boundaries and publication BLOCKED remain. Combined FACTS and source fingerprints reviewed.",
-      "reviewed_at": "2026-10-31T10:36:27.591360+00:00",
-      "source_commit": "59fa8e19f02d371e84c48d422c9ef7c091dd3a76"
+      "source_digest": "084de6913aaeb79128914c5e0ed3bcc44ed7d3e3e691e3509f5dc538123f6c54",
+      "reviewed_by": "Codex UI compatibility follow-up",
+      "review_note": "PR53 source review: inner quote delimiters only in crypto narrative; Python 3.12 AST identical. Added actual Python 3.10/3.11 runtime syntax checks, Windows 3.11 installed CI, and website follow-up metadata. Existing policy wording, data flows, numerical outputs and BLOCKED publication status remain accurate; no policy or release approval is recorded.",
+      "reviewed_at": "2026-11-01T03:42:09.226885+00:00",
+      "source_commit": "8c0fb632add442fd1f4d79baea239c21255324d1"
     }
   }
 }
