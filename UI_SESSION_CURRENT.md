@@ -1,19 +1,21 @@
 # QUANTGEN UI 소스 병합 완료 / 사용자 앱 반영 미확인 — 메인 / Claude 인수인계
 
-상태: **UI 소스 구현·CI 검증·PR47 main 병합 완료. 사용자 실행 앱에는 미반영 보고가 있어 업데이트 경로 확인이 필요합니다.**
+상태: **UI PR47과 Flet 실행 오류 수정 PR53의 소스·CI·main 병합 완료. 사용자 PC 업데이트 후 실제 실행 확인은 대기입니다.**
 메인 세션의 CURRENT 소유권·실행 ID·연구 원장을 변경하지 않는 보충 인계입니다.
 
-## 2026-11-01 KST — Flet 실행 차단 오류 후속 (PR53, CI 진행 중)
+## 2026-11-01 KST — Flet 실행 차단 오류 수정 완료 (PR53 MERGED)
 
-- 사용자는 기존 실행 명령이 `.venv\\Scripts\\python.exe -X utf8 main.py`라고 확인했고, crypto narrative의 `getattr(kp, "decay", None)` 위치에서 `SyntaxError: f-string: unmatched '('`를 보고했습니다.
-- 전역 Python 3.14와 프로젝트 .venv를 혼동해 네이티브 실행을 안내했던 점을 정정했습니다. 기존 Flet/.venv를 유지합니다. 사용자 .venv의 정확한 Python 버전은 미확인이나, 실제 Python 3.10.22/3.11.17에서 동일 오류가 재현됩니다.
-- 사용자 추가 지시: “넣엇음 크레딧 마저해줘 그리고 내가 충전하면 내가 하지말라고 하는게 아닌이상 그냥 알아서 좀 이어서해 토큰 ㄲ늫기기 전에 하던거”. 이번 실행 오류 수정은 계속 진행합니다. 메인 연구 로드맵/자동 예약/사이트 배포를 재개하는 지시로 확대하지 않습니다.
-- 원인: core/research/crypto_workflow.py:87에서 f-string 큰따옴표와 내부 문자열 큰따옴표가 중복됨. Python 3.12 PEP701에서는 허용되지만 지원 하한인 3.10/3.11에서는 시작 시 파싱 실패.
-- PR53 https://github.com/xkg4real/quantgen/pull/53, branch gpt/flet-python-compat-20261101, source **8a40aa1c222e399a3b17a5ee28863be0c4e38c5e**. 내부 따옴표만 변경; Python 3.12 AST 전후 동일. CI에 Windows3.10/3.11 실제 컴파일 검사와 Windows3.11 installed runtime 추가.
-- 로컬: 실제3.10/3.11 수정 전 1파일 실패→수정 후 runtime212파일 모두 컴파일; 3.11 bounded18검사 PASS, main.py import(network/protected files/dotenv blocked) PASS; 문서47검사 및 consistency PASS. publication BLOCKED 유지.
-- 최종 head Runtime https://github.com/xkg4real/quantgen/actions/runs/41270309815 / Document https://github.com/xkg4real/quantgen/actions/runs/41270309883 진행 중. 아직 PR53 main 병합/사용자 PC 재실행 완료를 주장하지 않습니다.
-- AWS 검토 큐 docs/product/ui_website_updates/PR-53.json: shared/browser startup fix; 정적 소개 사이트의 해당 여부는 실제 소스 확인 필요. 기존 AWS 로그인 유지. 직접 채팅 도구 없음/queued.
-- 현재 목표: 정확한 최종 head CI 확인→승인된 범위 내 PR53 병합→원래 .venv 명령의 안전한 업데이트·재실행 안내→사용자 실제 실행 결과 확인.
+- 사용자 원래 실행 명령: `.venv\\Scripts\\python.exe -X utf8 main.py`. 이 기존 Flet/.venv 경로를 유지합니다. 전역 Python 3.14와 .venv를 혼동해 네이티브 명령을 안내했던 점을 정정했습니다. 사용자 .venv의 정확한 버전은 직접 확인하지 못했습니다.
+- 사용자 보고: crypto narrative `getattr(kp, "decay", None)`에서 `SyntaxError: f-string: unmatched '('`. 실제 Python 3.10.22/3.11.17에서 재현했습니다. PEP701을 지원하는 3.12/3.14 CI만 있던 검증 공백입니다.
+- **PR53 https://github.com/xkg4real/quantgen/pull/53 MERGED.** source **8a40aa1c222e399a3b17a5ee28863be0c4e38c5e**, main merge **b42820540f0b83b35bebcd0c1da5589967ceb461**, branch gpt/flet-python-compat-20261101.
+- core/research/crypto_workflow.py:87의 내부 문자열 따옴표만 변경했습니다. Python 3.12에서 전후 AST가 동일합니다. 계산·숫자·보고서·표시문구는 동일합니다.
+- tests/runtime_syntax_acceptance.py는 실제 실행 인터프리터로 runtime allowlist 전체를 compile합니다. 최신 ast.parse(feature_version=...)로는 이 오류가 잡히지 않아 대체하지 않습니다.
+- CI에 Windows Python3.10/3.11 실제 문법 검사와 Windows3.11 설치본 검사를 추가했습니다. 최종 source Runtime https://github.com/xkg4real/quantgen/actions/runs/41270309815 **SUCCESS**: 문법2건 + Windows3.11/3.12/3.14 및 Ubuntu3.12 설치본4건 모두 PASS. Document https://github.com/xkg4real/quantgen/actions/runs/41270309883 **SUCCESS**.
+- 로컬: 실제3.10/3.11 수정 전 crypto_workflow.py 실패→수정 후 runtime212파일 모두 컴파일; 3.11 bounded18검사 PASS(AR1/Flet·가이드·C/테마·패키징·문법), main.py import(network/protected files/dotenv blocked) PASS; 문서47검사 및 consistency PASS, publication BLOCKED 유지.
+- 사용자 추가 지시: “넣엇음 크레딧 마저해줘 그리고 내가 충전하면 내가 하지말라고 하는게 아닌이상 그냥 알아서 좀 이어서해 토큰 ㄲ늫기기 전에 하던거”. 중단 지시가 없으면 충전 후 하던 작업을 이어가는 선호를 유지합니다. 토큰/크레딧 잔량은 도구로 검증할 수 없습니다. 이 후속으로 연구 로드맵/자동 예약/웹 배포를 재개하지 않았습니다.
+- **사용자 PC의 실제 재실행/새 UI 표시 확인은 대기입니다.** 같은 checkout에서 GitHub Desktop 내장 git으로 `--no-pager pull --ff-only origin main` 성공 후 원래 `.venv\\Scripts\\python.exe -X utf8 main.py`를 실행하도록 안내합니다. 이번 수정에는 패키지 재설치나 환경 변경이 필요 없습니다. 로컬 미추적 파일을 삭제/초기화하지 않습니다.
+- AWS 검토 큐 docs/product/ui_website_updates/PR-53.json 및 WEBSITE_AWS_HANDOFF.md 추가 기록 저장. shared/browser startup fix이며 정적 소개 사이트 적용 여부는 별도 소스 확인 대상입니다. 기존 AWS 중지/인증 상태 유지, 직접 채팅 도구 없음/queued/영수증 없음, 추가 사이트 배포 없음.
+- 메인 CURRENT/task/execution/연구 원장은 변경하지 않았습니다. 다음에 사용자 실행 실패가 오면 실제 traceback을 받아 같은 .venv 경로 기준으로 좁게 진단합니다. 앱 전체 수동 검수 완료나 Claude의 실제 열람으로 처리하지 않습니다.
 
 ## 2026-11-01 KST — 사용자 실행 앱에 UI 미반영 보고
 
