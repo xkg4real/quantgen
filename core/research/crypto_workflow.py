@@ -84,7 +84,7 @@ def narrative(a: dict) -> str:
     kp, fc, g = a["kimchi"], a["funding"], a["garch"]
     parts = [
         f"Korea pays {kp.last_pct:+.2f} % against the world price for bitcoin ({kp.last_z:+.1f} standard deviations from its one-year mean; "
-        f"average {kp.mean_pct:+.2f} %, peak {kp.max_pct:.1f} % since {kp.dates[0]}); {decay_text(getattr(kp, "decay", None))} "
+        f"average {kp.mean_pct:+.2f} %, peak {kp.max_pct:.1f} % since {kp.dates[0]}); {decay_text(getattr(kp, 'decay', None))} "
         f"(ADF p = {kp.adf_p:.3f}). It is a signal, not a trade: remittance limits, the Travel Rule and the 2027 tax close the arbitrage"
         + (f", and its predictive slope on next-week returns is {kp.pred_slope:+.4f} (t {kp.pred_t:+.1f})." if math.isfinite(kp.pred_t) else "."),
     ]
