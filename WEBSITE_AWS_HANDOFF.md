@@ -24,3 +24,12 @@
 ## 전달 상태
 
 공유 GitHub 완료 회신과 코드·영수증 보존 완료. 지정된 QUANTGEN 메인세션의 오른쪽 패널에 회신 링크 열기를 요청했고 결과는 `queued`입니다. 패널 표시 예약과 메인 에이전트의 실제 열람 확인은 구분합니다.
+
+## UI 추가 전달 기록 — 2026-11-01 Python 시작 오류 (PR53)
+
+앱 UI 세션이 기존 Flet 실행 명령 `.venv\\Scripts\\python.exe -X utf8 main.py`의 SyntaxError를 재현해 수정했습니다. Python 3.10/3.11에서 crypto_workflow.py의 중첩 f-string 따옴표가 시작을 막았으며, 내부 문자열 구분자만 수정해 계산·표시문구의 AST가 동일함을 확인했습니다.
+
+- [PR53](https://github.com/xkg4real/quantgen/pull/53), source 8a40aa1c222e399a3b17a5ee28863be0c4e38c5e.
+- [웹 검토 큐](https://github.com/xkg4real/quantgen/blob/gpt/flet-python-compat-20261101/docs/product/ui_website_updates/PR-53.json), [Runtime CI](https://github.com/xkg4real/quantgen/actions/runs/41270309815). 최종 병합·CI 상태는 PR과 UI_SESSION_CURRENT.md에서 확인합니다.
+- Flet/Python 연구 앱을 운영한다면 관련 시작 오류입니다. 정적 소개 사이트의 해당 여부는 실제 소스를 확인해 기록합니다. CSS·C형 차트 디자인 변경은 없습니다.
+- 이 기록은 추가 인계이며 기존 AWS 개발·배포 중지 상태나 인증을 변경하지 않습니다. 직접 채팅 전송은 도구가 없어 queued/영수증 없음입니다. 웹 적용·추가 배포를 했다고 주장하지 않습니다.
