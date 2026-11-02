@@ -1,12 +1,18 @@
-## 2026-11-02 — 소개사이트 재구성 진행 체크포인트
+# 2026-11-02 최신 웹 UI 인계 — 사용자 직접 HTML 업로드
 
-사용자가 소개사이트 제작을 재개하고 Figma 없이 Impeccable·Taste로 직접 구현하도록 지정했습니다. 최신 추가 요청은 Login 왼쪽 globe 언어 선택, 둥근 Liquid Glass 버튼·설명 카드, 기존 색상과 Light/Dark 유지, 부드러운 스크롤입니다. 이 웹 UI 범위의 직접 지시이며 메인 연구 CURRENT/소유권/원장은 변경하지 않습니다.
+메인/Claude용 전체 최신 인계는 [UI_SESSION_CURRENT.md](UI_SESSION_CURRENT.md)에 반영했습니다. 웹 소스/HTML의 GitHub 게시 금지 지시는 유지하며 이 공유 인계 문서만 갱신합니다. 메인 CURRENT/연구 원장은 변경하지 않습니다.
 
-- 로컬 소스: `/workspace/work/quantgen-web-redesign-20261102/site`. Main/Who we are/Docs/Questions/Inquiries/Login/Sign Up, 3개 요금제 초안, 같은 기간의 역사 차트 복수선택, 한국어·영어 번역 구현 중입니다.
-- GitHub 준비 브랜치: `gpt/website-redesign-20261102` (base `d0f18a0`). **아직 사이트 소스 커밋/PR을 게시하지 않았습니다.** 검증 완료 후 같은 인계 항목에 확정 링크를 추가합니다.
-- 기존 첫 검수는 6개 폭·7경로·8개 지표조합 통과. 범례 대비 수정. 최신 Liquid Glass/두 언어 검수는 진행 중이며 PASS로 집계하지 않습니다.
-- **운영 배포 NOT_DEPLOYED.** 기존 AWS 원본과 Quant Lab/Gate 엔진을 보존해 통합할 패키지이며, 로그인·문의·결제 서버는 연결되지 않았습니다.
-- 직접 다른 채팅 전송 도구가 없어 `queued/not_received`. 스레드 조회도 연결 오류가 났습니다. 이 공유 문서 저장은 메시지 수신이나 배포 영수증이 아닙니다.
+- 최종 파일: /workspace/work/quantgen-web-redesign-20261102/dist/QUANTGEN-website-with-docs-2026-11-02.html (5,506,989 bytes).
+- SHA256: ce48aea091f482ad834fdf836ae71528731e92ddbd90b1d5b2bc372fd8fcc609.
+- 완료: 요청한 소개사이트 구조, 둥근 Liquid Glass UI, light/dark, Login 왼쪽 globe, KO/EN 전체 표시, 같은 문서를 유지하는 언어 전환, 역사적 C형 차트·해설, 한영 Docs20종과 공통 하단 정책 링크.
+- 최종 Docs40개 언어별 본문 검사 PASS, 최신 앱 원문과 번역 정합성 PASS. 모든 정책은 공개 전 preview. 본문·표·버튼·개정 안내를 양언어로 제공하며 내부 운영 양식은 제외합니다.
+- 실제 AWS 배포/운영 사이트 통합은 미완료입니다. 사용자 직접 업로드용 HTML을 전달했습니다. 기존 운영본과 Quant Lab/Gate 엔진을 이 HTML이 포팅했다고 주장하지 않습니다. 로그인·문의·결제 백엔드와 원격 CI 설치는 미완료입니다.
+- 전체 소스·검증·인계·실행법 묶음: 같은 dist의 QUANTGEN-source-and-handoff-2026-11-02.zip. 다른 환경에서 로컬 경로가 없으면 사용자에게 전달된 ZIP으로 복원합니다.
+- 직접 채팅 전송/실제 수신 확인 없음. 이 갱신은 공유 인계 경로 저장이며 AWS 로그인·추가 배포를 실행하지 않았습니다.
+
+---
+
+## 아래는 이전 AWS 세션의 완료/중단 이력입니다
 
 # 웹사이트 작업공간(AWS) 인수인계 — 사용자 중단 및 완료 회신
 
