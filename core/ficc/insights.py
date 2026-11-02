@@ -86,8 +86,10 @@ def narrate_curve(report: CurveReport, pca: PCAResult | None = None) -> str:
         f"{_pct(d['level'])}.",
         f"Over the last {report.lookback} sessions the move reads as a {report.regime}: "
         f"2y {_bp(c.get('2y'))}, 10y {_bp(c.get('10y'))}, 2s10s {_bp(c.get('2s10s'))}.",
-        f"Forwards price 1y1y at {_pct(d['1y1y'])}, 2y1y at {_pct(d['2y1y'])} and 5y5y at "
-        f"{_pct(d['5y5y'])}; the 1y rate is priced to move {_bp(d['1y_fwd_1y_ahead'])} over "
+        f"Simple-compounded forwards price 1y1y at {_pct(d['1y1y'])}, 2y1y at {_pct(d['2y1y'])} "
+        f"and the five-year simple-compounded 5y5y at {_pct(d['5y5y'])}; "
+        f"the latter is not a forward par swap rate or a semiannually compounded rate. "
+        f"The 1y rate is priced to move {_bp(d['1y_fwd_1y_ahead'])} over "
         f"the next year.",
         f"The {report.ns.method.replace('_', '-')} fit misses the par points by "
         f"{report.ns.rmse / BP:.1f}bp rms ({report.curve.method} zeros used for pricing).",
@@ -466,7 +468,8 @@ def narrate_weekly_strategy(sheet: MacroSheet, curve_report: CurveReport | None 
             f"{_bp(curve_report.changes.get('2s10s'))}, which the 2s10s regime classifies as "
             f"{_curve_move(curve_report.regime, curve_report.lookback)} (bull or bear as "
             f"yields fell or rose, steepening or flattening as 2s10s widened or narrowed, "
-            f"each beyond 5bp). The 5y5y forward rate is {_pct(d['5y5y'])}, a measured spread "
+            f"each beyond 5bp). The five-year simple-compounded 5y5y forward rate is {_pct(d['5y5y'])} "
+            f"(not a forward par swap rate or a semiannually compounded rate), a measured spread "
             f"of {_bp(d['5y5y'] - d['level'])} to the 2y/5y/10y level.")
     elif slope is not None:
         lines.append(
@@ -579,7 +582,8 @@ REPORT_PROMPTS: dict[str, str] = {
         "'FX' paragraphs, each anchored to a number in the payload and stating the measure's "
         "definition and window (the 10y level and its z-score against the trailing "
         "252-session mean, the 1-week change in bp, the level, slope and curvature of the "
-        "curve in the sense of Litterman & Scheinkman (1991), the 5y5y forward as a measured "
+        "curve in the sense of Litterman & Scheinkman (1991), the five-year simple-compounded "
+        "5y5y forward (not a forward par swap rate or a semiannually compounded rate) as a measured "
         "spread to the 2y/5y/10y level, the dollar's 1-month change, the carry-to-volatility "
         "cross-section with carry as defined by Koijen, Moskowitz, Pedersen & Vrugt (2018)); "
         "an 'Interpretation' paragraph on where the measures agree or disagree and which "

@@ -23,7 +23,9 @@ def curve_korean(r, pca=None):
         f"2s5s10s 버터플라이 {_bp(d['2s5s10s_fly'])}, 2y/5y/10y 평균 수준 {_pct(d['level'])}.",
         f"최근 {r.lookback}개 거래일 변화는 {REGIMES.get(r.regime,r.regime)}입니다: "
         f"2y {_bp(c.get('2y'))}, 10y {_bp(c.get('10y'))}, 2s10s {_bp(c.get('2s10s'))}.",
-        f"선도금리는 1y1y {_pct(d['1y1y'])}, 2y1y {_pct(d['2y1y'])}, 5y5y {_pct(d['5y5y'])}입니다. "
+        f"단리 선도금리는 1y1y {_pct(d['1y1y'])}, 2y1y {_pct(d['2y1y'])}, "
+        f"오 년 단리 5y5y {_pct(d['5y5y'])}입니다. "
+        f"마지막 값은 선도 파 스왑금리나 반기 복리 금리가 아닙니다. "
         f"1y 금리는 향후 일 년간 {_bp(d['1y_fwd_1y_ahead'])} 변화를 가격에 반영합니다.",
         f"{r.ns.method.replace('_','-')} 적합의 파 수익률 오차는 RMS {r.ns.rmse/BP:.1f}bp입니다 "
         f"(가격 산출에는 {r.curve.method} 제로금리 사용).",
@@ -126,7 +128,10 @@ def simulation_korean(sim, horizon_pv=None):
 
 def rates_korean(out):
     q,r = out.request,out.report
-    if q.tool == 'curve': return curve_korean(r,out.pca)
+    if q.tool == 'curve':
+        from core.ficc.insights import narrate_curve
+        if out.narrative != narrate_curve(r, out.pca): return None
+        return curve_korean(r,out.pca)
     if q.tool == 'swap': return swap_korean(r)
     if q.tool == 'option': return swaption_korean(r) if q.kind == 'swaption' else cap_floor_korean(r)
     if q.tool == 'sim': return simulation_korean(r,out.horizon_pv)

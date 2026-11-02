@@ -596,6 +596,10 @@ from .macro_narrative_language import PAIRS as _MACRO_PAIRS
 KO.update(_MACRO_PAIRS)
 EN.update({ko: en for en, ko in _MACRO_PAIRS.items()})
 
+from core.ficc.forward_conventions import FIVE_YEAR_SIMPLE_LABEL, FIVE_YEAR_SIMPLE_LABEL_KO
+KO[FIVE_YEAR_SIMPLE_LABEL] = FIVE_YEAR_SIMPLE_LABEL_KO
+EN[FIVE_YEAR_SIMPLE_LABEL_KO] = FIVE_YEAR_SIMPLE_LABEL
+
 def translate(text, language):
     """Translate only authored UI messages; unknown source text stays intact."""
     text = str(text)
