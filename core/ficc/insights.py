@@ -671,7 +671,7 @@ if __name__ == "__main__":
 
     prm = ratesim.calibrate(data.synthetic_series("SOFR", days=300, kind="rate"))
     sim = ratesim.simulate(prm, n_paths=500, threshold=0.05)
-    hp = ratesim.horizon_pv_distribution(prm, sim, kind="bond", bond=bond, curve=rep.curve)
+    hp = ratesim.horizon_pv_distribution(sim.params, sim, kind="bond", bond=bond, curve=rep.curve)
     t = clean(narrate_ratesim(sim, hp))
     assert pct_text(sim.mean_terminal) in t and "Vasicek" in t and f"{hp.var95:,.0f}" in t
 

@@ -1,6 +1,6 @@
 # Home compact 변경과 정책 20종 대조
 
-검토일: 2026-11-02 한국시간. compact 작업 기준: `ead6e67`. 최종 검토는 작업 체크포인트 `19c663c`에 최신 main `f673f37`(PR54/58)을 통합한 작업 트리를 포함합니다. 검토 주체: Codex `completion_audit`.
+검토일: 2026-11-02 한국시간. compact 작업 기준: `ead6e67`. 최종 검토는 작업 체크포인트 `19c663c`에 main `f673f37`(PR54/58)을 통합한 뒤, PR61 구현 `6925bbdd`에 최신 main `8b40104`(PR59)를 추가 통합한 작업 트리를 포함합니다. 검토 주체: Codex `completion_audit`.
 
 이 검토는 네이티브 Home 목록·Q-SCORE 소개·차트 접근 경로의 소스와 정책 정합성을 확인합니다. 실제 KIS 연결·예측력·공개 승인·접근성 인증·AWS 배포를 확인한 기록이 아닙니다. 모든 정책의 `review-required`와 공개 준비 `BLOCKED`를 유지합니다.
 
@@ -73,6 +73,12 @@ main `f673f37`의 정책01/06/07/08/12/13/14/15/19/20, FACTS, RELEASE_GAPS 및 �
 
 main이 추가한 정책 문장들을 통합 파일에 대조했습니다. compact 요구로 명시적으로 바꾼09번의 수식 전시 약속과 버전 metadata를 제외하고 새 main 정책 문장이 유지됩니다. compact 대상 버전은09번1.4, 12번1.6, 13/14/15번1.5이며 나머지는 최신 main 버전을 유지합니다. 모두 `review-required`입니다. main에서 `core.quant.signals`·`core.quant.risk` 변경은 없으며 compact Q-SCORE의 실제 산식·입력 경계 보존과 충돌하지 않습니다.
 
+### PR59 금리 재평가 입력 일관성 추가 통합
+
+최신 main `8b40104`의 [금리 재평가 검토](RATES_REVALUATION_PARAMS_2026-11-02.md), `core/ficc/ratesim.py`·`core/research/rates_analysis.py`·Flet 호출 및 회귀검사·CI 변경을 대조했습니다. 기간말 재평가에 전달한 model·kappa·theta·sigma·r0가 실제 `sim.params`와 정확히 다르면 가격 계산 전에 필드명을 명시해 거부하며 note만의 차이는 허용합니다. Hull–White의 기존 r0 정규화 이후 값을 넘기도록 호출부를 맞췄고, 정상 입력 수치·규약을 새로 정의하거나 다른 파라미터로 기존 경로를 재평가하는 기능을 추가하지 않습니다.
+
+자동 병합된06번 입력·동의 구분, 12번 불일치 거부/검증 한계와 주장 대장, FACTS의 M3-N08 절을 compact 내용과 함께 보존했습니다. 20종 정책 범위와 다시 대조한 결과 새 개인정보·전송처·선택적 AI 범위·권리·요금·운영자·저장·삭제·접근성 계약 변경은 없으며 기존 미확정 상태를 유지합니다. main 문서에 기록된 합성10개 검사·이전 버전 수치 일치 기록은 기존 검토 증거이며 이 정책 검토자가 새로 실행했다고 표시하지 않습니다. 이번 단계에서도 최신 main baseline을 출발점으로 전체 통합 지문을 갱신합니다.
+
 ## 실제 환경 증거와 검증 범위
 
 - 사용자 실행에서 `KIS_SETTINGS_FOUND=True`를 확인했습니다. 이는 설정 발견이며 실제 거래시간대의 KIS 시세 인증·구독·체결 수신 성공 증거가 아닙니다.
@@ -84,13 +90,13 @@ main이 추가한 정책 문장들을 통합 파일에 대조했습니다. compa
 
 | 실행 주체·명령 또는 범위 | 확인한 결과 |
 |---|---|
-| 검토자: `python -m unittest tests.compliance_acceptance tests.compliance_export_acceptance` | main 통합·최종 UI 수정 후47개 통과, 7.493초. 실행기는 `/workspace/.venvs/quantgen/bin/python` |
+| 검토자: `python -m unittest tests.compliance_acceptance tests.compliance_export_acceptance` | PR59까지의 main 통합·최종 UI 수정 후47개 통과, 6.076초. 실행기는 `/workspace/.venvs/quantgen/bin/python` |
 | UI 담당자: `MPLCONFIGDIR=/tmp/quantgen-mpl QT_QPA_PLATFORM=offscreen /workspace/quantgen-compat-venv/bin/python -m unittest -q tests.desktop_watchlist_acceptance` | 최종15개 통과, 9.032초. 실제 동봉 글꼴의 긴 영문 이름·중지 점수 두 줄, 헤더 도움말·안전한 오류 표시 포함 |
 | 주 작업자: `tests.qscore_acceptance` + `tests.desktop_market_layout_acceptance` | 12개 통과 보고. 한영 소개·기존 계산·종목 상세에서 차트 접근 범위 |
 | 데이터 담당자: Home 목록15개와 기존 시장 계약2개 | 17개 통과 보고. Yahoo 빈/정상 MultiIndex 응답·패키지 누락·FRED 독립 유지·비밀 원문 비노출·KIS 선택 항목 빈값·무한 변화율 거부 |
 | 주 작업자: Home 통합·점수 제어 검사 | 14개 통과 보고. 시세·점수의 기존 연결/중지 계약 |
 | 검토자: 문서 링크·정책 상태·Q-SCORE AST 대조·diff 검사 | 깨진 로컬 링크 없음, 20종 모두 review-required, 도움말 이외 계산 코드 동일. compact diff 및 CRLF 허용 staged diff 공백 검사 통과 |
-| 검토자: `python -m tools.compliance.check --check --report-dir /tmp/qg-compact-compliance` | 정합성 PASS, 문서20종·소스521개, 공개 준비 BLOCKED |
+| 검토자: `python -m tools.compliance.check --check --report-dir /tmp/qg-compact-compliance` | 정합성 PASS, 문서20종·소스523개, 공개 준비 BLOCKED |
 
 이는 코드·주입 자료·Qt offscreen 검증입니다. 실제 사용자 키·실시간 시세 복구·새 Windows 화면의 모든 접근성·소개사이트 배포를 통과로 보고하지 않습니다. 정책 정합성 검사 결과는 별도 `/tmp/qg-compact-compliance` 보고서에서 확인하며 정합성 통과가 공개 준비 `BLOCKED`를 해제하지 않습니다.
 

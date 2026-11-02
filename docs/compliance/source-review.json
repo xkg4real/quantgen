@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "707eb13dde1f785e579b04b1522f91d1d801d87081b91acb76e848ce64ec628e",
+    ".github/workflows/runtime-smoke.yml": "af3af48261767d62b8fce5703cfe3e94007ec73ce6c11dcd364d608e1f8a4e88",
     "README.md": "6a4f572a12e6dea657c7c063240b94d1a928e2b4f41fff25f7348ca69e1b88b5",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -84,14 +84,14 @@
     "core/ficc/forward_conventions.py": "11226fef98c00ec3a6bdfe458da095ee07bf97523f2988351ed3af5e803be741",
     "core/ficc/fx.py": "a12dca02caab44fdfaa951081b1e613db3bd9448f81586b29c2e0039f6dd4e3b",
     "core/ficc/fx_styles.py": "339e24889c8e010018139cce6b362bed691f91493685780ef2fdc107c3dbd26e",
-    "core/ficc/insights.py": "6e9d6ae44223118c30ee0df979e23eccaa3789e121efeee117cca91b37692322",
+    "core/ficc/insights.py": "a18c4046d3fb87db31504b9bf74bc248e80595ebb37c1af3a5d5b0671c2eccc1",
     "core/ficc/lag_audit.py": "17d8ba7d9e0bd5f8d5bcff93c8df237ba23682cacdb386744e7d28fb91c1b429",
     "core/ficc/letf_assumptions.py": "c87beb1761aac4a9e60c2da942c6b83cffcc9f3d8ddc029ab91a5c18ad06fc49",
     "core/ficc/macro.py": "78139ea28b194878478cab77faf3fe3220249fbcd369a0da28c43cb92776eaca",
     "core/ficc/macro_artifacts.py": "0643b4337981e3e0ecd304a5f045690f62e6eaa0f396248775c035a871fa7ae1",
     "core/ficc/macro_schema.py": "36078e3589c36c1e443f3067c403b155bdef93b85341ed9df6bd3a2697248284",
     "core/ficc/pit.py": "ba15530722fafe454783907071a0947e0b0a971505dbb8d19216088b2c77d1d9",
-    "core/ficc/ratesim.py": "392a5ad3b9783adff0bbe29eb573aba6f70c90f666a087f34f35a515ad91df67",
+    "core/ficc/ratesim.py": "28ea6fb89913a7014024c6062a67c25f0c1ea43795923a52c70fddd31613b77b",
     "core/ficc/sabr_diagnostics.py": "b67c1298d002abeb552652ca2374a9d9991259f72a8caeed731c0917a9dae232",
     "core/ficc/schemas/context_log.v2.0.json": "b6dbddc5bfae4846b5492429e786e81f82e81a1ca980792cc75661e4954b0869",
     "core/ficc/schemas/event_calendar.v2.0.json": "f307cec0ecfaf0b953995105192731a05efc5eabda17c2613143eb546acf6756",
@@ -170,7 +170,7 @@
     "core/research/provenance.py": "b7dbb0ee71a0df7809304110bf1c259289122d37af269da0e29ef3f5e7dbc8db",
     "core/research/qscore.py": "e8d7ad85a6b57491079ce256ab57236502188e7c787730321f6858e0edc8d933",
     "core/research/quote_coverage.py": "92145030da624f6cca4696e4ea40384c2791fdeb2185abaf3000c24cd62ca0b9",
-    "core/research/rates_analysis.py": "ac1bf95230a9f875a7f59cec1fd09c586ab70f39a49c0abae71cba0c230ab217",
+    "core/research/rates_analysis.py": "a475fd24e0388ba899d399b3b7ba858fb1096586110f747505d321e11fecf8ef",
     "core/research/runs.py": "480df15cf6ab9458743dcce4eba05b1f1e534e7635756a7c6353ebee5965f6f4",
     "core/research/signals_analysis.py": "6f2f2c495fec9e152fc372edbe8bb3e38436038d7ab1842b17a1703a0f229281",
     "core/research/strategy_analysis.py": "5cbf2915c0657081a3ee8b9bfca8169814de533e2965f9835d74d28f6b01f1c9",
@@ -237,7 +237,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "0c871ff2b8357ebb0f4029a653bf00fd5de3087b8e1d4f4ff0ea2e05173a7117",
+    "docs/compliance/FACTS.md": "4856834a080e0aec9703404ceebb3b8f306ce5852aa9642b2df8b486b4a8fe57",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -256,7 +256,7 @@
     "docs/product/FUNDING_INFERENCE_2026-10-30.md": "ea1ef423c1d2d3601f82c301536709fa66292595faee72dbd283ad49c5d87952",
     "docs/product/FX_CIP_DISCREPANCY_2026-11-02.md": "99a42c71f255e6ff271c66f1245dd45ca63e3627001e17a8848680ca4fc39b32",
     "docs/product/FX_LANGUAGE_2026-10-31.md": "e2c15111acbd1bf6391700c6a0f6616da69d65ce4750654783fd08fbaea3d65f",
-    "docs/product/HOME_COMPACT_REVIEW_20261102.md": "dad396cdfa6be7482765b4ae5f8f402c8d7c726a45c61c87775d37d8fe09dc3a",
+    "docs/product/HOME_COMPACT_REVIEW_20261102.md": "1de9b2f45926e5259969082d608aa7292bf8c2687c0eaa77501e9afafbc1c015",
     "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md": "8ea3908579720e4bb3262e2952251d2b054aa2fcdc3ba34dbb7118e5c6e5d711",
     "docs/product/INDICATOR_GUIDE_DESIGN.md": "cf664a34fefd8506e356ca2f261ddc6acbce168d370d1f7d504393d94acca484",
     "docs/product/KIS_MARKET_CHARTS_2026-11-02.md": "ae0d54bb8f2a90c39446829d56e08e564fa989182aba65933b06c849c7ba4951",
@@ -273,11 +273,12 @@
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
+    "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
     "docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md": "ad9177b241178d7427f77caa8b7de6f14390610d41d2959c87dd03b1093fd189",
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "94e8c2d7682d59ba9115d7ea317118099ef0db26301169c67983fe84be2122bb",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "9eb917388f941560c928f571d70460513e17b8048630a3dd4abea9aaa635fbd3",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
@@ -378,7 +379,7 @@
     "tests/desktop_watchlist_acceptance.py": "b705a181a88d3f4c80dea2ba22d1abedf21bfc97d292ef671cd3f94594da27cb",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
-    "tests/ficc_acceptance.py": "101e26e68f97b5cb4a8bf2a5498a300498a9c44627d219559d1fcbd5228ed813",
+    "tests/ficc_acceptance.py": "04e7f5301539555f8c5be057d010fbfd40a2e22af32fac33bdb51a210b23b2f5",
     "tests/ficc_boundary_acceptance.py": "004cef8d6fe84cf7e3481fd4bcc93ad76abfcb8abc2da65e27132d5eae664957",
     "tests/flet_api_guard.py": "eb8c49ea831064795613cfa80b2cbc70e1fb38cbcacc2587e1fd0863ca85f57a",
     "tests/flet_runtime_acceptance.py": "19e881c015ed2837bde5ebcaa6b362c792c698e83e92765a2187a2003e30e6f6",
@@ -443,6 +444,7 @@
     "tests/qscore_acceptance.py": "52d0c74fd0e5455b3d333618e011e5a6d7372e4521b750986ff15a30a78559ac",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
     "tests/quote_coverage_acceptance.py": "09d727791eb18d44955a0324058439c0d63777af94b5ca18f8a1ced7eb6cec86",
+    "tests/rates_revaluation_params_acceptance.py": "85ccf11af449a58c8d3772bb38e0502d3f5b8d772caad478b27ad91d50fc5329",
     "tests/reference/__init__.py": "981465fb05d87f128a0b80cc4b8122a83335ee0994ce5b4d3ee3bdbe72bc6e9c",
     "tests/reference/reference_mode.py": "f79ad9f482323344ee20c6685edf08b8abd64f11dfad25ab40cd132ad9339c37",
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
@@ -504,7 +506,7 @@
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
     "ui/derivatives_page.py": "ed659a96def9e1b9bddbd0295c6357c47418fb4ba11778a1aecc817c352e1359",
     "ui/etf_page.py": "910b2a27d4ee5264cc79286e8fc48bc985a251d6a0f1727ec6f29daa633c660f",
-    "ui/fcharts.py": "e59a274207d5b3b2ad416a5a304cc040f517caee8f166a309b279342f8dfe56d",
+    "ui/fcharts.py": "fc7fafba72863691b8013fbba55c3299eac46440f7a5285ffd7e4ba61b0bf78d",
     "ui/fx_page.py": "42a0304e93d0d9159d3941ee7c6883c980e9e595b9825cccc10c2eccdc99f48d",
     "ui/indicator_guide.py": "a063f8938b211975b4f0f00edcd40a3e6f1aa65f4db9aaeca4494a471bae5ccd",
     "ui/krx_page.py": "9f66b040a21a9e757af61f3ed4dfa5dfc6220ec1a0ba171996365c4db98b86a2",
@@ -516,7 +518,7 @@
     "ui/portfolio_page.py": "dafb8f336dffa002992c4cac3c8817ef66346cade02855c5f9bbbee1bc0b56a2",
     "ui/qcharts.py": "4b173a61b68e9b9378ccbd97f827eb6f368f0232352ecf2225e404374b39accd",
     "ui/quant_lab_page.py": "e15a5c11d00a2a7c2c3034cc69e9e6c1fc6b852fda61bc8a78d2d7050b2ca457",
-    "ui/rates_page.py": "0174e7498e14dbf12bde6a33c5fa4f9fa610cd19795865ff20a5141bed716122",
+    "ui/rates_page.py": "353612b0641e9138b5c31bb4c42281c10267096ddfb00cfb5e3e2c2de26796e4",
     "ui/research_home.py": "08a5985d0c0788e40648a94d51bf1202c08097eac08b0b85b043dfedb7e1b6c7",
     "ui/research_view.py": "cf9f3a905aace4617c6582aad9213e8e4aff859ed07b9a97316d3431809ba10d",
     "ui/rules_page.py": "cfd9ef27c9ae2c0b5279ad46de8026b73aad711846b6c743e7e978c09482315b",
@@ -531,163 +533,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4a70042c317d349050e1460ffc71950915f545cdaea09540ad479ebcc6aeee44",
-      "source_digest": "f5a3d0966b3308afd5cac988f130a55ff7885726959f74856e742dd0f1d8728f",
+      "source_digest": "0b2a891f3c85769c3a815a409e00d84a3769d6fb310c056fda69bedf55caacb2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.581904+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.965831+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "f5a3d0966b3308afd5cac988f130a55ff7885726959f74856e742dd0f1d8728f",
+      "source_digest": "0b2a891f3c85769c3a815a409e00d84a3769d6fb310c056fda69bedf55caacb2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.585106+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.969379+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "0f5cd8664c2daa8fa60ff2f7bf9708424f75fd0dea9fdb588e2ebf34788bdf00",
+      "source_digest": "3014552353d873613ddc4603f6da2592c25a6ba34a038f8babaa1e836c59beb0",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.588752+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.972009+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "7b9f99fddc3252e36af92c097aa45597d7dbd9d699f79ad3cc6614e349e85e0f",
+      "source_digest": "28499fde2fa4eb23405c5a2d8673300d77e207f69d26d19c490db20c9bdf508a",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.591797+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.974878+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "28133392b0bf16b5513baf576a0dd478d411d2923a422138c3d4db873c5b97f0",
+      "source_digest": "0378a779bc617396e687d043df6a8ac751b4c5ac42e7f0b835009a3a200dbefc",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.594690+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.977431+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "6": {
-      "document_sha256": "e84be81b04899ead322e5c5092f4823e7301f352d2b5b33e196ed49bf43d788c",
-      "source_digest": "cfd1e56f3b2f89f0b9a19bc37bcac7fcfef32264edd0d0ab7d2f251b1f0d0bf9",
+      "document_sha256": "b7e192bc71505c5d63cda54ca49c27f050069e4dabd45b82aff1a2288cf8bb29",
+      "source_digest": "808868ab31e74550ad3c23b396d84385a0c668e996629e4660fe54edf335da6d",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.596969+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.980405+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "7": {
       "document_sha256": "9fce6e4eaca9d4f692bc5da0d67c07ae60be26b6470c297fca88f041c9855512",
-      "source_digest": "f5a3d0966b3308afd5cac988f130a55ff7885726959f74856e742dd0f1d8728f",
+      "source_digest": "0b2a891f3c85769c3a815a409e00d84a3769d6fb310c056fda69bedf55caacb2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.600765+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.982956+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "8": {
       "document_sha256": "d6675324c77086e06722883b428a745596ff924dd574b89f8746bcf5d68044a1",
-      "source_digest": "cfd1e56f3b2f89f0b9a19bc37bcac7fcfef32264edd0d0ab7d2f251b1f0d0bf9",
+      "source_digest": "808868ab31e74550ad3c23b396d84385a0c668e996629e4660fe54edf335da6d",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.603104+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.985401+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "9": {
       "document_sha256": "34ff240c2ae78059c2b5f66396c1e2b2af30b539ce9771e6f7c738083f6fc328",
-      "source_digest": "136cd2832ee1ed15865950718b802b23b5a1b7bd92bda61c1e0c19509e2d7530",
+      "source_digest": "3ca44f248e6b39216e4f9b524ccbdd6f289911770208ae97eb6d1023778198b1",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.605361+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.988318+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "11e66970af1fc0ac4eada8ab07ca8220794a39f9e1fd8a200d00d5924eb5cc96",
+      "source_digest": "812d66bbee478f67712aed65211a94c6884223f9515f80cc2a6054a7702493a7",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.608518+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.991939+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "63889bee69f9f5ddda7cfc0b238f1d49087d33b259d654713aac937a9b062150",
+      "source_digest": "2bf19d078a5600afbc9a0b301f6adbad7f69687f901161b984ec8f3b516de915",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.611871+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.994442+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "12": {
-      "document_sha256": "eb4934bffd006745e9eff80326424ae5a4c0f48e547039fb23f58f2ed78a1a9f",
-      "source_digest": "3fe8f7e109e31bab7a6b613908c6872e61b5e0726e2d1430fa602ceff80cb1e9",
+      "document_sha256": "f047c8691ccceee9b99a0c17a0be2844d60eb933cc381c0a1a47d8f52760039d",
+      "source_digest": "1abe5a37cbc8822a75a785d9016db548941fe84455f0caa318283c686db2b2ed",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.614676+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:04.998239+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "13": {
       "document_sha256": "83267aad5a49b1694e1d08bcfd4b04c5d55b478d424436a1ce5958579ad1060a",
-      "source_digest": "136cd2832ee1ed15865950718b802b23b5a1b7bd92bda61c1e0c19509e2d7530",
+      "source_digest": "3ca44f248e6b39216e4f9b524ccbdd6f289911770208ae97eb6d1023778198b1",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.617823+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:05.000545+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "14": {
       "document_sha256": "3354d61d645e1efe0122da647663fdd49d0b499c29270ee0df3de77bfc23e1a2",
-      "source_digest": "136cd2832ee1ed15865950718b802b23b5a1b7bd92bda61c1e0c19509e2d7530",
+      "source_digest": "3ca44f248e6b39216e4f9b524ccbdd6f289911770208ae97eb6d1023778198b1",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.620460+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:05.003276+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "15": {
       "document_sha256": "1d8f9c3e9fa8ac348f065429ca06f5efb076bbc5e89a4382d435d6ee0e41c838",
-      "source_digest": "136cd2832ee1ed15865950718b802b23b5a1b7bd92bda61c1e0c19509e2d7530",
+      "source_digest": "3ca44f248e6b39216e4f9b524ccbdd6f289911770208ae97eb6d1023778198b1",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.622933+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:05.005446+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "569f3be0afec6712335969b22df6a1827dbe08b91df9ffad09b666cf2eadcbc6",
+      "source_digest": "82df584c23527d44745396796ed081379607a23fe7be92fc124dd33d1cfcf8ec",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.625245+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:05.008202+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "cfd1e56f3b2f89f0b9a19bc37bcac7fcfef32264edd0d0ab7d2f251b1f0d0bf9",
+      "source_digest": "808868ab31e74550ad3c23b396d84385a0c668e996629e4660fe54edf335da6d",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.628438+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:05.011232+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "f5a3d0966b3308afd5cac988f130a55ff7885726959f74856e742dd0f1d8728f",
+      "source_digest": "0b2a891f3c85769c3a815a409e00d84a3769d6fb310c056fda69bedf55caacb2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.630967+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:05.015178+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "19": {
       "document_sha256": "fd491927bcc996f146f1f168385be9194c10d9db347cf07eb9a45dc5f6922424",
-      "source_digest": "a666c10be3fc3076d9881b7ff2cade8dfcc3fcc3404887a02d04e8006268d846",
+      "source_digest": "6a5a79db21ed27618a114aa2779fbbb7458f349b566e2653a41b0f0ff3abc927",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.634417+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:05.019233+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     },
     "20": {
       "document_sha256": "61322a5d5757929879890622e49e587058b0024de8eacd8ae9d817dd9e78d45f",
-      "source_digest": "f5a3d0966b3308afd5cac988f130a55ff7885726959f74856e742dd0f1d8728f",
+      "source_digest": "0b2a891f3c85769c3a815a409e00d84a3769d6fb310c056fda69bedf55caacb2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에서 compact19c663c+main f673f37 통합의 정책20종 원문·양식·근거를 대조했다. main KIS/FX/CMS/Signals/금리규약/LETF/구동 검토를 보존하고09/12/13/14/15·FACTS에compact 사실을 반영했다. main baseline에서 출발해 통합파일을검토했으며 과거baseline으로복귀하지않았다. 실제동봉폰트의 이름39>=38·중지점수두줄·44px행·헤더키보드·자료없음/안전한12종오류를 포함한 최종UI15개9.032초, 정책/문서생성47개7.493초 PASS를 기록했다. 내부산식/도움말외Q-SCORE AST동일·실제두엔진역할·예측력미검증·KIS설정발견vs체결·Yahoo원인미확정을 유지한다. CRLF보존 staged공백검사통과. review-required/공개BLOCKED 및실제KIS/Windows전체접근성/권리/AWS미검증 유지.",
-      "reviewed_at": "2026-11-02T04:23:43.639380+00:00",
-      "source_commit": "19c663cef9961a1932565c6ecb4fe52d8c6b6c28"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
+      "reviewed_at": "2026-11-02T04:26:05.022724+00:00",
+      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
     }
   }
 }

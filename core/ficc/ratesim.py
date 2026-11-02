@@ -346,9 +346,21 @@ def horizon_pv_distribution(params: ShortRateParams, sim: RateSimResult, *, kind
                             curve: YieldCurve | None = None) -> HorizonPV:
     """Revalue a bond or swap at `sim.horizon` on each path's model curve (≤ 500
     paths, evenly strided). Losses are measured against today's PV on `curve`
-    (flat at r0 when None); var95/cvar95 are positive loss numbers."""
+    (flat at r0 when None); var95/cvar95 are positive loss numbers.
+
+    Calculation parameters must match the simulation, including any Hull-White
+    r0 normalization. Pass sim.params; regenerate the simulation to use changed
+    parameters. Descriptive note text is not part of this consistency check."""
     if kind not in ("bond", "swap"):
         raise ValueError(f"kind must be bond|swap, got {kind!r}.")
+    mismatched = [name for name in ("model", "kappa", "theta", "sigma", "r0")
+                  if getattr(params, name) != getattr(sim.params, name)]
+    if mismatched:
+        raise ValueError(
+            "Revaluation parameters must match sim.params; different: "
+            + ", ".join(mismatched)
+            + ". Regenerate the simulation for changed parameters; use sim.params "
+              "after model normalization.")
     if curve is None:
         curve = flat_curve(sim.params.r0)
     h = sim.horizon
@@ -422,8 +434,8 @@ if __name__ == "__main__":
     from types import SimpleNamespace as _NS
     bond = _NS(coupon=0.04, maturity=10.0, freq=2, face=100.0, notional=1e6)
     swap = _NS(tenor=10.0, fixed_rate=None, notional=1e6, pay_fixed=True, freq=1, start=0.0)
-    hb = horizon_pv_distribution(hw, sh, kind="bond", bond=bond, curve=crv)
-    hs = horizon_pv_distribution(hw, sh, kind="swap", swap=swap, curve=crv)
+    hb = horizon_pv_distribution(sh.params, sh, kind="bond", bond=bond, curve=crv)
+    hs = horizon_pv_distribution(sh.params, sh, kind="swap", swap=swap, curve=crv)
     assert hb.pvs.size == 500 and np.all(np.isfinite(hb.pvs)) and hb.var95 >= 0
     assert hs.pvs.size == 500 and np.all(np.isfinite(hs.pvs)) and hs.cvar95 >= hs.var95
     print("ok")
