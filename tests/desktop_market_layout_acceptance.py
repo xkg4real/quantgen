@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import time
 from pathlib import Path
 import unittest
 from unittest.mock import Mock, patch
@@ -12,7 +13,8 @@ import dotenv
 with patch.object(dotenv, "load_dotenv", return_value=False):
     from quantgen_desktop.app import ResearchWindow
 
-from PyQt6.QtCore import QPoint, QRect
+from PyQt6.QtCore import QPoint, QRect, Qt
+from PyQt6.QtTest import QTest
 from PyQt6.QtGui import QFont, QFontDatabase
 from PyQt6.QtWidgets import QApplication, QMessageBox
 
@@ -129,6 +131,59 @@ class NativeMarketLayoutTests(unittest.TestCase):
                     self.assertFalse(w.market_chart.chart.isVisible())
         self.http.assert_not_called()
         self.jobs.assert_not_called()
+
+
+    def test_dynamic_indicator_panels_never_overlap_readouts_after_theme_and_width_changes(self):
+        from tests.desktop_market_chart_acceptance import fixture
+        w = self.window
+        pane = w.market_chart
+        self.select(pane)
+        pane.snapshot = fixture(pane.request())
+        pane.render()
+        scroll = w.stack.currentWidget()
+
+        def settle_and_check():
+            def ordered():
+                widgets = (pane.chart, pane.cursor_slider, pane.reading, pane.indicator_reading)
+                return all(b.y() >= a.y() + a.height() for a, b in zip(widgets, widgets[1:]))
+            deadline = time.monotonic() + 2
+            while time.monotonic() < deadline:
+                self.app.processEvents()
+                QTest.qWait(20)
+                if ordered():
+                    break
+            self.assertTrue(ordered(), str({name: getattr(pane, name).geometry().getRect()
+                for name in ('chart', 'cursor_slider', 'reading', 'indicator_reading')}))
+
+        # The old tab retained its 410px-chart allocation after this sequence,
+        # although the SVG became 634px. Exercise the actual event path.
+        for language in ('ko', 'en'):
+            w.set_language(language)
+            for theme in (0, 1):
+                w.theme.setCurrentIndex(theme)
+                for width, height in ((1360, 940), (1000, 700)):
+                    w.resize(width, height)
+                    self.app.processEvents()
+        for button in pane.indicator_boxes.values():
+            if not button.isChecked():
+                QTest.mouseClick(button, Qt.MouseButton.LeftButton)
+        for width, height in ((1360, 940), (1000, 700)):
+            with self.subTest(width=width):
+                w.resize(width, height)
+                settle_and_check()
+                self.assertEqual(pane.chart.height(), 634)
+                scroll.verticalScrollBar().setValue(scroll.verticalScrollBar().maximum())
+                self.app.processEvents()
+                viewport = scroll.viewport()
+                for control in (pane.cursor_slider, pane.reading, pane.indicator_reading):
+                    bounds = QRect(control.mapTo(viewport, QPoint()), control.size())
+                    self.assertTrue(viewport.rect().contains(bounds), str(bounds))
+        expanded = pane.height()
+        for key in ('rsi', 'macd'):
+            QTest.mouseClick(pane.indicator_boxes[key], Qt.MouseButton.LeftButton)
+        settle_and_check()
+        self.assertEqual(pane.chart.height(), 410)
+        self.assertLess(pane.height(), expanded)
 
 
 if __name__ == "__main__":
