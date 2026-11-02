@@ -18,7 +18,10 @@ class LocaleContext:
     @property
     def locale(self):
         try:
-            return Locale.parse(self.requested.replace('-', '_'))
+            # QSettings and imported preferences can contain a non-string value.
+            # Locale selection must remain usable so the operator can repair it.
+            requested = self.requested if isinstance(self.requested, str) else 'en_US'
+            return Locale.parse(requested.replace('-', '_'))
         except (ValueError, TypeError, LookupError, UnknownLocaleError):
             return Locale.parse('en_US')
 

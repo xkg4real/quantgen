@@ -21,6 +21,41 @@ These counts are **review classifications, not publication authorization**.
 Conditional does not mean that a contract or acknowledgement was obtained.
 Unavailable contracts, tariff amounts and legal conclusions remain unverified.
 
+<a id="kis-chart-scope-2026-11-02"></a>
+## Additional KIS chart scope — 2026-11-02
+
+PR #56, integrated at `147afc0`, adds user-selected KIS quotes, OHLCV charts
+and supported trade subscriptions in the native and Flet workspaces. These
+dynamic instruments, exchanges and subscriptions are **not all covered by the
+six Home observations or 73 registered-series counts above**. Those historical
+inventory counts and classifications are preserved; this paragraph does not
+add approved datasets or mark any live feed usable.
+
+The [implemented coverage](KIS_MARKET_CHARTS_2026-11-02.md) distinguishes
+domestic stock/ETF, overseas stock, domestic derivative and bond streams from
+REST-only overseas futures and other unsupported combinations. Its US free
+Nasdaq feed notice (0-minute delay, limited market-center coverage) and Asian
+15-minute delay are product-specific source statements, not a blanket
+consolidated real-time entitlement. Generic 20-minute-delayed examples in the
+existing provider policy must not override these actual feed distinctions.
+Live-account connectivity and the applicable entitlement have not been tested.
+
+KIS/provider and exchange agreements must cover the actual audience, personal
+or commercial app use, server-to-browser display, concurrent users, raw and
+derived data, retention, redistribution and any export. Overseas futures also
+require the applicable CME/SGX market-data entitlement. Free access, an API key,
+temporary memory processing or calculating indicators grants none of these
+permissions by itself. The existing `kis_krx` provider-level conditional
+classification remains insufficient as dataset-specific or service-specific
+approval. Contract terms, fees and legal conclusions remain **NOT_VERIFIED**;
+`publication_authorization: false` and `legal_opinion: false` remain unchanged.
+
+The new software dependency `websockets>=15,<17` has separate package-license
+obligations recorded in [policy 19](../compliance/19-licenses.md). Its BSD license
+does not grant KIS or exchange data rights. New authentication/transport and
+in-memory approval-key handling are recorded in [FACTS](../compliance/FACTS.md#kis-market-integration-2026-11-02);
+the `ws://` connection must not be described as TLS-protected.
+
 ## Home review
 
 | Item / current route | Classification | Required next evidence |

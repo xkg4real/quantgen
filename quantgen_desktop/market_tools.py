@@ -9,6 +9,7 @@ from core.research.decay_disclosure import decay_value, decay_text
 from core.research.quote_coverage import quote_coverage_text
 from .tools import ToolPane, number, fmt
 from .market_diagnostics_language import decay_korean, funding_korean, coverage_korean
+from .market_narrative_language import market_variants, letf_korean, letf_unavailable_korean
 
 
 class DerivativesPane(ToolPane):
@@ -32,7 +33,8 @@ class DerivativesPane(ToolPane):
                   f"Session {s['session']} · {s['n_quotes']} strikes · rate {s['rate']:.3%} ({s['rate_source']})")
         if s['source'] == 'synthetic': self.text('SYNTHETIC · 모든 시세는 합성 데이터입니다.')
         if not s.get('live_quotes', True): self.text('Last prints only · 장외/마감 시 호가는 동시 체결 가능한 가격이 아닙니다.')
-        if s.get('quotes_note'): self.text(s['quotes_note'])
+        if s.get('quotes_note'):
+            self.text(s['quotes_note'], localized={'en': s['quotes_note'], 'ko': s['quotes_note']})
         self.result_table('Futures & volatility', ['Metric', 'Value'], [
             ('Parity forward', fmt(s['F'])), ('Future', fmt(s['futures']['price'])), ('Basis · points', fmt(b.basis_pts)),
             ('Fair value', fmt(b.fair)), ('Mispricing · bp of spot', fmt(b.mispricing_bp)),
@@ -60,7 +62,7 @@ class DerivativesPane(ToolPane):
         coverage_source = quote_coverage_text(coverage)
         self.text(coverage_source, localized={'en': coverage_source, 'ko': coverage_korean(coverage)})
         self.sections.append({'type': 'quote_coverage', **coverage})
-        self.finished(out.narrative)
+        self.finished(out.narrative, localized=market_variants(out, 'derivatives'))
 
 
 class ETFPane(ToolPane):
@@ -108,12 +110,13 @@ class ETFPane(ToolPane):
             self.result_table('AZ variance proxies · bp', ['Sessions', 'Proxy', 'Variance term', 'Fee assumption term'],
                 [[r['sessions'], fmt(r['drag_bp']), fmt(r['variance_bp']), fmt(r['fee_bp'])] for r in lt['rows']])
             self.text(f"Index: {lt['index_source']} · prior-quarter variance AZ proxy {lt['last_quarter_drag_bp']:.2f} bp · GARCH converged={lt['converged']}")
-            self.text(letf_text(lt))
+            self.text(letf_text(lt), localized={'en': letf_text(lt), 'ko': letf_korean(lt)})
             self.sections.append({'type':'letf_interpretation', **lt['interpretation']})
         elif lt:
-            self.text(letf_unavailable_text(lt))
+            self.text(letf_unavailable_text(lt), localized={'en': letf_unavailable_text(lt),
+                                                         'ko': letf_unavailable_korean(lt)})
             self.sections.append({'type': 'letf_unavailable', **lt})
-        self.finished(out.narrative)
+        self.finished(out.narrative, localized=market_variants(out, 'etf'))
 
 
 class CryptoPane(ToolPane):
@@ -168,7 +171,7 @@ class CryptoPane(ToolPane):
             self.result_table('Upbit holdings · read only', ['Currency','Total','Average buy price','KRW value'],
                 [[b['currency'],fmt(b['total']),fmt(b['avg_buy_price']),fmt(b['krw_value'])] for b in d['balances']])
         elif out.request.include_balances: self.text('Holdings unavailable · verify the configured read-only connection. No account values loaded.')
-        self.finished(out.narrative)
+        self.finished(out.narrative, localized=market_variants(out, 'crypto'))
 
 
 class KRXPane(ToolPane):
@@ -187,7 +190,8 @@ class KRXPane(ToolPane):
         self.text(f'Provider: {a.source or "UNAVAILABLE"}')
         if not a.ok:
             from core.research.presentation import safe_detail
-            self.text(safe_detail(a.reason))
+            reason = safe_detail(a.reason)
+            self.text(reason, localized={'en': reason, 'ko': reason})
             self.status.setText('UNAVAILABLE · 공급자 응답을 확인하세요. 대체 값을 생성하지 않습니다.')
             return
         data = a.data

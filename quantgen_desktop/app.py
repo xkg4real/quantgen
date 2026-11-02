@@ -41,6 +41,7 @@ from .charts import FanChart, FrontierChart, LineChart, SignedBars
 from .jobs import Jobs
 from .localization import UiLabel, LanguageController, CAPTION_ROLE
 from .translations import display
+from .chart_study import CurrentPageTabs
 from .macro_records import execute_macro_records
 
 
@@ -309,7 +310,7 @@ class ResearchWindow(QMainWindow):
             pane = pane_type()
             pane.requested.connect(lambda q, n=name:self.run_tool(n,q))
             setattr(self, name, pane)
-        self.market_tabs=QTabWidget()
+        self.market_tabs=CurrentPageTabs()
         self.market_chart = MarketChartPane(locale=self.ctx)
         for pane,name in ((self.market_chart,'KIS chart'),(self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX'),(self.structuring,'Structuring'),
                           (self.derivatives,'Derivatives'),(self.etf,'ETF'),(self.crypto,'Crypto'),(self.krx,'KRX'),
@@ -385,7 +386,7 @@ class ResearchWindow(QMainWindow):
         self.portfolio = PortfolioPane()
         self.portfolio.requested.connect(self.run_portfolio)
         self.signals=SignalsPane();self.signals.requested.connect(lambda q:self.run_tool('signals',q))
-        self.risk_tabs=QTabWidget();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
+        self.risk_tabs=CurrentPageTabs();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
         from .paper import PaperPane
         self.paper = PaperPane(self.paper_session)
         self.risk_tabs.addTab(self.paper, 'Paper Trading')
@@ -899,7 +900,7 @@ class ResearchWindow(QMainWindow):
                 return
         if not self.paper_session.stop():
             event.ignore()
-            self.statusBar().showMessage('모의 엔진의 진행 중인 조회가 끝나면 다시 종료해 주세요.')
+            self.statusBar().showMessage(display(self, '모의 엔진의 진행 중인 조회가 끝나면 다시 종료해 주세요.'))
             return
         self.market_chart.stop()
         self.quote_paint_timer.stop()

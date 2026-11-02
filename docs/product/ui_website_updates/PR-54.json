@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "PR-54",
+  "source_session": "QUANTGEN UI 개선",
+  "destination_session": "웹사이트 작업공간(AWS)",
+  "destination_thread_id": "01a18c19-eda9-7327-b6d9-c9ca24937093",
+  "website_url": "https://quantgeneration.com/",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/54",
+  "source_branch": "gpt/remaining-work-20261102",
+  "source_commit": "7bf5f8a2018499cc75ea780b201431629f3cf4dd",
+  "summary": "Native authored model/Macro descriptions, registered indicator/chart captions and Signals stance labels follow Korean/English selection. Selected tabs and wrapped narration fit narrow windows without stale Macro whitespace. Malformed locale startup remains repairable. Canonical data, original reports and calculations are preserved. Preserves main PR55–57 KIS integration, verifies idle navigation and both-theme chart contrast, and reconciles transmission/retention/dependency facts.",
+  "files": [
+    "core/i18n.py",
+    "quantgen_desktop/translations.py",
+    "quantgen_desktop/display_prose_catalog.py",
+    "quantgen_desktop/market_narrative_language.py",
+    "quantgen_desktop/model_narrative_language.py",
+    "quantgen_desktop/macro_narrative_language.py",
+    "quantgen_desktop/market_tools.py",
+    "quantgen_desktop/signals.py",
+    "quantgen_desktop/strategy.py",
+    "quantgen_desktop/structuring.py",
+    "quantgen_desktop/macro.py",
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/tools.py",
+    "quantgen_desktop/chart_study.py",
+    "quantgen_desktop/charts.py",
+    "core/market/presentation.py"
+  ],
+  "website_impact": "Native display changes plus shared locale fallback and KIS chart colors; Flet route construction/lifecycle verified for 20 routes. Introduction-site applicability and remaining narrative parity require review.",
+  "actions_for_aws": [
+    "Check whether the website imports QUANTGEN core/i18n.py before applying the locale fallback; an introduction-only site may be not applicable with source evidence.",
+    "For Flet research pages, translate authored narratives with the same evidence/source boundaries. Do not copy Qt widgets or translate original provider/research evidence.",
+    "Keep native implementation, website application and deployment statuses separate. This record authorizes no new AWS or live deployment operation.",
+    "If using the shared KIS renderer, retain both-theme indicator contrast and accurate non-TLS/approval-cache/provider-rights disclosures. No actual live or deployment acceptance is inferred."
+  ],
+  "verification": {
+    "focused": "98 integrated native/layout/locale/KIS offline checks PASS using private selector-polling harness for this cloud sandbox; 29 follow-up contrast/status/syntax/Flet checks PASS after PR57 integration.",
+    "source": "Earlier130 bounded checks PASS; current real Flet20routes across locale/theme/width and idle KIS lifecycle PASS.",
+    "installed": "Merged PR56 wheel Linux native smoke passed, 301 runtime files / 224 Python files matched staged bytes. PR57 palette change tested; final exact-head CI wheel remains authoritative.",
+    "documents": "47 policy/export tests PASS. Twenty policy scopes reconciled with PR57; source consistency refresh accompanies this record, publication BLOCKED.",
+    "ci": "Initial efd9b0c runtime41377093005 and compliance41377093014 succeeded. Final merged PR54 head requires fresh CI.",
+    "user_windows": "NOT_RUN"
+  },
+  "delivery": {
+    "status": "queued",
+    "reason": "No supported send tool for the exact existing destination chat.",
+    "receipt": null
+  },
+  "website_application": "unverified",
+  "website_deployment": "unverified"
+}

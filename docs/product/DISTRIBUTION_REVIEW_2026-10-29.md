@@ -1,7 +1,10 @@
 # ⑩-1 Distribution review — research draft, not legal clearance
 
 ## Current decision
-Keep QUANTGEN personal research only. The 2026-10-27 roadmap's free companion is a proposal gated on legal and data-right review; it does not supersede README's personal-only policy. Code/UI/PR/merge permission does not establish a data license, professional legal opinion or public release clearance. No public site or service was deployed.
+As of 2026-11-02, README records the owner's **commercial launch decision, OWNER_APPROVED on 2026-10-30**. That decision supersedes the earlier personal-use-only distribution policy. It does not constitute government/KOFIA endorsement, a professional legal opinion, or a provider's data license. Source-specific rights and the operational evidence in `docs/compliance/RELEASE_GAPS.md` remain separate checks; document consistency PASS is not clearance of those gaps. A deployed introductory website does not establish rights to redistribute market data or release a paid research service.
+
+### Historical decision — 2026-10-29
+At the original review date the posture was personal research only, and the 2026-10-27 roadmap's free companion was a proposal pending legal and data-right review. No site or service was deployed by that review task. These statements are retained as history, not as the current owner decision or a claim about later website work.
 
 ## Primary sources inspected 2026-10-29
 - [Capital Markets Act, article 101](https://law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1017471463): the retrieved text is effective 2026-10-02. Its reporting rule concerns conducting a business providing non-individualized investment/value advice for consideration. Whether this product meets that definition depends on the actual service and business model.
@@ -23,7 +26,7 @@ Provide an actual feature/flow demonstration, target jurisdictions, personal/pub
 | Offline design prototype using synthetic fixtures | Own generated fixture only | Private review artifact |
 
 ## Concrete release checklist
-Written legal opinion with versioned feature scope; provider-by-provider rights/attribution list including derived outputs; privacy/terms and security review; README policy reconciliation; owner release decision. Each item is currently pending. Merge approval can deploy application code to the repo without declaring these items satisfied.
+Written legal opinion with versioned feature scope; provider-by-provider rights/attribution list including derived outputs; privacy/terms and security review remain pending evidence. README policy reconciliation is recorded above and the owner's commercial decision is recorded in README; neither supplies the missing third-party evidence. A code merge records implementation without declaring those remaining items satisfied. Product deployment remains a separate operation within its approved scope.
 
 ## ⑩-2 companion preparation
 An independent offline viewer prototype is prepared outside the QUANTGEN checkout. It accepts only an explicit ResearchRun export, verifies its integrity checksum and displays observations, assumptions and NOT_RUN separately. It contains no provider credentials, broker integration, order actions, telemetry, external CDN or write-back to QUANTGEN. Synthetic example only. It is not a publicly approved MVP or a production deployment.
