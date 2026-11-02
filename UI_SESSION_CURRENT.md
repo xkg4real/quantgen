@@ -1,3 +1,48 @@
+# 2026-11-02 최신 앱 UI 인계 — PR60 자동 검사 중
+
+이 섹션이 아래 이전 완료 기록보다 우선합니다. 사용자 요청에 따라 앱 소스를 새로 수정했으며, 웹 HTML은 GitHub에 게시하지 않았습니다. 메인 CURRENT·LEDGER·AUTO_STATE 소유권과 연구 원장은 유지합니다.
+
+- 앱 PR: https://github.com/xkg4real/quantgen/pull/60
+- 브랜치: `gpt/live-chart-layout-20261102`
+- 구현 커밋: `da14c50f0894f00e40dfc0646087c7a9f330825c`; 최종 소스·검토 기록: `ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c`.
+- 상태: PUSHED / PR OPEN / 자동 검사 진행. 아직 main 병합 완료로 안내하지 않습니다.
+- Runtime CI: https://github.com/xkg4real/quantgen/actions/runs/41384257982
+- Document CI: https://github.com/xkg4real/quantgen/actions/runs/41384257971
+
+## 이번 요청과 구현
+
+기술지표 가이드를 왼쪽 독립 메뉴로 옮겼습니다. 연구홈은 기존 시장지표6개와 국내주식6개(삼성전자·SK하이닉스·현대차·KB금융·LG에너지솔루션·삼성바이오로직스)를 compact row/상세보기로 표시합니다. 1360px 기본 창에서 오른쪽 Q-SCORE까지 보이고 1000px에서는 표 안에서 가로 스크롤합니다.
+
+KRX의 입력 영역이 숨겨진 다른 탭 높이로 늘어나던 빈 화면을 재현·수정했습니다. 연구홈의 시세 바로가기는 실제 조회/연결 버튼까지 이동합니다. 차트 연결 버튼은 빈 차트에서도 이력을 먼저 조회한 뒤 구독하고, KISUnavailable은 .env의 키 설정과 재시작 안내로 표시합니다.
+
+명시적인 Home 연결은 수정 일봉을 백그라운드로 준비하고, 최대6개 종목을 **한 WebSocket**에서 수신합니다. 실제 체결만 가격·점수에 반영하며 표 표시200ms/점수1초 단위로 묶습니다. Home/차트는 별도 수명주기·점수 제어기를 쓰고, 화면 이탈 시 수신 중지·지연 콜백 폐기합니다.
+
+Q-SCORE v0.1은 기존 기술신호70% + 최대낙폭15% + 일간 historical CVaR95 15%의 **새 실험적 연구 표시**입니다. 최소200개·최대252개 수정 일봉, 1~5별과 소수점 점수·한영 도움말. 신선도·중복/역순·가격기준 불일치를 검사하고, 중단 시 마지막 점수·시각을 구분합니다. 펀더멘털 평가·예측력 검증·매수 추천·모든 엔진 실행이라고 표현하지 않습니다.
+
+주요 경로: `quantgen_desktop/{app,market_chart,watchlist,watchlist_live,qscore}.py`, `core/research/{watchlist,qscore}.py`, `data/kis_stream.py`. 정책20종 대조와 실제 네트워크/저장 범위는 `docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md`. 웹 영향 큐는 `docs/product/ui_website_updates/PR-60.json`.
+
+## 확인한 사용자 PC 상태
+
+- 현재 폴더: `C:\Users\skymi\OneDrive\문서\GitHub\quantgen`.
+- 같은 폴더의 .venv Python과 app.py를 사용하며 초기 `KIS_UI=False`: 실제로 오래된 코드였음.
+- 이후 사용자 스크린샷에서 **KIS chart 탭이 나타난 것 확인**. 현재 오류는 `KISUnavailable`: 구현상 KIS_APP_KEY/SECRET을 읽지 못함. 실제 체결 수신 성공은 아직 없음.
+- `main.py`는 Flet입니다. 네이티브 앱 실행은 `.venv\Scripts\python.exe -X utf8 -m quantgen_desktop`. 사용자에게 한번 main.py로 잘못 안내했다가 명시적으로 정정했습니다.
+- GitHub Desktop 내장Git 자동 탐색 + `pull --ff-only origin main` + 같은 .venv의 `pip install -e ".[desktop]"` 후 위 모듈로 실행합니다. reset/clean/로컬파일삭제 금지. API 키 값은 채팅으로 요청하지 않았습니다.
+- 사용자가 작업 도중 업데이트해도 이번 PR60 기능은 아직 main에 없으므로 나타나지 않는다고 설명했습니다. 병합 후 한 번에 안내해야 합니다.
+
+## 검증·남은 작업
+
+- 99개 통합/패키징/구문 검사 PASS, 53개 기존 native 회귀 PASS, 별도 Qscore9/컨트롤러11/UI12/스트림·watchlist 검사는 서로 중복 묶음이며 합산하지 않습니다.
+- 정책 검사47 PASS, source/document consistency PASS, publication BLOCKED 유지.
+- UI 캡처 `/tmp/quantgen-home-wide.png`, `/tmp/quantgen-home-narrow.png`; 전체 창·실제 Qt 이벤트와 가짜 공급자 통합 검사입니다.
+- 사용자 Windows 새 Home/점수 UI, 실제 KIS 계정/권한/장중 체결 수신, 점수 예측 성능은 미검증.
+- 다음: PR60 최종 CI 통과 확인 → 해당 head만 main 병합 → 이 인계와 AWS 큐에 merge SHA 기록 → 사용자에게 정확한 네이티브 업데이트/실행법 제공.
+- 웹 HTML/AWS 배포 없음. 기존 전달 HTML은 cac727e2 문서 기준이며 이번 정책14종 변경을 포함하지 않으므로 KO/EN 본문·버전·해시 재검토가 다음 웹 갱신 때 필요합니다.
+- 직접 채팅 전송 도구와 artifact 첨부 도구 연결이 실패합니다. 공유 handoff 저장/read-back은 실제 메인/Claude/AWS 열람 영수증과 구분합니다. 다음 Claude 통합 인계에 이 섹션을 포함하세요.
+
+<details>
+<summary>이전 웹 산출물·앱 UI 인계 이력 — 위 최신 상태 우선</summary>
+
 # QUANTGEN UI 세션 → 메인 세션 / Claude 최신 인수인계
 
 사용자가 2026-11-02에 "인수인계 파일 메인세션에 보내라"고 재지시하여, 메인 인계 규칙 README가 지정한 이 공유 경로에 최신 본문을 반영합니다. **전체 요청 완료가 아닙니다.** 이 문서는 메인의 CURRENT 소유권·작업·연구 원장을 변경하지 않습니다.
@@ -187,5 +232,7 @@ PR47에 남은 앱 구현·CI·병합 작업은 없습니다. 다른 작업공�
 
 UI 작업공간 /workspace/artifacts/quantgen-ui에 chart-design-studies-ABCD.png, chart-c-light.png, chart-c-dark.png, chart-c-native-narrow.png, chart-c-browser-light/dark/mobile.png가 있습니다. 다른 환경에서 파일이 없으면 소스/CI 링크를 사용하세요.
 최초 브라우저 fixture가 Home 자동 갱신 요청을 시도해 차단된 적이 있어 중지하고 공급자 stub/요청 차단으로 교체했습니다. 그 시도를 실시간 데이터·사이트 검증 증거로 쓰지 않습니다.
+
+</details>
 
 </details>
