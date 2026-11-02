@@ -14,8 +14,8 @@
     "pull_request": "https://github.com/xkg4real/quantgen/pull/62",
     "implementation_commit": "398ebe39281693237f50892c88e016c6c7a58ca4",
     "source_tree": "65954ab6f4ff929ca61b36695a5454c6c34d53c5",
-    "remote_status": "OPEN",
-    "merge_commit": null
+    "remote_status": "MERGED",
+    "merge_commit": "30a2a81c05cc825fe4a551d6c9700795d265fa26"
   },
   "summary_ko": [
     "조회 한 번으로 지원 체결 스트림을 연결하고 활성 조건 변경을 자동 처리합니다. 중지·이탈은 갱신을 멈춥니다.",
@@ -62,7 +62,7 @@
     "counts_note": "Suites can overlap; do not sum.",
     "source_review": "20 documents / 529 sources PASS; publication BLOCKED",
     "local_remote_tree": "identical",
-    "ci": "PENDING",
+    "ci": "SUCCESS",
     "ci_runs": [
       41398755386,
       41398755349
@@ -79,5 +79,35 @@
     "틱·초봉은 연결 후 수신 기록이며 장 운영·실제 체결·이용 권한에 따라 기다릴 수 있습니다. 지원 자산만 표시합니다.",
     "재연결 복귀 후 자동 동기화는 명시적 조회당1회입니다. 다시 끊기면 수동 새 조회가 필요합니다.",
     "현재 환경 교체로 이전 단일 웹 HTML/ZIP은 로컬에 없습니다. 이전 전달 파일이나 AWS 보존 소스를 사용해야 합니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "core/market/live.py",
+    "core/market/models.py",
+    "core/market/presentation.py",
+    "data/kis_workspace.py",
+    "docs/compliance/01-privacy-policy.md",
+    "docs/compliance/06-form-consent.md",
+    "docs/compliance/07-data-minimization.md",
+    "docs/compliance/09-dark-patterns.md",
+    "docs/compliance/12-claims.md",
+    "docs/compliance/13-alternative-text.md",
+    "docs/compliance/14-contrast.md",
+    "docs/compliance/15-keyboard.md",
+    "docs/compliance/19-licenses.md",
+    "docs/compliance/20-deletion.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md",
+    "docs/product/KIS_MARKET_CHARTS_2026-11-02.md",
+    "quantgen_desktop/market_chart.py",
+    "tests/desktop_home_live_acceptance.py",
+    "tests/desktop_market_chart_acceptance.py",
+    "tests/desktop_market_layout_acceptance.py",
+    "tests/kis_workspace_acceptance.py",
+    "tests/market_chart_presentation_acceptance.py",
+    "tests/market_received_bars_acceptance.py",
+    "tests/web_market_chart_acceptance.py",
+    "ui/market_chart_page.py"
   ]
 }
