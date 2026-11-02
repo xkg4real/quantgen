@@ -4,9 +4,9 @@ reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
-done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a, ⑬-8/b2/c/b/b/native, ⑬-2/k/cloud-runtime, ②-5/M4-N3, ②-5/M4-N6, ②-5/M4-N11, ②-5/N11, ②-5/M3-N06
+done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a, ⑬-8/b2/c/b/b/native, ⑬-2/k/cloud-runtime, ②-5/M4-N3, ②-5/M4-N6, ②-5/M4-N11, ②-5/N11, ②-5/M3-N06, ②-5/M3-N08
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-11-02T13:19:12.000+09:00
+updated_at: 2026-11-02T13:20:06.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
@@ -189,4 +189,10 @@ UI는 PR36/37/42/47, 웹은 초기 UI 수정 revision2026-10-31.1, 정책 문서
 ## Verified PR58 completion — 2026-11-02T13:19:12.000+09:00
 - Source 67e76e704574af5365bee52733bed4e2b4dd47fe → main f673f37001b53471ff2dfe139a44db72552c9235. Exact-head runtime41386559163 and compliance41386559127 success; merged/read-back verified.
 - Bounded IDs: ②-5/M4-N3, ②-5/M4-N6, ②-5/M4-N11, ②-5/N11, ②-5/M3-N06. Explicit LETF funding/fee/dividend assumptions; conditional FX CIP/coupon/forward descriptions; executable-side and completed-roundtrip counts. 99 integrated +9 Home;45 independent LETF scenarios;8192 order comparisons;36 audit-isolation cleanup regressions. Earlier installed7483459:304/227 source bytes plus native/Flet consent/export smoke. Final CI separate.
+- Actual user Windows/provider/AI/legal/research execution gates remain open; parent tasks not completed. LEDGER and designated Notion child sync follow this verified record.
+
+
+## Verified PR59 completion — 2026-11-02T13:20:06.000+09:00
+- Source 947ae44c89058b8dcc4b91b338b1fc9f33ea29be → main 8b4010430a9ece2a4e1b05b234abe81d3796771f. Exact-head runtime41386603330 and compliance41386603276 success; merged/read-back verified.
+- Bounded IDs: ②-5/M3-N08. Reject mismatched rates revaluation parameters; use normalized final sim.params across all callers. 10 focused and21 integrated;12 terminal/24PV arrays/144summary values preserved; installedb16f606 actual Qt synthetic workflow6PASS; final CI separate.
 - Actual user Windows/provider/AI/legal/research execution gates remain open; parent tasks not completed. LEDGER and designated Notion child sync follow this verified record.
