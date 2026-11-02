@@ -125,6 +125,7 @@ def structured_variants(out):
 def strategy_variants(data):
     from core.research.strategy_workflow import narrative
     from core.research.strategy_exposure import exposure_lines
+    from core.research.strategy_assumptions import assumption_lines
     score = data['score']
     decision = (f"판정 보류 — {data['withheld']} " if data.get('withheld') else
                 f'판정 {score.decision} — {score.reason}. ')
@@ -135,4 +136,5 @@ def strategy_variants(data):
     # surrounding authored workflow explanation, never turn a withheld result
     # into an apparent decision or alter the cumulative-trials description.
     prose = [translate(line, 'ko') for line in exposure_lines(data.get('exposure'))]
+    prose.extend(assumption_lines(data.get('assumptions'), 'ko'))
     return {'en': narrative(data), 'ko': head + ' ' + ' '.join(prose + list(score.lines))}

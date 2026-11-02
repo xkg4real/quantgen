@@ -293,8 +293,16 @@ def half_life(x: np.ndarray) -> float:
 
 def adf_pvalue(x: np.ndarray) -> float:
     try:
+        from inspect import signature
         from statsmodels.tsa.stattools import adfuller
-        return float(adfuller(np.asarray(x, dtype=float), autolag="AIC")[1])
+        # statsmodels 0.15 adds an explicit result-object opt-in; 0.14 does
+        # not accept that keyword. Preserve the same ADF specification and
+        # p-value while avoiding the impending default-return-type warning.
+        kwargs = {"autolag": "AIC"}
+        if "result_object" in signature(adfuller).parameters:
+            kwargs["result_object"] = True
+        result = adfuller(np.asarray(x, dtype=float), **kwargs)
+        return float(result.pvalue if hasattr(result, "pvalue") else result[1])
     except Exception:
         return float("nan")
 
@@ -308,6 +316,11 @@ class PairsDiagnostics:
 
     @property
     def share_cointegrated(self) -> float:
+        """Legacy field: ordinary residual-ADF rejection share, not a coint pass rate.
+
+        The name and calculation remain for historical compatibility; do not
+        use this diagnostic as an Engle–Granger cointegration validation.
+        """
         p = [x for x in self.adf_p if math.isfinite(x)]
         return float(np.mean([x < 0.05 for x in p])) if p else float("nan")
 
@@ -319,8 +332,11 @@ def pairs(prices: np.ndarray, *, formation: int = 252, trading: int = 126, entry
     Granger step 1), record the ADF p-value and the OU half-life of the
     residual, freeze (a, b, μ, σ), and trade the next `trading` sessions on
     z = (resid − μ)/σ: open when |z| > entry, close when z crosses `exit` (or
-    after `max_hold`). Long/short is dollar-neutral (±gross/2 per leg, x leg
-    scaled by b); `long_only` holds only the cheap leg (retail KRX form)."""
+    after `max_hold`). Long/short weights are gross × [pos, −pos*b] / (1+|b|),
+    with net exposure gross*pos*(1−b)/(1+|b|), not generally dollar-neutral.
+    Negative b can put both legs in the same direction. `long_only` instead
+    holds only the cheap leg (retail KRX form). The residual's ordinary ADF
+    p-value is a diagnostic, not an Engle–Granger cointegration p-value."""
     P = np.asarray(prices, dtype=float)
     if P.ndim != 2 or P.shape[1] != 2:
         raise ValueError("pairs needs exactly two price columns (y, x)")

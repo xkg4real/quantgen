@@ -439,7 +439,10 @@ def year_stats(dates: Sequence[str], pnl: np.ndarray) -> dict:
 
 def regime_split(pnl: np.ndarray, bench: Optional[np.ndarray], *, window: int = 63) -> dict:
     """OOS Sharpe in high- vs low-volatility and up- vs down-benchmark halves,
-    classified on the trailing `window` sessions of the benchmark (known at t)."""
+    using trailing `window` benchmark observations. The high/low cutoff is
+    the whole-OOS median, so the volatility split is retrospective rather
+    than known at t; adding later observations can reclassify earlier rows.
+    This descriptive split is not a causal trading signal."""
     if bench is None or len(bench) != len(pnl) or len(pnl) < 2 * window:
         return {}
     b = np.asarray(bench, dtype=float)

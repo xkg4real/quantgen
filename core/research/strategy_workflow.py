@@ -11,6 +11,7 @@ from core.quant import strategies as S
 from core.quant import validate as V
 from core.quant.history import convention_warning, load_history
 from .strategy_exposure import exposure_summary, exposure_lines
+from .strategy_assumptions import assumption_summary, assumption_lines
 ROOT = Path(__file__).resolve().parents[2]
 CARDS_DIR = ROOT / "docs" / "asset_expansion" / "cards"
 
@@ -114,6 +115,7 @@ def run_family(family: str, symbols: list[str], *, source: str = "auto", cost_bp
             "panel": pn, "score": sc, "wf": wf, "equity": eq, "bench_equity": beq, "grid": grid,
             "chosen": grid[wf.chosen[-1]] if wf.chosen else {}, "cost_bps": cost_bps, "cost_floor": floor,
             "withheld": withheld, "ledger_n": ledger_n,
+            "assumptions": assumption_summary(family, cash_daily=rf, has_regime=bool(sc.regime)),
             "exposure": exposure_summary(family, pn.prices, dates, grid, fn, wf,
                                          embargo=embargo, cash_daily=rf)}
 
@@ -123,7 +125,8 @@ def narrative(r: dict) -> str:
             f"{len(r['grid'])} configurations = {sc.n_trials} trials): "
             + (f"decision withheld — {r['withheld']} " if r.get("withheld") else f"decision {sc.decision} — {sc.reason}. ") +
             f"The last in-sample winner was {r['chosen']}.")
-    return head + " " + " ".join(exposure_lines(r.get("exposure")) + list(sc.lines))
+    return head + " " + " ".join(exposure_lines(r.get("exposure")) +
+                                assumption_lines(r.get("assumptions")) + list(sc.lines))
 
 def payload(r: dict) -> dict:
     sc = r["score"]
@@ -133,7 +136,8 @@ def payload(r: dict) -> dict:
             "reason": r.get("withheld") or sc.reason, "revise_target": None if r.get("withheld") else sc.revise_target,
             "stats": {k: v for k, v in sc.__dict__.items() if isinstance(v, (int, float, str, bool, tuple)) and k not in hide},
             "regime": sc.regime, "lines": sc.lines, "walk_forward": r["wf"].note,
-            "exposure": r.get("exposure"), "exposure_notes": exposure_lines(r.get("exposure"))}
+            "exposure": r.get("exposure"), "exposure_notes": exposure_lines(r.get("exposure")),
+            "assumptions": r.get("assumptions"), "assumption_notes": assumption_lines(r.get("assumptions"))}
 
 def _study_card(c: dict) -> dict:
     """A card with every key the page indexes, read with .get: a file of another shape (a v2 macro card, a header,

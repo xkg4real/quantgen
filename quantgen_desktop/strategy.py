@@ -2,6 +2,7 @@
 from core.research.strategy_analysis import StrategyRequest
 from core.research.strategy_workflow import FAMILIES, narrative, payload
 from core.research.strategy_exposure import EXPOSURE_HELP, exposure_lines
+from core.research.strategy_assumptions import assumption_lines, historical_card_lines
 from .tools import ToolPane, number, fmt
 from .model_narrative_language import strategy_variants
 
@@ -35,6 +36,8 @@ class StrategyPane(ToolPane):
             self.result_table('Study scorecard', ['Card', 'Kind', 'Decision', 'Reason'],
                 [[c['card_id'], c['kind'], c['decision'], c['decision_reason']] for c in cards])
             for c in cards:
+                for en, ko in zip(historical_card_lines(c), historical_card_lines(c, 'ko')):
+                    self.text(en, localized={'en': en, 'ko': ko})
                 record = (f"{c['card_id']} · {c['decision']}\n{c['hypothesis']}\n{c['decision_reason']}\n"
                           + '\n'.join(c.get('lines', [])) + '\nSources: ' + '; '.join(c.get('citations', [])))
                 self.text(record, localized={'en': record, 'ko': record})
@@ -48,6 +51,8 @@ class StrategyPane(ToolPane):
             self.text('SYNTHETIC · 아래 점수는 합성 시연입니다. 공식 연구카드 판정이 아닙니다.')
         for line in exposure_lines(d.get('exposure')):
             self.text(line)
+        for en, ko in zip(assumption_lines(d.get('assumptions')), assumption_lines(d.get('assumptions'), 'ko')):
+            self.text(en, localized={'en': en, 'ko': ko})
         self.text(f"Decision: {safe['decision']} · {safe['reason']}")
         self.text(f"Grid/DSR trials {len(d['grid'])}/{sc.n_trials} · cumulative ledger configurations {d['ledger_n']}\n"
                   f"Walk-forward: {wf.note} · last in-sample winner: {d['chosen']}")

@@ -29,6 +29,7 @@ import ui.xcharts as xc
 from core.research.strategy_workflow import FAMILIES, FAMILY_ID, _MARKET, register_trials, narrative, payload, _study_card
 from core.research.strategy_workflow import run_family as _run_family
 from core.research.strategy_exposure import EXPOSURE_HELP, exposure_lines
+from core.research.strategy_assumptions import assumption_lines, historical_card_lines
 
 ROOT = Path(__file__).resolve().parents[1]
 CARDS_DIR = ROOT / "docs" / "asset_expansion" / "cards"
@@ -55,7 +56,7 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
         c = next((x for x in cards if x["card_id"] == picker.value), None)
         detail.controls = []
         if c:
-            detail.controls = [
+            detail.controls = [notice(line, "accent") for line in historical_card_lines(c)] + [
                 ft.Row([chip(c["decision"], _TOKEN.get(c["decision"], "muted")), chip(c["kind"]), chip(f"seed {c.get('seed')}"),
                         chip(f"results md5 {str(c.get('results_md5', ''))[:8]}")], spacing=6, wrap=True),
                 ft.Text(c["hypothesis"], size=12, color=pal.text, italic=True, selectable=True),
@@ -129,6 +130,7 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
             sc = r["score"]
             blocks: list[ft.Control] = []
             blocks.extend(notice(line, "accent") for line in exposure_lines(r.get("exposure")))
+            blocks.extend(notice(line, "accent") for line in assumption_lines(r.get("assumptions")))
             if "SYNTHETIC" in r["sources"]:
                 blocks.append(notice("Synthetic data in the panel: the verdict below is a toy.", "error", icon=ft.Icons.SCIENCE_OUTLINED))
             if r.get("convention"):
