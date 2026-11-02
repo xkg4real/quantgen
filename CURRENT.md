@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-11-02T10:58:31.000+09:00
+updated_at: 2026-11-02T11:20:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
-work_commit: d0f18a011dc6703a45e851a4eb1413439353e6f5
+work_commit: efd9b0c70fb113342e9a2dce498d88113d2ee0f3
 uncommitted_changes: no
-pr: 51,52 (merged); 47 (separate UI session merged)
+pr: 54 (open; runtime/Windows CI in progress)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -24,6 +24,13 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN 직접 작업 재개 — 2026-11-02
 
 > 최신 사용자 직접 지시: 2026-11-02 13:00 KST를 목표로 지정 Notion Remaining Work 미완료 항목(4~7,10 등)을 재개한다. GPT/Gemini spec 공개/추가 모델 심사를 수행하지 않는다. 기존 O8 NOT_PERFORMED와 기술·Windows·실행 조건은 보존하며 실제 확인된 하위 작업만 완료 표시한다. 이전 STOP은 이번 범위의 직접 재개 지시로 해제됐다. 아래 10월31일 반환 내용은 이전 이력이며 최신 지시보다 우선하지 않는다. 현재 최신 코드·문서/검사 상태를 대조하는 중이며 외부 실행 승인/개인 PC/원장 제한은 유지한다.
+
+## 11월2일 검증 체크포인트
+- 제품 source027fddf / 기록 포함head efd9b0c70fb113342e9a2dce498d88113d2ee0f3, PR54. 원격 code push/read-back 확인. 로컬 source/Flet130·production 언어/startup17·문서47 PASS; 설치 wheel Flet/PyQt6 합성계산/JSON·ZIP PASS. 넓은native회귀와 exact-head Windows/Ubuntu CI 진행중. 제품전체/실기기 완료 아님.
+- 오프라인 viewer private commit7e9e112, 합성 Chromium58/58 PASS. Step7A 진단 private commit07c4859, 합성23 PASS; 원격미게시. 10-4 비교Word/TXT/PDF13검사PASS·9쪽, cracker.im공식본문 proxy403으로미검증.
+- sapientia Remaining Work에 검증된 private하위범위3개취소선과 HTML/TXT첨부 실제반영/read-back. 직접ZIP/Word업로드는 proxy403실패라성공으로표시하지않음. GPT/Gemini spec공개없음.
+- 같은 기존 시간당예약을 최신재개범위로복구; 새예약/run_now없음. 등록만으로실행성공을주장하지않음. RUN.lock이현재실행에있으면다른실행은종료해야함.
+- 후속M4-N3금리/배당명시시나리오는별도local gpt브랜치에서core/Flet/Qt통합중. 이번PR54에아직포함하지않음.
 
 ## 현재 실행 단위
 - 최신 main d0f18a0 기준 격리 gpt/remaining-work-20261102에서 작업. 언어 표시, 실제 앱 구동, 독립 오프라인 MVP, Step7A JSON 진단, 비교전략 보고서를 병렬 검증한다.
