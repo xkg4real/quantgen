@@ -1,8 +1,8 @@
 """Shared native form and result widgets for the FICC tool panes."""
 from .translations import display
 import math
-from PyQt6.QtCore import pyqtSignal, Qt
-from PyQt6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QPushButton, QStackedWidget, QVBoxLayout, QWidget, QSizePolicy
+from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QPushButton, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget
 from .charts import LineChart, SignedBars
 from core.ficc.common import FICCError
 

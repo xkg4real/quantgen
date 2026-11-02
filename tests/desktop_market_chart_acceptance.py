@@ -120,6 +120,15 @@ class NativeChartLifecycleTests(unittest.TestCase):
             QTest.qWait(10)
         self.fail("REST worker did not finish")
 
+    def wait_for_ui(self, predicate):
+        # Assert the rendered outcome, not an OS-specific timer scheduling time.
+        for _ in range(100):
+            self.app.processEvents()
+            if predicate():
+                return
+            QTest.qWait(10)
+        self.assertTrue(predicate(), 'UI did not render the accepted tick within 1 second')
+
     def load(self):
         self.assertTrue(self.pane.refresh(manual=True))
         self.wait_idle()
@@ -172,6 +181,27 @@ class NativeChartLifecycleTests(unittest.TestCase):
         self.assertEqual(p.load_button.text(), "Load / refresh")
         self.assertIs(p.snapshot, before)
         self.assertEqual(len(self.service.calls), 1)
+
+    def test_connect_from_empty_chart_loads_history_before_subscribing(self):
+        self.assertIsNone(self.pane.snapshot)
+        self.assertTrue(self.pane.stream_button.isEnabled())
+        self.pane.stream_button.click()
+        self.wait_idle()
+        self.app.processEvents()
+        self.assertEqual(len(self.service.calls), 1)
+        self.assertTrue(self.streams[-1].started)
+        self.assertTrue(self.pane.chart.renderer().isValid())
+
+    def test_missing_kis_settings_has_actionable_message_without_raw_exception(self):
+        from data.krx.kis_client import KISUnavailable
+        with patch.object(self.service, 'load', side_effect=KISUnavailable('SECRET')):
+            self.pane.stream_button.click()
+            self.wait_idle()
+        self.assertIn('KIS_APP_KEY', self.pane.status.text())
+        self.assertIn('.env', self.pane.status.text())
+        self.assertNotIn('SECRET)', self.pane.status.text())
+        self.assertFalse(self.streams)
+        self.assertTrue(self.pane.stream_button.isEnabled())
 
     def test_old_request_result_cannot_overwrite_new_symbol(self):
         self.service.entered, self.service.release = threading.Event(), threading.Event()

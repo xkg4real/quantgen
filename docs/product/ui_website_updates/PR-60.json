@@ -1,0 +1,73 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-home-live-qscore-pr-60",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "No supported cross-chat send tool. Shared handoff record is saved separately; receipt and actual reading remain unverified.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/UI_SESSION_CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/live-chart-layout-20261102",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/60",
+    "implementation_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c",
+    "merge_commit": "1e67b04a4e6e39a1689bdea3d682c330d40fe6b6",
+    "head_commit": "6a2c062427409b2d61cb1bdfb7ce7d3e56f2650f",
+    "remote_status": "MERGED"
+  },
+  "summary_ko": [
+    "기술지표 가이드를 독립 왼쪽 메뉴로 이동하고 연구홈에 기존 지표 6종+국내주식 6종·상세보기를 배치했습니다.",
+    "KIS 첫 연결에서 이력 조회 후 구독하며 키 누락 안내와 KRX 빈 공간을 수정했습니다.",
+    "국내 6종은 단일 WS 연결을 사용하며 실제 체결에 따라 가격과 실험적 Q-SCORE를 갱신합니다. 별점은 기존 기술신호70%·최대낙폭15%·CVaR15%이며 최소200 수정 일봉을 요구합니다."
+  ],
+  "website_impact": {
+    "classification": "native_ui_and_shared_data_change",
+    "browser_code_changed": false,
+    "shared_sources": [
+      "data/kis_stream.py",
+      "core/research/watchlist.py",
+      "core/research/qscore.py"
+    ],
+    "requested_actions_ko": [
+      "AWS는 실제 웹 소스에서 연구홈·가이드·실시간 목록 대응 여부를 검토합니다. Qt UI 코드를 직접 복사하지 않습니다.",
+      "정책14종 원문 변경에 따라 별도 단일 HTML의 KO/EN Docs 본문·버전·해시를 재검토합니다. 기존 HTML이 최신 정책에 일치한다고 표시하지 않습니다.",
+      "웹 HTML/소스 GitHub 게시 금지, AWS 로그인 재요청 금지, 사용자의 직접 업로드 방식을 유지합니다."
+    ]
+  },
+  "verification": {
+    "integration_tests": 99,
+    "native_regression_tests": 53,
+    "policy_tests": 47,
+    "counts_note": "Overlapping offline suites; do not add as unique test count.",
+    "full_window_previews": [
+      "1360x940",
+      "1000x700"
+    ],
+    "source_document_consistency": "PASS",
+    "publication_readiness": "BLOCKED",
+    "actual_kis": "NOT_RUN",
+    "windows_new_ui_manual": "NOT_RUN",
+    "ci": "SUCCESS",
+    "runtime_ci": "https://github.com/xkg4real/quantgen/actions/runs/41385301484",
+    "document_ci": "https://github.com/xkg4real/quantgen/actions/runs/41385301381",
+    "windows_ci": [
+      "3.11",
+      "3.12",
+      "3.14"
+    ],
+    "linux_ci": "3.12",
+    "installed_wheel_smoke": "PASS outside source checkout; 7 pages, independent guide, 12 rows, Q-SCORE"
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "Q-SCORE는 새 실험적 연구 표시이며 예측 성능이나 매수 추천이 아닙니다.",
+    "실제 PC에서 KIS 차트 화면 표시는 확인됐으나 KISUnavailable 오류로 실제 체결 수신은 확인되지 않았습니다.",
+    "main.py는 Flet 실행, python -m quantgen_desktop이 네이티브 앱 실행입니다."
+  ]
+}
