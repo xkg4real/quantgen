@@ -61,6 +61,10 @@ class ResearchHomeTests(unittest.TestCase):
                 self.calls[key] = self.calls.get(key, 0) + 1
                 if key == 'rules': self.rules_changed = kwargs['on_changed']
                 view = ft.Text('fixture ' + key); self.built[key] = view
+                if key == 'market_chart':
+                    # Keep the real chart lifecycle contract in this route stub.
+                    view.deactivate = unittest.mock.Mock()
+                    view.reconnect_session = unittest.mock.Mock()
                 return view
             p = patch.object(app, name, side_effect=builder); p.start(); self.addCleanup(p.stop)
         app.main(self.page)

@@ -156,6 +156,27 @@ class NativeChartLifecycleTests(unittest.TestCase):
         self.assertIs(p.snapshot, before)
         self.assertEqual(len(self.service.calls), 1)
 
+    def test_connect_from_empty_chart_loads_history_before_subscribing(self):
+        self.assertIsNone(self.pane.snapshot)
+        self.assertTrue(self.pane.stream_button.isEnabled())
+        self.pane.stream_button.click()
+        self.wait_idle()
+        self.app.processEvents()
+        self.assertEqual(len(self.service.calls), 1)
+        self.assertTrue(self.streams[-1].started)
+        self.assertTrue(self.pane.chart.renderer().isValid())
+
+    def test_missing_kis_settings_has_actionable_message_without_raw_exception(self):
+        from data.krx.kis_client import KISUnavailable
+        with patch.object(self.service, 'load', side_effect=KISUnavailable('SECRET')):
+            self.pane.stream_button.click()
+            self.wait_idle()
+        self.assertIn('KIS_APP_KEY', self.pane.status.text())
+        self.assertIn('.env', self.pane.status.text())
+        self.assertNotIn('SECRET)', self.pane.status.text())
+        self.assertFalse(self.streams)
+        self.assertTrue(self.pane.stream_button.isEnabled())
+
     def test_old_request_result_cannot_overwrite_new_symbol(self):
         self.service.entered, self.service.release = threading.Event(), threading.Event()
         self.assertTrue(self.pane.refresh(manual=True))
@@ -183,7 +204,12 @@ class NativeChartLifecycleTests(unittest.TestCase):
         worker.start()
         worker.join()
         self.app.processEvents()
-        QTest.qWait(220)
+        # The coalescing timer is 200ms; CI may schedule its paint later under
+        # load. Require the visible quote to arrive within a bounded deadline.
+        for _ in range(100):
+            if '225' in p.quote.text():
+                break
+            QTest.qWait(10)
         self.assertEqual(p.snapshot.quote.price, 225)
         self.assertIn("225", p.quote.text())
         retained = p.snapshot
