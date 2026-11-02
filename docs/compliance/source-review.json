@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "d91e8196a5e5cb7e915096b1e617dc803f9c6b39405400f437ee36a4ad2ee00a",
+    ".github/workflows/runtime-smoke.yml": "1d1a736722bf389243706ba977b17196760cbc6f27c644adf16eb97ccf6445c9",
     "README.md": "6a4f572a12e6dea657c7c063240b94d1a928e2b4f41fff25f7348ca69e1b88b5",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -84,14 +84,14 @@
     "core/ficc/forward_conventions.py": "11226fef98c00ec3a6bdfe458da095ee07bf97523f2988351ed3af5e803be741",
     "core/ficc/fx.py": "a12dca02caab44fdfaa951081b1e613db3bd9448f81586b29c2e0039f6dd4e3b",
     "core/ficc/fx_styles.py": "339e24889c8e010018139cce6b362bed691f91493685780ef2fdc107c3dbd26e",
-    "core/ficc/insights.py": "6e9d6ae44223118c30ee0df979e23eccaa3789e121efeee117cca91b37692322",
+    "core/ficc/insights.py": "a18c4046d3fb87db31504b9bf74bc248e80595ebb37c1af3a5d5b0671c2eccc1",
     "core/ficc/lag_audit.py": "17d8ba7d9e0bd5f8d5bcff93c8df237ba23682cacdb386744e7d28fb91c1b429",
     "core/ficc/letf_assumptions.py": "c87beb1761aac4a9e60c2da942c6b83cffcc9f3d8ddc029ab91a5c18ad06fc49",
     "core/ficc/macro.py": "78139ea28b194878478cab77faf3fe3220249fbcd369a0da28c43cb92776eaca",
     "core/ficc/macro_artifacts.py": "0643b4337981e3e0ecd304a5f045690f62e6eaa0f396248775c035a871fa7ae1",
     "core/ficc/macro_schema.py": "36078e3589c36c1e443f3067c403b155bdef93b85341ed9df6bd3a2697248284",
     "core/ficc/pit.py": "ba15530722fafe454783907071a0947e0b0a971505dbb8d19216088b2c77d1d9",
-    "core/ficc/ratesim.py": "392a5ad3b9783adff0bbe29eb573aba6f70c90f666a087f34f35a515ad91df67",
+    "core/ficc/ratesim.py": "28ea6fb89913a7014024c6062a67c25f0c1ea43795923a52c70fddd31613b77b",
     "core/ficc/sabr_diagnostics.py": "b67c1298d002abeb552652ca2374a9d9991259f72a8caeed731c0917a9dae232",
     "core/ficc/schemas/context_log.v2.0.json": "b6dbddc5bfae4846b5492429e786e81f82e81a1ca980792cc75661e4954b0869",
     "core/ficc/schemas/event_calendar.v2.0.json": "f307cec0ecfaf0b953995105192731a05efc5eabda17c2613143eb546acf6756",
@@ -169,7 +169,7 @@
     "core/research/presentation.py": "3eccfd7e49ace9b1a39b3a8f89538c528439ad90125119c7ac262b35ca135e37",
     "core/research/provenance.py": "b7dbb0ee71a0df7809304110bf1c259289122d37af269da0e29ef3f5e7dbc8db",
     "core/research/quote_coverage.py": "92145030da624f6cca4696e4ea40384c2791fdeb2185abaf3000c24cd62ca0b9",
-    "core/research/rates_analysis.py": "ac1bf95230a9f875a7f59cec1fd09c586ab70f39a49c0abae71cba0c230ab217",
+    "core/research/rates_analysis.py": "a475fd24e0388ba899d399b3b7ba858fb1096586110f747505d321e11fecf8ef",
     "core/research/runs.py": "480df15cf6ab9458743dcce4eba05b1f1e534e7635756a7c6353ebee5965f6f4",
     "core/research/signals_analysis.py": "6f2f2c495fec9e152fc372edbe8bb3e38436038d7ab1842b17a1703a0f229281",
     "core/research/strategy_analysis.py": "5cbf2915c0657081a3ee8b9bfca8169814de533e2965f9835d74d28f6b01f1c9",
@@ -235,7 +235,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "178a423cc5870747ad39617ececdaf31cf88ad22f00d5f867f9885173181314c",
+    "docs/compliance/FACTS.md": "3cd46392d9be71c9fdead1a76a5c90689d360498479e7e31df6b23d963e297f7",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "b00b8d7cca62810b9bf938dc0f1485e3b494ba43f65f40858663b79fdefde223",
@@ -269,11 +269,12 @@
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
+    "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
     "docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md": "ad9177b241178d7427f77caa8b7de6f14390610d41d2959c87dd03b1093fd189",
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "94e8c2d7682d59ba9115d7ea317118099ef0db26301169c67983fe84be2122bb",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "9eb917388f941560c928f571d70460513e17b8048630a3dd4abea9aaa635fbd3",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
@@ -353,7 +354,7 @@
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
     "tests/desktop_macro_language_acceptance.py": "916fc1c1d5620d9cc58b674084b2a30aa3f65512e1a2b9c7f73236f459ac3832",
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
-    "tests/desktop_market_chart_acceptance.py": "07a166d0dd4ee6d5662ea06cc8d10a8aa3381ed4a381fa186b97bec70c3f76a4",
+    "tests/desktop_market_chart_acceptance.py": "223aae61612f40f94cbd8a6cf7d18a7bc7599444d09748b5757c56cc80109dbe",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
@@ -367,7 +368,7 @@
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
-    "tests/ficc_acceptance.py": "101e26e68f97b5cb4a8bf2a5498a300498a9c44627d219559d1fcbd5228ed813",
+    "tests/ficc_acceptance.py": "04e7f5301539555f8c5be057d010fbfd40a2e22af32fac33bdb51a210b23b2f5",
     "tests/ficc_boundary_acceptance.py": "004cef8d6fe84cf7e3481fd4bcc93ad76abfcb8abc2da65e27132d5eae664957",
     "tests/flet_api_guard.py": "eb8c49ea831064795613cfa80b2cbc70e1fb38cbcacc2587e1fd0863ca85f57a",
     "tests/flet_runtime_acceptance.py": "19e881c015ed2837bde5ebcaa6b362c792c698e83e92765a2187a2003e30e6f6",
@@ -380,9 +381,10 @@
     "tests/kis_stream_acceptance.py": "a9108b1ab7fa59c536fa616a3a03d1d179176bdf8007628c01043cf457895bbe",
     "tests/kis_workspace_acceptance.py": "b381d8a3e7c0d53f671ab06859fab7e72467af50c95d79894aa0b914eeb22421",
     "tests/letf_ai_payload_acceptance.py": "9defaeed9ec2f7988a146643f3f3a466e743a96cefa4e4b24f0e803b10690421",
-    "tests/letf_assumptions_acceptance.py": "c62cc15e979a61371539def2da6c20e8394e16bb289c2ad91ce2e70747bc5944",
+    "tests/letf_assumptions_acceptance.py": "b7604260ff3c0602065d34b927cb6f5a8364f5c27811ea8c138658c1c6cf9eaf",
     "tests/letf_disclosure_acceptance.py": "ec7e880c6b450f490103ac2e95bda12e0c4d9b4d14c79b0a993c09f613112ce6",
     "tests/letf_index_acceptance.py": "8ce0f308cb5b2d971bb6b629fc811f88afd95b64ed4d74e57873f43e58c39965",
+    "tests/letf_io_guard_acceptance.py": "d1b3141513d36958da88f14cbd3bda77d3c27dedf260fc5731bce6bd46b1eb43",
     "tests/macro_acceptance.py": "797e97526b724a54ad1f6e3caec3f7c8d0dbad2b1b7a2ce3616dbe6751db1587",
     "tests/macro_m0_harness.py": "5591a52b2a3f9617171b1e9dae005c5b61a445de73c7f126b047a8f94066c687",
     "tests/macro_m0_instruments.py": "ed1a81a2793cc8f8f4919b36d9e85ecd0dc4058dfd52d8abc98b9eca6d8e2d73",
@@ -429,6 +431,7 @@
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
     "tests/quote_coverage_acceptance.py": "09d727791eb18d44955a0324058439c0d63777af94b5ca18f8a1ced7eb6cec86",
+    "tests/rates_revaluation_params_acceptance.py": "85ccf11af449a58c8d3772bb38e0502d3f5b8d772caad478b27ad91d50fc5329",
     "tests/reference/__init__.py": "981465fb05d87f128a0b80cc4b8122a83335ee0994ce5b4d3ee3bdbe72bc6e9c",
     "tests/reference/reference_mode.py": "f79ad9f482323344ee20c6685edf08b8abd64f11dfad25ab40cd132ad9339c37",
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
@@ -489,7 +492,7 @@
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
     "ui/derivatives_page.py": "ed659a96def9e1b9bddbd0295c6357c47418fb4ba11778a1aecc817c352e1359",
     "ui/etf_page.py": "910b2a27d4ee5264cc79286e8fc48bc985a251d6a0f1727ec6f29daa633c660f",
-    "ui/fcharts.py": "e59a274207d5b3b2ad416a5a304cc040f517caee8f166a309b279342f8dfe56d",
+    "ui/fcharts.py": "fc7fafba72863691b8013fbba55c3299eac46440f7a5285ffd7e4ba61b0bf78d",
     "ui/fx_page.py": "42a0304e93d0d9159d3941ee7c6883c980e9e595b9825cccc10c2eccdc99f48d",
     "ui/indicator_guide.py": "a063f8938b211975b4f0f00edcd40a3e6f1aa65f4db9aaeca4494a471bae5ccd",
     "ui/krx_page.py": "9f66b040a21a9e757af61f3ed4dfa5dfc6220ec1a0ba171996365c4db98b86a2",
@@ -501,7 +504,7 @@
     "ui/portfolio_page.py": "dafb8f336dffa002992c4cac3c8817ef66346cade02855c5f9bbbee1bc0b56a2",
     "ui/qcharts.py": "4b173a61b68e9b9378ccbd97f827eb6f368f0232352ecf2225e404374b39accd",
     "ui/quant_lab_page.py": "e15a5c11d00a2a7c2c3034cc69e9e6c1fc6b852fda61bc8a78d2d7050b2ca457",
-    "ui/rates_page.py": "0174e7498e14dbf12bde6a33c5fa4f9fa610cd19795865ff20a5141bed716122",
+    "ui/rates_page.py": "353612b0641e9138b5c31bb4c42281c10267096ddfb00cfb5e3e2c2de26796e4",
     "ui/research_home.py": "08a5985d0c0788e40648a94d51bf1202c08097eac08b0b85b043dfedb7e1b6c7",
     "ui/research_view.py": "cf9f3a905aace4617c6582aad9213e8e4aff859ed07b9a97316d3431809ba10d",
     "ui/rules_page.py": "cfd9ef27c9ae2c0b5279ad46de8026b73aad711846b6c743e7e978c09482315b",
@@ -516,163 +519,163 @@
   "reviews": {
     "1": {
       "document_sha256": "31a79b6417732796945b28f5f167a432d6f53eb86852bc8eeadd9b8923aff155",
-      "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.419194+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "b7899db566ff5c17dc3e527c5bb26dc3a7bacad1b42dba80f76afcf2f32879cf",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.042327+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "2": {
       "document_sha256": "ff1afc17787f8c26209a022892c76e5d44af87b32988be7e01a6e9ee83d81c2f",
-      "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.421440+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "b7899db566ff5c17dc3e527c5bb26dc3a7bacad1b42dba80f76afcf2f32879cf",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.044682+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "d569ed2d9bdd8152c911d9779de7828ee7923e26f4bd9abe0c762b049fbc818a",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.423697+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "9d56c8f14f48285476fba586fa193c15811b799480041359d8589e39a884e098",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.046987+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "4": {
       "document_sha256": "6e917ef0c712b4406cc1ce8007884dae6c2922c46b364ed7ead166868de77b59",
-      "source_digest": "1130f6b59b4881fe995dbba6f63c63899ff68b95dc555883c3406f65c8f8d6ef",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.425951+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "e9fbb64adf115e507fd760c9249828c1dacb9ab3ad5b6f6334a54a4f54952437",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.049037+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "8b35907b25be5cd985f8c4ad03410b7e0d085afccfc6db061e2ae2164afed1b9",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.427997+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "47a6ff6c8e07e5db436cbe1f542d2dbf3721ebf6bb8c8f184b0a6585a999fd99",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.051357+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "6": {
-      "document_sha256": "d6b67c23112b708082f04d4ca62899b978a69b7f19e04a3149b63df9c4aba062",
-      "source_digest": "2bcaf38fbe2f6cfd40e90ae6f06c47f07c107ba851d49a7d5cb39ef9c7c5fd75",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.430205+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "document_sha256": "f83a3ea15f1b5dd48d6b03146cb8411c23756707769aa8830510b3b59c35c026",
+      "source_digest": "ecd2da52f8c8a1b5aad9397e9566cb2c4e27f6904355d1de06ccfbb479bd6bea",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.053469+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "7": {
       "document_sha256": "bd91d3d8ea6a85eb7f6f9f0e8afdc40403760e40ca03df95c419e76e35817f70",
-      "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.432402+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "b7899db566ff5c17dc3e527c5bb26dc3a7bacad1b42dba80f76afcf2f32879cf",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.055609+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "8": {
       "document_sha256": "f8c83e2d6942ae1a0a45863a951ec512c9a099e089b970d580c7a075f1fe70b7",
-      "source_digest": "2bcaf38fbe2f6cfd40e90ae6f06c47f07c107ba851d49a7d5cb39ef9c7c5fd75",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.434650+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "ecd2da52f8c8a1b5aad9397e9566cb2c4e27f6904355d1de06ccfbb479bd6bea",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.057683+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "9": {
       "document_sha256": "0425a711d615ab6ff44a4573ed1d4962dc620cc0f89ac349481a0eee448ee262",
-      "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.436632+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "f4edf2134052dcc445547c088cc4f20613a294917f80408c6c5124dfc9021b73",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.060077+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "f532a9930446bdd84667cec423ab693f2ebbf453ff7529bfdba5cdfb28e6e740",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.438819+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "d481c11b908fc4eb806e82d71203967f78453a4eb2335ff9b397f893b0353185",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.062310+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "1478fa88a12d3fd6874a87f69d8530779f9dd6eaeee44f7ec9f85b11da59f9c3",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.441455+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "781051bcbd9433adec1b84636aaa096b163d5988f2d522b6f3b7c394c74b6207",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.064474+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "12": {
-      "document_sha256": "407e354b7b2d7281c5b1555b04767a04ba47bf16c061cb5ac429ff8a6cfabc0e",
-      "source_digest": "88e2531af8c293e6c8b254e5eedf7066ef96cabfb7bacd1aaa18abf54ea7fa4f",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.443579+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "document_sha256": "6f98fda31f2dbad741f03adca28de476b94de3ea6bd7826a987b8cc437eacd97",
+      "source_digest": "30aab3701926e7d924a074ce7782e2d057d9df47072e27f856abd513606ae3b4",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.067270+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "13": {
       "document_sha256": "3a5eb3e68df8feebe2eaa02a96f4e89f87dbe2cf17fa6f58d6e372eb59b16b1f",
-      "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.445569+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "f4edf2134052dcc445547c088cc4f20613a294917f80408c6c5124dfc9021b73",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.069553+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "14": {
       "document_sha256": "5db35b4cdfe4e6f054979abadb7fc49d628154719f319ce7308626f004515d5d",
-      "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.447435+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "f4edf2134052dcc445547c088cc4f20613a294917f80408c6c5124dfc9021b73",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.071633+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "15": {
       "document_sha256": "e5143b74273be5899c679d40e2e447da79c3fe5b565e278bf014535954d64701",
-      "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.449780+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "f4edf2134052dcc445547c088cc4f20613a294917f80408c6c5124dfc9021b73",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.073514+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "09b26bceb680f1b09f14c30db85b80f5ae1d2d06b44a070c7abd6a412ffe5924",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.451688+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "175969a16467b0ab003f7352b707871dff9284c97b743bd4a14ecb6194e7fe10",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.075602+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "2bcaf38fbe2f6cfd40e90ae6f06c47f07c107ba851d49a7d5cb39ef9c7c5fd75",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.454173+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "ecd2da52f8c8a1b5aad9397e9566cb2c4e27f6904355d1de06ccfbb479bd6bea",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.077634+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.456553+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "b7899db566ff5c17dc3e527c5bb26dc3a7bacad1b42dba80f76afcf2f32879cf",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.079757+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "19": {
       "document_sha256": "1a489fb06d0cb74a247df01ed5d43f7ab9921dc4326920a8fc805a26a9a6addd",
-      "source_digest": "6f73f42f189adefd51ae651432a0f7040b9ec13ef8085bbbdd91d165486bea5e",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.458944+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "414b605a9c012bf54dc5a901e542020f8040ca5d094805e6ddb3abfb85b58a62",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.081849+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     },
     "20": {
       "document_sha256": "7c3cbc05a1d70875329da961cdcc2827878c98285aff03ed7856cd06a1db9b91",
-      "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.461460+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "b7899db566ff5c17dc3e527c5bb26dc3a7bacad1b42dba80f76afcf2f32879cf",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:18:03.084046+00:00",
+      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
     }
   }
 }

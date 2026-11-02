@@ -18,11 +18,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class NativeChartSourceChecks(unittest.TestCase):
     def test_native_view_uses_shared_contract_and_renderer(self):
-        tree = ast.parse((ROOT / "quantgen_desktop/market_chart.py").read_text())
+        tree = ast.parse((ROOT / "quantgen_desktop/market_chart.py").read_text(encoding="utf-8"))
         imports = {node.module for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)}
         self.assertTrue({"core.market.models", "core.market.presentation", "core.market.live"} <= imports)
         # User-facing native features must be reachable from the real application.
-        app = (ROOT / "quantgen_desktop/app.py").read_text()
+        app = (ROOT / "quantgen_desktop/app.py").read_text(encoding="utf-8")
         self.assertIn("self.market_chart = MarketChartPane(locale=self.ctx)", app)
         self.assertIn("self.market_chart.stop()", app)
         self.assertIn("self.market_chart.set_locale(self.ctx)", app)
