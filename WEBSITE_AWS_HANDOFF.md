@@ -1,3 +1,36 @@
+# 최신 AWS 후속 프롬프트 — PR61 완료 / PR62 검사 중
+
+아래는 사용자에게 제공할 복사용 작업 지시입니다. 원격 공유 저장이며 AWS 세션 수신/실제 웹 적용/배포 완료의 증거가 아닙니다.
+
+QUANTGEN 웹사이트 작업공간(AWS)에서 이어서 처리해주세요. 대상 https://quantgeneration.com/
+
+먼저 공유 인계를 읽고 실제 AWS 소스와 대조하세요.
+https://github.com/xkg4real/quantgen/blob/handoff/WEBSITE_AWS_HANDOFF.md
+https://github.com/xkg4real/quantgen/blob/handoff/UI_SESSION_CURRENT.md
+https://github.com/xkg4real/quantgen/tree/main/docs/product/ui_website_updates
+앱 표/글꼴: PR61(main 병합 완료). 앱 차트: PR62(현재 병합 상태 확인).
+
+이전 UI 환경에서 소개사이트와 KO/EN Docs20종의 단일 HTML/ZIP을 제작·검사했습니다. 그러나 환경 교체 후 현재 UI 작업공간에는 그 파일이 없습니다. 이미 사용자에게 전달된 HTML/ZIP 또는 이 AWS 세션에 보존된 실제 소스를 사용하세요. 이전 경로가 현재 존재한다고 가정하지 마세요.
+이전 HTML 이름 QUANTGEN-website-with-docs-2026-11-02.html, SHA256 ce48aea091f482ad834fdf836ae71528731e92ddbd90b1d5b2bc372fd8fcc609,5506989bytes. 그 파일의 정책 기준은 cac727e2로 지금 main보다 오래됐습니다. 앱 UI 반영을 웹 배포 완료로 간주하지 마세요.
+
+유지할 요청: 로고 / Main·Who we are·Docs·Questions·Inquiries / 우측 Login·Sign Up / Login 왼쪽 globe, 한국어·영어 전체 번역, 아이보리·숲색 테마, Light/Dark, 둥근 Liquid Glass 버튼·설명 카드, 부드러운 스크롤과 모션 감소 대응. 기존 impeccable/taste 규칙을 재사용하고 기존 Figma 파일 없이 진행합니다.
+
+남은 작업:
+1. 실제 라우터·언어·테마 방식으로 소개 화면과 내부 Docs 목록/상세20종을 연결하세요. 메뉴뿐 아니라 본문·표·버튼·개정 안내를 번역하고, 언어 전환 시 동일 문서 유지 및 직접 URL/새로고침을 검증하세요. 없는 번역은 조용히 다른 언어로 대체하지 마세요.
+2. 최신 main docs/compliance/registry.json과 원문20종을 재대조하고 공개용 본문·KO/EN 버전/해시를 갱신하세요. 내부 승인표를 공개하지 말고 review-required는 프리뷰로 구분하세요. 미확정 사업자/환불/권한 조건을 새로 만들지 마세요.
+3. 실제 불일치: 사용자가 승인한 웹 요금 초안은 Free / Pro월59,000 / Ultra월129,000, 기능은 학습·기본탐색 / 전략검증·포트폴리오연구 / 고급시나리오·확장분석입니다. 현재 원문 정책02/03/10에는 Research29,000 / Pro59,000 / TeamPilot290,000 및5인 조건이 남아 있습니다. 초안과 정책이 일치한다고 공개하지 말고 차이를 명시하여 정리하세요. VAT·자동갱신·환불 조건을 임의 변경하지 마세요.
+4. 하단 약관·환불·개인정보·쿠키·Docs 내부 링크를 선택 언어로 제공합니다.
+5. 대응하는 연구 화면이 있다면 PR61의44px 비교 표(종목/가격/변동/거래량/시총/PER/EPS/업종/상세/Q-SCORE)를 참고하세요. Q-SCORE는 마지막, 제목 옆? 도움말. 출처·관측일·상태는 상세/가격툴팁에 보존합니다. 미지원 EPS기준·배당·상대거래량을 만들지 않습니다. 도움말에 산식 대신 실제 기술신호·위험분석과 입력 검증을 설명하되 예측력·수익을 보장하지 않습니다.
+6. 앱 fonts의 실제 QG Interface Regular/Medium/Semibold(Pretendard 파생)와 OFL 고지를 재사용하여 제목/본문/숫자 위계를 맞춥니다. 이전 HTML이 이미 바뀌었다고 주장하지 마세요.
+7. PR62의 단순한 가격중심 차트·선택형 지표·한영 설명을 해당 웹 화면에서 검토하세요. 새 자동연결·틱/초봉 조작은 네이티브 구현이며 Flet은 공통SVG/읽기 언어 변경만 적용됐습니다. 소개사이트가 실시간 차트 기능을 이미 제공한다고 쓰지 마세요. 틱/초봉은 연결 후 받은 체결뿐이며 자료 이용권·지연·지원시장 제한은 그대로입니다.
+8. 데스크톱/모바일·KO/EN·Light/Dark·키보드·문서20종 누락·번역/버전불일치·깨진 링크·차트/본문 잘림을 검사하고 최신 단일 HTML을 사용자에게 직접 전달하세요.
+
+웹 HTML/소스는 GitHub에 올리지 않습니다. 사용자의 직접 AWS 업로드 방식을 유지합니다. 이 AWS 세션의 기존 로그인과 승인 범위를 사용하고 별도 로그인/비밀번호/액세스 키를 반복 요청하지 마세요.
+소스 구현 / 프리뷰 확인 / 실제 웹 적용 / 배포 후 공개 URL 확인을 분리하여 보고하세요. 로그인·결제·문의 백엔드는 기존 HTML에 완료된 것으로 간주하지 마세요. 최종 파일 위치·해시·검증 결과·남은 항목을 main/Claude 공유 인계에 기록하세요. CURRENT/LEDGER/AUTO_STATE 소유권은 변경하지 않습니다.
+
+
+---
+
 # 2026-11-02 AWS 최종 HTML 준비 완료 — 운영 미반영
 
 [최신 AWS 결과·검증·적용 안내](WEBSITE_AWS_SESSION_CURRENT.md)를 확인하세요. 사용자 첨부 ZIP을 복구했고 한영 Docs20종/40번역을 main 8b40104 기준으로 갱신했습니다. 168 화면 경로·64 차트 조합·기존 연구 경로/재계산 검증이 통과했습니다.
