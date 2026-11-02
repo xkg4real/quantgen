@@ -179,6 +179,21 @@ The old zero-rate reference and historical research cards are preserved.
 Synthetic algebra, independent self-financing wealth, invalid-input/overflow
 and UI checks are documented in `LETF_ASSUMPTIONS_2026-11-02.md`.
 Implementation is not actual fund tracking, provider or Windows manual
-acceptance. Latest source implementation count: **16/67**, **51** remaining.
+acceptance. At the LETF checkpoint: **16/67**, **51** remaining.
 The original observation inventory has **14 rows and 14 unique model names**,
 not 13; **15 ambiguous ID mappings** remain open.
+
+
+## FX and CMS disclosure corrections — 2026-11-02
+
+M4-N6 removes the unsubstantiated 5 bp boundary between noise and an actual
+funding premium. The existing signed annualized input-rate CIP discrepancy is
+unchanged; timestamps, maturities and conventions remain unverified. See
+`FX_CIP_DISCREPANCY_2026-11-02.md`. M4-N11 distinguishes the first CMS expected
+annualized coupon from its later period schedule and a guaranteed payment.
+Pricing, Greeks, schedule and non-CMS conventions remain unchanged; see
+`CMS_COUPON_DISCLOSURE_2026-11-02.md`. Both changes reach native/Flet displays
+and AI/export interpretation without changing official research criteria.
+Latest source implementation count: **18/67**, **49** remaining, with
+**14 observation rows/models and 15 ambiguous mappings** still open.
+Actual market/provider/user-Windows acceptance is separate.
