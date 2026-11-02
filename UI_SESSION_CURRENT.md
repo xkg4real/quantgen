@@ -1,3 +1,16 @@
+# 추가 지시 반영 중 — PR61은 draft / 이전 head 검사는 최종본 아님
+
+사용자가 검사 대기 중 표 양식과 전체 글꼴을 추가 변경했습니다. PR61을 draft로 전환했고 이전 head 5b52e3d의 CI로 최신 작업 완료/병합을 판정하지 않습니다.
+
+- 새 표: 종목·가격·등락률·거래량·시가총액·PER·EPS·섹터·상세·Q-SCORE(마지막). 공급자/관측일/상태 열은 본표에서 제거하고 상세/가격 툴팁으로 이동합니다. 44px 행·머리글 ? 유지.
+- KIS 기존 현재가 응답의 지원 필드만 연결합니다. 공식 문서에 없는 희석/TTM EPS·성장률·배당수익률·상대거래량은 만들지 않습니다. hts_avls 단위는 미확인으로 보존하고, 시가총액은 검증 가능한 현재가(KRW)×상장주수에서 산출하며 기준/시각을 구분합니다.
+- 전체 글꼴: Pretendard의 실제 Regular/Medium/SemiBold를 동봉해 제목/본문/숫자의 위계를 개선하는 작업 중. QG Interface 가족 이름과 기존 차트 참조를 유지하며 라이선스·한국어/영어 두 줄 높이를 검증합니다.
+- 병렬 작업 소유: data=home_watchlist_data, table=home_watchlist_ui, typography=live_chart_visibility, 정책20종=completion_audit. 작업 폴더 /workspace/work/quantgen-home-compact-20261102, 브랜치 gpt/home-compact-20261102. root는 통합 검사/CI/PR/인계 담당.
+- 사용자에게 AWS 복사용 프롬프트 /workspace/artifacts/quantgen-ui/AWS_SESSION_PROMPT_20261102.txt를 제공했습니다. 웹 구현 HTML은 존재하지만 최신 정책 반영/실제 배포는 AWS 후속으로 남아 있음을 명시했습니다.
+- 다음: 새 표·font·metric 검증 → baseline/PR61 설명·큐 수정 → commit/push → draft해제·최종CI → main병합 → 사용자업데이트명령/인계최종갱신. 웹 HTML/소스 GitHub 게시와 별도 AWS 로그인은 금지입니다.
+
+---
+
 # 2026-11-02 연구홈 압축·Q-SCORE 소개 — PR61 검사 중
 
 이 섹션이 아래 PR60 기록보다 우선합니다. main/Claude 통합 인계에 포함하세요. 현재 상태는 **구현·로컬 검증 완료, PR61 원격 검사와 병합 대기**입니다. 소스가 사용자 PC에 자동 설치되는 것은 아닙니다.
