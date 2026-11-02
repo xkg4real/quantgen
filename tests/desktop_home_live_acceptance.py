@@ -136,14 +136,14 @@ class HomeLiveIntegrationTests(unittest.TestCase):
         initial = w.q_scores.scores()["005930"]
         self.assertEqual(initial["status"], "ready")
         self.assertFalse(initial["live"])
-        self.assertIn("★", w.watchlist.table.item(6, 7).text())
+        self.assertIn("★", w.watchlist.table.item(6, w.watchlist.table.columnCount() - 1).text())
         self.publish(self.home_streams[0], tick(price=121, stamp=self.clock))
         self.wait_until(lambda: w.q_scores.scores()["005930"].get("live"))
         live = w.q_scores.scores()["005930"]
         self.assertEqual(live["last_price"], 121)
         self.assertNotEqual(live["score"], initial["score"])
         self.assertIn("121", w.watchlist.table.item(6, 1).text())
-        self.assertIn("★", w.watchlist.table.item(6, 7).text())
+        self.assertIn("★", w.watchlist.table.item(6, w.watchlist.table.columnCount() - 1).text())
         self.assertEqual(w.watchlist.rows[6]["q_score"]["as_of"], self.clock.isoformat())
         self.publish(self.home_streams[0], tick(price=116, stamp=self.clock, cumulative=1010))
         self.wait_until(lambda: w.q_scores.scores()["005930"].get("last_price") == 116)
@@ -155,7 +155,7 @@ class HomeLiveIntegrationTests(unittest.TestCase):
     def test_details_selects_chart_stops_home_and_updates_candles_and_score_from_same_tick(self):
         w = self.window
         self.start_home()
-        w.watchlist.table.cellWidget(6, 6).click()
+        w.watchlist.table.cellWidget(6, w.watchlist.table.columnCount() - 2).click()
         self.app.processEvents()
         dialog = w.watchlist.detail_dialog
         self.assertTrue(dialog.isVisible())

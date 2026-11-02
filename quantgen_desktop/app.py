@@ -54,6 +54,23 @@ def label(text, role="", *, wrap=True):
     return w
 
 
+def load_interface_fonts(app):
+    """Register bundled real weights; retain the platform font if unavailable."""
+    family = None
+    for filename in ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf"):
+        font_id = QFontDatabase.addApplicationFont(str(application_root() / "assets/fonts" / filename))
+        families = QFontDatabase.applicationFontFamilies(font_id)
+        if families and family is None:
+            family = families[0]
+    if family is not None:
+        font = QFont(family, 10)
+        font.setWeight(QFont.Weight.Normal)
+        # Keep changing prices aligned without giving Korean labels a monospace face.
+        font.setFeature(QFont.Tag.fromString("tnum"), 1)
+        app.setFont(font)
+    return family
+
+
 def panel(title):
     box = QFrame()
     box.setObjectName("panel")
@@ -238,10 +255,6 @@ class ResearchWindow(QMainWindow):
         self.watchlist.refresh_requested.connect(self.refresh_markets)
         self.watchlist.chart_requested.connect(self.open_stock_chart)
         self.home_markets = self.watchlist.table
-        self.live_chart_open = QPushButton("실시간 시세·차트 열기")
-        self.live_chart_open.setProperty('primary', True)
-        self.live_chart_open.clicked.connect(self.open_live_chart)
-        layout.addWidget(self.live_chart_open)
         layout.addWidget(self.watchlist)
         summary = QHBoxLayout()
         self.count_labels = []
@@ -850,18 +863,18 @@ class ResearchWindow(QMainWindow):
         if self.language_store is not None:
             self.language_store.setValue("ui/theme", "dark" if index else "light")
         self.setStyleSheet(f"""
-          QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; }}
+          QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; font-weight: 400; }}
           QFrame#sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
           QFrame#panel {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; }}
           QFrame#panel QLabel {{ background: transparent; }}
           QLabel {{ background: transparent; }}
-          QLabel[role='title'] {{ font-size: 30px; font-weight: 700; }}
+          QLabel[role='title'] {{ font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }}
           QLabel[role='heading'] {{ font-size: 17px; font-weight: 600; }}
-          QLabel[role='brand'] {{ font-size: 16px; font-weight: 700; color: {p.accent}; }}
-          QLabel[role='number'] {{ font-size: 30px; font-weight: 700; }}
+          QLabel[role='brand'] {{ font-size: 16px; font-weight: 600; letter-spacing: 0.15px; color: {p.accent}; }}
+          QLabel[role='number'] {{ font-size: 30px; font-weight: 500; letter-spacing: -0.4px; }}
           QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
-          QLabel[role='caption'] {{ font-size: 11px; }}
-          QPushButton {{ padding: 10px 14px; border: 1px solid {p.border}; border-radius: 8px; background: {p.surface}; }}
+          QLabel[role='caption'] {{ font-size: 12px; }}
+          QPushButton {{ padding: 10px 14px; border: 1px solid {p.border}; border-radius: 8px; background: {p.surface}; font-weight: 500; }}
           QPushButton:hover {{ background: {p.accent_soft}; }}
           QPushButton:focus, QLineEdit:focus, QComboBox:focus {{ border: 2px solid {p.accent}; }}
           QPushButton[primary='true'], QPushButton:checked {{ background: {p.accent}; color: {p.on_accent}; }}
@@ -869,10 +882,10 @@ class ResearchWindow(QMainWindow):
           QPushButton:disabled {{ color: {p.muted}; background: {p.surface_2}; }}
           QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ min-height: 28px; padding: 5px; border: 1px solid {p.border}; border-radius: 6px; background: {p.surface}; }}
           QTableWidget {{ background: {p.surface}; alternate-background-color: {p.surface_2}; gridline-color: {p.border}; border: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
-          QHeaderView::section {{ padding: 8px; border: 0; background: {p.surface_2}; color: {p.muted}; }}
+          QHeaderView::section {{ padding: 8px; border: 0; background: {p.surface_2}; color: {p.muted}; font-size: 12px; font-weight: 500; }}
           QScrollArea {{ border: 0; }}
           QTabWidget::pane {{ border: 0; }}
-          QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 18px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; }}
+          QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 18px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-weight: 500; }}
           QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; }}
         """)
         for chart in [*self.findChildren(FanChart), *self.findChildren(FrontierChart), *self.findChildren(LineChart), *self.findChildren(SignedBars)]:
@@ -918,9 +931,7 @@ def main():
     app.setWindowIcon(QIcon(str(application_root()/"assets/icon.png")))
     app.setApplicationName("QUANTGEN")
     app.setOrganizationName("QUANTGEN")
-    font_id = QFontDatabase.addApplicationFont(str(application_root()/"assets/fonts/qg-interface.otf"))
-    families = QFontDatabase.applicationFontFamilies(font_id)
-    if families: app.setFont(QFont(families[0], 10))
+    load_interface_fonts(app)
     settings = QSettings("QUANTGEN", "QUANTGEN")
     window = ResearchWindow(language=settings.value("ui/language", "en"),
                             locale=settings.value("ui/locale", None), language_store=settings,

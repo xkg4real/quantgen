@@ -40,6 +40,7 @@ from PyQt6.QtWidgets import QApplication, QMessageBox
 if 'site-packages' not in Path(desktop.__file__).parts:
     raise AssertionError('Imported checkout instead of installed wheel')
 app=QApplication([])
+assert desktop.load_interface_fonts(app)=='QG Interface'
 history=History('FIXTURE','SYNTHETIC',
     tuple((date(2026,1,1)+timedelta(days=i)).isoformat() for i in range(120)),
     tuple(100+.08*i+math.sin(i*.7) for i in range(120)),note='Installed runtime fixture')
@@ -67,7 +68,7 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder, 
         assert window.stack.count()==7  # Six research workspaces plus the independent guide.
         assert 'guide' in window.nav
         assert window.home_markets.rowCount()==12
-        assert window.home_markets.horizontalHeaderItem(7).text()=='Q-SCORE'
+        assert window.home_markets.horizontalHeaderItem(window.home_markets.columnCount()-1).text()=='Q-SCORE'
         assert not window.windowIcon().isNull()
         assert not window.grab().isNull()
         assert window.locale_picker.currentData()=='en_US'

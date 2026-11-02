@@ -99,8 +99,9 @@ class NativeMarketLayoutTests(unittest.TestCase):
                 self.assertTrue(viewport.rect().contains(bounds),
                                 f"{name} is outside the visible form: {bounds}")
 
-    def test_home_shortcut_opens_live_controls_without_starting_a_query(self):
+    def test_stock_detail_opens_live_controls_without_starting_a_query(self):
         w = self.window
+        self.assertFalse(hasattr(w, "live_chart_open"))
         for language in ("ko", "en"):
             w.set_language(language)
             for width, height in ((1000, 700), (1360, 940)):
@@ -109,8 +110,9 @@ class NativeMarketLayoutTests(unittest.TestCase):
                     self.select(w.krx)
                     w.navigate("home")
                     self.app.processEvents()
-                    w.live_chart_open.click()
-                    # The shortcut reveals the selected tab on the next event.
+                    detail = w.watchlist.open_detail(6)
+                    detail.chart_button.click()
+                    # A stock's detail opens the chart on the next event.
                     for _ in range(3):
                         self.app.processEvents()
                     self.assertEqual(w.stack.currentIndex(), w.route_indices["markets"])
