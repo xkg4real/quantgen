@@ -6,12 +6,12 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-11-02T13:03:40.000+09:00
+updated_at: 2026-11-02T13:07:05.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
-work_commit: e10cebfd96577a2226d8d89d5e9d31ec6948d596
-uncommitted_changes: yes; latest main PR60 integration resolved locally, synthetic/installed tests running
+work_commit: 29d926169b8c4c29c1def4720a06bfe1203ad365
+uncommitted_changes: no; latest-main integration pushed and independently read back on all three branches
 pr: 54, 58 and 59 (open; Windows header regression in exact-head CI)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -22,6 +22,13 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 ---
 
 # QUANTGEN 직접 작업 재개 — 2026-11-02
+
+## 13:07 KST 최신 main 통합 저장
+- PR60 main ead6e67과root전체수정양쪽보존. 기존7개충돌정리, Home9·nativechart/layout/KIS26·정책47 PASS. 새임시설치wheel:306runtime/229Python byte일치,7페이지·독립가이드·Home12행/Q-SCORE·4개서비스유휴/실load0·합성worker/언어/설정/JSONZIP·Flet구동PASS. 실제provider/Windows수동/공식원장NOT_RUN. policy20/503·520·522 정합성PASS/publicationBLOCKED.
+- PR54 29d926169b8c4c29c1def4720a06bfe1203ad365 push/read-back; 새 Runtime41386502950/Compliance41386502697 검사중, 아직미병합.
+- PR58 67e76e704574af5365bee52733bed4e2b4dd47fe push/read-back; 새 Runtime41386559163/Compliance41386559127 검사중, 아직미병합.
+- PR59 947ae44c89058b8dcc4b91b338b1fc9f33ea29be push/read-back; 새 Runtime41386603330/Compliance41386603276 검사중, 아직미병합.
+- 이전e10cebf/f0d4a34/33d4f89의모든CI성공을이전트리근거로보존. 새통합트리에그성공을전용하지않음. 다음은새CI완료후승인범위병합·Notion하위범위·LEDGER·최종Claude인계저장.
 
 ## 13:04 KST 동시 main 통합
 - PR54/e10cebf Runtime41385318053·Compliance41385317430, PR58/f0d4a34 Runtime41385357196·Compliance41385357344, PR59/33d4f89 Runtime41385391393·Compliance41385391425 전부success를조회. Windows3.11/3.12/3.14·Ubuntu3.12 자동검사통과이며실제사용자PC인수아님.
