@@ -1,43 +1,40 @@
 {
   "schema_version": "quantgen.ui-website-update/1",
-  "id": "quantgen-kis-market-charts-20261102",
+  "id": "quantgen-kis-chart-ci-fix-pr-57",
   "delivery": {
     "destination_title": "웹사이트 작업공간(AWS)",
     "observed_destination_title": "QUANTGEN 웹사이트 (AWS)",
     "destination_thread_id": "01a18c19-eda9-7327-b6d9-c9ca24937093",
     "status": "queued",
     "queued_at": "2026-11-02T11:28:03+09:00",
-    "blocker": "No supported cross-chat send operation in this session. GitHub branch export also rejected by automatic approval review; awaiting explicit owner authorization for external code egress.",
+    "blocker": "No supported cross-chat send operation in this session. GitHub source and PR are saved; website chat delivery remains queued.",
     "sent_at": null,
     "receipt": null
   },
   "source": {
     "repository": "https://github.com/xkg4real/quantgen",
-    "branch": "gpt/kis-market-charts-20261102",
-    "pull_request": null,
-    "head_commit": "28f83a51127bd4be19e31da9bd2c6dbec23442fc",
+    "branch": "gpt/kis-chart-ci-fix-20261102",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/57",
+    "head_commit": "8d2bbce0166ded67c64ded92486b04bd6826a348",
     "merge_commit": null,
-    "remote_status": "NOT_PUSHED",
+    "remote_status": "PUSHED",
     "local_commit_verified": true,
     "changed_files": [
-      "core/market/models.py",
-      "core/market/live.py",
       "core/market/presentation.py",
-      "data/kis_workspace.py",
-      "data/kis_stream.py",
-      "quantgen_desktop/market_chart.py",
-      "quantgen_desktop/app.py",
-      "ui/market_chart_page.py",
-      "main.py",
-      "config.py",
-      "pyproject.toml",
-      "requirements.txt"
-    ]
+      "qa/research_status.json",
+      "tests/status_snapshot_acceptance.py",
+      ".github/workflows/runtime-smoke.yml",
+      "docs/compliance/source-review.json",
+      "docs/compliance/FACTS.md",
+      "docs/compliance/RELEASE_GAPS.md",
+      "docs/product/KIS_SOURCE_DOCUMENT_REVIEW_2026-11-02.md"
+    ],
+    "implementation_commit": "8d2bbce0166ded67c64ded92486b04bd6826a348"
   },
   "summary_ko": [
-    "앱과 Flet 웹에서 KIS 캔들·거래량·SMA20·볼린저밴드·RSI·MACD와 일/주/월/분봉을 공통 구현했습니다.",
-    "REST 5초 조회와 WebSocket 체결 수신을 구분하고, 시세 지연·수신 공백·부분 이력·미지원 조합을 표시합니다.",
-    "매 연결 전 최신 REST 이력을 조회하며 화면 이탈·종료 시 구독을 중지합니다. 누적 거래량·시간대·재연결 공백을 검증했습니다."
+    "PR56 후 상태·소스 지문 변경으로 실패한 설치/문서 CI를 보완합니다. 과거 QA 수치·게이트·미실행 상태는 유지합니다.",
+    "앱·웹 공통 시장 차트의 작은 SMA/볼린저 범례 글씨 대비를 개선했습니다.",
+    "신규/회귀 검사151개와 실제wheel설치 smoke, 문서47검사 및 정합성PASS. 실제KIS·Windows수동·운영웹은미검증입니다."
   ],
   "website_impact": {
     "classification": "shared_browser_change",
@@ -51,9 +48,8 @@
       "data/kis_stream.py"
     ],
     "requested_actions_ko": [
-      "실제 AWS 사이트 소스와 실행환경을 확인해 Markets 시세·차트 화면의 적용 경로를 결정합니다.",
-      "KIS 키와 토큰은 서버에 보관하고 브라우저로 전달하지 않습니다. 문서의 자산별 시세 지연·지원 제한·부분 이력을 보존합니다.",
-      "WebSocket 아웃바운드·실제 KIS 권한·세션 종료·재접속 및 작은 화면을 운영환경에서 별도 검증한 후 적용/배포 근거를 기록합니다."
+      "시세 차트에 공통 렌더러의 라이트 SMA #896000와 볼린저 #157367 범례 색상 개선을 반영합니다. 다크 범례 색상은 기존값을 유지합니다.",
+      "PR56의 시세 지연·지원범위·통신/보관 한계를 보존하며 실제 AWS 소스와 배포를 별도 검증합니다."
     ]
   },
   "website_application": {
@@ -64,13 +60,13 @@
     "deployment_url": null
   },
   "verification": {
-    "local_tests_passed": 94,
+    "local_tests_passed": 151,
     "local_test_result": "PASS",
     "python": "3.13.16",
     "qt": "6.12.0",
     "quotation_guard": "T-RO-02 PASS, 31 quotation paths; account/order paths refused",
     "native_preview": "synthetic fixtures inspected with Linux Qt offscreen",
-    "ci_result": "NOT_RUN",
+    "ci_result": "PENDING",
     "ci_url": null,
     "manual_windows_display_acceptance": "NOT_RUN",
     "live_kis_acceptance": "NOT_RUN",
@@ -85,12 +81,25 @@
       "tests.desktop_chart_rendering_acceptance",
       "tests.runtime_syntax_acceptance",
       "tests.web_branding_acceptance",
-      "tests.packaging_policy_acceptance"
-    ]
+      "tests.packaging_policy_acceptance",
+      "tests.status_snapshot_acceptance",
+      "tests.compliance_acceptance",
+      "tests.compliance_export_acceptance"
+    ],
+    "ci_source_commit": "8d2bbce0166ded67c64ded92486b04bd6826a348",
+    "websockets": "16.1.1",
+    "installed_wheel_smoke": "PASS; isolated offline wheel install outside checkout",
+    "source_document_consistency": "PASS; publication readiness remains BLOCKED",
+    "compliance_tests_passed": 47
   },
   "limits_ko": [
     "채권은 최근 최대100 일봉, 분봉은 첨부 사양에 없습니다.",
     "해외선물은 master 기반 일·주·월봉만 지원하며 분봉·WebSocket은 시간대가 검증되지 않았습니다. 해외옵션은 미구현입니다.",
     "별도 AWS 사이트 반영·배포와 실제 KIS 연결은 확인하지 않았습니다. 기존 연구/원장 및 다른 세션의 handoff 소유권은 변경하지 않았습니다."
-  ]
+  ],
+  "authorization": {
+    "github_export": "OWNER_APPROVED",
+    "scope": "Save changes to xkg4real/quantgen and create pull request",
+    "requested_at": "2026-11-02"
+  }
 }
