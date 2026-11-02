@@ -11,9 +11,10 @@ from dataclasses import replace
 from datetime import datetime, timedelta
 from math import isfinite
 from typing import Callable
+from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
-from core.market.models import (Candle, ChartRequest, Instrument, INTERVALS,
+from core.market.models import (Candle, ChartRequest, Instrument, HISTORY_INTERVALS, LIVE_INTERVALS,
                                 MarketQuote, MarketSnapshot, utc_now)
 from data.krx.kis_client import KISClient, KISError
 from data.kis_markets import KISMarkets, load_master
@@ -136,12 +137,16 @@ def _future_market(instrument):
     raise KISError("Select the domestic derivative market; its code alone is ambiguous")
 
 
-def supported_intervals(instrument):
-    if instrument.asset == "bond":
-        return ("1d",)
-    if instrument.asset == "overseas_future":
-        return ("1d", "1w", "1M")
-    return INTERVALS
+def supported_intervals(instrument, *, paper=False):
+    """Historical periods plus receive-only periods with a verified feed."""
+    from data.kis_stream import subscription_for
+    history = (("1d",) if instrument.asset == "bond" else
+               ("1d", "1w", "1M") if instrument.asset == "overseas_future" else HISTORY_INTERVALS)
+    try:
+        subscription_for(instrument, paper=paper)
+    except ValueError:
+        return history
+    return LIVE_INTERVALS + history
 
 
 def availability_note(instrument):
@@ -181,12 +186,25 @@ class MarketDataService:
 
     def load(self, request: ChartRequest) -> MarketSnapshot:
         instrument = request.instrument
-        if request.interval not in supported_intervals(instrument):
+        paper = urlparse(getattr(self.client, "base_url", "")).hostname == "openapivts.koreainvestment.com"
+        if request.interval not in supported_intervals(instrument, paper=paper):
             raise KISError(availability_note(instrument))
         if request.adjusted and instrument.asset not in ("domestic_stock", "overseas_stock"):
             raise KISError("Adjusted charts are supported for stocks only")
         if instrument.asset == "domestic_future":
             _future_market(instrument)  # reject ambiguous inputs before reading credentials
+        if request.interval in LIVE_INTERVALS:
+            if request.adjusted:
+                raise KISError("Tick and second bars contain raw executions; adjusted live bars are unavailable")
+            note = (availability_note(instrument) + " Received executions only: tick/second bars begin when the "
+                    "stream connects. Historical tick/second bars are unavailable; gaps are not filled. "
+                    "The first/current bar can be partial; volume is received trade volume, not session volume.")
+            quote = None
+            try:
+                quote = self.quote(instrument)
+            except KISError:
+                note += " Current quote unavailable; waiting for a valid streaming execution."
+            return MarketSnapshot(request, (), quote, utc_now(), "KIS WebSocket", note)
         if request.interval.endswith("m"):
             candles = self._minutes(request)
         else:

@@ -7,7 +7,11 @@ import math
 import re
 
 ASSETS = ("domestic_stock", "overseas_stock", "domestic_future", "overseas_future", "bond")
-INTERVALS = ("1m", "3m", "5m", "15m", "30m", "60m", "1d", "1w", "1M")
+TICK_INTERVALS = ("1tick", "10tick", "100tick")
+SECOND_INTERVALS = ("1s", "5s", "10s", "30s")
+LIVE_INTERVALS = TICK_INTERVALS + SECOND_INTERVALS
+HISTORY_INTERVALS = ("1m", "3m", "5m", "15m", "30m", "60m", "1d", "1w", "1M")
+INTERVALS = LIVE_INTERVALS + HISTORY_INTERVALS
 
 
 def utc_now() -> str:
@@ -64,6 +68,11 @@ class Candle:
     close: float
     volume: float | None = None
 
+    # Preserve actual exchange timestamps even when distinct received bars
+    # start within the same second; never invent a finer time resolution.
+    sequence: int | None = None
+    trade_count: int | None = None
+
     def __post_init__(self):
         if not all(math.isfinite(v) for v in (self.open, self.high, self.low, self.close)):
             raise ValueError("Non-finite OHLC price")
@@ -71,6 +80,9 @@ class Candle:
             raise ValueError("Invalid OHLC range")
         if self.volume is not None and (not math.isfinite(self.volume) or self.volume < 0):
             raise ValueError("Invalid bar volume")
+        for value in (self.sequence, self.trade_count):
+            if value is not None and (isinstance(value, bool) or not isinstance(value, int) or value < 1):
+                raise ValueError("Live bar sequence and trade count must be positive integers")
 
 
 @dataclass(frozen=True)

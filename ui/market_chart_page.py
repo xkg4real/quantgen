@@ -511,14 +511,15 @@ class MarketChartPage(ft.Column):
         width = max(350, min(1300, int((getattr(self.host_page, "width", None) or 1200) - 320)))
         selected = tuple(key for key, checkbox in self.indicators.items() if checkbox.value)
         svg = chart_svg(snapshot, indicators=selected, cursor=self.cursor, width=width,
-                        dark=getattr(self.host_page, "qg_theme", "light") == "dark", visible=self.visible_bars)
+                        dark=getattr(self.host_page, "qg_theme", "light") == "dark", visible=self.visible_bars,
+                        language=self.ctx.language)
         self.image.src = "data:image/svg+xml;base64," + base64.b64encode(svg.encode()).decode()
         dimensions = re.search(r'<svg[^>]*width="(\d+)"[^>]*height="(\d+)"', svg)
         if dimensions:
             self.image.aspect_ratio = int(dimensions.group(1)) / int(dimensions.group(2))
         self.image.visible = True
         self.image.semantics_label = snapshot.request.instrument.symbol + " · " + snapshot.request.interval
-        self.image.tooltip = self.reading.value = readout(snapshot, self.cursor)
+        self.image.tooltip = self.reading.value = readout(snapshot, self.cursor, language=self.ctx.language)
         self.zoom.disabled = self.cursor_slider.disabled = False
         self.cursor_slider.max = max(1, len(snapshot.candles) - 1)
         self.cursor_slider.divisions = max(1, len(snapshot.candles) - 1)
