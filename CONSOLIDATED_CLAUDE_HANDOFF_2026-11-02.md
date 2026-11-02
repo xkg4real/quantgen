@@ -1,30 +1,28 @@
 # QUANTGEN consolidated Claude handoff — 2026-11-02
 
-**ACTIVE / PARTIAL — ready for final evidence review.** This local refresh does not publish a return, deployment or all-complete claim. Root reports an existing remote ACTIVE checkpoint at `6b7cd37`; final CAS/read-back is pending. No Claude receipt is established. No remote requests/product edits/tests by this writer.
+**PARTIAL HANDOFF — verified implementation, remaining acceptance gates.** This consolidates the root work and received UI/website reports. Overall Remaining Work is not complete. No deployment or actual Claude receipt is claimed. Remote handoff/CURRENT read-back and local STATE are the authoritative transfer records.
 
 Prior history: `CONSOLIDATED_CLAUDE_HANDOFF_2026-10-31.md`; its stop-state was superseded by November 2 resumption. Deadline waives no evidence. No GPT/Gemini spec disclosure; optional reviews remain **NOT_PERFORMED**, nonblocking solely for absence. Approved ordinary fixes/tests may proceed; research criteria/formal records/actual execution/publication retain separate conditions.
 
 ## 1. Source checkpoint
 
-Repository `xkg4real/quantgen`; root-reported status. **PR54/58/59 all unmerged.** Refresh exact heads before finalization.
+Repository `xkg4real/quantgen`. Observed 2026-11-02T13:21:03.000+09:00.
 
-**All three new integration heads were pushed and read back after preserving the concurrent PR60/main changes. Their runtime CI is running; no final success or merge claim for these heads.**
-
-| PR | Current exact remote head | Exact-head runs |
+| PR | Exact source head | Final observed result |
 | --- | --- | --- |
-| [PR54](https://github.com/xkg4real/quantgen/pull/54) | `29d926169b8c4c29c1def4720a06bfe1203ad365` | Runtime `41386502950`; compliance `41386502697`. Await final verification. |
-| [PR58](https://github.com/xkg4real/quantgen/pull/58) | `67e76e704574af5365bee52733bed4e2b4dd47fe` | Runtime `41386559163`; compliance `41386559127`. Await final verification. |
-| [PR59](https://github.com/xkg4real/quantgen/pull/59) | `947ae44c89058b8dcc4b91b338b1fc9f33ea29be` | Runtime `41386603330`; compliance `41386603276`. Await final verification. |
+| [PR54](https://github.com/xkg4real/quantgen/pull/54) | `29d926169b8c4c29c1def4720a06bfe1203ad365` | Runtime `41386502950`: success; compliance `41386502697`: success; main merge `8dbdc139d4ec652490d3be4476eb4b41d8c234d2` |
+| [PR58](https://github.com/xkg4real/quantgen/pull/58) | `67e76e704574af5365bee52733bed4e2b4dd47fe` | Runtime `41386559163`: success; compliance `41386559127`: success; main merge `f673f37001b53471ff2dfe139a44db72552c9235` |
+| [PR59](https://github.com/xkg4real/quantgen/pull/59) | `947ae44c89058b8dcc4b91b338b1fc9f33ea29be` | Runtime `41386603330`: success; compliance `41386603276`: success; main merge `8b4010430a9ece2a4e1b05b234abe81d3796771f` |
 
 Worktrees under `/workspace/work/`: `quantgen-active-20261102`, `quantgen-letf-integration-20261102`, `quantgen-rates-params-20261102`. Financial branch: `gpt/letf-explicit-inputs-20261102`. Verify refs; old `origin/main` was stale. No force moves.
 
-Previous heads `e10cebfd`/`f0d4a349`/`33d4f899` each passed Windows 3.11/3.12/3.14 and Ubuntu runtime plus compliance, as verified by root. Their respective runtime/compliance run pairs were `41385318053`/`41385317430`, `41385357196`/`41385357344`, and `41385391393`/`41385391425`. These are valid earlier-head results, not the new integration heads' results. Root's PR54 merge attempt returned HTTP405, not a successful merge, during concurrent PR60/main advancement to `1e67b04` and then `ead6e67a5dd1a767f11d960e67eb8069891e92ad`. Root integrated the newer main normally, resolved conflicts while preserving both sides, and pushed the three heads above. PR54/58/59 remain unmerged.
+Previous heads `e10cebfd`/`f0d4a349`/`33d4f899` each passed Windows 3.11/3.12/3.14 and Ubuntu runtime plus compliance, as verified by root. Their respective runtime/compliance run pairs were `41385318053`/`41385317430`, `41385357196`/`41385357344`, and `41385391393`/`41385391425`. These are valid earlier-head results, not the new integration heads' results. Root's PR54 merge attempt returned HTTP405, not a successful merge, during concurrent PR60/main advancement to `1e67b04` and then `ead6e67a5dd1a767f11d960e67eb8069891e92ad`. Root integrated the newer main normally, resolved conflicts while preserving both sides, and pushed the three heads above. Those pre-final snapshots were unmerged; all three final verified merges are listed above.
 
 ## 2. Product changes and evidence
 
 - **PyQt6/Flet:** authored EN/KO text and responsive chart/Signals/Macro sizing corrected. Provider prose, historical reports and numbers preserved; locale/theme must not start jobs. Sixteen visual combinations inspected; nine-module integration 98 PASS with private harness. Not final-head Windows evidence.
 - **Qt correction 1 — separate valid fix:** `CurrentPageTabs.hasHeightForWidth` and `heightForWidth` consult only the selected page, fixing independently reproduced hidden-page 9000px height leakage. Nine chart tests in original order passed, but **this did not resolve the Windows 66px overflow**. Retain the failed Windows results and their diagnostic assertions; do not relabel the nine local passes as proof of that resolution.
-- **Qt correction 2 — `e10cebf`:** Windows diagnostics measured Tool/Source combo minimum-size hints of **251px/459px**, identifying the remaining 66px overflow cause. The controls use `minimumContentsLength=12` and `AdjustToMinimumContentsLengthWithIcon`; full tooltip text and item data are preserved. Ten local chart tests in CI-equivalent order passed, followed by the earlier-head Windows/Ubuntu CI success recorded above. The newer PR60 integration still requires its own exact-head CI; physical user-Windows acceptance remains separate.
+- **Qt correction 2 — `e10cebf`:** Windows diagnostics measured Tool/Source combo minimum-size hints of **251px/459px**, identifying the remaining 66px overflow cause. The controls use `minimumContentsLength=12` and `AdjustToMinimumContentsLengthWithIcon`; full tooltip text and item data are preserved. Ten local chart tests in CI-equivalent order passed, followed by the earlier-head Windows/Ubuntu CI success recorded above. The newer PR60 integration also passed its exact-head Windows3.11/3.12/3.14 and Ubuntu3.12 runtime CI, listed above; physical user-Windows acceptance remains separate.
 - **M4-N3 LETF:** explicit funding/fee/dividend, price/total-return distinction, signed leverage, overflow guards; zero-reference compatibility retained. Source `eb46600b`, native `5c32657f`; 28 tests/45 formula checks, 100 original fields unchanged. No research verdict.
 - **M4-N6 FX:** neutral annual CIP discrepancy replaces unsupported classification; numbers unchanged. `0bd214e0`, 16 PASS; date/maturity/convention comparability unverified.
 - **M4-N11 CMS:** first-period expected annualized coupon distinguished from later schedule in Native/Flet/KO/AI; no payment guarantee. Canonical coupon/non-CMS/history preserved. `76a5580f`→`4428cb1`; nine PASS, 24 cases/456 original fields unchanged.
@@ -58,7 +56,7 @@ Newest UI archive: `REMOTE_HANDOFF_INPUTS_FINAL.json`, handoff ref **`7c8c98b60d
 
 - PR60 adds a standalone technical-indicator menu/seven native pages, a 12-row Home, and explicitly experimental Q-SCORE presentation. Explicit Home connection subscribes to up to six symbols through one WebSocket, with separate Home/chart lifecycles and stale-callback handling. This is an implementation report, not proof of live delivery or predictive performance.
 - That session recorded overlapping 99 integration/packaging/syntax, 53 native and 47 policy checks, plus an installed smoke after updating the six-page assumption. Preserve their source provenance without summing them. Root's new seven-page merged-workingtree verification is separate; prior six-route wheels do not cover this UI.
-- User reported `KISUnavailable`; **no successful actual trade/tick receipt is established**. New Windows Home/score behavior, actual KIS access and score validity remain unverified. Experimental Q-SCORE is not fundamentals valuation, validated forecasting or a buy recommendation. No private PC path or account details are reproduced here.
+- User reported `KISUnavailable`; **no successful actual trade/tick receipt is established**. Physical user-Windows Home/score behavior, actual KIS access and score validity remain unverified. Experimental Q-SCORE is not fundamentals valuation, validated forecasting or a buy recommendation. No private PC path or account details are reproduced here.
 - PR60's source/document review is `docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md`; website applicability record is `docs/product/ui_website_updates/PR-60.json`. Its handoff reports changes to 14 policies with publication still BLOCKED. The previously delivered website remains based on `cac727e2` and does not include them; later web work must review KO/EN bodies, versions and hashes. No new website source/HTML/ZIP publication or deployment is authorized.
 
 - Root reports prior PR55/56/57 merges `56927c1`/`69a2559`/`cac727e2`; PR53 `8a40aa1c` has recorded CI success. Historical, not PR54 proof.
@@ -73,7 +71,7 @@ Research PR21 integrated at `0510719995e0ec3dfda8f113f826f43ca1821c6b`, separate
 
 Open: actual Windows Step7A/Step10; provider parity; separately authorized pilots/formal records; installed shortcut/clean Windows/DPI/dialogs/accessibility; real Claude API; expert legal advice/data rights; owner acceptance/adoption; frozen/holdout/future-date conditions. All20 policies review-required, publication BLOCKED; 18 unverified requirements/eight findings retained. Compliance CI is not legal clearance.
 
-Latest source queue and header agree: 21/67 implemented, 46 remaining; final merge/CI evidence is still required. NEW-M6-02 partial; 14 observation rows/15 ambiguous mappings are distinct. No evidence for 13 observation rows. N5 remains investigation, not fix: residual-ADF wording can overstate cointegration. Proposed bounded next child adds separate explanatory warnings to historical pair-card UI/export/AI while preserving original data/decision. Do not globally replace shared ADF, regenerate research cards or claim N5 complete.
+Latest source queue and header agree:21/67 implemented and verified in main,46 remaining. Final exact-head CI and merge evidence appear in sections1 and7. NEW-M6-02 partial; 14 observation rows/15 ambiguous mappings are distinct. No evidence for 13 observation rows. N5 remains investigation, not fix: residual-ADF wording can overstate cointegration. Proposed bounded next child adds separate explanatory warnings to historical pair-card UI/export/AI while preserving original data/decision. Do not globally replace shared ADF, regenerate research cards or claim N5 complete.
 
 ## 6. Replay and safe next ownership start
 
@@ -92,7 +90,21 @@ Installed report folders retain `commands.json`, identities/results/helpers. Reb
 
 Validate STATE transition/environment before remote lookup; use existing OS lock and unique execution ID. Read CURRENT/README/TEMPLATE/AGENTS/LEDGER/AUTO_STATE at one latest ref. Match saved execution/task/handoff/branch/commit; fresh-SHA CAS plus remote read-back before resuming. Never infer ownership from `from=gpt` or override another claim. Refresh PR54/58/59 heads/CI and preserve concurrent changes; merge only authorized scope. Append evidence without deleting history; fetch/minimally update verified Notion children using the privately designated connection, preserving actual sync outcomes. Partial parents stay open. No duplicate schedule/environment migration/deployment.
 
-Before final CAS, root must record each final remote head containing the intended corrections, its exact runtime/compliance outcome and actual merge state; preserve failures and any unresolved installed-runtime limitation. Then append the next safe start, CAS/read back CURRENT, atomically preserve STATE and release the lock. No receipt or whole-task completion may be inferred from publication. This document remains ACTIVE/PARTIAL until that finalization.
+Before final CAS, root must record each final remote head containing the intended corrections, its exact runtime/compliance outcome and actual merge state; preserve failures and any unresolved installed-runtime limitation. Then append the next safe start, CAS/read back CURRENT, atomically preserve STATE and release the lock. No receipt or whole-task completion may be inferred from publication. The final observed source, CI and merge facts are recorded below. CURRENT and STATE retain verified checkpoints; read their final transfer status before resuming. Claude receipt remains unconfirmed.
 
 
 Root source-identity follow-up: `app-operation-pr60-installed/COMMITTED_SOURCE_MATCH.json` compares every one of the306 allowlisted runtime files after commit29d926169b8c4c29c1def4720a06bfe1203ad365 to the saved successful installed-test inputs; all match fingerprint23d3d172ab572a6fda014eef2e3175455e9521a5597e94bc04039d12b4cd0b6f. This links the installed proof to primary29d runtime, not PR58/59 wheel identities.
+
+
+## 7. Final transfer checkpoint
+
+- Execution: `c939f3aa-5fae-42ea-aad8-cf1db1317b09`; task `owner-product-workflow-20261029`.
+- Verified bounded completion IDs: `⑬-8/b2/c/b/b/native`, `⑬-2/k/cloud-runtime`, `②-5/M4-N3`, `②-5/M4-N6`, `②-5/M4-N11`, `②-5/N11`, `②-5/M3-N06`, `②-5/M3-N08`.
+- Owner-designated Remaining Work: all eight new bounded source/runtime children struck and fetched back successfully; counts21/67,46remaining. Private MVP/diagnostic/report children already synced. Parents and manual gates remain open.
+- Canonical source groups implemented:21/67; verified main groups:21/67; remaining main groups:46. Partial NEW-M6-02 and aliases are not counted twice.
+- Latest other-session status: UI-owned PR60 source6a2c062427409b2d61cb1bdfb7ce7d3e56f2650f merged to1e67b04a4e6e39a1689bdea3d682c330d40fe6b6; runtime41385301484 and compliance41385301381 success independently verified. Main recordead6e67 preserved in all three root branches. Website latest artifact remains NOT_DEPLOYED and not present in root filesystem; its recorded checks are attributed to that session.
+- Next safe start: Validate STATE/environment/OS lock and saved execution/task/handoff/branch/source against latest six handoff documents, then fresh-SHA CURRENT CAS/read-back before resumption. Skip these completed IDs. Use latest verified main8b4010430a9ece2a4e1b05b234abe81d3796771f for the next approved gpt branch; next bounded candidate is N5 historical diagnostic explanation without changing original cards/criteria, followed by other approved independent remaining groups. Actual Windows/provider/pilot/legal/API decisions need their real evidence; do not run the ledger or grant owner_confirmed.
+- This is a safe partial handoff before starting another large unit. Account token balance is unknown; no exhaustion estimate. Existing hourly owner-work schedule remains; no duplicate/run_now/new environment or Thursday deferral.
+- The 13:00 KST full-completion target was not met. Actual Windows/provider parity/pilots, legal/license/API/frozen-study evidence and the remaining canonical groups are open.
+
+The private owner-download bundle includes the unpublished offline MVP, synthetic Step7A diagnostic patch, N5 reproduction and comparison Word/TXT/PDF. Do not publish that private ZIP to GitHub. Website HTML/source/ZIP and protected datasets are excluded.
