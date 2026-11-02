@@ -30,7 +30,7 @@ class NativeChartSourceChecks(unittest.TestCase):
 
 
 if HAS_QT:
-    from PyQt6.QtCore import QThread
+    from PyQt6.QtCore import QThread, Qt
     from PyQt6.QtTest import QTest
     from PyQt6.QtWidgets import QApplication
     from core.i18n import LocaleContext
@@ -149,7 +149,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
             snapshot = p.snapshot
             if (snapshot is not None and snapshot.last_tick_at == tick.timestamp
                     and p.chart.snapshot is snapshot and p.chart.cursor == p._cursor
-                    and p.reading.text() == readout(snapshot, p._cursor)):
+                    and p.reading.text() == readout(snapshot, p._cursor, language=p.ctx.language)):
                 return
             # Advance the event loop until the observable condition is true.
             QTest.qWait(10)
@@ -265,7 +265,8 @@ class NativeChartLifecycleTests(unittest.TestCase):
             received_at=datetime.now(timezone.utc).isoformat(timespec="seconds")))
         self.app.processEvents()
         self.assertIs(p.snapshot, retained)
-        self.assertIn("연결 공백", p.status.text())
+        self.assertTrue(p._stream_gap)
+        self.assertTrue(p.resync_timer.isActive())
         p.stop()
         count = len(self.service.calls)
         self.connect_stream()
@@ -302,7 +303,8 @@ class NativeChartLifecycleTests(unittest.TestCase):
         self.service.entered, self.service.release = threading.Event(), threading.Event()
         p.start_stream()
         self.assertTrue(self.service.entered.wait(2))
-        self.assertEqual(self.streams, [])
+        self.assertEqual(len(self.streams), 1)
+        self.assertTrue(self.streams[0].stopped)
         self.assertIs(p.snapshot, old)
         self.service.release.set()
         self.wait_idle()
@@ -315,7 +317,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
         self.app.processEvents()
         self.connect_stream()
         self.assertEqual(len(self.service.calls), 3)
-        self.assertEqual(len(self.streams), 2)
+        self.assertEqual(len(self.streams), 3)
 
     def test_hide_cancels_subscription_pending_history_sync(self):
         self.load()
@@ -327,12 +329,14 @@ class NativeChartLifecycleTests(unittest.TestCase):
         p.hide()
         self.service.release.set()
         self.wait_idle()
-        self.assertEqual(self.streams, [])
+        self.assertEqual(len(self.streams), 1)
+        self.assertTrue(self.streams[0].stopped)
         self.assertIs(p.snapshot, retained)
         self.assertIsNone(p._pending_stream_epoch)
         p.show()
         self.app.processEvents()
-        self.assertEqual(self.streams, [])
+        self.assertEqual(len(self.streams), 1)
+        self.assertIsNone(p._stream)
 
     def test_live_ticks_pin_historical_cursor_by_timestamp_and_only_follow_latest(self):
         # Also exercise a paint deadline beyond the former fixed 220ms wait.
@@ -379,7 +383,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
         p.asset.setCurrentIndex(p.asset.findData("bond"))
         for index in range(p.interval.count()):
             self.assertEqual(p.interval.model().item(index).isEnabled(),
-                             p.interval.itemData(index) == "1d")
+                             p.interval.itemData(index) in {"1d", "1tick", "10tick", "100tick", "1s", "5s", "10s", "30s"})
         self.assertEqual(p.interval.currentData(), "1d")
         self.assertIn("10,000", p.availability.text())
         p.asset.setCurrentIndex(p.asset.findData("domestic_future"))
@@ -402,6 +406,188 @@ class NativeChartLifecycleTests(unittest.TestCase):
                 self.assertIn(expected, p.quote.text())
         self.assertIn("계약 시세 단위", p.quote.text())
         self.assertNotIn("KRW", p.quote.text())
+
+
+    def test_query_starts_exactly_one_subscription_without_extra_connect(self):
+        p = self.pane
+        self.assertFalse(self.streams)
+        p.load_button.click()
+        self.wait_idle()
+        self.app.processEvents()
+        self.assertEqual(len(self.service.calls), 1)
+        self.assertEqual(len(self.streams), 1)
+        self.assertTrue(self.streams[0].started)
+        self.assertFalse(p.poll_timer.isActive())
+        self.assertNotIn("SUBSCRIBED", p.status.text())
+
+    def test_indicators_mouse_keyboard_busy_and_live_selection_persists(self):
+        p = self.pane
+        self.assertEqual(set(p.indicator_boxes), {"sma", "ema", "bollinger", "rsi", "macd"})
+        self.assertEqual([k for k, b in p.indicator_boxes.items() if b.isChecked()], ["sma"])
+        ema = p.indicator_boxes["ema"]
+        QTest.mouseClick(ema, Qt.MouseButton.LeftButton, pos=ema.rect().center())
+        self.assertTrue(ema.isChecked())
+        self.assertEqual(self.service.calls, [])
+        self.service.entered, self.service.release = threading.Event(), threading.Event()
+        p.load_button.click()
+        self.assertTrue(self.service.entered.wait(2))
+        rsi = p.indicator_boxes["rsi"]
+        self.assertTrue(rsi.isEnabled())
+        rsi.setFocus()
+        QTest.keyClick(rsi, Qt.Key.Key_Space)
+        self.assertTrue(rsi.isChecked())
+        self.service.release.set()
+        self.wait_idle()
+        self.assertEqual(p.chart.indicators, ("sma", "ema", "rsi"))
+        stream = self.streams[-1]
+        tick = MarketTick(p.request().instrument, datetime.now(timezone.utc).isoformat(), 225,
+                          volume=2, cumulative_volume=1121)
+        stream.on_tick(tick)
+        self.app.processEvents()
+        macd = p.indicator_boxes["macd"]
+        QTest.mouseClick(macd, Qt.MouseButton.LeftButton, pos=macd.rect().center())
+        self.assertEqual(p.chart.indicators, ("sma", "ema", "rsi", "macd"))
+        self.assertEqual(len(self.streams), 1)
+        self.assertEqual(len(self.service.calls), 1)
+        self.assertGreater(p.chart.renderer().viewBoxF().height(), 410)
+        p.load_button.click()
+        self.wait_idle()
+        self.assertEqual(p.chart.indicators, ("sma", "ema", "rsi", "macd"))
+        self.assertEqual(len(self.streams), 2)
+        QTest.mouseClick(rsi, Qt.MouseButton.LeftButton, pos=rsi.rect().center())
+        self.assertNotIn("rsi", p.chart.indicators)
+
+    def test_live_only_empty_bootstrap_then_tied_second_cursor_identity(self):
+        p = self.pane
+        p.interval.setCurrentIndex(p.interval.findData("1tick"))
+        with patch.object(self.service, "load", side_effect=lambda req: replace(fixture(req), candles=())):
+            p.load_button.click()
+            self.wait_idle()
+        self.assertFalse(p.snapshot.candles)
+        self.assertTrue(p.empty_state.isVisible())
+        self.assertFalse(p.poll_button.isEnabled())
+        stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        for cumulative, price in ((1201, 100), (1202, 101), (1203, 102)):
+            self.streams[-1].on_tick(MarketTick(p.request().instrument, stamp, price,
+                                               volume=1, cumulative_volume=cumulative))
+        self.wait_for_ui(lambda: len(p.snapshot.candles) == 3)
+        p.move_cursor(0)
+        self.streams[-1].on_tick(MarketTick(p.request().instrument, stamp, 103,
+                                          volume=1, cumulative_volume=1204))
+        self.wait_for_ui(lambda: len(p.snapshot.candles) == 4)
+        p.render()
+        self.assertEqual(p.snapshot.candles[p._cursor].sequence, 1)
+        self.assertIn("#1", p.reading.text())
+        self.assertIn("1/1", p.feed_notice.text())
+        self.assertIn("연결 이후", p.feed_notice.text())
+        self.assertTrue(p.chart.isVisible())
+
+    def test_second_bars_wait_for_received_trade_and_explain_partial_values(self):
+        p = self.pane
+        p.interval.setCurrentIndex(p.interval.findData("5s"))
+        with patch.object(self.service, "load", side_effect=lambda req: replace(fixture(req), candles=())):
+            p.load_button.click()
+            self.wait_idle()
+        stamp = datetime.now(timezone.utc).replace(second=10, microsecond=0).isoformat()
+        self.streams[-1].on_tick(MarketTick(p.request().instrument, stamp, 100,
+                                          volume=2, cumulative_volume=1002))
+        self.wait_for_ui(lambda: bool(p.snapshot.candles))
+        self.assertEqual(p.snapshot.candles[0].volume, 2)
+        self.assertEqual(p.snapshot.candles[0].trade_count, 1)
+        p.snapshot = replace(p.snapshot, note="Live gap: some executions were not received")
+        p.render()
+        self.assertIn("체결 공백", p.feed_notice.text())
+        self.assertIn("부분", p.feed_notice.text())
+        p.set_locale(LocaleContext("en_US"))
+        self.assertIn("received trades", p.feed_notice.text())
+        self.assertIn("incomplete", p.feed_notice.text())
+
+    def test_active_interval_switch_reloads_once_and_ignores_old_callbacks(self):
+        self.load()
+        p = self.pane
+        old = self.streams[-1]
+        p.interval.setCurrentIndex(p.interval.findData("5m"))
+        self.assertTrue(old.stopped)
+        self.wait_for_ui(lambda: len(self.streams) == 2)
+        self.assertEqual(p.snapshot.request.interval, "5m")
+        retained = p.snapshot
+        old.on_tick(MarketTick(p.request().instrument, datetime.now(timezone.utc).isoformat(), 900))
+        old.on_status("RECONNECTING")
+        self.app.processEvents()
+        self.assertIs(p.snapshot, retained)
+        self.assertFalse(p._stream_gap)
+        self.assertEqual(len(self.service.calls), 2)
+
+    def test_restored_stream_resyncs_once_and_hide_cancels_pending_recovery(self):
+        self.load()
+        p = self.pane
+        old = self.streams[-1]
+        retained = p.snapshot
+        old.on_status("RECONNECTING")
+        old.on_status("SUBSCRIBED")
+        old.on_tick(MarketTick(p.request().instrument, datetime.now(timezone.utc).isoformat(), 900))
+        self.app.processEvents()
+        self.assertIs(p.snapshot, retained)
+        self.wait_for_ui(lambda: len(self.streams) == 2)
+        self.assertTrue(old.stopped)
+        self.assertFalse(p._stream_gap)
+        self.assertEqual(len(self.service.calls), 2)
+        self.streams[-1].on_status("RECONNECTING")
+        self.streams[-1].on_status("SUBSCRIBED")
+        self.app.processEvents()
+        self.assertFalse(p.resync_timer.isActive())
+        self.assertTrue(p._stream_gap)
+        p.load_button.click()
+        self.wait_idle()
+        self.streams[-1].on_status("RECONNECTING")
+        self.streams[-1].on_status("SUBSCRIBED")
+        self.app.processEvents()
+        self.assertTrue(p.resync_timer.isActive())
+        p.hide()
+        self.assertFalse(p.resync_timer.isActive())
+
+    def test_stop_and_hide_cancel_active_input_restart(self):
+        self.load()
+        p = self.pane
+        p.symbol.setText("000660")
+        self.assertTrue(p.input_timer.isActive())
+        p.stop()
+        self.assertFalse(p.input_timer.isActive())
+        p.hide()
+        p.show()
+        QTest.qWait(500)
+        self.app.processEvents()
+        self.assertEqual(len(self.service.calls), 1)
+
+    def test_selected_indicator_values_follow_inspected_candle(self):
+        from core.market.presentation import indicator_series, number
+        self.load()
+        p = self.pane
+        p.indicator_boxes["ema"].click()
+        p.move_cursor(40)
+        values = indicator_series(p.snapshot)
+        self.assertIn("SMA20: " + number(values["SMA20"][40]), p.indicator_reading.text())
+        self.assertIn("EMA12: " + number(values["EMA12"][40]), p.indicator_reading.text())
+        self.assertNotEqual(values["SMA20"][40], values["SMA20"][-1])
+
+    def test_unsupported_stream_asset_uses_labelled_polling_not_live(self):
+        p = self.pane
+        p.asset.setCurrentIndex(p.asset.findData("overseas_future"))
+        self.load()
+        self.assertFalse(self.streams)
+        self.assertTrue(p.poll_timer.isActive())
+        self.assertIn("5초 주기 조회", p.status.text())
+        self.assertIn("미지원", p.status.text())
+
+    def test_overseas_delay_notice_is_visible_without_opening_advanced_settings(self):
+        p = self.pane
+        p.asset.setCurrentIndex(p.asset.findData("overseas_stock"))
+        p.exchange.setCurrentIndex(p.exchange.findData("HKS"))
+        self.assertFalse(p.advanced.isVisible())
+        self.assertTrue(p.feed_notice.isVisible())
+        self.assertIn("15분", p.feed_notice.text())
+        p.set_locale(LocaleContext("en_US"))
+        self.assertIn("15-minute", p.feed_notice.text())
 
 
 if __name__ == "__main__":

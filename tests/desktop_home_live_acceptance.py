@@ -173,9 +173,9 @@ class HomeLiveIntegrationTests(unittest.TestCase):
         self.wait_until(lambda: p.snapshot is not None and not p.jobs.busy and not w.chart_scores.jobs.busy)
         self.assertEqual(len(self.chart_service.calls), 1)
         self.assertEqual(len(self.score_service.calls), 1)
-        p.stream_button.click()
         self.wait_until(lambda: bool(self.chart_streams) and not p.jobs.busy)
-        self.assertEqual(len(self.chart_service.calls), 2)  # Synchronization before subscribe.
+        self.assertEqual(len(self.chart_streams), 1)
+        self.assertEqual(len(self.chart_service.calls), 1)  # Load automatically subscribes.
         self.assertEqual(len(self.score_service.calls), 1)  # Reuse same-day score history.
         self.publish(self.chart_streams[0], tick(price=121, stamp=self.clock, cumulative=1000))
         self.wait_until(lambda: w.chart_scores.scores().get("005930", {}).get("live"))
@@ -188,7 +188,7 @@ class HomeLiveIntegrationTests(unittest.TestCase):
         self.assertEqual(w.chart_scores.scores()["005930"]["last_price"], 121)
         self.assertEqual(w.watchlist.rows[6]["q_score"]["last_price"], 121)
         self.assertEqual(len(self.home_service.calls), 6)
-        self.assertEqual(len(self.chart_service.calls), 2)
+        self.assertEqual(len(self.chart_service.calls), 1)
         self.assertEqual(len(self.score_service.calls), 1)
 
     def test_page_exit_stops_both_price_and_score_and_late_callbacks_cannot_restart(self):

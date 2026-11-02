@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import dotenv
 with patch.object(dotenv, 'load_dotenv', return_value=False):
-    from core.market.models import ChartRequest, Instrument
+    from core.market.models import ChartRequest, Instrument, LIVE_INTERVALS, HISTORY_INTERVALS
     from data.kis_workspace import MarketDataService, supported_intervals, _MAX_PAGES
     from data.krx.kis_client import KISError, check_quotation_path
 
@@ -173,7 +173,7 @@ class WorkspaceTests(unittest.TestCase):
         ins=Instrument('bond','KR2033022D33')
         s=self.service(lambda *a:self.fail('unsupported interval must fail before HTTP'))
         with self.assertRaises(KISError):s.load(ChartRequest(ins,'1m',20))
-        self.assertEqual(supported_intervals(ins),('1d',))
+        self.assertEqual(supported_intervals(ins), LIVE_INTERVALS + ('1d',))
         def handler(path,tr,params):
             if no_quote(path):return {'output':{'bond_prpr':'9999','bond_oprc':'9990'}}
             return {'output':[{'stck_bsop_date':'20261030','bond_oprc':'9990','bond_hgpr':'10010',
@@ -253,6 +253,50 @@ class WorkspaceTests(unittest.TestCase):
             self.assertEqual(check_quotation_path(path),path)
         for path in ('/uapi/domestic-stock/v1/trading/order-cash', '/uapi/domestic-stock/v1/trading/inquire-balance'):
             with self.assertRaises(KISError): check_quotation_path(path)
+
+    def test_live_periods_only_fetch_current_quote_and_start_without_history(self):
+        for period in LIVE_INTERVALS:
+            with self.subTest(period=period):
+                def handler(path, tr, params):
+                    self.assertTrue(no_quote(path), 'No historical OHLC may seed tick/second bars')
+                    return {'output': {'stck_prpr': '100', 'acml_vol': '99999'}}
+                service = self.service(handler)
+                out = service.load(ChartRequest(interval=period))
+                self.assertEqual(out.candles, ())
+                self.assertEqual(out.quote.price, 100)
+                self.assertEqual(len(service.client.calls), 1)
+                self.assertIn('Historical tick/second bars are unavailable', out.note)
+                self.assertIn('received trade volume', out.note)
+
+    def test_live_periods_can_wait_for_stream_when_quote_is_unavailable(self):
+        out = self.service(lambda *args: {'output': {}}).load(ChartRequest(interval='1tick'))
+        self.assertEqual(out.candles, ())
+        self.assertIsNone(out.quote)
+        self.assertIn('waiting for a valid streaming execution', out.note)
+
+    def test_live_support_matches_verified_subscription_and_paper_restrictions(self):
+        for ins in (Instrument(), Instrument('overseas_stock', 'AAPL', 'NAS'),
+                    Instrument('bond', 'KR2033022D33'), Instrument('domestic_future', 'A01612', 'F')):
+            self.assertTrue(set(LIVE_INTERVALS).issubset(supported_intervals(ins)))
+        for ins in (Instrument('overseas_future', 'GCU26', 'CME'),
+                    Instrument('domestic_future', 'A01612', 'CM'),
+                    Instrument('domestic_future', 'A01612', 'EU')):
+            self.assertFalse(set(LIVE_INTERVALS).intersection(supported_intervals(ins)))
+            service = self.service(lambda *args: self.fail('Unsupported live interval must fail before I/O'))
+            with self.assertRaises(KISError):
+                service.load(ChartRequest(ins, '1tick'))
+        self.assertTrue(set(LIVE_INTERVALS).issubset(supported_intervals(Instrument(), paper=True)))
+        overseas = Instrument('overseas_stock', 'AAPL', 'NAS')
+        self.assertEqual(supported_intervals(overseas, paper=True), HISTORY_INTERVALS)
+        service = self.service(lambda *args: self.fail('Paper unsupported feed must fail before I/O'))
+        service.client.base_url = 'https://openapivts.koreainvestment.com:29443'
+        with self.assertRaises(KISError):
+            service.load(ChartRequest(overseas, '1s'))
+
+    def test_adjusted_live_bars_fail_before_provider_access(self):
+        service = self.service(lambda *args: self.fail('Cannot mix adjusted history and raw executions'))
+        with self.assertRaises(KISError):
+            service.load(ChartRequest(interval='1tick', adjusted=True))
 
 
 if __name__=='__main__':unittest.main()

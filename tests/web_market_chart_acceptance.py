@@ -95,7 +95,11 @@ class WebMarketTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("005930", self.view.image.semantics_label)
         self.assertIn("2026-11-02", self.view.source.value)
         self.assertIn("SMA20", self.view.metrics.value)
+        self.assertIn("거래량 10", self.view.reading.value)
+        self.view.render_locale(LocaleContext("en_US"))
         self.assertIn("V 10", self.view.reading.value)
+        self.view.render_locale(LocaleContext("ko_KR"))
+        self.assertIn("거래량 10", self.view.reading.value)
         self.assertIsNone(self.view.cursor)
 
     async def test_current_price_keeps_small_contract_precision(self):
