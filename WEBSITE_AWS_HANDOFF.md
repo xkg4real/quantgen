@@ -1,3 +1,13 @@
+## 2026-11-02 — 소개사이트 재구성 진행 체크포인트
+
+사용자가 소개사이트 제작을 재개하고 Figma 없이 Impeccable·Taste로 직접 구현하도록 지정했습니다. 최신 추가 요청은 Login 왼쪽 globe 언어 선택, 둥근 Liquid Glass 버튼·설명 카드, 기존 색상과 Light/Dark 유지, 부드러운 스크롤입니다. 이 웹 UI 범위의 직접 지시이며 메인 연구 CURRENT/소유권/원장은 변경하지 않습니다.
+
+- 로컬 소스: `/workspace/work/quantgen-web-redesign-20261102/site`. Main/Who we are/Docs/Questions/Inquiries/Login/Sign Up, 3개 요금제 초안, 같은 기간의 역사 차트 복수선택, 한국어·영어 번역 구현 중입니다.
+- GitHub 준비 브랜치: `gpt/website-redesign-20261102` (base `d0f18a0`). **아직 사이트 소스 커밋/PR을 게시하지 않았습니다.** 검증 완료 후 같은 인계 항목에 확정 링크를 추가합니다.
+- 기존 첫 검수는 6개 폭·7경로·8개 지표조합 통과. 범례 대비 수정. 최신 Liquid Glass/두 언어 검수는 진행 중이며 PASS로 집계하지 않습니다.
+- **운영 배포 NOT_DEPLOYED.** 기존 AWS 원본과 Quant Lab/Gate 엔진을 보존해 통합할 패키지이며, 로그인·문의·결제 서버는 연결되지 않았습니다.
+- 직접 다른 채팅 전송 도구가 없어 `queued/not_received`. 스레드 조회도 연결 오류가 났습니다. 이 공유 문서 저장은 메시지 수신이나 배포 영수증이 아닙니다.
+
 # 웹사이트 작업공간(AWS) 인수인계 — 사용자 중단 및 완료 회신
 
 대상: https://quantgeneration.com/  
