@@ -353,7 +353,7 @@
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
     "tests/desktop_macro_language_acceptance.py": "916fc1c1d5620d9cc58b674084b2a30aa3f65512e1a2b9c7f73236f459ac3832",
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
-    "tests/desktop_market_chart_acceptance.py": "223aae61612f40f94cbd8a6cf7d18a7bc7599444d09748b5757c56cc80109dbe",
+    "tests/desktop_market_chart_acceptance.py": "dd0a1885b0a2072e0d5a41581892b5319ff8fc8573fac7dd57935064c1a5f34c",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
@@ -519,161 +519,161 @@
       "document_sha256": "31a79b6417732796945b28f5f167a432d6f53eb86852bc8eeadd9b8923aff155",
       "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.472613+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.707723+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "2": {
       "document_sha256": "ff1afc17787f8c26209a022892c76e5d44af87b32988be7e01a6e9ee83d81c2f",
       "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.475128+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.710375+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
       "source_digest": "9e8148325bdf0a091906160026477d2fb325df7096ea46970ab4b154a7eb8c84",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.477377+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.712516+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "4": {
       "document_sha256": "6e917ef0c712b4406cc1ce8007884dae6c2922c46b364ed7ead166868de77b59",
       "source_digest": "f7a4c03f52fe412a0bafa822f9f18e107eef71046dd38ce242b8f8d8d3b57e0f",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.479614+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.714876+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "a1d9ea4f584f6aa95bae27fe51497746e9f476440a64b23b5024dbb6ab548f8d",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.481656+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.717276+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "6": {
       "document_sha256": "d6b67c23112b708082f04d4ca62899b978a69b7f19e04a3149b63df9c4aba062",
       "source_digest": "8ee13ad5ab01ca46c8854884e94f9af4f45392c753862c7b14e087068ebe725c",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.483734+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.719281+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "7": {
       "document_sha256": "bd91d3d8ea6a85eb7f6f9f0e8afdc40403760e40ca03df95c419e76e35817f70",
       "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.485812+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.721397+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "8": {
       "document_sha256": "f8c83e2d6942ae1a0a45863a951ec512c9a099e089b970d580c7a075f1fe70b7",
       "source_digest": "8ee13ad5ab01ca46c8854884e94f9af4f45392c753862c7b14e087068ebe725c",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.488031+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.723689+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "9": {
       "document_sha256": "0425a711d615ab6ff44a4573ed1d4962dc620cc0f89ac349481a0eee448ee262",
       "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.490054+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.726028+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
       "source_digest": "bfe2bf43615a6ef2e15bfeaa13e9c7886538d7b356f16f50ec9a5880247dbe61",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.491976+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.728210+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
       "source_digest": "1929acda407dc8aaaae20e3a5663fb4b8513df8534c8c525d805652577297750",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.494147+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.730641+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "12": {
       "document_sha256": "407e354b7b2d7281c5b1555b04767a04ba47bf16c061cb5ac429ff8a6cfabc0e",
-      "source_digest": "bee40fc15489b69cfc8289e721b305a83885d78ff00b8ff2b03c0ef621de197f",
+      "source_digest": "f7c0b81f782acbb7af0e8ed1a43f1e54db245fa8c528afea9c9040379efa4281",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.496373+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.732761+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "13": {
       "document_sha256": "3a5eb3e68df8feebe2eaa02a96f4e89f87dbe2cf17fa6f58d6e372eb59b16b1f",
       "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.498527+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.735321+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "14": {
       "document_sha256": "5db35b4cdfe4e6f054979abadb7fc49d628154719f319ce7308626f004515d5d",
       "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.500463+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.737607+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "15": {
       "document_sha256": "e5143b74273be5899c679d40e2e447da79c3fe5b565e278bf014535954d64701",
       "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.502637+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.739582+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
       "source_digest": "31d633ddccee429d3030df00797bad1b312490af415e049fd5c3e99499d5a661",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.504856+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.741448+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
       "source_digest": "8ee13ad5ab01ca46c8854884e94f9af4f45392c753862c7b14e087068ebe725c",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.507181+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.743550+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
       "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.509385+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.746157+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "19": {
       "document_sha256": "1a489fb06d0cb74a247df01ed5d43f7ab9921dc4326920a8fc805a26a9a6addd",
       "source_digest": "c8cea71bceee0ed5c66ccc4e61e8b33f661236edc7e710eb71ce20182233cdd7",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.511812+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.748144+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     },
     "20": {
       "document_sha256": "7c3cbc05a1d70875329da961cdcc2827878c98285aff03ed7856cd06a1db9b91",
       "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:16:34.513977+00:00",
-      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
+      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:28:21.750397+00:00",
+      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
     }
   }
 }
