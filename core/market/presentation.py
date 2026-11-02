@@ -88,7 +88,9 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
     """
     width = max(420, min(2400, int(width)))
     fg, bg, grid = ("#E9EEE9", "#17211E", "#34443D") if dark else ("#20372E", "#FFFFFF", "#DCE4DF")
-    up, down, blue, gold = "#D94A52", "#397AC4", "#2E9F91", "#C58C23"
+    up, down = "#D94A52", "#397AC4"
+    # Indicator colors also label the legend: meet text contrast on each canvas.
+    blue, gold = ("#2E9F91", "#C58C23") if dark else ("#247E73", "#946A1B")
     rsi_on, macd_on = "rsi" in indicators, "macd" in indicators
     height = 410 + 112 * (rsi_on + macd_on)
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',

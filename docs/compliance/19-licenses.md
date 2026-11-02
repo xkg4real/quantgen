@@ -20,6 +20,12 @@ QUANTGEN의 이미지·브랜드·아이콘·폰트, 설치물에 포함하는 �
 
 C형 후속은 기존 차트 렌더러·브랜드 자산·동봉 글꼴을 재사용합니다. 새로운 앱 배포 의존성을 추가하지 않았습니다. 로컬 확인에만 사용한 Chromium/Playwright는 제품 배포 의존성이나 데이터 이용권 증거가 아닙니다.
 
+### 2026-11-02 KIS 차트·WebSocket 의존성
+
+KIS 동적 시세·차트와 새 필수 패키지 `websockets>=15,<17`을 추가했습니다. 검토 인터프리터가 확인한 설치본 16.0의 `METADATA`는 `License-Expression: BSD-3-Clause`이며 `Requires-Dist` 항목이 없습니다. 해당 배포본의 `licenses/LICENSE` 원문도 대조했습니다. 이 관찰은 앞으로 설치되는 15/16 계열 전체나 최종 배포물의 고지 포함 검증을 대신하지 않습니다.
+
+기존 Home 6개·등록 계열 73개 검토 숫자에 신규 동적 차트의 모든 종목·거래소·실시간 구독이 포함된 것으로 간주하지 않습니다. 개인 계정 API 접근, 무료/지연 시세, 메모리 처리 또는 지표 계산이 제3자 앱·브라우저 상업 표시·재배포·가공 권리를 부여하지 않습니다. [별도 차트 권리 범위](../product/MARKET_DISPLAY_RIGHTS_2026-10-31.md#kis-chart-scope-2026-11-02)에 미확정 이용권을 기록하며 게시 승인·법률 의견은 부여하지 않습니다.
+
 ## 정책 또는 구현 기준
 
 ### 이번 변경의 자산·의존성 근거
@@ -27,6 +33,8 @@ C형 후속은 기존 차트 렌더러·브랜드 자산·동봉 글꼴을 재�
 | 항목 | 확인한 근거 | 배포 시 조건과 남은 범위 |
 |---|---|---|
 | Babel 2.18.0 | 설치 배포본 `babel-2.18.0.dist-info/licenses/LICENSE`: BSD-3-Clause. 포함 `babel/locale-data/LICENSE.unicode`: Unicode-3.0 | 저작권·조건·면책·Unicode 고지를 보존하며 보증/추천 표현을 만들지 않음. 선언 범위 `>=2.17,<3`의 향후 실제 버전과 설치물도 대조 필요 |
+| websockets 16.0 | 설치 메타데이터 `License-Expression: BSD-3-Clause` 및 `websockets-16.0.dist-info/licenses/LICENSE` 원문. `Copyright (c) Aymeric Augustin and contributors`; 추가 Requires-Dist 선언 없음 | 소스 재배포는 저작권·조건·면책을 보존하고 바이너리 배포는 동봉 문서/자료에 재현. 사전 서면허가 없는 권리자·기여자 명의 홍보/보증 금지. 선언 `>=15,<17`의 실제 릴리스 버전·설치물 고지 포함은 별도 미검증 |
+| KIS 동적 차트·실시간 체결 | [지원 범위](../product/KIS_MARKET_CHARTS_2026-11-02.md), [추가 권리 범위](../product/MARKET_DISPLAY_RIGHTS_2026-10-31.md#kis-chart-scope-2026-11-02) | 기존 73개 계열 목록에 전 종목 구독권이 포함된 것으로 간주하지 않음. 사용자/거래소/상품별 상업 표시·재배포·저장·파생지표·서버→브라우저 제공권 및 CME/SGX 이용권 미검증 |
 | 교육 USD/EUR 2018–2022 관측 1,247개 | [provenance](../../core/education/samples/usdeur_provenance.json)에 Board H.10/FRED DEXUSEU, 고정 mirror commit·원자료/동봉 CSV 해시, 역수·소수 네 자리 반올림을 명시. Board 공공영역 안내 및 mirror PDDL은 해당 원자료에 한정 | 출처·변환 표시 보존. 거래소 종가·OHLCV·실시간 자료가 아님. FRED의 다른 계열에 일괄 적용하지 않음 |
 | Home·등록 시장지표 표시 검토 | [검토 근거](../product/MARKET_DISPLAY_RIGHTS_2026-10-31.md), [기계 판독 목록](../../core/research/display_rights.json) | 출처·지연·표시·상업 이용·저장·가공·내보내기 조건을 제공자/계열별로 확인. 목록 작성은 계약·게시 허가를 부여하지 않음 |
 
@@ -66,6 +74,8 @@ C형 후속은 기존 차트 렌더러·브랜드 자산·동봉 글꼴을 재�
 | QG-RIGHTS-003 | PyQt6 및 실제 Qt 배포 구성요소 | 배포 방식에 맞는 라이선스 선택·의무·계약 검토 필요 |
 | QG-RIGHTS-004 | 직접·전이 소프트웨어 의존성 | 빌드별 SBOM·라이선스·NOTICE 생성 및 검토 필요 |
 | QG-RIGHTS-005 | 금융·시장 데이터 공급자별 이용 | 공급자마다 별도 행 생성; 상업 표시·내보내기·AI 권한 확인 필요 |
+| QG-RIGHTS-KIS-20261102 | KIS 동적 차트·체결 수신 | 공급자·거래소·상품/이용자별 권리 증거 미확정; 접속 성공·무료 시세·메모리 처리로 표시/재배포권 승인하지 않음 |
+| QG-RIGHTS-WEBSOCKETS-20261102 | websockets 16.0 / 선언 >=15,<17 | BSD-3-Clause 원문 확인; 최종 배포 버전·필수 고지 포함·의무 이행은 별도 확인 |
 
 이 초기 표는 권리 확보 완료 확인서가 아니다. 계약·근거 없이 임의의 허용 범위를 채우지 않는다.
 

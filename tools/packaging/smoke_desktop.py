@@ -10,7 +10,7 @@ import os
 from pathlib import Path
 import sys
 import tempfile
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from zipfile import ZipFile
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -33,6 +33,7 @@ with patch.object(dotenv,'load_dotenv',return_value=False):
     from core.quant.history import History
     from core.research.analysis import execute_analysis
     from core.research.runs import read_export
+    from quantgen_desktop.market_chart import MarketChartPane
 from PyQt6.QtCore import QSettings
 from PyQt6.QtTest import QTest
 from PyQt6.QtWidgets import QApplication, QMessageBox
@@ -49,7 +50,12 @@ def fixture_runner(request, run):
         rate_reader=lambda symbol:(.03,'assumed fixture rate'))
 
 
-with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder:
+chart_service=Mock()
+chart_service.load.side_effect=AssertionError('Installed navigation must not query KIS')
+with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder, \
+     patch('data.kis_workspace.MarketDataService',return_value=chart_service) as chart_factory, \
+     patch('data.kis_stream.KISStream',side_effect=AssertionError('No KIS stream')) as chart_stream, \
+     patch('config.kis_credentials',side_effect=AssertionError('No real KIS credentials')):
     root=Path(folder)
     settings=QSettings(str(root/'preferences.ini'),QSettings.Format.IniFormat)
     # A malformed stored value must leave the UI usable for preference repair.
@@ -65,6 +71,19 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder:
         for route in window.route_indices:
             window.navigate(route)
             assert window.nav[route].isChecked()
+        assert isinstance(window.market_chart,MarketChartPane)
+        chart_index=window.market_tabs.indexOf(window.market_chart)
+        assert chart_index>=0,'Installed KIS chart must be reachable from Markets'
+        window.navigate('markets');window.market_tabs.setCurrentIndex(chart_index)
+        app.processEvents()
+        assert window.market_chart.snapshot is None
+        assert not window.market_chart.jobs.busy
+        assert not window.market_chart.poll_button.isChecked()
+        assert not window.market_chart.poll_timer.isActive()
+        assert window.market_chart._stream is None
+        assert window.market_chart.request().instrument.code=='005930'
+        chart_factory.assert_called_once_with()
+        chart_service.load.assert_not_called();chart_stream.assert_not_called()
         window.symbol.setText('FIXTURE')
         window.source.setCurrentIndex(window.source.findData('synthetic'))
         window.model.setCurrentIndex(window.model.findData('gbm'))
@@ -93,11 +112,14 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder:
             else:assert read_export(destination.read_bytes())==run
         settings.sync()
         assert QSettings(str(root/'preferences.ini'),QSettings.Format.IniFormat).value('ui/locale')=='ko_KR'
+        assert window.market_chart.ctx.language=='ko'
+        assert window.market_chart.snapshot is None
+        chart_service.load.assert_not_called();chart_stream.assert_not_called()
         assert window.paper_session.runtime is None
     finally:
         with patch.object(QMessageBox,'question',return_value=QMessageBox.StandardButton.Yes):
             window.close()
         window.deleteLater();app.processEvents()
 print(json.dumps({'status':'PASS','platform':sys.platform,
-    'scope':'installed native shell, six routes, synthetic worker, locale/theme, preference repair and JSON/ZIP exports',
+    'scope':'installed native shell, six routes plus reachable idle KIS chart, synthetic worker, locale/theme, preference repair and JSON/ZIP exports',
     'live_providers':'NOT_RUN','paper_engine':'NOT_RUN','research_pilot':'NOT_RUN','official_ledger':'NOT_RUN'}))
