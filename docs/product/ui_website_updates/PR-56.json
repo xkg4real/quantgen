@@ -16,7 +16,7 @@
     "branch": "gpt/kis-market-charts-20261102",
     "pull_request": "https://github.com/xkg4real/quantgen/pull/56",
     "head_commit": "ee681aa39dad9d791a2f457f0efa0682ce2a35f6",
-    "merge_commit": null,
+    "merge_commit": "69a255955fd2c35393c910d1ac5338f053f5f4ca",
     "remote_status": "PUSHED",
     "local_commit_verified": true,
     "changed_files": [
@@ -33,7 +33,9 @@
       "pyproject.toml",
       "requirements.txt"
     ],
-    "implementation_commit": "28f83a51127bd4be19e31da9bd2c6dbec23442fc"
+    "implementation_commit": "28f83a51127bd4be19e31da9bd2c6dbec23442fc",
+    "merged_at": "2026-11-02T02:34:35Z",
+    "merge_observation": "PR was already merged by an external actor when this session re-read it; this session did not request the merge."
   },
   "summary_ko": [
     "앱과 Flet 웹에서 KIS 캔들·거래량·SMA20·볼린저밴드·RSI·MACD와 일/주/월/분봉을 공통 구현했습니다.",
@@ -71,8 +73,8 @@
     "qt": "6.12.0",
     "quotation_guard": "T-RO-02 PASS, 31 quotation paths; account/order paths refused",
     "native_preview": "synthetic fixtures inspected with Linux Qt offscreen",
-    "ci_result": "PENDING",
-    "ci_url": null,
+    "ci_result": "FAIL",
+    "ci_url": "https://github.com/xkg4real/quantgen/actions/runs/41378314168",
     "manual_windows_display_acceptance": "NOT_RUN",
     "live_kis_acceptance": "NOT_RUN",
     "live_website_acceptance": "NOT_RUN",
@@ -88,7 +90,18 @@
       "tests.web_branding_acceptance",
       "tests.packaging_policy_acceptance"
     ],
-    "ci_source_commit": "ee681aa39dad9d791a2f457f0efa0682ce2a35f6"
+    "ci_source_commit": "ee681aa39dad9d791a2f457f0efa0682ce2a35f6",
+    "ci_failures": [
+      {
+        "run_url": "https://github.com/xkg4real/quantgen/actions/runs/41378314168",
+        "reason": "Installed wheel status verification rejected stale README source fingerprint; QA record refresh required."
+      },
+      {
+        "run_url": "https://github.com/xkg4real/quantgen/actions/runs/41378314065",
+        "reason": "Source/document fingerprints require named consistency review after new market-data modules and dependency."
+      }
+    ],
+    "follow_up_branch": "gpt/kis-chart-ci-fix-20261102"
   },
   "limits_ko": [
     "채권은 최근 최대100 일봉, 분봉은 첨부 사양에 없습니다.",

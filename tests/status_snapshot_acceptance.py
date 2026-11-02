@@ -49,6 +49,20 @@ class StatusSnapshotTests(unittest.TestCase):
         self.qa.write_text(json.dumps([{'test': 'ok', 'status': 'FAIL'}]), encoding='utf-8')
         with self.assertRaises(StatusError): verify(self.root)
 
+    def test_feature_readme_edit_requires_refresh_without_changing_recorded_evidence(self):
+        before = verify(self.root)
+        p = self.root / 'README.md'
+        p.write_text('KIS live quotes and daily/minute charts are available.\n' + p.read_text(encoding='utf-8'),
+                     encoding='utf-8')
+        with self.assertRaises(StatusError):
+            verify(self.root)
+        refreshed = self.refresh()
+        self.assertEqual(verify(self.root), refreshed)
+        self.assertNotEqual(before['sources'][0]['sha256'], refreshed['sources'][0]['sha256'])
+        self.assertEqual(before['sources'][1:], refreshed['sources'][1:])
+        for key in ('code_test', 'data_readiness', 'formal_gate', 'paper_study', 'distribution_policy'):
+            self.assertEqual(before[key], refreshed[key])
+
     def test_summary_cannot_promote_notrun_or_gate(self):
         p = self.root / 'README.md'; t = p.read_text(encoding='utf-8')
         for old, new in [('1/2 PASS', '2/2 PASS'), ('NOT_FROZEN per README', 'PASS per README')]:

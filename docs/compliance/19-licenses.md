@@ -1,6 +1,6 @@
 # 19. 이미지·폰트·소프트웨어·데이터 권리 관리 정책 및 대장
 
-문서 ID: QG-C19 · 버전: 1.2 · 검토일: 2026-10-31 · 상태: review-required
+문서 ID: QG-C19 · 버전: 1.3 · 검토일: 2026-11-02 · 상태: review-required
 
 ## 적용 범위와 현재 상태
 
@@ -20,6 +20,14 @@ QUANTGEN의 이미지·브랜드·아이콘·폰트, 설치물에 포함하는 �
 
 C형 후속은 기존 차트 렌더러·브랜드 자산·동봉 글꼴을 재사용합니다. 새로운 앱 배포 의존성을 추가하지 않았습니다. 로컬 확인에만 사용한 Chromium/Playwright는 제품 배포 의존성이나 데이터 이용권 증거가 아닙니다.
 
+### 2026-11-02 KIS 시세·차트 소스 검토
+
+이번 KIS 후속에는 새 런타임 의존성 `websockets>=15,<17`과 REST/WS 시세 표시 범위가 추가됩니다. 이 작업의 프로젝트 가상환경에서 `websockets` 16.1.1의 `License-Expression: BSD-3-Clause` 및 `websockets-16.1.1.dist-info/licenses/LICENSE` 원문을 확인했습니다. 저작권자 Aymeric Augustin과 기여자의 고지·조건·면책을 소스/바이너리 배포 시 보존하고 허락 없는 추천·보증 표현을 만들지 않는 조건입니다. 이는 해당 설치본에 한정하며 모든 선언 버전·전이 의존성·최종 설치물 고지 포함을 검증한 결과가 아닙니다.
+
+새 차트는 기존 자산·글꼴을 재사용합니다. KIS 주식·파생·채권 시세의 표시·캐시·파생지표·상업 이용·다중 사용자 전달은 제공자/거래소별 권리 범위를 별도로 확인해야 합니다. 첨부 사양·API 접속·가격 배율 확인·소프트웨어 라이선스는 시장자료 재배포 허락이나 게시 승인을 부여하지 않습니다.
+
+소스·문서 정합성 기록이며 `review-required`와 운영 증빙의 미확정 상태를 유지합니다. 법률 검토·공개 승인·실제 배포 검증이 아닙니다.
+
 ## 정책 또는 구현 기준
 
 ### 이번 변경의 자산·의존성 근거
@@ -27,6 +35,7 @@ C형 후속은 기존 차트 렌더러·브랜드 자산·동봉 글꼴을 재�
 | 항목 | 확인한 근거 | 배포 시 조건과 남은 범위 |
 |---|---|---|
 | Babel 2.18.0 | 설치 배포본 `babel-2.18.0.dist-info/licenses/LICENSE`: BSD-3-Clause. 포함 `babel/locale-data/LICENSE.unicode`: Unicode-3.0 | 저작권·조건·면책·Unicode 고지를 보존하며 보증/추천 표현을 만들지 않음. 선언 범위 `>=2.17,<3`의 향후 실제 버전과 설치물도 대조 필요 |
+| websockets 16.1.1 | 프로젝트 가상환경의 배포 메타데이터 `License-Expression: BSD-3-Clause` 및 `websockets-16.1.1.dist-info/licenses/LICENSE` | 저작권·조건·면책 고지 보존과 추천 표현 제한. 선언 `>=15,<17` 전체나 최종 배포물·전이 의존성 검토 완료가 아니며 KIS 시장자료 권리와 별개 |
 | 교육 USD/EUR 2018–2022 관측 1,247개 | [provenance](../../core/education/samples/usdeur_provenance.json)에 Board H.10/FRED DEXUSEU, 고정 mirror commit·원자료/동봉 CSV 해시, 역수·소수 네 자리 반올림을 명시. Board 공공영역 안내 및 mirror PDDL은 해당 원자료에 한정 | 출처·변환 표시 보존. 거래소 종가·OHLCV·실시간 자료가 아님. FRED의 다른 계열에 일괄 적용하지 않음 |
 | Home·등록 시장지표 표시 검토 | [검토 근거](../product/MARKET_DISPLAY_RIGHTS_2026-10-31.md), [기계 판독 목록](../../core/research/display_rights.json) | 출처·지연·표시·상업 이용·저장·가공·내보내기 조건을 제공자/계열별로 확인. 목록 작성은 계약·게시 허가를 부여하지 않음 |
 
