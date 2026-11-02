@@ -45,6 +45,17 @@ class Page:
     def pop_dialog(self): self.dialog = None
 
 
+class MarketChartFixture(ft.Text):
+    """Inert view exposing the production route's stream lifecycle contract."""
+    def __init__(self):
+        super().__init__('fixture market_chart')
+        self.deactivations = 0
+        self.reconnections = 0
+
+    def deactivate(self): self.deactivations += 1
+    def reconnect_session(self): self.reconnections += 1
+
+
 class ResearchHomeTests(unittest.TestCase):
     def setUp(self):
         self.page = Page(); self.calls = {}; self.built = {}; self.rules_changed = None
@@ -60,7 +71,8 @@ class ResearchHomeTests(unittest.TestCase):
             def builder(*args, key=route, **kwargs):
                 self.calls[key] = self.calls.get(key, 0) + 1
                 if key == 'rules': self.rules_changed = kwargs['on_changed']
-                view = ft.Text('fixture ' + key); self.built[key] = view
+                view = MarketChartFixture() if key == 'market_chart' else ft.Text('fixture ' + key)
+                self.built[key] = view
                 return view
             p = patch.object(app, name, side_effect=builder); p.start(); self.addCleanup(p.stop)
         app.main(self.page)
@@ -103,6 +115,23 @@ class ResearchHomeTests(unittest.TestCase):
         self.go('rules'); self.rules_changed(); self.go('trading')
         self.assertEqual(self.calls['trading'], 3)
         self.EngineRuntime.assert_called_once(); self.RuleStore.assert_called_once()
+
+    def test_market_chart_route_lifecycle_stops_and_only_reconnects_when_visible(self):
+        self.go('market_chart'); chart = self.built['market_chart']
+        self.assertEqual(chart.deactivations, 0)
+        self.go('macro')
+        self.assertEqual(chart.deactivations, 1)
+        self.go('market_chart')
+        self.assertIs(self.built['market_chart'], chart)
+        self.assertEqual(self.calls['market_chart'], 1)
+        self.page.on_disconnect(None)
+        self.assertEqual(chart.deactivations, 2)
+        self.page.on_connect(None)
+        self.assertEqual(chart.reconnections, 1)
+        self.go('home')
+        self.assertEqual(chart.deactivations, 3)
+        self.page.on_connect(None)
+        self.assertEqual(chart.reconnections, 1)
 
     def test_mobile_menu_and_resize_keep_running_view(self):
         self.go('quant'); first = self.built['quant']
