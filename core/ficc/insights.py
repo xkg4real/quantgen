@@ -207,6 +207,17 @@ def narrate_cap_floor(r: CapFloorReport) -> str:
 # --------------------------------------------------------------------------- #
 # FX
 # --------------------------------------------------------------------------- #
+def fx_basis_note(basis: float | None) -> str | None:
+    """Explain the existing input-rate discrepancy without an economic verdict."""
+    if basis is None:
+        return None
+    return (f"The supplied market forward has a signed annualized CIP discrepancy of {_bp(basis)} p.a. "
+            "under the input rates. Positive values place the market forward above the CIP forward; "
+            "negative values place it below. Quote timestamps, maturities and rate/quote conventions "
+            "have not been verified as aligned. This discrepancy alone does not establish a funding "
+            "premium or statistical significance.")
+
+
 def narrate_fx_forward(pair: str, spot: float, fwd: float, points: float, carry: float,
                        basis: float | None = None) -> str:
     p = _pair(pair)
@@ -219,10 +230,7 @@ def narrate_fx_forward(pair: str, spot: float, fwd: float, points: float, carry:
         f"one-for-one: the forward is a rate differential, not a forecast.",
     ]
     if basis is not None:
-        lines.append(f"The market forward implies a cross-currency basis of {_bp(basis)} p.a. "
-                     f"versus covered interest parity"
-                     + (", within noise." if abs(basis) < 5 * BP else
-                        f", a real funding premium on {base if basis < 0 else p[4:]}."))
+        lines.append(fx_basis_note(basis))
     return " ".join(lines)
 
 

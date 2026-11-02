@@ -212,8 +212,9 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
         ]
         if basis is not None:
             stats.append(stat("Implied basis", f"{basis / BP:+.1f}bp",
-                              token="error" if abs(basis) >= 5 * BP else "text",
-                              tooltip=f"market forward {_px(mf)} vs CIP {_px(F)}"))
+                              token="text",
+                              tooltip=f"market forward {_px(mf)} vs CIP {_px(F)}. "
+                                      + insights.fx_basis_note(basis)))
         blocks.append(ft.Row(stats, spacing=10, wrap=True))
         blocks.append(ft.Row(_chips(spot_s, rd_s, rf_s)
                              + [chip("flat rates across tenors")], spacing=6, wrap=True))
@@ -228,6 +229,7 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
                              base: rf_s.source if rf_s else "typed"},
             "forward": F, "forward_points": pts, "pip": pip, "carry_pa_long_base": cy,
             "market_forward": mf, "implied_basis": basis,
+            "implied_basis_note": insights.fx_basis_note(basis),
             "forward_curve": [{"tenor": tenor_label(t), "forward": f} for t, f in curve_pts],
         }
         blocks.append(analysis_panel(
