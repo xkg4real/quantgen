@@ -6,11 +6,11 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-11-02T12:23:00+09:00
+updated_at: 2026-11-02T12:32:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
-work_commit: ab6a15f9c92011f7e98838ca0bed004d101bcf6f
+work_commit: 3e979d9f23195b5579b92f13c8c2968618c62fd9
 uncommitted_changes: no; primary and financial source commits pushed/read back
 pr: 54, 58 and 59 (open; compliance success, exact-head runtime CI running)
 usage_weekly_pct: unknown
@@ -22,6 +22,13 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 ---
 
 # QUANTGEN 직접 작업 재개 — 2026-11-02
+
+## 12:32 KST 최종 검사 수정 저장
+- Windows에서220ms고정대기가Qt렌더완료보다빨라실패하는테스트경쟁을650ms지연으로재현. 모델커서는정상이며제품타이밍변경없음. snapshot/cursor/readout 실제완료조건으로수정, 지연반복9회+KIS전체74 PASS. 이전실패·partial실행은통과근거에서제외.
+- PR54 head3e979d9f23195b5579b92f13c8c2968618c62fd9 push/read-back; Runtime41383243839 진행,Compliance41383243764 success. 아직미병합.
+- PR58 head92c6443050ddec9c712ae582b2aba9f713a5a102 push/read-back; Runtime41383297354 진행,Compliance41383297373 success. 아직미병합.
+- PR59 head12112514be5092e6ca2e0d28557607642e7866fc push/read-back; Runtime41383497363 진행,Compliance41383497389 success. 아직미병합.
+- 설치검증과동일한runtime bytes보존. §10 큐헤더/정규ID계수21/67·46미완료일치검사PASS. 최종CI후승인범위PR병합·Notion하위완료표시·LEDGER·전체인계정리를진행한다. 실제Windows/공급사/법률/파일럿완료로대체하지않는다.
 
 ## 12:23 KST 금리 수정 원격 저장
 - PR59 https://github.com/xkg4real/quantgen/pull/59, branchgpt/rates-params-20261102 headfe45e905150490bf5c4d08e3825730fbddfc795b push/read-back. M3-N08 모수 불일치 거부 및 Hull-White 최종sim.params 연결. 신규5+기존5, 통합21 PASS; 별도 설치wheel6 PASS(실제Qt버튼→worker→표/차트 포함),304runtime/227Python exact-source일치. 실제수치12/24/144 비교보존. Runtime41382605803 진행,Compliance41382605813 success. 큐는bounded21/67구현·46미완료(미병합상태)이며 실제연구/Windows 미완료.
