@@ -64,7 +64,10 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder, 
         locale=settings.value('ui/locale'),language_store=settings)
     try:
         window.show();app.processEvents()
-        assert window.stack.count()==6
+        assert window.stack.count()==7  # Six research workspaces plus the independent guide.
+        assert 'guide' in window.nav
+        assert window.home_markets.rowCount()==12
+        assert window.home_markets.horizontalHeaderItem(7).text()=='Q-SCORE'
         assert not window.windowIcon().isNull()
         assert not window.grab().isNull()
         assert window.locale_picker.currentData()=='en_US'
@@ -82,7 +85,16 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder, 
         assert not window.market_chart.poll_timer.isActive()
         assert window.market_chart._stream is None
         assert window.market_chart.request().instrument.code=='005930'
-        chart_factory.assert_called_once_with()
+        # Chart, Home feed and the two independent Q-SCORE controllers each
+        # construct a service. Construction must still perform no live work.
+        assert chart_factory.call_count==4
+        assert all(not call.args and not call.kwargs for call in chart_factory.call_args_list)
+        assert not window.home_feed.active and not window.home_feed.busy
+        assert window.home_feed._stream is None
+        assert not window.home_feed.age_timer.isActive()
+        for scores in (window.q_scores,window.chart_scores):
+            assert not scores.jobs.busy and not scores.timer.isActive()
+            assert scores.scores()=={}
         chart_service.load.assert_not_called();chart_stream.assert_not_called()
         window.symbol.setText('FIXTURE')
         window.source.setCurrentIndex(window.source.findData('synthetic'))
@@ -114,6 +126,9 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder, 
         assert QSettings(str(root/'preferences.ini'),QSettings.Format.IniFormat).value('ui/locale')=='ko_KR'
         assert window.market_chart.ctx.language=='ko'
         assert window.market_chart.snapshot is None
+        assert not window.home_feed.active and not window.home_feed.busy
+        for scores in (window.q_scores,window.chart_scores):
+            assert not scores.jobs.busy and not scores.timer.isActive()
         chart_service.load.assert_not_called();chart_stream.assert_not_called()
         assert window.paper_session.runtime is None
     finally:
@@ -121,5 +136,5 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder, 
             window.close()
         window.deleteLater();app.processEvents()
 print(json.dumps({'status':'PASS','platform':sys.platform,
-    'scope':'installed native shell, six routes plus reachable idle KIS chart, synthetic worker, locale/theme, preference repair and JSON/ZIP exports',
+    'scope':'installed native shell, six workspaces plus independent guide, 12-row Q-SCORE watchlist, reachable idle KIS chart, synthetic worker, locale/theme, preference repair and JSON/ZIP exports',
     'live_providers':'NOT_RUN','paper_engine':'NOT_RUN','research_pilot':'NOT_RUN','official_ledger':'NOT_RUN'}))

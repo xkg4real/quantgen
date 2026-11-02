@@ -3,7 +3,7 @@
 2026-10-31 추가 표시 검토: 네이티브 ETF/Crypto/Derivatives의 AR(1)·펀딩·호가 검사 안내에 로컬 한영 문구를 연결했습니다. 원본 보고서·수치·미실시 상태·외부 진단 원문 및 기존 전송/저장 경로는 보존합니다. `quantgen_desktop/market_diagnostics_language.py`, `market_tools.py`와 `docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md`가 근거입니다. 실제 Windows 시각/DPI·Flet 동등성·외부 서비스 검증 또는 공개 승인은 별도입니다.
 
 - 기준일: 2026-11-02 한국시간
-- 코드 기준: 기존 `5074322` 기능 검토 이력을 보존하고 `853de90`과 PR #57 `cac727e2`의 통합 작업 트리를 대조. 검토 fingerprint는 `source-review.json` 참조
+- 코드 기준: 기존 `5074322` 기능 검토 이력을 보존하고 `853de90`과 PR #57 `cac727e2`의 통합 작업 트리를 대조. 검토 fingerprint는 `source-review.json` 참조 · 이후 main PR60 `1e67b04`/기록 `ead6e67`의 Home 목록·Q-SCORE·7페이지 변경도 통합 대조.
 - 범위: 실행 진입점, `core/`, `data/`, `ui/`, `quantgen_desktop/`, 의존성·자산 선언과 관련 문서. 실제 운영 서버·사업자 계약·판매 사이트는 이 소스 검사로 확인되지 않는다.
 
 <a id="kis-market-integration-2026-11-02"></a>
@@ -154,3 +154,37 @@ remain. Source/document consistency is not publication approval.
 C형 최종 통합 시 main PR48/49(4c51ab9)의 인계 기록과 채권·포트폴리오 한/영 결과 표현을 보존했습니다. display_variants는 원본 source_text·내보내기·수치·경고를 유지하고 C형의 기존 notes 위젯을 재사용합니다. 이 한정된 소스 차이를 20개 문서와 대조했으며 저장·전송·거래·정책 공개 상태 변화는 없습니다.
 
 C형 병합 직전 통합: main PR50–52(d789691)의 웹 인계 기록과 시장 진단 한영 표시를 함께 보존했습니다. ToolPane의 기존 text(localized=...) 경로를 사용하며 AR(1)·펀딩·호가 수치, 원문 경고와 NOT_RUN·정규 보고서가 유지됩니다. 20개 정책 범위와 대조했고 신규 저장·요청·승인 상태 변화는 없습니다.
+
+## KIS 시세·차트 후속 — 2026-11-02
+
+01–20 문서를 새 시세 소스·화면·의존성과 대조했습니다. [20개 문서별 검토표](../product/KIS_SOURCE_DOCUMENT_REVIEW_2026-11-02.md)는 사실 갱신과 변경 없는 정책을 구분합니다. 이는 fingerprint 갱신에 앞선 소스·문서 정합성 기록이며 `review-required`·공개 준비 `BLOCKED`, 운영자 제공 사실과 미확정 계약·보유기간·연령·호스팅 조건을 유지합니다. 법률 의견·게시 승인·데이터 재배포 허가·실서비스 검증이 아닙니다.
+
+| 주제 | 새로 확인한 사실과 한계 | 근거 |
+|---|---|---|
+| 시세 범위 | PyQt6/Flet가 공통 OHLCV·지표·SVG를 사용. REST 단일/5초 폴링과 WS 체결을 구분. KIS 계좌·주문 경로 추가 없음; 기존 Upbit 계좌·AI 흐름은 별개 | [기능 범위](../product/KIS_MARKET_CHARTS_2026-11-02.md), [시세 adapter](../../data/kis_workspace.py), [공통 모델](../../core/market/models.py) |
+| 지원·단위·지연 | 국내/해외주식·국내파생 차트와 채권 일봉. 해외선물은 master 계산 배율이 확인된 일·주·월봉만. 해외옵션·야간 WS 등 미지원. 미국 무료 Nasdaq 범위/아시아15분 지연, 계약별 시세 단위/채권 액면1만원 기준, 부분 이력·미확인 거래량·잠정 봉을 표시 | 같은 기능 문서, [시세 처리](../../data/kis_workspace.py), [체결 집계](../../core/market/live.py) |
+| 인증·프로토콜 | HTTPS `/oauth2/Approval`에 appkey·secretkey를 전송. 승인키·종목·채널을 실전 `ws://ops.koreainvestment.com:21000` / 모의 `:31000` 구독에 사용. 키를 브라우저에 넣지 않는 Python 측 경계이며 해당 WS 구간의 암호화 보장이 아님 | [승인키·연결](../../data/kis_stream.py) `_approval_key`, `subscription_message`, `_run` |
+| 보관·중지 | 기존 평문 Bearer 토큰 파일은 유지. 승인키는 서버 주소·인증정보 지문별 프로세스 전역 메모리 캐시이며 23시간은 재사용 기준. 시세 snapshot·대기 tick·종목 master도 메모리. 연결 중지·브라우저 종료가 전역 캐시 삭제·원격 철회를 보장하지 않음 | 같은 파일 `_APPROVAL_CACHE`, `stop`; [master](../../data/kis_markets.py) `load_master`; [삭제 지도](20-deletion.md) |
+| 입력·생명주기 | 별도 KIS 차트 화면 최초 진입은 요청 없음. 조회·폴링·체결 연결을 명시적으로 선택하고 화면 이탈/중지 후 자동 재개하지 않음. 새 체결 연결은 REST 새 조회 후 시작. 이 선택은 개인정보·국외이전·광고의 법적 동의를 대체하지 않음. Home 시작 시 조회는 아래 후속 절 참조 | [Flet](../../ui/market_chart_page.py), [Qt](../../quantgen_desktop/market_chart.py), [라우팅](../../main.py) |
+| 접근성 | 선택 봉 OHLCV 텍스트·이미지 이름/Qt 설명, 커서·슬라이더/Qt 방향키 제공. 시장 SVG는 일반 title만 있고 desc·전체 동등 표 없음. 지표는 최신 봉 값. 14번의 네 범례 대비 측정만 확인하며 실제 보조기술·전체 상태 검증은 미완료 | [표시](../../core/market/presentation.py), [대체 정보](13-alternative-text.md), [대비](14-contrast.md), [키보드](15-keyboard.md) |
+| 의존성·권리 | `websockets>=15,<17` 추가. 이 작업의 프로젝트 가상환경 16.1.1/BSD-3-Clause 메타데이터·LICENSE 원문 확인. 전체 선언 버전·전이 의존성·최종 설치물·KIS 자료 상업 표시/재배포권을 확인한 결과가 아님 | [선언](../../pyproject.toml), [외부 대장](08-third-parties.md), [권리 대장](19-licenses.md) |
+
+가격·환불 기능·사업자 번호/연락처·후기·연령 확인·광고메일·쿠키 동의·전체 삭제 기능을 새로 구현하거나 운영 사실로 확정한 변경은 없습니다. 합성·주입 테스트와 메타데이터 검사는 실제 사용자 키 연결, 웹사이트 반영·배포, 공유 서버의 사용자별 분리·로그/백업 조사 및 금융 서비스 분류 검토를 대신하지 않습니다.
+
+## Home 목록·Q-SCORE·레이아웃 후속 — 2026-11-02
+
+20개 정책의 본문·양식과 새 모듈·변경 소스를 대조했습니다. [20종 검토 기록](../product/HOME_LIVE_QSCORE_REVIEW_20261102.md)은 변경한 14종과 유지한 6종의 이유, 산식과 검증 한계를 구분합니다. 새로운 소스 파일 추가에 따른 전체 정책 재검토이며 공개 준비 `BLOCKED`·각 문서 `review-required`를 유지합니다.
+
+| 주제 | 코드에서 확인한 변경과 한계 | 근거 |
+|---|---|---|
+| Home 구성 | 기존 시장지표 6개와 고정 국내주식 6개를 목록·상세로 표시. 기술지표 가이드는 독립 왼쪽 메뉴로 이동하며 기존 교육 내용을 재사용. Home의 실시간 차트 바로가기는 기존 KIS 차트에 연결 | [Home](../../quantgen_desktop/app.py), [목록·상세](../../quantgen_desktop/watchlist.py), [기존 가이드](../../quantgen_desktop/indicator_guide.py) |
+| 시작 시 요청 | 기존 `auto_refresh=True`의 일별 시장지표 조회에, 키가 준비된 경우 고정 국내주식 6개의 KIS REST 단일 현재가 조회가 추가됨. 최초 Home 자동 갱신에는 점수용 일봉 조회나 WS 연결 없음. 별도 차트 화면의 최초 무요청과 구분 | [snapshot 조회](../../core/research/watchlist.py), [Home 초기화](../../quantgen_desktop/app.py) |
+| 명시적 실시간 요청 | Home 실시간 목록 연결에서 종목별 수정 일봉 최대252개를 백그라운드에서 조회한 뒤 단일 KIS WS에 최대6종을 구독. 국내주식 차트를 명시적으로 조회해도 별도 점수용 수정 일봉을 조회. 모두 계좌·잔고·실주문·출금 요청 추가 없음 | [Home 수신 제어](../../quantgen_desktop/watchlist_live.py), [WS](../../data/kis_stream.py), [점수 제어](../../quantgen_desktop/qscore.py) |
+| 표시·수신 상태 | 일별 관측, REST snapshot 수신 시각, 실제 거래 시각을 구분. Home은 신선한 실제 체결을 받은 뒤에만 수신 상태를 표시하고 중복·역순·오래된 tick을 거부. 표는200ms마다 변경 행을 모아 표시하며 종목별15초 초과 수신 공백을 stale로 표시. 수신 공백·재연결은 정상 연속 시세로 위장하지 않으며 Home 이탈·중지 후 자동 재개하지 않음 | 위 수신 제어, [Home](../../quantgen_desktop/app.py), [목록](../../quantgen_desktop/watchlist.py) |
+| Q-SCORE v0.1 | 기존 기술신호70%·최대낙폭15%·95% CVaR15%의 새 실험적 표시 점수. 최소200개 수정 일봉에서 계산하고 실제 체결을 당일 잠정 종가로 반영. 1초 주기로 최신 tick을 모아 계산하며 원시 차트 봉·정규 연구 게이트를 변경하지 않음. 초기 비중·별 경계의 예측력 검증 없음 | [순수 계산](../../core/research/qscore.py), [점수 제어](../../quantgen_desktop/qscore.py) |
+| 처리·저장 경계 | 시세·수정 이력·파생 점수는 프로세스 상태. 새 고객 프로필·연구 원장·점수 파일·외부 AI 요청 없음. Q-SCORE 제어기별 수정 이력 캐시는 최대16종. 중지는 늦은 콜백을 무시하지만 진행 중 REST가 공급자 timeout 전 즉시 종료되거나 기존 Bearer 파일·승인키 캐시가 삭제됨을 보장하지 않음 | 위 계산·제어, [삭제 범위](20-deletion.md) |
+| 접근성·검증 | 표·상세 수치, 상태 텍스트, 점수 도움말·Enter/Return 상세 열기 제공. 빈 ToolPane가 세로 공간을 과점유하던 배치 수정. 소스·주입/offscreen 검증과 실제 Windows DPI·키보드·스크린리더·KIS 계정 연결 검증은 별개 | [대체 정보](13-alternative-text.md), [대비](14-contrast.md), [키보드](15-keyboard.md), [검토 기록](../product/HOME_LIVE_QSCORE_REVIEW_20261102.md) |
+
+변경은 네이티브 앱 범위이며 Flet·소개사이트에 같은 Home이나 점수가 배포되었다고 기록하지 않습니다. 기존 외부 SDK·NumPy·브랜드 자산을 재사용했으며, 권리 목록에 항목을 추가하거나 계산식을 설명한 사실만으로 시장자료의 상업 표시·저장·파생·재배포 권리, 금융서비스 분류, 예측 성능 또는 사용자 후기의 근거를 확보한 것으로 취급하지 않습니다.
+
+네이티브 실행 진입점은 `python -m quantgen_desktop`이며 기존 `python main.py`의 Flet과 구분합니다. 빈 차트에서도 사용자가 연결을 누르면 초기 이력 조회 뒤 구독을 시작합니다. `KISUnavailable`에는 `.env`의 KIS 키 설정·재시작·시스템 연결 확인 안내를 제공합니다. 사용자가 업데이트 후 기존 KIS 차트 화면을 표시한 증거와 실제 체결 연결 성공·이번 통합 UI의 전체 Windows 검증은 별개입니다.
