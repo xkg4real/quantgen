@@ -23,6 +23,8 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 
 # QUANTGEN 직접 작업 재개 — 2026-11-02
 
+검증된 같은 execution 아래 격리 하위 작업: gpt/defects-{strategy,rates,options,crypto,models}-20261102 (모두 main8b40104 시작). 대표가 CURRENT/STATE/LEDGER/Notion/원격 통합을 전담하며 하위 작업은 합성 재현과 배정된 일반 수정만 수행한다. root 브랜치에는 선택 AI 응답 완결성·전송 페이로드 검증을 진행한다. 중복 ID/파일은 통합 전에 대조하며 보호된 판정·동결 계산 변경은 제외한다.
+
 새 작업 브랜치: gpt/defects-priority-20261102, 최신 검증 main 8b4010430a9ece2a4e1b05b234abe81d3796771f 기준. 기존 29d 작업 브랜치·완료 기록 보존.
 
 ## 결함 46그룹 우선 처리 — 2026-11-02T13:47:36.000+09:00
