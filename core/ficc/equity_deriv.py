@@ -559,6 +559,34 @@ def letf_drag(beta: float, daily_variances: Sequence[float], *, rate: float = 0.
             "annualised_variance": float(np.sum(v)) * TRADING_DAYS / N}
 
 
+def letf_drag_scenario(beta: float, daily_variances: Sequence[float], *, funding_rate: float,
+                       annual_fee: float, benchmark: str, dividend_yield: float | None = None) -> dict:
+    """Explicit continuous-rate scenario for log(L/L0) - beta*log(B/B0).
+
+    Relative to a total-return benchmark, distribution carry cancels. Relative
+    to a price-return benchmark, constant annual yield q contributes beta*q*T.
+    This ideal self-financing scenario is not a verified fund cost model.
+    The legacy zero-rate reference and historical study calculations are unchanged.
+    """
+    from core.ficc.letf_assumptions import resolve_letf_assumptions
+    assumptions = resolve_letf_assumptions(funding_rate=funding_rate, annual_fee=annual_fee,
+                                          benchmark=benchmark, dividend_yield=dividend_yield)
+    if assumptions["mode"] != "EXPLICIT_SCENARIO":
+        raise FICCError("A return comparison is required for an explicit LETF scenario")
+    v = np.asarray(daily_variances, dtype=float)
+    if (v.ndim != 1 or not v.size or not np.all(np.isfinite(v)) or np.any(v < 0)
+            or isinstance(beta, bool) or not isinstance(beta, (int, float)) or not math.isfinite(beta)):
+        raise FICCError("LETF scenario needs finite leverage and a nonempty nonnegative daily variance vector")
+    result = letf_drag(beta, v, rate=funding_rate, fee=annual_fee)
+    years = v.size / TRADING_DAYS
+    funding = (1.0 - beta) * funding_rate * years
+    fee_term = -annual_fee * years
+    dividend = beta * dividend_yield * years if benchmark == "price_return" else 0.0
+    drag = result["drag"] + dividend
+    return {**result, "funding_term": funding, "fee_term": fee_term, "dividend_term": dividend,
+            "drag": drag, "drag_bp": drag / BP, "year_fraction": years, "assumptions": assumptions}
+
+
 def letf_realised_drag(letf_prices: Sequence[float], index_prices: Sequence[float], beta: float) -> float:
     L, S = np.asarray(letf_prices, dtype=float), np.asarray(index_prices, dtype=float)
     return float(math.log(L[-1] / L[0]) - beta * math.log(S[-1] / S[0]))

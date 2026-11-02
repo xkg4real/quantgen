@@ -6,12 +6,13 @@ from typing import Optional
 import numpy as np
 import config
 from core.ficc.common import BP
-from core.ficc.equity_deriv import letf_drag
+from core.ficc.equity_deriv import letf_drag, letf_drag_scenario
 from core.quant import strategies as S
 from core.quant.history import HistoryError, load_history, synthetic_history
 from core.quant.validate import load_cards
 from .decay_disclosure import decay_text
 from .letf_disclosure import letf_context, letf_text, letf_unavailable_text
+from core.ficc.letf_assumptions import resolve_letf_assumptions
 ROOT = Path(__file__).resolve().parents[2]
 
 LETF = {"122630": (2.0, "KODEX 레버리지", 0.0064), "252670": (-2.0, "KODEX 200선물인버스2X", 0.0064),
@@ -27,7 +28,12 @@ def _clean(code: str) -> str:
     c = (code or "").strip().upper()
     return c.split(".")[0] if c.endswith((".KS", ".KQ")) else c
 
-def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=None, history_loader=None) -> dict:
+def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=None, history_loader=None,
+            letf_funding_rate=None, letf_annual_fee=None, letf_benchmark="zero_rate_reference",
+            letf_dividend_yield=None) -> dict:
+    # Validate before provider/history access, not inside the model fallback.
+    assumptions = resolve_letf_assumptions(funding_rate=letf_funding_rate, annual_fee=letf_annual_fee,
+                                          benchmark=letf_benchmark, dividend_yield=letf_dividend_yield)
     history_loader = history_loader or load_history
     out: dict = {"code": code, "source": source, "is_krx": _clean(code).isdigit() and len(_clean(code)) == 6}
     km = None
@@ -78,10 +84,14 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
     c = _clean(code)
     if c in LETF:
         beta, name, fee = LETF[c]
+        assumptions = resolve_letf_assumptions(funding_rate=letf_funding_rate, annual_fee=letf_annual_fee,
+                                              benchmark=letf_benchmark, dividend_yield=letf_dividend_yield,
+                                              reference_fee=fee)
+        fee = assumptions["annual_fee"]
         index = LETF_INDEX[c]
         lt = {"beta": beta, "name": name, "fee": fee, "underlying_index": index,
               "index_code": None, "index_source": None, "index_mapping_source": None,
-              "index_status": "UNAVAILABLE", "calculation_status": "NOT_RUN"}
+              "index_status": "UNAVAILABLE", "calculation_status": "NOT_RUN", "assumptions": assumptions}
         out["letf"] = lt
         try:
             if source == "synthetic":
@@ -107,16 +117,28 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
                 raise HistoryError("No supported real underlying-index provider")
             from core.quant.garch import fit_garch, forecast_variance
             fit = fit_garch(r, dist="t", profile=False)
+            def proxy(variances):
+                reference = letf_drag(beta, variances, fee=LETF[c][2])
+                if assumptions["mode"] == "ZERO_RATE_REFERENCE":
+                    return {**reference, "funding_term": 0.0, "fee_term": reference["financing_term"],
+                            "dividend_term": 0.0, "reference_drag_bp": reference["drag_bp"]}
+                scenario = letf_drag_scenario(beta, variances, funding_rate=assumptions["funding_rate"],
+                                              annual_fee=fee, benchmark=assumptions["benchmark"],
+                                              dividend_yield=assumptions["dividend_yield"])
+                return {**scenario, "reference_drag_bp": reference["drag_bp"]}
             rows = []
             for n in (21, 63, 252):
-                d = letf_drag(beta, forecast_variance(fit, n), fee=fee)
+                d = proxy(forecast_variance(fit, n))
                 rows.append({"sessions": n, "drag_bp": d["drag_bp"], "variance_bp": d["variance_term"] / BP,
-                             "fee_bp": d["financing_term"] / BP})
+                             "fee_bp": d["fee_term"] / BP, "funding_bp": d["funding_term"] / BP,
+                             "dividend_bp": d["dividend_term"] / BP,
+                             "reference_drag_bp": d["reference_drag_bp"]})
             # A variance-based formula proxy, not the study's observed realised-drag benchmark.
-            last_q = letf_drag(beta, np.full(63, float(np.var(r[-63:]))), fee=fee)
+            last_q = proxy(np.full(63, float(np.var(r[-63:]))))
             lt.update(rows=rows, cond_vol=fit.cond_vol_last, uncond_vol=fit.uncond_vol, nu=fit.nu,
                       converged=fit.converged, calculation_status="COMPUTED",
-                      last_quarter_drag_bp=last_q["drag_bp"], last_quarter_vol=float(np.sqrt(np.var(r[-63:]) * 252)))
+                      last_quarter_drag_bp=last_q["drag_bp"], last_quarter_reference_drag_bp=last_q["reference_drag_bp"],
+                      last_quarter_vol=float(np.sqrt(np.var(r[-63:]) * 252)))
         except Exception:
             # Do not expose provider exception URLs/credentials or create a demo fallback.
             lt["error"] = ("Required index history or exact code mapping unavailable; no substitute index used."

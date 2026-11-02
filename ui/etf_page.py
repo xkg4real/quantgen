@@ -36,10 +36,10 @@ from core.research.etf_workflow import _clean, analyze as _analyze, narrative, p
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def analyze(code: str, *, days: int = 504, source: str = "auto") -> dict:
+def analyze(code: str, *, days: int = 504, source: str = "auto", **letf_options) -> dict:
     """Retain the browser adapter's injectable provider boundary."""
     return _analyze(code, days=days, source=source,
-                    history_loader=load_history, card_loader=load_cards)
+                    history_loader=load_history, card_loader=load_cards, **letf_options)
 
 
 def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -> ft.Control:
@@ -48,6 +48,23 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
     days = ft.TextField(label="Sessions", value="504", width=110, border_radius=RADII["md"])
     source = ft.Dropdown(label="Source", width=220, value="auto",
                          options=[ft.dropdown.Option("auto", "Auto (KIS for KRX codes)"), ft.dropdown.Option("synthetic", "Synthetic demo")])
+    benchmark = ft.Dropdown(label="LETF comparison", width=270, value="zero_rate_reference",
+                           options=[ft.dropdown.Option("zero_rate_reference", "Zero-rate reference (legacy)"),
+                                    ft.dropdown.Option("total_return", "Total-return scenario"),
+                                    ft.dropdown.Option("price_return", "Price-return scenario")])
+    funding = ft.TextField(label="Annual funding rate (%)", value="", width=200, disabled=True,
+                          hint_text="Explicit assumption, e.g. 3.21")
+    fee = ft.TextField(label="Annual fee (%)", value="", width=170, disabled=True,
+                      hint_text="Explicit assumption")
+    dividend = ft.TextField(label="Annual dividend yield (%)", value="", width=220, disabled=True,
+                           hint_text="Required for price return")
+
+    def comparison_changed(_event=None):
+        funding.disabled = fee.disabled = benchmark.value == "zero_rate_reference"
+        dividend.disabled = benchmark.value != "price_return"
+        page.update()
+
+    benchmark.on_select = comparison_changed
     busy = ft.ProgressRing(visible=False, width=20, height=20)
     host = ft.Column(spacing=14)
 
@@ -56,7 +73,16 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
 
         def worker():
             try:
-                a = analyze(code.value or "069500", days=int(float(days.value or "504")), source=source.value or "auto")
+                options = {}
+                if benchmark.value != "zero_rate_reference":
+                    def annual(field):
+                        if not (field.value or "").strip():
+                            raise ValueError("Enter explicit funding and fee assumptions; price-return also needs a dividend yield.")
+                        return float(field.value) / 100.0
+                    options = {"letf_benchmark": benchmark.value, "letf_funding_rate": annual(funding),
+                               "letf_annual_fee": annual(fee),
+                               "letf_dividend_yield": annual(dividend) if benchmark.value == "price_return" else None}
+                a = analyze(code.value or "069500", days=int(float(days.value or "504")), source=source.value or "auto", **options)
             except (HistoryError, ValueError) as exc:
                 host.controls = [notice(str(exc), "error", icon=ft.Icons.ERROR_OUTLINE)]; busy.visible = False; page.update(); return
             except Exception as exc:
@@ -87,9 +113,11 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
             if lt and "rows" in lt:
                 blocks.append(notice(letf_text(lt), "accent"))
                 blocks.append(ft.Row([stat(f"{lt['name']} AZ proxy · prior-quarter variance", f"{lt['last_quarter_drag_bp']:+.0f} bp / qtr",
-                                           token="error", tooltip=letf_text(lt))] +
+                                           token="error" if lt['last_quarter_drag_bp'] < 0 else "text", tooltip=letf_text(lt))] +
                                      [stat(f"GARCH variance proxy {r['sessions']} sessions", f"{r['drag_bp']:+.0f} bp",
-                                           tooltip=f"variance {r['variance_bp']:+.0f} bp, fee {r['fee_bp']:+.0f} bp")
+                                           tooltip=f"variance {r['variance_bp']:+.2f} bp, funding {r.get('funding_bp', 0):+.2f} bp, "
+                                                   f"fee {r['fee_bp']:+.2f} bp, dividend {r.get('dividend_bp', 0):+.2f} bp; "
+                                                   f"zero-rate reference {r.get('reference_drag_bp', r['drag_bp']):+.2f} bp")
                                       for r in lt["rows"]] + [stat("Index cond. vol", f"{lt['cond_vol']:.1%}"),
                                                               stat("ν", f"{lt['nu']:.1f}"),
                                                               stat("Historical 122630 study · not current validation", lt.get("verdict", "not run"),
@@ -129,6 +157,10 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
     return ft.Column([
         section("ETF", subtitle="NAV premium, basket, leveraged-fund drag, sleeve rules."),
         ft.Row([code, days, source, ft.Button("Analyze", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy], spacing=10, wrap=True),
+        ft.Row([benchmark, funding, fee, dividend], spacing=10, wrap=True),
+        ft.Text("LETF inputs are annual continuous-rate assumptions, not live market observations. "
+                "Price-return comparison requires dividends; total-return already includes them. "
+                "The zero-rate reference preserves the previous calculation.", size=12, color=pal.muted),
         ft.Column([host], scroll=ft.ScrollMode.AUTO, expand=True),
     ], spacing=14, expand=True)
 
