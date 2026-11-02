@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-30T12:25:58.332252+00:00",
+  "generated_at": "2026-11-02T02:37:31.929320+00:00",
   "scope": "recorded repository evidence; not a test run or deployment verdict",
   "sources": [
     {
       "path": "README.md",
-      "sha256": "b89c0d1f7d6bcce5dcb165a1b412348a96d99447154a7757be40a23c81b2183a",
+      "sha256": "c6d4e23ffd51fb8e113df4df078a9da6b927042f8dd9ea537a8f32ba7f0a027f",
       "normalization": "LF; generated block excluded"
     },
     {
