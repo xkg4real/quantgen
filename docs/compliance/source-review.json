@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "d91e8196a5e5cb7e915096b1e617dc803f9c6b39405400f437ee36a4ad2ee00a",
+    ".github/workflows/runtime-smoke.yml": "f0e928a00340dc1e5633e24758c5d1e53306c7ff18290395af52e3d2ee13080f",
     "README.md": "6a4f572a12e6dea657c7c063240b94d1a928e2b4f41fff25f7348ca69e1b88b5",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -353,7 +353,7 @@
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
     "tests/desktop_macro_language_acceptance.py": "916fc1c1d5620d9cc58b674084b2a30aa3f65512e1a2b9c7f73236f459ac3832",
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
-    "tests/desktop_market_chart_acceptance.py": "07a166d0dd4ee6d5662ea06cc8d10a8aa3381ed4a381fa186b97bec70c3f76a4",
+    "tests/desktop_market_chart_acceptance.py": "223aae61612f40f94cbd8a6cf7d18a7bc7599444d09748b5757c56cc80109dbe",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
@@ -380,9 +380,10 @@
     "tests/kis_stream_acceptance.py": "a9108b1ab7fa59c536fa616a3a03d1d179176bdf8007628c01043cf457895bbe",
     "tests/kis_workspace_acceptance.py": "b381d8a3e7c0d53f671ab06859fab7e72467af50c95d79894aa0b914eeb22421",
     "tests/letf_ai_payload_acceptance.py": "9defaeed9ec2f7988a146643f3f3a466e743a96cefa4e4b24f0e803b10690421",
-    "tests/letf_assumptions_acceptance.py": "c62cc15e979a61371539def2da6c20e8394e16bb289c2ad91ce2e70747bc5944",
+    "tests/letf_assumptions_acceptance.py": "b7604260ff3c0602065d34b927cb6f5a8364f5c27811ea8c138658c1c6cf9eaf",
     "tests/letf_disclosure_acceptance.py": "ec7e880c6b450f490103ac2e95bda12e0c4d9b4d14c79b0a993c09f613112ce6",
     "tests/letf_index_acceptance.py": "8ce0f308cb5b2d971bb6b629fc811f88afd95b64ed4d74e57873f43e58c39965",
+    "tests/letf_io_guard_acceptance.py": "d1b3141513d36958da88f14cbd3bda77d3c27dedf260fc5731bce6bd46b1eb43",
     "tests/macro_acceptance.py": "797e97526b724a54ad1f6e3caec3f7c8d0dbad2b1b7a2ce3616dbe6751db1587",
     "tests/macro_m0_harness.py": "5591a52b2a3f9617171b1e9dae005c5b61a445de73c7f126b047a8f94066c687",
     "tests/macro_m0_instruments.py": "ed1a81a2793cc8f8f4919b36d9e85ecd0dc4058dfd52d8abc98b9eca6d8e2d73",
@@ -516,163 +517,163 @@
   "reviews": {
     "1": {
       "document_sha256": "31a79b6417732796945b28f5f167a432d6f53eb86852bc8eeadd9b8923aff155",
-      "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.419194+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.472613+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "2": {
       "document_sha256": "ff1afc17787f8c26209a022892c76e5d44af87b32988be7e01a6e9ee83d81c2f",
-      "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.421440+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.475128+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "d569ed2d9bdd8152c911d9779de7828ee7923e26f4bd9abe0c762b049fbc818a",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.423697+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "9e8148325bdf0a091906160026477d2fb325df7096ea46970ab4b154a7eb8c84",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.477377+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "4": {
       "document_sha256": "6e917ef0c712b4406cc1ce8007884dae6c2922c46b364ed7ead166868de77b59",
-      "source_digest": "1130f6b59b4881fe995dbba6f63c63899ff68b95dc555883c3406f65c8f8d6ef",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.425951+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "f7a4c03f52fe412a0bafa822f9f18e107eef71046dd38ce242b8f8d8d3b57e0f",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.479614+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "8b35907b25be5cd985f8c4ad03410b7e0d085afccfc6db061e2ae2164afed1b9",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.427997+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "a1d9ea4f584f6aa95bae27fe51497746e9f476440a64b23b5024dbb6ab548f8d",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.481656+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "6": {
       "document_sha256": "d6b67c23112b708082f04d4ca62899b978a69b7f19e04a3149b63df9c4aba062",
-      "source_digest": "2bcaf38fbe2f6cfd40e90ae6f06c47f07c107ba851d49a7d5cb39ef9c7c5fd75",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.430205+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "8ee13ad5ab01ca46c8854884e94f9af4f45392c753862c7b14e087068ebe725c",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.483734+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "7": {
       "document_sha256": "bd91d3d8ea6a85eb7f6f9f0e8afdc40403760e40ca03df95c419e76e35817f70",
-      "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.432402+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.485812+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "8": {
       "document_sha256": "f8c83e2d6942ae1a0a45863a951ec512c9a099e089b970d580c7a075f1fe70b7",
-      "source_digest": "2bcaf38fbe2f6cfd40e90ae6f06c47f07c107ba851d49a7d5cb39ef9c7c5fd75",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.434650+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "8ee13ad5ab01ca46c8854884e94f9af4f45392c753862c7b14e087068ebe725c",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.488031+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "9": {
       "document_sha256": "0425a711d615ab6ff44a4573ed1d4962dc620cc0f89ac349481a0eee448ee262",
-      "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.436632+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.490054+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "f532a9930446bdd84667cec423ab693f2ebbf453ff7529bfdba5cdfb28e6e740",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.438819+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "bfe2bf43615a6ef2e15bfeaa13e9c7886538d7b356f16f50ec9a5880247dbe61",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.491976+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "1478fa88a12d3fd6874a87f69d8530779f9dd6eaeee44f7ec9f85b11da59f9c3",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.441455+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "1929acda407dc8aaaae20e3a5663fb4b8513df8534c8c525d805652577297750",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.494147+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "12": {
       "document_sha256": "407e354b7b2d7281c5b1555b04767a04ba47bf16c061cb5ac429ff8a6cfabc0e",
-      "source_digest": "88e2531af8c293e6c8b254e5eedf7066ef96cabfb7bacd1aaa18abf54ea7fa4f",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.443579+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "bee40fc15489b69cfc8289e721b305a83885d78ff00b8ff2b03c0ef621de197f",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.496373+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "13": {
       "document_sha256": "3a5eb3e68df8feebe2eaa02a96f4e89f87dbe2cf17fa6f58d6e372eb59b16b1f",
-      "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.445569+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.498527+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "14": {
       "document_sha256": "5db35b4cdfe4e6f054979abadb7fc49d628154719f319ce7308626f004515d5d",
-      "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.447435+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.500463+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "15": {
       "document_sha256": "e5143b74273be5899c679d40e2e447da79c3fe5b565e278bf014535954d64701",
-      "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.449780+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.502637+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "09b26bceb680f1b09f14c30db85b80f5ae1d2d06b44a070c7abd6a412ffe5924",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.451688+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "31d633ddccee429d3030df00797bad1b312490af415e049fd5c3e99499d5a661",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.504856+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "2bcaf38fbe2f6cfd40e90ae6f06c47f07c107ba851d49a7d5cb39ef9c7c5fd75",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.454173+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "8ee13ad5ab01ca46c8854884e94f9af4f45392c753862c7b14e087068ebe725c",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.507181+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.456553+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.509385+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "19": {
       "document_sha256": "1a489fb06d0cb74a247df01ed5d43f7ab9921dc4326920a8fc805a26a9a6addd",
-      "source_digest": "6f73f42f189adefd51ae651432a0f7040b9ec13ef8085bbbdd91d165486bea5e",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.458944+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "c8cea71bceee0ed5c66ccc4e61e8b33f661236edc7e710eb71ce20182233cdd7",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.511812+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     },
     "20": {
       "document_sha256": "7c3cbc05a1d70875329da961cdcc2827878c98285aff03ed7856cd06a1db9b91",
-      "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
-      "reviewed_at": "2026-11-02T03:03:14.461460+00:00",
-      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
+      "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed scoped LETF audit test lifecycle, synthetic cleanup probes and explicit UTF-8 chart source reads; financial behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:16:34.513977+00:00",
+      "source_commit": "8d7a1f7bae2d7aa59f8fd1fe4f54219519c51fc8"
     }
   }
 }
