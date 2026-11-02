@@ -1,3 +1,17 @@
+## 최신 상태 — PR61 병합 완료 / PR62 소스 복구·검증 완료, CI 진행 중
+
+- PR61 main707cdc: 10열 비교표·44px·Q-SCORE헤더?·3개 실제 글꼴. 최종 Runtime41390246447/Compliance41390246439 SUCCESS.
+- PR62 https://github.com/xkg4real/quantgen/pull/62 ; remotehead `398ebe39281693237f50892c88e016c6c7a58ca4`, branch gpt/chart-live-ux-20261102. 로컬복구최종9bbcfab과 원격 tree `65954ab6f4ff929ca61b36695a5454c6c34d53c5` 동일을 fetch/diff로 확인했습니다. CLI push 인증이 없어서 GitHub 연결 도구로 같은 트리를 게시했습니다. 사용자 재승인/로그인은 요청하지 않았습니다.
+- 조회 한 번→지원 WS 자동연결, 활성조건450ms변경,중지/이탈취소,복귀1회한정동기화. 실제수신1/10/100틱·1/5/10/30초,기존분/일/주/월. 소급체결·빈봉 없음. SMA/EMA/볼린저/RSI/MACD 전체클릭/키보드선택·유지,선택봉값/한영설명.
+- 실제복수지표겹침 원인은 SVG확대634px에비해바깥영역이958px에머무른것입니다. MarketChartSvg에서높이변경후이벤트루프에부모layout캐시갱신을예약하여 pane1246/slider1145>chart끝1133으로복구했습니다. CurrentPageTabs는변경하지않았습니다. 빠른선택+8언어/테마/폭변경+해제축소회귀를추가했습니다.
+- 새환경검사33native/Home/layout,66core/stream/presentation,17Flet언어,47정책 PASS(서로겹치는수합산금지).20문서/529소스기준선PASS,publicationBLOCKED. 이전환경93검사는이번복구본증거로전용하지않았습니다. 실제Windows수동/KIS계정/AWS배포는미검증.
+- 원격검사 Runtime41398755386 진행중, Compliance41398755349 SUCCESS. 아직PR62 main합병전입니다. 다음: 현재head CI성공조회→expectedhead398ebe로merge→mainreadback→PR62queue/UI/AWS기록최종SHA→사용자CMD명령보고.
+- 앱변경큐 PR61/PR62 JSON을main에기록했습니다. 웹직접전송도구없음→queued/receipt없음. 로컬인수프롬프트 /workspace/artifacts/quantgen-ui/AWS_SESSION_PROMPT_20261102.txt 와 실행안내 QUANTGEN_UPDATE_AND_RUN.txt 재생성했습니다. AWS프롬프트본문은 WEBSITE_AWS_HANDOFF에도보존합니다.
+- 과거웹HTML/ZIP은현재환경에없습니다. 기존전달본/AWS보존본복구와최신Docs정책/글꼴반영/실제배포는남아있습니다. 기존정책요금과Free/Pro/Ultra초안의불일치를인계했습니다. 웹HTMLGitHub금지,추가AWS로그인금지유지.
+- 이파일은메인/Claude가읽는공유인계이며직접채팅전송/열람영수증은없습니다. CURRENT/LEDGER/AUTO_STATE 유지. 사용자완료보고에‘북딱북딱’을자연스럽게1회사용하고CMD실행법을반드시포함합니다.
+
+---
+
 ## 2026-11-02 14시 KST 이후 환경 복구 체크포인트
 
 - PR61은 main `707cdc7786fb2dbce2718f97458f02c43b21bcda`에 MERGED. head4e17087의 Runtime41390246447 / Compliance41390246439 최종 SUCCESS를 직접 재조회했습니다. 연구홈10열·44px·Q-SCORE헤더도움말·실제3굵기글꼴은 원격 보존되어 있습니다.
