@@ -354,7 +354,7 @@
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
     "tests/desktop_macro_language_acceptance.py": "916fc1c1d5620d9cc58b674084b2a30aa3f65512e1a2b9c7f73236f459ac3832",
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
-    "tests/desktop_market_chart_acceptance.py": "223aae61612f40f94cbd8a6cf7d18a7bc7599444d09748b5757c56cc80109dbe",
+    "tests/desktop_market_chart_acceptance.py": "dd0a1885b0a2072e0d5a41581892b5319ff8fc8573fac7dd57935064c1a5f34c",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
@@ -521,161 +521,161 @@
       "document_sha256": "31a79b6417732796945b28f5f167a432d6f53eb86852bc8eeadd9b8923aff155",
       "source_digest": "b7899db566ff5c17dc3e527c5bb26dc3a7bacad1b42dba80f76afcf2f32879cf",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.042327+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.712405+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "2": {
       "document_sha256": "ff1afc17787f8c26209a022892c76e5d44af87b32988be7e01a6e9ee83d81c2f",
       "source_digest": "b7899db566ff5c17dc3e527c5bb26dc3a7bacad1b42dba80f76afcf2f32879cf",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.044682+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.714910+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
       "source_digest": "9d56c8f14f48285476fba586fa193c15811b799480041359d8589e39a884e098",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.046987+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.717156+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "4": {
       "document_sha256": "6e917ef0c712b4406cc1ce8007884dae6c2922c46b364ed7ead166868de77b59",
       "source_digest": "e9fbb64adf115e507fd760c9249828c1dacb9ab3ad5b6f6334a54a4f54952437",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.049037+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.719334+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "47a6ff6c8e07e5db436cbe1f542d2dbf3721ebf6bb8c8f184b0a6585a999fd99",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.051357+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.721530+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "6": {
       "document_sha256": "f83a3ea15f1b5dd48d6b03146cb8411c23756707769aa8830510b3b59c35c026",
       "source_digest": "ecd2da52f8c8a1b5aad9397e9566cb2c4e27f6904355d1de06ccfbb479bd6bea",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.053469+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.723563+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "7": {
       "document_sha256": "bd91d3d8ea6a85eb7f6f9f0e8afdc40403760e40ca03df95c419e76e35817f70",
       "source_digest": "b7899db566ff5c17dc3e527c5bb26dc3a7bacad1b42dba80f76afcf2f32879cf",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.055609+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.725558+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "8": {
       "document_sha256": "f8c83e2d6942ae1a0a45863a951ec512c9a099e089b970d580c7a075f1fe70b7",
       "source_digest": "ecd2da52f8c8a1b5aad9397e9566cb2c4e27f6904355d1de06ccfbb479bd6bea",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.057683+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.727449+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "9": {
       "document_sha256": "0425a711d615ab6ff44a4573ed1d4962dc620cc0f89ac349481a0eee448ee262",
       "source_digest": "f4edf2134052dcc445547c088cc4f20613a294917f80408c6c5124dfc9021b73",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.060077+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.729457+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
       "source_digest": "d481c11b908fc4eb806e82d71203967f78453a4eb2335ff9b397f893b0353185",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.062310+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.731619+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
       "source_digest": "781051bcbd9433adec1b84636aaa096b163d5988f2d522b6f3b7c394c74b6207",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.064474+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.733570+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "12": {
       "document_sha256": "6f98fda31f2dbad741f03adca28de476b94de3ea6bd7826a987b8cc437eacd97",
-      "source_digest": "30aab3701926e7d924a074ce7782e2d057d9df47072e27f856abd513606ae3b4",
+      "source_digest": "eaa06a898559411aa032e04fd407ae5e62d8e340b0371f6714f6eb47ad1503e4",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.067270+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.735652+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "13": {
       "document_sha256": "3a5eb3e68df8feebe2eaa02a96f4e89f87dbe2cf17fa6f58d6e372eb59b16b1f",
       "source_digest": "f4edf2134052dcc445547c088cc4f20613a294917f80408c6c5124dfc9021b73",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.069553+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.737692+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "14": {
       "document_sha256": "5db35b4cdfe4e6f054979abadb7fc49d628154719f319ce7308626f004515d5d",
       "source_digest": "f4edf2134052dcc445547c088cc4f20613a294917f80408c6c5124dfc9021b73",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.071633+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.739695+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "15": {
       "document_sha256": "e5143b74273be5899c679d40e2e447da79c3fe5b565e278bf014535954d64701",
       "source_digest": "f4edf2134052dcc445547c088cc4f20613a294917f80408c6c5124dfc9021b73",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.073514+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.741656+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
       "source_digest": "175969a16467b0ab003f7352b707871dff9284c97b743bd4a14ecb6194e7fe10",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.075602+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.743798+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
       "source_digest": "ecd2da52f8c8a1b5aad9397e9566cb2c4e27f6904355d1de06ccfbb479bd6bea",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.077634+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.746173+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
       "source_digest": "b7899db566ff5c17dc3e527c5bb26dc3a7bacad1b42dba80f76afcf2f32879cf",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.079757+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.748353+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "19": {
       "document_sha256": "1a489fb06d0cb74a247df01ed5d43f7ab9921dc4326920a8fc805a26a9a6addd",
       "source_digest": "414b605a9c012bf54dc5a901e542020f8040ca5d094805e6ddb3abfb85b58a62",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.081849+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.750609+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     },
     "20": {
       "document_sha256": "7c3cbc05a1d70875329da961cdcc2827878c98285aff03ed7856cd06a1db9b91",
       "source_digest": "b7899db566ff5c17dc3e527c5bb26dc3a7bacad1b42dba80f76afcf2f32879cf",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed rate parameter mismatch refusal with normalized simulation callers, matching-input numerical regression evidence and scoped Windows test fixes; actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:18:03.084046+00:00",
-      "source_commit": "36b4c3bd6a21ae67fded19d3b7ca54115ecabd5b"
+      "review_note": "Reviewed rate parameter consistency with condition-based chart render fixture and 74 KIS regressions; installed runtime and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:29:09.753254+00:00",
+      "source_commit": "fe45e905150490bf5c4d08e3825730fbddfc795b"
     }
   }
 }
