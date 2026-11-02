@@ -866,6 +866,15 @@ public market data only, places no order on any venue, and nothing in
   compliance matrix rows 2 and 3. The study is a benchmark, not a reason to
   open a Kalshi account.
 
+## KIS live quotes and charts
+
+The desktop Markets workspace and Flet browser now share candlestick/volume
+charts, daily/weekly/monthly and minute timeframes, SMA20, Bollinger bands,
+RSI14 and MACD. REST polling and WebSocket trade reception have separate states.
+See [supported markets, setup and current limits](docs/product/KIS_MARKET_CHARTS_2026-11-02.md).
+Actual KIS account connectivity and AWS deployment have not been verified by
+these offline fixture checks.
+
 ## Setup
 
 1. Python 3.10+

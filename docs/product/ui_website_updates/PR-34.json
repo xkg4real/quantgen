@@ -1,0 +1,335 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-ui-pr-34-docs-i18n",
+  "request_date": "2026-11-02",
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/34",
+    "head_commit": "c63ca999b686d36787c7b013e66f53bb2199c97d",
+    "merge_commit": "d1c56a847e975228a93aae539c8a303c467b1a5e",
+    "inspected_main_commit": "d0f18a011dc6703a45e851a4eb1413439353e6f5",
+    "registry": "docs/compliance/registry.json",
+    "operating_profile": "docs/compliance/release-profile.json",
+    "changed_files": [
+      "docs/compliance/registry.json",
+      "docs/compliance/01-privacy-policy.md",
+      "docs/compliance/02-terms-of-service.md",
+      "docs/compliance/03-refund-policy.md",
+      "docs/compliance/04-cookie-policy.md",
+      "docs/compliance/05-cookie-consent.md",
+      "docs/compliance/06-form-consent.md",
+      "docs/compliance/07-data-minimization.md",
+      "docs/compliance/08-third-parties.md",
+      "docs/compliance/09-dark-patterns.md",
+      "docs/compliance/10-pricing.md",
+      "docs/compliance/11-testimonials.md",
+      "docs/compliance/12-claims.md",
+      "docs/compliance/13-alternative-text.md",
+      "docs/compliance/14-contrast.md",
+      "docs/compliance/15-keyboard.md",
+      "docs/compliance/16-business-information.md",
+      "docs/compliance/17-children.md",
+      "docs/compliance/18-marketing-email.md",
+      "docs/compliance/19-licenses.md",
+      "docs/compliance/20-deletion.md"
+    ]
+  },
+  "summary_ko": [
+    "사용자 직접 요청: QUANTGEN 웹사이트 하단에 Terms of Service·Refund Policy 등 문서 링크를 연결하고 내부 Docs에서 20종을 웹 본문으로 읽게 구성한다.",
+    "본문 전체는 현재 웹사이트에서 선택한 언어를 따른다. 한국어 선택 시 한국어, 영어 선택 시 영어로 제공한다.",
+    "이 기록은 UI 개선 세션에 전달할 실행 요구사항이다. 실제 대화 발송·UI 구현·웹사이트 적용·배포는 아직 수행하거나 확인하지 않았다."
+  ],
+  "website_impact": {
+    "classification": "shared_browser_change",
+    "review_status": "required",
+    "browser_code_changed": false,
+    "surfaces": [
+      "공통 footer",
+      "내부 Docs 인덱스",
+      "20개 문서 상세 페이지",
+      "웹사이트 언어 선택과 번역",
+      "정책 관련 신청·설정 링크"
+    ],
+    "requested_actions_ko": [
+      "우선 실제 운영 웹사이트의 저장소·라우터·언어 선택 상태·지원 언어 목록을 확인하고 기존 웹 구조에 구현한다. 데스크톱 PyQt6 언어 설정이나 Flet 소스만 바꾸고 운영 웹사이트 적용으로 보고하지 않는다.",
+      "모든 웹사이트 페이지의 공통 footer에 이용약관/Terms of Service, 환불정책/Refund Policy, 개인정보 처리방침/Privacy Policy, 쿠키 정책/Cookie Policy, 문서/Docs 링크를 제공한다. 라벨도 현재 언어에 맞춘다.",
+      "웹사이트 내부 /docs에 20개 문서의 제목·설명·분류를 제공하고 모든 항목을 해당 문서의 내부 상세 페이지로 연결한다. 기존 locale 경로 규약을 유지하고 새 웹사이트나 별도 호스팅을 만들지 않는다.",
+      "상세 페이지는 읽기 쉬운 조항·문단·제목으로 충분한 정책 본문을 제공한다. ZIP·Word 다운로드나 한 줄 설명만으로 대체하지 않는다. 버전·최종 개정일·적용일은 사실이 확정된 값만 표시한다.",
+      "원본은 registry의 20개 문서와 현재 operating profile이다. 공개 독자용 정책과 운영자용 승인서·검토표·내부 계약·민원·삭제기록·비밀값을 분리한다. 내부 양식과 검증 절차를 그대로 공개 페이지에 덤프하지 않는다.",
+      "현재 웹 언어와 문서 제목·본문·표·목차·버튼·오류·개정 안내·신청 화면을 모두 일치시킨다. 메뉴만 번역하고 환불 등 본문을 다른 언어로 남겨두지 않는다.",
+      "한국어·영어 20개 본문을 준비하고 웹사이트가 실제로 추가 지원하는 언어에도 동일 요건을 적용한다. 언어 전환 시 문서 식별자를 유지하여 같은 문서의 번역으로 이동하고 새로고침·직접 URL 접근에도 언어를 보존한다.",
+      "지원 언어의 번역 누락·원문 버전 불일치는 CI에서 검출한다. 운영 정책에서 다른 언어로 조용히 fallback하거나 번역되지 않은 제목만 노출하지 않는다. 미완료 번역은 프리뷰에 명시하고 공개 가능한 완성본과 구분한다.",
+      "환불·청약철회·해지·자동 갱신·VAT·가격·최대 사용 인원·법정 권리의 의미를 언어 간 동일하게 유지한다. 추가 자율 환불정책이나 상품별 기능 등 미확정 내용을 임의로 만들지 않는다.",
+      "현재 원본의 초안 상태·미확정 항목을 먼저 확인한다. {{...}}·미정·가상의 연락처·미구현 접수 링크가 남은 정책을 확정·시행 중인 문안으로 공개하지 않는다. 필요한 경우 동작하는 프리뷰까지 완성하고 공개 전 미해결 목록을 보고한다.",
+      "사용자용 동의·쿠키 설정·수신거부·삭제 요청 링크는 실제 연결 경로가 있을 때만 제공하고 해당 문서와 같은 언어로 연결한다. 문서 페이지를 만들었다는 이유로 해당 처리 기능이 구현됐다고 표시하지 않는다.",
+      "기존 문서 점검 파이프라인에 공개 문안/번역의 원본 문서 ID·버전 대응 및 링크 검사를 연결한다. 문서 수정 시 관련 번역을 재검토 대상으로 표시하며 임의의 법률 문구 자동 승인·자동 배포를 하지 않는다.",
+      "UI 개선 세션이 실제 웹 소유 작업공간과 연계할 때 기존 웹사이트 작업공간(AWS) 전달 절차를 따른다. 실제 수신·구현·배포는 각각 별도 증거로 기록한다."
+    ]
+  },
+  "document_pages": [
+    {
+      "source_id": 1,
+      "doc_id": "qg-c01-privacy-policy",
+      "slug": "privacy-policy",
+      "source_path": "docs/compliance/01-privacy-policy.md",
+      "title_ko": "개인정보 처리방침",
+      "title_en": "Privacy Policy",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 2,
+      "doc_id": "qg-c02-terms-of-service",
+      "slug": "terms-of-service",
+      "source_path": "docs/compliance/02-terms-of-service.md",
+      "title_ko": "이용약관",
+      "title_en": "Terms of Service",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 3,
+      "doc_id": "qg-c03-refund-policy",
+      "slug": "refund-policy",
+      "source_path": "docs/compliance/03-refund-policy.md",
+      "title_ko": "청약철회·해지·환불",
+      "title_en": "Cancellation and Refund Policy",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 4,
+      "doc_id": "qg-c04-cookie-policy",
+      "slug": "cookie-policy",
+      "source_path": "docs/compliance/04-cookie-policy.md",
+      "title_ko": "쿠키 정책",
+      "title_en": "Cookie Policy",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 5,
+      "doc_id": "qg-c05-cookie-preferences",
+      "slug": "cookie-preferences",
+      "source_path": "docs/compliance/05-cookie-consent.md",
+      "title_ko": "쿠키 선택 관리",
+      "title_en": "Cookie Preferences",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 6,
+      "doc_id": "qg-c06-privacy-choices",
+      "slug": "privacy-choices",
+      "source_path": "docs/compliance/06-form-consent.md",
+      "title_ko": "개인정보 고지와 선택",
+      "title_en": "Privacy Notices and Choices",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 7,
+      "doc_id": "qg-c07-data-minimization",
+      "slug": "data-minimization",
+      "source_path": "docs/compliance/07-data-minimization.md",
+      "title_ko": "개인정보 최소 수집",
+      "title_en": "Data Minimization",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 8,
+      "doc_id": "qg-c08-third-party-services",
+      "slug": "third-party-services",
+      "source_path": "docs/compliance/08-third-parties.md",
+      "title_ko": "외부 서비스와 데이터 처리",
+      "title_en": "Third-Party Services and Data Processing",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 9,
+      "doc_id": "qg-c09-fair-choices",
+      "slug": "fair-choices",
+      "source_path": "docs/compliance/09-dark-patterns.md",
+      "title_ko": "공정한 선택과 이용자 보호",
+      "title_en": "Fair Choices and User Protection",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 10,
+      "doc_id": "qg-c10-pricing",
+      "slug": "pricing",
+      "source_path": "docs/compliance/10-pricing.md",
+      "title_ko": "요금·갱신·추가 비용",
+      "title_en": "Pricing, Renewals and Additional Costs",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 11,
+      "doc_id": "qg-c11-testimonials",
+      "slug": "testimonials",
+      "source_path": "docs/compliance/11-testimonials.md",
+      "title_ko": "이용후기 운영 기준",
+      "title_en": "Review and Testimonial Policy",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 12,
+      "doc_id": "qg-c12-research-evidence",
+      "slug": "research-evidence",
+      "source_path": "docs/compliance/12-claims.md",
+      "title_ko": "분석 근거와 성과 표현",
+      "title_en": "Research Evidence and Performance Claims",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 13,
+      "doc_id": "qg-c13-image-alternatives",
+      "slug": "image-alternatives",
+      "source_path": "docs/compliance/13-alternative-text.md",
+      "title_ko": "이미지·차트 대체 정보",
+      "title_en": "Image and Chart Alternatives",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 14,
+      "doc_id": "qg-c14-color-contrast",
+      "slug": "color-contrast",
+      "source_path": "docs/compliance/14-contrast.md",
+      "title_ko": "가독성과 색상 대비",
+      "title_en": "Readability and Color Contrast",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 15,
+      "doc_id": "qg-c15-keyboard-navigation",
+      "slug": "keyboard-navigation",
+      "source_path": "docs/compliance/15-keyboard.md",
+      "title_ko": "키보드 이용 안내",
+      "title_en": "Keyboard Navigation",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 16,
+      "doc_id": "qg-c16-business-information",
+      "slug": "business-information",
+      "source_path": "docs/compliance/16-business-information.md",
+      "title_ko": "사업자 정보",
+      "title_en": "Business Information",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 17,
+      "doc_id": "qg-c17-childrens-privacy",
+      "slug": "childrens-privacy",
+      "source_path": "docs/compliance/17-children.md",
+      "title_ko": "아동 개인정보 보호",
+      "title_en": "Children's Privacy",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 18,
+      "doc_id": "qg-c18-email-preferences",
+      "slug": "email-preferences",
+      "source_path": "docs/compliance/18-marketing-email.md",
+      "title_ko": "이메일 수신 설정",
+      "title_en": "Email Preferences",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 19,
+      "doc_id": "qg-c19-license-notices",
+      "slug": "license-notices",
+      "source_path": "docs/compliance/19-licenses.md",
+      "title_ko": "저작권·라이선스 고지",
+      "title_en": "Copyright and License Notices",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    },
+    {
+      "source_id": 20,
+      "doc_id": "qg-c20-data-deletion",
+      "slug": "data-deletion",
+      "source_path": "docs/compliance/20-deletion.md",
+      "title_ko": "개인정보 삭제 요청",
+      "title_en": "Personal Data Deletion Requests",
+      "content_type": "reader_facing_prose",
+      "publication_status": "source_review_required"
+    }
+  ],
+  "localization": {
+    "required_locales": [
+      "ko",
+      "en"
+    ],
+    "additional_locales": "실제 웹사이트가 지원하는 전체 언어 목록을 조사하여 포함한다. 기존 locale 코드·라우팅 규약을 재사용한다.",
+    "locale_source": "현재 웹사이트의 명시적 언어 설정",
+    "same_document_on_switch": true,
+    "silent_wrong_language_fallback": false,
+    "required_content": [
+      "navigation",
+      "footer_labels",
+      "document_titles",
+      "summaries",
+      "full_body",
+      "tables",
+      "toc",
+      "action_labels",
+      "errors",
+      "revision_notices",
+      "related_request_screens"
+    ],
+    "version_policy": "공개본은 모든 지원 언어가 같은 검토된 원문 버전·정책 의미를 가진다. 누락·불일치는 공개 빌드에서 차단하고 프리뷰의 미완료 상태를 구분한다.",
+    "cached_content_key": "문서 ID·웹사이트 locale·문서 버전을 구분하여 다른 언어 본문이 섞이지 않게 한다.",
+    "translation_review": "금액은 원본의 통화·세금·주기·좌석 수를 유지하며 임의 환산이나 조건 추가 없이 검토한다."
+  },
+  "acceptance_criteria": [
+    "Docs 인덱스에 registry의 ID 1..20이 중복·누락 없이 연결되고 각 문서가 웹 문단으로 읽힌다.",
+    "모든 페이지에서 footer의 Terms of Service·Refund Policy 등 링크가 실제 내부 문서로 열리며 404·ZIP 강제 다운로드·외부 문서 의존이 없다.",
+    "한국어/영어 및 실제 추가 지원 언어 각각에서 20개 제목·본문·관련 문구가 현재 선택 언어와 일치한다.",
+    "같은 환불 문서에서 KO→EN→KO 전환 시 같은 문서를 유지하고 직접 URL·새로고침에서도 올바른 언어를 표시한다.",
+    "번역 누락·원문 버전 불일치·잘못된 문서 매핑을 주입하면 검사에서 실패한다.",
+    "모든 언어에서 환불 권리·자동 갱신·VAT·가격·Team 사용 인원 등 계약 내용이 동일하고 미확정 혜택을 추가하지 않는다.",
+    "공개 대상에 {{...}}·미정 값·가상 사업자/연락처·운영자용 기록·실개인정보·비밀값이 노출되지 않는다.",
+    "모바일·데스크톱, 키보드 탐색·보이는 포커스·문서 제목 구조·lang 속성과 각 언어의 줄바꿈을 검증한다.",
+    "사용자용 요청·설정 링크가 제공되는 경우 실제 기능과 일치하고 문서 언어를 유지한다.",
+    "UI 세션은 수정 파일·커밋/PR·검증·프리뷰 URL·미해결 항목을 보고하고 수신/웹 적용/실제 배포 상태를 구분한다."
+  ],
+  "verification": {
+    "handoff_document_count": 20,
+    "source_registry_checked": true,
+    "source_registry_commit": "d0f18a011dc6703a45e851a4eb1413439353e6f5",
+    "browser_acceptance": "NOT_RUN",
+    "multilingual_content_acceptance": "NOT_RUN",
+    "website_implementation": "NOT_STARTED"
+  },
+  "delivery": {
+    "destination_title": "QUANTGEN UI 개선",
+    "status": "queued",
+    "queued_at": "2026-11-02T11:28:58+09:00",
+    "blocker": "지원 도구 목록에 send_message_to_thread/handoff_thread가 없고 현재 list_threads/read_thread는 connection closed before server request was answered로 실패한다. 이 파일 저장은 대화 발송이 아니다.",
+    "sent_at": null,
+    "receipt": null,
+    "acknowledgement": null,
+    "downstream_destination_title": "웹사이트 작업공간(AWS)",
+    "deduplication": "이 요청 ID로 재전송 여부를 판정한다. 성공한 전송 영수증과 내용 변경이 없으면 중복 발송하지 않는다."
+  },
+  "website_application": {
+    "status": "not_started",
+    "commit": null,
+    "checks": [],
+    "deployment_status": "not_verified",
+    "deployment_url": null
+  }
+}
