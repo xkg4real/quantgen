@@ -7,17 +7,17 @@
     "destination_thread_id": "01a18c19-eda9-7327-b6d9-c9ca24937093",
     "status": "queued",
     "queued_at": "2026-11-02T11:28:03+09:00",
-    "blocker": "No supported cross-chat send operation in this session. GitHub branch export also rejected by automatic approval review; awaiting explicit owner authorization for external code egress.",
+    "blocker": "No supported cross-chat send operation in this session. GitHub source and PR are saved; website chat delivery remains queued.",
     "sent_at": null,
     "receipt": null
   },
   "source": {
     "repository": "https://github.com/xkg4real/quantgen",
     "branch": "gpt/kis-market-charts-20261102",
-    "pull_request": null,
-    "head_commit": "28f83a51127bd4be19e31da9bd2c6dbec23442fc",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/56",
+    "head_commit": "ee681aa39dad9d791a2f457f0efa0682ce2a35f6",
     "merge_commit": null,
-    "remote_status": "NOT_PUSHED",
+    "remote_status": "PUSHED",
     "local_commit_verified": true,
     "changed_files": [
       "core/market/models.py",
@@ -32,7 +32,8 @@
       "config.py",
       "pyproject.toml",
       "requirements.txt"
-    ]
+    ],
+    "implementation_commit": "28f83a51127bd4be19e31da9bd2c6dbec23442fc"
   },
   "summary_ko": [
     "앱과 Flet 웹에서 KIS 캔들·거래량·SMA20·볼린저밴드·RSI·MACD와 일/주/월/분봉을 공통 구현했습니다.",
@@ -70,7 +71,7 @@
     "qt": "6.12.0",
     "quotation_guard": "T-RO-02 PASS, 31 quotation paths; account/order paths refused",
     "native_preview": "synthetic fixtures inspected with Linux Qt offscreen",
-    "ci_result": "NOT_RUN",
+    "ci_result": "PENDING",
     "ci_url": null,
     "manual_windows_display_acceptance": "NOT_RUN",
     "live_kis_acceptance": "NOT_RUN",
@@ -86,11 +87,17 @@
       "tests.runtime_syntax_acceptance",
       "tests.web_branding_acceptance",
       "tests.packaging_policy_acceptance"
-    ]
+    ],
+    "ci_source_commit": "ee681aa39dad9d791a2f457f0efa0682ce2a35f6"
   },
   "limits_ko": [
     "채권은 최근 최대100 일봉, 분봉은 첨부 사양에 없습니다.",
     "해외선물은 master 기반 일·주·월봉만 지원하며 분봉·WebSocket은 시간대가 검증되지 않았습니다. 해외옵션은 미구현입니다.",
     "별도 AWS 사이트 반영·배포와 실제 KIS 연결은 확인하지 않았습니다. 기존 연구/원장 및 다른 세션의 handoff 소유권은 변경하지 않았습니다."
-  ]
+  ],
+  "authorization": {
+    "github_export": "OWNER_APPROVED",
+    "scope": "Save changes to xkg4real/quantgen and create pull request",
+    "requested_at": "2026-11-02"
+  }
 }

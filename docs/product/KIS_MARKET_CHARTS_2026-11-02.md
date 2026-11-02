@@ -86,6 +86,6 @@ PyQt6 Linux offscreen 화면도 확인했다. 실제 KIS 계정·시세 이용�
 Windows 수동 검수, AWS 웹사이트 배포는 수행하지 않았다.
 
 웹 구현은 이 저장소의 Flet 소스다. 별도 AWS 웹사이트 반영은
-`ui_website_updates/KIS-MARKET-CHARTS-20261102.json`의 전달 대기 기록으로 남겼다.
+`ui_website_updates/PR-56.json`의 전달 대기 기록으로 남겼다.
 현재 제공 도구에 채팅 발송 기능이 없어 메시지 전달·사이트 반영·배포 완료로 간주하지 않는다.
 다른 세션이 보유한 `handoff/CURRENT.md` 및 기존 연구 작업/원장은 변경하지 않는다.
