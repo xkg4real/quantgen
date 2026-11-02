@@ -537,7 +537,11 @@ def narrate_structured(p) -> str:
         lines.append(f"Coupon leverage is {p.participation:g}x the 10y-2y spread." if cms else
                      f"Participation is {p.participation * 100:.0f}% of the upside.")
     if getattr(p, "coupon", None) is not None:
-        lines.append(f"The coupon is {_pct(p.coupon)} a year.")
+        lines.append(
+            f"The first-period expected coupon is {_pct(p.coupon)} annualized. "
+            "Later coupons follow the period-by-period forward-curve schedule in the CMS coupon leg; "
+            "the first-period figure alone does not establish a fixed coupon for all periods or guarantee payment."
+            if cms else f"The coupon is {_pct(p.coupon)} a year.")
     g = dict(getattr(p, "greeks", {}) or {})
     if g:
         lines.append("Whole-note risk: " + ", ".join(

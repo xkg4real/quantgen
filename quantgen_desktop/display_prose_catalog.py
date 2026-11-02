@@ -32,6 +32,7 @@ Dividend yield % · price-return only|배당수익률 % · 가격수익률만 �
 LETF only: leave rates blank for the zero-rate reference. Scenarios require funding and fee inputs; add a dividend yield only for a price-return comparison. Inputs are assumptions, not verified fund costs.|LETF 전용: 금리 0 비교 기준에서는 금리 입력란을 비워 두세요. 시나리오에는 조달금리와 보수가 필요하며, 가격수익률 비교에만 배당수익률을 추가합니다. 입력은 가정이며 검증된 펀드 비용이 아닙니다.
 Funding term|펀딩 항
 Dividend term|배당 항
+First-period expected coupon · p.a.|첫 기간 예상 쿠폰 · 연율
 Detail|상세
 Leg|구성요소
 Rationale|근거

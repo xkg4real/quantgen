@@ -73,7 +73,12 @@ def structured_korean(p):
     if getattr(p, 'participation', None) is not None:
         lines.append(f'쿠폰 레버리지는 10y-2y 스프레드의 {p.participation:g}x입니다.' if cms else
                      f'상승분의 {p.participation * 100:.0f}%에 참여합니다.')
-    if getattr(p, 'coupon', None) is not None: lines.append(f'연간 쿠폰은 {_pct(p.coupon)}입니다.')
+    if getattr(p, 'coupon', None) is not None:
+        lines.append(
+            f'첫 기간 예상 쿠폰은 연율 {_pct(p.coupon)}입니다. '
+            '이후 쿠폰은 CMS 쿠폰 구성요소의 기간별 선도 곡선 일정을 따르며, '
+            '첫 기간 수치만으로 모든 기간의 쿠폰이 고정되거나 지급이 보장된다고 볼 수 없습니다.'
+            if cms else f'연간 쿠폰은 {_pct(p.coupon)}입니다.')
     g = dict(getattr(p, 'greeks', {}) or {})
     if g:
         lines.append('상품 전체 위험: ' + ', '.join(

@@ -19,6 +19,7 @@ from typing import Callable, Optional
 import flet as ft
 
 from core.ficc import insights, structured
+from core.research.structured_disclosure import cms_coupon_context
 from core.ficc.common import BP, FICCError, parse_tenor, pct_text, tenor_label
 from core.ficc.curves import curve_from_snapshot
 from core.ficc.data import load_treasury_curve
@@ -148,8 +149,9 @@ def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
         stats.append(stat("Leverage", f"{r.participation:g}x") if cms else
                      stat("Participation", f"{r.participation * 100:.0f}%"))
     if r.coupon is not None:
-        stats.append(stat("Enhanced yield (simple)" if tool == "dcd" else "Coupon (p.a.)",
-                          pct_text(r.coupon)))
+        coupon_label = ("First-period expected coupon · p.a." if cms else
+                        "Enhanced yield (simple)" if tool == "dcd" else "Coupon (p.a.)")
+        stats.append(stat(coupon_label, pct_text(r.coupon)))
     stats += [stat("Maturity", tenor_label(r.maturity)),
               stat("Notional", f"{r.notional:,.0f} {r.currency}")]
     blocks.append(ft.Row(stats, spacing=10, wrap=True))
@@ -205,6 +207,8 @@ def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
         "curve": {"source": panel.source, "date": curve.date, "method": curve.method,
                   "note": panel.note},
     }
+    if cms:
+        payload["coupon_interpretation"] = cms_coupon_context(r)
     blocks.append(analysis_panel(page, kind="structured_product",
                                  narrative=insights.narrate_structured(r),
                                  payload_fn=lambda p=payload: p))
