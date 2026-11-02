@@ -1,5 +1,57 @@
 # QUANTGEN consolidated Claude handoff — 2026-11-02
 
+## 최신 인계 확인 — 2026-11-02T15:08:27.000+09:00
+
+**현재 대표 작업은 인수인계 확인만 수행한다.** 사용자의 최신 직접 지시로 신규 구현·제품 검사·PR 병합을 멈췄다. 아래 과거 진행 기록은 보존하되 이 절이 현재 상태에 우선한다. 결함 전체 완료 선언이 아니다. 정규 §10 그룹은 마지막 검증 기준 **21/67 완료, 46 미완료**이며 이번에는 완료 ID나 취소선을 추가하지 않았다.
+
+### UI 개선 세션 확인 및 아직 도착하지 않은 최종 인계
+
+대표가 handoff ref `2a43ddc7a4977cf12e720db1872a8fd1bf582830`에서 다음 자료를 실제 읽었다.
+
+| 자료 | 읽은 blob SHA | 대표 확인 |
+| --- | --- | --- |
+| [UI_SESSION_CURRENT.md](https://github.com/xkg4real/quantgen/blob/2a43ddc7a4977cf12e720db1872a8fd1bf582830/UI_SESSION_CURRENT.md) | `10a4ad575289b75415ab7e24a707a48a5a67af22` | 14시 KST 이후 환경 복구 체크포인트까지 열람 |
+| [WEBSITE_AWS_SESSION_CURRENT.md](https://github.com/xkg4real/quantgen/blob/2a43ddc7a4977cf12e720db1872a8fd1bf582830/WEBSITE_AWS_SESSION_CURRENT.md) | `75ebcf31632c7981468dae6c74e32c4ecc7ca165` | 단일 HTML 갱신·사용자 수동 적용 대기 인계 열람 |
+| [WEBSITE_AWS_HANDOFF.md](https://github.com/xkg4real/quantgen/blob/2a43ddc7a4977cf12e720db1872a8fd1bf582830/WEBSITE_AWS_HANDOFF.md) | `145d4bf1ed3670b6631d1fb42ef354c7b51c237b` | 최신 AWS 인계 연결과 과거 이력 보존 확인 |
+
+**직접 원격 검증한 UI 완료 범위:** [PR61](https://github.com/xkg4real/quantgen/pull/61) source `4e17087b1de5dfc01e5f03485088c316f22b0710`는 main `707cdc7786fb2dbce2718f97458f02c43b21bcda`에 병합됐다. [Runtime41390246447](https://github.com/xkg4real/quantgen/actions/runs/41390246447)와 [Compliance41390246439](https://github.com/xkg4real/quantgen/actions/runs/41390246439)의 head 일치·completed/success를 대표가 재조회했다. 10열 연구홈·44px 행·Q-SCORE 도움말·글꼴 개선 범위다. 로컬 검사 숫자를 다시 실행하거나 합산하지 않았다. 사용자 PC의 실제 KIS/Claude API 성공은 별도 미확인이다.
+
+**추가 차트 작업은 최종 인계 대기:** UI 세션이 자기 환경 교체와 미게시 차트/프리뷰 접근 불가를 보고했고, main707cdc에서 `gpt/chart-live-ux-20261102`를 복구 중이라고 기록했다. 실제 수신 틱/초봉·자동 연결·지표 선택·겹침 수정의 새 최종 commit/PR/CI 증거는 이 확인 시점에 없다. 공개 open PR 목록에도 해당 차트 PR은 없었다. 예전 63/93 검사와 PR61 성공을 새 복구본의 성공으로 쓰지 않는다. UI 세션의 환경 보고는 그 세션에 한정되며 대표의 기대 환경은 일치했고 복구본도 보존되어 있다. 다른 세션 작업을 선점하지 않는다.
+
+**UI 세션이 최종 인계를 추가하면 반드시 다시 읽을 것:** 최신 handoff의 UI_SESSION_CURRENT.md를 먼저 재조회해 위 blob과 비교한다. 새 source/PR/최종 CI/head/main 반영 상태와 남은 항목을 확인한 후 이 문서와 CURRENT의 인계 기록에 덧붙인다. 현재의 체크포인트 열람을 앞으로 올 최종 인계 수신으로 주장하지 않는다. UI·AWS·Claude 채팅 직접 전송/열람 영수증은 없으며, 대표의 공유 문서 실제 열람은 확인됐다.
+
+### AWS 자료의 범위와 새 main 차이
+
+AWS 세션 보고: `QUANTGEN-website-ready-2026-11-02.html`, 8,462,984 bytes, SHA256 `b6664cd4889da06a3b47aed62ea26c61f9584bd913ff3faf80e56d25c7890656`; Docs20종/40번역, 168 화면경로, 64 차트 조합, 기존 연구 경로/재계산 검증, 수동 업로드 도구8개 검사를 완료했다고 기록했다. 이 수치는 **AWS 세션이 보고한 증거**이며 대표가 HTML을 확보하거나 재실행한 결과가 아니다. 별도 세션 로컬 경로가 대표 환경에 있다고 가정하지 않는다.
+
+HTML 원문 기준은 main8b40104이고 그 인계의 PR61 OPEN 표기는 과거 관측이다. 현재 PR61 병합707cdc를 별도로 직접 확인했으므로 다음 웹 갱신 담당자는 정책 원문·번역/버전 차이를 다시 검사해야 한다. 실제 AWS 배포·공개 URL의 새 버전 확인, 로그인/회원가입/문의/결제 백엔드는 미완료다. 웹 HTML/소스의 GitHub 게시 금지와 사용자 수동 적용 원칙은 유지한다. 새 인증·환경 변경·배포를 수행하지 않았다.
+
+### 대표의 미완료 수정 6개 단위 보존
+
+직전 [13:53 작업 로그](logs/QUANTGEN_WORK_LOG_2026-11-02_1353_KST.md)와 13:57 CURRENT 부분 반환을 함께 읽는다. 아래는 아직 제품 전체 완료나 main 적용으로 기록하지 않는다.
+
+| 단위 | 보존 위치/커밋 | 검사와 다음 단계 |
+| --- | --- | --- |
+| 전략 | `gpt/defects-strategy-20261102` / `47805e6343b31ae4eacf51c68a2cb176a68fc82c` | 이전18/18 PASS, 원격 head 재조회 일치. N6/N9/N10 및 N3/a·N14/a·N5/a 제한적 설명. PR/CI/main 미반영 |
+| 금리 | `gpt/defects-rates-20261102` / `524edf7867ebd06538746cde0f6d55f334923353` | 이전16 PASS, 원격 head 재조회 일치. M3-N09 표시만. M3-N02는 재현·설계까지, 구현 없음 |
+| Crypto | `/workspace/work/quantgen-defects-crypto-20261102` | 7개 WIP 파일, 이전24 PASS. 프리미엄 행 한국어·통합·CI 남음 |
+| 옵션 | `/workspace/work/quantgen-defects-options-20261102` | 7개 WIP 파일, 담당7 PASS 보고. 최종 회귀·통합·CI 남음 |
+| 모형 | `/workspace/work/quantgen-defects-models-20261102` | 8개 WIP 파일, 미완성. ResearchRun 스키마 수정 취소/정리와 native note 연결부터 검토; 전체 테스트 성공 근거 없음 |
+| AI 응답 | `/workspace/work/quantgen-defects-20261102` | 9개 WIP 파일, 이전24 검사 중23 PASS/1 FAIL. Flet container 문자열이 아닌 실제 child Text를 검사하도록 수정 필요. 숫자 참조 검사는 의미/단위 검증 PASS가 아님 |
+
+복구 디렉터리: `/workspace/work/quantgen-private-context/reports/2026-11-02/defects-priority-checkpoint-1355`. 이번 읽기 전용 대조에서 6개 branch/HEAD가 manifest와 일치하고 WIP31개 명시 파일은 복사본과 byte-exact, 누락0/차이0, tracked.patch6개도 일치했다. 전략10개/금리7개 파일은 로컬 커밋 객체와 일치했다. 이 두 커밋은 체크포인트 폴더에 별도 파일 복사본이 없으므로 **로컬 Git 객체 또는 위 검증된 원격 브랜치**로 복구한다. 폴더 하나만으로 모든 커밋을 복원할 수 있다고 안내하지 않는다.
+
+이번에는 제품 코드를 수정하거나 새 제품 테스트를 실행하지 않았다. 이전 일부 하위 실행의 usage_limit 오류는 이력으로 보존하고 계정 잔여 토큰·한도 유형은 추정하지 않는다. .env/보호 캐시/실제 원장/동결 연구/실제 주문·TRADEGEN 미접근·미변경, O8 NOT_PERFORMED 선택·O11 사전12설정/n_trials=12+U/U≤24·owner_confirmed 미부여 유지.
+
+### 인계 수신자가 먼저 할 일
+
+1. CURRENT·STATE·실행 소유권과 최신 UI_SESSION_CURRENT.md를 대조한다. 대표 최신 지시는 인계 확인만이므로 새 개발은 재개 지시 또는 유효한 인계 범위에 따라 수행한다. 기존 예약 변경·중복 예약/run_now는 하지 않는다.
+2. 위 UI 최종 인계가 새로 오면 정확한 branch/head/PR/checks를 재조회하여 통합한다. 차트 작업은 UI 세션 소유로 남겨 중복 구현하지 않는다.
+3. 개발이 적법하게 재개되면 먼저 31개 WIP와 두 원격 커밋을 복구·검토하고 AI 실패/모형 미완성부터 정리한다. main707cdc 이상의 타 세션 변경을 보존한 뒤 합성/격리 검사·PR 정확 head CI를 수행한다. 미완료 부모와 46그룹을 근거 없이 취소선 처리하지 않는다.
+4. 실제 Windows/DPI/설치 사용자 인수, 공급사/Claude API, 파일럿·정식 원장, 법률/라이선스/동결 연구 증거는 별도로 남긴다. 공유 인계 저장/read-back과 Claude 실제 열람을 구분한다.
+
+---
+
 **PARTIAL HANDOFF — verified implementation, remaining acceptance gates.** This consolidates the root work and received UI/website reports. Overall Remaining Work is not complete. No deployment or actual Claude receipt is claimed. Remote handoff/CURRENT read-back and local STATE are the authoritative transfer records.
 
 Prior history: `CONSOLIDATED_CLAUDE_HANDOFF_2026-10-31.md`; its stop-state was superseded by November 2 resumption. Deadline waives no evidence. No GPT/Gemini spec disclosure; optional reviews remain **NOT_PERFORMED**, nonblocking solely for absence. Approved ordinary fixes/tests may proceed; research criteria/formal records/actual execution/publication retain separate conditions.
