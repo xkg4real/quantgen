@@ -1,12 +1,96 @@
-## 2026-11-02 — 소개사이트 재구성 진행 체크포인트
+# QUANTGEN UI 세션 → 메인 세션 / Claude 최신 인수인계
 
-사용자가 소개사이트 제작을 재개하고 Figma 없이 Impeccable·Taste로 직접 구현하도록 지정했습니다. 최신 추가 요청은 Login 왼쪽 globe 언어 선택, 둥근 Liquid Glass 버튼·설명 카드, 기존 색상과 Light/Dark 유지, 부드러운 스크롤입니다. 이 웹 UI 범위의 직접 지시이며 메인 연구 CURRENT/소유권/원장은 변경하지 않습니다.
+사용자가 2026-11-02에 "인수인계 파일 메인세션에 보내라"고 재지시하여, 메인 인계 규칙 README가 지정한 이 공유 경로에 최신 본문을 반영합니다. **전체 요청 완료가 아닙니다.** 이 문서는 메인의 CURRENT 소유권·작업·연구 원장을 변경하지 않습니다.
 
-- 로컬 소스: `/workspace/work/quantgen-web-redesign-20261102/site`. Main/Who we are/Docs/Questions/Inquiries/Login/Sign Up, 3개 요금제 초안, 같은 기간의 역사 차트 복수선택, 한국어·영어 번역 구현 중입니다.
-- GitHub 준비 브랜치: `gpt/website-redesign-20261102` (base `d0f18a0`). **아직 사이트 소스 커밋/PR을 게시하지 않았습니다.** 검증 완료 후 같은 인계 항목에 확정 링크를 추가합니다.
-- 기존 첫 검수는 6개 폭·7경로·8개 지표조합 통과. 범례 대비 수정. 최신 Liquid Glass/두 언어 검수는 진행 중이며 PASS로 집계하지 않습니다.
-- **운영 배포 NOT_DEPLOYED.** 기존 AWS 원본과 Quant Lab/Gate 엔진을 보존해 통합할 패키지이며, 로그인·문의·결제 서버는 연결되지 않았습니다.
-- 직접 다른 채팅 전송 도구가 없어 `queued/not_received`. 스레드 조회도 연결 오류가 났습니다. 이 공유 문서 저장은 메시지 수신이나 배포 영수증이 아닙니다.
+## 메인에서 우선 확인할 완료/미완료
+
+- 완료: 앱 기술지표 가이드·공통 사례·C형 차트·다크모드·로고 설정의 소스 반영, 데이터 이용조건 검토 목록, 웹 구조·Liquid Glass·globe·한영 Docs20종과 업로드용 단일 HTML, 최신 Windows 실행 안내.
+- 확인한 검사: 앱 최신main cac727e2의 실시간 체결 경로 모의 입력72 PASS; 최종 웹 Docs40개 언어별 전체 본문 PASS; 앞선 마케팅 화면168경로 PASS. 실제 사용자PC·실계정KIS·운영웹 검증과 구분합니다.
+- 남음: 사용자가 수행할 AWS 업로드 및 기존 운영 사이트의 전체 기능/차트 통합, 사용자 Windows 실행·아이콘·DPI 확인, 실제 KIS 수신, ko/en 외 번역, 앱 기존 해설의 잔여 언어 혼용 정리, 정책·데이터 이용권 확정, 문서CI 원격 설치. 웹 로그인·문의·결제 백엔드는 연결되지 않았습니다.
+- 사용자 결정: 웹 소스/HTML은 GitHub 게시 금지. 지금 반영하는 것은 **공유 인수인계 문서뿐**입니다. HTML은 사용자에게 전달한 파일로 AWS에 직접 업로드합니다. AWS 로그인 재요청 금지.
+- 메인 세션은 이 결과를 다음 Claude 통합 인계에 포함해 주세요. 다른 환경에서 아래 로컬 경로가 없으면, 이미 사용자에게 전달한 ZIP을 받아 같은 구조로 복원합니다. ZIP/HTML을 이 저장소에 게시하지 마세요.
+- 전달 상태: 이 문서의 원격 저장/read-back과 메인 에이전트 실제 열람은 구분합니다. 대화 직접 전송 도구는 없고 list_threads 연결 오류가 지속됩니다. 저장 성공을 채팅 수신 확인으로 표현하지 마세요.
+
+---
+
+# QUANTGEN UI — Claude / 메인 세션 최종 인계
+
+2026-11-02 UTC. 요청한 웹 UI·Docs 구현과 최신 앱 실시간 차트 점검을 마쳤다. 다음 담당자는 아래 산출물·검증 범위·남은 운영 작업을 기준으로 이어간다. 이 파일과 전달 ZIP은 저장된 인계이며 다른 채팅의 수신 확인은 아니다.
+
+## 유지할 사용자 지시
+
+- 웹사이트 소스와 HTML은 GitHub에 올리지 않는다. 사용자가 단일 HTML을 직접 AWS에 올린다. AWS 로그인 재요청 금지.
+- GitHub 작업은 앱 관련 항목만. 이번 최종 검사에서는 앱 소스를 변경하지 않았다.
+- 토큰·크레딧 소진 전에 인계한다. 잔여 크레딧 조회 도구가 없어 단계별로 이 문서를 먼저 저장했다.
+- Figma는 사용자가 생략을 허용했다. Impeccable/Taste를 적용했고 Figma 파일 생성은 주장하지 않는다.
+- 아이보리·딥그린, C형 차트, Light/Dark, Login 왼쪽 globe, 둥근 Liquid Glass 버튼·설명 카드, 부드러운 스크롤을 유지한다.
+
+## 전달 산출물
+
+- `dist/QUANTGEN-website-with-docs-2026-11-02.html`: 최종 단일 HTML, 5,506,989 bytes.
+- SHA256: `ce48aea091f482ad834fdf836ae71528731e92ddbd90b1d5b2bc372fd8fcc609`. 같은 이름의 `.manifest.json`에 개별 소스 해시도 있다.
+- `site/`: 편집 가능한 HTML/CSS/JS·한영 콘텐츠·브랜드·글꼴·64개 차트 SVG.
+- `content/public-docs/01.json`–`20.json`: 20종 공개 열람용 본문, 한국어와 영어.
+- `compliance-source/`: 최신 앱 main `cac727e2b5499533301fdc7b2e9ea6479c7788db`의 문서 원본 25파일 사본.
+- `LATEST_APP_RUN_WINDOWS.md`, `Update-and-Run-QUANTGEN.ps1`: 최신 앱 업데이트·가상환경 생성·설치·네이티브 실행 안내.
+- `AWS_HANDOFF.md`, `MAIN_SESSION_HANDOFF.md`: AWS 적용과 메인 세션용 상세 기록.
+- `dist/QUANTGEN-source-and-handoff-2026-11-02.zip`: 최종 HTML, 편집 소스, 검사 도구·기록, 실행법, 인계 문서를 함께 전달하는 묶음.
+- 이전 `QUANTGEN-website-2026-11-02-preview.html`은 Docs 통합 전 파일이다. 최종본으로 사용하지 않는다.
+
+## 웹 구현 및 검증
+
+Main / Who we are / Docs / Questions / Inquiries, Login / Sign Up, FAQ, Free·Pro59,000원·Ultra129,000원 기능 초안을 구현했다. 로그인·문의 전송·결제는 연결되지 않았으며 작동한다고 표시하지 않는다.
+
+언어는 현재 ko/en 두 가지를 실제 지원한다. 메뉴와 전체 본문·차트·해설·표·버튼·오류·개정 안내를 전환한다. 날짜·숫자·통화 형식, 같은 문서 유지, URL의 `?lang=` 및 해시 경로, 새로고침을 처리한다. 없는 언어는 명시적 unavailable 화면으로 처리한다. 거의 모든 언어의 번역 완료를 주장하지 않는다.
+
+Docs 목록 20종, 20개 상세 화면, 하단 이용약관·환불·개인정보·쿠키·Docs 링크를 구현했다. 내부 검토표·승인 양식·운영 기록을 공개 본문에 그대로 복사하지 않았다. 모든 문서는 preview다. 원문 `review-required`는 법적 공표 승인으로 바꾸지 않았다. 기존 Research/Team Pilot 조건을 새 Free/Pro/Ultra에 임의 적용하지 않았다.
+
+- `evidence/docs-browser-checks.json`: 최종 HTML의 20종×2언어=40개 전체 본문 검사 PASS. 최종 실행 시각 2026-11-02T03:01:35.688Z. 문단·표·절, 하단 링크, 직접 URL·재로딩·같은 문서 언어 변경, 키보드, 320/390/768px 및 추가 외부 요청 없음 확인.
+- `evidence/public-docs-check.json`, `public-docs-current-main-check.json`: 정확한 20종, 번역 누락·원문 해시·버전·섹션·표·숫자·로컬 링크 검사 PASS. 후자는 최신 앱 원본과 직접 비교한 결과다.
+- `evidence/language-glass-checks.json`: 앞선 마케팅 화면 24조건×7경로=168검사 PASS. `language-recovery-checks.json`은 언어 실패·재시도와 투명도 축소 동작 PASS.
+- `evidence/finish-review-glass.md`, `finish-review-docs.md`: 제한된 정적 화면 범위 `ship`. 모바일 요금표의 단어 중간 줄바꿈을 수정했다. 정책 승인·Windows 전체 검수·운영 배포 승인이 아니다.
+- 최초 69a255… 원문과 최신 main의 KIS 변경을 비교해 14종을 다시 읽고 KO/EN에 반영했다. 변경 문서는 `2026-11-02.2`, 미변경 문서는 `.1`. 해시만 자동으로 바꾸지 않았다. 검토 근거는 `public-docs-01-10-source-review-20261102.md`, `docs-latest-main-review-12-20.md`.
+
+교육 차트는 USD/EUR 과거 관측 332개를 모든 지표 조합이 공유한다. 2019-09-03–2020-12-31, H.10/FRED DEXUSEU 역수 참조 환율이다. 실시간 틱·OHLCV·투자 성과가 아니다. 원본 앱 교육 자료 1,247개와 웹의 부분 표본을 구분한다.
+
+## 앱 실시간 차트 확인
+
+별도 깨끗한 checkout `/workspace/work/quantgen-live-check-20261102`, main `cac727e2b5499533301fdc7b2e9ea6479c7788db`를 확인했다. 앱 수정·GitHub 쓰기는 없었다.
+
+- KIS WebSocket 체결 → 공통 MarketTick → apply_tick → 네이티브/Flet OHLCV·지표 갱신이 구현돼 있다.
+- `evidence/app-live-verification.json`: 72 PASS, core/KIS/native55 + Flet17. 네이티브는 Linux Qt offscreen, 외부 공급사는 가짜 REST/소켓 입력이다.
+- 초기 제한 네트워크 샌드박스에서 Flet 테스트의 asyncio 종료가 대기했다. 동일 코드·가짜 입력으로 네트워크 허용 샌드박스에서 17개 모두 완료했다. 초기 진단 로그를 보존하며 PASS 수에 포함하지 않았다.
+- 실제 KIS 계정 수신과 사용자의 Windows 실행은 미검증이다. 이 환경의 KIS 설정은 False이고 KIS 호스트 접속 권한도 없다. 키 값은 요청하거나 출력하지 않았다.
+- 현재는 체결로 갱신되는 시간봉이다. 1틱·100틱·200틱봉 선택은 없다. 해외선물 WebSocket, 국내 야간 CM/EU 스트림은 미지원이다. 연결 공백 뒤에는 재조회·재연결이 필요하다.
+- 실행은 `.\.venv\Scripts\python.exe -X utf8 -m quantgen_desktop`, 앱 경로는 Markets → KIS chart → 조회 → 실시간 체결 연결이다. 기존 `main.py`는 Flet 화면이다.
+- PowerShell 스크립트는 GitHub Desktop Git 자동 탐색, 안전한 fast-forward 업데이트, 없는 가상환경 생성, 같은 인터프리터로 의존성 설치를 수행한다. 추적 파일 변경·충돌·고장 난 기존 환경은 보존하며 중지한다. 정적 검토 완료, Windows 실행 완료로 주장하지 않는다.
+
+## 재생성과 다음 운영 작업
+
+```sh
+python tools/build_public_docs.py --report evidence/public-docs-build.json
+python tools/check_public_docs.py --check --report evidence/public-docs-check.json
+python tools/check_public_docs.py --check --source-root /path/to/current/app/docs/compliance
+python tools/bundle_html.py --output dist/QUANTGEN-website-with-docs-2026-11-02.html
+python -m http.server 8124 --directory dist
+# 다른 터미널: node tools/check_docs_browser.cjs
+```
+
+미리보기 URL은 `http://localhost:8124/QUANTGEN-website-with-docs-2026-11-02.html?lang=ko#/docs`다. 브라우저 검사에는 Playwright와 Chromium이 필요하다. 여기서는 `/usr/bin/chromium`을 사용했다. 관리형 브라우저가 file://를 차단해 HTTP로 검증했다. 원본 `site/` 미리보기는 8123 포트였다.
+
+AWS 실제 배포는 NOT_DEPLOYED다. 사용자가 HTML을 올릴 때 현 운영본을 백업하고 새 파일을 별도 URL에서 확인한 뒤 적용하면 된다. 이 패키지는 기존 Quant Lab/Gate 계산 엔진의 포팅본이 아니며, 기존 애플리케이션 경로·자산을 보존한다. 자세한 적용·복구·URL 체크는 AWS_HANDOFF를 따른다. 배포 완료 주장은 실제 서버·공개 URL 확인 뒤에만 한다.
+
+미확정 정책 공표, 사업자·연락처·신규 요금 조건·데이터 권리의 확정, 로그인·문의·결제 백엔드, 추가 언어 번역은 남아 있다. `integration/`의 기존 앱 검사 파이프라인 연계 CI 템플릿은 제공만 했고 원격에 설치하지 않았다. 현재 사용자 지시로 웹 소스를 GitHub에 올리면 안 된다.
+
+## 전달 상태와 다른 세션 소유권
+
+직접 다른 대화에 메시지를 보내는 도구가 없고 스레드 조회도 실패했다. 이 파일·ZIP은 인수인계 준비 완료이며 메인/Claude/AWS 실제 수신 확인은 없다. 사용자 금지 전 공유 handoff 체크포인트 `82a59e47a18b6a502d62f2ec49e901deb13c3a82`는 이전 상태만 기록한다. 최신 작업은 이 패키지가 기준이다.
+
+메인 CURRENT는 다른 세션이 taken 상태임을 `--show`로 확인했다. CURRENT·LEDGER·AUTO_STATE, 연구 원장과 타 세션 작업을 덮어쓰지 않았다. 중단된 웹 GitHub 트리 요청은 재시도하지 않았고 웹 소스 커밋/PR·AWS 배포는 없다. 원본 스킬 라이선스와 글꼴 OFL 고지를 보존한다.
+
+
+<details>
+<summary>이전 앱 UI / 실행 오류 인수인계 이력 — 위 최신 상태가 우선</summary>
 
 # QUANTGEN UI 소스 병합 완료 / 사용자 앱 반영 미확인 — 메인 / Claude 인수인계
 
@@ -103,3 +187,5 @@ PR47에 남은 앱 구현·CI·병합 작업은 없습니다. 다른 작업공�
 
 UI 작업공간 /workspace/artifacts/quantgen-ui에 chart-design-studies-ABCD.png, chart-c-light.png, chart-c-dark.png, chart-c-native-narrow.png, chart-c-browser-light/dark/mobile.png가 있습니다. 다른 환경에서 파일이 없으면 소스/CI 링크를 사용하세요.
 최초 브라우저 fixture가 Home 자동 갱신 요청을 시도해 차단된 적이 있어 중지하고 공급자 stub/요청 차단으로 교체했습니다. 그 시도를 실시간 데이터·사이트 검증 증거로 쓰지 않습니다.
+
+</details>
