@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-11-02T12:42:20.000+09:00
+updated_at: 2026-11-02T12:52:44.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
-work_commit: e9608be3531a4661e9d8327292864ed64dbd357a
-uncommitted_changes: no; selected-tab HFW fix pushed/read back on all three branches
-pr: 54, 58 and 59 (open; selected-tab HFW repair in exact-head CI, no completion claim)
+work_commit: e10cebfd96577a2226d8d89d5e9d31ec6948d596
+uncommitted_changes: no; narrow header repair pushed and read back on all three branches
+pr: 54, 58 and 59 (open; Windows header regression in exact-head CI)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -22,6 +22,13 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 ---
 
 # QUANTGEN 직접 작업 재개 — 2026-11-02
+
+## 12:53 KST Windows 헤더 폭 수정 저장
+- Windows 실측 Tool/Source 최소폭251/459px이 좁은1000px창의66px넘침원인임을확인. 두콤보만최소문자수12·minimum-content 정책과동일stretch로수정, 전체선택text tooltip/locale갱신·itemdata·접근성보존. 합성Windows크기주입으로기존실패재현후수정및한영전환0overflow, CI동일순서10 PASS. 앞선선택tab HFW수정은별도유효수정이나66px완료근거가아님.
+- PR54 e10cebfd96577a2226d8d89d5e9d31ec6948d596 push/read-back, Runtime41385318053/Compliance41385317430 새정확한head검사. 미병합; 최종Windows자동검사와수동인수구분.
+- PR58 f0d4a3497a0f5b2b6f5ec67a356ae4f443354379 push/read-back, Runtime41385357196/Compliance41385357344 새정확한head검사. 미병합; 최종Windows자동검사와수동인수구분.
+- PR59 33d4f899d54d61447e4ac8ba208bf8af987a8fc4 push/read-back, Runtime41385391393/Compliance41385391425 새정확한head검사. 미병합; 최종Windows자동검사와수동인수구분.
+- 최신3개정책정합성PASS, publicationBLOCKED. 인계모든세션취합유지, 제품전체·실제API·Windows수동·공급사·파일럿완료주장없음.
 
 ## 12:42 KST 높이 계산 수정 저장
 - 숨은tab의heightForWidth누수재현을현재선택page기준으로수정, 명시minimumHeight보존, 기존overflowassert/창폭/CI순서유지. CI동일순서9 PASS. Windows66px해결여부는새CI로확인중이며제품완료로기록하지않음.
