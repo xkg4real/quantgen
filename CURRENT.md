@@ -1,12 +1,12 @@
 ---
-status: returned
+status: taken
 reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a, ⑬-8/b2/c/b/b/native, ⑬-2/k/cloud-runtime, ②-5/M4-N3, ②-5/M4-N6, ②-5/M4-N11, ②-5/N11, ②-5/M3-N06, ②-5/M3-N08
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b, ②-5/N5/a
-updated_at: 2026-11-02T13:23:07.000+09:00
+updated_at: 2026-11-02T13:47:36.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
@@ -17,11 +17,16 @@ usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
 session: codex
-execution_id: c939f3aa-5fae-42ea-aad8-cf1db1317b09
+execution_id: 68ff1db0-782b-4cca-b992-31ad1bc9fd9d
 handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21a0cd7bbbb15bd75
 ---
 
 # QUANTGEN 직접 작업 재개 — 2026-11-02
+
+## 결함 46그룹 우선 처리 — 2026-11-02T13:47:36.000+09:00
+- 사용자 최신 직접 지시: 결함 46개 먼저 처리. 기존 21/67 완료 ID와 LEDGER를 보존하고 남은 정규 결함 그룹을 우선한다. 현재 source/task/handoff/직전 execution 및 로컬 저장 기록 일치, OS 잠금 해제 후 배타 잠금 확보를 확인했다. 최신 CURRENT blob 조건 CAS와 새 execution read-back 후 재개한다.
+- 우선순위는 독립 재현→일반 수정→합성 회귀 및 앱 전달 경로 검증→PR/CI→검증된 하위 완료 기록이다. 동결 연구/원장/판정 기준/실행 승인·보호 캐시·비밀은 변경하지 않는다. 현재 브랜치를 먼저 검증해 재개하고 최신 main 기반 다음 gpt 작업 브랜치로 전환할 때 기록한다.
+
 
 ## 최종 부분 인계 — 2026-11-02T13:23:07.000+09:00
 - [통합 Claude 인계](CONSOLIDATED_CLAUDE_HANDOFF_2026-11-02.md) 최종 원격 77bb1155a58e81d95646f2023ff8b5301aceb80e, blob 12fae3dfbe8c1c4dcebb9f0892c660b6ef1dd8c6, 본문 일치 read-back. 이전 10월31일 전체 이력과 이번 private MVP/Step7A/비교보고서, 다른 UI/AWS 세션 및 PR60 결과를 취합했다. Claude 실제 열람 영수증은 없음.
