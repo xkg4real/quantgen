@@ -6,12 +6,12 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-11-02T11:20:00+09:00
+updated_at: 2026-11-02T11:29:36+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
 work_commit: efd9b0c70fb113342e9a2dce498d88113d2ee0f3
-uncommitted_changes: no
+uncommitted_changes: yes (bounded responsive/localization follow-up; isolated M4 scenario tests/docs)
 pr: 54 (open; runtime/Windows CI in progress)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -24,6 +24,13 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN 직접 작업 재개 — 2026-11-02
 
 > 최신 사용자 직접 지시: 2026-11-02 13:00 KST를 목표로 지정 Notion Remaining Work 미완료 항목(4~7,10 등)을 재개한다. GPT/Gemini spec 공개/추가 모델 심사를 수행하지 않는다. 기존 O8 NOT_PERFORMED와 기술·Windows·실행 조건은 보존하며 실제 확인된 하위 작업만 완료 표시한다. 이전 STOP은 이번 범위의 직접 재개 지시로 해제됐다. 아래 10월31일 반환 내용은 이전 이력이며 최신 지시보다 우선하지 않는다. 현재 최신 코드·문서/검사 상태를 대조하는 중이며 외부 실행 승인/개인 PC/원장 제한은 유지한다.
+
+## 11월2일 11:29 진행 체크포인트
+- PR54 source efd9b0c의 Windows/Ubuntu 자동 검사 진행 중. 추가 실제 offscreen 시각 확인에서 Signals 좁은 창 잘림과 Macro 탭 전환 공백을 재현·수정했고 관련11검사 PASS. Macro 지표/차트 저작 문구와 종료 오류 표시 언어의 추가 수정·검증 진행 중이며 아직 새 source push 전이다.
+- 별도 gpt/letf-explicit-inputs-20261102의 da9f483: M4-N3 explicit 가정 입력, 기존 영금리 참고 보존. core28·native26·실제 Flet/Qt AI 동의/payload 신규2 PASS, 독립 수학45사례 PASS. 최종 기본 브랜치 통합·패키징/CI/PR는 남음. 공개 스펙·실제 provider·연구원장 실행 없음.
+- Step7A private helper 최종 local a2d93c2b2c122c2506520c0a5f35132f045ec48b, 보호경로 거부 포함27 합성 PASS. Notion 하위 항목의23→27/commit 변경 저장 후 read-back 확인. private helper source는 원격 미게시라 원격 완료 LEDGER 행으로 기록하지 않음.
+- 다음 독립 승인된 일반 수정 M4-N6(FX 조건부 CIP 설명)와 M4-N11(CMS 첫기간 연율쿠폰) 분리 gpt 브랜치에서 합성 검사와 함께 진행. 가격·공식 판정·실제 원장 불변.
+- handoff82a59e47의 다른 세션 UI_SESSION_CURRENT/WEBSITE_AWS_HANDOFF 업데이트를 관측, 본 CURRENT 소유권/작업/commit은 변하지 않았음. 다른 세션 변경 보존.
 
 ## 11월2일 검증 체크포인트
 - 제품 source027fddf / 기록 포함head efd9b0c70fb113342e9a2dce498d88113d2ee0f3, PR54. 원격 code push/read-back 확인. 로컬 source/Flet130·production 언어/startup17·문서47 PASS; 설치 wheel Flet/PyQt6 합성계산/JSON·ZIP PASS. 넓은native회귀와 exact-head Windows/Ubuntu CI 진행중. 제품전체/실기기 완료 아님.
