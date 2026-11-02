@@ -18,11 +18,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class NativeChartSourceChecks(unittest.TestCase):
     def test_native_view_uses_shared_contract_and_renderer(self):
-        tree = ast.parse((ROOT / "quantgen_desktop/market_chart.py").read_text())
+        tree = ast.parse((ROOT / "quantgen_desktop/market_chart.py").read_text(encoding='utf-8'))
         imports = {node.module for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)}
         self.assertTrue({"core.market.models", "core.market.presentation", "core.market.live"} <= imports)
         # User-facing native features must be reachable from the real application.
-        app = (ROOT / "quantgen_desktop/app.py").read_text()
+        app = (ROOT / "quantgen_desktop/app.py").read_text(encoding='utf-8')
         self.assertIn("self.market_chart = MarketChartPane(locale=self.ctx)", app)
         self.assertIn("self.market_chart.stop()", app)
         self.assertIn("self.market_chart.set_locale(self.ctx)", app)
@@ -119,6 +119,15 @@ class NativeChartLifecycleTests(unittest.TestCase):
             QTest.qWait(10)
         self.fail("REST worker did not finish")
 
+    def wait_for_ui(self, predicate):
+        # Assert the rendered outcome, not an OS-specific timer scheduling time.
+        for _ in range(100):
+            self.app.processEvents()
+            if predicate():
+                return
+            QTest.qWait(10)
+        self.assertTrue(predicate(), 'UI did not render the accepted tick within 1 second')
+
     def load(self):
         self.assertTrue(self.pane.refresh(manual=True))
         self.wait_idle()
@@ -206,10 +215,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
         self.app.processEvents()
         # The coalescing timer is 200ms; CI may schedule its paint later under
         # load. Require the visible quote to arrive within a bounded deadline.
-        for _ in range(100):
-            if '225' in p.quote.text():
-                break
-            QTest.qWait(10)
+        self.wait_for_ui(lambda: '225' in p.quote.text())
         self.assertEqual(p.snapshot.quote.price, 225)
         self.assertIn("225", p.quote.text())
         retained = p.snapshot
@@ -229,7 +235,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
                           received_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
         self.streams[-1].on_tick(tick)
         self.app.processEvents()
-        QTest.qWait(220)
+        self.wait_for_ui(lambda: '지연·오래된 체결' in p.status.text())
         self.assertIn("지연·오래된 체결", p.status.text())
 
     def test_reconnect_gap_requires_authoritative_reload_before_merging(self):
@@ -327,7 +333,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
                            received_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
         self.streams[-1].on_tick(first)
         self.app.processEvents()
-        QTest.qWait(220)
+        self.wait_for_ui(lambda: p.chart.snapshot is p.snapshot)
         self.assertEqual(p.snapshot.candles[p._cursor].timestamp, selected)
         self.assertIn(selected, p.reading.text())
         p.move_cursor(len(p.snapshot.candles) - 1)
@@ -335,7 +341,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
                          cumulative_volume=1123)
         self.streams[-1].on_tick(second)
         self.app.processEvents()
-        QTest.qWait(220)
+        self.wait_for_ui(lambda: p.chart.snapshot is p.snapshot)
         self.assertEqual(p._cursor, len(p.snapshot.candles) - 1)
         self.assertIn(second.timestamp[:10], p.reading.text())
 

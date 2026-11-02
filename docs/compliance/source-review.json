@@ -249,7 +249,7 @@
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "1cb449ab4976d82574d778f3089758f69240d1f12d40b21e42131ba79e166ae5",
     "docs/product/FUNDING_INFERENCE_2026-10-30.md": "ea1ef423c1d2d3601f82c301536709fa66292595faee72dbd283ad49c5d87952",
     "docs/product/FX_LANGUAGE_2026-10-31.md": "e2c15111acbd1bf6391700c6a0f6616da69d65ce4750654783fd08fbaea3d65f",
-    "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md": "40172a2b49d7602dce2ff4043d7dc07f739b492c9e71afbb492c6dc3cba8b922",
+    "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md": "8ea3908579720e4bb3262e2952251d2b054aa2fcdc3ba34dbb7118e5c6e5d711",
     "docs/product/INDICATOR_GUIDE_DESIGN.md": "cf664a34fefd8506e356ca2f261ddc6acbce168d370d1f7d504393d94acca484",
     "docs/product/KIS_MARKET_CHARTS_2026-11-02.md": "ae0d54bb8f2a90c39446829d56e08e564fa989182aba65933b06c849c7ba4951",
     "docs/product/KIS_SOURCE_DOCUMENT_REVIEW_2026-11-02.md": "a301a9b6991eff904f455f8da82d3d32f447a50ee5f02f952cba05715ff78740",
@@ -342,7 +342,7 @@
     "tests/desktop_letf_index_acceptance.py": "a5bc0f194c44d154dfbab81dccc4661f0ddade92ba34c906ed5172de7d60e664",
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
-    "tests/desktop_market_chart_acceptance.py": "27de412d0e53d85ee76e156410f662346ba03ab8bb1d6e070dd1f44dd0b255a0",
+    "tests/desktop_market_chart_acceptance.py": "746ec35592633d1051d42e204cca3687a2a1689002aea52ce962c4863215ccd4",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_layout_acceptance.py": "2ef33734e9a1d74dd7b07818b8338f576fc49d8888c3ca0ba8d1eb365d886436",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
@@ -503,163 +503,163 @@
   "reviews": {
     "1": {
       "document_sha256": "8999644c980682de0259e004f13b09b3155ee5f90de6a1a2fc443961e784d6e4",
-      "source_digest": "cb05e0cee0e04ac68a112348e0fe3831c2b55b80cf4baa566a2a43b6da9421cd",
+      "source_digest": "20f6bf126e355d17b4ebe085cc1c4ba552a382eb490a33183f39bbace34d4cec",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.587331+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.827104+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "cb05e0cee0e04ac68a112348e0fe3831c2b55b80cf4baa566a2a43b6da9421cd",
+      "source_digest": "20f6bf126e355d17b4ebe085cc1c4ba552a382eb490a33183f39bbace34d4cec",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.591338+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.832261+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "4d03f31e8c77ce94390a1bee51bdc471d527920599fc3451c9482f842bdbb057",
+      "source_digest": "4d2c326b8d02beb1699c6747e65095f917eec9fc1a477ad391a6bb304bde3c0b",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.594192+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.835719+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "26cdc78b7e29a953c5a036f34d30121aa0bdb710d59115bcd3ead1ec6da0d1f3",
+      "source_digest": "4cf0888e6f96f06a88023541892cdf72c4442af0e32c2e7a8301f15b9ee710c5",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.597557+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.838772+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "481b80935f323e84201c80eb73601a97b3552a0bd1faf9032120f9fd36048959",
+      "source_digest": "62ebe167aa9e89263bebc6435cfc65d9140035942cc89f4c351d9283adbd650a",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.599884+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.842049+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "6": {
       "document_sha256": "fbe667b6e7f2f4064e7873cb880beb348875cc4c4c4ecf4797125ea3b898dab0",
-      "source_digest": "1580968ea369a4922d45f199f72c37daea7b62c7ba8823e59a70f4771ee8e0f5",
+      "source_digest": "d55c0220cf23244c14e0ac1783657a63f61eff6601e94e0cc23cefb913fead86",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.602948+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.844704+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "7": {
       "document_sha256": "5614e2d62a783fa147880e6aba7da1db696191b204923339c4c49364b88a3f57",
-      "source_digest": "cb05e0cee0e04ac68a112348e0fe3831c2b55b80cf4baa566a2a43b6da9421cd",
+      "source_digest": "20f6bf126e355d17b4ebe085cc1c4ba552a382eb490a33183f39bbace34d4cec",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.605538+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.849701+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "8": {
       "document_sha256": "64caf9f82a5167b591343a22dbe476110744faea951302d4214a2d634a2aeedc",
-      "source_digest": "1580968ea369a4922d45f199f72c37daea7b62c7ba8823e59a70f4771ee8e0f5",
+      "source_digest": "d55c0220cf23244c14e0ac1783657a63f61eff6601e94e0cc23cefb913fead86",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.608194+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.855271+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "9": {
       "document_sha256": "e13cc4d66fa727f737e85b40ab105fecb5904971c86055dda16aef24b208dfe4",
-      "source_digest": "8200a15a1ce3bdb52212da93351a636538cd2bc53e60d950ef1c1c1befccf37c",
+      "source_digest": "9cfad1d3c69d9f4a74a036cb4d99e3306b558fb7fb2657dc73421146cb5788c9",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.610866+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.860379+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "6bf45db5d655bf6e59f9826a0d51fe15fd8d04e4455d433d9e8d3b644db5c9aa",
+      "source_digest": "bfec12945838eafef8659732d3fbe7a170a9dc5916b0d1d3a077b6711add7389",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.614067+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.864659+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "2424d40ddb4e59ef50d05c9561833737d5da97787514feaa30ba18ba95a6d25b",
+      "source_digest": "415f87ea40cb71d4c44fb3735ac43c284f5f393aa8304a242b31372a3505b77b",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.616998+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.870466+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "12": {
       "document_sha256": "e6a6ec1bf32796ecee6570528b5b46ffcc3dd666c1cc8c037d3e49ab374ae7b7",
-      "source_digest": "af42d114dbae820bf0bf5a0bbbe2a41d0bab15c47fc99019e130240de31b59d6",
+      "source_digest": "1aa63942b89307963ae2f1592b31a6caf721051a36186201c3b7b0739fd65610",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.619548+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.874595+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "13": {
       "document_sha256": "9a1da9d3c0fe3437b4992dd6eb25a174cd0d6e60d5b18c8e0c906be9a2382658",
-      "source_digest": "8200a15a1ce3bdb52212da93351a636538cd2bc53e60d950ef1c1c1befccf37c",
+      "source_digest": "9cfad1d3c69d9f4a74a036cb4d99e3306b558fb7fb2657dc73421146cb5788c9",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.621674+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.880068+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "14": {
       "document_sha256": "4708a9554bc74653e7b0401d559ae5ee29728397b2fd8f2fb6bb57a05e0a1fc6",
-      "source_digest": "8200a15a1ce3bdb52212da93351a636538cd2bc53e60d950ef1c1c1befccf37c",
+      "source_digest": "9cfad1d3c69d9f4a74a036cb4d99e3306b558fb7fb2657dc73421146cb5788c9",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.624415+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.887381+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "15": {
       "document_sha256": "6a103c51e560274abb48e1958a91868e28cf2ecae2eae26ca66cecacbc0e7d2d",
-      "source_digest": "8200a15a1ce3bdb52212da93351a636538cd2bc53e60d950ef1c1c1befccf37c",
+      "source_digest": "9cfad1d3c69d9f4a74a036cb4d99e3306b558fb7fb2657dc73421146cb5788c9",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.627855+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.893431+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "4d94f60d94639409261fc5965b1be3ada894e06d016a1f57d49cbe3088af66a2",
+      "source_digest": "f47627a7354264d3e421a32877faa509387271c763bdf9bb1bf0ec5cfd9da4e9",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.632101+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.896802+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "1580968ea369a4922d45f199f72c37daea7b62c7ba8823e59a70f4771ee8e0f5",
+      "source_digest": "d55c0220cf23244c14e0ac1783657a63f61eff6601e94e0cc23cefb913fead86",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.634720+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.902912+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "cb05e0cee0e04ac68a112348e0fe3831c2b55b80cf4baa566a2a43b6da9421cd",
+      "source_digest": "20f6bf126e355d17b4ebe085cc1c4ba552a382eb490a33183f39bbace34d4cec",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.638238+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.908407+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "19": {
       "document_sha256": "0a94fadb71a3bec2038f7d33ca4575fcfdfec1b754872408851d3b223b04e174",
-      "source_digest": "65503c58c82c3ddd8112c882b35b9a38b85f6304e35d79e67e32420904a23827",
+      "source_digest": "8fffcac7f8f029e486447d21566c43f45b30de66e03ea32c866d0b82fe3ce4c7",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.643577+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.912115+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     },
     "20": {
       "document_sha256": "7cb0681604508a6d5e63633469acd974c078f96e5f72ba158b8ecbfbf92f5adb",
-      "source_digest": "cb05e0cee0e04ac68a112348e0fe3831c2b55b80cf4baa566a2a43b6da9421cd",
+      "source_digest": "20f6bf126e355d17b4ebe085cc1c4ba552a382eb490a33183f39bbace34d4cec",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed installed smoke update for seven pages, guide and 12-row Q-SCORE table against all 20 prior policy reviews; no runtime or policy semantics changed. Evidence: docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:44:52.648679+00:00",
-      "source_commit": "ce7f6f9ff7f516ebbf5bae6146ebac2a6bdf569c"
+      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
+      "reviewed_at": "2026-11-02T03:51:17.914705+00:00",
+      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
     }
   }
 }

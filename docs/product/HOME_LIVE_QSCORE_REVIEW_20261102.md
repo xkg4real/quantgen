@@ -102,3 +102,5 @@ python -m unittest tests.desktop_market_chart_acceptance tests.desktop_home_live
 ## 설치본 검사 보완
 
 PR60 최초 Linux CI는 native 회귀 109개를 통과한 뒤 설치본 smoke의 기존 `stack.count()==6` 가정에서 실패했습니다. 기술지표 가이드를 독립 페이지로 옮긴 실제 7개 페이지에 맞춰 검사하고, 설치본에서도 가이드 메뉴·12행 목록·Q-SCORE 마지막 열을 검증하도록 보완했습니다. 앱 산식·공급자 요청·문서 정책의 추가 변경은 없습니다. 이 설치 검사 보완을 20종 기존 검토 범위에 대조한 뒤 기준선을 갱신합니다.
+
+Windows Python3.12 시세 검사에서는 기존 소스 검사의 `read_text()` 기본 cp1252 디코딩과 220ms 고정 화면 대기가 실패했습니다. 소스 읽기는 UTF-8을 명시하고, 실제 시세·지연 상태·차트 snapshot이 1초 내 표시되는지를 기다리도록 보완했습니다. 단독 native 시세16개 검사를 다시 통과했습니다. 런타임 산식·거래 데이터·UI 권한은 바꾸지 않는 검사 이식성 수정입니다. Linux 전체 설치본 workflow가 통과한 상태에서 최신 head의 Windows/설치본 검사를 다시 실행합니다.
