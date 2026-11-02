@@ -1,17 +1,17 @@
 ---
-status: taken
+status: returned
 reason: manual
 from: gpt
 task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a, ⑬-8/b2/c/b/b/native, ⑬-2/k/cloud-runtime, ②-5/M4-N3, ②-5/M4-N6, ②-5/M4-N11, ②-5/N11, ②-5/M3-N06, ②-5/M3-N08
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b, ②-5/N5/a
-updated_at: 2026-11-02T13:47:36.000+09:00
+updated_at: 2026-11-02T13:57:27.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/defects-priority-20261102
 work_commit: 8b4010430a9ece2a4e1b05b234abe81d3796771f
-uncommitted_changes: no; all three source branches pushed/read back and merged
+uncommitted_changes: yes; four uncommitted units copied to private recovery snapshot; two tested source branches pushed
 pr: none (previous 54/58/59 merged)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -22,6 +22,21 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 ---
 
 # QUANTGEN 직접 작업 재개 — 2026-11-02
+
+## 결함 우선 작업 부분 반환 — 2026-11-02T13:57:27.000+09:00
+- 최신 사용자 요청에 따라 [작업 로그](logs/QUANTGEN_WORK_LOG_2026-11-02_1353_KST.md)를 공개 가능한 상태·검증 요약으로 작성했다. 최종 log commit ae3568a96a22848c76febe2e621568353e13c197, blob dc7080319275ad3b2bce2c42c59bf22c89420388; 로컬 /workspace/artifacts/QUANTGEN_WORK_LOG_2026-11-02_1353_KST.md와 원격 본문 정확 일치를 확인했다. 완료/미완료/실패와 이전 13:23 인계 및 다른 세션 결과를 모두 구분했다.
+- 일부 하위 실행의 usage_limit 오류를 실제 관측했다. 계정 잔량·한도 유형은 추정하지 않고 사용자 지시에 따라 신규 구현을 중단, 이미 실행 중이던 검사 결과만 취합하고 복구 자료를 저장했다. 이번 반환은 주기 전체 완료·사용자 STOP·재승인 요청이 아니다.
+- 전략 gpt/defects-strategy-20261102 / 47805e6343b31ae4eacf51c68a2cb176a68fc82c 원격 push/read-back. N6/N9 설명, N10 ADF호환 및 N3/a·N14/a·N5/a 안내. 최종18/18합성·양UI/export/AI PASS,12×600행 페어비중/진단동일. PR/CI/main미반영.
+- 금리 gpt/defects-rates-20261102 / 524edf7867ebd06538746cde0f6d55f334923353 원격 push/read-back. M3-N09 Hull–White 미사용 회귀평균 설명,16검사PASS·엔진배열동일. PR/CI/main미반영. M3-N02는 재가중 허위손익 합성재현과설계까지만, 구현없음; N01/N03/N05진단도미구현.
+- Crypto /workspace/work/quantgen-defects-crypto-20261102 제품6파일+검사1파일 미커밋.24PASS/31.881s,가격결측·부분평가·z불가수정. 새프리미엄행한국어카탈로그·통합·CI남음. NEW-M6-21 읽기만.
+- 옵션 /workspace/work/quantgen-defects-options-20261102 미커밋7파일.담당신규7PASS와원래손익/실현vol/감마전체배열·9scalar동일보고. N7/N9표시·N4네다리호가검증구현중,최종통합/CI없음.
+- 모형 /workspace/work/quantgen-defects-models-20261102 미커밋8파일. bootstrap/replay/관측수설명 등중간상태. canonical ResearchRun 스키마확장을피하려던정리도미완성일수있어 core/research/runs.py diff부터점검. native note연결미완료. 테스트전체성공근거없음.
+- 대표 /workspace/work/quantgen-defects-20261102 AI수정9파일미커밋.24검사중23PASS/1FAIL(Fletcontainer문자열대신실제childText검사수정필요); max_tokens거부/미완성미저장/비유한null/배열절단제거/숫자참조검사/영한UI·export미검증고지. 숫자일치는의미/단위검증PASS아님. 첫기본Python import3오류도실패이력보존.
+- 6개작업트리파일/추적patch/branch/head manifest를 /workspace/work/quantgen-private-context/reports/2026-11-02/defects-priority-checkpoint-1355 에복사했다. N09/전략커밋은원격에도보존. .env/보호캐시/실제원장/동결자료접근없음.
+- 이번신규완료ID/LEDGER완료행/Notion취소선추가없음. main8b4010430a9ece2a4e1b05b234abe81d3796771f와21/67완료·46미완료유지. 원격중간소스저장을CI/병합완료로바꾸지않는다. 실제Windows/API/공급사/법률/파일럿미완료, O8 NOT_PERFORMED선택·O11조건·owner_confirmed미부여유지.
+- 다음안전시작: STATE·환경·RUN.lock·최신6문서와 execution 68ff1db0-782b-4cca-b992-31ad1bc9fd9d/task/handoff/대표branch gpt/defects-priority-20261102/source8b401043 를대조→최신CURRENT CAS+새execution/read-back. rootAI실패수정/모형미완성diff검토→위두원격커밋과Crypto/옵션패치충돌통합→정책/합성/설치/정확한head CI→승인PR병합→LEDGER/Notion하위완료. 이미완료21그룹중복금지. 새예약/run_now/사이트배포없음; 기존시간당직접작업재개조건유지.
+- 로그·CURRENT를Claude가읽을수있도록저장했으나 실제열람영수증은없다.
+
 
 검증된 같은 execution 아래 격리 하위 작업: gpt/defects-{strategy,rates,options,crypto,models}-20261102 (모두 main8b40104 시작). 대표가 CURRENT/STATE/LEDGER/Notion/원격 통합을 전담하며 하위 작업은 합성 재현과 배정된 일반 수정만 수행한다. root 브랜치에는 선택 AI 응답 완결성·전송 페이로드 검증을 진행한다. 중복 ID/파일은 통합 전에 대조하며 보호된 판정·동결 계산 변경은 제외한다.
 
