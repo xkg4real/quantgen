@@ -101,7 +101,8 @@
         "reason": "Source/document fingerprints require named consistency review after new market-data modules and dependency."
       }
     ],
-    "follow_up_branch": "gpt/kis-chart-ci-fix-20261102"
+    "follow_up_branch": "gpt/kis-chart-ci-fix-20261102",
+    "follow_up_pull_request": "https://github.com/xkg4real/quantgen/pull/57"
   },
   "limits_ko": [
     "채권은 최근 최대100 일봉, 분봉은 첨부 사양에 없습니다.",
