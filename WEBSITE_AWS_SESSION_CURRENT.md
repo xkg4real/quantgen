@@ -1,3 +1,40 @@
+# 2026-11-02 AWS 웹 HTML 갱신 완료 — 사용자 수동 적용 대기
+
+원본 ZIP을 사용자 첨부로 확보하고 인계 HTML SHA256 ce48aea0… 일치를 확인했습니다. 소개 화면·Docs20종 KO/EN을 현재 main `8b4010430a9ece2a4e1b05b234abe81d3796771f` 기준으로 갱신하고 최종 단일 HTML 검증을 완료했습니다. **운영 배포 및 공개 URL의 새 버전 확인은 아직 실행하지 않았습니다.**
+
+- 최종 HTML: `QUANTGEN-website-ready-2026-11-02.html`, 8,462,984 bytes.
+- SHA256: `b6664cd4889da06a3b47aed62ea26c61f9584bd913ff3faf80e56d25c7890656`.
+- 전달 폴더: `/workspace/outputs/quantgen-20261102`.
+- 사용자 업로드 ZIP: `QUANTGEN-AWS-upload-2026-11-02.zip` (HTML/manifest/manual_aws_upload.py/AWS_UPLOAD_KO.md).
+- 편집용 보관 ZIP: `QUANTGEN-updated-source-2026-11-02.zip`. 웹 HTML/소스는 GitHub에 올리지 않았습니다. 별도 환경에서는 사용자가 전달받은 ZIP으로 복구해야 합니다.
+- 편집 폴더: `/workspace/work/quantgen-web-redesign-20261102/QUANTGEN-website-2026-11-02`; 전체 수정 내역과 범위는 로컬 `FINAL_DELIVERY.md`에 있습니다.
+
+## 완료 및 검증
+
+정책20종/40번역의 원문·번역 hash/revision .3 갱신, main 대조 PASS. 실제 원문 변경 주입에서 양쪽 번역의 재검토 요구 PASS. 모든 정책은 preview/review-required 상태를 유지합니다. 현재 웹 Free/Pro/Ultra 초안과 이전 Research/Pro/Team Pilot 조건을 혼합하지 않았습니다.
+
+Docs40본문·표 전체 렌더링, 320px 긴 본문/표, 같은 문서 언어 전환·직접 URL·새로고침·하단5링크·키보드·없는 번역/미지원 언어 안내 PASS. 한영/테마/6폭의 168 경로, 차트64조합, 삽입자산66개의 UTF-8 바이트 일치 및 SVG 글자 영역 검사가 PASS입니다. 기존 연구8경로·seed 변경 재계산·입력/언어/테마 유지도 PASS; 검사 중 브라우저 예외·외부 자산 요청 0입니다.
+
+기존 #lab/#gate/#strategies 등은 원문을 보존한 영어 교육 연구 데모로 열립니다. 원본 source SHA d3dcc4f48dd2355fc7e748f30b75135992043a0e9933dc13f40d7355d624ca02를 별도 iframe에 보존했고 계산 엔진은 바꾸지 않았습니다. 프레임은 scripts/forms만 허용하고 same-origin과 외부 연결/폼 전송은 막습니다. 한글 차트 인코딩, 중첩 HTML의 script 문법, 모바일 긴 문자열, 테마 변경 시 스크롤·Auto 유지 문제를 수정했습니다. 기존 브랜드/글꼴/차트69자산은 ZIP과 같습니다.
+
+마지막 조회한 PR61은 OPEN/head `4e17087b1de5dfc01e5f03485088c316f22b0710`입니다. 작업 중 추가된 종목 재무표·Pretendard 변경도 확인했으나 대응 웹 Q-SCORE 목록이 없어 실시간 표를 만들지 않았고 기존 웹 글꼴을 보존했습니다. 정책은 현재 main 기준이며 미병합 PR을 적용 완료로 표시하지 않습니다. main이 바뀌면 원문/번역 재검토 검사를 다시 실행해야 합니다.
+
+## 운영 반영과 남은 범위
+
+AWS_UPLOAD_KO.md: AWS Console 로그인 → Sydney CloudShell → ZIP 업로드/해시 검증 → stage → 공개 미리보기 확인 → apply(백업/원자 교체) → 공개 URL 확인 → 필요시 rollback 순서입니다. 실제 AWS 호출0회; 수동도구의 로컬 안전검사8개 PASS입니다.
+
+기존 quantgen 인증은 만료 상태이며 최신 origin 소스 재조회는 미완료입니다. apply는 검토한 기존 원본 SHA와 현재 index가 다르거나 staging 이후 바뀌면 거부합니다. 운영본 백업은 /var/backups/quantgen-manual/<전송 ID>/index.html, 대상은 /usr/share/nginx/html/index.html입니다. 새 버킷·IAM·액세스 키 없이 기존 SSM을 사용합니다.
+
+확인 예정 URL: https://quantgeneration.com/?lang=ko#/ , https://quantgeneration.com/?lang=en#/docs/privacy-policy , https://quantgeneration.com/#lab . 아직 이 최종 HTML의 공개 배포 확인 URL로 집계하지 않습니다.
+
+Login/Sign Up·문의·결제 백엔드는 미연결이며, 회원 인증 후 실제 웹 연구 서비스를 제공하는 단계는 별도 미완료입니다. 공개 정책 프리뷰는 법률/시행 승인이 아닙니다.
+
+공유 인계 기록만 갱신했습니다. 메인 CURRENT/LEDGER/AUTO_STATE 소유권과 앱 저장소는 변경하지 않았습니다.
+
+
+<details>
+<summary>이전 사전 점검 및 역사 기록</summary>
+
 # QUANTGEN 웹사이트 AWS 재개 점검 — 2026-11-02
 
 확인 시각: 2026-11-02T13:37:00+09:00
@@ -109,5 +146,7 @@ main의 02/03/10 문서는 Research 월29,000원 / Pro 월59,000원 / Team Pilot
 ## 인계 방식
 
 사용자가 지정한 QUANTGEN 메인세션을 실제 thread 목록에서 확인했고, 해당 세션이 읽고 있는 `handoff/WEBSITE_AWS_HANDOFF.md`에 이 회신 링크를 연결했습니다. 이 자료를 UI_SESSION_CURRENT.md와 함께 통합 인수인계에 포함하세요. 공유 GitHub 보존/패널 연결과 메인 에이전트의 열람 확인은 구분합니다.
+
+</details>
 
 </details>
