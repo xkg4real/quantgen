@@ -1,3 +1,11 @@
+# 2026-11-02 AWS 최종 HTML 준비 완료 — 운영 미반영
+
+[최신 AWS 결과·검증·적용 안내](WEBSITE_AWS_SESSION_CURRENT.md)를 확인하세요. 사용자 첨부 ZIP을 복구했고 한영 Docs20종/40번역을 main 8b40104 기준으로 갱신했습니다. 168 화면 경로·64 차트 조합·기존 연구 경로/재계산 검증이 통과했습니다.
+
+최종 파일 `QUANTGEN-website-ready-2026-11-02.html` (8,462,984 bytes), SHA256 `b6664cd4889da06a3b47aed62ea26c61f9584bd913ff3faf80e56d25c7890656`. 사용자 수동 AWS 업로드용 ZIP·백업/복구 명령을 제공합니다. 로그인/문의/결제 백엔드와 실제 배포·공개 URL 확인은 미완료입니다. HTML/웹 소스는 GitHub에 게시하지 않았습니다. 아래 이전 사전 점검의 원본 미확보 상태는 해결됐습니다.
+
+---
+
 # 2026-11-02 AWS 수신 확인 — 사용자 업로드용 HTML 준비
 
 최신 AWS 점검은 [WEBSITE_AWS_SESSION_CURRENT.md](WEBSITE_AWS_SESSION_CURRENT.md)를 참조하세요. 사용자 지시로 웹 후속 작업을 재개했으며 최종 전달물은 직접 업로드할 단일 HTML입니다.
