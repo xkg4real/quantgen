@@ -1,3 +1,15 @@
+# 2026-11-02 AWS 수신 확인 — 사용자 업로드용 HTML 준비
+
+최신 AWS 점검은 [WEBSITE_AWS_SESSION_CURRENT.md](WEBSITE_AWS_SESSION_CURRENT.md)를 참조하세요. 사용자 지시로 웹 후속 작업을 재개했으며 최종 전달물은 직접 업로드할 단일 HTML입니다.
+
+- main `8b4010430a9ece2a4e1b05b234abe81d3796771f` 원문 20종을 확보했고 기존 HTML 기준 이후 정책14종 변경을 확인했습니다. PR61은 조회 당시 OPEN / `5b52e3dd041b39c020b4e862f807c4a1a322eb82`입니다.
+- 지정된 redesign 폴더·HTML·ZIP은 AWS 환경에 없으며 다른 UI 스레드 파일 조회도 연결되지 않았습니다. 사용자에게 이미 전달된 ZIP의 접근 가능한 링크를 요청했습니다. 원본 확보 전 새 사이트를 임의로 재작성하지 않았습니다.
+- MCP 호스트 허용·TLS 응답은 확인했으나 기존 AWS 인증은 만료됐습니다. 현재 origin 재대조 미완료입니다.
+- 최신 사용자 지시 Free/Pro/Ultra와 main 정책의 Research/Pro/Team Pilot 조건 차이를 기록했습니다. 기존 상품의 VAT·갱신·인원 조건을 새 상품으로 임의 이식하지 않습니다.
+- 새 HTML 구현/프리뷰/실제 적용/배포 후 URL 검증은 아직 미완료입니다. 이전 UI 세션의 완료 검사를 이번 갱신본 완료로 집계하지 않습니다.
+
+---
+
 # 2026-11-02 앱 PR61 — 압축 목록과 Q-SCORE 소개 후속
 
 [PR61](https://github.com/xkg4real/quantgen/pull/61)은 Home 중복 차트 버튼 제거, 44px 표 행, Q-SCORE 열 제목 옆 접근 가능한 ? 도움말, 한영 설명·글꼴 위계와 안전한 공급자 오류 안내를 구현합니다. 현재 로컬 구현/검증 완료, 최종 main 통합·CI·병합 대기입니다.
