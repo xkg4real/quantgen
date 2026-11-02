@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "b832c08e3b85f4ea1479252609e30b4a4ab84d07f990fe64fadec4135b2cacd7",
+    ".github/workflows/runtime-smoke.yml": "94e1a5ffad08735cbcf8ecb87c80b31c74d55fe344376914f2b3497616589274",
     "README.md": "3d5109bbf91644ca6dcddd4ff609d72f1819c0e54d0a8eac2b75ddd4e244e54e",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -226,12 +226,12 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "b307a5163c7360cfe0a9bdb2e066d22d5a02b1033c7a26da60c65953e903e252",
+    "docs/compliance/FACTS.md": "7407d29536577188a9ed0b311d479b66ddd89502835391364c274f0574521719",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "fe76f5dc8fb85e691d1c33140a1b01481d8ba851c43398ac99b00effbf981fe8",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
-    "docs/product/APP_ACCEPTANCE_2026-11-02.md": "46e175f8ab14b79320aba4a400cd20e6ffd72930b430ba5f5e566ee4a45a8a4c",
+    "docs/product/APP_ACCEPTANCE_2026-11-02.md": "9cdbd4ebd67320a584e26a4bd05625e39c3cb2f689090aaaa362d4c0c962cbe4",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
     "docs/product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md": "469c32828b75b54797bf1ac81a8645688452bce5f0cf7c69132e7236f96f8e59",
     "docs/product/BS21_FUNDING_2026-10-30.md": "a8060c8d57b2532eed9b06c429a97568c77a3ba3c9e0370f273e1d3ac9bc8c4d",
@@ -272,36 +272,36 @@
     "pyproject.toml": "a2e189e9e506fb72cd2e3cddc089a3ac011b47362face10d15714bdb91402844",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "faf72d902d98407c6f0a4d3b0b2662f6f56bd2691521e4ce6ddba1529b2b0444",
+    "quantgen_desktop/app.py": "2e32e6626cd29eb4afd465312cc5ad911536059c830d5ed341763ff4c6908d78",
     "quantgen_desktop/bonds.py": "98e50ea1a2040e420fb783a457dd615e005522da56dc94ef86bfbd01fc254e3f",
     "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
-    "quantgen_desktop/chart_study.py": "031c70ef5b77a65f683b1de38fd6c91038a0a469f49414405a5272dc1587cc96",
-    "quantgen_desktop/charts.py": "abc3382ca861b9e7ed0c876ee0bf7cc47ece79c6a1964f5f026702ebbb7adbb7",
+    "quantgen_desktop/chart_study.py": "bf42039d26a21117548c30cb72ddd4bb6dc60cf8ed527d3c614c0c6ffd54c7ba",
+    "quantgen_desktop/charts.py": "26664a81b31a256b77f70fc8adca76f51a763560cf33e1f2d556b527b41cbdf8",
     "quantgen_desktop/commentary.py": "4b5d02a17b5621db28c24a3f54a37106837239d7fe55aa7f376e677f80d0845f",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
-    "quantgen_desktop/display_prose_catalog.py": "d0c47ebfd0752bb9013fb1f437c77a3f31ffcbca1995eed81276ab82933ef9a2",
+    "quantgen_desktop/display_prose_catalog.py": "f9575d1c8545a6e9b2e338cb595d901054c3125f5339d6724c6109a62f4cb8a8",
     "quantgen_desktop/fx.py": "c57c76ab44edc66bfd4451e6b75abf7d92ba38806cbfc8685c8cba3c287322d9",
     "quantgen_desktop/fx_narrative.py": "caec5b4b3a62b50c358f329c75e0ebab951ac783eab1a87d0c61883e127f50f8",
     "quantgen_desktop/indicator_guide.py": "c613421bd6e0ac16e35addb14537a0908206f8eb98c3dafcbb6a59ffb9e8fee6",
     "quantgen_desktop/jobs.py": "2a0764c9c4f767a2c93d49b0fe929a1ad655d2195acc0c9a371f6229a1aa5ac1",
     "quantgen_desktop/localization.py": "2927801b702787e2c962319693e4dd1f6db4ecc9543c5e23e2d757ea9c0b1fb1",
-    "quantgen_desktop/macro.py": "3e5ba9b57a5898dfb19cfb6a67ebe45128ce96be93fbe46fd1fdb0b90cc8428b",
-    "quantgen_desktop/macro_narrative_language.py": "a37490d06d169009fc52156beb4dbc7b0566aa9af4bb88e366a094a86dd41380",
+    "quantgen_desktop/macro.py": "b8933483ead3e3e12f13c7e5581741336000d81e8719b1d3b1092ab57232c2b3",
+    "quantgen_desktop/macro_narrative_language.py": "4a39ff7e9ef3583d803bc25f899737194186d15a3311d5d7d0e4f0cb0b45803c",
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
     "quantgen_desktop/market_narrative_language.py": "2706979b574f9a3455dc1d3867879a4f1d3089c59cbfb01066570c718158e9ac",
     "quantgen_desktop/market_tools.py": "9321e3f64ee17162b150eb7a860c5807a918ce309cc49c9f2a03793f4d19afa2",
-    "quantgen_desktop/model_narrative_language.py": "9d513c0ceac5ab4d10dce7ab6e731598a8ae3eeb9f3765710f63e35ba838078d",
+    "quantgen_desktop/model_narrative_language.py": "9812925b5fdaaca831788782444449156d26bf643a7737fad60eddb0bdb42e11",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
     "quantgen_desktop/rates.py": "f98d6db2d305ee12264c7a758af8a9951b2b9bb6a27686c4a0a29cc215038ddf",
     "quantgen_desktop/rates_narrative.py": "ba72992fba5226961c7d6f7cd6c58009677f629fa4cf617a712b6d564d024f0e",
     "quantgen_desktop/report_actions.py": "fbf48c2350434f8c4e953fd1efd99ed666f60e74e6da5154bb529a43ec50115d",
-    "quantgen_desktop/signals.py": "64740d7d06d9bfeced6d8f0f7ceaa700e34e65a373a90a70ce9f6b66fbd07333",
+    "quantgen_desktop/signals.py": "ae9a3eb8f1cb491facbc0df37c162b728211716b7f74e4cdf1b30f24e04fce26",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "fdd1b9ace2fdf3395704ad138b6d0fa8fbbfe1036f6c7cab8bbbdc3ae5aaf312",
-    "quantgen_desktop/tools.py": "58ab23031f9166b58b53bb03bfa9ed13e3c9f4d16392f4b368d9b295138ab4eb",
+    "quantgen_desktop/tools.py": "d5fe5dada5e1860ea92b2826b7f36136babc91faba225bede59d8455de2b33df",
     "quantgen_desktop/translations.py": "a0b0d3950fc34b59f6478b315ffdb7d0b0c69ac422e2255b24c25aac54b6f4d2",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
     "requirements.txt": "97e8ce656440d83cc9bbbd3bd157645ee0a1c4841fe7ef7a5eb917fdba170129",
@@ -319,7 +319,7 @@
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_acceptance.py": "a6f7da6c1c95e52940f32af4c0a82d1653faa9e827cef380cdd760203dd7a9a9",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
-    "tests/desktop_authored_prose_language_acceptance.py": "9c1a68998200b353e72515f21dbcb4a5186b6825f8d8c9a57c384c83a404181e",
+    "tests/desktop_authored_prose_language_acceptance.py": "b32c911300a13b2e7e3fd5a25c88499188234c8e7ecc08e53de5ef9f94120a75",
     "tests/desktop_bonds_portfolio_language_acceptance.py": "8429bf7fcb8b9ab8c0ed306052135f2afc0501247c51a1c5fabb68ad8e9c319b",
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "3f3c0ee0e38d946647a7ae2448af8d0496c2dea779a81be4cfd8734b84a61834",
@@ -331,13 +331,14 @@
     "tests/desktop_letf_disclosure_acceptance.py": "f70b5bfffb5562aa1f08a7f2417769adb7e91a926816b494c48f4045a79c19f4",
     "tests/desktop_letf_index_acceptance.py": "a5bc0f194c44d154dfbab81dccc4661f0ddade92ba34c906ed5172de7d60e664",
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
-    "tests/desktop_macro_language_acceptance.py": "b6b4317168774d897f8754020ad6179eb514abad8a34d96f6ed8b018c03b852c",
+    "tests/desktop_macro_language_acceptance.py": "916fc1c1d5620d9cc58b674084b2a30aa3f65512e1a2b9c7f73236f459ac3832",
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_rates_language_acceptance.py": "506bb6fdd48bf13a00f509eba198260a9961522892295309360025be2b4c45c0",
+    "tests/desktop_responsive_tools_acceptance.py": "9adf483ecda78e710b923f1b4dcce1e10c3537ac4295c8f18ef37988e1e0fe80",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
@@ -484,163 +485,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4c9561c2b4764f28c763b9d956df2bd6def8517226636322cea0c4652126cee4",
-      "source_digest": "8a1b713c9932d7d0e6c53ab1529280c77780763b5652a2ca9fa55fdd144b26dd",
+      "source_digest": "0947bf01acfd833cd1d6ef7e508ba6cc7f300ffd54d93cb971516853661329fc",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.004546+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.846205+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "2": {
       "document_sha256": "8a8915a728f0bd28f95fa46082cde5efd96739cb14bf69e69ad9205841c6cbe0",
-      "source_digest": "8a1b713c9932d7d0e6c53ab1529280c77780763b5652a2ca9fa55fdd144b26dd",
+      "source_digest": "0947bf01acfd833cd1d6ef7e508ba6cc7f300ffd54d93cb971516853661329fc",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.007714+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.848841+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "954b455762937200ee251262c73c3ad3c54190525a6d29dc6ed062e8ccb8c852",
+      "source_digest": "1fe05824059cbbf0e7e2d0d1a93c153439f0a5c8bdd7366b98a79323aafbe246",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.009752+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.851745+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "4": {
       "document_sha256": "7d0f3373b9815cd9db634f28323c8c90bc7e78cd09cf40d757e98adfc3ac1dd7",
-      "source_digest": "77de800cf69384cc1821a8fe1cb7e427e03898a628b649a2b50ce28e8aa50651",
+      "source_digest": "202b8f36b95d27a51afd2ffc49ffc63aa651b78509ca158d367a95ccdb793151",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.012195+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.856942+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "dfb7d11144b5ff49dccd83f79eb89bf0ada8e498302283cfd4db3a6d5e2e9f99",
+      "source_digest": "76460be164758237e764f2c12e372be0da34a4f7160a5677094ad8fd096fddb3",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.014627+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.859895+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "6": {
       "document_sha256": "fae1be1112448c78bde79274a691143bdadcb4623853f26798735cf71b20973a",
-      "source_digest": "c3733fcbb28b73373ed28ab27b62aac9cb5a68df0553c8339e2726592aae007a",
+      "source_digest": "e452b95adbd08266aa0c00106f8a88b605fe63722acb6fdba27ddb54b5aa511b",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.016604+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.862112+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "7": {
       "document_sha256": "d255a134f4e97cd65a7b3a4676b26a0f6e655e823ab23f971d477235df751931",
-      "source_digest": "8a1b713c9932d7d0e6c53ab1529280c77780763b5652a2ca9fa55fdd144b26dd",
+      "source_digest": "0947bf01acfd833cd1d6ef7e508ba6cc7f300ffd54d93cb971516853661329fc",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.018730+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.864367+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "8": {
       "document_sha256": "06dbba68f23aa6e2aec1125b031a7486b863296ec51a15481a893ea62253f232",
-      "source_digest": "c3733fcbb28b73373ed28ab27b62aac9cb5a68df0553c8339e2726592aae007a",
+      "source_digest": "e452b95adbd08266aa0c00106f8a88b605fe63722acb6fdba27ddb54b5aa511b",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.021796+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.866529+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "9": {
       "document_sha256": "81e96f0f623036ca1b290ddf8508a9ff8e6cc8b0fca380a939abc529a4dfb747",
-      "source_digest": "ed1135aac5d4978a6ae6a17fe2c52f457cbf2d326bf4ec65622e43d15522ba1c",
+      "source_digest": "76059da69fc9523e9b3eec0cac8fc6476bf14227ab4f0cd25597b37ed00761a6",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.024605+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.869105+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "10": {
       "document_sha256": "9b4f832a3c5363e29f704dbf3f3f89bf13aef9be27298cd14b8d3fe4533685cb",
-      "source_digest": "868cfde1bf565c663e4ca53438c9c5e8fa2a66562f3ecd609a6a0e700b2fc462",
+      "source_digest": "dddc7d90677bb588ee948a7d98fcd4b864517eb969e3281f4e379a17fb122e80",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.026507+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.871165+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "d76922017898ed7c3c6e2f46192c82e63f13ed85c82355eb78e7ab2cc469f6b2",
+      "source_digest": "d002252d8fadb4e9ed3f6be4dd2494ce1d469154bf826f7740699f318535ccb2",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.028389+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.874148+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "12": {
       "document_sha256": "7f3aed235693c66f0f32fc3c62a988658dadbea65f2c314ccc111d06c8c2d675",
-      "source_digest": "5ba602e4caa9f69a80ca02e700d45f7b385b5d33c1bfb2f0223c4ca1e3069de8",
+      "source_digest": "a6ac1a0727ebb84fe365e8b0e5620e41bfc4846090c848c404d324b0c8822114",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.030212+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.876861+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "13": {
       "document_sha256": "1ae2381d67147472a0b3a8b89ccf44d493925ad72430091bd67376635d137186",
-      "source_digest": "ed1135aac5d4978a6ae6a17fe2c52f457cbf2d326bf4ec65622e43d15522ba1c",
+      "source_digest": "76059da69fc9523e9b3eec0cac8fc6476bf14227ab4f0cd25597b37ed00761a6",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.033244+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.879498+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "14": {
       "document_sha256": "b955cd3fbada10bf18fc428f54264fbed7623176c9e4ac19b5307c3531affd74",
-      "source_digest": "ed1135aac5d4978a6ae6a17fe2c52f457cbf2d326bf4ec65622e43d15522ba1c",
+      "source_digest": "76059da69fc9523e9b3eec0cac8fc6476bf14227ab4f0cd25597b37ed00761a6",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.035444+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.882079+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "15": {
       "document_sha256": "926245ec0903d7f5fb0759e513e010154ff32bd2db6df3a95b816cce610b6e65",
-      "source_digest": "ed1135aac5d4978a6ae6a17fe2c52f457cbf2d326bf4ec65622e43d15522ba1c",
+      "source_digest": "76059da69fc9523e9b3eec0cac8fc6476bf14227ab4f0cd25597b37ed00761a6",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.037464+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.884718+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "1d3e56ec835249c0f2dee6b8df7b6b8cd6067953502891f8f4b87286f65d0f9d",
+      "source_digest": "2456adeda71e6714fa71b99a480eb52f3fb2e3823eceb54d4f9b0750e0edeefa",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.039408+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.887736+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "c3733fcbb28b73373ed28ab27b62aac9cb5a68df0553c8339e2726592aae007a",
+      "source_digest": "e452b95adbd08266aa0c00106f8a88b605fe63722acb6fdba27ddb54b5aa511b",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.041540+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.890538+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "8a1b713c9932d7d0e6c53ab1529280c77780763b5652a2ca9fa55fdd144b26dd",
+      "source_digest": "0947bf01acfd833cd1d6ef7e508ba6cc7f300ffd54d93cb971516853661329fc",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.044663+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.893098+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "19": {
       "document_sha256": "550ebe0e687e42986c399f50bf2fb9da524c3e6bc53df0437f48c63a672d03e9",
-      "source_digest": "c19718d52e031c248dc65bd045357ee8cdb0c5ddca4665f427df3c798684562b",
+      "source_digest": "b15eba050d54b16bcf8e3f9b62d079c98f662ad7c66ac4e631c51289b0f695ec",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.046812+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.895101+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     },
     "20": {
       "document_sha256": "40c60347005959a09fc475243ffb06f7571203892a39137e471f5a2bea9c7c11",
-      "source_digest": "8a1b713c9932d7d0e6c53ab1529280c77780763b5652a2ca9fa55fdd144b26dd",
+      "source_digest": "0947bf01acfd833cd1d6ef7e508ba6cc7f300ffd54d93cb971516853661329fc",
       "reviewed_by": "Codex",
-      "review_note": "2026-11-02: reviewed all 20 policy documents against native display-only authored translations, malformed QSettings locale recovery, bounded Flet/installed-wheel acceptance and verified-wheel artifact retention. Existing processing, providers, canonical records, prices, data rights and review-required/BLOCKED remain unchanged. Reconciled historical distribution review with README owner commercial decision; no legal or operational clearance.",
-      "reviewed_at": "2026-11-02T02:17:05.048949+00:00",
-      "source_commit": "354343edb0b9e0bdcdf63f7c0dd2fcaf3581ee74"
+      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
+      "reviewed_at": "2026-11-02T02:34:47.897808+00:00",
+      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
     }
   }
 }

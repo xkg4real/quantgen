@@ -33,6 +33,11 @@ LETF only: leave rates blank for the zero-rate reference. Scenarios require fund
 Funding term|펀딩 항
 Dividend term|배당 항
 First-period expected coupon · p.a.|첫 기간 예상 쿠폰 · 연율
+strong bullish|강한 상승 우위
+bullish|상승 우위
+neutral|중립
+bearish|하락 우위
+strong bearish|강한 하락 우위
 Detail|상세
 Leg|구성요소
 Rationale|근거

@@ -20,6 +20,10 @@ PAIRS = {
     'risk-on': '위험 선호', 'risk-off': '위험 회피', 'neutral': '중립',
     'strong': '강세', 'weak': '약세', 'range': '횡보',
     'rising': '상승', 'falling': '하락', 'stable': '안정',
+    'UST 2y': '미국채 2y', 'UST 10y': '미국채 10y', 'UST 30y': '미국채 30y',
+    '10y real (TIPS)': '10y 실질금리 (TIPS)', '10y breakeven': '10y 기대 인플레이션',
+    'Fed funds': '연방기금금리', 'Broad USD': '광의 USD 지수',
+    '10y note future': '10y 미국채 선물', 'Gold': '금',
     'Rate and spread changes are in bp; other changes use their original units. These descriptions do not change validation gates or positions.':
     '금리·스프레드의 변화는 bp, 다른 지표의 변화는 원 단위입니다. 분류는 설명용이며 검증 게이트나 포지션을 바꾸지 않습니다.',
 }
@@ -27,6 +31,13 @@ PAIRS = {
 
 def word(value):
     return PAIRS.get(value, value)
+
+
+def indicator_caption(row):
+    """Localize only the exact caption paired with a registered indicator ID."""
+    from core.ficc.macro import INDICATORS
+    known = {item.id: item.label for item in INDICATORS}
+    return word(row.label) if known.get(row.id) == row.label else row.label
 
 
 def summary_korean(text):
@@ -94,7 +105,7 @@ def macro_korean(output):
         ]
         if s.rows:
             row = max(s.rows, key=lambda x: abs(x.z_1y))
-            lines.append(f'가장 크게 이탈한 지표는 {row.label}: {level(row)} ({where(row)})입니다.')
+            lines.append(f'가장 크게 이탈한 지표는 {indicator_caption(row)}: {level(row)} ({where(row)})입니다.')
         if s.synthetic_ids:
             ids = ', '.join(s.synthetic_ids[:6]) + (', ...' if len(s.synthetic_ids) > 6 else '')
             lines.append(f'전체 {len(s.rows)}개 중 {len(s.synthetic_ids)}개 행이 합성(SYNTHETIC)입니다 '
@@ -117,10 +128,10 @@ def macro_korean(output):
         ]
         if by_day:
             lines.append('하루 변동이 가장 큰 지표: ' + '; '.join(
-                f'{x.label} {chg(x)}, 최근값 {level(x)}' for x in by_day) + '.')
+                f'{indicator_caption(x)} {chg(x)}, 최근값 {level(x)}' for x in by_day) + '.')
         if by_z:
             lines.append('직전 연간 분포에서 가장 크게 이탈한 지표: ' + '; '.join(
-                f'{x.label} ({where(x)})' for x in by_z) + '.')
+                f'{indicator_caption(x)} ({where(x)})' for x in by_z) + '.')
         if s.synthetic_ids:
             lines.append(f'주의: {len(s.synthetic_ids)}개 시계열은 합성(SYNTHETIC)입니다.')
     else:

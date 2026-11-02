@@ -1,7 +1,8 @@
 """Native context-only technical signals; no live book or order connection."""
 from core.research.signals_analysis import SignalsRequest
 from .tools import ToolPane, number, fmt
-from .model_narrative_language import signals_variants, localize_columns
+from .model_narrative_language import signals_variants, localize_columns, localize_cell, SIGNAL_STANCES
+from .translations import translate
 
 
 class SignalsPane(ToolPane):
@@ -28,7 +29,14 @@ class SignalsPane(ToolPane):
         self.text(original, localized={'en': ('Synthetic data · ' if h.source == 'SYNTHETIC' else '') + origin,
                                        'ko': original})
         self.result_table('Composite',['Score · -100…100','Stance'],[[f'{r.composite:+.2f}',r.stance]])
+        if r.stance in SIGNAL_STANCES:
+            localize_cell(self.tables['Composite'], 0, 1)
         self.bars('Component scores · -100…100',[(c.label,c.score) for c in r.components],limit=100)
+        authored = {'trend50': 'Price vs 50-day SMA', 'trend200': 'Price vs 200-day SMA',
+                    'momentum': '3-month momentum', 'vol': 'Volatility regime'}
+        self.charts['Component scores · -100…100'].localized_labels = {
+            index: {'ko': translate(c.label, 'ko')} for index, c in enumerate(r.components)
+            if authored.get(c.key) == c.label}
         self.result_table('Signal components',['Component','Signed score','Weight','Observed value','Reason'],
             [[c.label,f'{c.score:+.2f}',fmt(c.weight,'pct'),c.value,c.reason] for c in r.components])
         localize_columns(self.tables['Signal components'], (0, 4))

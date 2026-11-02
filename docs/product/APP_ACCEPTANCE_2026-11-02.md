@@ -19,6 +19,15 @@ worker with injected synthetic prices, locale/theme switching, preference repair
 and JSON/ZIP export roundtrips. The canonical run keeps `verdict=NOT_RUN` and
 synthetic provenance. Network and protected paths are blocked.
 
+`tests.desktop_responsive_tools_acceptance` reproduces switching away from a
+large result, returning to Macro and resizing Signals from wide to narrow and
+back in both languages. The selected Markets/Risk tab determines its own size;
+inactive tools no longer force horizontal clipping or stretch Macro input
+labels. ChartStudy measures wrapped commentary at its actual available width.
+Local offscreen captures cover ETF, Signals, Structuring and Macro in English
+and Korean at 1440px and 1000px. These are renderer checks, not physical-device
+or assistive-technology acceptance.
+
 The runtime workflow repeats the bounded checks on its declared Windows and
 Ubuntu matrix. A green job now retains only its allowlisted, verified wheel for
 seven days under **Actions → Runtime packaging smoke → Artifacts → QUANTGEN-wheel**.

@@ -7,9 +7,25 @@
   "website_url": "https://quantgeneration.com/",
   "source_pr": "https://github.com/xkg4real/quantgen/pull/54",
   "source_branch": "gpt/remaining-work-20261102",
-  "source_commit": "027fddf1ce1fefbbd5e78bdc2dd0030cd85e8a68",
-  "summary": "Native authored model/Macro descriptions and selected table captions follow Korean/English selection. Malformed persisted locale values use the existing usable English fallback. Inputs, numbers, canonical verdicts and original exports are preserved.",
-  "files": ["core/i18n.py", "quantgen_desktop/translations.py", "quantgen_desktop/display_prose_catalog.py", "quantgen_desktop/market_narrative_language.py", "quantgen_desktop/model_narrative_language.py", "quantgen_desktop/macro_narrative_language.py", "quantgen_desktop/market_tools.py", "quantgen_desktop/signals.py", "quantgen_desktop/strategy.py", "quantgen_desktop/structuring.py", "quantgen_desktop/macro.py"],
+  "source_commit": "c2bf6363675ee2a4248507f0c6ee690fa93fc4a4",
+  "summary": "Native authored model/Macro descriptions, registered indicator/chart captions and Signals stance labels follow Korean/English selection. Selected tabs and wrapped narration fit narrow windows without stale Macro whitespace. Malformed locale startup remains repairable. Canonical data, original reports and calculations are preserved.",
+  "files": [
+    "core/i18n.py",
+    "quantgen_desktop/translations.py",
+    "quantgen_desktop/display_prose_catalog.py",
+    "quantgen_desktop/market_narrative_language.py",
+    "quantgen_desktop/model_narrative_language.py",
+    "quantgen_desktop/macro_narrative_language.py",
+    "quantgen_desktop/market_tools.py",
+    "quantgen_desktop/signals.py",
+    "quantgen_desktop/strategy.py",
+    "quantgen_desktop/structuring.py",
+    "quantgen_desktop/macro.py",
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/tools.py",
+    "quantgen_desktop/chart_study.py",
+    "quantgen_desktop/charts.py"
+  ],
   "website_impact": "Native display changes; shared locale fallback and Flet route acceptance. Legacy Flet narrative parity requires separate implementation review.",
   "actions_for_aws": [
     "Check whether the website imports QUANTGEN core/i18n.py before applying the locale fallback; an introduction-only site may be not applicable with source evidence.",
@@ -17,14 +33,18 @@
     "Keep native implementation, website application and deployment statuses separate. This record authorizes no new AWS or live deployment operation."
   ],
   "verification": {
-    "focused": "17 production-catalogue language/startup tests PASS, including numeric/source/report preservation and no recompute on locale change.",
+    "focused": "32 combined final native layout/locale/chart/startup checks PASS; includes wide-narrow resizing, tab transitions, known/unknown caption boundaries, same inputs/numbers/reports and no recompute.",
     "source": "130 bounded source/Flet tests PASS, including 19 real routes across locale/theme/width.",
-    "installed": "Allowlisted wheel installed outside checkout: Flet/Home and native six routes, synthetic worker, locale/theme, preference repair and JSON/ZIP exports PASS on Linux.",
+    "installed": "Initial PR54 wheel Linux installed tests passed before the responsive follow-up; final combined wheel must be verified by current-head CI.",
     "documents": "47 policy/export tests PASS; consistency PASS, publication BLOCKED.",
-    "ci": "Inspect current PR head Windows/Ubuntu results; pending at record creation.",
+    "ci": "Initial efd9b0c runtime41377093005 and compliance41377093014 succeeded across declared matrix. Follow-up c2bf636 final-head CI must be checked separately.",
     "user_windows": "NOT_RUN"
   },
-  "delivery": {"status": "queued", "reason": "No supported send tool for the exact existing destination chat.", "receipt": null},
+  "delivery": {
+    "status": "queued",
+    "reason": "No supported send tool for the exact existing destination chat.",
+    "receipt": null
+  },
   "website_application": "unverified",
   "website_deployment": "unverified"
 }

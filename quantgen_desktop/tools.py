@@ -1,8 +1,8 @@
 """Shared native form and result widgets for the FICC tool panes."""
 from .translations import display
 import math
-from PyQt6.QtCore import pyqtSignal
-from PyQt6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QPushButton, QStackedWidget, QVBoxLayout, QWidget
+from PyQt6.QtCore import pyqtSignal, Qt
+from PyQt6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QPushButton, QStackedWidget, QVBoxLayout, QWidget, QSizePolicy
 from .charts import LineChart, SignedBars
 from core.ficc.common import FICCError
 
@@ -36,7 +36,9 @@ class ToolPane(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 12, 0, 0)
         layout.setSpacing(18)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.input_box, inner = panel(title)
+        self.input_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         top = QGridLayout()
         self.tool, self.source = QComboBox(), QComboBox()
         for key, text in tools: self.tool.addItem(text, key)
