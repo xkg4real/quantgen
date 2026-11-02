@@ -1,3 +1,23 @@
+## 최종 앱 완료 — PR61·PR62 main 반영 / 인수인계
+
+- PR62 https://github.com/xkg4real/quantgen/pull/62 — **MERGED**, main merge **30a2a81c05cc825fe4a551d6c9700795d265fa26**. 검증 head398ebe39281693237f50892c88e016c6c7a58ca4.
+- 최종 Runtime **41398755386 SUCCESS**, Compliance **41398755349 SUCCESS**. Windows3.11/3.12/3.14 및 Ubuntu3.12 설치본 전체 검사, Windows3.10/3.11 구문 검사 통과. 실제 KIS 장중/사용자PC 수동 확인을 대신하지 않습니다.
+- 조회→자동연결·갱신, 5종 지표 전체 클릭/키보드 선택·유지, 수신 틱/초봉, 한영 읽기 설명, 복수지표의 하단 겹침 수정까지 완료했습니다. 실제수신1/10/100틱·1/5/10/30초이며 과거 체결을 만들지 않습니다. 이전 PR61의10열·44px표/Q-SCORE도움말/새글꼴도 main입니다.
+- 앱 UI 변경 큐 PR61/PR62는 MERGED/SUCCESS로 기록했습니다. 최종 source tree65954ab6f4ff929ca61b36695a5454c6c34d53c5와 로컬복구본9bbcfab 동일 확인. 새환경에서33native/66core/17Flet/47정책 검증,20문서529소스PASS(중복합산금지).
+- 사용자 실행: 앱을 닫고 QUANTGEN 폴더의 CMD에서 아래 두 줄을 각각 실행합니다. 이미 설정된 .env를 유지합니다.
+
+```cmd
+for /d %G in ("%LOCALAPPDATA%\GitHubDesktop\app-*") do @if exist "%G\resources\app\git\cmd\git.exe" set "QG_GIT=%G\resources\app\git\cmd\git.exe"
+"%QG_GIT%" --no-pager pull --ff-only origin main && .venv\Scripts\python.exe -X utf8 -m quantgen_desktop
+```
+
+앱에서는 시장→종목/봉주기→조회/새로고침. 기술지표 버튼을 다시 누르면 해제됩니다. 틱/초봉은 연결 후 첫 실제 체결을 기다립니다.
+
+- 웹 후속은 별도: 최신 HTML/Docs/글꼴 반영과 요금 초안·정책 불일치 정리 및 실제 AWS 배포는 남아 있습니다. 이전 HTML/ZIP은 현 환경에 없고 기존 전달본/AWS 보존본을 사용합니다. AWS용 프롬프트 본문은 WEBSITE_AWS_HANDOFF에 보존했습니다. 웹 HTML GitHub 게시/로그인 재요청은 하지 않았습니다.
+- 메인·Claude용 공유 기록 저장 완료. 직접 채팅 전송 도구가 없어 수신/열람 영수증은 없습니다. CURRENT/LEDGER/AUTO_STATE는 변경하지 않았습니다. 앱 개발 완료와 웹 미완료를 구분해 인수하세요.
+
+---
+
 ## 최신 상태 — PR61 병합 완료 / PR62 소스 복구·검증 완료, CI 진행 중
 
 - PR61 main707cdc: 10열 비교표·44px·Q-SCORE헤더?·3개 실제 글꼴. 최종 Runtime41390246447/Compliance41390246439 SUCCESS.
