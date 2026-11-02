@@ -1,6 +1,6 @@
 # QUANTGEN consolidated Claude handoff — 2026-11-02
 
-**ACTIVE / PARTIAL.** Local summary only; no return, deployment, Claude receipt or all-complete claim. Root must finalize CI/merge/ownership read-back. No remote requests/product edits/tests by this writer.
+**ACTIVE / PARTIAL — ready for final evidence review.** This local refresh does not publish a return, deployment or all-complete claim. Root reports an existing remote ACTIVE checkpoint at `6b7cd37`; final CAS/read-back is pending. No Claude receipt is established. No remote requests/product edits/tests by this writer.
 
 Prior history: `CONSOLIDATED_CLAUDE_HANDOFF_2026-10-31.md`; its stop-state was superseded by November 2 resumption. Deadline waives no evidence. No GPT/Gemini spec disclosure; optional reviews remain **NOT_PERFORMED**, nonblocking solely for absence. Approved ordinary fixes/tests may proceed; research criteria/formal records/actual execution/publication retain separate conditions.
 
@@ -8,17 +8,23 @@ Prior history: `CONSOLIDATED_CLAUDE_HANDOFF_2026-10-31.md`; its stop-state was s
 
 Repository `xkg4real/quantgen`; root-reported status. **PR54/58/59 all unmerged.** Refresh exact heads before finalization.
 
-| PR | Verified remote head | Exact-head CI (still in progress) |
+**All three new integration heads were pushed and read back after preserving the concurrent PR60/main changes. Their runtime CI is running; no final success or merge claim for these heads.**
+
+| PR | Current exact remote head | Exact-head runs |
 | --- | --- | --- |
-| [54](https://github.com/xkg4real/quantgen/pull/54) | `3e979d9f23195b5579b92f13c8c2968618c62fd9` | Runtime `41383243839`; compliance `41383243764`. No merge or final CI success claimed yet. |
-| [58](https://github.com/xkg4real/quantgen/pull/58) | `92c6443050ddec9c712ae582b2aba9f713a5a102` | Runtime `41383297354`; compliance `41383297373`. No merge or final CI success claimed yet. |
-| [59](https://github.com/xkg4real/quantgen/pull/59) | `12112514be5092e6ca2e0d28557607642e7866fc` | Runtime `41383497363`; compliance `41383497389`. No merge or final CI success claimed yet. |
+| [PR54](https://github.com/xkg4real/quantgen/pull/54) | `29d926169b8c4c29c1def4720a06bfe1203ad365` | Runtime `41386502950`; compliance `41386502697`. Await final verification. |
+| [PR58](https://github.com/xkg4real/quantgen/pull/58) | `67e76e704574af5365bee52733bed4e2b4dd47fe` | Runtime `41386559163`; compliance `41386559127`. Await final verification. |
+| [PR59](https://github.com/xkg4real/quantgen/pull/59) | `947ae44c89058b8dcc4b91b338b1fc9f33ea29be` | Runtime `41386603330`; compliance `41386603276`. Await final verification. |
 
 Worktrees under `/workspace/work/`: `quantgen-active-20261102`, `quantgen-letf-integration-20261102`, `quantgen-rates-params-20261102`. Financial branch: `gpt/letf-explicit-inputs-20261102`. Verify refs; old `origin/main` was stale. No force moves.
+
+Previous heads `e10cebfd`/`f0d4a349`/`33d4f899` each passed Windows 3.11/3.12/3.14 and Ubuntu runtime plus compliance, as verified by root. Their respective runtime/compliance run pairs were `41385318053`/`41385317430`, `41385357196`/`41385357344`, and `41385391393`/`41385391425`. These are valid earlier-head results, not the new integration heads' results. Root's PR54 merge attempt returned HTTP405, not a successful merge, during concurrent PR60/main advancement to `1e67b04` and then `ead6e67a5dd1a767f11d960e67eb8069891e92ad`. Root integrated the newer main normally, resolved conflicts while preserving both sides, and pushed the three heads above. PR54/58/59 remain unmerged.
 
 ## 2. Product changes and evidence
 
 - **PyQt6/Flet:** authored EN/KO text and responsive chart/Signals/Macro sizing corrected. Provider prose, historical reports and numbers preserved; locale/theme must not start jobs. Sixteen visual combinations inspected; nine-module integration 98 PASS with private harness. Not final-head Windows evidence.
+- **Qt correction 1 — separate valid fix:** `CurrentPageTabs.hasHeightForWidth` and `heightForWidth` consult only the selected page, fixing independently reproduced hidden-page 9000px height leakage. Nine chart tests in original order passed, but **this did not resolve the Windows 66px overflow**. Retain the failed Windows results and their diagnostic assertions; do not relabel the nine local passes as proof of that resolution.
+- **Qt correction 2 — `e10cebf`:** Windows diagnostics measured Tool/Source combo minimum-size hints of **251px/459px**, identifying the remaining 66px overflow cause. The controls use `minimumContentsLength=12` and `AdjustToMinimumContentsLengthWithIcon`; full tooltip text and item data are preserved. Ten local chart tests in CI-equivalent order passed, followed by the earlier-head Windows/Ubuntu CI success recorded above. The newer PR60 integration still requires its own exact-head CI; physical user-Windows acceptance remains separate.
 - **M4-N3 LETF:** explicit funding/fee/dividend, price/total-return distinction, signed leverage, overflow guards; zero-reference compatibility retained. Source `eb46600b`, native `5c32657f`; 28 tests/45 formula checks, 100 original fields unchanged. No research verdict.
 - **M4-N6 FX:** neutral annual CIP discrepancy replaces unsupported classification; numbers unchanged. `0bd214e0`, 16 PASS; date/maturity/convention comparability unverified.
 - **M4-N11 CMS:** first-period expected annualized coupon distinguished from later schedule in Native/Flet/KO/AI; no payment guarantee. Canonical coupon/non-CMS/history preserved. `76a5580f`→`4428cb1`; nine PASS, 24 cases/456 original fields unchanged.
@@ -30,17 +36,30 @@ Financial integration recorded 46, later 99 plus nine Home checks. **Do not sum 
 
 ## 3. Installed runtime and qualification
 
+**Keep the new merged-workingtree verification distinct from older immutable-ref wheels.** `app-operation-pr60-installed/PR60_MERGE_RUNTIME.md` verifies the resolved, then-uncommitted merge workingtree: HEAD `e10cebfd96577a2226d8d89d5e9d31ec6948d596`, MERGE_HEAD `ead6e67a5dd1a767f11d960e67eb8069891e92ad`. It is not itself an exact merge-commit or new CI result. Fresh installed native/Flet checks passed with seven native pages, 12 Home rows/Q-SCORE, synthetic worker, locale/theme, preference recovery and JSON/ZIP round trips. Four service objects (chart, Home feed, two independent score controllers) were constructed but remained idle: zero loads, no stream/jobs/timers. Root additionally reports Home9/native26/policy47 PASS; do not add overlapping counts.
+
+Fresh wheel: 306 allowlisted staged files / 229 installed Python files matched staged bytes and wheel contents; no allowlisted runtime source changed between staging and final identity check. Wheel SHA256 `01b2a4c8a6d7bb3b1980708de48b084865f50732793b0e6044fe4620651873d5`; runtime fingerprint `23d3d172ab572a6fda014eef2e3175455e9521a5597e94bc04039d12b4cd0b6f`; installed fingerprint `d9ad6325dc742abbdb1f449b846ba3375468031522685138ed14d08b1f8c11fe`. The first native smoke failed its outdated one-service expectation; its log is preserved. The fixture was corrected to verify all four constructions and idle/no-I/O invariants; only the successful rerun is PASS. Product behavior was not altered to satisfy the fixture. This Linux/offscreen installation reuses dependencies, not a clean OS or physical Windows/live test.
+
+**The older wheels below validate their stated refs only.** Selected-page height, combo sizing and PR60 product changes are outside those earlier byte identities; they do not establish the latest heads' installed behavior. The new workingtree fingerprint above is separate evidence.
+
 Financial **`7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557`**: fresh wheel, 304 stage/227 installed Python files byte-match source. Actual offscreen Qt six routes/worker/preferences/export PASS; Flet20 routes×2 contexts inside one test. Two Qt/Flet workflow/consent tests used inert AI; KIS idle. Wheel SHA256 `93c07936deb7d9a148d042815f85df11ae712c962af93036705610abafb4546d`.
 
 Rates source **`b16f6063da14ebb10e5af24be0ba5929e3d441c9`**: fresh installed wheel, 304/227 exact-byte proof, **six PASS in 3.028s**, including actual Qt synthetic Hull–White bond/swap worker with normalized r0. No whole-app rerun implied. Wheel SHA256 `283207648cba1fc94191b35930f14c58eaa5dad1f8708c9520043dad5ffb0394`.
 
 Linux Python3.12.14/PyQt6 6.12.0/Flet0.85.2; temporary installs reuse dependencies, not clean-OS/Windows proof. Shared settings unchanged. Providers/real AI/ledger/pilot NOT_RUN. Consent tests do not prove a real key or the user's shortcut works.
 
-Cloud asyncio shutdown stalls reproduced in stdlib (blocked socketpair wakeup); partial runs remain INCOMPLETE. Private wrappers cap selector wait at 50ms, no product/shared change; rates runner needed none. Default-loop CI separate. PR58 fixes test audit-hook leakage; 36 local PASS, runtime unchanged. The fixed-220ms Qt rendering test race was reproduced at650ms paint latency and replaced with observable snapshot/cursor/readout completion. Nine repeated/delayed tests and full74 KIS regressions passed; no product timing patch. Explicit UTF-8 fixture decoding is retained. Failed/partial prior CI and local attempts remain separately recorded.
+Cloud asyncio shutdown stalls reproduced in stdlib (blocked socketpair wakeup); partial runs remain INCOMPLETE. Private wrappers cap selector wait at 50ms, no product/shared change; rates runner needed none. Default-loop CI separate. Earlier PR58 test audit-hook correction passed 36 local checks without a runtime change. The separate fixed-220ms Qt test race was reproduced at 650ms paint latency and replaced by observable snapshot/cursor/readout completion; nine repeated/delayed tests and 74 KIS regressions passed at that earlier checkpoint. These test-only corrections, the nine-test height fix, and the latest ten-test combo fix are different checkpoints; do not combine their counts or claim the earlier changes solved the later Windows failure. Explicit UTF-8 decoding and failed/partial CI/local records are preserved.
 
 ## 4. Other sessions and private deliverables
 
-`REMOTE_HANDOFF_INPUTS_LATEST.json` pins ref **`90ed55f6d80a674e0b0f4aa8ef36df82a94dfbaa`**: UI/website CURRENT, AWS_HANDOFF and historical ledger. Earlier snapshot preserved. Team reviewed this archive; no Claude/chat receipt.
+Newest UI archive: `REMOTE_HANDOFF_INPUTS_FINAL.json`, handoff ref **`7c8c98b60da45a4e10dd59fd28e8a2ea031e9e8c`**, `UI_SESSION_CURRENT.md` blob `dc86410c5877a629316084bbb7f99a6c5a66b7a6`. Previous `REMOTE_HANDOFF_INPUTS_LATEST.json` at `90ed55f6d80a674e0b0f4aa8ef36df82a94dfbaa` and earlier snapshots remain history. This team read the archives; no Claude/chat receipt is established.
+
+**Other-session PR60 now merged:** [PR60](https://github.com/xkg4real/quantgen/pull/60), branch `gpt/live-chart-layout-20261102`, source **`6a2c062427409b2d61cb1bdfb7ce7d3e56f2650f`**, was merged by the concurrent UI session into main `1e67b04`; main subsequently advanced to `ead6e67`. Root directly verified Runtime `41385301484` and Compliance `41385301381` SUCCESS. The archived `3c18a93` OPEN/in-progress record and its runs `41384791924`/`41384792027` remain historical, superseded by this verified outcome. This writer did not take ownership, modify or merge that branch. PR60 success does not replace the new PR54/58/59 integration CI.
+
+- PR60 adds a standalone technical-indicator menu/seven native pages, a 12-row Home, and explicitly experimental Q-SCORE presentation. Explicit Home connection subscribes to up to six symbols through one WebSocket, with separate Home/chart lifecycles and stale-callback handling. This is an implementation report, not proof of live delivery or predictive performance.
+- That session recorded overlapping 99 integration/packaging/syntax, 53 native and 47 policy checks, plus an installed smoke after updating the six-page assumption. Preserve their source provenance without summing them. Root's new seven-page merged-workingtree verification is separate; prior six-route wheels do not cover this UI.
+- User reported `KISUnavailable`; **no successful actual trade/tick receipt is established**. New Windows Home/score behavior, actual KIS access and score validity remain unverified. Experimental Q-SCORE is not fundamentals valuation, validated forecasting or a buy recommendation. No private PC path or account details are reproduced here.
+- PR60's source/document review is `docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md`; website applicability record is `docs/product/ui_website_updates/PR-60.json`. Its handoff reports changes to 14 policies with publication still BLOCKED. The previously delivered website remains based on `cac727e2` and does not include them; later web work must review KO/EN bodies, versions and hashes. No new website source/HTML/ZIP publication or deployment is authorized.
 
 - Root reports prior PR55/56/57 merges `56927c1`/`69a2559`/`cac727e2`; PR53 `8a40aa1c` has recorded CI success. Historical, not PR54 proof.
 - Other app session: 72 synthetic KIS PASS at `cac727e2`, fake REST/socket, Linux offscreen. Live/rights/Windows unverified. Policies disclose opt-in behavior, plaintext WebSocket, key reuse and separate stops. Synthetic contrast PASS; manual accessibility open.
@@ -73,4 +92,7 @@ Installed report folders retain `commands.json`, identities/results/helpers. Reb
 
 Validate STATE transition/environment before remote lookup; use existing OS lock and unique execution ID. Read CURRENT/README/TEMPLATE/AGENTS/LEDGER/AUTO_STATE at one latest ref. Match saved execution/task/handoff/branch/commit; fresh-SHA CAS plus remote read-back before resuming. Never infer ownership from `from=gpt` or override another claim. Refresh PR54/58/59 heads/CI and preserve concurrent changes; merge only authorized scope. Append evidence without deleting history; fetch/minimally update verified Notion children using the privately designated connection, preserving actual sync outcomes. Partial parents stay open. No duplicate schedule/environment migration/deployment.
 
-Root must append final facts/next start, CAS/read back CURRENT, atomically preserve STATE, then release lock. ACTIVE/PARTIAL until finalized; no Claude receipt claim.
+Before final CAS, root must record each final remote head containing the intended corrections, its exact runtime/compliance outcome and actual merge state; preserve failures and any unresolved installed-runtime limitation. Then append the next safe start, CAS/read back CURRENT, atomically preserve STATE and release the lock. No receipt or whole-task completion may be inferred from publication. This document remains ACTIVE/PARTIAL until that finalization.
+
+
+Root source-identity follow-up: `app-operation-pr60-installed/COMMITTED_SOURCE_MATCH.json` compares every one of the306 allowlisted runtime files after commit29d926169b8c4c29c1def4720a06bfe1203ad365 to the saved successful installed-test inputs; all match fingerprint23d3d172ab572a6fda014eef2e3175455e9521a5597e94bc04039d12b4cd0b6f. This links the installed proof to primary29d runtime, not PR58/59 wheel identities.
