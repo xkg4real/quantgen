@@ -307,11 +307,11 @@ def _run_sim(page, *, source: str, model: str, horizon: float, n_paths: int,
     hpv, what = None, "none"
     if instrument == "bond":
         bond = Bond(coupon=coupon_pct / 100.0, maturity=parse_tenor(instr_tenor_text))
-        hpv = horizon_pv_distribution(params, sim, kind="bond", bond=bond, curve=curve)
+        hpv = horizon_pv_distribution(sim.params, sim, kind="bond", bond=bond, curve=curve)
         what = f"{_pct(bond.coupon)} {tenor_label(bond.maturity)} bond"
     elif instrument == "swap":
         swap = Swap(tenor=parse_tenor(instr_tenor_text))
-        hpv = horizon_pv_distribution(params, sim, kind="swap", swap=swap, curve=curve)
+        hpv = horizon_pv_distribution(sim.params, sim, kind="swap", swap=swap, curve=curve)
         what = swap.label
     p = sim.params
     sigma = f"{p.sigma:.3f} (sqrt-r)" if model == "cir" else f"{p.sigma / BP:.0f}bp/yr"

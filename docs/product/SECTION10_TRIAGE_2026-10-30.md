@@ -209,7 +209,21 @@ five-year simple-compounded annualized rate, separate from semiannual or forward
 par swap rates. Neither change modifies equity/return/risk arrays or curve pricing.
 See `SIGNALS_TRADE_COUNTS_2026-11-02.md` and `FORWARD_CONVENTION_2026-11-02.md`.
 
-Latest source implementation count: **20/67**, **47** remaining. Alias IDs are
+Prior five-correction checkpoint: **20/67**, **47** remaining. Alias IDs are
 deduplicated; partial NEW-M6-02 is not counted as completed. The 14 observation
 models and 15 ambiguous mappings remain. This queue records bounded product
 corrections, not full application/research/actual Windows acceptance.
+
+### 2026-11-02 rate revaluation parameter consistency
+
+M3-N08 rejects calculation parameters that differ from the completed simulation
+before valuation. Native/Flet callers use the simulation's final parameters,
+including Hull-White initial-rate normalization; descriptive note differences
+remain compatible. Existing matched-input prices, paths and VaR/CVaR values are
+preserved. Five focused regressions, five existing checks and exact before/after
+comparisons of 12 terminal arrays, 24 PV arrays and 144 summary values/notes passed.
+See `RATES_REVALUATION_PARAMS_2026-11-02.md` for the bounded evidence and limitations.
+
+Latest source implementation count: **21/67**, **46** remaining. Partial
+NEW-M6-02, the 14 observation models and 15 ambiguous mappings remain open.
+Actual Windows, provider, research and release acceptance are separate.

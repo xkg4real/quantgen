@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 14,
-    "implemented_canonical_groups": 20
+    "implemented_canonical_groups": 21
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -411,10 +411,11 @@
       "source_model": "71. M3-19 시평 재평가 VaR·CVaR",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Verify focused CI and PR/main integration; actual Windows and provider validation remain separate",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "tests/rates_revaluation_params_acceptance.py; docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md"
     },
     {
       "id": "M3-N09",

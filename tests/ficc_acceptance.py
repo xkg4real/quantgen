@@ -509,8 +509,8 @@ def test_horizon_pv_var_is_a_non_negative_loss():
     sim = ratesim.simulate(v, horizon=1.0, n_paths=1000, threshold=0.05)
     assert sim.prob_above is not None and 0.0 <= sim.prob_above <= 1.0
     crv = _report().curve
-    hb = ratesim.horizon_pv_distribution(v, sim, kind="bond", bond=_BOND, curve=crv)
-    hs = ratesim.horizon_pv_distribution(v, sim, kind="swap", swap=swaps.Swap(tenor=10.0),
+    hb = ratesim.horizon_pv_distribution(sim.params, sim, kind="bond", bond=_BOND, curve=crv)
+    hs = ratesim.horizon_pv_distribution(sim.params, sim, kind="swap", swap=swaps.Swap(tenor=10.0),
                                          curve=crv)
     for h in (hb, hs):
         assert h.pvs.size == 500 and np.all(np.isfinite(h.pvs))
@@ -730,7 +730,7 @@ def test_every_fchart_renders_a_data_uri_image():
     ks = np.linspace(pts[0].strike * 0.97, pts[-1].strike * 1.03, 40)
     prm = ratesim.calibrate(_sofr())
     sim = ratesim.simulate(prm, n_paths=300, threshold=0.05)
-    hpv = ratesim.horizon_pv_distribution(prm, sim, kind="bond", bond=_BOND, curve=curve)
+    hpv = ratesim.horizon_pv_distribution(sim.params, sim, kind="bond", bond=_BOND, curve=curve)
     spots, rates = _carry_inputs()
     images = [
         fc.curve_chart(rep), fc.curve_history_chart(panel), fc.pca_chart(curves.curve_pca(panel)),

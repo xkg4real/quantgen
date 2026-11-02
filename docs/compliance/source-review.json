@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "707eb13dde1f785e579b04b1522f91d1d801d87081b91acb76e848ce64ec628e",
+    ".github/workflows/runtime-smoke.yml": "af3af48261767d62b8fce5703cfe3e94007ec73ce6c11dcd364d608e1f8a4e88",
     "README.md": "6a4f572a12e6dea657c7c063240b94d1a928e2b4f41fff25f7348ca69e1b88b5",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -84,14 +84,14 @@
     "core/ficc/forward_conventions.py": "11226fef98c00ec3a6bdfe458da095ee07bf97523f2988351ed3af5e803be741",
     "core/ficc/fx.py": "a12dca02caab44fdfaa951081b1e613db3bd9448f81586b29c2e0039f6dd4e3b",
     "core/ficc/fx_styles.py": "339e24889c8e010018139cce6b362bed691f91493685780ef2fdc107c3dbd26e",
-    "core/ficc/insights.py": "6e9d6ae44223118c30ee0df979e23eccaa3789e121efeee117cca91b37692322",
+    "core/ficc/insights.py": "a18c4046d3fb87db31504b9bf74bc248e80595ebb37c1af3a5d5b0671c2eccc1",
     "core/ficc/lag_audit.py": "17d8ba7d9e0bd5f8d5bcff93c8df237ba23682cacdb386744e7d28fb91c1b429",
     "core/ficc/letf_assumptions.py": "c87beb1761aac4a9e60c2da942c6b83cffcc9f3d8ddc029ab91a5c18ad06fc49",
     "core/ficc/macro.py": "78139ea28b194878478cab77faf3fe3220249fbcd369a0da28c43cb92776eaca",
     "core/ficc/macro_artifacts.py": "0643b4337981e3e0ecd304a5f045690f62e6eaa0f396248775c035a871fa7ae1",
     "core/ficc/macro_schema.py": "36078e3589c36c1e443f3067c403b155bdef93b85341ed9df6bd3a2697248284",
     "core/ficc/pit.py": "ba15530722fafe454783907071a0947e0b0a971505dbb8d19216088b2c77d1d9",
-    "core/ficc/ratesim.py": "392a5ad3b9783adff0bbe29eb573aba6f70c90f666a087f34f35a515ad91df67",
+    "core/ficc/ratesim.py": "28ea6fb89913a7014024c6062a67c25f0c1ea43795923a52c70fddd31613b77b",
     "core/ficc/sabr_diagnostics.py": "b67c1298d002abeb552652ca2374a9d9991259f72a8caeed731c0917a9dae232",
     "core/ficc/schemas/context_log.v2.0.json": "b6dbddc5bfae4846b5492429e786e81f82e81a1ca980792cc75661e4954b0869",
     "core/ficc/schemas/event_calendar.v2.0.json": "f307cec0ecfaf0b953995105192731a05efc5eabda17c2613143eb546acf6756",
@@ -170,7 +170,7 @@
     "core/research/provenance.py": "b7dbb0ee71a0df7809304110bf1c259289122d37af269da0e29ef3f5e7dbc8db",
     "core/research/qscore.py": "e5265be2a6a2778cc69b03207e7cf00aa7343e3f5e358ed32cf6d479f1674fbe",
     "core/research/quote_coverage.py": "92145030da624f6cca4696e4ea40384c2791fdeb2185abaf3000c24cd62ca0b9",
-    "core/research/rates_analysis.py": "ac1bf95230a9f875a7f59cec1fd09c586ab70f39a49c0abae71cba0c230ab217",
+    "core/research/rates_analysis.py": "a475fd24e0388ba899d399b3b7ba858fb1096586110f747505d321e11fecf8ef",
     "core/research/runs.py": "480df15cf6ab9458743dcce4eba05b1f1e534e7635756a7c6353ebee5965f6f4",
     "core/research/signals_analysis.py": "6f2f2c495fec9e152fc372edbe8bb3e38436038d7ab1842b17a1703a0f229281",
     "core/research/strategy_analysis.py": "5cbf2915c0657081a3ee8b9bfca8169814de533e2965f9835d74d28f6b01f1c9",
@@ -237,7 +237,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "c576b20034bae7924bc3a0955f364ad915a1f939cb1b751268619e8b55a98aed",
+    "docs/compliance/FACTS.md": "f46389a42bd5dd396ed7c07c96fe5ac880e91a3fed9ca1adb8d14f7c818c012b",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -272,11 +272,12 @@
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
+    "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
     "docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md": "ad9177b241178d7427f77caa8b7de6f14390610d41d2959c87dd03b1093fd189",
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "94e8c2d7682d59ba9115d7ea317118099ef0db26301169c67983fe84be2122bb",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "9eb917388f941560c928f571d70460513e17b8048630a3dd4abea9aaa635fbd3",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
@@ -377,7 +378,7 @@
     "tests/desktop_watchlist_acceptance.py": "fb5dec3279a60e21658a8b60dac232809a4d3b1b0fb930e1b711a77f4054c45c",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
-    "tests/ficc_acceptance.py": "101e26e68f97b5cb4a8bf2a5498a300498a9c44627d219559d1fcbd5228ed813",
+    "tests/ficc_acceptance.py": "04e7f5301539555f8c5be057d010fbfd40a2e22af32fac33bdb51a210b23b2f5",
     "tests/ficc_boundary_acceptance.py": "004cef8d6fe84cf7e3481fd4bcc93ad76abfcb8abc2da65e27132d5eae664957",
     "tests/flet_api_guard.py": "eb8c49ea831064795613cfa80b2cbc70e1fb38cbcacc2587e1fd0863ca85f57a",
     "tests/flet_runtime_acceptance.py": "19e881c015ed2837bde5ebcaa6b362c792c698e83e92765a2187a2003e30e6f6",
@@ -442,6 +443,7 @@
     "tests/qscore_acceptance.py": "b33b54454f8aba2f625b071b52f482f98c1840a52e6a3f1a497eeb2417799762",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
     "tests/quote_coverage_acceptance.py": "09d727791eb18d44955a0324058439c0d63777af94b5ca18f8a1ced7eb6cec86",
+    "tests/rates_revaluation_params_acceptance.py": "85ccf11af449a58c8d3772bb38e0502d3f5b8d772caad478b27ad91d50fc5329",
     "tests/reference/__init__.py": "981465fb05d87f128a0b80cc4b8122a83335ee0994ce5b4d3ee3bdbe72bc6e9c",
     "tests/reference/reference_mode.py": "f79ad9f482323344ee20c6685edf08b8abd64f11dfad25ab40cd132ad9339c37",
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
@@ -503,7 +505,7 @@
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
     "ui/derivatives_page.py": "ed659a96def9e1b9bddbd0295c6357c47418fb4ba11778a1aecc817c352e1359",
     "ui/etf_page.py": "910b2a27d4ee5264cc79286e8fc48bc985a251d6a0f1727ec6f29daa633c660f",
-    "ui/fcharts.py": "e59a274207d5b3b2ad416a5a304cc040f517caee8f166a309b279342f8dfe56d",
+    "ui/fcharts.py": "fc7fafba72863691b8013fbba55c3299eac46440f7a5285ffd7e4ba61b0bf78d",
     "ui/fx_page.py": "42a0304e93d0d9159d3941ee7c6883c980e9e595b9825cccc10c2eccdc99f48d",
     "ui/indicator_guide.py": "a063f8938b211975b4f0f00edcd40a3e6f1aa65f4db9aaeca4494a471bae5ccd",
     "ui/krx_page.py": "9f66b040a21a9e757af61f3ed4dfa5dfc6220ec1a0ba171996365c4db98b86a2",
@@ -515,7 +517,7 @@
     "ui/portfolio_page.py": "dafb8f336dffa002992c4cac3c8817ef66346cade02855c5f9bbbee1bc0b56a2",
     "ui/qcharts.py": "4b173a61b68e9b9378ccbd97f827eb6f368f0232352ecf2225e404374b39accd",
     "ui/quant_lab_page.py": "e15a5c11d00a2a7c2c3034cc69e9e6c1fc6b852fda61bc8a78d2d7050b2ca457",
-    "ui/rates_page.py": "0174e7498e14dbf12bde6a33c5fa4f9fa610cd19795865ff20a5141bed716122",
+    "ui/rates_page.py": "353612b0641e9138b5c31bb4c42281c10267096ddfb00cfb5e3e2c2de26796e4",
     "ui/research_home.py": "08a5985d0c0788e40648a94d51bf1202c08097eac08b0b85b043dfedb7e1b6c7",
     "ui/research_view.py": "cf9f3a905aace4617c6582aad9213e8e4aff859ed07b9a97316d3431809ba10d",
     "ui/rules_page.py": "cfd9ef27c9ae2c0b5279ad46de8026b73aad711846b6c743e7e978c09482315b",
@@ -530,163 +532,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4a70042c317d349050e1460ffc71950915f545cdaea09540ad479ebcc6aeee44",
-      "source_digest": "cf0a35504e0b2e381c1416428b8ed1aee7bc70e103126bb046b291ee76a0cce2",
+      "source_digest": "098723237ae48f03a51cad8f2085a141e61e337e313260c62b2a3a14fc6acda0",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.368446+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.219631+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "cf0a35504e0b2e381c1416428b8ed1aee7bc70e103126bb046b291ee76a0cce2",
+      "source_digest": "098723237ae48f03a51cad8f2085a141e61e337e313260c62b2a3a14fc6acda0",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.370614+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.222229+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "eddac17ef3c18c62a37c37c479bdeb8c2d642ea54a86b9ba29b410873484cab3",
+      "source_digest": "e7b71f9b56d13cb7bf612fab32be03853f013274784d1a22a969dc3ee780545a",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.372858+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.224800+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "b51d8f72c565611633a8c20c664e16c88e4d9759967569d84e021edaffed840f",
+      "source_digest": "e9f9f32b550adcbe99d52b3064346f2b363fcf39605be005310e7949408dfb62",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.375200+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.227335+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "b637c411074320e093278b619f394089c498ef472ef5d6467ee50ad32f9e2acb",
+      "source_digest": "14a486aa3ebfd73242220eece28fe0869778bd47e042cf4d03b6255e5feadd4e",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.377351+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.229408+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "6": {
-      "document_sha256": "e84be81b04899ead322e5c5092f4823e7301f352d2b5b33e196ed49bf43d788c",
-      "source_digest": "4c62e43cc84b5d75f421d101aa6da28d89181a7b688c99d568014a6748c56c5d",
+      "document_sha256": "b7e192bc71505c5d63cda54ca49c27f050069e4dabd45b82aff1a2288cf8bb29",
+      "source_digest": "cb8556303dcea6a6157031e0de85266b9f80690b64b2fe2e857ef293361dfb36",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.379563+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.231951+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "7": {
       "document_sha256": "9fce6e4eaca9d4f692bc5da0d67c07ae60be26b6470c297fca88f041c9855512",
-      "source_digest": "cf0a35504e0b2e381c1416428b8ed1aee7bc70e103126bb046b291ee76a0cce2",
+      "source_digest": "098723237ae48f03a51cad8f2085a141e61e337e313260c62b2a3a14fc6acda0",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.381616+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.234451+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "8": {
       "document_sha256": "d6675324c77086e06722883b428a745596ff924dd574b89f8746bcf5d68044a1",
-      "source_digest": "4c62e43cc84b5d75f421d101aa6da28d89181a7b688c99d568014a6748c56c5d",
+      "source_digest": "cb8556303dcea6a6157031e0de85266b9f80690b64b2fe2e857ef293361dfb36",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.383603+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.236847+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "9": {
       "document_sha256": "e13cc4d66fa727f737e85b40ab105fecb5904971c86055dda16aef24b208dfe4",
-      "source_digest": "cfbc2252c3a07e41139759dc08f2551bd2d3e45bab9f1da7e1bcaf8950a16588",
+      "source_digest": "b2f2869def94e39e1849666550c0a46bdbb802a0236b98b8bb2a6b2328060a6c",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.385559+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.239582+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "fc7572a2009882b2adfcb0c28cca05394e2af9755144dbbbe00f4fdeff2b2b12",
+      "source_digest": "87b930c327c0582a30ef87d8986eaf03eb5887265a5e50317e6e777a5f6315a6",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.387736+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.242097+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "2b0197cd90b6a057e0dcdca5dd75e7828ef8162e88d797b02552c24c5b0a4dd3",
+      "source_digest": "d1b07562c1767ca6b0259b8dab8be444b334f0128da75f823bdc9a0a770b5fb3",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.389699+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.244398+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "12": {
-      "document_sha256": "b6820254f32210790252fea2f31f4598707ddaad2e30d07633b0d7bc63a5d897",
-      "source_digest": "c0308619e64be510b0e2a5cc74dbd6df879d22064d1b4ae02509dae26bc170d8",
+      "document_sha256": "895d833537d04fd452b55129036b64771d41b7b169d5e30b7273085d3c82c300",
+      "source_digest": "ffd3424cdfe14a88f88bf61e8313effabc0376a0d283b930285e554d43c16294",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.392087+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.246667+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "13": {
       "document_sha256": "a176e05516f4053d9a01efe2a65c73ca4eb9125f3723a7e7130588e7a8c65102",
-      "source_digest": "cfbc2252c3a07e41139759dc08f2551bd2d3e45bab9f1da7e1bcaf8950a16588",
+      "source_digest": "b2f2869def94e39e1849666550c0a46bdbb802a0236b98b8bb2a6b2328060a6c",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.394196+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.249211+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "14": {
       "document_sha256": "ba9024a1fe135529342a94498b82255c514f633f787421f89a6ffefc9cf2bf65",
-      "source_digest": "cfbc2252c3a07e41139759dc08f2551bd2d3e45bab9f1da7e1bcaf8950a16588",
+      "source_digest": "b2f2869def94e39e1849666550c0a46bdbb802a0236b98b8bb2a6b2328060a6c",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.396324+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.252062+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "15": {
       "document_sha256": "1c1a3ce9c95b1956b56ecfb4356ae9dc94c8715c0e78cea97fbdbc792921e0e3",
-      "source_digest": "cfbc2252c3a07e41139759dc08f2551bd2d3e45bab9f1da7e1bcaf8950a16588",
+      "source_digest": "b2f2869def94e39e1849666550c0a46bdbb802a0236b98b8bb2a6b2328060a6c",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.398485+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.254292+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "1a11a4482bc423f97295bf66db1d999893eac2f72bd461f3a9f6f1bb96187169",
+      "source_digest": "a6d9ff7a4dded571d4dad392eb2041336934103405bf450641967e2bb4a1168b",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.400573+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.256864+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "4c62e43cc84b5d75f421d101aa6da28d89181a7b688c99d568014a6748c56c5d",
+      "source_digest": "cb8556303dcea6a6157031e0de85266b9f80690b64b2fe2e857ef293361dfb36",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.402573+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.259147+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "cf0a35504e0b2e381c1416428b8ed1aee7bc70e103126bb046b291ee76a0cce2",
+      "source_digest": "098723237ae48f03a51cad8f2085a141e61e337e313260c62b2a3a14fc6acda0",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.404699+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.261333+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "19": {
       "document_sha256": "fd491927bcc996f146f1f168385be9194c10d9db347cf07eb9a45dc5f6922424",
-      "source_digest": "ee91f03692eb8f3c78dedd646ed143c128868608aaeb9ab136ba191a04f6a81d",
+      "source_digest": "48ee9e42699ecdb609013d89f104bb2827231f9d4b694ef951eadae23c5617a9",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.406644+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.264033+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     },
     "20": {
       "document_sha256": "61322a5d5757929879890622e49e587058b0024de8eacd8ae9d817dd9e78d45f",
-      "source_digest": "cf0a35504e0b2e381c1416428b8ed1aee7bc70e103126bb046b291ee76a0cce2",
+      "source_digest": "098723237ae48f03a51cad8f2085a141e61e337e313260c62b2a3a14fc6acda0",
       "reviewed_by": "GPT",
-      "review_note": "Preserved reviewed PR60 Home Q-SCORE disclosures and all financial result convention corrections during main integration; actual evidence and publication gates retained.",
-      "reviewed_at": "2026-11-02T04:05:54.408590+00:00",
-      "source_commit": "f0d4a3497a0f5b2b6f5ec67a356ae4f443354379"
+      "review_note": "Preserved all separately reviewed Home Q-SCORE and financial rates parameter consistency disclosures during main integration; actual provider legal publication research gates retained.",
+      "reviewed_at": "2026-11-02T04:06:24.266422+00:00",
+      "source_commit": "33d4f899d54d61447e4ac8ba208bf8af987a8fc4"
     }
   }
 }
