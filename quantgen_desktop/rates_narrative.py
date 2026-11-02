@@ -103,9 +103,12 @@ def simulation_korean(sim, horizon_pv=None):
     p = sim.params
     name = {'vasicek':'Vasicek','cir':'CIR','hull_white':'Hull-White'}.get(sim.model,sim.model)
     sigma = f'sigma {p.sigma:.4f} × sqrt(r)' if sim.model == 'cir' else f'연 sigma {p.sigma/BP:.0f}bp'
+    theta = (f'회귀 평균 {_pct(p.theta)} (Hull–White 드리프트에 미사용; '
+             '시간 가변 드리프트는 입력 곡선에서 맞춤)'
+             if sim.model == 'hull_white' else f'장기 평균 {_pct(p.theta)}')
     lines = [
         f'{name} 보정: kappa {p.kappa:.2f} (반감기 {math.log(2)/p.kappa:.1f}y), '
-        f'장기 평균 {_pct(p.theta)}, {sigma}, 초기 r0 {_pct(p.r0)}.',
+        f'{theta}, {sigma}, 초기 r0 {_pct(p.r0)}.',
         f'{tenor_label(sim.horizon)} 동안 {sim.n_paths:,}개 경로에서 단기금리 평균은 '
         f'{_pct(sim.mean_terminal)}, 90% 구간은 {_pct(sim.p05)}~{_pct(sim.p95)}입니다.',
     ]

@@ -314,6 +314,8 @@ def _run_sim(page, *, source: str, model: str, horizon: float, n_paths: int,
         hpv = horizon_pv_distribution(sim.params, sim, kind="swap", swap=swap, curve=curve)
         what = swap.label
     p = sim.params
+    from core.ficc.rate_diagnostics import theta_semantics
+    theta = theta_semantics(p)
     sigma = f"{p.sigma:.3f} (sqrt-r)" if model == "cir" else f"{p.sigma / BP:.0f}bp/yr"
     blocks = (_synthetic_notice(series.source, series.note, "short rate")
               + _synthetic_notice(panel.source, panel.note, "curve"))
@@ -321,11 +323,14 @@ def _run_sim(page, *, source: str, model: str, horizon: float, n_paths: int,
         stat("Model", _MODEL_LABELS.get(model, model)),
         stat("kappa", f"{p.kappa:.2f}/yr"),
         stat("Half-life", f"{math.log(2) / p.kappa:.1f}y"),
-        stat("theta", _pct(p.theta)), stat("sigma", sigma), stat("r0", _pct(p.r0)),
+        stat(theta["label"] if not theta["used_by_simulation"] else "theta", _pct(p.theta)),
+        stat("sigma", sigma), stat("r0", _pct(p.r0)),
         stat(f"Mean at {horizon:g}y", _pct(sim.mean_terminal)),
         stat("90% range", f"{_pct(sim.p05)} – {_pct(sim.p95)}"),
     ] + ([stat(f"P(> {_pct(thr)})", f"{sim.prob_above * 100:.0f}%", token="accent")]
          if sim.prob_above is not None else []), spacing=10, wrap=True))
+    if not theta["used_by_simulation"]:
+        blocks.append(notice(theta["note"], "muted"))
     blocks.append(ft.Row([
         _src_chip(series.id, series.source), chip(f"{series.first_date} → {series.last_date}"),
         chip(f"{len(series)} obs"), _src_chip("curve", panel.source),
@@ -345,6 +350,7 @@ def _run_sim(page, *, source: str, model: str, horizon: float, n_paths: int,
         blocks.append(card(fcharts.horizon_pv_hist(hpv)))
     payload = {
         "model": model, "horizon": horizon, "n_paths": sim.n_paths,
+        "parameter_semantics": {"theta": theta},
         "params": {"kappa": p.kappa, "theta": p.theta, "sigma": p.sigma, "r0": p.r0,
                    "note": p.note},
         "series": {"id": series.id, "source": series.source, "first": series.first_date,

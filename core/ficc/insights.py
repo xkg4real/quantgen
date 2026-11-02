@@ -317,9 +317,12 @@ def narrate_ratesim(sim: RateSimResult, horizon_pv: HorizonPV | None = None) -> 
                                                                                  sim.model)
     sigma = (f"sigma {p.sigma:.4f} on sqrt(r)" if sim.model == "cir"
              else f"sigma {p.sigma / BP:.0f}bp a year")
+    theta = (f"regression mean {_pct(p.theta)} (unused by Hull–White drift; "
+             "the time-dependent drift is fitted from the input curve)"
+             if sim.model == "hull_white" else f"long-run mean {_pct(p.theta)}")
     lines = [
         f"{name} calibrated with kappa {p.kappa:.2f} (half-life {math.log(2) / p.kappa:.1f}y), "
-        f"long-run mean {_pct(p.theta)}, {sigma}, from r0 {_pct(p.r0)}.",
+        f"{theta}, {sigma}, from r0 {_pct(p.r0)}.",
         f"Over {tenor_label(sim.horizon)} on {sim.n_paths:,} paths the short rate averages "
         f"{_pct(sim.mean_terminal)} with a 90% band of {_pct(sim.p05)} to {_pct(sim.p95)}.",
     ]

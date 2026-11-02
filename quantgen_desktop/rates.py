@@ -108,8 +108,16 @@ class RatesPane(ToolPane):
                 self.line('Caplet premium', [b for a,b,f,v in r.caplets], [('Premium',[v for a,b,f,v in r.caplets])], 'End · years','Premium')
         else:
             params = r.params
-            metrics = [('Model',q.model),('Kappa · /year',fmt(params.kappa)),('Half-life · years',fmt(math.log(2)/params.kappa)),
-                ('Theta',fmt(params.theta,'pct')),('Sigma',fmt(params.sigma)+(' sqrt-r' if q.model=='cir' else ' decimal / sqrt-year')),
+            from core.ficc.rate_diagnostics import theta_semantics
+            theta = theta_semantics(params)
+            self.sections.append({'type': 'rate_parameter_semantics', 'theta': theta})
+            if not theta['used_by_simulation']:
+                self.text(theta['label'] + ': ' + fmt(params.theta, 'pct') + '. ' + theta['note'],
+                          localized={'ko': theta['label_ko'] + ': ' + fmt(params.theta, 'pct') + '. ' + theta['note_ko']})
+            metrics = [('Model',q.model),('Kappa · /year',fmt(params.kappa)),('Half-life · years',fmt(math.log(2)/params.kappa))]
+            if theta['used_by_simulation']:
+                metrics.append(('Theta',fmt(params.theta,'pct')))
+            metrics += [('Sigma',fmt(params.sigma)+(' sqrt-r' if q.model=='cir' else ' decimal / sqrt-year')),
                 ('Initial rate',fmt(params.r0,'pct')),('Terminal mean',fmt(r.mean_terminal,'pct')),('P5 / P95',fmt(r.p05,'pct')+' / '+fmt(r.p95,'pct')),
                 ('P(terminal > threshold)',fmt(r.prob_above,'pct')),('Threshold',fmt(q.threshold,'pct'))]
             self.line('금리 분포 · 중앙 90%', r.times, [(f'P{k}',r.fan[k]*100) for k in (5,25,50,75,95)], 'Years','Short rate · %')
