@@ -1,8 +1,17 @@
-"""Installed optional native desktop smoke, outside checkout, no providers/stores."""
+"""Installed native navigation, synthetic calculation and export, outside checkout.
+
+Uses only a temporary preference/export directory and injected synthetic history.
+Never starts a provider, paper engine, research pilot or official ledger.
+"""
+from datetime import date, timedelta
+import json
+import math
 import os
 from pathlib import Path
 import sys
+import tempfile
 from unittest.mock import patch
+from zipfile import ZipFile
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
@@ -21,14 +30,74 @@ sys.addaudithook(guard)
 import dotenv
 with patch.object(dotenv,'load_dotenv',return_value=False):
     import quantgen_desktop.app as desktop
-from PyQt6.QtWidgets import QApplication
+    from core.quant.history import History
+    from core.research.analysis import execute_analysis
+    from core.research.runs import read_export
+from PyQt6.QtCore import QSettings
+from PyQt6.QtTest import QTest
+from PyQt6.QtWidgets import QApplication, QMessageBox
 if 'site-packages' not in Path(desktop.__file__).parts:
     raise AssertionError('Imported checkout instead of installed wheel')
 app=QApplication([])
-window=desktop.ResearchWindow(auto_refresh=False)
-window.show();app.processEvents()
-assert window.stack.count()==6
-assert not window.windowIcon().isNull()
-assert not window.grab().isNull()
-window.close()
-print('PASS: installed native PyQt6 shell, resources, six workspaces; no engine/provider/ledger start')
+history=History('FIXTURE','SYNTHETIC',
+    tuple((date(2026,1,1)+timedelta(days=i)).isoformat() for i in range(120)),
+    tuple(100+.08*i+math.sin(i*.7) for i in range(120)),note='Installed runtime fixture')
+
+
+def fixture_runner(request, run):
+    return execute_analysis(request,run,history_loader=lambda *a,**kw:history,
+        rate_reader=lambda symbol:(.03,'assumed fixture rate'))
+
+
+with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder:
+    root=Path(folder)
+    settings=QSettings(str(root/'preferences.ini'),QSettings.Format.IniFormat)
+    # A malformed stored value must leave the UI usable for preference repair.
+    settings.setValue('ui/locale',42)
+    window=desktop.ResearchWindow(auto_refresh=False,analysis_runner=fixture_runner,
+        locale=settings.value('ui/locale'),language_store=settings)
+    try:
+        window.show();app.processEvents()
+        assert window.stack.count()==6
+        assert not window.windowIcon().isNull()
+        assert not window.grab().isNull()
+        assert window.locale_picker.currentData()=='en_US'
+        for route in window.route_indices:
+            window.navigate(route)
+            assert window.nav[route].isChecked()
+        window.symbol.setText('FIXTURE')
+        window.source.setCurrentIndex(window.source.findData('synthetic'))
+        window.model.setCurrentIndex(window.model.findData('gbm'))
+        window.drift.setCurrentIndex(window.drift.findData('zero'))
+        window.paths.setValue(200);window.horizon.setValue(5)
+        window.run_button.click()
+        for _ in range(1500):
+            app.processEvents()
+            if not window.jobs.busy:break
+            QTest.qWait(10)
+        assert not window.jobs.busy,'Synthetic worker did not finish within 15 seconds'
+        run=window.session.runs()[0]
+        assert run['execution_status']=='COMPLETED'
+        assert run['verdict']=='NOT_RUN' and run['data']['synthetic']
+        window.set_language('ko');window.theme.setCurrentIndex(1)
+        window.navigate('library');window.run_table.selectRow(0)
+        assert window.session.runs()[0]==run
+        for bundle in (False,True):
+            destination=root/('fixture.zip' if bundle else 'fixture.json')
+            with patch.object(desktop.QFileDialog,'getSaveFileName',return_value=(str(destination),'')):
+                window.export_selected(bundle)
+            if bundle:
+                with ZipFile(destination) as archive:
+                    assert archive.testzip() is None
+                    assert read_export(archive.read('research-run.json'))==run
+            else:assert read_export(destination.read_bytes())==run
+        settings.sync()
+        assert QSettings(str(root/'preferences.ini'),QSettings.Format.IniFormat).value('ui/locale')=='ko_KR'
+        assert window.paper_session.runtime is None
+    finally:
+        with patch.object(QMessageBox,'question',return_value=QMessageBox.StandardButton.Yes):
+            window.close()
+        window.deleteLater();app.processEvents()
+print(json.dumps({'status':'PASS','platform':sys.platform,
+    'scope':'installed native shell, six routes, synthetic worker, locale/theme, preference repair and JSON/ZIP exports',
+    'live_providers':'NOT_RUN','paper_engine':'NOT_RUN','research_pilot':'NOT_RUN','official_ledger':'NOT_RUN'}))
