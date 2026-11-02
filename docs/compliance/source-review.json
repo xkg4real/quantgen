@@ -160,13 +160,13 @@
     "core/research/localized_report.py": "1c6ff55a3d4c326ba76eb58c01cd5fd76dccfb9633bae7c06466f556df352d30",
     "core/research/macro_analysis.py": "78cb709bfcbbe339993574a8a105ff1d50cfacc12967e0c6434de38942fa1135",
     "core/research/market_analysis.py": "3b2a1c1daed61420a81677c9b54ce56bcce3da919630f9dea4e64bebcac5b870",
-    "core/research/markets.py": "5d15b4f44b1fdb2062d807d615fb4688973247c146eeeae3f6f79ad919553a4a",
+    "core/research/markets.py": "69236b90c444495868cb4d363a86ced1ce049592e4a7fa986b73f148f9b4e9d5",
     "core/research/mc_disclosure.py": "52e784e1a98693e7e8b8ed77d54366ba3fdb1eaf784a53271a0590ead80547ee",
     "core/research/portfolio_analysis.py": "58fc8d6a1c27d73afea6761a125f52135639070d4b0ffe6cdc2f70911b1c0ede",
     "core/research/portfolio_disclosure.py": "2e93f4c753c3bfa73bc11f468ac1eac3fb7d0c5be18191590e41efcf1a79e24c",
     "core/research/presentation.py": "3eccfd7e49ace9b1a39b3a8f89538c528439ad90125119c7ac262b35ca135e37",
     "core/research/provenance.py": "b7dbb0ee71a0df7809304110bf1c259289122d37af269da0e29ef3f5e7dbc8db",
-    "core/research/qscore.py": "e5265be2a6a2778cc69b03207e7cf00aa7343e3f5e358ed32cf6d479f1674fbe",
+    "core/research/qscore.py": "e8d7ad85a6b57491079ce256ab57236502188e7c787730321f6858e0edc8d933",
     "core/research/quote_coverage.py": "92145030da624f6cca4696e4ea40384c2791fdeb2185abaf3000c24cd62ca0b9",
     "core/research/rates_analysis.py": "ac1bf95230a9f875a7f59cec1fd09c586ab70f39a49c0abae71cba0c230ab217",
     "core/research/runs.py": "480df15cf6ab9458743dcce4eba05b1f1e534e7635756a7c6353ebee5965f6f4",
@@ -176,7 +176,7 @@
     "core/research/strategy_workflow.py": "0e99ea585474a6abed26ddcff247e74cafd4f805dafa8d8e1557535c99da7e2c",
     "core/research/structuring_analysis.py": "cedbe854629367b5372e03be3d55e784df1df0c1f92849c5fb707b59d176321a",
     "core/research/tool_export.py": "85c4042681d6efc7650f8d86ec7c81c423fd4119f5c1442e5b45283e1484a630",
-    "core/research/watchlist.py": "0afd2c770501f5cd1110b5f76eb4692b13e351b62077d31a5364dd8fd6bba89e",
+    "core/research/watchlist.py": "d1aa750e159ced081d08cb00272026e49cee76bb0a98ab2c819183fdbd29099a",
     "core/rules/__init__.py": "4cbdabd33ebc2dcf4b768f389ec041ac209cf6d7de8f616264781fb44905966c",
     "core/rules/backlog_registry.py": "233f9d8000cdf62a7369473e15b9cd97945861bb8a37f3cac061c69ab92925d3",
     "core/rules/governance.py": "89c37e7975f935c1676ff453bfa1ce3260ba91f0db1ab1c126b65bfd0de456fb",
@@ -234,7 +234,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "a3237d6da4286b13371b9cf042e2d382686c133e3ca3354b9e281382b9353f7a",
+    "docs/compliance/FACTS.md": "56739bc35cf8511a81e8231e5d4bb68471a8959ea40d963b3ebb4deb53b14ba3",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "1cb083fd217c205876a154f502d02542591dab2e62790afbdc3202f80a1c7a0a",
@@ -249,6 +249,7 @@
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "1cb449ab4976d82574d778f3089758f69240d1f12d40b21e42131ba79e166ae5",
     "docs/product/FUNDING_INFERENCE_2026-10-30.md": "ea1ef423c1d2d3601f82c301536709fa66292595faee72dbd283ad49c5d87952",
     "docs/product/FX_LANGUAGE_2026-10-31.md": "e2c15111acbd1bf6391700c6a0f6616da69d65ce4750654783fd08fbaea3d65f",
+    "docs/product/HOME_COMPACT_REVIEW_20261102.md": "cd2ae1756f0beeb72125e1e543a83ed93766bd5ab8bb6dbd0f51b7d27027c802",
     "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md": "8ea3908579720e4bb3262e2952251d2b054aa2fcdc3ba34dbb7118e5c6e5d711",
     "docs/product/INDICATOR_GUIDE_DESIGN.md": "cf664a34fefd8506e356ca2f261ddc6acbce168d370d1f7d504393d94acca484",
     "docs/product/KIS_MARKET_CHARTS_2026-11-02.md": "ae0d54bb8f2a90c39446829d56e08e564fa989182aba65933b06c849c7ba4951",
@@ -282,7 +283,7 @@
     "pyproject.toml": "9a018faa10d90f657adc69bbd91161b92b799b008ab5eba0e5ca40c120e384e8",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "7564fab775871a3a380c260edaef697c6349a67a8a6779d98a523c9767716fb7",
+    "quantgen_desktop/app.py": "89c8374238cb4c93988b37e442c0278ccbd4c41c925f28fe9cae3dfbd0e8934e",
     "quantgen_desktop/bonds.py": "98e50ea1a2040e420fb783a457dd615e005522da56dc94ef86bfbd01fc254e3f",
     "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
     "quantgen_desktop/chart_study.py": "031c70ef5b77a65f683b1de38fd6c91038a0a469f49414405a5272dc1587cc96",
@@ -311,7 +312,7 @@
     "quantgen_desktop/structuring.py": "247ef7c5f315214b82506613183d1b9b0076b7735ecb4fc4183fe55b74ded1a3",
     "quantgen_desktop/tools.py": "81910893210dd9cb3d492260d5637dc68f6edaa02952651c75bc4c233d65e27c",
     "quantgen_desktop/translations.py": "7503286b281297173ee038c413f5a4f37ca2dceb54d0a82329fba3553c5442ac",
-    "quantgen_desktop/watchlist.py": "612d760d0bb4385e2e8a4c980947723a4d8ba2e67e178c315e3f7ba07cac9d42",
+    "quantgen_desktop/watchlist.py": "d35d7a210b6f3bc1c3fce1f4608317543f73866ffd0d9b8c1723f9da007c2269",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
     "requirements.txt": "efe528fea6e00d9edb734ada7e11c75ece2e7b8996d2697fca643e15eefc000e",
@@ -344,7 +345,7 @@
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
     "tests/desktop_market_chart_acceptance.py": "746ec35592633d1051d42e204cca3687a2a1689002aea52ce962c4863215ccd4",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
-    "tests/desktop_market_layout_acceptance.py": "2ef33734e9a1d74dd7b07818b8338f576fc49d8888c3ca0ba8d1eb365d886436",
+    "tests/desktop_market_layout_acceptance.py": "2e8c3fe3bd0a8f84b60c5fcffb39e1763fd98da214b579c08aaebb8fce467c34",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
@@ -354,7 +355,7 @@
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
-    "tests/desktop_watchlist_acceptance.py": "fb5dec3279a60e21658a8b60dac232809a4d3b1b0fb930e1b711a77f4054c45c",
+    "tests/desktop_watchlist_acceptance.py": "27141f72527b979e556c0961833109f5355388a73908ccf2019936a32e6f0fbc",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
     "tests/ficc_acceptance.py": "101e26e68f97b5cb4a8bf2a5498a300498a9c44627d219559d1fcbd5228ed813",
@@ -363,7 +364,7 @@
     "tests/frozen_guard.py": "5a8f9a8c33cd0cc279da28db6e8f38c6e9b8abe643d0b7a26821077257f32246",
     "tests/funding_inference_acceptance.py": "dc1eaf4e627411a43ab46dd878a3628c076911ede974554575cc24f101310b7b",
     "tests/golden_tools.py": "d3b4ec0c7610e1391eb1739f8101b60766139d9dff37f80a18528bcb99f31e61",
-    "tests/home_watchlist_acceptance.py": "a128c3acb36d67d3a2dbd0e028185387d387de2cc17bb8c6fd0735c7e8b40cd3",
+    "tests/home_watchlist_acceptance.py": "411f8d91eb8073a1b089297842cdaf2ba927a48dfd7d34f563d8908d86dd6416",
     "tests/indicator_guide_acceptance.py": "94f9065e59762bdbc7f2ab8a9d000f8211b2aef88a87a0076f70f6bdca2bc76e",
     "tests/kis_stream_acceptance.py": "a9108b1ab7fa59c536fa616a3a03d1d179176bdf8007628c01043cf457895bbe",
     "tests/kis_workspace_acceptance.py": "b381d8a3e7c0d53f671ab06859fab7e72467af50c95d79894aa0b914eeb22421",
@@ -413,7 +414,7 @@
     "tests/packaging_policy_acceptance.py": "936034aeaab8d118f83fce8728897650acc2f306cb5405172fef4893fef0b04f",
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
-    "tests/qscore_acceptance.py": "b33b54454f8aba2f625b071b52f482f98c1840a52e6a3f1a497eeb2417799762",
+    "tests/qscore_acceptance.py": "52d0c74fd0e5455b3d333618e011e5a6d7372e4521b750986ff15a30a78559ac",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
     "tests/quote_coverage_acceptance.py": "09d727791eb18d44955a0324058439c0d63777af94b5ca18f8a1ced7eb6cec86",
     "tests/reference/__init__.py": "981465fb05d87f128a0b80cc4b8122a83335ee0994ce5b4d3ee3bdbe72bc6e9c",
@@ -503,163 +504,163 @@
   "reviews": {
     "1": {
       "document_sha256": "8999644c980682de0259e004f13b09b3155ee5f90de6a1a2fc443961e784d6e4",
-      "source_digest": "20f6bf126e355d17b4ebe085cc1c4ba552a382eb490a33183f39bbace34d4cec",
+      "source_digest": "a24a4ef716f1c80f843828f3e9c7aa342c9659ee72741c44f306626e50a76a3a",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.827104+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.396680+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "20f6bf126e355d17b4ebe085cc1c4ba552a382eb490a33183f39bbace34d4cec",
+      "source_digest": "a24a4ef716f1c80f843828f3e9c7aa342c9659ee72741c44f306626e50a76a3a",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.832261+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.400486+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "4d2c326b8d02beb1699c6747e65095f917eec9fc1a477ad391a6bb304bde3c0b",
+      "source_digest": "32b173917c5668b1e46a05f7950aa7ae08271fae1456c12361b828c6a0036848",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.835719+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.404025+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "4cf0888e6f96f06a88023541892cdf72c4442af0e32c2e7a8301f15b9ee710c5",
+      "source_digest": "0e2cec5fdd1aff3ea0f6f727db58200c98b46ec50f1e2f4eb16b532ace3736b5",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.838772+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.408273+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "62ebe167aa9e89263bebc6435cfc65d9140035942cc89f4c351d9283adbd650a",
+      "source_digest": "f43753007e2fcaa657bad045a98fcea2b1fa6210b98e5d5e49bff8449e2abb85",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.842049+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.411798+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "6": {
       "document_sha256": "fbe667b6e7f2f4064e7873cb880beb348875cc4c4c4ecf4797125ea3b898dab0",
-      "source_digest": "d55c0220cf23244c14e0ac1783657a63f61eff6601e94e0cc23cefb913fead86",
+      "source_digest": "f963a7ba2c5c35e241273c8059632a7a32cd8fc3acae67f5f3119be337d21719",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.844704+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.414442+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "7": {
       "document_sha256": "5614e2d62a783fa147880e6aba7da1db696191b204923339c4c49364b88a3f57",
-      "source_digest": "20f6bf126e355d17b4ebe085cc1c4ba552a382eb490a33183f39bbace34d4cec",
+      "source_digest": "a24a4ef716f1c80f843828f3e9c7aa342c9659ee72741c44f306626e50a76a3a",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.849701+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.418198+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "8": {
       "document_sha256": "64caf9f82a5167b591343a22dbe476110744faea951302d4214a2d634a2aeedc",
-      "source_digest": "d55c0220cf23244c14e0ac1783657a63f61eff6601e94e0cc23cefb913fead86",
+      "source_digest": "f963a7ba2c5c35e241273c8059632a7a32cd8fc3acae67f5f3119be337d21719",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.855271+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.420833+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "9": {
-      "document_sha256": "e13cc4d66fa727f737e85b40ab105fecb5904971c86055dda16aef24b208dfe4",
-      "source_digest": "9cfad1d3c69d9f4a74a036cb4d99e3306b558fb7fb2657dc73421146cb5788c9",
+      "document_sha256": "34ff240c2ae78059c2b5f66396c1e2b2af30b539ce9771e6f7c738083f6fc328",
+      "source_digest": "df4278069fd6e36d38b8cb8604f69137fabb587bdfadbdf83a18a73057a57571",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.860379+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.425862+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "bfec12945838eafef8659732d3fbe7a170a9dc5916b0d1d3a077b6711add7389",
+      "source_digest": "fe4662cab23d44574a34849ecf48207808392b94ee621cd757ae80afc46669bd",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.864659+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.428494+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "415f87ea40cb71d4c44fb3735ac43c284f5f393aa8304a242b31372a3505b77b",
+      "source_digest": "e8240bae8720463adb1ffd5a8b0aa011b34b49052403562bda2a2fcc80e5d575",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.870466+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.431871+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "12": {
-      "document_sha256": "e6a6ec1bf32796ecee6570528b5b46ffcc3dd666c1cc8c037d3e49ab374ae7b7",
-      "source_digest": "1aa63942b89307963ae2f1592b31a6caf721051a36186201c3b7b0739fd65610",
+      "document_sha256": "d16956523934581e1476652a3e3e1a187186059a59e360a15a17ba3c74f864bb",
+      "source_digest": "5c7a65f0ede3b519722cef33bc25cf16bb2369dff76061997a8ec81edaf4e1e1",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.874595+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.434941+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "13": {
-      "document_sha256": "9a1da9d3c0fe3437b4992dd6eb25a174cd0d6e60d5b18c8e0c906be9a2382658",
-      "source_digest": "9cfad1d3c69d9f4a74a036cb4d99e3306b558fb7fb2657dc73421146cb5788c9",
+      "document_sha256": "009a5630dbee93b84fac4f277a4c7189f8fefa5931bf82d7f5f1715b06bf008b",
+      "source_digest": "df4278069fd6e36d38b8cb8604f69137fabb587bdfadbdf83a18a73057a57571",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.880068+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.438166+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "14": {
-      "document_sha256": "4708a9554bc74653e7b0401d559ae5ee29728397b2fd8f2fb6bb57a05e0a1fc6",
-      "source_digest": "9cfad1d3c69d9f4a74a036cb4d99e3306b558fb7fb2657dc73421146cb5788c9",
+      "document_sha256": "b832e82b89d512c38174ff791559e001480a42261b80ed8ec763ab6cf1ef5eac",
+      "source_digest": "df4278069fd6e36d38b8cb8604f69137fabb587bdfadbdf83a18a73057a57571",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.887381+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.441663+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "15": {
-      "document_sha256": "6a103c51e560274abb48e1958a91868e28cf2ecae2eae26ca66cecacbc0e7d2d",
-      "source_digest": "9cfad1d3c69d9f4a74a036cb4d99e3306b558fb7fb2657dc73421146cb5788c9",
+      "document_sha256": "334781de333f627b09f0cab3c008658fe2ee5be386f7b0a783c514a50d811227",
+      "source_digest": "df4278069fd6e36d38b8cb8604f69137fabb587bdfadbdf83a18a73057a57571",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.893431+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.446891+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "f47627a7354264d3e421a32877faa509387271c763bdf9bb1bf0ec5cfd9da4e9",
+      "source_digest": "f0d9ea73e7ec19d339950a45dfc218d43da9b4246215fdc5dac6f08993227943",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.896802+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.451138+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "d55c0220cf23244c14e0ac1783657a63f61eff6601e94e0cc23cefb913fead86",
+      "source_digest": "f963a7ba2c5c35e241273c8059632a7a32cd8fc3acae67f5f3119be337d21719",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.902912+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.455597+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "20f6bf126e355d17b4ebe085cc1c4ba552a382eb490a33183f39bbace34d4cec",
+      "source_digest": "a24a4ef716f1c80f843828f3e9c7aa342c9659ee72741c44f306626e50a76a3a",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.908407+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.463469+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "19": {
       "document_sha256": "0a94fadb71a3bec2038f7d33ca4575fcfdfec1b754872408851d3b223b04e174",
-      "source_digest": "8fffcac7f8f029e486447d21566c43f45b30de66e03ea32c866d0b82fe3ce4c7",
+      "source_digest": "266bdc1f71d4f2241352eb9290411b3319d8c543482b0bca78e6b08b0aa36046",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.912115+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.467859+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     },
     "20": {
       "document_sha256": "7cb0681604508a6d5e63633469acd974c078f96e5f72ba158b8ecbfbf92f5adb",
-      "source_digest": "20f6bf126e355d17b4ebe085cc1c4ba552a382eb490a33183f39bbace34d4cec",
+      "source_digest": "a24a4ef716f1c80f843828f3e9c7aa342c9659ee72741c44f306626e50a76a3a",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "Reviewed Windows-only test portability changes: explicit UTF-8 and bounded rendered-outcome waits, no runtime/policy semantics change. All20 prior review maintained; evidence docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md",
-      "reviewed_at": "2026-11-02T03:51:17.914705+00:00",
-      "source_commit": "3c18a93efc2981903de2f2a1fdfe53ebbc6cc464"
+      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 따라 직전 검토와 동일한 20종 원문·양식을 compact Home 소스 차이와 재대조했다. 09/12/13/14/15 및 FACTS를 갱신하고 나머지15종의 개인정보·계약·요금·권리·삭제 조건은 변경 근거가 없어 유지했다. 44px행·헤더 도움말 포커스/키보드·긴 영문 이름 두줄 높이·종목 상세 차트 경로·자료없음 표시·12종 안전한 오류 분류를 검토했다. 화면 산식 생략은 실제 두 엔진의 역할·한계 설명으로 대체하되 내부 산식 보존, 도움말 이외 Q-SCORE AST 동일 확인. KIS 설정 발견과 실제 수신, Yahoo 빈자료와 미확인 원인을 구별하며 실제 KIS/Windows 전체접근성/예측력/권리/사이트 배포와 공개 BLOCKED 상태는 유지한다.",
+      "reviewed_at": "2026-11-02T04:20:20.476272+00:00",
+      "source_commit": "ead6e67a5dd1a767f11d960e67eb8069891e92ad"
     }
   }
 }

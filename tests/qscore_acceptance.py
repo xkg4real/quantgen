@@ -159,8 +159,9 @@ class QScoreTests(unittest.TestCase):
         self.assertIn("예측력은 검증되지", q_score_help("ko"))
         self.assertIn("unvalidated predictive power", q_score_help("en"))
         for lang in ("ko", "en"):
-            for requirement in ("70%", "15%", "200", "252", "120", "CVaR"):
-                self.assertIn(requirement, q_score_help(lang))
+            self.assertIn("Q-SCORE v0.1", q_score_help(lang))
+            self.assertNotIn("70%", q_score_help(lang))
+            self.assertNotIn("15%", q_score_help(lang))
 
 
 if __name__ == "__main__":

@@ -158,9 +158,21 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.assertLessEqual(self.panel.width(), 700)
         self.assertLessEqual(table.width(), self.panel.width())
         self.assertGreater(table.horizontalScrollBar().maximum(), 0)
-        self.assertLessEqual(table.height(), 12 * 64 + 80)
-        self.assertEqual([table.rowHeight(i) for i in range(12)], [64] * 12)
+        self.assertLessEqual(table.height(), 600)
+        self.assertEqual([table.rowHeight(i) for i in range(12)], [44] * 12)
         self.assertEqual(table.verticalScrollBarPolicy(), Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+    def test_long_english_company_names_keep_both_lines_in_compact_rows(self):
+        font = self.panel.font()
+        font.setPixelSize(13)  # The research window's production text size.
+        self.panel.setFont(font)
+        self.panel.set_locale(LocaleContext("en_US"))
+        self.drain()
+        for row in (6, 10, 11):
+            identity = self.panel.table.cellWidget(row, 0)
+            company = next(label for label in identity.findChildren(QLabel) if label.objectName() != "watchlistTicker")
+            self.assertGreaterEqual(company.height(), company.heightForWidth(company.width()), company.text())
+            self.assertEqual(self.panel.table.rowHeight(row), 44)
 
     def test_busy_refresh_is_explicit_and_keeps_existing_rows(self):
         requests = []
@@ -213,9 +225,10 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.assertEqual(table.item(0, 7).text(), "Not scored")
         self.network.assert_not_called()
 
-    def test_score_help_hover_and_keyboard_use_the_engine_methodology(self):
+    def test_score_help_hover_and_keyboard_explain_engine_capabilities(self):
         from core.research.qscore import q_score_help
-        self.assertTrue(self.panel.score_help.toolTip().startswith(q_score_help("ko").split("\n\n")[0]))
+        self.assertIn("기술신호·위험분석 엔진", self.panel.score_help.toolTip())
+        self.assertNotIn("70%", self.panel.score_help.toolTip())
         self.panel.score_help.setFocus()
         QTest.keyClick(self.panel.score_help, Qt.Key.Key_Space)
         self.drain()
@@ -225,11 +238,65 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.panel.set_locale(LocaleContext("en_US"))
         self.panel.set_theme(DARK)
         self.assertEqual(dialog.body.text(), q_score_help("en"))
-        self.assertTrue(self.panel.score_help.toolTip().startswith(q_score_help("en").split("\n\n")[0]))
-        self.assertIn("70%", dialog.body.text())
-        self.assertIn("200", dialog.body.text())
+        self.assertIn("technical-signal and risk engines", self.panel.score_help.toolTip())
+        self.assertNotIn("70%", dialog.body.text())
+        self.assertNotIn("15%", dialog.body.text())
         self.assertIn(DARK.text, dialog.styleSheet())
         self.network.assert_not_called()
+
+    def test_header_help_follows_column_resize_move_and_horizontal_scroll(self):
+        header = self.panel.table.horizontalHeader()
+        help_button = self.panel.score_help
+        self.assertIs(help_button.parentWidget(), header.viewport())
+        self.assertEqual(help_button.text(), "?")
+        self.assertEqual(self.panel.findChildren(QPushButton, "qScoreHeaderHelp"), [help_button])
+        self.assertFalse([button for button in self.panel.findChildren(QPushButton) if button.text() == "Q-SCORE ?"])
+        self.assertEqual(header.logicalIndexAt(help_button.geometry().center()), 7)
+        old_position = help_button.pos()
+        header.resizeSection(6, 100)
+        self.drain()
+        self.assertNotEqual(help_button.pos(), old_position)
+        self.assertEqual(header.logicalIndexAt(help_button.geometry().center()), 7)
+        header.moveSection(header.visualIndex(7), 1)
+        self.drain()
+        self.assertEqual(header.logicalIndexAt(help_button.geometry().center()), 7)
+        header.moveSection(header.visualIndex(7), 7)
+        self.panel.resize(700, 800)
+        self.panel.table.horizontalScrollBar().setValue(0)
+        self.drain()
+        self.assertTrue(help_button.visibleRegion().isEmpty())
+        self.panel.set_live_state("connecting")
+        self.panel.stop_button.setFocus()
+        QTest.keyClick(self.panel.stop_button, Qt.Key.Key_Tab)
+        self.drain()
+        self.assertIs(self.app.focusWidget(), help_button)
+        self.assertGreater(self.panel.table.horizontalScrollBar().value(), 0)
+        self.assertTrue(header.viewport().rect().contains(help_button.geometry()))
+        QTest.keyClick(help_button, Qt.Key.Key_Return)
+        self.drain()
+        self.assertTrue(self.panel.score_help_dialog.isVisible())
+        self.network.assert_not_called()
+
+    def test_provider_failure_reason_is_localized_safe_and_actionable(self):
+        rows = sample_rows()
+        rows[0].update(status="UNAVAILABLE", reason_code="rate_limited", error_code="https://unsafe.invalid?secret=hidden")
+        self.panel.set_rows(rows)
+        tooltip = self.panel.table.item(0, 5).toolTip()
+        self.assertEqual(self.panel.table.item(0, 5).text(), "요청 제한")
+        self.assertIn("요청 한도", tooltip)
+        self.assertIn("새로고침", tooltip)
+        self.assertNotIn("KIS", tooltip)
+        self.assertNotIn("unsafe.invalid", tooltip)
+        self.panel.set_locale(LocaleContext("en_US"))
+        tooltip = self.panel.table.item(0, 5).toolTip()
+        self.assertEqual(self.panel.table.item(0, 5).text(), "Rate limited")
+        self.assertIn("request limit", tooltip)
+        self.assertIn("refresh", tooltip)
+        self.assertNotIn("secret", tooltip)
+        rows[0]["reason_code"] = "no_observations"
+        self.panel.set_rows(rows)
+        self.panel.set_locale(LocaleContext("ko_KR"))
+        self.assertEqual(self.panel.table.item(0, 5).text(), "자료 없음")
 
     def test_live_controls_trade_metadata_and_disconnect_pause_last_stars(self):
         events = []

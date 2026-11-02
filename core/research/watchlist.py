@@ -10,7 +10,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 import math
 
-from .markets import SPECS, load_markets
+from .markets import SPECS, MarketDataUnavailable, load_markets, provider_failure_reason
 
 
 KR_STOCK_SPECS = (
@@ -51,7 +51,9 @@ def default_home_rows(status="NOT_LOADED"):
 
 
 def _quote_client():
-    from data.krx.kis_client import KISClient
+    from data.krx.kis_client import KISClient, requests
+    if requests is None:
+        raise ImportError("KIS transport library unavailable")
     return KISClient()
 
 
@@ -100,9 +102,6 @@ def load_home_markets(*, loader=None, quote_client=None, today=None):
     for default, observation in zip(defaults[:len(SPECS)], indicators):
         row = {**default, **observation}
         row["kind"] = "market_indicator"
-        if row["status"] == "UNAVAILABLE":
-            row["reason_code"] = ("invalid_response" if row.get("error_code") == "ValueError"
-                                  else "provider_unavailable")
         rows.append(row)
 
     stocks = defaults[len(SPECS):]
@@ -110,7 +109,7 @@ def load_home_markets(*, loader=None, quote_client=None, today=None):
         client = quote_client if quote_client is not None else _quote_client()
         ready = bool(client.ready)
     except Exception as exc:
-        reason = "dependency_missing" if isinstance(exc, ImportError) else "provider_unavailable"
+        reason = provider_failure_reason(exc)
         for row in stocks:
             row.update(status="UNAVAILABLE", reason_code=reason,
                        error_code=type(exc).__name__, loaded_at=_now().isoformat())
@@ -129,6 +128,8 @@ def load_home_markets(*, loader=None, quote_client=None, today=None):
             if (str(quote.ticker) != row["symbol"] or str(quote.source).upper() != "KIS"
                     or str(quote.currency).upper() != "KRW"):
                 raise ValueError("Unexpected instrument, provider or unit")
+            if quote.price is None:
+                raise MarketDataUnavailable("no_observations")
             values = dict(
                 value=_number(quote.price, positive=True),
                 change=_number(quote.change_pct, optional=True),
@@ -144,8 +145,6 @@ def load_home_markets(*, loader=None, quote_client=None, today=None):
             row.update(**values, market_cap_unit="UNVERIFIED", status="SNAPSHOT",
                        quote_time_kind="receipt", loaded_at=now.isoformat())
         except Exception as exc:
-            row.update(status="UNAVAILABLE", reason_code=("invalid_response"
-                       if isinstance(exc, (ValueError, TypeError, AttributeError, OverflowError))
-                       else "provider_unavailable"), error_code=type(exc).__name__,
+            row.update(status="UNAVAILABLE", reason_code=provider_failure_reason(exc), error_code=type(exc).__name__,
                        loaded_at=_now().isoformat())
     return rows + stocks

@@ -7,16 +7,18 @@ import math
 import re
 from babel.dates import format_date
 
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import QEvent, QRect, Qt, pyqtSignal
 from PyQt6.QtGui import QColor, QBrush
 from PyQt6.QtWidgets import (
     QAbstractItemView, QDialog, QFormLayout, QFrame, QHBoxLayout, QHeaderView,
     QLabel, QPushButton, QScrollArea, QSizePolicy, QTableWidget,
-    QStyledItemDelegate, QTableWidgetItem, QVBoxLayout, QWidget,
+    QStyle, QStyledItemDelegate, QTableWidgetItem, QVBoxLayout, QWidget,
 )
 
 from core.i18n import LocaleContext
 from core.theme import LIGHT
+
+ROW_HEIGHT = 44
 
 
 _NAMES = {
@@ -129,6 +131,22 @@ def _timestamp(value, ctx, *, compact=False):
 
 
 def _status(row, ctx):
+    if row.get("status") == "UNAVAILABLE":
+        reasons = {
+            "no_observations": ("자료 없음", "No data"),
+            "insufficient_observations": ("자료 부족", "Too little data"),
+            "rate_limited": ("요청 제한", "Rate limited"),
+            "network_timeout": ("응답 지연", "Timed out"),
+            "network_error": ("연결 확인", "Connection"),
+            "certificate_error": ("인증서 확인", "Certificate"),
+            "access_denied": ("권한 확인", "Access denied"),
+            "dependency_missing": ("설치 확인", "Missing package"),
+            "dependency_incompatible": ("버전 확인", "Version issue"),
+            "connection_not_configured": ("설정 필요", "Setup needed"),
+            "invalid_response": ("응답 확인", "Invalid response"),
+        }
+        if row.get("reason_code") in reasons:
+            return _text(ctx, *reasons[row["reason_code"]])
     if row.get("status") == "STALE" and row.get("quote_time_kind") == "trade":
         if row.get("feed_state") == "stopped":
             return _text(ctx, "연결 종료", "Disconnected")
@@ -156,8 +174,8 @@ def _score_text(score, ctx):
 
 def _score_tooltip(score, ctx):
     score = score if isinstance(score, dict) else {}
-    return (_text(ctx, "가격 추세·위험을 살펴보는 연구 점수입니다. Q-SCORE ?에서 산정 방식을 확인하세요.",
-                  "A research score for price trend and risk. Open Q-SCORE ? for its methodology.")
+    return (_text(ctx, "가격 흐름과 위험을 함께 비교하는 연구 점수입니다. 표 제목 옆 ?에서 Q-SCORE 소개를 확인하세요.",
+                  "Compare price behavior and risk with this research score. Open ? beside the column title to learn about Q-SCORE.")
             + "\n" + _text(ctx, "점수 기준: ", "Score data as of: ") + _score_as_of(score, ctx))
 
 
@@ -170,10 +188,11 @@ def _score_as_of(score, ctx):
 
 
 def _score_help_summary(ctx):
-    from core.research.qscore import q_score_help
-    return ("\n\n".join(q_score_help(ctx.language).split("\n\n")[:2]) + "\n\n"
-            + _text(ctx, "클릭하거나 키보드로 열면 기준과 한계를 모두 확인할 수 있습니다.",
-                    "Click or use the keyboard to read the full requirements and limitations."))
+    return (_text(ctx,
+                  "QUANTGEN의 기술신호·위험분석 엔진이 추세·모멘텀·변동성·하락 위험을 함께 살펴 정리한 연구 별점입니다.",
+                  "A research rating from QUANTGEN's technical-signal and risk engines, bringing together trend, momentum, volatility and downside risk.") + "\n\n"
+            + _text(ctx, "클릭하거나 Enter·Space를 누르면 활용 방법과 해석 시 유의점을 확인할 수 있습니다.",
+                    "Click or press Enter/Space to explore its uses and interpretation limits."))
 
 
 def _can_chart(row):
@@ -202,6 +221,26 @@ def _source_time(row, ctx, *, compact=False):
 
 def _reason(row, ctx):
     reason = row.get("reason_code") or row.get("error_code")
+    provider_reasons = {
+        "no_observations": ("공급처가 관측값을 반환하지 않았습니다. 연결과 조회 종목을 확인한 뒤 다시 조회하세요.",
+                            "The provider returned no observations. Check the connection and instrument, then refresh."),
+        "insufficient_observations": ("변화를 계산할 관측값이 부족합니다. 나중에 다시 조회하세요.",
+                                      "There are too few observations to calculate a change. Refresh later."),
+        "rate_limited": ("공급처의 요청 한도에 도달했습니다. 잠시 기다린 뒤 새로고침하세요.",
+                         "The provider's request limit was reached. Wait briefly, then refresh."),
+        "network_timeout": ("공급처 응답 시간이 초과되었습니다. 인터넷 연결을 확인한 뒤 다시 조회하세요.",
+                            "The provider response timed out. Check the internet connection, then refresh."),
+        "network_error": ("공급처에 연결하지 못했습니다. 인터넷 연결과 프록시 설정을 확인한 뒤 다시 조회하세요.",
+                          "The provider could not be reached. Check the internet connection and proxy settings, then refresh."),
+        "certificate_error": ("공급처의 인증서를 확인하지 못했습니다. PC 시각과 네트워크 인증서 설정을 확인하세요.",
+                              "The provider certificate could not be verified. Check the PC clock and network certificate settings."),
+        "access_denied": ("공급처가 조회를 허용하지 않았습니다. 해당 공급처의 접근 권한과 이용 조건을 확인하세요.",
+                          "The provider denied access. Check its access permissions and service terms."),
+        "dependency_incompatible": ("시세 라이브러리 버전이 호환되지 않습니다. 앱의 의존성을 업데이트한 뒤 다시 조회하세요.",
+                                    "The quote-library version is incompatible. Update the app dependencies, then refresh."),
+    }
+    if reason in provider_reasons:
+        return _text(ctx, *provider_reasons[reason])
     if reason in ("connection_not_configured", "missing_credentials", "KISUnavailable", "MISSING_CREDENTIALS", "NOT_CONFIGURED"):
         return _text(ctx, "KIS 연결 설정을 확인하세요. API 키와 시크릿이 필요합니다.",
                      "Check KIS connection settings. An API key and secret are required.")
@@ -250,6 +289,97 @@ class _IdentityDelegate(QStyledItemDelegate):
         # Keep the item's name for accessibility and legacy consumers, while
         # the ticker/name widget owns visible text. Otherwise both are drawn.
         option.text = ""
+
+
+class _HeaderHelpButton(QPushButton):
+    def focusInEvent(self, event):
+        self.parentWidget().parentWidget().ensure_score_visible()
+        super().focusInEvent(event)
+
+    def keyPressEvent(self, event):
+        if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
+            self.click()
+            event.accept()
+            return
+        super().keyPressEvent(event)
+
+
+class _WatchlistHeader(QHeaderView):
+    """An actual focusable help button travels with the Q-SCORE section."""
+    SCORE_COLUMN = 7
+
+    def __init__(self, table):
+        super().__init__(Qt.Orientation.Horizontal, table)
+        self.table = table
+        self.colors = LIGHT
+        self.help_button = _HeaderHelpButton("?", self.viewport())
+        self.help_button.setObjectName("qScoreHeaderHelp")
+        self.help_button.setFixedSize(22, 22)
+        self.help_button.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        self.setFixedHeight(38)
+        self.sectionResized.connect(self._section_resized)
+        self.sectionMoved.connect(self._position_help)
+        self.geometriesChanged.connect(self._position_help)
+        table.horizontalScrollBar().valueChanged.connect(self._position_help)
+
+    def _section_resized(self, logical, previous, size):
+        if logical == self.SCORE_COLUMN and size < 128:
+            self.resizeSection(logical, 128)
+        self._position_help()
+
+    def _group_geometry(self):
+        title_width = self.fontMetrics().horizontalAdvance("Q-SCORE")
+        width = title_width + 6 + self.help_button.width()
+        left = self.sectionViewportPosition(self.SCORE_COLUMN) + (self.sectionSize(self.SCORE_COLUMN) - width) // 2
+        return left, title_width
+
+    def _position_help(self, *args):
+        if not hasattr(self, "help_button"):
+            return
+        if self.count() <= self.SCORE_COLUMN:
+            self.help_button.hide()
+            return
+        self.help_button.setVisible(not self.isSectionHidden(self.SCORE_COLUMN))
+        left, title_width = self._group_geometry()
+        self.help_button.move(left + title_width + 6, (self.viewport().height() - self.help_button.height()) // 2)
+        self.help_button.raise_()
+
+    def ensure_score_visible(self):
+        # A keyboard focus on the clipped button must also reveal its section.
+        left = self.sectionViewportPosition(self.SCORE_COLUMN)
+        right = left + self.sectionSize(self.SCORE_COLUMN)
+        bar = self.table.horizontalScrollBar()
+        if left < 0:
+            bar.setValue(bar.value() + left)
+        elif right > self.viewport().width():
+            bar.setValue(bar.value() + right - self.viewport().width())
+        self._position_help()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._position_help()
+
+    def changeEvent(self, event):
+        super().changeEvent(event)
+        if event.type() in (QEvent.Type.FontChange, QEvent.Type.StyleChange):
+            self._position_help()
+            self.viewport().update()
+
+    def scrollContentsBy(self, dx, dy):
+        super().scrollContentsBy(dx, dy)
+        self._position_help()
+
+    def paintSection(self, painter, rect, logical_index):
+        if logical_index != self.SCORE_COLUMN:
+            return super().paintSection(painter, rect, logical_index)
+        left, title_width = self._group_geometry()
+        painter.save()
+        painter.setClipRect(rect)
+        painter.fillRect(rect, QColor(self.colors.surface_2))
+        painter.setPen(QColor(self.colors.muted))
+        painter.setFont(self.font())
+        painter.drawText(QRect(left, rect.y(), title_width, rect.height()), Qt.AlignmentFlag.AlignCenter, "Q-SCORE")
+        painter.restore()
 
 
 class MarketDetailDialog(QDialog):
@@ -363,9 +493,14 @@ class ScoreHelpDialog(QDialog):
         outer.setContentsMargins(24, 24, 24, 24)
         outer.setSpacing(16)
         self.heading = _label("Q-SCORE")
+        self.heading.setObjectName("scoreHelpHeading")
+        self.eyebrow = _label("QUANTGEN")
+        self.eyebrow.setObjectName("scoreHelpBrand")
         self.body = _label()
+        self.body.setObjectName("scoreHelpBody")
         self.close_button = QPushButton()
         self.close_button.clicked.connect(self.accept)
+        outer.addWidget(self.eyebrow)
         outer.addWidget(self.heading)
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
@@ -382,9 +517,8 @@ class ScoreHelpDialog(QDialog):
         self.set_locale(locale)
 
     def set_locale(self, ctx):
-        self.setWindowTitle(_text(ctx, "Q-SCORE 산정 안내", "About Q-SCORE"))
-        # The calculation module owns the methodology text so its weights and
-        # data requirements cannot diverge from the UI explanation.
+        self.setWindowTitle(_text(ctx, "Q-SCORE 소개", "About Q-SCORE"))
+        # The core owns the product explanation, keeping both views in sync.
         from core.research.qscore import q_score_help
         self.body.setText(q_score_help(ctx.language))
         self.close_button.setText(_text(ctx, "닫기", "Close"))
@@ -393,6 +527,9 @@ class ScoreHelpDialog(QDialog):
         self.setStyleSheet(f"""
             QWidget {{ background: {p.surface}; color: {p.text}; }}
             QLabel {{ color: {p.text}; background: transparent; }}
+            QLabel#scoreHelpBrand {{ color: {p.accent}; font-size: 11px; font-weight: 600; }}
+            QLabel#scoreHelpHeading {{ font-size: 25px; font-weight: 600; }}
+            QLabel#scoreHelpBody {{ font-size: 14px; }}
             QPushButton {{ color: {p.text}; background: {p.surface}; border: 1px solid {p.border}; border-radius: 8px; padding: 9px 14px; }}
             QPushButton:hover {{ background: {p.accent_soft}; }}
             QPushButton:focus {{ border: 2px solid {p.accent}; }}
@@ -429,9 +566,6 @@ class WatchlistPanel(QWidget):
         self.refresh = QPushButton()
         self.refresh.clicked.connect(self.refresh_requested.emit)
         header.addWidget(self.refresh)
-        self.score_help = QPushButton("Q-SCORE ?")
-        self.score_help.clicked.connect(self.open_score_help)
-        header.addWidget(self.score_help)
         outer.addLayout(header)
         self.caption = _label()
         outer.addWidget(self.caption)
@@ -446,6 +580,9 @@ class WatchlistPanel(QWidget):
         live_controls.addWidget(self.live_status, 1)
         outer.addLayout(live_controls)
         self.table = _WatchlistTable(0, 8)
+        self.table.setHorizontalHeader(_WatchlistHeader(self.table))
+        self.score_help = self.table.horizontalHeader().help_button
+        self.score_help.clicked.connect(self.open_score_help)
         self.table.setItemDelegateForColumn(0, _IdentityDelegate(self.table))
         self.table.setAccessibleName("Market watchlist")
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
@@ -455,8 +592,9 @@ class WatchlistPanel(QWidget):
         self.table.setShowGrid(False)
         self.table.setWordWrap(False)
         self.table.verticalHeader().hide()
-        self.table.verticalHeader().setDefaultSectionSize(64)
+        self.table.verticalHeader().setDefaultSectionSize(ROW_HEIGHT)
         self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.table.setHorizontalScrollMode(QAbstractItemView.ScrollMode.ScrollPerPixel)
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
@@ -464,9 +602,12 @@ class WatchlistPanel(QWidget):
         for column, width in enumerate((210, 115, 85, 85, 185, 128, 70, 150)):
             self.table.setColumnWidth(column, width)
         self.table.horizontalHeader().setStretchLastSection(True)
+        self.table.horizontalScrollBar().rangeChanged.connect(self._sync_table_height)
         self.table.cellDoubleClicked.connect(lambda row, column: self.open_detail(row))
         self.table.detail_activated.connect(self.open_detail)
         outer.addWidget(self.table)
+        QWidget.setTabOrder(self.stop_button, self.score_help)
+        QWidget.setTabOrder(self.score_help, self.table)
         self.set_locale(self.ctx)
         self.set_theme(LIGHT)
 
@@ -524,7 +665,7 @@ class WatchlistPanel(QWidget):
             "시장지표는 일별 관측, 국내 종목은 조회 시세입니다. 실시간 목록을 연결하면 국내 종목의 새 체결과 점수가 갱신됩니다.",
             "Indicators show daily observations; stocks start with quote snapshots. Connect the live watchlist to update stock trades and scores."))
         self.refresh.setText(_text(ctx, "조회 중…", "Loading…") if self.busy else _text(ctx, "새로고침", "Refresh"))
-        self.score_help.setAccessibleName(_text(ctx, "Q-SCORE 산정 안내 열기", "Open Q-SCORE methodology"))
+        self.score_help.setAccessibleName(_text(ctx, "Q-SCORE 소개 열기", "About Q-SCORE"))
         self.score_help.setToolTip(_score_help_summary(ctx))
         self.live_button.setText(_text(ctx, "실시간 목록 연결", "Connect live watchlist"))
         self.stop_button.setText(_text(ctx, "연결 중지", "Stop"))
@@ -548,15 +689,21 @@ class WatchlistPanel(QWidget):
             QLabel {{ color: {p.text}; }}
             QLabel#watchlistTitle {{ font-size: 18px; font-weight: 600; color: {p.text}; }}
             QTableWidget {{ background: {p.surface}; alternate-background-color: {p.surface_2}; border: 1px solid {p.border}; border-radius: 10px; selection-background-color: {p.accent_soft}; selection-color: {p.text}; color: {p.text}; }}
-            QTableWidget::item {{ padding: 8px; border-bottom: 1px solid {p.border}; }}
-            QHeaderView::section {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 8px; border: 0; }}
+            QTableWidget::item {{ padding: 3px 8px; border-bottom: 1px solid {p.border}; }}
+            QHeaderView::section {{ background: {p.surface_2}; color: {p.muted}; padding: 6px 8px; border: 0; font-weight: 500; }}
             QWidget#watchlistIdentity {{ background: transparent; }}
             QWidget#watchlistIdentity QLabel {{ background: transparent; color: {p.text}; }}
-            QWidget#watchlistIdentity QLabel#watchlistTicker {{ background: {p.accent_soft}; color: {p.accent}; border-radius: 7px; padding: 5px; font-weight: 600; }}
+            QWidget#watchlistIdentity QLabel#watchlistTicker {{ background: {p.accent_soft}; color: {p.accent}; border-radius: 6px; padding: 3px 4px; font-size: 11px; font-weight: 600; }}
             QPushButton {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 8px; padding: 7px 10px; }}
             QPushButton:hover {{ background: {p.accent_soft}; }}
             QPushButton:focus {{ border: 2px solid {p.accent}; }}
+            QPushButton[watchlistDetail='true'] {{ margin: 6px 3px; padding: 0 5px; border-radius: 6px; }}
+            QPushButton#qScoreHeaderHelp {{ color: {p.muted}; background: {p.surface}; border: 1px solid {p.border}; border-radius: 11px; padding: 0; margin: 0; font-size: 12px; font-weight: 600; }}
+            QPushButton#qScoreHeaderHelp:hover {{ color: {p.accent}; background: {p.accent_soft}; }}
+            QPushButton#qScoreHeaderHelp:focus {{ color: {p.accent}; border: 2px solid {p.accent}; }}
         """)
+        self.table.horizontalHeader().colors = palette
+        self.table.horizontalHeader().viewport().update()
         self._render_rows()
         if self.detail_dialog is not None:
             self.detail_dialog.set_theme(palette)
@@ -604,7 +751,7 @@ class WatchlistPanel(QWidget):
             identity.setObjectName("watchlistIdentity")
             identity.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
             identity_layout = QHBoxLayout(identity)
-            identity_layout.setContentsMargins(10, 4, 10, 4)
+            identity_layout.setContentsMargins(10, 2, 10, 2)
             identity_layout.setSpacing(8)
             symbol = str(row.get("symbol") or "—")
             badge = _label(_BADGES.get(symbol, symbol))
@@ -615,18 +762,25 @@ class WatchlistPanel(QWidget):
             identity_layout.addWidget(badge)
             company = _label(name)
             company.setMinimumWidth(0)
-            company.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Maximum)
+            company.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Expanding)
             identity_layout.addWidget(company, 1)
             self.table.setCellWidget(index, 0, identity)
             button = QPushButton(_text(self.ctx, "상세", "Details"))
+            button.setProperty("watchlistDetail", True)
             button.setAccessibleName(_text(self.ctx, name + " 상세보기", "Details for " + name))
             button.clicked.connect(lambda checked=False, row_index=index: self.open_detail(row_index))
             self.table.setCellWidget(index, 6, button)
-            self.table.setRowHeight(index, 64)
+            self.table.setRowHeight(index, ROW_HEIGHT)
         if self.rows:
             self.table.setCurrentCell(min(max(selected, 0), len(self.rows) - 1), 0)
-        # The outer page owns vertical scrolling; horizontal overflow stays in the table.
-        self.table.setFixedHeight(self.table.horizontalHeader().height() + len(self.rows) * 64 + 28)
+        self._sync_table_height()
+
+    def _sync_table_height(self, *args):
+        # Outer-page vertical scrolling; reserve scrollbar space only when used.
+        scrollbar = self.table.style().pixelMetric(QStyle.PixelMetric.PM_ScrollBarExtent) if self.table.horizontalScrollBar().maximum() else 0
+        height = self.table.horizontalHeader().height() + len(self.rows) * ROW_HEIGHT + 2 * self.table.frameWidth() + scrollbar
+        if self.table.height() != height:
+            self.table.setFixedHeight(height)
 
     def _update_row_items(self, index):
         row = self.rows[index]
@@ -639,6 +793,9 @@ class WatchlistPanel(QWidget):
                 item = QTableWidgetItem()
                 self.table.setItem(index, column, item)
             item.setText(value)
+            font = self.table.font()
+            font.setPixelSize(12 if column == 4 else 13)
+            item.setFont(font)
             item.setData(Qt.ItemDataRole.UserRole, row.get("symbol"))
             item.setToolTip(_reason(row, self.ctx) if column == 5 else _score_tooltip(row.get("q_score"), self.ctx) if column == 7 else _source_time(row, self.ctx) if column == 4 else value)
             item.setTextAlignment((Qt.AlignmentFlag.AlignRight if column in (1, 2, 3) else Qt.AlignmentFlag.AlignLeft) | Qt.AlignmentFlag.AlignVCenter)

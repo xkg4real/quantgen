@@ -237,10 +237,6 @@ class ResearchWindow(QMainWindow):
         self.watchlist.refresh_requested.connect(self.refresh_markets)
         self.watchlist.chart_requested.connect(self.open_stock_chart)
         self.home_markets = self.watchlist.table
-        self.live_chart_open = QPushButton("실시간 시세·차트 열기")
-        self.live_chart_open.setProperty('primary', True)
-        self.live_chart_open.clicked.connect(self.open_live_chart)
-        layout.addWidget(self.live_chart_open)
         layout.addWidget(self.watchlist)
         summary = QHBoxLayout()
         self.count_labels = []
