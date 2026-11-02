@@ -18,6 +18,20 @@ def cms_schedule_korean(text):
     return f"스프레드 {match['leverage']}배, 하한 {match['floor']}, 상한 {cap}; " + ', '.join(rows)
 
 PAIRS = r'''
+AZ variance proxies · bp|AZ 분산 대용값 · bp
+Proxy|대용값
+Variance term|분산 항
+Fee assumption term|보수 가정 항
+LETF comparison|LETF 비교 기준
+Zero-rate reference|금리 0 비교 기준
+Total-return scenario|총수익률 시나리오
+Price-return scenario|가격수익률 시나리오
+Funding rate % · continuous annual|조달금리 % · 연속복리 연율
+Fee % · continuous annual|보수 % · 연속복리 연율
+Dividend yield % · price-return only|배당수익률 % · 가격수익률만 입력
+LETF only: leave rates blank for the zero-rate reference. Scenarios require funding and fee inputs; add a dividend yield only for a price-return comparison. Inputs are assumptions, not verified fund costs.|LETF 전용: 금리 0 비교 기준에서는 금리 입력란을 비워 두세요. 시나리오에는 조달금리와 보수가 필요하며, 가격수익률 비교에만 배당수익률을 추가합니다. 입력은 가정이며 검증된 펀드 비용이 아닙니다.
+Funding term|펀딩 항
+Dividend term|배당 항
 Detail|상세
 Leg|구성요소
 Rationale|근거
