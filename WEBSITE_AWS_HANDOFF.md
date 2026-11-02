@@ -1,3 +1,17 @@
+# 2026-11-02 앱 PR60 후속 검토 큐
+
+[PR60](https://github.com/xkg4real/quantgen/pull/60)은 연구홈 국내주식 목록·상세보기, 왼쪽 기술지표 가이드, 단일 KIS 연결6종목과 실험적 Q-SCORE, KRX 빈 화면/초기 차트 연결을 수정합니다. 현재 source `ce7f6f9`, CI 진행 중이며 main 병합 여부는 PR에서 확인합니다.
+
+- 앱 UI는 Qt native입니다. 실제 웹 연구화면이 있으면 이에 대응하는 목록·별도 가이드·시세/점수 상태를 검토하고, 공통 data/score 계약은 재사용할 수 있습니다. Qt 파일 자체를 복사하지 마세요.
+- [정책 검토](https://github.com/xkg4real/quantgen/blob/gpt/live-chart-layout-20261102/docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md)와 [PR60 웹 영향 큐](https://github.com/xkg4real/quantgen/blob/gpt/live-chart-layout-20261102/docs/product/ui_website_updates/PR-60.json)를 확인하세요.
+- 아래 전달 HTML은 이전 main cac727e2 정책 기준입니다. 새 앱 흐름으로 정책14종이 바뀌었으므로, 다음 HTML 갱신 시 KO/EN 전체 본문·원문 버전·해시를 재검토해야 합니다. 현재 HTML이 이 새 변경까지 포함한다고 주장하지 않습니다.
+- Q-SCORE는 기존 기술신호/과거위험 기반 실험적 값이며, 예측력 검증·매수추천·실현 수익·고객후기 별점이 아닙니다.
+- 웹 HTML/소스 GitHub 게시 금지, 사용자가 AWS 직접 업로드, 추가 AWS 로그인 재요청 금지 지시를 유지합니다.
+- 앱 변경이 AWS 적용·배포 완료라는 뜻은 아닙니다. 현재 웹 적용 미완료, 직접 채팅 전송 도구 없음, 큐 보존입니다.
+- 메인/Claude 최신 앱 인계: [UI_SESSION_CURRENT.md](UI_SESSION_CURRENT.md).
+
+---
+
 # 2026-11-02 최신 웹 UI 인계 — 사용자 직접 HTML 업로드
 
 메인/Claude용 전체 최신 인계는 [UI_SESSION_CURRENT.md](UI_SESSION_CURRENT.md)에 반영했습니다. 웹 소스/HTML의 GitHub 게시 금지 지시는 유지하며 이 공유 인계 문서만 갱신합니다. 메인 CURRENT/연구 원장은 변경하지 않습니다.
