@@ -573,18 +573,32 @@ def letf_drag_scenario(beta: float, daily_variances: Sequence[float], *, funding
                                           benchmark=benchmark, dividend_yield=dividend_yield)
     if assumptions["mode"] != "EXPLICIT_SCENARIO":
         raise FICCError("A return comparison is required for an explicit LETF scenario")
-    v = np.asarray(daily_variances, dtype=float)
+    try:
+        v = np.asarray(daily_variances, dtype=float)
+        finite_beta = not isinstance(beta, bool) and isinstance(beta, (int, float)) and math.isfinite(beta)
+    except (ValueError, TypeError, OverflowError) as exc:
+        raise FICCError("LETF scenario inputs must be representable finite numbers") from exc
     if (v.ndim != 1 or not v.size or not np.all(np.isfinite(v)) or np.any(v < 0)
-            or isinstance(beta, bool) or not isinstance(beta, (int, float)) or not math.isfinite(beta)):
+            or not finite_beta):
         raise FICCError("LETF scenario needs finite leverage and a nonempty nonnegative daily variance vector")
-    result = letf_drag(beta, v, rate=funding_rate, fee=annual_fee)
-    years = v.size / TRADING_DAYS
-    funding = (1.0 - beta) * funding_rate * years
-    fee_term = -annual_fee * years
-    dividend = beta * dividend_yield * years if benchmark == "price_return" else 0.0
-    drag = result["drag"] + dividend
-    return {**result, "funding_term": funding, "fee_term": fee_term, "dividend_term": dividend,
-            "drag": drag, "drag_bp": drag / BP, "year_fraction": years, "assumptions": assumptions}
+    try:
+        with np.errstate(over="raise", invalid="raise"):
+            result = letf_drag(beta, v, rate=funding_rate, fee=annual_fee)
+            years = v.size / TRADING_DAYS
+            funding = (1.0 - beta) * funding_rate * years
+            fee_term = -annual_fee * years
+            dividend = beta * dividend_yield * years if benchmark == "price_return" else 0.0
+            drag = result["drag"] + dividend
+            out = {**result, "funding_term": funding, "fee_term": fee_term, "dividend_term": dividend,
+                   "drag": drag, "drag_bp": drag / BP, "year_fraction": years, "assumptions": assumptions}
+    except (OverflowError, FloatingPointError) as exc:
+        raise FICCError("LETF scenario arithmetic overflow; no finite result") from exc
+    if not all(math.isfinite(value) for value in out.values() if isinstance(value, (int, float))):
+        raise FICCError("LETF scenario arithmetic overflow; no finite result")
+    if not all(math.isfinite(out[name] / BP) for name in
+               ("variance_term", "financing_term", "funding_term", "fee_term", "dividend_term")):
+        raise FICCError("LETF scenario attribution overflows basis points; no finite result")
+    return out
 
 
 def letf_realised_drag(letf_prices: Sequence[float], index_prices: Sequence[float], beta: float) -> float:

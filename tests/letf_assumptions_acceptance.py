@@ -126,6 +126,31 @@ class LETFAssumptionsTests(unittest.TestCase):
         for beta in (True, float('nan'), float('inf')):
             with self.assertRaises(FICCError): self.scenario(beta)
 
+    def test_finite_inputs_that_overflow_arithmetic_do_not_return_infinite_drag(self):
+        for kw in ({'funding_rate': 1e306}, {'annual_fee': 1e306},
+                   {'benchmark': 'price_return', 'dividend_yield': 1e306}):
+            with self.subTest(kw=kw), self.assertRaises(FICCError):
+                self.scenario(2., **kw)
+        with self.assertRaises(FICCError): self.scenario(1e308)
+        # Large opposite carry terms can cancel in total while individual bp
+        # columns still overflow. A finite total must not hide invalid columns.
+        with self.assertRaises(FICCError): self.scenario(-1., funding_rate=6e305, annual_fee=1.2e306)
+        with self.assertRaises(FICCError):
+            letf_drag_scenario(2., [1e308, 1e308], funding_rate=0., annual_fee=0., benchmark='total_return')
+
+    def test_invalid_api_types_and_unrepresentable_numbers_raise_validation_error(self):
+        for kw in ({'benchmark': []}, {'benchmark': {}},
+                   {'benchmark': 'total_return', 'funding_rate': 10**1000, 'annual_fee': .0064}):
+            with self.assertRaises(ValueError): resolve_letf_assumptions(**kw)
+
+    def test_product_arithmetic_overflow_stays_not_run_and_export_has_no_infinity(self):
+        for code, rate, fee in (('122630', 1e306, .0064), ('114800', 6e305, 1.2e306)):
+            out = execute_etf(ETFRequest(source='synthetic', code=code, days=60, letf_benchmark='total_return',
+                                        letf_funding_rate=rate, letf_annual_fee=fee))
+            self.assertEqual(out.data['letf']['calculation_status'], 'NOT_RUN')
+            self.assertNotIn('rows', out.data['letf'])
+            json.dumps(wf.payload(out.data), allow_nan=False)
+
     def test_request_validates_before_injected_execution(self):
         fn = Mock(side_effect=AssertionError('must not execute'))
         with self.assertRaises(ValueError):

@@ -11,11 +11,15 @@ def resolve_letf_assumptions(*, funding_rate=None, annual_fee=None,
     includes distributions, so adding q again would double count them. Neither
     convention identifies a real fund's benchmark or validates its financing.
     """
-    if benchmark not in {"zero_rate_reference", "total_return", "price_return"}:
+    if not isinstance(benchmark, str) or benchmark not in {"zero_rate_reference", "total_return", "price_return"}:
         raise ValueError("Choose zero-rate reference, total-return or price-return comparison.")
 
     def number(name, value, nonnegative=False):
-        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+        try:
+            valid = not isinstance(value, bool) and isinstance(value, (int, float)) and math.isfinite(value)
+        except OverflowError:
+            valid = False
+        if not valid:
             raise ValueError(f"{name} must be an explicit finite annual decimal rate.")
         if nonnegative and value < 0:
             raise ValueError(f"{name} must be nonnegative.")
