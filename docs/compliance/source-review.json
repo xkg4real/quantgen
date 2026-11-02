@@ -342,7 +342,7 @@
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
     "tests/desktop_macro_language_acceptance.py": "916fc1c1d5620d9cc58b674084b2a30aa3f65512e1a2b9c7f73236f459ac3832",
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
-    "tests/desktop_market_chart_acceptance.py": "07a166d0dd4ee6d5662ea06cc8d10a8aa3381ed4a381fa186b97bec70c3f76a4",
+    "tests/desktop_market_chart_acceptance.py": "223aae61612f40f94cbd8a6cf7d18a7bc7599444d09748b5757c56cc80109dbe",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
@@ -501,162 +501,162 @@
     "1": {
       "document_sha256": "31a79b6417732796945b28f5f167a432d6f53eb86852bc8eeadd9b8923aff155",
       "source_digest": "608e5c23fcd06f30fefc9c562aeb6371275ddb5f6ff99bb92a8b57306602ec7a",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.154269+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.728054+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "2": {
       "document_sha256": "ff1afc17787f8c26209a022892c76e5d44af87b32988be7e01a6e9ee83d81c2f",
       "source_digest": "608e5c23fcd06f30fefc9c562aeb6371275ddb5f6ff99bb92a8b57306602ec7a",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.156754+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.731201+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
       "source_digest": "153412ec72c6563f2f38889677882c009d405bcb8a9e9e427c08e84bd4dbd2c9",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.158890+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.733338+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "4": {
       "document_sha256": "6e917ef0c712b4406cc1ce8007884dae6c2922c46b364ed7ead166868de77b59",
       "source_digest": "8ca1815f4e826c84fee4783a1e6e857378cc2e541579a488f27a0cd6b136c878",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.160885+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.735648+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "aae561fa4a950f98e476595f0c576385de9fa0aa0ed0707f74dbb98abf55f75b",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.163182+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.737951+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "6": {
       "document_sha256": "d6b67c23112b708082f04d4ca62899b978a69b7f19e04a3149b63df9c4aba062",
       "source_digest": "23b61a604ea9c758387a583ff3cd9833199195b73c64dde5fdd0b144d316eb21",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.165431+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.739907+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "7": {
       "document_sha256": "bd91d3d8ea6a85eb7f6f9f0e8afdc40403760e40ca03df95c419e76e35817f70",
       "source_digest": "608e5c23fcd06f30fefc9c562aeb6371275ddb5f6ff99bb92a8b57306602ec7a",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.167459+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.741847+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "8": {
       "document_sha256": "f8c83e2d6942ae1a0a45863a951ec512c9a099e089b970d580c7a075f1fe70b7",
       "source_digest": "23b61a604ea9c758387a583ff3cd9833199195b73c64dde5fdd0b144d316eb21",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.169536+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.743868+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "9": {
       "document_sha256": "0425a711d615ab6ff44a4573ed1d4962dc620cc0f89ac349481a0eee448ee262",
       "source_digest": "8d8b74a10e78ff8d2fbf1d42cabac74660770fca98189555ee07f805d9433c5e",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.171602+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.746112+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
       "source_digest": "33b1430b4e33b8704377e15753998873c2180b2922bd8b432d109e5ff1096df7",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.173837+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.748271+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
       "source_digest": "ca8b8688a3514df14c8f1aa5a1559c70c5ae53b482f2c406e90e89782792f29f",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.175820+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.750316+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "12": {
       "document_sha256": "407e354b7b2d7281c5b1555b04767a04ba47bf16c061cb5ac429ff8a6cfabc0e",
-      "source_digest": "7d5b9619a86e19a04696e416384115437642dab096b83dd38222dc8b412f199e",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.178085+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "source_digest": "92294ea5e00a245dd62addb6454ba8aafa91cb9ab893e607a413916400faf025",
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.752274+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "13": {
       "document_sha256": "3a5eb3e68df8feebe2eaa02a96f4e89f87dbe2cf17fa6f58d6e372eb59b16b1f",
       "source_digest": "8d8b74a10e78ff8d2fbf1d42cabac74660770fca98189555ee07f805d9433c5e",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.180027+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.754249+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "14": {
       "document_sha256": "5db35b4cdfe4e6f054979abadb7fc49d628154719f319ce7308626f004515d5d",
       "source_digest": "8d8b74a10e78ff8d2fbf1d42cabac74660770fca98189555ee07f805d9433c5e",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.182072+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.756427+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "15": {
       "document_sha256": "e5143b74273be5899c679d40e2e447da79c3fe5b565e278bf014535954d64701",
       "source_digest": "8d8b74a10e78ff8d2fbf1d42cabac74660770fca98189555ee07f805d9433c5e",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.184110+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.758441+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
       "source_digest": "037b0f8130bbcc87473a7d3e749ba5d7b18fb37f28b86703406d4d1c40034b5f",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.186215+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.760620+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
       "source_digest": "23b61a604ea9c758387a583ff3cd9833199195b73c64dde5fdd0b144d316eb21",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.188106+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.762564+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
       "source_digest": "608e5c23fcd06f30fefc9c562aeb6371275ddb5f6ff99bb92a8b57306602ec7a",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.189893+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.764516+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "19": {
       "document_sha256": "1a489fb06d0cb74a247df01ed5d43f7ab9921dc4326920a8fc805a26a9a6addd",
       "source_digest": "cd4809a7233d21d03991b1ce48e503dd1049a58a008a4396b12c34fa80007757",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.192191+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.766777+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     },
     "20": {
       "document_sha256": "7c3cbc05a1d70875329da961cdcc2827878c98285aff03ed7856cd06a1db9b91",
       "source_digest": "608e5c23fcd06f30fefc9c562aeb6371275ddb5f6ff99bb92a8b57306602ec7a",
-      "reviewed_by": "Codex source-review team",
-      "review_note": "Preserved reviewed runtime and twenty policy drafts; repaired the legacy Home navigation fixture to implement the actual KIS chart deactivate and reconnect lifecycle. Nine focused fixture regressions pass. This test-only update does not change provider behavior, storage, approval conditions or publication evidence.",
-      "reviewed_at": "2026-11-02T03:02:08.194114+00:00",
-      "source_commit": "98eb643f710142f6391b1cc16a0fc4de287144c1"
+      "reviewed_by": "GPT",
+      "review_note": "Reviewed explicit UTF-8 decoding in native chart source contract checks; product behavior and actual provider manual legal gates retained.",
+      "reviewed_at": "2026-11-02T03:14:29.768965+00:00",
+      "source_commit": "20c63046e3065cc4de3c73139d7a6a6182b5a83a"
     }
   }
 }
