@@ -39,6 +39,8 @@ Equity · starts at 1|누적 가치 · 시작값 1
 Language|언어
 Research Home|연구 홈
 Markets|시장
+Open live quotes and charts|실시간 시세·차트 열기
+Technical indicator guide|기술지표 가이드
 Build & Test|설계 및 검증
 Portfolio & Risk|포트폴리오 및 위험
 Research Library|연구 보관함

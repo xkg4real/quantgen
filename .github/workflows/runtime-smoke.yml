@@ -113,7 +113,7 @@ jobs:
       - name: Verify shared KIS charts and realtime lifecycle with offline fixtures
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.market_core_acceptance tests.kis_workspace_acceptance tests.kis_stream_acceptance tests.desktop_market_chart_acceptance tests.web_market_chart_acceptance -v
+        run: python -m unittest tests.home_watchlist_acceptance tests.qscore_acceptance tests.watchlist_live_acceptance tests.desktop_watchlist_acceptance tests.desktop_qscore_acceptance tests.desktop_home_live_acceptance tests.desktop_market_layout_acceptance tests.market_core_acceptance tests.kis_workspace_acceptance tests.kis_stream_acceptance tests.desktop_market_chart_acceptance tests.web_market_chart_acceptance -v
       - name: Verify native chart text layout
         env:
           QT_QPA_PLATFORM: offscreen

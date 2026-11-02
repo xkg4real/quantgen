@@ -6,6 +6,7 @@ available unchanged while their native equivalents are ported and verified.
 from __future__ import annotations
 
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 from PyQt6.QtCore import Qt, QTimer, pyqtSlot, QByteArray, QSettings
@@ -19,7 +20,7 @@ from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialo
 from core.app_paths import application_root
 from core.research.analysis import AnalysisRequest, execute_analysis
 from core.research.export import bundle_bytes, save_desktop_export
-from core.research.markets import load_markets, SPECS
+from core.research.watchlist import load_home_markets, default_home_rows
 from core.research.provenance import code_evidence, runtime_evidence
 from core.research.portfolio_analysis import execute_portfolio
 from core.research.mc_disclosure import volatility_disclosure
@@ -94,7 +95,7 @@ def table_rows(t, rows, ids=None):
 
 
 class ResearchWindow(QMainWindow):
-    def __init__(self, *, session=None, market_loader=load_markets,
+    def __init__(self, *, session=None, market_loader=load_home_markets,
                  analysis_runner=execute_analysis, portfolio_runner=execute_portfolio, bond_runner=execute_bond,
                  rates_runner=execute_rates, fx_runner=execute_fx, structuring_runner=execute_structuring,
                  signals_runner=execute_signals, macro_runner=execute_macro,
@@ -156,7 +157,7 @@ class ResearchWindow(QMainWindow):
         rail.addSpacing(12)
         self.stack = QStackedWidget()
         self.nav = {}
-        routes = (("home", "Research Home"), ("markets", "Markets"),
+        routes = (("home", "Research Home"), ("markets", "Markets"), ("guide", "Technical indicator guide"),
                   ("quant", "Build & Test"), ("risk", "Portfolio & Risk"),
                   ("library", "Research Library"), ("system", "System"))
         self.route_indices = {route:i for i,(route,_) in enumerate(routes)}
@@ -193,10 +194,12 @@ class ResearchWindow(QMainWindow):
         outer.addWidget(self.stack, 1)
         self.make_home()
         self.make_markets()
+        self.make_indicator_guide()
         self.make_quant()
         self.make_risk()
         self.make_library()
         self.make_system()
+        self.setup_live_watchlist()
         self.change_theme(self.theme.currentIndex())
         self.navigate("home")
         self.localizer = LanguageController(self)
@@ -230,6 +233,16 @@ class ResearchWindow(QMainWindow):
 
     def make_home(self):
         layout = self.page("Research Home", "관측된 시장과 내가 실행한 연구를 한눈에 확인하세요.")
+        from .watchlist import WatchlistPanel
+        self.watchlist = WatchlistPanel(locale=self.ctx)
+        self.watchlist.refresh_requested.connect(self.refresh_markets)
+        self.watchlist.chart_requested.connect(self.open_stock_chart)
+        self.home_markets = self.watchlist.table
+        self.live_chart_open = QPushButton("실시간 시세·차트 열기")
+        self.live_chart_open.setProperty('primary', True)
+        self.live_chart_open.clicked.connect(self.open_live_chart)
+        layout.addWidget(self.live_chart_open)
+        layout.addWidget(self.watchlist)
         summary = QHBoxLayout()
         self.count_labels = []
         for title in ("완료한 분석", "진행 중", "확인할 실행"):
@@ -240,28 +253,9 @@ class ResearchWindow(QMainWindow):
             summary.addWidget(box)
             self.count_labels.append(number)
         layout.addLayout(summary)
-        box,inner=panel(self.ctx.t('guide'))
-        inner.addWidget(label(self.ctx.t('guide_intro')))
-        self.guide_open=QPushButton(self.ctx.t('start_guide'))
-        self.guide_open.setProperty('primary',True)
-        inner.addWidget(self.guide_open)
-        from .indicator_guide import IndicatorGuide
-        self.indicator_guide=IndicatorGuide(locale=self.ctx)
-        self.indicator_guide.intro.hide()
-        self.indicator_guide.hide()
-        self.guide_open.clicked.connect(self.toggle_indicator_guide)
-        inner.addWidget(self.indicator_guide)
-        layout.addWidget(box)
-        box, inner = panel("주요 시장지표")
-        self.home_markets = table(["지표", "관측값", "변화", "상태 · 관측일"])
-        self.home_markets.setProperty("localized_columns", [0])
-        self.home_markets.setMinimumHeight(100)
-        inner.addWidget(self.home_markets)
-        inner.addWidget(label("일별 관측 · 실시간 아님 · 조회 실패와 오래된 관측은 구분합니다.", "caption"))
         rights_button=QPushButton(self.ctx.t('data_rights'))
         rights_button.clicked.connect(self.open_data_rights)
-        inner.addWidget(rights_button)
-        layout.addWidget(box)
+        layout.addWidget(rights_button)
         box, inner = panel("가능성을 하나의 숫자로 좁히지 마세요")
         self.home_chart = FanChart()
         self.home_summary = label("분석을 실행하면 최신 결과와 데이터 근거가 연결됩니다.")
@@ -272,6 +266,15 @@ class ResearchWindow(QMainWindow):
         inner.addWidget(b)
         inner.addWidget(label("P5–P95는 시뮬레이션 분포의 중앙 90% 구간입니다. 수익 보장이나 95% 신뢰구간이 아닙니다.", "caption"))
         layout.addWidget(box)
+        layout.addStretch()
+
+    def make_indicator_guide(self):
+        from .indicator_guide import IndicatorGuide
+        layout = self.page("Technical indicator guide", self.ctx.t('guide_intro'))
+        self.guide_subtitle = layout.itemAt(1).widget()
+        self.indicator_guide = IndicatorGuide(locale=self.ctx)
+        self.indicator_guide.intro.hide()
+        layout.addWidget(self.indicator_guide)
         layout.addStretch()
 
     def make_markets(self):
@@ -477,16 +480,151 @@ class ResearchWindow(QMainWindow):
         layout.addStretch()
 
     def navigate(self, route):
+        if route != 'home' and hasattr(self, 'home_feed') and self.home_feed.active:
+            self.home_feed.stop()
         self.stack.setCurrentIndex(self.route_indices[route])
         for name, button in self.nav.items(): button.setChecked(name == route)
+
+    def setup_live_watchlist(self):
+        from .watchlist_live import WatchlistLiveController
+        from .qscore import QScoreController
+        self._live_quotes = {}
+        self._dirty_quotes = set()
+        self._failed_scores = {}
+        self.quote_paint_timer = QTimer(self)
+        self.quote_paint_timer.setInterval(200)
+        self.quote_paint_timer.timeout.connect(self.flush_market_quotes)
+        self.quote_paint_timer.start()
+        self.home_feed = WatchlistLiveController(self)
+        self.q_scores = QScoreController(self)
+        self.chart_scores = QScoreController(self)
+        self.watchlist.live_requested.connect(self.start_watchlist_live)
+        self.watchlist.stop_requested.connect(self.home_feed.stop)
+        self.home_feed.history_ready.connect(self.q_scores.set_history)
+        self.home_feed.history_failed.connect(self.home_history_failed)
+        self.home_feed.tick_received.connect(self.accept_market_tick)
+        self.home_feed.state_changed.connect(self.home_feed_changed)
+        self.q_scores.score_changed.connect(self.show_q_score)
+        self.chart_scores.score_changed.connect(self.show_q_score)
+        self.market_chart.snapshot_loaded.connect(self.chart_history_loaded)
+        self.market_chart.trade_received.connect(self.accept_chart_tick)
+        self.market_chart.feed_state_changed.connect(self.chart_feed_changed)
+
+    def start_watchlist_live(self):
+        self.market_chart.stop()
+        self.q_scores.stop()
+        self.home_feed.start()
+
+    def home_feed_changed(self, state):
+        self.watchlist.set_live_state(state)
+        self.q_scores.set_feed_state(state)
+        if state in ('stopped', 'stale', 'error'):
+            for quote in self._live_quotes.values():
+                quote['status'] = 'STALE'
+
+    def chart_feed_changed(self, state):
+        self.chart_scores.set_feed_state(state)
+        if state in ('stopped', 'stale', 'error'):
+            for quote in self._live_quotes.values():
+                quote['status'] = 'STALE'
+            for symbol, quote in self._live_quotes.items():
+                self.watchlist.update_quote(symbol, **quote)
+
+    def chart_history_loaded(self, snapshot):
+        if snapshot.request.instrument.asset == 'domestic_stock':
+            self.chart_scores.request_history(snapshot.request.instrument)
+            score = self.all_q_scores().get(snapshot.request.instrument.code)
+            if score:
+                self.market_chart.set_q_score(snapshot.request.instrument.code, score)
+
+    def home_history_failed(self, symbol, code):
+        from core.research.qscore import compute_q_score
+        score = compute_q_score(None, symbol=symbol)
+        score['reason'] = 'history_unavailable'
+        self._failed_scores[symbol] = score
+        self.show_q_score(symbol, score)
+
+    def all_q_scores(self):
+        scores = self.q_scores.scores()
+        for symbol, score in self.chart_scores.scores().items():
+            if score.get('computed_at', '') >= scores.get(symbol, {}).get('computed_at', ''):
+                scores[symbol] = score
+        for symbol, score in self._failed_scores.items():
+            if score.get('computed_at', '') >= scores.get(symbol, {}).get('computed_at', ''):
+                scores[symbol] = score
+        return scores
+
+    def accept_market_tick(self, tick):
+        self.show_market_tick(tick)
+        self.q_scores.accept_tick(tick)
+
+    def accept_chart_tick(self, tick):
+        self.show_market_tick(tick)
+        self.chart_scores.accept_tick(tick)
+
+    def show_market_tick(self, tick):
+        if tick.instrument.asset != 'domestic_stock':
+            return
+        try:
+            observed = datetime.fromisoformat(tick.timestamp.replace('Z', '+00:00'))
+            received = datetime.fromisoformat(tick.received_at.replace('Z', '+00:00'))
+            now = datetime.now(timezone.utc)
+            fresh = all(stamp.tzinfo is not None and -5 <= (now-stamp).total_seconds() <= 60
+                        for stamp in (observed, received))
+        except (TypeError, ValueError):
+            fresh = False
+        quote = dict(price=tick.price, change_pct=tick.change_pct,
+                     received_at=tick.received_at, market_time=tick.timestamp,
+                     status='STREAMING' if fresh else 'STALE', source=tick.source,
+                     volume=tick.cumulative_volume, absolute_change=tick.change)
+        self._live_quotes[tick.instrument.code] = quote
+        self._dirty_quotes.add(tick.instrument.code)
+
+    def flush_market_quotes(self):
+        now = datetime.now(timezone.utc)
+        for symbol, quote in self._live_quotes.items():
+            if quote['status'] == 'STREAMING':
+                try:
+                    age = (now - datetime.fromisoformat(quote['received_at'])).total_seconds()
+                except (TypeError, ValueError):
+                    age = 61
+                if age > 15:
+                    quote['status'] = 'STALE'
+                    self._dirty_quotes.add(symbol)
+        for symbol in tuple(self._dirty_quotes):
+            self.watchlist.update_quote(symbol, **self._live_quotes[symbol])
+        self._dirty_quotes.clear()
+
+    def show_q_score(self, symbol, score):
+        if score.get('status') == 'ready':
+            self._failed_scores.pop(symbol, None)
+        self.watchlist.update_score(symbol, score)
+        self.market_chart.set_q_score(symbol, score)
 
     def open_data_rights(self):
         self.navigate('system')
         self.system_tabs.setCurrentWidget(self.data_rights)
 
-    def toggle_indicator_guide(self):
-        self.indicator_guide.setVisible(self.indicator_guide.isHidden())
-        self.guide_open.setText(self.ctx.t('start_guide' if self.indicator_guide.isHidden() else 'hide_guide'))
+    def open_live_chart(self):
+        self.navigate('markets')
+        self.market_tabs.setCurrentWidget(self.market_chart)
+
+        def reveal():
+            scroll = self.stack.widget(self.route_indices['markets'])
+            if self.stack.currentWidget() is scroll and self.market_tabs.currentWidget() is self.market_chart:
+                top = self.market_tabs.mapTo(scroll.widget(), self.market_tabs.rect().topLeft()).y()
+                scroll.verticalScrollBar().setValue(top)
+                self.market_chart.symbol.setFocus(Qt.FocusReason.OtherFocusReason)
+
+        # Tab selection can change the scroll page's geometry on the next event.
+        QTimer.singleShot(0, reveal)
+
+    def open_stock_chart(self, symbol):
+        # Selecting a row changes the chart inputs; loading remains explicit.
+        pane = self.market_chart
+        pane.asset.setCurrentIndex(pane.asset.findData('domestic_stock'))
+        pane.symbol.setText(symbol)
+        self.open_live_chart()
 
     def change_language(self,index):
         value=self.locale_picker.itemData(index)
@@ -498,8 +636,9 @@ class ResearchWindow(QMainWindow):
         self.language.blockSignals(False)
         self.data_rights.set_locale(self.ctx)
         self.indicator_guide.set_locale(self.ctx)
+        self.guide_subtitle.setText(self.ctx.t('guide_intro'))
+        self.watchlist.set_locale(self.ctx)
         self.market_chart.set_locale(self.ctx)
-        self.guide_open.setText(self.ctx.t('start_guide' if self.indicator_guide.isHidden() else 'hide_guide'))
         self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
         from .indicator_guide import IndicatorGuide
         for pane in self.findChildren(IndicatorGuide):
@@ -608,6 +747,7 @@ class ResearchWindow(QMainWindow):
     def busy_changed(self, busy):
         self.run_button.setEnabled(not busy)
         self.market_refresh.setEnabled(not busy)
+        self.watchlist.set_busy(busy)
         self.portfolio.run.setEnabled(not busy)
         self.bonds.run.setEnabled(not busy)
         for name in self.tool_names:getattr(self,name).input_box.setEnabled(not busy)
@@ -646,23 +786,21 @@ class ResearchWindow(QMainWindow):
             w.setText(str(sum(r["execution_status"] == state for r in runs)))
         markets = self.session.markets()
         if not markets:
-            markets=[dict(label=name,symbol=symbol,provider=provider.upper(),unit=unit,
-                value=None,change=None,observation_date=None,
-                status='UNAVAILABLE' if self.session.market_attempted and not self.session.market_loading else 'NOT_LOADED')
-                for name,symbol,provider,unit,_ in SPECS]
-        home, details = [], []
+            markets=default_home_rows(status='UNAVAILABLE' if self.session.market_attempted and not self.session.market_loading else 'NOT_LOADED')
+        details = []
         for r in markets:
             v = self.ctx.number(r["value"])
             change = "—" if r["change"] is None else (("+" if r["change"] >= 0 else "") +
                 (self.ctx.number(r["change"]) + " bp" if r["unit"] == "%" else self.ctx.percent(r["change"]/100, 2)))
             observed = self.ctx.date(r["observation_date"])
-            home.append([r["label"], v, change, f"{r['status']} · {observed}"])
             details.append([r["label"], v, r["unit"], change, r["provider"], observed, r["status"]])
-        if not home:
-            home = [["시장 데이터", "—", "—", "미연결 · 새로고침 필요"]]
-        table_rows(self.home_markets, home)
+        self.watchlist.set_rows(markets)
+        for symbol, quote in self._live_quotes.items():
+            self.watchlist.update_quote(symbol, **quote)
+        for symbol, score in self.all_q_scores().items():
+            self.watchlist.update_score(symbol, score)
         table_rows(self.market_table, details)
-        for widget in (self.home_markets,self.market_table):
+        for widget in (self.market_table,):
             widget.setFixedHeight(min(350,max(100,widget.horizontalHeader().height()+sum(widget.rowHeight(i) for i in range(widget.rowCount()))+12)))
         table_rows(self.run_table, [[r["parameters"].get("symbol", "—"), r["parameters"].get("model", "—"),
             r["execution_status"], r["verdict"], self.ctx.timestamp(r["created_at"])] for r in runs], [r["run_id"] for r in runs])
@@ -708,6 +846,7 @@ class ResearchWindow(QMainWindow):
             symbol = symbol.replace(b'#194C40', b'#E5EEE8').replace(b'fill="#E5EEE8"', b'fill="#A9C6BD"')
         self.brand_symbol.load(QByteArray(symbol))
         p = self.colors = DARK if index else LIGHT
+        self.watchlist.set_theme(p)
         if self.language_store is not None:
             self.language_store.setValue("ui/theme", "dark" if index else "light")
         self.setStyleSheet(f"""
@@ -744,6 +883,11 @@ class ResearchWindow(QMainWindow):
         self.market_chart.render()
 
     def closeEvent(self, event):
+        closed = (self.home_feed.close(), self.q_scores.close(), self.chart_scores.close())
+        if not all(closed):
+            event.ignore()
+            self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
+            return
         if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy or self.market_chart.jobs.busy:
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
@@ -759,6 +903,7 @@ class ResearchWindow(QMainWindow):
             self.statusBar().showMessage(display(self, '모의 엔진의 진행 중인 조회가 끝나면 다시 종료해 주세요.'))
             return
         self.market_chart.stop()
+        self.quote_paint_timer.stop()
         event.accept()
 
 

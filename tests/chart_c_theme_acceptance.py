@@ -120,7 +120,7 @@ class NativeStudyTests(unittest.TestCase):
             settings=QSettings(str(Path(folder)/'ui.ini'),QSettings.Format.IniFormat)
             window=ResearchWindow(auto_refresh=False,language_store=settings)
             self.addCleanup(window.deleteLater);self.addCleanup(window.hide)
-            window.resize(1600,1000);window.show();window.guide_open.click()
+            window.resize(1600,1000);window.show();window.nav['guide'].click()
             guide=window.indicator_guide;guide.buttons['rsi'].click();guide.move_cursor(45)
             class WideReadingHint(QLabel):
                 def minimumSizeHint(self): return QSize(966, 40)

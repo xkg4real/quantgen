@@ -29,7 +29,11 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         self.addCleanup(self.window.deleteLater);self.addCleanup(self.window.hide)
 
     def test_reference_screen_selection_shares_history_and_never_starts_jobs(self):
-        w=self.window;w.guide_open.click();self.app.processEvents()
+        w=self.window
+        self.assertFalse(w.indicator_guide.isVisible())
+        w.nav['guide'].click();self.app.processEvents()
+        self.assertEqual(w.stack.currentIndex(), w.route_indices['guide'])
+        self.assertTrue(w.nav['guide'].isChecked())
         guide=w.indicator_guide
         self.assertTrue(guide.isVisible());self.assertEqual(guide.keys,())
         baseline=guide.series.dates
@@ -84,7 +88,7 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         self.provider.assert_not_called()
 
     def test_vector_chart_background_keyboard_and_selection_survive_theme_resize(self):
-        w=self.window;w.guide_open.click();guide=w.indicator_guide
+        w=self.window;w.nav['guide'].click();guide=w.indicator_guide
         for key in guide.buttons:guide.buttons[key].click()
         for theme in (0,1):
             w.change_theme(theme)
@@ -99,8 +103,8 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         self.assertEqual(guide.cursor,0)
         guide.chart.keyPressEvent(QKeyEvent(QKeyEvent.Type.KeyPress,Qt.Key.Key_End,Qt.KeyboardModifier.NoModifier))
         self.assertEqual(guide.cursor,len(guide.series.closes)-1)
-        w.guide_open.click();self.assertTrue(guide.isHidden())
-        w.guide_open.click();self.assertEqual(guide.keys,('sma','ema','rsi','macd','bb'))
+        w.navigate('home');self.assertFalse(guide.isVisible())
+        w.nav['guide'].click();self.assertEqual(guide.keys,('sma','ema','rsi','macd','bb'))
 
     def test_region_preference_round_trips_without_changing_financial_inputs(self):
         with tempfile.TemporaryDirectory() as folder:

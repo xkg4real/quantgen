@@ -94,6 +94,9 @@ class MarketChartSvg(QSvgWidget):
 
 class MarketChartPane(QWidget):
     """One bounded REST worker and one cancellable stream per visible chart pane."""
+    snapshot_loaded = pyqtSignal(object)
+    trade_received = pyqtSignal(object)
+    feed_state_changed = pyqtSignal(str)
 
     def __init__(self, *, service=None, stream_factory=None, locale=None):
         super().__init__()
@@ -112,6 +115,8 @@ class MarketChartPane(QWidget):
         self._last_received = ""
         self._last_tick_received = ""
         self._mode = "idle"
+        self._emitted_mode = None
+        self._q_score = None
         self._status_detail = ""
         self._cursor = 0
         self._last_request = None
@@ -183,10 +188,12 @@ class MarketChartPane(QWidget):
         layout.addLayout(buttons)
         self.status = self._label()
         self.quote = self._label()
+        self.q_score_label = self._label()
+        self.q_score_label.hide()
         self.provenance = self._label()
         self.note = self._label()
         self.availability = self._label()
-        for field in (self.status, self.quote, self.provenance, self.note, self.availability):
+        for field in (self.status, self.quote, self.q_score_label, self.provenance, self.note, self.availability):
             layout.addWidget(field)
         display_row = QHBoxLayout()
         self.indicator_boxes = {}
@@ -206,6 +213,8 @@ class MarketChartPane(QWidget):
         self.visible_bars.valueChanged.connect(self.render)
         display_row.addWidget(self.visible_bars)
         layout.addLayout(display_row)
+        self.empty_state = self._label()
+        layout.addWidget(self.empty_state)
         self.chart = MarketChartSvg()
         self.chart.cursor_changed.connect(self.move_cursor)
         layout.addWidget(self.chart)
@@ -250,6 +259,9 @@ class MarketChartPane(QWidget):
         self.stream_button.setText(self._text("실시간 체결 연결", "Connect live trades"))
         self.stop_button.setText(self._text("수신 중지", "Stop updates"))
         self.zoom_label.setText(self._text("표시 봉 수", "Visible bars"))
+        self.empty_state.setText(self._text(
+            "종목과 봉 주기를 선택한 뒤 ‘실시간 체결 연결’을 누르면 과거 차트를 조회하고 체결 수신을 시작합니다. 일회 조회는 ‘조회 / 새로고침’을 사용하세요. KIS 앱키·시크릿 설정이 필요합니다.",
+            "Choose an instrument and interval, then select Connect live trades to load history and start the stream. Use Load / refresh for a snapshot. A KIS app key and secret are required."))
         for label, ko, en in zip(self.form_labels,
                 ("자산", "종목 코드", "거래소", "봉 주기", "조회 봉 수"),
                 ("Asset", "Instrument code", "Exchange", "Interval", "History bars")):
@@ -275,6 +287,23 @@ class MarketChartPane(QWidget):
             "Polling and trade streaming have separate connection states. Overseas quotes may be delayed by exchange or entitlement. "
             "The latest candle and indicators change with new trades; insufficient history is shown as —. Updates stop when this pane is hidden."))
         self.render()
+
+    def set_q_score(self, symbol, score):
+        if symbol != self.symbol.text().strip() or self.asset.currentData() != 'domestic_stock':
+            return
+        self._q_score = (symbol, score)
+        self._render_q_score()
+
+    def _render_q_score(self):
+        visible = bool(self.snapshot and self._q_score and
+                       self.snapshot.request.instrument.asset == 'domestic_stock' and
+                       self.snapshot.request.instrument.code == self._q_score[0])
+        self.q_score_label.setVisible(visible)
+        if visible:
+            from .watchlist import _score_text, _score_tooltip
+            score = self._q_score[1]
+            self.q_score_label.setText('Q-SCORE · ' + _score_text(score, self.ctx))
+            self.q_score_label.setToolTip(_score_tooltip(score, self.ctx))
 
     def request(self):
         asset = self.asset.currentData()
@@ -326,6 +355,7 @@ class MarketChartPane(QWidget):
     def _inputs_changed(self, *_):
         self.stop()
         self.snapshot = None
+        self._q_score = None
         self._stream_gap = False
         self._last_request = None
         self._last_received = ""
@@ -333,6 +363,7 @@ class MarketChartPane(QWidget):
         self._cursor = 0
         self.chart.set_snapshot(None)
         self.quote.clear()
+        self.q_score_label.hide()
         self.provenance.clear()
         self.note.clear()
         self.reading.clear()
@@ -346,7 +377,7 @@ class MarketChartPane(QWidget):
         except ValueError:
             self.availability.clear()
         self._busy(self.jobs.busy)
-        self._render_status()
+        self.render()
 
     def refresh(self, *, manual=False, for_stream=False):
         if self.jobs.busy:
@@ -386,6 +417,7 @@ class MarketChartPane(QWidget):
         self._mode = "polling" if self.poll_timer.isActive() else "snapshot"
         self._status_detail = ""
         self.render()
+        self.snapshot_loaded.emit(snapshot)
         if auto_stream:
             self._subscribe(epoch, request)
 
@@ -395,13 +427,16 @@ class MarketChartPane(QWidget):
             return
         self._pending_stream_epoch = None
         self._mode = "stale" if self.snapshot is not None else "error"
-        self._status_detail = self._text("조회 실패", "Request failed") + f" ({code})"
+        self._status_detail = (self._text(
+            "KIS 앱키·시크릿을 찾지 못했습니다. QUANTGEN 폴더의 .env에 KIS_APP_KEY와 KIS_APP_SECRET을 설정한 뒤 앱을 다시 실행하세요. 시스템 → 데이터 연결에서 설정 여부를 확인할 수 있습니다.",
+            "KIS app key or secret is missing. Set KIS_APP_KEY and KIS_APP_SECRET in the QUANTGEN folder's .env, then restart. Check their presence under System → Connections.")
+            if code == 'KISUnavailable' else self._text("조회 실패", "Request failed") + f" ({code})")
         self._render_status()
 
     @pyqtSlot(bool)
     def _busy(self, busy):
         self.load_button.setEnabled(not busy)
-        self.stream_button.setEnabled(not busy and self.snapshot is not None and self._stream is None)
+        self.stream_button.setEnabled(not busy and self._stream is None)
         self.stop_button.setEnabled(busy or self._stream is not None or self.poll_timer.isActive())
 
     def _poll_toggled(self, enabled):
@@ -417,13 +452,11 @@ class MarketChartPane(QWidget):
         self._busy(self.jobs.busy)
 
     def start_stream(self):
-        if self.jobs.busy or self.snapshot is None or self._stream is not None:
+        if self.jobs.busy or self._stream is not None:
             return
         try:
             request = self.request()
         except ValueError:
-            return
-        if request != self.snapshot.request:
             return
         self.poll_button.blockSignals(True)
         self.poll_button.setChecked(False)
@@ -471,6 +504,7 @@ class MarketChartPane(QWidget):
         self._restore_cursor(selected)
         self._mode = "streaming"
         self._status_detail = ""
+        self.trade_received.emit(tick)
         if not self.paint_timer.isActive():
             self.paint_timer.start()
 
@@ -567,6 +601,9 @@ class MarketChartPane(QWidget):
             except (ValueError, TypeError):
                 pass
         self.status.setText(text)
+        if self._emitted_mode != self._mode:
+            self._emitted_mode = self._mode
+            self.feed_state_changed.emit(self._mode)
 
     def move_cursor(self, value):
         if self.snapshot is None or not self.snapshot.candles:
@@ -582,6 +619,10 @@ class MarketChartPane(QWidget):
 
     def render(self, *_):
         self._render_status()
+        self._render_q_score()
+        has_candles = bool(self.snapshot and self.snapshot.candles)
+        self.empty_state.setVisible(not has_candles)
+        self.chart.setVisible(has_candles)
         if self.snapshot is None:
             return
         from core.market.presentation import readout, indicator_values, number
