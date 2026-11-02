@@ -2,8 +2,8 @@
 
 2026-10-31 추가 표시 검토: 네이티브 ETF/Crypto/Derivatives의 AR(1)·펀딩·호가 검사 안내에 로컬 한영 문구를 연결했습니다. 원본 보고서·수치·미실시 상태·외부 진단 원문 및 기존 전송/저장 경로는 보존합니다. `quantgen_desktop/market_diagnostics_language.py`, `market_tools.py`와 `docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md`가 근거입니다. 실제 Windows 시각/DPI·Flet 동등성·외부 서비스 검증 또는 공개 승인은 별도입니다.
 
-- 기준일: 2026-10-31 한국시간
-- 코드 기준: `c7d2e2d` 및 이 변경의 문서 작업 트리. 검토 fingerprint는 `source-review.json` 참조
+- 기준일: 2026-11-02 한국시간
+- 코드 기준: 기존 검토 기록과 KIS 기능 커밋 `5074322` 및 이 변경의 작업 트리. 검토 fingerprint는 `source-review.json` 참조
 - 범위: 실행 진입점, `core/`, `data/`, `ui/`, `quantgen_desktop/`, 의존성·자산 선언과 관련 문서. 실제 운영 서버·사업자 계약·판매 사이트는 이 소스 검사로 확인되지 않는다.
 
 ## 기능과 정보 흐름
@@ -134,3 +134,19 @@ remain. Source/document consistency is not publication approval.
 C형 최종 통합 시 main PR48/49(4c51ab9)의 인계 기록과 채권·포트폴리오 한/영 결과 표현을 보존했습니다. display_variants는 원본 source_text·내보내기·수치·경고를 유지하고 C형의 기존 notes 위젯을 재사용합니다. 이 한정된 소스 차이를 20개 문서와 대조했으며 저장·전송·거래·정책 공개 상태 변화는 없습니다.
 
 C형 병합 직전 통합: main PR50–52(d789691)의 웹 인계 기록과 시장 진단 한영 표시를 함께 보존했습니다. ToolPane의 기존 text(localized=...) 경로를 사용하며 AR(1)·펀딩·호가 수치, 원문 경고와 NOT_RUN·정규 보고서가 유지됩니다. 20개 정책 범위와 대조했고 신규 저장·요청·승인 상태 변화는 없습니다.
+
+## KIS 시세·차트 후속 — 2026-11-02
+
+01–20 문서를 새 시세 소스·화면·의존성과 대조했습니다. [20개 문서별 검토표](../product/KIS_SOURCE_DOCUMENT_REVIEW_2026-11-02.md)는 사실 갱신과 변경 없는 정책을 구분합니다. 이는 fingerprint 갱신에 앞선 소스·문서 정합성 기록이며 `review-required`·공개 준비 `BLOCKED`, 운영자 제공 사실과 미확정 계약·보유기간·연령·호스팅 조건을 유지합니다. 법률 의견·게시 승인·데이터 재배포 허가·실서비스 검증이 아닙니다.
+
+| 주제 | 새로 확인한 사실과 한계 | 근거 |
+|---|---|---|
+| 시세 범위 | PyQt6/Flet가 공통 OHLCV·지표·SVG를 사용. REST 단일/5초 폴링과 WS 체결을 구분. KIS 계좌·주문 경로 추가 없음; 기존 Upbit 계좌·AI 흐름은 별개 | [기능 범위](../product/KIS_MARKET_CHARTS_2026-11-02.md), [시세 adapter](../../data/kis_workspace.py), [공통 모델](../../core/market/models.py) |
+| 지원·단위·지연 | 국내/해외주식·국내파생 차트와 채권 일봉. 해외선물은 master 계산 배율이 확인된 일·주·월봉만. 해외옵션·야간 WS 등 미지원. 미국 무료 Nasdaq 범위/아시아15분 지연, 계약별 시세 단위/채권 액면1만원 기준, 부분 이력·미확인 거래량·잠정 봉을 표시 | 같은 기능 문서, [시세 처리](../../data/kis_workspace.py), [체결 집계](../../core/market/live.py) |
+| 인증·프로토콜 | HTTPS `/oauth2/Approval`에 appkey·secretkey를 전송. 승인키·종목·채널을 실전 `ws://ops.koreainvestment.com:21000` / 모의 `:31000` 구독에 사용. 키를 브라우저에 넣지 않는 Python 측 경계이며 해당 WS 구간의 암호화 보장이 아님 | [승인키·연결](../../data/kis_stream.py) `_approval_key`, `subscription_message`, `_run` |
+| 보관·중지 | 기존 평문 Bearer 토큰 파일은 유지. 승인키는 서버 주소·인증정보 지문별 프로세스 전역 메모리 캐시이며 23시간은 재사용 기준. 시세 snapshot·대기 tick·종목 master도 메모리. 연결 중지·브라우저 종료가 전역 캐시 삭제·원격 철회를 보장하지 않음 | 같은 파일 `_APPROVAL_CACHE`, `stop`; [master](../../data/kis_markets.py) `load_master`; [삭제 지도](20-deletion.md) |
+| 입력·생명주기 | 최초 화면 진입은 요청 없음. 조회·폴링·체결 연결을 명시적으로 선택하고 화면 이탈/중지 후 자동 재개하지 않음. 새 체결 연결은 REST 새 조회 후 시작. 이 선택은 개인정보·국외이전·광고의 법적 동의를 대체하지 않음 | [Flet](../../ui/market_chart_page.py), [Qt](../../quantgen_desktop/market_chart.py), [라우팅](../../main.py) |
+| 접근성 | 선택 봉 OHLCV 텍스트·이미지 이름/Qt 설명, 커서·슬라이더/Qt 방향키 제공. 시장 SVG는 일반 title만 있고 desc·전체 동등 표 없음. 지표는 최신 봉 값. 14번의 네 범례 대비 측정만 확인하며 실제 보조기술·전체 상태 검증은 미완료 | [표시](../../core/market/presentation.py), [대체 정보](13-alternative-text.md), [대비](14-contrast.md), [키보드](15-keyboard.md) |
+| 의존성·권리 | `websockets>=15,<17` 추가. 이 작업의 프로젝트 가상환경 16.1.1/BSD-3-Clause 메타데이터·LICENSE 원문 확인. 전체 선언 버전·전이 의존성·최종 설치물·KIS 자료 상업 표시/재배포권을 확인한 결과가 아님 | [선언](../../pyproject.toml), [외부 대장](08-third-parties.md), [권리 대장](19-licenses.md) |
+
+가격·환불 기능·사업자 번호/연락처·후기·연령 확인·광고메일·쿠키 동의·전체 삭제 기능을 새로 구현하거나 운영 사실로 확정한 변경은 없습니다. 합성·주입 테스트와 메타데이터 검사는 실제 사용자 키 연결, 웹사이트 반영·배포, 공유 서버의 사용자별 분리·로그/백업 조사 및 금융 서비스 분류 검토를 대신하지 않습니다.
