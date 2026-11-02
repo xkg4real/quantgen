@@ -91,4 +91,10 @@ KIS 키가 없으면 차트 오류에 저장소의 `.env`에서 `KIS_APP_KEY`·`
 | `python -m tools.compliance.check --check --report-dir /tmp/qg-home-compliance` | 정합성 PASS, 문서20종·소스493개, 공개 준비 BLOCKED |
 | 수정 문서의 로컬 링크와 상태 확인 | 깨진 로컬 링크 없음, 20종 모두 review-required |
 
+주 작업자의 최종 통합 실행은 아래 모듈 명령으로 **99개 통과(22.328초)**했습니다. `/tmp/qg-integration-tests-final.log`의 `Ran 99 tests`·`OK`를 직접 확인했습니다. 이 실행은 실제 네트워크를 차단한 fixture·Qt offscreen 범위이며, 별도로 실행한 점수9개·제어기11개·목록 UI12개·수신8개 같은 하위 검사 수를 중복 합산하지 않습니다.
+
+```bash
+python -m unittest tests.desktop_market_chart_acceptance tests.desktop_home_live_acceptance tests.research_home_acceptance tests.market_core_acceptance tests.kis_workspace_acceptance tests.kis_stream_acceptance tests.web_market_chart_acceptance tests.runtime_syntax_acceptance tests.packaging_policy_acceptance tests.status_snapshot_acceptance
+```
+
 배포·정책 승인·실제 서비스 수신 완료 여부는 각각 별도로 보고해야 합니다.

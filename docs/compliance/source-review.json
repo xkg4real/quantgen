@@ -249,7 +249,7 @@
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "1cb449ab4976d82574d778f3089758f69240d1f12d40b21e42131ba79e166ae5",
     "docs/product/FUNDING_INFERENCE_2026-10-30.md": "ea1ef423c1d2d3601f82c301536709fa66292595faee72dbd283ad49c5d87952",
     "docs/product/FX_LANGUAGE_2026-10-31.md": "e2c15111acbd1bf6391700c6a0f6616da69d65ce4750654783fd08fbaea3d65f",
-    "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md": "eeaf869de0b219e7048703b275c6f642afc395c4145708fdcac83cacf5c1f86a",
+    "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md": "32dc85bc5d9859aaa400545fedf2977cf420cafbb1c64750de8441aae6821382",
     "docs/product/INDICATOR_GUIDE_DESIGN.md": "cf664a34fefd8506e356ca2f261ddc6acbce168d370d1f7d504393d94acca484",
     "docs/product/KIS_MARKET_CHARTS_2026-11-02.md": "ae0d54bb8f2a90c39446829d56e08e564fa989182aba65933b06c849c7ba4951",
     "docs/product/KIS_SOURCE_DOCUMENT_REVIEW_2026-11-02.md": "a301a9b6991eff904f455f8da82d3d32f447a50ee5f02f952cba05715ff78740",
@@ -503,163 +503,163 @@
   "reviews": {
     "1": {
       "document_sha256": "8999644c980682de0259e004f13b09b3155ee5f90de6a1a2fc443961e784d6e4",
-      "source_digest": "ecc37fc863f8c89788bfa889040a306dff6b2ccd2361ac1a55c4b260206dab1f",
+      "source_digest": "db6feb35890b12ada841d66eb42c0c7dcb21839fab88b419d2f55c0ac5a14dcf",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.410692+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.355553+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "ecc37fc863f8c89788bfa889040a306dff6b2ccd2361ac1a55c4b260206dab1f",
+      "source_digest": "db6feb35890b12ada841d66eb42c0c7dcb21839fab88b419d2f55c0ac5a14dcf",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.416489+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.361007+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "a829c105d7c70b1c6fa2e56c33110faafc05fd5ddcb4b9b244bb3281e52d41b7",
+      "source_digest": "718680b548de7180ed6e95a36982c0bcc511facce508c68716e7fa6a465a8c19",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.426764+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.363953+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "6b58a44fabd29e84c170f450ab4c568241cc44e6fc9fddc39c47e83ab0239cfb",
+      "source_digest": "afcc0be104f333c23438813a947eee5563a35c5e1d2bf290160e7f347c640ca1",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.431119+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.368489+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "cc7c3d763a3cc35e8ddc6bdae3cb95febdd41ba1a60755d4466a9f7d89988939",
+      "source_digest": "10851a78fd104a3f22ef16b77ad2c850089bf7ebf327e44932dc3ed3cb40f599",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.436623+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.371627+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "6": {
       "document_sha256": "fbe667b6e7f2f4064e7873cb880beb348875cc4c4c4ecf4797125ea3b898dab0",
-      "source_digest": "16992a7a8653e881e68969dd0acc1965032dfae8173fe2828efb24a7b9f7dbeb",
+      "source_digest": "99a485aaea609c58393f1d83401c26c586803d4897cc932fcc1b95806111dd96",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.439399+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.374329+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "7": {
       "document_sha256": "5614e2d62a783fa147880e6aba7da1db696191b204923339c4c49364b88a3f57",
-      "source_digest": "ecc37fc863f8c89788bfa889040a306dff6b2ccd2361ac1a55c4b260206dab1f",
+      "source_digest": "db6feb35890b12ada841d66eb42c0c7dcb21839fab88b419d2f55c0ac5a14dcf",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.443563+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.377280+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "8": {
       "document_sha256": "64caf9f82a5167b591343a22dbe476110744faea951302d4214a2d634a2aeedc",
-      "source_digest": "16992a7a8653e881e68969dd0acc1965032dfae8173fe2828efb24a7b9f7dbeb",
+      "source_digest": "99a485aaea609c58393f1d83401c26c586803d4897cc932fcc1b95806111dd96",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.450197+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.380412+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "9": {
       "document_sha256": "e13cc4d66fa727f737e85b40ab105fecb5904971c86055dda16aef24b208dfe4",
-      "source_digest": "c344c0b74dc352b703bee1f87a6a8060589b0c680114d46a5495cc09ee7918b4",
+      "source_digest": "187ef90d63355edd5004105c16c026d1e4d4068f46b73fdd6b549587ae1a15e7",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.453242+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.382724+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "9eb040959d680d0da4f58ffca5464327f935a0b89b5e9db3dfdb44b15b739810",
+      "source_digest": "76a4ae64f006b3f7ae3881e6670b1e84dac13051854f1390e1f8a64dc81c16fb",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.456113+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.385067+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "7650d7c2d2b0eae58a010b264b03f880fdfe372b1e90b175886670ae7c311779",
+      "source_digest": "8fbf89d6feacf0dac122c2e5dfc0f915c292cad99fd33771efcc89a652cadad7",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.459208+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.388220+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "12": {
       "document_sha256": "e6a6ec1bf32796ecee6570528b5b46ffcc3dd666c1cc8c037d3e49ab374ae7b7",
-      "source_digest": "f49ea634054b4bd7d660112cf900aade28244f736e839a4ff15caa9051f69434",
+      "source_digest": "5e312b36e5e909d7509811987197c3b70f0d6042c2677866b519667251831594",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.462068+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.391512+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "13": {
       "document_sha256": "9a1da9d3c0fe3437b4992dd6eb25a174cd0d6e60d5b18c8e0c906be9a2382658",
-      "source_digest": "c344c0b74dc352b703bee1f87a6a8060589b0c680114d46a5495cc09ee7918b4",
+      "source_digest": "187ef90d63355edd5004105c16c026d1e4d4068f46b73fdd6b549587ae1a15e7",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.465458+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.393852+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "14": {
       "document_sha256": "4708a9554bc74653e7b0401d559ae5ee29728397b2fd8f2fb6bb57a05e0a1fc6",
-      "source_digest": "c344c0b74dc352b703bee1f87a6a8060589b0c680114d46a5495cc09ee7918b4",
+      "source_digest": "187ef90d63355edd5004105c16c026d1e4d4068f46b73fdd6b549587ae1a15e7",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.469252+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.396374+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "15": {
       "document_sha256": "6a103c51e560274abb48e1958a91868e28cf2ecae2eae26ca66cecacbc0e7d2d",
-      "source_digest": "c344c0b74dc352b703bee1f87a6a8060589b0c680114d46a5495cc09ee7918b4",
+      "source_digest": "187ef90d63355edd5004105c16c026d1e4d4068f46b73fdd6b549587ae1a15e7",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.473376+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.399410+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "da2edbbaa8e774a486fca6d59bc08bf7a1f8eb47a30d881115d40c25378fbc43",
+      "source_digest": "aa84d3dd99f9dadae86db2b476a4083d7e9690ba886dd694d3c2753a71dbb71d",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.476857+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.402214+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "16992a7a8653e881e68969dd0acc1965032dfae8173fe2828efb24a7b9f7dbeb",
+      "source_digest": "99a485aaea609c58393f1d83401c26c586803d4897cc932fcc1b95806111dd96",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.479396+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.404550+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "ecc37fc863f8c89788bfa889040a306dff6b2ccd2361ac1a55c4b260206dab1f",
+      "source_digest": "db6feb35890b12ada841d66eb42c0c7dcb21839fab88b419d2f55c0ac5a14dcf",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.482213+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.407151+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "19": {
       "document_sha256": "0a94fadb71a3bec2038f7d33ca4575fcfdfec1b754872408851d3b223b04e174",
-      "source_digest": "76c6517ab1285e0b5ecb1fdf62108d2e510a493cbba5559b99a16ef408717f10",
+      "source_digest": "9ba29aa6ebecf1ed5265f111aa9046836d25f3ee73c56f6bdfada557337f7553",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.485121+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.411597+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     },
     "20": {
       "document_sha256": "7cb0681604508a6d5e63633469acd974c078f96e5f72ba158b8ecbfbf92f5adb",
-      "source_digest": "ecc37fc863f8c89788bfa889040a306dff6b2ccd2361ac1a55c4b260206dab1f",
+      "source_digest": "db6feb35890b12ada841d66eb42c0c7dcb21839fab88b419d2f55c0ac5a14dcf",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md에 따라 20종 정책·양식을 Home 자동 REST, 명시적 수정 일봉·단일 WS, 로컬 실험 Q-SCORE, 차트 첫 연결·키 누락 안내, 중지·지연·200ms 표 갱신 및 접근성 범위와 대조했다. 14종·FACTS·RELEASE_GAPS를 갱신하고 03/05/10/16/17/18은 조건 변경이 없어 유지했다. runtime-smoke의 신규 회귀검사 연결과 desktop_market_chart_acceptance의 초기 연결·키 비노출 검사, 고정220ms 대기 대신 실제225시세표시를 최대1초 확인하는 bounded polling도 대조했다. 정책검사31개·문서생성검사16개 통과. 실제 KIS·Windows 통합 수동검증·예측력·권리·사이트 배포는 미확인, review-required와 공개 BLOCKED 유지.",
-      "reviewed_at": "2026-11-02T03:37:41.487858+00:00",
-      "source_commit": "cac727e2b5499533301fdc7b2e9ea6479c7788db"
+      "review_note": "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md의 20종 정책 대조와 최종 99개 통합검사 로그·명령, 정책31개·문서생성16개 PASS 기록을 반영했다. Home 자동 REST·명시적 수정 일봉/단일 WS·실험 Q-SCORE·차트 초기 연결·키 누락 안내·200ms 표 갱신·15초 stale·메모리 처리·접근성 범위를 검토했으며 14종 및 FACTS/RELEASE_GAPS를 갱신했다. 기존 조건을 유지한 03/05/10/16/17/18의 이유와 runtime-smoke 연결·차트 bounded polling도 기록했다. 실제 KIS 수신·Windows 통합 수동검증·예측력·자료 이용권·사이트 배포는 미확인, review-required 및 공개 BLOCKED 유지.",
+      "reviewed_at": "2026-11-02T03:38:18.413823+00:00",
+      "source_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c"
     }
   }
 }
