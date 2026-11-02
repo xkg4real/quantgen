@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-11-02T12:08:55.000+09:00
+updated_at: 2026-11-02T12:17:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
-work_commit: 20c63046e3065cc4de3c73139d7a6a6182b5a83a
+work_commit: ab6a15f9c92011f7e98838ca0bed004d101bcf6f
 uncommitted_changes: no; primary and financial source commits pushed/read back
-pr: 54 and 58 (open; final runtime CI running, compliance success)
+pr: 54 and 58 (open; Windows test portability fixes pushed, exact-head CI running)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -22,6 +22,12 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 ---
 
 # QUANTGEN 직접 작업 재개 — 2026-11-02
+
+## 12:17 KST 검증 중간 저장
+- PR54 headab6a15f9c92011f7e98838ca0bed004d101bcf6f push/read-back. Windows KIS source-fixture의 기본 cp1252 읽기를 명시UTF-8로 수정; 제품 불변, 모사검사1 PASS. Runtime41382070806 재실행 중.
+- PR58 head1cbe874eadb8432102be6896a393e6c5499067da push/read-back. LETF 테스트 전역 audit hook이 다른 Windows asyncio loopback을 막는 문제를 모듈 실행 범위로 한정. 활성 보호·실패 cleanup 포함36 합성검사 PASS, 제품runtime 불변. 최종CI 재실행 중이며 기존 실패를 통과로 기록하지 않음.
+- M3-N08 금리 재평가모수 일관성 local7e8d7442(gpt/rates-params-20261102): 신규5+기존5 PASS, 이전12terminal/24PV/144summary 정확일치. 별도정책·CI·PR 준비중, 원격완료아님. N5 진단은 실제연구기준과 연결되어 수정하지 않고 비공개 재현/후속안 보존.
+- 인수인계 draft에 private MVP/Step7A/비교문서와 수신UI/AWS자료 취합중. 실제Windows/liveAPI/법률/공급사/파일럿 미완료 유지; 계정토큰잔량 unknown.
 
 ## 11월2일 최종 소스 검사·원격 반영
 - PR54 head20c63046e3065cc4de3c73139d7a6a6182b5a83a push/read-back. 이전98eb643 CI의legacy Home stub 실패를 실제lifecycle 계약으로수정했고 집중9 PASS. Runtime41380903353 현재Windows/Ubuntu native단계진행,Compliance41380903347 success. 이전98통합+29후속+47문서 증거와 실제Windows/공급자미실시를 구분.
