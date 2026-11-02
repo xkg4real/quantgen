@@ -194,6 +194,22 @@ annualized coupon from its later period schedule and a guaranteed payment.
 Pricing, Greeks, schedule and non-CMS conventions remain unchanged; see
 `CMS_COUPON_DISCLOSURE_2026-11-02.md`. Both changes reach native/Flet displays
 and AI/export interpretation without changing official research criteria.
-Latest source implementation count: **18/67**, **49** remaining, with
+Prior LETF/FX/CMS checkpoint: **18/67**, **49** remaining, with
 **14 observation rows/models and 15 ambiguous mappings** still open.
 Actual market/provider/user-Windows acceptance is separate.
+
+
+### 2026-11-02 Signals counts and forward convention
+
+N11 now counts executed order sides and completed round trips only over the
+executable return/cost intervals. Final-bar pending transitions are distinct,
+win rates remain gross price comparisons, and historical/unknown versions stay
+unverified. M3-N06 explicitly identifies the existing 5y5y descriptor as a
+five-year simple-compounded annualized rate, separate from semiannual or forward
+par swap rates. Neither change modifies equity/return/risk arrays or curve pricing.
+See `SIGNALS_TRADE_COUNTS_2026-11-02.md` and `FORWARD_CONVENTION_2026-11-02.md`.
+
+Latest source implementation count: **20/67**, **47** remaining. Alias IDs are
+deduplicated; partial NEW-M6-02 is not counted as completed. The 14 observation
+models and 15 ambiguous mappings remain. This queue records bounded product
+corrections, not full application/research/actual Windows acceptance.
