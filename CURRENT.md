@@ -9,10 +9,10 @@ next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b
 updated_at: 2026-11-02T13:47:36.000+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/remaining-work-20261102
-work_commit: 29d926169b8c4c29c1def4720a06bfe1203ad365
+work_branch: gpt/defects-priority-20261102
+work_commit: 8b4010430a9ece2a4e1b05b234abe81d3796771f
 uncommitted_changes: no; all three source branches pushed/read back and merged
-pr: 54, 58, 59 (merged and verified); 60 (merged by UI session)
+pr: none (previous 54/58/59 merged)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -22,6 +22,8 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 ---
 
 # QUANTGEN 직접 작업 재개 — 2026-11-02
+
+새 작업 브랜치: gpt/defects-priority-20261102, 최신 검증 main 8b4010430a9ece2a4e1b05b234abe81d3796771f 기준. 기존 29d 작업 브랜치·완료 기록 보존.
 
 ## 결함 46그룹 우선 처리 — 2026-11-02T13:47:36.000+09:00
 - 사용자 최신 직접 지시: 결함 46개 먼저 처리. 기존 21/67 완료 ID와 LEDGER를 보존하고 남은 정규 결함 그룹을 우선한다. 현재 source/task/handoff/직전 execution 및 로컬 저장 기록 일치, OS 잠금 해제 후 배타 잠금 확보를 확인했다. 최신 CURRENT blob 조건 CAS와 새 execution read-back 후 재개한다.
