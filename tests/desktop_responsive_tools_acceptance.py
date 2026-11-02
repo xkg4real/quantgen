@@ -11,7 +11,7 @@ from core.research.structuring_analysis import StructuringRequest
 from quantgen_desktop.app import ResearchWindow
 from quantgen_desktop.chart_study import CurrentPageTabs
 from quantgen_desktop.localization import UiLabel
-from PyQt6.QtCore import QEvent,QPoint
+from PyQt6.QtCore import QEvent,QPoint,QSize
 from PyQt6.QtWidgets import QApplication,QWidget,QScrollArea
 from PyQt6.QtTest import QTest
 
@@ -34,12 +34,46 @@ class ResponsiveToolTests(unittest.TestCase):
         self.addCleanup(cleanup)
         return w
 
+    def overflow_context(self, window, pane, width, language):
+        scroll=window.stack.currentWidget()
+        tabs=window.market_tabs if pane is window.macro else window.risk_tabs
+        def geometry(widget):
+            hint=widget.minimumSizeHint()
+            return f'{widget.width()}x{widget.height()} min={widget.minimumWidth()} hint={hint.width()}x{hint.height()}'
+        return (f'width={width} actual_window={window.width()} language={language} '
+                f'viewport={geometry(scroll.viewport())} content={geometry(scroll.widget())} '
+                f'pane={geometry(pane)} input_box={geometry(pane.input_box)} '
+                f'study={geometry(pane.study)} tabs={geometry(tabs)} '
+                f'tabbar={geometry(tabs.tabBar())} tool={geometry(pane.tool)} source={geometry(pane.source)}')
+
     def test_inactive_oversize_page_does_not_set_selected_page_minimum(self):
         tabs=CurrentPageTabs();small=QWidget();large=QWidget();large.setMinimumSize(8000,9000)
         tabs.addTab(small,'Small');tabs.addTab(large,'Large');tabs.setCurrentWidget(small)
         self.assertLess(tabs.minimumSizeHint().width(),1000);self.assertLess(tabs.minimumSizeHint().height(),1000)
         tabs.setCurrentWidget(large);self.assertGreaterEqual(tabs.minimumSizeHint().width(),8000)
         tabs.setCurrentWidget(small);self.assertLess(tabs.minimumSizeHint().width(),1000)
+        tabs.deleteLater()
+
+    def test_height_for_width_uses_selected_page_and_keeps_explicit_minimum(self):
+        class WrappingPage(QWidget):
+            def __init__(self, height):
+                super().__init__(); self.content_height=height
+            def sizeHint(self): return QSize(200,self.content_height)
+            def minimumSizeHint(self): return QSize(100,20)
+            def hasHeightForWidth(self): return True
+            def heightForWidth(self,width): return self.content_height
+        tabs=CurrentPageTabs(); small=WrappingPage(50); large=WrappingPage(9000)
+        tabs.addTab(small,'Small'); tabs.addTab(large,'Large')
+        tabs.setCurrentWidget(small)
+        self.assertTrue(tabs.hasHeightForWidth())
+        self.assertLess(tabs.heightForWidth(700),200)
+        small.setMinimumHeight(450)
+        self.assertGreaterEqual(tabs.heightForWidth(700),450)
+        self.assertLess(tabs.heightForWidth(700),600)
+        tabs.setCurrentWidget(large)
+        self.assertGreaterEqual(tabs.heightForWidth(700),9000)
+        tabs.setCurrentWidget(small)
+        self.assertLess(tabs.heightForWidth(700),600)
         tabs.deleteLater()
 
     def test_signals_render_locale_narrow_wide_keeps_narrative_inside_viewport(self):
@@ -52,7 +86,8 @@ class ResponsiveToolTests(unittest.TestCase):
                 for language in ('en','ko'):
                     w.set_language(language);self.settle();pane.grab();self.settle()
                     scroll=w.stack.currentWidget();self.assertIsInstance(scroll,QScrollArea)
-                    self.assertEqual(scroll.horizontalScrollBar().maximum(),0)
+                    self.assertEqual(scroll.horizontalScrollBar().maximum(),0,
+                                     self.overflow_context(w,pane,width,language))
                     narrative=next(x for x in pane.findChildren(UiLabel) if x.source_text==out.narrative)
                     x=narrative.mapTo(scroll.viewport(),QPoint(0,0)).x()
                     self.assertGreaterEqual(x,0);self.assertLessEqual(x+narrative.width(),scroll.viewport().width())
@@ -80,7 +115,8 @@ class ResponsiveToolTests(unittest.TestCase):
                     self.assertLessEqual(reading_top-last,pane.study.split.spacing()+24)
                 for label in pane.input_box.findChildren(UiLabel):
                     self.assertLessEqual(label.height(),max(50,label.heightForWidth(label.width())+10))
-                self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(),0)
+                self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(),0,
+                                 self.overflow_context(w,pane,width,language))
 
 
 if __name__=='__main__':unittest.main()
