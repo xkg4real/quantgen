@@ -12,9 +12,9 @@
     "repository": "https://github.com/xkg4real/quantgen",
     "branch": "gpt/home-compact-20261102",
     "pull_request": "https://github.com/xkg4real/quantgen/pull/61",
-    "implementation_commit": "pending_final_commit",
-    "merge_commit": null,
-    "remote_status": "OPEN",
+    "implementation_commit": "4e17087b1de5dfc01e5f03485088c316f22b0710",
+    "merge_commit": "707cdc7786fb2dbce2718f97458f02c43b21bcda",
+    "remote_status": "MERGED",
     "integrated_main": "8b4010430a9ece2a4e1b05b234abe81d3796771f"
   },
   "summary_ko": [
@@ -65,12 +65,16 @@
         "passed": 47
       }
     ],
-    "ci": "PENDING",
+    "ci": "SUCCESS",
     "actual_provider_network": "NOT_RUN",
     "user_pc": "User confirmed native app launch and KIS_SETTINGS_FOUND=True before this change; current UI and actual live receipts are unverified.",
     "counts_note": "Suites overlap; do not sum as unique tests.",
     "font_proof": "Three actual 400/500/600 faces, 11172 Hangul, tabular numerals, deterministic regular rebuild, startup fallback; no network font loading.",
-    "source_review": "20 documents / 526 source files PASS; publication BLOCKED"
+    "source_review": "20 documents / 526 source files PASS; publication BLOCKED",
+    "ci_runs": [
+      41390246447,
+      41390246439
+    ]
   },
   "website_application": {
     "status": "not_applied",
