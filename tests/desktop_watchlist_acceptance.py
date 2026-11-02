@@ -1,5 +1,6 @@
 """Native watchlist behavior, truthful source metadata and keyboard access."""
 import os
+from pathlib import Path
 import re
 import unittest
 from unittest.mock import patch
@@ -163,7 +164,12 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.assertEqual(table.verticalScrollBarPolicy(), Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
     def test_long_english_company_names_keep_both_lines_in_compact_rows(self):
-        font = self.panel.font()
+        from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics
+        path = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.otf"
+        font_id = QFontDatabase.addApplicationFont(str(path))
+        families = QFontDatabase.applicationFontFamilies(font_id)
+        self.assertTrue(families)
+        font = QFont(families[0])
         font.setPixelSize(13)  # The research window's production text size.
         self.panel.setFont(font)
         self.panel.set_locale(LocaleContext("en_US"))
@@ -173,6 +179,17 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
             company = next(label for label in identity.findChildren(QLabel) if label.objectName() != "watchlistTicker")
             self.assertGreaterEqual(company.height(), company.heightForWidth(company.width()), company.text())
             self.assertEqual(self.panel.table.rowHeight(row), 44)
+        self.panel.update_score("005930", dict(status="ready", score=79.99, stars=4,
+                                                as_of="2026-11-02T03:00:00+00:00", feed_state="stopped", live=False))
+        item = self.panel.table.item(6, 7)
+        lines = item.text().splitlines()
+        metrics = QFontMetrics(item.font())
+        identity = self.panel.table.cellWidget(6, 0)
+        self.assertEqual(lines[1], "Paused · last score")
+        self.assertLessEqual(metrics.lineSpacing() * len(lines), identity.height())
+        insets = self.panel.table.columnWidth(0) - identity.width()
+        self.assertLessEqual(max(metrics.horizontalAdvance(line) for line in lines),
+                             self.panel.table.columnWidth(7) - insets)
 
     def test_busy_refresh_is_explicit_and_keeps_existing_rows(self):
         requests = []

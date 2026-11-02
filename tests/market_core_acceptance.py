@@ -16,6 +16,52 @@ def history(n=80, interval="1d"):
     return MarketSnapshot(ChartRequest(interval=interval), candles)
 
 
+def contrast_ratio(first, second):
+    """WCAG sRGB relative luminance, computed from actual rendered SVG colors."""
+    def luminance(value):
+        channels = [int(value[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+        linear = [c / 12.92 if c <= .04045 else ((c + .055) / 1.055) ** 2.4 for c in channels]
+        return sum(c * weight for c, weight in zip(linear, (.2126, .7152, .0722)))
+    low, high = sorted((luminance(first), luminance(second)))
+    return (high + .05) / (low + .05)
+
+
+class ChartContrastTests(unittest.TestCase):
+    def test_both_themes_meet_legend_text_and_indicator_line_contrast(self):
+        ns = '{http://www.w3.org/2000/svg}'
+        for dark in (False, True):
+            for width in (420, 1000):
+                with self.subTest(dark=dark, width=width):
+                    root = ElementTree.fromstring(chart_svg(history(), dark=dark, width=width,
+                        indicators=('sma', 'rsi', 'macd', 'bollinger')))
+                    background = root.find(ns + 'rect').attrib['fill']
+                    texts = root.findall(ns + 'text')
+                    self.assertTrue({'SMA20', 'BB20 +2σ', 'BB20 −2σ'} <= {t.text for t in texts})
+                    for text in texts:
+                        self.assertGreaterEqual(contrast_ratio(text.attrib['fill'], background), 4.5, text.text)
+                    paths = root.findall(ns + 'polyline')
+                    self.assertGreaterEqual(len(paths), 6)
+                    for path in paths:
+                        self.assertGreaterEqual(contrast_ratio(path.attrib['stroke'], background), 3)
+                    if dark:
+                        legend = {t.text: t.attrib['fill'] for t in texts}
+                        self.assertEqual(legend['SMA20'], '#C58C23')
+                        self.assertEqual(legend['BB20 +2σ'], '#2E9F91')
+
+    def test_theme_changes_only_color_not_values_labels_or_plot_geometry(self):
+        snapshot = history()
+        before = indicator_series(snapshot)
+        outputs = []
+        for dark in (False, True):
+            root = ElementTree.fromstring(chart_svg(snapshot, dark=dark, cursor=45, visible=30,
+                indicators=('sma', 'rsi', 'macd', 'bollinger')))
+            for node in root.iter():
+                for key in ('fill', 'stroke'): node.attrib.pop(key, None)
+            outputs.append(ElementTree.tostring(root))
+        self.assertEqual(outputs[0], outputs[1])
+        self.assertEqual(indicator_series(snapshot), before)
+
+
 class IndicatorTests(unittest.TestCase):
     def test_independent_linear_price_oracle_and_warmup(self):
         s = history()

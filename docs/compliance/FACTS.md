@@ -3,8 +3,28 @@
 2026-10-31 추가 표시 검토: 네이티브 ETF/Crypto/Derivatives의 AR(1)·펀딩·호가 검사 안내에 로컬 한영 문구를 연결했습니다. 원본 보고서·수치·미실시 상태·외부 진단 원문 및 기존 전송/저장 경로는 보존합니다. `quantgen_desktop/market_diagnostics_language.py`, `market_tools.py`와 `docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md`가 근거입니다. 실제 Windows 시각/DPI·Flet 동등성·외부 서비스 검증 또는 공개 승인은 별도입니다.
 
 - 기준일: 2026-11-02 한국시간
-- 코드 기준: 기존 검토 기록과 KIS 기능 커밋 `5074322` 및 Home 목록·Q-SCORE·네이티브 레이아웃 후속 작업 트리. 검토 fingerprint는 `source-review.json` 참조
+- 코드 기준: 기존 `5074322` 기능 검토 이력을 보존하고 `853de90`과 PR #57 `cac727e2`의 통합 작업 트리를 대조. 검토 fingerprint는 `source-review.json` 참조 · 이후 main PR60 `1e67b04`/기록 `ead6e67`의 Home 목록·Q-SCORE·7페이지 변경도 통합 대조.
 - 범위: 실행 진입점, `core/`, `data/`, `ui/`, `quantgen_desktop/`, 의존성·자산 선언과 관련 문서. 실제 운영 서버·사업자 계약·판매 사이트는 이 소스 검사로 확인되지 않는다.
+
+<a id="kis-market-integration-2026-11-02"></a>
+## KIS 시세·차트 통합 — 2026-11-02 소스·문서 정합성
+
+PR #55/#56이 포함된 `69a2559`의 통합 `147afc0`, 후속 `853de90`과 PR #57 `cac727e2`를 통합한 작업 트리를 기준으로 검토했습니다. [20개 문서별 검토표](../product/KIS_SOURCE_DOCUMENT_REVIEW_2026-11-02.md)의 원검토 이력과 현재 통합 검증을 구분합니다. 이전 UI 번역·FX/CMS 설명 수정에 관한 “외부 전송 변화 없음” 기록은 그 변경에 한정하며 아래 KIS 신규 연결에는 적용하지 않습니다. 비밀값·실제 계정·시세 API·고객 자료를 읽거나 요청하지 않은 소스 검토입니다.
+
+| 추가·변경 사실 | 확인된 범위와 남은 확인 |
+|---|---|
+| 시세 GET | 기존 KIS 허용목록에 국내주식 과거 분봉, 국내파생 분봉, 해외주식 분봉, 해외선물 주봉·월봉·현재가의 6개 시세 경로 추가. [설정](../../config.py), [조회 어댑터](../../data/kis_workspace.py). 계좌·주문 API를 추가하지 않음 |
+| 승인키 발급·구독 | [스트림](../../data/kis_stream.py)은 기존 앱 키·시크릿을 `client.base_url + /oauth2/Approval`에 POST함(기본 REST 주소는 HTTPS). 승인키·선택 종목/TR을 `ws://ops.koreainvestment.com:21000`(실전), `:31000`(모의)에 전달. 이 WebSocket은 비TLS이며 전송 보호 검토 완료가 아님. 암호화 계좌·주문 통보는 구독/해독하지 않음 |
+| 승인키 메모리 | 프로세스 전역 캐시가 base URL과 인증정보 지문별로 승인키를 23시간 재사용. 기한은 재사용 기준이며 자동 삭제·안전한 메모리 소거·원격 철회가 아님. 정지 시 전역 캐시를 지우지 않으며 기존 Bearer 토큰 평문 JSON 저장과 별개. 새 스트림 모듈의 승인키 파일 저장은 없음 |
+| 실행 선택·종료 | 조회·기본 OFF인 5초 REST 반복 조회·별도 WebSocket 연결을 사용자가 선택. 새 연결 전 REST 이력 재조회, 화면 이탈/종료 후 자동 재개 없음. Flet 실시간 중지는 WebSocket 수신만 중지하며 REST 반복 조회는 별도 스위치 OFF로 중지. 이미 전송된 요청의 취소·제공자 로그 삭제·법적 동의 충족은 보장하지 않음. [Qt](../../quantgen_desktop/market_chart.py), [Flet](../../ui/market_chart_page.py) |
+| 시세·체결 처리 | 선택 종목/거래소/기간·주기와 OHLCV·시장/수신 시각을 처리. snapshot·체결 대기·해외선물 배율 자료는 실행 프로세스 메모리에서 사용. 기존 마스터 다운로드 경로 `new.real.download.dws.co.kr`도 사용. 화면을 닫는 것이 모든 처리 자료 삭제를 뜻하지 않음 |
+| 브라우저 경계 | Flet 서버가 공급자 요청을 수행하고 브라우저에는 차트·시세 표시 데이터 전달. 새 화면이 앱 키·시크릿·승인키를 표시 데이터로 넘기거나 AI 해설로 보내는 경로는 없음. 운영 서버의 이용자 분리·인증정보 접근·통신 보호·제공자 로그/처리 국가·보유기간은 미검증 |
+| 지원·단위 | PyQt6/Flet가 공통 OHLCV·지표·SVG를 사용. 국내/해외주식·국내파생 차트와 채권 일봉, master 계산 배율을 확인한 해외선물 일·주·월봉을 제공하고 해외옵션·야간 WebSocket 등은 미지원. 파생 계약별 시세 단위·채권 액면 1만원 기준을 구분. 기존 Upbit 계좌·AI 흐름은 별개 |
+| 표시와 주장 | `SUBSCRIBED`와 유효 체결 수신 `LIVE`를 구분. heartbeat는 새 시세 증거가 아님. 미국 무료 Nasdaq 범위와 아시아 15분 지연, 부분 이력·형성 중 봉·미확정 거래량·공백 후 OHLC 불완전·일부 체결의 수신일 추정을 유지. [공개 구현 범위](../product/KIS_MARKET_CHARTS_2026-11-02.md)의 지원 제한을 전체 자산 실시간 보장으로 확대하지 않음 |
+| 대체 정보·대비 | 선택 봉 OHLCV 텍스트·Flet 이미지 이름/tooltip·Qt 설명·커서/슬라이더·Qt 방향키를 제공. 시장 SVG는 일반 title만 있고 desc·전체 동등 표는 없으며 지표값은 최신 봉 기준. PR #57 네 범례쌍 검토와 최종 17개 합성 검사의 범위는 [14번](14-contrast.md)에 구분. 실제 전체 상태·보조기술·Windows/브라우저 수용은 미완료 |
+| 새 패키지·데이터 권리 | 필수 `websockets>=15,<17`. 현재 지정 개발 환경 16.0의 BSD-3-Clause 원문 확인과 PR #57 당시 별도 환경 16.1.1 확인 기록을 [19번](19-licenses.md)에 구분. 현재 별도 환경의 17.3은 선언 범위 밖이며 이 통합 검증의 의존성 충족 근거로 사용하지 않음. 새 동적 시세는 기존 Home 6개/등록 계열 73개 목록과 범위가 다름. [별도 표시권 검토](../product/MARKET_DISPLAY_RIGHTS_2026-10-31.md#kis-chart-scope-2026-11-02)는 KIS/거래소 상업 표시·재배포·파생지표·서버→브라우저 제공권을 미확정으로 유지 |
+
+정책 01/06/07/08/20의 전송·선택·보관, 12–15의 주장·대체 정보·대비·키보드, 19의 패키지·데이터 권리에 해당 사실을 반영했습니다. PR #57의 02/04/09/10 기능 범위·메모리/쿠키 구분·선택권·추가 시세 비용 안내도 보존했습니다. 밝은 테마 범례의 기존 대비 미달과 후속 합성 검증은 [14번 수정 이력](14-contrast.md)에 구분합니다. 02/03/04/05/09/10/11/16/17/18의 상품·가격/환불·쿠키·후기·사업자·연령·메일 운영 조건은 이 변경으로 해결되지 않습니다. 모든 정책 `review-required`, 공개 준비 `BLOCKED`, 실제 KIS 계정/이용권·Windows/브라우저 수동 수용·AWS 배포·법률 검토의 미완료 상태를 유지합니다. 최종 소스 fingerprint 갱신은 별도 작업이며 이 문단 자체가 배포 승인이나 수동 검증 결과가 아닙니다.
 
 ## 기능과 정보 흐름
 
@@ -53,9 +73,16 @@ Flet와 네이티브의 기존 동의 절차 차이, 자유 질문의 개인정�
 실제 Windows/브라우저·스크린리더·사용자 API 연결은 별도입니다. 20개 문서와 소스의 정합성만 검토하며
 각 문서의 `review-required` 및 외부 공개의 별도 증거 조건을 유지합니다.
 
-[최신 README](../../README.md)의 상업화 결정은 과거 개인용 배포 정책을 대체한다고 명시한다. 그러나 [2026-10-29 배포 검토](../product/DISTRIBUTION_REVIEW_2026-10-29.md), [데스크톱 이행 문서](../DESKTOP_MIGRATION_2026-10-30.md), 일부 실행 코드의 개인용 표현과 공개 배포 미승인 표시는 남아 있다. 이 문서 묶음은 현재 기능과 최신 사업 의도를 구분하고, 과거 개인용 제한을 현행 정책으로 복제하지 않는다. 기존 표시를 일괄 정정하려면 데이터 권리·배포 승인 상태를 함께 확인해야 하며, 문구 삭제만으로 권리가 확보되지는 않는다.
+[최신 README](../../README.md)의 상업화 결정은 과거 개인용 배포 정책을 대체한다고 명시한다. [2026-10-29 배포 검토](../product/DISTRIBUTION_REVIEW_2026-10-29.md)는 2026-11-02 정정으로 현행 소유자 결정과 과거 개인용 이력을 구분했다. [데스크톱 이행 문서](../DESKTOP_MIGRATION_2026-10-30.md)와 일부 실행 코드의 개인용 표현·공개 준비 미확정 표시는 별도 검토 대상으로 남아 있다. 이 문서 묶음은 현재 기능과 최신 사업 의도를 구분하고, 과거 개인용 제한을 현행 정책으로 복제하지 않는다. 기존 표시를 일괄 정정하려면 데이터 권리·배포 승인 상태를 함께 확인해야 하며, 문구 삭제만으로 권리가 확보되지는 않는다.
 
 ## 이 기록으로 확정할 수 없는 사실
+
+2026-11-02 M4-N6/M4-N11: FX의 기존 수치를 입력 금리 기준 부호 있는 연환산 CIP 차이로 설명하고 5bp 경계의 잡음/실제 조달 프리미엄 단정과 오류 색을 제거했다. 호가 시점·만기·규약 정합성은 미검증이다. CMS의 기존 coupon은 첫 기간 예상 연율 쿠폰으로 명시하고 이후 기간은 기존 일정으로 구분하며 지급 보장으로 해석하지 않는다. Flet의 `implied_basis_note`·`coupon_interpretation` 및 native 보고서·기존 선택적 AI 전달의 해석 정보를 보강했다. 수치·가격·Greeks·계산식·기존 저장 보고서·연구 판정은 유지하며 새 전송처·개인정보/키·동의·저장·삭제 경로는 추가하지 않았다. [FX 근거](../product/FX_CIP_DISCREPANCY_2026-11-02.md)와 [CMS 근거](../product/CMS_COUPON_DISCLOSURE_2026-11-02.md)를 01–20 문서와 대조했다. 합성 검증은 실시장·실제 Windows·접근성·법률·공개 승인 증거가 아니며 `review-required`와 `BLOCKED`는 유지한다.
+
+2026-11-02 M4-N3: ETF 화면에 LETF 비교기준과 연속 연율 금리·보수·배당 가정을 명시 입력하는 시나리오를 추가했다. 이는 사용자 가정이며 관측 금리·검증된 펀드 비용·분배금이 아니다. 기존 영금리 계산은 `ZERO_RATE_REFERENCE`로 별도 보존하며 분산·펀딩·보수·배당 기여도를 구분한다. 입력 가정과 계산 결과는 사용자가 명시적으로 만든 보고서 및 기존 선택적 AI 해설 payload에 포함될 수 있다. 새 키·계좌정보 필드, 외부 목적지, 기본 조회, 주문 경로, 저장 위치·보유기간은 추가하지 않았다. 기존 native 미리보기·미선택 동의와 Flet 전송 버튼의 차이, 자유 입력 개인정보·자료 이용권·국외이전의 미확정 사항은 유지한다. 역사적 연구·공식 판정·원장을 바꾸지 않으며 현 시나리오의 시장 대조 검증은 `NOT_RUN`이다. 합성 수학·표시 검사는 실제 Windows 접근성 또는 시장 대조 증빙이 아니다. [가정 계산](../../core/ficc/letf_assumptions.py), [ETF 흐름](../../core/research/etf_workflow.py), [공시](../../core/research/letf_disclosure.py), [Flet 입력](../../ui/etf_page.py), [Qt 입력](../../quantgen_desktop/market_tools.py), [검증 범위](../product/LETF_ASSUMPTIONS_2026-11-02.md)를 01–20 문서의 현재 조건과 대조했으며 `review-required`와 공개 준비 `BLOCKED`는 유지한다.
+2026-11-02 표시 후속: Markets/Risk의 선택한 탭만 크기를 결정하고 실제 폭에 맞춰 긴 해설 높이를 계산하여 좁은 Signals 잘림과 Macro의 과도한 입력 공백을 수정했다. Macro의 코드에 정의된 지표명과 등록된 차트 설명, 종료 실패 안내에 표시 언어를 적용한다. 공급자 원문·수치·원본 보고서·실행/저장/전송 조건은 유지하며 새 정보 수집·추적·자격증명·배포 경로는 없다. 접근성 문서 13–15를 포함한 기존 20개 문서의 조건과 대조했으며 합성 offscreen 결과는 실제 Windows/DPI·키보드·스크린리더 증빙을 대신하지 않는다. 공개 준비 BLOCKED 및 review-required는 유지한다.
+
+2026-11-02 앱 구동·언어 표시 후속: 저장된 locale 타입이 잘못돼도 기존 영어 대체 표시로 설정 화면을 열고 사용자가 지역 설정을 고칠 수 있게 했다. 기존 QSettings 경로와 저장 항목을 유지한다. 네이티브 모델·매크로 해설과 명시한 표 셀은 현재 로컬 생성 문구일 때만 표시 언어를 바꾸며 원문 보고서·식별자·수치·연구 판정은 유지한다. 외부 번역 API, 새 개인정보·키 수집, 새로운 계좌·주문·서비스 과금 경로는 추가하지 않았다. 합성 입력을 사용한 실제 Flet 화면 생성·이동과 설치 wheel의 PyQt6 작업·내보내기 검사를 확대했다([구동 검증 범위](../product/APP_ACCEPTANCE_2026-11-02.md)). 01–20 문서의 기능·전송·저장·공개 조건과 대조했으며 `review-required`, 외부 계약·운영 증빙의 미확정값과 공개 준비 `BLOCKED`는 유지한다. 이 검토는 실제 Windows 실기기·스크린리더·실제 API·Windows 연구 검증이나 법률 의견을 대신하지 않는다.
 
 사업자 등록·신고 증빙과 연락처, 실제 요금·갱신·환불 채널, 호스팅 제품·로그·백업·처리 국가, 실제 보유기간, 제공자별 개인정보 역할·국외이전 국가·계약, 허용 이용 연령, 계약별 데이터 권리, 운영 사이트 접근성은 별도 증빙이 필요하다. 이 파일은 이용자 개인정보나 비밀키를 저장하는 장소가 아니다.
 
@@ -131,6 +158,28 @@ C형 최종 통합 시 main PR48/49(4c51ab9)의 인계 기록과 채권·포트�
 
 C형 병합 직전 통합: main PR50–52(d789691)의 웹 인계 기록과 시장 진단 한영 표시를 함께 보존했습니다. ToolPane의 기존 text(localized=...) 경로를 사용하며 AR(1)·펀딩·호가 수치, 원문 경고와 NOT_RUN·정규 보고서가 유지됩니다. 20개 정책 범위와 대조했고 신규 저장·요청·승인 상태 변화는 없습니다.
 
+
+### Signals count and forward-convention disclosure — 2026-11-02
+
+The [Signals correction](../product/SIGNALS_TRADE_COUNTS_2026-11-02.md) aligns
+executed order-side counts and completed round trips with the existing executable
+return/cost window. Final-bar pending transitions do not count as fills. Win rates
+remain gross price comparisons, and legacy or unknown statistics versions remain
+unverified. Existing equity, return and risk arrays are unchanged. This is product
+backtest result labeling/statistics, not an actual trade ledger or research verdict.
+
+The [curve disclosure](../product/FORWARD_CONVENTION_2026-11-02.md) identifies
+5y5y as a five-year simple-compounded annualized forward and distinguishes it from
+semiannual and forward par swap rates. Descriptor values, curve/bootstrap and swap
+engines remain unchanged. Optional AI payloads and user-initiated exports include
+additive scope/convention metadata; existing privacy filters and consent paths remain.
+
+All twenty policy scopes were checked for these bounded changes. They introduce no
+new provider, collection, storage path, SDK, billing, marketing or deletion behavior.
+Existing KIS integration transmission/retention facts remain independently applicable.
+Actual Windows/accessibility/provider checks, commercial/data rights, legal/operator
+facts and publication approval remain unresolved; review-required/BLOCKED is retained.
+
 ## KIS 시세·차트 후속 — 2026-11-02
 
 01–20 문서를 새 시세 소스·화면·의존성과 대조했습니다. [20개 문서별 검토표](../product/KIS_SOURCE_DOCUMENT_REVIEW_2026-11-02.md)는 사실 갱신과 변경 없는 정책을 구분합니다. 이는 fingerprint 갱신에 앞선 소스·문서 정합성 기록이며 `review-required`·공개 준비 `BLOCKED`, 운영자 제공 사실과 미확정 계약·보유기간·연령·호스팅 조건을 유지합니다. 법률 의견·게시 승인·데이터 재배포 허가·실서비스 검증이 아닙니다.
@@ -167,7 +216,7 @@ C형 병합 직전 통합: main PR50–52(d789691)의 웹 인계 기록과 시�
 
 ## Home compact 후속 — 2026-11-02
 
-기준 `ead6e67`과 후속 작업 트리를 [20종 검토 기록](../product/HOME_COMPACT_REVIEW_20261102.md)에 대조했습니다. 앞 절의 Home 별도 차트 바로가기 버튼은 제거하고 종목 상세→기존 차트 경로를 유지합니다. 표 행은64px에서44px로 줄이고 Q-SCORE 소개 버튼은 해당 열 제목 옆에 둡니다. 실제 버튼의 hover·클릭·Enter/Space, 가로 스크롤/헤더 변경에 따른 위치·포커스 처리를 구분합니다. 기존 `assets/fonts/qg-interface.otf`를 재사용하며 새 글꼴·외부 폰트 요청을 추가하지 않습니다.
+기준 `ead6e67`의 compact 변경과 이후 main `f673f37`(PR54/58) 통합 작업 트리를 [20종 검토 기록](../product/HOME_COMPACT_REVIEW_20261102.md)에 대조했습니다. 위 KIS 통합·FX/CMS·Signals/금리 규약·LETF 가정·구동 검토의 기존 범위와 compact 사실을 함께 보존합니다. 앞 절의 Home 별도 차트 바로가기 버튼은 제거하고 종목 상세→기존 차트 경로를 유지합니다. 표 행은64px에서44px로 줄이고 Q-SCORE 소개 버튼은 해당 열 제목 옆에 둡니다. 실제 버튼의 hover·클릭·Enter/Space, 가로 스크롤/헤더 변경에 따른 위치·포커스 처리를 구분합니다. 기존 `assets/fonts/qg-interface.otf`를 재사용하며 새 글꼴·외부 폰트 요청을 추가하지 않습니다.
 
 Q-SCORE 한영 소개는 실제 기술신호·위험분석 엔진, 입력 이력·시각·가격 기준 점검, 가격 추세·과거 손실 분석과 체결에 따른 재계산의 의미를 설명합니다. 사용자 화면에서 가중치·환산식·별점 경계 숫자를 생략하지만 순수 계산·표본 요구·결과·실험 상태를 바꾸지 않았습니다. 내부 방법론은 [12번 주장 근거](12-claims.md)와 [기존 산식 기록](../product/HOME_LIVE_QSCORE_REVIEW_20261102.md)에 보존합니다. 코드에 없는 AI 분석·기업가치 판단·모든 엔진 실행·예측력·실현 성과를 추가하지 않습니다.
 

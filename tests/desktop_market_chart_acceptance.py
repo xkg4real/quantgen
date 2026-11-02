@@ -8,6 +8,7 @@ import importlib.util
 import os
 from pathlib import Path
 import threading
+import time
 import unittest
 from unittest.mock import patch
 
@@ -18,11 +19,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class NativeChartSourceChecks(unittest.TestCase):
     def test_native_view_uses_shared_contract_and_renderer(self):
-        tree = ast.parse((ROOT / "quantgen_desktop/market_chart.py").read_text(encoding='utf-8'))
+        tree = ast.parse((ROOT / "quantgen_desktop/market_chart.py").read_text(encoding="utf-8"))
         imports = {node.module for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)}
         self.assertTrue({"core.market.models", "core.market.presentation", "core.market.live"} <= imports)
         # User-facing native features must be reachable from the real application.
-        app = (ROOT / "quantgen_desktop/app.py").read_text(encoding='utf-8')
+        app = (ROOT / "quantgen_desktop/app.py").read_text(encoding="utf-8")
         self.assertIn("self.market_chart = MarketChartPane(locale=self.ctx)", app)
         self.assertIn("self.market_chart.stop()", app)
         self.assertIn("self.market_chart.set_locale(self.ctx)", app)
@@ -138,6 +139,22 @@ class NativeChartLifecycleTests(unittest.TestCase):
         self.wait_idle()
         self.app.processEvents()
 
+    def wait_rendered_tick(self, tick, timeout=4):
+        """Await merged data and its painted view, not an assumed timer deadline."""
+        from core.market.presentation import readout
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            self.app.processEvents()
+            p = self.pane
+            snapshot = p.snapshot
+            if (snapshot is not None and snapshot.last_tick_at == tick.timestamp
+                    and p.chart.snapshot is snapshot and p.chart.cursor == p._cursor
+                    and p.reading.text() == readout(snapshot, p._cursor)):
+                return
+            # Advance the event loop until the observable condition is true.
+            QTest.qWait(10)
+        self.fail(f"Tick was not rendered: {tick.timestamp}; readout={self.pane.reading.text()!r}")
+
     def test_construction_never_fetches_and_input_validation_precedes_provider(self):
         self.assertEqual(self.service.calls, [])
         self.assertEqual(self.pane.request().interval, "1d")
@@ -212,10 +229,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
         worker = threading.Thread(target=lambda: stream.on_tick(tick))
         worker.start()
         worker.join()
-        self.app.processEvents()
-        # The coalescing timer is 200ms; CI may schedule its paint later under
-        # load. Require the visible quote to arrive within a bounded deadline.
-        self.wait_for_ui(lambda: '225' in p.quote.text())
+        self.wait_rendered_tick(tick)
         self.assertEqual(p.snapshot.quote.price, 225)
         self.assertIn("225", p.quote.text())
         retained = p.snapshot
@@ -234,8 +248,7 @@ class NativeChartLifecycleTests(unittest.TestCase):
                           volume=2, cumulative_volume=1121,
                           received_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
         self.streams[-1].on_tick(tick)
-        self.app.processEvents()
-        self.wait_for_ui(lambda: '지연·오래된 체결' in p.status.text())
+        self.wait_rendered_tick(tick)
         self.assertIn("지연·오래된 체결", p.status.text())
 
     def test_reconnect_gap_requires_authoritative_reload_before_merging(self):
@@ -322,6 +335,13 @@ class NativeChartLifecycleTests(unittest.TestCase):
         self.assertEqual(self.streams, [])
 
     def test_live_ticks_pin_historical_cursor_by_timestamp_and_only_follow_latest(self):
+        # Also exercise a paint deadline beyond the former fixed 220ms wait.
+        for interval in (200, 650):
+            with self.subTest(paint_interval_ms=interval):
+                self.pane.paint_timer.setInterval(interval)
+                self.assert_live_cursor_behavior()
+
+    def assert_live_cursor_behavior(self):
         self.load()
         p = self.pane
         self.connect_stream()
@@ -332,16 +352,14 @@ class NativeChartLifecycleTests(unittest.TestCase):
                            volume=2, cumulative_volume=1121,
                            received_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
         self.streams[-1].on_tick(first)
-        self.app.processEvents()
-        self.wait_for_ui(lambda: p.chart.snapshot is p.snapshot)
+        self.wait_rendered_tick(first)
         self.assertEqual(p.snapshot.candles[p._cursor].timestamp, selected)
         self.assertIn(selected, p.reading.text())
         p.move_cursor(len(p.snapshot.candles) - 1)
         second = replace(first, timestamp=(tomorrow + timedelta(days=1)).isoformat(timespec="seconds"),
                          cumulative_volume=1123)
         self.streams[-1].on_tick(second)
-        self.app.processEvents()
-        self.wait_for_ui(lambda: p.chart.snapshot is p.snapshot)
+        self.wait_rendered_tick(second)
         self.assertEqual(p._cursor, len(p.snapshot.candles) - 1)
         self.assertIn(second.timestamp[:10], p.reading.text())
 

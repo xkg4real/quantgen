@@ -276,11 +276,17 @@ class SignedBars(QWidget):
     def __init__(self,rows,*,limit=None,parent=None):
         super().__init__(parent)
         self.rows=list(rows);self.colors=LIGHT
+        self.localized_labels = {}
         finite=[abs(float(v)) for _,v in self.rows if math.isfinite(float(v))]
         self.limit=limit or max([1.,*finite])*1.1
         self.setMinimumWidth(350)
         self.setFixedHeight(34+len(self.rows)*28)
         self.setAccessibleName('Zero-centered values: '+', '.join(f'{n}: {v:+.2f}' for n,v in self.rows))
+
+    def display_label(self, index):
+        """Only captions explicitly tagged by the originating pane translate."""
+        language = getattr(self.window(), 'ui_language', None)
+        return self.localized_labels.get(index, {}).get(language, self.rows[index][0])
 
     def paintEvent(self,event):
         p=QPainter(self);p.setRenderHint(QPainter.RenderHint.Antialiasing)
@@ -291,7 +297,7 @@ class SignedBars(QWidget):
         for i,(name,value) in enumerate(self.rows):
             y=28+i*28
             p.setPen(QColor(c.text));p.drawText(QRectF(8,y-10,left-16,22),Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter,
-                p.fontMetrics().elidedText(name,Qt.TextElideMode.ElideRight,int(left-16)))
+                p.fontMetrics().elidedText(self.display_label(i),Qt.TextElideMode.ElideRight,int(left-16)))
             p.setPen(QPen(QColor(c.border),1));p.drawLine(QPointF(zero,y-10),QPointF(zero,y+10))
             if not math.isfinite(float(value)):
                 p.drawText(QPointF(right+10,y+5),'—');continue

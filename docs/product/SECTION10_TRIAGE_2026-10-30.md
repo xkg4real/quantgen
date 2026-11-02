@@ -165,5 +165,51 @@ M4-N8 separates solver convergence, optimizer active bounds, per-quote residuals
 and strike extrapolation in Flet, Qt, AI and exports. A three-quote/three-parameter
 fit does not validate wings or establish arbitrage freedom. No fit-quality
 threshold, solver, price or research gate changed. See
-`SABR_DIAGNOSTICS_2026-10-31.md`. Latest: **15/67** implemented groups, **52**
+`SABR_DIAGNOSTICS_2026-10-31.md`. At that checkpoint: **15/67** implemented groups, **52**
 remaining; 14 observation rows and15 ambiguous mappings remain open.
+
+
+## LETF explicit funding, fee and dividend scenarios — 2026-11-02
+
+M4-N3 and its alias NEW-M6-07 are one canonical group. The product now exposes
+explicit annual continuous funding/fee assumptions and a price- versus
+total-return comparison; price-return scenarios require an explicit dividend
+yield. Signed contributions are retained in Flet, Qt, AI and exported reports.
+The old zero-rate reference and historical research cards are preserved.
+Synthetic algebra, independent self-financing wealth, invalid-input/overflow
+and UI checks are documented in `LETF_ASSUMPTIONS_2026-11-02.md`.
+Implementation is not actual fund tracking, provider or Windows manual
+acceptance. At the LETF checkpoint: **16/67**, **51** remaining.
+The original observation inventory has **14 rows and 14 unique model names**,
+not 13; **15 ambiguous ID mappings** remain open.
+
+
+## FX and CMS disclosure corrections — 2026-11-02
+
+M4-N6 removes the unsubstantiated 5 bp boundary between noise and an actual
+funding premium. The existing signed annualized input-rate CIP discrepancy is
+unchanged; timestamps, maturities and conventions remain unverified. See
+`FX_CIP_DISCREPANCY_2026-11-02.md`. M4-N11 distinguishes the first CMS expected
+annualized coupon from its later period schedule and a guaranteed payment.
+Pricing, Greeks, schedule and non-CMS conventions remain unchanged; see
+`CMS_COUPON_DISCLOSURE_2026-11-02.md`. Both changes reach native/Flet displays
+and AI/export interpretation without changing official research criteria.
+Prior LETF/FX/CMS checkpoint: **18/67**, **49** remaining, with
+**14 observation rows/models and 15 ambiguous mappings** still open.
+Actual market/provider/user-Windows acceptance is separate.
+
+
+### 2026-11-02 Signals counts and forward convention
+
+N11 now counts executed order sides and completed round trips only over the
+executable return/cost intervals. Final-bar pending transitions are distinct,
+win rates remain gross price comparisons, and historical/unknown versions stay
+unverified. M3-N06 explicitly identifies the existing 5y5y descriptor as a
+five-year simple-compounded annualized rate, separate from semiannual or forward
+par swap rates. Neither change modifies equity/return/risk arrays or curve pricing.
+See `SIGNALS_TRADE_COUNTS_2026-11-02.md` and `FORWARD_CONVENTION_2026-11-02.md`.
+
+Latest source implementation count: **20/67**, **47** remaining. Alias IDs are
+deduplicated; partial NEW-M6-02 is not counted as completed. The 14 observation
+models and 15 ambiguous mappings remain. This queue records bounded product
+corrections, not full application/research/actual Windows acceptance.

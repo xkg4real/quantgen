@@ -689,7 +689,7 @@ class WatchlistPanel(QWidget):
             QLabel {{ color: {p.text}; }}
             QLabel#watchlistTitle {{ font-size: 18px; font-weight: 600; color: {p.text}; }}
             QTableWidget {{ background: {p.surface}; alternate-background-color: {p.surface_2}; border: 1px solid {p.border}; border-radius: 10px; selection-background-color: {p.accent_soft}; selection-color: {p.text}; color: {p.text}; }}
-            QTableWidget::item {{ padding: 3px 8px; border-bottom: 1px solid {p.border}; }}
+            QTableWidget::item {{ padding: 1px 8px; border-bottom: 1px solid {p.border}; }}
             QHeaderView::section {{ background: {p.surface_2}; color: {p.muted}; padding: 6px 8px; border: 0; font-weight: 500; }}
             QWidget#watchlistIdentity {{ background: transparent; }}
             QWidget#watchlistIdentity QLabel {{ background: transparent; color: {p.text}; }}
@@ -751,7 +751,7 @@ class WatchlistPanel(QWidget):
             identity.setObjectName("watchlistIdentity")
             identity.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
             identity_layout = QHBoxLayout(identity)
-            identity_layout.setContentsMargins(10, 2, 10, 2)
+            identity_layout.setContentsMargins(10, 1, 10, 1)
             identity_layout.setSpacing(8)
             symbol = str(row.get("symbol") or "—")
             badge = _label(_BADGES.get(symbol, symbol))

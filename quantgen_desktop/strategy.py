@@ -3,6 +3,7 @@ from core.research.strategy_analysis import StrategyRequest
 from core.research.strategy_workflow import FAMILIES, narrative, payload
 from core.research.strategy_exposure import EXPOSURE_HELP, exposure_lines
 from .tools import ToolPane, number, fmt
+from .model_narrative_language import strategy_variants
 
 
 class StrategyPane(ToolPane):
@@ -34,8 +35,9 @@ class StrategyPane(ToolPane):
             self.result_table('Study scorecard', ['Card', 'Kind', 'Decision', 'Reason'],
                 [[c['card_id'], c['kind'], c['decision'], c['decision_reason']] for c in cards])
             for c in cards:
-                self.text(f"{c['card_id']} · {c['decision']}\n{c['hypothesis']}\n{c['decision_reason']}\n"
+                record = (f"{c['card_id']} · {c['decision']}\n{c['hypothesis']}\n{c['decision_reason']}\n"
                           + '\n'.join(c.get('lines', [])) + '\nSources: ' + '; '.join(c.get('citations', [])))
+                self.text(record, localized={'en': record, 'ko': record})
             self.finished('저장된 연구 기록입니다. 조회는 카드를 재실행하거나 판정을 바꾸지 않습니다.' if cards else 'NOT_LOADED · 저장된 연구카드가 없습니다.')
             return
         sc, wf = d['score'], d['wf']
@@ -61,4 +63,4 @@ class StrategyPane(ToolPane):
         if d['bench_equity'] is not None: series.append(('Benchmark', d['bench_equity']))
         self.line('Walk-forward equity', range(len(d['equity'])), series, 'OOS observations', 'Equity')
         self.text(' · '.join(d['notes']))
-        self.finished(narrative(d))
+        self.finished(narrative(d), localized=strategy_variants(d))
