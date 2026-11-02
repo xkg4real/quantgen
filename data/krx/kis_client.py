@@ -26,6 +26,7 @@ cache file holds a token, never the appkey/appsecret.
 from __future__ import annotations
 
 import json
+import math
 import threading
 import time
 from dataclasses import dataclass
@@ -120,6 +121,12 @@ class Quote:
     currency: str = "KRW"
     as_of: str = ""
     source: str = "KIS"
+    # Optional fields from the same inquire-price response. Appended defaults
+    # preserve positional construction and the legacy raw market_cap meaning.
+    per: Optional[float] = None
+    eps: Optional[float] = None
+    sector: Optional[str] = None
+    listed_shares: Optional[int] = None
 
 
 def _f(value: Any) -> Optional[float]:
@@ -128,6 +135,30 @@ def _f(value: Any) -> Optional[float]:
         return float(text) if text not in ("", "-", "None") else None
     except Exception:
         return None
+
+
+def _finite_metric(value: Any) -> Optional[float]:
+    if isinstance(value, bool):
+        return None
+    result = _f(value)
+    return result if result is not None and math.isfinite(result) else None
+
+
+def _listed_shares(value: Any) -> Optional[int]:
+    result = _finite_metric(value)
+    # Reject fractional or inexact float counts instead of inventing a scale.
+    if result is None or not 0 < result <= 2**53 - 1 or not result.is_integer():
+        return None
+    return int(result)
+
+
+def _sector_name(value: Any) -> Optional[str]:
+    if not isinstance(value, str):
+        return None
+    text = value.strip()
+    if not text or len(text) > 80 or any(ord(char) < 32 or char in "<>" for char in text):
+        return None
+    return text
 
 
 def _now() -> str:
@@ -267,6 +298,12 @@ class KISClient:
             low=_f(out.get("stck_lwpr")),
             open=_f(out.get("stck_oprc")),
             as_of=_now(),
+            # Official field mapping (no TTM/consolidation/dilution basis given):
+            # https://github.com/koreainvestment/open-trading-api/blob/3a9be59a3ed8745720dc3aa9d584bdf3b7830362/examples_llm/domestic_stock/inquire_price/chk_inquire_price.py
+            per=_finite_metric(out.get("per")),
+            eps=_finite_metric(out.get("eps")),
+            sector=_sector_name(out.get("bstp_kor_isnm")),
+            listed_shares=_listed_shares(out.get("lstn_stcn")),
         )
 
     def daily(self, code: str, *, start: Optional[str] = None,

@@ -224,10 +224,22 @@ facts and publication approval remain unresolved; review-required/BLOCKED is ret
 
 ## Home compact 후속 — 2026-11-02
 
-기준 `ead6e67`의 compact 변경과 이후 main `f673f37`(PR54/58)·`8b40104`(PR59) 통합 작업 트리를 [20종 검토 기록](../product/HOME_COMPACT_REVIEW_20261102.md)에 대조했습니다. 위 KIS 통합·FX/CMS·Signals/금리 규약·LETF 가정·구동 검토의 기존 범위와 compact 사실을 함께 보존합니다. 앞 절의 Home 별도 차트 바로가기 버튼은 제거하고 종목 상세→기존 차트 경로를 유지합니다. 표 행은64px에서44px로 줄이고 Q-SCORE 소개 버튼은 해당 열 제목 옆에 둡니다. 실제 버튼의 hover·클릭·Enter/Space, 가로 스크롤/헤더 변경에 따른 위치·포커스 처리를 구분합니다. 기존 `assets/fonts/qg-interface.otf`를 재사용하며 새 글꼴·외부 폰트 요청을 추가하지 않습니다.
+기준 `ead6e67`의 compact 변경과 이후 main `f673f37`(PR54/58)·`8b40104`(PR59) 통합 작업 트리를 [20종 검토 기록](../product/HOME_COMPACT_REVIEW_20261102.md)에 대조했습니다. 위 KIS 통합·FX/CMS·Signals/금리 규약·LETF 가정·구동 검토의 기존 범위와 compact 사실을 함께 보존합니다. 앞 절의 Home 별도 차트 바로가기 버튼은 제거하고 종목 상세→기존 차트 경로를 유지합니다. 표 행은64px에서44px로 줄이고 Q-SCORE 소개 버튼은 해당 열 제목 옆에 둡니다. 실제 버튼의 hover·클릭·Enter/Space, 가로 스크롤/헤더 변경에 따른 위치·포커스 처리를 구분합니다. 이 초기 compact 단계는 당시 `assets/fonts/qg-interface.otf`를 재사용했으며, 아래 종목 정보·글꼴 확장 단계의 자산 교체와 구분합니다.
 
 Q-SCORE 한영 소개는 실제 기술신호·위험분석 엔진, 입력 이력·시각·가격 기준 점검, 가격 추세·과거 손실 분석과 체결에 따른 재계산의 의미를 설명합니다. 사용자 화면에서 가중치·환산식·별점 경계 숫자를 생략하지만 순수 계산·표본 요구·결과·실험 상태를 바꾸지 않았습니다. 내부 방법론은 [12번 주장 근거](12-claims.md)와 [기존 산식 기록](../product/HOME_LIVE_QSCORE_REVIEW_20261102.md)에 보존합니다. 코드에 없는 AI 분석·기업가치 판단·모든 엔진 실행·예측력·실현 성과를 추가하지 않습니다.
 
 사용자 Windows 실행에서 `KIS_SETTINGS_FOUND=True`로 설정 발견을 확인한 범위와 실제 KIS 체결 수신·상업 이용권 확인을 구분합니다. Yahoo의 S&P 500·KOSPI·Bitcoin 일별 자료는 KIS 인증과 다른 경로이며 KIS 설정 성공만으로 해당 자료 공급 성공이 입증되지 않습니다. 실제 사용자 환경의 공급자 장애 원인·실시간 연결·새 compact 화면의 DPI/보조기술 검증·웹사이트 배포는 별도입니다. 문서 상태·가격·환불·운영자 사실·공개 준비 상태를 변경하지 않습니다.
 
 [Home 시장 조회](../../core/research/markets.py)는 기존 예외·상태·관측 수를 허용된 `reason_code`로 분류하고 [목록 조회](../../core/research/watchlist.py)가 이를 보존합니다. 예외 텍스트는 최대1500자를 실행 중 분류에만 사용하고 원문·URL·키를 UI 진단으로 반환하거나 새 파일에 저장하지 않습니다. 빈 Yahoo 응답은 `no_observations`이며 원인을 추정하지 않습니다. 새 외부 요청·데이터 공급자·폴백·캐시 경로는 없고, 원래의 KIS/FRED/yfinance 흐름을 유지합니다. 유한한 입력에서도 변화율이 무한대로 계산되면 정상 관측으로 표시하지 않습니다.
+
+### Home 종목 정보·글꼴 확장 — 2026-11-02
+
+PR61의 `5b52e3d` 이후 작업 트리는 같은 Home을 종목·가격·변동·거래량·시가총액·PER·EPS·업종·상세·Q-SCORE의10열로 정리합니다. 출처·관측/체결·앱 수신 시각·연결 상태·안전한 오류 안내는 가격 hover/접근성 설명과 상세 버튼·행 Enter로 여는 본문에서 유지합니다. 표시 열을 줄인 사실을 출처나 오래된 자료 상태의 삭제로 기록하지 않습니다.
+
+KIS 기존 현재가 응답의 `per`·`eps`·`bstp_kor_isnm`·`lstn_stcn`을 읽으며 새 endpoint·HTTP 횟수·개인 항목·계좌·재무 파일·원격 번역·AI 요청을 추가하지 않습니다. 표시 시가총액은 같은 응답의 원화 가격×유효한 양의 정수 상장주수로 계산한 값입니다. 원시 `hts_avls`는 별도 미확인 단위로 남기며 환산하지 않습니다. 같은 KST 날짜에 수신한 상장주수와 유효 체결 가격으로만 산출값을 갱신하고 날짜가 다르면 이전 기준 시각을 보존합니다. 이는 상장주수를 매 tick 검증했다는 뜻이 아닙니다.
+
+재무항목의 REST 수신 시각과 실제 가격 체결 시각은 다릅니다. 공급자가 재무 기준일을 제공하지 않아 `fundamentals_as_of`는 비워 둡니다. PER/EPS의 TTM·회계 범위·EPS 단위·희석 기준을 추정하지 않으며, 유한한0·음수와 없는/잘못된 값을 구분합니다. 업종은 공급자 분류이며 GICS라고 주장하지 않습니다. 준비된 정확한 영어 대응 외에는 `Untranslated`와 상세 원문을 제공하고 미번역을 숨기지 않습니다. 공식 필드 근거와 한계는 [08번](08-third-parties.md), [12번](12-claims.md), [20종 재검토](../product/HOME_COMPACT_REVIEW_20261102.md)에 기록합니다.
+
+현재 QG Interface는 Pretendard1.3.9의 이름을 바꾼 Regular400·Medium500·SemiBold600 서브셋으로 교체합니다. [README](../../assets/fonts/README.txt)에 고정 원본·SHA256·재생성 절차, [OFL](../../assets/fonts/OFL.txt)에 원본 고지, [이전 Noto 고지](../../assets/fonts/OFL-Noto-legacy.txt)에 과거 출처를 구분합니다. 실제3개 파일의 해시·굵기·한글11,172자·tabular numeral 기능을 대조했습니다. 네이티브 Qt는3개 실제 굵기를 등록하고 제목·본문·수치·설명의 위계를 조정합니다. 공유 Regular 파일 교체는 Flet 자산에도 영향을 주지만 실제 Medium/SemiBold 등록·전체 웹사이트 화면 반영·AWS 배포까지 입증하지 않습니다. 런타임 폰트 다운로드·시스템 설치·새 런타임 의존성은 추가하지 않습니다.
+
+이 확장에 따라 정책07/08/09/12/13/14/15/19의 버전을 갱신하고 나머지12종의 계약·권리·개인정보·동의·보유/삭제 범위도 대조합니다. 이전 main PR54/58/59의 절·양식은 보존합니다. 실제 KIS 체결 수신·Windows 전체 화면 수용·시장자료 상업 표시권·본문 번역/사이트 배포·정책 공개 승인은 별도이며20종 `review-required`와 공개 준비 `BLOCKED`를 유지합니다.

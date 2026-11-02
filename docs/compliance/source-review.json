@@ -13,9 +13,12 @@
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
     "assets/branding/f1-wordmark.svg": "145715bc8df17cb3c99b734d4c7cb2b8e9bf1878e87c401f518f46b944ba41aa",
     "assets/favicon.png": "c8d4ecdcc08015073632c1d4a89e3b47c9bb312203e46f9937691131102fae46",
-    "assets/fonts/OFL.txt": "e42004c233f81eac2bd0ad6657381079b9207b78fd800e2b515724432e3c0624",
-    "assets/fonts/README.txt": "714e0c6a9db068b8a7f3fd7019fd881729241ae4d94e473ff1f4049dc6d466d6",
-    "assets/fonts/qg-interface.otf": "793047b342203e08360fe0a0f453b7d28efe9418d6495670c987b1d93324810d",
+    "assets/fonts/OFL-Noto-legacy.txt": "e42004c233f81eac2bd0ad6657381079b9207b78fd800e2b515724432e3c0624",
+    "assets/fonts/OFL.txt": "d31ddd9f2bed32fd7e302a205cf2380ba0de6529152d239ef99cfb6f261bfc04",
+    "assets/fonts/README.txt": "68d230a2f4e961959b2c5f9019a8e721d6388706c6bd8ecc44a6e4db19c65f2a",
+    "assets/fonts/qg-interface-medium.otf": "f52aa3022d241b4cd03eb71f64a9389fc298760e057a317305312e24bb44fbbc",
+    "assets/fonts/qg-interface-semibold.otf": "97c53221c1d3fadc48d692fab9bf5a545159be95a5c0228dc3b8cc24db4ec8dd",
+    "assets/fonts/qg-interface.otf": "90aded599c3206a647c88f6a81bc5df670fdec6ff2d9c9f241de2d0bf64b6b31",
     "assets/icon.ico": "6607c187ae1a96b7289f4822bfd54c59464494ad85ae54a209b57ae3dced15ee",
     "assets/icon.png": "efe10d22fa7a1bb646b9c82bf3f775d5d8df5e77bcf3e7ded8afd415905c4fa4",
     "assets/icon_192.png": "e4eedf78c09c1d77bcc54ce022988c529d4137a759cec2c8be3d8878e4383d79",
@@ -179,7 +182,7 @@
     "core/research/structured_disclosure.py": "4f63ebb9c6901b923307a3f8453ad6e12b7c6bc39ffefa5555b87f86bbabbae9",
     "core/research/structuring_analysis.py": "cedbe854629367b5372e03be3d55e784df1df0c1f92849c5fb707b59d176321a",
     "core/research/tool_export.py": "85c4042681d6efc7650f8d86ec7c81c423fd4119f5c1442e5b45283e1484a630",
-    "core/research/watchlist.py": "d1aa750e159ced081d08cb00272026e49cee76bb0a98ab2c819183fdbd29099a",
+    "core/research/watchlist.py": "7e1ffaa65b3211a7557a4358460b4a1ace167426a8050359ad3e13bb21e75245",
     "core/rules/__init__.py": "4cbdabd33ebc2dcf4b768f389ec041ac209cf6d7de8f616264781fb44905966c",
     "core/rules/backlog_registry.py": "233f9d8000cdf62a7369473e15b9cd97945861bb8a37f3cac061c69ab92925d3",
     "core/rules/governance.py": "89c37e7975f935c1676ff453bfa1ce3260ba91f0db1ab1c126b65bfd0de456fb",
@@ -230,14 +233,14 @@
     "data/kis_workspace.py": "ae5ffccc0857b781a015c897f258a21a29c79e32b01068faca12dabd4fe65f13",
     "data/krx/__init__.py": "85eab43f9556eb3a7a207099993842304821caba218b68a3aaaf00d004622dc9",
     "data/krx/gateway.py": "6aec229a790be1cbafbc7bef6b3206ccd585148c6899665fe82102931b0d00e7",
-    "data/krx/kis_client.py": "2f304d895edfcfbda7a22d765369b4d34a5713ddd209ab29932289d515812f70",
+    "data/krx/kis_client.py": "9f957cadff94bb9c3edf5b92d955e21892c50abaff5d167bde7f3871e7fc456e",
     "data/krx/krx_market_client.py": "092fcd34a4000731a9eaba27f27ddd1f396137e27e96e6627b767a688635ab87",
     "data/krx/opendart_client.py": "d038d525d9b66d8633ffe3cc0c43d4da72a5cf9cee3ebf6a9496e68ca08afbff",
     "data/macro/rules_v2.0.0.json": "c74edcd93d05a55eddea860e2fd6ee8e31bcaf00dfd7fbc2b0e41766f766822e",
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "4856834a080e0aec9703404ceebb3b8f306ce5852aa9642b2df8b486b4a8fe57",
+    "docs/compliance/FACTS.md": "76909cfea9136a86278abdcfad9da35702cc49866aca344d3310fd7c6d4bcd45",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -256,7 +259,7 @@
     "docs/product/FUNDING_INFERENCE_2026-10-30.md": "ea1ef423c1d2d3601f82c301536709fa66292595faee72dbd283ad49c5d87952",
     "docs/product/FX_CIP_DISCREPANCY_2026-11-02.md": "99a42c71f255e6ff271c66f1245dd45ca63e3627001e17a8848680ca4fc39b32",
     "docs/product/FX_LANGUAGE_2026-10-31.md": "e2c15111acbd1bf6391700c6a0f6616da69d65ce4750654783fd08fbaea3d65f",
-    "docs/product/HOME_COMPACT_REVIEW_20261102.md": "1de9b2f45926e5259969082d608aa7292bf8c2687c0eaa77501e9afafbc1c015",
+    "docs/product/HOME_COMPACT_REVIEW_20261102.md": "45e335e646bca3e25d2beb975f0465ae8b7d57779b10c737cd65dd157426d585",
     "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md": "8ea3908579720e4bb3262e2952251d2b054aa2fcdc3ba34dbb7118e5c6e5d711",
     "docs/product/INDICATOR_GUIDE_DESIGN.md": "cf664a34fefd8506e356ca2f261ddc6acbce168d370d1f7d504393d94acca484",
     "docs/product/KIS_MARKET_CHARTS_2026-11-02.md": "ae0d54bb8f2a90c39446829d56e08e564fa989182aba65933b06c849c7ba4951",
@@ -293,7 +296,7 @@
     "pyproject.toml": "9a018faa10d90f657adc69bbd91161b92b799b008ab5eba0e5ca40c120e384e8",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "08de4c3d170c3d8ca2ad69d0fd5748055c6a0468514adef0a8a0bbeb0a7b9099",
+    "quantgen_desktop/app.py": "e95173a6ad7edd05212b5c5123eaa2684f24ab675c2151e746006cb90a5e41b9",
     "quantgen_desktop/bonds.py": "98e50ea1a2040e420fb783a457dd615e005522da56dc94ef86bfbd01fc254e3f",
     "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
@@ -326,7 +329,7 @@
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
     "quantgen_desktop/tools.py": "d5fe4d7fc5a5c2c13b3466f8f1071854a1b05838dbcccfa8dcb366d0057b736f",
     "quantgen_desktop/translations.py": "84ab537354185c5a3f9a584405de0ae42570f0a1306846ca8bd3dfe5e5a70956",
-    "quantgen_desktop/watchlist.py": "811aea61f664d09bd877d8a09b2a4f8682d092b1e04912d2223bacb979431970",
+    "quantgen_desktop/watchlist.py": "8261b0eae67e53bb21932fe4fb9d675b6ad158b1fec7ce2de7cc7551264d1969",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
     "requirements.txt": "efe528fea6e00d9edb734ada7e11c75ece2e7b8996d2697fca643e15eefc000e",
@@ -352,7 +355,7 @@
     "tests/desktop_commentary_acceptance.py": "23fd186a1562c440d1cf79ee8a9e1169ebeb499da93caec54141415410db7821",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
-    "tests/desktop_home_live_acceptance.py": "535a8b43b12f48b7343556a4e2ed6f0a82b0234ad9ac69e2d676885b6211f8c9",
+    "tests/desktop_home_live_acceptance.py": "26c6a9525e2a815227d0802b8acbcfce054d6f7f7d319015822c1f636b0150ab",
     "tests/desktop_indicator_guide_acceptance.py": "e7157f3d2c0bb82e9814d9a1d9a30409e43e239b9139426facde51415422865b",
     "tests/desktop_language_acceptance.py": "9f2c9a16007e4790823122f5e3ce6c8b19ade4b82ef1b41c20a742dcdf0dbf72",
     "tests/desktop_letf_ai_acceptance.py": "1c9d8b5e2ae41716c2f7c2dfe73e78f39b485d5d636ad17928ed408eb533c4df",
@@ -376,7 +379,7 @@
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
-    "tests/desktop_watchlist_acceptance.py": "b705a181a88d3f4c80dea2ba22d1abedf21bfc97d292ef671cd3f94594da27cb",
+    "tests/desktop_watchlist_acceptance.py": "8edfa04cbc752291b0819dcb5fa2eb6b2667902abe77afe5e71304bf179bb01a",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
     "tests/ficc_acceptance.py": "04e7f5301539555f8c5be057d010fbfd40a2e22af32fac33bdb51a210b23b2f5",
@@ -388,7 +391,7 @@
     "tests/funding_inference_acceptance.py": "dc1eaf4e627411a43ab46dd878a3628c076911ede974554575cc24f101310b7b",
     "tests/fx_basis_disclosure_acceptance.py": "9077bab45713c30e1b63607f87607c92c7a9bef60e094affdc968571405bb99e",
     "tests/golden_tools.py": "d3b4ec0c7610e1391eb1739f8101b60766139d9dff37f80a18528bcb99f31e61",
-    "tests/home_watchlist_acceptance.py": "411f8d91eb8073a1b089297842cdaf2ba927a48dfd7d34f563d8908d86dd6416",
+    "tests/home_watchlist_acceptance.py": "86956c94f3aa7a90f496bc5c2bea388a6b2b5f861b5d1ca4421045c55f19165c",
     "tests/indicator_guide_acceptance.py": "94f9065e59762bdbc7f2ab8a9d000f8211b2aef88a87a0076f70f6bdca2bc76e",
     "tests/kis_stream_acceptance.py": "a9108b1ab7fa59c536fa616a3a03d1d179176bdf8007628c01043cf457895bbe",
     "tests/kis_workspace_acceptance.py": "b381d8a3e7c0d53f671ab06859fab7e72467af50c95d79894aa0b914eeb22421",
@@ -471,7 +474,7 @@
     "tools/handoff/mod/hooks/register.test.ts": "2709a0beb01e94689c5be2118f266138ad24b990648afbd58de8086e4d5628fb",
     "tools/handoff/mod/hooks/register.ts": "f7370a361aee2a53d4e1b8355f5a707b52a77d0e852a63bc3a1c743400b39d0b",
     "tools/handoff/push_handoff.py": "45e2e3405d78087d5acb91ce4ea415a47fdcab3f13f3331708d07af856b91f29",
-    "tools/packaging/smoke_desktop.py": "6ce0d2467617d3dc9c4bc43fdd3591882ef7e80b3ee34878860d9542749d6423",
+    "tools/packaging/smoke_desktop.py": "a4e42833d429378f12fe87fec75fc448dd663003e88a420418344dd37d36ae95",
     "tools/packaging/smoke_installed.py": "ac27822bc910528abef35a63a38a1f3756dbd7fe436da8fd6352611c917f26f4",
     "tools/packaging/stage.py": "416569c488d19aeaa82bcf9eeda3a72ff302ef4c8fddb46dd3e16dc24c2e3d64",
     "tools/paper/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -496,7 +499,7 @@
     "tools/ui/build_dynamic_catalog.py": "e7977b9603ac66470849927c36d2c8eccb898378b2b416314f25cbc190641643",
     "tools/ui/export_brand_icons.py": "693f486cb278a66ebc24a5aa8f0590ddb28f0e1ddf37038e55f34910fe1a128b",
     "tools/ui/preview_home.py": "67e18b0f780f3c3a7c5901e0e0af68d3c1eca9e441dd3e5ac491af4d4e482775",
-    "tools/ui/subset_font.py": "8cc63bd9b0952b955b425b69d8523c6f64d85b5baa52f502c56a8d31f54b899a",
+    "tools/ui/subset_font.py": "669d3f76843f78bc12fe9afe812045657fd3e6a9e01b300abdb0b753d0500e15",
     "ui/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "ui/ai_panel.py": "92e83a1414a7667ba28b3d6f023716b1390318d16f7158c8ea63d1f7c9758151",
     "ui/bonds_page.py": "93db57961b326872584c3b01600356a1eea9f882c3da55035196b2c1ae691881",
@@ -533,163 +536,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4a70042c317d349050e1460ffc71950915f545cdaea09540ad479ebcc6aeee44",
-      "source_digest": "0b2a891f3c85769c3a815a409e00d84a3769d6fb310c056fda69bedf55caacb2",
+      "source_digest": "52b203820f0dbc6594566769b941df9f4b393e4ebcc134ba001be9841e89d8d2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.965831+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.401069+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "0b2a891f3c85769c3a815a409e00d84a3769d6fb310c056fda69bedf55caacb2",
+      "source_digest": "52b203820f0dbc6594566769b941df9f4b393e4ebcc134ba001be9841e89d8d2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.969379+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.404922+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "3014552353d873613ddc4603f6da2592c25a6ba34a038f8babaa1e836c59beb0",
+      "source_digest": "33855a3e3c8a25839aa12305f0a6fe4b86f81b9d2dff33da95f4333bf522498a",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.972009+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.408568+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "28499fde2fa4eb23405c5a2d8673300d77e207f69d26d19c490db20c9bdf508a",
+      "source_digest": "7f230ece2f4e35157477ff51048dae56699158e16f794f654baf5eae1a31a401",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.974878+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.411074+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "0378a779bc617396e687d043df6a8ac751b4c5ac42e7f0b835009a3a200dbefc",
+      "source_digest": "d9140536e64155a13e1912bc41669acad12674acbbe548fd42a0934321e77b12",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.977431+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.413704+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "6": {
       "document_sha256": "b7e192bc71505c5d63cda54ca49c27f050069e4dabd45b82aff1a2288cf8bb29",
-      "source_digest": "808868ab31e74550ad3c23b396d84385a0c668e996629e4660fe54edf335da6d",
+      "source_digest": "3f7d9d6e9212b6c93d5dd60c86265ea77b79699801cdd31bc72d61ae4db07cb2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.980405+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.418973+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "7": {
-      "document_sha256": "9fce6e4eaca9d4f692bc5da0d67c07ae60be26b6470c297fca88f041c9855512",
-      "source_digest": "0b2a891f3c85769c3a815a409e00d84a3769d6fb310c056fda69bedf55caacb2",
+      "document_sha256": "c4c511a590a6e6c5000895b0c0475a25466fc37629d5df80e28d9678c30719a5",
+      "source_digest": "52b203820f0dbc6594566769b941df9f4b393e4ebcc134ba001be9841e89d8d2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.982956+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.421296+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "8": {
-      "document_sha256": "d6675324c77086e06722883b428a745596ff924dd574b89f8746bcf5d68044a1",
-      "source_digest": "808868ab31e74550ad3c23b396d84385a0c668e996629e4660fe54edf335da6d",
+      "document_sha256": "d0c5fc83c5de36a3179e30fd136b3ce51a06d7a4a3e8dac33ca2ae3c80714bea",
+      "source_digest": "3f7d9d6e9212b6c93d5dd60c86265ea77b79699801cdd31bc72d61ae4db07cb2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.985401+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.425409+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "9": {
-      "document_sha256": "34ff240c2ae78059c2b5f66396c1e2b2af30b539ce9771e6f7c738083f6fc328",
-      "source_digest": "3ca44f248e6b39216e4f9b524ccbdd6f289911770208ae97eb6d1023778198b1",
+      "document_sha256": "a7fc893e1218468201f4faa68beaa8b4c53578b29c1097a964fa365c0661c0f1",
+      "source_digest": "3f8bd1249e6d8bc7a9ca8c141f5572268839eb62e42a637480418fb06f9c4ddb",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.988318+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.431577+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "812d66bbee478f67712aed65211a94c6884223f9515f80cc2a6054a7702493a7",
+      "source_digest": "c9f65b5fc7fb5655ae33886dac94fdb7fef4dd03d3f2fe49ab4a5050cfda2a43",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.991939+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.434919+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "2bf19d078a5600afbc9a0b301f6adbad7f69687f901161b984ec8f3b516de915",
+      "source_digest": "ac7ac04b54c6d765678bb7b0fe3cae4031b6e8ce1978668692c8bf3cd0585870",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.994442+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.437614+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "12": {
-      "document_sha256": "f047c8691ccceee9b99a0c17a0be2844d60eb933cc381c0a1a47d8f52760039d",
-      "source_digest": "1abe5a37cbc8822a75a785d9016db548941fe84455f0caa318283c686db2b2ed",
+      "document_sha256": "16f8ced5b9ad9e09e35b4a378460a6d17096b43c28a7b7e61f419fc2749170a2",
+      "source_digest": "0b29929e7fc06b2f33d32e7ff9b4c6a8e0ce60f81bacb0ab1315c9619a0f0a02",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:04.998239+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.441883+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "13": {
-      "document_sha256": "83267aad5a49b1694e1d08bcfd4b04c5d55b478d424436a1ce5958579ad1060a",
-      "source_digest": "3ca44f248e6b39216e4f9b524ccbdd6f289911770208ae97eb6d1023778198b1",
+      "document_sha256": "66bfb675e633b55622d874fbe29294eb525bcf11b7316af5e79aeece6913ec19",
+      "source_digest": "3f8bd1249e6d8bc7a9ca8c141f5572268839eb62e42a637480418fb06f9c4ddb",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:05.000545+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.444494+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "14": {
-      "document_sha256": "3354d61d645e1efe0122da647663fdd49d0b499c29270ee0df3de77bfc23e1a2",
-      "source_digest": "3ca44f248e6b39216e4f9b524ccbdd6f289911770208ae97eb6d1023778198b1",
+      "document_sha256": "1654db2b6fb29fd5c275e5bd7099d3c03d18cc04fc5bf7dd38e2185fe07272a0",
+      "source_digest": "3f8bd1249e6d8bc7a9ca8c141f5572268839eb62e42a637480418fb06f9c4ddb",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:05.003276+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.449204+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "15": {
-      "document_sha256": "1d8f9c3e9fa8ac348f065429ca06f5efb076bbc5e89a4382d435d6ee0e41c838",
-      "source_digest": "3ca44f248e6b39216e4f9b524ccbdd6f289911770208ae97eb6d1023778198b1",
+      "document_sha256": "3fdc384cb6ba528f4c33cf70bffe62055af73701171f3f74408feb291898c7ac",
+      "source_digest": "3f8bd1249e6d8bc7a9ca8c141f5572268839eb62e42a637480418fb06f9c4ddb",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:05.005446+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.451781+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "82df584c23527d44745396796ed081379607a23fe7be92fc124dd33d1cfcf8ec",
+      "source_digest": "0276ff81ef66246b12dba46a99e9d9441ec795ffa5e8a7d971e1634a91fe36fb",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:05.008202+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.457791+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "808868ab31e74550ad3c23b396d84385a0c668e996629e4660fe54edf335da6d",
+      "source_digest": "3f7d9d6e9212b6c93d5dd60c86265ea77b79699801cdd31bc72d61ae4db07cb2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:05.011232+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.468154+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "0b2a891f3c85769c3a815a409e00d84a3769d6fb310c056fda69bedf55caacb2",
+      "source_digest": "52b203820f0dbc6594566769b941df9f4b393e4ebcc134ba001be9841e89d8d2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:05.015178+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.475195+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "19": {
-      "document_sha256": "fd491927bcc996f146f1f168385be9194c10d9db347cf07eb9a45dc5f6922424",
-      "source_digest": "6a5a79db21ed27618a114aa2779fbbb7458f349b566e2653a41b0f0ff3abc927",
+      "document_sha256": "10a3f519814a8c1757825691041ee2e490cfb46c9df89e9e160dcc562f5ec3f7",
+      "source_digest": "fd682c24891605905a1a3b2c9c75dd2b360ed76ec842cf868de5230637468f04",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:05.019233+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.478813+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     },
     "20": {
       "document_sha256": "61322a5d5757929879890622e49e587058b0024de8eacd8ae9d817dd9e78d45f",
-      "source_digest": "0b2a891f3c85769c3a815a409e00d84a3769d6fb310c056fda69bedf55caacb2",
+      "source_digest": "52b203820f0dbc6594566769b941df9f4b393e4ebcc134ba001be9841e89d8d2",
       "reviewed_by": "Codex UI session 2026-11-02",
-      "review_note": "docs/product/HOME_COMPACT_REVIEW_20261102.md에 compact+PR54/58+PR59 main8b40104의 정책20종 재대조를 기록했다. 최신main baseline을 채택하고 ratesim 5필드정확일치/note제외/HullWhite최종sim.params와06/12/FACTS의 입력동의구분·주장·근거를 보존했다. compact44px/동봉폰트/헤더키보드/실제엔진소개/안전오류12종과내부산식은유지. 최종통합후정책/문서생성47개6.076초PASS, 신규main정책문장누락0,20종review-required,origin/main대비공백검사PASS. 정합성20문서523소스PASS와공개BLOCKED를구분하며실제시세/Windows전체접근성/예측력/권리/AWS미검증을유지한다.",
-      "reviewed_at": "2026-11-02T04:26:05.022724+00:00",
-      "source_commit": "6925bbdd801034845f4fc1ecd46b58a8e4d01fbe"
+      "review_note": "Reviewed all 20 policies against docs/product/HOME_COMPACT_REVIEW_20261102.md. Preserved main PR54/58/59 evidence. Home ten-column metrics, detailed provenance and separate financial timestamps, derived KRW cap with raw hts_avls unit limitations, unchanged Q-SCORE method, Pretendard real weights and OFL provenance: 8 policies updated and 12 reviewed unchanged. Publication, actual Windows/live KIS and AWS deployment remain separate.",
+      "reviewed_at": "2026-11-02T04:43:25.484298+00:00",
+      "source_commit": "5b52e3dd041b39c020b4e862f807c4a1a322eb82"
     }
   }
 }

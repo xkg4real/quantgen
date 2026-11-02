@@ -32,6 +32,9 @@ def _blank_row(label, symbol, provider, unit, route, status, *, kind):
                 route=route, kind=kind, value=None, change=None,
                 absolute_change=None, volume=None, open=None, high=None, low=None,
                 market_cap=None, market_cap_raw=None, market_cap_unit=None,
+                market_cap_raw_unit=None, market_cap_basis=None, market_cap_as_of=None,
+                listed_shares=None, per=None, eps=None, sector=None,
+                fundamentals_received_at=None, fundamentals_as_of=None,
                 observation_date=None, received_at=None, loaded_at=None,
                 quote_time_kind=None, status=status, error_code=None,
                 reason_code=None, license="NOT_VERIFIED")
@@ -73,6 +76,30 @@ def _optional_price(value):
     # placeholders as observed zero-valued prices or discard a valid last price.
     result = _number(value, optional=True, nonnegative=True)
     return result if result else None
+
+
+def _optional_metric(value, *, nonnegative=False):
+    """A missing/invalid optional metric must not erase an observed price."""
+    try:
+        return _number(value, optional=True, nonnegative=nonnegative)
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
+def _listed_shares(value):
+    result = _optional_metric(value, nonnegative=True)
+    if result is None or not 0 < result <= 2**53 - 1 or not result.is_integer():
+        return None
+    return int(result)
+
+
+def _sector_name(value):
+    if not isinstance(value, str):
+        return None
+    text = value.strip()
+    if not text or len(text) > 80 or any(ord(char) < 32 or char in "<>" for char in text):
+        return None
+    return text
 
 
 def _receipt_time(value, now):
@@ -137,12 +164,23 @@ def load_home_markets(*, loader=None, quote_client=None, today=None):
                 volume=_number(quote.volume, optional=True, nonnegative=True),
                 open=_optional_price(quote.open), high=_optional_price(quote.high),
                 low=_optional_price(quote.low),
-                market_cap_raw=_number(quote.market_cap, optional=True, nonnegative=True),
+                market_cap_raw=_optional_metric(quote.market_cap, nonnegative=True),
+                listed_shares=_listed_shares(getattr(quote, "listed_shares", None)),
+                per=_optional_metric(getattr(quote, "per", None)),
+                eps=_optional_metric(getattr(quote, "eps", None)),
+                sector=_sector_name(getattr(quote, "sector", None)),
                 received_at=_receipt_time(quote.as_of, now),
             )
-            # KISClient currently exposes raw hts_avls without a unit contract.
-            # Keep it separate; a view must not label that raw number as KRW.
-            row.update(**values, market_cap_unit="UNVERIFIED", status="SNAPSHOT",
+            # hts_avls remains unscaled: its unit has not been established here.
+            # The official same-payload fields are current price (stck_prpr)
+            # and listed shares (lstn_stcn), so their product has KRW units.
+            cap = (values["value"] * values["listed_shares"]
+                   if values["listed_shares"] is not None else None)
+            cap = _optional_metric(cap, nonnegative=True)
+            row.update(**values, market_cap=cap, market_cap_unit="KRW" if cap is not None else "UNVERIFIED",
+                       market_cap_raw_unit="UNVERIFIED",
+                       market_cap_basis="price_x_listed_shares" if cap is not None else None,
+                       fundamentals_received_at=values["received_at"], status="SNAPSHOT",
                        quote_time_kind="receipt", loaded_at=now.isoformat())
         except Exception as exc:
             row.update(status="UNAVAILABLE", reason_code=provider_failure_reason(exc), error_code=type(exc).__name__,

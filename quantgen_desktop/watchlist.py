@@ -2,10 +2,11 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import math
 import re
 from babel.dates import format_date
+from babel.numbers import format_compact_decimal
 
 from PyQt6.QtCore import QEvent, QRect, Qt, pyqtSignal
 from PyQt6.QtGui import QColor, QBrush
@@ -19,6 +20,12 @@ from core.i18n import LocaleContext
 from core.theme import LIGHT
 
 ROW_HEIGHT = 44
+DETAIL_COLUMN = 8
+SCORE_COLUMN = 9
+_KST = timezone(timedelta(hours=9))
+_SECTORS_EN = {"전기전자": "Electronics", "전기,전자": "Electronics", "전기·전자": "Electronics",
+               "운수장비": "Transport equipment", "금융업": "Financials", "의약품": "Pharmaceuticals",
+               "서비스업": "Services", "기계": "Machinery", "화학": "Chemicals"}
 
 
 _NAMES = {
@@ -88,6 +95,81 @@ def _name(row, ctx):
 
 def _number(value, ctx, digits=2):
     return ctx.number(_finite(value), digits)
+
+
+def _compact(value, ctx):
+    value = _finite(value)
+    return "—" if value is None else format_compact_decimal(value, format_type="short", locale=ctx.locale, fraction_digits=2)
+
+
+def _metric(value, ctx):
+    value = _finite(value)
+    return "—" if value is None else ctx.number(value, 0 if value.is_integer() else 2)
+
+
+def _cap_value(row):
+    value = _finite(row.get("market_cap"))
+    return value if row.get("market_cap_unit") == "KRW" and value is not None and value > 0 else None
+
+
+def _sector(row, ctx, *, compact=False):
+    raw = row.get("sector")
+    if not raw:
+        return "—"
+    if ctx.language == "ko":
+        return str(raw)
+    translated = _SECTORS_EN.get(str(raw), "Untranslated")
+    if compact:
+        return {"Transport equipment": "Transport eq.", "Pharmaceuticals": "Pharma"}.get(translated, translated)
+    return translated
+
+
+def _fundamental_tooltip(row, ctx, field):
+    if row.get("kind") != "domestic_stock":
+        return _text(ctx, "이 시장지표에는 종목 재무 항목이 적용되지 않습니다.", "Stock fundamentals do not apply to this market indicator.")
+    value = row.get(field)
+    if field == "market_cap":
+        cap = _cap_value(row)
+        description = (_number(cap, ctx, 0) + " KRW" if cap is not None else
+                       _text(ctx, "시가총액 확인 안 됨 · 가격 조회 상태와 별개입니다.", "Market cap unconfirmed · independent of price availability."))
+        if cap is not None and row.get("market_cap_basis") == "price_x_listed_shares":
+            description += "\n" + _text(ctx, "산출값: 가격 × 상장 주식 수", "Calculated: price × listed shares")
+        description += "\n" + _text(ctx, "시가총액 기준 시각: ", "Market cap data as of: ") + _timestamp(row.get("market_cap_as_of"), ctx)
+        if not row.get("market_cap_as_of"):
+            description += "\n" + _text(ctx, "조회 시세로 계산한 스냅샷입니다. 실제 가격 관측 시각은 제공되지 않았습니다.",
+                                        "Calculated from a quote snapshot; the actual price observation time was not supplied.")
+    elif field == "sector":
+        description = _sector(row, ctx) + "\n" + _text(ctx, "공급처 업종 원문: ", "Provider sector text: ") + str(value or "—")
+    else:
+        description = field.upper() + ": " + _number(value, ctx)
+        description += "\n" + _text(ctx, "KIS 제공값 · 회계 기준과 기준일은 확인되지 않았습니다. EPS 단위·희석 여부도 확인되지 않았습니다.",
+                                    "KIS-provided value. Accounting basis and reference date are unconfirmed; EPS unit and dilution basis are also unconfirmed.")
+    description += "\n" + _text(ctx, "재무 항목 수신: ", "Fundamentals received: ") + _timestamp(row.get("fundamentals_received_at"), ctx)
+    description += "\n" + (_text(ctx, "공급처 기준일: ", "Provider reference date: ") + _date(row.get("fundamentals_as_of"), ctx)
+                            if row.get("fundamentals_as_of") else _text(ctx, "공급처 기준일 미제공", "Provider reference date not supplied"))
+    return description
+
+
+def _refresh_cap_from_tick(row, price, market_time):
+    """Reuse shares only within their received KST session; never refresh EPS/PER clocks."""
+    if row.get("kind") != "domestic_stock" or row.get("provider") != "KIS" or row.get("unit") != "KRW":
+        return
+    shares = _finite(row.get("listed_shares"))
+    if shares is None or not 0 < shares <= 2**53 - 1 or not shares.is_integer():
+        return
+    try:
+        received = row.get("fundamentals_received_at")
+        received = datetime.fromisoformat(received.replace("Z", "+00:00")) if isinstance(received, str) else received
+        trade = datetime.fromisoformat(market_time.replace("Z", "+00:00")) if isinstance(market_time, str) else market_time
+        if (not isinstance(received, datetime) or not isinstance(trade, datetime)
+                or received.tzinfo is None or trade.tzinfo is None
+                or received.astimezone(_KST).date() != trade.astimezone(_KST).date()):
+            return
+        cap = _finite(price * shares)
+        if cap is not None and cap > 0:
+            row.update(market_cap=cap, market_cap_unit="KRW", market_cap_basis="price_x_listed_shares", market_cap_as_of=trade.isoformat())
+    except (TypeError, ValueError, OverflowError):
+        return
 
 
 def _price(row, ctx):
@@ -219,6 +301,13 @@ def _source_time(row, ctx, *, compact=False):
     return source + "\n" + detail
 
 
+def _price_tooltip(row, ctx):
+    return (" · ".join((_name(row, ctx), _price(row, ctx), _status(row, ctx))) + "\n"
+            + _source_time(row, ctx) + "\n"
+            + _text(ctx, "앱 수신: ", "App received: ") + _timestamp(row.get("received_at"), ctx)
+            + "\n" + _reason(row, ctx))
+
+
 def _reason(row, ctx):
     reason = row.get("reason_code") or row.get("error_code")
     provider_reasons = {
@@ -306,7 +395,9 @@ class _HeaderHelpButton(QPushButton):
 
 class _WatchlistHeader(QHeaderView):
     """An actual focusable help button travels with the Q-SCORE section."""
-    SCORE_COLUMN = 7
+    @property
+    def score_column(self):
+        return self.table.columnCount() - 1
 
     def __init__(self, table):
         super().__init__(Qt.Orientation.Horizontal, table)
@@ -323,31 +414,31 @@ class _WatchlistHeader(QHeaderView):
         table.horizontalScrollBar().valueChanged.connect(self._position_help)
 
     def _section_resized(self, logical, previous, size):
-        if logical == self.SCORE_COLUMN and size < 128:
+        if logical == self.score_column and size < 128:
             self.resizeSection(logical, 128)
         self._position_help()
 
     def _group_geometry(self):
         title_width = self.fontMetrics().horizontalAdvance("Q-SCORE")
         width = title_width + 6 + self.help_button.width()
-        left = self.sectionViewportPosition(self.SCORE_COLUMN) + (self.sectionSize(self.SCORE_COLUMN) - width) // 2
+        left = self.sectionViewportPosition(self.score_column) + (self.sectionSize(self.score_column) - width) // 2
         return left, title_width
 
     def _position_help(self, *args):
         if not hasattr(self, "help_button"):
             return
-        if self.count() <= self.SCORE_COLUMN:
+        if self.count() <= self.score_column:
             self.help_button.hide()
             return
-        self.help_button.setVisible(not self.isSectionHidden(self.SCORE_COLUMN))
+        self.help_button.setVisible(not self.isSectionHidden(self.score_column))
         left, title_width = self._group_geometry()
         self.help_button.move(left + title_width + 6, (self.viewport().height() - self.help_button.height()) // 2)
         self.help_button.raise_()
 
     def ensure_score_visible(self):
         # A keyboard focus on the clipped button must also reveal its section.
-        left = self.sectionViewportPosition(self.SCORE_COLUMN)
-        right = left + self.sectionSize(self.SCORE_COLUMN)
+        left = self.sectionViewportPosition(self.score_column)
+        right = left + self.sectionSize(self.score_column)
         bar = self.table.horizontalScrollBar()
         if left < 0:
             bar.setValue(bar.value() + left)
@@ -370,7 +461,7 @@ class _WatchlistHeader(QHeaderView):
         self._position_help()
 
     def paintSection(self, painter, rect, logical_index):
-        if logical_index != self.SCORE_COLUMN:
+        if logical_index != self.score_column:
             return super().paintSection(painter, rect, logical_index)
         left, title_width = self._group_geometry()
         painter.save()
@@ -438,7 +529,7 @@ class MarketDetailDialog(QDialog):
             self.form.removeRow(0)
         row = self.row
         unknown = _text(ctx, "확인 안 됨", "Unconfirmed")
-        cap_verified = row.get("market_cap_unit") == "KRW" and _finite(row.get("market_cap")) is not None
+        cap_verified = _cap_value(row) is not None
         pairs = [
             (("상태", "Status"), _status(row, ctx)),
             (("Q-SCORE", "Q-SCORE"), _score_text(row.get("q_score"), ctx)),
@@ -454,12 +545,28 @@ class MarketDetailDialog(QDialog):
             (("고가", "High"), _number(row.get("high"), ctx)),
             (("저가", "Low"), _number(row.get("low"), ctx)),
             (("시가총액", "Market cap"), _number(row.get("market_cap"), ctx, 0) + " KRW" if cap_verified else unknown),
+            (("시가총액 산출 기준", "Market cap basis"), _text(ctx, "가격 × 상장 주식 수", "Price × listed shares")
+             if cap_verified and row.get("market_cap_basis") == "price_x_listed_shares" else unknown),
+            (("시가총액 기준 시각", "Market cap data as of"), _timestamp(row.get("market_cap_as_of"), ctx)),
+            (("상장 주식 수", "Listed shares"), _number(row.get("listed_shares"), ctx, 0)),
+            (("PER · 공급처 제공값", "PER · provider value"), _number(row.get("per"), ctx)),
+            (("EPS · 공급처 제공값", "EPS · provider value"), _metric(row.get("eps"), ctx)),
+            (("업종", "Sector"), _sector(row, ctx)),
+            (("재무 항목 수신 시각", "Fundamentals received at"), _timestamp(row.get("fundamentals_received_at"), ctx)),
+            (("재무 항목 기준일", "Financial reference date"), _date(row.get("fundamentals_as_of"), ctx) if row.get("fundamentals_as_of")
+             else _text(ctx, "공급처 미제공", "Not supplied by provider")),
         ]
+        if ctx.language != "ko" and row.get("sector") and str(row["sector"]) not in _SECTORS_EN:
+            pairs.append((("공급처 업종 원문", "Provider sector text"), str(row["sector"])))
         for labels, value in pairs:
             self.form.addRow(_label(_text(ctx, *labels)), _label(value))
-        self.rights.setText(_text(ctx,
-            "자료 이용 조건은 공급처별 확인이 필요합니다. 확인되지 않은 값은 —로 표시합니다.",
-            "Data-use rights require provider-specific review. Unconfirmed values are shown as —."))
+        if row.get("kind") == "domestic_stock":
+            self.rights.setText(_text(ctx,
+                "시가총액의 계산 근거와 기준 시각을 확인하세요. PER·EPS의 회계 기준과 기준일, EPS 단위·희석 여부는 확인되지 않았습니다. 자료 이용 조건은 공급처별 확인이 필요합니다.",
+                "Review the market-cap calculation basis and timestamp. PER/EPS accounting basis and date, and EPS unit/dilution basis, are unconfirmed. Data-use rights require provider-specific review."))
+        else:
+            self.rights.setText(_text(ctx, "자료 이용 조건은 공급처별 확인이 필요합니다. 확인되지 않은 값은 —로 표시합니다.",
+                                     "Data-use rights require provider-specific review. Unconfirmed values are shown as —."))
         self.chart_button.setText(_text(ctx, "종목 차트 열기", "Open instrument chart"))
         self.chart_button.setVisible(_can_chart(row))
         self.close_button.setText(_text(ctx, "닫기", "Close"))
@@ -579,7 +686,8 @@ class WatchlistPanel(QWidget):
         live_controls.addWidget(self.stop_button)
         live_controls.addWidget(self.live_status, 1)
         outer.addLayout(live_controls)
-        self.table = _WatchlistTable(0, 8)
+        self.table = _WatchlistTable(0, 10)
+        self.detail_column, self.score_column = DETAIL_COLUMN, SCORE_COLUMN
         self.table.setHorizontalHeader(_WatchlistHeader(self.table))
         self.score_help = self.table.horizontalHeader().help_button
         self.score_help.clicked.connect(self.open_score_help)
@@ -599,7 +707,7 @@ class WatchlistPanel(QWidget):
         self.table.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
         self.table.horizontalHeader().setMinimumSectionSize(64)
-        for column, width in enumerate((210, 115, 85, 85, 185, 128, 70, 150)):
+        for column, width in enumerate((205, 110, 80, 80, 105, 80, 80, 100, 70, 150)):
             self.table.setColumnWidth(column, width)
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.horizontalScrollBar().rangeChanged.connect(self._sync_table_height)
@@ -648,6 +756,8 @@ class WatchlistPanel(QWidget):
                     row["market_time"] = optional["market_time"]
                 if optional.get("source") in ("KIS", "KIS WebSocket"):
                     row["stream_source"] = optional["source"]
+                if optional.get("status") == "STREAMING":
+                    _refresh_cap_from_tick(row, value, optional.get("market_time"))
                 self._update_row_items(index)
                 self._sync_detail(row)
                 return True
@@ -662,8 +772,8 @@ class WatchlistPanel(QWidget):
         self.ctx = ctx
         self.title.setText(_text(ctx, "주요 시장 · 국내 주요 종목", "Markets and Korean stocks"))
         self.caption.setText(_text(ctx,
-            "시장지표는 일별 관측, 국내 종목은 조회 시세입니다. 실시간 목록을 연결하면 국내 종목의 새 체결과 점수가 갱신됩니다.",
-            "Indicators show daily observations; stocks start with quote snapshots. Connect the live watchlist to update stock trades and scores."))
+            "시장지표는 일별 관측, 국내 종목은 조회 시세입니다. 가격에 마우스를 올리거나 상세를 열면 출처·시각·상태를 확인할 수 있습니다.",
+            "Indicators are daily observations; stocks start with quote snapshots. Hover a price or open Details for source, timing and status."))
         self.refresh.setText(_text(ctx, "조회 중…", "Loading…") if self.busy else _text(ctx, "새로고침", "Refresh"))
         self.score_help.setAccessibleName(_text(ctx, "Q-SCORE 소개 열기", "About Q-SCORE"))
         self.score_help.setToolTip(_score_help_summary(ctx))
@@ -672,9 +782,13 @@ class WatchlistPanel(QWidget):
         self.set_live_state(self.live_state, self.live_detail)
         self.table.setAccessibleName(_text(ctx, "주요 시장과 국내 종목 목록", "Markets and Korean stocks watchlist"))
         self.table.setHorizontalHeaderLabels([_text(ctx, ko, en) for ko, en in (
-            ("종목 · 지표", "Instrument"), ("최근값", "Latest value"), ("변동", "Change"),
-            ("거래량", "Volume"), ("출처 · 시각", "Source · time"), ("상태", "Status"), ("상세", "Details"), ("Q-SCORE", "Q-SCORE"))])
-        self.table.horizontalHeaderItem(7).setToolTip(self.score_help.toolTip())
+            ("종목 · 지표", "Instrument"), ("현재가", "Price"), ("변동", "Change"),
+            ("거래량", "Volume"), ("시가총액", "Market cap"), ("PER", "PER"), ("EPS", "EPS"),
+            ("업종", "Sector"), ("상세", "Details"), ("Q-SCORE", "Q-SCORE"))])
+        self.table.horizontalHeaderItem(self.score_column).setToolTip(self.score_help.toolTip())
+        self.table.horizontalHeaderItem(4).setToolTip(_text(ctx, "KRW · 가격 × 상장 주식 수로 산출, 기준 시각은 상세에서 확인", "KRW · calculated from price × listed shares; open Details for timing"))
+        for column in (5, 6):
+            self.table.horizontalHeaderItem(column).setToolTip(_text(ctx, "KIS 제공값 · 회계 기준·기준일 및 EPS 단위는 미확인", "KIS-provided value · accounting basis/date and EPS unit unconfirmed"))
         self._render_rows()
         if self.detail_dialog is not None:
             self.detail_dialog.set_locale(ctx)
@@ -692,7 +806,7 @@ class WatchlistPanel(QWidget):
             QTableWidget::item {{ padding: 1px 8px; border-bottom: 1px solid {p.border}; }}
             QHeaderView::section {{ background: {p.surface_2}; color: {p.muted}; padding: 6px 8px; border: 0; font-weight: 500; }}
             QWidget#watchlistIdentity {{ background: transparent; }}
-            QWidget#watchlistIdentity QLabel {{ background: transparent; color: {p.text}; }}
+            QWidget#watchlistIdentity QLabel {{ background: transparent; color: {p.text}; font-size: 13px; }}
             QWidget#watchlistIdentity QLabel#watchlistTicker {{ background: {p.accent_soft}; color: {p.accent}; border-radius: 6px; padding: 3px 4px; font-size: 11px; font-weight: 600; }}
             QPushButton {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 8px; padding: 7px 10px; }}
             QPushButton:hover {{ background: {p.accent_soft}; }}
@@ -743,7 +857,7 @@ class WatchlistPanel(QWidget):
         for index, row in enumerate(self.rows):
             name = _name(row, self.ctx)
             self._update_row_items(index)
-            for column in (0, 6):
+            for column in (0, self.detail_column):
                 previous = self.table.cellWidget(index, column)
                 if previous is not None:
                     previous.hide()
@@ -769,7 +883,7 @@ class WatchlistPanel(QWidget):
             button.setProperty("watchlistDetail", True)
             button.setAccessibleName(_text(self.ctx, name + " 상세보기", "Details for " + name))
             button.clicked.connect(lambda checked=False, row_index=index: self.open_detail(row_index))
-            self.table.setCellWidget(index, 6, button)
+            self.table.setCellWidget(index, self.detail_column, button)
             self.table.setRowHeight(index, ROW_HEIGHT)
         if self.rows:
             self.table.setCurrentCell(min(max(selected, 0), len(self.rows) - 1), 0)
@@ -784,9 +898,11 @@ class WatchlistPanel(QWidget):
 
     def _update_row_items(self, index):
         row = self.rows[index]
+        cap = _cap_value(row)
         contents = [_name(row, self.ctx), _price(row, self.ctx), _change(row, self.ctx),
-                    _number(row.get("volume"), self.ctx, 0), _source_time(row, self.ctx, compact=True),
-                    _status(row, self.ctx), "", _score_text(row.get("q_score"), self.ctx)]
+                    _compact(row.get("volume"), self.ctx), _compact(cap, self.ctx) + " KRW" if cap is not None else "—",
+                    _number(row.get("per"), self.ctx), _metric(row.get("eps"), self.ctx), _sector(row, self.ctx, compact=True),
+                    "", _score_text(row.get("q_score"), self.ctx)]
         for column, value in enumerate(contents):
             item = self.table.item(index, column)
             if item is None:
@@ -794,18 +910,28 @@ class WatchlistPanel(QWidget):
                 self.table.setItem(index, column, item)
             item.setText(value)
             font = self.table.font()
-            font.setPixelSize(12 if column == 4 else 13)
+            font.setPixelSize(13)
             item.setFont(font)
             item.setData(Qt.ItemDataRole.UserRole, row.get("symbol"))
-            item.setToolTip(_reason(row, self.ctx) if column == 5 else _score_tooltip(row.get("q_score"), self.ctx) if column == 7 else _source_time(row, self.ctx) if column == 4 else value)
-            item.setTextAlignment((Qt.AlignmentFlag.AlignRight if column in (1, 2, 3) else Qt.AlignmentFlag.AlignLeft) | Qt.AlignmentFlag.AlignVCenter)
+            tooltip = value
+            if column == 1:
+                tooltip = _price_tooltip(row, self.ctx)
+            elif column == 3:
+                tooltip = _number(row.get("volume"), self.ctx, 0)
+            elif column in (4, 5, 6, 7):
+                tooltip = _fundamental_tooltip(row, self.ctx, ("market_cap", "per", "eps", "sector")[column - 4])
+            elif column == self.score_column:
+                tooltip = _score_tooltip(row.get("q_score"), self.ctx)
+            item.setToolTip(tooltip)
+            item.setData(Qt.ItemDataRole.AccessibleDescriptionRole, tooltip)
+            item.setTextAlignment((Qt.AlignmentFlag.AlignRight if column in (1, 2, 3, 4, 5, 6) else Qt.AlignmentFlag.AlignLeft) | Qt.AlignmentFlag.AlignVCenter)
             color = self.colors.text
             if column == 2 and _finite(row.get("change")) is not None:
                 change = _finite(row["change"])
                 color = self.colors.success if change > 0 else self.colors.error if change < 0 else self.colors.muted
-            if column == 5:
-                color = self.colors.warning if row.get("status") in ("STALE", "UNAVAILABLE") else self.colors.muted
-            if column == 7:
+            if column == 1 and row.get("status") in ("STALE", "UNAVAILABLE"):
+                color = self.colors.warning
+            if column == self.score_column:
                 color = self.colors.accent if "★" in value else self.colors.muted
             item.setForeground(QBrush(QColor(color)))
 

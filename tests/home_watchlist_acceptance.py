@@ -80,7 +80,7 @@ class HomeWatchlistTests(unittest.TestCase):
 
     def test_malformed_quote_is_not_displayed_as_valid_market_data(self):
         cases = [dict(price=float("nan")), dict(price=0), dict(price=-1), dict(price=True),
-                 dict(volume=-1), dict(market_cap=float("inf")), dict(change_pct=float("nan")),
+                 dict(volume=-1), dict(change_pct=float("nan")),
                  dict(source="synthetic"), dict(currency="USD"), dict(ticker="000000"),
                  dict(as_of="2026-11-03T02:00:00+00:00"), dict(as_of="2026-11-02T02:00:00")]
         for changes in cases:
@@ -218,6 +218,76 @@ class HomeWatchlistTests(unittest.TestCase):
                            dates=["2026-10-29", "2026-10-30"], values=[1e-308, 1e308]), today=NOW.date())
         self.assertTrue(all(row["reason_code"] == "invalid_response" and row["change"] is None for row in rows))
         json.dumps(rows, allow_nan=False)
+
+    def test_same_kis_quote_supplies_fundamentals_and_cap_uses_price_times_listed_shares(self):
+        from data.krx.kis_client import KISClient
+        client = KISClient.__new__(KISClient)
+        client.ready = True
+        client._get = Mock(return_value={"output": {
+            "stck_prpr": "70000", "hts_avls": "123", "lstn_stcn": "5,000,000",
+            "per": "12.50", "eps": "-150.00", "bstp_kor_isnm": " 전기전자 ",
+        }})
+        with patch("data.krx.kis_client._now", return_value=NOW.isoformat()):
+            parsed = client.quote("005930")
+            self.assertEqual(parsed.market_cap, 123)  # Legacy field remains raw hts_avls.
+            self.assertEqual((parsed.per, parsed.eps, parsed.listed_shares), (12.5, -150, 5_000_000))
+            rows = load_home_markets(loader=series, quote_client=client, today=NOW.date())
+        self.assertEqual(client._get.call_count, 7)  # One probe and the usual six quotes; no metric lookup.
+        row = rows[6]
+        self.assertEqual(row["market_cap"], 350_000_000_000)
+        self.assertEqual(row["market_cap_unit"], "KRW")
+        self.assertEqual(row["market_cap_basis"], "price_x_listed_shares")
+        self.assertEqual(row["market_cap_raw"], 123)
+        self.assertEqual(row["market_cap_raw_unit"], "UNVERIFIED")
+        self.assertEqual((row["per"], row["eps"], row["sector"]), (12.5, -150, "전기전자"))
+        self.assertEqual(row["fundamentals_received_at"], NOW.isoformat())
+        self.assertIsNone(row["fundamentals_as_of"])
+        self.assertIsNone(row["market_cap_as_of"])
+        self.assertIsNone(row["observation_date"])
+
+    def test_invalid_optional_fundamentals_do_not_erase_a_valid_quote(self):
+        cases = [dict(market_cap=float("inf")), dict(per=float("nan")), dict(eps="invalid"),
+                 dict(listed_shares=-1), dict(listed_shares=0), dict(listed_shares=1.5),
+                 dict(listed_shares=True), dict(listed_shares=float("inf")), dict(listed_shares=2**54),
+                 dict(sector="<b>bad</b>"), dict(sector="bad\nlabel"), dict(sector={"wrong": "shape"})]
+        for changes in cases:
+            with self.subTest(changes=changes):
+                client = SimpleNamespace(ready=True, quote=lambda code: replace(quote(code), **changes))
+                row = load_home_markets(loader=series, quote_client=client, today=NOW.date())[6]
+                self.assertEqual((row["status"], row["value"]), ("SNAPSHOT", 70000))
+                self.assertIsNone(row["reason_code"])
+                key = next(iter(changes))
+                self.assertIsNone(row["market_cap_raw" if key == "market_cap" else key])
+                self.assertIsNone(row["market_cap"])
+                json.dumps(row, allow_nan=False)
+
+    def test_optional_metric_parser_and_overflow_preserve_price_and_legacy_construction(self):
+        from data.krx.kis_client import KISClient
+        legacy = quote("005930")
+        self.assertIsNone(legacy.per)
+        self.assertIsNone(legacy.eps)
+        self.assertIsNone(legacy.listed_shares)
+        client = KISClient.__new__(KISClient)
+        client.ready = True
+        client._get = Mock(return_value={"output": {
+            "stck_prpr": "70000", "per": "inf", "eps": "nan", "lstn_stcn": "1.5",
+            "bstp_kor_isnm": {"invalid": "shape"},
+        }})
+        with patch("data.krx.kis_client._now", return_value=NOW.isoformat()):
+            parsed = client.quote("005930")
+        self.assertEqual(parsed.price, 70000)
+        self.assertTrue(all(getattr(parsed, key) is None for key in ("per", "eps", "listed_shares", "sector")))
+        client._get.return_value = {"output": {"stck_prpr": "70000", "per": True, "eps": False,
+                                              "lstn_stcn": True, "bstp_kor_isnm": True}}
+        with patch("data.krx.kis_client._now", return_value=NOW.isoformat()):
+            parsed = client.quote("005930")
+        self.assertEqual(parsed.price, 70000)
+        self.assertTrue(all(getattr(parsed, key) is None for key in ("per", "eps", "listed_shares", "sector")))
+        overflowing = SimpleNamespace(ready=True, quote=lambda code: replace(quote(code), price=1e308, listed_shares=1000))
+        row = load_home_markets(loader=series, quote_client=overflowing, today=NOW.date())[6]
+        self.assertEqual(row["status"], "SNAPSHOT")
+        self.assertIsNone(row["market_cap"])
+        self.assertIsNone(row["market_cap_basis"])
 
 
 if __name__ == "__main__":
