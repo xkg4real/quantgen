@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "94e1a5ffad08735cbcf8ecb87c80b31c74d55fe344376914f2b3497616589274",
+    ".github/workflows/runtime-smoke.yml": "8531df2c9ef6710c57887a90242b99b8b6b7047ba11e02e36744313bdc5d73e0",
     "README.md": "3d5109bbf91644ca6dcddd4ff609d72f1819c0e54d0a8eac2b75ddd4e244e54e",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -79,12 +79,13 @@
     "core/ficc/curve_models.py": "233d4b1027153de55416aafb0a550aaf7e73029038b27b23dd8289a2324c51a1",
     "core/ficc/curves.py": "d156b8e5b1dd0bcd955c94e8167432b83848f26ec83544849b2bd0245534f37e",
     "core/ficc/data.py": "9d75c2b60b70a1e5f0a3a854318adb135d0524b6588beb3779f10ef156cdb0a2",
-    "core/ficc/equity_deriv.py": "eea67eb24e5abf9a31a0570f1f6c2db21607cfd4b68450c8fa401a2195ad500a",
+    "core/ficc/equity_deriv.py": "200f8e51a78e2c14c6da81367e26ee69979eab4739b0eafadfef23877d628dfc",
     "core/ficc/flows_log.py": "cde3e25f42928c0fb644dfebb9f4df5c55f10f3a00e2d46f3f71d20839e5fdbe",
     "core/ficc/fx.py": "a12dca02caab44fdfaa951081b1e613db3bd9448f81586b29c2e0039f6dd4e3b",
     "core/ficc/fx_styles.py": "339e24889c8e010018139cce6b362bed691f91493685780ef2fdc107c3dbd26e",
-    "core/ficc/insights.py": "fb3fa4d89d5473369430760f3120a4887b80e2c20ebf5c6bb4a41599ebee5b2e",
+    "core/ficc/insights.py": "d93e27be5538e4e8a540e36138b944b737f32afd97a4dcbb321e1fc2d7100ae0",
     "core/ficc/lag_audit.py": "17d8ba7d9e0bd5f8d5bcff93c8df237ba23682cacdb386744e7d28fb91c1b429",
+    "core/ficc/letf_assumptions.py": "c87beb1761aac4a9e60c2da942c6b83cffcc9f3d8ddc029ab91a5c18ad06fc49",
     "core/ficc/macro.py": "78139ea28b194878478cab77faf3fe3220249fbcd369a0da28c43cb92776eaca",
     "core/ficc/macro_artifacts.py": "0643b4337981e3e0ecd304a5f045690f62e6eaa0f396248775c035a871fa7ae1",
     "core/ficc/macro_schema.py": "36078e3589c36c1e443f3067c403b155bdef93b85341ed9df6bd3a2697248284",
@@ -147,15 +148,15 @@
     "core/research/decay_disclosure.py": "98f68bb2b8f8a0ac051865a76313855a323890a4adacd9abe9d0c025c0a934ce",
     "core/research/derivatives_workflow.py": "0597ee855c13663bd4d851320c68115482c3a41e4ea5f68b8f2ca35b91cd70e6",
     "core/research/display_rights.py": "e59554e140ee5ea994812bcaca083c622d94bac1513411bdca58824b6f20e6fb",
-    "core/research/etf_workflow.py": "c52c9de43fd818b0a5583941ac09ced6f66e17bcdc82f5fdebd84d2e97758f5b",
+    "core/research/etf_workflow.py": "c85aedeea6dcb4c691174fc658350a2f2f52e9b713b46f9c56f4c193fc5dc9ba",
     "core/research/export.py": "16cbc78bbcf4f72d656f28f9b66823090fc21e5e92c0aa9ff56a07de2dc9b402",
     "core/research/funding_disclosure.py": "2f6c9a3e8f9815d3e724689320c60ccb1c2d6ae97787743d7d7440b45900ffbb",
     "core/research/fx_analysis.py": "1d409db7d01c33237d315eeb82ff4731248f5f8615782631ab2d996f95481f4f",
     "core/research/intake.py": "10981cc4ffd14f71a8d7fa5a21dbd33085c590a3ec89fee24b07dde86fb14011",
-    "core/research/letf_disclosure.py": "82d3026c49757b9e9d4abe8d94a1c38d164a52a50b32f9405e7674045b09a4a2",
+    "core/research/letf_disclosure.py": "468cbc98101fcde53ea0913ac9a1fc864f5eeace420bc3a5838ce1f6f7ee7bcb",
     "core/research/localized_report.py": "1c6ff55a3d4c326ba76eb58c01cd5fd76dccfb9633bae7c06466f556df352d30",
     "core/research/macro_analysis.py": "78cb709bfcbbe339993574a8a105ff1d50cfacc12967e0c6434de38942fa1135",
-    "core/research/market_analysis.py": "3b2a1c1daed61420a81677c9b54ce56bcce3da919630f9dea4e64bebcac5b870",
+    "core/research/market_analysis.py": "65774b1dd9675d4e65edb2b0fdf44ae36a329fe80b0541bf873caa9af56f504e",
     "core/research/markets.py": "5d15b4f44b1fdb2062d807d615fb4688973247c146eeeae3f6f79ad919553a4a",
     "core/research/mc_disclosure.py": "52e784e1a98693e7e8b8ed77d54366ba3fdb1eaf784a53271a0590ead80547ee",
     "core/research/portfolio_analysis.py": "58fc8d6a1c27d73afea6761a125f52135639070d4b0ffe6cdc2f70911b1c0ede",
@@ -169,6 +170,7 @@
     "core/research/strategy_analysis.py": "5cbf2915c0657081a3ee8b9bfca8169814de533e2965f9835d74d28f6b01f1c9",
     "core/research/strategy_exposure.py": "4e0a386ad7b9a28d834a1f372f0789d9f723c3c93fce1c57163a131965805fdb",
     "core/research/strategy_workflow.py": "0e99ea585474a6abed26ddcff247e74cafd4f805dafa8d8e1557535c99da7e2c",
+    "core/research/structured_disclosure.py": "4f63ebb9c6901b923307a3f8453ad6e12b7c6bc39ffefa5555b87f86bbabbae9",
     "core/research/structuring_analysis.py": "cedbe854629367b5372e03be3d55e784df1df0c1f92849c5fb707b59d176321a",
     "core/research/tool_export.py": "85c4042681d6efc7650f8d86ec7c81c423fd4119f5c1442e5b45283e1484a630",
     "core/rules/__init__.py": "4cbdabd33ebc2dcf4b768f389ec041ac209cf6d7de8f616264781fb44905966c",
@@ -226,7 +228,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "7407d29536577188a9ed0b311d479b66ddd89502835391364c274f0574521719",
+    "docs/compliance/FACTS.md": "4efaf34e02cf5eb1397ec9b427620e30d047748974a8e114a331995294401220",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "fe76f5dc8fb85e691d1c33140a1b01481d8ba851c43398ac99b00effbf981fe8",
@@ -238,11 +240,14 @@
     "docs/product/CARRY_LANGUAGE_2026-10-31.md": "7cf0c8152b053bfaeaf44dd72e7244acb076426ae5618fd20291eb2b2b26a691",
     "docs/product/CHART_C_DESIGN_2026-10-31.md": "4ef295e78271c6335666df6ac1456459235a0a0b35ddfd9de813952e524221ae",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
+    "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "c03dae78c5964bded90065661a0d3dc631f4b650c3baae8eb6875443b11959e6",
     "docs/product/FUNDING_INFERENCE_2026-10-30.md": "ea1ef423c1d2d3601f82c301536709fa66292595faee72dbd283ad49c5d87952",
+    "docs/product/FX_CIP_DISCREPANCY_2026-11-02.md": "99a42c71f255e6ff271c66f1245dd45ca63e3627001e17a8848680ca4fc39b32",
     "docs/product/FX_LANGUAGE_2026-10-31.md": "e2c15111acbd1bf6391700c6a0f6616da69d65ce4750654783fd08fbaea3d65f",
     "docs/product/INDICATOR_GUIDE_DESIGN.md": "cf664a34fefd8506e356ca2f261ddc6acbce168d370d1f7d504393d94acca484",
+    "docs/product/LETF_ASSUMPTIONS_2026-11-02.md": "4fd6fbcd5caad90146799feb6fa7ae61a38603e22c752970474e3d23b757fd0b",
     "docs/product/LETF_INDEX_2026-10-31.md": "7c10b178f33c59f2afb2783c94413cc2c949ba3d5f0e7b4412246d0da1f54693",
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
@@ -258,7 +263,7 @@
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "73a0d77247432de8b4e431017b434426766576bb777f40a52db57d1c6349afc2",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "cfea91118e3cfc5c0e31bcd03c299439d70029ca8b1dde1089717853ae49564c",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
     "docs/product/TERMINAL_TARGET_2026-10-30.md": "5c3e2eac999534371560def0e00d3ef45d0b7abcd960a6b1d7d7c3c9c3b05c29",
@@ -280,9 +285,9 @@
     "quantgen_desktop/commentary.py": "4b5d02a17b5621db28c24a3f54a37106837239d7fe55aa7f376e677f80d0845f",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
-    "quantgen_desktop/display_prose_catalog.py": "f9575d1c8545a6e9b2e338cb595d901054c3125f5339d6724c6109a62f4cb8a8",
+    "quantgen_desktop/display_prose_catalog.py": "25621b1400bf12cfe9874b0bca300ce5fa3a61fe752ee49033bc5929f0f5e63d",
     "quantgen_desktop/fx.py": "c57c76ab44edc66bfd4451e6b75abf7d92ba38806cbfc8685c8cba3c287322d9",
-    "quantgen_desktop/fx_narrative.py": "caec5b4b3a62b50c358f329c75e0ebab951ac783eab1a87d0c61883e127f50f8",
+    "quantgen_desktop/fx_narrative.py": "1078cff2724ff7c6bc75f8146e7893622323899ee5bb1c52100007c11649e52e",
     "quantgen_desktop/indicator_guide.py": "c613421bd6e0ac16e35addb14537a0908206f8eb98c3dafcbb6a59ffb9e8fee6",
     "quantgen_desktop/jobs.py": "2a0764c9c4f767a2c93d49b0fe929a1ad655d2195acc0c9a371f6229a1aa5ac1",
     "quantgen_desktop/localization.py": "2927801b702787e2c962319693e4dd1f6db4ecc9543c5e23e2d757ea9c0b1fb1",
@@ -290,9 +295,9 @@
     "quantgen_desktop/macro_narrative_language.py": "4a39ff7e9ef3583d803bc25f899737194186d15a3311d5d7d0e4f0cb0b45803c",
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
-    "quantgen_desktop/market_narrative_language.py": "2706979b574f9a3455dc1d3867879a4f1d3089c59cbfb01066570c718158e9ac",
-    "quantgen_desktop/market_tools.py": "9321e3f64ee17162b150eb7a860c5807a918ce309cc49c9f2a03793f4d19afa2",
-    "quantgen_desktop/model_narrative_language.py": "9812925b5fdaaca831788782444449156d26bf643a7737fad60eddb0bdb42e11",
+    "quantgen_desktop/market_narrative_language.py": "b8cb8fd3f6b2a75fcd8225d43a2a172365caa237774c6ac45bc0e535655fd15a",
+    "quantgen_desktop/market_tools.py": "814118dc14ade98a391e2cb8200c22becb751cc4f6dab2138ef5802a13c858af",
+    "quantgen_desktop/model_narrative_language.py": "355e6bec3d0073ade429f2c7183d495f756aca341434196ef53627ec8a039a65",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
     "quantgen_desktop/rates.py": "f98d6db2d305ee12264c7a758af8a9951b2b9bb6a27686c4a0a29cc215038ddf",
@@ -300,7 +305,7 @@
     "quantgen_desktop/report_actions.py": "fbf48c2350434f8c4e953fd1efd99ed666f60e74e6da5154bb529a43ec50115d",
     "quantgen_desktop/signals.py": "ae9a3eb8f1cb491facbc0df37c162b728211716b7f74e4cdf1b30f24e04fce26",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
-    "quantgen_desktop/structuring.py": "fdd1b9ace2fdf3395704ad138b6d0fa8fbbfe1036f6c7cab8bbbdc3ae5aaf312",
+    "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
     "quantgen_desktop/tools.py": "d5fe5dada5e1860ea92b2826b7f36136babc91faba225bede59d8455de2b33df",
     "quantgen_desktop/translations.py": "a0b0d3950fc34b59f6478b315ffdb7d0b0c69ac422e2255b24c25aac54b6f4d2",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
@@ -313,6 +318,7 @@
     "tests/ar1_decay_acceptance.py": "8283f51b60967f30950af4ec7ecfda48f52c9bb605b2dc8231fc26b3549b63ab",
     "tests/bond_funding_acceptance.py": "dfd5760cec1f4e32cfccdae4f73cf8d4a38ea72650af612587e981c8058db02c",
     "tests/chart_c_theme_acceptance.py": "a442300aaa20ddc93af66473e68f1eee17f1ac5df717668f5a00051f4f312a37",
+    "tests/cms_coupon_disclosure_acceptance.py": "1c1fcf30d38c23885e7c236f1ed39302972df972c93c9a20184b3b7ebf3d4010",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
@@ -328,6 +334,8 @@
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_indicator_guide_acceptance.py": "6d90f6df5eac7fb0930278d7f38e1e216e30831bbaae02b06293f4fcbe7c532d",
     "tests/desktop_language_acceptance.py": "9f2c9a16007e4790823122f5e3ce6c8b19ade4b82ef1b41c20a742dcdf0dbf72",
+    "tests/desktop_letf_ai_acceptance.py": "1c9d8b5e2ae41716c2f7c2dfe73e78f39b485d5d636ad17928ed408eb533c4df",
+    "tests/desktop_letf_assumptions_acceptance.py": "38bd6813074605393f690893c5bbbccfffc814dd4eaf44346ec7cb2f63b3f772",
     "tests/desktop_letf_disclosure_acceptance.py": "f70b5bfffb5562aa1f08a7f2417769adb7e91a926816b494c48f4045a79c19f4",
     "tests/desktop_letf_index_acceptance.py": "a5bc0f194c44d154dfbab81dccc4661f0ddade92ba34c906ed5172de7d60e664",
     "tests/desktop_macro_acceptance.py": "e221eb4a7b4d5db5d941f5d7d33902677b20f7611dbbcf940ef02fa41f2b2fee",
@@ -352,8 +360,11 @@
     "tests/flet_runtime_acceptance.py": "2b217a6a4749a0d56cd676f16f8db3f7ccb04f0eb52989e3a4e1f2314247a689",
     "tests/frozen_guard.py": "5a8f9a8c33cd0cc279da28db6e8f38c6e9b8abe643d0b7a26821077257f32246",
     "tests/funding_inference_acceptance.py": "dc1eaf4e627411a43ab46dd878a3628c076911ede974554575cc24f101310b7b",
+    "tests/fx_basis_disclosure_acceptance.py": "9077bab45713c30e1b63607f87607c92c7a9bef60e094affdc968571405bb99e",
     "tests/golden_tools.py": "d3b4ec0c7610e1391eb1739f8101b60766139d9dff37f80a18528bcb99f31e61",
     "tests/indicator_guide_acceptance.py": "94f9065e59762bdbc7f2ab8a9d000f8211b2aef88a87a0076f70f6bdca2bc76e",
+    "tests/letf_ai_payload_acceptance.py": "9defaeed9ec2f7988a146643f3f3a466e743a96cefa4e4b24f0e803b10690421",
+    "tests/letf_assumptions_acceptance.py": "c62cc15e979a61371539def2da6c20e8394e16bb289c2ad91ce2e70747bc5944",
     "tests/letf_disclosure_acceptance.py": "ec7e880c6b450f490103ac2e95bda12e0c4d9b4d14c79b0a993c09f613112ce6",
     "tests/letf_index_acceptance.py": "8ce0f308cb5b2d971bb6b629fc811f88afd95b64ed4d74e57873f43e58c39965",
     "tests/macro_acceptance.py": "797e97526b724a54ad1f6e3caec3f7c8d0dbad2b1b7a2ce3616dbe6751db1587",
@@ -458,9 +469,9 @@
     "ui/crypto_page.py": "6829f7aedd678196a1bb1853044789d7bca0ac40b724006d35ead19942c65101",
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
     "ui/derivatives_page.py": "ed659a96def9e1b9bddbd0295c6357c47418fb4ba11778a1aecc817c352e1359",
-    "ui/etf_page.py": "e6989e0383b4672d557d6eb45b9ed29e5f12ba2054f9df865ba0c88cba1f7438",
+    "ui/etf_page.py": "910b2a27d4ee5264cc79286e8fc48bc985a251d6a0f1727ec6f29daa633c660f",
     "ui/fcharts.py": "e59a274207d5b3b2ad416a5a304cc040f517caee8f166a309b279342f8dfe56d",
-    "ui/fx_page.py": "395f331df8e85145e38373976c39893c5b4fea29d1e0a811749200081116e5bc",
+    "ui/fx_page.py": "42a0304e93d0d9159d3941ee7c6883c980e9e595b9825cccc10c2eccdc99f48d",
     "ui/indicator_guide.py": "a063f8938b211975b4f0f00edcd40a3e6f1aa65f4db9aaeca4494a471bae5ccd",
     "ui/krx_page.py": "9f66b040a21a9e757af61f3ed4dfa5dfc6220ec1a0ba171996365c4db98b86a2",
     "ui/localization.py": "3fc653e4d9cfd2a2b5ff64faf954a91bc88bac21ce14c1137bcdf34b844e81c7",
@@ -477,7 +488,7 @@
     "ui/settings_page.py": "5643946feaec9c904ec699f5905c54b2058e0fe395795269f7f6c60b57b74b21",
     "ui/signals_page.py": "ed4189f8d42cd79460330cef114fa639f86ccf82c30496809086f05410703b95",
     "ui/strategy_lab_page.py": "7c6f450ec9e97043c24573b546d1ef7aa9083f7f8352096482f111dc79533c2e",
-    "ui/structuring_page.py": "59f2f167b000c9708d03d99629945fd69f1e4ab1d9c275bf63f25bcc876e3dc0",
+    "ui/structuring_page.py": "644af29077105ebbef93d768fbd02eeae6fbdf33ee70d1821f0746050f1e904d",
     "ui/theme_controller.py": "2a01cd04e970fd5f5788b2a4ad896d55ae5653f42ccfb2009af82eb105087e12",
     "ui/trading_page.py": "9c100076247189c5a8219e26e50ac7a99a09c2b86d756a58058c14e192810d9b",
     "ui/xcharts.py": "e3b75d6cbd6fb8349425678ac194d1e1eee41c67e61062149865f127f4d4a774"
@@ -485,163 +496,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4c9561c2b4764f28c763b9d956df2bd6def8517226636322cea0c4652126cee4",
-      "source_digest": "0947bf01acfd833cd1d6ef7e508ba6cc7f300ffd54d93cb971516853661329fc",
+      "source_digest": "af001e394cbada4d8cd1603affaa9e4a1cdf5ad3a7a342a06b9fc211e05b1e69",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.846205+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.838311+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "2": {
       "document_sha256": "8a8915a728f0bd28f95fa46082cde5efd96739cb14bf69e69ad9205841c6cbe0",
-      "source_digest": "0947bf01acfd833cd1d6ef7e508ba6cc7f300ffd54d93cb971516853661329fc",
+      "source_digest": "af001e394cbada4d8cd1603affaa9e4a1cdf5ad3a7a342a06b9fc211e05b1e69",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.848841+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.842995+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "1fe05824059cbbf0e7e2d0d1a93c153439f0a5c8bdd7366b98a79323aafbe246",
+      "source_digest": "d0937393fbfc570f5ebe3909d2d0978fd71d19386e592bd90897ead2d6d37570",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.851745+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.845360+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "4": {
       "document_sha256": "7d0f3373b9815cd9db634f28323c8c90bc7e78cd09cf40d757e98adfc3ac1dd7",
-      "source_digest": "202b8f36b95d27a51afd2ffc49ffc63aa651b78509ca158d367a95ccdb793151",
+      "source_digest": "a50f68b0b680a9ce3bd44a2a5119c561b75214ba63f65131d97d39bc764b4166",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.856942+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.847613+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "76460be164758237e764f2c12e372be0da34a4f7160a5677094ad8fd096fddb3",
+      "source_digest": "23c7772bafb7ebc1299bd576b869227b8a733a2813ce94524607fd118d29321e",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.859895+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.850522+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "6": {
       "document_sha256": "fae1be1112448c78bde79274a691143bdadcb4623853f26798735cf71b20973a",
-      "source_digest": "e452b95adbd08266aa0c00106f8a88b605fe63722acb6fdba27ddb54b5aa511b",
+      "source_digest": "6fb1f3ed2ff9f9116c355ad9116e18eabdaeebe0379a720ac8d11c4d2f77f7e1",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.862112+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.854152+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "7": {
       "document_sha256": "d255a134f4e97cd65a7b3a4676b26a0f6e655e823ab23f971d477235df751931",
-      "source_digest": "0947bf01acfd833cd1d6ef7e508ba6cc7f300ffd54d93cb971516853661329fc",
+      "source_digest": "af001e394cbada4d8cd1603affaa9e4a1cdf5ad3a7a342a06b9fc211e05b1e69",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.864367+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.857811+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "8": {
       "document_sha256": "06dbba68f23aa6e2aec1125b031a7486b863296ec51a15481a893ea62253f232",
-      "source_digest": "e452b95adbd08266aa0c00106f8a88b605fe63722acb6fdba27ddb54b5aa511b",
+      "source_digest": "6fb1f3ed2ff9f9116c355ad9116e18eabdaeebe0379a720ac8d11c4d2f77f7e1",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.866529+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.860616+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "9": {
       "document_sha256": "81e96f0f623036ca1b290ddf8508a9ff8e6cc8b0fca380a939abc529a4dfb747",
-      "source_digest": "76059da69fc9523e9b3eec0cac8fc6476bf14227ab4f0cd25597b37ed00761a6",
+      "source_digest": "dd21f375f1ee7716fe24d12e776a501b135d07f8cd46ef844b33defcaa74bda4",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.869105+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.863667+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "10": {
       "document_sha256": "9b4f832a3c5363e29f704dbf3f3f89bf13aef9be27298cd14b8d3fe4533685cb",
-      "source_digest": "dddc7d90677bb588ee948a7d98fcd4b864517eb969e3281f4e379a17fb122e80",
+      "source_digest": "a14bb45b6ab582d9d60750d9697c3373c55b1c6c9fbf23b060d24c7bc2201365",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.871165+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.866252+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "d002252d8fadb4e9ed3f6be4dd2494ce1d469154bf826f7740699f318535ccb2",
+      "source_digest": "a9e52c42f5b43c0e2980aabbd6943bd762708ffa63a52ffbbaf820fce6073f5b",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.874148+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.868718+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "12": {
       "document_sha256": "7f3aed235693c66f0f32fc3c62a988658dadbea65f2c314ccc111d06c8c2d675",
-      "source_digest": "a6ac1a0727ebb84fe365e8b0e5620e41bfc4846090c848c404d324b0c8822114",
+      "source_digest": "c2573ad5b92fb249dec72a078cf988bdae53e2e2fbf16cf2dc4e546f36f50244",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.876861+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.871063+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "13": {
       "document_sha256": "1ae2381d67147472a0b3a8b89ccf44d493925ad72430091bd67376635d137186",
-      "source_digest": "76059da69fc9523e9b3eec0cac8fc6476bf14227ab4f0cd25597b37ed00761a6",
+      "source_digest": "dd21f375f1ee7716fe24d12e776a501b135d07f8cd46ef844b33defcaa74bda4",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.879498+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.874392+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "14": {
       "document_sha256": "b955cd3fbada10bf18fc428f54264fbed7623176c9e4ac19b5307c3531affd74",
-      "source_digest": "76059da69fc9523e9b3eec0cac8fc6476bf14227ab4f0cd25597b37ed00761a6",
+      "source_digest": "dd21f375f1ee7716fe24d12e776a501b135d07f8cd46ef844b33defcaa74bda4",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.882079+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.877686+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "15": {
       "document_sha256": "926245ec0903d7f5fb0759e513e010154ff32bd2db6df3a95b816cce610b6e65",
-      "source_digest": "76059da69fc9523e9b3eec0cac8fc6476bf14227ab4f0cd25597b37ed00761a6",
+      "source_digest": "dd21f375f1ee7716fe24d12e776a501b135d07f8cd46ef844b33defcaa74bda4",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.884718+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.880325+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "2456adeda71e6714fa71b99a480eb52f3fb2e3823eceb54d4f9b0750e0edeefa",
+      "source_digest": "0278e47a6706f5dc579abe16455c54e4dc6eb93a708abf7970e437c71b73c27e",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.887736+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.883212+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "e452b95adbd08266aa0c00106f8a88b605fe63722acb6fdba27ddb54b5aa511b",
+      "source_digest": "6fb1f3ed2ff9f9116c355ad9116e18eabdaeebe0379a720ac8d11c4d2f77f7e1",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.890538+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.885949+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "0947bf01acfd833cd1d6ef7e508ba6cc7f300ffd54d93cb971516853661329fc",
+      "source_digest": "af001e394cbada4d8cd1603affaa9e4a1cdf5ad3a7a342a06b9fc211e05b1e69",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.893098+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.888529+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "19": {
       "document_sha256": "550ebe0e687e42986c399f50bf2fb9da524c3e6bc53df0437f48c63a672d03e9",
-      "source_digest": "b15eba050d54b16bcf8e3f9b62d079c98f662ad7c66ac4e631c51289b0f695ec",
+      "source_digest": "f4c66a1c36bd99840637e1c9dba01a33df2d88459dc397b81c41e47a90aa1f92",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.895101+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.891421+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     },
     "20": {
       "document_sha256": "40c60347005959a09fc475243ffb06f7571203892a39137e471f5a2bea9c7c11",
-      "source_digest": "0947bf01acfd833cd1d6ef7e508ba6cc7f300ffd54d93cb971516853661329fc",
+      "source_digest": "af001e394cbada4d8cd1603affaa9e4a1cdf5ad3a7a342a06b9fc211e05b1e69",
       "reviewed_by": "Codex",
-      "review_note": "Compared twenty policy scopes with selected-tab sizing, wrapped narrative layout, registered caption/stance display translations and locale failure messages. Canonical data, collection, endpoints, storage and consent unchanged; physical Windows, accessibility, legal and publication evidence remain unresolved. FACTS and runtime acceptance scope updated.",
-      "reviewed_at": "2026-11-02T02:34:47.897808+00:00",
-      "source_commit": "efd9b0c70fb113342e9a2dce498d88113d2ee0f3"
+      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding/fee/dividend assumptions and optional AI/export payloads, descriptive signed FX CIP differences and CMS first-period annualized coupon; preserved PR54 responsive and locale changes. FACTS records scope and existing consent/privacy/rights/accessibility limits; review-required and publication BLOCKED unchanged.",
+      "reviewed_at": "2026-11-02T02:38:04.893530+00:00",
+      "source_commit": "f3f917323750c9a906cfaf000be9e1e4c41ca97d"
     }
   }
 }
