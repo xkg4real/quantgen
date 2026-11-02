@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 14,
-    "implemented_canonical_groups": 15
+    "implemented_canonical_groups": 16
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -455,10 +455,11 @@
       "source_model": "94. M4-17 레버리지 ETF 드래그 식(Avellaneda–Zhang 2010)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Explicit user funding/fee/benchmark/dividend scenarios and signed components implemented; old zero-rate reference and historical study remain separate. Actual fund/provider/Windows manual validation NOT_RUN.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/LETF_ASSUMPTIONS_2026-11-02.md"
     },
     {
       "id": "M4-N4",
@@ -637,10 +638,11 @@
       "source_model": "94. M4-17 레버리지 ETF 드래그 식(Avellaneda–Zhang 2010)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Explicit user funding/fee/benchmark/dividend scenarios and signed components implemented; old zero-rate reference and historical study remain separate. Actual fund/provider/Windows manual validation NOT_RUN.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/LETF_ASSUMPTIONS_2026-11-02.md"
     },
     {
       "id": "NEW-M6-08",

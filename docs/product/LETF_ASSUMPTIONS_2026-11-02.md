@@ -8,7 +8,7 @@ or observed fund/index tracking performance.
 A separate user scenario requires an explicit annual funding rate and annual
 fee plus a return comparison. The UI accepts percentages; the request and
 calculation use annual **continuous decimal rates**, with time equal to trading
-sessions divided by252. Negative funding rates are permitted. Fees and dividend
+sessions divided by 252. Negative funding rates are permitted. Fees and dividend
 yields must be nonnegative and all inputs must be finite. A blank is not zero.
 
 - **Total-return comparison:** distributions are already included in the
@@ -40,15 +40,16 @@ Results and AI/export payloads keep the input values, conventions, user-assumed
 provenance, separate variance/funding/fee/dividend contributions and the unchanged
 zero-rate reference alongside the scenario. Missing index history remains
 NOT_RUN; a scenario never creates market history or changes stored study cards,
-research decisions, ledgers or the historical122630 study.
+research decisions, ledgers or the historical 122630 study.
 
-Synthetic verification includes beta2/-1/-2 at63 sessions,20% annual volatility,
-funding3.21% and fee0.64%: funding contributions are respectively -80.25,
-+160.50 and +240.75bp; the fee contributes -16bp. A deterministic self-financing
+Synthetic verification includes beta 2/-1/-2 at 63 sessions, 20% annual volatility,
+funding 3.21% and fee 0.64%: funding contributions are respectively -80.25,
++160.50 and +240.75 bp; the fee contributes -16 bp. A deterministic self-financing
 wealth calculation checks both return conventions independently.
 
 ```text
 python -B -m unittest tests.letf_assumptions_acceptance tests.letf_disclosure_acceptance tests.letf_index_acceptance -v
+python -B -m unittest tests.desktop_letf_assumptions_acceptance -v
 ```
 
 These are synthetic/injected product checks. Live market assumptions,

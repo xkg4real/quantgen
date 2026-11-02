@@ -165,5 +165,20 @@ M4-N8 separates solver convergence, optimizer active bounds, per-quote residuals
 and strike extrapolation in Flet, Qt, AI and exports. A three-quote/three-parameter
 fit does not validate wings or establish arbitrage freedom. No fit-quality
 threshold, solver, price or research gate changed. See
-`SABR_DIAGNOSTICS_2026-10-31.md`. Latest: **15/67** implemented groups, **52**
+`SABR_DIAGNOSTICS_2026-10-31.md`. At that checkpoint: **15/67** implemented groups, **52**
 remaining; 14 observation rows and15 ambiguous mappings remain open.
+
+
+## LETF explicit funding, fee and dividend scenarios — 2026-11-02
+
+M4-N3 and its alias NEW-M6-07 are one canonical group. The product now exposes
+explicit annual continuous funding/fee assumptions and a price- versus
+total-return comparison; price-return scenarios require an explicit dividend
+yield. Signed contributions are retained in Flet, Qt, AI and exported reports.
+The old zero-rate reference and historical research cards are preserved.
+Synthetic algebra, independent self-financing wealth, invalid-input/overflow
+and UI checks are documented in `LETF_ASSUMPTIONS_2026-11-02.md`.
+Implementation is not actual fund tracking, provider or Windows manual
+acceptance. Latest source implementation count: **16/67**, **51** remaining.
+The original observation inventory has **14 rows and 14 unique model names**,
+not 13; **15 ambiguous ID mappings** remain open.
