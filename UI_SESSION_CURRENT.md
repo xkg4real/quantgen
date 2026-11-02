@@ -4,12 +4,14 @@
 
 - 앱 PR: https://github.com/xkg4real/quantgen/pull/60
 - 브랜치: `gpt/live-chart-layout-20261102`
-- 구현 커밋: `da14c50f0894f00e40dfc0646087c7a9f330825c`; 최종 소스·검토 기록: `3c18a93efc2981903de2f2a1fdfe53ebbc6cc464`.
+- 구현 커밋: `da14c50f0894f00e40dfc0646087c7a9f330825c`; 최종 소스·검토 기록: `6a2c062427409b2d61cb1bdfb7ce7d3e56f2650f`.
 - 상태: PUSHED / PR OPEN / 자동 검사 진행. 아직 main 병합 완료로 안내하지 않습니다.
-- Runtime CI: https://github.com/xkg4real/quantgen/actions/runs/41384791924
-- Document CI: https://github.com/xkg4real/quantgen/actions/runs/41384792027
+- Runtime CI: https://github.com/xkg4real/quantgen/actions/runs/41385301484
+- Document CI: https://github.com/xkg4real/quantgen/actions/runs/41385301381
 
 설치본 CI의 기존 6개 페이지 고정 검사를 독립 가이드 포함 7개 및 12행/Q-SCORE 검증으로 보완했습니다. 초기 Linux native109개 PASS 후 이 옛 가정만 실패했고, 수정 wheel을 체크아웃 밖에 실제 설치한 smoke는 PASS했습니다. 최신 head로 CI 재진행 중입니다.
+
+추가로 Windows 검사의 UTF-8 소스 읽기와 타이머 고정 대기를 보완했습니다(런타임 변경 없음). native 시세16개 로컬 PASS, 최신 head로 전체 CI 진행 중입니다. 사용자 완료 보고 말투에는 ‘북딱북딱’을 넣어 달라는 선호를 받았습니다.
 
 ## 이번 요청과 구현
 
