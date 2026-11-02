@@ -1,3 +1,16 @@
+## 2026-11-02 추가 차트 작업 진행 체크포인트
+
+- PR61 최종 표/글꼴 확장 head `4e17087b1de5dfc01e5f03485088c316f22b0710` push 및 ready 전환 완료. 10열 비교 표, 44px 행, Q-SCORE 마지막/헤더 ?, 실제 Pretendard 기반 400/500/600, KIS 동일 응답의 PER/EPS/업종/검증된 가격×상장주식수 시총. 새 head CI는 진행 중이며 아직 main 합병 전입니다.
+- 로컬 검증: 표 19, 공급자/패키징 48, Home/레이아웃/시작 8, 정책 47 PASS(중복 합산 금지). 문서20종/소스526 baseline PASS; publication BLOCKED. Windows 실계정 장중 수신과 웹 배포는 미검증.
+- 사용자의 추가 요청: 조회 한 번으로 차트+자동갱신, 틱/초/분 선택, 초보 안내/토스 참고, 실시간 기술지표 버튼 선택 불가 수정. 별도 작업 트리 `/workspace/work/quantgen-chart-live-ux-20261102`, branch `gpt/chart-live-ux-20261102`, base5b52. 아직 원격 PR 없음.
+- 새 차트 core는 실제 수신 체결의 1/10/100틱·1/5/10/30초를 구현하고 offline63검사 PASS. 소급 틱을 만들지 않으며 기존 분/일/주/월 이력과 구분합니다. UI/정책 검토 진행 중. PR61 합병 후 새 트리에 통합·최종검사·별도PR가 필요합니다.
+- 담당: chart_intraday_core(core ready), chart_live_experience(UI+indicators), completion_audit(정책). root는 PR61 CI/합병과 전체 통합 담당. 신규 소스는 아직 미배포이므로 사용자에게 지금 pull만 하면 새 차트가 적용된다고 말하지 마세요.
+- AWS 복사 프롬프트는 `/workspace/artifacts/quantgen-ui/AWS_SESSION_PROMPT_20261102.txt`에 전달했습니다. 웹 HTML/소스는 GitHub 업로드 금지, 기존 HTML은 최신 정책/글꼴 갱신 전이며 실제 배포 미완료입니다.
+- 정상 native 실행: `.venv\\Scripts\\python.exe -X utf8 -m quantgen_desktop`. 사용자 KIS_SETTINGS_FOUND=True 및 앱 실행 성공 확인; 실제 시세 수신 확인은 별도입니다.
+- 이 문서는 공유 handoff 저장입니다. 메인/Claude/AWS 채팅으로의 직접 발송 또는 읽음 확인은 없습니다. CURRENT/LEDGER/AUTO_STATE는 변경하지 않았습니다.
+
+---
+
 # 추가 지시 반영 중 — PR61은 draft / 이전 head 검사는 최종본 아님
 
 사용자가 검사 대기 중 표 양식과 전체 글꼴을 추가 변경했습니다. PR61을 draft로 전환했고 이전 head 5b52e3d의 CI로 최신 작업 완료/병합을 판정하지 않습니다.
