@@ -129,6 +129,41 @@ class AuthoredProseLanguageTests(unittest.TestCase):
                 elif request.tool in ('ppn', 'rc'):
                     self.assertIn('발행자 신용 스프레드를 반영하지 않습니다', variants['ko'])
 
+    def test_signals_stance_labels_roundtrip_without_changing_canonical_enum(self):
+        from core.quant.insights import narrate_signals, narrate_backtest
+        # Include a catalog collision as an unknown stance: it must stay raw.
+        labels = {'strong bullish': '강한 상승 우위', 'bullish': '상승 우위',
+                  'neutral': '중립', 'bearish': '하락 우위',
+                  'strong bearish': '강한 하락 우위', 'Gold': 'Gold'}
+        original = signals_fixture(SignalsRequest(source='synthetic'))
+        window = ResearchWindow(auto_refresh=False, language='en')
+        try:
+            pane = window.signals
+            for stance, korean in labels.items():
+                signal = replace(original.report, stance=stance)
+                narrative = narrate_signals(signal) + ' ' + narrate_backtest(original.backtest)
+                out = replace(original, report=signal, narrative=narrative)
+                pane.show_result(out); pane.bind_output('Stance fixture', out)
+                report = deepcopy(pane.report); sections = deepcopy(pane.sections)
+                values = deepcopy(pane.values())
+                summary = next(x for x in pane.findChildren(UiLabel) if x.source_text == narrative)
+                with patch.object(window.jobs, 'start', side_effect=AssertionError('must not recompute')):
+                    for language in ('ko', 'en', 'ko'):
+                        window.set_language(language)
+                        expected = korean if language == 'ko' else stance
+                        self.assertEqual(pane.tables['Composite'].item(0, 1).text(), expected)
+                        self.assertIn(expected, summary.text())
+                        self.assertEqual(out.report.stance, stance)
+                        self.assertEqual(out.report.composite, original.report.composite)
+                        self.assertEqual(pane.report, report); self.assertEqual(pane.sections, sections)
+                        self.assertEqual(pane.values(), values)
+                        self.assertEqual(numbers(summary.text()), numbers(narrative))
+                self.assertIn(narrative, [s['text'] for s in pane.sections if s['type'] == 'text'])
+                pane.clear_result()
+        finally:
+            window.signals.clear_result(); window.deleteLater()
+            self.app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+
     def test_strategy_withheld_reason_and_recorded_score_evidence_stay_raw(self):
         from tests.strategy_exposure_acceptance import fixture
         from core.research.strategy_analysis import StrategyRequest, StrategyOutput

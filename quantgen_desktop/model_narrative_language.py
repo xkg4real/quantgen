@@ -5,6 +5,8 @@ recomputed; unknown/user/provider text is left intact.
 """
 from .translations import translate
 
+SIGNAL_STANCES = frozenset(('strong bullish', 'bullish', 'neutral', 'bearish', 'strong bearish'))
+
 
 def localize_columns(table, columns):
     """Tag only caller-selected authored text cells; never all result values."""
@@ -30,8 +32,9 @@ def signals_korean(s, b):
     from core.quant.insights import _pct
     agree = [c for c in s.components if c.score * s.composite > 0]
     dissent = [c for c in s.components if c.score * s.composite < 0 and abs(c.score) > 20]
-    # Stance is a computed classification; retain the exact original identifier.
-    lines = [f'{s.symbol}의 종합 기술적 관측은 {s.composite:+.0f} — {s.stance}입니다.']
+    # Only the display label changes; the original enum and report stay intact.
+    stance = translate(s.stance, 'ko') if s.stance in SIGNAL_STANCES else s.stance
+    lines = [f'{s.symbol}의 종합 기술적 관측은 {s.composite:+.0f} — {stance}입니다.']
     if agree:
         c = max(agree, key=lambda c: abs(c.score))
         lines.append(f"가장 강하게 지지하는 구성요소는 {translate(c.label, 'ko')} "

@@ -18,6 +18,11 @@ def cms_schedule_korean(text):
     return f"스프레드 {match['leverage']}배, 하한 {match['floor']}, 상한 {cap}; " + ', '.join(rows)
 
 PAIRS = r'''
+strong bullish|강한 상승 우위
+bullish|상승 우위
+neutral|중립
+bearish|하락 우위
+strong bearish|강한 하락 우위
 Detail|상세
 Leg|구성요소
 Rationale|근거
