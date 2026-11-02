@@ -291,7 +291,7 @@
     "quantgen_desktop/app.py": "856185117ec2b837234a9a2bc7275e457f96650d0e5695f038abc1dd15a0009c",
     "quantgen_desktop/bonds.py": "98e50ea1a2040e420fb783a457dd615e005522da56dc94ef86bfbd01fc254e3f",
     "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
-    "quantgen_desktop/chart_study.py": "bf42039d26a21117548c30cb72ddd4bb6dc60cf8ed527d3c614c0c6ffd54c7ba",
+    "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
     "quantgen_desktop/charts.py": "26664a81b31a256b77f70fc8adca76f51a763560cf33e1f2d556b527b41cbdf8",
     "quantgen_desktop/commentary.py": "4b5d02a17b5621db28c24a3f54a37106837239d7fe55aa7f376e677f80d0845f",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
@@ -359,7 +359,7 @@
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_rates_language_acceptance.py": "506bb6fdd48bf13a00f509eba198260a9961522892295309360025be2b4c45c0",
-    "tests/desktop_responsive_tools_acceptance.py": "9adf483ecda78e710b923f1b4dcce1e10c3537ac4295c8f18ef37988e1e0fe80",
+    "tests/desktop_responsive_tools_acceptance.py": "544ae65319666abcbb80e49daeb612ea4b938b6d4ed980a02133d60848a7f90c",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
@@ -517,163 +517,163 @@
   "reviews": {
     "1": {
       "document_sha256": "31a79b6417732796945b28f5f167a432d6f53eb86852bc8eeadd9b8923aff155",
-      "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
+      "source_digest": "f6296284034b7998e6c81e46fcc57feae8bc66d8b5f67ce99450369849a7c40b",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.707723+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.559838+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "2": {
       "document_sha256": "ff1afc17787f8c26209a022892c76e5d44af87b32988be7e01a6e9ee83d81c2f",
-      "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
+      "source_digest": "f6296284034b7998e6c81e46fcc57feae8bc66d8b5f67ce99450369849a7c40b",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.710375+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.562309+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "9e8148325bdf0a091906160026477d2fb325df7096ea46970ab4b154a7eb8c84",
+      "source_digest": "5b47463dc6719636cd4a25d9d14af99e43519e5b207d6bfb866b141a1b1e2e06",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.712516+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.564569+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "4": {
       "document_sha256": "6e917ef0c712b4406cc1ce8007884dae6c2922c46b364ed7ead166868de77b59",
       "source_digest": "f7a4c03f52fe412a0bafa822f9f18e107eef71046dd38ce242b8f8d8d3b57e0f",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.714876+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.566756+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "a1d9ea4f584f6aa95bae27fe51497746e9f476440a64b23b5024dbb6ab548f8d",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.717276+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.568725+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "6": {
       "document_sha256": "d6b67c23112b708082f04d4ca62899b978a69b7f19e04a3149b63df9c4aba062",
-      "source_digest": "8ee13ad5ab01ca46c8854884e94f9af4f45392c753862c7b14e087068ebe725c",
+      "source_digest": "1b42d7b24537f1658e7bc53e44d176336117c56156b320e7dbda42a5f8f5a77f",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.719281+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.571006+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "7": {
       "document_sha256": "bd91d3d8ea6a85eb7f6f9f0e8afdc40403760e40ca03df95c419e76e35817f70",
-      "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
+      "source_digest": "f6296284034b7998e6c81e46fcc57feae8bc66d8b5f67ce99450369849a7c40b",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.721397+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.572974+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "8": {
       "document_sha256": "f8c83e2d6942ae1a0a45863a951ec512c9a099e089b970d580c7a075f1fe70b7",
-      "source_digest": "8ee13ad5ab01ca46c8854884e94f9af4f45392c753862c7b14e087068ebe725c",
+      "source_digest": "1b42d7b24537f1658e7bc53e44d176336117c56156b320e7dbda42a5f8f5a77f",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.723689+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.579679+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "9": {
       "document_sha256": "0425a711d615ab6ff44a4573ed1d4962dc620cc0f89ac349481a0eee448ee262",
-      "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
+      "source_digest": "29fa93b89b37c24dfa596b3dc978e22f404213704c53f2cbdf8144b57f1b77fa",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.726028+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.582013+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "bfe2bf43615a6ef2e15bfeaa13e9c7886538d7b356f16f50ec9a5880247dbe61",
+      "source_digest": "d1114f502805c7b8af8116e9cbfb0bb3b9c095b17960bf862ec65d2645b4431d",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.728210+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.584205+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "1929acda407dc8aaaae20e3a5663fb4b8513df8534c8c525d805652577297750",
+      "source_digest": "9a031e555a83e60c34488028a6abf6edaff091aa64e40bebbcc71186838e98b9",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.730641+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.589806+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "12": {
       "document_sha256": "407e354b7b2d7281c5b1555b04767a04ba47bf16c061cb5ac429ff8a6cfabc0e",
-      "source_digest": "f7c0b81f782acbb7af0e8ed1a43f1e54db245fa8c528afea9c9040379efa4281",
+      "source_digest": "09117f33c67c88e8848b86ed0e9140253eb5b30669921bf0630efbd9f4e89a03",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.732761+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.592125+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "13": {
       "document_sha256": "3a5eb3e68df8feebe2eaa02a96f4e89f87dbe2cf17fa6f58d6e372eb59b16b1f",
-      "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
+      "source_digest": "29fa93b89b37c24dfa596b3dc978e22f404213704c53f2cbdf8144b57f1b77fa",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.735321+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.594648+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "14": {
       "document_sha256": "5db35b4cdfe4e6f054979abadb7fc49d628154719f319ce7308626f004515d5d",
-      "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
+      "source_digest": "29fa93b89b37c24dfa596b3dc978e22f404213704c53f2cbdf8144b57f1b77fa",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.737607+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.596659+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "15": {
       "document_sha256": "e5143b74273be5899c679d40e2e447da79c3fe5b565e278bf014535954d64701",
-      "source_digest": "c5633b4c5e1ca3bf156c37608a0635f8c43c41ec77c8aa1ae3580eacfbe80144",
+      "source_digest": "29fa93b89b37c24dfa596b3dc978e22f404213704c53f2cbdf8144b57f1b77fa",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.739582+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.598571+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "31d633ddccee429d3030df00797bad1b312490af415e049fd5c3e99499d5a661",
+      "source_digest": "932c90631cc26eb87ed61a976f64797e016e147aca79278cdf0f0a4a7cbd82a9",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.741448+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.600646+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "8ee13ad5ab01ca46c8854884e94f9af4f45392c753862c7b14e087068ebe725c",
+      "source_digest": "1b42d7b24537f1658e7bc53e44d176336117c56156b320e7dbda42a5f8f5a77f",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.743550+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.602771+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
+      "source_digest": "f6296284034b7998e6c81e46fcc57feae8bc66d8b5f67ce99450369849a7c40b",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.746157+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.604847+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "19": {
       "document_sha256": "1a489fb06d0cb74a247df01ed5d43f7ab9921dc4326920a8fc805a26a9a6addd",
       "source_digest": "c8cea71bceee0ed5c66ccc4e61e8b33f661236edc7e710eb71ce20182233cdd7",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.748144+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.607140+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     },
     "20": {
       "document_sha256": "7c3cbc05a1d70875329da961cdcc2827878c98285aff03ed7856cd06a1db9b91",
-      "source_digest": "987f2b2cbe0a2c61bdd7d7c927bd04ccf3fdd42edcbd97b74fb057d9f4a0fc18",
+      "source_digest": "f6296284034b7998e6c81e46fcc57feae8bc66d8b5f67ce99450369849a7c40b",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial source with condition-based chart render test, 74 KIS regressions and nine repeated delay cases; runtime and actual provider manual legal gates retained.",
-      "reviewed_at": "2026-11-02T03:28:21.750397+00:00",
-      "source_commit": "1cbe874eadb8432102be6896a393e6c5499067da"
+      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
+      "reviewed_at": "2026-11-02T03:41:18.609336+00:00",
+      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
     }
   }
 }

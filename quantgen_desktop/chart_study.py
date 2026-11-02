@@ -92,3 +92,16 @@ class CurrentPageTabs(QTabWidget):
 
     def sizeHint(self):
         return self._page_hint(False)
+
+    def hasHeightForWidth(self):
+        page = self.currentWidget()
+        return page is not None and page.hasHeightForWidth()
+
+    def heightForWidth(self, width):
+        page = self.currentWidget()
+        if page is None:
+            return super().heightForWidth(width)
+        frame = 2 * self.style().pixelMetric(QStyle.PixelMetric.PM_DefaultFrameWidth)
+        height = (page.heightForWidth(max(1, width - frame)) if page.hasHeightForWidth()
+                  else page.sizeHint().height())
+        return max(0, height, page.minimumHeight()) + self.tabBar().sizeHint().height() + frame
