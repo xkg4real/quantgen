@@ -9,8 +9,8 @@ next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b,
 updated_at: 2026-11-02T10:58:31.000+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/market-diagnostics-website-record-20261031
-work_commit: 6a47cc8692a18b505fecf549013252ce61e94e68
+work_branch: gpt/remaining-work-20261102
+work_commit: d0f18a011dc6703a45e851a4eb1413439353e6f5
 uncommitted_changes: no
 pr: 51,52 (merged); 47 (separate UI session merged)
 usage_weekly_pct: unknown
@@ -24,6 +24,11 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 # QUANTGEN 직접 작업 재개 — 2026-11-02
 
 > 최신 사용자 직접 지시: 2026-11-02 13:00 KST를 목표로 지정 Notion Remaining Work 미완료 항목(4~7,10 등)을 재개한다. GPT/Gemini spec 공개/추가 모델 심사를 수행하지 않는다. 기존 O8 NOT_PERFORMED와 기술·Windows·실행 조건은 보존하며 실제 확인된 하위 작업만 완료 표시한다. 이전 STOP은 이번 범위의 직접 재개 지시로 해제됐다. 아래 10월31일 반환 내용은 이전 이력이며 최신 지시보다 우선하지 않는다. 현재 최신 코드·문서/검사 상태를 대조하는 중이며 외부 실행 승인/개인 PC/원장 제한은 유지한다.
+
+## 현재 실행 단위
+- 최신 main d0f18a0 기준 격리 gpt/remaining-work-20261102에서 작업. 언어 표시, 실제 앱 구동, 독립 오프라인 MVP, Step7A JSON 진단, 비교전략 보고서를 병렬 검증한다.
+- 사용자 확인: 실제 Windows 런북·공급사 대조·파일럿 결과 없음, 클라우드 수정·검증부터 진행. Cracker=cracker.im.
+- 연구진단은 비공개 패치이며 실제실행·owner_confirmed·정식원장·외부공개 승인을 대신하지 않는다.
 
 # 이전 통합 인수인계
 
