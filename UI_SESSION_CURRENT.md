@@ -1,17 +1,18 @@
-# 2026-11-02 최신 앱 UI 인계 — PR60 자동 검사 중
+# 2026-11-02 최신 앱 UI 인계 — PR60 main 병합 완료
 
 이 섹션이 아래 이전 완료 기록보다 우선합니다. 사용자 요청에 따라 앱 소스를 새로 수정했으며, 웹 HTML은 GitHub에 게시하지 않았습니다. 메인 CURRENT·LEDGER·AUTO_STATE 소유권과 연구 원장은 유지합니다.
 
 - 앱 PR: https://github.com/xkg4real/quantgen/pull/60
 - 브랜치: `gpt/live-chart-layout-20261102`
 - 구현 커밋: `da14c50f0894f00e40dfc0646087c7a9f330825c`; 최종 소스·검토 기록: `6a2c062427409b2d61cb1bdfb7ce7d3e56f2650f`.
-- 상태: PUSHED / PR OPEN / 자동 검사 진행. 아직 main 병합 완료로 안내하지 않습니다.
+- 상태: **MERGED / 최종 Runtime·Document CI SUCCESS**. main merge `1e67b04a4e6e39a1689bdea3d682c330d40fe6b6`, 병합 결과 기록 commit `ead6e67a5dd1a767f11d960e67eb8069891e92ad`.
+- Windows 3.11/3.12/3.14·Ubuntu3.12 설치본 전체검사, Windows3.10/3.11 구문검사 모두 통과했습니다. 사용자 PC 키 설정·실제 체결 수신은 별도입니다.
 - Runtime CI: https://github.com/xkg4real/quantgen/actions/runs/41385301484
 - Document CI: https://github.com/xkg4real/quantgen/actions/runs/41385301381
 
-설치본 CI의 기존 6개 페이지 고정 검사를 독립 가이드 포함 7개 및 12행/Q-SCORE 검증으로 보완했습니다. 초기 Linux native109개 PASS 후 이 옛 가정만 실패했고, 수정 wheel을 체크아웃 밖에 실제 설치한 smoke는 PASS했습니다. 최신 head로 CI 재진행 중입니다.
+설치본 CI의 기존 6개 페이지 고정 검사를 독립 가이드 포함 7개 및 12행/Q-SCORE 검증으로 보완했습니다. 초기 Linux native109개 PASS 후 이 옛 가정만 실패했고, 수정 wheel을 체크아웃 밖에 실제 설치한 smoke는 PASS했습니다. 최신 head `6a2c062`의 전체 CI는 최종 통과했습니다.
 
-추가로 Windows 검사의 UTF-8 소스 읽기와 타이머 고정 대기를 보완했습니다(런타임 변경 없음). native 시세16개 로컬 PASS, 최신 head로 전체 CI 진행 중입니다. 사용자 완료 보고 말투에는 ‘북딱북딱’을 넣어 달라는 선호를 받았습니다.
+추가로 Windows 검사의 UTF-8 소스 읽기와 타이머 고정 대기를 보완했습니다(런타임 변경 없음). native 시세16개 로컬 PASS, 최신 head의 전체 CI는 최종 통과했습니다. 사용자 완료 보고 말투에는 ‘북딱북딱’을 넣어 달라는 선호를 받았습니다.
 
 ## 이번 요청과 구현
 
@@ -24,6 +25,8 @@ KRX의 입력 영역이 숨겨진 다른 탭 높이로 늘어나던 빈 화면�
 Q-SCORE v0.1은 기존 기술신호70% + 최대낙폭15% + 일간 historical CVaR95 15%의 **새 실험적 연구 표시**입니다. 최소200개·최대252개 수정 일봉, 1~5별과 소수점 점수·한영 도움말. 신선도·중복/역순·가격기준 불일치를 검사하고, 중단 시 마지막 점수·시각을 구분합니다. 펀더멘털 평가·예측력 검증·매수 추천·모든 엔진 실행이라고 표현하지 않습니다.
 
 주요 경로: `quantgen_desktop/{app,market_chart,watchlist,watchlist_live,qscore}.py`, `core/research/{watchlist,qscore}.py`, `data/kis_stream.py`. 정책20종 대조와 실제 네트워크/저장 범위는 `docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md`. 웹 영향 큐는 `docs/product/ui_website_updates/PR-60.json`.
+
+PR54에도 있던 ToolPane 두 줄 배치 수정을 동일하게 포함했습니다. 메인에서 PR54를 정리할 때 이미 반영된 배치를 다시 별도 작업으로 수행하지 말고, 새 독립 guide route와 설치본7개 페이지 검사를 보존하세요.
 
 ## 확인한 사용자 PC 상태
 
@@ -40,7 +43,7 @@ Q-SCORE v0.1은 기존 기술신호70% + 최대낙폭15% + 일간 historical CVa
 - 정책 검사47 PASS, source/document consistency PASS, publication BLOCKED 유지.
 - UI 캡처 `/tmp/quantgen-home-wide.png`, `/tmp/quantgen-home-narrow.png`; 전체 창·실제 Qt 이벤트와 가짜 공급자 통합 검사입니다.
 - 사용자 Windows 새 Home/점수 UI, 실제 KIS 계정/권한/장중 체결 수신, 점수 예측 성능은 미검증.
-- 다음: PR60 최종 CI 통과 확인 → 해당 head만 main 병합 → 이 인계와 AWS 큐에 merge SHA 기록 → 사용자에게 정확한 네이티브 업데이트/실행법 제공.
+- 완료: 최종 head 검사·main 병합·AWS 변경 큐 merge/CI 기록. 다음은 사용자 PC에서 앱 종료 → CMD fast-forward update → desktop extra 설치 → `.env`의 KIS 키 두 개 설정 → `python -m quantgen_desktop` 재실행 → 실제 체결 확인입니다. 사용자에게 명령과 설정 절차를 함께 제공합니다.
 - 웹 HTML/AWS 배포 없음. 기존 전달 HTML은 cac727e2 문서 기준이며 이번 정책14종 변경을 포함하지 않으므로 KO/EN 본문·버전·해시 재검토가 다음 웹 갱신 때 필요합니다.
 - 직접 채팅 전송 도구와 artifact 첨부 도구 연결이 실패합니다. 공유 handoff 저장/read-back은 실제 메인/Claude/AWS 열람 영수증과 구분합니다. 다음 Claude 통합 인계에 이 섹션을 포함하세요.
 
