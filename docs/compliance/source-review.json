@@ -318,7 +318,7 @@
     "quantgen_desktop/signals.py": "42c35b809cbb3b2ca20be1d2103f405a4e7564ac9678673d39fa26368bfd96ef",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
-    "quantgen_desktop/tools.py": "d5fe5dada5e1860ea92b2826b7f36136babc91faba225bede59d8455de2b33df",
+    "quantgen_desktop/tools.py": "a3a87622c40db871c16e496c4c2477575bca1fe5b672edf923f48a4658203a78",
     "quantgen_desktop/translations.py": "c29e402f26e446cbb5f0bdcb9e45aac500851cc12379dd74f711caaccbdb8b78",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
     "requirements.txt": "efe528fea6e00d9edb734ada7e11c75ece2e7b8996d2697fca643e15eefc000e",
@@ -359,7 +359,7 @@
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_rates_language_acceptance.py": "506bb6fdd48bf13a00f509eba198260a9961522892295309360025be2b4c45c0",
-    "tests/desktop_responsive_tools_acceptance.py": "544ae65319666abcbb80e49daeb612ea4b938b6d4ed980a02133d60848a7f90c",
+    "tests/desktop_responsive_tools_acceptance.py": "78d38f9d592f7494012c78cb26443bef516592fadd11448ce535efce533c0e92",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
@@ -517,163 +517,163 @@
   "reviews": {
     "1": {
       "document_sha256": "31a79b6417732796945b28f5f167a432d6f53eb86852bc8eeadd9b8923aff155",
-      "source_digest": "f6296284034b7998e6c81e46fcc57feae8bc66d8b5f67ce99450369849a7c40b",
+      "source_digest": "dd2b9b4917569062a5083b3b5397b384138769867c59fd33ad3805a7128aff7d",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.559838+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.305513+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "2": {
       "document_sha256": "ff1afc17787f8c26209a022892c76e5d44af87b32988be7e01a6e9ee83d81c2f",
-      "source_digest": "f6296284034b7998e6c81e46fcc57feae8bc66d8b5f67ce99450369849a7c40b",
+      "source_digest": "dd2b9b4917569062a5083b3b5397b384138769867c59fd33ad3805a7128aff7d",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.562309+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.307854+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "5b47463dc6719636cd4a25d9d14af99e43519e5b207d6bfb866b141a1b1e2e06",
+      "source_digest": "d6ae7310241bc602841080b7f98f786d6133ddb1ec02eecc14d232ebb785e6af",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.564569+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.310444+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "4": {
       "document_sha256": "6e917ef0c712b4406cc1ce8007884dae6c2922c46b364ed7ead166868de77b59",
       "source_digest": "f7a4c03f52fe412a0bafa822f9f18e107eef71046dd38ce242b8f8d8d3b57e0f",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.566756+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.313127+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "a1d9ea4f584f6aa95bae27fe51497746e9f476440a64b23b5024dbb6ab548f8d",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.568725+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.315390+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "6": {
       "document_sha256": "d6b67c23112b708082f04d4ca62899b978a69b7f19e04a3149b63df9c4aba062",
-      "source_digest": "1b42d7b24537f1658e7bc53e44d176336117c56156b320e7dbda42a5f8f5a77f",
+      "source_digest": "f3f1ba125d026b45f0e8d24f9568b6dd19e6474da8444ce33f316c811f6c15cc",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.571006+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.317550+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "7": {
       "document_sha256": "bd91d3d8ea6a85eb7f6f9f0e8afdc40403760e40ca03df95c419e76e35817f70",
-      "source_digest": "f6296284034b7998e6c81e46fcc57feae8bc66d8b5f67ce99450369849a7c40b",
+      "source_digest": "dd2b9b4917569062a5083b3b5397b384138769867c59fd33ad3805a7128aff7d",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.572974+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.319693+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "8": {
       "document_sha256": "f8c83e2d6942ae1a0a45863a951ec512c9a099e089b970d580c7a075f1fe70b7",
-      "source_digest": "1b42d7b24537f1658e7bc53e44d176336117c56156b320e7dbda42a5f8f5a77f",
+      "source_digest": "f3f1ba125d026b45f0e8d24f9568b6dd19e6474da8444ce33f316c811f6c15cc",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.579679+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.321889+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "9": {
       "document_sha256": "0425a711d615ab6ff44a4573ed1d4962dc620cc0f89ac349481a0eee448ee262",
-      "source_digest": "29fa93b89b37c24dfa596b3dc978e22f404213704c53f2cbdf8144b57f1b77fa",
+      "source_digest": "9d3c650bd34c1a8e16418bd1e5fc3c110ffeb291a94872a209168c26bf7f9e85",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.582013+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.324373+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "d1114f502805c7b8af8116e9cbfb0bb3b9c095b17960bf862ec65d2645b4431d",
+      "source_digest": "65f65788d1c3424b7b1076a4ddc7c4f0dbb4a6c92abd3b882d023c2525d0b1e4",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.584205+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.326525+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "9a031e555a83e60c34488028a6abf6edaff091aa64e40bebbcc71186838e98b9",
+      "source_digest": "424bffd4726cf748360f64701df6b32a96c89a06f1be9cb6659b4d18d094a43d",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.589806+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.329122+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "12": {
       "document_sha256": "407e354b7b2d7281c5b1555b04767a04ba47bf16c061cb5ac429ff8a6cfabc0e",
-      "source_digest": "09117f33c67c88e8848b86ed0e9140253eb5b30669921bf0630efbd9f4e89a03",
+      "source_digest": "fd71732842714ceb48e3ac741bf0a294881d522e62ea5db297e33cd06a7fdcf9",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.592125+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.331481+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "13": {
       "document_sha256": "3a5eb3e68df8feebe2eaa02a96f4e89f87dbe2cf17fa6f58d6e372eb59b16b1f",
-      "source_digest": "29fa93b89b37c24dfa596b3dc978e22f404213704c53f2cbdf8144b57f1b77fa",
+      "source_digest": "9d3c650bd34c1a8e16418bd1e5fc3c110ffeb291a94872a209168c26bf7f9e85",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.594648+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.333677+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "14": {
       "document_sha256": "5db35b4cdfe4e6f054979abadb7fc49d628154719f319ce7308626f004515d5d",
-      "source_digest": "29fa93b89b37c24dfa596b3dc978e22f404213704c53f2cbdf8144b57f1b77fa",
+      "source_digest": "9d3c650bd34c1a8e16418bd1e5fc3c110ffeb291a94872a209168c26bf7f9e85",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.596659+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.335669+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "15": {
       "document_sha256": "e5143b74273be5899c679d40e2e447da79c3fe5b565e278bf014535954d64701",
-      "source_digest": "29fa93b89b37c24dfa596b3dc978e22f404213704c53f2cbdf8144b57f1b77fa",
+      "source_digest": "9d3c650bd34c1a8e16418bd1e5fc3c110ffeb291a94872a209168c26bf7f9e85",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.598571+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.337612+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "932c90631cc26eb87ed61a976f64797e016e147aca79278cdf0f0a4a7cbd82a9",
+      "source_digest": "696861ae96c1207078240c513287c4db03d1454b9f6e56ab8d900a8d04c286a8",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.600646+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.339865+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "1b42d7b24537f1658e7bc53e44d176336117c56156b320e7dbda42a5f8f5a77f",
+      "source_digest": "f3f1ba125d026b45f0e8d24f9568b6dd19e6474da8444ce33f316c811f6c15cc",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.602771+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.341948+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "f6296284034b7998e6c81e46fcc57feae8bc66d8b5f67ce99450369849a7c40b",
+      "source_digest": "dd2b9b4917569062a5083b3b5397b384138769867c59fd33ad3805a7128aff7d",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.604847+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.343911+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "19": {
       "document_sha256": "1a489fb06d0cb74a247df01ed5d43f7ab9921dc4326920a8fc805a26a9a6addd",
       "source_digest": "c8cea71bceee0ed5c66ccc4e61e8b33f661236edc7e710eb71ce20182233cdd7",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.607140+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.346046+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     },
     "20": {
       "document_sha256": "7c3cbc05a1d70875329da961cdcc2827878c98285aff03ed7856cd06a1db9b91",
-      "source_digest": "f6296284034b7998e6c81e46fcc57feae8bc66d8b5f67ce99450369849a7c40b",
+      "source_digest": "dd2b9b4917569062a5083b3b5397b384138769867c59fd33ad3805a7128aff7d",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed financial integration with selected-tab height-for-width isolation and preserved minimum constraints; nine chart regressions passed; Windows platform geometry still requires CI.",
-      "reviewed_at": "2026-11-02T03:41:18.609336+00:00",
-      "source_commit": "92c6443050ddec9c712ae582b2aba9f713a5a102"
+      "review_note": "Reviewed native header minimum sizing integration; financial assumptions and actual provider legal execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:58.348081+00:00",
+      "source_commit": "f054cc8035d74f3c8996207faa3fd7f365f86a73"
     }
   }
 }

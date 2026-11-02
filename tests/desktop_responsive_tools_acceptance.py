@@ -12,7 +12,7 @@ from quantgen_desktop.app import ResearchWindow
 from quantgen_desktop.chart_study import CurrentPageTabs
 from quantgen_desktop.localization import UiLabel
 from PyQt6.QtCore import QEvent,QPoint,QSize
-from PyQt6.QtWidgets import QApplication,QWidget,QScrollArea
+from PyQt6.QtWidgets import QApplication,QWidget,QScrollArea,QComboBox
 from PyQt6.QtTest import QTest
 
 
@@ -93,6 +93,44 @@ class ResponsiveToolTests(unittest.TestCase):
                     self.assertGreaterEqual(x,0);self.assertLessEqual(x+narrative.width(),scroll.viewport().width())
                     self.assertGreaterEqual(narrative.height()+2,narrative.heightForWidth(narrative.width()))
                     self.assertEqual(pane.report,before)
+
+    def test_platform_wide_header_options_fit_without_losing_selection_or_text(self):
+        original_hint=QComboBox.minimumSizeHint
+        def platform_hint(combo):
+            hint=original_hint(combo)
+            width=combo.property('platform_intrinsic_width')
+            if width and combo.sizeAdjustPolicy()!=QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon:
+                return QSize(width,hint.height())
+            return hint
+        with patch.object(QComboBox,'minimumSizeHint',platform_hint):
+            w=self.window(); pane=w.macro
+            pane.tool.setProperty('platform_intrinsic_width',251)
+            pane.source.setProperty('platform_intrinsic_width',459)
+            pane.tool.setCurrentIndex(pane.tool.findData('weekly'))
+            pane.source.setCurrentIndex(pane.source.findData('fred'))
+            w.navigate('markets');w.market_tabs.setCurrentWidget(pane);w.resize(1000,1000)
+            choices=[[combo.itemData(i) for i in range(combo.count())] for combo in (pane.tool,pane.source)]
+            policies=[combo.sizeAdjustPolicy() for combo in (pane.tool,pane.source)]
+            request=pane.make_request()
+            # The measured Windows content-driven hints must reproduce overflow.
+            for combo in (pane.tool,pane.source):
+                combo.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContents)
+                combo.updateGeometry()
+            self.settle()
+            self.assertGreater(w.stack.currentWidget().horizontalScrollBar().maximum(),0)
+            for combo,policy in zip((pane.tool,pane.source),policies):
+                combo.setSizeAdjustPolicy(policy)
+                combo.updateGeometry()
+            with patch.object(w.jobs,'start',side_effect=AssertionError('no recompute')):
+                for language in ('en','ko','en'):
+                    w.set_language(language);self.settle();pane.grab();self.settle()
+                    self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(),0,
+                                     self.overflow_context(w,pane,1000,language))
+                    self.assertEqual(pane.make_request(),request)
+                    for combo,items in zip((pane.tool,pane.source),choices):
+                        self.assertEqual([combo.itemData(i) for i in range(combo.count())],items)
+                        self.assertEqual(combo.toolTip(),combo.currentText())
+                        self.assertTrue(combo.accessibleName())
 
     def test_cleared_sibling_tools_do_not_expand_macro_input_labels(self):
         w=self.window()
