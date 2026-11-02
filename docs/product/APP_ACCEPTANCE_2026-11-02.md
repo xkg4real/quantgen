@@ -7,16 +7,19 @@ locale repairs the preference through the existing QSettings path.
 
 ## Reproducible automated checks
 
-`tests.flet_runtime_acceptance` constructs all 19 real Flet routes with temporary,
+`tests.flet_runtime_acceptance` constructs all 20 real Flet routes with temporary,
 disarmed state, an inert startup hook and blocked provider calls. It exercises
 English/light/1440px and Korean/dark/390px navigation. It does not launch the live
-Flet browser client or prove visual accessibility.
+Flet browser client or prove visual accessibility. The KIS chart route remains
+idle through mount, disconnect and reconnect; provider/stream construction
+counts remain zero until an explicit user action.
 
 `tests.desktop_startup_acceptance` covers malformed locale types and a temporary
 QSettings repair/restart cycle. The installed-wheel `tools/packaging/smoke_desktop.py`
 runs outside the source checkout and checks the six native workspaces, a real
 worker with injected synthetic prices, locale/theme switching, preference repair,
-and JSON/ZIP export roundtrips. The canonical run keeps `verdict=NOT_RUN` and
+and JSON/ZIP export roundtrips. It also reaches the native KIS chart and
+confirms locale/theme changes do not start a quote request or stream. The canonical run keeps `verdict=NOT_RUN` and
 synthetic provenance. Network and protected paths are blocked.
 
 `tests.desktop_responsive_tools_acceptance` reproduces switching away from a
