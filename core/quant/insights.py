@@ -215,18 +215,29 @@ def narrate_signals(s: SignalReport) -> str:
 
 
 def narrate_backtest(b: BacktestResult) -> str:
+    current = b.execution_statistics_verified
+    side_basis = "executed entry/exit sides" if current else "recorded trade-count units (basis unverified)"
     verdict = ("beat" if b.beat_benchmark else "lost to")
     lines = [
         f"The {b.strategy} strategy on {b.symbol} returned "
         f"{_pct(b.total_return)} over {b.sessions} sessions and {verdict} "
         f"buy-and-hold ({_pct(b.bench_return)}).",
-        f"It was in the market {b.exposure * 100:.0f}% of the time, traded "
-        f"{b.n_trades} times at {b.cost_bps:.0f} bps per side, with a maximum "
+        f"It was in the market {b.exposure * 100:.0f}% of the time, with "
+        f"{b.n_trades} {side_basis} at {b.cost_bps:.0f} bps per side, and a maximum "
         f"drawdown of {b.max_drawdown * 100:.1f}% against the benchmark's "
         f"{b.bench_max_drawdown * 100:.1f}%.",
     ]
+    if current and b.completed_round_trips is not None:
+        lines.append(f"Completed round trips: {b.completed_round_trips}.")
     if b.win_rate is not None:
-        lines.append(f"Closed-trade win rate: {b.win_rate * 100:.0f}%.")
+        basis = "Gross-price win rate on completed round trips, before costs" if current else "Recorded win rate (basis unverified)"
+        lines.append(f"{basis}: {b.win_rate * 100:.0f}%.")
+    if current and b.pending_last_signal in ('entry', 'exit'):
+        lines.append(f"The final-close {b.pending_last_signal} signal is pending and excluded from executed sides and completed round trips.")
+    if current:
+        lines.append("Open positions are not forcibly closed; the equity curve includes trading costs, while the win rate excludes them.")
+    else:
+        lines.append("Legacy execution scope is unverified; recalculate to obtain executed-side statistics. Stored results are unchanged.")
     if not b.beat_benchmark and b.max_drawdown > b.bench_max_drawdown:
         lines.append("It underperformed with *shallower* drawdowns — the "
                      "strategy is buying protection with return. Whether that "

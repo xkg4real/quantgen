@@ -1,5 +1,5 @@
 """Native context-only technical signals; no live book or order connection."""
-from core.research.signals_analysis import SignalsRequest
+from core.research.signals_analysis import SignalsRequest, PENDING_LABELS, trade_statistics, trade_statistics_labels
 from .tools import ToolPane, number, fmt
 from .model_narrative_language import signals_variants, localize_columns, localize_cell, SIGNAL_STANCES
 from .translations import translate
@@ -23,6 +23,7 @@ class SignalsPane(ToolPane):
     def show_result(self,out):
         self.clear_result()
         h,r,b=out.history,out.report,out.backtest
+        count_label, win_label, count_note = trade_statistics_labels(b)
         self.text('Context only — not a v2 signal (DO-NOT-BUILD TF-12). Nothing here feeds a book.')
         origin = f'{h.symbol} · {h.source} · {h.first_date} → {h.last_date}\n{h.note}'
         original = ('합성 데이터 · ' if h.source == 'SYNTHETIC' else '') + origin
@@ -51,5 +52,12 @@ class SignalsPane(ToolPane):
             ('Return',fmt(b.total_return,'pct')),('Buy & hold',fmt(b.bench_return,'pct')),('Beat benchmark',str(b.beat_benchmark)),
             ('Annual return',fmt(b.ann_return,'pct')),('Annual volatility',fmt(b.ann_vol,'pct')),('Sharpe',fmt(b.sharpe)),
             ('Max drawdown',fmt(b.max_drawdown,'pct')),('Benchmark drawdown',fmt(b.bench_max_drawdown,'pct')),
-            ('Exposure',fmt(b.exposure,'pct')),('Trades',str(b.n_trades)),('Win rate',fmt(b.win_rate,'pct'))])
+            ('Exposure',fmt(b.exposure,'pct')),(count_label,str(b.n_trades)),
+            ('Completed round trips',str(b.completed_round_trips) if b.completed_round_trips is not None else '—'),
+            ('Final-close signal',PENDING_LABELS.get(b.pending_last_signal,b.pending_last_signal)),
+            (win_label,fmt(b.win_rate,'pct'))])
+        table = self.tables['Backtest metrics']
+        localize_cell(table, table.rowCount()-2, 1)
+        self.text(count_note)
+        self.sections.append({'type': 'trade_statistics', **trade_statistics(b)})
         self.finished(out.narrative, localized=signals_variants(out))

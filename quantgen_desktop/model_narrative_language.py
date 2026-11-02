@@ -29,6 +29,8 @@ def localize_cell(table, row, column):
 
 
 def signals_korean(s, b):
+    current = b.execution_statistics_verified
+    side_basis = '실행된 진입·청산 편도 횟수' if current else '집계 기준 미검증 기록 거래 수'
     from core.quant.insights import _pct
     agree = [c for c in s.components if c.score * s.composite > 0]
     dissent = [c for c in s.components if c.score * s.composite < 0 and abs(c.score) > 20]
@@ -48,11 +50,22 @@ def signals_korean(s, b):
     lines += [
         f'{b.symbol}의 {b.strategy} 전략은 {b.sessions}개 거래일 동안 {_pct(b.total_return)}의 수익률로 '
         f'매수 후 보유 ({_pct(b.bench_return)})보다 ' + ('높았습니다.' if b.beat_benchmark else '낮았습니다.'),
-        f'시장 노출 기간은 {b.exposure * 100:.0f}%, 거래 횟수는 {b.n_trades}회, 편도 비용은 '
+        f'시장 노출 기간은 {b.exposure * 100:.0f}%, {side_basis}는 {b.n_trades}회, 편도 비용은 '
         f'{b.cost_bps:.0f} bps이며 최대 낙폭은 {b.max_drawdown * 100:.1f}%, '
         f'벤치마크의 최대 낙폭은 {b.bench_max_drawdown * 100:.1f}%입니다.',
     ]
-    if b.win_rate is not None: lines.append(f'청산 거래 승률: {b.win_rate * 100:.0f}%.')
+    if current and b.completed_round_trips is not None:
+        lines.append(f'완료된 왕복 거래: {b.completed_round_trips}회.')
+    if b.win_rate is not None:
+        basis = '완료된 왕복 거래의 비용 차감 전 가격 기준 승률' if current else '집계 기준 미검증 기록 승률'
+        lines.append(f'{basis}: {b.win_rate * 100:.0f}%.')
+    if current and b.pending_last_signal in ('entry', 'exit'):
+        side = '진입' if b.pending_last_signal == 'entry' else '청산'
+        lines.append(f'마지막 종가의 {side} 신호는 대기 상태이며 실행 편도 횟수와 완료된 왕복 거래에서 제외됩니다.')
+    if current:
+        lines.append('열린 포지션을 강제 청산하지 않습니다. 자산 곡선은 거래 비용을 포함하고 승률은 비용 차감 전입니다.')
+    else:
+        lines.append('이전 결과의 실행 범위는 미검증입니다. 실행 편도 통계를 얻으려면 다시 계산하세요. 저장된 결과는 바뀌지 않습니다.')
     if not b.beat_benchmark and b.max_drawdown > b.bench_max_drawdown:
         lines.append('수익률은 낮았지만 낙폭은 더 작았습니다. 수익률을 포기해 보호를 얻는 전략입니다. '
                      '그 교환이 가치 있는지는 백테스트가 아니라 사용자의 위험 감내 수준에 달려 있습니다.')

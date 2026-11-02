@@ -260,5 +260,23 @@ EN_TO_KO.update({
 })
 
 
+# Descriptive Signals statistics: display labels only, never report keys.
+_SIGNAL_STATISTICS = {
+    'Recorded trade count · basis unverified': '기록 거래 수 · 집계 기준 미검증',
+    'Recorded win rate · basis unverified': '기록 승률 · 집계 기준 미검증',
+    "This legacy result's trade-count and win-rate execution scope is unverified. Recalculate to obtain executed-side statistics; stored results are unchanged.": '이전 결과의 거래 수와 승률의 실행 범위는 미검증입니다. 실행 편도 통계를 얻으려면 다시 계산하세요. 저장된 결과는 바뀌지 않습니다.',
+    'Executed entry/exit sides': '실행된 진입·청산 편도 횟수',
+    'Completed round trips': '완료된 왕복 거래',
+    'Final-close signal': '마지막 종가 신호',
+    'Gross-price win rate · before costs': '비용 차감 전 가격 기준 승률',
+    'Entry pending': '진입 대기',
+    'Exit pending': '청산 대기',
+    'No pending signal': '대기 신호 없음',
+    'Not recorded': '미기록',
+    'Entry and exit each count as one executed side. Final-close signals are pending, not executions; open positions are not forcibly closed. Gross-price wins exclude costs, while the equity curve includes trading costs.': '진입과 청산은 각각 한 번의 실행 편도로 셉니다. 마지막 종가 신호는 실행이 아닌 대기 상태이며 열린 포지션은 강제 청산하지 않습니다. 가격 기준 승률은 비용 차감 전이고 자산 곡선은 거래 비용을 포함합니다.',
+}
+EN_TO_KO.update(_SIGNAL_STATISTICS)
+KO_TO_EN.update({value: key for key, value in _SIGNAL_STATISTICS.items()})
+
 def static_text(text,language):
     return KO_TO_EN.get(text,text) if language=='en' else EN_TO_KO.get(text,text)
