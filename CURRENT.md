@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-11-02T12:17:00+09:00
+updated_at: 2026-11-02T12:23:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
 work_commit: ab6a15f9c92011f7e98838ca0bed004d101bcf6f
 uncommitted_changes: no; primary and financial source commits pushed/read back
-pr: 54 and 58 (open; Windows test portability fixes pushed, exact-head CI running)
+pr: 54, 58 and 59 (open; compliance success, exact-head runtime CI running)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -22,6 +22,10 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 ---
 
 # QUANTGEN 직접 작업 재개 — 2026-11-02
+
+## 12:23 KST 금리 수정 원격 저장
+- PR59 https://github.com/xkg4real/quantgen/pull/59, branchgpt/rates-params-20261102 headfe45e905150490bf5c4d08e3825730fbddfc795b push/read-back. M3-N08 모수 불일치 거부 및 Hull-White 최종sim.params 연결. 신규5+기존5, 통합21 PASS; 별도 설치wheel6 PASS(실제Qt버튼→worker→표/차트 포함),304runtime/227Python exact-source일치. 실제수치12/24/144 비교보존. Runtime41382605803 진행,Compliance41382605813 success. 큐는bounded21/67구현·46미완료(미병합상태)이며 실제연구/Windows 미완료.
+- UI_SESSION_CURRENT 최신최종인계 수신·열람: 단일HTML/Docs20종×ko/en40본문 PASS, 이전marketing168·KIS합성72 PASS는 다른세션의근거로구분. 사용자웹HTML·소스·ZIP GitHub게시금지, 사용자수동AWS업로드, 새배포없음. handoff90ed55f 원문snapshot으로 통합draft보존. Claude실제수신확인없음.
 
 ## 12:17 KST 검증 중간 저장
 - PR54 headab6a15f9c92011f7e98838ca0bed004d101bcf6f push/read-back. Windows KIS source-fixture의 기본 cp1252 읽기를 명시UTF-8로 수정; 제품 불변, 모사검사1 PASS. Runtime41382070806 재실행 중.
