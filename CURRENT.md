@@ -6,13 +6,13 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-11-02T12:40:00+09:00
+updated_at: 2026-11-02T12:42:20.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
-work_commit: 3e979d9f23195b5579b92f13c8c2968618c62fd9
-uncommitted_changes: yes; bounded selected-tab geometry fix and diagnostics in primary worktree
-pr: 54, 58 and 59 (open; Windows Macro 66px overflow under investigation, no completion claim)
+work_commit: e9608be3531a4661e9d8327292864ed64dbd357a
+uncommitted_changes: no; selected-tab HFW fix pushed/read back on all three branches
+pr: 54, 58 and 59 (open; selected-tab HFW repair in exact-head CI, no completion claim)
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: unknown
@@ -22,6 +22,13 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 ---
 
 # QUANTGEN 직접 작업 재개 — 2026-11-02
+
+## 12:42 KST 높이 계산 수정 저장
+- 숨은tab의heightForWidth누수재현을현재선택page기준으로수정, 명시minimumHeight보존, 기존overflowassert/창폭/CI순서유지. CI동일순서9 PASS. Windows66px해결여부는새CI로확인중이며제품완료로기록하지않음.
+- PR54 heade9608be3531a4661e9d8327292864ed64dbd357a push/read-back; Runtime41384414087,Compliance41384414093 최신검사.
+- PR58 headf054cc8035d74f3c8996207faa3fd7f365f86a73 push/read-back; Runtime41384454104,Compliance41384454032 최신검사.
+- PR59 head2f98ca5dd33bc6efc9e9fa32c8e558d7ea892317 push/read-back; Runtime41384504105,Compliance41384504119 최신검사.
+- 제품chart_study.py가변경됐으므로기존설치wheel byte일치근거는기존정확한ref에만해당한다. 새head는새CI설치/구동검사로검증한다. sapientiaNotion현재진행/미병합/실제증거제약을저장후재조회,완료취소선추가없음.
 
 ## 12:40 KST Windows 회귀와 통합 인계 보존
 - 최신Windows CI에서Macro좁은창가로넘침66px을발견. 이전UTF8/audit/Qt tick렌더검사는통과했고새overflow실패는미해결로기록한다. 원래assert를완화하지않고플랫폼geometry진단과선택되지않은탭의heightForWidth누수(50대9000 합성재현)를좁게수정중. 제품전체완료·main병합·Notion취소선없음.
