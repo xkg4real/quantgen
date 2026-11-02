@@ -1,6 +1,6 @@
 # 2026-11-02 앱 PR60 후속 검토 큐
 
-[PR60](https://github.com/xkg4real/quantgen/pull/60)은 연구홈 국내주식 목록·상세보기, 왼쪽 기술지표 가이드, 단일 KIS 연결6종목과 실험적 Q-SCORE, KRX 빈 화면/초기 차트 연결을 수정합니다. 현재 source `ce7f6f9`, CI 진행 중이며 main 병합 여부는 PR에서 확인합니다.
+[PR60](https://github.com/xkg4real/quantgen/pull/60)은 연구홈 국내주식 목록·상세보기, 왼쪽 기술지표 가이드, 단일 KIS 연결6종목과 실험적 Q-SCORE, KRX 빈 화면/초기 차트 연결을 수정합니다. 최종 source `6a2c062`, Runtime·Document CI SUCCESS, main merge `1e67b04a4e6e39a1689bdea3d682c330d40fe6b6`로 반영 완료했습니다. Windows3.11/3.12/3.14·Ubuntu3.12 설치본 검사가 통과했습니다.
 
 - 앱 UI는 Qt native입니다. 실제 웹 연구화면이 있으면 이에 대응하는 목록·별도 가이드·시세/점수 상태를 검토하고, 공통 data/score 계약은 재사용할 수 있습니다. Qt 파일 자체를 복사하지 마세요.
 - [정책 검토](https://github.com/xkg4real/quantgen/blob/gpt/live-chart-layout-20261102/docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md)와 [PR60 웹 영향 큐](https://github.com/xkg4real/quantgen/blob/gpt/live-chart-layout-20261102/docs/product/ui_website_updates/PR-60.json)를 확인하세요.
