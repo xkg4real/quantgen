@@ -1,3 +1,54 @@
+# QUANTGEN 웹사이트 AWS 재개 점검 — 2026-11-02
+
+확인 시각: 2026-11-02T13:37:00+09:00
+현재 범위: 사용자가 승인한 기존 소개 화면·Docs 갱신, 검증 후 사용자가 직접 반영할 단일 HTML 제공.
+상태: 원본 산출물 확보 대기. 새 HTML 구현·프리뷰·배포 완료가 아님.
+
+## 이번 AWS 세션에서 확인한 내용
+
+- 공유 WEBSITE_AWS_HANDOFF.md / UI_SESSION_CURRENT.md 최신 섹션 및 앱 변경 큐 PR54/58/59/60을 읽었다. PR61은 조회 당시 OPEN, head `5b52e3dd041b39c020b4e862f807c4a1a322eb82`, main은 `8b4010430a9ece2a4e1b05b234abe81d3796771f`였다. PR61을 병합 완료로 취급하지 않는다.
+- 해당 main의 registry·정책 20종 및 관련 사실/큐 기록을 별도 로컬 snapshot으로 확보했다. 32개 파일의 Git blob SHA를 대조하여 원격과 바이트 일치를 확인했다. HTML 기존 기준 `cac727e2` 이후 정책 14종(01/02/04/06/07/08/09/11/12/13/14/15/19/20)이 변경됐다. 정책 20종은 모두 review-required다. 이는 공개 번역 정합성 통과가 아니다.
+- 지정된 `/workspace/work/quantgen-web-redesign-20261102` 및 해당 HTML/ZIP은 이 AWS 환경에 없다. /workspace, /home/agent, /tmp의 파일명 검색과 Library/shared 경로에서도 발견되지 않았다. 지원 앱 도구의 다른 UI 스레드 조회는 빈 결과 또는 연결 종료로 실패했다. 원본을 새 디자인으로 대체하지 않았다.
+- 사용자에게 기존 `QUANTGEN-source-and-handoff-2026-11-02.zip`의 접근 가능한 다운로드 링크를 요청한 상태다. 원본 HTML 예상값은 5,506,989 bytes / SHA256 `ce48aea091f482ad834fdf836ae71528731e92ddbd90b1d5b2bc372fd8fcc609`이며 아직 로컬 검증하지 못했다.
+- AWS setup-state와 CLI 설치 ZIP 존재, CLI 2.39.2, 설치 AWS 스킬 24개를 확인했다. 최신 환경의 aws-mcp.us-east-1.api.aws 허용 설정과 실제 TLS 검증된 HTTP 405 응답을 확인했다. 인증된 MCP API 성공을 뜻하지 않는다.
+- 기존 quantgen 프로필의 STS 호출은 “Your session has expired”로 실패했다. 새 로그인·비밀번호·액세스 키를 요청하지 않았으며 운영 서버의 현재 소스/라우팅 재조회는 미완료다. HTML 편집 자체에 새 AWS 인증이 필요한 것은 아니다.
+- 보존된 10월31일 운영 소스는 `/workspace/.cloud-setup/aws-toolkit/website-review/site/index.html`, SHA256 `d3dcc4f48dd2355fc7e748f30b75135992043a0e9933dc13f40d7355d624ca02`다. 연구 설명/브라우저 시뮬레이션, #lab/#gate/#strategies 등 기존 앵커와 qg-theme 저장을 확인했다. 이 snapshot에는 Q-SCORE 연구 목록이 없다. 11월2일 실제 origin의 최신 바이트로 단정하지 않는다.
+- 공개 웹 조회의 캐시 화면도 기존 Record/Rules/Quant Lab/Gate/Strategy Lab/Desk/Reproduce/Contribute 구성을 보여준다. 캐시 조회를 새 배포 검증으로 취급하지 않는다.
+- 앱 저장소 /workspace/quantgen, /workspace/tradegen은 git status 기준 변경 없음. 웹 HTML/소스는 GitHub에 게시하지 않았다. CURRENT/LEDGER/AUTO_STATE 소유권·파일은 변경하지 않았다.
+
+## 가격 정책 충돌과 다음 적용 기준
+
+main의 02/03/10 문서는 Research 월29,000원 / Pro 월59,000원 / Team Pilot 월290,000원 및 VAT 포함·월 자동 갱신·Team Pilot 최대5인을 기재한다. 이번 사용자 웹 지시는 Free / Pro 월59,000원 / Ultra 월129,000원과 승인된 기능 초안이다. 최신 사용자 지시를 웹 초안 기준으로 삼되, 기존 Research/Team Pilot의 세금·갱신·인원 조건을 Free/Ultra로 임의 이식하거나 두 상품 구성을 하나의 현재 계약으로 혼합하면 안 된다. KO/EN 공개 본문에 같은 해석을 적용하고 출처 대비 차이를 버전 기록에 남겨야 한다. 법정 권리와 협의 중인 추가 환불 혜택도 구분한다.
+
+## 작업 상태와 다음 순서
+
+| 구분 | 상태 |
+|---|---|
+| 원문/기존 환경 사전 확인 | 위 범위 완료 |
+| 기존 redesign 원본 확보·해시 검증 | 미완료 |
+| 공개 KO/EN 40본문 개정 | 미완료 |
+| HTML 묶음/모바일·테마·키보드·Docs 회귀 검사 | 미실행 |
+| 최신 HTML 다운로드 파일·최종 SHA256 | 아직 없음 |
+| 운영 반영·배포 후 URL 검증 | 미실행; 이번 사용자 직접 업로드 방식 유지 |
+
+1. 기존 ZIP을 복구하고 최초 HTML 크기/해시부터 대조한다. site, public-docs, tools, 기존 디자인 스킬/규칙을 읽고 수정한다.
+2. 재개 시 최신 main/PR61 상태를 다시 읽는다. 현재 main 원문과 공개 번역 차이, 위 상품 조건 충돌을 정리한다. 내부 운영표/승인서 양식은 공개 본문에 복사하지 않는다.
+3. 기존 연구 경로·테마 키를 보존하는 연결을 검사하고, review-required 표시와 같은 문서 언어 전환·직접 URL·footer 경로를 검증한다. 실제 웹에 Q-SCORE 목록이 없다면 실시간 표를 새로 만들지 않는다.
+4. 실제 제공된 스크립트 옵션을 확인한 뒤 build/check/source-root/bundle/browser 검사를 수행한다. 기존 보고서를 이번 파일의 검사 통과로 재사용하지 않는다.
+5. 새 단일 HTML, SHA256, 사용자 업로드 안내를 전달한다. 이전에 확인한 서버 파일 경로는 /usr/share/nginx/html/index.html이고 복구본은 /var/backups/quantgen-ui/2026-10-31-eb3920403777/index.html이다. 현재 서버 상태 대조 없이 덮어쓰기하지 않는다.
+
+로컬 준비 자료: `/workspace/work/quantgen-web-resume-20261102`
+- `source-main/docs/compliance/`: main 고정 ref의 원문 snapshot
+- `evidence/verified-source-manifest.json`: 원문 Git blob 및 SHA256
+- `evidence/policy-preflight.json`: 20종 버전/상태·14종 변경 목록
+- `evidence/retained-website-inventory.json`: 보존된 10월31일 웹 source 구조
+- `evidence/PR61.json`, `evidence/compare-cac727e2-to-main.json`
+
+---
+
+<details>
+<summary>이전 2026-10-31 중단·배포 인계 기록 (역사 기록)</summary>
+
 # QUANTGEN 웹사이트(AWS) → QUANTGEN 메인세션 인계
 
 작성일: 2026-10-31  
@@ -58,3 +109,5 @@
 ## 인계 방식
 
 사용자가 지정한 QUANTGEN 메인세션을 실제 thread 목록에서 확인했고, 해당 세션이 읽고 있는 `handoff/WEBSITE_AWS_HANDOFF.md`에 이 회신 링크를 연결했습니다. 이 자료를 UI_SESSION_CURRENT.md와 함께 통합 인수인계에 포함하세요. 공유 GitHub 보존/패널 연결과 메인 에이전트의 열람 확인은 구분합니다.
+
+</details>
