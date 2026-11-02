@@ -580,6 +580,10 @@ for line in (_PAIRS + _TERMS).strip().splitlines():
 KO["Build && Test"] = KO["Build & Test"]
 KO["Portfolio && Risk"] = KO["Portfolio & Risk"]
 
+from .macro_narrative_language import PAIRS as _MACRO_PAIRS
+KO.update(_MACRO_PAIRS)
+EN.update({ko: en for en, ko in _MACRO_PAIRS.items()})
+
 def translate(text, language):
     """Translate only authored UI messages; unknown source text stays intact."""
     text = str(text)

@@ -47,7 +47,15 @@ original source language is retained.
    the review scope and reviewer; automated placeholder tests alone do not
    establish professional translation review.
 
-Legacy generated model narratives beyond the main session's completed FX scope
-are still being localized there. This change does not claim universal translation
-or completed language review for all existing models. The same extension rules
-apply when those translations are added.
+The 2026-11-02 native extension covers current locally authored ETF/LETF,
+crypto, derivatives, Signals, four Structuring products, Strategy header/exposure,
+and descriptive Macro sheet/daily/weekly prose and selected table captions.
+Exact generator matching preserves unknown/provider/historical narratives; raw
+exports, numerical results, identifiers and verdicts remain canonical. The macro
+table registers authored cells before language updates, so a language switch can
+translate them without a new analysis or reset of inputs.
+
+This is a native display extension. It does not claim universal translation,
+Flet parity for these legacy narratives, translation of provider evidence, or a
+completed review on the user's Windows installation. Table/plot instrument names,
+original research records and operating-system file dialogs have their own scope.
