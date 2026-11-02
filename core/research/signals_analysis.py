@@ -51,3 +51,38 @@ def execute_signals(request, *, history_loader=None):
     report=compute_signals(history)
     backtest=run_backtest(history,strategy=request.tool,params=parameters,cost_bps=request.cost_bps)
     return SignalsOutput(request,history,report,backtest,insights.narrate_signals(report)+' '+insights.narrate_backtest(backtest))
+
+
+TRADE_COUNT_NOTE = (
+    "Entry and exit each count as one executed side. Final-close signals are pending, "
+    "not executions; open positions are not forcibly closed. Gross-price wins exclude "
+    "costs, while the equity curve includes trading costs."
+)
+LEGACY_STATS_NOTE = (
+    "This legacy result's trade-count and win-rate execution scope is unverified. "
+    "Recalculate to obtain executed-side statistics; stored results are unchanged."
+)
+PENDING_LABELS = {'entry': 'Entry pending', 'exit': 'Exit pending', 'none': 'No pending signal',
+                  'NOT_RECORDED': 'Not recorded'}
+
+
+def trade_statistics(backtest):
+    """Unambiguous descriptive metadata for both UIs/AI; no research verdict."""
+    current = backtest.execution_statistics_verified
+    return {
+        'statistics_version': backtest.statistics_version,
+        'n_trades': backtest.n_trades,
+        'n_trades_basis': 'executed_entry_exit_sides' if current else 'legacy_unverified',
+        'completed_round_trips': backtest.completed_round_trips,
+        'pending_last_signal': backtest.pending_last_signal,
+        'win_rate': backtest.win_rate,
+        'win_rate_basis': 'gross_price_return_before_costs' if current else 'legacy_unverified',
+        'execution_window': 'signals_before_final_close' if current else 'legacy_unverified',
+        'forced_terminal_liquidation': False if current else None,
+    }
+
+
+def trade_statistics_labels(backtest):
+    if backtest.execution_statistics_verified:
+        return 'Executed entry/exit sides', 'Gross-price win rate · before costs', TRADE_COUNT_NOTE
+    return 'Recorded trade count · basis unverified', 'Recorded win rate · basis unverified', LEGACY_STATS_NOTE

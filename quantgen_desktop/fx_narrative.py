@@ -102,9 +102,10 @@ def fx_korean(out):
             "선물환은 금리 차이를 반영하며 환율 예측값이 아닙니다.",
         ]
         if basis is not None:
-            lines.append(f"시장 선물환이 내포한 통화 간 베이시스는 커버드 금리평가 대비 연 {_bp(basis)}이며, "
-                         + ("잡음 범위 안입니다." if abs(basis) < 5*BP else
-                            f"{base if basis < 0 else quote}의 실제 자금조달 프리미엄을 나타냅니다."))
+            lines.append(f"입력한 시장 선물환의 입력 금리 기준 부호 있는 연환산 CIP 차이는 {_bp(basis)}입니다. "
+                         "양수는 시장 선물환이 CIP 선물환보다 높고, 음수는 더 낮음을 뜻합니다. "
+                         "호가 시점, 만기 및 금리·호가 규약의 정합성은 검증되지 않았습니다. "
+                         "이 차이만으로 자금조달 프리미엄이나 통계적 유의성을 판단할 수 없습니다.")
         return ' '.join(lines)
     if q.tool != 'option':
         return None

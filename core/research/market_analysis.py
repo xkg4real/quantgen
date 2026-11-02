@@ -35,6 +35,10 @@ class ETFRequest:
     source: str = 'auto'
     code: str = '069500'
     days: int = 504
+    letf_funding_rate: float | None = None
+    letf_annual_fee: float | None = None
+    letf_benchmark: str = 'zero_rate_reference'
+    letf_dividend_yield: float | None = None
 
     def validate(self):
         if self.source not in {'auto', 'kis', 'fmp', 'yfinance', 'synthetic'}:
@@ -43,6 +47,9 @@ class ETFRequest:
             raise ValueError('Invalid ETF code')
         if type(self.days) is not int or not 30 <= self.days <= 10000:
             raise ValueError('Invalid history size')
+        from core.ficc.letf_assumptions import resolve_letf_assumptions
+        resolve_letf_assumptions(funding_rate=self.letf_funding_rate, annual_fee=self.letf_annual_fee,
+                                 benchmark=self.letf_benchmark, dividend_yield=self.letf_dividend_yield)
 
 
 @dataclass(frozen=True)
@@ -77,8 +84,12 @@ def execute_derivatives(request, *, snapshot_loader=None):
 def execute_etf(request, *, analyze_fn=None, study_cards=None):
     request.validate()
     from .etf_workflow import analyze, narrative
+    options = {}
+    if request.letf_benchmark != 'zero_rate_reference':
+        options = {name: getattr(request, name) for name in
+                   ('letf_funding_rate', 'letf_annual_fee', 'letf_benchmark', 'letf_dividend_yield')}
     data = (analyze_fn or analyze)(request.code.strip().upper(), days=request.days, source=request.source,
-                                  card_loader=lambda path: tuple(study_cards or ()))
+                                  card_loader=lambda path: tuple(study_cards or ()), **options)
     return MarketOutput(request, data, narrative(data), 'PROVIDED' if study_cards is not None else 'NOT_LOADED')
 
 

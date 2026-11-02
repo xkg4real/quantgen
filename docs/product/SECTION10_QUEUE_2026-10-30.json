@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 14,
-    "implemented_canonical_groups": 15
+    "implemented_canonical_groups": 20
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -253,10 +253,11 @@
       "source_model": "50. M2-28 단일 종목 규칙 백테스트 (backtest.run_backtest: ma_cross · momentum · rsi_revert)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Executed order sides and completed round trips use the same executable interval window as costs; final-bar pending transitions and gross price wins are explicit. Legacy/unknown count versions remain unverified. Equity, returns and risk arrays unchanged.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md"
     },
     {
       "id": "N12",
@@ -386,10 +387,11 @@
       "source_model": "57. M3-05 곡선 요약 지표·모양·국면 분류",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Existing 5y5y value is explicitly named five-year simple-compounded annualized forward in native/Flet/AI/export; semiannual and forward par swap rates are distinct. Numerical engines unchanged; alternative convention selector and actual Windows validation not introduced.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/FORWARD_CONVENTION_2026-11-02.md"
     },
     {
       "id": "M3-N07",
@@ -455,10 +457,11 @@
       "source_model": "94. M4-17 레버리지 ETF 드래그 식(Avellaneda–Zhang 2010)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Explicit user funding/fee/benchmark/dividend scenarios and signed components implemented; old zero-rate reference and historical study remain separate. Actual fund/provider/Windows manual validation NOT_RUN.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/LETF_ASSUMPTIONS_2026-11-02.md"
     },
     {
       "id": "M4-N4",
@@ -489,10 +492,11 @@
       "source_model": "78. M4-01 FX 선도(CIP)·선도 포인트·암시 베이시스·캐리",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Signed CIP input-rate discrepancy described without arbitrary noise/funding-premium verdict; quote/rate alignment remains unverified.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/FX_CIP_DISCREPANCY_2026-11-02.md"
     },
     {
       "id": "M4-N7",
@@ -545,10 +549,11 @@
       "source_model": "100. M4-23 CMS 10y−2y 스티프너 노트",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "CMS coupon explicitly denotes the first expected annualized period; period schedule and canonical numerical reports preserved, no payment guarantee.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md"
     },
     {
       "id": "M4-N12",
@@ -637,10 +642,11 @@
       "source_model": "94. M4-17 레버리지 ETF 드래그 식(Avellaneda–Zhang 2010)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Explicit user funding/fee/benchmark/dividend scenarios and signed components implemented; old zero-rate reference and historical study remain separate. Actual fund/provider/Windows manual validation NOT_RUN.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/LETF_ASSUMPTIONS_2026-11-02.md"
     },
     {
       "id": "NEW-M6-08",

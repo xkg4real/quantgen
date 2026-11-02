@@ -8,10 +8,26 @@ from .market_diagnostics_language import decay_korean, funding_korean, coverage_
 
 
 def letf_korean(lt):
+    assumptions = lt.get('assumptions') or {}
+    if assumptions.get('mode') == 'EXPLICIT_SCENARIO':
+        convention = ('가격수익률 비교로, beta에 가정 배당수익률을 곱한 값을 더합니다'
+                      if assumptions['benchmark'] == 'price_return' else
+                      '총수익률 비교로, 분배금이 이미 포함되어 추가 배당 항을 더하지 않습니다')
+        dividend = (f", 배당수익률={assumptions['dividend_yield']:.2%}"
+                    if assumptions['dividend_yield'] is not None else '')
+        carry = (f"사용자 시나리오: {convention}. 연속복리 연율 입력: 조달금리={assumptions['funding_rate']:.2%}, "
+                 f"보수={assumptions['annual_fee']:.2%}{dividend}; 시간=거래일/252. "
+                 '펀딩·보수·배당 기여분을 각각 표시합니다. 펀딩 기여분은 (1-beta)*r*T이며 '
+                 '인버스 펀드의 모형 상대 수익률을 높일 수 있습니다. 이 입력은 가정이며 관측된 펀드 비용이나 '
+                 '검증된 분배금이 아닙니다. ZERO_RATE_REFERENCE는 기존 고정 보수와 배당 생략을 사용하는 '
+                 '별도 비교 기준으로 유지합니다. ')
+    else:
+        carry = (f"현재 가정: 금리=0, 연간 보수={lt['fee']:.2%}, 배당 생략. "
+                 'ZERO_RATE_REFERENCE는 비교 기준이며 고정 보수는 검증된 현재 펀드 비용이 아닙니다. ')
     return ("AZ 분산 대용값: 직전 63개 관측의 분산을 공식에 대입합니다. "
             "관측된 펀드/지수의 실현 드래그나 연구의 직전 분기 실현 드래그 벤치마크가 아닙니다. "
             "저장된 M_E4 연구는 과거 122630에 관한 것으로, 이 펀드·표본·분산 대용값을 검증하지 않습니다. "
-            f"지수 입력: {lt['index_source']}. 현재 가정: 금리=0, 연간 보수={lt['fee']:.2%}, 배당 생략. "
+            f"지수 입력: {lt['index_source']}. " + carry +
             "선택한 지수는 분산 입력이며 펀드의 실현 선물 벤치마크가 아닙니다. "
             "펀딩·배당 항과 실제 시장 검증은 별도의 한계로 남습니다. "
             "이 대용값을 펀드 괴리 예측이나 보유 권고로 사용하지 마세요.")

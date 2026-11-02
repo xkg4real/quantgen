@@ -1,5 +1,6 @@
 """Native term sheets, payoff, leg decomposition and first-order hedge sheets."""
 from core.research.structuring_analysis import StructuringRequest
+from core.research.structured_disclosure import cms_coupon_context
 from .tools import ToolPane, number, fmt
 from .model_narrative_language import structured_variants, localize_columns, localize_cell
 from .translations import translate
@@ -45,7 +46,11 @@ class StructuringPane(ToolPane):
             ('Issue price',fmt(r.issue_price)),('Margin · per 100',fmt(r.margin)),('Maturity · years',fmt(r.maturity)),
             ('Notional',fmt(r.notional)+' '+r.currency)]
         if r.participation is not None:metrics.append(('Leverage' if cms else 'Participation',fmt(r.participation)+ ' ×' if cms else fmt(r.participation,'pct')))
-        if r.coupon is not None:metrics.append(('Enhanced yield · simple' if out.request.tool=='dcd' else 'Coupon / year',fmt(r.coupon,'pct')))
+        if r.coupon is not None:
+            coupon_label = ('First-period expected coupon · p.a.' if cms else
+                            'Enhanced yield · simple' if out.request.tool == 'dcd' else 'Coupon / year')
+            metrics.append((coupon_label, fmt(r.coupon, 'pct')))
+            if cms:self.sections.append({'type': 'coupon_interpretation', **cms_coupon_context(r)})
         for name,value in (('Spot',r.spot),('Strike',r.strike)):
             if value is not None:metrics.append((name,fmt(value)))
         if r.vol is not None:metrics.append(('Volatility',fmt(r.vol,'pct')))

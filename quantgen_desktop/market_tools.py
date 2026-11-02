@@ -69,11 +69,25 @@ class ETFPane(ToolPane):
     def __init__(self):
         super().__init__('ETF structure', [('etf', 'NAV, basket & sleeve rules')],
             [('auto', 'Auto · KIS / FMP'), ('kis', 'KIS'), ('fmp', 'FMP'), ('yfinance', 'Yahoo'), ('synthetic', 'Synthetic demo')],
-            {'etf': [('code', 'ETF code', '069500'), ('days', 'Sessions', 504)]})
+            {'etf': [('code', 'ETF code', '069500'), ('days', 'Sessions', 504),
+                     ('letf_benchmark', 'LETF comparison', [
+                         ('zero_rate_reference', 'Zero-rate reference'),
+                         ('total_return', 'Total-return scenario'), ('price_return', 'Price-return scenario')]),
+                     ('letf_funding_rate', 'Funding rate % · continuous annual', ''),
+                     ('letf_annual_fee', 'Fee % · continuous annual', ''),
+                     ('letf_dividend_yield', 'Dividend yield % · price-return only', '')]})
+        from .app import label
+        self.input_box.layout().addWidget(label(
+            'LETF only: leave rates blank for the zero-rate reference. Scenarios require funding and fee inputs; '
+            'add a dividend yield only for a price-return comparison. Inputs are assumptions, not verified fund costs.', 'caption'))
 
     def make_request(self):
         v = self.values()
-        return ETFRequest(self.source.currentData(), v['code'], number(v['days'], integer=True))
+        return ETFRequest(self.source.currentData(), v['code'], number(v['days'], integer=True),
+            letf_funding_rate=number(v['letf_funding_rate'], optional=True, scale=.01),
+            letf_annual_fee=number(v['letf_annual_fee'], optional=True, scale=.01),
+            letf_benchmark=v['letf_benchmark'],
+            letf_dividend_yield=number(v['letf_dividend_yield'], optional=True, scale=.01))
 
     def show_result(self, out):
         self.clear_result()
@@ -107,8 +121,10 @@ class ETFPane(ToolPane):
             self.result_table('Constituents', ['Code', 'Name', 'Weight %'], [[r['code'],r['name'],fmt(r['weight_pct'])] for r in rows])
         lt = d.get('letf')
         if lt and lt.get('rows'):
-            self.result_table('AZ variance proxies · bp', ['Sessions', 'Proxy', 'Variance term', 'Fee assumption term'],
-                [[r['sessions'], fmt(r['drag_bp']), fmt(r['variance_bp']), fmt(r['fee_bp'])] for r in lt['rows']])
+            self.result_table('AZ variance proxies · bp',
+                ['Sessions', 'Proxy', 'Variance term', 'Funding term', 'Fee assumption term', 'Dividend term', 'Zero-rate reference'],
+                [[r['sessions'], fmt(r['drag_bp']), fmt(r['variance_bp']), fmt(r.get('funding_bp')),
+                  fmt(r['fee_bp']), fmt(r.get('dividend_bp')), fmt(r.get('reference_drag_bp'))] for r in lt['rows']])
             self.text(f"Index: {lt['index_source']} · prior-quarter variance AZ proxy {lt['last_quarter_drag_bp']:.2f} bp · GARCH converged={lt['converged']}")
             self.text(letf_text(lt), localized={'en': letf_text(lt), 'ko': letf_korean(lt)})
             self.sections.append({'type':'letf_interpretation', **lt['interpretation']})

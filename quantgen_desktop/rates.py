@@ -60,9 +60,14 @@ class RatesPane(ToolPane):
                   f'{p.source} · {c.date} · {len(p)} observations · {c.method}\n{p.note}\n{c.note}')
         metrics = []
         if q.tool == 'curve':
+            from core.ficc.forward_conventions import (FIVE_YEAR_SIMPLE_LABEL, FIVE_YEAR_SIMPLE_NOTE,
+                FIVE_YEAR_SIMPLE_NOTE_KO, curve_descriptor_conventions)
             metrics = [('Shape',r.shape),('Regime',r.regime),('Lookback',str(r.lookback)),('NS/NSS fit RMSE',fmt(r.ns.rmse,'bp'))]
             pct = {'level','1y1y','2y1y','5y5y'}
-            metrics += [(k,fmt(v,'pct' if k in pct else 'bp')) for k,v in r.descriptors.items()]
+            metrics += [(FIVE_YEAR_SIMPLE_LABEL if k == '5y5y' else k,
+                         fmt(v,'pct' if k in pct else 'bp')) for k,v in r.descriptors.items()]
+            self.text(FIVE_YEAR_SIMPLE_NOTE, localized={'ko': FIVE_YEAR_SIMPLE_NOTE_KO})
+            self.sections.append({'type': 'descriptor_conventions', 'values': curve_descriptor_conventions()})
             rows = c.table()
             self.line('수익률 곡선', c.tenors, [('Zero',np.array(c.zeros)*100),('Par',np.array(r.snapshot.par_yields)*100)], 'Maturity · years','Yield · %')
             self.result_table('Curve table', ['Tenor','Zero','DF','Par','1y forward',f'Change · {r.lookback}d'],
