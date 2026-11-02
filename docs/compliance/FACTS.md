@@ -137,3 +137,25 @@ remain. Source/document consistency is not publication approval.
 C형 최종 통합 시 main PR48/49(4c51ab9)의 인계 기록과 채권·포트폴리오 한/영 결과 표현을 보존했습니다. display_variants는 원본 source_text·내보내기·수치·경고를 유지하고 C형의 기존 notes 위젯을 재사용합니다. 이 한정된 소스 차이를 20개 문서와 대조했으며 저장·전송·거래·정책 공개 상태 변화는 없습니다.
 
 C형 병합 직전 통합: main PR50–52(d789691)의 웹 인계 기록과 시장 진단 한영 표시를 함께 보존했습니다. ToolPane의 기존 text(localized=...) 경로를 사용하며 AR(1)·펀딩·호가 수치, 원문 경고와 NOT_RUN·정규 보고서가 유지됩니다. 20개 정책 범위와 대조했고 신규 저장·요청·승인 상태 변화는 없습니다.
+
+
+### Signals count and forward-convention disclosure — 2026-11-02
+
+The [Signals correction](../product/SIGNALS_TRADE_COUNTS_2026-11-02.md) aligns
+executed order-side counts and completed round trips with the existing executable
+return/cost window. Final-bar pending transitions do not count as fills. Win rates
+remain gross price comparisons, and legacy or unknown statistics versions remain
+unverified. Existing equity, return and risk arrays are unchanged. This is product
+backtest result labeling/statistics, not an actual trade ledger or research verdict.
+
+The [curve disclosure](../product/FORWARD_CONVENTION_2026-11-02.md) identifies
+5y5y as a five-year simple-compounded annualized forward and distinguishes it from
+semiannual and forward par swap rates. Descriptor values, curve/bootstrap and swap
+engines remain unchanged. Optional AI payloads and user-initiated exports include
+additive scope/convention metadata; existing privacy filters and consent paths remain.
+
+All twenty policy scopes were checked for these bounded changes. They introduce no
+new provider, collection, storage path, SDK, billing, marketing or deletion behavior.
+Existing KIS integration transmission/retention facts remain independently applicable.
+Actual Windows/accessibility/provider checks, commercial/data rights, legal/operator
+facts and publication approval remain unresolved; review-required/BLOCKED is retained.

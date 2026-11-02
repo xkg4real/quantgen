@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 14,
-    "implemented_canonical_groups": 18
+    "implemented_canonical_groups": 20
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -253,10 +253,11 @@
       "source_model": "50. M2-28 단일 종목 규칙 백테스트 (backtest.run_backtest: ma_cross · momentum · rsi_revert)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Executed order sides and completed round trips use the same executable interval window as costs; final-bar pending transitions and gross price wins are explicit. Legacy/unknown count versions remain unverified. Equity, returns and risk arrays unchanged.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md"
     },
     {
       "id": "N12",
@@ -386,10 +387,11 @@
       "source_model": "57. M3-05 곡선 요약 지표·모양·국면 분류",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
+      "next": "Existing 5y5y value is explicitly named five-year simple-compounded annualized forward in native/Flet/AI/export; semiannual and forward par swap rates are distinct. Numerical engines unchanged; alternative convention selector and actual Windows validation not introduced.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/FORWARD_CONVENTION_2026-11-02.md"
     },
     {
       "id": "M3-N07",
