@@ -27,8 +27,11 @@ if 'site-packages' not in Path(desktop.__file__).parts:
 app=QApplication([])
 window=desktop.ResearchWindow(auto_refresh=False)
 window.show();app.processEvents()
-assert window.stack.count()==6
+assert window.stack.count()==7  # Six research workspaces plus the independent guide.
+assert 'guide' in window.nav
+assert window.home_markets.rowCount()==12
+assert window.home_markets.horizontalHeaderItem(7).text()=='Q-SCORE'
 assert not window.windowIcon().isNull()
 assert not window.grab().isNull()
 window.close()
-print('PASS: installed native PyQt6 shell, resources, six workspaces; no engine/provider/ledger start')
+print('PASS: installed native PyQt6 shell, resources, six workspaces plus guide and 12-row watchlist; no engine/provider/ledger start')

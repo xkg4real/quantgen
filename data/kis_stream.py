@@ -251,7 +251,7 @@ class _SubscriptionRejected(KISError):
 
 
 class KISStream:
-    """One selected instrument per view; callbacks run on a daemon worker.
+    """One connection for a chart or bounded watchlist; daemon callbacks.
 
     ``SUBSCRIBED`` means the server accepted the request, and ``LIVE`` is
     emitted only when a valid tick arrives. A connected but quiet market is not
@@ -266,6 +266,7 @@ class KISStream:
         self._stop = threading.Event()
         self._connection = None
         self._spec: Subscription | None = None
+        self._specs: tuple[Subscription, ...] = ()
         self._key = ""
 
     @property
@@ -274,10 +275,29 @@ class KISStream:
 
     def start(self, instrument: Instrument, on_tick: Callable[[MarketTick], None],
               on_status: Callable[[str], None]) -> None:
+        self._start((instrument,), on_tick, on_status)
+
+    def start_many(self, instruments, on_tick: Callable[[MarketTick], None],
+                   on_status: Callable[[str], None]) -> None:
+        """Subscribe to up to six unique domestic stocks on one connection.
+
+        Market permissions still apply. ``SUBSCRIBED`` means *every* requested
+        instrument was acknowledged; a partial subscription is not called ready.
+        """
+        self.stop()
+        instruments = tuple(instruments)
+        if (not 1 <= len(instruments) <= 6
+                or any(not isinstance(i, Instrument) or i.asset != "domestic_stock"
+                       for i in instruments)
+                or len(set(instruments)) != len(instruments)):
+            raise ValueError("Use one to six unique domestic stocks")
+        self._start(instruments, on_tick, on_status)
+
+    def _start(self, instruments, on_tick, on_status):
         # A failed instrument switch must never leave the old instrument live.
         self.stop()
         paper = urlparse(self.client.base_url).hostname == "openapivts.koreainvestment.com"
-        spec = subscription_for(instrument, paper=paper)
+        specs = tuple(subscription_for(i, paper=paper) for i in instruments)
         if not callable(on_tick) or not callable(on_status):
             raise ValueError("Stream callbacks must be callable")
         if not self.client.ready:
@@ -288,9 +308,10 @@ class KISStream:
             if self._thread and self._thread.is_alive():
                 raise KISError("Previous KIS stream is still stopping")
             self._stop = stop = threading.Event()
-            self._spec = spec
+            self._specs = specs
+            self._spec = specs[0]  # Retained for existing single-chart callers.
             self._thread = threading.Thread(
-                target=self._run, args=(instrument, spec, paper, stop, on_tick, on_status),
+                target=self._run, args=(instruments, specs, paper, stop, on_tick, on_status),
                 name="kis-quotation-stream", daemon=True,
             )
             self._thread.start()
@@ -298,11 +319,12 @@ class KISStream:
     def stop(self) -> None:
         with self._lock:
             self._stop.set()
-            connection, spec, key, thread = self._connection, self._spec, self._key, self._thread
+            connection, specs, key, thread = self._connection, self._specs, self._key, self._thread
         if connection is not None:
             try:
-                if spec is not None and key:
-                    connection.send(subscription_message(key, spec, subscribe=False))
+                if key:
+                    for spec in specs:
+                        connection.send(subscription_message(key, spec, subscribe=False))
             except Exception:
                 pass
             try:
@@ -319,7 +341,7 @@ class KISStream:
         except Exception:
             pass
 
-    def _run(self, instrument, spec, paper, stop, on_tick, on_status):
+    def _run(self, instruments, specs, paper, stop, on_tick, on_status):
         failures = 0
         fatal = False
         address = "ws://ops.koreainvestment.com:" + ("31000" if paper else "21000")
@@ -337,7 +359,11 @@ class KISStream:
                         self._connection, self._key = connection, key
                     if stop.is_set():
                         break
-                    connection.send(subscription_message(key, spec))
+                    pending = {(spec.tr_id, spec.tr_key) for spec in specs}
+                    for spec in specs:
+                        if stop.is_set():
+                            break
+                        connection.send(subscription_message(key, spec))
                     while not stop.is_set():
                         try:
                             message = connection.recv(timeout=0.5)
@@ -358,22 +384,30 @@ class KISStream:
                             if header.get("tr_id") == "PINGPONG":
                                 connection.pong(message.encode() if isinstance(message, str) else message)
                                 continue
-                            if header.get("tr_id") == spec.tr_id and header.get("tr_key", spec.tr_key) == spec.tr_key:
+                            matches = [spec for spec in specs if header.get("tr_id") == spec.tr_id
+                                       and header.get("tr_key", spec.tr_key) == spec.tr_key]
+                            if matches:
                                 body = control.get("body") or {}
                                 if not isinstance(body, dict):
                                     continue
                                 if str(body.get("rt_cd", "")) == "0":
-                                    self._status(on_status, "SUBSCRIBED")
+                                    # A missing key is unambiguous only for a chart.
+                                    if len(matches) == 1:
+                                        identity = (matches[0].tr_id, matches[0].tr_key)
+                                        was_pending = identity in pending
+                                        pending.discard(identity)
+                                        if was_pending and not pending:
+                                            self._status(on_status, "SUBSCRIBED")
                                 elif "rt_cd" in body:
                                     raise _SubscriptionRejected("KIS quotation subscription was rejected; check market access")
                             continue
-                        ticks = parse_ticks(message, instrument)
-                        for tick in ticks:
-                            if stop.is_set():
-                                break
-                            on_tick(tick)
-                            if not stop.is_set():
-                                self._status(on_status, "LIVE")
+                        for instrument in instruments:
+                            for tick in parse_ticks(message, instrument):
+                                if stop.is_set():
+                                    break
+                                on_tick(tick)
+                                if not stop.is_set():
+                                    self._status(on_status, "LIVE")
                 except _SubscriptionRejected:
                     fatal = True
                     self._status(on_status, "ERROR: KIS quotation subscription rejected; check market access")
