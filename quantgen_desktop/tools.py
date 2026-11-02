@@ -45,8 +45,17 @@ class ToolPane(QWidget):
         for key, text in sources: self.source.addItem(text, key)
         for i, (name, w) in enumerate((('Tool', self.tool), ('Data source', self.source))):
             w.setAccessibleName(name)
+            # Long translated options remain in the popup/tooltip without
+            # making the two-column header wider than a narrow viewport.
+            w.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+            w.setMinimumContentsLength(12)
+            w.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+            w.setToolTip(w.currentText())
+            w.currentTextChanged.connect(w.setToolTip)
+            w.model().dataChanged.connect(lambda *args, combo=w: combo.setToolTip(combo.currentText()))
             top.addWidget(label(name, 'caption'), 0, i)
             top.addWidget(w, 1, i)
+            top.setColumnStretch(i, 1)
         inner.addLayout(top)
         self.forms, self.fields = QStackedWidget(), {}
         for key, _ in tools:
