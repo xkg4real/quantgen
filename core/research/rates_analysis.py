@@ -125,10 +125,10 @@ def execute_rates(request, *, curve_loader=None, rate_loader=None):
                       threshold=request.threshold, curve=curve, seed=7)
     hpv = None
     if request.instrument == "bond":
-        hpv = horizon_pv_distribution(params, report, kind="bond", curve=curve,
+        hpv = horizon_pv_distribution(report.params, report, kind="bond", curve=curve,
                                      bond=Bond(coupon=request.coupon, maturity=parse_tenor(request.tenor)))
     elif request.instrument == "swap":
-        hpv = horizon_pv_distribution(params, report, kind="swap", curve=curve,
+        hpv = horizon_pv_distribution(report.params, report, kind="swap", curve=curve,
                                      swap=Swap(tenor=parse_tenor(request.tenor)))
     return RatesOutput(request, panel, curve, report, insights.narrate_ratesim(report, hpv),
                        series=series, horizon_pv=hpv)

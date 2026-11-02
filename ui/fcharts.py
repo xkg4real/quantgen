@@ -420,7 +420,7 @@ if __name__ == "__main__":
     ks = np.linspace(pts[0].strike * 0.97, pts[-1].strike * 1.03, 60)
     params = ratesim.calibrate(data.load_short_rate("USD", source="synthetic", days=300))
     sim = ratesim.simulate(params, horizon=1.0, n_paths=300, threshold=0.05)
-    hpv = ratesim.horizon_pv_distribution(params, sim, kind="bond", bond=bond, curve=curve)
+    hpv = ratesim.horizon_pv_distribution(sim.params, sim, kind="bond", bond=bond, curve=curve)
     pairs = ("EURUSD", "USDJPY", "GBPUSD", "AUDUSD", "USDCAD", "USDCHF", "USDKRW")
     spots = {p: data.synthetic_fx(p, days=300) for p in pairs}
     rates = {c: data.synthetic_series(f"RATE_{c}", days=300, kind="rate") for c in data.G10_KRW}
