@@ -280,7 +280,12 @@ class ResearchWindow(QMainWindow):
         from .structuring import StructuringPane
         from .macro import MacroPane
         from .market_tools import DerivativesPane, ETFPane, CryptoPane, KRXPane
-        layout = self.page("Markets", "공급자와 관측일을 함께 확인하는 일별 시장 데이터")
+        from .market_chart import MarketChartPane
+        layout = self.page("Markets", "공급자·관측 시각과 함께 확인하는 시세·차트와 시장 분석")
+        self.market_subtitle = layout.itemAt(1).widget()
+        self.market_subtitle.localized_text = {"ko": "공급자·관측 시각과 함께 확인하는 시세·차트와 시장 분석",
+            "en": "Market quotes, charts and analysis with provider and observation time"}
+        self.market_subtitle.retranslate()
         self.market_refresh = QPushButton("시장지표 새로고침")
         self.market_refresh.clicked.connect(self.refresh_markets)
         layout.addWidget(self.market_refresh)
@@ -302,7 +307,8 @@ class ResearchWindow(QMainWindow):
             pane.requested.connect(lambda q, n=name:self.run_tool(n,q))
             setattr(self, name, pane)
         self.market_tabs=QTabWidget()
-        for pane,name in ((self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX'),(self.structuring,'Structuring'),
+        self.market_chart = MarketChartPane(locale=self.ctx)
+        for pane,name in ((self.market_chart,'KIS chart'),(self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX'),(self.structuring,'Structuring'),
                           (self.derivatives,'Derivatives'),(self.etf,'ETF'),(self.crypto,'Crypto'),(self.krx,'KRX'),
                           (self.macro,'Macro sheet'),(self.macro_records,'Macro v2')):self.market_tabs.addTab(pane,name)
         self.market_tabs.setUsesScrollButtons(True)
@@ -491,6 +497,7 @@ class ResearchWindow(QMainWindow):
         self.language.blockSignals(False)
         self.data_rights.set_locale(self.ctx)
         self.indicator_guide.set_locale(self.ctx)
+        self.market_chart.set_locale(self.ctx)
         self.guide_open.setText(self.ctx.t('start_guide' if self.indicator_guide.isHidden() else 'hide_guide'))
         self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
         from .indicator_guide import IndicatorGuide
@@ -733,9 +740,10 @@ class ResearchWindow(QMainWindow):
             chart.update()
         from .indicator_guide import TechnicalChart
         for chart in self.findChildren(TechnicalChart):chart.redraw()
+        self.market_chart.render()
 
     def closeEvent(self, event):
-        if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy:
+        if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy or self.market_chart.jobs.busy:
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
             return
@@ -749,6 +757,7 @@ class ResearchWindow(QMainWindow):
             event.ignore()
             self.statusBar().showMessage('모의 엔진의 진행 중인 조회가 끝나면 다시 종료해 주세요.')
             return
+        self.market_chart.stop()
         event.accept()
 
 

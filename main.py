@@ -59,6 +59,7 @@ from ui.etf_page import build_etf_page
 from ui.fx_page import build_fx_page
 from ui.strategy_lab_page import build_strategy_lab_page
 from ui.krx_page import build_krx_page
+from ui.market_chart_page import build_market_chart_page
 from ui.macro_page import build_macro_page
 from ui.portfolio_page import build_portfolio_page
 from ui.quant_lab_page import build_quant_lab_page
@@ -73,6 +74,7 @@ from ui.research_home import build_home_page, build_library_page, build_system_p
 LOCALE = "en"
 
 NAV = (
+    ("market_chart", "Live quotes & charts", ft.Icons.CANDLESTICK_CHART_OUTLINED),
     ("macro", "Macro", ft.Icons.PUBLIC_OUTLINED),
     ("rates", "Rates", ft.Icons.SSID_CHART_ROUNDED),
     ("bonds", "Bonds", ft.Icons.RECEIPT_LONG_OUTLINED),
@@ -96,7 +98,7 @@ NAV = (
 WORKSPACES = (
     ("home", "Research Home", ft.Icons.HOME_OUTLINED, ("home",)),
     ("markets", "Markets", ft.Icons.PUBLIC_OUTLINED,
-     ("macro", "rates", "bonds", "fx", "derivatives", "etf", "crypto", "krx")),
+     ("market_chart", "macro", "rates", "bonds", "fx", "derivatives", "etf", "crypto", "krx")),
     ("build", "Build & Test", ft.Icons.SCIENCE_OUTLINED,
      ("quant", "lab", "signals", "structuring", "trading")),
     ("risk", "Portfolio & Risk", ft.Icons.PIE_CHART_OUTLINE, ("portfolio",)),
@@ -145,6 +147,8 @@ def main(page: ft.Page) -> None:
             return build_library_page(page, navigate=navigate)
         if name == "system":
             return build_system_page(page, navigate=navigate)
+        if name == "market_chart":
+            return build_market_chart_page(page, on_open_settings=lambda: navigate("settings"))
         ficc = {"macro": build_macro_page, "rates": build_rates_page,
                 "bonds": build_bonds_page, "fx": build_fx_page,
                 "structuring": build_structuring_page,
@@ -174,6 +178,10 @@ def main(page: ft.Page) -> None:
         return build_settings_page(page)
 
     def navigate(name: str, *, rebuild: bool = False) -> None:
+        if current["page"] == "market_chart" and (name != "market_chart" or rebuild):
+            view = cache.get("market_chart")
+            if view is not None:
+                view.deactivate()
         # Execution must reflect state that changed elsewhere; everything else
         # keeps its live view so a pipeline survives a tab switch.
         if rebuild or name in {"trading", "library"}:
@@ -234,6 +242,8 @@ def main(page: ft.Page) -> None:
                 if len(routes) > 1:
                     for route in routes:
                         label, child_icon = labels[route]
+                        if route == "market_chart" and page.qg_locale.language == "ko":
+                            label = "실시간 시세 · 차트"
                         controls.append(nav_button(label, child_icon, route,
                                                    selected=current["page"] == route,
                                                    indent=True, modal=modal))
@@ -285,6 +295,16 @@ def main(page: ft.Page) -> None:
 
     # Flet 0.85 uses on_resize; keep cached views/engine across resize and navigation.
     page.on_resize = resize
+    def stop_market_stream(e=None):
+        view = cache.get("market_chart")
+        if view is not None:
+            view.deactivate()
+    page.on_disconnect = stop_market_stream
+    def reconnect_market_view(e=None):
+        view = cache.get("market_chart")
+        if current["page"] == "market_chart" and view is not None:
+            view.reconnect_session()
+    page.on_connect = reconnect_market_view
     root=LocalizedRoot(page,[
         rail, separator,
         ft.Column([mobile_bar, desktop_bar, content], expand=True, spacing=0),

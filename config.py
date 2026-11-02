@@ -85,11 +85,12 @@ KIS_BASE_URL = _clean("KIS_BASE_URL") or "https://openapi.koreainvestment.com:94
 
 # Read-only guard (v2 M1, TASK-M1-02; spec P0, T-RO-02): the frozen allowlist of KIS quotation endpoints. The
 # single KIS choke point (data/krx/kis_client.py KISClient._get) refuses any other path before a credential is
-# read or a request is built. The 24 paths in use (kis_client.py, data/kis_markets.py) plus the asking-price path
-# of the owner-run quote-field check (docs/kis_quote_check.py). Never a /trading/, /oauth2/ or account path.
+# read or a request is built. Quotation paths used by kis_client.py, data/kis_markets.py and
+# data/kis_workspace.py, plus the owner-run quote-field check. Never a /trading/, /oauth2/ or account path.
 KIS_QUOTATION_ALLOWLIST = frozenset({
     "/uapi/domestic-stock/v1/quotations/inquire-price",
     "/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice",
+    "/uapi/domestic-stock/v1/quotations/inquire-time-dailychartprice",
     "/uapi/domestic-stock/v1/quotations/inquire-index-price",
     "/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice",
     "/uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn",
@@ -101,14 +102,19 @@ KIS_QUOTATION_ALLOWLIST = frozenset({
     "/uapi/etfetn/v1/quotations/inquire-component-stock-price",
     "/uapi/domestic-futureoption/v1/quotations/inquire-price",
     "/uapi/domestic-futureoption/v1/quotations/inquire-daily-fuopchartprice",
+    "/uapi/domestic-futureoption/v1/quotations/inquire-time-fuopchartprice",
     "/uapi/domestic-futureoption/v1/quotations/display-board-futures",
     "/uapi/domestic-futureoption/v1/quotations/display-board-option-list",
     "/uapi/domestic-futureoption/v1/quotations/display-board-callput",
     "/uapi/domestic-futureoption/v1/quotations/inquire-asking-price",
     "/uapi/overseas-price/v1/quotations/price",
     "/uapi/overseas-price/v1/quotations/dailyprice",
+    "/uapi/overseas-price/v1/quotations/inquire-time-itemchartprice",
     "/uapi/overseas-price/v1/quotations/inquire-daily-chartprice",
     "/uapi/overseas-futureoption/v1/quotations/daily-ccnl",
+    "/uapi/overseas-futureoption/v1/quotations/weekly-ccnl",
+    "/uapi/overseas-futureoption/v1/quotations/monthly-ccnl",
+    "/uapi/overseas-futureoption/v1/quotations/inquire-price",
     "/uapi/overseas-futureoption/v1/quotations/search-contract-detail",
     "/uapi/domestic-bond/v1/quotations/inquire-price",
     "/uapi/domestic-bond/v1/quotations/inquire-daily-price",
