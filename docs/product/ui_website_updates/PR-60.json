@@ -5,14 +5,17 @@
     "destination_title": "웹사이트 작업공간(AWS)",
     "status": "queued",
     "blocker": "No supported cross-chat send tool. Shared handoff record is saved separately; receipt and actual reading remain unverified.",
-    "receipt": null
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/UI_SESSION_CURRENT.md"
   },
   "source": {
     "repository": "https://github.com/xkg4real/quantgen",
     "branch": "gpt/live-chart-layout-20261102",
     "pull_request": "https://github.com/xkg4real/quantgen/pull/60",
     "implementation_commit": "da14c50f0894f00e40dfc0646087c7a9f330825c",
-    "merge_commit": null
+    "merge_commit": "1e67b04a4e6e39a1689bdea3d682c330d40fe6b6",
+    "head_commit": "6a2c062427409b2d61cb1bdfb7ce7d3e56f2650f",
+    "remote_status": "MERGED"
   },
   "summary_ko": [
     "기술지표 가이드를 독립 왼쪽 메뉴로 이동하고 연구홈에 기존 지표 6종+국내주식 6종·상세보기를 배치했습니다.",
@@ -46,7 +49,16 @@
     "publication_readiness": "BLOCKED",
     "actual_kis": "NOT_RUN",
     "windows_new_ui_manual": "NOT_RUN",
-    "ci": "PENDING"
+    "ci": "SUCCESS",
+    "runtime_ci": "https://github.com/xkg4real/quantgen/actions/runs/41385301484",
+    "document_ci": "https://github.com/xkg4real/quantgen/actions/runs/41385301381",
+    "windows_ci": [
+      "3.11",
+      "3.12",
+      "3.14"
+    ],
+    "linux_ci": "3.12",
+    "installed_wheel_smoke": "PASS outside source checkout; 7 pages, independent guide, 12 rows, Q-SCORE"
   },
   "website_application": {
     "status": "not_applied",
