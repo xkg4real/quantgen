@@ -432,7 +432,7 @@
     "tests/reference/__init__.py": "981465fb05d87f128a0b80cc4b8122a83335ee0994ce5b4d3ee3bdbe72bc6e9c",
     "tests/reference/reference_mode.py": "f79ad9f482323344ee20c6685edf08b8abd64f11dfad25ab40cd132ad9339c37",
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
-    "tests/research_home_acceptance.py": "471b9f74e6978b6420d2daa1cff231410261fe22fcdaa8d7e197bb00f4c1a8f8",
+    "tests/research_home_acceptance.py": "6837298838c5850841a432c08f7397185befc549937c4cf29b28c8ca2313cd1e",
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
     "tests/runtime_syntax_acceptance.py": "174dd84c35a1085a271baa27c0a8e651b519af0e348d912e62a6453027d94e7e",
     "tests/sabr_diagnostics_acceptance.py": "934edacf62c87d572930e9f824120c22dd98dfe0ddc5257e08645b704670e07f",
@@ -518,161 +518,161 @@
       "document_sha256": "31a79b6417732796945b28f5f167a432d6f53eb86852bc8eeadd9b8923aff155",
       "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.369223+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.419194+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "2": {
       "document_sha256": "ff1afc17787f8c26209a022892c76e5d44af87b32988be7e01a6e9ee83d81c2f",
       "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.371541+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.421440+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
       "source_digest": "d569ed2d9bdd8152c911d9779de7828ee7923e26f4bd9abe0c762b049fbc818a",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.373746+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.423697+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "4": {
       "document_sha256": "6e917ef0c712b4406cc1ce8007884dae6c2922c46b364ed7ead166868de77b59",
       "source_digest": "1130f6b59b4881fe995dbba6f63c63899ff68b95dc555883c3406f65c8f8d6ef",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.375842+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.425951+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "8b35907b25be5cd985f8c4ad03410b7e0d085afccfc6db061e2ae2164afed1b9",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.377841+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.427997+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "6": {
       "document_sha256": "d6b67c23112b708082f04d4ca62899b978a69b7f19e04a3149b63df9c4aba062",
       "source_digest": "2bcaf38fbe2f6cfd40e90ae6f06c47f07c107ba851d49a7d5cb39ef9c7c5fd75",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.380200+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.430205+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "7": {
       "document_sha256": "bd91d3d8ea6a85eb7f6f9f0e8afdc40403760e40ca03df95c419e76e35817f70",
       "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.382809+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.432402+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "8": {
       "document_sha256": "f8c83e2d6942ae1a0a45863a951ec512c9a099e089b970d580c7a075f1fe70b7",
       "source_digest": "2bcaf38fbe2f6cfd40e90ae6f06c47f07c107ba851d49a7d5cb39ef9c7c5fd75",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.384852+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.434650+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "9": {
       "document_sha256": "0425a711d615ab6ff44a4573ed1d4962dc620cc0f89ac349481a0eee448ee262",
       "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.386835+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.436632+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
       "source_digest": "f532a9930446bdd84667cec423ab693f2ebbf453ff7529bfdba5cdfb28e6e740",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.388817+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.438819+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
       "source_digest": "1478fa88a12d3fd6874a87f69d8530779f9dd6eaeee44f7ec9f85b11da59f9c3",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.390846+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.441455+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "12": {
       "document_sha256": "407e354b7b2d7281c5b1555b04767a04ba47bf16c061cb5ac429ff8a6cfabc0e",
-      "source_digest": "641f1b7c59f9ffa3d1a461df9a6f56a9209a27c4cb18a87b7758a25d60eb5dcb",
+      "source_digest": "88e2531af8c293e6c8b254e5eedf7066ef96cabfb7bacd1aaa18abf54ea7fa4f",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.392805+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.443579+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "13": {
       "document_sha256": "3a5eb3e68df8feebe2eaa02a96f4e89f87dbe2cf17fa6f58d6e372eb59b16b1f",
       "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.395258+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.445569+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "14": {
       "document_sha256": "5db35b4cdfe4e6f054979abadb7fc49d628154719f319ce7308626f004515d5d",
       "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.397243+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.447435+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "15": {
       "document_sha256": "e5143b74273be5899c679d40e2e447da79c3fe5b565e278bf014535954d64701",
       "source_digest": "b2b7cde24fa854253d73417a9aee50297d39f35f0109dd24c64762af7ee8797b",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.399479+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.449780+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
       "source_digest": "09b26bceb680f1b09f14c30db85b80f5ae1d2d06b44a070c7abd6a412ffe5924",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.401530+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.451688+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
       "source_digest": "2bcaf38fbe2f6cfd40e90ae6f06c47f07c107ba851d49a7d5cb39ef9c7c5fd75",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.403615+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.454173+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
       "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.405444+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.456553+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "19": {
       "document_sha256": "1a489fb06d0cb74a247df01ed5d43f7ab9921dc4326920a8fc805a26a9a6addd",
       "source_digest": "6f73f42f189adefd51ae651432a0f7040b9ec13ef8085bbbdd91d165486bea5e",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.407460+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.458944+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     },
     "20": {
       "document_sha256": "7c3cbc05a1d70875329da961cdcc2827878c98285aff03ed7856cd06a1db9b91",
       "source_digest": "ced14ad3058cde0d90a80b467e2d345378c13d4573a83b9b15227beeda30d795",
       "reviewed_by": "Codex source-review team",
-      "review_note": "Reviewed all twenty policy scopes for explicit LETF funding fee and dividend assumptions, conditional FX CIP interpretation, first-period CMS coupon, executable Signals counts and five-year simple forward disclosure. Preserved integrated KIS transmission and retention evidence, privacy and consent paths, pricing arrays, formal research gates and publication requirements.",
-      "reviewed_at": "2026-11-02T02:57:55.409396+00:00",
-      "source_commit": "2f53563ee59f93427f1875a860ea5c5a28f6de88"
+      "review_note": "Retained all twenty reviewed policy scopes for the five financial corrections and merged the Home chart lifecycle fixture repair. Source has ninety-nine integrated regressions and exact-source installed Flet/native smoke evidence. Actual provider, Windows manual, formal research, legal and publication gates remain separate.",
+      "reviewed_at": "2026-11-02T03:03:14.461460+00:00",
+      "source_commit": "7483459d3c7d88ac9e3bd6dbf0e53fd2f71da557"
     }
   }
 }
