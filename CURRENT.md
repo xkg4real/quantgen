@@ -6,7 +6,7 @@ task: owner-product-workflow-20261029
 cycle: 2026-10-27
 done_ids: ⑬-8/ui-handoff-51, ⑬-8/b2/c/b/a, ⑬-8/ui-handoff-49, ⑬-8/b2/c/a, ⑬-9/ui-handoff-46, ⑬-9/a, ⑨-2/c, ⑬-8/ui-handoff-43-44, ⑬-8/b2/b, ⑬-8/b2/a, ⑬-8/ui-handoff-40, ⑬-8/b1, ⑬-8/a, ②-5/M4-N8, ②-1/b, ②-5/M3-N04, ②-5/M4-N12, ②-5/M4-N1, ②-5/M4-N2, ②-5/NEW-M6-02/a, ②-5/NEW-M6-03, ②-5/N1, ②-5/N-M1-03, ②-5/N-M1-11, ②-5/N-M1-09, ②-5/N-M1-10, ④-3/O8/a, ②-5/M4-N5, ②-5/M3-N07, ②-5/NEW-M6-18, ④-3/O11-A2/a, ②-5/§10-a, ②-5/NEW-M6-01, ⑦-4/BS-21, ⑬-2/j, ⑬-2/i, ⑬-2/h, ⑬-2/g, ⑬-2/e, ⑬-2/f, ⑫-3, ⑬-1/a, ⑬-1/b, ⑬-2/b, ⑬-2/c, ⑬-2/d, ⑨-2/a, ⑩-1/a, ⑩-2/a, ⑪-1/a
 next_ids: ⑬-8/b2/c/b/b, ⑬-9/b, ②-5/M4-N3, ②-5/NEW-M6-02, ④-3/O11-A2/b, ②-5/§10-b, ⑬-2/k, ⑬-1/c, ⑨-2/b, ⑩-1/b, ⑩-2/b, ⑪-1/b, ⑫-2/b
-updated_at: 2026-11-02T11:49:00+09:00
+updated_at: 2026-11-02T11:46:53.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/remaining-work-20261102
@@ -25,7 +25,7 @@ handoff_id: 2026-10-27/owner-product-workflow-20261029/a45bca0b6c73178729d1c3d21
 
 > 최신 사용자 직접 지시: 2026-11-02 13:00 KST를 목표로 지정 Notion Remaining Work 미완료 항목(4~7,10 등)을 재개한다. GPT/Gemini spec 공개/추가 모델 심사를 수행하지 않는다. 기존 O8 NOT_PERFORMED와 기술·Windows·실행 조건은 보존하며 실제 확인된 하위 작업만 완료 표시한다. 이전 STOP은 이번 범위의 직접 재개 지시로 해제됐다. 아래 10월31일 반환 내용은 이전 이력이며 최신 지시보다 우선하지 않는다. 현재 최신 코드·문서/검사 상태를 대조하는 중이며 외부 실행 승인/개인 PC/원장 제한은 유지한다.
 
-## 11월2일 11:49 진행 체크포인트
+## 11월2일 11:46 진행 체크포인트
 - PR54 source follow-up c2bf636 / head5c7acbb 원격 push/read-back. 통합 언어/레이아웃32 PASS. 이전 efd9b0c의 Windows/Ubuntu/runtime/compliance CI는 success지만 새 head 검사와 구분한다.
 - 다른 세션 PR55/56이 main69a2559로 병합됐고 PR54 충돌을 발견했다. 양쪽 기능을 보존한 local147afc0 통합 후 Flet20경로/설치PyQt6 기본구동 PASS. 새 KIS 차트 light 범례 대비를 수정해17 합성 PASS; 정책/외부전송/보관/의존성 사실을 추가 검토·보강 중. 다음은 final source push와 exact-head CI이다.
 - LETF/FX/CMS 분리 branch localcf6ad36에 통합,59 합성회귀 PASS. 별도 N11 거래수 e6da9e4는11검사·독립8192비교 PASS, M3-N06 선도금리규약 b0f965c는13검사 PASS. 두 승인된 일반 수정의 후속 통합 진행, 원격PR/최종CI 아직 없음.
