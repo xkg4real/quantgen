@@ -559,6 +559,9 @@ Volatility · %|변동성 · %
 Observations · {start} → {end}|관측 · {start} → {end}
 '''
 
+from .display_prose_catalog import PAIRS as _DISPLAY_PROSE, cms_schedule_korean
+_PAIRS += _DISPLAY_PROSE
+
 EN, KO = {}, {}
 TEMPLATES = []
 for line in (_PAIRS + _TERMS).strip().splitlines():
@@ -587,6 +590,9 @@ def translate(text, language):
         if lang == language:
             m = pattern.fullmatch(text)
             if m: return target.format(**m.groupdict())
+    if language == 'ko':
+        schedule = cms_schedule_korean(text)
+        if schedule != text: return schedule
     if '\n' in text:
         return '\n'.join(translate(line, language) for line in text.split('\n'))
     return text
