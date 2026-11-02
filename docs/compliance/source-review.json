@@ -310,7 +310,7 @@
     "quantgen_desktop/signals.py": "ae9a3eb8f1cb491facbc0df37c162b728211716b7f74e4cdf1b30f24e04fce26",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "fdd1b9ace2fdf3395704ad138b6d0fa8fbbfe1036f6c7cab8bbbdc3ae5aaf312",
-    "quantgen_desktop/tools.py": "d5fe5dada5e1860ea92b2826b7f36136babc91faba225bede59d8455de2b33df",
+    "quantgen_desktop/tools.py": "a3a87622c40db871c16e496c4c2477575bca1fe5b672edf923f48a4658203a78",
     "quantgen_desktop/translations.py": "a0b0d3950fc34b59f6478b315ffdb7d0b0c69ac422e2255b24c25aac54b6f4d2",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
     "requirements.txt": "efe528fea6e00d9edb734ada7e11c75ece2e7b8996d2697fca643e15eefc000e",
@@ -348,7 +348,7 @@
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_rates_language_acceptance.py": "506bb6fdd48bf13a00f509eba198260a9961522892295309360025be2b4c45c0",
-    "tests/desktop_responsive_tools_acceptance.py": "544ae65319666abcbb80e49daeb612ea4b938b6d4ed980a02133d60848a7f90c",
+    "tests/desktop_responsive_tools_acceptance.py": "78d38f9d592f7494012c78cb26443bef516592fadd11448ce535efce533c0e92",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
@@ -500,163 +500,163 @@
   "reviews": {
     "1": {
       "document_sha256": "31a79b6417732796945b28f5f167a432d6f53eb86852bc8eeadd9b8923aff155",
-      "source_digest": "5c4eba69125d56981384604d0a6087de5ec7bb09c871566fedc144080e952287",
+      "source_digest": "625d556218ac31a27ec2da6409dc5557150e1563be306b773794a82483c4f604",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.888716+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.264687+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "2": {
       "document_sha256": "ff1afc17787f8c26209a022892c76e5d44af87b32988be7e01a6e9ee83d81c2f",
-      "source_digest": "5c4eba69125d56981384604d0a6087de5ec7bb09c871566fedc144080e952287",
+      "source_digest": "625d556218ac31a27ec2da6409dc5557150e1563be306b773794a82483c4f604",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.891500+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.267464+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "e2a6c4dfbab4bb13cae8e51c4d6fb57561f254a7a560486b737b4f3c82d98b9d",
+      "source_digest": "3c7f366cbd436d65659737ee618b7d82ef1fdf5bb795eb97fbe273f1b9ccf932",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.893891+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.269702+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "4": {
       "document_sha256": "6e917ef0c712b4406cc1ce8007884dae6c2922c46b364ed7ead166868de77b59",
       "source_digest": "8ca1815f4e826c84fee4783a1e6e857378cc2e541579a488f27a0cd6b136c878",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.896431+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.271847+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "aae561fa4a950f98e476595f0c576385de9fa0aa0ed0707f74dbb98abf55f75b",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.898554+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.274055+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "6": {
       "document_sha256": "d6b67c23112b708082f04d4ca62899b978a69b7f19e04a3149b63df9c4aba062",
-      "source_digest": "3931790b6e189a77418961b60a2f215acf89934cf3433540fcb4e5eb11cef9e8",
+      "source_digest": "f7920e6d4ace9c4dc6e7ca45d3ef77115941088b099b92b9f0d1ed17d6790129",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.900776+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.276135+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "7": {
       "document_sha256": "bd91d3d8ea6a85eb7f6f9f0e8afdc40403760e40ca03df95c419e76e35817f70",
-      "source_digest": "5c4eba69125d56981384604d0a6087de5ec7bb09c871566fedc144080e952287",
+      "source_digest": "625d556218ac31a27ec2da6409dc5557150e1563be306b773794a82483c4f604",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.902797+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.278805+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "8": {
       "document_sha256": "f8c83e2d6942ae1a0a45863a951ec512c9a099e089b970d580c7a075f1fe70b7",
-      "source_digest": "3931790b6e189a77418961b60a2f215acf89934cf3433540fcb4e5eb11cef9e8",
+      "source_digest": "f7920e6d4ace9c4dc6e7ca45d3ef77115941088b099b92b9f0d1ed17d6790129",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.905055+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.281490+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "9": {
       "document_sha256": "0425a711d615ab6ff44a4573ed1d4962dc620cc0f89ac349481a0eee448ee262",
-      "source_digest": "0852f7aed60d6936add0942aff6fc282225c7fe0d218afb80e552b28db4b5071",
+      "source_digest": "6a2d6746dddfab837ed2c88988240938c8c95dd61b1cd00b376b5786e4cb1f10",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.907524+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.283644+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "dc0d7a4f7fc0777f3063af853465eb08ee6fa321d98b203f6e2c4f990899cfc9",
+      "source_digest": "c851b2002511381fdee03d0e79fc7a872f3d348fe1c19e576ab35ba025cd01ab",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.910122+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.285999+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "11": {
       "document_sha256": "a5df3f94ff2eaffcd9ab1f2da941ae5c096bbd0cb340e21779d5b4220d7922c2",
-      "source_digest": "dd3515a5261c4331b7ed07f6cf770d217ac8fda34c3cdd95e86589399a97559f",
+      "source_digest": "5f975f8b2975b43c6b59816d71f6efb0e805465c36868acbb6940e5e76628d90",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.912391+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.288302+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "12": {
       "document_sha256": "407e354b7b2d7281c5b1555b04767a04ba47bf16c061cb5ac429ff8a6cfabc0e",
-      "source_digest": "fae5571cf98422d09efaecad89bebd99d90ef87a8d42bcc37a6269aa3664ff3e",
+      "source_digest": "ac32dd97d365ccfc970c7036b7dd72966a1eb1a47992bb53545a5892485d3c7e",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.914608+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.290368+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "13": {
       "document_sha256": "3a5eb3e68df8feebe2eaa02a96f4e89f87dbe2cf17fa6f58d6e372eb59b16b1f",
-      "source_digest": "0852f7aed60d6936add0942aff6fc282225c7fe0d218afb80e552b28db4b5071",
+      "source_digest": "6a2d6746dddfab837ed2c88988240938c8c95dd61b1cd00b376b5786e4cb1f10",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.916561+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.292391+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "14": {
       "document_sha256": "5db35b4cdfe4e6f054979abadb7fc49d628154719f319ce7308626f004515d5d",
-      "source_digest": "0852f7aed60d6936add0942aff6fc282225c7fe0d218afb80e552b28db4b5071",
+      "source_digest": "6a2d6746dddfab837ed2c88988240938c8c95dd61b1cd00b376b5786e4cb1f10",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.918957+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.294554+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "15": {
       "document_sha256": "e5143b74273be5899c679d40e2e447da79c3fe5b565e278bf014535954d64701",
-      "source_digest": "0852f7aed60d6936add0942aff6fc282225c7fe0d218afb80e552b28db4b5071",
+      "source_digest": "6a2d6746dddfab837ed2c88988240938c8c95dd61b1cd00b376b5786e4cb1f10",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.921027+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.296564+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "bf4f755a4ddaecb42c2e0e5e4512247f22f8ebd58e011b293b18b16850ac48dc",
+      "source_digest": "b6b6fc84dac5d88ba4b624c04a482476978b6f1571c0b63364bd0a1b7b38c214",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.923195+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.298939+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "3931790b6e189a77418961b60a2f215acf89934cf3433540fcb4e5eb11cef9e8",
+      "source_digest": "f7920e6d4ace9c4dc6e7ca45d3ef77115941088b099b92b9f0d1ed17d6790129",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.925323+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.300892+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "5c4eba69125d56981384604d0a6087de5ec7bb09c871566fedc144080e952287",
+      "source_digest": "625d556218ac31a27ec2da6409dc5557150e1563be306b773794a82483c4f604",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.927403+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.302860+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "19": {
       "document_sha256": "1a489fb06d0cb74a247df01ed5d43f7ab9921dc4326920a8fc805a26a9a6addd",
       "source_digest": "cd4809a7233d21d03991b1ce48e503dd1049a58a008a4396b12c34fa80007757",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.929528+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.304789+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     },
     "20": {
       "document_sha256": "7c3cbc05a1d70875329da961cdcc2827878c98285aff03ed7856cd06a1db9b91",
-      "source_digest": "5c4eba69125d56981384604d0a6087de5ec7bb09c871566fedc144080e952287",
+      "source_digest": "625d556218ac31a27ec2da6409dc5557150e1563be306b773794a82483c4f604",
       "reviewed_by": "GPT",
-      "review_note": "Reviewed selected-tab height-for-width calculation, explicit minimum preservation and unchanged overflow assertions with platform geometry diagnostics; no financial or provider behavior changes.",
-      "reviewed_at": "2026-11-02T03:40:49.931446+00:00",
-      "source_commit": "3e979d9f23195b5579b92f13c8c2968618c62fd9"
+      "review_note": "Reviewed narrow native header sizing and platform font regression; existing provider, legal and actual execution gates retained.",
+      "reviewed_at": "2026-11-02T03:51:07.307045+00:00",
+      "source_commit": "e9608be3531a4661e9d8327292864ed64dbd357a"
     }
   }
 }
