@@ -9,13 +9,33 @@ import unittest
 from unittest.mock import Mock, patch
 
 
+_private_io_guard_active = False
+
+
 def _no_private_io(event, args):
+    # Audit hooks cannot be removed. Keep this module's restrictions inactive
+    # during discovery and after its tests, including another suite's asyncio
+    # loopback setup on Windows.
+    if not _private_io_guard_active:
+        return
     if event == 'socket.connect':
         raise AssertionError('No providers in LETF scenario tests')
     if event == 'open' and isinstance(args[0], (str, bytes)):
         p = Path(args[0].decode() if isinstance(args[0], bytes) else args[0])
         if p.name == '.env' or set(p.parts) & {'cache', 'paper_live', 'grokteam', 'cards', '_backup'}:
             raise AssertionError('Protected input is outside the test scope')
+
+
+def _disable_private_io_guard():
+    global _private_io_guard_active
+    _private_io_guard_active = False
+
+
+def setUpModule():
+    global _private_io_guard_active
+    _private_io_guard_active = True
+    # Module cleanups also run if a test or a later module setup step fails.
+    unittest.addModuleCleanup(_disable_private_io_guard)
 
 
 sys.addaudithook(_no_private_io)
