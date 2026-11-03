@@ -1,14 +1,14 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-11-04T01:31:16+09:00
+created_at: 2026-11-04T02:07:21+09:00
 source_branch: claude/ui-markets-a4-20261103
-source_head: e967fec
+source_head: 96709a7
 upstream: origin/claude/ui-markets-a4-20261103
-patch_base: e967fec
+patch_base: 96709a7
 unpushed_commits: 0
-uncommitted_files: 0
-patch: none
+uncommitted_files: 2
+patch: AUTO_STATE.patch (`git apply AUTO_STATE.patch` on patch_base)
 usage_pct: unknown
 usage_resets_at: unknown
 session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
@@ -26,6 +26,8 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
+96709a7 Report layout numbers when a tool form is clipped
+42105eb Make the wrapped-caption check independent of the runner's fonts
 e967fec Wait for nested layouts before checking form clipping (A2 CI fix)
 dbeb4b6 Queue the PR-67 operation fixes for the website workspace
 4ece546 Fix desktop operation bugs: wheel, bond digits, form clipping, icon, AI button (A2)
@@ -39,8 +41,6 @@ d6413d9 Split Markets into asset-class tabs and choose the chart provider automa
 ba3b6b2 Merge pull request #64 from xkg4real/claude/ui-markets-a4-20261103
 9f7dc0e Queue the PR-64 guide search change for the website workspace
 7de46d4 Make the native indicator guide search-first with a bilingual market glossary (UI-13)
-140f101 Owner rulings 2026-11-03 (cont.): amend the no-order-path principle to a confined order module; GPT private WIP retrieval
-db07005 Merge pull request #63 from xkg4real/claude/ui-markets-a4-20261103
 ```
 
 ## 푸시되지 않은 커밋
@@ -52,13 +52,16 @@ db07005 Merge pull request #63 from xkg4real/claude/ui-markets-a4-20261103
 ## 커밋되지 않은 변경
 
 ```
-(없음)
+M quantgen_desktop/tools.py
+ M tests/desktop_operation_fixes_acceptance.py
 ```
 
 `patch_base` 이후 바뀐 파일 (푸시 안 된 커밋 포함):
 
 ```
-(없음)
+quantgen_desktop/tools.py                   |  5 ++++-
+ tests/desktop_operation_fixes_acceptance.py | 20 +++++++++++++++++++-
+ 2 files changed, 23 insertions(+), 2 deletions(-)
 ```
 
-전체 diff: none
+전체 diff: AUTO_STATE.patch (`git apply AUTO_STATE.patch` on patch_base)

@@ -1,0 +1,54 @@
+diff --git a/quantgen_desktop/tools.py b/quantgen_desktop/tools.py
+index d60ff1e..75f97f7 100644
+--- a/quantgen_desktop/tools.py
++++ b/quantgen_desktop/tools.py
+@@ -85,7 +85,10 @@ class ToolPane(QWidget):
+         layout.setSpacing(18)
+         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+         self.input_box, inner = panel(title)
+-        self.input_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
++        # Preferred, not Maximum: a Maximum height is capped at the size hint, which Qt takes at the panel's
++        # preferred width. Where captions wrap more at the real width (Windows fonts), that cap cut the
++        # last form row (owner UI-6a). The pane's top alignment still keeps the panel from stretching.
++        self.input_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+         top = QGridLayout()
+         self.tool, self.source = QComboBox(), QComboBox()
+         for key, text in tools: self.tool.addItem(text, key)
+diff --git a/tests/desktop_operation_fixes_acceptance.py b/tests/desktop_operation_fixes_acceptance.py
+index 88341f9..9ecf078 100644
+--- a/tests/desktop_operation_fixes_acceptance.py
++++ b/tests/desktop_operation_fixes_acceptance.py
+@@ -167,7 +167,8 @@ class OperationFixTests(unittest.TestCase):
+             page = pane.forms.currentWidget()
+             bottom = max(c.geometry().bottom() for c in page.findChildren(QWidget)
+                          if c.parent() is page and not c.isHidden())
+-            return bottom < pane.forms.height()
++            box = pane.input_box  # nothing in the input panel is squeezed below its wrapped height
++            return bottom < pane.forms.height() and box.height() >= box.heightForWidth(box.width())
+         for width in (1000, 1360):
+             w.resize(width, 900)
+             for pane in (w.rates, w.krx, w.fx, w.etf, w.derivatives, w.crypto):
+@@ -190,6 +191,23 @@ class OperationFixTests(unittest.TestCase):
+             self.assertTrue(fits(w.fx), f"{width}\n{layout_report(w.fx)}")
+         self.assertGreater(w.fx.forms.height(), before)  # the wrapped captions really took more room
+ 
++    def test_form_panel_is_not_capped_at_a_wider_preferred_width(self):
++        """Windows CI: the ETF panel's size hint, taken at a wider preferred width, was 383 px while its
++        wrapped content needed 411 px at the real width, and a Maximum height policy cut it to 383.
++        A child that prefers a wide layout recreates that on any platform."""
++        from PyQt6.QtCore import QSize
++
++        class WideHint(QWidget):
++            def sizeHint(self): return QSize(1600, 8)
++            def minimumSizeHint(self): return QSize(10, 8)
++        w = self.window
++        w.resize(1000, 900); w.show_market_pane(w.etf); settle(self.app)
++        grid = w.etf.forms.currentWidget().layout()
++        grid.addWidget(WideHint(), grid.rowCount(), 0, 1, 3); settle(self.app)
++        box = w.etf.input_box
++        self.assertLess(box.sizeHint().height(), box.heightForWidth(box.width()))  # the Windows condition holds
++        self.assertGreaterEqual(box.height(), box.heightForWidth(box.width()), layout_report(w.etf))
++
+     def test_window_and_app_icons_carry_taskbar_sizes(self):
+         icon = app_icon()
+         sizes = {size.width() for size in icon.availableSizes()}
