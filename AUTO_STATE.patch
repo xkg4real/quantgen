@@ -1,0 +1,467 @@
+diff --git a/quantgen_desktop/app.py b/quantgen_desktop/app.py
+index 271dc39..c5aee0e 100644
+--- a/quantgen_desktop/app.py
++++ b/quantgen_desktop/app.py
+@@ -45,6 +45,20 @@ from .chart_study import CurrentPageTabs
+ from .macro_records import execute_macro_records
+ 
+ 
++# Markets asset classes: (key, tab title, chart asset or None, tool panes in order).
++MARKET_CLASSES = (
++    ('domestic', 'Domestic securities', 'domestic_stock', ('etf', 'krx')),
++    ('overseas', 'Overseas securities', 'overseas_stock', ()),
++    ('domestic_derivatives', 'Domestic derivatives', 'domestic_future', ('derivatives',)),
++    ('overseas_derivatives', 'Overseas derivatives', 'overseas_future', ()),
++    ('bonds', 'Bonds', 'bond', ('bonds',)),
++    ('rates', 'Rates & swaps', None, ('rates', 'structuring')),
++    ('fx', 'FX', None, ('fx',)),
++    ('crypto', 'Crypto', None, ('crypto',)),
++    ('macro', 'Macro', None, ('macro', 'macro_records')),
++)
++
++
+ def label(text, role="", *, wrap=True):
+     w = UiLabel(text)
+     w.setTextFormat(Qt.TextFormat.PlainText)
+@@ -323,15 +337,69 @@ class ResearchWindow(QMainWindow):
+             pane = pane_type()
+             pane.requested.connect(lambda q, n=name:self.run_tool(n,q))
+             setattr(self, name, pane)
+-        self.market_tabs=CurrentPageTabs()
++        for pane in (self.rates,self.fx,self.structuring,self.macro,self.derivatives,self.etf,self.crypto,self.krx):
++            pane.hide_source()
++        self.macro_records.set_source_caption('Record set')
+         self.market_chart = MarketChartPane(locale=self.ctx)
+-        for pane,name in ((self.market_chart,'KIS chart'),(self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX'),(self.structuring,'Structuring'),
+-                          (self.derivatives,'Derivatives'),(self.etf,'ETF'),(self.crypto,'Crypto'),(self.krx,'KRX'),
+-                          (self.macro,'Macro sheet'),(self.macro_records,'Macro v2')):self.market_tabs.addTab(pane,name)
++        self.market_chart.setObjectName('marketChart')
++        # UI-8 (owner, 2026-11-03): asset-class tabs instead of a separate KIS chart tab.
++        # One chart pane moves into the selected chartable class; its provider is chosen automatically.
++        self.market_tabs=CurrentPageTabs()
++        self.market_classes=[]
++        names={'etf':'ETF','krx':'KRX','derivatives':'Derivatives','bonds':'Bonds','rates':'Rates',
++               'structuring':'Structuring','fx':'FX','crypto':'Crypto','macro':'Macro sheet','macro_records':'Macro v2'}
++        for key,title,asset,tools in MARKET_CLASSES:
++            panes=[(getattr(self,tool),names[tool]) for tool in tools]
++            slot=None
++            if asset:
++                slot=QWidget();slot.setObjectName('chartSlot')
++                slot_layout=QVBoxLayout(slot);slot_layout.setContentsMargins(0,0,0,0)
++                panes.insert(0,(slot,'Price chart'))
++            inner=None
++            if len(panes)==1:
++                page=panes[0][0]
++            else:
++                inner=page=CurrentPageTabs();inner.setObjectName('marketInnerTabs')
++                for pane,name in panes:inner.addTab(pane,name)
++                inner.currentChanged.connect(self.market_tabs.updateGeometry)
++            self.market_tabs.addTab(page,title)
++            self.market_classes.append({'key':key,'asset':asset,'page':page,'inner':inner,'slot':slot,
++                                        'panes':[pane for pane,_ in panes]})
+         self.market_tabs.setUsesScrollButtons(True)
++        self.market_tabs.currentChanged.connect(self._market_class_changed)
++        self._market_class_changed(self.market_tabs.currentIndex())
+         layout.addWidget(self.market_tabs)
+         layout.addStretch()
+ 
++    def _market_class_changed(self,index):
++        entry=self.market_classes[index] if 0<=index<len(self.market_classes) else None
++        if entry is None or entry['slot'] is None:return
++        if self.market_chart.parent() is not entry['slot']:
++            entry['slot'].layout().addWidget(self.market_chart)
++        self.market_chart.set_asset_class(entry['asset'])
++        self.market_chart.show()
++
++    def show_market_pane(self,pane):
++        """Select the asset class (and inner tab) that shows `pane`; the chart follows the class."""
++        order=list(enumerate(self.market_classes))
++        if pane is self.market_chart:
++            # Keep the chart in the class the user is viewing when that class has one.
++            current=self.market_tabs.currentIndex()
++            order=[order[current]]+order if 0<=current<len(order) else order
++        for index,entry in order:
++            target=entry['slot'] if pane is self.market_chart else pane
++            if target is not None and target in entry['panes']:
++                self.market_tabs.setCurrentIndex(index)
++                self._market_class_changed(index)
++                if entry['inner'] is not None:entry['inner'].setCurrentWidget(target)
++                return entry
++        raise ValueError('Pane is not part of the Markets workspace')
++
++    def current_market_pane(self):
++        entry=self.market_classes[self.market_tabs.currentIndex()]
++        page=entry['inner'].currentWidget() if entry['inner'] is not None else entry['page']
++        return self.market_chart if page is entry['slot'] else page
++
+     def make_quant(self):
+         outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
+         self.quant_tabs = QTabWidget()
+@@ -620,11 +688,11 @@ class ResearchWindow(QMainWindow):
+ 
+     def open_live_chart(self):
+         self.navigate('markets')
+-        self.market_tabs.setCurrentWidget(self.market_chart)
++        self.show_market_pane(self.market_chart)
+ 
+         def reveal():
+             scroll = self.stack.widget(self.route_indices['markets'])
+-            if self.stack.currentWidget() is scroll and self.market_tabs.currentWidget() is self.market_chart:
++            if self.stack.currentWidget() is scroll and self.current_market_pane() is self.market_chart:
+                 top = self.market_tabs.mapTo(scroll.widget(), self.market_tabs.rect().topLeft()).y()
+                 scroll.verticalScrollBar().setValue(top)
+                 self.market_chart.symbol.setFocus(Qt.FocusReason.OtherFocusReason)
+@@ -634,9 +702,10 @@ class ResearchWindow(QMainWindow):
+ 
+     def open_stock_chart(self, symbol):
+         # Selecting a row changes the chart inputs; loading remains explicit.
+-        pane = self.market_chart
+-        pane.asset.setCurrentIndex(pane.asset.findData('domestic_stock'))
+-        pane.symbol.setText(symbol)
++        # Home rows are domestic stocks: select that class before setting the code.
++        self.market_tabs.setCurrentIndex(0)
++        self._market_class_changed(0)
++        self.market_chart.symbol.setText(symbol)
+         self.open_live_chart()
+ 
+     def change_language(self,index):
+@@ -887,6 +956,8 @@ class ResearchWindow(QMainWindow):
+           QTabWidget::pane {{ border: 0; }}
+           QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 18px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-weight: 500; }}
+           QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; }}
++          QTabWidget#marketInnerTabs QTabBar::tab {{ background: transparent; color: {p.muted}; padding: 7px 14px; margin-right: 6px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; }}
++          QTabWidget#marketInnerTabs QTabBar::tab:selected {{ background: transparent; color: {p.accent}; border-bottom: 2px solid {p.accent}; font-weight: 600; }}
+           QLineEdit#guideSearch {{ min-height: 34px; padding: 6px 12px; border-radius: 20px; font-size: 14px; }}
+           QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; padding: 4px; outline: 0; }}
+           QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
+diff --git a/quantgen_desktop/bonds.py b/quantgen_desktop/bonds.py
+index c7e2744..db8bbb7 100644
+--- a/quantgen_desktop/bonds.py
++++ b/quantgen_desktop/bonds.py
+@@ -28,8 +28,10 @@ class BondsPane(QWidget):
+         for v in ('auto','fred','synthetic'):self.source.addItem(v,v)
+         self.tool=QComboBox()
+         for text,value in [('Calculator & risk','calc'),('Scenarios','scenarios'),('Futures hedge','hedge')]:self.tool.addItem(text,value)
+-        for i,(name,w) in enumerate((('Coupons / year',self.frequency),('Curve source',self.source),('Tool',self.tool))):
++        for i,(name,w) in enumerate((('Coupons / year',self.frequency),('Tool',self.tool))):
+             w.setAccessibleName(name);form.addWidget(label(name,'caption'),4,i);form.addWidget(w,5,i)
++        # Owner UI-8: the curve provider is automatic (FRED, labelled synthetic fallback); no selector.
++        self.source.setAccessibleName('Curve source');self.source.hide()
+         inner.addLayout(form)
+         inner.addWidget(label('가격과 수익률 중 하나만 입력하세요. Price를 입력할 때는 Yield를 비웁니다.','caption'))
+         self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);inner.addWidget(self.run)
+diff --git a/quantgen_desktop/market_chart.py b/quantgen_desktop/market_chart.py
+index ebd2575..874ec69 100644
+--- a/quantgen_desktop/market_chart.py
++++ b/quantgen_desktop/market_chart.py
+@@ -120,11 +120,15 @@ class MarketChartPane(QWidget):
+     trade_received = pyqtSignal(object)
+     feed_state_changed = pyqtSignal(str)
+ 
+-    def __init__(self, *, service=None, stream_factory=None, locale=None):
++    def __init__(self, *, service=None, stream_factory=None, locale=None, router=None):
+         super().__init__()
++        from core.market.routing import ChartRouter, KISChartProvider, default_chart_router
+         if service is None:
+             from data.kis_workspace import MarketDataService
+             service = MarketDataService()
++            router = router or default_chart_router(service)
++        # An injected service (tests, fixtures) keeps KIS-only behaviour unless a router is given.
++        self.router = router or ChartRouter(KISChartProvider(service))
+         if stream_factory is None:
+             from data.kis_stream import KISStream
+             stream_factory = KISStream
+@@ -203,6 +207,8 @@ class MarketChartPane(QWidget):
+         for column, index in enumerate((0, 1, 3)):
+             form.addWidget(self.form_labels[index], 0, column)
+             form.addWidget((self.asset, self.symbol, self.exchange, self.interval, self.bar_count)[index], 1, column)
++        # The Markets asset-class tab chooses the asset (UI-8); the combo stays as state only.
++        self.asset.hide();self.form_labels[0].hide();form.setColumnStretch(0, 0)
+         layout.addLayout(form)
+         buttons = QHBoxLayout()
+         self.load_button = QPushButton()
+@@ -379,11 +385,14 @@ class MarketChartPane(QWidget):
+             "Live gap: missing trades may affect OHLC and minute-bar volume. Reload history to reconcile.": "체결 공백 · 가격·분봉 거래량에 누락이 있을 수 있습니다. 다시 조회해 이력을 맞추세요.",
+             "REST snapshot; quote timestamp convention unverified.": "시점 조회 · 시세 시각 기준 미검증.",
+             "REST snapshot; market timestamp not provided.": "시점 조회 · 공급자가 시장 시각을 제공하지 않습니다.",
++            "Yahoo Finance fallback: unadjusted daily OHLC, delayed; not a KIS quote. Live trade updates and Q-SCORE use KIS only.": "Yahoo Finance 대체 자료 · 수정 전 일별 시가·고가·저가·종가, 지연 시세이며 KIS 시세가 아닙니다. 실시간 체결 갱신과 Q-SCORE는 KIS 자료만 씁니다.",
+         }
+         for original, translated in translations.items():
+             note = note.replace(original, translated)
+-        return re.sub(r"Partial history: (\d+)/(\d+) requested bars \(provider window or paging limit\)\.",
++        note = re.sub(r"Partial history: (\d+)/(\d+) requested bars \(provider window or paging limit\)\.",
+                       r"부분 이력 · 요청한 \2개 중 \1개 봉만 조회됐습니다(공급자 조회 범위·페이지 한도).", note)
++        return re.sub(r"Partial history: (\d+)/(\d+) requested bars\.",
++                      r"부분 이력 · 요청한 \2개 중 \1개 봉만 조회됐습니다.", note)
+ 
+     def _restart_after_inputs(self):
+         if not self._restart_pending or self.jobs.busy:
+@@ -474,6 +483,14 @@ class MarketChartPane(QWidget):
+         return ChartRequest(Instrument(asset, self.symbol.text(), exchange),
+                             self.interval.currentData(), self.bar_count.value(), adjusted=False)
+ 
++    def set_asset_class(self, asset):
++        """Called by the Markets asset-class tabs; changing class stops updates like any input change."""
++        index = self.asset.findData(asset)
++        if index < 0:
++            raise ValueError("Unsupported asset class")
++        if index != self.asset.currentIndex():
++            self.asset.setCurrentIndex(index)
++
+     def _asset_changed(self, *_):
+         asset = self.asset.currentData()
+         self._configure_exchange()
+@@ -581,7 +598,7 @@ class MarketChartPane(QWidget):
+         self._mode = "loading"
+         self._status_detail = self._text("실시간 연결 전 차트 동기화", "Synchronizing history before live connection") if for_stream else ""
+         self._render_status()
+-        return self.jobs.start(lambda: (epoch, request, self.service.load(request)))
++        return self.jobs.start(lambda: (epoch, request, self.router.load(request)))
+ 
+     @pyqtSlot(object)
+     def _loaded(self, result):
+@@ -599,6 +616,16 @@ class MarketChartPane(QWidget):
+         self._status_detail = ""
+         self.render()
+         self.snapshot_loaded.emit(snapshot)
++        if not self._from_kis(snapshot):
++            # A fallback answer is a delayed snapshot: no KIS stream, no 5-second polling of it.
++            self._auto_updates = False
++            self.poll_timer.stop()
++            self._mode = "snapshot"
++            self._status_detail = self._text(f"{snapshot.source} 자료로 표시 · 자동 갱신 없음",
++                                             f"Showing {snapshot.source} data · no automatic updates")
++            self._render_status()
++            self._busy(self.jobs.busy)
++            return
+         if auto_stream:
+             self._subscribe(epoch, request)
+         elif self._auto_updates:
+@@ -610,12 +637,26 @@ class MarketChartPane(QWidget):
+             self._status_detail = self._text("이 자산은 체결 스트림 미지원", "Trade streaming is unavailable for this asset")
+             self._render_status()
+ 
++    @staticmethod
++    def _from_kis(snapshot):
++        return str(getattr(snapshot, "source", "")).startswith("KIS")
++
++    def _tried(self):
++        from core.market.routing import describe
++        return describe(getattr(self.router, "last_attempts", ()), self.ctx.language)
++
+     @pyqtSlot(str)
+     def _failed(self, code):
+         if self._job_epoch != self._epoch:
+             return
+         self._pending_stream_epoch = None
+         self._mode = "stale" if self.snapshot is not None else "error"
++        if code == "ProvidersNotRun":
++            code = "KISUnavailable"
++        if code == "ProvidersUnavailable":
++            self._status_detail = self._text("모든 공급사 조회 실패", "Every provider failed") + " · " + self._tried()
++            self._render_status()
++            return
+         self._status_detail = (self._text(
+             "KIS 앱키·시크릿을 찾지 못했습니다. QUANTGEN 폴더의 .env에 KIS_APP_KEY와 KIS_APP_SECRET을 설정한 뒤 앱을 다시 실행하세요. 시스템 → 데이터 연결에서 설정 여부를 확인할 수 있습니다.",
+             "KIS app key or secret is missing. Set KIS_APP_KEY and KIS_APP_SECRET in the QUANTGEN folder's .env, then restart. Check their presence under System → Connections.")
+@@ -846,7 +887,11 @@ class MarketChartPane(QWidget):
+         self.indicator_reading.setVisible(bool(selected))
+         live_only = self.interval.currentData() in LIVE_INTERVALS
+         notices = []
+-        if self.asset.currentData() == "overseas_stock":
++        if self.snapshot is not None and not self._from_kis(self.snapshot):
++            notices.append(self._text(f"KIS 대신 {self.snapshot.source} 자료입니다(지연·일별 수정 전 가격). 시도: ",
++                                      f"{self.snapshot.source} data instead of KIS (delayed, unadjusted daily). Tried: ")
++                           + self._tried())
++        if self.asset.currentData() == "overseas_stock" and (self.snapshot is None or self._from_kis(self.snapshot)):
+             notices.append(self._text("미국 무료 Nasdaq 시장센터 시세 · 0분 지연 · 유료 통합 시세와 다를 수 있어요.",
+                                       "US free Nasdaq market-center feed · 0-minute delay · may differ from paid consolidated feeds.")
+                            if self.exchange.currentData() in ("NAS", "NYS", "AMS") else self._text(
+@@ -891,7 +936,7 @@ class MarketChartPane(QWidget):
+         self.provenance.setText(self._text("출처", "Source") + f": {snapshot.source} · "
+             + self._text("조회 시각", "Fetched") + f": {snapshot.fetched_at}"
+             + (" · " + self._text("체결 시각", "Market time") + f": {q.market_time}" if q and q.market_time else ""))
+-        self.availability.setText(self._availability_text(snapshot.request.instrument))
++        self.availability.setText(self._availability_text(snapshot.request.instrument) if self._from_kis(snapshot) else '')
+         self.note.setText(" · ".join(dict.fromkeys(self._data_note(str(note), snapshot.request.instrument)
+                                  for note in (snapshot.note, q.note if q else "") if note)))
+         n = len(snapshot.candles)
+@@ -909,7 +954,7 @@ class MarketChartPane(QWidget):
+                                 indicators=selected, dark=dark, language=self.ctx.language)
+         self.reading.setText(readout(snapshot, self._cursor, language=self.ctx.language))
+         self.chart.setAccessibleDescription(self.reading.text())
+-        self.chart.setAccessibleName(self._text("KIS 캔들 차트", "KIS candlestick chart"))
++        self.chart.setAccessibleName(self._text("캔들 차트", "Candlestick chart") + f" · {snapshot.source}")
+         values = {key: data[self._cursor] for key, data in indicator_series(snapshot).items()}
+         keys = {"sma": ("SMA20",), "ema": ("EMA12", "EMA26"), "bollinger": ("BB_UPPER", "BB_LOWER"),
+                 "rsi": ("RSI14",), "macd": ("MACD", "SIGNAL", "HISTOGRAM")}
+diff --git a/quantgen_desktop/tools.py b/quantgen_desktop/tools.py
+index af1f511..c78abbe 100644
+--- a/quantgen_desktop/tools.py
++++ b/quantgen_desktop/tools.py
+@@ -53,9 +53,13 @@ class ToolPane(QWidget):
+             w.setToolTip(w.currentText())
+             w.currentTextChanged.connect(w.setToolTip)
+             w.model().dataChanged.connect(lambda *args, combo=w: combo.setToolTip(combo.currentText()))
+-            top.addWidget(label(name, 'caption'), 0, i)
++            caption = label(name, 'caption')
++            if w is self.source:
++                self.source_label = caption
++            top.addWidget(caption, 0, i)
+             top.addWidget(w, 1, i)
+             top.setColumnStretch(i, 1)
++        self._top_grid = top
+         inner.addLayout(top)
+         self.forms, self.fields = QStackedWidget(), {}
+         for key, _ in tools:
+@@ -104,6 +108,21 @@ class ToolPane(QWidget):
+         self.tool.currentIndexChanged.connect(self.switch)
+         self.forms.setFixedHeight(self.forms.currentWidget().sizeHint().height())
+ 
++    def hide_source(self):
++        """Markets panes choose providers automatically (owner UI-8): no 데이터 출처 selector.
++
++        The combo keeps its first (automatic) value for requests, exports and fixtures;
++        every result still names the provider that actually answered.
++        """
++        self.source.setCurrentIndex(0)
++        self.source.hide()
++        self.source_label.hide()
++        self._top_grid.setColumnStretch(1, 0)
++
++    def set_source_caption(self, text):
++        self.source_label.setText(text)
++        self.source.setAccessibleName(text)
++
+     def switch(self, index):
+         self.forms.setCurrentIndex(index)
+         self.forms.setFixedHeight(self.forms.currentWidget().sizeHint().height())
+diff --git a/quantgen_desktop/translations.py b/quantgen_desktop/translations.py
+index 9160eae..1853289 100644
+--- a/quantgen_desktop/translations.py
++++ b/quantgen_desktop/translations.py
+@@ -486,6 +486,15 @@ Crypto|가상자산
+ Derivatives|파생상품
+ Macro sheet|매크로 현황
+ Macro v2|매크로 v2
++Domestic securities|국내증권
++Overseas securities|해외증권
++Domestic derivatives|국내파생상품
++Overseas derivatives|해외파생상품
++Rates & swaps|금리·스왑
++FX|외환
++Macro|매크로
++Price chart|시세 차트
++Record set|기록 묶음
+ Strategy Lab|전략 실험실
+ Rules|규칙
+ Underlying|기초자산
+diff --git a/tests/desktop_acceptance.py b/tests/desktop_acceptance.py
+index 0b7881a..5993f3c 100644
+--- a/tests/desktop_acceptance.py
++++ b/tests/desktop_acceptance.py
+@@ -315,7 +315,7 @@ class NativeDesktopTests(unittest.TestCase):
+         self.assertFalse(w.jobs.busy)
+ 
+     def test_native_rates_tools_units_locking_and_results(self):
+-        w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.rates)
++        w=self.window;w.navigate('markets');w.show_market_pane(w.rates)
+         pane=w.rates
+         for tool in ('curve','swap','option','sim'):
+             pane.tool.setCurrentIndex(pane.tool.findData(tool))
+@@ -341,7 +341,7 @@ class NativeDesktopTests(unittest.TestCase):
+         self.assertIn('Input error',pane.status.text());self.assertFalse(w.jobs.busy)
+ 
+     def test_native_fx_all_tools_and_invalid_input_clears_stale_result(self):
+-        w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.fx)
++        w=self.window;w.navigate('markets');w.show_market_pane(w.fx)
+         pane=w.fx
+         for tool in ('forward','option','carry'):
+             pane.tool.setCurrentIndex(pane.tool.findData(tool))
+@@ -354,7 +354,7 @@ class NativeDesktopTests(unittest.TestCase):
+         self.assertIn('Input error',pane.status.text());self.assertFalse(pane.has_result)
+ 
+     def test_native_structuring_all_products_payoff_hedges_and_units(self):
+-        w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.structuring)
++        w=self.window;w.navigate('markets');w.show_market_pane(w.structuring)
+         pane=w.structuring
+         for key in ('ppn','rc','dcd','steep'):
+             pane.tool.setCurrentIndex(pane.tool.findData(key))
+diff --git a/tests/desktop_home_live_acceptance.py b/tests/desktop_home_live_acceptance.py
+index 404aeca..787e130 100644
+--- a/tests/desktop_home_live_acceptance.py
++++ b/tests/desktop_home_live_acceptance.py
+@@ -164,7 +164,7 @@ class HomeLiveIntegrationTests(unittest.TestCase):
+         self.assertTrue(self.home_streams[0].stopped)
+         self.assertFalse(w.home_feed.active)
+         self.assertEqual(w.stack.currentIndex(), w.route_indices["markets"])
+-        self.assertIs(w.market_tabs.currentWidget(), w.market_chart)
++        self.assertIs(w.current_market_pane(), w.market_chart)
+         self.assertEqual(w.market_chart.symbol.text(), "005930")
+         self.assertEqual(self.chart_service.calls, [])
+         self.assertEqual(self.score_service.calls, [])
+diff --git a/tests/desktop_market_layout_acceptance.py b/tests/desktop_market_layout_acceptance.py
+index 33c0aa3..084d4bd 100644
+--- a/tests/desktop_market_layout_acceptance.py
++++ b/tests/desktop_market_layout_acceptance.py
+@@ -63,7 +63,7 @@ class NativeMarketLayoutTests(unittest.TestCase):
+         self.paper.assert_not_called()
+ 
+     def select(self, pane):
+-        self.window.market_tabs.setCurrentWidget(pane)
++        self.window.show_market_pane(pane)
+         self.app.processEvents()
+ 
+     def test_forms_stay_compact_after_switching_from_tall_sibling_tabs(self):
+@@ -118,7 +118,7 @@ class NativeMarketLayoutTests(unittest.TestCase):
+                     for _ in range(3):
+                         self.app.processEvents()
+                     self.assertEqual(w.stack.currentIndex(), w.route_indices["markets"])
+-                    self.assertIs(w.market_tabs.currentWidget(), w.market_chart)
++                    self.assertIs(w.current_market_pane(), w.market_chart)
+                     viewport = w.stack.currentWidget().viewport()
+                     for control in (w.market_chart.symbol, w.market_chart.load_button):
+                         self.assertTrue(control.isVisible())
+diff --git a/tests/desktop_responsive_tools_acceptance.py b/tests/desktop_responsive_tools_acceptance.py
+index d6b5db7..ff42002 100644
+--- a/tests/desktop_responsive_tools_acceptance.py
++++ b/tests/desktop_responsive_tools_acceptance.py
+@@ -108,7 +108,7 @@ class ResponsiveToolTests(unittest.TestCase):
+             pane.source.setProperty('platform_intrinsic_width',459)
+             pane.tool.setCurrentIndex(pane.tool.findData('weekly'))
+             pane.source.setCurrentIndex(pane.source.findData('fred'))
+-            w.navigate('markets');w.market_tabs.setCurrentWidget(pane);w.resize(1000,1000)
++            w.navigate('markets');w.show_market_pane(pane);w.resize(1000,1000)
+             choices=[[combo.itemData(i) for i in range(combo.count())] for combo in (pane.tool,pane.source)]
+             policies=[combo.sizeAdjustPolicy() for combo in (pane.tool,pane.source)]
+             request=pane.make_request()
+@@ -136,10 +136,10 @@ class ResponsiveToolTests(unittest.TestCase):
+         w=self.window()
+         structured=structuring_fixture(StructuringRequest(source='synthetic',tool='steep',maturity='5y',cap=.03))
+         pane=w.structuring;pane.show_result(structured);pane.bind_output('structuring',structured)
+-        w.navigate('markets');w.market_tabs.setCurrentWidget(pane);self.settle();pane.grab()
++        w.navigate('markets');w.show_market_pane(pane);self.settle();pane.grab()
+         pane.clear_result();self.app.sendPostedEvents(None,QEvent.Type.DeferredDelete)
+         macro=macro_fixture('weekly',short=True);pane=w.macro;pane.show_result(macro);pane.bind_output('macro',macro)
+-        w.market_tabs.setCurrentWidget(pane)
++        w.show_market_pane(pane)
+         for width in (1440,1000,1440):
+             w.resize(width,1000)
+             for language in ('en','ko'):
+diff --git a/tools/packaging/smoke_desktop.py b/tools/packaging/smoke_desktop.py
+index 71f8448..037c648 100644
+--- a/tools/packaging/smoke_desktop.py
++++ b/tools/packaging/smoke_desktop.py
+@@ -76,9 +76,9 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder,
+             window.navigate(route)
+             assert window.nav[route].isChecked()
+         assert isinstance(window.market_chart,MarketChartPane)
+-        chart_index=window.market_tabs.indexOf(window.market_chart)
+-        assert chart_index>=0,'Installed KIS chart must be reachable from Markets'
+-        window.navigate('markets');window.market_tabs.setCurrentIndex(chart_index)
++        window.navigate('markets');window.show_market_pane(window.market_chart)
++        assert window.current_market_pane() is window.market_chart,'Installed chart must be reachable from Markets'
++        assert window.market_tabs.count()==9 and window.market_chart.asset.currentData()=='domestic_stock'
+         app.processEvents()
+         assert window.market_chart.snapshot is None
+         assert not window.market_chart.jobs.busy
