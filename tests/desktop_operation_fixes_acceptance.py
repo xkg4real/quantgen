@@ -145,12 +145,13 @@ class OperationFixTests(unittest.TestCase):
         self.assertTrue(fits(w.rates))  # a taller form after switching tools is laid out in full
         # Wider glyphs (Windows fonts) wrap captions to more lines; the form must grow to match.
         from PyQt6.QtWidgets import QLabel
-        w.resize(800, 900); w.show_market_pane(w.fx); settle(self.app)
+        w.resize(1000, 900); w.show_market_pane(w.fx); settle(self.app)
+        before = w.fx.forms.height()  # FX form at width 1000 with its own captions
+        w.resize(800, 900); settle(self.app)
         page = w.fx.forms.currentWidget()
-        before = w.fx.forms.height()
         for caption in page.findChildren(QLabel):
-            if caption.parent() is page:
-                caption.setText(caption.text() + ' 긴설명' * 3)
+            if caption.parent() is page:  # long enough to wrap to more lines in any font
+                caption.setText(caption.text() + ' 긴설명' * 12)
         for width in (1000, 1360, 800, 1000):
             w.resize(width, 900); settle(self.app)
             self.assertTrue(fits(w.fx), width)
