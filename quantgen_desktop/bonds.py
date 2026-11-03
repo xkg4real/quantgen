@@ -6,6 +6,16 @@ from .charts import LineChart
 from .bonds_portfolio_narrative import bond_notes, hedge_text, display_variants
 
 
+def group_digits(text):
+    """'1000000.5' -> '1,000,000.5'; text that is not a plain number is left as typed."""
+    raw=str(text).strip().replace(',','')
+    sign,body=('-',raw[1:]) if raw.startswith('-') else ('',raw)
+    whole,dot,fraction=body.partition('.')
+    if not (whole.isascii() and whole.isdecimal()) or (fraction and not (fraction.isascii() and fraction.isdecimal())):
+        return str(text)
+    return sign+f'{int(whole):,}'+dot+fraction
+
+
 class BondsPane(QWidget):
     requested=pyqtSignal(object)
 
@@ -19,7 +29,9 @@ class BondsPane(QWidget):
                 ('Price · per 100',''),('Yield %','4.50'),('Position DV01 · optional',''),
                 ('CTD DV01 / contract','65'),('Conversion factor','0.8')]
         for i,(name,value) in enumerate(fields):
-            w=QLineEdit(value);w.setAccessibleName(name);self.fields[name]=w
+            # Owner UI-4: amounts read with thousands separators (1,000,000); parsing strips them.
+            w=QLineEdit(group_digits(value));w.setAccessibleName(name);self.fields[name]=w
+            w.editingFinished.connect(lambda w=w:w.setText(group_digits(w.text())))
             form.addWidget(label(name,'caption'),2*(i//4),i%4);form.addWidget(w,2*(i//4)+1,i%4)
         self.frequency=QComboBox()
         for text,value in [('Annual',1),('Semi-annual',2),('Quarterly',4)]:self.frequency.addItem(text,value)
