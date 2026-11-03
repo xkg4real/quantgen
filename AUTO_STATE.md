@@ -1,19 +1,19 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-11-03T22:50:27+09:00
+created_at: 2026-11-03T23:20:53+09:00
 source_branch: claude/ui-markets-a4-20261103
-source_head: e86873d
-upstream: origin/claude/ui-markets-a4-20261103
-patch_base: e86873d
+source_head: 1682404
+upstream: origin/main
+patch_base: 1682404
 unpushed_commits: 0
-uncommitted_files: 8
+uncommitted_files: 2
 patch: AUTO_STATE.patch (`git apply AUTO_STATE.patch` on patch_base)
 usage_pct: unknown
 usage_resets_at: unknown
 session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
 snapshot_key: none
-current_md_updated_at: 2026-11-03T22:46:31+09:00
+current_md_updated_at: 2026-11-03T23:16:36+09:00
 current_md_status: checkpoint
 ---
 
@@ -26,6 +26,8 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
+1682404 Merge pull request #65 from xkg4real/claude/ui-markets-a4-20261103
+7f90641 Search overseas stocks by name, drop exchange and bar-count inputs, zoom with the wheel (UI-16)
 e86873d Queue the PR-65 Markets asset-class change for the website workspace
 d6413d9 Split Markets into asset-class tabs and choose the chart provider automatically (UI-8)
 ba3b6b2 Merge pull request #64 from xkg4real/claude/ui-markets-a4-20261103
@@ -39,8 +41,6 @@ c81e8df Owner rulings 2026-11-03: Claude resumes, UI order A4>A2>A3>A1, R3/cost-
 00ba803 Queue live chart changes and website follow-up for PR62
 3ea77b9 Record merged Home UI and successful final CI
 398ebe3 Connect charts on query, make indicators selectable and repair growing panels
-672ae61 Add received trade bars and shared indicator presentation
-707cdc7 Merge pull request #61 from xkg4real/gpt/home-compact-20261102
 ```
 
 ## 푸시되지 않은 커밋
@@ -52,25 +52,15 @@ c81e8df Owner rulings 2026-11-03: Claude resumes, UI order A4>A2>A3>A1, R3/cost-
 ## 커밋되지 않은 변경
 
 ```
-M core/education/glossary.py
- M pyproject.toml
- M quantgen_desktop/market_chart.py
- M tools/packaging/smoke_installed.py
- M tools/packaging/stage.py
-?? core/market/data/
-?? core/market/symbols.py
-?? core/search_text.py
+M core/market/routing.py
+?? core/research/market_board.py
 ```
 
 `patch_base` 이후 바뀐 파일 (푸시 안 된 커밋 포함):
 
 ```
-core/education/glossary.py         |  32 +------
- pyproject.toml                     | 119 +++++++++++------------
- quantgen_desktop/market_chart.py   | 190 +++++++++++++++++++++++++++++++++----
- tools/packaging/smoke_installed.py |   2 +
- tools/packaging/stage.py           |   2 +-
- 5 files changed, 239 insertions(+), 106 deletions(-)
+core/market/routing.py | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 ```
 
 전체 diff: AUTO_STATE.patch (`git apply AUTO_STATE.patch` on patch_base)
@@ -78,7 +68,5 @@ core/education/glossary.py         |  32 +------
 추적되지 않는 파일은 비밀 값이 있을 수 있어 이름만 적습니다:
 
 ```
-core/market/data/
-core/market/symbols.py
-core/search_text.py
+core/research/market_board.py
 ```
