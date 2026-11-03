@@ -1552,6 +1552,7 @@ owner, in this order; the runbook file repeats it.
    New-NetFirewallRule -DisplayName "QUANTGEN-nautilus-block-out" -Direction Outbound -Action Block -Program "<printed path>\py313\python.exe" -Profile Any
    # back in the normal window: add the .env line of 3.4 with the owner's path if absent, then:
    python -B -m tools.nautilus.runner --check-env; if ($LASTEXITCODE) { throw "check-env" }
+   python -B -m tools.nautilus.register_e1 --owner-windows --table docs\nautilus_bridge\registration\pilot1_E1_spy.json; if ($LASTEXITCODE) { throw "A2" }   # O11 A2: only while E1 is missing or empty
    python -B -m tools.nautilus.runner --egress-record; if ($LASTEXITCODE) { throw "egress" }
    python -B -m tools.nautilus.runner --fixtures --record-baseline; if ($LASTEXITCODE) { throw "fixtures" }
    python -B -m tools.nautilus.runner --timing; if ($LASTEXITCODE) { throw "timing" }
@@ -1564,7 +1565,8 @@ owner, in this order; the runbook file repeats it.
    (OPS-8, OPS-R5-2). A null host
    fingerprint stops here (R-15, O11). If every line passed, he also pastes each fingerprint into its table's
    `host_fingerprint`, writes `owner_confirmed` as `"Geon Koh, <date>, table <16 hex>, code <16 hex>"` from the printed
-   digests, which approves of-record runs of that table (GOVERNANCE-R2-2), and commits as one change group
+   digests, which approves of-record runs of that table (GOVERNANCE-R2-2), saving both tables as UTF-8 without a
+   BOM (L1-36 reads them as plain UTF-8), and commits as one change group
    `tools/nautilus/golden/modules_win_amd64.json`, `docs/nautilus_bridge/egress/win_amd64.json`, both tables and
    `qa/acceptance_results.json` (GOVERNANCE-R3-4), each named in `git add`, never `git add -A` (OPS-R3-3); that commit
    also writes the branch's loose ref (OPS-3).

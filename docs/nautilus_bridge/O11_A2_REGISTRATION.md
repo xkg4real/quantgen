@@ -32,6 +32,12 @@ remove or reset an existing ledger to make this command pass.
 python -B -m tools.nautilus.register_e1 --owner-windows --table docs\nautilus_bridge\registration\pilot1_E1_spy.json
 ```
 
+Where it runs (2026-11-04, ⑤-1/a): inside Step 7A.2, right after `--check-env` passes and before
+`--egress-record` (RUNBOOK_windows.md and spec section 9 list the line). From `--egress-record` on, the 7A.2 lines
+write files into the clone, and owner mode refuses a tree that is not clean outside `docs/nautilus_bridge/runs/`.
+The receipt is git-ignored by `docs/nautilus_bridge/.gitignore` (`runs/A2-E1-*`), so it never reaches a commit and
+the Step 7A done-when "`git status --porcelain` is empty" still holds.
+
 Owner mode accepts no output/ledger/repository override. It checks Windows and
 a clean anchored repository, uses `config.macro_dir()/ledgers/E1.jsonl`, and
 writes an atomic receipt under `docs/nautilus_bridge/runs/A2-E1-<table-prefix>.json`.

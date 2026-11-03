@@ -17,7 +17,11 @@ here; changing this file changes no digest (it is not in `code_sha256`, spec 6.6
 The owner approved the registration-only E1 initialization path described in
 [O11_A2_REGISTRATION.md](O11_A2_REGISTRATION.md). Complete that bounded step on the owner's Windows machine
 before pilot price reads if E1 is missing/empty. Keep its receipt private. It does not satisfy the independent
-review, Step 7A, host verification or `owner_confirmed` requirements below. The cloud's temporary-ledger tests
+review, Step 7A, host verification or `owner_confirmed` requirements below.
+Its place in 7A.2 (2026-11-04, ⑤-1/a): the `register_e1` line right after `--check-env` passes and before
+`--egress-record`. Owner mode needs a clean tree (only `docs/nautilus_bridge/runs/` exempt), and from
+`--egress-record` on the 7A.2 lines write files into the clone; after a null fingerprint it would be refused.
+The receipt `docs/nautilus_bridge/runs/A2-E1-<16 hex>.json` is git-ignored (`docs/nautilus_bridge/.gitignore`). The cloud's temporary-ledger tests
 are separate from actual Windows acceptance. Existing C3 is never initialized or rewritten by A2.
 
 ## Before Step 7A
@@ -68,6 +72,8 @@ In the main clone, in a normal (not elevated) PowerShell window, run the lines b
   have run.
 - The `venv`, install and runner lines are safe to repeat; the first firewall line removes any rule of that name
   before the second creates it; `--record-baseline` treats an existing baseline as spec 5.2.7 says.
+- The O11 A2 line runs once: skip it on re-entry when its receipt says `REGISTERED_ONLY` and E1 holds the 12 rows.
+  After the fifth git line has moved HEAD it only refuses ("belongs to another table/mode/host/source").
 
 ```powershell
 git fetch origin; if ($LASTEXITCODE) { throw "fetch" }
@@ -94,6 +100,7 @@ Remove-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out -ErrorAction Sil
 New-NetFirewallRule -DisplayName "QUANTGEN-nautilus-block-out" -Direction Outbound -Action Block -Program "<printed path>\py313\python.exe" -Profile Any
 # back in the normal window: add the .env line of 3.4 with the owner's path if absent, then:
 python -B -m tools.nautilus.runner --check-env; if ($LASTEXITCODE) { throw "check-env" }
+python -B -m tools.nautilus.register_e1 --owner-windows --table docs\nautilus_bridge\registration\pilot1_E1_spy.json; if ($LASTEXITCODE) { throw "A2" }   # O11 A2: only while E1 is missing or empty
 python -B -m tools.nautilus.runner --egress-record; if ($LASTEXITCODE) { throw "egress" }
 python -B -m tools.nautilus.runner --fixtures --record-baseline; if ($LASTEXITCODE) { throw "fixtures" }
 python -B -m tools.nautilus.runner --timing; if ($LASTEXITCODE) { throw "timing" }
@@ -113,9 +120,18 @@ the `\n` of `\ntvenv` into a newline. This line prints it with your path, ready 
 **What each runner line must show:**
 - `--check-env`: the pinned versions, the `win_amd64` identity `47d274d7...` with 764 entries, `HIGH_PRECISION`
   false and `FIXED_PRECISION` 9; `--guard-selftest`'s five outcomes; `STATUS OK exit=0`.
+- `register_e1` (O11 A2; run it only while E1 is missing or empty, and only with every other QUANTGEN writer
+  closed): one JSON line with `"status": "REGISTERED_ONLY"` and counts `len_grid` 12, `family_n_raw` 12,
+  `market_n_raw` 12, `U` 24, `n_trials` 36, and no STATUS line. The 12 rows are permanent (spec 3.10). A refusal
+  prints `STATUS REFUSED registration-only: ...` and exits 2: skip to `--handoff-report` as for any red error and
+  send Claude the line with `git status --porcelain --untracked-files=all`. Never delete, empty or edit E1 to make
+  it pass. If it stops part-way (window closed, power, an OSError; the receipt says INTENT or PARTIAL), run the
+  same line once more before any other line, git command or commit: only the same HEAD, table and host resume.
 - `--egress-record`: writes `docs\nautilus_bridge\egress\win_amd64.json` with `probe.blocked` and
   `control_connect.ok` both true. A failed control connect prints its error first: this network does not reach
-  1.1.1.1:443, so the record cannot prove the rule; run Step 7A on a network that does, or ask Claude.
+  1.1.1.1:443, so the record cannot prove the rule; run Step 7A on a network that does, or ask Claude. Only this
+  line needs that network: the pilot reads the record, it does not connect again. A network that blocks only
+  1.1.1.1 can be swapped for a phone hotspot for this line (and, for a consistent report, up to `--handoff-report`).
 - `--fixtures --record-baseline`: F1, F2 and N1 match their goldens, and `tools\nautilus\golden\modules_win_amd64.json`
   is written. A differing fixture writes nothing and exits 2; the hand-off stops and no pilot runs.
 - `--timing`: the `BacktestEngine` import time and the wall time of 12 synthetic runs of 5,600 bars.
@@ -143,7 +159,9 @@ the `\n` of `\ntvenv` into a newline. This line prints it with your path, ready 
     "owner_confirmed": "Geon Koh, <YYYY-MM-DD>, table <16 hex>, code <16 hex>",
     "host_fingerprint": "<64 hex>"
    ```
-   `owner_confirmed` approves of-record runs of that table. Then:
+   `owner_confirmed` approves of-record runs of that table. Save both files as UTF-8 without a BOM (Notepad:
+   "UTF-8", not "UTF-8 with BOM"): `--fingerprint` tolerates a BOM, but L1-36 reads the E1 table as plain UTF-8 and
+   would FAIL every later suite run. Then:
    ```powershell
    git add tools/nautilus/golden/modules_win_amd64.json docs/nautilus_bridge/egress/win_amd64.json docs/nautilus_bridge/registration/pilot1_E1_spy.json docs/nautilus_bridge/registration/pilot2_C3_btcusd.json qa/acceptance_results.json
    git commit -m "nautilus: Step 7A records (win_amd64), owner fields of both pilot tables"
