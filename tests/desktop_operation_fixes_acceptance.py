@@ -167,7 +167,8 @@ class OperationFixTests(unittest.TestCase):
             page = pane.forms.currentWidget()
             bottom = max(c.geometry().bottom() for c in page.findChildren(QWidget)
                          if c.parent() is page and not c.isHidden())
-            return bottom < pane.forms.height()
+            box = pane.input_box  # nothing in the input panel is squeezed below its wrapped height
+            return bottom < pane.forms.height() and box.height() >= box.heightForWidth(box.width())
         for width in (1000, 1360):
             w.resize(width, 900)
             for pane in (w.rates, w.krx, w.fx, w.etf, w.derivatives, w.crypto):
@@ -189,6 +190,23 @@ class OperationFixTests(unittest.TestCase):
             w.resize(width, 900); settle(self.app)
             self.assertTrue(fits(w.fx), f"{width}\n{layout_report(w.fx)}")
         self.assertGreater(w.fx.forms.height(), before)  # the wrapped captions really took more room
+
+    def test_form_panel_is_not_capped_at_a_wider_preferred_width(self):
+        """Windows CI: the ETF panel's size hint, taken at a wider preferred width, was 383 px while its
+        wrapped content needed 411 px at the real width, and a Maximum height policy cut it to 383.
+        A child that prefers a wide layout recreates that on any platform."""
+        from PyQt6.QtCore import QSize
+
+        class WideHint(QWidget):
+            def sizeHint(self): return QSize(1600, 8)
+            def minimumSizeHint(self): return QSize(10, 8)
+        w = self.window
+        w.resize(1000, 900); w.show_market_pane(w.etf); settle(self.app)
+        grid = w.etf.forms.currentWidget().layout()
+        grid.addWidget(WideHint(), grid.rowCount(), 0, 1, 3); settle(self.app)
+        box = w.etf.input_box
+        self.assertLess(box.sizeHint().height(), box.heightForWidth(box.width()))  # the Windows condition holds
+        self.assertGreaterEqual(box.height(), box.heightForWidth(box.width()), layout_report(w.etf))
 
     def test_window_and_app_icons_carry_taskbar_sizes(self):
         icon = app_icon()

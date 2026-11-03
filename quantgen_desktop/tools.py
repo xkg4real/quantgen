@@ -85,7 +85,10 @@ class ToolPane(QWidget):
         layout.setSpacing(18)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.input_box, inner = panel(title)
-        self.input_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
+        # Preferred, not Maximum: a Maximum height is capped at the size hint, which Qt takes at the panel's
+        # preferred width. Where captions wrap more at the real width (Windows fonts), that cap cut the
+        # last form row (owner UI-6a). The pane's top alignment still keeps the panel from stretching.
+        self.input_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         top = QGridLayout()
         self.tool, self.source = QComboBox(), QComboBox()
         for key, text in tools: self.tool.addItem(text, key)
