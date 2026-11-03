@@ -57,7 +57,7 @@ class BondFundingTests(unittest.TestCase):
         bond=Bond(coupon=.04,maturity=.10);curve=SimpleFundingCurve(.05)
         result=carry_roll(bond,curve,99,horizon=.25)
         self.assertAlmostEqual(result.carry,.04*100*.10-99*.05*.10,places=11)
-        # RP-01 (owner-approved, kept at the 2026-11-04 research merge): a bond maturing inside the horizon is
+        # BS-08 (owner-approved Bonds patch, kept at the 2026-11-04 research merge): a bond maturing inside the horizon is
         # held to maturity, so its final coupon (2.00 per 100 at freq 2) is cash in hand, not dropped by rolling
         # to face: rolldown = face + final coupon - coupon accrued over h - price.
         self.assertAlmostEqual(result.rolldown,100+2-.04*100*.10-99)

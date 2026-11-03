@@ -1507,7 +1507,9 @@ owner, in this order; the runbook file repeats it.
    suite's layer-2 tests also keep the machine awake, 5.3.5 and 5.7; OPS-R5-5), the owner runs the lines below one at
    a time; the python.org installer, at the 3.13 patch the runbook pins, is downloaded into `$q`, never into the clone
    (OPS-R3-3, OPS-R4-5). A throw in the five git lines stops the block: he sends Claude the message, because the
-   hand-off needs the branch (OPS-R5-2). On a red error in any later line he skips to the last line (OPS-R2-1). The
+   hand-off needs the branch (OPS-R5-2). On a red error in any later line he skips to the last line (OPS-R2-1),
+   except that an O11 A2 line that stopped part-way (receipt INTENT or PARTIAL) is run once more first (2026-11-04,
+   ⑤-1/a; the read-only E1 gate before it decides whether it runs at all, RUNBOOK_windows.md). The
    fast-forward line, the fifth git line, brings Claude's fixes and a new sign-off into a re-entry (OPS-R4-1,
    OPS-R5-2). Re-entry (OPS-R3-2, OPS-R4-1, OPS-R5-1, SECURITY-R5-1): if `$q\py313\python.exe` exists from an earlier
    attempt, the listed registry row is that install, and he skips from the registry line to the rule check line, whose
@@ -1552,6 +1554,7 @@ owner, in this order; the runbook file repeats it.
    New-NetFirewallRule -DisplayName "QUANTGEN-nautilus-block-out" -Direction Outbound -Action Block -Program "<printed path>\py313\python.exe" -Profile Any
    # back in the normal window: add the .env line of 3.4 with the owner's path if absent, then:
    python -B -m tools.nautilus.runner --check-env; if ($LASTEXITCODE) { throw "check-env" }
+   python -B -m tools.nautilus.runner --fingerprint --table docs\nautilus_bridge\registration\pilot1_E1_spy.json; if ($LASTEXITCODE) { throw "fingerprint" }   # E1 state, read only: the next line only on a null E1 fingerprint
    python -B -m tools.nautilus.register_e1 --owner-windows --table docs\nautilus_bridge\registration\pilot1_E1_spy.json; if ($LASTEXITCODE) { throw "A2" }   # O11 A2: only while E1 is missing or empty
    python -B -m tools.nautilus.runner --egress-record; if ($LASTEXITCODE) { throw "egress" }
    python -B -m tools.nautilus.runner --fixtures --record-baseline; if ($LASTEXITCODE) { throw "fixtures" }

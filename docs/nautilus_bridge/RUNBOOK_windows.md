@@ -51,7 +51,9 @@ are separate from actual Windows acceptance. Existing C3 is never initialized or
 In the main clone, in a normal (not elevated) PowerShell window, run the lines below one at a time.
 
 - **A throw in the five git lines** stops the block: send Claude the message, because the hand-off needs the branch.
-- **A red error in any later line**: skip to the last line (`--handoff-report`), which always runs.
+- **A red error in any later line**: skip to the last line (`--handoff-report`), which always runs. One exception:
+  if the O11 A2 line stopped part-way (its receipt `docs\nautilus_bridge\runs\A2-E1-<16 hex>.json` says INTENT or
+  PARTIAL), run that same line once more before any other line; only if it fails again, skip to the last line.
 - **The fifth git line** (the fast-forward) brings Claude's fixes and a new sign-off into a re-entry.
 - **Never** a whole-tree `checkout`, `reset`, `stash` or `clean` in the main clone, and never a worktree. `git switch`
   rewrites only files that differ; the branch leaves `docs/asset_expansion/cache/` alone.
@@ -72,8 +74,11 @@ In the main clone, in a normal (not elevated) PowerShell window, run the lines b
   have run.
 - The `venv`, install and runner lines are safe to repeat; the first firewall line removes any rule of that name
   before the second creates it; `--record-baseline` treats an existing baseline as spec 5.2.7 says.
-- The O11 A2 line runs once: skip it on re-entry when its receipt says `REGISTERED_ONLY` and E1 holds the 12 rows.
-  After the fifth git line has moved HEAD it only refuses ("belongs to another table/mode/host/source").
+- The O11 A2 line runs once. On re-entry skip it whenever its receipt exists: `REGISTERED_ONLY` means it is done
+  (the E1 gate line then prints a 64-hex fingerprint). An INTENT or PARTIAL receipt from an earlier attempt can no
+  longer resume once HEAD has moved (the 7A.3 step 1 commit or the fifth git line moves it): running the line only
+  refuses ("commit the reviewed source before owner registration" or "belongs to another table/mode/host/source").
+  Send Claude the receipt's `status` and `n_registered` and wait before `--egress-record`.
 
 ```powershell
 git fetch origin; if ($LASTEXITCODE) { throw "fetch" }
@@ -100,6 +105,7 @@ Remove-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out -ErrorAction Sil
 New-NetFirewallRule -DisplayName "QUANTGEN-nautilus-block-out" -Direction Outbound -Action Block -Program "<printed path>\py313\python.exe" -Profile Any
 # back in the normal window: add the .env line of 3.4 with the owner's path if absent, then:
 python -B -m tools.nautilus.runner --check-env; if ($LASTEXITCODE) { throw "check-env" }
+python -B -m tools.nautilus.runner --fingerprint --table docs\nautilus_bridge\registration\pilot1_E1_spy.json; if ($LASTEXITCODE) { throw "fingerprint" }   # E1 state, read only: the next line only on a null E1 fingerprint
 python -B -m tools.nautilus.register_e1 --owner-windows --table docs\nautilus_bridge\registration\pilot1_E1_spy.json; if ($LASTEXITCODE) { throw "A2" }   # O11 A2: only while E1 is missing or empty
 python -B -m tools.nautilus.runner --egress-record; if ($LASTEXITCODE) { throw "egress" }
 python -B -m tools.nautilus.runner --fixtures --record-baseline; if ($LASTEXITCODE) { throw "fixtures" }
@@ -120,8 +126,15 @@ the `\n` of `\ntvenv` into a newline. This line prints it with your path, ready 
 **What each runner line must show:**
 - `--check-env`: the pinned versions, the `win_amd64` identity `47d274d7...` with 764 entries, `HIGH_PRECISION`
   false and `FIXED_PRECISION` 9; `--guard-selftest`'s five outcomes; `STATUS OK exit=0`.
-- `register_e1` (O11 A2; run it only while E1 is missing or empty, and only with every other QUANTGEN writer
-  closed): one JSON line with `"status": "REGISTERED_ONLY"` and counts `len_grid` 12, `family_n_raw` 12,
+- E1 gate (`--fingerprint` on the pilot-1 table, read only, writes nothing): `host_fingerprint null (the family
+  ledger <path>\E1.jsonl does not exist; R-15, O11)`, or the same with `holds no row`: run the A2 line. A 64-hex
+  `host_fingerprint`: E1 already holds rows, so skip the A2 line (it covers only a missing or empty E1) and go on to
+  `--egress-record`; on a first attempt send Claude that line too. `does not verify`: stop, skip to
+  `--handoff-report` and ask Claude (R-09/R-15); never repair E1. Its `code_sha256` predates the census baseline
+  that `--record-baseline` writes, so never copy it into `owner_confirmed`: 7A.3 uses the two fingerprint lines
+  after the suite.
+- `register_e1` (O11 A2; run it only after the gate printed a null E1 fingerprint, and only with every other
+  QUANTGEN writer closed): one JSON line with `"status": "REGISTERED_ONLY"` and counts `len_grid` 12, `family_n_raw` 12,
   `market_n_raw` 12, `U` 24, `n_trials` 36, and no STATUS line. The 12 rows are permanent (spec 3.10). A refusal
   prints `STATUS REFUSED registration-only: ...` and exits 2: skip to `--handoff-report` as for any red error and
   send Claude the line with `git status --porcelain --untracked-files=all`. Never delete, empty or edit E1 to make
@@ -130,16 +143,21 @@ the `\n` of `\ntvenv` into a newline. This line prints it with your path, ready 
 - `--egress-record`: writes `docs\nautilus_bridge\egress\win_amd64.json` with `probe.blocked` and
   `control_connect.ok` both true. A failed control connect prints its error first: this network does not reach
   1.1.1.1:443, so the record cannot prove the rule; run Step 7A on a network that does, or ask Claude. Only this
-  line needs that network: the pilot reads the record, it does not connect again. A network that blocks only
-  1.1.1.1 can be swapped for a phone hotspot for this line (and, for a consistent report, up to `--handoff-report`).
+  line and `--handoff-report` make the parent's control connect. Every pilot run still starts the egress probe, a
+  child connect to 1.1.1.1:443 that must fail, and that probe can tell a removed or disabled rule from a blocked
+  network only where 1.1.1.1:443 is reachable. So a network that blocks only 1.1.1.1 is swapped (for example for a
+  phone hotspot) from this line through `--handoff-report`, and again for every pilot run (Steps 8 and 9).
 - `--fixtures --record-baseline`: F1, F2 and N1 match their goldens, and `tools\nautilus\golden\modules_win_amd64.json`
   is written. A differing fixture writes nothing and exits 2; the hand-off stops and no pilot runs.
 - `--timing`: the `BacktestEngine` import time and the wall time of 12 synthetic runs of 5,600 bars.
 - `python tests/run_all.py`: 0 FAIL, the `nautilus` layer-2 tests PASS, `nautilus/test_l2_05b_input_linked_to_env_refused`
   the only `nautilus/*` NOT_RUN allowed (it needs Developer Mode for a symbolic link).
 - `--fingerprint` (each table): `table_sha256`, `code_sha256`, then `host_fingerprint <64 hex>`; a
-  `host_fingerprint null (...)` stops here (R-15, O11): the family ledger is missing or empty on this machine, and
-  follow the separately approved O11 A2 procedure for E1; unresolved C3 still stops. Do not bypass R-15.
+  `host_fingerprint null (...)` stops here (R-15, O11). For E1 it means the A2 line above did not run or did not
+  finish: commit the hand-off report (7A.3 step 1) and send Claude this output and the receipt's status if one
+  exists. Do not run `register_e1` now, because the tree is no longer clean; before a re-entry Claude names the
+  exact outputs to remove and the `git restore qa/acceptance_results.json` that let the A2 line find a clean tree.
+  Unresolved C3 still stops. Do not bypass R-15.
 - `--handoff-report`: writes `docs\nautilus_bridge\handoff\win_amd64.json`, each part with its own result or error.
 
 ## 7A.3 Commit what Step 7A produced (the owner)
@@ -187,7 +205,8 @@ before that review. The O8 waiver changes no R-09/R-11/R-15 or freshness require
 ```powershell
 git pull --ff-only
 ```
-The pilots anchor to that HEAD, and every pilot run record stores it.
+The pilots anchor to that HEAD, and every pilot run record stores it. Run each pilot on a network that reaches
+1.1.1.1:443 (see `--egress-record` above): the pilot's own egress probe must fail because of the rule, not the network.
 
 ## After Step 10: the merge (the owner)
 
