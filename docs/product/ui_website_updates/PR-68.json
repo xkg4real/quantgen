@@ -1,0 +1,87 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-crypto-missing-values-pr-68",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Owner ruling 2026-11-03: the website is handled in a separate session and this session does not modify it; this record does not establish receipt.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "claude/s10-crypto-20261104",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/68",
+    "implementation_commit": "5fbb1a3",
+    "remote_status": "OPEN",
+    "merge_commit": null,
+    "verified_head": null
+  },
+  "summary_ko": [
+    "Crypto 화면에서 값이 없을 때 0이나 −100%로 보이던 곳을 '값 없음'으로 표시합니다: 무기한 선물 괴리, 김치 프리미엄 1년 z, Upbit 종가.",
+    "원화 시세가 없는 보유 코인은 0원으로 평가하지 않고, 합계를 '부분 합계'로 표시하며 빠진 코인을 밝힙니다. 평균 매수가에 통화 단위를 붙입니다.",
+    "정상 자료의 김치 프리미엄 결과는 바뀌지 않습니다(합성 40건 동일)."
+  ],
+  "website_impact": {
+    "classification": "shared_browser_change",
+    "browser_code_changed": true,
+    "shared_sources": [
+      "core/crypto/analytics.py",
+      "core/crypto/values.py",
+      "core/research/crypto_workflow.py",
+      "data/crypto/crypto_client.py",
+      "ui/crypto_page.py"
+    ],
+    "requested_actions_ko": [
+      "소개사이트가 Crypto 화면의 김치 프리미엄 z·무기한 선물 괴리·보유 평가를 보여 준다면 '값 없음'과 '부분 합계' 표시를 반영할지 검토하세요.",
+      "정책 FACTS·01(개인정보 처리)의 2026-11-04 Crypto 절을 웹 Docs에 반영할지 검토하세요.",
+      "웹 HTML/소스는 GitHub에 올리지 않습니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "crypto missing values (new)",
+        "passed": 11
+      },
+      {
+        "suite": "crypto, AI payload, desktop, prose, Flet runtime, compliance, syntax after main merge",
+        "passed": 94
+      }
+    ],
+    "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12.",
+    "source_review": "20 documents PASS after named refresh; publication BLOCKED",
+    "ci": "PENDING",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "Not verified on the owner's Windows PC."
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "실제 Upbit·Binance 응답, 특히 KRW 시장이 없는 코인이 섞인 목록에 Upbit가 어떻게 답하는지는 미검증입니다.",
+    "동결 연구 스크립트 docs/asset_expansion_study.py는 같은 계산 불가 경우 +nan을 출력하며, 소유자 승인 없이 바꾸지 않았습니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "core/crypto/analytics.py",
+    "core/crypto/values.py",
+    "core/research/crypto_workflow.py",
+    "data/crypto/crypto_client.py",
+    "docs/compliance/01-privacy-policy.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md",
+    "docs/product/SECTION10_QUEUE_2026-10-30.json",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md",
+    "docs/product/ui_website_updates/PR-67.json",
+    "docs/product/ui_website_updates/PR-68.json",
+    "quantgen_desktop/market_narrative_language.py",
+    "quantgen_desktop/market_tools.py",
+    "tests/crypto_missing_values_acceptance.py",
+    "ui/crypto_page.py"
+  ]
+}
