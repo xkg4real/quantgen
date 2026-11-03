@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d
-next_ids: ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-04T02:40:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2
+next_ids: ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-04T02:26:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/ui-markets-a4-20261103
-work_commit: 141ebf2
+work_commit: 7fc53e2
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/67
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -101,7 +101,8 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - **A4-a 완료:** PR #64 병합(main `ba3b6b2`, 소스 `9f7dc0e`와 트리 동일). CI Runtime 41641446205(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41641446773 성공. 로컬 41+62+47+14 OK, `/code-review` 7건 수정. 실제 Windows IME·Tab·DPI는 미검증.
 - **A4-b + A4-c 완료:** PR #65 병합(main `1682404`, 소스 `7f90641`과 트리 동일). CI Runtime 41649397459(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41649397329 성공. Vercel 상태 실패는 저장소 전체 연동 문제(PR #63 문서 커밋도 실패)로 PR에 한 번 설명. 자산별 탭 9개·KIS 먼저→Yahoo 대체·데이터 출처 선택 숨김(A4-b), 해외 종목명 검색 126개·거래소/봉 수 입력 제거·휠·+/- 확대·출처 두 줄(A4-c).
 - **A4-d 완료:** PR #66 병합(main `c1a4e97`, 소스 `8b88726`과 트리 동일). CI Runtime 41655524416·Compliance 41655524169 성공. **UI A4 전체 완료.**
-- **A2 Windows 근본 원인 확인·수정(`141ebf2`, CI 대기):** 진단 출력(`96709a7`)으로 Windows 수치 확보. 입력 패널(QFrame) 704x383, 크기 힌트 383, 실제 폭에서의 필요 높이(hfw) 411. Maximum 세로 정책이 패널을 선호 폭 기준 크기 힌트(383)로 제한해 ETF 양식이 130px(최소 144)로 눌림. 정책을 Preferred로 바꿈(c2bf636의 '늘어나지 않기'는 상단 정렬로 유지). 넓은 선호 폭 자식으로 Windows 조건을 재현하는 시험 추가: 수정 전 397<413 실패, 수정 후 통과. 광범위 254 OK.
+- **A2 완료:** PR #67 병합(main `7fc53e2`, 소스 `141ebf2`). CI Runtime 41681151562(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41681151793 성공. 원장 ⑬-2/a2.
+- (기록) **A2 Windows 근본 원인 확인·수정(`141ebf2`):** 진단 출력(`96709a7`)으로 Windows 수치 확보. 입력 패널(QFrame) 704x383, 크기 힌트 383, 실제 폭에서의 필요 높이(hfw) 411. Maximum 세로 정책이 패널을 선호 폭 기준 크기 힌트(383)로 제한해 ETF 양식이 130px(최소 144)로 눌림. 정책을 Preferred로 바꿈(c2bf636의 '늘어나지 않기'는 상단 정렬로 유지). 넓은 선호 폭 자식으로 Windows 조건을 재현하는 시험 추가: 수정 전 397<413 실패, 수정 후 통과. 광범위 254 OK.
 - **§10 옵션(M4-N4·N7·N9) 구현·검토 완료, 브랜치 `claude/s10-options-20261104` `a4b7c3c` 푸시(PR 없음):** 근거 `docs/product/OPTION_DISCLOSURE_2026-11-04.md`, 검사 `tests/option_disclosure_acceptance.py` 11개, 관련 46개 OK. 유효 입력 4사례(GBM/GARCH × 100/3000경로) 배열·값·payload 기존 키 모두 main과 동일, 키만 추가. `/code-review` 10건: 7건 수정, 2건 유지(equity_deriv 무변경 원칙, 구버전 자료 방어 분기), 1건(§10 집계 21→24 동일 줄 충돌 없이 24로 병합됨)은 병합 시 수동으로 27로 맞춤.
 - **병합 순서:** A2(#67) → Crypto PR(main 합치기, FACTS·기준선 충돌 정리) → 옵션 PR(main 합치기, 집계 27로 수정). 그다음 §10 모형/ETF, AI.
 - (이전 기록) **A2 Windows CI 실패 → 수정 푸시(`e967fec`, CI 재실행 대기):** `test_tool_forms_are_not_clipped_after_styles_apply`가 Windows 3.11/3.12/3.14에서 ETFPane(폭 1000) 실패, Ubuntu 통과. 원인: 시장 화면 레이아웃은 중첩 단계마다 따로 게시되는 LayoutRequest로 크기 변경이 전파되는데, 검사가 processEvents() 한 번 뒤에 측정. Windows 글꼴로 캡션이 줄바꿈되면 새 높이가 도착하기 한 단계 전을 봄. Linux에서 FX 캡션을 길게(800→1000) 해 재현: 1~2회 실패, 12회 통과. 폼 컨테이너 최소 높이 보정은 시험해 봤으나 같은 횟수가 필요해 버림. 시험이 레이아웃 정착(12회) 후 측정하고 줄바꿈 사례를 추가. Vercel 실패는 저장소 전체 문제로 PR #67에 한 번 설명(댓글 6609469123).
