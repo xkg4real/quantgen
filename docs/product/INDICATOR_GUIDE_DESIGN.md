@@ -1,8 +1,17 @@
 # QUANTGEN indicator guide and shared chart rules
 
-The Home guide teaches indicator interpretation on one attributed historical
-series. Opening it shows an introduction and a baseline chart. A–E buttons select
-SMA, EMA, RSI, MACD and Bollinger bands; selections can be combined or cleared.
+The guide teaches indicator interpretation on one attributed historical
+series. Opening it shows an introduction and a baseline chart. In the native
+app (2026-11-03, owner request UI-13) the guide is search-first: a box titled
+“Search what you want to explore” (“궁금한 내용을 검색해 보세요”) suggests up to
+eight matching terms while typing, like a browser search box, and the chosen
+term’s explanation appears directly below it. The glossary
+(`core/education/glossary.py`) covers the five indicators and 27 market, risk,
+rates, derivatives, FX and QUANTGEN terms in Korean and English; names,
+abbreviations, aliases, Hangul initial consonants and finally definition words
+match. Choosing an indicator also draws it on the chart; chosen indicators show
+as removable chips and can be combined or cleared. The Flet guide keeps its A–E
+buttons.
 The existing Signals workspace uses the same guide with its actual loaded
 `History`, so its dates and prices are never replaced with an educational sample.
 
@@ -16,9 +25,12 @@ Order: introduction → choices and sample → selection reason/source → chart
 same-date cursor → interpretation → four-part explanations → counterexamples
 → explicit report save. Keep provenance, period and data type near the chart.
 
-Each indicator has a stable letter and colour, shared by the button, chart and
-explanation. A checked button adds a checkmark; colour is not the only selection
-signal. Clear preserves the underlying historical example policy. The guide can
+Each indicator has a stable letter and colour, shared by the button or chip,
+chart and explanation. A Flet checked button adds a checkmark and a native chip
+shows the letter and abbreviation (reopening its explanation) beside a remove
+button; colour is not the only
+selection signal. Native keyboard path: Tab to the search box, type, Down into
+the suggestions (Up returns), Enter chooses, Escape closes the list. Clear preserves the underlying historical example policy. The guide can
 be collapsed and reopened without losing selections. Changing language preserves
 selections, the cursor date when available, financial inputs and research results.
 

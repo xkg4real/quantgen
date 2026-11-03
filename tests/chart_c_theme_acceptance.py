@@ -121,7 +121,7 @@ class NativeStudyTests(unittest.TestCase):
             window=ResearchWindow(auto_refresh=False,language_store=settings)
             self.addCleanup(window.deleteLater);self.addCleanup(window.hide)
             window.resize(1600,1000);window.show();window.nav['guide'].click()
-            guide=window.indicator_guide;guide.buttons['rsi'].click();guide.move_cursor(45)
+            guide=window.indicator_guide;guide.choose('rsi');guide.move_cursor(45)
             class WideReadingHint(QLabel):
                 def minimumSizeHint(self): return QSize(966, 40)
             text=WideReadingHint('A long reading wraps within the available guide width. ' * 3)

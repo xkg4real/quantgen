@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "9c000b4e9dea22fc41c69593b4b304295400b0c04c4613775d6235da3bf5340f",
+    ".github/workflows/runtime-smoke.yml": "2c386d00996526897f10a2c9d805422632d52f1beef2a966f576b0f92331464f",
     "README.md": "6a4f572a12e6dea657c7c063240b94d1a928e2b4f41fff25f7348ca69e1b88b5",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -65,6 +65,7 @@
     "core/crypto/funding_diagnostic.py": "19e0763b30e0f838d522c4ceedffd8ad7139b69f7257924532593b9bb02a9270",
     "core/education/__init__.py": "d04a1be2039032cc6150e474930f58e9f5b1e882d8fad1a6b472c313b5456ad4",
     "core/education/chart.py": "e42562c7fdcbfe5be6743561b1b60a0567ca6da916c292c641c3e84ae6d79771",
+    "core/education/glossary.py": "2fc0f2f0d6c5c6f7938a249d8d99a05e69c211860ffefad88ec4b1ebbb87195b",
     "core/education/indicators.py": "22954a58ab04b41c3a0b6d49a57006d271f6a4d464b8c6bb997a048949deae5c",
     "core/engine/__init__.py": "df385736b31e385fea9202e4ec5651220bfb1bf783aeacff105540f85d21cf85",
     "core/engine/books.py": "e3c0f6048a8047501b8be27d1af661b4aa137fe8bc59e4fa0478fef97e08ddd8",
@@ -199,7 +200,7 @@
     "core/theme.py": "726e370feb7e44ed22a439b3b8111b5a065e9b08ff483f603c58d4b3ff4fad51",
     "core/ui_dynamic_messages.py": "218891aa8f4097e6db887b1f38128253036aaa4d96d3e4817550d3d17c924a1e",
     "core/ui_legacy_messages.py": "fc79fa0ad7750a4d9640adb5845ca2d1f4367468aef5028aeb4c00f35dc45a75",
-    "core/ui_messages.py": "ffafbd00625f8ab6722db1a90e3e5f15ba97860a320646dd57e2630f2d7afc96",
+    "core/ui_messages.py": "9d78e48a301d1bb6b3b70efe5586606d5ee51aac63b2e2a37e5dbee5807de086",
     "data/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "data/calendars/ASX.json": "af9afc80eeccfbcbf2cb25eb1b8b10d40a10972914d028b82208f077dc9711d1",
     "data/calendars/B3.json": "3bed23966ff33a40008a63f593302c20cfb0d231145a51a724e4d66de926385d",
@@ -240,7 +241,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "661cb76177788aa1e269a5b54ddd17f18429b451ac9da2d56d2cb8fc7c62dc55",
+    "docs/compliance/FACTS.md": "bd5ecad69d4ddd0586f015ac97af0e909ba3238d5991fa9dec9e51d1f1fbdfd5",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -262,7 +263,7 @@
     "docs/product/FX_LANGUAGE_2026-10-31.md": "e2c15111acbd1bf6391700c6a0f6616da69d65ce4750654783fd08fbaea3d65f",
     "docs/product/HOME_COMPACT_REVIEW_20261102.md": "45e335e646bca3e25d2beb975f0465ae8b7d57779b10c737cd65dd157426d585",
     "docs/product/HOME_LIVE_QSCORE_REVIEW_20261102.md": "8ea3908579720e4bb3262e2952251d2b054aa2fcdc3ba34dbb7118e5c6e5d711",
-    "docs/product/INDICATOR_GUIDE_DESIGN.md": "cf664a34fefd8506e356ca2f261ddc6acbce168d370d1f7d504393d94acca484",
+    "docs/product/INDICATOR_GUIDE_DESIGN.md": "09cea58c3cd2859fdc2dbe69f1956c4fec229c6c3a82ab2b1eea0b091e669b4b",
     "docs/product/KIS_MARKET_CHARTS_2026-11-02.md": "f3dfa3a71ced1f1bfb194e349266cb9581c1d09e001ff3dd60dbd9eba2e5ab68",
     "docs/product/KIS_SOURCE_DOCUMENT_REVIEW_2026-11-02.md": "6dfed3be22f7b4700cd932fc9d71f13a980c380d74fc6e6980312ecdde532053",
     "docs/product/LETF_ASSUMPTIONS_2026-11-02.md": "4fd6fbcd5caad90146799feb6fa7ae61a38603e22c752970474e3d23b757fd0b",
@@ -297,7 +298,7 @@
     "pyproject.toml": "9a018faa10d90f657adc69bbd91161b92b799b008ab5eba0e5ca40c120e384e8",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "e95173a6ad7edd05212b5c5123eaa2684f24ab675c2151e746006cb90a5e41b9",
+    "quantgen_desktop/app.py": "e0886fd7adec43aef76005c622650cbb829672b7905110ff8d3fe18802fc6127",
     "quantgen_desktop/bonds.py": "98e50ea1a2040e420fb783a457dd615e005522da56dc94ef86bfbd01fc254e3f",
     "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
@@ -308,7 +309,7 @@
     "quantgen_desktop/display_prose_catalog.py": "25621b1400bf12cfe9874b0bca300ce5fa3a61fe752ee49033bc5929f0f5e63d",
     "quantgen_desktop/fx.py": "c57c76ab44edc66bfd4451e6b75abf7d92ba38806cbfc8685c8cba3c287322d9",
     "quantgen_desktop/fx_narrative.py": "1078cff2724ff7c6bc75f8146e7893622323899ee5bb1c52100007c11649e52e",
-    "quantgen_desktop/indicator_guide.py": "c613421bd6e0ac16e35addb14537a0908206f8eb98c3dafcbb6a59ffb9e8fee6",
+    "quantgen_desktop/indicator_guide.py": "6fbdb1e53e2f8e1ec9a42c52df5828127d4fc5404cf3f3260b0ba32c153c5325",
     "quantgen_desktop/jobs.py": "2a0764c9c4f767a2c93d49b0fe929a1ad655d2195acc0c9a371f6229a1aa5ac1",
     "quantgen_desktop/localization.py": "2927801b702787e2c962319693e4dd1f6db4ecc9543c5e23e2d757ea9c0b1fb1",
     "quantgen_desktop/macro.py": "b8933483ead3e3e12f13c7e5581741336000d81e8719b1d3b1092ab57232c2b3",
@@ -341,7 +342,7 @@
     "tests/ai_payload_acceptance.py": "2989ffcbc806c4a31f2795adaca8be20c90f47ea4140cfab5fe600a976cc5a4e",
     "tests/ar1_decay_acceptance.py": "8283f51b60967f30950af4ec7ecfda48f52c9bb605b2dc8231fc26b3549b63ab",
     "tests/bond_funding_acceptance.py": "dfd5760cec1f4e32cfccdae4f73cf8d4a38ea72650af612587e981c8058db02c",
-    "tests/chart_c_theme_acceptance.py": "2df7605b8f04cddc17f21f613d6498715a8b94e7ea3785e30df6be8224de7435",
+    "tests/chart_c_theme_acceptance.py": "e0d60eae41de0c82c90538e293329cd673af4d20aa972cf2fe307d2442fed4b4",
     "tests/cms_coupon_disclosure_acceptance.py": "1c1fcf30d38c23885e7c236f1ed39302972df972c93c9a20184b3b7ebf3d4010",
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
@@ -357,7 +358,7 @@
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "52168dc4253a65ef8763ff37ec2a33ee810c26ab411eccf1ddd7dc7cf139c7d6",
-    "tests/desktop_indicator_guide_acceptance.py": "e7157f3d2c0bb82e9814d9a1d9a30409e43e239b9139426facde51415422865b",
+    "tests/desktop_indicator_guide_acceptance.py": "126f6bfdefad5c2c6c53ce0e24975077c0b2b6764fdaf95e02bcd04c531b7ea8",
     "tests/desktop_language_acceptance.py": "9f2c9a16007e4790823122f5e3ce6c8b19ade4b82ef1b41c20a742dcdf0dbf72",
     "tests/desktop_letf_ai_acceptance.py": "1c9d8b5e2ae41716c2f7c2dfe73e78f39b485d5d636ad17928ed408eb533c4df",
     "tests/desktop_letf_assumptions_acceptance.py": "38bd6813074605393f690893c5bbbccfffc814dd4eaf44346ec7cb2f63b3f772",
@@ -391,6 +392,7 @@
     "tests/frozen_guard.py": "5a8f9a8c33cd0cc279da28db6e8f38c6e9b8abe643d0b7a26821077257f32246",
     "tests/funding_inference_acceptance.py": "dc1eaf4e627411a43ab46dd878a3628c076911ede974554575cc24f101310b7b",
     "tests/fx_basis_disclosure_acceptance.py": "9077bab45713c30e1b63607f87607c92c7a9bef60e094affdc968571405bb99e",
+    "tests/glossary_search_acceptance.py": "058922190b05fc585dab3462848b40ea0444a43b4b5e96fdb512cd8ccfc0e64e",
     "tests/golden_tools.py": "d3b4ec0c7610e1391eb1739f8101b60766139d9dff37f80a18528bcb99f31e61",
     "tests/home_watchlist_acceptance.py": "86956c94f3aa7a90f496bc5c2bea388a6b2b5f861b5d1ca4421045c55f19165c",
     "tests/indicator_guide_acceptance.py": "94f9065e59762bdbc7f2ab8a9d000f8211b2aef88a87a0076f70f6bdca2bc76e",
@@ -539,163 +541,163 @@
   "reviews": {
     "1": {
       "document_sha256": "e917090c1153867f2f06a3529253445d505584ee0a970e9dc39d347715d12696",
-      "source_digest": "d2ac73fb4c8fe5dd6bc0871cc6e81d836baf8f1753c63e2ceca3529c8796cd0a",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.426451+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "e98a54e5b2c6a4e8ec47e97c3fc0f039ab0d3446078207c6153826a5a8a3b38e",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.976326+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "d2ac73fb4c8fe5dd6bc0871cc6e81d836baf8f1753c63e2ceca3529c8796cd0a",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.428692+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "e98a54e5b2c6a4e8ec47e97c3fc0f039ab0d3446078207c6153826a5a8a3b38e",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.978621+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "b687df31b5b78a40d8a37973575793db7e3234f5b065aec956c294967805f370",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.431570+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "475ea049ab2c075d89372aa9026d309f8c3f0b8dd63dcb1a62d7dccd9886ee56",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.980561+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "f13abbc5c7319509cb7b363e4f19ccc045cb676e932ea24f9983fbd927a8a836",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.432836+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "a594b226118602fee98c30e7ce3433980ff82f2013beec259fe5d6e015126485",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.982374+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "f9f8d9076fcd61239170b867eb729e3951264b6b761d1573c9d7bbdbfa2a9056",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.434890+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "963151398e609e50ba75106fb7f961fa666118b89c44c21fc04a788e6ec9d848",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.984150+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "6": {
       "document_sha256": "939f35c300ac2881e95ffc494d364bd48a8b7e48f42187a7ce1b14865c042958",
-      "source_digest": "793ebe4f584bd6c23b9e0bbaee1d45a814a3104c38867f5a7d6740838cb49519",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.436298+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "b07769de2eefdb1076815aba72be1857e1576159451a5e5ad0cc6bfec5331ea2",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.986525+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "7": {
       "document_sha256": "ec90dca35feb62eb3479b78d71152b5829fb9f87bd1667ad5e4a354308479f4f",
-      "source_digest": "d2ac73fb4c8fe5dd6bc0871cc6e81d836baf8f1753c63e2ceca3529c8796cd0a",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.437444+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "e98a54e5b2c6a4e8ec47e97c3fc0f039ab0d3446078207c6153826a5a8a3b38e",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.989072+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "8": {
       "document_sha256": "d0c5fc83c5de36a3179e30fd136b3ce51a06d7a4a3e8dac33ca2ae3c80714bea",
-      "source_digest": "793ebe4f584bd6c23b9e0bbaee1d45a814a3104c38867f5a7d6740838cb49519",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.438954+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "b07769de2eefdb1076815aba72be1857e1576159451a5e5ad0cc6bfec5331ea2",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.990842+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "9": {
       "document_sha256": "d0ba0b9e69f01b0c2f38e422a3a234f1d3cfe260947d114ea630af0bd1c8c83d",
-      "source_digest": "22032eb9e53020c0f2b45b25589f8fafb8b628d682dc27e9cf9f92ffe0bb2064",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.440773+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "5d3befb1792ee7386ea7297fdcd56a8f2f143626f98c88b06c7cb6508a978eb6",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.992561+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "22ec1a7d1d745d6098f9a0a4f51308406f628e481195422df254f6344ea62ab4",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.443111+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "6d386e462deff6306b0e8f6d1dd63c480930ff44487a7f5d7788722778085c61",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.994552+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "ff724074b0d03aef346ff6eae3ebf01b9382d0f4224ed2cebeb5ad8bcff30240",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.444578+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "3204d5e1040f8a94454bfda6e4ca57a893384b66022199810799c51cee8644ce",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.996564+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "12": {
-      "document_sha256": "f34e088c236594930b6823fb2bb0f3d9c840f1155252750b6ef09bd7736b2834",
-      "source_digest": "f25bde0c91bcb81240be2984c4515fd143cc83c2cac257b9273ec3f585c29a29",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.445777+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
+      "source_digest": "0f4feefebdb358e92ec53222506b759022ea8da589198e86a6477e3244c7e7e1",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:34.998568+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "13": {
-      "document_sha256": "be5d49b9dff20570a6a460b1568ae5cbc2b8e6749806b7beb233164b7116ae3c",
-      "source_digest": "22032eb9e53020c0f2b45b25589f8fafb8b628d682dc27e9cf9f92ffe0bb2064",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.447394+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "document_sha256": "5ae647631512811571d0b5db76be8f701afed407a1832de2a78b613ac3115f33",
+      "source_digest": "5d3befb1792ee7386ea7297fdcd56a8f2f143626f98c88b06c7cb6508a978eb6",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:35.000476+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "14": {
-      "document_sha256": "71023aeea71480c66c0b11f38a2fabfa981d78ca77a34338554755e3731693b8",
-      "source_digest": "22032eb9e53020c0f2b45b25589f8fafb8b628d682dc27e9cf9f92ffe0bb2064",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.448642+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "document_sha256": "f118bd8252f20e39a0025a04e9f43fbfc0ce415ad54bccf579e0c3c88dac7e42",
+      "source_digest": "5d3befb1792ee7386ea7297fdcd56a8f2f143626f98c88b06c7cb6508a978eb6",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:35.001965+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "15": {
-      "document_sha256": "45001d5a5e9f76314511cc60030b1026d1bfff8fafb701706cce83a829f4db34",
-      "source_digest": "22032eb9e53020c0f2b45b25589f8fafb8b628d682dc27e9cf9f92ffe0bb2064",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.449816+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "document_sha256": "52c3d22d3de4d9a1500cb345fdee2797505d3c216de4cfffdf4c5a905d4f17ca",
+      "source_digest": "5d3befb1792ee7386ea7297fdcd56a8f2f143626f98c88b06c7cb6508a978eb6",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:35.003946+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "ad04aba16e4169de9ed1c72b3a0d49c9cf8331c7221d97c342aab7eeb4fa4505",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.451809+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "da1977e4afba3b1700db11ccd9e5c3add9516478241a36fb904d0cb11d2f37b7",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:35.005938+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "793ebe4f584bd6c23b9e0bbaee1d45a814a3104c38867f5a7d6740838cb49519",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.453151+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "b07769de2eefdb1076815aba72be1857e1576159451a5e5ad0cc6bfec5331ea2",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:35.008578+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "d2ac73fb4c8fe5dd6bc0871cc6e81d836baf8f1753c63e2ceca3529c8796cd0a",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.454468+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "e98a54e5b2c6a4e8ec47e97c3fc0f039ab0d3446078207c6153826a5a8a3b38e",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:35.011154+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "19": {
       "document_sha256": "20261f5ce75559081373cbcff1a075a866651822ad505417bc295ab30c9f7a08",
-      "source_digest": "1035ae877921ca2d62b11b3ea75d2db749bdc3b85e064c0eccc741b51f956992",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.455726+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "05439f427f00332bb6bd19a6e812d3a05e2cefffd04d1bea1ad6be45d36ee44b",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:35.012919+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     },
     "20": {
       "document_sha256": "d4b1fde2264cb0881b23ebc84d6efd8b8e22b41b4966924c7cda2fdf0c9c4f9f",
-      "source_digest": "d2ac73fb4c8fe5dd6bc0871cc6e81d836baf8f1753c63e2ceca3529c8796cd0a",
-      "reviewed_by": "Codex UI final review",
-      "review_note": "Reviewed all twenty documents and final native received charts, geometry repair, and KO EN Flet readout regression; no publication approval.",
-      "reviewed_at": "2026-11-02T06:14:19.456982+00:00",
-      "source_commit": "1a2032efa9dabba7f1ce4519487372e868660dce"
+      "source_digest": "e98a54e5b2c6a4e8ec47e97c3fc0f039ab0d3446078207c6153826a5a8a3b38e",
+      "reviewed_by": "Claude A4-a guide search review",
+      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
+      "reviewed_at": "2026-11-03T13:05:35.014739+00:00",
+      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
     }
   }
 }
