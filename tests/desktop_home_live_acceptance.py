@@ -164,7 +164,7 @@ class HomeLiveIntegrationTests(unittest.TestCase):
         self.assertTrue(self.home_streams[0].stopped)
         self.assertFalse(w.home_feed.active)
         self.assertEqual(w.stack.currentIndex(), w.route_indices["markets"])
-        self.assertIs(w.market_tabs.currentWidget(), w.market_chart)
+        self.assertIs(w.current_market_pane(), w.market_chart)
         self.assertEqual(w.market_chart.symbol.text(), "005930")
         self.assertEqual(self.chart_service.calls, [])
         self.assertEqual(self.score_service.calls, [])

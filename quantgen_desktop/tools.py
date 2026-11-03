@@ -53,9 +53,13 @@ class ToolPane(QWidget):
             w.setToolTip(w.currentText())
             w.currentTextChanged.connect(w.setToolTip)
             w.model().dataChanged.connect(lambda *args, combo=w: combo.setToolTip(combo.currentText()))
-            top.addWidget(label(name, 'caption'), 0, i)
+            caption = label(name, 'caption')
+            if w is self.source:
+                self.source_label = caption
+            top.addWidget(caption, 0, i)
             top.addWidget(w, 1, i)
             top.setColumnStretch(i, 1)
+        self._top_grid = top
         inner.addLayout(top)
         self.forms, self.fields = QStackedWidget(), {}
         for key, _ in tools:
@@ -103,6 +107,21 @@ class ToolPane(QWidget):
         layout.addLayout(exports)
         self.tool.currentIndexChanged.connect(self.switch)
         self.forms.setFixedHeight(self.forms.currentWidget().sizeHint().height())
+
+    def hide_source(self):
+        """Markets panes choose providers automatically (owner UI-8): no 데이터 출처 selector.
+
+        The combo keeps its first (automatic) value for requests, exports and fixtures;
+        every result still names the provider that actually answered.
+        """
+        self.source.setCurrentIndex(0)
+        self.source.hide()
+        self.source_label.hide()
+        self._top_grid.setColumnStretch(1, 0)
+
+    def set_source_caption(self, text):
+        self.source_label.setText(text)
+        self.source.setAccessibleName(text)
 
     def switch(self, index):
         self.forms.setCurrentIndex(index)

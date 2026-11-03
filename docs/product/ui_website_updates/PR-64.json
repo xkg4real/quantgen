@@ -13,8 +13,9 @@
     "branch": "claude/ui-markets-a4-20261103",
     "pull_request": "https://github.com/xkg4real/quantgen/pull/64",
     "implementation_commit": "7de46d4",
-    "remote_status": "OPEN",
-    "merge_commit": null
+    "remote_status": "MERGED",
+    "merge_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a",
+    "verified_head": "9f7dc0e689def1483edb14b13ef840dbca92ce16"
   },
   "summary_ko": [
     "네이티브 기술지표 가이드의 A–E 선택 버튼을 검색창으로 바꿨습니다. 제목은 “Search what you want to explore” / “궁금한 내용을 검색해 보세요”입니다.",
@@ -37,15 +38,30 @@
   },
   "verification": {
     "tests": [
-      {"suite": "guide: indicator_guide, glossary_search, web_indicator_guide, desktop_indicator_guide, chart_c_theme, desktop_language", "passed": 41},
-      {"suite": "wider native regression (desktop, language, startup, prose, strategy, rendering, responsive, market layout, home live)", "passed": 62},
-      {"suite": "compliance acceptance and export", "passed": 47},
-      {"suite": "runtime syntax, packaging policy, status snapshot", "passed": 14}
+      {
+        "suite": "guide: indicator_guide, glossary_search, web_indicator_guide, desktop_indicator_guide, chart_c_theme, desktop_language",
+        "passed": 41
+      },
+      {
+        "suite": "wider native regression (desktop, language, startup, prose, strategy, rendering, responsive, market layout, home live)",
+        "passed": 62
+      },
+      {
+        "suite": "compliance acceptance and export",
+        "passed": 47
+      },
+      {
+        "suite": "runtime syntax, packaging policy, status snapshot",
+        "passed": 14
+      }
     ],
     "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12; changed files also compiled on 3.10/3.11.",
     "source_review": "20 documents PASS after named refresh; publication BLOCKED",
-    "ci": "PENDING",
-    "ci_runs": [],
+    "ci": "SUCCESS",
+    "ci_runs": [
+      41641446205,
+      41641446773
+    ],
     "actual_provider_network": "NOT_RUN",
     "user_pc": "Not verified on the owner's Windows PC (IME composition, Tab order, DPI, screen reader)."
   },

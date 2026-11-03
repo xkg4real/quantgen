@@ -120,11 +120,17 @@ class MarketChartPane(QWidget):
     trade_received = pyqtSignal(object)
     feed_state_changed = pyqtSignal(str)
 
-    def __init__(self, *, service=None, stream_factory=None, locale=None):
+    def __init__(self, *, service=None, stream_factory=None, locale=None, router=None):
         super().__init__()
+        from core.market.routing import ChartRouter, KISChartProvider, default_chart_router
+        injected = service is not None
         if service is None:
             from data.kis_workspace import MarketDataService
             service = MarketDataService()
+        # The KIS route always reads the pane's current service. An injected service
+        # (fixtures) keeps KIS-only behaviour unless a router is given explicitly.
+        current = lambda: self.service
+        self.router = router or (ChartRouter(KISChartProvider(current)) if injected else default_chart_router(current))
         if stream_factory is None:
             from data.kis_stream import KISStream
             stream_factory = KISStream
@@ -142,6 +148,7 @@ class MarketChartPane(QWidget):
         self._status_detail = ""
         self._cursor = 0
         self._last_request = None
+        self._attempts = ()
         self._pending_stream_epoch = None
         self._auto_updates = False
         self._restart_pending = False
@@ -203,6 +210,8 @@ class MarketChartPane(QWidget):
         for column, index in enumerate((0, 1, 3)):
             form.addWidget(self.form_labels[index], 0, column)
             form.addWidget((self.asset, self.symbol, self.exchange, self.interval, self.bar_count)[index], 1, column)
+        # The Markets asset-class tab chooses the asset (UI-8); the combo stays as state only.
+        self.asset.hide();self.form_labels[0].hide();form.setColumnStretch(0, 0)
         layout.addLayout(form)
         buttons = QHBoxLayout()
         self.load_button = QPushButton()
@@ -379,11 +388,14 @@ class MarketChartPane(QWidget):
             "Live gap: missing trades may affect OHLC and minute-bar volume. Reload history to reconcile.": "체결 공백 · 가격·분봉 거래량에 누락이 있을 수 있습니다. 다시 조회해 이력을 맞추세요.",
             "REST snapshot; quote timestamp convention unverified.": "시점 조회 · 시세 시각 기준 미검증.",
             "REST snapshot; market timestamp not provided.": "시점 조회 · 공급자가 시장 시각을 제공하지 않습니다.",
+            "Yahoo Finance fallback: unadjusted OHLC, delayed; not a KIS quote. Live trade updates and Q-SCORE use KIS only.": "Yahoo Finance 대체 자료 · 수정 전 시가·고가·저가·종가, 지연 시세이며 KIS 시세가 아닙니다. 실시간 체결 갱신과 Q-SCORE는 KIS 자료만 씁니다.",
         }
         for original, translated in translations.items():
             note = note.replace(original, translated)
-        return re.sub(r"Partial history: (\d+)/(\d+) requested bars \(provider window or paging limit\)\.",
+        note = re.sub(r"Partial history: (\d+)/(\d+) requested bars \(provider window or paging limit\)\.",
                       r"부분 이력 · 요청한 \2개 중 \1개 봉만 조회됐습니다(공급자 조회 범위·페이지 한도).", note)
+        return re.sub(r"Partial history: (\d+)/(\d+) requested bars\.",
+                      r"부분 이력 · 요청한 \2개 중 \1개 봉만 조회됐습니다.", note)
 
     def _restart_after_inputs(self):
         if not self._restart_pending or self.jobs.busy:
@@ -474,6 +486,14 @@ class MarketChartPane(QWidget):
         return ChartRequest(Instrument(asset, self.symbol.text(), exchange),
                             self.interval.currentData(), self.bar_count.value(), adjusted=False)
 
+    def set_asset_class(self, asset):
+        """Called by the Markets asset-class tabs; changing class stops updates like any input change."""
+        index = self.asset.findData(asset)
+        if index < 0:
+            raise ValueError("Unsupported asset class")
+        if index != self.asset.currentIndex():
+            self.asset.setCurrentIndex(index)
+
     def _asset_changed(self, *_):
         asset = self.asset.currentData()
         self._configure_exchange()
@@ -523,6 +543,7 @@ class MarketChartPane(QWidget):
         self._q_score = None
         self._stream_gap = False
         self._last_request = None
+        self._attempts = ()
         self._last_received = ""
         self._last_tick_received = ""
         self._cursor = 0
@@ -581,13 +602,16 @@ class MarketChartPane(QWidget):
         self._mode = "loading"
         self._status_detail = self._text("실시간 연결 전 차트 동기화", "Synchronizing history before live connection") if for_stream else ""
         self._render_status()
-        return self.jobs.start(lambda: (epoch, request, self.service.load(request)))
+        # Attempts travel with the result: the router runs one job at a time on this pane's Jobs.
+        router = self.router
+        return self.jobs.start(lambda: (epoch, request, router.load(request), tuple(router.last_attempts)))
 
     @pyqtSlot(object)
     def _loaded(self, result):
-        epoch, request, snapshot = result
+        epoch, request, snapshot, attempts = result
         if epoch != self._epoch or request != self.request():
             return
+        self._attempts = attempts
         selected = self._selected_timestamp()
         auto_stream = self._pending_stream_epoch == epoch
         self._pending_stream_epoch = None
@@ -599,6 +623,19 @@ class MarketChartPane(QWidget):
         self._status_detail = ""
         self.render()
         self.snapshot_loaded.emit(snapshot)
+        if not self._from_kis(snapshot):
+            # A fallback answer is a delayed snapshot: no KIS stream, no 5-second polling of it.
+            self._auto_updates = False
+            self.poll_timer.stop()
+            self.poll_button.blockSignals(True)
+            self.poll_button.setChecked(False)
+            self.poll_button.blockSignals(False)
+            self._mode = "snapshot"
+            self._status_detail = self._text(f"{snapshot.source} 자료로 표시 · 자동 갱신 없음",
+                                             f"Showing {snapshot.source} data · no automatic updates")
+            self._render_status()
+            self._busy(self.jobs.busy)
+            return
         if auto_stream:
             self._subscribe(epoch, request)
         elif self._auto_updates:
@@ -610,12 +647,32 @@ class MarketChartPane(QWidget):
             self._status_detail = self._text("이 자산은 체결 스트림 미지원", "Trade streaming is unavailable for this asset")
             self._render_status()
 
+    @staticmethod
+    def _from_kis(snapshot):
+        return str(getattr(snapshot, "source", "")).startswith("KIS")
+
+    def _tried(self):
+        from core.market.routing import describe
+        return describe(self._attempts, self.ctx.language)
+
     @pyqtSlot(str)
     def _failed(self, code):
         if self._job_epoch != self._epoch:
             return
         self._pending_stream_epoch = None
         self._mode = "stale" if self.snapshot is not None else "error"
+        # The failed job was the router's only job; its attempts belong to this request.
+        self._attempts = tuple(getattr(self.router, "last_attempts", ()))
+        if code == "ProvidersNotRun":
+            code = "KISUnavailable"
+        if code == "ProvidersUnavailable":
+            self._status_detail = self._text("모든 공급사 조회 실패", "Every provider failed") + " · " + self._tried()
+            if any(a.provider == "KIS" and (a.missing or a.reason == "KISUnavailable") for a in self._attempts):
+                self._status_detail += self._text(
+                    " · KIS를 쓰려면 QUANTGEN 폴더의 .env에 KIS_APP_KEY와 KIS_APP_SECRET을 설정하고 앱을 다시 실행하세요.",
+                    " · To use KIS, set KIS_APP_KEY and KIS_APP_SECRET in the QUANTGEN folder's .env and restart.")
+            self._render_status()
+            return
         self._status_detail = (self._text(
             "KIS 앱키·시크릿을 찾지 못했습니다. QUANTGEN 폴더의 .env에 KIS_APP_KEY와 KIS_APP_SECRET을 설정한 뒤 앱을 다시 실행하세요. 시스템 → 데이터 연결에서 설정 여부를 확인할 수 있습니다.",
             "KIS app key or secret is missing. Set KIS_APP_KEY and KIS_APP_SECRET in the QUANTGEN folder's .env, then restart. Check their presence under System → Connections.")
@@ -846,7 +903,11 @@ class MarketChartPane(QWidget):
         self.indicator_reading.setVisible(bool(selected))
         live_only = self.interval.currentData() in LIVE_INTERVALS
         notices = []
-        if self.asset.currentData() == "overseas_stock":
+        if self.snapshot is not None and not self._from_kis(self.snapshot):
+            notices.append(self._text(f"KIS 대신 {self.snapshot.source} 자료입니다(지연·수정 전 가격). 시도: ",
+                                      f"{self.snapshot.source} data instead of KIS (delayed, unadjusted). Tried: ")
+                           + self._tried())
+        if self.asset.currentData() == "overseas_stock" and (self.snapshot is None or self._from_kis(self.snapshot)):
             notices.append(self._text("미국 무료 Nasdaq 시장센터 시세 · 0분 지연 · 유료 통합 시세와 다를 수 있어요.",
                                       "US free Nasdaq market-center feed · 0-minute delay · may differ from paid consolidated feeds.")
                            if self.exchange.currentData() in ("NAS", "NYS", "AMS") else self._text(
@@ -891,7 +952,7 @@ class MarketChartPane(QWidget):
         self.provenance.setText(self._text("출처", "Source") + f": {snapshot.source} · "
             + self._text("조회 시각", "Fetched") + f": {snapshot.fetched_at}"
             + (" · " + self._text("체결 시각", "Market time") + f": {q.market_time}" if q and q.market_time else ""))
-        self.availability.setText(self._availability_text(snapshot.request.instrument))
+        self.availability.setText(self._availability_text(snapshot.request.instrument) if self._from_kis(snapshot) else '')
         self.note.setText(" · ".join(dict.fromkeys(self._data_note(str(note), snapshot.request.instrument)
                                  for note in (snapshot.note, q.note if q else "") if note)))
         n = len(snapshot.candles)
@@ -909,7 +970,7 @@ class MarketChartPane(QWidget):
                                 indicators=selected, dark=dark, language=self.ctx.language)
         self.reading.setText(readout(snapshot, self._cursor, language=self.ctx.language))
         self.chart.setAccessibleDescription(self.reading.text())
-        self.chart.setAccessibleName(self._text("KIS 캔들 차트", "KIS candlestick chart"))
+        self.chart.setAccessibleName(self._text("캔들 차트", "Candlestick chart") + f" · {snapshot.source}")
         values = {key: data[self._cursor] for key, data in indicator_series(snapshot).items()}
         keys = {"sma": ("SMA20",), "ema": ("EMA12", "EMA26"), "bollinger": ("BB_UPPER", "BB_LOWER"),
                 "rsi": ("RSI14",), "macd": ("MACD", "SIGNAL", "HISTOGRAM")}

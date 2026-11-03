@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "2c386d00996526897f10a2c9d805422632d52f1beef2a966f576b0f92331464f",
+    ".github/workflows/runtime-smoke.yml": "11be8f93a9f4c8527997ed81fdb55f65417ce96b2067753fb37032cbef193f6c",
     "README.md": "6a4f572a12e6dea657c7c063240b94d1a928e2b4f41fff25f7348ca69e1b88b5",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -112,6 +112,7 @@
     "core/market/live.py": "1cf1815f27de0b7eaca155b4e1a4b07d8c7e6287197dc5b39ab0c5bb07dfb570",
     "core/market/models.py": "1e302fe59acad098443262074d17cbfe508c5b5d621a05b41c00547271dbdbf2",
     "core/market/presentation.py": "cfb3df67906e8ea3d313bb02be7f4f2fe8d22b9aa315539cf2fdf59931ce0b62",
+    "core/market/routing.py": "9b3157cbac65070e1ccd9926ccc2153739a58b52c1d8b963fb88bd2574757c67",
     "core/markets.py": "0477d1af9f064f69e2619f22b2672af45dd88cba346d83704e9ed3e9c7dcf088",
     "core/numfmt.py": "12ed43176eb802c9d1f08ef5cdcd9e6b97466f8fe5b162abc47ca7791dd8e600",
     "core/quant/__init__.py": "c6216333e6d7e7acab439a2cbfbb2626e1c8ea24e1d4d2001ff8c158dcbff4f5",
@@ -241,7 +242,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "bd5ecad69d4ddd0586f015ac97af0e909ba3238d5991fa9dec9e51d1f1fbdfd5",
+    "docs/compliance/FACTS.md": "ff26c0d09c1a82f677e2b05631415b86bb4fb37293b229a8caed54a26b82b710",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -298,8 +299,8 @@
     "pyproject.toml": "9a018faa10d90f657adc69bbd91161b92b799b008ab5eba0e5ca40c120e384e8",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "e0886fd7adec43aef76005c622650cbb829672b7905110ff8d3fe18802fc6127",
-    "quantgen_desktop/bonds.py": "98e50ea1a2040e420fb783a457dd615e005522da56dc94ef86bfbd01fc254e3f",
+    "quantgen_desktop/app.py": "d41c3b0b521abdf650f046680e49571cfa31daa830682f5146fda8c02f6b2b94",
+    "quantgen_desktop/bonds.py": "20008483d17950302fe971c43c98ab81d938f2814197b559e1a718f6a5cc940c",
     "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
     "quantgen_desktop/charts.py": "26664a81b31a256b77f70fc8adca76f51a763560cf33e1f2d556b527b41cbdf8",
@@ -315,7 +316,7 @@
     "quantgen_desktop/macro.py": "b8933483ead3e3e12f13c7e5581741336000d81e8719b1d3b1092ab57232c2b3",
     "quantgen_desktop/macro_narrative_language.py": "4a39ff7e9ef3583d803bc25f899737194186d15a3311d5d7d0e4f0cb0b45803c",
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
-    "quantgen_desktop/market_chart.py": "a126205c17485c47d5f5b7282166561ef5f532fa49955b5a54ed94525648eee4",
+    "quantgen_desktop/market_chart.py": "db190f020e7d0e2f70978fe3bc45350641abc9368c18c648768f8275b18a3ebb",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
     "quantgen_desktop/market_narrative_language.py": "b8cb8fd3f6b2a75fcd8225d43a2a172365caa237774c6ac45bc0e535655fd15a",
     "quantgen_desktop/market_tools.py": "814118dc14ade98a391e2cb8200c22becb751cc4f6dab2138ef5802a13c858af",
@@ -329,8 +330,8 @@
     "quantgen_desktop/signals.py": "42c35b809cbb3b2ca20be1d2103f405a4e7564ac9678673d39fa26368bfd96ef",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
-    "quantgen_desktop/tools.py": "d5fe4d7fc5a5c2c13b3466f8f1071854a1b05838dbcccfa8dcb366d0057b736f",
-    "quantgen_desktop/translations.py": "84ab537354185c5a3f9a584405de0ae42570f0a1306846ca8bd3dfe5e5a70956",
+    "quantgen_desktop/tools.py": "abb35694317cc028156e0c5500a429cbe2fe99ff068b86134326351765530009",
+    "quantgen_desktop/translations.py": "d2b14ff1f97d28c672483f1506062f385ed459a9b90ec5ba2dfffcf6ea6f552e",
     "quantgen_desktop/watchlist.py": "8261b0eae67e53bb21932fe4fb9d675b6ad158b1fec7ce2de7cc7551264d1969",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
@@ -348,7 +349,7 @@
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
-    "tests/desktop_acceptance.py": "841ce5119e6e1d64e8d41e195e8441a09c95260428698c157ef3bb6159ef99ce",
+    "tests/desktop_acceptance.py": "172aa648792ff58b52d9a73216c53b8be2f1f16976e65f8789866e4014202698",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
     "tests/desktop_authored_prose_language_acceptance.py": "b32c911300a13b2e7e3fd5a25c88499188234c8e7ecc08e53de5ef9f94120a75",
     "tests/desktop_bonds_portfolio_language_acceptance.py": "8429bf7fcb8b9ab8c0ed306052135f2afc0501247c51a1c5fabb68ad8e9c319b",
@@ -357,7 +358,7 @@
     "tests/desktop_commentary_acceptance.py": "23fd186a1562c440d1cf79ee8a9e1169ebeb499da93caec54141415410db7821",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
-    "tests/desktop_home_live_acceptance.py": "52168dc4253a65ef8763ff37ec2a33ee810c26ab411eccf1ddd7dc7cf139c7d6",
+    "tests/desktop_home_live_acceptance.py": "1514c7b2446c314ad3514b21de3fccd7814f8db4e1081a7fc27480fe4163c687",
     "tests/desktop_indicator_guide_acceptance.py": "126f6bfdefad5c2c6c53ce0e24975077c0b2b6764fdaf95e02bcd04c531b7ea8",
     "tests/desktop_language_acceptance.py": "9f2c9a16007e4790823122f5e3ce6c8b19ade4b82ef1b41c20a742dcdf0dbf72",
     "tests/desktop_letf_ai_acceptance.py": "1c9d8b5e2ae41716c2f7c2dfe73e78f39b485d5d636ad17928ed408eb533c4df",
@@ -369,13 +370,14 @@
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
     "tests/desktop_market_chart_acceptance.py": "cb07b4d093bb0d7f28d93a19b22cd7a1636bfcdf855fdf82cbf4ff605ca53382",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
-    "tests/desktop_market_layout_acceptance.py": "1bb7c5578fbfbe49d51ced7a463da76d6075ea8af448d5065879e73ff40d76c8",
+    "tests/desktop_market_layout_acceptance.py": "98244edaf19773ca75295a7e715154abb3687f38a6618490ad86d32b2984767d",
+    "tests/desktop_market_tabs_acceptance.py": "a489d61afaf5998a1b2c86baf5757c5911655c6addb634dd32d9b058129c982b",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_rates_language_acceptance.py": "506bb6fdd48bf13a00f509eba198260a9961522892295309360025be2b4c45c0",
-    "tests/desktop_responsive_tools_acceptance.py": "78d38f9d592f7494012c78cb26443bef516592fadd11448ce535efce533c0e92",
+    "tests/desktop_responsive_tools_acceptance.py": "7e6479ba55584374405ab030115e9b62af1ca63b0d483e63e42a81a3ea822e9e",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
@@ -444,6 +446,7 @@
     "tests/market_chart_presentation_acceptance.py": "6fe863f83008534a669d4c14baa2f4e06d6ca1eb31e4bf30d21d5e89aa78dbeb",
     "tests/market_core_acceptance.py": "da7c6f4df956acccb02e469ff6e632a7dad264f43f1f68421b76ef8e7a5da89d",
     "tests/market_received_bars_acceptance.py": "d813ac382849703a0d06cdf23fb2ace46d2319187956150dc86b750b79890f92",
+    "tests/market_routing_acceptance.py": "76cefd5084a08c8aec8d108323f2147b39b05ca20febc81b0c687d9a99614301",
     "tests/mc_volatility_acceptance.py": "5715fb07e257e88f6a38ace19863c83e926c01bbc5c22573174e4ea1072c2a89",
     "tests/notrun.py": "8da97cac3ebd6d0f22ee476b0869e33cb363688317a38befa541ffc2b79f7b20",
     "tests/packaging_policy_acceptance.py": "936034aeaab8d118f83fce8728897650acc2f306cb5405172fef4893fef0b04f",
@@ -479,7 +482,7 @@
     "tools/handoff/mod/hooks/register.test.ts": "2709a0beb01e94689c5be2118f266138ad24b990648afbd58de8086e4d5628fb",
     "tools/handoff/mod/hooks/register.ts": "f7370a361aee2a53d4e1b8355f5a707b52a77d0e852a63bc3a1c743400b39d0b",
     "tools/handoff/push_handoff.py": "45e2e3405d78087d5acb91ce4ea415a47fdcab3f13f3331708d07af856b91f29",
-    "tools/packaging/smoke_desktop.py": "a4e42833d429378f12fe87fec75fc448dd663003e88a420418344dd37d36ae95",
+    "tools/packaging/smoke_desktop.py": "d78d2fdba8ddc38edaa5bfbf062d66259b7a56f1be3aacaf1806be8948ce5481",
     "tools/packaging/smoke_installed.py": "ac27822bc910528abef35a63a38a1f3756dbd7fe436da8fd6352611c917f26f4",
     "tools/packaging/stage.py": "416569c488d19aeaa82bcf9eeda3a72ff302ef4c8fddb46dd3e16dc24c2e3d64",
     "tools/paper/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -541,163 +544,163 @@
   "reviews": {
     "1": {
       "document_sha256": "e917090c1153867f2f06a3529253445d505584ee0a970e9dc39d347715d12696",
-      "source_digest": "e98a54e5b2c6a4e8ec47e97c3fc0f039ab0d3446078207c6153826a5a8a3b38e",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.976326+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "e45164b282af4fb17e6d7b12f35477a20c0f2b314ba06508f83093e332629442",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.069081+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "e98a54e5b2c6a4e8ec47e97c3fc0f039ab0d3446078207c6153826a5a8a3b38e",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.978621+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "e45164b282af4fb17e6d7b12f35477a20c0f2b314ba06508f83093e332629442",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.071915+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "475ea049ab2c075d89372aa9026d309f8c3f0b8dd63dcb1a62d7dccd9886ee56",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.980561+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "25112dce95aa0ba4e4053f4a2c9b012873a828a1d3b916560cea42d5d36f3cb8",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.073820+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "a594b226118602fee98c30e7ce3433980ff82f2013beec259fe5d6e015126485",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.982374+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "4dd9c467a0c8fb5e4a935b58aa4d0c0f8a50e86798dfc8670f024b73597afea7",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.076175+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "963151398e609e50ba75106fb7f961fa666118b89c44c21fc04a788e6ec9d848",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.984150+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "b01ec690b7c7f7207194beb1ad87201e55dee9a988d856c30d9c53986578ee75",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.079142+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "6": {
       "document_sha256": "939f35c300ac2881e95ffc494d364bd48a8b7e48f42187a7ce1b14865c042958",
-      "source_digest": "b07769de2eefdb1076815aba72be1857e1576159451a5e5ad0cc6bfec5331ea2",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.986525+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "adc5bb172433b3d28ade8cb2f0b427b7beaa6bbd97bd752704af725aa456cf03",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.081663+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "7": {
-      "document_sha256": "ec90dca35feb62eb3479b78d71152b5829fb9f87bd1667ad5e4a354308479f4f",
-      "source_digest": "e98a54e5b2c6a4e8ec47e97c3fc0f039ab0d3446078207c6153826a5a8a3b38e",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.989072+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "document_sha256": "da59a63d379931b9d397b611a6f1ce61a245d7e33b53f8d96a962fcaa579d21d",
+      "source_digest": "e45164b282af4fb17e6d7b12f35477a20c0f2b314ba06508f83093e332629442",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.084183+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "8": {
-      "document_sha256": "d0c5fc83c5de36a3179e30fd136b3ce51a06d7a4a3e8dac33ca2ae3c80714bea",
-      "source_digest": "b07769de2eefdb1076815aba72be1857e1576159451a5e5ad0cc6bfec5331ea2",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.990842+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "document_sha256": "d8ebd68465cc4956fa6cc02a2d9e0f732da7e1d8917752c87937a7d320978bd6",
+      "source_digest": "adc5bb172433b3d28ade8cb2f0b427b7beaa6bbd97bd752704af725aa456cf03",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.086835+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "9": {
       "document_sha256": "d0ba0b9e69f01b0c2f38e422a3a234f1d3cfe260947d114ea630af0bd1c8c83d",
-      "source_digest": "5d3befb1792ee7386ea7297fdcd56a8f2f143626f98c88b06c7cb6508a978eb6",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.992561+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "86070432343855a517d9017123966bb59337980a3ed2cefbd8845e5f00c0cde2",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.089100+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "6d386e462deff6306b0e8f6d1dd63c480930ff44487a7f5d7788722778085c61",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.994552+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "bfc1b3a80ad33a70bb00aa4f422622ba50ff8daf93630ad74cb9d66932135780",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.091149+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "3204d5e1040f8a94454bfda6e4ca57a893384b66022199810799c51cee8644ce",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.996564+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "eaf42657032bf3627c8604b6de7f6b8239f70f7a12e0a1c55976c1af9a974bfe",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.093583+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "0f4feefebdb358e92ec53222506b759022ea8da589198e86a6477e3244c7e7e1",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:34.998568+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "c9384c5d7708d42b4f7a0807703c55d8165e1388975e6852423b9b9209b0bf78",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.095812+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "13": {
       "document_sha256": "5ae647631512811571d0b5db76be8f701afed407a1832de2a78b613ac3115f33",
-      "source_digest": "5d3befb1792ee7386ea7297fdcd56a8f2f143626f98c88b06c7cb6508a978eb6",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:35.000476+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "86070432343855a517d9017123966bb59337980a3ed2cefbd8845e5f00c0cde2",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.098108+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "14": {
       "document_sha256": "f118bd8252f20e39a0025a04e9f43fbfc0ce415ad54bccf579e0c3c88dac7e42",
-      "source_digest": "5d3befb1792ee7386ea7297fdcd56a8f2f143626f98c88b06c7cb6508a978eb6",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:35.001965+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "86070432343855a517d9017123966bb59337980a3ed2cefbd8845e5f00c0cde2",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.100211+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "15": {
-      "document_sha256": "52c3d22d3de4d9a1500cb345fdee2797505d3c216de4cfffdf4c5a905d4f17ca",
-      "source_digest": "5d3befb1792ee7386ea7297fdcd56a8f2f143626f98c88b06c7cb6508a978eb6",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:35.003946+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "document_sha256": "5ca7319c22a758a6e7090d852663144705d4d232c4a74a6ed82dc3c11fc2c957",
+      "source_digest": "86070432343855a517d9017123966bb59337980a3ed2cefbd8845e5f00c0cde2",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.102472+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "da1977e4afba3b1700db11ccd9e5c3add9516478241a36fb904d0cb11d2f37b7",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:35.005938+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "e8752c6bd427d8e2c669ed873c0ba399ae807e17c1d795c363454f168895b056",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.104161+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "b07769de2eefdb1076815aba72be1857e1576159451a5e5ad0cc6bfec5331ea2",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:35.008578+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "adc5bb172433b3d28ade8cb2f0b427b7beaa6bbd97bd752704af725aa456cf03",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.106371+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "e98a54e5b2c6a4e8ec47e97c3fc0f039ab0d3446078207c6153826a5a8a3b38e",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:35.011154+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "e45164b282af4fb17e6d7b12f35477a20c0f2b314ba06508f83093e332629442",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.108606+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "19": {
       "document_sha256": "20261f5ce75559081373cbcff1a075a866651822ad505417bc295ab30c9f7a08",
-      "source_digest": "05439f427f00332bb6bd19a6e812d3a05e2cefffd04d1bea1ad6be45d36ee44b",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:35.012919+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "e9764f26ceca2b1b805fe1b0310075e7b8265fe192185262c9bb5324c7e50964",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.110329+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     },
     "20": {
       "document_sha256": "d4b1fde2264cb0881b23ebc84d6efd8b8e22b41b4966924c7cda2fdf0c9c4f9f",
-      "source_digest": "e98a54e5b2c6a4e8ec47e97c3fc0f039ab0d3446078207c6153826a5a8a3b38e",
-      "reviewed_by": "Claude A4-a guide search review",
-      "review_note": "Reviewed all twenty documents for the native search-first indicator guide and local glossary: updated FACTS, 12 claims, 13 alternative text, 14 contrast and 15 keyboard; others unaffected (no data collection, storage, transfer, pricing, cookies or third parties added); no publication approval.",
-      "reviewed_at": "2026-11-03T13:05:35.014739+00:00",
-      "source_commit": "140f101420080f1d3afcb7061b9f997553cd7950"
+      "source_digest": "e45164b282af4fb17e6d7b12f35477a20c0f2b314ba06508f83093e332629442",
+      "reviewed_by": "Claude A4-b market tabs review",
+      "review_note": "Reviewed all twenty documents for asset-class Markets tabs and KIS-first automatic provider choice with a Yahoo Finance stock fallback: updated FACTS, 07 data minimization, 08 third parties and 15 keyboard; Yahoo sends ticker, interval and period only, rights stay rights_replace; no publication approval.",
+      "reviewed_at": "2026-11-03T13:45:13.112500+00:00",
+      "source_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a"
     }
   }
 }
