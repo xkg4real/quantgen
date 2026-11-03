@@ -32,6 +32,39 @@ def settle(app, passes=12):
         app.processEvents()
 
 
+def layout_report(pane):
+    """The numbers needed to diagnose a clipped form on a platform we cannot run locally."""
+    from PyQt6.QtGui import QFontInfo
+    from PyQt6.QtWidgets import QAbstractScrollArea
+
+    def size(widget):
+        width = widget.width()
+        hfw = widget.heightForWidth(width) if widget.hasHeightForWidth() else '-'
+        return (f"{type(widget).__name__} {width}x{widget.height()} hint={widget.sizeHint().height()} "
+                f"min={widget.minimumSizeHint().height()} minH={widget.minimumHeight()} hfw={hfw} "
+                f"pol={widget.sizePolicy().verticalPolicy().name}")
+    app = QApplication.instance()
+    page = pane.forms.currentWidget()
+    lines = [f"style={app.style().name()} app_font={QFontInfo(app.font()).family()} {app.font().pointSizeF()}pt "
+             f"dpr={pane.devicePixelRatioF()}"]
+    for child in page.findChildren(QWidget):
+        if child.parent() is page and not child.isHidden():
+            text = child.text()[:14] if hasattr(child, 'text') and callable(child.text) else ''
+            info = QFontInfo(child.font())
+            lines.append(f"  {type(child).__name__} {text!r} geo={child.geometry().getRect()} "
+                         f"hint={child.sizeHint().height()} font={info.family()} {info.pixelSize()}px "
+                         f"hfw={child.heightForWidth(child.width()) if child.hasHeightForWidth() else '-'}")
+    widget = page
+    while widget is not None:
+        lines.append('  ' + size(widget))
+        if isinstance(widget, QAbstractScrollArea):
+            bar = widget.verticalScrollBar()
+            lines.append(f"  scrollbar visible={bar.isVisible()} max={bar.maximum()}")
+            break
+        widget = widget.parentWidget()
+    return '\n'.join(lines)
+
+
 class OperationFixTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -139,10 +172,10 @@ class OperationFixTests(unittest.TestCase):
             w.resize(width, 900)
             for pane in (w.rates, w.krx, w.fx, w.etf, w.derivatives, w.crypto):
                 w.show_market_pane(pane); settle(self.app)
-                self.assertTrue(fits(pane), (type(pane).__name__, width))
+                self.assertTrue(fits(pane), f"{type(pane).__name__} at {width}\n{layout_report(pane)}")
         w.show_market_pane(w.rates); settle(self.app)
         w.rates.tool.setCurrentIndex(1); settle(self.app)
-        self.assertTrue(fits(w.rates))  # a taller form after switching tools is laid out in full
+        self.assertTrue(fits(w.rates), layout_report(w.rates))  # a taller form after switching tools is laid out in full
         # Wider glyphs (Windows fonts) wrap captions to more lines; the form must grow to match.
         from PyQt6.QtWidgets import QLabel
         w.resize(1000, 900); w.show_market_pane(w.fx); settle(self.app)
@@ -154,7 +187,7 @@ class OperationFixTests(unittest.TestCase):
                 caption.setText(caption.text() + ' 긴설명' * 12)
         for width in (1000, 1360, 800, 1000):
             w.resize(width, 900); settle(self.app)
-            self.assertTrue(fits(w.fx), width)
+            self.assertTrue(fits(w.fx), f"{width}\n{layout_report(w.fx)}")
         self.assertGreater(w.fx.forms.height(), before)  # the wrapped captions really took more room
 
     def test_window_and_app_icons_carry_taskbar_sizes(self):
