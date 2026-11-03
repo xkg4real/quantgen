@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a
-next_ids: ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-03T22:46:31+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c
+next_ids: ⑬-2/a4-d, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-03T23:16:36+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/ui-markets-a4-20261103
-work_commit: e86873d
+work_commit: 1682404
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/65
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -99,7 +99,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - **소유자 추가 지시:** 작업이 끝날 때마다 Notion "REMAINING WORK"(https://app.notion.com/p/4065c916fe0c80d2af08c0e7f68817fa) 해당 항목에 `<s>…</s>` 취소선. 페이지에 없는 UI 항목은 "13. Home UI" 절에 취소선 항목으로 추가(PR·main·CI 링크 포함).
 - A4는 PR 4개로 나눕니다: A4-a 검색형 가이드(UI-13), A4-b 공급사 자동 선택과 자산별 탭(UI-8), A4-c 해외 종목명 검색·휠 확대·출처 두 줄(UI-16), A4-d 시장지표 차트 4개(UI-7). 설계 지도: 워크플로 `wf_f050b1c9-227` 결과(스크래치패드 `a4/synth.md`).
 - **A4-a 완료:** PR #64 병합(main `ba3b6b2`, 소스 `9f7dc0e`와 트리 동일). CI Runtime 41641446205(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41641446773 성공. 로컬 41+62+47+14 OK, `/code-review` 7건 수정. 실제 Windows IME·Tab·DPI는 미검증.
-- **A4-b:** PR #65(커밋 `d6413d9`, 기록 `e86873d`). 자산별 탭 9개, `core/market/routing.py` KIS 먼저→Yahoo 등 동시 대체, 시장 화면 데이터 출처 선택 숨김. 로컬 18 신규+215 native+스모크 PASS+정책 47, `/code-review` 6건 수정. CI 대기, 통과하면 Claude 병합 → 원장 ⑬-2/a4-b, Notion 취소선.
+- **A4-b + A4-c 완료:** PR #65 병합(main `1682404`, 소스 `7f90641`과 트리 동일). CI Runtime 41649397459(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41649397329 성공. Vercel 상태 실패는 저장소 전체 연동 문제(PR #63 문서 커밋도 실패)로 PR에 한 번 설명. 자산별 탭 9개·KIS 먼저→Yahoo 대체·데이터 출처 선택 숨김(A4-b), 해외 종목명 검색 126개·거래소/봉 수 입력 제거·휠·+/- 확대·출처 두 줄(A4-c).
 - 다음: A4-c(해외 종목명 검색·거래소/봉 수 입력 제거·휠 확대·출처 두 줄), A4-d(시장지표 차트 4개). Notion "REMAINING WORK" 13-10 항목 아래에 하위 완료를 취소선으로 추가.
 - 로컬 PyQt6 검사 환경: 스크래치패드 `qtvenv`(PyQt6 6.12.0, 전역 설치 없음), 시스템 라이브러리 `libegl1 libopengl0`(CI와 같음).
 
