@@ -1,0 +1,89 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-market-board-pr-66",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Owner ruling 2026-11-03: the website is handled in a separate session and this session does not modify it; this record does not establish receipt.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "claude/ui-markets-a4-20261103",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/66",
+    "implementation_commit": "f6a76ce",
+    "remote_status": "OPEN",
+    "merge_commit": null
+  },
+  "summary_ko": [
+    "시장 화면의 시장지표 표를 지표 선 차트 4개(코스피, S&P 500, 원/달러 환율, 미국 10년 국채금리)로 바꿨습니다. 개별 종목은 빠졌습니다(Home 목록에 유지).",
+    "카드마다 KIS를 먼저 쓰고, 안 되면 Yahoo Finance(원/달러는 그다음 FRED), 미국 10년은 FRED를 씁니다. 합성 자료는 쓰지 않습니다.",
+    "화면이 보일 때만 갱신(KIS 3분, 지연 공급사 15분)하며 실패하면 마지막 값을 유지하고 그 사실을 표시합니다."
+  ],
+  "website_impact": {
+    "classification": "native_ui_only",
+    "browser_code_changed": false,
+    "shared_sources": [
+      "core/research/market_board.py",
+      "core/market/presentation.py",
+      "core/market/routing.py"
+    ],
+    "requested_actions_ko": [
+      "소개사이트가 시장 화면을 표로 보여 준다면 지표 차트 4개로 바뀐 점을 반영할지 검토하세요. Flet 화면은 바뀌지 않았습니다.",
+      "정책 FACTS·08·13·14의 2026-11-03 절을 웹 Docs에 반영할지 검토하세요.",
+      "웹 HTML/소스는 GitHub에 올리지 않습니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "market board core + Qt",
+        "passed": 10
+      },
+      {
+        "suite": "broad native regression",
+        "passed": 194
+      },
+      {
+        "suite": "installed-wheel smoke_desktop and smoke_installed",
+        "passed": 2
+      },
+      {
+        "suite": "compliance acceptance and export",
+        "passed": 47
+      }
+    ],
+    "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12.",
+    "source_review": "20 documents PASS after named refresh; publication BLOCKED",
+    "ci": "PENDING",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "Not verified on the owner's Windows PC."
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "실제 KIS·Yahoo·FRED 응답은 미검증입니다. FRED는 공표 지연이 있고 Yahoo 표시 권리는 rights_replace 상태입니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "core/market/presentation.py",
+    "core/market/routing.py",
+    "core/research/market_board.py",
+    "docs/compliance/08-third-parties.md",
+    "docs/compliance/13-alternative-text.md",
+    "docs/compliance/14-contrast.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/product/ui_website_updates/PR-65.json",
+    "docs/product/ui_website_updates/PR-66.json",
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/market_board.py",
+    "tests/desktop_market_board_acceptance.py",
+    "tests/market_board_core_acceptance.py"
+  ]
+}

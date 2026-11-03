@@ -136,6 +136,7 @@ class ResearchWindow(QMainWindow):
                  macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None, locale=None, theme_mode="light"):
         super().__init__()
         self.ctx = LocaleContext(locale or ("ko_KR" if language == "ko" else "en_US"))
+        self.auto_refresh = auto_refresh
         self.ui_language = self.ctx.language
         self.language_store = language_store
         self.session = session or SessionResearch()
@@ -317,14 +318,10 @@ class ResearchWindow(QMainWindow):
         self.market_subtitle.localized_text = {"ko": "공급자·관측 시각과 함께 확인하는 시세·차트와 시장 분석",
             "en": "Market quotes, charts and analysis with provider and observation time"}
         self.market_subtitle.retranslate()
-        self.market_refresh = QPushButton("시장지표 새로고침")
-        self.market_refresh.clicked.connect(self.refresh_markets)
-        layout.addWidget(self.market_refresh)
-        self.market_table = table(["지표", "값", "단위", "직전 대비", "공급자", "관측일", "상태"])
-        self.market_table.setProperty("localized_columns", [0])
-        self.market_table.setMinimumHeight(100)
-        layout.addWidget(self.market_table)
-        layout.addWidget(label("USD 금리는 변화량을 bp로 표시합니다. 나머지는 직전 관측 대비 %입니다. 데이터 권리와 빈티지는 미검증입니다.", "muted"))
+        # UI-7 (owner, 2026-11-03): four indicator charts instead of a table; no individual stocks.
+        from .market_board import MarketBoard
+        self.market_board = MarketBoard(locale=self.ctx, auto_load=self.auto_refresh)
+        layout.addWidget(self.market_board)
         self.bonds=BondsPane();self.bonds.requested.connect(self.run_bond)
         self.rates=RatesPane(); self.rates.requested.connect(lambda q:self.run_tool('rates',q))
         self.fx=FXPane(); self.fx.requested.connect(lambda q:self.run_tool('fx',q))
@@ -727,6 +724,7 @@ class ResearchWindow(QMainWindow):
         self.guide_subtitle.setText(self.ctx.t('search_intro'))
         self.watchlist.set_locale(self.ctx)
         self.market_chart.set_locale(self.ctx)
+        self.market_board.set_locale(self.ctx)
         self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
         from .indicator_guide import IndicatorGuide
         for pane in self.findChildren(IndicatorGuide):
@@ -834,7 +832,6 @@ class ResearchWindow(QMainWindow):
     @pyqtSlot(bool)
     def busy_changed(self, busy):
         self.run_button.setEnabled(not busy)
-        self.market_refresh.setEnabled(not busy)
         self.watchlist.set_busy(busy)
         self.portfolio.run.setEnabled(not busy)
         self.bonds.run.setEnabled(not busy)
@@ -875,21 +872,11 @@ class ResearchWindow(QMainWindow):
         markets = self.session.markets()
         if not markets:
             markets=default_home_rows(status='UNAVAILABLE' if self.session.market_attempted and not self.session.market_loading else 'NOT_LOADED')
-        details = []
-        for r in markets:
-            v = self.ctx.number(r["value"])
-            change = "—" if r["change"] is None else (("+" if r["change"] >= 0 else "") +
-                (self.ctx.number(r["change"]) + " bp" if r["unit"] == "%" else self.ctx.percent(r["change"]/100, 2)))
-            observed = self.ctx.date(r["observation_date"])
-            details.append([r["label"], v, r["unit"], change, r["provider"], observed, r["status"]])
         self.watchlist.set_rows(markets)
         for symbol, quote in self._live_quotes.items():
             self.watchlist.update_quote(symbol, **quote)
         for symbol, score in self.all_q_scores().items():
             self.watchlist.update_score(symbol, score)
-        table_rows(self.market_table, details)
-        for widget in (self.market_table,):
-            widget.setFixedHeight(min(350,max(100,widget.horizontalHeader().height()+sum(widget.rowHeight(i) for i in range(widget.rowCount()))+12)))
         table_rows(self.run_table, [[r["parameters"].get("symbol", "—"), r["parameters"].get("model", "—"),
             r["execution_status"], r["verdict"], self.ctx.timestamp(r["created_at"])] for r in runs], [r["run_id"] for r in runs])
         complete = [r for r in runs if r["execution_status"] == "COMPLETED"]
@@ -935,6 +922,7 @@ class ResearchWindow(QMainWindow):
         self.brand_symbol.load(QByteArray(symbol))
         p = self.colors = DARK if index else LIGHT
         self.watchlist.set_theme(p)
+        self.market_board.set_theme(bool(index))
         if self.language_store is not None:
             self.language_store.setValue("ui/theme", "dark" if index else "light")
         self.setStyleSheet(f"""
@@ -983,6 +971,7 @@ class ResearchWindow(QMainWindow):
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
             return
+        # The indicator board polls on its own; it never holds the window open (its answer is dropped).
         if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy or self.market_chart.jobs.busy:
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
@@ -998,6 +987,7 @@ class ResearchWindow(QMainWindow):
             self.statusBar().showMessage(display(self, '모의 엔진의 진행 중인 조회가 끝나면 다시 종료해 주세요.'))
             return
         self.market_chart.stop()
+        self.market_board.stop()
         self.quote_paint_timer.stop()
         event.accept()
 

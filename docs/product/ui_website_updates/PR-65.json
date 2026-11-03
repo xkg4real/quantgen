@@ -13,8 +13,9 @@
     "branch": "claude/ui-markets-a4-20261103",
     "pull_request": "https://github.com/xkg4real/quantgen/pull/65",
     "implementation_commit": "d6413d9",
-    "remote_status": "OPEN",
-    "merge_commit": null
+    "remote_status": "MERGED",
+    "merge_commit": "16824045115d00758138bda2e387e6cb9987f9f9",
+    "verified_head": "7f9064123c89d071d2c00175d673397ef3c42634"
   },
   "summary_ko": [
     "시장 화면의 별도 KIS chart 탭을 없애고 자산별 탭 9개(국내증권·해외증권·국내파생상품·해외파생상품·채권·금리·스왑·외환·가상자산·매크로)로 나눴습니다.",
@@ -67,8 +68,11 @@
     ],
     "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12; changed files compiled on 3.10/3.11.",
     "source_review": "20 documents PASS after named refresh; publication BLOCKED",
-    "ci": "PENDING",
-    "ci_runs": [],
+    "ci": "SUCCESS",
+    "ci_runs": [
+      41649397459,
+      41649397329
+    ],
     "actual_provider_network": "NOT_RUN",
     "user_pc": "Not verified on the owner's Windows PC."
   },

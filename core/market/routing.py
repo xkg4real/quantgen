@@ -65,8 +65,10 @@ def _valid(request, snapshot, minimum=2):
 class ChartRouter:
     """Primary first (alone), then a race among the remaining ready providers."""
 
-    def __init__(self, primary, fallbacks=(), *, deadline=12.0, clock=time.monotonic):
+    def __init__(self, primary, fallbacks=(), *, deadline=12.0, clock=time.monotonic, validate=None):
+        """`validate(request, result, minimum)` returns a problem code or ''; charts use `_valid`."""
         self.primary, self.fallbacks = primary, tuple(fallbacks)
+        self._validate = validate or _valid
         self.deadline, self._clock = float(deadline), clock
         self.last_attempts: tuple = ()
 
@@ -96,7 +98,7 @@ class ChartRouter:
                 attempts.append(Attempt(self.primary.name, FAILED, type(exc).__name__,
                                         elapsed_ms=int((self._clock() - start) * 1000)))
             else:
-                problem = _valid(request, snapshot, minimum=1)
+                problem = self._validate(request, snapshot, 1)
                 elapsed = int((self._clock() - start) * 1000)
                 if not problem:
                     attempts.append(Attempt(self.primary.name, OK, elapsed_ms=elapsed))
@@ -141,7 +143,7 @@ class ChartRouter:
             if error:
                 attempts.append(Attempt(provider.name, FAILED, error, elapsed_ms=elapsed))
                 continue
-            problem = _valid(request, snapshot)
+            problem = self._validate(request, snapshot, 2)
             if problem:
                 attempts.append(Attempt(provider.name, INVALID, problem, elapsed_ms=elapsed))
                 continue
