@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2
 next_ids: ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-04T02:50:00+09:00
+updated_at: 2026-11-04T03:45:00+09:00
 stale_after_hours: 3
-waiting_on: none
-work_branch: claude/s10-crypto-20261104
-work_commit: b9b946d
+waiting_on: owner
+work_branch: claude/fix-macro-ui-tests-20261104
+work_commit: b00cb42
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/68
+pr: https://github.com/xkg4real/quantgen/pull/69
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -92,6 +92,25 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - [ ] 7번 결과 통합
 
 ## 5. 중단 지점
+
+- **main 병합 동결 중 (2026-11-04 03:36:05 KST부터).** 소유자 결정 원문은 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`
+  "2026-11-04, Claude Code 채팅: Step 7A 동안 main 병합 동결"에 있습니다(커밋 `b00cb42`).
+  - **동결 시작점:** PR #69 병합 커밋 `bb35b3b4bf4bf1eb602d138a396ac90e253c035b`(2026-11-04 03:36:05 KST). 이 병합 직후부터
+    Step 7A 세션의 7A.3 커밋이 `claude/amazing-gauss-tdiguu`에 들어갈 때까지 **어떤 PR도 main에 병합하지 않습니다**
+    (PR #68, 옵션 브랜치 `claude/s10-options-20261104`, 그 밖의 모든 PR). "CI 통과 시 Claude 병합"은 이 기간에 쓰지
+    않습니다. PR 작업과 CI는 계속할 수 있습니다.
+  - **PR #69(동결 직전 예외 1건):** main의 FAIL 2개를 검사만 고쳐 해결. `tests/macro_ui_components.py`(DARK `warning`이 C형
+    팔레트에서 `#E5BE74`), `tests/macro_ui_views.py`(`ResponsiveRow.columns`가 정수라 트리 순회 `TypeError`). 컴플라이언스
+    지문 갱신(`ba9eeb9`). Compliance CI 41694069555 성공, Runtime은 경로 필터로 미실행. 전체 `run_all`(캐시 없는 사본,
+    3.13 동결 핀 + PyQt6 6.12.0): 746/872 PASS, 2 FAIL, 124 NOT_RUN. 남은 FAIL 2개는 main에서도 같고 환경 탓입니다
+    (`macro_m8_pipeline` 드라이런은 보호 캐시 `yf_SPY.csv` 필요, `papers` 검사는 Windows `taskkill` 필요).
+  - **연구 브랜치는 Step 7A 세션 담당입니다(소유자 지시).** 이 세션은 `claude/amazing-gauss-tdiguu`에 push하지 않습니다.
+    이 세션 컨테이너에는 그 브랜치의 push하지 않은 커밋 3개(`4cb9b9b` main 7fc53e2 병합, `a8f76f9` L1-15·L1-30·A2·RUNBOOK
+    7A.2·`.gitignore`, `7eb3c01` 이전 동결 기록)가 남아 있습니다. 소유자가 처리 방법을 정할 때까지 그대로 둡니다.
+    Step 7A 세션은 새 main `bb35b3b`를 연구 브랜치에 합쳐야 하고, `OWNER_RULINGS_LOG.md`는 양쪽에 추가분이 있어 합칠 곳이
+    생깁니다.
+  - **PR #68(Crypto):** CI 성공(`0a1ba2a`), 동결로 병합 보류. 병합 전 검증 워크플로 `wf_e3ca9fa9-a1b`가 17:35Z쯤 멈춰
+    다시 돌려야 합니다. 모형/ETF 분석 `wf_fea1b022-4f8`도 같이 멈췄습니다. AI 분석 `wf_2c60a985-9f9`는 끝났습니다.
 
 - 소유자 답(2026-11-03 이어서)을 `OWNER_RULINGS_LOG.md`에 기록했습니다(`2ca38d5`).
 - **GPT 비공개 미완료 작업 4개는 아직 회수되지 않았습니다.** 옵션, Crypto, 모형/ETF, AI(§10 일부)입니다. 모두 GPT 컨테이너 안의 작업 폴더에만 있습니다(`/workspace/work/quantgen-defects-{crypto,options,models}-20261102`, `/workspace/work/quantgen-defects-20261102`, 사본 `/workspace/work/quantgen-private-context/reports/2026-11-02/defects-priority-checkpoint-1355`). 소유자가 회수를 시도합니다. 회수하지 못하면 Claude가 해당 항목을 처음부터 다시 하고 `/code-review`로 검토합니다.
