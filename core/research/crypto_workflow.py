@@ -65,10 +65,8 @@ def analyze(*, days: int = 730, source: str = "live", card_loader=None, include_
         try:
             from data.crypto.crypto_client import UpbitAccount, UpbitPublic
             bal = UpbitAccount().balances()
-            tick = {t["market"]: t["price"] for t in UpbitPublic().ticker([f"KRW-{b['currency']}" for b in bal if b["currency"] != "KRW"])} if bal else {}
-            for b in bal:
-                b["krw_value"] = b["total"] if b["currency"] == "KRW" else b["total"] * tick.get(f"KRW-{b['currency']}", 0.0)
-            out["balances"] = bal
+            coins = [f"KRW-{b['currency']}" for b in bal if b["currency"] != "KRW"]
+            out["balances"] = value_holdings(bal, krw_prices(UpbitPublic(), coins))
         except Exception as exc:
             out["balances_error"] = f"{type(exc).__name__}: {exc}"
     from core.quant.validate import load_cards
@@ -80,11 +78,72 @@ def analyze(*, days: int = 730, source: str = "live", card_loader=None, include_
     out["verdict_context"] = {"M_C4_funding": FUNDING_CARD_NOTE}
     return out
 
+def krw_prices(public, markets) -> dict:
+    """Current KRW prices by market; a market that cannot be priced maps to None.
+
+    One request covers every market. If it fails (for example a coin with no KRW
+    market, which the Upbit API may reject for the whole list; unverified), each
+    market is asked alone, so one unknown coin cannot erase every holding (§10 M6-11).
+    """
+    from data.crypto.crypto_client import CryptoError
+    if not markets:
+        return {}
+    try:
+        return {t["market"]: t["price"] for t in public.ticker(list(markets))}
+    except CryptoError:
+        if len(markets) == 1:
+            return {markets[0]: None}
+    prices = {}
+    for market in markets:
+        try:
+            prices.update({t["market"]: t["price"] for t in public.ticker([market])})
+        except CryptoError:
+            prices[market] = None
+    return prices
+
+
+def value_holdings(balances, prices) -> list:
+    """Add each holding's KRW value from {"KRW-<coin>": price}.
+
+    No KRW market or no current price leaves the value unknown (None), never 0
+    (§10 NEW-M6-14, NEW-M6-22).
+    """
+    for b in balances:
+        price = 1.0 if b["currency"] == "KRW" else prices.get(f"KRW-{b['currency']}")
+        b["krw_value"] = b["total"] * price if price is not None else None
+    return balances
+
+
+def holdings_summary(balances) -> dict:
+    """Total of the valued holdings and the currencies left out because no price was found.
+
+    `complete` is False whenever a holding could not be valued, so a total is never shown
+    as the whole account when part of it is missing.
+    """
+    rows = list(balances or ())
+    unvalued = [b["currency"] for b in rows if b.get("krw_value") is None]
+    total = sum(b["krw_value"] for b in rows if b.get("krw_value") is not None)
+    return {"total_krw": total, "unvalued": unvalued, "complete": not unvalued}
+
+
+def perp_premium_pct(premium_index) -> float | None:
+    """The perpetual mark/index premium in percent, or None when the provider did not give both prices."""
+    value = (premium_index or {}).get("premium_pct")
+    return float(value) if value is not None and math.isfinite(float(value)) else None
+
+
+def z_text(z, digits=1) -> str | None:
+    """A signed z, or None when it could not be computed (fewer than 91 observations or a flat window)."""
+    return f"{z:+.{digits}f}" if z is not None and math.isfinite(z) else None
+
+
 def narrative(a: dict) -> str:
     kp, fc, g = a["kimchi"], a["funding"], a["garch"]
     parts = [
-        f"Korea pays {kp.last_pct:+.2f} % against the world price for bitcoin ({kp.last_z:+.1f} standard deviations from its one-year mean; "
-        f"average {kp.mean_pct:+.2f} %, peak {kp.max_pct:.1f} % since {kp.dates[0]}); {decay_text(getattr(kp, 'decay', None))} "
+        f"Korea pays {kp.last_pct:+.2f} % against the world price for bitcoin ("
+        + (f"{z_text(kp.last_z)} standard deviations from its one-year mean; " if z_text(kp.last_z)
+           else "z unavailable: fewer than 91 observations or no variation in the window; ")
+        + f"average {kp.mean_pct:+.2f} %, peak {kp.max_pct:.1f} % since {kp.dates[0]}); {decay_text(getattr(kp, 'decay', None))} "
         f"(ADF p = {kp.adf_p:.3f}). It is a signal, not a trade: remittance limits, the Travel Rule and the 2027 tax close the arbitrage"
         + (f", and its predictive slope on next-week returns is {kp.pred_slope:+.4f} (t {kp.pred_t:+.1f})." if math.isfinite(kp.pred_t) else "."),
     ]
@@ -104,7 +163,8 @@ def narrative(a: dict) -> str:
 def payload(a: dict) -> dict:
     """Market commentary only. Holdings stay in the local read-only display."""
     kp, fc = a["kimchi"], a["funding"]
-    return {"source": a["source"], "kimchi": {"last_pct": kp.last_pct, "z": kp.last_z, "mean_pct": kp.mean_pct, "max_pct": kp.max_pct,
+    return {"source": a["source"], "kimchi": {"last_pct": kp.last_pct, "z": kp.last_z if math.isfinite(kp.last_z) else None,
+                                              "mean_pct": kp.mean_pct, "max_pct": kp.max_pct,
                                               "half_life_days": kp.half_life_days, "decay": getattr(kp, "decay", None), "adf_p": kp.adf_p, "pred_t": kp.pred_t, "n": kp.n},
             "funding": ({"last_ann_pct": fc.last_ann_pct, "percentile": fc.percentile, "flag": fc.flag, "top_decile_fwd30": fc.top_decile_fwd30,
                          "bottom_decile_fwd30": fc.bottom_decile_fwd30, "bootstrap_p": None, "bootstrap_status": "RETIRED_INVALID_IID",

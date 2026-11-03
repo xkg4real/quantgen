@@ -7,6 +7,7 @@ from core.research.funding_disclosure import funding_text
 from core.research.letf_disclosure import letf_text, letf_unavailable_text
 from core.research.decay_disclosure import decay_value, decay_text
 from core.research.quote_coverage import quote_coverage_text
+from core.research.crypto_workflow import holdings_summary
 from .tools import ToolPane, number, fmt
 from .market_diagnostics_language import decay_korean, funding_korean, coverage_korean
 from .market_narrative_language import market_variants, letf_korean, letf_unavailable_korean
@@ -185,7 +186,14 @@ class CryptoPane(ToolPane):
         self.text(f"Weekday Bonferroni p={d['weekday']['return_effect_p_bonferroni']:.4g} · weekend volume ratio={d['weekday']['weekend_volume_ratio']:.3f}")
         if d.get('balances'):
             self.result_table('Upbit holdings · read only', ['Currency','Total','Average buy price','KRW value'],
-                [[b['currency'],fmt(b['total']),fmt(b['avg_buy_price']),fmt(b['krw_value'])] for b in d['balances']])
+                [[b['currency'],fmt(b['total']),f"{fmt(b['avg_buy_price'])} {b.get('unit_currency') or ''}".strip(),fmt(b['krw_value'])]
+                 for b in d['balances']])
+            held = holdings_summary(d['balances'])
+            if not held['complete']:  # §10 NEW-M6-14/22: a missing price is shown as missing, never as 0
+                names = ', '.join(held['unvalued'])
+                partial = f'No KRW price for {names}: their value is not shown and is not in any total.'
+                self.text(partial, localized={'en': partial,
+                                              'ko': f'{names}의 원화 시세가 없어 평가액을 표시하지 않으며 합계에도 넣지 않습니다.'})
         elif out.request.include_balances: self.text('Holdings unavailable · verify the configured read-only connection. No account values loaded.')
         self.finished(out.narrative, localized=market_variants(out, 'crypto'))
 

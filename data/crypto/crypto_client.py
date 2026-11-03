@@ -35,6 +35,7 @@ import base64
 import hashlib
 import hmac
 import json
+import math
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -56,6 +57,19 @@ COINGECKO = "https://api.coingecko.com/api/v3"
 _UPBIT_PAGE, _BINANCE_PAGE, _FUNDING_PAGE = 200, 1000, 1000
 _MIN_GAP_S = 0.12                                    # ≤ ~8 req/s, under Upbit's 10/s group limit
 _last_call = {"t": 0.0}
+
+
+def _price(value) -> Optional[float]:
+    """A provider price, or None when it is missing, zero, negative or not a number.
+
+    A missing price must never become 0.0: it would read as a -100% premium or a
+    zero-value holding (§10 NEW-M6-14, NEW-M6-15, NEW-M6-22).
+    """
+    try:
+        x = float(value)
+    except (TypeError, ValueError):
+        return None
+    return x if math.isfinite(x) and x > 0 else None
 
 
 class CryptoError(RuntimeError):
@@ -155,6 +169,8 @@ class UpbitPublic:
                 break
             oldest = min(rows)
             to = f"{oldest}T00:00:00Z"
+        # A day without a closing price is left out, not priced at 0 (§10 NEW-M6-15).
+        rows = {d: r for d, r in rows.items() if _price(r.get("trade_price")) is not None}
         if not rows:
             raise CryptoError(f"Upbit returned no candles for {market}.")
         ds = sorted(rows)
@@ -167,7 +183,7 @@ class UpbitPublic:
     def ticker(self, markets: list[str] | str = "KRW-BTC") -> list[dict]:
         m = ",".join(markets) if isinstance(markets, list) else markets
         page = _get(f"{UPBIT}/ticker", {"markets": m.upper()}, label="Upbit ticker")
-        return [{"market": r.get("market"), "price": float(r.get("trade_price") or 0.0),
+        return [{"market": r.get("market"), "price": _price(r.get("trade_price")),
                  "change_pct": float(r.get("signed_change_rate") or 0.0) * 100,
                  "volume_24h_krw": float(r.get("acc_trade_price_24h") or 0.0),
                  "as_of": datetime.now(timezone.utc).isoformat(timespec="seconds")} for r in page]
@@ -256,12 +272,14 @@ class BinancePublic:
 
     def premium_index(self, symbol: str = "BTCUSDT") -> dict:
         r = _get(f"{BINANCE_FAPI}/fapi/v1/premiumIndex", {"symbol": symbol.upper()}, label="Binance premium")
-        mark, index = float(r.get("markPrice") or 0.0), float(r.get("indexPrice") or 0.0)
+        # Missing mark or index prices leave the premium unavailable (None), never 0% or -100%.
+        mark, index = _price(r.get("markPrice")), _price(r.get("indexPrice"))
+        next_ms = r.get("nextFundingTime")
         return {"symbol": symbol.upper(), "mark": mark, "index": index,
-                "premium_pct": (mark / index - 1.0) * 100 if index else 0.0,
+                "premium_pct": (mark / index - 1.0) * 100 if mark is not None and index is not None else None,
                 "last_funding_rate": float(r.get("lastFundingRate") or 0.0),
-                "next_funding_time": datetime.fromtimestamp(int(r.get("nextFundingTime") or 0) / 1000,
-                                                            tz=timezone.utc).isoformat(timespec="minutes"),
+                "next_funding_time": datetime.fromtimestamp(int(next_ms) / 1000, tz=timezone.utc).isoformat(timespec="minutes")
+                if next_ms else None,
                 "as_of": datetime.now(timezone.utc).isoformat(timespec="seconds")}
 
     def open_interest_hist(self, symbol: str = "BTCUSDT", *, period: str = "1d", limit: int = 30) -> list[dict]:
@@ -350,7 +368,7 @@ def probe() -> dict:
                      ("binance_futures", lambda: BinancePublic().premium_index("BTCUSDT")["mark"])):
         try:
             v = fn()
-            out[name] = {"ok": bool(v), "detail": f"last {v:,.2f}"}
+            out[name] = {"ok": v is not None and v > 0, "detail": f"last {v:,.2f}" if v is not None else "price missing"}
         except Exception as exc:
             out[name] = {"ok": False, "detail": f"{type(exc).__name__}: {exc}"}
     return out

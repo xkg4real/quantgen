@@ -56,7 +56,7 @@ class KimchiPremium:
     z_1y: np.ndarray = field(repr=False)
     btc_usd: np.ndarray = field(repr=False)
     last_pct: float = 0.0
-    last_z: float = 0.0
+    last_z: float = math.nan           # NaN when the 1-year z cannot be computed
     mean_pct: float = 0.0
     max_pct: float = 0.0
     adf_p: float = 1.0
@@ -72,7 +72,11 @@ def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
                    usdkrw: dict[str, float], *, z_window: int = 365, horizon: int = 7) -> KimchiPremium:
     """Inputs are {date: close} dicts; USD/KRW is forward-filled by date because
     the FX fixing has no weekend rows."""
-    dates = sorted(set(upbit_krw) & set(binance_usdt))
+    # Rows without a usable price are left out: a missing close must not read as -100% (§10 NEW-M6-15).
+    def usable(x):
+        return x is not None and np.isfinite(x) and x > 0
+    dates = sorted(d for d in set(upbit_krw) & set(binance_usdt) if usable(upbit_krw[d]) and usable(binance_usdt[d]))
+    usdkrw = {d: v for d, v in usdkrw.items() if usable(v)}
     fx_dates = np.array(sorted(usdkrw))
     fx_vals = np.array([usdkrw[d] for d in fx_dates], dtype=float)
     idx = np.searchsorted(fx_dates, np.array(dates), side="right") - 1
@@ -86,7 +90,8 @@ def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
     for t in range(min(z_window, 90), prem.size):
         w = prem[max(0, t - z_window):t]
         sd = w.std(ddof=1)
-        z[t] = (prem[t] - w.mean()) / sd if sd > 0 else 0.0
+        # No variation (allowing for float rounding of a constant window): z is undefined, not 0 or ±1.
+        z[t] = (prem[t] - w.mean()) / sd if sd > 1e-10 * max(1.0, float(np.max(np.abs(w)))) else np.nan
     fwd = np.full(prem.size, np.nan)
     if prem.size > horizon + 1:
         fwd[:-horizon] = np.log(us[horizon:] / us[:-horizon])
@@ -104,7 +109,8 @@ def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
         se = math.sqrt(_hac_var(score, horizon - 1)) * ok.sum() / np.sum(xc ** 2)
         slope, t = float(beta[1]), float(beta[1] / se) if se > 0 else float("nan")
     return KimchiPremium(dates=tuple(dates), premium_pct=prem, z_1y=z, btc_usd=us, last_pct=float(prem[-1]),
-                         last_z=float(z[-1]) if np.isfinite(z[-1]) else 0.0, mean_pct=float(prem.mean()),
+                         # NaN when fewer than 91 observations or a flat window: shown as unavailable, never +0.00.
+                         last_z=float(z[-1]), mean_pct=float(prem.mean()),
                          max_pct=float(prem.max()), adf_p=adf_pvalue(prem), half_life_days=half_life(prem),
                          decay=ar1_decay(prem), pred_slope=slope, pred_t=t, n=int(prem.size),
                          note=("USD/KRW forward-filled by date (FRED noon fixing vs UTC-midnight closes: a few hours "

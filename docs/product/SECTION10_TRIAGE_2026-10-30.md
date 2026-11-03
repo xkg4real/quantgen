@@ -227,3 +227,19 @@ See `RATES_REVALUATION_PARAMS_2026-11-02.md` for the bounded evidence and limita
 Latest source implementation count: **21/67**, **46** remaining. Partial
 NEW-M6-02, the 14 observation models and 15 ambiguous mappings remain open.
 Actual Windows, provider, research and release acceptance are separate.
+
+### 2026-11-04 Crypto missing values (Claude rework)
+
+The owner chose not to recover GPT's private Crypto work; Claude redid it from main
+`c1a4e97`. NEW-M6-15 maps by elimination to the uncomputed 1-year z shown as +0.00;
+z is now NaN when undefined (short history or a flat window) and every screen,
+narrative and payload says it is unavailable. NEW-M6-14 and NEW-M6-22 share the four
+unlabelled M6-11 limitations (zero-valued unpriced holdings in a complete-looking total,
+a batch ticker failure erasing all holdings, a missing mark/index read as 0% or −100%,
+the cost basis without a unit). All four are corrected, so both IDs are covered while
+their exact pairing stays ambiguous. Valid-data kimchi results are unchanged on 40
+synthetic histories. See `CRYPTO_MISSING_VALUES_2026-11-04.md`.
+
+Latest source implementation count: **24/67**, **43** remaining. Partial
+NEW-M6-02, the 14 observation models and the remaining ambiguous mappings stay open.
+Actual Windows, provider, research and release acceptance are separate.

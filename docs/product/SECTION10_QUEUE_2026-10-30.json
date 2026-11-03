@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 14,
-    "implemented_canonical_groups": 21
+    "implemented_canonical_groups": 24
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -722,10 +722,11 @@
       "source_model": "142. M6-11 크립토 공급사 파생 표시값(perp premium, Upbit 보유 평가)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Two IDs over four unlabelled M6-11 limitations (zero-valued unpriced holdings in a complete-looking total, batch ticker failure erasing all holdings, missing mark/index giving 0%/-100%, cost basis without unit); all four corrected, so the exact pairing stays ambiguous but both IDs are covered. Actual Upbit/Binance replies NOT_RUN.",
       "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md; tests/crypto_missing_values_acceptance.py"
     },
     {
       "id": "NEW-M6-15",
@@ -733,10 +734,11 @@
       "source_model": "132. M6-01 김치 프리미엄 수준과 1년 z",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
-      "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "next": "Resolved by elimination: the only M6-01 limitation without its own ID (uncomputed or flat-window z shown as +0.00). z/last_z are NaN when undefined and shown as unavailable in Native/Flet/narratives; payload z null. Valid-data results unchanged (40 synthetic histories). Actual provider data NOT_RUN.",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md; tests/crypto_missing_values_acceptance.py"
     },
     {
       "id": "NEW-M6-16",
@@ -811,10 +813,11 @@
       "source_model": "142. M6-11 크립토 공급사 파생 표시값(perp premium, Upbit 보유 평가)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Same as NEW-M6-14: all four unlabelled M6-11 limitations corrected; exact pairing stays ambiguous. Actual Upbit/Binance replies NOT_RUN.",
       "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md; tests/crypto_missing_values_acceptance.py"
     },
     {
       "id": "NEW-M6-23",
