@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c
-next_ids: ⑬-2/a4-d, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-03T23:37:35+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d
+next_ids: ⑬-2/a2, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-03T23:53:35+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/ui-markets-a4-20261103
-work_commit: 8b88726
+work_commit: c1a4e97
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/66
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -100,7 +100,8 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - A4는 PR 4개로 나눕니다: A4-a 검색형 가이드(UI-13), A4-b 공급사 자동 선택과 자산별 탭(UI-8), A4-c 해외 종목명 검색·휠 확대·출처 두 줄(UI-16), A4-d 시장지표 차트 4개(UI-7). 설계 지도: 워크플로 `wf_f050b1c9-227` 결과(스크래치패드 `a4/synth.md`).
 - **A4-a 완료:** PR #64 병합(main `ba3b6b2`, 소스 `9f7dc0e`와 트리 동일). CI Runtime 41641446205(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41641446773 성공. 로컬 41+62+47+14 OK, `/code-review` 7건 수정. 실제 Windows IME·Tab·DPI는 미검증.
 - **A4-b + A4-c 완료:** PR #65 병합(main `1682404`, 소스 `7f90641`과 트리 동일). CI Runtime 41649397459(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41649397329 성공. Vercel 상태 실패는 저장소 전체 연동 문제(PR #63 문서 커밋도 실패)로 PR에 한 번 설명. 자산별 탭 9개·KIS 먼저→Yahoo 대체·데이터 출처 선택 숨김(A4-b), 해외 종목명 검색 126개·거래소/봉 수 입력 제거·휠·+/- 확대·출처 두 줄(A4-c).
-- **A4-d:** PR #66(커밋 `f6a76ce`, 기록 `8b88726`). 시장지표 표 → 지표 선 차트 4개(코스피·S&P 500·원/달러·미국 10년), 개별 종목 없음, KIS 먼저→Yahoo(원/달러는 그다음 FRED), 보일 때만 갱신(KIS 3분·지연 15분·실패 1/2/5/15분 재시도). 로컬 10 신규+194 native+설치 smoke 2종 PASS+정책 47, `/code-review` 10건 수정. CI 대기, 통과하면 Claude 병합 → 원장 ⑬-2/a4-d, Notion 취소선 → A2 착수.
+- **A4-d 완료:** PR #66 병합(main `c1a4e97`, 소스 `8b88726`과 트리 동일). CI Runtime 41655524416·Compliance 41655524169 성공. **UI A4 전체 완료.**
+- **A2 진행 중(로컬, 미커밋):** UI-3 휠 가드(초점 없는 선택 상자·탭은 휠 무시하고 페이지 스크롤), UI-4 채권 금액 천 단위 구분, UI-6a 도구 입력 영역 잘림(CurrentPageStack), UI-17 작업표시줄 아이콘(다중 크기 .ico + 앱 ID 결과 확인), B3 AI 해설 버튼(항상 응답, 동의 없이는 전송 안 함). 새 검사 `tests/desktop_operation_fixes_acceptance.py`.
 - **다음 순서(소유자 확정 + Claude 배치):** A2 조작 버그(휠로 선택 상자 바뀜, 채권 천 단위, Rates/KRX 잘림, 아이콘) → §10 재작업(Crypto→옵션→모형/ETF→AI, `/code-review`) → A3 디자인 → A1 이름·번역 → 5~6번 승인 항목 → 실시간 체결(주문 안전 설계 먼저) → 7번.
 - 다음: A4-c(해외 종목명 검색·거래소/봉 수 입력 제거·휠 확대·출처 두 줄), A4-d(시장지표 차트 4개). Notion "REMAINING WORK" 13-10 항목 아래에 하위 완료를 취소선으로 추가.
 - 로컬 PyQt6 검사 환경: 스크래치패드 `qtvenv`(PyQt6 6.12.0, 전역 설치 없음), 시스템 라이브러리 `libegl1 libopengl0`(CI와 같음).
