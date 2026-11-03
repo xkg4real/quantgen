@@ -1,19 +1,19 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-11-04T00:28:36+09:00
+created_at: 2026-11-04T01:00:22+09:00
 source_branch: claude/ui-markets-a4-20261103
-source_head: c1a4e97
-upstream: origin/main
-patch_base: c1a4e97
+source_head: dbeb4b6
+upstream: origin/claude/ui-markets-a4-20261103
+patch_base: dbeb4b6
 unpushed_commits: 0
-uncommitted_files: 12
-patch: AUTO_STATE.patch (`git apply AUTO_STATE.patch` on patch_base)
+uncommitted_files: 0
+patch: none
 usage_pct: unknown
 usage_resets_at: unknown
 session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
 snapshot_key: none
-current_md_updated_at: 2026-11-03T23:53:35+09:00
+current_md_updated_at: 2026-11-04T00:47:00+09:00
 current_md_status: checkpoint
 ---
 
@@ -26,6 +26,8 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
+dbeb4b6 Queue the PR-67 operation fixes for the website workspace
+4ece546 Fix desktop operation bugs: wheel, bond digits, form clipping, icon, AI button (A2)
 c1a4e97 Merge pull request #66 from xkg4real/claude/ui-markets-a4-20261103
 8b88726 Queue the PR-66 market board change for the website workspace
 f6a76ce Show four market-indicator charts instead of the Markets table (UI-7)
@@ -39,8 +41,6 @@ ba3b6b2 Merge pull request #64 from xkg4real/claude/ui-markets-a4-20261103
 140f101 Owner rulings 2026-11-03 (cont.): amend the no-order-path principle to a confined order module; GPT private WIP retrieval
 db07005 Merge pull request #63 from xkg4real/claude/ui-markets-a4-20261103
 c81e8df Owner rulings 2026-11-03: Claude resumes, UI order A4>A2>A3>A1, R3/cost-class/status/translation approved, direct orders chosen, website left to its own session
-7a57187 Record merged live charts and passing Windows/Linux CI
-30a2a81 Merge pull request #62 from xkg4real/gpt/chart-live-ux-20261102
 ```
 
 ## 푸시되지 않은 커밋
@@ -52,36 +52,13 @@ c81e8df Owner rulings 2026-11-03: Claude resumes, UI order A4>A2>A3>A1, R3/cost-
 ## 커밋되지 않은 변경
 
 ```
-M  .github/workflows/runtime-smoke.yml
-M  docs/compliance/06-form-consent.md
-M  docs/compliance/15-keyboard.md
-M  docs/compliance/FACTS.md
-M  docs/product/ui_website_updates/PR-66.json
-M  quantgen_desktop/app.py
-M  quantgen_desktop/bonds.py
-M  quantgen_desktop/commentary.py
-M  quantgen_desktop/tools.py
-M  tests/desktop_commentary_acceptance.py
-M  tests/desktop_letf_ai_acceptance.py
-A  tests/desktop_operation_fixes_acceptance.py
+(없음)
 ```
 
 `patch_base` 이후 바뀐 파일 (푸시 안 된 커밋 포함):
 
 ```
-.github/workflows/runtime-smoke.yml         |  2 +-
- docs/compliance/06-form-consent.md          |  4 ++
- docs/compliance/15-keyboard.md              |  4 ++
- docs/compliance/FACTS.md                    | 10 ++++
- docs/product/ui_website_updates/PR-66.json  | 12 ++--
- quantgen_desktop/app.py                     | 54 +++++++++++++++--
- quantgen_desktop/bonds.py                   | 14 ++++-
- quantgen_desktop/commentary.py              | 31 ++++++++--
- quantgen_desktop/tools.py                   | 54 +++++++++++++++--
- tests/desktop_commentary_acceptance.py      |  9 ++-
- tests/desktop_letf_ai_acceptance.py         |  6 +-
- tests/desktop_operation_fixes_acceptance.py | 92 +++++++++++++++++++++++++++++
- 12 files changed, 270 insertions(+), 22 deletions(-)
+(없음)
 ```
 
-전체 diff: AUTO_STATE.patch (`git apply AUTO_STATE.patch` on patch_base)
+전체 diff: none
