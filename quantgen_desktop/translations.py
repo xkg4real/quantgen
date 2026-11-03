@@ -486,6 +486,15 @@ Crypto|가상자산
 Derivatives|파생상품
 Macro sheet|매크로 현황
 Macro v2|매크로 v2
+Domestic securities|국내증권
+Overseas securities|해외증권
+Domestic derivatives|국내파생상품
+Overseas derivatives|해외파생상품
+Rates & swaps|금리·스왑
+FX|외환
+Macro|매크로
+Price chart|시세 차트
+Record set|기록 묶음
 Strategy Lab|전략 실험실
 Rules|규칙
 Underlying|기초자산

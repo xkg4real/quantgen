@@ -28,8 +28,10 @@ class BondsPane(QWidget):
         for v in ('auto','fred','synthetic'):self.source.addItem(v,v)
         self.tool=QComboBox()
         for text,value in [('Calculator & risk','calc'),('Scenarios','scenarios'),('Futures hedge','hedge')]:self.tool.addItem(text,value)
-        for i,(name,w) in enumerate((('Coupons / year',self.frequency),('Curve source',self.source),('Tool',self.tool))):
+        for i,(name,w) in enumerate((('Coupons / year',self.frequency),('Tool',self.tool))):
             w.setAccessibleName(name);form.addWidget(label(name,'caption'),4,i);form.addWidget(w,5,i)
+        # Owner UI-8: the curve provider is automatic (FRED, labelled synthetic fallback); no selector.
+        self.source.setAccessibleName('Curve source');self.source.hide()
         inner.addLayout(form)
         inner.addWidget(label('가격과 수익률 중 하나만 입력하세요. Price를 입력할 때는 Yield를 비웁니다.','caption'))
         self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);inner.addWidget(self.run)

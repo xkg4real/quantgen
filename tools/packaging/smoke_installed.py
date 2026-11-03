@@ -62,4 +62,6 @@ assert len(indicator_values(sample)['RSI14']) == len(sample.dates)
 assert '<svg' in chart_svg(sample,('rsi','macd'),locale=LocaleContext('ko_KR'))
 assert len(display_rights()['registered_series']) == 73
 assert LocaleContext('de_DE').number(1234.5) == '1.234,50'
+from core.market.symbols import search as symbol_search
+assert symbol_search('애플')[0].code == 'AAPL'  # bundled overseas name list (UI-16)
 print(json.dumps({"status": "PASS", "platform": sys.platform, "scope": "installed imports, Home, recorded status, assets and calendar payload presence", "version": importlib.metadata.version("quantgen"), "live_providers": "NOT_RUN", "engine_start": "NOT_RUN"}))

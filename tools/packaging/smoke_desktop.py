@@ -76,9 +76,9 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder, 
             window.navigate(route)
             assert window.nav[route].isChecked()
         assert isinstance(window.market_chart,MarketChartPane)
-        chart_index=window.market_tabs.indexOf(window.market_chart)
-        assert chart_index>=0,'Installed KIS chart must be reachable from Markets'
-        window.navigate('markets');window.market_tabs.setCurrentIndex(chart_index)
+        window.navigate('markets');window.show_market_pane(window.market_chart)
+        assert window.current_market_pane() is window.market_chart,'Installed chart must be reachable from Markets'
+        assert window.market_tabs.count()==9 and window.market_chart.asset.currentData()=='domestic_stock'
         app.processEvents()
         assert window.market_chart.snapshot is None
         assert not window.market_chart.jobs.busy

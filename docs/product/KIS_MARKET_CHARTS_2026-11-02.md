@@ -115,3 +115,14 @@ Windows 수동 검수, AWS 웹사이트 배포는 수행하지 않았다.
 이번 네이티브 후속의20종 정책 영향과 복구본 검증 상태는
 [수신 체결봉·선택 지표 검토](CHART_RECEIVED_BARS_REVIEW_20261102.md)에서 확인한다.
 기존 환경의 테스트·프리뷰를 복구본의 통과 근거로 전용하지 않는다.
+
+## 2026-11-03 follow-up (owner UI-8 and UI-16)
+
+The separate “KIS chart” tab became the chart inside the Markets asset-class tabs.
+The provider is chosen automatically (KIS first, Yahoo Finance for stocks when KIS
+cannot answer; `core/market/routing.py`). Overseas instruments are found by name in a
+bundled 126-entry list (`core/market/symbols.py`); the exchange, history-bar and
+visible-bar inputs are gone (240 bars are loaded, 120 shown, and the mouse wheel or
+`+`/`-` zooms between 20 bars and all loaded bars). Source and times are two short
+lines; the longer provider notes moved to the “데이터 설명” panel.
+

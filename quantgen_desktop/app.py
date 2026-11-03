@@ -45,6 +45,20 @@ from .chart_study import CurrentPageTabs
 from .macro_records import execute_macro_records
 
 
+# Markets asset classes: (key, tab title, chart asset or None, tool panes in order).
+MARKET_CLASSES = (
+    ('domestic', 'Domestic securities', 'domestic_stock', (('etf', 'ETF'), ('krx', 'KRX'))),
+    ('overseas', 'Overseas securities', 'overseas_stock', ()),
+    ('domestic_derivatives', 'Domestic derivatives', 'domestic_future', (('derivatives', 'Derivatives'),)),
+    ('overseas_derivatives', 'Overseas derivatives', 'overseas_future', ()),
+    ('bonds', 'Bonds', 'bond', (('bonds', 'Bonds'),)),
+    ('rates', 'Rates & swaps', None, (('rates', 'Rates'), ('structuring', 'Structuring'))),
+    ('fx', 'FX', None, (('fx', 'FX'),)),
+    ('crypto', 'Crypto', None, (('crypto', 'Crypto'),)),
+    ('macro', 'Macro', None, (('macro', 'Macro sheet'), ('macro_records', 'Macro v2'))),
+)
+
+
 def label(text, role="", *, wrap=True):
     w = UiLabel(text)
     w.setTextFormat(Qt.TextFormat.PlainText)
@@ -323,14 +337,74 @@ class ResearchWindow(QMainWindow):
             pane = pane_type()
             pane.requested.connect(lambda q, n=name:self.run_tool(n,q))
             setattr(self, name, pane)
-        self.market_tabs=CurrentPageTabs()
+        for pane in (self.rates,self.fx,self.structuring,self.macro,self.derivatives,self.etf,self.crypto,self.krx):
+            pane.hide_source()
+        self.macro_records.set_source_caption('Record set')
         self.market_chart = MarketChartPane(locale=self.ctx)
-        for pane,name in ((self.market_chart,'KIS chart'),(self.bonds,'Bonds'),(self.rates,'Rates'),(self.fx,'FX'),(self.structuring,'Structuring'),
-                          (self.derivatives,'Derivatives'),(self.etf,'ETF'),(self.crypto,'Crypto'),(self.krx,'KRX'),
-                          (self.macro,'Macro sheet'),(self.macro_records,'Macro v2')):self.market_tabs.addTab(pane,name)
+        self.market_chart.setObjectName('marketChart')
+        # UI-8 (owner, 2026-11-03): asset-class tabs instead of a separate KIS chart tab.
+        # One chart pane moves into the selected chartable class; its provider is chosen automatically.
+        self.market_tabs=CurrentPageTabs()
+        self.market_classes=[]
+        self._class_symbols={}
+        for key,title,asset,tools in MARKET_CLASSES:
+            panes=[(getattr(self,tool),name) for tool,name in tools]
+            slot=None
+            if asset:
+                slot=QWidget();slot.setObjectName('chartSlot')
+                slot_layout=QVBoxLayout(slot);slot_layout.setContentsMargins(0,0,0,0)
+                panes.insert(0,(slot,'Price chart'))
+            inner=None
+            if len(panes)==1:
+                page=panes[0][0]
+            else:
+                inner=page=CurrentPageTabs();inner.setObjectName('marketInnerTabs')
+                for pane,name in panes:inner.addTab(pane,name)
+                inner.currentChanged.connect(self.market_tabs.updateGeometry)
+            self.market_tabs.addTab(page,title)
+            self.market_classes.append({'key':key,'asset':asset,'page':page,'inner':inner,'slot':slot,
+                                        'panes':[pane for pane,_ in panes]})
         self.market_tabs.setUsesScrollButtons(True)
+        self.market_tabs.currentChanged.connect(self._market_class_changed)
+        self._market_class_changed(self.market_tabs.currentIndex())
         layout.addWidget(self.market_tabs)
         layout.addStretch()
+
+    def _market_class_changed(self,index):
+        entry=self.market_classes[index] if 0<=index<len(self.market_classes) else None
+        if entry is None or entry['slot'] is None:return
+        chart=self.market_chart
+        if chart.parent() is not entry['slot']:
+            entry['slot'].layout().addWidget(chart)
+        previous=chart.asset.currentData()
+        if previous!=entry['asset']:
+            # Each class remembers the last code typed there; the class example is the default.
+            self._class_symbols[previous]=chart.symbol.text()
+            chart.set_asset_class(entry['asset'])
+            if entry['asset'] in self._class_symbols:
+                chart.symbol.setText(self._class_symbols[entry['asset']])
+        chart.show()
+
+    def show_market_pane(self,pane):
+        """Select the asset class (and inner tab) that shows `pane`; the chart follows the class."""
+        order=list(enumerate(self.market_classes))
+        if pane is self.market_chart:
+            # Keep the chart in the class the user is viewing when that class has one.
+            current=self.market_tabs.currentIndex()
+            order=[order[current]]+order if 0<=current<len(order) else order
+        for index,entry in order:
+            target=entry['slot'] if pane is self.market_chart else pane
+            if target is not None and target in entry['panes']:
+                self.market_tabs.setCurrentIndex(index)
+                self._market_class_changed(index)
+                if entry['inner'] is not None:entry['inner'].setCurrentWidget(target)
+                return entry
+        raise ValueError('Pane is not part of the Markets workspace')
+
+    def current_market_pane(self):
+        entry=self.market_classes[self.market_tabs.currentIndex()]
+        page=entry['inner'].currentWidget() if entry['inner'] is not None else entry['page']
+        return self.market_chart if page is entry['slot'] else page
 
     def make_quant(self):
         outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
@@ -620,11 +694,11 @@ class ResearchWindow(QMainWindow):
 
     def open_live_chart(self):
         self.navigate('markets')
-        self.market_tabs.setCurrentWidget(self.market_chart)
+        self.show_market_pane(self.market_chart)
 
         def reveal():
             scroll = self.stack.widget(self.route_indices['markets'])
-            if self.stack.currentWidget() is scroll and self.market_tabs.currentWidget() is self.market_chart:
+            if self.stack.currentWidget() is scroll and self.current_market_pane() is self.market_chart:
                 top = self.market_tabs.mapTo(scroll.widget(), self.market_tabs.rect().topLeft()).y()
                 scroll.verticalScrollBar().setValue(top)
                 self.market_chart.symbol.setFocus(Qt.FocusReason.OtherFocusReason)
@@ -634,9 +708,10 @@ class ResearchWindow(QMainWindow):
 
     def open_stock_chart(self, symbol):
         # Selecting a row changes the chart inputs; loading remains explicit.
-        pane = self.market_chart
-        pane.asset.setCurrentIndex(pane.asset.findData('domestic_stock'))
-        pane.symbol.setText(symbol)
+        # Home rows are domestic stocks: select that class before setting the code.
+        self.market_tabs.setCurrentIndex(0)
+        self._market_class_changed(0)
+        self.market_chart.symbol.setText(symbol)
         self.open_live_chart()
 
     def change_language(self,index):
@@ -887,6 +962,8 @@ class ResearchWindow(QMainWindow):
           QTabWidget::pane {{ border: 0; }}
           QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 18px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-weight: 500; }}
           QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; }}
+          QTabWidget#marketInnerTabs QTabBar::tab {{ background: transparent; color: {p.muted}; padding: 7px 14px; margin-right: 6px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; }}
+          QTabWidget#marketInnerTabs QTabBar::tab:selected {{ background: transparent; color: {p.accent}; border-bottom: 2px solid {p.accent}; font-weight: 600; }}
           QLineEdit#guideSearch {{ min-height: 34px; padding: 6px 12px; border-radius: 20px; font-size: 14px; }}
           QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; padding: 4px; outline: 0; }}
           QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}

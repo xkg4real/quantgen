@@ -315,7 +315,7 @@ class NativeDesktopTests(unittest.TestCase):
         self.assertFalse(w.jobs.busy)
 
     def test_native_rates_tools_units_locking_and_results(self):
-        w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.rates)
+        w=self.window;w.navigate('markets');w.show_market_pane(w.rates)
         pane=w.rates
         for tool in ('curve','swap','option','sim'):
             pane.tool.setCurrentIndex(pane.tool.findData(tool))
@@ -341,7 +341,7 @@ class NativeDesktopTests(unittest.TestCase):
         self.assertIn('Input error',pane.status.text());self.assertFalse(w.jobs.busy)
 
     def test_native_fx_all_tools_and_invalid_input_clears_stale_result(self):
-        w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.fx)
+        w=self.window;w.navigate('markets');w.show_market_pane(w.fx)
         pane=w.fx
         for tool in ('forward','option','carry'):
             pane.tool.setCurrentIndex(pane.tool.findData(tool))
@@ -354,7 +354,7 @@ class NativeDesktopTests(unittest.TestCase):
         self.assertIn('Input error',pane.status.text());self.assertFalse(pane.has_result)
 
     def test_native_structuring_all_products_payoff_hedges_and_units(self):
-        w=self.window;w.navigate('markets');w.market_tabs.setCurrentWidget(w.structuring)
+        w=self.window;w.navigate('markets');w.show_market_pane(w.structuring)
         pane=w.structuring
         for key in ('ppn','rc','dcd','steep'):
             pane.tool.setCurrentIndex(pane.tool.findData(key))

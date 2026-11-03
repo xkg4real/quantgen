@@ -104,11 +104,14 @@ class ResponsiveToolTests(unittest.TestCase):
             return hint
         with patch.object(QComboBox,'minimumSizeHint',platform_hint):
             w=self.window(); pane=w.macro
-            pane.tool.setProperty('platform_intrinsic_width',251)
+            # Markets hide the source selector (UI-8), so the visible tool combo alone carries the
+            # measured Windows-wide hint (251 + 459 px) that reproduces the overflow.
+            self.assertTrue(pane.source.isHidden())
+            pane.tool.setProperty('platform_intrinsic_width',251+459)
             pane.source.setProperty('platform_intrinsic_width',459)
             pane.tool.setCurrentIndex(pane.tool.findData('weekly'))
             pane.source.setCurrentIndex(pane.source.findData('fred'))
-            w.navigate('markets');w.market_tabs.setCurrentWidget(pane);w.resize(1000,1000)
+            w.navigate('markets');w.show_market_pane(pane);w.resize(1000,1000)
             choices=[[combo.itemData(i) for i in range(combo.count())] for combo in (pane.tool,pane.source)]
             policies=[combo.sizeAdjustPolicy() for combo in (pane.tool,pane.source)]
             request=pane.make_request()
@@ -136,10 +139,10 @@ class ResponsiveToolTests(unittest.TestCase):
         w=self.window()
         structured=structuring_fixture(StructuringRequest(source='synthetic',tool='steep',maturity='5y',cap=.03))
         pane=w.structuring;pane.show_result(structured);pane.bind_output('structuring',structured)
-        w.navigate('markets');w.market_tabs.setCurrentWidget(pane);self.settle();pane.grab()
+        w.navigate('markets');w.show_market_pane(pane);self.settle();pane.grab()
         pane.clear_result();self.app.sendPostedEvents(None,QEvent.Type.DeferredDelete)
         macro=macro_fixture('weekly',short=True);pane=w.macro;pane.show_result(macro);pane.bind_output('macro',macro)
-        w.market_tabs.setCurrentWidget(pane)
+        w.show_market_pane(pane)
         for width in (1440,1000,1440):
             w.resize(width,1000)
             for language in ('en','ko'):
@@ -152,6 +155,7 @@ class ResponsiveToolTests(unittest.TestCase):
                     reading_top=pane.result_reading.mapTo(pane.study,QPoint(0,0)).y()
                     self.assertLessEqual(reading_top-last,pane.study.split.spacing()+24)
                 for label in pane.input_box.findChildren(UiLabel):
+                    if label.isHidden():continue  # Markets hide the source caption (UI-8); hidden widgets keep Qt's default size
                     self.assertLessEqual(label.height(),max(50,label.heightForWidth(label.width())+10))
                 self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(),0,
                                  self.overflow_context(w,pane,width,language))

@@ -63,7 +63,7 @@ class NativeMarketLayoutTests(unittest.TestCase):
         self.paper.assert_not_called()
 
     def select(self, pane):
-        self.window.market_tabs.setCurrentWidget(pane)
+        self.window.show_market_pane(pane)
         self.app.processEvents()
 
     def test_forms_stay_compact_after_switching_from_tall_sibling_tabs(self):
@@ -94,7 +94,9 @@ class NativeMarketLayoutTests(unittest.TestCase):
         scroll.ensureWidgetVisible(w.krx.input_box, 0, 0)
         self.app.processEvents()
         viewport = scroll.viewport()
-        for name in ("tool", "source", "forms", "run"):
+        # Owner UI-8: Markets panes choose providers automatically; no source selector is shown.
+        self.assertTrue(w.krx.source.isHidden())
+        for name in ("tool", "forms", "run"):
             with self.subTest(control=name):
                 control = getattr(w.krx, name)
                 bounds = QRect(control.mapTo(viewport, QPoint()), control.size())
@@ -118,7 +120,7 @@ class NativeMarketLayoutTests(unittest.TestCase):
                     for _ in range(3):
                         self.app.processEvents()
                     self.assertEqual(w.stack.currentIndex(), w.route_indices["markets"])
-                    self.assertIs(w.market_tabs.currentWidget(), w.market_chart)
+                    self.assertIs(w.current_market_pane(), w.market_chart)
                     viewport = w.stack.currentWidget().viewport()
                     for control in (w.market_chart.symbol, w.market_chart.load_button):
                         self.assertTrue(control.isVisible())

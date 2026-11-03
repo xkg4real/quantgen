@@ -353,24 +353,11 @@ TERMS = (
 )
 BY_KEY = {term.key: term for term in TERMS}
 
-_SEPARATORS = re.compile(r"[\s·\-–_/().,&+~:']")
-_INITIALS = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'
+from core.search_text import INITIALS as _INITIALS, best_score as _best_score, normal as _normal
 
 
 def _language(ctx):
     return 'ko' if getattr(ctx, 'language', ctx) == 'ko' else 'en'
-
-
-def _normal(text):
-    return _SEPARATORS.sub('', unicodedata.normalize('NFC', str(text)).casefold())
-
-
-def _initials(text):
-    out = []
-    for char in text:
-        code = ord(char) - 0xAC00
-        out.append(_INITIALS[code // 588] if 0 <= code < 11172 else char)
-    return ''.join(out)
 
 
 def name(key, ctx):
@@ -445,22 +432,7 @@ def search(query, limit=8):
     body_pattern = None if jamo else _body_pattern(wanted, query)
     scored = []
     for order, term in enumerate(TERMS):
-        best = None
-        for candidate in _names(term, MESSAGES):
-            text = _normal(candidate)
-            if text == wanted:
-                score = 0
-            elif text.startswith(wanted):
-                score = 1
-            elif jamo and _initials(text).startswith(wanted):
-                score = 1
-            elif len(wanted) >= 2 and wanted in text:
-                score = 2
-            elif jamo and len(wanted) >= 2 and wanted in _initials(text):
-                score = 3
-            else:
-                continue
-            best = score if best is None else min(best, score)
+        best = _best_score(wanted, _names(term, MESSAGES))
         if best is None and not jamo and _body_match(body_pattern, _bodies(term, MESSAGES)):
             best = 4
         if best is not None:
