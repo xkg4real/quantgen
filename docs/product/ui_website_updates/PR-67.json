@@ -1,0 +1,89 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-operation-fixes-pr-67",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Owner ruling 2026-11-03: the website is handled in a separate session and this session does not modify it; this record does not establish receipt.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "claude/ui-markets-a4-20261103",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/67",
+    "implementation_commit": "4ece546",
+    "remote_status": "OPEN",
+    "merge_commit": null,
+    "verified_head": null
+  },
+  "summary_ko": [
+    "마우스 휠로 페이지를 내릴 때 포인터 아래의 선택 상자·숫자 상자·탭 값이 바뀌지 않습니다. 휠은 움직일 수 있는 스크롤 영역으로 전달됩니다(UI-3).",
+    "채권 금액 칸이 천 단위 구분기호로 표시됩니다(1,000,000). 계산은 같은 값을 씁니다(UI-4).",
+    "Rates·KRX 등 분석 도구 입력 양식의 마지막 줄이 잘리지 않습니다(UI-6a).",
+    "창·작업표시줄 아이콘을 여러 크기로 제공합니다(UI-17). AI 해설 버튼은 항상 응답하고, 동의 없이는 전송하지 않습니다(B3)."
+  ],
+  "website_impact": {
+    "classification": "native_ui_only",
+    "browser_code_changed": false,
+    "shared_sources": [],
+    "requested_actions_ko": [
+      "소개사이트에 데스크톱 조작 방식(휠, 입력 표시)을 설명하는 부분이 있다면 반영할지 검토하세요. Flet 화면은 바뀌지 않았습니다.",
+      "정책 FACTS·06·15의 2026-11-03 절을 웹 Docs에 반영할지 검토하세요.",
+      "웹 HTML/소스는 GitHub에 올리지 않습니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "A2 operation fixes + commentary + LETF AI (Qt)",
+        "passed": 13
+      },
+      {
+        "suite": "broad native regression",
+        "passed": 401
+      },
+      {
+        "suite": "installed-wheel smoke_desktop and smoke_installed",
+        "passed": 2
+      },
+      {
+        "suite": "compliance acceptance, export and runtime syntax",
+        "passed": 48
+      }
+    ],
+    "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12.",
+    "source_review": "20 documents PASS after named refresh; publication BLOCKED",
+    "ci": "PENDING",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "Not verified on the owner's Windows PC: real mouse wheel, touchpad and taskbar icon are unverified."
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "합성 Qt 이벤트로는 Qt의 '휠로 포커스 주기' 단계를 재현할 수 없어, 포커스 정책(StrongFocus)을 검사했습니다. 실제 Windows 휠·터치패드·작업표시줄은 미검증입니다.",
+    "휠 처리는 메인 창의 위젯에 적용됩니다. 별도 대화상자 창은 대상이 아닙니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "docs/compliance/06-form-consent.md",
+    "docs/compliance/15-keyboard.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/product/ui_website_updates/PR-66.json",
+    "docs/product/ui_website_updates/PR-67.json",
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/bonds.py",
+    "quantgen_desktop/commentary.py",
+    "quantgen_desktop/localization.py",
+    "quantgen_desktop/tools.py",
+    "quantgen_desktop/wheel_guard.py",
+    "tests/desktop_commentary_acceptance.py",
+    "tests/desktop_letf_ai_acceptance.py",
+    "tests/desktop_operation_fixes_acceptance.py"
+  ]
+}
