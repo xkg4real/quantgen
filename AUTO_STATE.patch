@@ -1,34 +1,308 @@
-diff --git a/core/market/routing.py b/core/market/routing.py
-index 3035811..d9af55a 100644
---- a/core/market/routing.py
-+++ b/core/market/routing.py
-@@ -65,8 +65,10 @@ def _valid(request, snapshot, minimum=2):
- class ChartRouter:
-     """Primary first (alone), then a race among the remaining ready providers."""
+diff --git a/quantgen_desktop/app.py b/quantgen_desktop/app.py
+index 5895b3e..a8f0444 100644
+--- a/quantgen_desktop/app.py
++++ b/quantgen_desktop/app.py
+@@ -9,13 +9,14 @@ import sys
+ from datetime import datetime, timezone
+ from pathlib import Path
  
--    def __init__(self, primary, fallbacks=(), *, deadline=12.0, clock=time.monotonic):
-+    def __init__(self, primary, fallbacks=(), *, deadline=12.0, clock=time.monotonic, validate=None):
-+        """`validate(request, result, minimum)` returns a problem code or ''; charts use `_valid`."""
-         self.primary, self.fallbacks = primary, tuple(fallbacks)
-+        self._validate = validate or _valid
-         self.deadline, self._clock = float(deadline), clock
-         self.last_attempts: tuple = ()
+-from PyQt6.QtCore import Qt, QTimer, pyqtSlot, QByteArray, QSettings
++from PyQt6.QtCore import Qt, QTimer, pyqtSlot, QByteArray, QSettings, QObject, QEvent
+ from PyQt6.QtGui import QFont, QFontDatabase, QIcon
+ from PyQt6.QtSvgWidgets import QSvgWidget
+ from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialog,
+     QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow,
+     QMessageBox, QPushButton, QScrollArea, QSpinBox, QStackedWidget, QTableWidget,
+-    QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView, QTabWidget)
++    QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView, QTabWidget,
++    QAbstractScrollArea, QAbstractSpinBox, QTabBar)
  
-@@ -96,7 +98,7 @@ class ChartRouter:
-                 attempts.append(Attempt(self.primary.name, FAILED, type(exc).__name__,
-                                         elapsed_ms=int((self._clock() - start) * 1000)))
-             else:
--                problem = _valid(request, snapshot, minimum=1)
-+                problem = self._validate(request, snapshot, 1)
-                 elapsed = int((self._clock() - start) * 1000)
-                 if not problem:
-                     attempts.append(Attempt(self.primary.name, OK, elapsed_ms=elapsed))
-@@ -141,7 +143,7 @@ class ChartRouter:
-             if error:
-                 attempts.append(Attempt(provider.name, FAILED, error, elapsed_ms=elapsed))
-                 continue
--            problem = _valid(request, snapshot)
-+            problem = self._validate(request, snapshot, 2)
-             if problem:
-                 attempts.append(Attempt(provider.name, INVALID, problem, elapsed_ms=elapsed))
-                 continue
+ from core.app_paths import application_root
+ from core.research.analysis import AnalysisRequest, execute_analysis
+@@ -59,6 +60,46 @@ MARKET_CLASSES = (
+ )
+ 
+ 
++def app_icon():
++    """Multi-size icon for the window and the Windows taskbar (owner UI-17).
++
++    The .ico carries 16-256 px images, so the taskbar gets a native size instead of
++    falling back to the Python interpreter's icon; the PNGs cover other platforms.
++    """
++    icon = QIcon()
++    assets = application_root() / "assets"
++    for name in ("icon.ico", "icon_192.png", "icon_512.png", "icon.png"):
++        if (assets / name).is_file():
++            icon.addFile(str(assets / name))
++    return icon
++
++
++class WheelGuard(QObject):
++    """An unfocused selector ignores the mouse wheel and scrolls the page instead (owner UI-3).
++
++    Scrolling a page used to change combo boxes, spin boxes and tabs the pointer
++    passed over. A control changes by wheel only after the user has focused it.
++    """
++    def eventFilter(self, watched, event):
++        if event.type() != QEvent.Type.Wheel or not isinstance(watched, QWidget):
++            return False
++        if isinstance(watched, QTabBar) or (isinstance(watched, (QComboBox, QAbstractSpinBox)) and not watched.hasFocus()):
++            parent = watched.parentWidget()
++            while parent is not None and not isinstance(parent, QAbstractScrollArea):
++                parent = parent.parentWidget()
++            if parent is not None:
++                QApplication.sendEvent(parent.verticalScrollBar(), event)
++            return True
++        return False
++
++
++def install_wheel_guard(app):
++    if app is not None and not app.property("qg_wheel_guard"):
++        app._qg_wheel_guard = WheelGuard(app)
++        app.installEventFilter(app._qg_wheel_guard)
++        app.setProperty("qg_wheel_guard", True)
++
++
+ def label(text, role="", *, wrap=True):
+     w = UiLabel(text)
+     w.setTextFormat(Qt.TextFormat.PlainText)
+@@ -164,7 +205,8 @@ class ResearchWindow(QMainWindow):
+         self.jobs.failed.connect(self.job_failed)
+         self.jobs.busy_changed.connect(self.busy_changed)
+         self.setWindowTitle("QUANTGEN — Research Desktop")
+-        self.setWindowIcon(QIcon(str(application_root()/"assets/icon.png")))
++        self.setWindowIcon(app_icon())
++        install_wheel_guard(QApplication.instance())
+         self.resize(1360, 940)
+         self.setMinimumSize(1000, 700)
+         root = QWidget()
+@@ -998,9 +1040,11 @@ def main():
+         set_app_id = ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID
+         set_app_id.argtypes = [ctypes.c_wchar_p]
+         set_app_id.restype = ctypes.c_long
+-        set_app_id("QUANTGEN.Desktop")
++        if set_app_id("QUANTGEN.Desktop") != 0:  # S_OK; otherwise Windows groups the window under python.exe
++            print("QUANTGEN: Windows did not accept the application ID; the taskbar may show the Python icon.",
++                  file=sys.stderr)
+     app = QApplication(sys.argv)
+-    app.setWindowIcon(QIcon(str(application_root()/"assets/icon.png")))
++    app.setWindowIcon(app_icon())
+     app.setApplicationName("QUANTGEN")
+     app.setOrganizationName("QUANTGEN")
+     load_interface_fonts(app)
+diff --git a/quantgen_desktop/bonds.py b/quantgen_desktop/bonds.py
+index db8bbb7..34bb97d 100644
+--- a/quantgen_desktop/bonds.py
++++ b/quantgen_desktop/bonds.py
+@@ -6,6 +6,16 @@ from .charts import LineChart
+ from .bonds_portfolio_narrative import bond_notes, hedge_text, display_variants
+ 
+ 
++def group_digits(text):
++    """'1000000.5' -> '1,000,000.5'; text that is not a plain number is left as typed."""
++    raw=str(text).strip().replace(',','')
++    sign,body=('-',raw[1:]) if raw.startswith('-') else ('',raw)
++    whole,dot,fraction=body.partition('.')
++    if not whole.isdigit() or (fraction and not fraction.isdigit()):
++        return str(text)
++    return sign+f'{int(whole):,}'+dot+fraction
++
++
+ class BondsPane(QWidget):
+     requested=pyqtSignal(object)
+ 
+@@ -19,7 +29,9 @@ class BondsPane(QWidget):
+                 ('Price · per 100',''),('Yield %','4.50'),('Position DV01 · optional',''),
+                 ('CTD DV01 / contract','65'),('Conversion factor','0.8')]
+         for i,(name,value) in enumerate(fields):
+-            w=QLineEdit(value);w.setAccessibleName(name);self.fields[name]=w
++            # Owner UI-4: amounts read with thousands separators (1,000,000); parsing strips them.
++            w=QLineEdit(group_digits(value));w.setAccessibleName(name);self.fields[name]=w
++            w.editingFinished.connect(lambda w=w:w.setText(group_digits(w.text())))
+             form.addWidget(label(name,'caption'),2*(i//4),i%4);form.addWidget(w,2*(i//4)+1,i%4)
+         self.frequency=QComboBox()
+         for text,value in [('Annual',1),('Semi-annual',2),('Quarterly',4)]:self.frequency.addItem(text,value)
+diff --git a/quantgen_desktop/commentary.py b/quantgen_desktop/commentary.py
+index ef58d5a..09eee4f 100644
+--- a/quantgen_desktop/commentary.py
++++ b/quantgen_desktop/commentary.py
+@@ -7,6 +7,7 @@ from copy import deepcopy
+ import hashlib
+ import json
+ 
++from PyQt6.QtCore import Qt
+ from PyQt6.QtWidgets import QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButton,QPlainTextEdit,QLineEdit,QCheckBox
+ from core.research.ai_connection import error_message
+ from core.research.presentation import safe_detail
+@@ -53,17 +54,28 @@ class CommentaryPane(QWidget):
+         self.preview=QPlainTextEdit();self.preview.setReadOnly(True);self.preview.setMinimumHeight(220);controls.addWidget(self.preview)
+         self.question=QLineEdit();self.question.setPlaceholderText('궁금한 점 · 비밀번호나 계좌정보는 입력하지 마세요');controls.addWidget(self.question)
+         self.consent=QCheckBox('표시한 계산 결과와 질문을 외부 AI 서비스로 전송');controls.addWidget(self.consent)
+-        self.send=QPushButton('AI 해설 요청');self.send.setEnabled(False);controls.addWidget(self.send);layout.addWidget(self.input_box)
++        # Owner B3: the button always answers. It walks the user through the steps it needs
++        # (choose a result → preview → consent); nothing is sent without the consent tick.
++        self.send=QPushButton('AI 해설 요청');self.send.setCursor(Qt.CursorShape.PointingHandCursor)
++        controls.addWidget(self.send);layout.addWidget(self.input_box)
+         self.output=QPlainTextEdit();self.output.setReadOnly(True);self.output.setMinimumHeight(250);layout.addWidget(self.output)
+         self.report_actions=ReportActions(self.status);layout.addWidget(self.report_actions)
+         self.jobs=Jobs(self);self.jobs.succeeded.connect(self.finished);self.jobs.failed.connect(self.failed)
+         self.jobs.busy_changed.connect(lambda busy:self.input_box.setEnabled(not busy))
+         self.reload.clicked.connect(self.refresh_sources);self.preview_button.clicked.connect(self.prepare)
+-        self.source.currentIndexChanged.connect(self.invalidate);self.consent.toggled.connect(lambda _:self.send.setEnabled(self.payload is not None and self.consent.isChecked()))
++        self.source.currentIndexChanged.connect(self.invalidate);self.consent.toggled.connect(lambda _:self._mark_ready())
+         self.send.clicked.connect(self.submit)
+ 
++    def _mark_ready(self):
++        self.send.setProperty('primary',self.payload is not None and self.consent.isChecked())
++        self.send.style().unpolish(self.send);self.send.style().polish(self.send)
++
++    def showEvent(self,event):
++        super().showEvent(event)
++        if self.source.count()==0 and not self.jobs.busy:self.refresh_sources()
++
+     def invalidate(self,*_):
+-        self.payload=None;self.consent.setChecked(False);self.send.setEnabled(False);self.preview.clear()
++        self.payload=None;self.consent.setChecked(False);self._mark_ready();self.preview.clear()
+         self.output.clear();self.report_actions.clear()
+ 
+     def refresh_sources(self):
+@@ -82,7 +94,18 @@ class CommentaryPane(QWidget):
+         self.status.setText('이 내용과 질문만 전송합니다. AI 해설은 공식 gate 판정을 변경하지 않습니다.')
+ 
+     def submit(self):
+-        if self.jobs.busy or self.payload is None or not self.consent.isChecked():return
++        if self.jobs.busy:return
++        if self.payload is None:
++            if self.source.count()==0:self.refresh_sources()
++            if self.source.count()==0:return  # refresh_sources already says to finish a calculation first
++            self.prepare()
++            if self.payload is not None:
++                self.status.setText('전송할 내용을 아래에 표시했습니다. 확인한 뒤 전송 동의에 체크하고 다시 누르세요.')
++                self.consent.setFocus()
++            return
++        if not self.consent.isChecked():
++            self.status.setText('전송 동의에 체크해야 요청할 수 있습니다. 아래 내용만 외부 AI 서비스로 전송됩니다.')
++            self.consent.setFocus();return
+         payload=deepcopy(self.payload);question=safe_detail(self.question.text(),limit=None)
+         if len(question)>4000:self.status.setText('질문을 4,000자 이내로 입력하세요.');return
+         self.completed_payload=payload;self.output.clear();self.report_actions.clear();self.status.setText('AI 해설 요청 중…')
+diff --git a/quantgen_desktop/tools.py b/quantgen_desktop/tools.py
+index c78abbe..a2cd944 100644
+--- a/quantgen_desktop/tools.py
++++ b/quantgen_desktop/tools.py
+@@ -1,7 +1,7 @@
+ """Shared native form and result widgets for the FICC tool panes."""
+ from .translations import display
+ import math
+-from PyQt6.QtCore import Qt, pyqtSignal
++from PyQt6.QtCore import QSize, Qt, pyqtSignal
+ from PyQt6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QPushButton, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget
+ from .charts import LineChart, SignedBars
+ from core.ficc.common import FICCError
+@@ -22,6 +22,54 @@ def fmt(value, mode='number'):
+     return f'{value:,.4f}'
+ 
+ 
++class CurrentPageStack(QStackedWidget):
++    """Sizes to the visible form only, re-measured after styles apply (owner UI-6a).
++
++    A fixed height taken at construction missed the theme's taller inputs, so the
++    last row of the Rates and KRX forms was cut off.
++    """
++    def __init__(self, parent=None):
++        super().__init__(parent)
++        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
++        self.currentChanged.connect(self._page_changed)
++
++    def _page_changed(self, *_):
++        # A different form can be taller: invalidate the cached layouts up to the scroll page.
++        self.updateGeometry()
++        parent = self.parentWidget()
++        while parent is not None:
++            if parent.layout() is not None:
++                parent.layout().invalidate()
++            parent.updateGeometry()
++            if parent.inherits("QAbstractScrollArea"):
++                break
++            parent = parent.parentWidget()
++
++    def sizeHint(self):
++        page = self.currentWidget()
++        return page.sizeHint() if page is not None else super().sizeHint()
++
++    def _content_height(self, width):
++        page = self.currentWidget()
++        if page.hasHeightForWidth() and width > 0:
++            return page.heightForWidth(width)
++        return page.sizeHint().height()
++
++    def minimumSizeHint(self):
++        # The enclosing panel may shrink to its minimum; never let that cut the form's rows.
++        page = self.currentWidget()
++        if page is None:
++            return super().minimumSizeHint()
++        return QSize(page.minimumSizeHint().width(), self._content_height(self.width()))
++
++    def hasHeightForWidth(self):
++        page = self.currentWidget()
++        return page is not None and page.hasHeightForWidth()
++
++    def heightForWidth(self, width):
++        return self._content_height(width) if self.currentWidget() is not None else super().heightForWidth(width)
++
++
+ class ToolPane(QWidget):
+     requested = pyqtSignal(object)
+ 
+@@ -61,7 +109,7 @@ class ToolPane(QWidget):
+             top.setColumnStretch(i, 1)
+         self._top_grid = top
+         inner.addLayout(top)
+-        self.forms, self.fields = QStackedWidget(), {}
++        self.forms, self.fields = CurrentPageStack(), {}
+         for key, _ in tools:
+             host = QWidget()
+             form = QGridLayout(host)
+@@ -106,7 +154,6 @@ class ToolPane(QWidget):
+             exports.addWidget(button)
+         layout.addLayout(exports)
+         self.tool.currentIndexChanged.connect(self.switch)
+-        self.forms.setFixedHeight(self.forms.currentWidget().sizeHint().height())
+ 
+     def hide_source(self):
+         """Markets panes choose providers automatically (owner UI-8): no 데이터 출처 selector.
+@@ -125,7 +172,6 @@ class ToolPane(QWidget):
+ 
+     def switch(self, index):
+         self.forms.setCurrentIndex(index)
+-        self.forms.setFixedHeight(self.forms.currentWidget().sizeHint().height())
+         self.clear_result()
+         self.status.setText('도구가 변경됐습니다. 다시 실행하세요.')
+ 
+diff --git a/tests/desktop_commentary_acceptance.py b/tests/desktop_commentary_acceptance.py
+index 6866d23..022c1a6 100644
+--- a/tests/desktop_commentary_acceptance.py
++++ b/tests/desktop_commentary_acceptance.py
+@@ -10,6 +10,7 @@ with patch.object(dotenv,'load_dotenv',return_value=False):
+     from quantgen_desktop.app import ResearchWindow
+     from quantgen_desktop.commentary import commentary_payload
+     from core.quant.insights import Analysis
++from PyQt6.QtCore import Qt
+ from PyQt6.QtWidgets import QApplication,QMessageBox
+ from PyQt6.QtTest import QTest
+ 
+@@ -63,7 +64,13 @@ class NativeCommentaryTests(unittest.TestCase):
+         p.consent.setChecked(True);p.submit();self.wait()
+         self.runner.assert_called_once();self.assertEqual(p.output.toPlainText(),'Fixture commentary')
+         self.assertEqual(p.report_actions.report['verdict'],'NOT_RUN')
+-        p.refresh_sources();self.assertIsNone(p.report_actions.report);self.assertFalse(p.send.isEnabled())
++        p.refresh_sources();self.assertIsNone(p.report_actions.report)
++        # Owner B3: the button always answers, but each click without consent only guides the user.
++        self.assertTrue(p.send.isEnabled());self.assertEqual(p.send.cursor().shape(),Qt.CursorShape.PointingHandCursor)
++        p.submit();self.assertIsNotNone(p.payload);self.assertIn('전송 동의',p.status.text())
++        self.assertTrue(p.preview.toPlainText())
++        p.submit();self.assertIn('전송 동의에 체크',p.status.text())
++        self.runner.assert_called_once()
+ 
+     def test_error_clears_previous_result_and_redacts_provider_secrets(self):
+         p=self.prepare();p.consent.setChecked(True);p.submit();self.wait()
