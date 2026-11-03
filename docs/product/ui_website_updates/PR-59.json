@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "id": "PR-59",
+  "source_session": "QUANTGEN UI 개선",
+  "destination_session": "웹사이트 작업공간(AWS)",
+  "destination_thread_id": "01a18c19-eda9-7327-b6d9-c9ca24937093",
+  "website_url": "https://quantgeneration.com/",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/59",
+  "source_branch": "gpt/rates-params-20261102",
+  "source_commit": "b16f6063da14ebb10e5af24be0ba5929e3d441c9",
+  "summary": "Horizon revaluation rejects mismatched calculation parameters before valuation. Native/Flet callers pass final simulation parameters, preserving Hull-White normalization and existing matched-input prices, paths and risk statistics.",
+  "files": [
+    ".github/workflows/runtime-smoke.yml",
+    "core/ficc/insights.py",
+    "core/ficc/ratesim.py",
+    "core/research/rates_analysis.py",
+    "docs/compliance/06-form-consent.md",
+    "docs/compliance/12-claims.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md",
+    "docs/product/SECTION10_QUEUE_2026-10-30.json",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md",
+    "tests/ficc_acceptance.py",
+    "tests/rates_revaluation_params_acceptance.py",
+    "ui/fcharts.py",
+    "ui/rates_page.py"
+  ],
+  "website_impact": "Shared Flet rates calculation caller contract. The separately delivered marketing HTML has no automatic applicability; its source/HTML must not be published to GitHub.",
+  "actions_for_aws": [
+    "If a future authorized website uses the shared rates workspace, pass the final simulation parameters and reproduce mismatch refusal with synthetic inputs.",
+    "Preserve conventions, numerical outputs, provider evidence and existing authorization gates.",
+    "This record contains app change metadata only. Do not publish the separate website source/HTML or deploy from this record."
+  ],
+  "verification": {
+    "source": "Five new plus five existing checks passed; 21 integrated rate/native/Flet/audit checks passed.",
+    "numerical": "12 terminal arrays, 24 PV arrays and 144 summary values/notes exactly match the before source.",
+    "documents": "20 policy scopes/509 source files consistency PASS; publication BLOCKED.",
+    "ci": "Final PR59 Windows/Ubuntu checks required before merge.",
+    "user_windows": "NOT_RUN",
+    "real_providers": "NOT_RUN",
+    "research_pilot": "NOT_RUN"
+  },
+  "delivery": {
+    "status": "queued",
+    "reason": "No supported messaging tool for the exact existing destination chat.",
+    "receipt": null
+  },
+  "website_application": "unverified",
+  "website_deployment": "unverified"
+}

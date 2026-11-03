@@ -1,0 +1,63 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "queued_at": "2026-10-31T15:51:00+09:00",
+    "blocker": "No supported cross-chat send/handoff operation is available in the current tool set.",
+    "sent_at": null,
+    "receipt": null
+  },
+  "website_application": {
+    "status": "not_reviewed",
+    "commit": null,
+    "checks": [],
+    "deployment_status": "not_verified",
+    "deployment_url": null
+  },
+  "id": "quantgen-ui-pr-40",
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/40",
+    "head_commit": "ae768dc607a961bf71a8d4c57c6cd629ec78ba71",
+    "merge_commit": "bea069f14722b55466d21ad7a5924c4a42bbd312",
+    "changed_files": [
+      ".github/workflows/runtime-smoke.yml",
+      "docs/product/FX_LANGUAGE_2026-10-31.md",
+      "docs/product/ui_website_updates/PR-38.json",
+      "docs/product/ui_website_updates/PR-39.json",
+      "quantgen_desktop/fx.py",
+      "quantgen_desktop/fx_narrative.py",
+      "quantgen_desktop/localization.py",
+      "quantgen_desktop/tools.py",
+      "quantgen_desktop/translations.py",
+      "tests/desktop_fx_language_acceptance.py"
+    ]
+  },
+  "summary_ko": [
+    "Native FX 선물환·옵션·SABR 진단 해설을 English/한국어 선택에 연결했습니다.",
+    "표시 숫자·정밀도·분기·누락/NOT_RUN 및 영문 원문 보고서를 보존합니다.",
+    "캐리/다른 모델 해설과 실제 Windows 검수는 아직 미완료입니다."
+  ],
+  "website_impact": {
+    "classification": "native_only_source_change",
+    "review_status": "required",
+    "browser_code_changed": false,
+    "browser_sources_to_check": [
+      "ui/fx_page.py",
+      "core/ficc/insights.py"
+    ],
+    "requested_actions_ko": [
+      "실제 웹사이트 구현에 해당 화면이 있는지 확인하고 필요 범위만 별도 적용/검사한다.",
+      "네이티브 언어 선택 코드를 Flet에 그대로 복사하거나 공개 배포를 완료로 가정하지 않는다."
+    ]
+  },
+  "verification": {
+    "ci_url": "https://github.com/xkg4real/quantgen/actions/runs/41177922111",
+    "ci_result": "success",
+    "local_tests_passed": 36,
+    "manual_windows_display_acceptance": "NOT_RUN",
+    "live_website_acceptance": "NOT_RUN",
+    "ci_source_commit": "ae768dc607a961bf71a8d4c57c6cd629ec78ba71"
+  }
+}

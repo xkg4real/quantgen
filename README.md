@@ -1,12 +1,43 @@
 # QUANTGEN
 
-The upgraded, personal-use successor to NEXTGEN. Same body — the rule engine,
-simulated order book and KRX data layer all survive intact (the skill cockpit
-moved to TRADEGEN on 2026-10-23) — with the one organ the client build was
-contractually forbidden from having:
-**an opinion**. QUANTGEN computes and validates analysis and ranks outcomes; on
-the macro overlay it displays a recommendation only for what a frozen gate has
-passed, and today nothing has: see
+**Quantitative methods for individual traders.**
+
+QUANTGEN is a commercial quantitative finance research application
+built to make systematic, data-driven methods accessible to individual traders.
+Our mission is to bring quantitative research into everyday trading decisions:
+test an idea, understand its assumptions, compare outcomes and evaluate risk
+before committing capital.
+
+**Commercial launch announcement — 2026-10-30.** Following our team's review of
+applicable Korean government guidelines and materials from institutions including
+the Korea Financial Investment Association (KOFIA), we have decided to launch
+QUANTGEN as a commercial product for broad individual adoption.
+
+### What you can do with QUANTGEN
+
+- **Explore markets:** analyze equities, ETFs, rates, bonds, FX, derivatives and
+  crypto through the documented data integrations.
+- **Test ideas:** compare strategies and backtests with explicit transaction
+  costs, benchmarks and validation results.
+- **Understand risk:** use portfolio analysis, Monte Carlo simulation,
+  volatility models and scenario analysis to examine potential outcomes.
+- **Inspect the evidence:** see data sources, assumptions, model limitations
+  and incomplete or rejected results alongside the analysis.
+
+The current application supports research, analysis and paper trading. It has
+no broker order path. Individual users retain control of their trading decisions.
+See [Setup](#setup) to get started and the feature documentation below for
+current capabilities.
+
+**Native desktop preview:** the optional PyQt6 research workspace is available with
+`pip install ".[desktop]"` and `python -m quantgen_desktop`. The browser remains
+Flet. This is a partial migration; see [scope and remaining screens](docs/DESKTOP_MIGRATION_2026-10-30.md).
+
+Built on NEXTGEN's rule engine, simulated order book and KRX data layer,
+QUANTGEN computes and validates analysis and ranks outcomes. The skill cockpit
+moved to TRADEGEN on 2026-10-23. The macro overlay displays a recommendation
+only for what a frozen gate has passed; no macro card has passed that gate in
+this build. See
 [Macro integration](#macro-integration-quant-council-specification-v20).
 
 Version 2 widens the desk. The equity surfaces (Quant Lab, Portfolio, Signals)
@@ -31,11 +62,11 @@ before any card runs. Macro sizes risk and never sets direction; nothing
 exceeds 1.0×; nothing places an order. Beside it sits the tech-fund research
 register. Both live inside the Macro page; neither added a rail entry.
 
-QUANTGEN is a quantitative finance research application: models, estimation,
-validation, FICC pricing, portfolio theory, backtests and gates. It goes no
-further than paper trading, and there is no broker order path in this
-repository. It is a personal instrument, not a client deliverable and not for
-commercial distribution, and nothing in it is investment advice.
+QUANTGEN brings models, estimation, validation, FICC pricing, portfolio theory,
+backtests and research gates into one workspace for individual users. Its
+commercial mission is broader access to quantitative methods; the current
+software remains limited to analysis and paper trading, and nothing in it is
+investment advice.
 
 **Split from TRADEGEN (2026-10-23).** On 2026-10-23 this repository was copied
 byte for byte to `Desktop/TRADEGEN` (959 files, identical sha256), and the two
@@ -283,10 +314,10 @@ with the numbers:
   (PASS: every criterion, off the grid edge, beats buy-and-hold at p 0.07
   against the 0.10 the claim needs). The Sprint 7 CRY-1 trials re-examined the
   KRW-BTC card; see [Tech-fund research register](#tech-fund-research-register).
-* **Offered as monitors**: funding carry (the BIS sign confirmed), the weekday
+* **Offered as monitors**: funding carry (retrospective association; historical IID confirmation is not reliable), the weekday
   table (no return effect, a weekend-volume cost input), the futures basis
   (reconciles with KIS's theoretical price within the dividend band), the
-  kimchi premium, the PCA fly, the LETF drag at realised variance.
+  kimchi premium, the PCA fly, LETF variance-based proxies (not the historical realised-drag benchmark).
 * **Rejected, and shown as rejected**: the ETF trend switch (protects the
   drawdown, does not beat buy-and-hold on Sharpe), capped vol targeting (the
   Cederburg real-time result — this study's cards on SPY and KODEX 200 at its
@@ -574,16 +605,15 @@ inconclusive, never "refuted".
   data enters only through a re-gate. The local vendor caches
   (`docs/asset_expansion/cache/`, Yahoo / FRED to 2026-09-25) feed the labelled
   dry run only.
-* The calendar files are unsigned, so every live run refuses
-  (`CalendarUnsigned`) and the missed-decision check at app start reports itself
-  unavailable.
+* The calendar MANIFEST records the owner-signed set 1.0.0 (2026-10-29).
+  Signed calendars alone do not establish live data availability or formal gate readiness.
+  Changed/unsigned inputs still refuse with `CalendarUnsigned`.
 
 ### Open owner actions
 
-* Sign the calendar set (`core/calendars/data/*.yaml`, including
-  `kr_regime_tags.yaml`).
-* Place the repository under git (the freeze, header commits and the verdict
-  filter refuse `UNVERSIONED`).
+* Preserve signed calendar set 1.0.0. Any calendar revision requires the existing
+  change-control and re-signing process.
+* Keep work versioned: the freeze, header commits and verdict filter refuse `UNVERSIONED`.
 * Set `sleeves.KR.notional_nav` and `sleeves.US.notional_nav`; decide D5.
 * For the US futures card: the Micro ES contract multiplier, the
   `nav_fx.conversion_instant` and the futures roll calendar; acquire and
@@ -612,7 +642,7 @@ From a shell:
 ```bash
 python -m core.skills.macro_daily --mode dry_run                     # both markets
 python -m core.skills.macro_daily --market KR --mode dry_run --macro-dir <scratch dir>
-python -m core.skills.macro_daily --market KR --mode live            # refuses today: CalendarUnsigned (exit 2)
+python -m core.skills.macro_daily --market KR --mode live            # requires live data and existing governance prerequisites
 ```
 
 A dry run ingests `docs/asset_expansion/cache` as `vendor_close` rows (source
@@ -836,6 +866,15 @@ public market data only, places no order on any venue, and nothing in
   compliance matrix rows 2 and 3. The study is a benchmark, not a reason to
   open a Kalshi account.
 
+## KIS live quotes and charts
+
+The desktop Markets workspace and Flet browser now share candlestick/volume
+charts, daily/weekly/monthly and minute timeframes, SMA20, Bollinger bands,
+RSI14 and MACD. REST polling and WebSocket trade reception have separate states.
+See [supported markets, setup and current limits](docs/product/KIS_MARKET_CHARTS_2026-11-02.md).
+Actual KIS account connectivity and AWS deployment have not been verified by
+these offline fixture checks.
+
 ## Setup
 
 1. Python 3.10+
@@ -847,6 +886,26 @@ public market data only, places no order on any venue, and nothing in
 Optional: `QUANTGEN_MACRO_DIR` moves the macro state out of `~/.nextgen/macro`.
 
 ## Verification
+
+<!-- research-status:start -->
+### Recorded repository status
+
+Generated from explicit sources; **not a new test run or overall readiness verdict**.
+
+| Dimension | Recorded evidence |
+|---|---|
+| Code tests | 749/870 PASS; 0 FAIL; 121 NOT_RUN. Run time/commit not supplied by source. |
+| Calendars | 17 signed metadata rows, set 1.0.0; signed 2026-10-29T04:29:39Z. Payload verification is separate. |
+| Data readiness | NOT_VERIFIED; missing reference data remains a separate blocker. |
+| Formal gate | NOT_FROZEN per README; protected package NOT_INSPECTED. |
+| Paper studies | NOT_INSPECTED; no ledger or holdout access. |
+| Distribution | COMMERCIAL; launch decision OWNER_APPROVED (2026-10-30). |
+
+Machine-readable evidence: [qa/research_status.json](qa/research_status.json).
+Check: `python -m tools.status.snapshot --check`. Historical dated tables below remain historical.
+<!-- research-status:end -->
+
+The detailed tables below record the historical 2026-10-23 run; they are not the latest QA aggregate.
 
 ```bash
 python tests/run_all.py                  # every suite; writes qa/acceptance_results.json
@@ -924,7 +983,13 @@ containers, not matplotlib.
 
 ## Regulatory note
 
-QUANTGEN is built for the operator's personal use only. It intentionally does
-not implement the recommendation-abstinence constraints of the NEXTGEN client
-build, and it is not designed to satisfy Korean FSCMA or US SEC requirements
-for commercial financial software. Do not distribute it as a product.
+As of 2026-10-30, QUANTGEN's commercial launch is an owner-approved decision
+following the team's review of applicable Korean government and KOFIA materials.
+This supersedes the earlier personal-use-only distribution policy. The review
+and launch decision are the team's assessment; they do not represent approval,
+certification or endorsement by the Korean government or KOFIA.
+
+QUANTGEN provides software for quantitative analysis and paper trading.
+It does not place live broker orders or guarantee investment outcomes. Market
+data and connected services remain subject to their providers' applicable terms.
+The software is not legal, tax or investment advice.

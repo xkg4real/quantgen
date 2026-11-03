@@ -45,7 +45,7 @@ except Exception:                                    # pragma: no cover
     _requests = None
 
 MASTER_URL = "https://new.real.download.dws.co.kr/common/master/"
-_MASTERS = ("fo_idx_code_mts", "fo_com_code", "bond_code", "ffcode", "frgn_code")
+_MASTERS = ("fo_idx_code_mts", "fo_com_code", "bond_code", "ffcode", "frgn_code", "idxcode")
 
 # Market division codes (FID_COND_MRKT_DIV_CODE) confirmed by the probe.
 MKT_STOCK, MKT_INDEX, MKT_BOND = "J", "U", "B"
@@ -668,6 +668,35 @@ def load_master(name: str) -> list[str]:
     text = zf.read(zf.namelist()[0]).decode("cp949", errors="replace")
     _MASTER_CACHE[name] = text.splitlines()
     return _MASTER_CACHE[name]
+
+
+def domestic_index_code(index: str) -> str:
+    """Resolve an exact index name; never substitute the broad KOSDAQ index.
+
+    KIS stocks_info/업종코드정보.h defines 1 ASCII market byte, 4 code bytes,
+    then 40 CP949 name bytes. The official sector_code.py supplies idxcode.mst.zip.
+    The existing KOSPI200 code has repository probe evidence. KOSDAQ150 is
+    resolved from the official master at runtime, not from a guessed constant.
+    """
+    if index == "KOSPI200":
+        return "2001"
+    if index != "KOSDAQ150":
+        raise ValueError("Unsupported underlying index")
+    codes = set()
+    for line in load_master("idxcode"):
+        try:
+            raw = line.encode("cp949", errors="strict")
+            if len(raw) < 45 or raw[45:].strip():
+                continue
+            code = raw[1:5].decode("ascii")
+            name = "".join(raw[5:45].decode("cp949").upper().split())
+        except (UnicodeError, ValueError):
+            continue
+        if raw[:1].isdigit() and re.fullmatch(r"[0-9]{4}", code) and name in {"KOSDAQ150", "코스닥150"}:
+            codes.add(code)
+    if len(codes) != 1:
+        raise KISUnavailable("KOSDAQ150 requires one unambiguous exact-name match in the KIS index master")
+    return codes.pop()
 
 
 def _top_of_book(payload: dict) -> tuple[Optional[float], Optional[float]]:

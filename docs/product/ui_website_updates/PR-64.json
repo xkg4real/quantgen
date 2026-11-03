@@ -1,0 +1,95 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-guide-search-pr-64",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Owner ruling 2026-11-03: the website is handled in a separate session and this session does not modify it; no cross-chat send tool is used here, so this record does not establish receipt.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "claude/ui-markets-a4-20261103",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/64",
+    "implementation_commit": "7de46d4",
+    "remote_status": "MERGED",
+    "merge_commit": "ba3b6b2e15023ebf997dec554fe3e6c3707f616a",
+    "verified_head": "9f7dc0e689def1483edb14b13ef840dbca92ce16"
+  },
+  "summary_ko": [
+    "네이티브 기술지표 가이드의 A–E 선택 버튼을 검색창으로 바꿨습니다. 제목은 “Search what you want to explore” / “궁금한 내용을 검색해 보세요”입니다.",
+    "입력하면 검색창 아래에 최대 8개 추천이 나오고(이름·약어·별칭·한글 초성·정의 순), 고르면 설명이 바로 아래에 나옵니다. 키보드: 아래쪽 방향키·Enter·Esc.",
+    "기술지표를 고르면 기존 과거 표본 차트에도 표시되며, 선택한 지표는 칩(이름: 설명 다시 보기, ✕: 차트에서 빼기)으로 보입니다.",
+    "기술지표 5개 외 시장·위험·금리·파생·외환·QUANTGEN 용어 27개의 한영 교육용 정의를 추가했습니다. 검색어는 저장·전송하지 않습니다."
+  ],
+  "website_impact": {
+    "classification": "native_ui_only",
+    "browser_code_changed": false,
+    "shared_sources": [
+      "core/education/glossary.py",
+      "core/ui_messages.py"
+    ],
+    "requested_actions_ko": [
+      "소개사이트의 기술지표 가이드 설명·화면 이미지가 A–E 버튼을 보여 준다면 네이티브 앱이 검색형으로 바뀌었음을 반영할지 검토하세요. Flet 가이드는 버튼 방식을 유지하므로 웹 가이드가 검색형이라고 주장하지 마세요.",
+      "정책 문서 FACTS·12·13·14·15의 2026-11-03 절이 바뀌었습니다. 웹 Docs 번역·버전에 반영할지 검토하세요.",
+      "웹 HTML/소스는 GitHub에 올리지 않습니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "guide: indicator_guide, glossary_search, web_indicator_guide, desktop_indicator_guide, chart_c_theme, desktop_language",
+        "passed": 41
+      },
+      {
+        "suite": "wider native regression (desktop, language, startup, prose, strategy, rendering, responsive, market layout, home live)",
+        "passed": 62
+      },
+      {
+        "suite": "compliance acceptance and export",
+        "passed": 47
+      },
+      {
+        "suite": "runtime syntax, packaging policy, status snapshot",
+        "passed": 14
+      }
+    ],
+    "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12; changed files also compiled on 3.10/3.11.",
+    "source_review": "20 documents PASS after named refresh; publication BLOCKED",
+    "ci": "SUCCESS",
+    "ci_runs": [
+      41641446205,
+      41641446773
+    ],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "Not verified on the owner's Windows PC (IME composition, Tab order, DPI, screen reader)."
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "한글 초성 검색은 조합이 끝난 글자 기준이며 Windows IME 조합 중 동작은 실제 PC에서 확인하지 않았습니다.",
+    "용어 정의는 일반 교육 설명이며 특정 공급사 조건이나 화면 계산 결과를 설명하지 않습니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "core/education/glossary.py",
+    "core/ui_messages.py",
+    "docs/compliance/12-claims.md",
+    "docs/compliance/13-alternative-text.md",
+    "docs/compliance/14-contrast.md",
+    "docs/compliance/15-keyboard.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/product/INDICATOR_GUIDE_DESIGN.md",
+    "docs/product/ui_website_updates/PR-64.json",
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/indicator_guide.py",
+    "tests/chart_c_theme_acceptance.py",
+    "tests/desktop_indicator_guide_acceptance.py",
+    "tests/glossary_search_acceptance.py"
+  ]
+}

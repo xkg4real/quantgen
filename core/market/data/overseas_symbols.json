@@ -1,0 +1,763 @@
+{
+ "schema": "quantgen.overseas-symbols/1",
+ "note": "Curated, hand-checked list for name search; exchange codes are KIS overseas exchange codes (NAS Nasdaq, NYS NYSE, AMS NYSE American/Arca, HKS Hong Kong, TSE Tokyo). Not a complete market master; codes can still be typed directly.",
+ "as_of": "2026-11-03",
+ "symbols": [
+  {
+   "code": "AAPL",
+   "exchange": "NAS",
+   "name_en": "Apple",
+   "name_ko": "애플"
+  },
+  {
+   "code": "MSFT",
+   "exchange": "NAS",
+   "name_en": "Microsoft",
+   "name_ko": "마이크로소프트"
+  },
+  {
+   "code": "NVDA",
+   "exchange": "NAS",
+   "name_en": "NVIDIA",
+   "name_ko": "엔비디아"
+  },
+  {
+   "code": "AMZN",
+   "exchange": "NAS",
+   "name_en": "Amazon.com",
+   "name_ko": "아마존"
+  },
+  {
+   "code": "GOOGL",
+   "exchange": "NAS",
+   "name_en": "Alphabet Class A",
+   "name_ko": "알파벳 A 구글"
+  },
+  {
+   "code": "GOOG",
+   "exchange": "NAS",
+   "name_en": "Alphabet Class C",
+   "name_ko": "알파벳 C 구글"
+  },
+  {
+   "code": "META",
+   "exchange": "NAS",
+   "name_en": "Meta Platforms",
+   "name_ko": "메타 페이스북"
+  },
+  {
+   "code": "TSLA",
+   "exchange": "NAS",
+   "name_en": "Tesla",
+   "name_ko": "테슬라"
+  },
+  {
+   "code": "AVGO",
+   "exchange": "NAS",
+   "name_en": "Broadcom",
+   "name_ko": "브로드컴"
+  },
+  {
+   "code": "NFLX",
+   "exchange": "NAS",
+   "name_en": "Netflix",
+   "name_ko": "넷플릭스"
+  },
+  {
+   "code": "AMD",
+   "exchange": "NAS",
+   "name_en": "Advanced Micro Devices",
+   "name_ko": "AMD 에이엠디"
+  },
+  {
+   "code": "INTC",
+   "exchange": "NAS",
+   "name_en": "Intel",
+   "name_ko": "인텔"
+  },
+  {
+   "code": "QCOM",
+   "exchange": "NAS",
+   "name_en": "Qualcomm",
+   "name_ko": "퀄컴"
+  },
+  {
+   "code": "ADBE",
+   "exchange": "NAS",
+   "name_en": "Adobe",
+   "name_ko": "어도비"
+  },
+  {
+   "code": "CSCO",
+   "exchange": "NAS",
+   "name_en": "Cisco Systems",
+   "name_ko": "시스코"
+  },
+  {
+   "code": "PEP",
+   "exchange": "NAS",
+   "name_en": "PepsiCo",
+   "name_ko": "펩시코"
+  },
+  {
+   "code": "COST",
+   "exchange": "NAS",
+   "name_en": "Costco Wholesale",
+   "name_ko": "코스트코"
+  },
+  {
+   "code": "PLTR",
+   "exchange": "NAS",
+   "name_en": "Palantir Technologies",
+   "name_ko": "팔란티어"
+  },
+  {
+   "code": "MU",
+   "exchange": "NAS",
+   "name_en": "Micron Technology",
+   "name_ko": "마이크론"
+  },
+  {
+   "code": "AMAT",
+   "exchange": "NAS",
+   "name_en": "Applied Materials",
+   "name_ko": "어플라이드 머티리얼즈"
+  },
+  {
+   "code": "LRCX",
+   "exchange": "NAS",
+   "name_en": "Lam Research",
+   "name_ko": "램리서치"
+  },
+  {
+   "code": "KLAC",
+   "exchange": "NAS",
+   "name_en": "KLA",
+   "name_ko": "KLA"
+  },
+  {
+   "code": "ASML",
+   "exchange": "NAS",
+   "name_en": "ASML Holding",
+   "name_ko": "ASML"
+  },
+  {
+   "code": "TXN",
+   "exchange": "NAS",
+   "name_en": "Texas Instruments",
+   "name_ko": "텍사스 인스트루먼트"
+  },
+  {
+   "code": "INTU",
+   "exchange": "NAS",
+   "name_en": "Intuit",
+   "name_ko": "인튜이트"
+  },
+  {
+   "code": "ISRG",
+   "exchange": "NAS",
+   "name_en": "Intuitive Surgical",
+   "name_ko": "인튜이티브 서지컬"
+  },
+  {
+   "code": "BKNG",
+   "exchange": "NAS",
+   "name_en": "Booking Holdings",
+   "name_ko": "부킹홀딩스"
+  },
+  {
+   "code": "SBUX",
+   "exchange": "NAS",
+   "name_en": "Starbucks",
+   "name_ko": "스타벅스"
+  },
+  {
+   "code": "AMGN",
+   "exchange": "NAS",
+   "name_en": "Amgen",
+   "name_ko": "암젠"
+  },
+  {
+   "code": "GILD",
+   "exchange": "NAS",
+   "name_en": "Gilead Sciences",
+   "name_ko": "길리어드"
+  },
+  {
+   "code": "VRTX",
+   "exchange": "NAS",
+   "name_en": "Vertex Pharmaceuticals",
+   "name_ko": "버텍스"
+  },
+  {
+   "code": "REGN",
+   "exchange": "NAS",
+   "name_en": "Regeneron",
+   "name_ko": "리제네론"
+  },
+  {
+   "code": "PYPL",
+   "exchange": "NAS",
+   "name_en": "PayPal",
+   "name_ko": "페이팔"
+  },
+  {
+   "code": "MRVL",
+   "exchange": "NAS",
+   "name_en": "Marvell Technology",
+   "name_ko": "마벨"
+  },
+  {
+   "code": "ARM",
+   "exchange": "NAS",
+   "name_en": "Arm Holdings",
+   "name_ko": "암 홀딩스 ARM"
+  },
+  {
+   "code": "PDD",
+   "exchange": "NAS",
+   "name_en": "PDD Holdings",
+   "name_ko": "핀둬둬 테무"
+  },
+  {
+   "code": "ABNB",
+   "exchange": "NAS",
+   "name_en": "Airbnb",
+   "name_ko": "에어비앤비"
+  },
+  {
+   "code": "COIN",
+   "exchange": "NAS",
+   "name_en": "Coinbase",
+   "name_ko": "코인베이스"
+  },
+  {
+   "code": "CRWD",
+   "exchange": "NAS",
+   "name_en": "CrowdStrike",
+   "name_ko": "크라우드스트라이크"
+  },
+  {
+   "code": "PANW",
+   "exchange": "NAS",
+   "name_en": "Palo Alto Networks",
+   "name_ko": "팔로알토 네트웍스"
+  },
+  {
+   "code": "SMCI",
+   "exchange": "NAS",
+   "name_en": "Super Micro Computer",
+   "name_ko": "슈퍼마이크로"
+  },
+  {
+   "code": "TMUS",
+   "exchange": "NAS",
+   "name_en": "T-Mobile US",
+   "name_ko": "티모바일"
+  },
+  {
+   "code": "CMCSA",
+   "exchange": "NAS",
+   "name_en": "Comcast",
+   "name_ko": "컴캐스트"
+  },
+  {
+   "code": "HON",
+   "exchange": "NAS",
+   "name_en": "Honeywell",
+   "name_ko": "하니웰"
+  },
+  {
+   "code": "MELI",
+   "exchange": "NAS",
+   "name_en": "MercadoLibre",
+   "name_ko": "메르카도리브레"
+  },
+  {
+   "code": "LULU",
+   "exchange": "NAS",
+   "name_en": "Lululemon Athletica",
+   "name_ko": "룰루레몬"
+  },
+  {
+   "code": "SOFI",
+   "exchange": "NAS",
+   "name_en": "SoFi Technologies",
+   "name_ko": "소파이"
+  },
+  {
+   "code": "HOOD",
+   "exchange": "NAS",
+   "name_en": "Robinhood Markets",
+   "name_ko": "로빈후드"
+  },
+  {
+   "code": "RIVN",
+   "exchange": "NAS",
+   "name_en": "Rivian Automotive",
+   "name_ko": "리비안"
+  },
+  {
+   "code": "LCID",
+   "exchange": "NAS",
+   "name_en": "Lucid Group",
+   "name_ko": "루시드"
+  },
+  {
+   "code": "RKLB",
+   "exchange": "NAS",
+   "name_en": "Rocket Lab",
+   "name_ko": "로켓랩"
+  },
+  {
+   "code": "QQQ",
+   "exchange": "NAS",
+   "name_en": "Invesco QQQ Trust ETF",
+   "name_ko": "나스닥100 ETF QQQ"
+  },
+  {
+   "code": "TQQQ",
+   "exchange": "NAS",
+   "name_en": "ProShares UltraPro QQQ ETF",
+   "name_ko": "나스닥 3배 ETF TQQQ"
+  },
+  {
+   "code": "SQQQ",
+   "exchange": "NAS",
+   "name_en": "ProShares UltraPro Short QQQ ETF",
+   "name_ko": "나스닥 인버스 3배 ETF SQQQ"
+  },
+  {
+   "code": "TLT",
+   "exchange": "NAS",
+   "name_en": "iShares 20+ Year Treasury Bond ETF",
+   "name_ko": "미국 장기채 ETF TLT"
+  },
+  {
+   "code": "SOXX",
+   "exchange": "NAS",
+   "name_en": "iShares Semiconductor ETF",
+   "name_ko": "반도체 ETF SOXX"
+  },
+  {
+   "code": "JPM",
+   "exchange": "NYS",
+   "name_en": "JPMorgan Chase",
+   "name_ko": "JP모건"
+  },
+  {
+   "code": "V",
+   "exchange": "NYS",
+   "name_en": "Visa",
+   "name_ko": "비자"
+  },
+  {
+   "code": "MA",
+   "exchange": "NYS",
+   "name_en": "Mastercard",
+   "name_ko": "마스터카드"
+  },
+  {
+   "code": "JNJ",
+   "exchange": "NYS",
+   "name_en": "Johnson & Johnson",
+   "name_ko": "존슨앤드존슨"
+  },
+  {
+   "code": "PG",
+   "exchange": "NYS",
+   "name_en": "Procter & Gamble",
+   "name_ko": "P&G 프록터앤드갬블"
+  },
+  {
+   "code": "KO",
+   "exchange": "NYS",
+   "name_en": "Coca-Cola",
+   "name_ko": "코카콜라"
+  },
+  {
+   "code": "XOM",
+   "exchange": "NYS",
+   "name_en": "Exxon Mobil",
+   "name_ko": "엑슨모빌"
+  },
+  {
+   "code": "CVX",
+   "exchange": "NYS",
+   "name_en": "Chevron",
+   "name_ko": "셰브론"
+  },
+  {
+   "code": "UNH",
+   "exchange": "NYS",
+   "name_en": "UnitedHealth Group",
+   "name_ko": "유나이티드헬스"
+  },
+  {
+   "code": "LLY",
+   "exchange": "NYS",
+   "name_en": "Eli Lilly",
+   "name_ko": "일라이 릴리"
+  },
+  {
+   "code": "HD",
+   "exchange": "NYS",
+   "name_en": "Home Depot",
+   "name_ko": "홈디포"
+  },
+  {
+   "code": "MRK",
+   "exchange": "NYS",
+   "name_en": "Merck",
+   "name_ko": "머크"
+  },
+  {
+   "code": "ABBV",
+   "exchange": "NYS",
+   "name_en": "AbbVie",
+   "name_ko": "애브비"
+  },
+  {
+   "code": "PFE",
+   "exchange": "NYS",
+   "name_en": "Pfizer",
+   "name_ko": "화이자"
+  },
+  {
+   "code": "BAC",
+   "exchange": "NYS",
+   "name_en": "Bank of America",
+   "name_ko": "뱅크오브아메리카"
+  },
+  {
+   "code": "WFC",
+   "exchange": "NYS",
+   "name_en": "Wells Fargo",
+   "name_ko": "웰스파고"
+  },
+  {
+   "code": "GS",
+   "exchange": "NYS",
+   "name_en": "Goldman Sachs",
+   "name_ko": "골드만삭스"
+  },
+  {
+   "code": "MS",
+   "exchange": "NYS",
+   "name_en": "Morgan Stanley",
+   "name_ko": "모건스탠리"
+  },
+  {
+   "code": "DIS",
+   "exchange": "NYS",
+   "name_en": "Walt Disney",
+   "name_ko": "디즈니"
+  },
+  {
+   "code": "NKE",
+   "exchange": "NYS",
+   "name_en": "Nike",
+   "name_ko": "나이키"
+  },
+  {
+   "code": "MCD",
+   "exchange": "NYS",
+   "name_en": "McDonald's",
+   "name_ko": "맥도날드"
+  },
+  {
+   "code": "ORCL",
+   "exchange": "NYS",
+   "name_en": "Oracle",
+   "name_ko": "오라클"
+  },
+  {
+   "code": "CRM",
+   "exchange": "NYS",
+   "name_en": "Salesforce",
+   "name_ko": "세일즈포스"
+  },
+  {
+   "code": "IBM",
+   "exchange": "NYS",
+   "name_en": "IBM",
+   "name_ko": "IBM 아이비엠"
+  },
+  {
+   "code": "BA",
+   "exchange": "NYS",
+   "name_en": "Boeing",
+   "name_ko": "보잉"
+  },
+  {
+   "code": "CAT",
+   "exchange": "NYS",
+   "name_en": "Caterpillar",
+   "name_ko": "캐터필러"
+  },
+  {
+   "code": "GE",
+   "exchange": "NYS",
+   "name_en": "GE Aerospace",
+   "name_ko": "GE 제너럴일렉트릭"
+  },
+  {
+   "code": "T",
+   "exchange": "NYS",
+   "name_en": "AT&T",
+   "name_ko": "AT&T"
+  },
+  {
+   "code": "VZ",
+   "exchange": "NYS",
+   "name_en": "Verizon",
+   "name_ko": "버라이즌"
+  },
+  {
+   "code": "TSM",
+   "exchange": "NYS",
+   "name_en": "Taiwan Semiconductor (TSMC) ADR",
+   "name_ko": "TSMC 대만반도체"
+  },
+  {
+   "code": "BABA",
+   "exchange": "NYS",
+   "name_en": "Alibaba Group ADR",
+   "name_ko": "알리바바"
+  },
+  {
+   "code": "UBER",
+   "exchange": "NYS",
+   "name_en": "Uber Technologies",
+   "name_ko": "우버"
+  },
+  {
+   "code": "NOW",
+   "exchange": "NYS",
+   "name_en": "ServiceNow",
+   "name_ko": "서비스나우"
+  },
+  {
+   "code": "SNOW",
+   "exchange": "NYS",
+   "name_en": "Snowflake",
+   "name_ko": "스노우플레이크"
+  },
+  {
+   "code": "NET",
+   "exchange": "NYS",
+   "name_en": "Cloudflare",
+   "name_ko": "클라우드플레어"
+  },
+  {
+   "code": "SPOT",
+   "exchange": "NYS",
+   "name_en": "Spotify",
+   "name_ko": "스포티파이"
+  },
+  {
+   "code": "F",
+   "exchange": "NYS",
+   "name_en": "Ford Motor",
+   "name_ko": "포드"
+  },
+  {
+   "code": "GM",
+   "exchange": "NYS",
+   "name_en": "General Motors",
+   "name_ko": "GM 제너럴모터스"
+  },
+  {
+   "code": "O",
+   "exchange": "NYS",
+   "name_en": "Realty Income",
+   "name_ko": "리얼티인컴"
+  },
+  {
+   "code": "AXP",
+   "exchange": "NYS",
+   "name_en": "American Express",
+   "name_ko": "아메리칸 익스프레스"
+  },
+  {
+   "code": "C",
+   "exchange": "NYS",
+   "name_en": "Citigroup",
+   "name_ko": "씨티그룹"
+  },
+  {
+   "code": "BLK",
+   "exchange": "NYS",
+   "name_en": "BlackRock",
+   "name_ko": "블랙록"
+  },
+  {
+   "code": "NVO",
+   "exchange": "NYS",
+   "name_en": "Novo Nordisk ADR",
+   "name_ko": "노보 노디스크"
+  },
+  {
+   "code": "SONY",
+   "exchange": "NYS",
+   "name_en": "Sony Group ADR",
+   "name_ko": "소니"
+  },
+  {
+   "code": "TM",
+   "exchange": "NYS",
+   "name_en": "Toyota Motor ADR",
+   "name_ko": "도요타"
+  },
+  {
+   "code": "ABT",
+   "exchange": "NYS",
+   "name_en": "Abbott Laboratories",
+   "name_ko": "애보트"
+  },
+  {
+   "code": "TMO",
+   "exchange": "NYS",
+   "name_en": "Thermo Fisher Scientific",
+   "name_ko": "써모피셔"
+  },
+  {
+   "code": "LMT",
+   "exchange": "NYS",
+   "name_en": "Lockheed Martin",
+   "name_ko": "록히드마틴"
+  },
+  {
+   "code": "RTX",
+   "exchange": "NYS",
+   "name_en": "RTX",
+   "name_ko": "RTX 레이시온"
+  },
+  {
+   "code": "DE",
+   "exchange": "NYS",
+   "name_en": "Deere",
+   "name_ko": "디어 존디어"
+  },
+  {
+   "code": "PM",
+   "exchange": "NYS",
+   "name_en": "Philip Morris International",
+   "name_ko": "필립모리스"
+  },
+  {
+   "code": "NEE",
+   "exchange": "NYS",
+   "name_en": "NextEra Energy",
+   "name_ko": "넥스트에라 에너지"
+  },
+  {
+   "code": "ACN",
+   "exchange": "NYS",
+   "name_en": "Accenture",
+   "name_ko": "액센츄어"
+  },
+  {
+   "code": "UPS",
+   "exchange": "NYS",
+   "name_en": "United Parcel Service",
+   "name_ko": "UPS"
+  },
+  {
+   "code": "SPY",
+   "exchange": "AMS",
+   "name_en": "SPDR S&P 500 ETF",
+   "name_ko": "S&P500 ETF SPY"
+  },
+  {
+   "code": "VOO",
+   "exchange": "AMS",
+   "name_en": "Vanguard S&P 500 ETF",
+   "name_ko": "S&P500 ETF VOO 뱅가드"
+  },
+  {
+   "code": "IVV",
+   "exchange": "AMS",
+   "name_en": "iShares Core S&P 500 ETF",
+   "name_ko": "S&P500 ETF IVV"
+  },
+  {
+   "code": "SCHD",
+   "exchange": "AMS",
+   "name_en": "Schwab US Dividend Equity ETF",
+   "name_ko": "배당 ETF SCHD"
+  },
+  {
+   "code": "DIA",
+   "exchange": "AMS",
+   "name_en": "SPDR Dow Jones Industrial Average ETF",
+   "name_ko": "다우존스 ETF DIA"
+  },
+  {
+   "code": "IWM",
+   "exchange": "AMS",
+   "name_en": "iShares Russell 2000 ETF",
+   "name_ko": "러셀2000 ETF IWM"
+  },
+  {
+   "code": "GLD",
+   "exchange": "AMS",
+   "name_en": "SPDR Gold Shares",
+   "name_ko": "금 ETF GLD"
+  },
+  {
+   "code": "SOXL",
+   "exchange": "AMS",
+   "name_en": "Direxion Daily Semiconductor Bull 3X ETF",
+   "name_ko": "반도체 3배 ETF SOXL"
+  },
+  {
+   "code": "00700",
+   "exchange": "HKS",
+   "name_en": "Tencent Holdings",
+   "name_ko": "텐센트"
+  },
+  {
+   "code": "09988",
+   "exchange": "HKS",
+   "name_en": "Alibaba Group (Hong Kong)",
+   "name_ko": "알리바바 홍콩"
+  },
+  {
+   "code": "01810",
+   "exchange": "HKS",
+   "name_en": "Xiaomi",
+   "name_ko": "샤오미"
+  },
+  {
+   "code": "01211",
+   "exchange": "HKS",
+   "name_en": "BYD",
+   "name_ko": "비야디 BYD"
+  },
+  {
+   "code": "7203",
+   "exchange": "TSE",
+   "name_en": "Toyota Motor",
+   "name_ko": "도요타 일본"
+  },
+  {
+   "code": "6758",
+   "exchange": "TSE",
+   "name_en": "Sony Group",
+   "name_ko": "소니 일본"
+  },
+  {
+   "code": "9984",
+   "exchange": "TSE",
+   "name_en": "SoftBank Group",
+   "name_ko": "소프트뱅크그룹"
+  },
+  {
+   "code": "7974",
+   "exchange": "TSE",
+   "name_en": "Nintendo",
+   "name_ko": "닌텐도"
+  }
+ ]
+}

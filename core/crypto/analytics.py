@@ -34,8 +34,9 @@ from typing import Optional, Sequence
 import numpy as np
 from scipy import stats as sps
 
-from core.quant.strategies import adf_pvalue, half_life
+from core.quant.strategies import adf_pvalue, half_life, ar1_decay
 from core.quant.validate import newey_west_t
+from core.crypto.funding_diagnostic import phase_diagnostic
 
 CRYPTO_DAYS = 365
 
@@ -64,6 +65,7 @@ class KimchiPremium:
     pred_t: float = 0.0                # Newey–West t (lag 6)
     n: int = 0
     note: str = ""
+    decay: dict = field(default_factory=dict)
 
 
 def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
@@ -97,17 +99,20 @@ def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
         xc = z[ok] - z[ok].mean()
         # HAC t for the slope from the moment condition series (overlapping 7-day returns → lag h−1)
         score = resid * xc
-        se = math.sqrt(_hac_var(score, horizon - 1) * ok.sum()) / np.sum(xc ** 2)
+        # _hac_var is the variance of the score MEAN. Recover the variance of
+        # its sum with n**2 before dividing by the regression denominator.
+        se = math.sqrt(_hac_var(score, horizon - 1)) * ok.sum() / np.sum(xc ** 2)
         slope, t = float(beta[1]), float(beta[1] / se) if se > 0 else float("nan")
     return KimchiPremium(dates=tuple(dates), premium_pct=prem, z_1y=z, btc_usd=us, last_pct=float(prem[-1]),
                          last_z=float(z[-1]) if np.isfinite(z[-1]) else 0.0, mean_pct=float(prem.mean()),
                          max_pct=float(prem.max()), adf_p=adf_pvalue(prem), half_life_days=half_life(prem),
-                         pred_slope=slope, pred_t=t, n=int(prem.size),
+                         decay=ar1_decay(prem), pred_slope=slope, pred_t=t, n=int(prem.size),
                          note=("USD/KRW forward-filled by date (FRED noon fixing vs UTC-midnight closes: a few hours "
                                "of FX drift); a positive premium means Korea pays more than the world price."))
 
 
 def _hac_var(u: np.ndarray, lag: int) -> float:
+    """Bartlett/Newey-West variance of the sample mean, not the long-run variance."""
     u = np.asarray(u, dtype=float)
     n = u.size
     s = float(u @ u) / n
@@ -123,25 +128,35 @@ def _hac_var(u: np.ndarray, lag: int) -> float:
 class FundingCarry:
     dates: tuple[str, ...]
     daily_rate: np.ndarray = field(repr=False)        # sum of the day's 8-hourly rates
-    carry_ann_pct: np.ndarray = field(repr=False)     # trailing-7-day mean × 1,095 × 100
+    carry_ann_pct: np.ndarray = field(repr=False)     # trailing mean of DAILY sums × 365 × 100
     last_ann_pct: float = 0.0
     percentile: float = 0.0                           # of the trailing-7d mean since the start
     flag: str = "normal"
     top_decile_fwd30: float = float("nan")            # mean forward 30-day BTC log return
     bottom_decile_fwd30: float = float("nan")
-    bootstrap_p: float = float("nan")                 # P(top ≥ bottom) under resampling
+    bootstrap_p: float = float("nan")                 # retired IID statistic; always unavailable
     n: int = 0
+    diagnostic: dict = field(default_factory=dict)
 
 
 def funding_carry(funding_daily: dict[str, float], btc_close: dict[str, float], *, window: int = 7,
                   fwd: int = 30, seed: int = 3) -> FundingCarry:
+    """Daily carry plus retrospective event means and a conditional phase diagnostic.
+
+    ``bootstrap_p`` is retired (NaN); it is not an alias for the new p_lower.
+    ``seed`` remains accepted for call compatibility; enumeration is deterministic.
+    Horizon units are aligned observations, which need not be calendar days.
+    """
+    if type(window) is not int or type(fwd) is not int or min(window, fwd) < 1:
+        raise ValueError("window and fwd must be positive integers")
     dates, (f, px) = _align(funding_daily, btc_close)
+    if not np.isfinite(f).all() or not np.isfinite(px).all() or np.any(px <= 0):
+        raise ValueError("Funding/prices must be finite, with positive prices")
     n = len(dates)
     if n < window + fwd + 30:
         raise ValueError(f"need more than {window + fwd + 30} days of aligned funding and prices, got {n}")
     trail = np.convolve(f, np.ones(window) / window, mode="full")[:n]
     trail[:window - 1] = np.nan
-    carry_ann = trail / 1.0 * 3 * CRYPTO_DAYS * 100.0 / 1.0   # per-day sum × 365 ≈ mean8h × 1,095
     carry_ann = trail * CRYPTO_DAYS * 100.0
     last = float(carry_ann[-1])
     hist = carry_ann[np.isfinite(carry_ann)]
@@ -153,15 +168,16 @@ def funding_carry(funding_daily: dict[str, float], btc_close: dict[str, float], 
     tr, fr = trail[ok], fwd_ret[ok]
     q_hi, q_lo = np.quantile(tr, [0.9, 0.1])
     top, bot = fr[tr >= q_hi], fr[tr <= q_lo]
-    rng = np.random.default_rng(seed)
-    if top.size > 10 and bot.size > 10:
-        diff = np.array([rng.choice(top, top.size).mean() - rng.choice(bot, bot.size).mean() for _ in range(2000)])
-        p = float(np.mean(diff >= 0))
-    else:
-        p = float("nan")
+    diagnostic = phase_diagnostic(tr, fr, fwd)
+    # Do not silently compress calendar gaps into daily circular shifts.
+    daily = all((date.fromisoformat(b[:10]) - date.fromisoformat(a[:10])).days == 1
+                for a, b in zip(dates, dates[1:]))
+    if not daily:
+        diagnostic.update(status="NOT_ESTIMATED", p_lower=None, cyclic_shifts=0,
+                          reason="Calendar gaps in aligned daily data")
     return FundingCarry(dates=tuple(dates), daily_rate=f, carry_ann_pct=carry_ann, last_ann_pct=last, percentile=pct,
                         flag=flag, top_decile_fwd30=float(top.mean()) if top.size else float("nan"),
-                        bottom_decile_fwd30=float(bot.mean()) if bot.size else float("nan"), bootstrap_p=p, n=n)
+                        bottom_decile_fwd30=float(bot.mean()) if bot.size else float("nan"), n=n, diagnostic=diagnostic)
 
 
 # --------------------------------------------------------------------------- #
@@ -171,7 +187,7 @@ def eth_btc_test(eth: dict[str, float], btc: dict[str, float]) -> dict:
     dates, (e, b) = _align(eth, btc)
     x = np.log(e / b)
     return {"n": len(dates), "last_ratio": float(e[-1] / b[-1]), "adf_p": adf_pvalue(x),
-            "half_life_days": half_life(x), "z_2y": float((x[-1] - x[-730:].mean()) / x[-730:].std(ddof=1)) if x.size > 100 else float("nan"),
+            "half_life_days": half_life(x), "decay": ar1_decay(x), "z_2y": float((x[-1] - x[-730:].mean()) / x[-730:].std(ddof=1)) if x.size > 100 else float("nan"),
             "verdict": ("mean-reverting at 5 %" if adf_pvalue(x) < 0.05 else "no rejection of a unit root (the expected null)")}
 
 

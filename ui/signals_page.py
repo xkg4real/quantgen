@@ -15,6 +15,7 @@ from typing import Callable, Optional
 import flet as ft
 
 from core.quant.backtest import STRATEGIES, run_backtest
+from core.research.signals_analysis import PENDING_LABELS, trade_statistics, trade_statistics_labels
 from core.quant.history import HistoryError, load_history
 from core.quant.signals import SignalReport, compute_signals
 from core.quant import insights
@@ -92,6 +93,19 @@ def _signal_block(report: SignalReport) -> ft.Control:
     return ft.Column(rows, spacing=6)
 
 
+def _trade_statistics_block(bt):
+    """Separate labels from values so locale switching preserves statistics."""
+    count_label, win_label, count_note = trade_statistics_labels(bt)
+    rows = [
+        (count_label, str(bt.n_trades)),
+        ('Completed round trips', str(bt.completed_round_trips) if bt.completed_round_trips is not None else '—'),
+        ('Final-close signal', PENDING_LABELS.get(bt.pending_last_signal, bt.pending_last_signal)),
+        (win_label, f'{bt.win_rate * 100:.0f}%' if bt.win_rate is not None else '—'),
+    ]
+    return card(ft.Column([ft.Row([ft.Text(label), ft.Text(value)], wrap=True)
+                           for label, value in rows] + [ft.Text(count_note)]))
+
+
 def build_signals_page(page: ft.Page,
                        on_open_settings: Optional[Callable] = None) -> ft.Control:
     pal = active()
@@ -155,8 +169,9 @@ def build_signals_page(page: ft.Page,
                 blocks.append(notice("Synthetic data: " + hist.note, "error",
                                      icon=ft.Icons.SCIENCE_OUTLINED))
             blocks.append(card(qcharts.price_chart(hist)))
+            from .indicator_guide import IndicatorGuide
+            blocks.append(card(IndicatorGuide(page,history=hist)))
             blocks.append(card(_signal_block(report)))
-            wr = (f"{bt.win_rate * 100:.0f}%" if bt.win_rate is not None else "—")
             blocks.append(ft.Row([
                 chip(f"{_STRAT_LABELS[bt.strategy]}", "accent"),
                 chip(f"strategy {bt.total_return * 100:+.1f}%",
@@ -165,9 +180,9 @@ def build_signals_page(page: ft.Page,
                 chip(f"Sharpe {bt.sharpe:.2f}"),
                 chip(f"max DD {bt.max_drawdown * 100:.1f}%"),
                 chip(f"exposure {bt.exposure * 100:.0f}%"),
-                chip(f"{bt.n_trades} trades · win {wr}"),
             ] + ([chip(f"{hist.source}: {hist.note}")]
                  if hist.note and hist.source != "SYNTHETIC" else []), spacing=6, wrap=True))
+            blocks.append(_trade_statistics_block(bt))
             blocks.append(card(qcharts.equity_chart(bt)))
 
             payload = {
@@ -184,8 +199,8 @@ def build_signals_page(page: ft.Page,
                     "ann_vol": bt.ann_vol, "sharpe": bt.sharpe,
                     "max_drawdown": bt.max_drawdown,
                     "benchmark_max_drawdown": bt.bench_max_drawdown,
-                    "exposure": bt.exposure, "n_trades": bt.n_trades,
-                    "win_rate": bt.win_rate, "cost_bps": bt.cost_bps,
+                    "exposure": bt.exposure, "cost_bps": bt.cost_bps,
+                    **trade_statistics(bt),
                 },
             }
             narrative = (insights.narrate_signals(report) + " " +

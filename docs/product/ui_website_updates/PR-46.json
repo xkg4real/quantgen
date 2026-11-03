@@ -1,0 +1,62 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-ui-pr-46",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "queued_at": "2026-10-31T16:49:10.852345+09:00",
+    "blocker": "No supported cross-chat messaging operation in this session.",
+    "sent_at": null,
+    "receipt": null
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/46",
+    "head_commit": "c47f6c0a116cad919b403568d377408452cdab69",
+    "merge_commit": "13d16ae551cea65b6ac20a02a04e812de7745838",
+    "changed_files": [
+      "core/research/ai_connection.py",
+      "core/quant/insights.py",
+      "quantgen_desktop/commentary.py",
+      "ui/ai_panel.py",
+      "tests/ai_connection_acceptance.py",
+      "tests/ai_payload_acceptance.py",
+      "tests/desktop_commentary_acceptance.py"
+    ]
+  },
+  "summary_ko": [
+    "Claude AI 해설의 인증·권한·모델·결제·사용량·통신 실패를 구분하고 원문 오류/예외를 노출하지 않습니다.",
+    "PyQt6와 Flet 오류 안내가 선택한 한영 언어를 따르며 전환만으로 재요청하지 않습니다. 키 검증/실제 연결 성공을 뜻하지 않습니다."
+  ],
+  "website_impact": {
+    "classification": "shared_browser_change",
+    "review_status": "required",
+    "browser_code_changed": true,
+    "browser_sources_to_check": [
+      "ui/ai_panel.py",
+      "core/research/ai_connection.py"
+    ],
+    "requested_actions_ko": [
+      "웹사이트가 같은 선택 AI 분석 패널을 제공하는 경우 오류/언어전환·원문비노출을 적용·검수합니다.",
+      "공개 소개 사이트만 있는 경우 실제 소스를 확인하고 해당 없음의 근거를 남깁니다.",
+      "사이트 배포와 사용자 키 교체는 이 기록으로 승인되거나 실행되지 않습니다."
+    ]
+  },
+  "website_application": {
+    "status": "not_reviewed",
+    "commit": null,
+    "checks": [],
+    "deployment_status": "not_verified",
+    "deployment_url": null
+  },
+  "verification": {
+    "ci_url": "https://github.com/xkg4real/quantgen/actions/runs/41181892399",
+    "ci_result": "success",
+    "ci_source_commit": "c47f6c0a116cad919b403568d377408452cdab69",
+    "local_tests_passed": 24,
+    "compliance_tests_passed": 47,
+    "manual_windows_display_acceptance": "NOT_RUN",
+    "live_api_acceptance": "NOT_RUN",
+    "live_website_acceptance": "NOT_RUN"
+  }
+}

@@ -108,6 +108,9 @@ def _run_curve(page, *, source: str, method: str, lookback: int) -> list[ft.Cont
     except FICCError:                                 # panel too short for PCA
         pca = None
     d, curve = report.descriptors, report.curve
+    from core.ficc.forward_conventions import (FIVE_YEAR_SIMPLE_LABEL, FIVE_YEAR_SIMPLE_LABEL_KO,
+        FIVE_YEAR_SIMPLE_NOTE, FIVE_YEAR_SIMPLE_NOTE_KO, curve_descriptor_conventions)
+    ko = getattr(getattr(page, "qg_locale", None), "language", None) == "ko"
     blocks = _synthetic_notice(panel.source, panel.note, "curve")
     blocks.append(ft.Row([
         stat("Shape", report.shape), stat("Regime", report.regime, token="accent"),
@@ -115,7 +118,7 @@ def _run_curve(page, *, source: str, method: str, lookback: int) -> list[ft.Cont
         stat("3m10y", _bp(d["3m10y"])), stat("2s5s10s fly", _bp(d["2s5s10s_fly"])),
         stat("Level (2/5/10y)", _pct(d["level"])),
         stat("1y1y", _pct(d["1y1y"])), stat("2y1y", _pct(d["2y1y"])),
-        stat("5y5y", _pct(d["5y5y"])),
+        stat(FIVE_YEAR_SIMPLE_LABEL_KO if ko else FIVE_YEAR_SIMPLE_LABEL, _pct(d["5y5y"])),
         stat("1y fwd vs 1y", _bp(d["1y_fwd_1y_ahead"])),
     ], spacing=10, wrap=True))
     blocks.append(ft.Row([
@@ -124,6 +127,7 @@ def _run_curve(page, *, source: str, method: str, lookback: int) -> list[ft.Cont
         chip(f"{report.ns.method} rmse {report.ns.rmse / BP:.1f}bp"),
         chip(f"changes over {report.lookback} sessions"),
     ], spacing=6, wrap=True))
+    blocks.append(notice(FIVE_YEAR_SIMPLE_NOTE_KO if ko else FIVE_YEAR_SIMPLE_NOTE))
     blocks.append(card(fcharts.curve_chart(report)))
     rows = []
     for r in curve.table():
@@ -139,6 +143,7 @@ def _run_curve(page, *, source: str, method: str, lookback: int) -> list[ft.Cont
         "as_of": report.snapshot.date, "source": panel.source, "method": curve.method,
         "shape": report.shape, "regime": report.regime, "lookback": report.lookback,
         "descriptors": {k: float(v) for k, v in d.items()},
+        "descriptor_conventions": curve_descriptor_conventions(),
         "changes": {k: float(v) for k, v in report.changes.items()},
         "ns": {"method": report.ns.method, "params": [float(x) for x in report.ns.params],
                "rmse": float(report.ns.rmse)},
@@ -244,6 +249,8 @@ def _run_option(page, *, source: str, kind: str, expiry_text: str, tenor_text: s
             "vega": rep.vega, "vega_unit": rep.vega_unit, "theta_1d": rep.theta_1d,
             "other_model_vol": (rep.other_model_vol if math.isfinite(rep.other_model_vol)
                                 else None),
+            "other_model_status": rep.other_model_status,
+            "other_model_reason": rep.other_model_reason,
             "curve_date": curve.date, "curve_source": panel.source, "note": rep.note,
         }
         blocks.append(analysis_panel(page, kind="rates_swaption",
@@ -300,11 +307,11 @@ def _run_sim(page, *, source: str, model: str, horizon: float, n_paths: int,
     hpv, what = None, "none"
     if instrument == "bond":
         bond = Bond(coupon=coupon_pct / 100.0, maturity=parse_tenor(instr_tenor_text))
-        hpv = horizon_pv_distribution(params, sim, kind="bond", bond=bond, curve=curve)
+        hpv = horizon_pv_distribution(sim.params, sim, kind="bond", bond=bond, curve=curve)
         what = f"{_pct(bond.coupon)} {tenor_label(bond.maturity)} bond"
     elif instrument == "swap":
         swap = Swap(tenor=parse_tenor(instr_tenor_text))
-        hpv = horizon_pv_distribution(params, sim, kind="swap", swap=swap, curve=curve)
+        hpv = horizon_pv_distribution(sim.params, sim, kind="swap", swap=swap, curve=curve)
         what = swap.label
     p = sim.params
     sigma = f"{p.sigma:.3f} (sqrt-r)" if model == "cir" else f"{p.sigma / BP:.0f}bp/yr"

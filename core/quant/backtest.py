@@ -12,7 +12,9 @@ Execution honesty, in order of how often naive backtests cheat on it:
 
   1. Signals computed on close *t* earn the return from *t+1* — the position
      array is shifted one bar before it meets the returns.
-  2. Every position change pays `cost_bps` of the traded notional.
+  2. Every position change with a subsequent return observation pays `cost_bps`
+     of the traded notional. The last close signal is pending, not executed.
+     Open positions are marked to the last close without forced liquidation.
   3. The benchmark is buy-and-hold of the same series over the same window,
      reported side by side. A strategy that loses to its own underlying has
      no business existing, and the report should make that impossible to miss.
@@ -35,7 +37,7 @@ class BacktestResult:
     strategy: str
     params: dict
     sessions: int
-    n_trades: int
+    n_trades: int                     # executed entry/exit sides, NOT round trips
     cost_bps: float
     # Curves (aligned to dates)
     dates: tuple[str, ...] = field(repr=False, default=())
@@ -51,7 +53,14 @@ class BacktestResult:
     max_drawdown: float = 0.0
     bench_max_drawdown: float = 0.0
     exposure: float = 0.0             # fraction of bars in the market
-    win_rate: float | None = None     # per-trade, None when no closed trades
+    win_rate: float | None = None     # gross-price wins / completed round trips, before costs
+    completed_round_trips: int | None = None
+    pending_last_signal: str = "NOT_RECORDED"  # entry | exit | none for new calculations
+    statistics_version: str = "legacy_unverified"
+
+    @property
+    def execution_statistics_verified(self) -> bool:
+        return self.statistics_version == "signals-executed-sides/1"
 
     @property
     def beat_benchmark(self) -> bool:
@@ -131,25 +140,31 @@ def run_backtest(history: History, *, strategy: str = "ma_cross",
     vol = float(np.std(strat_daily, ddof=1)) * np.sqrt(TRADING_DAYS)
     sharpe = (float(np.mean(strat_daily)) * TRADING_DAYS) / vol if vol > 0 else 0.0
 
-    # Per-trade wins: segment the position array into holding periods.
+    # Statistics use the SAME execution window as costs/held above. A final
+    # close signal has no subsequent observation and cannot complete a trade.
+    # Gross price wins deliberately exclude costs; equity remains costed.
     wins, closed = 0, 0
     entry = None
-    for i in range(1, pos.size):
-        if pos[i] == 1.0 and pos[i - 1] == 0.0:
+    previous = 0.0
+    for i, state in enumerate(held):
+        if state == 1.0 and previous == 0.0:
             entry = px[i]
-        elif pos[i] == 0.0 and pos[i - 1] == 1.0 and entry is not None:
+        elif state == 0.0 and previous == 1.0 and entry is not None:
             closed += 1
-            if px[i] > entry:
-                wins += 1
+            wins += int(px[i] > entry)
             entry = None
+        previous = state
     win_rate = wins / closed if closed else None
+    pending = ('entry' if pos[-1] > held[-1] else 'exit') if pos[-1] != held[-1] else 'none'
 
     return BacktestResult(
         symbol=history.symbol, strategy=strategy, params=params,
-        sessions=px.size, n_trades=int(trades.sum() // 1), cost_bps=cost_bps,
+        sessions=px.size, n_trades=int(trades[:-1].sum()), cost_bps=cost_bps,
         dates=history.dates, equity=equity, bench_equity=bench, position=pos,
         total_return=total, bench_return=float(bench[-1] - 1.0),
         ann_return=ann_ret, ann_vol=vol, sharpe=sharpe,
         max_drawdown=mdd(equity), bench_max_drawdown=mdd(bench),
         exposure=float(np.mean(held)), win_rate=win_rate,
+        completed_round_trips=closed, pending_last_signal=pending,
+        statistics_version="signals-executed-sides/1",
     )

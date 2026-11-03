@@ -27,6 +27,7 @@ except Exception:                                    # pragma: no cover
     _requests = None
 
 import config
+from core.research.ai_connection import error_message, response_error, transport_error
 from core.quant.backtest import BacktestResult
 from core.quant.garch import LR_5PCT, NU_NORMAL
 from core.quant.montecarlo import MCResult
@@ -43,9 +44,12 @@ class Analysis:
     text: str
     engine: str                       # "local" or the Claude model id
     error: str = ""                   # non-empty when the AI call failed
+    error_code: str = ""              # safe diagnostic category, never provider text
+    http_status: int | None = None
 
 
 def ai_ready() -> bool:
+    """Configuration presence only; does not verify API authentication."""
     return bool(config.anthropic_key()) and _requests is not None
 
 
@@ -67,8 +71,8 @@ def _narrate_garch(mc: MCResult) -> str:
             else "never decays (integrated variance)")
     out = [
         f"Calibration (GARCH(1,1)-{g.dist} on {g.n_obs} sessions): conditional "
-        f"vol today {v(g.cond_vol_last)} against {uncond} "
-        f"and a {mc.horizon_days}-session horizon vol of {v(mc.garch_horizon_vol)}.",
+        f"vol for the next session (annualized) {v(g.cond_vol_last)} against {uncond} "
+        f"and a {mc.horizon_days}-session average forecast vol (annualized) of {v(mc.garch_horizon_vol)}.",
         f"alpha {g.alpha:.3f}, beta {g.beta:.3f}, persistence {g.persistence:.3f} "
         f"— a variance shock {half}.",
     ]
@@ -149,12 +153,12 @@ def narrate_monte_carlo(mc: MCResult) -> str:
         f"{mc.cvar_pct * 100:.1f}%.",
     ]
     lines.append(_narrate_garch(mc) if mc.garch is not None else
-                 f"Calibration: annualized volatility {mc.sigma_annual * 100:.1f}%.")
+                 f"Calibration: historical sample log-return volatility (annualized, 252 sessions) {mc.sigma_annual * 100:.1f}%.")
     if getattr(mc, "bound_note", ""):
         lines.append(mc.bound_note)
     lines.append(_narrate_drift(mc))
     if mc.prob_target is not None and mc.target:
-        lines.append(f"Probability of reaching the {mc.target:,.2f} target: "
+        lines.append(f"Probability of finishing at or above {mc.target:,.2f} after {mc.horizon_days} sessions: "
                      f"{mc.prob_target * 100:.0f}%.")
     if mc.jump_note:
         lines.append(mc.jump_note)
@@ -211,18 +215,29 @@ def narrate_signals(s: SignalReport) -> str:
 
 
 def narrate_backtest(b: BacktestResult) -> str:
+    current = b.execution_statistics_verified
+    side_basis = "executed entry/exit sides" if current else "recorded trade-count units (basis unverified)"
     verdict = ("beat" if b.beat_benchmark else "lost to")
     lines = [
         f"The {b.strategy} strategy on {b.symbol} returned "
         f"{_pct(b.total_return)} over {b.sessions} sessions and {verdict} "
         f"buy-and-hold ({_pct(b.bench_return)}).",
-        f"It was in the market {b.exposure * 100:.0f}% of the time, traded "
-        f"{b.n_trades} times at {b.cost_bps:.0f} bps per side, with a maximum "
+        f"It was in the market {b.exposure * 100:.0f}% of the time, with "
+        f"{b.n_trades} {side_basis} at {b.cost_bps:.0f} bps per side, and a maximum "
         f"drawdown of {b.max_drawdown * 100:.1f}% against the benchmark's "
         f"{b.bench_max_drawdown * 100:.1f}%.",
     ]
+    if current and b.completed_round_trips is not None:
+        lines.append(f"Completed round trips: {b.completed_round_trips}.")
     if b.win_rate is not None:
-        lines.append(f"Closed-trade win rate: {b.win_rate * 100:.0f}%.")
+        basis = "Gross-price win rate on completed round trips, before costs" if current else "Recorded win rate (basis unverified)"
+        lines.append(f"{basis}: {b.win_rate * 100:.0f}%.")
+    if current and b.pending_last_signal in ('entry', 'exit'):
+        lines.append(f"The final-close {b.pending_last_signal} signal is pending and excluded from executed sides and completed round trips.")
+    if current:
+        lines.append("Open positions are not forcibly closed; the equity curve includes trading costs, while the win rate excludes them.")
+    else:
+        lines.append("Legacy execution scope is unverified; recalculate to obtain executed-side statistics. Stored results are unchanged.")
     if not b.beat_benchmark and b.max_drawdown > b.bench_max_drawdown:
         lines.append("It underperformed with *shallower* drawdowns — the "
                      "strategy is buying protection with return. Whether that "
@@ -293,18 +308,22 @@ def _payload_to_json(payload: dict) -> str:
         except Exception:
             pass
         return str(o)
-    return json.dumps(payload, default=default)
+    from core.research.ai_payload import filter_analysis_fields
+    return json.dumps(filter_analysis_fields(payload), default=default)
 
 
 def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
     """Send a structured result to Claude. Returns Analysis with error set (and
     empty text) when unconfigured or the call fails — the caller already has
     the local narrative, so failure here degrades, never blocks."""
+    def failure(code, engine="none", status=None):
+        return Analysis("", engine, error_message(code, http_status=status), code, status)
+
     key = config.anthropic_key()
     if not key:
-        return Analysis("", "none", error="ANTHROPIC_API_KEY is not configured.")
+        return failure("NOT_CONFIGURED")
     if _requests is None:
-        return Analysis("", "none", error="The requests package is not installed.")
+        return failure("DEPENDENCY")
     model = config.ai_model()
     user_msg = (f"Analysis type: {kind}\n\nComputed results:\n"
                 f"{_payload_to_json(payload)}")
@@ -320,22 +339,21 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
             timeout=60,
         )
     except Exception as exc:
-        return Analysis("", model, error=f"Claude API request failed: {exc}")
-    if resp.status_code == 401:
-        return Analysis("", model, error="Claude API rejected the key (HTTP 401).")
+        return failure(transport_error(exc), model)
     if resp.status_code != 200:
-        detail = ""
         try:
-            detail = resp.json().get("error", {}).get("message", "")[:200]
+            body = resp.json()
         except Exception:
-            pass
-        return Analysis("", model, error=f"Claude API answered HTTP {resp.status_code}. {detail}".strip())
+            body = None
+        return failure(response_error(resp.status_code, body), model, resp.status_code)
     try:
         blocks = resp.json().get("content", [])
+        if not isinstance(blocks, list):
+            return failure("INVALID_RESPONSE", model)
         text = "\n\n".join(b.get("text", "") for b in blocks
-                           if b.get("type") == "text").strip()
+                           if isinstance(b, dict) and b.get("type") == "text").strip()
     except Exception:
-        return Analysis("", model, error="Claude API returned an unreadable body.")
+        return failure("INVALID_RESPONSE", model)
     if not text:
-        return Analysis("", model, error="Claude API returned no text.")
+        return failure("INVALID_RESPONSE", model)
     return Analysis(text, model)

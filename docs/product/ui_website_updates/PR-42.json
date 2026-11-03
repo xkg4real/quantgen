@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "id": "PR-42",
+  "source_session": "QUANTGEN UI 개선",
+  "destination_session": "웹사이트 작업공간(AWS)",
+  "destination_thread_id": "01a18c19-eda9-7327-b6d9-c9ca24937093",
+  "website_url": "https://quantgeneration.com/",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/42",
+  "source_branch": "gpt/indicator-guide-20261031",
+  "source_commit": "resolve the current PR head; this record is versioned with the change",
+  "summary": "Home indicator guide with one historical sample for multi-select, shared chart grammar, six Home plus 73 registered data-rights entries, locale structure, and native rendering corrections. Desktop launch icons now explicitly use existing QUANTGEN branding.",
+  "files": [
+    "core/education",
+    "core/i18n.py",
+    "core/ui_messages.py",
+    "core/research/display_rights.json",
+    "quantgen_desktop/indicator_guide.py",
+    "ui/indicator_guide.py",
+    "docs/product/INDICATOR_GUIDE_DESIGN.md",
+    "docs/product/UI_LOCALIZATION.md",
+    "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md"
+  ],
+  "website_impact": "shared/browser application changes and introduction-site review required",
+  "actions_for_aws": [
+    "Continue quantgeneration.com source discovery, visual bug reproduction, fixes and deployment in the already authenticated AWS workspace. Do not request another login from the UI session.",
+    "Read handoff/WEBSITE_AWS_HANDOFF.md. Inspect the actual introduction-site implementation before applying app changes or claiming deployment.",
+    "Review selection colour/letter consistency, responsive legends and SVG/canvas backgrounds at narrow widths and 125%/150% scale. Keep native Qt fixes separate from site-specific implementation.",
+    "If introducing the guide on the site, retain one shared instrument/period, real provenance, missing OHLCV, warmup and counterexamples. Do not invent candles or advertise an unlicensed live feed.",
+    "Describe 714 regional formats accurately: only Korean/English interface catalogues ship. Other choices explicitly fall back to English; translation coverage is not 714 languages.",
+    "The desktop icon fix uses existing assets/icon.ico and icon.png. Inspect site favicon/PWA separately; no new logo or inferred website deployment.",
+    "Record site source commit, visual checks, application and actual deployment separately, then acknowledge the handoff."
+  ],
+  "verification": {
+    "native": "offline selection, locale persistence, original input/report preservation and vector painting tests; light/dark screenshots",
+    "flet_application": "offline callback tests; live Flutter browser visual acceptance pending",
+    "packaging": "allowlisted sample/provenance and rights resources included in wheel smoke",
+    "ci": "see PR head checks for the current result",
+    "physical_windows": "pending"
+  },
+  "delivery": {
+    "status": "queued",
+    "reason": "Available Codex chat tools can read threads but cannot send messages to another thread.",
+    "receipt": null,
+    "shared_handoff_url": "https://github.com/xkg4real/quantgen/blob/handoff/WEBSITE_AWS_HANDOFF.md"
+  },
+  "website_application": "unverified",
+  "website_deployment": "unverified"
+}

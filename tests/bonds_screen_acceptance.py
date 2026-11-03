@@ -108,7 +108,10 @@ def _walk(c, shown: bool = False):
         return
     yield c
     for attr in ("controls", "rows", "cells", "columns"):
-        for child in getattr(c, attr, None) or []:
+        kids = getattr(c, attr, None)
+        if not isinstance(kids, (list, tuple)):  # ft.ResponsiveRow.columns is a grid width (int)
+            continue
+        for child in kids:
             yield from _walk(child, shown)
     for attr in ("content", "label"):
         child = getattr(c, attr, None)
@@ -400,7 +403,7 @@ def test_carry_roll_for_a_bond_maturing_inside_the_horizon():
         px = bonds.price_from_yield(b, 0.045)
         cr = bonds.carry_roll(b, flat, px)
         cash = sum(cf for _, cf in _ind_flows(0.055, T, 2))
-        want = cash - px - 0.045 * px * T              # all cash in hand, funding to maturity
+        want = cash - px * math.exp(0.045 * T)         # all cash in hand; BS-21 repays px / DF(T) at maturity
         assert abs(cr.total - want) < 1e-9, (T, cr.total, want)
         assert cr.horizon == T and math.isnan(cr.breakeven_bp), (T, cr)
     totals = [bonds.carry_roll(b, flat, bonds.price_from_yield(b, 0.045)).total

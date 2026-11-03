@@ -252,15 +252,43 @@ def tsmom(prices: np.ndarray, *, lookback: int = 252, vol_target_ann: float = 0.
     return _hold(at, T, N)
 
 
-def half_life(x: np.ndarray) -> float:
-    """OU / AR(1) half-life −ln 2 / ln φ from x_t = c + φ x_{t−1} (Berkeley TS
-    lecture 6 §1.1; 계량2 §2.1.1). inf when φ ≥ 1."""
+def ar1_decay(x: np.ndarray) -> dict:
+    """OLS AR(1) impulse-amplitude decay, not a stationarity test.
+
+    A shock has magnitude |phi|**k: half-life is -ln(2)/ln(|phi|).
+    Negative stable phi alternates sign; it is not monotone OU decay.
+    phi=0 is the zero-persistence limit (no memory after one observation).
+    Missing/unidentified and non-decaying fits carry no numeric half-life.
+    """
     x = np.asarray(x, dtype=float)
-    if x.size < 10:
-        return math.inf
+    result = {"phi": None, "half_life": None, "status": "NOT_ESTIMATED",
+              "definition": "AR1_impulse_amplitude", "unit": "observations"}
+    if x.ndim != 1 or x.size < 10 or not np.all(np.isfinite(x)) or np.ptp(x[:-1]) == 0:
+        return result
     X = np.column_stack([np.ones(x.size - 1), x[:-1]])
-    phi = float(np.linalg.lstsq(X, x[1:], rcond=None)[0][1])
-    return math.inf if phi >= 1.0 or phi <= 0.0 else -math.log(2) / math.log(phi)
+    fit, _, rank, _ = np.linalg.lstsq(X, x[1:], rcond=None)
+    if rank < 2 or not np.all(np.isfinite(fit)):
+        return result
+    phi = float(fit[1])
+    result["phi"] = phi
+    if abs(phi) >= 1:
+        result["status"] = "NON_DECAYING"
+    elif phi == 0:
+        result.update(status="NO_MEMORY", half_life=0.0)
+    else:
+        result.update(status="OSCILLATING" if phi < 0 else "MONOTONE",
+                      half_life=-math.log(2) / math.log(abs(phi)))
+    return result
+
+
+def half_life(x: np.ndarray) -> float:
+    """AR(1) impulse-amplitude half-life in observations; see ar1_decay().
+
+    inf is retained for missing or non-decaying fits for numeric callers;
+    it must not be interpreted as slow mean reversion. Use the status too.
+    """
+    value = ar1_decay(x)["half_life"]
+    return math.inf if value is None else value
 
 
 def adf_pvalue(x: np.ndarray) -> float:

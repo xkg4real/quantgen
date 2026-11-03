@@ -86,8 +86,10 @@ def narrate_curve(report: CurveReport, pca: PCAResult | None = None) -> str:
         f"{_pct(d['level'])}.",
         f"Over the last {report.lookback} sessions the move reads as a {report.regime}: "
         f"2y {_bp(c.get('2y'))}, 10y {_bp(c.get('10y'))}, 2s10s {_bp(c.get('2s10s'))}.",
-        f"Forwards price 1y1y at {_pct(d['1y1y'])}, 2y1y at {_pct(d['2y1y'])} and 5y5y at "
-        f"{_pct(d['5y5y'])}; the 1y rate is priced to move {_bp(d['1y_fwd_1y_ahead'])} over "
+        f"Simple-compounded forwards price 1y1y at {_pct(d['1y1y'])}, 2y1y at {_pct(d['2y1y'])} "
+        f"and the five-year simple-compounded 5y5y at {_pct(d['5y5y'])}; "
+        f"the latter is not a forward par swap rate or a semiannually compounded rate. "
+        f"The 1y rate is priced to move {_bp(d['1y_fwd_1y_ahead'])} over "
         f"the next year.",
         f"The {report.ns.method.replace('_', '-')} fit misses the par points by "
         f"{report.ns.rmse / BP:.1f}bp rms ({report.curve.method} zeros used for pricing).",
@@ -132,6 +134,8 @@ def narrate_bond(a: BondAnalytics, scenarios: list[ScenarioRow] | None = None) -
     lines.append(f"Over a {tenor_label(cr.horizon)} horizon carry is {cr.carry:+.3f} and "
                  f"roll-down {cr.rolldown:+.3f} per {b.face:g}, {cr.total:+.3f} in total, so "
                  f"{be}.")
+    lines.append("Funding uses price * (1 / DF(h) - 1), with h capped at maturity: "
+                 "a curve-based funding proxy, not an executable repo quote.")
     if scenarios:
         worst = min(scenarios, key=lambda r: r.pnl)
         best = max(scenarios, key=lambda r: r.pnl)
@@ -211,6 +215,17 @@ def narrate_cap_floor(r: CapFloorReport) -> str:
 # --------------------------------------------------------------------------- #
 # FX
 # --------------------------------------------------------------------------- #
+def fx_basis_note(basis: float | None) -> str | None:
+    """Explain the existing input-rate discrepancy without an economic verdict."""
+    if basis is None:
+        return None
+    return (f"The supplied market forward has a signed annualized CIP discrepancy of {_bp(basis)} p.a. "
+            "under the input rates. Positive values place the market forward above the CIP forward; "
+            "negative values place it below. Quote timestamps, maturities and rate/quote conventions "
+            "have not been verified as aligned. This discrepancy alone does not establish a funding "
+            "premium or statistical significance.")
+
+
 def narrate_fx_forward(pair: str, spot: float, fwd: float, points: float, carry: float,
                        basis: float | None = None) -> str:
     p = _pair(pair)
@@ -223,15 +238,12 @@ def narrate_fx_forward(pair: str, spot: float, fwd: float, points: float, carry:
         f"one-for-one: the forward is a rate differential, not a forecast.",
     ]
     if basis is not None:
-        lines.append(f"The market forward implies a cross-currency basis of {_bp(basis)} p.a. "
-                     f"versus covered interest parity"
-                     + (", within noise." if abs(basis) < 5 * BP else
-                        f", a real funding premium on {base if basis < 0 else p[4:]}."))
+        lines.append(fx_basis_note(basis))
     return " ".join(lines)
 
 
 def narrate_fx_option(gk: GKReport, smile_points: tuple[SmilePoint, ...] | None = None,
-                      sabr: SABRFit | None = None) -> str:
+                      sabr: SABRFit | None = None, *, diagnostics=None) -> str:
     kind = "call" if gk.call else "put"
     lines = [
         f"A {tenor_label(gk.expiry)} {kind} struck at {_px(gk.strike)} on spot {_px(gk.spot)} "
@@ -253,9 +265,11 @@ def narrate_fx_option(gk: GKReport, smile_points: tuple[SmilePoint, ...] | None 
                          + f"; the 25d risk reversal is {skew:+.2f} vol points, so the market "
                            f"pays up for {lean}.")
     if sabr is not None:
-        lines.append(f"SABR (beta {sabr.beta:g}) fits with alpha {sabr.alpha:.4f}, rho "
-                     f"{sabr.rho:+.2f}, nu {sabr.nu:.2f}, rmse {sabr.rmse * 100:.3f} vol points"
-                     + ("." if sabr.converged else "; the solver did not converge."))
+        from .sabr_diagnostics import fit_diagnostics, diagnostic_text
+        if diagnostics is None:
+            diagnostics = fit_diagnostics(sabr, gk.forward, gk.expiry, smile_points,
+                                          pricing_strike=gk.strike)
+        lines.append(diagnostic_text(diagnostics))
     return " ".join(lines)
 
 
@@ -460,7 +474,8 @@ def narrate_weekly_strategy(sheet: MacroSheet, curve_report: CurveReport | None 
             f"{_bp(curve_report.changes.get('2s10s'))}, which the 2s10s regime classifies as "
             f"{_curve_move(curve_report.regime, curve_report.lookback)} (bull or bear as "
             f"yields fell or rose, steepening or flattening as 2s10s widened or narrowed, "
-            f"each beyond 5bp). The 5y5y forward rate is {_pct(d['5y5y'])}, a measured spread "
+            f"each beyond 5bp). The five-year simple-compounded 5y5y forward rate is {_pct(d['5y5y'])} "
+            f"(not a forward par swap rate or a semiannually compounded rate), a measured spread "
             f"of {_bp(d['5y5y'] - d['level'])} to the 2y/5y/10y level.")
     elif slope is not None:
         lines.append(
@@ -531,7 +546,11 @@ def narrate_structured(p) -> str:
         lines.append(f"Coupon leverage is {p.participation:g}x the 10y-2y spread." if cms else
                      f"Participation is {p.participation * 100:.0f}% of the upside.")
     if getattr(p, "coupon", None) is not None:
-        lines.append(f"The coupon is {_pct(p.coupon)} a year.")
+        lines.append(
+            f"The first-period expected coupon is {_pct(p.coupon)} annualized. "
+            "Later coupons follow the period-by-period forward-curve schedule in the CMS coupon leg; "
+            "the first-period figure alone does not establish a fixed coupon for all periods or guarantee payment."
+            if cms else f"The coupon is {_pct(p.coupon)} a year.")
     g = dict(getattr(p, "greeks", {}) or {})
     if g:
         lines.append("Whole-note risk: " + ", ".join(
@@ -569,7 +588,8 @@ REPORT_PROMPTS: dict[str, str] = {
         "'FX' paragraphs, each anchored to a number in the payload and stating the measure's "
         "definition and window (the 10y level and its z-score against the trailing "
         "252-session mean, the 1-week change in bp, the level, slope and curvature of the "
-        "curve in the sense of Litterman & Scheinkman (1991), the 5y5y forward as a measured "
+        "curve in the sense of Litterman & Scheinkman (1991), the five-year simple-compounded "
+        "5y5y forward (not a forward par swap rate or a semiannually compounded rate) as a measured "
         "spread to the 2y/5y/10y level, the dollar's 1-month change, the carry-to-volatility "
         "cross-section with carry as defined by Koijen, Moskowitz, Pedersen & Vrugt (2018)); "
         "an 'Interpretation' paragraph on where the measures agree or disagree and which "
@@ -657,7 +677,7 @@ if __name__ == "__main__":
 
     prm = ratesim.calibrate(data.synthetic_series("SOFR", days=300, kind="rate"))
     sim = ratesim.simulate(prm, n_paths=500, threshold=0.05)
-    hp = ratesim.horizon_pv_distribution(prm, sim, kind="bond", bond=bond, curve=rep.curve)
+    hp = ratesim.horizon_pv_distribution(sim.params, sim, kind="bond", bond=bond, curve=rep.curve)
     t = clean(narrate_ratesim(sim, hp))
     assert pct_text(sim.mean_terminal) in t and "Vasicek" in t and f"{hp.var95:,.0f}" in t
 

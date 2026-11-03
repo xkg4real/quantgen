@@ -13,6 +13,10 @@ and is assumed 3% otherwise; either way the chip row says which.
 """
 from __future__ import annotations
 
+from core.research.runs import session_for, new_run, completed, failed, utc_now
+from core.research.provenance import code_evidence, runtime_evidence
+from core.research.mc_disclosure import volatility_disclosure
+
 import json
 import re
 from pathlib import Path
@@ -126,11 +130,12 @@ def _garch_blocks(fit, horizon_vol: float) -> list[ft.Control]:
                        "(the boundary null of the LR tile); 'normal' means the interval includes eta = 0"
                        + ("; greyed: alpha at its bound, the reference distribution is indicative only"
                           if "alpha" in ab else ""))),
-        _stat("Cond vol (ann.)", _fmt_pct(fit.cond_vol_last)),
+        _stat("Next-session vol (ann.)", _fmt_pct(fit.cond_vol_last)),
         _stat("Uncond vol (ann.)", _fmt_pct(fit.uncond_vol),
               token="error" if "omega" in ab else "text",
               tooltip="no interval: the delta method covers 42% to 100% depending on persistence (B2)"),
-        _stat("Horizon vol (ann.)", _fmt_pct(horizon_vol)),
+        _stat("Horizon-average vol (ann.)", _fmt_pct(horizon_vol),
+              tooltip="Annualized forecast RMS across the simulated horizon; 252 sessions/year, using the engine innovation convention."),
         _stat("LR t vs normal", f"{fit.lr_t_vs_normal:.1f}",
               token="success" if (fit.lr_t_vs_normal > LR_5PCT and "alpha" not in ab) else "muted",
               tooltip=(f"5% point of the boundary null (half delta-0, half chi-square(1)): {LR_5PCT}"
@@ -266,41 +271,54 @@ def build_quant_lab_page(page: ft.Page,
     result_host = ft.Column(spacing=14)
 
     def run(e=None) -> None:
+        # Capture UI inputs before starting a background task.
+        inputs = dict(symbol=symbol.value, source_requested=source.value or "auto", model=model.value or "garch_t",
+                      horizon_days=horizon.value or "126", n_paths=paths.value or "5000", target=target.value,
+                      drift=drift.value or "premium", erp=erp.value or "0", seed=7)
+        research = session_for(page)
+        run_record = new_run(inputs, code=code_evidence(), environment=runtime_evidence())
+        research.put(run_record)
         busy.visible = True
         result_host.controls = []
         page.update()
 
         def worker():
             try:
-                hz = int(float(horizon.value or "126"))
-                np_ = int(float(paths.value or "5000"))
-                tgt = float(target.value) if (target.value or "").strip() else None
-                mode = drift.value or "premium"
+                hz = int(float(inputs["horizon_days"]))
+                np_ = int(float(inputs["n_paths"]))
+                tgt = float(inputs["target"]) if (inputs["target"] or "").strip() else None
+                mode = inputs["drift"]
                 erp_dec = 0.0
                 if mode == "premium":
                     try:
-                        erp_dec = float(erp.value or "0") / 100.0
+                        erp_dec = float(inputs["erp"]) / 100.0
                     except ValueError:
                         raise ValueError(f"ERP % is not a number: {erp.value!r}")
-                rf, rf_chip = (_risk_free(symbol.value or "") if mode in ("premium", "rf")
+                rf, rf_chip = (_risk_free(inputs["symbol"] or "") if mode in ("premium", "rf")
                                else (0.0, None))
-                hist = load_history(symbol.value, source=source.value or "auto")
-                mc = run_monte_carlo(hist, model=model.value or "garch_t",
+                hist = load_history(inputs["symbol"], source=inputs["source_requested"])
+                loaded_at = utc_now()
+                mc = run_monte_carlo(hist, model=inputs["model"],
                                      n_paths=np_, horizon_days=hz, target=tgt,
-                                     drift=mode, rf_rate=rf, erp=erp_dec)
+                                     drift=mode, rf_rate=rf, erp=erp_dec, seed=inputs["seed"])
+                run_record["parameters"]["target"] = tgt
+                research.put(completed(run_record, hist, mc, loaded_at=loaded_at))
             except (HistoryError, ValueError) as exc:
+                research.put(failed(run_record, type(exc).__name__))
                 result_host.controls = [notice(str(exc), "error",
                                                icon=ft.Icons.ERROR_OUTLINE)]
                 busy.visible = False
                 page.update()
                 return
             except Exception as exc:
+                research.put(failed(run_record, type(exc).__name__))
                 result_host.controls = [notice(f"{type(exc).__name__}: {exc}",
                                                "error", icon=ft.Icons.ERROR_OUTLINE)]
                 busy.visible = False
                 page.update()
                 return
 
+            vol_info = volatility_disclosure(mc)
             blocks: list[ft.Control] = []
             if hist.source == "SYNTHETIC":
                 blocks.append(notice("Synthetic data: " + hist.note, "error",
@@ -314,8 +332,9 @@ def build_quant_lab_page(page: ft.Page,
                 _stat(f"VaR {mc.var_level * 100:.0f}", f"{mc.var_pct * 100:.1f}%"),
                 _stat("CVaR", f"{mc.cvar_pct * 100:.1f}%"),
                 _stat("Drift (ann.)", f"{mc.mu_annual * 100:+.1f}%"),
-                _stat("Vol (ann.)", f"{mc.sigma_annual * 100:.1f}%"),
-            ] + ([_stat("P(target)", f"{mc.prob_target * 100:.0f}%",
+                _stat(vol_info["label"], f"{mc.sigma_annual * 100:.1f}%",
+                      tooltip=vol_info["description"]),
+            ] + ([_stat("P(terminal ≥ target)", f"{mc.prob_target * 100:.0f}%",
                         token="success")] if mc.prob_target is not None else []),
                 spacing=10, wrap=True))
             blocks.append(ft.Text(mc.drift_note, size=11, color=pal.muted))
@@ -342,10 +361,12 @@ def build_quant_lab_page(page: ft.Page,
                 "model": mc.model, "n_paths": mc.n_paths,
                 "horizon_days": mc.horizon_days, "spot": mc.spot,
                 "drift_annual": mc.mu_annual, "vol_annual": mc.sigma_annual,
+                "volatility_definition": vol_info,
                 "median_terminal": mc.median_terminal,
                 "mean_terminal": mc.mean_terminal,
                 "p05": mc.p05, "p95": mc.p95, "prob_loss": mc.prob_loss,
                 "prob_target": mc.prob_target, "target": mc.target,
+                "prob_target_basis": "terminal_price >= target at horizon_days; not first-touch probability" if mc.prob_target is not None else None,
                 "var_level": mc.var_level, "var_pct": mc.var_pct,
                 "cvar_pct": mc.cvar_pct, "jump_note": mc.jump_note,
                 "drift_mode": mc.drift_mode, "drift_note": mc.drift_note,

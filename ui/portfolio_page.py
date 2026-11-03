@@ -20,6 +20,7 @@ from core.quant.history import HistoryError, convention_warning, load_history
 from core.quant.optimize import OBJECTIVES, efficient_frontier, optimize_portfolio
 from core.quant.risk import align_histories
 from core.quant import insights
+from core.research.portfolio_disclosure import cap_label, portfolio_disclosure
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section
@@ -115,6 +116,7 @@ def build_portfolio_page(page: ft.Page,
                          for o in OBJECTIVES}
                 chosen = ports[objective.value or "max_sharpe"]
                 frontier = efficient_frontier(stats, rf_rate=rf_rate)
+                disclosure = portfolio_disclosure(ports, chosen.objective)
             except (HistoryError, ValueError) as exc:
                 result_host.controls = [notice(str(exc), "error",
                                                icon=ft.Icons.ERROR_OUTLINE)]
@@ -154,6 +156,10 @@ def build_portfolio_page(page: ft.Page,
                  if not chosen.converged else []), spacing=6, wrap=True))
             blocks.append(card(_weight_rows(chosen.symbols, chosen.weights,
                                             chosen.risk_contrib)))
+            blocks.append(notice(disclosure["summary"]))
+            for o, p in ports.items():
+                if p.note:
+                    blocks.append(notice(f"{_OBJ_LABELS[o]}: {p.note}"))
 
             # All four objectives, side by side.
             comparison = [ft.Row([
@@ -161,6 +167,7 @@ def build_portfolio_page(page: ft.Page,
                 ft.Text("Return", size=10, color=pal.muted, width=70),
                 ft.Text("Vol", size=10, color=pal.muted, width=70),
                 ft.Text("Sharpe", size=10, color=pal.muted, width=70),
+                ft.Text("Per-asset cap / scope", size=10, color=pal.muted, expand=True),
             ], spacing=8)]
             for o in OBJECTIVES:
                 p = ports[o]
@@ -170,10 +177,16 @@ def build_portfolio_page(page: ft.Page,
                     ft.Text(f"{p.ann_return * 100:+.1f}%", size=12, color=pal.text, width=70, weight=em),
                     ft.Text(f"{p.ann_vol * 100:.1f}%", size=12, color=pal.text, width=70, weight=em),
                     ft.Text(f"{p.sharpe:.2f}", size=12, color=pal.text, width=70, weight=em),
+                    ft.Text(cap_label(p) + (" · selected" if o == chosen.objective else " · comparison"),
+                            size=12, color=pal.text, expand=True, weight=em),
                 ], spacing=8))
             blocks.append(card(ft.Column(comparison, spacing=6)))
 
-            blocks.append(card(qcharts.frontier_chart(frontier, list(ports.values()))))
+            blocks.append(card(ft.Column([
+                ft.Text("Frontier / random cloud: 100% per-asset bound; markers use each row's cap.",
+                        size=12, color=pal.muted),
+                qcharts.frontier_chart(frontier, list(ports.values())),
+            ])))
             blocks.append(card(qcharts.corr_heatmap(stats.corr, stats.symbols)))
 
             payload = {
@@ -184,6 +197,8 @@ def build_portfolio_page(page: ft.Page,
                 "ann_return": chosen.ann_return, "ann_vol": chosen.ann_vol,
                 "sharpe": chosen.sharpe, "converged": chosen.converged,
                 "rf_rate": rf_rate, "shared_sessions": stats.sessions,
+                "constraint_scope": disclosure,
+                "note": chosen.note,
                 "correlation": [[round(float(c), 3) for c in row] for row in stats.corr],
                 "alternatives": {o: {"return": ports[o].ann_return,
                                      "vol": ports[o].ann_vol,
@@ -191,7 +206,7 @@ def build_portfolio_page(page: ft.Page,
                 "synthetic_symbols": synth,
             }
             blocks.append(analysis_panel(page, kind="portfolio_optimization",
-                                         narrative=insights.narrate_portfolio(chosen),
+                                         narrative=insights.narrate_portfolio(chosen) + " " + disclosure["summary"],
                                          payload_fn=lambda p=payload: p))
             result_host.controls = blocks
             busy.visible = False

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "PR-53",
+  "source_session": "QUANTGEN UI 개선",
+  "destination_session": "웹사이트 작업공간(AWS)",
+  "destination_thread_id": "01a18c19-eda9-7327-b6d9-c9ca24937093",
+  "website_url": "https://quantgeneration.com/",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/53",
+  "source_branch": "gpt/flet-python-compat-20261101",
+  "source_commit": "2d9a4c67ac46a4a94effa804e38fdbc23807a1e6 (syntax fix and regression checks); resolve PR head for this record and source-review baseline",
+  "summary": "Fix the existing Flet main.py startup on Python 3.10/3.11 by changing nested f-string quote delimiters. Calculations and displayed narrative remain unchanged.",
+  "files": [
+    "core/research/crypto_workflow.py",
+    "tests/runtime_syntax_acceptance.py",
+    ".github/workflows/runtime-smoke.yml"
+  ],
+  "website_impact": "shared/browser startup compatibility; introduction-site applicability requires source review",
+  "actions_for_aws": [
+    "If the website runs QUANTGEN Flet/Python, apply the source fix using its existing runtime and verify startup. Do not replace the Flet entry point with the optional PyQt6 preview.",
+    "If the introduction site does not import this Python module, record not_applicable with that source evidence. No CSS or chart design change is introduced by this fix.",
+    "Preserve the existing AWS authentication and deployment ownership. This queue is not a new deployment instruction or a receipt of application."
+  ],
+  "verification": {
+    "reproduction": "Actual Python 3.10.22 and 3.11.17 fail at crypto_workflow.py:87 before the fix; all 212 allowlisted runtime sources compile afterward.",
+    "semantic_equivalence": "Python 3.12 AST before/after is identical.",
+    "runtime": "18 Python 3.11 tests passed: syntax, AR1/Flet diagnostics, indicator guide, C-layout/theme, packaging boundaries.",
+    "startup_import": "Python 3.11 imports main.py with dotenv, network and protected file access blocked.",
+    "ci": "Consult current PR head checks; adds Windows Python 3.10/3.11 syntax and Windows Python 3.11 installed runtime coverage.",
+    "user_windows_restart": "pending"
+  },
+  "delivery": {
+    "status": "queued",
+    "reason": "No supported tool can send to the existing Codex destination chat.",
+    "receipt": null
+  },
+  "website_application": "unverified",
+  "website_deployment": "unverified"
+}

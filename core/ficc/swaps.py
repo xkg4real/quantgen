@@ -335,6 +335,8 @@ class SwaptionReport:
     theta_1d: float                   # currency per calendar day
     other_model_vol: float            # implied vol in the other model (nan if undefined)
     note: str = ""
+    other_model_status: str = "COMPUTED"
+    other_model_reason: str = ""
 
 
 def price_swaption(swaption: Swaption, curve: YieldCurve, *, vol: float,
@@ -350,19 +352,28 @@ def price_swaption(swaption: Swaption, curve: YieldCurve, *, vol: float,
     note = f"{'payer' if swaption.payer else 'receiver'} {model}"
     if model == "bachelier":
         vega, unit = opt.vega * scale * BP, "per 1bp normal vol"
-        if F > 0 and K > 0:
-            other = black_from_normal(F, K, T, vol)
-        else:
-            other, note = math.nan, note + "; Black vol undefined (non-positive forward)"
     else:
         vega, unit = opt.vega * scale * 0.01, "per 1 vol-pt Black vol"
-        other = normal_from_black(F, K, T, vol)
+    # This optional comparison must not discard a valid primary-model price.
+    # Keep the public inversion routines and their bounds/refusals unchanged.
+    other, reason = math.nan, ""
+    if model == "bachelier" and (F <= 0 or K <= 0):
+        reason = "Black conversion requires a positive forward and strike"
+    else:
+        try:
+            other = (black_from_normal if model == "bachelier" else normal_from_black)(F, K, T, vol)
+        except (ValueError, RuntimeError):
+            reason = "comparison inversion could not resolve a volatility within its supported domain"
+    if reason:
+        note += "; Other-model vol unavailable: " + reason + "; primary-model price and Greeks retained"
     return SwaptionReport(swaption=swaption, forward=F, strike=K, annuity=A, model=model,
                           vol=vol, premium=opt.price * scale,
                           premium_bp=opt.price * A / BP, delta=opt.delta * scale * BP,
                           gamma=opt.gamma * scale * BP * BP, vega=vega, vega_unit=unit,
                           theta_1d=opt.theta * scale / 365.0, other_model_vol=other,
-                          note=note + "; single-curve, annuity discounted to today.")
+                          note=note + "; single-curve, annuity discounted to today.",
+                          other_model_status="UNAVAILABLE" if reason else "COMPUTED",
+                          other_model_reason=reason)
 
 
 @dataclass(frozen=True)
@@ -386,13 +397,15 @@ def price_cap_floor(curve: YieldCurve, tenor: float, strike: float | None, *, vo
     option expiring at the period start, paid at the period end:
     N·τ·DF(t_end)·option(fwd, K, t_start). strike=None → ATM = par swap rate
     over [start, start + tenor]. Caplets whose rate is already fixed
-    (t_start = 0) are dropped."""
+    (t_start = 0) are dropped. Refuses a schedule with no unfixed caplets."""
     if tenor <= 0 or start < 0 or notional <= 0 or freq < 1:
         raise ValueError("Need tenor > 0, start >= 0, notional > 0, freq >= 1.")
-    atm = par_swap_rate(curve, tenor, freq=freq, start=start)
-    K = atm if strike is None else float(strike)
     ends = coupon_times(start + tenor, freq, start)
     starts = [start] + [float(t) for t in ends[:-1]]
+    if not any(t0 > 1e-12 for t0, _ in zip(starts, ends)):
+        raise FICCError("Cap/floor has no unfixed caplets; extend the tenor or use a forward start.")
+    atm = par_swap_rate(curve, tenor, freq=freq, start=start)
+    K = atm if strike is None else float(strike)
     rows = []
     for t0, t1 in zip(starts, ends):
         if t0 <= 1e-12:

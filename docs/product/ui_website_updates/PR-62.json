@@ -1,0 +1,113 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-live-chart-pr-62",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "No supported cross-chat send tool; shared records do not establish receipt.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/UI_SESSION_CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/chart-live-ux-20261102",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/62",
+    "implementation_commit": "398ebe39281693237f50892c88e016c6c7a58ca4",
+    "source_tree": "65954ab6f4ff929ca61b36695a5454c6c34d53c5",
+    "remote_status": "MERGED",
+    "merge_commit": "30a2a81c05cc825fe4a551d6c9700795d265fa26"
+  },
+  "summary_ko": [
+    "조회 한 번으로 지원 체결 스트림을 연결하고 활성 조건 변경을 자동 처리합니다. 중지·이탈은 갱신을 멈춥니다.",
+    "이동평균·EMA·볼린저·RSI·MACD 버튼을 조회 전·조회 중·체결 수신 중 선택할 수 있고 선택을 유지합니다.",
+    "실제 수신한1/10/100틱·1/5/10/30초 봉을 추가하고 기존 지원 분·일·주·월봉을 유지합니다. 과거 틱·빈 구간은 만들지 않습니다.",
+    "가격 중심 화면, 한영 초보 설명과 선택 봉 읽기를 제공하고 복수 지표 높이 증가로 하단 설명이 겹치는 오류를 수정했습니다."
+  ],
+  "website_impact": {
+    "classification": "native_ui_plus_shared_svg_locale",
+    "browser_code_changed": true,
+    "shared_sources": [
+      "core/market/models.py",
+      "core/market/live.py",
+      "core/market/presentation.py",
+      "data/kis_workspace.py",
+      "ui/market_chart_page.py"
+    ],
+    "requested_actions_ko": [
+      "대응 웹 차트의 지표 선택·의미 설명·가격 중심 배치를 검토하세요. 네이티브 자동 연결과 새 봉 선택 UI가 Flet/소개사이트에 구현됐다고 주장하지 마세요.",
+      "Flet 변경은 공통 SVG와 한영 OHLCV 읽기입니다. 웹 HTML/소스는 GitHub에 올리지 않습니다.",
+      "정책01/06/07/09/12/13/14/15/19/20·FACTS 최신 변경을 웹 Docs 번역과 버전에 반영하세요.",
+      "기존 정책 요금 Research29k/Pro59k/TeamPilot290k와 사용자가 승인한 웹 초안 Free/Pro59k/Ultra129k 불일치를 명시하고 공개본/프리뷰를 구분하세요."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "native chart, Home and full-window layout",
+        "passed": 33
+      },
+      {
+        "suite": "shared market/stream/presentation",
+        "passed": 66
+      },
+      {
+        "suite": "Flet lifecycle and KO/EN readout",
+        "passed": 17
+      },
+      {
+        "suite": "policy",
+        "passed": 47
+      }
+    ],
+    "counts_note": "Suites can overlap; do not sum.",
+    "source_review": "20 documents / 529 sources PASS; publication BLOCKED",
+    "local_remote_tree": "identical",
+    "ci": "SUCCESS",
+    "ci_runs": [
+      41398755386,
+      41398755349
+    ],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "User previously confirmed native launch and KIS_SETTINGS_FOUND=True; new live reception not verified."
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "틱·초봉은 연결 후 수신 기록이며 장 운영·실제 체결·이용 권한에 따라 기다릴 수 있습니다. 지원 자산만 표시합니다.",
+    "재연결 복귀 후 자동 동기화는 명시적 조회당1회입니다. 다시 끊기면 수동 새 조회가 필요합니다.",
+    "현재 환경 교체로 이전 단일 웹 HTML/ZIP은 로컬에 없습니다. 이전 전달 파일이나 AWS 보존 소스를 사용해야 합니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "core/market/live.py",
+    "core/market/models.py",
+    "core/market/presentation.py",
+    "data/kis_workspace.py",
+    "docs/compliance/01-privacy-policy.md",
+    "docs/compliance/06-form-consent.md",
+    "docs/compliance/07-data-minimization.md",
+    "docs/compliance/09-dark-patterns.md",
+    "docs/compliance/12-claims.md",
+    "docs/compliance/13-alternative-text.md",
+    "docs/compliance/14-contrast.md",
+    "docs/compliance/15-keyboard.md",
+    "docs/compliance/19-licenses.md",
+    "docs/compliance/20-deletion.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md",
+    "docs/product/KIS_MARKET_CHARTS_2026-11-02.md",
+    "quantgen_desktop/market_chart.py",
+    "tests/desktop_home_live_acceptance.py",
+    "tests/desktop_market_chart_acceptance.py",
+    "tests/desktop_market_layout_acceptance.py",
+    "tests/kis_workspace_acceptance.py",
+    "tests/market_chart_presentation_acceptance.py",
+    "tests/market_received_bars_acceptance.py",
+    "tests/web_market_chart_acceptance.py",
+    "ui/market_chart_page.py"
+  ]
+}

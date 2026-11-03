@@ -1,0 +1,65 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "queued_at": "2026-10-31T15:38:00+09:00",
+    "blocker": "No supported cross-chat send/handoff operation is available in the current tool set.",
+    "sent_at": null,
+    "receipt": null
+  },
+  "website_application": {
+    "status": "not_reviewed",
+    "commit": null,
+    "checks": [],
+    "deployment_status": "not_verified",
+    "deployment_url": null
+  },
+  "id": "quantgen-ui-pr-39",
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/39",
+    "head_commit": "6a82337de447279372a351185bda855b581c3c51",
+    "merge_commit": "f24463f4bf9fa637318dd1f1683c375d5387eef4",
+    "changed_files": [
+      ".github/workflows/runtime-smoke.yml",
+      "docs/product/NATIVE_LANGUAGE_2026-10-31.md",
+      "quantgen_desktop/app.py",
+      "quantgen_desktop/bonds.py",
+      "quantgen_desktop/charts.py",
+      "quantgen_desktop/localization.py",
+      "quantgen_desktop/paper.py",
+      "quantgen_desktop/portfolio.py",
+      "quantgen_desktop/report_actions.py",
+      "quantgen_desktop/tools.py",
+      "quantgen_desktop/translations.py",
+      "tests/desktop_acceptance.py",
+      "tests/desktop_language_acceptance.py"
+    ]
+  },
+  "summary_ko": [
+    "Windows PyQt6 사이드바에 English/한국어 선택과 재시작 시 설정 복원을 추가합니다.",
+    "메뉴·입력 용어·표 제목/측정 항목·지원 상태 문구·차트에 표시 언어를 연결합니다.",
+    "원문 해설·공급자 문구와 실제 Windows 수동 검증은 미완료입니다."
+  ],
+  "website_impact": {
+    "classification": "native_only_source_change",
+    "review_status": "required",
+    "browser_code_changed": false,
+    "browser_sources_to_check": [
+      "main.py",
+      "ui/"
+    ],
+    "requested_actions_ko": [
+      "실제 웹사이트 구현에 해당 화면이 있는지 확인하고 필요 범위만 별도 적용/검사한다.",
+      "네이티브 언어 선택 코드를 Flet에 그대로 복사하거나 공개 배포를 완료로 가정하지 않는다."
+    ]
+  },
+  "verification": {
+    "ci_url": "https://github.com/xkg4real/quantgen/actions/runs/41177249869",
+    "ci_result": "success",
+    "local_tests_passed": 33,
+    "manual_windows_display_acceptance": "NOT_RUN",
+    "live_website_acceptance": "NOT_RUN"
+  }
+}

@@ -1,0 +1,128 @@
+# KIS 시세·차트 — 앱 / 웹 공통 구현
+
+2026-11-02 사용자 요청의 첨부 XLSX 22개를 API 참고자료로 분석했다.
+앱은 PyQt6, 브라우저는 기존 Flet이며 두 화면이 동일한 시세 계약,
+지표 계산, SVG 차트와 실시간 캔들 집계를 사용한다.
+
+## 사용
+
+1. 기존 KIS 설정 `KIS_APP_KEY`, `KIS_APP_SECRET`을 앱 실행 환경 또는 웹 서버에 설정한다.
+   브라우저로 키·토큰·WebSocket 승인키를 전달하지 않는다.
+2. 데스크톱 `python -m quantgen_desktop` → Markets → **KIS chart**.
+   Flet `flet run --web main.py` → Markets → **실시간 시세 · 차트**.
+3. 자산, 거래소 또는 시장 구분, 현재 거래 중인 종목코드와 주기를 선택하고 조회한다.
+   파생상품은 만기별 종목코드가 필요하다. 국내 시장 구분은 F/O/JF/JO/CF/CM/EU다.
+4. 네이티브 **조회 / 새로고침** 또는 종목 입력 Enter는 조회 뒤 지원되는 WebSocket 체결 연결도 시작한다.
+   구독 미지원 자산은 지원 이력을 **5초 REST 조회**로 갱신하며 체결 스트림으로 표시하지 않는다.
+   Flet은 기존의 별도 조회/폴링/실시간 연결 제어를 유지한다.
+5. 네이티브 갱신 중 종목·시장·주기 등을 바꾸면450ms 뒤 새 조건으로 조회/구독한다.
+   중지·화면 이탈은 예약도 해제하고 복귀만으로 자동 재개하지 않는다.
+   구독 복구 후 명시적 조회당 한 번 새 기준을 자동 조회하며 반복 공백에는 수동 조회가 필요하다.
+   이력 주기는 REST 이력을, 틱·초봉은 빈 수신봉 기준과 선택적 현재가를 먼저 조회한다.
+
+캔들 OHLC, 거래량, SMA20, 네이티브 EMA12/26, 볼린저밴드20/2σ, Wilder RSI14,
+MACD12/26/Signal9와 히스토그램을 표시한다. 지표는 전체 조회 이력으로 계산한 뒤
+보이는 범위만 확대한다. 커서·슬라이더로 봉별 OHLCV를 확인한다.
+형성 중인 봉의 값은 바뀔 수 있으며 워밍업 부족·확인 불가 값은 `—`다.
+네이티브에서는 기본 SMA만 선택하고 다섯 지표를 전체 버튼 클릭·키보드로 켜고 끈다.
+조회 전·조회 중·실시간 수신 중 선택할 수 있고 새로고침 뒤 선택을 유지한다.
+지표 값도 OHLCV와 같은 커서 봉을 읽는다. 한영 읽기 안내와 지표별 해석/한계를 제공한다.
+Flet의 기존 지표 제어/주기는 별도로 유지하며 공통 SVG·읽기 문자열만 현재 언어를 전달한다.
+
+## 구현 범위
+
+| 자산 | 차트 | WebSocket | 제한 |
+|---|---|---|---|
+| 국내주식 / ETF | 일·주·월, 1/3/5/15/30/60분, 수신 틱/초 | KRX 체결 H0STCNT0 | 과거 분봉 API는 실전 환경 전용 |
+| 해외주식 | 일·주·월, 1/3/5/15/30/60분, 수신 틱/초 | HDFSCNT0 | 미국 무료 Nasdaq 피드 0분 지연, 아시아 무료 피드 15분 지연; 분봉은 정규장 |
+| 국내 선물·옵션 | 일·주·월, 1/3/5/15/30/60분; 검증된 주간 구독만 수신 틱/초 | F/CF/JF/O/JO 체결 | 야간 CM/EU REST 지원, 야간 WebSocket 미지원; 가격 단위는 계약별 시세 단위 |
+| 장내채권 | 최근 최대 100 일봉, 수신 틱/초 | H0BJCNT0 | 첨부 사양에 과거 분봉 API 없음; 가격은 액면 1만원 기준 |
+| 해외선물 | 일·주·월 | 미지원 | 공식 ffcode master의 계산 배율 필수; 분봉·실시간 시각의 시간대 미검증, CME/SGX 시세 이용권 필요 |
+
+네이티브 수신 주기는1/10/100틱과1/5/10/30초다. 모의 WebSocket은 국내주식만 지원한다.
+주간 국내 파생 F/CF/JF/O/JO는 기존 검증 채널을 사용하고 야간CM/EU·해외선물에는
+틱/초 선택을 제공하지 않는다. 채권 틱 가격은 기존 액면10,000원 기준이며 체결량은
+기존 파서의 검증된 단위를 유지한다. 새 과거 틱/초 조회 endpoint는 추가하지 않았다.
+
+해외옵션·해외주식옵션의 가격/실시간 경로는 이번 화면에 구현하지 않았다.
+전체 주문·계좌·순위/분석 API를 구현한 작업이 아니다. API별 허용 시장/권한은
+공급사 응답에 따르며 실패를 다른 자산이나 합성 시세로 대체하지 않는다.
+
+## 데이터 처리
+
+- 틱·초봉은 연결 이후 실제 받은 유효 체결만 사용한다. 처음에는 빈 봉 목록이며 현재가
+  snapshot을 과거 체결로 바꾸지 않는다. 틱 수는 수용한 레코드 수이지 전체 거래소 체결 수가 아니다.
+  같은 초의 체결은 실제 시각과 `sequence`/`trade_count`로 구별하며 가짜 미세시각을 만들지 않는다.
+- 누적량이 받은 체결량보다 더 증가하면 누락을 표시한다. 부분 틱 묶음은 해당 개수로 남기고
+  새 묶음을 시작하며 영향 거래량은 미확정이다. 초봉의 빈 구간·누락 가격/거래량을 채우지 않는다.
+  첫 봉·현재 봉은 부분 구간일 수 있다. 요청 봉 수 이내 최대500봉을 실행 메모리에 유지한다.
+
+- 모든 분봉은 1분 OHLC 원자료에서 거래소 현지 달력 시각 기준으로 재집계한다.
+  예: 미국 09:30 체결은 현지 09:00~09:59의 60분 구간에 속한다.
+  공급사의 시간봉 시작 기준을 추정해 다른 구간에 섞지 않는다.
+- 분봉 조회는 최대 20페이지이며 부족한 이력은 실제/요청 봉 수와 부분 이력 안내를 표시한다.
+  일별 조회도 페이지 수·커서 진행 여부를 제한한다. 중복·미래·잘못된 OHLC를 제외하고
+  무거래 시각의 봉을 임의로 채우지 않는다.
+- REST·WebSocket 모두 현지 시각과 UTC offset을 유지한다. 일봉은 현지 거래일,
+  주·월봉은 각각 월요일·월초 날짜로 정규화한다. 국내 야간 24시 초과 시각은 익일로 변환한다.
+- 실시간 체결의 누적 거래량으로 중복·역순 재전송을 걸러낸다. 날짜 변경은 별도 세션으로
+  처리한다. 조회 수신 시각으로 시장 거래일을 추정해 전일 거래량을 당일 기준으로 삼지 않는다.
+- 최초 기준량이 불명확하거나 수신 공백이 있으면 분봉 거래량을 미확정으로 남긴다.
+  네이티브는 구독 복구 후 조회당 한 번 차트를 자동 재조회하며 반복 공백은 수동 조회한다. Flet은 기존 수동 재조회 경로다. 누락된 고가·저가는 다음 체결 하나로 복원되지 않는다.
+  국내 형성 중 분봉의 이전 거래량 복제 가능성도 미확정으로 처리한다.
+- 차트는 원주가를 사용한다. 수정주가 이력에는 원주가 체결을 혼합하지 않는다.
+  해외선물 master의 표시 소수점과 계산 배율을 구분하고, 배율 확인 실패 시 조회를 거부한다.
+- 앱과 웹 모두 공급원·마지막 봉·체결/수신 시각·연결/대기/오래된 값 상태를 표시한다.
+  소켓 연결과 heartbeat만으로 새 체결 수신을 표시하지 않는다.
+
+## 첨부 근거와 주요 경로
+
+| 첨부 / 시트 | TR ID / 경로 끝부분 |
+|---|---|
+| [국내주식] 기본시세 / 주식현재가 시세 | FHKST01010100 · inquire-price |
+| 같은 파일 / 국내주식기간별시세(일/주/월/년) | FHKST03010100 · inquire-daily-itemchartprice |
+| 같은 파일 / 주식일별분봉조회 | FHKST03010230 · inquire-time-dailychartprice |
+| [해외주식] 기본시세 / 해외주식 현재체결가 | HHDFS00000300 · price |
+| 같은 파일 / 해외주식 기간별시세 | HHDFS76240000 · dailyprice |
+| 같은 파일 / 해외주식분봉조회 | HHDFS76950200 · inquire-time-itemchartprice |
+| [국내선물옵션] 기본시세 / 현재가·기간별·분봉 | FHMIF10000000 / FHKIF03020100 / FHKIF03020200 |
+| [장내채권] 기본시세 / 장내채권현재가(일별) | FHKBJ773404C0 · inquire-daily-price (100개 OHLC) |
+| [해외선물옵션] 기본시세 / 선물 현재가·일주월 | HHDFC55010000 / HHDFC55020100 / HHDFC55020000 / HHDFC55020300 |
+| 자산별 실시간시세 / 체결가 | H0STCNT0 / HDFSCNT0 / H0IFCNT0 / H0CFCNT0 / H0ZFCNT0 / H0IOCNT0 / H0ZOCNT0 / H0BJCNT0 |
+| OAuth인증 / WebSocket 접속키 발급 | POST /oauth2/Approval · appkey + secretkey |
+
+공식 해외선물 가격 배율 근거:
+[해외선물정보.h](https://github.com/koreainvestment/open-trading-api/blob/main/stocks_info/해외선물정보.h).
+CP949 바이트 160~164의 `sCalcDesz`를 적용한다. H0STCNT0의 신·구 47/46필드
+배치를 모두 지원하며 해외주식 체결은 26필드다. 암호화 계좌통보는 구독/파싱하지 않는다.
+
+## 검증과 전달
+
+`tests.market_core_acceptance`, `tests.market_received_bars_acceptance`,
+`tests.market_chart_presentation_acceptance`, `tests.kis_workspace_acceptance`,
+`tests.kis_stream_acceptance`, `tests.desktop_market_chart_acceptance`,
+`tests.web_market_chart_acceptance`는 오프라인 입력/가짜 공급사·소켓으로
+계산, 페이지 조회, 가격 배율, 시간대, 재연결, 화면 이탈, 늦은 응답 방어를 확인한다.
+PyQt6 Linux offscreen 화면도 확인했다. 실제 KIS 계정·시세 이용권 연결과
+Windows 수동 검수, AWS 웹사이트 배포는 수행하지 않았다.
+
+웹 구현은 이 저장소의 Flet 소스다. 별도 AWS 웹사이트 반영은
+`ui_website_updates/PR-56.json`의 전달 대기 기록으로 남겼다.
+현재 제공 도구에 채팅 발송 기능이 없어 메시지 전달·사이트 반영·배포 완료로 간주하지 않는다.
+다른 세션이 보유한 `handoff/CURRENT.md` 및 기존 연구 작업/원장은 변경하지 않는다.
+
+
+이번 네이티브 후속의20종 정책 영향과 복구본 검증 상태는
+[수신 체결봉·선택 지표 검토](CHART_RECEIVED_BARS_REVIEW_20261102.md)에서 확인한다.
+기존 환경의 테스트·프리뷰를 복구본의 통과 근거로 전용하지 않는다.
+
+## 2026-11-03 follow-up (owner UI-8 and UI-16)
+
+The separate “KIS chart” tab became the chart inside the Markets asset-class tabs.
+The provider is chosen automatically (KIS first, Yahoo Finance for stocks when KIS
+cannot answer; `core/market/routing.py`). Overseas instruments are found by name in a
+bundled 126-entry list (`core/market/symbols.py`); the exchange, history-bar and
+visible-bar inputs are gone (240 bars are loaded, 120 shown, and the mouse wheel or
+`+`/`-` zooms between 20 bars and all loaded bars). Source and times are two short
+lines; the longer provider notes moved to the “데이터 설명” panel.
+
