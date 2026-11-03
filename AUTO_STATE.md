@@ -1,11 +1,11 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-11-04T01:00:22+09:00
+created_at: 2026-11-04T01:31:16+09:00
 source_branch: claude/ui-markets-a4-20261103
-source_head: dbeb4b6
+source_head: e967fec
 upstream: origin/claude/ui-markets-a4-20261103
-patch_base: dbeb4b6
+patch_base: e967fec
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
@@ -13,7 +13,7 @@ usage_pct: unknown
 usage_resets_at: unknown
 session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
 snapshot_key: none
-current_md_updated_at: 2026-11-04T00:47:00+09:00
+current_md_updated_at: 2026-11-04T01:35:00+09:00
 current_md_status: checkpoint
 ---
 
@@ -26,6 +26,7 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
+e967fec Wait for nested layouts before checking form clipping (A2 CI fix)
 dbeb4b6 Queue the PR-67 operation fixes for the website workspace
 4ece546 Fix desktop operation bugs: wheel, bond digits, form clipping, icon, AI button (A2)
 c1a4e97 Merge pull request #66 from xkg4real/claude/ui-markets-a4-20261103
@@ -40,7 +41,6 @@ ba3b6b2 Merge pull request #64 from xkg4real/claude/ui-markets-a4-20261103
 7de46d4 Make the native indicator guide search-first with a bilingual market glossary (UI-13)
 140f101 Owner rulings 2026-11-03 (cont.): amend the no-order-path principle to a confined order module; GPT private WIP retrieval
 db07005 Merge pull request #63 from xkg4real/claude/ui-markets-a4-20261103
-c81e8df Owner rulings 2026-11-03: Claude resumes, UI order A4>A2>A3>A1, R3/cost-class/status/translation approved, direct orders chosen, website left to its own session
 ```
 
 ## 푸시되지 않은 커밋
