@@ -1,5 +1,5 @@
 """Derivatives — KOSPI200 futures basis, the option board, the volatility
-surface, the risk-neutral density, the box-spread funding rate, and the
+surface, the risk-neutral density, the adjacent-strike box as a quote check, and the
 hedger's P&L simulation for the structuring pages.
 
 Live data comes from the KIS asset domains (`data.kis_markets`): the whole
@@ -126,8 +126,9 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
                 stat("Identity slope / R²", f"{sim.identity_slope:.2f} / {sim.identity_r2:.2f}"),
                 stat("Engine", sim.engine),
             ], spacing=10, wrap=True))
-            if hedge_text(s):
-                blocks.append(notice(hedge_text(s), "accent"))
+            hedge_note = hedge_text(s)
+            if hedge_note:
+                blocks.append(notice(hedge_note, "accent"))
             blocks.append(analysis_panel(page, kind="kospi200_derivatives", narrative=narrative(s),
                                          payload_fn=lambda p=payload(s): p, deep_fn=insights.deep_analysis))
             host.controls = blocks
@@ -139,7 +140,7 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
     host.controls = [empty_state("Load the board",
                                  "The nearest KOSPI200 expiry from KIS (or a synthetic demo): futures basis and fair value, "
                                  "the Black-76 smile against the exchange's IV, an SVI fit with the butterfly check, the "
-                                 "model-free variance, the risk-neutral density, the box-spread funding rate, and a hedge "
+                                 "model-free variance, the risk-neutral density, the box-spread quote check, and a hedge "
                                  "P&L simulation in bp of notional.", icon=ft.Icons.STACKED_LINE_CHART_OUTLINED,
                                  action=ft.Button("Open Settings", on_click=lambda e: on_open_settings())
                                  if on_open_settings else None)]

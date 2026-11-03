@@ -136,8 +136,9 @@ def derivatives_korean(s):
         f"항등식 ½Σe^{{r(T−t)}}ΓS²(σ_h² − r²/Δ)Δ는 기울기 {sim.identity_slope:.2f}, "
         f"R² {sim.identity_r2:.2f}로 손익을 설명합니다.",
     ]
-    if hedge_korean(s):
-        txt.append(hedge_korean(s))
+    hedge_note = hedge_korean(s)
+    if hedge_note:
+        txt.append(hedge_note)
     if s.get('garch') is not None:
         g = s['garch']
         txt.append(f"지수 GARCH-t: ν {g.nu:.1f}, 지속성 {g.persistence:.3f}, 조건부 변동성 "

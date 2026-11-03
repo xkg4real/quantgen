@@ -100,11 +100,13 @@ def snapshot(*, source: str = "kis", expiry: str = "", rate_pct: Optional[float]
         from core.quant.garch import fit_garch
         r = np.diff(np.log(out["index_close"]))
         garch_fit = fit_garch(r, dist="t", profile=False)
-    sim = ED.hedge_pnl_simulation(spot=spot, strike=round(F / 2.5) * 2.5, horizon_days=hz, sigma_hedge=sigma_h,
-                                  rate=rate, engine=engine, garch_fit=garch_fit, n_paths=n_paths, seed=7)
+    # One set of arguments feeds the simulation and its disclosure, so the label cannot drift from the run.
+    sim_args = dict(sigma_hedge=sigma_h, engine=engine, sigma_true=None, drift_daily=None, cost_bps=0.0)
+    sim = ED.hedge_pnl_simulation(spot=spot, strike=round(F / 2.5) * 2.5, horizon_days=hz, rate=rate,
+                                  garch_fit=garch_fit, n_paths=n_paths, seed=7, **sim_args)
     out.update(F=F, k0=k0, points=pts, reconcile=rec, parity=par, arbitrage=arb, svi=fit, atm=atm, mfiv=mv, rnd=rnd,
                box=box, basis=basis, sigma_h=sigma_h, hedge=sim, garch=garch_fit, n_quotes=len(quotes),
-               box_check=box_chk, hedge_scope=hedge_scope(engine, sigma_h))  # simulation run at its defaults
+               box_check=box_chk, hedge_scope=hedge_scope(**sim_args))
     out['quote_coverage'] = quote_coverage(arb, par)
     return out
 
@@ -135,8 +137,9 @@ def narrative(s: dict) -> str:
         f"{sim.breakeven_vol:.1%}. The identity ½Σe^{{r(T−t)}}ΓS²(σ_h² − r²/Δ)Δ explains the P&L with slope "
         f"{sim.identity_slope:.2f} and R² {sim.identity_r2:.2f}.",
     ]
-    if hedge_text(s):
-        txt.append(hedge_text(s))
+    hedge_note = hedge_text(s)
+    if hedge_note:
+        txt.append(hedge_note)
     if s.get("garch") is not None:
         g = s["garch"]
         txt.append(f"GARCH-t on the index: ν {g.nu:.1f}, persistence {g.persistence:.3f}, conditional vol "
@@ -159,6 +162,5 @@ def payload(s: dict) -> dict:
             "rnd": {"integral": s["rnd"]["integral"], "mean": s["rnd"]["mean"]},
             "hedge": {"engine": sim.engine, "sigma_hedge": sim.sigma_hedge, "mean_pnl_bp": sim.mean_pnl_bp, "se_bp": sim.se_bp,
                       "cvar95_bp": sim.cvar95_bp, "breakeven_vol": sim.breakeven_vol, "identity_slope": sim.identity_slope,
-                      "identity_r2": sim.identity_r2, **{key: value for key, value in (s.get("hedge_scope") or {}).items()
-                                                         if key != "sigma_true"}},
+                      "identity_r2": sim.identity_r2, **(s.get("hedge_scope") or {})},
             "smile": [{"strike": p.strike, "iv": p.iv, "iv_exchange": p.iv_exchange, "kind": p.kind} for p in s["points"]]}

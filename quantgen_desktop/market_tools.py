@@ -7,7 +7,7 @@ from core.research.funding_disclosure import funding_text
 from core.research.letf_disclosure import letf_text, letf_unavailable_text
 from core.research.decay_disclosure import decay_value, decay_text
 from core.research.quote_coverage import quote_coverage_text
-from core.research.option_disclosure import hedge_korean, hedge_text, mfiv_strip
+from core.research.option_disclosure import box_computed, hedge_korean, hedge_text, mfiv_strip
 from .tools import ToolPane, number, fmt
 from .market_diagnostics_language import decay_korean, funding_korean, coverage_korean
 from .market_narrative_language import market_variants, letf_korean, letf_unavailable_korean
@@ -52,9 +52,8 @@ class DerivativesPane(ToolPane):
             ('Box rate · adjacent strikes, mid quotes', fmt(s['box']['rate'], 'pct') if s['box'] else 'UNAVAILABLE'),
             ('Box rate at quotes · bought / sold',
              f"{fmt(chk.get('rate_bought_at_quotes'), 'pct')} / {fmt(chk.get('rate_sold_at_quotes'), 'pct')}"
-             if s['box'] and chk.get('status') == 'COMPUTED' else 'UNAVAILABLE'),
-            ('Box sensitivity · bp per 0.01 point',
-             fmt(chk['bp_per_0_01pt']) if s['box'] and chk.get('status') == 'COMPUTED' else 'UNAVAILABLE'),
+             if box_computed(s) else 'UNAVAILABLE'),
+            ('Box sensitivity · bp per 0.01 point', fmt(chk['bp_per_0_01pt']) if box_computed(s) else 'UNAVAILABLE'),
             ('RND integral', fmt(s['rnd']['integral']))])
         from core.ficc.equity_deriv import svi_vol
         points = sorted(s['points'], key=lambda p:p.strike)
@@ -75,8 +74,9 @@ class DerivativesPane(ToolPane):
         coverage_source = quote_coverage_text(coverage)
         self.text(coverage_source, localized={'en': coverage_source, 'ko': coverage_korean(coverage)})
         self.sections.append({'type': 'quote_coverage', **coverage})
-        if hedge_text(s):  # §10 M4-N7
-            self.text(hedge_text(s), localized={'en': hedge_text(s), 'ko': hedge_korean(s)})
+        hedge_note = hedge_text(s)
+        if hedge_note:  # §10 M4-N7
+            self.text(hedge_note, localized={'en': hedge_note, 'ko': hedge_korean(s)})
         for kind, value in (('hedge_scope', s.get('hedge_scope')), ('box_check', s.get('box_check')),
                             ('mfiv_strip', strip)):
             if value is not None:

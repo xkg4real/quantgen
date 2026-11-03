@@ -157,7 +157,7 @@
     "core/research/connections.py": "f634fe608bcfca39c3841ee7e4bf25524ba4cba8e28658d957d56725c2c56a04",
     "core/research/crypto_workflow.py": "c84aeb06fff2e5e552ed208d134f86ebc6a0fa626949830fdfd407413b2c8e85",
     "core/research/decay_disclosure.py": "98f68bb2b8f8a0ac051865a76313855a323890a4adacd9abe9d0c025c0a934ce",
-    "core/research/derivatives_workflow.py": "e1f6b619d82d35d7e742f08326b5fe909e9c991a35896b4b554fef351c37c429",
+    "core/research/derivatives_workflow.py": "54f3d62a7cbc00b34228f247af7882057097c15f88d2fc59e8e203d9c80d8320",
     "core/research/display_rights.py": "e59554e140ee5ea994812bcaca083c622d94bac1513411bdca58824b6f20e6fb",
     "core/research/etf_workflow.py": "c85aedeea6dcb4c691174fc658350a2f2f52e9b713b46f9c56f4c193fc5dc9ba",
     "core/research/export.py": "16cbc78bbcf4f72d656f28f9b66823090fc21e5e92c0aa9ff56a07de2dc9b402",
@@ -171,7 +171,7 @@
     "core/research/market_board.py": "93e0b043671855e7bbd1418c476b2856e89f708cd786f542afd84377a1a8ae9d",
     "core/research/markets.py": "69236b90c444495868cb4d363a86ced1ce049592e4a7fa986b73f148f9b4e9d5",
     "core/research/mc_disclosure.py": "52e784e1a98693e7e8b8ed77d54366ba3fdb1eaf784a53271a0590ead80547ee",
-    "core/research/option_disclosure.py": "6c52cd55de539af9f4f1cb789fe5d3c8a788c9de0f6c4895964a97df37db0885",
+    "core/research/option_disclosure.py": "aafbf64c7660d31b300a4b87f40a4ee36df330a4bdd3d9892de5d74042774879",
     "core/research/portfolio_analysis.py": "58fc8d6a1c27d73afea6761a125f52135639070d4b0ffe6cdc2f70911b1c0ede",
     "core/research/portfolio_disclosure.py": "2e93f4c753c3bfa73bc11f468ac1eac3fb7d0c5be18191590e41efcf1a79e24c",
     "core/research/presentation.py": "3eccfd7e49ace9b1a39b3a8f89538c528439ad90125119c7ac262b35ca135e37",
@@ -324,8 +324,8 @@
     "quantgen_desktop/market_board.py": "64a19ff906f9d194135f988d73908fdb063ff9945b8e9da1c69a48b2e38dba5b",
     "quantgen_desktop/market_chart.py": "28d4f14d92ad276ccf1bb5bba241ee108ab63c5340103d38f270fdaeaee3d645",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
-    "quantgen_desktop/market_narrative_language.py": "9707ac8424475049897e255560285a695097ea590e18c69b063964e28bf6782d",
-    "quantgen_desktop/market_tools.py": "6687df84a4d87ff33b6d72844ccf9384e7d7e102f016da0d35b98f95f7168ee5",
+    "quantgen_desktop/market_narrative_language.py": "edf055daee380f95d3f62f73be0c365eb515b216c0b077f4c319b318e25cf516",
+    "quantgen_desktop/market_tools.py": "06c3ec559303894e69e7e4084e811256ccace1e5d2a277777c95a4bc996521a4",
     "quantgen_desktop/model_narrative_language.py": "c4d4c826e3416a202cc4167c19a2ccbc233fcbc80239e62a81808092274c0981",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
@@ -458,7 +458,7 @@
     "tests/market_symbols_acceptance.py": "dac7d8af68db34e0ecf7ce451fddc288618eae24988c080d8784b5e480526d78",
     "tests/mc_volatility_acceptance.py": "5715fb07e257e88f6a38ace19863c83e926c01bbc5c22573174e4ea1072c2a89",
     "tests/notrun.py": "8da97cac3ebd6d0f22ee476b0869e33cb363688317a38befa541ffc2b79f7b20",
-    "tests/option_disclosure_acceptance.py": "ab5d37b31775b5f12907c7bca934945b8a26ce19b8f853d34a08a04754c639f3",
+    "tests/option_disclosure_acceptance.py": "9cf0384cc930e27853c26f6c8b554e184dba6a1fe208fb3e90998d91e5951c8f",
     "tests/packaging_policy_acceptance.py": "936034aeaab8d118f83fce8728897650acc2f306cb5405172fef4893fef0b04f",
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
@@ -525,7 +525,7 @@
     "ui/components.py": "41be9f3117f80c1677308355702758897f6d9d30654eb5a4d229d0bf7702a4fd",
     "ui/crypto_page.py": "6829f7aedd678196a1bb1853044789d7bca0ac40b724006d35ead19942c65101",
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
-    "ui/derivatives_page.py": "3aecea9399047798c65788ef2a1642d5c80d62530ac52c5000e9b23093ef0fc5",
+    "ui/derivatives_page.py": "d2556fc98cc5c936f0e87dade57a39aa01a84e21878bf1708a93c521e31b213a",
     "ui/etf_page.py": "910b2a27d4ee5264cc79286e8fc48bc985a251d6a0f1727ec6f29daa633c660f",
     "ui/fcharts.py": "fc7fafba72863691b8013fbba55c3299eac46440f7a5285ffd7e4ba61b0bf78d",
     "ui/fx_page.py": "42a0304e93d0d9159d3941ee7c6883c980e9e595b9825cccc10c2eccdc99f48d",
@@ -554,163 +554,163 @@
   "reviews": {
     "1": {
       "document_sha256": "e917090c1153867f2f06a3529253445d505584ee0a970e9dc39d347715d12696",
-      "source_digest": "160b904e4a411e65e40f7bc1ccc2228eb59956dbac98794d35359effcad4e2ce",
+      "source_digest": "1cf23440514f166834710946885a6d60a1feabd6622e815b033d74c9880ca4c5",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.720343+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.277352+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "160b904e4a411e65e40f7bc1ccc2228eb59956dbac98794d35359effcad4e2ce",
+      "source_digest": "1cf23440514f166834710946885a6d60a1feabd6622e815b033d74c9880ca4c5",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.723817+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.281868+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "e4366487ae7539ac47756f422b2977ffa38965b78cce60f2dab97618a0b99b8f",
+      "source_digest": "9459e37d10273f54f7968a7ef8e4bb22fbbcfd5c92fa128d19b7db57ebc30fcb",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.726357+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.283893+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "ba172b503eef7101caf24b638eddd98b6e42cfa878a21a1a82085cbefa3b7ecb",
+      "source_digest": "d800437e21c9cde7d667275d513ef12e3c4ba1db08a8d093c245841e3ee0dedf",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.728362+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.286225+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "d21a19bae4549bfffa3a3260a3288dc05e3385ff869ca321bd0881ffc749cacf",
+      "source_digest": "3e205873a04d6dcac705a58c7e9006fefa3ba8ccef643505d9ff408330df07a6",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.730854+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.287923+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "6": {
       "document_sha256": "939f35c300ac2881e95ffc494d364bd48a8b7e48f42187a7ce1b14865c042958",
-      "source_digest": "8b07fb991ad966005f4329d3bfc2430ca1458906d7aef954674d7c99dbc79d40",
+      "source_digest": "2f208fa5c2ee76cae7c9f1bd922b09265b96d647ebab6ff79d7e2f68d0503916",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.732948+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.289898+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "7": {
       "document_sha256": "da59a63d379931b9d397b611a6f1ce61a245d7e33b53f8d96a962fcaa579d21d",
-      "source_digest": "160b904e4a411e65e40f7bc1ccc2228eb59956dbac98794d35359effcad4e2ce",
+      "source_digest": "1cf23440514f166834710946885a6d60a1feabd6622e815b033d74c9880ca4c5",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.734825+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.292108+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "8": {
       "document_sha256": "0aa27284556dffcc7b175478898e504746b115bc0612c546fc32a1ed57002a81",
-      "source_digest": "8b07fb991ad966005f4329d3bfc2430ca1458906d7aef954674d7c99dbc79d40",
+      "source_digest": "2f208fa5c2ee76cae7c9f1bd922b09265b96d647ebab6ff79d7e2f68d0503916",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.736782+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.294546+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "9": {
       "document_sha256": "d0ba0b9e69f01b0c2f38e422a3a234f1d3cfe260947d114ea630af0bd1c8c83d",
-      "source_digest": "658b96fa078a59e8476e5fc4a776d8383894d1c932db7a36493bd3028e8bb984",
+      "source_digest": "f5b28909e21a80538bfb3de1795252fa7f0cd5cde89521c8b1a7916baacdd095",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.738589+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.296678+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "a6baa627dd79bb797bbe8bf9f327ca899cbd32a289d2f99ef15c8adf8c8f2237",
+      "source_digest": "8c2ac4f1f841702ceaf7e427c6f9b52eaffa66381ce826c194dcead5640f60f8",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.740469+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.298550+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "cd4c61bf7f8d28c85a1f43583e10e67e25f57ba23c0aebc4e8783733047e1567",
+      "source_digest": "4d4e1795b52c1857b573475b2f0612f68eb13fa09e9cb5404f276eb532142599",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.742442+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.300596+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "7f7973207f8975236954ab40916f6cc4587083dd6a5fec3ede96b83445b6d683",
+      "source_digest": "6aac079060ddbf613397c054abf9d8f367e132fa557baf2102c19a654dbc3f5e",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.744773+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.302699+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "13": {
       "document_sha256": "609e26253d6ea9098b44836c142c11b4a6bc33966ea7ed9e972c571eff1b6139",
-      "source_digest": "658b96fa078a59e8476e5fc4a776d8383894d1c932db7a36493bd3028e8bb984",
+      "source_digest": "f5b28909e21a80538bfb3de1795252fa7f0cd5cde89521c8b1a7916baacdd095",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.746929+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.305700+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "14": {
       "document_sha256": "dfc3b0a28baede299ec21622bfe0e03b977d10e5d49399d3c4e1457003c2a955",
-      "source_digest": "658b96fa078a59e8476e5fc4a776d8383894d1c932db7a36493bd3028e8bb984",
+      "source_digest": "f5b28909e21a80538bfb3de1795252fa7f0cd5cde89521c8b1a7916baacdd095",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.748898+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.307559+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "15": {
       "document_sha256": "e002833c12f06337497c3b27e248bcbd3d668072dda42f0fa94cd4335f78bf0a",
-      "source_digest": "658b96fa078a59e8476e5fc4a776d8383894d1c932db7a36493bd3028e8bb984",
+      "source_digest": "f5b28909e21a80538bfb3de1795252fa7f0cd5cde89521c8b1a7916baacdd095",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.750704+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.310985+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "24772ec8e968d174dfa5c91e6ee31e4effdb68a55f958f18a4a1434a2a73d7f3",
+      "source_digest": "882f39f31eba686948639a274cc06af3ae9cf3b52200fc09907245e055d8ea11",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.752946+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.312836+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "8b07fb991ad966005f4329d3bfc2430ca1458906d7aef954674d7c99dbc79d40",
+      "source_digest": "2f208fa5c2ee76cae7c9f1bd922b09265b96d647ebab6ff79d7e2f68d0503916",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.754946+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.314903+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "160b904e4a411e65e40f7bc1ccc2228eb59956dbac98794d35359effcad4e2ce",
+      "source_digest": "1cf23440514f166834710946885a6d60a1feabd6622e815b033d74c9880ca4c5",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.757272+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.316705+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "19": {
       "document_sha256": "20261f5ce75559081373cbcff1a075a866651822ad505417bc295ab30c9f7a08",
-      "source_digest": "89a745747e7852fb2b4e1f8c8dc58c19d2ded0376d64fd0a629e1ba11701796a",
+      "source_digest": "8299ffb988213f07805d230e4ccce7d4df9b5595bc879f065a170eb6a26a2af0",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.759585+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.319204+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     },
     "20": {
       "document_sha256": "d4b1fde2264cb0881b23ebc84d6efd8b8e22b41b4966924c7cda2fdf0c9c4f9f",
-      "source_digest": "160b904e4a411e65e40f7bc1ccc2228eb59956dbac98794d35359effcad4e2ce",
+      "source_digest": "1cf23440514f166834710946885a6d60a1feabd6622e815b033d74c9880ca4c5",
       "reviewed_by": "Claude §10 options disclosure review",
-      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
-      "reviewed_at": "2026-11-03T17:07:47.761536+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "§10 options review fixes: closed-market box sentence, one argument set for the hedge simulation and its label, empty-state wording",
+      "reviewed_at": "2026-11-03T17:17:05.320913+00:00",
+      "source_commit": "3f49b0b2df815b6a8bb27e7faf4315fbc14b7b88"
     }
   }
 }

@@ -86,15 +86,17 @@ class BoxTests(unittest.TestCase):
             with self.subTest(change=list(change)):
                 self.assertEqual(numbers(OD.box_text(d)), numbers(OD.box_korean(d)))
         self.assertIn('2 of its 4 legs', OD.box_text({**s, **cases[1]}))
+        closed = {**s, 'box': None, 'box_check': {'status': 'NOT_RUN', 'reason': 'market_closed'}}
+        self.assertIn('market is closed', OD.box_text(closed)); self.assertIn('장이 마감', OD.box_korean(closed))
         self.assertEqual(OD.box_korean({**s, 'box': None}), '중간값으로 가격을 산출할 수 있는 ATM 박스가 없습니다.')
 
 
 class HedgeTests(unittest.TestCase):
     def test_scope_follows_the_arguments_the_simulation_received(self):
-        self.assertEqual(OD.hedge_scope('gbm', .2)['expected_mean_status'], 'ZERO_BY_CONSTRUCTION')
-        for kw in ({'sigma_true': .25}, {'drift_daily': .0001}, {'cost_bps': 2.0}):
-            self.assertEqual(OD.hedge_scope('gbm', .2, **kw)['expected_mean_status'], 'MODEL_RESULT', kw)
-        self.assertEqual(OD.hedge_scope('garch_t', .2)['expected_mean_status'], 'MODEL_RESULT')
+        for kw in ({}, {'sigma_true': None}, {'sigma_true': 0.0}, {'sigma_true': .2}):  # all simulate at sigma_h
+            self.assertEqual(OD.hedge_scope(sigma_hedge=.2, **kw)['expected_mean_status'], 'ZERO_BY_CONSTRUCTION', kw)
+        for kw in ({'sigma_true': .25}, {'drift_daily': .0001}, {'cost_bps': 2.0}, {'engine': 'garch_t'}):
+            self.assertEqual(OD.hedge_scope(sigma_hedge=.2, **kw)['expected_mean_status'], 'MODEL_RESULT', kw)
 
     def test_gbm_mean_is_labelled_noise_and_garch_is_a_model_result(self):
         gbm, garch = snap(engine='gbm'), snap(engine='garch_t')

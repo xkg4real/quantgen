@@ -29,6 +29,8 @@ MFIV_SCOPE = ("Finite strike strip: options outside the strike range are omitted
 
 # Box -------------------------------------------------------------------------------
 def _two_sided(bid, ask) -> bool:
+    # The same rule chain_implied_vols applies inline in core/ficc/equity_deriv.py (bid and ask, bid > 0,
+    # ask >= bid); kept here so that model module stays unchanged.
     return bid is not None and ask is not None and bid > 0 and ask >= bid
 
 
@@ -73,8 +75,12 @@ def box_check(quotes, T: float, F: float, *, live: bool):
 
 def _box_parts(s: dict):
     box, check = s.get("box"), s.get("box_check") or {}
-    computed = bool(box) and check.get("status") == "COMPUTED"
-    return box, check, computed
+    return box, check, box_computed(s)
+
+
+def box_computed(s: dict) -> bool:
+    """A priced box with its band and sensitivity (older saved results may have the box without a check)."""
+    return bool(s.get("box")) and (s.get("box_check") or {}).get("status") == "COMPUTED"
 
 
 def box_text(s: dict) -> str:
@@ -95,6 +101,8 @@ def box_text(s: dict) -> str:
         n = len(check["legs_without_two_sided_quote"])
         return (f"No ATM box was priced: {n} of its 4 legs lack a two-sided quote, and a box from last prints "
                 f"or one-sided quotes is not a rate.")
+    if check.get("reason") == "market_closed":
+        return "No ATM box was priced: the market is closed, and a box from last prints is not a rate."
     return "No ATM box could be priced from the mids."
 
 
@@ -116,6 +124,8 @@ def box_korean(s: dict) -> str:
         n = len(check["legs_without_two_sided_quote"])
         return (f"ATM 박스를 산출하지 않았습니다: 4개 다리 중 {n}개에 양방향 호가가 없으며, "
                 f"마지막 체결가나 한쪽 호가로 만든 박스는 금리가 아닙니다.")
+    if check.get("reason") == "market_closed":
+        return "ATM 박스를 산출하지 않았습니다: 장이 마감되어 마지막 체결가로 만든 박스는 금리가 아닙니다."
     return "중간값으로 가격을 산출할 수 있는 ATM 박스가 없습니다."
 
 
@@ -132,14 +142,16 @@ def box_tooltip(s: dict) -> str:
 
 
 # Hedge simulation ---------------------------------------------------------------------
-def hedge_scope(engine: str, sigma_hedge: float, *, sigma_true: Optional[float] = None,
+def hedge_scope(*, sigma_hedge: float, engine: str = "gbm", sigma_true: Optional[float] = None,
                 drift_daily: Optional[float] = None, cost_bps: float = 0.0) -> dict:
-    """Built in `snapshot` from the arguments it actually passed to the simulation."""
-    same_vol = engine == "gbm" and (sigma_true is None or sigma_true == sigma_hedge) and drift_daily is None \
+    """Built in `snapshot` from the same arguments it passes to the simulation.
+
+    The simulation draws at `sigma_true or sigma_hedge`, so a missing or zero sigma_true is sigma_h.
+    """
+    zero_mean = engine == "gbm" and (not sigma_true or sigma_true == sigma_hedge) and drift_daily is None \
         and not cost_bps
-    return {"expected_mean_status": "ZERO_BY_CONSTRUCTION" if same_vol else "MODEL_RESULT",
-            "expected_mean_pnl_bp": 0.0 if same_vol else None,
-            "sigma_true": sigma_hedge if same_vol else sigma_true, "scope": HEDGE_SCOPE if same_vol else None}
+    return {"expected_mean_status": "ZERO_BY_CONSTRUCTION" if zero_mean else "MODEL_RESULT",
+            "expected_mean_pnl_bp": 0.0 if zero_mean else None, "scope": HEDGE_SCOPE if zero_mean else None}
 
 
 def same_vol(s: dict) -> bool:
