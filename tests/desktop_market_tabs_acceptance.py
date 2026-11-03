@@ -116,6 +116,97 @@ class MarketTabsTests(unittest.TestCase):
         self.assertIsNone(w.market_chart.snapshot)
 
 
+class SearchZoomTests(unittest.TestCase):
+    """Owner UI-16: name search, no exchange/bar-count inputs, wheel zoom, two source lines."""
+    @classmethod
+    def setUpClass(cls):
+        cls.app = QApplication.instance() or QApplication([])
+
+    def setUp(self):
+        deny = patch('requests.sessions.Session.request', side_effect=AssertionError('Network forbidden'))
+        deny.start(); self.addCleanup(deny.stop)
+        self.window = ResearchWindow(auto_refresh=False, locale='ko_KR', market_loader=Mock(), connections_runner=Mock())
+        self.window.resize(1360, 940); self.window.show(); self.window.navigate('markets')
+        self.addCleanup(self.window.deleteLater); self.addCleanup(self.window.hide)
+        self.service = FakeService(); self.streams = []
+        chart = self.window.market_chart
+        chart.service = self.service
+        chart.stream_factory = lambda: self.streams.append(FakeStream()) or self.streams[-1]
+        self.window.market_tabs.setCurrentIndex(1); self.app.processEvents()
+
+    def wait(self, predicate):
+        import time
+        end = time.monotonic() + 5
+        while time.monotonic() < end and not predicate():
+            self.app.processEvents(); time.sleep(0.01)
+        self.assertTrue(predicate())
+
+    def test_choosing_a_name_loads_and_connects_without_a_button(self):
+        from PyQt6.QtCore import Qt
+        from PyQt6.QtTest import QTest
+        p = self.window.market_chart
+        for hidden in (p.exchange, p.bar_count, p.visible_bars, p.asset):
+            self.assertTrue(hidden.isHidden())
+        self.assertEqual(p.form_labels[1].text(), '종목 검색')
+        p.symbol.setFocus(); p.symbol.setText('애플'); self.app.processEvents()
+        self.assertTrue(p.symbol_suggestions.isVisible())
+        self.assertEqual(p.suggestion_codes()[0], ('AAPL', 'NAS'))
+        self.assertEqual(self.service.calls, [])  # typing alone never loads
+        QTest.keyClick(p.symbol, Qt.Key.Key_Return)
+        self.wait(lambda: p.snapshot is not None and not p.jobs.busy)
+        self.assertEqual(self.service.calls[0].instrument.symbol, 'NAS:AAPL')
+        self.assertEqual(self.service.calls[0].limit, 240)
+        self.assertTrue(self.streams and self.streams[0].started)
+        self.assertFalse(p.symbol_suggestions.isVisible())
+        # Two short source/time lines with the same role and size, outside the advanced panel.
+        self.assertTrue(p.provenance.isVisible() and p.times.isVisible())
+        self.assertIn('지연 0분', p.provenance.text()); self.assertIn('한국시간', p.times.text())
+        self.assertEqual(p.provenance.property('role'), p.times.property('role'))
+        self.assertEqual(p.provenance.font().pointSizeF(), p.times.font().pointSizeF())
+        self.assertNotIn('\n', p.provenance.text() + p.times.text())
+
+    def test_wheel_zooms_without_reloading_and_passes_through_at_limits(self):
+        from PyQt6.QtCore import QPoint, QPointF, Qt
+        from PyQt6.QtGui import QWheelEvent
+        p = self.window.market_chart
+        p.refresh(manual=True)
+        self.wait(lambda: p.snapshot is not None and not p.jobs.busy)
+        n = len(p.snapshot.candles)
+
+        def wheel(delta):
+            event = QWheelEvent(QPointF(100, 100), QPointF(100, 100), QPoint(0, 0), QPoint(0, delta),
+                                Qt.MouseButton.NoButton, Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
+            self.app.sendEvent(p.chart, event)
+            return event.isAccepted()
+
+        start = p.visible_bars.value()
+        self.assertTrue(wheel(120)); self.assertLess(p.visible_bars.value(), start)
+        for _ in range(30):
+            wheel(120)
+        self.assertEqual(p.visible_bars.value(), 20)
+        self.assertFalse(wheel(120))  # at the limit the page may scroll instead
+        for _ in range(30):
+            wheel(-120)
+        self.assertEqual(p.visible_bars.value(), n)
+        self.assertFalse(wheel(-120))
+        self.assertEqual(len(self.service.calls), 1)
+        self.assertGreaterEqual(p._cursor, n - p.visible_bars.value())
+
+    def test_typed_listed_code_uses_its_exchange_and_suggestions_follow_language(self):
+        p = self.window.market_chart
+        p.symbol.setText('9984'); self.app.processEvents()
+        self.assertEqual(p.request().instrument.symbol, 'TSE:9984')
+        p.symbol.setText('애플'); self.app.processEvents()
+        self.window.set_language('en'); self.app.processEvents()
+        self.assertIn('Apple', p.symbol_suggestions.item(0).text())
+
+    def test_domestic_derivatives_keep_a_market_selector(self):
+        p = self.window.market_chart
+        self.window.market_tabs.setCurrentIndex(2); self.app.processEvents()
+        self.assertTrue(p.exchange.isVisible()); self.assertEqual(p.form_labels[2].text(), '시장 구분')
+        self.assertFalse(p.symbol_suggestions.isVisible())
+
+
 class FallbackDisplayTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

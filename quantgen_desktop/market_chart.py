@@ -3,11 +3,11 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from PyQt6.QtCore import QByteArray, QObject, QTimer, Qt, QSize, pyqtSignal, pyqtSlot
+from PyQt6.QtCore import QByteArray, QEvent, QObject, QTimer, Qt, QSize, pyqtSignal, pyqtSlot
 from PyQt6.QtGui import QColor, QIcon, QPixmap
 from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtWidgets import (QCheckBox, QComboBox, QGridLayout, QHBoxLayout,
-    QLabel, QLineEdit, QPushButton, QSizePolicy, QSlider, QSpinBox, QVBoxLayout, QWidget)
+from PyQt6.QtWidgets import (QAbstractItemView, QCheckBox, QComboBox, QGridLayout, QHBoxLayout,
+    QLabel, QLineEdit, QListWidget, QListWidgetItem, QPushButton, QSizePolicy, QSlider, QSpinBox, QVBoxLayout, QWidget)
 
 from core.i18n import LocaleContext
 from core.market.models import ChartRequest, Instrument, INTERVALS
@@ -102,7 +102,21 @@ class MarketChartSvg(QSvgWidget):
             self.cursor_changed.emit(n - visible + round(fraction * max(0, visible - 1)))
         super().mouseMoveEvent(event)
 
+    def wheelEvent(self, event):
+        """Owner UI-16: the wheel zooms the price chart; at a zoom limit the page scrolls instead."""
+        steps = event.angleDelta().y() / 120
+        handler = getattr(self, "zoom_handler", None)
+        if steps and handler is not None and handler(steps):
+            event.accept()
+            return
+        event.ignore()
+
     def keyPressEvent(self, event):
+        handler = getattr(self, "zoom_handler", None)
+        if handler is not None and event.key() in (Qt.Key.Key_Plus, Qt.Key.Key_Equal, Qt.Key.Key_Minus):
+            handler(-1 if event.key() == Qt.Key.Key_Minus else 1)
+            event.accept()
+            return
         if self.snapshot and self.snapshot.candles and event.key() in (
                 Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Home, Qt.Key.Key_End):
             n = len(self.snapshot.candles)
@@ -205,14 +219,31 @@ class MarketChartPane(QWidget):
         self.interval.setCurrentIndex(self.interval.findData("1d"))
         self.bar_count = QSpinBox()
         self.bar_count.setRange(20, 500)
-        self.bar_count.setValue(120)
+        # Owner UI-16: no 조회 봉 수 input. Load 240 bars so the wheel can zoom out past the 120 shown.
+        self.bar_count.setValue(240)
         self.form_labels = [self._label() for _ in range(5)]
         for column, index in enumerate((0, 1, 3)):
             form.addWidget(self.form_labels[index], 0, column)
             form.addWidget((self.asset, self.symbol, self.exchange, self.interval, self.bar_count)[index], 1, column)
         # The Markets asset-class tab chooses the asset (UI-8); the combo stays as state only.
-        self.asset.hide();self.form_labels[0].hide();form.setColumnStretch(0, 0)
+        self.asset.hide();self.form_labels[0].hide()
+        # Exchange is not an input (UI-16): overseas search sets it; only domestic derivatives
+        # keep a visible market selector (F/O/JF/…), which KIS needs for ambiguous codes.
+        form.addWidget(self.form_labels[2], 0, 0)
+        form.addWidget(self.exchange, 1, 0)
+        self._form = form
         layout.addLayout(form)
+        self.symbol_suggestions = QListWidget()
+        self.symbol_suggestions.setObjectName("symbolSuggestions")
+        self.symbol_suggestions.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        self.symbol_suggestions.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.symbol_suggestions.itemClicked.connect(self._symbol_chosen)
+        self.symbol_suggestions.itemActivated.connect(self._symbol_chosen)
+        self.symbol_suggestions.hide()
+        self.symbol.installEventFilter(self)
+        self.symbol_suggestions.installEventFilter(self)
+        self._choosing_symbol = False
+        layout.addWidget(self.symbol_suggestions)
         buttons = QHBoxLayout()
         self.load_button = QPushButton()
         self.load_button.setProperty("primary", True)
@@ -239,7 +270,15 @@ class MarketChartPane(QWidget):
         self.q_score_label.hide()
         for field in (self.status, self.quote, self.quote_detail, self.q_score_label):
             layout.addWidget(field)
-        self.provenance, self.note, self.availability = self._label(), self._label(), self._label()
+        # Owner UI-16: source and times as two short lines, same size, close but not cramped.
+        self.provenance, self.times = self._label(), self._label()
+        source_lines = QVBoxLayout()
+        source_lines.setSpacing(5)
+        for field in (self.provenance, self.times):
+            field.setProperty("role", "caption")
+            source_lines.addWidget(field)
+        layout.addLayout(source_lines)
+        self.note, self.availability = self._label(), self._label()
         self.advanced = QWidget()
         advanced_layout = QVBoxLayout(self.advanced)
         advanced_layout.setContentsMargins(0, 0, 0, 0)
@@ -249,17 +288,19 @@ class MarketChartPane(QWidget):
         self.visible_bars.setRange(20, 500)
         self.visible_bars.setValue(120)
         self.visible_bars.valueChanged.connect(self.render)
-        for column, (caption, control) in enumerate(((self.form_labels[2], self.exchange),
-                (self.form_labels[4], self.bar_count), (self.zoom_label, self.visible_bars))):
+        # History size and visible bars are internal state now: the wheel zooms the chart.
+        for column, (caption, control) in enumerate(((self.form_labels[4], self.bar_count), (self.zoom_label, self.visible_bars))):
             advanced_form.addWidget(caption, 0, column)
             advanced_form.addWidget(control, 1, column)
+            caption.hide()
+            control.hide()
         advanced_layout.addLayout(advanced_form)
         actions = QHBoxLayout()
         actions.addWidget(self.poll_button)
         actions.addWidget(self.stream_button)
         actions.addStretch()
         advanced_layout.addLayout(actions)
-        for field in (self.provenance, self.note, self.availability):
+        for field in (self.note, self.availability):
             advanced_layout.addWidget(field)
         self.advanced.hide()
         self.advanced_button.toggled.connect(self.advanced.setVisible)
@@ -298,6 +339,7 @@ class MarketChartPane(QWidget):
         self.empty_state = self._label()
         layout.addWidget(self.empty_state)
         self.chart = MarketChartSvg()
+        self.chart.zoom_handler = self.zoom
         self.chart.cursor_changed.connect(self.move_cursor)
         layout.addWidget(self.chart)
         self.cursor_slider = QSlider(Qt.Orientation.Horizontal)
@@ -309,6 +351,7 @@ class MarketChartPane(QWidget):
             layout.addWidget(field)
         self.asset.currentIndexChanged.connect(self._asset_changed)
         self.symbol.textChanged.connect(self._inputs_changed)
+        self.symbol.textChanged.connect(self._symbol_typed)
         self.exchange.currentIndexChanged.connect(self._exchange_changed)
         self.interval.currentIndexChanged.connect(self._inputs_changed)
         self.bar_count.valueChanged.connect(self._inputs_changed)
@@ -418,7 +461,7 @@ class MarketChartPane(QWidget):
         self.poll_button.setText(self._text("5초 주기 조회", "Poll every 5 seconds"))
         self.stream_button.setText(self._text("체결 연결 다시 시도", "Retry trade stream"))
         self.stop_button.setText(self._text("수신 중지", "Stop updates"))
-        self.advanced_button.setText(self._text("차트 설정 · 데이터", "Chart settings · data"))
+        self.advanced_button.setText(self._text("데이터 설명 · 수신 설정", "Data notes · updates"))
         self.indicator_title.setText(self._text("기술지표", "Indicators"))
         self.guide_button.setText(self._text("차트 읽는 법 ?", "How to read this ?"))
         self.zoom_label.setText(self._text("표시 봉 수", "Visible bars"))
@@ -440,9 +483,12 @@ class MarketChartPane(QWidget):
             button.setAccessibleName(self._text(*names[key]) + self._text(" 표시 / 숨기기", " show / hide"))
             button.setToolTip(self._indicator_explanation(key))
         for label, ko, en in zip(self.form_labels,
-                ("자산", "종목 코드", "거래소", "봉 주기", "조회 봉 수"),
-                ("Asset", "Instrument code", "Exchange", "Interval", "History bars")):
+                ("자산", "종목 코드", "시장 구분", "봉 주기", "조회 봉 수"),
+                ("Asset", "Instrument code", "Market", "Interval", "History bars")):
             label.setText(self._text(ko, en))
+        self._search_mode()
+        if not self.symbol_suggestions.isHidden():
+            self._symbol_typed(self.symbol.text())  # rebuild labels in the new language
         self.asset.blockSignals(True)
         for index, (_, ko, en, _) in enumerate(_ASSETS):
             self.asset.setItemText(index, self._text(ko, en))
@@ -454,7 +500,7 @@ class MarketChartPane(QWidget):
         if self.asset.currentData() == "domestic_future" and self.exchange.count():
             self.exchange.setItemText(0, self._text("자동 · 지수선물", "Auto · index future"))
         for control, ko, en in ((self.asset,"자산 선택","Select asset"), (self.symbol,"종목 코드","Instrument code"),
-                (self.exchange,"해외 거래소","Overseas exchange"), (self.interval,"차트 봉 주기","Chart interval"),
+                (self.exchange,"시장 구분","Market division"), (self.interval,"차트 봉 주기","Chart interval"),
                 (self.bar_count,"조회 봉 수","History bars"), (self.visible_bars,"표시 봉 수","Visible bars"),
                 (self.cursor_slider,"캔들 선택 · 좌우 방향키","Select candle · left / right arrows")):
             control.setAccessibleName(self._text(ko, en))
@@ -483,8 +529,122 @@ class MarketChartPane(QWidget):
     def request(self):
         asset = self.asset.currentData()
         exchange = (self.exchange.currentData() or "") if asset in ("overseas_stock", "domestic_future") else ""
+        if asset == "overseas_stock":
+            # A code typed without choosing a result still uses its listed exchange when known.
+            from core.market.symbols import lookup
+            listed = lookup(self.symbol.text())
+            if listed is not None and lookup(self.symbol.text(), exchange) is None:
+                exchange = listed.exchange
         return ChartRequest(Instrument(asset, self.symbol.text(), exchange),
                             self.interval.currentData(), self.bar_count.value(), adjusted=False)
+
+    # Overseas name search (UI-16) -----------------------------------------
+    def _search_mode(self):
+        overseas = self.asset.currentData() == "overseas_stock"
+        self.symbol.setPlaceholderText(self._text("이름이나 코드로 검색 · 예: 애플, TSLA", "Search by name or code · e.g. Apple, TSLA")
+                                       if overseas else "")
+        self.form_labels[1].setText(self._text("종목 검색", "Search instrument") if overseas else self._text("종목 코드", "Instrument code"))
+        if not overseas:
+            self.symbol_suggestions.hide()
+
+    def _symbol_typed(self, text):
+        if self._choosing_symbol or self.asset.currentData() != "overseas_stock":
+            self.symbol_suggestions.hide()
+            return
+        from core.market.symbols import search
+        found = search(text, 8)
+        current = (self.symbol.text().strip().upper(), self.exchange.currentData())
+        if len(found) == 1 and (found[0].code, found[0].exchange) == current:
+            found = ()  # already chosen
+        self.symbol_suggestions.clear()
+        for entry in found:
+            item = QListWidgetItem(entry.label(self.ctx.language))
+            item.setData(Qt.ItemDataRole.UserRole, entry)
+            self.symbol_suggestions.addItem(item)
+        if found:
+            self.symbol_suggestions.setCurrentRow(0)
+            rows = sum(self.symbol_suggestions.sizeHintForRow(i) for i in range(len(found)))
+            self.symbol_suggestions.setFixedHeight(rows + 2 * self.symbol_suggestions.frameWidth() + 6)
+        self.symbol_suggestions.setVisible(bool(found))
+
+    def suggestion_codes(self):
+        return tuple((self.symbol_suggestions.item(i).data(Qt.ItemDataRole.UserRole).code,
+                      self.symbol_suggestions.item(i).data(Qt.ItemDataRole.UserRole).exchange)
+                     for i in range(self.symbol_suggestions.count()))
+
+    def choose_symbol(self, entry):
+        """Set code and exchange from a search result and load it immediately."""
+        self._choosing_symbol = True
+        try:
+            self.exchange.setCurrentIndex(self.exchange.findData(entry.exchange))
+            self.symbol.setText(entry.code)
+        finally:
+            self._choosing_symbol = False
+        self.symbol_suggestions.hide()
+        self.refresh(manual=True)
+
+    def _symbol_chosen(self, item):
+        if item is not None:
+            self.choose_symbol(item.data(Qt.ItemDataRole.UserRole))
+
+    def eventFilter(self, watched, event):
+        if event.type() != QEvent.Type.KeyPress:
+            return False
+        key = event.key()
+        if watched is self.symbol and self.symbol_suggestions.isVisible():
+            if key == Qt.Key.Key_Down:
+                self.symbol_suggestions.setFocus()
+                return True
+            if key in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
+                self._symbol_chosen(self.symbol_suggestions.currentItem() or self.symbol_suggestions.item(0))
+                return True
+            if key == Qt.Key.Key_Escape:
+                self.symbol_suggestions.hide()
+                return True
+        elif watched is self.symbol_suggestions and (
+                key == Qt.Key.Key_Escape or (key == Qt.Key.Key_Up and self.symbol_suggestions.currentRow() <= 0)):
+            if key == Qt.Key.Key_Escape:
+                self.symbol_suggestions.hide()
+            self.symbol.setFocus()
+            return True
+        return False
+
+    def zoom(self, steps):
+        """Wheel or +/- zoom: fewer bars per notch in, more out; returns False at a limit."""
+        n = len(self.snapshot.candles) if self.snapshot else 0
+        if n < 2:
+            return False
+        current = min(self.visible_bars.value(), n)
+        target = round(current * (0.8 ** steps))
+        target = max(min(20, n), min(n, target))
+        if target == current:
+            return False
+        self.visible_bars.setValue(target)
+        return True
+
+    def _clock(self, text):
+        """A provider timestamp as concise Korea time; date-only values stay dates."""
+        from zoneinfo import ZoneInfo
+        try:
+            at = datetime.fromisoformat(str(text).replace("Z", "+00:00"))
+        except (TypeError, ValueError):
+            return str(text)
+        if at.tzinfo is None:
+            return str(text)[:10] if len(str(text)) <= 10 else at.strftime("%m-%d %H:%M:%S")
+        return at.astimezone(ZoneInfo("Asia/Seoul")).strftime("%m-%d %H:%M:%S")
+
+    def _delay_text(self, snapshot):
+        instrument = snapshot.request.instrument
+        if not self._from_kis(snapshot):
+            return self._text("지연 시세", "delayed")
+        if instrument.asset == "overseas_stock":
+            return (self._text("미국 무료 시세 · 지연 0분", "US free feed · 0-minute delay")
+                    if instrument.exchange in ("NAS", "NYS", "AMS") else self._text("15분 지연", "15-minute delay"))
+        if instrument.asset == "bond":
+            return self._text("일별 시세", "daily prices")
+        if instrument.asset == "overseas_future":
+            return self._text("해외선물 시세", "overseas futures quotes")
+        return self._text("국내 실시간 시세", "domestic real-time")
 
     def set_asset_class(self, asset):
         """Called by the Markets asset-class tabs; changing class stops updates like any input change."""
@@ -519,6 +679,10 @@ class MarketChartPane(QWidget):
             self.exchange.addItem("—", "")
         self.exchange.setEnabled(asset in ("overseas_stock", "domestic_future"))
         self.exchange.blockSignals(False)
+        self.exchange.setVisible(asset == "domestic_future")
+        self.form_labels[2].setVisible(asset == "domestic_future")
+        self._form.setColumnStretch(0, 2 if asset == "domestic_future" else 0)
+        self._search_mode()
 
     def _configure_intervals(self):
         from data.kis_workspace import supported_intervals
@@ -552,6 +716,7 @@ class MarketChartPane(QWidget):
         self.quote_detail.clear()
         self.q_score_label.hide()
         self.provenance.clear()
+        self.times.clear()
         self.note.clear()
         self.reading.clear()
         self.indicator_reading.clear()
@@ -907,7 +1072,7 @@ class MarketChartPane(QWidget):
             notices.append(self._text(f"KIS 대신 {self.snapshot.source} 자료입니다(지연·수정 전 가격). 시도: ",
                                       f"{self.snapshot.source} data instead of KIS (delayed, unadjusted). Tried: ")
                            + self._tried())
-        if self.asset.currentData() == "overseas_stock" and (self.snapshot is None or self._from_kis(self.snapshot)):
+        if self.asset.currentData() == "overseas_stock" and self.snapshot is None:
             notices.append(self._text("미국 무료 Nasdaq 시장센터 시세 · 0분 지연 · 유료 통합 시세와 다를 수 있어요.",
                                       "US free Nasdaq market-center feed · 0-minute delay · may differ from paid consolidated feeds.")
                            if self.exchange.currentData() in ("NAS", "NYS", "AMS") else self._text(
@@ -949,12 +1114,14 @@ class MarketChartPane(QWidget):
             unit = self._text("계약 시세 단위", "contract quote units") if q.instrument.asset == "domestic_future" else q.currency
             self.quote.setText(f"{number(q.price)} {unit}")
             self.quote_detail.setText(f"{q.instrument.symbol} · {number(q.change)} ({number(q.change_pct)}%)")
-        self.provenance.setText(self._text("출처", "Source") + f": {snapshot.source} · "
-            + self._text("조회 시각", "Fetched") + f": {snapshot.fetched_at}"
-            + (" · " + self._text("체결 시각", "Market time") + f": {q.market_time}" if q and q.market_time else ""))
+        self.provenance.setText(self._text("출처", "Source") + f": {snapshot.source} · {self._delay_text(snapshot)}")
+        self.times.setText(self._text("조회", "Fetched") + f" {self._clock(snapshot.fetched_at)}"
+            + (" · " + self._text("체결", "Market") + f" {self._clock(q.market_time)}" if q and q.market_time else "")
+            + self._text(" (한국시간)", " (Korea time)"))
         self.availability.setText(self._availability_text(snapshot.request.instrument) if self._from_kis(snapshot) else '')
         self.note.setText(" · ".join(dict.fromkeys(self._data_note(str(note), snapshot.request.instrument)
                                  for note in (snapshot.note, q.note if q else "") if note)))
+        self.provenance.setToolTip(self.note.text())
         n = len(snapshot.candles)
         if not n:
             self.reading.clear()

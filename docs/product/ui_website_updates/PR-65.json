@@ -20,13 +20,17 @@
     "시장 화면의 별도 KIS chart 탭을 없애고 자산별 탭 9개(국내증권·해외증권·국내파생상품·해외파생상품·채권·금리·스왑·외환·가상자산·매크로)로 나눴습니다.",
     "차트 공급사는 자동으로 고릅니다. KIS를 먼저 쓰고, 안 되면 다른 공급사(현재 Yahoo Finance: 국내·미국·홍콩·일본·중국 주식 일·주·월봉)에 동시에 요청해 먼저 온 유효한 응답을 보여 줍니다. 합성 자료는 쓰지 않습니다.",
     "대체 응답은 출처와 시도한 공급사를 표시하며 실시간 체결·5초 반복 조회·Q-SCORE에 쓰지 않습니다.",
-    "시장 화면의 데이터 출처 선택 상자를 없앴습니다(분석 도구는 기존 자동 경로 유지)."
+    "시장 화면의 데이터 출처 선택 상자를 없앴습니다(분석 도구는 기존 자동 경로 유지).",
+    "해외증권은 종목명 검색(구글식 추천, 한영·초성)으로 고르고, 고르면 바로 조회·체결 연결됩니다. 거래소·조회 봉 수·표시 봉 수 입력을 없애고(국내파생상품만 시장 구분 유지), 차트 위 휠·+/- 키로 확대·축소합니다. 출처·시각은 같은 크기의 두 줄로 줄였습니다."
   ],
   "website_impact": {
     "classification": "native_ui_only",
     "browser_code_changed": false,
     "shared_sources": [
-      "core/market/routing.py"
+      "core/market/routing.py",
+      "core/market/symbols.py",
+      "core/market/data/overseas_symbols.json",
+      "core/search_text.py"
     ],
     "requested_actions_ko": [
       "소개사이트가 ‘KIS chart’ 탭이나 데이터 출처 선택을 설명한다면 자산별 탭과 자동 공급사 선택으로 바뀐 점을 반영할지 검토하세요. Flet 화면은 바뀌지 않았으므로 웹 앱이 자동 선택한다고 주장하지 마세요.",
@@ -51,6 +55,14 @@
       {
         "suite": "compliance acceptance and export",
         "passed": 47
+      },
+      {
+        "suite": "UI-16 search, zoom, provenance (pure + Qt) and chart lifecycle",
+        "passed": 40
+      },
+      {
+        "suite": "broad native regression with A4-c",
+        "passed": 236
       }
     ],
     "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12; changed files compiled on 3.10/3.11.",
@@ -72,14 +84,20 @@
   ],
   "changed_files": [
     ".github/workflows/runtime-smoke.yml",
+    "core/education/glossary.py",
+    "core/market/data/overseas_symbols.json",
     "core/market/routing.py",
+    "core/market/symbols.py",
+    "core/search_text.py",
     "docs/compliance/07-data-minimization.md",
     "docs/compliance/08-third-parties.md",
     "docs/compliance/15-keyboard.md",
     "docs/compliance/FACTS.md",
     "docs/compliance/source-review.json",
+    "docs/product/KIS_MARKET_CHARTS_2026-11-02.md",
     "docs/product/ui_website_updates/PR-64.json",
     "docs/product/ui_website_updates/PR-65.json",
+    "pyproject.toml",
     "quantgen_desktop/app.py",
     "quantgen_desktop/bonds.py",
     "quantgen_desktop/market_chart.py",
@@ -91,6 +109,9 @@
     "tests/desktop_market_tabs_acceptance.py",
     "tests/desktop_responsive_tools_acceptance.py",
     "tests/market_routing_acceptance.py",
-    "tools/packaging/smoke_desktop.py"
+    "tests/market_symbols_acceptance.py",
+    "tools/packaging/smoke_desktop.py",
+    "tools/packaging/smoke_installed.py",
+    "tools/packaging/stage.py"
   ]
 }

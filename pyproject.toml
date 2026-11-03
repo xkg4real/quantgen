@@ -44,6 +44,7 @@ web = "assets/icon_192.png"
 [tool.setuptools.package-data]
 "core.education" = ["samples/*.csv", "samples/*.json"]
 "core.research" = ["display_rights.json"]
+"core.market" = ["data/*.json"]
 "core.calendars" = ["data/*.yaml"]
 "core.ficc" = ["schemas/*.json"]
 "core.skills" = ["macro_workflows/*.yaml"]
