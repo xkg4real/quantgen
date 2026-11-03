@@ -3,6 +3,15 @@
 Date: 2026-10-26.
 
 Status:
+- **2026-11-04 owner sign-off, Step 7A.1 (verbatim; Claude Code chat, session_016uB1jgeiPdP8gPkAez3Wrx).**
+  "I approve spec 2026-10-26 revision 6, the T-RO-01 exemption of its section 5.6 and the merge of claude/amazing-gauss-tdiguu into main. Geon Koh, 2026-11-04."
+  It releases two acts only: the merge of this branch into `main` (the owner's own `--no-ff` merge after Step 10)
+  and the T-RO-01 exemption of section 5.6 outside the branch. It is not a pilot approval: each table's
+  of-record runs still need the current `owner_confirmed` of Step 7A.3, after Claude's 7A.4 review. Before
+  recording it Claude ran `git fetch origin` and `git merge-base --is-ancestor origin/main HEAD`: `main`, frozen at
+  `bb35b3b` (PR #69, 2026-11-04 03:36:05 KST) until the 7A.3 commit, is merged into the branch (`92cc00f`,
+  `c95b3aa`), so the sentence covers the merged branch with the ⑤-1/a fixes (`85d2e51`, `611c718`, `2c299c9`). The commit
+  recording this bullet is the scoped sign-off that 7A.4 requires to be an ancestor of the 7A.3 commit.
 - **2026-10-30 owner addendum (O11 A2; implementation on the research branch).**
   O2–O15 revision-6 defaults are accepted, with the subsequent O8 optional-review decision and O11 A2 exception below.
   The approval source is the owner's 2026-10-30 chat, recorded in the private Notion approval page
@@ -36,7 +45,8 @@ Status:
     Technical and Windows acceptance, the specific research-main merge sign-off and current per-table
     `owner_confirmed` remain separate requirements.
   - Historical owner approval at revision 6 drafting: **not given**. See the 2026-10-30 addendum for received scope.
-    Owner sign-off sentence (Step 7A cumulative merge): **none recorded**.
+    Owner sign-off sentence (Step 7A cumulative merge): none recorded at drafting; **recorded 2026-11-04** (first
+    Status bullet).
   - Owner rulings received (verbatim, with channel and date):
     - **O1 approved**, 2026-10-27, Claude Code chat (cloud session), in Korean: "아뇨, Nautilus로 옮기는 걸 목표로
       하고 있습니다. 따라서 pyarrow를 포함한 새 의존성을 승인합니다." (English: "No, the goal is to move to

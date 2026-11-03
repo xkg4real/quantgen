@@ -651,3 +651,37 @@ holidays_FED·KRX·NYSE·SIFMA, kr_sessions, 이 로그, `tests/macro_m1_calenda
     고쳤습니다. 저장소 도구(`tools.compliance.check --refresh-baseline --documents 12`)가 요구하는 것입니다.
 - **연구 브랜치:** 이 세션은 `claude/amazing-gauss-tdiguu`를 건드리지 않습니다. Step 7A 세션이 이 병합 뒤의 `main`을 연구
   브랜치에 합칩니다. 이 파일에도 양쪽 추가분이 있어 그때 합칠 곳이 생깁니다.
+
+## 2026-11-04, Claude Code 채팅 (Step 7A 세션): 사전 점검, 결정, 7A.1 승인 문장
+
+세션: https://claude.ai/code/session_016uB1jgeiPdP8gPkAez3Wrx. 메인 세션(claude-resume-20261103)의 인계 문서는 덮어쓰지
+않았습니다. 소유자가 그 세션에 "7번(Windows Step 7A 등)은 별도 세션이 처리 중"이라고 알린 대로, 이 세션은 Step 7A(⑤-1)만
+맡습니다.
+
+- **7A.1 승인 문장 (원문 그대로):**
+  > I approve spec 2026-10-26 revision 6, the T-RO-01 exemption of its section 5.6 and the merge of claude/amazing-gauss-tdiguu into main. Geon Koh, 2026-11-04.
+  - 범위: 연구 브랜치의 main 병합(Step 10 뒤 소유자의 `--no-ff` 병합)과 스펙 5.6의 T-RO-01 예외뿐입니다. 파일럿 실행
+    승인이 아닙니다. 표마다 7A.3의 `owner_confirmed`가 따로 필요합니다.
+  - 기록 직전 `git fetch origin`과 조상 검사를 했습니다. 동결된 main `bb35b3b`는 연구 브랜치에 병합돼 있습니다
+    (`92cc00f`, `c95b3aa`).
+  - 연구 브랜치 push 승인 (원문 그대로): "연구 브랜치 push를 승인합니다". 기록 커밋 뒤 `claude/amazing-gauss-tdiguu`에
+    fast-forward로 push합니다.
+- **소유자 결정 (질문 화면에서 고른 선택지 이름, 원문 그대로):**
+  - Step 7A 사전 정비 담당: "이 세션에서 Claude가 인수 (Recommended)". 질문할 때는 인계 문서가 GPT의 `taken`으로
+    보였으나, 그사이 메인 세션이 이미 가져간 상태였습니다. 그래서 인계 문서에는 쓰지 않고 사전 정비만 했습니다.
+  - 7A.3 공개 범위: "그대로 push (Recommended)". 인계 보고서와 egress 기록의 로컬 경로·패키지 목록을 가리지 않고
+    공개 저장소에 push합니다. Windows 계정명은 이미 main의 공개 파일 61개에 있습니다.
+  - 만기가 기간 안에 끝나는 채권: "RP-01 유지, main 검사 수정 (Recommended)". 질문의 "RP-01"은 잘못 붙인 ID이고,
+    가리킨 규칙(만기 보유: 마지막 쿠폰 포함, 손익분기 NaN)의 실제 ID는 BS-08입니다. `92cc00f`와 `2c299c9`에 반영했습니다.
+  - Babel: "버전이 나왔다 (설치됨)".
+  - 3-8 egress 네트워크: "핫스팟 결과 확인 시 True, 즉 1번 방식으로 확정하겠습니다". 집 네트워크는 1.1.1.1:443만
+    막혀 있습니다(github.com, 1.0.0.1, 8.8.8.8은 443 연결됨, 프록시 없음). 코드 변경 없이 3-8부터 3-13까지 휴대폰
+    핫스팟에서 실행합니다.
+- **소유자 Windows 사전 점검 (읽기 전용, 소유자 보고):**
+  - 메인 클론: `C:\Users\whydi\OneDrive\Desktop\QUANTGEN` (`main`, 보호 캐시 있음).
+  - P-1: 처음에 `?? .agents/skills/quantgen-paper/SKILL.md`(main `d0f18a0`이 지운 파일과 같은 blob `ee0ff4b`)와
+    `?? QUANTGEN/`(remote도 커밋도 없는 내부 git 저장소, 파일 47개)이 있었습니다. 클론 밖으로 옮기도록 안내한 뒤
+    "P-1은 통과했고"라는 보고를 받았습니다.
+  - P-2, P-3, P-4: "P-2, P-3, P-4 정상 통과입니다".
+  - P-5: `QUANTGEN_NAUTILUS_PYTHON`과 `QUANTGEN_MACRO_DIR`이 Process, User, Machine 모두 비어 있고 `.env`에도
+    없습니다.
