@@ -24,6 +24,14 @@ def wheel(app, widget, delta=-120, horizontal=False):
     app.sendEvent(widget, event)
 
 
+def settle(app, passes=12):
+    """Let nested layouts finish. Each nesting level reacts to a size change in its own
+    posted LayoutRequest, so one processEvents() can observe a form mid-propagation
+    (seen on Windows CI as a one-pass-old ETF height). Twelve passes exceed the depth."""
+    for _ in range(passes):
+        app.processEvents()
+
+
 class OperationFixTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -130,11 +138,23 @@ class OperationFixTests(unittest.TestCase):
         for width in (1000, 1360):
             w.resize(width, 900)
             for pane in (w.rates, w.krx, w.fx, w.etf, w.derivatives, w.crypto):
-                w.show_market_pane(pane); self.app.processEvents()
+                w.show_market_pane(pane); settle(self.app)
                 self.assertTrue(fits(pane), (type(pane).__name__, width))
-        w.show_market_pane(w.rates); self.app.processEvents()
-        w.rates.tool.setCurrentIndex(1); self.app.processEvents()
+        w.show_market_pane(w.rates); settle(self.app)
+        w.rates.tool.setCurrentIndex(1); settle(self.app)
         self.assertTrue(fits(w.rates))  # a taller form after switching tools is laid out in full
+        # Wider glyphs (Windows fonts) wrap captions to more lines; the form must grow to match.
+        from PyQt6.QtWidgets import QLabel
+        w.resize(800, 900); w.show_market_pane(w.fx); settle(self.app)
+        page = w.fx.forms.currentWidget()
+        before = w.fx.forms.height()
+        for caption in page.findChildren(QLabel):
+            if caption.parent() is page:
+                caption.setText(caption.text() + ' 긴설명' * 3)
+        for width in (1000, 1360, 800, 1000):
+            w.resize(width, 900); settle(self.app)
+            self.assertTrue(fits(w.fx), width)
+        self.assertGreater(w.fx.forms.height(), before)  # the wrapped captions really took more room
 
     def test_window_and_app_icons_carry_taskbar_sizes(self):
         icon = app_icon()

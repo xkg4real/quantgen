@@ -378,7 +378,7 @@
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_layout_acceptance.py": "98244edaf19773ca75295a7e715154abb3687f38a6618490ad86d32b2984767d",
     "tests/desktop_market_tabs_acceptance.py": "b46f719989b1cabd910531ef39f11a8630e32241aaf8345f37ed621f9ddb5946",
-    "tests/desktop_operation_fixes_acceptance.py": "66fbf511d1e4f1ecc04db3b37b71ccc7e97b978baf57b647adde4474329fc921",
+    "tests/desktop_operation_fixes_acceptance.py": "17539fbe59511499eb88c80bad7fe42ab600e8d7953a766fc30ecc7b021b9d67",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
@@ -555,161 +555,161 @@
       "document_sha256": "e917090c1153867f2f06a3529253445d505584ee0a970e9dc39d347715d12696",
       "source_digest": "701d7458e423a61dc66ea0a317556571b1f5f52e3331b978a578a93602d8fe20",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.721861+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.305653+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
       "source_digest": "701d7458e423a61dc66ea0a317556571b1f5f52e3331b978a578a93602d8fe20",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.723847+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.308305+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
       "source_digest": "814a35caea69be63221d7ed89e16ac1a3f7ddebab2178a3b58386f9502ac8713",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.725631+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.310586+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
       "source_digest": "d39bd37407060725c894cb0008a161dd6e6a879748ad04a7c01ecfdc8a911a75",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.727522+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.312942+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "b72f4ab15304ef28f2d78b468699b7f397c57b3725842f83043af41efc5c35b4",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.729244+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.315014+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "6": {
       "document_sha256": "9a86db478c03eefb0f6b05fe56c7708dc5559d7670a44cc1c40561ee0a5f0335",
       "source_digest": "1142d031a494d2021abe70df2b3fcf86a46eeb868f2928368b78ed47a196bd65",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.730775+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.316879+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "7": {
       "document_sha256": "da59a63d379931b9d397b611a6f1ce61a245d7e33b53f8d96a962fcaa579d21d",
       "source_digest": "701d7458e423a61dc66ea0a317556571b1f5f52e3331b978a578a93602d8fe20",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.732217+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.318799+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "8": {
       "document_sha256": "0aa27284556dffcc7b175478898e504746b115bc0612c546fc32a1ed57002a81",
       "source_digest": "1142d031a494d2021abe70df2b3fcf86a46eeb868f2928368b78ed47a196bd65",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.733736+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.321471+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "9": {
       "document_sha256": "d0ba0b9e69f01b0c2f38e422a3a234f1d3cfe260947d114ea630af0bd1c8c83d",
       "source_digest": "2e634b6b423cc4b10f73082e4edb78709b11b59e741c0ee0b6b7c5ed4178b0eb",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.735490+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.323431+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
       "source_digest": "f83ee4911689219fa68cb8cde99aa4b913fa72048bd25bab428367dd2d7f7bf5",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.736953+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.325340+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
       "source_digest": "37695b73b9154c2d0a3b7200a673b1b8b59dcbf0209a850e88b61a06ccb25d4c",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.740312+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.327539+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "6f25e4b22f0495b1fae806fc5084d00b132831327bab50752575e503ec02eaf3",
+      "source_digest": "51286468c948b98e1ffe8b4916d0725ba0b9c720a3a162ff775ba1c27f2a21b0",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.741981+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.331594+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "13": {
       "document_sha256": "609e26253d6ea9098b44836c142c11b4a6bc33966ea7ed9e972c571eff1b6139",
       "source_digest": "2e634b6b423cc4b10f73082e4edb78709b11b59e741c0ee0b6b7c5ed4178b0eb",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.743812+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.333561+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "14": {
       "document_sha256": "d402c9f37367bed480a24acc886c3f45933b6882b12058b659bab31b575a2bd3",
       "source_digest": "2e634b6b423cc4b10f73082e4edb78709b11b59e741c0ee0b6b7c5ed4178b0eb",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.745650+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.335381+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "15": {
       "document_sha256": "d72369824a5f3428023178a3690e50844081b050d28f7c2cefd7c7434199c5f1",
       "source_digest": "2e634b6b423cc4b10f73082e4edb78709b11b59e741c0ee0b6b7c5ed4178b0eb",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.747335+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.338285+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
       "source_digest": "3d9e5b0e22b60caec0d3e0af0da8af020064607e12fb305c8168c2b5f8dabd52",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.749175+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.340169+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
       "source_digest": "1142d031a494d2021abe70df2b3fcf86a46eeb868f2928368b78ed47a196bd65",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.750761+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.342203+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
       "source_digest": "701d7458e423a61dc66ea0a317556571b1f5f52e3331b978a578a93602d8fe20",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.753813+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.343954+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "19": {
       "document_sha256": "20261f5ce75559081373cbcff1a075a866651822ad505417bc295ab30c9f7a08",
       "source_digest": "04742978da3d6f1cedc06321342d7d5425588c0b2bf986ab49f81edb768e3d27",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.755468+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.347268+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     },
     "20": {
       "document_sha256": "d4b1fde2264cb0881b23ebc84d6efd8b8e22b41b4966924c7cda2fdf0c9c4f9f",
       "source_digest": "701d7458e423a61dc66ea0a317556571b1f5f52e3331b978a578a93602d8fe20",
       "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 (UI-3 wheel, UI-4 digits, UI-6a form clipping, UI-17 icon, B3 AI button): per-widget StrongFocus wheel guard, visible-page form container, consent reset on question edit; docs 06, 15 and FACTS updated",
-      "reviewed_at": "2026-11-03T15:38:48.757080+00:00",
-      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
+      "review_note": "A2 CI fix: the clipping test waits for nested layouts to settle and checks wrapped captions; no product behaviour change",
+      "reviewed_at": "2026-11-03T16:24:43.348972+00:00",
+      "source_commit": "dbeb4b6a2bd9df0ac4c15cc5bcdfdacbe01d15a0"
     }
   }
 }
