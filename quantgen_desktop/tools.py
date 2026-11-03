@@ -208,11 +208,12 @@ class ToolPane(QWidget):
                 item.widget().hide()
                 item.widget().deleteLater()
 
-    def text(self, text, role='muted', *, localized=None):
+    def text(self, text, role='muted', *, localized=None, name=None):
+        """`name` labels the export section; a private name (e.g. holdings) keeps it out of AI commentary."""
         from .app import label
         from core.research.presentation import safe_detail
         text = safe_detail(text, limit=None)
-        self.sections.append({'type':'text','text':text})
+        self.sections.append({'type':'text','text':text, **({'name': name} if name else {})})
         widget = label(text, role)
         if localized:
             widget.localized_text = {key: safe_detail(value, limit=None) for key, value in localized.items()}

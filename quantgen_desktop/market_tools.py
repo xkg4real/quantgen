@@ -192,8 +192,10 @@ class CryptoPane(ToolPane):
             if not held['complete']:  # §10 NEW-M6-14/22: a missing price is shown as missing, never as 0
                 names = ', '.join(held['unvalued'])
                 partial = f'No KRW price for {names}: their value is not shown and is not in any total.'
-                self.text(partial, localized={'en': partial,
-                                              'ko': f'{names}의 원화 시세가 없어 평가액을 표시하지 않으며 합계에도 넣지 않습니다.'})
+                # Named as a holdings section: like the holdings table, it never enters AI commentary (NEW-M6-18).
+                self.text(partial, name='Upbit holdings note',
+                          localized={'en': partial,
+                                     'ko': f'{names}의 원화 시세가 없어 평가액을 표시하지 않으며 합계에도 넣지 않습니다.'})
         elif out.request.include_balances: self.text('Holdings unavailable · verify the configured read-only connection. No account values loaded.')
         self.finished(out.narrative, localized=market_variants(out, 'crypto'))
 

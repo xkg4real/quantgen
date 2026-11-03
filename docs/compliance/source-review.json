@@ -246,7 +246,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "ae528166d90eefef58ef844657e3f6e875576798df528fdcdd3bdd4b1ae207e4",
+    "docs/compliance/FACTS.md": "37ade4aed1560ddc3edaa1f8950caafb3fd3db4871e40c72a24eaeb73d8c7179",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -260,7 +260,7 @@
     "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md": "3f05520af76a14bbeb8fab8f7db874b25f18e52d4e884ec6b46e305e58f7ca44",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
-    "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "bb8823ca2fcf7875cc69ded51a9ae1a83b8df1a3435c2b72aba0538d4a2ec011",
+    "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9bf88ee0e036296c566da32170977916ce5be38fe1128562a6c640db945e620c",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "c03dae78c5964bded90065661a0d3dc631f4b650c3baae8eb6875443b11959e6",
     "docs/product/FORWARD_CONVENTION_2026-11-02.md": "a294ca013fa1460c435286a1b2a466630f522d859fc9a43da29927e6c5ffcd86",
@@ -325,7 +325,7 @@
     "quantgen_desktop/market_chart.py": "28d4f14d92ad276ccf1bb5bba241ee108ab63c5340103d38f270fdaeaee3d645",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
     "quantgen_desktop/market_narrative_language.py": "2e6dd30c91e53ea433a4eff400674e3b32ee01d49656a3204242219acfe741ea",
-    "quantgen_desktop/market_tools.py": "d3dd7cb14edcd39e597d8f90680575958e43422f696634925db87fb454c68c64",
+    "quantgen_desktop/market_tools.py": "dad4b0baa20f8189d20f22c6d7c57d0b86483842f6beb99221707452c02e4449",
     "quantgen_desktop/model_narrative_language.py": "c4d4c826e3416a202cc4167c19a2ccbc233fcbc80239e62a81808092274c0981",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
@@ -336,7 +336,7 @@
     "quantgen_desktop/signals.py": "42c35b809cbb3b2ca20be1d2103f405a4e7564ac9678673d39fa26368bfd96ef",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
-    "quantgen_desktop/tools.py": "d98221d56bd5596ee096d2f77d3437e6c3d35a3d85fb313db281cf018c5d5bdc",
+    "quantgen_desktop/tools.py": "187d1b76279de24b009b8625ac6b89126117a5e3cf1245033f8ba38a272de27a",
     "quantgen_desktop/translations.py": "d2b14ff1f97d28c672483f1506062f385ed459a9b90ec5ba2dfffcf6ea6f552e",
     "quantgen_desktop/watchlist.py": "8261b0eae67e53bb21932fe4fb9d675b6ad158b1fec7ce2de7cc7551264d1969",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
@@ -355,7 +355,7 @@
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
-    "tests/crypto_missing_values_acceptance.py": "03a1dffe28c4d83685818655778add5bde6e3b29c3eefa636d3457b9c6081f6b",
+    "tests/crypto_missing_values_acceptance.py": "cb746002bead7d856f0eaf1c8c9d2a25a60593d9cb75145b896857ace6b46c89",
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_acceptance.py": "172aa648792ff58b52d9a73216c53b8be2f1f16976e65f8789866e4014202698",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
@@ -556,163 +556,163 @@
   "reviews": {
     "1": {
       "document_sha256": "15e782f39147b6c9e1c99e19dcdc28ca7b5dee6b6bea6af7457f05fe1fbf64f0",
-      "source_digest": "b552dfe911b40243c22d41c6faabf2dcc72e906c5dca5d996c62e1aeb3c7c6bb",
+      "source_digest": "12b7eab1d29f7a9351a3c33639de83d74d978893227b4b6498baebfd03f685f1",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.055865+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.217818+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "b552dfe911b40243c22d41c6faabf2dcc72e906c5dca5d996c62e1aeb3c7c6bb",
+      "source_digest": "12b7eab1d29f7a9351a3c33639de83d74d978893227b4b6498baebfd03f685f1",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.058282+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.223857+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "e388fa7bd8656663246a9e9fa00a2cbe23c1688bda7d7a007e9af3525b62ff8f",
+      "source_digest": "c81d11f10db8f93382ede6201ca955033fa76b2dee8322b7da4d07572b5de7a9",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.060159+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.226339+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "8e9dfe4891bf2257cfa331c9b68cb17ff090fb442dd66d386231d01011082f15",
+      "source_digest": "be216b48c9af75b06db0c8c6b7127594a71e4dc67969a18411b8dc8f508f9141",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.061963+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.228566+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "dc984091eb446e4f4cbcc74783b7109fcb7df3c1048d2d9dacce935c40359bee",
+      "source_digest": "11a7403995bfafefc5b50344119f0cf8ee4eb2babfba1fcdeb1c3fdc68578bf4",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.063743+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.230221+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "6": {
       "document_sha256": "9a86db478c03eefb0f6b05fe56c7708dc5559d7670a44cc1c40561ee0a5f0335",
-      "source_digest": "f7553a09132bfc3bbca411ac5a6c0ee377e5b03134e5a0a90aad9bb138411612",
+      "source_digest": "8f64ef66149049e812b20cfef7a951f28baf067e5b4055ae8c98ee2bc68285ca",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.065607+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.232277+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "7": {
       "document_sha256": "da59a63d379931b9d397b611a6f1ce61a245d7e33b53f8d96a962fcaa579d21d",
-      "source_digest": "b552dfe911b40243c22d41c6faabf2dcc72e906c5dca5d996c62e1aeb3c7c6bb",
+      "source_digest": "12b7eab1d29f7a9351a3c33639de83d74d978893227b4b6498baebfd03f685f1",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.067593+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.234476+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "8": {
       "document_sha256": "0aa27284556dffcc7b175478898e504746b115bc0612c546fc32a1ed57002a81",
-      "source_digest": "f7553a09132bfc3bbca411ac5a6c0ee377e5b03134e5a0a90aad9bb138411612",
+      "source_digest": "8f64ef66149049e812b20cfef7a951f28baf067e5b4055ae8c98ee2bc68285ca",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.069450+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.236461+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "9": {
       "document_sha256": "d0ba0b9e69f01b0c2f38e422a3a234f1d3cfe260947d114ea630af0bd1c8c83d",
-      "source_digest": "3ef1a6aae10047c5828b404c5c2b56fe91dfaef7923c2296a4ad9d3be6892a1b",
+      "source_digest": "554019b35243d39ae3dce7e707e6c0871f0670a71c8672b6757c92b82632a977",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.071428+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.238174+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "7ef58b47acf0d6f36aed9c9ae3d9bd82293e2e97b2831aaa935509b1654f8e7c",
+      "source_digest": "b9ed69bbb6fbb629d044e03fcde7471afb45d30fcd53c60533e3c12ffa17fb00",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.073264+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.240140+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "2ad160c2c3925d2e0e8b0f47e8c8a817b69978555ce2be0f7e7ec23d2f337f83",
+      "source_digest": "0b24d1173118c838a8eeb00229192401a07a50b95b650e341150df732a539f09",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.074910+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.242737+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "5447190eae22e3c63d167d198a06bf01fac475571483876c7f0e2ad631065575",
+      "source_digest": "b3e2dd9d9346fcf3c1872b4d4c75eb9e8c394fb753da6f6073f7819ee3b18dc5",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.076635+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.244694+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "13": {
       "document_sha256": "609e26253d6ea9098b44836c142c11b4a6bc33966ea7ed9e972c571eff1b6139",
-      "source_digest": "3ef1a6aae10047c5828b404c5c2b56fe91dfaef7923c2296a4ad9d3be6892a1b",
+      "source_digest": "554019b35243d39ae3dce7e707e6c0871f0670a71c8672b6757c92b82632a977",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.078545+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.246652+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "14": {
       "document_sha256": "d402c9f37367bed480a24acc886c3f45933b6882b12058b659bab31b575a2bd3",
-      "source_digest": "3ef1a6aae10047c5828b404c5c2b56fe91dfaef7923c2296a4ad9d3be6892a1b",
+      "source_digest": "554019b35243d39ae3dce7e707e6c0871f0670a71c8672b6757c92b82632a977",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.080655+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.248683+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "15": {
       "document_sha256": "d72369824a5f3428023178a3690e50844081b050d28f7c2cefd7c7434199c5f1",
-      "source_digest": "3ef1a6aae10047c5828b404c5c2b56fe91dfaef7923c2296a4ad9d3be6892a1b",
+      "source_digest": "554019b35243d39ae3dce7e707e6c0871f0670a71c8672b6757c92b82632a977",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.082357+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.250901+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "9e6f3cc035ae698a1e7f7be1ab39427389aa212ab28ee3202f7b8246e0cad55b",
+      "source_digest": "22e6d2f4bb135904ca6840334324f61baabc92570a6ffaefaaa4f08ae3652a72",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.084985+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.252791+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "f7553a09132bfc3bbca411ac5a6c0ee377e5b03134e5a0a90aad9bb138411612",
+      "source_digest": "8f64ef66149049e812b20cfef7a951f28baf067e5b4055ae8c98ee2bc68285ca",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.086631+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.254867+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "b552dfe911b40243c22d41c6faabf2dcc72e906c5dca5d996c62e1aeb3c7c6bb",
+      "source_digest": "12b7eab1d29f7a9351a3c33639de83d74d978893227b4b6498baebfd03f685f1",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.088244+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.257012+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "19": {
       "document_sha256": "20261f5ce75559081373cbcff1a075a866651822ad505417bc295ab30c9f7a08",
-      "source_digest": "ded46370d3d8b609e102378d4ad66e105d4d23b49e5ce9e40054d5e7ed6b5180",
+      "source_digest": "6f0b9e5dc8b7921df340687231350362fc10c84041fa00c1b2175e3f483fd14a",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.090062+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.258970+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     },
     "20": {
       "document_sha256": "d4b1fde2264cb0881b23ebc84d6efd8b8e22b41b4966924c7cda2fdf0c9c4f9f",
-      "source_digest": "b552dfe911b40243c22d41c6faabf2dcc72e906c5dca5d996c62e1aeb3c7c6bb",
+      "source_digest": "12b7eab1d29f7a9351a3c33639de83d74d978893227b4b6498baebfd03f685f1",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
-      "reviewed_at": "2026-11-03T17:25:23.091625+00:00",
-      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
+      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
+      "reviewed_at": "2026-11-03T17:38:14.260928+00:00",
+      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
     }
   }
 }

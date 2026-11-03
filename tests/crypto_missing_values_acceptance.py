@@ -219,6 +219,13 @@ class NativeDisplay(NoNetwork):
         self.assertEqual(cells["BTC"][1], "1 KRW")  # the cost basis names its currency
         notes = " ".join(label.text() for label in pane.findChildren(QLabel))
         self.assertIn("No KRW price for XYZ", notes)
+        # The note names held coins, so like the holdings table it stays out of AI commentary (NEW-M6-18).
+        import json
+        from quantgen_desktop.commentary import commentary_payload
+        pane.bind_output("crypto", out)  # the tool name
+        sent = json.dumps(commentary_payload(pane.report), ensure_ascii=False)
+        self.assertNotIn("XYZ", sent)  # the unpriced holding's name is not sent
+        self.assertIn("Premium / volatility", sent)  # market results are still sent
 
 
 if __name__ == "__main__":
