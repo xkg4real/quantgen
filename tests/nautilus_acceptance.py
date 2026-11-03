@@ -2726,6 +2726,23 @@ def test_l1_29_trial_counts_protocol_and_reference_drift():
         assert "G-08: reference drift: sr_oos" in rec["withheld_reasons"], rec["withheld_reasons"]
 
 
+def _assert_owner_fields_absent_or_well_formed(t: dict, pilot: str) -> None:
+    """Before Step 7A.3 a committed table holds neither owner field (Claude never writes them, GOVERNANCE-R4-3).
+    At 7A.3 the owner adds both together (RUNBOOK 7A.3, spec 6.6): owner_confirmed "<name>, <YYYY-MM-DD>, table
+    <16 hex>, code <16 hex>" quoting this table's table_sha256, and a 64-hex host_fingerprint. Whether the code
+    digest is current and the host matches is R-11/R-15's job at of-record time, not this static check."""
+    import re
+    from tools.nautilus import runner
+    present = [k for k in runner.OWNER_FIELDS if k in t]
+    if not present:
+        return
+    assert present == list(runner.OWNER_FIELDS), (pilot, "owner fields come as a pair", present)
+    m = re.fullmatch(r"(.+), (\d{4}-\d{2}-\d{2}), table ([0-9a-f]{16}), code ([0-9a-f]{16})", str(t["owner_confirmed"]))
+    assert m, (pilot, t["owner_confirmed"])
+    assert m.group(3) == runner.table_sha256(t)[:16], (pilot, m.group(3), runner.table_sha256(t)[:16])
+    assert re.fullmatch(r"[0-9a-f]{64}", str(t["host_fingerprint"])), (pilot, t["host_fingerprint"])
+
+
 def test_l1_30_card_labels_and_engine_text():
     """L1-30 (6.5; QUANT-6, QUANT-11, QUANT-R2-4): a written card carries the claim label, the engine text (STUB with
     the stub child, 6.5's text otherwise), parity_scope and stats.quantgen_score; every committed table's claim_label
@@ -2734,7 +2751,7 @@ def test_l1_30_card_labels_and_engine_text():
     for pilot, path in PILOT_TABLES.items():
         t = json.loads(path.read_text(encoding="utf-8-sig"))
         assert t["pilot"] == pilot and t["claim_label"].startswith(parity.CLAIM_PREFIXES), (pilot, t["claim_label"])
-        assert "owner_confirmed" not in t and "host_fingerprint" not in t, pilot          # GOVERNANCE-R4-3
+        _assert_owner_fields_absent_or_well_formed(t, pilot)                              # GOVERNANCE-R4-3
         assert parity.card_rules(t, stub_child=False)["engine"] == ENGINE_6_5
     with tempfile.TemporaryDirectory(prefix="qgnb_l130_") as name:
         tmp = Path(name)

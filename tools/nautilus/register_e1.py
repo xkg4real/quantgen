@@ -30,7 +30,7 @@ GRID = [{"rule": rule, "lookback": lookback, "step": step}
 def _write(path: Path, value: dict) -> None:
     tmp = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
     try:
-        with tmp.open("x", encoding="utf-8") as fh:
+        with tmp.open("x", encoding="utf-8", newline="\n") as fh:
             json.dump(value, fh, ensure_ascii=False, indent=2, allow_nan=False)
             fh.write("\n")
             fh.flush()
@@ -151,9 +151,9 @@ def register(table_path: Path, *, mode: str, ledger_dir: Path | None = None,
             _write(receipt_path, receipt)  # durable intent BEFORE first ledger append
         planned = _planned_rows(t, receipt["created_utc"], receipt["source_anchor"], tsha)
         _check_prefix(rows, planned)
-        writer = register_fn or G.register_trial
+        append_row = register_fn or G.register_trial
         for index in range(len(rows), 12):
-            writer(ledger, planned[index], script=SCRIPT)
+            append_row(ledger, planned[index], script=SCRIPT)
             rows = ledger.rows()
             _check_prefix(rows, planned)
             if len(rows) != index + 1:

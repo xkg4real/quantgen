@@ -42,9 +42,18 @@ class RegistrationAcceptance(unittest.TestCase):
         self.root = Path(self.tmp.name)
         self.repo = self.root / "repo"
         (self.repo / ".git").mkdir(parents=True)
-        (self.repo / ".git/HEAD").write_text("a" * 40 + "\n", encoding="utf-8")
+        (self.repo / ".git/HEAD").write_text("a" * 40 + "\n", encoding="utf-8", newline="\n")
         self.table = self.root / "table.json"
-        self.table.write_bytes(FIXTURE.read_bytes())
+        fixture = json.loads(FIXTURE.read_text(encoding="utf-8-sig"))
+        if any(k in fixture for k in R.OWNER_FIELDS):
+            # After Step 7A.3 the committed table carries the owner's two fields. These tests exercise the
+            # pre-approval table, so drop them; table_sha256 already excludes them (spec 6.6).
+            for k in R.OWNER_FIELDS:
+                fixture.pop(k, None)
+            self.table.write_text(json.dumps(fixture, ensure_ascii=False, indent=1) + "\n", encoding="utf-8",
+                                  newline="\n")
+        else:
+            self.table.write_bytes(FIXTURE.read_bytes())
         self.ledger_dir, self.out = self.root / "ledgers", self.root / "out"
         self.ledger = G.family_ledger("E1", self.ledger_dir)
         self.guards = self.enterContext(ExitStack())
@@ -59,7 +68,7 @@ class RegistrationAcceptance(unittest.TestCase):
     def mutate_table(self, fn):
         t = json.loads(self.table.read_text(encoding="utf-8"))
         fn(t)
-        self.table.write_text(json.dumps(t), encoding="utf-8")
+        self.table.write_text(json.dumps(t), encoding="utf-8", newline="\n")
 
     def test_12_unique_rows_counts_and_no_data_or_owner_write(self):
         before = self.table.read_bytes()
@@ -120,7 +129,7 @@ class RegistrationAcceptance(unittest.TestCase):
         self.assertFalse(self.ledger.path.exists())
 
     def test_existing_unrelated_ledger_is_not_overwritten(self):
-        t = json.loads(self.table.read_text())
+        t = json.loads(self.table.read_text(encoding="utf-8"))
         row = A._planned_rows(t, "2026-10-30T00:00:00Z", "git:" + "a" * 40, R.table_sha256(t))[0]
         row["params"]["lookback"] = 99
         G.register_trial(self.ledger, row, script=A.SCRIPT)
@@ -149,13 +158,13 @@ class RegistrationAcceptance(unittest.TestCase):
         path = Path(out["receipt_path"])
         for invalid in ([], {"schema": A.SCHEMA}, dict(out, status="PILOT_PASS")):
             with self.subTest(invalid=invalid.get("status") if isinstance(invalid, dict) else "list"):
-                path.write_text(json.dumps(invalid), encoding="utf-8")
+                path.write_text(json.dumps(invalid), encoding="utf-8", newline="\n")
                 with self.assertRaises(ValueError):
                     self.run_a2()
                 self.assertEqual(len(self.ledger.rows()), 12)
 
     def test_same_table_lock_blocks_registration(self):
-        t = json.loads(self.table.read_text())
+        t = json.loads(self.table.read_text(encoding="utf-8"))
         lock, _ = R.take_lock(self.out, R.table_sha256(t), [], None)
         try:
             with self.assertRaisesRegex(R.BridgeRefusal, "R-16"):
@@ -189,7 +198,7 @@ class RegistrationAcceptance(unittest.TestCase):
 
     def test_normal_runner_still_needs_owner_confirmation_and_freshness(self):
         self.run_a2()
-        t = json.loads(self.table.read_text())
+        t = json.loads(self.table.read_text(encoding="utf-8"))
         with self.assertRaisesRegex(R.BridgeRefusal, "owner_confirmed"):
             R._check_fields(t, "of-record")
         with self.assertRaisesRegex(R.BridgeRefusal, "R-16"):
@@ -198,7 +207,7 @@ class RegistrationAcceptance(unittest.TestCase):
     def approved_temp_table(self):
         """Synthetic approval only in memory; never write a production table."""
         self.run_a2()
-        t = json.loads(self.table.read_text())
+        t = json.loads(self.table.read_text(encoding="utf-8"))
         t["host_fingerprint"] = R.host_fingerprint("o8-test-host", self.ledger)
         t["owner_confirmed"] = (f"Test fixture, 2026-10-30, table {R.table_sha256(t)[:16]}, "
                                 f"code {'a' * 16}")
@@ -217,7 +226,7 @@ class RegistrationAcceptance(unittest.TestCase):
         self.check_temp_execution_guards(t)
         self.assertEqual(before, self.ledger.path.read_bytes())
         self.assertFalse((self.repo / "docs").exists())  # no referee report files
-        self.assertNotIn("owner_confirmed", json.loads(self.table.read_text()))
+        self.assertNotIn("owner_confirmed", json.loads(self.table.read_text(encoding="utf-8")))
 
     def test_o8_waiver_does_not_accept_missing_or_empty_ledger(self):
         t = self.approved_temp_table()
