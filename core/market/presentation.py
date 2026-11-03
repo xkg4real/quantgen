@@ -255,3 +255,50 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
     line(x(selected - start), 73, x(selected - start), height - 12, fg, "3 4")
     text(width - 10, height - 3, "거래소 시간 · 마지막 봉은 갱신 중일 수 있어요" if language == "ko" else "Exchange time · latest candle may still be forming", anchor="end", size=9)
     return "".join(parts) + "</svg>"
+
+
+def card_svg(dates, values, *, width: int = 360, height: int = 150, dark: bool = False,
+             label: str = "", decimals: int = 2) -> str:
+    """Compact line chart for the Markets indicator cards (owner UI-7).
+
+    Close-only observations are drawn as a line in the guide's C-format style:
+    light gridlines at the low, middle and high values with right-hand labels, the
+    first and last dates underneath and a dot on the latest value. Nothing is
+    inferred: no candles, smoothing or projected values.
+    """
+    width = max(220, min(1200, int(width)))
+    height = max(110, min(400, int(height)))
+    fg, bg, grid, muted = (("#E9EEE9", "#17211E", "#34443D", "#A7B8AC") if dark
+                           else ("#20372E", "#FFFFFF", "#E4E8E3", "#646E68"))
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
+             '<title>' + escape(label or "QUANTGEN market indicator") + '</title>',
+             f'<rect width="{width}" height="{height}" fill="{bg}"/>']
+    points = [(d, float(v)) for d, v in zip(dates, values) if v is not None and math.isfinite(float(v))]
+    if len(points) < 2:
+        parts.append(f'<text x="12" y="{height / 2:.0f}" fill="{muted}" font-family="QG Interface, sans-serif" '
+                     'font-size="11">—</text>')
+        return "".join(parts) + "</svg>"
+    low, high = min(v for _, v in points), max(v for _, v in points)
+    if high == low:  # a flat series sits mid-card between distinct gridlines
+        pad = abs(high) * 0.005 or 0.5
+        low, high = low - pad, high + pad
+    span = high - low
+    left, right, top, bottom = 6, width - 58, 10, height - 24
+    x = lambda i: left + (right - left) * i / (len(points) - 1)
+    y = lambda v: bottom - (bottom - top) * (v - low) / span
+
+    def text(tx, ty, value, *, anchor="start", color=muted, size=10):
+        parts.append(f'<text x="{tx:.1f}" y="{ty:.1f}" fill="{color}" font-family="QG Interface, sans-serif" '
+                     f'font-size="{size}" text-anchor="{anchor}">{escape(str(value))}</text>')
+
+    for value in (low, (low + high) / 2, high):
+        gy = y(value)
+        parts.append(f'<line x1="{left}" y1="{gy:.2f}" x2="{right}" y2="{gy:.2f}" stroke="{grid}" stroke-width="1"/>')
+        text(right + 6, gy + 3.5, f"{value:,.{max(0, int(decimals))}f}")
+    path = " ".join(("M" if i == 0 else "L") + f"{x(i):.2f},{y(v):.2f}" for i, (_, v) in enumerate(points))
+    parts.append(f'<path d="{path}" fill="none" stroke="{fg}" stroke-width="1.6" stroke-linejoin="round"/>')
+    last_x, last_y = x(len(points) - 1), y(points[-1][1])
+    parts.append(f'<circle cx="{last_x:.2f}" cy="{last_y:.2f}" r="3" fill="{fg}"/>')
+    text(left, height - 6, points[0][0])
+    text(right, height - 6, points[-1][0], anchor="end")
+    return "".join(parts) + "</svg>"
