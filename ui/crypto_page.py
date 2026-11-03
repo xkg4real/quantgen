@@ -22,7 +22,7 @@ from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
 import ui.xcharts as xc
 from core.research.crypto_workflow import (_synthetic, _live, analyze, narrative, payload, CRYPTO_DAYS,
-                                          holdings_summary, perp_premium_pct, z_text)
+                                          cost_basis_text, holdings_summary, perp_premium_pct, z_text)
 from core.research.decay_disclosure import decay_value, decay_text
 
 
@@ -56,11 +56,11 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
                                   chip(f"USD/KRW: {a['usdkrw_source']}"), chip(f"{kp.n} premium days")] +
                                  [chip(f"{k.split('_', 2)[-1]}: {v}" + (" · historical, not revalidated" if k == "M_C4_funding" else ""), "success" if v == "PASS" and k != "M_C4_funding" else "muted") for k, v in a["verdicts"].items()],
                                  spacing=6, wrap=True))
-            perp = perp_premium_pct(a["premium_index"])
+            perp, z = perp_premium_pct(a["premium_index"]), z_text(kp.last_z, 2)
             blocks.append(ft.Row([
                 stat("Kimchi premium", f"{kp.last_pct:+.2f}%", token="error" if abs(kp.last_pct) > 3 else "text"),
-                stat("Premium z (1y)", z_text(kp.last_z, 2) or "n/a",
-                     tooltip="" if z_text(kp.last_z) else "Not computed: fewer than 91 observations or no variation in the window."),
+                stat("Premium z (1y)", z or "n/a",
+                     tooltip="" if z else "Not computed: fewer than 91 observations or no variation in the window."),
                 stat("AR(1) amplitude half-life", decay_value(getattr(kp, "decay", None)), tooltip=decay_text(getattr(kp, "decay", None)) + " Unit: observations."),
                 stat("Funding (ann.)", f"{fc.last_ann_pct:+.1f}%" if fc else "n/a", token="error" if fc and fc.flag != "normal" else "text",
                      tooltip=fc.flag if fc else ""),
@@ -90,7 +90,7 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
                 title = f"Upbit holdings (read-only): ₩{held['total_krw']:,.0f}" + (
                     "" if held["complete"] else f" · partial, excludes {', '.join(held['unvalued'])} (no KRW price)")
                 blocks.append(card(ft.Column([ft.Text(title, size=13, weight=ft.FontWeight.W_600, color=pal.text)] +
-                                             [ft.Text(f"{b['currency']}  {b['total']:.6f}  avg buy {b['avg_buy_price']:,.0f} {b.get('unit_currency') or ''}  value "
+                                             [ft.Text(f"{b['currency']}  {b['total']:.6f}  avg buy {cost_basis_text(b)}  value "
                                                       + (f"₩{b['krw_value']:,.0f}" if b["krw_value"] is not None else "n/a (no KRW price)"),
                                                       size=12, color=pal.text, font_family="Consolas, monospace") for b in a["balances"]] +
                                              [ft.Text("avg_buy_price is the cost-basis record for the 2027 virtual-asset tax; this page computes no tax.",

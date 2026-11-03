@@ -79,25 +79,30 @@ def analyze(*, days: int = 730, source: str = "live", card_loader=None, include_
     return out
 
 def krw_prices(public, markets) -> dict:
-    """Current KRW prices by market; a market that cannot be priced maps to None.
+    """Current KRW prices by market; a market Upbit does not list maps to None.
 
-    One request covers every market. If it fails (for example a coin with no KRW
-    market, which the Upbit API may reject for the whole list; unverified), each
-    market is asked alone, so one unknown coin cannot erase every holding (§10 M6-11).
+    One request covers every market. If Upbit rejects the list (HTTP 400/404, as for
+    a coin with no KRW market; the exact reply is unverified), each market is asked
+    alone, so one unknown coin cannot erase every holding (§10 M6-11). A timeout,
+    rate limit or server error is not "no price": it is raised and shown as a failed
+    read, without retrying each coin.
     """
     from data.crypto.crypto_client import CryptoError
+    rejected = (400, 404)
     if not markets:
         return {}
     try:
         return {t["market"]: t["price"] for t in public.ticker(list(markets))}
-    except CryptoError:
-        if len(markets) == 1:
-            return {markets[0]: None}
+    except CryptoError as exc:
+        if getattr(exc, "status", None) not in rejected:
+            raise
     prices = {}
     for market in markets:
         try:
             prices.update({t["market"]: t["price"] for t in public.ticker([market])})
-        except CryptoError:
+        except CryptoError as exc:
+            if getattr(exc, "status", None) not in rejected:
+                raise
             prices[market] = None
     return prices
 
@@ -106,11 +111,14 @@ def value_holdings(balances, prices) -> list:
     """Add each holding's KRW value from {"KRW-<coin>": price}.
 
     No KRW market or no current price leaves the value unknown (None), never 0
-    (§10 NEW-M6-14, NEW-M6-22).
+    (§10 NEW-M6-14, NEW-M6-22). A zero quantity is worth 0 whatever its price.
     """
     for b in balances:
         price = 1.0 if b["currency"] == "KRW" else prices.get(f"KRW-{b['currency']}")
-        b["krw_value"] = b["total"] * price if price is not None else None
+        if not b["total"]:
+            b["krw_value"] = 0.0
+        else:
+            b["krw_value"] = b["total"] * price if price is not None else None
     return balances
 
 
@@ -127,9 +135,8 @@ def holdings_summary(balances) -> dict:
 
 
 def perp_premium_pct(premium_index) -> float | None:
-    """The perpetual mark/index premium in percent, or None when the provider did not give both prices."""
-    value = (premium_index or {}).get("premium_pct")
-    return float(value) if value is not None and math.isfinite(float(value)) else None
+    """The perpetual mark/index premium in percent; None when the provider lacked either price."""
+    return (premium_index or {}).get("premium_pct")
 
 
 def z_text(z, digits=1) -> str | None:
@@ -137,11 +144,20 @@ def z_text(z, digits=1) -> str | None:
     return f"{z:+.{digits}f}" if z is not None and math.isfinite(z) else None
 
 
+def cost_basis_text(holding) -> str:
+    """Upbit's average buy price with its currency; precise enough for small non-KRW prices."""
+    value, unit = holding.get("avg_buy_price"), (holding.get("unit_currency") or "").strip()
+    if value is None:
+        return "n/a"
+    text = f"{value:,.0f}" if unit in ("", "KRW") else f"{value:.8g}"
+    return f"{text} {unit}".strip()
+
+
 def narrative(a: dict) -> str:
     kp, fc, g = a["kimchi"], a["funding"], a["garch"]
     parts = [
         f"Korea pays {kp.last_pct:+.2f} % against the world price for bitcoin ("
-        + (f"{z_text(kp.last_z)} standard deviations from its one-year mean; " if z_text(kp.last_z)
+        + (f"{z} standard deviations from its one-year mean; " if (z := z_text(kp.last_z))
            else "z unavailable: fewer than 91 observations or no variation in the window; ")
         + f"average {kp.mean_pct:+.2f} %, peak {kp.max_pct:.1f} % since {kp.dates[0]}); {decay_text(getattr(kp, 'decay', None))} "
         f"(ADF p = {kp.adf_p:.3f}). It is a signal, not a trade: remittance limits, the Travel Rule and the 2027 tax close the arbitrage"

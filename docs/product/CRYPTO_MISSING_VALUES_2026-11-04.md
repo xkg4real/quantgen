@@ -34,14 +34,17 @@ other limitation of the same model already carries its own error ID.
 | Where | Before | After |
 | --- | --- | --- |
 | `data/crypto/crypto_client.py` premium index | missing index → 0.0 %, missing mark → −100 %, missing next funding time → 1970-01-01 | `premium_pct`, `mark`, `index`, `next_funding_time` are `None` when missing |
-| Upbit daily candles | a day without a close became 0.0 (premium −100 %) | the day is left out (also D12-03) |
-| Upbit ticker | a missing price became 0.0 | `None` |
+| Upbit daily candles | a day without a close (or open/high/low) became 0.0 (premium −100 %) | the day is left out and not counted, so paging continues to the requested number of usable days (also D12-03) |
+| Upbit ticker | a missing price, change or 24-hour value became 0.0 | `None` |
+| Binance funding rate in the premium index | missing → 0.0, read by the AI as a 0 % rate | `None` |
 | `core/crypto/analytics.py` `kimchi_premium` | z = 0 for a flat window; `last_z` 0.0 when not computed; zero or missing prices entered the premium | z and `last_z` are NaN when undefined; days without a usable Upbit or Binance price are left out, and an unusable FX fixing is skipped so the previous one carries forward |
-| `core/research/crypto_workflow.py` | `tick.get(coin, 0.0)`; one batch ticker request | `value_holdings` sets `krw_value=None` without a price; `krw_prices` asks each market alone if the batch fails; `holdings_summary` returns the valued total, the unvalued coins and `complete` |
+| `core/research/crypto_workflow.py` | `tick.get(coin, 0.0)`; one batch ticker request | `value_holdings` sets `krw_value=None` without a price (a zero quantity is worth 0); `krw_prices` asks each market alone only when Upbit rejects the list (HTTP 400/404), while a timeout, rate limit or server error stays a failed read; `holdings_summary` returns the valued total, the unvalued coins and `complete` |
 | Narratives (English, Korean) | "+0.0 standard deviations" | "z unavailable: fewer than 91 observations or no variation in the window" / "z는 계산할 수 없습니다 …" |
 | AI payload | `kimchi.z` 0.0; `premium_index.premium_pct` 0.0 or −100 | `null` |
-| Flet Crypto page | `+0.00`, `+0.000%`, total of valued and zero-valued coins | `n/a` with a tooltip; total marked "partial, excludes …"; row value "n/a (no KRW price)"; cost basis with its unit |
+| Flet Crypto page | `+0.00`, `+0.000%`, total of valued and zero-valued coins | `n/a` with a tooltip; total marked "partial, excludes …"; row value "n/a (no KRW price)"; cost basis with its unit, non-KRW prices to 8 significant digits |
 | Native Crypto pane | z 0.0000; KRW value 0.0000 | `—`; a note naming unvalued coins (English and Korean); cost basis with its unit |
+
+Provider parsing and the analytics share one definition of a usable number (`core/crypto/values.py`).
 
 For valid inputs nothing changes. On 40 synthetic random histories (95–800 days,
 weekday-only FX), the old and new `kimchi_premium` gave identical dates, premium and
@@ -65,10 +68,10 @@ tolerance, float rounding of a constant window gave z ≈ ±1.
 
 ## Checks
 
-`tests/crypto_missing_values_acceptance.py` (10 tests, offline, sockets refused):
+`tests/crypto_missing_values_acceptance.py` (11 tests, offline, sockets refused):
 
 - provider parsing of missing mark/index/close/price;
-- the ticker fallback;
+- the ticker fallback, and no per-coin retry on an outage;
 - holdings valuation and summary;
 - z for a short and a flat history, and unchanged z for a varying one;
 - left-out zero/NaN rows;

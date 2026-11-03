@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "1782d0f8f20802d7e9496c0efe2e067298906a8183983a7e1e1b509a629f2100",
+    ".github/workflows/runtime-smoke.yml": "bbe7a2979ba4ab675c297fc1f7b189a2eb425f94c1a4716b2faba42d5dc575f5",
     "README.md": "6a4f572a12e6dea657c7c063240b94d1a928e2b4f41fff25f7348ca69e1b88b5",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -61,8 +61,9 @@
     "core/calendars/regime.py": "fcac664c8f3b2d51ff45c67ef27252b1961b38c944dd785f8162d9ffa579d17b",
     "core/calendars/store.py": "4932ad9cbb4a1914f6b75da84e96a74730444cf2f43c756a7c7dd95efb403041",
     "core/crypto/__init__.py": "239a350b379471bb83ac90f3dc25149814f5f58790604236697daf160f5fcd81",
-    "core/crypto/analytics.py": "1385035b274e89bf7eb643fbb02f3fc86f73ce7ba3542df85a21de43020676f7",
+    "core/crypto/analytics.py": "4a3dba15eb00bdcb6fdefdb04db814042cad52af683e55722638acd17af2479a",
     "core/crypto/funding_diagnostic.py": "19e0763b30e0f838d522c4ceedffd8ad7139b69f7257924532593b9bb02a9270",
+    "core/crypto/values.py": "c881387f0f6b79df3bbd2458320e5731be4d19e929f539f2bba18446804ce54a",
     "core/education/__init__.py": "d04a1be2039032cc6150e474930f58e9f5b1e882d8fad1a6b472c313b5456ad4",
     "core/education/chart.py": "e42562c7fdcbfe5be6743561b1b60a0567ca6da916c292c641c3e84ae6d79771",
     "core/education/glossary.py": "14cbdcaad4eb87cbddbebf79390b94f115693d25b4ab48c2b2bd5f80536c1324",
@@ -155,7 +156,7 @@
     "core/research/analysis.py": "f3867004882d212f49a702b9bfe201a006e56fd0a76f138397a1bcbb11942808",
     "core/research/bond_analysis.py": "0d7b40defdd580db677226483b4a1cc6bf1e5919ea1e9ca39d691376c0b1263f",
     "core/research/connections.py": "f634fe608bcfca39c3841ee7e4bf25524ba4cba8e28658d957d56725c2c56a04",
-    "core/research/crypto_workflow.py": "c84aeb06fff2e5e552ed208d134f86ebc6a0fa626949830fdfd407413b2c8e85",
+    "core/research/crypto_workflow.py": "523a52f3caaae235d38f160eb665f609577467b5a5b8727fa8e88f42a0a15ca3",
     "core/research/decay_disclosure.py": "98f68bb2b8f8a0ac051865a76313855a323890a4adacd9abe9d0c025c0a934ce",
     "core/research/derivatives_workflow.py": "0597ee855c13663bd4d851320c68115482c3a41e4ea5f68b8f2ca35b91cd70e6",
     "core/research/display_rights.py": "e59554e140ee5ea994812bcaca083c622d94bac1513411bdca58824b6f20e6fb",
@@ -230,7 +231,7 @@
     "data/calendars/XETRA.json": "5df6cbfc3b262716d8f8c0e598031a082c3379a96b52470154b87069544b7f07",
     "data/calendars/index.json": "2b9554ba81120f51804a1df3fcfe0ef810974b660573c8213269074505f35d38",
     "data/crypto/__init__.py": "f07f423c4c4e88823feb526625101d80d90ef5f322a506a73ddf7fbbd292109b",
-    "data/crypto/crypto_client.py": "f799c510e754292d1467004b87266e08b48afa00cc9d7138d7ee1c7c4396f04b",
+    "data/crypto/crypto_client.py": "8b298e90fa8f342ed361e722a3650dfa76ce0bd030f492a44b5f7fc20622d867",
     "data/fmp/__init__.py": "23b067ddcc2dee0fd36594e1838eaec90d475fa7b862fc4186de6950ab347d1d",
     "data/fmp/quote_client.py": "89d9dee24b32ea2e6b9dd0570ce89a98310f145a535a7acd79863921d91f09de",
     "data/kis_markets.py": "7bfbce9da1609cae4405e16e3900cf45b4062cb4eb1c2c54e6049cb36bc0025b",
@@ -245,7 +246,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "47e87f1594d4d671d0758723692e3f36f60c7900b670b0f425272919de51091a",
+    "docs/compliance/FACTS.md": "9d70b35d08947cd9797464f90ceabf1f130181ada95c4b88c142d5add676a381",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -259,6 +260,7 @@
     "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md": "3f05520af76a14bbeb8fab8f7db874b25f18e52d4e884ec6b46e305e58f7ca44",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
+    "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "bb8823ca2fcf7875cc69ded51a9ae1a83b8df1a3435c2b72aba0538d4a2ec011",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "c03dae78c5964bded90065661a0d3dc631f4b650c3baae8eb6875443b11959e6",
     "docs/product/FORWARD_CONVENTION_2026-11-02.md": "a294ca013fa1460c435286a1b2a466630f522d859fc9a43da29927e6c5ffcd86",
@@ -287,7 +289,7 @@
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "9eb917388f941560c928f571d70460513e17b8048630a3dd4abea9aaa635fbd3",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "daca3c13b8d1b320c438d3f65263fda58b70ac23c8eb2ed186ebab824eebb7ce",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
@@ -322,8 +324,8 @@
     "quantgen_desktop/market_board.py": "64a19ff906f9d194135f988d73908fdb063ff9945b8e9da1c69a48b2e38dba5b",
     "quantgen_desktop/market_chart.py": "28d4f14d92ad276ccf1bb5bba241ee108ab63c5340103d38f270fdaeaee3d645",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
-    "quantgen_desktop/market_narrative_language.py": "b8cb8fd3f6b2a75fcd8225d43a2a172365caa237774c6ac45bc0e535655fd15a",
-    "quantgen_desktop/market_tools.py": "814118dc14ade98a391e2cb8200c22becb751cc4f6dab2138ef5802a13c858af",
+    "quantgen_desktop/market_narrative_language.py": "2e6dd30c91e53ea433a4eff400674e3b32ee01d49656a3204242219acfe741ea",
+    "quantgen_desktop/market_tools.py": "d3dd7cb14edcd39e597d8f90680575958e43422f696634925db87fb454c68c64",
     "quantgen_desktop/model_narrative_language.py": "c4d4c826e3416a202cc4167c19a2ccbc233fcbc80239e62a81808092274c0981",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
@@ -352,6 +354,7 @@
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
+    "tests/crypto_missing_values_acceptance.py": "03a1dffe28c4d83685818655778add5bde6e3b29c3eefa636d3457b9c6081f6b",
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_acceptance.py": "172aa648792ff58b52d9a73216c53b8be2f1f16976e65f8789866e4014202698",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
@@ -520,7 +523,7 @@
     "ui/bonds_page.py": "93db57961b326872584c3b01600356a1eea9f882c3da55035196b2c1ae691881",
     "ui/chart_study.py": "503ad1e97211fa899cfc77a42dfdd4627c8a5169ed459901872af6875a5192c7",
     "ui/components.py": "41be9f3117f80c1677308355702758897f6d9d30654eb5a4d229d0bf7702a4fd",
-    "ui/crypto_page.py": "6829f7aedd678196a1bb1853044789d7bca0ac40b724006d35ead19942c65101",
+    "ui/crypto_page.py": "880d2af07c25f45249b95f02bcdd5f2b919414c1b845f248feae84e55e9e2aab",
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
     "ui/derivatives_page.py": "ed659a96def9e1b9bddbd0295c6357c47418fb4ba11778a1aecc817c352e1359",
     "ui/etf_page.py": "910b2a27d4ee5264cc79286e8fc48bc985a251d6a0f1727ec6f29daa633c660f",
@@ -550,164 +553,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "e917090c1153867f2f06a3529253445d505584ee0a970e9dc39d347715d12696",
-      "source_digest": "865daa7a0e843a3579bee76ae52d5713a1dd5208833656339ea1b1d43d628cdf",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.920841+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "document_sha256": "15e782f39147b6c9e1c99e19dcdc28ca7b5dee6b6bea6af7457f05fe1fbf64f0",
+      "source_digest": "f88c288dbc91d215ce73dd83cf66a8ba124f775beca016b8c0e45843124e35cc",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.969193+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "865daa7a0e843a3579bee76ae52d5713a1dd5208833656339ea1b1d43d628cdf",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.925340+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "f88c288dbc91d215ce73dd83cf66a8ba124f775beca016b8c0e45843124e35cc",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.971386+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "7993c36e8886cc390d19d580e3aa55512e826ed376bb124d0b204b2d6aae55ac",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.927327+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "b2cec2c99bea9679969ccd7760a25609abdc1888f22ca8b919ee64bbe5ed2368",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.973733+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "a1599df0e2c938cc2b291b8ab3cb4eea0ac7d49e196ffd9d464cc08d4fb06c20",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.929430+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "9fc17550499cebed55755be2b5de86d17d7980a7da682c99f2b124dcb7afdf56",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.975941+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "25c0102d742de3b539d83618db854f346eeab424d5eeb48c718d69375a2650fe",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.931453+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "8379f5b8344e8af331bf0edb9d4f1d160d39eb169d44ddf38f0a479e19701f80",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.978601+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "6": {
       "document_sha256": "939f35c300ac2881e95ffc494d364bd48a8b7e48f42187a7ce1b14865c042958",
-      "source_digest": "48a1e60fba3024a6949804a45838c147b5b1113166b5e6da4e77f5d5065e8401",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.933241+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "20c258bc58066ae2ad65a10536c86431c6fea1850a1a7d087fb7035452e13005",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.980750+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "7": {
       "document_sha256": "da59a63d379931b9d397b611a6f1ce61a245d7e33b53f8d96a962fcaa579d21d",
-      "source_digest": "865daa7a0e843a3579bee76ae52d5713a1dd5208833656339ea1b1d43d628cdf",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.935032+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "f88c288dbc91d215ce73dd83cf66a8ba124f775beca016b8c0e45843124e35cc",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.982857+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "8": {
       "document_sha256": "0aa27284556dffcc7b175478898e504746b115bc0612c546fc32a1ed57002a81",
-      "source_digest": "48a1e60fba3024a6949804a45838c147b5b1113166b5e6da4e77f5d5065e8401",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.936673+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "20c258bc58066ae2ad65a10536c86431c6fea1850a1a7d087fb7035452e13005",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.984648+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "9": {
       "document_sha256": "d0ba0b9e69f01b0c2f38e422a3a234f1d3cfe260947d114ea630af0bd1c8c83d",
-      "source_digest": "996c8129563dfd3b293fc6062e00eb920264a18c3af11ebb05270183b633397c",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.938913+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "4b78e4c29e4a4b02ecac9f1d64ea1904be4eb916e4d92b17586703b2620f5fb9",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.986371+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "461f4a0bed99aae680cea6abcfc82a350f080340b258707bb5faaea8c0177c65",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.940809+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "d9a84bf4eafbdb883ae0885012bb029ea6d4bcf674dab67e745b11a2ea272295",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.989804+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "889e11e65b84e65c0c93b747c134fbaf68579021b0ec0aa3ee3b9bf81c39a6e0",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.942743+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "3ca06d346d921ce8c892801c8a5427f22e96b91b940d8d7da189266b49ce86e5",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.992316+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "bf51b9d720603c561c1c5dc39ceeb716456400446e24215e8444488cd50059cc",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.944573+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "ffb8693a86708c8eb646b70374615a02fcab6ceba87b375b7d2edd017f508281",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.994406+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "13": {
       "document_sha256": "609e26253d6ea9098b44836c142c11b4a6bc33966ea7ed9e972c571eff1b6139",
-      "source_digest": "996c8129563dfd3b293fc6062e00eb920264a18c3af11ebb05270183b633397c",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.946421+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "4b78e4c29e4a4b02ecac9f1d64ea1904be4eb916e4d92b17586703b2620f5fb9",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.996756+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "14": {
       "document_sha256": "d402c9f37367bed480a24acc886c3f45933b6882b12058b659bab31b575a2bd3",
-      "source_digest": "996c8129563dfd3b293fc6062e00eb920264a18c3af11ebb05270183b633397c",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.948115+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "4b78e4c29e4a4b02ecac9f1d64ea1904be4eb916e4d92b17586703b2620f5fb9",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:23.999303+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "15": {
       "document_sha256": "e002833c12f06337497c3b27e248bcbd3d668072dda42f0fa94cd4335f78bf0a",
-      "source_digest": "996c8129563dfd3b293fc6062e00eb920264a18c3af11ebb05270183b633397c",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.950185+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "4b78e4c29e4a4b02ecac9f1d64ea1904be4eb916e4d92b17586703b2620f5fb9",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:24.001158+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "6c67e4684ba312c573a8cab34782faaceafe361b9af0ab86dfe77de8cf91f164",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.952737+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "15c6022ca10b35927400493e311fc30d91b8a4101c795b06fba6491d51e2065e",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:24.003084+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "48a1e60fba3024a6949804a45838c147b5b1113166b5e6da4e77f5d5065e8401",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.954610+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "20c258bc58066ae2ad65a10536c86431c6fea1850a1a7d087fb7035452e13005",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:24.004698+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "865daa7a0e843a3579bee76ae52d5713a1dd5208833656339ea1b1d43d628cdf",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.956431+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "f88c288dbc91d215ce73dd83cf66a8ba124f775beca016b8c0e45843124e35cc",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:24.007158+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "19": {
       "document_sha256": "20261f5ce75559081373cbcff1a075a866651822ad505417bc295ab30c9f7a08",
-      "source_digest": "35b35bcf7de8978aa8f5b8e33691bff1bab15d30688c4a7f72a41a50a8744a13",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.958218+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "44fce9b7bf846af230a50a3bd8e60b97cd4cf3399da1f64ec76d29eee10c283c",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:24.009109+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     },
     "20": {
       "document_sha256": "d4b1fde2264cb0881b23ebc84d6efd8b8e22b41b4966924c7cda2fdf0c9c4f9f",
-      "source_digest": "865daa7a0e843a3579bee76ae52d5713a1dd5208833656339ea1b1d43d628cdf",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.959751+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "f88c288dbc91d215ce73dd83cf66a8ba124f775beca016b8c0e45843124e35cc",
+      "reviewed_by": "Claude §10 Crypto missing-values review",
+      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
+      "reviewed_at": "2026-11-03T16:04:24.011443+00:00",
+      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
     }
   }
 }

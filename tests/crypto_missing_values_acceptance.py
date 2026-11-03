@@ -51,20 +51,31 @@ class ProviderValues(NoNetwork):
                 self.assertAlmostEqual(got["premium_pct"], expected)
                 self.assertAlmostEqual(W.perp_premium_pct(got), expected)
         with patch.object(C, "_get", return_value={"markPrice": "1", "indexPrice": "1"}):
-            self.assertIsNone(C.BinancePublic().premium_index()["next_funding_time"])  # was 1970-01-01
+            got = C.BinancePublic().premium_index()
+        self.assertIsNone(got["next_funding_time"])   # was 1970-01-01
+        self.assertIsNone(got["last_funding_rate"])   # was 0.0, read by the AI as a 0% funding rate
+        with patch.object(C, "_get", return_value={"markPrice": "1", "indexPrice": "1", "lastFundingRate": "-0.0001"}):
+            self.assertEqual(C.BinancePublic().premium_index()["last_funding_rate"], -0.0001)
 
     def test_upbit_day_without_a_close_is_left_out(self):
         page = [{"candle_date_time_utc": f"{d}T00:00:00", "trade_price": p, "opening_price": 1, "high_price": 1,
                  "low_price": 1, "candle_acc_trade_volume": 1, "candle_acc_trade_price": 1}
                 for d, p in zip(days(3), (90_000_000, None, 91_000_000))]
-        with patch.object(C, "_get", side_effect=[page, []]):
+        older = [{"candle_date_time_utc": "2023-12-31T00:00:00", "trade_price": 89_000_000, "opening_price": 1,
+                  "high_price": None, "low_price": 1, "candle_acc_trade_volume": 1, "candle_acc_trade_price": 1},
+                 {"candle_date_time_utc": "2023-12-30T00:00:00", "trade_price": 88_000_000, "opening_price": 1,
+                  "high_price": 1, "low_price": 1, "candle_acc_trade_volume": 1, "candle_acc_trade_price": 1}]
+        with patch.object(C, "_get", side_effect=[page, older, []]) as get:
             got = C.UpbitPublic().daily("KRW-BTC", days=3)
-        self.assertEqual(got.dates, (days(3)[0], days(3)[2]))
-        self.assertEqual(got.close, (90_000_000.0, 91_000_000.0))
+        # Skipped days are not counted: paging goes on until three usable days.
+        self.assertEqual(got.dates, ("2023-12-30", days(3)[0], days(3)[2]))
+        self.assertEqual(got.close, (88_000_000.0, 90_000_000.0, 91_000_000.0))
+        self.assertEqual(get.call_count, 2)
 
     def test_ticker_without_a_price_reports_none(self):
         with patch.object(C, "_get", return_value=[{"market": "KRW-BTC", "trade_price": None}]):
-            self.assertIsNone(C.UpbitPublic().ticker("KRW-BTC")[0]["price"])
+            row = C.UpbitPublic().ticker("KRW-BTC")[0]
+        self.assertEqual((row["price"], row["change_pct"], row["volume_24h_krw"]), (None, None, None))
         with patch.object(C, "_get", return_value={"indexPrice": "100"}):
             probe = C.probe()["binance_futures"]
         self.assertFalse(probe["ok"]); self.assertEqual(probe["detail"], "price missing")
@@ -87,13 +98,36 @@ class Holdings(NoNetwork):
             def ticker(self, markets):
                 self.calls.append(list(markets))
                 if "KRW-XYZ" in markets:
-                    raise C.CryptoError("Upbit ticker: HTTP 404")
+                    raise C.CryptoError("Upbit ticker: HTTP 404", status=404)
                 return [{"market": m, "price": 1000.0} for m in markets]
         public = Public()
         self.assertEqual(W.krw_prices(public, ["KRW-BTC", "KRW-XYZ"]), {"KRW-BTC": 1000.0, "KRW-XYZ": None})
         self.assertEqual(public.calls, [["KRW-BTC", "KRW-XYZ"], ["KRW-BTC"], ["KRW-XYZ"]])
         self.assertEqual(W.krw_prices(public, []), {})  # KRW only: no request at all
         self.assertEqual(len(public.calls), 3)
+
+        class Down:
+            calls = 0
+            def ticker(self, markets):
+                Down.calls += 1
+                raise C.CryptoError("Upbit ticker: HTTP 503", status=503)
+        for error in (503, 429, None):  # an outage is a failed read, not "no KRW price", and is not retried per coin
+            Down.calls = 0
+            def ticker(self, markets, error=error):
+                Down.calls += 1
+                raise C.CryptoError("Upbit ticker: failed", status=error)
+            Down.ticker = ticker
+            with self.subTest(error), self.assertRaises(C.CryptoError):
+                W.krw_prices(Down(), ["KRW-BTC", "KRW-ETH"])
+            self.assertEqual(Down.calls, 1)
+
+    def test_zero_quantity_is_worth_zero_and_cost_basis_keeps_precision(self):
+        valued = W.value_holdings([{"currency": "XYZ", "total": 0.0}], {})
+        self.assertEqual(valued[0]["krw_value"], 0.0)
+        self.assertTrue(W.holdings_summary(valued)["complete"])
+        self.assertEqual(W.cost_basis_text({"avg_buy_price": 80_000_000.0, "unit_currency": "KRW"}), "80,000,000 KRW")
+        self.assertEqual(W.cost_basis_text({"avg_buy_price": 0.00002, "unit_currency": "BTC"}), "2e-05 BTC")
+        self.assertEqual(W.cost_basis_text({"avg_buy_price": 1500.0}), "1,500")
 
 
 class KimchiZ(NoNetwork):
@@ -182,7 +216,7 @@ class NativeDisplay(NoNetwork):
                 cells[table.item(row, 0).text()] = [table.item(row, c).text() for c in range(1, table.columnCount())]
         self.assertEqual(cells["Premium z"], ["—"])
         self.assertEqual(cells["XYZ"][-1], "—")          # was 0.0000
-        self.assertEqual(cells["BTC"][1], "1.0000 KRW")  # the cost basis names its currency
+        self.assertEqual(cells["BTC"][1], "1 KRW")  # the cost basis names its currency
         notes = " ".join(label.text() for label in pane.findChildren(QLabel))
         self.assertIn("No KRW price for XYZ", notes)
 

@@ -32,6 +32,8 @@ from datetime import date
 from typing import Optional, Sequence
 
 import numpy as np
+
+from .values import price_or_none
 from scipy import stats as sps
 
 from core.quant.strategies import adf_pvalue, half_life, ar1_decay
@@ -74,7 +76,7 @@ def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
     the FX fixing has no weekend rows."""
     # Rows without a usable price are left out: a missing close must not read as -100% (§10 NEW-M6-15).
     def usable(x):
-        return x is not None and np.isfinite(x) and x > 0
+        return price_or_none(x) is not None
     dates = sorted(d for d in set(upbit_krw) & set(binance_usdt) if usable(upbit_krw[d]) and usable(binance_usdt[d]))
     usdkrw = {d: v for d, v in usdkrw.items() if usable(v)}
     fx_dates = np.array(sorted(usdkrw))

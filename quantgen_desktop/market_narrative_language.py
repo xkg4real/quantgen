@@ -84,7 +84,7 @@ def crypto_korean(a):
     kp, fc, g = a['kimchi'], a['funding'], a['garch']
     parts = [
         f"한국 비트코인 가격은 세계 가격 대비 {kp.last_pct:+.2f} % "
-        + (f"(일년 평균에서 {z_text(kp.last_z)} 표준편차, " if z_text(kp.last_z)
+        + (f"(일년 평균에서 {z} 표준편차, " if (z := z_text(kp.last_z))
            else '(z는 계산할 수 없습니다: 관측이 91개 미만이거나 기간 내 변동이 없습니다, ')
         + f"{kp.dates[0]} 이후 평균 "
         f"{kp.mean_pct:+.2f} %, 최고 {kp.max_pct:.1f} %)입니다. "

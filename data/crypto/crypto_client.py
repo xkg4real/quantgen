@@ -35,7 +35,6 @@ import base64
 import hashlib
 import hmac
 import json
-import math
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -43,6 +42,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 import config
+from core.crypto.values import number_or_none, price_or_none
 
 try:
     from data.net import session as _requests        # shared session: retry + backoff
@@ -55,25 +55,20 @@ BINANCE_FAPI = "https://fapi.binance.com"
 COINGECKO = "https://api.coingecko.com/api/v3"
 
 _UPBIT_PAGE, _BINANCE_PAGE, _FUNDING_PAGE = 200, 1000, 1000
+_UPBIT_PRICES = ("trade_price", "opening_price", "high_price", "low_price")
 _MIN_GAP_S = 0.12                                    # ≤ ~8 req/s, under Upbit's 10/s group limit
 _last_call = {"t": 0.0}
 
 
-def _price(value) -> Optional[float]:
-    """A provider price, or None when it is missing, zero, negative or not a number.
-
-    A missing price must never become 0.0: it would read as a -100% premium or a
-    zero-value holding (§10 NEW-M6-14, NEW-M6-15, NEW-M6-22).
-    """
-    try:
-        x = float(value)
-    except (TypeError, ValueError):
-        return None
-    return x if math.isfinite(x) and x > 0 else None
-
-
 class CryptoError(RuntimeError):
-    """A provider was asked and could not answer; the message says why."""
+    """A provider was asked and could not answer; the message says why.
+
+    `status` is the HTTP status when the provider answered with one (None otherwise).
+    """
+
+    def __init__(self, message: str = "", *, status: Optional[int] = None):
+        super().__init__(message)
+        self.status = status
 
 
 @dataclass(frozen=True)
@@ -133,9 +128,9 @@ def _get(url: str, params: dict | None = None, headers: dict | None = None, *, l
     except Exception as exc:
         raise CryptoError(f"{label}: {type(exc).__name__}") from None
     if resp.status_code == 429:
-        raise CryptoError(f"{label}: rate limited (HTTP 429); slow down")
+        raise CryptoError(f"{label}: rate limited (HTTP 429); slow down", status=429)
     if resp.status_code != 200:
-        raise CryptoError(f"{label}: HTTP {resp.status_code}")
+        raise CryptoError(f"{label}: HTTP {resp.status_code}", status=resp.status_code)
     try:
         return resp.json()
     except Exception:
@@ -152,8 +147,9 @@ class UpbitPublic:
         """Daily candles (KST 09:00 boundary), paged backwards with `to`."""
         market = market.upper()
         rows: dict[str, dict] = {}
+        seen: set[str] = set()
         to: Optional[str] = None
-        for _ in range(days // _UPBIT_PAGE + 2):
+        for _ in range(days // _UPBIT_PAGE + 3):
             params = {"market": market, "count": min(_UPBIT_PAGE, max(1, days - len(rows)))}
             if to:
                 params["to"] = to
@@ -163,14 +159,15 @@ class UpbitPublic:
             fresh = 0
             for r in page:
                 d = str(r.get("candle_date_time_utc") or "")[:10]
-                if d and d not in rows:
-                    rows[d] = r; fresh += 1
+                if d and d not in seen:
+                    seen.add(d); fresh += 1
+                    # A day without all four prices is left out, not priced at 0 (§10 NEW-M6-15);
+                    # it is not counted, so paging continues until `days` usable days.
+                    if all(price_or_none(r.get(k)) is not None for k in _UPBIT_PRICES):
+                        rows[d] = r
             if not fresh or len(rows) >= days:
                 break
-            oldest = min(rows)
-            to = f"{oldest}T00:00:00Z"
-        # A day without a closing price is left out, not priced at 0 (§10 NEW-M6-15).
-        rows = {d: r for d, r in rows.items() if _price(r.get("trade_price")) is not None}
+            to = f"{min(seen)}T00:00:00Z"
         if not rows:
             raise CryptoError(f"Upbit returned no candles for {market}.")
         ds = sorted(rows)
@@ -183,10 +180,14 @@ class UpbitPublic:
     def ticker(self, markets: list[str] | str = "KRW-BTC") -> list[dict]:
         m = ",".join(markets) if isinstance(markets, list) else markets
         page = _get(f"{UPBIT}/ticker", {"markets": m.upper()}, label="Upbit ticker")
-        return [{"market": r.get("market"), "price": _price(r.get("trade_price")),
-                 "change_pct": float(r.get("signed_change_rate") or 0.0) * 100,
-                 "volume_24h_krw": float(r.get("acc_trade_price_24h") or 0.0),
-                 "as_of": datetime.now(timezone.utc).isoformat(timespec="seconds")} for r in page]
+        out = []
+        for r in page:  # missing fields stay None, never 0 (§10 NEW-M6-14/22)
+            rate = number_or_none(r.get("signed_change_rate"))
+            out.append({"market": r.get("market"), "price": price_or_none(r.get("trade_price")),
+                        "change_pct": rate * 100 if rate is not None else None,
+                        "volume_24h_krw": number_or_none(r.get("acc_trade_price_24h")),
+                        "as_of": datetime.now(timezone.utc).isoformat(timespec="seconds")})
+        return out
 
 
 # --------------------------------------------------------------------------- #
@@ -273,11 +274,11 @@ class BinancePublic:
     def premium_index(self, symbol: str = "BTCUSDT") -> dict:
         r = _get(f"{BINANCE_FAPI}/fapi/v1/premiumIndex", {"symbol": symbol.upper()}, label="Binance premium")
         # Missing mark or index prices leave the premium unavailable (None), never 0% or -100%.
-        mark, index = _price(r.get("markPrice")), _price(r.get("indexPrice"))
+        mark, index = price_or_none(r.get("markPrice")), price_or_none(r.get("indexPrice"))
         next_ms = r.get("nextFundingTime")
         return {"symbol": symbol.upper(), "mark": mark, "index": index,
                 "premium_pct": (mark / index - 1.0) * 100 if mark is not None and index is not None else None,
-                "last_funding_rate": float(r.get("lastFundingRate") or 0.0),
+                "last_funding_rate": number_or_none(r.get("lastFundingRate")),
                 "next_funding_time": datetime.fromtimestamp(int(next_ms) / 1000, tz=timezone.utc).isoformat(timespec="minutes")
                 if next_ms else None,
                 "as_of": datetime.now(timezone.utc).isoformat(timespec="seconds")}
