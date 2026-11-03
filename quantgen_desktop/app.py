@@ -283,7 +283,7 @@ class ResearchWindow(QMainWindow):
 
     def make_indicator_guide(self):
         from .indicator_guide import IndicatorGuide
-        layout = self.page("Technical indicator guide", self.ctx.t('guide_intro'))
+        layout = self.page("Technical indicator guide", self.ctx.t('search_intro'))
         self.guide_subtitle = layout.itemAt(1).widget()
         self.indicator_guide = IndicatorGuide(locale=self.ctx)
         self.indicator_guide.intro.hide()
@@ -649,7 +649,7 @@ class ResearchWindow(QMainWindow):
         self.language.blockSignals(False)
         self.data_rights.set_locale(self.ctx)
         self.indicator_guide.set_locale(self.ctx)
-        self.guide_subtitle.setText(self.ctx.t('guide_intro'))
+        self.guide_subtitle.setText(self.ctx.t('search_intro'))
         self.watchlist.set_locale(self.ctx)
         self.market_chart.set_locale(self.ctx)
         self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
@@ -887,6 +887,11 @@ class ResearchWindow(QMainWindow):
           QTabWidget::pane {{ border: 0; }}
           QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 18px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-weight: 500; }}
           QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; }}
+          QLineEdit#guideSearch {{ min-height: 34px; padding: 6px 12px; border-radius: 20px; font-size: 14px; }}
+          QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; padding: 4px; outline: 0; }}
+          QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
+          QListWidget#guideSuggestions::item:selected, QListWidget#guideSuggestions::item:hover {{ background: {p.accent_soft}; }}
+          QPushButton[chip='true'] {{ padding: 6px 12px; border-radius: 15px; font-weight: 500; }}
         """)
         for chart in [*self.findChildren(FanChart), *self.findChildren(FrontierChart), *self.findChildren(LineChart), *self.findChildren(SignedBars)]:
             chart.colors = p
