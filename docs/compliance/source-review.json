@@ -446,10 +446,10 @@
     "tests/macro_tf_gov.py": "3467c72c5b3598a498d5558c2bbc4e3b8a32947ac9be738dd29c59a935b58745",
     "tests/macro_tf_integration.py": "8c47e72d9caaca23e3029277fc7b83da8f58ab32bf61d58b2de964b8b99fcd52",
     "tests/macro_tf_screens.py": "66ce8b5851f29d01d337aa79309b92d11bcd1eba88c18b1acb9527a60d19776d",
-    "tests/macro_ui_components.py": "303f4a4173e317a7a163b39b04bbaa285692b72ad22c25cd5055a840c16876aa",
+    "tests/macro_ui_components.py": "440bc7786f3e5e350dfa695c2de44d14ba868b7f462740817e59d023687f9bca",
     "tests/macro_ui_overlay.py": "c86c39daaeac33dcec9f02a16820fb913546422754b24f2d26c3ac7499add27c",
     "tests/macro_ui_rulings.py": "314d6be882c6749c15b372f2936f1b55703e90ff3a6358654482d37e181a4222",
-    "tests/macro_ui_views.py": "072f65dc6107ffe7da7d3dde7ad81522935cff218f9d5bb34fdb7864200b2e35",
+    "tests/macro_ui_views.py": "1321a4961380479fa28764e70edf742935925a78da12300e9c25850195299700",
     "tests/market_board_core_acceptance.py": "4234f3e172849e9624c15d8cbe4513455e4fb346e3f211148aa287e6f83f6151",
     "tests/market_chart_presentation_acceptance.py": "6fe863f83008534a669d4c14baa2f4e06d6ca1eb31e4bf30d21d5e89aa78dbeb",
     "tests/market_core_acceptance.py": "da7c6f4df956acccb02e469ff6e632a7dad264f43f1f68421b76ef8e7a5da89d",
@@ -641,11 +641,11 @@
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "36291e5a560f0f369d7363f44c54c568aa8f417f480b49597b7e4644572b7abe",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.756488+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "0f48c31bb5a2bae4fbba1d8148e412d62a33d14bc168917fd8cbc4ddd1ad3446",
+      "reviewed_by": "Claude pre-freeze test fix review",
+      "review_note": "Test-only fix: macro UI tests follow the C-format DARK warning colour #E5BE74 and walk only list children (ResponsiveRow.columns is an int); 12-claims text unchanged",
+      "reviewed_at": "2026-11-03T18:26:12.284529+00:00",
+      "source_commit": "3b1ee4fd23e3e44bb3b45b4db3a487cd30f876a6"
     },
     "13": {
       "document_sha256": "609e26253d6ea9098b44836c142c11b4a6bc33966ea7ed9e972c571eff1b6139",
