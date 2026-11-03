@@ -1,11 +1,11 @@
 ---
 kind: auto_snapshot
 reason: periodic
-created_at: 2026-11-03T21:11:29+09:00
-source_branch: claude/amazing-gauss-tdiguu
-source_head: 2da6469
-upstream: origin/claude/amazing-gauss-tdiguu
-patch_base: 2da6469
+created_at: 2026-11-03T21:43:13+09:00
+source_branch: claude/ui-markets-a4-20261103
+source_head: 2ca38d5
+upstream: origin/claude/ui-markets-a4-20261103
+patch_base: 2ca38d5
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
@@ -13,7 +13,7 @@ usage_pct: unknown
 usage_resets_at: unknown
 session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
 snapshot_key: none
-current_md_updated_at: 2026-11-03T20:45:01+09:00
+current_md_updated_at: 2026-11-03T21:32:34+09:00
 current_md_status: checkpoint
 ---
 
@@ -26,21 +26,21 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
-2da6469 Session log for the next agent: sanitized Claude main-session conversation (2026-10-26 to 10-29)
-0a91f26 Handoff at 95% usage: manual, ④-2 decision form, R3 10.2 A explainer, PT-07 assessment draft, PentPort audit
-4709cf2 ②-5/b: apply the owner-approved Bonds screen patch (queue step 3) with the RP-01 fix
-cad341c Owner rulings 2026-10-29 (X-1 include, Bonds patch approved, PT-07 redesign if worthwhile, ④-2 first); X-1 data-access entry; third main merge verified (792/931)
-468d0fb Merge main (PR #10: overlay UI tests follow the calendar signing state) into the Nautilus branch
-950f25e Merge pull request #10 from xkg4real/claude/relaxed-cerf-az755o
-ace8f3b Overlay UI tests follow the calendar signing state; stale "calendar set is unsigned" line fixed
-45b233f Execution record: the second main merge (0acb9b7, PR #9) and its full run (790/931, 4 failed, 137 not run)
-0acb9b7 Merge main (PR #9: calendar audits 5 and 6, all 17 files and the set 1.0.0 owner-signed) into the Nautilus branch
-e28035f Merge pull request #9 from xkg4real/claude/relaxed-cerf-az755o
-999dd26 Owner set sign-off (Geon Koh): calendar set 1.0.0 in the MANIFEST header; a signed set requires every file signed
-f8c7467 Owner sign-off (Geon Koh): JPX, SSE, HKEX, TWSE, CME and market_closes v1.0.0 (calendar audit 6); all 17 calendar files signed
-d4e9a42 Owner sign-off (Geon Koh): release_calendar v1.0.0 (calendar audit 5) with the approved code patch; BLS and BEA open
-59ff2cf Batch 6 names fixed (report 14_), fingerprints refreshed; register and rulings log carry the release_calendar handover
-86ff0d2 Merge remote-tracking branch 'origin/claude/optimistic-fermi-revc37' into claude/relaxed-cerf-az755o
+2ca38d5 Owner rulings 2026-11-03 (cont.): amend the no-order-path principle to a confined order module; GPT private WIP retrieval
+c81e8df Owner rulings 2026-11-03: Claude resumes, UI order A4>A2>A3>A1, R3/cost-class/status/translation approved, direct orders chosen, website left to its own session
+7a57187 Record merged live charts and passing Windows/Linux CI
+30a2a81 Merge pull request #62 from xkg4real/gpt/chart-live-ux-20261102
+00ba803 Queue live chart changes and website follow-up for PR62
+3ea77b9 Record merged Home UI and successful final CI
+398ebe3 Connect charts on query, make indicators selectable and repair growing panels
+672ae61 Add received trade bars and shared indicator presentation
+707cdc7 Merge pull request #61 from xkg4real/gpt/home-compact-20261102
+4e17087 Add compact stock comparisons and layered interface typography
+5b52e3d Preserve latest rates changes and record compact UI website handoff
+6925bbd Integrate latest main and verify compact UI with bundled font
+19c663c Compact Home watchlist and clarify Q-SCORE and provider failures
+8b40104 Merge pull request #59 from xkg4real/gpt/rates-params-20261102
+f673f37 Merge pull request #58 from xkg4real/gpt/letf-explicit-inputs-20261102
 ```
 
 ## 푸시되지 않은 커밋
