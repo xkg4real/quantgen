@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2
 next_ids: ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-04T02:45:00+09:00
+updated_at: 2026-11-04T02:50:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/s10-crypto-20261104
@@ -79,6 +79,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 | GPT 잠금을 `--force`로 가져옴 | 소유자 "Claude 반환 허가". GPT CURRENT는 28시간 넘게 갱신이 없었음 | GPT 반환 대기: 소유자가 반환을 허가함 |
 | 실시간 주문은 구현 전에 방식 확인 | QUANTGEN에는 주문 경로가 없게 설계됨(T-RO-01, `tests` safety test_08, 분리 스펙, 2026-10-29 소유자 요약 "실제 자금 매매는 모두 TRADEGEN") | 바로 구현: 보호 장치를 확인 없이 해제하게 됨 |
 | "주문 경로 없음" 원칙을 폐기하지 않고 "격리된 주문 모듈 한 곳만 허용"으로 고침(소유자 "기존 원칙을 고치거나 폐기해주세요") | 나머지 코드(연구·백테스트·원장·Nautilus)의 보호는 그대로 두고, 주문 모듈은 별도 안전 검사로 묶음 | 전면 폐기: 연구 코드에 주문 경로가 섞여도 못 잡음 |
+| Vercel 상태는 병합 판단에서 제외하고 PR에 Vercel 관련 댓글을 남기지 않음 | 소유자 지시 2026-11-04: "Vercel없이 진행해주세요" (저장소 전체 Vercel 배포 실패, 팀 접근 불가) | Vercel 실패마다 설명 댓글 |
 | README·test_08·T-RO-01 변경은 3단계 주문 모듈 PR과 함께 | 검사를 먼저 풀면 모듈 없이 보호만 사라짐, README는 실제 상태를 설명해야 함 | 지금 바로 문구 수정 |
 
 ## 4. 진행 상황
