@@ -3,6 +3,7 @@ from PyQt6.QtCore import QObject, QEvent, QSignalBlocker, QTimer, Qt, QLocale
 from PyQt6.QtWidgets import (QAbstractButton, QComboBox, QLabel, QLineEdit,
                              QTableWidget, QTabWidget, QPlainTextEdit, QWidget)
 from .translations import display
+from .wheel_guard import guard as guard_wheel
 
 CAPTION_ROLE = Qt.ItemDataRole.UserRole + 802
 
@@ -83,6 +84,7 @@ class LanguageController(QObject):
                 if not getattr(widget, '_qg_watched', False):
                     widget.installEventFilter(self)
                     widget._qg_watched = True
+                    guard_wheel(widget)  # owner UI-3: the wheel scrolls the page, not selectors
                     if isinstance(widget, (QComboBox, QTableWidget)):
                         model = widget.model()
                         model.dataChanged.connect(self.schedule)

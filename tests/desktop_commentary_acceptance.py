@@ -10,6 +10,7 @@ with patch.object(dotenv,'load_dotenv',return_value=False):
     from quantgen_desktop.app import ResearchWindow
     from quantgen_desktop.commentary import commentary_payload
     from core.quant.insights import Analysis
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication,QMessageBox
 from PyQt6.QtTest import QTest
 
@@ -63,7 +64,17 @@ class NativeCommentaryTests(unittest.TestCase):
         p.consent.setChecked(True);p.submit();self.wait()
         self.runner.assert_called_once();self.assertEqual(p.output.toPlainText(),'Fixture commentary')
         self.assertEqual(p.report_actions.report['verdict'],'NOT_RUN')
-        p.refresh_sources();self.assertIsNone(p.report_actions.report);self.assertFalse(p.send.isEnabled())
+        p.refresh_sources();self.assertIsNone(p.report_actions.report)
+        # Owner B3: the button always answers, but each click without consent only guides the user.
+        self.assertTrue(p.send.isEnabled());self.assertEqual(p.send.cursor().shape(),Qt.CursorShape.PointingHandCursor)
+        p.submit();self.assertIsNotNone(p.payload);self.assertIn('전송 동의',p.status.text())
+        self.assertTrue(p.preview.toPlainText())
+        p.submit();self.assertIn('전송 동의에 체크',p.status.text())
+        self.runner.assert_called_once()
+        # Consent covers the question as it stood when ticked: a user edit asks for it again.
+        p.consent.setChecked(True);p.question.setText('programmatic');self.assertTrue(p.consent.isChecked())
+        QTest.keyClicks(p.question,'?');self.assertFalse(p.consent.isChecked())
+        p.submit();self.assertIn('전송 동의에 체크',p.status.text());self.runner.assert_called_once()
 
     def test_error_clears_previous_result_and_redacts_provider_secrets(self):
         p=self.prepare();p.consent.setChecked(True);p.submit();self.wait()

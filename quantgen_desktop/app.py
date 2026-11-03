@@ -59,6 +59,20 @@ MARKET_CLASSES = (
 )
 
 
+def app_icon():
+    """Multi-size icon for the window and the Windows taskbar (owner UI-17).
+
+    The .ico carries 16-256 px images, so the taskbar gets a native size instead of
+    falling back to the Python interpreter's icon; the PNGs cover other platforms.
+    """
+    icon = QIcon()
+    assets = application_root() / "assets"
+    for name in ("icon.ico", "icon_192.png", "icon_512.png", "icon.png"):
+        if (assets / name).is_file():
+            icon.addFile(str(assets / name))
+    return icon
+
+
 def label(text, role="", *, wrap=True):
     w = UiLabel(text)
     w.setTextFormat(Qt.TextFormat.PlainText)
@@ -164,7 +178,7 @@ class ResearchWindow(QMainWindow):
         self.jobs.failed.connect(self.job_failed)
         self.jobs.busy_changed.connect(self.busy_changed)
         self.setWindowTitle("QUANTGEN — Research Desktop")
-        self.setWindowIcon(QIcon(str(application_root()/"assets/icon.png")))
+        self.setWindowIcon(app_icon())
         self.resize(1360, 940)
         self.setMinimumSize(1000, 700)
         root = QWidget()
@@ -998,9 +1012,11 @@ def main():
         set_app_id = ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID
         set_app_id.argtypes = [ctypes.c_wchar_p]
         set_app_id.restype = ctypes.c_long
-        set_app_id("QUANTGEN.Desktop")
+        if set_app_id("QUANTGEN.Desktop") != 0:  # S_OK; otherwise Windows groups the window under python.exe
+            print("QUANTGEN: Windows did not accept the application ID; the taskbar may show the Python icon.",
+                  file=sys.stderr)
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon(str(application_root()/"assets/icon.png")))
+    app.setWindowIcon(app_icon())
     app.setApplicationName("QUANTGEN")
     app.setOrganizationName("QUANTGEN")
     load_interface_fonts(app)

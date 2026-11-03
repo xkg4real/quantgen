@@ -116,11 +116,13 @@ class NativeLETFAiTests(unittest.TestCase):
         self.assertEqual(len(row), 7)
 
         self.assertFalse(commentary.consent.isChecked())
-        self.assertFalse(commentary.send.isEnabled())
+        # Owner B3: the button always answers; it is marked ready only once consent is ticked.
+        self.assertFalse(commentary.send.property('primary'))
         commentary.submit()  # Even direct invocation cannot bypass the consent guard.
         self.runner.assert_not_called()
+        self.assertIn('전송 동의', commentary.status.text())
         commentary.consent.setChecked(True)
-        self.assertTrue(commentary.send.isEnabled())
+        self.assertTrue(commentary.send.property('primary'))
         self.runner.assert_not_called()
         commentary.send.click()
         self.wait(commentary.jobs)
