@@ -244,11 +244,14 @@ board endpoint stops at its top 100 strikes): futures basis and cost-of-carry
 fair value against KIS's theoretical price, the parity-implied forward,
 Black-76 inversion of every two-sided quote against KIS's implied vol, put-call
 parity residuals, butterfly and vertical arbitrage counts, a raw SVI smile with
-the Gatheral–Jacquier g(k) check, the Cboe model-free implied variance, the
+the Gatheral–Jacquier g(k) check, the Cboe model-free implied variance over the quoted strike strip (the
+omitted wings bias it low and the covered range is shown), the
 Breeden–Litzenberger risk-neutral density and the empirical pricing kernel
-against the Quant Lab's GARCH-t terminal density, the box-spread implied KRW
-rate, and a delta-hedging P&L simulation (GBM or GARCH-t) that reports the
-gamma-weighted break-even volatility. A board captured with the market closed
+against the Quant Lab's GARCH-t terminal density, an adjacent-strike box-spread
+rate shown as a quote-quality check (its sensitivity and bid/ask range, not a
+funding rate), and a delta-hedging P&L simulation (GBM or GARCH-t) that reports
+the gamma-weighted break-even volatility; under GBM the expected P&L is zero by
+construction, so its sign is not read as a result. A board captured with the market closed
 is last prints struck at different moments: the page says so in red, measures
 time to expiry from the last session, and marks every figure indicative.
 

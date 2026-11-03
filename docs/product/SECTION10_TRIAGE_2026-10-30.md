@@ -227,3 +227,22 @@ See `RATES_REVALUATION_PARAMS_2026-11-02.md` for the bounded evidence and limita
 Latest source implementation count: **21/67**, **46** remaining. Partial
 NEW-M6-02, the 14 observation models and 15 ambiguous mappings remain open.
 Actual Windows, provider, research and release acceptance are separate.
+
+### 2026-11-04 Option board disclosures (Claude rework)
+
+The owner chose not to recover GPT's private options work. Claude redid it from main
+`c1a4e97`. An analyst reproduced each item and a separate reviewer challenged it.
+
+- **M4-N7:** under GBM the hedge mean is 0 by construction. Its sign is no longer
+  coloured or called earnings.
+- **M4-N9:** the MFIV strike range and its downward truncation bias are stated.
+- **M4-N4:** the adjacent-strike box is priced only from four two-sided legs. It is
+  shown with its sensitivity and its bid/ask range as a quote-quality check, not a
+  funding rate.
+
+Valid-input numbers are byte-identical on GBM and GARCH-t synthetic boards. See
+`OPTION_DISCLOSURE_2026-11-04.md`.
+
+This branch adds three groups to main's count (21 → 24/67). Combined with the Crypto
+rework branch the count is 27/67. Partial NEW-M6-02, the 14 observation models and
+the remaining ambiguous mappings stay open.

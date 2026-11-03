@@ -7,8 +7,8 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "1782d0f8f20802d7e9496c0efe2e067298906a8183983a7e1e1b509a629f2100",
-    "README.md": "6a4f572a12e6dea657c7c063240b94d1a928e2b4f41fff25f7348ca69e1b88b5",
+    ".github/workflows/runtime-smoke.yml": "d5e8d80e424a7d01647ec419537976359562806cb72b9746040e775b59eaff77",
+    "README.md": "f99ca9b22398698125072d44d62ff3e5dfe84cbc649a3f2936a20e4a95dff6e2",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
     "assets/branding/f1-wordmark.svg": "145715bc8df17cb3c99b734d4c7cb2b8e9bf1878e87c401f518f46b944ba41aa",
@@ -157,7 +157,7 @@
     "core/research/connections.py": "f634fe608bcfca39c3841ee7e4bf25524ba4cba8e28658d957d56725c2c56a04",
     "core/research/crypto_workflow.py": "c84aeb06fff2e5e552ed208d134f86ebc6a0fa626949830fdfd407413b2c8e85",
     "core/research/decay_disclosure.py": "98f68bb2b8f8a0ac051865a76313855a323890a4adacd9abe9d0c025c0a934ce",
-    "core/research/derivatives_workflow.py": "0597ee855c13663bd4d851320c68115482c3a41e4ea5f68b8f2ca35b91cd70e6",
+    "core/research/derivatives_workflow.py": "e1f6b619d82d35d7e742f08326b5fe909e9c991a35896b4b554fef351c37c429",
     "core/research/display_rights.py": "e59554e140ee5ea994812bcaca083c622d94bac1513411bdca58824b6f20e6fb",
     "core/research/etf_workflow.py": "c85aedeea6dcb4c691174fc658350a2f2f52e9b713b46f9c56f4c193fc5dc9ba",
     "core/research/export.py": "16cbc78bbcf4f72d656f28f9b66823090fc21e5e92c0aa9ff56a07de2dc9b402",
@@ -171,6 +171,7 @@
     "core/research/market_board.py": "93e0b043671855e7bbd1418c476b2856e89f708cd786f542afd84377a1a8ae9d",
     "core/research/markets.py": "69236b90c444495868cb4d363a86ced1ce049592e4a7fa986b73f148f9b4e9d5",
     "core/research/mc_disclosure.py": "52e784e1a98693e7e8b8ed77d54366ba3fdb1eaf784a53271a0590ead80547ee",
+    "core/research/option_disclosure.py": "6c52cd55de539af9f4f1cb789fe5d3c8a788c9de0f6c4895964a97df37db0885",
     "core/research/portfolio_analysis.py": "58fc8d6a1c27d73afea6761a125f52135639070d4b0ffe6cdc2f70911b1c0ede",
     "core/research/portfolio_disclosure.py": "2e93f4c753c3bfa73bc11f468ac1eac3fb7d0c5be18191590e41efcf1a79e24c",
     "core/research/presentation.py": "3eccfd7e49ace9b1a39b3a8f89538c528439ad90125119c7ac262b35ca135e37",
@@ -245,7 +246,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "47e87f1594d4d671d0758723692e3f36f60c7900b670b0f425272919de51091a",
+    "docs/compliance/FACTS.md": "cf28d5985b72a361f1c97cae9562ac2cc3f7a4176e7fa48bad59a4de57c4ac09",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -278,6 +279,7 @@
     "docs/product/MC_VOLATILITY_2026-10-30.md": "92dc8a14c6884ea57936f9f187e9b87d1120b426ac0fe2f8767867617ef6837f",
     "docs/product/NATIVE_LANGUAGE_2026-10-31.md": "c9b68cf82c3a9bf858d9e0649871116f7d618a86ae8e4ba12dab87872db8fe32",
     "docs/product/NAUTILUS_AND_DATA_SOURCES_2026-10-31.md": "b2b0fdb675bd2e04e79863d872fc6101f40a10744b5bd0516da17957a26e7936",
+    "docs/product/OPTION_DISCLOSURE_2026-11-04.md": "ff314ee2043b524cdb8456f4af5c2ffe5f19f19d341ac28be471a6d3c7588373",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
@@ -287,7 +289,7 @@
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "9eb917388f941560c928f571d70460513e17b8048630a3dd4abea9aaa635fbd3",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "352a66b6edefb8aea227f49ed7dcc264061e58c6ac2c1c8669af5e9c58c7f848",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
@@ -310,7 +312,7 @@
     "quantgen_desktop/commentary.py": "4b5d02a17b5621db28c24a3f54a37106837239d7fe55aa7f376e677f80d0845f",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
-    "quantgen_desktop/display_prose_catalog.py": "25621b1400bf12cfe9874b0bca300ce5fa3a61fe752ee49033bc5929f0f5e63d",
+    "quantgen_desktop/display_prose_catalog.py": "85cd9be4469c96b83a71aa0ac3c0dad0b04cbbf35649da8beb7cef12c9eb7708",
     "quantgen_desktop/fx.py": "c57c76ab44edc66bfd4451e6b75abf7d92ba38806cbfc8685c8cba3c287322d9",
     "quantgen_desktop/fx_narrative.py": "1078cff2724ff7c6bc75f8146e7893622323899ee5bb1c52100007c11649e52e",
     "quantgen_desktop/indicator_guide.py": "6fbdb1e53e2f8e1ec9a42c52df5828127d4fc5404cf3f3260b0ba32c153c5325",
@@ -322,8 +324,8 @@
     "quantgen_desktop/market_board.py": "64a19ff906f9d194135f988d73908fdb063ff9945b8e9da1c69a48b2e38dba5b",
     "quantgen_desktop/market_chart.py": "28d4f14d92ad276ccf1bb5bba241ee108ab63c5340103d38f270fdaeaee3d645",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
-    "quantgen_desktop/market_narrative_language.py": "b8cb8fd3f6b2a75fcd8225d43a2a172365caa237774c6ac45bc0e535655fd15a",
-    "quantgen_desktop/market_tools.py": "814118dc14ade98a391e2cb8200c22becb751cc4f6dab2138ef5802a13c858af",
+    "quantgen_desktop/market_narrative_language.py": "9707ac8424475049897e255560285a695097ea590e18c69b063964e28bf6782d",
+    "quantgen_desktop/market_tools.py": "6687df84a4d87ff33b6d72844ccf9384e7d7e102f016da0d35b98f95f7168ee5",
     "quantgen_desktop/model_narrative_language.py": "c4d4c826e3416a202cc4167c19a2ccbc233fcbc80239e62a81808092274c0981",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
@@ -456,6 +458,7 @@
     "tests/market_symbols_acceptance.py": "dac7d8af68db34e0ecf7ce451fddc288618eae24988c080d8784b5e480526d78",
     "tests/mc_volatility_acceptance.py": "5715fb07e257e88f6a38ace19863c83e926c01bbc5c22573174e4ea1072c2a89",
     "tests/notrun.py": "8da97cac3ebd6d0f22ee476b0869e33cb363688317a38befa541ffc2b79f7b20",
+    "tests/option_disclosure_acceptance.py": "ab5d37b31775b5f12907c7bca934945b8a26ce19b8f853d34a08a04754c639f3",
     "tests/packaging_policy_acceptance.py": "936034aeaab8d118f83fce8728897650acc2f306cb5405172fef4893fef0b04f",
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
@@ -522,7 +525,7 @@
     "ui/components.py": "41be9f3117f80c1677308355702758897f6d9d30654eb5a4d229d0bf7702a4fd",
     "ui/crypto_page.py": "6829f7aedd678196a1bb1853044789d7bca0ac40b724006d35ead19942c65101",
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
-    "ui/derivatives_page.py": "ed659a96def9e1b9bddbd0295c6357c47418fb4ba11778a1aecc817c352e1359",
+    "ui/derivatives_page.py": "3aecea9399047798c65788ef2a1642d5c80d62530ac52c5000e9b23093ef0fc5",
     "ui/etf_page.py": "910b2a27d4ee5264cc79286e8fc48bc985a251d6a0f1727ec6f29daa633c660f",
     "ui/fcharts.py": "fc7fafba72863691b8013fbba55c3299eac46440f7a5285ffd7e4ba61b0bf78d",
     "ui/fx_page.py": "42a0304e93d0d9159d3941ee7c6883c980e9e595b9825cccc10c2eccdc99f48d",
@@ -551,163 +554,163 @@
   "reviews": {
     "1": {
       "document_sha256": "e917090c1153867f2f06a3529253445d505584ee0a970e9dc39d347715d12696",
-      "source_digest": "865daa7a0e843a3579bee76ae52d5713a1dd5208833656339ea1b1d43d628cdf",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.920841+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "160b904e4a411e65e40f7bc1ccc2228eb59956dbac98794d35359effcad4e2ce",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.720343+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "865daa7a0e843a3579bee76ae52d5713a1dd5208833656339ea1b1d43d628cdf",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.925340+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "160b904e4a411e65e40f7bc1ccc2228eb59956dbac98794d35359effcad4e2ce",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.723817+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "7993c36e8886cc390d19d580e3aa55512e826ed376bb124d0b204b2d6aae55ac",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.927327+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "e4366487ae7539ac47756f422b2977ffa38965b78cce60f2dab97618a0b99b8f",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.726357+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "a1599df0e2c938cc2b291b8ab3cb4eea0ac7d49e196ffd9d464cc08d4fb06c20",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.929430+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "ba172b503eef7101caf24b638eddd98b6e42cfa878a21a1a82085cbefa3b7ecb",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.728362+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "25c0102d742de3b539d83618db854f346eeab424d5eeb48c718d69375a2650fe",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.931453+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "d21a19bae4549bfffa3a3260a3288dc05e3385ff869ca321bd0881ffc749cacf",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.730854+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "6": {
       "document_sha256": "939f35c300ac2881e95ffc494d364bd48a8b7e48f42187a7ce1b14865c042958",
-      "source_digest": "48a1e60fba3024a6949804a45838c147b5b1113166b5e6da4e77f5d5065e8401",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.933241+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "8b07fb991ad966005f4329d3bfc2430ca1458906d7aef954674d7c99dbc79d40",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.732948+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "7": {
       "document_sha256": "da59a63d379931b9d397b611a6f1ce61a245d7e33b53f8d96a962fcaa579d21d",
-      "source_digest": "865daa7a0e843a3579bee76ae52d5713a1dd5208833656339ea1b1d43d628cdf",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.935032+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "160b904e4a411e65e40f7bc1ccc2228eb59956dbac98794d35359effcad4e2ce",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.734825+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "8": {
       "document_sha256": "0aa27284556dffcc7b175478898e504746b115bc0612c546fc32a1ed57002a81",
-      "source_digest": "48a1e60fba3024a6949804a45838c147b5b1113166b5e6da4e77f5d5065e8401",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.936673+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "8b07fb991ad966005f4329d3bfc2430ca1458906d7aef954674d7c99dbc79d40",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.736782+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "9": {
       "document_sha256": "d0ba0b9e69f01b0c2f38e422a3a234f1d3cfe260947d114ea630af0bd1c8c83d",
-      "source_digest": "996c8129563dfd3b293fc6062e00eb920264a18c3af11ebb05270183b633397c",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.938913+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "658b96fa078a59e8476e5fc4a776d8383894d1c932db7a36493bd3028e8bb984",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.738589+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "461f4a0bed99aae680cea6abcfc82a350f080340b258707bb5faaea8c0177c65",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.940809+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "a6baa627dd79bb797bbe8bf9f327ca899cbd32a289d2f99ef15c8adf8c8f2237",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.740469+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "889e11e65b84e65c0c93b747c134fbaf68579021b0ec0aa3ee3b9bf81c39a6e0",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.942743+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "cd4c61bf7f8d28c85a1f43583e10e67e25f57ba23c0aebc4e8783733047e1567",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.742442+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "bf51b9d720603c561c1c5dc39ceeb716456400446e24215e8444488cd50059cc",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.944573+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "7f7973207f8975236954ab40916f6cc4587083dd6a5fec3ede96b83445b6d683",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.744773+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "13": {
       "document_sha256": "609e26253d6ea9098b44836c142c11b4a6bc33966ea7ed9e972c571eff1b6139",
-      "source_digest": "996c8129563dfd3b293fc6062e00eb920264a18c3af11ebb05270183b633397c",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.946421+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "658b96fa078a59e8476e5fc4a776d8383894d1c932db7a36493bd3028e8bb984",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.746929+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "14": {
-      "document_sha256": "d402c9f37367bed480a24acc886c3f45933b6882b12058b659bab31b575a2bd3",
-      "source_digest": "996c8129563dfd3b293fc6062e00eb920264a18c3af11ebb05270183b633397c",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.948115+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "document_sha256": "dfc3b0a28baede299ec21622bfe0e03b977d10e5d49399d3c4e1457003c2a955",
+      "source_digest": "658b96fa078a59e8476e5fc4a776d8383894d1c932db7a36493bd3028e8bb984",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.748898+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "15": {
       "document_sha256": "e002833c12f06337497c3b27e248bcbd3d668072dda42f0fa94cd4335f78bf0a",
-      "source_digest": "996c8129563dfd3b293fc6062e00eb920264a18c3af11ebb05270183b633397c",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.950185+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "658b96fa078a59e8476e5fc4a776d8383894d1c932db7a36493bd3028e8bb984",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.750704+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "6c67e4684ba312c573a8cab34782faaceafe361b9af0ab86dfe77de8cf91f164",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.952737+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "24772ec8e968d174dfa5c91e6ee31e4effdb68a55f958f18a4a1434a2a73d7f3",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.752946+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "48a1e60fba3024a6949804a45838c147b5b1113166b5e6da4e77f5d5065e8401",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.954610+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "8b07fb991ad966005f4329d3bfc2430ca1458906d7aef954674d7c99dbc79d40",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.754946+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "865daa7a0e843a3579bee76ae52d5713a1dd5208833656339ea1b1d43d628cdf",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.956431+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "160b904e4a411e65e40f7bc1ccc2228eb59956dbac98794d35359effcad4e2ce",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.757272+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "19": {
       "document_sha256": "20261f5ce75559081373cbcff1a075a866651822ad505417bc295ab30c9f7a08",
-      "source_digest": "35b35bcf7de8978aa8f5b8e33691bff1bab15d30688c4a7f72a41a50a8744a13",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.958218+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "89a745747e7852fb2b4e1f8c8dc58c19d2ded0376d64fd0a629e1ba11701796a",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.759585+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     },
     "20": {
       "document_sha256": "d4b1fde2264cb0881b23ebc84d6efd8b8e22b41b4966924c7cda2fdf0c9c4f9f",
-      "source_digest": "865daa7a0e843a3579bee76ae52d5713a1dd5208833656339ea1b1d43d628cdf",
-      "reviewed_by": "Claude A4-d market board review",
-      "review_note": "Reviewed all twenty documents for the four Markets indicator charts replacing the table (KIS first, Yahoo and FRED fallbacks, polling only while visible, rights caveat kept): updated FACTS, 08 third parties, 13 alternative text and 14 contrast; no stocks, storage or new data categories; no publication approval.",
-      "reviewed_at": "2026-11-03T14:35:57.959751+00:00",
-      "source_commit": "16824045115d00758138bda2e387e6cb9987f9f9"
+      "source_digest": "160b904e4a411e65e40f7bc1ccc2228eb59956dbac98794d35359effcad4e2ce",
+      "reviewed_by": "Claude §10 options disclosure review",
+      "review_note": "§10 M4-N4/N7/N9: box priced only from two-sided legs and shown as a quote-quality check; GBM hedge mean zero by construction; MFIV strike range and truncation bias; FACTS and 14-contrast notes",
+      "reviewed_at": "2026-11-03T17:07:47.761536+00:00",
+      "source_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac"
     }
   }
 }

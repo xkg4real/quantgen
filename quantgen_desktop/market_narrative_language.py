@@ -106,6 +106,7 @@ def crypto_korean(a):
 
 
 def derivatives_korean(s):
+    from core.research.option_disclosure import box_korean, hedge_korean, mfiv_korean, mfiv_strip
     fq, b, fit, sim = s['futures'], s['basis'], s['svi'], s['hedge']
     mv = s['mfiv']
     txt = [
@@ -124,19 +125,19 @@ def derivatives_korean(s):
         + (' (0.5포인트 게이트 이내). ' if s['reconcile']['ok'] else ' (0.5포인트 게이트 밖: 규약 확인 필요). ')
         + f"SVI 스마일 적합 RMSE는 {fit.rmse_volpts:.2f} 변동성 포인트, 왜도 ρ는 {fit.rho:+.2f}이며"
         + (' 차익거래가 없습니다.' if fit.arbitrage_free else ' 버터플라이 차익거래 구간이 있습니다.'),
-        (f"모형 비의존 내재 변동성은 {mv['n_strikes']}개 행사가에서 {mv['vol']:.1%}입니다 (VKOSPI 방식 스트립)."
-         if mv.get('n_strikes') else f"모형 비의존 분산 미계산: {mv.get('error', '')}"),
+        (f"모형 비의존 내재 변동성은 {mv['n_strikes']}개 행사가에서 {mv['vol']:.1%}입니다 (VKOSPI 방식 스트립). "
+         + mfiv_korean(mfiv_strip(s)) if mv.get('n_strikes') else f"모형 비의존 분산 미계산: {mv.get('error', '')}"),
         coverage_korean(s['quote_coverage']),
-        (f"ATM 박스의 내재 KRW 펀딩 금리는 {s['box']['rate']:.2%}, 비교 금리는 {s['rate']:.2%} "
-         f"({(s['box']['rate'] - s['rate']) / .0001:+.0f} bp)입니다."
-         if s['box'] else '중간값으로 가격을 산출할 수 있는 ATM 박스가 없습니다.'),
+        box_korean(s),
         f"헤지 시뮬레이션 ({sim.engine}, {sim.n_paths:,}개 경로, {sim.horizon}개 거래일): "
-        f"σ_h = {sim.sigma_hedge:.1%}에서 ATM 옵션을 매도하고 매일 델타 헤지하면 평균 손익은 "
+        f"σ_h = {sim.sigma_hedge:.1%}에서 ATM 옵션을 매도하고 매일 델타 헤지하면 모의 평균 손익은 "
         f"명목금액의 {sim.mean_pnl_bp:+.0f} bp (SE {sim.se_bp:.0f} bp), CVaR95 {sim.cvar95_bp:+.0f} bp이며, "
         f"손익분기 실현 변동성은 {sim.breakeven_vol:.1%}입니다. "
         f"항등식 ½Σe^{{r(T−t)}}ΓS²(σ_h² − r²/Δ)Δ는 기울기 {sim.identity_slope:.2f}, "
         f"R² {sim.identity_r2:.2f}로 손익을 설명합니다.",
     ]
+    if hedge_korean(s):
+        txt.append(hedge_korean(s))
     if s.get('garch') is not None:
         g = s['garch']
         txt.append(f"지수 GARCH-t: ν {g.nu:.1f}, 지속성 {g.persistence:.3f}, 조건부 변동성 "

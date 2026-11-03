@@ -69,11 +69,14 @@ Implied funding|내재 조달금리
 KIS theoretical gap · points|KIS 이론가격 차이 · 포인트
 ATM IV|ATM 내재 변동성
 Model-free IV|모형 비의존 내재 변동성
+Model-free IV strike range · % of forward|모형 비의존 내재 변동성 행사가 범위 · 선도 대비 %
 SVI RMSE · vol points|SVI RMSE · 변동성 포인트
 SVI rho|SVI ρ
 Butterfly arbitrage free|버터플라이 차익거래 없음
 IV reconciliation gap · vol points|내재 변동성 대조 차이 · 변동성 포인트
-Box funding|박스 내재 조달금리
+Box rate · adjacent strikes, mid quotes|박스 금리 · 인접 행사가 중간가
+Box rate at quotes · bought / sold|호가 기준 박스 금리 · 매수 / 매도
+Box sensitivity · bp per 0.01 point|박스 민감도 · 0.01포인트당 bp
 RND integral|위험중립 밀도 적분
 Engine|엔진
 Paths / sessions|경로 수 / 거래일
