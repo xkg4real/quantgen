@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: none
 next_ids: ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-03T20:45:01+09:00
+updated_at: 2026-11-03T21:13:21+09:00
 stale_after_hours: 3
-waiting_on: owner
-work_branch: claude/amazing-gauss-tdiguu
-work_commit: 0510719
+waiting_on: none
+work_branch: claude/ui-markets-a4-20261103
+work_commit: 7a57187
 uncommitted_changes: no
-pr: 4
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -25,7 +25,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 소유자가 "Claude 반환 허가"를 줬습니다. 그래서 GPT의 `taken` 잠금(task `owner-product-workflow-20261029`, 마지막 갱신
 2026-11-02T15:57:58+09:00)을 Claude가 가져왔습니다(소유자 허락으로 `--force`). 작업 순서는 소유자가 정했습니다(1절).
-지금은 진행 방식 질문 몇 개에 대한 소유자 답을 기다립니다(`waiting_on: owner`, 8절). 이 문서가 있는 동안 GPT는 이 작업을
+소유자 답(8절)을 받아 UI A4부터 진행 중입니다. 이 문서가 있는 동안 GPT는 이 작업을
 이어받거나 잠그지 않습니다(AGENTS.md 1절).
 
 ## 1. 목표와 완료 조건
@@ -81,9 +81,9 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 ## 4. 진행 상황
 
-- [ ] 소유자 답(8절) 받기 ← **여기서 멈춤**
-- [ ] UI A4 설계와 구현 → A2 → A3 → A1
-- [ ] 8번: 웹사이트 (나) 0~13단계와 변호사 의뢰 자료
+- [x] 소유자 답(8절) 받음
+- [ ] UI A4 설계와 구현 ← **진행 중**(브랜치 `claude/ui-markets-a4-20261103`, 코드 지도 작성 중) → A2 → A3 → A1
+- [-] 8번 웹사이트: 소유자 지시로 별도 세션이 맡음(Claude는 수정하지 않음)
 - [ ] 5~6번 승인 항목
 - [ ] 실시간 체결
 - [ ] 7번 결과 통합
@@ -107,13 +107,12 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - 주문 경로는 8절 답을 받기 전에는 만들지 않습니다.
 - 웹사이트 소스와 HTML은 GitHub에 올리지 않습니다(기존 규칙).
 
-## 8. 사용자에게 물어야 할 것
+## 8. 사용자 답 (2026-11-03, 질문 도구로 받음)
 
-- **실시간 주문의 방식:** QUANTGEN이 직접 주문할지(보호 장치 해제 필요), TRADEGEN을 거쳐 주문할지.
-- **PR 병합 방식:** CI가 통과하면 Claude가 `main`에 병합할지, PR만 만들고 소유자가 병합할지.
-- **지금 공개 중인 사이트의 임시 조치(웹 2단계):** 유지 / 소개 1쪽 축소 / 비공개.
-- **웹사이트 현재 원본:** HTML 파일 전달 방법. 이 환경에서는 quantgeneration.com에 접속할 수 없습니다.
-- **GPT 비공개 작업 4개:** 원격 push를 요청할지, Claude가 처음부터 다시 할지.
+- **실시간 주문: "QUANTGEN 직접 주문".** 3단계에서 진행합니다. 구현 전에 안전 설계를 먼저 합니다(모의투자 기본, 실거래 전환은 명시적, 한도·확인창·긴급 중지·감사 기록, 연구 원장과 분리). T-RO-01과 safety test_08 개정은 이 승인을 근거로 기록합니다. 상업 배포에 대한 법률 검토는 따로 필요합니다.
+- **PR 병합: CI가 통과하면 Claude가 병합합니다.** Windows와 Ubuntu CI를 모두 확인합니다. 판정 기준과 원장 변경은 계속 따로 승인받습니다.
+- **웹사이트: 수정하지 않습니다.** 별도 세션이 진행합니다(현재 공개본 임시 조치와 원본 HTML 포함). Claude는 UI 변경마다 `docs/product/ui_website_updates/`에 기록만 남깁니다.
+- **남은 질문:** GPT 비공개 미완료 작업 4개를 push해 달라고 요청할지. 답을 받기 전에는 해당 §10 항목을 새로 시작하지 않습니다.
 
 ## 9. 이어받는 에이전트에게 주는 지시문
 
