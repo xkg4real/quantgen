@@ -1,3 +1,94 @@
+diff --git a/.github/workflows/runtime-smoke.yml b/.github/workflows/runtime-smoke.yml
+index e632944..d192289 100644
+--- a/.github/workflows/runtime-smoke.yml
++++ b/.github/workflows/runtime-smoke.yml
+@@ -117,7 +117,7 @@ jobs:
+       - name: Verify native chart text layout
+         env:
+           QT_QPA_PLATFORM: offscreen
+-        run: python -m unittest tests.desktop_chart_rendering_acceptance tests.desktop_responsive_tools_acceptance -v
++        run: python -m unittest tests.desktop_chart_rendering_acceptance tests.desktop_responsive_tools_acceptance tests.desktop_operation_fixes_acceptance -v
+       - name: Verify indicator education and locale contracts
+         env:
+           QT_QPA_PLATFORM: offscreen
+diff --git a/docs/compliance/06-form-consent.md b/docs/compliance/06-form-consent.md
+index a53a948..7b4237b 100644
+--- a/docs/compliance/06-form-consent.md
++++ b/docs/compliance/06-form-consent.md
+@@ -51,6 +51,10 @@
+ 
+ [실제 지원·20종 영향 검토](../product/CHART_RECEIVED_BARS_REVIEW_20261102.md)를 따릅니다. 기존 `review-required`·공개 준비 `BLOCKED`와 미확정 계약/운영 사실을 유지하며 공개 승인·실계정 검증을 뜻하지 않습니다.
+ 
++### 2026-11-03 AI 해설 요청 버튼
++
++“AI 해설 요청” 버튼은 이제 항상 누를 수 있고 손 모양 커서를 보입니다(소유자 B3: 반응하지 않는 버튼으로 보였음). 누르면 필요한 단계를 차례로 안내합니다. 결과를 고르지 않았으면 완료 결과 목록을 읽고, 전송 내용을 미리 보여 준 뒤 동의 체크를 요청합니다. 동의가 없으면 아무것도 전송하지 않고 안내만 합니다. 동의 상자는 기본으로 꺼져 있고, 결과·질문을 바꾸면 다시 꺼집니다. 동의가 있을 때만 버튼이 강조 상태가 됩니다. [AI 해설 화면](../../quantgen_desktop/commentary.py)과 [시험](../../tests/desktop_commentary_acceptance.py)이 근거입니다.
++
+ ## 정책 또는 구현 기준
+ 
+ ### 양식 설계 규칙
+diff --git a/docs/compliance/15-keyboard.md b/docs/compliance/15-keyboard.md
+index 59f8327..7e7b490 100644
+--- a/docs/compliance/15-keyboard.md
++++ b/docs/compliance/15-keyboard.md
+@@ -73,6 +73,10 @@ Qt offscreen 합성 키 입력 시험(`QTest`)으로 위 순서를 확인했으
+ 
+ 해외증권 탭의 종목 입력은 검색창이 됩니다. 입력하면 아래에 최대 8개 결과(이름 · 코드 · 거래소)가 나오고, 아래쪽 방향키로 목록 이동·위쪽 방향키로 복귀·Enter로 선택·Esc로 닫습니다. 고르면 조회와 지원되는 체결 연결이 버튼 없이 시작됩니다. 거래소·조회 봉 수·표시 봉 수 입력은 화면에서 없어졌고 국내파생상품 탭에서만 “시장 구분” 선택을 보입니다. 차트 위 마우스 휠로 확대·축소하며, 차트에 포커스가 있으면 `+`·`-` 키로도 같은 동작을 합니다. 더 확대·축소할 수 없으면 휠은 페이지 스크롤로 넘어갑니다. Qt offscreen 합성 입력으로 확인했으며 실제 Windows 휠 감도·고해상도 터치패드·스크린리더는 미실행입니다.
+ 
++### 2026-11-03 마우스 휠과 선택 상자
++
++포커스가 없는 선택 상자·숫자 상자·탭은 마우스 휠로 값이 바뀌지 않고 페이지가 스크롤됩니다(소유자 UI-3). 클릭이나 Tab으로 포커스를 준 선택 상자는 기존처럼 휠로 바뀝니다. 키보드 조작은 바뀌지 않습니다. Qt offscreen 합성 휠 이벤트로 확인했으며 실제 Windows 휠·터치패드는 미실행입니다.
++
+ ## 정책 또는 구현 기준
+ 
+ 1. 주요 기능을 Tab·Shift+Tab, 방향키, Enter·Space, Escape 등 해당 컨트롤의 표준 키로 사용할 수 있게 한다. 단축키가 없더라도 기능에 도달할 수 있어야 한다.
+diff --git a/docs/compliance/FACTS.md b/docs/compliance/FACTS.md
+index 7909d80..5f19dfe 100644
+--- a/docs/compliance/FACTS.md
++++ b/docs/compliance/FACTS.md
+@@ -294,3 +294,13 @@ PR61의 main `707cdc7`을 기준으로 기존 정책과 실제 복구 소스를
+ | 갱신 | 시장 화면이 보일 때만, KIS 카드 3분·지연 공급사 15분 간격, 실패 카드는 1·2·5·15분 간격 재시도. 자체 작업 큐라 분석 도구를 막지 않음. 실패한 갱신은 마지막 정상 값을 유지 | [보드](../../quantgen_desktop/market_board.py) |
+ | 표시 | 값·등락(%, 금리는 bp)·선 차트·출처/지연 한 줄·관측일/갱신 시각 한 줄. 7일 넘은 관측은 “오래된 관측” | [카드 차트](../../core/market/presentation.py) |
+ 
++## 조작 버그 수정(A2) — 2026-11-03
++
++| 항목 | 사실 | 근거 |
++| --- | --- | --- |
++| 휠 | 포커스 없는 선택 상자·숫자 상자·탭은 휠 입력을 무시하고 페이지를 스크롤(앱 전체 이벤트 필터) | [앱](../../quantgen_desktop/app.py) |
++| 채권 입력 | 금액 칸이 천 단위 구분기호로 표시(1,000,000). 계산 전 구분기호를 제거해 같은 값을 사용 | [채권 화면](../../quantgen_desktop/bonds.py) |
++| 입력 잘림 | 분석 도구 입력 영역이 고정 높이 대신 현재 양식의 실제 높이(폭에 따른 높이 포함)를 따름. Rates·KRX 마지막 줄 잘림 해결 | [도구 화면](../../quantgen_desktop/tools.py) |
++| 아이콘 | 창·앱 아이콘을 16–256px .ico와 PNG로 구성하고 Windows 앱 ID 설정 결과를 확인. 실제 Windows 작업표시줄 표시는 미검증 | [앱](../../quantgen_desktop/app.py) |
++| AI 해설 버튼 | 항상 응답하며 미리보기·동의 단계를 안내. 동의 없이는 전송하지 않음 | [AI 해설](../../quantgen_desktop/commentary.py) |
++
+diff --git a/docs/product/ui_website_updates/PR-66.json b/docs/product/ui_website_updates/PR-66.json
+index 5983bd5..e99dd9b 100644
+--- a/docs/product/ui_website_updates/PR-66.json
++++ b/docs/product/ui_website_updates/PR-66.json
+@@ -13,8 +13,9 @@
+     "branch": "claude/ui-markets-a4-20261103",
+     "pull_request": "https://github.com/xkg4real/quantgen/pull/66",
+     "implementation_commit": "f6a76ce",
+-    "remote_status": "OPEN",
+-    "merge_commit": null
++    "remote_status": "MERGED",
++    "merge_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac",
++    "verified_head": "8b88726a22686bc9b5d0d80ad77b843d0631313c"
+   },
+   "summary_ko": [
+     "시장 화면의 시장지표 표를 지표 선 차트 4개(코스피, S&P 500, 원/달러 환율, 미국 10년 국채금리)로 바꿨습니다. 개별 종목은 빠졌습니다(Home 목록에 유지).",
+@@ -56,8 +57,11 @@
+     ],
+     "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12.",
+     "source_review": "20 documents PASS after named refresh; publication BLOCKED",
+-    "ci": "PENDING",
+-    "ci_runs": [],
++    "ci": "SUCCESS",
++    "ci_runs": [
++      41655524416,
++      41655524169
++    ],
+     "actual_provider_network": "NOT_RUN",
+     "user_pc": "Not verified on the owner's Windows PC."
+   },
 diff --git a/quantgen_desktop/app.py b/quantgen_desktop/app.py
 index 5895b3e..a8f0444 100644
 --- a/quantgen_desktop/app.py
@@ -306,3 +397,121 @@ index 6866d23..022c1a6 100644
  
      def test_error_clears_previous_result_and_redacts_provider_secrets(self):
          p=self.prepare();p.consent.setChecked(True);p.submit();self.wait()
+diff --git a/tests/desktop_letf_ai_acceptance.py b/tests/desktop_letf_ai_acceptance.py
+index 732b0e2..eb5cb44 100644
+--- a/tests/desktop_letf_ai_acceptance.py
++++ b/tests/desktop_letf_ai_acceptance.py
+@@ -116,11 +116,13 @@ class NativeLETFAiTests(unittest.TestCase):
+         self.assertEqual(len(row), 7)
+ 
+         self.assertFalse(commentary.consent.isChecked())
+-        self.assertFalse(commentary.send.isEnabled())
++        # Owner B3: the button always answers; it is marked ready only once consent is ticked.
++        self.assertFalse(commentary.send.property('primary'))
+         commentary.submit()  # Even direct invocation cannot bypass the consent guard.
+         self.runner.assert_not_called()
++        self.assertIn('전송 동의', commentary.status.text())
+         commentary.consent.setChecked(True)
+-        self.assertTrue(commentary.send.isEnabled())
++        self.assertTrue(commentary.send.property('primary'))
+         self.runner.assert_not_called()
+         commentary.send.click()
+         self.wait(commentary.jobs)
+diff --git a/tests/desktop_operation_fixes_acceptance.py b/tests/desktop_operation_fixes_acceptance.py
+new file mode 100644
+index 0000000..e99736c
+--- /dev/null
++++ b/tests/desktop_operation_fixes_acceptance.py
+@@ -0,0 +1,92 @@
++"""Owner A2 operation fixes (2026-11-03): wheel guard, bond digit grouping, form clipping, icon.
++
++Offline Qt fixtures; no provider, AI or network calls.
++"""
++import os
++import unittest
++from unittest.mock import Mock, patch
++
++os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
++import dotenv
++with patch.object(dotenv, 'load_dotenv', return_value=False):
++    from quantgen_desktop.app import ResearchWindow, app_icon
++    from quantgen_desktop.bonds import group_digits
++from PyQt6.QtCore import QPoint, QPointF, Qt
++from PyQt6.QtGui import QWheelEvent
++from PyQt6.QtWidgets import QApplication
++
++
++def wheel(app, widget, delta=-120):
++    event = QWheelEvent(QPointF(5, 5), QPointF(5, 5), QPoint(0, 0), QPoint(0, delta), Qt.MouseButton.NoButton,
++                        Qt.KeyboardModifier.NoModifier, Qt.ScrollPhase.NoScrollPhase, False)
++    app.sendEvent(widget, event)
++
++
++class OperationFixTests(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls):
++        cls.app = QApplication.instance() or QApplication([])
++
++    def setUp(self):
++        deny = patch('requests.sessions.Session.request', side_effect=AssertionError('Network forbidden'))
++        deny.start(); self.addCleanup(deny.stop)
++        self.provider = Mock(side_effect=AssertionError('Provider forbidden'))
++        self.window = ResearchWindow(auto_refresh=False, locale='ko_KR', market_loader=self.provider,
++                                     connections_runner=self.provider)
++        self.window.resize(1000, 700); self.window.show(); self.window.navigate('markets'); self.app.processEvents()
++        self.addCleanup(self.window.deleteLater); self.addCleanup(self.window.hide)
++
++    def test_unfocused_selectors_ignore_the_wheel_and_the_page_scrolls(self):
++        w = self.window
++        w.show_market_pane(w.rates); self.app.processEvents()
++        scroll = w.stack.currentWidget().verticalScrollBar()
++        tool, tabs = w.rates.tool, w.market_tabs
++        before = (tool.currentIndex(), tabs.currentIndex(), w.theme.currentIndex())
++        scroll.setValue(0)
++        wheel(self.app, tool); wheel(self.app, tabs.tabBar()); wheel(self.app, w.theme)
++        self.assertEqual((tool.currentIndex(), tabs.currentIndex(), w.theme.currentIndex()), before)
++        self.assertGreater(scroll.value(), 0)  # the wheel moved the page instead
++        tool.setFocus(); self.app.processEvents()
++        wheel(self.app, tool)
++        self.assertNotEqual(tool.currentIndex(), before[0])  # a focused selector still responds
++
++    def test_bond_amounts_show_thousands_separators_and_still_parse(self):
++        self.assertEqual(group_digits('1000000'), '1,000,000')
++        self.assertEqual(group_digits('-1234567.25'), '-1,234,567.25')
++        self.assertEqual(group_digits('abc'), 'abc'); self.assertEqual(group_digits(''), '')
++        field = self.window.bonds.fields['Notional']
++        self.assertEqual(field.text(), '1,000,000')
++        field.setText('2500000'); field.editingFinished.emit()
++        self.assertEqual(field.text(), '2,500,000')
++        requests = []
++        self.window.bonds.requested.connect(requests.append)
++        self.window.bonds.submit()
++        self.assertEqual(requests[0].notional, 2_500_000)
++
++    def test_tool_forms_are_not_clipped_after_styles_apply(self):
++        w = self.window
++        from PyQt6.QtWidgets import QWidget
++
++        def fits(pane):
++            page = pane.forms.currentWidget()
++            bottom = max(c.geometry().bottom() for c in page.findChildren(QWidget)
++                         if c.parent() is page and not c.isHidden())
++            return bottom < pane.forms.height()
++        for width in (1000, 1360):
++            w.resize(width, 900)
++            for pane in (w.rates, w.krx, w.fx, w.etf, w.derivatives, w.crypto):
++                w.show_market_pane(pane); self.app.processEvents()
++                self.assertTrue(fits(pane), (type(pane).__name__, width))
++        w.show_market_pane(w.rates); self.app.processEvents()
++        w.rates.tool.setCurrentIndex(1); self.app.processEvents()
++        self.assertTrue(fits(w.rates))  # a taller form after switching tools is laid out in full
++
++    def test_window_and_app_icons_carry_taskbar_sizes(self):
++        icon = app_icon()
++        sizes = {size.width() for size in icon.availableSizes()}
++        self.assertTrue({16, 32, 48, 256} <= sizes, sizes)
++        self.assertFalse(self.window.windowIcon().isNull())
++
++
++if __name__ == '__main__':
++    unittest.main()
