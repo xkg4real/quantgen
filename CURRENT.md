@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: none
 next_ids: ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-03T21:13:21+09:00
+updated_at: 2026-11-03T21:32:34+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/ui-markets-a4-20261103
-work_commit: 7a57187
+work_commit: 2ca38d5
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -78,6 +78,8 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 |---|---|---|
 | GPT 잠금을 `--force`로 가져옴 | 소유자 "Claude 반환 허가". GPT CURRENT는 28시간 넘게 갱신이 없었음 | GPT 반환 대기: 소유자가 반환을 허가함 |
 | 실시간 주문은 구현 전에 방식 확인 | QUANTGEN에는 주문 경로가 없게 설계됨(T-RO-01, `tests` safety test_08, 분리 스펙, 2026-10-29 소유자 요약 "실제 자금 매매는 모두 TRADEGEN") | 바로 구현: 보호 장치를 확인 없이 해제하게 됨 |
+| "주문 경로 없음" 원칙을 폐기하지 않고 "격리된 주문 모듈 한 곳만 허용"으로 고침(소유자 "기존 원칙을 고치거나 폐기해주세요") | 나머지 코드(연구·백테스트·원장·Nautilus)의 보호는 그대로 두고, 주문 모듈은 별도 안전 검사로 묶음 | 전면 폐기: 연구 코드에 주문 경로가 섞여도 못 잡음 |
+| README·test_08·T-RO-01 변경은 3단계 주문 모듈 PR과 함께 | 검사를 먼저 풀면 모듈 없이 보호만 사라짐, README는 실제 상태를 설명해야 함 | 지금 바로 문구 수정 |
 
 ## 4. 진행 상황
 
@@ -90,8 +92,10 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 ## 5. 중단 지점
 
-- 코드 변경은 아직 없습니다.
-- **GPT의 비공개 미완료 작업 4개는 회수되지 않았습니다.** 옵션, Crypto, 모형/ETF, AI(§10 일부)이고, GPT 비공개 복구 스냅샷에만 있습니다. Claude는 접근할 수 없습니다. 원격에 있는 것은 전략과 금리 두 브랜치뿐입니다.
+- 소유자 답(2026-11-03 이어서)을 `OWNER_RULINGS_LOG.md`에 기록했습니다(`2ca38d5`).
+- **GPT 비공개 미완료 작업 4개는 아직 회수되지 않았습니다.** 옵션, Crypto, 모형/ETF, AI(§10 일부)입니다. 모두 GPT 컨테이너 안의 작업 폴더에만 있습니다(`/workspace/work/quantgen-defects-{crypto,options,models}-20261102`, `/workspace/work/quantgen-defects-20261102`, 사본 `/workspace/work/quantgen-private-context/reports/2026-11-02/defects-priority-checkpoint-1355`). 소유자가 회수를 시도합니다. 회수하지 못하면 Claude가 해당 항목을 처음부터 다시 하고 `/code-review`로 검토합니다.
+- 원격에 있는 것은 전략과 금리 두 브랜치뿐입니다.
+- A4 코드 지도 워크플로가 실행 중입니다. 코드 변경은 아직 없습니다.
 
 ## 6. 다음 할 일
 
@@ -104,7 +108,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - `.env`를 열거나 읽지 않습니다. 공급사 키는 소유자가 로컬에서 넣습니다.
 - 보호 캐시 4개(`docs/asset_expansion/cache/{yf_SPY,yf_BTC-USD,binance_BTCUSDT,upbit_KRW-BTC}.csv`)는 열지도 검색하지도 않습니다. 검색에는 `--exclude-dir=docs/asset_expansion/cache`를 붙입니다.
 - 동결 하네스, 판정 기준, 공식 원장, `owner_confirmed`, 동결 연구, 홀드아웃은 소유자 승인 범위 밖에서 바꾸지 않습니다. 이번 승인은 비용 분류와 R3에만 해당합니다.
-- 주문 경로는 8절 답을 받기 전에는 만들지 않습니다.
+- 주문 경로는 3단계 안전 설계 문서를 소유자에게 보이기 전에는 만들지 않습니다.
 - 웹사이트 소스와 HTML은 GitHub에 올리지 않습니다(기존 규칙).
 
 ## 8. 사용자 답 (2026-11-03, 질문 도구로 받음)
@@ -112,7 +116,8 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - **실시간 주문: "QUANTGEN 직접 주문".** 3단계에서 진행합니다. 구현 전에 안전 설계를 먼저 합니다(모의투자 기본, 실거래 전환은 명시적, 한도·확인창·긴급 중지·감사 기록, 연구 원장과 분리). T-RO-01과 safety test_08 개정은 이 승인을 근거로 기록합니다. 상업 배포에 대한 법률 검토는 따로 필요합니다.
 - **PR 병합: CI가 통과하면 Claude가 병합합니다.** Windows와 Ubuntu CI를 모두 확인합니다. 판정 기준과 원장 변경은 계속 따로 승인받습니다.
 - **웹사이트: 수정하지 않습니다.** 별도 세션이 진행합니다(현재 공개본 임시 조치와 원본 HTML 포함). Claude는 UI 변경마다 `docs/product/ui_website_updates/`에 기록만 남깁니다.
-- **남은 질문:** GPT 비공개 미완료 작업 4개를 push해 달라고 요청할지. 답을 받기 전에는 해당 §10 항목을 새로 시작하지 않습니다.
+- **주문 원칙(이어서 받은 답):** "네 직접 주문 가능하도록 하겠습니다. 기존 원칙을 고치거나 폐기해주세요." → 고침(3절). 3단계에서 주문 모듈과 함께 바꿉니다.
+- **GPT 비공개 작업(이어서 받은 답):** "제가 접근하고 관련 .md파일을 가져오도록 하겠습니다. 만약 제가 가져오는데 실패했다면 처음부터 다시 진행해주세요." 소유자 회수 결과를 기다리는 동안 해당 §10 항목은 시작하지 않습니다. UI 작업은 계속합니다.
 
 ## 9. 이어받는 에이전트에게 주는 지시문
 
