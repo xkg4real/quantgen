@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: none
-next_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-03T22:07:05+09:00
+done_ids: ⑬-2/a4-a
+next_ids: ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-03T22:21:47+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/ui-markets-a4-20261103
-work_commit: 9f7dc0e
+work_commit: ba3b6b2
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/64
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -98,7 +98,8 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - **소유자 추가 결정(2026-11-03):** GPT 비공개 작업 4개는 회수하지 않습니다. 해당 §10 항목을 Claude가 처음부터 다시 하고 `/code-review`로 검토합니다. Claude가 정한 위치: **UI A4 → UI A2 → §10 재작업(Crypto → 옵션 → 모형/ETF → AI) → UI A3 → UI A1 → 5~6번 → 실시간 체결 → 7번.** 이유: A2는 §10과 파일이 겹치지 않는 조작 버그이고, §10은 결과 화면의 숫자·설명 내용을 바꾸므로 A3(설명 정리)·A1(용어 통일) 전에 끝내야 두 번 손보지 않습니다.
 - **소유자 추가 지시:** 작업이 끝날 때마다 Notion "REMAINING WORK"(https://app.notion.com/p/4065c916fe0c80d2af08c0e7f68817fa) 해당 항목에 `<s>…</s>` 취소선. 페이지에 없는 UI 항목은 "13. Home UI" 절에 취소선 항목으로 추가(PR·main·CI 링크 포함).
 - A4는 PR 4개로 나눕니다: A4-a 검색형 가이드(UI-13), A4-b 공급사 자동 선택과 자산별 탭(UI-8), A4-c 해외 종목명 검색·휠 확대·출처 두 줄(UI-16), A4-d 시장지표 차트 4개(UI-7). 설계 지도: 워크플로 `wf_f050b1c9-227` 결과(스크래치패드 `a4/synth.md`).
-- **A4-a:** PR #64(커밋 `7de46d4`, 기록 `9f7dc0e`). 로컬 검사 41+62+47+14 OK, `/code-review` 지적 7건 수정. CI 대기 중. 통과하면 Claude가 병합합니다.
+- **A4-a 완료:** PR #64 병합(main `ba3b6b2`, 소스 `9f7dc0e`와 트리 동일). CI Runtime 41641446205(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41641446773 성공. 로컬 41+62+47+14 OK, `/code-review` 7건 수정. 실제 Windows IME·Tab·DPI는 미검증.
+- **A4-b 진행 중(로컬, 미커밋):** `core/market/routing.py`(KIS 먼저, 실패 시 Yahoo 등 대체 공급사 동시 요청, 첫 유효 응답), 시장 9개 자산별 탭, 시장 화면 데이터 출처 선택 숨김. 새 검사 `tests/market_routing_acceptance.py` 10, `tests/desktop_market_tabs_acceptance.py` 6 OK.
 - 로컬 PyQt6 검사 환경: 스크래치패드 `qtvenv`(PyQt6 6.12.0, 전역 설치 없음), 시스템 라이브러리 `libegl1 libopengl0`(CI와 같음).
 
 ## 6. 다음 할 일
