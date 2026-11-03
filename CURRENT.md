@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2
 next_ids: ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-04T02:26:00+09:00
+updated_at: 2026-11-04T02:45:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/ui-markets-a4-20261103
-work_commit: 7fc53e2
+work_branch: claude/s10-crypto-20261104
+work_commit: b9b946d
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/68
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -101,6 +101,8 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - **A4-a 완료:** PR #64 병합(main `ba3b6b2`, 소스 `9f7dc0e`와 트리 동일). CI Runtime 41641446205(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41641446773 성공. 로컬 41+62+47+14 OK, `/code-review` 7건 수정. 실제 Windows IME·Tab·DPI는 미검증.
 - **A4-b + A4-c 완료:** PR #65 병합(main `1682404`, 소스 `7f90641`과 트리 동일). CI Runtime 41649397459(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41649397329 성공. Vercel 상태 실패는 저장소 전체 연동 문제(PR #63 문서 커밋도 실패)로 PR에 한 번 설명. 자산별 탭 9개·KIS 먼저→Yahoo 대체·데이터 출처 선택 숨김(A4-b), 해외 종목명 검색 126개·거래소/봉 수 입력 제거·휠·+/- 확대·출처 두 줄(A4-c).
 - **A4-d 완료:** PR #66 병합(main `c1a4e97`, 소스 `8b88726`과 트리 동일). CI Runtime 41655524416·Compliance 41655524169 성공. **UI A4 전체 완료.**
+- **§10 Crypto PR #68 열림(CI 대기):** main(A2 포함)을 합쳐 FACTS 두 절 유지·기준선 재생성(`cc820c0`), 웹 기록 PR-68.json(`b9b946d`, shared_browser_change). 병합 전 독립 검증 워크플로(3개 관점+각 지적 반박 검증) 실행 중. 통과·CI 성공 시 병합 → 원장 ②-5/NEW-M6-14·15·22 → Notion → 옵션 PR(main 합치기, §10 집계 27로 수동 수정).
+- **§10 모형/ETF(N-M1-02, NEW-M6-04, NEW-M6-05) 분석 워크플로 실행 중:** 워크트리 `claude/s10-models-20261104`(main 7fc53e2). 세 ID 모두 등록부 설명 없음 → 소거법으로 대응 한계 확정부터.
 - **A2 완료:** PR #67 병합(main `7fc53e2`, 소스 `141ebf2`). CI Runtime 41681151562(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41681151793 성공. 원장 ⑬-2/a2.
 - (기록) **A2 Windows 근본 원인 확인·수정(`141ebf2`):** 진단 출력(`96709a7`)으로 Windows 수치 확보. 입력 패널(QFrame) 704x383, 크기 힌트 383, 실제 폭에서의 필요 높이(hfw) 411. Maximum 세로 정책이 패널을 선호 폭 기준 크기 힌트(383)로 제한해 ETF 양식이 130px(최소 144)로 눌림. 정책을 Preferred로 바꿈(c2bf636의 '늘어나지 않기'는 상단 정렬로 유지). 넓은 선호 폭 자식으로 Windows 조건을 재현하는 시험 추가: 수정 전 397<413 실패, 수정 후 통과. 광범위 254 OK.
 - **§10 옵션(M4-N4·N7·N9) 구현·검토 완료, 브랜치 `claude/s10-options-20261104` `a4b7c3c` 푸시(PR 없음):** 근거 `docs/product/OPTION_DISCLOSURE_2026-11-04.md`, 검사 `tests/option_disclosure_acceptance.py` 11개, 관련 46개 OK. 유효 입력 4사례(GBM/GARCH × 100/3000경로) 배열·값·payload 기존 키 모두 main과 동일, 키만 추가. `/code-review` 10건: 7건 수정, 2건 유지(equity_deriv 무변경 원칙, 구버전 자료 방어 분기), 1건(§10 집계 21→24 동일 줄 충돌 없이 24로 병합됨)은 병합 시 수동으로 27로 맞춤.
