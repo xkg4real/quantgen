@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "bbe7a2979ba4ab675c297fc1f7b189a2eb425f94c1a4716b2faba42d5dc575f5",
+    ".github/workflows/runtime-smoke.yml": "7142fd4b94463a3916ff1c1b4df3c0ae4f32d26ca4ffaba7e63003a7c7ff95c7",
     "README.md": "6a4f572a12e6dea657c7c063240b94d1a928e2b4f41fff25f7348ca69e1b88b5",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -246,7 +246,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "9d70b35d08947cd9797464f90ceabf1f130181ada95c4b88c142d5add676a381",
+    "docs/compliance/FACTS.md": "ae528166d90eefef58ef844657e3f6e875576798df528fdcdd3bdd4b1ae207e4",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -304,12 +304,12 @@
     "pyproject.toml": "88a8f9ac2dd220ffae1ef7b9e4bbd5b8767b16c85664a516d82caca3a692798d",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "ae653f6fe2bd5de11e31bc645d0385e2ca635e1cdfae9f6553149ba19a8d0ad0",
-    "quantgen_desktop/bonds.py": "20008483d17950302fe971c43c98ab81d938f2814197b559e1a718f6a5cc940c",
+    "quantgen_desktop/app.py": "145204802fecd7af279c8f9ffe3516ee17f0bf1f5f5c159ab86179575c3e74e9",
+    "quantgen_desktop/bonds.py": "7d173230908995d65b98dde02903f59c823b6261a550ae562d5d9e697b361bd9",
     "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
     "quantgen_desktop/charts.py": "26664a81b31a256b77f70fc8adca76f51a763560cf33e1f2d556b527b41cbdf8",
-    "quantgen_desktop/commentary.py": "4b5d02a17b5621db28c24a3f54a37106837239d7fe55aa7f376e677f80d0845f",
+    "quantgen_desktop/commentary.py": "ed0b730ca87aa042001757a4e99fc2d4846c95b71c13094e37a3d96add3df9c9",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
     "quantgen_desktop/display_prose_catalog.py": "25621b1400bf12cfe9874b0bca300ce5fa3a61fe752ee49033bc5929f0f5e63d",
@@ -317,7 +317,7 @@
     "quantgen_desktop/fx_narrative.py": "1078cff2724ff7c6bc75f8146e7893622323899ee5bb1c52100007c11649e52e",
     "quantgen_desktop/indicator_guide.py": "6fbdb1e53e2f8e1ec9a42c52df5828127d4fc5404cf3f3260b0ba32c153c5325",
     "quantgen_desktop/jobs.py": "2a0764c9c4f767a2c93d49b0fe929a1ad655d2195acc0c9a371f6229a1aa5ac1",
-    "quantgen_desktop/localization.py": "2927801b702787e2c962319693e4dd1f6db4ecc9543c5e23e2d757ea9c0b1fb1",
+    "quantgen_desktop/localization.py": "8f61f625aac09931c1f022b647975256664fc77c2a4f9f809830a39b4f082243",
     "quantgen_desktop/macro.py": "b8933483ead3e3e12f13c7e5581741336000d81e8719b1d3b1092ab57232c2b3",
     "quantgen_desktop/macro_narrative_language.py": "4a39ff7e9ef3583d803bc25f899737194186d15a3311d5d7d0e4f0cb0b45803c",
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
@@ -336,10 +336,11 @@
     "quantgen_desktop/signals.py": "42c35b809cbb3b2ca20be1d2103f405a4e7564ac9678673d39fa26368bfd96ef",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
-    "quantgen_desktop/tools.py": "abb35694317cc028156e0c5500a429cbe2fe99ff068b86134326351765530009",
+    "quantgen_desktop/tools.py": "d98221d56bd5596ee096d2f77d3437e6c3d35a3d85fb313db281cf018c5d5bdc",
     "quantgen_desktop/translations.py": "d2b14ff1f97d28c672483f1506062f385ed459a9b90ec5ba2dfffcf6ea6f552e",
     "quantgen_desktop/watchlist.py": "8261b0eae67e53bb21932fe4fb9d675b6ad158b1fec7ce2de7cc7551264d1969",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
+    "quantgen_desktop/wheel_guard.py": "44bfee9b20b358b794cfebdd71f0760b28b99bcd39a45cc36fa450a8d2ce68f6",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
     "requirements.txt": "efe528fea6e00d9edb734ada7e11c75ece2e7b8996d2697fca643e15eefc000e",
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
@@ -362,13 +363,13 @@
     "tests/desktop_bonds_portfolio_language_acceptance.py": "8429bf7fcb8b9ab8c0ed306052135f2afc0501247c51a1c5fabb68ad8e9c319b",
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "3f3c0ee0e38d946647a7ae2448af8d0496c2dea779a81be4cfd8734b84a61834",
-    "tests/desktop_commentary_acceptance.py": "23fd186a1562c440d1cf79ee8a9e1169ebeb499da93caec54141415410db7821",
+    "tests/desktop_commentary_acceptance.py": "9c4c695a57de4dd3a1c3093e058c369f3372604d4a8b6bf98ce3838e3f3f104b",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "1514c7b2446c314ad3514b21de3fccd7814f8db4e1081a7fc27480fe4163c687",
     "tests/desktop_indicator_guide_acceptance.py": "126f6bfdefad5c2c6c53ce0e24975077c0b2b6764fdaf95e02bcd04c531b7ea8",
     "tests/desktop_language_acceptance.py": "9f2c9a16007e4790823122f5e3ce6c8b19ade4b82ef1b41c20a742dcdf0dbf72",
-    "tests/desktop_letf_ai_acceptance.py": "1c9d8b5e2ae41716c2f7c2dfe73e78f39b485d5d636ad17928ed408eb533c4df",
+    "tests/desktop_letf_ai_acceptance.py": "ecd27e36e4faf7f8dac6399b57d30ebda4ff56efe273b452b77280df75ce9c5f",
     "tests/desktop_letf_assumptions_acceptance.py": "38bd6813074605393f690893c5bbbccfffc814dd4eaf44346ec7cb2f63b3f772",
     "tests/desktop_letf_disclosure_acceptance.py": "f70b5bfffb5562aa1f08a7f2417769adb7e91a926816b494c48f4045a79c19f4",
     "tests/desktop_letf_index_acceptance.py": "a5bc0f194c44d154dfbab81dccc4661f0ddade92ba34c906ed5172de7d60e664",
@@ -380,6 +381,7 @@
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_layout_acceptance.py": "98244edaf19773ca75295a7e715154abb3687f38a6618490ad86d32b2984767d",
     "tests/desktop_market_tabs_acceptance.py": "b46f719989b1cabd910531ef39f11a8630e32241aaf8345f37ed621f9ddb5946",
+    "tests/desktop_operation_fixes_acceptance.py": "85d1dcc046da9936fa5ba69f1f2acc50ff01c7d86c01a5514d9e47ebb4ef8e81",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
@@ -554,163 +556,163 @@
   "reviews": {
     "1": {
       "document_sha256": "15e782f39147b6c9e1c99e19dcdc28ca7b5dee6b6bea6af7457f05fe1fbf64f0",
-      "source_digest": "f88c288dbc91d215ce73dd83cf66a8ba124f775beca016b8c0e45843124e35cc",
+      "source_digest": "b552dfe911b40243c22d41c6faabf2dcc72e906c5dca5d996c62e1aeb3c7c6bb",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.969193+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.055865+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "f88c288dbc91d215ce73dd83cf66a8ba124f775beca016b8c0e45843124e35cc",
+      "source_digest": "b552dfe911b40243c22d41c6faabf2dcc72e906c5dca5d996c62e1aeb3c7c6bb",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.971386+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.058282+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "b2cec2c99bea9679969ccd7760a25609abdc1888f22ca8b919ee64bbe5ed2368",
+      "source_digest": "e388fa7bd8656663246a9e9fa00a2cbe23c1688bda7d7a007e9af3525b62ff8f",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.973733+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.060159+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "9fc17550499cebed55755be2b5de86d17d7980a7da682c99f2b124dcb7afdf56",
+      "source_digest": "8e9dfe4891bf2257cfa331c9b68cb17ff090fb442dd66d386231d01011082f15",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.975941+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.061963+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "8379f5b8344e8af331bf0edb9d4f1d160d39eb169d44ddf38f0a479e19701f80",
+      "source_digest": "dc984091eb446e4f4cbcc74783b7109fcb7df3c1048d2d9dacce935c40359bee",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.978601+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.063743+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "6": {
-      "document_sha256": "939f35c300ac2881e95ffc494d364bd48a8b7e48f42187a7ce1b14865c042958",
-      "source_digest": "20c258bc58066ae2ad65a10536c86431c6fea1850a1a7d087fb7035452e13005",
+      "document_sha256": "9a86db478c03eefb0f6b05fe56c7708dc5559d7670a44cc1c40561ee0a5f0335",
+      "source_digest": "f7553a09132bfc3bbca411ac5a6c0ee377e5b03134e5a0a90aad9bb138411612",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.980750+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.065607+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "7": {
       "document_sha256": "da59a63d379931b9d397b611a6f1ce61a245d7e33b53f8d96a962fcaa579d21d",
-      "source_digest": "f88c288dbc91d215ce73dd83cf66a8ba124f775beca016b8c0e45843124e35cc",
+      "source_digest": "b552dfe911b40243c22d41c6faabf2dcc72e906c5dca5d996c62e1aeb3c7c6bb",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.982857+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.067593+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "8": {
       "document_sha256": "0aa27284556dffcc7b175478898e504746b115bc0612c546fc32a1ed57002a81",
-      "source_digest": "20c258bc58066ae2ad65a10536c86431c6fea1850a1a7d087fb7035452e13005",
+      "source_digest": "f7553a09132bfc3bbca411ac5a6c0ee377e5b03134e5a0a90aad9bb138411612",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.984648+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.069450+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "9": {
       "document_sha256": "d0ba0b9e69f01b0c2f38e422a3a234f1d3cfe260947d114ea630af0bd1c8c83d",
-      "source_digest": "4b78e4c29e4a4b02ecac9f1d64ea1904be4eb916e4d92b17586703b2620f5fb9",
+      "source_digest": "3ef1a6aae10047c5828b404c5c2b56fe91dfaef7923c2296a4ad9d3be6892a1b",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.986371+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.071428+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "d9a84bf4eafbdb883ae0885012bb029ea6d4bcf674dab67e745b11a2ea272295",
+      "source_digest": "7ef58b47acf0d6f36aed9c9ae3d9bd82293e2e97b2831aaa935509b1654f8e7c",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.989804+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.073264+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "3ca06d346d921ce8c892801c8a5427f22e96b91b940d8d7da189266b49ce86e5",
+      "source_digest": "2ad160c2c3925d2e0e8b0f47e8c8a817b69978555ce2be0f7e7ec23d2f337f83",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.992316+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.074910+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "ffb8693a86708c8eb646b70374615a02fcab6ceba87b375b7d2edd017f508281",
+      "source_digest": "5447190eae22e3c63d167d198a06bf01fac475571483876c7f0e2ad631065575",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.994406+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.076635+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "13": {
       "document_sha256": "609e26253d6ea9098b44836c142c11b4a6bc33966ea7ed9e972c571eff1b6139",
-      "source_digest": "4b78e4c29e4a4b02ecac9f1d64ea1904be4eb916e4d92b17586703b2620f5fb9",
+      "source_digest": "3ef1a6aae10047c5828b404c5c2b56fe91dfaef7923c2296a4ad9d3be6892a1b",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.996756+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.078545+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "14": {
       "document_sha256": "d402c9f37367bed480a24acc886c3f45933b6882b12058b659bab31b575a2bd3",
-      "source_digest": "4b78e4c29e4a4b02ecac9f1d64ea1904be4eb916e4d92b17586703b2620f5fb9",
+      "source_digest": "3ef1a6aae10047c5828b404c5c2b56fe91dfaef7923c2296a4ad9d3be6892a1b",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:23.999303+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.080655+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "15": {
-      "document_sha256": "e002833c12f06337497c3b27e248bcbd3d668072dda42f0fa94cd4335f78bf0a",
-      "source_digest": "4b78e4c29e4a4b02ecac9f1d64ea1904be4eb916e4d92b17586703b2620f5fb9",
+      "document_sha256": "d72369824a5f3428023178a3690e50844081b050d28f7c2cefd7c7434199c5f1",
+      "source_digest": "3ef1a6aae10047c5828b404c5c2b56fe91dfaef7923c2296a4ad9d3be6892a1b",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:24.001158+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.082357+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "15c6022ca10b35927400493e311fc30d91b8a4101c795b06fba6491d51e2065e",
+      "source_digest": "9e6f3cc035ae698a1e7f7be1ab39427389aa212ab28ee3202f7b8246e0cad55b",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:24.003084+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.084985+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "20c258bc58066ae2ad65a10536c86431c6fea1850a1a7d087fb7035452e13005",
+      "source_digest": "f7553a09132bfc3bbca411ac5a6c0ee377e5b03134e5a0a90aad9bb138411612",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:24.004698+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.086631+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "f88c288dbc91d215ce73dd83cf66a8ba124f775beca016b8c0e45843124e35cc",
+      "source_digest": "b552dfe911b40243c22d41c6faabf2dcc72e906c5dca5d996c62e1aeb3c7c6bb",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:24.007158+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.088244+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "19": {
       "document_sha256": "20261f5ce75559081373cbcff1a075a866651822ad505417bc295ab30c9f7a08",
-      "source_digest": "44fce9b7bf846af230a50a3bd8e60b97cd4cf3399da1f64ec76d29eee10c283c",
+      "source_digest": "ded46370d3d8b609e102378d4ad66e105d4d23b49e5ce9e40054d5e7ed6b5180",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:24.009109+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.090062+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     },
     "20": {
       "document_sha256": "d4b1fde2264cb0881b23ebc84d6efd8b8e22b41b4966924c7cda2fdf0c9c4f9f",
-      "source_digest": "f88c288dbc91d215ce73dd83cf66a8ba124f775beca016b8c0e45843124e35cc",
+      "source_digest": "b552dfe911b40243c22d41c6faabf2dcc72e906c5dca5d996c62e1aeb3c7c6bb",
       "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "§10 NEW-M6-14/15/22: missing provider prices, holdings values and the 1-year z stay missing; privacy policy and FACTS describe the per-coin price retry on HTTP 400/404 only",
-      "reviewed_at": "2026-11-03T16:04:24.011443+00:00",
-      "source_commit": "f357d73f338956c02ec2baf8d8b8b47350fafef5"
+      "review_note": "Merged main after A2 (#67): FACTS keeps both the A2 and Crypto sections; crypto privacy-policy and FACTS rows unchanged",
+      "reviewed_at": "2026-11-03T17:25:23.091625+00:00",
+      "source_commit": "5fbb1a3309703b657d31e90458f1d5a999f9a610"
     }
   }
 }

@@ -117,7 +117,7 @@ jobs:
       - name: Verify native chart text layout
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.desktop_chart_rendering_acceptance tests.desktop_responsive_tools_acceptance -v
+        run: python -m unittest tests.desktop_chart_rendering_acceptance tests.desktop_responsive_tools_acceptance tests.desktop_operation_fixes_acceptance -v
       - name: Verify indicator education and locale contracts
         env:
           QT_QPA_PLATFORM: offscreen

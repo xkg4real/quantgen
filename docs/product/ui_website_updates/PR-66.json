@@ -13,8 +13,9 @@
     "branch": "claude/ui-markets-a4-20261103",
     "pull_request": "https://github.com/xkg4real/quantgen/pull/66",
     "implementation_commit": "f6a76ce",
-    "remote_status": "OPEN",
-    "merge_commit": null
+    "remote_status": "MERGED",
+    "merge_commit": "c1a4e97bcf7d8a900e9029cfc65e0f98edf926ac",
+    "verified_head": "8b88726a22686bc9b5d0d80ad77b843d0631313c"
   },
   "summary_ko": [
     "시장 화면의 시장지표 표를 지표 선 차트 4개(코스피, S&P 500, 원/달러 환율, 미국 10년 국채금리)로 바꿨습니다. 개별 종목은 빠졌습니다(Home 목록에 유지).",
@@ -56,8 +57,11 @@
     ],
     "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12.",
     "source_review": "20 documents PASS after named refresh; publication BLOCKED",
-    "ci": "PENDING",
-    "ci_runs": [],
+    "ci": "SUCCESS",
+    "ci_runs": [
+      41655524416,
+      41655524169
+    ],
     "actual_provider_network": "NOT_RUN",
     "user_pc": "Not verified on the owner's Windows PC."
   },
