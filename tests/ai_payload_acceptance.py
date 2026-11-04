@@ -38,7 +38,8 @@ class AiPayloadTests(unittest.TestCase):
                    "API_KEY": "fake-private-key-marker", "verdict": "NOT_RUN"}
         before = deepcopy(payload)
         http = Mock(); http.post.return_value.status_code = 200
-        http.post.return_value.json.return_value = {"content": [{"type": "text", "text": "fixture response"}]}
+        http.post.return_value.json.return_value = {"content": [{"type": "text", "text": "fixture response"}],
+                                                    "stop_reason": "end_turn"}
         with patch.object(insights.config, "anthropic_key", return_value="fixture-key"), \
              patch.object(insights.config, "ai_model", return_value="fixture-model"), \
              patch.object(insights, "_requests", http):
@@ -87,6 +88,48 @@ class AiPayloadTests(unittest.TestCase):
         self.assertNotIn('인증 실패', banner.content.content.controls[1].value)
         self.assertFalse(rows[3].controls[-1].visible)
         runner.assert_called_once()
+
+    def test_flet_cut_off_reply_shows_the_notice_not_the_text(self):
+        from ui.ai_panel import _ErrorNotice
+        from ui.localization import translate_controls
+        from core.i18n import LocaleContext
+        partial = "The Sharpe ratio of 0.42 over the window is modest, and the drawdown of"
+        http = Mock(); http.post.return_value.status_code = 200
+        http.post.return_value.json.return_value = {
+            "content": [{"type": "thinking", "thinking": ""}, {"type": "text", "text": partial}],
+            "stop_reason": "max_tokens"}
+        page = Mock(); page.run_thread.side_effect = lambda worker: worker()
+        with patch.object(insights.config, "anthropic_key", return_value="fixture-key"), \
+             patch.object(insights.config, "ai_model", return_value="fixture-model"), \
+             patch.object(insights, "_requests", http), \
+             patch.object(insights, "ai_ready", return_value=True):
+            panel = analysis_panel(page, kind="portfolio", narrative="Local computed explanation",
+                                   payload_fn=lambda: {"price": 42})
+            rows = panel.content.controls
+            next(c for c in rows[3].controls if isinstance(c, ft.Button)).on_click(None)
+        http.post.assert_called_once()
+        self.assertEqual(len(rows[-1].controls), 1)
+        banner = rows[-1].controls[0]
+        self.assertIsInstance(banner, _ErrorNotice)
+        self.assertEqual(banner.result.error_code, "OUTPUT_LIMIT")
+        self.assertFalse(any(partial in str(t.value) for t in texts(panel)))
+        translate_controls(banner, LocaleContext("ko_KR"))
+        self.assertTrue(any("출력 한도" in str(t.value) for t in texts(banner)))
+        translate_controls(banner, LocaleContext("en_US"))
+        self.assertTrue(any("output limit" in str(t.value) for t in texts(banner)))
+        self.assertEqual(rows[1].value, "Local computed explanation")
+        self.assertFalse(rows[3].controls[-1].visible)
+
+
+def texts(root):
+    """Every ft.Text under a control, through `controls` and `content`."""
+    if isinstance(root, ft.Text):
+        yield root
+    for child in getattr(root, "controls", None) or []:
+        yield from texts(child)
+    content = getattr(root, "content", None)
+    if isinstance(content, ft.Control):
+        yield from texts(content)
 
 
 if __name__ == "__main__":

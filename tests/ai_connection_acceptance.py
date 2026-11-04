@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 import dotenv
 with patch.object(dotenv, 'load_dotenv', return_value=False):
     from core.quant import insights
-from core.research.ai_connection import error_message
+from core.research.ai_connection import OUTPUT_TOKEN_LIMIT, error_message
 from requests.exceptions import Timeout, ConnectionError
 
 
@@ -66,13 +66,73 @@ class ConnectionTests(unittest.TestCase):
 
     def test_success_and_invalid_success_responses(self):
         r = self.call(body={'content':[{'type':'thinking','thinking':'hidden'},
-                                      {'type':'text','text':'Fixture explanation'}]})
+                                      {'type':'text','text':'Fixture explanation'}],
+                            'stop_reason': 'end_turn'})
         self.assertEqual(r.text, 'Fixture explanation'); self.assertEqual(r.error_code, '')
+        self.assertEqual(r.stop_reason, 'end_turn')
         for body in (None, 'bad', {'content': []}, {'content': {}},
                      {'content': [{'type':'text','text': 42}]}):
             with self.subTest(body=body):
                 r = self.call(body=body)
                 self.assertEqual(r.error_code, 'INVALID_RESPONSE'); self.assertEqual(r.text, '')
+
+    def test_stop_reason_is_read_after_the_body_and_before_the_text(self):
+        thinking = {'type': 'thinking', 'thinking': ''}
+        text = {'type': 'text', 'text': 'The figures describe a portfolio whose'}
+        ok = self.call(body={'content': [thinking, {'type': 'text', 'text': 'Complete fixture.'}],
+                             'stop_reason': 'end_turn'})
+        self.assertEqual((ok.error_code, ok.text, ok.stop_reason), ('', 'Complete fixture.', 'end_turn'))
+        cases = [
+            ({'content': [text], 'stop_reason': 'stop_sequence'}, 'INCOMPLETE_RESPONSE'),
+            ({'content': [text], 'stop_reason': 'max_tokens'}, 'OUTPUT_LIMIT'),
+            ({'content': [thinking], 'stop_reason': 'max_tokens'}, 'OUTPUT_LIMIT'),
+            ({'content': [], 'stop_reason': 'max_tokens'}, 'OUTPUT_LIMIT'),
+            ({'content': [text], 'stop_reason': 'refusal',
+              'stop_details': {'type': 'refusal', 'category': None,
+                               'explanation': 'fixture-key-secret provider explanation'}}, 'REFUSED'),
+            ({'content': [], 'stop_reason': 'refusal'}, 'REFUSED'),
+            ({'content': [], 'stop_reason': 'end_turn'}, 'INVALID_RESPONSE'),
+            ({'content': [{'type': 'text', 'text': 42}], 'stop_reason': 'end_turn'}, 'INVALID_RESPONSE'),
+        ]
+        for stop in ('pause_turn', 'tool_use', 'model_context_window_exceeded', 'compaction', 'future_value'):
+            cases.append(({'content': [text], 'stop_reason': stop}, 'INCOMPLETE_RESPONSE'))
+        for body in ({'content': [text]}, {'content': [text], 'stop_reason': None},
+                     {'content': [text], 'stop_reason': 42}, {'content': [text], 'stop_reason': []}):
+            cases.append((body, 'INVALID_RESPONSE'))
+        for body, code in cases:
+            with self.subTest(body=body):
+                r = self.call(body=body)
+                self.assertEqual(r.error_code, code)
+                self.assertEqual(r.text, ''); self.assertIsNone(r.http_status)
+                self.assertNotIn('HTTP 200', r.error)
+                self.assertNotIn('provider explanation', r.error)
+                self.assertNotIn('portfolio whose', r.error)
+
+    def test_cut_off_messages_are_bilingual_and_name_the_limit(self):
+        limit = f'{OUTPUT_TOKEN_LIMIT:,}'
+        for code in ('OUTPUT_LIMIT', 'REFUSED', 'INCOMPLETE_RESPONSE'):
+            en, ko = error_message(code, 'en'), error_message(code, 'ko')
+            with self.subTest(code=code):
+                self.assertNotEqual(en, ko)
+                self.assertTrue(any('\uac00' <= c <= '\ud7a3' for c in ko))
+                self.assertFalse(any('\uac00' <= c <= '\ud7a3' for c in en))
+                self.assertIn('retry', en)
+        en, ko = error_message('OUTPUT_LIMIT', 'en'), error_message('OUTPUT_LIMIT', 'ko')
+        for message in (en, ko):
+            self.assertIn(limit, message); self.assertIn('max_tokens', message)
+        self.assertIn('output limit', en); self.assertIn('reasoning', en)
+        self.assertIn('출력 한도', ko); self.assertIn('추론', ko)
+        http = Mock(); http.post.return_value.status_code = 200
+        http.post.return_value.json.return_value = {'content': [{'type': 'text', 'text': 'x'}],
+                                                    'stop_reason': 'end_turn'}
+        with patch.object(insights.config, 'anthropic_key', return_value='fixture-key'), \
+             patch.object(insights, '_requests', http):
+            insights.deep_analysis('portfolio', {'price': 42})
+        sent = http.post.call_args.kwargs
+        self.assertEqual(sent['json']['max_tokens'], OUTPUT_TOKEN_LIMIT)
+        for key in ('stop_sequences', 'thinking', 'temperature'):
+            self.assertNotIn(key, sent['json'])
+        self.assertEqual(sent['timeout'], 60)
 
     def test_missing_configuration_or_dependency_does_not_send(self):
         http = Mock()

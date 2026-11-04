@@ -95,6 +95,28 @@ class NativeCommentaryTests(unittest.TestCase):
         self.assertEqual(p.output.toPlainText(),'');self.assertIsNone(p.report_actions.report)
         self.assertEqual(p.payload,before);self.runner.assert_called_once()
 
+    def test_refused_or_cut_off_reply_is_neither_shown_nor_exportable(self):
+        from core.ficc import insights as ficc_insights
+        from core.quant import insights
+        p=self.prepare();p.runner=ficc_insights.deep_analysis
+        partial='The figures describe a portfolio whose'
+        bodies=[({'content':[{'type':'text','text':partial}],'stop_reason':'refusal',
+                  'stop_details':{'type':'refusal','category':None,'explanation':'provider explanation'}},('거절','declined')),
+                ({'content':[{'type':'thinking','thinking':''}],'stop_reason':'max_tokens'},('출력 한도','output limit'))]
+        for body,(ko,en) in bodies:
+            with self.subTest(stop=body['stop_reason']):
+                http=Mock();http.post.return_value.status_code=200;http.post.return_value.json.return_value=body
+                with patch.object(insights.config,'anthropic_key',return_value='fixture-key'), \
+                     patch.object(insights.config,'ai_model',return_value='fixture-model'), \
+                     patch.object(insights,'_requests',http):
+                    p.consent.setChecked(True);p.submit();self.wait()
+                http.post.assert_called_once()
+                self.assertEqual(p.output.toPlainText(),'');self.assertIsNone(p.report_actions.report)
+                self.window.ui_language='ko';p.status.retranslate();self.assertIn(ko,p.status.text())
+                self.assertNotIn(partial,p.status.text());self.assertNotIn('provider explanation',p.status.text())
+                self.window.ui_language='en';p.status.retranslate();self.assertIn(en,p.status.text())
+        self.runner.assert_not_called()
+
     def test_daily_prompt_kind_and_close_guard(self):
         gate=threading.Event()
         def runner(*a,**kw):gate.wait(2);return Analysis('daily fixture','fixture')

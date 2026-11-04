@@ -1,5 +1,11 @@
 """Safe, actionable Claude diagnostics. Never echo provider bodies or secrets."""
 
+# One response budget for every AI commentary request; the cut-off message quotes it.
+OUTPUT_TOKEN_LIMIT = 1500
+# QUANTGEN sends no tools and no stop_sequences, so only end_turn is a finished reply.
+COMPLETE_STOP_REASONS = ('end_turn',)
+_LIMIT = f'{OUTPUT_TOKEN_LIMIT:,}'
+
 MESSAGES = {
     'NOT_CONFIGURED': (
         'Claude API key is not configured. Set ANTHROPIC_API_KEY locally, then fully restart QUANTGEN. Never share the key.',
@@ -43,6 +49,26 @@ MESSAGES = {
     'REQUEST_FAILED': (
         'Claude API request failed. Check the HTTP status and API service status. No AI commentary was saved.',
         'Claude API 요청이 실패했습니다. HTTP 상태와 API 서비스 상태를 확인하세요. AI 해설은 저장하지 않았습니다.'),
+    'OUTPUT_LIMIT': (
+        f"Claude reached QUANTGEN's output limit of {_LIMIT} tokens before finishing (stop reason: max_tokens). "
+        "The limit can include the model's internal reasoning as well as the visible text, so a long report format "
+        "or long reasoning can use it up. The unfinished text was not shown or saved, and no automatic retry was made. "
+        "Local calculations and official verdicts are unchanged.",
+        f'Claude가 글을 끝내기 전에 QUANTGEN의 출력 한도({_LIMIT}토큰)에 도달했습니다(중단 사유: max_tokens). '
+        '이 한도에는 화면에 보이는 글뿐 아니라 모델의 내부 추론이 포함될 수 있으므로, 보고서 형식이 길거나 추론이 길어지면 '
+        '한도를 다 쓸 수 있습니다. 끝나지 않은 글은 표시하거나 저장하지 않았고 자동 재시도도 하지 않았습니다. '
+        '로컬 계산과 공식 판정은 그대로입니다.'),
+    'REFUSED': (
+        'Claude declined to write this commentary (stop reason: refusal). Any partial text was not shown or saved, '
+        'and no automatic retry was made. Local calculations and official verdicts are unchanged.',
+        'Claude가 이 해설 작성을 거절했습니다(중단 사유: refusal). 일부 작성된 글이 있어도 표시하거나 저장하지 않았고 '
+        '자동 재시도도 하지 않았습니다. 로컬 계산과 공식 판정은 그대로입니다.'),
+    'INCOMPLETE_RESPONSE': (
+        "Claude's reply did not end normally (its stop reason was not end_turn), so it was treated as incomplete. "
+        'The text was not shown or saved, and no automatic retry was made. '
+        'Local calculations and official verdicts are unchanged.',
+        'Claude 응답이 정상적으로 끝나지 않아(중단 사유가 end_turn이 아님) 완성되지 않은 응답으로 처리했습니다. '
+        '글은 표시하거나 저장하지 않았고 자동 재시도도 하지 않았습니다. 로컬 계산과 공식 판정은 그대로입니다.'),
 }
 
 
@@ -77,3 +103,34 @@ def transport_error(error: Exception) -> str:
     except ImportError:
         pass
     return 'NETWORK'
+
+
+def reply_result(body: object) -> tuple[str, str, str]:
+    """Classify an HTTP 200 Messages body as (error_code or '', text, stop_reason).
+
+    The order is fixed: a malformed body first, then the stop reason, then the
+    text. A reply that did not finish (max_tokens, refusal, pause_turn, tool_use,
+    model_context_window_exceeded, stop_sequence or any other value) never
+    returns its partial text. stop_details is provider text and is never read.
+    """
+    if not isinstance(body, dict):
+        return 'INVALID_RESPONSE', '', ''
+    blocks = body.get('content')
+    if not isinstance(blocks, list):
+        return 'INVALID_RESPONSE', '', ''
+    texts = [b for b in blocks if isinstance(b, dict) and b.get('type') == 'text']
+    if any(not isinstance(b.get('text'), str) for b in texts):
+        return 'INVALID_RESPONSE', '', ''
+    stop = body.get('stop_reason')
+    if not isinstance(stop, str):
+        return 'INVALID_RESPONSE', '', ''
+    if stop == 'refusal':
+        return 'REFUSED', '', stop
+    if stop == 'max_tokens':
+        return 'OUTPUT_LIMIT', '', stop
+    if stop not in COMPLETE_STOP_REASONS:
+        return 'INCOMPLETE_RESPONSE', '', stop
+    text = '\n\n'.join(b['text'] for b in texts).strip()
+    if not text:
+        return 'INVALID_RESPONSE', '', stop
+    return '', text, stop
