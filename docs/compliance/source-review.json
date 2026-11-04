@@ -156,7 +156,7 @@
     "core/research/analysis.py": "f3867004882d212f49a702b9bfe201a006e56fd0a76f138397a1bcbb11942808",
     "core/research/bond_analysis.py": "0d7b40defdd580db677226483b4a1cc6bf1e5919ea1e9ca39d691376c0b1263f",
     "core/research/connections.py": "f634fe608bcfca39c3841ee7e4bf25524ba4cba8e28658d957d56725c2c56a04",
-    "core/research/crypto_workflow.py": "6a8e638e1ef6f0ac83e72499ae2e359fd5b6f742f152d475af4994b57cbc71ab",
+    "core/research/crypto_workflow.py": "3e2af208e0a5a94edac709ee086ab871f09413fba9b0c538494a82deaab4a023",
     "core/research/decay_disclosure.py": "98f68bb2b8f8a0ac051865a76313855a323890a4adacd9abe9d0c025c0a934ce",
     "core/research/derivatives_workflow.py": "0597ee855c13663bd4d851320c68115482c3a41e4ea5f68b8f2ca35b91cd70e6",
     "core/research/display_rights.py": "e59554e140ee5ea994812bcaca083c622d94bac1513411bdca58824b6f20e6fb",
@@ -355,7 +355,7 @@
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
-    "tests/crypto_missing_values_acceptance.py": "d53059866a0667ef1bd4f80901a8d98ba8afb60dd6f02c029b8643373e5233f9",
+    "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_acceptance.py": "172aa648792ff58b52d9a73216c53b8be2f1f16976e65f8789866e4014202698",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
@@ -556,19 +556,19 @@
   "reviews": {
     "1": {
       "document_sha256": "15e782f39147b6c9e1c99e19dcdc28ca7b5dee6b6bea6af7457f05fe1fbf64f0",
-      "source_digest": "d8e4dcb7ba1af934a43dae2be8aae8bdde522d734e2e2bc755fdbab5554e266f",
+      "source_digest": "90fb09028089226f444df29c81479814a4f5fa80a21264ed0cb6c403c87f9992",
       "reviewed_by": "Claude Crypto PR review fixes",
-      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
-      "reviewed_at": "2026-11-04T08:35:05.970497+00:00",
-      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.865388+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "d8e4dcb7ba1af934a43dae2be8aae8bdde522d734e2e2bc755fdbab5554e266f",
+      "source_digest": "90fb09028089226f444df29c81479814a4f5fa80a21264ed0cb6c403c87f9992",
       "reviewed_by": "Claude Crypto PR review fixes",
-      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
-      "reviewed_at": "2026-11-04T08:35:05.973130+00:00",
-      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.868735+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
@@ -596,27 +596,27 @@
     },
     "6": {
       "document_sha256": "9a86db478c03eefb0f6b05fe56c7708dc5559d7670a44cc1c40561ee0a5f0335",
-      "source_digest": "5115d4f72aa5d7cf283ff82631121b7510a480374003726616a05cd7685e4d45",
+      "source_digest": "acf9d105e9f8dea4afb2750f69773110fc9b18498305fd832edfcb5e8dd69450",
       "reviewed_by": "Claude Crypto PR review fixes",
-      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
-      "reviewed_at": "2026-11-04T08:35:05.982063+00:00",
-      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.871702+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "7": {
       "document_sha256": "da59a63d379931b9d397b611a6f1ce61a245d7e33b53f8d96a962fcaa579d21d",
-      "source_digest": "d8e4dcb7ba1af934a43dae2be8aae8bdde522d734e2e2bc755fdbab5554e266f",
+      "source_digest": "90fb09028089226f444df29c81479814a4f5fa80a21264ed0cb6c403c87f9992",
       "reviewed_by": "Claude Crypto PR review fixes",
-      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
-      "reviewed_at": "2026-11-04T08:35:05.985055+00:00",
-      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.874618+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "8": {
       "document_sha256": "0aa27284556dffcc7b175478898e504746b115bc0612c546fc32a1ed57002a81",
-      "source_digest": "5115d4f72aa5d7cf283ff82631121b7510a480374003726616a05cd7685e4d45",
+      "source_digest": "acf9d105e9f8dea4afb2750f69773110fc9b18498305fd832edfcb5e8dd69450",
       "reviewed_by": "Claude Crypto PR review fixes",
-      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
-      "reviewed_at": "2026-11-04T08:35:05.987167+00:00",
-      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.876724+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "9": {
       "document_sha256": "d0ba0b9e69f01b0c2f38e422a3a234f1d3cfe260947d114ea630af0bd1c8c83d",
@@ -644,11 +644,11 @@
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "a1e1c1d96bd7b71dfbeceffa980ac8093ac572887c09621b0cd5960cf610710e",
+      "source_digest": "fbbec4582a11e2c5f3369001720b604cdbab8a8881340ebce69b3ec9e508bc92",
       "reviewed_by": "Claude Crypto PR review fixes",
-      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
-      "reviewed_at": "2026-11-04T08:35:05.996710+00:00",
-      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.881840+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "13": {
       "document_sha256": "609e26253d6ea9098b44836c142c11b4a6bc33966ea7ed9e972c571eff1b6139",
@@ -684,35 +684,35 @@
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "5115d4f72aa5d7cf283ff82631121b7510a480374003726616a05cd7685e4d45",
+      "source_digest": "acf9d105e9f8dea4afb2750f69773110fc9b18498305fd832edfcb5e8dd69450",
       "reviewed_by": "Claude Crypto PR review fixes",
-      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
-      "reviewed_at": "2026-11-04T08:35:06.008139+00:00",
-      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.883817+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "d8e4dcb7ba1af934a43dae2be8aae8bdde522d734e2e2bc755fdbab5554e266f",
+      "source_digest": "90fb09028089226f444df29c81479814a4f5fa80a21264ed0cb6c403c87f9992",
       "reviewed_by": "Claude Crypto PR review fixes",
-      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
-      "reviewed_at": "2026-11-04T08:35:06.010462+00:00",
-      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.886739+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "19": {
       "document_sha256": "20261f5ce75559081373cbcff1a075a866651822ad505417bc295ab30c9f7a08",
-      "source_digest": "142b5a5b12b0b7bbee15253578f0676b1edadce4a9a44cd56777d0c2b32bd968",
+      "source_digest": "b50b6d6f0c21ebac0aa04b41e28c2e4f437ddf615fbb35f1b95de7d8fe709779",
       "reviewed_by": "Claude Crypto PR review fixes",
-      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
-      "reviewed_at": "2026-11-04T08:35:06.012465+00:00",
-      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.888731+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "20": {
       "document_sha256": "d4b1fde2264cb0881b23ebc84d6efd8b8e22b41b4966924c7cda2fdf0c9c4f9f",
-      "source_digest": "d8e4dcb7ba1af934a43dae2be8aae8bdde522d734e2e2bc755fdbab5554e266f",
+      "source_digest": "90fb09028089226f444df29c81479814a4f5fa80a21264ed0cb6c403c87f9992",
       "reviewed_by": "Claude Crypto PR review fixes",
-      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
-      "reviewed_at": "2026-11-04T08:35:06.014611+00:00",
-      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.890804+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     }
   }
 }
