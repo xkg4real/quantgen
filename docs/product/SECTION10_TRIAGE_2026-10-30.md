@@ -284,7 +284,7 @@ more reviewers checked each implementation.
   C1's maths fix (block length or stationary lengths) is left to the owner.
 - **NEW-M6-04:** a sleeve whose daily P&L does not vary (cash only, or some flat prices)
   showed a Sharpe of about 1e16 or 0.00. It is now unavailable under an explicit rule
-  (relative sd at or below 1e-10). Every defined Sharpe is unchanged.
+  (sd at or below 1e-10 × max(1, max|P&L|), an absolute 1e-10 for daily returns). Every defined Sharpe is unchanged.
 - **NEW-M6-05:** the mapping stays ambiguous, so the disclosure covers every reading: the
   210-session cash warm-up inside a full-window Sharpe, the fixed 3% cash assumption, the
   Sharpe not in excess of cash, buy-and-hold without warm-up, cash or cost, the K-e daily

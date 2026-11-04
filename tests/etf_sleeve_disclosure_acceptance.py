@@ -699,7 +699,7 @@ class FletPageTests(OfflineCase):
         self.assertTrue(tooltip.startswith('Not defined: the daily P&L did not vary'))
         for label in ('Vol-target Sharpe', 'Buy & hold Sharpe'):
             self.assertRegex(t[label][0], r'^-?\d+\.\d\d$')
-            self.assertTrue(t[label][1].startswith('Sleeve conventions:'))
+            self.assertEqual(t[label][1], SD.SHARPE_CONVENTIONS_POINTER)   # a pointer, not the paragraph again
         texts = list(all_strings(root))
         for s in texts:
             self.assertNotRegex(s, DEFECT)
@@ -722,7 +722,7 @@ class FletPageTests(OfflineCase):
         conventions = SD.conventions_text(expected['conventions'])
         for label, key in (('Trend switch Sharpe', 'trend'), ('Vol-target Sharpe', 'vol_target'),
                            ('Buy & hold Sharpe', 'buy_hold')):
-            self.assertEqual(t[label], (f"{expected[key]['sharpe']:.2f}", conventions))
+            self.assertEqual(t[label], (f"{expected[key]['sharpe']:.2f}", SD.SHARPE_CONVENTIONS_POINTER))
         self.assertEqual(t['Trend MDD'][0], f"{expected['trend']['max_drawdown']:.0%}")
         self.assertIsNone(t['Trend MDD'][1])
         # The notice directly under the sleeve row is a banner with the conventions text, not only the tooltips.
@@ -731,6 +731,13 @@ class FletPageTests(OfflineCase):
         self.assertEqual(payload['sleeves']['trend']['sharpe'], expected['trend']['sharpe'])
         self.assertEqual(payload['sleeves']['trend']['sharpe_status'], SD.COMPUTED)
 
+
+    def test_defined_sharpe_tooltip_is_a_short_pointer_with_a_korean_pair(self):
+        from core.ui_legacy_messages import static_text
+        pointer, korean = SD.SHARPE_CONVENTIONS_POINTER, SD.SHARPE_CONVENTIONS_POINTER_KO
+        self.assertLess(len(pointer), 160)                      # not the whole conventions paragraph again
+        self.assertEqual(static_text(pointer, 'ko'), korean)    # Flet translates tooltips through this catalog
+        self.assertEqual(static_text(korean, 'en'), pointer)
 
 if __name__ == '__main__':
     unittest.main()

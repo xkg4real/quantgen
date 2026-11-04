@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "9ddf8eadc26233b36d471a8af1be00706aa1f588356890ea472b2e806233ff1b",
+    ".github/workflows/runtime-smoke.yml": "f7ec4f395a30df7e3d626b9c8a7d11b3a6166d57beba1e23cd1b0ab53255f5b6",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -191,7 +191,7 @@
     "core/research/rates_analysis.py": "a475fd24e0388ba899d399b3b7ba858fb1096586110f747505d321e11fecf8ef",
     "core/research/runs.py": "480df15cf6ab9458743dcce4eba05b1f1e534e7635756a7c6353ebee5965f6f4",
     "core/research/signals_analysis.py": "6f2f2c495fec9e152fc372edbe8bb3e38436038d7ab1842b17a1703a0f229281",
-    "core/research/sleeve_disclosure.py": "69d9dcfe45ab44cd2d982160eb9fb693285889cae51824256194147e253f274d",
+    "core/research/sleeve_disclosure.py": "66114ab1ebe02f82c3d1cc3edee764c630cf6d05fffae50a5b7435e99e8a4eca",
     "core/research/stock_profile.py": "e472e265254b2e30a89a237f8ca142326a40097cd84d6cca389d20ed6c21906b",
     "core/research/strategy_analysis.py": "5cbf2915c0657081a3ee8b9bfca8169814de533e2965f9835d74d28f6b01f1c9",
     "core/research/strategy_exposure.py": "4e0a386ad7b9a28d834a1f372f0789d9f723c3c93fce1c57163a131965805fdb",
@@ -216,7 +216,7 @@
     "core/techfund.py": "1108820d937dc1047f5302b2628ccde26f99ec82d03db197f9892b31d74d9629",
     "core/theme.py": "726e370feb7e44ed22a439b3b8111b5a065e9b08ff483f603c58d4b3ff4fad51",
     "core/ui_dynamic_messages.py": "218891aa8f4097e6db887b1f38128253036aaa4d96d3e4817550d3d17c924a1e",
-    "core/ui_legacy_messages.py": "82b4d665b66eee8d229e6a1c69040b4c85e7655e22163620ff582675d335e923",
+    "core/ui_legacy_messages.py": "097eeedc9deebd59c79bc782782c80456d22a05d8e2820e73af9d20838a43a38",
     "core/ui_messages.py": "9d78e48a301d1bb6b3b70efe5586606d5ee51aac63b2e2a37e5dbee5807de086",
     "data/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "data/calendars/ASX.json": "af9afc80eeccfbcbf2cb25eb1b8b10d40a10972914d028b82208f077dc9711d1",
@@ -275,7 +275,7 @@
     "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "c03dae78c5964bded90065661a0d3dc631f4b650c3baae8eb6875443b11959e6",
-    "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md": "b7936654549e3a533be0598f848c612b48386eab7339fe04e748b91f1bf06631",
+    "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md": "d39113026df4ad4a4d1903072cd64cbbd8015dc74835b77f4a96d38b1f2c52c3",
     "docs/product/FORWARD_CONVENTION_2026-11-02.md": "a294ca013fa1460c435286a1b2a466630f522d859fc9a43da29927e6c5ffcd86",
     "docs/product/FUNDING_INFERENCE_2026-10-30.md": "ea1ef423c1d2d3601f82c301536709fa66292595faee72dbd283ad49c5d87952",
     "docs/product/FX_CIP_DISCREPANCY_2026-11-02.md": "99a42c71f255e6ff271c66f1245dd45ca63e3627001e17a8848680ca4fc39b32",
@@ -305,7 +305,7 @@
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "3311b96a880aa15ffe7c24c01b98458d7bdc77eb140ac5b93b2a2a9effd8d258",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "a4fd149730de02ff1a12d0b83eea0e4bf4e88895a298f66400b022d7cc12715e",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
@@ -413,7 +413,7 @@
     "tests/desktop_typography_acceptance.py": "725e266b810776c484a45dd9b2b8b70b86d7bd0cf40fcd59b92b02e4d0bbe302",
     "tests/desktop_watchlist_acceptance.py": "baecb5ebcd7f60efcfddb203bb453b58fe1e975ee11933f039061ce9078116af",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
-    "tests/etf_sleeve_disclosure_acceptance.py": "f6f33fe1ef895229e8d61b8334f3de56581a1980e31fe4175a48776b0bf95f51",
+    "tests/etf_sleeve_disclosure_acceptance.py": "e2732c036efb7b3045f5e323ec7a68976d499c2e26ab0f147964d1c474c7d957",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
     "tests/ficc_acceptance.py": "04e7f5301539555f8c5be057d010fbfd40a2e22af32fac33bdb51a210b23b2f5",
     "tests/ficc_boundary_acceptance.py": "004cef8d6fe84cf7e3481fd4bcc93ad76abfcb8abc2da65e27132d5eae664957",
@@ -551,7 +551,7 @@
     "ui/crypto_page.py": "f7b0f3b4f1a09b2f9c3a9b3b75f1ef15bb4eb6af5e2c11aa8433f93630e91fd8",
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
     "ui/derivatives_page.py": "d2556fc98cc5c936f0e87dade57a39aa01a84e21878bf1708a93c521e31b213a",
-    "ui/etf_page.py": "f8002dbbc2d826cee7c6e35b832b14f7bbfbaac9f6275fd8c285057b39941eb5",
+    "ui/etf_page.py": "2eb5228e44318255434f332728563311e0e33ff5df54382b9491efd9cfb4338b",
     "ui/fcharts.py": "fc7fafba72863691b8013fbba55c3299eac46440f7a5285ffd7e4ba61b0bf78d",
     "ui/fx_page.py": "42a0304e93d0d9159d3941ee7c6883c980e9e595b9825cccc10c2eccdc99f48d",
     "ui/indicator_guide.py": "a063f8938b211975b4f0f00edcd40a3e6f1aa65f4db9aaeca4494a471bae5ccd",
@@ -579,163 +579,163 @@
   "reviews": {
     "1": {
       "document_sha256": "800842db400cf938aaaca47d17d69cd9c1f8100096255c919dfbd44b290af9cb",
-      "source_digest": "6f0251b73fd471793db44fefb5dd45c4576dc15a18e75a9e5318ed94c63ad186",
+      "source_digest": "0d8cd50327d5088c43fcd913714028d1c8bb4064e8b9171d733f1477542069ec",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.442411+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.344170+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "6f0251b73fd471793db44fefb5dd45c4576dc15a18e75a9e5318ed94c63ad186",
+      "source_digest": "0d8cd50327d5088c43fcd913714028d1c8bb4064e8b9171d733f1477542069ec",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.444822+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.348417+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "105a3a9babd85ae7a0d4cb5babb1b18d0461dadf66d81d0ca5aaf8413a611b35",
+      "source_digest": "ebb4a1e245f99eba13cafa98dd0dbea296ce90a528ea4f922defa28cb837c27c",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.447021+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.351950+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "660303d1225675699b21c05146d8eeea9124e5983af1a7cb422efc83f1119069",
+      "source_digest": "b5f615352d1b9c34f19c86418f2f508c6c904dc5926cd89239e92cc5219a4285",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.449015+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.358159+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "792ab7aefd43671e2863e734f5ce38729b237432fc29f3a29cc468ee6e6e01e1",
+      "source_digest": "5b5f371050d6c64991447112c23dd71b72064b6b3f422581288d310264c960ea",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.451260+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.360177+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "6": {
       "document_sha256": "9e7d3a2850c698226b88e0715ac5a11d47559a375158df21e5d5f2b4618d9805",
-      "source_digest": "9d406cfe26755a5b4a6491ccb85ccea45bde5f6717926652d61972f17c801c35",
+      "source_digest": "abec1aa31f849cde84b400fa4dfc1da5d0c6d43676ab7092a2895ccb28570277",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.453190+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.363911+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "7": {
       "document_sha256": "99b4631bd5dc98b713015d45db2b864a64919a8a7dedfb4f903ee75656fa1f04",
-      "source_digest": "6f0251b73fd471793db44fefb5dd45c4576dc15a18e75a9e5318ed94c63ad186",
+      "source_digest": "0d8cd50327d5088c43fcd913714028d1c8bb4064e8b9171d733f1477542069ec",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.455203+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.367833+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "8": {
       "document_sha256": "a0c83c9860eb1b77a1b5dd89ac4036cab1d5a48ef8ca1efeadc2295b0205dc61",
-      "source_digest": "9d406cfe26755a5b4a6491ccb85ccea45bde5f6717926652d61972f17c801c35",
+      "source_digest": "abec1aa31f849cde84b400fa4dfc1da5d0c6d43676ab7092a2895ccb28570277",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.457100+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.374174+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "9": {
       "document_sha256": "1ac53869fa19977ce6917d2c401f93f457245bc9a98c465f937740896f87a8fc",
-      "source_digest": "ba1f7fb786b14a5a56829aca35f9762fe5e697327445cb2ba1196fcf84e0ab09",
+      "source_digest": "10994d4b00c423481fa49fc60789ac1b5b0619d02b58a88b588c156a5390a1fe",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.459053+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.376077+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "c215f0d1589e1ed6ab0832b042f67b11ebdce25accfee2c98c884658e5273f16",
+      "source_digest": "ea8ae86aeb7f8d51dafd5bf293785f06c2fa19433c5d2d18872c4a100212bef1",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.460925+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.379827+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "c37657511cd8041347da14dd0435ec0d047fc3114b37c22ddb6d7059214ea0d3",
+      "source_digest": "7599b020482cc211e2a0e753df4767cb95c9f42201cf0340fb84c82b493c5555",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.462871+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.384015+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "09e3a8d2d3f654dfcac070a9161891863bbb4af9eec116e61bae13f1f61bbcc3",
+      "source_digest": "25cb35d892ff48b7a3de87d5ceadbf610fdeecbc393b6df5ffdbcfc13d200468",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.464841+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.388630+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "ba1f7fb786b14a5a56829aca35f9762fe5e697327445cb2ba1196fcf84e0ab09",
+      "source_digest": "10994d4b00c423481fa49fc60789ac1b5b0619d02b58a88b588c156a5390a1fe",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.466921+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.392207+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "ba1f7fb786b14a5a56829aca35f9762fe5e697327445cb2ba1196fcf84e0ab09",
+      "source_digest": "10994d4b00c423481fa49fc60789ac1b5b0619d02b58a88b588c156a5390a1fe",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.468810+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.398172+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "15": {
       "document_sha256": "f6d97b6b70a73b55d43b72efc4df0232ffe0516f32f22478fdf94b6a973af131",
-      "source_digest": "ba1f7fb786b14a5a56829aca35f9762fe5e697327445cb2ba1196fcf84e0ab09",
+      "source_digest": "10994d4b00c423481fa49fc60789ac1b5b0619d02b58a88b588c156a5390a1fe",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.470847+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.400143+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "302993633036e532c48329595e7a2665754d1745bb74f603743736eeb2b82e98",
+      "source_digest": "02cc64ed16b6f8051e36c0bacd2a52374743c393e1dbbf13d0327d691c163da8",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.472898+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.403778+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "9d406cfe26755a5b4a6491ccb85ccea45bde5f6717926652d61972f17c801c35",
+      "source_digest": "abec1aa31f849cde84b400fa4dfc1da5d0c6d43676ab7092a2895ccb28570277",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.474808+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.407715+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "6f0251b73fd471793db44fefb5dd45c4576dc15a18e75a9e5318ed94c63ad186",
+      "source_digest": "0d8cd50327d5088c43fcd913714028d1c8bb4064e8b9171d733f1477542069ec",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.478602+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.411837+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "577e09434c7781fb8ecc5c0476a171e5247688609f5eb7b04bcfb19262e80ca7",
+      "source_digest": "3d6a86dc60e146f1c62510da267bf9020bd316c340993050914fb00a2b3ee307",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.480509+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.415688+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     },
     "20": {
       "document_sha256": "9e456e5db5c44c8592f493633e32f1e00de8d112b05dd468e6b335e481363d45",
-      "source_digest": "6f0251b73fd471793db44fefb5dd45c4576dc15a18e75a9e5318ed94c63ad186",
+      "source_digest": "0d8cd50327d5088c43fcd913714028d1c8bb4064e8b9171d733f1477542069ec",
       "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Section 10 N-M1-02/a (bootstrap scheme disclosure; montecarlo.py docstring, mc_disclosure, Flet, narrative, native notes, README, primer source) and NEW-M6-04/05 (ETF sleeve Sharpe unavailable state and conventions disclosure; sleeve_disclosure, etf_workflow, Flet, native, narratives). FACTS gains one section; the other 19 documents were searched for statements on the bootstrap scheme, the ETF sleeves and their Sharpe, and none needed a change.",
-      "reviewed_at": "2026-11-04T15:41:27.482394+00:00",
-      "source_commit": "46f4950b648b5dbde28184aaa65cf0489fe18e19"
+      "review_note": "Code review fixes on PR 73: defined ETF Sharpe tiles carry a short pointer tooltip with a Korean catalog pair instead of the whole conventions paragraph; the 1e-10 no-variation rule is described as an absolute 1e-10 for daily returns; redundant CI path entries removed. FACTS already states the rule as sd at or below 1e-10 x max(1, max abs P&L); no other document statement changed.",
+      "reviewed_at": "2026-11-04T15:56:38.420219+00:00",
+      "source_commit": "aa4b550003d5a03c9e5f1f2978bef861257edfb8"
     }
   }
 }

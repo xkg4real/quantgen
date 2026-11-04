@@ -89,8 +89,9 @@ reading; nothing in the code depends on it.
 - `NOT_DEFINED_NO_VARIATION`: otherwise. `sharpe` is `None`.
 - `NOT_DEFINED_NON_FINITE`: the P&L contains NaN or infinity. `sharpe` is `None`.
 
-This is a numerical tolerance, not an exact zero test: a P&L whose relative sd is at or below 1e-10
-counts as no variation. A P&L with a real but tiny variation at or below that level also becomes
+This is a numerical tolerance, not an exact zero test: a P&L whose sd is at or below
+1e-10 × max(1, max|P&L|) counts as no variation. Daily P&L values are below 1, so in practice this is
+an absolute 1e-10. A P&L with a real but tiny variation at or below that level also becomes
 n/a; the test pins one (300 sessions at the cash rate plus one at +1e-12). On the register walks
 above, the margin is more than 7 orders of magnitude on each side (5.43e-20 and 1.84e-3 against
 1e-10), and the rule agrees with an exact max − min == 0 test on every trend P&L. The crypto z score uses the same 1e-10 rule

@@ -27,7 +27,7 @@ from core.quant import strategies as S
 from core.quant.history import HistoryError, load_history, synthetic_history
 from core.quant.validate import load_cards
 from core.research.decay_disclosure import decay_value, decay_text
-from core.research.sleeve_disclosure import conventions_text, sharpe_text, sharpe_tooltip
+from core.research.sleeve_disclosure import SHARPE_CONVENTIONS_POINTER, conventions_text, sharpe_text, sharpe_tooltip
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
@@ -133,7 +133,8 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                 conventions = conventions_text(sl["conventions"]) if sl.get("conventions") else ""
 
                 def sharpe_stat(label, key):
-                    return stat(label, sharpe_text(sl[key]) or "n/a", tooltip=sharpe_tooltip(sl[key]) or conventions)
+                    return stat(label, sharpe_text(sl[key]) or "n/a",
+                                tooltip=sharpe_tooltip(sl[key]) or (SHARPE_CONVENTIONS_POINTER if conventions else ""))
 
                 blocks.append(ft.Row([
                     sharpe_stat("Trend switch Sharpe", "trend"), stat("Trend MDD", f"{sl['trend']['max_drawdown']:.0%}"),

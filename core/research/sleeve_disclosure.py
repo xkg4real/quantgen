@@ -18,8 +18,8 @@
   `conventions_korean` state them on every screen.
 
 Numerical tolerance rule (NEW-M6-04). A P&L counts as "no variation" when its sample standard deviation
-(ddof=1) is at or below RELATIVE_SD_TOLERANCE x max(1, max|p|), i.e. a relative standard deviation of at
-most 1e-10. This is a tolerance, not an exact zero test: a constant cash P&L leaves a rounding residue
+(ddof=1) is at or below RELATIVE_SD_TOLERANCE x max(1, max|p|). Daily P&L values are below 1, so for
+them this is an absolute 1e-10 (the scale only matters for P&L values above 1). This is a tolerance, not an exact zero test: a constant cash P&L leaves a rounding residue
 of order 1e-20 (5.4e-20 at 505 closes; exactly 0 at some lengths, the first being 547 closes), and a
 P&L with a real but tiny variation at or below the tolerance is also reported as not defined. In a probe of 400 driftless walks x 2 cost levels, every
 trend P&L that held the fund had a relative sd above 1.7e-3 and every cash-only one at most 5.5e-20, so
@@ -70,6 +70,14 @@ def sharpe_text(s, digits: int = 2):
     """The Sharpe as shown (two decimals), or None when it is not defined."""
     v = (s or {}).get("sharpe")
     return f"{v:.{digits}f}" if v is not None and math.isfinite(v) else None
+
+
+# Tooltip of a defined Sharpe tile: a pointer to the conventions notice under the row, not the whole
+# paragraph again. A static string, so the Flet Korean catalog (core/ui_legacy_messages.py) translates it.
+SHARPE_CONVENTIONS_POINTER = ("Whole-window Sharpe, warm-up included, not in excess of the cash rate. "
+                              "The conventions are in the note below this row.")
+SHARPE_CONVENTIONS_POINTER_KO = ("준비 구간을 포함한 전체 기간의 샤프비율이며, 현금 금리를 뺀 초과 수익 기준이 "
+                                 "아닙니다. 계산 관례는 이 줄 아래 안내에 있습니다.")
 
 
 def sharpe_tooltip(s) -> str:
