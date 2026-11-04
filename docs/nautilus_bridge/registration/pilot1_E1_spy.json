@@ -66,5 +66,7 @@
   {"source": "docs/asset_expansion/cards/S_E1_trend_krx.json", "symbols": ["069500.KS", "132030.KS", "152380.KS", "229200.KS"], "cost_bps": 3.0, "params": {"rule": "tsmom", "lookback": 252, "step": 42}}
  ],
  "reference_card": null,
- "reference_card_md5": null
+ "reference_card_md5": null,
+ "owner_confirmed": "Geon Koh, 2026-11-04, table d76d2d7301ffe92c, code f995600b36c75523",
+ "host_fingerprint": "4931117fa6167e5ae20ee78b167f0af940be585806a6156de6ee08a534feee1e"
 }

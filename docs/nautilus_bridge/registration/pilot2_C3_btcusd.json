@@ -46,5 +46,7 @@
   {"source": "docs/asset_expansion/cards/S_C3_crypto_trend_krwbtc.json", "symbols": ["KRW-BTC"], "cost_bps": 10.0, "params": {"hysteresis": 0.889}}
  ],
  "reference_card": "docs/asset_expansion/cards/S_C3_crypto_trend_btcusd.json",
- "reference_card_md5": "d0bb0882fb51dec361cf2ddb160186bb"
+  "reference_card_md5": "d0bb0882fb51dec361cf2ddb160186bb",
+ "owner_confirmed": "Geon Koh, 2026-11-04, table e2ec073c309cbfc7, code f995600b36c75523",
+ "host_fingerprint": "a4e800924871e4d2e02e41d94aafa4731f78d29270a9cf46a9238a86d870cbcc"
 }
