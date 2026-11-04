@@ -1,6 +1,6 @@
 # 19. 이미지·폰트·소프트웨어·데이터 권리 관리 정책 및 대장
 
-문서 ID: QG-C19 · 버전: 1.6 · 검토일: 2026-11-02 · 상태: review-required
+문서 ID: QG-C19 · 버전: 1.7 · 검토일: 2026-11-04 · 상태: review-required
 
 ## 적용 범위와 현재 상태
 
@@ -53,6 +53,10 @@ PER/EPS·업종·상장주수 필드 확인과 가격×상장주수 계산은 �
 새 외부 데이터 endpoint·글꼴·SDK·AI 제공자·주문 기능을 추가하지 않습니다. PR61의 Pretendard 기반 QG Interface Regular/Medium/Semibold와 OFL·기존 자산 고지를 보존합니다. 토스증권의 간결한 가격 우선 정보 구조를 참고하는 것은 해당 브랜드·소스·시세·이미지의 복제/제휴 근거가 아닙니다.
 
 [실제 지원·20종 영향 검토](../product/CHART_RECEIVED_BARS_REVIEW_20261102.md)를 따릅니다. 기존 `review-required`·공개 준비 `BLOCKED`와 미확정 계약/운영 사실을 유지하며 공개 승인·실계정 검증을 뜻하지 않습니다.
+
+### 2026-11-04 꺾쇠 SVG
+
+`assets/ui/`의 꺾쇠 SVG 8개(아래·위·왼쪽·오른쪽 × 밝은·어두운 테마)는 이 저장소에서 만든 12×12 선 경로이며 외부 아이콘 세트를 복사하지 않았습니다(`2349132`). `pyproject.toml`의 `share/quantgen/assets/ui`로 설치물에 넣습니다. 설치물에서 실제로 그려지는지는 미검증입니다. 새 글꼴·굵기·SDK·다운로드는 없습니다. 화면의 KIS/KRX 종목 이름과 투자자별 매매·공매도 자료의 표시 권리는 기존 `kis_krx` `rights_conditional` 그대로이며 이 변경이 이용권을 승인하지 않습니다. [변경 사실](FACTS.md#markets-watchlist-2026-11-04)을 따릅니다.
 
 ## 정책 또는 구현 기준
 

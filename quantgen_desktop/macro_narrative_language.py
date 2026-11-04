@@ -5,8 +5,8 @@ PAIRS = {
     'Macro · Market observations and local commentary': 'Macro · 시장 관측과 로컬 해설',
     'Macro sheet': '거시 지표표', 'Daily commentary': '일일 시장 해설',
     'Weekly rates & FX': '주간 금리·외환',
-    'This tab is a descriptive macro sheet. See Markets → Macro v2 for the v2 Overlay, Model cards and Research register.':
-    '이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 Markets의 Macro v2 탭에서 확인합니다.',
+    'This tab is a descriptive macro sheet. See Analysis tools → Macro v2 for the v2 Overlay, Model cards and Research register.':
+    '이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 분석 도구의 매크로 v2에서 확인합니다.',
     'descriptive read — not a regime model (P19)': '설명용 관측 — 국면 모형이 아님 (P19)',
     'Descriptive read': '설명용 관측', 'Curve': '수익률곡선', 'Risk': '위험',
     'Dollar': '달러', 'Breakevens': '기대 인플레이션', 'Real yields': '실질금리',

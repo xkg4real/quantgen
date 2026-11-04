@@ -270,8 +270,10 @@ class MarketChartPane(QWidget):
         self.q_score_label.hide()
         for field in (self.status, self.quote, self.quote_detail, self.q_score_label):
             layout.addWidget(field)
-        # Owner UI-16: source and times as two short lines, same size, close but not cramped.
+        # Owner, 2026-11-04: no provider or observation-time lines. `provenance` shows only a delay
+        # notice when the data is not domestic real-time; source and times live in the price tooltip.
         self.provenance, self.times = self._label(), self._label()
+        self.times.hide()
         source_lines = QVBoxLayout()
         source_lines.setSpacing(5)
         for field in (self.provenance, self.times):
@@ -1114,14 +1116,20 @@ class MarketChartPane(QWidget):
             unit = self._text("계약 시세 단위", "contract quote units") if q.instrument.asset == "domestic_future" else q.currency
             self.quote.setText(f"{number(q.price)} {unit}")
             self.quote_detail.setText(f"{q.instrument.symbol} · {number(q.change)} ({number(q.change_pct)}%)")
-        self.provenance.setText(self._text("출처", "Source") + f": {snapshot.source} · {self._delay_text(snapshot)}")
+        delay = self._delay_text(snapshot)
+        realtime = self._from_kis(snapshot) and snapshot.request.instrument.asset in ("domestic_stock", "domestic_future")
+        self.provenance.setText("" if realtime else delay)
+        self.provenance.setVisible(not realtime)
         self.times.setText(self._text("조회", "Fetched") + f" {self._clock(snapshot.fetched_at)}"
             + (" · " + self._text("체결", "Market") + f" {self._clock(q.market_time)}" if q and q.market_time else "")
             + self._text(" (한국시간)", " (Korea time)"))
+        source_tip = self._text("출처", "Source") + f": {snapshot.source} · {delay}\n{self.times.text()}"
+        self.quote.setToolTip(source_tip)
+        self.quote_detail.setToolTip(source_tip)
         self.availability.setText(self._availability_text(snapshot.request.instrument) if self._from_kis(snapshot) else '')
         self.note.setText(" · ".join(dict.fromkeys(self._data_note(str(note), snapshot.request.instrument)
                                  for note in (snapshot.note, q.note if q else "") if note)))
-        self.provenance.setToolTip(self.note.text())
+        self.provenance.setToolTip(source_tip + ("\n" + self.note.text() if self.note.text() else ""))
         n = len(snapshot.candles)
         if not n:
             self.reading.clear()

@@ -142,7 +142,7 @@ class NativeIndicatorGuideTests(unittest.TestCase):
         QTest.keyClick(guide.search,Qt.Key.Key_Escape);self.assertFalse(guide.no_match.isVisible())
         guide.search.clear();self.app.processEvents()
         self.assertFalse(guide.suggestions.isVisible());self.assertFalse(guide.no_match.isVisible())
-        # A chip's name reopens that explanation; its ✕ removes it from the chart.
+        # A chip's name reopens that explanation; its × removes it from the chart.
         guide.chips['rsi'].show_button.click();self.assertEqual(guide.focus,'rsi')
         self.assertEqual(guide.detail_sections[0][1].text(),w.ctx.t('rsi_meaning'))
         guide.chips['bb'].remove_button.click();self.assertEqual(guide.keys,('rsi',))

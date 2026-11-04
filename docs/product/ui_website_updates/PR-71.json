@@ -1,0 +1,134 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-markets-watchlist-pr-71",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "Owner ruling 2026-11-03: the website is handled in a separate session and this session does not modify it; this record does not establish receipt.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "claude/ui-markets-watchlist-20261104",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/71",
+    "implementation_commit": "343d469",
+    "remote_status": "OPEN",
+    "merge_commit": null,
+    "verified_head": null
+  },
+  "summary_ko": [
+    "데스크톱 '시장' 화면을 관심종목 차트 카드와 한 종목 화면으로 바꿨습니다. 지표 차트 4개와 자산별 스크롤 탭은 없앴고, 10개 분석 도구는 왼쪽 메뉴 '분석 도구'의 5열 2행 버튼으로 옮겼습니다.",
+    "한 종목을 검색하면 가격 차트와 주요 지표·수익률·변동성·투자자별 매매·공매도(국내)·제공하지 않는 정보를 한 화면에 보입니다.",
+    "모든 종목 칸에서 코드뿐 아니라 한글·영어 이름과 초성으로 찾습니다. 국내 종목 목록은 키 없는 KIS 종목 마스터에서 받습니다.",
+    "실시간 지표 화면의 공급자·관측일 칸을 화면에서 뺐습니다. 공급자와 시각은 tooltip과 보고서 내보내기에 남고, 지연·오래된 자료·대체 자료 상태는 글자로 남습니다.",
+    "글꼴(동봉 QG Interface 400/500/600), 제목 단계, 패널 입체감, 한국식 등락 색, 더 얇은 좌측 메뉴, 상자 없는 꺾쇠 선택 상자와 얇은 스크롤 막대, 테마를 따르는 종목 검색 목록."
+  ],
+  "website_impact": {
+    "classification": "shared_browser_change",
+    "browser_code_changed": false,
+    "shared_sources": [
+      "core/market/presentation.py"
+    ],
+    "requested_actions_ko": [
+      "브라우저(Flet) 화면 코드는 바꾸지 않았습니다. 다만 Flet 시장 차트가 쓰는 공유 SVG(core/market/presentation.py)의 글꼴 이름이 'QG Interface'로, 축·라벨 글자가 12px 이상으로 바뀌었습니다. 소개사이트가 이 차트 그림을 쓴다면 글꼴 대체와 글자 크기를 확인하세요.",
+      "소개사이트가 데스크톱 시장 화면을 설명한다면 '관심종목 차트 + 한 종목 화면 + 분석 도구 메뉴' 구성과 코드·이름 검색, 공급자·관측일 칸 제거를 반영할지 검토하세요.",
+      "정책 FACTS와 01·04·06·07·08·09·13·14·15·19·20번의 2026-11-04 시장 개편 절을 웹 Docs에 반영할지 검토하세요.",
+      "웹 HTML/소스는 GitHub에 올리지 않습니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "Markets watchlist, typography, symbol directory, stock profile and desktop suites (18 modules)",
+        "passed": 236
+      },
+      {
+        "suite": "after merging main ce77566: Markets, desktop, typography, crypto, compliance, Flet runtime (15 modules)",
+        "passed": 144
+      },
+      {
+        "suite": "installed-wheel smoke_desktop.py",
+        "passed": 1
+      }
+    ],
+    "counts_note": "Suites overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.13, network and docs/asset_expansion/cache blocked.",
+    "source_review": "20 documents PASS after named refresh; publication BLOCKED",
+    "ci": "PENDING",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "Not verified on the owner's Windows PC."
+  },
+  "website_application": {
+    "status": "not_applied",
+    "deployment_status": "not_deployed",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "실제 Windows 화면(글꼴 렌더링, DPI 125·150%, 꺾쇠·스크롤 막대 모양, 좌측 메뉴 폭)은 미검증입니다.",
+    "KIS 종목 마스터의 고정폭 형식과 실제 KIS 응답(투자자별 매매·공매도 포함)은 미검증입니다.",
+    "외환 'Data sources' 표, 매크로 'As of' 줄, 금리·채권·구조화·파생·ETF·가상자산 결과 머리의 공급자·날짜 글자는 남아 있습니다(제품 기록 6절 7번).",
+    "공급자 계약상 출처 표시 의무는 미검증입니다."
+  ],
+  "changed_files": [
+    ".github/workflows/runtime-smoke.yml",
+    "README.md",
+    "assets/ui/chevron-down-dark.svg",
+    "assets/ui/chevron-down-light.svg",
+    "assets/ui/chevron-left-dark.svg",
+    "assets/ui/chevron-left-light.svg",
+    "assets/ui/chevron-right-dark.svg",
+    "assets/ui/chevron-right-light.svg",
+    "assets/ui/chevron-up-dark.svg",
+    "assets/ui/chevron-up-light.svg",
+    "core/market/directory.py",
+    "core/market/presentation.py",
+    "core/research/stock_profile.py",
+    "core/ui_legacy_messages.py",
+    "data/kis_markets.py",
+    "docs/DESKTOP_MIGRATION_2026-10-30.md",
+    "docs/compliance/01-privacy-policy.md",
+    "docs/compliance/04-cookie-policy.md",
+    "docs/compliance/06-form-consent.md",
+    "docs/compliance/07-data-minimization.md",
+    "docs/compliance/08-third-parties.md",
+    "docs/compliance/09-dark-patterns.md",
+    "docs/compliance/13-alternative-text.md",
+    "docs/compliance/14-contrast.md",
+    "docs/compliance/15-keyboard.md",
+    "docs/compliance/19-licenses.md",
+    "docs/compliance/20-deletion.md",
+    "docs/compliance/FACTS.md",
+    "docs/compliance/source-review.json",
+    "docs/nautilus_bridge/OWNER_RULINGS_LOG.md",
+    "docs/product/KIS_MARKET_CHARTS_2026-11-02.md",
+    "docs/product/MARKETS_WATCHLIST_2026-11-04.md",
+    "docs/product/ui_website_updates/PR-71.json",
+    "pyproject.toml",
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/fx.py",
+    "quantgen_desktop/indicator_guide.py",
+    "quantgen_desktop/macro.py",
+    "quantgen_desktop/macro_narrative_language.py",
+    "quantgen_desktop/market_board.py",
+    "quantgen_desktop/market_chart.py",
+    "quantgen_desktop/market_tools.py",
+    "quantgen_desktop/markets_view.py",
+    "quantgen_desktop/translations.py",
+    "quantgen_desktop/typography.py",
+    "quantgen_desktop/watchlist.py",
+    "tests/desktop_acceptance.py",
+    "tests/desktop_indicator_guide_acceptance.py",
+    "tests/desktop_market_board_acceptance.py",
+    "tests/desktop_market_layout_acceptance.py",
+    "tests/desktop_market_tabs_acceptance.py",
+    "tests/desktop_markets_watchlist_acceptance.py",
+    "tests/desktop_operation_fixes_acceptance.py",
+    "tests/desktop_responsive_tools_acceptance.py",
+    "tests/desktop_typography_acceptance.py",
+    "tests/desktop_watchlist_acceptance.py",
+    "tests/market_directory_acceptance.py",
+    "tests/stock_profile_acceptance.py",
+    "tools/packaging/smoke_desktop.py"
+  ]
+}

@@ -122,7 +122,10 @@ class NativeMarketLayoutTests(unittest.TestCase):
                     self.assertEqual(w.stack.currentIndex(), w.route_indices["markets"])
                     self.assertIs(w.current_market_pane(), w.market_chart)
                     viewport = w.stack.currentWidget().viewport()
-                    for control in (w.market_chart.symbol, w.market_chart.load_button):
+                    # Since 2026-11-04 the stock's screen names it in its header; the chart's own code field is hidden.
+                    self.assertFalse(w.market_chart.symbol.isVisible())
+                    self.assertEqual(w.markets_view.stock.instrument.code, w.market_chart.symbol.text())
+                    for control in (w.markets_view.stock.name, w.market_chart.load_button):
                         self.assertTrue(control.isVisible())
                         bounds = QRect(control.mapTo(viewport, QPoint()), control.size())
                         self.assertTrue(viewport.rect().contains(bounds),

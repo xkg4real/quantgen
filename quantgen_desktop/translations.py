@@ -39,6 +39,8 @@ Equity · starts at 1|누적 가치 · 시작값 1
 Language|언어
 Research Home|연구 홈
 Markets|시장
+Analysis tools|분석 도구
+Indicator guide|기술지표 가이드
 Open live quotes and charts|실시간 시세·차트 열기
 Technical indicator guide|기술지표 가이드
 Build & Test|설계 및 검증
@@ -234,7 +236,7 @@ Records are read explicitly. Live execution requires existing signed-calendar an
 Read stored research cards|저장된 연구카드 읽기
 Run strategy validation|전략 검증 실행
 Real-data execution records a trial in the existing research ledger. Synthetic execution does not. Lab DSR currently uses this grid's trial count; cumulative ledger counts are separate work.|실데이터 실행은 기존 연구 원장에 시행을 기록합니다. 합성 실행은 기록하지 않습니다. 현재 Lab의 DSR 시행 수는 이번 그리드 수입니다. 누적 원장 기반 전환은 별도 작업입니다.
-This tab is a descriptive macro sheet. Find v2 Overlay, Model cards and Research register in Markets → Macro v2.|이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 Markets의 Macro v2 탭에서 확인합니다.
+This tab is a descriptive macro sheet. Find v2 Overlay, Model cards and Research register in Analysis tools → Macro v2.|이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 분석 도구의 매크로 v2에서 확인합니다.
 FX · spot, forwards, options and carry|FX · 현물·선물환·옵션·캐리
 Rates · yield curve and rate risk|Rates · 수익률 곡선과 금리 위험
 Macro · market observations and local commentary|Macro · 시장 관측과 로컬 해설
@@ -465,7 +467,7 @@ Original narrative (English)|원문 해설 (영어)
 '''
 
 _PAIRS += r'''
-PyQt6 native: Home, daily Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, portfolios, Signals, Library/export, Connections, System\nMacro v2, paper trading, rules and optional AI commentary are connected / Remaining checks: actual Windows display, DPI and installation\nBrowser: the existing Flet app is retained.|PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다.
+PyQt6 native: Home, Markets (watchlist charts and one screen per stock), Analysis tools (Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), Indicator guide, Monte Carlo, Strategy Lab, portfolios, Signals, Library/export, Connections, System\nPaper trading, rules and optional AI commentary are connected / Remaining checks: actual Windows display, DPI and installation\nBrowser: the existing Flet app is retained.|PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다.
 Confirm rule|규칙 확인
 Delete rule|규칙 삭제
 Delete {name} and its change history?|{name} 및 변경 이력을 삭제할까요?
@@ -602,6 +604,8 @@ for line in (_PAIRS + _TERMS).strip().splitlines():
 
 KO["Build && Test"] = KO["Build & Test"]
 KO["Portfolio && Risk"] = KO["Portfolio & Risk"]
+# The English nav label is shortened (owner 2026-11-04); the Korean label and the page title stay.
+KO["Indicator guide"] = KO["Technical indicator guide"]
 
 from .macro_narrative_language import PAIRS as _MACRO_PAIRS
 KO.update(_MACRO_PAIRS)

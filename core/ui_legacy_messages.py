@@ -150,7 +150,7 @@ KO_TO_EN = {
  '계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.':'Calculation completed · check sources, dates and assumptions. Official validation is separate.',
  '입력 오류 · 숫자, 단위, 만기 및 선택한 도구의 조건을 확인하세요.':'Input error · check numbers, units, maturity and tool conditions.',
  'Macro · 시장 관측과 로컬 해설':'Macro · market observations and local commentary',
- '이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 Markets의 Macro v2 탭에서 확인합니다.':'This is the descriptive macro sheet. Use Markets → Macro v2 for the overlay, model cards and research register.',
+ '이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 분석 도구의 매크로 v2에서 확인합니다.':'This is the descriptive macro sheet. Use Analysis tools → Macro v2 for the overlay, model cards and research register.',
  '금리·스프레드의 변화는 bp, 다른 지표의 변화는 원 단위입니다. 분류는 설명용이며 검증 게이트나 포지션을 바꾸지 않습니다.':'Rate/spread changes use bp; other changes use original units. Classification is descriptive and changes neither gates nor positions.',
  '합성 데이터 포함: ':'Includes synthetic data: ',
  'Bonds · 가격·위험·시나리오·선물 헤지':'Bonds · price, risk, scenarios and futures hedge',
@@ -215,7 +215,7 @@ KO_TO_EN = {
  'Native desktop preview\nFlet browser is retained':'Native desktop preview\nFlet browser is retained',
  '억':'×100M',
  '미국 10년 금리':'US 10-year Treasury yield',
- 'PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다.':'Native PyQt6: Home, daily Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, Portfolio, Signals, Library/exports, Connections and System.\nMacro v2, paper trading, rules and optional AI commentary are connected. Physical Windows display/DPI/install checks remain pending.\nThe Flet browser remains available.',
+ 'PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다.':'Native PyQt6: Home, Markets (watchlist charts and one screen per stock), Analysis tools (Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), Indicator guide, Monte Carlo, Strategy Lab, Portfolio, Signals, Library/exports, Connections and System.\nPaper trading, rules and optional AI commentary are connected. Physical Windows display/DPI/install checks remain pending.\nThe Flet browser remains available.',
 }
 
 EN_TO_KO = {english:korean for korean,english in KO_TO_EN.items()}

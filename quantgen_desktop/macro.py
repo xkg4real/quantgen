@@ -31,7 +31,7 @@ class MacroPane(ToolPane):
             [('sheet','Macro sheet'),('daily','Daily commentary'),('weekly','Weekly rates & FX')],
             [('auto','Auto · synthetic fallback'),('fred','Live providers only · no fallback'),('synthetic','Synthetic demo')],
             {k:[] for k in ('sheet','daily','weekly')})
-        self.status.setText('이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 Markets의 Macro v2 탭에서 확인합니다.')
+        self.status.setText('이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 분석 도구의 매크로 v2에서 확인합니다.')
 
     def make_request(self):
         return MacroRequest(tool=self.tool.currentData(),source=self.source.currentData())
@@ -66,6 +66,10 @@ class MacroPane(ToolPane):
         for index, a in enumerate(s.rows):
             if indicator_caption(a) != a.label:
                 indicators.item(index, 1).setData(CAPTION_ROLE, a.label)
+            # Owner, 2026-11-04: no Source / Observed date columns on screen; the export keeps both.
+            indicators.item(index, 1).setToolTip(f'{a.source} · {a.last_date}')
+        for column in (9, 10):
+            indicators.setColumnHidden(column, True)
         self.text('금리·스프레드의 변화는 bp, 다른 지표의 변화는 원 단위입니다. 분류는 설명용이며 검증 게이트나 포지션을 바꾸지 않습니다.')
         korean=macro_korean(out)
         self.finished(out.narrative, localized={'ko':korean} if korean is not None else None)
