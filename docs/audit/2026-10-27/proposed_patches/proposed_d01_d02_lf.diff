@@ -1,0 +1,685 @@
+--- a/core/quant/history.py
++++ b/core/quant/history.py
+@@ -85,21 +85,216 @@
+     def prices(self) -> np.ndarray:
+         return np.asarray(self.closes, dtype=float)
+ 
+-    def log_returns(self) -> np.ndarray:
++    def _checked_prices(self) -> np.ndarray:
+         px = self.prices()
++        bad = ~np.isfinite(px) | (px <= 0)
++        if bad.any():
++            raise ValueError(f"{self.symbol}: {int(bad.sum())} close(s) are NaN, infinite or not above zero; "
++                             "returns cannot be computed on this series.")
++        return px
++
++    def log_returns(self) -> np.ndarray:
++        px = self._checked_prices()
+         return np.diff(np.log(px))
+ 
+     def simple_returns(self) -> np.ndarray:
+-        px = self.prices()
++        px = self._checked_prices()
+         return px[1:] / px[:-1] - 1.0
+ 
++    @classmethod
++    def from_rows(cls, symbol: str, source: str, dates, closes, *, note: str = "", adjustment: str = "",
++                  positive: bool = True) -> "History":
++        """A History from provider rows built outside this module (`Bars.to_history`, `Candles.to_history`):
++        the same `clean_rows` rule as every loader here, its report appended to the note."""
++        ds, cs, rep = clean_rows(zip(dates, closes), positive=positive, label=f"{source} {symbol}")
++        return cls(symbol=symbol, source=source, dates=ds, closes=cs, note=_with_note(note, rep),
++                   adjustment=adjustment)
++
++
++# --------------------------------------------------------------------------- #
++# Cleaning: one rule for every provider path (audit 2026-10-27, D-01 / D-02)
++# --------------------------------------------------------------------------- #
++SPIKE_LOG_MOVE = 0.25            # |ln(P_t / P_t-1)| above this and above 8 robust sigmas is flagged, never removed
++_SAME_CLOSE_RTOL = 1e-9          # two rows of one session this close are one row
++
+ 
+-def _clean_rows(rows: list[tuple[str, float]]) -> tuple[tuple[str, ...], tuple[float, ...]]:
+-    rows = [(d, c) for d, c in rows if c is not None and c > 0]
+-    rows.sort(key=lambda r: r[0])
+-    dates = tuple(d for d, _ in rows)
+-    closes = tuple(float(c) for _, c in rows)
+-    return dates, closes
++@dataclass(frozen=True)
++class CleanReport:
++    """What cleaning did to a provider's rows. `note()` goes into `History.note`: nothing is dropped unsaid."""
++    bad_date: int = 0
++    non_numeric: int = 0
++    non_finite: int = 0
++    non_positive: tuple[str, ...] = ()
++    merged_duplicates: int = 0
++    revised_last: str = ""
++    spikes: tuple[str, ...] = ()
++
++    def note(self) -> str:
++        def few(xs):
++            return ", ".join(xs[:3]) + (" ..." if len(xs) > 3 else "")
++        parts = []
++        if self.bad_date:
++            parts.append(f"{self.bad_date} row(s) with an unreadable date dropped")
++        if self.non_numeric:
++            parts.append(f"{self.non_numeric} row(s) without a numeric close dropped")
++        if self.non_finite:
++            parts.append(f"{self.non_finite} NaN/inf close(s) dropped")
++        if self.non_positive:
++            parts.append(f"{len(self.non_positive)} close(s) at or below zero dropped ({few(self.non_positive)})")
++        if self.merged_duplicates:
++            parts.append(f"{self.merged_duplicates} repeated row(s) of one session merged")
++        if self.revised_last:
++            parts.append(f"two different closes for {self.revised_last}; the later row kept")
++        if self.spikes:
++            parts.append(f"move over {SPIKE_LOG_MOVE:.0%} on {few(self.spikes)} kept, check it")
++        return "; ".join(parts)
++
++
++def _iso_day(text) -> str:
++    """'2026-01-05', '20260105' or '2026-01-05T00:00:00' -> '2026-01-05'; anything else -> ''."""
++    t = str(text or "").strip()
++    if len(t) >= 8 and t[:8].isdigit():
++        t = f"{t[:4]}-{t[4:6]}-{t[6:8]}"
++    t = t[:10]
++    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", t):
++        return ""
++    try:
++        return date.fromisoformat(t).isoformat()
++    except ValueError:
++        return ""
++
++
++def _spikes(dates: tuple[str, ...], closes: tuple[float, ...]) -> tuple[str, ...]:
++    if len(closes) < 3:
++        return ()
++    lr = np.diff(np.log(np.asarray(closes, dtype=float)))
++    robust_sigma = 1.4826 * float(np.median(np.abs(lr - np.median(lr))))
++    bound = max(SPIKE_LOG_MOVE, 8.0 * robust_sigma)
++    return tuple(dates[i + 1] for i in np.flatnonzero(np.abs(lr) > bound))
++
++
++def clean_rows(rows, *, positive: bool = True,
++               label: str = "") -> tuple[tuple[str, ...], tuple[float, ...], CleanReport]:
++    """A provider's `(date, close)` rows -> ascending ISO dates, one close per session, and a report.
++
++    * date: an ISO day (YYYYMMDD and ISO datetimes are normalised); anything else is dropped and counted.
++    * close: a real number (a bool is refused); NaN and +-inf are dropped and counted. For a price
++      (`positive`) a close at or below zero is dropped and its dates are named: a log return cannot hold it.
++      A rate series passes `positive=False` and keeps zero and negative values.
++    * several rows for one session: identical closes merge (counted). Different closes on the LAST session
++      keep the later row (a running bar re-issued). Different closes on an earlier session raise
++      `HistoryError` naming both: which one is true cannot be decided here. Precedence between providers
++      belongs to the PIT store (`core.ficc.pit._best_per_obs`); a History holds one provider.
++    * large moves are flagged in the report and never removed (audit request, section 6).
++    """
++    bad_date = non_numeric = non_finite = 0
++    non_positive: list[str] = []
++    by_day: dict[str, list[float]] = {}
++    for d, c in rows:
++        day = _iso_day(d)
++        if not day:
++            bad_date += 1
++            continue
++        if c is None or isinstance(c, bool):
++            non_numeric += 1
++            continue
++        try:
++            v = float(c)
++        except (TypeError, ValueError):
++            non_numeric += 1
++            continue
++        if not math.isfinite(v):
++            non_finite += 1
++            continue
++        if positive and v <= 0:
++            non_positive.append(day)
++            continue
++        by_day.setdefault(day, []).append(v)
++    days = sorted(by_day)
++    merged, revised, conflicts, closes = 0, "", [], []
++    for i, day in enumerate(days):
++        vals = by_day[day]
++        if all(math.isclose(v, vals[0], rel_tol=_SAME_CLOSE_RTOL, abs_tol=0.0) for v in vals[1:]):
++            merged += len(vals) - 1
++        elif i == len(days) - 1:
++            revised = day
++        else:
++            conflicts.append(f"{day}: {' vs '.join(f'{v:g}' for v in vals)}")
++        closes.append(vals[-1])
++    if conflicts:
++        raise HistoryError(f"{label or 'The provider'} returned different closes for one session "
++                           f"({'; '.join(conflicts[:3])}{' ...' if len(conflicts) > 3 else ''}). Which one is "
++                           "right cannot be decided here, so nothing was computed.")
++    ds, cs = tuple(days), tuple(closes)
++    report = CleanReport(bad_date, non_numeric, non_finite, tuple(sorted(non_positive)), merged, revised,
++                         _spikes(ds, cs) if positive else ())
++    return ds, cs, report
++
++
++def _clean_rows(rows) -> tuple[tuple[str, ...], tuple[float, ...]]:
++    """Kept for callers outside this module. New code calls `clean_rows` and puts the report in the note."""
++    ds, cs, _ = clean_rows(rows)
++    return ds, cs
++
++
++def _with_note(note: str, report: CleanReport) -> str:
++    return "; ".join(x for x in (note, report.note()) if x)
++
++
++def _well_formed(dates, closes) -> bool:
++    """A stored series is served only if it is exactly what `clean_rows` would hand out."""
++    return (len(dates) == len(closes)
++            and all(isinstance(d, str) and _iso_day(d) == d for d in dates)
++            and all(a < b for a, b in zip(dates, dates[1:]))
++            and all(isinstance(c, (int, float)) and not isinstance(c, bool) and math.isfinite(c) for c in closes))
++
++
++def _market_of(provider: str, symbol: str) -> str:
++    s = symbol.upper()
++    if provider == "CRYPTO":
++        return "CRYPTO"
++    if provider in ("KIS", "YFINANCE") and _looks_krx(s):
++        return "KRX"
++    if (provider == "FMP" and "." not in s) or (provider == "KIS" and s.split(":")[0] in ("NAS", "NYS", "AMS")):
++        return "US"
++    return ""
++
++
++def gap_report(dates, market: str) -> tuple[tuple[str, ...], tuple[str, ...], int]:
++    """(sessions missing, rows on non-sessions, days the calendar could not judge) from the first to the last date.
++    CRYPTO trades every UTC day; KRX and US use `core.calendars` inside its generated coverage, and a day outside
++    it is counted as unjudged, never as open. Reported only: nothing is filled or removed."""
++    if not market or len(dates) < 2:
++        return (), (), 0
++    from core import calendars
++    have = set(dates)
++    d, hi = date.fromisoformat(dates[0]), date.fromisoformat(dates[-1])
++    missing, extra, unknown = [], [], 0
++    while d <= hi:
++        open_ = True if market == "CRYPTO" else calendars.is_trading_day(market, d)
++        if open_ is None:
++            unknown += 1
++        elif open_ and d.isoformat() not in have:
++            missing.append(d.isoformat())
++        elif not open_ and d.isoformat() in have:
++            extra.append(d.isoformat())
++        d += timedelta(days=1)
++    return tuple(missing), tuple(extra), unknown
++
++
++def _gap_note(h: "History", provider: str) -> str:
++    market = _market_of(provider, h.symbol)
++    missing, extra, unknown = gap_report(h.dates, market)
++    few = lambda xs: ", ".join(xs[:3]) + (" ..." if len(xs) > 3 else "")      # noqa: E731
++    parts = []
++    if missing:
++        parts.append(f"{len(missing)} {market} session(s) missing against the calendar ({few(missing)}); "
++                     "the return across each gap spans more than one session")
++    if extra:
++        parts.append(f"{len(extra)} row(s) on {market} non-sessions ({few(extra)})")
++    if unknown:
++        parts.append(f"{unknown} day(s) outside the {market} calendar coverage were not checked for gaps")
++    return "; ".join(parts)
+ 
+ 
+ def convention_warning(hists) -> str:
+@@ -165,24 +360,17 @@
+     price_field = "adjClose" if dividend_adjusted else "close"
+     dropped = sum(1 for r in records if isinstance(r, dict) and r.get(price_field) is None)
+     for rec in records:
+-        if not isinstance(rec, dict):
+-            continue
+-        d = str(rec.get("date") or "")[:10]
+-        c = rec.get(price_field)
+-        try:
+-            c = float(c)
+-        except (TypeError, ValueError):
+-            continue
+-        if d:
+-            rows.append((d, c))
+-    dates, closes = _clean_rows(rows)
++        if isinstance(rec, dict) and rec.get(price_field) is not None:      # a missing field is counted in `dropped`
++            rows.append((rec.get("date"), rec.get(price_field)))
++    dates, closes, rep = clean_rows(rows, label=f"FMP {symbol!r}")
+     if len(closes) < 30:
+         raise HistoryError(f"FMP returned only {len(closes)} usable sessions for {symbol!r}.")
+     return History(symbol=symbol.upper(), source="FMP",
+                    dates=dates[-days:], closes=closes[-days:],
+-                   note=("FMP close adjusted for splits and dividends" if dividend_adjusted
+-                         else "FMP close, NOT dividend-adjusted (no adjClose in the response)")
+-                        + (f"; {dropped} session(s) without {price_field} dropped" if dropped else ""),
++                   note=_with_note(("FMP close adjusted for splits and dividends" if dividend_adjusted
++                                    else "FMP close, NOT dividend-adjusted (no adjClose in the response)")
++                                   + (f"; {dropped} session(s) without {price_field} dropped" if dropped else ""),
++                                   rep),
+                    adjustment="total" if dividend_adjusted else "split")
+ 
+ 
+@@ -198,31 +386,30 @@
+     from data.krx.kis_client import KISClient
+     client = KISClient()
+     start = (date.today() - timedelta(days=int(days * 1.6) + 10)).strftime("%Y%m%d")
+-    rows_by_date: dict[str, float] = {}
++    rows: list[tuple[str, object]] = []
++    seen: set[str] = set()
+     end: str | None = None
+     for _ in range(days // 100 + 3):                 # a few spare pages for holidays
+         try:
+             page = client.daily(code, start=start, end=end)
+         except Exception as exc:
+             raise HistoryError(f"KIS daily history failed: {exc}") from exc
+-        fresh = [(r["date"], r.get("close")) for r in page
+-                 if r.get("date") and r["date"] not in rows_by_date]
++        fresh = [(r["date"], r.get("close")) for r in page if r.get("date") and r["date"] not in seen]
+         if not fresh:
+             break
+-        for d, c in fresh:
+-            if c is not None and c > 0:
+-                rows_by_date[d] = float(c)
+-        if len(rows_by_date) >= days:
++        rows.extend(fresh)
++        seen.update(d for d, _ in fresh)
++        if len(seen) >= days:
+             break
+         earliest = min(d for d, _ in fresh)
+         end = (date.fromisoformat(earliest) - timedelta(days=1)).strftime("%Y%m%d")
+         if end < start:
+             break
+-    dates, closes = _clean_rows(list(rows_by_date.items()))
++    dates, closes, rep = clean_rows(rows, label=f"KIS {code!r}")
+     if len(closes) < 30:
+         raise HistoryError(f"KIS returned only {len(closes)} usable sessions for {code!r}.")
+     return History(symbol=code, source="KIS", dates=dates[-days:], closes=closes[-days:],
+-                   note="KIS 수정주가: adjusted for splits and rights, cash dividends not included",
++                   note=_with_note("KIS 수정주가: adjusted for splits and rights, cash dividends not included", rep),
+                    adjustment="split")
+ 
+ 
+@@ -272,13 +459,13 @@
+         rows = _yf_fetch([symbol], _period_for(days)).get(symbol) or []
+     except Exception as exc:
+         raise HistoryError(f"Yahoo Finance failed for {symbol!r}: {exc}") from exc
+-    dates, closes = _clean_rows([(d, c) for d, c in rows])
++    dates, closes, rep = clean_rows(rows, label=f"Yahoo {symbol!r}")
+     if len(closes) < 30:
+         raise HistoryError(f"Yahoo Finance returned only {len(closes)} usable sessions for {symbol!r}.")
+     s = symbol.upper()
+     pays_no_dividend = s.startswith("^") or s.endswith(("=F", "=X", "-USD", "-KRW"))
+     return History(symbol=s, source="YFINANCE", dates=dates[-days:], closes=closes[-days:],
+-                   note="Yahoo adjusted close", adjustment="" if pays_no_dividend else "total")
++                   note=_with_note("Yahoo adjusted close", rep), adjustment="" if pays_no_dividend else "total")
+ 
+ 
+ def crypto_history(symbol: str, *, days: int = 504) -> History:
+@@ -423,7 +610,8 @@
+     """
+     ttl = float(config.FICC_CACHE_TTL_SECONDS)
+     if ttl <= 0 or not _READY.get(provider, lambda: True)():
+-        return fetch(symbol, days=days)
++        h = fetch(symbol, days=days)
++        return replace(h, note=_with_gap(h, provider))
+     name = re.sub(r"[^A-Za-z0-9_.-]", "_", f"HIST_{provider}_{symbol.upper()}_{days}")
+     path = config.ficc_cache_dir() / f"{name}.json"
+     try:
+@@ -433,7 +621,7 @@
+         # traded since it was written.
+         final = p.get("live") is False and not _traded_since(provider, symbol, float(p["ts"]))
+         limit = ttl if final else min(ttl, _CACHE_LIVE_TTL)
+-        if 0 <= time.time() - float(p["ts"]) < limit and len(p["dates"]) == len(p["closes"]):
++        if 0 <= time.time() - float(p["ts"]) < limit and _well_formed(p["dates"], p["closes"]):
+             stamp = datetime.fromtimestamp(float(p["ts"])).strftime("%Y-%m-%d %H:%M")
+             note = "; ".join(x for x in (str(p.get("note") or ""), f"cached {stamp}") if x)
+             return History(str(p["symbol"]), str(p["source"]), tuple(p["dates"]),
+@@ -444,6 +632,7 @@
+         pass                                  # absent, expired or unreadable: fetch
+     live = _may_be_trading(provider, symbol)  # judged before the request goes out
+     h = fetch(symbol, days=days)
++    h = replace(h, note=_with_gap(h, provider))
+     if live and not h.status:
+         h = replace(h, status="provisional_intraday")   # M1: a running last bar is never presented as a close
+     if len(h) >= _CACHE_MIN_ROWS:
+@@ -458,6 +647,10 @@
+     return h
+ 
+ 
++def _with_gap(h: History, provider: str) -> str:
++    return "; ".join(x for x in (h.note, _gap_note(h, provider)) if x)
++
++
+ SOURCES = ("auto", "fmp", "kis", "yfinance", "crypto", "synthetic")
+ 
+ 
+--- a/data/kis_markets.py
++++ b/data/kis_markets.py
+@@ -30,6 +30,7 @@
+ from __future__ import annotations
+ 
+ import io
++import math
+ import re
+ import zipfile
+ from dataclasses import dataclass, field
+@@ -86,8 +87,8 @@
+ 
+     def to_history(self, symbol: str | None = None):
+         from core.quant.history import History
+-        return History(symbol=symbol or self.symbol, source=self.source,
+-                       dates=self.dates, closes=self.close, note=self.note)
++        return History.from_rows(symbol or self.symbol, self.source, self.dates, self.close, note=self.note,
++                                 positive=not self.symbol.startswith(f"{CHART_YIELD}:"))
+ 
+ 
+ @dataclass(frozen=True)
+@@ -141,13 +142,14 @@
+ 
+ 
+ def _bars(symbol: str, rows: list[dict], keys: dict[str, str], *, note: str = "",
+-          extra: dict | None = None) -> Bars:
+-    """rows: KIS dicts; keys: {'date': ..., 'close': ..., 'open': ..., ...}."""
++          extra: dict | None = None, positive: bool = True) -> Bars:
++    """rows: KIS dicts; keys: {'date': ..., 'close': ..., 'open': ..., ...}. A rate (`positive=False`) keeps
++    zero and negative values; NaN and inf are never kept."""
+     seen: dict[str, dict] = {}
+     for r in rows:
+         d = _iso(r.get(keys["date"]))
+         c = _f(r.get(keys["close"]))
+-        if d and c is not None and c > 0:
++        if d and c is not None and math.isfinite(c) and (c > 0 or not positive):
+             seen[d] = r
+     ds = sorted(seen)
+     col = lambda k: tuple(float(_f(seen[d].get(keys[k])) or 0.0) for d in ds) if k in keys else ()  # noqa: E731
+@@ -487,7 +489,8 @@
+             raise KISError(f"{market}/{code}: KIS returned no chart rows (unknown code for this market?)")
+         return _bars(f"{market}:{code}", rows, {"date": "stck_bsop_date", "close": "ovrs_nmix_prpr",
+                                                 "open": "ovrs_nmix_oprc", "high": "ovrs_nmix_hgpr",
+-                                                "low": "ovrs_nmix_lwpr", "volume": "acml_vol"})
++                                                "low": "ovrs_nmix_lwpr", "volume": "acml_vol"},
++                     positive=market != CHART_YIELD)
+ 
+     def krw_yield_daily(self, code: str = "Y0101", *, days: int = 504) -> Bars:
+         """KRW benchmark yield history in PERCENT (KTB 1/3/5/10/20/30y, CD 91d, call)."""
+--- a/data/crypto/crypto_client.py
++++ b/data/crypto/crypto_client.py
+@@ -80,8 +80,7 @@
+ 
+     def to_history(self, symbol: str | None = None):
+         from core.quant.history import History
+-        return History(symbol=symbol or self.symbol, source=self.source, dates=self.dates,
+-                       closes=self.close, note=self.note)
++        return History.from_rows(symbol or self.symbol, self.source, self.dates, self.close, note=self.note)
+ 
+ 
+ @dataclass(frozen=True)
+--- a/core/ficc/data.py
++++ b/core/ficc/data.py
+@@ -483,9 +483,9 @@
+                     except Exception as exc1:
+                         errors[i] = f"{type(exc1).__name__}: {exc1}"
+     for i in missing:
+-        r = sorted(fetched.get(i) or [])
++        r, why = _tidy(fetched.get(i) or [], f"{provider} {i}")
+         if len(r) < _MIN_OBS:
+-            errors.setdefault(i, reason or f"{provider} returned only {len(r)} observations")
++            errors.setdefault(i, why or reason or f"{provider} returned only {len(r)} observations")
+         else:
+             rows[i] = r
+             _cache_put(_cache_key(provider, i, days), r)
+@@ -495,6 +495,17 @@
+     return rows, errors
+ 
+ 
++def _tidy(rows: Rows, label: str) -> tuple[Rows, str]:
++    """Finite values, one row per date, ascending (the `core.quant.history.clean_rows` rule with rates allowed at
++    or below zero). A date with two different values is refused: ([], reason)."""
++    from core.quant.history import HistoryError, clean_rows
++    try:
++        ds, vs, _ = clean_rows(rows, positive=False, label=label)
++    except HistoryError as exc:
++        return [], str(exc)
++    return list(zip(ds, vs)), ""
++
++
+ def _series_from_rows(id: str, provider: str, rows: Rows, days: int, *, label: str = "",
+                       note: str = "") -> Series:
+     rows = rows[-days:]
+--- /dev/null
++++ b/tests/history_cleaning_acceptance.py
+@@ -0,0 +1,236 @@
++"""Acceptance checks for the price-cleaning rule (audit 2026-10-27, D-01 / D-02).
++
++Hermetic: every provider transport is a fake, credentials are patched, the cache lives in a temporary folder.
++One rule for every path that builds a `History`: NaN / inf / non-numeric / unreadable dates never survive, a
++close at or below zero is dropped and named, one session has one row, a conflicting session is refused, a
++large move is flagged and kept, and a missing session is reported and never filled.
++"""
++from __future__ import annotations
++
++import contextlib
++import json
++import math
++import os
++import tempfile
++from datetime import date, timedelta
++
++import config
++import core.quant.history as H
++from core.quant.history import History, HistoryError, clean_rows, gap_report
++
++ROWS = [(f"2026-{1 + i // 28:02d}-{1 + i % 28:02d}", 100.0 + i) for i in range(40)]
++
++
++@contextlib.contextmanager
++def _patched(obj, **attrs):
++    saved = {k: getattr(obj, k) for k in attrs}
++    for k, v in attrs.items():
++        setattr(obj, k, v)
++    try:
++        yield
++    finally:
++        for k, v in saved.items():
++            setattr(obj, k, v)
++
++
++def test_non_finite_and_non_numeric_closes_never_survive_and_are_counted():
++    rows = list(ROWS)
++    rows[3] = (rows[3][0], math.inf)
++    rows[4] = (rows[4][0], -math.inf)
++    rows[5] = (rows[5][0], math.nan)
++    rows[6] = (rows[6][0], "inf")
++    rows[7] = (rows[7][0], "abc")
++    rows[8] = (rows[8][0], None)
++    rows[9] = (rows[9][0], True)
++    ds, cs, rep = clean_rows(rows)
++    assert all(math.isfinite(c) and c > 0 for c in cs) and len(cs) == 33
++    assert (rep.non_finite, rep.non_numeric) == (4, 3), rep
++    assert "4 NaN/inf close(s) dropped" in rep.note() and "3 row(s) without a numeric close dropped" in rep.note()
++
++
++def test_a_close_at_or_below_zero_is_dropped_and_named_unless_the_series_is_a_rate():
++    rows = list(ROWS)
++    rows[10] = ("2026-01-11", -37.63)
++    rows[11] = ("2026-01-12", 0.0)
++    ds, cs, rep = clean_rows(rows)
++    assert "2026-01-11" not in ds and rep.non_positive == ("2026-01-11", "2026-01-12")
++    assert "2 close(s) at or below zero dropped (2026-01-11, 2026-01-12)" in rep.note()
++    ds, cs, rep = clean_rows(rows, positive=False)
++    assert -37.63 in cs and 0.0 in cs and rep.non_positive == ()
++
++
++def test_dates_are_normalised_or_dropped_and_the_output_is_strictly_ascending():
++    rows = [("2026-01-06", 3.0), ("20260102", 1.0), ("2026-01-05T00:00:00", 2.0), ("2026-1-9", 9.0),
++            ("N/A", 9.0), ("", 9.0), ("2026-02-30", 9.0)]
++    ds, cs, rep = clean_rows(rows)
++    assert ds == ("2026-01-02", "2026-01-05", "2026-01-06") and cs == (1.0, 2.0, 3.0)
++    assert rep.bad_date == 4
++    assert all(a < b for a, b in zip(ds, ds[1:]))
++
++
++def test_identical_rows_of_one_session_merge_and_are_counted():
++    rows = ROWS + [ROWS[5], ROWS[5]]
++    ds, cs, rep = clean_rows(rows)
++    assert len(ds) == len(set(ds)) == 40 and rep.merged_duplicates == 2
++    assert "2 repeated row(s) of one session merged" in rep.note()
++
++
++def test_two_different_closes_for_an_earlier_session_raise_and_name_both():
++    rows = ROWS + [(ROWS[20][0], 555.0)]
++    try:
++        clean_rows(rows, label="FMP 'KO'")
++    except HistoryError as exc:
++        msg = str(exc)
++        assert ROWS[20][0] in msg and "120" in msg and "555" in msg and "FMP 'KO'" in msg
++    else:
++        raise AssertionError("a conflicting session must not be resolved silently")
++
++
++def test_two_different_closes_for_the_last_session_keep_the_later_row_and_say_so():
++    rows = ROWS + [(ROWS[-1][0], 140.5)]
++    ds, cs, rep = clean_rows(rows)
++    assert cs[-1] == 140.5 and len(ds) == 40 and rep.revised_last == ROWS[-1][0]
++    assert f"two different closes for {ROWS[-1][0]}; the later row kept" in rep.note()
++
++
++def test_a_large_move_is_flagged_and_kept():
++    rows = list(ROWS)
++    rows[30] = (rows[30][0], 400.0)
++    ds, cs, rep = clean_rows(rows)
++    assert 400.0 in cs and rows[30][0] in rep.spikes and rows[31][0] in rep.spikes
++    assert "kept, check it" in rep.note()
++
++
++def test_returns_refuse_a_series_that_is_not_finite_and_positive():
++    for bad in (math.inf, math.nan, 0.0, -1.0):
++        h = History("X", "TEST", tuple(d for d, _ in ROWS), tuple(c if i != 10 else bad for i, (_, c) in enumerate(ROWS)))
++        for fn in (h.log_returns, h.simple_returns):
++            try:
++                fn()
++            except ValueError as exc:
++                assert "returns cannot be computed" in str(exc)
++            else:
++                raise AssertionError(f"{fn.__name__} accepted {bad}")
++
++
++class _Resp:
++    def __init__(self, text, status=200):
++        self.text, self.status_code = text, status
++
++    def json(self):
++        return json.loads(self.text)
++
++
++class _HTTP:
++    def __init__(self, text):
++        self.text = text
++
++    def get(self, url, **kw):
++        return _Resp(self.text)
++
++
++def test_every_provider_path_applies_the_rule():
++    import core.ficc.data as ficc
++    import data.crypto.crypto_client as cc
++    import data.kis_markets as km
++    import data.krx.kis_client as kis
++    recs = [{"date": d, "adjClose": c} for d, c in ROWS]
++    body = json.dumps(recs).replace('"adjClose": 110.0', '"adjClose": Infinity')
++    with _patched(config, fmp_key=lambda: "K", kis_ready=lambda: True), _patched(H, _requests=_HTTP(body)):
++        h = H.fmp_history("KO", days=60)
++        assert all(math.isfinite(c) for c in h.closes) and "1 NaN/inf close(s) dropped" in h.note
++
++    class _KIS:
++        def daily(self, code, start=None, end=None):
++            if end is not None:
++                return []
++            rows = [{"date": d, "close": c} for d, c in ROWS]
++            rows[10]["close"] = kis._f("inf")
++            return rows + [{"date": ROWS[20][0], "close": 999.0}]
++
++    with _patched(config, kis_ready=lambda: True), _patched(kis, KISClient=_KIS):
++        try:
++            H.kis_history("005930", days=60)
++        except HistoryError as exc:
++            assert ROWS[20][0] in str(exc)
++        else:
++            raise AssertionError("KIS: a duplicate inside one page must not be overwritten silently")
++    with _patched(ficc, _yf_fetch=lambda t, p: {t[0]: ROWS[:12] + [(ROWS[12][0], math.inf)] + ROWS[13:]}):
++        h = H.yf_history("ZZZ", days=60)
++        assert len(h) == 39 and all(math.isfinite(c) for c in h.closes)
++    candles = cc.Candles("KRW-BTC", tuple(d for d, _ in ROWS), tuple(0.0 if i == 3 else c for i, (_, c) in enumerate(ROWS)),
++                         source="UPBIT")
++    h = candles.to_history()
++    assert 0.0 not in h.closes and "at or below zero dropped" in h.note
++    rows = [{"stck_bsop_date": d.replace("-", ""), "ovrs_nmix_prpr": str(v)} for d, v in
++            zip((d for d, _ in ROWS), ("0.25", "0.00", "-0.05", "inf") + ("0.30",) * 36)]
++    y = km._bars("I:Y0204", rows, {"date": "stck_bsop_date", "close": "ovrs_nmix_prpr"}, positive=False)
++    assert 0.0 in y.close and -0.05 in y.close and len(y) == 39
++    assert 0.0 in y.to_history().closes, "a rate keeps zero"
++
++
++def test_a_cache_file_holding_infinity_is_refetched_not_served():
++    with tempfile.TemporaryDirectory() as tmp:
++        saved_env = os.environ.get("NEXTGEN_FICC_CACHE")
++        os.environ["NEXTGEN_FICC_CACHE"] = tmp
++        calls = []
++
++        def fetch(symbol, days):
++            calls.append(symbol)
++            return History(symbol, "FMP", tuple(d for d, _ in ROWS), tuple(c for _, c in ROWS))
++        try:
++            with _patched(H, _READY={"FMP": lambda: True}, _may_be_trading=lambda *a, **k: False,
++                          _traded_since=lambda *a, **k: False):
++                name = "HIST_FMP_ABC_40.json"
++                with open(os.path.join(tmp, name), "w", encoding="utf-8") as fh:
++                    fh.write(json.dumps({"ts": __import__("time").time(), "live": False, "symbol": "ABC",
++                                         "source": "FMP", "note": "", "dates": [d for d, _ in ROWS],
++                                         "closes": [math.inf] + [c for _, c in ROWS[1:]]}))
++                h = H._cached("FMP", fetch, "ABC", 40)
++                assert calls == ["ABC"] and all(math.isfinite(c) for c in h.closes)
++        finally:
++            if saved_env is None:
++                os.environ.pop("NEXTGEN_FICC_CACHE", None)
++            else:
++                os.environ["NEXTGEN_FICC_CACHE"] = saved_env
++
++
++def test_missing_sessions_are_reported_against_the_calendar_and_never_filled():
++    days = [date(2026, 3, 2) + timedelta(days=i) for i in range(30)]
++    us = [d.isoformat() for d in days if d.weekday() < 5]
++    gappy = [d for d in us if d != "2026-03-11"] + ["2026-03-28"]      # a Wednesday missing, a Saturday row
++    missing, extra, unknown = gap_report(sorted(gappy), "US")
++    assert missing == ("2026-03-11",) and extra == ("2026-03-28",) and unknown == 0
++    btc = [d.isoformat() for d in days if d.isoformat() != "2026-03-15"]
++    assert gap_report(btc, "CRYPTO")[0] == ("2026-03-15",)
++    old = [(date(2024, 1, 1) + timedelta(days=i)).isoformat() for i in range(10)]
++    assert gap_report(old, "US") == ((), (), 10), "outside coverage is unjudged, never open"
++    h = History("AAPL", "FMP", tuple(sorted(gappy)), tuple(100.0 + i for i in range(len(gappy))))
++    note = H._gap_note(h, "FMP")
++    assert "1 US session(s) missing against the calendar (2026-03-11)" in note and "non-sessions" in note
++    assert len(h) == len(gappy), "a gap is reported, never filled"
++
++
++def test_ficc_rows_with_a_conflicting_date_are_refused_with_the_reason():
++    import core.ficc.data as ficc
++    rows, why = ficc._tidy(ROWS + [(ROWS[5][0], 1.0)], "YFINANCE EURUSD=X")
++    assert rows == [] and ROWS[5][0] in why
++    rows, why = ficc._tidy(ROWS[:5] + [(ROWS[5][0], math.inf)] + [(ROWS[6][0], -0.5)], "FRED X")
++    assert len(rows) == 6 and why == "" and (ROWS[6][0], -0.5) in rows
++
++
++def tests():
++    return [(name, fn) for name, fn in sorted(globals().items())
++            if name.startswith("test_") and callable(fn)]
++
++
++if __name__ == "__main__":
++    failed = 0
++    for name, fn in tests():
++        try:
++            fn()
++            print("PASS", name)
++        except Exception as exc:  # noqa: BLE001
++            failed += 1
++            print("FAIL", name, f"{type(exc).__name__}: {exc}")
++    raise SystemExit(1 if failed else 0)

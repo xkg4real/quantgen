@@ -3,7 +3,33 @@
 Date: 2026-10-26.
 
 Status:
-- **Revision 6 (Claude debate closed after round 5; GPT and Gemini pending, Step 1b).**
+- **2026-11-04 Step 7A.4 review (Claude): passed.** It covers the 7A.3 evidence commit `563db54`. The owner ruled
+  that the cross-platform census may also differ by `six.moves.winreg` (POSIX only), and 5.2.7 now says so.
+  The review is in Appendix B. Next is 7A.5, the owner's `git pull --ff-only` of this commit.
+- **2026-11-04 owner sign-off, Step 7A.1 (verbatim; Claude Code chat, session_016uB1jgeiPdP8gPkAez3Wrx).**
+  "I approve spec 2026-10-26 revision 6, the T-RO-01 exemption of its section 5.6 and the merge of claude/amazing-gauss-tdiguu into main. Geon Koh, 2026-11-04."
+  It releases two acts only: the merge of this branch into `main` (the owner's own `--no-ff` merge after Step 10)
+  and the T-RO-01 exemption of section 5.6 outside the branch. It is not a pilot approval: each table's
+  of-record runs still need the current `owner_confirmed` of Step 7A.3, after Claude's 7A.4 review. Before
+  recording it Claude ran `git fetch origin` and `git merge-base --is-ancestor origin/main HEAD`: `main`, frozen at
+  `bb35b3b` (PR #69, 2026-11-04 03:36:05 KST) until the 7A.3 commit, is merged into the branch (`92cc00f`,
+  `c95b3aa`), so the sentence covers the merged branch with the ⑤-1/a fixes (`85d2e51`, `611c718`, `2c299c9`). The commit
+  recording this bullet is the scoped sign-off that 7A.4 requires to be an ancestor of the 7A.3 commit.
+- **2026-10-30 owner addendum (O11 A2; implementation on the research branch).**
+  O2–O15 revision-6 defaults are accepted, with the subsequent O8 optional-review decision and O11 A2 exception below.
+  The approval source is the owner's 2026-10-30 chat, recorded in the private Notion approval page
+  `4095c916-fe0c-8173-a4da-e8156aa03ae4`. Its original text remains private; this public addendum is a scope summary.
+  O11 A2 permits registration of pilot 1's 12 E1 configurations on the owner's Windows machine before reading
+  prices. Initial `n_trials = 12 + U`, `U <= 24`. See `docs/nautilus_bridge/O11_A2_REGISTRATION.md`.
+  The implementation and temporary-ledger checks do not establish an actual Windows registration, pilot result,
+  `owner_confirmed`, Step 7A or the cumulative research-main merge sign-off.
+  O8 follow-up: additional GPT and Gemini review is optional. Both are NOT_PERFORMED, not PASS or no objections.
+  The owner waived that additional-review prerequisite; its absence alone does not block Windows hand-off or
+  subsequent steps. Existing Claude reviews and every technical/Windows acceptance condition remain in force.
+  Approved ordinary fixes/tests need no repeated general sign-off; research verdict changes, formal ledger
+  execution and external publication retain their separate approvals. Appendix B records this decision.
+  Historical revision-6 status immediately below is retained as dated history, superseded only by this scope.
+- **Revision 6 (Claude debate closed after round 5; O8 amended 2026-10-30).**
   - Five Claude personas (security, quant, QA, ops, governance) form one referee under D6
     (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:46`). Round 1, on Revision 1:
     1 REJECT, 4 ACCEPT WITH CHANGES. Round 2, on Revision 2: security AGREE, 4 ACCEPT WITH CHANGES. Round 3, on
@@ -17,18 +43,20 @@ Status:
     (rounds 2 to 5), quant AGREE (round 4), QA AGREE (rounds 3 and 4), governance AGREE (rounds 3 and 4), ops AGREE
     (round 5). Steps 2 to 7 start now on the branch, on the section 2 defaults, with synthetic data and temp ledgers
     (GOVERNANCE-R2-1; section 9).
-  - Step 1b is open. GPT (Codex CLI) and Gemini (`agy`) have reviewed no revision, because neither CLI exists in the
-    cloud container: REVIEW_INCOMPLETE until both run on the owner's machine (Codex quota back 2026-10-30 14:40), or
-    the owner records a substitute in Appendix B. Step 1b also needs the owner's approval with answers to O1 to O15
-    (section 2). Step 7A waits for Step 1b.
-  - Owner approval: **not given** (the whole spec). Owner sign-off sentence (Step 7A): **none recorded**.
+  - Step 1b records the owner's O1–O15 decisions and their implementation. Under the 2026-10-30 O8 follow-up,
+    GPT and Gemini are optional / NOT_PERFORMED. Their absence is not a Step 7A blocker; it is never a review pass.
+    Technical and Windows acceptance, the specific research-main merge sign-off and current per-table
+    `owner_confirmed` remain separate requirements.
+  - Historical owner approval at revision 6 drafting: **not given**. See the 2026-10-30 addendum for received scope.
+    Owner sign-off sentence (Step 7A cumulative merge): none recorded at drafting; **recorded 2026-11-04** (first
+    Status bullet).
   - Owner rulings received (verbatim, with channel and date):
     - **O1 approved**, 2026-10-27, Claude Code chat (cloud session), in Korean: "아뇨, Nautilus로 옮기는 걸 목표로
       하고 있습니다. 따라서 pyarrow를 포함한 새 의존성을 승인합니다." (English: "No, the goal is to move to
       Nautilus. Therefore I approve the new dependencies, including pyarrow.") This answers O1 only; the venv shape
       of O1's default (separate hash-pinned venv, global interpreter unchanged) stays the design. O2 to O15 remain
-      open.
-- Next: Step 2 (the plan) on the branch; in parallel, GPT and Gemini and the owner's rulings (Step 1b).
+      open at that time; see the 2026-10-30 addendum.
+- Historical next: Step 2 (the plan) on the branch; in parallel, GPT and Gemini and the owner's rulings (Step 1b).
 
 Inputs (QUANTGEN code at `6f7c610`, unchanged at HEAD `b7f991a`, which adds only this spec and the review folder;
 branch `claude/amazing-gauss-tdiguu`): in `research_notes/QUANTGEN Nautilus bridge map/`, `00_synthesis.md` ("synth",
@@ -57,17 +85,21 @@ reversible: Claude builds on `claude/amazing-gauss-tdiguu` with synthetic data a
 the branch files undoes it. Two acts take effect only after the owner's sign-off sentence at Step 7A.1: the merge of the
 branch into `main`, which is the owner's own act (GOVERNANCE-11), and the T-RO-01 exemption of section 5.6 outside the
 branch. Claude records the sentence verbatim in the Status block. Its form: "I approve spec 2026-10-26 revision <n>, the
-T-RO-01 exemption of its section 5.6 and the merge of claude/amazing-gauss-tdiguu into main. Geon Koh, <date>." Any code
-change after the sentence needs a new one (GOVERNANCE-R4-2). Of-record runs, that is, rows in `~/.nextgen/macro/ledgers`
+T-RO-01 exemption of its section 5.6 and the merge of claude/amazing-gauss-tdiguu into main. Geon Koh, <date>." Ordinary code
+fixes/tests inside the approved scope do not require a repeated general approval (2026-10-30 O8 follow-up).
+Affected technical and Windows checks must be rerun, and actual execution still requires a current,
+code/table-bound `owner_confirmed`. Research verdict changes, formal ledger execution and external publication
+need their separate approvals; this does not grant the cumulative research-main merge. Of-record runs, that is, rows in `~/.nextgen/macro/ledgers`
 (map02 §3.1), are approved per table through `owner_confirmed`, written at Step 7A.3 after the Windows evidence exists
 and quoting the table and code digests (6.6; GOVERNANCE-R2-2).
 
 Branch work does not wait for Step 1b (GOVERNANCE-R2-1): once Step 1a closes, Steps 2 to 7 run on the section 2
 defaults, and where the owner later rules otherwise, the affected branch work is redone or deleted before Step 7A.
-Pilots wait for, in this order: (1) Step 1b, that is, the GPT and Gemini rounds, or a substitute the owner records in
-Appendix B, and the owner's approval, recorded verbatim in the Status block with its channel and date in the form "I
-approve spec 2026-10-26 revision <n> on the section 2 defaults, except: <O-number: ruling>. Geon Koh, <date>."
-(GOVERNANCE-R3-5); (2) the sign-off sentence and the rest of Step 7A (section 9).
+Pilots wait for, in this order: (1) Step 1b, the owner's O1–O15 decisions and implementation of exceptions;
+(2) the separately scoped sign-off and all technical/Windows requirements of Step 7A (section 9), including
+current per-table `owner_confirmed`. The 2026-10-30 O8 decision makes additional GPT/Gemini reviews optional
+and NOT_PERFORMED; missing optional reports cannot block those steps. The original approval remains in the
+private source identified in Status; public summaries do not replace or expand its scope.
 
 ## 1. Purpose and scope
 
@@ -107,10 +139,10 @@ it until the owner rules. O1 to O12 come from synth §3.1, O13 from K5, O14 and 
 | O5 | Parity bars: the corrected bars of 5.4, or the original 98% / 0.99 / 0.05. | Corrected bars, with the commission check P7 hard (QUANT-5); the original bars printed next to them. | Too strict: a false WITHHELD on engine noise; measured margins are 100x on correlation and 7.7x on Sharpe (5.4.3). Kept original: a forgotten 2x cost passes all three original bars (synth §7.3). |
 | O6 | Pilot-1 registration table (10.1). | As 10.1. The start is 2004-12-01: map 03 already computed all 12 settings on 1995 to 2004, so an earlier start would make pilot 1 exploratory (GOVERNANCE-5). | Ledger rows are immutable (`core/quant/gate_ledger.py:337-355`); a wrong key field leaves 12 permanent extra trials in E1. |
 | O7 | Realism leg (fill delay): in scope? | **Deferred** by ruling C-1: no latency code, no `timing_lag` rows, no realism fixture. | If the owner wants a realism number, a later spec adds it with its own registration. Nothing to undo. |
-| O8 | Referees: wait for GPT (Codex quota resets 2026-10-30 14:40; `docs/superpowers/plans/2026-10-23-execution-record.md:158`) and Gemini (`agy`; `tools/debate.py:46-47`), or record a substitute. | Wait (Step 1b). Claude's rounds 1 to 5 are ruled and applied, and Step 1a is done: round 5 raised only minor issues, so the moderator closed the Claude debate (`round5_rulings.md` §1). Neither CLI exists in the cloud container, so both run on the owner's machine; no substitute is recorded. | Step 1b ends about four days later; Steps 2 to 7 go ahead meanwhile on the branch. A missing referee is REVIEW_INCOMPLETE, never "no objections" (map04 R24). |
+| O8 | Additional GPT/Gemini review: optional under the owner's explicit 2026-10-30 follow-up. | Both NOT_PERFORMED; retain Claude rounds 1–5 and record the waiver in Appendix B. | Missing optional reports are not a Windows hand-off blocker and never count as PASS or no objections. All technical/Windows conditions and separate approval boundaries remain. |
 | O9 | Windows environment and its location. | Base interpreter `%LOCALAPPDATA%\quantgen\py313` (python.org per-user install), venv `%LOCALAPPDATA%\quantgen\ntvenv`, firewall rule `QUANTGEN-nautilus-block-out` (4.4), the `.env` line of 3.4, timings at Step 7A. The Windows closure unpacks to about 506 MB, 0.5 to 0.6 GB with bytecode (OPS-14). The owner's global interpreter is the Microsoft Store Python 3.13 (`docs/asset_expansion/study.log:27, 29`; `grokteam/prereg.py:87-88`; UNVERIFIED until Step 7A prints `sys.executable`); it never creates the venv or runs pip for the bridge, and R-03 refuses a venv built on it (6.7; OPS-R2-2). | Owner time. A venv inside OneDrive would sync about 0.6 GB. |
 | O10 | Where pilots and the suite of record run. | The owner's Windows machine, against the production ledger; of-record mode is tied to it by the host fingerprint and the egress record (5.3.2). Linux rehearses on synthetic data only. | Exporting `E1.jsonl` and copying back the extended chain risks a fork. |
-| O11 | Trial count; row counts of `E1.jsonl` and `C3.jsonl` (UNVERIFIED today). | `n_trials = family N_raw after registration + U`; U counts the study's documented configurations (`study_configs`, 6.6) whose `config_id` is absent from the family ledger (QUANT-4). Four counts printed. Of-record mode refuses a missing, empty or broken family ledger (R-15). | Over-counting lowers the DSR, the conservative direction. If `E1.jsonl` is missing or empty on the owner's machine, pilot 1 waits for the owner's ruling on how that ledger starts. |
+| O11 | Trial count; row counts of `E1.jsonl` and `C3.jsonl` (UNVERIFIED today). | `n_trials = family N_raw after registration + U`; U counts the study's documented configurations (`study_configs`, 6.6) whose `config_id` is absent from the family ledger (QUANT-4). Four counts printed. Of-record mode refuses a missing, empty or broken family ledger (R-15). | Over-counting lowers the DSR, the conservative direction. 2026-10-30 ruling: A2 registration-only can initialize missing/empty E1 with pilot 1's 12 configurations before price reads; initial N_raw=12 and U<=24. Existing history is preserved/refused, never reset. Owner Windows verification and subsequent owner_confirmed remain required; see O11_A2_REGISTRATION.md. |
 | O12 | How a WITHHELD result appears in Strategy Lab. | Deferred. Outputs live in `docs/nautilus_bridge/runs/<bridge_run_id>/`, which the Lab does not read (`ui/strategy_lab_page.py:31`). | The owner reads results from files. No card ever says WITHHELD (5.5). |
 | O13 | May the child tolerate what the kernel and the Rust core load in every backtest? `from nautilus_trader.backtest.engine import BacktestEngine` loads 7 `nautilus_trader.live.*` modules (`nt:system/kernel.py:75-77`) and `nautilus_trader.core.nautilus_pyo3` with 35 compiled submodules, among them `binance`, `bybit`, `okx`, `polymarket`, `interactive_brokers`, `network`, `live` and `sandbox`. | Tolerate the import census of a per-platform golden baseline recorded from F1 and F2 (5.2.7). The census is drift detection only: it cannot see use of a module already loaded (SECURITY-2); the egress layer (4.4) bounds use. A run whose Nautilus or third-party import set differs from the baseline's, in either direction, or that imports any `nautilus_trader.adapters` or `.network` module, is invalid (QA-R3-12). | Ruled unacceptable: no 1.231.0 backtest runs, and the bridge stops. Tolerated wrongly: a loaded Rust client could try a socket; the egress layer makes it fail, and Step 7A's probe shows that on Windows. |
 | O14 | Pilot-2 registration table (10.2). It writes 5 permanent rows into C3, which also holds paper_live's trend rows (`paper_live/engine.py:64-69`). | As 10.2. | As O6, in C3. |
@@ -496,8 +528,10 @@ its top-level component: NT (`nautilus_trader`); STD (in the parent's `sys.stdli
 lies under `nautilus_trader.adapters` or `nautilus_trader.network`, or its NT or TP set differs from the platform
 baseline's (`tools/nautilus/golden/modules_<platform tag>.json`). STD names may differ between 3.13.x patch levels and
 platforms (QA-11). A platform's baseline is the union of its F1 and F2 censuses: Step 6 records Linux's, Step 7A
-Windows'. Across platforms the NT sets must be equal, and the TP sets may differ only by `uvloop*` (POSIX only) and
-`colorama*` (Windows only). `--record-baseline` prints that diff and never overwrites a baseline git tracks (`git
+Windows'. Across platforms the NT sets must be equal, and the TP sets may differ only by `uvloop*` (POSIX only),
+`colorama*` (Windows only) and `six.moves.winreg` (POSIX only: the failed attempt of python-dateutil's
+`from six.moves import winreg`, which resolves to the stdlib `winreg` on Windows; owner ruling 2026-11-04, Appendix
+B). `--record-baseline` prints that diff and never overwrites a baseline git tracks (`git
 ls-files --error-unmatch <path>` exits 0): an existing equal one gives "unchanged" and exit 0; a different one writes
 nothing, prints its diff and the removal line, `Remove-Item tools\nautilus\golden\modules_<tag>.json` on Windows or `rm
 tools/nautilus/golden/modules_<tag>.json` on Linux (OPS-R4-5), to run only after Claude has reviewed that diff, and
@@ -1469,7 +1503,7 @@ synthetic data and temp ledgers only.
 | Step | Who, what | Done when |
 |---|---|---|
 | 1a Claude rounds (**done**) | Claude drafts; the Claude referee rounds run and are ruled; Claude applies the rulings. | Each report is saved as `docs/superpowers/specs/2026-10-26-nautilus-review/round<k>_<name>.md` with its rulings file, and every issue has a ruling in Appendix B. Done when the moderator closes the Claude debate under C-8: a round with only minor issues is applied and closes it, and a new major reopens it (GOVERNANCE-R3-6). Round 4's major (OPS-R4-1) reopened it; the targeted round 5 by ops and security on Revision 5 raised only minor issues, which Revision 6 applies. **Done**: the moderator closed the Claude debate after round 5 (`round5_rulings.md` §1); rounds 1 to 5 are ruled and applied. Steps 2 to 7 start now on the branch, on the section 2 defaults, with synthetic data and temp ledgers (GOVERNANCE-R2-1). |
-| 1b Outside review and approval | GPT and Gemini review on the owner's machine, as neither CLI exists in the cloud container, or the owner records a substitute in Appendix B; the owner approves. Required before Step 7A, not before Step 2. | Their reports and rulings are saved and mapped in Appendix B; the Status block carries the owner's approval in the form of the Owner context, verbatim with its channel and date, and answers to O1 to O15; branch work that an answer different from its default affects is redone or deleted. |
+| 1b Owner decisions and optional outside review | Record the owner's O1–O15 decisions and implement exceptions. Additional GPT/Gemini reviews are optional / NOT_PERFORMED under O8. | Status and Appendix B preserve the decision, review history and scope. Missing optional reports cannot block Step 7A. All existing technical/Windows conditions and specific approvals still apply. |
 | 2 Plan and dry run | Claude: `docs/superpowers/plans/2026-10-<dd>-nautilus-bridge.md` in the house format (Global Constraints, a file table, RED/GREEN steps for Steps 3 to 7); it names the spec revision it implements (GOVERNANCE-R3-6). Global Constraints = all of section 3, verbatim (GOVERNANCE-13), plus: Claude never runs of-record mode (GOVERNANCE-R2-4; 5.3.1) and writes ledger rows only under the system temp dir; no Claude commit includes `qa/acceptance_results.json` (`docs/superpowers/plans/2026-10-23-quantgen-paper-pipeline.md:30`); Claude reads no real BTC price and no SPY row on or after 2004-12-01; the pinned md5s come from this spec, and Claude never opens or hashes `yf_SPY.csv`, `yf_BTC-USD.csv`, `binance_BTCUSDT.csv` or `upbit_KRW-BTC.csv` (GOVERNANCE-R3-3); Claude never writes or edits `owner_confirmed` or `host_fingerprint` in a committed table (`docs/nautilus_bridge/registration/`); tests write them only into tables under the system temp dir (GOVERNANCE-R3-5, GOVERNANCE-R4-3); no global `pip install`. Dry run (QA-21): the plan's own RED steps, run in a scratch clone with `scratch:ntvenv`; nothing is built twice. | The plan exists; its RED steps fail for the reason each states in the scratch clone; in the real repo `git status` shows no change beyond the plan file, and `qa/acceptance_results.json` keeps its md5. |
 | 3 Environment | Claude on Linux (the Windows half is Step 7A): `requirements-nautilus.txt` (5.1); `.env.example`; `tools/nautilus/__init__.py`; `sandbox.py` with `--check-env` and `--guard-selftest`; `egress_probe.py`; `launch.py` (QA-R2-5); `env_pins.json` with both platforms and the `RECORD` fixtures (6.7); `docs/nautilus_bridge/.gitignore`. | The file pins 5.1's 16 distributions with hashes; `pip install --require-hashes --only-binary=:all: --no-cache-dir -r requirements-nautilus.txt` succeeds in a fresh scratch venv and `pip check` is clean; `launch.py`'s identity read gives `a448cd20...` with 764 entries; under `unshare -rn`, `--check-env` reports Python 3.13.x, `HIGH_PRECISION` true and environment `BACKTEST`, `--guard-selftest` exits 0, and the probe reports `blocked: true`; the global interpreter still reports numpy 2.3.5, pandas 2.3.3, scipy 1.18.0 and no `nautilus_trader`; `requirements.txt`, `requirements-dev.txt` and `pyproject.toml` are byte-identical. |
 | 4 Guard | Claude, on ruling O2's default (in effect outside the branch only after the sign-off): 5.6; the suite registration (5.7); the registry resync and README text of 5.8. | Both new tests pass; every control of 8.5 gives exactly its multiset; the real tree and the real sandbox give no hit; test_08 and test_09 are unchanged and pass; `python -m tests.macro_acceptance` has resynced row 12 and `test_registry_implemented_in_matches_test_ids` passes; L1-15, L1-16, L1-17, L1-22 and L1-32 pass; through the wrapper, `--suite nautilus` reports its layer-2 tests NOT_RUN, not PASS, with `QUANTGEN_NAUTILUS_PYTHON` unset; the README Total row is unchanged. |
@@ -1488,7 +1522,9 @@ owner, in this order; the runbook file repeats it.
    suite's layer-2 tests also keep the machine awake, 5.3.5 and 5.7; OPS-R5-5), the owner runs the lines below one at
    a time; the python.org installer, at the 3.13 patch the runbook pins, is downloaded into `$q`, never into the clone
    (OPS-R3-3, OPS-R4-5). A throw in the five git lines stops the block: he sends Claude the message, because the
-   hand-off needs the branch (OPS-R5-2). On a red error in any later line he skips to the last line (OPS-R2-1). The
+   hand-off needs the branch (OPS-R5-2). On a red error in any later line he skips to the last line (OPS-R2-1),
+   except that an O11 A2 line that stopped part-way (receipt INTENT or PARTIAL) is run once more first (2026-11-04,
+   ⑤-1/a; the read-only E1 gate before it decides whether it runs at all, RUNBOOK_windows.md). The
    fast-forward line, the fifth git line, brings Claude's fixes and a new sign-off into a re-entry (OPS-R4-1,
    OPS-R5-2). Re-entry (OPS-R3-2, OPS-R4-1, OPS-R5-1, SECURITY-R5-1): if `$q\py313\python.exe` exists from an earlier
    attempt, the listed registry row is that install, and he skips from the registry line to the rule check line, whose
@@ -1533,6 +1569,8 @@ owner, in this order; the runbook file repeats it.
    New-NetFirewallRule -DisplayName "QUANTGEN-nautilus-block-out" -Direction Outbound -Action Block -Program "<printed path>\py313\python.exe" -Profile Any
    # back in the normal window: add the .env line of 3.4 with the owner's path if absent, then:
    python -B -m tools.nautilus.runner --check-env; if ($LASTEXITCODE) { throw "check-env" }
+   python -B -m tools.nautilus.runner --fingerprint --table docs\nautilus_bridge\registration\pilot1_E1_spy.json; if ($LASTEXITCODE) { throw "fingerprint" }   # E1 state, read only: the next line only on a null E1 fingerprint
+   python -B -m tools.nautilus.register_e1 --owner-windows --table docs\nautilus_bridge\registration\pilot1_E1_spy.json; if ($LASTEXITCODE) { throw "A2" }   # O11 A2: only while E1 is missing or empty
    python -B -m tools.nautilus.runner --egress-record; if ($LASTEXITCODE) { throw "egress" }
    python -B -m tools.nautilus.runner --fixtures --record-baseline; if ($LASTEXITCODE) { throw "fixtures" }
    python -B -m tools.nautilus.runner --timing; if ($LASTEXITCODE) { throw "timing" }
@@ -1545,18 +1583,22 @@ owner, in this order; the runbook file repeats it.
    (OPS-8, OPS-R5-2). A null host
    fingerprint stops here (R-15, O11). If every line passed, he also pastes each fingerprint into its table's
    `host_fingerprint`, writes `owner_confirmed` as `"Geon Koh, <date>, table <16 hex>, code <16 hex>"` from the printed
-   digests, which approves of-record runs of that table (GOVERNANCE-R2-2), and commits as one change group
+   digests, which approves of-record runs of that table (GOVERNANCE-R2-2), saving both tables as UTF-8 without a
+   BOM (L1-36 reads them as plain UTF-8), and commits as one change group
    `tools/nautilus/golden/modules_win_amd64.json`, `docs/nautilus_bridge/egress/win_amd64.json`, both tables and
    `qa/acceptance_results.json` (GOVERNANCE-R3-4), each named in `git add`, never `git add -A` (OPS-R3-3); that commit
    also writes the branch's loose ref (OPS-3).
 4. Claude reviews the hand-off report and the census diff in the next session; checks that the commit carrying the
-   current sign-off sentence is an ancestor of the 7A.3 commit and lists the files `git diff --name-only <sentence
-   commit> <7A.3 commit>` changes, which must be only 7A.3's (the census baseline, the egress record, the hand-off
-   report, both tables and `qa/acceptance_results.json`); recomputes `code_sha256` on Linux at the 7A.3 commit with
-   `--fingerprint` and compares it with both tables' `owner_confirmed` (OPS-R3-6, GOVERNANCE-R4-1, GOVERNANCE-R4-2); and
-   records the review in Appendix B. Claude's review commit changes only this spec; a review that needs any other change
-   means Step 7A has failed. No pilot runs before that review. Any code change after the sign-off sentence needs a new
-   sentence and a new `owner_confirmed`.
+   scoped sign-off remains an ancestor of the 7A.3 commit. List every intervening change and verify it is
+   within that approved scope. Ordinary fixes require fresh affected technical/Windows evidence, not another
+   general sign-off. Record the exact validation baseline commit; from that baseline to the 7A.3 evidence commit,
+   only the census baseline, egress record, hand-off report, both tables and `qa/acceptance_results.json` may change.
+   Recompute `code_sha256` on Linux at the 7A.3 commit with
+   `--fingerprint` and compare it with both tables' `owner_confirmed` (OPS-R3-6, GOVERNANCE-R4-1, GOVERNANCE-R4-2).
+   Record the review in Appendix B. Claude's review commit changes only this spec; a review that needs any other change
+   requires re-entry through the affected technical/Windows checks. No pilot runs before that review. Any code
+   or table change invalidates the prior execution fingerprint and requires fresh `owner_confirmed` after
+   validation; an ordinary in-scope fix does not itself require a new general approval sentence.
 5. The owner pulls Claude's review commit with `git pull --ff-only` before Step 8; the pilots anchor to that HEAD, and
    the run record stores it (GOVERNANCE-R2-5).
 - Merge (GOVERNANCE-R2-5, OPS-R3-7): after Step 10 the owner merges the branch into `main` (`origin/main`, `716bf77`
@@ -1594,7 +1636,7 @@ run is a new trial.
 | Params per row | `{"rule", "lookback", "step", "symbols": ["SPY"], "cost_bps": 50.0}` | 6.4 | Cash rate | DGS3MO / 100 / 252, forward-filled, `fred_DGS3MO.csv` md5 `661722143f24930a29b58c535d227c1b`, no fallback | K8 |
 | Cost | 50 bp per side from `cost_floor_bp(["SPY"])`; stress 100 bp | `core/quant/validate.py:78, 115-121` | Embargo, benchmark | 21; SPY buy-and-hold, uncosted | `docs/asset_expansion_study.py:275, 278` |
 | Capital, account, instrument | $1,000,000; CASH, NETTING; `Equity`, whole shares, 9 dp; fee-inclusive sizing | 5.2.3, 5.2.5 | Gate | `GATE` unchanged: 756 / 126 / 504, B 2000, seed 11 | `core/quant/validate.py:53-74` |
-| `study_configs` | `S_E1_trend_us`: the 12 settings with symbols `["GLD", "QQQ", "SPY", "TLT"]` at 50.0; `S_E1_trend_krx`: the 12 settings with `["069500.KS", "132030.KS", "152380.KS", "229200.KS"]` at 3.0 | `docs/asset_expansion/cards/S_E1_trend_us.json`, `S_E1_trend_krx.json` | Trial count; ledger | `E1 N_raw after registration + U`, U at most 24; `E1.jsonl` must exist, hold a row and verify (R-15) | O11; 5.5 step 3 |
+| `study_configs` | `S_E1_trend_us`: the 12 settings with symbols `["GLD", "QQQ", "SPY", "TLT"]` at 50.0; `S_E1_trend_krx`: the 12 settings with `["069500.KS", "132030.KS", "152380.KS", "229200.KS"]` at 3.0 | `docs/asset_expansion/cards/S_E1_trend_us.json`, `S_E1_trend_krx.json` | Trial count; ledger | `E1 N_raw after registration + U`, U at most 24; approved A2 initializes 12 rows before price reads when E1 is missing/empty. Of-record still requires a nonempty verified ledger (R-15) | O11; 5.5 step 3 |
 | Claim label; card | `"pre-specified on historical data; the SPY series was used inside S_E1_trend_us with the same 12-setting grid; not confirmatory"`; `NB_E1_trend_spy` | QUANT-6, QUANT-R2-4; 6.5 | Before registration | md5 pins, date checks, 9-decimal rounding and P0a only; no signal, return or statistic | 3.9 |
 
 From the row counts alone: 38 origins, the first OOS session at row 777, and 4,711 OOS sessions, about 18.7 years
@@ -1719,8 +1761,20 @@ bars checked, 5.2.5); A-4 (the study's 0.03-percent leading DGS3MO fill; the bri
 
 ## Appendix B: referee rounds
 
-Each referee reviews the current revision. A referee who returns nothing is REVIEW_INCOMPLETE, never "no objections",
-unless the owner records a substitution. The Claude referee ran with the repo clone as its working directory; the clone
+**2026-10-30 O8 follow-up decision (applied):** the owner explicitly made additional GPT and Gemini
+reviews optional and waived that prerequisite. Both remain NOT_PERFORMED. Their absence alone cannot block
+Windows hand-off or subsequent procedures. This is a waiver, not a completed review or a no-objections verdict.
+Existing Claude rounds and their rulings remain design-review evidence. All technical and Windows conditions
+remain; ordinary approved fixes/tests need no repeated general sign-off. Research verdict changes, formal
+ledger execution and external publication keep their separate approvals. Actual `owner_confirmed` still
+binds the latest code/table after validation. The original later instruction is preserved in the private
+approval page identified in Status; no private verbatim text is published here.
+
+The earlier request for a substitute report was superseded by this explicit follow-up, not by the earlier
+question about whether review was needed. A voluntary later review must identify its revision, report and
+verdict; absence cannot be relabelled PASS. Implementation tests are not referee reports.
+
+The Claude referee ran with the repo clone as its working directory; the clone
 holds no `.env` (GOVERNANCE-12). Reports (`round<k>_claude_<persona>.md`, 2026-10-26) and rulings
 (`round<k>_rulings.md`) are in `docs/superpowers/specs/2026-10-26-nautilus-review/`.
 
@@ -1731,8 +1785,8 @@ holds no `.env` (GOVERNANCE-12). Reports (`round<k>_claude_<persona>.md`, 2026-1
 | Claude, QA | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (5 major, 9 minor) | AGREE (12 minor) | AGREE (6 minor) | not run (AGREE in round 4) |
 | Claude, ops | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (2 major, 6 minor) | ACCEPT WITH CHANGES (2 major, 7 minor) | ACCEPT WITH CHANGES (1 major, 4 minor) | AGREE (5 minor) |
 | Claude, governance | same | ACCEPT WITH CHANGES | ACCEPT WITH CHANGES (3 major, 3 minor) | AGREE (7 minor) | AGREE (5 minor) | not run (AGREE in round 4) |
-| GPT | Codex CLI on the owner's machine (quota resets 2026-10-30 14:40) | pending | pending | pending | pending | pending |
-| Gemini | `agy` on the owner's machine | pending | pending | pending | pending | pending |
+| GPT | optional, owner waiver 2026-10-30 | NOT_PERFORMED | NOT_PERFORMED | NOT_PERFORMED | NOT_PERFORMED | NOT_PERFORMED |
+| Gemini | optional, owner waiver 2026-10-30 | NOT_PERFORMED | NOT_PERFORMED | NOT_PERFORMED | NOT_PERFORMED | NOT_PERFORMED |
 | Owner-recorded substitute | | none | none | none | none | none |
 
 **Round 1 issues** (rulings in `round1_rulings.md`; none rejected; C-n are the moderator's own items).
@@ -1905,8 +1959,111 @@ Round 5, applied with a stated interpretation:
 - C-6 growth: Revision 5 had 1,849 lines; Revision 6 has 1,906 (+3.1 percent; +3.3 percent in bytes), mostly
   this table and the Step 7A lines.
 
-**Outside review.** GPT and Gemini review the current revision. Their issues and the owner's rulings go here.
+**Optional outside review.** GPT and Gemini remain NOT_PERFORMED under the owner's 2026-10-30 waiver.
+If a voluntary review is later performed, record its revision, issues and rulings here. No review result is fabricated.
 
 | Issue | Raised by | Ruling | Addressed in |
 |---|---|---|---|
 | | | | |
+
+**2026-11-04 Step 7A.4 review (Claude; https://claude.ai/code/session_016uB1jgeiPdP8gPkAez3Wrx).** Inputs: the 7A.3
+evidence commit `563db54` (owner, 2026-11-04 15:38 KST) and the hand-off report it carries (`9d8d9c6`, recorded
+2026-11-04T06:02:45Z). Each item was checked on Linux at `563db54` in a sparse checkout without the protected caches.
+
+- Sign-off and freeze: the scoped sign-off commit `0bc9595` (the Status bullet "2026-11-04 owner sign-off, Step
+  7A.1") is an ancestor of `563db54`. The frozen `main` `bb35b3b` is an ancestor too, and `origin/main` is still
+  `bb35b3b`.
+- Intervening changes `0bc9595..563db54`, all within the approved scope:
+  - `fe37e82`, `e3c61cb`, `9d8d9c6` (owner): hand-off reports only.
+  - `e07da98` (Claude, ⑤-1/b): `tests/nautilus_acceptance.py` (L1-32 path matching) and `tests/macro_m8_pipeline.py`
+    (the dry-run cache times). Both are outside `code_paths()` and the harness sources, so `code_sha256` is unchanged
+    by them. They are ordinary in-scope fixes. Their fresh Windows evidence is the re-entry run: the two rows that
+    FAILed in `e3c61cb`'s report (suite of 02:52:44Z), `nautilus/test_l1_32_every_test_guarded_and_ledgers_unchanged`
+    and `macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache`, both PASS in `563db54`'s
+    `qa/acceptance_results.json` (suite of 04:10:16Z at `e07da98`).
+- Validation baseline: `e07da98`. The report's `git.head` and `git.origin_branch` are both `e07da98`.
+  `git diff --name-status e07da98 563db54` lists only the evidence files:
+  - `tools/nautilus/golden/modules_win_amd64.json` (added);
+  - `docs/nautilus_bridge/egress/win_amd64.json` (added);
+  - `docs/nautilus_bridge/handoff/win_amd64.json`;
+  - both registration tables: `git diff -w` shows only the comma after `reference_card_md5` and the two owner-field
+    lines. The other byte changes are whitespace: one more leading space on C3's `reference_card_md5` line, and no
+    final newline in either file. Each table's `table_sha256` at `e07da98`, before the owner fields, is already
+    `d76d2d7301ffe92c…` (E1) and `e2ec073c309cbfc7…` (C3), so no key field changed;
+  - `qa/acceptance_results.json`.
+- Fingerprints (OPS-R3-6, GOVERNANCE-R4-1):
+  - `python3 -B -m tools.nautilus.runner --fingerprint --table <table>` at `563db54` prints `table_sha256`
+    `d76d2d7301ffe92c…` (E1) and `e2ec073c309cbfc7…` (C3).
+  - Both print `code_sha256 f995600b36c75523fe6079ab5209e60d94c2b5d0ac44437673fe4bc71c055620`.
+  - From `0bc9595` to `9d8d9c6`, `code_sha256` is `89e4590322b75341…`. Only the 7A.3 commit's
+    `tools/nautilus/golden/modules_win_amd64.json`, one of `code_paths()` (`tools/nautilus/golden/*.json`, 6.6),
+    makes it `f995600b…`. So both `owner_confirmed` values quote the fingerprint lines taken after
+    `--record-baseline` and the suite, not the E1 gate's earlier digest (RUNBOOK 7A.2).
+  - Both `owner_confirmed` values read `Geon Koh, 2026-11-04, table <that table's 16 hex>, code f995600b36c75523` and
+    match.
+  - Each `host_fingerprint` is 64 hex, and the two differ (E1 `4931117f…`, C3 `a4e80092…`). R-15 checks them against
+    the owner's ledgers at each of-record run.
+  - Neither table has a BOM.
+- Hand-off report:
+  - `check_env`: Python 3.13.14 (the runbook's pinned patch), Windows AMD64, `BACKTEST`, `FIXED_PRECISION` 9,
+    `HIGH_PRECISION` false.
+  - venv: nautilus-trader 1.231.0, numpy 2.3.5 and pandas 2.3.3; wheel identity `47d274d7…` with 764 entries;
+    `venv_mismatches` empty.
+  - `guard_selftest`: backtest and test_clock passed; live, live_clock and sandbox raised.
+  - The parent's `nautilus_trader` and `pyarrow` are null.
+  - Firewall: rule `QUANTGEN-nautilus-block-out` is enabled, outbound, block, profile Any, with program
+    `%LOCALAPPDATA%\quantgen\py313\python.exe`. All three profiles are enabled.
+  - Fixtures: F1 and F2 exit 0, N1 exits 10, and all three goldens diffs are empty.
+- Stub children (8.1, QA-R3-10): `sys.executable` is the WindowsApps alias, so the stub python is
+  `%LOCALAPPDATA%\quantgen\py313\python.exe`, the interpreter 8.1's rule picks.
+- Timing: the `BacktestEngine` import takes 1.94 s (`import_us` 1,936,529). The 12 synthetic runs of 5,600 bars all
+  exit 0 and take 35.1 s in total (2.50 to 3.78 s each).
+- Egress record (`docs/nautilus_bridge/egress/win_amd64.json`, recorded 2026-11-04T03:52:33Z): `probe.blocked` true
+  (WinError 10013) and `control_connect.ok` true. The report's own probe at 06:03:06Z agrees.
+- Full suite (`qa/acceptance_results.json` in `563db54`):
+  - 964 rows: 844 PASS, 0 FAIL and 120 NOT_RUN.
+  - Every NOT_RUN is a `macro/*` test that needs owner input or reference data.
+  - `nautilus/*` is 57/57 PASS, L2-5b included.
+  - All five `guard/*` rows PASS, so frozen_guard (a), (b) and (d) pass.
+- Census (5.2.7, OPS-7): the Windows baseline (union of F1 and F2) holds 945 names and Linux's holds 942.
+  - The report's `census.judgement`, `C-08: TP names missing: six.moves.winreg, uvloop._noop, uvloop._version,
+    uvloop.includes, uvloop.loop`, is `judge_census`, the same-platform rule, applied to the Windows union against
+    the Linux baseline (runner.py:1917-1921). So it also lists the allowed `uvloop*` names. Runs are judged against
+    their own platform's baseline (runner.py:1438), so it bears on no Windows run. The cross-platform rule of 5.2.7
+    is applied here, by this review; no code applies it.
+  - The NT sets are equal, and no name lies at or under `nautilus_trader.adapters` or `.network`.
+  - Differences other than TP are STD only.
+  - TP names on Linux only: `uvloop._noop`, `uvloop._version`, `uvloop.includes`, `uvloop.loop` (allowed as
+    `uvloop*`), and `six.moves.winreg`, which 5.2.7's cross-platform rule did not list. There is no TP name on
+    Windows only.
+  - Cause, measured in the Linux venv (python-dateutil 3.0.0, six 1.17.0): `import dateutil.tz` loads
+    `dateutil/tz/win.py` (through `dateutil.tz.tz`). On POSIX its `from six.moves import winreg` (win.py:13) fails,
+    because six 1.17.0 defines `moves.winreg` only when `sys.platform == "win32"` (six.py:322-326). `six.moves` has no
+    `winreg` attribute there, so the import system tries the submodule `six.moves.winreg`. Six's meta-path importer
+    does not know that name, and `six.moves.__path__ = []` cannot supply it. The census records that attempt;
+    dateutil/tz/tz.py:37-40 catches the ImportError, and `dateutil.tz.tzwin` stays None.
+  - On Windows the same line resolves to the stdlib `winreg` through six's lazy `MovedModule` attribute, so no
+    `six.moves.winreg` import is attempted. `winreg` itself is already loaded at interpreter start-up by importlib's
+    bootstrap (`importlib/_bootstrap_external.py:33-36`), so line 13 adds no census line. The `+ STD winreg` line of
+    the Windows diff comes from that start-up and is in every Windows census. The module's `from ctypes import
+    wintypes` (win.py:18) follows and is the `+ STD ctypes.wintypes` line.
+  - Apart from `uvloop*`, which 5.2.7 allows, the two TP sets name the same modules. uvloop is installed and loaded
+    on Linux only (`nautilus_trader/system/kernel.py:90-93`), and the Windows census holds only the failed
+    `import uvloop`. Both venvs hold python-dateutil 3.0.0 and six 1.17.0. `dateutil.tz.win` is attempted on both
+    platforms but runs to the end only on Windows. `six.moves.winreg` is a failed attempt that loads no module on
+    either platform. No TP name is Windows-only: colorama 0.4.6 is installed in the Windows venv but never imported.
+  - Owner ruling (verbatim, Claude Code chat, 2026-11-04, after Claude explained this cause):
+    "six.moves.winreg 판정 -> 승인".
+    Claude's chat explanation before the ruling said this line also produced `+ STD winreg` on Windows. The
+    independent check above corrected that before this commit was pushed, and Claude told the owner. The conclusion
+    the ruling rests on is unchanged: `six.moves.winreg` is a failed attempt that loads no module.
+    5.2.7 now lists `six.moves.winreg` (POSIX only) beside `uvloop*` and `colorama*`, so the census diff obeys
+    5.2.7. A pilot run's own C-08 check compares its census with the Windows baseline and does not change.
+- Not evidenced in the repository: the O11 A2 receipt is private. The owner ran the two read-only lines Claude
+  gave on 2026-11-04 and reported "2줄 출력 정상", meaning the expected values: the receipt
+  `A2-E1-d76d2d7301ffe92c.json` with status `REGISTERED_ONLY` and `n_registered` 12, `E1.jsonl` with 12 rows, and
+  `C3.jsonl` with at least 17 rows (the exact C3 count was not sent).
+- Result: Step 7A.4 passes. Every Done-when item of Step 7A is met except the two that only the 7A.5 HEAD can show:
+  `repo_anchor()` returning `git:<the 7A.5 HEAD>`, and an empty `git status --porcelain`. The owner checks both after
+  `git pull --ff-only` of this commit. This commit changes only this spec, so `code_sha256` stays `f995600b…` and
+  both `owner_confirmed` remain current. Pilots may start after 7A.5, under Step 8's own conditions.

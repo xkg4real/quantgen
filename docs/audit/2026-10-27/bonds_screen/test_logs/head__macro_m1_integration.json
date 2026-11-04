@@ -1,0 +1,44 @@
+[
+ {
+  "test": "test_calendar_coverage_halt_through_the_book_runtime",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 1.428
+ },
+ {
+  "test": "test_clocks_adapter_resolves_registry_schedules_on_signed_calendars",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.954
+ },
+ {
+  "test": "test_data_hook_history_status_and_instruments_agree_with_pit",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.009
+ },
+ {
+  "test": "test_fixture_generator_instants_from_calendars_and_check_fixture_on_csv",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "test_kis_allowlist_frozen_in_config_covers_the_quote_check",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.013
+ },
+ {
+  "test": "test_stamping_and_lag_audit_on_the_calendar_adapter",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_unsigned_shipped_calendars_fail_acting_inputs_closed",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.06
+ }
+]

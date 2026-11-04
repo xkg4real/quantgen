@@ -3,6 +3,7 @@
 Provider notes, symbols, scenario IDs and unrecognized text remain verbatim.
 Canonical narratives and exported result records are kept by the caller.
 """
+import math
 import re
 from core.ficc.common import tenor_label
 from core.ficc.insights import _pct, _bp, _money, _top, narrate_bond
@@ -55,8 +56,9 @@ def bond_korean(a, scenarios=()):
         f'{name}은 연 {b.freq}회 쿠폰을 지급하며 액면 {b.face:g}당 가격 {a.price:.3f}, '
         f'수익률 {_pct(a.ytm,3)}입니다. 매콜리 듀레이션 {a.macaulay:.2f}y, '
         f'수정 듀레이션 {a.modified:.2f}, 볼록성 {a.convexity:.1f}입니다.',
-        f'명목금액 {_money(b.notional)}의 DV01은 bp당 {_money(a.dv01)}입니다. '
-        f'+100bp 평행 상승 시 볼록성을 반영하기 전 대략 {_money(a.dv01*100)}의 손실이 발생합니다.',
+        f'명목금액 {_money(b.notional)}의 DV01은 채권 자체 수익률 bp당 '
+        f'{_money(a.dv01) if abs(a.dv01) >= 100 else f"{a.dv01:,.2f}"}입니다. '
+        f'그 수익률이 +100bp 오르면 볼록성을 반영하기 전 대략 {_money(a.dv01*100)}의 손실이 발생합니다.',
     ]
     if a.krd:
         t,v = _top(a.krd)
@@ -64,7 +66,9 @@ def bond_korean(a, scenarios=()):
         lines.append(f'주요 만기 금리위험은 {tenor_label(t)}에 집중됩니다 '
                      f'(bp당 {_money(v)}, 전체의 {share*100:.0f}%).')
     lines.append(f'곡선 대비 z-스프레드는 {_bp(a.z_spread)}이며 곡선 가격은 {a.curve_price:.3f}입니다.')
-    be = (f'손실이 나기 전 금리가 {cr.breakeven_bp:.1f}bp까지 상승할 수 있습니다'
+    be = ('채권이 기간 안에 만기가 되므로 어떤 금리 변화도 이 만기 보유 결과를 바꾸지 않습니다'
+          if not math.isfinite(cr.breakeven_bp) else
+          f'손실이 나기 전 금리가 {cr.breakeven_bp:.1f}bp까지 상승할 수 있습니다'
           if cr.total >= 0 else
           f'캐리와 롤다운의 합이 음수이므로 손익분기를 위해서는 해당 기간 금리가 '
           f'{abs(cr.breakeven_bp):.1f}bp 하락해야 합니다')
@@ -74,7 +78,7 @@ def bond_korean(a, scenarios=()):
                  '곡선 기반 펀딩 대용값이며 체결 가능한 레포 호가가 아닙니다.')
     if scenarios:
         worst,best = min(scenarios,key=lambda r:r.pnl),max(scenarios,key=lambda r:r.pnl)
-        lines.append(f"{len(scenarios)}개 시나리오 중 최악은 '{worst.name}': "
+        lines.append(f"{len(scenarios)}개 제로곡선 시나리오(z-스프레드 고정) 중 최악은 '{worst.name}': "
                      f"{_money(worst.pnl,signed=True)} ({worst.pnl_pct*100:+.2f}%), "
                      f"최선은 '{best.name}': {_money(best.pnl,signed=True)} ({best.pnl_pct*100:+.2f}%)입니다.")
     if a.note: lines.append(model_note_korean(a.note))

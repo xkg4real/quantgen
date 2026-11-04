@@ -1,0 +1,85 @@
+PASS test_cal01_calendar_change_governance_event  (2.1s)
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_acceptance.py", line 254, in run_module
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 689, in test_cal01_manifest_pins_signed_utc_and_statement
+    exc = _raises(lambda: CalendarSet(cal.data_dir).file("holidays_KRX"), CalendarUnsigned)
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 264, in _raises
+    raise AssertionError(f"expected {exc.__name__}")
+AssertionError: expected CalendarUnsigned
+FAIL test_cal01_manifest_pins_signed_utc_and_statement AssertionError: expected CalendarUnsigned (0.4s)
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_acceptance.py", line 254, in run_module
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 637, in test_cal01_same_day_schedule_needs_its_signed_calendar
+    exc = _raises(lambda: publication.publication_instant({"schedule_id": "VIXCLS_CBOE"}, date(2026, 10, 2), cal=no_cboe),
+                  CalendarUnsigned)
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 264, in _raises
+    raise AssertionError(f"expected {exc.__name__}")
+AssertionError: expected CalendarUnsigned
+FAIL test_cal01_same_day_schedule_needs_its_signed_calendar AssertionError: expected CalendarUnsigned (0.5s)
+PASS test_cal01_shipped_files_signed_or_refused  (1.3s)
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_acceptance.py", line 254, in run_module
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 709, in test_cal01_signed_utc_must_be_iso_utc
+    exc = _raises(lambda: fixture_set(f"m4_bad_{i}", docs).file("holidays_KRX"), CalendarUnsigned)
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 264, in _raises
+    raise AssertionError(f"expected {exc.__name__}")
+AssertionError: expected CalendarUnsigned
+FAIL test_cal01_signed_utc_must_be_iso_utc AssertionError: expected CalendarUnsigned (0.3s)
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_acceptance.py", line 254, in run_module
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 664, in test_cal01_unquoted_time_refused_at_load
+    assert "unquoted time" in str(_raises(lambda: CalendarSet(cal.data_dir).file("holidays_HKEX"), CalendarUnsigned))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+FAIL test_cal01_unquoted_time_refused_at_load AssertionError:  (0.2s)
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_acceptance.py", line 254, in run_module
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 500, in test_cal01_unsigned_refused_signed_accepted
+    exc = _raises(lambda: clocks.decision_time_utc("KR", date(2026, 10, 2), cal=bad), CalendarUnsigned)
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 264, in _raises
+    raise AssertionError(f"expected {exc.__name__}")
+AssertionError: expected CalendarUnsigned
+FAIL test_cal01_unsigned_refused_signed_accepted AssertionError: expected CalendarUnsigned (1.0s)
+NOT_RUN test_cal02_2027_files_signed_before_2026_11_01 OWNER: ['holidays_KRX', 'holidays_NYSE', 'holidays_FED', 'holidays_SIFMA', 'kr_sessions'] unsigned; the 2027 KRX, NYSE, Fed and SIFMA files (and kr_sessions for the KR clock) must be signed before 2026-10-31T15:00:00Z = 2026-11-01 00:00 KST (spec L2101) (0.2s)
+PASS test_cal02_coverage_warn_page_halt  (3.7s)
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_acceptance.py", line 254, in run_module
+    fn()
+    ~~^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 822, in test_cal02_deadline_clock_injected
+    check_signed_before_deadline(now, cal=signed)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/calendar_impl/probe_oldcode/tests/macro_m1_calendars.py", line 798, in check_signed_before_deadline
+    signed = store.utc_instant(f.signed_utc, f"{fid}: signed_utc")
+             ^^^^^^^^^^^^^^^^^
+AttributeError: module 'core.calendars.store' has no attribute 'utc_instant'
+FAIL test_cal02_deadline_clock_injected AttributeError: module 'core.calendars.store' has no attribute 'utc_instant' (0.4s)
+PASS test_cal02_known_2026_2027_rows_present  (0.1s)
+PASS test_close01_decision_time_and_bound  (0.1s)
+PASS test_close02_effective_dated_clocks  (1.1s)
+NOT_RUN test_close02_on_the_real_signed_files OWNER: kr_sessions / holidays_KRX / holidays_NYSE unsigned; T-CLOSE-02 on the real files waits for the owner's sign-off (Saturday closes, pre-2016 CSAT window and random-end extensions stay owner input) (0.0s)
+PASS test_event_store_shape_and_artifact  (0.1s)
+PASS test_gap_sessions_values  (0.0s)
+PASS test_market_ids_and_venue_maps  (0.0s)
+PASS test_print01_intraday_print_is_never_a_close  (0.0s)
+NOT_RUN test_print01_real_kospi_close_2026_03_09 REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv (0.0s)
+PASS test_publication_h15_h10_vix_avail_timing  (0.2s)
+NOT_RUN test_regime01_full_range_expected_values_file OWNER: tests/fixtures/macro/kr_regime_tags_expected.csv (1995-01-01..2026-12-31, built from the official notices incl. the pre-Apr-1995 price limit, sell-tax steps, BoK fx regimes) is an owner deliverable; the shipped kr_regime_tags.yaml is an unsigned draft (0.0s)
+PASS test_regime01_point_clauses_and_fail_closed  (0.1s)
+NOT_RUN test_sat01_real_kospi_completeness_and_variance_ratio REFDATA: krx_kospi_official_close_1997-01-03_2026-10-02.csv not in tests/fixtures/macro/MANIFEST.csv (0.0s)
+PASS test_sat01_saturday_sessions_and_completeness  (0.0s)
+PASS test_tz01_cross_time_zone  (0.0s)
+PASS test_tz02_event_to_kr_open_gap_session  (0.0s)
+PASS test_xmkt01_same_instant_closes  (0.1s)
+
+16/27 passed, 6 failed, 5 not run

@@ -1,0 +1,17 @@
+{
+ "base_python": "C:\\Users\\whydi\\AppData\\Local\\quantgen\\py313\\python.exe",
+ "control_connect": {
+  "error": "",
+  "ok": true
+ },
+ "layer": "QUANTGEN-nautilus-block-out",
+ "platform_tag": "win_amd64",
+ "probe": {
+  "blocked": true,
+  "errno": 13,
+  "error": "PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions"
+ },
+ "recorded_utc": "2026-11-04T03:52:33.983610Z",
+ "schema": "nautilus-bridge-egress/1",
+ "venv_python": "C:\\Users\\whydi\\AppData\\Local\\quantgen\\ntvenv\\Scripts\\python.exe"
+}

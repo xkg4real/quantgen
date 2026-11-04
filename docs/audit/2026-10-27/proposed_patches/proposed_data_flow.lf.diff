@@ -1,0 +1,477 @@
+diff -ruN a/core/crypto/analytics.py b/core/crypto/analytics.py
+--- a/core/crypto/analytics.py
++++ b/core/crypto/analytics.py
+@@ -103,8 +103,9 @@
+                          last_z=float(z[-1]) if np.isfinite(z[-1]) else 0.0, mean_pct=float(prem.mean()),
+                          max_pct=float(prem.max()), adf_p=adf_pvalue(prem), half_life_days=half_life(prem),
+                          pred_slope=slope, pred_t=t, n=int(prem.size),
+-                         note=("USD/KRW forward-filled by date (FRED noon fixing vs UTC-midnight closes: a few hours "
+-                               "of FX drift); a positive premium means Korea pays more than the world price."))
++                         note=("Binance BTCUSDT is quoted in USDT and taken 1:1 as USD: the USDT/USD basis is inside the "
++                               "premium. USD/KRW forward-filled by date (FRED noon fixing vs UTC-midnight closes: a few "
++                               "hours of FX drift); a positive premium means Korea pays more than the world price."))
+ 
+ 
+ def _hac_var(u: np.ndarray, lag: int) -> float:
+diff -ruN a/core/ficc/fx.py b/core/ficc/fx.py
+--- a/core/ficc/fx.py
++++ b/core/ficc/fx.py
+@@ -21,12 +21,14 @@
+     BF repricing); ATM is the delta-neutral straddle strike F·exp(½σ²T).
+   * SABR is Hagan 2002's lognormal expansion, beta fixed (1.0 for FX).
+   * Carry backtest: each currency's return vs USD is spot return + (r_ccy −
+-    r_usd)/252 per observation, rates taken from the last observation ON OR
+-    BEFORE the day they accrue. Series whose note says "monthly" (OECD period
+-    averages dated the 1st, published after month-end) enter with a ONE-
+-    OBSERVATION lag: on any day in March the February average is used. The
+-    backtest starts on the first date every currency has a rate; ranks use
+-    only data available at the rebalance date.
++    r_usd)/252 per observation, accrued at the rate observed for that day
++    (last observation on or before it). Ranks use only rates PUBLISHED by the
++    rebalance date: a series whose note says "monthly" (OECD period averages
++    dated the 1st) is usable from day `_MONTHLY_RELEASE_DAYS` after its month
++    ends (FRED IR3TIB01KRM156N: the Feb-2026 average was posted 2026-03-16).
++    Daily fixings keep their observation date (SOFR / SONIA are posted the
++    next morning: a one-day lead, stated in the note). The backtest starts on
++    the first date every currency has a published rate.
+   * `carry_table` flags a rate as stale when its last observation is more
+     than 45 days older than the spot's last observation.
+ """
+@@ -370,13 +372,27 @@
+     return sorted(rows, key=lambda x: x.score, reverse=True)
+ 
+ 
+-def _ffill_rates(s: Series, dates: list[str]) -> np.ndarray:
+-    """Last observation on or before each date; NaN before the first one. A series
+-    whose note says "monthly" is a period average dated the 1st and published
+-    after month-end, so it is lagged one observation."""
+-    rd = np.asarray(s.dates)
+-    lag = 1 if "monthly" in s.note.lower() else 0
+-    idx = np.searchsorted(rd, np.asarray(dates), side="right") - 1 - lag
++_MONTHLY_RELEASE_DAYS = 21          # a monthly average is usable this many days after its month ends (DF-04)
++
++
++def _release_dates(s: Series) -> list[str]:
++    """When each observation could be known. Monthly averages dated the 1st: day `_MONTHLY_RELEASE_DAYS` of the
++    following month. Anything else: its observation date."""
++    if "monthly" not in s.note.lower():
++        return list(s.dates)
++    out = []
++    for d in s.dates:
++        x = date.fromisoformat(d)
++        nxt = date(x.year + (x.month == 12), x.month % 12 + 1, 1)
++        out.append(date.fromordinal(nxt.toordinal() + _MONTHLY_RELEASE_DAYS - 1).isoformat())
++    return out
++
++
++def _ffill_rates(s: Series, dates: list[str], *, known: bool = True) -> np.ndarray:
++    """Per date: the last value PUBLISHED on or before it (`known=True`, for decisions) or the last value
++    OBSERVED on or before it (`known=False`, for accrual). NaN before the first one."""
++    rd = np.asarray(_release_dates(s) if known else list(s.dates))
++    idx = np.searchsorted(rd, np.asarray(dates), side="right") - 1
+     out = np.asarray(s.values, dtype=float)[np.clip(idx, 0, None)]
+     return np.where(idx < 0, np.nan, out)
+ 
+@@ -400,8 +416,10 @@
+     ccys = [legs[p][0] for p in spots]
+     P = np.column_stack([np.asarray(legs[p][2], dtype=float)[
+         [i for i, d in enumerate(spots[p].dates) if d in common]] for p in spots])
+-    R = np.column_stack([_ffill_rates(_rate(rates, c), dates) for c in ccys])
++    R = np.column_stack([_ffill_rates(_rate(rates, c), dates) for c in ccys])        # published: ranks
+     r_usd = _ffill_rates(_rate(rates, "USD"), dates)
++    A = np.column_stack([_ffill_rates(_rate(rates, c), dates, known=False) for c in ccys])   # observed: accrual
++    a_usd = _ffill_rates(_rate(rates, "USD"), dates, known=False)
+     ok = np.isfinite(R).all(axis=1) & np.isfinite(r_usd)
+     if not ok.any() or int(np.argmax(ok)) >= len(dates) - 1:
+         raise FICCError("Rates are not known on any date with a following spot observation.")
+@@ -422,7 +440,7 @@
+             w = new_w
+             positions.append((dates[i], tuple(ccys[j] for j in order[:k]),
+                               tuple(ccys[j] for j in order[-k:])))
+-        ret = P[i + 1] / P[i] - 1.0 + (R[i] - r_usd[i]) / TRADING_DAYS
++        ret = P[i + 1] / P[i] - 1.0 + (A[i] - a_usd[i]) / TRADING_DAYS
+         eq.append(eq[-1] * (1.0 + float(w @ ret)))
+         bench.append(bench[-1] * (1.0 + float(ret.mean())))
+     equity, bench_eq = np.asarray(eq), np.asarray(bench)
+@@ -433,9 +451,10 @@
+     ann_vol = float(np.std(daily, ddof=1)) * math.sqrt(TRADING_DAYS) if n > 1 else 0.0
+     mdd = float(np.min(equity / np.maximum.accumulate(equity) - 1.0))
+     note = (f"{n_ccy} ccys vs USD, long/short {k} each at ±1/{k}; {n} observations from "
+-            f"{dates[i0]} (first date every rate is known); rates ffilled by date, monthly "
+-            f"averages with a one-observation lag; accrual 1/{TRADING_DAYS} per observation; "
+-            f"no lookahead.")
++            f"{dates[i0]} (first date every rate is published); ranks use rates published by the "
++            f"rebalance date (monthly averages from day {_MONTHLY_RELEASE_DAYS} after month end; daily "
++            f"fixings on their observation date, a one-day lead); accrual at the observed rate, "
++            f"1/{TRADING_DAYS} per observation.")
+     if k < top_n:
+         note += f" top_n clipped from {top_n} to {k}."
+     return CarryBacktest(dates=tuple(dates[i0:]), equity=equity, bench_equity=bench_eq,
+@@ -527,12 +546,13 @@
+     eur_m = mk("EUR", ("2025-02-01", "2025-03-01"), (0.01, 0.10), "monthly; 3m interbank")
+     tiny_rates = {"USD": mk("USD", ds, [0.03] * len(ds)), "EUR": eur_m,
+                   "JPY": mk("JPY", ds, [0.05] * len(ds))}
+-    # monthly average dated 2025-03-01 is not knowable in March: lagged one observation
+-    assert np.isnan(_ffill_rates(eur_m, ["2025-02-28"])[0])
+-    assert _ffill_rates(eur_m, ["2025-03-01", "2025-03-15"]).tolist() == [0.01, 0.01]
++    # monthly average dated 2025-02-01 is published from 2025-03-21 (DF-04); the March one from 2025-04-21
++    assert np.isnan(_ffill_rates(eur_m, ["2025-03-20"])[0])
++    assert _ffill_rates(eur_m, ["2025-03-21", "2025-04-18"]).tolist() == [0.01, 0.01]
++    assert _ffill_rates(eur_m, ["2025-03-21"], known=False)[0] == 0.10      # accrual: the rate observed
+     assert _ffill_rates(mk("EUR", eur_m.dates, eur_m.values), ["2025-03-15"])[0] == 0.10
+     tb = carry_backtest(tiny_spots, tiny_rates, cost_bps=0.0, rebalance_days=5)
+-    assert tb.dates[0] == "2025-03-03"                # first weekday on/after 2025-03-01
++    assert tb.dates[0] == "2025-03-21"                # first date the Feb-2025 average is published
+     assert all(l == ("JPY",) and s == ("EUR",) for _, l, s in tb.positions), tb.positions
+     # staleness: rate's last_date 60 days before spot's last_date flips the flag
+     fresh = carry_table(tiny_spots, tiny_rates)
+diff -ruN a/core/quant/backtest.py b/core/quant/backtest.py
+--- a/core/quant/backtest.py
++++ b/core/quant/backtest.py
+@@ -107,6 +107,8 @@
+ def run_backtest(history: History, *, strategy: str = "ma_cross",
+                  params: dict | None = None, cost_bps: float = 10.0) -> BacktestResult:
+     params = dict(params or {})
++    from core.quant.history import require_price
++    require_price(history, "a backtest")
+     px = history.prices()
+     if px.size < 60:
+         raise ValueError("Need at least 60 sessions to backtest.")
+diff -ruN a/core/quant/history.py b/core/quant/history.py
+--- a/core/quant/history.py
++++ b/core/quant/history.py
+@@ -66,6 +66,9 @@
+     # "provisional_intraday" = fetched while the market may have been trading, the last bar is a running price;
+     # ""                     = no status claimed (a History is a display shape; acting reads use core.ficc.pit).
+     status: str = ""
++    # DF-01: what the closes ARE. "price" = a tradable price (default); "rate_pct" = a yield or rate in percent
++    # (KIS Y0xxx, Yahoo ^TNX). Returns, volatility, simulation and weights are undefined on a rate level.
++    kind: str = "price"
+ 
+     def __len__(self) -> int:
+         return len(self.closes)
+@@ -117,6 +120,44 @@
+             f"(a KRX code as 005930.KS), or KIS for price return (a US ticker as NAS:AAPL).")
+ 
+ 
++def require_price(h: "History", what: str) -> None:
++    """DF-01: refuse a non-price series at a model entry. A yield level has no return."""
++    if getattr(h, "kind", "price") != "price":
++        raise ValueError(f"{h.symbol} is a {h.kind.replace('_', ' ')} series ({h.note or h.source}), not a price: "
++                         f"{what} needs prices. Chart it, or use a bond or futures price series instead.")
++
++
++_CLOCKS = {"KRX": "15:30 KST (06:30 UTC)", "US": "16:00 ET (20:00-21:00 UTC)", "UTC0": "00:00 UTC (crypto day)"}
++
++
++def close_clock(h: "History") -> str:
++    """DF-02: which close a daily date label stands for: 'KRX', 'US', 'UTC0' (crypto), '' when unknown."""
++    s, src = h.symbol.upper(), h.source
++    if src in ("UPBIT", "BINANCE") or _looks_crypto(s) or s.endswith(("-USD", "-KRW")):
++        return "UTC0"
++    if _looks_krx(s) or s in ("^KS11", "^KS200", "^KQ11"):
++        return "KRX"
++    if ":" in s:
++        return "US" if s.split(":", 1)[0] in ("NAS", "NYS", "AMS") else ""
++    if src in ("FMP", "YFINANCE") and "." not in s and s.replace("-", "").isalnum():
++        return "US"
++    return ""
++
++
++def mixed_close_warning(hists) -> str:
++    """DF-02: one sentence when a panel aligns venues whose closes are hours apart on one date label."""
++    by: dict[str, list[str]] = {}
++    for h in hists:
++        c = close_clock(h)
++        if c:
++            by.setdefault(c, []).append(h.symbol)
++    if len(by) < 2:
++        return ""
++    parts = "; ".join(f"{', '.join(v)} close at {_CLOCKS[k]}" for k, v in by.items())
++    return (f"Mixed close times: {parts}. Same-date daily returns understate their co-movement, and a rule that "
++            f"reads both closes of one date uses news the earlier market had not yet seen.")
++
++
+ # --------------------------------------------------------------------------- #
+ # FMP
+ # --------------------------------------------------------------------------- #
+@@ -277,8 +318,16 @@
+         raise HistoryError(f"Yahoo Finance returned only {len(closes)} usable sessions for {symbol!r}.")
+     s = symbol.upper()
+     pays_no_dividend = s.startswith("^") or s.endswith(("=F", "=X", "-USD", "-KRW"))
++    rate = s in _YAHOO_YIELDS
++    note = ("Yahoo yield index in percent: a rate, not a price" if rate
++            else "Yahoo continuous front-month future, NOT roll-adjusted" if s.endswith("=F")
++            else "Yahoo adjusted close")
+     return History(symbol=s, source="YFINANCE", dates=dates[-days:], closes=closes[-days:],
+-                   note="Yahoo adjusted close", adjustment="" if pays_no_dividend else "total")
++                   note=note, adjustment="" if pays_no_dividend else "total",
++                   kind="rate_pct" if rate else "price")
++
++
++_YAHOO_YIELDS = ("^TNX", "^IRX", "^FVX", "^TYX")     # CBOE Treasury yield indices, percent
+ 
+ 
+ def crypto_history(symbol: str, *, days: int = 504) -> History:
+@@ -308,9 +357,11 @@
+             # MODP=1 is 수정주가: splits, not dividends.
+             return replace(km.overseas_daily(ex, sym, days=days).to_history(), adjustment="split")
+         if s.startswith("KR") and len(s) == 12:
+-            return km.bond_daily(s).to_history()
++            b = km.bond_daily(s).to_history()
++            return replace(b, note=b.note + "; coupons NOT included (price return)")
+         if s.startswith("Y0") and len(s) == 5:
+-            return km.overseas_chart(CHART_YIELD, s, days=days).to_history()
++            return replace(km.overseas_chart(CHART_YIELD, s, days=days).to_history(), kind="rate_pct",
++                           note="KIS benchmark yield in percent: a rate, not a price")
+         if s.startswith("FX@"):
+             return km.overseas_chart(CHART_FX, s, days=days).to_history()
+         return km.futures_daily(s, days=days).to_history()
+@@ -439,7 +490,8 @@
+             return History(str(p["symbol"]), str(p["source"]), tuple(p["dates"]),
+                            tuple(float(c) for c in p["closes"]), note=note,
+                            adjustment=str(p.get("adjustment") or ""),
+-                           status=str(p.get("status") or ("provisional_intraday" if p.get("live") else "")))
++                           status=str(p.get("status") or ("provisional_intraday" if p.get("live") else "")),
++                           kind=str(p.get("kind") or "price"))
+     except Exception:
+         pass                                  # absent, expired or unreadable: fetch
+     live = _may_be_trading(provider, symbol)  # judged before the request goes out
+@@ -451,7 +503,7 @@
+             path.parent.mkdir(parents=True, exist_ok=True)
+             path.write_text(json.dumps({"ts": time.time(), "live": live, "symbol": h.symbol,
+                                         "source": h.source, "note": h.note,
+-                                        "adjustment": h.adjustment, "status": h.status,
++                                        "adjustment": h.adjustment, "status": h.status, "kind": h.kind,
+                                         "dates": h.dates, "closes": h.closes}), "utf-8")
+         except Exception:
+             pass                              # a cache that cannot be written is not an error
+diff -ruN a/core/quant/montecarlo.py b/core/quant/montecarlo.py
+--- a/core/quant/montecarlo.py
++++ b/core/quant/montecarlo.py
+@@ -231,6 +231,8 @@
+                     var_level: float = 0.95, seed: int = 7,
+                     n_sample_paths: int = 40, drift: str = "premium",
+                     rf_rate: float = 0.03, erp: float = 0.04) -> MCResult:
++    from core.quant.history import require_price
++    require_price(history, "a price simulation")
+     model = (model or "garch_t").lower()
+     if model not in MODELS:
+         raise ValueError(f"Unknown model {model!r}. One of {MODELS}.")
+diff -ruN a/core/quant/risk.py b/core/quant/risk.py
+--- a/core/quant/risk.py
++++ b/core/quant/risk.py
+@@ -14,7 +14,7 @@
+ 
+ import numpy as np
+ 
+-from core.quant.history import History, TRADING_DAYS
++from core.quant.history import History, TRADING_DAYS, mixed_close_warning, require_price
+ 
+ try:                                                  # optional, offline-capable
+     import pandas as _pd
+@@ -62,6 +62,7 @@
+ 
+ def analyze_history(history: History, *, rf_rate: float = 0.03,
+                     var_level: float = 0.95) -> RiskReport:
++    require_price(history, "risk statistics")
+     px = history.prices()
+     r = history.log_returns()
+     if r.size < 20:
+@@ -129,6 +130,7 @@
+     cov: np.ndarray = field(repr=False, default=None)            # annualized covariance
+     corr: np.ndarray = field(repr=False, default=None)
+     returns: np.ndarray = field(repr=False, default=None)        # (T, N) daily log returns
++    note: str = ""                    # DF-02: why the covariance is not the same-date daily one
+ 
+ 
+ def align_histories(histories: list[History]) -> BasketStats:
+@@ -137,6 +139,8 @@
+     covariance estimated on less is noise wearing a matrix."""
+     if len(histories) < 2:
+         raise ValueError("Need at least two assets.")
++    for h in histories:
++        require_price(h, "a portfolio")
+     common = set(histories[0].dates)
+     for h in histories[1:]:
+         common &= set(h.dates)
+@@ -151,13 +155,22 @@
+         cols.append(np.diff(np.log(px)))
+     R = np.column_stack(cols)                          # (T-1, N)
+     mean = R.mean(axis=0) * TRADING_DAYS
+-    cov = np.cov(R, rowvar=False, ddof=1) * TRADING_DAYS
++    note = mixed_close_warning(histories)
++    if note and R.shape[0] >= 50:
++        # DF-02: closes hours apart on one date label. Five-session sums carry the next-day co-movement
++        # that same-date daily returns miss (non-synchronous closes).
++        k = R.shape[0] // 5
++        Rw = R[-k * 5:].reshape(k, 5, R.shape[1]).sum(axis=1)
++        cov = np.cov(Rw, rowvar=False, ddof=1) * (TRADING_DAYS / 5)
++        note += " Covariance here is estimated on 5-session returns."
++    else:
++        cov = np.cov(R, rowvar=False, ddof=1) * TRADING_DAYS
+     sd = np.sqrt(np.clip(np.diag(cov), 1e-12, None))
+     corr = cov / np.outer(sd, sd)
+     np.fill_diagonal(corr, 1.0)
+     return BasketStats(symbols=tuple(h.symbol for h in histories),
+                        sessions=len(dates), mean_returns=mean, cov=cov,
+-                       corr=corr, returns=R)
++                       corr=corr, returns=R, note=note)
+ 
+ 
+ def portfolio_point(weights: np.ndarray, stats: BasketStats,
+diff -ruN a/core/quant/strategies.py b/core/quant/strategies.py
+--- a/core/quant/strategies.py
++++ b/core/quant/strategies.py
+@@ -43,6 +43,7 @@
+     symbols: tuple[str, ...]
+     prices: np.ndarray = field(repr=False)        # T × N, aligned on shared dates
+     sources: tuple[str, ...] = ()
++    note: str = ""                                # DF-02: mixed close times (a rule may read the later close)
+ 
+     def __len__(self) -> int:
+         return len(self.dates)
+@@ -52,6 +53,9 @@
+     """Intersect on shared dates (the FX carry page's convention)."""
+     if not histories:
+         raise ValueError("no histories")
++    from core.quant.history import mixed_close_warning, require_price
++    for h in histories:
++        require_price(h, "a strategy panel")
+     common = set(histories[0].dates)
+     for h in histories[1:]:
+         common &= set(h.dates)
+@@ -63,7 +67,8 @@
+         lookup = dict(zip(h.dates, h.closes))
+         cols.append(np.array([lookup[d] for d in dates], dtype=float))
+     return Panel(dates=tuple(dates), symbols=tuple(h.symbol for h in histories),
+-                 prices=np.column_stack(cols), sources=tuple(h.source for h in histories))
++                 prices=np.column_stack(cols), sources=tuple(h.source for h in histories),
++                 note=mixed_close_warning(histories))
+ 
+ 
+ def simulate(prices: np.ndarray, weights: np.ndarray, *, cost_bps: float = 5.0,
+diff -ruN a/data/crypto/crypto_client.py b/data/crypto/crypto_client.py
+--- a/data/crypto/crypto_client.py
++++ b/data/crypto/crypto_client.py
+@@ -94,11 +94,14 @@
+     def __len__(self) -> int:
+         return len(self.rates)
+ 
+-    def daily(self) -> dict[str, float]:
+-        """Sum of the funding rates paid per UTC day (three intervals)."""
++    def daily(self, *, complete_only: bool = False) -> dict[str, float]:
++        """Sum of the funding rates paid per UTC day (three intervals). `complete_only` drops the current UTC
++        day, whose sum holds only the fixings paid so far (DF-03)."""
+         out: dict[str, float] = {}
+         for t, r in zip(self.times, self.rates):
+             out[t[:10]] = out.get(t[:10], 0.0) + r
++        if complete_only:
++            out.pop(datetime.now(timezone.utc).date().isoformat(), None)
+         return out
+ 
+ 
+@@ -134,8 +137,9 @@
+ class UpbitPublic:
+     source = "UPBIT"
+ 
+-    def daily(self, market: str = "KRW-BTC", *, days: int = 504) -> Candles:
+-        """Daily candles (KST 09:00 boundary), paged backwards with `to`."""
++    def daily(self, market: str = "KRW-BTC", *, days: int = 504, closed_only: bool = False) -> Candles:
++        """Daily candles (KST 09:00 boundary), paged backwards with `to`. `closed_only` drops today's
++        UTC candle, which is still open (its trade_price is the running price; DF-03)."""
+         market = market.upper()
+         rows: dict[str, dict] = {}
+         to: Optional[str] = None
+@@ -155,6 +159,8 @@
+                 break
+             oldest = min(rows)
+             to = f"{oldest}T00:00:00Z"
++        if closed_only:
++            rows.pop(datetime.now(timezone.utc).date().isoformat(), None)
+         if not rows:
+             raise CryptoError(f"Upbit returned no candles for {market}.")
+         ds = sorted(rows)
+@@ -190,7 +196,7 @@
+     source = "BINANCE"
+ 
+     def daily(self, symbol: str = "BTCUSDT", *, days: int = 504, interval: str = "1d",
+-              market: str = "spot") -> Candles:
++              market: str = "spot", closed_only: bool = False) -> Candles:
+         """Klines paged backwards with endTime. interval 1d (default) or 1h;
+         market 'spot' (/api/v3) or 'perp' (/fapi/v1, from 2019-09-08)."""
+         symbol = symbol.upper()
+@@ -215,6 +221,9 @@
+             if not fresh or len(rows) >= days:
+                 break
+             end_ms = min(rows) - 1
++        if closed_only:                                  # DF-03: kline[6] is the close time; an open one is in the future
++            now_ms = int(time.time() * 1000)
++            rows = {t: k for t, k in rows.items() if int(k[6]) < now_ms}
+         if not rows:
+             raise CryptoError(f"Binance returned no klines for {symbol}.")
+         ts = sorted(rows)
+diff -ruN a/ui/crypto_page.py b/ui/crypto_page.py
+--- a/ui/crypto_page.py
++++ b/ui/crypto_page.py
+@@ -45,14 +45,14 @@
+ def _live(days: int) -> dict:
+     from core.ficc.data import load_series
+     from data.crypto.crypto_client import BinancePublic, UpbitPublic
+-    up = UpbitPublic().daily("KRW-BTC", days=days)
++    up = UpbitPublic().daily("KRW-BTC", days=days, closed_only=True)          # DF-03: complete UTC days only
+     bn = BinancePublic()
+-    btc = bn.daily("BTCUSDT", days=days)
+-    fund = bn.funding("BTCUSDT", days=min(days, 1500)).daily()
++    btc = bn.daily("BTCUSDT", days=days, closed_only=True)
++    fund = bn.funding("BTCUSDT", days=min(days, 1500)).daily(complete_only=True)
+     fx = load_series("DEXKOUS", source="auto", days=days + 100)
+     return {"dates": btc.dates, "upbit": dict(zip(up.dates, up.close)), "binance": dict(zip(btc.dates, btc.close)),
+             "usdkrw": dict(zip(fx.dates, fx.values)), "usdkrw_source": fx.source, "funding_daily": fund,
+-            "eth": dict(zip(*(lambda c: (c.dates, c.close))(bn.daily("ETHUSDT", days=days)))),
++            "eth": dict(zip(*(lambda c: (c.dates, c.close))(bn.daily("ETHUSDT", days=days, closed_only=True)))),
+             "volume": np.asarray(btc.quote_volume), "premium_index": bn.premium_index("BTCUSDT"),
+             "oi": bn.open_interest_hist("BTCUSDT"), "source": "LIVE"}
+ 
+diff -ruN a/ui/portfolio_page.py b/ui/portfolio_page.py
+--- a/ui/portfolio_page.py
++++ b/ui/portfolio_page.py
+@@ -139,8 +139,11 @@
+             mixed = convention_warning(hists)
+             if mixed:
+                 blocks.append(notice(mixed, "error", icon=ft.Icons.ERROR_OUTLINE))
++            if stats.note:
++                blocks.append(notice(stats.note, "error", icon=ft.Icons.SCHEDULE))
+             blocks.append(ft.Row([
+-                chip(f"{h.symbol}: {h.source}" + (" · cached" if "cached" in h.note else ""),
++                chip(f"{h.symbol}: {h.source}" + (" · cached" if "cached" in h.note else "")
++                     + (" · last bar intraday" if h.status == "provisional_intraday" else ""),
+                      "muted" if h.source == "SYNTHETIC" else "success", tooltip=h.note)
+                 for h in hists], spacing=6, wrap=True))
+             blocks.append(ft.Row([
+diff -ruN a/ui/quant_lab_page.py b/ui/quant_lab_page.py
+--- a/ui/quant_lab_page.py
++++ b/ui/quant_lab_page.py
+@@ -324,7 +324,9 @@
+                      "muted" if hist.source == "SYNTHETIC" else "success",
+                      tooltip=hist.note),
+             ] + ([chip(hist.note)] if hist.note and hist.source != "SYNTHETIC" else []) + [
+-                chip(f"{hist.first_date} → {hist.last_date}"),
++                chip(f"{hist.first_date} → {hist.last_date}"
++                     + (" (last bar intraday, not a close)" if hist.status == "provisional_intraday" else ""),
++                     "error" if hist.status == "provisional_intraday" else "muted"),
+                 chip(f"{mc.n_paths:,} paths"),
+                 chip(_MODEL_LABELS[mc.model]),
+                 chip(f"drift: {_DRIFT_SHORT.get(mc.drift_mode, mc.drift_mode)}", "accent"),
+diff -ruN a/ui/strategy_lab_page.py b/ui/strategy_lab_page.py
+--- a/ui/strategy_lab_page.py
++++ b/ui/strategy_lab_page.py
+@@ -103,6 +103,8 @@
+                 f"sensitivity, not a gate verdict.")
+     hists = [load_history(s, source=source, days=days) for s in symbols]
+     pn = S.align_panel(hists)
++    if pn.note and not withheld:
++        withheld = ("No PASS / REJECT: " + pn.note + " The walk-forward cannot tell that lead-lag from skill.")
+     if family == "pairs":
+         if pn.prices.shape[1] != 2:
+             raise ValueError("pairs needs exactly two symbols: y then x")

@@ -1,0 +1,42 @@
+{
+ "bars_fed": 12,
+ "bars_seen": 12,
+ "exit_code": 0,
+ "fills": [
+  {
+   "commission": "5000.00",
+   "date": "2001-01-05",
+   "price": "100.000000000",
+   "qty": "10000",
+   "side": "BUY"
+  },
+  {
+   "commission": "4800.00",
+   "date": "2001-01-09",
+   "price": "96.000000000",
+   "qty": "10000",
+   "side": "SELL"
+  },
+  {
+   "commission": "4752.00",
+   "date": "2001-01-11",
+   "price": "99.000000000",
+   "qty": "9600",
+   "side": "BUY"
+  },
+  {
+   "commission": "4656.00",
+   "date": "2001-01-17",
+   "price": "97.000000000",
+   "qty": "9600",
+   "side": "SELL"
+  }
+ ],
+ "final_cash": "926593.00",
+ "final_qty": "0",
+ "fixture": "F1",
+ "force_stop": false,
+ "invalid_reasons": [],
+ "schema": "nautilus-bridge-golden/1",
+ "status": "valid"
+}

@@ -1,0 +1,344 @@
+[
+ {
+  "test": "test_atm_straddle_is_twice_the_atm_payer",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "test_black_and_bachelier_agree_atm_and_implied_vols_round_trip",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_bond_analyze_requires_exactly_one_of_price_or_yield",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_bond_carry_roll_is_a_holding_period_pnl",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "test_bond_convexity_is_positive_and_numeric",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_bond_duration_matches_numeric_derivative",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_bond_flat_curve_reprices_the_yield",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_bond_krd_sums_to_dv01",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "test_bond_par_prices_at_100_and_yield_round_trips",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_bond_scenarios_show_convexity",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.004
+ },
+ {
+  "test": "test_bond_z_spread_round_trips",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_cap_is_sum_of_caplets_and_cap_minus_floor_is_the_swap",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_carry_backtest_is_sane_and_costs_only_hurt",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.023
+ },
+ {
+  "test": "test_carry_table_inverts_usd_base_pairs",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_curve_bootstrap_round_trips_par_inputs",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "test_curve_bumps_are_local_and_parallel",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_curve_df_is_one_at_zero_and_monotone",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_curve_ns_fit_is_tight",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.011
+ },
+ {
+  "test": "test_curve_pca_explains_level_first",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_curve_report_uses_allowed_regime_and_shape_strings",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.036
+ },
+ {
+  "test": "test_data_auto_degrades_to_synthetic_naming_the_provider",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "test_data_explicit_provider_raises_offline",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_data_shapes_are_clean",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_data_synthetic_is_deterministic_and_labeled",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_data_synthetic_never_touches_the_cache",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_dcd_enhanced_yield_beats_the_plain_deposit",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.008
+ },
+ {
+  "test": "test_every_fchart_renders_a_data_uri_image",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 2.778
+ },
+ {
+  "test": "test_futures_hedge_arithmetic",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_fx_forward_is_cip_and_its_basis_is_zero",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_fx_forward_points_follow_the_pip_rule",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_gk_implied_vol_round_trips",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_gk_parity_and_delta_bounds",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_hedge_sheet_sizes_spot_swaps_and_futures",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_horizon_pv_var_is_a_non_negative_loss",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.088
+ },
+ {
+  "test": "test_implied_vol_outside_no_arb_raises",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_macro_briefs_are_json_payloads",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_macro_rows_are_bounded_and_regimes_are_from_the_sets",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_macro_sheet_offline_auto_is_loudly_synthetic_and_fred_raises",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.011
+ },
+ {
+  "test": "test_narratives_state_their_numbers",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.028
+ },
+ {
+  "test": "test_ppn_fair_below_issue_with_positive_participation",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_ratesim_cir_stays_non_negative",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.18
+ },
+ {
+  "test": "test_ratesim_hull_white_matches_the_curve_at_t0",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.021
+ },
+ {
+  "test": "test_ratesim_is_seeded_and_reproducible",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.041
+ },
+ {
+  "test": "test_ratesim_vasicek_reverts_to_theta",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.58
+ },
+ {
+  "test": "test_report_prompt_and_deep_analysis_degrade_without_network",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_reverse_convertible_coupon_beats_the_zcb_rate",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_sabr_reproduces_its_quotes",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.037
+ },
+ {
+  "test": "test_smile_ordering_follows_the_risk_reversal",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.002
+ },
+ {
+  "test": "test_steepener_note_warns_about_convexity",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.006
+ },
+ {
+  "test": "test_strike_from_delta_round_trips",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_swap_at_par_has_zero_pv_and_payer_dv01_positive",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.007
+ },
+ {
+  "test": "test_swap_krd_sums_to_dv01",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.005
+ },
+ {
+  "test": "test_swap_off_market_pv_is_minus_spread_times_annuity",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ },
+ {
+  "test": "test_swaption_put_call_parity",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.001
+ },
+ {
+  "test": "test_weekly_note_has_no_position_language",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.003
+ },
+ {
+  "test": "test_weekly_strategy_ranks_positive_carry_first",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.032
+ },
+ {
+  "test": "test_weekly_strategy_states_its_views",
+  "status": "PASS",
+  "detail": "",
+  "seconds": 0.0
+ }
+]

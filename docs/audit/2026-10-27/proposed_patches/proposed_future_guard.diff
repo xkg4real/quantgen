@@ -1,0 +1,24 @@
+--- orig/core/engine/evaluator.py	2026-10-27 13:21:10.000000000 +0000
++++ fut/core/engine/evaluator.py	2026-10-27 13:53:54.102401636 +0000
+@@ -67,6 +67,9 @@
+         return (now - stamp).total_seconds()
+ 
+ 
++_FUTURE_SKEW_S = 60.0          # a provider clock may lead ours a little; more is an error
++
++
+ @dataclass(frozen=True)
+ class Decision:
+     rule_id: str
+@@ -281,6 +284,11 @@
+         below still catches a feed that is simply dead.
+         """
+         age = quote.age_seconds(now=now)
++        if age < -_FUTURE_SKEW_S:
++            # A stamp ahead of the clock is a broken feed or a timezone bug (a naive local time read as UTC),
++            # never a fresh print: without this a negative age passes every bound below.
++            return Outcome.HALTED, (f"{rule.symbol} quote is stamped {-age:.0f}s in the future "
++                                    f"(clock or timezone error; tolerance {_FUTURE_SKEW_S:.0f}s)")
+         market = markets.get(rule.market)
+         session = market.session if market is not None else None
+ 

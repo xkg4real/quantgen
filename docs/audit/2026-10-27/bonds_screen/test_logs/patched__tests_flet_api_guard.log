@@ -1,0 +1,10 @@
+$ (cwd=/tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched) python3 -B /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/scripts/run_module_tests.py /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/patched tests.flet_api_guard /tmp/claude-0/-home-user-quantgen/244a07c1-ef5e-50fd-a9f1-360db0f46038/scratchpad/bonds_work/patch/logs2/patched__flet_api_guard.json
+rc=0
+PASS test_control_attribute_assignments_exist (0.2s)
+PASS test_control_keywords_exist (0.201s)
+PASS test_page_methods_exist (0.154s)
+PASS test_theme_tokens_referenced_by_ui_exist (0.16s)
+not_run=0
+4/4 passed
+
+--- stderr ---

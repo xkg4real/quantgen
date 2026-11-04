@@ -1,0 +1,11 @@
+PASS  selfcheck core.ficc.bonds  rc=0 0.5s  ok
+PASS  selfcheck ui.bonds_page  rc=0 4.0s  ok
+PASS  selfcheck core.ficc.curves  rc=0 1.3s  ok
+PASS  selfcheck core.ficc.insights  rc=0 2.1s  ok
+PASS  selfcheck core.ficc.data  rc=0 1.6s  ok
+PASS  tests.ficc_acceptance  rc=0 6.6s  57/57 passed
+PASS  tests.flet_api_guard  rc=0 1.6s  4/4 passed
+FAIL  tests.bonds_screen_acceptance (patched file run against this copy's code)  rc=0 12.0s  4/33 passed
+PASS  tests.quant_acceptance  rc=0 46.1s  53/53 passed
+PASS  tests.macro_m1_pit  rc=0 5.8s  24/24 passed
+PASS  tests.macro_m1_integration  rc=0 3.5s  7/7 passed

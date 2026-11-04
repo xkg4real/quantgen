@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import ast
 import json
+import os
+import shutil
 import tempfile
 import time
 from dataclasses import replace
@@ -843,10 +845,29 @@ test_default_services_reads_the_effective_store_with_owner_rulings.test_ids = ["
 # --------------------------------------------------------------------------- #
 # The labelled dry run on the local vendor cache (rulings 1): offline, under two minutes, books DISARMED
 # --------------------------------------------------------------------------- #
+DRY_RUN_RETRIEVED = U(2026, 10, 1)        # fixed retrieval instant of the copied cache files, before the pinned clock
+
+
+def _dry_run_cache_copy(dst: Path) -> Path:
+    """Copies the DRY_RUN_CACHE files into `dst` and fixes their mtime. dry_run stamps retrieved_at_utc from the
+    file's mtime (L1283), and a git checkout or a sync rewrites the repository files' mtimes, so a clone written after
+    the pinned clock failed closed (owner Windows run 2026-11-04: cache mtimes 2026-11-01). The copy keeps the bytes
+    and fixes only the retrieval instant; the repository files are never touched. A missing file stays missing."""
+    dst.mkdir(parents=True, exist_ok=True)
+    ts = DRY_RUN_RETRIEVED.timestamp()
+    for name, _ in MD.DRY_RUN_CACHE.values():
+        src = Path(MD.CACHE_DIR) / name
+        if src.is_file():
+            shutil.copyfile(src, dst / name)
+            os.utime(dst / name, (ts, ts))
+    return dst
+
+
 def test_dry_run_end_to_end_on_the_local_cache():
     tmp = _tmp()
+    cache = _dry_run_cache_copy(tmp / "cache")
     t0 = time.perf_counter()
-    out = MD.dry_run(tmp, clock=lambda: U(2026, 10, 7, 9, 0))
+    out = MD.dry_run(tmp, clock=lambda: U(2026, 10, 7, 9, 0), cache_dir=cache)
     assert time.perf_counter() - t0 < 120.0
     root = tmp / "dry_run"
     assert out["root"] == str(root) and all(v.get("appended", 0) > 0 for v in out["ingested"].values())
@@ -866,6 +887,7 @@ def test_dry_run_end_to_end_on_the_local_cache():
         assert all(e["engine_state"] == "DISARMED" for e in state["runtime"]) and state["vol"]["vt_weight_recommended_book"] == 1.0
         assert all(i["value_status"] in ("vendor_close", "first_release") for i in state["inputs"])
         assert all(i["retrieved_at_utc"] != "2026-10-07T09:00:00Z" for i in state["inputs"])     # the file's mtime (L1283), never the clock
+        assert all(i["retrieved_at_utc"] == "2026-10-01T00:00:00Z" for i in state["inputs"])     # the copy's fixed mtime, not the checkout's
     assert all(m == "DISARMED" for m in out["books"].values()) and not (root / "engine_feed").exists()
     us = next(v for k, v in {rel: json.loads((root / rel).read_text(encoding="utf-8")) for rel in out["runs"]["US"]["artifacts"]}.items() if k.startswith("macro_state/"))
     assert us["vol"]["vt_status"] == "ok" and 0.0 < us["vol"]["vt_weight_next"] <= 1.0           # SPY vendor rows size the US vt (labelled)

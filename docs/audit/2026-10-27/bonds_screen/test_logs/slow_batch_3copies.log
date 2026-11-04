@@ -1,0 +1,3 @@
+== head: served FRED 10 tenors; note: Missing tenors: DGS20. 0.55s
+== patched_v1: FICCError: FRED served 0/11 tenors (DGS1MO, DGS3MO, DGS6MO, DGS1, DGS2, DGS3, DGS5, DGS7, DGS10, DGS20, DGS30: FICCError: FRED answered HTTP 404 for DGS20.). 0.55s
+== patched: served FRED 10 tenors; note: Missing tenors: DGS20; the curve interpolates across a gap (log-linear DF) and holds the zero flat beyond the shortest a 0.55s

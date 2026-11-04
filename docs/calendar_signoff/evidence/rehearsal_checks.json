@@ -1,0 +1,168 @@
+{
+ "refusals": {
+  "holidays_KRX": null,
+  "holidays_NYSE": null,
+  "holidays_FED": null,
+  "holidays_SIFMA": null,
+  "kr_sessions": null
+ },
+ "signed": {
+  "holidays_KRX": {
+   "version": "1.0.0",
+   "md5": "894b4f5434c75745c7acf2ad9e39c660",
+   "signed_utc": "2026-10-28T07:16:59Z",
+   "signer": "REHEARSAL"
+  },
+  "holidays_NYSE": {
+   "version": "1.0.0",
+   "md5": "a0eda258edb52b90bfd38702e9fdf2f5",
+   "signed_utc": "2026-10-28T07:16:59Z",
+   "signer": "REHEARSAL"
+  },
+  "holidays_FED": {
+   "version": "1.0.0",
+   "md5": "9800221672a427707d362e3bb211cbea",
+   "signed_utc": "2026-10-28T07:16:59Z",
+   "signer": "REHEARSAL"
+  },
+  "holidays_SIFMA": {
+   "version": "1.0.0",
+   "md5": "0f7f851857371324fc022a98174269fb",
+   "signed_utc": "2026-10-28T07:16:59Z",
+   "signer": "REHEARSAL"
+  },
+  "kr_sessions": {
+   "version": "1.0.0",
+   "md5": "11aad8a403e698d5e3bb2ceb10a872af",
+   "signed_utc": "2026-10-28T07:16:59Z",
+   "signer": "REHEARSAL"
+  }
+ },
+ "sessions_left_2026_11_01": {
+  "holidays_KRX": 287,
+  "holidays_NYSE": 293,
+  "holidays_FED": 290,
+  "holidays_SIFMA": 290
+ },
+ "fed_business_day_2027_12_31": false,
+ "fed_business_day_2027_12_24": false,
+ "us_is_session_2027_12_31": true,
+ "sifma_2026_04_03": "early_close",
+ "sifma_2027_12_31": "early_close",
+ "kr_decision_2027_11_18": "2027-11-18T07:30:00+00:00",
+ "arm_2026_11_02": {
+  "KR": true,
+  "US": true
+ },
+ "status_signed_2026_11_02": {
+  "KR": false,
+  "US": false
+ },
+ "deadline_check_on_rehearsal": "PASS at 2026-10-31T14:59:59Z and 2026-11-03T00:00:00Z",
+ "kr_sessions_late_signature": "AssertionError: kr_sessions: signed 2026-11-02T00:00:00Z, not before the deadline 2026-10-31T15:00:00Z",
+ "without_row_fed_business_day_2027_12_31": true,
+ "file_fields": {
+  "holidays_KRX": {
+   "status": "SIGNED (REHEARSAL in a throwaway copy - not an owner sign-off)",
+   "statement_starts": "REHEARSAL (not an owner sign-off; signer",
+   "rows": 33,
+   "rows_signed": 33
+  },
+  "holidays_NYSE": {
+   "status": "SIGNED (REHEARSAL in a throwaway copy - not an owner sign-off)",
+   "statement_starts": "REHEARSAL (not an owner sign-off; signer",
+   "rows": 37,
+   "rows_signed": 37
+  },
+  "holidays_FED": {
+   "status": "SIGNED (REHEARSAL in a throwaway copy - not an owner sign-off)",
+   "statement_starts": "REHEARSAL (not an owner sign-off; signer",
+   "rows": 138,
+   "rows_signed": 138
+  },
+  "holidays_SIFMA": {
+   "status": "SIGNED (REHEARSAL in a throwaway copy - not an owner sign-off)",
+   "statement_starts": "REHEARSAL (not an owner sign-off; signer",
+   "rows": 50,
+   "rows_signed": 50
+  },
+  "kr_sessions": {
+   "status": "SIGNED (REHEARSAL in a throwaway copy - not an owner sign-off)",
+   "statement_starts": "REHEARSAL (not an owner sign-off; signer",
+   "rows": 23,
+   "rows_signed": 23
+  }
+ },
+ "manifest_top": {
+  "version": "1.0.0",
+  "signed_off_by": "REHEARSAL",
+  "signed_utc": "2026-10-28T07:16:59Z",
+  "status": "REHEARSAL in a throwaway copy: five files signed by 'REHEARSAL', not by the owner"
+ },
+ "manifest_rows": {
+  "holidays_KRX.yaml": {
+   "version": "1.0.0",
+   "md5": "894b4f5434c75745c7acf2ad9e39c660",
+   "signed_off_by": "REHEARSAL",
+   "signed_utc": "2026-10-28T07:16:59Z",
+   "test_ids": [
+    "T-CLOSE-02",
+    "T-SAT-01",
+    "T-TZ-02",
+    "T-CAL-01",
+    "T-CAL-02"
+   ]
+  },
+  "holidays_NYSE.yaml": {
+   "version": "1.0.0",
+   "md5": "a0eda258edb52b90bfd38702e9fdf2f5",
+   "signed_off_by": "REHEARSAL",
+   "signed_utc": "2026-10-28T07:16:59Z",
+   "test_ids": [
+    "T-CLOSE-01",
+    "T-CLOSE-02",
+    "T-TZ-01",
+    "T-CAL-01",
+    "T-CAL-02"
+   ]
+  },
+  "holidays_FED.yaml": {
+   "version": "1.0.0",
+   "md5": "9800221672a427707d362e3bb211cbea",
+   "signed_off_by": "REHEARSAL",
+   "signed_utc": "2026-10-28T07:16:59Z",
+   "test_ids": [
+    "T-H15-01",
+    "T-H10-02",
+    "T-AVAIL-01",
+    "T-CAL-01",
+    "T-CAL-02"
+   ]
+  },
+  "holidays_SIFMA.yaml": {
+   "version": "1.0.0",
+   "md5": "0f7f851857371324fc022a98174269fb",
+   "signed_off_by": "REHEARSAL",
+   "signed_utc": "2026-10-28T07:16:59Z",
+   "test_ids": [
+    "T-STALE-01",
+    "T-H15-01",
+    "T-CAL-01",
+    "T-CAL-02"
+   ]
+  },
+  "kr_sessions.yaml": {
+   "version": "1.0.0",
+   "md5": "11aad8a403e698d5e3bb2ceb10a872af",
+   "signed_off_by": "REHEARSAL",
+   "signed_utc": "2026-10-28T07:16:59Z",
+   "test_ids": [
+    "T-CLOSE-01",
+    "T-CLOSE-02",
+    "T-SAT-01",
+    "T-CAL-01",
+    "T-CAL-02"
+   ]
+  }
+ }
+}

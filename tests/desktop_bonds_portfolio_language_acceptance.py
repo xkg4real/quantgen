@@ -2,6 +2,7 @@
 from copy import deepcopy
 from dataclasses import replace
 from types import SimpleNamespace
+import math
 import unittest
 from unittest.mock import patch
 import numpy as np
@@ -43,6 +44,29 @@ class BondsPortfolioLanguageTests(unittest.TestCase):
                     self.assertEqual('최악은' in ko,bool(scenarios))
                     self.assertIn('체결 가능한 레포 호가가 아닙니다',ko)
                     self.assertIn('price * (1 / DF(h) - 1)',ko)
+
+    def test_bond_maturing_inside_the_horizon_shows_no_breakeven_number(self):
+        # BS-08: a bond maturing inside the carry horizon is held to maturity, so breakeven_bp is NaN.
+        out = bond_fixture(BondRequest(source='synthetic',tool='scenarios',maturity=.2))
+        a = out.analytics
+        self.assertTrue(math.isnan(a.carry_roll.breakeven_bp))
+        en,ko = narrate_bond(a,out.scenarios),bond_korean(a,out.scenarios)
+        self.assertNotIn('nan',ko.lower())
+        self.assertIn('만기 보유 결과를 바꾸지 않습니다',ko)
+        self.assertIn('hold-to-maturity',en)
+        self.assertEqual(sorted(numbers(en)),sorted(numbers(ko)))
+        from quantgen_desktop.bonds import BondsPane
+        pane = BondsPane();pane.show_result(out)
+        rows = {pane.metrics.item(i,0).text():pane.metrics.item(i,1).text() for i in range(pane.metrics.rowCount())}
+        self.assertEqual(rows['Breakeven'],'—')
+
+    def test_bond_dv01_is_per_bp_of_own_yield_and_scenarios_are_zero_curve(self):
+        # BS-09: the DV01 sentence speaks of the bond's own yield, not a parallel curve shift.
+        out = bond_fixture(BondRequest(source='synthetic',tool='scenarios'))
+        ko = bond_korean(out.analytics,out.scenarios)
+        self.assertNotIn('평행 상승',ko)
+        self.assertIn('채권 자체 수익률 bp당',ko)
+        self.assertIn('제로곡선 시나리오(z-스프레드 고정)',ko)
 
     def test_bond_custom_names_and_unknown_notes_remain_verbatim(self):
         out = bond_fixture(BondRequest())

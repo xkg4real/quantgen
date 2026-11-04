@@ -1,4 +1,5 @@
 """Native Bonds calculator, full-revaluation scenarios and hedge sizing."""
+import math
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QWidget,QVBoxLayout,QGridLayout,QLineEdit,QComboBox,QPushButton
 from core.research.bond_analysis import BondRequest
@@ -84,7 +85,8 @@ class BondsPane(QWidget):
             ('Convexity',f'{a.convexity:.3f}'),('DV01',f'{a.dv01:,.2f} currency / bp'),
             ('z-spread',f'{a.z_spread*10000:.2f} bp'),('Curve price',f'{a.curve_price:.3f}'),
             (f'Carry · {cr.horizon:g} years',f'{cr.carry:+.3f}'),('Roll-down',f'{cr.rolldown:+.3f}'),
-            ('Carry + roll',f'{cr.total:+.3f}'),('Breakeven',f'{cr.breakeven_bp:+.2f} bp')])
+            ('Carry + roll',f'{cr.total:+.3f}'),
+            ('Breakeven',f'{cr.breakeven_bp:+.2f} bp' if math.isfinite(cr.breakeven_bp) else '—')])
         self.chart.set_series(o.yield_axis,[('Price',o.price_curve),('Duration tangent',o.duration_tangent)])
         table_rows(self.krd,[[f'{k:g}',f'{v:,.2f}'] for k,v in sorted(a.krd.items())])
         table_rows(self.scenarios,[[r.name,str(r.shock_bp),f'{r.new_price:.3f}',f'{r.pnl:+,.2f}',f'{r.pnl_pct:+.2%}'] for r in o.scenarios])

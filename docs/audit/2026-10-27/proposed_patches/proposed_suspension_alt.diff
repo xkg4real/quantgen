@@ -1,0 +1,19 @@
+--- tree/data/krx/kis_client.py	2026-10-27 13:43:11.912058710 +0000
++++ tree2/data/krx/kis_client.py	2026-10-27 13:58:10.372579208 +0000
+@@ -284,9 +284,13 @@
+         # FHKST01010100 carries no time of day (open-trading-api chk_inquire_price: 82 fields, none a time). The
+         # exchange instant is the level-1 book's 호가 접수 시간 (`aspr_acpt_hour`, FHKST01010200); a suspended
+         # issue (temp_stop_yn = Y) has no live price at all. Either way as_of is never the receipt instant (D-05).
+-        stamp = None
+-        if str(out.get("temp_stop_yn") or "").strip().upper() != "Y":
+-            stamp = self.exchange_time(code, datetime.fromisoformat(fetched))
++        receipt = datetime.fromisoformat(fetched)
++        if str(out.get("temp_stop_yn") or "").strip().upper() == "Y":
++            # suspended: the price is a previous session's; date it to that close so the engine SKIPs this one
++            # symbol ("before today's open", evaluator._freshness) instead of a missing quote that halts every rule
++            stamp = _kst_stamp("153000", receipt)
++        else:
++            stamp = self.exchange_time(code, receipt)
+         return Quote(
+             ticker=code,
+             name=str(out.get("hts_kor_isnm") or "").strip(),
