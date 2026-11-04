@@ -1,0 +1,127 @@
+{
+ "census": {
+  "error": "KeyError: 'F1'",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1842, in _part\n    report[name] = fn()\n                   ~~^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1944, in <lambda>\n    _part(rep, \"census\", lambda: _census_part(fixtures, golden_dir))\n                                 ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1918, in _census_part\n    union = sorted(set(fixtures[\"F1\"][\"census\"]) | set(fixtures[\"F2\"][\"census\"]))\n                       ~~~~~~~~^^^^^^\nKeyError: 'F1'\n"
+ },
+ "check_env": {
+  "error": "RuntimeError: no venv python: see the venv part",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1842, in _part\n    report[name] = fn()\n                   ~~^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1938, in <lambda>\n    _part(rep, \"check_env\", lambda: _child_json([\"--check-env\"], _need(python), unshare))\n                                                                 ~~~~~^^^^^^^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1885, in _need\n    raise RuntimeError(\"no venv python: see the venv part\")\nRuntimeError: no venv python: see the venv part\n"
+ },
+ "egress": {
+  "error": "RuntimeError: no venv python: see the venv part",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1842, in _part\n    report[name] = fn()\n                   ~~^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1941, in <lambda>\n    _part(rep, \"egress\", lambda: _egress_part(_need(python), venv, unshare))\n                                              ~~~~~^^^^^^^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1885, in _need\n    raise RuntimeError(\"no venv python: see the venv part\")\nRuntimeError: no venv python: see the venv part\n"
+ },
+ "firewall": [
+  {
+   "command": "Get-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out | Format-List DisplayName, Enabled, Direction, Action, Profile",
+   "exit": 0,
+   "stderr": "",
+   "stdout": [
+    "",
+    "",
+    "DisplayName : QUANTGEN-nautilus-block-out",
+    "Enabled     : True",
+    "Direction   : Outbound",
+    "Action      : Block",
+    "Profile     : Any",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "command": "Get-NetFirewallRule -DisplayName QUANTGEN-nautilus-block-out | Get-NetFirewallApplicationFilter | Format-List Program",
+   "exit": 0,
+   "stderr": "",
+   "stdout": [
+    "",
+    "",
+    "Program : C:\\Users\\whydi\\AppData\\Local\\quantgen\\py313\\python.exe",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "command": "Get-NetFirewallProfile | Format-List Name, Enabled",
+   "exit": 0,
+   "stderr": "",
+   "stdout": [
+    "",
+    "",
+    "Name    : Domain",
+    "Enabled : True",
+    "",
+    "Name    : Private",
+    "Enabled : True",
+    "",
+    "Name    : Public",
+    "Enabled : True",
+    "",
+    "",
+    ""
+   ]
+  }
+ ],
+ "fixtures": {
+  "error": "RuntimeError: no venv python: see the venv part",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1842, in _part\n    report[name] = fn()\n                   ~~^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1943, in <lambda>\n    fixtures = _part(rep, \"fixtures\", lambda: _fixture_part(_need(python), unshare, golden_dir))\n                                                            ~~~~~^^^^^^^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1885, in _need\n    raise RuntimeError(\"no venv python: see the venv part\")\nRuntimeError: no venv python: see the venv part\n"
+ },
+ "git": {
+  "head": {
+   "exit": 0,
+   "stderr": "",
+   "stdout": [
+    "0bc9595f4f581c83288d617e69945622ae9de6d6"
+   ]
+  },
+  "origin_branch": {
+   "exit": 0,
+   "stderr": "",
+   "stdout": [
+    "0bc9595f4f581c83288d617e69945622ae9de6d6"
+   ]
+  },
+  "status": {
+   "exit": 0,
+   "stderr": "",
+   "stdout": []
+  }
+ },
+ "guard_selftest": {
+  "error": "RuntimeError: no venv python: see the venv part",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1842, in _part\n    report[name] = fn()\n                   ~~^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1939, in <lambda>\n    _part(rep, \"guard_selftest\", lambda: _child_json([\"--guard-selftest\"], _need(python), unshare))\n                                                                           ~~~~~^^^^^^^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1885, in _need\n    raise RuntimeError(\"no venv python: see the venv part\")\nRuntimeError: no venv python: see the venv part\n"
+ },
+ "host_tag": "win_amd64",
+ "parent": {
+  "nautilus_trader": "2.0.0rc7",
+  "pyarrow": null,
+  "sys_base_executable": "C:\\Users\\whydi\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe",
+  "sys_executable": "C:\\Users\\whydi\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe",
+  "sys_version": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]"
+ },
+ "recorded_utc": "2026-11-04T01:57:10.060775Z",
+ "schema": "nautilus-bridge-handoff/1",
+ "stub_interpreter": {
+  "python": "C:\\Users\\whydi\\AppData\\Local\\quantgen\\py313\\python.exe",
+  "sys_executable": "C:\\Users\\whydi\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe"
+ },
+ "suite": {
+  "mtime_utc": "2026-11-01T07:52:25.169004Z",
+  "path": "C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\qa\\acceptance_results.json",
+  "rows": []
+ },
+ "timing": {
+  "error": "RuntimeError: no venv python: see the venv part",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1842, in _part\n    report[name] = fn()\n                   ~~^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1945, in <lambda>\n    _part(rep, \"timing\", lambda: run_timing(_need(python), unshare))\n                                            ~~~~~^^^^^^^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1885, in _need\n    raise RuntimeError(\"no venv python: see the venv part\")\nRuntimeError: no venv python: see the venv part\n"
+ },
+ "unshare": null,
+ "venv": {
+  "error": "BridgeRefusal: R-03: 0 nautilus_trader dist-info dirs in 'C:\\\\Users\\\\whydi\\\\AppData\\\\Local\\\\quantgen\\\\ntvenv\\\\Lib\\\\site-packages'",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1842, in _part\n    report[name] = fn()\n                   ~~^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1891, in _venv_part\n    return {\"python\": str(python), \"reads\": launch.read_venv(python)}\n                                            ~~~~~~~~~~~~~~~~^^^^^^^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\launch.py\", line 191, in read_venv\n    raise BridgeRefusal(\"R-03\", f\"{len(infos)} nautilus_trader dist-info dirs in {str(site)!r}\", VENV_FIX)\ntools.nautilus.launch.BridgeRefusal: R-03: 0 nautilus_trader dist-info dirs in 'C:\\\\Users\\\\whydi\\\\AppData\\\\Local\\\\quantgen\\\\ntvenv\\\\Lib\\\\site-packages'\n"
+ },
+ "venv_mismatches": {
+  "error": "KeyError: 'reads'",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1842, in _part\n    report[name] = fn()\n                   ~~^^\n  File \"C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\tools\\nautilus\\runner.py\", line 1937, in <lambda>\n    _part(rep, \"venv_mismatches\", lambda: launch.venv_mismatches(venv[\"reads\"]))\n                                                                 ~~~~^^^^^^^^^\nKeyError: 'reads'\n"
+ }
+}
