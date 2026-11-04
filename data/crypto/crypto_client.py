@@ -161,7 +161,7 @@ class UpbitPublic:
                 d = str(r.get("candle_date_time_utc") or "")[:10]
                 if d and d not in seen:
                     seen.add(d); fresh += 1
-                    # A day without all four prices is left out, not priced at 0 (§10 NEW-M6-15);
+                    # A day without all four prices is left out, not priced at 0 (D12-03, Upbit daily prices only);
                     # it is not counted, so paging continues until `days` usable days.
                     if all(price_or_none(r.get(k)) is not None for k in _UPBIT_PRICES):
                         rows[d] = r

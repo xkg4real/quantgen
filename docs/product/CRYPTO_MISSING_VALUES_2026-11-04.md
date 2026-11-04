@@ -34,7 +34,7 @@ other limitation of the same model already carries its own error ID.
 | Where | Before | After |
 | --- | --- | --- |
 | `data/crypto/crypto_client.py` premium index | missing index → 0.0 %, missing mark → −100 %, missing next funding time → 1970-01-01 | `premium_pct`, `mark`, `index`, `next_funding_time` are `None` when missing |
-| Upbit daily candles | a day without a close (or open/high/low) became 0.0 (premium −100 %) | the day is left out and not counted, so paging continues to the requested number of usable days (also D12-03) |
+| Upbit daily candles | a day without a close (or open/high/low) became 0.0 (premium −100 %) | the day is left out and not counted, so paging continues to the requested number of usable days (the Upbit daily part of D12-03, not §10; see Not changed) |
 | Upbit ticker | a missing price, change or 24-hour value became 0.0 | `None` |
 | Binance funding rate in the premium index | missing → 0.0, read by the AI as a 0 % rate | `None` |
 | `core/crypto/analytics.py` `kimchi_premium` | z = 0 for a flat window; `last_z` 0.0 when not computed; zero or missing prices entered the premium | z and `last_z` are NaN when undefined; days without a usable Upbit or Binance price are left out, and an unusable FX fixing is skipped so the previous one carries forward |
@@ -62,6 +62,14 @@ tolerance, float rounding of a constant window gave z ≈ ±1.
   (V01-01), synthetic FX labelled LIVE (D03-01, D03-08), USDT basis (DF-06), today's
   incomplete bar (DF-03), page-wide failure when Binance futures fail (SFV-01) and speed
   (P01-09).
+- D12-03 (audit, fix group PT-18) is only partly addressed. The register gives the M6-01
+  limitation "a missing Upbit close becomes 0.0 and last_pct reads −100 %" to D12-03, not
+  to NEW-M6-15. This change covers that case: `UpbitPublic.daily` leaves out a day without
+  its four prices, and `kimchi_premium` leaves out days without a usable Upbit or Binance
+  price and skips an unusable FX fixing. Still open under PT-18: `Candles.to_history` and
+  `Bars.to_history` bypass `_clean_rows`, `BinancePublic.daily` passes `"0"` or `"inf"`
+  into its candles, `data/kis_markets._bars` passes `inf`, and missing Upbit volumes
+  still read as 0.0.
 - Real Upbit and Binance replies are not used. How Upbit answers a list with an
   unknown market is unverified. The per-market retry covers both a whole-list
   rejection and a partial answer.

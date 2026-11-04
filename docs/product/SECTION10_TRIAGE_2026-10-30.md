@@ -238,7 +238,10 @@ unlabelled M6-11 limitations (zero-valued unpriced holdings in a complete-lookin
 a batch ticker failure erasing all holdings, a missing mark/index read as 0% or −100%,
 the cost basis without a unit). All four are corrected, so both IDs are covered while
 their exact pairing stays ambiguous. Valid-data kimchi results are unchanged on 40
-synthetic histories. See `CRYPTO_MISSING_VALUES_2026-11-04.md`.
+synthetic histories. A missing Upbit close no longer reads as a −100 % premium (the
+day is left out); the register gives that case to D12-03 (audit, PT-18), not to a §10 ID,
+so it is only the Upbit daily part of D12-03 and the rest of D12-03 stays open. See
+`CRYPTO_MISSING_VALUES_2026-11-04.md`.
 
 Latest source implementation count: **24/67**, **43** remaining. Partial
 NEW-M6-02, the 14 observation models and the remaining ambiguous mappings stay open.

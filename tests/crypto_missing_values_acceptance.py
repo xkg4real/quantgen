@@ -1,4 +1,4 @@
-"""§10 Crypto rework (NEW-M6-14, NEW-M6-15, NEW-M6-22): a missing value stays missing.
+"""§10 Crypto rework (NEW-M6-14, NEW-M6-15, NEW-M6-22; the Upbit daily part of D12-03): a missing value stays missing.
 
 Before: a missing Upbit close became 0.0 (premium -100%), a missing perpetual mark or
 index price gave 0% or -100%, a coin without a KRW price was valued at 0 inside a total

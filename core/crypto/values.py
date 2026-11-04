@@ -1,4 +1,4 @@
-"""Provider numbers: a missing value stays missing (§10 NEW-M6-14, NEW-M6-15, NEW-M6-22).
+"""Provider numbers: a missing value stays missing (§10 NEW-M6-14, NEW-M6-22; the Upbit daily part of D12-03).
 
 Shared by the provider parsers (data/crypto) and the analytics (core/crypto), so both
 layers agree on what counts as missing.

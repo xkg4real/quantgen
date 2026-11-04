@@ -74,7 +74,8 @@ def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
                    usdkrw: dict[str, float], *, z_window: int = 365, horizon: int = 7) -> KimchiPremium:
     """Inputs are {date: close} dicts; USD/KRW is forward-filled by date because
     the FX fixing has no weekend rows."""
-    # Rows without a usable price are left out: a missing close must not read as -100% (§10 NEW-M6-15).
+    # Rows without a usable price are left out: a missing close must not read as -100%
+    # (D12-03, kimchi premium inputs only; the rest of D12-03 stays open under PT-18).
     def usable(x):
         return price_or_none(x) is not None
     dates = sorted(d for d in set(upbit_krw) & set(binance_usdt) if usable(upbit_krw[d]) and usable(binance_usdt[d]))
