@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2
 next_ids: ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-04T04:05:00+09:00
+updated_at: 2026-11-04T16:35:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/ui-markets-watchlist-20261104
@@ -100,7 +100,13 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
   - **main 동결 중이라 PR은 만들되 병합하지 않습니다.** 소유자는 별도 폴더에 이 브랜치를 받아 실행합니다(Step 7A용 기본 클론은 건드리지 않음).
   - 1단계: 읽기 전용 지도 워크플로 `wf_c6fd7578-be3`(시장 구조, 공급자·관측일 칸, 검색, 한 종목 화면, 글자) 실행 중.
 
-- **main 병합 동결 중 (2026-11-04 03:36:05 KST부터).** 소유자 결정 원문은 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`
+- **main 동결 해제 (U4-나, 2026-11-04 16:3x KST).** 소유자 결정 원문은 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`
+  "2026-11-04, Claude Code 채팅: main 병합 동결 해제 (U4-나)"(기록 커밋 `24e9ece`, PR #70 병합 `f455710`).
+  해제 조건인 7A.3 묶음 커밋 `563db54`가 연구 브랜치에 있습니다. 러너의 정식 실행 git 검사(R-01·R-02)는
+  HEAD와 작업 트리만 보므로 main이 움직여도 파일럿은 막히지 않습니다. 다시 "CI 통과 시 Claude 병합"입니다.
+  **연구 브랜치 `claude/amazing-gauss-tdiguu`와 PR #4는 Step 7A 세션 담당이며, 7A.5부터 Step 10까지 main을 연구
+  브랜치에 합치지 않습니다(H-D5).** 보류했던 병합 순서: PR #68(Crypto) → 옵션 브랜치 PR → 화면 개편 PR.
+- (이력) **main 병합 동결 (2026-11-04 03:36:05 KST ~ PR #70 병합).** 소유자 결정 원문은 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`
   "2026-11-04, Claude Code 채팅: Step 7A 동안 main 병합 동결"에 있습니다(커밋 `b00cb42`).
   - **동결 시작점:** PR #69 병합 커밋 `bb35b3b4bf4bf1eb602d138a396ac90e253c035b`(2026-11-04 03:36:05 KST). 이 병합 직후부터
     Step 7A 세션의 7A.3 커밋이 `claude/amazing-gauss-tdiguu`에 들어갈 때까지 **어떤 PR도 main에 병합하지 않습니다**
