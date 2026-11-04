@@ -411,3 +411,45 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
     고쳤습니다. 저장소 도구(`tools.compliance.check --refresh-baseline --documents 12`)가 요구하는 것입니다.
 - **연구 브랜치:** 이 세션은 `claude/amazing-gauss-tdiguu`를 건드리지 않습니다. Step 7A 세션이 이 병합 뒤의 `main`을 연구
   브랜치에 합칩니다. 이 파일에도 양쪽 추가분이 있어 그때 합칠 곳이 생깁니다.
+
+## 2026-11-04, Claude Code 채팅: main 병합 동결 해제 (U4-나)
+
+> [소유자 결정 전달 · 2026-11-04 · Geon Koh]
+> U4 = (나) main 병합 동결을 지금 해제합니다.
+> 근거: 동결 해제 조건인 "모두 통과한 7A.3 묶음 커밋"이 연구 브랜치에 563db54(11-04 15:38 KST)로 push됐습니다.
+> 7A.4 검토 커밋은 Step 7A 세션이 준비해 두었고, push는 소유자 승인 대기 중입니다.
+>
+> 메인 세션이 할 일:
+> 1. 해제 전에 확인: 러너의 정식 실행 git 검사(R-01·R-02 등)가 "origin/main이 연구 브랜치 HEAD의 조상"인지를
+>    요구하는지 tools/nautilus/runner.py에서 확인하세요. 요구한다면 해제하지 말고 결과를 보고해 주세요
+>    (해제하면 파일럿이 막힙니다).
+> 2. 문제가 없으면, 이 결정을 원문 그대로 main의 docs/nautilus_bridge/OWNER_RULINGS_LOG.md에 기록하세요
+>    (평소 PR 경로로). 연구 브랜치에는 기록하지 마세요.
+> 3. 보류했던 main PR 병합을 재개하세요.
+> 4. 연구 브랜치 claude/amazing-gauss-tdiguu는 건드리지 마세요. push, main 병합, tools/nautilus·tests/nautilus_*·
+>    RUNBOOK·스펙 수정 모두 하지 않습니다(Step 7A 세션 담당). 7A.5부터 Step 10까지는 main을 연구 브랜치에
+>    합치지 않습니다(H-D5).
+> 5. 인계 문서(CURRENT.md) checkpoint에 "main 동결 해제(U4-나)"를 반영하고, main에 병합하는 다른 사람·에이전트에게
+>    해제를 알려 주세요.
+> 6. 끝나면 기록 커밋 해시와 병합한 PR 목록을 보고해 주세요.
+
+- **해제 전 확인 결과 (1번):** 러너의 정식 실행 git 검사는 `origin/main`의 조상 관계를 요구하지 않습니다.
+  확인한 연구 브랜치 HEAD는 `83ee469`(563db54 다음 커밋)이며, 연구 브랜치는 읽기만 했습니다.
+  - `tools/nautilus/runner.py` `check_tree`(475행~)가 실행하는 git 명령은 `rev-parse HEAD`(483행)와
+    `status --porcelain=v1 -z --untracked-files=all`(485행) 둘뿐입니다. `tree_refusal`(510행~)은
+    R-02(HEAD를 읽지 못함·기준점 문제)와 R-01(정리되지 않은 경로)만 판정합니다.
+  - 기준점은 `core/quant/gate_ledger.py` `repo_anchor`가 `.git/HEAD`에서 읽은 `git:<HEAD 커밋>`입니다.
+  - `tools/nautilus/register_e1.py`(128행)는 같은 `check_tree`를 씁니다.
+  - 인계 보고서(`runner.py` 1930~1932행)는 `rev-parse HEAD`, `rev-parse origin/claude/amazing-gauss-tdiguu`,
+    `status`를 기록만 하고 막지 않습니다.
+  - `tools/nautilus/` 전체에 `origin/main`, `merge-base`, `is-ancestor`, `rev-list`, `fetch`가 없습니다.
+  - `origin/main` 조상 검사는 RUNBOOK 7A.2의 git 두 줄(85~86행)과 7A.1 서명 절차(41~42행)에만 있습니다.
+    7A.5는 `git pull --ff-only`만 실행합니다. 따라서 해제해도 파일럿은 막히지 않습니다.
+  - 남는 점: 7A.4 검토 뒤 7A.2를 다시 실행해야 하는 경우, 그 git 두 줄은 main이 움직였으면 멈춥니다.
+    H-D5에 따라 그때도 main을 연구 브랜치에 합치지 않으므로, 재실행 방법은 Step 7A 세션이 정합니다.
+- **반영:**
+  - 이 기록의 병합으로 main 병합 동결(2026-11-04 03:36:05 KST, PR #69 병합 `bb35b3b`부터)을 끝냅니다.
+    "CI 통과 시 Claude 병합"을 다시 적용합니다.
+  - 연구 브랜치 `claude/amazing-gauss-tdiguu`와 PR #4는 건드리지 않습니다. 7A.5부터 Step 10까지 main을 연구
+    브랜치에 합치지 않습니다(H-D5).
+  - 보류했던 PR은 각자 main을 합치고 CI가 통과한 뒤 병합합니다. 순서는 PR #68(Crypto), 옵션 브랜치, 화면 개편입니다.
