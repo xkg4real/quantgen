@@ -48,8 +48,8 @@
  "egress": {
   "base_python": "C:\\Users\\whydi\\AppData\\Local\\quantgen\\py313\\python.exe",
   "control_connect": {
-   "error": "TimeoutError: timed out",
-   "ok": false
+   "error": "",
+   "ok": true
   },
   "layer": "QUANTGEN-nautilus-block-out",
   "platform_tag": "win_amd64",
@@ -58,7 +58,7 @@
    "errno": 13,
    "error": "PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions"
   },
-  "recorded_utc": "2026-11-04T03:13:20.040404Z",
+  "recorded_utc": "2026-11-04T06:03:06.787590Z",
   "schema": "nautilus-bridge-egress/1",
   "venv_python": "C:\\Users\\whydi\\AppData\\Local\\quantgen\\ntvenv\\Scripts\\python.exe"
  },
@@ -3091,14 +3091,14 @@
    "exit": 0,
    "stderr": "",
    "stdout": [
-    "fe37e821adf75301041d1b5b3b7591c76f6e444a"
+    "e07da98602e64942ae88e7e4e293c016455b4d3e"
    ]
   },
   "origin_branch": {
    "exit": 0,
    "stderr": "",
    "stdout": [
-    "fe37e821adf75301041d1b5b3b7591c76f6e444a"
+    "e07da98602e64942ae88e7e4e293c016455b4d3e"
    ]
   },
   "status": {
@@ -3131,362 +3131,356 @@
   "sys_executable": "C:\\Users\\whydi\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe",
   "sys_version": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]"
  },
- "recorded_utc": "2026-11-04T03:13:14.579094Z",
+ "recorded_utc": "2026-11-04T06:02:45.196727Z",
  "schema": "nautilus-bridge-handoff/1",
  "stub_interpreter": {
   "python": "C:\\Users\\whydi\\AppData\\Local\\quantgen\\py313\\python.exe",
   "sys_executable": "C:\\Users\\whydi\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe"
  },
  "suite": {
-  "mtime_utc": "2026-11-04T02:52:44.280028Z",
+  "mtime_utc": "2026-11-04T04:10:16.783943Z",
   "path": "C:\\Users\\whydi\\OneDrive\\Desktop\\QUANTGEN\\qa\\acceptance_results.json",
   "rows": [
    {
-    "detail": "AssertionError: ",
-    "seconds": 8.7993,
-    "status": "FAIL",
-    "test": "macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache"
-   },
-   {
     "detail": "",
-    "seconds": 0.7946,
+    "seconds": 0.3277,
     "status": "PASS",
     "test": "nautilus/test_l1_01_return_reconstruction_f1_f1r_f2"
    },
    {
     "detail": "",
-    "seconds": 15.6949,
+    "seconds": 7.3553,
     "status": "PASS",
     "test": "nautilus/test_l1_02_parity_functions"
    },
    {
     "detail": "",
-    "seconds": 3.8564,
+    "seconds": 1.8571,
     "status": "PASS",
     "test": "nautilus/test_l1_03_children_start_after_registration"
    },
    {
     "detail": "",
-    "seconds": 1.5255,
+    "seconds": 0.7373,
     "status": "PASS",
     "test": "nautilus/test_l1_04_broken_chain_stops_before_children"
    },
    {
     "detail": "",
-    "seconds": 14.5098,
+    "seconds": 6.3105,
     "status": "PASS",
     "test": "nautilus/test_l1_05_rerun_policy_r17"
    },
    {
     "detail": "",
-    "seconds": 3.8291,
+    "seconds": 1.7451,
     "status": "PASS",
     "test": "nautilus/test_l1_06_tree_refusals_r01_r02"
    },
    {
     "detail": "",
-    "seconds": 6.0625,
+    "seconds": 2.1893,
     "status": "PASS",
     "test": "nautilus/test_l1_07_data_refusals_r04_r05_r06"
    },
    {
     "detail": "",
-    "seconds": 1.76,
+    "seconds": 0.7085,
     "status": "PASS",
     "test": "nautilus/test_l1_08_cost_refusals_r07"
    },
    {
     "detail": "",
-    "seconds": 3.3423,
+    "seconds": 1.493,
     "status": "PASS",
     "test": "nautilus/test_l1_09_place_and_content_refusals_r10"
    },
    {
     "detail": "",
-    "seconds": 0.2015,
+    "seconds": 0.0792,
     "status": "PASS",
     "test": "nautilus/test_l1_10_config_id_equals_strategy_lab"
    },
    {
     "detail": "",
-    "seconds": 0.139,
+    "seconds": 0.0583,
     "status": "PASS",
     "test": "nautilus/test_l1_11_register_result_row_md5"
    },
    {
     "detail": "",
-    "seconds": 0.0994,
+    "seconds": 0.0388,
     "status": "PASS",
     "test": "nautilus/test_l1_12_census_judgement"
    },
    {
     "detail": "",
-    "seconds": 3.3332,
+    "seconds": 1.4322,
     "status": "PASS",
     "test": "nautilus/test_l1_13_parity_failure_withholds_without_card"
    },
    {
     "detail": "",
-    "seconds": 19.1922,
+    "seconds": 6.4284,
     "status": "PASS",
     "test": "nautilus/test_l1_14_gate_unchanged_and_g04"
    },
    {
     "detail": "",
-    "seconds": 1.1621,
+    "seconds": 0.2585,
     "status": "PASS",
     "test": "nautilus/test_l1_15_encoding_rules_hold"
    },
    {
     "detail": "",
-    "seconds": 0.1449,
+    "seconds": 0.0496,
     "status": "PASS",
     "test": "nautilus/test_l1_16_launch_builder_matches_the_contract"
    },
    {
     "detail": "",
-    "seconds": 4.1386,
+    "seconds": 0.4528,
     "status": "PASS",
     "test": "nautilus/test_l1_17_venv_reads_and_wheel_identity"
    },
    {
     "detail": "",
-    "seconds": 2.5648,
+    "seconds": 0.7689,
     "status": "PASS",
     "test": "nautilus/test_l1_18_gate_bootstrap_b_refusal_r08"
    },
    {
     "detail": "",
-    "seconds": 5.0695,
+    "seconds": 0.7103,
     "status": "PASS",
     "test": "nautilus/test_l1_19_table_refusals_r11"
    },
    {
     "detail": "",
-    "seconds": 0.9628,
+    "seconds": 0.0986,
     "status": "PASS",
     "test": "nautilus/test_l1_20a_p0a_against_the_study_loaders"
    },
    {
     "detail": "",
-    "seconds": 8.9382,
+    "seconds": 2.7521,
     "status": "PASS",
     "test": "nautilus/test_l1_20b_p0b_benchmark_withholds"
    },
    {
     "detail": "",
-    "seconds": 0.6336,
+    "seconds": 0.396,
     "status": "PASS",
     "test": "nautilus/test_l1_21_select_matched_reproduces_wf_qg"
    },
    {
     "detail": "",
-    "seconds": 0.071,
+    "seconds": 0.0443,
     "status": "PASS",
     "test": "nautilus/test_l1_22_global_interpreter_has_no_nautilus"
    },
    {
     "detail": "",
-    "seconds": 2.3237,
+    "seconds": 0.7261,
     "status": "PASS",
     "test": "nautilus/test_l1_23_egress_refusals_r14"
    },
    {
     "detail": "",
-    "seconds": 2.8484,
+    "seconds": 0.4555,
     "status": "PASS",
     "test": "nautilus/test_l1_24_ledger_and_host_refusals_r15"
    },
    {
     "detail": "",
-    "seconds": 0.179,
+    "seconds": 0.0502,
     "status": "PASS",
     "test": "nautilus/test_l1_25_lock_and_freshness_r16"
    },
    {
     "detail": "",
-    "seconds": 9.9854,
+    "seconds": 2.317,
     "status": "PASS",
     "test": "nautilus/test_l1_26a_lifecycle_records_and_exits"
    },
    {
     "detail": "",
-    "seconds": 9.5596,
+    "seconds": 3.4043,
     "status": "PASS",
     "test": "nautilus/test_l1_26b_ledger_moved_g05"
    },
    {
     "detail": "",
-    "seconds": 63.4965,
+    "seconds": 25.1028,
     "status": "PASS",
     "test": "nautilus/test_l1_27_child_failures_and_doctored_manifests"
    },
    {
     "detail": "",
-    "seconds": 12.1892,
+    "seconds": 3.3692,
     "status": "PASS",
     "test": "nautilus/test_l1_28_card_and_record_bytes"
    },
    {
     "detail": "",
-    "seconds": 20.138,
+    "seconds": 4.4927,
     "status": "PASS",
     "test": "nautilus/test_l1_29_trial_counts_protocol_and_reference_drift"
    },
    {
     "detail": "",
-    "seconds": 13.1767,
+    "seconds": 3.2303,
     "status": "PASS",
     "test": "nautilus/test_l1_30_card_labels_and_engine_text"
    },
    {
     "detail": "",
-    "seconds": 17.4898,
+    "seconds": 4.6471,
     "status": "PASS",
     "test": "nautilus/test_l1_31_walk_forward_raise_g03"
    },
    {
     "detail": "",
-    "seconds": 0.3284,
+    "seconds": 0.041,
     "status": "PASS",
     "test": "nautilus/test_l1_33_goldens_equal_the_spec_tables"
    },
    {
     "detail": "",
-    "seconds": 5.2382,
+    "seconds": 1.4369,
     "status": "PASS",
     "test": "nautilus/test_l1_34_write_record_retries_and_fallback"
    },
    {
     "detail": "",
-    "seconds": 0.2055,
+    "seconds": 0.0676,
     "status": "PASS",
     "test": "nautilus/test_l1_35_record_baseline_rules"
    },
    {
     "detail": "",
-    "seconds": 0.269,
+    "seconds": 0.1212,
     "status": "PASS",
     "test": "nautilus/test_l1_36_fingerprint_reads_no_data"
    },
    {
     "detail": "",
-    "seconds": 11.3257,
+    "seconds": 15.7273,
     "status": "PASS",
     "test": "nautilus/test_l2_01_check_env_pins_identity_precision"
    },
    {
     "detail": "",
-    "seconds": 27.0285,
+    "seconds": 5.3074,
     "status": "PASS",
     "test": "nautilus/test_l2_02_f1_f2_match_goldens"
    },
    {
     "detail": "",
-    "seconds": 10.3564,
+    "seconds": 2.6264,
     "status": "PASS",
     "test": "nautilus/test_l2_03_n1_matches_golden"
    },
    {
     "detail": "",
-    "seconds": 39.4239,
+    "seconds": 10.2845,
     "status": "PASS",
     "test": "nautilus/test_l2_04_fills_identical_across_processes"
    },
    {
     "detail": "",
-    "seconds": 470.4751,
+    "seconds": 152.3701,
     "status": "PASS",
     "test": "nautilus/test_l2_05a_refusals_exit_20_before_the_engine"
    },
    {
     "detail": "",
-    "seconds": 54.1197,
+    "seconds": 10.0112,
     "status": "PASS",
     "test": "nautilus/test_l2_05b_input_linked_to_env_refused"
    },
    {
     "detail": "",
-    "seconds": 15.1246,
+    "seconds": 5.0833,
     "status": "PASS",
     "test": "nautilus/test_l2_06_census_matches_platform_baseline"
    },
    {
     "detail": "",
-    "seconds": 87.4229,
+    "seconds": 26.8621,
     "status": "PASS",
     "test": "nautilus/test_l2_07_synthetic_end_to_end_rehearsal"
    },
    {
     "detail": "",
-    "seconds": 3.2874,
+    "seconds": 1.8137,
     "status": "PASS",
     "test": "nautilus/test_l2_08_guard_selftest_outcomes"
    },
    {
     "detail": "",
-    "seconds": 0.4559,
+    "seconds": 0.1649,
     "status": "PASS",
     "test": "nautilus/test_l2_09_egress_probe_blocked"
    },
    {
     "detail": "",
-    "seconds": 4.516,
+    "seconds": 3.5758,
     "status": "PASS",
     "test": "nautilus/test_l2_10_timeout_kills_the_child_tree"
    },
    {
     "detail": "",
-    "seconds": 246.8586,
+    "seconds": 85.0764,
     "status": "PASS",
     "test": "nautilus/test_l2_11_n6_stress"
    },
    {
     "detail": "",
-    "seconds": 105.8813,
+    "seconds": 31.9517,
     "status": "PASS",
     "test": "nautilus/test_l2_12_crypto_rehearsal_reference"
    },
    {
     "detail": "",
-    "seconds": 0.6668,
+    "seconds": 0.1432,
     "status": "PASS",
     "test": "nautilus/test_px_census_parser_reads_importtime_lines"
    },
    {
     "detail": "",
-    "seconds": 2.3991,
+    "seconds": 2.0684,
     "status": "PASS",
     "test": "nautilus/test_px_egress_probe_imports_json_and_socket_only"
    },
    {
     "detail": "",
-    "seconds": 0.3675,
+    "seconds": 0.044,
     "status": "PASS",
     "test": "nautilus/test_px_env_example_and_env_pins"
    },
    {
     "detail": "",
-    "seconds": 0.2689,
+    "seconds": 0.0335,
     "status": "PASS",
     "test": "nautilus/test_px_fixture_inputs_follow_6_1_and_8_2"
    },
    {
     "detail": "",
-    "seconds": 0.1893,
+    "seconds": 0.0432,
     "status": "PASS",
     "test": "nautilus/test_px_requirements_nautilus_pins_and_header"
    },
    {
     "detail": "",
-    "seconds": 0.4029,
+    "seconds": 0.0911,
     "status": "PASS",
     "test": "nautilus/test_px_sandbox_avoids_excluded_constructs"
    },
    {
-    "detail": "AssertionError: probe_appends changed guarded files (spec 3.3): ['C:\\\\Users\\\\whydi\\\\AppData\\\\Local\\\\Temp\\\\qgnb_l132_zy0acejw\\\\E1.jsonl']",
-    "seconds": 0.1941,
-    "status": "FAIL",
+    "detail": "",
+    "seconds": 0.0807,
+    "status": "PASS",
     "test": "nautilus/test_l1_32_every_test_guarded_and_ledgers_unchanged"
    }
   ]
@@ -3507,24 +3501,24 @@
    0,
    0
   ],
-  "import_us": 1276297,
+  "import_us": 1936529,
   "runs": 12,
   "seconds": [
-   2.281,
-   2.312,
-   2.304,
-   2.704,
-   2.746,
-   2.324,
-   2.56,
-   2.346,
-   2.321,
-   2.329,
-   2.471,
-   2.551
+   3.778,
+   3.305,
+   2.888,
+   2.943,
+   3.237,
+   2.986,
+   2.686,
+   2.604,
+   2.501,
+   2.509,
+   2.709,
+   2.992
   ],
   "timed_module": "nautilus_trader.backtest.engine",
-  "total_s": 29.249
+  "total_s": 35.138
  },
  "unshare": null,
  "venv": {
