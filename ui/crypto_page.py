@@ -22,7 +22,7 @@ from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
 import ui.xcharts as xc
 from core.research.crypto_workflow import (_synthetic, _live, analyze, narrative, payload, CRYPTO_DAYS,
-                                          cost_basis_text, holdings_summary, perp_premium_pct, z_text)
+                                          cost_basis_text, holdings_summary, perp_premium_pct, z_short_window, z_text)
 from core.research.decay_disclosure import decay_value, decay_text
 
 
@@ -56,11 +56,12 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
                                   chip(f"USD/KRW: {a['usdkrw_source']}"), chip(f"{kp.n} premium days")] +
                                  [chip(f"{k.split('_', 2)[-1]}: {v}" + (" · historical, not revalidated" if k == "M_C4_funding" else ""), "success" if v == "PASS" and k != "M_C4_funding" else "muted") for k, v in a["verdicts"].items()],
                                  spacing=6, wrap=True))
-            perp, z = perp_premium_pct(a["premium_index"]), z_text(kp.last_z, 2)
+            perp, z, zw = perp_premium_pct(a["premium_index"]), z_text(kp.last_z, 2), z_short_window(kp)
             blocks.append(ft.Row([
                 stat("Kimchi premium", f"{kp.last_pct:+.2f}%", token="error" if abs(kp.last_pct) > 3 else "text"),
-                stat("Premium z (1y)", z or "n/a",
-                     tooltip="" if z else "Not computed: fewer than 91 observations or no variation in the window."),
+                stat(f"Premium z ({zw} obs)" if zw else "Premium z (1y)", z or "n/a",
+                     tooltip=("Not computed: fewer than 91 observations or no variation in the window." if not z else
+                              f"Less than a year of history: the z uses the {zw} earlier observations." if zw else "")),
                 stat("AR(1) amplitude half-life", decay_value(getattr(kp, "decay", None)), tooltip=decay_text(getattr(kp, "decay", None)) + " Unit: observations."),
                 stat("Funding (ann.)", f"{fc.last_ann_pct:+.1f}%" if fc else "n/a", token="error" if fc and fc.flag != "normal" else "text",
                      tooltip=fc.flag if fc else ""),

@@ -144,6 +144,16 @@ def z_text(z, digits=1) -> str | None:
     return f"{z:+.{digits}f}" if z is not None and math.isfinite(z) else None
 
 
+def z_short_window(kp, year: int = 365) -> int | None:
+    """The observations behind the latest z when they are fewer than a year's 365, else None.
+
+    The z is the one-year z, but on a history of 91 to 365 observations its window is shorter;
+    the screens and narratives then name the real window instead of "one year" (§10 NEW-M6-15).
+    """
+    w = getattr(kp, "last_z_window", 0) or 0
+    return w if 0 < w < year else None
+
+
 def cost_basis_text(holding) -> str:
     """Upbit's average buy price with its currency, keeping its digits.
 
@@ -168,7 +178,9 @@ def narrative(a: dict) -> str:
     kp, fc, g = a["kimchi"], a["funding"], a["garch"]
     parts = [
         f"Korea pays {kp.last_pct:+.2f} % against the world price for bitcoin ("
-        + (f"{z} standard deviations from its one-year mean; " if (z := z_text(kp.last_z))
+        + ((f"{z} standard deviations from the mean of the {w} earlier observations (less than a year); "
+            if (w := z_short_window(kp)) else f"{z} standard deviations from its one-year mean; ")
+           if (z := z_text(kp.last_z))
            else "z unavailable: fewer than 91 observations or no variation in the window; ")
         + f"average {kp.mean_pct:+.2f} %, peak {kp.max_pct:.1f} % since {kp.dates[0]}); {decay_text(getattr(kp, 'decay', None))} "
         f"(ADF p = {kp.adf_p:.3f}). It is a signal, not a trade: remittance limits, the Travel Rule and the 2027 tax close the arbitrage"
@@ -191,6 +203,7 @@ def payload(a: dict) -> dict:
     """Market commentary only. Holdings stay in the local read-only display."""
     kp, fc = a["kimchi"], a["funding"]
     return {"source": a["source"], "kimchi": {"last_pct": kp.last_pct, "z": kp.last_z if math.isfinite(kp.last_z) else None,
+                                              "z_window": getattr(kp, "last_z_window", 0) or None,
                                               "mean_pct": kp.mean_pct, "max_pct": kp.max_pct,
                                               "half_life_days": kp.half_life_days, "decay": getattr(kp, "decay", None), "adf_p": kp.adf_p, "pred_t": kp.pred_t, "n": kp.n},
             "funding": ({"last_ann_pct": fc.last_ann_pct, "percentile": fc.percentile, "flag": fc.flag, "top_decile_fwd30": fc.top_decile_fwd30,

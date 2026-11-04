@@ -196,6 +196,19 @@ class KimchiZ(NoNetwork):
         window = got.premium_pct[:-1]  # the 199 earlier observations; the current one is not in its own window
         self.assertAlmostEqual(got.last_z, (prem - window.mean()) / window.std(ddof=1))
 
+    def test_a_z_from_less_than_a_year_names_its_window(self):
+        # §10 NEW-M6-15: the "1y" z of a 91-365 observation history uses a shorter window.
+        for n, window in ((60, 0), (91, 90), (120, 119), (365, 364), (366, 365), (400, 365)):
+            premium = np.random.default_rng(n).normal(.02, .004, n)
+            keys, btc, upbit = self.series(n, premium)
+            got = kimchi_premium(upbit, dict(zip(keys, btc)), dict(zip(keys, np.full(n, 1300.))))
+            with self.subTest(n=n):
+                self.assertEqual(got.last_z_window, window)
+                self.assertEqual(W.z_short_window(got), window if 0 < window < 365 else None)
+                if window:
+                    w = got.premium_pct[-1 - window:-1]
+                    self.assertAlmostEqual(got.last_z, (got.premium_pct[-1] - w.mean()) / w.std(ddof=1))
+
     def test_missing_or_zero_prices_are_left_out_not_minus_100(self):
         keys, btc, upbit = self.series(120, np.full(120, .02))
         upbit[keys[-1]] = 0.0          # a missing Upbit close that became 0
@@ -227,6 +240,22 @@ class Texts(NoNetwork):
         self.assertIsNone(body["kimchi"]["z"])
         self.assertIsNone(body["premium_index"]["premium_pct"])
         self.assertIn("+0.4 standard", W.narrative(self.analysis(.4)))
+
+    def test_a_short_window_z_is_not_called_one_year(self):
+        from dataclasses import replace
+        from quantgen_desktop.market_narrative_language import crypto_korean
+        full = self.analysis(.4)
+        self.assertEqual(full["kimchi"].last_z_window, 365)  # the 900-day synthetic history
+        self.assertIn("one-year mean", W.narrative(full)); self.assertIn("일년 평균", crypto_korean(full))
+        self.assertEqual(W.payload(full)["kimchi"]["z_window"], 365)
+        short = dict(full, kimchi=replace(full["kimchi"], last_z_window=119))
+        en, ko = W.narrative(short), crypto_korean(short)
+        self.assertIn("+0.4 standard deviations from the mean of the 119 earlier observations (less than a year)", en)
+        self.assertNotIn("one-year", en)
+        self.assertIn("1년이 안 되는 직전 119개 관측 평균에서 +0.4 표준편차", ko); self.assertNotIn("일년", ko)
+        self.assertEqual(W.payload(short)["kimchi"]["z_window"], 119)
+        none = dict(full, kimchi=replace(full["kimchi"], last_z=float("nan"), last_z_window=0))
+        self.assertIsNone(W.payload(none)["kimchi"]["z_window"])
 
 
 class NativeDisplay(NoNetwork):

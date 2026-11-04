@@ -231,9 +231,13 @@ Actual Windows, provider, research and release acceptance are separate.
 ### 2026-11-04 Crypto missing values (Claude rework)
 
 The owner chose not to recover GPT's private Crypto work; Claude redid it from main
-`c1a4e97`. NEW-M6-15 maps by elimination to the uncomputed 1-year z shown as +0.00;
-z is now NaN when undefined (short history or a flat window) and every screen,
-narrative and payload says it is unavailable. NEW-M6-14 and NEW-M6-22 share the four
+`c1a4e97`. NEW-M6-15 maps by elimination to the M6-01 limitation with two parts: the
+uncomputed 1-year z shown as +0.00, and the "1y" z of a history shorter than a year,
+which uses a 90–364-observation window. z is now NaN when undefined (short history or a
+flat window) and every screen, narrative and payload says it is unavailable; when the
+window is shorter than a year the Flet stat, the narratives and the payload name it.
+The z series keeps its short windows at the start of a sample: they are not displayed
+and only feed the M6-02 regression (NEW-M6-01). NEW-M6-14 and NEW-M6-22 share the four
 unlabelled M6-11 limitations (zero-valued unpriced holdings in a complete-looking total,
 a batch ticker failure erasing all holdings, a missing mark/index read as 0% or −100%,
 the cost basis without a unit). All four are corrected, so both IDs are covered while

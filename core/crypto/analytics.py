@@ -59,6 +59,8 @@ class KimchiPremium:
     btc_usd: np.ndarray = field(repr=False)
     last_pct: float = 0.0
     last_z: float = math.nan           # NaN when the 1-year z cannot be computed
+    last_z_window: int = 0             # observations behind last_z: 365 once the history is long enough, fewer
+                                       # on a shorter history (the '1y' z is then not a year, §10 NEW-M6-15); 0 when NaN
     mean_pct: float = 0.0
     max_pct: float = 0.0
     adf_p: float = 1.0
@@ -113,7 +115,8 @@ def kimchi_premium(upbit_krw: dict[str, float], binance_usdt: dict[str, float],
         slope, t = float(beta[1]), float(beta[1] / se) if se > 0 else float("nan")
     return KimchiPremium(dates=tuple(dates), premium_pct=prem, z_1y=z, btc_usd=us, last_pct=float(prem[-1]),
                          # NaN when fewer than 91 observations or a flat window: shown as unavailable, never +0.00.
-                         last_z=float(z[-1]), mean_pct=float(prem.mean()),
+                         last_z=float(z[-1]), last_z_window=int(min(z_window, prem.size - 1)) if np.isfinite(z[-1]) else 0,
+                         mean_pct=float(prem.mean()),
                          max_pct=float(prem.max()), adf_p=adf_pvalue(prem), half_life_days=half_life(prem),
                          decay=ar1_decay(prem), pred_slope=slope, pred_t=t, n=int(prem.size),
                          note=("USD/KRW forward-filled by date (FRED noon fixing vs UTC-midnight closes: a few hours "
