@@ -12,14 +12,15 @@
     "repository": "https://github.com/xkg4real/quantgen",
     "branch": "claude/s10-crypto-20261104",
     "pull_request": "https://github.com/xkg4real/quantgen/pull/68",
-    "implementation_commit": "5fbb1a3",
+    "implementation_commit": "5f808db",
     "remote_status": "OPEN",
     "merge_commit": null,
     "verified_head": null
   },
   "summary_ko": [
-    "Crypto 화면에서 값이 없을 때 0이나 −100%로 보이던 곳을 '값 없음'으로 표시합니다: 무기한 선물 괴리, 김치 프리미엄 1년 z, Upbit 종가.",
-    "원화 시세가 없는 보유 코인은 0원으로 평가하지 않고, 합계를 '부분 합계'로 표시하며 빠진 코인을 밝힙니다. 평균 매수가에 통화 단위를 붙입니다.",
+    "Crypto 화면에서 값이 없을 때 0이나 −100%로 보이던 무기한 선물 괴리와 김치 프리미엄 1년 z를 '값 없음'으로 표시합니다. 종가가 없는 Upbit 일봉은 −100%로 계산하지 않고 프리미엄 계산에서 뺍니다.",
+    "기록이 1년(관측 365개)보다 짧으면 김치 프리미엄 z가 실제로 쓴 관측 수를 밝힙니다: Flet 'Premium z (N obs)', 영어·한국어 해설, AI 페이로드 z_window.",
+    "원화 시세가 없는 보유 코인은 0원으로 평가하지 않고, 합계를 '부분 합계'로 표시하며 빠진 코인을 밝힙니다. 평균 매수가에 통화 단위를 붙이고, 원화 가격은 소수 자릿수를 유지합니다(0.0189 KRW, 812.5 KRW).",
     "정상 자료의 김치 프리미엄 결과는 바뀌지 않습니다(합성 40건 동일)."
   ],
   "website_impact": {
@@ -33,7 +34,7 @@
       "ui/crypto_page.py"
     ],
     "requested_actions_ko": [
-      "소개사이트가 Crypto 화면의 김치 프리미엄 z·무기한 선물 괴리·보유 평가를 보여 준다면 '값 없음'과 '부분 합계' 표시를 반영할지 검토하세요.",
+      "소개사이트가 Crypto 화면의 김치 프리미엄 z·무기한 선물 괴리·보유 평가를 보여 준다면 '값 없음', '부분 합계', 1년 미만 z의 관측 수 표시와 원화 평균 매수가의 소수 자릿수를 반영할지 검토하세요.",
       "정책 FACTS·01(개인정보 처리)의 2026-11-04 Crypto 절을 웹 Docs에 반영할지 검토하세요.",
       "웹 HTML/소스는 GitHub에 올리지 않습니다."
     ]
@@ -42,14 +43,22 @@
     "tests": [
       {
         "suite": "crypto missing values (new)",
-        "passed": 11
+        "passed": 14
       },
       {
-        "suite": "crypto, AI payload, desktop, prose, Flet runtime, compliance, syntax after main merge",
-        "passed": 94
+        "suite": "crypto, AI payload, desktop, prose, Flet runtime, commentary, runtime syntax after the review fixes (unittest)",
+        "passed": 90
+      },
+      {
+        "suite": "expansion and engine function suites (offline)",
+        "passed": 112
+      },
+      {
+        "suite": "compliance acceptance and export",
+        "passed": null
       }
     ],
-    "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12.",
+    "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.13, network and docs/asset_expansion/cache blocked.",
     "source_review": "20 documents PASS after named refresh; publication BLOCKED",
     "ci": "PENDING",
     "ci_runs": [],
@@ -63,7 +72,9 @@
   },
   "limits_ko": [
     "실제 Upbit·Binance 응답, 특히 KRW 시장이 없는 코인이 섞인 목록에 Upbit가 어떻게 답하는지는 미검증입니다.",
-    "동결 연구 스크립트 docs/asset_expansion_study.py는 같은 계산 불가 경우 +nan을 출력하며, 소유자 승인 없이 바꾸지 않았습니다."
+    "동결 연구 스크립트 docs/asset_expansion_study.py는 같은 계산 불가 경우 +nan을 출력하며, 소유자 승인 없이 바꾸지 않았습니다.",
+    "D12-03은 Upbit 일봉 가격과 김치 프리미엄 입력만 고쳤습니다. Candles.to_history·Bars.to_history의 정제 우회, Binance 일봉, KIS _bars, Upbit 거래량 결측은 PT-18로 남습니다.",
+    "z_1y 시계열의 앞 275개 값은 90~364개 관측 창으로 계산됩니다. 화면에는 나오지 않고 M6-02 예측 회귀에만 쓰이며 바꾸지 않았습니다."
   ],
   "changed_files": [
     ".github/workflows/runtime-smoke.yml",
@@ -81,6 +92,7 @@
     "docs/product/ui_website_updates/PR-68.json",
     "quantgen_desktop/market_narrative_language.py",
     "quantgen_desktop/market_tools.py",
+    "quantgen_desktop/tools.py",
     "tests/crypto_missing_values_acceptance.py",
     "ui/crypto_page.py"
   ]

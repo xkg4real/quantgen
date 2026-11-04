@@ -96,12 +96,14 @@ tolerance, float rounding of a constant window gave z ≈ ±1.
 
 ## Checks
 
-`tests/crypto_missing_values_acceptance.py` (11 tests, offline, sockets refused):
+`tests/crypto_missing_values_acceptance.py` (14 tests, offline, sockets refused):
 
 - provider parsing of missing mark/index/close/price;
+- Upbit daily paging with every 10th, 5th, 3rd or 2nd close missing, and with none usable;
 - the ticker fallback, and no per-coin retry on an outage;
-- holdings valuation and summary;
+- holdings valuation and summary, and KRW cost bases below 1 KRW or with decimals;
 - z for a short and a flat history, and unchanged z for a varying one;
+- the window behind a z from less than a year, and its wording in the narratives and payload;
 - left-out zero/NaN rows;
 - English/Korean narratives and payload;
 - the native pane's cells and note.
