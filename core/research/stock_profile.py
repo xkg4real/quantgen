@@ -49,6 +49,10 @@ FLOW_SESSIONS = 20
 RANGE_SESSIONS = 252
 RANGE_MIN_SESSIONS = 200
 RISK_MIN_SESSIONS = 21           # analyze_history needs 20 returns
+# compute_signals always scores MACD (12/26/9), seeding its EMAs at the first close, while indicator_values shows
+# the MACD line from 26 bars and its 9-session signal line from 26 + 9 - 1 = 34. Signals wait for that length so
+# the view never scores MACD next to an Indicators section that leaves it out.
+SIGNALS_MIN_SESSIONS = 26 + 9 - 1
 INDICATOR_MIN_SESSIONS = 12      # EMA12 is the shortest indicator
 STALE_DAYS = 7                   # the Q-SCORE history-age limit
 RETURN_PERIODS = (("1W", 5), ("1M", 21), ("3M", 63), ("6M", 126), ("1Y", 252))
@@ -501,10 +505,11 @@ def build_profile(instrument, *, candles, quote=None, flows=None, shorts=None, n
         else:
             why["returns"] = "insufficient_history"
             values["returns"] = {"sessions": count, "needed": RETURN_PERIODS[0][1] + 1}
-        for key, compute in (("risk", _risk), ("signals", _signals)):
-            if count < RISK_MIN_SESSIONS:
+        for key, compute, needed in (("risk", _risk, RISK_MIN_SESSIONS),
+                                     ("signals", _signals, SIGNALS_MIN_SESSIONS)):
+            if count < needed:
                 why[key] = "insufficient_history"
-                values[key] = {"sessions": count, "needed": RISK_MIN_SESSIONS}
+                values[key] = {"sessions": count, "needed": needed}
                 continue
             result = compute(series)
             if result is None:

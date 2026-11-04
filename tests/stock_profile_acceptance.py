@@ -371,9 +371,25 @@ class HistoryLengthTests(Base):
         missing = {r.label: r.value for r in en["unavailable"].rows}
         self.assertEqual(missing["52-week range"], "15 sessions · needs at least 200")
         self.assertEqual(missing["Risk"], "15 sessions · needs at least 21")
-        self.assertEqual(missing["Technical signals"], "15 sessions · needs at least 21")
+        self.assertEqual(missing["Technical signals"], "15 sessions · needs at least 34")
         ko = {r.label: r.value for r in by_key(profile, "ko")["unavailable"].rows}
         self.assertEqual(ko["위험 지표"], "15거래일 자료 · 21거래일 이상 필요")
+
+    def test_signals_wait_until_the_indicators_show_macd_and_its_signal_line(self):
+        macd_labels = ["MACD (12/26)", "MACD signal (9)"]
+        for count in (21, 25, 33):
+            en = by_key(self.full(router=router(FakeService(count))), "en")
+            self.assertIn("risk", en)
+            self.assertNotIn("signals", en)
+            shown = [r.label for r in en["indicators"].rows]
+            self.assertFalse(set(macd_labels) <= set(shown), (count, shown))
+            self.assertEqual(row(en["unavailable"], "Technical signals").value,
+                             f"{count} sessions · needs at least 34")
+        en = by_key(self.full(router=router(FakeService(34))), "en")
+        shown = [r.label for r in en["indicators"].rows]
+        self.assertTrue(set(macd_labels) <= set(shown), shown)
+        self.assertIn("MACD (12/26/9)", [r.label for r in en["signals"].rows])
+        self.assertNotIn("Technical signals", [r.label for r in en["unavailable"].rows])
 
     def test_fewer_than_200_sessions_drop_the_range_and_the_returns_they_cannot_reach(self):
         profile = self.full(router=router(FakeService(120)))
