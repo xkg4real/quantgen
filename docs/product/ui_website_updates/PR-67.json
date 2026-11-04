@@ -12,15 +12,15 @@
     "repository": "https://github.com/xkg4real/quantgen",
     "branch": "claude/ui-markets-a4-20261103",
     "pull_request": "https://github.com/xkg4real/quantgen/pull/67",
-    "implementation_commit": "4ece546",
-    "remote_status": "OPEN",
-    "merge_commit": null,
-    "verified_head": null
+    "implementation_commit": "141ebf2",
+    "remote_status": "MERGED",
+    "merge_commit": "7fc53e2c3befa8f60e934aca704967a47e4eb169",
+    "verified_head": "141ebf2b9df826ccf7f191a5ee93d180c656209e"
   },
   "summary_ko": [
     "마우스 휠로 페이지를 내릴 때 포인터 아래의 선택 상자·숫자 상자·탭 값이 바뀌지 않습니다. 휠은 움직일 수 있는 스크롤 영역으로 전달됩니다(UI-3).",
     "채권 금액 칸이 천 단위 구분기호로 표시됩니다(1,000,000). 계산은 같은 값을 씁니다(UI-4).",
-    "Rates·KRX 등 분석 도구 입력 양식의 마지막 줄이 잘리지 않습니다(UI-6a).",
+    "Rates·KRX·ETF 등 분석 도구 입력 양식의 마지막 줄이 잘리지 않습니다(UI-6a). Windows에서만 보이던 잘림은 입력 패널 높이 정책(Maximum) 때문이었고 수정했습니다.",
     "창·작업표시줄 아이콘을 여러 크기로 제공합니다(UI-17). AI 해설 버튼은 항상 응답하고, 동의 없이는 전송하지 않습니다(B3)."
   ],
   "website_impact": {
@@ -41,7 +41,7 @@
       },
       {
         "suite": "broad native regression",
-        "passed": 401
+        "passed": 254
       },
       {
         "suite": "installed-wheel smoke_desktop and smoke_installed",
@@ -54,8 +54,11 @@
     ],
     "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.12.",
     "source_review": "20 documents PASS after named refresh; publication BLOCKED",
-    "ci": "PENDING",
-    "ci_runs": [],
+    "ci": "SUCCESS",
+    "ci_runs": [
+      41681151562,
+      41681151793
+    ],
     "actual_provider_network": "NOT_RUN",
     "user_pc": "Not verified on the owner's Windows PC: real mouse wheel, touchpad and taskbar icon are unverified."
   },

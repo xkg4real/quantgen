@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "9a3d96cf384e2d2c9400c794da2229de9d554f03913a39bcad4cf9301159db12",
+    ".github/workflows/runtime-smoke.yml": "7142fd4b94463a3916ff1c1b4df3c0ae4f32d26ca4ffaba7e63003a7c7ff95c7",
     "README.md": "6a4f572a12e6dea657c7c063240b94d1a928e2b4f41fff25f7348ca69e1b88b5",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -61,8 +61,9 @@
     "core/calendars/regime.py": "fcac664c8f3b2d51ff45c67ef27252b1961b38c944dd785f8162d9ffa579d17b",
     "core/calendars/store.py": "4932ad9cbb4a1914f6b75da84e96a74730444cf2f43c756a7c7dd95efb403041",
     "core/crypto/__init__.py": "239a350b379471bb83ac90f3dc25149814f5f58790604236697daf160f5fcd81",
-    "core/crypto/analytics.py": "1385035b274e89bf7eb643fbb02f3fc86f73ce7ba3542df85a21de43020676f7",
+    "core/crypto/analytics.py": "7d7c846f0a363135592b88699190ac8c7251e159756ffb21bbebc128129dfdbf",
     "core/crypto/funding_diagnostic.py": "19e0763b30e0f838d522c4ceedffd8ad7139b69f7257924532593b9bb02a9270",
+    "core/crypto/values.py": "6254994c3125bb248e9b42d5bbb83edec23943ec8dce99d25f03c0713ea24ee3",
     "core/education/__init__.py": "d04a1be2039032cc6150e474930f58e9f5b1e882d8fad1a6b472c313b5456ad4",
     "core/education/chart.py": "e42562c7fdcbfe5be6743561b1b60a0567ca6da916c292c641c3e84ae6d79771",
     "core/education/glossary.py": "14cbdcaad4eb87cbddbebf79390b94f115693d25b4ab48c2b2bd5f80536c1324",
@@ -155,7 +156,7 @@
     "core/research/analysis.py": "f3867004882d212f49a702b9bfe201a006e56fd0a76f138397a1bcbb11942808",
     "core/research/bond_analysis.py": "0d7b40defdd580db677226483b4a1cc6bf1e5919ea1e9ca39d691376c0b1263f",
     "core/research/connections.py": "f634fe608bcfca39c3841ee7e4bf25524ba4cba8e28658d957d56725c2c56a04",
-    "core/research/crypto_workflow.py": "c84aeb06fff2e5e552ed208d134f86ebc6a0fa626949830fdfd407413b2c8e85",
+    "core/research/crypto_workflow.py": "3e2af208e0a5a94edac709ee086ab871f09413fba9b0c538494a82deaab4a023",
     "core/research/decay_disclosure.py": "98f68bb2b8f8a0ac051865a76313855a323890a4adacd9abe9d0c025c0a934ce",
     "core/research/derivatives_workflow.py": "0597ee855c13663bd4d851320c68115482c3a41e4ea5f68b8f2ca35b91cd70e6",
     "core/research/display_rights.py": "e59554e140ee5ea994812bcaca083c622d94bac1513411bdca58824b6f20e6fb",
@@ -230,7 +231,7 @@
     "data/calendars/XETRA.json": "5df6cbfc3b262716d8f8c0e598031a082c3379a96b52470154b87069544b7f07",
     "data/calendars/index.json": "2b9554ba81120f51804a1df3fcfe0ef810974b660573c8213269074505f35d38",
     "data/crypto/__init__.py": "f07f423c4c4e88823feb526625101d80d90ef5f322a506a73ddf7fbbd292109b",
-    "data/crypto/crypto_client.py": "f799c510e754292d1467004b87266e08b48afa00cc9d7138d7ee1c7c4396f04b",
+    "data/crypto/crypto_client.py": "91207df9f32804321fd9b68db7b652fde425b3f90062f7838ca190132d13d1f3",
     "data/fmp/__init__.py": "23b067ddcc2dee0fd36594e1838eaec90d475fa7b862fc4186de6950ab347d1d",
     "data/fmp/quote_client.py": "89d9dee24b32ea2e6b9dd0570ce89a98310f145a535a7acd79863921d91f09de",
     "data/kis_markets.py": "7bfbce9da1609cae4405e16e3900cf45b4062cb4eb1c2c54e6049cb36bc0025b",
@@ -245,7 +246,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "c167003f2b2dbe37d9bf9271ac2724a7cb7fb66ed106655b846d56f3ff1d612c",
-    "docs/compliance/FACTS.md": "235504cf21846dba1ca582f312f023c4de117beb7dfcf03e01db193450264ce9",
+    "docs/compliance/FACTS.md": "eefc79f4b75d012800b6ac5703c7e6ba26ff04dfc97ac35576ad88b645a4361e",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -259,6 +260,7 @@
     "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md": "3f05520af76a14bbeb8fab8f7db874b25f18e52d4e884ec6b46e305e58f7ca44",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
+    "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "c03dae78c5964bded90065661a0d3dc631f4b650c3baae8eb6875443b11959e6",
     "docs/product/FORWARD_CONVENTION_2026-11-02.md": "a294ca013fa1460c435286a1b2a466630f522d859fc9a43da29927e6c5ffcd86",
@@ -287,7 +289,7 @@
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "9eb917388f941560c928f571d70460513e17b8048630a3dd4abea9aaa635fbd3",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "7e5760a4d315298b267a008aaad88e7142790bc784a2aa294d3629eb1425332e",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
@@ -322,8 +324,8 @@
     "quantgen_desktop/market_board.py": "64a19ff906f9d194135f988d73908fdb063ff9945b8e9da1c69a48b2e38dba5b",
     "quantgen_desktop/market_chart.py": "28d4f14d92ad276ccf1bb5bba241ee108ab63c5340103d38f270fdaeaee3d645",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
-    "quantgen_desktop/market_narrative_language.py": "b8cb8fd3f6b2a75fcd8225d43a2a172365caa237774c6ac45bc0e535655fd15a",
-    "quantgen_desktop/market_tools.py": "814118dc14ade98a391e2cb8200c22becb751cc4f6dab2138ef5802a13c858af",
+    "quantgen_desktop/market_narrative_language.py": "e4e3d3ac3d1ddfdac171d9bb5fd336d1c6e4bc2bd08bbf5862a53784e3587511",
+    "quantgen_desktop/market_tools.py": "dad4b0baa20f8189d20f22c6d7c57d0b86483842f6beb99221707452c02e4449",
     "quantgen_desktop/model_narrative_language.py": "c4d4c826e3416a202cc4167c19a2ccbc233fcbc80239e62a81808092274c0981",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
@@ -334,7 +336,7 @@
     "quantgen_desktop/signals.py": "42c35b809cbb3b2ca20be1d2103f405a4e7564ac9678673d39fa26368bfd96ef",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
-    "quantgen_desktop/tools.py": "d98221d56bd5596ee096d2f77d3437e6c3d35a3d85fb313db281cf018c5d5bdc",
+    "quantgen_desktop/tools.py": "187d1b76279de24b009b8625ac6b89126117a5e3cf1245033f8ba38a272de27a",
     "quantgen_desktop/translations.py": "d2b14ff1f97d28c672483f1506062f385ed459a9b90ec5ba2dfffcf6ea6f552e",
     "quantgen_desktop/watchlist.py": "8261b0eae67e53bb21932fe4fb9d675b6ad158b1fec7ce2de7cc7551264d1969",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
@@ -353,6 +355,7 @@
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
+    "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_acceptance.py": "172aa648792ff58b52d9a73216c53b8be2f1f16976e65f8789866e4014202698",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
@@ -522,7 +525,7 @@
     "ui/bonds_page.py": "93db57961b326872584c3b01600356a1eea9f882c3da55035196b2c1ae691881",
     "ui/chart_study.py": "503ad1e97211fa899cfc77a42dfdd4627c8a5169ed459901872af6875a5192c7",
     "ui/components.py": "41be9f3117f80c1677308355702758897f6d9d30654eb5a4d229d0bf7702a4fd",
-    "ui/crypto_page.py": "6829f7aedd678196a1bb1853044789d7bca0ac40b724006d35ead19942c65101",
+    "ui/crypto_page.py": "f7b0f3b4f1a09b2f9c3a9b3b75f1ef15bb4eb6af5e2c11aa8433f93630e91fd8",
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
     "ui/derivatives_page.py": "ed659a96def9e1b9bddbd0295c6357c47418fb4ba11778a1aecc817c352e1359",
     "ui/etf_page.py": "910b2a27d4ee5264cc79286e8fc48bc985a251d6a0f1727ec6f29daa633c660f",
@@ -552,164 +555,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "e917090c1153867f2f06a3529253445d505584ee0a970e9dc39d347715d12696",
-      "source_digest": "8a342f66702c591b65c74ce74f21a2d8ecc41ef8b692485fc6b5481b400e3ff1",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.733720+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "document_sha256": "15e782f39147b6c9e1c99e19dcdc28ca7b5dee6b6bea6af7457f05fe1fbf64f0",
+      "source_digest": "90fb09028089226f444df29c81479814a4f5fa80a21264ed0cb6c403c87f9992",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.865388+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "8a342f66702c591b65c74ce74f21a2d8ecc41ef8b692485fc6b5481b400e3ff1",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.736077+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "90fb09028089226f444df29c81479814a4f5fa80a21264ed0cb6c403c87f9992",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.868735+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "5dfeb0deb91d81faaa600f4866ad2176c8e7fb1eb42f9cd27e80c3e1c7037f9e",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.737989+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "e016957bb67f34eb4fad3c0a225343cd6c3dbcfab80546e37e3b27dd2688f962",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
+      "reviewed_at": "2026-11-04T08:35:05.975327+00:00",
+      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
     },
     "4": {
       "document_sha256": "52a90f98be494f6873875bf0f0b1785b2f569e1c4750be9481d2ecb36d5cdaac",
-      "source_digest": "750b8f8964083b770f7d78720f33047c6f35cc7932e4afdf2f75ea54cf21d686",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.740383+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "4fd4458d3bf0e0668b5f8d035c4ce35720f67559313798471727295d2cd6c9d8",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
+      "reviewed_at": "2026-11-04T08:35:05.977631+00:00",
+      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "4e2ea01a255573024fbf8ec86a5e1abf2a59859ee716d74de9897d323abffaba",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.742084+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "c61229a32819bd0ef0911e0ce0ccc295e68dfde442f81a9b84d3a7c9bf428a2c",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
+      "reviewed_at": "2026-11-04T08:35:05.979929+00:00",
+      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
     },
     "6": {
       "document_sha256": "9a86db478c03eefb0f6b05fe56c7708dc5559d7670a44cc1c40561ee0a5f0335",
-      "source_digest": "0735f5ed63254b156d895e36cd7be63dc0fc12ef7129769ea06a925573fada77",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.744422+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "acf9d105e9f8dea4afb2750f69773110fc9b18498305fd832edfcb5e8dd69450",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.871702+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "7": {
       "document_sha256": "da59a63d379931b9d397b611a6f1ce61a245d7e33b53f8d96a962fcaa579d21d",
-      "source_digest": "8a342f66702c591b65c74ce74f21a2d8ecc41ef8b692485fc6b5481b400e3ff1",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.746389+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "90fb09028089226f444df29c81479814a4f5fa80a21264ed0cb6c403c87f9992",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.874618+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "8": {
       "document_sha256": "0aa27284556dffcc7b175478898e504746b115bc0612c546fc32a1ed57002a81",
-      "source_digest": "0735f5ed63254b156d895e36cd7be63dc0fc12ef7129769ea06a925573fada77",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.748075+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "acf9d105e9f8dea4afb2750f69773110fc9b18498305fd832edfcb5e8dd69450",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.876724+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "9": {
       "document_sha256": "d0ba0b9e69f01b0c2f38e422a3a234f1d3cfe260947d114ea630af0bd1c8c83d",
-      "source_digest": "c6c1ea38d389bafa855bc303cd5a303ae704da9484746ed5956b9b97a14418e2",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.750000+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "ca44be2631449ceb055dbb6ba1c0544fd1926f73fed935dd0d25194c912061c7",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
+      "reviewed_at": "2026-11-04T08:35:05.989732+00:00",
+      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "2122b34ce46b1ec62ddb3f52bd291eb27d8814d39a70f86aeab0771eef8ff90c",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.752561+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "840fd3470d6846541c3616a53d9b7d7761263aecaaa6f0fb77b7fea81b19946a",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
+      "reviewed_at": "2026-11-04T08:35:05.991805+00:00",
+      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "d7364a9e2d80ef9474bd56c3c54e927625358216e98f8f9db2ca6294d5d531d2",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.754488+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "b4b717678100890c1f36eb48340626977e927763c588fe63e343b0bc73a71585",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
+      "reviewed_at": "2026-11-04T08:35:05.993986+00:00",
+      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "0f48c31bb5a2bae4fbba1d8148e412d62a33d14bc168917fd8cbc4ddd1ad3446",
-      "reviewed_by": "Claude pre-freeze test fix review",
-      "review_note": "Test-only fix: macro UI tests follow the C-format DARK warning colour #E5BE74 and walk only list children (ResponsiveRow.columns is an int); 12-claims text unchanged",
-      "reviewed_at": "2026-11-03T18:26:12.284529+00:00",
-      "source_commit": "3b1ee4fd23e3e44bb3b45b4db3a487cd30f876a6"
+      "source_digest": "fbbec4582a11e2c5f3369001720b604cdbab8a8881340ebce69b3ec9e508bc92",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.881840+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "13": {
       "document_sha256": "609e26253d6ea9098b44836c142c11b4a6bc33966ea7ed9e972c571eff1b6139",
-      "source_digest": "c6c1ea38d389bafa855bc303cd5a303ae704da9484746ed5956b9b97a14418e2",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.758711+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "ca44be2631449ceb055dbb6ba1c0544fd1926f73fed935dd0d25194c912061c7",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
+      "reviewed_at": "2026-11-04T08:35:05.998911+00:00",
+      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
     },
     "14": {
       "document_sha256": "d402c9f37367bed480a24acc886c3f45933b6882b12058b659bab31b575a2bd3",
-      "source_digest": "c6c1ea38d389bafa855bc303cd5a303ae704da9484746ed5956b9b97a14418e2",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.760457+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "ca44be2631449ceb055dbb6ba1c0544fd1926f73fed935dd0d25194c912061c7",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
+      "reviewed_at": "2026-11-04T08:35:06.001033+00:00",
+      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
     },
     "15": {
       "document_sha256": "d72369824a5f3428023178a3690e50844081b050d28f7c2cefd7c7434199c5f1",
-      "source_digest": "c6c1ea38d389bafa855bc303cd5a303ae704da9484746ed5956b9b97a14418e2",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.762816+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "ca44be2631449ceb055dbb6ba1c0544fd1926f73fed935dd0d25194c912061c7",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
+      "reviewed_at": "2026-11-04T08:35:06.003806+00:00",
+      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "8dd1556bd848083fe23a58a725ef575c7a2ba971d58553c27c68573bed01fcf4",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.765944+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "66ac59c28bd3913e79f302b25530a898076c5d16cab77d3ab1f42adb0af8aeae",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "PR-68 review fixes: KRW cost-basis decimals, Upbit daily paging past skipped days, short-window kimchi z labelled with its window, D12-03 attribution, flat-window and retry wording, absolute import, PR-68 record",
+      "reviewed_at": "2026-11-04T08:35:06.006048+00:00",
+      "source_commit": "ed78e6336dfec5bc04504205a865511075c656b5"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "0735f5ed63254b156d895e36cd7be63dc0fc12ef7129769ea06a925573fada77",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.768158+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "acf9d105e9f8dea4afb2750f69773110fc9b18498305fd832edfcb5e8dd69450",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.883817+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "8a342f66702c591b65c74ce74f21a2d8ecc41ef8b692485fc6b5481b400e3ff1",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.772890+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "90fb09028089226f444df29c81479814a4f5fa80a21264ed0cb6c403c87f9992",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.886739+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "19": {
       "document_sha256": "20261f5ce75559081373cbcff1a075a866651822ad505417bc295ab30c9f7a08",
-      "source_digest": "1da0e63b931d6d673302118b731704f3b481ccda177a5ea55dc7299abb04734f",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.774552+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "b50b6d6f0c21ebac0aa04b41e28c2e4f437ddf615fbb35f1b95de7d8fe709779",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.888731+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     },
     "20": {
       "document_sha256": "d4b1fde2264cb0881b23ebc84d6efd8b8e22b41b4966924c7cda2fdf0c9c4f9f",
-      "source_digest": "8a342f66702c591b65c74ce74f21a2d8ecc41ef8b692485fc6b5481b400e3ff1",
-      "reviewed_by": "Claude A2 operation fixes review",
-      "review_note": "A2 Windows fix: the tool input panel is no longer capped at its preferred-width size hint (Maximum policy); FACTS row updated",
-      "reviewed_at": "2026-11-03T17:07:34.776328+00:00",
-      "source_commit": "96709a7adb8e39ebbf496b19a3dad9980004b7a8"
+      "source_digest": "90fb09028089226f444df29c81479814a4f5fa80a21264ed0cb6c403c87f9992",
+      "reviewed_by": "Claude Crypto PR review fixes",
+      "review_note": "KRW cost basis printed from its repr decimal (no float noise for BTC-level averages); crypto_workflow.py and its acceptance test changed",
+      "reviewed_at": "2026-11-04T08:58:29.890804+00:00",
+      "source_commit": "d34e51aea4df4f5c69517870d28bbbdbe07ef7a5"
     }
   }
 }

@@ -80,10 +80,15 @@ def etf_korean(a):
 
 
 def crypto_korean(a):
+    from core.research.crypto_workflow import z_short_window, z_text
     kp, fc, g = a['kimchi'], a['funding'], a['garch']
     parts = [
         f"한국 비트코인 가격은 세계 가격 대비 {kp.last_pct:+.2f} % "
-        f"(일년 평균에서 {kp.last_z:+.1f} 표준편차, {kp.dates[0]} 이후 평균 "
+        + ((f"(1년이 안 되는 직전 {w}개 관측 평균에서 {z} 표준편차, " if (w := z_short_window(kp))
+            else f"(일년 평균에서 {z} 표준편차, ")
+           if (z := z_text(kp.last_z))
+           else '(z는 계산할 수 없습니다: 관측이 91개 미만이거나 기간 내 변동이 없습니다, ')
+        + f"{kp.dates[0]} 이후 평균 "
         f"{kp.mean_pct:+.2f} %, 최고 {kp.max_pct:.1f} %)입니다. "
         f"{decay_korean(getattr(kp, 'decay', None))} (ADF p = {kp.adf_p:.3f}). "
         '신호이지 거래가 아닙니다. 송금 한도, 트래블룰과 2027년 세금이 차익거래를 제약합니다'
