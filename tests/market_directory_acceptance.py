@@ -115,6 +115,41 @@ class RankingTests(Network):
         self.assertEqual([(x.asset, x.code) for x in d.search("apple")[:2]],
                          [("overseas_stock", "AAPL"), ("domestic_stock", "900041")])
 
+    def test_a_word_of_a_domestic_name_is_not_an_exact_name(self):
+        # KIS names ETNs '<issuer> <product> ETN'; the issuer word must not outrank the issuer's stock.
+        d = loaded([("005930", "삼성전자"), ("530036", "삼성 레버리지 WTI원유 선물 ETN", "EN")])
+        self.assertEqual(d.search("삼성")[0].code, "005930")
+        self.assertEqual(codes(d.search("삼성")), ["005930", "207940", "530036"])
+        self.assertIsNone(d.resolve("삼성"))
+        products = ("레버리지 WTI원유 선물", "인버스 2X WTI원유 선물", "레버리지 구리 선물", "KRX 금현물",
+                    "레버리지 천연가스 선물", "인버스 천연가스 선물", "레버리지 은 선물", "인버스 은 선물", "레버리지 금 선물")
+        etns = [(f"5300{i:02d}", f"삼성 {product} ETN", "EN") for i, product in enumerate(products)]
+        d = loaded(etns + [("580001", "KB 레버리지 금 선물 ETN", "EN"), ("500001", "신한 레버리지 WTI원유 선물 ETN", "EN"),
+                           ("006400", "삼성SDI"), ("055550", "신한지주")])
+        found = d.search("삼성")
+        self.assertEqual(len(found), 8)
+        self.assertEqual(codes(found)[:3], ["005930", "207940", "006400"])
+        self.assertEqual([x.kind for x in found], ["stock"] * 3 + ["etn"] * 5)
+        self.assertEqual(codes(d.search("KB")), ["105560", "580001"])
+        self.assertEqual(codes(d.search("신한")), ["055550", "500001"])
+        # A word inside a domestic name is still found, as a substring.
+        self.assertIn("530000", codes(d.search("레버리지", limit=20)))
+        self.assertIn("530000", codes(d.search("ㄹㅂㄹㅈ", limit=20)))
+        # Name prefix outranks substring whatever the kind: the ETF's name starts with the query.
+        d = loaded([("900091", "알파 베타"), ("900090", "베타플러스", "EF")])
+        self.assertEqual(codes(d.search("베타", assets="domestic_stock")), ["900090", "900091"])
+        self.assertEqual(codes(d.search("ㅂㅌ", assets="domestic_stock")), ["900090", "900091"])
+
+    def test_words_of_bundled_overseas_names_still_count_as_name_prefixes(self):
+        # The bundled overseas Korean names list alternative names ('알파벳 A 구글', '메타 페이스북').
+        d = loaded([("011780", "금호석유")])
+        self.assertEqual(codes(d.search("구글")), ["GOOGL", "GOOG"])
+        self.assertEqual(codes(d.search("페이스북"))[:1], ["META"])
+        self.assertEqual(codes(d.search("ㄱㄱ", assets="overseas_stock"))[:2], ["GOOGL", "GOOG"])
+        self.assertIsNone(d.resolve("구글"))
+        # ...but never as exact names: a stock's name prefix ranks before the ETF's word '금'.
+        self.assertEqual(codes(d.search("금")), ["011780", "GLD"])
+
     def test_domestic_code_forms_normalise(self):
         d = SymbolDirectory(master_loader=loader_for())
         for text in ("005930", "A005930", "a005930", "005930.KS", "005930.KQ", "005930.ks", "5930", " 005930 "):

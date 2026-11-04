@@ -184,7 +184,7 @@ def _reason(name: str, exc: BaseException) -> str:
 # Search index
 # --------------------------------------------------------------------------- #
 class _Row:
-    __slots__ = ("listing", "code", "names", "inits", "full", "aliases", "kind_rank", "domestic")
+    __slots__ = ("listing", "code", "names", "inits", "full", "kind_rank", "domestic")
 
     def __init__(self, listing: Listing, aliases=()):
         def norm(text):
@@ -199,13 +199,18 @@ class _Row:
             value = norm(text)
             if value and value not in full:
                 full.append(value)
-        self.full = tuple(full)             # whole names: resolve()
+        self.full = tuple(full)             # whole names: the exact-name rank and resolve()
         names = list(full)
-        for word in listing.name_ko.split():
-            value = norm(word)
-            if value and value not in names:
-                names.append(value)
-        self.aliases = tuple(names)         # whole names and Korean words: search()
+        if not self.domestic:
+            # The bundled overseas Korean names are lists of alternative names
+            # ('알파벳 A 구글', '메타 페이스북'), so each word also counts for the
+            # prefix ranks, as core.market.symbols.search treats them. A word of a
+            # KIS name ('삼성' in '삼성 레버리지 WTI원유 선물 ETN') is not a name of
+            # that issue: it matches as a substring only.
+            for word in listing.name_ko.split():
+                value = norm(word)
+                if value and value not in names:
+                    names.append(value)
         inits = []
         for value in names:
             jamo = initials(value)
@@ -248,13 +253,13 @@ _ID_MASK = (1 << _ID_BITS) - 1
 
 class _Index:
     """Immutable search tables; a load builds a new one and swaps it in whole."""
-    __slots__ = ("rows", "keys_latin", "keys_hangul", "by_code", "by_name", "by_alias",
+    __slots__ = ("rows", "keys_latin", "keys_hangul", "by_code", "by_name",
                  "codes", "names", "code_text", "inits", "domestic_count")
 
     def __init__(self, rows):
         self.rows = tuple(rows)
         keys_latin, keys_hangul = [], []
-        by_code, by_name, by_alias = {}, {}, {}
+        by_code, by_name = {}, {}
         per_asset = {asset: [] for asset in ASSETS}
         for i, row in enumerate(self.rows):
             # Tie order as one integer: kind, then asset (by query script), then list order.
@@ -264,13 +269,10 @@ class _Index:
             by_code.setdefault(row.code, []).append(i)
             for name in row.full:
                 by_name.setdefault(name, []).append(i)
-            for name in row.aliases:
-                by_alias.setdefault(name, []).append(i)
             per_asset[row.listing.asset].append((row.code, i))
         self.keys_latin, self.keys_hangul = keys_latin, keys_hangul
         self.by_code = {key: tuple(value) for key, value in by_code.items()}
         self.by_name = {key: tuple(value) for key, value in by_name.items()}
-        self.by_alias = {key: tuple(value) for key, value in by_alias.items()}
         # Codes sorted per asset, with tie keys aligned, so a code prefix is one bisect.
         self.codes = {}
         for asset, pairs in per_asset.items():
@@ -337,9 +339,12 @@ class SymbolDirectory:
 
     Ranking, after normalising the query (NFC, case-fold, separators removed;
     'A005930', '005930.KS', '005930.KQ' and '5930' all mean domestic '005930'):
-    exact code, exact name (a whole Korean or English name, or one word of the
-    Korean name), name prefix, code prefix, substring of 2+ characters, 초성
-    prefix, 초성 substring. Ties: stock < ETF < ETN < REIT < other, then domestic
+    exact code, exact name (a whole Korean or English name, the same names
+    ``resolve()`` takes), name prefix, code prefix, substring of 2+ characters,
+    초성 prefix, 초성 substring. Prefixes are of whole names, except that each
+    word of a bundled overseas Korean name (a list of alternative names such as
+    '알파벳 A 구글') also counts as a name prefix and 초성 prefix; a word inside a
+    domestic name matches as a substring only. Ties: stock < ETF < ETN < REIT < other, then domestic
     first when the query holds Hangul and overseas first otherwise, then list
     order (the six Home stocks first, then KOSPI and KOSDAQ master order; the
     bundled overseas order).
@@ -398,7 +403,7 @@ class SymbolDirectory:
         long = len(wanted) >= 2
         stages = (
             lambda: exact,                                                       # exact code
-            lambda: index.by_alias.get(wanted, ()),                              # exact name
+            lambda: index.by_name.get(wanted, ()),                               # exact name
             lambda: index.names.find(_SEP + wanted),                             # name prefix
             code_prefix,                                                         # code prefix
             lambda: (index.names.find(wanted) + index.code_text.find(wanted)) if long else (),
