@@ -5,14 +5,14 @@ from: claude
 task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22
-next_ids: ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-04T18:20:00+09:00
+next_ids: ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-04T20:14:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/ui-markets-watchlist-20261104
-work_commit: bb35b3b
+work_commit: 96f20a6
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/71
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -97,8 +97,10 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
   > 현재 APP 글자 폰트가, 아무런 생기가 없고 글자 폰트가 깨지는 느낌이 드는 부분들도 많다. 글자 폰트를 필요한 부분들에 조금더 입체적으로 수정바란다. 또한 실시간 지표들을 보여주는 모든 부분에서, '공급자'와 '관측일'칸 자체가 필요가 없다. 또한 모든 차트를 검색할 때에, 종목 코드만이 아닌, 종목 코드와 해당 주식의 이름으로도 검색할 수 있게 수정돼야하고, 현재 시장 에서 KIS CHART, 채권 금리 등 해당 요소들을 스크롤을 통해 선택할수잇는데, 이 기능은 불편하기만 한다. 삭제 필요 또한 '시장' UI에서 주요지표들의 실시간 차트를 제공할 필요가 없다. 해당 화면은 사용자의 선호에 따라 자신이 관심종목으로 추가해놓은 차트들을 확인할 수 있어야하고, 구체적으로 하나의 종목을 검색하였을 때 해당 종목의 모든것들을 한 화면에서 제시해줘야한다. 바로 수정해보고 어플 실행방법 안내바란다.
   - ID: ⑬-2/a4-b/2(시장 스크롤 탭 선택 삭제, 도구는 다른 곳으로), ⑬-2/a4-c/2(모든 차트 검색에 코드+종목명), ⑬-2/a4-d/2(시장 = 관심종목 차트 + 한 종목 전체 화면, 주요지표 실시간 차트 제거), ⑬-2/a4-e(실시간 지표의 공급자·관측일 칸 제거), ⑬-2/a3-type(글자 위계·입체감).
   - 브랜치 `claude/ui-markets-watchlist-20261104`(main `bb35b3b`에서), 워크트리 스크래치패드 `uimk`. 대상은 Native 앱(`python -m quantgen_desktop`).
-  - **main 동결 중이라 PR은 만들되 병합하지 않습니다.** 소유자는 별도 폴더에 이 브랜치를 받아 실행합니다(Step 7A용 기본 클론은 건드리지 않음).
-  - 1단계: 읽기 전용 지도 워크플로 `wf_c6fd7578-be3`(시장 구조, 공급자·관측일 칸, 검색, 한 종목 화면, 글자) 실행 중.
+  - 추가 요청(원문): "그리고 어플의 메인화면이 전체적으로 너무 좁다. 좌측의 ui공간을 조금 얇고 줄여서 메인화면을 탁 트이게 보일 수 있게 수정해야함. 단, 좌측이 답답해지면 안됨. 지금은 너무 널널해" → ⑬-2/a3-rail. "저 주식 챙권 이런거 종목고르는 옆에있는 화살표있지. 저것도 좀 세련되게 바꿔라 뭐냐 저게 윈도우 xp냐;;", "인터벌 화살표도 마찬가지. 저 화살표와 네모박스는 어디에서도 보고싶지않다." → ⑬-2/a3-controls.
+  - **PR #71 열림(https://github.com/xkg4real/quantgen/pull/71), head `96f20a6`, CI 대기.** 동결이 풀렸으므로 CI 성공 시 병합합니다. 근거 문서 `docs/product/MARKETS_WATCHLIST_2026-11-04.md`(요청 원문, 결정, 알려진 문제, 미검증, 실행 방법, 11절 코드 리뷰 반영), FACTS "시장 개편" 절, 웹 기록 `docs/product/ui_website_updates/PR-71.json`.
+  - 로컬 확인: 20개 모듈 283개 통과(오프스크린, 3.13, PyQt6 6.12.0), 설치 휠 스모크 PASS, 컴플라이언스 --check PASS. 전체 run_all(캐시 없는 사본, `48bf786`): 746/872, FAIL 2(기존 환경 탓 동일), NOT_RUN 124, acceptance_results.json md5 그대로. `/code-review`(high) 10건: 8건 수정(`96f20a6`), 2건 설계대로 유지(이유는 근거 문서 11절).
+  - main `ce77566`(PR #68)을 `b2f7a41`에서 합침(runtime-smoke 경로 합집합, FACTS 두 절 유지, 기준선 재생성).
 
 - **main 동결 해제 (U4-나, 2026-11-04 16:3x KST).** 소유자 결정 원문은 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`
   "2026-11-04, Claude Code 채팅: main 병합 동결 해제 (U4-나)"(기록 커밋 `24e9ece`, PR #70 병합 `f455710`).
@@ -157,9 +159,9 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 ## 6. 다음 할 일
 
-1. 소유자 답을 기록합니다(OWNER_RULINGS_LOG, 첫 PR에 포함).
-2. UI A4(실시간 차트 4개, 자산별 탭과 공급사 자동 선택, 검색형 가이드, 종목 검색과 휠 확대)의 설계 문서와 시안을 만듭니다. 그다음 구현합니다.
-3. 이후 1절의 순서를 따릅니다.
+1. PR #71 CI(Runtime·Compliance)가 성공하면 병합합니다. 완료 기준: main에 병합 커밋, 원장 `--done`으로 ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls 기록, Notion 13절 취소선.
+2. 옵션 브랜치 `claude/s10-options-20261104`(`a4b7c3c`)에 main을 합칩니다(`git merge origin/main`; 충돌 예상: SECTION10_QUEUE/TRIAGE, FACTS, runtime-smoke.yml, market_tools.py, source-review.json). §10 집계는 27로 맞춥니다. PR을 열고 CI 성공 시 병합, 원장 ②-5/M4-N4·N7·N9, Notion.
+3. 그다음 §10 모형/ETF(`wf_fea1b022-4f8` 멈춤, 다시 실행), AI, 그 뒤 A3 나머지, A1, 5~6번, 실시간 체결, 7번.
 
 ## 7. 주의사항 / 하지 말 것
 
