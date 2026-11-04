@@ -17,7 +17,13 @@ other limitation of the same model already carries its own error ID.
     with 90–364-observation windows, so on a history of 91–365 observations the
     displayed "1y" z is not a year;
   - (b) when z cannot be computed (fewer than 91 observations), `last_z` became 0.0 and
-    the screens showed `+0.00`. A flat window gave z = 0 as well.
+    the screens showed `+0.00`. A flat window (no variation) was not shown as
+    unavailable either. Its z was 0 only when the window's floating-point mean was exact,
+    as for a premium of exactly 0 %. Otherwise rounding left a tiny positive standard
+    deviation and z came out near +1. On the test's flat 200-day fixture (a constant
+    premium of 2.0000000000000018 %), the old code gave z of +0.994 to +0.998 at 92 of the
+    110 computed indices and 0 at the other 18; `last_z` was 0.9975 and the screen read
+    `+1.00`.
 
   Both parts are corrected for every displayed value; the z series itself is not
   changed (see Not changed).
@@ -44,7 +50,7 @@ other limitation of the same model already carries its own error ID.
 | Upbit daily candles | a day without a close (or open/high/low) became 0.0 (premium −100 %) | the day is left out and not counted, so paging continues to the requested number of usable days: after a skipped day it asks for full 200-day pages and keeps the newest days; it stops early only when the history ends or after looking at 2 × days + 200 days (the Upbit daily part of D12-03, not §10; see Not changed) |
 | Upbit ticker | a missing price, change or 24-hour value became 0.0 | `None` |
 | Binance funding rate in the premium index | missing → 0.0, read by the AI as a 0 % rate | `None` |
-| `core/crypto/analytics.py` `kimchi_premium` | z = 0 for a flat window; `last_z` 0.0 when not computed; zero or missing prices entered the premium; nothing said how many observations the latest z used | z and `last_z` are NaN when undefined; `last_z_window` is the number of observations behind `last_z` (365 on a history longer than a year, 0 when z is NaN); days without a usable Upbit or Binance price are left out, and an unusable FX fixing is skipped so the previous one carries forward |
+| `core/crypto/analytics.py` `kimchi_premium` | z = 0, or about +1 from float rounding, for a flat window; `last_z` 0.0 when not computed; zero or missing prices entered the premium; nothing said how many observations the latest z used | z and `last_z` are NaN when undefined; `last_z_window` is the number of observations behind `last_z` (365 on a history longer than a year, 0 when z is NaN); days without a usable Upbit or Binance price are left out, and an unusable FX fixing is skipped so the previous one carries forward |
 | `core/research/crypto_workflow.py` | `tick.get(coin, 0.0)`; one batch ticker request | `value_holdings` sets `krw_value=None` without a price (a zero quantity is worth 0); `krw_prices` asks each market alone only when Upbit rejects the list (HTTP 400/404), while a timeout, rate limit or server error stays a failed read; `holdings_summary` returns the valued total, the unvalued coins and `complete` |
 | Narratives (English, Korean) | "+0.0 standard deviations"; "from its one-year mean" / "일년 평균에서" whatever the window | "z unavailable: fewer than 91 observations or no variation in the window" / "z는 계산할 수 없습니다 …"; on a history shorter than a year "from the mean of the N earlier observations (less than a year)" / "1년이 안 되는 직전 N개 관측 평균에서" |
 | AI payload | `kimchi.z` 0.0; `premium_index.premium_pct` 0.0 or −100 | `null`; new `kimchi.z_window` (observations behind z, `null` when z is) |

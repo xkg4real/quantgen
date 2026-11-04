@@ -187,7 +187,9 @@ class KimchiZ(NoNetwork):
     def test_flat_window_has_no_z_but_a_varying_one_is_unchanged(self):
         keys = days(200)
         flat = kimchi_premium(dict.fromkeys(keys, 132_600.0), dict.fromkeys(keys, 100.0), dict.fromkeys(keys, 1300.0))
-        self.assertTrue(np.isnan(flat.z_1y).all())  # no variation: was 0.0 from index 90 on
+        # No variation. The old code gave z of about +0.995 (float rounding) at 92 of the 110 indices
+        # from 90 on and 0 at the other 18, so last_z read +1.00.
+        self.assertTrue(np.isnan(flat.z_1y).all())
         self.assertTrue(math.isnan(flat.last_z))
         premium = np.random.default_rng(7).normal(.02, .004, 200)
         keys, btc, upbit = self.series(200, premium)
