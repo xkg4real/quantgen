@@ -285,7 +285,7 @@
     "docs/product/LETF_ASSUMPTIONS_2026-11-02.md": "4fd6fbcd5caad90146799feb6fa7ae61a38603e22c752970474e3d23b757fd0b",
     "docs/product/LETF_INDEX_2026-10-31.md": "7c10b178f33c59f2afb2783c94413cc2c949ba3d5f0e7b4412246d0da1f54693",
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
-    "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "3f91eab5c6dd32fed94a630f8907eeec4de2d4b7c3daba28974dbdfef80b381b",
+    "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "71dffdb67f3b38ed8b726f273c8651a8a65ec832cdfedc84ba5431bebaca2494",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
     "docs/product/MC_VOLATILITY_2026-10-30.md": "92dc8a14c6884ea57936f9f187e9b87d1120b426ac0fe2f8767867617ef6837f",
@@ -393,7 +393,7 @@
     "tests/desktop_market_layout_acceptance.py": "215764cefa9108907c3480cad377b261dcf404c7a7342ecb0047ed43b7ea0023",
     "tests/desktop_market_tabs_acceptance.py": "a58b9dc8ce6b0f55df2370b9ea2187a65e917340488fcfeaea266e831248d54d",
     "tests/desktop_markets_watchlist_acceptance.py": "d458aa2d633dbbbfead6347d0fe5b53f3f827e17c91ea0b31483df59cfe5b569",
-    "tests/desktop_operation_fixes_acceptance.py": "3624ea38c93ea8e1d11a4a57c2122f96eee85b460431d5eac8e72361e89f108c",
+    "tests/desktop_operation_fixes_acceptance.py": "b4f11e0d8251c65daa7faa63e1307a99346b63f94aecd5766eab2cb8b688463c",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
@@ -571,163 +571,163 @@
   "reviews": {
     "1": {
       "document_sha256": "800842db400cf938aaaca47d17d69cd9c1f8100096255c919dfbd44b290af9cb",
-      "source_digest": "55fa7880c6687052c49b32264fb2a7f55de6b89847e738f25e1ff93cb7016fb5",
+      "source_digest": "716010abf4b07c69ef1bfb7583d29416c7a3c6184827f09885e3c1dc48536d2a",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.495054+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.101080+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "55fa7880c6687052c49b32264fb2a7f55de6b89847e738f25e1ff93cb7016fb5",
+      "source_digest": "716010abf4b07c69ef1bfb7583d29416c7a3c6184827f09885e3c1dc48536d2a",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.499167+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.103958+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "8b1c410653ca1bae4925ece89a82dc8b95e1d0620865bc81b6afe5b493c20244",
+      "source_digest": "8012ac0a2262906a7ea86f872ea1be1868d5fe1f336e093f49be5c684b584cf5",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.501555+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.106701+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "47784fbcbee9bfac5b72d9797bd399f66e351faf821d171f6eec9d9d27de2c68",
+      "source_digest": "96f10e7fbae8a2d85cc80f862fb9ae274a136a356d57b8a6daf153c805015cef",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.503691+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.109486+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "bc7c72b3292f21b75e86061c55714a47832fafe265f72a34890106e990e4e3dc",
+      "source_digest": "7d28a22d9ce2693d924213bc3aa7ad733be8332d542d36f9f853b24ed6e821e2",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.506831+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.112147+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "6": {
       "document_sha256": "9e7d3a2850c698226b88e0715ac5a11d47559a375158df21e5d5f2b4618d9805",
-      "source_digest": "3bdb4146d5728ea4ebe72049578da79f4f4dc555503a1a7df4b305eefa370de2",
+      "source_digest": "03f03b9305d1c0781ff663d3798ff70ae5ad2e8dcf87bd360bbe2dd922c3b77c",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.509170+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.114544+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "7": {
       "document_sha256": "99b4631bd5dc98b713015d45db2b864a64919a8a7dedfb4f903ee75656fa1f04",
-      "source_digest": "55fa7880c6687052c49b32264fb2a7f55de6b89847e738f25e1ff93cb7016fb5",
+      "source_digest": "716010abf4b07c69ef1bfb7583d29416c7a3c6184827f09885e3c1dc48536d2a",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.511220+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.117047+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "8": {
       "document_sha256": "a0c83c9860eb1b77a1b5dd89ac4036cab1d5a48ef8ca1efeadc2295b0205dc61",
-      "source_digest": "3bdb4146d5728ea4ebe72049578da79f4f4dc555503a1a7df4b305eefa370de2",
+      "source_digest": "03f03b9305d1c0781ff663d3798ff70ae5ad2e8dcf87bd360bbe2dd922c3b77c",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.513382+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.121042+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "9": {
       "document_sha256": "1ac53869fa19977ce6917d2c401f93f457245bc9a98c465f937740896f87a8fc",
-      "source_digest": "5b5a753242fb95e34d6035e8151171d942e5e82324a4c526ed8af5206d1f81b5",
+      "source_digest": "cad56e14f8d5796e2effa782c5c8283f6b8e9884961b00885553caaf3206a376",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.515438+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.123113+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "854cf9b521648fefe71afdf562586e9b18e86ccae63ad1abbb0fe590bec55149",
+      "source_digest": "02d5e4ea4b5455e52e63dd597e7819d3c3c50516059de9e5844c196f1bac8353",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.517503+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.125077+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "d6ad17a12848a8d4be5ad64733598d59e61f5e4594f6ae988f9e0bf730b1fe4f",
+      "source_digest": "f61205df803b4d6332f66f83438ffb14ceb9b1b90707a1b61557209b196e567d",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.519695+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.126818+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
       "source_digest": "885868daebd1b6ec292331645499a4a4f15b1ca3d7f36429e3edeaad32050b42",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Test-only change in tests/desktop_operation_fixes_acceptance.py: a long ASCII wrapping line makes the wider-preferred-width precondition hold on any platform font (Ubuntu CI saw 388 == 388). The product behaviour and the claims in 12 are unchanged.",
-      "reviewed_at": "2026-11-04T11:34:31.568340+00:00",
-      "source_commit": "31086ac17b848fc06152234b188af953ab2a8978"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.128863+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "5b5a753242fb95e34d6035e8151171d942e5e82324a4c526ed8af5206d1f81b5",
+      "source_digest": "cad56e14f8d5796e2effa782c5c8283f6b8e9884961b00885553caaf3206a376",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.523560+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.130703+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "14": {
       "document_sha256": "14f89ec3bf10261b8d039e4bef5a113b599f30b6494755090a6570ac8e0dbdb0",
-      "source_digest": "5b5a753242fb95e34d6035e8151171d942e5e82324a4c526ed8af5206d1f81b5",
+      "source_digest": "cad56e14f8d5796e2effa782c5c8283f6b8e9884961b00885553caaf3206a376",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.525644+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.132545+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "15": {
       "document_sha256": "f6d97b6b70a73b55d43b72efc4df0232ffe0516f32f22478fdf94b6a973af131",
-      "source_digest": "5b5a753242fb95e34d6035e8151171d942e5e82324a4c526ed8af5206d1f81b5",
+      "source_digest": "cad56e14f8d5796e2effa782c5c8283f6b8e9884961b00885553caaf3206a376",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.527855+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.134255+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "9561abf46d7a19344328b9c5190999d842874f56e1612a494de70698f6451016",
+      "source_digest": "7fd43eac8557d2df0bed4be4d288ee937c57544d71fa6c09f2cbbf85efdc2daf",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.530832+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.136028+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "3bdb4146d5728ea4ebe72049578da79f4f4dc555503a1a7df4b305eefa370de2",
+      "source_digest": "03f03b9305d1c0781ff663d3798ff70ae5ad2e8dcf87bd360bbe2dd922c3b77c",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.532755+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.137725+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "55fa7880c6687052c49b32264fb2a7f55de6b89847e738f25e1ff93cb7016fb5",
+      "source_digest": "716010abf4b07c69ef1bfb7583d29416c7a3c6184827f09885e3c1dc48536d2a",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.534708+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.140322+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "724e0ee3ccb27344c12f9118583d907a340d12c46a03035ef8727512c1b2dd88",
+      "source_digest": "25a0db082e4ea4bc30494792e68e33ffac9640eb14c0d86da84120627c0950d6",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.537358+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.142098+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     },
     "20": {
       "document_sha256": "9e456e5db5c44c8592f493633e32f1e00de8d112b05dd468e6b335e481363d45",
-      "source_digest": "55fa7880c6687052c49b32264fb2a7f55de6b89847e738f25e1ff93cb7016fb5",
+      "source_digest": "716010abf4b07c69ef1bfb7583d29416c7a3c6184827f09885e3c1dc48536d2a",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.539356+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
+      "reviewed_at": "2026-11-04T11:34:50.143887+00:00",
+      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
     }
   }
 }
