@@ -65,7 +65,7 @@ _KIS_SOURCES = frozenset({"KIS", "KIS REST"})
 _KST = timezone(timedelta(hours=9))
 _CURRENCIES = {"NAS": "USD", "NYS": "USD", "AMS": "USD", "HKS": "HKD", "TSE": "JPY",
                "SHS": "CNY", "SZS": "CNY", "HSX": "VND", "HNX": "VND"}
-_HANGUL = re.compile("[ᄀ-ᇿ㄰-㆏ꥠ-꥿가-힯ힰ-퟿]")
+_HANGUL = re.compile(r"[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]")
 
 
 # --------------------------------------------------------------------------- #

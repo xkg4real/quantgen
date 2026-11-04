@@ -242,7 +242,7 @@ class MarketsWatchlistTests(unittest.TestCase):
         self.view.open_instrument(SAMSUNG); self.app.processEvents()
         self.assertEqual(self.router.calls, []); self.assertEqual(self.profiles, [])
         self.assertIsNone(self.window.market_chart.snapshot)
-        self.directory.master_loader.assert_not_called() if hasattr(self.directory, "master_loader") else None
+        self.assertFalse(self.directory.domestic_loaded)  # no master download with automatic refresh off
         self.provider.assert_not_called()
 
 

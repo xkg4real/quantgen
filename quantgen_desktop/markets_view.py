@@ -51,13 +51,15 @@ def _text(ctx, ko, en):
 
 
 def set_tone(widget, tone):
-    """Drive the stylesheet's up/down/flat colours through a dynamic property."""
-    if widget.property("tone") == tone:
+    """Up/down/flat colours through the shared stylesheet; no value clears the tone."""
+    from .typography import TONES, set_tone as apply_tone
+    if tone in TONES:
+        apply_tone(widget, tone)
         return
-    widget.setProperty("tone", tone or "")
-    style = widget.style()
-    style.unpolish(widget)
-    style.polish(widget)
+    if widget.property("tone"):
+        widget.setProperty("tone", "")
+        widget.style().unpolish(widget)
+        widget.style().polish(widget)
 
 
 def _discard(widget):
@@ -254,6 +256,7 @@ class SymbolCompleter(QObject):
         self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         self.completer.setMaxVisibleItems(limit)
         self.completer.setWidget(line_edit)
+        self.completer.popup().setObjectName("symbolPopup")
         self.completer.activated[QModelIndex].connect(self._activated)
         line_edit.textEdited.connect(self._edited)
         line_edit.installEventFilter(self)
@@ -507,7 +510,8 @@ class WatchlistGrid(QWidget):
         layout.setSpacing(10)
         head = QHBoxLayout()
         self.heading = label("", "heading", wrap=False)
-        head.addWidget(self.heading, 1)
+        # Beside the taller refresh button the heading keeps its text height (its accent bar too).
+        head.addWidget(self.heading, 1, Qt.AlignmentFlag.AlignVCenter)
         self.status = label("", "caption", wrap=False)
         head.addWidget(self.status)
         self.refresh_button = QPushButton()
@@ -809,6 +813,9 @@ class StockView(QWidget):
         self._clear_sections()
         self.render_header()
         self._sync_watch()
+        self.profile_status.setText("" if instrument.asset in STOCK_ASSETS else
+                                    _text(self.ctx, "종목 정보는 주식에만 제공합니다. 차트는 위에 있습니다.",
+                                          "Stock details are for stocks only; the chart is above."))
         if load and self.auto_load:
             # Opening a stock loads its chart and details; with automatic refresh off (tests) both
             # stay explicit, exactly like the chart pane's own Load button.
@@ -886,8 +893,11 @@ class StockView(QWidget):
             for field in (self.code, self.name, self.price, self.change):
                 field.setText("")
             return
-        profile_name = getattr(self.profile, "name", "") if self.profile is not None else ""
-        name = profile_name if profile_name and ctx.language == "ko" else self.name_fn(instrument, ctx.language)
+        if self.profile is not None:
+            from core.research.stock_profile import display_name
+            name = display_name(self.profile, ctx.language) or self.name_fn(instrument, ctx.language)
+        else:
+            name = self.name_fn(instrument, ctx.language)
         place = instrument.exchange or ("KRX" if instrument.asset == "domestic_stock" else "")
         self.code.setText(f"{instrument.code} · {place}" if place else instrument.code)
         self.name.setText(name)
@@ -895,7 +905,7 @@ class StockView(QWidget):
         if self._live_price is not None:
             price, pct = self._live_price
         elif self.profile is not None:
-            price, pct = getattr(self.profile, "price", None), getattr(self.profile, "change_pct", None)
+            price, pct = self.profile.last_price, self.profile.change_pct
         self.price.setText(_price_text(price, instrument))
         text, tone = _change_text(pct)
         self.change.setText(text)
@@ -992,6 +1002,8 @@ class MarketsWorkspace(QWidget):
         self.completer = attach_symbol_search(self.search, directory, assets=STOCK_ASSETS, locale=self.ctx,
                                               loader=directory_loader)
         self.completer.chosen.connect(self.open_listing)
+        if directory_loader is not None:
+            directory_loader.loaded.connect(self._directory_loaded)
         self.pages = CurrentPageStack()
         name_fn = self.display_name
         self.grid = WatchlistGrid(store, router_factory=card_router_factory, name_fn=name_fn, locale=self.ctx,
@@ -1058,6 +1070,11 @@ class MarketsWorkspace(QWidget):
             self.open_instrument(Instrument(kind, text.upper()))
         except ValueError:
             self._say(_text(self.ctx, "코드 형식이 맞지 않습니다.", "That code is not valid for this kind."))
+
+    def _directory_loaded(self, _added):
+        if self.directory is not None and getattr(self.directory, "error", None):
+            self._say(_text(self.ctx, "국내 종목 이름 목록을 불러오지 못했습니다. 국내 종목은 6자리 코드로 검색하세요.",
+                            "Could not load the domestic stock names. Search domestic stocks by their 6-digit code."))
 
     def _say(self, text):
         self.message.setText(text)

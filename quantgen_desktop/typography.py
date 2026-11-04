@@ -90,6 +90,51 @@ def scaled_font(base: QFont, pixel_size: int, weight: int) -> QFont:
     return font
 
 
+def icon_dir() -> str:
+    """Forward-slash path to the bundled chevrons (Qt stylesheet url() needs '/' on Windows too)."""
+    from core.app_paths import application_root
+    return (application_root() / "assets" / "ui").as_posix()
+
+
+def controls_stylesheet(p, dark: bool) -> str:
+    """Owner, 2026-11-04: no native arrow boxes anywhere ("저 화살표와 네모박스는 어디에서도 보고싶지않다").
+
+    Drop-downs show a thin chevron (up while open) with no box, their lists are rounded, spin boxes
+    use the same chevrons, scroll bars are thin with no arrow buttons, and an overflowing tab bar
+    scrolls with chevrons instead of boxed arrows.
+    """
+    icons, theme = icon_dir(), "dark" if dark else "light"
+    down, up = f"{icons}/chevron-down-{theme}.svg", f"{icons}/chevron-up-{theme}.svg"
+    left, right = f"{icons}/chevron-left-{theme}.svg", f"{icons}/chevron-right-{theme}.svg"
+    return f"""
+          QComboBox {{ padding: 5px 30px 5px 10px; }}
+          QComboBox::drop-down {{ subcontrol-origin: padding; subcontrol-position: center right; width: 28px; border: 0; background: transparent; }}
+          QComboBox::down-arrow {{ image: url({down}); width: 12px; height: 12px; }}
+          QComboBox::down-arrow:on {{ image: url({up}); }}
+          QComboBox QAbstractItemView {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 10px; padding: 4px; outline: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
+          QComboBox QAbstractItemView::item {{ min-height: 26px; padding: 3px 8px; border-radius: 6px; }}
+          QListView#symbolPopup {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 12px; padding: 4px; outline: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
+          QListView#symbolPopup::item {{ min-height: 28px; padding: 3px 10px; border-radius: 8px; }}
+          QAbstractSpinBox {{ padding-right: 26px; }}
+          QAbstractSpinBox::up-button, QAbstractSpinBox::down-button {{ subcontrol-origin: border; width: 24px; border: 0; background: transparent; }}
+          QAbstractSpinBox::up-button {{ subcontrol-position: top right; }}
+          QAbstractSpinBox::down-button {{ subcontrol-position: bottom right; }}
+          QAbstractSpinBox::up-button:hover, QAbstractSpinBox::down-button:hover {{ background: {p.accent_soft}; border-radius: 4px; }}
+          QAbstractSpinBox::up-arrow {{ image: url({up}); width: 10px; height: 10px; }}
+          QAbstractSpinBox::down-arrow {{ image: url({down}); width: 10px; height: 10px; }}
+          QScrollBar:vertical {{ background: transparent; width: 10px; margin: 2px 1px; border: 0; }}
+          QScrollBar:horizontal {{ background: transparent; height: 10px; margin: 1px 2px; border: 0; }}
+          QScrollBar::handle:vertical {{ background: {p.border}; border-radius: 4px; min-height: 32px; }}
+          QScrollBar::handle:horizontal {{ background: {p.border}; border-radius: 4px; min-width: 32px; }}
+          QScrollBar::handle:hover {{ background: {p.muted}; }}
+          QScrollBar::add-line, QScrollBar::sub-line {{ width: 0; height: 0; border: 0; background: transparent; }}
+          QScrollBar::add-page, QScrollBar::sub-page {{ background: transparent; }}
+          QTabBar QToolButton {{ border: 0; background: {p.bg}; width: 22px; }}
+          QTabBar QToolButton::left-arrow {{ image: url({left}); width: 12px; height: 12px; }}
+          QTabBar QToolButton::right-arrow {{ image: url({right}); width: 12px; height: 12px; }}
+        """
+
+
 def window_stylesheet(p, dark: bool) -> str:
     """The research window stylesheet.
 
@@ -100,6 +145,7 @@ def window_stylesheet(p, dark: bool) -> str:
     QLabel[role='delta'], and cards (MarketCard and the like) are panels.
     """
     t, d = TONE_COLORS[dark], PANEL_DEPTH[dark]
+    controls = controls_stylesheet(p, dark)
     nav_v, nav_h = NAV_PADDING
     return f"""
           QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; font-weight: 400; }}
@@ -143,9 +189,9 @@ def window_stylesheet(p, dark: bool) -> str:
           QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
           QListWidget#guideSuggestions::item:selected, QListWidget#guideSuggestions::item:hover {{ background: {p.accent_soft}; }}
           QPushButton[chip='true'] {{ padding: 6px 12px; border-radius: 15px; font-weight: 500; }}
-        """
+{controls}        """
 
 
 __all__ = ["TONES", "TONE_COLORS", "PANEL_DEPTH", "RAIL_MARGINS", "RAIL_SPACING", "NAV_PADDING",
            "NAV_SLACK", "SIDEBAR_WIDTH_RANGE", "is_dark", "tone_colors", "tone_for", "set_tone",
-           "scaled_font", "window_stylesheet"]
+           "scaled_font", "window_stylesheet", "controls_stylesheet", "icon_dir"]

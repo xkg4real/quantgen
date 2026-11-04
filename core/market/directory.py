@@ -52,7 +52,7 @@ _SEED_EN = {
 # word; these two are not named that way.
 _OVERSEAS_KINDS = {("AMS", "GLD"): "etf", ("NYS", "O"): "reit"}
 
-_HANGUL = re.compile("[\u1100-\u11ff\u3130-\u318f\ua960-\ua97f\uac00-\ud7a3\ud7b0-\ud7ff]")
+_HANGUL = re.compile(r"[\u1100-\u11ff\u3130-\u318f\ua960-\ua97f\uac00-\ud7a3\ud7b0-\ud7ff]")
 _DOMESTIC_CODE = re.compile(r"A?(\d{1,6})(?:\.(?:KS|KQ))?")
 _SEP = "\x00"           # field separator inside the search haystack; removed from queries
 _MAX_QUERY = 100
@@ -146,7 +146,7 @@ def _parse_stock_master(text, tail: int):
             continue
         short, standard = line[0:9].strip(), line[9:_FRONT].strip()
         name = re.sub(r"\s+", " ", unicodedata.normalize("NFC", line[_FRONT:start])).strip()
-        if not name or "\ufffd" in name or not name.isprintable():
+        if not name or chr(0xFFFD) in name or not name.isprintable():  # a CP949 decoding failure
             counts["malformed"] += 1
             continue
         if not (short.isascii() and short.isalnum() and standard.isascii() and standard.isalnum()):

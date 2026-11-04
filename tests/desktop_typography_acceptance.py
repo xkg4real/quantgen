@@ -76,9 +76,15 @@ class BundledFontCoverageTests(unittest.TestCase):
         for name, face in cls.faces.items():
             assert face.isValid(), name
 
+    @staticmethod
+    def noncharacter(ch):
+        # Sort sentinels such as U+10FFFF are never shown; Unicode reserves them as noncharacters.
+        code = ord(ch)
+        return 0xFDD0 <= code <= 0xFDEF or code & 0xFFFE == 0xFFFE
+
     def missing(self, text):
-        return sorted({ch for ch in text if ord(ch) >= 0x20
-                       for face in self.faces.values() if not face.supportsCharacter(ch)})
+        return sorted({ch for ch in text if ord(ch) >= 0x20 and not self.noncharacter(ch)
+                       for face in self.faces.values() if not face.supportsCharacter(ord(ch))})
 
     def test_every_shown_string_literal_is_in_the_bundled_font(self):
         problems = []
