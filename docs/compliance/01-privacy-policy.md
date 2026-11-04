@@ -85,7 +85,7 @@ Q-SCORE는 받은 공개 가격 이력과 유효 체결을 실행 프로세스�
 | --- | --- | --- | --- | --- |
 | 서비스 계약·제공 | {{privacy.service_fields}} | {{privacy.service_collection_and_location}} | {{privacy.service_basis}} | {{privacy.service_retention}} |
 | 선택적 데이터 제공자 연결 | 필요한 API 인증정보·연결 상태; 제공자마다 구체 항목 공개 | 환경변수/사용자 설정 → 해당 제공자; KIS 토큰은 실행 기기 파일 | {{privacy.connection_basis}} | {{privacy.connection_retention}} |
-| 선택적 Upbit 자산 분석 | 통화, 기준통화(`unit_currency`), 잔액, 잠금 금액, 평균 매수가, 총수량과 파생 원화평가액(`krw_value`); 현재 코드 기준 | Upbit 계좌 API → 실행 기기. 보유 통화 종목을 Upbit 공개 시세 API에 보내 평가액 계산; 서버 실행 시 서버 처리 여부 명시 | {{privacy.upbit_basis}} | {{privacy.upbit_retention}} |
+| 선택적 Upbit 자산 분석 | 통화, 기준통화(`unit_currency`), 잔액, 잠금 금액, 평균 매수가, 총수량과 파생 원화평가액(`krw_value`); 현재 코드 기준 | Upbit 계좌 API → 실행 기기. 보유 통화 종목을 Upbit 공개 시세 API에 보내 평가액 계산(Upbit가 목록을 거부하면(HTTP 400·404) 같은 종목을 하나씩 다시 요청, 시세가 없는 통화는 평가액을 비워 둠); 서버 실행 시 서버 처리 여부 명시 | {{privacy.upbit_basis}} | {{privacy.upbit_retention}} |
 | 규칙 및 모의연구 기록 관리 | 규칙명·메모·개정 이력·모의주문·판정·저장한 연구 결과 | {{privacy.research_location}} | {{privacy.research_basis}} | {{privacy.research_retention}} |
 | 선택적 외부 AI 해설 | 전송 전 표시한 계산 결과와 질문; 인증정보·개인 계좌 내용을 질문에 입력하지 않도록 안내 | {{privacy.ai_route}} → Anthropic | {{privacy.ai_basis}} | {{privacy.ai_retention}} |
 | 문의 및 권리 행사 처리 | 회신 연락처, 문의 내용, 최소한의 확인 정보 | {{privacy.support_tools}} | {{privacy.support_basis}} | {{privacy.support_retention}} |

@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "ec0ebf0dee6375c657f69240016fcf93b9aa5d3bff856e5328206d2966fe0cb8",
+    ".github/workflows/runtime-smoke.yml": "271d62841a59b4c54d0ba733b5cc00d84bc329a65c97dd366a77dc36fd3f8b85",
     "README.md": "9396b708dc01df00a5d32b5549fe1b316824318319a95e0ecd8c296016ca0204",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -69,8 +69,9 @@
     "core/calendars/regime.py": "fcac664c8f3b2d51ff45c67ef27252b1961b38c944dd785f8162d9ffa579d17b",
     "core/calendars/store.py": "4932ad9cbb4a1914f6b75da84e96a74730444cf2f43c756a7c7dd95efb403041",
     "core/crypto/__init__.py": "239a350b379471bb83ac90f3dc25149814f5f58790604236697daf160f5fcd81",
-    "core/crypto/analytics.py": "1385035b274e89bf7eb643fbb02f3fc86f73ce7ba3542df85a21de43020676f7",
+    "core/crypto/analytics.py": "7d7c846f0a363135592b88699190ac8c7251e159756ffb21bbebc128129dfdbf",
     "core/crypto/funding_diagnostic.py": "19e0763b30e0f838d522c4ceedffd8ad7139b69f7257924532593b9bb02a9270",
+    "core/crypto/values.py": "6254994c3125bb248e9b42d5bbb83edec23943ec8dce99d25f03c0713ea24ee3",
     "core/education/__init__.py": "d04a1be2039032cc6150e474930f58e9f5b1e882d8fad1a6b472c313b5456ad4",
     "core/education/chart.py": "e42562c7fdcbfe5be6743561b1b60a0567ca6da916c292c641c3e84ae6d79771",
     "core/education/glossary.py": "14cbdcaad4eb87cbddbebf79390b94f115693d25b4ab48c2b2bd5f80536c1324",
@@ -164,7 +165,7 @@
     "core/research/analysis.py": "f3867004882d212f49a702b9bfe201a006e56fd0a76f138397a1bcbb11942808",
     "core/research/bond_analysis.py": "0d7b40defdd580db677226483b4a1cc6bf1e5919ea1e9ca39d691376c0b1263f",
     "core/research/connections.py": "f634fe608bcfca39c3841ee7e4bf25524ba4cba8e28658d957d56725c2c56a04",
-    "core/research/crypto_workflow.py": "c84aeb06fff2e5e552ed208d134f86ebc6a0fa626949830fdfd407413b2c8e85",
+    "core/research/crypto_workflow.py": "3e2af208e0a5a94edac709ee086ab871f09413fba9b0c538494a82deaab4a023",
     "core/research/decay_disclosure.py": "98f68bb2b8f8a0ac051865a76313855a323890a4adacd9abe9d0c025c0a934ce",
     "core/research/derivatives_workflow.py": "0597ee855c13663bd4d851320c68115482c3a41e4ea5f68b8f2ca35b91cd70e6",
     "core/research/display_rights.py": "e59554e140ee5ea994812bcaca083c622d94bac1513411bdca58824b6f20e6fb",
@@ -240,7 +241,7 @@
     "data/calendars/XETRA.json": "5df6cbfc3b262716d8f8c0e598031a082c3379a96b52470154b87069544b7f07",
     "data/calendars/index.json": "2b9554ba81120f51804a1df3fcfe0ef810974b660573c8213269074505f35d38",
     "data/crypto/__init__.py": "f07f423c4c4e88823feb526625101d80d90ef5f322a506a73ddf7fbbd292109b",
-    "data/crypto/crypto_client.py": "f799c510e754292d1467004b87266e08b48afa00cc9d7138d7ee1c7c4396f04b",
+    "data/crypto/crypto_client.py": "91207df9f32804321fd9b68db7b652fde425b3f90062f7838ca190132d13d1f3",
     "data/fmp/__init__.py": "23b067ddcc2dee0fd36594e1838eaec90d475fa7b862fc4186de6950ab347d1d",
     "data/fmp/quote_client.py": "89d9dee24b32ea2e6b9dd0570ce89a98310f145a535a7acd79863921d91f09de",
     "data/kis_markets.py": "84f63c5bd7592a625df3948a35042ba14f67d4b54775cc5ebd4f490eef9a2b39",
@@ -255,7 +256,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "07e76f2d77fa9cff0ea10209c3cb5d723bbc6a9ac110e85dd6a3915c16ae2b08",
+    "docs/compliance/FACTS.md": "e59fc767076e20e34e92850d7dfdd4d7c0ce8d9a356dac56c34a3b4a3b698702",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -269,6 +270,7 @@
     "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md": "3f05520af76a14bbeb8fab8f7db874b25f18e52d4e884ec6b46e305e58f7ca44",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
+    "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "c03dae78c5964bded90065661a0d3dc631f4b650c3baae8eb6875443b11959e6",
     "docs/product/FORWARD_CONVENTION_2026-11-02.md": "a294ca013fa1460c435286a1b2a466630f522d859fc9a43da29927e6c5ffcd86",
@@ -283,7 +285,7 @@
     "docs/product/LETF_ASSUMPTIONS_2026-11-02.md": "4fd6fbcd5caad90146799feb6fa7ae61a38603e22c752970474e3d23b757fd0b",
     "docs/product/LETF_INDEX_2026-10-31.md": "7c10b178f33c59f2afb2783c94413cc2c949ba3d5f0e7b4412246d0da1f54693",
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
-    "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "c1e91951fd550af73c0d0c7f7671436e040b481c388987acf44070278590b33d",
+    "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "0b78e087529b60cb1a07492517d5eccd0bf89d37f0137c82cd9eb53f46c4dbe0",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
     "docs/product/MC_VOLATILITY_2026-10-30.md": "92dc8a14c6884ea57936f9f187e9b87d1120b426ac0fe2f8767867617ef6837f",
@@ -298,7 +300,7 @@
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "9eb917388f941560c928f571d70460513e17b8048630a3dd4abea9aaa635fbd3",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "7e5760a4d315298b267a008aaad88e7142790bc784a2aa294d3629eb1425332e",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
@@ -332,8 +334,8 @@
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
     "quantgen_desktop/market_chart.py": "a2c163621fc1050b54c47e90cb5de2b449fdf27106475f1cbcd167757978ad88",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
-    "quantgen_desktop/market_narrative_language.py": "b8cb8fd3f6b2a75fcd8225d43a2a172365caa237774c6ac45bc0e535655fd15a",
-    "quantgen_desktop/market_tools.py": "a87519c7048f8614ea3a78c811dd4d7944b341a504213c968460d7c2845e1c2e",
+    "quantgen_desktop/market_narrative_language.py": "e4e3d3ac3d1ddfdac171d9bb5fd336d1c6e4bc2bd08bbf5862a53784e3587511",
+    "quantgen_desktop/market_tools.py": "1232506457cf60393a450b93327ff3203be5d7e1c5fed9815068703c112ea2e2",
     "quantgen_desktop/markets_view.py": "730bc75c1da4365f345ff329377a44071a09253d4dc5377bbaa2154ad14d12b0",
     "quantgen_desktop/model_narrative_language.py": "c4d4c826e3416a202cc4167c19a2ccbc233fcbc80239e62a81808092274c0981",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
@@ -345,7 +347,7 @@
     "quantgen_desktop/signals.py": "42c35b809cbb3b2ca20be1d2103f405a4e7564ac9678673d39fa26368bfd96ef",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
-    "quantgen_desktop/tools.py": "d98221d56bd5596ee096d2f77d3437e6c3d35a3d85fb313db281cf018c5d5bdc",
+    "quantgen_desktop/tools.py": "187d1b76279de24b009b8625ac6b89126117a5e3cf1245033f8ba38a272de27a",
     "quantgen_desktop/translations.py": "cfd64447e97ea3be9074082dc7d233ae25a974396a0ab1ad3a2f99f6e21ba2af",
     "quantgen_desktop/typography.py": "ea39d2b4f4cafb64e1b1865807ff523d59f02c20f64894acc0e531abf5b462c8",
     "quantgen_desktop/watchlist.py": "c58ed15245ec7c30da319efdb5a97c9d56c5d6b0f83440625c0493fcfe5d7986",
@@ -365,6 +367,7 @@
     "tests/compliance_acceptance.py": "515c4e52c4643cc4a4679bcacf401af6829b2472a69ae9ca23ded61752c40156",
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
+    "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_acceptance.py": "922f93afe5bb0bbc852bc95df31cb52beb317e9121c192d7484debecdda9291d",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
@@ -537,7 +540,7 @@
     "ui/bonds_page.py": "93db57961b326872584c3b01600356a1eea9f882c3da55035196b2c1ae691881",
     "ui/chart_study.py": "503ad1e97211fa899cfc77a42dfdd4627c8a5169ed459901872af6875a5192c7",
     "ui/components.py": "41be9f3117f80c1677308355702758897f6d9d30654eb5a4d229d0bf7702a4fd",
-    "ui/crypto_page.py": "6829f7aedd678196a1bb1853044789d7bca0ac40b724006d35ead19942c65101",
+    "ui/crypto_page.py": "f7b0f3b4f1a09b2f9c3a9b3b75f1ef15bb4eb6af5e2c11aa8433f93630e91fd8",
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
     "ui/derivatives_page.py": "ed659a96def9e1b9bddbd0295c6357c47418fb4ba11778a1aecc817c352e1359",
     "ui/etf_page.py": "910b2a27d4ee5264cc79286e8fc48bc985a251d6a0f1727ec6f29daa633c660f",
@@ -567,164 +570,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "584ca9c262f35bbf1cc8077354dd5bb9e3237a4b3891692164b06781c93043af",
-      "source_digest": "e5a0edc66d3e0da13a881b6e2033d9223cc64ffabb859086d1411de6c82f619b",
+      "document_sha256": "800842db400cf938aaaca47d17d69cd9c1f8100096255c919dfbd44b290af9cb",
+      "source_digest": "86ea4cf3b9825abd6d7cdd8bc3108aa392a8d9ce34dfe5bfc40294014759d9c6",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.030055+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.792754+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "e5a0edc66d3e0da13a881b6e2033d9223cc64ffabb859086d1411de6c82f619b",
+      "source_digest": "86ea4cf3b9825abd6d7cdd8bc3108aa392a8d9ce34dfe5bfc40294014759d9c6",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.032611+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.795414+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "39a278dd01b3a4f38928ac31822bcbb29a6ea8da9176ead7a13c498f7f069d84",
+      "source_digest": "a31854fb7555e33bdb1f530d263bc2e1770a817f3f8320601c7a3c0d9d4c5b99",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.035455+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.798158+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "867003fb0a29cf6a497bde4ef2e37704520eb939339bed994e18e1b5be8520c7",
+      "source_digest": "ddbafa7cba9f0dda9559119afd81520293d318b4cdc1b552df87c5a9e1f38221",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.037510+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.800238+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "ede21435f3953a92b38ea70783862002bebcb446420bfba01f21c247caa37597",
+      "source_digest": "edde25c5ad6e19297b88e73a47c305f28b33c27a8180e52947453f2b0e3e451e",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.040330+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.802642+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "6": {
       "document_sha256": "9e7d3a2850c698226b88e0715ac5a11d47559a375158df21e5d5f2b4618d9805",
-      "source_digest": "6f64c141093d5874687af3e1ea524cc2936f4a68caaf31de3624a945da7e6f22",
+      "source_digest": "e5480a8c5989f84c2b24bc2fac3fc91aed663ff82fde79e78dc8eebe02460c03",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.042241+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.804713+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "7": {
       "document_sha256": "17a5e5231248738a4a7b37d8bf9f6cc300eae0f02d4c501fc33d37040c1c651c",
-      "source_digest": "e5a0edc66d3e0da13a881b6e2033d9223cc64ffabb859086d1411de6c82f619b",
+      "source_digest": "86ea4cf3b9825abd6d7cdd8bc3108aa392a8d9ce34dfe5bfc40294014759d9c6",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.044645+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.806740+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "8": {
       "document_sha256": "a0c83c9860eb1b77a1b5dd89ac4036cab1d5a48ef8ca1efeadc2295b0205dc61",
-      "source_digest": "6f64c141093d5874687af3e1ea524cc2936f4a68caaf31de3624a945da7e6f22",
+      "source_digest": "e5480a8c5989f84c2b24bc2fac3fc91aed663ff82fde79e78dc8eebe02460c03",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.047458+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.809505+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "9": {
       "document_sha256": "dac511ef262686869f627a264090cb5866bc60ad1a5f7fbb70df3ede8f79c7ae",
-      "source_digest": "927f4134291c4e94241cbaac4eb037ec60bebee55d4ec2e92d716cdc4762f8db",
+      "source_digest": "a61249ec9204b4e1257bf7cc59d4ca81f4e867056833253fd8d300d5fc1eba55",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.049478+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.811469+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "7c850dd6fcbd34c5f13afba152cd3e027e5e940ae29ef87014b314166df36e5c",
+      "source_digest": "6806fb77489e3d0887b5272b96679bf8f8b658ad6f5d11ca89ee38f2b32bc742",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.051640+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.813574+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "7b4819528cc2b7d52771610d92511992d197209f85f5a61fa46ff97ff3ba2133",
+      "source_digest": "da6d4f4063633f922ee6df0f108801c5dd69f5ac16c8f1a684b43539965abf68",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.054084+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.816208+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "eaa2b585f77711240c7966f5da9039b2bcb68e5c14418e4cb59731f29f65a055",
+      "source_digest": "235b5b3153774a58fb567d75a9fbaeab8ad16cde49b559f566db6f5ca679b7b3",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.056125+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.819202+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "927f4134291c4e94241cbaac4eb037ec60bebee55d4ec2e92d716cdc4762f8db",
+      "source_digest": "a61249ec9204b4e1257bf7cc59d4ca81f4e867056833253fd8d300d5fc1eba55",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.058826+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.821640+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "14": {
       "document_sha256": "14f89ec3bf10261b8d039e4bef5a113b599f30b6494755090a6570ac8e0dbdb0",
-      "source_digest": "927f4134291c4e94241cbaac4eb037ec60bebee55d4ec2e92d716cdc4762f8db",
+      "source_digest": "a61249ec9204b4e1257bf7cc59d4ca81f4e867056833253fd8d300d5fc1eba55",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.061143+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.824097+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "15": {
       "document_sha256": "f6d97b6b70a73b55d43b72efc4df0232ffe0516f32f22478fdf94b6a973af131",
-      "source_digest": "927f4134291c4e94241cbaac4eb037ec60bebee55d4ec2e92d716cdc4762f8db",
+      "source_digest": "a61249ec9204b4e1257bf7cc59d4ca81f4e867056833253fd8d300d5fc1eba55",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.063183+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.827028+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "688aa278b082b495bba07a17ccc4c4715c3fdff3300c4c117455aaec5a0ee9e7",
+      "source_digest": "0fe867f7b665c9f7916dde056610486bebc4097c94bbf451783cc1748a80a66e",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.065871+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.829044+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "6f64c141093d5874687af3e1ea524cc2936f4a68caaf31de3624a945da7e6f22",
+      "source_digest": "e5480a8c5989f84c2b24bc2fac3fc91aed663ff82fde79e78dc8eebe02460c03",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.068357+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.831121+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "e5a0edc66d3e0da13a881b6e2033d9223cc64ffabb859086d1411de6c82f619b",
+      "source_digest": "86ea4cf3b9825abd6d7cdd8bc3108aa392a8d9ce34dfe5bfc40294014759d9c6",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.070415+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.833047+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "f8af0e2676e38c6aaa2db998dace73ef66c6bacd86c70559db7ccbb5fc2fa264",
+      "source_digest": "eb54a3cc0b2b20f26b5754aafae8eab397605a4e7a2bd8859b45fb3abc1d4399",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.072590+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.835934+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     },
     "20": {
       "document_sha256": "9e456e5db5c44c8592f493633e32f1e00de8d112b05dd468e6b335e481363d45",
-      "source_digest": "e5a0edc66d3e0da13a881b6e2033d9223cc64ffabb859086d1411de6c82f619b",
+      "source_digest": "86ea4cf3b9825abd6d7cdd8bc3108aa392a8d9ce34dfe5bfc40294014759d9c6",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Fixes 2026-11-04: KIS REST cards count as KIS (3-minute polling, no delayed label), search popup styled per theme, search field stays empty after choosing a row, KRX/ETF quote rows hidden on screen but kept in exports. 07 08 09 14 FACTS edited; the other documents were searched for statements on the symbol popup, quote exports, KIS source strings and the delayed label, and none needed a change.",
-      "reviewed_at": "2026-11-04T10:44:04.075329+00:00",
-      "source_commit": "1842bfcb500ccef79dbd28f4545ee29dadae2afd"
+      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
+      "reviewed_at": "2026-11-04T10:45:39.837844+00:00",
+      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
     }
   }
 }
