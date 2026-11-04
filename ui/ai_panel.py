@@ -21,6 +21,7 @@ import flet as ft
 from core.quant import insights
 from core.i18n import LocaleContext
 from core.research.ai_connection import error_message
+from core.research.ai_output_check import AI_LABEL, NumberCheck, check_line
 from core.research.ai_payload import filter_analysis_fields
 from core.theme import RADII, active
 from ui.components import chip, notice
@@ -39,6 +40,25 @@ class _ErrorNotice(ft.Container):
         code = getattr(self.result, 'error_code', '')
         message = error_message(code, ctx.language, getattr(self.result, 'http_status', None)) if code else self.result.error
         self.content = notice(message, 'error', icon=ft.Icons.CLOUD_OFF_OUTLINED)
+
+
+class _CheckNotice(ft.Container):
+    """'Not verified' label and the advisory number check under a finished reply.
+    Re-rendered on language changes without sending another request."""
+    def __init__(self, result, page):
+        super().__init__()
+        self.result = result
+        ctx = getattr(page, 'qg_locale', None)
+        self.render_locale(ctx if isinstance(ctx, LocaleContext) else LocaleContext('en_US'))
+
+    def render_locale(self, ctx):
+        self.ctx = ctx
+        language = 'ko' if ctx.language == 'ko' else 'en'
+        check = getattr(self.result, 'number_check', None)
+        check = check if isinstance(check, NumberCheck) else None
+        muted = active().muted
+        self.content = ft.Column([ft.Text(AI_LABEL[language], size=11, color=muted),
+                                  ft.Text(check_line(check, language), size=11, color=muted)], spacing=2)
 
 
 def analysis_panel(page: ft.Page, *, kind: str, narrative: str,
@@ -74,6 +94,7 @@ def analysis_panel(page: ft.Page, *, kind: str, narrative: str,
                     deep_host.controls = [
                         ft.Row([chip(f"engine: {result.engine}", "accent")], spacing=6),
                         ft.Text(result.text, size=13, color=pal.text, selectable=True),
+                        _CheckNotice(result, page),
                     ]
             finally:
                 busy.visible = False

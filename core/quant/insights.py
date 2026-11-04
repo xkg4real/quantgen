@@ -29,6 +29,7 @@ except Exception:                                    # pragma: no cover
 import config
 from core.research.ai_connection import (OUTPUT_TOKEN_LIMIT, error_message, reply_result,
                                          response_error, transport_error)
+from core.research.ai_output_check import NumberCheck, number_check
 from core.research.ai_payload import AI_PAYLOAD_MAX_BYTES, VALUE_NOTE, ai_payload_json
 from core.research.mc_disclosure import bootstrap_disclosure
 from core.quant.backtest import BacktestResult
@@ -50,6 +51,7 @@ class Analysis:
     error_code: str = ""              # safe diagnostic category, never provider text
     http_status: int | None = None
     stop_reason: str = ""             # the Messages API stop reason of a finished reply
+    number_check: NumberCheck | None = None   # advisory only; None means not run
 
 
 def ai_ready() -> bool:
@@ -361,4 +363,10 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
     code, text, stop = reply_result(body)
     if code:
         return failure(code, model)
-    return Analysis(text, model, stop_reason=stop)
+    # Advisory: compares cited numbers with the JSON actually sent; never changes the
+    # text, an error code, the payload or a verdict, and never blocks display.
+    try:
+        check = number_check(text, json.loads(sent.text), question.strip())
+    except Exception:
+        check = None
+    return Analysis(text, model, stop_reason=stop, number_check=check)

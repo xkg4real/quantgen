@@ -70,6 +70,12 @@ class ConnectionTests(unittest.TestCase):
                             'stop_reason': 'end_turn'})
         self.assertEqual(r.text, 'Fixture explanation'); self.assertEqual(r.error_code, '')
         self.assertEqual(r.stop_reason, 'end_turn')
+        self.assertIsNotNone(r.number_check)        # advisory; never alters the text
+        with patch.object(insights, 'number_check', side_effect=ValueError('fixture')):
+            r = self.call(body={'content': [{'type': 'text', 'text': 'Fixture 9.99'}],
+                                'stop_reason': 'end_turn'})
+        self.assertEqual((r.error_code, r.text, r.stop_reason), ('', 'Fixture 9.99', 'end_turn'))
+        self.assertIsNone(r.number_check)
         for body in (None, 'bad', {'content': []}, {'content': {}},
                      {'content': [{'type':'text','text': 42}]}):
             with self.subTest(body=body):

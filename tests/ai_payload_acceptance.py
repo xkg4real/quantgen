@@ -285,6 +285,55 @@ class AiPayloadTests(unittest.TestCase):
         self.assertFalse(rows[3].controls[-1].visible)
         self.assertEqual(rows[1].value, "Local computed explanation")
 
+    def test_flet_success_shows_label_and_number_check(self):
+        from core.i18n import LocaleContext
+        from core.research.ai_output_check import AI_LABEL
+        from ui.localization import translate_controls
+        import core.quant.validate as V
+        import core.quant.gate_ledger as GL
+        reply = "The Sharpe ratio of 9.99 sits well above the sample's 0.42."
+        http = Mock(); http.post.return_value.status_code = 200
+        http.post.return_value.json.return_value = {"content": [{"type": "text", "text": reply}],
+                                                    "stop_reason": "end_turn"}
+        page = Mock(); page.run_thread.side_effect = lambda worker: worker()
+        with patch("socket.socket.connect", side_effect=AssertionError("No live network")), \
+             patch.object(V, "load_cards", side_effect=AssertionError("No study cards")), \
+             patch.object(GL, "family_ledger", side_effect=AssertionError("No ledger")), \
+             patch.object(insights.config, "anthropic_key", return_value="fixture-key"), \
+             patch.object(insights.config, "ai_model", return_value="fixture-model"), \
+             patch.object(insights, "_requests", http), \
+             patch.object(insights, "ai_ready", return_value=True):
+            panel = analysis_panel(page, kind="portfolio", narrative="Local computed explanation",
+                                   payload_fn=lambda: {"sharpe": 0.42, "price": 42})
+            rows = panel.content.controls
+            next(c for c in rows[3].controls if isinstance(c, ft.Button)).on_click(None)
+        http.post.assert_called_once()
+        host = rows[-1]
+        self.assertEqual(host.controls[1].value, reply)        # the commentary text is unchanged
+        values = [str(t.value) for t in texts(host)]
+        self.assertIn(AI_LABEL["en"], values)
+        line = next(v for v in values if v.startswith("Number check"))
+        self.assertIn("9.99", line); self.assertNotIn("0.42,", line)
+        self.assertEqual(rows[1].value, "Local computed explanation")
+        self.assertFalse(rows[3].controls[-1].visible)
+        translate_controls(host, LocaleContext("ko_KR"))
+        values = [str(t.value) for t in texts(host)]
+        self.assertTrue(any("검증 안 됨" in v for v in values))
+        self.assertTrue(any(v.startswith("숫자 대조") and "9.99" in v for v in values))
+        self.assertIn(reply, values)
+        translate_controls(host, LocaleContext("en_US"))
+        values = [str(t.value) for t in texts(host)]
+        self.assertIn(AI_LABEL["en"], values)
+        self.assertFalse(any("검증" in v for v in values))
+
+        runner = Mock(return_value=insights.Analysis("x", "fixture"))
+        with patch.object(insights, "ai_ready", return_value=True):
+            panel = analysis_panel(page, kind="portfolio", narrative="local",
+                                   payload_fn=lambda: {"price": 42}, deep_fn=runner)
+            rows = panel.content.controls
+            next(c for c in rows[3].controls if isinstance(c, ft.Button)).on_click(None)
+        self.assertIn("Number check: not run.", [str(t.value) for t in texts(rows[-1])])
+
 
 def texts(root):
     """Every ft.Text under a control, through `controls` and `content`."""

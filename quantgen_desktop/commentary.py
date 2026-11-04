@@ -4,12 +4,14 @@ Only selected calculation reports enter this panel. Owner rulings, rule stores,
 paper orders, connection settings, account holdings and source paths do not.
 """
 from copy import deepcopy
+from dataclasses import asdict
 import hashlib
 import json
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButton,QPlainTextEdit,QLineEdit,QCheckBox
 from core.research.ai_connection import error_message
+from core.research.ai_output_check import AI_LABEL, NumberCheck, check_line
 from core.research.presentation import safe_detail
 from core.research.tool_export import plain
 from core.research.ai_payload import AI_PAYLOAD_MAX_BYTES, filter_analysis_fields, private_field
@@ -60,6 +62,8 @@ class CommentaryPane(QWidget):
         self.send=QPushButton('AI 해설 요청');self.send.setCursor(Qt.CursorShape.PointingHandCursor)
         controls.addWidget(self.send);layout.addWidget(self.input_box)
         self.output=QPlainTextEdit();self.output.setReadOnly(True);self.output.setMinimumHeight(250);layout.addWidget(self.output)
+        # 'Not verified' label and advisory number check of a finished reply; empty until one exists.
+        self.check_note=label('','muted');layout.addWidget(self.check_note)
         self.report_actions=ReportActions(self.status);layout.addWidget(self.report_actions)
         self.jobs=Jobs(self);self.jobs.succeeded.connect(self.finished);self.jobs.failed.connect(self.failed)
         self.jobs.busy_changed.connect(lambda busy:self.input_box.setEnabled(not busy))
@@ -83,7 +87,7 @@ class CommentaryPane(QWidget):
 
     def invalidate(self,*_):
         self.payload=None;self.consent.setChecked(False);self._mark_ready();self.preview.clear()
-        self.output.clear();self.report_actions.clear()
+        self.output.clear();self.check_note.setText('');self.report_actions.clear()
 
     def refresh_sources(self):
         self.invalidate();self.source.clear()
@@ -115,7 +119,7 @@ class CommentaryPane(QWidget):
             self.consent.setFocus();return
         payload=deepcopy(self.payload);question=safe_detail(self.question.text(),limit=None)
         if len(question)>4000:self.status.setText('질문을 4,000자 이내로 입력하세요.');return
-        self.completed_payload=payload;self.output.clear();self.report_actions.clear();self.status.setText('AI 해설 요청 중…')
+        self.completed_payload=payload;self.output.clear();self.check_note.setText('');self.report_actions.clear();self.status.setText('AI 해설 요청 중…')
         kind=payload['tool']
         if kind=='macro':
             kind={'daily':'daily_market_commentary','weekly':'weekly_fi_fx_strategy'}.get(payload['parameters'].get('tool'),kind)
@@ -129,13 +133,19 @@ class CommentaryPane(QWidget):
             return
         text=safe_detail(result.text,limit=None)
         self.output.setPlainText(text)
+        check=getattr(result,'number_check',None);check=check if isinstance(check,NumberCheck) else None
+        notes={language:AI_LABEL[language]+'\n'+check_line(check,language) for language in ('en','ko')}
+        self.check_note.setText(notes['ko']);self.check_note.localized_text=notes;self.check_note.retranslate()
         digest=hashlib.sha256(json.dumps(self.completed_payload,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
-        self.report_actions.set_result('ai_commentary',{'source_tool':self.completed_payload['tool'],'source_payload_sha256':digest},
-            [{'type':'text','text':text},{'type':'text','text':'AI-generated commentary · '+safe_detail(result.engine)+' · official verdict unchanged'}])
+        self.report_actions.set_result('ai_commentary',{'source_tool':self.completed_payload['tool'],'source_payload_sha256':digest,
+            'stop_reason':getattr(result,'stop_reason','') or 'NOT_RECORDED','verification':'NOT_VERIFIED',
+            'number_check':asdict(check) if check else None},
+            [{'type':'text','text':text},{'type':'text','text':'AI-generated commentary · '+safe_detail(result.engine)+' · official verdict unchanged'},
+             {'type':'text','text':AI_LABEL['en']},{'type':'text','text':check_line(check,'en')}])
         self.status.setText('AI 해설 완료 · '+safe_detail(result.engine)+' · 공식 판정은 원래 기록을 유지합니다.')
 
     def failed(self,error, *, localized=None):
-        self.output.clear();self.report_actions.clear();self.status.setText('AI FAILED · '+safe_detail(error))
+        self.output.clear();self.check_note.setText('');self.report_actions.clear();self.status.setText('AI FAILED · '+safe_detail(error))
         if localized:
             self.status.localized_text = {'ko': localized}
             self.status.retranslate()

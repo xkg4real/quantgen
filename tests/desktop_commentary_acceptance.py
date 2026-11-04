@@ -165,6 +165,48 @@ class NativeCommentaryTests(unittest.TestCase):
         self.assertNotIn('고정', p.status.text())
         self.runner.assert_not_called()
 
+    def test_success_label_and_export_stay_advisory(self):
+        from core.research.ai_output_check import AI_LABEL, NumberCheck, check_line
+        p=self.prepare();p.consent.setChecked(True);p.submit();self.wait()
+        self.assertEqual(p.output.toPlainText(),'Fixture commentary')
+        self.window.ui_language='ko';p.check_note.retranslate()
+        self.assertIn('검증 안 됨',p.check_note.text());self.assertIn('숫자 대조: 실행하지 않음.',p.check_note.text())
+        self.window.ui_language='en';p.check_note.retranslate()
+        self.assertEqual(p.check_note.text(),AI_LABEL['en']+'\n'+check_line(None,'en'))
+        report=p.report_actions.report
+        self.assertEqual(report['verdict'],'NOT_RUN')
+        self.assertEqual(report['parameters']['verification'],'NOT_VERIFIED')
+        self.assertEqual(report['parameters']['stop_reason'],'NOT_RECORDED')
+        self.assertIsNone(report['parameters']['number_check'])
+        texts=[s['text'] for s in report['sections']]
+        self.assertEqual(texts[0],'Fixture commentary')
+        self.assertIn(AI_LABEL['en'],texts);self.assertIn(check_line(None,'en'),texts)
+        p.refresh_sources();self.assertEqual(p.check_note.text(),'')
+
+        check=NumberCheck(1,('9.99',),(),0,0,0)
+        self.runner.return_value=Analysis('Fixture commentary','fixture-model',stop_reason='end_turn',number_check=check)
+        p=self.prepare();p.consent.setChecked(True);p.submit();self.wait()
+        self.window.ui_language='ko';p.check_note.retranslate();self.assertIn('9.99',p.check_note.text())
+        self.assertIn('찾지 못한 숫자',p.check_note.text())
+        self.window.ui_language='en';p.check_note.retranslate();self.assertIn('not found in anything sent: 9.99',p.check_note.text())
+        report=p.report_actions.report
+        self.assertEqual(report['parameters']['stop_reason'],'end_turn')
+        self.assertEqual(report['parameters']['number_check']['not_found'],['9.99'])
+        self.assertIn(check_line(check,'en'),[s['text'] for s in report['sections']])
+        self.assertEqual(report['verdict'],'NOT_RUN')
+
+        gate=threading.Event()
+        def blocked(*a,**kw):gate.wait(2);return Analysis('Fixture commentary','fixture-model')
+        self.runner.side_effect=blocked
+        p.consent.setChecked(True);p.submit()
+        self.assertEqual(p.check_note.text(),'');gate.set();self.wait()
+        self.assertTrue(p.check_note.text())
+        self.runner.side_effect=None
+        self.runner.return_value=Analysis('','fixture-model',error='fixture failure')
+        p.consent.setChecked(True);p.submit();self.wait()
+        self.assertEqual(p.check_note.text(),'');self.assertEqual(p.output.toPlainText(),'')
+        self.assertIsNone(p.report_actions.report)
+
     def test_daily_prompt_kind_and_close_guard(self):
         gate=threading.Event()
         def runner(*a,**kw):gate.wait(2);return Analysis('daily fixture','fixture')
