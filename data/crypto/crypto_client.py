@@ -149,8 +149,13 @@ class UpbitPublic:
         rows: dict[str, dict] = {}
         seen: set[str] = set()
         to: Optional[str] = None
-        for _ in range(days // _UPBIT_PAGE + 3):
-            params = {"market": market, "count": min(_UPBIT_PAGE, max(1, days - len(rows)))}
+        # A day without all four prices is left out, not priced at 0 (D12-03, Upbit daily prices only).
+        # It is not counted, so paging continues until `days` usable days, the history ends, or
+        # 2 × days + one page of days have been looked at (most days price-less: give up).
+        while True:
+            # Once a day was skipped the shortfall no longer sizes the next page: ask for full pages.
+            count = _UPBIT_PAGE if len(seen) > len(rows) else min(_UPBIT_PAGE, max(1, days - len(rows)))
+            params = {"market": market, "count": count}
             if to:
                 params["to"] = to
             page = _get(f"{UPBIT}/candles/days", params, label=f"Upbit {market}")
@@ -161,16 +166,14 @@ class UpbitPublic:
                 d = str(r.get("candle_date_time_utc") or "")[:10]
                 if d and d not in seen:
                     seen.add(d); fresh += 1
-                    # A day without all four prices is left out, not priced at 0 (D12-03, Upbit daily prices only);
-                    # it is not counted, so paging continues until `days` usable days.
                     if all(price_or_none(r.get(k)) is not None for k in _UPBIT_PRICES):
                         rows[d] = r
-            if not fresh or len(rows) >= days:
+            if not fresh or len(rows) >= days or len(seen) >= 2 * days + _UPBIT_PAGE:
                 break
             to = f"{min(seen)}T00:00:00Z"
         if not rows:
             raise CryptoError(f"Upbit returned no candles for {market}.")
-        ds = sorted(rows)
+        ds = sorted(rows)[-max(days, 1):]   # full pages can overshoot: keep the newest `days`
         g = lambda k: tuple(float(rows[d].get(k) or 0.0) for d in ds)   # noqa: E731
         return Candles(symbol=market, dates=tuple(ds), close=g("trade_price"), open=g("opening_price"),
                        high=g("high_price"), low=g("low_price"), volume=g("candle_acc_trade_volume"),

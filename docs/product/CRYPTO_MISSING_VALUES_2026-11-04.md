@@ -34,7 +34,7 @@ other limitation of the same model already carries its own error ID.
 | Where | Before | After |
 | --- | --- | --- |
 | `data/crypto/crypto_client.py` premium index | missing index → 0.0 %, missing mark → −100 %, missing next funding time → 1970-01-01 | `premium_pct`, `mark`, `index`, `next_funding_time` are `None` when missing |
-| Upbit daily candles | a day without a close (or open/high/low) became 0.0 (premium −100 %) | the day is left out and not counted, so paging continues to the requested number of usable days (the Upbit daily part of D12-03, not §10; see Not changed) |
+| Upbit daily candles | a day without a close (or open/high/low) became 0.0 (premium −100 %) | the day is left out and not counted, so paging continues to the requested number of usable days: after a skipped day it asks for full 200-day pages and keeps the newest days; it stops early only when the history ends or after looking at 2 × days + 200 days (the Upbit daily part of D12-03, not §10; see Not changed) |
 | Upbit ticker | a missing price, change or 24-hour value became 0.0 | `None` |
 | Binance funding rate in the premium index | missing → 0.0, read by the AI as a 0 % rate | `None` |
 | `core/crypto/analytics.py` `kimchi_premium` | z = 0 for a flat window; `last_z` 0.0 when not computed; zero or missing prices entered the premium | z and `last_z` are NaN when undefined; days without a usable Upbit or Binance price are left out, and an unusable FX fixing is skipped so the previous one carries forward |

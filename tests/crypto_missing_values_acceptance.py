@@ -72,6 +72,41 @@ class ProviderValues(NoNetwork):
         self.assertEqual(got.close, (88_000_000.0, 90_000_000.0, 91_000_000.0))
         self.assertEqual(get.call_count, 2)
 
+    def test_upbit_paging_reaches_the_requested_days_when_price_less_days_are_scattered(self):
+        history = days(3000, start=date(2018, 1, 1))  # oldest first
+
+        def endpoint(missing_every):
+            calls = []
+            def get(url, params, label=""):
+                calls.append(params["count"])
+                end = history.index(params["to"][:10]) if "to" in params else len(history)  # `to` is exclusive
+                return [{"candle_date_time_utc": f"{d}T00:00:00",
+                         "trade_price": None if missing_every and i % missing_every == 0 else 100.0 + i,
+                         "opening_price": 1, "high_price": 1, "low_price": 1,
+                         "candle_acc_trade_volume": 1, "candle_acc_trade_price": 1}
+                        for i, d in reversed(list(enumerate(history[max(0, end - params["count"]):end], max(0, end - params["count"]))))]
+            return calls, get
+
+        calls, get = endpoint(None)
+        with patch.object(C, "_get", side_effect=get):
+            got = C.UpbitPublic().daily("KRW-BTC", days=730)
+        self.assertEqual(got.dates, tuple(history[-730:]))
+        self.assertEqual(calls, [200, 200, 200, 130])  # valid history: the same requests as before
+        # Every 10th, 5th, 3rd or 2nd day without a close: the shrinking requests used to stop
+        # 1 to 130 days short (729 of 730 with every 10th missing). Now the newest usable days.
+        for every in (10, 5, 3, 2):
+            for want in (200, 504, 730):
+                usable = [d for i, d in enumerate(history) if i % every]
+                calls, get = endpoint(every)
+                with self.subTest(every=every, days=want), patch.object(C, "_get", side_effect=get):
+                    got = C.UpbitPublic().daily("KRW-BTC", days=want)
+                    self.assertEqual(got.dates, tuple(usable[-want:]))
+                    self.assertTrue(all(c > 0 for c in got.close))
+        calls, get = endpoint(1)  # no usable day at all: a bounded number of requests, then an error
+        with patch.object(C, "_get", side_effect=get), self.assertRaises(C.CryptoError):
+            C.UpbitPublic().daily("KRW-BTC", days=730)
+        self.assertLessEqual(sum(calls), 2 * 730 + 2 * 200)
+
     def test_ticker_without_a_price_reports_none(self):
         with patch.object(C, "_get", return_value=[{"market": "KRW-BTC", "trade_price": None}]):
             row = C.UpbitPublic().ticker("KRW-BTC")[0]
