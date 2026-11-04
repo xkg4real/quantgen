@@ -659,11 +659,11 @@
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "97b12c45bd005180621d5d8074a92b9aee10088bace568e1b905997b89acd92b",
+      "source_digest": "885868daebd1b6ec292331645499a4a4f15b1ca3d7f36429e3edeaad32050b42",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
-      "reviewed_at": "2026-11-04T11:12:49.521622+00:00",
-      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
+      "review_note": "Test-only change in tests/desktop_operation_fixes_acceptance.py: a long ASCII wrapping line makes the wider-preferred-width precondition hold on any platform font (Ubuntu CI saw 388 == 388). The product behaviour and the claims in 12 are unchanged.",
+      "reviewed_at": "2026-11-04T11:34:31.568340+00:00",
+      "source_commit": "31086ac17b848fc06152234b188af953ab2a8978"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",

@@ -135,6 +135,8 @@
 
 설치물 확인: `tools/packaging/stage.py`로 허용 파일만 모아 만든 wheel을 새 가상환경에 설치하고 저장소 밖에서 `tools/packaging/smoke_desktop.py`를 실행해 `PASS`를 받았습니다(실제 공급자·모의투자 엔진·공식 원장은 `NOT_RUN`). 새 시험 셋은 수정 전 코드로 되돌리면 실패하는 것을 확인했습니다. `tests/run_all.py` 전체 실행과 Windows CI는 이 기록에 포함하지 않았습니다(미검증).
 
+CI(2026-11-04, `31086ac`)의 Ubuntu 3.12에서 `test_form_panel_is_not_capped_at_a_wider_preferred_width`가 본 검사 전의 전제(패널 크기 힌트 < 실제 폭에서 필요한 높이)에서 388 = 388로 멈췄습니다. 좌측 메뉴가 좁아져 내용 폭이 넓어지자, CI 글꼴에서는 ETF 양식의 설명이 실제 폭에서 더 이상 줄바꿈되지 않았기 때문입니다. Windows 3.11·3.12·3.14는 통과했습니다. 시험에 긴 ASCII 줄바꿈 글줄을 더해 어느 글꼴에서도 전제가 성립하게 했습니다(로컬 456 < 540). 높이 정책을 예전의 Maximum으로 되돌리면 이 시험이 실패하는 것도 확인했습니다.
+
 ## 10. 실행 방법 (Windows)
 
 1. 저장소 폴더에서 브랜치를 받습니다: `git fetch` 다음 `git switch claude/ui-markets-watchlist-20261104` (main에 병합된 뒤에는 `git switch main`과 `git pull`).
