@@ -81,7 +81,7 @@
 5. **매크로 표의 행별 관측일은 tooltip에만 있습니다.** 행별 오래된 표시 규칙은 원래 없었습니다.
 6. **(고침) 종목 검색 목록이 창의 색을 따르지 않던 문제.** QCompleter 목록은 부모 없는 별도 창이라 주 창의 스타일시트가 닿지 않습니다. 이제 테마를 정하거나 바꿀 때마다 모든 종목 칸의 목록에 직접 스타일을 줍니다(typography.py:138 `popup_stylesheet`, markets_view.py:270 `SymbolCompleter.set_theme`, app.py:1040-1041). 닿지 않던 창 스타일시트의 `QListView#symbolPopup` 규칙은 지웠습니다. 소스 색 대비는 글자/바탕 LIGHT 14.99:1·DARK 14.10:1, 선택·hover 행 LIGHT 12.76:1·DARK 9.26:1입니다([14번](../compliance/14-contrast.md)). 목록 안쪽 여백을 없애 두 줄 결과에 스크롤 막대가 생기지 않게 했습니다(오프스크린 캡처). Windows 스타일에서의 모습은 미검증입니다.
 7. **공급자·날짜 글자가 그대로 남은 도구가 있습니다.** 요청은 “모든 부분에서” 공급자·관측일 칸을 없애는 것이었지만 이 기록의 변경은 다음 글자를 바꾸지 않았습니다. 외환: 모든 결과의 “Data sources” 표(Series·Provider·First·Last·Note, fx.py:38-39)와 차트 축 이름의 기간(:63, :79). 매크로: “As of {기준일} · {공급자: 개수}” 줄(macro.py:44-46). 금리(rates.py:59-60)·채권(bonds.py:99-100)·구조화 상품(structuring.py:40)·파생상품(market_tools.py:41)·ETF(:104)·가상자산(:164): 결과 머리의 공급자와 날짜. KRX: 실패이거나 KIS가 아닌 출처일 때 “Provider:” 줄(:228-229).
-8. **UI 변경 기록이 아직 없습니다.** 2026-11-03 소유자 결정은 UI 변경마다 `docs/product/ui_website_updates/` 기록을 요구합니다([소유자 결정 기록](../nautilus_bridge/OWNER_RULINGS_LOG.md) 326행). 기록 이름이 `PR-<번호>.json`이므로 이 브랜치의 PR을 연 뒤 씁니다.
+8. **(기록함) UI 변경 기록.** 2026-11-03 소유자 결정은 UI 변경마다 `docs/product/ui_website_updates/` 기록을 요구합니다([소유자 결정 기록](../nautilus_bridge/OWNER_RULINGS_LOG.md) 326행). 이 브랜치의 PR #71을 연 뒤 [PR-71.json](ui_website_updates/PR-71.json)을 썼습니다. 웹사이트 반영은 별도 세션 담당이며 이 기록은 수신을 뜻하지 않습니다.
 
 ## 7. 미검증
 
