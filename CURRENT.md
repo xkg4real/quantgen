@@ -5,14 +5,14 @@ from: claude
 task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2
-next_ids: ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-04T03:45:00+09:00
+next_ids: ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-04T04:05:00+09:00
 stale_after_hours: 3
-waiting_on: owner
-work_branch: claude/fix-macro-ui-tests-20261104
-work_commit: b00cb42
+waiting_on: none
+work_branch: claude/ui-markets-watchlist-20261104
+work_commit: bb35b3b
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/69
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -92,6 +92,13 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 - [ ] 7번 결과 통합
 
 ## 5. 중단 지점
+
+- **새 소유자 요청 (2026-11-04, 지금 작업, 원문 그대로):**
+  > 현재 APP 글자 폰트가, 아무런 생기가 없고 글자 폰트가 깨지는 느낌이 드는 부분들도 많다. 글자 폰트를 필요한 부분들에 조금더 입체적으로 수정바란다. 또한 실시간 지표들을 보여주는 모든 부분에서, '공급자'와 '관측일'칸 자체가 필요가 없다. 또한 모든 차트를 검색할 때에, 종목 코드만이 아닌, 종목 코드와 해당 주식의 이름으로도 검색할 수 있게 수정돼야하고, 현재 시장 에서 KIS CHART, 채권 금리 등 해당 요소들을 스크롤을 통해 선택할수잇는데, 이 기능은 불편하기만 한다. 삭제 필요 또한 '시장' UI에서 주요지표들의 실시간 차트를 제공할 필요가 없다. 해당 화면은 사용자의 선호에 따라 자신이 관심종목으로 추가해놓은 차트들을 확인할 수 있어야하고, 구체적으로 하나의 종목을 검색하였을 때 해당 종목의 모든것들을 한 화면에서 제시해줘야한다. 바로 수정해보고 어플 실행방법 안내바란다.
+  - ID: ⑬-2/a4-b/2(시장 스크롤 탭 선택 삭제, 도구는 다른 곳으로), ⑬-2/a4-c/2(모든 차트 검색에 코드+종목명), ⑬-2/a4-d/2(시장 = 관심종목 차트 + 한 종목 전체 화면, 주요지표 실시간 차트 제거), ⑬-2/a4-e(실시간 지표의 공급자·관측일 칸 제거), ⑬-2/a3-type(글자 위계·입체감).
+  - 브랜치 `claude/ui-markets-watchlist-20261104`(main `bb35b3b`에서), 워크트리 스크래치패드 `uimk`. 대상은 Native 앱(`python -m quantgen_desktop`).
+  - **main 동결 중이라 PR은 만들되 병합하지 않습니다.** 소유자는 별도 폴더에 이 브랜치를 받아 실행합니다(Step 7A용 기본 클론은 건드리지 않음).
+  - 1단계: 읽기 전용 지도 워크플로 `wf_c6fd7578-be3`(시장 구조, 공급자·관측일 칸, 검색, 한 종목 화면, 글자) 실행 중.
 
 - **main 병합 동결 중 (2026-11-04 03:36:05 KST부터).** 소유자 결정 원문은 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`
   "2026-11-04, Claude Code 채팅: Step 7A 동안 main 병합 동결"에 있습니다(커밋 `b00cb42`).
