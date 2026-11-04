@@ -352,8 +352,10 @@ def _reason(row, ctx):
         return _text(ctx, "KIS에서 받은 실시간 체결입니다. 체결 시각과 앱의 수신 시각을 구분해 표시합니다.",
                      "A live trade received from KIS. The exchange trade time and app receipt time are shown separately.")
     if row.get("status") == "STALE":
-        return _text(ctx, "마지막 일별 관측이 오래되었습니다. 아래 관측일을 확인하세요.",
-                     "The last daily observation is old. Check its observation date below.")
+        # Owner, 2026-11-04: no observation-date row; a stale value names its date here instead.
+        observed = _date(row.get("observation_date"), ctx) if row.get("observation_date") else "—"
+        return _text(ctx, f"마지막 일별 관측({observed})이 오래되었습니다. 표시된 값은 최신이 아닙니다.",
+                     f"The last daily observation ({observed}) is old. The value shown is not current.")
     if row.get("kind") == "domestic_stock":
         return _text(ctx, "조회 시점에 받은 시세입니다. 수신 시각은 시장 체결 시각을 뜻하지 않습니다. 실시간 체결은 차트에서 별도로 연결합니다.",
                      "This is a quote snapshot. Receipt time is not the exchange trade time. Connect trade streaming separately in the chart.")
@@ -534,9 +536,7 @@ class MarketDetailDialog(QDialog):
             (("상태", "Status"), _status(row, ctx)),
             (("Q-SCORE", "Q-SCORE"), _score_text(row.get("q_score"), ctx)),
             (("점수 기준 시각", "Score data as of"), _score_as_of(row.get("q_score"), ctx)),
-            (("공급처", "Provider"), _provider(row, ctx)),
             (("단위", "Unit"), str(row.get("unit") or "—")),
-            (("관측일", "Observation date"), _date(row.get("observation_date"), ctx) if row.get("observation_date") else unknown),
             (("체결 시각", "Trade time"), _timestamp(row.get("market_time"), ctx)),
             (("수신 시각", "Received at"), _timestamp(row.get("received_at"), ctx)),
             (("조회 시각", "Queried at"), _timestamp(row.get("loaded_at"), ctx)),

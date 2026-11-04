@@ -150,7 +150,7 @@ KO_TO_EN = {
  '계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.':'Calculation completed · check sources, dates and assumptions. Official validation is separate.',
  '입력 오류 · 숫자, 단위, 만기 및 선택한 도구의 조건을 확인하세요.':'Input error · check numbers, units, maturity and tool conditions.',
  'Macro · 시장 관측과 로컬 해설':'Macro · market observations and local commentary',
- '이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 Markets의 Macro v2 탭에서 확인합니다.':'This is the descriptive macro sheet. Use Markets → Macro v2 for the overlay, model cards and research register.',
+ '이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 분석 도구의 매크로 v2에서 확인합니다.':'This is the descriptive macro sheet. Use Analysis tools → Macro v2 for the overlay, model cards and research register.',
  '금리·스프레드의 변화는 bp, 다른 지표의 변화는 원 단위입니다. 분류는 설명용이며 검증 게이트나 포지션을 바꾸지 않습니다.':'Rate/spread changes use bp; other changes use original units. Classification is descriptive and changes neither gates nor positions.',
  '합성 데이터 포함: ':'Includes synthetic data: ',
  'Bonds · 가격·위험·시나리오·선물 헤지':'Bonds · price, risk, scenarios and futures hedge',

@@ -98,7 +98,7 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.assertTrue(dialog.isVisible())
         self.assertIn("삼성전자", dialog.windowTitle() + dialog.title.text())
         fields = self.fields(dialog)
-        self.assertEqual(fields["관측일"], "확인 안 됨")
+        self.assertNotIn("관측일", fields); self.assertNotIn("공급처", fields)  # owner, 2026-11-04
         self.assertEqual(fields["시가총액"], "확인 안 됨")
         self.assertNotIn("123456789", " ".join(fields.values()))
         self.assertIn("UTC", fields["수신 시각"])
@@ -138,7 +138,7 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.assertEqual(self.panel.table.item(3, 0).text(), "US 10-year yield")
         self.assertEqual(self.panel.table.item(6, 0).text(), "Samsung Electronics")
         self.assertIn("Quote snapshot", self.panel.table.item(6, 1).toolTip())
-        self.assertEqual(self.fields(dialog)["Observation date"], "Unconfirmed")
+        self.assertNotIn("Observation date", self.fields(dialog)); self.assertNotIn("Provider", self.fields(dialog))
         self.assertEqual(self.fields(dialog)["Market cap"], "Unconfirmed")
         visible_text = [v.text() for v in self.panel.findChildren(QLabel) if v.isVisible()]
         visible_text += [v.text() for v in self.panel.findChildren(QPushButton) if v.isVisible()]
@@ -398,7 +398,7 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.assertEqual(fields["Volume"], "1,200,000")
         self.assertEqual(fields["Financial reference date"], "Not supplied by provider")
         self.assertEqual(fields["Status"], "Quote snapshot")
-        self.assertEqual(fields["Provider"], "KIS")
+        self.assertNotIn("Provider", fields)  # provider stays in the price tooltip (owner, 2026-11-04)
         self.assertIn("EPS unit", self.panel.detail_dialog.rights.text())
         self.panel.set_locale(LocaleContext("ko_KR"))
         self.assertEqual(table.item(6, 3).text(), "120만")

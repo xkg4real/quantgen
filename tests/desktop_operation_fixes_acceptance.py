@@ -83,11 +83,12 @@ class OperationFixTests(unittest.TestCase):
         w = self.window
         w.show_market_pane(w.rates); self.app.processEvents()
         scroll = w.stack.currentWidget().verticalScrollBar()
-        tool, tabs = w.rates.tool, w.market_tabs
-        before = (tool.currentIndex(), tabs.currentIndex(), w.theme.currentIndex())
+        # The analysis tools are buttons on their own page now (owner, 2026-11-04): no tab bar to scroll.
+        tool, picker = w.rates.tool, w.tool_buttons['bonds']
+        before = (tool.currentIndex(), w.current_market_pane(), w.theme.currentIndex())
         scroll.setValue(0)
-        wheel(self.app, tool); wheel(self.app, tabs.tabBar()); wheel(self.app, w.theme)
-        self.assertEqual((tool.currentIndex(), tabs.currentIndex(), w.theme.currentIndex()), before)
+        wheel(self.app, tool); wheel(self.app, picker); wheel(self.app, w.theme)
+        self.assertEqual((tool.currentIndex(), w.current_market_pane(), w.theme.currentIndex()), before)
         self.assertGreater(scroll.value(), 0)  # the wheel moved the page instead
         tool.setFocus(); self.app.processEvents()
         wheel(self.app, tool)

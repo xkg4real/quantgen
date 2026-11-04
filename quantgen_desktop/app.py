@@ -6,6 +6,7 @@ available unchanged while their native equivalents are ported and verified.
 from __future__ import annotations
 
 import sys
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -15,7 +16,7 @@ from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialog,
     QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow,
     QMessageBox, QPushButton, QScrollArea, QSpinBox, QStackedWidget, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView, QTabWidget)
+    QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView, QTabWidget, QButtonGroup)
 
 from core.app_paths import application_root
 from core.research.analysis import AnalysisRequest, execute_analysis
@@ -45,18 +46,40 @@ from .chart_study import CurrentPageTabs
 from .macro_records import execute_macro_records
 
 
-# Markets asset classes: (key, tab title, chart asset or None, tool panes in order).
-MARKET_CLASSES = (
-    ('domestic', 'Domestic securities', 'domestic_stock', (('etf', 'ETF'), ('krx', 'KRX'))),
-    ('overseas', 'Overseas securities', 'overseas_stock', ()),
-    ('domestic_derivatives', 'Domestic derivatives', 'domestic_future', (('derivatives', 'Derivatives'),)),
-    ('overseas_derivatives', 'Overseas derivatives', 'overseas_future', ()),
-    ('bonds', 'Bonds', 'bond', (('bonds', 'Bonds'),)),
-    ('rates', 'Rates & swaps', None, (('rates', 'Rates'), ('structuring', 'Structuring'))),
-    ('fx', 'FX', None, (('fx', 'FX'),)),
-    ('crypto', 'Crypto', None, (('crypto', 'Crypto'),)),
-    ('macro', 'Macro', None, (('macro', 'Macro sheet'), ('macro_records', 'Macro v2'))),
-)
+# Analysis tools (owner, 2026-11-04): reached from their own page through a visible grid,
+# not a scrolling tab strip on Markets. (attribute, button title) in display order.
+TOOL_PANES = (('bonds', 'Bonds'), ('rates', 'Rates'), ('structuring', 'Structuring'), ('fx', 'FX'),
+              ('derivatives', 'Derivatives'), ('etf', 'ETF'), ('krx', 'KRX'), ('crypto', 'Crypto'),
+              ('macro', 'Macro sheet'), ('macro_records', 'Macro v2'))
+
+
+def _production_card_router():
+    """Watchlist cards: their own KIS service, KIS first and Yahoo for stocks when KIS cannot answer."""
+    from core.market.routing import default_chart_router
+    from data.kis_workspace import MarketDataService
+    service = MarketDataService()
+    return default_chart_router(lambda: service)
+
+
+class _ProductionProfileLoader:
+    """One stock's profile from existing allowlisted KIS calls; daily bars fall back to Yahoo for stocks."""
+
+    def __init__(self):
+        self._service = None
+        self._lock = threading.Lock()
+
+    def __call__(self, instrument):
+        from core.market.routing import default_chart_router
+        from core.research.stock_profile import load_profile
+        from data.kis_workspace import MarketDataService
+        with self._lock:
+            if self._service is None:
+                self._service = MarketDataService()
+            service = self._service
+        domestic = instrument.asset == "domestic_stock" and service.ready
+        return load_profile(instrument, router=default_chart_router(lambda: service),
+                            quote_client=service.client if domestic else None,
+                            markets=service.markets if domestic else None)
 
 
 def app_icon():
@@ -147,7 +170,8 @@ class ResearchWindow(QMainWindow):
                  derivatives_runner=execute_derivatives, etf_runner=execute_etf,
                  crypto_runner=execute_crypto, krx_runner=execute_krx,
                  connections_runner=execute_connections, strategy_runner=execute_strategy,
-                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None, locale=None, theme_mode="light"):
+                 macro_records_runner=execute_macro_records, paper_factory=None, commentary_runner=None, auto_refresh=True, language="en", language_store=None, locale=None, theme_mode="light",
+                 symbol_directory=None, watchlist_store=None, card_router_factory=None, profile_loader=None):
         super().__init__()
         self.ctx = LocaleContext(locale or ("ko_KR" if language == "ko" else "en_US"))
         self.auto_refresh = auto_refresh
@@ -166,6 +190,10 @@ class ResearchWindow(QMainWindow):
         self.strategy_runner = strategy_runner
         self.macro_records_runner = macro_records_runner
         self.commentary_runner = commentary_runner
+        self.symbol_directory = symbol_directory
+        self.watchlist_store = watchlist_store
+        self.card_router_factory = card_router_factory
+        self.profile_loader = profile_loader
         self.tool_names = ('rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx','connections','strategy','macro_records')
         self.outputs = {}
         self.active_run = None
@@ -203,7 +231,8 @@ class ResearchWindow(QMainWindow):
         rail.addSpacing(12)
         self.stack = QStackedWidget()
         self.nav = {}
-        routes = (("home", "Research Home"), ("markets", "Markets"), ("guide", "Technical indicator guide"),
+        routes = (("home", "Research Home"), ("markets", "Markets"), ("tools", "Analysis tools"),
+                  ("guide", "Technical indicator guide"),
                   ("quant", "Build & Test"), ("risk", "Portfolio & Risk"),
                   ("library", "Research Library"), ("system", "System"))
         self.route_indices = {route:i for i,(route,_) in enumerate(routes)}
@@ -240,11 +269,13 @@ class ResearchWindow(QMainWindow):
         outer.addWidget(self.stack, 1)
         self.make_home()
         self.make_markets()
+        self.make_tools()
         self.make_indicator_guide()
         self.make_quant()
         self.make_risk()
         self.make_library()
         self.make_system()
+        self.attach_symbol_searches()
         self.setup_live_watchlist()
         self.change_theme(self.theme.currentIndex())
         self.navigate("home")
@@ -320,28 +351,53 @@ class ResearchWindow(QMainWindow):
         layout.addStretch()
 
     def make_markets(self):
+        from .market_chart import MarketChartPane
+        from .markets_view import DirectoryLoader, MarketsWorkspace, WatchlistStore
+        from core.market.directory import default_directory
+        layout = self.page("Markets", "관심종목 차트와 종목 한 화면 보기")
+        self.market_subtitle = layout.itemAt(1).widget()
+        self.market_subtitle.localized_text = {
+            "ko": "관심종목 차트를 한눈에 보고, 종목 코드나 이름으로 검색해 그 종목의 모든 것을 한 화면에서 확인합니다.",
+            "en": "Your watchlist charts at a glance; search a stock by code or name to see everything about it on one screen."}
+        self.market_subtitle.retranslate()
+        # Owner, 2026-11-04: no indicator board (UI-7) and no asset-class tab strip (UI-8) here.
+        self.market_chart = MarketChartPane(locale=self.ctx)
+        self.market_chart.setObjectName('marketChart')
+        if self.symbol_directory is None:
+            self.symbol_directory = default_directory()
+        self.directory_loader = DirectoryLoader(self.symbol_directory, enabled=self.auto_refresh)
+        if self.watchlist_store is None:
+            self.watchlist_store = WatchlistStore(self.language_store)
+        self.markets_view = MarketsWorkspace(
+            self.market_chart, store=self.watchlist_store, directory=self.symbol_directory,
+            directory_loader=self.directory_loader,
+            card_router_factory=self.card_router_factory or _production_card_router,
+            profile_loader=self.profile_loader or _ProductionProfileLoader(),
+            locale=self.ctx, auto_load=self.auto_refresh)
+        layout.addWidget(self.markets_view)
+        layout.addStretch()
+
+    def make_tools(self):
+        """Analysis tools on their own page: a visible button grid, no scrolling tabs (owner, 2026-11-04)."""
         from .bonds import BondsPane
         from .rates import RatesPane
         from .fx import FXPane
         from .structuring import StructuringPane
         from .macro import MacroPane
+        from .macro_records import MacroRecordsPane
         from .market_tools import DerivativesPane, ETFPane, CryptoPane, KRXPane
-        from .market_chart import MarketChartPane
-        layout = self.page("Markets", "공급자·관측 시각과 함께 확인하는 시세·차트와 시장 분석")
-        self.market_subtitle = layout.itemAt(1).widget()
-        self.market_subtitle.localized_text = {"ko": "공급자·관측 시각과 함께 확인하는 시세·차트와 시장 분석",
-            "en": "Market quotes, charts and analysis with provider and observation time"}
-        self.market_subtitle.retranslate()
-        # UI-7 (owner, 2026-11-03): four indicator charts instead of a table; no individual stocks.
-        from .market_board import MarketBoard
-        self.market_board = MarketBoard(locale=self.ctx, auto_load=self.auto_refresh)
-        layout.addWidget(self.market_board)
+        from .tools import CurrentPageStack
+        layout = self.page("Analysis tools", "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구")
+        self.tools_subtitle = layout.itemAt(1).widget()
+        self.tools_subtitle.localized_text = {
+            "ko": "채권·금리·외환·파생·ETF·KRX·가상자산·매크로 분석 도구입니다. 아래에서 하나를 고르세요.",
+            "en": "Bonds, rates, FX, derivatives, ETF, KRX, crypto and macro tools. Pick one below."}
+        self.tools_subtitle.retranslate()
         self.bonds=BondsPane();self.bonds.requested.connect(self.run_bond)
         self.rates=RatesPane(); self.rates.requested.connect(lambda q:self.run_tool('rates',q))
         self.fx=FXPane(); self.fx.requested.connect(lambda q:self.run_tool('fx',q))
         self.structuring=StructuringPane(); self.structuring.requested.connect(lambda q:self.run_tool('structuring',q))
         self.macro=MacroPane(); self.macro.requested.connect(lambda q:self.run_tool('macro',q))
-        from .macro_records import MacroRecordsPane
         self.macro_records = MacroRecordsPane()
         self.macro_records.requested.connect(lambda q:self.run_tool('macro_records',q))
         for name, pane_type in (('derivatives', DerivativesPane), ('etf', ETFPane), ('crypto', CryptoPane), ('krx', KRXPane)):
@@ -351,71 +407,79 @@ class ResearchWindow(QMainWindow):
         for pane in (self.rates,self.fx,self.structuring,self.macro,self.derivatives,self.etf,self.crypto,self.krx):
             pane.hide_source()
         self.macro_records.set_source_caption('Record set')
-        self.market_chart = MarketChartPane(locale=self.ctx)
-        self.market_chart.setObjectName('marketChart')
-        # UI-8 (owner, 2026-11-03): asset-class tabs instead of a separate KIS chart tab.
-        # One chart pane moves into the selected chartable class; its provider is chosen automatically.
-        self.market_tabs=CurrentPageTabs()
-        self.market_classes=[]
-        self._class_symbols={}
-        for key,title,asset,tools in MARKET_CLASSES:
-            panes=[(getattr(self,tool),name) for tool,name in tools]
-            slot=None
-            if asset:
-                slot=QWidget();slot.setObjectName('chartSlot')
-                slot_layout=QVBoxLayout(slot);slot_layout.setContentsMargins(0,0,0,0)
-                panes.insert(0,(slot,'Price chart'))
-            inner=None
-            if len(panes)==1:
-                page=panes[0][0]
-            else:
-                inner=page=CurrentPageTabs();inner.setObjectName('marketInnerTabs')
-                for pane,name in panes:inner.addTab(pane,name)
-                inner.currentChanged.connect(self.market_tabs.updateGeometry)
-            self.market_tabs.addTab(page,title)
-            self.market_classes.append({'key':key,'asset':asset,'page':page,'inner':inner,'slot':slot,
-                                        'panes':[pane for pane,_ in panes]})
-        self.market_tabs.setUsesScrollButtons(True)
-        self.market_tabs.currentChanged.connect(self._market_class_changed)
-        self._market_class_changed(self.market_tabs.currentIndex())
-        layout.addWidget(self.market_tabs)
+        picker = QWidget()
+        picker.setObjectName('toolPicker')
+        grid = QGridLayout(picker)
+        grid.setContentsMargins(0, 0, 0, 0)
+        grid.setSpacing(8)
+        self.tool_group = QButtonGroup(self)
+        self.tool_group.setExclusive(True)
+        self.tool_host = CurrentPageStack()
+        self.tool_host.setObjectName('toolHost')
+        self.tool_buttons = {}
+        columns = 5
+        for index, (name, title) in enumerate(TOOL_PANES):
+            pane = getattr(self, name)
+            button = QPushButton(title)
+            button.setCheckable(True)
+            button.setProperty('tool', True)
+            button.setAccessibleName(title)
+            button.clicked.connect(lambda checked=False, p=pane: self.show_tool(p))
+            self.tool_group.addButton(button)
+            grid.addWidget(button, index // columns, index % columns)
+            self.tool_buttons[name] = button
+            self.tool_host.addWidget(pane)
+        for column in range(columns):
+            grid.setColumnStretch(column, 1)
+        self.tool_buttons[TOOL_PANES[0][0]].setChecked(True)
+        layout.addWidget(picker)
+        layout.addWidget(self.tool_host)
         layout.addStretch()
 
-    def _market_class_changed(self,index):
-        entry=self.market_classes[index] if 0<=index<len(self.market_classes) else None
-        if entry is None or entry['slot'] is None:return
-        chart=self.market_chart
-        if chart.parent() is not entry['slot']:
-            entry['slot'].layout().addWidget(chart)
-        previous=chart.asset.currentData()
-        if previous!=entry['asset']:
-            # Each class remembers the last code typed there; the class example is the default.
-            self._class_symbols[previous]=chart.symbol.text()
-            chart.set_asset_class(entry['asset'])
-            if entry['asset'] in self._class_symbols:
-                chart.symbol.setText(self._class_symbols[entry['asset']])
-        chart.show()
+    def attach_symbol_searches(self):
+        """Code-or-name search on every symbol field that loads a chart or one instrument's data
+        (owner, 2026-11-04). Choosing a row writes the code, so each pane's own routing is unchanged."""
+        from .markets_view import STOCK_ASSETS, attach_symbol_search
+        directory, loader = self.symbol_directory, self.directory_loader
+        targets = [(self.symbol, {}), (self.portfolio.symbols, {"multi": True})]
+        for pane, field, options in ((self.signals, "symbol", {}), (self.strategy, "symbols", {"multi": True}),
+                                     (self.etf, "code", {"assets": ("domestic_stock",), "kinds": ("etf",)}),
+                                     (self.krx, "code", {"assets": ("domestic_stock",)})):
+            for controls in pane.fields.values():
+                if isinstance(controls.get(field), QLineEdit):
+                    targets.append((controls[field], options))
+        self.symbol_completers = [self.markets_view.completer]
+        for edit, options in targets:
+            options = {"assets": STOCK_ASSETS, **options}
+            self.symbol_completers.append(attach_symbol_search(edit, directory, locale=self.ctx, loader=loader,
+                                                               **options))
 
-    def show_market_pane(self,pane):
-        """Select the asset class (and inner tab) that shows `pane`; the chart follows the class."""
-        order=list(enumerate(self.market_classes))
+    def show_tool(self, pane):
+        """Show one analysis tool on the tools page (does not navigate)."""
+        for index in range(self.tool_host.count()):
+            if self.tool_host.widget(index) is pane:
+                self.tool_host.setCurrentIndex(index)
+                for name, button in self.tool_buttons.items():
+                    button.setChecked(getattr(self, name) is pane)
+                return pane
+        raise ValueError('Pane is not one of the analysis tools')
+
+    def show_market_pane(self, pane):
+        """Kept for callers of the former Markets tabs: the chart opens Markets, a tool opens its page."""
         if pane is self.market_chart:
-            # Keep the chart in the class the user is viewing when that class has one.
-            current=self.market_tabs.currentIndex()
-            order=[order[current]]+order if 0<=current<len(order) else order
-        for index,entry in order:
-            target=entry['slot'] if pane is self.market_chart else pane
-            if target is not None and target in entry['panes']:
-                self.market_tabs.setCurrentIndex(index)
-                self._market_class_changed(index)
-                if entry['inner'] is not None:entry['inner'].setCurrentWidget(target)
-                return entry
-        raise ValueError('Pane is not part of the Markets workspace')
+            self.navigate('markets')
+            if not self.markets_view.showing_stock():
+                self.markets_view.stock.adopt_chart()
+                self.markets_view.pages.setCurrentIndex(1)
+            return pane
+        self.show_tool(pane)
+        self.navigate('tools')
+        return pane
 
     def current_market_pane(self):
-        entry=self.market_classes[self.market_tabs.currentIndex()]
-        page=entry['inner'].currentWidget() if entry['inner'] is not None else entry['page']
-        return self.market_chart if page is entry['slot'] else page
+        if self.stack.currentIndex() == self.route_indices['tools']:
+            return self.tool_host.currentWidget()
+        return self.market_chart if self.markets_view.showing_stock() else self.markets_view.grid
 
     def make_quant(self):
         outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
@@ -705,25 +769,23 @@ class ResearchWindow(QMainWindow):
 
     def open_live_chart(self):
         self.navigate('markets')
-        self.show_market_pane(self.market_chart)
-
-        def reveal():
-            scroll = self.stack.widget(self.route_indices['markets'])
-            if self.stack.currentWidget() is scroll and self.current_market_pane() is self.market_chart:
-                top = self.market_tabs.mapTo(scroll.widget(), self.market_tabs.rect().topLeft()).y()
-                scroll.verticalScrollBar().setValue(top)
-                self.market_chart.symbol.setFocus(Qt.FocusReason.OtherFocusReason)
-
-        # Tab selection can change the scroll page's geometry on the next event.
-        QTimer.singleShot(0, reveal)
+        scroll = self.stack.widget(self.route_indices['markets'])
+        if self.markets_view.showing_stock():
+            def reveal():
+                if self.stack.currentWidget() is scroll:
+                    top = self.market_chart.mapTo(scroll.widget(), self.market_chart.rect().topLeft()).y()
+                    scroll.verticalScrollBar().setValue(max(0, top - 120))
+            QTimer.singleShot(0, reveal)
+        else:
+            self.markets_view.search.setFocus(Qt.FocusReason.OtherFocusReason)
 
     def open_stock_chart(self, symbol):
-        # Selecting a row changes the chart inputs; loading remains explicit.
-        # Home rows are domestic stocks: select that class before setting the code.
-        self.market_tabs.setCurrentIndex(0)
-        self._market_class_changed(0)
-        self.market_chart.symbol.setText(symbol)
-        self.open_live_chart()
+        """A Home row opens that stock's screen on Markets (it loads when automatic refresh is on)."""
+        from core.market.models import Instrument
+        self.navigate('markets')
+        self.markets_view.open_instrument(Instrument('domestic_stock', symbol))
+        scroll = self.stack.widget(self.route_indices['markets'])
+        QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0))
 
     def change_language(self,index):
         value=self.locale_picker.itemData(index)
@@ -738,7 +800,9 @@ class ResearchWindow(QMainWindow):
         self.guide_subtitle.setText(self.ctx.t('search_intro'))
         self.watchlist.set_locale(self.ctx)
         self.market_chart.set_locale(self.ctx)
-        self.market_board.set_locale(self.ctx)
+        self.markets_view.set_locale(self.ctx)
+        for completer in self.symbol_completers:
+            completer.set_locale(self.ctx)
         self.locale_notice.setText(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'))
         from .indicator_guide import IndicatorGuide
         for pane in self.findChildren(IndicatorGuide):
@@ -936,7 +1000,7 @@ class ResearchWindow(QMainWindow):
         self.brand_symbol.load(QByteArray(symbol))
         p = self.colors = DARK if index else LIGHT
         self.watchlist.set_theme(p)
-        self.market_board.set_theme(bool(index))
+        self.markets_view.set_theme(bool(index))
         if self.language_store is not None:
             self.language_store.setValue("ui/theme", "dark" if index else "light")
         self.setStyleSheet(f"""
@@ -985,7 +1049,8 @@ class ResearchWindow(QMainWindow):
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
             return
-        # The indicator board polls on its own; it never holds the window open (its answer is dropped).
+        # The watchlist cards and the stock details poll on their own; they never hold the window open
+        # (their late answers are dropped).
         if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy or self.market_chart.jobs.busy:
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
@@ -1001,7 +1066,7 @@ class ResearchWindow(QMainWindow):
             self.statusBar().showMessage(display(self, '모의 엔진의 진행 중인 조회가 끝나면 다시 종료해 주세요.'))
             return
         self.market_chart.stop()
-        self.market_board.stop()
+        self.markets_view.stop()
         self.quote_paint_timer.stop()
         event.accept()
 

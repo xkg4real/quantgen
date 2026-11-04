@@ -98,7 +98,8 @@ class ETFPane(ToolPane):
         series = [('Price', d['price'])]
         if d.get('nav') is not None: series.append(('NAV', d['nav']))
         self.line('ETF price / NAV', range(len(d['dates'])), series, 'Observations', 'Price / NAV')
-        if d.get('quote'): self.result_table('Quote', ['Field', 'Value'], list(d['quote'].items()))
+        # Owner, 2026-11-04: no observation-date row (as_of here is the request date, not a market time).
+        if d.get('quote'): self.result_table('Quote', ['Field', 'Value'], [(k, v) for k, v in d['quote'].items() if k != 'as_of'])
         if d.get('premium_stats'):
             self.line('NAV premium', range(len(d['dates'])), [('Premium %', d['premium_pct'])], 'Observations', 'Premium · %')
             ps = d['premium_stats']
@@ -203,7 +204,9 @@ class KRXPane(ToolPane):
     def show_result(self, out):
         self.clear_result()
         a = out.answer
-        self.text(f'Provider: {a.source or "UNAVAILABLE"}')
+        # Owner, 2026-11-04: no provider line or rows; only an unavailable or non-KIS source is named.
+        if not a.ok or (a.source or '').upper() != 'KIS':
+            self.text(f'Provider: {a.source or "UNAVAILABLE"}')
         if not a.ok:
             from core.research.presentation import safe_detail
             reason = safe_detail(a.reason)
@@ -212,7 +215,7 @@ class KRXPane(ToolPane):
             return
         data = a.data
         if out.request.tool == 'quote':
-            self.result_table('Quote', ['Field','Value'], list(asdict(data).items()))
+            self.result_table('Quote', ['Field','Value'], [(k, v) for k, v in asdict(data).items() if k not in ('source', 'as_of')])
         elif data:
             keys = list(dict.fromkeys(k for row in data for k in row))
             self.result_table('Observations',keys,[[r.get(k,'—') for k in keys] for r in data[:300]])

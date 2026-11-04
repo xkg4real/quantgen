@@ -36,7 +36,7 @@ class ResponsiveToolTests(unittest.TestCase):
 
     def overflow_context(self, window, pane, width, language):
         scroll=window.stack.currentWidget()
-        tabs=window.market_tabs if pane is window.macro else window.risk_tabs
+        tabs=window.tool_host if pane is window.macro else window.risk_tabs
         def geometry(widget):
             hint=widget.minimumSizeHint()
             return f'{widget.width()}x{widget.height()} min={widget.minimumWidth()} hint={hint.width()}x{hint.height()}'
@@ -44,7 +44,8 @@ class ResponsiveToolTests(unittest.TestCase):
                 f'viewport={geometry(scroll.viewport())} content={geometry(scroll.widget())} '
                 f'pane={geometry(pane)} input_box={geometry(pane.input_box)} '
                 f'study={geometry(pane.study)} tabs={geometry(tabs)} '
-                f'tabbar={geometry(tabs.tabBar())} tool={geometry(pane.tool)} source={geometry(pane.source)}')
+                f'tabbar={geometry(tabs.tabBar()) if hasattr(tabs, "tabBar") else "-"} '
+                f'tool={geometry(pane.tool)} source={geometry(pane.source)}')
 
     def test_inactive_oversize_page_does_not_set_selected_page_minimum(self):
         tabs=CurrentPageTabs();small=QWidget();large=QWidget();large.setMinimumSize(8000,9000)

@@ -39,6 +39,8 @@ Equity · starts at 1|누적 가치 · 시작값 1
 Language|언어
 Research Home|연구 홈
 Markets|시장
+Analysis tools|분석 도구
+Indicator guide|기술지표 가이드
 Open live quotes and charts|실시간 시세·차트 열기
 Technical indicator guide|기술지표 가이드
 Build & Test|설계 및 검증
@@ -234,7 +236,7 @@ Records are read explicitly. Live execution requires existing signed-calendar an
 Read stored research cards|저장된 연구카드 읽기
 Run strategy validation|전략 검증 실행
 Real-data execution records a trial in the existing research ledger. Synthetic execution does not. Lab DSR currently uses this grid's trial count; cumulative ledger counts are separate work.|실데이터 실행은 기존 연구 원장에 시행을 기록합니다. 합성 실행은 기록하지 않습니다. 현재 Lab의 DSR 시행 수는 이번 그리드 수입니다. 누적 원장 기반 전환은 별도 작업입니다.
-This tab is a descriptive macro sheet. Find v2 Overlay, Model cards and Research register in Markets → Macro v2.|이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 Markets의 Macro v2 탭에서 확인합니다.
+This tab is a descriptive macro sheet. Find v2 Overlay, Model cards and Research register in Analysis tools → Macro v2.|이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 분석 도구의 매크로 v2에서 확인합니다.
 FX · spot, forwards, options and carry|FX · 현물·선물환·옵션·캐리
 Rates · yield curve and rate risk|Rates · 수익률 곡선과 금리 위험
 Macro · market observations and local commentary|Macro · 시장 관측과 로컬 해설
