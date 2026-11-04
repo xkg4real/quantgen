@@ -3,6 +3,14 @@
 Date: 2026-10-26.
 
 Status:
+- **2026-11-04 owner addendum (⑤-2 provider parity; spec-only).** The owner's ruling P-D3, verbatim (Geon Koh,
+  Claude Code chat, session_016uB1jgeiPdP8gPkAez3Wrx):
+  "P-D3 = (가) 승인. 7A.4 검토 커밋 바로 뒤에 따로 넣음 [권고] | 메모: 7A 전체가 마무리 된 것 감안하여 최대한 빨리 (금방 넣기)"
+  It adds 10.5 and changes no code: `code_sha256` and every `owner_confirmed` stay valid. The ⑤-2 rows of 10.4 are
+  written at Step 10. This commit follows the 7A.5 HEAD `83ee469`; Step 10's rule lets this spec change after that
+  HEAD. Appendix B quotes the ⑤-2 rulings (U5, P-D2 to P-D9) and lists what changed. One part of the approved text
+  is left out until the tool exists: its commit and sha256 (10.5). By the owner's option (가) (Step 7A item 5), the
+  owner pulls this and any later spec-only commit before each pilot and repeats the two 7A.5 checks.
 - **2026-11-04 Step 7A.4 review (Claude): passed.** It covers the 7A.3 evidence commit `563db54`. The owner ruled
   that the cross-platform census may also differ by `six.moves.winreg` (POSIX only), and 5.2.7 now says so.
   The review is in Appendix B. Next is 7A.5, the owner's `git pull --ff-only` of this commit.
@@ -1600,7 +1608,10 @@ owner, in this order; the runbook file repeats it.
    or table change invalidates the prior execution fingerprint and requires fresh `owner_confirmed` after
    validation; an ordinary in-scope fix does not itself require a new general approval sentence.
 5. The owner pulls Claude's review commit with `git pull --ff-only` before Step 8; the pilots anchor to that HEAD, and
-   the run record stores it (GOVERNANCE-R2-5).
+   the run record stores it (GOVERNANCE-R2-5). Owner ruling 2026-11-04 (option (가), Appendix B): spec-only commits
+   that leave `code_sha256` unchanged may follow the 7A.4 review commit before a pilot. Before each pilot the owner
+   runs `git pull --ff-only` again and repeats the two 7A.5 checks (`git status --porcelain` empty; `repo_anchor()`
+   returns `git:<HEAD>`). The pilot then anchors to that HEAD, and its run record stores it.
 - Merge (GOVERNANCE-R2-5, OPS-R3-7): after Step 10 the owner merges the branch into `main` (`origin/main`, `716bf77`
   today, the branch's base) with a merge commit he makes himself, never a squash or a rebase, and keeps the branch ref,
   so every ledger anchor stays reachable: `git switch main`, `git pull --ff-only`, `git merge --no-ff
@@ -1619,7 +1630,7 @@ owner, in this order; the runbook file repeats it.
 |---|---|---|
 | 8 Pilot 1 | The owner runs `python -B -m tools.nautilus.runner --table docs/nautilus_bridge/registration/pilot1_E1_spy.json --of-record`, never while the suite or a readout runs, with power plugged in, updates paused (in Settings; no stable command, UNVERIFIED) and a console that stays open (OPS-6); the runner itself keeps the machine awake (5.3.5; OPS-R3-8); a re-run follows 5.3.5 (R-17); Claude reads the outputs after the owner pushes them. | E1 holds the 12 `config_id`s, appended or already present, and recorded; every manifest echoes the post-registration ledger hash, the evidence that every child ran after registration (QA-R3-12); every hard check passes for all 12 columns at 1x and 2x, or a WITHHELD record names the failing check; if parity passed, the run folder holds `NB_E1_trend_spy.json` with the decision both engines reached, the four trial counts, the manifest hashes and the selection used, or a WITHHELD record says "decision mismatch"; the owner has committed and pushed the run folder. |
 | 9 Pilot 2 | The owner, only if pilot 1 passed parity, which R-11 enforces (GOVERNANCE-R4-4). | Step 8's conditions hold for 5 columns at 10 and 20 bp, a WITHHELD "reference drift" (G-08) being a valid end too (QUANT-R4-3); `NB_C3_crypto_trend_btcusd.json` reports PBO for information only, and over-search uses the share of splits where the in-sample winner loses (`core/quant/validate.py:576`; map02 §2.5). |
-| 10 Close-out | The owner runs the full suite on Windows and updates the README counts and Total row from it (C-4); Claude writes `docs/superpowers/plans/2026-10-<dd>-nautilus-bridge-execution-record.md` with every ruling made, its cost if wrong, and the data-access history of 10.4. | The Windows full run shows 0 FAIL with the `nautilus` suite counted; `qa/acceptance_results.json` is committed only from an owner's Windows full run (Step 7A.2 and this step), never from Linux (GOVERNANCE-R3-4); frozen_guard (a), (b) and (d) pass there; run folders and the execution record are committed; `git diff --name-only` against the 7A.5 HEAD that the pilot run records store lists only paths under `docs/nautilus_bridge/runs/`, the execution record, `README.md`, `qa/acceptance_results.json` and this spec, so nothing under `paper_live/`, `grokteam/`, `docs/asset_expansion/cards/` or the harness sources of `core/quant/gate_package.py:36-38` changed (GOVERNANCE-R3-1, GOVERNANCE-R3-7, GOVERNANCE-R4-2). |
+| 10 Close-out | The owner runs the full suite on Windows and updates the README counts and Total row from it (C-4); Claude writes `docs/superpowers/plans/2026-10-<dd>-nautilus-bridge-execution-record.md` with every ruling made, its cost if wrong, and the data-access history of 10.4. | The Windows full run shows 0 FAIL with the `nautilus` suite counted; `qa/acceptance_results.json` is committed only from an owner's Windows full run (Step 7A.2 and this step), never from Linux (GOVERNANCE-R3-4); frozen_guard (a), (b) and (d) pass there; run folders and the execution record are committed; `git diff --name-only` against the earliest HEAD that the pilot run records store (Step 7A item 5) lists only paths under `docs/nautilus_bridge/runs/`, the execution record, `README.md`, `qa/acceptance_results.json` and this spec, so nothing under `paper_live/`, `grokteam/`, `docs/asset_expansion/cards/` or the harness sources of `core/quant/gate_package.py:36-38` changed (GOVERNANCE-R3-1, GOVERNANCE-R3-7, GOVERNANCE-R4-2). |
 
 ## 10. Pilots
 
@@ -1697,6 +1708,73 @@ This list goes verbatim into the execution record (map04 R23).
 Claim labels in the house protocol's terms (`docs/superpowers/specs/2026-10-23-quantgen-split-and-paper-pipeline-design.md:442-452`):
 pilot 1 is *pre-specified on historical data*, on a series already used inside a four-sleeve book; pilot 2 is an
 engine replication of a stored card. Neither is confirmatory. Each card carries its label (6.5).
+
+### 10.5 Provider parity (⑤-2)
+
+Added by the owner's ruling P-D3 of 2026-11-04 (Status; Appendix B).
+
+- *Tool.* `tools/provider_parity/parity_check.py` on branch `claude/provider-parity-5-2`, outside this branch and
+  outside `code_sha256`. The tool is not written yet, so this section does not yet fix its commit and
+  sha256. Where they are fixed before the first run awaits an owner ruling (Appendix B). A run with tool bytes other
+  than those fixed counts under this section only by an owner ruling recorded with the earlier result.
+- *When and where.* After Step 7A and before Step 8, the owner runs it on all three series, SPY, DGS3MO and BTC-USD
+  (P-D8), from a separate clone on his machine (U5), from that clone's root, as
+  `python -B -m tools.provider_parity.parity_check`. It reads each table's `prices_file` and `rf_file` read-only,
+  checks their md5 against the table, and compares them with other providers' series fetched on the same machine. No
+  observation dated on or after 2027-01-01 is requested, stored or compared.
+- *Exception to 3.9, narrow.* On the owner's machine only, on the pilot windows and before registration, the tool may
+  compute: calendar membership of each provider's dates; the day-by-day differences between two providers' closes,
+  simple or log returns and rates, including the differences of daily returns at lags -1, 0 and +1 for the BTC-USD
+  day boundary; and counts, extremes, percentiles, ranges and per-year sums of those differences. Of one provider's
+  series alone it computes only range and gap checks: no one-day move above a split-shaped threshold, missing days,
+  rate units within range, a rate observation before the window start. It computes no correlation, no signal, no
+  strategy return, and no mean, volatility, Sharpe or drawdown of any series. The tool's `COMPUTES` table names these
+  kinds check by check, and its self-test holds the two together.
+- *Providers.* Each provider has the role and convention of 10.5.1, and the tool refuses any other provider or role.
+  Every required provider is compared or recorded as unavailable with a reason; the summary lists both.
+- *Thresholds.* Those of 10.5.1.
+- *Outputs.* Only `summary.json` leaves the owner's machine, with the fields of 10.5.2. `detail.json` stays there; the
+  owner decides what happens to it after Step 10 (P-D7). Claude reads only `summary.json`.
+- *Runs of record.* Every summary produced is committed under `results/` on the tool's branch. Per series, the first
+  run that ends PASS, FAIL or WITHHELD is the run of record; a REFUSED or ERROR run writes nothing and is not a run. A
+  later run, on new fetches or the same files, counts only after an owner ruling recorded next to the earlier result,
+  which stays. A change to 10.5.1 after any summary exists is recorded with the earlier result in the same way. Each
+  such ruling goes into `results/RULINGS.md` on the tool's branch (P-D9).
+- *Gate.* Step 8 starts only when the SPY and DGS3MO runs of record say PASS, or the owner has written a ruling for
+  each that does not; Step 9 likewise for BTC-USD, in addition to R-11's pilot-1 condition. The gate is procedural
+  (P-D6): the runner does not check it, because adding the check to `tools/nautilus/` would change `code_sha256`. A
+  ruling on a series that is not PASS either holds the pilot or lets it go ahead with the disagreement noted in the
+  execution record and in 10.4. The ruling goes into `results/RULINGS.md` (P-D9).
+- *Writes.* Nothing the tool writes enters this clone, `docs/asset_expansion/` or a ledger. The `kis` fetch reads, and
+  may rewrite, the app's KIS access token `~/.nextgen/kis_token.json`; it writes nothing else under `~/.nextgen`.
+- *Step 10.* The summaries of record are copied to
+  `docs/nautilus_bridge/runs/PP-<UTC>-<series>/provider_parity_summary.json`, and the execution record states their
+  sha256, the tool's commit and sha256, and each outcome. The rulings in `results/RULINGS.md` go into the execution
+  record and this spec's Status block (P-D9).
+
+#### 10.5.1 Providers and thresholds (fixed before any summary exists)
+
+| Series | Providers: role, convention (required unless optional) | Thresholds |
+|---|---|---|
+| SPY (`yf_SPY.csv`, total return) | `fmp`: independent, total; `kis`: cross, split; `yahoo_now`: vintage, total | `coverage_min` 0.99; `edge_uncovered_max` 5; `ret_diff_tol` 2e-4; `ret_diff_max` 2e-3; `ret_diff_share_max` 0.005; `ret_diff_floor_days` 5; `drift_range_max` 5e-3; `jump_abs_max` 0.25; `ex_gap_min` 5e-4; `ex_gap_max` 2e-2; `ex_days_per_year` 4 (3 or 5 is WARN); `yield_band` [0.005, 0.04] |
+| BTC-USD (`yf_BTC-USD.csv`) | `coinbase`: independent, none; `bitstamp`: independent, none, optional; `binance`: diagnostic, none | `coverage_min` 0.95; `edge_uncovered_max` 471; `late_from` 2017-01-01; `level_p50_max` 0.003; `level_p99_max` 0.015; `level_max` 0.05; `early_level_p99_max` 0.03 and `early_level_max` 0.10 (WARN only); `missing_days_warn_max` 5; `jump_log_abs_max` 0.7; `ret_diff_big` 0.02 (also the day-boundary tolerance); `ret_diff_share_max` 0.005 |
+| DGS3MO (`fred_DGS3MO.csv`) | `treasury`: independent, rate_pct; `h15`: independent, rate_pct, optional; `fred_now`: vintage, rate_pct | `coverage_min` 0.99; `edge_uncovered_max` 5; `value_tol_pct` 0.005; `range_pct` [-1, 20]; `unit_max_at_least_pct` 1.0; `seed_lookback_days` 31 |
+
+A is the series' pinned file. Coverage is measured over A's dates inside the provider's first-to-last span; A's dates
+outside it are counted against `edge_uncovered_max`. Unavailable reasons: `no_key`, `plan_or_access`, `fetch_failed`,
+`short_history`. A vintage or diagnostic pair reports FAIL as WARN. A series is FAIL when A's integrity check or any
+independent or cross pair fails, WITHHELD when no independent or cross pair was evaluated in full, and PASS otherwise.
+Exit codes: 0 PASS, 1 FAIL, 3 WITHHELD, 2 refused, 4 error; the result is the last console line
+`PARITY <series> <outcome> ...`.
+
+#### 10.5.2 Summary fields
+
+Identifiers and hashes (`schema`, `run_id`, `created_utc`, `tool.sha256`, `pinned.md5`, `md5_ok`, `file_sha256`); the
+window, the thresholds and the provider map; integers under keys `n_*`; `lag` in {-1, 0, 1}; calendar dates under
+`first_date`, `last_date`, `only_a`, `only_b`, `missing_a`, `blank_a_value_b` and `value_a_absent_b`, at most 100
+each; decade buckets such as `<=1e-04`; booleans; outcomes and `withheld_reasons`. Nothing else: no price, return,
+rate, per-date difference, exact extreme or its date, per-lag count, yearly gap sum or level ratio. The tool refuses
+to write a summary that breaks this rule.
 
 ## 11. Risks
 
@@ -2067,3 +2145,59 @@ evidence commit `563db54` (owner, 2026-11-04 15:38 KST) and the hand-off report 
   `repo_anchor()` returning `git:<the 7A.5 HEAD>`, and an empty `git status --porcelain`. The owner checks both after
   `git pull --ff-only` of this commit. This commit changes only this spec, so `code_sha256` stays `f995600b…` and
   both `owner_confirmed` remain current. Pilots may start after 7A.5, under Step 8's own conditions.
+
+**2026-11-04 owner rulings on ⑤-2 (U5, P-D2..P-D9) and the P-D3 spec change.** Source: the owner's decision batch
+"[QUANTGEN 소유자 결정 2026-11-04 · 2차]" (Geon Koh, Claude Code chat, session_016uB1jgeiPdP8gPkAez3Wrx). Its U5 and
+P-D2 to P-D9 answer D-1 to D-9 of section 12 of the ⑤-2 design draft
+`docs/nautilus_bridge/PROVIDER_PARITY_DESIGN_DRAFT_2026-11-04.md` (branch `claude/provider-parity-design-20261104`,
+commit `1d37fa9`; not on this branch). The batch's other lines are outside this commit and are not recorded here.
+Claude read the draft and the prototype's constants at `1d37fa9`; no protected cache, price file or `fred_DGS3MO.csv`
+was opened.
+
+- The rulings, verbatim:
+  - "U5 = (가) A: 7A 끝난 뒤 별도 클론에서 대조, 연구 브랜치에는 스펙만 바꾸는 커밋 하나 [권고]"
+  - "P-D2 = (가) 별도 브랜치(claude/provider-parity-design-20261104)에 둠 [권고]"
+  - "P-D3 = (가) 승인. 7A.4 검토 커밋 바로 뒤에 따로 넣음 [권고] | 메모: 7A 전체가 마무리 된 것 감안하여 최대한 빨리 (금방 넣기)"
+  - "P-D4 = (가) 초안 3절 표 그대로 [권고]"
+  - "P-D5 = (가) 5.1·5.5 승인. 늦게 시작한 공급사는 그 공급사 구간 안에서 비율 계산 [권고]"
+  - "P-D6 = (가) 절차 관문(5.3): 통과하지 않으면 파일럿을 보류하거나 주석을 달고 진행 [권고]"
+  - "P-D7 = (가) 6.2 목록 승인. detail.json 처리는 Step 10 뒤에 정함 [권고]"
+  - "P-D8 = (가) Pilot 1 전에 세 시계열 모두 [권고]"
+  - "P-D9 = (가) 별도 브랜치의 results/RULINGS.md → Step 10에 반영 [권고]"
+- What changed in this spec (one commit, whose parent is the 7A.4 review commit `83ee469`; no other file changed):
+  - Status: a new first bullet that quotes P-D3.
+  - 10.5, 10.5.1 and 10.5.2 are new. They are the draft's Appendix A, adapted only where its text depends on these
+    rulings:
+    - U5 (the draft's option A): *When and where* now begins "After Step 7A"; the separate clone was already in
+      Appendix A. The tool stays on its own branch; only this spec changes here.
+    - P-D8: *When and where* names all three series before Step 8. The gate for BTC-USD stays at Step 9.
+    - P-D6: *Gate* says the gate is procedural, and that a ruling on a series that is not PASS either holds the
+      pilot or lets it go ahead with a note in the execution record and 10.4 (the draft's 5.3 and 5.4).
+    - P-D9: *Runs of record* and *Gate* put each ruling in `results/RULINGS.md` on the tool's branch. *Step 10*
+      carries them into the execution record and the Status block.
+    - P-D7: *Outputs* says the owner decides on `detail.json` after Step 10. Appendix A said it stays "until Step 10".
+    - P-D4 and P-D5: 10.5.1 is Appendix A's table unchanged. Its providers and roles are the draft's section 3
+      tables, and its thresholds are the draft's 5.1. Both match the prototype's `PROVIDERS` and `THRESHOLDS`
+      (`docs/nautilus_bridge/provider_parity_prototype/parity_check.py` at `1d37fa9`). For a provider that starts
+      late, coverage is measured inside that provider's span, as P-D5 says. The draft's 5.5 rules are the
+      *Providers* and *Runs of record* bullets.
+    - P-D2: the draft and its prototype stay on `claude/provider-parity-design-20261104`. 10.5 cites neither, so it
+      still reads in full after the merge into `main`.
+    - Not from a ruling: 10.5 opens with a line naming P-D3, and 10.5.1 adds one definition, "A is the series'
+      pinned file", because Appendix A uses A without defining it.
+  - Left out, for an owner ruling: the tool's commit and sha256 (Appendix A's `<40 hex>` and `<64 hex>`). The draft
+    fixes them first and then writes them into this spec (its 8.4 steps 1 and 2). P-D3's memo puts this commit
+    first, and the tool is not written yet. U5 names one spec-only commit on this branch. So it is open where the
+    tool's commit and sha256 are fixed before the first run. 10.5's *Tool* bullet says so.
+  - Not changed: the text of 3.9 (Appendix A adds only the Status bullet and 10.5), and 10.4, which gains its ⑤-2
+    rows at Step 10.
+- This commit follows the 7A.5 HEAD `83ee469`. Step 10's diff rule allows this spec to differ from that HEAD. Only
+  this spec changes, so `code_sha256` stays `f995600b36c75523…`, the tables' `table_sha256` stay `d76d2d7301ffe92c…`
+  (E1) and `e2ec073c309cbfc7…` (C3), and both `owner_confirmed` remain current.
+- Pilot anchor (owner ruling, verbatim, Claude Code chat, 2026-11-04): "1. Continue with option(가)." Claude had asked
+  whether the owner pulls spec-only commits that land after the 7A.5 HEAD before a pilot. Option (가) was: pull
+  before each pilot and repeat the two 7A.5 checks; the pilot record stores that HEAD; Step 10's diff rule is read
+  against the earliest HEAD a pilot run record stores. Option (나), not chosen, kept the pilots at `83ee469`.
+  Grounds: `code_sha256` and both `owner_confirmed` stay valid across spec-only commits, the branch stays linear so
+  the owner's pilot commits push without a merge, and Step 10's path rule still holds. Step 7A item 5 and Step 10's
+  Done-when now say so.
