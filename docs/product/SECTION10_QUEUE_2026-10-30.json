@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 14,
-    "implemented_canonical_groups": 27
+    "implemented_canonical_groups": 29
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -36,10 +36,11 @@
       "source_model": "9. M1-09 블록 부트스트랩 경로 모형",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
-      "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "next": "N-M1-02 is ARCHITECTURE_REVIEW C1 (register: 'C1(=N-M1-02)'). N-M1-02/a discloses the scheme on every Monte Carlo surface: circular fixed 5-session blocks of demeaned daily log returns (not a stationary bootstrap), clustering kept only in part at lags 1-4 ((5-k)/5 over a long horizon) and lost from lag 5, no current-vol start; engine docstring, README and primer source corrected. Numbers unchanged. C1(b), the maths fix (block length from the r² ACF or stationary lengths, which changes every bootstrap number and the convexity correction), is left to the owner; the primer PDF is not rebuilt.",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "PARTIAL_IMPLEMENTED",
+      "evidence": "docs/product/MC_BOOTSTRAP_DISCLOSURE_2026-11-04.md; tests/mc_bootstrap_disclosure_acceptance.py"
     },
     {
       "id": "N-M1-03",
@@ -612,10 +613,11 @@
       "source_model": "144. M6-13 ETF 슬리브 표본 내 요약(추세 전환, 변동성 목표, 매수 보유)",
       "queue": 2,
       "type": "Numerical result or missing-result display",
-      "next": "Independent synthetic oracle, then focused correction and UI regression within approved scope",
-      "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "next": "Mapped by register summary line 137 (659898b) to the M6-13 [결함]: a sleeve whose daily P&L does not vary (cash only, or a flat price) showed a Sharpe of about 1e16 or 0.00. Now the Sharpe is unavailable (n/a, 계산 불가, payload null with sharpe_status) under an explicit rule: sd(ddof=1) <= 1e-10 * max(1, max|P&L|) counts as no variation; non-finite P&L is NOT_DEFINED_NON_FINITE. Every defined Sharpe and every other number is unchanged. P01-11 (validate._col_sharpe) and the vol_products sibling stay open.",
+      "mapping_needs_disambiguation": false,
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md; tests/etf_sleeve_disclosure_acceptance.py"
     },
     {
       "id": "NEW-M6-05",
@@ -623,10 +625,11 @@
       "source_model": "144. M6-13 ETF 슬리브 표본 내 요약(추세 전환, 변동성 목표, 매수 보유)",
       "queue": 3,
       "type": "Model assumption or convention",
-      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "next": "Mapping stays ambiguous (probable: the 210-session cash warm-up inside a full-window Sharpe plus the undisclosed fixed 3% cash; alternatives: K-e daily constant-weight rebalancing, or the family-card verdict). The disclosure covers every reading: warm-up rows, fixed 3% cash assumption, Sharpe over the whole window and not in excess of cash, buy-and-hold with no warm-up, cash or cost, the K-e rebalancing assumption, and the verdicts as family cards. Disclosure only; numbers unchanged. Any redefinition of the displayed Sharpe is a model change for the owner.",
       "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md; tests/etf_sleeve_disclosure_acceptance.py"
     },
     {
       "id": "NEW-M6-06",

@@ -266,7 +266,34 @@ The owner chose not to recover GPT's private options work. Claude redid it from 
 Valid-input numbers are byte-identical on GBM and GARCH-t synthetic boards. See
 `OPTION_DISCLOSURE_2026-11-04.md`.
 
-These three groups follow the Crypto section above (24 → 27/67). Latest source
-implementation count: **27/67**, **40** remaining. Partial NEW-M6-02, the 14 observation
+These three groups follow the Crypto section above (24 → 27/67). Source
+implementation count after this section: **27/67**, **40** remaining. Partial NEW-M6-02, the 14 observation
 models and the remaining ambiguous mappings stay open. Actual Windows, provider, research
 and release acceptance are separate.
+
+### 2026-11-04 Bootstrap and ETF sleeve disclosures (Claude rework)
+
+The owner chose not to recover GPT's private models/ETF work. Claude redid it from main
+`a32106b`. An analyst reproduced each item, a separate reviewer challenged it, and three
+more reviewers checked each implementation.
+
+- **N-M1-02 (partial, N-M1-02/a):** the register maps it to ARCHITECTURE_REVIEW C1. The
+  Monte Carlo bootstrap is now described as what it is on every surface: circular, fixed
+  5-session blocks of demeaned daily log returns, clustering kept only in part at lags
+  1-4 and lost from lag 5, no start from the current volatility. Numbers are unchanged.
+  C1's maths fix (block length or stationary lengths) is left to the owner.
+- **NEW-M6-04:** a sleeve whose daily P&L does not vary (cash only, or some flat prices)
+  showed a Sharpe of about 1e16 or 0.00. It is now unavailable under an explicit rule
+  (relative sd at or below 1e-10). Every defined Sharpe is unchanged.
+- **NEW-M6-05:** the mapping stays ambiguous, so the disclosure covers every reading: the
+  210-session cash warm-up inside a full-window Sharpe, the fixed 3% cash assumption, the
+  Sharpe not in excess of cash, buy-and-hold without warm-up, cash or cost, the K-e daily
+  rebalancing assumption and the family-card verdicts.
+
+See `MC_BOOTSTRAP_DISCLOSURE_2026-11-04.md` and `ETF_SLEEVE_DISCLOSURE_2026-11-04.md`.
+
+NEW-M6-04 and NEW-M6-05 follow the options section above (27 → 29/67). N-M1-02 is partial
+and not counted, like NEW-M6-02. Latest source implementation count: **29/67**, **38**
+remaining. Partial NEW-M6-02 and N-M1-02, the 14 observation models and the remaining
+ambiguous mappings stay open. Actual Windows, provider, research and release acceptance
+are separate.
