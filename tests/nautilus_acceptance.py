@@ -517,6 +517,13 @@ def test_l1_22_global_interpreter_has_no_nautilus():
     print(f"  pyarrow in the global interpreter: {launch.parent_pyarrow()}")
 
 
+def _names_file(exc: BaseException, path: Path) -> bool:
+    """The guard lists the changed files as a Python list, whose repr doubles every backslash of a Windows path
+    (Windows run 2026-11-04: 'C:\\\\Users\\\\...'), so the plain path is not a substring there; accept either form."""
+    text = str(exc)
+    return str(path) in text or repr(str(path)) in text
+
+
 def test_l1_32_every_test_guarded_and_ledgers_unchanged():
     """L1-32: the guard of 3.3 wraps every test, this test runs last, the guarded files equal the digests taken when
     the suite started, QUANTGEN_MACRO_DIR is a fresh temp dir inside each test, and a write under a guarded root is
@@ -546,7 +553,7 @@ def test_l1_32_every_test_guarded_and_ledgers_unchanged():
             try:
                 guarded("probe_appends", appends)()
             except AssertionError as exc:
-                assert str(root / "E1.jsonl") in str(exc), exc
+                assert _names_file(exc, root / "E1.jsonl"), exc
             else:
                 raise AssertionError("a ledger append inside a guarded test passed")
 
@@ -556,7 +563,7 @@ def test_l1_32_every_test_guarded_and_ledgers_unchanged():
             try:
                 guarded("probe_appends_not_run", appends_then_not_run)()
             except AssertionError as exc:
-                assert str(root / "E1.jsonl") in str(exc) and isinstance(exc.__context__, NotRun), exc
+                assert _names_file(exc, root / "E1.jsonl") and isinstance(exc.__context__, NotRun), exc
             except NotRun:
                 raise AssertionError("a ledger append followed by NotRun passed as NOT_RUN") from None
         finally:
