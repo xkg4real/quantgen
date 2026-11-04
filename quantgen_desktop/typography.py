@@ -129,6 +129,8 @@ def controls_stylesheet(p, dark: bool) -> str:
           QScrollBar::handle:hover {{ background: {p.muted}; }}
           QScrollBar::add-line, QScrollBar::sub-line {{ width: 0; height: 0; border: 0; background: transparent; }}
           QScrollBar::add-page, QScrollBar::sub-page {{ background: transparent; }}
+          QPushButton[flat='true'] {{ padding: 0; border: 0; border-radius: 14px; background: transparent; color: {p.muted}; font-size: 18px; font-weight: 400; }}
+          QPushButton[flat='true']:hover {{ background: {p.accent_soft}; color: {p.text}; }}
           QTabBar QToolButton {{ border: 0; background: {p.bg}; width: 22px; }}
           QTabBar QToolButton::left-arrow {{ image: url({left}); width: 12px; height: 12px; }}
           QTabBar QToolButton::right-arrow {{ image: url({right}); width: 12px; height: 12px; }}

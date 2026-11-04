@@ -796,6 +796,11 @@ class StockView(QWidget):
         self.chart.intro.hide()
         self.chart.symbol.hide()
         self.chart.form_labels[1].hide()
+        # With the code field hidden, keep the interval (and the derivatives market selector) at the left.
+        form = self.chart._form
+        for column in range(3):
+            form.setColumnStretch(column, 0)
+        form.setColumnStretch(3, 1)
         self.chart.show()
 
     def show_instrument(self, instrument, *, load=True):
