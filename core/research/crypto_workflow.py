@@ -1,6 +1,7 @@
 """Shared existing crypto workflow; no GUI widgets or replacement models."""
 from __future__ import annotations
 import math
+from decimal import Context, Decimal
 import numpy as np
 import config
 from core.crypto import analytics as CA
@@ -158,17 +159,22 @@ def cost_basis_text(holding) -> str:
     """Upbit's average buy price with its currency, keeping its digits.
 
     KRW prices keep thousands separators and up to 8 decimals without trailing zeros, so a
-    coin bought below 1 KRW (0.0189) or at 812.5 KRW is not rounded to whole won; whole
-    amounts stay whole. Non-KRW prices keep 8 significant digits.
+    coin bought below 1 KRW (0.0189) or at 812.5 KRW is not rounded to whole won, and a
+    BTC-level average (143,250,000.3) shows no float noise; whole amounts stay whole.
+    Non-KRW prices keep 8 significant digits.
     """
     value, unit = holding.get("avg_buy_price"), (holding.get("unit_currency") or "").strip()
     if value is None:
         return "n/a"
-    if unit in ("", "KRW"):
-        # 15 significant digits first, so float noise does not show up in the 8th decimal.
-        text = f"{float(f'{value:.15g}'):,.8f}".rstrip("0").rstrip(".")
-        if text == "0" and value:  # below 1e-8 KRW: never shown as 0
-            text = f"{value:.8g}"
+    value = float(value)
+    if unit in ("", "KRW") and math.isfinite(value):
+        # Round the shortest decimal that reads back as this float (its repr), not the binary
+        # value: printing the float itself to 8 decimals shows its error once the integer part
+        # has 8 or more digits (143250000.3 -> 143,250,000.30000001).
+        d = Decimal(repr(value)).quantize(Decimal("1E-8"), context=Context(prec=400))
+        text = f"{d:,f}".rstrip("0").rstrip(".")
+        if text in ("0", "-0"):  # a zero stays "0"; below 1e-8 KRW it is never shown as 0
+            text = f"{value:.8g}" if value else "0"
     else:
         text = f"{value:.8g}"
     return f"{text} {unit}".strip()

@@ -166,10 +166,24 @@ class Holdings(NoNetwork):
         # KRW keeps its decimals: a coin bought below 1 KRW was shown as "0 KRW", 812.5 as "812 KRW".
         krw = {0.0189: "0.0189 KRW", 0.00085: "0.00085 KRW", 0.5: "0.5 KRW", 812.5: "812.5 KRW",
                4_123_000.5: "4,123,000.5 KRW", 95_123_456.789: "95,123,456.789 KRW", 0.0: "0 KRW",
-               1e-9: "1e-09 KRW"}
+               1e-9: "1e-09 KRW",
+               # BTC-level averages carry no float noise (143250000.3 read 143,250,000.30000001).
+               143_250_000.3: "143,250,000.3 KRW", 150_123_456.7: "150,123,456.7 KRW",
+               99_999_999.1: "99,999,999.1 KRW", 12_345_678.12345678: "12,345,678.12345678 KRW"}
         for value, text in krw.items():
             with self.subTest(value):
                 self.assertEqual(W.cost_basis_text({"avg_buy_price": value, "unit_currency": "KRW"}), text)
+        self.assertEqual(W.cost_basis_text({"avg_buy_price": np.float64(143_250_000.3), "unit_currency": "KRW"}),
+                         "143,250,000.3 KRW")
+        rng = np.random.default_rng(68)
+        for won in rng.integers(10_000_000, 1_000_000_000, 300):
+            for places in (1, 2, 4):
+                frac = int(rng.integers(1, 10 ** places))
+                typed = f"{won}.{frac:0{places}d}".rstrip("0")
+                with self.subTest(typed=typed):
+                    whole, dec = typed.split(".")
+                    self.assertEqual(W.cost_basis_text({"avg_buy_price": float(typed), "unit_currency": "KRW"}),
+                                     f"{int(whole):,}.{dec} KRW")
 
 
 class KimchiZ(NoNetwork):
