@@ -875,6 +875,17 @@ See [supported markets, setup and current limits](docs/product/KIS_MARKET_CHARTS
 Actual KIS account connectivity and AWS deployment have not been verified by
 these offline fixture checks.
 
+Since 2026-11-04 the desktop Markets page shows the user's watchlist as chart
+cards (stored as asset/code/exchange only in the `markets/watchlist` setting,
+20 at most) and one screen per stock: the price chart plus key figures, 52-week
+range, returns, risk, signals, indicators, investor flows and short selling, and
+a list of what is not provided. Every symbol field searches by code or name. The
+ten analysis tools moved to their own Analysis tools page. Provider and
+observation time sit in tooltips and exports; delayed, fallback, stale and
+failed states stay on screen. See
+[the Markets rework record](docs/product/MARKETS_WATCHLIST_2026-11-04.md).
+The Flet browser is unchanged.
+
 ## Setup
 
 1. Python 3.10+

@@ -467,7 +467,7 @@ Original narrative (English)|원문 해설 (영어)
 '''
 
 _PAIRS += r'''
-PyQt6 native: Home, daily Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, portfolios, Signals, Library/export, Connections, System\nMacro v2, paper trading, rules and optional AI commentary are connected / Remaining checks: actual Windows display, DPI and installation\nBrowser: the existing Flet app is retained.|PyQt6 네이티브: Home, 일별 Markets, Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다.
+PyQt6 native: Home, Markets (watchlist charts and one screen per stock), Analysis tools (Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX), Indicator guide, Monte Carlo, Strategy Lab, portfolios, Signals, Library/export, Connections, System\nMacro v2, paper trading, rules and optional AI commentary are connected / Remaining checks: actual Windows display, DPI and installation\nBrowser: the existing Flet app is retained.|PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다.
 Confirm rule|규칙 확인
 Delete rule|규칙 삭제
 Delete {name} and its change history?|{name} 및 변경 이력을 삭제할까요?
