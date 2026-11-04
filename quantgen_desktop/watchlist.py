@@ -9,7 +9,7 @@ from babel.dates import format_date
 from babel.numbers import format_compact_decimal
 
 from PyQt6.QtCore import QEvent, QRect, Qt, pyqtSignal
-from PyQt6.QtGui import QColor, QBrush
+from PyQt6.QtGui import QBrush, QColor, QFontMetrics
 from PyQt6.QtWidgets import (
     QAbstractItemView, QDialog, QFormLayout, QFrame, QHBoxLayout, QHeaderView,
     QLabel, QPushButton, QScrollArea, QSizePolicy, QTableWidget,
@@ -18,6 +18,7 @@ from PyQt6.QtWidgets import (
 
 from core.i18n import LocaleContext
 from core.theme import LIGHT
+from .typography import scaled_font, tone_colors, tone_for
 
 ROW_HEIGHT = 44
 DETAIL_COLUMN = 8
@@ -420,8 +421,12 @@ class _WatchlistHeader(QHeaderView):
             self.resizeSection(logical, 128)
         self._position_help()
 
+    def title_font(self):
+        """The section header font (12px / 600), shared with the other header labels."""
+        return scaled_font(self.font(), 12, 600)
+
     def _group_geometry(self):
-        title_width = self.fontMetrics().horizontalAdvance("Q-SCORE")
+        title_width = QFontMetrics(self.title_font()).horizontalAdvance("Q-SCORE") + 1
         width = title_width + 6 + self.help_button.width()
         left = self.sectionViewportPosition(self.score_column) + (self.sectionSize(self.score_column) - width) // 2
         return left, title_width
@@ -470,7 +475,7 @@ class _WatchlistHeader(QHeaderView):
         painter.setClipRect(rect)
         painter.fillRect(rect, QColor(self.colors.surface_2))
         painter.setPen(QColor(self.colors.muted))
-        painter.setFont(self.font())
+        painter.setFont(self.title_font())
         painter.drawText(QRect(left, rect.y(), title_width, rect.height()), Qt.AlignmentFlag.AlignCenter, "Q-SCORE")
         painter.restore()
 
@@ -634,7 +639,7 @@ class ScoreHelpDialog(QDialog):
         self.setStyleSheet(f"""
             QWidget {{ background: {p.surface}; color: {p.text}; }}
             QLabel {{ color: {p.text}; background: transparent; }}
-            QLabel#scoreHelpBrand {{ color: {p.accent}; font-size: 11px; font-weight: 600; }}
+            QLabel#scoreHelpBrand {{ color: {p.accent}; font-size: 12px; font-weight: 600; letter-spacing: 1px; }}
             QLabel#scoreHelpHeading {{ font-size: 25px; font-weight: 600; }}
             QLabel#scoreHelpBody {{ font-size: 14px; }}
             QPushButton {{ color: {p.text}; background: {p.surface}; border: 1px solid {p.border}; border-radius: 8px; padding: 9px 14px; }}
@@ -804,14 +809,14 @@ class WatchlistPanel(QWidget):
             QLabel#watchlistTitle {{ font-size: 18px; font-weight: 600; color: {p.text}; }}
             QTableWidget {{ background: {p.surface}; alternate-background-color: {p.surface_2}; border: 1px solid {p.border}; border-radius: 10px; selection-background-color: {p.accent_soft}; selection-color: {p.text}; color: {p.text}; }}
             QTableWidget::item {{ padding: 1px 8px; border-bottom: 1px solid {p.border}; }}
-            QHeaderView::section {{ background: {p.surface_2}; color: {p.muted}; padding: 6px 8px; border: 0; font-weight: 500; }}
+            QHeaderView::section {{ background: {p.surface_2}; color: {p.muted}; padding: 6px 8px; border: 0; font-size: 12px; font-weight: 600; }}
             QWidget#watchlistIdentity {{ background: transparent; }}
             QWidget#watchlistIdentity QLabel {{ background: transparent; color: {p.text}; font-size: 13px; }}
-            QWidget#watchlistIdentity QLabel#watchlistTicker {{ background: {p.accent_soft}; color: {p.accent}; border-radius: 6px; padding: 3px 4px; font-size: 11px; font-weight: 600; }}
+            QWidget#watchlistIdentity QLabel#watchlistTicker {{ background: {p.accent_soft}; color: {p.accent}; border-radius: 6px; padding: 3px 4px; font-size: 12px; font-weight: 600; }}
             QPushButton {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 8px; padding: 7px 10px; }}
             QPushButton:hover {{ background: {p.accent_soft}; }}
             QPushButton:focus {{ border: 2px solid {p.accent}; }}
-            QPushButton[watchlistDetail='true'] {{ margin: 6px 3px; padding: 0 5px; border-radius: 6px; }}
+            QPushButton[watchlistDetail='true'] {{ margin: 6px 1px; padding: 0 3px; border-radius: 6px; }}
             QPushButton#qScoreHeaderHelp {{ color: {p.muted}; background: {p.surface}; border: 1px solid {p.border}; border-radius: 11px; padding: 0; margin: 0; font-size: 12px; font-weight: 600; }}
             QPushButton#qScoreHeaderHelp:hover {{ color: {p.accent}; background: {p.accent_soft}; }}
             QPushButton#qScoreHeaderHelp:focus {{ color: {p.accent}; border: 2px solid {p.accent}; }}
@@ -927,8 +932,8 @@ class WatchlistPanel(QWidget):
             item.setTextAlignment((Qt.AlignmentFlag.AlignRight if column in (1, 2, 3, 4, 5, 6) else Qt.AlignmentFlag.AlignLeft) | Qt.AlignmentFlag.AlignVCenter)
             color = self.colors.text
             if column == 2 and _finite(row.get("change")) is not None:
-                change = _finite(row["change"])
-                color = self.colors.success if change > 0 else self.colors.error if change < 0 else self.colors.muted
+                # Korean market convention (owner 2026-11-04): rise red, fall blue, AA on both themes.
+                color = tone_colors(self.colors)[tone_for(_finite(row["change"]))]
             if column == 1 and row.get("status") in ("STALE", "UNAVAILABLE"):
                 color = self.colors.warning
             if column == self.score_column:

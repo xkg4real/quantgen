@@ -101,8 +101,16 @@ def _axis_number(value, span):
     return text.rstrip("0").rstrip(".") if precision else text
 
 
+# QtSvg reads a comma list as one (missing) family, so SVG text names only the
+# registered app family; Flet and browsers fall back to their default sans-serif.
+SVG_FONT_FAMILY = "QG Interface"
+# Hangul loses strokes below 12px; every chart label is drawn at 12px or larger.
+SVG_MIN_TEXT = 12
+MIN_CHART_WIDTH = 320  # the narrowest native chart; drawn 1:1 so labels never shrink
+
+
 def plot_bounds(width: int = 1000) -> tuple[int, int]:
-    return 18, max(420, int(width)) - 100
+    return 18, max(MIN_CHART_WIDTH, int(width)) - 100
 
 
 def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
@@ -113,7 +121,7 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
     Candle positions are observation based. Gaps do not fabricate candles.
     Trade timestamps retain the exchange's offset; daily bars are local dates.
     """
-    width = max(420, min(2400, int(width)))
+    width = max(MIN_CHART_WIDTH, min(2400, int(width)))
     fg, bg, grid = ("#E9EEE9", "#17211E", "#34443D") if dark else ("#20372E", "#FFFFFF", "#DCE4DF")
     up, down = "#D94A52", "#397AC4"
     # Indicator colors also label the legend: meet text contrast on each canvas.
@@ -125,8 +133,10 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
              '<title>QUANTGEN OHLCV · ' + escape(' · '.join(indicators)) + '</title>',
              f'<rect width="{width}" height="{height}" fill="{bg}"/>']
 
-    def text(x, y, value, *, color=fg, size=11, anchor="start"):
-        parts.append(f'<text x="{x:.1f}" y="{y:.1f}" fill="{color}" font-family="QG Interface, sans-serif" font-size="{size}" text-anchor="{anchor}">{escape(str(value))}</text>')
+    def text(x, y, value, *, color=fg, size=SVG_MIN_TEXT, anchor="start", weight=None):
+        size = max(SVG_MIN_TEXT, size)
+        bold = f' font-weight="{weight}"' if weight else ''
+        parts.append(f'<text x="{x:.1f}" y="{y:.1f}" fill="{color}" font-family="{SVG_FONT_FAMILY}" font-size="{size}"{bold} text-anchor="{anchor}">{escape(str(value))}</text>')
 
     def line(x1, y1, x2, y2, color=grid, dash=""):
         parts.append(f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" stroke="{color}" stroke-width="1"' + (f' stroke-dasharray="{dash}"' if dash else '') + '/>')
@@ -134,7 +144,7 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
     def rect(x, y, w, h, color):
         parts.append(f'<rect x="{x:.2f}" y="{y:.2f}" width="{max(.5,w):.2f}" height="{max(1,h):.2f}" fill="{color}"/>')
 
-    text(18, 21, f"{snapshot.request.instrument.symbol} · {snapshot.request.interval}", size=13)
+    text(18, 21, f"{snapshot.request.instrument.symbol} · {snapshot.request.interval}", size=14, weight=600)
     if not snapshot.candles:
         text(18, 70, "OHLCV —")
         return "".join(parts) + "</svg>"
@@ -147,7 +157,7 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
     x = lambda j: left + (j + .5) * step
     selected = total - 1 if cursor is None else max(start, min(total - 1, int(cursor)))
     # A compact readout lives outside SVG in both clients; this label never clips.
-    text(18, 42, snapshot.candles[selected].timestamp, size=10)
+    text(18, 42, snapshot.candles[selected].timestamp)
     legend = []
     if "sma" in indicators:
         legend.append(("SMA20", gold))
@@ -155,10 +165,13 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
         legend.append(("EMA12 / 26", colors["ema"]))
     if "bollinger" in indicators:
         legend += [("BB20 +2σ", blue), ("BB20 −2σ", blue)]
+    # About 7px per 12px Latin glyph; the gap narrows on small charts so the legend stays one line.
+    legend_width = sum(len(name) * 7 for name, _ in legend)
+    gap = max(10, min(22, (width - 30 - legend_width) / max(1, len(legend) - 1))) if legend else 0
     legend_x = 18
     for name, color in legend:
-        text(legend_x, 60, name, color=color, size=10)
-        legend_x += len(name) * 6.5 + 22
+        text(legend_x, 60, name, color=color)
+        legend_x += len(name) * 7 + gap
     lo, hi = min(c.low for c in bars), max(c.high for c in bars)
     if "bollinger" in indicators:
         bounds = [v for key in ("BB_UPPER", "BB_LOWER") for v in series[key][start:] if v is not None]
@@ -183,7 +196,7 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
             value = minimum + (maximum - minimum) * k / 3
             yy = sy(value)
             line(left, yy, right, yy)
-            text(right + 7, yy + 4, f"{value:.0f}" if percent else _axis_number(value, maximum - minimum), size=10)
+            text(right + 7, yy + 4, f"{value:.0f}" if percent else _axis_number(value, maximum - minimum))
         return sy
 
     def curve(key, sy, color, *, dash=""):
@@ -218,31 +231,32 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
     # Unknown volume stays absent instead of becoming an invented zero.
     volumes = [c.volume for c in bars if c.volume is not None]
     volume_label = "거래량" if language == "ko" else "Volume"
-    text(left, 303, volume_label if volumes else volume_label + " —", size=10)
+    text(left, 303, volume_label if volumes else volume_label + " —")
     maxvol = max(volumes, default=0) or 1
     for j, c in enumerate(bars):
         if c.volume is not None and c.volume > 0:
             h = c.volume / maxvol * 48
             rect(x(j) - step * .3, 359 - h, step * .6, h, up if c.close >= c.open else down)
     line(left, 359, right, 359)
-    text(right + 7, 317, number(max(volumes)) if volumes else "—", size=10)
+    text(right + 7, 317, number(max(volumes)) if volumes else "—")
     # Sparse x ticks leave room at mobile widths and for exchange-local times.
-    count = min(len(bars), max(2, (right - left) // 150))
+    count = min(len(bars), max(2, (right - left) // 160))
     for k in range(count):
         j = round(k * (len(bars) - 1) / max(1, count - 1))
         stamp = bars[j].timestamp
         label = stamp[5:10] + (" " + stamp[11:19 if snapshot.request.interval in LIVE_INTERVALS else 16] if len(stamp) > 10 else "")
-        text(x(j), 379, label, anchor="middle", size=9)
+        half = len(label) * 3.3  # keep the edge ticks inside the canvas at 12px
+        text(min(max(x(j), half + 2), width - half - 2), 379, label, anchor="middle")
     top = 398
     if rsi_on:
-        text(left, top, "RSI14 · Wilder", color=colors["rsi"], size=10)
+        text(left, top, "RSI14 · Wilder", color=colors["rsi"])
         sy = panel(top + 12, top + 88, 0, 100, percent=True)
         for boundary in (30, 70):
             line(left, sy(boundary), right, sy(boundary), gold, "3 4")
         curve("RSI14", sy, colors["rsi"])
         top += 112
     if macd_on:
-        text(left, top, "MACD12/26 · Signal9", color=colors["macd"], size=10)
+        text(left, top, "MACD12/26 · Signal9", color=colors["macd"])
         values = [v for key in ("MACD", "SIGNAL", "HISTOGRAM") for v in series[key][start:] if v is not None]
         extent = max((abs(v) for v in values), default=1) * 1.1 or 1
         sy = panel(top + 12, top + 88, -extent, extent)
@@ -253,7 +267,7 @@ def chart_svg(snapshot: MarketSnapshot, *, indicators=("sma", "rsi", "macd"),
         curve("MACD", sy, colors["macd"])
         curve("SIGNAL", sy, colors["macd"], dash="4 3")
     line(x(selected - start), 73, x(selected - start), height - 12, fg, "3 4")
-    text(width - 10, height - 3, "거래소 시간 · 마지막 봉은 갱신 중일 수 있어요" if language == "ko" else "Exchange time · latest candle may still be forming", anchor="end", size=9)
+    text(width - 10, height - 3, "거래소 시간 · 마지막 봉은 갱신 중일 수 있어요" if language == "ko" else "Exchange time · latest candle may still be forming", anchor="end")
     return "".join(parts) + "</svg>"
 
 
@@ -275,26 +289,30 @@ def card_svg(dates, values, *, width: int = 360, height: int = 150, dark: bool =
              f'<rect width="{width}" height="{height}" fill="{bg}"/>']
     points = [(d, float(v)) for d, v in zip(dates, values) if v is not None and math.isfinite(float(v))]
     if len(points) < 2:
-        parts.append(f'<text x="12" y="{height / 2:.0f}" fill="{muted}" font-family="QG Interface, sans-serif" '
-                     'font-size="11">—</text>')
+        parts.append(f'<text x="12" y="{height / 2:.0f}" fill="{muted}" font-family="{SVG_FONT_FAMILY}" '
+                     f'font-size="{SVG_MIN_TEXT}">—</text>')
         return "".join(parts) + "</svg>"
     low, high = min(v for _, v in points), max(v for _, v in points)
     if high == low:  # a flat series sits mid-card between distinct gridlines
         pad = abs(high) * 0.005 or 0.5
         low, high = low - pad, high + pad
     span = high - low
-    left, right, top, bottom = 6, width - 58, 10, height - 24
+    grid_values = (low, (low + high) / 2, high)
+    grid_labels = [f"{value:,.{max(0, int(decimals))}f}" for value in grid_values]
+    # Right-hand labels at 12px need about 6.4px per character.
+    left, right, top, bottom = 6, width - max(58, int(max(map(len, grid_labels)) * 6.4) + 10), 10, height - 24
     x = lambda i: left + (right - left) * i / (len(points) - 1)
     y = lambda v: bottom - (bottom - top) * (v - low) / span
 
-    def text(tx, ty, value, *, anchor="start", color=muted, size=10):
-        parts.append(f'<text x="{tx:.1f}" y="{ty:.1f}" fill="{color}" font-family="QG Interface, sans-serif" '
+    def text(tx, ty, value, *, anchor="start", color=muted, size=SVG_MIN_TEXT):
+        size = max(SVG_MIN_TEXT, size)
+        parts.append(f'<text x="{tx:.1f}" y="{ty:.1f}" fill="{color}" font-family="{SVG_FONT_FAMILY}" '
                      f'font-size="{size}" text-anchor="{anchor}">{escape(str(value))}</text>')
 
-    for value in (low, (low + high) / 2, high):
+    for value, grid_label in zip(grid_values, grid_labels):
         gy = y(value)
         parts.append(f'<line x1="{left}" y1="{gy:.2f}" x2="{right}" y2="{gy:.2f}" stroke="{grid}" stroke-width="1"/>')
-        text(right + 6, gy + 3.5, f"{value:,.{max(0, int(decimals))}f}")
+        text(right + 6, gy + 4, grid_label)
     path = " ".join(("M" if i == 0 else "L") + f"{x(i):.2f},{y(v):.2f}" for i, (_, v) in enumerate(points))
     parts.append(f'<path d="{path}" fill="none" stroke="{fg}" stroke-width="1.6" stroke-linejoin="round"/>')
     last_x, last_y = x(len(points) - 1), y(points[-1][1])

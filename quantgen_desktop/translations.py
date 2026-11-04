@@ -604,6 +604,8 @@ for line in (_PAIRS + _TERMS).strip().splitlines():
 
 KO["Build && Test"] = KO["Build & Test"]
 KO["Portfolio && Risk"] = KO["Portfolio & Risk"]
+# The English nav label is shortened (owner 2026-11-04); the Korean label and the page title stay.
+KO["Indicator guide"] = KO["Technical indicator guide"]
 
 from .macro_narrative_language import PAIRS as _MACRO_PAIRS
 KO.update(_MACRO_PAIRS)

@@ -152,8 +152,10 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
             self.panel.set_theme(palette)
             self.drain()
             self.assertEqual(self.panel.table.item(6, 1).text(), before)
-            self.assertEqual(self.panel.table.item(6, 2).foreground().color().name(), palette.success.lower())
-            self.assertEqual(self.panel.table.item(3, 2).foreground().color().name(), palette.error.lower())
+            # Korean convention (owner 2026-11-04): a rise is red and a fall is blue, AA on each theme.
+            up, down = ("#f0868c", "#7fb0e8") if palette is DARK else ("#c8343d", "#2f6db5")
+            self.assertEqual(self.panel.table.item(6, 2).foreground().color().name(), up)
+            self.assertEqual(self.panel.table.item(3, 2).foreground().color().name(), down)
             self.assertIn(palette.surface, self.panel.styleSheet())
             self.assertIn(palette.text, self.panel.detail_dialog.styleSheet())
 

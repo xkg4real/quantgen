@@ -1,0 +1,151 @@
+"""Type scale and rise/fall tones for the native window (owner request 2026-11-04).
+
+Only the bundled QG Interface weights 400, 500 and 600 are used; asking Qt for 700
+draws a synthetic bold from the SemiBold face. Tone colours stay here, next to the
+stylesheet that uses them, instead of becoming Palette fields: `core.theme.Palette`
+keeps `warning` as its last positional field.
+
+Korean market convention: a rise is red and a fall is blue. Each colour meets WCAG AA
+4.5:1 for 13px text on the window surfaces and on its own tinted pill
+(docs/compliance/14-contrast.md).
+"""
+from __future__ import annotations
+
+from PyQt6.QtGui import QColor, QFont
+
+TONES = ("up", "down", "flat")
+
+# Text colour and pill tint per theme. Light values are checked against #FFFEFB,
+# #F7F5F0 and #F1F2EB; dark values against #17231D, #101915 and #1E2D25.
+TONE_COLORS = {
+    False: {"up": "#C8343D", "down": "#2F6DB5", "flat": "#646E68",
+            "up_tint": "#FDF0F0", "down_tint": "#EEF4FB", "flat_tint": "#F3F4EE"},
+    True: {"up": "#F0868C", "down": "#7FB0E8", "flat": "#A7B8AC",
+           "up_tint": "#3A2427", "down_tint": "#1E2F44", "flat_tint": "#26342C"},
+}
+
+# Raised-panel depth: a subtle vertical gradient with a lighter top edge and a 2px
+# bottom edge. No QGraphicsDropShadowEffect: it re-renders children offscreen on
+# every live quote and can blur text at fractional scaling.
+PANEL_DEPTH = {
+    False: {"top": "#FFFFFF", "bottom": "#FAF9F4", "edge_top": "#ECEDE6", "edge_bottom": "#D2D5C9"},
+    True: {"top": "#1B2A23", "bottom": "#15201B", "edge_top": "#3F5649", "edge_bottom": "#0A110E"},
+}
+
+# Sidebar geometry: rail margins (left, top, right, bottom), nav padding and limits.
+RAIL_MARGINS = (12, 22, 12, 16)
+RAIL_SPACING = 5
+NAV_PADDING = (9, 14)        # vertical, horizontal
+NAV_SLACK = 20               # breathing room beyond the widest label
+SIDEBAR_WIDTH_RANGE = (168, 208)
+
+
+def is_dark(palette) -> bool:
+    """A palette is dark when its background is darker than mid grey."""
+    color = QColor(palette.bg)
+    return color.lightnessF() < 0.5
+
+
+def tone_colors(palette_or_dark) -> dict:
+    """Rise/fall/flat colours for a Palette (or a bool meaning dark)."""
+    dark = palette_or_dark if isinstance(palette_or_dark, bool) else is_dark(palette_or_dark)
+    return dict(TONE_COLORS[dark])
+
+
+def tone_for(change) -> str:
+    """'up', 'down' or 'flat' for a signed change; unknown values are flat."""
+    try:
+        value = float(change)
+    except (TypeError, ValueError):
+        return "flat"
+    if value != value:  # NaN
+        return "flat"
+    return "up" if value > 0 else "down" if value < 0 else "flat"
+
+
+def set_tone(widget, tone: str) -> None:
+    """Set the `tone` dynamic property (up/down/flat) and re-polish the widget.
+
+    Stylesheet selectors such as QLabel[role='delta'][tone='up'] are only
+    re-evaluated after unpolish/polish, so a changing quote needs both calls.
+    """
+    if tone not in TONES:
+        raise ValueError(f"Unsupported tone: {tone!r}")
+    if widget.property("tone") == tone:
+        return
+    widget.setProperty("tone", tone)
+    style = widget.style()
+    style.unpolish(widget)
+    style.polish(widget)
+    widget.update()
+
+
+def scaled_font(base: QFont, pixel_size: int, weight: int) -> QFont:
+    """A copy of `base` (family and features kept) at a pixel size and weight."""
+    if weight not in (400, 500, 600):
+        raise ValueError("Only the bundled 400/500/600 weights are allowed")
+    font = QFont(base)
+    font.setPixelSize(int(pixel_size))
+    font.setWeight(QFont.Weight(weight))
+    return font
+
+
+def window_stylesheet(p, dark: bool) -> str:
+    """The research window stylesheet.
+
+    Controls, tables and tabs stay at 13px so dense forms do not clip at 1000x700;
+    body labels are 14px; the hierarchy runs from 12px captions to 32px figures.
+    Each delta rule is repeated under QFrame#panel: the ID selector in
+    `QFrame#panel QLabel { background: transparent }` outranks a bare
+    QLabel[role='delta'], and cards (MarketCard and the like) are panels.
+    """
+    t, d = TONE_COLORS[dark], PANEL_DEPTH[dark]
+    nav_v, nav_h = NAV_PADDING
+    return f"""
+          QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; font-weight: 400; }}
+          QFrame#sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
+          QFrame#panel {{ background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 {d['top']}, stop:1 {d['bottom']});
+                          border: 1px solid {p.border}; border-top-color: {d['edge_top']};
+                          border-bottom: 2px solid {d['edge_bottom']}; border-radius: 14px; }}
+          QFrame#panel QLabel {{ background: transparent; }}
+          QLabel {{ background: transparent; font-size: 14px; }}
+          QLabel[role='title'] {{ font-size: 30px; font-weight: 600; letter-spacing: -0.6px; }}
+          QLabel[role='heading'] {{ font-size: 18px; font-weight: 600; border: 0; border-left: 3px solid {p.accent}; padding-left: 8px; }}
+          QLabel[role='cardTitle'] {{ font-size: 15px; font-weight: 600; }}
+          QLabel[role='price'] {{ font-size: 15px; font-weight: 600; }}
+          QLabel[role='eyebrow'] {{ font-size: 12px; font-weight: 600; letter-spacing: 1px; color: {p.accent}; }}
+          QLabel[role='delta'], QFrame#panel QLabel[role='delta'] {{ font-size: 13px; font-weight: 600; padding: 2px 7px; border-radius: 6px; color: {t['flat']}; background: {t['flat_tint']}; }}
+          QLabel[role='delta'][tone='up'], QFrame#panel QLabel[role='delta'][tone='up'] {{ color: {t['up']}; background: {t['up_tint']}; }}
+          QLabel[role='delta'][tone='down'], QFrame#panel QLabel[role='delta'][tone='down'] {{ color: {t['down']}; background: {t['down_tint']}; }}
+          QLabel[role='brand'] {{ font-size: 17px; font-weight: 600; letter-spacing: 0.15px; color: {p.accent}; }}
+          QLabel[role='number'] {{ font-size: 32px; font-weight: 600; letter-spacing: -0.6px; }}
+          QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
+          QLabel[role='caption'] {{ font-size: 12px; }}
+          QPushButton {{ padding: 10px 14px; border: 1px solid {p.border}; border-radius: 8px; background: {p.surface}; font-weight: 500; }}
+          QPushButton:hover {{ background: {p.accent_soft}; }}
+          QPushButton:focus, QLineEdit:focus, QComboBox:focus {{ border: 2px solid {p.accent}; }}
+          QPushButton[primary='true'], QPushButton:checked {{ background: {p.accent}; color: {p.on_accent}; }}
+          QPushButton[primary='true'] {{ font-weight: 600; }}
+          QPushButton[nav='true'] {{ text-align: left; border: 0; padding: {nav_v}px {nav_h}px; min-height: 20px; font-size: 14px; font-weight: 500; }}
+          QPushButton[nav='true']:checked {{ font-weight: 600; }}
+          QPushButton:disabled {{ color: {p.muted}; background: {p.surface_2}; }}
+          QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ min-height: 28px; padding: 5px; border: 1px solid {p.border}; border-radius: 6px; background: {p.surface}; }}
+          QTableWidget {{ background: {p.surface}; alternate-background-color: {p.surface_2}; gridline-color: {p.border}; border: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
+          QHeaderView::section {{ padding: 8px; border: 0; background: {p.surface_2}; color: {p.muted}; font-size: 12px; font-weight: 600; }}
+          QScrollArea {{ border: 0; }}
+          QTabWidget::pane {{ border: 0; }}
+          QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 18px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-size: 13px; font-weight: 500; }}
+          QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; font-weight: 600; }}
+          QTabWidget#marketInnerTabs QTabBar::tab {{ background: transparent; color: {p.muted}; padding: 7px 14px; margin-right: 6px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; }}
+          QTabWidget#marketInnerTabs QTabBar::tab:selected {{ background: transparent; color: {p.accent}; border-bottom: 2px solid {p.accent}; font-weight: 600; }}
+          QLineEdit#guideSearch {{ min-height: 34px; padding: 6px 12px; border-radius: 20px; font-size: 14px; }}
+          QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; padding: 4px; outline: 0; }}
+          QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
+          QListWidget#guideSuggestions::item:selected, QListWidget#guideSuggestions::item:hover {{ background: {p.accent_soft}; }}
+          QPushButton[chip='true'] {{ padding: 6px 12px; border-radius: 15px; font-weight: 500; }}
+        """
+
+
+__all__ = ["TONES", "TONE_COLORS", "PANEL_DEPTH", "RAIL_MARGINS", "RAIL_SPACING", "NAV_PADDING",
+           "NAV_SLACK", "SIDEBAR_WIDTH_RANGE", "is_dark", "tone_colors", "tone_for", "set_tone",
+           "scaled_font", "window_stylesheet"]
