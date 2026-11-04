@@ -671,7 +671,7 @@ class ResearchWindow(QMainWindow):
         inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
-        inner.addWidget(label("PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\nMacro v2·모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다."))
+        inner.addWidget(label("PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다."))
         inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
         layout.addWidget(box)
         layout.addStretch()

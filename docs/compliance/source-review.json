@@ -8,7 +8,7 @@
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
     ".github/workflows/runtime-smoke.yml": "ec0ebf0dee6375c657f69240016fcf93b9aa5d3bff856e5328206d2966fe0cb8",
-    "README.md": "11129495b126209689ab4dfc88338d1a60f3b0ae0b51f924da074e42061f6265",
+    "README.md": "9396b708dc01df00a5d32b5549fe1b316824318319a95e0ecd8c296016ca0204",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
     "assets/branding/f1-wordmark.svg": "145715bc8df17cb3c99b734d4c7cb2b8e9bf1878e87c401f518f46b944ba41aa",
@@ -213,7 +213,7 @@
     "core/techfund.py": "1108820d937dc1047f5302b2628ccde26f99ec82d03db197f9892b31d74d9629",
     "core/theme.py": "726e370feb7e44ed22a439b3b8111b5a065e9b08ff483f603c58d4b3ff4fad51",
     "core/ui_dynamic_messages.py": "218891aa8f4097e6db887b1f38128253036aaa4d96d3e4817550d3d17c924a1e",
-    "core/ui_legacy_messages.py": "100c8f030f70ef4b2c41aaa755020ad934103c73eb08b0bb804236c347d71e2f",
+    "core/ui_legacy_messages.py": "8b36cb6a694e53477bde80c267e2e8f50408765859976db6633979356f5d4884",
     "core/ui_messages.py": "9d78e48a301d1bb6b3b70efe5586606d5ee51aac63b2e2a37e5dbee5807de086",
     "data/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "data/calendars/ASX.json": "af9afc80eeccfbcbf2cb25eb1b8b10d40a10972914d028b82208f077dc9711d1",
@@ -254,8 +254,8 @@
     "data/macro/rules_v2.0.0.json": "c74edcd93d05a55eddea860e2fd6ee8e31bcaf00dfd7fbc2b0e41766f766822e",
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
-    "docs/DESKTOP_MIGRATION_2026-10-30.md": "330b96bdf6005c408d8a7341b2c103bf4b774b43b756794dcb9cd2a1a5c4f236",
-    "docs/compliance/FACTS.md": "e547d4c9fcd0292ed7ceb3a3e83992afade32bf139a3e4e754c0fcc97fc55b85",
+    "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
+    "docs/compliance/FACTS.md": "6a792415df0613b18e296c71c1614fc93304a300f4ab80742d7c907ae6ed6297",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -283,7 +283,7 @@
     "docs/product/LETF_ASSUMPTIONS_2026-11-02.md": "4fd6fbcd5caad90146799feb6fa7ae61a38603e22c752970474e3d23b757fd0b",
     "docs/product/LETF_INDEX_2026-10-31.md": "7c10b178f33c59f2afb2783c94413cc2c949ba3d5f0e7b4412246d0da1f54693",
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
-    "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "2262a6ba0beab3ebbce28b489b859e915a7d73678360845271610622a574f9cf",
+    "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "05e1d155c3a5a8f22d66a3d58ae505920c459fb3a2d591554e95d65eb7256913",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
     "docs/product/MC_VOLATILITY_2026-10-30.md": "92dc8a14c6884ea57936f9f187e9b87d1120b426ac0fe2f8767867617ef6837f",
@@ -313,7 +313,7 @@
     "pyproject.toml": "77589c755d38fe9bc4316841b4a4b69b1dd807f532c211d16d1658e1540926d4",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "867c7d0de96fbe98e95d4b1db97afd3814fad66ced02cc940e9ffc6d95addb53",
+    "quantgen_desktop/app.py": "ea56a026ddf7d730652d407f83ba88b54c61002500cf290f5e612434582f81b3",
     "quantgen_desktop/bonds.py": "7d173230908995d65b98dde02903f59c823b6261a550ae562d5d9e697b361bd9",
     "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
@@ -346,7 +346,7 @@
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
     "quantgen_desktop/tools.py": "d98221d56bd5596ee096d2f77d3437e6c3d35a3d85fb313db281cf018c5d5bdc",
-    "quantgen_desktop/translations.py": "97f97ccaea041c4c42afe7899dea427deaff9c25b37b39335133886b25da5c8c",
+    "quantgen_desktop/translations.py": "cfd64447e97ea3be9074082dc7d233ae25a974396a0ab1ad3a2f99f6e21ba2af",
     "quantgen_desktop/typography.py": "ca03e8acc771fc275908220a0eec00a38f39e71dfa0de2c9626d6b4c104e4330",
     "quantgen_desktop/watchlist.py": "c58ed15245ec7c30da319efdb5a97c9d56c5d6b0f83440625c0493fcfe5d7986",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
@@ -568,163 +568,163 @@
   "reviews": {
     "1": {
       "document_sha256": "584ca9c262f35bbf1cc8077354dd5bb9e3237a4b3891692164b06781c93043af",
-      "source_digest": "59b029cee37256e4e8d43ba41eddf4b44b7b7122e6766a0b6e270733d327e079",
+      "source_digest": "d5e0eb0153af1587d6ac9084a756376ac867340f8eb3dc1e9e5a789865bfb6cb",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.413922+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.636674+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "59b029cee37256e4e8d43ba41eddf4b44b7b7122e6766a0b6e270733d327e079",
+      "source_digest": "d5e0eb0153af1587d6ac9084a756376ac867340f8eb3dc1e9e5a789865bfb6cb",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.416612+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.639242+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "3a323be12caef090a396a4ff43b253e861e42b6e846c9658c6ccccd0c5d1ed4f",
+      "source_digest": "ad2c1754b6be7870750a18e62f37de78eb51c9ae57816d39b0060e6126d93055",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.419657+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.641585+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "2bcba750ff663b772c0d9cf6717b8904f5b9495020a478806ad3c696590aec40",
+      "source_digest": "3695a6d1c13e419ec637ebcf9e1b6a75763a0bde11f9d0954fa38d26ad765376",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.422687+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.644064+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "3f6dacb57308989d325b50ad88bcb13442c2b3e4f4edf2c2c76ca47b79d31983",
+      "source_digest": "1e5a93d0906885d56ea2327fa531515e95ca4d21bd72ba7a4b2fccdb5c0c5034",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.424818+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.646394+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "6": {
       "document_sha256": "9e7d3a2850c698226b88e0715ac5a11d47559a375158df21e5d5f2b4618d9805",
-      "source_digest": "ad82228068327beee5e8b838a79429532f41c4a1ceac7ae2fe8ab07c4cf74089",
+      "source_digest": "242621977bcffb02a388dfec6971c13ac86b727a145a9be836a080ee973c999c",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.427596+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.648589+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "7": {
-      "document_sha256": "4f09006c71901b527218e66f578c87d9ac825b82aa9a6daab11865f37ce077b1",
-      "source_digest": "59b029cee37256e4e8d43ba41eddf4b44b7b7122e6766a0b6e270733d327e079",
+      "document_sha256": "4e29d02f2213cf401aacd8c1d46bfa837c2ffe50527c1b8cc89690467e644112",
+      "source_digest": "d5e0eb0153af1587d6ac9084a756376ac867340f8eb3dc1e9e5a789865bfb6cb",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.430517+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.651526+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "8": {
-      "document_sha256": "7388af1588c31eedd82dc8ea72bcb923ba65ad4af4b4197a45ab442c346c623f",
-      "source_digest": "ad82228068327beee5e8b838a79429532f41c4a1ceac7ae2fe8ab07c4cf74089",
+      "document_sha256": "c37d042708d4b07132d11b878bffb9b313209b87df34e5e9fdbdab9c50770746",
+      "source_digest": "242621977bcffb02a388dfec6971c13ac86b727a145a9be836a080ee973c999c",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.433164+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.653693+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "9": {
-      "document_sha256": "6a8755ccf6f921ed2d5117647aa35129c863c89c20508372f75c84604621cbfb",
-      "source_digest": "66668ddc4e4ddd10fba92ae8211d62c1a76bdf6fc14120d68dfbad970f9e3816",
+      "document_sha256": "55df60516bf1f54b4f7c6f8d3f5fb0c75368aee6f29f104db6f4ac48714990b5",
+      "source_digest": "57c6b44e634234f4030029b0004f1433121d28039cbbfcd6bee3e23c435985f1",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.435827+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.655609+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "59b0f58a5afa5a3dd0a570cfe6ae6c06b81a3f2d5120dc164f9ea5d6edcfb491",
+      "source_digest": "ae3c4b5901f943eac11b3ceb2367730c01141269cd3fb836a509b29023f1cf7c",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.438655+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.657618+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "2c50e96e00a9e957effb000da81148695d90a06968dd778419696b1734d9d57d",
+      "source_digest": "0cc124f18a1c5554d81078b738ca5e204bd4c920b56b99175c1844fd257059dc",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.441129+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.659639+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "c43fdb43998d0263e55cbe577e2625752580e76defcbeca4b919f0e21050c431",
+      "source_digest": "c141815fd20b376f397c93526ab26c870ddee349cfc728d28a7a4702901b2a18",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.443765+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.661694+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "13": {
-      "document_sha256": "324fbf23fb406d23a9fc19e389d846fce35e3203e2698726331173b5b17a38f2",
-      "source_digest": "66668ddc4e4ddd10fba92ae8211d62c1a76bdf6fc14120d68dfbad970f9e3816",
+      "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
+      "source_digest": "57c6b44e634234f4030029b0004f1433121d28039cbbfcd6bee3e23c435985f1",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.445736+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.663656+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "14": {
-      "document_sha256": "e3be2872bcd6b261756f5deb7d55c94035953b50b079ad1b46bb166c9492d435",
-      "source_digest": "66668ddc4e4ddd10fba92ae8211d62c1a76bdf6fc14120d68dfbad970f9e3816",
+      "document_sha256": "23b4aec97fca5a736f29f0ee12ec24104ec30b558f1c08b94d412e19d06d0c8f",
+      "source_digest": "57c6b44e634234f4030029b0004f1433121d28039cbbfcd6bee3e23c435985f1",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.448404+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.665648+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "15": {
-      "document_sha256": "96a961cd0abeafde05431c0b24a1bab5b9179a00ba7bb3b2e6ea0f1b3e9d1125",
-      "source_digest": "66668ddc4e4ddd10fba92ae8211d62c1a76bdf6fc14120d68dfbad970f9e3816",
+      "document_sha256": "f6d97b6b70a73b55d43b72efc4df0232ffe0516f32f22478fdf94b6a973af131",
+      "source_digest": "57c6b44e634234f4030029b0004f1433121d28039cbbfcd6bee3e23c435985f1",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.450868+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.667891+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "1dd8708959eb156e01498d2aa73824f5712e60e44e7c863aae89f2cdfcf454d5",
+      "source_digest": "01f77f252e19163f9ba2d75c27d869361d7460b711b77485d1ca6834e430dd6b",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.452885+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.670200+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "ad82228068327beee5e8b838a79429532f41c4a1ceac7ae2fe8ab07c4cf74089",
+      "source_digest": "242621977bcffb02a388dfec6971c13ac86b727a145a9be836a080ee973c999c",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.455476+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.672255+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "59b029cee37256e4e8d43ba41eddf4b44b7b7122e6766a0b6e270733d327e079",
+      "source_digest": "d5e0eb0153af1587d6ac9084a756376ac867340f8eb3dc1e9e5a789865bfb6cb",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.457960+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.674243+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "d2a02ded13221fdfb9473ad0ac36ec24c041268d851063f8c70043b5f0fabc89",
+      "source_digest": "f5bc207c852025cf9fbf787479276638f8bce748e29bcd96607d337d43eb34bf",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.459921+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.676470+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     },
     "20": {
       "document_sha256": "9e456e5db5c44c8592f493633e32f1e00de8d112b05dd468e6b335e481363d45",
-      "source_digest": "59b029cee37256e4e8d43ba41eddf4b44b7b7122e6766a0b6e270733d327e079",
+      "source_digest": "d5e0eb0153af1587d6ac9084a756376ac867340f8eb3dc1e9e5a789865bfb6cb",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "2026-11-04 Markets rework (watchlist chart cards, one screen per stock, code-or-name search, Analysis tools page, provider/observation columns moved to tooltips, type scale, fitted sidebar, chevron controls) checked against the code: 01/04/07/20 record QSettings markets/watchlist (asset/code/exchange, max 20); 08 records the keyless kospi_code/kosdaq_code masters kept in memory, investor-flow and short-sale display, the removed board requests and the Yahoo fallback; 06/09/13/14/15/19 updated; 02/03/05/10/11/12/16/17/18 compared and nothing became untrue; Windows rendering and real KIS responses were not checked",
-      "reviewed_at": "2026-11-04T08:49:00.462581+00:00",
-      "source_commit": "07b948786b66ad4e8045f65161809d1ec89e8345"
+      "review_note": "Checker corrections 2026-11-04: where provider/time remain per screen (tooltips, macro/FX exports only, KRX via KIS nowhere), remaining provider/date text in tools, Home table changes, search caveats, symbol popup unstyled (offscreen), screen-reader paths, System text lists Macro v2. 07 08 09 13 14 15 FACTS edited; other documents re-read against the source change (app.py, translations.py, ui_legacy_messages.py, README.md) with no false statement found.",
+      "reviewed_at": "2026-11-04T09:25:47.678389+00:00",
+      "source_commit": "b998c2503b204f3a93c8aaf9a0f62cceac3cd8c6"
     }
   }
 }
