@@ -32,13 +32,12 @@ from datetime import date
 from typing import Optional, Sequence
 
 import numpy as np
-
-from .values import price_or_none
 from scipy import stats as sps
 
 from core.quant.strategies import adf_pvalue, half_life, ar1_decay
 from core.quant.validate import newey_west_t
 from core.crypto.funding_diagnostic import phase_diagnostic
+from core.crypto.values import price_or_none
 
 CRYPTO_DAYS = 365
 
