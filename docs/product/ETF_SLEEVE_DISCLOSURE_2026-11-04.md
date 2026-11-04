@@ -6,7 +6,8 @@ through two steps:
 - an analyst reproduced it on synthetic and injected histories;
 - a separate reviewer tried to refute the reproduction and the proposed fix.
 
-The fixes below include the reviewers' corrections. Both are disclosure, validation or
+The fixes below include the reviewers' corrections, and a second round of corrections from three
+code reviewers (listed under "Review round 2" below). Both are disclosure, validation or
 unavailable-state changes. `core/quant/strategies.py` (a frozen harness file) is unchanged, and
 no number changes for a sleeve whose daily P&L varies. Both items live in one new module,
 `core/research/sleeve_disclosure.py`.
@@ -54,13 +55,22 @@ reading; nothing in the code depends on it.
 | Constant cash P&L, 505 closes | numpy sd 5.43e-20, Sharpe 3.4826467946423224e16 | n/a |
 | Constant cash P&L, 547 closes | sd exactly 0, Sharpe 0.00 | n/a |
 | Register seed-2 walk, 505 closes, 069500 (3 bp) and SPY (50 bp) | trend 3.4826467946423224e16 | trend n/a; vol target −0.7151 / −0.7516 and buy-and-hold −0.8407 unchanged |
-| Flat price, 505 closes | trend and vol target 3.48e16, buy-and-hold 0.00 | all three n/a, one note naming all three |
+| Flat price at 100.0, 505 closes | trend and vol target 3.48e16, buy-and-hold 0.00 | all three n/a, one note naming all three |
+| Flat price at 100.37, 505 closes | trend 20.80, vol target 3.48e16, buy-and-hold 0.00 | trend 20.80 unchanged; vol target and buy-and-hold n/a |
 | Shipped Synthetic demo, 251340, 400 sessions | trend 4.642314207434303e16; Flet tile "46423142074343032.00" | trend n/a; vol target −0.64, buy-and-hold −0.73 unchanged |
 | One NaN close | every Sharpe 0.00 | every Sharpe n/a, "non-finite values" |
 
-- The exact sample variance of a constant cash P&L is 0 (checked with `Fraction` arithmetic), so its
-  Sharpe is 0/0. Of the lengths 301–2520 closes, 21 give an sd of exactly 0 (the first is 547) and
-  showed 0.00; the rest showed about 1e16.
+- The exact sample variance of a constant cash P&L is 0 (checked with `Fraction` arithmetic), while its
+  mean is positive (0.03 a year). Its Sharpe is therefore a positive number over 0: undefined, but not
+  0/0. Only a P&L that is 0 throughout, such as buy-and-hold on a flat price, is 0/0. Of the lengths
+  301–2520 closes, 21 give an sd of exactly 0 (the first is 547) and showed 0.00; the rest showed about
+  1e16, which comes from the rounding residue of the sd (5.43e-20 at 505 closes), not from the data.
+- A flat price is not always "all three n/a". Buy-and-hold never varies on it, and neither does the vol
+  target (its realised vol is 0, so it stays in cash). The trend switch stays in cash only when its
+  210-session average equals the price exactly, as at 100.0 (and at 0.1 over 505 closes). At many other
+  levels, float rounding of that average puts the switch in the fund on some rows, so its P&L moves
+  between 0 and the cash rate and its Sharpe is defined: 20.80 at 100.37, 57% invested. That number is
+  the same as before; the test pins it.
 - On 400 register walks (505 closes, 19%/yr, no drift), 27 never hold the fund. In 3 of them the switch
   turns on only on the final row, which is never held. Every cash-only P&L has a relative sd at most
   5.43e-20, and every P&L that held the fund at least 1.84e-3.
@@ -90,8 +100,8 @@ above, the margin is more than 7 orders of magnitude on each side (5.43e-20 and 
 
 | Surface | NEW-M6-04 | NEW-M6-05 |
 | --- | --- | --- |
-| `etf_workflow.analyze` | `sleeve_summary` for the three sleeves | The literals are named once (`SLEEVE_TREND_LOOKBACK` 210, `SLEEVE_VOL_WINDOW` 22, `SLEEVE_CASH_RATE` 0.03, rf = cash / 252). The same variables go to the strategy calls and to `sleeves.conventions`. |
-| EN narrative | "Sharpe n/a" in place of the number, then a note after "…vol target earned …" | The conventions sentence after "Price basis for these sleeve numbers: …" |
+| `etf_workflow.analyze` | `sleeve_summary` for the three sleeves | The literals are named once (`SLEEVE_TREND_LOOKBACK` 210, `SLEEVE_VOL_WINDOW` 22, `SLEEVE_CASH_RATE` 0.03, rf = cash / 252). The same variables go to the strategy calls and to `sleeves.conventions`. After the study cards are loaded, `with_loaded_cards` records whether each family card was among them (`trend_card_loaded`, `vol_target_card_loaded`). |
+| EN narrative | "Sharpe n/a" in place of the number, then a note after "Price basis for these sleeve numbers: …" | The conventions sentence after the note (or after the price basis when there is no note) |
 | KO narrative | "계산 불가" and the Korean note, in the same places | `conventions_korean`, in the same place |
 | Flet tiles | "n/a" with a tooltip saying why | A defined Sharpe tile carries the conventions as its tooltip (it had none) |
 | Flet notice | — | A notice under the sleeve row with the conventions text |
@@ -100,22 +110,38 @@ above, the margin is more than 7 orders of magnitude on each side (5.43e-20 and 
 | Native text | A localized en/ko note after the "bp per side" line | A localized en/ko conventions text, then a `sleeve_conventions` report section |
 | Native export and AI commentary | They carry the sections (the note and the conventions text, plus the section). They never carried the sleeve dicts, so `sharpe_status` reaches only the Flet AI payload and `MarketOutput.data`. | Same |
 
-Narrative order: the existing sleeve sentence, then the NEW-M6-04 note (only when a Sharpe is not
-defined), then the existing in-sample, verdict and price-basis sentences, then the conventions.
+Narrative order: the existing sleeve sentences unchanged (the Sharpe sentence, "These are in-sample
+descriptive numbers…", the verdicts and the price basis), then the NEW-M6-04 note (only when a Sharpe
+is not defined), then the conventions. The note comes after the price basis, not straight after the
+Sharpe numbers, so that "These are…" / "이는 표본 내 기술통계입니다" still refers to the numbers and not to
+the note.
 
-The conventions text (default screen):
+The conventions text (default screen, Flet, where the study cards are loaded):
 
-> Sleeve conventions: the trend switch first decides after 210 sessions (its 10-month average), so the
-> first 210 of these 503 daily returns (42%) are a warm-up held in cash, and the vol target's first 23
-> likewise. Cash earns a fixed 3% a year (assumption: 3% / 252 per session), not an observed rate, the
-> same for every currency. Each Sharpe is the mean daily return × 252 over its standard deviation × √252
-> on the whole window, warm-up included, and is gross, not in excess of the cash rate; buy-and-hold has
-> no warm-up, no cash and no cost. The warm-up replaces the fund's return with the fixed cash return on
-> those sessions and lowers the measured volatility, so the comparison with buy-and-hold is not
-> like-for-like. The invested share averages the trend weight from the end of the warm-up to the last
-> close, including the last close's weight, which is never held. A vol-target weight below 1 is reset to
-> that weight every session at no cost. The study verdicts are those of the family cards (S_E1_trend_krx
-> and S_E2_voltarget_kodex200), not a test of this fund.
+> Sleeve conventions: the trend switch first decides after 210 sessions (the length of its 10-month
+> moving average), so the first 210 of these 503 daily returns (42%) are a warm-up held in cash, and the
+> vol target's first 23 likewise. Cash earns a fixed 3% a year (assumption: 3% / 252 per session), not an
+> observed rate, the same for every currency. Each Sharpe is the mean daily return × 252 over its
+> standard deviation × √252 on the whole window, warm-up included. It uses raw returns, not returns in
+> excess of the cash rate, and the trend switch and vol target returns are after their per-side trading
+> cost; buy-and-hold has no warm-up, no cash and no cost. The warm-up replaces the fund's return with the
+> fixed cash return on those sessions and lowers the measured volatility, so the comparison with
+> buy-and-hold is not like-for-like. The invested share averages the trend weight from the end of the
+> warm-up to the last close, including the last close's weight, which is never held. A vol-target weight
+> below 1 is reset to that weight every session at no cost. The study verdicts are those of the family
+> cards (S_E1_trend_krx and S_E2_voltarget_kodex200), not a test of this fund.
+
+The Native app loads no study card (`execute_etf` without `study_cards`, so the verdicts read "not
+run"). There the last sentence is instead: "The family study cards (S_E1_trend_krx and
+S_E2_voltarget_kodex200) were not loaded here, so no study verdict is shown for them (not run); a
+card's verdict covers the rule family, not this fund." If only one card is loaded, each card gets its
+own sentence.
+
+The Sharpe is not called "gross": in this codebase "gross" means before costs, and the trend and
+vol-target P&L is after the 3 or 50 bp per-side cost (`strategies.simulate` subtracts it). The Korean
+text likewise avoids "총수익", which the LETF text in the same narrative uses for total return with
+distributions; it says "현금 금리를 빼지 않은 수익률 기준" and "편도 거래 비용을 뺀 값". The record's
+`sharpe_basis` is `RAW_RETURN_NOT_EXCESS_OF_CASH_AFTER_SLEEVE_COST`.
 
 The counts are daily returns, so they do not clash with "Over 504 sessions" in the premium sentence.
 The text describes the mechanism and claims no direction of bias, because the direction depends on
@@ -159,9 +185,43 @@ pairs were added. The test reads both notes from the `ko_KR` report.html.
 - The Korean-locale export notes stay in English.
 - Optional maths additions, for the owner to decide: a like-for-like pair (trend and buy-and-hold
   Sharpe after the warm-up) and the vol target's mean held weight.
+- Native AI commentary refuses reports over 180,000 bytes (`quantgen_desktop/commentary.py`). The note,
+  the conventions text (in its own line and in the narrative) and the `sleeve_conventions` section add
+  about 3.4 KB to the ETF report, so that limit is now reached about 48 sessions earlier. Measured on
+  the synthetic 069500 Native report: `a32106b` accepts up to 2,554 sessions and refuses from 2,555;
+  now it accepts up to 2,506 and refuses from 2,507 ("Report is too large for commentary; choose a
+  smaller calculation"). The refusal is the existing explicit message; the exact limit for real data
+  depends on the series and is unverified. The default screen (504 sessions) is about 39.6 KB.
 - Observed, outside these items: on the synthetic LETF index, GARCH-t ν is `inf`, so
   `json.dumps(wf.payload(...), allow_nan=False)` fails for those funds. The export's `plain()` writes it
   as null. The new test checks strict JSON for the sleeves only, for that reason.
+
+- Observed in the tests, outside these items: in one process, a second `ResearchWindow` built after the
+  first was really deleted (`deleteLater` plus a posted `DeferredDelete`) fails in
+  `quantgen_desktop/wheel_guard.py` ("wrapped C/C++ object of type _WheelGuard has been deleted"). The
+  two Native tests therefore share one window. The product opens one window, so this is not reached in
+  normal use (unverified beyond that).
+
+## Review round 2
+
+Three code reviewers read commit `acc736c`. Every finding was reproduced before it was fixed:
+
+- The cash-only Sharpe was called 0/0, and the on-screen note said "not a large positive Sharpe".
+  Its mean is positive, so the ratio is a positive number over 0. The note now says "the standard
+  deviation is 0 and the ratio is undefined; a figure of 0 or a very large number here would be float
+  rounding, not a result", and the comments say the same.
+- "Flat price: all three n/a" holds at 100.0, not at every level (see the reproduction section).
+- The verdict clause named the card ids next to "not run" verdicts on the Native screen, which loads
+  no card. It now says the cards were not loaded.
+- "Gross" read as "before costs", and "총수익" as total return with distributions (see above).
+- The n/a note sat between the Sharpe sentence and "These are in-sample descriptive numbers" / "이는
+  표본 내 기술통계입니다", so "These" and "이는" pointed at the note. It now follows the price basis.
+- Korean wording: "변동성 목표도 처음 23개가 같습니다" (ambiguous) is now "변동성 목표도 처음 23개는 현금으로
+  보유한 준비 구간입니다", and "210거래일(10개월 평균)" is now "210거래일(10개월 이동평균 기간)".
+- Test gaps: a test now checks the Native conventions text and section for a valid input (the
+  mutation "show them only with a note" fails it), and the Flet tests check the banner under the sleeve
+  row itself, not only the tile tooltips (removing the banner fails them).
+- The commentary size limit is disclosed above.
 
 ## Records left to the main session
 
@@ -180,7 +240,7 @@ The SECTION10 queue entry and counts, the SECTION10 triage, `docs/compliance/FAC
 
 ## Checks
 
-`tests/etf_sleeve_disclosure_acceptance.py` has 14 tests and runs offline. Run it with
+`tests/etf_sleeve_disclosure_acceptance.py` has 17 tests and runs offline. Run it with
 `python -B -m unittest tests.etf_sleeve_disclosure_acceptance -v`. These existing suites still pass:
 
 - desktop market and markets watchlist;

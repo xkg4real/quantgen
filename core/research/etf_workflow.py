@@ -12,7 +12,8 @@ from core.quant.history import HistoryError, load_history, synthetic_history
 from core.quant.validate import load_cards
 from .decay_disclosure import decay_text
 from .letf_disclosure import letf_context, letf_text, letf_unavailable_text
-from .sleeve_disclosure import conventions_text, sharpe_note, sharpe_text, sleeve_conventions, sleeve_summary
+from .sleeve_disclosure import (conventions_text, sharpe_note, sharpe_text, sleeve_conventions, sleeve_summary,
+                                with_loaded_cards)
 from core.ficc.letf_assumptions import resolve_letf_assumptions
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -84,7 +85,7 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
         pt, _ = S.simulate(px[:, None], W_t, cost_bps=cost, cash_daily=rf)
         pv, _ = S.simulate(px[:, None], W_v, cost_bps=cost, cash_daily=rf)
         bh = px[1:] / px[:-1] - 1.0
-        # S.summary's numbers unchanged; a Sharpe that is 0/0 (P&L without variation) is None (§10 NEW-M6-04).
+        # S.summary's numbers unchanged; the Sharpe of a P&L without variation (sd 0) is undefined: None (§10 NEW-M6-04).
         out["sleeves"] = {"trend": sleeve_summary(pt), "vol_target": sleeve_summary(pv), "buy_hold": sleeve_summary(bh),
                           "equity_trend": S.equity_curve(pt), "equity_bh": S.equity_curve(bh), "cost_bps": cost,
                           "exposure_trend": float(W_t[lookback:].mean()) if px.size > lookback else float("nan"),
@@ -161,6 +162,9 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
     pick = 0 if out["is_krx"] else 1
     out["verdicts"] = {fam: cards.get(ids[pick], {}).get("decision", "not run") for fam, ids in _CARD_FOR.items()}
     out["verdict_reasons"] = {fam: cards.get(ids[pick], {}).get("decision_reason", "") for fam, ids in _CARD_FOR.items()}
+    if "sleeves" in out:
+        # §10 NEW-M6-05: a family card that was not loaded gives the verdict "not run"; say so, not "the card's verdict".
+        out["sleeves"]["conventions"] = with_loaded_cards(out["sleeves"]["conventions"], cards)
     if "letf" in out:
         lc = cards.get("M_E4_letf_drag", {})
         out["letf"]["verdict"] = lc.get("decision", "not run")
@@ -183,16 +187,18 @@ def narrative(a: dict) -> str:
                      + decay_text(ps.get('decay')))
     sl = a.get("sleeves")
     if sl:
-        # §10 NEW-M6-04: an undefined Sharpe reads "n/a" and the note says why; NEW-M6-05: the conventions
-        # follow the price basis. A defined Sharpe keeps its text, so valid inputs read as before plus that sentence.
+        # §10 NEW-M6-04: an undefined Sharpe reads "n/a" and a note after the price basis says why, so "These are
+        # in-sample..." still follows the numbers; NEW-M6-05: the conventions come last. A defined Sharpe keeps its
+        # text, so valid inputs read as before plus the conventions.
         t, b, v = (sharpe_text(sl[k]) or "n/a" for k in ("trend", "buy_hold", "vol_target"))
         note = sharpe_note(sl)
         parts.append(f"On this fund's own history the 10-month trend switch earned Sharpe {t} "
                      f"(max drawdown {sl['trend']['max_drawdown']:.0%}, {sl['exposure_trend']:.0%} invested) against buy-and-hold "
                      f"{b} ({sl['buy_hold']['max_drawdown']:.0%}); the 12 % vol target earned "
-                     f"{v}. " + (note + " " if note else "") + "These are in-sample descriptive numbers; the validation study's verdict "
+                     f"{v}. These are in-sample descriptive numbers; the validation study's verdict "
                      f"for this family is trend: {a['verdicts']['trend']}, vol target: {a['verdicts']['vol']}. "
                      f"Price basis for these sleeve numbers: {a.get('sleeve_basis', a.get('data_source'))}."
+                     + (" " + note if note else "")
                      + (" " + conventions_text(sl["conventions"]) if sl.get("conventions") else ""))
     lt = a.get("letf")
     if lt and "rows" in lt:

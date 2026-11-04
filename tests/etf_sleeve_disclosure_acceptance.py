@@ -1,11 +1,13 @@
 """§10 NEW-M6-04 and NEW-M6-05: what the ETF sleeve numbers are, without changing them.
 
-* NEW-M6-04: a sleeve whose daily P&L does not vary has an undefined Sharpe (0/0). It used to show
-  as about 1e16, or 0.00 where float rounding cancels; it is now n/a / '—' / 계산 불가 / null with a
-  status and a note on every surface.
-* NEW-M6-05: the cash warm-up, the fixed 3% cash assumption, the gross full-window Sharpe, the
-  invested-share window, costless constant-weight rebalancing (K-e) and the family-card verdicts are
-  stated on every surface, in English and Korean with the same number tokens.
+* NEW-M6-04: a sleeve whose daily P&L does not vary has a standard deviation of 0, so its Sharpe is
+  undefined (for a cash-only sleeve a positive mean over 0, not 0/0). It used to show as about 1e16,
+  or 0.00 where float rounding cancels; it is now n/a / '—' / 계산 불가 / null with a status and a
+  note on every surface.
+* NEW-M6-05: the cash warm-up, the fixed 3% cash assumption, the full-window Sharpe on raw (not
+  excess-of-cash) returns after the sleeve cost, the invested-share window, costless constant-weight
+  rebalancing (K-e) and the family-card verdicts (or that the cards were not loaded) are stated on
+  every surface, in English and Korean with the same number tokens.
 
 For every P&L that varies, every existing number, key and sentence is unchanged: the narratives
 differ only by the inserted sentences. Offline: synthetic and injected histories only; no provider,
@@ -165,7 +167,9 @@ def without_insertions(text, sl, korean=False):
     assert text.count(' ' + conventions) == 1
     text = text.replace(' ' + conventions, '')
     note = (SD.sharpe_note_korean if korean else SD.sharpe_note)(sl)
-    return text.replace(note + ' ', '') if note else text
+    if note:
+        assert text.count(' ' + note) == 1
+    return text.replace(' ' + note, '') if note else text
 
 
 def same_value(x, y):
@@ -192,6 +196,27 @@ def tiles(root):
                 and all(isinstance(t, ft.Text) for t in col.controls):
             out[col.controls[0].value] = (col.controls[1].value, c.tooltip)
     return out
+
+
+def notice_texts(root):
+    """Texts of the `ui.components.notice` banners (an icon, then the text) under `root`."""
+    out = []
+    for c in controls(root):
+        row = getattr(c, 'content', None)
+        if isinstance(c, ft.Container) and isinstance(row, ft.Row) and row.controls \
+                and isinstance(row.controls[0], ft.Icon):
+            out += [t.value for t in row.controls if isinstance(t, ft.Text)]
+    return out
+
+
+def block_after_sleeve_row(root):
+    """The block placed directly after the row of sleeve stat tiles."""
+    for c in controls(root):
+        kids = list(getattr(c, 'controls', None) or [])
+        for i, k in enumerate(kids):
+            if isinstance(k, ft.Row) and 'Trend switch Sharpe' in tiles(k):
+                return kids[i + 1]
+    raise AssertionError('no sleeve row')
 
 
 def all_strings(root):
@@ -222,7 +247,10 @@ class UndefinedSharpeTests(OfflineCase):
                 p = np.full(closes - 1, RF)          # what simulate books on every session of a cash-only sleeve
                 exact = [Fraction(float(x)) for x in p]
                 mean = sum(exact) / len(exact)
-                self.assertEqual(sum((x - mean) ** 2 for x in exact), 0)  # exact sample variance: Sharpe is 0/0
+                # Exact sample variance 0 with a positive mean: mean x 252 / (0 x √252) is a positive number
+                # over 0, undefined (not 0/0, which only a P&L of 0 throughout gives).
+                self.assertEqual(sum((x - mean) ** 2 for x in exact), 0)
+                self.assertGreater(mean, 0)
                 sd = float(np.std(p, ddof=1))
                 old = S.summary(p)
                 if numpy_sd_is_zero:   # rounding cancels: the old screens showed 0.00
@@ -235,7 +263,7 @@ class UndefinedSharpeTests(OfflineCase):
                 self.assertEqual({k: v for k, v in new.items() if k not in ('sharpe', 'sharpe_status')},
                                  {k: v for k, v in old.items() if k != 'sharpe'})
                 self.assertIsNone(SD.sharpe_text(new))
-                self.assertIn('not 0', SD.sharpe_tooltip(new))
+                self.assertIn('standard deviation is 0 and the Sharpe ratio is undefined', SD.sharpe_tooltip(new))
 
     def test_tolerance_rule_and_non_finite(self):
         # The documented numerical rule: relative sd at or below 1e-10 counts as no variation.
@@ -278,31 +306,55 @@ class UndefinedSharpeTests(OfflineCase):
                     self.assertNotRegex(text, SEED_2_DEFECT)
                 self.assertEqual(numbers(en), numbers(ko))
                 self.assertEqual(market_variants(out, 'etf')['ko'], ko)
-                # the note comes after the sleeve sentence and before the conventions
-                self.assertLess(en.index('the 12 % vol target earned'), en.index('Sharpe n/a for'))
+                # "These are in-sample..." still follows the numbers; the note comes after the price basis and
+                # before the conventions.
+                self.assertRegex(en, r'the 12 % vol target earned -0\.\d\d\. These are in-sample descriptive numbers')
+                self.assertRegex(ko, r'12 % 변동성 목표는 -0\.\d\d입니다\. 이는 표본 내 기술통계입니다\.')
+                self.assertLess(en.index('Price basis for these sleeve numbers:'), en.index('Sharpe n/a for'))
                 self.assertLess(en.index('Sharpe n/a for'), en.index('Sleeve conventions:'))
+                self.assertLess(ko.index('이 전략별 수치의 가격 기준:'), ko.index('추세 전환의 샤프비율은 계산 불가입니다'))
                 self.assertLess(ko.index('추세 전환의 샤프비율은 계산 불가입니다'), ko.index('전략 계산 관례:'))
 
-    def test_flat_price_all_three_are_na_with_one_note(self):
+    def test_flat_price_at_100_all_three_are_na_with_one_note(self):
         out = output(np.full(505, 100.0))
         sl = out.data['sleeves']
         self.assertEqual([sl[k]['sharpe_status'] for k in SD.SLEEVES], [SD.NO_VARIATION] * 3)
         en, ko = out.narrative, etf_korean(out.data)
         self.assertIn('earned Sharpe n/a', en); self.assertIn('against buy-and-hold n/a (0%)', en)
-        self.assertIn('the 12 % vol target earned n/a.', en)
+        self.assertIn('the 12 % vol target earned n/a. These are in-sample', en)
         self.assertIn('Sharpe n/a for the trend switch, the vol target and buy-and-hold:', en)
         self.assertIn('추세 전환, 변동성 목표, 매수 후 보유의 샤프비율은 계산 불가입니다', ko)
-        self.assertIn('12 % 변동성 목표는 계산 불가입니다.', ko)
-        # Degenerate-case parity: each note carries exactly one '0' in both languages.
+        self.assertIn('12 % 변동성 목표는 계산 불가입니다. 이는 표본 내', ko)
+        self.assertIn('the standard deviation is 0 and the ratio is undefined', en)
+        self.assertIn('표준편차가 0이므로 비율이 정의되지 않습니다', ko)
+        for text in (en, ko):
+            self.assertNotIn('large positive', text); self.assertNotIn('큰 양의', text)
+        # Degenerate-case parity: each note carries the same two '0's in both languages.
         self.assertEqual(numbers(en), numbers(ko))
         self.assertEqual(numbers(SD.sharpe_note(sl)), numbers(SD.sharpe_note_korean(sl)))
-        self.assertEqual(numbers(SD.sharpe_note(sl)), numbers('0'))
+        self.assertEqual(numbers(SD.sharpe_note(sl)), numbers('0 0'))
         json.dumps(wf.payload(out.data), allow_nan=False)
         two = {'trend': {'sharpe_status': SD.NO_VARIATION}, 'vol_target': {'sharpe_status': SD.NO_VARIATION},
                'buy_hold': {'sharpe_status': SD.COMPUTED}}
         self.assertIn('Sharpe n/a for the trend switch and the vol target:', SD.sharpe_note(two))
         self.assertIn('추세 전환, 변동성 목표의 샤프비율', SD.sharpe_note_korean(two))
         self.assertIsNone(SD.sharpe_note({k: {'sharpe_status': SD.COMPUTED} for k in SD.SLEEVES}))
+
+    def test_flat_price_at_other_levels_the_trend_sharpe_can_be_defined(self):
+        # Float rounding of the 210-session average can put the trend switch in a flat fund on some rows, so its
+        # P&L moves between 0 and the cash rate: a defined Sharpe, the same number as before. The other two are n/a.
+        px = np.full(505, 100.37)
+        out = output(px)
+        sl, old = out.data['sleeves'], old_sleeves(px, True)
+        self.assertEqual((sl['trend']['sharpe_status'], sl['trend']['sharpe']), (SD.COMPUTED, old['trend']['sharpe']))
+        self.assertAlmostEqual(sl['trend']['sharpe'], 20.8006, places=4)
+        self.assertGreater(sl['exposure_trend'], 0)
+        self.assertEqual([sl[k]['sharpe_status'] for k in ('vol_target', 'buy_hold')], [SD.NO_VARIATION] * 2)
+        en, ko = out.narrative, etf_korean(out.data)
+        self.assertIn('earned Sharpe 20.80', en)
+        self.assertIn('Sharpe n/a for the vol target and buy-and-hold:', en)
+        self.assertIn('변동성 목표, 매수 후 보유의 샤프비율은 계산 불가입니다', ko)
+        self.assertEqual(numbers(en), numbers(ko))
 
     def test_nan_close_is_non_finite_not_no_variation(self):
         px = walk(5)
@@ -380,8 +432,10 @@ class ConventionsTests(OfflineCase):
             self.assertEqual(c['window_daily_returns'], out.data['sleeves']['trend']['sessions'])
             self.assertEqual(c['trend_warmup_share'], 210 / 503)
             self.assertEqual((c['trend_card'], c['vol_target_card']), cards)
+            self.assertEqual(out.study_status, 'NOT_LOADED')                      # the Native path loads no card
+            self.assertEqual((c['trend_card_loaded'], c['vol_target_card_loaded']), (False, False))
             self.assertEqual((c['sharpe_basis'], c['sharpe_window'], c['cash_rate_basis'], c['comparison']),
-                             ('GROSS_NOT_EXCESS_OF_CASH', 'FULL_WINDOW_INCLUDING_WARMUP',
+                             ('RAW_RETURN_NOT_EXCESS_OF_CASH_AFTER_SLEEVE_COST', 'FULL_WINDOW_INCLUDING_WARMUP',
                               'FIXED_ASSUMPTION_NOT_OBSERVED', 'NOT_LIKE_FOR_LIKE'))
             self.assertEqual((c['exposure_first_row'], c['exposure_window']),
                              (210, 'WARMUP_END_TO_LAST_ROW_INCLUDING_UNHELD_FINAL_ROW'))
@@ -395,23 +449,33 @@ class ConventionsTests(OfflineCase):
         out = execute_etf(ETFRequest(source='synthetic', code='069500', days=504))
         c = out.data['sleeves']['conventions']
         en, ko = SD.conventions_text(c), SD.conventions_korean(c)
-        for phrase in ('first 210 of these 503 daily returns (42%)', "vol target's first 23",
+        for phrase in ('after 210 sessions (the length of its 10-month moving average)',
+                       'first 210 of these 503 daily returns (42%)', "vol target's first 23",
                        'fixed 3% a year (assumption: 3% / 252 per session)', 'not an observed rate',
-                       'whole window, warm-up included', 'not in excess of the cash rate',
+                       'whole window, warm-up included', 'raw returns, not returns in excess of the cash rate',
+                       'the trend switch and vol target returns are after their per-side trading cost',
                        'buy-and-hold has no warm-up, no cash and no cost',
                        "replaces the fund's return with the fixed cash return on those sessions",
                        'lowers the measured volatility', 'not like-for-like',
                        "including the last close's weight, which is never held",
                        'A vol-target weight below 1 is reset to that weight every session at no cost',
-                       'family cards (S_E1_trend_krx and S_E2_voltarget_kodex200), not a test of this fund'):
+                       # this screen loaded no study card, so its "not run" is not a card's verdict
+                       'The family study cards (S_E1_trend_krx and S_E2_voltarget_kodex200) were not loaded here, '
+                       'so no study verdict is shown for them (not run); a card\'s verdict covers the rule family, '
+                       'not this fund.'):
             self.assertIn(phrase, en)
-        for phrase in ('503개 일별 수익률 가운데 처음 210개(42%)', '처음 23개', '연 3% 고정', '가정: 거래일당 3% / 252',
-                       '관측 금리가 아니며', '준비 구간을 포함한 전체 기간', '초과 수익 기준이 아닌 총수익 기준',
+        for phrase in ('210거래일(10개월 이동평균 기간)', '503개 일별 수익률 가운데 처음 210개(42%)',
+                       '변동성 목표도 처음 23개는 현금으로 보유한 준비 구간입니다', '연 3% 고정', '가정: 거래일당 3% / 252',
+                       '관측 금리가 아니며', '준비 구간을 포함한 전체 기간', '현금 금리를 빼지 않은 수익률 기준',
+                       '추세 전환과 변동성 목표의 수익률은 편도 거래 비용을 뺀 값',
                        '매수 후 보유에는 준비 구간, 현금, 비용이 없습니다', '고정 현금 수익률로 대신하고',
                        '측정 변동성을 낮추므로', '같은 조건의 비교가 아닙니다', '보유하지 않는 마지막 종가의 비중도 포함',
-                       '비용 없이 그 비중으로 다시 맞춘다', 'S_E1_trend_krx, S_E2_voltarget_kodex200',
-                       '이 펀드를 검정한 것이 아닙니다'):
+                       '비용 없이 그 비중으로 다시 맞춘다',
+                       '계열 연구 카드(S_E1_trend_krx, S_E2_voltarget_kodex200)를 여기서 불러오지 않아 연구 판정이 표시되지 않습니다(not run)'):
             self.assertIn(phrase, ko)
+        # "gross" reads as "before costs" and 총수익 as "with distributions"; neither is what the Sharpe is.
+        self.assertNotIn('gross', en.lower()); self.assertNotIn('총수익', ko)
+        self.assertNotIn('are those of the family card', en); self.assertNotIn('의 판정이며', ko)
         self.assertEqual(numbers(en), numbers(ko))
         self.assertEqual(sorted(PCT_NUMBERS.findall(en)), sorted(PCT_NUMBERS.findall(ko)))
         # Counted in daily returns, so it cannot clash with the 504-session premium sentence.
@@ -423,6 +487,46 @@ class ConventionsTests(OfflineCase):
             text = SD.conventions_text(SD.sleeve_conventions(window_sessions=closes - 1, trend_lookback=210,
                                                              vol_window=22, cash_rate_annual=0.03))
             self.assertIn(f'of these {closes - 1} daily returns ({share})', text)
+
+    def test_verdict_clause_follows_which_family_cards_were_loaded(self):
+        px = walk(7)
+        card = lambda cid: {'card_id': cid, 'decision': 'REJECT', 'decision_reason': 'fixture'}
+        for loaded, en_clause, ko_clause in (
+                (('S_E1_trend_krx', 'S_E2_voltarget_kodex200'),
+                 'The study verdicts are those of the family cards (S_E1_trend_krx and S_E2_voltarget_kodex200), '
+                 'not a test of this fund.',
+                 '연구 판정은 계열 카드(S_E1_trend_krx, S_E2_voltarget_kodex200)의 판정이며 이 펀드를 검정한 것이 아닙니다.'),
+                (('S_E1_trend_krx',),
+                 'The study verdicts are those of the family card (S_E1_trend_krx), not a test of this fund. '
+                 'The family study card (S_E2_voltarget_kodex200) was not loaded here, so no study verdict is shown '
+                 'for it (not run);',
+                 '계열 연구 카드(S_E2_voltarget_kodex200)를 여기서 불러오지 않아 연구 판정이 표시되지 않습니다(not run).'),
+                ((), 'were not loaded here, so no study verdict is shown for them (not run)',
+                 '계열 연구 카드(S_E1_trend_krx, S_E2_voltarget_kodex200)를 여기서 불러오지 않아')):
+            with self.subTest(loaded=loaded):
+                dates = tuple(f'2020-{i:05d}' for i in range(len(px)))
+                h = History('069500', 'SYNTHETIC', dates, tuple(float(x) for x in px), note='injected walk')
+                a = wf.analyze('069500', source='synthetic', days=len(px), history_loader=lambda *x, **k: h,
+                               card_loader=lambda path: [card(cid) for cid in loaded])
+                c = a['sleeves']['conventions']
+                self.assertEqual((c['trend_card_loaded'], c['vol_target_card_loaded']),
+                                 ('S_E1_trend_krx' in loaded, 'S_E2_voltarget_kodex200' in loaded))
+                self.assertEqual(a['verdicts'], {'trend': 'REJECT' if 'S_E1_trend_krx' in loaded else 'not run',
+                                                 'vol': 'REJECT' if 'S_E2_voltarget_kodex200' in loaded else 'not run'})
+                en, ko = wf.narrative(a), etf_korean(a)
+                self.assertIn(en_clause, en); self.assertIn(ko_clause, ko)
+                self.assertEqual(numbers(en), numbers(ko))
+                self.assertEqual(numbers(SD.conventions_text(c)), numbers(SD.conventions_korean(c)))
+                self.assertEqual(list(c), list(SD.sleeve_conventions(window_sessions=504, trend_lookback=210,
+                                                                     vol_window=22, cash_rate_annual=0.03)))
+        # A record built without a card status (None) keeps the plain clause.
+        plain = SD.sleeve_conventions(window_sessions=504, trend_lookback=210, vol_window=22, cash_rate_annual=0.03,
+                                      trend_card='S_E1_trend_us', vol_target_card='S_E2_voltarget_spy')
+        self.assertIn('family cards (S_E1_trend_us and S_E2_voltarget_spy), not a test of this fund.',
+                      SD.conventions_text(plain))
+        self.assertTrue(SD.conventions_text(SD.sleeve_conventions(
+            window_sessions=504, trend_lookback=210, vol_window=22, cash_rate_annual=0.03)).endswith(
+            'The study verdicts are those of the family cards, not a test of this fund.'))
 
     def test_warmups_are_pinned_against_the_strategy_functions(self):
         lookback, window = wf.SLEEVE_TREND_LOOKBACK, wf.SLEEVE_VOL_WINDOW
@@ -452,15 +556,34 @@ class ConventionsTests(OfflineCase):
         self.assertNotIn('전략 계산 관례', etf_korean(out.data))
 
 
-class SurfaceTests(OfflineCase):
-    def test_shipped_251340_native_pane_export_and_commentary_carry_no_1e16(self):
+class NativePaneTests(OfflineCase):
+    """Both Native checks share one window: in this process a second ResearchWindow, built after the first
+    was deleted, fails inside quantgen_desktop/wheel_guard.py (its shared event filter is gone)."""
+    @classmethod
+    def setUpClass(cls):
         from PyQt6.QtWidgets import QApplication
-        from PyQt6.QtCore import QEvent
         from quantgen_desktop.app import ResearchWindow
+        cls.app = QApplication.instance() or QApplication([])
+        with patch('socket.socket.connect', side_effect=OSError('network forbidden')), \
+             patch('requests.sessions.Session.request', side_effect=AssertionError('live I/O forbidden')):
+            cls.window = ResearchWindow(auto_refresh=False, language='ko')
+
+    @classmethod
+    def tearDownClass(cls):
+        from PyQt6.QtCore import QEvent
+        cls.window.etf.clear_result()
+        cls.window.deleteLater(); cls.app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+
+    def setUp(self):
+        super().setUp()
+        self.window.set_language('ko')
+        self.window.etf.clear_result()
+        self.addCleanup(self.window.etf.clear_result)
+
+    def test_shipped_251340_native_pane_export_and_commentary_carry_no_1e16(self):
         from quantgen_desktop.commentary import commentary_payload
         from quantgen_desktop.localization import UiLabel
         from quantgen_desktop.tools import fmt
-        app = QApplication.instance() or QApplication([])
         old_value = 4.642314207434303e16          # what every surface carried before
         for shown in (f'{old_value:.2f}', json.dumps(old_value), fmt(old_value), str(old_value)):
             self.assertRegex(shown, DEFECT)
@@ -470,57 +593,87 @@ class SurfaceTests(OfflineCase):
         self.assertEqual((sl['trend']['sharpe'], sl['trend']['sharpe_status']), (None, SD.NO_VARIATION))
         self.assertEqual([sl[k]['sharpe_status'] for k in ('vol_target', 'buy_hold')], [SD.COMPUTED] * 2)
         variants = market_variants(out, 'etf')
-        w = ResearchWindow(auto_refresh=False, language='ko')
-        try:
-            pane = w.etf
-            pane.show_result(out); pane.bind_output('etf', out)
-            table = pane.tables['Descriptive sleeve backtests']
-            self.assertEqual([table.item(0, 0).text(), table.item(0, 1).text()], ['trend', '—'])
-            self.assertNotEqual(table.item(1, 1).text(), '—')
-            texts = [s['text'] for s in pane.sections if s['type'] == 'text']
-            note, conventions = SD.sharpe_note(sl), SD.conventions_text(sl['conventions'])
-            self.assertIn(note, texts); self.assertIn(conventions, texts)
-            # after the sleeve table and its 'bp per side' line, before the narrative
-            order = [s.get('name') or s.get('text') or s['type'] for s in pane.sections]
-            bp = next(i for i, x in enumerate(order) if 'bp per side' in x)
-            self.assertEqual(order.index('Descriptive sleeve backtests') < bp < order.index(note)
-                             < order.index(conventions) < order.index('sleeve_conventions'), True)
-            self.assertIn({'type': 'sleeve_conventions', **sl['conventions']}, pane.sections)
-            labels = {x.source_text: x for x in pane.findChildren(UiLabel) if getattr(x, 'localized_text', {})}
-            self.assertEqual(labels[note].localized_text, {'en': note, 'ko': SD.sharpe_note_korean(sl)})
-            self.assertEqual(labels[conventions].localized_text,
-                             {'en': conventions, 'ko': SD.conventions_korean(sl['conventions'])})
-            report = deepcopy(pane.report)
-            sections = json.dumps(pane.sections, sort_keys=True, default=lambda v: v.item())
-            with patch.object(w.jobs, 'start', side_effect=AssertionError('no recomputation')):
-                for language in ('en', 'ko', 'en'):
-                    w.set_language(language)
-                    self.assertEqual(labels[note].text(), labels[note].localized_text[language])
-                    self.assertEqual(pane.report, report)
-                    self.assertEqual(json.dumps(pane.sections, sort_keys=True, default=lambda v: v.item()), sections)
-            raw = report_bytes(pane.report).decode()
-            self.assertIn('"sleeve_conventions"', raw)
-            json.dumps(wf.payload(out.data)['sleeves'], allow_nan=False)
-            blobs = [raw, json.dumps(commentary_payload(pane.report), ensure_ascii=False), out.narrative,
-                     variants['ko'], json.dumps(wf.payload(out.data))]
-            for locale in (None, 'ko_KR'):
-                with ZipFile(BytesIO(report_bytes(pane.report, bundle=True, locale=locale))) as z:
-                    blobs += [z.read(n).decode() for n in z.namelist()]
-            blobs.append('\n'.join(x.text() for x in pane.findChildren(UiLabel)))
-            for blob in blobs:
-                self.assertNotRegex(blob, DEFECT)
-            commentary = commentary_payload(pane.report)
-            self.assertIn(note, [s.get('text') for s in commentary['sections']])
-            self.assertIn('sleeve_conventions', [s['type'] for s in commentary['sections']])
-            # The Korean-locale HTML export keeps these dynamic notes in English (as the decay and LETF notes).
-            with ZipFile(BytesIO(report_bytes(pane.report, bundle=True, locale='ko_KR'))) as z:
-                html = z.read('report.html').decode()
-            self.assertIn('Sharpe n/a for the trend switch', html)
-            self.assertIn('Sleeve conventions:', html)
-        finally:
-            w.etf.clear_result()
-            w.deleteLater(); app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+        w = self.window
+        pane = w.etf
+        pane.show_result(out); pane.bind_output('etf', out)
+        table = pane.tables['Descriptive sleeve backtests']
+        self.assertEqual([table.item(0, 0).text(), table.item(0, 1).text()], ['trend', '—'])
+        self.assertNotEqual(table.item(1, 1).text(), '—')
+        texts = [s['text'] for s in pane.sections if s['type'] == 'text']
+        note, conventions = SD.sharpe_note(sl), SD.conventions_text(sl['conventions'])
+        self.assertIn(note, texts); self.assertIn(conventions, texts)
+        # after the sleeve table and its 'bp per side' line, before the narrative
+        order = [s.get('name') or s.get('text') or s['type'] for s in pane.sections]
+        bp = next(i for i, x in enumerate(order) if 'bp per side' in x)
+        self.assertEqual(order.index('Descriptive sleeve backtests') < bp < order.index(note)
+                         < order.index(conventions) < order.index('sleeve_conventions'), True)
+        self.assertIn({'type': 'sleeve_conventions', **sl['conventions']}, pane.sections)
+        labels = {x.source_text: x for x in pane.findChildren(UiLabel) if getattr(x, 'localized_text', {})}
+        self.assertEqual(labels[note].localized_text, {'en': note, 'ko': SD.sharpe_note_korean(sl)})
+        self.assertEqual(labels[conventions].localized_text,
+                         {'en': conventions, 'ko': SD.conventions_korean(sl['conventions'])})
+        report = deepcopy(pane.report)
+        sections = json.dumps(pane.sections, sort_keys=True, default=lambda v: v.item())
+        with patch.object(w.jobs, 'start', side_effect=AssertionError('no recomputation')):
+            for language in ('en', 'ko', 'en'):
+                w.set_language(language)
+                self.assertEqual(labels[note].text(), labels[note].localized_text[language])
+                self.assertEqual(pane.report, report)
+                self.assertEqual(json.dumps(pane.sections, sort_keys=True, default=lambda v: v.item()), sections)
+        raw = report_bytes(pane.report).decode()
+        self.assertIn('"sleeve_conventions"', raw)
+        json.dumps(wf.payload(out.data)['sleeves'], allow_nan=False)
+        blobs = [raw, json.dumps(commentary_payload(pane.report), ensure_ascii=False), out.narrative,
+                 variants['ko'], json.dumps(wf.payload(out.data))]
+        for locale in (None, 'ko_KR'):
+            with ZipFile(BytesIO(report_bytes(pane.report, bundle=True, locale=locale))) as z:
+                blobs += [z.read(n).decode() for n in z.namelist()]
+        blobs.append('\n'.join(x.text() for x in pane.findChildren(UiLabel)))
+        for blob in blobs:
+            self.assertNotRegex(blob, DEFECT)
+        commentary = commentary_payload(pane.report)
+        self.assertIn(note, [s.get('text') for s in commentary['sections']])
+        self.assertIn('sleeve_conventions', [s['type'] for s in commentary['sections']])
+        # The Korean-locale HTML export keeps these dynamic notes in English (as the decay and LETF notes).
+        with ZipFile(BytesIO(report_bytes(pane.report, bundle=True, locale='ko_KR'))) as z:
+            html = z.read('report.html').decode()
+        self.assertIn('Sharpe n/a for the trend switch', html)
+        self.assertIn('Sleeve conventions:', html)
 
+    def test_native_pane_valid_input_states_the_conventions_without_a_note(self):
+        # The usual case: every Sharpe defined, so no n/a note, but the conventions text and section are there.
+        from quantgen_desktop.commentary import commentary_payload
+        from quantgen_desktop.localization import UiLabel
+        from quantgen_desktop.tools import fmt
+        out = execute_etf(ETFRequest(source='synthetic', code='069500', days=504))
+        sl = out.data['sleeves']
+        self.assertTrue(all(sl[k]['sharpe_status'] == SD.COMPUTED for k in SD.SLEEVES))
+        w = self.window
+        pane = w.etf
+        pane.show_result(out); pane.bind_output('etf', out)
+        table = pane.tables['Descriptive sleeve backtests']
+        self.assertEqual([table.item(r, 1).text() for r in range(3)],
+                         [fmt(sl[k]['sharpe']) for k in ('trend', 'vol_target', 'buy_hold')])
+        texts = [s['text'] for s in pane.sections if s['type'] == 'text']
+        conventions = SD.conventions_text(sl['conventions'])
+        self.assertIn(conventions, texts)
+        self.assertFalse(any(t.startswith('Sharpe n/a') for t in texts))
+        self.assertEqual([s for s in pane.sections if s['type'] == 'sleeve_conventions'],
+                         [{'type': 'sleeve_conventions', **sl['conventions']}])
+        order = [s.get('name') or s.get('text') or s['type'] for s in pane.sections]
+        bp = next(i for i, x in enumerate(order) if 'bp per side' in x)
+        self.assertEqual(order.index('Descriptive sleeve backtests') < bp < order.index(conventions)
+                         < order.index('sleeve_conventions'), True)
+        labels = {x.source_text: x for x in pane.findChildren(UiLabel) if getattr(x, 'localized_text', {})}
+        self.assertEqual(labels[conventions].localized_text,
+                         {'en': conventions, 'ko': SD.conventions_korean(sl['conventions'])})
+        commentary = commentary_payload(pane.report)
+        self.assertIn(conventions, [s.get('text') for s in commentary['sections']])
+        self.assertIn('sleeve_conventions', [s['type'] for s in commentary['sections']])
+        self.assertIn('"sleeve_conventions"', report_bytes(pane.report).decode())
+
+
+class FletPageTests(OfflineCase):
     def flet_run(self, code, sessions):
         runner = Mock(return_value=insights.Analysis('Synthetic commentary', 'fixture-model'))
         page = Mock()
@@ -552,6 +705,9 @@ class SurfaceTests(OfflineCase):
             self.assertNotRegex(s, DEFECT)
         self.assertTrue(any(s.startswith('Sleeve conventions: the trend switch first decides') for s in texts))
         self.assertTrue(any('Sharpe n/a for the trend switch' in s for s in texts))     # the narrative
+        # the notice under the sleeve row (a banner, not only the tile tooltips)
+        self.assertEqual(notice_texts(block_after_sleeve_row(root)),
+                         [SD.conventions_text(payload['sleeves']['conventions'])])
         self.assertIsNone(payload['sleeves']['trend']['sharpe'])
         self.assertEqual(payload['sleeves']['trend']['sharpe_status'], SD.NO_VARIATION)
         self.assertEqual(payload['sleeves']['conventions']['window_daily_returns'], 399)
@@ -569,8 +725,9 @@ class SurfaceTests(OfflineCase):
             self.assertEqual(t[label], (f"{expected[key]['sharpe']:.2f}", conventions))
         self.assertEqual(t['Trend MDD'][0], f"{expected['trend']['max_drawdown']:.0%}")
         self.assertIsNone(t['Trend MDD'][1])
-        notices = [s for s in all_strings(root) if s == conventions]
-        self.assertGreaterEqual(len(notices), 1)
+        # The notice directly under the sleeve row is a banner with the conventions text, not only the tooltips.
+        self.assertEqual(notice_texts(block_after_sleeve_row(root)), [conventions])
+        self.assertEqual(notice_texts(root).count(conventions), 1)
         self.assertEqual(payload['sleeves']['trend']['sharpe'], expected['trend']['sharpe'])
         self.assertEqual(payload['sleeves']['trend']['sharpe_status'], SD.COMPUTED)
 

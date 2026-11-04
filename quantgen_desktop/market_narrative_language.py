@@ -67,9 +67,10 @@ def etf_korean(a):
         parts.append(f"이 펀드의 자체 이력에서 10개월 추세 전환의 샤프비율은 {t} "
                      f"(최대 낙폭 {sl['trend']['max_drawdown']:.0%}, 투자 비중 {sl['exposure_trend']:.0%})이며, "
                      f"매수 후 보유는 {b} ({sl['buy_hold']['max_drawdown']:.0%}), "
-                     f"12 % 변동성 목표는 {v}입니다. " + (note + ' ' if note else '') + "이는 표본 내 기술통계입니다. "
+                     f"12 % 변동성 목표는 {v}입니다. 이는 표본 내 기술통계입니다. "
                      f"이 계열의 검증 연구 판정은 추세: {a['verdicts']['trend']}, 변동성 목표: {a['verdicts']['vol']}입니다. "
                      f"이 전략별 수치의 가격 기준: {a.get('sleeve_basis', a.get('data_source'))}."
+                     + (' ' + note if note else '')
                      + (' ' + conventions_korean(sl['conventions']) if sl.get('conventions') else ''))
     lt = a.get('letf')
     if lt and 'rows' in lt:
