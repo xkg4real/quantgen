@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from core.research.runs import session_for, new_run, completed, failed, utc_now
 from core.research.provenance import code_evidence, runtime_evidence
-from core.research.mc_disclosure import volatility_disclosure
+from core.research.mc_disclosure import bootstrap_disclosure, volatility_disclosure
 
 import json
 import re
@@ -338,6 +338,9 @@ def build_quant_lab_page(page: ft.Page,
                         token="success")] if mc.prob_target is not None else []),
                 spacing=10, wrap=True))
             blocks.append(ft.Text(mc.drift_note, size=11, color=pal.muted))
+            resampling = bootstrap_disclosure(mc.model)   # None for every model but bootstrap
+            if resampling is not None:
+                blocks.append(ft.Text(resampling["description"], size=11, color=pal.muted))
             blocks.append(ft.Row([
                 chip(f"source: {hist.source}",
                      "muted" if hist.source == "SYNTHETIC" else "success",
@@ -372,7 +375,7 @@ def build_quant_lab_page(page: ft.Page,
                 "drift_mode": mc.drift_mode, "drift_note": mc.drift_note,
                 "rf_rate": mc.rf_rate, "erp": mc.erp,
                 "convexity_correction_annual": mc.correction_annual, "z_bound": mc.z_bound,
-                "bound_note": mc.bound_note,
+                "bound_note": mc.bound_note, "resampling_definition": resampling,
             }
             if fit is not None:
                 payload["garch"] = {

@@ -28,6 +28,7 @@ except Exception:                                    # pragma: no cover
 
 import config
 from core.research.ai_connection import error_message, response_error, transport_error
+from core.research.mc_disclosure import bootstrap_disclosure
 from core.quant.backtest import BacktestResult
 from core.quant.garch import LR_5PCT, NU_NORMAL
 from core.quant.montecarlo import MCResult
@@ -154,6 +155,9 @@ def narrate_monte_carlo(mc: MCResult) -> str:
     ]
     lines.append(_narrate_garch(mc) if mc.garch is not None else
                  f"Calibration: historical sample log-return volatility (annualized, 252 sessions) {mc.sigma_annual * 100:.1f}%.")
+    resampling = bootstrap_disclosure(mc.model)          # None for every model but bootstrap
+    if resampling is not None:
+        lines.append(resampling["description"])
     if getattr(mc, "bound_note", ""):
         lines.append(mc.bound_note)
     lines.append(_narrate_drift(mc))
