@@ -7,6 +7,8 @@ from core.research.funding_disclosure import funding_text
 from core.research.letf_disclosure import letf_text, letf_unavailable_text
 from core.research.decay_disclosure import decay_value, decay_text
 from core.research.quote_coverage import quote_coverage_text
+from core.research.sleeve_disclosure import (conventions_korean, conventions_text, sharpe_note,
+                                           sharpe_note_korean)
 from core.research.option_disclosure import box_computed, hedge_korean, hedge_text, mfiv_strip
 from core.research.crypto_workflow import cost_basis_text, holdings_summary
 from .tools import ToolPane, number, fmt
@@ -147,6 +149,17 @@ class ETFPane(ToolPane):
             self.line('Trend switch vs buy & hold', range(len(sleeves['equity_trend'])),
                 [('Trend', sleeves['equity_trend']), ('Buy & hold', sleeves['equity_bh'])], 'Sessions', 'Equity · starts at 1')
             self.text(f"{sleeves['cost_bps']:g} bp per side · in-sample descriptive results, not a new study decision.")
+            # §10 NEW-M6-04: the table shows '—' for an undefined Sharpe; this line says why (also in the export
+            # and the AI commentary, which carry the sections, not the sleeve dicts).
+            note = sharpe_note(sleeves)
+            if note:
+                self.text(note, localized={'en': note, 'ko': sharpe_note_korean(sleeves)})
+            # §10 NEW-M6-05: the conventions behind these numbers, as text and as an export section.
+            c = sleeves.get('conventions')
+            if c:
+                conventions = conventions_text(c)
+                self.text(conventions, localized={'en': conventions, 'ko': conventions_korean(c)})
+                self.sections.append({'type': 'sleeve_conventions', **c})
         if d.get('components'):
             rows = sorted(d['components'], key=lambda c:-(c.get('weight_pct') or 0))
             self.result_table('Constituents', ['Code', 'Name', 'Weight %'], [[r['code'],r['name'],fmt(r['weight_pct'])] for r in rows])

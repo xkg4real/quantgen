@@ -12,6 +12,7 @@ from core.quant.history import HistoryError, load_history, synthetic_history
 from core.quant.validate import load_cards
 from .decay_disclosure import decay_text
 from .letf_disclosure import letf_context, letf_text, letf_unavailable_text
+from .sleeve_disclosure import conventions_text, sharpe_note, sharpe_text, sleeve_conventions, sleeve_summary
 from core.ficc.letf_assumptions import resolve_letf_assumptions
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -23,6 +24,12 @@ LETF_INDEX = {"122630": "KOSPI200", "252670": "KOSPI200", "114800": "KOSPI200",
               "233740": "KOSDAQ150", "251340": "KOSDAQ150"}
 
 _CARD_FOR = {"trend": ("S_E1_trend_krx", "S_E1_trend_us"), "vol": ("S_E2_voltarget_kodex200", "S_E2_voltarget_spy")}
+
+# Sleeve rule parameters, named once: the same values go to the strategy functions and to the
+# conventions record the screens disclose (§10 NEW-M6-05).
+SLEEVE_TREND_LOOKBACK = 210     # sessions in the 10-month SMA; the trend switch first decides at this row
+SLEEVE_VOL_WINDOW = 22          # realised-vol window; the vol target first decides at row window + 1
+SLEEVE_CASH_RATE = 0.03         # fixed annual cash rate, an assumption (not an observed rate)
 
 def _clean(code: str) -> str:
     c = (code or "").strip().upper()
@@ -70,16 +77,22 @@ def analyze(code: str, *, days: int = 504, source: str = "auto", card_loader=Non
                                 "abs_mean": float(np.abs(prem).mean())}
     # sleeve rules on the fund's own history, with a costed summary
     if px.size > 300:
-        rf = 0.03 / 252
-        W_t = S.trend_switch(px[:, None], rule="sma", lookback=210, step=21, cash_rate_daily=rf)
-        W_v = S.vol_target(px[:, None], target=0.12, window=22, step=21)
+        lookback, window, rf = SLEEVE_TREND_LOOKBACK, SLEEVE_VOL_WINDOW, SLEEVE_CASH_RATE / 252
+        W_t = S.trend_switch(px[:, None], rule="sma", lookback=lookback, step=21, cash_rate_daily=rf)
+        W_v = S.vol_target(px[:, None], target=0.12, window=window, step=21)
         cost = 3.0 if out["is_krx"] else 50.0
         pt, _ = S.simulate(px[:, None], W_t, cost_bps=cost, cash_daily=rf)
         pv, _ = S.simulate(px[:, None], W_v, cost_bps=cost, cash_daily=rf)
         bh = px[1:] / px[:-1] - 1.0
-        out["sleeves"] = {"trend": S.summary(pt), "vol_target": S.summary(pv), "buy_hold": S.summary(bh),
+        # S.summary's numbers unchanged; a Sharpe that is 0/0 (P&L without variation) is None (§10 NEW-M6-04).
+        out["sleeves"] = {"trend": sleeve_summary(pt), "vol_target": sleeve_summary(pv), "buy_hold": sleeve_summary(bh),
                           "equity_trend": S.equity_curve(pt), "equity_bh": S.equity_curve(bh), "cost_bps": cost,
-                          "exposure_trend": float(W_t[210:].mean()) if px.size > 210 else float("nan")}
+                          "exposure_trend": float(W_t[lookback:].mean()) if px.size > lookback else float("nan"),
+                          "conventions": sleeve_conventions(
+                              window_sessions=int(pt.size), trend_lookback=lookback, vol_window=window,
+                              cash_rate_annual=SLEEVE_CASH_RATE,
+                              trend_card=_CARD_FOR["trend"][0 if out["is_krx"] else 1],
+                              vol_target_card=_CARD_FOR["vol"][0 if out["is_krx"] else 1])}
     # leveraged-fund drag from the index's GARCH variance term structure
     c = _clean(code)
     if c in LETF:
@@ -170,12 +183,17 @@ def narrative(a: dict) -> str:
                      + decay_text(ps.get('decay')))
     sl = a.get("sleeves")
     if sl:
-        parts.append(f"On this fund's own history the 10-month trend switch earned Sharpe {sl['trend']['sharpe']:.2f} "
+        # §10 NEW-M6-04: an undefined Sharpe reads "n/a" and the note says why; NEW-M6-05: the conventions
+        # follow the price basis. A defined Sharpe keeps its text, so valid inputs read as before plus that sentence.
+        t, b, v = (sharpe_text(sl[k]) or "n/a" for k in ("trend", "buy_hold", "vol_target"))
+        note = sharpe_note(sl)
+        parts.append(f"On this fund's own history the 10-month trend switch earned Sharpe {t} "
                      f"(max drawdown {sl['trend']['max_drawdown']:.0%}, {sl['exposure_trend']:.0%} invested) against buy-and-hold "
-                     f"{sl['buy_hold']['sharpe']:.2f} ({sl['buy_hold']['max_drawdown']:.0%}); the 12 % vol target earned "
-                     f"{sl['vol_target']['sharpe']:.2f}. These are in-sample descriptive numbers; the validation study's verdict "
+                     f"{b} ({sl['buy_hold']['max_drawdown']:.0%}); the 12 % vol target earned "
+                     f"{v}. " + (note + " " if note else "") + "These are in-sample descriptive numbers; the validation study's verdict "
                      f"for this family is trend: {a['verdicts']['trend']}, vol target: {a['verdicts']['vol']}. "
-                     f"Price basis for these sleeve numbers: {a.get('sleeve_basis', a.get('data_source'))}.")
+                     f"Price basis for these sleeve numbers: {a.get('sleeve_basis', a.get('data_source'))}."
+                     + (" " + conventions_text(sl["conventions"]) if sl.get("conventions") else ""))
     lt = a.get("letf")
     if lt and "rows" in lt:
         r63 = next(r for r in lt["rows"] if r["sessions"] == 63)
