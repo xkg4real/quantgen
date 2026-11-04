@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9
-next_ids: ②-5/N-M1-02, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-05T02:50:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05
+next_ids: ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-05T01:40:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/s10-models-20261104
-work_commit: f001287
+work_branch: main
+work_commit: faf9f3b
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/73
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -162,8 +162,8 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 1. (완료) PR #71 병합 `d5e73ae`, 원장 기록. Notion 13절 취소선은 이 게시 직후.
 2. (완료) 옵션 PR #72 병합 `a32106b`(트리 = head `d88277a`). CI Runtime 41825869368·Compliance 41825869356 성공, 전체 run_all(캐시 없는 사본 `6048ba9`) 746/872·FAIL 2(기존 환경 탓)·NOT_RUN 124. 원장 ②-5/M4-N4·N7·N9 기록. head `d88277a`. main `d5e73ae`를 `6048ba9`에서 합침(충돌: market_tools import 둘 다, runtime-smoke 둘 다, FACTS 옵션 절 마지막, §10 집계 27/67·남은 40, 기준선 재생성, README 변경으로 상태 스냅샷 재생성). 합친 뒤 23개 모듈 204검사 OK, 웹 기록 PR-72.json. CI 성공 시 병합 → 원장 ②-5/M4-N4, M4-N7, M4-N9 → Notion. 아래는 원래 지시:
    옵션 브랜치 `claude/s10-options-20261104`(`a4b7c3c`)에 main을 합칩니다(`git merge origin/main`; 충돌 예상: SECTION10_QUEUE/TRIAGE, FACTS, runtime-smoke.yml, market_tools.py, source-review.json). §10 집계는 27로 맞춥니다. PR을 열고 CI 성공 시 병합, 원장 ②-5/M4-N4·N7·N9, Notion.
-3. (진행 중) §10 모형/ETF(N-M1-02, NEW-M6-04, NEW-M6-05): 브랜치 `claude/s10-models-20261104`를 main `a32106b`로 빨리감기, 스크래치패드 워크트리 `s10`. 분석+반박 워크플로 `wf_1c9cce85-b38` 완료(결과 `s10etf/results.json`): N-M1-02는 C1의 이름 오류(a)와 군집 한계(b) 중 공개만 하는 N-M1-02/a로 기록(수학 수정은 소유자 승인 필요), NEW-M6-04는 등록부 137행으로 대응 확정(변동 없는 손익의 샤프 1e16 → 계산 불가), NEW-M6-05는 대응 모호(준비 구간·고정 현금·총 샤프 / K-e / 계열 판정) → 모든 해석을 덮는 공개 문구. 구현+3관점 검토+수정 워크플로 `wf_68021ee4-8b5` 완료 → 두 트랙 병합 `46f4950`, 공유 기록 `2710cd0`(§10 29/67, N-M1-02는 부분), 웹 기록 PR-73.json `aa4b550`, /code-review 8건 중 3건 수정 `f001287`(나머지 5건 이유는 PR 댓글). **PR #73 열림(https://github.com/xkg4real/quantgen/pull/73), CI 대기.** 주의: 구현 에이전트가 grep으로 docs/asset_expansion/cache의 .py를 한 번 훑었고, tests.macro_m9_lab 직접 실행이 캐시의 yf_069500.KS.csv(보호 4개 아님)를 열어 md5를 계산함 — 소유자에게 보고함. (이전 기록) 구현+3관점 검토+수정 워크플로 `wf_68021ee4-8b5`: MC 트랙은 워크트리 `s10mc`(브랜치 `claude/s10-mc-bootstrap-20261104`), ETF 트랙은 `s10`(브랜치 `claude/s10-models-20261104`), 둘 다 main `a32106b`에서. 끝나면 MC 브랜치를 models 브랜치에 합치고 공유 기록(§10 큐·분류 29/67, FACTS, runtime-smoke, 기준선, README 상태 스냅샷, PR-<n>.json)을 직접 갱신. 완료 기준: 각 ID 대응 한계 확정, 재현, 최소 수정, 시험, /code-review, PR, CI 성공 시 병합, 원장 ②-5/N-M1-02·NEW-M6-04·NEW-M6-05.
-4. 그다음 §10 AI(분석 `wf_2c60a985-9f9` 완료, 브랜치 `claude/s10-ai-20261104`), 그 뒤 A3 나머지, A1, 5~6번, 실시간 체결, 7번.
+3. (완료) PR #73 병합 `faf9f3b`(트리 = head `516953a`). CI Runtime 41866083398·Compliance 41866083244 성공. CI에서 garch_t 고정값이 라이브러리 버전(numpy 2.5.4·scipy 1.18.1) 차이로 최대 4.6e-5 달라 허용치를 1e-3으로 조정(`516953a`). 전체 run_all(`2710cd0`) 746/872·FAIL 2(기존 환경 탓). 원장 ②-5/N-M1-02/a, NEW-M6-04, NEW-M6-05. 소유자 결정 필요: 부트스트랩 블록 길이 수학 수정 여부, NEW-M6-05 해석. 이전 기록: §10 모형/ETF(N-M1-02, NEW-M6-04, NEW-M6-05): 브랜치 `claude/s10-models-20261104`를 main `a32106b`로 빨리감기, 스크래치패드 워크트리 `s10`. 분석+반박 워크플로 `wf_1c9cce85-b38` 완료(결과 `s10etf/results.json`): N-M1-02는 C1의 이름 오류(a)와 군집 한계(b) 중 공개만 하는 N-M1-02/a로 기록(수학 수정은 소유자 승인 필요), NEW-M6-04는 등록부 137행으로 대응 확정(변동 없는 손익의 샤프 1e16 → 계산 불가), NEW-M6-05는 대응 모호(준비 구간·고정 현금·총 샤프 / K-e / 계열 판정) → 모든 해석을 덮는 공개 문구. 구현+3관점 검토+수정 워크플로 `wf_68021ee4-8b5` 완료 → 두 트랙 병합 `46f4950`, 공유 기록 `2710cd0`(§10 29/67, N-M1-02는 부분), 웹 기록 PR-73.json `aa4b550`, /code-review 8건 중 3건 수정 `f001287`(나머지 5건 이유는 PR 댓글). **PR #73 열림(https://github.com/xkg4real/quantgen/pull/73), CI 대기.** 주의: 구현 에이전트가 grep으로 docs/asset_expansion/cache의 .py를 한 번 훑었고, tests.macro_m9_lab 직접 실행이 캐시의 yf_069500.KS.csv(보호 4개 아님)를 열어 md5를 계산함 — 소유자에게 보고함. (이전 기록) 구현+3관점 검토+수정 워크플로 `wf_68021ee4-8b5`: MC 트랙은 워크트리 `s10mc`(브랜치 `claude/s10-mc-bootstrap-20261104`), ETF 트랙은 `s10`(브랜치 `claude/s10-models-20261104`), 둘 다 main `a32106b`에서. 끝나면 MC 브랜치를 models 브랜치에 합치고 공유 기록(§10 큐·분류 29/67, FACTS, runtime-smoke, 기준선, README 상태 스냅샷, PR-<n>.json)을 직접 갱신. 완료 기준: 각 ID 대응 한계 확정, 재현, 최소 수정, 시험, /code-review, PR, CI 성공 시 병합, 원장 ②-5/N-M1-02·NEW-M6-04·NEW-M6-05.
+4. (다음) §10 AI NEW-M6-12, NEW-M6-19: 옛 분석 `wf_2c60a985-9f9`(main 7fc53e2 기준, 두 제안 모두 반박 검토에서 불충분 판정, 결과 `s10etf/ai_results.json`)를 출발점으로 최신 main `faf9f3b`에서 다시 분석·반박 → 구현·3관점 검토 → PR. 브랜치 `claude/s10-ai-20261104`를 main으로 빨리감기, 그 뒤 A3 나머지, A1, 5~6번, 실시간 체결, 7번.
 
 ## 7. 주의사항 / 하지 말 것
 
