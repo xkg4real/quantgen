@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButto
 from core.research.ai_connection import error_message
 from core.research.presentation import safe_detail
 from core.research.tool_export import plain
-from core.research.ai_payload import filter_analysis_fields, private_field
+from core.research.ai_payload import AI_PAYLOAD_MAX_BYTES, filter_analysis_fields, private_field
 from core.ficc.insights import deep_analysis
 from .jobs import Jobs
 from .report_actions import ReportActions
@@ -33,7 +33,8 @@ def commentary_payload(report):
         'sections':sections,'official_verdict':report.get('verdict','NOT_RUN'),
         'reproducibility':report.get('reproducibility','PARTIAL'),'data_rights':report.get('data_rights','NOT_VERIFIED')})
     raw=json.dumps(payload,ensure_ascii=False,allow_nan=False,sort_keys=True)
-    if len(raw.encode('utf-8'))>180_000:raise ValueError('Report is too large for commentary; choose a smaller calculation')
+    # The send side measures the same UTF-8 JSON with the same '>' (core.research.ai_payload).
+    if len(raw.encode('utf-8'))>AI_PAYLOAD_MAX_BYTES:raise ValueError('Report is too large for commentary; choose a smaller calculation')
     return payload
 
 
@@ -97,7 +98,7 @@ class CommentaryPane(QWidget):
             self.payload=commentary_payload(report)
         except (ValueError,TypeError) as exc:self.status.setText(safe_detail(exc));return
         self.preview.setPlainText(json.dumps(self.payload,ensure_ascii=False,indent=2,allow_nan=False))
-        self.status.setText('이 내용과 질문만 전송합니다. AI 해설은 공식 gate 판정을 변경하지 않습니다.')
+        self.status.setText('이 내용과 질문을 QUANTGEN의 고정 작성 지침과 함께 전송합니다. 지침에는 계좌나 개인 정보가 없습니다. AI 해설은 공식 gate 판정을 변경하지 않습니다.')
 
     def submit(self):
         if self.jobs.busy:return

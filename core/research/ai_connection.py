@@ -1,10 +1,12 @@
 """Safe, actionable Claude diagnostics. Never echo provider bodies or secrets."""
+from core.research.ai_payload import AI_PAYLOAD_MAX_BYTES
 
 # One response budget for every AI commentary request; the cut-off message quotes it.
 OUTPUT_TOKEN_LIMIT = 1500
 # QUANTGEN sends no tools and no stop_sequences, so only end_turn is a finished reply.
 COMPLETE_STOP_REASONS = ('end_turn',)
 _LIMIT = f'{OUTPUT_TOKEN_LIMIT:,}'
+_PAYLOAD_LIMIT = f'{AI_PAYLOAD_MAX_BYTES:,}'
 
 MESSAGES = {
     'NOT_CONFIGURED': (
@@ -69,6 +71,15 @@ MESSAGES = {
         'Local calculations and official verdicts are unchanged.',
         'Claude 응답이 정상적으로 끝나지 않아(중단 사유가 end_turn이 아님) 완성되지 않은 응답으로 처리했습니다. '
         '글은 표시하거나 저장하지 않았고 자동 재시도도 하지 않았습니다. 로컬 계산과 공식 판정은 그대로입니다.'),
+    'PAYLOAD_TOO_LARGE': (
+        f'The calculation data is larger than the {_PAYLOAD_LIMIT}-byte limit for AI commentary, so nothing was sent '
+        'and nothing was cut. Choose a smaller calculation. Local results are unchanged.',
+        f'계산 데이터가 AI 해설 전송 한도({_PAYLOAD_LIMIT}바이트)보다 커서 아무것도 보내지 않았고, 데이터를 잘라 '
+        '보내지도 않았습니다. 더 작은 계산을 선택하세요. 로컬 결과는 그대로입니다.'),
+    'PAYLOAD_INVALID': (
+        'QUANTGEN could not prepare the calculation data for AI commentary, so nothing was sent. '
+        'Local results are unchanged.',
+        'QUANTGEN이 AI 해설에 보낼 계산 데이터를 준비하지 못해 아무것도 보내지 않았습니다. 로컬 결과는 그대로입니다.'),
 }
 
 

@@ -542,7 +542,7 @@ SYNTHETIC · scores below are synthetic demonstrations, not official research-ca
 Stored research records. Reading does not rerun cards or change verdicts.|저장된 연구 기록입니다. 조회는 카드를 재실행하거나 판정을 바꾸지 않습니다.
 NOT_LOADED · no stored research cards.|NOT_LOADED · 저장된 연구카드가 없습니다.
 Question · do not enter passwords or account information|궁금한 점 · 비밀번호나 계좌정보는 입력하지 마세요
-Only this payload and question will be sent. AI commentary does not change official gate verdicts.|이 내용과 질문만 전송합니다. AI 해설은 공식 gate 판정을 변경하지 않습니다.
+This payload and your question are sent with QUANTGEN's fixed writing instructions, which contain no account or personal data. AI commentary does not change official gate verdicts.|이 내용과 질문을 QUANTGEN의 고정 작성 지침과 함께 전송합니다. 지침에는 계좌나 개인 정보가 없습니다. AI 해설은 공식 gate 판정을 변경하지 않습니다.
 Requesting AI commentary…|AI 해설 요청 중…
 Complete a calculation first. Failed/unrun records are not sent.|먼저 계산을 완료하세요. 실패·미실행 기록은 전송하지 않습니다.
 Keep the question within 4,000 characters.|질문을 4,000자 이내로 입력하세요.

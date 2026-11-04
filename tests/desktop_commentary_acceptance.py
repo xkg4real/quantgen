@@ -117,6 +117,54 @@ class NativeCommentaryTests(unittest.TestCase):
                 self.window.ui_language='en';p.status.retranslate();self.assertIn(en,p.status.text())
         self.runner.assert_not_called()
 
+    def test_native_size_limit_matches_the_send_limit(self):
+        import json
+        from core.quant import insights
+        from core.research.ai_payload import AI_PAYLOAD_MAX_BYTES, filter_analysis_fields
+        from core.research.tool_export import plain
+
+        def sized(target):
+            r = {'tool': 'crypto', 'execution_status': 'COMPLETED', 'verdict': 'NOT_RUN',
+                 'parameters': {'source': 'synthetic'}, 'sections': [{'type': 'text', 'text': ''}]}
+            def native(r):          # what commentary_payload measures, before its size check
+                return plain({'tool': r['tool'], 'parameters': filter_analysis_fields(r['parameters']),
+                              'sections': [filter_analysis_fields(s) for s in r['sections']],
+                              'official_verdict': 'NOT_RUN', 'reproducibility': 'PARTIAL',
+                              'data_rights': 'NOT_VERIFIED'})
+            def size(r):
+                return len(json.dumps(native(r), ensure_ascii=False, allow_nan=False,
+                                      sort_keys=True).encode('utf-8'))
+            r['sections'][0]['text'] = '가' * 59_900
+            r['sections'][0]['text'] += 'a' * (target - size(r))
+            self.assertEqual(size(r), target)
+            return r, native(r)
+
+        for target in (AI_PAYLOAD_MAX_BYTES - 1, AI_PAYLOAD_MAX_BYTES, AI_PAYLOAD_MAX_BYTES + 1):
+            with self.subTest(bytes=target):
+                r, payload = sized(target)
+                try:
+                    payload = commentary_payload(r); accepted = True
+                except ValueError:
+                    accepted = False
+                http = Mock(); http.post.return_value.status_code = 200
+                http.post.return_value.json.return_value = {
+                    'content': [{'type': 'text', 'text': 'fixture'}], 'stop_reason': 'end_turn'}
+                with patch.object(insights.config, 'anthropic_key', return_value='fixture-key'), \
+                     patch.object(insights, '_requests', http):
+                    sent = insights.deep_analysis('crypto_market', payload)
+                self.assertEqual(accepted, target <= AI_PAYLOAD_MAX_BYTES)
+                self.assertEqual(accepted, sent.error_code != 'PAYLOAD_TOO_LARGE')
+                self.assertEqual(http.post.called, accepted)
+
+    def test_consent_status_names_the_fixed_instructions(self):
+        p = self.prepare()
+        self.window.ui_language = 'ko'; p.status.retranslate()
+        self.assertIn('고정 작성 지침', p.status.text())
+        self.window.ui_language = 'en'; p.status.retranslate()
+        self.assertIn('fixed writing instructions', p.status.text())
+        self.assertNotIn('고정', p.status.text())
+        self.runner.assert_not_called()
+
     def test_daily_prompt_kind_and_close_guard(self):
         gate=threading.Event()
         def runner(*a,**kw):gate.wait(2);return Analysis('daily fixture','fixture')

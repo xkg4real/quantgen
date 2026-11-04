@@ -29,6 +29,7 @@ except Exception:                                    # pragma: no cover
 import config
 from core.research.ai_connection import (OUTPUT_TOKEN_LIMIT, error_message, reply_result,
                                          response_error, transport_error)
+from core.research.ai_payload import AI_PAYLOAD_MAX_BYTES, VALUE_NOTE, ai_payload_json
 from core.research.mc_disclosure import bootstrap_disclosure
 from core.quant.backtest import BacktestResult
 from core.quant.garch import LR_5PCT, NU_NORMAL
@@ -304,18 +305,8 @@ _SYSTEM = (
 
 
 def _payload_to_json(payload: dict) -> str:
-    def default(o):
-        try:
-            import numpy as np
-            if isinstance(o, np.ndarray):
-                return o.tolist()[:50]
-            if isinstance(o, (np.floating, np.integer)):
-                return float(o)
-        except Exception:
-            pass
-        return str(o)
-    from core.research.ai_payload import filter_analysis_fields
-    return json.dumps(filter_analysis_fields(payload), default=default)
+    """The payload JSON exactly as sent (see core.research.ai_payload.ai_payload_json)."""
+    return ai_payload_json(payload).text
 
 
 def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
@@ -330,9 +321,18 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
         return failure("NOT_CONFIGURED")
     if _requests is None:
         return failure("DEPENDENCY")
+    # Serialised before anything is sent: a payload that cannot be written as strict
+    # JSON, or that is over the Native preview limit, fails locally with no request.
+    try:
+        sent = ai_payload_json(payload)
+    except Exception:
+        return failure("PAYLOAD_INVALID")
+    if len(sent.text.encode("utf-8")) > AI_PAYLOAD_MAX_BYTES:
+        return failure("PAYLOAD_TOO_LARGE")
     model = config.ai_model()
-    user_msg = (f"Analysis type: {kind}\n\nComputed results:\n"
-                f"{_payload_to_json(payload)}")
+    user_msg = f"Analysis type: {kind}\n\nComputed results:\n{sent.text}"
+    if sent.marked or sent.nulls:
+        user_msg += "\n\n" + VALUE_NOTE
     if question.strip():
         user_msg += f"\n\nThe operator specifically asks: {question.strip()}"
     try:

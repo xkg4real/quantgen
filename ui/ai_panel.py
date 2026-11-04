@@ -5,7 +5,7 @@ Layout contract, same on all pages:
   * The **local narrative** is always present — written the moment results
     exist, engine-labeled "local", no network involved.
   * The **deep analysis** button sends the computed payload to the Claude API
-    and streams the written result into the same card. Unconfigured or failed,
+    and shows the written result in the same card. Unconfigured or failed,
     the card says exactly why and the page loses nothing else.
 
 The payload the button sends contains the caller's computed market results — this module
@@ -61,16 +61,23 @@ def analysis_panel(page: ft.Page, *, kind: str, narrative: str,
         page.update()
 
         def worker():
-            result = deep(kind, filter_analysis_fields(payload_fn()), question=question.value or "")
-            if result.error:
-                deep_host.controls = [_ErrorNotice(result, page)]
-            else:
-                deep_host.controls = [
-                    ft.Row([chip(f"engine: {result.engine}", "accent")], spacing=6),
-                    ft.Text(result.text, size=13, color=pal.text, selectable=True),
-                ]
-            busy.visible = False
-            page.update()
+            try:
+                try:
+                    result = deep(kind, filter_analysis_fields(payload_fn()), question=question.value or "")
+                except Exception:
+                    # payload_fn (or a custom runner) raised; deep_analysis itself fails closed
+                    # before posting. The spinner must still clear and the card must say why.
+                    result = insights.Analysis("", "none", error_message("PAYLOAD_INVALID"), "PAYLOAD_INVALID")
+                if result.error:
+                    deep_host.controls = [_ErrorNotice(result, page)]
+                else:
+                    deep_host.controls = [
+                        ft.Row([chip(f"engine: {result.engine}", "accent")], spacing=6),
+                        ft.Text(result.text, size=13, color=pal.text, selectable=True),
+                    ]
+            finally:
+                busy.visible = False
+                page.update()
 
         page.run_thread(worker)
 
