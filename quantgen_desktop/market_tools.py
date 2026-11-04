@@ -236,8 +236,10 @@ class KRXPane(ToolPane):
         data = a.data
         if out.request.tool == 'quote':
             # Owner, 2026-11-04: no provider or time rows on screen; the export keeps both (attribution).
+            # A KRX fallback is a previous session's close, so its date stays visible.
             self.result_table('Quote', ['Field','Value'], list(asdict(data).items()))
-            hide_rows(self.tables['Quote'], ('source', 'as_of'))
+            kis = (a.source or '').upper() == 'KIS'
+            hide_rows(self.tables['Quote'], ('source', 'as_of') if kis else ('source',))
         elif data:
             keys = list(dict.fromkeys(k for row in data for k in row))
             self.result_table('Observations',keys,[[r.get(k,'—') for k in keys] for r in data[:300]])

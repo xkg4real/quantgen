@@ -474,7 +474,7 @@ class ResearchWindow(QMainWindow):
     def attach_symbol_searches(self):
         """Code-or-name search on every symbol field that loads a chart or one instrument's data
         (owner, 2026-11-04). Choosing a row writes the code, so each pane's own routing is unchanged."""
-        from .markets_view import STOCK_ASSETS, attach_symbol_search
+        from .markets_view import STOCK_ASSETS, US_EXCHANGES, attach_symbol_search
         directory, loader = self.symbol_directory, self.directory_loader
         targets = [(self.symbol, {}), (self.portfolio.symbols, {"multi": True})]
         for pane, field, options in ((self.signals, "symbol", {}), (self.strategy, "symbols", {"multi": True}),
@@ -485,7 +485,8 @@ class ResearchWindow(QMainWindow):
                     targets.append((controls[field], options))
         self.symbol_completers = [self.markets_view.completer]
         for edit, options in targets:
-            options = {"assets": STOCK_ASSETS, **options}
+            # Writing a code drops the exchange, so only listings whose bare code loads the same security.
+            options = {"assets": STOCK_ASSETS, "exchanges": US_EXCHANGES, **options}
             self.symbol_completers.append(attach_symbol_search(edit, directory, locale=self.ctx, loader=loader,
                                                                **options))
 
@@ -1055,8 +1056,8 @@ class ResearchWindow(QMainWindow):
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))
             return
-        # The watchlist cards and the stock details poll on their own; they never hold the window open
-        # (their late answers are dropped).
+        # The watchlist cards and the stock details poll on their own and do not block closing: stop()
+        # cancels the cards still queued and drops late answers, so exit waits for one request at most.
         if self.jobs.busy or self.paper_session.jobs.busy or self.commentary.jobs.busy or self.market_chart.jobs.busy:
             event.ignore()
             self.statusBar().showMessage(display(self, "진행 중인 분석 또는 조회가 끝난 뒤 종료할 수 있습니다."))

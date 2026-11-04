@@ -256,7 +256,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "feb893f97e7829248ea393fd1c14b6db02b0ecf79333f4d81771228c7b18c3c2",
+    "docs/compliance/FACTS.md": "9dad6eef465c141d2fb2426dbd78b554a26b564093a9541ada3da62452b5455b",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -285,7 +285,7 @@
     "docs/product/LETF_ASSUMPTIONS_2026-11-02.md": "4fd6fbcd5caad90146799feb6fa7ae61a38603e22c752970474e3d23b757fd0b",
     "docs/product/LETF_INDEX_2026-10-31.md": "7c10b178f33c59f2afb2783c94413cc2c949ba3d5f0e7b4412246d0da1f54693",
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
-    "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "acb462b7019b164bcf831d7072eafaee2acdab4c5d41d6a665a5d14bd5602d7c",
+    "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "3f91eab5c6dd32fed94a630f8907eeec4de2d4b7c3daba28974dbdfef80b381b",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
     "docs/product/MC_VOLATILITY_2026-10-30.md": "92dc8a14c6884ea57936f9f187e9b87d1120b426ac0fe2f8767867617ef6837f",
@@ -315,7 +315,7 @@
     "pyproject.toml": "77589c755d38fe9bc4316841b4a4b69b1dd807f532c211d16d1658e1540926d4",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "671dd2925a0b5af91a34598993504c5b47754255b669a33b0543b384ff5db7bf",
+    "quantgen_desktop/app.py": "5d0be53a16063550cca18a2b29d80f0ae76bf4bd669ac28a7df74b8fbcf8aa4c",
     "quantgen_desktop/bonds.py": "7d173230908995d65b98dde02903f59c823b6261a550ae562d5d9e697b361bd9",
     "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
@@ -335,8 +335,8 @@
     "quantgen_desktop/market_chart.py": "a2c163621fc1050b54c47e90cb5de2b449fdf27106475f1cbcd167757978ad88",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
     "quantgen_desktop/market_narrative_language.py": "e4e3d3ac3d1ddfdac171d9bb5fd336d1c6e4bc2bd08bbf5862a53784e3587511",
-    "quantgen_desktop/market_tools.py": "1232506457cf60393a450b93327ff3203be5d7e1c5fed9815068703c112ea2e2",
-    "quantgen_desktop/markets_view.py": "730bc75c1da4365f345ff329377a44071a09253d4dc5377bbaa2154ad14d12b0",
+    "quantgen_desktop/market_tools.py": "331817363b3839c9dd0251b5c7abfc19f79a1450bfad67bcee1fc7cc34dfd987",
+    "quantgen_desktop/markets_view.py": "ae84fac7ca9ab0544930465b81b4f47ab871da69a486c77c6daa1bb89a710899",
     "quantgen_desktop/model_narrative_language.py": "c4d4c826e3416a202cc4167c19a2ccbc233fcbc80239e62a81808092274c0981",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
@@ -392,7 +392,7 @@
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_layout_acceptance.py": "215764cefa9108907c3480cad377b261dcf404c7a7342ecb0047ed43b7ea0023",
     "tests/desktop_market_tabs_acceptance.py": "a58b9dc8ce6b0f55df2370b9ea2187a65e917340488fcfeaea266e831248d54d",
-    "tests/desktop_markets_watchlist_acceptance.py": "a0e90b5dbd673544e3e1f2e4f7cf66ed29104de051aea6ad2407163a970a8a70",
+    "tests/desktop_markets_watchlist_acceptance.py": "d458aa2d633dbbbfead6347d0fe5b53f3f827e17c91ea0b31483df59cfe5b569",
     "tests/desktop_operation_fixes_acceptance.py": "3624ea38c93ea8e1d11a4a57c2122f96eee85b460431d5eac8e72361e89f108c",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
@@ -571,163 +571,163 @@
   "reviews": {
     "1": {
       "document_sha256": "800842db400cf938aaaca47d17d69cd9c1f8100096255c919dfbd44b290af9cb",
-      "source_digest": "4d867527b608ccdc5cb4f838588e352c869f5d3003d9ec1d802521b4e1466986",
+      "source_digest": "55fa7880c6687052c49b32264fb2a7f55de6b89847e738f25e1ff93cb7016fb5",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.544159+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.495054+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "4d867527b608ccdc5cb4f838588e352c869f5d3003d9ec1d802521b4e1466986",
+      "source_digest": "55fa7880c6687052c49b32264fb2a7f55de6b89847e738f25e1ff93cb7016fb5",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.548393+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.499167+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "0f9bc5e4665e2d54ef55c9f0e6fcd25848a4959e2ae38b516906e9ab6ff5c3e0",
+      "source_digest": "8b1c410653ca1bae4925ece89a82dc8b95e1d0620865bc81b6afe5b493c20244",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.551552+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.501555+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "d45ffa1653f054ec3ff75c7cc8d0972ca02483a16e4cd079c3e0e938c1c6a16e",
+      "source_digest": "47784fbcbee9bfac5b72d9797bd399f66e351faf821d171f6eec9d9d27de2c68",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.554210+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.503691+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "b9c413c200fe09ee59ca79beae9637509a12519a7ffff16fad768dd0f4b2ddd0",
+      "source_digest": "bc7c72b3292f21b75e86061c55714a47832fafe265f72a34890106e990e4e3dc",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.556872+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.506831+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "6": {
       "document_sha256": "9e7d3a2850c698226b88e0715ac5a11d47559a375158df21e5d5f2b4618d9805",
-      "source_digest": "74e93ae02fab2de1a25985555f6def1587064ac92dd7ad982886df8bc998cc59",
+      "source_digest": "3bdb4146d5728ea4ebe72049578da79f4f4dc555503a1a7df4b305eefa370de2",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.559367+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.509170+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "7": {
-      "document_sha256": "17a5e5231248738a4a7b37d8bf9f6cc300eae0f02d4c501fc33d37040c1c651c",
-      "source_digest": "4d867527b608ccdc5cb4f838588e352c869f5d3003d9ec1d802521b4e1466986",
+      "document_sha256": "99b4631bd5dc98b713015d45db2b864a64919a8a7dedfb4f903ee75656fa1f04",
+      "source_digest": "55fa7880c6687052c49b32264fb2a7f55de6b89847e738f25e1ff93cb7016fb5",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.562122+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.511220+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "8": {
       "document_sha256": "a0c83c9860eb1b77a1b5dd89ac4036cab1d5a48ef8ca1efeadc2295b0205dc61",
-      "source_digest": "74e93ae02fab2de1a25985555f6def1587064ac92dd7ad982886df8bc998cc59",
+      "source_digest": "3bdb4146d5728ea4ebe72049578da79f4f4dc555503a1a7df4b305eefa370de2",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.564159+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.513382+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "9": {
-      "document_sha256": "dac511ef262686869f627a264090cb5866bc60ad1a5f7fbb70df3ede8f79c7ae",
-      "source_digest": "2654687dad659aa558ea59f5d63d8f33fc52243650ad2d9b8f7ce8259cb45df9",
+      "document_sha256": "1ac53869fa19977ce6917d2c401f93f457245bc9a98c465f937740896f87a8fc",
+      "source_digest": "5b5a753242fb95e34d6035e8151171d942e5e82324a4c526ed8af5206d1f81b5",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.566524+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.515438+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "f8e91e6b6b7ac50ff6dfcd582e5d74f9b68de8a406aae4410d4eef81cfebfcc8",
+      "source_digest": "854cf9b521648fefe71afdf562586e9b18e86ccae63ad1abbb0fe590bec55149",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.569174+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.517503+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "4c20c0a3f3314e2b8b3bf55ef66ee90145c709e8dc269d551266c253d0889c89",
+      "source_digest": "d6ad17a12848a8d4be5ad64733598d59e61f5e4594f6ae988f9e0bf730b1fe4f",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.572107+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.519695+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "735517597eed47575d1b5db02661290d560b92607f998d4853ad6429b9733ea0",
+      "source_digest": "97b12c45bd005180621d5d8074a92b9aee10088bace568e1b905997b89acd92b",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.574848+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.521622+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "2654687dad659aa558ea59f5d63d8f33fc52243650ad2d9b8f7ce8259cb45df9",
+      "source_digest": "5b5a753242fb95e34d6035e8151171d942e5e82324a4c526ed8af5206d1f81b5",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.577133+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.523560+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "14": {
       "document_sha256": "14f89ec3bf10261b8d039e4bef5a113b599f30b6494755090a6570ac8e0dbdb0",
-      "source_digest": "2654687dad659aa558ea59f5d63d8f33fc52243650ad2d9b8f7ce8259cb45df9",
+      "source_digest": "5b5a753242fb95e34d6035e8151171d942e5e82324a4c526ed8af5206d1f81b5",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.579243+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.525644+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "15": {
       "document_sha256": "f6d97b6b70a73b55d43b72efc4df0232ffe0516f32f22478fdf94b6a973af131",
-      "source_digest": "2654687dad659aa558ea59f5d63d8f33fc52243650ad2d9b8f7ce8259cb45df9",
+      "source_digest": "5b5a753242fb95e34d6035e8151171d942e5e82324a4c526ed8af5206d1f81b5",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.581906+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.527855+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "55d216ef22cbc41d3a452a4f3ffc27962fb9d6743bc8cd4bda976ef13c300ee4",
+      "source_digest": "9561abf46d7a19344328b9c5190999d842874f56e1612a494de70698f6451016",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.584573+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.530832+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "74e93ae02fab2de1a25985555f6def1587064ac92dd7ad982886df8bc998cc59",
+      "source_digest": "3bdb4146d5728ea4ebe72049578da79f4f4dc555503a1a7df4b305eefa370de2",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.587625+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.532755+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "4d867527b608ccdc5cb4f838588e352c869f5d3003d9ec1d802521b4e1466986",
+      "source_digest": "55fa7880c6687052c49b32264fb2a7f55de6b89847e738f25e1ff93cb7016fb5",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.590122+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.534708+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "d598727dceb3838261fa8f8873af6104e7d0bd65041feab0e0cdf4edf409466e",
+      "source_digest": "724e0ee3ccb27344c12f9118583d907a340d12c46a03035ef8727512c1b2dd88",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.592850+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.537358+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     },
     "20": {
       "document_sha256": "9e456e5db5c44c8592f493633e32f1e00de8d112b05dd468e6b335e481363d45",
-      "source_digest": "4d867527b608ccdc5cb4f838588e352c869f5d3003d9ec1d802521b4e1466986",
+      "source_digest": "55fa7880c6687052c49b32264fb2a7f55de6b89847e738f25e1ff93cb7016fb5",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
-      "reviewed_at": "2026-11-04T10:51:50.595571+00:00",
-      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
+      "review_note": "Code review fixes on PR 71: stock details reload after a busy job, stale failures dropped, analysis fields offer US overseas listings only, KRX fallback keeps its session date, card loads cancel on close, header keeps the directory name. 07 09 FACTS edited; the other documents were searched for statements on these behaviours and none needed a change.",
+      "reviewed_at": "2026-11-04T11:12:49.539356+00:00",
+      "source_commit": "48bf786246df02f428819a8df5fc92df9701516f"
     }
   }
 }

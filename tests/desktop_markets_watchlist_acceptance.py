@@ -278,6 +278,59 @@ class MarketsWatchlistTests(unittest.TestCase):
         texts = [w.text() for w in krx.findChildren(QLabel) if w.text()]
         self.assertFalse([t for t in texts if t.startswith("Provider")])  # KIS: no provider line
 
+    def test_a_stock_opened_while_another_loads_gets_its_own_details(self):
+        import threading
+        gate, started = threading.Event(), []
+
+        def slow_loader(instrument):
+            started.append(instrument.code)
+            if instrument.code == "005930":
+                gate.wait(5)
+                raise TimeoutError("first stock")
+            data = self.router.answers[instrument.code]
+            return build_profile(instrument, candles=data.candles, name="")
+
+        stock = self.view.stock
+        stock.profile_loader = slow_loader
+        self.view.open_instrument(SAMSUNG); stock.load_profile()
+        self.wait(lambda: started == ["005930"])
+        self.view.open_instrument(HYNIX)
+        self.assertFalse(stock.load_profile())  # busy: queued, not dropped
+        gate.set()
+        self.wait(lambda: stock.profile is not None and not stock.jobs.busy)
+        self.assertEqual(started, ["005930", "000660"])
+        self.assertEqual(stock.profile.instrument, HYNIX)
+        self.assertNotIn("TimeoutError", stock.profile_status.text())  # the old stock's failure is not shown
+
+    def test_analysis_fields_offer_only_tickers_that_load_as_typed_and_closing_cancels_cards(self):
+        quant = next(c for c in self.window.symbol_completers if c.edit is self.window.symbol)
+        self.assertFalse([r for r in quant.results("도요타") if r.exchange == "TSE"])  # '7203' would load another stock
+        self.assertTrue(all(r.exchange in ("", "NAS", "NYS", "AMS") for r in quant.results("A")))
+        self.assertTrue(any(r.exchange == "TSE" for r in self.view.completer.results("도요타")))  # Markets keeps all
+        calls = []
+
+        class Router:
+            last_attempts = ()
+
+            def load(self, request):
+                calls.append(request.instrument.code)
+                return snapshot(request.instrument)
+        out = load_cards(Router(), [SAMSUNG, HYNIX, APPLE], lambda: len(calls) >= 1)
+        self.assertEqual((calls, len(out)), (["005930"], 1))  # cancelled before the second card
+
+    def test_a_krx_fallback_quote_keeps_its_session_date_on_screen(self):
+        from core.research.market_analysis import KRXOutput, KRXRequest
+        from data.krx.gateway import Answer
+        from data.krx.kis_client import Quote
+        krx = self.window.krx
+        quote = Quote("005930", "삼성전자", 71000.0, None, None, None, None, None, None, None,
+                      as_of="2026-11-03", source="KRX")
+        krx.show_result(KRXOutput(KRXRequest("quote", "005930"), Answer(quote, "KRX")))
+        table = krx.tables["Quote"]
+        shown = {table.item(r, 0).text() for r in range(table.rowCount()) if not table.isRowHidden(r)}
+        self.assertIn("as_of", shown); self.assertNotIn("source", shown)
+        self.assertTrue(any(w.text().endswith(": KRX") for w in krx.findChildren(QLabel)))  # the provider line
+
     def test_nothing_loads_or_downloads_with_automatic_refresh_off(self):
         self.window.navigate("home"); self.window.navigate("markets"); self.app.processEvents()
         self.view.search.setFocus(); self.view.search.setText("삼성"); self.app.processEvents()

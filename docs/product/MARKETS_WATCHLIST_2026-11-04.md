@@ -21,9 +21,9 @@
 | 요청 | 바뀐 것 | 근거 |
 |---|---|---|
 | (1) 글자 | 동봉 QG Interface의 400/500/600 굵기만 씁니다(700은 가짜 굵게라 거부). 제목 30/600, 소제목 18/600과 3px 강조 막대, 본문 14, 캡션·표 머리 12, 큰 수치 32/600, 카드 제목·가격 15/600. 패널은 세로 그라데이션과 2px 아래 테두리. 등락은 한국식 상승 빨강·하락 파랑 알약. SVG 차트 글자는 등록 글꼴 `QG Interface`만 지정하고 12px 이상(전에는 9–11px, 쉼표 목록이라 QtSvg가 없는 글꼴로 읽음). 칩 제거 버튼 `✕`(동봉 글꼴에 없음)를 `×`로 바꿈 | [글자·스타일](../../quantgen_desktop/typography.py), [SVG](../../core/market/presentation.py), [가이드](../../quantgen_desktop/indicator_guide.py) |
-| (1) 공급자·관측일 칸 | 차트의 출처·시각 두 줄, Home 상세 창의 공급처·관측일 행, 매크로 표의 출처·관측일 열, 외환 캐리 표의 금리 관측일·오래된 관측 열, KRX의 공급자 줄(KIS일 때)과 `source`·`as_of` 행, ETF의 `as_of` 행을 화면에서 뺐습니다. 남는 곳은 화면마다 다릅니다. 시장 카드·공유 가격 차트·종목 정보·Home 상세 창에는 보고서 내보내기가 없어 tooltip에만 있습니다. 매크로·외환 캐리 표는 열만 숨기므로 내보내기에 그 열이 남습니다(도구 내보내기는 화면에 넣은 행으로 만듦, tools.py:226, :271). KRX·ETF 시세 표도 행을 화면에서만 숨기므로(market_tools.py:16 `hide_rows`, :113, :240) 내보내기에는 KRX `source`·`as_of`와 ETF `as_of` 행이 남습니다. KIS로 받은 KRX 결과의 공급자와 `as_of`는 화면·tooltip에는 없고 내보내기에만 있습니다. 공급자·날짜 글자가 그대로 남은 도구는 6절 7번에 적었습니다 | [차트](../../quantgen_desktop/market_chart.py), [Home 상세](../../quantgen_desktop/watchlist.py), [매크로](../../quantgen_desktop/macro.py), [외환](../../quantgen_desktop/fx.py), [ETF·KRX](../../quantgen_desktop/market_tools.py) |
-| (1) 코드·이름 검색 | 시장 검색창과 Build & Test, 포트폴리오, Signals, Strategy Lab, ETF, KRX의 종목 칸에서 코드·한글 이름·영어 이름·한글 초성으로 찾습니다. 고르면 코드가 들어갑니다. 영어 이름은 Home 6종목과 동봉 해외 126종목에만 있습니다. KIS 종목 마스터에는 영어 이름이 없어(directory.py:67, :164) 그 밖의 국내 종목은 영어 이름으로 찾지 못하고 영어 화면에서는 코드로 보입니다(:76-85). 모의매매 규칙 편집기의 종목 칸(paper.py:164)에는 검색이 없습니다. 선물·채권은 시장 검색 막대에서 코드로만 엽니다 | [검색](../../core/market/directory.py), [시장 화면](../../quantgen_desktop/markets_view.py) `SymbolCompleter`, [앱](../../quantgen_desktop/app.py) `attach_symbol_searches` |
-| (1) 스크롤 선택 삭제 | 시장의 자산별 탭 9개와 안쪽 탭(스크롤 화살표가 생기던 줄)을 없앴습니다. 10개 분석 도구는 새 왼쪽 메뉴 “분석 도구”에서 5열 2행 버튼으로 고릅니다. System 화면의 “데스크톱 이전 상태” 글도 분석 도구 10개를 적습니다(app.py:674) | app.py `TOOL_PANES`·`make_tools` |
+| (1) 공급자·관측일 칸 | 차트의 출처·시각 두 줄, Home 상세 창의 공급처·관측일 행, 매크로 표의 출처·관측일 열, 외환 캐리 표의 금리 관측일·오래된 관측 열, KRX의 공급자 줄(KIS일 때)과 `source`·`as_of` 행, ETF의 `as_of` 행을 화면에서 뺐습니다. 남는 곳은 화면마다 다릅니다. 시장 카드·공유 가격 차트·종목 정보·Home 상세 창에는 보고서 내보내기가 없어 tooltip에만 있습니다. 매크로·외환 캐리 표는 열만 숨기므로 내보내기에 그 열이 남습니다(도구 내보내기는 화면에 넣은 행으로 만듦, tools.py:226, :271). KRX·ETF 시세 표도 행을 화면에서만 숨기므로(market_tools.py:16 `hide_rows`, :113, :240-242) 내보내기에는 KRX `source`·`as_of`와 ETF `as_of` 행이 남습니다. KIS로 받은 KRX 결과의 공급자와 `as_of`는 화면·tooltip에는 없고 내보내기에만 있습니다. KIS가 아닌 KRX 대체(직전 거래일 종가)는 공급자 줄과 `as_of` 행을 화면에 보입니다. 공급자·날짜 글자가 그대로 남은 도구는 6절 7번에 적었습니다 | [차트](../../quantgen_desktop/market_chart.py), [Home 상세](../../quantgen_desktop/watchlist.py), [매크로](../../quantgen_desktop/macro.py), [외환](../../quantgen_desktop/fx.py), [ETF·KRX](../../quantgen_desktop/market_tools.py) |
+| (1) 코드·이름 검색 | 시장 검색창과 Build & Test, 포트폴리오, Signals, Strategy Lab, ETF, KRX의 종목 칸에서 코드·한글 이름·영어 이름·한글 초성으로 찾습니다. 고르면 코드가 들어갑니다. 영어 이름은 Home 6종목과 동봉 해외 126종목에만 있습니다. KIS 종목 마스터에는 영어 이름이 없어(directory.py:67, :164) 그 밖의 국내 종목은 영어 이름으로 찾지 못하고 영어 화면에서는 코드로 보입니다(:76-85). 모의매매 규칙 편집기의 종목 칸(paper.py:164)에는 검색이 없습니다. 시장 검색창 밖의 칸은 해외 종목 중 미국 상장(NAS·NYS·AMS)만 보입니다. 거래소 없이 들어간 홍콩·도쿄 코드('00700', '7203')는 분석 도구의 가격 조회에서 다른 종목이나 합성 자료로 이어지기 때문입니다(markets_view.py `US_EXCHANGES`, core/quant/history.py `load_history`). 선물·채권은 시장 검색 막대에서 코드로만 엽니다 | [검색](../../core/market/directory.py), [시장 화면](../../quantgen_desktop/markets_view.py) `SymbolCompleter`, [앱](../../quantgen_desktop/app.py) `attach_symbol_searches` |
+| (1) 스크롤 선택 삭제 | 시장의 자산별 탭 9개와 안쪽 탭(스크롤 화살표가 생기던 줄)을 없앴습니다. 10개 분석 도구는 새 왼쪽 메뉴 “분석 도구”에서 5열 2행 버튼으로 고릅니다. System 화면의 “데스크톱 이전 상태” 글도 분석 도구 10개를 적습니다(app.py:675) | app.py `TOOL_PANES`·`make_tools` |
 | (1) 시장 = 관심종목 차트 + 한 종목 화면 | 지표 차트 4개(UI-7)를 없애고, 이용자가 고른 관심종목의 차트 카드를 보입니다. 카드나 검색 결과를 고르면 그 종목의 가격 차트와 종목 정보를 한 화면에 보입니다 | markets_view.py `WatchlistGrid`·`StockView`, [종목 정보](../../core/research/stock_profile.py) |
 | (1) 실행 방법 안내 | 아래 10절 | |
 | (2) 7A 뒤 자동 병합 | 해당 없음이 됐습니다. 소유자가 같은 날 U4-나로 main 병합 동결을 풀었으므로 이 브랜치는 평소대로 PR과 CI 통과 뒤 병합합니다([소유자 결정 기록](../nautilus_bridge/OWNER_RULINGS_LOG.md)) | |
@@ -35,7 +35,7 @@
 
 1. **10개 분석 도구는 지우지 않고 “분석 도구 / Analysis tools” 화면으로 옮겼습니다.** 요청은 스크롤로 고르는 방식을 지우라는 것이었고 도구 자체를 지우라는 말은 없었습니다. 도구는 보이는 버튼 격자로 고릅니다.
 2. **선물·채권은 시장 검색 막대의 종류 선택(국내 파생·해외 파생·채권)으로 코드를 입력합니다.** 이름 목록은 주식만 있고, 선물·채권 코드는 자산 구분이 있어야 해석됩니다.
-3. **공급자·관측일 칸과 줄을 빼고, 지연·오래된 자료·실패 상태는 화면 글자로 남겼습니다.** 공급자와 시각이 남는 곳은 화면마다 다릅니다(2절 표). 대체(Yahoo) 자료는 차트의 “KIS 대신 Yahoo Finance 자료입니다(지연·수정 전 가격)”(market_chart.py:1074)와 종목 정보 섹션 노트의 “Yahoo Finance 일별 종가 (수정 전·지연)”(stock_profile.py:785)로 글자에 남습니다. 관심종목 카드는 출처가 KIS(`KIS`·`KIS REST`, markets_view.py:42)가 아니면 “지연 시세”만 보이고 Yahoo 이름은 tooltip에만 있습니다(markets_view.py:459-466). 근거: [09번](../compliance/09-dark-patterns.md)의 “화면을 간결하게 만드는 변경이 오래된 값·불완전 자료·자료 이용권의 은폐가 되어서는 안 됩니다”, [12번](../compliance/12-claims.md)의 지연 안내, [08번](../compliance/08-third-parties.md)의 “대체 응답은 출처를 ‘Yahoo Finance’로 표시”(차트에 관한 2026-11-03 문장), [권리 목록](../../core/research/display_rights.json)의 공급자·관측일·지연 표시 조건.
+3. **공급자·관측일 칸과 줄을 빼고, 지연·오래된 자료·실패 상태는 화면 글자로 남겼습니다.** 공급자와 시각이 남는 곳은 화면마다 다릅니다(2절 표). 대체(Yahoo) 자료는 차트의 “KIS 대신 Yahoo Finance 자료입니다(지연·수정 전 가격)”(market_chart.py:1074)와 종목 정보 섹션 노트의 “Yahoo Finance 일별 종가 (수정 전·지연)”(stock_profile.py:785)로 글자에 남습니다. 관심종목 카드는 출처가 KIS(`KIS`·`KIS REST`, markets_view.py:44)가 아니면 “지연 시세”만 보이고 Yahoo 이름은 tooltip에만 있습니다(markets_view.py:470-477). 근거: [09번](../compliance/09-dark-patterns.md)의 “화면을 간결하게 만드는 변경이 오래된 값·불완전 자료·자료 이용권의 은폐가 되어서는 안 됩니다”, [12번](../compliance/12-claims.md)의 지연 안내, [08번](../compliance/08-third-parties.md)의 “대체 응답은 출처를 ‘Yahoo Finance’로 표시”(차트에 관한 2026-11-03 문장), [권리 목록](../../core/research/display_rights.json)의 공급자·관측일·지연 표시 조건.
 4. **KIS 종목 마스터는 자동 갱신이 켜진 창에서만 키 없이 백그라운드로 받고, 프로세스 메모리에만 두며 디스크에 쓰지 않습니다.** 근거: [07번](../compliance/07-data-minimization.md)의 “종목 마스터는 프로세스 메모리”, [FACTS](../compliance/FACTS.md)의 “종목 master도 메모리”. 저장소에 스냅숏을 넣으면 `kis_krx` 저장·재배포 조건에 걸립니다.
 5. **관심종목은 QSettings 키 `markets/watchlist`에 자산 구분·코드·거래소만 저장합니다(최대 20개, 기본은 Home의 국내주식 6개).** 이름·가격은 저장하지 않으므로 오래된 이름이나 시세가 남지 않습니다.
 6. **Home의 고정 종목 목록(6종목)과 열 구성은 바꾸지 않았습니다.** 요청 (1)의 글자와 공급자·관측일 부분은 Home에도 적용했습니다. 변동 열은 한국식 상승 빨강·하락 파랑(watchlist.py:934-936), 열 머리는 12/600(:812), 종목 코드 알약은 12px(:815)입니다. 상세 창에서 공급처·관측일 행을 뺐고(:540-563), 오래된 관측은 안내문에 날짜를 적습니다(:355-359).
@@ -74,12 +74,12 @@
 
 ## 6. 이 기록 시점에 알려진 문제
 
-1. **(고침) 실제 KIS 카드가 “지연 시세”로 표시되고 15분 간격으로 조회되던 문제.** 카드는 출처 문자열이 `KIS`와 같은지로 판정했는데, 실제 KIS 일별 응답의 출처는 `KIS REST`입니다(data/kis_workspace.py:229). 이제 `KIS`·`KIS REST`를 KIS로 봅니다(markets_view.py:42, :464, :608. Q-SCORE의 qscore.py:113과 같은 집합). 시험 `test_kis_rest_cards_are_live_and_the_search_popup_follows_the_theme`은 출처 `KIS REST`인 가짜 응답을 씁니다. 실제 KIS 응답으로는 미검증입니다.
-2. **(고침) 검색 목록에서 종목을 고른 뒤 검색창에 그 코드가 다시 들어가던 문제.** 고를 때 코드를 다음 이벤트에 한 번 더 쓰는데, 종목을 여는 쪽이 검색창을 먼저 비워서(markets_view.py:1059) 비운 칸에 코드가 다시 들어갔습니다. 이제 다음 이벤트의 재기록은 칸이 아직 고른 글자나 그 코드를 담고 있을 때만 합니다(markets_view.py:323-330). 시험 `test_choosing_a_search_row_opens_the_stock_and_leaves_the_search_empty`(오프스크린).
+1. **(고침) 실제 KIS 카드가 “지연 시세”로 표시되고 15분 간격으로 조회되던 문제.** 카드는 출처 문자열이 `KIS`와 같은지로 판정했는데, 실제 KIS 일별 응답의 출처는 `KIS REST`입니다(data/kis_workspace.py:229). 이제 `KIS`·`KIS REST`를 KIS로 봅니다(markets_view.py:44, :475, :618. Q-SCORE의 qscore.py:113과 같은 집합). 시험 `test_kis_rest_cards_are_live_and_the_search_popup_follows_the_theme`은 출처 `KIS REST`인 가짜 응답을 씁니다. 실제 KIS 응답으로는 미검증입니다.
+2. **(고침) 검색 목록에서 종목을 고른 뒤 검색창에 그 코드가 다시 들어가던 문제.** 고를 때 코드를 다음 이벤트에 한 번 더 쓰는데, 종목을 여는 쪽이 검색창을 먼저 비워서(markets_view.py:1090) 비운 칸에 코드가 다시 들어갔습니다. 이제 다음 이벤트의 재기록은 칸이 아직 고른 글자나 그 코드를 담고 있을 때만 합니다(markets_view.py:329-336). 시험 `test_choosing_a_search_row_opens_the_stock_and_leaves_the_search_empty`(오프스크린).
 3. **공급자 이름을 화면에서 키보드로 읽을 경로가 없습니다.** tooltip은 마우스 hover에서만 보이고, Home 상세 창에서도 공급처 행을 뺐습니다(예외: Yahoo 대체 안내 글자, 매크로·외환 캐리의 보고서 내보내기, 7번의 남은 글자). 보조기술 경로는 일부 있습니다. Home 표의 각 셀은 tooltip을 접근성 설명으로도 두고(watchlist.py:930-931), 가격 셀의 tooltip에는 공급자 이름(YFINANCE·FRED·KIS)과 시각 줄이 있습니다(:285-309). 표는 키보드로 셀을 옮겨 다니고 Enter로 상세 창을 엽니다(:367-375). 가격 차트 그림은 포커스를 받고 접근성 이름이 “캔들 차트 · {공급자}”입니다(market_chart.py:50, :1148). 관심종목 카드와 종목 정보 행은 접근성 이름·설명에 공급자가 없고 tooltip에만 있습니다. Windows 스크린리더가 이 설명과 이름을 읽는지, Qt가 카드·글자 행의 tooltip을 설명으로 넘기는지는 미검증입니다.
 4. **외환 캐리 표의 오래된 금리 칸 색 `#B26B00`은 두 테마 모두 4.5:1 미만입니다**(LIGHT 4.17·3.73, DARK 3.86·3.43). `⚠`를 함께 둡니다. 얇은 스크롤 막대 손잡이도 배경과 3:1 미만입니다([14번](../compliance/14-contrast.md)).
 5. **매크로 표의 행별 관측일은 tooltip에만 있습니다.** 행별 오래된 표시 규칙은 원래 없었습니다.
-6. **(고침) 종목 검색 목록이 창의 색을 따르지 않던 문제.** QCompleter 목록은 부모 없는 별도 창이라 주 창의 스타일시트가 닿지 않습니다. 이제 테마를 정하거나 바꿀 때마다 모든 종목 칸의 목록에 직접 스타일을 줍니다(typography.py:138 `popup_stylesheet`, markets_view.py:270 `SymbolCompleter.set_theme`, app.py:1040-1041). 닿지 않던 창 스타일시트의 `QListView#symbolPopup` 규칙은 지웠습니다. 소스 색 대비는 글자/바탕 LIGHT 14.99:1·DARK 14.10:1, 선택·hover 행 LIGHT 12.76:1·DARK 9.26:1입니다([14번](../compliance/14-contrast.md)). 목록 안쪽 여백을 없애 두 줄 결과에 스크롤 막대가 생기지 않게 했습니다(오프스크린 캡처). Windows 스타일에서의 모습은 미검증입니다.
+6. **(고침) 종목 검색 목록이 창의 색을 따르지 않던 문제.** QCompleter 목록은 부모 없는 별도 창이라 주 창의 스타일시트가 닿지 않습니다. 이제 테마를 정하거나 바꿀 때마다 모든 종목 칸의 목록에 직접 스타일을 줍니다(typography.py:138 `popup_stylesheet`, markets_view.py:273 `SymbolCompleter.set_theme`, app.py:1041-1042). 닿지 않던 창 스타일시트의 `QListView#symbolPopup` 규칙은 지웠습니다. 소스 색 대비는 글자/바탕 LIGHT 14.99:1·DARK 14.10:1, 선택·hover 행 LIGHT 12.76:1·DARK 9.26:1입니다([14번](../compliance/14-contrast.md)). 목록 안쪽 여백을 없애 두 줄 결과에 스크롤 막대가 생기지 않게 했습니다(오프스크린 캡처). Windows 스타일에서의 모습은 미검증입니다.
 7. **공급자·날짜 글자가 그대로 남은 도구가 있습니다.** 요청은 “모든 부분에서” 공급자·관측일 칸을 없애는 것이었지만 이 기록의 변경은 다음 글자를 바꾸지 않았습니다. 외환: 모든 결과의 “Data sources” 표(Series·Provider·First·Last·Note, fx.py:38-39)와 차트 축 이름의 기간(:63, :79). 매크로: “As of {기준일} · {공급자: 개수}” 줄(macro.py:44-46). 금리(rates.py:59-60)·채권(bonds.py:99-100)·구조화 상품(structuring.py:40)·파생상품(market_tools.py:41)·ETF(:104)·가상자산(:164): 결과 머리의 공급자와 날짜. KRX: 실패이거나 KIS가 아닌 출처일 때 “Provider:” 줄(:228-229).
 8. **(기록함) UI 변경 기록.** 2026-11-03 소유자 결정은 UI 변경마다 `docs/product/ui_website_updates/` 기록을 요구합니다([소유자 결정 기록](../nautilus_bridge/OWNER_RULINGS_LOG.md) 326행). 이 브랜치의 PR #71을 연 뒤 [PR-71.json](ui_website_updates/PR-71.json)을 썼습니다. 웹사이트 반영은 별도 세션 담당이며 이 기록은 수신을 뜻하지 않습니다.
 
@@ -98,7 +98,7 @@
 
 | 시험 | 확인하는 것 |
 |---|---|
-| [tests/desktop_markets_watchlist_acceptance.py](../../tests/desktop_markets_watchlist_acceptance.py) | 관심종목 저장·기본값·잘못된 항목·20개 제한, 카드에 공급자·날짜 글자가 없고 지연·오래된 자료는 보임, 실패 뒤 마지막 차트 유지, 카드·검색으로 한 종목 화면 열기, 추측하지 않는 검색, ☆·× 추가·삭제, 모든 종목 칸의 코드·이름 검색, 영어 모드에 한글 없음, 자동 갱신이 꺼지면 조회·다운로드 없음, 출처 `KIS REST` 카드는 지연 표시 없이 3분 간격, 두 테마에서 모든 종목 칸의 검색 목록 색, 검색 목록에서 고른 뒤 시장 검색창이 빈 채로 남음, KRX 시세 표는 `source`·`as_of` 행을 화면에서 숨기고 내보내기 자료에 남김 |
+| [tests/desktop_markets_watchlist_acceptance.py](../../tests/desktop_markets_watchlist_acceptance.py) | 관심종목 저장·기본값·잘못된 항목·20개 제한, 카드에 공급자·날짜 글자가 없고 지연·오래된 자료는 보임, 실패 뒤 마지막 차트 유지, 카드·검색으로 한 종목 화면 열기, 추측하지 않는 검색, ☆·× 추가·삭제, 모든 종목 칸의 코드·이름 검색, 영어 모드에 한글 없음, 자동 갱신이 꺼지면 조회·다운로드 없음, 출처 `KIS REST` 카드는 지연 표시 없이 3분 간격, 두 테마에서 모든 종목 칸의 검색 목록 색, 검색 목록에서 고른 뒤 시장 검색창이 빈 채로 남음, KRX 시세 표는 `source`·`as_of` 행을 화면에서 숨기고 내보내기 자료에 남김, KIS가 아닌 KRX 대체 시세는 날짜를 보임, 다른 종목 정보를 불러오는 중에 연 종목도 자기 정보를 받고 앞 종목의 실패가 보이지 않음, 분석 도구 칸에 홍콩·도쿄 종목 없음, 카드 조회 취소 |
 | [tests/market_directory_acceptance.py](../../tests/market_directory_acceptance.py) | 코드·이름·초성 검색 순위, 코드 형식, 마스터 분석, 실패 처리, 파일 쓰기 없음, 동봉 글꼴로 모든 이름 표시 |
 | [tests/stock_profile_acceptance.py](../../tests/stock_profile_acceptance.py) | 섹션 계산(손 계산과 대조), 허용목록 경로와 호출 횟수, 대체 자료 표시, 합성 자료 미사용, 공급자·관측일 칸 없음, 영어에 한글 없음, 새 endpoint 없음 |
 | [tests/desktop_typography_acceptance.py](../../tests/desktop_typography_acceptance.py) | 400/500/600 굵기만 사용, SVG 글자 12px 이상과 등록 글꼴, 한국식 등락 색의 AA 대비, 패널 안 알약 색, 좌측 메뉴 폭과 두 언어의 메뉴 이름, 소제목 막대 높이, 화면 글자의 동봉 글꼴 지원, 글꼴 파일이 없을 때 경고 |
@@ -110,11 +110,11 @@
 
 ## 9. 실행 결과 (이 문서 커밋)
 
-2026-11-04, Linux, Python 3.13, PyQt6 offscreen, `.env` 읽기 끔, 네트워크 차단(시험 자체가 HTTP·Yahoo 요청을 실패로 처리). 코드 기준은 이 문서 커밋의 작업 트리입니다(6절 1·2·6번 수정과 KRX·ETF 행 숨김 포함).
+2026-11-04, Linux, Python 3.13, PyQt6 offscreen, `.env` 읽기 끔, 네트워크 차단(시험 자체가 HTTP·Yahoo 요청을 실패로 처리). 코드 기준은 이 문서 커밋의 작업 트리입니다(6절 1·2·6번 수정, KRX·ETF 행 숨김, 11절의 코드 리뷰 반영 포함). 표 아래 두 모듈도 같은 트리에서 통과했습니다: `tests.crypto_missing_values_acceptance` 14, `tests.compliance_acceptance` 31.
 
 | 모듈 | 시험 수 | 결과 |
 |---|---:|---|
-| `tests.desktop_markets_watchlist_acceptance` | 12 | 통과 |
+| `tests.desktop_markets_watchlist_acceptance` | 15 | 통과 |
 | `tests.desktop_typography_acceptance` | 14 | 통과 |
 | `tests.market_directory_acceptance` | 21 | 통과 |
 | `tests.stock_profile_acceptance` | 34 | 통과 |
@@ -142,3 +142,20 @@
 3. `Start-QUANTGEN-Desktop.cmd`를 두 번 누릅니다. 이 파일은 저장소 폴더로 이동한 뒤 `.venv`의 Python으로 `python -m quantgen_desktop`을 실행하므로 받은 코드가 실행됩니다.
 4. 실행한 코드가 맞는지 `git log -1 --oneline`으로 확인합니다. 설치된 `quantgen-desktop` 명령이나 다른 폴더에서 실행한 `python -m quantgen_desktop`은 마지막으로 `pip install`한 사본을 실행할 수 있습니다.
 5. KIS 키가 없어도 인터넷 연결이 있으면 시장 화면의 종목 이름 검색과 주식 카드·가격 이력이 동작합니다(자동 갱신은 기본으로 켜져 있음, app.py:186). 국내 전체 종목 이름 목록은 키 없이 받습니다(data/kis_markets.py:657-671). KIS 키가 없으면 카드와 한 종목 화면의 가격 이력과 가격으로 계산하는 섹션은 주식(국내, 미국·홍콩·일본·중국)에 한해 Yahoo Finance 일·주·월봉으로 받습니다(지연·수정 전 가격, core/market/routing.py `default_chart_router`). `.env`의 KIS 설정(`KIS_APP_KEY`, `KIS_APP_SECRET`)이 있어야 하는 것: 국내주식의 PER·EPS·업종·상장 주식 수와 그것으로 계산하는 시가총액, 투자자별 순매수, 공매도, 실시간 체결 갱신, 분·틱봉, 선물·채권 차트(app.py:75-85). 실제 KIS·Yahoo 응답은 미검증입니다.
+
+## 11. 코드 리뷰 반영 (2026-11-04)
+
+PR #71에 `/code-review`(high)를 돌려 나온 10건을 코드로 확인했습니다.
+
+| 지적 | 판단 | 처리 |
+|---|---|---|
+| 다른 종목 정보를 불러오는 중에 연 종목은 정보를 끝내 받지 못함(`Jobs`가 결과 신호를 낸 뒤에야 작업을 비움) | 맞음 | 바쁠 때 요청을 기억했다가 작업이 끝나면 불러옴(`StockView._jobs_busy`). 시험 추가 |
+| 앞 종목의 실패가 지금 종목에 표시됨 | 맞음 | 실패에도 작업 번호를 대조함. 시험 추가 |
+| 분석 도구 칸에서 홍콩·도쿄 종목을 고르면 거래소 없는 코드로 다른 종목을 부름 | 맞음 | 그 칸들은 미국 상장 해외 종목만 보임. 시험 추가 |
+| KIS가 아닌 KRX 대체 시세(직전 거래일 종가)의 날짜가 숨겨짐 | 맞음 | KIS일 때만 `as_of`를 숨김. 시험 추가 |
+| 카드 조회 중 창을 닫으면 남은 카드를 모두 조회할 때까지 종료가 늦어짐(작업 풀 소멸자가 기다림) | 맞음 | `stop()`이 남은 카드를 취소해 진행 중인 요청 하나만 기다림. 취소 시험 추가. 실제 네트워크에서의 종료 시간은 미검증 |
+| 짧은 숫자 입력('20')이 0을 채운 코드(000020)를 맨 위에 올림 | 설계대로 둠 | 앞자리 0을 빼고 코드를 적는 습관('5930' → 삼성전자)을 위한 순위이며 시험(market_directory_acceptance 87·169행)이 정한 동작입니다 |
+| 종목 정보가 도착하면 머리글 영어 이름이 바뀜(KB Financial → KB Financial Group) | 맞음 | 머리글이 카드와 같은 종목 목록 이름을 먼저 씀 |
+| 차트 자산 구분을 바꾸면 입력 줄 배치가 되돌아감 | 맞음 | 자산 구분을 바꾼 뒤 배치를 다시 적용함 |
+| `_arrange`의 조기 반환이 실행되지 않는 코드 | 맞음 | 삭제 |
+| 공급자 열을 열 번호로 숨김(유지보수) | 이번에는 두지 않음 | 숨기는 열 번호가 같은 함수의 머리글 목록 바로 옆에 있고 시험이 열 위치를 확인합니다. 공용 `result_table`을 바꾸면 모든 도구에 영향이 가므로 이 PR 범위 밖으로 둡니다 |

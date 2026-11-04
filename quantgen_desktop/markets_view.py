@@ -39,6 +39,8 @@ RETRY_SECONDS = (60, 120, 300, 900)
 STALE_DAYS = 7
 CARD_BARS = 120
 STOCK_ASSETS = ("domestic_stock", "overseas_stock")
+# US tickers load by their bare code in the analysis tools; HKS/TSE codes ('00700', '7203') would not.
+US_EXCHANGES = ("NAS", "NYS", "AMS")
 KIS_SOURCES = frozenset({"KIS", "KIS REST"})  # KIS chart snapshots name either; anything else is a fallback
 # Kind selector: stocks search by code or name; derivatives and bonds take a code.
 KINDS = (("stock", "주식", "Stocks", "005930"),
@@ -243,11 +245,12 @@ class SymbolCompleter(QObject):
     """
     chosen = pyqtSignal(object)
 
-    def __init__(self, line_edit, directory, *, assets=STOCK_ASSETS, kinds=None, multi=False,
+    def __init__(self, line_edit, directory, *, assets=STOCK_ASSETS, kinds=None, exchanges=None, multi=False,
                  locale=None, loader=None, limit=8):
         super().__init__(line_edit)
         self.edit, self.directory = line_edit, directory
         self.assets, self.kinds, self.multi, self.limit = assets, kinds, multi, limit
+        self.exchanges = exchanges  # overseas exchanges offered; None offers all
         self.ctx = locale or LocaleContext("ko_KR")
         self.loader = loader
         self.enabled = True
@@ -285,9 +288,12 @@ class SymbolCompleter(QObject):
         query = self._query(text)
         if not query or self.directory is None:
             return []
-        rows = self.directory.search(query, limit=self.limit * 3 if self.kinds else self.limit, assets=self.assets)
+        narrowed = self.kinds or self.exchanges is not None
+        rows = self.directory.search(query, limit=self.limit * 3 if narrowed else self.limit, assets=self.assets)
         if self.kinds:
             rows = [row for row in rows if row.kind in self.kinds]
+        if self.exchanges is not None:
+            rows = [row for row in rows if row.asset != "overseas_stock" or row.exchange in self.exchanges]
         return rows[: self.limit]
 
     def _edited(self, text):
@@ -345,10 +351,15 @@ class CardResult:
     attempts: tuple = ()
 
 
-def load_cards(router, instruments):
-    """Daily adjusted closes per instrument, one at a time (KIS paces itself); failures stay per card."""
+def load_cards(router, instruments, cancelled=None):
+    """Daily adjusted closes per instrument, one at a time (KIS paces itself); failures stay per card.
+
+    ``cancelled`` is checked before each card, so closing the window waits for one request at most.
+    """
     results = []
     for instrument in instruments:
+        if cancelled is not None and cancelled():
+            break
         try:
             snapshot = router.load(ChartRequest(instrument, "1d", CARD_BARS, adjusted=True))
             results.append(CardResult(instrument, snapshot, "", tuple(getattr(router, "last_attempts", ()))))
@@ -513,6 +524,7 @@ class WatchlistGrid(QWidget):
         self._router_factory, self._router = router_factory, None
         self.name_fn = name_fn or (lambda instrument, lang: instrument.code)
         self._epoch = 0
+        self._cancel = None
         self.jobs = Jobs(self)
         self.jobs.succeeded.connect(self._loaded)
         self.jobs.failed.connect(self._failed)
@@ -569,8 +581,6 @@ class WatchlistGrid(QWidget):
         order = order if order is not None else list(self.cards.values())
         width = self.width()
         columns = 3 if width >= 1060 else 2 if width >= 640 else 1
-        if columns == self._columns and order is None:
-            return
         self._columns = columns
         for card in order:
             self.grid.removeWidget(card)
@@ -619,9 +629,10 @@ class WatchlistGrid(QWidget):
         if not instruments or router is None:
             return False
         self._epoch += 1
-        epoch = self._epoch
+        epoch, cancel = self._epoch, threading.Event()
+        self._cancel = cancel
         self.status.setText(_text(self.ctx, "불러오는 중…", "Loading…"))
-        return self.jobs.start(lambda: (epoch, load_cards(router, instruments)))
+        return self.jobs.start(lambda: (epoch, load_cards(router, instruments, cancel.is_set)))
 
     @pyqtSlot(object)
     def _loaded(self, value):
@@ -670,6 +681,8 @@ class WatchlistGrid(QWidget):
     def stop(self):
         self.poll_timer.stop()
         self._epoch += 1
+        if self._cancel is not None:
+            self._cancel.set()
 
     # Presentation --------------------------------------------------------------------------
     def set_locale(self, ctx):
@@ -751,9 +764,11 @@ class StockView(QWidget):
         self.instrument, self.profile = None, None
         self._epoch = 0
         self._live_price = None
+        self._reload, self._job_epoch = False, -1
         self.jobs = Jobs(self)
         self.jobs.succeeded.connect(self._profile_loaded)
         self.jobs.failed.connect(self._profile_failed)
+        self.jobs.busy_changed.connect(self._jobs_busy)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(14)
@@ -808,12 +823,16 @@ class StockView(QWidget):
         self.chart.intro.hide()
         self.chart.symbol.hide()
         self.chart.form_labels[1].hide()
+        self._fit_form()
+        self.chart.show()
+
+    def _fit_form(self):
         # With the code field hidden, keep the interval (and the derivatives market selector) at the left.
+        # Changing the chart's asset class resets column 0, so this runs again after set_asset_class.
         form = self.chart._form
         for column in range(3):
             form.setColumnStretch(column, 0)
         form.setColumnStretch(3, 1)
-        self.chart.show()
 
     def show_instrument(self, instrument, *, load=True):
         self.instrument = instrument
@@ -823,6 +842,7 @@ class StockView(QWidget):
         self.adopt_chart()
         if self.chart.asset.currentData() != instrument.asset:
             self.chart.set_asset_class(instrument.asset)
+            self._fit_form()
         index = self.chart.exchange.findData(instrument.exchange)
         if index >= 0:
             self.chart.exchange.setCurrentIndex(index)
@@ -845,19 +865,27 @@ class StockView(QWidget):
                                         _text(self.ctx, "종목 정보는 주식에만 제공합니다. 차트는 위에 있습니다.",
                                               "Stock details are for stocks only; the chart is above."))
             return False
-        if self.jobs.busy:
-            return False
-        epoch, instrument, loader = self._epoch, self.instrument, self.profile_loader
         self.profile_status.setText(_text(self.ctx, "종목 정보를 불러오는 중…", "Loading stock details…"))
+        if self.jobs.busy:
+            # Another stock's details are still loading; load this one when that job ends.
+            self._reload = True
+            return False
+        self._reload = False
+        epoch, instrument, loader = self._epoch, self.instrument, self.profile_loader
+        self._job_epoch = epoch
         return self.jobs.start(lambda: (epoch, loader(instrument)))
+
+    @pyqtSlot(bool)
+    def _jobs_busy(self, busy):
+        # Jobs emits succeeded/failed before it clears its job, so a refused load is retried here.
+        if not busy and self._reload and self._job_epoch != self._epoch:
+            QTimer.singleShot(0, self.load_profile)
 
     @pyqtSlot(object)
     def _profile_loaded(self, value):
         epoch, profile = value
         if epoch != self._epoch:
-            if not self.jobs.busy:
-                QTimer.singleShot(0, self.load_profile)  # a newer stock was chosen meanwhile
-            return
+            return  # a newer stock was opened meanwhile; _jobs_busy loads it
         self.profile = profile
         self.profile_status.setText("")
         self.render_header()
@@ -865,6 +893,8 @@ class StockView(QWidget):
 
     @pyqtSlot(str)
     def _profile_failed(self, code):
+        if self._job_epoch != self._epoch:
+            return  # the failure belongs to a stock that is no longer open
         self.profile_status.setText(_text(self.ctx, "종목 정보를 불러오지 못했습니다", "Could not load stock details")
                                     + f" ({code})")
 
@@ -910,11 +940,12 @@ class StockView(QWidget):
             for field in (self.code, self.name, self.price, self.change):
                 field.setText("")
             return
-        if self.profile is not None:
+        # The directory name (the one on the card) first, so the header does not change name when the
+        # details arrive; the profile's name only when the directory does not know the stock.
+        name = self.name_fn(instrument, ctx.language)
+        if self.profile is not None and name == instrument.code:
             from core.research.stock_profile import display_name
-            name = display_name(self.profile, ctx.language) or self.name_fn(instrument, ctx.language)
-        else:
-            name = self.name_fn(instrument, ctx.language)
+            name = display_name(self.profile, ctx.language) or name
         place = instrument.exchange or ("KRX" if instrument.asset == "domestic_stock" else "")
         self.code.setText(f"{instrument.code} · {place}" if place else instrument.code)
         self.name.setText(name)
