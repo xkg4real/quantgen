@@ -113,8 +113,6 @@ def controls_stylesheet(p, dark: bool) -> str:
           QComboBox::down-arrow:on {{ image: url({up}); }}
           QComboBox QAbstractItemView {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 10px; padding: 4px; outline: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
           QComboBox QAbstractItemView::item {{ min-height: 26px; padding: 3px 8px; border-radius: 6px; }}
-          QListView#symbolPopup {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 12px; padding: 4px; outline: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
-          QListView#symbolPopup::item {{ min-height: 28px; padding: 3px 10px; border-radius: 8px; }}
           QAbstractSpinBox {{ padding-right: 26px; }}
           QAbstractSpinBox::up-button, QAbstractSpinBox::down-button {{ subcontrol-origin: border; width: 24px; border: 0; background: transparent; }}
           QAbstractSpinBox::up-button {{ subcontrol-position: top right; }}
@@ -134,6 +132,21 @@ def controls_stylesheet(p, dark: bool) -> str:
           QTabBar QToolButton {{ border: 0; background: {p.bg}; width: 22px; }}
           QTabBar QToolButton::left-arrow {{ image: url({left}); width: 12px; height: 12px; }}
           QTabBar QToolButton::right-arrow {{ image: url({right}); width: 12px; height: 12px; }}
+        """
+
+
+def popup_stylesheet(p, dark: bool) -> str:
+    """Applied directly to a completer popup: a parentless top-level list window that the window
+    stylesheet never reaches (markets_view.SymbolCompleter.set_theme)."""
+    return f"""
+          QListView {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 12px;
+                       padding: 0; outline: 0; font-size: 13px; }}
+          QListView::item {{ min-height: 28px; padding: 3px 10px; border-radius: 8px; color: {p.text}; }}
+          QListView::item:selected, QListView::item:hover {{ background: {p.accent_soft}; color: {p.text}; }}
+          QScrollBar:vertical {{ background: transparent; width: 10px; margin: 2px 1px; border: 0; }}
+          QScrollBar::handle:vertical {{ background: {p.border}; border-radius: 4px; min-height: 32px; }}
+          QScrollBar::add-line, QScrollBar::sub-line {{ width: 0; height: 0; border: 0; background: transparent; }}
+          QScrollBar::add-page, QScrollBar::sub-page {{ background: transparent; }}
         """
 
 
@@ -196,4 +209,4 @@ def window_stylesheet(p, dark: bool) -> str:
 
 __all__ = ["TONES", "TONE_COLORS", "PANEL_DEPTH", "RAIL_MARGINS", "RAIL_SPACING", "NAV_PADDING",
            "NAV_SLACK", "SIDEBAR_WIDTH_RANGE", "is_dark", "tone_colors", "tone_for", "set_tone",
-           "scaled_font", "window_stylesheet", "controls_stylesheet", "icon_dir"]
+           "scaled_font", "window_stylesheet", "controls_stylesheet", "popup_stylesheet", "icon_dir"]

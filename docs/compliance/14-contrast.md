@@ -116,12 +116,13 @@ Home 목록의 등락은 부호·수치로, 수신·산정 불가 상태는 텍�
 | 꺾쇠(그래픽, 3:1 기준) | LIGHT | `#5B6660` / `surface`·`bg`·`surface_2`·`accent_soft` | 5.92 · 5.48 · 5.30 · 5.04 |
 | 꺾쇠 | DARK | `#B4C4B9` / 같은 순서 | 8.91 · 9.84 · 7.92 · 5.85 |
 | 분석 도구 선택 버튼(`on_accent` / `accent`) | LIGHT · DARK | `#FFFFFF`/`#194C40` · `#0C2118`/`#91C5AC` | 9.77 · 8.65 |
-| 종목 검색 목록(창 스타일 미적용, 오프스크린 팔레트) | LIGHT · DARK 같음 | 글자 `#000000` / `#FFFFFF` · 선택 행 `#FFFFFF` / `#308CC6` | 21.00 · 3.69 |
+| 종목 검색 목록 글자(`text` / `surface`) | LIGHT · DARK | `#202823`/`#FFFEFB` · `#EAF1E9`/`#17231D` | 14.99 · 14.10 |
+| 종목 검색 목록 선택·hover 행(`text` / `accent_soft`) | LIGHT · DARK | `#202823`/`#E5EEE8` · `#EAF1E9`/`#284437` | 12.76 · 9.26 |
 | 외환 캐리 표 오래된 금리 칸 | LIGHT | `#B26B00` / `surface`·`surface_2` | 4.17 · 3.73 |
 | 외환 캐리 표 오래된 금리 칸 | DARK | `#B26B00` / `surface`·`surface_2` | 3.86 · 3.43 |
 | 스크롤 막대 손잡이(`border` / `bg`) | LIGHT · DARK | `#E2E3DB`/`#F7F5F0` · `#34483C`/`#101915` | 1.19 · 1.82 |
 
-외환 캐리 표의 오래된 금리 칸 색 `#B26B00`은 두 테마 모두 4.5:1에 못 미칩니다. 칸에 `⚠`와 날짜 tooltip을 함께 두어 색만으로 전달하지는 않지만 글자 대비 미달은 남은 과제입니다. 얇은 스크롤 막대 손잡이도 배경과 3:1에 못 미치며 hover 때만 `muted`(LIGHT 4.85:1, DARK 8.61:1)로 바뀝니다. 종목 검색 목록에는 `text`/`accent_soft` 규칙(`QListView#symbolPopup`, [스타일](../../quantgen_desktop/typography.py) 116–117행)을 적었지만 그려지지 않습니다. QCompleter 목록은 부모 없는 별도 창이고 규칙은 주 창의 스타일시트에만 있기 때문입니다([앱](../../quantgen_desktop/app.py) 1042행). 위 표의 해당 행은 오프스크린(Fusion) 팔레트와 픽셀에서 읽은 값입니다. 두 테마 모두 흰 바탕·검은 글자라 다크 테마에서 흰 상자로 보이고, 선택 행 3.69:1은 4.5:1에 못 미칩니다. Windows 스타일·팔레트에서의 색은 미검증이며 수정 전입니다. Windows 실측·고대비 모드·확대는 미검증입니다. [변경 사실](FACTS.md#markets-watchlist-2026-11-04)을 따릅니다.
+외환 캐리 표의 오래된 금리 칸 색 `#B26B00`은 두 테마 모두 4.5:1에 못 미칩니다. 칸에 `⚠`와 날짜 tooltip을 함께 두어 색만으로 전달하지는 않지만 글자 대비 미달은 남은 과제입니다. 얇은 스크롤 막대 손잡이도 배경과 3:1에 못 미치며 hover 때만 `muted`(LIGHT 4.85:1, DARK 8.61:1)로 바뀝니다. 종목 검색 목록(QCompleter)은 부모 없는 별도 창이라 주 창의 스타일시트가 닿지 않으므로, 테마를 정하거나 바꿀 때 각 목록에 직접 스타일을 줍니다([스타일](../../quantgen_desktop/typography.py) `popup_stylesheet`, [앱](../../quantgen_desktop/app.py) `change_theme`). 위 표의 목록 두 행은 그 스타일의 소스 색입니다. 목록의 스크롤 막대 손잡이도 `border` 색이라 목록 바탕과 LIGHT 1.28:1, DARK 1.65:1로 3:1에 못 미칩니다. Windows 스타일에서의 색은 미검증입니다. Windows 실측·고대비 모드·확대는 미검증입니다. [변경 사실](FACTS.md#markets-watchlist-2026-11-04)을 따릅니다.
 
 ## 정책 또는 구현 기준
 

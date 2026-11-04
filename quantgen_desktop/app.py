@@ -1037,6 +1037,8 @@ class ResearchWindow(QMainWindow):
         p = self.colors = DARK if index else LIGHT
         self.watchlist.set_theme(p)
         self.markets_view.set_theme(bool(index))
+        for completer in getattr(self, 'symbol_completers', ()):
+            completer.set_theme(p, bool(index))
         if self.language_store is not None:
             self.language_store.setValue("ui/theme", "dark" if index else "light")
         self.setStyleSheet(typography.window_stylesheet(p, bool(index)))

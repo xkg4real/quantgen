@@ -20,8 +20,8 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 import dotenv
 with patch.object(dotenv, "load_dotenv", return_value=False):
     from quantgen_desktop.app import ResearchWindow
-    from quantgen_desktop.markets_view import (SymbolCompleter, WatchlistStore, WATCHLIST_KEY, WATCHLIST_LIMIT,
-                                               load_cards)
+    from quantgen_desktop.markets_view import (KIS_POLL_SECONDS, SymbolCompleter, WatchlistStore, WATCHLIST_KEY,
+                                               WATCHLIST_LIMIT, load_cards)
 from PyQt6.QtCore import QSettings, Qt
 from PyQt6.QtTest import QTest
 from PyQt6.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton
@@ -235,6 +235,48 @@ class MarketsWatchlistTests(unittest.TestCase):
         self.assertEqual(self.view.stock.name.text(), "Samsung Electronics")
         self.view.stock.back_button.click(); self.app.processEvents()
         self.assertEqual(self.view.grid.cards[("domestic_stock", "005930", "")].title.text(), "Samsung Electronics")
+
+    def test_choosing_a_search_row_opens_the_stock_and_leaves_the_search_empty(self):
+        completer = self.view.completer
+        self.view.search.setText("삼성"); completer.apply(completer.results("삼성전자")[0])
+        for _ in range(5):
+            self.app.processEvents()
+        self.assertTrue(self.view.showing_stock())
+        self.assertEqual(self.view.search.text(), "")  # the deferred write must not refill a cleared field
+        QTest.keyClicks(self.view.search, "a"); self.app.processEvents()
+        self.assertEqual(self.view.search.text(), "a")  # typing starts fresh, not after a stale code
+
+    def test_kis_rest_cards_are_live_and_the_search_popup_follows_the_theme(self):
+        from core.theme import DARK, LIGHT
+        # Real KIS daily snapshots are labelled "KIS REST": not a delayed fallback, polled every 3 minutes.
+        self.router.answers["005930"] = snapshot(SAMSUNG, source="KIS REST", start=70000, step=10)
+        self.load_cards()
+        samsung = self.view.grid.cards[("domestic_stock", "005930", "")]
+        self.assertFalse(samsung.state.isVisible())
+        due = self.view.grid.due(samsung.attempted_at + timedelta(seconds=KIS_POLL_SECONDS + 1))
+        self.assertIn(SAMSUNG, due); self.assertNotIn(APPLE, due)  # Yahoo stays on the 15-minute cadence
+        # The completer list is a parentless window: the window stylesheet never reaches it.
+        for index, palette in ((1, DARK), (0, LIGHT)):
+            self.window.theme.setCurrentIndex(index); self.app.processEvents()
+            for completer in self.window.symbol_completers:
+                sheet = completer.completer.popup().styleSheet()
+                self.assertIn(palette.surface, sheet); self.assertIn(palette.text, sheet)
+
+    def test_quote_rows_hide_provider_and_time_on_screen_but_the_export_keeps_them(self):
+        from core.research.market_analysis import KRXOutput, KRXRequest
+        from data.krx.gateway import Answer
+        from data.krx.kis_client import Quote
+        krx = self.window.krx
+        quote = Quote("005930", "삼성전자", 71000.0, 500.0, 0.71, 1e6, None, 71500.0, 70000.0, 70500.0,
+                      as_of="2026-11-04T06:00:00+00:00", source="KIS")
+        krx.show_result(KRXOutput(KRXRequest("quote", "005930"), Answer(quote, "KIS")))
+        table = krx.tables["Quote"]
+        shown = {table.item(r, 0).text() for r in range(table.rowCount()) if not table.isRowHidden(r)}
+        self.assertTrue({"price", "name"} <= shown); self.assertFalse({"source", "as_of"} & shown)
+        rows = dict(next(s for s in krx.sections if s.get("name") == "Quote")["rows"])
+        self.assertEqual((rows["source"], rows["as_of"]), ("KIS", "2026-11-04T06:00:00+00:00"))
+        texts = [w.text() for w in krx.findChildren(QLabel) if w.text()]
+        self.assertFalse([t for t in texts if t.startswith("Provider")])  # KIS: no provider line
 
     def test_nothing_loads_or_downloads_with_automatic_refresh_off(self):
         self.window.navigate("home"); self.window.navigate("markets"); self.app.processEvents()

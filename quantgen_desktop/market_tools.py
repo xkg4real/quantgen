@@ -12,6 +12,14 @@ from .market_diagnostics_language import decay_korean, funding_korean, coverage_
 from .market_narrative_language import market_variants, letf_korean, letf_unavailable_korean
 
 
+def hide_rows(table, fields):
+    """Hide Field/Value rows on screen only; the report sections keep every row."""
+    for row in range(table.rowCount()):
+        item = table.item(row, 0)
+        if item is not None and item.text() in fields:
+            table.setRowHidden(row, True)
+
+
 class DerivativesPane(ToolPane):
     def __init__(self):
         super().__init__('KOSPI200 board', [('board', 'Options, futures & hedge P&L')],
@@ -98,8 +106,10 @@ class ETFPane(ToolPane):
         series = [('Price', d['price'])]
         if d.get('nav') is not None: series.append(('NAV', d['nav']))
         self.line('ETF price / NAV', range(len(d['dates'])), series, 'Observations', 'Price / NAV')
-        # Owner, 2026-11-04: no observation-date row (as_of here is the request date, not a market time).
-        if d.get('quote'): self.result_table('Quote', ['Field', 'Value'], [(k, v) for k, v in d['quote'].items() if k != 'as_of'])
+        # Owner, 2026-11-04: no observation-date row on screen (as_of is the request date); the export keeps it.
+        if d.get('quote'):
+            self.result_table('Quote', ['Field', 'Value'], list(d['quote'].items()))
+            hide_rows(self.tables['Quote'], ('as_of',))
         if d.get('premium_stats'):
             self.line('NAV premium', range(len(d['dates'])), [('Premium %', d['premium_pct'])], 'Observations', 'Premium · %')
             ps = d['premium_stats']
@@ -215,7 +225,9 @@ class KRXPane(ToolPane):
             return
         data = a.data
         if out.request.tool == 'quote':
-            self.result_table('Quote', ['Field','Value'], [(k, v) for k, v in asdict(data).items() if k not in ('source', 'as_of')])
+            # Owner, 2026-11-04: no provider or time rows on screen; the export keeps both (attribution).
+            self.result_table('Quote', ['Field','Value'], list(asdict(data).items()))
+            hide_rows(self.tables['Quote'], ('source', 'as_of'))
         elif data:
             keys = list(dict.fromkeys(k for row in data for k in row))
             self.result_table('Observations',keys,[[r.get(k,'—') for k in keys] for r in data[:300]])

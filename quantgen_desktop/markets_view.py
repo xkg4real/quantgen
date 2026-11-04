@@ -39,6 +39,7 @@ RETRY_SECONDS = (60, 120, 300, 900)
 STALE_DAYS = 7
 CARD_BARS = 120
 STOCK_ASSETS = ("domestic_stock", "overseas_stock")
+KIS_SOURCES = frozenset({"KIS", "KIS REST"})  # KIS chart snapshots name either; anything else is a fallback
 # Kind selector: stocks search by code or name; derivatives and bonds take a code.
 KINDS = (("stock", "주식", "Stocks", "005930"),
          ("domestic_future", "국내 파생", "Domestic derivatives", "101W12"),
@@ -266,6 +267,11 @@ class SymbolCompleter(QObject):
     def set_locale(self, ctx):
         self.ctx = ctx
 
+    def set_theme(self, palette, dark):
+        """The popup is a separate top-level window, so the window stylesheet never reaches it."""
+        from .typography import popup_stylesheet
+        self.completer.popup().setStyleSheet(popup_stylesheet(palette, dark))
+
     def eventFilter(self, obj, event):
         from PyQt6.QtCore import QEvent
         if obj is self.edit and event.type() == QEvent.Type.FocusIn and self.loader is not None:
@@ -314,9 +320,14 @@ class SymbolCompleter(QObject):
             text = ", ".join(part for part in parts if part)
         else:
             text = listing.code
-        # QCompleter writes the edit role after `activated`; set ours on the next turn as well.
+        # QCompleter may write the edit role (the bare code) after `activated`; restore ours on the
+        # next turn only if the field still holds it, so a screen that clears the field stays clear.
         self.edit.setText(text)
-        QTimer.singleShot(0, lambda: self.edit.setText(text))
+
+        def restore():
+            if self.edit.text() in (text, listing.code):
+                self.edit.setText(text)
+        QTimer.singleShot(0, restore)
         self.chosen.emit(listing)
 
 
@@ -450,7 +461,8 @@ class WatchCard(QFrame):
         self.setToolTip(_text(ctx, "출처 ", "Source ") + source + (" · " + dates[-1] if dates else "")
                         + _text(ctx, " · 확인 ", " · checked ") + _clock(getattr(snapshot, "fetched_at", "")))
         states = []
-        if source and source != "KIS":
+        if source and source not in KIS_SOURCES:
+            # Owner, 2026-11-04: no provider on the card; the fallback's name stays in the tooltip.
             states.append(_text(ctx, "지연 시세", "Delayed"))
         if _stale(snapshot):
             states.append(_text(ctx, "오래된 자료", "Stale data"))
@@ -593,7 +605,7 @@ class WatchlistGrid(QWidget):
             if card.failures:
                 limit = RETRY_SECONDS[min(card.failures, len(RETRY_SECONDS)) - 1]
             else:
-                limit = KIS_POLL_SECONDS if snapshot is not None and getattr(snapshot, "source", "") == "KIS" \
+                limit = KIS_POLL_SECONDS if snapshot is not None and getattr(snapshot, "source", "") in KIS_SOURCES \
                     else DELAYED_POLL_SECONDS
             if age >= limit:
                 out.append(card.instrument)
