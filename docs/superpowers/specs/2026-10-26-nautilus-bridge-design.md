@@ -3,6 +3,9 @@
 Date: 2026-10-26.
 
 Status:
+- **2026-11-04 Step 7A.4 review (Claude): passed.** It covers the 7A.3 evidence commit `563db54`. The owner ruled
+  that the cross-platform census may also differ by `six.moves.winreg` (POSIX only), and 5.2.7 now says so.
+  The review is in Appendix B. Next is 7A.5, the owner's `git pull --ff-only` of this commit.
 - **2026-11-04 owner sign-off, Step 7A.1 (verbatim; Claude Code chat, session_016uB1jgeiPdP8gPkAez3Wrx).**
   "I approve spec 2026-10-26 revision 6, the T-RO-01 exemption of its section 5.6 and the merge of claude/amazing-gauss-tdiguu into main. Geon Koh, 2026-11-04."
   It releases two acts only: the merge of this branch into `main` (the owner's own `--no-ff` merge after Step 10)
@@ -525,8 +528,10 @@ its top-level component: NT (`nautilus_trader`); STD (in the parent's `sys.stdli
 lies under `nautilus_trader.adapters` or `nautilus_trader.network`, or its NT or TP set differs from the platform
 baseline's (`tools/nautilus/golden/modules_<platform tag>.json`). STD names may differ between 3.13.x patch levels and
 platforms (QA-11). A platform's baseline is the union of its F1 and F2 censuses: Step 6 records Linux's, Step 7A
-Windows'. Across platforms the NT sets must be equal, and the TP sets may differ only by `uvloop*` (POSIX only) and
-`colorama*` (Windows only). `--record-baseline` prints that diff and never overwrites a baseline git tracks (`git
+Windows'. Across platforms the NT sets must be equal, and the TP sets may differ only by `uvloop*` (POSIX only),
+`colorama*` (Windows only) and `six.moves.winreg` (POSIX only: the failed attempt of python-dateutil's
+`from six.moves import winreg`, which resolves to the stdlib `winreg` on Windows; owner ruling 2026-11-04, Appendix
+B). `--record-baseline` prints that diff and never overwrites a baseline git tracks (`git
 ls-files --error-unmatch <path>` exits 0): an existing equal one gives "unchanged" and exit 0; a different one writes
 nothing, prints its diff and the removal line, `Remove-Item tools\nautilus\golden\modules_<tag>.json` on Windows or `rm
 tools/nautilus/golden/modules_<tag>.json` on Linux (OPS-R4-5), to run only after Claude has reviewed that diff, and
@@ -1960,3 +1965,105 @@ If a voluntary review is later performed, record its revision, issues and ruling
 | Issue | Raised by | Ruling | Addressed in |
 |---|---|---|---|
 | | | | |
+
+**2026-11-04 Step 7A.4 review (Claude; https://claude.ai/code/session_016uB1jgeiPdP8gPkAez3Wrx).** Inputs: the 7A.3
+evidence commit `563db54` (owner, 2026-11-04 15:38 KST) and the hand-off report it carries (`9d8d9c6`, recorded
+2026-11-04T06:02:45Z). Each item was checked on Linux at `563db54` in a sparse checkout without the protected caches.
+
+- Sign-off and freeze: the scoped sign-off commit `0bc9595` (the Status bullet "2026-11-04 owner sign-off, Step
+  7A.1") is an ancestor of `563db54`. The frozen `main` `bb35b3b` is an ancestor too, and `origin/main` is still
+  `bb35b3b`.
+- Intervening changes `0bc9595..563db54`, all within the approved scope:
+  - `fe37e82`, `e3c61cb`, `9d8d9c6` (owner): hand-off reports only.
+  - `e07da98` (Claude, ⑤-1/b): `tests/nautilus_acceptance.py` (L1-32 path matching) and `tests/macro_m8_pipeline.py`
+    (the dry-run cache times). Both are outside `code_paths()` and the harness sources, so `code_sha256` is unchanged
+    by them. They are ordinary in-scope fixes. Their fresh Windows evidence is the re-entry run: the two rows that
+    FAILed in `e3c61cb`'s report (suite of 02:52:44Z), `nautilus/test_l1_32_every_test_guarded_and_ledgers_unchanged`
+    and `macro/macro_m8_pipeline/test_dry_run_end_to_end_on_the_local_cache`, both PASS in `563db54`'s
+    `qa/acceptance_results.json` (suite of 04:10:16Z at `e07da98`).
+- Validation baseline: `e07da98`. The report's `git.head` and `git.origin_branch` are both `e07da98`.
+  `git diff --name-status e07da98 563db54` lists only the evidence files:
+  - `tools/nautilus/golden/modules_win_amd64.json` (added);
+  - `docs/nautilus_bridge/egress/win_amd64.json` (added);
+  - `docs/nautilus_bridge/handoff/win_amd64.json`;
+  - both registration tables: `git diff -w` shows only the comma after `reference_card_md5` and the two owner-field
+    lines. The other byte changes are whitespace: one more leading space on C3's `reference_card_md5` line, and no
+    final newline in either file. Each table's `table_sha256` at `e07da98`, before the owner fields, is already
+    `d76d2d7301ffe92c…` (E1) and `e2ec073c309cbfc7…` (C3), so no key field changed;
+  - `qa/acceptance_results.json`.
+- Fingerprints (OPS-R3-6, GOVERNANCE-R4-1):
+  - `python3 -B -m tools.nautilus.runner --fingerprint --table <table>` at `563db54` prints `table_sha256`
+    `d76d2d7301ffe92c…` (E1) and `e2ec073c309cbfc7…` (C3).
+  - Both print `code_sha256 f995600b36c75523fe6079ab5209e60d94c2b5d0ac44437673fe4bc71c055620`.
+  - From `0bc9595` to `9d8d9c6`, `code_sha256` is `89e4590322b75341…`. Only the 7A.3 commit's
+    `tools/nautilus/golden/modules_win_amd64.json`, one of `code_paths()` (`tools/nautilus/golden/*.json`, 6.6),
+    makes it `f995600b…`. So both `owner_confirmed` values quote the fingerprint lines taken after
+    `--record-baseline` and the suite, not the E1 gate's earlier digest (RUNBOOK 7A.2).
+  - Both `owner_confirmed` values read `Geon Koh, 2026-11-04, table <that table's 16 hex>, code f995600b36c75523` and
+    match.
+  - Each `host_fingerprint` is 64 hex, and the two differ (E1 `4931117f…`, C3 `a4e80092…`). R-15 checks them against
+    the owner's ledgers at each of-record run.
+  - Neither table has a BOM.
+- Hand-off report:
+  - `check_env`: Python 3.13.14 (the runbook's pinned patch), Windows AMD64, `BACKTEST`, `FIXED_PRECISION` 9,
+    `HIGH_PRECISION` false.
+  - venv: nautilus-trader 1.231.0, numpy 2.3.5 and pandas 2.3.3; wheel identity `47d274d7…` with 764 entries;
+    `venv_mismatches` empty.
+  - `guard_selftest`: backtest and test_clock passed; live, live_clock and sandbox raised.
+  - The parent's `nautilus_trader` and `pyarrow` are null.
+  - Firewall: rule `QUANTGEN-nautilus-block-out` is enabled, outbound, block, profile Any, with program
+    `%LOCALAPPDATA%\quantgen\py313\python.exe`. All three profiles are enabled.
+  - Fixtures: F1 and F2 exit 0, N1 exits 10, and all three goldens diffs are empty.
+- Stub children (8.1, QA-R3-10): `sys.executable` is the WindowsApps alias, so the stub python is
+  `%LOCALAPPDATA%\quantgen\py313\python.exe`, the interpreter 8.1's rule picks.
+- Timing: the `BacktestEngine` import takes 1.94 s (`import_us` 1,936,529). The 12 synthetic runs of 5,600 bars all
+  exit 0 and take 35.1 s in total (2.50 to 3.78 s each).
+- Egress record (`docs/nautilus_bridge/egress/win_amd64.json`, recorded 2026-11-04T03:52:33Z): `probe.blocked` true
+  (WinError 10013) and `control_connect.ok` true. The report's own probe at 06:03:06Z agrees.
+- Full suite (`qa/acceptance_results.json` in `563db54`):
+  - 964 rows: 844 PASS, 0 FAIL and 120 NOT_RUN.
+  - Every NOT_RUN is a `macro/*` test that needs owner input or reference data.
+  - `nautilus/*` is 57/57 PASS, L2-5b included.
+  - All five `guard/*` rows PASS, so frozen_guard (a), (b) and (d) pass.
+- Census (5.2.7, OPS-7): the Windows baseline (union of F1 and F2) holds 945 names and Linux's holds 942.
+  - The report's `census.judgement`, `C-08: TP names missing: six.moves.winreg, uvloop._noop, uvloop._version,
+    uvloop.includes, uvloop.loop`, is `judge_census`, the same-platform rule, applied to the Windows union against
+    the Linux baseline (runner.py:1917-1921). So it also lists the allowed `uvloop*` names. Runs are judged against
+    their own platform's baseline (runner.py:1438), so it bears on no Windows run. The cross-platform rule of 5.2.7
+    is applied here, by this review; no code applies it.
+  - The NT sets are equal, and no name lies at or under `nautilus_trader.adapters` or `.network`.
+  - Differences other than TP are STD only.
+  - TP names on Linux only: `uvloop._noop`, `uvloop._version`, `uvloop.includes`, `uvloop.loop` (allowed as
+    `uvloop*`), and `six.moves.winreg`, which 5.2.7's cross-platform rule did not list. There is no TP name on
+    Windows only.
+  - Cause, measured in the Linux venv (python-dateutil 3.0.0, six 1.17.0): `import dateutil.tz` loads
+    `dateutil/tz/win.py` (through `dateutil.tz.tz`). On POSIX its `from six.moves import winreg` (win.py:13) fails,
+    because six 1.17.0 defines `moves.winreg` only when `sys.platform == "win32"` (six.py:322-326). `six.moves` has no
+    `winreg` attribute there, so the import system tries the submodule `six.moves.winreg`. Six's meta-path importer
+    does not know that name, and `six.moves.__path__ = []` cannot supply it. The census records that attempt;
+    dateutil/tz/tz.py:37-40 catches the ImportError, and `dateutil.tz.tzwin` stays None.
+  - On Windows the same line resolves to the stdlib `winreg` through six's lazy `MovedModule` attribute, so no
+    `six.moves.winreg` import is attempted. `winreg` itself is already loaded at interpreter start-up by importlib's
+    bootstrap (`importlib/_bootstrap_external.py:33-36`), so line 13 adds no census line. The `+ STD winreg` line of
+    the Windows diff comes from that start-up and is in every Windows census. The module's `from ctypes import
+    wintypes` (win.py:18) follows and is the `+ STD ctypes.wintypes` line.
+  - Apart from `uvloop*`, which 5.2.7 allows, the two TP sets name the same modules. uvloop is installed and loaded
+    on Linux only (`nautilus_trader/system/kernel.py:90-93`), and the Windows census holds only the failed
+    `import uvloop`. Both venvs hold python-dateutil 3.0.0 and six 1.17.0. `dateutil.tz.win` is attempted on both
+    platforms but runs to the end only on Windows. `six.moves.winreg` is a failed attempt that loads no module on
+    either platform. No TP name is Windows-only: colorama 0.4.6 is installed in the Windows venv but never imported.
+  - Owner ruling (verbatim, Claude Code chat, 2026-11-04, after Claude explained this cause):
+    "six.moves.winreg 판정 -> 승인".
+    Claude's chat explanation before the ruling said this line also produced `+ STD winreg` on Windows. The
+    independent check above corrected that before this commit was pushed, and Claude told the owner. The conclusion
+    the ruling rests on is unchanged: `six.moves.winreg` is a failed attempt that loads no module.
+    5.2.7 now lists `six.moves.winreg` (POSIX only) beside `uvloop*` and `colorama*`, so the census diff obeys
+    5.2.7. A pilot run's own C-08 check compares its census with the Windows baseline and does not change.
+- Not evidenced in the repository: the O11 A2 receipt is private. The owner ran the two read-only lines Claude
+  gave on 2026-11-04 and reported "2줄 출력 정상", meaning the expected values: the receipt
+  `A2-E1-d76d2d7301ffe92c.json` with status `REGISTERED_ONLY` and `n_registered` 12, `E1.jsonl` with 12 rows, and
+  `C3.jsonl` with at least 17 rows (the exact C3 count was not sent).
+- Result: Step 7A.4 passes. Every Done-when item of Step 7A is met except the two that only the 7A.5 HEAD can show:
+  `repo_anchor()` returning `git:<the 7A.5 HEAD>`, and an empty `git status --porcelain`. The owner checks both after
+  `git pull --ff-only` of this commit. This commit changes only this spec, so `code_sha256` stays `f995600b…` and
+  both `owner_confirmed` remain current. Pilots may start after 7A.5, under Step 8's own conditions.
