@@ -4,9 +4,9 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2
-next_ids: ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-04T16:50:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22
+next_ids: ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-04T18:20:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/ui-markets-watchlist-20261104
@@ -106,6 +106,10 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
   HEAD와 작업 트리만 보므로 main이 움직여도 파일럿은 막히지 않습니다. 다시 "CI 통과 시 Claude 병합"입니다.
   **연구 브랜치 `claude/amazing-gauss-tdiguu`와 PR #4는 Step 7A 세션 담당이며, 7A.5부터 Step 10까지 main을 연구
   브랜치에 합치지 않습니다(H-D5).** 보류했던 병합 순서: PR #68(Crypto) → 옵션 브랜치 PR → 화면 개편 PR.
+  - **PR #68(Crypto) 병합 `ce77566`(2026-11-04).** main `f455710`을 합친 뒤 세 관점 재검증에서 확인된 결함 6건과 미검증 문서
+    지적 3건을 모두 고침(평단가 소수·부동소수 잡음, Upbit 일봉 일수, 1년 미만 김치 z 창 표시, 문서 정정, 절대 import).
+    CI 41803981425(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문)·Compliance 41803981668 성공. 원장 ②-5/NEW-M6-14·15·22 기록.
+    D12-03은 Upbit 일봉 부분만 처리(§10 ID 아님, PT-18에 남은 부분).
   - **정정(소유자, 2026-11-04):** Step 7A는 7A.5까지 모두 끝났습니다. 결정 기록의 "7A.2를 다시 돌려야 하는 경우" 단서는
     해당하지 않습니다(다음 결정 기록 PR에서 한 줄로 바로잡음). H-D5는 Step 10까지 그대로입니다.
 - (이력) **main 병합 동결 (2026-11-04 03:36:05 KST ~ PR #70 병합).** 소유자 결정 원문은 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`
