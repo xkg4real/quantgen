@@ -19,8 +19,8 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
     from quantgen_desktop import app as desktop
     from quantgen_desktop.app import ResearchWindow, label
 
-from PyQt6.QtGui import QFont, QFontMetrics, QPalette, QRawFont
-from PyQt6.QtWidgets import QApplication, QLabel, QMessageBox
+from PyQt6.QtGui import QColor, QFont, QFontMetrics, QPalette, QRawFont
+from PyQt6.QtWidgets import QApplication, QFrame, QLabel, QMessageBox, QVBoxLayout, QWidget
 
 from core.market.models import Candle, ChartRequest, MarketSnapshot
 from core.market.presentation import card_svg, chart_svg
@@ -188,6 +188,40 @@ class ToneTests(unittest.TestCase):
             set_tone(pill, "bold")
         with self.assertRaises(ValueError):
             scaled_font(QFont(), 14, 700)  # no real Bold face is bundled
+
+    def test_delta_pill_keeps_its_tint_inside_a_panel(self):
+        # Cards are QFrame#panel; `QFrame#panel QLabel { background: transparent }`
+        # carries an ID selector and must not strip the pill tint.
+        for palette, dark in ((LIGHT, False), (DARK, True)):
+            tones = TONE_COLORS[dark]
+            root = QWidget()
+            root.setStyleSheet(window_stylesheet(palette, dark))
+            layout = QVBoxLayout(root)
+            box = QFrame()
+            box.setObjectName("panel")
+            QVBoxLayout(box).addWidget(label("+1.20%", "delta"))
+            layout.addWidget(box)
+            layout.addWidget(label("+1.20%", "delta"))
+            pills = {"inside panel": box.findChild(QLabel), "outside panel": root.findChildren(QLabel)[-1]}
+            self.assertIsNot(pills["inside panel"], pills["outside panel"])
+            root.resize(300, 200)
+            root.show()
+            self.app.processEvents()
+            try:
+                for tone in ("up", "down", "flat"):
+                    for where, pill in pills.items():
+                        set_tone(pill, tone)
+                        self.app.processEvents()
+                        image = pill.grab().toImage()
+                        tint = {QColor(image.pixel(x, image.height() // 2)).name().upper() for x in range(2, 6)}
+                        text = pill.palette().color(QPalette.ColorRole.WindowText).name().upper()
+                        with self.subTest(dark=dark, tone=tone, where=where):
+                            self.assertEqual(tint, {tones[tone + "_tint"]})
+                            self.assertEqual(text, tones[tone])
+            finally:
+                root.close()
+                root.deleteLater()
+                self.app.processEvents()
 
 
 class WindowTypographyTests(unittest.TestCase):

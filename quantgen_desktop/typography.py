@@ -95,6 +95,9 @@ def window_stylesheet(p, dark: bool) -> str:
 
     Controls, tables and tabs stay at 13px so dense forms do not clip at 1000x700;
     body labels are 14px; the hierarchy runs from 12px captions to 32px figures.
+    Each delta rule is repeated under QFrame#panel: the ID selector in
+    `QFrame#panel QLabel { background: transparent }` outranks a bare
+    QLabel[role='delta'], and cards (MarketCard and the like) are panels.
     """
     t, d = TONE_COLORS[dark], PANEL_DEPTH[dark]
     nav_v, nav_h = NAV_PADDING
@@ -111,9 +114,9 @@ def window_stylesheet(p, dark: bool) -> str:
           QLabel[role='cardTitle'] {{ font-size: 15px; font-weight: 600; }}
           QLabel[role='price'] {{ font-size: 15px; font-weight: 600; }}
           QLabel[role='eyebrow'] {{ font-size: 12px; font-weight: 600; letter-spacing: 1px; color: {p.accent}; }}
-          QLabel[role='delta'] {{ font-size: 13px; font-weight: 600; padding: 2px 7px; border-radius: 6px; color: {t['flat']}; background: {t['flat_tint']}; }}
-          QLabel[role='delta'][tone='up'] {{ color: {t['up']}; background: {t['up_tint']}; }}
-          QLabel[role='delta'][tone='down'] {{ color: {t['down']}; background: {t['down_tint']}; }}
+          QLabel[role='delta'], QFrame#panel QLabel[role='delta'] {{ font-size: 13px; font-weight: 600; padding: 2px 7px; border-radius: 6px; color: {t['flat']}; background: {t['flat_tint']}; }}
+          QLabel[role='delta'][tone='up'], QFrame#panel QLabel[role='delta'][tone='up'] {{ color: {t['up']}; background: {t['up_tint']}; }}
+          QLabel[role='delta'][tone='down'], QFrame#panel QLabel[role='delta'][tone='down'] {{ color: {t['down']}; background: {t['down_tint']}; }}
           QLabel[role='brand'] {{ font-size: 17px; font-weight: 600; letter-spacing: 0.15px; color: {p.accent}; }}
           QLabel[role='number'] {{ font-size: 32px; font-weight: 600; letter-spacing: -0.6px; }}
           QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
