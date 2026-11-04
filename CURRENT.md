@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22
-next_ids: ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-04T20:14:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls
+next_ids: ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-04T20:56:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/ui-markets-watchlist-20261104
-work_commit: 96f20a6
+work_branch: claude/s10-options-20261104
+work_commit: a4b7c3c
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/71
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -98,7 +98,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
   - ID: ⑬-2/a4-b/2(시장 스크롤 탭 선택 삭제, 도구는 다른 곳으로), ⑬-2/a4-c/2(모든 차트 검색에 코드+종목명), ⑬-2/a4-d/2(시장 = 관심종목 차트 + 한 종목 전체 화면, 주요지표 실시간 차트 제거), ⑬-2/a4-e(실시간 지표의 공급자·관측일 칸 제거), ⑬-2/a3-type(글자 위계·입체감).
   - 브랜치 `claude/ui-markets-watchlist-20261104`(main `bb35b3b`에서), 워크트리 스크래치패드 `uimk`. 대상은 Native 앱(`python -m quantgen_desktop`).
   - 추가 요청(원문): "그리고 어플의 메인화면이 전체적으로 너무 좁다. 좌측의 ui공간을 조금 얇고 줄여서 메인화면을 탁 트이게 보일 수 있게 수정해야함. 단, 좌측이 답답해지면 안됨. 지금은 너무 널널해" → ⑬-2/a3-rail. "저 주식 챙권 이런거 종목고르는 옆에있는 화살표있지. 저것도 좀 세련되게 바꿔라 뭐냐 저게 윈도우 xp냐;;", "인터벌 화살표도 마찬가지. 저 화살표와 네모박스는 어디에서도 보고싶지않다." → ⑬-2/a3-controls.
-  - **PR #71 열림(https://github.com/xkg4real/quantgen/pull/71), head `96f20a6`, CI 대기.** 동결이 풀렸으므로 CI 성공 시 병합합니다. 근거 문서 `docs/product/MARKETS_WATCHLIST_2026-11-04.md`(요청 원문, 결정, 알려진 문제, 미검증, 실행 방법, 11절 코드 리뷰 반영), FACTS "시장 개편" 절, 웹 기록 `docs/product/ui_website_updates/PR-71.json`.
+  - **PR #71 병합 `d5e73ae`(2026-11-04 20:53 KST, 병합 트리 = head `3c0fd24` 트리).** CI Runtime 41822103802(Windows 3.11/3.12/3.14·Ubuntu 3.12·구문 3.10/3.11)·Compliance 41822103837 성공. 원장 ⑬-2/a4-b/2, a4-c/2, a4-d/2, a4-e, a3-type, a3-rail, a3-controls 기록. CI에서 고친 것: README 변경 뒤 상태 스냅샷 재생성(`31086ac`), Ubuntu 글꼴에서 레이아웃 시험 전제가 깨지던 것(`51f3921`, 기준선 `3c0fd24`). 근거 문서 `docs/product/MARKETS_WATCHLIST_2026-11-04.md`(요청 원문, 결정, 알려진 문제, 미검증, 실행 방법, 11절 코드 리뷰 반영), FACTS "시장 개편" 절, 웹 기록 `docs/product/ui_website_updates/PR-71.json`.
   - 로컬 확인: 20개 모듈 283개 통과(오프스크린, 3.13, PyQt6 6.12.0), 설치 휠 스모크 PASS, 컴플라이언스 --check PASS. 전체 run_all(캐시 없는 사본, `48bf786`): 746/872, FAIL 2(기존 환경 탓 동일), NOT_RUN 124, acceptance_results.json md5 그대로. `/code-review`(high) 10건: 8건 수정(`96f20a6`), 2건 설계대로 유지(이유는 근거 문서 11절).
   - main `ce77566`(PR #68)을 `b2f7a41`에서 합침(runtime-smoke 경로 합집합, FACTS 두 절 유지, 기준선 재생성).
 
@@ -159,7 +159,7 @@ session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
 
 ## 6. 다음 할 일
 
-1. PR #71 CI(Runtime·Compliance)가 성공하면 병합합니다. 완료 기준: main에 병합 커밋, 원장 `--done`으로 ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls 기록, Notion 13절 취소선.
+1. (완료) PR #71 병합 `d5e73ae`, 원장 기록. Notion 13절 취소선은 이 게시 직후.
 2. 옵션 브랜치 `claude/s10-options-20261104`(`a4b7c3c`)에 main을 합칩니다(`git merge origin/main`; 충돌 예상: SECTION10_QUEUE/TRIAGE, FACTS, runtime-smoke.yml, market_tools.py, source-review.json). §10 집계는 27로 맞춥니다. PR을 열고 CI 성공 시 병합, 원장 ②-5/M4-N4·N7·N9, Notion.
 3. 그다음 §10 모형/ETF(`wf_fea1b022-4f8` 멈춤, 다시 실행), AI, 그 뒤 A3 나머지, A1, 5~6번, 실시간 체결, 7번.
 
