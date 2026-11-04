@@ -361,3 +361,95 @@ Nautilus 스펙에 해당하는 판정(O1~O15)은 스펙 Status에도 기록합�
     - push되지 않은 브랜치 이름: `gpt/defects-{options,crypto,models}-20261102`
   - 소유자가 회수를 시도합니다. 회수하지 못하면 Claude가 해당 §10 항목을 처음부터 다시 하고, 검토에 `/code-review`를 씁니다.
   - `/karpathy-skills`와 `/goal`은 이 환경에 설치되어 있지 않습니다.
+
+## 2026-11-04, Claude Code 채팅: Step 7A 동안 main 병합 동결
+
+소유자가 7A.2의 두 번째 git 줄에서 `main has moved`로 멈춘 것을 알린 뒤 먼저 "이 세션이 push한 뒤 7A.3 커밋까지 main
+병합을 멈춰 달라"고 했고, 이어서 시작점을 아래처럼 정했습니다.
+
+> (가)로 결정합니다. main 병합 동결은 다음 순서로 진행해 주세요.
+>
+> 1. 동결 직전 마지막 병합(예외 1건):
+>    - 방금 진단한 새 FAIL 2개(main 차트 재디자인으로 경고 색이 바뀌었는데 검사가 갱신되지 않은 것)를 main에서 고칩니다.
+>    - 최신 main에서 새 브랜치를 만들어 작업합니다.
+>    - 새 경고 색이 승인된 디자인대로 의도한 변경이면 검사의 기대값만 새 색으로 고칩니다.
+>    - 제품 코드(색 자체)를 바꿔야 한다고 판단되면, 고치기 전에 이유를 적어 저에게 먼저 물어보세요.
+>    - 범위는 이 두 검사뿐입니다. PR #68, 옵션 브랜치, 그 밖의 변경은 함께 넣지 마세요.
+>
+> 2. 검증:
+>    - 수정 브랜치에서 해당 검사가 들어 있는 스위트와 tests/run_all.py 전체 검사를 실행합니다.
+>    - 보호 캐시 4개는 열지 않는 기존 방식(캐시 없는 사본)으로 실행합니다.
+>    - 결과에서 FAIL 0을 확인하고, FAIL이 남으면 이름과 원인을 보고합니다.
+>    - PR을 만들고 CI(Runtime/Compliance 등)가 성공한 뒤에 main에 병합합니다.
+>
+> 3. 동결 시작:
+>    - 이 수정 PR의 병합 커밋을 동결 시작점으로 정합니다.
+>    - 그 뒤부터 Step 7A 세션의 7A.3 커밋이 연구 브랜치에 들어갈 때까지 main에는 아무것도 병합하지 않습니다(PR #68, 옵션 브랜치, 다른 모든 PR 포함).
+>    - 결정 기록(OWNER_RULINGS_LOG)과 인계 문서에 남기던 동결 규칙의 시작점을 "이 수정 병합 직후"로 맞춰 적어 주세요.
+>
+> 4. 하지 말 것:
+>    - 연구 브랜치 claude/amazing-gauss-tdiguu, tools/nautilus/**, tests/nautilus_*.py, Nautilus RUNBOOK·스펙은 건드리지 않습니다. 이 부분은 Step 7A 세션 담당입니다.
+>    - 원장(~/.nextgen)과 보호 캐시는 열거나 쓰지 않습니다.
+>
+> 5. 끝나면 다음을 한 번에 보고해 주세요. 제가 Step 7A 세션에 그대로 전달합니다.
+
+- **동결 규칙:** 시작점은 브랜치 `claude/fix-macro-ui-tests-20261104` PR의 `main` 병합 커밋입니다. 그 병합 직후부터
+  Step 7A 세션의 7A.3 커밋이 `claude/amazing-gauss-tdiguu`에 들어갈 때까지 어떤 PR도 `main`에 병합하지 않습니다(PR #68,
+  옵션 브랜치, 다른 모든 PR). 이 기간에는 "CI 통과 시 Claude 병합"을 적용하지 않습니다. PR 작업과 CI는 계속합니다.
+  병합 커밋 SHA와 시각은 인수인계 문서(`handoff` 브랜치 CURRENT.md)에 적습니다.
+- **예외 1건(이 PR):** 범위는 두 검사뿐입니다. 두 실패는 모두 C형 차트 재디자인 `f6f63af`(2026-10-31) 뒤에 검사가
+  따라가지 못한 것입니다.
+  - `tests/macro_ui_components.py`: DARK 팔레트가 숲색 계열로 바뀌면서 `warning`이 `#E5BE74`가 됐습니다. 같은 커밋이 DARK
+    12개 값을 한꺼번에 바꿨고, `docs/compliance/14-contrast.md`는 "C형 후속에서 DARK를 QUANTGEN의 숲색 계열로 조정"이라고
+    적습니다. 설계 문서 `docs/product/CHART_C_DESIGN_2026-10-31.md`는 배경·표면·강조색만 적고 `warning`은 따로 적지
+    않습니다. LIGHT의 `#8a5a00`은 그대로입니다. 그래서 의도한 변경으로 보고 기대값만 고쳤습니다. 제품 색은 바꾸지
+    않았습니다.
+  - `tests/macro_ui_views.py`: 색이 아니라 화면 구조 때문입니다. 모든 qchart가 `FigureStudy`의 `ResponsiveRow`로 그려지는데,
+    `ResponsiveRow.columns`는 격자 폭(정수)입니다. 검사의 트리 순회가 이것을 표의 열 목록으로 보고 순회하다
+    `TypeError`가 났습니다. 순회가 목록·튜플만 따라가게 고쳤습니다.
+  - 컴플라이언스 지문 기준선(`docs/compliance/source-review.json`)에서 두 검사 파일의 지문과 문서 12의 검토 기록을 새로
+    고쳤습니다. 저장소 도구(`tools.compliance.check --refresh-baseline --documents 12`)가 요구하는 것입니다.
+- **연구 브랜치:** 이 세션은 `claude/amazing-gauss-tdiguu`를 건드리지 않습니다. Step 7A 세션이 이 병합 뒤의 `main`을 연구
+  브랜치에 합칩니다. 이 파일에도 양쪽 추가분이 있어 그때 합칠 곳이 생깁니다.
+
+## 2026-11-04, Claude Code 채팅: main 병합 동결 해제 (U4-나)
+
+> [소유자 결정 전달 · 2026-11-04 · Geon Koh]
+> U4 = (나) main 병합 동결을 지금 해제합니다.
+> 근거: 동결 해제 조건인 "모두 통과한 7A.3 묶음 커밋"이 연구 브랜치에 563db54(11-04 15:38 KST)로 push됐습니다.
+> 7A.4 검토 커밋은 Step 7A 세션이 준비해 두었고, push는 소유자 승인 대기 중입니다.
+>
+> 메인 세션이 할 일:
+> 1. 해제 전에 확인: 러너의 정식 실행 git 검사(R-01·R-02 등)가 "origin/main이 연구 브랜치 HEAD의 조상"인지를
+>    요구하는지 tools/nautilus/runner.py에서 확인하세요. 요구한다면 해제하지 말고 결과를 보고해 주세요
+>    (해제하면 파일럿이 막힙니다).
+> 2. 문제가 없으면, 이 결정을 원문 그대로 main의 docs/nautilus_bridge/OWNER_RULINGS_LOG.md에 기록하세요
+>    (평소 PR 경로로). 연구 브랜치에는 기록하지 마세요.
+> 3. 보류했던 main PR 병합을 재개하세요.
+> 4. 연구 브랜치 claude/amazing-gauss-tdiguu는 건드리지 마세요. push, main 병합, tools/nautilus·tests/nautilus_*·
+>    RUNBOOK·스펙 수정 모두 하지 않습니다(Step 7A 세션 담당). 7A.5부터 Step 10까지는 main을 연구 브랜치에
+>    합치지 않습니다(H-D5).
+> 5. 인계 문서(CURRENT.md) checkpoint에 "main 동결 해제(U4-나)"를 반영하고, main에 병합하는 다른 사람·에이전트에게
+>    해제를 알려 주세요.
+> 6. 끝나면 기록 커밋 해시와 병합한 PR 목록을 보고해 주세요.
+
+- **해제 전 확인 결과 (1번):** 러너의 정식 실행 git 검사는 `origin/main`의 조상 관계를 요구하지 않습니다.
+  확인한 연구 브랜치 HEAD는 `83ee469`(563db54 다음 커밋)이며, 연구 브랜치는 읽기만 했습니다.
+  - `tools/nautilus/runner.py` `check_tree`(475행~)가 실행하는 git 명령은 `rev-parse HEAD`(483행)와
+    `status --porcelain=v1 -z --untracked-files=all`(485행) 둘뿐입니다. `tree_refusal`(510행~)은
+    R-02(HEAD를 읽지 못함·기준점 문제)와 R-01(정리되지 않은 경로)만 판정합니다.
+  - 기준점은 `core/quant/gate_ledger.py` `repo_anchor`가 `.git/HEAD`에서 읽은 `git:<HEAD 커밋>`입니다.
+  - `tools/nautilus/register_e1.py`(128행)는 같은 `check_tree`를 씁니다.
+  - 인계 보고서(`runner.py` 1930~1932행)는 `rev-parse HEAD`, `rev-parse origin/claude/amazing-gauss-tdiguu`,
+    `status`를 기록만 하고 막지 않습니다.
+  - `tools/nautilus/` 전체에 `origin/main`, `merge-base`, `is-ancestor`, `rev-list`, `fetch`가 없습니다.
+  - `origin/main` 조상 검사는 RUNBOOK 7A.2의 git 두 줄(85~86행)과 7A.1 서명 절차(41~42행)에만 있습니다.
+    7A.5는 `git pull --ff-only`만 실행합니다. 따라서 해제해도 파일럿은 막히지 않습니다.
+  - 남는 점: 7A.4 검토 뒤 7A.2를 다시 실행해야 하는 경우, 그 git 두 줄은 main이 움직였으면 멈춥니다.
+    H-D5에 따라 그때도 main을 연구 브랜치에 합치지 않으므로, 재실행 방법은 Step 7A 세션이 정합니다.
+- **반영:**
+  - 이 기록의 병합으로 main 병합 동결(2026-11-04 03:36:05 KST, PR #69 병합 `bb35b3b`부터)을 끝냅니다.
+    "CI 통과 시 Claude 병합"을 다시 적용합니다.
+  - 연구 브랜치 `claude/amazing-gauss-tdiguu`와 PR #4는 건드리지 않습니다. 7A.5부터 Step 10까지 main을 연구
+    브랜치에 합치지 않습니다(H-D5).
+  - 보류했던 PR은 각자 main을 합치고 CI가 통과한 뒤 병합합니다. 순서는 PR #68(Crypto), 옵션 브랜치, 화면 개편입니다.

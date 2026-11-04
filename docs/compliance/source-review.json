@@ -449,10 +449,10 @@
     "tests/macro_tf_gov.py": "3467c72c5b3598a498d5558c2bbc4e3b8a32947ac9be738dd29c59a935b58745",
     "tests/macro_tf_integration.py": "8c47e72d9caaca23e3029277fc7b83da8f58ab32bf61d58b2de964b8b99fcd52",
     "tests/macro_tf_screens.py": "66ce8b5851f29d01d337aa79309b92d11bcd1eba88c18b1acb9527a60d19776d",
-    "tests/macro_ui_components.py": "303f4a4173e317a7a163b39b04bbaa285692b72ad22c25cd5055a840c16876aa",
+    "tests/macro_ui_components.py": "440bc7786f3e5e350dfa695c2de44d14ba868b7f462740817e59d023687f9bca",
     "tests/macro_ui_overlay.py": "c86c39daaeac33dcec9f02a16820fb913546422754b24f2d26c3ac7499add27c",
     "tests/macro_ui_rulings.py": "314d6be882c6749c15b372f2936f1b55703e90ff3a6358654482d37e181a4222",
-    "tests/macro_ui_views.py": "072f65dc6107ffe7da7d3dde7ad81522935cff218f9d5bb34fdb7864200b2e35",
+    "tests/macro_ui_views.py": "1321a4961380479fa28764e70edf742935925a78da12300e9c25850195299700",
     "tests/market_board_core_acceptance.py": "4234f3e172849e9624c15d8cbe4513455e4fb346e3f211148aa287e6f83f6151",
     "tests/market_chart_presentation_acceptance.py": "6fe863f83008534a669d4c14baa2f4e06d6ca1eb31e4bf30d21d5e89aa78dbeb",
     "tests/market_core_acceptance.py": "da7c6f4df956acccb02e469ff6e632a7dad264f43f1f68421b76ef8e7a5da89d",
@@ -644,11 +644,11 @@
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "b3e2dd9d9346fcf3c1872b4d4c75eb9e8c394fb753da6f6073f7819ee3b18dc5",
-      "reviewed_by": "Claude §10 Crypto missing-values review",
-      "review_note": "Verification found the unvalued-holdings note reached native AI commentary; it is now a named holdings section filtered like the holdings table",
-      "reviewed_at": "2026-11-03T17:38:14.244694+00:00",
-      "source_commit": "b9b946d2b8eaa106bd988798fd1a7edcfc6c57ba"
+      "source_digest": "2dcbffb78a5084f998170046288b1403f7d542f3a931473b26021fca09c7673f",
+      "reviewed_by": "Claude Crypto PR main merge review",
+      "review_note": "Merged main (PR #69 macro UI test fix, PR #70 unfreeze record) into the Crypto rework; 12-claims text unchanged",
+      "reviewed_at": "2026-11-04T07:27:44.023164+00:00",
+      "source_commit": "0a1ba2adf5bf4ea8e7150f91ed364e2395fa877e"
     },
     "13": {
       "document_sha256": "609e26253d6ea9098b44836c142c11b4a6bc33966ea7ed9e972c571eff1b6139",
