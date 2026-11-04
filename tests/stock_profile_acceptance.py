@@ -51,8 +51,12 @@ def closes(n, base=50000.0, digits=0):
 
 
 def bars(n, *, end=TODAY, base=50000.0, digits=0):
+    return candles_from(closes(n, base, digits), end=end)
+
+
+def candles_from(values, *, end=TODAY):
     return tuple(Candle(day.isoformat(), c * 0.995, c * 1.01, c * 0.985, c, 1_000_000 + 10 * i)
-                 for i, (day, c) in enumerate(zip(session_days(n, end), closes(n, base, digits))))
+                 for i, (day, c) in enumerate(zip(session_days(len(values), end), values)))
 
 
 class FakeService:
@@ -632,6 +636,43 @@ class HandComputationTests(Base):
         self.assertEqual(row(self.en["range"], "From 52-week high").value, signed_pct(last / high - 1))
         self.assertEqual(row(self.en["range"], "From 52-week low").value, signed_pct(last / low - 1))
         self.assertEqual(self.en["range"].note, "Adjusted daily closes · 260 sessions · today's bar may be provisional")
+
+    def test_range_with_the_last_close_inside_the_window(self):
+        # 30 sessions later in the same wave: the series has turned down, so the last close sits mid-range.
+        values = closes(290)[-260:]
+        # Equal closes later in the window: the range reports the latest high and the latest low.
+        values[-252 + 240], values[-252 + 100] = max(values[-252:]), min(values[-252:])
+        # A lower close before the 252-session window must not become the 52-week low.
+        values[3] = min(values[-252:]) - 5000
+        candles = candles_from(values)
+        days = [c.timestamp for c in candles]
+        window, window_days, last = values[-252:], days[-252:], values[-1]
+        high = low = window[0]
+        high_at = low_at = 0
+        for i, close in enumerate(window):
+            if close >= high:
+                high, high_at = close, i
+            if close <= low:
+                low, low_at = close, i
+        self.assertEqual((high_at, low_at), (240, 100))
+        position, from_high, from_low = (last - low) / (high - low), last / high - 1, last / low - 1
+        self.assertTrue(0.1 < position < 0.9 and from_high < -0.01 and from_low > 0.01, (position, from_high))
+        profile = build_profile(SAMSUNG, candles=candles, today=TODAY, source="KIS REST")
+        data = profile.values["range"]
+        self.assertEqual((data["high"], data["low"], data["last"], data["sessions"]), (high, low, last, 252))
+        self.assertEqual((data["high_date"], data["low_date"]), (window_days[high_at], window_days[low_at]))
+        self.assertAlmostEqual(data["position"], position, places=12)
+        self.assertAlmostEqual(data["from_high"], from_high, places=12)
+        self.assertAlmostEqual(data["from_low"], from_low, places=12)
+        en = by_key(profile, "en")["range"]
+        self.assertEqual(row(en, "Position in range").value, f"{position * 100:.2f}%")
+        self.assertEqual(row(en, "From 52-week high").value, f"{from_high * 100:+.2f}%")
+        self.assertEqual(row(en, "From 52-week high").tone, "down")
+        self.assertEqual(row(en, "From 52-week low").value, f"{from_low * 100:+.2f}%")
+        self.assertEqual(row(en, "From 52-week low").tone, "up")
+        for label, at in (("52-week high", high_at), ("52-week low", low_at)):
+            day = date.fromisoformat(window_days[at])
+            self.assertEqual(row(en, label).hint.split("\n")[0], f"{day:%b} {day.day}, {day.year}")
 
     def test_risk_against_hand_statistics(self):
         logs = [math.log(b / a) for a, b in zip(self.closes, self.closes[1:])]
