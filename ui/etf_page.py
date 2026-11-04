@@ -27,6 +27,7 @@ from core.quant import strategies as S
 from core.quant.history import HistoryError, load_history, synthetic_history
 from core.quant.validate import load_cards
 from core.research.decay_disclosure import decay_value, decay_text
+from core.research.sleeve_disclosure import SHARPE_CONVENTIONS_POINTER, conventions_text, sharpe_text, sharpe_tooltip
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
@@ -127,15 +128,25 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                 blocks.append(notice(letf_unavailable_text(lt), "error"))
             sl = a.get("sleeves")
             if sl:
+                # §10 NEW-M6-04: an undefined Sharpe shows "n/a" and says why; NEW-M6-05: a defined one carries the
+                # conventions it was computed under, and a notice under the row states them.
+                conventions = conventions_text(sl["conventions"]) if sl.get("conventions") else ""
+
+                def sharpe_stat(label, key):
+                    return stat(label, sharpe_text(sl[key]) or "n/a",
+                                tooltip=sharpe_tooltip(sl[key]) or (SHARPE_CONVENTIONS_POINTER if conventions else ""))
+
                 blocks.append(ft.Row([
-                    stat("Trend switch Sharpe", f"{sl['trend']['sharpe']:.2f}"), stat("Trend MDD", f"{sl['trend']['max_drawdown']:.0%}"),
-                    stat("Vol-target Sharpe", f"{sl['vol_target']['sharpe']:.2f}"), stat("Buy & hold Sharpe", f"{sl['buy_hold']['sharpe']:.2f}"),
+                    sharpe_stat("Trend switch Sharpe", "trend"), stat("Trend MDD", f"{sl['trend']['max_drawdown']:.0%}"),
+                    sharpe_stat("Vol-target Sharpe", "vol_target"), sharpe_stat("Buy & hold Sharpe", "buy_hold"),
                     stat("B&H MDD", f"{sl['buy_hold']['max_drawdown']:.0%}"),
                     stat("Study verdict: trend", a["verdicts"]["trend"], token="success" if a["verdicts"]["trend"] == "PASS" else "error",
                          tooltip=a["verdict_reasons"]["trend"]),
                     stat("Study verdict: vol target", a["verdicts"]["vol"], token="success" if a["verdicts"]["vol"] == "PASS" else "error",
                          tooltip=a["verdict_reasons"]["vol"]),
                 ], spacing=10, wrap=True))
+                if conventions:
+                    blocks.append(notice(conventions, "accent"))
                 blocks.append(card(xc.equity_chart(a.get("sleeve_dates", a["dates"]), sl["equity_trend"], sl["equity_bh"],
                                                    title=f"10-month trend switch vs buy-and-hold ({sl['cost_bps']:.0f} bp per side)")))
             comps = a.get("components") or []

@@ -25,7 +25,7 @@ from core.research.export import bundle_bytes, save_desktop_export
 from core.research.watchlist import load_home_markets, default_home_rows
 from core.research.provenance import code_evidence, runtime_evidence
 from core.research.portfolio_analysis import execute_portfolio
-from core.research.mc_disclosure import volatility_disclosure
+from core.research.mc_disclosure import bootstrap_disclosure, volatility_disclosure
 from core.research.bond_analysis import execute_bond
 from core.research.rates_analysis import execute_rates
 from core.research.fx_analysis import execute_fx
@@ -908,6 +908,9 @@ class ResearchWindow(QMainWindow):
                 ([("Horizon-average vol (ann.)", f"{r.garch_horizon_vol:.1%}")] if r.garch is not None else []))
             notes = [f"{'합성 데이터 · ' if h.source=='SYNTHETIC' else ''}{h.source} · {h.first_date} → {h.last_date}",
                      h.note, value.funding_note, r.drift_note, r.bound_note, r.jump_note]
+            resampling = bootstrap_disclosure(r.model)   # None for every model but bootstrap
+            if resampling is not None:
+                notes.append(resampling["description"])
             notes.append(vol_info["description"])
             if vol_info["horizon_basis"]:
                 notes.append("Horizon-average volatility: " + vol_info["horizon_basis"])

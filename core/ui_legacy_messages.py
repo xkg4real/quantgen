@@ -278,5 +278,13 @@ _SIGNAL_STATISTICS = {
 EN_TO_KO.update(_SIGNAL_STATISTICS)
 KO_TO_EN.update({value: key for key, value in _SIGNAL_STATISTICS.items()})
 
+# Monte Carlo block-bootstrap disclosure (§10 N-M1-02/a): one EN/KO pair, defined once.
+from core.research.mc_disclosure import BOOTSTRAP_TEXT, BOOTSTRAP_TEXT_KO
+EN_TO_KO[BOOTSTRAP_TEXT] = BOOTSTRAP_TEXT_KO
+KO_TO_EN[BOOTSTRAP_TEXT_KO] = BOOTSTRAP_TEXT
+from core.research.sleeve_disclosure import SHARPE_CONVENTIONS_POINTER, SHARPE_CONVENTIONS_POINTER_KO
+EN_TO_KO[SHARPE_CONVENTIONS_POINTER] = SHARPE_CONVENTIONS_POINTER_KO
+KO_TO_EN[SHARPE_CONVENTIONS_POINTER_KO] = SHARPE_CONVENTIONS_POINTER
+
 def static_text(text,language):
     return KO_TO_EN.get(text,text) if language=='en' else EN_TO_KO.get(text,text)
