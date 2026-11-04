@@ -81,18 +81,26 @@ class OperationFixTests(unittest.TestCase):
 
     def test_unfocused_selectors_ignore_the_wheel_and_the_page_scrolls(self):
         w = self.window
-        w.show_market_pane(w.rates); self.app.processEvents()
+        # Markets (owner, 2026-11-04): the watchlist cards make the page taller than the window.
+        w.navigate('markets'); settle(self.app)
         scroll = w.stack.currentWidget().verticalScrollBar()
-        # The analysis tools are buttons on their own page now (owner, 2026-11-04): no tab bar to scroll.
-        tool, picker = w.rates.tool, w.tool_buttons['bonds']
-        before = (tool.currentIndex(), w.current_market_pane(), w.theme.currentIndex())
+        self.assertGreater(scroll.maximum(), 0)
+        kind = w.markets_view.kind
+        before = (kind.currentIndex(), w.theme.currentIndex())
         scroll.setValue(0)
-        wheel(self.app, tool); wheel(self.app, picker); wheel(self.app, w.theme)
-        self.assertEqual((tool.currentIndex(), w.current_market_pane(), w.theme.currentIndex()), before)
+        wheel(self.app, kind); wheel(self.app, w.theme)
+        self.assertEqual((kind.currentIndex(), w.theme.currentIndex()), before)
         self.assertGreater(scroll.value(), 0)  # the wheel moved the page instead
+        # The analysis tools are buttons on their own page (no tab bar to scroll); a tool's selector
+        # and the tool buttons ignore the wheel too.
+        w.show_market_pane(w.rates); settle(self.app)
+        tool = w.rates.tool
+        start = tool.currentIndex()
+        wheel(self.app, tool); wheel(self.app, w.tool_buttons['bonds'])
+        self.assertEqual((tool.currentIndex(), w.current_market_pane()), (start, w.rates))
         tool.setFocus(); self.app.processEvents()
         wheel(self.app, tool)
-        self.assertNotEqual(tool.currentIndex(), before[0])  # a focused selector still responds
+        self.assertNotEqual(tool.currentIndex(), start)  # a focused selector still responds
 
     def test_real_wheel_cannot_focus_a_selector(self):
         """Qt focuses a control on a real wheel event when its policy includes WheelFocus.
