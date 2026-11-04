@@ -256,7 +256,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "e59fc767076e20e34e92850d7dfdd4d7c0ce8d9a356dac56c34a3b4a3b698702",
+    "docs/compliance/FACTS.md": "feb893f97e7829248ea393fd1c14b6db02b0ecf79333f4d81771228c7b18c3c2",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -285,7 +285,7 @@
     "docs/product/LETF_ASSUMPTIONS_2026-11-02.md": "4fd6fbcd5caad90146799feb6fa7ae61a38603e22c752970474e3d23b757fd0b",
     "docs/product/LETF_INDEX_2026-10-31.md": "7c10b178f33c59f2afb2783c94413cc2c949ba3d5f0e7b4412246d0da1f54693",
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
-    "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "0b78e087529b60cb1a07492517d5eccd0bf89d37f0137c82cd9eb53f46c4dbe0",
+    "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "acb462b7019b164bcf831d7072eafaee2acdab4c5d41d6a665a5d14bd5602d7c",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
     "docs/product/MC_VOLATILITY_2026-10-30.md": "92dc8a14c6884ea57936f9f187e9b87d1120b426ac0fe2f8767867617ef6837f",
@@ -571,163 +571,163 @@
   "reviews": {
     "1": {
       "document_sha256": "800842db400cf938aaaca47d17d69cd9c1f8100096255c919dfbd44b290af9cb",
-      "source_digest": "86ea4cf3b9825abd6d7cdd8bc3108aa392a8d9ce34dfe5bfc40294014759d9c6",
+      "source_digest": "4d867527b608ccdc5cb4f838588e352c869f5d3003d9ec1d802521b4e1466986",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.792754+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.544159+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "86ea4cf3b9825abd6d7cdd8bc3108aa392a8d9ce34dfe5bfc40294014759d9c6",
+      "source_digest": "4d867527b608ccdc5cb4f838588e352c869f5d3003d9ec1d802521b4e1466986",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.795414+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.548393+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "a31854fb7555e33bdb1f530d263bc2e1770a817f3f8320601c7a3c0d9d4c5b99",
+      "source_digest": "0f9bc5e4665e2d54ef55c9f0e6fcd25848a4959e2ae38b516906e9ab6ff5c3e0",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.798158+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.551552+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "ddbafa7cba9f0dda9559119afd81520293d318b4cdc1b552df87c5a9e1f38221",
+      "source_digest": "d45ffa1653f054ec3ff75c7cc8d0972ca02483a16e4cd079c3e0e938c1c6a16e",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.800238+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.554210+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "edde25c5ad6e19297b88e73a47c305f28b33c27a8180e52947453f2b0e3e451e",
+      "source_digest": "b9c413c200fe09ee59ca79beae9637509a12519a7ffff16fad768dd0f4b2ddd0",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.802642+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.556872+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "6": {
       "document_sha256": "9e7d3a2850c698226b88e0715ac5a11d47559a375158df21e5d5f2b4618d9805",
-      "source_digest": "e5480a8c5989f84c2b24bc2fac3fc91aed663ff82fde79e78dc8eebe02460c03",
+      "source_digest": "74e93ae02fab2de1a25985555f6def1587064ac92dd7ad982886df8bc998cc59",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.804713+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.559367+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "7": {
       "document_sha256": "17a5e5231248738a4a7b37d8bf9f6cc300eae0f02d4c501fc33d37040c1c651c",
-      "source_digest": "86ea4cf3b9825abd6d7cdd8bc3108aa392a8d9ce34dfe5bfc40294014759d9c6",
+      "source_digest": "4d867527b608ccdc5cb4f838588e352c869f5d3003d9ec1d802521b4e1466986",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.806740+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.562122+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "8": {
       "document_sha256": "a0c83c9860eb1b77a1b5dd89ac4036cab1d5a48ef8ca1efeadc2295b0205dc61",
-      "source_digest": "e5480a8c5989f84c2b24bc2fac3fc91aed663ff82fde79e78dc8eebe02460c03",
+      "source_digest": "74e93ae02fab2de1a25985555f6def1587064ac92dd7ad982886df8bc998cc59",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.809505+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.564159+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "9": {
       "document_sha256": "dac511ef262686869f627a264090cb5866bc60ad1a5f7fbb70df3ede8f79c7ae",
-      "source_digest": "a61249ec9204b4e1257bf7cc59d4ca81f4e867056833253fd8d300d5fc1eba55",
+      "source_digest": "2654687dad659aa558ea59f5d63d8f33fc52243650ad2d9b8f7ce8259cb45df9",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.811469+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.566524+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "6806fb77489e3d0887b5272b96679bf8f8b658ad6f5d11ca89ee38f2b32bc742",
+      "source_digest": "f8e91e6b6b7ac50ff6dfcd582e5d74f9b68de8a406aae4410d4eef81cfebfcc8",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.813574+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.569174+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "da6d4f4063633f922ee6df0f108801c5dd69f5ac16c8f1a684b43539965abf68",
+      "source_digest": "4c20c0a3f3314e2b8b3bf55ef66ee90145c709e8dc269d551266c253d0889c89",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.816208+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.572107+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "235b5b3153774a58fb567d75a9fbaeab8ad16cde49b559f566db6f5ca679b7b3",
+      "source_digest": "735517597eed47575d1b5db02661290d560b92607f998d4853ad6429b9733ea0",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.819202+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.574848+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "a61249ec9204b4e1257bf7cc59d4ca81f4e867056833253fd8d300d5fc1eba55",
+      "source_digest": "2654687dad659aa558ea59f5d63d8f33fc52243650ad2d9b8f7ce8259cb45df9",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.821640+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.577133+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "14": {
       "document_sha256": "14f89ec3bf10261b8d039e4bef5a113b599f30b6494755090a6570ac8e0dbdb0",
-      "source_digest": "a61249ec9204b4e1257bf7cc59d4ca81f4e867056833253fd8d300d5fc1eba55",
+      "source_digest": "2654687dad659aa558ea59f5d63d8f33fc52243650ad2d9b8f7ce8259cb45df9",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.824097+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.579243+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "15": {
       "document_sha256": "f6d97b6b70a73b55d43b72efc4df0232ffe0516f32f22478fdf94b6a973af131",
-      "source_digest": "a61249ec9204b4e1257bf7cc59d4ca81f4e867056833253fd8d300d5fc1eba55",
+      "source_digest": "2654687dad659aa558ea59f5d63d8f33fc52243650ad2d9b8f7ce8259cb45df9",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.827028+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.581906+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "0fe867f7b665c9f7916dde056610486bebc4097c94bbf451783cc1748a80a66e",
+      "source_digest": "55d216ef22cbc41d3a452a4f3ffc27962fb9d6743bc8cd4bda976ef13c300ee4",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.829044+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.584573+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "e5480a8c5989f84c2b24bc2fac3fc91aed663ff82fde79e78dc8eebe02460c03",
+      "source_digest": "74e93ae02fab2de1a25985555f6def1587064ac92dd7ad982886df8bc998cc59",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.831121+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.587625+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "86ea4cf3b9825abd6d7cdd8bc3108aa392a8d9ce34dfe5bfc40294014759d9c6",
+      "source_digest": "4d867527b608ccdc5cb4f838588e352c869f5d3003d9ec1d802521b4e1466986",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.833047+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.590122+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "eb54a3cc0b2b20f26b5754aafae8eab397605a4e7a2bd8859b45fb3abc1d4399",
+      "source_digest": "d598727dceb3838261fa8f8873af6104e7d0bd65041feab0e0cdf4edf409466e",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.835934+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.592850+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     },
     "20": {
       "document_sha256": "9e456e5db5c44c8592f493633e32f1e00de8d112b05dd468e6b335e481363d45",
-      "source_digest": "86ea4cf3b9825abd6d7cdd8bc3108aa392a8d9ce34dfe5bfc40294014759d9c6",
+      "source_digest": "4d867527b608ccdc5cb4f838588e352c869f5d3003d9ec1d802521b4e1466986",
       "reviewed_by": "Claude Markets rework review",
-      "review_note": "Merge of main ce77566 (Crypto missing values, PR #68) into the Markets branch: both FACTS sections kept, market_tools.py and tools.py line references in FACTS and the Markets record moved to the merged lines; the Crypto document text is main's as reviewed in PR #68 and the Markets text is this branch's as reviewed in 343d469. No other statement changed.",
-      "reviewed_at": "2026-11-04T10:45:39.837844+00:00",
-      "source_commit": "343d4695e5792415340f18dd8cbc151f300385f4"
+      "review_note": "Website record PR-71.json added (queued, not applied); FACTS and the Markets record now link it instead of saying it will be written later. No policy statement changed.",
+      "reviewed_at": "2026-11-04T10:51:50.595571+00:00",
+      "source_commit": "001e25f091ceef026a395ee00c75e1524db7a517"
     }
   }
 }
