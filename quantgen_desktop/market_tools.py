@@ -7,6 +7,7 @@ from core.research.funding_disclosure import funding_text
 from core.research.letf_disclosure import letf_text, letf_unavailable_text
 from core.research.decay_disclosure import decay_value, decay_text
 from core.research.quote_coverage import quote_coverage_text
+from core.research.option_disclosure import box_computed, hedge_korean, hedge_text, mfiv_strip
 from core.research.crypto_workflow import cost_basis_text, holdings_summary
 from .tools import ToolPane, number, fmt
 from .market_diagnostics_language import decay_korean, funding_korean, coverage_korean
@@ -44,14 +45,25 @@ class DerivativesPane(ToolPane):
         if not s.get('live_quotes', True): self.text('Last prints only · 장외/마감 시 호가는 동시 체결 가능한 가격이 아닙니다.')
         if s.get('quotes_note'):
             self.text(s['quotes_note'], localized={'en': s['quotes_note'], 'ko': s['quotes_note']})
+        strip, chk = mfiv_strip(s), s.get('box_check') or {}
         self.result_table('Futures & volatility', ['Metric', 'Value'], [
             ('Parity forward', fmt(s['F'])), ('Future', fmt(s['futures']['price'])), ('Basis · points', fmt(b.basis_pts)),
             ('Fair value', fmt(b.fair)), ('Mispricing · bp of spot', fmt(b.mispricing_bp)),
             ('Implied funding', fmt(b.implied_rate, 'pct')), ('KIS theoretical gap · points', fmt(b.theo_gap_pts)),
             ('ATM IV', fmt(s['atm'].iv, 'pct')), ('Model-free IV', fmt(s['mfiv'].get('vol'), 'pct')),
+            # §10 M4-N9: the strip's strike range; outside it the omitted wings bias MFIV downward
+            ('Model-free IV strike range · % of forward',
+             f"{fmt(strip['lower_moneyness'], 'pct')} / {fmt(strip['upper_moneyness'], 'pct')}"
+             if strip['status'] == 'COMPUTED' else 'UNAVAILABLE'),
             ('SVI RMSE · vol points', fmt(fit.rmse_volpts)), ('SVI rho', fmt(fit.rho)),
             ('Butterfly arbitrage free', str(fit.arbitrage_free)), ('IV reconciliation gap · vol points', fmt(s['reconcile']['median_volpts'])),
-            ('Box funding', fmt(s['box']['rate'], 'pct') if s['box'] else 'UNAVAILABLE'), ('RND integral', fmt(s['rnd']['integral']))])
+            # §10 M4-N4: an adjacent-strike box is a quote-quality check, not a funding rate
+            ('Box rate · adjacent strikes, mid quotes', fmt(s['box']['rate'], 'pct') if s['box'] else 'UNAVAILABLE'),
+            ('Box rate at quotes · bought / sold',
+             f"{fmt(chk.get('rate_bought_at_quotes'), 'pct')} / {fmt(chk.get('rate_sold_at_quotes'), 'pct')}"
+             if box_computed(s) else 'UNAVAILABLE'),
+            ('Box sensitivity · bp per 0.01 point', fmt(chk['bp_per_0_01pt']) if box_computed(s) else 'UNAVAILABLE'),
+            ('RND integral', fmt(s['rnd']['integral']))])
         from core.ficc.equity_deriv import svi_vol
         points = sorted(s['points'], key=lambda p:p.strike)
         self.line('Implied volatility smile', [p.strike for p in points],
@@ -71,6 +83,13 @@ class DerivativesPane(ToolPane):
         coverage_source = quote_coverage_text(coverage)
         self.text(coverage_source, localized={'en': coverage_source, 'ko': coverage_korean(coverage)})
         self.sections.append({'type': 'quote_coverage', **coverage})
+        hedge_note = hedge_text(s)
+        if hedge_note:  # §10 M4-N7
+            self.text(hedge_note, localized={'en': hedge_note, 'ko': hedge_korean(s)})
+        for kind, value in (('hedge_scope', s.get('hedge_scope')), ('box_check', s.get('box_check')),
+                            ('mfiv_strip', strip)):
+            if value is not None:
+                self.sections.append({'type': kind, **value})
         self.finished(out.narrative, localized=market_variants(out, 'derivatives'))
 
 

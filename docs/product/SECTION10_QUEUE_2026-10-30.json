@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 14,
-    "implemented_canonical_groups": 24
+    "implemented_canonical_groups": 27
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -470,10 +470,11 @@
       "source_model": "92. M4-15 박스 스프레드 조달금리",
       "queue": 3,
       "type": "Model assumption or convention",
-      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "next": "Adjacent-strike box priced only from four two-sided legs (else NOT_RUN with the missing legs named); shown with its bp-per-0.01-point sensitivity and its rate at the quoted bids/asks, and relabelled a quote-quality check, not a funding rate. Widening the box (a model change) is left to the owner. Actual KIS boards NOT_RUN.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/OPTION_DISCLOSURE_2026-11-04.md; tests/option_disclosure_acceptance.py"
     },
     {
       "id": "M4-N5",
@@ -505,10 +506,11 @@
       "source_model": "93. M4-16 델타 헤지 손익 시뮬레이션(감마 항등식, GBM·GARCH-t 엔진)",
       "queue": 3,
       "type": "Model assumption or convention",
-      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "next": "GBM engine runs at sigma_true = sigma_h: expected mean P&L is 0 by construction, recorded by snapshot from the arguments it passed; the Flet tile no longer colours the sign, narratives say 'simulated mean' and disclose it, payload and native export carry the status. GARCH-t unchanged. Simulation numbers byte-identical.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/OPTION_DISCLOSURE_2026-11-04.md; tests/option_disclosure_acceptance.py"
     },
     {
       "id": "M4-N8",
@@ -528,10 +530,11 @@
       "source_model": "90. M4-13 모형무관 내재변동성(MFIV, Cboe 스트립)",
       "queue": 3,
       "type": "Model assumption or convention",
-      "next": "Distinguish intended model from implementation error; disclose assumptions before changing model",
+      "next": "MFIV strike range (forward moneyness and approximate ATM-vol standard deviations) stated in Native/Flet/narratives/payload/export with the downward truncation bias; mfiv() and existing values unchanged. Register's +/-10% comparison uses a 91-strike board; the KIS +/-10% filter gives -0.07/-1.80/-1.31 vp.",
       "mapping_needs_disambiguation": false,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/OPTION_DISCLOSURE_2026-11-04.md; tests/option_disclosure_acceptance.py"
     },
     {
       "id": "M4-N10",

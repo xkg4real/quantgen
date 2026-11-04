@@ -247,6 +247,26 @@ day is left out); the register gives that case to D12-03 (audit, PT-18), not to 
 so it is only the Upbit daily part of D12-03 and the rest of D12-03 stays open. See
 `CRYPTO_MISSING_VALUES_2026-11-04.md`.
 
-Latest source implementation count: **24/67**, **43** remaining. Partial
+Source implementation count after this section: **24/67**, **43** remaining. Partial
 NEW-M6-02, the 14 observation models and the remaining ambiguous mappings stay open.
 Actual Windows, provider, research and release acceptance are separate.
+
+### 2026-11-04 Option board disclosures (Claude rework)
+
+The owner chose not to recover GPT's private options work. Claude redid it from main
+`c1a4e97`. An analyst reproduced each item and a separate reviewer challenged it.
+
+- **M4-N7:** under GBM the hedge mean is 0 by construction. Its sign is no longer
+  coloured or called earnings.
+- **M4-N9:** the MFIV strike range and its downward truncation bias are stated.
+- **M4-N4:** the adjacent-strike box is priced only from four two-sided legs. It is
+  shown with its sensitivity and its bid/ask range as a quote-quality check, not a
+  funding rate.
+
+Valid-input numbers are byte-identical on GBM and GARCH-t synthetic boards. See
+`OPTION_DISCLOSURE_2026-11-04.md`.
+
+These three groups follow the Crypto section above (24 → 27/67). Latest source
+implementation count: **27/67**, **40** remaining. Partial NEW-M6-02, the 14 observation
+models and the remaining ambiguous mappings stay open. Actual Windows, provider, research
+and release acceptance are separate.

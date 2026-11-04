@@ -7,8 +7,8 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "271d62841a59b4c54d0ba733b5cc00d84bc329a65c97dd366a77dc36fd3f8b85",
-    "README.md": "9396b708dc01df00a5d32b5549fe1b316824318319a95e0ecd8c296016ca0204",
+    ".github/workflows/runtime-smoke.yml": "c1a6cfab14b4918bb25a284ab1f41d6c21c613d2f36dc13c0b1db2e02c3f5068",
+    "README.md": "ef70bc6e82e86c95315c8bc0955f7b7050ed6e29928ac6112617ff771ad89a12",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
     "assets/branding/f1-wordmark.svg": "145715bc8df17cb3c99b734d4c7cb2b8e9bf1878e87c401f518f46b944ba41aa",
@@ -167,7 +167,7 @@
     "core/research/connections.py": "f634fe608bcfca39c3841ee7e4bf25524ba4cba8e28658d957d56725c2c56a04",
     "core/research/crypto_workflow.py": "3e2af208e0a5a94edac709ee086ab871f09413fba9b0c538494a82deaab4a023",
     "core/research/decay_disclosure.py": "98f68bb2b8f8a0ac051865a76313855a323890a4adacd9abe9d0c025c0a934ce",
-    "core/research/derivatives_workflow.py": "0597ee855c13663bd4d851320c68115482c3a41e4ea5f68b8f2ca35b91cd70e6",
+    "core/research/derivatives_workflow.py": "54f3d62a7cbc00b34228f247af7882057097c15f88d2fc59e8e203d9c80d8320",
     "core/research/display_rights.py": "e59554e140ee5ea994812bcaca083c622d94bac1513411bdca58824b6f20e6fb",
     "core/research/etf_workflow.py": "c85aedeea6dcb4c691174fc658350a2f2f52e9b713b46f9c56f4c193fc5dc9ba",
     "core/research/export.py": "16cbc78bbcf4f72d656f28f9b66823090fc21e5e92c0aa9ff56a07de2dc9b402",
@@ -181,6 +181,7 @@
     "core/research/market_board.py": "93e0b043671855e7bbd1418c476b2856e89f708cd786f542afd84377a1a8ae9d",
     "core/research/markets.py": "69236b90c444495868cb4d363a86ced1ce049592e4a7fa986b73f148f9b4e9d5",
     "core/research/mc_disclosure.py": "52e784e1a98693e7e8b8ed77d54366ba3fdb1eaf784a53271a0590ead80547ee",
+    "core/research/option_disclosure.py": "aafbf64c7660d31b300a4b87f40a4ee36df330a4bdd3d9892de5d74042774879",
     "core/research/portfolio_analysis.py": "58fc8d6a1c27d73afea6761a125f52135639070d4b0ffe6cdc2f70911b1c0ede",
     "core/research/portfolio_disclosure.py": "2e93f4c753c3bfa73bc11f468ac1eac3fb7d0c5be18191590e41efcf1a79e24c",
     "core/research/presentation.py": "3eccfd7e49ace9b1a39b3a8f89538c528439ad90125119c7ac262b35ca135e37",
@@ -256,7 +257,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "9dad6eef465c141d2fb2426dbd78b554a26b564093a9541ada3da62452b5455b",
+    "docs/compliance/FACTS.md": "6375186729ed53fcb3c781a0ad35d52b8ed51de47830ab1ba7422f808839a84d",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
@@ -291,6 +292,7 @@
     "docs/product/MC_VOLATILITY_2026-10-30.md": "92dc8a14c6884ea57936f9f187e9b87d1120b426ac0fe2f8767867617ef6837f",
     "docs/product/NATIVE_LANGUAGE_2026-10-31.md": "c9b68cf82c3a9bf858d9e0649871116f7d618a86ae8e4ba12dab87872db8fe32",
     "docs/product/NAUTILUS_AND_DATA_SOURCES_2026-10-31.md": "b2b0fdb675bd2e04e79863d872fc6101f40a10744b5bd0516da17957a26e7936",
+    "docs/product/OPTION_DISCLOSURE_2026-11-04.md": "ff314ee2043b524cdb8456f4af5c2ffe5f19f19d341ac28be471a6d3c7588373",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
@@ -300,7 +302,7 @@
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "7e5760a4d315298b267a008aaad88e7142790bc784a2aa294d3629eb1425332e",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "322f905c529e8828f8230de0110431b70763170d4726c890046aa8f1d0bd041d",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
@@ -323,7 +325,7 @@
     "quantgen_desktop/commentary.py": "ed0b730ca87aa042001757a4e99fc2d4846c95b71c13094e37a3d96add3df9c9",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
-    "quantgen_desktop/display_prose_catalog.py": "25621b1400bf12cfe9874b0bca300ce5fa3a61fe752ee49033bc5929f0f5e63d",
+    "quantgen_desktop/display_prose_catalog.py": "85cd9be4469c96b83a71aa0ac3c0dad0b04cbbf35649da8beb7cef12c9eb7708",
     "quantgen_desktop/fx.py": "89e77de9e85e2f1673c7ef32947893be4043eb5236292f587f400303db7456a6",
     "quantgen_desktop/fx_narrative.py": "1078cff2724ff7c6bc75f8146e7893622323899ee5bb1c52100007c11649e52e",
     "quantgen_desktop/indicator_guide.py": "ce6f8c970fcd2dea89e318e68785bacdf8367c0152ac800d5e38623f618a5559",
@@ -334,8 +336,8 @@
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
     "quantgen_desktop/market_chart.py": "a2c163621fc1050b54c47e90cb5de2b449fdf27106475f1cbcd167757978ad88",
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
-    "quantgen_desktop/market_narrative_language.py": "e4e3d3ac3d1ddfdac171d9bb5fd336d1c6e4bc2bd08bbf5862a53784e3587511",
-    "quantgen_desktop/market_tools.py": "331817363b3839c9dd0251b5c7abfc19f79a1450bfad67bcee1fc7cc34dfd987",
+    "quantgen_desktop/market_narrative_language.py": "256bad1643524a00f49b314ac161c40b2aeeef2da76faefa1de383612de07891",
+    "quantgen_desktop/market_tools.py": "433a3f101d3e829433aa5f2eb851105b39a94b656337cf949d32163cbe1bb849",
     "quantgen_desktop/markets_view.py": "ae84fac7ca9ab0544930465b81b4f47ab871da69a486c77c6daa1bb89a710899",
     "quantgen_desktop/model_narrative_language.py": "c4d4c826e3416a202cc4167c19a2ccbc233fcbc80239e62a81808092274c0981",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
@@ -475,6 +477,7 @@
     "tests/market_symbols_acceptance.py": "dac7d8af68db34e0ecf7ce451fddc288618eae24988c080d8784b5e480526d78",
     "tests/mc_volatility_acceptance.py": "5715fb07e257e88f6a38ace19863c83e926c01bbc5c22573174e4ea1072c2a89",
     "tests/notrun.py": "8da97cac3ebd6d0f22ee476b0869e33cb363688317a38befa541ffc2b79f7b20",
+    "tests/option_disclosure_acceptance.py": "9cf0384cc930e27853c26f6c8b554e184dba6a1fe208fb3e90998d91e5951c8f",
     "tests/packaging_policy_acceptance.py": "936034aeaab8d118f83fce8728897650acc2f306cb5405172fef4893fef0b04f",
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
@@ -542,7 +545,7 @@
     "ui/components.py": "41be9f3117f80c1677308355702758897f6d9d30654eb5a4d229d0bf7702a4fd",
     "ui/crypto_page.py": "f7b0f3b4f1a09b2f9c3a9b3b75f1ef15bb4eb6af5e2c11aa8433f93630e91fd8",
     "ui/data_rights.py": "3ebc471d51a81f19172514dc735c5450a87f1a795fe31f0807d8fa806a25951e",
-    "ui/derivatives_page.py": "ed659a96def9e1b9bddbd0295c6357c47418fb4ba11778a1aecc817c352e1359",
+    "ui/derivatives_page.py": "d2556fc98cc5c936f0e87dade57a39aa01a84e21878bf1708a93c521e31b213a",
     "ui/etf_page.py": "910b2a27d4ee5264cc79286e8fc48bc985a251d6a0f1727ec6f29daa633c660f",
     "ui/fcharts.py": "fc7fafba72863691b8013fbba55c3299eac46440f7a5285ffd7e4ba61b0bf78d",
     "ui/fx_page.py": "42a0304e93d0d9159d3941ee7c6883c980e9e595b9825cccc10c2eccdc99f48d",
@@ -571,163 +574,163 @@
   "reviews": {
     "1": {
       "document_sha256": "800842db400cf938aaaca47d17d69cd9c1f8100096255c919dfbd44b290af9cb",
-      "source_digest": "716010abf4b07c69ef1bfb7583d29416c7a3c6184827f09885e3c1dc48536d2a",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.101080+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "e8fb6129da4ddcc40f3ecfa352f80c39fee63f00ac89ef2fa7cc21e0a5cb736a",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.807816+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "2": {
       "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "716010abf4b07c69ef1bfb7583d29416c7a3c6184827f09885e3c1dc48536d2a",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.103958+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "e8fb6129da4ddcc40f3ecfa352f80c39fee63f00ac89ef2fa7cc21e0a5cb736a",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.811283+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "8012ac0a2262906a7ea86f872ea1be1868d5fe1f336e093f49be5c684b584cf5",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.106701+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "cbab94829db10b4da0b08b054f6fa7203cd105c51f9cec8422873374a70ce856",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.813957+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "96f10e7fbae8a2d85cc80f862fb9ae274a136a356d57b8a6daf153c805015cef",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.109486+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "8dd79751f3a5df729ac6afc0b2d460145a976ef9394acc72c1d54671ad713565",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.816737+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "7d28a22d9ce2693d924213bc3aa7ad733be8332d542d36f9f853b24ed6e821e2",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.112147+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "7ac6541298134ab6760c3787fdf9e142f791ae4a7f1c547cca6485c07ee08c65",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.819304+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "6": {
       "document_sha256": "9e7d3a2850c698226b88e0715ac5a11d47559a375158df21e5d5f2b4618d9805",
-      "source_digest": "03f03b9305d1c0781ff663d3798ff70ae5ad2e8dcf87bd360bbe2dd922c3b77c",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.114544+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "f4e87144f964ab4d8f1daae6c500fb2f27201f0a56f1024df546916e319ec49f",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.821432+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "7": {
       "document_sha256": "99b4631bd5dc98b713015d45db2b864a64919a8a7dedfb4f903ee75656fa1f04",
-      "source_digest": "716010abf4b07c69ef1bfb7583d29416c7a3c6184827f09885e3c1dc48536d2a",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.117047+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "e8fb6129da4ddcc40f3ecfa352f80c39fee63f00ac89ef2fa7cc21e0a5cb736a",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.824032+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "8": {
       "document_sha256": "a0c83c9860eb1b77a1b5dd89ac4036cab1d5a48ef8ca1efeadc2295b0205dc61",
-      "source_digest": "03f03b9305d1c0781ff663d3798ff70ae5ad2e8dcf87bd360bbe2dd922c3b77c",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.121042+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "f4e87144f964ab4d8f1daae6c500fb2f27201f0a56f1024df546916e319ec49f",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.826488+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "9": {
       "document_sha256": "1ac53869fa19977ce6917d2c401f93f457245bc9a98c465f937740896f87a8fc",
-      "source_digest": "cad56e14f8d5796e2effa782c5c8283f6b8e9884961b00885553caaf3206a376",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.123113+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "d22b466037e71f379c54f4808867cc8070cc8bdfbafe7b6a3d85e94b40884173",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.829192+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "10": {
       "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "02d5e4ea4b5455e52e63dd597e7819d3c3c50516059de9e5844c196f1bac8353",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.125077+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "4e9a1d861f9af8e2754631b36b0d33e999ab2b62b73e721da274e4274849ae7a",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.831761+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "f61205df803b4d6332f66f83438ffb14ceb9b1b90707a1b61557209b196e567d",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.126818+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "6d6e7d75fb94cd587687ac8785630c3494d1c4bc303f08c8bc078d4316d88c34",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.834227+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "12": {
       "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "885868daebd1b6ec292331645499a4a4f15b1ca3d7f36429e3edeaad32050b42",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.128863+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "ed8fbd6cf7dded0740f43da16a249641505d479c0209444a6a4ce6d9d7ec43a2",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.836409+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "cad56e14f8d5796e2effa782c5c8283f6b8e9884961b00885553caaf3206a376",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.130703+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "d22b466037e71f379c54f4808867cc8070cc8bdfbafe7b6a3d85e94b40884173",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.838982+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "14": {
-      "document_sha256": "14f89ec3bf10261b8d039e4bef5a113b599f30b6494755090a6570ac8e0dbdb0",
-      "source_digest": "cad56e14f8d5796e2effa782c5c8283f6b8e9884961b00885553caaf3206a376",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.132545+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
+      "source_digest": "d22b466037e71f379c54f4808867cc8070cc8bdfbafe7b6a3d85e94b40884173",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.841494+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "15": {
       "document_sha256": "f6d97b6b70a73b55d43b72efc4df0232ffe0516f32f22478fdf94b6a973af131",
-      "source_digest": "cad56e14f8d5796e2effa782c5c8283f6b8e9884961b00885553caaf3206a376",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.134255+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "d22b466037e71f379c54f4808867cc8070cc8bdfbafe7b6a3d85e94b40884173",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.844185+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "7fd43eac8557d2df0bed4be4d288ee937c57544d71fa6c09f2cbbf85efdc2daf",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.136028+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "0c0da4bc06cf178329949da1484c08bd05c7d01c430d8d87e0f2562863adb4a5",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.846576+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "03f03b9305d1c0781ff663d3798ff70ae5ad2e8dcf87bd360bbe2dd922c3b77c",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.137725+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "f4e87144f964ab4d8f1daae6c500fb2f27201f0a56f1024df546916e319ec49f",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.850417+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "716010abf4b07c69ef1bfb7583d29416c7a3c6184827f09885e3c1dc48536d2a",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.140322+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "e8fb6129da4ddcc40f3ecfa352f80c39fee63f00ac89ef2fa7cc21e0a5cb736a",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.853001+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "25a0db082e4ea4bc30494792e68e33ffac9640eb14c0d86da84120627c0950d6",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.142098+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "fc5110785f66dd5387e835e91c8d62fed36d6ed73629c067687c706f3e6b3f8a",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.855652+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     },
     "20": {
       "document_sha256": "9e456e5db5c44c8592f493633e32f1e00de8d112b05dd468e6b335e481363d45",
-      "source_digest": "716010abf4b07c69ef1bfb7583d29416c7a3c6184827f09885e3c1dc48536d2a",
-      "reviewed_by": "Claude Markets rework review",
-      "review_note": "Since the last full review only tests/desktop_operation_fixes_acceptance.py changed: a long ASCII wrapping line makes a layout test precondition hold on any platform font. No product source changed and none of documents 1-20 states anything about that test's setup.",
-      "reviewed_at": "2026-11-04T11:34:50.143887+00:00",
-      "source_commit": "51f39217db7f3969bc10d0a7433fff28c45535b7"
+      "source_digest": "e8fb6129da4ddcc40f3ecfa352f80c39fee63f00ac89ef2fa7cc21e0a5cb736a",
+      "reviewed_by": "Claude Section 10 options review",
+      "review_note": "Merge of main d5e73ae (Markets rework PR 71, Crypto PR 68) into the option-board disclosure branch: FACTS keeps every section with the options section last, 14-contrast keeps the options line as reviewed at a4b7c3c, the section 10 count is now 27 of 67 in the queue and triage, and the README status snapshot was regenerated. No other document statement changed.",
+      "reviewed_at": "2026-11-04T12:01:08.857960+00:00",
+      "source_commit": "a4b7c3caca74f0a5f7c87f2354c99a1c592a9fc8"
     }
   }
 }

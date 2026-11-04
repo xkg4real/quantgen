@@ -1,5 +1,5 @@
 """Derivatives — KOSPI200 futures basis, the option board, the volatility
-surface, the risk-neutral density, the box-spread funding rate, and the
+surface, the risk-neutral density, the adjacent-strike box as a quote check, and the
 hedger's P&L simulation for the structuring pages.
 
 Live data comes from the KIS asset domains (`data.kis_markets`): the whole
@@ -30,6 +30,7 @@ from ui.components import card, chip, empty_state, notice, section, stat
 import ui.xcharts as xc
 from core.research.derivatives_workflow import synthetic_board, snapshot, narrative, payload
 from core.research.quote_coverage import butterfly_display, quote_coverage_text
+from core.research.option_disclosure import box_tooltip, hedge_text, mfiv_strip, mfiv_text, same_vol
 
 _SOURCES = [("kis", "KIS live (KOSPI200 board)"), ("synthetic", "Synthetic demo board")]
 _ENGINES = [("gbm", "GBM at the ATM vol"), ("garch_t", "GARCH(1,1)-t on the index history")]
@@ -65,6 +66,7 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
                 busy.visible = False; page.update(); return
             b, fit, sim, rec = s["basis"], s["svi"], s["hedge"], s["reconcile"]
             butterfly_value, butterfly_token = butterfly_display(s['quote_coverage'])
+            strip = mfiv_strip(s)
             blocks: list[ft.Control] = []
             if s["source"] != "kis":
                 blocks.append(notice("Synthetic board: a smile-shaped demo chain, not market quotes.", "error",
@@ -87,14 +89,18 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
             ], spacing=10, wrap=True))
             blocks.append(ft.Row([
                 stat("ATM IV", f"{s['atm'].iv:.1%}"),
-                stat("MFIV", f"{s['mfiv'].get('vol', float('nan')):.1%}" if s["mfiv"].get("n_strikes") else "n/a"),
+                stat("MFIV", f"{s['mfiv'].get('vol', float('nan')):.1%}" if s["mfiv"].get("n_strikes") else "n/a",
+                     tooltip=mfiv_text(strip) or "Model-free variance not computed"),
+                stat("MFIV strike range", f"{strip['lower_moneyness']:+.1%} / {strip['upper_moneyness']:+.1%} of F"
+                     if strip["status"] == "COMPUTED" else "n/a", token="muted",
+                     tooltip="Options outside this range are omitted; the omitted wings bias MFIV downward (truncated strip)."),
                 stat("SVI ρ", f"{fit.rho:+.2f}"), stat("SVI RMSE", f"{fit.rmse_volpts:.2f} pts",
                                                        token="error" if fit.rmse_volpts > 1.0 else "text"),
                 stat("IV gap vs KIS", f"{rec['median_volpts']:.2f} pts", token="success" if rec["ok"] else "error",
                      tooltip="median |σ_app − σ_KIS| on quoted strikes within ±15 % of F; gate 0.5"),
                 stat("Butterfly viol.", butterfly_value, token=butterfly_token,
                      tooltip=quote_coverage_text(s['quote_coverage'])),
-                stat("Box rate", f"{s['box']['rate']:.2%}" if s["box"] else "n/a"),
+                stat("Box rate (quote check)", f"{s['box']['rate']:.2%}" if s["box"] else "n/a", tooltip=box_tooltip(s)),
                 stat("RND ∫", f"{s['rnd']['integral']:.3f}"),
             ], spacing=10, wrap=True))
             blocks.append(notice(quote_coverage_text(s['quote_coverage']), "accent"))
@@ -107,13 +113,22 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
                 p_samples = s["futures"]["underlying_level"] * np.exp(shocks.sum(axis=1))
             blocks.append(card(xc.density_chart(s["rnd"], p_samples=p_samples)))
             blocks.append(ft.Row([
-                stat("Hedge P&L (mean)", f"{sim.mean_pnl_bp:+.0f} bp", token="success" if sim.mean_pnl_bp > 0 else "error",
-                     tooltip="short the ATM option at σ_h, delta-hedged daily; bp of notional"),
+                # §10 M4-N7: at σ_true = σ_h the expected mean is 0 by construction; its sign is not coloured.
+                stat("Hedge P&L (mean)", f"{sim.mean_pnl_bp:+.0f} bp",
+                     token="text" if same_vol(s) else "success" if sim.mean_pnl_bp > 0 else "error",
+                     tooltip="short the ATM option at σ_h, delta-hedged daily; bp of notional"
+                     + ("; GBM engine at σ_true = σ_h: expected mean 0 bp by construction, the sign is Monte Carlo noise"
+                        if same_vol(s) else "")),
                 stat("SE", f"{sim.se_bp:.0f} bp"), stat("CVaR95", f"{sim.cvar95_bp:+.0f} bp", token="error"),
-                stat("σ_h", f"{sim.sigma_hedge:.1%}"), stat("Break-even realised vol", f"{sim.breakeven_vol:.1%}"),
+                stat("σ_h", f"{sim.sigma_hedge:.1%}"),
+                stat("Break-even realised vol", f"{sim.breakeven_vol:.1%}",
+                     tooltip="GBM engine: equals σ_h by construction, up to Monte Carlo noise" if same_vol(s) else ""),
                 stat("Identity slope / R²", f"{sim.identity_slope:.2f} / {sim.identity_r2:.2f}"),
                 stat("Engine", sim.engine),
             ], spacing=10, wrap=True))
+            hedge_note = hedge_text(s)
+            if hedge_note:
+                blocks.append(notice(hedge_note, "accent"))
             blocks.append(analysis_panel(page, kind="kospi200_derivatives", narrative=narrative(s),
                                          payload_fn=lambda p=payload(s): p, deep_fn=insights.deep_analysis))
             host.controls = blocks
@@ -125,7 +140,7 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
     host.controls = [empty_state("Load the board",
                                  "The nearest KOSPI200 expiry from KIS (or a synthetic demo): futures basis and fair value, "
                                  "the Black-76 smile against the exchange's IV, an SVI fit with the butterfly check, the "
-                                 "model-free variance, the risk-neutral density, the box-spread funding rate, and a hedge "
+                                 "model-free variance, the risk-neutral density, the box-spread quote check, and a hedge "
                                  "P&L simulation in bp of notional.", icon=ft.Icons.STACKED_LINE_CHART_OUTLINED,
                                  action=ft.Button("Open Settings", on_click=lambda e: on_open_settings())
                                  if on_open_settings else None)]
