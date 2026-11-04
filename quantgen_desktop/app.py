@@ -5,12 +5,13 @@ available unchanged while their native equivalents are ported and verified.
 """
 from __future__ import annotations
 
+import logging
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 from PyQt6.QtCore import Qt, QTimer, pyqtSlot, QByteArray, QSettings
-from PyQt6.QtGui import QFont, QFontDatabase, QIcon
+from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics, QIcon
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialog,
     QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow,
@@ -43,6 +44,9 @@ from .localization import UiLabel, LanguageController, CAPTION_ROLE
 from .translations import display
 from .chart_study import CurrentPageTabs
 from .macro_records import execute_macro_records
+from . import typography
+
+log = logging.getLogger(__name__)
 
 
 # Markets asset classes: (key, tab title, chart asset or None, tool panes in order).
@@ -83,11 +87,18 @@ def label(text, role="", *, wrap=True):
 
 
 def load_interface_fonts(app):
-    """Register bundled real weights; retain the platform font if unavailable."""
+    """Register bundled real weights; retain the platform font if unavailable.
+
+    A missing or unreadable file is logged: the window then falls back to the
+    platform font, which changes Hangul shapes and widths.
+    """
     family = None
     for filename in ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf"):
-        font_id = QFontDatabase.addApplicationFont(str(application_root() / "assets/fonts" / filename))
-        families = QFontDatabase.applicationFontFamilies(font_id)
+        path = application_root() / "assets/fonts" / filename
+        font_id = QFontDatabase.addApplicationFont(str(path))
+        families = QFontDatabase.applicationFontFamilies(font_id) if font_id >= 0 else []
+        if not families:
+            log.warning("QUANTGEN interface font did not load: %s", path)
         if families and family is None:
             family = families[0]
     if family is not None:
@@ -96,6 +107,8 @@ def load_interface_fonts(app):
         # Keep changing prices aligned without giving Korean labels a monospace face.
         font.setFeature(QFont.Tag.fromString("tnum"), 1)
         app.setFont(font)
+    else:
+        log.warning("QUANTGEN interface font unavailable; using the platform font")
     return family
 
 
@@ -188,10 +201,12 @@ class ResearchWindow(QMainWindow):
         outer.setSpacing(0)
         sidebar = QFrame()
         sidebar.setObjectName("sidebar")
-        sidebar.setFixedWidth(222)
+        self.sidebar = sidebar
+        # Owner 2026-11-04: a thinner rail, sized from its widest label (fit_sidebar).
+        sidebar.setFixedWidth(typography.SIDEBAR_WIDTH_RANGE[1])
         rail = QVBoxLayout(sidebar)
-        rail.setContentsMargins(18, 28, 18, 22)
-        rail.setSpacing(9)
+        rail.setContentsMargins(*typography.RAIL_MARGINS)
+        rail.setSpacing(typography.RAIL_SPACING)
         brand = QHBoxLayout()
         icon = QSvgWidget(str(application_root()/"assets/branding/f1-symbol.svg"))
         self.brand_symbol = icon
@@ -200,10 +215,10 @@ class ResearchWindow(QMainWindow):
         brand.addWidget(icon)
         brand.addWidget(label("QUANTGEN", "brand", wrap=False))
         rail.addLayout(brand)
-        rail.addSpacing(12)
+        rail.addSpacing(10)
         self.stack = QStackedWidget()
         self.nav = {}
-        routes = (("home", "Research Home"), ("markets", "Markets"), ("guide", "Technical indicator guide"),
+        routes = (("home", "Research Home"), ("markets", "Markets"), ("guide", "Indicator guide"),
                   ("quant", "Build & Test"), ("risk", "Portfolio & Risk"),
                   ("library", "Research Library"), ("system", "System"))
         self.route_indices = {route:i for i,(route,_) in enumerate(routes)}
@@ -215,8 +230,6 @@ class ResearchWindow(QMainWindow):
             rail.addWidget(b)
             self.nav[route] = b
         rail.addStretch()
-        rail.addWidget(label("PERSONAL RESEARCH", "caption"))
-        rail.addWidget(label("Native desktop preview\nFlet browser is retained", "muted"))
         self.paper_halt = QPushButton('모의 엔진 긴급 정지')
         self.paper_halt.setEnabled(False)
         self.paper_halt.clicked.connect(lambda: self.paper_session.runtime.halt() if self.paper_session.runtime else None)
@@ -250,6 +263,7 @@ class ResearchWindow(QMainWindow):
         self.navigate("home")
         self.localizer = LanguageController(self)
         self.refresh_views()
+        self.fit_sidebar()
         if auto_refresh:
             QTimer.singleShot(0, self.refresh_markets)
 
@@ -262,6 +276,27 @@ class ResearchWindow(QMainWindow):
         self.locale_picker.setCurrentIndex(index)
         self.locale_picker.blockSignals(False)
         self.change_language(index)
+
+    def fit_sidebar(self):
+        """Size the rail from its widest nav label in the current language.
+
+        Measured at the checked nav font (14px / 600) plus the nav padding, the rail
+        margins and a little air, never below what the paper-halt button and the
+        theme/language selectors need, and clamped to SIDEBAR_WIDTH_RANGE.
+        """
+        left, _, right, _ = typography.RAIL_MARGINS
+        frame = self.sidebar.frameWidth() + 1  # right-hand border
+        low, high = typography.SIDEBAR_WIDTH_RANGE
+        font = typography.scaled_font(next(iter(self.nav.values())).font(), 14, 600)
+        metrics = QFontMetrics(font)
+        widest = max(metrics.horizontalAdvance(button.text().replace("&&", "&")) for button in self.nav.values())
+        needed = widest + 2 * typography.NAV_PADDING[1] + typography.NAV_SLACK
+        for widget in (self.paper_halt, self.theme, self.language):
+            needed = max(needed, widget.sizeHint().width())
+        width = max(low, min(high, needed + left + right + frame))
+        if self.sidebar.width() != width or self.sidebar.minimumWidth() != width:
+            self.sidebar.setFixedWidth(width)
+        return width
 
     def page(self, title, subtitle):
         scroll = QScrollArea()
@@ -748,6 +783,7 @@ class ResearchWindow(QMainWindow):
             self.language_store.setValue("ui/language", self.ui_language)
             self.language_store.setValue("ui/locale", str(self.ctx.locale))
         self.localizer.apply()
+        self.fit_sidebar()
 
     @pyqtSlot()
     def refresh_markets(self):
@@ -939,39 +975,7 @@ class ResearchWindow(QMainWindow):
         self.market_board.set_theme(bool(index))
         if self.language_store is not None:
             self.language_store.setValue("ui/theme", "dark" if index else "light")
-        self.setStyleSheet(f"""
-          QWidget {{ background: {p.bg}; color: {p.text}; font-size: 13px; font-weight: 400; }}
-          QFrame#sidebar {{ background: {p.surface}; border-right: 1px solid {p.border}; }}
-          QFrame#panel {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; }}
-          QFrame#panel QLabel {{ background: transparent; }}
-          QLabel {{ background: transparent; }}
-          QLabel[role='title'] {{ font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }}
-          QLabel[role='heading'] {{ font-size: 17px; font-weight: 600; }}
-          QLabel[role='brand'] {{ font-size: 16px; font-weight: 600; letter-spacing: 0.15px; color: {p.accent}; }}
-          QLabel[role='number'] {{ font-size: 30px; font-weight: 500; letter-spacing: -0.4px; }}
-          QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
-          QLabel[role='caption'] {{ font-size: 12px; }}
-          QPushButton {{ padding: 10px 14px; border: 1px solid {p.border}; border-radius: 8px; background: {p.surface}; font-weight: 500; }}
-          QPushButton:hover {{ background: {p.accent_soft}; }}
-          QPushButton:focus, QLineEdit:focus, QComboBox:focus {{ border: 2px solid {p.accent}; }}
-          QPushButton[primary='true'], QPushButton:checked {{ background: {p.accent}; color: {p.on_accent}; }}
-          QPushButton[nav='true'] {{ text-align: left; border: 0; min-height: 24px; }}
-          QPushButton:disabled {{ color: {p.muted}; background: {p.surface_2}; }}
-          QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ min-height: 28px; padding: 5px; border: 1px solid {p.border}; border-radius: 6px; background: {p.surface}; }}
-          QTableWidget {{ background: {p.surface}; alternate-background-color: {p.surface_2}; gridline-color: {p.border}; border: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
-          QHeaderView::section {{ padding: 8px; border: 0; background: {p.surface_2}; color: {p.muted}; font-size: 12px; font-weight: 500; }}
-          QScrollArea {{ border: 0; }}
-          QTabWidget::pane {{ border: 0; }}
-          QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 18px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-weight: 500; }}
-          QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; }}
-          QTabWidget#marketInnerTabs QTabBar::tab {{ background: transparent; color: {p.muted}; padding: 7px 14px; margin-right: 6px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; }}
-          QTabWidget#marketInnerTabs QTabBar::tab:selected {{ background: transparent; color: {p.accent}; border-bottom: 2px solid {p.accent}; font-weight: 600; }}
-          QLineEdit#guideSearch {{ min-height: 34px; padding: 6px 12px; border-radius: 20px; font-size: 14px; }}
-          QListWidget#guideSuggestions {{ background: {p.surface}; border: 1px solid {p.border}; border-radius: 14px; padding: 4px; outline: 0; }}
-          QListWidget#guideSuggestions::item {{ border-radius: 9px; color: transparent; }}
-          QListWidget#guideSuggestions::item:selected, QListWidget#guideSuggestions::item:hover {{ background: {p.accent_soft}; }}
-          QPushButton[chip='true'] {{ padding: 6px 12px; border-radius: 15px; font-weight: 500; }}
-        """)
+        self.setStyleSheet(typography.window_stylesheet(p, bool(index)))
         for chart in [*self.findChildren(FanChart), *self.findChildren(FrontierChart), *self.findChildren(LineChart), *self.findChildren(SignedBars)]:
             chart.colors = p
             chart.update()
