@@ -54,8 +54,8 @@
         "passed": 112
       },
       {
-        "suite": "compliance acceptance and export",
-        "passed": null
+        "suite": "compliance acceptance, export and status snapshot after the named refresh",
+        "passed": 57
       }
     ],
     "counts_note": "Suites can overlap; do not sum. Local Linux PyQt6 6.12.0 offscreen, Python 3.13, network and docs/asset_expansion/cache blocked.",
