@@ -51,7 +51,7 @@ other limitation of the same model already carries its own error ID.
 | Upbit ticker | a missing price, change or 24-hour value became 0.0 | `None` |
 | Binance funding rate in the premium index | missing → 0.0, read by the AI as a 0 % rate | `None` |
 | `core/crypto/analytics.py` `kimchi_premium` | z = 0, or about +1 from float rounding, for a flat window; `last_z` 0.0 when not computed; zero or missing prices entered the premium; nothing said how many observations the latest z used | z and `last_z` are NaN when undefined; `last_z_window` is the number of observations behind `last_z` (365 on a history longer than a year, 0 when z is NaN); days without a usable Upbit or Binance price are left out, and an unusable FX fixing is skipped so the previous one carries forward |
-| `core/research/crypto_workflow.py` | `tick.get(coin, 0.0)`; one batch ticker request | `value_holdings` sets `krw_value=None` without a price (a zero quantity is worth 0); `krw_prices` asks each market alone only when Upbit rejects the list (HTTP 400/404), while a timeout, rate limit or server error stays a failed read; `holdings_summary` returns the valued total, the unvalued coins and `complete` |
+| `core/research/crypto_workflow.py` | `tick.get(coin, 0.0)`; one batch ticker request | `value_holdings` sets `krw_value=None` without a price (a zero quantity is worth 0); `krw_prices` asks each market alone only when Upbit rejects the list (HTTP 400/404), while a timeout, rate limit or server error stays a failed read and is not retried per coin (the shared HTTP session in `data/net.py` still re-sends the same request up to twice after a connection failure, a timeout or HTTP 502/503/504); `holdings_summary` returns the valued total, the unvalued coins and `complete` |
 | Narratives (English, Korean) | "+0.0 standard deviations"; "from its one-year mean" / "일년 평균에서" whatever the window | "z unavailable: fewer than 91 observations or no variation in the window" / "z는 계산할 수 없습니다 …"; on a history shorter than a year "from the mean of the N earlier observations (less than a year)" / "1년이 안 되는 직전 N개 관측 평균에서" |
 | AI payload | `kimchi.z` 0.0; `premium_index.premium_pct` 0.0 or −100 | `null`; new `kimchi.z_window` (observations behind z, `null` when z is) |
 | Flet Crypto page | `+0.00`, `+0.000%`, total of valued and zero-valued coins; "Premium z (1y)" whatever the window | `n/a` with a tooltip; "Premium z (N obs)" with a tooltip when the window is shorter than a year; total marked "partial, excludes …"; row value "n/a (no KRW price)"; cost basis with its unit, KRW prices with up to 8 decimals (0.0189 KRW, 812.5 KRW; whole won before, so a coin bought below 1 KRW read 0), non-KRW prices to 8 significant digits |
@@ -89,8 +89,10 @@ tolerance, float rounding of a constant window gave z ≈ ±1.
   into its candles, `data/kis_markets._bars` passes `inf`, and missing Upbit volumes
   still read as 0.0.
 - Real Upbit and Binance replies are not used. How Upbit answers a list with an
-  unknown market is unverified. The per-market retry covers both a whole-list
-  rejection and a partial answer.
+  unknown market is unverified. A whole-list rejection (HTTP 400/404) triggers the
+  per-market retry. A partial answer (HTTP 200 without some markets) gets no retry and
+  needs none: a market missing from the reply has no price, so its holding is left
+  unvalued and the total is marked partial.
 
 ## Checks
 
