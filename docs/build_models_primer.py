@@ -897,12 +897,16 @@ def ch3() -> list:
           "decides the centre. With no outlier in the sample the model degrades to GBM and says so "
           f"in the jump note. On the worked series the note reads: <i>{jump.jump_note}</i>"),
         P("3.5 Block bootstrap: no distribution at all", "H2"),
-        P("The stationary block bootstrap resamples the observed daily returns in blocks of five "
-          "consecutive sessions (wrapping around the sample), so short-run clustering and the "
-          "empirical tails survive exactly as far as they exist in the data. Its strength is that it "
-          "assumes nothing; its weakness is the same thing: it can never draw a move larger than any "
-          "the window contains, the cone is the sample's own history reshuffled, and the returns are "
-          "demeaned before resampling so that, again, only the drift mode sets the centre."),
+        P("The circular block bootstrap resamples the observed daily returns in fixed blocks of five "
+          "consecutive sessions, wrapping around the sample (it is not the stationary bootstrap, "
+          "whose block lengths are random). The empirical tails survive; volatility clustering is "
+          "only partly kept within a block (lag k keeps (5-k)/5 of the sample's autocorrelation of "
+          "squared returns, none from lag 5, because blocks are drawn independently), and the fan "
+          "does not start from the current vol level. Its strength is that it assumes nothing; its "
+          "weakness is the same thing: it can never draw a daily shock larger than any the window "
+          "contains, the cone is the sample's own history reshuffled, and the returns are demeaned "
+          "before resampling so that, again, only the drift mode sets the centre (the drift is "
+          "added on top of each resampled shock)."),
         P("3.6 The four models side by side", "H2"),
         TBL(["Model", "Assumption", "Captures", "Misses", "When to use"], [
             ["GBM", "constant μ and σ, normal daily returns",
@@ -913,9 +917,9 @@ def ch3() -> list:
              "gap risk; a fat left tail when the sample has one",
              "clustering; needs outliers in the window to be different from GBM",
              "a name with known event risk (earnings, policy) when the window contains such days"],
-            ["Block bootstrap", "the future is a reshuffle of the past 5-session blocks",
-             "the empirical tails and short-run clustering, with no formula",
-             "anything the window never showed; long-memory vol; a real forecast of today's vol",
+            ["Block bootstrap", "the future is a reshuffle of the past, in fixed circular 5-session blocks",
+             "the empirical tails, with no formula; clustering only partly, within a block",
+             "anything the window never showed; clustering beyond 5 sessions; a real forecast of today's vol",
              "a sanity check on the parametric models; series whose shape you distrust"],
             ["GARCH(1,1)-t", "variance follows its own recursion; innovations are Student-t",
              "clustering, fat tails, a fan that starts from today's vol and mean-reverts",
