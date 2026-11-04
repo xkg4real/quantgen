@@ -56,6 +56,7 @@ SECTION_KEYS = ("key_figures", "range", "returns", "risk", "signals", "indicator
                 "short_selling", "unavailable")
 SOURCE_KEYS = ("history", "quote", "flows", "short_selling")
 _HISTORY_SECTIONS = ("range", "returns", "risk", "signals", "indicators")
+_INVESTOR_KEYS = ("foreign", "institution", "individual")
 _KIS_SOURCES = frozenset({"KIS", "KIS REST"})
 _KST = timezone(timedelta(hours=9))
 _CURRENCIES = {"NAS": "USD", "NYS": "USD", "AMS": "USD", "HKS": "HKD", "TSE": "JPY",
@@ -375,15 +376,18 @@ def _signals(history):
 
 
 def _flows(rows):
+    """Net-buying sums per window; None when no session reported any investor value (dated rows, empty fields)."""
     out = {"sessions": len(rows), "first_date": rows[0]["date"], "last_date": rows[-1]["date"], "windows": {}}
     for length in sorted({min(w, len(rows)) for w in (5, FLOW_SESSIONS)}):
         window = rows[-length:]
         entry = {"first_date": window[0]["date"], "last_date": window[-1]["date"], "reported": {}}
-        for investor in ("foreign", "institution", "individual"):
+        for investor in _INVESTOR_KEYS:
             reported = [r[investor] for r in window if r[investor] is not None]
             entry[investor] = sum(reported) if reported else None
             entry["reported"][investor] = len(reported)
         out["windows"][length] = entry
+    if not any(entry[k] is not None for entry in out["windows"].values() for k in _INVESTOR_KEYS):
+        return None
     return out
 
 

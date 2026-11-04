@@ -295,6 +295,25 @@ class DomesticProfileTests(Base):
         self.assertIn("Individuals · last 12 sessions", [r.label for r in en["flows"].rows])
         self.assertIn("3-session average short-sale share", [r.label for r in en["short_selling"].rows])
 
+    def test_dated_flow_rows_without_any_investor_value_read_as_no_data(self):
+        flows = flow_rows(25)
+        for item in flows:
+            item.update(foreign_net_qty=None, institution_net_qty=None, individual_net_qty=None)
+        profile = self.full(markets=FakeMarkets(flows=flows))
+        self.assertNotIn("flows", profile.values)
+        self.assertEqual(profile.reasons["flows"], "no_observations")
+        en, ko = by_key(profile, "en"), by_key(profile, "ko")
+        self.assertNotIn("flows", en)
+        self.assertEqual(row(en["unavailable"], "Investor net buying").value, "No data")
+        self.assertEqual(row(ko["unavailable"], sp._TITLES["flows"][0]).value, "자료 없음")
+        self.assertIn("short_selling", en)
+        # One investor reported on one session is still a flow section, with the gap stated.
+        flows[-1]["institution_net_qty"] = -700.0
+        partial = by_key(self.full(markets=FakeMarkets(flows=flows)), "en")["flows"]
+        self.assertEqual([r.label for r in partial.rows],
+                         ["Institutions · last 5 sessions", "Institutions · last 20 sessions"])
+        self.assertIn("Reported on 1 of 20 sessions", row(partial, "Institutions · last 20 sessions").hint)
+
 
 class OverseasProfileTests(Base):
     def test_overseas_profile_has_no_fundamentals_flows_or_short_selling_and_never_asks_kis_for_them(self):
