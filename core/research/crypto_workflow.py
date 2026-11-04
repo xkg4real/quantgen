@@ -145,11 +145,22 @@ def z_text(z, digits=1) -> str | None:
 
 
 def cost_basis_text(holding) -> str:
-    """Upbit's average buy price with its currency; precise enough for small non-KRW prices."""
+    """Upbit's average buy price with its currency, keeping its digits.
+
+    KRW prices keep thousands separators and up to 8 decimals without trailing zeros, so a
+    coin bought below 1 KRW (0.0189) or at 812.5 KRW is not rounded to whole won; whole
+    amounts stay whole. Non-KRW prices keep 8 significant digits.
+    """
     value, unit = holding.get("avg_buy_price"), (holding.get("unit_currency") or "").strip()
     if value is None:
         return "n/a"
-    text = f"{value:,.0f}" if unit in ("", "KRW") else f"{value:.8g}"
+    if unit in ("", "KRW"):
+        # 15 significant digits first, so float noise does not show up in the 8th decimal.
+        text = f"{float(f'{value:.15g}'):,.8f}".rstrip("0").rstrip(".")
+        if text == "0" and value:  # below 1e-8 KRW: never shown as 0
+            text = f"{value:.8g}"
+    else:
+        text = f"{value:.8g}"
     return f"{text} {unit}".strip()
 
 

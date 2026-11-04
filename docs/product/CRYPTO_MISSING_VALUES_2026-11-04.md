@@ -41,12 +41,12 @@ other limitation of the same model already carries its own error ID.
 | `core/research/crypto_workflow.py` | `tick.get(coin, 0.0)`; one batch ticker request | `value_holdings` sets `krw_value=None` without a price (a zero quantity is worth 0); `krw_prices` asks each market alone only when Upbit rejects the list (HTTP 400/404), while a timeout, rate limit or server error stays a failed read; `holdings_summary` returns the valued total, the unvalued coins and `complete` |
 | Narratives (English, Korean) | "+0.0 standard deviations" | "z unavailable: fewer than 91 observations or no variation in the window" / "z는 계산할 수 없습니다 …" |
 | AI payload | `kimchi.z` 0.0; `premium_index.premium_pct` 0.0 or −100 | `null` |
-| Flet Crypto page | `+0.00`, `+0.000%`, total of valued and zero-valued coins | `n/a` with a tooltip; total marked "partial, excludes …"; row value "n/a (no KRW price)"; cost basis with its unit, non-KRW prices to 8 significant digits |
-| Native Crypto pane | z 0.0000; KRW value 0.0000 | `—`; a note naming unvalued coins (English and Korean), exported as a named holdings section so, like the holdings table, it never enters AI commentary (NEW-M6-18); cost basis with its unit |
+| Flet Crypto page | `+0.00`, `+0.000%`, total of valued and zero-valued coins | `n/a` with a tooltip; total marked "partial, excludes …"; row value "n/a (no KRW price)"; cost basis with its unit, KRW prices with up to 8 decimals (0.0189 KRW, 812.5 KRW; whole won before, so a coin bought below 1 KRW read 0), non-KRW prices to 8 significant digits |
+| Native Crypto pane | z 0.0000; KRW value 0.0000 | `—`; a note naming unvalued coins (English and Korean), exported as a named holdings section so, like the holdings table, it never enters AI commentary (NEW-M6-18); cost basis with its unit, KRW prices with up to 8 decimals (4 decimals without a unit before) |
 
 Provider parsing and the analytics share one definition of a usable number (`core/crypto/values.py`).
 
-For valid inputs nothing changes. On 40 synthetic random histories (95–800 days,
+For valid inputs the kimchi premium numbers do not change. On 40 synthetic random histories (95–800 days,
 weekday-only FX), the old and new `kimchi_premium` gave identical dates, premium and
 z arrays and identical summary values. The only numbers that differ are the
 undefined cases above. A flat window is treated as having no variation when its

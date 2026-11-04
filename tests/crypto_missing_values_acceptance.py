@@ -128,6 +128,13 @@ class Holdings(NoNetwork):
         self.assertEqual(W.cost_basis_text({"avg_buy_price": 80_000_000.0, "unit_currency": "KRW"}), "80,000,000 KRW")
         self.assertEqual(W.cost_basis_text({"avg_buy_price": 0.00002, "unit_currency": "BTC"}), "2e-05 BTC")
         self.assertEqual(W.cost_basis_text({"avg_buy_price": 1500.0}), "1,500")
+        # KRW keeps its decimals: a coin bought below 1 KRW was shown as "0 KRW", 812.5 as "812 KRW".
+        krw = {0.0189: "0.0189 KRW", 0.00085: "0.00085 KRW", 0.5: "0.5 KRW", 812.5: "812.5 KRW",
+               4_123_000.5: "4,123,000.5 KRW", 95_123_456.789: "95,123,456.789 KRW", 0.0: "0 KRW",
+               1e-9: "1e-09 KRW"}
+        for value, text in krw.items():
+            with self.subTest(value):
+                self.assertEqual(W.cost_basis_text({"avg_buy_price": value, "unit_currency": "KRW"}), text)
 
 
 class KimchiZ(NoNetwork):
@@ -203,7 +210,7 @@ class NativeDisplay(NoNetwork):
         out.data["kimchi"] = replace(out.data["kimchi"], last_z=float("nan"))
         out.data["balances"] = W.value_holdings(
             [{"currency": "BTC", "total": .01, "avg_buy_price": 1.0, "unit_currency": "KRW"},
-             {"currency": "XYZ", "total": 3.0, "avg_buy_price": 1.0, "unit_currency": "KRW"}],
+             {"currency": "XYZ", "total": 3.0, "avg_buy_price": 0.0189, "unit_currency": "KRW"}],
             {"KRW-BTC": 90_000_000.0})
         with patch.object(dotenv, "load_dotenv", return_value=False):
             from quantgen_desktop.app import ResearchWindow
@@ -217,6 +224,7 @@ class NativeDisplay(NoNetwork):
         self.assertEqual(cells["Premium z"], ["—"])
         self.assertEqual(cells["XYZ"][-1], "—")          # was 0.0000
         self.assertEqual(cells["BTC"][1], "1 KRW")  # the cost basis names its currency
+        self.assertEqual(cells["XYZ"][1], "0.0189 KRW")  # and keeps its decimals (was "0 KRW")
         notes = " ".join(label.text() for label in pane.findChildren(QLabel))
         self.assertIn("No KRW price for XYZ", notes)
         # The note names held coins, so like the holdings table it stays out of AI commentary (NEW-M6-18).
