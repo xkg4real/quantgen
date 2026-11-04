@@ -150,7 +150,7 @@ class MarketBoard(QWidget):
         layout.setSpacing(10)
         head = QHBoxLayout()
         self.heading = label("", "heading")
-        head.addWidget(self.heading, 1)
+        head.addWidget(self.heading, 1, Qt.AlignmentFlag.AlignVCenter)  # keep the accent bar to the text height
         self.status = label("", "caption", wrap=False)
         head.addWidget(self.status)
         self.refresh_button = QPushButton()

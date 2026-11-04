@@ -293,6 +293,25 @@ class WindowTypographyTests(unittest.TestCase):
         self.drain()
         self.assertFalse([b.text() for b in w.nav.values() if re.search("[가-힣]", b.text())])
 
+    def test_heading_accent_bar_stays_at_text_height_on_every_page(self):
+        # The 3px heading bar is as tall as its label: a heading added to a row
+        # beside a taller button without an alignment stretches it to the row height.
+        w = self.window
+        for language, size in (("en", (1000, 700)), ("ko", (1360, 900))):
+            w.set_language(language)
+            w.resize(*size)
+            for route in w.nav:
+                w.navigate(route)
+                self.drain()
+                page = w.stack.currentWidget()
+                for heading in page.findChildren(QLabel):
+                    if heading.property("role") != "heading" or not heading.isVisible():
+                        continue
+                    needed = (heading.heightForWidth(heading.width()) if heading.wordWrap()
+                              else heading.sizeHint().height())
+                    with self.subTest(language=language, size=size, route=route, text=heading.text()[:30]):
+                        self.assertLessEqual(heading.height(), needed + 6)
+
     def test_type_scale_uses_only_real_weights(self):
         w = self.window
         sheet = w.styleSheet()
