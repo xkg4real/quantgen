@@ -615,6 +615,10 @@ from core.ficc.forward_conventions import FIVE_YEAR_SIMPLE_LABEL, FIVE_YEAR_SIMP
 KO[FIVE_YEAR_SIMPLE_LABEL] = FIVE_YEAR_SIMPLE_LABEL_KO
 EN[FIVE_YEAR_SIMPLE_LABEL_KO] = FIVE_YEAR_SIMPLE_LABEL
 
+from core.research.mc_disclosure import BOOTSTRAP_TEXT, BOOTSTRAP_TEXT_KO
+KO[BOOTSTRAP_TEXT] = BOOTSTRAP_TEXT_KO
+EN[BOOTSTRAP_TEXT_KO] = BOOTSTRAP_TEXT
+
 def translate(text, language):
     """Translate only authored UI messages; unknown source text stays intact."""
     text = str(text)
