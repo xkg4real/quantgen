@@ -810,6 +810,12 @@ class _Writer:
         text = provider + " · " + self.t(label_ko, label_en)
         return text + (self.t(" · 수신 ", " · received ") + received if received else "")
 
+    def reported(self, count, length):
+        """A hint line when a window's figure rests on fewer sessions than the window holds; else ''."""
+        if count >= length:
+            return ""
+        return self.t(f"\n{length}거래일 중 {count}일만 보고됨", f"\nReported on {count} of {length} sessions")
+
     def reason(self, key):
         code = self.p.reasons.get(key, "not_provided")
         template = self.pair(_REASONS.get(code, _REASONS["provider_unavailable"]))
@@ -980,10 +986,7 @@ def _flow_rows(w):
             total = entry.get(key)
             if total is None:
                 continue
-            hint = span + "\n" + source
-            reported = entry["reported"][key]
-            if reported < length:
-                hint += w.t(f"\n{length}거래일 중 {reported}일만 보고됨", f"\nReported on {reported} of {length} sessions")
+            hint = span + "\n" + source + w.reported(entry["reported"][key], length)
             rows.append(ProfileRow(w.pair(labels) + w.t(f" · 최근 {length}거래일", f" · last {length} sessions"),
                                    w.shares(total, signed=True), w.tone(total, 0), hint))
     return tuple(rows)
@@ -1007,10 +1010,12 @@ def _short_rows(w):
     span = w.span(average["first_date"], average["last_date"]) + "\n" + source
     if average["short_ratio_pct"] is not None:
         rows.append(ProfileRow(w.t(f"{length}거래일 평균 공매도 비중", f"{length}-session average short-sale share"),
-                               w.num(average["short_ratio_pct"], 2) + "%", None, span))
+                               w.num(average["short_ratio_pct"], 2) + "%", None,
+                               span + w.reported(average["reported_ratio"], length)))
     if average["short_qty"] is not None:
         rows.append(ProfileRow(w.t(f"{length}거래일 평균 공매도 수량", f"{length}-session average short-sale volume"),
-                               w.shares(average["short_qty"]), None, span))
+                               w.shares(average["short_qty"]), None,
+                               span + w.reported(average["reported_qty"], length)))
     return tuple(rows)
 
 

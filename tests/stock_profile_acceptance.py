@@ -295,6 +295,23 @@ class DomesticProfileTests(Base):
         self.assertIn("Individuals · last 12 sessions", [r.label for r in en["flows"].rows])
         self.assertIn("3-session average short-sale share", [r.label for r in en["short_selling"].rows])
 
+    def test_short_sale_averages_say_how_many_sessions_reported(self):
+        shorts = short_rows(25)
+        for item in shorts[-20:][:15]:
+            item["short_ratio_pct"] = None
+        profile = self.full(markets=FakeMarkets(shorts=shorts))
+        average = profile.values["short_selling"]["average"]
+        self.assertEqual((average["sessions"], average["reported_ratio"], average["reported_qty"]), (20, 5, 20))
+        en, ko = by_key(profile, "en")["short_selling"], by_key(profile, "ko")["short_selling"]
+        share = row(en, "20-session average short-sale share")
+        self.assertEqual(share.value, f"{statistics.fmean(r['short_ratio_pct'] for r in shorts[-5:]):.2f}%")
+        self.assertTrue(share.hint.endswith("\nReported on 5 of 20 sessions"), share.hint)
+        self.assertIn("20거래일 중 5일만 보고됨", row(ko, "20거래일 평균 공매도 비중").hint)
+        # The volume average used every session, so its hint carries no such line.
+        self.assertNotIn("Reported on", row(en, "20-session average short-sale volume").hint)
+        self.assertNotIn("Reported on", row(by_key(self.full(), "en")["short_selling"],
+                                            "20-session average short-sale share").hint)
+
     def test_dated_flow_rows_without_any_investor_value_read_as_no_data(self):
         flows = flow_rows(25)
         for item in flows:
