@@ -15,9 +15,10 @@ Four models, all calibrated from the supplied history's daily log returns:
     fixed blocks of 5 sessions, wrapping at the sample end (not the stationary
     bootstrap, whose block lengths are random). No distributional assumption:
     each day's shock is one of the sample's demeaned returns, so its fat tails
-    survive. Volatility clustering is only partly kept within a block (lag k
-    keeps (5-k)/5 of the sample's, none from lag 5), and the fan does not
-    start from the current vol level.
+    survive. Volatility clustering is kept only within a block: over a
+    horizon well beyond 5 sessions lag k keeps about (5-k)/5 of the sample's
+    (more over a shorter one), none from lag 5, and the fan does not start
+    from the current vol level.
 
 DRIFT — every model draws zero-mean shocks; `drift` chooses what is added:
 

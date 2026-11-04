@@ -69,6 +69,7 @@ from core.quant.garch import (BOUNDS, LR_5PCT, NU_NORMAL, STATIONARITY_MAX, TRAD
                               fit_garch, forecast_variance, simulate_garch_series)
 from core.quant.history import History, fmp_history, synthetic_history
 from core.quant.montecarlo import DRIFTS, FAN_PERCENTILES, MODELS, run_monte_carlo
+from core.research.mc_disclosure import BOOTSTRAP_TEXT
 from ui.quant_lab_page import _garch_blocks, _study_chips
 
 ETA_MAX = BOUNDS["eta"][1]                            # the tail is fitted as eta = 1/nu on [0, ETA_MAX]
@@ -899,14 +900,16 @@ def ch3() -> list:
         P("3.5 Block bootstrap: no distribution at all", "H2"),
         P("The circular block bootstrap resamples the observed daily returns in fixed blocks of five "
           "consecutive sessions, wrapping around the sample (it is not the stationary bootstrap, "
-          "whose block lengths are random). The empirical tails survive; volatility clustering is "
-          "only partly kept within a block (lag k keeps (5-k)/5 of the sample's autocorrelation of "
-          "squared returns, none from lag 5, because blocks are drawn independently), and the fan "
-          "does not start from the current vol level. Its strength is that it assumes nothing; its "
-          "weakness is the same thing: it can never draw a daily shock larger than any the window "
-          "contains, the cone is the sample's own history reshuffled, and the returns are demeaned "
-          "before resampling so that, again, only the drift mode sets the centre (the drift is "
-          "added on top of each resampled shock)."),
+          "whose block lengths are random). The empirical tails survive. Volatility clustering is "
+          "kept only within a block, because blocks are drawn independently: over a horizon well "
+          "beyond five sessions, lag k keeps about (5-k)/5 of the sample's autocorrelation of squared "
+          "returns (more over a shorter horizon) and none from lag 5, and the fan does not start from "
+          "the current vol level. Its strength is that it assumes nothing; its weakness is the same "
+          "thing: the returns are demeaned before resampling, every daily shock is one of those "
+          "demeaned returns, so no shock falls outside the demeaned sample's range, and the cone is "
+          "the sample's own history reshuffled. Again only the drift mode sets the centre: the drift "
+          "is added on top of each resampled shock. Because of the demeaning and the drift, a drawn "
+          "daily move can still fall outside the range of the window's raw returns."),
         P("3.6 The four models side by side", "H2"),
         TBL(["Model", "Assumption", "Captures", "Misses", "When to use"], [
             ["GBM", "constant μ and σ, normal daily returns",
@@ -1957,6 +1960,7 @@ def ch9() -> list:
             ["Guardrails: the solver did not converge; treat the calibration as indicative; near-integrated: the sample cannot pin down where vol settles; use a longer history; tails heavier than the model allows; unconditional vol undefined; alpha at 0: no reaction to shocks, so beta and the half-life are not identified [or alpha at its cap: shock response is capped by the guardrail].", "one clause per flag", "7.6"],
             [f"t innovations are capped at ±{Z_BOUND}: this fit expects a larger day once per N years (P x% within the horizon); the cap drops y% of innovation variance, so the fan's vol over this horizon runs z% below the fit's own forecast and VaR/CVaR exclude those days. [or Innovations are effectively normal (the t fit found no heavier tail), so they are drawn unbounded and no cap applies.]", "GARCH-t, every drift mode", "6.2"],
             ["Calibration: annualized volatility x%.", "GBM, jump, bootstrap", "3"],
+            [BOOTSTRAP_TEXT, "bootstrap", "3.5"],
             ["Drift (risk-premium view) / Drift / Drift (risk-neutral) / Drift (sample mean): <the drift sentence>.", "always", "8.6"],
             ["Probability of reaching the T target: p%.", "target given", "2.5"],
             ["Calibrated k jump days out of T (λ=… /yr, mean jump …). [or No >3σ daily moves in the sample — jump model degrades to GBM.]", "jump model", "3.4"],

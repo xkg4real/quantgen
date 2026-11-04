@@ -14,6 +14,7 @@ from functools import lru_cache
 import inspect
 import math
 import os
+import re
 import unittest
 from unittest.mock import Mock, patch
 
@@ -46,6 +47,23 @@ OLD_PAYLOAD_KEYS = {
     "prob_loss", "prob_target", "target", "prob_target_basis", "var_level", "var_pct",
     "cvar_pct", "jump_note", "drift_mode", "drift_note", "rf_rate", "erp",
     "convexity_correction_annual", "z_bound", "bound_note",
+}
+
+# run_monte_carlo(VOL_FIXTURE, n_paths=300, horizon_days=30, seed=23, rf_rate=.03, erp=.04,
+# target=spot) on the engine before this change (a32106b), for every model in a rate and a
+# log drift mode. Unlike engine_parts, these values do not come from the engine's own
+# building blocks, so a change inside _simulate_gbm, _simulate_jump or the GARCH code fails.
+GOLDEN_NAMES = ("mean_terminal", "median_terminal", "p05", "p95", "var_pct", "cvar_pct",
+                "mu_annual", "sigma_annual", "correction_annual")
+GOLDEN_A32106B = {
+    ("garch_t", "premium"): (95.90980363559014, 95.98768625488103, 81.05025090411962, 110.90802582538733, 0.15466303058852646, 0.21533161764778033, 0.03479701518024998, 0.27953997032639216, 0.035202984819750024),
+    ("garch_t", "zero"): (95.51056365351249, 95.46571565889921, 80.74805962156745, 110.31682181462673, 0.15781482173199154, 0.2156540947963074, 0.0, 0.27953997032639216, 0.0),
+    ("gbm", "premium"): (96.54900525325547, 96.55210485204465, 90.2966101739603, 103.51247432068402, 0.05822545962402349, 0.08467603881953625, 0.06250168034426917, 0.12246076641709239, 0.0074983196557308306),
+    ("gbm", "zero"): (95.83328140151052, 95.83635802277882, 89.62723572039968, 102.74512983453297, 0.06520689355744567, 0.09146139294485436, 0.0, 0.12246076641709239, 0.0),
+    ("jump", "premium"): (96.74704680188646, 96.68377278519414, 90.65939696915375, 105.0633074704941, 0.054441670103691026, 0.0799688076142728, 0.06186519314446903, 0.12246076641709239, 0.00813480685553097),
+    ("jump", "zero"): (96.03713153295747, 95.97432181147687, 89.99415195850149, 104.29236873238237, 0.06138003482123067, 0.08671985803861325, 0.0, 0.12246076641709239, 0.0),
+    ("bootstrap", "premium"): (96.70288141240006, 96.44919823524599, 91.32040384556339, 103.10408505236721, 0.04754750822965455, 0.06099630082742819, 0.0644065963585174, 0.12246076641709239, 0.005593403641482597),
+    ("bootstrap", "zero"): (95.9642520372654, 95.71250652571018, 90.62288654468964, 102.31656243873086, 0.05482246610646883, 0.06816853505084432, 0.0, 0.12246076641709239, 0.0),
 }
 
 
@@ -187,6 +205,10 @@ def engine_parts(history, model, *, n_paths, horizon, seed, drift, rf, erp):
     return paths, dict(extra, mu_annual=mu, sigma_annual=sigma_report, correction_annual=corr_daily * DAYS)
 
 
+def numbers(text):
+    return sorted(re.findall(r"[+-]?\d+(?:[.,]\d+)*", text))
+
+
 def r2_acf_pooled(shocks, k):
     """Lag-k autocorrelation of squared shocks, pooled over the paths (within a path only)."""
     x = shocks ** 2
@@ -271,6 +293,12 @@ class BootstrapEngineTests(_Offline):
             self.assertAlmostEqual(paths / circular, (B - k) / B, delta=.05, msg=f"lag {k} retention")
         for k in (B, 2 * B, 4 * B):
             self.assertLess(abs(r2_acf_pooled(shocks, k)), .01, f"lag {k}")
+        # (5-k)/5 is the long-horizon value; a short path keeps more ("more over a shorter one").
+        short = MC.run_monte_carlo(h, model="bootstrap", n_paths=20000, horizon_days=2 * B, drift="zero",
+                                   seed=11, n_sample_paths=20000)
+        shocks = np.diff(np.log(short.sample_paths), axis=1)
+        for k in range(1, B):
+            self.assertGreater(r2_acf_pooled(shocks, k) / r2_acf_circular(r_dm, k), (B - k) / B + .05, f"lag {k}")
 
     def test_bootstrap_numbers_equal_the_documented_recipe_in_every_drift_mode(self):
         for h in histories():
@@ -299,6 +327,18 @@ class BootstrapEngineTests(_Offline):
                         self.assertEqual(getattr(mc, name), value, name)
                     self.assertIsNone(bootstrap_disclosure(model))
 
+    def test_every_model_matches_the_numbers_pinned_from_a32106b(self):
+        h = histories()[1]
+        for (model, drift), want in GOLDEN_A32106B.items():
+            with self.subTest(model=model, drift=drift):
+                mc = MC.run_monte_carlo(h, model=model, n_paths=300, horizon_days=30, seed=23, drift=drift,
+                                        rf_rate=.03, erp=.04, target=h.last)
+                got = tuple(float(getattr(mc, name)) for name in GOLDEN_NAMES)
+                # Tight enough to catch any change of method; loose enough for last-digit libm and
+                # optimizer differences between platforms (the GARCH fit is an L-BFGS-B solve).
+                rtol = 1e-5 if model == "garch_t" else 1e-9
+                np.testing.assert_allclose(got, want, rtol=rtol, atol=1e-12, err_msg=f"{model} {drift}")
+
     def test_module_docstring_names_the_scheme(self):
         doc = MC.__doc__
         self.assertNotIn("stationary block bootstrap", doc)
@@ -306,6 +346,8 @@ class BootstrapEngineTests(_Offline):
         self.assertIn("circular block bootstrap", doc)
         self.assertIn("fixed blocks of 5", doc)
         self.assertIn("not the stationary", doc)
+        self.assertIn("kept only within a block", doc)
+        self.assertNotIn("only partly kept within a block", doc)
 
     def assert_same(self, got, want):
         self.assertEqual(set(got), set(want))
@@ -326,22 +368,28 @@ class BootstrapDisclosureTests(_Offline):
         info = bootstrap_disclosure("bootstrap")
         self.assertEqual(info, {
             "method": "circular_block_bootstrap", "block_sessions": 5, "block_length": "fixed",
-            "resampled": "demeaned_daily_log_returns", "within_block_lag_retention": "(5-k)/5 for k=1..4",
+            "resampled": "demeaned_daily_log_returns",
+            "within_block_lag_retention": "(5-k)/5 for k=1..4 over a long horizon, more over a short one",
             "clustering_from_lag": 5, "current_vol_level": "not_used", "description": BOOTSTRAP_TEXT})
         for model in ("garch_t", "gbm", "jump", None, "", "BOOTSTRAP"):
             self.assertIsNone(bootstrap_disclosure(model), model)
 
     def test_text_matches_the_constant_and_the_existing_drift_note(self):
-        for needle in (f"fixed {B}-session blocks", f"({B}-k)/{B}", f"lags 1-{B - 1}", f"from lag {B}",
+        for needle in (f"fixed {B}-session blocks", f"({B}-k)/{B}", f"lags 1-{B - 1}", f"none is kept from lag {B}",
                        "circular", "demeaned daily log returns", "not a stationary bootstrap",
+                       f"over a horizon well beyond {B} sessions (more over a shorter one)",
                        "current volatility level", "drift added on top"):
             self.assertIn(needle, BOOTSTRAP_TEXT)
         for needle in (f"{B}거래일 고정 길이 블록", f"({B}-k)/{B}", f"시차 1-{B - 1}", f"시차 {B}부터",
+                       f"분석 기간이 {B}거래일보다 충분히 길 때", "기간이 짧으면 더 많이 남음",
                        "원형", "평균을 뺀", "정상(stationary) 부트스트랩이 아닙니다", "변동성 군집", "팬 차트",
-                       "드리프트를 더합니다"):
+                       "드리프트(추세 가정)를 더합니다"):   # Flet labels the input 드리프트, Native 추세 가정
             self.assertIn(needle, BOOTSTRAP_TEXT_KO)
-        for false_claim in ("survives within a block", "outside the sample", "exactly as far as"):
+        self.assertEqual(numbers(BOOTSTRAP_TEXT), numbers(BOOTSTRAP_TEXT_KO))
+        for false_claim in ("survives within a block", "outside the sample", "exactly as far as",
+                            "larger than any", "only partly kept"):
             self.assertNotIn(false_claim, BOOTSTRAP_TEXT)
+        self.assertNotIn("재표본", BOOTSTRAP_TEXT_KO)
         mc = result("bootstrap", "premium")
         self.assertIn("(the empirical block log-MGF of the demeaned sample)", mc.drift_note)
 
