@@ -39,7 +39,9 @@ def texts(c) -> list[str]:
 def test_warning_token_is_last_with_a_default_and_in_both_palettes():
     names = theme.token_names()
     assert names[-1] == "warning" and "warning" in names
-    assert theme.DARK.warning == "#d9a441" and theme.LIGHT.warning == "#8a5a00"
+    # DARK took the C-format forest palette on 2026-10-31 (f6f63af, docs/product/CHART_C_DESIGN_2026-10-31.md);
+    # LIGHT kept its warning colour, and the field default stays the legacy one checked below.
+    assert theme.DARK.warning == "#E5BE74" and theme.LIGHT.warning == "#8a5a00"
     legacy = theme.Palette(*[getattr(theme.DARK, n) for n in names[:-1]])     # the 11-field positional form still builds
     assert legacy.warning == "#d9a441"
 

@@ -65,7 +65,7 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder, 
         locale=settings.value('ui/locale'),language_store=settings)
     try:
         window.show();app.processEvents()
-        assert window.stack.count()==7  # Six research workspaces plus the independent guide.
+        assert window.stack.count()==8  # Seven research workspaces (Analysis tools since 2026-11-04) plus the guide.
         assert 'guide' in window.nav
         assert window.home_markets.rowCount()==12
         assert window.home_markets.horizontalHeaderItem(window.home_markets.columnCount()-1).text()=='Q-SCORE'
@@ -78,7 +78,8 @@ with tempfile.TemporaryDirectory(prefix='quantgen-installed-smoke-') as folder, 
         assert isinstance(window.market_chart,MarketChartPane)
         window.navigate('markets');window.show_market_pane(window.market_chart)
         assert window.current_market_pane() is window.market_chart,'Installed chart must be reachable from Markets'
-        assert window.market_tabs.count()==9 and window.market_chart.asset.currentData()=='domestic_stock'
+        assert window.tool_host.count()==10 and window.market_chart.asset.currentData()=='domestic_stock'
+        assert window.markets_view.showing_stock() and len(window.markets_view.grid.cards)==6
         app.processEvents()
         assert window.market_chart.snapshot is None
         assert not window.market_chart.jobs.busy

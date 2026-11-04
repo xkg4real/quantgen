@@ -2,7 +2,7 @@
 from .translations import display
 import math
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QPushButton, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QComboBox, QFileDialog, QGridLayout, QHBoxLayout, QLineEdit, QPushButton, QSizePolicy, QVBoxLayout, QWidget
 from .charts import LineChart, SignedBars
 from core.ficc.common import FICCError
 
@@ -22,6 +22,53 @@ def fmt(value, mode='number'):
     return f'{value:,.4f}'
 
 
+class CurrentPageStack(QWidget):
+    """Shows one form page and sizes to that page alone (owner UI-6a).
+
+    A QStackedWidget measures every page, and the fixed height taken at construction
+    missed the theme's taller inputs, so the last row of the Rates and KRX forms was
+    cut off. Hidden pages here take no space: the layout measures the visible form
+    after styles apply, height-for-width included, and re-lays out when it changes.
+    """
+    currentChanged = pyqtSignal(int)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._pages, self._index = [], -1
+        self._layout = QVBoxLayout(self)
+        self._layout.setContentsMargins(0, 0, 0, 0)
+
+    def addWidget(self, page):
+        self._pages.append(page)
+        self._layout.addWidget(page)
+        if self._index < 0:
+            self._index = 0
+            self.currentChanged.emit(0)
+        else:
+            page.hide()
+        return len(self._pages) - 1
+
+    def count(self):
+        return len(self._pages)
+
+    def widget(self, index):
+        return self._pages[index] if 0 <= index < len(self._pages) else None
+
+    def currentIndex(self):
+        return self._index
+
+    def currentWidget(self):
+        return self.widget(self._index)
+
+    def setCurrentIndex(self, index):
+        if not 0 <= index < len(self._pages) or index == self._index:
+            return
+        self._pages[self._index].hide()
+        self._index = index
+        self._pages[index].show()
+        self.currentChanged.emit(index)
+
+
 class ToolPane(QWidget):
     requested = pyqtSignal(object)
 
@@ -38,7 +85,10 @@ class ToolPane(QWidget):
         layout.setSpacing(18)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.input_box, inner = panel(title)
-        self.input_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
+        # Preferred, not Maximum: a Maximum height is capped at the size hint, which Qt takes at the panel's
+        # preferred width. Where captions wrap more at the real width (Windows fonts), that cap cut the
+        # last form row (owner UI-6a). The pane's top alignment still keeps the panel from stretching.
+        self.input_box.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         top = QGridLayout()
         self.tool, self.source = QComboBox(), QComboBox()
         for key, text in tools: self.tool.addItem(text, key)
@@ -61,7 +111,7 @@ class ToolPane(QWidget):
             top.setColumnStretch(i, 1)
         self._top_grid = top
         inner.addLayout(top)
-        self.forms, self.fields = QStackedWidget(), {}
+        self.forms, self.fields = CurrentPageStack(), {}
         for key, _ in tools:
             host = QWidget()
             form = QGridLayout(host)
@@ -106,7 +156,6 @@ class ToolPane(QWidget):
             exports.addWidget(button)
         layout.addLayout(exports)
         self.tool.currentIndexChanged.connect(self.switch)
-        self.forms.setFixedHeight(self.forms.currentWidget().sizeHint().height())
 
     def hide_source(self):
         """Markets panes choose providers automatically (owner UI-8): no 데이터 출처 selector.
@@ -125,7 +174,6 @@ class ToolPane(QWidget):
 
     def switch(self, index):
         self.forms.setCurrentIndex(index)
-        self.forms.setFixedHeight(self.forms.currentWidget().sizeHint().height())
         self.clear_result()
         self.status.setText('도구가 변경됐습니다. 다시 실행하세요.')
 
@@ -160,11 +208,12 @@ class ToolPane(QWidget):
                 item.widget().hide()
                 item.widget().deleteLater()
 
-    def text(self, text, role='muted', *, localized=None):
+    def text(self, text, role='muted', *, localized=None, name=None):
+        """`name` labels the export section; a private name (e.g. holdings) keeps it out of AI commentary."""
         from .app import label
         from core.research.presentation import safe_detail
         text = safe_detail(text, limit=None)
-        self.sections.append({'type':'text','text':text})
+        self.sections.append({'type':'text','text':text, **({'name': name} if name else {})})
         widget = label(text, role)
         if localized:
             widget.localized_text = {key: safe_detail(value, limit=None) for key, value in localized.items()}

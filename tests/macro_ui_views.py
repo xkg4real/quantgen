@@ -31,8 +31,10 @@ VERDICT_WORDS = {label for label, _ in C.VERDICT_STYLE.values()} | {"verdict inv
 def walk(c):
     yield c
     for attr in ("controls", "rows", "cells", "columns"):
-        for child in getattr(c, attr, None) or []:
-            yield from walk(child)
+        children = getattr(c, attr, None)
+        if isinstance(children, (list, tuple)):  # ResponsiveRow.columns is its grid width, an int
+            for child in children:
+                yield from walk(child)
     for attr in ("content", "title", "label"):
         child = getattr(c, attr, None)
         if child is not None and not isinstance(child, str):

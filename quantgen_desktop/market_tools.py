@@ -8,9 +8,18 @@ from core.research.letf_disclosure import letf_text, letf_unavailable_text
 from core.research.decay_disclosure import decay_value, decay_text
 from core.research.quote_coverage import quote_coverage_text
 from core.research.option_disclosure import box_computed, hedge_korean, hedge_text, mfiv_strip
+from core.research.crypto_workflow import cost_basis_text, holdings_summary
 from .tools import ToolPane, number, fmt
 from .market_diagnostics_language import decay_korean, funding_korean, coverage_korean
 from .market_narrative_language import market_variants, letf_korean, letf_unavailable_korean
+
+
+def hide_rows(table, fields):
+    """Hide Field/Value rows on screen only; the report sections keep every row."""
+    for row in range(table.rowCount()):
+        item = table.item(row, 0)
+        if item is not None and item.text() in fields:
+            table.setRowHidden(row, True)
 
 
 class DerivativesPane(ToolPane):
@@ -117,7 +126,10 @@ class ETFPane(ToolPane):
         series = [('Price', d['price'])]
         if d.get('nav') is not None: series.append(('NAV', d['nav']))
         self.line('ETF price / NAV', range(len(d['dates'])), series, 'Observations', 'Price / NAV')
-        if d.get('quote'): self.result_table('Quote', ['Field', 'Value'], list(d['quote'].items()))
+        # Owner, 2026-11-04: no observation-date row on screen (as_of is the request date); the export keeps it.
+        if d.get('quote'):
+            self.result_table('Quote', ['Field', 'Value'], list(d['quote'].items()))
+            hide_rows(self.tables['Quote'], ('as_of',))
         if d.get('premium_stats'):
             self.line('NAV premium', range(len(d['dates'])), [('Premium %', d['premium_pct'])], 'Observations', 'Premium · %')
             ps = d['premium_stats']
@@ -204,7 +216,16 @@ class CryptoPane(ToolPane):
         self.text(f"Weekday Bonferroni p={d['weekday']['return_effect_p_bonferroni']:.4g} · weekend volume ratio={d['weekday']['weekend_volume_ratio']:.3f}")
         if d.get('balances'):
             self.result_table('Upbit holdings · read only', ['Currency','Total','Average buy price','KRW value'],
-                [[b['currency'],fmt(b['total']),fmt(b['avg_buy_price']),fmt(b['krw_value'])] for b in d['balances']])
+                [[b['currency'],fmt(b['total']),cost_basis_text(b),fmt(b['krw_value'])]
+                 for b in d['balances']])
+            held = holdings_summary(d['balances'])
+            if not held['complete']:  # §10 NEW-M6-14/22: a missing price is shown as missing, never as 0
+                names = ', '.join(held['unvalued'])
+                partial = f'No KRW price for {names}: their value is not shown and is not in any total.'
+                # Named as a holdings section: like the holdings table, it never enters AI commentary (NEW-M6-18).
+                self.text(partial, name='Upbit holdings note',
+                          localized={'en': partial,
+                                     'ko': f'{names}의 원화 시세가 없어 평가액을 표시하지 않으며 합계에도 넣지 않습니다.'})
         elif out.request.include_balances: self.text('Holdings unavailable · verify the configured read-only connection. No account values loaded.')
         self.finished(out.narrative, localized=market_variants(out, 'crypto'))
 
@@ -222,7 +243,9 @@ class KRXPane(ToolPane):
     def show_result(self, out):
         self.clear_result()
         a = out.answer
-        self.text(f'Provider: {a.source or "UNAVAILABLE"}')
+        # Owner, 2026-11-04: no provider line or rows; only an unavailable or non-KIS source is named.
+        if not a.ok or (a.source or '').upper() != 'KIS':
+            self.text(f'Provider: {a.source or "UNAVAILABLE"}')
         if not a.ok:
             from core.research.presentation import safe_detail
             reason = safe_detail(a.reason)
@@ -231,7 +254,11 @@ class KRXPane(ToolPane):
             return
         data = a.data
         if out.request.tool == 'quote':
+            # Owner, 2026-11-04: no provider or time rows on screen; the export keeps both (attribution).
+            # A KRX fallback is a previous session's close, so its date stays visible.
             self.result_table('Quote', ['Field','Value'], list(asdict(data).items()))
+            kis = (a.source or '').upper() == 'KIS'
+            hide_rows(self.tables['Quote'], ('source', 'as_of') if kis else ('source',))
         elif data:
             keys = list(dict.fromkeys(k for row in data for k in row))
             self.result_table('Observations',keys,[[r.get(k,'—') for k in keys] for r in data[:300]])

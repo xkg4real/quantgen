@@ -7,6 +7,7 @@ from copy import deepcopy
 import hashlib
 import json
 
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget,QVBoxLayout,QHBoxLayout,QComboBox,QPushButton,QPlainTextEdit,QLineEdit,QCheckBox
 from core.research.ai_connection import error_message
 from core.research.presentation import safe_detail
@@ -53,17 +54,34 @@ class CommentaryPane(QWidget):
         self.preview=QPlainTextEdit();self.preview.setReadOnly(True);self.preview.setMinimumHeight(220);controls.addWidget(self.preview)
         self.question=QLineEdit();self.question.setPlaceholderText('궁금한 점 · 비밀번호나 계좌정보는 입력하지 마세요');controls.addWidget(self.question)
         self.consent=QCheckBox('표시한 계산 결과와 질문을 외부 AI 서비스로 전송');controls.addWidget(self.consent)
-        self.send=QPushButton('AI 해설 요청');self.send.setEnabled(False);controls.addWidget(self.send);layout.addWidget(self.input_box)
+        # Owner B3: the button always answers. It walks the user through the steps it needs
+        # (choose a result → preview → consent); nothing is sent without the consent tick.
+        self.send=QPushButton('AI 해설 요청');self.send.setCursor(Qt.CursorShape.PointingHandCursor)
+        controls.addWidget(self.send);layout.addWidget(self.input_box)
         self.output=QPlainTextEdit();self.output.setReadOnly(True);self.output.setMinimumHeight(250);layout.addWidget(self.output)
         self.report_actions=ReportActions(self.status);layout.addWidget(self.report_actions)
         self.jobs=Jobs(self);self.jobs.succeeded.connect(self.finished);self.jobs.failed.connect(self.failed)
         self.jobs.busy_changed.connect(lambda busy:self.input_box.setEnabled(not busy))
         self.reload.clicked.connect(self.refresh_sources);self.preview_button.clicked.connect(self.prepare)
-        self.source.currentIndexChanged.connect(self.invalidate);self.consent.toggled.connect(lambda _:self.send.setEnabled(self.payload is not None and self.consent.isChecked()))
-        self.send.clicked.connect(self.submit)
+        self.source.currentIndexChanged.connect(self.invalidate);self.consent.toggled.connect(lambda _:self._mark_ready())
+        self.send.clicked.connect(self.submit);self.question.textEdited.connect(self._question_edited)
+
+    def _question_edited(self,_text):
+        # Consent covers the question as it stood when ticked; an edited question needs it again.
+        if self.consent.isChecked():
+            self.consent.setChecked(False)
+            self.status.setText('질문이 바뀌었습니다. 전송 동의에 다시 체크하세요.')
+
+    def _mark_ready(self):
+        self.send.setProperty('primary',self.payload is not None and self.consent.isChecked())
+        self.send.style().unpolish(self.send);self.send.style().polish(self.send)
+
+    def showEvent(self,event):
+        super().showEvent(event)
+        if self.source.count()==0 and not self.jobs.busy:self.refresh_sources()
 
     def invalidate(self,*_):
-        self.payload=None;self.consent.setChecked(False);self.send.setEnabled(False);self.preview.clear()
+        self.payload=None;self.consent.setChecked(False);self._mark_ready();self.preview.clear()
         self.output.clear();self.report_actions.clear()
 
     def refresh_sources(self):
@@ -82,7 +100,18 @@ class CommentaryPane(QWidget):
         self.status.setText('이 내용과 질문만 전송합니다. AI 해설은 공식 gate 판정을 변경하지 않습니다.')
 
     def submit(self):
-        if self.jobs.busy or self.payload is None or not self.consent.isChecked():return
+        if self.jobs.busy:return
+        if self.payload is None:
+            if self.source.count()==0:self.refresh_sources()
+            if self.source.count()==0:return  # refresh_sources already says to finish a calculation first
+            self.prepare()
+            if self.payload is not None:
+                self.status.setText('전송할 내용을 아래에 표시했습니다. 확인한 뒤 전송 동의에 체크하고 다시 누르세요.')
+                self.consent.setFocus()
+            return
+        if not self.consent.isChecked():
+            self.status.setText('전송 동의에 체크해야 요청할 수 있습니다. 아래 내용만 외부 AI 서비스로 전송됩니다.')
+            self.consent.setFocus();return
         payload=deepcopy(self.payload);question=safe_detail(self.question.text(),limit=None)
         if len(question)>4000:self.status.setText('질문을 4,000자 이내로 입력하세요.');return
         self.completed_payload=payload;self.output.clear();self.report_actions.clear();self.status.setText('AI 해설 요청 중…')

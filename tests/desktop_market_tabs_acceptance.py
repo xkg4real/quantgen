@@ -1,4 +1,8 @@
-"""Markets asset-class tabs and automatic provider choice (owner UI-8, 2026-11-03).
+"""Markets without tab strips, the Analysis tools page, and the chart pane's provider choice.
+
+Owner UI-8 (2026-11-03) added asset-class tabs; the owner's 2026-11-04 request removed the scrolling
+tab strip and the indicator charts from Markets: the analysis tools moved to their own page with a
+visible button grid, and the price chart lives in one stock's screen.
 
 Offline: KIS and fallback providers are fakes; any HTTP attempt fails the test.
 """
@@ -10,14 +14,13 @@ from unittest.mock import Mock, patch
 os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
 import dotenv
 with patch.object(dotenv, 'load_dotenv', return_value=False):
-    from quantgen_desktop.app import ResearchWindow, MARKET_CLASSES
-from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QWidget
+    from quantgen_desktop.app import ResearchWindow, TOOL_PANES
+from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QTabBar, QToolButton, QWidget
 from core.market.routing import ChartRouter, KISChartProvider
 from tests.desktop_market_chart_acceptance import FakeService, FakeStream, fixture
 
-KO = ['국내증권', '해외증권', '국내파생상품', '해외파생상품', '채권', '금리·스왑', '외환', '가상자산', '매크로']
-EN = ['Domestic securities', 'Overseas securities', 'Domestic derivatives', 'Overseas derivatives', 'Bonds',
-      'Rates & swaps', 'FX', 'Crypto', 'Macro']
+KO = ['채권', '금리', '구조화 상품', '외환', '파생상품', 'ETF', 'KRX', '가상자산', '거시 지표표', '매크로 v2']
+EN = ['Bonds', 'Rates', 'Structuring', 'FX', 'Derivatives', 'ETF', 'KRX', 'Crypto', 'Macro', 'Macro v2']
 
 
 class MarketTabsTests(unittest.TestCase):
@@ -34,33 +37,54 @@ class MarketTabsTests(unittest.TestCase):
         self.window.resize(1360, 940); self.window.show(); self.window.navigate('markets'); self.app.processEvents()
         self.addCleanup(self.window.deleteLater); self.addCleanup(self.window.hide)
 
-    def titles(self):
-        return [self.window.market_tabs.tabText(i) for i in range(self.window.market_tabs.count())]
+    def visible_tab_bars(self, route):
+        page = self.window.stack.widget(self.window.route_indices[route]).widget()
+        return [bar for bar in page.findChildren(QTabBar) if bar.isVisible()]
 
-    def test_nine_asset_classes_replace_the_kis_chart_tab_in_both_languages(self):
+    def test_markets_has_no_tab_strip_and_no_indicator_board(self):
         w = self.window
-        self.assertEqual(self.titles(), KO)
+        self.assertEqual(self.visible_tab_bars('markets'), [])
+        self.assertFalse(hasattr(w, 'market_tabs')); self.assertFalse(hasattr(w, 'market_board'))
+        page = w.stack.currentWidget().widget()
+        self.assertFalse([b for b in page.findChildren(QToolButton) if b.isVisible() and b.arrowType()])
+        self.assertTrue(w.markets_view.isVisible()); self.assertFalse(w.markets_view.showing_stock())
+        self.assertEqual(len(w.markets_view.grid.cards), 6)  # the default watchlist: the six Home stocks
+        shown = [l.text() for l in page.findChildren(QLabel) if l.isVisible()]
+        self.assertFalse([t for t in shown if '공급자' in t or '관측' in t], shown)
+        self.provider.assert_not_called()
+
+    def test_every_tool_is_one_click_on_the_tools_page_in_both_languages(self):
+        w = self.window
+        w.navigate('tools'); self.app.processEvents()
+        self.assertEqual(self.visible_tab_bars('tools'), [])
+        self.assertEqual([w.tool_buttons[name].text() for name, _ in TOOL_PANES], KO)
+        for name, _ in TOOL_PANES:
+            w.tool_buttons[name].click(); self.app.processEvents()
+            pane = getattr(w, name)
+            self.assertIs(w.current_market_pane(), pane)
+            self.assertTrue(pane.isVisible() and w.tool_buttons[name].isChecked(), name)
+            others = [getattr(w, n) for n, _ in TOOL_PANES if n != name]
+            self.assertFalse([o for o in others if o.isVisible()], name)
         w.set_language('en'); self.app.processEvents()
-        self.assertEqual(self.titles(), EN)
-        texts = [w.market_tabs.tabText(i) for i in range(w.market_tabs.count())]
-        for entry in w.market_classes:
-            if entry['inner'] is not None:
-                texts += [entry['inner'].tabText(i) for i in range(entry['inner'].count())]
-        self.assertFalse([t for t in texts if 'KIS' in t])
+        texts = [w.tool_buttons[name].text() for name, _ in TOOL_PANES]
+        self.assertEqual(texts, EN)
         self.assertFalse([t for t in texts if re.search('[가-힣]', t)])
-        self.assertEqual(len(MARKET_CLASSES), 9)
+        self.assertEqual(w.nav['tools'].text(), 'Analysis tools')
+        with self.assertRaises(ValueError):
+            w.show_market_pane(QWidget())
+        self.provider.assert_not_called()
 
-    def test_no_visible_data_source_selector_anywhere_in_markets(self):
+    def test_no_visible_data_source_selector_on_the_tools_page(self):
         w = self.window
-        for index, entry in enumerate(w.market_classes):
-            for pane in entry['panes']:
-                w.market_tabs.setCurrentIndex(index)
-                w.show_market_pane(w.market_chart if pane is entry['slot'] else pane); self.app.processEvents()
-                page = w.stack.currentWidget().widget()
-                shown = [l.text() for l in page.findChildren(QLabel) if l.isVisible()]
-                self.assertFalse([t for t in shown if t in ('데이터 출처', 'Data source', 'Curve source')], entry['key'])
-                if hasattr(pane, 'source') and isinstance(pane.source, QComboBox) and entry['key'] != 'macro':
-                    self.assertTrue(pane.source.isHidden(), entry['key'])
+        for name, _ in TOOL_PANES:
+            pane = getattr(w, name)
+            w.show_market_pane(pane); self.app.processEvents()
+            self.assertEqual(w.stack.currentIndex(), w.route_indices['tools'])
+            page = w.stack.currentWidget().widget()
+            shown = [l.text() for l in page.findChildren(QLabel) if l.isVisible()]
+            self.assertFalse([t for t in shown if t in ('데이터 출처', 'Data source', 'Curve source')], name)
+            if hasattr(pane, 'source') and isinstance(pane.source, QComboBox) and name not in ('macro', 'macro_records'):
+                self.assertTrue(pane.source.isHidden(), name)
         # The hidden combos keep their automatic value for requests and fixtures.
         self.assertEqual([w.rates.source.currentData(), w.fx.source.currentData(), w.derivatives.source.currentData(),
                           w.crypto.source.currentData(), w.krx.source.currentData(), w.bonds.source.currentData()],
@@ -69,55 +93,32 @@ class MarketTabsTests(unittest.TestCase):
         self.assertFalse(w.macro_records.source.isHidden())  # artifact set, not a data provider
         self.assertEqual(w.macro_records.source_label.text(), '기록 묶음')
 
-    def test_every_pane_is_reachable_and_the_chart_follows_its_asset_class(self):
+    def test_the_chart_opens_in_one_stocks_screen_on_markets(self):
         w = self.window
-        for index, entry in enumerate(w.market_classes):
-            for pane in entry['panes']:
-                target = w.market_chart if pane is entry['slot'] else pane
-                if target is w.market_chart:
-                    w.market_tabs.setCurrentIndex(index)  # the chart is shown in the class being viewed
-                found = w.show_market_pane(target); self.app.processEvents()
-                self.assertIs(w.current_market_pane(), target)
-                self.assertIs(found, entry)
-                if entry['asset']:
-                    self.assertIs(w.market_chart.parent(), entry['slot'])
-                    self.assertEqual(w.market_chart.asset.currentData(), entry['asset'])
-        self.assertTrue(w.market_chart.asset.isHidden())
-        # Asking for the chart keeps the chartable class being viewed.
-        w.market_tabs.setCurrentIndex(1); self.app.processEvents()
-        w.show_market_pane(w.market_chart); self.assertEqual(w.market_tabs.currentIndex(), 1)
-        w.show_market_pane(w.fx); w.show_market_pane(w.market_chart)
-        self.assertEqual(w.market_tabs.currentIndex(), 0)
-        with self.assertRaises(ValueError):
-            w.show_market_pane(QWidget())
+        w.navigate('tools'); self.app.processEvents()
+        w.show_market_pane(w.market_chart); self.app.processEvents()
+        self.assertEqual(w.stack.currentIndex(), w.route_indices['markets'])
+        self.assertIs(w.current_market_pane(), w.market_chart)
+        self.assertTrue(w.market_chart.isVisible()); self.assertTrue(w.market_chart.asset.isHidden())
         self.assertIsNone(w.market_chart.snapshot); self.assertEqual(w.market_chart._stream, None)
         self.provider.assert_not_called()
 
-    def test_each_class_remembers_its_last_symbol(self):
-        w = self.window; chart = w.market_chart
-        chart.symbol.setText('000660')
-        w.market_tabs.setCurrentIndex(1); self.app.processEvents()
-        self.assertEqual(chart.symbol.text(), 'AAPL')
-        chart.symbol.setText('MSFT')
-        w.market_tabs.setCurrentIndex(0); self.app.processEvents()
-        self.assertEqual((chart.asset.currentData(), chart.symbol.text()), ('domestic_stock', '000660'))
-        w.market_tabs.setCurrentIndex(1); self.app.processEvents()
-        self.assertEqual(chart.symbol.text(), 'MSFT')
-
-    def test_home_stock_detail_opens_the_domestic_class(self):
+    def test_home_stock_detail_opens_that_stocks_screen(self):
         w = self.window
-        w.market_tabs.setCurrentIndex(6); self.app.processEvents()
+        w.navigate('tools'); self.app.processEvents()
         w.open_stock_chart('000660')
         for _ in range(3):
             self.app.processEvents()
-        self.assertEqual(w.market_tabs.currentIndex(), 0)
+        self.assertEqual(w.stack.currentIndex(), w.route_indices['markets'])
         self.assertIs(w.current_market_pane(), w.market_chart)
         self.assertEqual((w.market_chart.asset.currentData(), w.market_chart.symbol.text()), ('domestic_stock', '000660'))
-        self.assertIsNone(w.market_chart.snapshot)
+        self.assertEqual(w.markets_view.stock.instrument.code, '000660')
+        self.assertIsNone(w.market_chart.snapshot)  # automatic refresh is off: loading stays explicit
 
 
 class SearchZoomTests(unittest.TestCase):
-    """Owner UI-16: name search, no exchange/bar-count inputs, wheel zoom, two source lines."""
+    """Owner UI-16 inside the pane: name search, no exchange/bar-count inputs, wheel zoom; since 2026-11-04 no
+    provider or time lines (a delay notice only when the data is not domestic real-time)."""
     @classmethod
     def setUpClass(cls):
         cls.app = QApplication.instance() or QApplication([])
@@ -132,7 +133,7 @@ class SearchZoomTests(unittest.TestCase):
         chart = self.window.market_chart
         chart.service = self.service
         chart.stream_factory = lambda: self.streams.append(FakeStream()) or self.streams[-1]
-        self.window.market_tabs.setCurrentIndex(1); self.app.processEvents()
+        self.window.show_market_pane(chart); chart.set_asset_class('overseas_stock'); self.app.processEvents()
 
     def wait(self, predicate):
         import time
@@ -158,12 +159,12 @@ class SearchZoomTests(unittest.TestCase):
         self.assertEqual(self.service.calls[0].limit, 240)
         self.assertTrue(self.streams and self.streams[0].started)
         self.assertFalse(p.symbol_suggestions.isVisible())
-        # Two short source/time lines with the same role and size, outside the advanced panel.
-        self.assertTrue(p.provenance.isVisible() and p.times.isVisible())
-        self.assertIn('지연 0분', p.provenance.text()); self.assertIn('한국시간', p.times.text())
-        self.assertEqual(p.provenance.property('role'), p.times.property('role'))
-        self.assertEqual(p.provenance.font().pointSizeF(), p.times.font().pointSizeF())
-        self.assertNotIn('\n', p.provenance.text() + p.times.text())
+        # Owner, 2026-11-04: no provider or time line; the US delay notice stays (12-claims), and the
+        # source and times remain in the price tooltip.
+        self.assertTrue(p.provenance.isVisible()); self.assertFalse(p.times.isVisible())
+        self.assertIn('지연 0분', p.provenance.text())
+        self.assertNotIn('출처', p.provenance.text()); self.assertNotIn('KIS', p.provenance.text())
+        self.assertIn('출처', p.quote.toolTip()); self.assertIn('한국시간', p.quote.toolTip())
 
     def test_wheel_zooms_without_reloading_and_passes_through_at_limits(self):
         from PyQt6.QtCore import QPoint, QPointF, Qt
@@ -202,7 +203,7 @@ class SearchZoomTests(unittest.TestCase):
 
     def test_domestic_derivatives_keep_a_market_selector(self):
         p = self.window.market_chart
-        self.window.market_tabs.setCurrentIndex(2); self.app.processEvents()
+        p.set_asset_class('domestic_future'); self.app.processEvents()
         self.assertTrue(p.exchange.isVisible()); self.assertEqual(p.form_labels[2].text(), '시장 구분')
         self.assertFalse(p.symbol_suggestions.isVisible())
 

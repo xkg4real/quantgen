@@ -1,8 +1,8 @@
 # 01 개인정보 처리방침
 
 - 문서 ID: QG-C01
-- 버전: 1.5
-- 기준일: 2026-11-02
+- 버전: 1.6
+- 기준일: 2026-11-04
 - 상태: review-required
 - 적용 예정일: {{policy.effective_date}}
 - 담당: {{privacy.owner}}
@@ -63,6 +63,16 @@ Q-SCORE는 받은 공개 가격 이력과 유효 체결을 실행 프로세스�
 
 [실제 지원·20종 영향 검토](../product/CHART_RECEIVED_BARS_REVIEW_20261102.md)를 따릅니다. 기존 `review-required`·공개 준비 `BLOCKED`와 미확정 계약/운영 사실을 유지하며 공개 승인·실계정 검증을 뜻하지 않습니다.
 
+### 2026-11-04 시장 관심종목·종목 목록·한 종목 화면
+
+네이티브 시장 화면의 관심종목을 같은 QSettings(QUANTGEN/QUANTGEN)의 `markets/watchlist`에 저장합니다. 값은 종목마다 자산 구분·코드·거래소만 담은 JSON 목록이며 최대 20개입니다. 키가 없으면 Home의 국내주식 6개로 시작하고, 이용자가 ☆·★·×로 종목을 넣거나 뺄 때만 씁니다. 종목 이름·가격·조회 결과·검색어는 저장하지 않습니다. 어떤 종목을 관심종목에 두었는지는 이용자의 관심을 드러낼 수 있으므로 ui/theme 같은 화면 선호와 따로 적습니다. 이 값을 운영자나 외부로 보내는 코드는 없습니다.
+
+종목 검색은 로컬 목록에서 찾고 입력한 글자를 보내지 않습니다. 자동 갱신이 켜진 창에서 종목 검색 칸에 처음 포커스가 가면 KIS 키 없이 KOSPI·KOSDAQ 종목 마스터 파일 두 개를 받습니다. 요청에는 파일 이름만 있고, 다운로드 호스트는 IP 주소 등 통신 정보를 받습니다. 받은 목록은 프로세스 메모리에만 둡니다.
+
+자동 갱신이 켜진 창에서 시장 화면이 보이면 관심종목마다 일별 종가를 KIS에 요청하고, 주식은 KIS가 응답하지 못하면 Yahoo Finance에 요청합니다. 종목을 열면 차트 조회·지원 체결 연결과 함께 국내주식의 현재가·투자자별 매매·공매도 일별 자료를 KIS에 요청합니다. 요청에는 종목 코드·기간과 기존 인증정보가 쓰이며 계좌·잔고·주문 경로는 없습니다. 관심종목 목록 자체를 보내지는 않습니다. 다만 같은 종목을 주기적으로 요청하므로 공급자는 요청 기록에서 관심종목을 짐작할 수 있습니다. 공급자 쪽 기록·보유기간은 미검증입니다.
+
+[변경 사실](FACTS.md#markets-watchlist-2026-11-04)과 [제품 기록](../product/MARKETS_WATCHLIST_2026-11-04.md)을 따릅니다. `review-required`·공개 준비 `BLOCKED`를 유지하며 공개 승인·실계정 검증이 아닙니다.
+
 ## 정책 또는 구현 기준
 
 ### 공개 방침 본문
@@ -75,7 +85,7 @@ Q-SCORE는 받은 공개 가격 이력과 유효 체결을 실행 프로세스�
 | --- | --- | --- | --- | --- |
 | 서비스 계약·제공 | {{privacy.service_fields}} | {{privacy.service_collection_and_location}} | {{privacy.service_basis}} | {{privacy.service_retention}} |
 | 선택적 데이터 제공자 연결 | 필요한 API 인증정보·연결 상태; 제공자마다 구체 항목 공개 | 환경변수/사용자 설정 → 해당 제공자; KIS 토큰은 실행 기기 파일 | {{privacy.connection_basis}} | {{privacy.connection_retention}} |
-| 선택적 Upbit 자산 분석 | 통화, 기준통화(`unit_currency`), 잔액, 잠금 금액, 평균 매수가, 총수량과 파생 원화평가액(`krw_value`); 현재 코드 기준 | Upbit 계좌 API → 실행 기기. 보유 통화 종목을 Upbit 공개 시세 API에 보내 평가액 계산; 서버 실행 시 서버 처리 여부 명시 | {{privacy.upbit_basis}} | {{privacy.upbit_retention}} |
+| 선택적 Upbit 자산 분석 | 통화, 기준통화(`unit_currency`), 잔액, 잠금 금액, 평균 매수가, 총수량과 파생 원화평가액(`krw_value`); 현재 코드 기준 | Upbit 계좌 API → 실행 기기. 보유 통화 종목을 Upbit 공개 시세 API에 보내 평가액 계산(Upbit가 목록을 거부하면(HTTP 400·404) 같은 종목을 하나씩 다시 요청, 시세가 없는 통화는 평가액을 비워 둠); 서버 실행 시 서버 처리 여부 명시 | {{privacy.upbit_basis}} | {{privacy.upbit_retention}} |
 | 규칙 및 모의연구 기록 관리 | 규칙명·메모·개정 이력·모의주문·판정·저장한 연구 결과 | {{privacy.research_location}} | {{privacy.research_basis}} | {{privacy.research_retention}} |
 | 선택적 외부 AI 해설 | 전송 전 표시한 계산 결과와 질문; 인증정보·개인 계좌 내용을 질문에 입력하지 않도록 안내 | {{privacy.ai_route}} → Anthropic | {{privacy.ai_basis}} | {{privacy.ai_retention}} |
 | 문의 및 권리 행사 처리 | 회신 연락처, 문의 내용, 최소한의 확인 정보 | {{privacy.support_tools}} | {{privacy.support_basis}} | {{privacy.support_retention}} |

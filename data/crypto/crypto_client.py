@@ -42,6 +42,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 import config
+from core.crypto.values import number_or_none, price_or_none
 
 try:
     from data.net import session as _requests        # shared session: retry + backoff
@@ -54,12 +55,20 @@ BINANCE_FAPI = "https://fapi.binance.com"
 COINGECKO = "https://api.coingecko.com/api/v3"
 
 _UPBIT_PAGE, _BINANCE_PAGE, _FUNDING_PAGE = 200, 1000, 1000
+_UPBIT_PRICES = ("trade_price", "opening_price", "high_price", "low_price")
 _MIN_GAP_S = 0.12                                    # ≤ ~8 req/s, under Upbit's 10/s group limit
 _last_call = {"t": 0.0}
 
 
 class CryptoError(RuntimeError):
-    """A provider was asked and could not answer; the message says why."""
+    """A provider was asked and could not answer; the message says why.
+
+    `status` is the HTTP status when the provider answered with one (None otherwise).
+    """
+
+    def __init__(self, message: str = "", *, status: Optional[int] = None):
+        super().__init__(message)
+        self.status = status
 
 
 @dataclass(frozen=True)
@@ -119,9 +128,9 @@ def _get(url: str, params: dict | None = None, headers: dict | None = None, *, l
     except Exception as exc:
         raise CryptoError(f"{label}: {type(exc).__name__}") from None
     if resp.status_code == 429:
-        raise CryptoError(f"{label}: rate limited (HTTP 429); slow down")
+        raise CryptoError(f"{label}: rate limited (HTTP 429); slow down", status=429)
     if resp.status_code != 200:
-        raise CryptoError(f"{label}: HTTP {resp.status_code}")
+        raise CryptoError(f"{label}: HTTP {resp.status_code}", status=resp.status_code)
     try:
         return resp.json()
     except Exception:
@@ -138,9 +147,15 @@ class UpbitPublic:
         """Daily candles (KST 09:00 boundary), paged backwards with `to`."""
         market = market.upper()
         rows: dict[str, dict] = {}
+        seen: set[str] = set()
         to: Optional[str] = None
-        for _ in range(days // _UPBIT_PAGE + 2):
-            params = {"market": market, "count": min(_UPBIT_PAGE, max(1, days - len(rows)))}
+        # A day without all four prices is left out, not priced at 0 (D12-03, Upbit daily prices only).
+        # It is not counted, so paging continues until `days` usable days, the history ends, or
+        # 2 × days + one page of days have been looked at (most days price-less: give up).
+        while True:
+            # Once a day was skipped the shortfall no longer sizes the next page: ask for full pages.
+            count = _UPBIT_PAGE if len(seen) > len(rows) else min(_UPBIT_PAGE, max(1, days - len(rows)))
+            params = {"market": market, "count": count}
             if to:
                 params["to"] = to
             page = _get(f"{UPBIT}/candles/days", params, label=f"Upbit {market}")
@@ -149,15 +164,16 @@ class UpbitPublic:
             fresh = 0
             for r in page:
                 d = str(r.get("candle_date_time_utc") or "")[:10]
-                if d and d not in rows:
-                    rows[d] = r; fresh += 1
-            if not fresh or len(rows) >= days:
+                if d and d not in seen:
+                    seen.add(d); fresh += 1
+                    if all(price_or_none(r.get(k)) is not None for k in _UPBIT_PRICES):
+                        rows[d] = r
+            if not fresh or len(rows) >= days or len(seen) >= 2 * days + _UPBIT_PAGE:
                 break
-            oldest = min(rows)
-            to = f"{oldest}T00:00:00Z"
+            to = f"{min(seen)}T00:00:00Z"
         if not rows:
             raise CryptoError(f"Upbit returned no candles for {market}.")
-        ds = sorted(rows)
+        ds = sorted(rows)[-max(days, 1):]   # full pages can overshoot: keep the newest `days`
         g = lambda k: tuple(float(rows[d].get(k) or 0.0) for d in ds)   # noqa: E731
         return Candles(symbol=market, dates=tuple(ds), close=g("trade_price"), open=g("opening_price"),
                        high=g("high_price"), low=g("low_price"), volume=g("candle_acc_trade_volume"),
@@ -167,10 +183,14 @@ class UpbitPublic:
     def ticker(self, markets: list[str] | str = "KRW-BTC") -> list[dict]:
         m = ",".join(markets) if isinstance(markets, list) else markets
         page = _get(f"{UPBIT}/ticker", {"markets": m.upper()}, label="Upbit ticker")
-        return [{"market": r.get("market"), "price": float(r.get("trade_price") or 0.0),
-                 "change_pct": float(r.get("signed_change_rate") or 0.0) * 100,
-                 "volume_24h_krw": float(r.get("acc_trade_price_24h") or 0.0),
-                 "as_of": datetime.now(timezone.utc).isoformat(timespec="seconds")} for r in page]
+        out = []
+        for r in page:  # missing fields stay None, never 0 (§10 NEW-M6-14/22)
+            rate = number_or_none(r.get("signed_change_rate"))
+            out.append({"market": r.get("market"), "price": price_or_none(r.get("trade_price")),
+                        "change_pct": rate * 100 if rate is not None else None,
+                        "volume_24h_krw": number_or_none(r.get("acc_trade_price_24h")),
+                        "as_of": datetime.now(timezone.utc).isoformat(timespec="seconds")})
+        return out
 
 
 # --------------------------------------------------------------------------- #
@@ -256,12 +276,14 @@ class BinancePublic:
 
     def premium_index(self, symbol: str = "BTCUSDT") -> dict:
         r = _get(f"{BINANCE_FAPI}/fapi/v1/premiumIndex", {"symbol": symbol.upper()}, label="Binance premium")
-        mark, index = float(r.get("markPrice") or 0.0), float(r.get("indexPrice") or 0.0)
+        # Missing mark or index prices leave the premium unavailable (None), never 0% or -100%.
+        mark, index = price_or_none(r.get("markPrice")), price_or_none(r.get("indexPrice"))
+        next_ms = r.get("nextFundingTime")
         return {"symbol": symbol.upper(), "mark": mark, "index": index,
-                "premium_pct": (mark / index - 1.0) * 100 if index else 0.0,
-                "last_funding_rate": float(r.get("lastFundingRate") or 0.0),
-                "next_funding_time": datetime.fromtimestamp(int(r.get("nextFundingTime") or 0) / 1000,
-                                                            tz=timezone.utc).isoformat(timespec="minutes"),
+                "premium_pct": (mark / index - 1.0) * 100 if mark is not None and index is not None else None,
+                "last_funding_rate": number_or_none(r.get("lastFundingRate")),
+                "next_funding_time": datetime.fromtimestamp(int(next_ms) / 1000, tz=timezone.utc).isoformat(timespec="minutes")
+                if next_ms else None,
                 "as_of": datetime.now(timezone.utc).isoformat(timespec="seconds")}
 
     def open_interest_hist(self, symbol: str = "BTCUSDT", *, period: str = "1d", limit: int = 30) -> list[dict]:
@@ -350,7 +372,7 @@ def probe() -> dict:
                      ("binance_futures", lambda: BinancePublic().premium_index("BTCUSDT")["mark"])):
         try:
             v = fn()
-            out[name] = {"ok": bool(v), "detail": f"last {v:,.2f}"}
+            out[name] = {"ok": v is not None and v > 0, "detail": f"last {v:,.2f}" if v is not None else "price missing"}
         except Exception as exc:
             out[name] = {"ok": False, "detail": f"{type(exc).__name__}: {exc}"}
     return out

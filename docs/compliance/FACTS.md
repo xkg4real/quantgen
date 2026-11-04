@@ -268,6 +268,8 @@ PR61의 main `707cdc7`을 기준으로 기존 정책과 실제 복구 소스를 
 
 ## 시장 자산별 탭·공급사 자동 선택 — 2026-11-03
 
+> 2026-11-04 대체: 자산별 탭 줄과 안쪽 탭은 [시장 개편](#markets-watchlist-2026-11-04)으로 없어졌습니다. 분석 도구는 “분석 도구” 화면으로 옮겼습니다. 공급사 자동 선택(KIS 먼저, 주식은 Yahoo Finance 대체)과 숨긴 출처 선택 상자는 그대로입니다. 아래 표는 당시 기록입니다.
+
 | 항목 | 사실 | 근거 |
 | --- | --- | --- |
 | 화면 | 시장 탭을 자산별 9개로 바꾸고 별도 “KIS chart” 탭을 없앰. 차트는 국내증권·해외증권·국내파생상품·해외파생상품·채권 탭 안에서 하나의 차트가 자산에 맞춰 이동. 시장 화면의 데이터 출처·곡선 출처 선택 상자를 숨기고 첫(자동) 값을 유지. Macro v2의 선택은 공급사가 아니라 기록 묶음이라 “기록 묶음”으로 표시 | [앱](../../quantgen_desktop/app.py), [도구 화면](../../quantgen_desktop/tools.py) |
@@ -278,21 +280,68 @@ PR61의 main `707cdc7`을 기준으로 기존 정책과 실제 복구 소스를 
 
 ## 해외 종목명 검색·휠 확대·출처 두 줄 — 2026-11-03
 
+> 2026-11-04 대체: “출처 표시” 행은 [시장 개편](#markets-watchlist-2026-11-04)으로 바뀌었습니다. 차트는 국내 실시간이 아닐 때 지연 안내 한 줄만 보이고 출처·조회/체결 시각은 가격 tooltip에 둡니다. “종목 검색” 행은 국내·해외 공통 코드·이름 검색으로 넓어졌습니다. “입력 정리”와 “확대” 행은 그대로입니다. 아래 표는 당시 기록입니다.
+
 | 항목 | 사실 | 근거 |
 | --- | --- | --- |
-| 종목 검색 | 해외증권은 이름·코드로 검색(한영·한글 초성). 목록은 앱에 포함된 126개 선별 종목(나스닥·NYSE·NYSE Arca/American·홍콩·도쿄)이며 시장 전체 목록이 아님. 검색은 로컬이며 고른 뒤에만 조회 | [검색](../../core/market/symbols.py), [목록](../../core/market/data/overseas_symbols.json) |
+| 종목 검색 (2026-11-04 대체) | 해외증권은 이름·코드로 검색(한영·한글 초성). 목록은 앱에 포함된 126개 선별 종목(나스닥·NYSE·NYSE Arca/American·홍콩·도쿄)이며 시장 전체 목록이 아님. 검색은 로컬이며 고른 뒤에만 조회 | [검색](../../core/market/symbols.py), [목록](../../core/market/data/overseas_symbols.json) |
 | 입력 정리 | 거래소·조회 봉 수·표시 봉 수 입력 제거. 거래소는 검색 결과로 정해지고, 국내파생상품만 시장 구분 선택을 보임. 기본 240봉 조회·120봉 표시 | [차트 화면](../../quantgen_desktop/market_chart.py) |
 | 확대 | 차트 위 휠과 `+`/`-` 키로 표시 봉 수를 20봉~받은 봉 수 사이에서 바꿈. 다시 조회하지 않음 | [차트 화면](../../quantgen_desktop/market_chart.py) |
-| 출처 표시 | 출처·지연 한 줄, 조회·체결 시각(한국시간) 한 줄, 같은 글자 크기. 긴 공급자 설명은 “데이터 설명” 펼침과 tooltip으로 이동 | [차트 화면](../../quantgen_desktop/market_chart.py) |
+| 출처 표시 (2026-11-04 대체) | 출처·지연 한 줄, 조회·체결 시각(한국시간) 한 줄, 같은 글자 크기. 긴 공급자 설명은 “데이터 설명” 펼침과 tooltip으로 이동 | [차트 화면](../../quantgen_desktop/market_chart.py) |
 
 ## 시장 지표 차트 4개 — 2026-11-03
 
+> 2026-11-04 대체: 지표 차트 4개는 [시장 개편](#markets-watchlist-2026-11-04)의 관심종목 차트로 바뀌었습니다. `quantgen_desktop/market_board.py`와 `tests/desktop_market_board_acceptance.py`는 `2927879`에서 삭제했습니다. [보드 자료](../../core/research/market_board.py)와 그 시험은 남아 있지만 앱 화면은 부르지 않습니다. 아래 표는 당시 기록입니다.
+
 | 항목 | 사실 | 근거 |
 | --- | --- | --- |
-| 화면 | 시장 화면의 7열 시장지표 표·새로고침 버튼·단위 안내를 지표 선 차트 4개(코스피, S&P 500, 원/달러 환율, 미국 10년 국채금리)로 교체. 개별 종목 없음(종목은 Home 목록·Q-SCORE에 그대로). 넓으면 2×2, 700px 미만이면 한 줄 | [보드](../../quantgen_desktop/market_board.py) |
+| 화면 | 시장 화면의 7열 시장지표 표·새로고침 버튼·단위 안내를 지표 선 차트 4개(코스피, S&P 500, 원/달러 환율, 미국 10년 국채금리)로 교체. 개별 종목 없음(종목은 Home 목록·Q-SCORE에 그대로). 넓으면 2×2, 700px 미만이면 한 줄 | 보드 `quantgen_desktop/market_board.py`(2026-11-04 삭제) |
 | 공급사 | 카드마다 KIS 먼저(코스피 지수·S&P 500 해외지수·원/달러), 실패·미설정이면 Yahoo·FRED 동시 요청·첫 유효 응답. 미국 10년은 FRED. 합성 자료 없음 | [보드 자료](../../core/research/market_board.py), [자동 선택](../../core/market/routing.py) |
-| 갱신 | 시장 화면이 보일 때만, KIS 카드 3분·지연 공급사 15분 간격, 실패 카드는 1·2·5·15분 간격 재시도. 자체 작업 큐라 분석 도구를 막지 않음. 실패한 갱신은 마지막 정상 값을 유지 | [보드](../../quantgen_desktop/market_board.py) |
+| 갱신 | 시장 화면이 보일 때만, KIS 카드 3분·지연 공급사 15분 간격, 실패 카드는 1·2·5·15분 간격 재시도. 자체 작업 큐라 분석 도구를 막지 않음. 실패한 갱신은 마지막 정상 값을 유지 | 보드 `quantgen_desktop/market_board.py`(2026-11-04 삭제) |
 | 표시 | 값·등락(%, 금리는 bp)·선 차트·출처/지연 한 줄·관측일/갱신 시각 한 줄. 7일 넘은 관측은 “오래된 관측” | [카드 차트](../../core/market/presentation.py) |
+
+## 조작 버그 수정(A2) — 2026-11-03
+
+| 항목 | 사실 | 근거 |
+| --- | --- | --- |
+| 휠 | 선택 상자·숫자 상자는 휠로 포커스를 받지 않음(StrongFocus). 포커스 없는 상자와 탭의 휠은 그 방향으로 움직일 수 있는 가장 가까운 스크롤 영역으로 전달, 없으면 무시. 실제 Windows 휠은 미검증 | [휠 처리](../../quantgen_desktop/wheel_guard.py) |
+| 채권 입력 | 금액 칸이 천 단위 구분기호로 표시(1,000,000). 계산 전 구분기호를 제거해 같은 값을 사용 | [채권 화면](../../quantgen_desktop/bonds.py) |
+| 입력 잘림 | 분석 도구 입력 영역이 고정 높이 대신 현재 양식만 표시·측정(숨긴 양식은 자리를 차지하지 않음, 폭에 따른 높이 포함). 입력 패널 높이를 선호 폭 기준 크기 힌트로 제한하지 않아, 실제 폭에서 캡션이 더 줄바꿈되는 경우(Windows 글꼴)에도 마지막 줄이 잘리지 않음. Rates·KRX·ETF 잘림 해결. 실제 Windows 화면은 미검증, Windows CI로 확인 | [도구 화면](../../quantgen_desktop/tools.py) |
+| 아이콘 | 창·앱 아이콘을 16–256px .ico와 PNG로 구성하고 Windows 앱 ID 설정 결과를 확인. 실제 Windows 작업표시줄 표시는 미검증 | [앱](../../quantgen_desktop/app.py) |
+| AI 해설 버튼 | 항상 응답하며 미리보기·동의 단계를 안내. 동의 없이는 전송하지 않고, 동의 후 질문을 고치면 동의가 다시 꺼짐 | [AI 해설](../../quantgen_desktop/commentary.py) |
+
+<a id="markets-watchlist-2026-11-04"></a>
+## 시장 개편: 관심종목 차트·한 종목 화면·분석 도구 — 2026-11-04
+
+소유자 요청 원문과 결정 이유는 [제품 기록](../product/MARKETS_WATCHLIST_2026-11-04.md)에 있습니다. 아래는 브랜치 `claude/ui-markets-watchlist-20261104`(코드 기준 `44ba1c7`)의 코드 사실입니다. 네이티브 PyQt6만 바꿨고 Flet 브라우저 화면과 Home 고정 목록은 그대로입니다.
+
+| 항목 | 사실 | 근거 |
+| --- | --- | --- |
+| 화면 | 시장 화면은 검색 막대 아래에 관심종목 차트 카드 또는 한 종목 화면을 보임. UI-7 지표 차트 4개와 UI-8 자산별 탭 줄은 없음. 카드는 이름·코드·가격·등락·일별 종가 선 차트(120봉)와, 해당할 때만 상태 한 줄. 폭 1060px 이상 3열, 640px 이상 2열, 그 밖 1열. 카드를 누르거나 Enter·Space를 누르면 한 종목 화면. Home 상세의 차트 버튼도 그 종목 화면을 엶 | [시장 화면](../../quantgen_desktop/markets_view.py) `WatchlistGrid`·`WatchCard`·`StockView`, [앱](../../quantgen_desktop/app.py) `make_markets`·`open_stock_chart` |
+| 조회 시점 | 자동 갱신이 켜진 창에서 시장 화면이 보일 때만 카드를 조회. 15초마다 차례를 확인하고 KIS 카드는 3분, 그 밖은 15분, 실패한 카드는 1·2·5·15분 뒤 다시 조회. 화면을 떠나면 멈춤. 실패해도 마지막 차트를 두고 “갱신 실패, 마지막 값 표시”. 종목을 열면 차트 조회·지원 체결 연결과 종목 정보 조회를 함께 시작. 자동 갱신이 꺼진 창(시험)은 카드의 새로고침·차트의 조회 버튼을 누르기 전에는 조회하지 않고 종목 마스터도 받지 않음 | markets_view.py `due`·`showEvent`·`show_instrument`, [시험](../../tests/desktop_markets_watchlist_acceptance.py) |
+| 관심종목 저장 | QSettings `QUANTGEN/QUANTGEN`의 `markets/watchlist`. 값은 자산 구분·코드·거래소만 담은 JSON 목록이며 최대 20개. 키가 없으면 Home의 국내주식 6개로 시작하고, 이용자가 ☆·★·×로 추가·삭제할 때만 씀. 모두 지우면 빈 목록이 남음. 잘못된 항목은 건너뛰고 다른 코드로 고치지 않음. 이름·가격·조회 결과·검색어는 저장하지 않음 | markets_view.py `WatchlistStore`(107–169행) |
+| 종목 검색 | 시장 검색창, Build & Test 종목, 포트폴리오 종목(쉼표 목록), Signals 종목, Strategy Lab 종목, ETF 코드(ETF만), KRX 코드에서 코드나 이름으로 찾음. 국내·해외 주식을 코드·한글 이름·영어 이름·한글 초성으로 찾고 결과는 최대 8개(“이름 코드 · 거래소”). 영어 이름은 Home 6종목과 동봉 해외 126종목에만 있음. KIS 마스터에는 영어 이름이 없어(directory.py 67·164행) 그 밖의 국내 종목은 영어 이름으로 찾지 못하고 영어 화면에서 코드로 보임(76–85행). 모의매매 규칙 편집기의 종목 칸(paper.py 164행)은 검색 없음. 고르면 칸에 코드만 들어가 각 화면의 조회 경로는 그대로. 거래소가 빠진 코드로 다른 종목을 부르지 않도록 시장 검색창 밖의 칸은 해외 종목 중 미국(NAS·NYS·AMS)만 보임(홍콩·도쿄 8종목 제외, markets_view.py `US_EXCHANGES`). 검색은 로컬이고 입력한 글자를 보내지 않음. 시장 검색 막대의 종류 선택(국내 파생·해외 파생·채권)에서는 코드를 직접 입력. 맞는 종목이 없으면 추측하지 않고 안내 | [검색](../../core/market/directory.py) `search`·`resolve`, markets_view.py `SymbolCompleter`·`submit`, app.py `attach_symbol_searches` |
+| 종목 목록 내려받기 | 자동 갱신이 켜진 창에서 위 검색 칸 중 하나에 처음 포커스가 가면, KIS 키 없이 `kospi_code.mst.zip`·`kosdaq_code.mst.zip`을 기존 마스터 호스트 `new.real.download.dws.co.kr`에서 백그라운드로 받음. 요청에는 파일 이름만 있음. 원본 줄은 `_MASTER_CACHE`, 분석한 목록은 디렉터리의 메모리 색인에 두고 파일로 쓰지 않음. 성공하면 같은 실행 중 다시 받지 않고, 실패하면 10분이 지난 뒤 다음 포커스에서 다시 시도. 받기 전이나 실패 시 국내는 Home 6종목만 이름으로 찾고 그 밖은 6자리 코드로 엶. 실패하면 시장 화면에 “국내 종목 이름 목록을 불러오지 못했습니다. 국내 종목은 6자리 코드로 검색하세요.”를 보임. 해외는 동봉 126종목뿐. 6자리 숫자가 아닌 국내 단축코드는 건너뜀 | markets_view.py `DirectoryLoader`, directory.py `load_domestic`(465행)·155행, [마스터](../../data/kis_markets.py) `_MASTERS`(48행)·`load_master`(657행) |
+| 한 종목 화면 | 머리글(코드·거래소, 이름, 가격, 등락), ☆ 관심종목 추가 / ★ 해제, 공유 가격 차트(주기·지표·체결 갱신은 기존 차트 그대로, 종목 입력칸은 숨김), 종목 정보 섹션. 섹션: 주요 지표(시가·고가·저가·거래량·시가총액(계산값)·PER·EPS·업종·상장 주식 수), 52주 범위, 기간 수익률(1주·1개월·3개월·6개월·1년), 위험 지표(“과거 자료이며 예측이 아님”), 기술적 신호(“매수·매도 추천이 아닙니다”), 기술 지표, 투자자별 순매수(외국인·기관·개인, 최근 5·20거래일), 공매도(최근·20거래일 평균 수량과 비중), 제공되지 않는 정보. 주식이 아닌 종류는 차트만 보이고 “종목 정보는 주식에만 제공합니다” | [종목 정보](../../core/research/stock_profile.py) `sections`, markets_view.py `StockView` |
+| 한 종목 화면 자료원 | 일별 이력 `ChartRequest(종목, "1d", 260, adjusted=True)`: KIS 먼저, 주식은 KIS가 응답하지 못하면 Yahoo Finance. 국내주식만 KIS `inquire-price`, `investor-trade-by-stock-daily`(20일), `daily-short-sale`(20일). 셋 다 기존 허용목록 경로이며, 투자자별 매매와 공매도를 앱 화면에 보이는 것은 처음. 해외주식은 이력만. 합성 자료는 쓰지 않음. 오류는 정한 이유 코드와 예외 종류 이름만 보임 | stock_profile.py `load_profile`, app.py `_ProductionProfileLoader`, [허용목록](../../config.py) 91·98·99행 |
+| 제공하지 않는 정보 | “제공되지 않는 정보” 섹션에 적음: 뉴스, 애널리스트 의견·목표주가, 배당(기간 수익률은 가격 기준), 호가, 해외 종목 재무 지표. 대체 자료일 때 “실시간 체결: KIS 자료에서만 제공”. 조회하지 못한 섹션은 이유와 함께 같은 섹션에 적음 | stock_profile.py `_ALWAYS_MISSING`·`_unavailable_rows` |
+| 공급자·관측일 제거 | 칸·줄로 보이던 공급자·관측일을 없앰: 차트의 출처·시각 두 줄, Home 상세 창의 공급처·관측일 행, 매크로 표의 출처·관측일 열, 외환 캐리 표의 금리 관측일·오래된 관측 열, KRX의 공급자 줄(KIS일 때)과 시세 표의 `source`·`as_of` 행, ETF 시세 표의 `as_of` 행(요청일). 공급자와 시각은 tooltip(카드, 차트 가격, 섹션 행, 매크로 지표 이름, 캐리 금리)에 남음. 시장 카드·공유 가격 차트·종목 정보·Home 상세 창은 보고서 내보내기가 없음. 도구 내보내기는 화면에 넣은 행으로 만들므로(tools.py 226·271행) 매크로·외환 캐리 표의 숨긴 열은 내보내기 표에 그대로 있음. KRX `source`·`as_of`와 ETF `as_of` 행도 화면에서만 숨기므로(market_tools.py `hide_rows`) 내보내기에 남음. KIS로 받은 KRX 결과의 공급자·`as_of`는 화면·tooltip에 없고 내보내기에만 있음. KIS가 아닌 KRX 대체(직전 거래일 종가)는 공급자 줄과 `as_of` 행을 화면에 보임 | [차트](../../quantgen_desktop/market_chart.py), [Home 상세](../../quantgen_desktop/watchlist.py), [매크로](../../quantgen_desktop/macro.py), [외환](../../quantgen_desktop/fx.py), [ETF·KRX](../../quantgen_desktop/market_tools.py) |
+| 남은 공급자·날짜 글자 | 이번 변경이 바꾸지 않아 화면 글자로 남은 것: 외환의 “Data sources” 표(Series·Provider·First·Last·Note, 모든 결과)와 차트 축 이름의 기간, 매크로의 “As of {기준일} · {공급자: 개수}” 줄, 금리·채권·구조화 상품·파생상품·ETF·가상자산 결과 머리의 공급자와 날짜, KRX의 실패·KIS 아닌 출처 “Provider:” 줄 | [외환](../../quantgen_desktop/fx.py) 38–39·63·79행, [매크로](../../quantgen_desktop/macro.py) 44–46행, [금리](../../quantgen_desktop/rates.py) 59–60행, [채권](../../quantgen_desktop/bonds.py) 99–100행, [구조화](../../quantgen_desktop/structuring.py) 40행, [도구](../../quantgen_desktop/market_tools.py) 41·104·164·228–229행 |
+| 남긴 상태 표시 | 차트: 국내 실시간이 아닐 때 지연 안내 한 줄(예: “15분 지연”, “미국 무료 시세 · 지연 0분”, “지연 시세”), 대체 자료일 때 “KIS 대신 Yahoo Finance 자료입니다(지연·수정 전 가격)”, 상태 줄의 오래된 값·조회 실패. 카드: 출처가 `KIS`·`KIS REST`가 아니면 “지연 시세”(Yahoo 대체도 이 글자뿐이고 Yahoo 이름은 tooltip에만), 마지막 봉이 7일보다 오래되면 “오래된 자료”, “갱신 실패, 마지막 값 표시”. 종목 정보: 섹션 노트의 “Yahoo Finance 일별 종가 (수정 전·지연)”과 “마지막 일봉 …, 오래된 자료”. 외환 캐리 표: 오래된 금리 칸에 ⚠와 날짜 tooltip. Home 상세 창: 오래된 관측의 날짜를 안내문에 적음. 매크로: 합성 자료 줄과 기준일 줄. KRX: 실패이거나 KIS가 아닐 때 공급자 줄 | 같은 파일, markets_view.py `WatchCard.render` |
+| 분석 도구 | 시장 탭에 있던 10개 도구(채권·금리·구조화 상품·외환·파생상품·ETF·KRX·가상자산·거시 지표표·매크로 v2)를 새 왼쪽 메뉴 “분석 도구 / Analysis tools”로 옮김. 5열 2행 버튼(Tab·Space로도 선택), 스크롤 탭 없음. 각 도구의 계산·조회·자동 경로·숨긴 출처 선택은 그대로. 매크로 안내문은 “분석 도구의 매크로 v2”를 가리킴 | app.py `TOOL_PANES`·`make_tools`·`show_tool`·`show_market_pane` |
+| 글자·좌측 메뉴·선택 상자 | 동봉 QG Interface의 400/500/600 굵기만 씀(700은 거부). 제목 30/600, 소제목 18/600과 3px 강조 막대, 본문 14, 캡션·표 머리 12, 큰 수치 32/600. 패널은 세로 그라데이션과 2px 아래 테두리. 등락은 한국식(상승 빨강·하락 파랑) 알약. 좌측 메뉴 폭은 가장 긴 메뉴 이름으로 정하고 168–208px로 제한(오프스크린 측정 영어 182px, 한국어 176px, 이전 고정 222px). “PERSONAL RESEARCH”와 미리보기 두 줄은 뺐고 미리보기 안내는 System 화면에 있음. 선택 상자·숫자 상자·넘치는 탭 줄의 기본 화살표 상자를 상자 없는 얇은 꺾쇠 SVG로, 스크롤 막대는 화살표 버튼 없이 얇게. 카드의 × 버튼은 상자 없음. SVG 차트 글자는 등록 글꼴 `QG Interface`만 지정하고 12px 이상. 글꼴 파일을 읽지 못하면 Python logging 경고(파일 경로)를 남기며 로그 파일은 만들지 않음 | [글자·스타일](../../quantgen_desktop/typography.py), [꺾쇠](../../assets/ui/chevron-down-light.svg), [SVG](../../core/market/presentation.py), app.py `fit_sidebar`·`load_interface_fonts` |
+| 범위 밖·미검증 | Flet 브라우저·웹사이트·Home 고정 종목 목록과 열 구성은 바꾸지 않음(공유 SVG의 글꼴 이름·크기 변경은 Flet 차트에도 적용). Home 표의 변동 색(한국식 상승 빨강·하락 파랑)·열 머리 12/600·종목 코드 알약 12px과 상세 창의 공급처·관측일 행 제거는 이번 변경(watchlist.py 812·815·936행, 540–563행). 종목 검색 목록(QCompleter)은 부모 없는 별도 창이라 주 창 스타일시트가 닿지 않으므로 테마마다 목록에 직접 스타일을 줌(typography.py `popup_stylesheet`, markets_view.py `SymbolCompleter.set_theme`). Windows 모습은 미검증. 웹사이트 변경 기록은 [PR-71.json](../product/ui_website_updates/PR-71.json). 실제 Windows 표시·DPI·글꼴 렌더링, KIS 종목 마스터의 고정폭 형식, 실제 KIS 응답(투자자별 매매·공매도 포함), 마스터 이름의 글꼴 지원(한자 등), 6자리가 아닌 단축코드로 빠지는 종목 수는 미검증. 실제 KIS 일별 응답의 출처 문자열은 `KIS REST`(data/kis_workspace.py:229)이며 카드는 `KIS`·`KIS REST`를 KIS로 판정함(markets_view.py:44). 실제 KIS 응답으로는 미검증. 종목 이름 표시 권리는 `kis_krx` `rights_conditional` 그대로 | [표시권 검토](../product/MARKET_DISPLAY_RIGHTS_2026-10-31.md), [권리 목록](../../core/research/display_rights.json) |
+
+정책 01·04·06·07·08·09·13·14·15·19·20에 해당 사실을 반영했습니다. 02·03·05·10·11·12·16·17·18은 대조했고 거짓이 된 문장이 없어 본문을 바꾸지 않았습니다. 모든 정책의 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. 법률 의견·공개 승인·실제 계정 연결·Windows 수동 검증이 아닙니다.
+
+## Crypto 결측값(§10 NEW-M6-14·15·22) — 2026-11-04
+
+| 항목 | 사실 | 근거 |
+| --- | --- | --- |
+| 보유 평가 | 원화 시세가 없는 통화는 평가액을 0이 아닌 빈 값으로 두고, 합계는 "부분 합계"로 표시하며 빠진 통화를 밝힘. 수량이 0이면 평가액 0. 평균 매수가에 통화 단위 표시. 빠진 통화를 밝히는 안내도 보유 내역처럼 AI 해설로 보내지 않음 | [Crypto 흐름](../../core/research/crypto_workflow.py) |
+| 공개 시세 요청 | 보유 통화 목록을 한 번에 요청하고, Upbit가 목록을 거부하면(HTTP 400·404) 같은 종목을 하나씩 다시 요청. 시간 초과·요청 한도·서버 오류는 종목별로 하나씩 다시 묻지 않고 조회 실패로 표시함. 다만 공용 HTTP 세션은 연결 실패·시간 초과·HTTP 502·503·504일 때 같은 요청을 최대 2번 더 보냄(HTTP 429·500은 한 번만). 보내는 항목(종목 코드)은 같음. 실제 Upbit 응답은 미검증 | [Crypto 흐름](../../core/research/crypto_workflow.py) |
+| 무기한 선물 괴리 | 마크·인덱스 가격 중 하나라도 없으면 0%·−100% 대신 "n/a" | [Crypto 공급사](../../data/crypto/crypto_client.py) |
+| 김치 프리미엄 z | 관측 91개 미만이거나 변동이 없으면 z를 계산하지 않고 "n/a"·"—"로 표시. 기록이 1년(관측 365개)보다 짧으면 z가 실제로 쓴 관측 수를 Flet 화면·해설·AI 페이로드(`z_window`)에 밝힘. 종가가 없는 날은 −100% 대신 제외 | [Crypto 분석](../../core/crypto/analytics.py) |
 
 ## 옵션판 표시(§10 M4-N4·N7·N9) — 2026-11-04
 

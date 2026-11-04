@@ -46,6 +46,19 @@ class FXPane(ToolPane):
             self.result_table('Carry ranking', ['Pair','CCY','Spot','Rate','USD rate','Carry','3m vol','Carry/vol','3m momentum','Score','Rate date','Stale'],
                 [[r.pair,r.ccy,fmt(r.spot),fmt(r.rate_ccy,'pct'),fmt(r.rate_usd,'pct'),fmt(r.carry,'pct'),fmt(r.vol_3m,'pct'),
                   fmt(r.carry_to_vol),fmt(r.mom_3m,'pct'),fmt(r.score),r.rate_date,str(r.rate_stale)] for r in rows])
+            ranking = self.tables['Carry ranking']
+            # Owner, 2026-11-04: no rate-date or stale columns on screen (the export keeps both);
+            # a stale rate is marked on its own cell with its date.
+            for index, r in enumerate(rows):
+                cell = ranking.item(index, 3)
+                if cell is not None:
+                    cell.setToolTip(f'{r.rate_date}' + (' · stale' if r.rate_stale else ''))
+                    if r.rate_stale:
+                        from PyQt6.QtGui import QBrush, QColor
+                        cell.setForeground(QBrush(QColor('#B26B00')))
+                        cell.setText(cell.text() + ' ⚠')
+            for column in (10, 11):
+                ranking.setColumnHidden(column, True)
             self.line('Carry equity', range(len(bt.dates)), [('Basket',bt.equity),('Equal-weight long',bt.bench_equity)],
                       f'Sessions · {bt.dates[0]} → {bt.dates[-1]}','Equity · starts at 1')
             _,longs,shorts = bt.positions[-1]

@@ -22,7 +22,8 @@ commercial distribution; current repository policy remains personal use.
 | Workspace | Working native scope | Limits |
 |---|---|---|
 | Research Home | Session Monte Carlo counts, daily market observations, last computed fan and provenance | Counts exclude portfolio optimizations; no historical ledger scan |
-| Markets | Six existing daily observations, dates/provider/status and correct bp/% units; Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary; Derivatives board, ETF sleeves, Crypto analytics and six KRX datasets | Native Macro v2 overlay/cards/register use the existing validated readers; optional AI commentary is in Research Library. Native ETF/Crypto study cards are explicitly NOT_LOADED |
+| Markets | Since 2026-11-04: watchlist chart cards (setting `markets/watchlist`, asset/code/exchange only, 20 at most, default the six Home stocks), code-or-name search, and one screen per stock with the shared price chart and profile sections (key figures, 52-week range, returns, risk, signals, indicators, investor flows, short selling, not provided). Futures and bonds open by code through a kind selector | With automatic refresh on, cards load while Markets is shown and a stock's chart and details load when it is opened. Provider/observation time only in tooltips (Markets has no export); tool screens differ, see the record. Flet is unchanged. See [the Markets rework record](product/MARKETS_WATCHLIST_2026-11-04.md) |
+| Analysis tools | Bonds calculator/scenarios/hedge, Rates curve/swap/options/simulation, FX forward/smile/carry, four structured notes and descriptive macro sheet/daily/weekly commentary; Derivatives board, ETF sleeves, Crypto analytics and six KRX datasets; Macro v2 (moved from the Markets tabs on 2026-11-04; a visible button grid) | Native Macro v2 overlay/cards/register use the existing validated readers; optional AI commentary is in Research Library. Native ETF/Crypto study cards are explicitly NOT_LOADED |
 | Build & Test | All four existing Monte Carlo models, data source, seed, target, drift/ERP, percentile fan, loss risk and GARCH diagnostic notes | Strategy Lab seven-family validation and explicit study-card viewer; optional AI commentary is in Research Library |
 | Portfolio & Risk | Four existing objectives, weights/risk contributions, frontier, correlation, source/convention/convergence notices; technical composite and three costed backtests | Explicit JSON/ZIP exports; native paper-only runtime controls |
 | Research Library | Session Monte Carlo results, native JSON and report ZIP save dialog | No persistent history browser; only explicit export |
@@ -145,7 +146,9 @@ CI proves an installed wheel starts outside the checkout and bounded fixture tes
 on Windows Python 3.12/3.14 and Ubuntu 3.12. It is not a signed Windows installer or a real
 monitor/DPI acceptance. Before treating this preview as the default replacement, check:
 
-- Windows 100%, 125%, 150% scaling: six workspaces, sidebar, long record tables, keyboard focus.
+- Windows 100%, 125%, 150% scaling: all eight workspaces (Research Home, Markets, Analysis tools,
+  Indicator guide, Build & Test, Portfolio & Risk, Research Library, System), the fitted sidebar,
+  long record tables, chevron controls and keyboard focus.
 - Light/dark mode, window resize, F1 taskbar icon and saved JSON/ZIP dialogs.
 - Synthetic calculation and rule/paper flow; optional real providers only with valid user rights.
 - Closing during a job keeps the window; closing an armed paper session stops its loop.

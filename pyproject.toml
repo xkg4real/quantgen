@@ -57,4 +57,5 @@ web = "assets/icon_192.png"
 "share/quantgen/assets" = ["assets/*.png", "assets/*.ico", "assets/manifest.json"]
 "share/quantgen/assets/icons" = ["assets/icons/*.png"]
 "share/quantgen/assets/branding" = ["assets/branding/*.svg"]
+"share/quantgen/assets/ui" = ["assets/ui/*.svg"]
 "share/quantgen/assets/fonts" = ["assets/fonts/*.otf", "assets/fonts/*.txt"]

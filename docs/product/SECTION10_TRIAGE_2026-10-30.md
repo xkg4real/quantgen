@@ -228,6 +228,29 @@ Latest source implementation count: **21/67**, **46** remaining. Partial
 NEW-M6-02, the 14 observation models and 15 ambiguous mappings remain open.
 Actual Windows, provider, research and release acceptance are separate.
 
+### 2026-11-04 Crypto missing values (Claude rework)
+
+The owner chose not to recover GPT's private Crypto work; Claude redid it from main
+`c1a4e97`. NEW-M6-15 maps by elimination to the M6-01 limitation with two parts: the
+uncomputed 1-year z shown as +0.00, and the "1y" z of a history shorter than a year,
+which uses a 90–364-observation window. z is now NaN when undefined (short history or a
+flat window) and every screen, narrative and payload says it is unavailable; when the
+window is shorter than a year the Flet stat, the narratives and the payload name it.
+The z series keeps its short windows at the start of a sample: they are not displayed
+and only feed the M6-02 regression (NEW-M6-01). NEW-M6-14 and NEW-M6-22 share the four
+unlabelled M6-11 limitations (zero-valued unpriced holdings in a complete-looking total,
+a batch ticker failure erasing all holdings, a missing mark/index read as 0% or −100%,
+the cost basis without a unit). All four are corrected, so both IDs are covered while
+their exact pairing stays ambiguous. Valid-data kimchi results are unchanged on 40
+synthetic histories. A missing Upbit close no longer reads as a −100 % premium (the
+day is left out); the register gives that case to D12-03 (audit, PT-18), not to a §10 ID,
+so it is only the Upbit daily part of D12-03 and the rest of D12-03 stays open. See
+`CRYPTO_MISSING_VALUES_2026-11-04.md`.
+
+Source implementation count after this section: **24/67**, **43** remaining. Partial
+NEW-M6-02, the 14 observation models and the remaining ambiguous mappings stay open.
+Actual Windows, provider, research and release acceptance are separate.
+
 ### 2026-11-04 Option board disclosures (Claude rework)
 
 The owner chose not to recover GPT's private options work. Claude redid it from main
@@ -243,6 +266,7 @@ The owner chose not to recover GPT's private options work. Claude redid it from 
 Valid-input numbers are byte-identical on GBM and GARCH-t synthetic boards. See
 `OPTION_DISCLOSURE_2026-11-04.md`.
 
-This branch adds three groups to main's count (21 → 24/67). Combined with the Crypto
-rework branch the count is 27/67. Partial NEW-M6-02, the 14 observation models and
-the remaining ambiguous mappings stay open.
+These three groups follow the Crypto section above (24 → 27/67). Latest source
+implementation count: **27/67**, **40** remaining. Partial NEW-M6-02, the 14 observation
+models and the remaining ambiguous mappings stay open. Actual Windows, provider, research
+and release acceptance are separate.

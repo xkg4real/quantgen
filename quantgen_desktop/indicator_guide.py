@@ -309,13 +309,13 @@ class IndicatorGuide(QWidget):
             if spec.key not in self.keys:continue
             chip=self.chips.get(spec.key)
             if chip is None:
-                # Name part shows the explanation; the ✕ part removes it from the chart.
+                # Name part shows the explanation; the × part removes it from the chart (U+00D7: the bundled font has no U+2715).
                 chip=QWidget();chip.setProperty('indicator',spec.key)
                 row=QHBoxLayout(chip);row.setContentsMargins(0,0,0,0);row.setSpacing(2)
                 chip.show_button=QPushButton();chip.show_button.setProperty('chip',True)
                 chip.show_button.setStyleSheet('QPushButton { border-left: 4px solid '+spec.color+'; }')
                 chip.show_button.clicked.connect(lambda checked=False,k=spec.key:self.choose(k))
-                chip.remove_button=QPushButton('✕');chip.remove_button.setProperty('chip',True)
+                chip.remove_button=QPushButton('×');chip.remove_button.setProperty('chip',True)
                 chip.remove_button.clicked.connect(lambda checked=False,k=spec.key:self.remove(k))
                 row.addWidget(chip.show_button);row.addWidget(chip.remove_button)
                 self.chips[spec.key]=chip
