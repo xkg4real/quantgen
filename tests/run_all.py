@@ -71,6 +71,20 @@ def papers_tests():
     return selfcheck_tests()
 
 
+def provider_parity_tests():
+    """Suite `provider_parity` (tests/provider_parity_acceptance.py; tools/provider_parity, roadmap item 5-2), imported
+    here: an import or collection failure is one FAIL row named `import` and never stops the other suites."""
+    try:
+        from tests.provider_parity_acceptance import tests as parity_tests
+        return parity_tests()
+    except Exception as exc:
+        reason = f"tests.provider_parity_acceptance does not import or collect ({type(exc).__name__}: {exc})"
+
+        def import_failed():
+            raise RuntimeError(reason)
+        return [("import", import_failed)]
+
+
 def tests():
     return ([(f"safety/{n}", f) for n, f in safety_tests()] +
             [(f"engine/{n}", f) for n, f in engine_tests()] +
@@ -82,7 +96,8 @@ def tests():
             [(f"paper/{n}", f) for n, f in paper_tests()] +
             [(f"grokteam/{n}", f) for n, f in grokteam_tests()] +
             [(f"guard/{n}", f) for n, f in guard_tests()] +
-            [(f"papers/{n}", f) for n, f in papers_tests()])
+            [(f"papers/{n}", f) for n, f in papers_tests()] +
+            [(f"provider_parity/{n}", f) for n, f in provider_parity_tests()])
 
 
 def runs_from() -> dict[str, int]:
@@ -128,7 +143,8 @@ def run(entries) -> list[dict]:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--milestone", help="run the exit set of M<k> via tests/macro_registry.csv")
-    parser.add_argument("--suite", help="run one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam, guard or papers")
+    parser.add_argument("--suite", help="run one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam, guard, papers "
+                                          "or provider_parity")
     args = parser.parse_args(argv)
     if args.milestone and not re.fullmatch(r"M(10|[0-9])", args.milestone):
         parser.error("--milestone takes M0..M10")

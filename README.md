@@ -929,7 +929,7 @@ The detailed tables below record the historical 2026-10-23 run; they are not the
 
 ```bash
 python tests/run_all.py                  # every suite; writes qa/acceptance_results.json
-python tests/run_all.py --suite macro    # one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam, guard or papers
+python tests/run_all.py --suite macro    # one suite: safety, engine, ui, quant, ficc, expansion, macro, paper, grokteam, guard, papers or provider_parity
 python tests/run_all.py --milestone M8   # the exit set of a milestone (tests/macro_registry.csv)
 python -m tests.macro_acceptance         # resync the registry's implemented_in column
 ```
@@ -954,6 +954,7 @@ exit code; the exit code is 0 only when nothing failed. The summary line reads
 | grokteam | `grokteam/selfcheck.py` | The GROKTEAM BOOK desk (Kalshi KXBTCD paper benchmark of the Grok trading-team guide), offline: the Kalshi fee and payoff with the fee inside the stake, SIZE (half Kelly, 6% cap, $50 floor), the GARCH-t digital, no look-ahead in hourly bars or quotes, the 30-minute quote lookback, the stationarity warning not skipping, each account's entry rule, the cluster t and the one-sided skill p, the verdict precedence, the forward window blinded until its one look (VOID and unsettled events withhold it), Python patch updates not voiding the freeze, the sha-checked cache and the new ledger family | 17 PASS |
 | guard | `tests/frozen_guard.py` | The frozen-study guard, by git and hashlib only (no `paper_live` or `grokteam` import): the tag `studies-of-record-2026-10-23` peels to `eacd57d`, the tagged tree's pinned files match PREREG and its H2 files match `frozen_rule`, no `FORWARD_LOOK.json` on the main line before 2027-02-01 01:00 UTC, and the numpy/scipy/pandas pins while a readout is pending (with a check of the pending rule itself) | 5 PASS |
 | papers | `tools/paper/selfcheck.py` | The research-paper pipeline, offline: the Tectonic log gate and both templates compiled from the cache (Korean fonts by path, build record), digit-safe `\qnum` numbers, the EN/KO consistency check (paragraph ids, per-section numbers and citations, bare digits in results and in input-ed tables), scope approval hashes, Crossref/arXiv reference records, the claims gate, study-run refusals and manifests, the referee runner (quota, timeout, malformed reports) and bundle, release states and the index, the two workflow scripts and the skill | 43 PASS |
+| provider_parity | `tests/provider_parity_acceptance.py` | The 5-2 provider parity tool `tools/provider_parity/parity_check.py`, synthetic series and mocked HTTP only (socket connects raise): every outcome for SPY, BTC-USD and DGS3MO, the late-starting provider rule, the 2027-01-01 cut-off in fetch and compare, md5 refusal, the summary allow-list, no key value printed or written, every fetcher over a fake transport, COMPUTES against the checks. Added 2026-11-05, after the run below | 46 PASS (Linux, 2026-11-05; not in the Total) |
 | **Total** | `tests/run_all.py` | | 743/864 passed, 0 failed, 121 not run (2026-10-23) |
 
 The macro group (new in v2) discovers every `tests/macro_*.py` module,
