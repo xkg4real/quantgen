@@ -6,14 +6,14 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05
 next_ids: ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a3, ⑬-2/a1, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-05T03:36:37+09:00
+updated_at: 2026-11-05T18:28:22+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/s10-ai-20261104
 work_commit: 67618da
 uncommitted_changes: no
 pr: none
-usage_weekly_pct: 95
+usage_weekly_pct: 98
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
 session: https://claude.ai/code/session_01H6RrzMUzF8vwK8xkX977mB
@@ -208,6 +208,17 @@ python3 -B -m tools.compliance.check --check  →  FAIL (문서 1~20 검토 필�
 4. **실시간 체결·직접 주문** — 구현 전에 주문 안전 설계 문서를 소유자에게 먼저 보입니다. 내용: 모의투자 기본, 명시적 실거래 전환, 한도·확인창·긴급 중지·감사 기록, 연구 원장과 분리. T-RO-01과 safety test_08 개정은 이 PR과 함께 합니다.
 5. **⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c**: GPT가 이전에 정한 ID입니다. Notion 정본을 따릅니다. ⑬-2/k는 실제 Windows 화면·DPI·키보드·파일 대화상자·실데이터/AI 연결 검수이며, 소유자 PC가 필요합니다.
 6. **7번** (Step 7A 세션 결과 통합): 그 세션의 완료 보고를 받은 뒤 진행합니다.
+
+### 6-추가. Step 7A 세션에서 넘어온 미완료 (2026-11-05, 그 세션 메시지 요지)
+
+Step 7A 세션(https://claude.ai/code/session_016uB1jgeiPdP8gPkAez3Wrx)은 주간 사용량 98%로 멈췄습니다. 그 세션의 완료 10줄(⑤-1/a, ⑤-1/b, ⑤-1/c, ⑤-1, ⑤-2/a, ⑤-2/a2, ⑧-1/a, ⑧-1/b, ⑨-1/a, ⑨-4/a)은 소유자 승인("10줄 기록까지만 하고 GPT한테 인계")으로 이 게시에서 원장에 기록했습니다. 각 줄의 검사 결과는 그 세션의 보고이며 메인 세션은 커밋이 원격에 있는지만 확인했습니다. 남은 일:
+1. ⑤-2 공급사 대조 도구: 브랜치 `claude/provider-parity-5-2` `777fc5b`는 중단 시점 WIP(미완성·미검토, 병합 금지). 스펙 10.5/10.5.1/10.5.2와 P-D4~P-D9로 검토·완성 → 소유자 push 승인 → 소유자 PC에서 SPY·DGS3MO·BTC-USD 실행(Pilot 1 전 필수) → 도구 커밋·sha256을 넣는 스펙 전용 커밋(연구 브랜치).
+2. ⑧-1 main 커밋(H-D5): 초안 `docs/nautilus_bridge/H2_MAIN_COMMIT_SHEET_DRAFT_2026-11-05.md`(`a76af7d`, 미검토). 검토 뒤 소유자가 별도 클론에서 PR, 병합. 스냅샷은 비공개, MANIFEST만(H-D6).
+3. ⑥-1 Pilot 1: ⑤-2 뒤. 직전에 소유자 `git pull --ff-only`와 7A.5 확인 2줄(옵션 가).
+4. ⑨-1/2 LA-01·LA-02 수정(L-2), ⑨-4/2 남은 소항목과 `core/adoption`(M-21): 시작 가능.
+5. M-12: 주문 모듈 설계를 시작할 때 11-03 주문 한도·긴급 중지 조건을 소유자에게 다시 확인.
+6. 연구 브랜치 HEAD `8a8c247` = 작업 브랜치 `claude/bold-davinci-aipgwi`. H-D5대로 Step 10까지 main을 연구 브랜치에 합치지 않음. 연구 브랜치·`tools/nautilus/**`·`tests/nautilus_*.py`·RUNBOOK·스펙은 Step 7A 담당 영역이므로, 이어받을 때 소유자에게 누가 맡을지 먼저 묻습니다.
+- 소유자 결정표(원문 기록 완료, PR #74 `a41fd7a`): https://claude.ai/artifact/JC8NVi2mNUoX9fo5uTkfqD
 
 ## 7. 주의사항 / 하지 말 것
 
