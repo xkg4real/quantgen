@@ -48,6 +48,7 @@ from tests.macro_acceptance import tests as macro_tests     # noqa: E402
 from tests.paper_live_acceptance import tests as paper_tests     # noqa: E402
 from grokteam.selfcheck import tests as grokteam_tests             # noqa: E402
 from tests.frozen_guard import tests as guard_tests         # noqa: E402
+from tests.provider_parity_acceptance import tests as provider_parity_tests   # noqa: E402
 from tests.notrun import NotRun                             # noqa: E402
 
 REGISTRY = ROOT / "tests" / "macro_registry.csv"
@@ -81,6 +82,7 @@ def tests():
             [(f"macro/{n}", f) for n, f in macro_tests()] +
             [(f"paper/{n}", f) for n, f in paper_tests()] +
             [(f"grokteam/{n}", f) for n, f in grokteam_tests()] +
+            [(f"provider_parity/{n}", f) for n, f in provider_parity_tests()] +
             [(f"guard/{n}", f) for n, f in guard_tests()] +
             [(f"papers/{n}", f) for n, f in papers_tests()])
 
