@@ -1,0 +1,65 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-a3-layout-reading-pr-77",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "No supported cross-chat sending tool is available; this file is not delivery evidence.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/ui-a3-20261106",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/77",
+    "implementation_commit": "1131301580bb8e4c3c7a70ed7445066384167ad5",
+    "remote_status": "OPEN_DRAFT",
+    "merge_commit": null,
+    "verified_head": null,
+    "owner_design_confirmed_on": "2026-11-06"
+  },
+  "summary_ko": [
+    "기존 G1 패널로 MC 전체 행과 채권 지표·DV01·차트를 배치합니다.",
+    "로컬 용어집 검색과 현재 표시값 인용을 F1·문맥 메뉴로 제공합니다. 자료 변경 시 오래된 인용은 지웁니다.",
+    "Macro 순수 출처/기준일만 명시적으로 접으며 합성·실패·가정·판정 안내는 유지합니다."
+  ],
+  "website_impact": {
+    "classification": "native_only",
+    "browser_code_changed": false,
+    "shared_sources": [],
+    "requested_actions_ko": [
+      "Native 설명/이미지를 웹에서 소개한다면 실제 병합된 G1 배치와 로컬 도움말 범위를 대조하세요.",
+      "Flet 레이아웃 변경이나 새로운 AI 해석 기능으로 소개하지 마세요.",
+      "실제 웹 반영·배포는 소유자 별도 작업이며 이 기록은 전달 영수증이 아닙니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "14 integrated guarded synthetic modules after A1 integration",
+        "passed": 131
+      },
+      {
+        "suite": "actual host geometry/source preservation diagnostic,12narrowpositions and4wide docks",
+        "passed": 1
+      }
+    ],
+    "counts_note": "Counts overlap prior suites and must not be summed. Linux offscreen Qt, synthetic data, isolated state, no network/dotenv/protected stores. Four actual integrated synthetic captures inspected. Baseline responsive forced-overflow setup failed separately and is not claimed PASS.",
+    "source_review": "20 policies consistency PASS; publication BLOCKED",
+    "ci": "PENDING_FINAL_HEAD",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "NOT_RUN"
+  },
+  "website_application": {
+    "status": "not_verified",
+    "deployment_status": "not_verified",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "A1 PR76 선병합 후 이 PR의 최종 Windows/Ubuntu CI 성공과 병합이 필요합니다.",
+    "실제 Windows PC/DPI/스크린리더/API/법률/라이선스/공급사/파일럿/동결연구 증거는 별도 미확보입니다.",
+    "추가 GPT/Gemini spec 공개·심사는 선택적 NOT_PERFORMED입니다.",
+    "좁은 화면에서 명시적 보호 영역을 피할 공간이 없으면 도움말은 안내 후 열리지 않습니다. 전체 앱 접근성 완료를 뜻하지 않습니다."
+  ]
+}
