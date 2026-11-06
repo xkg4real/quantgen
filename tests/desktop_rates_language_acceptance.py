@@ -8,10 +8,12 @@ import numpy as np
 from tests.desktop_acceptance import rates_fixture
 from tests.desktop_fx_language_acceptance import numbers
 from core.research.rates_analysis import RatesRequest
+from core.research.tool_export import report_bytes
 from core.ficc import insights
 from quantgen_desktop.rates_narrative import rates_korean, curve_korean, simulation_korean, SHAPES, REGIMES
 from quantgen_desktop.localization import UiLabel
 from quantgen_desktop.app import ResearchWindow
+from quantgen_desktop.tools import fmt
 from PyQt6.QtWidgets import QApplication
 
 
@@ -109,6 +111,99 @@ class RatesLanguageTests(unittest.TestCase):
 
     def test_unknown_tool_has_explicit_fallback(self):
         self.assertIsNone(rates_korean(SimpleNamespace(request=SimpleNamespace(tool='future'),report=None)))
+
+    def assert_inline_roundtrip(self, window, output, variants):
+        """Exercise actual result labels while canonical report/payload stay fixed."""
+        pane = window.rates
+        pane.show_result(output)
+        pane.bind_output('rates', output)
+        report = deepcopy(pane.report)
+        exported = report_bytes(report)
+        payload = deepcopy(window.commentary_sources())
+        labels = {item.source_text: item for item in pane.findChildren(UiLabel)}
+        for source, _en, _ko in variants:
+            self.assertIn(source, labels)
+            self.assertTrue(any(row.get('text') == source for row in report['sections']))
+        with patch.object(window.jobs, 'start', side_effect=AssertionError('locale must not recompute')):
+            for language in ('en', 'ko', 'en', 'ko'):
+                window.set_language(language)
+                for source, en, ko in variants:
+                    item = labels[source]
+                    self.assertEqual(item.source_text, source)
+                    self.assertEqual(item.text(), ko if language == 'ko' else en)
+                    self.assertEqual(numbers(source), numbers(item.text()))
+                    self.assertNotEqual(item.property('display_role'), 'provenance')
+                    self.assertTrue(item.property('reading_help_keep_visible'))
+                self.assertEqual(pane.report, report)
+                self.assertEqual(report_bytes(pane.report), exported)
+                self.assertEqual(window.commentary_sources(), payload)
+
+    def test_inline_source_summary_keeps_provider_notes_literal(self):
+        w = ResearchWindow(auto_refresh=False, language='en'); self.addCleanup(w.deleteLater)
+        base = rates_fixture(RatesRequest(source='synthetic'))
+        # Catalog-looking lines inside source notes must not become UI translations.
+        for source in ('SYNTHETIC', 'fixture-provider-unknown'):
+            out = replace(base,
+                          panel=replace(base.panel, source=source, note='Payer\nProvider note +1.250%'),
+                          curve=replace(base.curve, note='Receive fixed\nCurve note -0.001%'))
+            p, c = out.panel, out.curve
+            original_prefix = '합성 곡선 · 현재 시장 데이터 아님\n' if source == 'SYNTHETIC' else ''
+            notes = f'\n{p.note}\n{c.note}'
+            original = original_prefix + f'{source} · {c.date} · {len(p)} observations · {c.method}' + notes
+            en = ('Synthetic curve · not current market data\n' if source == 'SYNTHETIC' else '')
+            en += f'{source} · {c.date} · {len(p)} observations · {c.method}' + notes
+            ko = original_prefix + f'{source} · {c.date} · 관측 {len(p)}개 · {c.method}' + notes
+            with self.subTest(source=source):
+                self.assert_inline_roundtrip(w, out, [(original, en, ko)])
+
+    def test_inline_swap_and_option_terms_preserve_units_sides_and_notes(self):
+        w = ResearchWindow(auto_refresh=False, language='en'); self.addCleanup(w.deleteLater)
+        for pay in (True, False):
+            q = RatesRequest(tool='swap', source='synthetic', pay_fixed=pay, notional=1234567.4)
+            out = rates_fixture(q)
+            out = replace(out, report=replace(out.report, note='Payer\nSwap source note -1.25 bp'))
+            r = out.report
+            source = f'{q.notional:,.0f} notional · {r.swap.freq} payments/year · single curve · ACT/365F\n{r.note}'
+            ko = f'명목금액 {q.notional:,.0f} · 연 {r.swap.freq}회 지급 · 단일 곡선 · ACT/365F\n{r.note}'
+            with self.subTest(tool='swap', pay=pay):
+                self.assert_inline_roundtrip(w, out, [(source, source, ko)])
+        for kind in ('swaption', 'cap', 'floor'):
+            for model, vol in (('bachelier', .008125), ('black', .3125)):
+                for pay in (True, False):
+                    q = RatesRequest(tool='option', source='synthetic', kind=kind, pay_fixed=pay,
+                                     option_model=model, vol=vol, notional=1234567.4)
+                    out = rates_fixture(q)
+                    out = replace(out, report=replace(out.report, note='Receiver\nOption source +2.50%'))
+                    value = fmt(vol, 'bp' if model == 'bachelier' else 'pct')
+                    suffix = ' normal' if model == 'bachelier' else ' Black'
+                    source = f'{model} · {value}{suffix} · {q.notional:,.0f} notional\n{out.report.note}'
+                    ko = f'{model} · {value}' + (' 정규' if model == 'bachelier' else ' Black')
+                    ko += f' · 명목금액 {q.notional:,.0f}\n{out.report.note}'
+                    variants = [(source, source, ko)]
+                    if kind == 'swaption':
+                        direction = f'{q.expiry} × {q.tenor} · ' + ('Payer' if pay else 'Receiver')
+                        ko_direction = f'{q.expiry} × {q.tenor} · ' + ('고정금리 지급형' if pay else '고정금리 수취형')
+                        variants.append((direction, direction, ko_direction))
+                    with self.subTest(kind=kind, model=model, pay=pay):
+                        self.assert_inline_roundtrip(w, out, variants)
+
+    def test_inline_simulation_seed_paths_and_model_notes_remain_literal(self):
+        w = ResearchWindow(auto_refresh=False, language='en'); self.addCleanup(w.deleteLater)
+        for model, source in (('vasicek', 'SYNTHETIC'), ('cir', 'fixture-short-rate-unknown'),
+                              ('hull_white', 'SYNTHETIC')):
+            out = rates_fixture(RatesRequest(tool='sim', source='synthetic', model=model,
+                                            horizon=.25, n_paths=1000))
+            out = replace(out, series=replace(out.series, source=source, note='Payer\nSeries note 3.00%'),
+                          report=replace(out.report, note='Receiver\nSimulation note -0.25 bp',
+                                         params=replace(out.report.params, note='Receive fixed\nParameter note 0.5')))
+            s, r = out.series, out.report
+            prefix = '합성 단기금리 · ' if source == 'SYNTHETIC' else ''
+            evidence = f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{s.note}\n{r.params.note}\n{r.note}\n'
+            original = prefix + evidence + f'Seed 7 · {r.n_paths} paths'
+            en = ('Synthetic short rate · ' if source == 'SYNTHETIC' else '') + evidence + f'Seed 7 · {r.n_paths} paths'
+            ko = prefix + evidence + f'시드 7 · 경로 {r.n_paths}개'
+            with self.subTest(model=model, source=source):
+                self.assert_inline_roundtrip(w, out, [(original, en, ko)])
 
 
 if __name__ == '__main__':unittest.main()

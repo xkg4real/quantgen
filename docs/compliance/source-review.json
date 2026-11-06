@@ -260,7 +260,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "564b038a6873419fa6e296654c6e96591526eb442edc137632f79f43fce1eed4",
+    "docs/compliance/FACTS.md": "09b347cf9c14551ca6713d750dee2132622e6add6e83475a6ee7bc9c213a4015",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "0b5dd47d1d1e7004fd21732bda8b6411061added2645e4f008ebc13f91491eb2",
@@ -304,6 +304,7 @@
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
+    "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "85c35d925ef729f2f0649dbcede19e62722cdcdc9e7653e334c21a73d4d34eee",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
     "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
     "docs/product/RECORDED_STATUS_DISPLAY_2026-11-06.md": "b42185924788a1dc67c970e362fff0e7c73d312167acedd1ab242bf3ef1f06b7",
@@ -352,7 +353,7 @@
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "0265414d5d73b9978a4493948f2ec1ca4f0c05b5139fa57a64935dce0fab5c5e",
     "quantgen_desktop/qscore.py": "a495a5412195c98eddc5c3cca4ae0a7665e284a9803aceaa82e9dd46b881842f",
-    "quantgen_desktop/rates.py": "db8ab5530c5cc0611b842473aa265df89cc28665ce97be1f9f2ae5243bd5e967",
+    "quantgen_desktop/rates.py": "f78080d896533e00418607e69d40f179536928c400e5d280d4f5e6262ebaa9d0",
     "quantgen_desktop/rates_narrative.py": "a6bfdb0abc0db628d8ad8615a1bc222f375b2ee2c59d1a901ec3eab3a8d58ff0",
     "quantgen_desktop/reading_language.py": "ee8a55044482598fbcece2dfde3fca73e9b4ff9b2405db13c16dc2c0bc911adf",
     "quantgen_desktop/reading_panel.py": "93cb0202f6a2ffbe8d80340554ef4340f207b4a3d1e53bda4e1f96f5fa4778d1",
@@ -418,7 +419,7 @@
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
-    "tests/desktop_rates_language_acceptance.py": "506bb6fdd48bf13a00f509eba198260a9961522892295309360025be2b4c45c0",
+    "tests/desktop_rates_language_acceptance.py": "96644766a454ae3b9da85a3148ec5c0b4dc9d0e465325db43ef7cc435ecca16b",
     "tests/desktop_responsive_tools_acceptance.py": "bf5e78ae488b2899300ca63fadf7283822412a3a40b3edd65066e8582af3a33b",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
@@ -596,163 +597,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "967e84608d2e6d06c518a7b9725b0727407902e63c92f1b60d1d5d5fc92139f9",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.667149+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "81d222dbd62518459a5939b1994675877e38233959074409803b2fbc97c18f42",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.625287+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "967e84608d2e6d06c518a7b9725b0727407902e63c92f1b60d1d5d5fc92139f9",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.669950+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "81d222dbd62518459a5939b1994675877e38233959074409803b2fbc97c18f42",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.629699+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "05696537ed1218b66c30760c43ed334688f8f5484d69c8003c4117d3a1205452",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.672404+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "2c090068751fd90084a3a1d69b9e4218c8562ed328dd8ab28da4b165b4b908c6",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.632033+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "bd8016809b55c7738c998661b04a28b5ef16121ef17ae8e4bc4d99a7cc9a71bd",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.674644+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "5541ef36e0722b03bbbb14d3d1ffd85eec48ccb113859e6a0acdc03f45269144",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.634515+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "cc64484a1054164f10b5ec40dafd277ec5d9f5475fc13982f8be70ff386a3aca",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.676743+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "e4ec09283b509dbc01b30c0990a1db6b33d753a94ab5b74cef7a3961f8edfa0c",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.637599+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "451bd43ea8938a3c7299ed6bd0d5a1f22c47ca30b87bef06f237432cf8c0386b",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.678942+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "fa7093a9566d4da52125d1c315c8023b44d8fa3386b9b24d14986e1eaa8df2fe",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.639817+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "967e84608d2e6d06c518a7b9725b0727407902e63c92f1b60d1d5d5fc92139f9",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.681073+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "81d222dbd62518459a5939b1994675877e38233959074409803b2fbc97c18f42",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.643180+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "451bd43ea8938a3c7299ed6bd0d5a1f22c47ca30b87bef06f237432cf8c0386b",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.683304+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "fa7093a9566d4da52125d1c315c8023b44d8fa3386b9b24d14986e1eaa8df2fe",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.646220+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "e6676f5b35d651daebafb4ea5b5e49fe13e0d2494ba43283747336b6745940d6",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.685444+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "76b4ac108c6296268184fded5c9cdc949ee080f6b78fbd4a22cbbfe90cd58dbc",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.650163+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "c810869e1f363afb6c06bcf59538bb0ad63d20c216d73f2ccde714cde16d1709",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.687533+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "e507f9ff2f9cb4ffa8b27dc39511d6f0e64e6e3d20653550781218faf53d0301",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.652390+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "b29639708454ee30f079d2834807582a266b7760c123f46ce78ea2313feac805",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.689431+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "4b9c19d80f227dce14d50d6864b0f861812cbe6c186892feff91389dfe0a101a",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.654587+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "12": {
-      "document_sha256": "ea5017f8f93d973ad03aa62728aedaa39ed8d2d6c686feb41c0339c109fd590e",
-      "source_digest": "44b415f294e408587402baadd354cb4871402dc21c169cd6910e044320f00099",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.691426+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
+      "source_digest": "53f969a767942a9aa9ef4d9ec021c336cb92169b4d534f8dd7af68a570391d55",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.658523+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "e6676f5b35d651daebafb4ea5b5e49fe13e0d2494ba43283747336b6745940d6",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.693436+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "76b4ac108c6296268184fded5c9cdc949ee080f6b78fbd4a22cbbfe90cd58dbc",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.660798+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "e6676f5b35d651daebafb4ea5b5e49fe13e0d2494ba43283747336b6745940d6",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.695355+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "76b4ac108c6296268184fded5c9cdc949ee080f6b78fbd4a22cbbfe90cd58dbc",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.664859+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "15": {
       "document_sha256": "470bda66a33c2bdc9ff299940db8390750b54e0c73c978eff31abe5190f0df69",
-      "source_digest": "e6676f5b35d651daebafb4ea5b5e49fe13e0d2494ba43283747336b6745940d6",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.697597+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "76b4ac108c6296268184fded5c9cdc949ee080f6b78fbd4a22cbbfe90cd58dbc",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.668881+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "a14cefeec2ac39f6d088a4b62b08f0cf7944bc928da23427dfef283d93b90722",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.699702+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "109006c16bec5bad4adcbcc1f9a74ebec19619470a7a8e4b2d87dc6602289ba4",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.675299+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "451bd43ea8938a3c7299ed6bd0d5a1f22c47ca30b87bef06f237432cf8c0386b",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.701614+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "fa7093a9566d4da52125d1c315c8023b44d8fa3386b9b24d14986e1eaa8df2fe",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.677539+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "967e84608d2e6d06c518a7b9725b0727407902e63c92f1b60d1d5d5fc92139f9",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.703605+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "81d222dbd62518459a5939b1994675877e38233959074409803b2fbc97c18f42",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.680608+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "136e45d05fc916f2d7d226df95863aa9d0de7e5b3eeedbac6a9a5bacef4d320e",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.705736+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "eedcce8e2639fca31389a7d8df25e50ba30f9c421a04171e2c91477f3647819f",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.684656+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "967e84608d2e6d06c518a7b9725b0727407902e63c92f1b60d1d5d5fc92139f9",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.707922+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "81d222dbd62518459a5939b1994675877e38233959074409803b2fbc97c18f42",
+      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
+      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
+      "reviewed_at": "2026-11-06T07:53:36.686655+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     }
   }
 }
