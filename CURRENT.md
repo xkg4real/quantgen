@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T18:27:27+09:00
+updated_at: 2026-11-06T18:32:44+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-codec-20261106
@@ -470,3 +470,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - RatesPR79 새head 62246779f45b9e4eff37b7af6ac7e71354b5fd18 commit/push/read-back. e981와동일한A1시험2개수정/18methods82assertions보존/명령목록보존을대조했고20정책검토GO/소스정합성PASS588(publicationBLOCKED). 기존Rates합성11PASS와공유A1후속18PASS는별도범위;새Rates로컬재실행으로세지않는다. 이전578headUbuntu139실패보존,이새headfullCI필수.
 - identitye981에Rates622를정상merge중이다. staged변경은이미검토된FACTS추가와Rates제품문서뿐이며제품/test/workflow코드불변. FACTS검토스냅샷변화로첫정합성check는20문서재검토요구FAIL(publicationBLOCKED);이중간영수증보존후합성행위를변경하지않고정합성기준선갱신한다. 아직merge commit/push전.
 - 현재primaryR3source38745b7은clean/pushed. 다음identity통합push→R3정상merge→별도PR,모든최종head의전체CI후PR79→80→R3순병합. 소유권execution/브랜치/CURRENT CAS/read-back유지,기존자동예약변경없음.
+
+### GPT Identity 최종 통합 push 및 R3 합류 — 2026-11-06T18:32:44+09:00
+
+- Identity PR80 final386a0d75ce2b242873a5146eacebece66f1ae25e를 push/read-back했다. Rates622 노트 통합은 FACTS·제품문서·review baseline만 변경하며 source/tests/workflow는 e981과 동일하다. 전체20 정책 검토 GO, 정합성PASS591/publicationBLOCKED. FACTS 변경 직후 baseline 갱신 전 FAIL 기록도 보존했다. 새 최종 head 전체 CI가 필요하다.
+- Rates PR79 final62246779f45b9e4eff37b7af6ac7e71354b5fd18의 Runtime42194971104 진행 중, Compliance42194971102 success. 이전578의 Ubuntu A1 18OK 후139 실패는 성공으로 대체하지 않는다.
+- R3 branch387에 Identity386의 정상 merge를 진행 중이다. 기존R3 source/test 해시 유지, FACTS 양쪽 원문/추가절 보존, A1 소유 fixture cleanup 두 파일과 동일 명령의 실행 순서만 합류했다. 결합20정책 검토 후 baseline갱신·commit/push/readback·PR·최종CI를 진행한다. 실제증거 공백과 선택spec NOT_PERFORMED 유지.
