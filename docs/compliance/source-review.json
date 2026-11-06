@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "dd16ba58448c53b12bda28b0ec8f25448f68d51e7367b092629d6a0592a25863",
+    ".github/workflows/runtime-smoke.yml": "5fa6fb506e943474356198c7d7ed93a60dfb7e3d8ad0e117cae5e936986a70f4",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -150,6 +150,7 @@
     "core/quant/refusal.py": "ace787b208e8f47fa7dd7f763ca0198b3a6cceddf780b08b1b4c93892f400190",
     "core/quant/risk.py": "30ed7606cb181e0d4bba3ab984fe231e19fe6b3e293b063cf4640c909d2ad6f7",
     "core/quant/risk_layer.py": "9ca19aa23c50a01527aa08842c06bd92f311b535628ce62cb87509ba6238ba84",
+    "core/quant/run_registry_codec.py": "fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a",
     "core/quant/scenarios.py": "e65dda28f6cb9a3cd29cab547ae1093f556aa0e467f2c86b9d3c616090fbd205",
     "core/quant/signals.py": "d033d0f146e45ac59db6e1125a2b2256cc96c9c1744093e954adf45e2ccec64a",
     "core/quant/sleeves.py": "39bcdf9a73400ebe9634e75ae8278a3616cb41d90156749b369c1ae9042ef2ac",
@@ -261,7 +262,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "3fcd0a66b013eeab9d3b3822e7c6e705366f03a627d0f4af678880d114589184",
+    "docs/compliance/FACTS.md": "1b8a22735ce8ba702e7568663f062830adc8d1b50081c32fa0154426f95aedd9",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -306,6 +307,7 @@
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
+    "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "cdf40dc23e97458f04e4cc9591a9e7ee7dee287db5fb946b694022d3af965002",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
     "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
@@ -516,6 +518,7 @@
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
     "tests/research_home_acceptance.py": "a6ba826451e019e3bec8cbc145c3e89878b6e01caa6b976266af0e722f19b157",
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
+    "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
     "tests/runtime_syntax_acceptance.py": "174dd84c35a1085a271baa27c0a8e651b519af0e348d912e62a6453027d94e7e",
     "tests/sabr_diagnostics_acceptance.py": "934edacf62c87d572930e9f824120c22dd98dfe0ddc5257e08645b704670e07f",
     "tests/signals_trade_count_acceptance.py": "0b1ed7ed587492cc3dd1ca628e026e3bbdaa0dc2966e96626110a4e53de481a9",
@@ -601,163 +604,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "865211647f71975d7aefafc28c99627f0988163dcbe279c55f6dfc149b461b75",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.966858+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "cc70d0dc74a4b4382a93ba026c3b141d1f1c53351280b9fd1c6550194f82a820",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.592348+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "865211647f71975d7aefafc28c99627f0988163dcbe279c55f6dfc149b461b75",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.971328+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "cc70d0dc74a4b4382a93ba026c3b141d1f1c53351280b9fd1c6550194f82a820",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.594953+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "80ff3e3c1ccec5f9c93b5da4d534041513eaf03b515005a44a8d20c8ef0d3d09",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.974106+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "e9088667931fb95485af1fe7b7d0820330db1eafd7e061542a833d5548f115e1",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.598198+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "b28ccc6a2887b25a66022610532241e1bb1f6f6a304f034321f3374dfab19b30",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.976719+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "c706f14215abf25c9303b2834722015a15d913a4cffcc1680b2d2c64c0cd7f26",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.600451+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "8567fd61184d084a212bc245686abd4b193bddd021b1bd79d998a830deb88961",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.978932+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "faa93b79da16163d156e0687017af2830c3be01fd4027385a55e37718d869de2",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.603508+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "7844983e12739cbf880b7117f6f6eae9cfa55c253358508f019d248c2241f35d",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.980931+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "05feff72c636639db3a932dee09e748fbd2e09e8e61a0ea4e96d9cc97866b794",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.605462+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "865211647f71975d7aefafc28c99627f0988163dcbe279c55f6dfc149b461b75",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.983207+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "cc70d0dc74a4b4382a93ba026c3b141d1f1c53351280b9fd1c6550194f82a820",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.608259+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "7844983e12739cbf880b7117f6f6eae9cfa55c253358508f019d248c2241f35d",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.985719+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "05feff72c636639db3a932dee09e748fbd2e09e8e61a0ea4e96d9cc97866b794",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.610409+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "c0b1df870842075401a9783d74872e60caf0a0656a5174afe9438d420dce2ff8",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.987776+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "13a4018ca149174519c6c7df2af87c63e4951101dedfc3e36a8f5dd390235181",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.612500+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "be3fe48cdb16e005e49e57eded2ea9442af43f4d4d37e24edec7e28a3320555b",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.989708+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "25f5404ae6f8a5d3ab4dcb7013a66c6443bc9991acd5cf8916c1547e3a39f742",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.615399+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "d54e52431c9605b19346dfc62b76d55eca8c47f7160d883c9c853531c9b04e26",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.991854+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "3b2765a81c16c7b68fd6bcd96337c3ab5f5ff61bc0feecd95bdcbe689ebd0c73",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.617286+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "d3c750d19dbe45772664f4acfc5ab3f227fa8bea7dbe9a3fc1e8b10933e0a2e8",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.993837+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "cce9a1e79d2f0682be105cc2a4a2622ee308703ec3a74a740f9cca7b1329decc",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.620071+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "c0b1df870842075401a9783d74872e60caf0a0656a5174afe9438d420dce2ff8",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.996104+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "13a4018ca149174519c6c7df2af87c63e4951101dedfc3e36a8f5dd390235181",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.622117+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "c0b1df870842075401a9783d74872e60caf0a0656a5174afe9438d420dce2ff8",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:07.998132+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "13a4018ca149174519c6c7df2af87c63e4951101dedfc3e36a8f5dd390235181",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.624999+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "c0b1df870842075401a9783d74872e60caf0a0656a5174afe9438d420dce2ff8",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:08.000086+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "13a4018ca149174519c6c7df2af87c63e4951101dedfc3e36a8f5dd390235181",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.626927+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "bd21dfdd96003c3234bf324439fd4bbd5cc551fb9c978ea4e997df92cc826d17",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:08.002158+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "79b278c75e5245edd69d5f69525b8b4778695fedb957d61705d24d5da70d8d48",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.629057+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "7844983e12739cbf880b7117f6f6eae9cfa55c253358508f019d248c2241f35d",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:08.004112+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "05feff72c636639db3a932dee09e748fbd2e09e8e61a0ea4e96d9cc97866b794",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.631063+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "865211647f71975d7aefafc28c99627f0988163dcbe279c55f6dfc149b461b75",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:08.005980+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "cc70d0dc74a4b4382a93ba026c3b141d1f1c53351280b9fd1c6550194f82a820",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.633220+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "4a34e85efd4a1f84ccf04c32d7533d27de84a5b4704062eeffb65eee828c1b68",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:08.007937+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "102c9295abcc9116275ae27c5462aca83f15e8df0782e88cab371d6d4807136c",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.635991+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "865211647f71975d7aefafc28c99627f0988163dcbe279c55f6dfc149b461b75",
-      "reviewed_by": "GPT detached identity and combined UI policy review",
-      "review_note": "All20 policies reviewed against frozen detached identity and incoming Rates/status/A3 tree. Numbered policies/release gates retained; full FACTS plus exact identity section preserved. Identity requires caller-attested evidence with bounded MIC/cost labels and no production integration or actual supplier verification. Existing tests unchanged except adding identity module; full CI required and publication blocked.",
-      "reviewed_at": "2026-11-06T08:58:08.009822+00:00",
-      "source_commit": "e04f1cc29733758f2440774959786a7fc9077b0d"
+      "source_digest": "cc70d0dc74a4b4382a93ba026c3b141d1f1c53351280b9fd1c6550194f82a820",
+      "reviewed_by": "GPT detached R3 codec implementation and policy review",
+      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
+      "reviewed_at": "2026-11-06T09:16:13.638888+00:00",
+      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
     }
   }
 }
