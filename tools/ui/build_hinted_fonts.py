@@ -19,7 +19,7 @@ for style,suffix in [('Regular',''),('Medium','-medium'),('SemiBold','-semibold'
   f.save(output)
   lines.append(f'{source.name} source SHA256 {hashlib.sha256(source.read_bytes()).hexdigest()}\n{output.name} SHA256 {hashlib.sha256(output.read_bytes()).hexdigest()}')
 shutil.copyfile('/tmp/qg-fonts/OFL.txt',root/'OFL-GothicA1.txt')
-old=(root/'README.txt').read_text()
+old=(root/'README.txt').read_text().split('LEGACY FLET FONT PROVENANCE (unchanged OTFs)\n')[-1]
 (root/'README.txt').write_text('''Native desktop fonts: hinted Gothic A1, renamed QG Interface (400/500/600).
 Pinned Google Fonts ref38411257417e616c5d4daa1b9e91a3dbcebe1c2e:
 https://github.com/google/fonts/tree/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/gothica1
