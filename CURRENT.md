@@ -5,14 +5,14 @@ from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1
-next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a, ⑨-3a/series-digest/1, ⑨-3a/series-format/1
-updated_at: 2026-11-06T21:49:39+09:00
+next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1
+updated_at: 2026-11-06T21:52:49+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/run-registry-series-format-20261106
+work_branch: gpt/run-registry-series-files-20261106
 work_commit: e7ed79346653cd647f7f5e317fdca348037bfe4e
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/88
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -635,3 +635,11 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - PR86 final 9f623fd98c90b02e3da66fffe50fa60c41af1ecf passed Runtime42216709846 all6 exact-head jobs and Compliance42216709861. Fresh ownership/PR/head/main gate and expected-head merge cd4019c2dfd6747594c75fdf417fd465fc66eb7e, PR/main readback verified. LEDGER bc236b3e36a2dc92246b8ea1cc82704296487345 appends only⑨-3a/source-digests/1 with all prior rows preserved; parentR3/sourcecollection remains incomplete.
 - Guarded focused8/independent10/combined69 PASS are overlapping evidence separately recorded. Four installed-platform jobs each ran8 source tests within253 aggregate (Ubuntu20.153s; Windows3.11 25.438s/3.12 25.923s/3.14 25.039s) and completed with cleanup successfully. Source9f623fd, CI merge-test checkoute1f59666738f9f299b6b75a8c3af73a613a8a73e and actual mergecd4019c remain distinct. All20policyPASS608/publicationBLOCKED; no actual ownerWindows/API/provider/legal/license/pilot/frozen-study or additionalformal spec completion.
 - SeriesPR87ea905 and formatPR88e7ed remain in fullRuntime observation; primary CURRENT branch/head stays format until another verified claim. Source boundedNotioncompletion is next; earlier two-page progress sync preserved without parentstrike. Next file-store candidate is still preparation only, not claimed. Optional formal spec review NOT_PERFORMED.
+
+### GPT approved detached verified series-file claim — 2026-11-06T21:52:49+09:00
+
+- Same task/handoff/execution4bf1f03c-f677-4b28-af07-8c745e4cde07 claims only⑨-3a/series-files/1 before edits. New gpt/run-registry-series-files-20261106 remote-name absence verified, branch created/pushed/read-back clean at e7ed79346653cd647f7f5e317fdca348037bfe4e with identical protected sparse exclusions. Six handoff docs checked from latest single ref2640dbf69a8b0e09f62956147d2d47395b8e4315; no duplicate ID/equivalent series-file store. SourcePR86 is completed; series87/format88 remain in CI and must merge before this dependent unit.
+- Approved§5.7 lines857-864 supports same-directory temp/fsync/replace and bounded PermissionError retry. New SeriesFiles(existing_absolute_directory,*,max_bytes,lock_timeout=2.0) accepts immutable already-supplied NPY payload+expectedcontentSHA for write, returns sha256/created only after verification/release; read(sha) returns the existing format decoder's readonly array. Existing seven helpers remain unchanged. No implicit mkdir/default/config/provider/actualseries/recorder/series_error event. Matrix semantics remain opaque and may encode prices; this primitive cannot enforce PnL/day/date/config meaning. Only synthetic explicit-temp execution is authorized here.
+- New strict cooperating-local-directory protocol: fixed digest.npy/digest.lock names, process+OS lock acquisition0..10s default2, Windows seekbyte0 before lock AND unlock, sidecar NUL initialized only afterlock. Refuse existing target withoutsidecar before any sidecarcreation in read/write; validateexistingtarget before idempotentskip, preservecorrupt/oversized/nonregular/symlink target. Boundedchunk read+extra-byte probe, exactcontentrehash; no destructive repair/adoption/retention cleanup. Trust excludes hostile pathchanges/hardlink aliases/sync/networkmounts and fork during active I/O/inheritedFDs; PID-reset map+guard only fixes new Pythonlock state.
+- New writes retain own same-directory mkstemp identity, handlefull/shortwrites, fsync and closebeforepublish; retry only os.replace PermissionError, at most10 totalattempts within5s retrybudget (no hard filesystem deadline). Retry and final-safe-exhaustion require originaltempidentity plus targetabsence; changed/vanishedtemp or appearedtarget causes typeduncertain, neverblind overwrite/retry. No blindclose retry: markFD ownership consumed before eachsingleclose attempt. Preserve primary+cleanup causes. Postrename fsync/readback/unlock/close failure is publicationuncertainty; read/existing-skip release failure is separately described without inventingpublication. Cleanup onlymatchingownedtemp, never target/sidecar/unrelatedfiles. POSIXdirfsync vs Windowsfilefsync limit explicit, no powerloss/OneDrive/Defender guarantee.
+- Author new module/acceptance/productdoc only; workflow exactpaths/module preserves allprior commands/budgets. Review actual new persisted matrix/sidecar/temp inventory against all20 policies before baseline; appendFACTS/minimalnecessarypolicies. No actualledger/frozenstudy/criteria/owner-rule/order/localPC effects. FullR3/actualWindows/API/provider/legal/license/pilot proof remains open; optional additionalformal specreview NOT_PERFORMED.
