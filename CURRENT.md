@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T16:45:13+09:00
+updated_at: 2026-11-06T16:52:32+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
@@ -122,6 +122,12 @@ A1/A3 완료 ID는 아직 기록하지 않는다. 다음은 A1 코드 검토·�
 - ⑫-1/display-owner-decision 구현b423f0b, A3통합a99b16b, 검증문서521ae86, PR78웹queue 최종3726dd6a60958797f66546a19d6ccb833ba865f8을 gpt/status-display-20261106에 push/read-back했다. PR78은 A3 PR77 선병합 후 진행하는 draft. 집중21/통합43/병합후26PASS(중복합산금지), 실제합성캡처5개 및 기존System좁은폭58/44 문제동일성 확인,20정책정합성PASS586/publicationBLOCKED. exact-final-headCI/병합/완료원장아직없음. 웹queued/receipt없음.
 - 기존승인13-8 번역의 다음 한정 하위 ⑬-8/b2/b/2를 같은task/execution으로 등록한다. LEDGER의 기존⑬-8/b2/b(PR44)는 결과해설만 완료하며 기타inline을 명시제외했고 이 새ID는없다. gpt/rates-inline-language-20261106, /workspace/work/quantgen-rates-inline-20261106을 검증된3726dd6에서생성·push/read-back, 코드수정전 소유권을연결한다. Rates authored 관측수/명목금액/지급횟수/옵션방향/시드·경로수 표시만 기존localized metadata로한영제공한다. provider/model원문주석·원시코드·숫자·보고서·AI자료·계산·판정·동결/주문경로는보존. 부모13-8완료아님.
 - 다음:A3 af782be exact-headCI확인, PR78 final3726dd6CI, 이어등록된Ratesinline만구현·검증한다. 실제Windows/API/법률/라이선스/공급사/파일럿·동결연구증거없음, 추가GPT/Gemini spec NOT_PERFORMED.
+
+### GPT PR78 실패 시험 정렬 및 Rates 집중 검증 — 2026-11-06T16:52:32+09:00
+
+- PR78의 이전 head 3726dd6, Runtime 42182875822는 Windows 3.11/3.12/3.14와 Ubuntu의 bounded-source 단계에서 실패했다. 확인된 Ubuntu 로그는 기존 research_home 시험이 옛 오류 제목과 임의 오류 문자열을 그대로 기대한 1건이다. 승인된 공통 실패 표시의 제품 코드는 바꾸지 않았다. 해당 시험을 KO→EN→KO 공통 안내 및 승인/READY/집계/증거 날짜/임의 오류의 미노출 조건으로 수정했다. 관련 4모듈 31 PASS, 정책 소스 정합성 PASS 586/publication BLOCKED. 수정 fa7c2118680bd5b811748bbb00d41a589588834a를 같은 status 브랜치에 push/read-back했으며 새 exact-head CI는 아직 미확인이다. 이전 실패는 보존한다.
+- Rates 인라인 하위 구현은 로컬 소스 동결 상태다. 기존 다섯 canonical 문자열과 원문 주석·숫자·보고서·AI 자료를 유지한 표시용 EN/KO 변형만 추가했다. 변경 전 19개 subtest 실패를 보존했고 기존 Rates 모듈 전체 11 PASS(110.673s, exit0), 독립 검토에 차단 결함 없음. 정책 검토 및 status 시험 수정 합류, commit/PR/CI가 남는다. 부모 13-8은 미완료다.
+- A3 af782be의 Runtime 42182474082는 진행 중이다. 실패/진행 중 상태를 완료로 기록하지 않는다. 다음은 각 최종 head CI 확인과 원래 순서의 PR 병합·원장·Notion이다.
 
 ## 1. 목표와 완료 조건
 
