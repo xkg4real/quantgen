@@ -18,7 +18,7 @@ from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFileDialog,
     QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMainWindow,
     QMessageBox, QPushButton, QScrollArea, QSpinBox, QStackedWidget, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView, QTabWidget, QButtonGroup)
+    QTableWidgetItem, QVBoxLayout, QWidget, QHeaderView, QAbstractItemView, QTabWidget, QButtonGroup, QSizePolicy)
 
 from core.app_paths import application_root
 from core.research.analysis import AnalysisRequest, execute_analysis
@@ -549,7 +549,6 @@ class ResearchWindow(QMainWindow):
         self.strategy.requested.connect(lambda q: self.run_tool('strategy', q))
         self.quant_tabs.addTab(self.strategy, 'Strategy Lab')
         box, inner = panel("분석 설정")
-        form = QGridLayout()
         self.symbol = QLineEdit("AAPL")
         self.symbol.setMaxLength(120)
         self.source = QComboBox()
@@ -569,14 +568,21 @@ class ResearchWindow(QMainWindow):
         fields = (("Symbol", self.symbol), ("Data source", self.source), ("Model", self.model),
                   ("Drift", self.drift), ("Horizon · sessions", self.horizon), ("Paths", self.paths),
                   ("Seed", self.seed), ("ERP · %", self.erp), ("Target price", self.target))
-        for i, (name, widget) in enumerate(fields):
-            col, row = i%3, (i//3)*2
+        for name, widget in fields:
             widget.setAccessibleName(name)
-            form.addWidget(label(name, "caption"), row, col)
-            form.addWidget(widget, row+1, col)
-        form.setHorizontalSpacing(16)
-        form.setVerticalSpacing(8)
-        inner.addLayout(form)
+            if isinstance(widget, QComboBox):
+                # Match the shared tool header: native option/font widths must
+                # not make this three-column form wider than its scroll page.
+                # Full option labels stay in the popup and selected tooltip.
+                widget.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+                widget.setMinimumContentsLength(12)
+                widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+                widget.setToolTip(widget.currentText())
+                widget.currentTextChanged.connect(widget.setToolTip)
+                widget.model().dataChanged.connect(lambda *args, combo=widget: combo.setToolTip(combo.currentText()))
+        from .result_layout import ResponsiveFieldGrid
+        self.quant_form = ResponsiveFieldGrid([(label(name, "caption"), widget) for name, widget in fields])
+        inner.addWidget(self.quant_form)
         self.run_button = QPushButton("분포 분석 실행")
         self.run_button.setProperty("primary", True)
         self.run_button.clicked.connect(self.run_analysis)

@@ -59,12 +59,21 @@ class A3ResultLayoutTests(unittest.TestCase):
     @staticmethod
     def mc_geometry(window):
         scroll = window.stack.currentWidget()
+        controls = (('source', window.source), ('model', window.model), ('drift', window.drift),
+                    ('horizon', window.horizon), ('paths', window.paths), ('seed', window.seed),
+                    ('erp', window.erp))
+        child_hints = ','.join(f'{name}:{widget.minimumSizeHint().width()}/{widget.width()}'
+                               for name, widget in controls)
         return (f'window={window.width()} language={window.ui_language} '
                 f'viewport={scroll.viewport().width()} content={scroll.widget().width()} '
                 f'tabs_min={window.quant_tabs.minimumSizeHint().width()} '
                 f'mc_min={window.quant_tabs.widget(0).minimumSizeHint().width()} '
                 f'strategy_min={window.strategy.minimumSizeHint().width()} '
-                f'strategy_explicit_min={window.strategy.minimumWidth()}')
+                f'strategy_explicit_min={window.strategy.minimumWidth()} '
+                f'config_min={window.quant_form.parentWidget().minimumSizeHint().width()} '
+                f'form_width={window.quant_form.width()} columns={window.quant_form.columns} '
+                f'result_min={window.quant_metrics.parentWidget().minimumSizeHint().width()} '
+                f'control_min/width=[{child_hints}]')
 
     def put_analysis(self, model):
         request = AnalysisRequest(symbol='TEST', source_requested='synthetic', model=model,
@@ -140,6 +149,124 @@ class A3ResultLayoutTests(unittest.TestCase):
             self.settle()
             self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(), 0,
                              self.mc_geometry(w))
+
+    def test_mc_wide_option_captions_preserve_choices_without_page_overflow(self):
+        w = self.window
+        output = self.put_analysis('gbm')
+        controls = (w.source, w.model, w.drift)
+        choices = [[combo.itemData(i) for i in range(combo.count())] for combo in controls]
+        selection = [combo.currentData() for combo in controls]
+        values = self.values(w.quant_metrics)
+        run = export_bytes(output.run)
+        payload = deepcopy(w.commentary_sources())
+        # Wider native font/style metrics grow content-driven option hints.
+        # Long synthetic captions exercise that same Qt width path on every OS,
+        # without requiring an installed Windows font or changing option data.
+        for combo in controls:
+            index = combo.currentIndex()
+            combo.setItemText(index, combo.itemText(index) + ' · wide native option caption ' * 5)
+            # A native font/style change invalidates Qt's first-show cached
+            # hint without overriding the production sizing policy.
+            combo.setStyleSheet('QComboBox { font-size: 14px; }')
+            combo.updateGeometry()
+        with patch.object(w.jobs, 'start', side_effect=AssertionError('no recompute')):
+            for width in (1000, 1360, 1000):
+                w.resize(width, 1000)
+                for language in ('ko', 'en'):
+                    w.set_language(language)
+                    self.settle()
+                    scroll = w.stack.currentWidget()
+                    self.assertEqual(scroll.horizontalScrollBar().maximum(), 0, self.mc_geometry(w))
+                    for combo, data, selected in zip(controls, choices, selection):
+                        self.assertEqual([combo.itemData(i) for i in range(combo.count())], data)
+                        self.assertEqual(combo.currentData(), selected)
+                        self.assertEqual(combo.toolTip(), combo.currentText())
+                        self.assertEqual(combo.view().model().index(combo.currentIndex(), 0).data(),
+                                         combo.currentText())
+                    for widget in (w.symbol, w.source, w.model, w.drift, w.horizon, w.paths,
+                                   w.seed, w.erp, w.target, w.quant_study, w.quant_metrics):
+                        left = widget.mapTo(scroll.viewport(), QPoint(0, 0)).x()
+                        self.assertGreaterEqual(left, 0)
+                        self.assertLessEqual(left + widget.width(), scroll.viewport().width(),
+                                             self.mc_geometry(w))
+                        self.assertGreaterEqual(widget.width(), widget.minimumSizeHint().width())
+                    self.assert_all_rows_visible(w.quant_metrics)
+                    self.assertEqual(self.values(w.quant_metrics), values)
+                    self.assertEqual(export_bytes(output.run), run)
+                    self.assertEqual(w.commentary_sources(), payload)
+
+    def test_mc_larger_combo_fonts_reflow_and_keep_field_order_and_evidence(self):
+        w = self.window
+        output = self.put_analysis('gbm')
+        controls = (w.symbol, w.source, w.model, w.drift, w.horizon, w.paths,
+                    w.seed, w.erp, w.target)
+        values = self.values(w.quant_metrics)
+        run = export_bytes(output.run)
+        payload = deepcopy(w.commentary_sources())
+        selection = [combo.currentData() for combo in (w.source, w.model, w.drift)]
+        for combo in (w.source, w.model, w.drift):
+            combo.setStyleSheet('QComboBox { font-size: 18px; }')
+        with patch.object(w.jobs, 'start', side_effect=AssertionError('no recompute')):
+            for width in (1000, 1360, 1000):
+                w.resize(width, 1000)
+                for language in ('en', 'ko'):
+                    w.set_language(language)
+                    self.settle()
+                    scroll = w.stack.currentWidget()
+                    self.assertEqual(scroll.horizontalScrollBar().maximum(), 0, self.mc_geometry(w))
+                    columns = w.quant_form.columns
+                    if width == 1360:
+                        self.assertEqual(columns, 3, self.mc_geometry(w))
+                    # Native font metrics choose the narrow column count; the
+                    # strict viewport/minimum checks must hold on every OS.
+                    self.assertEqual([control for _, control in w.quant_form.fields], list(controls))
+                    for index, (caption, control) in enumerate(w.quant_form.fields):
+                        row, column = (index // columns) * 2, index % columns
+                        self.assertIs(w.quant_form.grid.itemAtPosition(row, column).widget(), caption)
+                        self.assertIs(w.quant_form.grid.itemAtPosition(row + 1, column).widget(), control)
+                        left = control.mapTo(scroll.viewport(), QPoint(0, 0)).x()
+                        self.assertGreaterEqual(left, 0)
+                        self.assertLessEqual(left + control.width(), scroll.viewport().width())
+                        self.assertGreaterEqual(control.width(), control.minimumSizeHint().width())
+                        self.assertLessEqual(control.y() + control.height(), w.quant_form.height())
+                    controls[0].setFocus()
+                    self.settle()
+                    for current, following in zip(controls, (*controls[1:], w.run_button)):
+                        self.assertIs(self.app.focusWidget(), current)
+                        QTest.keyClick(current, Qt.Key.Key_Tab)
+                    self.assertIs(self.app.focusWidget(), w.run_button)
+                    self.assertEqual([combo.currentData() for combo in (w.source, w.model, w.drift)], selection)
+                    self.assertEqual(self.values(w.quant_metrics), values)
+                    self.assertEqual(export_bytes(output.run), run)
+                    self.assertEqual(w.commentary_sources(), payload)
+        # A single field's real native minimum is sufficient for the final
+        # one-column layout; larger constraints are never silently suppressed.
+        minimum = w.quant_form.minimumSizeHint().width()
+        self.assertEqual(w.quant_form.columns_for_width(minimum), 1)
+        self.assertGreaterEqual(minimum, max(control.minimumSizeHint().width() for control in controls))
+
+    def test_mc_field_grid_reuses_one_two_three_and_one_columns_without_clipping(self):
+        from PyQt6.QtWidgets import QLabel, QLineEdit
+        from quantgen_desktop.result_layout import ResponsiveFieldGrid
+        fields = [(QLabel(f'Field {index}'), QLineEdit(str(index))) for index in range(9)]
+        for _, control in fields:
+            control.setMinimumWidth(250)
+        form = ResponsiveFieldGrid(fields)
+        self.addCleanup(form.deleteLater)
+        form.show()
+        for width, columns in ((260, 1), (550, 2), (850, 3), (260, 1)):
+            form.resize(width, 1000)
+            self.settle()
+            self.assertEqual(form.columns, columns)
+            for index, (caption, control) in enumerate(fields):
+                row, column = (index // columns) * 2, index % columns
+                self.assertIs(form.grid.itemAtPosition(row, column).widget(), caption)
+                self.assertIs(form.grid.itemAtPosition(row + 1, column).widget(), control)
+                self.assertEqual(control.text(), str(index))
+                self.assertGreaterEqual(control.width(), 250)
+                self.assertGreaterEqual(control.x(), 0)
+                self.assertLessEqual(control.x() + control.width(), form.width())
+                self.assertLessEqual(control.y() + control.height(), form.height())
 
     def test_bond_panels_reflow_and_retain_tables_chart_report_and_payload(self):
         w, pane = self.window, self.window.bonds
