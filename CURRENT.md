@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T17:36:34+09:00
+updated_at: 2026-11-06T17:53:15+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
-work_commit: f7b4a73fa08733b007b7ab499cbf377ab9970837
+work_commit: bd7ee2a1b329320caf99fdff0ec61abb4cc443a4
 uncommitted_changes: yes
 pr: https://github.com/xkg4real/quantgen/pull/77
 usage_weekly_pct: unknown
@@ -406,3 +406,10 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - A3 f7b4a73 Runtime42186371159 Windows3.14 job127787571907는 A3단계20PASS 이후 차트·글꼴31검사 모두OK를 출력했으나 프로세스exit1로 실패했다. 전체CI성공으로 처리하지 않는다. 원본 선택로그 A3_F7_WINDOWS314_PROCESS_EXIT_FAILURE.log 보존. Linux정확4모듈 진단은30PASS+기존responsive음성대조1FAIL이며 Windows종료실패재현으로 주장하지 않는다.
 - 독립종료계측에서12개 ResearchWindow와12개 ReadingHelp가 DeferredDelete 대기인 채 남는 fixture수명문제를 확인했다. 관련테스트의 소유widget 명시정리만 수정중,31개기존조건/원래responsive사전조건은 유지한다. 이수명문제가Windowsexit1의직접원인인지는아직미확정. production예외억제/os._exit/강제통과 없음. 수정후각최종head전체CI가다시필요.
 - 상태d1a62a2와Rates9800b27는 각각최종CI 진행중이며 A3를먼저병합하기전 완료처리하지않는다. 식별모듈은 코드백업/read-back을 마쳤고 알려진A3 CI문제를 통합한 뒤별도PR/검증을연결한다.
+
+### GPT Qt 시험 종료 정리·CI 재검증 — 2026-11-06T17:53:15+09:00
+
+- A3 PR77 새 head bd7ee2a1b329320caf99fdff0ec61abb4cc443a4를 push/read-back했다. 네 시험 모듈의 소유한 Qt 창만 DeferredDelete로 정리하고 기존 31 시험/152 assertion AST를 유지했다. 제품 코드/판정 규칙 변경 없음. Linux 격리 진단에서 잔존 ResearchWindow/ReadingHelp 12개씩→0; focused6PASS. 31시험 재진단은 30PASS+기존 Linux responsive 전제1FAIL(exit1)이며 새 failure/error 없음. Windows31OK 후 exit1의 원인은 아직 확정하지 않는다.
+- f7 Runtime42186371159는 A3 20시험 단계가 Windows3.11/3.12/3.14·Ubuntu 모두 성공했지만 Windows3.14 후속 chart/text31OK 후 exit1; 3.11/3.12는20분 경계에서 cancelled. 기존 실패·진단 로그를 보존했다. installed job 예산20→30분, chart/text 단계를 A3 직후로 이동; 시험 명령은 모두 유지했다. syntax5분 그대로.
+- 새 exact-head Runtime42190250542 진행 중, Compliance42190250754 success. 일부 단계 성공을 전체 CI/병합 완료로 기록하지 않는다. 상태 PR78(d1a62a2)·Rates PR79(9800b27)로 같은 시험 정리를 정상 merge 중이며 중복 제품 구현은 하지 않는다. 20정책 정합성PASS584/publicationBLOCKED. 실제 WindowsPC/API/공급사/법률/라이선스/파일럿/동결연구 증거 추가 없음; 추가 GPT/Gemini spec review NOT_PERFORMED.
+- 다음: 관련 브랜치 통합·정합성 검증/push/readback, exact-head 필수 전체 CI 후 PR77→78→79 순서로 판단. detached identity e04f1cc는19합성PASS, 아직 PR/완료 미기록.
