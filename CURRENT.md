@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T16:52:32+09:00
+updated_at: 2026-11-06T16:58:19+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
@@ -128,6 +128,13 @@ A1/A3 완료 ID는 아직 기록하지 않는다. 다음은 A1 코드 검토·�
 - PR78의 이전 head 3726dd6, Runtime 42182875822는 Windows 3.11/3.12/3.14와 Ubuntu의 bounded-source 단계에서 실패했다. 확인된 Ubuntu 로그는 기존 research_home 시험이 옛 오류 제목과 임의 오류 문자열을 그대로 기대한 1건이다. 승인된 공통 실패 표시의 제품 코드는 바꾸지 않았다. 해당 시험을 KO→EN→KO 공통 안내 및 승인/READY/집계/증거 날짜/임의 오류의 미노출 조건으로 수정했다. 관련 4모듈 31 PASS, 정책 소스 정합성 PASS 586/publication BLOCKED. 수정 fa7c2118680bd5b811748bbb00d41a589588834a를 같은 status 브랜치에 push/read-back했으며 새 exact-head CI는 아직 미확인이다. 이전 실패는 보존한다.
 - Rates 인라인 하위 구현은 로컬 소스 동결 상태다. 기존 다섯 canonical 문자열과 원문 주석·숫자·보고서·AI 자료를 유지한 표시용 EN/KO 변형만 추가했다. 변경 전 19개 subtest 실패를 보존했고 기존 Rates 모듈 전체 11 PASS(110.673s, exit0), 독립 검토에 차단 결함 없음. 정책 검토 및 status 시험 수정 합류, commit/PR/CI가 남는다. 부모 13-8은 미완료다.
 - A3 af782be의 Runtime 42182474082는 진행 중이다. 실패/진행 중 상태를 완료로 기록하지 않는다. 다음은 각 최종 head CI 확인과 원래 순서의 PR 병합·원장·Notion이다.
+
+### GPT A3 Windows 재실패 및 Rates PR79 — 2026-11-06T16:58:19+09:00
+
+- A3 af782be의 Runtime 42182474082 Windows 3.11/3.14 A3 단계가 다시 실패했다. 새 진단은 MC 자체 최소 폭 1014px가 viewport 782/792px를 넘음을 보여준다(284/294px 넘침). 비활성 Strategy 전파 수정은 독립 회귀를 해결했지만 Windows 원인 전체를 해결하지 못했다. 이전 실패와 별개로 보존하며 MC 입력 폼의 플랫폼별 크기 힌트를 수정 중이다. 가로 넘침 0 및 실제 내용 표시 조건은 유지한다. 같은 PyQt6 설치 뒤 A3 검사를 긴 회귀 검사보다 앞에 배치해 피드백을 앞당기며 기존 검사 명령은 모두 유지한다.
+- 상태 표시 PR78은 fa7c211로 수정해 push/read-back했고 Runtime 42183638295 진행 중, Compliance 42183638326 success. 이 head도 A3의 남은 문제를 포함하므로 A3 후속 수정 합류와 새 최종 CI가 필요하다.
+- Rates 구현 3b175e1, status 수정 합류 53e8487, 웹 queue 포함 최종 a8d75b85a04f2bf1b0f6241c8369bbd10e308742를 전용 gpt/rates-inline-language-20261106에 push/read-back했다. Draft PR79, 11 PASS와 독립 검토 및 20정책 정합성 PASS 587/publication BLOCKED. 코드/시험 AST를 각각 검증된 원본과 대조했다. 역시 A3 후속 수정 합류 후 최종 CI/병합이 남는다.
+- A3/상태 표시/Rates의 신규 완료 ID는 아직 기록하지 않는다. 다음은 MC 자체 너비 수정과 세 브랜치 합류, 각 최종 head의 필수 CI 확인이다. 실제 Windows PC/API/법률/라이선스/공급사/파일럿·동결 연구 증거 및 웹 전달 영수증은 없다.
 
 ## 1. 목표와 완료 조건
 
