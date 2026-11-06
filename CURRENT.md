@@ -12,7 +12,7 @@ waiting_on: none
 work_branch: gpt/run-registry-series-format-20261106
 work_commit: e7ed79346653cd647f7f5e317fdca348037bfe4e
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/88
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -627,3 +627,5 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - Child⑨-3a/series-format/1 pushed/read-back e7ed79346653cd647f7f5e317fdca348037bfe4e on gpt/run-registry-series-format-20261106, clean six-file scope. Source241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc, finaltest2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73. New strict NPY1 LE/C/2D profile validates bounded typedheader and exact Pythonint data size before numpy.load(allow_pickleFalse), then rehashes supplied content. No filesystem/persistent store or historicalfile compatibility claim; six prior helpers unchanged.
 - Final focused22PASS0.035s; independent13 overlapping probes PASS0.025s on unchanged product; combined format22+series15+source8+data15+keys13+store16+codec17=106PASS1.487s exit0. Root finaltest permits documented format refusal or resource MemoryError for pathological unaryheader while requiring numpy.load nevercalled; separate injected RecursionError typedrefusal/MemoryErrorpropagation remain. Independent receipt retains its earlier maintainedtesthash; no false rerun attribution. Initial21 fixtureERROR and prior22/106 runs retained separately; nbytes improvement came from source review, not a claimed independent failed product run.
 - All20 substantive policy GO, prefix-preserving FACTS17lines, consistencyPASS614/publicationBLOCKED. Prior workflow commands and5/30 budgets preserved. PR and exactfinalhead Runtimeall6/Compliance next; source86 andseries87 must merge first. FullR3, actualWindows/API/provider/legal/license/pilot/frozen-study and optional formal specNOT_PERFORMED remain unchanged. Next explicit-directory verified series-file storage is only an engineering candidate, not claimed/implemented.
+
+- Format PR88 draft opened at e7ed79346653cd647f7f5e317fdca348037bfe4e; exact-head Runtime42219899712 and Compliance42219899643 started. Source86/series87 remain separately in Runtime observation; required merge order86→87→88, no completion yet.
