@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T18:23:30+09:00
+updated_at: 2026-11-06T18:27:27+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-codec-20261106
@@ -464,3 +464,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - identity후속 e981ef7dce08d3463ae6bee2c6f0d4f68d238970를push/read-back했다. nativeA1 두모듈의import/cleanup등록2곳만바꿔기존helper로소유위젯을정리한다. 기존18시험/82assertion AST·제품/Flet/helper불변. before18PASS14.055s에도9소유위젯잔존, after18PASS12.249sexit0·9개파괴/ResearchWindow0/ReadingHelp0. 로컬segfault재현없고이전CI139의정확한원인미확정.20정책PASS591/publicationBLOCKED. 동일A1명령을chart직후로이동,명령목록불변.
 - Rates578d35d Runtime42191259285 Ubuntu127803562205에서도A1 18OK19.066s후segfault139가확인됐다. Rates전체CI실패이며PR79병합하지않는다. RATES_578_UBUNTU_A1_EXIT139.log보존. 동일preimage대조후같은2시험정리만Rates에이식했다(별도미커밋변경);제품Rates소스불변. 공유된18시험정리측정은새Rates재실행으로세지않는다.
 - 다음: Rates20정책·문서/commit/push/read-back → identity에정상merge → R3에정상merge후PR. 이최종각head의전체CI로판단한다. identity e981에서기동한CI가있어도후속mergehead의증거로대체하지않는다. sourceReview/FACTS충돌은양쪽기록보존후재검토하며선행완료A3/상태근거는유지한다.
+
+### GPT Rates A1 정리 원격 보존 — 2026-11-06T18:27:27+09:00
+
+- RatesPR79 새head 62246779f45b9e4eff37b7af6ac7e71354b5fd18 commit/push/read-back. e981와동일한A1시험2개수정/18methods82assertions보존/명령목록보존을대조했고20정책검토GO/소스정합성PASS588(publicationBLOCKED). 기존Rates합성11PASS와공유A1후속18PASS는별도범위;새Rates로컬재실행으로세지않는다. 이전578headUbuntu139실패보존,이새headfullCI필수.
+- identitye981에Rates622를정상merge중이다. staged변경은이미검토된FACTS추가와Rates제품문서뿐이며제품/test/workflow코드불변. FACTS검토스냅샷변화로첫정합성check는20문서재검토요구FAIL(publicationBLOCKED);이중간영수증보존후합성행위를변경하지않고정합성기준선갱신한다. 아직merge commit/push전.
+- 현재primaryR3source38745b7은clean/pushed. 다음identity통합push→R3정상merge→별도PR,모든최종head의전체CI후PR79→80→R3순병합. 소유권execution/브랜치/CURRENT CAS/read-back유지,기존자동예약변경없음.
