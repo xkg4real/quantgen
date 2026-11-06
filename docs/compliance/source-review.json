@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "9e30bb4d0daf1157360bc9d94004c97df6d58874d29e2585ff318125a79b4b6c",
+    ".github/workflows/runtime-smoke.yml": "abe393d047df2dbe8e2a7bb2153189fec2c622c2bee5429ee7be3baa9c196b75",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -260,13 +260,13 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "09b347cf9c14551ca6713d750dee2132622e6add6e83475a6ee7bc9c213a4015",
+    "docs/compliance/FACTS.md": "62657b4890d2e41156600ad3e09e3f74cea83ce4f8d3e78116d588710503c5b7",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
-    "docs/compliance/RELEASE_GAPS.md": "0b5dd47d1d1e7004fd21732bda8b6411061added2645e4f008ebc13f91491eb2",
+    "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
-    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "76e29d092e101a51049fe39c78e10a0385566f6ab776163d4fd3afe781b2d845",
+    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "087d82bb21c64d8949debf38fdc86b5ef6522bb361962422fc5a01883af7b634",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -304,10 +304,10 @@
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
-    "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "e75a5728837082ba0cce769c7b360f41c7d860911fd486595ad5935d0b77407a",
+    "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "cdf40dc23e97458f04e4cc9591a9e7ee7dee287db5fb946b694022d3af965002",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
     "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
-    "docs/product/RECORDED_STATUS_DISPLAY_2026-11-06.md": "a4c2192fda73553c93205b2132237d9d1f2dfb9abdf78784df340397891411c9",
+    "docs/product/RECORDED_STATUS_DISPLAY_2026-11-06.md": "33e76e3cbc4ded9db268df780c0d406f67aa420bd726d2e5174827e6e72411d2",
     "docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md": "ad9177b241178d7427f77caa8b7de6f14390610d41d2959c87dd03b1093fd189",
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
@@ -327,7 +327,7 @@
     "pyproject.toml": "77589c755d38fe9bc4316841b4a4b69b1dd807f532c211d16d1658e1540926d4",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "68ff793c70ce814bce60d566900db0e007c5abcad07e7fa866ea474a5b480882",
+    "quantgen_desktop/app.py": "d1266ea4cffcddcb6e202e501358edbe97baf3fce8df6a3f2db84f4330c9a8f2",
     "quantgen_desktop/bonds.py": "609e60e2497ac734cfe9ff4a6663910218014fe7828152f0b31f48040487cac6",
     "quantgen_desktop/bonds_portfolio_narrative.py": "008ff36812f8b26317929feae9731604798cd6e43850dfe72e99bb7eadb3841a",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
@@ -358,7 +358,7 @@
     "quantgen_desktop/reading_language.py": "ee8a55044482598fbcece2dfde3fca73e9b4ff9b2405db13c16dc2c0bc911adf",
     "quantgen_desktop/reading_panel.py": "93cb0202f6a2ffbe8d80340554ef4340f207b4a3d1e53bda4e1f96f5fa4778d1",
     "quantgen_desktop/report_actions.py": "fbf48c2350434f8c4e953fd1efd99ed666f60e74e6da5154bb529a43ec50115d",
-    "quantgen_desktop/result_layout.py": "ad9300648be6cda9af5cd31573e50835802bcb991bf818a8a7fa5b8bb8a4249f",
+    "quantgen_desktop/result_layout.py": "68322297edde73a262b4b6eb3f3959d65571a8d2ebf6e0fab3893e8088af4ee5",
     "quantgen_desktop/signals.py": "42c35b809cbb3b2ca20be1d2103f405a4e7564ac9678673d39fa26368bfd96ef",
     "quantgen_desktop/status_language.py": "e23a11eb835b155bfc88685ea0f521e664b8b7fc080ce3f600042b1002427386",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
@@ -388,7 +388,7 @@
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_a1_status_acceptance.py": "e921669fc62347f09913c87db2d3aae5cca89d3eb45461371a93f061e566fb3a",
     "tests/desktop_a1_terms_acceptance.py": "e2b93cfbd295df742d218e893dd586d8b6b23fd7a63ac75877f2e7b4717b4280",
-    "tests/desktop_a3_layout_acceptance.py": "dbe303fce99664d4f39191c7fc32505bb0d337170fd27c09d5ea0ef76b42ad53",
+    "tests/desktop_a3_layout_acceptance.py": "12c431696f0029fa72c6381e01547f48808973b4b6906a4cfe3b4f8531094444",
     "tests/desktop_a3_reading_acceptance.py": "84d69d2df57bf9592ec5dff00c0df32b24dcc454e06d539e330e3964382ae847",
     "tests/desktop_acceptance.py": "922f93afe5bb0bbc852bc95df31cb52beb317e9121c192d7484debecdda9291d",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
@@ -597,163 +597,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "2a6f42b799dfadd60e1d2bf81545e9a4b130c7b2ce856d430c72d5fd3d79e4e6",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.349589+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "a7b0a3031d37fdea64de56dae1f345b11e9950711e03f95e7b5acf0ec2746636",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.324255+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "2a6f42b799dfadd60e1d2bf81545e9a4b130c7b2ce856d430c72d5fd3d79e4e6",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.352091+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "a7b0a3031d37fdea64de56dae1f345b11e9950711e03f95e7b5acf0ec2746636",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.327169+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "a3a5d2e56cb7e1b802da9464d4ead6b8430132dfe72f040b09bfdc0f6675c8c2",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.354263+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "1fdd50e7724d3f56aa5552eab3de68c6100d85670aef6d27267df6f08158e3f6",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.329376+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "087e9a28ceb56ef3ee8442030f3cdc0f62cb3cb338afaeaaa2d1bbb14c604833",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.356464+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "e383c2b03c10ba837a0f95b76833b224ebd8051143523146c2ef7a9b999d1d7c",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.331776+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "a2196f0b2746a20c1e4501a93675b2e9882655f2be1f6605d48a41d0775269bf",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.358444+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "d613dea225525d87567a0ae786f3c233f00c4bc3fc92bd38a2618839a3503d4d",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.333847+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "04347980db07043cbdf51b740efd9430cadced1ece774f494b8ce830c4a5a940",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.360549+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "9859a3fa0709a1a8f1c8043487625f169b591ea97ff8a3a399e9577112a97642",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.336155+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "2a6f42b799dfadd60e1d2bf81545e9a4b130c7b2ce856d430c72d5fd3d79e4e6",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.362725+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "a7b0a3031d37fdea64de56dae1f345b11e9950711e03f95e7b5acf0ec2746636",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.338367+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "04347980db07043cbdf51b740efd9430cadced1ece774f494b8ce830c4a5a940",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.365083+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "9859a3fa0709a1a8f1c8043487625f169b591ea97ff8a3a399e9577112a97642",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.340805+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "3ea7e405fd57b5b3b87fe747eafc65dac15e765ea42b85666b5c7fc7995bff4f",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.367432+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "3eab04b0e3fe55175880ea700ac8a3c91d04099129f77423fc3a92a099c22728",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.342950+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "a508fc614e1061ca78d4f1756122a006843313b4bf65398d4aa59c892e823e2c",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.369685+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "b3c54f03f37c48c8199afefb4f2e24fc7c2b7b0b80cfc0cdc1b7c61b42fc0c97",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.345818+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "adb22bc783f05723e570e4d115032170656ea1654c1d7ecd5a43bbcd0edf2482",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.372244+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "dd93edbca9e995c91f34df3cd83f8405932d9def330e02a8532c54725d546f8f",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.347955+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "bd2db4de4a0e158c7ccef82d8ac1bf254883639adcf158d2c6de4c466f872bd6",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.375253+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "588af49b90403817af7fcf5887e79b9c5920b480900423380c8c3d463e9bf731",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.350087+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "3ea7e405fd57b5b3b87fe747eafc65dac15e765ea42b85666b5c7fc7995bff4f",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.377453+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "3eab04b0e3fe55175880ea700ac8a3c91d04099129f77423fc3a92a099c22728",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.352367+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "3ea7e405fd57b5b3b87fe747eafc65dac15e765ea42b85666b5c7fc7995bff4f",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.379523+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "3eab04b0e3fe55175880ea700ac8a3c91d04099129f77423fc3a92a099c22728",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.354407+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "15": {
-      "document_sha256": "470bda66a33c2bdc9ff299940db8390750b54e0c73c978eff31abe5190f0df69",
-      "source_digest": "3ea7e405fd57b5b3b87fe747eafc65dac15e765ea42b85666b5c7fc7995bff4f",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.381694+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
+      "source_digest": "3eab04b0e3fe55175880ea700ac8a3c91d04099129f77423fc3a92a099c22728",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.356683+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "fe8047d7123d41ccb41df4069479dfe87657b44580588a8a81709ab0c164ee12",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.385529+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "e855e315214e652d991d9cbc26d4d8016b579bf79fbb7e095f2274112cb2ab56",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.358989+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "04347980db07043cbdf51b740efd9430cadced1ece774f494b8ce830c4a5a940",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.388621+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "9859a3fa0709a1a8f1c8043487625f169b591ea97ff8a3a399e9577112a97642",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.361198+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "2a6f42b799dfadd60e1d2bf81545e9a4b130c7b2ce856d430c72d5fd3d79e4e6",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.390805+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "a7b0a3031d37fdea64de56dae1f345b11e9950711e03f95e7b5acf0ec2746636",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.363254+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "f26a722cbc21df3152df65979890664e47a10e082c180156d1ca50346c4f2103",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.392952+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "5966bf89daab8169a175d020238a02645c3f0104fb036c0103646d11d016ff96",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.365276+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "2a6f42b799dfadd60e1d2bf81545e9a4b130c7b2ce856d430c72d5fd3d79e4e6",
-      "reviewed_by": "GPT combined Rates inline and status test review",
-      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
-      "reviewed_at": "2026-11-06T07:54:13.395578+00:00",
-      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
+      "source_digest": "a7b0a3031d37fdea64de56dae1f345b11e9950711e03f95e7b5acf0ec2746636",
+      "reviewed_by": "GPT Rates status and responsive MC combined review",
+      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
+      "reviewed_at": "2026-11-06T08:24:50.367423+00:00",
+      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
     }
   }
 }

@@ -63,3 +63,24 @@ status codes, recorded counts and evidence dates on the failure path. The
 original one-test failure is preserved; research-home, status-display, snapshot
 and Flet runtime validation then passed31 tests (3.944s, exit0). Corrected
 exact-head Windows/Ubuntu CI is still required.
+
+## Final A3 integration follow-up
+
+PR78 headfa7c211 Runtime42183638295 passed the corrected bounded-source test but
+failed the inherited A3 MC step on all three Windows jobs; Ubuntu and syntax
+passed. Those failures are retained and do not invalidate the separate state
+snapshot/source contract results. The responsive MC correction f7b4a73 is now
+merged into this branch. AST comparison confirms make_system matchesfa7c211,
+make_quant matchesf7b4a73, and the A3 helper/tests retain identical bytes.
+
+The corrected four-module guarded integration run passed41 tests in96.053s
+(exit0): status_display, status_snapshot, A3 layout and A3 reading. An earlier
+invocation used a nonexistent display-test module name and reported one loader
+error; its original private log is retained. It was not a passing integration
+run. All test data/state are synthetic/isolated and network/protected stores
+are denied. The combined20-policy review found no additional policy changes;
+status approval distinctions and all A3 failure/limitation records are retained.
+
+The final integrated head still requires all exact-head Windows/Ubuntu Runtime
+and Compliance checks before ordered merge after PR77. Physical Windows/API,
+regulatory/license/provider/pilot/research and actual publication remain separate.

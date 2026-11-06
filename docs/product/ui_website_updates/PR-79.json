@@ -42,7 +42,15 @@
     "ci": "PENDING_FINAL_HEAD",
     "ci_runs": [],
     "actual_provider_network": "NOT_RUN",
-    "user_pc": "NOT_RUN"
+    "user_pc": "NOT_RUN",
+    "final_branch_integration": {
+      "status_head": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3",
+      "a3_source": "f7b4a73fa08733b007b7ab499cbf377ab9970837",
+      "rates_source_and_tests": "AST unchanged from11PASS receipt",
+      "status_a3_tests": 41,
+      "counts_note": "Separate overlapping integration evidence; not a new41-test Rates run.",
+      "ci": "final integrated head required"
+    }
   },
   "website_application": {
     "status": "not_verified",

@@ -39,3 +39,17 @@ follow-up is a queued source record until a supported delivery receipt exists.
 The status failure-test correction fa7c211 is integrated. Rates production and
 test ASTs match the reviewed 3b175e1 exactly; the research-home test AST matches
 the corrected and tested fa7c211. The merge changes no tested product behavior.
+
+## Final status and A3 branch integration
+
+The branch incorporates status d1a62a2 and responsive MC f7b4a73 through normal
+merge. The Rates implementation and language tests remain AST-identical to the
+11-PASS source; app, A3 helper and corrected research-home test matchd1a62a2.
+The status/A3 integration passed41 guarded tests in96.053s. This is separate
+from the Rates11-test run and is not a new41-test Rates result. Both complete
+Rates and A3 policy/evidence sections were retained in the document conflict.
+
+Final integrated-head Windows/Ubuntu Runtime and Compliance checks are required
+before merge after PR77 and PR78. Prior a8d75b8 runtime contained the earlier
+MC form and cannot verify this integrated head. Manual Windows, provider/API,
+legal/license/pilot/frozen-research and website publication remain unverified.

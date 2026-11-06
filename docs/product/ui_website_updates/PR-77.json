@@ -21,7 +21,8 @@
   "summary_ko": [
     "기존 G1 패널로 MC 전체 행과 채권 지표·DV01·차트를 배치합니다.",
     "로컬 용어집 검색과 현재 표시값 인용을 F1·문맥 메뉴로 제공합니다. 자료 변경 시 오래된 인용은 지웁니다.",
-    "Macro 순수 출처/기준일만 명시적으로 접으며 합성·실패·가정·판정 안내는 유지합니다."
+    "Macro 순수 출처/기준일만 명시적으로 접으며 합성·실패·가정·판정 안내는 유지합니다.",
+    "MC 입력 폼은 실제 최소 폭에 따라 3·2·1열로 재배치하며 같은 입력값과 Tab 순서를 유지합니다."
   ],
   "website_impact": {
     "classification": "native_only",
@@ -50,18 +51,28 @@
       {
         "suite": "separate Strategy/chart regression after tab correction",
         "passed": 10
+      },
+      {
+        "suite": "responsive MC form: final guarded A3 layout8+reading12",
+        "passed": 20
+      },
+      {
+        "suite": "actual MC host diagnostic:10 EN/KO geometry cases, Linux offscreen",
+        "passed": 1
       }
     ],
     "counts_note": "Counts overlap prior suites and must not be summed. Linux offscreen Qt, synthetic data, isolated state, no network/dotenv/protected stores. Four actual integrated synthetic captures inspected. Baseline responsive forced-overflow setup failed separately and is not claimed PASS.",
     "source_review": "20 policies consistency PASS; publication BLOCKED",
-    "ci": "ORIGINAL_HEAD_FAILED_WINDOWS_A3_LAYOUT; CORRECTED_HEAD_CHECKS_PENDING",
+    "ci": "SECOND_HEAD_FAILED_WINDOWS_A3_LAYOUT; RESPONSIVE_FORM_FINAL_HEAD_CHECKS_PENDING",
     "ci_runs": [
       42179854778,
-      42179855683
+      42179855683,
+      42182474082,
+      42182474026
     ],
     "actual_provider_network": "NOT_RUN",
     "user_pc": "NOT_RUN",
-    "windows_failure": "Original head67a8838 Runtime42179854778 failed new A3 step on Windows3.11/3.12/3.14; inspected Windows3.11 MC gbm/garch_t overflow286. Corrected existingCurrentPageTabs sizing requires fresh exact-head CI."
+    "windows_failure": "Original head67a8838 Runtime42179854778 failed new A3 step on Windows3.11/3.12/3.14; inspected Windows3.11 MC gbm/garch_t overflow286. Corrected existingCurrentPageTabs sizing requires fresh exact-head CI. Second headaf782be Runtime42182474082 again failed all three Windows jobs; inspected MC own minimum1014 and overflow284/294. Fixed3-column min12 candidate also overflowed14 in independent18px Linux render; measured3-to2-to1 reflow now passes20 local tests and10 actual-host cases. Fresh final-head Windows/Ubuntu CI required."
   },
   "website_application": {
     "status": "not_verified",
