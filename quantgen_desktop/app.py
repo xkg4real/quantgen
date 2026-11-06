@@ -163,12 +163,18 @@ def table(headers):
 
 
 def table_rows(t, rows, ids=None):
+    from .status_language import STATUS_ROLE, status_text
     t.setRowCount(len(rows))
     for i, row in enumerate(rows):
         for j, value in enumerate(row):
             item = QTableWidgetItem(str(value))
             if j in (t.property('localized_columns') or ()):
                 item.setData(CAPTION_ROLE, str(value))
+            context = getattr(t, '_qg_status_columns', {}).get(j)
+            if context:
+                item.setData(STATUS_ROLE, str(value))
+                item.setToolTip(str(value))
+                item.setText(status_text(t, value, context))
             if ids:
                 item.setData(Qt.ItemDataRole.UserRole, ids[i])
             t.setItem(i, j, item)
@@ -567,6 +573,7 @@ class ResearchWindow(QMainWindow):
         box, inner = panel("분포와 근거")
         self.quant_chart = FanChart()
         self.quant_metrics = table(["지표", "값"])
+        self.quant_metrics.horizontalHeaderItem(0).setData(CAPTION_ROLE, 'Metric')
         self.quant_metrics.setProperty("localized_columns", [0])
         self.quant_metrics.setMinimumHeight(280)
         inner.addWidget(self.quant_metrics)
@@ -591,6 +598,7 @@ class ResearchWindow(QMainWindow):
         layout.addWidget(self.risk_tabs)
         layout.addWidget(label("개별 가격 시뮬레이션 위험", "heading"))
         self.risk_table = table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
+        self.risk_table.setProperty('localized_columns', [1])
         self.risk_table.setMinimumHeight(300)
         layout.addWidget(self.risk_table)
         layout.addWidget(label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "muted"))
@@ -599,6 +607,8 @@ class ResearchWindow(QMainWindow):
     def make_library(self):
         layout = self.page("Research Library", "이번 앱 세션의 실행 근거 · 종료 전에 필요한 결과를 저장하세요.")
         self.run_table = table(["Symbol", "Model", "실행 상태", "검증 판정", "생성 시각 · UTC"])
+        self.run_table._qg_status_columns = {2: 'execution', 3: 'official'}
+        self.run_table.setProperty('localized_columns', [1])
         self.run_table.setMinimumHeight(280)
         layout.addWidget(self.run_table)
         buttons = QHBoxLayout()

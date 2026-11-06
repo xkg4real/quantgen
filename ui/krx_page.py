@@ -18,6 +18,16 @@ from core.numfmt import format_compact, format_number, format_price
 from core.theme import RADII, active
 from data.krx import KRXGateway
 from ui.components import chip, empty_state, key_value, notice, section
+from ui.localization import table_header, literal_text
+
+# Header context only: DART Account is an accounting item, never a brokerage account.
+_HEADERS_KO = {
+    'Date': '일자', 'Open': '시가', 'High': '고가', 'Low': '저가', 'Volume': '거래량',
+    'Report': '보고서명', 'Filer': '제출인', 'Receipt': '접수번호',
+    'Statement': '재무제표 구분', 'Account': '계정과목', 'This term': '당기', 'Prev term': '전기',
+    'Code': '종목코드', 'Name': '종목명', 'Market': '시장 구분', 'Chg %': '등락률',
+    'Mkt cap': '시가총액', 'Index': '지수명', 'Level': '지수', 'Change': '전일 대비',
+}
 
 _LOOKUPS = [
     ("quote", "Quote"),
@@ -71,8 +81,8 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
         head = ft.Row([ft.Text(f"Source: {source}", size=11, color=pal.muted),
                        ft.Text(f"{len(rows)} rows", size=11, color=pal.muted)], spacing=14)
         table = ft.DataTable(
-            columns=[ft.DataColumn(ft.Text(label, size=11)) for _, label in columns],
-            rows=[ft.DataRow(cells=[ft.DataCell(ft.Text(_cell(r.get(k)), size=11))
+            columns=[ft.DataColumn(table_header(label, ko=_HEADERS_KO.get(label), size=11)) for _, label in columns],
+            rows=[ft.DataRow(cells=[ft.DataCell(literal_text(_cell(r.get(k)), size=11))
                                     for k, _ in columns]) for r in rows[:300]],
             column_spacing=18, heading_row_height=34, data_row_max_height=34,
         )

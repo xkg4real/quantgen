@@ -3,6 +3,16 @@ import flet as ft
 from core.i18n import LocaleContext, locale_choices, numeric_presentation
 
 
+def table_header(source, *, ko=None, **kwargs):
+    """Authored column text; an optional Korean override is local to this table."""
+    return ft.Text(source, data={'qg_table_header': {'source': source, 'ko': ko}}, **kwargs)
+
+
+def literal_text(value, **kwargs):
+    """A provider/calculation value whose displayed text must survive locale changes."""
+    return ft.Text(value, data={'qg_literal_value': True}, **kwargs)
+
+
 def translate_controls(root,ctx):
     visited=set()
     def visit(control):
@@ -18,6 +28,16 @@ def translate_controls(root,ctx):
         for field in fields:
             value=getattr(control,field,None)
             if not isinstance(value,str):continue
+            data=getattr(control,'data',None)
+            if isinstance(control,ft.Text) and field=='value' and isinstance(data,dict):
+                if data.get('qg_literal_value') is True:continue
+                header=data.get('qg_table_header')
+                if isinstance(header,dict):
+                    source=header['source']
+                    translated=(header['ko'] if ctx.language=='ko' and header.get('ko') is not None
+                                else ctx.text(source))
+                    control.value=translated;history[field]=(source,translated)
+                    continue
             source,last=history.get(field,(value,None))
             if value!=last:source=value
             translated=ctx.text(source)

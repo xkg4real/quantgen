@@ -37,6 +37,7 @@ from core.theme import RADII
 from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
 import ui.fcharts as fcharts
+from ui.localization import table_header, literal_text
 
 _TOOLS = [("curve", "Yield curve"), ("swap", "Swap pricer"),
           ("option", "Swaption / cap-floor"), ("sim", "Rate simulation")]
@@ -73,10 +74,17 @@ def _num(text: str | None, default: float | None, what: str) -> float | None:
         raise ValueError(f"{what}: cannot read {text!r} as a number.") from None
 
 
-def _table(columns: list[str], rows: list[list[str]]) -> ft.Control:
+_CURVE_HEADERS_KO = {'Tenor': '만기', 'Zero': '무이표 금리', 'DF': '할인계수',
+                     'Par': '파 금리', '1y fwd': '1년 선도금리'}
+
+
+def _table(columns: list[str], rows: list[list[str]], *, headers_ko=None) -> ft.Control:
+    # Only the approved table surfaces opt into source-preserving localization.
+    text_cell = literal_text if headers_ko is not None else ft.Text
     return ft.Row([ft.DataTable(
-        columns=[ft.DataColumn(ft.Text(c, size=11)) for c in columns],
-        rows=[ft.DataRow(cells=[ft.DataCell(ft.Text(v, size=11)) for v in r]) for r in rows],
+        columns=[ft.DataColumn(table_header(c, ko=headers_ko.get(c), size=11)
+                               if headers_ko is not None else ft.Text(c, size=11)) for c in columns],
+        rows=[ft.DataRow(cells=[ft.DataCell(text_cell(v, size=11)) for v in r]) for r in rows],
         column_spacing=18, heading_row_height=34, data_row_max_height=34,
     )], scroll=ft.ScrollMode.AUTO)
 
@@ -135,7 +143,8 @@ def _run_curve(page, *, source: str, method: str, lookback: int) -> list[ft.Cont
         rows.append([r["label"], _pct(r["zero"], 3), f"{r['df']:.4f}", _pct(r["par"], 3),
                      _pct(r["fwd_1y"], 3), _bp(chg) if chg is not None else "—"])
     blocks.append(_table(["Tenor", "Zero", "DF", "Par", "1y fwd", f"Chg {report.lookback}d"],
-                         rows))
+                         rows, headers_ko={**_CURVE_HEADERS_KO,
+                             f"Chg {report.lookback}d": f"{report.lookback}거래일 변화"}))
     blocks.append(card(fcharts.curve_history_chart(panel)))
     if pca is not None:
         blocks.append(card(fcharts.pca_chart(pca)))

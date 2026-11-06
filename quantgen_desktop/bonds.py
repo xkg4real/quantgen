@@ -48,7 +48,7 @@ class BondsPane(QWidget):
         inner.addWidget(label('가격과 수익률 중 하나만 입력하세요. Price를 입력할 때는 Yield를 비웁니다.','caption'))
         self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);inner.addWidget(self.run)
         self.status=label('곡선 출처와 관측일을 함께 표시합니다.','muted');inner.addWidget(self.status);layout.addWidget(box)
-        self.metrics=table(['Metric','Value']);self.metrics.setMinimumHeight(360);layout.addWidget(self.metrics)
+        self.metrics=table(['Metric','Value']);self.metrics.setProperty('localized_columns', [0]);self.metrics.setMinimumHeight(360);layout.addWidget(self.metrics)
         self.chart=LineChart('Yield (%)','Price per 100')
         self.krd=table(['Key tenor · years','DV01 · currency / bp']);self.krd.setMinimumHeight(260);layout.addWidget(self.krd)
         self.scenarios=table(['Scenario','Shock · bp','New price','P&L','P&L %']);self.scenarios.setMinimumHeight(310);layout.addWidget(self.scenarios);self.scenarios.hide()

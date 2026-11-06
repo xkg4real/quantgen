@@ -2,8 +2,8 @@
 import re
 
 PAIRS = {
-    'Macro · Market observations and local commentary': 'Macro · 시장 관측과 로컬 해설',
-    'Macro sheet': '거시 지표표', 'Daily commentary': '일일 시장 해설',
+    'Macro · Market observations and local commentary': '매크로 · 시장 관측과 해설',
+    'Macro sheet': '매크로 지표', 'Daily commentary': '일일 시장 해설',
     'Weekly rates & FX': '주간 금리·외환',
     'This tab is a descriptive macro sheet. See Analysis tools → Macro v2 for the v2 Overlay, Model cards and Research register.':
     '이 탭은 descriptive macro sheet입니다. v2 Overlay·Model cards·Research register는 분석 도구의 매크로 v2에서 확인합니다.',
@@ -11,7 +11,7 @@ PAIRS = {
     'Descriptive read': '설명용 관측', 'Curve': '수익률곡선', 'Risk': '위험',
     'Dollar': '달러', 'Breakevens': '기대 인플레이션', 'Real yields': '실질금리',
     '1y z-scores · descriptive only': '1년 z점수 · 설명용',
-    'Macro indicators': '거시 지표', 'Group': '분류', 'Last': '최근값',
+    'Macro indicators': '매크로 지표', 'Group': '분류', 'Last': '최근값',
     '1y z-score': '1년 z점수', '1y percentile': '1년 백분위', 'Observed date': '관측일',
     'rates': '금리', 'credit': '신용', 'fx': '외환', 'risk': '위험',
     'bull steepener': '금리 하락·곡선 가팔라짐', 'bear steepener': '금리 상승·곡선 가팔라짐',

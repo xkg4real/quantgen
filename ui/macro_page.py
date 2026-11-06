@@ -21,6 +21,7 @@ from __future__ import annotations
 from typing import Callable, Optional
 
 import flet as ft
+from ui.localization import table_header, literal_text
 
 import config
 from core.ficc import insights
@@ -40,6 +41,9 @@ _SOURCES = [("auto", "Auto (FRED + Yahoo, synthetic fallback)"),
 _HEADLINE = ("DGS2", "DGS10", "DGS30", "T10Y2Y", "DFII10", "T10YIE",
              "VIXCLS", "BAMLH0A0HYM2", "DTWEXBGS")
 _REGIME_TOKEN = {"risk-on": "success", "risk-off": "error"}
+_HEADERS_KO = {'Group': '분류', 'Indicator': '지표', 'Last': '최근값',
+               '1d': '1일', '1w': '1주', '1m': '1개월', '3m': '3개월',
+               'z (1y)': 'z점수 (1년)', 'pct (1y)': '백분위 (1년)'}
 _COLUMNS = ("Group", "Indicator", "Last", "1d", "1w", "1m", "3m", "z (1y)", "pct (1y)", "Source")
 _VIEWS = (("sheet", "Macro sheet"), ("overlay", "Overlay state"), ("cards", "Model cards"),
           ("research", "Research register"))
@@ -101,7 +105,7 @@ def build_macro_page(page: ft.Page,
         return ft.Row(chips, spacing=6, wrap=True)
 
     def cell(text: str, *, token: str = "text") -> ft.DataCell:
-        return ft.DataCell(ft.Text(text, size=11, color=getattr(pal, token)))
+        return ft.DataCell(literal_text(text, size=11, color=getattr(pal, token)))
 
     def sign_token(x: float | None) -> str:
         return "text" if not x else ("success" if x > 0 else "error")
@@ -121,7 +125,7 @@ def build_macro_page(page: ft.Page,
                 cell(r.source, token="error" if r.source == "SYNTHETIC" else "muted"),
             ]))
         dt = ft.DataTable(
-            columns=[ft.DataColumn(ft.Text(c, size=11, color=pal.muted),
+            columns=[ft.DataColumn(table_header(c, ko=_HEADERS_KO.get(c), size=11, color=pal.muted),
                                    numeric=i >= 2 and c != "Source")
                      for i, c in enumerate(_COLUMNS)],
             rows=rows, column_spacing=16, heading_row_height=34, data_row_max_height=32)

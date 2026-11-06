@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (QAbstractButton, QComboBox, QLabel, QLineEdit,
                              QTableWidget, QTabWidget, QPlainTextEdit, QWidget)
 from .translations import display
 from .wheel_guard import guard as guard_wheel
+from .status_language import STATUS_ROLE, status_text
 
 CAPTION_ROLE = Qt.ItemDataRole.UserRole + 802
 
@@ -110,7 +111,11 @@ class LanguageController(QObject):
                         for i in range(widget.columnCount()):
                             item = widget.horizontalHeaderItem(i)
                             if item:
-                                self._text(widget, ('header', i), item.text(), item.setText)
+                                source = item.data(CAPTION_ROLE)
+                                if source is not None:
+                                    item.setText(display(widget, source))
+                                else:
+                                    self._text(widget, ('header', i), item.text(), item.setText)
                         # Only explicitly tagged metric captions; never symbols,
                         # order IDs, numbers or provider-supplied values.
                         for column in widget.property('localized_columns') or ():
@@ -118,6 +123,13 @@ class LanguageController(QObject):
                                 item = widget.item(row, column)
                                 if item and item.data(CAPTION_ROLE) is not None:
                                     item.setText(display(widget, item.data(CAPTION_ROLE)))
+                        for column, context in getattr(widget, '_qg_status_columns', {}).items():
+                            for row in range(widget.rowCount()):
+                                item = widget.item(row, column)
+                                if item and item.data(STATUS_ROLE) is not None:
+                                    raw = item.data(STATUS_ROLE)
+                                    item.setText(status_text(widget, raw, context))
+                                    item.setToolTip(str(raw))
                     if isinstance(widget, (QLineEdit, QPlainTextEdit)):
                         self._text(widget, 'placeholder', widget.placeholderText(), widget.setPlaceholderText)
                     self._text(widget, 'accessible', widget.accessibleName(), widget.setAccessibleName)

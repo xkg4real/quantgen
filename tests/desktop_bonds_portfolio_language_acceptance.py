@@ -80,7 +80,7 @@ class BondsPortfolioLanguageTests(unittest.TestCase):
         with patch('core.quant.optimize._solve',return_value=(np.array([.5,.5]),False)):
             p=optimize_portfolio(stats,objective='max_sharpe',max_weight=.1)
         ko=portfolio_korean(p)
-        self.assertIn('양수가 아닌 샤프비율',ko)
+        self.assertIn('양수가 아닌 샤프 지수',ko)
         self.assertIn('위험이 낮은 배분이라는 근거가 아닙니다',ko)
         self.assertIn('수렴을 보고하지 않았으므로',ko)
         self.assertEqual(sorted(numbers(narrate_portfolio(p))),sorted(numbers(ko)))
