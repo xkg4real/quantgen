@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import QApplication
 from core.i18n import LocaleContext
 from core.research.bond_analysis import BondRequest
 from core.research.tool_export import report_bytes
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 
 class A1TermsTests(unittest.TestCase):
@@ -26,7 +27,7 @@ class A1TermsTests(unittest.TestCase):
 
     def window(self):
         window=ResearchWindow(auto_refresh=False,language='en')
-        self.addCleanup(window.deleteLater)
+        self.addCleanup(delete_owned_widget, window)
         return window
 
     def test_approved_captions_round_trip_from_their_original_sources(self):
