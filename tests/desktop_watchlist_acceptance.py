@@ -14,7 +14,8 @@ from PyQt6.QtWidgets import QApplication, QLabel, QPushButton
 from core.i18n import LocaleContext
 from core.research.watchlist import default_home_rows
 from core.theme import DARK, LIGHT
-from quantgen_desktop.watchlist import DETAIL_COLUMN, SCORE_COLUMN, WatchlistPanel
+from quantgen_desktop.watchlist import DETAIL_COLUMN, SCORE_COLUMN, WatchlistPanel, _compact
+from quantgen_desktop.company_identity import CompanyMark, company_icon, company_mark
 
 
 def sample_rows():
@@ -79,7 +80,7 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.assertEqual(table.item(6, 1).text(), "72,000 KRW")
         self.assertEqual(table.item(6, 2).text(), "+1.45%")
         self.assertEqual(table.item(3, 2).text(), "-7.00 bp")
-        self.assertEqual(table.item(6, 3).text(), "120만")
+        self.assertEqual(table.item(6, 3).text(), "1.2M")
         self.assertEqual(table.item(7, 1).text(), "—")
         self.assertIn("관측", table.item(0, 1).toolTip())
         self.assertIn("수신", table.item(6, 1).toolTip())
@@ -173,7 +174,7 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.assertEqual([table.rowHeight(i) for i in range(12)], [44] * 12)
         self.assertEqual(table.verticalScrollBarPolicy(), Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-    def test_long_english_company_names_keep_both_lines_in_compact_rows(self):
+    def test_company_names_keep_full_accessible_text_in_compact_rows(self):
         from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics
         path = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.otf"
         font_id = QFontDatabase.addApplicationFont(str(path))
@@ -192,6 +193,9 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
             company = next(label for label in identity.findChildren(QLabel) if label.objectName() != "watchlistTicker")
             self.assertGreaterEqual(company.height(), company.heightForWidth(company.width()), company.text())
             self.assertEqual(self.panel.table.rowHeight(row), 44)
+            self.assertFalse(company.wordWrap())
+            self.assertEqual(company.accessibleName(), company.text())
+            self.assertEqual(company.toolTip(), company.text())
         self.panel.update_score("005930", dict(status="ready", score=79.99, stars=4,
                                                 as_of="2026-11-02T03:00:00+00:00", feed_state="stopped", live=False))
         item = self.panel.table.item(6, SCORE_COLUMN)
@@ -207,6 +211,38 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.assertEqual(per.text(), "100.50")
         self.assertLessEqual(QFontMetrics(per.font()).horizontalAdvance(per.text()),
                              self.panel.table.columnWidth(5) - insets - 4)
+
+    def test_company_marks_are_local_accessible_and_survive_quote_updates(self):
+        expected = {6: "S", 7: "SK", 8: "H", 9: "KB", 10: "LG", 11: "S"}
+        for row_index, letters in expected.items():
+            identity = self.panel.table.cellWidget(row_index, 0)
+            mark = identity.findChild(CompanyMark)
+            self.assertIsNotNone(mark)
+            self.assertEqual(mark.spec.letters, letters)
+            self.assertEqual(mark.accessibleName(), self.panel.table.item(row_index, 0).text())
+            self.assertEqual(mark.symbol, self.panel.rows[row_index]["symbol"])
+            self.assertTrue(mark.testAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents))
+        mark = self.panel.table.cellWidget(6, 0).findChild(CompanyMark)
+        self.panel.update_quote("005930", 73000, 1.5, "2026-11-06T02:00:00+00:00")
+        self.assertIs(self.panel.table.cellWidget(6, 0).findChild(CompanyMark), mark)
+        self.assertEqual(company_mark("005930.KS"), company_mark("005930"))
+        self.assertEqual(company_mark("CUSTOM", "Example Company").letters, "EC")
+        self.assertEqual(company_mark("123456").letters, "12")
+        self.assertFalse(company_icon("005930", size=28, dpr=1.5).isNull())
+        self.network.assert_not_called()
+
+    def test_price_column_fits_large_domestic_quotes_without_abbreviation(self):
+        from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics
+        path = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.otf"
+        font_id = QFontDatabase.addApplicationFont(str(path))
+        font = QFont(QFontDatabase.applicationFontFamilies(font_id)[0])
+        self.panel.setFont(font)
+        self.panel.update_quote("005930", 1_457_000, 2.75, "2026-11-06T02:00:00+00:00")
+        self.drain()
+        item = self.panel.table.item(6, 1)
+        self.assertEqual(item.text(), "1,457,000 KRW")
+        self.assertLessEqual(QFontMetrics(item.font()).horizontalAdvance(item.text()),
+                             self.panel.table.columnWidth(1) - 20)
 
     def test_busy_refresh_is_explicit_and_keeps_existing_rows(self):
         requests = []
@@ -403,9 +439,26 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
         self.assertNotIn("Provider", fields)  # provider stays in the price tooltip (owner, 2026-11-04)
         self.assertIn("EPS unit", self.panel.detail_dialog.rights.text())
         self.panel.set_locale(LocaleContext("ko_KR"))
-        self.assertEqual(table.item(6, 3).text(), "120만")
-        self.assertEqual(table.item(6, 4).text(), "720억 KRW")
+        self.assertEqual(table.item(6, 3).text(), "1.2M")
+        self.assertEqual(table.item(6, 4).text(), "72B KRW")
+        self.assertEqual(table.item(6, 1).text(), "72,000 KRW")
+        self.assertIn("72,000,000,000 KRW", table.item(6, 4).toolTip())
         self.network.assert_not_called()
+
+    def test_volume_cap_units_promote_at_rounding_boundaries_in_both_languages(self):
+        cases = (
+            (0, "0"), (999, "999"), (1000, "1K"), (1234, "1.23K"),
+            (999.999, "1K"), (999_994, "999.99K"), (999_999, "1M"),
+            (1_200_000, "1.2M"), (999_999_999, "1B"),
+            (72_000_000_000, "72B"), (999_999_999_999, "1T"),
+            (1_432_080_000_000_000, "1,432.08T"),
+            (None, "—"), (True, "—"), (float("nan"), "—"),
+            (float("inf"), "—"), ("not a number", "—"),
+        )
+        for locale in ("ko_KR", "en_US"):
+            for value, expected in cases:
+                with self.subTest(locale=locale, value=value):
+                    self.assertEqual(_compact(value, LocaleContext(locale)), expected)
 
     def test_market_cap_tick_reuses_only_same_kst_session_shares(self):
         self.panel.set_rows(financial_rows())

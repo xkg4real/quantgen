@@ -127,3 +127,8 @@ PER/EPS·업종·시가총액이 없는 지표 행은 값이 없는 상태를 �
 - [W3C WCAG 2.2 — 1.1.1 Non-text Content](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html)
 - [W3C WAI — Complex Images](https://www.w3.org/WAI/tutorials/images/complex/)
 - 국내 적용 기준·범위는 [공식 출처 대장](SOURCES.md)에서 함께 확인한다.
+
+
+### 2026-11-06 기업 식별 마크와 전체 이름
+
+Home·시장 카드·종목 제목·검색의 기업 마크는 인접 종목코드·회사명을 보조하는 로컬 문자 그림입니다. 공식 로고만으로 회사를 식별하게 하지 않습니다. Home 이름은 한 줄 말줄임하되 표 모델의 전체 회사명, 라벨의 접근성 이름 및 툴팁을 유지합니다. 마크에는 회사명/코드의 접근성 이름을 두며 별도 키보드 포커스를 추가하지 않습니다. 전체 Windows 스크린리더 발화·중복 읽기는 미검증입니다.

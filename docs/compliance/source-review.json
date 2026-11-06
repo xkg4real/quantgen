@@ -125,7 +125,7 @@
     "core/market/routing.py": "184b7fe14b8fcdd771868a31190e94e379bc3ad8fd9de02551874cbc5f23a42b",
     "core/market/symbols.py": "75f77c78fa240abb9096b8e8419e11b782801375e2b6b7783306f7d7e7d498a3",
     "core/markets.py": "0477d1af9f064f69e2619f22b2672af45dd88cba346d83704e9ed3e9c7dcf088",
-    "core/numfmt.py": "12ed43176eb802c9d1f08ef5cdcd9e6b97466f8fe5b162abc47ca7791dd8e600",
+    "core/numfmt.py": "0bab47658c7aac8d07915437386deb8aec49596f0482737bc68f383389a8df45",
     "core/quant/__init__.py": "c6216333e6d7e7acab439a2cbfbb2626e1c8ea24e1d4d2001ff8c158dcbff4f5",
     "core/quant/backtest.py": "50e92db4caa2cfef55ab7d2b48daf56eef3a0b21a62be17416edcaccdca9c491",
     "core/quant/card_lines.py": "c25953b07106e84a34f74a0c30596d43910418eae6b4a7ba65cfdde2f802a9bd",
@@ -198,7 +198,7 @@
     "core/research/runs.py": "480df15cf6ab9458743dcce4eba05b1f1e534e7635756a7c6353ebee5965f6f4",
     "core/research/signals_analysis.py": "6f2f2c495fec9e152fc372edbe8bb3e38436038d7ab1842b17a1703a0f229281",
     "core/research/sleeve_disclosure.py": "66114ab1ebe02f82c3d1cc3edee764c630cf6d05fffae50a5b7435e99e8a4eca",
-    "core/research/stock_profile.py": "e472e265254b2e30a89a237f8ca142326a40097cd84d6cca389d20ed6c21906b",
+    "core/research/stock_profile.py": "c828e67767b1fa3f0f8d8a78a0e882df973718b0dd04619e72b35335040c37f2",
     "core/research/strategy_analysis.py": "5cbf2915c0657081a3ee8b9bfca8169814de533e2965f9835d74d28f6b01f1c9",
     "core/research/strategy_exposure.py": "4e0a386ad7b9a28d834a1f372f0789d9f723c3c93fce1c57163a131965805fdb",
     "core/research/strategy_workflow.py": "0e99ea585474a6abed26ddcff247e74cafd4f805dafa8d8e1557535c99da7e2c",
@@ -264,7 +264,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "af344b9c28d0cf34cdc94a69f44fc1ceebcbb374a2a8f1022382c94d36613392",
+    "docs/compliance/FACTS.md": "d302b4511ba774f471a1d3e8187b090bcad802bdd0848acf7c2f4bf482bcef8e",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -281,6 +281,7 @@
     "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md": "3f05520af76a14bbeb8fab8f7db874b25f18e52d4e884ec6b46e305e58f7ca44",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
+    "docs/product/COMPANY_MARKS_READABILITY_20261106.md": "cea321847ed32fe5f077180665bcaa485dff75444bdce86526e8357ee2626be3",
     "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
     "docs/product/DETACHED_INSTRUMENT_IDENTITY_2026-11-06.md": "85c2893a29d219f39e5c98c97da93e4cb3b80ab0d2c703091abd6e7564ecc209",
@@ -335,12 +336,13 @@
     "pyproject.toml": "77589c755d38fe9bc4316841b4a4b69b1dd807f532c211d16d1658e1540926d4",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "d1266ea4cffcddcb6e202e501358edbe97baf3fce8df6a3f2db84f4330c9a8f2",
+    "quantgen_desktop/app.py": "70a1a553bb02463d9aabc7f900f7a5bbea350c1abbc72b8dc0a15b38a02d5778",
     "quantgen_desktop/bonds.py": "609e60e2497ac734cfe9ff4a6663910218014fe7828152f0b31f48040487cac6",
     "quantgen_desktop/bonds_portfolio_narrative.py": "008ff36812f8b26317929feae9731604798cd6e43850dfe72e99bb7eadb3841a",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
     "quantgen_desktop/charts.py": "26664a81b31a256b77f70fc8adca76f51a763560cf33e1f2d556b527b41cbdf8",
     "quantgen_desktop/commentary.py": "ca24bc71353f5abe6feaa8e57ad2b490c50d41e23997cf74750cc802b4fd602f",
+    "quantgen_desktop/company_identity.py": "5267d47f4aeff0395a483dc084eef7934bf4625bafbc86aa8ce6a5e2a7578891",
     "quantgen_desktop/connections.py": "abef3e9ace3b2fa02660507eb171835d5b7290180c38a687395fc7a203e38eef",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
     "quantgen_desktop/display_prose_catalog.py": "85cd9be4469c96b83a71aa0ac3c0dad0b04cbbf35649da8beb7cef12c9eb7708",
@@ -356,7 +358,7 @@
     "quantgen_desktop/market_diagnostics_language.py": "98e2d56039c70b533f4ee44f754f2e0a200af47cf93c73e21e702d6933585345",
     "quantgen_desktop/market_narrative_language.py": "8859a18c78f8a1a4868dbd3b2a9b243d7f9992fb70ef377f4683a8fa0196f2f3",
     "quantgen_desktop/market_tools.py": "6f4144f61c779a94e36b26f6918647691a4f613c5edb923b67fc434d5d3103c1",
-    "quantgen_desktop/markets_view.py": "ae84fac7ca9ab0544930465b81b4f47ab871da69a486c77c6daa1bb89a710899",
+    "quantgen_desktop/markets_view.py": "9ad61cfc6c625cabcfbe64523e879b3cf90d8aa20b387aa18c365dce5673b710",
     "quantgen_desktop/model_narrative_language.py": "c4d4c826e3416a202cc4167c19a2ccbc233fcbc80239e62a81808092274c0981",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "0265414d5d73b9978a4493948f2ec1ca4f0c05b5139fa57a64935dce0fab5c5e",
@@ -373,8 +375,8 @@
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
     "quantgen_desktop/tools.py": "0d5115e4ca70a4ab092d0ae70222ad52b080fec3054918919fc309a491893ad6",
     "quantgen_desktop/translations.py": "59a140c85923608a4466b59f5a054c5777f3eb0bf27e2787f74097e0a4ce2419",
-    "quantgen_desktop/typography.py": "ea39d2b4f4cafb64e1b1865807ff523d59f02c20f64894acc0e531abf5b462c8",
-    "quantgen_desktop/watchlist.py": "507a4509bbf79a0fe88903dd8478f873f1f111f49704e945a3642af737576e46",
+    "quantgen_desktop/typography.py": "07f0aef09640eade235b2af9085d365a1b0f39e670f816ede444f9b97b0a733a",
+    "quantgen_desktop/watchlist.py": "0058adfe30e21671cca305d71f4317ae79af5ab10866cceb5d542d8f98f88be9",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "quantgen_desktop/wheel_guard.py": "44bfee9b20b358b794cfebdd71f0760b28b99bcd39a45cc36fa450a8d2ce68f6",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
@@ -421,21 +423,21 @@
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
     "tests/desktop_market_layout_acceptance.py": "215764cefa9108907c3480cad377b261dcf404c7a7342ecb0047ed43b7ea0023",
     "tests/desktop_market_tabs_acceptance.py": "f68d5e9a3411f01d1f5d91132126ae34c485a5f690b189a591d45e9f678ce3be",
-    "tests/desktop_markets_watchlist_acceptance.py": "d458aa2d633dbbbfead6347d0fe5b53f3f827e17c91ea0b31483df59cfe5b569",
+    "tests/desktop_markets_watchlist_acceptance.py": "6b10fe17e4193e9c742419e742580a74b2f6281642a18ee30206f3bb19a5d2ea",
     "tests/desktop_operation_fixes_acceptance.py": "9b9b725e6e250e435b4e597dcc9808b8f55917f1edac4382180681c2ad8ce89d",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_rates_language_acceptance.py": "96644766a454ae3b9da85a3148ec5c0b4dc9d0e465325db43ef7cc435ecca16b",
-    "tests/desktop_responsive_tools_acceptance.py": "1b0a6a3bd7e341432ea72306b01674a0d9332f0c148e11a96e4b343adf73b877",
+    "tests/desktop_responsive_tools_acceptance.py": "82e4c41ef44b76edfc66ee38e92fcb1980485a1963c7807318921d3b06cc7d0c",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
-    "tests/desktop_typography_acceptance.py": "e1996fa991d34ebb20b29769e193d28043d68e5bdfcb405bfda29102fe11dfb9",
-    "tests/desktop_watchlist_acceptance.py": "baecb5ebcd7f60efcfddb203bb453b58fe1e975ee11933f039061ce9078116af",
+    "tests/desktop_typography_acceptance.py": "3f4ace47a9aaafd3aff5e901a09dd22c0d21b30d902b060824a2432d8842da45",
+    "tests/desktop_watchlist_acceptance.py": "acfdabe8a84d5011bc1e54b75448358b3ad645ee43351e2be7c25dd1746c75db",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/etf_sleeve_disclosure_acceptance.py": "f512c2fef9cef7642baa57b2a75275a2a43702dc9f55c5d0b4f9dfa38417fde9",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
@@ -530,7 +532,7 @@
     "tests/signals_trade_count_acceptance.py": "0b1ed7ed587492cc3dd1ca628e026e3bbdaa0dc2966e96626110a4e53de481a9",
     "tests/status_display_acceptance.py": "42274e248412fd5e9088edc615b3104d654b4d190b4a09592f97af641d80113d",
     "tests/status_snapshot_acceptance.py": "69185a46c4675300aa88bf6a441ddd753f4631162c05d174b2794587ed777ade",
-    "tests/stock_profile_acceptance.py": "870700f2721ae876455d0a7261680279cc7b6c826f3c587b3edd8cc01aefe30b",
+    "tests/stock_profile_acceptance.py": "36b310d5c5926a16be0852aa288f5ded6a2b6576923f43bfa64f1b3b94d64a67",
     "tests/strategy_exposure_acceptance.py": "3451a355e400ea2bc98c02c401a5b5680a187b190a6b52547ccf868b84867e01",
     "tests/swaption_conversion_acceptance.py": "62a4994aa046a463559f463cd87b6873235a3d80684df515be2fd74bb8ff338a",
     "tests/terminal_target_acceptance.py": "e4bd3e974ee8012a5c06c8f24313b869f4beac1d3268209057c1e3b44f7e4e30",
@@ -610,163 +612,163 @@
   "reviews": {
     "1": {
       "document_sha256": "7ffeb30cbf22092284b48635e1769018e2259ea44c1a5647ac50ecaf3f815d63",
-      "source_digest": "bd71f0df2ac1c37d042939ed652595dc05ae88b12fb81f0b218dfd86d932ad5f",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.627602+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "17aaa01e47285c562045dc5ff16a29547199b0e7331ff24ae5814161b7341ca8",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:13.991207+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "bd71f0df2ac1c37d042939ed652595dc05ae88b12fb81f0b218dfd86d932ad5f",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.630436+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "17aaa01e47285c562045dc5ff16a29547199b0e7331ff24ae5814161b7341ca8",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:13.994013+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "a835cd4cd9b8aa4a3e8faa9c79e922b78e5052ca663af48c891961a6a7a8de26",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.632794+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "dbb3d533d3b14219942809ef0713b5a9724a747e4b4a7a255f0cdfae16da41aa",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:13.996228+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "d87babe5650c1f067c243d82827f6f4a261d4d16ea8ac5cfd938e297bdc74d89",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.635003+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "d06e7680478a854b22458750ea6f09d11e2ffb3bfdfa302e5774fbf513a165c4",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:13.998363+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "36d04028df9d177534eadbd23a07cd2aced11949e47bef9e7c929a150201493d",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.637197+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "53a3d68036af2abecbecafe66e5d1008a9f0a78bef61210d03a907d019dfcf38",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.000486+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "d3cdc2312b2cf412a70898aafda47124e258a49ce5921b9ce8cb21b0b2f908fc",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.639323+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "280dae869ccda1f0276ff3e2a48d50dd60f717b8595eecfc221d77eae915c18d",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.002626+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "7": {
       "document_sha256": "cb99e2df664cbc0f5b4efa73259e32809a6a601fe4b64e08105020291a45932b",
-      "source_digest": "bd71f0df2ac1c37d042939ed652595dc05ae88b12fb81f0b218dfd86d932ad5f",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.641707+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "17aaa01e47285c562045dc5ff16a29547199b0e7331ff24ae5814161b7341ca8",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.004861+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "d3cdc2312b2cf412a70898aafda47124e258a49ce5921b9ce8cb21b0b2f908fc",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.643817+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "280dae869ccda1f0276ff3e2a48d50dd60f717b8595eecfc221d77eae915c18d",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.007062+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "2125ab268fe4e95d7a08fd0e3e54fb906f6378b53fd54d50a94c21140a106837",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.645834+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "fd8a79613576268b3fd0bd5c0d9666de490bf6653f0b9186fea0c191c4f51c13",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.009173+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "d4cfa3d2393fb02a92efc5a4dfd2a12ad05b67895aca9afe4dfccd07d34592db",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.647864+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "849c4b1ea1dde32be2daaccc4e92021a18f9b566274896ce1c593b4963b5e67c",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.011387+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "747b20cfdb98efd65d004eca21e2f01b7afcdbf39026edbc59709e99e27a0271",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.649956+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "b8caa7cb596a8a102286343b5e06bc5717e7a85b73ece65218b6c0cefe92a6b2",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.013477+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "f27a83de7275e127a5ea0724c6718bb57fe34ae31e21bbe11fb4a88e160c2f0c",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.652268+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "08a28343daccf239292dfdc130450c799b1149c9c5016ad5088ff6a39851f347",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.015575+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "13": {
-      "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "2125ab268fe4e95d7a08fd0e3e54fb906f6378b53fd54d50a94c21140a106837",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.654231+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "document_sha256": "1c4d599950946958006cfc32af93ff68d1ca81c9f0ff4291d2c722978e3dc1f9",
+      "source_digest": "fd8a79613576268b3fd0bd5c0d9666de490bf6653f0b9186fea0c191c4f51c13",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.017748+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "14": {
-      "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "2125ab268fe4e95d7a08fd0e3e54fb906f6378b53fd54d50a94c21140a106837",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.656439+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "document_sha256": "653d67e4d2540fd96d6d3bb70415f3ec11f8e89b10e662ef540779c16ac1d12a",
+      "source_digest": "fd8a79613576268b3fd0bd5c0d9666de490bf6653f0b9186fea0c191c4f51c13",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.019873+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "2125ab268fe4e95d7a08fd0e3e54fb906f6378b53fd54d50a94c21140a106837",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.658906+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "fd8a79613576268b3fd0bd5c0d9666de490bf6653f0b9186fea0c191c4f51c13",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.023209+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "63e7c3fe8b35cfc898b78ea35edcde87b8b87a5e16567a4cd53df750081e49ba",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.660960+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "77fdc6a3d409db597f1d525bdc67cf850de4a114e7ed0e511a115d337153e4aa",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.025330+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "d3cdc2312b2cf412a70898aafda47124e258a49ce5921b9ce8cb21b0b2f908fc",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.663203+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "280dae869ccda1f0276ff3e2a48d50dd60f717b8595eecfc221d77eae915c18d",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.027402+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "bd71f0df2ac1c37d042939ed652595dc05ae88b12fb81f0b218dfd86d932ad5f",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.665230+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "17aaa01e47285c562045dc5ff16a29547199b0e7331ff24ae5814161b7341ca8",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.029360+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "19": {
-      "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "b8db509bbc94e0416feb4cf4e5f13b18031684c68c70693f7a27c2b19bb05d1a",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.667806+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "document_sha256": "040f40ebb5add2ebcaef8f1d878dacc9ed83522a871016806673764b3c92cfea",
+      "source_digest": "5a7c17e58e138d54a8606726261ad37dac7c506650350ce93769900f14f9415b",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.031475+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     },
     "20": {
       "document_sha256": "b84d55ab085dad8cb897528f1cda017a96eeb41e68188bd350f13fcb02ea0f88",
-      "source_digest": "bd71f0df2ac1c37d042939ed652595dc05ae88b12fb81f0b218dfd86d932ad5f",
-      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
-      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
-      "reviewed_at": "2026-11-06T10:18:10.669925+00:00",
-      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
+      "source_digest": "17aaa01e47285c562045dc5ff16a29547199b0e7331ff24ae5814161b7341ca8",
+      "reviewed_by": "GPT keys and UI82 integration policy reviewer",
+      "review_note": "All20 policies substantively reviewed against the combined tree; preserve incoming UI13/14/19 and both FACTS appendices. UI source and tests match main e4ec; codec store keys and key fixtures match246c. R3 integration46 tests, UI86 tests and separate responsive5 tests passed with isolated synthetic state. Historical246c complete CI preserved separately; full final integrated Windows Ubuntu CI required. No actual ledger research provider owner-rule or deployment effects; publication remains blocked.",
+      "reviewed_at": "2026-11-06T10:52:14.034132+00:00",
+      "source_commit": "246c9af2159880c45f59ed5e895e673be2a8180f"
     }
   }
 }
