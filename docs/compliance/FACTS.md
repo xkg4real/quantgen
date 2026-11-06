@@ -43,7 +43,7 @@ PR #55/#56이 포함된 `69a2559`의 통합 `147afc0`, 후속 `853de90`과 PR #5
 | 키 입력과 전송 | 키는 환경변수 또는 `.env`에서 읽는다. 설정 화면은 존재 여부를 보여준다. KIS 인증 때 앱 키·시크릿이 발급 서버에 전송된다. | [config.py](../../config.py), [KIS 클라이언트](../../data/krx/kis_client.py) `token` |
 | 인증정보 저장 | KIS Bearer 토큰은 기본 `~/.nextgen/kis_token.json`에 평문 JSON으로 저장된다. “인증정보를 전혀 저장하지 않는다”는 고지는 부정확하다. | [KIS 클라이언트](../../data/krx/kis_client.py) `_TOKEN_PATH`, `_store_token` |
 | 계좌 조회 | 통화·기준통화·잔액·잠금금액·평균매수가·총수량과 파생 원화평가액을 처리한다. 평가를 위해 보유 통화 종목으로 Upbit 공개 시세를 추가 요청한다. Flet Crypto Refresh는 키가 있으면 기본 잔액 조회를 포함하며 네이티브는 기본 해제다. | [계좌 API](../../data/crypto/crypto_client.py) `balances`, [Flet 흐름](../../core/research/crypto_workflow.py) `analyze`, [네이티브 화면](../../quantgen_desktop/market_tools.py), [시장 분석](../../core/research/market_analysis.py) |
-| AI 해설 | Anthropic으로 계산 요약과 질문을 전송한다. 구조화된 private 필드 제거는 자유 입력 개인정보의 탐지·삭제를 보장하지 않는다. | [분석 전송](../../core/quant/insights.py) `deep_analysis`, [필드 필터](../../core/research/ai_payload.py) |
+| AI 해설 | Anthropic으로 계산 결과·질문·분석 종류·고정 작성 지시문과 해당 시 값 표기 설명을 전송한다. 구조화된 private 필드 제거는 자유 입력 개인정보의 탐지·삭제를 보장하지 않는다. | [분석 전송](../../core/quant/insights.py) `deep_analysis`, [필드 필터](../../core/research/ai_payload.py), [2026-11-06 범위](#ai-commentary-guards-2026-11-06) |
 | AI 선택 | 네이티브는 전송 미리보기·기본 해제 체크박스가 있다. Flet는 안내와 전송 버튼이 있고 동일한 체크박스 절차는 없다. 이 차이만으로 동의의 법적 충족 여부를 단정하지 않는다. | [네이티브 AI](../../quantgen_desktop/commentary.py), [Flet AI](../../ui/ai_panel.py) |
 | 로컬 기록 | 규칙 이름·메모·개정 이력, 모의거래 상태·주문·판정이 파일로 저장된다. 이름과 메모에는 이용자가 개인정보를 넣을 수 있다. | [규칙 저장](../../core/rules/store.py), [엔진 저장](../../core/engine/runtime.py) |
 | 캐시 | FICC·시세 캐시 등이 로컬에 존재한다. 6시간 TTL은 읽을 때의 신선도 기준이며 보관기간이나 자동 파기 기능이 아니다. | [config.py](../../config.py) `ficc_cache_dir`, [FICC 캐시](../../core/ficc/data.py), [시세 캐시](../../core/quant/history.py) |
@@ -358,4 +358,21 @@ PR61의 main `707cdc7`을 기준으로 기존 정책과 실제 복구 소스를 
 | 부트스트랩 설명 | 몬테카를로 부트스트랩을 "5거래일 고정 길이 블록의 원형 재표본(블록 길이가 무작위인 정상 부트스트랩이 아님)"으로 Flet 화면·해설·AI 페이로드(`resampling_definition`)·Native 메모·README·모형 설명서 원본에 표시. 변동성 군집은 시차 1-4에서 일부만 남고 시차 5부터 사라지며, 팬 차트는 현재 변동성 수준에서 출발하지 않음. 엔진 함수와 모든 숫자는 같음(모듈 설명문만 수정). 블록 길이를 바꾸는 수학 수정은 소유자 결정 사항. 모형 설명서 PDF는 다시 만들지 않음. ResearchRun 내보내기에는 설명 문장이 없음 | [몬테카를로 표시](../../core/research/mc_disclosure.py), [엔진](../../core/quant/montecarlo.py) |
 | ETF 샤프 계산 불가 | 일별 손익이 변하지 않는 전략(현금만 보유, 일부 평탄한 가격)의 샤프비율을 1e16이나 0.00 대신 "n/a"·"계산 불가"·페이로드 null(`sharpe_status`)로 표시. 표준편차(ddof=1)가 1e-10 × max(1, 최대 절댓값) 이하이면 변동 없음으로 봄. 정의되는 샤프비율과 다른 숫자는 같음 | [전략 표시](../../core/research/sleeve_disclosure.py), [ETF 흐름](../../core/research/etf_workflow.py) |
 | ETF 계산 관례 | 추세 전환의 첫 210개 일별 수익률은 현금 준비 구간, 변동성 목표는 첫 23개. 현금은 연 3% 고정 가정. 샤프비율은 준비 구간을 포함한 전체 기간 기준이며 현금 초과 수익 기준이 아님. 매수 후 보유는 준비 구간·현금·비용이 없음. 변동성 목표 비중은 매 거래일 비용 없이 재조정(K-e). 연구 판정은 계열 카드. Flet 안내·툴팁, 해설(영·한), Native 문장과 내보내기 절(`sleeve_conventions`)에 표시. 한국어 내보내기 HTML에서는 기존 공개 문구처럼 영어로 남음 | [Flet 화면](../../ui/etf_page.py), [Native](../../quantgen_desktop/market_tools.py) |
+
+<a id="ai-commentary-guards-2026-11-06"></a>
+## AI 해설 전송·응답·참고용 숫자 대조 — 2026-11-06 소스 검토
+
+Claude의 AI 변경(`7c31417`, `401fe33`, `54b52eb`)과 후속 수정 작업 트리의 사실을 대조했습니다. [원래 제품 기록](../product/AI_COMMENTARY_GUARDS_2026-11-04.md)의 당시 검증·설계 설명과 후속 상태를 구분합니다. 이 절은 코드·정책 정합성 기록이며 실제 API 호출·법률 검토·공개 승인 증거가 아닙니다.
+
+| 항목 | 현재 확인한 범위와 한계 | 근거 |
+| --- | --- | --- |
+| 계산 JSON | 알려진 private 구조 필드를 제외한 뒤 배열·pandas 자료를 직렬화 단계에서 50개로 자르지 않고 보존. NaN·무한대는 의미 설명 문자열로 바꾸고 `allow_nan=False`의 JSON을 생성. 알려진 필드의 무한대 의미와 일반적인 미정/비유한 값을 구분 | [변환](../../core/research/ai_payload.py) `ai_payload_json`·`NONFINITE_MEANINGS` |
+| 전송 범위·크기 | 계산 JSON·질문 외에 분석 종류, 고정 작성 지시문 `_SYSTEM`, marker/null이 있으면 설명 `VALUE_NOTE`도 전송. 계산 JSON이 UTF-8 **180,000바이트 초과**이면 POST 전 `PAYLOAD_TOO_LARGE`; 직렬화/UTF-8 인코딩 실패는 `PAYLOAD_INVALID`. 이 한도는 전체 요청·질문·토큰·요금 한도가 아님 | [요청](../../core/quant/insights.py) `deep_analysis`; 네이티브 질문에는 별도의 4,000자 제한 |
+| 기존 변환의 한계 | full-array 보존은 호출자가 넘긴 자료에 한정. 네이티브 보고서 `plain()`의 비유한 값→null과 Crypto 표의 `nu=inf`→`—`가 먼저 적용된 의미를 복원하지 않음. 필드명 필터는 자유 질문·문자열의 개인정보를 모두 탐지하지 않으며 자료의 외부 AI 전송권도 입증하지 않음 | [보고서](../../core/research/tool_export.py) `plain`, [네이티브 payload](../../quantgen_desktop/commentary.py) `commentary_payload`, [Crypto 표시](../../quantgen_desktop/market_tools.py) |
+| 응답 종료 | 유효한 비어 있지 않은 텍스트와 `end_turn`일 때만 성공. `max_tokens`·`refusal`·그 밖의 중단/잘못된 응답은 오류와 빈 텍스트로 처리하여 부분 응답을 화면·보고서에 싣지 않음. 요청은 한 번이며 자동 재시도 없음; 출력 예산 1,500은 실제 응답 길이나 사실성을 보장하지 않음 | [응답 분류](../../core/research/ai_connection.py) `reply_result`, `deep_analysis` |
+| 숫자 대조 | 전송한 계산 JSON의 값 및 질문에서 찾은 숫자와 응답 숫자를 제한된 표현·반올림/단위 규칙으로 대조. 키 이름·고정 지시문·분석 종류·`VALUE_NOTE`는 비교 대상이 아님. 부호·지표 대응·추론·판정·진위는 검증하지 않고 우연 일치·파생값 누락 가능. 실패/미실행도 해설의 공식 판정으로 바꾸지 않음 | [참고용 대조](../../core/research/ai_output_check.py) `number_check`·`check_line` |
+| 표시·내보내기 | Flet와 네이티브에 ‘AI 해설 · 검증 안 됨’과 대조 한계를 표시. 같은 입력의 다른 출력 가능성을 유지. 네이티브는 `safe_detail`로 응답 표시가 달라지면 원문 기준 대조를 화면·내보내기에서 보류하고 `number_check=None`, `WITHHELD_REDACTED_REPLY`와 원문 기준을 기록; 표시된 글을 다시 검사했다고 주장하지 않음. 보고서 `verification=NOT_VERIFIED`, `verdict=NOT_RUN` 유지 | [Flet](../../ui/ai_panel.py), [네이티브](../../quantgen_desktop/commentary.py) `finished` |
+| 선택·운영 경계 | 네이티브 미동의 안내는 고정 작성 지시문도 보낸다고 한영으로 설명하고 크기/인코딩 오류를 현지화. 기존 기본 미선택·입력 변경 시 동의 해제를 유지. Flet도 한영 전송 안내에 분석 종류·고정 지시문·해당 시 값 표기 설명을 포함하나 동등한 체크박스 동의 절차가 구현된 것은 아님. 부분 응답 미표시·표시 마스킹·대조 보류는 메모리 보안 소거·제공자 삭제 증거가 아님 | [네이티브 화면](../../quantgen_desktop/commentary.py), [번역](../../quantgen_desktop/translations.py), [Flet 화면](../../ui/ai_panel.py) `_SendNotice` |
+
+01–20 정책을 대조하고 전송 범위·최소화·가격 한계·AI 주장·키보드 검수·삭제에 직접 관련된 문구만 보강했습니다. 모든 정책 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. 제공자 계약·처리 국가·보존/삭제·데이터/라이브러리 권리·운영자 정보·법적 동의·실제 Windows/보조기술·실제 API/파일럿·동결 연구 증거는 별도이며, GPT/Gemini 추가 spec 공개·심사는 선택적 `NOT_PERFORMED`입니다. 원래 기록의 chance-match 수치는 당시 규칙의 합성 관측으로만 읽고 후속 단위/표현 규칙의 정확도나 현재 검증률로 재사용하지 않습니다. 소스 fingerprint 갱신과 최종 합성 실행 결과는 통합 후 별도 기록합니다.
 

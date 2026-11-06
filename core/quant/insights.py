@@ -27,7 +27,10 @@ except Exception:                                    # pragma: no cover
     _requests = None
 
 import config
-from core.research.ai_connection import error_message, response_error, transport_error
+from core.research.ai_connection import (OUTPUT_TOKEN_LIMIT, error_message, reply_result,
+                                         response_error, transport_error)
+from core.research.ai_output_check import NumberCheck, number_check
+from core.research.ai_payload import AI_PAYLOAD_MAX_BYTES, VALUE_NOTE, ai_payload_json
 from core.research.mc_disclosure import bootstrap_disclosure
 from core.quant.backtest import BacktestResult
 from core.quant.garch import LR_5PCT, NU_NORMAL
@@ -47,6 +50,8 @@ class Analysis:
     error: str = ""                   # non-empty when the AI call failed
     error_code: str = ""              # safe diagnostic category, never provider text
     http_status: int | None = None
+    stop_reason: str = ""             # the Messages API stop reason of a finished reply
+    number_check: NumberCheck | None = None   # advisory only; None means not run
 
 
 def ai_ready() -> bool:
@@ -302,18 +307,8 @@ _SYSTEM = (
 
 
 def _payload_to_json(payload: dict) -> str:
-    def default(o):
-        try:
-            import numpy as np
-            if isinstance(o, np.ndarray):
-                return o.tolist()[:50]
-            if isinstance(o, (np.floating, np.integer)):
-                return float(o)
-        except Exception:
-            pass
-        return str(o)
-    from core.research.ai_payload import filter_analysis_fields
-    return json.dumps(filter_analysis_fields(payload), default=default)
+    """The payload JSON exactly as sent (see core.research.ai_payload.ai_payload_json)."""
+    return ai_payload_json(payload).text
 
 
 def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
@@ -328,9 +323,19 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
         return failure("NOT_CONFIGURED")
     if _requests is None:
         return failure("DEPENDENCY")
+    # Serialised before anything is sent: a payload that cannot be written as strict
+    # JSON, or that is over the Native preview limit, fails locally with no request.
+    try:
+        sent = ai_payload_json(payload)
+        payload_bytes = len(sent.text.encode("utf-8"))
+    except Exception:
+        return failure("PAYLOAD_INVALID")
+    if payload_bytes > AI_PAYLOAD_MAX_BYTES:
+        return failure("PAYLOAD_TOO_LARGE")
     model = config.ai_model()
-    user_msg = (f"Analysis type: {kind}\n\nComputed results:\n"
-                f"{_payload_to_json(payload)}")
+    user_msg = f"Analysis type: {kind}\n\nComputed results:\n{sent.text}"
+    if sent.marked or sent.nulls:
+        user_msg += "\n\n" + VALUE_NOTE
     if question.strip():
         user_msg += f"\n\nThe operator specifically asks: {question.strip()}"
     try:
@@ -338,7 +343,7 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
             _API_URL,
             headers={"x-api-key": key, "anthropic-version": _API_VERSION,
                      "content-type": "application/json"},
-            json={"model": model, "max_tokens": 1500, "system": _SYSTEM,
+            json={"model": model, "max_tokens": OUTPUT_TOKEN_LIMIT, "system": _SYSTEM,
                   "messages": [{"role": "user", "content": user_msg}]},
             timeout=60,
         )
@@ -351,13 +356,18 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
             body = None
         return failure(response_error(resp.status_code, body), model, resp.status_code)
     try:
-        blocks = resp.json().get("content", [])
-        if not isinstance(blocks, list):
-            return failure("INVALID_RESPONSE", model)
-        text = "\n\n".join(b.get("text", "") for b in blocks
-                           if isinstance(b, dict) and b.get("type") == "text").strip()
+        body = resp.json()
     except Exception:
         return failure("INVALID_RESPONSE", model)
-    if not text:
-        return failure("INVALID_RESPONSE", model)
-    return Analysis(text, model)
+    # The stop reason is read before any text: a cut-off, refused or paused reply
+    # fails closed and its partial text is never shown, saved or exported.
+    code, text, stop = reply_result(body)
+    if code:
+        return failure(code, model)
+    # Advisory: compares cited numbers with the JSON actually sent; never changes the
+    # text, an error code, the payload or a verdict, and never blocks display.
+    try:
+        check = number_check(text, json.loads(sent.text), question.strip())
+    except Exception:
+        check = None
+    return Analysis(text, model, stop_reason=stop, number_check=check)

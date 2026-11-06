@@ -10,7 +10,7 @@
     "observation_models": 14,
     "initial_reproductions": 5,
     "additional_reproduced_ids": 14,
-    "implemented_canonical_groups": 29
+    "implemented_canonical_groups": 31
   },
   "aliases": {
     "NEW-M6-06": "M4-N1",
@@ -706,10 +706,11 @@
       "source_model": "149. M6-19 AI 심층 분석(Claude 서술, 모델 아님)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Branch implementation covers all four candidate limitations for both IDs: end_turn-only reply display, strict JSON/full arrays/nonfinite markers with 180000-byte UTF-8 refusal, advisory values-only number matching, and not-verified/nondeterministic label. Review fixes dates, bp-to-percent, ranges/scientific skips, bilingual transfer disclosures and native redaction/check provenance. Exact ID pairing remains unresolved. Owner confirmed PR75 defaults on 2026-11-06; exact-head CI and merge/ledger recording complete the workflow; no semantic verification, actual API, or owner Windows acceptance claimed.",
       "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md; tests/ai_output_check_acceptance.py; tests/ai_connection_acceptance.py; tests/ai_payload_acceptance.py; tests/desktop_commentary_acceptance.py; inherited commits 7c31417, 401fe33, 54b52eb plus review correction"
     },
     {
       "id": "NEW-M6-13",
@@ -786,10 +787,11 @@
       "source_model": "149. M6-19 AI 심층 분석(Claude 서술, 모델 아님)",
       "queue": 4,
       "type": "Disclosure, provenance or compatibility",
-      "next": "Resolve exact model-register evidence and current code location, then narrow display/validation fix",
+      "next": "Branch implementation covers all four candidate limitations for both IDs: end_turn-only reply display, strict JSON/full arrays/nonfinite markers with 180000-byte UTF-8 refusal, advisory values-only number matching, and not-verified/nondeterministic label. Review fixes dates, bp-to-percent, ranges/scientific skips, bilingual transfer disclosures and native redaction/check provenance. Exact ID pairing remains unresolved. Owner confirmed PR75 defaults on 2026-11-06; exact-head CI and merge/ledger recording complete the workflow; no semantic verification, actual API, or owner Windows acceptance claimed.",
       "mapping_needs_disambiguation": true,
-      "reproduction": "NOT_RUN",
-      "correction": "NOT_IMPLEMENTED"
+      "reproduction": "SYNTHETIC_REPRODUCED",
+      "correction": "IMPLEMENTED_WITH_SYNTHETIC_REGRESSION",
+      "evidence": "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md; tests/ai_output_check_acceptance.py; tests/ai_connection_acceptance.py; tests/ai_payload_acceptance.py; tests/desktop_commentary_acceptance.py; inherited commits 7c31417, 401fe33, 54b52eb plus review correction"
     },
     {
       "id": "NEW-M6-20",

@@ -1,8 +1,8 @@
 # 20. 개인정보 삭제 요청 및 안전한 처리 절차·양식
 
 - 문서 ID: QG-C20
-- 버전: 1.6
-- 기준일: 2026-11-04
+- 버전: 1.7
+- 기준일: 2026-11-06
 - 상태: review-required
 - 관리 주체: (주)넥스트제너레이션
 - 문의: {{operator.support_email}}
@@ -52,6 +52,10 @@ Home 목록·상세 값, 점수용 수정 일별 이력, 마지막으로 수용�
 `markets/watchlist`(관심종목의 자산 구분·코드·거래소, 최대 20개)를 같은 QSettings 선호 설정의 삭제 범위에 넣습니다. 앱 안에서는 카드의 ×나 한 종목 화면의 ★로 종목을 하나씩 뺍니다. 모두 빼면 키는 빈 목록으로 남습니다. 키 자체를 지우면 다음 실행에서 Home 6종목으로 다시 시작합니다. 키를 지우는 앱 안 버튼은 없고 모의 장부 초기화로도 지워지지 않습니다.
 
 KIS 종목 마스터의 원본 줄(`_MASTER_CACHE`)과 검색 색인, 관심종목 카드와 한 종목 화면의 시세·종목 정보는 프로세스 메모리에만 있고 새 파일은 없습니다. 앱을 끄면 사라지지만 보안 소거나 공급자 요청 기록의 삭제를 뜻하지 않습니다. [변경 사실](FACTS.md#markets-watchlist-2026-11-04)을 따릅니다.
+
+### 2026-11-06 AI 응답 미표시·대조 보류
+
+정상 종료가 아닌 AI 응답은 빈 오류 결과로 처리하여 화면·보고서에 부분 응답을 싣지 않습니다. 네이티브 표시에서 URL·비밀정보를 가려 원문과 달라지면 원문 기준 숫자 대조도 표시·내보내기에서 보류하고 그 이유를 기록합니다. 두 조치는 응답 메모리의 보안 소거, 이미 전송한 질문·계산 결과의 철회, 제공자 기록·기존 내보내기 사본의 삭제 기능이 아닙니다. 사용자가 새로 저장한 AI 보고서의 미검증·대조 상태 메타데이터도 내보내기 사본 범위에 포함합니다. [처리 사실](FACTS.md#ai-commentary-guards-2026-11-06)을 반영하며 통합 삭제·제공자 보존/파기의 미완료 상태와 공개 준비 `BLOCKED`는 유지합니다.
 
 ## 정책 또는 구현 기준
 
@@ -153,6 +157,6 @@ KIS 종목 마스터의 원본 줄(`_MASTER_CACHE`)과 검색 색인, 관심종�
 - 저장·초기화: [`core/rules/store.py`](../../core/rules/store.py) 58–85·216–239행; [`core/engine/runtime.py`](../../core/engine/runtime.py) 353–385행; [`core/skills/alerts.py`](../../core/skills/alerts.py) 39–54행.
 - 캐시 TTL은 자동 삭제가 아님: [`core/ficc/data.py`](../../core/ficc/data.py) 248–278행; [`core/quant/history.py`](../../core/quant/history.py) 424–455행.
 - 세션·종료: [`core/research/runs.py`](../../core/research/runs.py) 185–201행; [`quantgen_desktop/app.py`](../../quantgen_desktop/app.py) 643–658행.
-- 외부 AI: [`core/quant/insights.py`](../../core/quant/insights.py) 300–320행; [`core/research/ai_payload.py`](../../core/research/ai_payload.py). 외부 제공자·계약 검토는 [8번 문서](08-third-parties.md) 참조.
+- 외부 AI: [`core/quant/insights.py`](../../core/quant/insights.py) `deep_analysis`; [`core/research/ai_payload.py`](../../core/research/ai_payload.py), [`ai_connection.py`](../../core/research/ai_connection.py) `reply_result`, [`네이티브 표시·내보내기`](../../quantgen_desktop/commentary.py) `finished`. 외부 제공자·계약 검토는 [8번 문서](08-third-parties.md) 참조.
 - 공식 법령: [개인정보 보호법](https://www.law.go.kr/법령/개인정보보호법) 제21조·제35조·제36조·제37조 등, [동법 시행령](https://www.law.go.kr/법령/개인정보보호법시행령), [전자상거래 등에서의 소비자보호에 관한 법률](https://www.law.go.kr/법령/전자상거래등에서의소비자보호에관한법률).
 - 적용되는 삭제·통지 기한과 거래기록 보존 의무의 최신 시행·적용 범위는 [출처 대장](SOURCES.md)에 기록한다. 모든 로컬 연구자료에 거래기록 보존 의무가 있다고 일괄 적용하지 않는다.

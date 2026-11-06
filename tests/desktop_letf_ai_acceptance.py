@@ -90,6 +90,7 @@ class NativeLETFAiTests(unittest.TestCase):
         original = deepcopy(pane.report)
         self.runner.assert_not_called()
 
+        self.window.ui_language = "en"  # Keep the consent assertion independent of prior UI tests.
         commentary = self.window.commentary
         commentary.reload.click()
         self.assertEqual(commentary.source.count(), 1)
@@ -120,7 +121,7 @@ class NativeLETFAiTests(unittest.TestCase):
         self.assertFalse(commentary.send.property('primary'))
         commentary.submit()  # Even direct invocation cannot bypass the consent guard.
         self.runner.assert_not_called()
-        self.assertIn('전송 동의', commentary.status.text())
+        self.assertIn('Check the send consent box', commentary.status.text())
         commentary.consent.setChecked(True)
         self.assertTrue(commentary.send.property('primary'))
         self.runner.assert_not_called()
