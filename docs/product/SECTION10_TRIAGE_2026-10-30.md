@@ -312,8 +312,8 @@ refusal and privacy-redacted reply check withholding. See
 
 Branch source implementation is **31/67**, with **36** canonical groups remaining
 without full implementation. This is not a merged-completion count: the two AI
-IDs remain open pending owner default confirmation, exact-head CI, main merge and
-LEDGER entries. Prior verified merged count is 29/67. Approximate matching does
+IDs remain open pending exact-head CI, main merge and LEDGER entries. The owner
+confirmed PR #75 defaults on 2026-11-06. Prior verified merged count is 29/67. Approximate matching does
 not verify sign, metric identity, reasoning, verdicts or derived results. Windows
 user-PC/API/provider/pilot/legal/licensing acceptance is not supplied by these tests.
 N-M1-02/b remains deferred and protected research/order paths are unchanged.

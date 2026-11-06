@@ -37,7 +37,8 @@ Following Crypto PR #68 (NEW-M6-14 and NEW-M6-22), this branch addresses all
 four candidate limitations, with output verification limited to advisory number
 matching and non-reproducibility disclosed rather than removed. Both IDs refer
 to the three implementation commits and the review correction; their exact pairing
-remains unresolved. Completion requires the verified PR merge and ledger entry.
+remains unresolved. The owner confirmed PR #75 defaults on 2026-11-06. Completion still requires
+the verified PR merge and ledger entry.
 
 ## Reproduction on faf9f3b
 
@@ -221,7 +222,7 @@ Measured on the synthetic payloads (no network):
 Quant Lab sends `prob_target_basis: None` whenever `mc.prob_target` is None
 (`ui/quant_lab_page.py:372`), so it also gets the note then (read, not run).
 
-## Owner choices (defaults taken)
+## Owner choices (defaults confirmed for PR #75 on 2026-11-06)
 
 1. Text cut off at `max_tokens`: discarded (`OUTPUT_LIMIT`). Alternative: show it
    under a "cut off at the output limit" banner, kept out of export.
@@ -365,8 +366,9 @@ writing instructions and conditional missing/non-finite-value explanation. This
 localized notice does not introduce a checkbox or imply that the existing Flet
 consent gap has been resolved.
 
-All choices above remain the implemented defaults for owner confirmation in the
-PR, not a claim of new approval. The default English canonical export and marker-or-null
-VALUE_NOTE trigger are also disclosed. Optional additional GPT/Gemini specification
+The owner confirmed the PR #75 defaults and additional displayed behavior on
+2026-11-06. This includes the canonical English export, marker-or-null VALUE_NOTE
+trigger and withholding the original check after display redaction. This approval
+is confined to this PR and does not approve publication or actual execution. Optional additional GPT/Gemini specification
 review remains NOT_PERFORMED. Internal source/test review does not establish
 Windows user-PC, real API, legal/licensing, pilot or frozen-research evidence.

@@ -15,7 +15,8 @@
     "implementation_commit": "c8a024545ddab7ff27f3e15438f4a61e565b3fb1",
     "remote_status": "OPEN_DRAFT",
     "merge_commit": null,
-    "verified_head": null
+    "verified_head": null,
+    "owner_defaults_confirmed_on": "2026-11-06"
   },
   "summary_ko": [
     "AI 해설은 완료된 end_turn 응답만 표시하고 중단/거절 응답은 표시·저장하지 않습니다.",
@@ -65,7 +66,7 @@
     "url": "https://quantgeneration.com/"
   },
   "limits_ko": [
-    "PR은 기본값 확인·CI·병합 전입니다. §10 AI 두 ID의 전체 완료를 주장하지 않습니다.",
+    "PR의 AI 기본값과 추가 표시 동작은 2026-11-06 소유자가 확정했습니다. 최종 CI·병합·원장 기록 전이므로 두 ID의 전체 완료를 아직 주장하지 않습니다.",
     "숫자 일치는 부호·지표 대응·추론·판정을 검증하지 않습니다. 과거 우연 일치율은 현재 규칙의 측정치가 아닙니다.",
     "실제 Windows PC/API/공급사/법률/라이선스/파일럿 증거는 미확보입니다.",
     "추가 GPT/Gemini spec 공개·심사는 선택적 NOT_PERFORMED로 유지합니다."
