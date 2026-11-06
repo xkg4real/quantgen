@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a/keys/1, ⑨-3a/data-hash/1
-updated_at: 2026-11-06T19:55:17+09:00
+updated_at: 2026-11-06T20:08:28+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-data-hash-20261106
-work_commit: a083f75138c44feaa9eca788d82d53215eed38c0
+work_commit: 8e6db5b0b385d486596e51dd94d155c4847cd3de
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -547,3 +547,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - New branch `gpt/run-registry-data-hash-20261106` was created at pushed/read-back `a083f75138c44feaa9eca788d82d53215eed38c0`. Before edits, same-ref six handoff files at `65fd8642d630f03e1bd89f0410bb4b329604957c` and LEDGER ID/file duplication were checked. Bounded ID⑨-3a/data-hash/1, core/quant/run_registry_data_hash.py plus synthetic acceptance and scope records only.
 - Existing Nov3 all/rev2+10.2A R3 approval and exact designfa280591 §5.4 line719/§9.1 specify UTF8 LF-joined dates,NUL,LF-joined symbols,NUL,little-endian float64 C-order raw bytes, MD5 with no finalLF/metadata/shape/dtype prefix. No data loading, source verification, Lab/store/ledger/count/frozen research or human/owner-rule effects. Internal implementation scope review is separate from optional spec review NOT_PERFORMED.
 - Explicit supported domain: nonempty plain list/tuple string tokens, exact ASCII valid ISO dates, symbols literal except empty/LF/NUL/surrogate refusal, ordinary2D float64 ndarray either endian/any strides/read-only with exact shape. Preserve raw IEEE signedzero/NaN payloads; no semantic price/market validation. Restrictions are API bounds, not scientific acceptance criteria. Independent literal-byte, endian/stride/nonmutation and refusal tests required. Whole R3 and actual Windows/API/provider/legal/license/pilot/frozen-research proof remain incomplete.
+
+### GPT R3 supplied-panel data hash pushed — 2026-11-06T20:08:28+09:00
+
+- Detached child⑨-3a/data-hash/1 pushed/read-back `8e6db5b0b385d486596e51dd94d155c4847cd3de` on gpt/run-registry-data-hash-20261106; clean tree. Exactly prescribed raw-byte MD5, caller-supplied stable arrays/tokens only, no production registration/store/Lab/research effects. Full R3 remains incomplete.
+- Maintained15PASS0.013s, independent10 overlapping probes PASS0.009s, combined data15+keys13+store16+codec17=61PASS1.382s exit0, recorded separately. Literal independent preimages, raw IEEE endian/strides/nonmutation/refusal and guarded no-I/O evidence. Source f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699 frozen. All20 policy GO; FACTS append-only15lines, consistencyPASS605/publicationBLOCKED. Prior workflow modules and5/30 budgets preserved.
+- Draft PR and fresh exact-head full Runtime/Compliance are next; PR84 a083 remains separately in final CI. No bounded completion yet. Actual owner Windows/API/provider/legal/license/pilot/frozen-study gaps and optional additional spec review NOT_PERFORMED retained. After these two units, prepare detailed whole-week safe partial handoff with remaining work and next verified start.
