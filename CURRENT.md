@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a, ⑨-3a/source-digests/1
-updated_at: 2026-11-06T21:09:01+09:00
+updated_at: 2026-11-06T21:18:23+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-source-hash-20261106
-work_commit: 6ddf5146695de739e9f1ee5e2be609efd9d7be4c
+work_commit: 9f623fd98c90b02e3da66fffe50fa60c41af1ecf
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -590,3 +590,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - Independent literal digest fixtures, mixed/overlapping newline cases, byte-invalidUTF8/text-surrogate distinctions, nonmutation and no-I/O tests required. Code edits begin only after this latest CURRENT CAS/execution read-back and local atomic claim. Full code identity/strategy provenance, behavior fingerprint, seriesstore/recorder/Lab and actual evidence remain incomplete. Extra formal GPT/Gemini spec review NOT_PERFORMED.
 
 - Existing shared files reused only as necessary for this new child: runtime-smoke.yml adds its exact source/test trigger paths and one bounded unittest module, preserving all prior commands/budgets; FACTS appends measured scope and source-review.json is regenerated only after all20 substantive review. This does not redo earlier completed units or alter their source. These supporting-file reasons apply before their edits.
+
+### GPT supplied-source digest pushed — 2026-11-06T21:18:23+09:00
+
+- Bounded child⑨-3a/source-digests/1 pushed/read-back 9f623fd98c90b02e3da66fffe50fa60c41af1ecf on gpt/run-registry-source-hash-20261106; clean six-file scope. Exact plainstr/bytes raw and one-pass CRLF-to-LF SHA256, no source collection/file/git/code-identity/Lab/research effects. Source f38239e969a0127f8db00cbaf47fa9e1721c1642c525dff0ef5f7aa463e3bef6; final doc clarifies CRCRLF is not idempotent. No product failure or source defect found.
+- Maintained8PASS0.002s; independent10 overlapping probes PASS0.002s; combined source8+data15+keys13+store16+codec17=69PASS1.524s exit0. Separate literal preparations are not additional acceptance counts. All20 substantive policy GO, prefix-preserving FACTS14lines; consistencyPASS608/publicationBLOCKED. Previous workflow commands and5/30 budgets preserved.
+- PR and fresh exact-final-head Runtime all6/Compliance verification are next. No completion ID/whole R3/actual ownerWindows/provider/API/legal/license/pilot/frozen-study claim; extra formal spec review NOT_PERFORMED. Independent next pure series-content digest remains planned, not yet claimed/edited.
