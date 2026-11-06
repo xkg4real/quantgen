@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T16:32:33+09:00
+updated_at: 2026-11-06T16:42:00+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
-work_commit: 67a883875ca0a8242e880246ea2a009e688978f4
+work_commit: af782bec1116ce994c800ecb7ce869acd64e885f
 uncommitted_changes: yes
 pr: https://github.com/xkg4real/quantgen/pull/77
 usage_weekly_pct: unknown
@@ -109,6 +109,13 @@ A1/A3 완료 ID는 아직 기록하지 않는다. 다음은 A1 코드 검토·�
 - A3 final67a8838 Runtime42179854778 Windows3.11 신규 A3 검사에서 MC gbm/garch_t 두 경우 가로 scrollbar.maximum=286(기대0)로 실패했다. 합성 Linux131PASS와 별개로 보존하며 A3 병합/완료는 보류한다. 레이아웃/Windows 글꼴 너비를 진단·수정 중이며 판정 조건을 약화하지 않는다. Compliance42179855683는 성공.
 - A1 완료 Notion Remaining Work·업무기록1105를 sapientia 계정으로 최소 수정하고 read-back했다. 검증된 A1 하위 항목만 취소선, 부모 미완료.
 - 같은 실행의 ⑫-1/display-owner-decision 하위 브랜치는 로컬 미커밋 구현 완료: 기존 검증 snapshot만 공유 EN/KO 표시하고 OWNER_APPROVED와 기술/연구 준비·실제 공개 증거를 구분한다. 검증 실패/잘못된 YAML·JSON에서는 승인 요약을 추정하지 않는다. 원래 스키마/검증/승인 규칙은 유지. 집중21PASS, 5모듈 통합43PASS(exit0), 독립 검토 및 전체20정책 검토 완료. A3 수정 합류 후 commit/PR/CI가 남는다. ⑫-1 부모 완료 아님.
+
+### GPT A3 Windows 수정 push/read-back — 2026-11-06T16:42:00+09:00
+
+- 수정 af782bec1116ce994c800ecb7ce869acd64e885f를 gpt/ui-a3-20261106에 push/read-back했다. Quant만 기존 CurrentPageTabs로 전환해 비활성 Strategy 최소 폭의 전파를 막는다. 기존 scrollbar0 조건을 유지하고 실제 차트/표의 viewport 경계 및 선택한 Strategy 최소 폭을 추가 검증했다. 원래 Windows3.11/3.12/3.14 MC286 실패와 Linux의 별도1057 재현을 구분해 보존한다.
+- 수정 후 A3 layout5+reading12=17PASS, 강화한 중복 회귀1PASS, 별도Strategy/chart10PASS. 20정책 소스 정합성PASS583/publicationBLOCKED. 새 exact-head Runtime42182474082 진행 중, Compliance42182474026 success. A3 병합/완료는 아직 아니다.
+- 상태 표시 하위 로컬b423f0b에 A3수정을 합친 a99b16b 로컬 통합 검사 중. 두 정책의 FACTS/RELEASE_GAPS 절을 모두 보존하여 병합하고20정책정합성PASS586. 실제 합성 System 캡처5개에서11행/스크롤/도움말 보호 확인. 1000px EN58/KO44 가로 넘침은 기존67a8838과 동일한 비활성 Rules 탭 문제로 확인되어, 새 상태 표시 회귀와 구분한다. 실제사용자PC·배포 증거 아님.
+- Notion Remaining/업무기록1105에 A3 실패·상태표시43PASS 진척을 최소 반영/read-back, 신규취소선 없음. 다음은A3 exact-head CI와 상태표시PR/CI; 보호범위·추가spec NOT_PERFORMED 유지.
 
 ## 1. 목표와 완료 조건
 
