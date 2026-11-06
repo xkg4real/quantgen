@@ -290,7 +290,7 @@
     "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md": "3f05520af76a14bbeb8fab8f7db874b25f18e52d4e884ec6b46e305e58f7ca44",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
-    "docs/product/COMPACT_NATIVE_UI_20261107.md": "1463df1ec5b646ef1b773f208775df3612e529376e36a990233d04f80e618b2f",
+    "docs/product/COMPACT_NATIVE_UI_20261107.md": "c366e29b51988ec88c391e1390d91a29efa08d5e9cc58a5d9f5d3fe00918848e",
     "docs/product/COMPANY_MARKS_READABILITY_20261106.md": "cea321847ed32fe5f077180665bcaa485dff75444bdce86526e8357ee2626be3",
     "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
@@ -632,163 +632,163 @@
   "reviews": {
     "1": {
       "document_sha256": "7ffeb30cbf22092284b48635e1769018e2259ea44c1a5647ac50ecaf3f815d63",
-      "source_digest": "0cda34cd9c8b9e450f428c92d882e3a75be99a046fcf562e850872e1273df588",
+      "source_digest": "918d2ac1955bddd9c8dcd6ae39a8d53091e7451981e746a8370537f4c11bc8f0",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.052539+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.803884+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "0cda34cd9c8b9e450f428c92d882e3a75be99a046fcf562e850872e1273df588",
+      "source_digest": "918d2ac1955bddd9c8dcd6ae39a8d53091e7451981e746a8370537f4c11bc8f0",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.055043+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.807372+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "cada9ff269042eac81db2bb77df78b1d1edeb715aea74c525e7ad3c036ce8d2b",
+      "source_digest": "4d2a3135dff5f0c7bfed74ab2f70207018170d886d0a7187601d61a8eb150862",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.056978+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.809284+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "a037737ecd348cd77a213b96a5c0be2a08ee9e4b698fdd66682af29f66695b3c",
+      "source_digest": "48f93a40b608980d5eb91770ead83e1adda5e35abb91da5d5b3a8f6beb7a831f",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.058503+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.810903+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "0312a0d9f2a8bf2f0900f866eff06e5d6e99db4f6d19a939a37bd750000819d9",
+      "source_digest": "dbd47b2868919496d68c94b055544d5a48aaba5ec33c02c01219a91dd9652d33",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.059670+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.812250+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "e32b2d1634d705ada2b0e2c6d50d87ec8282faaf62d53b06a947a3b379886035",
+      "source_digest": "11c6003ad89d6f2cdcd83d7e7851b2e096f7232c795075724149db7e2d7e336a",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.061210+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.813670+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "7": {
       "document_sha256": "cb99e2df664cbc0f5b4efa73259e32809a6a601fe4b64e08105020291a45932b",
-      "source_digest": "0cda34cd9c8b9e450f428c92d882e3a75be99a046fcf562e850872e1273df588",
+      "source_digest": "918d2ac1955bddd9c8dcd6ae39a8d53091e7451981e746a8370537f4c11bc8f0",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.062735+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.815567+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "e32b2d1634d705ada2b0e2c6d50d87ec8282faaf62d53b06a947a3b379886035",
+      "source_digest": "11c6003ad89d6f2cdcd83d7e7851b2e096f7232c795075724149db7e2d7e336a",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.064325+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.817815+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "536a5e440f0e4cd399f740b9baf42dd026d19e882e6e391638bc49202c303ce8",
+      "source_digest": "c83f06c923eae239035a4d7cdf7c7b8a7b3c03c73f9714a4af36e44aaff6de42",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.066159+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.819268+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "96cdafb5a6a8689fd05879f58eab5c4d6767beeb37e528ffba00722495d3ac82",
+      "source_digest": "08fa6333f5af519967f0bb89a1d4eba2c98f14efab4d14045926066c1a62357f",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.067519+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.821842+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "7ac4c8381b372307f1e0f78e0933c656fd9b20fe473a6c0613149fbcced68818",
+      "source_digest": "eac6c1dbd7182456c48a35f57695b94d8859c68821b9dba9c7a9f905a0c80ac2",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.069160+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.823244+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "f2318c2c65eef0068b51d8cf9c2d9269b64f7a4e84a6a7b956c6f430b33683a7",
+      "source_digest": "540b6aa4d8d045e47620e630297295d8088b8d8f3fc17de2954ff38cbea66a91",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.070748+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.825691+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "536a5e440f0e4cd399f740b9baf42dd026d19e882e6e391638bc49202c303ce8",
+      "source_digest": "c83f06c923eae239035a4d7cdf7c7b8a7b3c03c73f9714a4af36e44aaff6de42",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.072394+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.827471+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "536a5e440f0e4cd399f740b9baf42dd026d19e882e6e391638bc49202c303ce8",
+      "source_digest": "c83f06c923eae239035a4d7cdf7c7b8a7b3c03c73f9714a4af36e44aaff6de42",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.074503+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.828712+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "536a5e440f0e4cd399f740b9baf42dd026d19e882e6e391638bc49202c303ce8",
+      "source_digest": "c83f06c923eae239035a4d7cdf7c7b8a7b3c03c73f9714a4af36e44aaff6de42",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.076065+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.830145+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "6f406b468d0f1160e4d5a1dbc698e849a8ec4c82763ecbba85b1403f2b9bb4a8",
+      "source_digest": "5669780209b1ec24cb9f5390e0d7c9e1c0a3d8286e24e0220d2ce2ace9b9ca40",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.077602+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.831849+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "e32b2d1634d705ada2b0e2c6d50d87ec8282faaf62d53b06a947a3b379886035",
+      "source_digest": "11c6003ad89d6f2cdcd83d7e7851b2e096f7232c795075724149db7e2d7e336a",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.079185+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.833169+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "0cda34cd9c8b9e450f428c92d882e3a75be99a046fcf562e850872e1273df588",
+      "source_digest": "918d2ac1955bddd9c8dcd6ae39a8d53091e7451981e746a8370537f4c11bc8f0",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.080683+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.834983+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "68f89b356f6bba4f695d949106bf214f952ad57aa0181dd78220c362a7a26d5c",
+      "source_digest": "4eb7f036816144cff44420bb09139fd5434f8711ebcd73f5ded3d9da5a345552",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.082291+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.836266+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     },
     "20": {
       "document_sha256": "b84d55ab085dad8cb897528f1cda017a96eeb41e68188bd350f13fcb02ea0f88",
-      "source_digest": "0cda34cd9c8b9e450f428c92d882e3a75be99a046fcf562e850872e1273df588",
+      "source_digest": "918d2ac1955bddd9c8dcd6ae39a8d53091e7451981e746a8370537f4c11bc8f0",
       "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Native hinted font and compact layout source review; preserve all existing publication and operational gates",
-      "reviewed_at": "2026-11-06T15:40:44.084221+00:00",
-      "source_commit": "0222dbad65fdbbadfa83b9a70d37e6207f87a1ae"
+      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
+      "reviewed_at": "2026-11-06T15:44:43.837987+00:00",
+      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
     }
   }
 }
