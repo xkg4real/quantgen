@@ -1,0 +1,39 @@
+{
+  "id": "PR-89",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/89",
+  "source_branch": "gpt/compact-ui-final-20261107",
+  "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8",
+  "summary": "Hinted Korean font; content-width categories, forms and tables.",
+  "changed_files": [
+    "quantgen_desktop/app.py",
+    "quantgen_desktop/font_policy.py",
+    "quantgen_desktop/category_picker.py",
+    "quantgen_desktop/form_layout.py",
+    "quantgen_desktop/table_layout.py",
+    "quantgen_desktop/typography.py",
+    "quantgen_desktop/tools.py",
+    "quantgen_desktop/bonds.py",
+    "quantgen_desktop/portfolio.py",
+    "quantgen_desktop/result_layout.py",
+    "assets/fonts/",
+    "pyproject.toml",
+    "tools/packaging/stage.py"
+  ],
+  "verification": {
+    "local_ui": "19 PASS incl corrected regressions and actual Hangul hint instructions; original31-run29passed, two corrected fixture preconditions rerun successfully",
+    "packaging_policy": "50 PASS",
+    "preview": "KO/EN, light/dark,1000/1360/1920,100/125/150% offscreen PASS",
+    "limitations": "Actual Windows display and remote runtime matrix require separate results; no KIS account or website deployment claim"
+  },
+  "website_impact": {
+    "classification": "native-only source; browser review required",
+    "action": "Review content-width menus/forms/tables and offline Korean font equivalents in AWS website source; respect licenses; no Qt code copying. Existing Flet OTF unchanged."
+  },
+  "delivery": {
+    "status": "queued",
+    "destination": "웹사이트 작업공간(AWS)",
+    "reason": "No supported direct chat messaging tool; shared handoff is not a delivery receipt."
+  },
+  "website_application": "unverified",
+  "deployment": "unverified"
+}

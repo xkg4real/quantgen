@@ -16,11 +16,12 @@ class PortfolioPane(QWidget):
         super().__init__()
         # Imported here to avoid a module-level UI dependency cycle.
         from .app import label, table, panel
+        from .form_layout import CompactFieldGrid,bound_input_panel,add_compact_action
         self.setObjectName("portfolio-pane")
         layout=QVBoxLayout(self);layout.setContentsMargins(0,0,0,0);layout.setSpacing(20)
         box,inner=panel("포트폴리오 최적화")
-        inputs=QGridLayout()
-        for column in range(3):inputs.setColumnStretch(column,1)
+        bound_input_panel(box)
+        pairs=[]
         self.symbols=QLineEdit("AAPL, MSFT, NVDA, TLT")
         self.source=QComboBox()
         for v in ("auto","fmp","kis","yfinance","synthetic"):self.source.addItem(v,v)
@@ -30,10 +31,11 @@ class PortfolioPane(QWidget):
         self.rf=QDoubleSpinBox();self.rf.setRange(-100,100);self.rf.setValue(3);self.rf.setSuffix(" %")
         for i,(name,w) in enumerate((("Symbols · comma separated",self.symbols),("Source",self.source),
             ("Objective",self.objective),("Max weight / asset",self.cap),("Risk-free",self.rf))):
-            w.setAccessibleName(name);inputs.addWidget(label(name,"caption"),2*(i//3),i%3);inputs.addWidget(w,2*(i//3)+1,i%3)
-        inner.addLayout(inputs)
+            w.setAccessibleName(name);pairs.append((label(name,"caption"),w))
+        self.form=CompactFieldGrid(pairs)
+        inner.addWidget(self.form)
         self.run=QPushButton("포트폴리오 분석 실행");self.run.setProperty("primary",True);self.run.clicked.connect(self.submit)
-        inner.addWidget(self.run)
+        add_compact_action(inner,self.run)
         self.status=label("동일 관측일의 이력을 정렬한 후 네 가지 목적함수를 비교합니다.","muted")
         self.status.setProperty("reading_help_keep_visible", True)
         inner.addWidget(self.status);layout.addWidget(box)

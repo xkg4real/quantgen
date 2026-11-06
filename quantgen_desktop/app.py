@@ -112,39 +112,16 @@ def label(text, role="", *, wrap=True):
 
 
 def load_interface_fonts(app):
-    """Register bundled real weights; retain the platform font if unavailable.
-
-    A missing or unreadable file is logged: the window then falls back to the
-    platform font, which changes Hangul shapes and widths.
-    """
-    family = None
-    for filename in ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf"):
-        path = application_root() / "assets/fonts" / filename
-        font_id = QFontDatabase.addApplicationFont(str(path))
-        families = QFontDatabase.applicationFontFamilies(font_id) if font_id >= 0 else []
-        if not families:
-            log.warning("QUANTGEN interface font did not load: %s", path)
-        if families and family is None:
-            family = families[0]
-    if family is not None:
-        font = QFont(family, 10)
-        # Use an integer logical pixel size as the unstyled text baseline.
-        # Qt applies the screen scale itself; do not rescale text as a bitmap.
-        font.setPixelSize(14)
-        font.setWeight(QFont.Weight.Normal)
-        # Keep changing prices aligned without giving Korean labels a monospace face.
-        font.setFeature(QFont.Tag.fromString("tnum"), 1)
-        app.setFont(font)
-    else:
-        log.warning("QUANTGEN interface font unavailable; using the platform font")
-    return family
+    """Register the complete hinted font bundle; preserve platform fallback on failure."""
+    from .font_policy import configure_interface_font
+    return configure_interface_font(app, application_root() / "assets/fonts", logger=log)
 
 
 def panel(title):
     box = QFrame()
     box.setObjectName("panel")
     layout = QVBoxLayout(box)
-    layout.setContentsMargins(22, 20, 22, 20)
+    layout.setContentsMargins(16, 16, 16, 16)
     layout.setSpacing(12)
     if title:
         layout.addWidget(label(title, "heading"))
@@ -154,17 +131,13 @@ def panel(title):
 def table(headers):
     t = QTableWidget(0, len(headers))
     t.setHorizontalHeaderLabels(headers)
-    if len(headers) <= 7:
-        t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-    else:
-        t.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
-        for column,header in enumerate(headers):t.setColumnWidth(column,max(100,min(220,12+len(header)*8)))
     t.verticalHeader().hide()
     t.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
     t.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
     t.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
     t.setAlternatingRowColors(True)
-    return t
+    from .table_layout import configure_compact_table
+    return configure_compact_table(t)
 
 
 def table_rows(t, rows, ids=None):
@@ -348,8 +321,8 @@ class ResearchWindow(QMainWindow):
         scroll.setFrameShape(QFrame.Shape.NoFrame)
         content = QWidget()
         layout = QVBoxLayout(content)
-        layout.setContentsMargins(30, 28, 30, 28)
-        layout.setSpacing(20)
+        layout.setContentsMargins(24, 22, 24, 22)
+        layout.setSpacing(14)
         layout.addWidget(label(title, "title"))
         layout.addWidget(label(subtitle, "muted"))
         scroll.setWidget(content)
@@ -465,15 +438,14 @@ class ResearchWindow(QMainWindow):
         self.macro_records.set_source_caption('Record set')
         picker = QWidget()
         picker.setObjectName('toolPicker')
-        grid = QGridLayout(picker)
-        grid.setContentsMargins(0, 0, 0, 0)
-        grid.setSpacing(8)
+        from .category_picker import CategoryFlow
+        categories = CategoryFlow(picker)
+        picker.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         self.tool_group = QButtonGroup(self)
         self.tool_group.setExclusive(True)
         self.tool_host = CurrentPageStack()
         self.tool_host.setObjectName('toolHost')
         self.tool_buttons = {}
-        columns = 5
         for index, (name, title) in enumerate(TOOL_PANES):
             pane = getattr(self, name)
             button = QPushButton(title)
@@ -482,11 +454,9 @@ class ResearchWindow(QMainWindow):
             button.setAccessibleName(title)
             button.clicked.connect(lambda checked=False, p=pane: self.show_tool(p))
             self.tool_group.addButton(button)
-            grid.addWidget(button, index // columns, index % columns)
+            categories.addWidget(button)
             self.tool_buttons[name] = button
             self.tool_host.addWidget(pane)
-        for column in range(columns):
-            grid.setColumnStretch(column, 1)
         self.tool_buttons[TOOL_PANES[0][0]].setChecked(True)
         layout.addWidget(picker)
         layout.addWidget(self.tool_host)
@@ -583,13 +553,14 @@ class ResearchWindow(QMainWindow):
                 widget.setToolTip(widget.currentText())
                 widget.currentTextChanged.connect(widget.setToolTip)
                 widget.model().dataChanged.connect(lambda *args, combo=widget: combo.setToolTip(combo.currentText()))
-        from .result_layout import ResponsiveFieldGrid
-        self.quant_form = ResponsiveFieldGrid([(label(name, "caption"), widget) for name, widget in fields])
+        from .form_layout import CompactFieldGrid, bound_input_panel, add_compact_action
+        bound_input_panel(box)
+        self.quant_form = CompactFieldGrid([(label(name, "caption"), widget) for name, widget in fields])
         inner.addWidget(self.quant_form)
         self.run_button = QPushButton("분포 분석 실행")
         self.run_button.setProperty("primary", True)
         self.run_button.clicked.connect(self.run_analysis)
-        inner.addWidget(self.run_button)
+        add_compact_action(inner, self.run_button)
         self.analysis_status = label("데이터 출처·시드·모델 가정을 기록합니다.", "muted")
         self.analysis_status.setProperty("reading_help_keep_visible", True)
         inner.addWidget(self.analysis_status)

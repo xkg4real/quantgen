@@ -30,7 +30,8 @@ from quantgen_desktop.typography import (NAV_PADDING, SIDEBAR_WIDTH_RANGE, TONE_
                                          set_tone, tone_colors, tone_for, window_stylesheet)
 
 ROOT = Path(__file__).resolve().parents[1]
-FONT_FILES = ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf")
+SYMBOL_FILES = ("qg-symbols.otf", "qg-symbols-medium.otf", "qg-symbols-semibold.otf")
+FONT_FILES = ("qg-interface.ttf", "qg-interface-medium.ttf", "qg-interface-semibold.ttf")
 SVG = "{http://www.w3.org/2000/svg}"
 
 # Modules whose string literals the native window shows: its own widgets plus the
@@ -74,6 +75,7 @@ class BundledFontCoverageTests(unittest.TestCase):
     def setUpClass(cls):
         cls.app = QApplication.instance() or QApplication([])
         cls.faces = {name: QRawFont(str(ROOT / "assets/fonts" / name), 16) for name in FONT_FILES}
+        cls.symbols = {name: QRawFont(str(ROOT / "assets/fonts" / name), 16) for name in SYMBOL_FILES}
         for name, face in cls.faces.items():
             assert face.isValid(), name
 
@@ -85,7 +87,8 @@ class BundledFontCoverageTests(unittest.TestCase):
 
     def missing(self, text):
         return sorted({ch for ch in text if ord(ch) >= 0x20 and not self.noncharacter(ch)
-                       for face in self.faces.values() if not face.supportsCharacter(ord(ch))})
+                       for face, supplement in zip(self.faces.values(), self.symbols.values())
+                       if not face.supportsCharacter(ord(ch)) and not supplement.supportsCharacter(ord(ch))})
 
     def test_every_shown_string_literal_is_in_the_bundled_font(self):
         problems = []
@@ -387,7 +390,7 @@ class FontLoadingTests(unittest.TestCase):
                 self.assertLogs("quantgen_desktop.app", level="WARNING") as logs:
             self.assertIsNone(desktop.load_interface_fonts(self.app))
         self.assertEqual(self.app.font(), before)
-        self.assertTrue(any("qg-interface.otf" in line for line in logs.output))
+        self.assertTrue(any("qg-interface.ttf" in line for line in logs.output))
         self.assertTrue(any("platform font" in line for line in logs.output))
 
 
