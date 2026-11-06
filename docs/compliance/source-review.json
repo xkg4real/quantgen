@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "abe393d047df2dbe8e2a7bb2153189fec2c622c2bee5429ee7be3baa9c196b75",
+    ".github/workflows/runtime-smoke.yml": "7eb1d95a236af2469ab212b4ab0ae59def31d54a55fd460f718629f0ab5e03be",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -260,13 +260,13 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "62657b4890d2e41156600ad3e09e3f74cea83ce4f8d3e78116d588710503c5b7",
+    "docs/compliance/FACTS.md": "efed0a29a8d67a816cc032706e1f2b545b6938206c40942aa584d409ee9a1524",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
-    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "087d82bb21c64d8949debf38fdc86b5ef6522bb361962422fc5a01883af7b634",
+    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -395,7 +395,7 @@
     "tests/desktop_authored_prose_language_acceptance.py": "b32c911300a13b2e7e3fd5a25c88499188234c8e7ecc08e53de5ef9f94120a75",
     "tests/desktop_bonds_portfolio_language_acceptance.py": "7c1103c926deccbce2c16329e6f4c6bd8347c4c58be6e27f2b8d0de1d50abc30",
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
-    "tests/desktop_chart_rendering_acceptance.py": "3f3c0ee0e38d946647a7ae2448af8d0496c2dea779a81be4cfd8734b84a61834",
+    "tests/desktop_chart_rendering_acceptance.py": "3e0a71ecbd3d2a4aec8669d6fc66c5e3bf18ac0c7760f94ff8a8a3e592eb8db0",
     "tests/desktop_commentary_acceptance.py": "ed1f58c2e133796d77ba3b6cdc5d187321f7491c1091ba3b36853aff773c8250",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
@@ -414,19 +414,19 @@
     "tests/desktop_market_layout_acceptance.py": "215764cefa9108907c3480cad377b261dcf404c7a7342ecb0047ed43b7ea0023",
     "tests/desktop_market_tabs_acceptance.py": "f68d5e9a3411f01d1f5d91132126ae34c485a5f690b189a591d45e9f678ce3be",
     "tests/desktop_markets_watchlist_acceptance.py": "d458aa2d633dbbbfead6347d0fe5b53f3f827e17c91ea0b31483df59cfe5b569",
-    "tests/desktop_operation_fixes_acceptance.py": "b4f11e0d8251c65daa7faa63e1307a99346b63f94aecd5766eab2cb8b688463c",
+    "tests/desktop_operation_fixes_acceptance.py": "9b9b725e6e250e435b4e597dcc9808b8f55917f1edac4382180681c2ad8ce89d",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_rates_language_acceptance.py": "96644766a454ae3b9da85a3148ec5c0b4dc9d0e465325db43ef7cc435ecca16b",
-    "tests/desktop_responsive_tools_acceptance.py": "bf5e78ae488b2899300ca63fadf7283822412a3a40b3edd65066e8582af3a33b",
+    "tests/desktop_responsive_tools_acceptance.py": "1b0a6a3bd7e341432ea72306b01674a0d9332f0c148e11a96e4b343adf73b877",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
-    "tests/desktop_typography_acceptance.py": "725e266b810776c484a45dd9b2b8b70b86d7bd0cf40fcd59b92b02e4d0bbe302",
+    "tests/desktop_typography_acceptance.py": "e1996fa991d34ebb20b29769e193d28043d68e5bdfcb405bfda29102fe11dfb9",
     "tests/desktop_watchlist_acceptance.py": "baecb5ebcd7f60efcfddb203bb453b58fe1e975ee11933f039061ce9078116af",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/etf_sleeve_disclosure_acceptance.py": "f512c2fef9cef7642baa57b2a75275a2a43702dc9f55c5d0b4f9dfa38417fde9",
@@ -504,6 +504,7 @@
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
     "tests/qscore_acceptance.py": "52d0c74fd0e5455b3d333618e011e5a6d7372e4521b750986ff15a30a78559ac",
+    "tests/qt_fixture_cleanup.py": "56b1c3ee6e6def041b391d40d3c7d40faa8bab0b3856901f671522c6121fdf04",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
     "tests/quote_coverage_acceptance.py": "09d727791eb18d44955a0324058439c0d63777af94b5ca18f8a1ced7eb6cec86",
     "tests/rates_revaluation_params_acceptance.py": "85ccf11af449a58c8d3772bb38e0502d3f5b8d772caad478b27ad91d50fc5329",
@@ -597,163 +598,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "a7b0a3031d37fdea64de56dae1f345b11e9950711e03f95e7b5acf0ec2746636",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.324255+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "5203b8795ec0d197b46f79982a185a743cd9471fd934ec55d67231c7dfed56a3",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.168534+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "a7b0a3031d37fdea64de56dae1f345b11e9950711e03f95e7b5acf0ec2746636",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.327169+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "5203b8795ec0d197b46f79982a185a743cd9471fd934ec55d67231c7dfed56a3",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.171488+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "1fdd50e7724d3f56aa5552eab3de68c6100d85670aef6d27267df6f08158e3f6",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.329376+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "beef1650f2a1e69857ae401f58c21cb785fdd201d15285e961cdce69d2bfd2fa",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.173827+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "e383c2b03c10ba837a0f95b76833b224ebd8051143523146c2ef7a9b999d1d7c",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.331776+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "480ed92e21df91940c885dd46d69bb1e1c967c2857045d108c5d8f6f4b37aff5",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.176167+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "d613dea225525d87567a0ae786f3c233f00c4bc3fc92bd38a2618839a3503d4d",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.333847+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "28ea645f32ea334890af927a6488ec51fc862e70ddee5c2014db1d2bbc073027",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.178391+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "9859a3fa0709a1a8f1c8043487625f169b591ea97ff8a3a399e9577112a97642",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.336155+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "aeabb8b030c1b23a57967b390369b66bfcaaa91c5ef071d9333a404cccc44978",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.180480+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "a7b0a3031d37fdea64de56dae1f345b11e9950711e03f95e7b5acf0ec2746636",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.338367+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "5203b8795ec0d197b46f79982a185a743cd9471fd934ec55d67231c7dfed56a3",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.182529+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "9859a3fa0709a1a8f1c8043487625f169b591ea97ff8a3a399e9577112a97642",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.340805+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "aeabb8b030c1b23a57967b390369b66bfcaaa91c5ef071d9333a404cccc44978",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.184519+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "3eab04b0e3fe55175880ea700ac8a3c91d04099129f77423fc3a92a099c22728",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.342950+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "0ff0959e7a2c26cf0479bc04b9e280c93cdf73ba8bfd6be36f81c93a116f2e76",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.186572+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "b3c54f03f37c48c8199afefb4f2e24fc7c2b7b0b80cfc0cdc1b7c61b42fc0c97",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.345818+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "023353c03247c930c1b41e2a5f1dcb0eea0c239e96d11d3e971a0e886875d3e9",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.189038+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "dd93edbca9e995c91f34df3cd83f8405932d9def330e02a8532c54725d546f8f",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.347955+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "cc8a61ea0bc9bd7865820c2741e5babf533792ebd5b662df79be676a5a69ef9c",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.191152+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "588af49b90403817af7fcf5887e79b9c5920b480900423380c8c3d463e9bf731",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.350087+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "373a83acd759940b7958256dcc57b7bf2e726632fed914309cd6837dcb5c220b",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.193323+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "3eab04b0e3fe55175880ea700ac8a3c91d04099129f77423fc3a92a099c22728",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.352367+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "0ff0959e7a2c26cf0479bc04b9e280c93cdf73ba8bfd6be36f81c93a116f2e76",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.195343+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "3eab04b0e3fe55175880ea700ac8a3c91d04099129f77423fc3a92a099c22728",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.354407+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "0ff0959e7a2c26cf0479bc04b9e280c93cdf73ba8bfd6be36f81c93a116f2e76",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.197388+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "3eab04b0e3fe55175880ea700ac8a3c91d04099129f77423fc3a92a099c22728",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.356683+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "0ff0959e7a2c26cf0479bc04b9e280c93cdf73ba8bfd6be36f81c93a116f2e76",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.199346+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "e855e315214e652d991d9cbc26d4d8016b579bf79fbb7e095f2274112cb2ab56",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.358989+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "d1c5575b1e3ecd8236305be16eae6ffa461c8ced32b28e6242d3f2fcb4ed7ae8",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.201488+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "9859a3fa0709a1a8f1c8043487625f169b591ea97ff8a3a399e9577112a97642",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.361198+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "aeabb8b030c1b23a57967b390369b66bfcaaa91c5ef071d9333a404cccc44978",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.203550+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "a7b0a3031d37fdea64de56dae1f345b11e9950711e03f95e7b5acf0ec2746636",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.363254+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "5203b8795ec0d197b46f79982a185a743cd9471fd934ec55d67231c7dfed56a3",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.205516+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "5966bf89daab8169a175d020238a02645c3f0104fb036c0103646d11d016ff96",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.365276+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "bbeaa794e953c316876e03b5647d212cc5d217501407505bdcfc4f70bebf2fc1",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.207466+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "a7b0a3031d37fdea64de56dae1f345b11e9950711e03f95e7b5acf0ec2746636",
-      "reviewed_by": "GPT Rates status and responsive MC combined review",
-      "review_note": "Reviewed all twenty policies against exact preserved Rates and status sources, combined MC reflow and keyboard behavior, all three evidence sections and unchanged publication conditions.",
-      "reviewed_at": "2026-11-06T08:24:50.367423+00:00",
-      "source_commit": "a8d75b85a04f2bf1b0f6241c8369bbd10e308742"
+      "source_digest": "5203b8795ec0d197b46f79982a185a743cd9471fd934ec55d67231c7dfed56a3",
+      "reviewed_by": "GPT combined Rates status and Qt fixture review",
+      "review_note": "All20 numbered policies and release gates preserve reviewed Rates behavior; FACTS retains Rates/status/MC evidence plus fixture cleanup. Rates production/test source unchanged, same original CI commands, targeted owned-window deletion only; exact full Windows CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T08:56:09.209566+00:00",
+      "source_commit": "9800b274569cb8f767a1d7b8d815a9f288ab3e3c"
     }
   }
 }

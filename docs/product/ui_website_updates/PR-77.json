@@ -63,16 +63,32 @@
     ],
     "counts_note": "Counts overlap prior suites and must not be summed. Linux offscreen Qt, synthetic data, isolated state, no network/dotenv/protected stores. Four actual integrated synthetic captures inspected. Baseline responsive forced-overflow setup failed separately and is not claimed PASS.",
     "source_review": "20 policies consistency PASS; publication BLOCKED",
-    "ci": "SECOND_HEAD_FAILED_WINDOWS_A3_LAYOUT; RESPONSIVE_FORM_FINAL_HEAD_CHECKS_PENDING",
+    "ci": "F7_A3_STEP_PASSED_ALL_PLATFORMS; FULL_RUNTIME_EXIT_FAILURE_AND_CANCELLED_JOBS; FIXTURE_CLEANUP_FINAL_HEAD_PENDING",
     "ci_runs": [
       42179854778,
       42179855683,
       42182474082,
-      42182474026
+      42182474026,
+      42186371159,
+      42186371128
     ],
     "actual_provider_network": "NOT_RUN",
     "user_pc": "NOT_RUN",
-    "windows_failure": "Original head67a8838 Runtime42179854778 failed new A3 step on Windows3.11/3.12/3.14; inspected Windows3.11 MC gbm/garch_t overflow286. Corrected existingCurrentPageTabs sizing requires fresh exact-head CI. Second headaf782be Runtime42182474082 again failed all three Windows jobs; inspected MC own minimum1014 and overflow284/294. Fixed3-column min12 candidate also overflowed14 in independent18px Linux render; measured3-to2-to1 reflow now passes20 local tests and10 actual-host cases. Fresh final-head Windows/Ubuntu CI required."
+    "windows_failure": "Original head67a8838 Runtime42179854778 failed new A3 step on Windows3.11/3.12/3.14; inspected Windows3.11 MC gbm/garch_t overflow286. Corrected existingCurrentPageTabs sizing requires fresh exact-head CI. Second headaf782be Runtime42182474082 again failed all three Windows jobs; inspected MC own minimum1014 and overflow284/294. Fixed3-column min12 candidate also overflowed14 in independent18px Linux render; measured3-to2-to1 reflow now passes20 local tests and10 actual-host cases. Fresh final-head Windows/Ubuntu CI required.",
+    "fixture_lifetime_followup": {
+      "production_changed": false,
+      "retained_research_windows_before": 12,
+      "retained_research_windows_after": 0,
+      "retained_reading_help_before": 12,
+      "retained_reading_help_after": 0,
+      "original_test_methods": 31,
+      "original_assertion_nodes": 152,
+      "focused_passed": 6,
+      "focused_exit": 0,
+      "full_linux_result": "30PASS + unchanged baseline precondition1FAIL, exit1; no cleanup errors",
+      "windows_exit_cause": "not proven",
+      "installed_job_budget_minutes": 30
+    }
   },
   "website_application": {
     "status": "not_verified",

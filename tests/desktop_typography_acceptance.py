@@ -21,6 +21,7 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
 
 from PyQt6.QtGui import QColor, QFont, QFontMetrics, QPalette, QRawFont
 from PyQt6.QtWidgets import QApplication, QFrame, QLabel, QMessageBox, QVBoxLayout, QWidget
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 from core.market.models import Candle, ChartRequest, MarketSnapshot
 from core.market.presentation import card_svg, chart_svg
@@ -179,6 +180,7 @@ class ToneTests(unittest.TestCase):
 
     def test_set_tone_repolishes_a_delta_pill(self):
         host = QLabel()
+        self.addCleanup(delete_owned_widget, host)
         host.setStyleSheet(window_stylesheet(LIGHT, False))
         pill = label("+1.20%", "delta")
         pill.setParent(host)
@@ -226,7 +228,7 @@ class ToneTests(unittest.TestCase):
                             self.assertEqual(text, tones[tone])
             finally:
                 root.close()
-                root.deleteLater()
+                delete_owned_widget(root)
                 self.app.processEvents()
 
 
@@ -257,7 +259,7 @@ class WindowTypographyTests(unittest.TestCase):
     def close_window(self):
         with patch.object(QMessageBox, "question", return_value=QMessageBox.StandardButton.Yes):
             self.window.close()
-        self.window.deleteLater()
+        delete_owned_widget(self.window)
         self.drain()
         self.http.assert_not_called()
         self.jobs.assert_not_called()
