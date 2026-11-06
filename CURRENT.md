@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T17:53:15+09:00
+updated_at: 2026-11-06T17:57:14+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
@@ -413,3 +413,10 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - f7 Runtime42186371159는 A3 20시험 단계가 Windows3.11/3.12/3.14·Ubuntu 모두 성공했지만 Windows3.14 후속 chart/text31OK 후 exit1; 3.11/3.12는20분 경계에서 cancelled. 기존 실패·진단 로그를 보존했다. installed job 예산20→30분, chart/text 단계를 A3 직후로 이동; 시험 명령은 모두 유지했다. syntax5분 그대로.
 - 새 exact-head Runtime42190250542 진행 중, Compliance42190250754 success. 일부 단계 성공을 전체 CI/병합 완료로 기록하지 않는다. 상태 PR78(d1a62a2)·Rates PR79(9800b27)로 같은 시험 정리를 정상 merge 중이며 중복 제품 구현은 하지 않는다. 20정책 정합성PASS584/publicationBLOCKED. 실제 WindowsPC/API/공급사/법률/라이선스/파일럿/동결연구 증거 추가 없음; 추가 GPT/Gemini spec review NOT_PERFORMED.
 - 다음: 관련 브랜치 통합·정합성 검증/push/readback, exact-head 필수 전체 CI 후 PR77→78→79 순서로 판단. detached identity e04f1cc는19합성PASS, 아직 PR/완료 미기록.
+
+### GPT 상태·Rates 시험 정리 통합 — 2026-11-06T17:57:14+09:00
+
+- 상태 PR78 e03898833329fd64db0feecab485dffe0fa297c8 및 Rates PR79 578d35d406cd6001190d0400caeab7f93cab3096를 정상 merge/commit/push/read-back했다. 각 제품 소스와 기존 합성 검증된 의미는 그대로이며 A3 소유 창 정리·CI 단계 순서/예산만 통합했다. 충돌은 모든 기존 FACTS 행·시험 명령을 보존해 해소했고 20정책 재검토 및 baseline 정합성 각각PASS587/588, publicationBLOCKED.
+- 상태 exact-head Runtime42191023747 진행/Compliance42191023765 success; Rates Runtime42191259285 진행/Compliance42191259325 success. A3 bd7 Runtime42190250542에서 Windows3.11/3.12/3.14·Ubuntu의 A3 및 chart/text 단계가 모두 정상 종료했지만 전체 job 결론은 미완료. 신규 완료/병합으로 기록하지 않는다.
+- detached identity는 Rates578d35d 트리를 정상 통합 중이며 e04 자체 resolver/시험을 그대로 유지한 최종 격리19PASS0.013s(exit0)를 확인했다. 별도 PR/fullCI는 다음 단계. Notion sapientia 두 페이지 A3 정리 진척 반영/read-back 및 큐26기록 보존 확인. 실제 API/공급사/WindowsPC/법률/라이선스/파일럿/동결연구와 웹배포의 새 증거 없음.
+- 다음 안전 시작: identity 통합20정책/commit/push/readback/PR → 각 최종 head 필수 fullCI, PR77→78→79→identity 순서로 판단. 부모 Remaining Work는 미완료 유지.
