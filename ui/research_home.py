@@ -5,11 +5,13 @@ from pathlib import Path
 from typing import Callable
 
 import flet as ft
+from yaml import YAMLError
 from core.i18n import LocaleContext
 
 from core.theme import active
 from tools.status.snapshot import verify
 from core.app_paths import application_root
+from core.recorded_status_display import recorded_status_display
 from core.research.runs import session_for, export_bytes
 from core.research.markets import load_markets, SPECS
 from core.research.export import bundle_bytes, save_desktop_export
@@ -21,7 +23,7 @@ def recorded_status() -> tuple[dict | None, str]:
     """Read only the explicit PR-A evidence inputs; refuse stale snapshots."""
     try:
         return verify(ROOT), ''
-    except (OSError, ValueError, KeyError, TypeError):
+    except (OSError, ValueError, KeyError, TypeError, YAMLError):
         return None, '기록된 상태를 확인할 수 없습니다. 상태 자료를 점검해 주세요.'
 
 
@@ -266,31 +268,34 @@ def build_library_page(page: ft.Page, *, navigate: Callable) -> ft.Control:
     ], spacing=20, scroll=ft.ScrollMode.AUTO, expand=True)
 
 
+class RecordedStatusView(ft.Column):
+    """Translate authored status prose while preserving verified codes and dates."""
+    def __init__(self, status, ctx):
+        super().__init__(spacing=12, data={'recorded_project_status': True})
+        self.lines = recorded_status_display(status)
+        self.render_locale(ctx)
+
+    def render_locale(self, ctx):
+        self.ctx = ctx
+        self.controls = []
+        for line in self.lines:
+            control = _text(line.text(ctx.language), 13 if line.muted else 14,
+                            muted=line.muted, bold=line.bold)
+            # Already localized prose plus literal evidence; do not translate it again.
+            control.data = {'qg_literal_value': True}
+            self.controls.append(control)
+
+
 def build_system_page(page: ft.Page, *, navigate: Callable) -> ft.Control:
     from .localization import LanguageSettings
     from .data_rights import DataRightsPanel
-    status, error = recorded_status()
-    rows = []
-    if error:
-        rows = [_text('확인 필요', 18, bold=True), _text(error)]
-    else:
-        q = status['code_test']; cal = status['data_readiness']['calendar']
-        rows = [
-            _text(f"기록된 코드 검사  {q['counts']['PASS']} PASS / {q['counts']['FAIL']} FAIL / {q['counts']['NOT_RUN']} NOT_RUN", 15, bold=True),
-            _text('새로 실행한 검사 결과가 아닙니다. 원본에는 실행 시각과 커밋이 없습니다.', 13, muted=True),
-            _text(f"달력  {cal['files']}개 서명 메타데이터 · 세트 {cal['version']}", 14),
-            _text(f"서명 시각 {cal['signed_at']} · 파일별 서명 검증은 별도입니다.", 12, muted=True),
-            _text('데이터  NOT_VERIFIED  ·  공식 게이트  NOT_FROZEN (문서 기록)', 14),
-            _text('동결 연구  NOT_INSPECTED  ·  공개 배포  NOT_APPROVED', 14),
-            _text('코드 검사, 데이터 준비, 투자 판정과 배포 승인은 서로 다른 상태입니다.', 13, muted=True),
-            _text('출처: qa/acceptance_results.json · calendar MANIFEST · README', 12, muted=True),
-            _text('상태 자료 생성 시각: ' + status['generated_at'], 12, muted=True),
-        ]
+    status, _error = recorded_status()
+    status_view = RecordedStatusView(status, getattr(page, 'qg_locale', LocaleContext()))
     return ft.Column([
         _text('System', 30, bold=True), _text('기록된 근거와 현재 연결을 구분해 확인하세요.', 14, muted=True),
         _panel('언어·지역',[LanguageSettings(page)]),
         _panel('시장 데이터 이용 조건',[DataRightsPanel(page)]),
-        _panel('기록된 프로젝트 상태', rows),
+        _panel('기록된 프로젝트 상태', [status_view]),
         _panel('설정과 규칙', [ft.Row([_link('데이터 연결 설정', 'settings', navigate),
                                        _link('모의 실행 규칙', 'rules', navigate)], wrap=True)]),
     ], spacing=20, scroll=ft.ScrollMode.AUTO, expand=True)
