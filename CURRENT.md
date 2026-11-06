@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a, ⑨-3a/source-digests/1, ⑨-3a/series-digest/1
-updated_at: 2026-11-06T21:19:44+09:00
+updated_at: 2026-11-06T21:28:26+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-series-hash-20261106
-work_commit: 9f623fd98c90b02e3da66fffe50fa60c41af1ecf
+work_commit: ea90521ddf057178d4d5eb182c426dd384256f4e
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -602,3 +602,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - Same task/handoff/execution4bf1f03c-f677-4b28-af07-8c745e4cde07 claims bounded child⑨-3a/series-digest/1 before code edits. Source child PR86 head9f623fd98c90b02e3da66fffe50fa60c41af1ecf remains incomplete with Runtime42216709846/Compliance42216709861 in progress. New gpt/run-registry-series-hash-20261106 at that verified pushed source head was created/pushed/read-back clean with identical protected sparse exclusions. Preserve PR86 and merge it first. Six handoff files checked at single latest ref0b15bdfb002d1b41c60259ec81982c40ac6f4229; LEDGER and verified-main source have no duplicate child/helper.
 - Existing approved R3rev2 §5.7 requires dtype+shape+raw-array SHA256. This detached helper adopts a new documented v1 framing: literal ASCII quantgen.r3.series/1, NUL, <f8, NUL, rows and columns as uint64 little-endian, then little-endian float64 raw IEEE words in logical C order. This is an explicit engineering convention within existing approval, not a claim of historical persistent-format parity. Hashes caller-supplied exact2D float64 ndarray/no dtype metadata; zero axes allowed for content identity only, no valid-series inference. Both endian/strides/read-only supported without float arithmetic; signedzero/NaN payload bits retained. Caller must keep input stable.
 - New source/test/bounded product doc only, plus necessary workflow source/test triggers and one module with all prior commands/budgets preserved; FACTS append and source-review refresh after all20 substantive policy review. Existing codec/store/keys/data/source helpers unchanged. No files/.npy loading/storage, series_ref packing, dates/config validation, provider/authenticity, collector, Lab/recorder, actual ledger/research/criteria/owner-rule effects. No fullR3 or actual Windows/API/provider/legal/license/pilot/frozen-study proof; extra spec review NOT_PERFORMED. Ordinary implementation review/fixtures remain separate.
+
+### GPT detached series-content digest pushed — 2026-11-06T21:28:26+09:00
+
+- Bounded child⑨-3a/series-digest/1 pushed/read-back ea90521ddf057178d4d5eb182c426dd384256f4e on gpt/run-registry-series-hash-20261106, clean six-file scope. New explicit25-byte domain/dtype header +two uint64LE dimensions +LEfloat64 C-order IEEE words, strict2D/no metadata, zeroaxes identity-only. Source96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043; prior five helpers unchanged. No storage, historical file parity or fullR3 claim.
+- Maintained15PASS0.011s; independent11 overlapping probes PASS0.008s; combined series15+source8+data15+keys13+store16+codec17=84PASS1.469s exit0. Fifteen literal preimages are fixtures, not extra product tests. All20 substantive policy GO; FACTS prefix-preserving15lines, consistencyPASS611/publicationBLOCKED. Previous workflow commands and5/30 budgets preserved. No failed product execution in this child.
+- Source PR86 exact9f623fd Runtime42216709846 still in progress, Compliance42216709861 success; do not complete from bounded-step success. Series PR/CI follows, sourcePR86 merges first. Sapientia two pages' progress sync read-back verified, private queue52 records; no new completion strike. Current next candidate is bounded in-memory NPY serialization/validation under approved§5.7, not claimed/implemented yet. Actual ownerWindows/provider/API/legal/license/pilot/frozen-study gaps and optional formal spec review NOT_PERFORMED retained.
