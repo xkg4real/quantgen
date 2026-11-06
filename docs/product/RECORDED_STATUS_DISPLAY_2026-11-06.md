@@ -52,3 +52,14 @@ The A3 correction was integrated at a99b16b; make_quant matches af782be and
 make_system matches b423f0b by AST comparison.
 Post-merge isolated status/snapshot/A3 layout validation passed26 tests
 (65.732s, exit0); earlier overlapping counts are not added.
+
+The first PR78 runtime run42182875822 at3726dd6 failed the bounded-source
+step on all four installed environments. Its older research-home failure test
+expected the superseded exact heading and injected raw error. Product behavior
+was unchanged: the shared renderer intentionally supplies a bilingual generic
+unavailable/no-approval message. That test now exercises KO/EN/KO and rejects
+raw error text containing fake READY/OWNER_APPROVED/counts, as well as normal
+status codes, recorded counts and evidence dates on the failure path. The
+original one-test failure is preserved; research-home, status-display, snapshot
+and Flet runtime validation then passed31 tests (3.944s, exit0). Corrected
+exact-head Windows/Ubuntu CI is still required.

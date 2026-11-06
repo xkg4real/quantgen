@@ -306,7 +306,7 @@
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
     "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
-    "docs/product/RECORDED_STATUS_DISPLAY_2026-11-06.md": "b42185924788a1dc67c970e362fff0e7c73d312167acedd1ab242bf3ef1f06b7",
+    "docs/product/RECORDED_STATUS_DISPLAY_2026-11-06.md": "a4c2192fda73553c93205b2132237d9d1f2dfb9abdf78784df340397891411c9",
     "docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md": "ad9177b241178d7427f77caa8b7de6f14390610d41d2959c87dd03b1093fd189",
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
@@ -509,7 +509,7 @@
     "tests/reference/__init__.py": "981465fb05d87f128a0b80cc4b8122a83335ee0994ce5b4d3ee3bdbe72bc6e9c",
     "tests/reference/reference_mode.py": "f79ad9f482323344ee20c6685edf08b8abd64f11dfad25ab40cd132ad9339c37",
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
-    "tests/research_home_acceptance.py": "6837298838c5850841a432c08f7397185befc549937c4cf29b28c8ca2313cd1e",
+    "tests/research_home_acceptance.py": "a6ba826451e019e3bec8cbc145c3e89878b6e01caa6b976266af0e722f19b157",
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
     "tests/runtime_syntax_acceptance.py": "174dd84c35a1085a271baa27c0a8e651b519af0e348d912e62a6453027d94e7e",
     "tests/sabr_diagnostics_acceptance.py": "934edacf62c87d572930e9f824120c22dd98dfe0ddc5257e08645b704670e07f",
@@ -596,163 +596,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "967e84608d2e6d06c518a7b9725b0727407902e63c92f1b60d1d5d5fc92139f9",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.667149+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "57dcca0f190e5246384fdd91a52df5c8586d63cc1a9611f7910e69863d7039e9",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.691394+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "967e84608d2e6d06c518a7b9725b0727407902e63c92f1b60d1d5d5fc92139f9",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.669950+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "57dcca0f190e5246384fdd91a52df5c8586d63cc1a9611f7910e69863d7039e9",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.694031+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "05696537ed1218b66c30760c43ed334688f8f5484d69c8003c4117d3a1205452",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.672404+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "553d58691954e536dcb41fe0ff8cedf473e62424bd5e97d27910c340d3ebe30b",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.696340+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "bd8016809b55c7738c998661b04a28b5ef16121ef17ae8e4bc4d99a7cc9a71bd",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.674644+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "ef39c9a15005142f094abafa3d2543560b51ea78b44e780906360a6da0307744",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.698488+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "cc64484a1054164f10b5ec40dafd277ec5d9f5475fc13982f8be70ff386a3aca",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.676743+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "4f2850e4297e96def8d1c0b38072d4a462f6fd05a44f27054d35f0a87aade781",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.700590+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "451bd43ea8938a3c7299ed6bd0d5a1f22c47ca30b87bef06f237432cf8c0386b",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.678942+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "e598eff05a5e2d8942649f991c8c4563d0ddbf0a4ee8c74d9a3372b4e179d4a9",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.702561+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "967e84608d2e6d06c518a7b9725b0727407902e63c92f1b60d1d5d5fc92139f9",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.681073+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "57dcca0f190e5246384fdd91a52df5c8586d63cc1a9611f7910e69863d7039e9",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.704675+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "451bd43ea8938a3c7299ed6bd0d5a1f22c47ca30b87bef06f237432cf8c0386b",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.683304+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "e598eff05a5e2d8942649f991c8c4563d0ddbf0a4ee8c74d9a3372b4e179d4a9",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.706648+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "e6676f5b35d651daebafb4ea5b5e49fe13e0d2494ba43283747336b6745940d6",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.685444+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "e2fc673c32a5c334cad68abdef4eb886ff40627840284e6cf03a03a1cfec7178",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.708922+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "c810869e1f363afb6c06bcf59538bb0ad63d20c216d73f2ccde714cde16d1709",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.687533+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "1d967a9a5f582a2f44158b5f4ead35dd689534b956e0322fcab9f4ab86e64fe6",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.711119+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "b29639708454ee30f079d2834807582a266b7760c123f46ce78ea2313feac805",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.689431+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "86a531dc8450b69c34a14b28af2debf2d2bc49ab9c2028dd13b5d340055f35b0",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.713172+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "12": {
       "document_sha256": "ea5017f8f93d973ad03aa62728aedaa39ed8d2d6c686feb41c0339c109fd590e",
-      "source_digest": "44b415f294e408587402baadd354cb4871402dc21c169cd6910e044320f00099",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.691426+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "1b95752dc047beab19f80bc16106b7c8005c3c76f89bb69c57dd1b0d136c9870",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.715314+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "e6676f5b35d651daebafb4ea5b5e49fe13e0d2494ba43283747336b6745940d6",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.693436+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "e2fc673c32a5c334cad68abdef4eb886ff40627840284e6cf03a03a1cfec7178",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.717246+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "e6676f5b35d651daebafb4ea5b5e49fe13e0d2494ba43283747336b6745940d6",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.695355+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "e2fc673c32a5c334cad68abdef4eb886ff40627840284e6cf03a03a1cfec7178",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.719454+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "15": {
       "document_sha256": "470bda66a33c2bdc9ff299940db8390750b54e0c73c978eff31abe5190f0df69",
-      "source_digest": "e6676f5b35d651daebafb4ea5b5e49fe13e0d2494ba43283747336b6745940d6",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.697597+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "e2fc673c32a5c334cad68abdef4eb886ff40627840284e6cf03a03a1cfec7178",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.721494+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "a14cefeec2ac39f6d088a4b62b08f0cf7944bc928da23427dfef283d93b90722",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.699702+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "20ff7cea6546bb5ad9b5b713c39a258ed6229182508d79dcee1d0a26fb5a0bab",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.723812+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "451bd43ea8938a3c7299ed6bd0d5a1f22c47ca30b87bef06f237432cf8c0386b",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.701614+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "e598eff05a5e2d8942649f991c8c4563d0ddbf0a4ee8c74d9a3372b4e179d4a9",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.726327+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "967e84608d2e6d06c518a7b9725b0727407902e63c92f1b60d1d5d5fc92139f9",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.703605+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "57dcca0f190e5246384fdd91a52df5c8586d63cc1a9611f7910e69863d7039e9",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.728817+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "136e45d05fc916f2d7d226df95863aa9d0de7e5b3eeedbac6a9a5bacef4d320e",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.705736+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "38af4fc8542988f68af57cbfb2317aa2088a1fc4f2120a016ebb23ab67ac967a",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.731038+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "967e84608d2e6d06c518a7b9725b0727407902e63c92f1b60d1d5d5fc92139f9",
-      "reviewed_by": "GPT integrated status display review",
-      "review_note": "Verified merged status and active-tab source boundaries, all twenty policy dispositions, actual synthetic render and baseline-matched narrow System limit, raw evidence immutability and publication separation; recorded post-merge twenty-six passing isolated tests.",
-      "reviewed_at": "2026-11-06T07:43:16.707922+00:00",
-      "source_commit": "a99b16b793b660c21b888ca2d2a9a0d7819e2fb4"
+      "source_digest": "57dcca0f190e5246384fdd91a52df5c8586d63cc1a9611f7910e69863d7039e9",
+      "reviewed_by": "GPT status failure contract review",
+      "review_note": "Reviewed existing failure-test alignment with approved generic bilingual no-approval behavior and stronger rejection of arbitrary error readiness claims, preserved all policy and approval boundaries; original CI failure and thirty-one passing isolated tests retained.",
+      "reviewed_at": "2026-11-06T07:51:20.733252+00:00",
+      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
     }
   }
 }
