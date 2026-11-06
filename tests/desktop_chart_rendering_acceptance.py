@@ -10,6 +10,7 @@ from PyQt6.QtGui import QFont, QFontMetricsF, QPainter
 from PyQt6.QtWidgets import QApplication
 from core.theme import DARK, LIGHT
 from quantgen_desktop import charts
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 
 class ChartRenderingTests(unittest.TestCase):
@@ -40,7 +41,7 @@ class ChartRenderingTests(unittest.TestCase):
             pixmap = widget.grab()
         self.assertFalse(pixmap.isNull())
         widget.hide()
-        self.addCleanup(widget.deleteLater)
+        self.addCleanup(delete_owned_widget, widget)
         return records
 
     def assert_inside(self, widget, records):

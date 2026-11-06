@@ -391,3 +391,56 @@ Claude의 AI 변경(`7c31417`, `401fe33`, `54b52eb`)과 후속 수정 작업 트
 
 01–20 정책을 현재 A1 소스와 대조하고 선택권·주장·키보드 문구만 직접 보강했습니다. 기존 법률·운영자·제공자 계약·라이선스·전송 동의·실제 공개/배포 조건, `review-required`와 공개 준비 `BLOCKED`를 보존합니다. 실제 Windows/API/파일럿·동결 연구 증거는 추가되지 않았고 Flet AI 체크박스 흐름도 여전히 미구현입니다. 최종 합성 실행·CI·병합과 소스 fingerprint는 통합 후 실제 결과로 별도 기록합니다.
 
+
+<a id="a3-reading-layout-2026-11-06"></a>
+## A3 네이티브 결과 배치·로컬 알아보기 — 2026-11-06 소스 검토
+
+A1 코드 `2715d9e` 이후 A3 통합 소스 `e33063b`의 범위입니다. A1 선행 병합, A3 최종 통합 검사·CI·병합과 실제 배포는 각각 확인해야 합니다. [A3 구현·실행 기록](../product/A3_READING_LAYOUT_2026-11-06.md)을 따릅니다.
+
+| 항목 | 확인한 소스 동작과 한계 | 근거 |
+| --- | --- | --- |
+| 결과 배치 | MC 제목→차트/서술→기존 7행 또는 GARCH 8행 표 순서. Bonds 기존 12개 지표와 실제 key-rate DV01 행을 같은 폭 두 G1 패널에 배치하고 내용 폭 820px 미만에서 세로 배치. 작은 지정 표만 실제 머리글·행·프레임·가로 스크롤 높이로 맞추며 다른 표의 스크롤은 유지. 계산·수치 형식·차트·원래 서술·보고서·AI 입력·공식 판정은 바꾸지 않음 | [표 높이·두 패널](../../quantgen_desktop/result_layout.py), [MC/호스트](../../quantgen_desktop/app.py), [채권](../../quantgen_desktop/bonds.py) |
+| 로컬 알아보기 | 창마다 한 제어기. F1 또는 표/선택한 라벨의 문맥 메뉴로 열고 기존 로컬 용어집의 후보를 명시적으로 선택해야 정의 표시. 선택 행의 보이는 셀과 선택 문구를 그대로 인용하며 3.000%·−0.00·— 같은 표시를 재계산/재형식화하지 않음. 새 정의·금융 해석·AI/네트워크 요청·파일/QSettings 저장 없음 | [도움말](../../quantgen_desktop/reading_panel.py) `TermPanel`, `ReadingHelp`, [기존 용어집](../../core/education/glossary.py), [한영 제어 문구](../../quantgen_desktop/reading_language.py) |
+| 문맥·복사 | 닫기·페이지/도구 전환·결과 초기화·원본 삭제, 같은 행 값/같은 크기 선택 문구 교체 시 인용 무효화. 원래 위젯이 남아 있고 표시·활성 상태이면 포커스와 원래 셀 복귀. 복사는 이용자가 선택할 때 OS 클립보드에 기록하며 인용 지우기가 클립보드·후속 사본 삭제나 메모리 보안 소거를 뜻하지 않음 | 같은 파일 `_snapshot`, `_source_contents`, `_check_quote`, `close`, `eventFilter`; [삭제 범위](20-deletion.md) |
+| 중요 안내·겹침 | 창 폭 1280px 이상은 340px 도킹, 좁으면 본문 폭을 유지하는 겹침 표시. 보이는 명시적 `reading_help_keep_visible` 영역을 피한 높이 260px 이상 구간만 사용하고 없으면 닫고 tooltip 안내. 일반 결과 행은 일시적으로 가려질 수 있음. 호스트는 동의/AI·연결/규칙/권리·프로젝트 상태·시장/관심종목·MC/Bonds/포트폴리오의 지정 안내를 보호. 태그/기하 검사와 실제 보조기술 검수는 별개 | [배치·회피](../../quantgen_desktop/reading_panel.py) `_overlay_rect`, `reflow`; [호스트 태그](../../quantgen_desktop/app.py), [Bonds 태그](../../quantgen_desktop/bonds.py), [포트폴리오 태그](../../quantgen_desktop/portfolio.py) |
+| 명시적 상세 접기 | `ToolPane.text`/`result_table`의 `display_role='provenance'`만 처음 접힌 상세 정보로 이동. 실제 연결 지점은 Macro 기준일·출처 개수 줄뿐. 별도 합성 ID·기술통계용 안내·짧은 표본 경고, 기본/알 수 없는/혼합/가정/지연/실패 문구는 본문 유지. 역할 메타데이터는 보고서 sections·AI 입력에 넣지 않음 | [위젯 배치](../../quantgen_desktop/tools.py), [Macro 호출](../../quantgen_desktop/macro.py), [접기 제어](../../quantgen_desktop/reading_panel.py) `DetailsFold` |
+| 검증 범위 | 지정 합성/offscreen 검사에는 F1/Esc·셀 복귀·언어/테마·폭 변경·정확 인용·실제 Macro 접기·기존 보고서/AI 입력 비교가 있음. 선행 실행의 통과 수를 합산하지 않으며 재현된 baseline 실패도 기록대로 유지. 실제 Windows/IME/DPI·스크린리더·전체 대비/캡처 행렬·Flet 동등 구현·실제 API/공개 배포 완료를 뜻하지 않음 | [레이아웃 검사](../../tests/desktop_a3_layout_acceptance.py), [읽기 검사](../../tests/desktop_a3_reading_acceptance.py), [실행 기록·한계](../product/A3_READING_LAYOUT_2026-11-06.md), [키보드 검수](15-keyboard.md) |
+
+01–20 정책을 현재 A3 소스와 대조하고 로컬 인용/명시적 복사, 선택권·주장·키보드·삭제에 직접 관련된 문구만 보강했습니다. 기존 법률·운영자·제공자 계약·라이선스·전송 동의·실제 공개/배포 조건, `review-required`와 공개 준비 `BLOCKED`를 유지합니다. Flet AI 체크박스 흐름·실제 Windows/API/파일럿·동결 연구 증거는 미완료이며 선택적 GPT/Gemini 추가 심사는 `NOT_PERFORMED`입니다. 최종 실행·CI·병합과 소스 fingerprint는 통합 후 실제 결과로 별도 기록합니다.
+
+<a id="a3-mc-tab-width-2026-11-06"></a>
+## A3 Monte Carlo 비활성 탭 최소 폭 후속 — 2026-11-06
+
+최초 PR #77 Windows CI는 `67a8838`의 GBM·GARCH-t MC 가로 스크롤 최대값이 286px여서 기존 0 조건에 실패했습니다. 앞서 통과한 Linux 131개 검사와 이 실패를 별도 증거로 보존합니다. Quant 탭을 일반 `QTabWidget`에서 이미 사용 중인 `CurrentPageTabs`로 바꿔 현재 선택한 페이지의 크기 힌트만 사용합니다. 비활성 Strategy Lab의 최소 폭이 MC를 넓히는 경로를 제거하되 Strategy가 선택되면 그 최소 폭을 그대로 존중합니다. [앱 적용](../../quantgen_desktop/app.py) `make_quant`와 [기존 탭 크기 처리](../../quantgen_desktop/chart_study.py) `CurrentPageTabs`가 근거이며 계산·문구·가정·판정·보호 태그·보고서·AI 입력은 바꾸지 않습니다.
+
+새 합성 회귀는 비활성 Strategy에 최소 폭 1800px를 주어 수정 전 넘침 1057px를 재현했습니다. 이는 숨은 탭 크기 제약의 재현이며 Windows에서 관측한 286px나 실제 Windows 글꼴·자식 폭을 재현/측정한 것으로 설명하지 않습니다. 수정 후 A3 layout 5개+reading 12개, 17개 검사가 통과했고 viewport 경계 조건을 보강한 같은 회귀 1개도 통과했습니다. 1개는 앞 검사와 겹치므로 합산하지 않습니다. 기존 넘침 0 조건은 유지하고 차트/표가 실제 viewport 안에 있는지도 검사하여 잘림으로 대신하지 않습니다. 선택한 Strategy의 필요한 스크롤·MC 복귀, 값·실행 보고서·AI 입력 보존도 확인합니다. [회귀 검사](../../tests/desktop_a3_layout_acceptance.py)와 [최종 통합/CI 기록](../product/A3_READING_LAYOUT_2026-11-06.md)을 연결합니다.
+
+01–20 정책을 이 한정된 변경에 재대조하고 15번에 실패 이력·검수 범위만 보강했습니다. 수정 후 정확한 커밋의 Windows CI는 별도로 확인하며 클라우드 합성 통과를 실제 사용자 Windows/DPI·키보드·스크린리더 수용으로 바꾸지 않습니다. 정책 `review-required`, 공개 준비 `BLOCKED`, 기존 법률·라이선스·동의·실제 API/파일럿·동결 연구·게시/배포 조건은 유지합니다.
+
+<a id="a3-mc-form-width-2026-11-06"></a>
+## A3 MC 입력 폼 최소 폭 추가 후속 — 2026-11-06
+
+앞의 비활성 탭 수정 `af782be` 뒤 Windows CI에서도 MC 자체 최소 폭 1014px, viewport 782/792px, 가로 넘침 294/284px가 확인되었습니다. 해당 실행은 17개 검사 중 3개 실패이며 최초 `67a8838`의 286px 실패와 별도 이력입니다. 앞의 합성 1057px 재현·Linux 통과를 Windows 전체 원인 해결이나 수정 후 Windows 성공으로 바꾸지 않습니다.
+
+[앱](../../quantgen_desktop/app.py) `make_quant`의 데이터 출처·모델·드리프트 세 콤보박스에 [기존 공통 도구 머리글](../../quantgen_desktop/tools.py)의 `AdjustToMinimumContentsLengthWithIcon`, 최소 내용 길이 12, 가변 가로 폭/고정 세로 크기 정책을 적용합니다. 전체 항목 문자열은 목록 모델과 현재 선택 tooltip에 유지하며 선택/모델 데이터 변경에 tooltip을 갱신합니다. 기존 언어 제어기의 재번역도 이 경로를 사용합니다. 선택의 내부 값·기본값·입력 범위·이름·실행 경로·보고서·AI 입력·수치·NOT_RUN 안내와 A3 보호 태그는 유지합니다.
+
+[추가 회귀](../../tests/desktop_a3_layout_acceptance.py)는 긴 합성 선택 문구와 14px 스타일 갱신으로 내용 기반 크기 힌트 경로를 검사합니다. 수정 전 해당 조건의 넘침 2615px는 별도의 합성 재현이며 Windows에서 관측한 284/294px나 실제 Windows 글꼴 폭을 재현한 증거는 아닙니다. 콤보 크기 정책만 적용한 중간 소스는 18개 합성 검사 통과 뒤 독립 Linux 렌더의 18px·영문·1000px 조건에서 14px 넘침(MC 최소 폭 770px, 설정 752px, viewport 818px, 내용 832px)으로 실패했습니다. 중간 통과와 이 실패를 함께 보존합니다.
+
+최종 소스의 [선택 적용 폼](../../quantgen_desktop/result_layout.py) `ResponsiveFieldGrid`는 각 라벨·컨트롤의 실제 명시적/권장 최소 폭과 간격의 합으로 가능한 최대 열 수 3·2·1을 선택합니다. 원래 아홉 위젯을 같은 읽기 순서로 옮기며 폭별 라벨 높이·컨트롤 높이를 계산하고 글꼴/스타일/배치/폭 변화에 갱신합니다. 위젯을 배치한 뒤 Tab 순서를 설정합니다. 고정 창폭 경계값이나 임의로 낮춘 컨트롤 최소 크기를 쓰지 않으며 한 컨트롤의 실제 최소 폭보다 좁으면 필요한 스크롤이 남을 수 있습니다.
+
+최종 layout 8개+reading 12개, 20개 합성 검사는 넘침 0, 입력·차트·표의 viewport 안 배치와 실제 최소 크기, 전체 행·선택값·보고서·AI 입력·재계산 없음 조건을 유지합니다. 18px 실제 MC 위젯의 Qt Tab 이동과 별도 250px 최소 폭 위젯의 1→2→3→1 배치도 확인합니다. 독립 Linux offscreen 렌더는 기본/18px·한영·1000/1360px 8개와 Linux Qt의 Windows 스타일을 적용한 1000px·한영 2개, 총 10개 관측에서 같은 소스의 넘침 0·팝업 열기·선택 변경/복귀·원본 보존을 확인합니다. Linux에서 Qt 스타일을 바꾼 것이며 Windows 운영체제 실행이 아닙니다. 이 범위의 합성 렌더/키 입력·목록 모델/tooltip 문자열 확인은 실제 Windows/DPI·스크린리더 수용이나 모든 확대율의 보장이 아닙니다.
+
+[CI 구성](../../.github/workflows/runtime-smoke.yml)은 같은 `PyQt6==6.12.0` 설치를 독립 단계로 옮기고 기존 두 A3 모듈을 긴 네이티브 묶음보다 먼저 실행합니다. 검사를 없애거나 판정 기준을 낮추지 않습니다. 수정 후 실행·정확한 커밋의 Windows CI·병합은 [제품 검증 기록](../product/A3_READING_LAYOUT_2026-11-06.md)의 실제 결과로 확인합니다. 01–20 정책을 재대조하고 15번 검수 범위만 보강했으며 공개 준비 `BLOCKED`, 모든 `review-required`·미확정 법률/운영자/라이선스/동의·실제 API/파일럿·동결 연구·게시/배포 조건과 기존 A3/System 좁은 화면 한계를 유지합니다.
+
+<a id="a3-qt-fixture-cleanup-2026-11-06"></a>
+## A3 후속 Qt 시험 위젯 정리·CI 실행 예산 — 2026-11-06
+
+`f7b4a73`의 Windows 3.14 CI는 A3 20개 통과 뒤 별도 차트/텍스트 31개를 모두 `OK`로 출력했으나 프로세스 종료 코드가 1이므로 전체 성공이 아닙니다. 정확한 종료 실패 원인은 확정하지 않았습니다. Linux의 같은 네 모듈에서는 수정 전 종료 시 `ResearchWindow`와 `ReadingHelp`가 각각 12개 남는 것을 관측했으며, 이 관측을 Windows 원인 재현으로 바꾸지 않습니다.
+
+[시험 전용 정리 함수](../../tests/qt_fixture_cleanup.py)는 이미 삭제된 소유 위젯에는 반환하고, 살아 있으면 `hide`·`deleteLater`·해당 위젯에만 `DeferredDelete` 전달 후 실제 Qt 삭제를 확인합니다. 네 테스트 모듈의 직접 소유 fixture에만 적용하며 프로덕션 코드·종료 callback·계산·보고서·AI 입력은 바꾸지 않습니다. 전체 위젯 삭제·예외 무시·강제 종료·검사 건너뛰기 없이 기존 31개 테스트 메서드와 152개 정적 assertion 구문, Linux 강제 넘침 전제조건을 보존합니다. Qt 객체 정리는 사용자 자료·클립보드·디스크·제공자 삭제 또는 보안 소거 기능이 아닙니다.
+
+수정된 집중 검사 6개(기존 차트 5개와 별도 소유권/반복 정리 진단 1개)는 3.276초, 종료 코드 0으로 통과했습니다. 최종 원래 네 모듈은 83.636초에 31개 중 30개 통과·기존 Linux 전제조건 1개 실패, 오류 0·종료 코드 1입니다. 서로 겹치는 검사를 합산하거나 이 실행을 전체 통과로 기록하지 않습니다. 최종 종료 시 위 두 객체는 각각 0개였고, 별도 삭제 대기 위젯은 집중 진단에서 살아 있어 대상별 처리를 확인했습니다. 중간 중복 정리 오류 2건과 기존 실패 이력은 보존하며, 새 Windows CI와 실제 사용자 Windows/DPI·보조기술 검수는 별도입니다.
+
+[CI 구성](../../.github/workflows/runtime-smoke.yml)은 같은 차트/텍스트 명령을 A3 바로 뒤로 옮기고 정리 helper 경로를 검사 대상으로 추가합니다. 모든 실행 명령은 유지하고 설치 포함 작업 예산만 20분에서 30분으로 늘리며 구문 검사는 5분을 유지합니다. 앞선 Windows 3.11/3.12 작업은 API 시각상 약 20분 5초에 취소되었고 로그는 검사 진행 중이었으나 취소 주석 원문을 읽지 못했으므로 확정된 시간초과 원인으로 표시하지 않습니다. 이 실행 예산 변경은 검사·금융·연구 판정 기준 변경이 아닙니다.
+
+01–20 정책을 시험/CI 차이와 대조했고 기존 조항은 그대로 유지합니다. [제품 검증 기록](../product/A3_READING_LAYOUT_2026-11-06.md)에 결과와 한계를 연결하며 공개 준비 `BLOCKED`, `review-required`, 법률·운영자·라이선스·동의·실제 API/파일럿·동결 연구·공개/배포 조건은 해제하지 않습니다.

@@ -14,6 +14,7 @@ from quantgen_desktop.localization import UiLabel
 from PyQt6.QtCore import QEvent,QPoint,QSize
 from PyQt6.QtWidgets import QApplication,QWidget,QScrollArea,QComboBox
 from PyQt6.QtTest import QTest
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 
 class ResponsiveToolTests(unittest.TestCase):
@@ -30,7 +31,7 @@ class ResponsiveToolTests(unittest.TestCase):
     def window(self):
         w=ResearchWindow(auto_refresh=False,language='en');w.resize(1440,1000);w.show()
         def cleanup():
-            w.hide();w.deleteLater();self.app.sendPostedEvents(None,QEvent.Type.DeferredDelete)
+            delete_owned_widget(w)
         self.addCleanup(cleanup)
         return w
 
@@ -49,11 +50,11 @@ class ResponsiveToolTests(unittest.TestCase):
 
     def test_inactive_oversize_page_does_not_set_selected_page_minimum(self):
         tabs=CurrentPageTabs();small=QWidget();large=QWidget();large.setMinimumSize(8000,9000)
+        self.addCleanup(delete_owned_widget,tabs)
         tabs.addTab(small,'Small');tabs.addTab(large,'Large');tabs.setCurrentWidget(small)
         self.assertLess(tabs.minimumSizeHint().width(),1000);self.assertLess(tabs.minimumSizeHint().height(),1000)
         tabs.setCurrentWidget(large);self.assertGreaterEqual(tabs.minimumSizeHint().width(),8000)
         tabs.setCurrentWidget(small);self.assertLess(tabs.minimumSizeHint().width(),1000)
-        tabs.deleteLater()
 
     def test_height_for_width_uses_selected_page_and_keeps_explicit_minimum(self):
         class WrappingPage(QWidget):
@@ -64,6 +65,7 @@ class ResponsiveToolTests(unittest.TestCase):
             def hasHeightForWidth(self): return True
             def heightForWidth(self,width): return self.content_height
         tabs=CurrentPageTabs(); small=WrappingPage(50); large=WrappingPage(9000)
+        self.addCleanup(delete_owned_widget,tabs)
         tabs.addTab(small,'Small'); tabs.addTab(large,'Large')
         tabs.setCurrentWidget(small)
         self.assertTrue(tabs.hasHeightForWidth())
@@ -75,7 +77,6 @@ class ResponsiveToolTests(unittest.TestCase):
         self.assertGreaterEqual(tabs.heightForWidth(700),9000)
         tabs.setCurrentWidget(small)
         self.assertLess(tabs.heightForWidth(700),600)
-        tabs.deleteLater()
 
     def test_signals_render_locale_narrow_wide_keeps_narrative_inside_viewport(self):
         w=self.window();pane=w.signals;out=signals_fixture(SignalsRequest(source='synthetic'))

@@ -15,6 +15,7 @@ with patch.object(dotenv, 'load_dotenv', return_value=False):
 from PyQt6.QtCore import QPoint, QPointF, Qt
 from PyQt6.QtGui import QWheelEvent
 from PyQt6.QtWidgets import QAbstractSpinBox, QApplication, QComboBox, QLabel, QScrollArea, QSpinBox, QWidget
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 
 def wheel(app, widget, delta=-120, horizontal=False):
@@ -77,7 +78,7 @@ class OperationFixTests(unittest.TestCase):
         self.window = ResearchWindow(auto_refresh=False, locale='ko_KR', market_loader=self.provider,
                                      connections_runner=self.provider)
         self.window.resize(1000, 700); self.window.show(); self.window.navigate('markets'); self.app.processEvents()
-        self.addCleanup(self.window.deleteLater); self.addCleanup(self.window.hide)
+        self.addCleanup(delete_owned_widget, self.window)
 
     def test_unfocused_selectors_ignore_the_wheel_and_the_page_scrolls(self):
         w = self.window
@@ -128,7 +129,7 @@ class OperationFixTests(unittest.TestCase):
         combo = QComboBox(content); combo.addItems(['a', 'b', 'c'])
         spin = QSpinBox(content); spin.setRange(0, 10); spin.move(0, 40)
         outer.setWidget(page); outer.show(); self.app.processEvents()
-        self.addCleanup(outer.deleteLater)
+        self.addCleanup(delete_owned_widget, outer)
         for control in (combo, spin):
             guard(control)
         inner_bar, outer_bar = inner.verticalScrollBar(), outer.verticalScrollBar()
