@@ -6,12 +6,12 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a, ⑨-3a/source-digests/1, ⑨-3a/series-digest/1, ⑨-3a/series-format/1
-updated_at: 2026-11-06T21:37:24+09:00
+updated_at: 2026-11-06T21:43:18+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-series-format-20261106
-work_commit: ea90521ddf057178d4d5eb182c426dd384256f4e
-uncommitted_changes: yes
+work_commit: e7ed79346653cd647f7f5e317fdca348037bfe4e
+uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -621,3 +621,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - Format child has local uncommitted source/tests/supporting workflow at gpt/run-registry-series-format-20261106; remote code head remains ea90521. Initial21-test run retained20PASS+1fixtureERROR because NumPy itself rejected construction of the impossible oversized zero-axis ndarray before the helper. Test now uses a literal oversized decoded header and a valid encoder boundary; follow-up22PASS0.036s exit0 is intermediate evidence, not final frozen-source acceptance.
 - Bounded-writer memoryview byte accounting is being strengthened after review; final independent/combined tests and all20 policy review remain. The pathological AST diagnostic did not reproduce a product RecursionError: parse-stage fixture expectations were corrected, and explicit recursion handling/resource MemoryError propagation are separately injected boundaries. Preserve those distinctions and initial logs.
 - PR86/87 exact-head full Runtime workflows still run; their bounded-source/syntax steps and Compliance success do not alone establish full completion. No new doneID/LEDGER/completion strike. Current working unit, execution and pendingPRs86/87 remain saved for recovery. Actual evidence exclusions and optional formal spec review NOT_PERFORMED retained.
+
+### GPT bounded in-memory NPY format pushed — 2026-11-06T21:43:18+09:00
+
+- Child⑨-3a/series-format/1 pushed/read-back e7ed79346653cd647f7f5e317fdca348037bfe4e on gpt/run-registry-series-format-20261106, clean six-file scope. Source241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc, finaltest2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73. New strict NPY1 LE/C/2D profile validates bounded typedheader and exact Pythonint data size before numpy.load(allow_pickleFalse), then rehashes supplied content. No filesystem/persistent store or historicalfile compatibility claim; six prior helpers unchanged.
+- Final focused22PASS0.035s; independent13 overlapping probes PASS0.025s on unchanged product; combined format22+series15+source8+data15+keys13+store16+codec17=106PASS1.487s exit0. Root finaltest permits documented format refusal or resource MemoryError for pathological unaryheader while requiring numpy.load nevercalled; separate injected RecursionError typedrefusal/MemoryErrorpropagation remain. Independent receipt retains its earlier maintainedtesthash; no false rerun attribution. Initial21 fixtureERROR and prior22/106 runs retained separately; nbytes improvement came from source review, not a claimed independent failed product run.
+- All20 substantive policy GO, prefix-preserving FACTS17lines, consistencyPASS614/publicationBLOCKED. Prior workflow commands and5/30 budgets preserved. PR and exactfinalhead Runtimeall6/Compliance next; source86 andseries87 must merge first. FullR3, actualWindows/API/provider/legal/license/pilot/frozen-study and optional formal specNOT_PERFORMED remain unchanged. Next explicit-directory verified series-file storage is only an engineering candidate, not claimed/implemented.
