@@ -4,14 +4,14 @@ reason: usage_limit_weekly
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T18:41:06+09:00
+updated_at: 2026-11-06T18:54:18+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-store-20261106
 work_commit: f3d6c5e2a0de766ab79a73d392eb77bd307c9862
-uncommitted_changes: no
+uncommitted_changes: yes
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -489,3 +489,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - 동일task/handoff/execution6c40bb4c-51a4-439b-a64d-0233051168ab 아래 ⑨-3a/store/1을 등록한다. gpt/run-registry-store-20261106 /workspace/work/quantgen-r3-store-20261106을 검증된f3d6c5e2a0de766ab79a73d392eb77bd307c9862에서 생성·push/read-back했고 코드수정은 아직 없다. 최신LEDGER979369ac에서 해당ID/파일 미완료·미기록 확인. 원래R3codec은PR81에서 계속CI확인하며 PR79→80→81 순서를 유지한다.
 - 승인 근거는 Nov3 소유자R3전부승인 및 Nov5유효인계, exactrev2계약fa280591 §5.2/5.5/9.1/9.3이다. 단일 활성구간의 명시적caller경로, read/append 전체chain검증, 프로세스+OSboundedlock, lock내중복STARTED/FINISHED거부, binaryLF/flush/fsync만 구현한다. 기본실제경로/config/env/네트워크 없음. rollover필요시거부하며 자동복구/회전/cache/human권한효과/recorder/Lab/keys/실제원장/동결연구는 제외한다. 전체T-RUNREG02/⑨-3a 완료아님.
 - 시험은격리temp합성에한정: 재열기/무결성·torn거부와원문보존, 중복경쟁,5threads×10events, 별도process OS잠금,timeout/쓰기실패, 최종Windows/UbuntuCI. 코드인수는 이CURRENT최신blob CAS·executionID원격read-back 이후에만 시작한다. 실제증거누락과 선택spec NOT_PERFORMED 유지.
+
+### GPT Rates 한정 완료·PR79 병합 — 2026-11-06T18:54:18+09:00
+
+- final62246779f45b9e4eff37b7af6ac7e71354b5fd18의 Runtime42194971104 전체6job/Compliance42194971102success 확인 후 PR79를 maina63fffb20fed22d6d0d582d68167af818c94db0b에 병합했고 PR/main read-back했다. LEDGERe9ffa27a909e630736b22c9683db4d42efce711b에 ⑬-8/b2/b/2만 추가·원문보존·read-back. 11합성PASS110.673s,20정책PASS588/publicationBLOCKED; inherited A1공유18PASS와 중복합산하지 않는다. 이전578Ubuntu18OK뒤139실패/원인미확정 보존.
+- 부모13-8/실제Windows·공급사/API/법률·라이선스/파일럿·동결연구 미완료, 선택spec NOT_PERFORMED. Notion완료는 이어서 최소반영한다. PR80Identity최종CI전체성공 보고를 이제독립재조회하고 PR81CI도계속확인한다.
+- 주작업R3store는 미커밋구현상태:16store+17codec 통합33PASS0.401s와 독립8검사PASS0.141s(중복), source77522bd80cb158bfac8b400435ede567c35514779ee37006be1007e8094a5eae 고정. 실제독립process잠금은Linux합성증거이며Windows는최종CI필요. 정책01/07/20과FACTS의caller저장/삭제범위 최소갱신 중; 전체R3/T02/회전복구·실제원장연결없음.
