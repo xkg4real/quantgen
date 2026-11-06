@@ -43,7 +43,7 @@ class MacroPane(ToolPane):
         self.text(DESCRIPTIVE_READ_NOTE)
         source_counts=', '.join(f'{k}: {v}' for k,v in s.sources.items())
         self.text(f'As of {s.as_of} · '+source_counts,
-                  localized={'ko':f'기준일 {s.as_of} · '+source_counts})
+                  localized={'ko':f'기준일 {s.as_of} · '+source_counts}, display_role='provenance')
         if s.synthetic_ids:
             self.text('합성 데이터 포함: '+', '.join(s.synthetic_ids),
                       localized={'en':'Includes synthetic data: '+', '.join(s.synthetic_ids)})

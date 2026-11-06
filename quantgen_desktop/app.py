@@ -295,6 +295,8 @@ class ResearchWindow(QMainWindow):
         self.localizer = LanguageController(self)
         self.refresh_views()
         self.fit_sidebar()
+        from .reading_panel import install_reading_help
+        self.reading_help = install_reading_help(self)
         if auto_refresh:
             QTimer.singleShot(0, self.refresh_markets)
 
@@ -347,6 +349,7 @@ class ResearchWindow(QMainWindow):
         layout = self.page("Research Home", "관측된 시장과 내가 실행한 연구를 한눈에 확인하세요.")
         from .watchlist import WatchlistPanel
         self.watchlist = WatchlistPanel(locale=self.ctx)
+        self.watchlist.setProperty("reading_help_keep_visible", True)
         self.watchlist.refresh_requested.connect(self.refresh_markets)
         self.watchlist.chart_requested.connect(self.open_stock_chart)
         self.home_markets = self.watchlist.table
@@ -357,7 +360,9 @@ class ResearchWindow(QMainWindow):
             box, inner = panel(title)
             number = label("0", "number")
             inner.addWidget(number)
-            inner.addWidget(label("이번 세션의 Monte Carlo · 투자 판정과 별개", "caption"))
+            notice = label("이번 세션의 Monte Carlo · 투자 판정과 별개", "caption")
+            notice.setProperty("reading_help_keep_visible", True)
+            inner.addWidget(notice)
             summary.addWidget(box)
             self.count_labels.append(number)
         layout.addLayout(summary)
@@ -367,12 +372,15 @@ class ResearchWindow(QMainWindow):
         box, inner = panel("가능성을 하나의 숫자로 좁히지 마세요")
         self.home_chart = FanChart()
         self.home_summary = label("분석을 실행하면 최신 결과와 데이터 근거가 연결됩니다.")
+        self.home_summary.setProperty("reading_help_keep_visible", True)
         from .chart_study import ChartStudy
         inner.addWidget(ChartStudy(self.home_chart,self.home_summary))
         b = QPushButton("Quant Lab에서 연구 시작 →")
         b.clicked.connect(lambda:self.navigate("quant"))
         inner.addWidget(b)
-        inner.addWidget(label("P5–P95는 시뮬레이션 분포의 중앙 90% 구간입니다. 수익 보장이나 95% 신뢰구간이 아닙니다.", "caption"))
+        notice = label("P5–P95는 시뮬레이션 분포의 중앙 90% 구간입니다. 수익 보장이나 95% 신뢰구간이 아닙니다.", "caption")
+        notice.setProperty("reading_help_keep_visible", True)
+        inner.addWidget(notice)
         layout.addWidget(box)
         layout.addStretch()
 
@@ -397,6 +405,7 @@ class ResearchWindow(QMainWindow):
         self.market_subtitle.retranslate()
         # Owner, 2026-11-04: no indicator board (UI-7) and no asset-class tab strip (UI-8) here.
         self.market_chart = MarketChartPane(locale=self.ctx)
+        self.market_chart.setProperty("reading_help_keep_visible", True)
         self.market_chart.setObjectName('marketChart')
         if self.symbol_directory is None:
             self.symbol_directory = default_directory()
@@ -409,6 +418,7 @@ class ResearchWindow(QMainWindow):
             card_router_factory=self.card_router_factory or _production_card_router,
             profile_loader=self.profile_loader or _ProductionProfileLoader(),
             locale=self.ctx, auto_load=self.auto_refresh)
+        self.markets_view.setProperty("reading_help_keep_visible", True)
         layout.addWidget(self.markets_view)
         layout.addStretch()
 
@@ -562,18 +572,24 @@ class ResearchWindow(QMainWindow):
         self.run_button.clicked.connect(self.run_analysis)
         inner.addWidget(self.run_button)
         self.analysis_status = label("데이터 출처·시드·모델 가정을 기록합니다.", "muted")
+        self.analysis_status.setProperty("reading_help_keep_visible", True)
         inner.addWidget(self.analysis_status)
         layout.addWidget(box)
         box, inner = panel("분포와 근거")
         self.quant_chart = FanChart()
         self.quant_metrics = table(["지표", "값"])
         self.quant_metrics.setProperty("localized_columns", [0])
-        self.quant_metrics.setMinimumHeight(280)
-        inner.addWidget(self.quant_metrics)
+        from .result_layout import fit_result_table
+        fit_result_table(self.quant_metrics)
         self.quant_notes = label("아직 실행한 분석이 없습니다.", "muted")
+        self.quant_notes.setProperty('reading_help_keep_visible', True)
         from .chart_study import ChartStudy
-        inner.insertWidget(0, ChartStudy(self.quant_chart,self.quant_notes))
-        inner.addWidget(label("계산 완료 ≠ 투자 검증. 이 화면은 NOT_RUN 판정을 유지하며 주문이나 전략 원장을 생성하지 않습니다.", "caption"))
+        self.quant_study = ChartStudy(self.quant_chart, self.quant_notes)
+        inner.addWidget(self.quant_study)
+        inner.addWidget(self.quant_metrics)
+        notice = label("계산 완료 ≠ 투자 검증. 이 화면은 NOT_RUN 판정을 유지하며 주문이나 전략 원장을 생성하지 않습니다.", "caption")
+        notice.setProperty('reading_help_keep_visible', True)
+        inner.addWidget(notice)
         layout.addWidget(box)
         layout.addStretch()
 
@@ -587,13 +603,16 @@ class ResearchWindow(QMainWindow):
         self.risk_tabs=CurrentPageTabs();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
         from .paper import PaperPane
         self.paper = PaperPane(self.paper_session)
+        self.paper.setProperty("reading_help_keep_visible", True)
         self.risk_tabs.addTab(self.paper, 'Paper Trading')
         layout.addWidget(self.risk_tabs)
         layout.addWidget(label("개별 가격 시뮬레이션 위험", "heading"))
         self.risk_table = table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
         self.risk_table.setMinimumHeight(300)
         layout.addWidget(self.risk_table)
-        layout.addWidget(label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "muted"))
+        notice = label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "muted")
+        notice.setProperty("reading_help_keep_visible", True)
+        layout.addWidget(notice)
         layout.addStretch()
 
     def make_library(self):
@@ -609,11 +628,15 @@ class ResearchWindow(QMainWindow):
         buttons.addWidget(self.save_json); buttons.addWidget(self.save_bundle)
         layout.addLayout(buttons)
         self.export_status = label("현재 저장 대상은 Monte Carlo 실행입니다. 자동 저장되지 않으며 경로는 직접 선택합니다.", "muted")
+        self.export_status.setProperty("reading_help_keep_visible", True)
         layout.addWidget(self.export_status)
-        layout.addWidget(label("재현성 PARTIAL · 데이터 빈티지/라이선스 미검증 · 비용 NOT_APPLIED · 검증 NOT_RUN\n동결 연구·과거 원장·비밀 설정을 탐색하지 않습니다.", "caption"))
+        notice = label("재현성 PARTIAL · 데이터 빈티지/라이선스 미검증 · 비용 NOT_APPLIED · 검증 NOT_RUN\n동결 연구·과거 원장·비밀 설정을 탐색하지 않습니다.", "caption")
+        notice.setProperty("reading_help_keep_visible", True)
+        layout.addWidget(notice)
         from .commentary import CommentaryPane
         options = {'runner': self.commentary_runner} if self.commentary_runner else {}
         self.commentary = CommentaryPane(self.commentary_sources, **options)
+        self.commentary.setProperty("reading_help_keep_visible", True)
         layout.addWidget(self.commentary)
         layout.addStretch()
 
@@ -644,21 +667,26 @@ class ResearchWindow(QMainWindow):
         self.locale_picker.currentIndexChanged.connect(self.change_language)
         inner.addWidget(self.locale_picker)
         self.locale_notice=label(self.ctx.t('language_fallback' if self.ctx.is_fallback else 'language_coverage'),'caption')
+        self.locale_notice.setProperty("reading_help_keep_visible", True)
         inner.addWidget(self.locale_notice)
         layout.addWidget(box)
         from .connections import ConnectionsPane
         self.connections = ConnectionsPane()
+        self.connections.setProperty("reading_help_keep_visible", True)
         self.connections.requested.connect(lambda q: self.run_tool('connections', q))
         from .paper import RulesPane
         self.rules = RulesPane(self.paper_session)
+        self.rules.setProperty("reading_help_keep_visible", True)
         self.system_tabs = QTabWidget()
         self.system_tabs.addTab(self.connections, 'Connections')
         self.system_tabs.addTab(self.rules, 'Rules')
         from .data_rights import DataRightsPane
         self.data_rights=DataRightsPane(self.ctx)
+        self.data_rights.setProperty("reading_help_keep_visible", True)
         self.system_tabs.addTab(self.data_rights,self.ctx.t('data_rights'))
         layout.addWidget(self.system_tabs)
         box, inner = panel("프로젝트 상태")
+        box.setProperty("reading_help_keep_visible", True)
         try:
             status = verify(application_root())
             counts = status["code_test"]["counts"]
@@ -672,6 +700,7 @@ class ResearchWindow(QMainWindow):
         inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
+        box.setProperty("reading_help_keep_visible", True)
         inner.addWidget(label("PyQt6 네이티브: Home, Markets(관심종목 차트·종목 한 화면), 분석 도구(Bonds, Rates, FX, Structuring, Macro sheet, Macro v2, Derivatives, ETF, Crypto, KRX), 기술지표 가이드, Monte Carlo, Strategy Lab, 포트폴리오, Signals, Library·저장, 연결 설정, System\n모의매매·규칙·선택 AI 해설 연결 완료 / 남은 검증: 실제 Windows 표시·DPI·설치\n브라우저: 기존 Flet 앱을 유지합니다."))
         inner.addWidget(label("이번 데스크톱은 선택 실행하는 미리보기입니다. 전체 기능 이전 완료본이 아닙니다.", "muted"))
         layout.addWidget(box)
@@ -849,6 +878,9 @@ class ResearchWindow(QMainWindow):
             self.language_store.setValue("ui/locale", str(self.ctx.locale))
         self.localizer.apply()
         self.fit_sidebar()
+
+        if hasattr(self, 'reading_help'):
+            self.reading_help.set_locale(self.ctx)
 
     @pyqtSlot()
     def refresh_markets(self):

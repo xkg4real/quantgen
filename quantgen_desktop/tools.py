@@ -80,6 +80,7 @@ class ToolPane(QWidget):
         self.sections = []
         self.tables = {}
         self.charts = {}
+        self._details_fold = None
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 12, 0, 0)
         layout.setSpacing(18)
@@ -136,6 +137,7 @@ class ToolPane(QWidget):
         inner.addWidget(self.run)
         layout.addWidget(self.input_box)
         self.status = label('도구와 출처를 선택한 후 실행하세요.', 'muted')
+        self.status.setProperty('reading_help_keep_visible', True)
         layout.addWidget(self.status)
         self.result = QWidget()
         self.result_layout = QVBoxLayout(self.result)
@@ -192,12 +194,16 @@ class ToolPane(QWidget):
         self.requested.emit(request)
 
     def clear_result(self):
+        reading_help = getattr(self.window(), '_reading_help', None)
+        if reading_help is not None:
+            reading_help.invalidate_source(self)
         self.has_result = False
         self.report = None
         self.sections = []
         self.export_json.setEnabled(False)
         self.export_zip.setEnabled(False)
         self.tables, self.charts = {}, {}
+        self._details_fold = None
         while self.result_reading_layout.count():
             item=self.result_reading_layout.takeAt(0)
             if item.widget():item.widget().hide();item.widget().deleteLater()
@@ -208,7 +214,21 @@ class ToolPane(QWidget):
                 item.widget().hide()
                 item.widget().deleteLater()
 
-    def text(self, text, role='muted', *, localized=None, name=None):
+    def _place_result_widget(self, widget, display_role=None):
+        # A role is display metadata only. Unclassified/mixed blocks, assumptions,
+        # synthetic/delayed notices and failures always remain in the main body.
+        widget.setProperty('display_role', display_role)
+        widget.setProperty('reading_help_keep_visible', display_role != 'provenance')
+        if display_role == 'provenance':
+            if self._details_fold is None:
+                from .reading_panel import DetailsFold
+                self._details_fold = DetailsFold(getattr(self.window(), 'ctx', None))
+                self.result_layout.addWidget(self._details_fold)
+            self._details_fold.add_widget(widget)
+        else:
+            self.result_layout.addWidget(widget)
+
+    def text(self, text, role='muted', *, localized=None, name=None, display_role=None):
         """`name` labels the export section; a private name (e.g. holdings) keeps it out of AI commentary."""
         from .app import label
         from core.research.presentation import safe_detail
@@ -217,20 +237,28 @@ class ToolPane(QWidget):
         widget = label(text, role)
         if localized:
             widget.localized_text = {key: safe_detail(value, limit=None) for key, value in localized.items()}
-        self.result_layout.addWidget(widget)
+        self._place_result_widget(widget, display_role)
         widget.retranslate()
         return widget
 
-    def result_table(self, name, headers, rows):
+    def result_table(self, name, headers, rows, *, localized_columns=None, display_role=None):
         from .app import label, table, table_rows
         self.sections.append({'type':'table','name':name,'headers':headers,'rows':rows})
-        self.result_layout.addWidget(label(name, 'heading'))
+        heading = label(name, 'heading')
+        self._place_result_widget(heading, display_role)
         widget = table(headers)
-        if headers and headers[0] == 'Metric':
+        if localized_columns is not None:
+            widget.setProperty('localized_columns', list(localized_columns))
+        elif headers and headers[0] == 'Metric':
             widget.setProperty('localized_columns', [0])
         table_rows(widget, rows)
         widget.setMinimumHeight(min(400, max(120, 45+len(rows)*32)))
-        self.result_layout.addWidget(widget)
+        # Ordinary result tables may be covered by the narrow help panel; their
+        # values remain unchanged. Important notice/assumption tables opt out.
+        self._place_result_widget(widget, display_role)
+        if display_role is None:
+            widget.setProperty('reading_help_keep_visible', False)
+            heading.setProperty('reading_help_keep_visible', False)
         self.tables[name] = widget
 
     def line(self, name, x, series, x_label, y_label):
