@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "abe393d047df2dbe8e2a7bb2153189fec2c622c2bee5429ee7be3baa9c196b75",
+    ".github/workflows/runtime-smoke.yml": "7eb1d95a236af2469ab212b4ab0ae59def31d54a55fd460f718629f0ab5e03be",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -260,13 +260,13 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "ebda8dd5524eae834bbbf93ed7fa4c3020b1a212c85a1ec6641ab73b17d3a4ba",
+    "docs/compliance/FACTS.md": "b0835714f882cf1caae91ef2e92a9b2da11cfba5f369d52018681a1b4bfbc717",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
-    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "087d82bb21c64d8949debf38fdc86b5ef6522bb361962422fc5a01883af7b634",
+    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -394,7 +394,7 @@
     "tests/desktop_authored_prose_language_acceptance.py": "b32c911300a13b2e7e3fd5a25c88499188234c8e7ecc08e53de5ef9f94120a75",
     "tests/desktop_bonds_portfolio_language_acceptance.py": "7c1103c926deccbce2c16329e6f4c6bd8347c4c58be6e27f2b8d0de1d50abc30",
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
-    "tests/desktop_chart_rendering_acceptance.py": "3f3c0ee0e38d946647a7ae2448af8d0496c2dea779a81be4cfd8734b84a61834",
+    "tests/desktop_chart_rendering_acceptance.py": "3e0a71ecbd3d2a4aec8669d6fc66c5e3bf18ac0c7760f94ff8a8a3e592eb8db0",
     "tests/desktop_commentary_acceptance.py": "ed1f58c2e133796d77ba3b6cdc5d187321f7491c1091ba3b36853aff773c8250",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
@@ -413,19 +413,19 @@
     "tests/desktop_market_layout_acceptance.py": "215764cefa9108907c3480cad377b261dcf404c7a7342ecb0047ed43b7ea0023",
     "tests/desktop_market_tabs_acceptance.py": "f68d5e9a3411f01d1f5d91132126ae34c485a5f690b189a591d45e9f678ce3be",
     "tests/desktop_markets_watchlist_acceptance.py": "d458aa2d633dbbbfead6347d0fe5b53f3f827e17c91ea0b31483df59cfe5b569",
-    "tests/desktop_operation_fixes_acceptance.py": "b4f11e0d8251c65daa7faa63e1307a99346b63f94aecd5766eab2cb8b688463c",
+    "tests/desktop_operation_fixes_acceptance.py": "9b9b725e6e250e435b4e597dcc9808b8f55917f1edac4382180681c2ad8ce89d",
     "tests/desktop_paper_acceptance.py": "7db24894557d3bd11c68ef768007af2686ee5afc3f8f2bb394ddb6f5d6f257f1",
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
     "tests/desktop_rates_language_acceptance.py": "506bb6fdd48bf13a00f509eba198260a9961522892295309360025be2b4c45c0",
-    "tests/desktop_responsive_tools_acceptance.py": "bf5e78ae488b2899300ca63fadf7283822412a3a40b3edd65066e8582af3a33b",
+    "tests/desktop_responsive_tools_acceptance.py": "1b0a6a3bd7e341432ea72306b01674a0d9332f0c148e11a96e4b343adf73b877",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
     "tests/desktop_strategy_acceptance.py": "0591170e55079f629df1fc94333043dfb196d8526efd9f311488f77075bd0fca",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
-    "tests/desktop_typography_acceptance.py": "725e266b810776c484a45dd9b2b8b70b86d7bd0cf40fcd59b92b02e4d0bbe302",
+    "tests/desktop_typography_acceptance.py": "e1996fa991d34ebb20b29769e193d28043d68e5bdfcb405bfda29102fe11dfb9",
     "tests/desktop_watchlist_acceptance.py": "baecb5ebcd7f60efcfddb203bb453b58fe1e975ee11933f039061ce9078116af",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/etf_sleeve_disclosure_acceptance.py": "f512c2fef9cef7642baa57b2a75275a2a43702dc9f55c5d0b4f9dfa38417fde9",
@@ -503,6 +503,7 @@
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
     "tests/qscore_acceptance.py": "52d0c74fd0e5455b3d333618e011e5a6d7372e4521b750986ff15a30a78559ac",
+    "tests/qt_fixture_cleanup.py": "56b1c3ee6e6def041b391d40d3c7d40faa8bab0b3856901f671522c6121fdf04",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
     "tests/quote_coverage_acceptance.py": "09d727791eb18d44955a0324058439c0d63777af94b5ca18f8a1ced7eb6cec86",
     "tests/rates_revaluation_params_acceptance.py": "85ccf11af449a58c8d3772bb38e0502d3f5b8d772caad478b27ad91d50fc5329",
@@ -596,163 +597,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "59cd61e3133dfe89091e2ae726f7e40b9223115797828c22b9c6d4512f4d9b79",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.911628+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "6d32b7501bf5704b0eff44b2503cf421df17a0c4862a8774a82b9c49b40c22b2",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.788906+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "59cd61e3133dfe89091e2ae726f7e40b9223115797828c22b9c6d4512f4d9b79",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.914107+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "6d32b7501bf5704b0eff44b2503cf421df17a0c4862a8774a82b9c49b40c22b2",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.791384+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "5d4314632c798d87cbbc7253a51facec9c3695c8c451f083972a2a3898f49a30",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.916381+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "7f55fc84747a03b2735157e1cae0fd1daf8bd9bdb7a81568bcd2c5167cbd63a2",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.793514+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "a2c467de2f7e6e99de67c4c61acd2f034aded0735cff45c06cd5c657cd673a99",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.918350+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "dbabb7041f19fc480e32e998d46ae85c13d60270f6f2c79b76b1752c9ae515c9",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.795621+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "0813d24386913b47d3524cdb610d5b34d758cc0125e1b0e020821808d3330f2a",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.920477+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "46572f328f96be53da8f359647a02c4d5d31b7d22505b5e27011246a738329f4",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.797691+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "a1fe6662888b61c842a941bbceddc0fc9991bf02dc9b19a13af3b88f86dc36f1",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.922554+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "77b7395ce764047b0764655b6c2ab10dc3ef32229adf6481ec944efbfc50765d",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.799958+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "59cd61e3133dfe89091e2ae726f7e40b9223115797828c22b9c6d4512f4d9b79",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.924519+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "6d32b7501bf5704b0eff44b2503cf421df17a0c4862a8774a82b9c49b40c22b2",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.801975+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "a1fe6662888b61c842a941bbceddc0fc9991bf02dc9b19a13af3b88f86dc36f1",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.926455+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "77b7395ce764047b0764655b6c2ab10dc3ef32229adf6481ec944efbfc50765d",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.804054+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "42207544062a675c795b66bdb67714a4cc9bb975543585c1e662745c0f977912",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.928644+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "4fcf4b2b64b3054f933d99b4955a69d9ee4da76a679e2f5c8afb5842cdc170be",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.806012+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "ba5ef2f1e624cbf8519a58cc9d65e26a7a0281a45cc2e1fd0160b2ef809a54dd",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.930868+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "3b39f4f38988872a4ce143fd7a9ed7d73beb31d0b7085e761d2390f1159a43e2",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.808104+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "ac709b3670355507039a24c35f8b5472a1703c0609c6aa8e1f8ddda3fc4eaa54",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.932995+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "67d61d0f1c023cd1a394c566043d413e4583869b638a6a43c2d7d35334a556ae",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.810129+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "12": {
       "document_sha256": "ea5017f8f93d973ad03aa62728aedaa39ed8d2d6c686feb41c0339c109fd590e",
-      "source_digest": "86f30de6b4dfc450d2724de63693fb522e39b5a93e43521a3ca65e6fecb11b92",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.935196+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "67bdf0269b3fb127506ab0f3e8b77e271d37a6984bddb9ee3d876c5c464da2e8",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.813458+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "42207544062a675c795b66bdb67714a4cc9bb975543585c1e662745c0f977912",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.937163+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "4fcf4b2b64b3054f933d99b4955a69d9ee4da76a679e2f5c8afb5842cdc170be",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.815596+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "42207544062a675c795b66bdb67714a4cc9bb975543585c1e662745c0f977912",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.939252+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "4fcf4b2b64b3054f933d99b4955a69d9ee4da76a679e2f5c8afb5842cdc170be",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.817725+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "42207544062a675c795b66bdb67714a4cc9bb975543585c1e662745c0f977912",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.941121+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "4fcf4b2b64b3054f933d99b4955a69d9ee4da76a679e2f5c8afb5842cdc170be",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.819790+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "c62ca9fd1ab01838328a3f153fba282380e32e49b2c9ed49e39dcab718dd5944",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.943075+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "6f2eeb7cf65e9e1b91e03059cd431f9b9fd98bd7d21ea77a11882a2abae9bb1c",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.821960+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "a1fe6662888b61c842a941bbceddc0fc9991bf02dc9b19a13af3b88f86dc36f1",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.944994+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "77b7395ce764047b0764655b6c2ab10dc3ef32229adf6481ec944efbfc50765d",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.823906+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "59cd61e3133dfe89091e2ae726f7e40b9223115797828c22b9c6d4512f4d9b79",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.947013+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "6d32b7501bf5704b0eff44b2503cf421df17a0c4862a8774a82b9c49b40c22b2",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.825764+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "4276764a56ee98820dc5f4ca2ccd38018b02ddc10152dd3220f3d6be74a96157",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.948883+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "e5fb28bf4e89cd4b91cbf9629d48cadc396ab9a1649cfafbbbb6e75898b7eadf",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.827703+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "59cd61e3133dfe89091e2ae726f7e40b9223115797828c22b9c6d4512f4d9b79",
-      "reviewed_by": "GPT status display and responsive MC combined review",
-      "review_note": "Verified exact preserved status and MC functions, all twenty policies, both evidence sections, keyboard behavior and publication distinctions after normal branch merge.",
-      "reviewed_at": "2026-11-06T08:22:02.950884+00:00",
-      "source_commit": "fa7c2118680bd5b811748bbb00d41a589588834a"
+      "source_digest": "6d32b7501bf5704b0eff44b2503cf421df17a0c4862a8774a82b9c49b40c22b2",
+      "reviewed_by": "GPT combined status and Qt fixture review",
+      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
+      "reviewed_at": "2026-11-06T08:54:10.829621+00:00",
+      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
     }
   }
 }

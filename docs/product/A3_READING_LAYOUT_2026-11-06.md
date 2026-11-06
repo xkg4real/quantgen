@@ -181,3 +181,43 @@ deployment result. Optional additional GPT/Gemini spec review remains
 The code changes are native-only. Browser applicability must be reviewed and
 recorded under [UI_WEBSITE_SYNC.md](UI_WEBSITE_SYNC.md); native implementation,
 message delivery, website application and deployment are separate states.
+
+## Native fixture lifetime and CI budget follow-up
+
+At f7b4a73, Runtime42186371159 passed the20-test A3 step on Windows3.11/3.12/3.14
+and Ubuntu3.12. The whole Ubuntu job succeeded. Windows3.14 then printed31
+chart/text tests OK but returned process exit1; the full CI was not successful.
+Windows3.11/3.12 were cancelled while still advancing through checks at the
+configured20-minute job boundary. The API supplied start/end timestamps and
+conclusions; the official connector could not read the separate annotations
+endpoint, so no unseen timeout annotation is claimed.
+
+A guarded Linux copy of the exact four-module chart/text suite measured12 live
+ResearchWindows and12 ReadingHelp controllers at interpreter shutdown. The
+existing fixtures queued deleteLater without delivering DeferredDelete. That
+is a concrete fixture-lifetime gap; it does not prove the exact cause of the
+Windows all-OK/exit1 observation. The Linux run had30 passing tests and the
+previously recorded responsive forced-overflow precondition failure, a different
+outcome from Windows.
+
+A small test-only helper now hides each explicitly owned fixture widget, queues
+deleteLater and delivers DeferredDelete to that exact widget, asserting actual
+SIP deletion. Repeated cleanup of an already deleted chart is idempotent. No
+application code, exception suppression, exit override or blanket top-level
+widget sweep is added. The four modules retain all31 test methods and152 original
+assertion nodes. An intermediate helper missed repeated chart cleanup and raised
+two cleanup errors; that result is retained separately from the corrected version.
+The corrected focused chart/lifetime run passed6 tests in3.276s (exit0), with
+zero retained owned ResearchWindows and an unrelated pending widget preserved.
+
+The corrected exact four-module Linux run reported30 passes plus the same
+baseline precondition failure (31 tests,83.636s, exit1), with zero new failures
+or cleanup errors. Shutdown tracing measured zero ResearchWindows and zero
+ReadingHelp controllers, with no captured callback/unraisable/fatal exception.
+It is not a passing31-test run or a reproduction of Windows all-OK/exit1.
+
+The native chart/text step now follows A3 so exit failures appear earlier; every
+existing workflow command remains. The installed-job budget is30 minutes rather
+than20, while syntax stays5. No assertion, skip condition, financial threshold,
+research criterion or success status is weakened. This final test-helper head
+still requires its own complete Windows/Ubuntu CI and merge verification.
