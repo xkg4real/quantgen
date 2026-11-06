@@ -6,12 +6,12 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T17:59:17+09:00
+updated_at: 2026-11-06T18:03:02+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
 work_commit: bd7ee2a1b329320caf99fdff0ec61abb4cc443a4
-uncommitted_changes: no
+uncommitted_changes: yes
 pr: https://github.com/xkg4real/quantgen/pull/77
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -426,3 +426,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - identity b79d56d5aedd0a7d854421c933d87b31338e5177를 push/read-back하고 draft PR80을 생성했다. status e038/Rates578/A3bd7 정상 통합과20정책 재검토를 마쳤다. 기존 identity source/test는 e04 고정 해시 그대로, 나머지 제품 코드는 Rates578과 동일. 최종19합성PASS0.013s(exit0), 소스정합성PASS591/publicationBLOCKED.
 - 범위는⑫-2/b/1 caller-supplied registry·request-boundmetadata의 분리된 resolver와 기존 cost-row명 반환뿐이다. 실제 공급사·실제비용·주문/라우팅·동결연구 연결 없음. alias중복/상충 거부, FX동일통화대소문자 거부, continuous선물orderableFalse, 나머지는주문승인추정없음.17설계요청은주입합성근거로검사. 부모⑫-2는미완료.
 - PR80 최종head 필수Runtime/ComplianceCI와 PR77→78→79 선병합을 기다린다. 모든 작업트리 source commit은 원격에 보존했고 신규 완료 행은 아직 추가하지 않았다. A3bd7 각Windows/Ubuntu A3·chart단계성공은전체CI증거와구분한다.
+
+### GPT 승인된 R3 독립 codec 하위 작업 인수 — 2026-11-06T18:03:02+09:00
+
+-⑨-3a/codec/1을 같은 execution 6c40bb4c-51a4-439b-a64d-0233051168ab/task claude-resume-20261103의 독립 하위 작업으로 기록한다. 새 gpt/run-registry-codec-20261106을 identity b79d56d5aedd0a7d854421c933d87b31338e5177에서 생성/push/read-back했다. 현행R3계약 fa280591b9915b213a00e231a55bbe8d33b0d9d7/blob7ca8411f5f02b48bee35ff28291acd2f171a4001와 Nov3 R3전부승인 기록 db070058 OWNER_RULINGS_LOG294–320을 대조했다. 새 추가 GPT/Gemini spec심사는 수행하지 않는다.
+-범위는 별도 순수 event-envelope canonical JSON/LF codec·chain MD5·명시적 시각/token LAB ID뿐. 합성 in-memory byte stream만 검사한다. 파일 저장/락/회복/segment writer/keybuilder/실제원장/공급사/기존Lab연결/연구판정/동결/사전등록/홀드아웃/owner-ruling효과는 제외한다. encode/decode가 의미·근거진위·연구승인을 검증한다고 주장하지 않는다. suffix전체삭제는 외부tailanchor없는경우판별불가를명시한다.
+-완료시에도 T-RUNREG02/09 일부 하위구현일뿐⑨-3a 전체와부모는미완료. PR77→78→79→80 선행 CI/병합 순서 유지. 이번CAS/read-back 전 신규source수정 없음. 다음은 이 한정범위 구현·독립 합성/소스 검토·20정책검토,별도PR; 실제증거미존재상태와보호범위그대로.
