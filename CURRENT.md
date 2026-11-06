@@ -4,9 +4,9 @@ reason: usage_limit_weekly
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T18:58:05+09:00
+updated_at: 2026-11-06T19:03:03+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-store-20261106
@@ -507,3 +507,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - 유지시험16store+17codec 통합33PASS0.401s, 독립8겹치는검사PASS0.141s, 별도source검토중대문제없음. source77522bd80cb158bfac8b400435ede567c35514779ee37006be1007e8094a5eae/testf54ca736727a198d7a15cc1996a66fbb966977cd8ecd4230c1b54f22e4ce6110 고정. 실제별도processOSlock·5threads×10events·중복경쟁·torn/partialwrite/fsync/unlock실패·해제검증은tempLinux합성증거다. Windowsbyte-lock은최종CI필요.
 - 정책20검토GO;01/07/20과FACTS만caller경로JSONL·sidecar잔존/불확실한쓰기/암호화·TTL·자동삭제없음에맞춰최소수정. 정합성PASS597/publicationBLOCKED.32MB는decimal32,000,000 preflight이며full회전계약보다엄격히거부한다. 전체eventpayload/lifecycle/인간권한/rotation/recovery/cache/recorder/Lab/keys/실제원장/동결연구구현아님.
 - Rates Notion한정완료read-back성공(큐36행); Identity완료동기화중. PR81codec fullCI확인계속. 기존실패이력·모든부모미완료/actual증거누락/선택specNOT_PERFORMED 유지.
+
+### GPT R3 코덱 한정 완료·PR81 병합 — 2026-11-06T19:03:03+09:00
+
+- finalf3d6c5e2a0de766ab79a73d392eb77bd307c9862의 Runtime42196016748 전체6job/Compliance42196016647success를독립재조회하고 PR79→80뒤 PR81를 main7274dedc3977b81546e085c4d0ff933b4188457b에 병합했다. PR/main read-back확인, LEDGERc96a05f8eb94403821e6a0c29d3057bbcc1c8555에 ⑨-3a/codec/1만추가·원문보존·read-back.17합성PASS0.010s와 독립9겹치는검사PASS0.010s,20정책PASS594/publicationBLOCKED. 순수codec/envelope/제공bytes chain/주입LAB ID만완료다.
+- 전체R3/T-RUNREG02/09·payload/lifecycle·저장소·회전복구·keys/Lab·실제원장·동결연구와실제증거미완료유지, 선택specNOT_PERFORMED. R3store⑨-3a/store/1은별도PR83 b5cbf6695b8430f89298e8c96294f2b83c4b0a85로미완료다.
+- PR83 Runtime42198946682 진행중/Compliance42198946631success; Windows3.11/3.12/3.14 boundedfixture단계가성공해새잠금/LF시험이실행됐지만전체Runtime완료는아니다. 로그는job완료뒤보존한다. Rates·Identity Notion한정완료모두read-back성공(큐38행), codecNotion완료는이어반영한다. 사용자반복운영지시는동일지속실행으로준수하며잠금·executionID를재생성하거나중복예약하지않는다.
