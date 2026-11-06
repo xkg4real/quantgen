@@ -6,12 +6,12 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19
 next_ids: ⑬-2/a3, ⑬-2/a1, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T15:39:50.000+09:00
+updated_at: 2026-11-06T15:54:11.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a1-20261106
 work_commit: e79ef2c1160242ddf86d5b381e1005f2ad627e16
-uncommitted_changes: no
+uncommitted_changes: yes
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -68,6 +68,14 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 - A1: 기존 CAPTION_ROLE/localized_columns를 활용한 승인 용어·명시적 표시 역할, 지정 Flet 머리글. 순수 용어 변경에는 별도 P0 동작 변경을 만들지 않는다. 필요한 선택 metadata는 기본 no-op와 원문/수치 동일성 조건으로 A1 PR에 포함한다.
 - A3-a: app.py MC 제목→차트→표, bonds.py G1 반응형 지표/KRD 패널, opt-in 내용 기반 표 높이. 기존 ChartStudy 820px 재배치 재사용. A3-b: 기존 glossary만 쓰는 로컬 설명 패널·F1/Esc/초점 복귀·명시적 안전 상세 접힘. 혼합/미분류/가정/합성/지연/실패는 계속 노출.
 - A1을 먼저 CI/PR 병합하고 A3 브랜치에 합친 후 통합 검증한다. 각 하위 branch의 커밋/검증을 이 CURRENT와 STATE에 연결한다. 계산/원문보고서/AI payload/export/공식코드, 연구·실제주문 보호 범위를 유지한다.
+
+### GPT UI 구현 중간 검증 — 2026-11-06T15:54:11.000+09:00
+
+두 UI worktree에 아직 미커밋 변경이 있다. A1: 표시용 용어/별칭·역할별 원시 코드 보존·명시적 Flet 머리글/값 분리. 집중49검사, 상태/관심종목24검사, Flet8검사 통과(범위 중복이므로 합산하지 않음). 정책20개 검토와 최종 통합 검사 준비 중이다. ETF 검사 정규식이 기준 SHA 끝의 e16을 수치로 오인한 오류는 실제 수치 mantissa/경계를 요구하도록 보정했고 실패 이력을 보존했다.
+
+A3-a 새 배치4검사 통과. A3-b 로컬 설명/키보드/원문 인용8검사와 glossary6검사 통과. 기존 responsive의 강제 overflow 음성대조는 현재와 AI 기준a419db9 모두에서 0으로 재현돼 환경/fixture 차이로 분리했다; 이를 통과로 기록하거나 제품을 억지로 늘리지 않는다. app host hook을 통합했으며 A1 합류 후 최종 검증·시안/CI가 남는다. 순수 provenance 접힘만 실제 호출부에 연결하고 혼합 경고는 계속 노출한다.
+
+A1/A3 완료 ID는 아직 기록하지 않는다. 다음은 A1 코드 검토·통합/정책 검사·PR/CI/병합, 이어 A3 최종 통합·PR/CI/병합. 실제 Windows 수동·API·법률/권리·연구 증거는 별도다.
 
 ### Claude 인계 원문 (보존)
 
