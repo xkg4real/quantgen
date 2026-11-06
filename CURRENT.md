@@ -4,9 +4,9 @@ reason: usage_limit_weekly
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T18:54:18+09:00
+updated_at: 2026-11-06T18:55:57+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-store-20261106
@@ -495,3 +495,8 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - final62246779f45b9e4eff37b7af6ac7e71354b5fd18의 Runtime42194971104 전체6job/Compliance42194971102success 확인 후 PR79를 maina63fffb20fed22d6d0d582d68167af818c94db0b에 병합했고 PR/main read-back했다. LEDGERe9ffa27a909e630736b22c9683db4d42efce711b에 ⑬-8/b2/b/2만 추가·원문보존·read-back. 11합성PASS110.673s,20정책PASS588/publicationBLOCKED; inherited A1공유18PASS와 중복합산하지 않는다. 이전578Ubuntu18OK뒤139실패/원인미확정 보존.
 - 부모13-8/실제Windows·공급사/API/법률·라이선스/파일럿·동결연구 미완료, 선택spec NOT_PERFORMED. Notion완료는 이어서 최소반영한다. PR80Identity최종CI전체성공 보고를 이제독립재조회하고 PR81CI도계속확인한다.
 - 주작업R3store는 미커밋구현상태:16store+17codec 통합33PASS0.401s와 독립8검사PASS0.141s(중복), source77522bd80cb158bfac8b400435ede567c35514779ee37006be1007e8094a5eae 고정. 실제독립process잠금은Linux합성증거이며Windows는최종CI필요. 정책01/07/20과FACTS의caller저장/삭제범위 최소갱신 중; 전체R3/T02/회전복구·실제원장연결없음.
+
+### GPT 종목 식별기 한정 완료·PR80 병합 — 2026-11-06T18:55:57+09:00
+
+- final386a0d75ce2b242873a5146eacebece66f1ae25e의 Runtime42195764855 전체6job/Compliance42195765001success를독립재조회하고 PR79선병합후 PR80를 main2a7e51bcb742c785fd32f1e366cf60a2e957ef4b에 병합했다. PR/main read-back확인, LEDGERa5fbada3663a431be055a152d28bf6065622d791에 ⑫-2/b/1만추가·원문보존·read-back. 최종19합성PASS0.013s,20정책PASS591/publicationBLOCKED. 네installed A1단계도실제성공; 이전b79 Ubuntu18OK뒤139실패/원인미확정보존.
+- 명시적주입metadata의독립식별/거부처리만완료. 기존비용수치·production routing·주문·원장·동결연구와연결하지않는다. 부모12-2/실제공급사식별·사용자Windows·API·법률·라이선스·파일럿은미완료, 선택specNOT_PERFORMED. Notion하위완료를이어반영한다. PR81codec 최종CI확인을계속하고 R3store최종정책통합/PR을진행한다.
