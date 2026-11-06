@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "468e7f383bb76f9055eb2240ee1a472795c01b14c52e326831196f8f978cd0a6",
+    ".github/workflows/runtime-smoke.yml": "a58ee1bea6d3b3b1674cefb59548229768a7b9791cb00bb5f6418036cc04f946",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -174,6 +174,7 @@
     "core/research/export.py": "16cbc78bbcf4f72d656f28f9b66823090fc21e5e92c0aa9ff56a07de2dc9b402",
     "core/research/funding_disclosure.py": "2f6c9a3e8f9815d3e724689320c60ccb1c2d6ae97787743d7d7440b45900ffbb",
     "core/research/fx_analysis.py": "1d409db7d01c33237d315eeb82ff4731248f5f8615782631ab2d996f95481f4f",
+    "core/research/instrument_identity.py": "22090ce81328c04441d595083e67a7b61d313b8233400a61fb951873c1a549ff",
     "core/research/intake.py": "10981cc4ffd14f71a8d7fa5a21dbd33085c590a3ec89fee24b07dde86fb14011",
     "core/research/letf_disclosure.py": "468cbc98101fcde53ea0913ac9a1fc864f5eeace420bc3a5838ce1f6f7ee7bcb",
     "core/research/localized_report.py": "1c6ff55a3d4c326ba76eb58c01cd5fd76dccfb9633bae7c06466f556df352d30",
@@ -259,7 +260,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "13e15f178d79b0fde0719e343999df3de0dbdfeba9496c3982d43443c09e12b0",
+    "docs/compliance/FACTS.md": "dcae0c737557c0ca4944917fbb9d27ebd46430c101715a6aa4d3251ee339f492",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "a5d357db9e2e6938f09d35a6a385a642dd2809a3ac43e4c96f23df16b4bc31bf",
@@ -278,6 +279,7 @@
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
     "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
+    "docs/product/DETACHED_INSTRUMENT_IDENTITY_2026-11-06.md": "8d228dffc3fade383f5f0ff92e981e258399500887a2befd6985bf40ac4cbd4d",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "c03dae78c5964bded90065661a0d3dc631f4b650c3baae8eb6875443b11959e6",
     "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md": "d39113026df4ad4a4d1903072cd64cbbd8015dc74835b77f4a96d38b1f2c52c3",
     "docs/product/FORWARD_CONVENTION_2026-11-02.md": "a294ca013fa1460c435286a1b2a466630f522d859fc9a43da29927e6c5ffcd86",
@@ -441,6 +443,7 @@
     "tests/golden_tools.py": "d3b4ec0c7610e1391eb1739f8101b60766139d9dff37f80a18528bcb99f31e61",
     "tests/home_watchlist_acceptance.py": "86956c94f3aa7a90f496bc5c2bea388a6b2b5f861b5d1ca4421045c55f19165c",
     "tests/indicator_guide_acceptance.py": "94f9065e59762bdbc7f2ab8a9d000f8211b2aef88a87a0076f70f6bdca2bc76e",
+    "tests/instrument_identity_acceptance.py": "2d5c66b8a6ab66145f98f9d7e50282bc5bdfce2ad57c905dd4e667a4e2e9258d",
     "tests/kis_stream_acceptance.py": "a9108b1ab7fa59c536fa616a3a03d1d179176bdf8007628c01043cf457895bbe",
     "tests/kis_workspace_acceptance.py": "1d34073904a9509f5156af8a76b47fd5fccb6f02d9818c40fa505c3d91e6f460",
     "tests/letf_ai_payload_acceptance.py": "9defaeed9ec2f7988a146643f3f3a466e743a96cefa4e4b24f0e803b10690421",
@@ -593,163 +596,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "1568d788c25f677faa624d97804b0029175f85bb04d34bec1bfc8bb268aa5dd5",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.800414+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "bf72915c2d43dcce1b0c38d34b64eced45ebefc99007e7adfdc1275411c6de6a",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.424159+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "1568d788c25f677faa624d97804b0029175f85bb04d34bec1bfc8bb268aa5dd5",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.802923+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "bf72915c2d43dcce1b0c38d34b64eced45ebefc99007e7adfdc1275411c6de6a",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.426525+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "eb0a7c4bd87541e7709328d0000f897bebf6d6f1217b22681f7aa2bb7b95ebcb",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.805107+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "9347fd9fa087143a549b0eaebb30f567167e227a5d53df9fa9874dae3a53e431",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.428848+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "c8e96ff750c09c220890392d42ff13687452a58327b3312f7684740df337eca0",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.807188+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "8c1254eec737b32d5da71ffeacc0f8e790912a4a71574a95ffe8fb9f12487bf0",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.430999+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "011c4c61002d5984c75afaf39500af213dbcc0145c0eed24953c1a04bfc03ade",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.809237+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "2ddd3a73360ef68c0bced4ac32200a77580f2e455b9fc2f4e9d89508cec61b4f",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.433052+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "3b472f0ead00b64111a2d14297c27edb333c28a8ce3a9d8917f09066f06dbbb6",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.811579+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "606d91dc633c96927ffa998b92bbc0c8d2e4be8d150b7b04deef1e69f231f94e",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.436269+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "1568d788c25f677faa624d97804b0029175f85bb04d34bec1bfc8bb268aa5dd5",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.813777+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "bf72915c2d43dcce1b0c38d34b64eced45ebefc99007e7adfdc1275411c6de6a",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.438775+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "3b472f0ead00b64111a2d14297c27edb333c28a8ce3a9d8917f09066f06dbbb6",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.815783+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "606d91dc633c96927ffa998b92bbc0c8d2e4be8d150b7b04deef1e69f231f94e",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.441375+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "5b6e3bcf17742ee5020329dbc0818810d83072b8fea6640f2c46aa40cb9b302d",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.818056+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "018930b622cf1a09065d2bc891190b3a846d5e745db9febc56462999cbc1e0d3",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.444338+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "53ac86e28fe15d02bfe27bb55e58d84d98bbc497724e428de3e45d68dff4fdab",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.820038+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "b63b39fd338582a05232e25eb65cecc118e86c52f1ced3c70257c62c50a5c874",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.446597+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "c7677c91f40e854579a92beef805271dae1667674d2f0290f8f3a38fd8c8de68",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.822139+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "615debbd16e22ff59338641a70df60edfc8b1effb3e7e85735f97bb16f03a913",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.448669+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "12": {
       "document_sha256": "2ef966b2023cb3c617984d29c2f076423625c5624f6fdc7d8c57f4e2f36fb3a4",
-      "source_digest": "1f2dbc1bafd5ee80f7249914766d6240a373c87a8a159a265dd9b00c807c326d",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.824327+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "3b3b5483bccdb0526c332d1e57c1a87247f5af7cb7eb87937bc20f7279ee1500",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.450861+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "5b6e3bcf17742ee5020329dbc0818810d83072b8fea6640f2c46aa40cb9b302d",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.826398+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "018930b622cf1a09065d2bc891190b3a846d5e745db9febc56462999cbc1e0d3",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.453341+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "5b6e3bcf17742ee5020329dbc0818810d83072b8fea6640f2c46aa40cb9b302d",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.828616+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "018930b622cf1a09065d2bc891190b3a846d5e745db9febc56462999cbc1e0d3",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.456278+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "5b6e3bcf17742ee5020329dbc0818810d83072b8fea6640f2c46aa40cb9b302d",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.831076+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "018930b622cf1a09065d2bc891190b3a846d5e745db9febc56462999cbc1e0d3",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.458492+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "57d1ccde135e6e9580f01048a5c69487368b47e0e9edfb76cf47f9d78358a920",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.833239+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "d37d890f0c5fcae80b6380fb6a146ba47260d923659bd04ebcfa0a0d54f23cca",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.460934+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "3b472f0ead00b64111a2d14297c27edb333c28a8ce3a9d8917f09066f06dbbb6",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.835293+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "606d91dc633c96927ffa998b92bbc0c8d2e4be8d150b7b04deef1e69f231f94e",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.463596+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "1568d788c25f677faa624d97804b0029175f85bb04d34bec1bfc8bb268aa5dd5",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.837161+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "bf72915c2d43dcce1b0c38d34b64eced45ebefc99007e7adfdc1275411c6de6a",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.466356+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "a80eaadab473d29fcc0d49e54b7755acdeb6a49e8944f5b41e7760f434ab8e1d",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.839324+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "7f202f71c76ff4f0882d99536633ee338cb34501f18c9de7b2975a950eb971b5",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.468829+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "1568d788c25f677faa624d97804b0029175f85bb04d34bec1bfc8bb268aa5dd5",
-      "reviewed_by": "GPT A3 responsive MC source and policy review",
-      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
-      "reviewed_at": "2026-11-06T08:15:00.841350+00:00",
-      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
+      "source_digest": "bf72915c2d43dcce1b0c38d34b64eced45ebefc99007e7adfdc1275411c6de6a",
+      "reviewed_by": "GPT detached instrument identity implementation review",
+      "review_note": "Reviewed explicit caller evidence and conservative refusal contracts, synthetic mapping limits, unchanged production cost and research paths, and all twenty existing policy conditions.",
+      "reviewed_at": "2026-11-06T08:36:18.470864+00:00",
+      "source_commit": "f7b4a73fa08733b007b7ab499cbf377ab9970837"
     }
   }
 }
