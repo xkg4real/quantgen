@@ -1,12 +1,12 @@
 ---
-status: taken
-reason: usage_limit_weekly
+status: returned
+reason: manual
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1
-updated_at: 2026-11-06T21:52:49+09:00
+updated_at: 2026-11-07T00:45:23+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-series-files-20261106
@@ -23,6 +23,19 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 # 인수인계: Claude 재개 (2026-11-03) — §10 AI 마무리부터, 이어서 UI A3·A1
 
 ## 0. 한 줄 요약
+
+### 최신 부분 반환 — 2026-11-07T00:45:23+09:00
+
+사용자 요청으로 상세 Markdown 인계 파일을 준비하고 이 실행을 반환한다. 위임한 구현·검토·관찰 턴의 usage-limit 오류를 실제 관찰했으며 계정 전체 잔량은 알 수 없다. 전체 Remaining Work/R3 완료나 Claude 수신 확인이 아니다. 상세 저장소 인계는 [WEEKLY_HANDOFF_2026-11-07_4bf1f03c.md](WEEKLY_HANDOFF_2026-11-07_4bf1f03c.md)를 읽는다.
+
+- 완료: PR75–81·83–86의 기록된 하위 범위. 최신 main cd4019c2dfd6747594c75fdf417fd465fc66eb7e. PR86 Notion 두 페이지 완료 read-back도 확인되어 기존 'next' 상태는 역사적 요약이다.
+- 미병합: PR87 ea90521ddf057178d4d5eb182c426dd384256f4e / Runtime42217989425 + Compliance42217989406, PR88 e7ed79346653cd647f7f5e317fdca348037bfe4e / Runtime42219899712 + Compliance42219899643 모두 정확한 head에서 전체6작업/두 workflow SUCCESS를 이번에 재조회했다. 두 PR은 여전히 open/draft/unmerged이며 완료 ID·취소선은 추가하지 않는다.
+- 중단 지점: gpt/run-registry-series-files-20261106@e7ed7934 기반은 원격 저장, worktree clean. proposed series-files source/test/productdoc 3파일은 없다. 구현/최종 정책 검토/검사/PR 미완료. 바로 앞 등록된 계약을 재사용한다.
+- 다음: 최신 소유권 절차 후 PR87→88 통합·병합·기록을 먼저 처리, 이어서 series-files 구현. 기존 hourly 예약 유지, 중복/run_now/Thursday cooldown 없음. 직접 작업 미완료와 전체 주기 미완료를 보존한다.
+- 별도 UI: UI_SESSION_CURRENT 최신 복원 branch gpt/compact-ui-final-20261107은 문서보고0222dbad 뒤 직접조회811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8. 최종 검증·main 병합은 여기서 미확인. 대표 소유권과 별도로 보존한다.
+- 기존 실제 Windows/API/공급사/법률/라이선스/파일럿/동결연구 공백, publication BLOCKED, optional formal spec review NOT_PERFORMED 유지. 새 제품 변경/병합/배포 없음.
+
+이하 본문은 당시 상태의 이력이며 위 최신 부분 반환이 현재 상태를 설명한다.
 
 ### GPT 신규 인수 — 2026-11-06T14:48:00.000+09:00
 
