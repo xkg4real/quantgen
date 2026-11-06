@@ -407,3 +407,17 @@ A1 코드 `2715d9e` 이후 A3 통합 소스 `e33063b`의 범위입니다. A1 선
 | 검증 범위 | 지정 합성/offscreen 검사에는 F1/Esc·셀 복귀·언어/테마·폭 변경·정확 인용·실제 Macro 접기·기존 보고서/AI 입력 비교가 있음. 선행 실행의 통과 수를 합산하지 않으며 재현된 baseline 실패도 기록대로 유지. 실제 Windows/IME/DPI·스크린리더·전체 대비/캡처 행렬·Flet 동등 구현·실제 API/공개 배포 완료를 뜻하지 않음 | [레이아웃 검사](../../tests/desktop_a3_layout_acceptance.py), [읽기 검사](../../tests/desktop_a3_reading_acceptance.py), [실행 기록·한계](../product/A3_READING_LAYOUT_2026-11-06.md), [키보드 검수](15-keyboard.md) |
 
 01–20 정책을 현재 A3 소스와 대조하고 로컬 인용/명시적 복사, 선택권·주장·키보드·삭제에 직접 관련된 문구만 보강했습니다. 기존 법률·운영자·제공자 계약·라이선스·전송 동의·실제 공개/배포 조건, `review-required`와 공개 준비 `BLOCKED`를 유지합니다. Flet AI 체크박스 흐름·실제 Windows/API/파일럿·동결 연구 증거는 미완료이며 선택적 GPT/Gemini 추가 심사는 `NOT_PERFORMED`입니다. 최종 실행·CI·병합과 소스 fingerprint는 통합 후 실제 결과로 별도 기록합니다.
+
+<a id="recorded-status-display-2026-11-06"></a>
+## 기록된 소유자 결정·준비 상태 표시 — 2026-11-06 소스 검토
+
+기준 `67a883875ca0a8242e880246ea2a009e688978f4` 대비 ⑫-1의 한정된 표시 수정입니다. 기존 snapshot의 의미와 검증 규칙을 유지하며 [구현 범위](../product/RECORDED_STATUS_DISPLAY_2026-11-06.md)를 따릅니다.
+
+| 항목 | 확인한 소스 동작과 한계 | 근거 |
+| --- | --- | --- |
+| 기록과 화면 일치 | 네이티브/Flet System의 고정 공개 배포 NOT_APPROVED를 없애고 기존 `verify()`가 반환한 기록을 공통 한영 표시 함수로 전달. 원래 dict·코드·날짜·집계는 바꾸지 않음. 기존 번역 카탈로그의 호환용 문구가 남아 있어도 이 새 상태 화면은 명시적 한영 문구를 사용 | [공통 표시](../../core/recorded_status_display.py), [네이티브 System](../../quantgen_desktop/app.py) `make_system`, [Flet System](../../ui/research_home.py) `recorded_status`, `RecordedStatusView` |
+| 승인·준비·게시 구분 | COMMERCIAL·OWNER_APPROVED·2026-10-30은 기존 소유자 상업 출시 결정. 규제 승인·기술 준비 완료와 분리하고 실제 공개 배포는 이 기록만으로 확인되지 않는다고 설명. 데이터/공식 게이트/검증/동결 연구 상태는 각각 원래 코드 유지 | [기존 기록·검증](../../tools/status/snapshot.py), [README 결정](../../README.md#regulatory-note), [주장 기준](12-claims.md) |
+| 검증 실패 | 원본/상태 파일 누락, stale/변조·불일치, JSON/YAML 파싱 등 처리 대상 실패에는 None을 표시 함수로 전달해 확인 필요 문구만 표시. YAMLError 처리는 두 UI 경계에 추가하며 snapshot 생성·스키마·검증·승인 규칙은 변경하지 않음. 표시 함수 자체가 새 검증기인 것은 아님 | 같은 두 UI 호출부와 [표시 함수](../../core/recorded_status_display.py) |
+| 시간·증거 한계 | 기록된 검사 수는 새 실행이 아니고 실행 시각/commit은 원본 미기록. 달력은 서명 메타데이터이며 파일별 검증은 별도. generated_at은 상태 자료 생성 시각이며 실제 검사·게시 시각으로 사용하지 않음. A3 System 중요 안내 보호 태그 유지 | [합성 표시 검사](../../tests/status_display_acceptance.py), [기존 snapshot 검사](../../tests/status_snapshot_acceptance.py) |
+
+01–20 정책을 이 변경과 대조하고 12번 주장 문구만 보강했습니다. 정책 `review-required`, 공개 준비 `BLOCKED`, 운영자·계약·권리·동의·실제 공개/배포 조건과 Windows/보조기술·실제 API/파일럿·동결 연구 미완료 상태는 유지합니다. 이 수정은 실제 게시 여부나 포괄적 ⑫-1 완료를 판정하지 않습니다. 최종 합성 실행·CI·병합·소스 fingerprint와 사이트 반영/전달은 별도 증거로 기록합니다. 선택적 GPT/Gemini 추가 spec 심사는 `NOT_PERFORMED`입니다.

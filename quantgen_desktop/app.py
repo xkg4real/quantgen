@@ -10,6 +10,7 @@ import sys
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
+from yaml import YAMLError
 
 from PyQt6.QtCore import Qt, QTimer, pyqtSlot, QByteArray, QSettings
 from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics, QIcon
@@ -38,6 +39,7 @@ from core.research.strategy_analysis import execute_strategy
 from core.research.runs import SessionResearch, new_run, failed, export_bytes
 from core.theme import LIGHT, DARK
 from core.i18n import LocaleContext
+from core.recorded_status_display import recorded_status_display
 from tools.status.snapshot import verify
 from .charts import FanChart, FrontierChart, LineChart, SignedBars
 from .jobs import Jobs
@@ -697,17 +699,16 @@ class ResearchWindow(QMainWindow):
         layout.addWidget(self.system_tabs)
         box, inner = panel("프로젝트 상태")
         box.setProperty("reading_help_keep_visible", True)
+        box.setProperty("recorded_project_status", True)
         try:
             status = verify(application_root())
-            counts = status["code_test"]["counts"]
-            calendar = status["data_readiness"]["calendar"]
-            text = (f"기록된 검사: {counts['PASS']} PASS / {counts['FAIL']} FAIL / {counts['NOT_RUN']} NOT_RUN\n"
-                    f"달력: {calendar['files']}개 서명 메타데이터 · 세트 {calendar['version']}\n"
-                    "위 수치는 이번에 실행한 검사 결과가 아닙니다. 파일별 서명 검증은 별도입니다.")
-        except (OSError, ValueError, KeyError, TypeError):
-            text = "기록된 상태를 검증할 수 없습니다. 출처 자료를 확인하세요."
-        inner.addWidget(label(text))
-        inner.addWidget(label("데이터 NOT_VERIFIED · 공식 게이트 NOT_FROZEN (문서 기록)\n동결 연구 NOT_INSPECTED · 공개 배포 NOT_APPROVED", "muted"))
+        except (OSError, ValueError, KeyError, TypeError, YAMLError):
+            status = None
+        for line in recorded_status_display(status):
+            item = label(line.en, 'muted' if line.muted else '')
+            item.localized_text = {'en': line.en, 'ko': line.ko}
+            inner.addWidget(item)
+            item.retranslate()
         layout.addWidget(box)
         box, inner = panel("데스크톱 이전 상태")
         box.setProperty("reading_help_keep_visible", True)
