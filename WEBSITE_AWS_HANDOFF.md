@@ -1,3 +1,17 @@
+## 2026-11-06 최종 앱 반영 완료 — PR82 MERGED
+
+- PR82 https://github.com/xkg4real/quantgen/pull/82 를 main **5b7988c653a7fc621a4e170d1361516124f316b4**에 병합했습니다. Source head **4ce18cb4a3de811df3dc165b5e1c7e115e3db35a**. main을 fetch하여 tree **48b0f9162c27604206c8a13f176513156f380f9e**가 로컬 e223c01과 동일함을 확인했습니다.
+- 기업 문자 마크: Home, 시장 카드, 검색 결과, 종목 제목. 44px 표, 코드 배지와 한 줄 이름, 숫자 정렬, 마지막 Q-SCORE/? 유지. 거래량/시총 K/M/B/T, 전체 값 상세/툴팁 보존. 본문15px, 설명14px Medium. 실제 회사 로고 파일 또는 새 데이터 공급자를 도입하지 않았습니다.
+- 검증 범위를 구분합니다. UI 코드는 **92c7280f의 모든 Windows3.11/3.12/3.14·Ubuntu3.12 및 구문3.10/3.11 CI PASS**와 바이트 동일합니다(Runtime42200892322, Compliance42200892116). 통합된 PR83 저장소 모듈도 독립적으로 Runtime42198946682/Compliance42198946631 PASS. 최종 합친 버전에서 저장소/정책63검사 PASS, 문서20종/소스599 정합성 PASS. 이전 통합94, UI/profile86, 레이아웃31+수정후responsive5, 정책47은 겹치는 묶음이며 합산하지 않습니다.
+- **마지막 통합 head4ce18cb의 자동 전체 재실행은 아직 완료로 판정하지 않습니다.** Runtime42204806984 / Compliance42204806985를 후속 확인하세요. UI 파일은 검증본 그대로이며 FACTS·source-review 충돌만 수동 병합했습니다. 최종 재실행 성공으로 기록하기 전에 해당 head 결과를 직접 확인해야 합니다.
+- 앱 변경 큐는 main **e4ec6ef9ed8ea1dc16ae7f06a8e75ec9bc0f1944**, docs/product/ui_website_updates/PR-82.json에 저장했습니다. 다음 담당자는 CI 최종 결과만 큐에 갱신하면 됩니다. PR82 구현/병합을 다시 수행하지 마세요. 실제 사용자 PC의 획 선명도와 장중 KIS 수신 검증은 별개입니다.
+- 실행: 앱을 닫고 QUANTGEN 폴더 CMD에서 GitHub Desktop 내장 Git을 찾아 pull --ff-only origin main 후 **.venv\\Scripts\\python.exe -X utf8 -m quantgen_desktop**. 기존 키를 다시 요청하지 않습니다. 사용자용 세 줄 명령은 /workspace/artifacts/quantgen-ui/QUANTGEN_UPDATE_AND_RUN.txt에 보존했습니다.
+- 프리뷰: /workspace/artifacts/quantgen-ui/font-table-20261106/ (검토용 자료), 1000/1360px, KO/EN 테마 및 전체창 KO 100/125/150%. 실제 Windows 시각 검수를 대신하지 않습니다.
+- 메인/Claude 인수인계 보충 기록이며 CURRENT/LEDGER/AUTO_STATE는 변경하지 않았습니다. 직접 다른 대화로 보내는 도구가 없어 채팅 전달 영수증은 없습니다. 공유 저장과 실제 수신은 구분합니다.
+- AWS: 대응 웹 표·설명문·단위 및 Docs13/14/19/FACTS를 실제 웹 소스에 대조하세요. 웹 HTML GitHub 게시·AWS 로그인 재요청 금지 유지. 이번 앱 변경의 실제 사이트 적용/배포는 미수행입니다. 전달문은 /workspace/artifacts/quantgen-ui/AWS_SESSION_PROMPT_20261106.txt와 이 공유 인계에 있습니다.
+
+---
+
 ## 2026-11-06 PR82 최신 통합 체크포인트 — 이 상태가 아래 기록보다 우선
 
 - 첫 UI head c028dd96의 Runtime42197290486/Compliance42197290701은 **모두 SUCCESS**. Windows3.11/3.12/3.14, Ubuntu3.12 설치본과 Python3.10/3.11 구문 검사 통과.
