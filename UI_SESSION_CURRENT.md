@@ -1,3 +1,7 @@
+## 2026-11-07 앱 UI 개선 재개 체크포인트
+
+사용자 충전/재개 지시. 현재 gpt/compact-workspace-20261106 (base cd4019c)에서 hinted Gothic A1 실제400/500/600 한글 폰트 교체, 글자폭 카테고리 메뉴, 제한폭 반응형 폼, 내용폭 결과표를 구현/검증 중입니다. 아직 이번 변경 병합/배포 완료 아님. root app/typography/category_picker; font_replacement fonts/font_policy/packaging; compact_forms tools/bonds/portfolio/form_layout; compact_tables table_layout/result_layout. 기존 UI 변경 PR82의 최종 통합 Runtime42204806984/Compliance42204806985는 SUCCESS 확인됨. 메인 CURRENT/LEDGER 및 엔진 작업은 건드리지 않습니다. 완료 후 앱 PR/main 확인, KO/EN/테마/폭/배율 검증, UI/AWS 큐 갱신과 CMD 세줄 실행법 전달 예정. 웹 HTML은 GitHub에 올리지 않으며 직접 채팅전송 도구가 없어 송신/수신/배포로 주장하지 않습니다.
+
 ## 2026-11-06 최종 앱 반영 완료 — PR82 MERGED
 
 - PR82 https://github.com/xkg4real/quantgen/pull/82 를 main **5b7988c653a7fc621a4e170d1361516124f316b4**에 병합했습니다. Source head **4ce18cb4a3de811df3dc165b5e1c7e115e3db35a**. main을 fetch하여 tree **48b0f9162c27604206c8a13f176513156f380f9e**가 로컬 e223c01과 동일함을 확인했습니다.
