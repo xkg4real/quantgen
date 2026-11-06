@@ -1,3 +1,14 @@
+## 2026-11-06 기업 마크·표 가독성 PR82 — 구현/로컬 검증 완료, CI 진행 중
+
+- https://github.com/xkg4real/quantgen/pull/82 ; branch gpt/font-clarity-20261106, source c028dd96b77a4c560d83bf115c6a095c81e193b0. 원격 tree6881f13e0f864622a8512dc4ab62ec3b854c6383는 로컬355cc50과 동일합니다. 아직 main 병합 전입니다.
+- Home 원형 회사 문자 마크+코드 pill+이름,44px행·숫자 정렬·Q-SCORE마지막/? 유지. Markets카드/검색/종목 제목 공유마크. 외부 공식 로고 수입/네트워크 없음. 긴 이름 전체는 모델/접근성/툴팁 보존.
+- 시총·거래량 K/M/B/T 공통함수, 한영동일, 반올림1000K→1M, 원값상세/툴팁 유지. 본문15px/설명14px500, Home이름·가격14px500. 원본도무힌트라 글꼴바이너리교체안함; 실제Windows획번짐해결미검증.
+- 로컬86 UI/profile PASS; layout32중기존710px고정시험전제1건실패→현viewport보다큰probe로수정후해당responsive5PASS, 나머지31PASS. 정책47PASS/20문서589소스정합성PASS. 전체창12조합 KO/테마/1000·1360/100·125·150%, 패널KOEN/테마 확인. 실제KIS호출없음. Runtime42197290486/Compliance42197290701진행중.
+- 다음: 최종CI확인→head검증후main병합→PR82변경큐/공유인계최종화→사용자CMD안내. 재실행명령 .venv\\Scripts\\python.exe -X utf8 -m quantgen_desktop. GithubDesktopGit변수는새CMD마다설정필요.
+- 메인 CURRENT/LEDGER/AUTO_STATE는 다른 run-registry-codec 세션 소유로 유지. 이것은 보충 UI 인계이며 직접 채팅전달/수신확인은 없습니다.
+
+---
+
 ## 2026-11-06 진행 중 — 기업 마크·연구홈 표·글꼴·K/M/B/T
 
 - 사용자 추가: 흐리거나 울퉁불퉁한 한글 획, 회사 앞 대표 마크, 연구홈 표 가독성/정돈, 시총·거래량 K/M/B/T.
