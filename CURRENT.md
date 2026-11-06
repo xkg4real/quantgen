@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19
 next_ids: ⑬-2/a3, ⑬-2/a1, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T15:54:11.000+09:00
+updated_at: 2026-11-06T16:05:14.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a1-20261106
-work_commit: e79ef2c1160242ddf86d5b381e1005f2ad627e16
-uncommitted_changes: yes
-pr: none
+work_commit: 2715d9e1aaee0d303ee483d11b9e6669459aa871
+uncommitted_changes: no
+pr: https://github.com/xkg4real/quantgen/pull/76
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -83,6 +83,13 @@ A1/A3 완료 ID는 아직 기록하지 않는다. 다음은 A1 코드 검토·�
 - §10 재작업은 Crypto, 옵션, 모형/ETF까지 main에 병합했습니다. 마지막 항목 **AI(NEW-M6-12, NEW-M6-19)**는 구현 3커밋까지 마쳤고, 검토 지적 수정 전에 멈췄습니다.
 - **가장 먼저 할 일:** 6절 1단계입니다. `claude/s10-ai-20261104`(`67618da`)에서 이어 받아 검토 지적을 고치고 공유 기록을 갱신한 뒤 PR → CI → 병합 → 원장 순으로 진행합니다.
 - 그다음은 UI A3·A1 설계안을 소유자에게 보이고 승인받는 일입니다(6절 2단계). 초안은 있으나 검증 전입니다.
+
+### GPT A1 PR·검증 — 2026-11-06T16:05:14.000+09:00
+
+- 승인된 A1 용어/표시 역할 구현 44c13da33f9aaff611ecfaa14abd5ca8a8d2f24f, PR76 웹 영향 metadata 포함 최종 head 2715d9e1aaee0d303ee483d11b9e6669459aa871를 push/read-back했다. PR #76 열림, 최종 Windows/Ubuntu CI·병합 전이므로 A1 전체 완료/LEDGER 완료 행은 아직 추가하지 않는다.
+- 20모듈 합성 통합 167 PASS(exit0), 독립 구현 검토와 조사 오타 수정, 20정책 소스 정합성 PASS(577 source files)/공개 준비 BLOCKED. 원문 보고서/수치/ID/AI payload 보존 시험 포함. PR75 웹 queue는 확인된 병합/CI 결과로 갱신했고 전달 상태는 queued/receipt 없음 유지.
+- A3 동일 실행 하위 브랜치 gpt/ui-a3-20261106은 로컬 WIP다. G1 MC/채권 배치, 로컬 용어 설명, 순수 Macro 출처만 접힘 구현. 독립 검토가 같은 행 수 결과 변경/선택 문구 변경 시 이전 인용이 남는 결함을 재현하여 수정 중. 기존 responsive forced-overflow 사전조건 실패는 기준 브랜치에서도 재현되어 별도 기록; 전체 통과로 주장하지 않는다.
+- 다음: A1 exact-head CI 후 선병합/원장/Notion. A3 결함 수정·A1 통합·합성 최종 검사·PR/CI/병합을 이어간다. 실제 Windows 사용자PC/API/법률/라이선스/공급사/파일럿·동결연구 증거 없음; 선택 GPT/Gemini spec review NOT_PERFORMED.
 
 ## 1. 목표와 완료 조건
 
