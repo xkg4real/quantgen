@@ -56,8 +56,16 @@ class RatesPane(ToolPane):
         import numpy as np
         self.clear_result()
         q, r, p, c = out.request, out.report, out.panel, out.curve
-        self.text(('합성 곡선 · 현재 시장 데이터 아님\n' if p.source=='SYNTHETIC' else '')+
-                  f'{p.source} · {c.date} · {len(p)} observations · {c.method}\n{p.note}\n{c.note}')
+        source_summary = ('합성 곡선 · 현재 시장 데이터 아님\n' if p.source=='SYNTHETIC' else '')+\
+                         f'{p.source} · {c.date} · {len(p)} observations · {c.method}\n{p.note}\n{c.note}'
+        # Author only the UI metadata. Embedded provider/model notes are literal
+        # in both languages; the original mixed-language export stays unchanged.
+        self.text(source_summary, localized={
+            'en': ('Synthetic curve · not current market data\n' if p.source=='SYNTHETIC' else '')+
+                  f'{p.source} · {c.date} · {len(p)} observations · {c.method}\n{p.note}\n{c.note}',
+            'ko': ('합성 곡선 · 현재 시장 데이터 아님\n' if p.source=='SYNTHETIC' else '')+
+                  f'{p.source} · {c.date} · 관측 {len(p)}개 · {c.method}\n{p.note}\n{c.note}',
+        })
         metrics = []
         if q.tool == 'curve':
             from core.ficc.forward_conventions import (FIVE_YEAR_SIMPLE_LABEL, FIVE_YEAR_SIMPLE_NOTE,
@@ -88,11 +96,20 @@ class RatesPane(ToolPane):
                 ('Carry · first period',fmt(r.carry_1y)),('Roll-down · 1y',fmt(r.rolldown_1y))]
             self.result_table('Key-rate DV01', ['Tenor','Currency / bp'], [[tenor_label(t),fmt(v)] for t,v in r.krd.items()])
             self.result_table('Forward swaps', ['Swap','Par rate'], [[k,fmt(v,'pct')] for k,v in r.fwd_rates.items()])
-            self.text(f'{q.notional:,.0f} notional · {r.swap.freq} payments/year · single curve · ACT/365F\n{r.note}')
+            swap_terms = f'{q.notional:,.0f} notional · {r.swap.freq} payments/year · single curve · ACT/365F\n{r.note}'
+            self.text(swap_terms, localized={
+                'en': swap_terms,
+                'ko': f'명목금액 {q.notional:,.0f} · 연 {r.swap.freq}회 지급 · 단일 곡선 · ACT/365F\n{r.note}',
+            })
         elif q.tool == 'option':
             metrics = [('Instrument',q.kind),('Strike',fmt(r.strike,'pct')),('Premium',fmt(r.premium)),('Premium / notional',f'{r.premium_bp:.2f} bp')]
-            self.text(f'{q.option_model} · '+(fmt(q.vol,'bp')+' normal' if q.option_model=='bachelier' else fmt(q.vol,'pct')+' Black')+
-                      f' · {q.notional:,.0f} notional\n{r.note}')
+            option_terms = f'{q.option_model} · '+(fmt(q.vol,'bp')+' normal' if q.option_model=='bachelier' else fmt(q.vol,'pct')+' Black')+\
+                           f' · {q.notional:,.0f} notional\n{r.note}'
+            self.text(option_terms, localized={
+                'en': option_terms,
+                'ko': f'{q.option_model} · '+(fmt(q.vol,'bp')+' 정규' if q.option_model=='bachelier' else fmt(q.vol,'pct')+' Black')+
+                      f' · 명목금액 {q.notional:,.0f}\n{r.note}',
+            })
             if q.kind == 'swaption':
                 self.sections.append({'type':'comparison_volatility',
                     'status':r.other_model_status, 'reason':r.other_model_reason,
@@ -100,7 +117,11 @@ class RatesPane(ToolPane):
                 metrics += [('Forward',fmt(r.forward,'pct')),('Annuity',fmt(r.annuity)),('Delta · per +1bp',fmt(r.delta)),
                     ('Gamma · per bp²',fmt(r.gamma)),(f'Vega · {r.vega_unit}',fmt(r.vega)),('Theta · 1 day',fmt(r.theta_1d)),
                     ('Other-model vol',fmt(r.other_model_vol,'pct' if q.option_model=='bachelier' else 'bp'))]
-                self.text(f'{q.expiry} × {q.tenor} · '+('Payer' if q.pay_fixed else 'Receiver'))
+                option_side = f'{q.expiry} × {q.tenor} · '+('Payer' if q.pay_fixed else 'Receiver')
+                self.text(option_side, localized={
+                    'en': option_side,
+                    'ko': f'{q.expiry} × {q.tenor} · '+('고정금리 지급형' if q.pay_fixed else '고정금리 수취형'),
+                })
             else:
                 metrics += [('ATM par swap',fmt(r.atm_strike,'pct')),('Caplets',str(len(r.caplets)))]
                 self.result_table('Caplets', ['Start · y','End · y','Forward','Premium'],
@@ -115,7 +136,13 @@ class RatesPane(ToolPane):
             self.line('금리 분포 · 중앙 90%', r.times, [(f'P{k}',r.fan[k]*100) for k in (5,25,50,75,95)], 'Years','Short rate · %')
             self.result_table('Horizon curve · median path', ['Tenor','Model zero'], [[tenor_label(t),fmt(z,'pct')] for t,z in r.model_curve_at_horizon])
             s = out.series
-            self.text(('합성 단기금리 · ' if s.source=='SYNTHETIC' else '')+f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{s.note}\n{params.note}\n{r.note}\nSeed 7 · {r.n_paths} paths')
+            simulation_source = ('합성 단기금리 · ' if s.source=='SYNTHETIC' else '')+f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{s.note}\n{params.note}\n{r.note}\nSeed 7 · {r.n_paths} paths'
+            self.text(simulation_source, localized={
+                'en': ('Synthetic short rate · ' if s.source=='SYNTHETIC' else '')+
+                      f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{s.note}\n{params.note}\n{r.note}\nSeed 7 · {r.n_paths} paths',
+                'ko': ('합성 단기금리 · ' if s.source=='SYNTHETIC' else '')+
+                      f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{s.note}\n{params.note}\n{r.note}\n시드 7 · 경로 {r.n_paths}개',
+            })
             if out.horizon_pv is not None:
                 hp = out.horizon_pv
                 metrics += [(f'{q.instrument} mean PV',fmt(hp.mean)),('PV P5 / P95',fmt(hp.p05)+' / '+fmt(hp.p95)),

@@ -1,0 +1,66 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-rates-inline-language-pr-79",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "No supported cross-chat sending tool is available; this file is not delivery evidence.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/rates-inline-language-20261106",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/79",
+    "implementation_commit": "53e8487037dfde63ad3a265f9a8fa7a414262868",
+    "remote_status": "OPEN_DRAFT",
+    "merge_commit": null,
+    "verified_head": null
+  },
+  "summary_ko": [
+    "Rates의 관측 수·명목금액·지급 횟수·옵션 방향·시드 및 경로 수를 화면에서 한영으로 제공합니다.",
+    "원문 주석·코드·수치·보고서·AI 자료는 보존하며 계산과 Flet 코드는 바꾸지 않습니다."
+  ],
+  "website_impact": {
+    "classification": "native_only",
+    "browser_code_changed": false,
+    "shared_sources": [],
+    "requested_actions_ko": [
+      "Native Rates 사용법이나 화면을 웹에 소개할 때 해당 짧은 한영 설명을 대조하세요.",
+      "수치·모형 원문·API 동작이 바뀐 것으로 소개하지 말고 실제 웹 적용·배포 증거를 따로 기록하세요."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "Rates narrative and authored inline language with actual widgets",
+        "passed": 11
+      }
+    ],
+    "counts_note": "Synthetic/offscreen; unchanged raw notes, numeric formatting, canonical sources, export bytes and AI payload across locales. Source AST preserved after upstream test correction merge.",
+    "source_review": "20 policies reviewed; consistency PASS587; publication BLOCKED",
+    "ci": "PENDING_FINAL_HEAD",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "NOT_RUN",
+    "final_branch_integration": {
+      "status_head": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3",
+      "a3_source": "f7b4a73fa08733b007b7ab499cbf377ab9970837",
+      "rates_source_and_tests": "AST unchanged from11PASS receipt",
+      "status_a3_tests": 41,
+      "counts_note": "Separate overlapping integration evidence; not a new41-test Rates run.",
+      "ci": "final integrated head required"
+    }
+  },
+  "website_application": {
+    "status": "not_verified",
+    "deployment_status": "not_verified",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "⑬-8/b2/b/2 한정 하위 항목이며 부모13-8·전체 Flet 완료가 아닙니다.",
+    "PR77·78 이후 최종 head Windows/Ubuntu CI를 확인해 병합합니다.",
+    "실제 사용자 Windows/API/공급사/법률/라이선스/파일럿·동결연구 증거는 없습니다.",
+    "추가 GPT/Gemini spec 공개·심사는 선택적 NOT_PERFORMED입니다."
+  ]
+}

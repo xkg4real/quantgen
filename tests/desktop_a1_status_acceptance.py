@@ -10,6 +10,7 @@ from quantgen_desktop.connections import ConnectionsPane
 from quantgen_desktop.localization import CAPTION_ROLE, LanguageController
 from quantgen_desktop.status_language import STATUS_ROLE
 from quantgen_desktop.watchlist import _price_tooltip, _reason, _status
+from tests.qt_fixture_cleanup import delete_owned_widget
 
 
 class A1StatusTests(unittest.TestCase):
@@ -21,7 +22,7 @@ class A1StatusTests(unittest.TestCase):
         self.host = QWidget()
         self.host.ui_language = 'en'
         self.layout = QVBoxLayout(self.host)
-        self.addCleanup(self.host.deleteLater)
+        self.addCleanup(delete_owned_widget, self.host)
 
     def test_status_roles_round_trip_without_touching_cells_or_ids(self):
         grid = table(['Provider', 'Execution', 'Verdict', 'Value'])

@@ -103,6 +103,10 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: python -m unittest tests.desktop_chart_rendering_acceptance tests.desktop_responsive_tools_acceptance tests.desktop_operation_fixes_acceptance tests.desktop_typography_acceptance -v
+      - name: Verify approved A1 terminology and source preservation
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest tests.desktop_a1_terms_acceptance tests.desktop_a1_status_acceptance tests.flet_a1_headers_acceptance -v
       - name: Verify native desktop with offline fixtures
         env:
           QT_QPA_PLATFORM: offscreen
@@ -127,10 +131,6 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: python -m unittest tests.status_display_acceptance tests.status_snapshot_acceptance -v
-      - name: Verify approved A1 terminology and source preservation
-        env:
-          QT_QPA_PLATFORM: offscreen
-        run: python -m unittest tests.desktop_a1_terms_acceptance tests.desktop_a1_status_acceptance tests.flet_a1_headers_acceptance -v
       - name: Verify indicator education and locale contracts
         env:
           QT_QPA_PLATFORM: offscreen

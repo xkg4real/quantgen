@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "7eb1d95a236af2469ab212b4ab0ae59def31d54a55fd460f718629f0ab5e03be",
+    ".github/workflows/runtime-smoke.yml": "7a17b1714d9c28ec402f93a469656031396d82bb9a0e22957a1d9bcc471502da",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -260,7 +260,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "b0835714f882cf1caae91ef2e92a9b2da11cfba5f369d52018681a1b4bfbc717",
+    "docs/compliance/FACTS.md": "3b0302d361486dd522315d6aad112cc864290d29a5c1d7cbc49e44adabf34899",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -304,6 +304,7 @@
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
+    "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "9082a26aaf303662283b7aadd56e63b3017aab8a30ebefe7cd54db62493d4ca2",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
     "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
     "docs/product/RECORDED_STATUS_DISPLAY_2026-11-06.md": "33e76e3cbc4ded9db268df780c0d406f67aa420bd726d2e5174827e6e72411d2",
@@ -352,7 +353,7 @@
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
     "quantgen_desktop/portfolio.py": "0265414d5d73b9978a4493948f2ec1ca4f0c05b5139fa57a64935dce0fab5c5e",
     "quantgen_desktop/qscore.py": "a495a5412195c98eddc5c3cca4ae0a7665e284a9803aceaa82e9dd46b881842f",
-    "quantgen_desktop/rates.py": "db8ab5530c5cc0611b842473aa265df89cc28665ce97be1f9f2ae5243bd5e967",
+    "quantgen_desktop/rates.py": "f78080d896533e00418607e69d40f179536928c400e5d280d4f5e6262ebaa9d0",
     "quantgen_desktop/rates_narrative.py": "a6bfdb0abc0db628d8ad8615a1bc222f375b2ee2c59d1a901ec3eab3a8d58ff0",
     "quantgen_desktop/reading_language.py": "ee8a55044482598fbcece2dfde3fca73e9b4ff9b2405db13c16dc2c0bc911adf",
     "quantgen_desktop/reading_panel.py": "93cb0202f6a2ffbe8d80340554ef4340f207b4a3d1e53bda4e1f96f5fa4778d1",
@@ -385,8 +386,8 @@
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
-    "tests/desktop_a1_status_acceptance.py": "e921669fc62347f09913c87db2d3aae5cca89d3eb45461371a93f061e566fb3a",
-    "tests/desktop_a1_terms_acceptance.py": "e2b93cfbd295df742d218e893dd586d8b6b23fd7a63ac75877f2e7b4717b4280",
+    "tests/desktop_a1_status_acceptance.py": "8993fa2d3914aa8285fb4b8dcfc81168ad62a42b7e8cace87f455865b8d70a7e",
+    "tests/desktop_a1_terms_acceptance.py": "2e8613a5e6c25766a138e483c449bfbe8e4098ed48e05d3513a5ca6b46fa781d",
     "tests/desktop_a3_layout_acceptance.py": "12c431696f0029fa72c6381e01547f48808973b4b6906a4cfe3b4f8531094444",
     "tests/desktop_a3_reading_acceptance.py": "84d69d2df57bf9592ec5dff00c0df32b24dcc454e06d539e330e3964382ae847",
     "tests/desktop_acceptance.py": "922f93afe5bb0bbc852bc95df31cb52beb317e9121c192d7484debecdda9291d",
@@ -418,7 +419,7 @@
     "tests/desktop_portfolio_scope_acceptance.py": "ecbc292b2db1c547db790e333b2edc87e0ee529675782a9ffc78437e7cf0142c",
     "tests/desktop_qscore_acceptance.py": "67db9d30ead27bf375189a1ced3cb60977f6c4600ce7ef40678ce1948867fb06",
     "tests/desktop_quote_coverage_acceptance.py": "a430d1493495a3f2bd440ba62e359f3a8904478c8d4f8f4f8e17bcb577df8e1c",
-    "tests/desktop_rates_language_acceptance.py": "506bb6fdd48bf13a00f509eba198260a9961522892295309360025be2b4c45c0",
+    "tests/desktop_rates_language_acceptance.py": "96644766a454ae3b9da85a3148ec5c0b4dc9d0e465325db43ef7cc435ecca16b",
     "tests/desktop_responsive_tools_acceptance.py": "1b0a6a3bd7e341432ea72306b01674a0d9332f0c148e11a96e4b343adf73b877",
     "tests/desktop_sabr_diagnostics_acceptance.py": "08498faacb4e6a1d028ac56c7f8969858c1413c565b476fe258bc566ea3c665e",
     "tests/desktop_startup_acceptance.py": "202276b82e211de7bbca2913ed866d593705986a230280c8cfdeefe8334eb1e5",
@@ -597,163 +598,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "6d32b7501bf5704b0eff44b2503cf421df17a0c4862a8774a82b9c49b40c22b2",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.788906+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "f651a1188d57bd5a45e405d20459c0a1ffbf8520e07afd0b1fbc7e0f100f4bcc",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.495318+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "6d32b7501bf5704b0eff44b2503cf421df17a0c4862a8774a82b9c49b40c22b2",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.791384+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "f651a1188d57bd5a45e405d20459c0a1ffbf8520e07afd0b1fbc7e0f100f4bcc",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.498128+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "7f55fc84747a03b2735157e1cae0fd1daf8bd9bdb7a81568bcd2c5167cbd63a2",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.793514+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "ceb204cdd2af1935afae629202542aa792321d6037364c0b81100b0d493e62fd",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.500321+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "dbabb7041f19fc480e32e998d46ae85c13d60270f6f2c79b76b1752c9ae515c9",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.795621+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "31191603be3f62b2c953830ceb5faafaadb0728e5d9e23735888ca4e9259cee0",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.502302+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "46572f328f96be53da8f359647a02c4d5d31b7d22505b5e27011246a738329f4",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.797691+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "ad7020d57888e1e7cb9d5e73c0dbb797b1f059a89e017d3c62754c9c710d2323",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.504469+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "77b7395ce764047b0764655b6c2ab10dc3ef32229adf6481ec944efbfc50765d",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.799958+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "7aa413eda63a6fbd868c5a93d2e2e390e83df304daa0b608422667c0805288ba",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.506680+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "6d32b7501bf5704b0eff44b2503cf421df17a0c4862a8774a82b9c49b40c22b2",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.801975+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "f651a1188d57bd5a45e405d20459c0a1ffbf8520e07afd0b1fbc7e0f100f4bcc",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.508931+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "77b7395ce764047b0764655b6c2ab10dc3ef32229adf6481ec944efbfc50765d",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.804054+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "7aa413eda63a6fbd868c5a93d2e2e390e83df304daa0b608422667c0805288ba",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.511036+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "4fcf4b2b64b3054f933d99b4955a69d9ee4da76a679e2f5c8afb5842cdc170be",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.806012+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "dd2c24cbc1198709cc10df1fd18a89a06d055d6dccfd2113061ab542c7944fdf",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.512931+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "3b39f4f38988872a4ce143fd7a9ed7d73beb31d0b7085e761d2390f1159a43e2",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.808104+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "fb01e047889be0705ae9382064daa08646f50440c0a7005373b3ff3015587503",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.515306+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "67d61d0f1c023cd1a394c566043d413e4583869b638a6a43c2d7d35334a556ae",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.810129+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "e6563620e8c50d101b2e285bec2777dc5d874fc1001db3a0ea3437d073f671d2",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.517475+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "12": {
-      "document_sha256": "ea5017f8f93d973ad03aa62728aedaa39ed8d2d6c686feb41c0339c109fd590e",
-      "source_digest": "67bdf0269b3fb127506ab0f3e8b77e271d37a6984bddb9ee3d876c5c464da2e8",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.813458+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
+      "source_digest": "c83cde179dda478d08ac356c21b44924093f2ef31a33fef077d8288e993d318c",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.520045+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "4fcf4b2b64b3054f933d99b4955a69d9ee4da76a679e2f5c8afb5842cdc170be",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.815596+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "dd2c24cbc1198709cc10df1fd18a89a06d055d6dccfd2113061ab542c7944fdf",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.522326+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "4fcf4b2b64b3054f933d99b4955a69d9ee4da76a679e2f5c8afb5842cdc170be",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.817725+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "dd2c24cbc1198709cc10df1fd18a89a06d055d6dccfd2113061ab542c7944fdf",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.524488+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "4fcf4b2b64b3054f933d99b4955a69d9ee4da76a679e2f5c8afb5842cdc170be",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.819790+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "dd2c24cbc1198709cc10df1fd18a89a06d055d6dccfd2113061ab542c7944fdf",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.526617+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "6f2eeb7cf65e9e1b91e03059cd431f9b9fd98bd7d21ea77a11882a2abae9bb1c",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.821960+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "9c770cc4250d712deb5b79b37740bc70d69d87e3ac94234117ff3e405957107e",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.529138+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "77b7395ce764047b0764655b6c2ab10dc3ef32229adf6481ec944efbfc50765d",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.823906+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "7aa413eda63a6fbd868c5a93d2e2e390e83df304daa0b608422667c0805288ba",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.531148+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "6d32b7501bf5704b0eff44b2503cf421df17a0c4862a8774a82b9c49b40c22b2",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.825764+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "f651a1188d57bd5a45e405d20459c0a1ffbf8520e07afd0b1fbc7e0f100f4bcc",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.533089+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "e5fb28bf4e89cd4b91cbf9629d48cadc396ab9a1649cfafbbbb6e75898b7eadf",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.827703+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "c30e03ae19cf810344bf64ad66de884d8b4fd4d0ba27493a3dd069fb0b3518c9",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.534932+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "6d32b7501bf5704b0eff44b2503cf421df17a0c4862a8774a82b9c49b40c22b2",
-      "reviewed_by": "GPT combined status and Qt fixture review",
-      "review_note": "Reviewed all20 combined status/A3 policies: numbered policies and release gates preserved; FACTS retains prior status and form sections plus measured cleanup evidence. Production status semantics and all CI commands unchanged. Only owned test widget cleanup and measured job budget change; full Windows verification required before merge; publication remains blocked.",
-      "reviewed_at": "2026-11-06T08:54:10.829621+00:00",
-      "source_commit": "d1a62a23b1c1d4f53657f5066e0bb75338b01bd3"
+      "source_digest": "f651a1188d57bd5a45e405d20459c0a1ffbf8520e07afd0b1fbc7e0f100f4bcc",
+      "reviewed_by": "GPT Rates A1 fixture lifecycle policy review",
+      "review_note": "All20 policies reviewed; Rates production unchanged, exact two reviewed A1 fixture cleanup blobs ported from identity followup,18 methods82 assertions retained. Actual Rates Ubuntu18OK then139 recorded distinctly from shared local18PASS9owned-destruction measurement. Same CI commands reordered for early A1 verification; cause not established and publication blocked.",
+      "reviewed_at": "2026-11-06T09:25:36.536688+00:00",
+      "source_commit": "578d35d406cd6001190d0400caeab7f93cab3096"
     }
   }
 }
