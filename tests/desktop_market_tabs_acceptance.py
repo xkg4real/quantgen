@@ -19,7 +19,7 @@ from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QTabBar, QToolButto
 from core.market.routing import ChartRouter, KISChartProvider
 from tests.desktop_market_chart_acceptance import FakeService, FakeStream, fixture
 
-KO = ['채권', '금리', '구조화 상품', '외환', '파생상품', 'ETF', 'KRX', '가상자산', '거시 지표표', '매크로 v2']
+KO = ['채권', '금리', '구조화 상품', '외환', '파생상품', 'ETF', 'KRX', '가상자산', '매크로 지표', '매크로 v2']
 EN = ['Bonds', 'Rates', 'Structuring', 'FX', 'Derivatives', 'ETF', 'KRX', 'Crypto', 'Macro', 'Macro v2']
 
 

@@ -286,5 +286,42 @@ from core.research.sleeve_disclosure import SHARPE_CONVENTIONS_POINTER, SHARPE_C
 EN_TO_KO[SHARPE_CONVENTIONS_POINTER] = SHARPE_CONVENTIONS_POINTER_KO
 KO_TO_EN[SHARPE_CONVENTIONS_POINTER_KO] = SHARPE_CONVENTIONS_POINTER
 
+# Exact A1 captions only. Old Korean authored chrome remains a source alias;
+# no replacement is applied inside user, provider or recorded report text.
+_A1_TERMS = {
+    'Build & Test': '설계/검증', 'Portfolio & Risk': '분석', 'Portfolio · risk': '분석',
+    'Signals': '기술적 분석', 'Paper Trading': '모의투자',
+    'Signals · technical observations and costed backtests': '기술적 분석 · 기술적 관측과 비용 포함 백테스트',
+    'Paper Trading · no actual orders': '모의투자 · 실제 주문 없음',
+    'Metric': '항목', 'Field': '항목', 'Fields': '항목', 'Metrics': '주요 지표',
+    'Sharpe': '샤프 지수', 'Sharpe ratio': '샤프 지수',
+    'Convexity': '컨벡시티', 'Macaulay': '맥컬리 듀레이션', 'Macaulay duration': '맥컬리 듀레이션',
+    'Modified': '수정 듀레이션', 'Modified duration': '수정 듀레이션',
+    'Zero rate': '무이표 금리', 'Model zero': '모형 무이표 금리',
+    'Strike': '행사가격',
+    'Provider': '제공처', 'Monte Carlo': '몬테카를로',
+    'Daily market data with providers and observation dates': '제공처와 관측일을 함께 확인하는 일별 시장 데이터',
+    'Provider failures are not filled with synthetic prices.': '제공처 조회 실패를 합성 가격으로 채우지 않습니다.',
+    'Daily observations · provider caches may be used. Check dates; public redistribution rights are separate.':
+        '일별 관측값 · 제공처 캐시가 사용될 수 있습니다. 관측일을 확인하세요. 공개 재배포 권리는 별도입니다.',
+    'Horizon · sessions': '분석 기간(거래일)', 'Sessions': '거래일 수',
+    'Macro sheet': '매크로 지표', 'Macro v2': '매크로 v2', 'Macro': '매크로',
+}
+_A1_TERMS[SHARPE_CONVENTIONS_POINTER] = SHARPE_CONVENTIONS_POINTER_KO.replace('샤프비율이며', '샤프 지수이며', 1)
+_A1_KO_ALIASES = {}
+for _english, _korean in _A1_TERMS.items():
+    _previous = EN_TO_KO.get(_english)
+    # A shared Korean caption may already mean another authored English label
+    # (for example 지표 = Indicator as well as the former Metric caption).
+    # Keep that source meaning; callers with a canonical Metric still get 항목.
+    if (_previous and _previous != _korean
+            and KO_TO_EN.get(_previous, _english) == _english):
+        _A1_KO_ALIASES[_previous] = _korean
+    EN_TO_KO[_english] = _korean
+    KO_TO_EN.setdefault(_korean, _english)
+for _source, _name in {'vasicek':'Vasicek', 'cir':'CIR', 'hull_white':'Hull-White',
+                       'nelson_siegel':'Nelson-Siegel', 'svensson':'Svensson'}.items():
+    EN_TO_KO[_source] = KO_TO_EN[_source] = _name
+
 def static_text(text,language):
-    return KO_TO_EN.get(text,text) if language=='en' else EN_TO_KO.get(text,text)
+    return KO_TO_EN.get(text,text) if language=='en' else _A1_KO_ALIASES.get(text,EN_TO_KO.get(text,text))

@@ -24,6 +24,7 @@ from typing import Callable, Optional
 import numpy as np
 
 import flet as ft
+from ui.localization import table_header, literal_text
 
 from core.ficc import fx, insights
 from core.ficc.sabr_diagnostics import fit_diagnostics, diagnostic_text, diagnostic_tone
@@ -89,10 +90,19 @@ def _strike(text: str, S: float, T: float, rd: float, rf: float, vol: float,
         raise ValueError(f"Strike: {text!r} is not a level, a delta like 25d, or ATM.") from None
 
 
-def _table(columns: list[str], rows: list[list[str]]) -> ft.Control:
+_SMILE_HEADERS_KO = {'Point': '구분', 'Vol': '변동성', 'Spot delta': '현물 델타'}
+_CARRY_HEADERS_KO = {'Pair': '통화쌍', 'Ccy': '통화', 'Spot': '현물환율', 'Rate': '금리',
+                     'USD rate': 'USD 금리', 'Carry': '캐리', '3m vol': '3개월 변동성',
+                     'Carry/vol': '캐리/변동성 비율', '3m mom': '3개월 모멘텀', 'Score': '점수'}
+
+
+def _table(columns: list[str], rows: list[list[str]], *, headers_ko=None) -> ft.Control:
+    # Only the approved table surfaces opt into source-preserving localization.
+    text_cell = literal_text if headers_ko is not None else ft.Text
     table = ft.DataTable(
-        columns=[ft.DataColumn(ft.Text(c, size=11)) for c in columns],
-        rows=[ft.DataRow(cells=[ft.DataCell(ft.Text(v, size=11)) for v in r]) for r in rows],
+        columns=[ft.DataColumn(table_header(c, ko=headers_ko.get(c), size=11)
+                               if headers_ko is not None else ft.Text(c, size=11)) for c in columns],
+        rows=[ft.DataRow(cells=[ft.DataCell(text_cell(v, size=11)) for v in r]) for r in rows],
         column_spacing=18, heading_row_height=34, data_row_max_height=34)
     return ft.Row([table], scroll=ft.ScrollMode.AUTO)
 
@@ -284,7 +294,8 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
         blocks.append(card(fcharts.smile_chart(grid, vols, pts, F)))
         blocks.append(card(_table(
             ["Point", "Strike", "Vol", "Spot delta"],
-            [[x.label, _px(x.strike), f"{x.vol * 100:.2f}%", f"{x.delta:+.3f}"] for x in pts])))
+            [[x.label, _px(x.strike), f"{x.vol * 100:.2f}%", f"{x.delta:+.3f}"] for x in pts],
+            headers_ko=_SMILE_HEADERS_KO)))
         blocks.append(notice(diagnostic_text(diag), diagnostic_tone(diag)))
         blocks.append(card(_table(
             ["Point", "Quoted vol %", "Fitted vol %", "Residual · vol points"],
@@ -356,7 +367,8 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
              "3m mom", "Score"],
             [[r.pair, r.ccy, _px(r.spot), f"{r.rate_ccy * 100:.2f}%", f"{r.rate_usd * 100:.2f}%",
               f"{r.carry * 100:+.2f}%", f"{r.vol_3m * 100:.1f}%", f"{r.carry_to_vol:+.2f}",
-              f"{r.mom_3m * 100:+.1f}%", f"{r.score:+.2f}"] for r in table_rows])))
+              f"{r.mom_3m * 100:+.1f}%", f"{r.score:+.2f}"] for r in table_rows],
+            headers_ko=_CARRY_HEADERS_KO)))
         blocks.append(card(fcharts.carry_equity_chart(bt)))
         payload = {
             "universe": [r.ccy for r in table_rows], "vs": "USD",

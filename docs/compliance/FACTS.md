@@ -376,3 +376,18 @@ Claude의 AI 변경(`7c31417`, `401fe33`, `54b52eb`)과 후속 수정 작업 트
 
 01–20 정책을 대조하고 전송 범위·최소화·가격 한계·AI 주장·키보드 검수·삭제에 직접 관련된 문구만 보강했습니다. 모든 정책 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. 제공자 계약·처리 국가·보존/삭제·데이터/라이브러리 권리·운영자 정보·법적 동의·실제 Windows/보조기술·실제 API/파일럿·동결 연구 증거는 별도이며, GPT/Gemini 추가 spec 공개·심사는 선택적 `NOT_PERFORMED`입니다. 원래 기록의 chance-match 수치는 당시 규칙의 합성 관측으로만 읽고 후속 단위/표현 규칙의 정확도나 현재 검증률로 재사용하지 않습니다. 소스 fingerprint 갱신과 최종 합성 실행 결과는 통합 후 별도 기록합니다.
 
+<a id="a1-terminology-2026-11-06"></a>
+## A1 용어·상태·표 머리글 — 2026-11-06 소스 검토
+
+기준 `e79ef2c1160242ddf86d5b381e1005f2ad627e16` 대비 승인된 A1 표시 변경입니다. [용어·범위 기록](../product/A1_TERMINOLOGY_2026-11-06.md)을 따르며 A3 배치·읽기 도움말은 별도 구현입니다.
+
+| 항목 | 확인한 소스 동작과 한계 | 근거 |
+| --- | --- | --- |
+| 용어 | 설계/검증·분석·기술적 분석·모의투자·샤프 지수·컨벡시티·맥컬리 듀레이션·무이표 금리·제공처 등 작성된 표시 문구를 정리. 기존 한영 별칭과 모델의 정규 키·선택값을 보존하며 이름 변경으로 새 기능·계산·검증을 만들지 않음 | [공통 문구](../../core/ui_messages.py), [기존 별칭](../../core/ui_legacy_messages.py), [네이티브 번역](../../quantgen_desktop/translations.py), [용어 사전](../../core/education/glossary.py) |
+| 상태 | 지정 셀의 실행·연결·공식 판정 역할을 구분. 한국어 공식 판정은 원래 코드 병기, 상태 tooltip에는 원래 코드 보존, 알 수 없는 코드는 그대로 표시. CONFIGURED 설정 있음과 REACHABLE 응답 확인은 별개이며 연결·연구 판단 규칙 자체는 바꾸지 않음 | [상태 표시](../../quantgen_desktop/status_language.py), [연결 화면](../../quantgen_desktop/connections.py), [표 갱신](../../quantgen_desktop/app.py), [언어 전환](../../quantgen_desktop/localization.py) |
+| 관측 상태 | Home OBSERVED의 한국어를 정상 관측으로 바꾸고 일별 관측 설명·오래된 자료/실패 경고와 원래 코드를 유지. 정상 관측은 실시간 체결·자료 완전성·실제 공급사 대조 성공이 아님 | [Home 상태·설명](../../quantgen_desktop/watchlist.py) `_STATUS`, `_price_tooltip`, `_reason` |
+| 표시와 원본 구분 | 네이티브 항목 열은 명시한 표시 역할로 번역. ETF의 한국어 표시 어댑터는 원래 공통 설명 함수·보고서 절·AI payload·계산값을 보존. Flet 지정 표는 머리글 메타데이터와 원문 셀을 구분하며 알려진 머리글과 같은 공급자/사용자/결과 문자열도 원문 유지. 전체 Flet 화면 번역 완료를 뜻하지 않음 | [ETF 표시 어댑터](../../quantgen_desktop/market_narrative_language.py), [보고서 절 보존](../../quantgen_desktop/market_tools.py), [Flet 메타데이터](../../ui/localization.py), [채권](../../ui/bonds_page.py), [구조화](../../ui/structuring_page.py), [KRX](../../ui/krx_page.py), [매크로](../../ui/macro_page.py), [금리](../../ui/rates_page.py), [외환](../../ui/fx_page.py) |
+| 검증 한계 | 표시 메타데이터·원래 코드·tooltip은 실제 키보드 경로·스크린리더 읽기·Windows DPI·전 화면 대비 수용의 증거가 아님. 긴 번역·상태 표시와 기존 제어를 실제 환경에서 재검수해야 함. A3 제목 번역의 존재도 A3 도움말 구현 증거가 아님 | [주장](12-claims.md), [대체 정보](13-alternative-text.md), [대비](14-contrast.md), [키보드](15-keyboard.md) |
+
+01–20 정책을 현재 A1 소스와 대조하고 선택권·주장·키보드 문구만 직접 보강했습니다. 기존 법률·운영자·제공자 계약·라이선스·전송 동의·실제 공개/배포 조건, `review-required`와 공개 준비 `BLOCKED`를 보존합니다. 실제 Windows/API/파일럿·동결 연구 증거는 추가되지 않았고 Flet AI 체크박스 흐름도 여전히 미구현입니다. 최종 합성 실행·CI·병합과 소스 fingerprint는 통합 후 실제 결과로 별도 기록합니다.
+

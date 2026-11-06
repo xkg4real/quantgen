@@ -19,7 +19,7 @@ _NOTE_PARTS = (
                          'Maximizing a non-positive Sharpe can favor higher volatility; these '
                          'weights are not evidence of an attractive or low-risk allocation.')),
      lambda m: '무위험금리보다 높은 추정 수익률을 가진 자산이 없습니다. '
-               '양수가 아닌 샤프비율을 최대화하면 더 높은 변동성을 선호할 수 있습니다. '
+               '양수가 아닌 샤프 지수를 최대화하면 더 높은 변동성을 선호할 수 있습니다. '
                '이 비중은 매력적이거나 위험이 낮은 배분이라는 근거가 아닙니다.'),
     (re.compile(r'Requested per-asset cap (?P<requested>\d+\.\d{10}%) was adjusted to '
                 r'(?P<effective>\d+\.\d{10}%) by the existing fully-invested feasibility bound '
@@ -53,10 +53,10 @@ def bond_korean(a, scenarios=()):
     name = b.name or f'{_pct(b.coupon)} {tenor_label(b.maturity)} 채권'
     lines = [
         f'{name}은 연 {b.freq}회 쿠폰을 지급하며 액면 {b.face:g}당 가격 {a.price:.3f}, '
-        f'수익률 {_pct(a.ytm,3)}입니다. 매콜리 듀레이션 {a.macaulay:.2f}y, '
-        f'수정 듀레이션 {a.modified:.2f}, 볼록성 {a.convexity:.1f}입니다.',
+        f'수익률 {_pct(a.ytm,3)}입니다. 맥컬리 듀레이션 {a.macaulay:.2f}y, '
+        f'수정 듀레이션 {a.modified:.2f}, 컨벡시티(볼록성) {a.convexity:.1f}입니다.',
         f'명목금액 {_money(b.notional)}의 DV01은 bp당 {_money(a.dv01)}입니다. '
-        f'+100bp 평행 상승 시 볼록성을 반영하기 전 대략 {_money(a.dv01*100)}의 손실이 발생합니다.',
+        f'+100bp 평행 상승 시 컨벡시티를 반영하기 전 대략 {_money(a.dv01*100)}의 손실이 발생합니다.',
     ]
     if a.krd:
         t,v = _top(a.krd)
@@ -84,9 +84,10 @@ def bond_korean(a, scenarios=()):
 def portfolio_korean(p):
     top = sorted(zip(p.symbols,p.weights),key=lambda x:-x[1])[:3]
     top_text = ', '.join(f'{s} {w*100:.0f}%' for s,w in top)
-    lines = [f'{p.objective.replace("_","-")} 포트폴리오의 주요 비중은 {top_text}입니다. '
+    objective = '최대 샤프 지수' if p.objective == 'max_sharpe' else p.objective.replace('_','-')
+    lines = [f'{objective} 포트폴리오의 주요 비중은 {top_text}입니다. '
              f'추정 연율 수익률 {p.ann_return*100:+.1f}%, 변동성 {p.ann_vol*100:.1f}%, '
-             f'샤프비율 {p.sharpe:.2f}입니다.']
+             f'샤프 지수 {p.sharpe:.2f}입니다.']
     if p.risk_contrib is not None:
         symbol,rc = sorted(zip(p.symbols,p.risk_contrib),key=lambda x:-x[1])[0]
         lines.append(f'{symbol}은 포트폴리오 전체 위험의 {rc*100:.0f}%를 기여합니다. '
@@ -103,7 +104,8 @@ def portfolio_scope_korean(portfolios, objective):
     p = portfolios[objective]
     cap = (f'{p.requested_max_weight:.2%} 요청 → {p.effective_max_weight:.8%} 유효'
            if p.requested_max_weight != p.effective_max_weight else cap_label(p))
-    return (f'선택 목적 {objective}: 종목당 상한 {cap}. 요청한 상한은 선택한 목적에만 적용합니다. '
+    display_objective = '최대 샤프 지수' if objective == 'max_sharpe' else objective
+    return (f'선택 목적 {display_objective}: 종목당 상한 {cap}. 요청한 상한은 선택한 목적에만 적용합니다. '
             '다른 목적의 행, 효율적 투자선과 무작위 구름은 종목당 상한 100%를 사용합니다. '
             '모두 롱온리·완전투자이며 equal_weight는 각 비중을 1/N로 고정합니다. '
             '상한이 다르면 동일 조건의 효율적 투자선 비교가 아닙니다.')

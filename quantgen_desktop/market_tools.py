@@ -7,8 +7,8 @@ from core.research.funding_disclosure import funding_text
 from core.research.letf_disclosure import letf_text, letf_unavailable_text
 from core.research.decay_disclosure import decay_value, decay_text
 from core.research.quote_coverage import quote_coverage_text
-from core.research.sleeve_disclosure import (conventions_korean, conventions_text, sharpe_note,
-                                           sharpe_note_korean)
+from core.research.sleeve_disclosure import conventions_text, sharpe_note
+from .market_narrative_language import display_conventions_korean, display_sharpe_note_korean
 from core.research.option_disclosure import box_computed, hedge_korean, hedge_text, mfiv_strip
 from core.research.crypto_workflow import cost_basis_text, holdings_summary
 from .tools import ToolPane, number, fmt
@@ -153,12 +153,12 @@ class ETFPane(ToolPane):
             # and the AI commentary, which carry the sections, not the sleeve dicts).
             note = sharpe_note(sleeves)
             if note:
-                self.text(note, localized={'en': note, 'ko': sharpe_note_korean(sleeves)})
+                self.text(note, localized={'en': note, 'ko': display_sharpe_note_korean(sleeves)})
             # §10 NEW-M6-05: the conventions behind these numbers, as text and as an export section.
             c = sleeves.get('conventions')
             if c:
                 conventions = conventions_text(c)
-                self.text(conventions, localized={'en': conventions, 'ko': conventions_korean(c)})
+                self.text(conventions, localized={'en': conventions, 'ko': display_conventions_korean(c)})
                 self.sections.append({'type': 'sleeve_conventions', **c})
         if d.get('components'):
             rows = sorted(d['components'], key=lambda c:-(c.get('weight_pct') or 0))

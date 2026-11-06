@@ -620,6 +620,97 @@ from core.research.mc_disclosure import BOOTSTRAP_TEXT, BOOTSTRAP_TEXT_KO
 KO[BOOTSTRAP_TEXT] = BOOTSTRAP_TEXT_KO
 EN[BOOTSTRAP_TEXT_KO] = BOOTSTRAP_TEXT
 
+# Owner-approved A1 display vocabulary. Keep the existing sources (including
+# older Korean UI text) as aliases; neither captions stored by widgets nor
+# report/engine identifiers are rewritten.
+_A1_DISPLAY_TERMS = {
+    'Build & Test': '설계/검증',
+    'Portfolio & Risk': '분석',
+    'Signals': '기술적 분석',
+    'Signals · technical observations and costed backtests': '기술적 분석 · 기술적 관측과 비용 포함 백테스트',
+    'Paper Trading': '모의투자',
+    'Paper Trading · no real orders': '모의투자 · 실제 주문 없음',
+    'Metric': '항목', 'Field': '항목', 'Fields': '항목', 'Metrics': '주요 지표',
+    'Key metrics': '핵심 지표', 'DV01 by maturity': '만기별 DV01',
+    'Yield and bond price': '수익률 변화와 채권 가격',
+    'Sharpe': '샤프 지수', 'Sharpe ratio': '샤프 지수', 'max_sharpe': '최대 샤프 지수',
+    'Convexity': '컨벡시티', 'Macaulay duration': '맥컬리 듀레이션', 'Macaulay': '맥컬리 듀레이션',
+    'Modified duration': '수정 듀레이션', 'Modified': '수정 듀레이션',
+    'Zero rate': '무이표 금리', 'Model zero': '모형 무이표 금리',
+    'Provider': '제공처', 'Provider: {provider}': '제공처: {provider}',
+    'Daily market data with providers and observation dates': '제공처와 관측일을 함께 확인하는 일별 시장 데이터',
+    'Quote/domestic rate % · blank = provider': '상대/국내 금리 % · 공란 = 제공처',
+    'Base/foreign rate % · blank = provider': '기준/외국 금리 % · 공란 = 제공처',
+    'Rate % · blank = provider': '금리 % · 공란 = 제공처',
+    'Live providers only · no fallback': '실제 제공처만 · 대체 데이터 없음',
+    'Existing provider routing': '기존 제공처 연결',
+    'Choose the market so quotes resolve to the right provider.': '호가를 올바른 제공처에서 읽도록 시장을 선택하세요.',
+    'UNAVAILABLE · Check the provider response. No substitute values are generated.': 'UNAVAILABLE · 제공처 응답을 확인하세요. 대체 값을 생성하지 않습니다.',
+    'EMPTY · The provider returned an empty result.': 'EMPTY · 제공처가 빈 결과를 반환했습니다.',
+    '{protection} of principal at {tenor}, DF {df} (zero {zero})':
+        '{tenor}에 원금의 {protection}, DF {df} (무이표 금리 {zero})',
+    'Monte Carlo': '몬테카를로',
+    "This session's Monte Carlo · separate from investment validation": '이번 세션의 몬테카를로 · 투자 판정과 별개',
+    'Saving currently covers Monte Carlo runs. Select the destination explicitly; there is no autosave.':
+        '현재 저장 대상은 몬테카를로 실행입니다. 자동 저장되지 않으며 경로는 직접 선택합니다.',
+    'Horizon · sessions': '분석 기간(거래일)',
+    'Horizon sessions · blank = expiry': '분석 기간(거래일) · 공란 = 만기',
+    'Sessions': '거래일 수', 'Paths / sessions': '경로 수 / 거래일 수',
+    '0 → {days} sessions · P5 / P25 / P50 / P75 / P95': '0 → {days}거래일 · P5 / P25 / P50 / P75 / P95',
+    'Macro sheet': '매크로 지표', 'Macro v2': '매크로 v2', 'Macro': '매크로',
+    'Macro indicators': '매크로 지표',
+    'Macro · Market observations and local commentary': '매크로 · 시장 관측과 해설',
+    'Macro · market observations and local commentary': '매크로 · 시장 관측과 해설',
+}
+
+from core.research.sleeve_disclosure import SHARPE_CONVENTIONS_POINTER, SHARPE_CONVENTIONS_POINTER_KO
+_A1_DISPLAY_TERMS[SHARPE_CONVENTIONS_POINTER] = SHARPE_CONVENTIONS_POINTER_KO.replace('샤프비율이며', '샤프 지수이며', 1)
+
+
+def _a1_pattern(source):
+    parts = []
+    for literal, key, spec, conversion in Formatter().parse(source):
+        parts.append(re.escape(literal))
+        if key is not None: parts.append(f'(?P<{key}>.+?)')
+    return re.compile(''.join(parts), re.S)
+
+
+_a1_templates = []
+for _source, _target in _A1_DISPLAY_TERMS.items():
+    _previous = KO.get(_source)
+    if _previous and _previous != _target:
+        KO[_previous] = _target
+        if '{' in _source:
+            _a1_templates.append(('ko', _a1_pattern(_previous), _target))
+    KO[_source], EN[_target] = _target, _source
+    if '{' in _source:
+        _a1_templates.extend((('ko', _a1_pattern(_source), _target),
+                              ('en', _a1_pattern(_target), _source)))
+TEMPLATES[:0] = _a1_templates
+
+# Some labels originated in Korean or came through the shared Flet catalogue.
+# Exact aliases do not replace words inside user/provider prose.
+for _previous, _source in {
+    '설계 및 검증': 'Build & Test', '설계·검증': 'Build & Test',
+    '포트폴리오 및 위험': 'Portfolio & Risk', '포트폴리오·위험': 'Portfolio & Risk',
+    '포트폴리오 · 위험': 'Portfolio & Risk', '신호': 'Signals', '기술적 관측': 'Signals',
+    '모의매매': 'Paper Trading', '모의 실행': 'Paper Trading',
+    '측정 항목': 'Metric', '필드': 'Field', '측정값': 'Metrics',
+    '공급자': 'Provider', '공급처': 'Provider',
+    '샤프비율': 'Sharpe ratio', '샤프 비율': 'Sharpe ratio',
+    '매콜리 듀레이션': 'Macaulay duration',
+    '거시 지표표': 'Macro sheet', '매크로 현황': 'Macro sheet', '거시경제 관측': 'Macro sheet',
+    '거시경제 v2': 'Macro v2', '거시경제': 'Macro',
+}.items():
+    KO[_previous], EN[_previous] = KO[_source], _source
+for _source, _target in {
+    'vasicek': 'Vasicek', 'cir': 'CIR', 'hull_white': 'Hull-White',
+    'nelson_siegel': 'Nelson-Siegel', 'svensson': 'Svensson',
+}.items():
+    KO[_source] = EN[_source] = KO[_target] = EN[_target] = _target
+KO['Build && Test'] = KO['Build & Test']
+KO['Portfolio && Risk'] = KO['Portfolio & Risk']
+
 def translate(text, language):
     """Translate only authored UI messages; unknown source text stays intact."""
     text = str(text)

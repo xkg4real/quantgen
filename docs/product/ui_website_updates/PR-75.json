@@ -13,9 +13,9 @@
     "branch": "gpt/ai-commentary-review-20261106",
     "pull_request": "https://github.com/xkg4real/quantgen/pull/75",
     "implementation_commit": "c8a024545ddab7ff27f3e15438f4a61e565b3fb1",
-    "remote_status": "OPEN_DRAFT",
-    "merge_commit": null,
-    "verified_head": null,
+    "remote_status": "MERGED",
+    "merge_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16",
+    "verified_head": "a419db99baaf911d9e6f06890ab7bce6cb4b5447",
     "owner_defaults_confirmed_on": "2026-11-06"
   },
   "summary_ko": [
@@ -55,8 +55,11 @@
     ],
     "counts_note": "Suites may overlap; do not sum. Linux Python 3.12 offscreen Qt, fake HTTP, network denied, isolated temporary state. Earlier 239-test run had 2 failures; corrected and fully rerun with exit0.",
     "source_review": "20 policies consistency PASS; publication BLOCKED",
-    "ci": "PENDING_FINAL_HEAD",
-    "ci_runs": [],
+    "ci": "SUCCESS",
+    "ci_runs": [
+      42173460454,
+      42173460398
+    ],
     "actual_provider_network": "NOT_RUN",
     "user_pc": "NOT_RUN"
   },
@@ -66,7 +69,7 @@
     "url": "https://quantgeneration.com/"
   },
   "limits_ko": [
-    "PR의 AI 기본값과 추가 표시 동작은 2026-11-06 소유자가 확정했습니다. 최종 CI·병합·원장 기록 전이므로 두 ID의 전체 완료를 아직 주장하지 않습니다.",
+    "PR75 기본값은 소유자가 확정했고 최종 head의 Windows/Ubuntu CI 성공 후 main에 병합했습니다. LEDGER 두 행과 sapientia Notion은 구현 범위만 완료로 기록·read-back했습니다.",
     "숫자 일치는 부호·지표 대응·추론·판정을 검증하지 않습니다. 과거 우연 일치율은 현재 규칙의 측정치가 아닙니다.",
     "실제 Windows PC/API/공급사/법률/라이선스/파일럿 증거는 미확보입니다.",
     "추가 GPT/Gemini spec 공개·심사는 선택적 NOT_PERFORMED로 유지합니다."
