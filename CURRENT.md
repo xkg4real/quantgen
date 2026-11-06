@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T16:42:00+09:00
+updated_at: 2026-11-06T16:45:13+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
@@ -116,6 +116,12 @@ A1/A3 완료 ID는 아직 기록하지 않는다. 다음은 A1 코드 검토·�
 - 수정 후 A3 layout5+reading12=17PASS, 강화한 중복 회귀1PASS, 별도Strategy/chart10PASS. 20정책 소스 정합성PASS583/publicationBLOCKED. 새 exact-head Runtime42182474082 진행 중, Compliance42182474026 success. A3 병합/완료는 아직 아니다.
 - 상태 표시 하위 로컬b423f0b에 A3수정을 합친 a99b16b 로컬 통합 검사 중. 두 정책의 FACTS/RELEASE_GAPS 절을 모두 보존하여 병합하고20정책정합성PASS586. 실제 합성 System 캡처5개에서11행/스크롤/도움말 보호 확인. 1000px EN58/KO44 가로 넘침은 기존67a8838과 동일한 비활성 Rules 탭 문제로 확인되어, 새 상태 표시 회귀와 구분한다. 실제사용자PC·배포 증거 아님.
 - Notion Remaining/업무기록1105에 A3 실패·상태표시43PASS 진척을 최소 반영/read-back, 신규취소선 없음. 다음은A3 exact-head CI와 상태표시PR/CI; 보호범위·추가spec NOT_PERFORMED 유지.
+
+### GPT 상태 표시 PR78·다음 인라인 번역 하위 작업 — 2026-11-06T16:45:13+09:00
+
+- ⑫-1/display-owner-decision 구현b423f0b, A3통합a99b16b, 검증문서521ae86, PR78웹queue 최종3726dd6a60958797f66546a19d6ccb833ba865f8을 gpt/status-display-20261106에 push/read-back했다. PR78은 A3 PR77 선병합 후 진행하는 draft. 집중21/통합43/병합후26PASS(중복합산금지), 실제합성캡처5개 및 기존System좁은폭58/44 문제동일성 확인,20정책정합성PASS586/publicationBLOCKED. exact-final-headCI/병합/완료원장아직없음. 웹queued/receipt없음.
+- 기존승인13-8 번역의 다음 한정 하위 ⑬-8/b2/b/2를 같은task/execution으로 등록한다. LEDGER의 기존⑬-8/b2/b(PR44)는 결과해설만 완료하며 기타inline을 명시제외했고 이 새ID는없다. gpt/rates-inline-language-20261106, /workspace/work/quantgen-rates-inline-20261106을 검증된3726dd6에서생성·push/read-back, 코드수정전 소유권을연결한다. Rates authored 관측수/명목금액/지급횟수/옵션방향/시드·경로수 표시만 기존localized metadata로한영제공한다. provider/model원문주석·원시코드·숫자·보고서·AI자료·계산·판정·동결/주문경로는보존. 부모13-8완료아님.
+- 다음:A3 af782be exact-headCI확인, PR78 final3726dd6CI, 이어등록된Ratesinline만구현·검증한다. 실제Windows/API/법률/라이선스/공급사/파일럿·동결연구증거없음, 추가GPT/Gemini spec NOT_PERFORMED.
 
 ## 1. 목표와 완료 조건
 
