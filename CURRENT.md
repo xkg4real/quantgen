@@ -4,9 +4,9 @@ reason: usage_limit_weekly
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19
-next_ids: ⑬-2/a3, ⑬-2/a1, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T16:18:02.000+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
+next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-06T16:24:41.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
@@ -97,6 +97,12 @@ A1/A3 완료 ID는 아직 기록하지 않는다. 다음은 A1 코드 검토·�
 - A3 14모듈 통합 131 PASS(exit0,302.857s), 20정책 정합성 PASS(583 source files)/publicationBLOCKED. 인용 staleness/복귀 셀 결함을 재현·수정. 실제 호스트의 12좁은 위치/4넓은 도킹 진단 통과 및 합성 캡처4개 확인; 원문 보고서/수치/AI payload 보존. 기준선에서도 실패한 responsive forced-overflow 사전조건은 별도 실패 이력을 유지했다.
 - 동일 task/execution 하위 독립 작업 ⑫-1 표시 정합성: gpt/status-display-20261106을 검증된 67a8838에서 생성·push/read-back. 이 하위 브랜치도 execution_id 6c40bb4c-51a4-439b-a64d-0233051168ab, task claude-resume-20261103, 동일 handoff ID에 속한다. 로컬 worktree /workspace/work/quantgen-status-display-20261106. 아직 코드 수정 없음. 검증된 status snapshot의 기존 OWNER_APPROVED 소유자 출시 결정을 hardcoded NOT_APPROVED로 덮는 Native/Flet 표시만 수정한다. 기술/연구 준비와 실제 배포는 별도 표시하고, 검증 실패 시 승인값을 추정하지 않는다. 기존 승인 규칙·스키마·연구 어댑터·실제 주문 경로는 변경하지 않는다. ⑫-1 부모 전체 완료가 아니다.
 - 다음: A1/A3 exact-head CI와 원래 순서 병합·원장·Notion, 병행하여 ⑫-1 표시 전용 하위 수정/합성 검증. 실제 Windows PC/API/공급사/법률/라이선스/파일럿·동결연구 증거 없음. 추가 GPT/Gemini spec 심사 NOT_PERFORMED, 웹 queue는 전달/배포 영수증 없음.
+
+### GPT A1 선병합·완료 기록 — 2026-11-06T16:24:41.000+09:00
+
+- PR76 final2715d9e1aaee0d303ee483d11b9e6669459aa871의 Runtime42178486278/Compliance42178486098 및 Windows3.11/3.12/3.14·Ubuntu3.12·syntax3.10/3.11 전부 성공. Vercel 배포 실패 상태는 기존 제외 범위이며 배포/우회 실행은 하지 않았다. 정상 PR 병합으로 main 2a78ee3e972eefe1ec2063a13d52d05f092bf24c에 반영, PR/main read-back 확인.
+- LEDGER 93f91ffd985af4a7721e18de8563eab0a25f2c8a에 ⑬-2/a1 행을 추가하고 기존 행 보존/read-back 확인. 승인된 A1 용어·명시적 표시 역할 구현만 완료(합성167PASS/정책20PASS/publicationBLOCKED); ⑬-2 전체·전체 Flet 번역·실제 Windows/API/법률/라이선스/파일럿 증거로 확대하지 않는다. Notion 완료 최소 동기화는 이어서 수행한다.
+- A1 선병합 조건을 충족하여 A3 PR77 draft 해제. final67a8838, Runtime42179854778 진행 중/Compliance42179855683 성공. 제품 코드는 합성131PASS와 실제 합성4캡처를 얻은 e33063b와 동일하다. 같은 execution의 ⑫-1 표시 전용 하위 브랜치 구현도 진행 중이며 실제 승인 규칙은 보존한다.
 
 ## 1. 목표와 완료 조건
 
