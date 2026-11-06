@@ -488,3 +488,14 @@ A1 코드 `2715d9e` 이후 A3 통합 소스 `e33063b`의 범위입니다. A1 선
 | 검증 한계 | 과거 설계의 17개 요청을 주입한 합성 registry로 검사하며 설계의 required_evidence 문장을 실제 메타데이터로 사용하지 않음. 공급자별 결합·통화 구분·모호/미지원·원문 보존·불변 결과와 I/O 없는 해석을 검사. 수정 전 FX 대소문자 동등 self-pair의 두 실패와 수정 후 19개 합성 통과를 구분. 실제 공급사 대조·Windows·비용 계산·주문/라우팅·동결 연구 결과 검증은 수행하지 않음 |
 
 01–20 정책을 이 분리된 소스와 대조했으며 기존 번호 문서의 처리·권리·비용/주장·승인·연구 한계가 그대로 적용되어 본 사실 기록만 추가합니다. 실제 registry 확보·공급사 검증·기존 비용/연구/주문 경로 연결은 별도 범위와 증거가 필요합니다. 모든 미확정 운영자/법률/계약/라이선스/동의·실제 API/파일럿·동결 연구·공개/배포 조건, `review-required`와 공개 준비 `BLOCKED`를 유지하며 선택적 GPT/Gemini 추가 심사는 `NOT_PERFORMED`입니다.
+
+<a id="identity-a1-fixture-cleanup-2026-11-06"></a>
+## Identity 통합의 A1 시험 위젯 정리 후속 — 2026-11-06
+
+`b79d56d`의 Runtime `42191579626` Ubuntu 3.12 작업은 A1 세 모듈 18개 검사를 11.710초에 `OK`로 출력한 뒤 segmentation fault·종료 코드 139로 실패했습니다. 검사 문구를 프로세스 성공으로 대체하지 않습니다. 같은 세 모듈의 수정 전 Linux guarded 진단은 18개 통과·14.055초·종료 코드 0이었지만 종료 시 소유 `ResearchWindow` 4개·상태 host 5개와 `ReadingHelp` 4개가 살아 있었습니다. 로컬에서 충돌을 재현한 것은 아니며 CI 충돌의 정확한 원인은 미확정입니다.
+
+[A1 용어 검사](../../tests/desktop_a1_terms_acceptance.py)와 [A1 상태 검사](../../tests/desktop_a1_status_acceptance.py)는 직접 소유한 창/host의 cleanup 등록을 이미 있는 [대상별 Qt 정리 함수](../../tests/qt_fixture_cleanup.py)로 바꿉니다. 두 import·두 cleanup 등록 외의 테스트 내용, 도우미·Flet 모듈·프로덕션 구현은 그대로입니다. 기존 18개 테스트 메서드와 82개 정적 assertion 구문, 값·코드·원문·보고서·AI 입력·언어 왕복 검사를 보존하며 종료 우회·예외 무시·전체 위젯 삭제·skip을 추가하지 않습니다.
+
+수정 후 같은 18개 검사는 12.249초·종료 코드 0으로 통과하고 소유 Qt 위젯 9개 모두의 삭제 신호를 확인했습니다. `ResearchWindow`·상태 host·`ReadingHelp` 생존 수는 0이며 전체 Qt top-level은 24개가 남습니다. 일부 Python wrapper 참조는 남아 있어 전체 메모리/객체 소거라고 주장하지 않습니다. 전후 실행은 같은 검사이므로 합산하지 않고, 이 수명 관측을 실제 CI 원인 입증·새 head의 CI 성공·사용자 자료 삭제 기능으로 확대하지 않습니다.
+
+[CI 구성](../../.github/workflows/runtime-smoke.yml)은 동일한 A1 명령을 차트/텍스트 검사 바로 뒤로 옮겨 조기에 결과를 확인합니다. 모든 기존 명령과 구문 5분/설치 포함 30분 예산을 유지합니다. [제품 검증 기록](../product/DETACHED_INSTRUMENT_IDENTITY_2026-11-06.md)에 실패·전후 측정과 새 CI 확인 필요를 남기며, 01–20 번호 정책·공개 준비 `BLOCKED`·`review-required`와 기존 법률/권리/동의·실제 Windows/API/파일럿·동결 연구·게시/배포 조건을 유지합니다.

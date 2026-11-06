@@ -69,3 +69,27 @@ identity confirmation, frozen-package authorization and prospective studies are
 still incomplete. No actual API, user-PC, legal/license, pilot or publication
 evidence is supplied. Optional additional GPT/Gemini spec review remains
 `NOT_PERFORMED`.
+
+## A1 test-process cleanup follow-up
+
+The integrated source `b79d56d5aedd0a7d854421c933d87b31338e5177` passed
+the final detached identity rerun (19 tests, 0.013s, exit0) and source consistency
+(20 policies, 591 files, publication BLOCKED). Its Runtime run42191579626
+Ubuntu3.12 job127804645117 later failed after the separate A1 step printed
+18 tests OK in11.710s: the process segfaulted with exit139. The complete job
+failure is retained; successful assertions do not establish successful exit.
+
+A guarded natural-shutdown probe of those same three A1 modules passed18 tests
+in14.055s with exit0 locally, but retained four owned ResearchWindows and five
+owned status hosts, including four reading-help controllers. Only the two native
+A1 test modules now reuse the existing `delete_owned_widget` helper for their
+owned fixture cleanup. All18 methods and82 assertion AST nodes are unchanged;
+the helper, Flet test module and production implementation are unchanged.
+
+The same guarded after-probe passed18 tests in12.249s with exit0. All nine owned
+C++ widgets emitted destruction and were deleted; no ResearchWindow or reading
+controller remained. Natural shutdown produced no exception, unraisable event
+or fatal trace. The original segfault was not reproduced locally, and its precise
+cause is not established. These lifecycle measurements and independent source
+review justify the narrow test fix; fresh exact-head full CI is still required.
+No test is skipped, weakened, retried into a passing claim or made to exit early.
