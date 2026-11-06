@@ -1,8 +1,8 @@
 # 08. 외부 SDK·데이터 제공자 점검대장
 
 - 문서 ID: QG-C08
-- 버전: 1.5
-- 기준일: 2026-11-04
+- 버전: 1.6
+- 기준일: 2026-11-06
 - 상태: review-required
 - 관리 주체: (주)넥스트제너레이션
 - 문의: {{operator.support_email}}
@@ -64,6 +64,10 @@ PER·EPS·업종·상장주수는 이미 호출하는 KIS `inquire-price` 응답
 
 실제 KIS 응답(투자자별 매매·공매도 포함)·호출 한도·상업 표시권은 미검증이며 `NOT_VERIFIED`를 유지합니다. [변경 사실](FACTS.md#markets-watchlist-2026-11-04)을 따릅니다.
 
+### 2026-11-06 Anthropic 요청·응답 변경
+
+기존 Anthropic 목적지·인증을 유지하고 계산 JSON의 전체 배열·의미가 있는 비유한 값 표기, 고정 작성 지시문·해당 시 값 표기 설명을 전송 범위에 명시합니다. 계산 JSON 180,000 UTF-8 바이트 초과·변환/인코딩 실패는 로컬에서 거부하며 정상 종료된 응답만 성공으로 받습니다. 한 번의 POST와 출력 예산 1,500은 계약·보존·학습 이용·요금·전체 요청 크기 보증이 아닙니다. 새 외부 제공자나 의존성 승인을 추가하지 않고 [현재 구현 한계](FACTS.md#ai-commentary-guards-2026-11-06)와 `NOT_VERIFIED`·공개 준비 `BLOCKED`를 유지합니다.
+
 ## 정책 또는 구현 기준
 
 ### 외부 서비스 인벤토리
@@ -83,7 +87,7 @@ PER·EPS·업종·상장주수는 이미 호출하는 KIS `inquire-price` 응답
 | Upbit 계좌 API | 선택 잔액 조회 `GET /v1/accounts` | 접근 키로 만든 JWT 전송; 통화·기준통화·잔액·잠금 수량·평균 매수가 수신, 총수량·원화평가액 계산 | 보유 통화의 종목을 Upbit 공개 시세 API에 추가 전송하여 평가. 계좌정보는 개인정보 처리 목록에 포함. 자산조회 권한만 사용. Flet는 키 설정 후 Refresh에서 조회하고, 네이티브는 기본 OFF 선택 사용 |
 | Binance 공개 API | 가격·펀딩·미결제약정 조회 | 종목·기간; 현재 코드에 계좌 인증 없음 | `data-api.binance.vision`, `api.binance.com`, `fapi.binance.com` 각각 확인. 접속 가능성과 국내 제공·상업 데이터 이용권을 구분 |
 | CoinGecko 공개 API | 가상자산 목록·시가총액 조회 함수 | 통화·정렬·페이지 조건; 코드 경로에서 키 불필요 | 연결 코드 존재와 실제 화면 호출 여부 구분. 무료 플랜의 표시·귀속 조건 확인 |
-| Anthropic Claude API | 이용자가 선택한 AI 해설 | 계산 결과, 질문, 모델명, 인증 헤더. 알려진 계좌·잔액·키 필드명은 제외 | 자유 입력 질문의 개인정보 자동 제거는 보장하지 않음. 수신 법인·국가·보존·모델 학습 사용·하위처리자·삭제 방법은 계약으로 확인 |
+| Anthropic Claude API | 이용자가 선택한 AI 해설 | 계산 결과·질문·분석 종류·고정 작성 지시문·해당 시 값 표기 설명, 모델명·출력 예산·인증 헤더. 알려진 계좌·잔액·키 필드명은 제외 | 자유 입력 질문의 개인정보 자동 제거는 보장하지 않음. 수신 법인·국가·보존·모델 학습 사용·하위처리자·삭제 방법은 계약으로 확인 |
 | Cloudflare — 운영자가 지정한 호스팅 업체 | 대한민국에서 서비스를 운영할 예정이라는 사용자 제공 정보. 실제 연결 구조는 별도 확인 | Workers·Pages·R2 등 제품, 계약 법인, 원본 서버, 처리 항목·보유기간·국가 미확정 | CDN·엣지·로그·백업·하위처리자와 국외 접근을 조사. 대한민국 운영을 모든 자료의 국내 보관으로 해석하지 않음 |
 | 기타 CDN·메일·결제·오류 수집 | 실제 운영 구성을 아직 확정하지 못함 | 서비스가 추가될 경우 별도 입력 | 저장소에서 회원·결제·광고메일·추적 SDK 흐름을 확인하지 못했어도 배포 인프라가 없다고 단정하지 않음 |
 
@@ -159,6 +163,6 @@ PER·EPS·업종·상장주수는 이미 호출하는 KIS `inquire-price` 응답
 - 구현: [`pyproject.toml`](../../pyproject.toml), [`requirements.txt`](../../requirements.txt), [`requirements-dev.txt`](../../requirements-dev.txt).
 - 인증·설정: [`config.py`](../../config.py), [`KISClient`](../../data/krx/kis_client.py) 146–184행, [`OpenDARTClient`](../../data/krx/opendart_client.py) 44·74–79행, [`KRXMarketClient`](../../data/krx/krx_market_client.py) 81–129행.
 - API와 SDK: [`crypto_client.py`](../../data/crypto/crypto_client.py) 51–54·308–326행, [`kis_markets.py`](../../data/kis_markets.py) 47·664행, [`gsq.py`](../../core/quant/gsq.py) 70–85행, [`ficc/data.py`](../../core/ficc/data.py) 163–200행, [`quant/history.py`](../../core/quant/history.py) 123–137행.
-- AI: [`ai_payload.py`](../../core/research/ai_payload.py), [`quant/insights.py`](../../core/quant/insights.py) 300–320행, [`ui/ai_panel.py`](../../ui/ai_panel.py) 35–77행, [`commentary.py`](../../quantgen_desktop/commentary.py) 49–91행.
+- AI: [`ai_payload.py`](../../core/research/ai_payload.py) `ai_payload_json`, [`quant/insights.py`](../../core/quant/insights.py) `deep_analysis`, [`ai_connection.py`](../../core/research/ai_connection.py) `reply_result`, [`ui/ai_panel.py`](../../ui/ai_panel.py), [`commentary.py`](../../quantgen_desktop/commentary.py).
 - 공식 확인 창구: [개인정보 보호법](https://www.law.go.kr/법령/개인정보보호법), [FRED 이용 조건](https://fred.stlouisfed.org/legal/), [KIS 개발자센터](https://apiportal.koreainvestment.com/), [OpenDART](https://opendart.fss.or.kr/), [KRX 정보데이터시스템](https://data.krx.co.kr/), [Anthropic 개인정보 안내](https://www.anthropic.com/legal/privacy), [Qt 라이선스 안내](https://www.qt.io/licensing/), [PyQt 라이선스 안내](https://www.riverbankcomputing.com/commercial/license-faq).
 - 법령·외부 계약의 최신 시행·계약 범위 확인 기록은 [출처 대장](SOURCES.md)에 남긴다. 위 링크는 현재 계약 또는 허락을 획득했다는 증거가 아니다.

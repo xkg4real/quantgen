@@ -25,7 +25,7 @@ _MARKER_PREFIXES = ("NaN:", "+inf:", "-inf:")      # the payload's non-finite ma
 AI_LABEL = {
     "en": ("AI commentary · not verified. Claude wrote this from the data sent; QUANTGEN does not check its "
            "reasoning, and the same request can give different text. It does not change any official verdict."),
-    "ko": ("AI 해설 · 검증 안 됨. Claude가 전송한 데이터로 쓴 글이며 QUANTGEN은 그 논리를 확인하지 않습니다. "
+    "ko": ("AI 해설 · 검증 안 됨. 전송한 데이터를 바탕으로 Claude가 쓴 글이며 QUANTGEN은 그 논리를 확인하지 않습니다. "
            "같은 요청에도 다른 글이 나올 수 있습니다. 공식 판정은 바뀌지 않습니다."),
 }
 
@@ -56,22 +56,35 @@ _MASKS = tuple(re.compile(p) for p in (
     r"\b\d{1,2}:\d{2}(?::\d{2})?\b",
     r"\d{4}년\s*\d{1,2}월(?:\s*\d{1,2}일)?",
     r"\d{1,2}월(?:\s*\d{1,2}일)?",
+    # Mask the complete day-first form before a shorter Month YYYY match can
+    # remove its month and leave the day behind as an apparent numeric claim.
+    rf"\b\d{{1,2}}(?:st|nd|rd|th)?\s+(?:{_MONTHS})\.?(?:\s+\d{{4}})?\b",
     rf"\b(?:{_MONTHS})\.?\s+\d{{1,2}}(?!\d)(?:,\s*\d{{4}})?",
     rf"\b(?:{_MONTHS})\.?\s+\d{{4}}\b",
-    rf"\b\d{{1,2}}\s+(?:{_MONTHS})\b",
 ))
 # Longest first; each maps to the scale family used for matching.
 _UNITS = (("percentage points", "%"), ("percentage point", "%"), ("퍼센트포인트", "%"),
-          ("베이시스포인트", "bp"), ("basis points", "bp"), ("basis point", "bp"), ("per cent", "%"),
-          ("percent", "%"), ("퍼센트", "%"), ("bps", "bp"), ("%p", "%"), ("pp", "%"), ("bp", "bp"),
+          ("베이시스 포인트", "bp"), ("베이시스포인트", "bp"),
+          ("basis points", "bp"), ("basis point", "bp"), ("per cent", "%"),
+          ("percent", "%"), ("퍼센트", "%"), ("pct", "%"), ("bps", "bp"), ("%p", "%"), ("pp", "%"), ("bp", "bp"),
           ("%", "%"), ("×", "x"), ("x", "x"), ("배", "x"))
+_RANGE_UNIT = "|".join(re.escape(word) for word, _ in _UNITS)
+_RANGE = re.compile(
+    rf"(?<![A-Za-z0-9_.])[+−-]?(?:{_NUMBER.pattern})(?:\s*(?:{_RANGE_UNIT}))?"
+    rf"\s*(?:[-–~\uff5e]|\bto\b)\s*[+−-]?(?:{_NUMBER.pattern})(?:\s*(?:{_RANGE_UNIT}))?",
+    re.I,
+)
+_SCIENTIFIC = re.compile(
+    rf"(?<![A-Za-z0-9_.])(?:{_NUMBER.pattern})\s*"
+    r"(?:[eE][+−-]?\d+|[×x]\s*10(?:[⁺⁻]?[⁰¹²³⁴⁵⁶⁷⁸⁹]+|\^[+−-]?\d+))(?![\d.])"
+)
 _INDEX_BEFORE = re.compile(r"(?:S&P|KOSPI|KOSDAQ|Nasdaq|NASDAQ|FTSE|Nikkei|Russell|Stoxx|STOXX|DAX|CAC) $")
 _CONFIDENCE_AFTER = re.compile(r"\s?(?:VaR|CVaR|ES\b|expected shortfall|confidence|CI\b|interval|신뢰|구간)")
 _SCALE_WORD_AFTER = re.compile(r"\s?(?:thousand|million|billion|trillion|mn|bn|tn)\b", re.I)
 _KO_SPAN = ("년", "개월", "달", "주", "거래일", "영업일", "일", "세션", "분기", "시간", "번째", "차")
 _KO_SPAN_NOT = ("달러", "차이", "주식")
 _KO_SCALE = ("만", "억", "조", "천")
-_SCALES = {"%": (1, 100), "bp": (1, 100, 10_000), "x": (1,), None: (1,)}
+_SCALES = {"%": (0.01, 1, 100), "bp": (1, 100, 10_000), "x": (1,), None: (1,)}
 
 
 @dataclass(frozen=True)
@@ -92,8 +105,14 @@ def _mask(text: str) -> str:
 def _cited_numbers(text: str) -> tuple[list[_Cited], int]:
     src = _mask(text)
     cited, skipped = [], 0
+    # Both ends of a range are outside this advisory comparison. Scientific
+    # notation is also skipped as one expression, rather than comparing the
+    # mantissa and exponent as unrelated claims.
+    ignored = [m.span() for pattern in (_RANGE, _SCIENTIFIC) for m in pattern.finditer(src)]
     for m in _NUMBER.finditer(src):
         start, end, number = m.start(), m.end(), m.group(0)
+        if any(left <= start < right for left, right in ignored):
+            skipped += 1; continue
         prev = src[start - 1] if start else ""
         if prev and (_WORD.match(prev) or prev in ".,"):
             skipped += 1; continue                       # A12, x1.5, 1.2.3
@@ -103,7 +122,7 @@ def _cited_numbers(text: str) -> tuple[list[_Cited], int]:
             skipped += 1; continue                       # S&P 500, KOSPI 200
         unit, stop = None, end
         rest = src[end:]
-        gap = 1 if rest[:1] == " " else 0
+        gap = len(rest) - len(rest.lstrip())
         for word, family in _UNITS:
             if rest[gap:gap + len(word)].lower() == word:
                 after = rest[gap + len(word):gap + len(word) + 1]
@@ -122,10 +141,11 @@ def _cited_numbers(text: str) -> tuple[list[_Cited], int]:
             skipped += 1; continue                       # 95% VaR, 99% 신뢰구간
         if unit is None and _SCALE_WORD_AFTER.match(tail):
             skipped += 1; continue                       # 1.2 billion
-        if (unit is None and decimals == 0 and tail.startswith(_KO_SPAN)
-                and not tail.startswith(_KO_SPAN_NOT)):
+        ko_tail = tail.lstrip()
+        if (unit is None and decimals == 0 and ko_tail.startswith(_KO_SPAN)
+                and not ko_tail.startswith(_KO_SPAN_NOT)):
             skipped += 1; continue                       # 52주, 3개월, 252거래일, 10년
-        if unit is None and tail.startswith(_KO_SCALE) and not tail.startswith("만큼"):
+        if unit is None and ko_tail.startswith(_KO_SCALE) and not ko_tail.startswith("만큼"):
             skipped += 1; continue                       # 3억, 1.2조
         if (unit is None and decimals == 0 and "," not in number and len(plain) == 4
                 and 1900 <= int(plain) <= 2100):
@@ -245,7 +265,7 @@ def check_line(check: NumberCheck | None, language: str) -> str:
         return ("숫자 대조: 해설에 대조할 숫자가 없습니다." if ko
                 else "Number check: the commentary cites no numbers to compare.")
     if ko:
-        line = (f"숫자 대조(확인한 숫자 {check.checked}개): 전송한 내용에서 찾지 못한 숫자: "
+        line = (f"숫자 대조(확인한 숫자 {check.checked}개): 전송한 값에서 찾지 못한 숫자: "
                 f"{_listed(check.not_found, True) if check.not_found else '없음'}.")
         if check.not_found:
             line += " 찾지 못한 숫자는 틀린 값이 아니라 차이나 비율처럼 계산해 낸 값일 수도 있습니다."
@@ -256,7 +276,7 @@ def check_line(check: NumberCheck | None, language: str) -> str:
             line += f" 일치한 숫자 중 {check.coarse_found}개는 유효숫자가 두 자리 이하라 우연히 일치했을 수 있습니다."
         return line + (" 일치는 그 숫자가 전송한 데이터 어딘가에 있다는 뜻일 뿐입니다(반올림과 %·bp 환산 허용). "
                        "부호, 숫자가 가리키는 항목, 판정 단어는 확인하지 않습니다.")
-    line = (f"Number check ({check.checked} checked): not found in anything sent: "
+    line = (f"Number check ({check.checked} checked): not found in the values sent: "
             f"{_listed(check.not_found, False) if check.not_found else 'none'}.")
     if check.not_found:
         line += " A number that was not found may be derived (a difference or a ratio) rather than wrong."
@@ -264,6 +284,7 @@ def check_line(check: NumberCheck | None, language: str) -> str:
         line += (" Only in the question text (your question or the report-format instructions), "
                  f"not in the calculation data: {_listed(check.question_only, False)}.")
     if check.coarse_found:
-        line += f" {check.coarse_found} of the matches have two significant digits or fewer and could match by chance."
+        verb = "has" if check.coarse_found == 1 else "have"
+        line += f" {check.coarse_found} of the matches {verb} two significant digits or fewer and could match by chance."
     return line + (" A match means only that the number occurs somewhere in the data sent, allowing rounding "
                    "and %/bp scaling; its sign, the measure it refers to, and verdict words are not checked.")

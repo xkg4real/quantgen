@@ -1,8 +1,8 @@
 # 01 개인정보 처리방침
 
 - 문서 ID: QG-C01
-- 버전: 1.6
-- 기준일: 2026-11-04
+- 버전: 1.7
+- 기준일: 2026-11-06
 - 상태: review-required
 - 적용 예정일: {{policy.effective_date}}
 - 담당: {{privacy.owner}}
@@ -20,7 +20,7 @@
 | KIS WebSocket 승인키·차트 | 승인키는 프로세스 전역 메모리에서 23시간 재사용. 선택 종목 구독과 가격·거래량·시각을 처리 | 비TLS WebSocket 전송 보호, 운영 서버의 접근/분리, 캐시 정지·만료와 실제 삭제/철회 구분 |
 | Upbit 자산조회 | 통화·기준통화·잔액·잠금 금액·평균 매수가를 조회하고 총수량·원화평가액을 계산. 보유 통화의 공개 시세도 요청 | Flet의 기본 조회를 이용자의 선택과 일치시키기. 네이티브 기본 미선택과 차이 존재 |
 | 규칙·모의기록 | 규칙 이름·메모·개정 이력, 모의주문·판정·상태를 로컬 파일에 저장 | 실제 저장 위치, 이용자별 분리, 보유기간·삭제 방법 |
-| AI 해설 | 계산 결과 및 사용자가 입력한 질문을 Anthropic API로 전송 | 계약 주체, 수탁/독립 처리 관계, 처리 국가·보유기간·재위탁·국외이전 근거 |
+| AI 해설 | 계산 결과·질문·분석 종류와 고정 작성 지시문, 해당 시 비유한 값/null 설명을 Anthropic API로 전송 | 계약 주체, 수탁/독립 처리 관계, 처리 국가·보유기간·재위탁·국외이전 근거 |
 | AI 필터 | 알려진 private 필드명을 제외함. 자유 입력 질문의 개인정보 탐지 장치가 아님 | 전송 미리보기·민감 입력 방지, Flet와 네이티브 동의 흐름 일치 |
 | 시계열 캐시 | 시장 데이터 파일을 로컬에 저장하며 기본 TTL은 6시간 | TTL은 신선도 기준이며 파일 삭제 기간이 아님. 사용자 식별정보 혼입 여부 |
 | 웹 접속·고객지원·거래 | 검토한 실행 코드에서 회원가입·결제·일반 삭제 흐름을 찾지 못함 | 실서비스의 IP·접속로그·결제·지원 도구·수탁자·백업을 별도 조사 |
@@ -73,6 +73,10 @@ Q-SCORE는 받은 공개 가격 이력과 유효 체결을 실행 프로세스�
 
 [변경 사실](FACTS.md#markets-watchlist-2026-11-04)과 [제품 기록](../product/MARKETS_WATCHLIST_2026-11-04.md)을 따릅니다. `review-required`·공개 준비 `BLOCKED`를 유지하며 공개 승인·실계정 검증이 아닙니다.
 
+### 2026-11-06 AI 전송·표시 범위
+
+계산 JSON의 배열을 직렬화 단계에서 50개로 자르지 않고 전송하며 비유한 값은 의미를 설명하는 문자열로 변환합니다. 계산 JSON 180,000 UTF-8 바이트 초과 또는 변환/인코딩 실패는 요청 전에 거부합니다. 질문·고정 지시문·전체 HTTP 요청의 크기 제한이나 개인정보 자동 제거 보장은 아닙니다. 네이티브 표시에서 URL·비밀정보를 가려 응답이 달라지면 원문 기반 숫자 대조도 화면·내보내기에서 보류합니다. 이 조치는 이미 전송한 자료의 철회·제공자 삭제를 뜻하지 않습니다. [전송·응답 사실과 한계](FACTS.md#ai-commentary-guards-2026-11-06)를 따르며 Flet 동의 절차의 차이와 기존 계약·공개 준비 `BLOCKED`를 유지합니다.
+
 ## 정책 또는 구현 기준
 
 ### 공개 방침 본문
@@ -87,7 +91,7 @@ Q-SCORE는 받은 공개 가격 이력과 유효 체결을 실행 프로세스�
 | 선택적 데이터 제공자 연결 | 필요한 API 인증정보·연결 상태; 제공자마다 구체 항목 공개 | 환경변수/사용자 설정 → 해당 제공자; KIS 토큰은 실행 기기 파일 | {{privacy.connection_basis}} | {{privacy.connection_retention}} |
 | 선택적 Upbit 자산 분석 | 통화, 기준통화(`unit_currency`), 잔액, 잠금 금액, 평균 매수가, 총수량과 파생 원화평가액(`krw_value`); 현재 코드 기준 | Upbit 계좌 API → 실행 기기. 보유 통화 종목을 Upbit 공개 시세 API에 보내 평가액 계산(Upbit가 목록을 거부하면(HTTP 400·404) 같은 종목을 하나씩 다시 요청, 시세가 없는 통화는 평가액을 비워 둠); 서버 실행 시 서버 처리 여부 명시 | {{privacy.upbit_basis}} | {{privacy.upbit_retention}} |
 | 규칙 및 모의연구 기록 관리 | 규칙명·메모·개정 이력·모의주문·판정·저장한 연구 결과 | {{privacy.research_location}} | {{privacy.research_basis}} | {{privacy.research_retention}} |
-| 선택적 외부 AI 해설 | 전송 전 표시한 계산 결과와 질문; 인증정보·개인 계좌 내용을 질문에 입력하지 않도록 안내 | {{privacy.ai_route}} → Anthropic | {{privacy.ai_basis}} | {{privacy.ai_retention}} |
+| 선택적 외부 AI 해설 | 계산 결과·질문·분석 종류, 고정 작성 지시문과 해당 시 값 표기 설명; 인증정보·개인 계좌 내용을 질문에 입력하지 않도록 안내 | {{privacy.ai_route}} → Anthropic | {{privacy.ai_basis}} | {{privacy.ai_retention}} |
 | 문의 및 권리 행사 처리 | 회신 연락처, 문의 내용, 최소한의 확인 정보 | {{privacy.support_tools}} | {{privacy.support_basis}} | {{privacy.support_retention}} |
 | 유료 구매·환불 및 법정 기록 | 실제 계약에서 필요한 거래 식별정보·결제·환불 기록. 미운영 시 해당 행 삭제 | {{privacy.payment_processors}} | 계약 및 적용되는 법적 의무를 구체 기재 | {{privacy.commerce_retention}} |
 | 서비스 보안 | 실제 수집하는 접속 시각·IP·기기/오류 정보만 항목별 기재 | {{privacy.security_log_route}} | {{privacy.security_log_basis}} | {{privacy.security_log_retention}} |

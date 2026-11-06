@@ -27,6 +27,27 @@ from core.theme import RADII, active
 from ui.components import chip, notice
 
 
+class _SendNotice(ft.Text):
+    """Explain the request contents before a click, including fixed instructions."""
+    def __init__(self, page):
+        super().__init__(size=11, color=active().muted)
+        ctx = getattr(page, 'qg_locale', None)
+        self.render_locale(ctx if isinstance(ctx, LocaleContext) else LocaleContext('en_US'))
+
+    def render_locale(self, ctx):
+        self.ctx = ctx
+        self.value = (
+            "Deep analysis sends the selected analysis type, calculated results and your question to Anthropic "
+            "with QUANTGEN's fixed writing instructions. When needed, it also sends an explanation of missing, "
+            "undefined or unbounded values. Account holdings and balances are excluded. "
+            "Do not include private account details in your question."
+            if ctx.language != 'ko' else
+            '심층 분석은 선택한 분석 종류, 계산 결과와 질문을 QUANTGEN의 고정 작성 지침과 함께 Anthropic으로 보냅니다. '
+            '누락되거나 정의되지 않은 값, 무한한 값이 있으면 그 표기 설명도 함께 보냅니다. '
+            '계좌 보유 내역과 잔고는 제외됩니다. 질문에 비공개 계좌 정보를 넣지 마세요.'
+        )
+
+
 class _ErrorNotice(ft.Container):
     """Re-render diagnostics on language changes without sending another request."""
     def __init__(self, result, page):
@@ -116,9 +137,7 @@ def analysis_panel(page: ft.Page, *, kind: str, narrative: str,
         ft.Text(narrative, size=13, color=pal.text, selectable=True),
         ft.Divider(color=pal.border),
         ft.Row([question, button, busy], spacing=10),
-        ft.Text("Deep analysis sends calculated results and your question to Anthropic. "
-                "Account holdings and balances are excluded. Do not include private account details in your question.",
-                size=11, color=pal.muted),
+        _SendNotice(page),
     ]
     if not ready:
         rows.append(ft.Text("Deep analysis needs ANTHROPIC_API_KEY in .env; "

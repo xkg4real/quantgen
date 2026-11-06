@@ -79,12 +79,70 @@ class NumberCheckTests(unittest.TestCase):
         for text in ("+3.20 bp", "−2.1%", "12.345%", "1,350.5", " 122630 "):
             self.assertIsNotNone(_FORMATTED.match(text), text)
 
+    def test_day_month_year_dates_do_not_add_numeric_claims(self):
+        for date in ("27 October 2026", "31 Oct. 2026", "3 November 2026", "3rd November 2026"):
+            with self.subTest(date=date):
+                c = number_check(f"As of {date}, the yield is 4.12%.", {"yield": 4.12})
+                self.assertEqual((c.checked, c.not_found), (1, ()))
+
+    def test_bp_values_quoted_in_percent_are_found_after_rounding(self):
+        for value, quoted in ((-662.79, "-6.63%"), (-598.79, "5.99%"), (-84.54, "-0.85%")):
+            with self.subTest(value=value, quoted=quoted):
+                c = number_check(f"The spread is {quoted}.", {"spread_bp": value})
+                self.assertEqual((c.checked, c.not_found, c.question_only), (1, (), ()))
+        self.assertEqual(number_check("The spread is 6.70%.", {"spread_bp": -662.79}).not_found,
+                         ("6.70%",))
+
+    def test_range_spellings_skip_both_bounds_but_keep_other_numbers(self):
+        for interval in ("15~20%", "15 ～ 20%", "from 15 to 20%", "15% to 20%",
+                         "0.38~0.47", "from -2.5 to -1.5%", "15 - 20%", "15%–20%"):
+            with self.subTest(interval=interval):
+                c = number_check(f"Range {interval}; the yield is 4.12%.", {"yield": 4.12})
+                self.assertEqual((c.checked, c.not_found), (1, ()))
+                self.assertGreaterEqual(c.skipped, 2)
+        # An ordinary list is two claims, not a range.
+        self.assertEqual(number_check("Values 15 and 20.", {}).checked, 2)
+
+    def test_additional_unit_spellings_use_the_same_conversions(self):
+        for text, payload in (("Volatility is 15.3 pct.", {"vol": .153}),
+                              ("Volatility is 15.3 PCT.", {"vol": .153}),
+                              ("스프레드는 8 베이시스 포인트입니다.", {"spread": -.0008})):
+            with self.subTest(text=text):
+                c = number_check(text, payload)
+                self.assertEqual((c.checked, c.not_found), (1, ()))
+
+    def test_scientific_notation_is_skipped_as_a_whole(self):
+        for value in ("3.04 × 10⁻⁸", "3.04×10⁻⁸", "3.04 × 10^-8", "3.04e-08"):
+            with self.subTest(value=value):
+                c = number_check(f"ADF p-value {value}; Sharpe 0.42.", {"sharpe": .42})
+                self.assertEqual((c.checked, c.not_found), (1, ()))
+                self.assertGreaterEqual(c.skipped, 1)
+
+    def test_korean_skip_rules_allow_spaces_without_hiding_amounts(self):
+        for phrase in ("20 거래일", "3 개월", "3 억 원", "52 주", "1.2 조 원"):
+            with self.subTest(phrase=phrase):
+                c = number_check(f"최근 {phrase} 기준.", {})
+                self.assertEqual(c.checked, 0)
+                self.assertGreaterEqual(c.skipped, 1)
+        for phrase in ("10 달러", "10 주식", "10 차이"):
+            with self.subTest(phrase=phrase):
+                self.assertEqual(number_check(phrase, {}).not_found, ("10",))
+
+    def test_number_check_describes_values_only_and_keeps_keys_excluded(self):
+        c = number_check("At the 95% level.", {"cvar95_bp": -84.53})
+        self.assertEqual(c.not_found, ("95%",))
+        self.assertIn("not found in the values sent", check_line(c, "en"))
+        self.assertIn("전송한 값에서 찾지 못한 숫자", check_line(c, "ko"))
+        self.assertIn("전송한 데이터를 바탕으로 Claude가", AI_LABEL["ko"])
+
     def test_coarse_matches_are_counted_and_swapped_measures_still_match(self):
         c = check("Volatility is 0.42 and the Sharpe ratio is 15.3%.")
         self.assertEqual((c.checked, c.found, c.coarse_found, c.not_found), (2, 1, 1, ()))
         self.assertEqual(COARSE_SIGNIFICANT_DIGITS, 2)
         line = check_line(c, "en")
-        self.assertIn("1 of the matches have two significant digits or fewer", line)
+        self.assertIn("1 of the matches has two significant digits or fewer", line)
+        plural = check_line(NumberCheck(2, (), (), 0, 2, 0), "en")
+        self.assertIn("2 of the matches have two significant digits or fewer", plural)
         self.assertIn("the measure it refers to", line)
         self.assertIn("유효숫자가 두 자리 이하", check_line(c, "ko"))
 
@@ -104,7 +162,7 @@ class NumberCheckTests(unittest.TestCase):
         self.assertEqual(check_line(none, "en"), "Number check: the commentary cites no numbers to compare.")
         self.assertEqual(check_line(none, "ko"), "숫자 대조: 해설에 대조할 숫자가 없습니다.")
         clean = check("Volatility of 15.3% and a median of 105.2.")
-        self.assertIn("not found in anything sent: none.", check_line(clean, "en"))
+        self.assertIn("not found in the values sent: none.", check_line(clean, "en"))
         self.assertIn("찾지 못한 숫자: 없음.", check_line(clean, "ko"))
         q = check("A Sharpe of 2.40.", "Is 2.40 plausible?")
         self.assertIn("Only in the question text", check_line(q, "en"))

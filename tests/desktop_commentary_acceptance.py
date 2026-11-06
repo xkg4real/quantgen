@@ -59,6 +59,7 @@ class NativeCommentaryTests(unittest.TestCase):
             with self.assertRaises(ValueError):commentary_payload(bad)
 
     def test_startup_navigation_preview_never_calls_ai_and_send_is_explicit(self):
+        self.window.ui_language='ko'
         self.window.navigate('library');self.runner.assert_not_called()
         p=self.prepare();p.submit();self.runner.assert_not_called()
         p.consent.setChecked(True);p.submit();self.wait()
@@ -163,7 +164,65 @@ class NativeCommentaryTests(unittest.TestCase):
         self.window.ui_language = 'en'; p.status.retranslate()
         self.assertIn('fixed writing instructions', p.status.text())
         self.assertNotIn('고정', p.status.text())
+        p.submit()
+        self.assertIn('send consent', p.status.text())
+        self.assertIn('fixed writing instructions', p.status.text())
+        self.assertIn('your question', p.status.text())
+        self.window.ui_language = 'ko'; p.status.retranslate()
+        self.assertIn('전송 동의에 체크', p.status.text())
+        self.assertIn('고정 작성 지침', p.status.text())
+        self.assertIn('질문', p.status.text())
+        self.assertNotIn('아래 내용만', p.status.text())
         self.runner.assert_not_called()
+
+    def test_invalid_or_oversized_preview_is_localized_without_sending(self):
+        from core.research.ai_connection import error_message
+        p=self.window.commentary
+        for text,code in (('가'*60_000,'PAYLOAD_TOO_LARGE'),
+                          ('fixture-private-marker \ud800','PAYLOAD_INVALID')):
+            with self.subTest(code=code):
+                source=report();source['sections']=[{'type':'text','text':text}]
+                with self.assertRaises(ValueError) as refused:commentary_payload(source)
+                self.assertEqual(str(refused.exception),error_message(code))
+                p.sources=lambda:[('fixture',source)]
+                p.refresh_sources();p.prepare()
+                self.assertIsNone(p.payload);self.assertEqual(p.preview.toPlainText(),'')
+                self.assertEqual(p.output.toPlainText(),'');self.assertIsNone(p.report_actions.report)
+                for language in ('en','ko'):
+                    self.window.ui_language=language;p.status.retranslate()
+                    self.assertEqual(p.status.text(),error_message(code,language))
+                    self.assertNotIn('fixture-private-marker',p.status.text())
+                    if code=='PAYLOAD_TOO_LARGE':self.assertIn('180,000',p.status.text())
+                p.consent.setChecked(True);p.submit()
+                self.assertIsNone(p.payload)
+                self.runner.assert_not_called()
+
+    def test_redacted_reply_withholds_original_numeric_tokens_from_note_and_export(self):
+        import json
+        from core.research.ai_output_check import AI_LABEL, NumberCheck
+        raw='Source https://example.invalid/?start=773100117 shows 42. api_key=982710119'
+        check=NumberCheck(3,('773100117','982710119'),(),1,0,0)
+        result=Analysis(raw,'fixture-model',stop_reason='end_turn',number_check=check)
+        self.runner.return_value=result
+        p=self.prepare();p.consent.setChecked(True);p.submit();self.wait()
+        self.assertIn('[provider URL redacted]',p.output.toPlainText())
+        self.assertIn('shows 42',p.output.toPlainText())
+        for language,explanation in (('en','The displayed text was not checked again.'),
+                                     ('ko','표시된 글은 다시 대조하지 않았습니다.')):
+            self.window.ui_language=language;p.check_note.retranslate()
+            self.assertIn(AI_LABEL[language],p.check_note.text())
+            self.assertIn(explanation,p.check_note.text())
+            for hidden in check.not_found:self.assertNotIn(hidden,p.check_note.text())
+        exported=p.report_actions.report
+        self.assertEqual(exported['verdict'],'NOT_RUN')
+        self.assertEqual(exported['parameters']['verification'],'NOT_VERIFIED')
+        self.assertIsNone(exported['parameters']['number_check'])
+        self.assertEqual(exported['parameters']['number_check_status'],'WITHHELD_REDACTED_REPLY')
+        self.assertEqual(exported['parameters']['number_check_basis'],'ORIGINAL_REPLY_BEFORE_DISPLAY_REDACTION')
+        for hidden in check.not_found:self.assertNotIn(hidden,json.dumps(exported))
+        self.assertIn('The displayed text was not checked again.',exported['sections'][-1]['text'])
+        self.assertEqual(result.text,raw);self.assertIs(result.number_check,check)
+        self.runner.assert_called_once()
 
     def test_success_label_and_export_stay_advisory(self):
         from core.research.ai_output_check import AI_LABEL, NumberCheck, check_line
@@ -188,10 +247,12 @@ class NativeCommentaryTests(unittest.TestCase):
         p=self.prepare();p.consent.setChecked(True);p.submit();self.wait()
         self.window.ui_language='ko';p.check_note.retranslate();self.assertIn('9.99',p.check_note.text())
         self.assertIn('찾지 못한 숫자',p.check_note.text())
-        self.window.ui_language='en';p.check_note.retranslate();self.assertIn('not found in anything sent: 9.99',p.check_note.text())
+        self.window.ui_language='en';p.check_note.retranslate();self.assertIn(check_line(check,'en'),p.check_note.text())
         report=p.report_actions.report
         self.assertEqual(report['parameters']['stop_reason'],'end_turn')
         self.assertEqual(report['parameters']['number_check']['not_found'],['9.99'])
+        self.assertEqual(report['parameters']['number_check_status'],'COMPLETED')
+        self.assertEqual(report['parameters']['number_check_basis'],'DISPLAYED_REPLY')
         self.assertIn(check_line(check,'en'),[s['text'] for s in report['sections']])
         self.assertEqual(report['verdict'],'NOT_RUN')
 

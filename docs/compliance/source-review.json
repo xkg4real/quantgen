@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "f7ec4f395a30df7e3d626b9c8a7d11b3a6166d57beba1e23cd1b0ab53255f5b6",
+    ".github/workflows/runtime-smoke.yml": "df79894686ba54762c8b194827b6017c14dc21b06a65da18ed14777d4a8b8ae0",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -142,7 +142,7 @@
     "core/quant/gjr.py": "7b2748c341507af6e4fdd169fd1bc5482d38bcde5dd76966a1962d0cdee23a9a",
     "core/quant/gsq.py": "ffd0d27b2b33964af2df2cbb5024e0f47c654ffd18e0169e5b80dac3d2430211",
     "core/quant/history.py": "aede01ea742c4e281a492ffafd0017a4e26941a418815d89e41a60240e7200fc",
-    "core/quant/insights.py": "ea864374625627030e3517ebfe05b59a791046e47c9b5123e4aecda241346358",
+    "core/quant/insights.py": "f4c91ca3535c4d31bbd217fbcd8819576767aa0377534744e889856ee98093c7",
     "core/quant/instruments.py": "5a228fb771d040cae8f3e4cf7869bd044728c81654b090d70faf67e3b5d3d013",
     "core/quant/lab.py": "d5e44e575a256328155cc84df0514f480f8d55eed0d04bd6d3b1172a70bd90c8",
     "core/quant/montecarlo.py": "60aae1b3b442fe8bb36bcd21c585c5ac1951cc332ed4a689135d92fd2b49d77d",
@@ -160,8 +160,9 @@
     "core/quant/validate.py": "68bc480f655d8297ae5326e08c3a19d36cdabf569452b93c97be5f634d239cf9",
     "core/quant/vol_estimators.py": "f33fb5f8d9be92d1d29e7e2cc9c8779ebf405908a7eb0ce7c1ca46941dffa1bb",
     "core/research/__init__.py": "64635429f4f12e50995889c34ed183a070545fc25ae5fa4c9dbe52a8ebf4ab0b",
-    "core/research/ai_connection.py": "42ade5f6dcc473f8fefdc53190c4927a74dc56d1b3e58ad5246227cbd3473294",
-    "core/research/ai_payload.py": "05aa6047d4275789b1e4fe2ba571bc3caf5a276392d3a3314e36c949b3f92422",
+    "core/research/ai_connection.py": "7a2f1067d26f8ff8b3e726a79a57f6590a4493f4515899d6968a7f9a498e1650",
+    "core/research/ai_output_check.py": "ec632c2806c13a6e7efbcac4d47d13df460fc042e043160ee8490118a96b190c",
+    "core/research/ai_payload.py": "4a246c00a44b857a2fbae100361cfef94e41f8aedc67863edd48a6293f17580c",
     "core/research/analysis.py": "f3867004882d212f49a702b9bfe201a006e56fd0a76f138397a1bcbb11942808",
     "core/research/bond_analysis.py": "0d7b40defdd580db677226483b4a1cc6bf1e5919ea1e9ca39d691376c0b1263f",
     "core/research/connections.py": "f634fe608bcfca39c3841ee7e4bf25524ba4cba8e28658d957d56725c2c56a04",
@@ -258,11 +259,12 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "b2ea95079dd2aac138ba920f140f5613c8ff1b78b1d94b6fc6dbc26557275b56",
+    "docs/compliance/FACTS.md": "3e78965b9614e2b60025b7ad02164bf81bb2e8e8deb5ca7d4e9b03251d365e91",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "bc9db166f42314fff0f82fcb231fb4e5e108c67055e13ad4cd6c4097d0d5c88c",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
+    "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "2daaf1aa42aed126ee0bc2063522edc3b79e19fe080316532374655b36ce42a1",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
     "docs/product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md": "469c32828b75b54797bf1ac81a8645688452bce5f0cf7c69132e7236f96f8e59",
@@ -305,7 +307,7 @@
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
     "docs/product/SECTION10_PAYLOAD_2026-10-30.md": "aadb8d4d84748ef49de5cfadc0335fcb747694291b192953fca1b7d311e3d426",
-    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "a4fd149730de02ff1a12d0b83eea0e4bf4e88895a298f66400b022d7cc12715e",
+    "docs/product/SECTION10_TRIAGE_2026-10-30.md": "f8bd557843fec1cc07ed4ea4b64077ea2ae9bade2abe93a38cdc58b33d51f346",
     "docs/product/SIGNALS_TRADE_COUNTS_2026-11-02.md": "262fab241bcc3db4e22817caf5b51c673af998d67d3576135c627f2ab89ae2ac",
     "docs/product/STRATEGY_EXPOSURE_2026-10-30.md": "1c1d5f061e978fdea11aa2fbc3f7d636fb94db00107a8da1daee70e18644b207",
     "docs/product/SWAPTION_CONVERSION_2026-10-31.md": "a7a8687620026dcbde8e63a8feb27e94e53cb5eeed4c50f004f4cef2842f3c10",
@@ -325,7 +327,7 @@
     "quantgen_desktop/bonds_portfolio_narrative.py": "e25b3b633f381e9d1cff12e946d69843faafda4eca9ca75f77d5ea6e88edee22",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
     "quantgen_desktop/charts.py": "26664a81b31a256b77f70fc8adca76f51a763560cf33e1f2d556b527b41cbdf8",
-    "quantgen_desktop/commentary.py": "ed0b730ca87aa042001757a4e99fc2d4846c95b71c13094e37a3d96add3df9c9",
+    "quantgen_desktop/commentary.py": "ca24bc71353f5abe6feaa8e57ad2b490c50d41e23997cf74750cc802b4fd602f",
     "quantgen_desktop/connections.py": "cb373223d975a9d854510b78753eda26106d8b577409e29f372ba90c746532e2",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
     "quantgen_desktop/display_prose_catalog.py": "85cd9be4469c96b83a71aa0ac3c0dad0b04cbbf35649da8beb7cef12c9eb7708",
@@ -353,7 +355,7 @@
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
     "quantgen_desktop/tools.py": "187d1b76279de24b009b8625ac6b89126117a5e3cf1245033f8ba38a272de27a",
-    "quantgen_desktop/translations.py": "9f4bad3e877a26e137c25e77a20e12cad332db9102099beaa4e19a3fd5a72945",
+    "quantgen_desktop/translations.py": "5daaefd34f1bbf04280ad18d7ec05b4991e06ba1796137d75f180afb92201ac7",
     "quantgen_desktop/typography.py": "ea39d2b4f4cafb64e1b1865807ff523d59f02c20f64894acc0e531abf5b462c8",
     "quantgen_desktop/watchlist.py": "c58ed15245ec7c30da319efdb5a97c9d56c5d6b0f83440625c0493fcfe5d7986",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
@@ -363,8 +365,9 @@
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
-    "tests/ai_connection_acceptance.py": "03aecec6afe99e8e38bb689a2bf2e0cc13ac64eea769b6343be813650888a7c8",
-    "tests/ai_payload_acceptance.py": "2989ffcbc806c4a31f2795adaca8be20c90f47ea4140cfab5fe600a976cc5a4e",
+    "tests/ai_connection_acceptance.py": "b074a2f0c8d708c68a28a19ff187b9e3ab1095c10c83c1a47cb6ede9d338f79f",
+    "tests/ai_output_check_acceptance.py": "01c54460c470062df057d398b08233cae41c420115ee24693f19ab3711a02972",
+    "tests/ai_payload_acceptance.py": "a4efa39af3a06c6859607306729a9190c4f44da320556a4567388f7ab107e138",
     "tests/ar1_decay_acceptance.py": "8283f51b60967f30950af4ec7ecfda48f52c9bb605b2dc8231fc26b3549b63ab",
     "tests/bond_funding_acceptance.py": "dfd5760cec1f4e32cfccdae4f73cf8d4a38ea72650af612587e981c8058db02c",
     "tests/chart_c_theme_acceptance.py": "e0d60eae41de0c82c90538e293329cd673af4d20aa972cf2fe307d2442fed4b4",
@@ -380,13 +383,13 @@
     "tests/desktop_bonds_portfolio_language_acceptance.py": "8429bf7fcb8b9ab8c0ed306052135f2afc0501247c51a1c5fabb68ad8e9c319b",
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "3f3c0ee0e38d946647a7ae2448af8d0496c2dea779a81be4cfd8734b84a61834",
-    "tests/desktop_commentary_acceptance.py": "9c4c695a57de4dd3a1c3093e058c369f3372604d4a8b6bf98ce3838e3f3f104b",
+    "tests/desktop_commentary_acceptance.py": "ed1f58c2e133796d77ba3b6cdc5d187321f7491c1091ba3b36853aff773c8250",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "1514c7b2446c314ad3514b21de3fccd7814f8db4e1081a7fc27480fe4163c687",
     "tests/desktop_indicator_guide_acceptance.py": "9aa60d4d760fb09ef3e6c4cb4d48cbef972bffeb015d27b30a52658238c50438",
     "tests/desktop_language_acceptance.py": "9f2c9a16007e4790823122f5e3ce6c8b19ade4b82ef1b41c20a742dcdf0dbf72",
-    "tests/desktop_letf_ai_acceptance.py": "ecd27e36e4faf7f8dac6399b57d30ebda4ff56efe273b452b77280df75ce9c5f",
+    "tests/desktop_letf_ai_acceptance.py": "2f896568aabeb52181681d11f3cc7c27d0664c60765770055407a4eaff2c9be0",
     "tests/desktop_letf_assumptions_acceptance.py": "38bd6813074605393f690893c5bbbccfffc814dd4eaf44346ec7cb2f63b3f772",
     "tests/desktop_letf_disclosure_acceptance.py": "f70b5bfffb5562aa1f08a7f2417769adb7e91a926816b494c48f4045a79c19f4",
     "tests/desktop_letf_index_acceptance.py": "a5bc0f194c44d154dfbab81dccc4661f0ddade92ba34c906ed5172de7d60e664",
@@ -544,7 +547,7 @@
     "tools/ui/preview_home.py": "67e18b0f780f3c3a7c5901e0e0af68d3c1eca9e441dd3e5ac491af4d4e482775",
     "tools/ui/subset_font.py": "669d3f76843f78bc12fe9afe812045657fd3e6a9e01b300abdb0b753d0500e15",
     "ui/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "ui/ai_panel.py": "92e83a1414a7667ba28b3d6f023716b1390318d16f7158c8ea63d1f7c9758151",
+    "ui/ai_panel.py": "fca6014f4b0e0beba271601fd13177b41cd795e264989f57829b5aab2def00fb",
     "ui/bonds_page.py": "93db57961b326872584c3b01600356a1eea9f882c3da55035196b2c1ae691881",
     "ui/chart_study.py": "503ad1e97211fa899cfc77a42dfdd4627c8a5169ed459901872af6875a5192c7",
     "ui/components.py": "41be9f3117f80c1677308355702758897f6d9d30654eb5a4d229d0bf7702a4fd",
@@ -578,164 +581,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "800842db400cf938aaaca47d17d69cd9c1f8100096255c919dfbd44b290af9cb",
-      "source_digest": "0d8cd50327d5088c43fcd913714028d1c8bb4064e8b9171d733f1477542069ec",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.306022+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "document_sha256": "40295c60f31b141262797bc6f82f4335dbacee0b0f04e57e67b4bf483907b158",
+      "source_digest": "187f7ab62991911f64d89b282a46d2f362fbdbe7f92ec8cddb22d006c38f4574",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.253254+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "2": {
-      "document_sha256": "10b19f1fae9a9be8d7ae65bc97c5fa2e535ad71995403d7932e9e7a696e16f36",
-      "source_digest": "0d8cd50327d5088c43fcd913714028d1c8bb4064e8b9171d733f1477542069ec",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.308469+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
+      "source_digest": "187f7ab62991911f64d89b282a46d2f362fbdbe7f92ec8cddb22d006c38f4574",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.256565+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "ebb4a1e245f99eba13cafa98dd0dbea296ce90a528ea4f922defa28cb837c27c",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.310638+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "69fbb63ffaf8758f5ff456f59ca1746695c141383f1d3d589960d331ca3473a5",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.258865+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "b5f615352d1b9c34f19c86418f2f508c6c904dc5926cd89239e92cc5219a4285",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.312774+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "cf4b4871d2d95a672889b37a16171f1b8610e487abf0ead4d468a180e135d640",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.261427+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "5b5f371050d6c64991447112c23dd71b72064b6b3f422581288d310264c960ea",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.315292+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "665b48be72032f8f7832bd1cbe4916e418f6aa668cce89463e9658a1dba3699c",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.270679+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "6": {
-      "document_sha256": "9e7d3a2850c698226b88e0715ac5a11d47559a375158df21e5d5f2b4618d9805",
-      "source_digest": "abec1aa31f849cde84b400fa4dfc1da5d0c6d43676ab7092a2895ccb28570277",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.317282+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
+      "source_digest": "1bb83a0fab7f4dfab18f21c0092568fbdc32459f7c848a0b5a0ce6d2fea10458",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.272908+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "7": {
-      "document_sha256": "99b4631bd5dc98b713015d45db2b864a64919a8a7dedfb4f903ee75656fa1f04",
-      "source_digest": "0d8cd50327d5088c43fcd913714028d1c8bb4064e8b9171d733f1477542069ec",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.319223+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "document_sha256": "79d0d53acc0383737f254b0967b1ba455554cbb378c1566158dd0e82a7c7ab49",
+      "source_digest": "187f7ab62991911f64d89b282a46d2f362fbdbe7f92ec8cddb22d006c38f4574",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.275318+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "8": {
-      "document_sha256": "a0c83c9860eb1b77a1b5dd89ac4036cab1d5a48ef8ca1efeadc2295b0205dc61",
-      "source_digest": "abec1aa31f849cde84b400fa4dfc1da5d0c6d43676ab7092a2895ccb28570277",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.321352+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
+      "source_digest": "1bb83a0fab7f4dfab18f21c0092568fbdc32459f7c848a0b5a0ce6d2fea10458",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.277506+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "9": {
       "document_sha256": "1ac53869fa19977ce6917d2c401f93f457245bc9a98c465f937740896f87a8fc",
-      "source_digest": "10994d4b00c423481fa49fc60789ac1b5b0619d02b58a88b588c156a5390a1fe",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.323543+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "9ff465b09b76c94ab68eb90821fb52ce63627437a76061d5ce3b936393b1e242",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.279784+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "10": {
-      "document_sha256": "1e7ce52efa02698c44133b8b9699f40c02193a54c3d9b3f54b33452be374b871",
-      "source_digest": "ea8ae86aeb7f8d51dafd5bf293785f06c2fa19433c5d2d18872c4a100212bef1",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.325657+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
+      "source_digest": "e59544bdf8be215ff1143d6abb6362a65bfd69ce04f313b4749a32b68736473b",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.281997+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "7599b020482cc211e2a0e753df4767cb95c9f42201cf0340fb84c82b493c5555",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.327958+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "27d0c1623f9976410591d51b6a5c80d38e3c077af376d7169e992dfbae443ba7",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.284224+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "12": {
-      "document_sha256": "808f45745b958ac0615dd74b510fbc6cd6af895bcbeb7648daae2e1de5bf942c",
-      "source_digest": "5437c17ee6ecd9b24df013a53c36284b4efe045387faa75f8d364b9d074ccd00",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.330014+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "document_sha256": "a2e54ce85a8ab94ebabd04acde4af30c683ba38bffbb8fdcfa488359eeab5957",
+      "source_digest": "e39108d676426a8a5223a39340cfa360b5a1bf154ba7ea0259fb7f5642176476",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.286209+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "10994d4b00c423481fa49fc60789ac1b5b0619d02b58a88b588c156a5390a1fe",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.331905+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "9ff465b09b76c94ab68eb90821fb52ce63627437a76061d5ce3b936393b1e242",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.288647+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "10994d4b00c423481fa49fc60789ac1b5b0619d02b58a88b588c156a5390a1fe",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.333723+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "9ff465b09b76c94ab68eb90821fb52ce63627437a76061d5ce3b936393b1e242",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.290852+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "15": {
-      "document_sha256": "f6d97b6b70a73b55d43b72efc4df0232ffe0516f32f22478fdf94b6a973af131",
-      "source_digest": "10994d4b00c423481fa49fc60789ac1b5b0619d02b58a88b588c156a5390a1fe",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.335818+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "document_sha256": "c6bcdfa5dbca4360ce73f9513a02d597ded964ef5effefac0349177e403e5942",
+      "source_digest": "9ff465b09b76c94ab68eb90821fb52ce63627437a76061d5ce3b936393b1e242",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.293022+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "02cc64ed16b6f8051e36c0bacd2a52374743c393e1dbbf13d0327d691c163da8",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.337888+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "277f20cddce58ab252581624cf613b2bfd3c96204fae5eeaced2663c42408630",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.295217+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "abec1aa31f849cde84b400fa4dfc1da5d0c6d43676ab7092a2895ccb28570277",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.339642+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "1bb83a0fab7f4dfab18f21c0092568fbdc32459f7c848a0b5a0ce6d2fea10458",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.297423+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "0d8cd50327d5088c43fcd913714028d1c8bb4064e8b9171d733f1477542069ec",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.341681+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "187f7ab62991911f64d89b282a46d2f362fbdbe7f92ec8cddb22d006c38f4574",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.300128+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "3d6a86dc60e146f1c62510da267bf9020bd316c340993050914fb00a2b3ee307",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.343718+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "source_digest": "d9d0e68e91d00d6f4a83a7f84ef05aedc94e789762096d3fb5f5b15ef904115f",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.302184+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     },
     "20": {
-      "document_sha256": "9e456e5db5c44c8592f493633e32f1e00de8d112b05dd468e6b335e481363d45",
-      "source_digest": "0d8cd50327d5088c43fcd913714028d1c8bb4064e8b9171d733f1477542069ec",
-      "reviewed_by": "Claude Section 10 models and ETF review",
-      "review_note": "Test-only change in tests/mc_bootstrap_disclosure_acceptance.py: the garch_t tolerance of the pinned-number check is 1e-3 relative because the L-BFGS-B GARCH fit moved by up to 4.6e-5 between numpy 2.3.5/scipy 1.18.0 and the CI's numpy 2.5.4/scipy 1.18.1. No product source and no document statement changed.",
-      "reviewed_at": "2026-11-04T16:19:22.345735+00:00",
-      "source_commit": "f001287f8d4056e080ca212243a0e50cb9165b99"
+      "document_sha256": "ae090069b2e33213573b6cd4a230f8d4deae8148b3aa36b1545c5014c7be3f61",
+      "source_digest": "187f7ab62991911f64d89b282a46d2f362fbdbe7f92ec8cddb22d006c38f4574",
+      "reviewed_by": "GPT section10 AI review",
+      "review_note": "Reviewed strict JSON transfer, UTF-8 size refusals, complete-response handling, advisory numeric limits and redacted reply exports against all twenty policies; retained publication evidence requirements.",
+      "reviewed_at": "2026-11-06T06:10:10.304480+00:00",
+      "source_commit": "67618da9231569b1aae7d12075621891b25f0e56"
     }
   }
 }

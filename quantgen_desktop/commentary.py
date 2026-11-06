@@ -23,6 +23,12 @@ from .report_actions import ReportActions
 ALLOWED={'monte_carlo','portfolio','bonds','rates','fx','structuring','signals','macro','derivatives','etf','crypto','krx','strategy'}
 
 
+class _PayloadError(ValueError):
+    def __init__(self,code):
+        self.code=code
+        super().__init__(error_message(code))
+
+
 def commentary_payload(report):
     tool=report.get('tool')
     if tool not in ALLOWED or report.get('execution_status')!='COMPLETED':
@@ -34,9 +40,12 @@ def commentary_payload(report):
     payload=plain({'tool':tool,'parameters':filter_analysis_fields(report.get('parameters',{})),
         'sections':sections,'official_verdict':report.get('verdict','NOT_RUN'),
         'reproducibility':report.get('reproducibility','PARTIAL'),'data_rights':report.get('data_rights','NOT_VERIFIED')})
-    raw=json.dumps(payload,ensure_ascii=False,allow_nan=False,sort_keys=True)
+    try:
+        raw=json.dumps(payload,ensure_ascii=False,allow_nan=False,sort_keys=True).encode('utf-8')
+    except (TypeError,ValueError):
+        raise _PayloadError('PAYLOAD_INVALID') from None
     # The send side measures the same UTF-8 JSON with the same '>' (core.research.ai_payload).
-    if len(raw.encode('utf-8'))>AI_PAYLOAD_MAX_BYTES:raise ValueError('Report is too large for commentary; choose a smaller calculation')
+    if len(raw)>AI_PAYLOAD_MAX_BYTES:raise _PayloadError('PAYLOAD_TOO_LARGE')
     return payload
 
 
@@ -100,6 +109,10 @@ class CommentaryPane(QWidget):
             report=self.source.currentData()
             if report is None:raise ValueError('Choose a completed result')
             self.payload=commentary_payload(report)
+        except _PayloadError as exc:
+            self.status.setText(error_message(exc.code))
+            self.status.localized_text={language:error_message(exc.code,language) for language in ('en','ko')}
+            self.status.retranslate();return
         except (ValueError,TypeError) as exc:self.status.setText(safe_detail(exc));return
         self.preview.setPlainText(json.dumps(self.payload,ensure_ascii=False,indent=2,allow_nan=False))
         self.status.setText('이 내용과 질문을 QUANTGEN의 고정 작성 지침과 함께 전송합니다. 지침에는 계좌나 개인 정보가 없습니다. AI 해설은 공식 gate 판정을 변경하지 않습니다.')
@@ -115,7 +128,7 @@ class CommentaryPane(QWidget):
                 self.consent.setFocus()
             return
         if not self.consent.isChecked():
-            self.status.setText('전송 동의에 체크해야 요청할 수 있습니다. 아래 내용만 외부 AI 서비스로 전송됩니다.')
+            self.status.setText('전송 동의에 체크해야 요청할 수 있습니다. 표시한 계산 결과와 질문을 QUANTGEN의 고정 작성 지침과 함께 외부 AI 서비스로 전송합니다.')
             self.consent.setFocus();return
         payload=deepcopy(self.payload);question=safe_detail(self.question.text(),limit=None)
         if len(question)>4000:self.status.setText('질문을 4,000자 이내로 입력하세요.');return
@@ -134,14 +147,28 @@ class CommentaryPane(QWidget):
         text=safe_detail(result.text,limit=None)
         self.output.setPlainText(text)
         check=getattr(result,'number_check',None);check=check if isinstance(check,NumberCheck) else None
-        notes={language:AI_LABEL[language]+'\n'+check_line(check,language) for language in ('en','ko')}
+        redacted=text!=result.text
+        if redacted:
+            # The supplied check describes the original reply. Its numeric tokens may
+            # disclose details removed above; keep that provenance on result, but do
+            # not display/export it or imply the displayed reply was checked again.
+            check=None
+            check_lines={
+                'en':'Number check: not shown because private details were removed from the reply. The displayed text was not checked again.',
+                'ko':'숫자 대조: 응답의 비공개 정보를 가렸으므로 결과를 표시하지 않습니다. 표시된 글은 다시 대조하지 않았습니다.',
+            }
+        else:
+            check_lines={language:check_line(check,language) for language in ('en','ko')}
+        notes={language:AI_LABEL[language]+'\n'+check_lines[language] for language in ('en','ko')}
         self.check_note.setText(notes['ko']);self.check_note.localized_text=notes;self.check_note.retranslate()
         digest=hashlib.sha256(json.dumps(self.completed_payload,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
         self.report_actions.set_result('ai_commentary',{'source_tool':self.completed_payload['tool'],'source_payload_sha256':digest,
             'stop_reason':getattr(result,'stop_reason','') or 'NOT_RECORDED','verification':'NOT_VERIFIED',
-            'number_check':asdict(check) if check else None},
+            'number_check':asdict(check) if check else None,
+            'number_check_status':'WITHHELD_REDACTED_REPLY' if redacted else ('COMPLETED' if check else 'NOT_RUN'),
+            'number_check_basis':'ORIGINAL_REPLY_BEFORE_DISPLAY_REDACTION' if redacted else ('DISPLAYED_REPLY' if check else 'NOT_RUN')},
             [{'type':'text','text':text},{'type':'text','text':'AI-generated commentary · '+safe_detail(result.engine)+' · official verdict unchanged'},
-             {'type':'text','text':AI_LABEL['en']},{'type':'text','text':check_line(check,'en')}])
+             {'type':'text','text':AI_LABEL['en']},{'type':'text','text':check_lines['en']}])
         self.status.setText('AI 해설 완료 · '+safe_detail(result.engine)+' · 공식 판정은 원래 기록을 유지합니다.')
 
     def failed(self,error, *, localized=None):

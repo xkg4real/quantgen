@@ -66,6 +66,26 @@ class AiPayloadTests(unittest.TestCase):
         self.assertEqual(runner.call_args.args[1], {"price": 42})
         self.assertIn("holdings", source)
 
+    def test_flet_disclosure_covers_fixed_instructions_and_value_notes_in_both_languages(self):
+        from core.i18n import LocaleContext
+        from ui.localization import translate_controls
+        runner=Mock();payload_fn=Mock(return_value={"price":42})
+        page=Mock();page.qg_locale=LocaleContext('ko_KR')
+        with patch.object(insights,'ai_ready',return_value=True):
+            panel=analysis_panel(page,kind='portfolio',narrative='local',payload_fn=payload_fn,deep_fn=runner)
+        disclosure=panel.content.controls[4]
+        self.assertIn('고정 작성 지침',disclosure.value)
+        question=panel.content.controls[3].controls[0];question.value='synthetic question'
+        for language,phrases in (
+            ('en_US',('selected analysis type','your question','fixed writing instructions',
+                      'When needed','missing, undefined or unbounded values','holdings and balances are excluded')),
+            ('ko_KR',('분석 종류','질문','고정 작성 지침','값이 있으면 그 표기 설명','보유 내역과 잔고는 제외')),
+        ):
+            translate_controls(panel,LocaleContext(language))
+            for phrase in phrases:self.assertIn(phrase,disclosure.value)
+            self.assertEqual(question.value,'synthetic question')
+        payload_fn.assert_not_called();runner.assert_not_called();page.run_thread.assert_not_called()
+
     def test_flet_error_keeps_local_narrative_and_shows_safe_action(self):
         from core.research.ai_connection import error_message
         message = error_message('AUTHENTICATION', http_status=401)
@@ -257,6 +277,13 @@ class AiPayloadTests(unittest.TestCase):
         self.assertEqual((broken.error_code, broken.text, broken.engine), ("PAYLOAD_INVALID", "", "none"))
         http.post.assert_not_called()
         self.assertNotIn("fixture", broken.error)
+        for surrogate in ("\ud800", "\udfff"):
+            with self.subTest(surrogate=repr(surrogate)):
+                invalid, http = call({"text": surrogate})
+                self.assertEqual((invalid.error_code, invalid.text, invalid.engine),
+                                 ("PAYLOAD_INVALID", "", "none"))
+                http.post.assert_not_called()
+                self.assertNotIn(surrogate, invalid.error)
         for language in ("en", "ko"):
             self.assertIn("180,000", error_message("PAYLOAD_TOO_LARGE", language))
             self.assertTrue(error_message("PAYLOAD_INVALID", language))

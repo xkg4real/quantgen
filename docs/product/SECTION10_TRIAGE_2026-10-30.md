@@ -293,7 +293,27 @@ more reviewers checked each implementation.
 See `MC_BOOTSTRAP_DISCLOSURE_2026-11-04.md` and `ETF_SLEEVE_DISCLOSURE_2026-11-04.md`.
 
 NEW-M6-04 and NEW-M6-05 follow the options section above (27 → 29/67). N-M1-02 is partial
-and not counted, like NEW-M6-02. Latest source implementation count: **29/67**, **38**
+and not counted, like NEW-M6-02. Source implementation count at this preceding stage: **29/67**, **38**
 remaining. Partial NEW-M6-02 and N-M1-02, the 14 observation models and the remaining
 ambiguous mappings stay open. Actual Windows, provider, research and release acceptance
 are separate.
+
+
+## AI commentary — branch implementation, 2026-11-06
+
+NEW-M6-12 and NEW-M6-19 are still ambiguous related IDs in model-register
+entry 149. This branch covers the four candidate limitations for both IDs:
+only end_turn replies can be displayed/saved, payloads use strict JSON/full arrays
+and nonfinite markers, number matching is advisory, and the reply is explicitly
+not verified and may vary between requests. Review corrections cover dates,
+bp-to-percent, ranges, scientific notation exclusions, bilingual disclosure, UTF-8
+refusal and privacy-redacted reply check withholding. See
+`AI_COMMENTARY_GUARDS_2026-11-04.md` for exact evidence and limits.
+
+Branch source implementation is **31/67**, with **36** canonical groups remaining
+without full implementation. This is not a merged-completion count: the two AI
+IDs remain open pending owner default confirmation, exact-head CI, main merge and
+LEDGER entries. Prior verified merged count is 29/67. Approximate matching does
+not verify sign, metric identity, reasoning, verdicts or derived results. Windows
+user-PC/API/provider/pilot/legal/licensing acceptance is not supplied by these tests.
+N-M1-02/b remains deferred and protected research/order paths are unchanged.

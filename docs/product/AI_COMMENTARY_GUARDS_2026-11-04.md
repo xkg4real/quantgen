@@ -9,7 +9,7 @@ entry that carry no other ID, on product main `faf9f3b`, in three commits on
 | --- | --- | --- |
 | `7c31417` | (c) the Messages API `stop_reason` was never read | A reply that did not end with `end_turn` fails closed; its text is never shown, saved or exported. |
 | `401fe33` | (b) payload serialisation | Strict JSON, full arrays, non-finite numbers as markers that carry the field's meaning, one size limit for both UIs. |
-| this note's commit | (a) the output is never checked, (d) the same request can give different text | An advisory number check and a "not verified" label under every finished reply. |
+| `54b52eb` | (a) the output is never checked, (d) the same request can give different text | An advisory number check and a "not verified" label under every finished reply. |
 
 AI commentary stays advisory. No verdict, card, gate, ledger, register or study
 harness is read or written; `core/quant/strategies.py`, `core/quant/validate.py`
@@ -33,9 +33,11 @@ and `docs/asset_expansion_study.py` are unchanged.
   IDs as code defects with line citations gives {(b), (c)} just as well, so the
   earlier "12 = (a), 19 = (c)" hint is dropped.
 
-Following Crypto PR #68 (NEW-M6-14 and NEW-M6-22), all four are fixed, so both
-IDs are covered whatever the pairing. Both IDs are recorded against all three
-commits; the owner maps them later.
+Following Crypto PR #68 (NEW-M6-14 and NEW-M6-22), this branch addresses all
+four candidate limitations, with output verification limited to advisory number
+matching and non-reproducibility disclosed rather than removed. Both IDs refer
+to the three implementation commits and the review correction; their exact pairing
+remains unresolved. Completion requires the verified PR merge and ledger entry.
 
 ## Reproduction on faf9f3b
 
@@ -64,7 +66,7 @@ probes on `faf9f3b` (`s10ai2/design/probe_render_current.out`), read here, not r
 | `np.int64(7)`, `np.bool_(True)` | `7.0`, `"True"` | `7`, `true` |
 | Hangul string | `\u` escapes | UTF-8 characters |
 | Tuple dict key | `TypeError` out of `deep_analysis`; Flet spinner stays on | sent as `"(1, 2)"` |
-| A reply citing an invented 9.99 | shown with no check or label | shown unchanged, with the label and "not found in anything sent: 9.99" |
+| A reply citing an invented 9.99 | shown with no check or label | shown unchanged, with the label and "not found in the values sent: 9.99" |
 
 ## Behaviour after the change
 
@@ -92,7 +94,7 @@ reading `max_tokens` from `OUTPUT_TOKEN_LIMIT = 1500`.
 | Surface | Cut-off, refused or paused reply |
 | --- | --- |
 | Flet (every page, `ui/ai_panel.py`) | The existing `_ErrorNotice` shows the new EN/KO message and re-renders on a language switch. The partial text appears nowhere. |
-| Native (`quantgen_desktop/commentary.py`) | `finished()` routes to `failed()` with the Korean text; output and the report buttons stay cleared, so nothing can be saved. |
+| Native (`quantgen_desktop/commentary.py`) | `finished()` routes to `failed()` with the localized message; output and the report buttons stay cleared, so nothing can be saved. |
 
 The `OUTPUT_LIMIT` message quotes the 1,500-token limit, says the limit can include
 the model's internal reasoning, and does not blame the question.
@@ -123,7 +125,7 @@ byte-identical.
 
 | Case | Before | After |
 | --- | --- | --- |
-| Serialisation fails | A tuple or numpy dict key raised `TypeError` out of `deep_analysis`; the Flet spinner stayed on | Such keys are now written as text. Any remaining failure is `PAYLOAD_INVALID` locally with nothing posted; the Flet worker also catches a failing `payload_fn` and always clears the spinner |
+| Serialisation fails | A tuple or numpy dict key raised `TypeError` out of `deep_analysis`; the Flet spinner stayed on | Such keys are now written as text. Any remaining serialisation or UTF-8 encoding failure is `PAYLOAD_INVALID` locally with nothing posted; the Flet worker also catches a failing `payload_fn` and always clears the spinner |
 | Payload over 180,000 bytes | Flet: no limit; Native: refused at preview | `PAYLOAD_TOO_LARGE` before any request. `AI_PAYLOAD_MAX_BYTES` is shared, and both sides measure UTF-8 JSON with `ensure_ascii=False` and `>`, so a payload Native accepted at preview is never refused after consent |
 | Native consent line | "Only this payload and question will be sent." | Says the payload and question are sent with QUANTGEN's fixed writing instructions, which contain no account or personal data (EN/KO pair replaced in `quantgen_desktop/translations.py`) |
 
@@ -143,24 +145,28 @@ payload or a verdict, and never blocks display.
   report-format instructions for the FICC report kinds) are listed apart, never as
   data.
 - A number matches when it equals some reference after rounding to the printed
-  decimals or truncation, with % as ×1 or ×100 and bp as ×1, ×100 or ×10,000. The
+  decimals or truncation, with % as ×0.01, ×1 or ×100 and bp as ×1, ×100 or ×10,000. The
   sign is ignored. Matches with two significant digits or fewer are counted as
   "could match by chance".
 - Dates, years, tenors and windows (10-year, 52주), ordinals and identifiers (5th,
   M6-19, 2y/5y), index levels (S&P 500, KOSPI 200), confidence levels (95% VaR),
-  scale words (1.2 billion, 3억) and ranges (15-20%) are skipped.
+  scale words (1.2 billion, 3억), ranges (15-20%, 15~20%, 15 to 20%)
+  and scientific notation (3.2×10⁻⁸) are skipped. Spaced Korean windows/scales
+  are skipped too; `달러` and `주식` remain values. `pct` and spaced
+  `베이시스 포인트` use the matching scale family.
 
 | Surface | Finished reply |
 | --- | --- |
 | Flet | Under the unchanged `engine:` chip and text: a muted label line and the number-check line (`_CheckNotice`, EN/KO, re-rendered on a language switch). The error branch is unchanged. |
-| Native | A new muted line under the output (`check_note`): the label and the check line, EN/KO. Cleared on a new source, a new request and a failure. The output box still holds exactly the reply text. |
-| Native export | Two more text sections (English label and check line), and `stop_reason`, `verification: NOT_VERIFIED` and `number_check` in the request fields. `make_report` keeps `verdict: NOT_RUN`. |
+| Native | A new muted line under the output (`check_note`): the label and the check line, EN/KO. Cleared on a new source, a new request and a failure. The output box holds the reply after the existing privacy redaction. If redaction changes it, the original number check is withheld from display and export, and the text explicitly says the displayed reply was not checked again. |
+| Native export | Two more text sections (English label and check line), and `stop_reason`, `verification: NOT_VERIFIED`, `number_check`, `number_check_status` and `number_check_basis` in the request fields. `make_report` keeps `verdict: NOT_RUN`. |
 
 Label (EN): "AI commentary · not verified. Claude wrote this from the data sent;
 QUANTGEN does not check its reasoning, and the same request can give different
 text. It does not change any official verdict." The label covers (d): on the
-default model `claude-sonnet-5` (`config.py:224`) `temperature`, `top_p` and
-`top_k` return a 400 (claude-api skill reference, not a real call), so the
+default model `claude-sonnet-5` (`config.py:224`) was reported to reject
+`temperature`, `top_p` and `top_k` in Claude's cached API reference. That
+provider-specific claim has not been verified with a real call; the
 non-reproducibility is disclosed, not removed.
 
 What a match does not show: that the number is attached to the right measure
@@ -168,8 +174,11 @@ What a match does not show: that the number is attached to the right measure
 number (a difference or ratio shows as not found), or verdict words. The line
 says so.
 
-Chance matches, measured on the three synthetic payloads with the final rules
-(`probe_calibration.py`: each number cited alone, share that matches anything sent):
+**Historical calibration reported by Claude before the 2026-11-06 correction**,
+not a measurement of the current rules. The original private fixtures were not
+available for independent recalibration. Adding the ×0.01 percent scale can increase
+chance matches. The table below is retained only as the prior implementation record
+(`probe_calibration.py`: each number cited alone, share that matched a value):
 
 | Cited form | Crypto | ETF | Derivatives |
 | --- | --- | --- | --- |
@@ -181,20 +190,22 @@ Chance matches, measured on the three synthetic payloads with the final rules
 | x.xx (three significant digits) | 2% | 0% | 2% |
 | xx.x% (three significant digits) | 5% | 2% | 12% |
 
-So a match of a two-digit number is weak evidence; the line says how many matches
-are that coarse. The Derivatives board (14,560 bytes) gives the most chance matches.
+A coarse number match remains weak evidence; the line reports its count. The
+prior Derivatives fixture was 14,560 bytes. No current false-match rate is claimed.
 
-## What stays identical
+## Preserved contracts and correction boundaries
 
-- `_SYSTEM`, the request fields, one POST with no retry, the existing error codes
-  and their EN/KO messages.
+- `_SYSTEM`, the request fields and one POST with no retry remain unchanged.
+  Existing payload error codes now also cover UTF-8 encoding failures, and Native
+  uses their shared EN/KO messages for preview refusal.
 - The success rendering: Flet `engine:` chip and text, the Native output box and
   success status (`translations.py` success template untouched).
 - For a payload with no None, no non-finite number, no numpy integer or bool, no
   array or pandas object, no bool or None key and only ASCII strings, the user
   message is byte-identical.
-- Native `commentary_payload`, its preview, `plain()` (non-finite → null is the
-  report contract), `make_report`, `report_bytes` and `verdict NOT_RUN`.
+- Native `plain()` (non-finite → null is the report contract), `make_report`,
+  `report_bytes` and `verdict NOT_RUN` retain their contracts. The preview now
+  rejects invalid UTF-8 locally and presents the shared payload error messages.
 - `filter_analysis_fields` and `PRIVATE_WORDS` (NEW-M6-18).
 - The Flet catalog (`core/ui_legacy_messages.py`) is not edited; its old consent
   pair is not displayed anywhere.
@@ -219,8 +230,8 @@ Quant Lab sends `prob_target_basis: None` whenever `mc.prob_target` is None
    ever added to the request.
 3. Output budget: `max_tokens` 1500, effort and thinking unchanged. Measure real
    truncation under ⑬-9/b first. Any thinking setting depends on the model
-   (`thinking: {type: disabled}` is accepted on Sonnet 5 and a 400 on Sonnet 5.5
-   and Opus 5.5).
+   (the prior cached-reference claims about model-specific thinking support are
+   unverified here; no new model option is enabled).
 4. Native consent text: reworded. Alternative: keep it and show `VALUE_NOTE` in
    the preview.
 5. Number check: two significant digits or fewer counts as coarse; verdict words
@@ -254,9 +265,13 @@ Quant Lab sends `prob_target_basis: None` whenever `mc.prob_target` is None
 - Payloads other than the synthetic Crypto, ETF and Derivatives ones (Quant Lab,
   Portfolio, Signals, rates, bonds, FX, structuring, macro, Strategy Lab) were
   read, not run, for arrays, pandas objects and non-finite values.
-- The number check runs on the raw reply; Native shows and saves
-  `safe_detail(text)`, which only redacts URLs and secrets, so the two can differ
-  slightly when a reply contains such text (not measured).
+- The number check runs on the raw reply. If Native `safe_detail(text)` changes
+  it, display/export withhold the check: `number_check = null`,
+  `number_check_status = WITHHELD_REDACTED_REPLY`,
+  `number_check_basis = ORIGINAL_REPLY_BEFORE_DISPLAY_REDACTION`. The original
+  `Analysis.number_check` is preserved in memory. A synthetic regression confirms
+  redacted URL numeric tokens do not reappear through the check. Unchanged replies
+  use `COMPLETED` / `DISPLAYED_REPLY`; absent checks use `NOT_RUN` / `NOT_RUN`.
 - The Windows screen, real KIS/Upbit data and the bundled-font rendering of the new
   lines on screen were not checked; `tests.desktop_typography_acceptance` passes
   (it checks the glyphs of string literals in `core/research/*.py`).
@@ -274,7 +289,7 @@ python -B -m unittest tests.ai_output_check_acceptance tests.ai_connection_accep
 
 New or changed tests:
 
-- `tests/ai_output_check_acceptance.py` (new, pure, 10 tests): invented, rounded,
+- `tests/ai_output_check_acceptance.py` (pure, 17 tests after review): invented, rounded,
   scaled, Korean, free-text, code and question-only numbers; skipped and masked
   dates, tenors, windows, indices and ranges; the escaped-hyphen regex; coarse
   counts; truncated lists; EN/KO lines; no mutation.
@@ -289,7 +304,8 @@ New or changed tests:
   179,999 / 180,000 / 180,001 bytes, the consent line, and the advisory label,
   check line and export fields.
 
-These suites were also run on every commit and pass:
+Claude reported the following historical per-commit checks; the independent
+2026-11-06 result is recorded below:
 `letf_ai_payload`, `desktop_letf_ai`, `crypto_missing_values`, `option_disclosure`,
 `etf_sleeve_disclosure`, `mc_bootstrap_disclosure`, `desktop_authored_prose_language`,
 `desktop_language`, `desktop_typography`, `fx_basis_disclosure`,
@@ -306,10 +322,51 @@ commits. `git grep -n "\"tools\"\|'tools'" -- core/quant/insights.py` stays empt
 `tests.macro_m6_context` (it walks `docs/`, which holds a protected folder),
 `tests.macro_m8_pipeline`, `tests.macro_m9_lab` and `tests/run_all.py`.
 
-Records not edited here (the main session updates them): the SECTION10 queue and
+Shared integration records updated with this review: the SECTION10 queue and
 triage, `docs/compliance/FACTS.md`, `docs/compliance/source-review.json` (new hashes
 for the changed sources and entries for `core/research/ai_output_check.py` and
 `tests/ai_output_check_acceptance.py`), `.github/workflows/runtime-smoke.yml`
 (add `tests.ai_output_check_acceptance` to the module list and the new and changed
-AI files to the paths), `docs/product/ui_website_updates/`, `qa/research_status.json`
-and `README.md`.
+AI files to the paths), and `docs/product/ui_website_updates/`.
+`qa/research_status.json` and `README.md` are not changed by this review.
+
+## Independent review correction, 2026-11-06
+
+The retained Claude baseline at `67618da` ran all 229 tests successfully in the
+25-module suite, but the private harness then exited 1 during temporary-directory
+cleanup: a test audit hook rejected a synthetic folder named `cache`. The private
+harness folder is now named `synthetic-xdg`; the protected-path/network guards and
+product tests were not relaxed. This baseline is not reported as a clean process exit.
+
+The checker regressions first reproduced 28 failing subcases; all 17 checker tests
+then passed after correction. Native localized consent and payload refusals, reply
+redaction provenance and export fields have targeted regressions. Shared UTF-8
+encoding is caught inside the payload refusal boundary before a POST.
+
+The first integrated run executed 239 tests and found two failures: an existing
+LETF scenario test expected Korean despite an English UI setting, and the broad
+font-literal check included a parser-only fullwidth range separator. The test now
+selects its English locale explicitly and checks the English consent message. The
+regex writes the same fullwidth input character as a Unicode regex escape; no font
+coverage assertion was weakened. The full 25-module rerun passed **239 tests in
+219.335 seconds, exit 0**, on Linux/Python 3.12 with offscreen Qt, fake HTTP,
+network denied, dotenv disabled and temporary mutable state. The separate
+synthetic compliance/export suites passed **47 tests, exit 0**. These suites
+overlap in scope with targeted checks and their counts should not be summed.
+
+The day-first date is masked before a shorter month-year expression. Both range
+endpoints are skipped, scientific notation is conservatively excluded, and the
+English/Korean notices identify values rather than all transmitted content. The
+original `54b52eb` commit message mentions `bisect`, but the checker uses `re`,
+`math` and `dataclasses`; no history rewrite is needed.
+
+Flet now explicitly discloses the analysis type, computed values, question, fixed
+writing instructions and conditional missing/non-finite-value explanation. This
+localized notice does not introduce a checkbox or imply that the existing Flet
+consent gap has been resolved.
+
+All choices above remain the implemented defaults for owner confirmation in the
+PR, not a claim of new approval. The default English canonical export and marker-or-null
+VALUE_NOTE trigger are also disclosed. Optional additional GPT/Gemini specification
+review remains NOT_PERFORMED. Internal source/test review does not establish
+Windows user-PC, real API, legal/licensing, pilot or frozen-research evidence.

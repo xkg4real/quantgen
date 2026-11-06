@@ -327,9 +327,10 @@ def deep_analysis(kind: str, payload: dict, *, question: str = "") -> Analysis:
     # JSON, or that is over the Native preview limit, fails locally with no request.
     try:
         sent = ai_payload_json(payload)
+        payload_bytes = len(sent.text.encode("utf-8"))
     except Exception:
         return failure("PAYLOAD_INVALID")
-    if len(sent.text.encode("utf-8")) > AI_PAYLOAD_MAX_BYTES:
+    if payload_bytes > AI_PAYLOAD_MAX_BYTES:
         return failure("PAYLOAD_TOO_LARGE")
     model = config.ai_model()
     user_msg = f"Analysis type: {kind}\n\nComputed results:\n{sent.text}"
