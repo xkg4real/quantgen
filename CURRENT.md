@@ -5,14 +5,14 @@ from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1
-next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a/keys/1
-updated_at: 2026-11-06T19:52:38+09:00
+next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a/keys/1, ⑨-3a/data-hash/1
+updated_at: 2026-11-06T19:55:17+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/run-registry-keys-20261106
+work_branch: gpt/run-registry-data-hash-20261106
 work_commit: a083f75138c44feaa9eca788d82d53215eed38c0
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/84
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -540,3 +540,10 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - Same owned keys branch now pushed/read-back `a083f75138c44feaa9eca788d82d53215eed38c0`, merging main e4ec. Only FACTS/source-review conflicted; both full FACTS appendices preserved and all20 policies reviewed. Incoming UI source/tests remain byte-identical to e4ec; codec/store/keys, keys tests/fixture and workflow remain byte-identical to246c. No product code conflict resolution or actual ledger/provider/research/owner-rule effect.
 - New guarded integration: R3 46PASS1.480s exit0; UI four modules86PASS106.513s exit0; separate responsive5PASS33.338s exit0. Actualviewport+100 oversized fixture preserves overflow/selection/request/tooltip assertions; earlier fixed710px Linux failure remains historical. ConsistencyPASS602/publicationBLOCKED. Initial lazy-fetch network refusal was resolved with existing per-command network permission, not policy/config changes.
 - Fresh exact-head Runtime and Compliance required for a083f75 before PR84 merge/⑨-3a/keys/1 completion. Windows CI/manual actual proof remain distinct. Full R3/T01b/recorder/Lab and actual API/provider/legal/license/pilot/frozen-research gaps remain; extra spec review NOT_PERFORMED. PR83 bounded Notion completion and PR84 earlier progress were read-back verified on sapientia. Next pure data-hash child is only scoped, not claimed/edited.
+
+### GPT same-task bounded R3 data hash claim — 2026-11-06T19:55:17+09:00
+
+- Continue the same authorized claude-resume-20261103 task/execution and OS lock. Previous keys branch/head/PR84 are preserved; a083 Runtime42205995118 still runs and Compliance42205995086 succeeded. The owner-directed independent-work instruction permits the next detached R3 implementation while CI observation continues; no duplicate monitor, run_now or unrelated task takeover.
+- New branch `gpt/run-registry-data-hash-20261106` was created at pushed/read-back `a083f75138c44feaa9eca788d82d53215eed38c0`. Before edits, same-ref six handoff files at `65fd8642d630f03e1bd89f0410bb4b329604957c` and LEDGER ID/file duplication were checked. Bounded ID⑨-3a/data-hash/1, core/quant/run_registry_data_hash.py plus synthetic acceptance and scope records only.
+- Existing Nov3 all/rev2+10.2A R3 approval and exact designfa280591 §5.4 line719/§9.1 specify UTF8 LF-joined dates,NUL,LF-joined symbols,NUL,little-endian float64 C-order raw bytes, MD5 with no finalLF/metadata/shape/dtype prefix. No data loading, source verification, Lab/store/ledger/count/frozen research or human/owner-rule effects. Internal implementation scope review is separate from optional spec review NOT_PERFORMED.
+- Explicit supported domain: nonempty plain list/tuple string tokens, exact ASCII valid ISO dates, symbols literal except empty/LF/NUL/surrogate refusal, ordinary2D float64 ndarray either endian/any strides/read-only with exact shape. Preserve raw IEEE signedzero/NaN payloads; no semantic price/market validation. Restrictions are API bounds, not scientific acceptance criteria. Independent literal-byte, endian/stride/nonmutation and refusal tests required. Whole R3 and actual Windows/API/provider/legal/license/pilot/frozen-research proof remain incomplete.
