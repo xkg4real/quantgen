@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T18:19:42+09:00
+updated_at: 2026-11-06T18:23:30+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-codec-20261106
@@ -458,3 +458,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - 상태표시final e03898833329fd64db0feecab485dffe0fa297c8의Runtime42191023747 전체6job 및Compliance42191023765 success확인 후 PR78을main f180f697c646a39536b7b57886d58c3667b4a9af에병합·PR/main read-back했다. LEDGER daee719b6ddda6a28d616aec3956f729b9e324da에⑫-1/display-owner-decision만append/read-back.
 - Native/FletSystem은검증된snapshot의소유자결정/날짜/코드를보존하면서기술준비·규제·실제게시근거와구분하고, 자료거부시승인을추정하지않는다. 생성기/검증기/소유자규칙변경없음. 초기사전21/통합43/최종status+snapshot+A3 41PASS는겹치는증거; 기존좁은System58/44px넘침은이범위에서해결하지않았다.20정책PASS587/publicationBLOCKED.
 - 부모⑫-1·실제Windows/라이브API·공급사/법률/라이선스/파일럿/동결연구/실제배포는미완료. 다음RatesPR79 fullCI·병합,identityPR80 A1정리후freshCI,R3codec 소스38745b7에정리통합후PR. Identity기존Ubuntu18OK후139는여전히실패기록보존.
+
+### GPT A1 시험 정리 push 및 Rates 동일 실패 확인 — 2026-11-06T18:23:30+09:00
+
+- identity후속 e981ef7dce08d3463ae6bee2c6f0d4f68d238970를push/read-back했다. nativeA1 두모듈의import/cleanup등록2곳만바꿔기존helper로소유위젯을정리한다. 기존18시험/82assertion AST·제품/Flet/helper불변. before18PASS14.055s에도9소유위젯잔존, after18PASS12.249sexit0·9개파괴/ResearchWindow0/ReadingHelp0. 로컬segfault재현없고이전CI139의정확한원인미확정.20정책PASS591/publicationBLOCKED. 동일A1명령을chart직후로이동,명령목록불변.
+- Rates578d35d Runtime42191259285 Ubuntu127803562205에서도A1 18OK19.066s후segfault139가확인됐다. Rates전체CI실패이며PR79병합하지않는다. RATES_578_UBUNTU_A1_EXIT139.log보존. 동일preimage대조후같은2시험정리만Rates에이식했다(별도미커밋변경);제품Rates소스불변. 공유된18시험정리측정은새Rates재실행으로세지않는다.
+- 다음: Rates20정책·문서/commit/push/read-back → identity에정상merge → R3에정상merge후PR. 이최종각head의전체CI로판단한다. identity e981에서기동한CI가있어도후속mergehead의증거로대체하지않는다. sourceReview/FACTS충돌은양쪽기록보존후재검토하며선행완료A3/상태근거는유지한다.
