@@ -30,10 +30,25 @@ verification failure. Snapshot generation/verification and its original tests
 are unchanged. The runtime workflow includes both display/snapshot modules.
 Five-module isolated integration passed 43 tests (72.088 seconds, exit 0).
 All 20 policies were reviewed; claims policy, FACTS and RELEASE_GAPS received
-minimal updates. Source consistency and exact-head CI/PR receipts follow.
+minimal updates. Source consistency passed for all 20 policies; publication remains BLOCKED.
+Exact-head CI/PR receipts follow.
 The existing verifier detects source/snapshot inconsistency, not expiry based
 on wall-clock age.
 
 No real provider/API call, user Windows/DPI/assistive-technology check, public
 release/deployment, legal/license, pilot or frozen-research proof is established.
 Optional additional GPT/Gemini specification review remains NOT_PERFORMED.
+
+Five actual native System captures (EN/KO, 1360/1000px, plus 1560px help dock)
+show all 11 status lines and their owner/readiness/publication distinctions.
+The isolated render diagnostic passed once; a separate baseline comparison
+passed once. At 1000px, both pre-change67a8838 and statusb423f0b have EN58px /
+KO44px horizontal overflow from the inactive Rules tab. This existing narrow
+System limitation remains; the new status panel did not increase it. Wide
+views have zero horizontal overflow, vertical scrolling works and A3 help
+keeps critical notices uncovered. These runs use verified temporary synthetic
+evidence and unchanged raw dictionaries/files, not real-user PC evidence.
+The A3 correction was integrated at a99b16b; make_quant matches af782be and
+make_system matches b423f0b by AST comparison.
+Post-merge isolated status/snapshot/A3 layout validation passed26 tests
+(65.732s, exit0); earlier overlapping counts are not added.
