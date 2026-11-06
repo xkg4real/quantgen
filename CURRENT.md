@@ -6,12 +6,12 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T17:57:14+09:00
+updated_at: 2026-11-06T17:59:17+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
 work_commit: bd7ee2a1b329320caf99fdff0ec61abb4cc443a4
-uncommitted_changes: yes
+uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/77
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -420,3 +420,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - 상태 exact-head Runtime42191023747 진행/Compliance42191023765 success; Rates Runtime42191259285 진행/Compliance42191259325 success. A3 bd7 Runtime42190250542에서 Windows3.11/3.12/3.14·Ubuntu의 A3 및 chart/text 단계가 모두 정상 종료했지만 전체 job 결론은 미완료. 신규 완료/병합으로 기록하지 않는다.
 - detached identity는 Rates578d35d 트리를 정상 통합 중이며 e04 자체 resolver/시험을 그대로 유지한 최종 격리19PASS0.013s(exit0)를 확인했다. 별도 PR/fullCI는 다음 단계. Notion sapientia 두 페이지 A3 정리 진척 반영/read-back 및 큐26기록 보존 확인. 실제 API/공급사/WindowsPC/법률/라이선스/파일럿/동결연구와 웹배포의 새 증거 없음.
 - 다음 안전 시작: identity 통합20정책/commit/push/readback/PR → 각 최종 head 필수 fullCI, PR77→78→79→identity 순서로 판단. 부모 Remaining Work는 미완료 유지.
+
+### GPT 분리된 종목 식별 PR80 — 2026-11-06T17:59:17+09:00
+
+- identity b79d56d5aedd0a7d854421c933d87b31338e5177를 push/read-back하고 draft PR80을 생성했다. status e038/Rates578/A3bd7 정상 통합과20정책 재검토를 마쳤다. 기존 identity source/test는 e04 고정 해시 그대로, 나머지 제품 코드는 Rates578과 동일. 최종19합성PASS0.013s(exit0), 소스정합성PASS591/publicationBLOCKED.
+- 범위는⑫-2/b/1 caller-supplied registry·request-boundmetadata의 분리된 resolver와 기존 cost-row명 반환뿐이다. 실제 공급사·실제비용·주문/라우팅·동결연구 연결 없음. alias중복/상충 거부, FX동일통화대소문자 거부, continuous선물orderableFalse, 나머지는주문승인추정없음.17설계요청은주입합성근거로검사. 부모⑫-2는미완료.
+- PR80 최종head 필수Runtime/ComplianceCI와 PR77→78→79 선병합을 기다린다. 모든 작업트리 source commit은 원격에 보존했고 신규 완료 행은 아직 추가하지 않았다. A3bd7 각Windows/Ubuntu A3·chart단계성공은전체CI증거와구분한다.
