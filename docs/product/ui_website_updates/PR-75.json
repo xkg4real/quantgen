@@ -1,0 +1,82 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-ai-commentary-guards-pr-75",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "No supported cross-chat sending tool is available. Website handled separately; this record is not delivery evidence.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/ai-commentary-review-20261106",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/75",
+    "implementation_commit": "c8a024545ddab7ff27f3e15438f4a61e565b3fb1",
+    "remote_status": "OPEN_DRAFT",
+    "merge_commit": null,
+    "verified_head": null
+  },
+  "summary_ko": [
+    "AI 해설은 완료된 end_turn 응답만 표시하고 중단/거절 응답은 표시·저장하지 않습니다.",
+    "전송 JSON은 전체 배열과 비유한값 표기를 보존하고 180,000바이트 및 UTF-8 거부를 양쪽 UI에 적용합니다.",
+    "검증되지 않은 AI 해설과 안내용 숫자 대조의 한계를 표시하며 날짜·bp/%·범위·띄어쓰기 문제를 정정합니다.",
+    "Native 응답의 비공개 정보를 가렸다면 원문 대조를 화면·내보내기에서 숨기고 재검사하지 않았음을 표시합니다.",
+    "Flet/Native 전송 안내에 고정 작성 지침 등을 명시합니다. Flet 체크박스 동의 공백은 해결하지 않았습니다."
+  ],
+  "website_impact": {
+    "classification": "shared_browser_change",
+    "browser_code_changed": true,
+    "shared_sources": [
+      "core/quant/insights.py",
+      "core/research/ai_connection.py",
+      "core/research/ai_payload.py",
+      "core/research/ai_output_check.py",
+      "ui/ai_panel.py"
+    ],
+    "requested_actions_ko": [
+      "웹에서 AI 해설을 제공한다면 응답 완료·전송 범위·미검증 및 숫자 대조 한계를 실제 브라우저 경로와 대조하세요.",
+      "소개/정책 문구에 AI 사실성 또는 재현성 보장을 주장하지 않도록 FACTS의 2026-11-06 소스 검토를 참고하세요.",
+      "네이티브 가림 후 대조 보류는 브라우저가 같은 가림 처리를 쓰는지 확인한 뒤 적용 여부를 판단하세요.",
+      "웹 HTML/소스는 GitHub에 올리지 않으며 실제 반영·배포는 소유자와 별도 세션 담당입니다."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "25 integrated synthetic modules",
+        "passed": 239
+      },
+      {
+        "suite": "synthetic compliance/export tools",
+        "passed": 47
+      }
+    ],
+    "counts_note": "Suites may overlap; do not sum. Linux Python 3.12 offscreen Qt, fake HTTP, network denied, isolated temporary state. Earlier 239-test run had 2 failures; corrected and fully rerun with exit0.",
+    "source_review": "20 policies consistency PASS; publication BLOCKED",
+    "ci": "PENDING_FINAL_HEAD",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "NOT_RUN"
+  },
+  "website_application": {
+    "status": "not_verified",
+    "deployment_status": "not_verified",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "PR은 기본값 확인·CI·병합 전입니다. §10 AI 두 ID의 전체 완료를 주장하지 않습니다.",
+    "숫자 일치는 부호·지표 대응·추론·판정을 검증하지 않습니다. 과거 우연 일치율은 현재 규칙의 측정치가 아닙니다.",
+    "실제 Windows PC/API/공급사/법률/라이선스/파일럿 증거는 미확보입니다.",
+    "추가 GPT/Gemini spec 공개·심사는 선택적 NOT_PERFORMED로 유지합니다."
+  ],
+  "changed_files": [
+    "core/quant/insights.py",
+    "core/research/ai_connection.py",
+    "core/research/ai_payload.py",
+    "core/research/ai_output_check.py",
+    "ui/ai_panel.py",
+    "quantgen_desktop/commentary.py",
+    "quantgen_desktop/translations.py"
+  ]
+}
