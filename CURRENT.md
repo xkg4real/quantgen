@@ -6,12 +6,12 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T16:58:19+09:00
+updated_at: 2026-11-06T17:15:47+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
-work_commit: af782bec1116ce994c800ecb7ce869acd64e885f
-uncommitted_changes: yes
+work_commit: f7b4a73fa08733b007b7ab499cbf377ab9970837
+uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/77
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -373,3 +373,10 @@ python3 tools/handoff/push_handoff.py --show
 git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 #   기대: 67618da…, 6a1424e…
 ```
+
+### GPT MC 입력 폼 재배치 수정·push/read-back — 2026-11-06T17:15:47+09:00
+
+- A3 `f7b4a73fa08733b007b7ab499cbf377ab9970837` push/read-back. 실제 라벨/입력 최소 폭으로 3→2→1열을 선택하는 MC 전용 폼이며 같은 위젯·값·선택·Tab 순서·원문 보고서/AI 입력을 보존한다. 콤보 minimumContentsLength12/전체 목록·tooltip 유지. 기존 Windows286, af782be284/294 실패 및 중간18PASS 뒤18px Linux14px 실패를 모두 보존했다.
+- 최종 layout8+reading12=20PASS96.156s exit0. 독립 실제 호스트10조건30.934s와 전체팝업6화면7.388s 검증 각각PASS(exit0); Linux Qt Windows-style2조건은 Windows OS 증거가 아니다. source/test hash 확인,20정책정합성PASS583/publicationBLOCKED. 기존CI 명령 모두 보존하고 A3 단계만 동일Qt설치 직후로 이동했다.
+- PR77 exact-final-head Runtime/Compliance 대기; 아직 병합/완료 ID 없음. 상태표시PR78 fa7c211 Runtime42183638295는 bounded-source 수정에 통과했지만 Windows3개가 같은 A3단계 실패. RatesPR79 a8d75b8도 같은 이전A3를 포함하므로 새수정을 순서대로 합치고 각 최종head CI를 확인한다. 일반 사용자PC/DPI/API/공급사/법률/라이선스/파일럿·동결연구 미확보, 선택spec NOT_PERFORMED 유지.
+- 다음 안전 시작점: f7b4a73를 상태표시→Rates에 정상병합·각20정책기준선/원본보존확인·push/read-back한 뒤 PR77→78→79 정확한head 필수CI/병합/원장/Notion 하위완료 처리. 현재 실행ID와 OS잠금 유지, 중복예약/run_now 없음.
