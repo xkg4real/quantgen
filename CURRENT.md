@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19
 next_ids: ⑬-2/a3, ⑬-2/a1, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T15:35:57.000+09:00
+updated_at: 2026-11-06T15:39:50.000+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/ai-commentary-review-20261106
-work_commit: a419db99baaf911d9e6f06890ab7bce6cb4b5447
+work_branch: gpt/ui-a1-20261106
+work_commit: e79ef2c1160242ddf86d5b381e1005f2ad627e16
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/75
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -60,6 +60,14 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 - LEDGER daad5883dea2732f65050f68bf558b0a50c496ae에 ②-5/NEW-M6-12·19 두 행을 추가하고 원문 보존·read-back을 확인했다. 각 ID는 네 후보 한계 및 원 구현3커밋/검토수정에 공동 대응한다. §10 canonical 그룹은 31/67 구현·병합 완료, 36그룹 남음. 전체 Remaining Work 완료 아님.
 - 합성25모듈239 PASS와 별도 정책/export47 PASS, 20정책 정합성PASS·공개준비BLOCKED. 실제 API/사용자Windows/공급사/법률·라이선스/파일럿·동결연구의 새 증거 없음. 웹영향 queued/receipt없음, optional spec review NOT_PERFORMED.
 - 다음: Notion 두 페이지의 AI 완료 및 A1/A3 승인 상태 최소 동기화 → 최신 main 기준 UI 전용 gpt 브랜치와 CURRENT CAS/read-back → 승인된 A1 먼저 병합, A3 이어서 구현·검증. 기존 보고서 원문·수치·AI 자료·공식코드 보존.
+
+### GPT 승인 UI 작업 시작 — 2026-11-06T15:39:50.000+09:00
+
+- AI 완료와 A1/A3 승인 상태를 sapientia Notion Remaining Work·업무기록1105에 최소 수정하고 read-back했다. AI 두 하위 항목만 취소선, 부모 미완료. NOTION_SYNC_QUEUE 계획·성공 기록 보존.
+- 같은 task/execution 아래 main e79ef2c1160242ddf86d5b381e1005f2ad627e16에서 두 격리 sparse worktree/branch를 생성·push·read-back했다: 주 작업 gpt/ui-a1-20261106, 하위 A3 gpt/ui-a3-20261106. 둘의 시작 head는 동일하다. 보호 제외 유지. 첫 origin/main 로컬 참조 불일치로 생성 전 중단 후 실제 fetch 결과 FETCH_HEAD의 검증된 SHA로 수정했으며 코드 변경은 없었다.
+- A1: 기존 CAPTION_ROLE/localized_columns를 활용한 승인 용어·명시적 표시 역할, 지정 Flet 머리글. 순수 용어 변경에는 별도 P0 동작 변경을 만들지 않는다. 필요한 선택 metadata는 기본 no-op와 원문/수치 동일성 조건으로 A1 PR에 포함한다.
+- A3-a: app.py MC 제목→차트→표, bonds.py G1 반응형 지표/KRD 패널, opt-in 내용 기반 표 높이. 기존 ChartStudy 820px 재배치 재사용. A3-b: 기존 glossary만 쓰는 로컬 설명 패널·F1/Esc/초점 복귀·명시적 안전 상세 접힘. 혼합/미분류/가정/합성/지연/실패는 계속 노출.
+- A1을 먼저 CI/PR 병합하고 A3 브랜치에 합친 후 통합 검증한다. 각 하위 branch의 커밋/검증을 이 CURRENT와 STATE에 연결한다. 계산/원문보고서/AI payload/export/공식코드, 연구·실제주문 보호 범위를 유지한다.
 
 ### Claude 인계 원문 (보존)
 
