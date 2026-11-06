@@ -4,9 +4,9 @@ reason: usage_limit_weekly
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1
-next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a/store/1, ⑨-3a/keys/1
-updated_at: 2026-11-06T19:19:08+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1
+next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a/keys/1
+updated_at: 2026-11-06T19:24:14+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-keys-20261106
@@ -527,3 +527,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - source04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069/test5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708/fixture6b11119ae10829514f8c762c6481bdc67c262284e36b2448898a461e699cc5ff 고정. 원래writer1708byte/GL·macro_schema변경없음. 초기private기준값생성기의grid수5/9가정오류와stdlibtime허용누락실패를보존했고원래규칙/제품코드는바꾸지않았다.
 -20정책검토GO,FACTS16줄만추가·다른번호정책/RELEASE그대로;정합성PASS600/publicationBLOCKED. COMPLIANT는기존keyliteral이며승인아님;plannedkeys는실제등록/시행수/identity/비용판정아님. default=str객체효과/JSON키변환/숫자type차이를보존한다. 실제원장·GATEscore·공급사·연구·카드/보호캐시실행없음. 전체T01b/R3/Lab연결·실제증거와선택specNOT_PERFORMED 상태유지.
 - Codec Notion한정완료및store진척두페이지read-back성공(큐40행). StorePR83 전체CI는진행중이며Windows초기신규저장소시험단계성공은전체완료로대체하지않는다. 다음:PR83→PR84각최종CI검증/정상병합/원장/CURRENT·STATE/Notion, 이후안전한부분인수인계에필요한전주기기록정리.
+
+### GPT bounded R3 store completion — 2026-11-06T19:24:14+09:00
+
+- PR #83 final `b5cbf6695b8430f89298e8c96294f2b83c4b0a85` passed exact-head Runtime42198946682 (all6 jobs) and Compliance42198946631; merge `d3f94b81b3e8c6ba0e9bb605d39b4726af62a392` verified in PR/main read-back. LEDGER `9818a212688ad78ac191ef8c91e55fd9db9f1736` records only ⑨-3a/store/1.
+- Isolated synthetic store16+codec17=33PASS0.401s; independent8 overlapping probes PASS0.141s. Windows3.11/3.12/3.14 store16+codec17 OK; real subprocess lock/LF tests are cloud CI, not owner-PC acceptance. All20 policy review PASS597/publication BLOCKED. Partial-write/fsync/unlock uncertainty,32MB single-segment limit, trusted canonical-path/cooperating-writer assumptions retained.
+- Rotation/recovery/cache/human authority/recorder/Lab and full R3/T-RUNREG02/09 remain incomplete. PR84 keys at `246c9af2159880c45f59ed5e895e673be2a8180f` remains active; exact-head final Runtime42201679975 required. Actual Windows/API/provider/legal/license/pilot/frozen-research evidence remains absent; optional spec review NOT_PERFORMED.
