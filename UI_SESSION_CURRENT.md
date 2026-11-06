@@ -1,3 +1,15 @@
+## 2026-11-06 PR82 최신 통합 체크포인트 — 이 상태가 아래 기록보다 우선
+
+- 첫 UI head c028dd96의 Runtime42197290486/Compliance42197290701은 **모두 SUCCESS**. Windows3.11/3.12/3.14, Ubuntu3.12 설치본과 Python3.10/3.11 구문 검사 통과.
+- 검사 대기 중 main이 PR79(금리 언어), PR80(분리된 종목 식별), PR81(run registry codec)을 병합해 7274dedc3977b81546e085c4d0ff933b4188457b로 이동했습니다. FACTS와 source-review의 문서 충돌만 해결했고 양쪽 변경을 보존했습니다. 앱 런타임 코드는 파일 충돌 없이 통합됐습니다.
+- PR82 최신 head **92c7280f599c404c8ebe3eb1b30d2e11881c33c0**, tree **a99ab725639bc1e23b772f6fcb1fb522298b12e7**. 로컬 merge92aec50과 tree 동일 확인. 아직 main에 PR82는 병합되지 않았습니다.
+- 최신 CI: Runtime **42200892322**, Compliance **42200892116** 진행 중. 이전 head의 성공을 최신 통합 head 성공으로 보고하지 마세요. 새 정책 기준선20문서/596소스 PASS, publication BLOCKED 유지. 새 main 금리/식별/codec+정책 로컬 검사는 /tmp/qg-main-integration.log에서 진행 중입니다.
+- 다음: 위 최신 head CI조회 → main이 추가로 바뀌지 않았는지 확인 → expected_head_sha=92c7280f...로 PR82 merge → docs/product/ui_website_updates/PR-82.json 기록 → 이 파일과 WEBSITE_AWS_HANDOFF 최종화 → 사용자 CMD 실행법 보고.
+- 대기 중 임의로 main에 새 코드를 덧붙이지 않습니다. CURRENT/LEDGER/AUTO_STATE는 메인 소유 그대로입니다. 공유 기록 저장이며 직접 채팅 전송 영수증은 없습니다.
+- 최신 수정본/프리뷰/실행법은 /workspace/work/quantgen-font-clarity-20261106 및 /workspace/artifacts/quantgen-ui에 있습니다. 사용자 보고에 ‘북딱북딱’ 한 번 포함. 웹 HTML GitHub 게시와 AWS로그인 재요청 금지 유지.
+
+---
+
 ## 2026-11-06 기업 마크·표 가독성 PR82 — 구현/로컬 검증 완료, CI 진행 중
 
 - https://github.com/xkg4real/quantgen/pull/82 ; branch gpt/font-clarity-20261106, source c028dd96b77a4c560d83bf115c6a095c81e193b0. 원격 tree6881f13e0f864622a8512dc4ab62ec3b854c6383는 로컬355cc50과 동일합니다. 아직 main 병합 전입니다.
