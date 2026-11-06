@@ -78,7 +78,7 @@ Source labels, provider choices and warning semantics are not removed.
 
 ## Verification and remaining evidence
 
-The focused modules are `tests.desktop_a3_layout_acceptance` (five tests) and
+The focused modules are `tests.desktop_a3_layout_acceptance` (eight tests) and
 `tests.desktop_a3_reading_acceptance` (12 tests). The former checks title
 order, real row counts, wide/narrow layout, larger fonts and empty/reset
 results, while comparing values, charts, reports and commentary inputs. It
@@ -137,8 +137,40 @@ The final strengthened edge regression passed1 test (13.314s); it overlaps that
 suite. Separate Strategy/chart regression passed10 tests (6.731s, exit0).
 Exact-head Windows CI must pass before merge; these Linux checks do not replace it.
 
+The second Windows run42182474082 (head af782be) still failed: the inspected
+Windows3.11 cases reported MC's own minimum width1014 and page overflow284/294.
+The inactive-tab correction remains useful, but did not solve the form's own
+width constraint. A fixed three-column form with minimum-contents-length12
+combos passed an intermediate18-test Linux run; an independent18px enlarged
+combo render still overflowed14px. Neither result is treated as Windows success.
+
+The nine existing MC fields now opt into `ResponsiveFieldGrid`. The grid chooses
+three, two or one column from actual caption/control minimum widths and spacing,
+recalculating after language, font, style and width changes. It reports the real
+one-column minimum so the enclosing page can narrow before reflow. It moves the
+same widgets in their original reading order and preserves the Tab sequence
+through the Run button. It does not reduce a control's real minimum or change
+any input, choice data, report, exported record or AI payload.
+
+Source/model/drift dropdowns use the existing shared-header sizing policy,
+including minimum contents length12, full popup labels and current-text tooltip.
+Long synthetic captions test the hint calculation independently of installed
+Windows fonts. A separate18px MC regression checks strict zero horizontal scroll,
+actual control edges/minima, reading and Tab order, evidence preservation and
+three-column restoration at1360px. A widget-only1→2→3→1 reuse test checks every
+original widget/value and right/bottom bound; it is not a physical Windows test.
+
+The responsive-form correction passed the final20-test guarded layout/reading
+suite (96.156s, exit0). Its counts overlap earlier runs and are not additive.
+An independent actual-host diagnostic also passed (30.934s, exit0):10 EN/KO
+geometry cases at1000/1360px with default or18px combo text, including two
+Linux Qt Windows-style probes. All had zero horizontal overflow, preserved
+field/chart/table bounds, complete popup text, real keyboard change/restore and
+Tab order, unchanged report bytes/results/AI inputs. Linux's Windows style is
+not a Windows runtime or physical-PC result.
+
 The runtime packaging workflow runs the two A3 modules in their own offscreen
-step. Adding that step is not evidence that CI passed: consult the checks for
+step, now immediately after the same pinned PyQt6==6.12.0 installation. Adding that step is not evidence that CI passed: consult the checks for
 the final PR head after A1 integration. Physical Windows installation, user-PC
 DPI behavior, manual keyboard/screen-reader acceptance and any broader manual
 capture matrix remain separate evidence. These checks also establish no real

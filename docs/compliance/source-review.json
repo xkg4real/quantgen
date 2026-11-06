@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "1cf52697d806ad4d492e47722b54dec3cb93bb8b35fd3f24566c7408aacd3848",
+    ".github/workflows/runtime-smoke.yml": "468e7f383bb76f9055eb2240ee1a472795c01b14c52e326831196f8f978cd0a6",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -259,13 +259,13 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "bc775cddb22f0a890ce6a048aceaec9b24db1cf5e6620cce3a43daf082bb4263",
+    "docs/compliance/FACTS.md": "13e15f178d79b0fde0719e343999df3de0dbdfeba9496c3982d43443c09e12b0",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
-    "docs/compliance/RELEASE_GAPS.md": "648ed8d34f6f1561785d4f796a3ecf40c76b87fea926550272fccece5a0c134b",
+    "docs/compliance/RELEASE_GAPS.md": "a5d357db9e2e6938f09d35a6a385a642dd2809a3ac43e4c96f23df16b4bc31bf",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
-    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "76e29d092e101a51049fe39c78e10a0385566f6ab776163d4fd3afe781b2d845",
+    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "087d82bb21c64d8949debf38fdc86b5ef6522bb361962422fc5a01883af7b634",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -324,7 +324,7 @@
     "pyproject.toml": "77589c755d38fe9bc4316841b4a4b69b1dd807f532c211d16d1658e1540926d4",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "43d3c91efbce15b29f588a82a23e4df39dd9093dbf1469cb7d78c6e065568e8e",
+    "quantgen_desktop/app.py": "056d5a2259f418ac7a13bc687697d59f54f54885bf164e7961d48b03cb1973eb",
     "quantgen_desktop/bonds.py": "609e60e2497ac734cfe9ff4a6663910218014fe7828152f0b31f48040487cac6",
     "quantgen_desktop/bonds_portfolio_narrative.py": "008ff36812f8b26317929feae9731604798cd6e43850dfe72e99bb7eadb3841a",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
@@ -355,7 +355,7 @@
     "quantgen_desktop/reading_language.py": "ee8a55044482598fbcece2dfde3fca73e9b4ff9b2405db13c16dc2c0bc911adf",
     "quantgen_desktop/reading_panel.py": "93cb0202f6a2ffbe8d80340554ef4340f207b4a3d1e53bda4e1f96f5fa4778d1",
     "quantgen_desktop/report_actions.py": "fbf48c2350434f8c4e953fd1efd99ed666f60e74e6da5154bb529a43ec50115d",
-    "quantgen_desktop/result_layout.py": "ad9300648be6cda9af5cd31573e50835802bcb991bf818a8a7fa5b8bb8a4249f",
+    "quantgen_desktop/result_layout.py": "68322297edde73a262b4b6eb3f3959d65571a8d2ebf6e0fab3893e8088af4ee5",
     "quantgen_desktop/signals.py": "42c35b809cbb3b2ca20be1d2103f405a4e7564ac9678673d39fa26368bfd96ef",
     "quantgen_desktop/status_language.py": "e23a11eb835b155bfc88685ea0f521e664b8b7fc080ce3f600042b1002427386",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
@@ -385,7 +385,7 @@
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_a1_status_acceptance.py": "e921669fc62347f09913c87db2d3aae5cca89d3eb45461371a93f061e566fb3a",
     "tests/desktop_a1_terms_acceptance.py": "e2b93cfbd295df742d218e893dd586d8b6b23fd7a63ac75877f2e7b4717b4280",
-    "tests/desktop_a3_layout_acceptance.py": "dbe303fce99664d4f39191c7fc32505bb0d337170fd27c09d5ea0ef76b42ad53",
+    "tests/desktop_a3_layout_acceptance.py": "12c431696f0029fa72c6381e01547f48808973b4b6906a4cfe3b4f8531094444",
     "tests/desktop_a3_reading_acceptance.py": "84d69d2df57bf9592ec5dff00c0df32b24dcc454e06d539e330e3964382ae847",
     "tests/desktop_acceptance.py": "922f93afe5bb0bbc852bc95df31cb52beb317e9121c192d7484debecdda9291d",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
@@ -593,163 +593,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "423ba73c5f176f55cf94d178c2278d1989ad6c965ef49dbbe2d18a6e5e8d2837",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.724066+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "1568d788c25f677faa624d97804b0029175f85bb04d34bec1bfc8bb268aa5dd5",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.800414+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "423ba73c5f176f55cf94d178c2278d1989ad6c965ef49dbbe2d18a6e5e8d2837",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.726316+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "1568d788c25f677faa624d97804b0029175f85bb04d34bec1bfc8bb268aa5dd5",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.802923+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "8223ec1a55d6e076d9796b5c8e287909a61a42f0e4505c080a30351a05758293",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.728485+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "eb0a7c4bd87541e7709328d0000f897bebf6d6f1217b22681f7aa2bb7b95ebcb",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.805107+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "f3cc7270d7ba564bd75e157397f37b2e37a06f9d85330260015e2f4abdca6639",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.730487+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "c8e96ff750c09c220890392d42ff13687452a58327b3312f7684740df337eca0",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.807188+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "9e9155e6032957878cf8745741f954b6da1626f1407f7ff5e494f937790ad2bf",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.732592+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "011c4c61002d5984c75afaf39500af213dbcc0145c0eed24953c1a04bfc03ade",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.809237+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "ac5ba6ed6b1c4989d3699f25988139e068a724655bb0d5107b5f9b4e27f28a1f",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.734473+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "3b472f0ead00b64111a2d14297c27edb333c28a8ce3a9d8917f09066f06dbbb6",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.811579+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "423ba73c5f176f55cf94d178c2278d1989ad6c965ef49dbbe2d18a6e5e8d2837",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.736665+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "1568d788c25f677faa624d97804b0029175f85bb04d34bec1bfc8bb268aa5dd5",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.813777+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "ac5ba6ed6b1c4989d3699f25988139e068a724655bb0d5107b5f9b4e27f28a1f",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.738486+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "3b472f0ead00b64111a2d14297c27edb333c28a8ce3a9d8917f09066f06dbbb6",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.815783+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "95d6b93c9b08b2f40bbaeb5ad9efac8c5787b269919a7893bae70b1e2ad0bce0",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.740826+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "5b6e3bcf17742ee5020329dbc0818810d83072b8fea6640f2c46aa40cb9b302d",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.818056+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "facc38a54e89dc940c42aaa9389d7a51faec9d2c2a2157432119dd8c31db425b",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.742823+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "53ac86e28fe15d02bfe27bb55e58d84d98bbc497724e428de3e45d68dff4fdab",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.820038+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "685b29e40da38f0a0ccfa6d5b122c07d65231438400cde440543a919ad58aba0",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.744983+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "c7677c91f40e854579a92beef805271dae1667674d2f0290f8f3a38fd8c8de68",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.822139+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "12": {
       "document_sha256": "2ef966b2023cb3c617984d29c2f076423625c5624f6fdc7d8c57f4e2f36fb3a4",
-      "source_digest": "cc692eb9c95a8c925f9fd6e3d70725573660fe79e976eca187d448bc3dc475b8",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.747260+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "1f2dbc1bafd5ee80f7249914766d6240a373c87a8a159a265dd9b00c807c326d",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.824327+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "95d6b93c9b08b2f40bbaeb5ad9efac8c5787b269919a7893bae70b1e2ad0bce0",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.749316+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "5b6e3bcf17742ee5020329dbc0818810d83072b8fea6640f2c46aa40cb9b302d",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.826398+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "95d6b93c9b08b2f40bbaeb5ad9efac8c5787b269919a7893bae70b1e2ad0bce0",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.751419+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "5b6e3bcf17742ee5020329dbc0818810d83072b8fea6640f2c46aa40cb9b302d",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.828616+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "15": {
-      "document_sha256": "470bda66a33c2bdc9ff299940db8390750b54e0c73c978eff31abe5190f0df69",
-      "source_digest": "95d6b93c9b08b2f40bbaeb5ad9efac8c5787b269919a7893bae70b1e2ad0bce0",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.753532+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
+      "source_digest": "5b6e3bcf17742ee5020329dbc0818810d83072b8fea6640f2c46aa40cb9b302d",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.831076+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "ee853bd4a448c67b977509680cd48df6f813ca37a104d994462ecb38acce27e1",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.755465+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "57d1ccde135e6e9580f01048a5c69487368b47e0e9edfb76cf47f9d78358a920",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.833239+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "ac5ba6ed6b1c4989d3699f25988139e068a724655bb0d5107b5f9b4e27f28a1f",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.757326+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "3b472f0ead00b64111a2d14297c27edb333c28a8ce3a9d8917f09066f06dbbb6",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.835293+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "423ba73c5f176f55cf94d178c2278d1989ad6c965ef49dbbe2d18a6e5e8d2837",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.759260+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "1568d788c25f677faa624d97804b0029175f85bb04d34bec1bfc8bb268aa5dd5",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.837161+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "6beb0c5f590ab3b9d1f6eac11458f992db38eda64b4c8557008f7e6e5d1275b0",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.761127+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "a80eaadab473d29fcc0d49e54b7755acdeb6a49e8944f5b41e7760f434ab8e1d",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.839324+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "423ba73c5f176f55cf94d178c2278d1989ad6c965ef49dbbe2d18a6e5e8d2837",
-      "reviewed_by": "GPT A3 inactive-tab fix and independent policy review",
-      "review_note": "Reviewed Quant selected-page sizing, strict zero-overflow and visible-child bounds, selected Strategy minimum preservation, immutable report and AI evidence, original Windows failure and distinct Linux reproduction, all twenty policies; actual Windows CI and public readiness remain separate.",
-      "reviewed_at": "2026-11-06T07:40:39.763026+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "1568d788c25f677faa624d97804b0029175f85bb04d34bec1bfc8bb268aa5dd5",
+      "reviewed_by": "GPT A3 responsive MC source and policy review",
+      "review_note": "Reviewed measured field minima and reflow, keyboard order, unchanged result and AI data, full option access, repeated failure evidence and preserved publication conditions.",
+      "reviewed_at": "2026-11-06T08:15:00.841350+00:00",
+      "source_commit": "af782bec1116ce994c800ecb7ce869acd64e885f"
     }
   }
 }
