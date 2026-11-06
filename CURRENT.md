@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19
 next_ids: ⑬-2/a3, ⑬-2/a1, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T16:05:14.000+09:00
+updated_at: 2026-11-06T16:18:02.000+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/ui-a1-20261106
-work_commit: 2715d9e1aaee0d303ee483d11b9e6669459aa871
+work_branch: gpt/ui-a3-20261106
+work_commit: 67a883875ca0a8242e880246ea2a009e688978f4
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/76
+pr: https://github.com/xkg4real/quantgen/pull/77
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -90,6 +90,13 @@ A1/A3 완료 ID는 아직 기록하지 않는다. 다음은 A1 코드 검토·�
 - 20모듈 합성 통합 167 PASS(exit0), 독립 구현 검토와 조사 오타 수정, 20정책 소스 정합성 PASS(577 source files)/공개 준비 BLOCKED. 원문 보고서/수치/ID/AI payload 보존 시험 포함. PR75 웹 queue는 확인된 병합/CI 결과로 갱신했고 전달 상태는 queued/receipt 없음 유지.
 - A3 동일 실행 하위 브랜치 gpt/ui-a3-20261106은 로컬 WIP다. G1 MC/채권 배치, 로컬 용어 설명, 순수 Macro 출처만 접힘 구현. 독립 검토가 같은 행 수 결과 변경/선택 문구 변경 시 이전 인용이 남는 결함을 재현하여 수정 중. 기존 responsive forced-overflow 사전조건 실패는 기준 브랜치에서도 재현되어 별도 기록; 전체 통과로 주장하지 않는다.
 - 다음: A1 exact-head CI 후 선병합/원장/Notion. A3 결함 수정·A1 통합·합성 최종 검사·PR/CI/병합을 이어간다. 실제 Windows 사용자PC/API/법률/라이선스/공급사/파일럿·동결연구 증거 없음; 선택 GPT/Gemini spec review NOT_PERFORMED.
+
+### GPT A3 통합 PR·다음 독립 표시 수정 — 2026-11-06T16:18:02.000+09:00
+
+- A3 구현 c6e76c6, A1 통합 e33063bca435edea502c985b75c42535846bedcd, 정책/검증 1131301580bb8e4c3c7a70ed7445066384167ad5, PR77 metadata 최종 head 67a883875ca0a8242e880246ea2a009e688978f4를 push/read-back했다. A1 PR76(2715d9e) 선병합 후 A3 PR77을 병합한다. 두 PR 모두 아직 필수 Runtime CI/병합 결과 확인 중이며 완료 ID는 추가하지 않는다.
+- A3 14모듈 통합 131 PASS(exit0,302.857s), 20정책 정합성 PASS(583 source files)/publicationBLOCKED. 인용 staleness/복귀 셀 결함을 재현·수정. 실제 호스트의 12좁은 위치/4넓은 도킹 진단 통과 및 합성 캡처4개 확인; 원문 보고서/수치/AI payload 보존. 기준선에서도 실패한 responsive forced-overflow 사전조건은 별도 실패 이력을 유지했다.
+- 동일 task/execution 하위 독립 작업 ⑫-1 표시 정합성: gpt/status-display-20261106을 검증된 67a8838에서 생성·push/read-back. 이 하위 브랜치도 execution_id 6c40bb4c-51a4-439b-a64d-0233051168ab, task claude-resume-20261103, 동일 handoff ID에 속한다. 로컬 worktree /workspace/work/quantgen-status-display-20261106. 아직 코드 수정 없음. 검증된 status snapshot의 기존 OWNER_APPROVED 소유자 출시 결정을 hardcoded NOT_APPROVED로 덮는 Native/Flet 표시만 수정한다. 기술/연구 준비와 실제 배포는 별도 표시하고, 검증 실패 시 승인값을 추정하지 않는다. 기존 승인 규칙·스키마·연구 어댑터·실제 주문 경로는 변경하지 않는다. ⑫-1 부모 전체 완료가 아니다.
+- 다음: A1/A3 exact-head CI와 원래 순서 병합·원장·Notion, 병행하여 ⑫-1 표시 전용 하위 수정/합성 검증. 실제 Windows PC/API/공급사/법률/라이선스/파일럿·동결연구 증거 없음. 추가 GPT/Gemini spec 심사 NOT_PERFORMED, 웹 queue는 전달/배포 영수증 없음.
 
 ## 1. 목표와 완료 조건
 
