@@ -2,7 +2,7 @@
   "id": "PR-89",
   "source_pr": "https://github.com/xkg4real/quantgen/pull/89",
   "source_branch": "gpt/compact-ui-final-20261107",
-  "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8",
+  "source_commit": "2f336a363210176b9309fed6aaa3e571630ab4b7",
   "summary": "Hinted Korean font; content-width categories, forms and tables.",
   "changed_files": [
     "quantgen_desktop/app.py",
@@ -23,7 +23,8 @@
     "local_ui": "19 PASS incl corrected regressions and actual Hangul hint instructions; original31-run29passed, two corrected fixture preconditions rerun successfully",
     "packaging_policy": "50 PASS",
     "preview": "KO/EN, light/dark,1000/1360/1920,100/125/150% offscreen PASS",
-    "limitations": "Actual Windows display and remote runtime matrix require separate results; no KIS account or website deployment claim"
+    "limitations": "Actual Windows display and remote runtime matrix require separate results; no KIS account or website deployment claim",
+    "remote": "Compliance42245900905 success; Runtime42245900881 still in progress at handoff"
   },
   "website_impact": {
     "classification": "native-only source; browser review required",
@@ -35,5 +36,7 @@
     "reason": "No supported direct chat messaging tool; shared handoff is not a delivery receipt."
   },
   "website_application": "unverified",
-  "deployment": "unverified"
+  "deployment": "unverified",
+  "merge_commit": "6a09d3fd367cfc14fd62378deed8c441001c6e1b",
+  "merge_status": "merged"
 }
