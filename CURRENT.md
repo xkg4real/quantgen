@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T17:20:47+09:00
+updated_at: 2026-11-06T17:22:12+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
@@ -387,3 +387,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - 같은 task/handoff/execution 아래 `gpt/identity-resolver-20261106`을 검증된f7b4a73fa08733b007b7ab499cbf377ab9970837에서 생성·push/read-back했다. worktree=/workspace/work/quantgen-identity-resolver-20261106, 기존보호sparse제외 유지. 코드수정은 이CAS/read-back 후 시작한다. 주작업A3/상태표시/Rates CI와 병합순서는 유지한다.
 - 계약00d32eb의 PR_B_IDENTITY_DESIGN/17제안과 현행 안전한symbol-directory를 대조했다. 기존첫매치lookup을진실로쓰지않고 호출자가 제공한 명시적metadata/alias만 사용한다. 원문symbol/provider/quote/nullablevenue/registryversion·typed UNKNOWN/AMBIGUOUS/UNSUPPORTED_COST를 보존하며 suffix/알파벳만으로 추정하지 않는다. 제안fixture는 실제공급사증거가 아니므로 양성검사는 명시합성registry로 제한한다.
 - 새 비동결 독립모듈·tests만 구현한다. validate.py, core/quant/instruments.py, 동결harness/비용숫자/최대floor/기존연구/판정/실제주문/데이터routing/원장에는 연결하거나변경하지 않는다. 실제비용integration, 공급사identity확인, 새동결package·prospective study는 별도 미완료다. 추가spec심사NOT_PERFORMED 유지.
+
+### GPT 상태 표시 최종 A3 통합 push/read-back — 2026-11-06T17:22:12+09:00
+
+- PR78 하위 branch `gpt/status-display-20261106` 최종 `d1a62a23b1c1d4f53657f5066e0bb75338b01bd3` push/read-back. f7b4a73를 정상병합했으며 make_system=fa7c211, make_quant=f7b4a73 및 A3 helper/tests 동일성 확인. 통합 4모듈41PASS96.053s exit0,20정책정합성PASS586/publicationBLOCKED. 앞선 존재하지않는 테스트모듈명 호출의 loader1ERROR는 기록보존 후 정확한 이름으로 전체통합 재실행했다.
+- 아직 최종head CI/PR77 선병합 전이므로 ⑫-1/display-owner-decision 완료행/취소선 없음. RatesPR79에 이 정상병합을 이어 적용한다. A3 자체는 f7b4a73, Runtime42186371159 진행/Compliance42186371128성공이며 부분step성공은 전체CI로 대체하지 않는다.
+- STATE 진척 원자저장 때 JSON끝에 literal줄바꿈문자열을 쓴 직렬화 오류를 즉시 교정하고 기존전체객체·이력보존/파싱/read-back을 확인했다. OS flock PID58256 연속유지. 원격소유권/execution은 바뀌지 않았다.
