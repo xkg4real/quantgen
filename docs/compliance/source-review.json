@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "5dd2afd4a24b39dd3d63e348b7b58f1a4912f4db80fd4b9488c53bb737c9397a",
+    ".github/workflows/runtime-smoke.yml": "66b51feca34d7a1e8bfa53785c717555db7b8413aa08f153f3acd364a08a06eb",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -151,6 +151,7 @@
     "core/quant/risk.py": "30ed7606cb181e0d4bba3ab984fe231e19fe6b3e293b063cf4640c909d2ad6f7",
     "core/quant/risk_layer.py": "9ca19aa23c50a01527aa08842c06bd92f311b535628ce62cb87509ba6238ba84",
     "core/quant/run_registry_codec.py": "fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a",
+    "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
     "core/quant/run_registry_store.py": "77522bd80cb158bfac8b400435ede567c35514779ee37006be1007e8094a5eae",
     "core/quant/scenarios.py": "e65dda28f6cb9a3cd29cab547ae1093f556aa0e467f2c86b9d3c616090fbd205",
     "core/quant/signals.py": "d033d0f146e45ac59db6e1125a2b2256cc96c9c1744093e954adf45e2ccec64a",
@@ -263,7 +264,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "3641588d604a5915ad63c992167b5e10a69f88a1e70a8ea0116c85953de9b9e2",
+    "docs/compliance/FACTS.md": "af344b9c28d0cf34cdc94a69f44fc1ceebcbb374a2a8f1022382c94d36613392",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -309,6 +310,7 @@
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
+    "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
     "docs/product/R3_SINGLE_SEGMENT_STORE_2026-11-06.md": "f49c6627c6744aec23c46e218be3579b8e91c6f4892862695f44b5fcadb76c1f",
     "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "9082a26aaf303662283b7aadd56e63b3017aab8a30ebefe7cd54db62493d4ca2",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
@@ -521,6 +523,7 @@
     "tests/research_home_acceptance.py": "a6ba826451e019e3bec8cbc145c3e89878b6e01caa6b976266af0e722f19b157",
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
     "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
+    "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
     "tests/run_registry_store_acceptance.py": "f54ca736727a198d7a15cc1996a66fbb966977cd8ecd4230c1b54f22e4ce6110",
     "tests/runtime_syntax_acceptance.py": "174dd84c35a1085a271baa27c0a8e651b519af0e348d912e62a6453027d94e7e",
     "tests/sabr_diagnostics_acceptance.py": "934edacf62c87d572930e9f824120c22dd98dfe0ddc5257e08645b704670e07f",
@@ -607,163 +610,163 @@
   "reviews": {
     "1": {
       "document_sha256": "7ffeb30cbf22092284b48635e1769018e2259ea44c1a5647ac50ecaf3f815d63",
-      "source_digest": "1ab43c602e56cd934e26512a5f1510de6a138afdf267a62f0cc22f5d610f9f46",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.174234+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "bd71f0df2ac1c37d042939ed652595dc05ae88b12fb81f0b218dfd86d932ad5f",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.627602+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "1ab43c602e56cd934e26512a5f1510de6a138afdf267a62f0cc22f5d610f9f46",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.176775+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "bd71f0df2ac1c37d042939ed652595dc05ae88b12fb81f0b218dfd86d932ad5f",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.630436+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "d91e98f31f352bf52be3c2d7889527e7e7361218839796152aa73c7ce45b76b6",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.179082+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "a835cd4cd9b8aa4a3e8faa9c79e922b78e5052ca663af48c891961a6a7a8de26",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.632794+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "ae33e3e5401f7a188748ccf23878e6b2479ae2051e2ced004b9804fe44d91cde",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.181119+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "d87babe5650c1f067c243d82827f6f4a261d4d16ea8ac5cfd938e297bdc74d89",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.635003+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "694feb29ebf3441a0c55b9d797dc215379ade94a74b29480d3491f6dbcaaf7d0",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.183233+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "36d04028df9d177534eadbd23a07cd2aced11949e47bef9e7c929a150201493d",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.637197+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "9382e90daaa4d182955722991f88fcefae9ca8fc66736efbae750851d296aa01",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.185261+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "d3cdc2312b2cf412a70898aafda47124e258a49ce5921b9ce8cb21b0b2f908fc",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.639323+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "7": {
       "document_sha256": "cb99e2df664cbc0f5b4efa73259e32809a6a601fe4b64e08105020291a45932b",
-      "source_digest": "1ab43c602e56cd934e26512a5f1510de6a138afdf267a62f0cc22f5d610f9f46",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.187409+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "bd71f0df2ac1c37d042939ed652595dc05ae88b12fb81f0b218dfd86d932ad5f",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.641707+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "9382e90daaa4d182955722991f88fcefae9ca8fc66736efbae750851d296aa01",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.189689+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "d3cdc2312b2cf412a70898aafda47124e258a49ce5921b9ce8cb21b0b2f908fc",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.643817+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "4ce35ab11a2600edff210d94743ac17030b27095a92db5d136573c6bb46771c4",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.192005+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "2125ab268fe4e95d7a08fd0e3e54fb906f6378b53fd54d50a94c21140a106837",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.645834+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "e8c3a1ef6a6aaf7954a6b666d436589f14daf6e2ec462045b412a8630befa3e5",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.194361+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "d4cfa3d2393fb02a92efc5a4dfd2a12ad05b67895aca9afe4dfccd07d34592db",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.647864+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "42297d89dabea5789696b138fce561cbf6ea0d06a19caed1e6871dca4b0c1f38",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.196327+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "747b20cfdb98efd65d004eca21e2f01b7afcdbf39026edbc59709e99e27a0271",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.649956+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "94665c5ed767439d52d45c964aa15ca8af1b0da95dd98283d98abe783b43debb",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.198344+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "f27a83de7275e127a5ea0724c6718bb57fe34ae31e21bbe11fb4a88e160c2f0c",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.652268+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "4ce35ab11a2600edff210d94743ac17030b27095a92db5d136573c6bb46771c4",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.200507+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "2125ab268fe4e95d7a08fd0e3e54fb906f6378b53fd54d50a94c21140a106837",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.654231+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "4ce35ab11a2600edff210d94743ac17030b27095a92db5d136573c6bb46771c4",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.202648+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "2125ab268fe4e95d7a08fd0e3e54fb906f6378b53fd54d50a94c21140a106837",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.656439+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "4ce35ab11a2600edff210d94743ac17030b27095a92db5d136573c6bb46771c4",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.204640+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "2125ab268fe4e95d7a08fd0e3e54fb906f6378b53fd54d50a94c21140a106837",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.658906+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "c3cdd18c120e966ec446e1de3bf04e5042e2e38fcfe363ca3884d70ee327f135",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.206506+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "63e7c3fe8b35cfc898b78ea35edcde87b8b87a5e16567a4cd53df750081e49ba",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.660960+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "9382e90daaa4d182955722991f88fcefae9ca8fc66736efbae750851d296aa01",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.208643+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "d3cdc2312b2cf412a70898aafda47124e258a49ce5921b9ce8cb21b0b2f908fc",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.663203+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "1ab43c602e56cd934e26512a5f1510de6a138afdf267a62f0cc22f5d610f9f46",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.211334+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "bd71f0df2ac1c37d042939ed652595dc05ae88b12fb81f0b218dfd86d932ad5f",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.665230+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "22a9e5497551038a52412823f4f35290d0c3ce0f296966b1f4eabb3858c532df",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.213456+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "b8db509bbc94e0416feb4cf4e5f13b18031684c68c70693f7a27c2b19bb05d1a",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.667806+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     },
     "20": {
       "document_sha256": "b84d55ab085dad8cb897528f1cda017a96eeb41e68188bd350f13fcb02ea0f88",
-      "source_digest": "1ab43c602e56cd934e26512a5f1510de6a138afdf267a62f0cc22f5d610f9f46",
-      "reviewed_by": "GPT detached R3 store implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen store source and tests. Minimal01 privacy07 retention20 deletion and FACTS additions reflect explicit raw caller-path artifacts and uncertain append, no encryption or automatic deletion. Guarded16store plus17codec tests passed and8 overlapping independent probes passed. Cooperative single-segment scope only; Windows and final full CI required, full R3 open and publication blocked.",
-      "reviewed_at": "2026-11-06T09:56:53.215478+00:00",
-      "source_commit": "f3d6c5e2a0de766ab79a73d392eb77bd307c9862"
+      "source_digest": "bd71f0df2ac1c37d042939ed652595dc05ae88b12fb81f0b218dfd86d932ad5f",
+      "reviewed_by": "GPT detached R3 key implementation and policy reviewer",
+      "review_note": "All20 policies reviewed; FACTS-only append. Pure planned key recipe preserves historical writer behavior without production imports or writes. Maintained13 tests, independent7 probes and historical generator1 test passed separately; actual current writer compared only with explicit guarded synthetic temporary ledgers. Metadata, literal COMPLIANT, default-string callback, coercion and numeric-type limits documented. Full R3 and final Windows Ubuntu CI still required; publication blocked.",
+      "reviewed_at": "2026-11-06T10:18:10.669925+00:00",
+      "source_commit": "b5cbf6695b8430f89298e8c96294f2b83c4b0a85"
     }
   }
 }

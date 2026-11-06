@@ -1,0 +1,2338 @@
+{
+  "cases": [
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":126,\"rule\":\"sma\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "84ee3ff3d68c987c76a79418a7682453",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":126,\"rule\":\"sma\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "a47ec2889a2ff574b2c96a0ca585dc70",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":210,\"rule\":\"sma\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "52be6d54091d48761a70d35230d919f8",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":210,\"rule\":\"sma\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "7dbd7e6433453bf603c239c8046e14b7",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":252,\"rule\":\"sma\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "8422c6101af8770f8c67adcb30098365",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":252,\"rule\":\"sma\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "269ec32b5d75a09005a98f5ff5f3efff",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":126,\"rule\":\"tsmom\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "727fde31ccd110022dd0d72931116ebb",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":126,\"rule\":\"tsmom\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "8208e52a0ce787c2c7fc21999ecae0e8",
+          "theta_index": 7
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":210,\"rule\":\"tsmom\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "3159ae563654c3c3fe9c8ef039684aad",
+          "theta_index": 8
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":210,\"rule\":\"tsmom\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "be304eb5062f5c317c34700d38b85a60",
+          "theta_index": 9
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":252,\"rule\":\"tsmom\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "42a6fb6b96722a185c24380ad96a165c",
+          "theta_index": 10
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":252,\"rule\":\"tsmom\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "b6d713761537b6e4ebc7de7a9f3030f6",
+          "theta_index": 11
+        }
+      ],
+      "expected_registrar_return": 12,
+      "family": "trend_switch",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "lookback": 126,
+          "rule": "sma",
+          "step": 21
+        },
+        {
+          "lookback": 126,
+          "rule": "sma",
+          "step": 42
+        },
+        {
+          "lookback": 210,
+          "rule": "sma",
+          "step": 21
+        },
+        {
+          "lookback": 210,
+          "rule": "sma",
+          "step": 42
+        },
+        {
+          "lookback": 252,
+          "rule": "sma",
+          "step": 21
+        },
+        {
+          "lookback": 252,
+          "rule": "sma",
+          "step": 42
+        },
+        {
+          "lookback": 126,
+          "rule": "tsmom",
+          "step": 21
+        },
+        {
+          "lookback": 126,
+          "rule": "tsmom",
+          "step": 42
+        },
+        {
+          "lookback": 210,
+          "rule": "tsmom",
+          "step": 21
+        },
+        {
+          "lookback": 210,
+          "rule": "tsmom",
+          "step": 42
+        },
+        {
+          "lookback": 252,
+          "rule": "tsmom",
+          "step": 21
+        },
+        {
+          "lookback": 252,
+          "rule": "tsmom",
+          "step": 42
+        }
+      ],
+      "is_pairs": false,
+      "name": "trend_switch_all_grid_cost_int",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50.0,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":126,\"rule\":\"sma\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "05c515273e260974edeba65a08aaebed",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":126,\"rule\":\"sma\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "1ea549f745aaf89937bbf1783a2bfcfb",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":210,\"rule\":\"sma\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "fd3a1137ba674ac28228b4a66fa967d8",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":210,\"rule\":\"sma\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "6521fdd07e7e57aff6f34506004eae8b",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":252,\"rule\":\"sma\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "8de97f4ed0ca60fda0e18873a77e9d74",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":252,\"rule\":\"sma\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "770de96ce70eeb2c8c5187407687322e",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":126,\"rule\":\"tsmom\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "e36bde115a97fe53a2a9de2cdf870fe6",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":126,\"rule\":\"tsmom\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "a6373e9d885921bb32a5ff138ac46c10",
+          "theta_index": 7
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":210,\"rule\":\"tsmom\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "31cec47155084c998a72d650c197f8ea",
+          "theta_index": 8
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":210,\"rule\":\"tsmom\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "30544cf99ef27697b37e9041f71b1dbc",
+          "theta_index": 9
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":252,\"rule\":\"tsmom\",\"step\":21,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "d69fc84ebf056e43b78f4b65e929dfca",
+          "theta_index": 10
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"lookback\":252,\"rule\":\"tsmom\",\"step\":42,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "098faf0f0e6a9de9ffd9db903923fee9",
+          "theta_index": 11
+        }
+      ],
+      "expected_registrar_return": 12,
+      "family": "trend_switch",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "lookback": 126,
+          "rule": "sma",
+          "step": 21
+        },
+        {
+          "lookback": 126,
+          "rule": "sma",
+          "step": 42
+        },
+        {
+          "lookback": 210,
+          "rule": "sma",
+          "step": 21
+        },
+        {
+          "lookback": 210,
+          "rule": "sma",
+          "step": 42
+        },
+        {
+          "lookback": 252,
+          "rule": "sma",
+          "step": 21
+        },
+        {
+          "lookback": 252,
+          "rule": "sma",
+          "step": 42
+        },
+        {
+          "lookback": 126,
+          "rule": "tsmom",
+          "step": 21
+        },
+        {
+          "lookback": 126,
+          "rule": "tsmom",
+          "step": 42
+        },
+        {
+          "lookback": 210,
+          "rule": "tsmom",
+          "step": 21
+        },
+        {
+          "lookback": 210,
+          "rule": "tsmom",
+          "step": 42
+        },
+        {
+          "lookback": 252,
+          "rule": "tsmom",
+          "step": 21
+        },
+        {
+          "lookback": 252,
+          "rule": "tsmom",
+          "step": 42
+        }
+      ],
+      "is_pairs": false,
+      "name": "trend_switch_all_grid_cost_float",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.08,\"window\":22},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "861e59a8f4820df2d0e3e3e3d6a22e9b",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.08,\"window\":44},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "13260308b83335a001db1b114789c341",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.1,\"window\":22},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "ed02d55cc90ca615628f9d049979f89d",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.1,\"window\":44},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "fecb010d3fb73ac787140cc681f20394",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.12,\"window\":22},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "9cb404a2b5bd72233a15a3faa74dcfba",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.12,\"window\":44},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "98625e352daa7c088c512baba125ac85",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.15,\"window\":22},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "7b08611e0bee4b420324bfc56316eca0",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.15,\"window\":44},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "57decae3028dd8e2416fdd8cb9a9f96e",
+          "theta_index": 7
+        }
+      ],
+      "expected_registrar_return": 8,
+      "family": "vol_target",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "step": 21,
+          "target": 0.08,
+          "window": 22
+        },
+        {
+          "step": 21,
+          "target": 0.08,
+          "window": 44
+        },
+        {
+          "step": 21,
+          "target": 0.1,
+          "window": 22
+        },
+        {
+          "step": 21,
+          "target": 0.1,
+          "window": 44
+        },
+        {
+          "step": 21,
+          "target": 0.12,
+          "window": 22
+        },
+        {
+          "step": 21,
+          "target": 0.12,
+          "window": 44
+        },
+        {
+          "step": 21,
+          "target": 0.15,
+          "window": 22
+        },
+        {
+          "step": 21,
+          "target": 0.15,
+          "window": 44
+        }
+      ],
+      "is_pairs": false,
+      "name": "vol_target_all_grid_cost_int",
+      "rule": "E2",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50.0,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.08,\"window\":22},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "1cf83918570764339294e248454dcb0d",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.08,\"window\":44},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "0d003e1a62196396a543378561b49182",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.1,\"window\":22},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "b6608cda47668dcea50a1602c7f417be",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.1,\"window\":44},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "5170479d96edc92a072e4138dde10248",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.12,\"window\":22},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "35ded647cf3ccc412ed4df17b77d0a3f",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.12,\"window\":44},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "34d30333b1c64ab6e5a813e7e09e7442",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.15,\"window\":22},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "04da504c60f2fa42a7b348d67067485d",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"target\":0.15,\"window\":44},\"rebalance\":null,\"rule\":\"E2\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "dcdf1f97e4d760bbe78c907b8216a990",
+          "theta_index": 7
+        }
+      ],
+      "expected_registrar_return": 8,
+      "family": "vol_target",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "step": 21,
+          "target": 0.08,
+          "window": 22
+        },
+        {
+          "step": 21,
+          "target": 0.08,
+          "window": 44
+        },
+        {
+          "step": 21,
+          "target": 0.1,
+          "window": 22
+        },
+        {
+          "step": 21,
+          "target": 0.1,
+          "window": 44
+        },
+        {
+          "step": 21,
+          "target": 0.12,
+          "window": 22
+        },
+        {
+          "step": 21,
+          "target": 0.12,
+          "window": 44
+        },
+        {
+          "step": 21,
+          "target": 0.15,
+          "window": 22
+        },
+        {
+          "step": 21,
+          "target": 0.15,
+          "window": 44
+        }
+      ],
+      "is_pairs": false,
+      "name": "vol_target_all_grid_cost_float",
+      "rule": "E2",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":126,\"skip\":5,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "ce1b049f0d6b0dde35ed9dad6e929604",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":126,\"skip\":5,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "10060ceef18abb608a06569e5b8158e4",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":126,\"skip\":21,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "d80b3b6aba059beff2280d85690ff90a",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":126,\"skip\":21,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "084b56e640547753ba05dcc4c70600a1",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":189,\"skip\":5,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "838bc3c0a820785fd7b6094ebb3a1f62",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":189,\"skip\":5,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "c76c9c1c33737f18bce36b80ce260129",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":189,\"skip\":21,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "de39b81209567ecd36f2b4df3016d7cb",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":189,\"skip\":21,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "d5c2ae9cb908796bdb5d7901bcde01fd",
+          "theta_index": 7
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":252,\"skip\":5,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "d45730c994b8fe47e8ec1baf04b64853",
+          "theta_index": 8
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":252,\"skip\":5,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "cb7b85b1eda01e60f0ea3fdd168c0a2b",
+          "theta_index": 9
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":252,\"skip\":21,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "461e8a5832938eab87c5c644bbe17e94",
+          "theta_index": 10
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"long_only\":true,\"lookback\":252,\"skip\":21,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "7f3b6518dfce0a4165be21cb5e12bf65",
+          "theta_index": 11
+        }
+      ],
+      "expected_registrar_return": 12,
+      "family": "xs_momentum",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "long_only": true,
+          "lookback": 126,
+          "skip": 5,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 126,
+          "skip": 5,
+          "step": 42,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 126,
+          "skip": 21,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 126,
+          "skip": 21,
+          "step": 42,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 189,
+          "skip": 5,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 189,
+          "skip": 5,
+          "step": 42,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 189,
+          "skip": 21,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 189,
+          "skip": 21,
+          "step": 42,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 252,
+          "skip": 5,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 252,
+          "skip": 5,
+          "step": 42,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 252,
+          "skip": 21,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 252,
+          "skip": 21,
+          "step": 42,
+          "top": 0.3333333333333333
+        }
+      ],
+      "is_pairs": false,
+      "name": "xs_momentum_all_grid_cost_int",
+      "rule": "E5",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50.0,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":126,\"skip\":5,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "4025eab4b0b65f97e0bd929164c16e89",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":126,\"skip\":5,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "10d350c7740fa28c964dfa46cc82e35e",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":126,\"skip\":21,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "41852204d09111e78b8768791f1f774a",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":126,\"skip\":21,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "35107abbd17615bff040261af27ebf55",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":189,\"skip\":5,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "05a2d2096052c0b5a32cc807f461d404",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":189,\"skip\":5,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "249081638bd6d018d783213086450816",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":189,\"skip\":21,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "4b34aec53ecf17e4f1500cefd030c8fc",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":189,\"skip\":21,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "9e67524408ea0775280922be13d69a15",
+          "theta_index": 7
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":252,\"skip\":5,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "d88b0d4b831189dabd68185accee2553",
+          "theta_index": 8
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":252,\"skip\":5,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "5140529316f605117582e96042f3d85c",
+          "theta_index": 9
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":252,\"skip\":21,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "2b6db22a602187fe8645ad7d3b521383",
+          "theta_index": 10
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"long_only\":true,\"lookback\":252,\"skip\":21,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"top\":0.3333333333333333},\"rebalance\":null,\"rule\":\"E5\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "b3d147fa3cb68aa16a6c61cdf15fc608",
+          "theta_index": 11
+        }
+      ],
+      "expected_registrar_return": 12,
+      "family": "xs_momentum",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "long_only": true,
+          "lookback": 126,
+          "skip": 5,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 126,
+          "skip": 5,
+          "step": 42,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 126,
+          "skip": 21,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 126,
+          "skip": 21,
+          "step": 42,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 189,
+          "skip": 5,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 189,
+          "skip": 5,
+          "step": 42,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 189,
+          "skip": 21,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 189,
+          "skip": 21,
+          "step": 42,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 252,
+          "skip": 5,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 252,
+          "skip": 5,
+          "step": 42,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 252,
+          "skip": 21,
+          "step": 21,
+          "top": 0.3333333333333333
+        },
+        {
+          "long_only": true,
+          "lookback": 252,
+          "skip": 21,
+          "step": 42,
+          "top": 0.3333333333333333
+        }
+      ],
+      "is_pairs": false,
+      "name": "xs_momentum_all_grid_cost_float",
+      "rule": "E5",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":63,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "5b27438305b01dba4ea0cb7e46808a23",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":63,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "8a29cececff5ca70504d3ac6fecb3f83",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":63,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "d55f91edb984e0455c0bbbb7abc632ea",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":63,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "ec99ee16b5f8c0eb9224da52ae1b52f1",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":126,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "b274fb1cd0f8ae533c0f3f7ea80637c9",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":126,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "77eeaff866ed8d940bbfdcbb419e1a6b",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":126,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "7a15db38e0189f6053650726bf3c77e6",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":126,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "7ce5ba3dbb3f52567d01ead5cab6c6f6",
+          "theta_index": 7
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":252,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "b4b89673fba917ce9f269a01880e46f0",
+          "theta_index": 8
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":252,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "cb75a805e1eeaa66e450e56d6d180299",
+          "theta_index": 9
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":252,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "1ae7b99756d4c4a9d88105f9f0144de5",
+          "theta_index": 10
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50,\"long_only\":false,\"lookback\":252,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "d5f88c848891cf3683450af0ee36808a",
+          "theta_index": 11
+        }
+      ],
+      "expected_registrar_return": 12,
+      "family": "tsmom",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 63,
+          "step": 21,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 63,
+          "step": 42,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 63,
+          "step": 21,
+          "vol_target_ann": 0.4
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 63,
+          "step": 42,
+          "vol_target_ann": 0.4
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 126,
+          "step": 21,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 126,
+          "step": 42,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 126,
+          "step": 21,
+          "vol_target_ann": 0.4
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 126,
+          "step": 42,
+          "vol_target_ann": 0.4
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 252,
+          "step": 21,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 252,
+          "step": 42,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 252,
+          "step": 21,
+          "vol_target_ann": 0.4
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 252,
+          "step": 42,
+          "vol_target_ann": 0.4
+        }
+      ],
+      "is_pairs": false,
+      "name": "tsmom_all_grid_cost_int",
+      "rule": "B3",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50.0,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":63,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "aa90ee7ac73be3e6e0e42a9050b85e20",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":63,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "a995e64654e5010f803e13d2e505c344",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":63,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "d0505bfeabf311b4341c8c671962c0e6",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":63,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "c35be6a27d477f47ba96bfce03cceb87",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":126,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "ff6829fa0830336181cd711f3e5acf3c",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":126,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "23e071cf89a96f8e1e4360b721783028",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":126,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "3fc1fc19af98aecb0967765fe7603f10",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":126,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "fd0fe8adf94540788c2ba4f2f1ef42e9",
+          "theta_index": 7
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":252,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "297667df2d7f39aaa5fb2b646bab4daf",
+          "theta_index": 8
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":252,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.2},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "8731fbc025a34a9aaac3e45d550ef60e",
+          "theta_index": 9
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":252,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "31d040eab85971b1f21264747d026594",
+          "theta_index": 10
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cap\":1.0,\"cost_bps\":50.0,\"long_only\":false,\"lookback\":252,\"step\":42,\"symbols\":[\"SPY\",\"TLT\"],\"vol_target_ann\":0.4},\"rebalance\":null,\"rule\":\"B3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "9c38b68aaf287dffb44dc98e8914a124",
+          "theta_index": 11
+        }
+      ],
+      "expected_registrar_return": 12,
+      "family": "tsmom",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 63,
+          "step": 21,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 63,
+          "step": 42,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 63,
+          "step": 21,
+          "vol_target_ann": 0.4
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 63,
+          "step": 42,
+          "vol_target_ann": 0.4
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 126,
+          "step": 21,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 126,
+          "step": 42,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 126,
+          "step": 21,
+          "vol_target_ann": 0.4
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 126,
+          "step": 42,
+          "vol_target_ann": 0.4
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 252,
+          "step": 21,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 252,
+          "step": 42,
+          "vol_target_ann": 0.2
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 252,
+          "step": 21,
+          "vol_target_ann": 0.4
+        },
+        {
+          "cap": 1.0,
+          "long_only": false,
+          "lookback": 252,
+          "step": 42,
+          "vol_target_ann": 0.4
+        }
+      ],
+      "is_pairs": false,
+      "name": "tsmom_all_grid_cost_float",
+      "rule": "B3",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"hysteresis\":0.05,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "f23cbf92db4c4616ff9e279a8e8bde5b",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"hysteresis\":0.1,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "1f703464ac2ff60036249d6b29b3a150",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"hysteresis\":0.2,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "19b95e53ae48de23bcd5bb23fdae599e",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"hysteresis\":0.3,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "9ae6e1a8870f8c6769ac2a03c7eac00c",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"hysteresis\":0.4,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "ab079a9a240936888254dc6be13bf12f",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"hysteresis\":0.5,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "a74a804f77b8dccbf4c90e0ceee99530",
+          "theta_index": 5
+        }
+      ],
+      "expected_registrar_return": 6,
+      "family": "crypto_trend",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "hysteresis": 0.05
+        },
+        {
+          "hysteresis": 0.1
+        },
+        {
+          "hysteresis": 0.2
+        },
+        {
+          "hysteresis": 0.3
+        },
+        {
+          "hysteresis": 0.4
+        },
+        {
+          "hysteresis": 0.5
+        }
+      ],
+      "is_pairs": false,
+      "name": "crypto_trend_all_grid_cost_int",
+      "rule": "C3",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50.0,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"hysteresis\":0.05,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "9d6a8e0c7eedc37e5316d8ac23ceb923",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"hysteresis\":0.1,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "6defb124b657e30eded76e248351a9ea",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"hysteresis\":0.2,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "edbaae19b249a2a6fce4ca6fb305fcee",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"hysteresis\":0.3,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "3f9c297e8c2c51a775f27b6c1d2e0fe0",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"hysteresis\":0.4,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "73565f8659944f4f3080a6d69f131701",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"hysteresis\":0.5,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"C3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "2105a493d34dd509151929cc2e4386d3",
+          "theta_index": 5
+        }
+      ],
+      "expected_registrar_return": 6,
+      "family": "crypto_trend",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "hysteresis": 0.05
+        },
+        {
+          "hysteresis": 0.1
+        },
+        {
+          "hysteresis": 0.2
+        },
+        {
+          "hysteresis": 0.3
+        },
+        {
+          "hysteresis": 0.4
+        },
+        {
+          "hysteresis": 0.5
+        }
+      ],
+      "is_pairs": false,
+      "name": "crypto_trend_all_grid_cost_float",
+      "rule": "C3",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"window\":125},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "83f45a2ef81fbb4b506ea1242ea4d903",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":63,\"symbols\":[\"SPY\",\"TLT\"],\"window\":125},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "9119fadad0e04d861f4ece55af3ca6f5",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"window\":250},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "a2cb907fbae14411b203b662e1b57de5",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":63,\"symbols\":[\"SPY\",\"TLT\"],\"window\":250},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "56e020369a72ab983633dc6f8fb63f5b",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"window\":500},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "72ee87568c2eec580b9c6b812c9716f6",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":63,\"symbols\":[\"SPY\",\"TLT\"],\"window\":500},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "ca2c63ae0ef8faf3a64377d999ce0255",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"window\":750},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "7f7d692fb28c310101152d72796a8497",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"step\":63,\"symbols\":[\"SPY\",\"TLT\"],\"window\":750},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "5dbd76c7335cef5ec37c1425d904acd9",
+          "theta_index": 7
+        }
+      ],
+      "expected_registrar_return": 8,
+      "family": "risk_parity",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "step": 21,
+          "window": 125
+        },
+        {
+          "step": 63,
+          "window": 125
+        },
+        {
+          "step": 21,
+          "window": 250
+        },
+        {
+          "step": 63,
+          "window": 250
+        },
+        {
+          "step": 21,
+          "window": 500
+        },
+        {
+          "step": 63,
+          "window": 500
+        },
+        {
+          "step": 21,
+          "window": 750
+        },
+        {
+          "step": 63,
+          "window": 750
+        }
+      ],
+      "is_pairs": false,
+      "name": "risk_parity_all_grid_cost_int",
+      "rule": "E3",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50.0,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"window\":125},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "7e44df40c225010ae1ffcca1be0a0fe0",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":63,\"symbols\":[\"SPY\",\"TLT\"],\"window\":125},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "0048a2ca14202adbd80a504475685a74",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"window\":250},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "38ac3c045cd586bed81a52816a80968f",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":63,\"symbols\":[\"SPY\",\"TLT\"],\"window\":250},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "1b29014281c3f5cb49fb32014cbe5a5e",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"window\":500},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "8e2c99ebac3c88c05d798ee7f2d054b8",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":63,\"symbols\":[\"SPY\",\"TLT\"],\"window\":500},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "33b1353eafcb8aa4d225aab7dfe61c12",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":21,\"symbols\":[\"SPY\",\"TLT\"],\"window\":750},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "f9693df3708a9c23d73c53298eed5fbe",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"step\":63,\"symbols\":[\"SPY\",\"TLT\"],\"window\":750},\"rebalance\":null,\"rule\":\"E3\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "f792200017694dc8c338e5e827e88a2d",
+          "theta_index": 7
+        }
+      ],
+      "expected_registrar_return": 8,
+      "family": "risk_parity",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "step": 21,
+          "window": 125
+        },
+        {
+          "step": 63,
+          "window": 125
+        },
+        {
+          "step": 21,
+          "window": 250
+        },
+        {
+          "step": 63,
+          "window": 250
+        },
+        {
+          "step": 21,
+          "window": 500
+        },
+        {
+          "step": 63,
+          "window": 500
+        },
+        {
+          "step": 21,
+          "window": 750
+        },
+        {
+          "step": 63,
+          "window": 750
+        }
+      ],
+      "is_pairs": false,
+      "name": "risk_parity_all_grid_cost_float",
+      "rule": "E3",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":1.5,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "62483742a2068f0a9550ceeb09cf8377",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":2.0,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "3c2dfdff1de7fbe01e8b3d2a94955595",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":2.5,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "ec629e680ee4ea3872de004b181d484b",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":3.0,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "bfaa540e859615f19a333b619ab02bda",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":1.5,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "b11c094bee81bba114bcf79d2d2021c9",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":2.0,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "c049d1b973184e8f63409ace43350580",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":2.5,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "43310532e5212382d3c8a1b8e829ce87",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":3.0,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "d3b0667afb73abc339f86c90a27b1745",
+          "theta_index": 7
+        }
+      ],
+      "expected_registrar_return": 8,
+      "family": "pairs",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "entry": 1.5,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.0,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.5,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 3.0,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 1.5,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.0,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.5,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 3.0,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        }
+      ],
+      "is_pairs": true,
+      "name": "pairs_all_grid_cost_int",
+      "rule": "E8",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50.0,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"entry\":1.5,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "e57a74ae96e31d3b1a688ad8b0cb75d5",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"entry\":2.0,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "5aeebbf8ec6398de14581bb9af36ca65",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"entry\":2.5,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "37becfe67845ec9d4eaae63c9a620bed",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"entry\":3.0,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "fe5b98915a872dd07ed38fc0e6ba2bed",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"entry\":1.5,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "c085190a6d725ea1ddb321115a76924c",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"entry\":2.0,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "bde889917d5754d534d9736de25907f9",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"entry\":2.5,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "8465ae6869f850a3ca32a16e657e2c23",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50.0,\"entry\":3.0,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"SPY\",\"TLT\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "034e8a1797394018666e3bf0343cdce1",
+          "theta_index": 7
+        }
+      ],
+      "expected_registrar_return": 8,
+      "family": "pairs",
+      "full_family_grid": true,
+      "grid": [
+        {
+          "entry": 1.5,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.0,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.5,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 3.0,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 1.5,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.0,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.5,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 3.0,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        }
+      ],
+      "is_pairs": true,
+      "name": "pairs_all_grid_cost_float",
+      "rule": "E8",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":1.5,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"TLT\",\"SPY\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "2d1c42ac5a41c797c7f6bde480643971",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":2.0,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"TLT\",\"SPY\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "41f080bc2d3112ca75f39fbe567fc77a",
+          "theta_index": 1
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":2.5,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"TLT\",\"SPY\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "127ba815770e041f3241d163ab098db2",
+          "theta_index": 2
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":3.0,\"exit\":0.0,\"formation\":126,\"long_only\":false,\"symbols\":[\"TLT\",\"SPY\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "1c340fd28dfb7f86b3e32060d2d909e6",
+          "theta_index": 3
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":1.5,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"TLT\",\"SPY\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "9b3e2b1557e55df87cf5083a569329ac",
+          "theta_index": 4
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":2.0,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"TLT\",\"SPY\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "8ff90b73df99ec954201c73406ce3176",
+          "theta_index": 5
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":2.5,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"TLT\",\"SPY\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "f630b0b5340bf49d1874802b7eca9f6e",
+          "theta_index": 6
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"entry\":3.0,\"exit\":0.0,\"formation\":252,\"long_only\":false,\"symbols\":[\"TLT\",\"SPY\"],\"trading\":126},\"rebalance\":null,\"rule\":\"E8\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "a8ea030254bb5b12513575365a4b23d3",
+          "theta_index": 7
+        }
+      ],
+      "expected_registrar_return": 8,
+      "family": "pairs",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "entry": 1.5,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.0,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.5,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 3.0,
+          "exit": 0.0,
+          "formation": 126,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 1.5,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.0,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 2.5,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        },
+        {
+          "entry": 3.0,
+          "exit": 0.0,
+          "formation": 252,
+          "long_only": false,
+          "trading": 126
+        }
+      ],
+      "is_pairs": true,
+      "name": "pairs_reversed_all_grid",
+      "rule": "E8",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "TLT",
+        "SPY"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":126,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "0d94ee472c5f462ae85abca02e937632",
+          "theta_index": 0
+        }
+      ],
+      "expected_registrar_return": 1,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "lookback": 126
+        }
+      ],
+      "is_pairs": false,
+      "name": "nonpair_normalized_baseline",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":126,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "0d94ee472c5f462ae85abca02e937632",
+          "theta_index": 0
+        }
+      ],
+      "expected_registrar_return": 1,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "lookback": 126
+        }
+      ],
+      "is_pairs": false,
+      "name": "nonpair_reordered_case_whitespace",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        " tlt ",
+        " spy "
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":126,\"symbols\":[\"SPY\",\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "00dd95466129762ebe27ff9c380cffa5",
+          "theta_index": 0
+        }
+      ],
+      "expected_registrar_return": 1,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "lookback": 126
+        }
+      ],
+      "is_pairs": false,
+      "name": "nonpair_duplicate_symbol",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT",
+        "SPY"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":126,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "0d94ee472c5f462ae85abca02e937632",
+          "theta_index": 0
+        }
+      ],
+      "expected_registrar_return": 1,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "cost_bps": 999,
+          "lookback": 126,
+          "symbols": [
+            "IGNORED"
+          ]
+        }
+      ],
+      "is_pairs": false,
+      "name": "theta_symbols_cost_override",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"nested\":[\"한글\",1,2.0],\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "aa48f8c295979705fd3364e46d98f86f",
+          "theta_index": 0
+        }
+      ],
+      "expected_registrar_return": 1,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "nested": {
+            "__tuple__": [
+              "한글",
+              1,
+              2.0
+            ]
+          }
+        }
+      ],
+      "is_pairs": false,
+      "name": "tuple_parameter",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"nested\":[\"한글\",1,2.0],\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "aa48f8c295979705fd3364e46d98f86f",
+          "theta_index": 0
+        }
+      ],
+      "expected_registrar_return": 1,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "nested": [
+            "한글",
+            1,
+            2.0
+          ]
+        }
+      ],
+      "is_pairs": false,
+      "name": "list_parameter",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"as_of\":\"2026-11-06\",\"cost_bps\":50,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "1eb1b90ed4f42727b234ef5420cb2928",
+          "theta_index": 0
+        }
+      ],
+      "expected_registrar_return": 1,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "as_of": {
+            "__date__": "2026-11-06"
+          }
+        }
+      ],
+      "is_pairs": false,
+      "name": "deterministic_default_str_date",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"nested\":{\"a\":{\"x\":1.0},\"β\":[true,null,-0.0]},\"symbols\":[\"SPY\",\"TLT\"],\"설명\":\"원문 é\"},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "eb93b2c2076c7d8c80fe093081ef2ceb",
+          "theta_index": 0
+        }
+      ],
+      "expected_registrar_return": 1,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "nested": {
+            "a": {
+              "x": 1.0
+            },
+            "β": [
+              true,
+              null,
+              -0.0
+            ]
+          },
+          "설명": "원문 é"
+        }
+      ],
+      "is_pairs": false,
+      "name": "unicode_nested_parameters",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"nested\":{\"a\":{\"x\":1.0},\"β\":[true,null,-0.0]},\"symbols\":[\"SPY\",\"TLT\"],\"설명\":\"원문 é\"},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "eb93b2c2076c7d8c80fe093081ef2ceb",
+          "theta_index": 0
+        }
+      ],
+      "expected_registrar_return": 1,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "nested": {
+            "a": {
+              "x": 1.0
+            },
+            "β": [
+              true,
+              null,
+              -0.0
+            ]
+          },
+          "설명": "원문 é"
+        }
+      ],
+      "is_pairs": false,
+      "name": "unicode_nested_reordered_keys",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":126,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "0d94ee472c5f462ae85abca02e937632",
+          "theta_index": 0
+        },
+        {
+          "canonical_key_json": "{\"cap\":null,\"estimator\":null,\"instrument_book\":null,\"params\":{\"cost_bps\":50,\"lookback\":126,\"symbols\":[\"SPY\",\"TLT\"]},\"rebalance\":null,\"rule\":\"E1\",\"start_convention\":null,\"timing_class\":\"COMPLIANT\",\"window\":null}",
+          "config_id": "0d94ee472c5f462ae85abca02e937632",
+          "theta_index": 1
+        }
+      ],
+      "expected_registrar_return": 1,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "lookback": 126
+        },
+        {
+          "lookback": 126
+        }
+      ],
+      "is_pairs": false,
+      "name": "duplicate_theta_positions",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [],
+      "expected_registrar_return": 0,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [],
+      "is_pairs": false,
+      "name": "empty_grid",
+      "rule": "E1",
+      "sources": [
+        "FIXTURE_ONLY"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    },
+    {
+      "cost_bps": 50,
+      "expected": [],
+      "expected_planned_reference": "trend_switch_all_grid_cost_int",
+      "expected_registrar_return": null,
+      "family": "trend_switch",
+      "full_family_grid": false,
+      "grid": [
+        {
+          "lookback": 126,
+          "rule": "sma",
+          "step": 21
+        },
+        {
+          "lookback": 126,
+          "rule": "sma",
+          "step": 42
+        },
+        {
+          "lookback": 210,
+          "rule": "sma",
+          "step": 21
+        },
+        {
+          "lookback": 210,
+          "rule": "sma",
+          "step": 42
+        },
+        {
+          "lookback": 252,
+          "rule": "sma",
+          "step": 21
+        },
+        {
+          "lookback": 252,
+          "rule": "sma",
+          "step": 42
+        },
+        {
+          "lookback": 126,
+          "rule": "tsmom",
+          "step": 21
+        },
+        {
+          "lookback": 126,
+          "rule": "tsmom",
+          "step": 42
+        },
+        {
+          "lookback": 210,
+          "rule": "tsmom",
+          "step": 21
+        },
+        {
+          "lookback": 210,
+          "rule": "tsmom",
+          "step": 42
+        },
+        {
+          "lookback": 252,
+          "rule": "tsmom",
+          "step": 21
+        },
+        {
+          "lookback": 252,
+          "rule": "tsmom",
+          "step": 42
+        }
+      ],
+      "is_pairs": false,
+      "name": "synthetic_skips_imports_and_capture",
+      "rule": "E1",
+      "sources": [
+        "SYNTHETIC"
+      ],
+      "symbols": [
+        "SPY",
+        "TLT"
+      ]
+    }
+  ],
+  "format": "quantgen.historical-lab-config-goldens/1",
+  "provenance": {
+    "adapter": "In-memory capture adapter; no actual ledger validation/deduplication/chain/filesystem execution",
+    "classifier": "V.cost_class stub returns us for excluded market metadata only; not provider/cost evidence",
+    "defaults": "Fake config.macro_dir raises; explicit synthetic capture path never opened; SYNTHETIC returns before imports",
+    "generation": "AST-selected original register_trials/config_id/canonical_json/md5_hex/grid_from; no new-builder import",
+    "grid_method": "Original grid_from AST executed; only FAMILIES grid-call expressions evaluated; no strategy callable executed",
+    "historical_ref": "527cdf24f90528a00a6b79901692ca926ceb4bc1",
+    "scope": "Historical source-derived literal keys only; not current actual-writer or production-ledger compatibility",
+    "sources": {
+      "canonical": {
+        "blob_sha1": "dbd557a9f2f64d7361db1f472dbab24d6d38f73d",
+        "path": "core/ficc/macro_schema.py",
+        "ref": "527cdf24f90528a00a6b79901692ca926ceb4bc1",
+        "slices": {
+          "canonical_json": {
+            "bytes": 233,
+            "first_line": 303,
+            "last_line": 305,
+            "sha256": "432dc355dcdba0b2fa064637178cbf27cfed9c0678e67704332020749522dee2"
+          },
+          "md5_hex": {
+            "bytes": 133,
+            "first_line": 308,
+            "last_line": 311,
+            "sha256": "a943339fd840a4ddc69d915866b5e46a0be000100b4466c361f68884734f2775"
+          }
+        },
+        "source_bytes": 25880,
+        "source_sha256": "36078e3589c36c1e443f3067c403b155bdef93b85341ed9df6bd3a2697248284"
+      },
+      "ledger": {
+        "blob_sha1": "96394d6dd6a1939a90544e2a72504c8a4e256ee8",
+        "path": "core/quant/gate_ledger.py",
+        "ref": "527cdf24f90528a00a6b79901692ca926ceb4bc1",
+        "slices": {
+          "ROW_SET_KEY": {
+            "bytes": 146,
+            "first_line": 60,
+            "last_line": 61,
+            "sha256": "0bbd2543647b8aef6c85d5d3810c01e5250edee597968a5df611303d6e3cb78b"
+          },
+          "config_id": {
+            "bytes": 328,
+            "first_line": 168,
+            "last_line": 171,
+            "sha256": "b5565862c9663c0b1daa397f610cef2207efbaf9208139fddf15d7d155d5c7c8"
+          }
+        },
+        "source_bytes": 46595,
+        "source_sha256": "018eaa960b2411dca13301c7353adcfb0bc160e494d9eb8e6e68f20d4c10be86"
+      },
+      "strategies": {
+        "blob_sha1": "063d2c27e34c23f4994022ef045b73dd49c21aa2",
+        "path": "core/quant/strategies.py",
+        "ref": "527cdf24f90528a00a6b79901692ca926ceb4bc1",
+        "slices": {
+          "grid_from": {
+            "bytes": 264,
+            "first_line": 392,
+            "last_line": 398,
+            "sha256": "6444bf48f79c246e94b476a89a2a4eea46fb4f013848f739306cb75d25590b74"
+          }
+        },
+        "source_bytes": 22237,
+        "source_sha256": "085594bc2e61d956274db0d9b1d70140737309a4d606b0f24e20fc592c9ac8f7"
+      },
+      "writer": {
+        "blob_sha1": "1297cb7c70e0b621f557489cb683e8c3c57caab9",
+        "path": "ui/strategy_lab_page.py",
+        "ref": "527cdf24f90528a00a6b79901692ca926ceb4bc1",
+        "slices": {
+          "FAMILIES": {
+            "bytes": 1192,
+            "first_line": 34,
+            "last_line": 46,
+            "sha256": "8dd234748270470a5ee03871ea2b0cdfd9100d8e78f6642312430c35c861194c"
+          },
+          "FAMILY_ID": {
+            "bytes": 162,
+            "first_line": 50,
+            "last_line": 51,
+            "sha256": "e9d3afbce6ab1e6830524d4dd0fd7d5ad6926c1c8a114ed80f64943b3d1bcfa8"
+          },
+          "_MARKET": {
+            "bytes": 113,
+            "first_line": 52,
+            "last_line": 52,
+            "sha256": "5ace27097a1f3fb3b7ced96fda741cd1a2104d1a876f43ff6c54945d4f7613e4"
+          },
+          "register_trials": {
+            "bytes": 1708,
+            "first_line": 55,
+            "last_line": 82,
+            "sha256": "8906e993263905b30a6bba2f9e977762bb8ec8e8f69545d822a825af7bb67fb3"
+          }
+        },
+        "source_bytes": 21598,
+        "source_sha256": "0b0518d5ef952e5eafd1b9508ca6653b26c48c0efa410987bfeacdc159042256"
+      }
+    },
+    "tags": {
+      "__date__": "datetime.date.fromisoformat",
+      "__tuple__": "recursive tuple reconstruction"
+    },
+    "writer_function_sha256": "8906e993263905b30a6bba2f9e977762bb8ec8e8f69545d822a825af7bb67fb3"
+  }
+}
