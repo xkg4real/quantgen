@@ -112,32 +112,9 @@ def label(text, role="", *, wrap=True):
 
 
 def load_interface_fonts(app):
-    """Register bundled real weights; retain the platform font if unavailable.
-
-    A missing or unreadable file is logged: the window then falls back to the
-    platform font, which changes Hangul shapes and widths.
-    """
-    family = None
-    for filename in ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf"):
-        path = application_root() / "assets/fonts" / filename
-        font_id = QFontDatabase.addApplicationFont(str(path))
-        families = QFontDatabase.applicationFontFamilies(font_id) if font_id >= 0 else []
-        if not families:
-            log.warning("QUANTGEN interface font did not load: %s", path)
-        if families and family is None:
-            family = families[0]
-    if family is not None:
-        font = QFont(family, 10)
-        # Use an integer logical pixel size as the unstyled text baseline.
-        # Qt applies the screen scale itself; do not rescale text as a bitmap.
-        font.setPixelSize(14)
-        font.setWeight(QFont.Weight.Normal)
-        # Keep changing prices aligned without giving Korean labels a monospace face.
-        font.setFeature(QFont.Tag.fromString("tnum"), 1)
-        app.setFont(font)
-    else:
-        log.warning("QUANTGEN interface font unavailable; using the platform font")
-    return family
+    """Register the complete hinted font bundle; preserve platform fallback on failure."""
+    from .font_policy import configure_interface_font
+    return configure_interface_font(app, application_root() / "assets/fonts", logger=log)
 
 
 def panel(title):
