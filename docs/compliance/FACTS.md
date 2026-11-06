@@ -505,3 +505,23 @@ A1 코드 `2715d9e` 이후 A3 통합 소스 `e33063b`의 범위입니다. A1 선
 | 검증 범위 | 최종 17개 합성 검사는 정규 바이트·해시·줄 연결/손상·비유한 위치·거부 조건·주입 ID를 검사하여 0.010초, 종료 코드 0으로 통과. 앞선 16개 실행과 겹치므로 합산하지 않음. 전체 이벤트 의미·저장소·수명주기 및 전체 T-RUNREG-02/-09·상위 ⑨-3a 완료 증거가 아님 |
 
 01–20 정책을 이 일부 구현과 대조했고 기존 번호 조항은 유지합니다. [제품 범위·검증 기록](../product/R3_DETACHED_CODEC_2026-11-06.md)과 함께 읽으며 실제 API/공급사·Windows 사용자 환경·법률/운영자/계약/라이선스/동의·파일럿·동결 연구·게시/배포 조건, `review-required`와 공개 준비 `BLOCKED`를 해제하지 않습니다. 기존 Identity·Rates·상태·A3의 범위와 실패/후속 검증 기록도 보존하며 선택적 GPT/Gemini 추가 심사는 `NOT_PERFORMED`입니다.
+
+<a id="identity-a1-fixture-cleanup-2026-11-06"></a>
+## Identity 통합의 A1 시험 위젯 정리 후속 — 2026-11-06
+
+`b79d56d`의 Runtime `42191579626` Ubuntu 3.12 작업은 A1 세 모듈 18개 검사를 11.710초에 `OK`로 출력한 뒤 segmentation fault·종료 코드 139로 실패했습니다. 검사 문구를 프로세스 성공으로 대체하지 않습니다. 같은 세 모듈의 수정 전 Linux guarded 진단은 18개 통과·14.055초·종료 코드 0이었지만 종료 시 소유 `ResearchWindow` 4개·상태 host 5개와 `ReadingHelp` 4개가 살아 있었습니다. 로컬에서 충돌을 재현한 것은 아니며 CI 충돌의 정확한 원인은 미확정입니다.
+
+[A1 용어 검사](../../tests/desktop_a1_terms_acceptance.py)와 [A1 상태 검사](../../tests/desktop_a1_status_acceptance.py)는 직접 소유한 창/host의 cleanup 등록을 이미 있는 [대상별 Qt 정리 함수](../../tests/qt_fixture_cleanup.py)로 바꿉니다. 두 import·두 cleanup 등록 외의 테스트 내용, 도우미·Flet 모듈·프로덕션 구현은 그대로입니다. 기존 18개 테스트 메서드와 82개 정적 assertion 구문, 값·코드·원문·보고서·AI 입력·언어 왕복 검사를 보존하며 종료 우회·예외 무시·전체 위젯 삭제·skip을 추가하지 않습니다.
+
+수정 후 같은 18개 검사는 12.249초·종료 코드 0으로 통과하고 소유 Qt 위젯 9개 모두의 삭제 신호를 확인했습니다. `ResearchWindow`·상태 host·`ReadingHelp` 생존 수는 0이며 전체 Qt top-level은 24개가 남습니다. 일부 Python wrapper 참조는 남아 있어 전체 메모리/객체 소거라고 주장하지 않습니다. 전후 실행은 같은 검사이므로 합산하지 않고, 이 수명 관측을 실제 CI 원인 입증·새 head의 CI 성공·사용자 자료 삭제 기능으로 확대하지 않습니다.
+
+[CI 구성](../../.github/workflows/runtime-smoke.yml)은 동일한 A1 명령을 차트/텍스트 검사 바로 뒤로 옮겨 조기에 결과를 확인합니다. 모든 기존 명령과 구문 5분/설치 포함 30분 예산을 유지합니다. [제품 검증 기록](../product/DETACHED_INSTRUMENT_IDENTITY_2026-11-06.md)에 실패·전후 측정과 새 CI 확인 필요를 남기며, 01–20 번호 정책·공개 준비 `BLOCKED`·`review-required`와 기존 법률/권리/동의·실제 Windows/API/파일럿·동결 연구·게시/배포 조건을 유지합니다.
+
+<a id="rates-a1-fixture-cleanup-2026-11-06"></a>
+## Rates 통합의 동일 A1 시험 정리 적용 — 2026-11-06
+
+Rates `578d35d`의 Runtime `42191259285` Ubuntu 3.12 작업 `127803562205`는 A1 세 모듈 18개 검사를 19.066초에 `OK`로 출력한 뒤 segmentation fault·종료 코드 139로 실패했습니다. 기존 금리 언어 11개 합성 통과와 별도 결과이며 전체 Runtime 성공으로 기록하지 않습니다.
+
+수정 전 두 네이티브 A1 파일은 Identity `b79d56d`와 같아 검토된 `e981ef7`의 동일한 두 import·두 cleanup 등록을 적용합니다. [A1 용어](../../tests/desktop_a1_terms_acceptance.py)·[상태 검사](../../tests/desktop_a1_status_acceptance.py)가 기존 대상별 Qt 삭제 도우미를 재사용하며 18개 테스트 메서드·82개 정적 assertion 구문과 프로덕션/Flet/도우미 코드는 유지합니다. 공유 Identity 진단의 전후 18개 통과·자연 종료 코드 0, 수정 후 12.249초 및 소유 Qt 위젯 9개 삭제는 동일 수정의 근거이며 Rates의 신규 로컬 실행으로 세지 않습니다. 로컬 충돌 재현과 기존 CI 실패의 정확한 원인 입증은 없으며 새 head의 전체 CI를 확인해야 합니다.
+
+동일 A1 명령을 차트/텍스트 바로 뒤로 옮기고 모든 기존 명령·5분/30분 실행 예산을 유지합니다. [제품 검증 기록](../product/RATES_INLINE_LANGUAGE_2026-11-06.md)에 실제 Rates 실패와 공유 측정의 차이를 남기며 01–20 번호 정책·기존 사실·`review-required`·공개 준비 `BLOCKED`·법률/권리/동의·실제 Windows/API/파일럿·동결 연구·게시/배포 조건을 보존합니다. 검사 완화·skip·종료 우회·전체 객체/사용자 자료 소거 기능은 추가하지 않습니다.

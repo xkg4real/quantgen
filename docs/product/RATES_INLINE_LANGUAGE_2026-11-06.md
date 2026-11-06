@@ -53,3 +53,24 @@ Final integrated-head Windows/Ubuntu Runtime and Compliance checks are required
 before merge after PR77 and PR78. Prior a8d75b8 runtime contained the earlier
 MC form and cannot verify this integrated head. Manual Windows, provider/API,
 legal/license/pilot/frozen-research and website publication remain unverified.
+## A1 test-process follow-up after full Runtime failure
+
+The Rates head `578d35d406cd6001190d0400caeab7f93cab3096` did not pass
+the whole Runtime run42191259285. Ubuntu3.12 job127803562205 printed18 A1
+tests OK in19.066s, then segfaulted with exit139. The raw failure is retained;
+assertion success alone is not successful process exit. This is separate from
+the Rates language suite's11 synthetic passes.
+
+The two native A1 test modules receive the same reviewed owned-widget cleanup
+as identity follow-up `e981ef7`. Their pre-fix files were byte-identical. Only
+two imports and two cleanup registrations change, using the existing helper.
+All18 methods/82 assertion AST nodes and production/Flet/helper code remain
+unchanged. The prior guarded lifecycle probe passed18 tests before and after;
+it observed nine retained owned widgets before and all nine destroyed after,
+with the after-run18PASS12.249s exit0. These are shared cleanup measurements,
+not a newly claimed Rates test rerun or a reproduced local segfault.
+
+The same A1 command moves immediately after chart/text for earlier feedback;
+every existing CI command remains. Fresh exact-head full CI is required before
+merge. The old segfault's precise cause remains unconfirmed. No assertion is
+weakened, test skipped, process exit suppressed or publication gate relaxed.

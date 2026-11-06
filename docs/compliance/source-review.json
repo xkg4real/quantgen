@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "5fa6fb506e943474356198c7d7ed93a60dfb7e3d8ad0e117cae5e936986a70f4",
+    ".github/workflows/runtime-smoke.yml": "cc0af5e5ac324c19287c1055b1eeb74cb1919f14af5051e416bee296cd52e749",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -262,7 +262,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "1b8a22735ce8ba702e7568663f062830adc8d1b50081c32fa0154426f95aedd9",
+    "docs/compliance/FACTS.md": "f1d64da8de31fade7ae104969dfb949bfba02eb65f7a01b2ecf2a7b5a28b1680",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -281,7 +281,7 @@
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
     "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
-    "docs/product/DETACHED_INSTRUMENT_IDENTITY_2026-11-06.md": "8d228dffc3fade383f5f0ff92e981e258399500887a2befd6985bf40ac4cbd4d",
+    "docs/product/DETACHED_INSTRUMENT_IDENTITY_2026-11-06.md": "85c2893a29d219f39e5c98c97da93e4cb3b80ab0d2c703091abd6e7564ecc209",
     "docs/product/DISTRIBUTION_REVIEW_2026-10-29.md": "c03dae78c5964bded90065661a0d3dc631f4b650c3baae8eb6875443b11959e6",
     "docs/product/ETF_SLEEVE_DISCLOSURE_2026-11-04.md": "d39113026df4ad4a4d1903072cd64cbbd8015dc74835b77f4a96d38b1f2c52c3",
     "docs/product/FORWARD_CONVENTION_2026-11-02.md": "a294ca013fa1460c435286a1b2a466630f522d859fc9a43da29927e6c5ffcd86",
@@ -308,7 +308,7 @@
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
-    "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "cdf40dc23e97458f04e4cc9591a9e7ee7dee287db5fb946b694022d3af965002",
+    "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "9082a26aaf303662283b7aadd56e63b3017aab8a30ebefe7cd54db62493d4ca2",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
     "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
     "docs/product/RECORDED_STATUS_DISPLAY_2026-11-06.md": "33e76e3cbc4ded9db268df780c0d406f67aa420bd726d2e5174827e6e72411d2",
@@ -390,8 +390,8 @@
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
-    "tests/desktop_a1_status_acceptance.py": "e921669fc62347f09913c87db2d3aae5cca89d3eb45461371a93f061e566fb3a",
-    "tests/desktop_a1_terms_acceptance.py": "e2b93cfbd295df742d218e893dd586d8b6b23fd7a63ac75877f2e7b4717b4280",
+    "tests/desktop_a1_status_acceptance.py": "8993fa2d3914aa8285fb4b8dcfc81168ad62a42b7e8cace87f455865b8d70a7e",
+    "tests/desktop_a1_terms_acceptance.py": "2e8613a5e6c25766a138e483c449bfbe8e4098ed48e05d3513a5ca6b46fa781d",
     "tests/desktop_a3_layout_acceptance.py": "12c431696f0029fa72c6381e01547f48808973b4b6906a4cfe3b4f8531094444",
     "tests/desktop_a3_reading_acceptance.py": "84d69d2df57bf9592ec5dff00c0df32b24dcc454e06d539e330e3964382ae847",
     "tests/desktop_acceptance.py": "922f93afe5bb0bbc852bc95df31cb52beb317e9121c192d7484debecdda9291d",
@@ -604,163 +604,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "cc70d0dc74a4b4382a93ba026c3b141d1f1c53351280b9fd1c6550194f82a820",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.592348+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "b7d33aeb02325c3378cf402dab605ac963fd835be7c77b5da56487b18156a2d2",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.191088+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "cc70d0dc74a4b4382a93ba026c3b141d1f1c53351280b9fd1c6550194f82a820",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.594953+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "b7d33aeb02325c3378cf402dab605ac963fd835be7c77b5da56487b18156a2d2",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.193774+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "e9088667931fb95485af1fe7b7d0820330db1eafd7e061542a833d5548f115e1",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.598198+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "4e5001297abec370a6c89a87c0d1f35b73d874b291ed6da9d032b500494f0a1f",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.196202+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "c706f14215abf25c9303b2834722015a15d913a4cffcc1680b2d2c64c0cd7f26",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.600451+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "d7c7de73913a3fc2588f49201411359ba575f4f7da1dc8f8c65770c3150e4f0d",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.198449+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "faa93b79da16163d156e0687017af2830c3be01fd4027385a55e37718d869de2",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.603508+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "50c10531eb51a370585372c9c120e51e0054c72cca154787ee977e7a75c7543c",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.200781+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "05feff72c636639db3a932dee09e748fbd2e09e8e61a0ea4e96d9cc97866b794",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.605462+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "11c741a04c71d92315ea091016015b7c87a7818d211765c875ff98c81daea586",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.202964+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "cc70d0dc74a4b4382a93ba026c3b141d1f1c53351280b9fd1c6550194f82a820",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.608259+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "b7d33aeb02325c3378cf402dab605ac963fd835be7c77b5da56487b18156a2d2",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.205284+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "05feff72c636639db3a932dee09e748fbd2e09e8e61a0ea4e96d9cc97866b794",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.610409+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "11c741a04c71d92315ea091016015b7c87a7818d211765c875ff98c81daea586",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.207615+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "13a4018ca149174519c6c7df2af87c63e4951101dedfc3e36a8f5dd390235181",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.612500+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "0803a826b6f54d501b8d10388b4049b3eb0e251beb0d1af112da8106b3f5f9c5",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.209754+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "25f5404ae6f8a5d3ab4dcb7013a66c6443bc9991acd5cf8916c1547e3a39f742",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.615399+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "ffa17fbed60c098098d5e472549dcda80a45324b9fa974433d9dd10736e5d7ff",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.212258+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "3b2765a81c16c7b68fd6bcd96337c3ab5f5ff61bc0feecd95bdcbe689ebd0c73",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.617286+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "8fa0e47ae34b5ee629e739a014ec2ec3bfc6d43ffb65883e664ad04c63d20c81",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.214477+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "cce9a1e79d2f0682be105cc2a4a2622ee308703ec3a74a740f9cca7b1329decc",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.620071+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "ffa9c6ebda737e1155ff18f22db8abb8dda78405b92370d83c85543083ccaf67",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.216605+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "13a4018ca149174519c6c7df2af87c63e4951101dedfc3e36a8f5dd390235181",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.622117+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "0803a826b6f54d501b8d10388b4049b3eb0e251beb0d1af112da8106b3f5f9c5",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.218852+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "13a4018ca149174519c6c7df2af87c63e4951101dedfc3e36a8f5dd390235181",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.624999+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "0803a826b6f54d501b8d10388b4049b3eb0e251beb0d1af112da8106b3f5f9c5",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.221177+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "13a4018ca149174519c6c7df2af87c63e4951101dedfc3e36a8f5dd390235181",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.626927+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "0803a826b6f54d501b8d10388b4049b3eb0e251beb0d1af112da8106b3f5f9c5",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.223315+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "79b278c75e5245edd69d5f69525b8b4778695fedb957d61705d24d5da70d8d48",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.629057+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "fc46b62108ba823193cc0342838a8bb23f9c4d12c13a0839424c474df5cc322c",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.225443+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "05feff72c636639db3a932dee09e748fbd2e09e8e61a0ea4e96d9cc97866b794",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.631063+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "11c741a04c71d92315ea091016015b7c87a7818d211765c875ff98c81daea586",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.227706+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "cc70d0dc74a4b4382a93ba026c3b141d1f1c53351280b9fd1c6550194f82a820",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.633220+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "b7d33aeb02325c3378cf402dab605ac963fd835be7c77b5da56487b18156a2d2",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.232304+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "102c9295abcc9116275ae27c5462aca83f15e8df0782e88cab371d6d4807136c",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.635991+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "028d124c0fd2b8eb804ec8cc8e19e6ce395127c05c964d37389058b85c77dc19",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.234566+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "cc70d0dc74a4b4382a93ba026c3b141d1f1c53351280b9fd1c6550194f82a820",
-      "reviewed_by": "GPT detached R3 codec implementation and policy review",
-      "review_note": "All20 policies reviewed against frozen pure envelope codec and LAB ID utility. FACTS adds bounded semantics and MD5/nonfinite/segment/callback limitations; numbered policies and release gates preserved. No storage, ledger, Lab or authority effects. Original UI/identity evidence remains scoped, publication blocked; full CI required before merge.",
-      "reviewed_at": "2026-11-06T09:16:13.638888+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "b7d33aeb02325c3378cf402dab605ac963fd835be7c77b5da56487b18156a2d2",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.236797+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     }
   }
 }
