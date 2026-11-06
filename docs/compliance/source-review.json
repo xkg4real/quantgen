@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "5d309a9d7c25a4fba4513ab207d17b557ee48d224c6b2baca40a87d8bcfa4b76",
+    ".github/workflows/runtime-smoke.yml": "cc0af5e5ac324c19287c1055b1eeb74cb1919f14af5051e416bee296cd52e749",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -150,6 +150,7 @@
     "core/quant/refusal.py": "ace787b208e8f47fa7dd7f763ca0198b3a6cceddf780b08b1b4c93892f400190",
     "core/quant/risk.py": "30ed7606cb181e0d4bba3ab984fe231e19fe6b3e293b063cf4640c909d2ad6f7",
     "core/quant/risk_layer.py": "9ca19aa23c50a01527aa08842c06bd92f311b535628ce62cb87509ba6238ba84",
+    "core/quant/run_registry_codec.py": "fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a",
     "core/quant/scenarios.py": "e65dda28f6cb9a3cd29cab547ae1093f556aa0e467f2c86b9d3c616090fbd205",
     "core/quant/signals.py": "d033d0f146e45ac59db6e1125a2b2256cc96c9c1744093e954adf45e2ccec64a",
     "core/quant/sleeves.py": "39bcdf9a73400ebe9634e75ae8278a3616cb41d90156749b369c1ae9042ef2ac",
@@ -261,7 +262,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "93495a4661d125c01d793aa3a7c1a8f22579a102389f7fdd3354fec2c01a9908",
+    "docs/compliance/FACTS.md": "f1d64da8de31fade7ae104969dfb949bfba02eb65f7a01b2ecf2a7b5a28b1680",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -306,6 +307,7 @@
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
+    "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "9082a26aaf303662283b7aadd56e63b3017aab8a30ebefe7cd54db62493d4ca2",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
     "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
@@ -516,6 +518,7 @@
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
     "tests/research_home_acceptance.py": "a6ba826451e019e3bec8cbc145c3e89878b6e01caa6b976266af0e722f19b157",
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
+    "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
     "tests/runtime_syntax_acceptance.py": "174dd84c35a1085a271baa27c0a8e651b519af0e348d912e62a6453027d94e7e",
     "tests/sabr_diagnostics_acceptance.py": "934edacf62c87d572930e9f824120c22dd98dfe0ddc5257e08645b704670e07f",
     "tests/signals_trade_count_acceptance.py": "0b1ed7ed587492cc3dd1ca628e026e3bbdaa0dc2966e96626110a4e53de481a9",
@@ -601,163 +604,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "fcd044d955b30c61f1e9990510fdc8adb2c405970c1f44ca8c08356aaa465e3b",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.677282+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "b7d33aeb02325c3378cf402dab605ac963fd835be7c77b5da56487b18156a2d2",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.191088+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "fcd044d955b30c61f1e9990510fdc8adb2c405970c1f44ca8c08356aaa465e3b",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.679595+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "b7d33aeb02325c3378cf402dab605ac963fd835be7c77b5da56487b18156a2d2",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.193774+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "733cf19dc0f2cd8f8044c8d89720968e7d5f1db1487bf34143304935267b6a58",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.681738+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "4e5001297abec370a6c89a87c0d1f35b73d874b291ed6da9d032b500494f0a1f",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.196202+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "033882db487579c9255336e7953d411e226f14050de4b9d89ff83152c657a725",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.684085+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "d7c7de73913a3fc2588f49201411359ba575f4f7da1dc8f8c65770c3150e4f0d",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.198449+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "b602e655532e193dac16f86594e8968b8a4e6dabc0d7a472312d4961eced4f07",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.686294+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "50c10531eb51a370585372c9c120e51e0054c72cca154787ee977e7a75c7543c",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.200781+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "3621901ff837b5225d22b61fbcc454dfbf530dfe8c76b57a88a6984b236a7530",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.688610+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "11c741a04c71d92315ea091016015b7c87a7818d211765c875ff98c81daea586",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.202964+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "fcd044d955b30c61f1e9990510fdc8adb2c405970c1f44ca8c08356aaa465e3b",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.690514+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "b7d33aeb02325c3378cf402dab605ac963fd835be7c77b5da56487b18156a2d2",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.205284+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "3621901ff837b5225d22b61fbcc454dfbf530dfe8c76b57a88a6984b236a7530",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.692703+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "11c741a04c71d92315ea091016015b7c87a7818d211765c875ff98c81daea586",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.207615+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "030b3df1d4778010513b39694a0ea48482a04f4257275fa797d8de2dbdf742d9",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.694718+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "0803a826b6f54d501b8d10388b4049b3eb0e251beb0d1af112da8106b3f5f9c5",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.209754+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "b2308b08919d7d8eab4f0bab0fe5a5ffffb8d5dcffaad9b337b1c676546a0af7",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.696695+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "ffa17fbed60c098098d5e472549dcda80a45324b9fa974433d9dd10736e5d7ff",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.212258+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "9e3c1c2bd1e0a77193869a39e2d884d829ee4e0ded495c20304faeb83927190a",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.698992+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "8fa0e47ae34b5ee629e739a014ec2ec3bfc6d43ffb65883e664ad04c63d20c81",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.214477+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "d9c61ef175039db69ce3932fd19da5059a33fff31e667e9b66b025ac55abafa1",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.701036+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "ffa9c6ebda737e1155ff18f22db8abb8dda78405b92370d83c85543083ccaf67",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.216605+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "030b3df1d4778010513b39694a0ea48482a04f4257275fa797d8de2dbdf742d9",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.703287+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "0803a826b6f54d501b8d10388b4049b3eb0e251beb0d1af112da8106b3f5f9c5",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.218852+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "030b3df1d4778010513b39694a0ea48482a04f4257275fa797d8de2dbdf742d9",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.705488+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "0803a826b6f54d501b8d10388b4049b3eb0e251beb0d1af112da8106b3f5f9c5",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.221177+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "030b3df1d4778010513b39694a0ea48482a04f4257275fa797d8de2dbdf742d9",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.707574+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "0803a826b6f54d501b8d10388b4049b3eb0e251beb0d1af112da8106b3f5f9c5",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.223315+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "f478d50ab74fe3fac9784d6d47e1e9805f95b7d6ccff5280fa19a0b4781881be",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.709505+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "fc46b62108ba823193cc0342838a8bb23f9c4d12c13a0839424c474df5cc322c",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.225443+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "3621901ff837b5225d22b61fbcc454dfbf530dfe8c76b57a88a6984b236a7530",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.711558+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "11c741a04c71d92315ea091016015b7c87a7818d211765c875ff98c81daea586",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.227706+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "fcd044d955b30c61f1e9990510fdc8adb2c405970c1f44ca8c08356aaa465e3b",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.713667+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "b7d33aeb02325c3378cf402dab605ac963fd835be7c77b5da56487b18156a2d2",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.232304+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "88ab2db92211251b9e9c13e4592009d6ba00a4cd7e5f4773b46ea08b6c6eaa11",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.715850+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "028d124c0fd2b8eb804ec8cc8e19e6ce395127c05c964d37389058b85c77dc19",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.234566+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "fcd044d955b30c61f1e9990510fdc8adb2c405970c1f44ca8c08356aaa465e3b",
-      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
-      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
-      "reviewed_at": "2026-11-06T09:31:34.717903+00:00",
-      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
+      "source_digest": "b7d33aeb02325c3378cf402dab605ac963fd835be7c77b5da56487b18156a2d2",
+      "reviewed_by": "GPT combined R3 implementation reviewer",
+      "review_note": "All20 policies reviewed with both parent records preserved. R3 pure codec source and tests unchanged; inherited exact A1 owned-fixture cleanup and unchanged test command multiset verified. Numbered policies and RELEASE_GAPS unchanged. Synthetic implementation only, final full CI required before merge, publication blocked.",
+      "reviewed_at": "2026-11-06T09:33:23.236797+00:00",
+      "source_commit": "38745b7738f667bbddae2bccfc4bf236b862c066"
     }
   }
 }
