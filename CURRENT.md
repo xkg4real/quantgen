@@ -6,12 +6,12 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a, ⑨-3a/source-digests/1, ⑨-3a/series-digest/1, ⑨-3a/series-format/1
-updated_at: 2026-11-06T21:29:57+09:00
+updated_at: 2026-11-06T21:37:24+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-series-format-20261106
 work_commit: ea90521ddf057178d4d5eb182c426dd384256f4e
-uncommitted_changes: no
+uncommitted_changes: yes
 pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -615,3 +615,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - Existing approved R3§5.7 lines851-856 covers numpy.save/allow_pickle=False and array content rehash. New detached encode_series(array, *, max_bytes)/decode_series(payload, expected_sha256, *, max_bytes), SeriesFormatError(ValueError), operates only on supplied arrays/bytes in memory. Strict new canonical NPY1.0 little-endian float64/C-order/2D domain; no historical artifact compatibility or full filesystem-store claim. Existing v1series_sha256 is the content recipe, not a hash of container bytes.
 - Caller serialized-byte limit must be plain positive int within platform index range; exactbytes/64lowerhex expected digest. Before parser/allocation, check NPYmagic/version, bounded actualheader length<=10000, finalLF/16bytealignment, ASTdict exact3unique keys with descr exact'<f8', fortran_order isFalse, shape tuple2plainints(no bool), each axis0..intp.max//8. Pythonint shape-product*8 must equal remaining payload; refuse pickle/object/ZIP/wrong rank/dtype/order/version, malformed/truncated/trailing data and digest mismatch. Encoder pre-copy budget plus bounded output writes; reader numpy.load allow_pickleFalse only after bounds, then content rehash; return read-only convenience, not immutable/security guarantee. Zeroaxes identity only; serialized ceiling is not total-memory/CPU sandbox. Preserve rawIEEE and stable caller-input requirements.
 - Author new module/acceptance/productdoc only; supporting workflow adds exact paths/module preserving all prior commands/budgets, FACTS append and all20-reviewed baseline required. No filesystem target/load/save path, series_ref/date/config/PnL semantic checks, provider/source authentication, Lab/recorder/event/ledger/frozen-study/criteria/owner effects. FullR3/realWindows/API/provider/legal/license/pilot evidence still open; additional formal spec review NOT_PERFORMED.
+
+### GPT NPY format validation checkpoint — 2026-11-06T21:37:24+09:00
+
+- Format child has local uncommitted source/tests/supporting workflow at gpt/run-registry-series-format-20261106; remote code head remains ea90521. Initial21-test run retained20PASS+1fixtureERROR because NumPy itself rejected construction of the impossible oversized zero-axis ndarray before the helper. Test now uses a literal oversized decoded header and a valid encoder boundary; follow-up22PASS0.036s exit0 is intermediate evidence, not final frozen-source acceptance.
+- Bounded-writer memoryview byte accounting is being strengthened after review; final independent/combined tests and all20 policy review remain. The pathological AST diagnostic did not reproduce a product RecursionError: parse-stage fixture expectations were corrected, and explicit recursion handling/resource MemoryError propagation are separately injected boundaries. Preserve those distinctions and initial logs.
+- PR86/87 exact-head full Runtime workflows still run; their bounded-source/syntax steps and Compliance success do not alone establish full completion. No new doneID/LEDGER/completion strike. Current working unit, execution and pendingPRs86/87 remain saved for recovery. Actual evidence exclusions and optional formal spec review NOT_PERFORMED retained.
