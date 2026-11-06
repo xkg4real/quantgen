@@ -1,3 +1,14 @@
+## 2026-11-06 진행 중 — 기업 마크·연구홈 표·글꼴·K/M/B/T
+
+- 사용자 추가: 흐리거나 울퉁불퉁한 한글 획, 회사 앞 대표 마크, 연구홈 표 가독성/정돈, 시총·거래량 K/M/B/T.
+- 새 작업 /workspace/work/quantgen-font-clarity-20261106, branch gpt/font-clarity-20261106; base main f180f697c646a39536b7b57886d58c3667b4a9af. 기존 A3/상태 개선 보존. main 미반영.
+- 로컬58950ed: watchlist K/M/B/T, 반올림 경계, 20개 검사 PASS. Home+company_identity/Markets 공유마크/공통글꼴은 작업 중. 공급자 조회/Q-SCORE 산식은 변경하지 않음.
+- 다음: 구현 통합→KO/EN/Light/Dark/배율→정책영향/baseline→PR/CI/main→최종인계/실행명령. Windows 사용자 PC 직접 확인은 별도.
+- 메인 CURRENT는 다른 세션 run-registry-codec 작업(taken). CURRENT/LEDGER/AUTO_STATE 유지. 별도 UI 보충 인계이며 직접 채팅 전송 영수증 없음.
+- 웹 HTML GitHub 게시와 AWS 로그인 재요청 금지 유지. 앱 변경은 실제 사이트 배포가 아님.
+
+---
+
 ## 최종 앱 완료 — PR61·PR62 main 반영 / 인수인계
 
 - PR62 https://github.com/xkg4real/quantgen/pull/62 — **MERGED**, main merge **30a2a81c05cc825fe4a551d6c9700795d265fa26**. 검증 head398ebe39281693237f50892c88e016c6c7a58ca4.
