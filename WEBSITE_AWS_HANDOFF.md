@@ -1,3 +1,7 @@
+## 2026-11-07 PR89 앱 main반영 — AWS 검토큐
+
+PR https://github.com/xkg4real/quantgen/pull/89, merge6a09d3fd367cfc14fd62378deed8c441001c6e1b. Native hinted Korean font와내용폭메뉴/폼/표. 로컬UI19·패키징정책50 PASS,RemoteCompliancePASS/Runtime42245900881진행중. 큐: main docs/product/ui_website_updates/PR-89.json. 실제웹소스를보고밀도/폰트영향만적용검토하세요. FletOTF유지/웹HTML변경없음/로그인재요청금지. 이문서는저장된인수인계이며직접채팅송신영수증이나웹배포증거가아닙니다.
+
 ## 2026-11-06 최종 앱 반영 완료 — PR82 MERGED
 
 - PR82 https://github.com/xkg4real/quantgen/pull/82 를 main **5b7988c653a7fc621a4e170d1361516124f316b4**에 병합했습니다. Source head **4ce18cb4a3de811df3dc165b5e1c7e115e3db35a**. main을 fetch하여 tree **48b0f9162c27604206c8a13f176513156f380f9e**가 로컬 e223c01과 동일함을 확인했습니다.
