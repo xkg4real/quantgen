@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "cc0af5e5ac324c19287c1055b1eeb74cb1919f14af5051e416bee296cd52e749",
+    ".github/workflows/runtime-smoke.yml": "5dd2afd4a24b39dd3d63e348b7b58f1a4912f4db80fd4b9488c53bb737c9397a",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -151,6 +151,7 @@
     "core/quant/risk.py": "30ed7606cb181e0d4bba3ab984fe231e19fe6b3e293b063cf4640c909d2ad6f7",
     "core/quant/risk_layer.py": "9ca19aa23c50a01527aa08842c06bd92f311b535628ce62cb87509ba6238ba84",
     "core/quant/run_registry_codec.py": "fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a",
+    "core/quant/run_registry_store.py": "77522bd80cb158bfac8b400435ede567c35514779ee37006be1007e8094a5eae",
     "core/quant/scenarios.py": "e65dda28f6cb9a3cd29cab547ae1093f556aa0e467f2c86b9d3c616090fbd205",
     "core/quant/signals.py": "d033d0f146e45ac59db6e1125a2b2256cc96c9c1744093e954adf45e2ccec64a",
     "core/quant/sleeves.py": "39bcdf9a73400ebe9634e75ae8278a3616cb41d90156749b369c1ae9042ef2ac",
@@ -262,7 +263,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "6ff75839ae0b72a911d745cacdbc48645488233ac2e0ffeafece0af0f09cead9",
+    "docs/compliance/FACTS.md": "0c59870e1c328965ccaae552c6782264602d36f743949bd8ee77fc666e46a442",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -309,6 +310,7 @@
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
+    "docs/product/R3_SINGLE_SEGMENT_STORE_2026-11-06.md": "f49c6627c6744aec23c46e218be3579b8e91c6f4892862695f44b5fcadb76c1f",
     "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "9082a26aaf303662283b7aadd56e63b3017aab8a30ebefe7cd54db62493d4ca2",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
     "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
@@ -521,6 +523,7 @@
     "tests/research_home_acceptance.py": "a6ba826451e019e3bec8cbc145c3e89878b6e01caa6b976266af0e722f19b157",
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
     "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
+    "tests/run_registry_store_acceptance.py": "f54ca736727a198d7a15cc1996a66fbb966977cd8ecd4230c1b54f22e4ce6110",
     "tests/runtime_syntax_acceptance.py": "174dd84c35a1085a271baa27c0a8e651b519af0e348d912e62a6453027d94e7e",
     "tests/sabr_diagnostics_acceptance.py": "934edacf62c87d572930e9f824120c22dd98dfe0ddc5257e08645b704670e07f",
     "tests/signals_trade_count_acceptance.py": "0b1ed7ed587492cc3dd1ca628e026e3bbdaa0dc2966e96626110a4e53de481a9",
@@ -605,164 +608,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "b2f5100629cba4a47ada73b68fed5e1dfd3e6afc4cd481ccd1b939b5ffa5da29",
+      "document_sha256": "7ffeb30cbf22092284b48635e1769018e2259ea44c1a5647ac50ecaf3f815d63",
+      "source_digest": "c222836c750f91f2c4e82c1ac234134ff7db089f83f47f2c7a84198b0c3ec385",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.390602+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.292017+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "b2f5100629cba4a47ada73b68fed5e1dfd3e6afc4cd481ccd1b939b5ffa5da29",
+      "source_digest": "c222836c750f91f2c4e82c1ac234134ff7db089f83f47f2c7a84198b0c3ec385",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.392175+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.293736+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "4c40c8dcb34df959892d1330896514266b97685b72f9eb4d1f568524125fafc1",
+      "source_digest": "b3e2be34cbd6b902c677f4073270f8cf15bea8e479f43458dc78d59c2dad4188",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.393146+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.294847+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "054d7639df71df640e9839cacd8d07ad667ed52fa360757c05a502b1b4f4bda1",
+      "source_digest": "f11654bbce03e1bd43d9533cb43e7aaa15f79747e5d61b5997e9ce284272e082",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.394034+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.296018+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "29eb2d9c8417dd7c9dafd9074042a5c9a94fc62297e3c53fa5478bb1b20015aa",
+      "source_digest": "fa05d0c2f87b664cdba3d64cca4931720c24e69a9bb6a6c449397a980a87e170",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.395490+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.297320+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "a316d6384efacba063c0934df737c22fe4e47ef527280ca91435776a47204205",
+      "source_digest": "1536e257bafdc6cbb0e73a222a482780ca76b9ef92da59ee10b9c59b9ce915b2",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.396454+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.298417+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "7": {
-      "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "b2f5100629cba4a47ada73b68fed5e1dfd3e6afc4cd481ccd1b939b5ffa5da29",
+      "document_sha256": "cb99e2df664cbc0f5b4efa73259e32809a6a601fe4b64e08105020291a45932b",
+      "source_digest": "c222836c750f91f2c4e82c1ac234134ff7db089f83f47f2c7a84198b0c3ec385",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.397609+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.299478+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "a316d6384efacba063c0934df737c22fe4e47ef527280ca91435776a47204205",
+      "source_digest": "1536e257bafdc6cbb0e73a222a482780ca76b9ef92da59ee10b9c59b9ce915b2",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.398698+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.300757+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "947f5849bdd31c5291e15ea5e64fd98f46ca8b8a338abcaaa6390391860e333a",
+      "source_digest": "70e25d188189db21162dc54f6602574e789440c264f5faed38afd3a179293333",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.399788+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.302066+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "3dd34e9f7775dd42a14aa0470e8be626f7a55c518c6e3d61d6e7fadbf5af1026",
+      "source_digest": "a2f05482533eb1ab4a998b2553966b35e446de5d1889e0d3a63ff1cc190c6410",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.400923+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.303068+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "8b41733ea94b762fb3a8fd6a1aa56df0fc773f86eeaa9dbbbe3a00916654b3cc",
+      "source_digest": "c766b078a2793d1889afc4f0a9deacce8b6c7217832da66e58284a36cc4f5e54",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.401950+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.304138+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "5b6233d6fd33de0ad42964c11fc874737d94ec2e7080aa6fd756746e3a0efbf2",
+      "source_digest": "9d088a097ec2039f9ad240ed565ad391eb4384ae51c09d13bd0b5f55717bd8e5",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.403007+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.305210+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "13": {
       "document_sha256": "1c4d599950946958006cfc32af93ff68d1ca81c9f0ff4291d2c722978e3dc1f9",
-      "source_digest": "947f5849bdd31c5291e15ea5e64fd98f46ca8b8a338abcaaa6390391860e333a",
+      "source_digest": "70e25d188189db21162dc54f6602574e789440c264f5faed38afd3a179293333",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.403918+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.306321+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "14": {
       "document_sha256": "653d67e4d2540fd96d6d3bb70415f3ec11f8e89b10e662ef540779c16ac1d12a",
-      "source_digest": "947f5849bdd31c5291e15ea5e64fd98f46ca8b8a338abcaaa6390391860e333a",
+      "source_digest": "70e25d188189db21162dc54f6602574e789440c264f5faed38afd3a179293333",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.405004+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.307188+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "947f5849bdd31c5291e15ea5e64fd98f46ca8b8a338abcaaa6390391860e333a",
+      "source_digest": "70e25d188189db21162dc54f6602574e789440c264f5faed38afd3a179293333",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.406186+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.308059+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "ebc43b0ab0ba3179a8178893bed4d22c3764e9bf7b298a52f4b861c1ca426f65",
+      "source_digest": "bacc60cfdcbcee1ab9c185020d1b701e4b5f52a2d569e7faee1d600f0f0e140f",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.407164+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.309365+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "a316d6384efacba063c0934df737c22fe4e47ef527280ca91435776a47204205",
+      "source_digest": "1536e257bafdc6cbb0e73a222a482780ca76b9ef92da59ee10b9c59b9ce915b2",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.408214+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.310662+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "b2f5100629cba4a47ada73b68fed5e1dfd3e6afc4cd481ccd1b939b5ffa5da29",
+      "source_digest": "c222836c750f91f2c4e82c1ac234134ff7db089f83f47f2c7a84198b0c3ec385",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.409705+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.311771+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "19": {
       "document_sha256": "040f40ebb5add2ebcaef8f1d878dacc9ed83522a871016806673764b3c92cfea",
-      "source_digest": "49f53ca9025c5d8a67b59ecdee79df9d1f3e46bda13ec1e9ab2ce0add685eb45",
+      "source_digest": "09346bd46958b85c3adfc7eeb1679dbe3b0ee30e5ee490ffe22f52342cac558a",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.410983+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.313214+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     },
     "20": {
-      "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "b2f5100629cba4a47ada73b68fed5e1dfd3e6afc4cd481ccd1b939b5ffa5da29",
+      "document_sha256": "b84d55ab085dad8cb897528f1cda017a96eeb41e68188bd350f13fcb02ea0f88",
+      "source_digest": "c222836c750f91f2c4e82c1ac234134ff7db089f83f47f2c7a84198b0c3ec385",
       "reviewed_by": "Codex UI integration",
-      "review_note": "Combine UI readability with already merged PR79/80/81; only FACTS appendices and source-review conflicted, retain both histories. Runtime files merge without overlap.",
-      "reviewed_at": "2026-11-06T10:11:39.412345+00:00",
-      "source_commit": "355cc50b4f077b1ad23bbc24fa62c55a66b1a76f"
+      "review_note": "Integrate independently merged PR83 detached store, preserving both FACTS appendices. UI files byte-identical to Windows/Linux verified92c728 tree; detached store and compliance verified separately.",
+      "reviewed_at": "2026-11-06T10:41:50.314556+00:00",
+      "source_commit": "92aec5054e0bf41b98967c38ad9bc0bd864da497"
     }
   }
 }
