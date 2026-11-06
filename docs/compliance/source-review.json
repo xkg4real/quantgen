@@ -304,10 +304,10 @@
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
-    "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "85c35d925ef729f2f0649dbcede19e62722cdcdc9e7653e334c21a73d4d34eee",
+    "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "e75a5728837082ba0cce769c7b360f41c7d860911fd486595ad5935d0b77407a",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
     "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
-    "docs/product/RECORDED_STATUS_DISPLAY_2026-11-06.md": "b42185924788a1dc67c970e362fff0e7c73d312167acedd1ab242bf3ef1f06b7",
+    "docs/product/RECORDED_STATUS_DISPLAY_2026-11-06.md": "a4c2192fda73553c93205b2132237d9d1f2dfb9abdf78784df340397891411c9",
     "docs/product/RESEARCH_HOME_CONTRACT_2026-10-29.md": "ad9177b241178d7427f77caa8b7de6f14390610d41d2959c87dd03b1093fd189",
     "docs/product/SABR_DIAGNOSTICS_2026-10-31.md": "a57bedc2a0e290b0c35118fd797b911424c3d663caf7813d241857f0c21cc9de",
     "docs/product/SECTION10_FICC_2026-10-30.md": "9d7b106343df1252c92fb63bae2e3f76958fb99b0c83e88790a59078f0ce0f14",
@@ -510,7 +510,7 @@
     "tests/reference/__init__.py": "981465fb05d87f128a0b80cc4b8122a83335ee0994ce5b4d3ee3bdbe72bc6e9c",
     "tests/reference/reference_mode.py": "f79ad9f482323344ee20c6685edf08b8abd64f11dfad25ab40cd132ad9339c37",
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
-    "tests/research_home_acceptance.py": "6837298838c5850841a432c08f7397185befc549937c4cf29b28c8ca2313cd1e",
+    "tests/research_home_acceptance.py": "a6ba826451e019e3bec8cbc145c3e89878b6e01caa6b976266af0e722f19b157",
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
     "tests/runtime_syntax_acceptance.py": "174dd84c35a1085a271baa27c0a8e651b519af0e348d912e62a6453027d94e7e",
     "tests/sabr_diagnostics_acceptance.py": "934edacf62c87d572930e9f824120c22dd98dfe0ddc5257e08645b704670e07f",
@@ -597,163 +597,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "81d222dbd62518459a5939b1994675877e38233959074409803b2fbc97c18f42",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.625287+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "2a6f42b799dfadd60e1d2bf81545e9a4b130c7b2ce856d430c72d5fd3d79e4e6",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.349589+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "81d222dbd62518459a5939b1994675877e38233959074409803b2fbc97c18f42",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.629699+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "2a6f42b799dfadd60e1d2bf81545e9a4b130c7b2ce856d430c72d5fd3d79e4e6",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.352091+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "2c090068751fd90084a3a1d69b9e4218c8562ed328dd8ab28da4b165b4b908c6",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.632033+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "a3a5d2e56cb7e1b802da9464d4ead6b8430132dfe72f040b09bfdc0f6675c8c2",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.354263+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "5541ef36e0722b03bbbb14d3d1ffd85eec48ccb113859e6a0acdc03f45269144",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.634515+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "087e9a28ceb56ef3ee8442030f3cdc0f62cb3cb338afaeaaa2d1bbb14c604833",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.356464+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "e4ec09283b509dbc01b30c0990a1db6b33d753a94ab5b74cef7a3961f8edfa0c",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.637599+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "a2196f0b2746a20c1e4501a93675b2e9882655f2be1f6605d48a41d0775269bf",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.358444+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "fa7093a9566d4da52125d1c315c8023b44d8fa3386b9b24d14986e1eaa8df2fe",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.639817+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "04347980db07043cbdf51b740efd9430cadced1ece774f494b8ce830c4a5a940",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.360549+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "81d222dbd62518459a5939b1994675877e38233959074409803b2fbc97c18f42",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.643180+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "2a6f42b799dfadd60e1d2bf81545e9a4b130c7b2ce856d430c72d5fd3d79e4e6",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.362725+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "fa7093a9566d4da52125d1c315c8023b44d8fa3386b9b24d14986e1eaa8df2fe",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.646220+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "04347980db07043cbdf51b740efd9430cadced1ece774f494b8ce830c4a5a940",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.365083+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "76b4ac108c6296268184fded5c9cdc949ee080f6b78fbd4a22cbbfe90cd58dbc",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.650163+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "3ea7e405fd57b5b3b87fe747eafc65dac15e765ea42b85666b5c7fc7995bff4f",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.367432+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "e507f9ff2f9cb4ffa8b27dc39511d6f0e64e6e3d20653550781218faf53d0301",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.652390+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "a508fc614e1061ca78d4f1756122a006843313b4bf65398d4aa59c892e823e2c",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.369685+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "4b9c19d80f227dce14d50d6864b0f861812cbe6c186892feff91389dfe0a101a",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.654587+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "adb22bc783f05723e570e4d115032170656ea1654c1d7ecd5a43bbcd0edf2482",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.372244+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "53f969a767942a9aa9ef4d9ec021c336cb92169b4d534f8dd7af68a570391d55",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.658523+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "bd2db4de4a0e158c7ccef82d8ac1bf254883639adcf158d2c6de4c466f872bd6",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.375253+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "76b4ac108c6296268184fded5c9cdc949ee080f6b78fbd4a22cbbfe90cd58dbc",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.660798+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "3ea7e405fd57b5b3b87fe747eafc65dac15e765ea42b85666b5c7fc7995bff4f",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.377453+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "76b4ac108c6296268184fded5c9cdc949ee080f6b78fbd4a22cbbfe90cd58dbc",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.664859+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "3ea7e405fd57b5b3b87fe747eafc65dac15e765ea42b85666b5c7fc7995bff4f",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.379523+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "15": {
       "document_sha256": "470bda66a33c2bdc9ff299940db8390750b54e0c73c978eff31abe5190f0df69",
-      "source_digest": "76b4ac108c6296268184fded5c9cdc949ee080f6b78fbd4a22cbbfe90cd58dbc",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.668881+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "3ea7e405fd57b5b3b87fe747eafc65dac15e765ea42b85666b5c7fc7995bff4f",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.381694+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "109006c16bec5bad4adcbcc1f9a74ebec19619470a7a8e4b2d87dc6602289ba4",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.675299+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "fe8047d7123d41ccb41df4069479dfe87657b44580588a8a81709ab0c164ee12",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.385529+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "fa7093a9566d4da52125d1c315c8023b44d8fa3386b9b24d14986e1eaa8df2fe",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.677539+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "04347980db07043cbdf51b740efd9430cadced1ece774f494b8ce830c4a5a940",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.388621+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "81d222dbd62518459a5939b1994675877e38233959074409803b2fbc97c18f42",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.680608+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "2a6f42b799dfadd60e1d2bf81545e9a4b130c7b2ce856d430c72d5fd3d79e4e6",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.390805+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "eedcce8e2639fca31389a7d8df25e50ba30f9c421a04171e2c91477f3647819f",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.684656+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "f26a722cbc21df3152df65979890664e47a10e082c180156d1ca50346c4f2103",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.392952+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "81d222dbd62518459a5939b1994675877e38233959074409803b2fbc97c18f42",
-      "reviewed_by": "GPT Rates inline implementation and independent policy reviewers",
-      "review_note": "Reviewed five authored bilingual metadata blocks, literal provider and model notes subject to existing redaction, unchanged canonical source expressions, numerical formatting, report and AI evidence, synthetic disclosure and all twenty policy impacts; no public readiness approval.",
-      "reviewed_at": "2026-11-06T07:53:36.686655+00:00",
-      "source_commit": "3726dd6a60958797f66546a19d6ccb833ba865f8"
+      "source_digest": "2a6f42b799dfadd60e1d2bf81545e9a4b130c7b2ce856d430c72d5fd3d79e4e6",
+      "reviewed_by": "GPT combined Rates inline and status test review",
+      "review_note": "Confirmed tested Rates source and test AST preservation with upstream status failure contract correction, reviewed all twenty policy dispositions and retained both failure histories and public-readiness boundaries; canonical inputs and outputs unchanged.",
+      "reviewed_at": "2026-11-06T07:54:13.395578+00:00",
+      "source_commit": "3b175e15ac4859ccb20e7e67abe54f70f537fda9"
     }
   }
 }

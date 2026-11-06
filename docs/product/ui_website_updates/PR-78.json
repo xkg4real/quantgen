@@ -46,12 +46,19 @@
       {
         "suite": "post-A3-merge status/snapshot/layout",
         "passed": 26
+      },
+      {
+        "suite": "research-home failure contract with status/snapshot/Flet regression",
+        "passed": 31
       }
     ],
     "counts_note": "Overlapping suites, do not sum. Five native synthetic captures plus separate baseline comparison. Existing narrow System inactive-Rules-tab overflow58/44 remains unchanged. All11 status lines readable. No full responsive or physical Windows acceptance.",
     "source_review": "20 policies reviewed; consistency PASS586; publication BLOCKED",
-    "ci": "PENDING_FINAL_HEAD",
-    "ci_runs": [],
+    "ci": "ORIGINAL3726dd6_FAILED_LEGACY_ERROR_TEXT_TEST; CORRECTED_HEAD_PENDING",
+    "ci_runs": [
+      42182875822,
+      42182875881
+    ],
     "actual_provider_network": "NOT_RUN",
     "user_pc": "NOT_RUN"
   },

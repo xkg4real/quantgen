@@ -35,3 +35,7 @@ No real Windows PC/DPI/assistive-technology, provider/API, legal/license,
 supplier-parity, pilot, frozen-research or actual deployment evidence is added.
 Extra GPT/Gemini specification review remains optional NOT_PERFORMED. Website
 follow-up is a queued source record until a supported delivery receipt exists.
+
+The status failure-test correction fa7c211 is integrated. Rates production and
+test ASTs match the reviewed 3b175e1 exactly; the research-home test AST matches
+the corrected and tested fa7c211. The merge changes no tested product behavior.
