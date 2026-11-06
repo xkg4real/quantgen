@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T18:15:38+09:00
+updated_at: 2026-11-06T18:17:06+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/ui-a3-20261106
-work_commit: bd7ee2a1b329320caf99fdff0ec61abb4cc443a4
+work_branch: gpt/run-registry-codec-20261106
+work_commit: 38745b7738f667bbddae2bccfc4bf236b862c066
 uncommitted_changes: yes
-pr: https://github.com/xkg4real/quantgen/pull/77
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -445,3 +445,10 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - identity PR80 b79d56d Runtime42191579626 Ubuntu3.12 job127804645117에서 A1후속18시험11.710s OK 후 segmentation fault/exit139를확인했다. 직전status21시험·기타native123시험등은통과했지만전체job은실패다. 원문로그는private IDENTITY_B79_UBUNTU_A1_EXIT139.log에보존했다. PR80병합금지/원인진단중이며제품identity의19합성PASS와구분한다.
 -같은Qt생명주기문제가능성을시험소유위젯측정으로확인중이다. tests.desktop_a1_terms_acceptance/desktop_a1_status_acceptance 두시험의명시적정리만검토하며기존단언·판정기준은유지한다. 테스트실패를재실행만으로덮지않는다. PR78/79는각exacthead의전체결과를따로확인한다.
 - R3 codec source/test freeze:17합성PASS0.010s,독립9probePASS0.010s(범위겹침),중대한소스결함없음. 독립probe의기대정렬오류수정이력보존,제품수정없음. code17및독립검토는전체R3/저장소/실제연구완료아님. 정책20개검토·문서통합진행중;아직R3sourcepush/PR전이다.
+
+### GPT R3 codec 소스 보존·주 작업 포인터 — 2026-11-06T18:17:06+09:00
+
+-⑨-3a/codec/1 source 38745b7738f667bbddae2bccfc4bf236b862c066를 gpt/run-registry-codec-20261106에commit/push/read-back했다. 현재주작업포인터를이검증된브랜치/커밋으로옮긴다.같은execution/task/handoff유지. 독립17PASS+9probePASS(겹침),20정책실질검토GO/소스정합성PASS594·공개준비BLOCKED. numbered정책/기존기록보존하고FACTS에한정범위만추가했다.
+- codec은envelope기본형식/JSON-LF/MD5/명시적UTC·tokenID만구현한다. event별필수payload의전체의미·원장/저장/락/회복/키생성/Lab/owner효과는미구현.기존marker는null구조확인일뿐출처증명아님,MD5인증아님,외부끝기준없는전체suffix삭제탐지불가. 추가formal spec심사NOT_PERFORMED. 아직PR/전체CI/완료원장미기록.
+-미커밋변경(§5 보충): 별도identity b79 worktree에서 nativeA1 두시험의widget정리진단중; 실제source수정은 tests/desktop_a1_terms_acceptance.py와tests/desktop_a1_status_acceptance.py의소유위젯정리만예정/진행.18시험·단언유지. R3 worktree source는clean. PR80Ubuntu18OK후exit139원문보존,최종수정후CI재검증필수.
+-다음: identityA1정리측정/테스트/검토후push/readback, R3에정상통합후별도PR; PR78/79 각fullCI후승인범위병합. A3완료Notion2페이지반영/readback/큐30기록보존.
