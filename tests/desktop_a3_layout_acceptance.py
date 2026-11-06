@@ -4,7 +4,7 @@ from dataclasses import replace
 import unittest
 from unittest.mock import patch
 
-from PyQt6.QtCore import QEvent, Qt
+from PyQt6.QtCore import QEvent, QPoint, Qt
 from PyQt6.QtTest import QTest
 from PyQt6.QtWidgets import QApplication
 
@@ -56,6 +56,16 @@ class A3ResultLayoutTests(unittest.TestCase):
     def values(table):
         return [table.item(row, 1).text() for row in range(table.rowCount())]
 
+    @staticmethod
+    def mc_geometry(window):
+        scroll = window.stack.currentWidget()
+        return (f'window={window.width()} language={window.ui_language} '
+                f'viewport={scroll.viewport().width()} content={scroll.widget().width()} '
+                f'tabs_min={window.quant_tabs.minimumSizeHint().width()} '
+                f'mc_min={window.quant_tabs.widget(0).minimumSizeHint().width()} '
+                f'strategy_min={window.strategy.minimumSizeHint().width()} '
+                f'strategy_explicit_min={window.strategy.minimumWidth()}')
+
     def put_analysis(self, model):
         request = AnalysisRequest(symbol='TEST', source_requested='synthetic', model=model,
                                   n_paths=200, horizon_days=5, seed=19, drift='premium')
@@ -85,7 +95,8 @@ class A3ResultLayoutTests(unittest.TestCase):
                             w.set_language(language)
                             self.settle(); w.grab(); self.settle()
                             self.assert_all_rows_visible(w.quant_metrics)
-                            self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(), 0)
+                            self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(), 0,
+                                             self.mc_geometry(w))
                             self.assertEqual(self.values(w.quant_metrics), expected_values)
                             self.assertEqual(w.quant_notes.source_text, raw)
                             self.assertFalse(w.quant_notes.isHidden())
@@ -93,6 +104,42 @@ class A3ResultLayoutTests(unittest.TestCase):
                             self.assertIn('NOT_RUN', w.analysis_status.text())
                             self.assertEqual(export_bytes(output.run), run)
                             self.assertEqual(w.commentary_sources(), payload)
+
+    def test_inactive_strategy_minimum_does_not_widen_monte_carlo(self):
+        w = self.window
+        output = self.put_analysis('gbm')
+        values = self.values(w.quant_metrics)
+        run = export_bytes(output.run)
+        payload = deepcopy(w.commentary_sources())
+        # Native font/style hints can make the inactive Strategy form wider.
+        # Use an explicit width to reproduce that layout contract on every OS.
+        w.strategy.setMinimumWidth(1800)
+        with patch.object(w.jobs, 'start', side_effect=AssertionError('no recompute')):
+            for width in (1000, 1360, 1000):
+                w.resize(width, 1000)
+                for language in ('en', 'ko'):
+                    w.set_language(language)
+                    self.settle()
+                    self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(), 0,
+                                     self.mc_geometry(w))
+                    viewport = w.stack.currentWidget().viewport()
+                    for widget in (w.quant_study, w.quant_metrics):
+                        left = widget.mapTo(viewport, QPoint(0, 0)).x()
+                        self.assertGreaterEqual(left, 0)
+                        self.assertLessEqual(left + widget.width(), viewport.width(),
+                                             self.mc_geometry(w))
+                    self.assert_all_rows_visible(w.quant_metrics)
+                    self.assertEqual(self.values(w.quant_metrics), values)
+                    self.assertEqual(export_bytes(output.run), run)
+                    self.assertEqual(w.commentary_sources(), payload)
+            # Respect the same constraint when its own page is selected.
+            w.quant_tabs.setCurrentWidget(w.strategy)
+            self.settle()
+            self.assertGreater(w.stack.currentWidget().horizontalScrollBar().maximum(), 0)
+            w.quant_tabs.setCurrentIndex(0)
+            self.settle()
+            self.assertEqual(w.stack.currentWidget().horizontalScrollBar().maximum(), 0,
+                             self.mc_geometry(w))
 
     def test_bond_panels_reflow_and_retain_tables_chart_report_and_payload(self):
         w, pane = self.window, self.window.bonds

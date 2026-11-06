@@ -535,7 +535,9 @@ class ResearchWindow(QMainWindow):
 
     def make_quant(self):
         outer = self.page("Build & Test", "Quant Lab · 기존 계산 엔진으로 가격 분포 분석")
-        self.quant_tabs = QTabWidget()
+        # Only the selected page sets the scroll width. The inactive Strategy
+        # form has platform-dependent font/combobox hints of its own.
+        self.quant_tabs = CurrentPageTabs()
         outer.addWidget(self.quant_tabs)
         host = QWidget()
         layout = QVBoxLayout(host)

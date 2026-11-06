@@ -407,3 +407,12 @@ A1 코드 `2715d9e` 이후 A3 통합 소스 `e33063b`의 범위입니다. A1 선
 | 검증 범위 | 지정 합성/offscreen 검사에는 F1/Esc·셀 복귀·언어/테마·폭 변경·정확 인용·실제 Macro 접기·기존 보고서/AI 입력 비교가 있음. 선행 실행의 통과 수를 합산하지 않으며 재현된 baseline 실패도 기록대로 유지. 실제 Windows/IME/DPI·스크린리더·전체 대비/캡처 행렬·Flet 동등 구현·실제 API/공개 배포 완료를 뜻하지 않음 | [레이아웃 검사](../../tests/desktop_a3_layout_acceptance.py), [읽기 검사](../../tests/desktop_a3_reading_acceptance.py), [실행 기록·한계](../product/A3_READING_LAYOUT_2026-11-06.md), [키보드 검수](15-keyboard.md) |
 
 01–20 정책을 현재 A3 소스와 대조하고 로컬 인용/명시적 복사, 선택권·주장·키보드·삭제에 직접 관련된 문구만 보강했습니다. 기존 법률·운영자·제공자 계약·라이선스·전송 동의·실제 공개/배포 조건, `review-required`와 공개 준비 `BLOCKED`를 유지합니다. Flet AI 체크박스 흐름·실제 Windows/API/파일럿·동결 연구 증거는 미완료이며 선택적 GPT/Gemini 추가 심사는 `NOT_PERFORMED`입니다. 최종 실행·CI·병합과 소스 fingerprint는 통합 후 실제 결과로 별도 기록합니다.
+
+<a id="a3-mc-tab-width-2026-11-06"></a>
+## A3 Monte Carlo 비활성 탭 최소 폭 후속 — 2026-11-06
+
+최초 PR #77 Windows CI는 `67a8838`의 GBM·GARCH-t MC 가로 스크롤 최대값이 286px여서 기존 0 조건에 실패했습니다. 앞서 통과한 Linux 131개 검사와 이 실패를 별도 증거로 보존합니다. Quant 탭을 일반 `QTabWidget`에서 이미 사용 중인 `CurrentPageTabs`로 바꿔 현재 선택한 페이지의 크기 힌트만 사용합니다. 비활성 Strategy Lab의 최소 폭이 MC를 넓히는 경로를 제거하되 Strategy가 선택되면 그 최소 폭을 그대로 존중합니다. [앱 적용](../../quantgen_desktop/app.py) `make_quant`와 [기존 탭 크기 처리](../../quantgen_desktop/chart_study.py) `CurrentPageTabs`가 근거이며 계산·문구·가정·판정·보호 태그·보고서·AI 입력은 바꾸지 않습니다.
+
+새 합성 회귀는 비활성 Strategy에 최소 폭 1800px를 주어 수정 전 넘침 1057px를 재현했습니다. 이는 숨은 탭 크기 제약의 재현이며 Windows에서 관측한 286px나 실제 Windows 글꼴·자식 폭을 재현/측정한 것으로 설명하지 않습니다. 수정 후 A3 layout 5개+reading 12개, 17개 검사가 통과했고 viewport 경계 조건을 보강한 같은 회귀 1개도 통과했습니다. 1개는 앞 검사와 겹치므로 합산하지 않습니다. 기존 넘침 0 조건은 유지하고 차트/표가 실제 viewport 안에 있는지도 검사하여 잘림으로 대신하지 않습니다. 선택한 Strategy의 필요한 스크롤·MC 복귀, 값·실행 보고서·AI 입력 보존도 확인합니다. [회귀 검사](../../tests/desktop_a3_layout_acceptance.py)와 [최종 통합/CI 기록](../product/A3_READING_LAYOUT_2026-11-06.md)을 연결합니다.
+
+01–20 정책을 이 한정된 변경에 재대조하고 15번에 실패 이력·검수 범위만 보강했습니다. 수정 후 정확한 커밋의 Windows CI는 별도로 확인하며 클라우드 합성 통과를 실제 사용자 Windows/DPI·키보드·스크린리더 수용으로 바꾸지 않습니다. 정책 `review-required`, 공개 준비 `BLOCKED`, 기존 법률·라이선스·동의·실제 API/파일럿·동결 연구·게시/배포 조건은 유지합니다.
