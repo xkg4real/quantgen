@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T18:32:44+09:00
+updated_at: 2026-11-06T18:34:31+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-codec-20261106
-work_commit: 38745b7738f667bbddae2bccfc4bf236b862c066
-uncommitted_changes: yes
-pr: none
+work_commit: f3d6c5e2a0de766ab79a73d392eb77bd307c9862
+uncommitted_changes: no
+pr: https://github.com/xkg4real/quantgen/pull/81
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -476,3 +476,10 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - Identity PR80 final386a0d75ce2b242873a5146eacebece66f1ae25e를 push/read-back했다. Rates622 노트 통합은 FACTS·제품문서·review baseline만 변경하며 source/tests/workflow는 e981과 동일하다. 전체20 정책 검토 GO, 정합성PASS591/publicationBLOCKED. FACTS 변경 직후 baseline 갱신 전 FAIL 기록도 보존했다. 새 최종 head 전체 CI가 필요하다.
 - Rates PR79 final62246779f45b9e4eff37b7af6ac7e71354b5fd18의 Runtime42194971104 진행 중, Compliance42194971102 success. 이전578의 Ubuntu A1 18OK 후139 실패는 성공으로 대체하지 않는다.
 - R3 branch387에 Identity386의 정상 merge를 진행 중이다. 기존R3 source/test 해시 유지, FACTS 양쪽 원문/추가절 보존, A1 소유 fixture cleanup 두 파일과 동일 명령의 실행 순서만 합류했다. 결합20정책 검토 후 baseline갱신·commit/push/readback·PR·최종CI를 진행한다. 실제증거 공백과 선택spec NOT_PERFORMED 유지.
+
+### GPT R3 최종 통합·PR81 — 2026-11-06T18:34:31+09:00
+
+- R3 finalf3d6c5e2a0de766ab79a73d392eb77bd307c9862를 gpt/run-registry-codec-20261106에 정상 push하고 원격 SHA read-back했다. PR81 draft이며 PR79 Rates622→PR80 Identity386→PR81 순서로 최종 head 전체 CI 성공 후 병합한다. 현재 로컬 worktree clean, 코드완료 ID/LEDGER 추가 전이다.
+- R3 pure codec source fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a/test c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e 유지. 17합성PASS0.010s+독립9검사PASS0.010s(중복합산금지), 결합20정책 검토GO/소스정합성PASS594/publicationBLOCKED. inherited A1 cleanup exact블롭과 검사명령 multiset 보존.
+- 완성 대상은 ⑨-3a/codec/1뿐이다. Envelope/정규JSON+LF/nonfinite표시/제공된 bytes MD5사슬/주입UTC·token LAB ID만 다룬다. 실제 원장/저장회전/keys/카논·Lab연결/동결연구/승인효과 없음. MD5는 인증 아님, 외부anchor없는 유효suffix삭제 판별불가. 전체⑨-3a와T-RUNREG02/09 미완료.
+- PR79 Runtime42194971104 진행중/Compliance42194971102success; PR80 Runtime42195764855 진행중/Compliance42195765001success. 일부A1단계 성공은 전체CI성공으로 대체하지 않는다. 실제 사용자Windows/API/공급사/법률·라이선스/파일럿 증거와 NOT_PERFORMED 선택spec 상태 유지. 다음은 세최종head 전체CI와 순차병합·원장·Notion 반영.
