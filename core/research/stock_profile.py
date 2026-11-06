@@ -31,9 +31,8 @@ import math
 import re
 from typing import Any, Mapping
 
-from babel.numbers import format_compact_decimal
-
 from core.i18n import LocaleContext
+from core.numfmt import compact_large_number
 from core.market.models import Candle, ChartRequest, Instrument, MarketSnapshot, utc_now
 from core.market.presentation import indicator_values
 from core.market.routing import ProvidersNotRun, ProvidersUnavailable, describe
@@ -746,7 +745,7 @@ class _Writer:
         return text + self.t("주", " shares")
 
     def compact(self, value):
-        return format_compact_decimal(float(value), format_type="short", locale=self.ctx.locale, fraction_digits=2)
+        return compact_large_number(value, self.ctx.locale)
 
     def plain(self, value):
         number = float(value)
@@ -855,7 +854,9 @@ def _key_figures(w):
         if data.get(key) is not None:
             rows.append(ProfileRow(w.pair(labels), w.price(data[key]), None, where))
     if data.get("volume") is not None:
-        rows.append(ProfileRow(w.t("거래량", "Volume"), w.shares(data["volume"]), None, where))
+        rows.append(ProfileRow(w.t("거래량", "Volume"),
+                               w.compact(data["volume"]) + w.t("주", " shares"), None,
+                               w.shares(data["volume"]) + "\n" + where))
     fundamentals = w.source_hint("quote", "현재가 조회", "quote")
     if data.get("market_cap") is not None:
         rows.append(ProfileRow(

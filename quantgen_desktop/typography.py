@@ -154,7 +154,8 @@ def window_stylesheet(p, dark: bool) -> str:
     """The research window stylesheet.
 
     Controls, tables and tabs stay at 13px so dense forms do not clip at 1000x700;
-    body labels are 14px; the hierarchy runs from 12px captions to 32px figures.
+    body labels are 15px; explanatory captions use the real Medium face at
+    14px instead of thin 12px text. Table/axis labels keep their own dense scale.
     Each delta rule is repeated under QFrame#panel: the ID selector in
     `QFrame#panel QLabel { background: transparent }` outranks a bare
     QLabel[role='delta'], and cards (MarketCard and the like) are panels.
@@ -169,7 +170,7 @@ def window_stylesheet(p, dark: bool) -> str:
                           border: 1px solid {p.border}; border-top-color: {d['edge_top']};
                           border-bottom: 2px solid {d['edge_bottom']}; border-radius: 14px; }}
           QFrame#panel QLabel {{ background: transparent; }}
-          QLabel {{ background: transparent; font-size: 14px; }}
+          QLabel {{ background: transparent; font-size: 15px; }}
           QLabel[role='title'] {{ font-size: 30px; font-weight: 600; letter-spacing: -0.6px; }}
           QLabel[role='heading'] {{ font-size: 18px; font-weight: 600; border: 0; border-left: 3px solid {p.accent}; padding-left: 8px; }}
           QLabel[role='cardTitle'] {{ font-size: 15px; font-weight: 600; }}
@@ -181,7 +182,8 @@ def window_stylesheet(p, dark: bool) -> str:
           QLabel[role='brand'] {{ font-size: 17px; font-weight: 600; letter-spacing: 0.15px; color: {p.accent}; }}
           QLabel[role='number'] {{ font-size: 32px; font-weight: 600; letter-spacing: -0.6px; }}
           QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
-          QLabel[role='caption'] {{ font-size: 12px; }}
+          QLabel[role='caption'] {{ font-size: 14px; font-weight: 500; }}
+          QToolTip {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; padding: 7px 10px; font-size: 14px; font-weight: 400; }}
           QPushButton {{ padding: 10px 14px; border: 1px solid {p.border}; border-radius: 8px; background: {p.surface}; font-weight: 500; }}
           QPushButton:hover {{ background: {p.accent_soft}; }}
           QPushButton:focus, QLineEdit:focus, QComboBox:focus {{ border: 2px solid {p.accent}; }}
