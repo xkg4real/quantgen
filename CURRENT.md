@@ -5,14 +5,14 @@ from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1
-next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T19:05:25+09:00
+next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a/store/1, ⑨-3a/keys/1
+updated_at: 2026-11-06T19:19:08+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-keys-20261106
-work_commit: b5cbf6695b8430f89298e8c96294f2b83c4b0a85
+work_commit: 246c9af2159880c45f59ed5e895e673be2a8180f
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/84
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -519,3 +519,11 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - 동일task/handoff/execution6c40bb4c-51a4-439b-a64d-0233051168ab 아래 ⑨-3a/keys/1을 등록한다. gpt/run-registry-keys-20261106 /workspace/work/quantgen-r3-keys-20261106을 검증된b5cbf6695b8430f89298e8c96294f2b83c4b0a85에서생성·push/read-back했고 코드수정아직없음. 최신LEDGERc5add02e에서 ID/새파일미완료·미기록확인. PR83store는별도최종CI계속확인한다.
 - 승인R3rev2 §9.1/9.2/T-RUNREG01b의 순수lab_config_ids(rule,is_pairs,symbols,grid,cost_bps)만구현. historical527cdf24f90528a00a6b79901692ca926ceb4bc1의register_trials와현재core/research/strategy_workflow.py 함수1708byte가동일하며SHA2568906e993263905b30a6bba2f9e977762bb8ec8e8f69545d822a825af7bb67fb3. gate_ledger/macro_schema blob도동일함을읽기대조했다. 원래함수·동결파일·키기준·비용·순서·수치규칙을변경하지않는다.
 - 키는계획된입력의순수계산이며실제등록/시행횟수/identity통합아님. 기존JSONdefault=str/정렬(쌍은순서보존)/6null필드/COMPLIANT/cost50과50.0의기존차이를핀한다. 독립golden과일곱family·순서·type회귀, 변경하지않은writer를명시적격리temp원장으로만대조한다. 실제원장/보호캐시/카드/GATE실행·변경/연구실행없음; 합성입력/네트워크차단/기본경로거부. 코드수정은이CAS/executionID read-back뒤에만시작한다.
+
+### GPT 순수 시행 키 PR84 — 2026-11-06T19:19:08+09:00
+
+- gpt/run-registry-keys-20261106 final246c9af2159880c45f59ed5e895e673be2a8180f를 push/read-back했다. PR84draft이며 PR83store선병합과 최종head전체Runtime/Compliance성공뒤⑨-3a/keys/1만완료기록한다. 로컬clean, 다음미완료IDs에store/keys하위항목을명시했다.
+- 유지13합성PASS0.986s, 독립7겹치는검사PASS0.002s, 별도과거source기준값generator1PASS0.051s.27cases/151positions(7family66fullgrid×int/float비용값포함)의literal기준값은527cdf24원문에서지금독립생성했으며과거운영실행기록이아니다. 현재변경없는writer26nonsynthetic표시사례를합성입력·명시적temp원장·기본경로거부로실제로대조했다. SYNTHETIC표시는기존등록없음을따로검증했다.
+- source04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069/test5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708/fixture6b11119ae10829514f8c762c6481bdc67c262284e36b2448898a461e699cc5ff 고정. 원래writer1708byte/GL·macro_schema변경없음. 초기private기준값생성기의grid수5/9가정오류와stdlibtime허용누락실패를보존했고원래규칙/제품코드는바꾸지않았다.
+-20정책검토GO,FACTS16줄만추가·다른번호정책/RELEASE그대로;정합성PASS600/publicationBLOCKED. COMPLIANT는기존keyliteral이며승인아님;plannedkeys는실제등록/시행수/identity/비용판정아님. default=str객체효과/JSON키변환/숫자type차이를보존한다. 실제원장·GATEscore·공급사·연구·카드/보호캐시실행없음. 전체T01b/R3/Lab연결·실제증거와선택specNOT_PERFORMED 상태유지.
+- Codec Notion한정완료및store진척두페이지read-back성공(큐40행). StorePR83 전체CI는진행중이며Windows초기신규저장소시험단계성공은전체완료로대체하지않는다. 다음:PR83→PR84각최종CI검증/정상병합/원장/CURRENT·STATE/Notion, 이후안전한부분인수인계에필요한전주기기록정리.
