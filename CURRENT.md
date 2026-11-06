@@ -6,11 +6,11 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a/keys/1
-updated_at: 2026-11-06T19:24:14+09:00
+updated_at: 2026-11-06T19:52:38+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-keys-20261106
-work_commit: 246c9af2159880c45f59ed5e895e673be2a8180f
+work_commit: a083f75138c44feaa9eca788d82d53215eed38c0
 uncommitted_changes: no
 pr: https://github.com/xkg4real/quantgen/pull/84
 usage_weekly_pct: unknown
@@ -533,3 +533,10 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - PR #83 final `b5cbf6695b8430f89298e8c96294f2b83c4b0a85` passed exact-head Runtime42198946682 (all6 jobs) and Compliance42198946631; merge `d3f94b81b3e8c6ba0e9bb605d39b4726af62a392` verified in PR/main read-back. LEDGER `9818a212688ad78ac191ef8c91e55fd9db9f1736` records only ⑨-3a/store/1.
 - Isolated synthetic store16+codec17=33PASS0.401s; independent8 overlapping probes PASS0.141s. Windows3.11/3.12/3.14 store16+codec17 OK; real subprocess lock/LF tests are cloud CI, not owner-PC acceptance. All20 policy review PASS597/publication BLOCKED. Partial-write/fsync/unlock uncertainty,32MB single-segment limit, trusted canonical-path/cooperating-writer assumptions retained.
 - Rotation/recovery/cache/human authority/recorder/Lab and full R3/T-RUNREG02/09 remain incomplete. PR84 keys at `246c9af2159880c45f59ed5e895e673be2a8180f` remains active; exact-head final Runtime42201679975 required. Actual Windows/API/provider/legal/license/pilot/frozen-research evidence remains absent; optional spec review NOT_PERFORMED.
+
+### GPT PR84 latest-main integration — 2026-11-06T19:52:38+09:00
+
+- Prior keys `246c9af2159880c45f59ed5e895e673be2a8180f` completed Runtime42201679975 all6 and Compliance42201680042. Final merge gate then found main moved to UI82 `e4ec6ef9ed8ea1dc16ae7f06a8e75ec9bc0f1944` and PR84 conflicted; no merge/completion was claimed. The separate UI82 source `4ce18cb4a3de811df3dc165b5e1c7e115e3db35a` was merged by its own session as `5b7988c653a7fc621a4e170d1361516124f316b4`; its latest observed Runtime42204806984 was still in progress, Compliance42204806985 success. Older UI82 CI is not proof for that new source.
+- Same owned keys branch now pushed/read-back `a083f75138c44feaa9eca788d82d53215eed38c0`, merging main e4ec. Only FACTS/source-review conflicted; both full FACTS appendices preserved and all20 policies reviewed. Incoming UI source/tests remain byte-identical to e4ec; codec/store/keys, keys tests/fixture and workflow remain byte-identical to246c. No product code conflict resolution or actual ledger/provider/research/owner-rule effect.
+- New guarded integration: R3 46PASS1.480s exit0; UI four modules86PASS106.513s exit0; separate responsive5PASS33.338s exit0. Actualviewport+100 oversized fixture preserves overflow/selection/request/tooltip assertions; earlier fixed710px Linux failure remains historical. ConsistencyPASS602/publicationBLOCKED. Initial lazy-fetch network refusal was resolved with existing per-command network permission, not policy/config changes.
+- Fresh exact-head Runtime and Compliance required for a083f75 before PR84 merge/⑨-3a/keys/1 completion. Windows CI/manual actual proof remain distinct. Full R3/T01b/recorder/Lab and actual API/provider/legal/license/pilot/frozen-research gaps remain; extra spec review NOT_PERFORMED. PR83 bounded Notion completion and PR84 earlier progress were read-back verified on sapientia. Next pure data-hash child is only scoped, not claimed/edited.
