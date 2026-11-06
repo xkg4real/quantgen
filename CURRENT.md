@@ -4,9 +4,9 @@ reason: usage_limit_weekly
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1
-next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a/keys/1, ⑨-3a/data-hash/1
-updated_at: 2026-11-06T20:09:25+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1
+next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a/data-hash/1
+updated_at: 2026-11-06T20:16:56+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-data-hash-20261106
@@ -555,3 +555,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - Draft PR and fresh exact-head full Runtime/Compliance are next; PR84 a083 remains separately in final CI. No bounded completion yet. Actual owner Windows/API/provider/legal/license/pilot/frozen-study gaps and optional additional spec review NOT_PERFORMED retained. After these two units, prepare detailed whole-week safe partial handoff with remaining work and next verified start.
 
 - PR #85 draft created for 8e6db5b0b385d486596e51dd94d155c4847cd3de; exact-head Runtime42208104232 and Compliance42208104307 started. PR84 a083 Windows3 jobs succeeded but Ubuntu/full workflow still runs, so keys remains incomplete. Final CI observer receipts are separate from local synthetic verification.
+
+### GPT bounded R3 planned keys completion — 2026-11-06T20:16:56+09:00
+
+- PR84 final `a083f75138c44feaa9eca788d82d53215eed38c0` passed Runtime42205995118 all6 exact-head jobs and Compliance42205995086; merged as `9660352d4984649c5937cc8d95d0f9f1f7d20fc1` and PR/main read-back verified. LEDGER `ed34c371193a873000636101ae605aa930b9077a` adds only ⑨-3a/keys/1, preserving prior rows. Historical246c full success remains separate from integrateda083 success.
+- Pure planned keys only, not registered count/approval/fullT01b/R3. Maintained13 and independent7 checks overlap; historical-source generator1 separate. The current unchanged relocated writer ran26 synthetic-input cases in explicit fresh temp ledgers; historicalsource was selected/captured in memory to generate fixtures now. 66 original grid positions each at int50/float50.0 contribute132 of151 positions across27fixturecases. Integration46core/86UI/5responsive PASS separately, policyPASS602/publicationBLOCKED. Notion bounded completion next.
+- Datahash PR85 `8e6db5b0b385d486596e51dd94d155c4847cd3de` remains active and incomplete, Runtime42208104232 still requires full completion; Compliance42208104307 success observed. Its primary branch/head remains CURRENT. ExternalUI82 source4ce18cb4a3de811df3dc165b5e1c7e115e3db35a now observed Runtime42204806984 all6 and Compliance42204806985 success, attributed to its separate UI session. No whole Remaining Work, physical Windows/API/provider/legal/license/pilot/frozen-study or optional spec completion claimed.
