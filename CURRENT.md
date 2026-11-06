@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T17:15:47+09:00
+updated_at: 2026-11-06T17:20:47+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
@@ -380,3 +380,10 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - 최종 layout8+reading12=20PASS96.156s exit0. 독립 실제 호스트10조건30.934s와 전체팝업6화면7.388s 검증 각각PASS(exit0); Linux Qt Windows-style2조건은 Windows OS 증거가 아니다. source/test hash 확인,20정책정합성PASS583/publicationBLOCKED. 기존CI 명령 모두 보존하고 A3 단계만 동일Qt설치 직후로 이동했다.
 - PR77 exact-final-head Runtime/Compliance 대기; 아직 병합/완료 ID 없음. 상태표시PR78 fa7c211 Runtime42183638295는 bounded-source 수정에 통과했지만 Windows3개가 같은 A3단계 실패. RatesPR79 a8d75b8도 같은 이전A3를 포함하므로 새수정을 순서대로 합치고 각 최종head CI를 확인한다. 일반 사용자PC/DPI/API/공급사/법률/라이선스/파일럿·동결연구 미확보, 선택spec NOT_PERFORMED 유지.
 - 다음 안전 시작점: f7b4a73를 상태표시→Rates에 정상병합·각20정책기준선/원본보존확인·push/read-back한 뒤 PR77→78→79 정확한head 필수CI/병합/원장/Notion 하위완료 처리. 현재 실행ID와 OS잠금 유지, 중복예약/run_now 없음.
+
+### GPT 승인 범위의 독립 식별 resolver 하위 등록 — 2026-11-06T17:20:47+09:00
+
+- 새 한정 ID `⑫-2/b/1`: 명시 메타데이터를 주입받는 순수 instrument identity resolver와 격리 합성 수용검사. 기존⑫-2/a는 설계/17별칭제안/특성화만 완료이고 최신 LEDGER에 새ID가 없음을 확인했다. Notion⑫-2·체크리스트12-5의 부분작업이며 부모완료/실사용비용수정으로 기록하지 않는다.
+- 같은 task/handoff/execution 아래 `gpt/identity-resolver-20261106`을 검증된f7b4a73fa08733b007b7ab499cbf377ab9970837에서 생성·push/read-back했다. worktree=/workspace/work/quantgen-identity-resolver-20261106, 기존보호sparse제외 유지. 코드수정은 이CAS/read-back 후 시작한다. 주작업A3/상태표시/Rates CI와 병합순서는 유지한다.
+- 계약00d32eb의 PR_B_IDENTITY_DESIGN/17제안과 현행 안전한symbol-directory를 대조했다. 기존첫매치lookup을진실로쓰지않고 호출자가 제공한 명시적metadata/alias만 사용한다. 원문symbol/provider/quote/nullablevenue/registryversion·typed UNKNOWN/AMBIGUOUS/UNSUPPORTED_COST를 보존하며 suffix/알파벳만으로 추정하지 않는다. 제안fixture는 실제공급사증거가 아니므로 양성검사는 명시합성registry로 제한한다.
+- 새 비동결 독립모듈·tests만 구현한다. validate.py, core/quant/instruments.py, 동결harness/비용숫자/최대floor/기존연구/판정/실제주문/데이터routing/원장에는 연결하거나변경하지 않는다. 실제비용integration, 공급사identity확인, 새동결package·prospective study는 별도 미완료다. 추가spec심사NOT_PERFORMED 유지.
