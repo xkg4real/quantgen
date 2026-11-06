@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05
 next_ids: ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a3, ⑬-2/a1, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T14:48:00.000+09:00
+updated_at: 2026-11-06T15:11:21.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ai-commentary-review-20261106
-work_commit: 67618da9231569b1aae7d12075621891b25f0e56
+work_commit: c8a024545ddab7ff27f3e15438f4a61e565b3fb1
 uncommitted_changes: no
-pr: none
+pr: https://github.com/xkg4real/quantgen/pull/75
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -29,6 +29,15 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 사용자의 Claude 잔여 작업 처리 요청과 11월 5일의 명시적 handoff를 근거로 신규 인수했다. 11월 2일 execution 4c655abb는 11월 3일 소유자 반환 허가로 보관되었음을 CURRENT 이력 43bc686에서 대조했다. 이전 WIP는 적용하지 않는다. 먼저 §10 AI NEW-M6-12·19의 검토 지적과 합성 시험을 처리하고, 별도 승인 조건이 있는 UI 설계·Windows·연구 작업은 구분한다. Notion 업무 기록(1105), 상업화 실행 분석서, Remaining Work를 수신했다. 실제 주문·동결 연구·원장·홀드아웃 변경은 현재 직접 지시의 보호범위에 따라 제외한다. 계정 잔량은 추정하지 않는다.
 
 - gpt/ai-commentary-review-20261106를 source 67618da9231569b1aae7d12075621891b25f0e56에서 생성·push·read-back했다. 동일한 sparse 보호 제외를 유지한다. 첫 Git 명령의 sandbox network 미허용 실패 후, 명령에만 네트워크 권한을 부여해 기존 프록시·정책 그대로 수신했다. 보호 파일/캐시 내용은 읽지 않았다. Claude 보고 25모듈 기준선의 독립 합성 재실행 중.
+
+### GPT 검토 수정·PR — 2026-11-06T15:11:21.000+09:00
+
+- AI 검토 수정 `c8a024545ddab7ff27f3e15438f4a61e565b3fb1`를 동일 gpt 브랜치에 push하고 원격 SHA를 read-back했다. PR #75는 draft이며 소유자 기본값 확인과 CI/병합이 남는다. NEW-M6-12·19 전체 완료로 기록하지 않는다.
+- 25모듈 합성 통합 239 PASS(exit 0), 정책/export 도구 47 PASS(exit 0). 원본 229개 통과 뒤 private harness cleanup exit1 및 첫 통합 2FAIL은 보존했고, 임시 경로명·명시적 시험 locale·파서 regex escape 수정 후 통합 재실행에 통과했다. 네트워크/실제 원장/보호 캐시 접근 차단, dotenv 비활성화, 임시 mutable state.
+- 20정책 실질 검토·최소 수정 후 소스 정합성 PASS(572 files), 공개 준비 BLOCKED. 숫자 대조는 의미/부호/항목 대응 검증이 아니며 원래 확률 표는 과거 측정으로 한정한다. 실제 API/Windows PC/공급사/법률/라이선스/파일럿·동결연구 증거 추가 없음.
+- Native 비공개 정보 가림 후 원문 숫자 대조를 화면/export에서 숨기고 provenance를 남긴다. Flet 전송 안내도 실제 범위로 정정했지만 기존 동의 체크박스 공백은 남는다. optional GPT/Gemini spec review NOT_PERFORMED.
+- A1/A3 검토안·합성 시안 3개 및 상업화 1/6/7 소스 조사 보고서를 비공개 로컬 산출물로 준비했다. 설계 질문에 사용자는 인계 문서를 첨부했고, 이는 승인으로 기록하지 않는다. 첨부본은 같은 AI 기준 커밋/순서이며 GitHub 인계의 후기 Step7A 추가 절을 보존한다.
+- 다음: PR75 웹 영향 queue 기록 → 최종 head CI, Notion 검증된 진척 최소 동기화. AI 기본값 확인·A1/A3 구체안 승인은 미해결.
 
 ### Claude 인계 원문 (보존)
 
