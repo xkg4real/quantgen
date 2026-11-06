@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "b7c08658766fa0efd45545408e44250845dd1df2d394af24edad6ed21217b265",
+    ".github/workflows/runtime-smoke.yml": "1cf52697d806ad4d492e47722b54dec3cb93bb8b35fd3f24566c7408aacd3848",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -259,12 +259,13 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "d176be45e12473479ed7f9d9c1f34461ba222b85dc3ab24e7e8b9f04e7d8d370",
+    "docs/compliance/FACTS.md": "72d2f97896a1af03dbc17b14d790440d0ff959c2b78d8071c3565b55e2d218e8",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
-    "docs/compliance/RELEASE_GAPS.md": "84f5e236eb30464af9ce840b6de97e4ea029e35122c16318888253cbc84e63c5",
+    "docs/compliance/RELEASE_GAPS.md": "48d135cf84033b98f4ac350657b5b4fd366dfcde7bbfcc2be2ce9946efc90552",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
+    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "1c4d17ebd782e8a19d0fc984fe3e5d232f4610daa08d73ae4278acdc83e8e962",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -323,8 +324,8 @@
     "pyproject.toml": "77589c755d38fe9bc4316841b4a4b69b1dd807f532c211d16d1658e1540926d4",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "3e15b22e2c50046187907f42a953343a9127da1505b6953442e37f2c0f338fa0",
-    "quantgen_desktop/bonds.py": "e42fcc8551d47c64234cb8fabc7b92140d50f9d46e4e66a53e8a4fba0753b0ac",
+    "quantgen_desktop/app.py": "2d762870f8d5e95175342d2a8f15a89765632e7613c32070c2b91d604558f837",
+    "quantgen_desktop/bonds.py": "609e60e2497ac734cfe9ff4a6663910218014fe7828152f0b31f48040487cac6",
     "quantgen_desktop/bonds_portfolio_narrative.py": "008ff36812f8b26317929feae9731604798cd6e43850dfe72e99bb7eadb3841a",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
     "quantgen_desktop/charts.py": "26664a81b31a256b77f70fc8adca76f51a763560cf33e1f2d556b527b41cbdf8",
@@ -337,7 +338,7 @@
     "quantgen_desktop/indicator_guide.py": "ce6f8c970fcd2dea89e318e68785bacdf8367c0152ac800d5e38623f618a5559",
     "quantgen_desktop/jobs.py": "2a0764c9c4f767a2c93d49b0fe929a1ad655d2195acc0c9a371f6229a1aa5ac1",
     "quantgen_desktop/localization.py": "d78faba33fea4592857fd9b0b4e3ce913e286e8f472561ff88b569454b7a3495",
-    "quantgen_desktop/macro.py": "a015e7af65b960627f1860922268f49d3f60cabd441c7faeb0078ce2a1785335",
+    "quantgen_desktop/macro.py": "237371cffc624403d707c8ab3f378ab908e2998582d4a662d22b4d46ee23e154",
     "quantgen_desktop/macro_narrative_language.py": "d067cfb517b57595cd891cf6c4f50f7cc47e02c155c41c5b9768483e6cef6414",
     "quantgen_desktop/macro_records.py": "06cb5ed97772cd8fe651c96ef7defcbad4b64eefc14294071f9a59442e7185c5",
     "quantgen_desktop/market_chart.py": "a2c163621fc1050b54c47e90cb5de2b449fdf27106475f1cbcd167757978ad88",
@@ -347,16 +348,19 @@
     "quantgen_desktop/markets_view.py": "ae84fac7ca9ab0544930465b81b4f47ab871da69a486c77c6daa1bb89a710899",
     "quantgen_desktop/model_narrative_language.py": "c4d4c826e3416a202cc4167c19a2ccbc233fcbc80239e62a81808092274c0981",
     "quantgen_desktop/paper.py": "5961658cc8310606b7ce6b057309715f14605e53dfa6b62635338de793b820d9",
-    "quantgen_desktop/portfolio.py": "f265825ff1ebfc6e9f5e18ced34ae03cefde558946a26cd3604640bda76fb296",
+    "quantgen_desktop/portfolio.py": "0265414d5d73b9978a4493948f2ec1ca4f0c05b5139fa57a64935dce0fab5c5e",
     "quantgen_desktop/qscore.py": "a495a5412195c98eddc5c3cca4ae0a7665e284a9803aceaa82e9dd46b881842f",
     "quantgen_desktop/rates.py": "db8ab5530c5cc0611b842473aa265df89cc28665ce97be1f9f2ae5243bd5e967",
     "quantgen_desktop/rates_narrative.py": "a6bfdb0abc0db628d8ad8615a1bc222f375b2ee2c59d1a901ec3eab3a8d58ff0",
+    "quantgen_desktop/reading_language.py": "ee8a55044482598fbcece2dfde3fca73e9b4ff9b2405db13c16dc2c0bc911adf",
+    "quantgen_desktop/reading_panel.py": "93cb0202f6a2ffbe8d80340554ef4340f207b4a3d1e53bda4e1f96f5fa4778d1",
     "quantgen_desktop/report_actions.py": "fbf48c2350434f8c4e953fd1efd99ed666f60e74e6da5154bb529a43ec50115d",
+    "quantgen_desktop/result_layout.py": "ad9300648be6cda9af5cd31573e50835802bcb991bf818a8a7fa5b8bb8a4249f",
     "quantgen_desktop/signals.py": "42c35b809cbb3b2ca20be1d2103f405a4e7564ac9678673d39fa26368bfd96ef",
     "quantgen_desktop/status_language.py": "e23a11eb835b155bfc88685ea0f521e664b8b7fc080ce3f600042b1002427386",
     "quantgen_desktop/strategy.py": "e2fc1504d8ea811fabcab5f9f5a7feb7445ce1a40de68d187589dcbd36c68a0e",
     "quantgen_desktop/structuring.py": "6b70cb30dae91321ca9a52e3a00368ec32f964a640e324f622e674674880ae0d",
-    "quantgen_desktop/tools.py": "187d1b76279de24b009b8625ac6b89126117a5e3cf1245033f8ba38a272de27a",
+    "quantgen_desktop/tools.py": "0d5115e4ca70a4ab092d0ae70222ad52b080fec3054918919fc309a491893ad6",
     "quantgen_desktop/translations.py": "59a140c85923608a4466b59f5a054c5777f3eb0bf27e2787f74097e0a4ce2419",
     "quantgen_desktop/typography.py": "ea39d2b4f4cafb64e1b1865807ff523d59f02c20f64894acc0e531abf5b462c8",
     "quantgen_desktop/watchlist.py": "507a4509bbf79a0fe88903dd8478f873f1f111f49704e945a3642af737576e46",
@@ -381,6 +385,8 @@
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_a1_status_acceptance.py": "e921669fc62347f09913c87db2d3aae5cca89d3eb45461371a93f061e566fb3a",
     "tests/desktop_a1_terms_acceptance.py": "e2b93cfbd295df742d218e893dd586d8b6b23fd7a63ac75877f2e7b4717b4280",
+    "tests/desktop_a3_layout_acceptance.py": "a9f73481cc99fb75e8aedb7a09423b97944ce909d478f66f11399177dc9ab406",
+    "tests/desktop_a3_reading_acceptance.py": "84d69d2df57bf9592ec5dff00c0df32b24dcc454e06d539e330e3964382ae847",
     "tests/desktop_acceptance.py": "922f93afe5bb0bbc852bc95df31cb52beb317e9121c192d7484debecdda9291d",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
     "tests/desktop_authored_prose_language_acceptance.py": "b32c911300a13b2e7e3fd5a25c88499188234c8e7ecc08e53de5ef9f94120a75",
@@ -586,164 +592,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "40295c60f31b141262797bc6f82f4335dbacee0b0f04e57e67b4bf483907b158",
-      "source_digest": "73c2afa6fced468acc7aeb7f3297ef87c3dc2e1d5340ef6e52f368086960146b",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.285380+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
+      "source_digest": "e45322c11fbf64fbcf7d0b986212d2bd94d4dc60cf899fbdc8e57209fec67495",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.887849+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "73c2afa6fced468acc7aeb7f3297ef87c3dc2e1d5340ef6e52f368086960146b",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.288030+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "e45322c11fbf64fbcf7d0b986212d2bd94d4dc60cf899fbdc8e57209fec67495",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.890714+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "08bbeaec2cf4ba524d430e51ad6234f43ec46c32c8bd453c5834b0f7c5e8d0fb",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.290404+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "c33ca9eb94bcfa2be6ced9a4af2d68a9aad4af0d9f9ecfdadc3a7a179b35e66d",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.892937+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "f35ad98667c11347c6ac5bcfefe8978c91eed17dc3e0dbad1ef6f31f5e4d571c",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.292611+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "29f31fbfe0dbc7a2ef384498807c9d58701f516884c20d584708d2b9e80fc057",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.895881+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "a3b6907f42fd6cbcf590487ef98476fab8af6637dec9cc79a8dea7d06061d6a9",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.294620+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "a51d86786314141d18bee7b5e6236f0cbedd77fda1f48a509a96c9bce3cd86ca",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.898146+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "15a6fe8f13642495861be6f9c51d1dda5bff845a2dc835293d7221bf902455a3",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.297044+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "1398b3a82929e1497f35bb747813cd7bb74ead67e59ee2c081b3725550e0a956",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.900422+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "7": {
-      "document_sha256": "79d0d53acc0383737f254b0967b1ba455554cbb378c1566158dd0e82a7c7ab49",
-      "source_digest": "73c2afa6fced468acc7aeb7f3297ef87c3dc2e1d5340ef6e52f368086960146b",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.299053+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
+      "source_digest": "e45322c11fbf64fbcf7d0b986212d2bd94d4dc60cf899fbdc8e57209fec67495",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.902664+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "15a6fe8f13642495861be6f9c51d1dda5bff845a2dc835293d7221bf902455a3",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.301149+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "1398b3a82929e1497f35bb747813cd7bb74ead67e59ee2c081b3725550e0a956",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.904686+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "9": {
-      "document_sha256": "780b06c415faab412a6fc3c9320749fa8fd2a7d62bd9d17ff1ae9cdc58a233f5",
-      "source_digest": "3d49448f356a802dbada338170e4f5fb4a2ae0b012564fe1d59aa3b430c9f8d5",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.303224+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
+      "source_digest": "21ce4f1c5e6e1606bec56bc2a743793dfdd0d0fa542b5d85ea4feea157f0f191",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.906870+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "d39b1dd89f925ae48fad17a2faeb6613af5c6b1651634e475a28e80e46d6e07f",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.305535+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "b18b803d903c69278d0da14e81c4ee868c40c1f1a21b22be81960be09fb4c066",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.909157+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "67d1f847e38e8fdc7bd5baa9785985f4b5170507570c8ca89d64078b90d874a0",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.307951+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "439288304ca09f1db90393b6ef8b67ee09b903fab84725c81dfa27892cad2e1a",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.911209+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "12": {
-      "document_sha256": "e1ac7d33af95eb9e97af2b1c37a1f3ebffc119eff3a6a314e9ab72f3d113504e",
-      "source_digest": "fc190bc2a10a6c30bd4852436a2c2e12328ca6fd895a25df5558cb612b8e2abd",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.310584+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "document_sha256": "2ef966b2023cb3c617984d29c2f076423625c5624f6fdc7d8c57f4e2f36fb3a4",
+      "source_digest": "f263a9c1d78637bf84317c888bee0c91dca8d521c2c3ac1549c3d7ca4ff33906",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.913378+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "3d49448f356a802dbada338170e4f5fb4a2ae0b012564fe1d59aa3b430c9f8d5",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.312703+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "21ce4f1c5e6e1606bec56bc2a743793dfdd0d0fa542b5d85ea4feea157f0f191",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.915377+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "3d49448f356a802dbada338170e4f5fb4a2ae0b012564fe1d59aa3b430c9f8d5",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.314757+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "21ce4f1c5e6e1606bec56bc2a743793dfdd0d0fa542b5d85ea4feea157f0f191",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.917295+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "15": {
-      "document_sha256": "67d721c2662d315699a56181bb8ea3e9d0f0eb4420e5ccbb0dc240df48e2bd96",
-      "source_digest": "3d49448f356a802dbada338170e4f5fb4a2ae0b012564fe1d59aa3b430c9f8d5",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.316659+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "document_sha256": "bdc7a10e280fdfcefd0ffc23f2803bef3674749c6d8e14bd8c1761054044f269",
+      "source_digest": "21ce4f1c5e6e1606bec56bc2a743793dfdd0d0fa542b5d85ea4feea157f0f191",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.919349+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "9da9e977847098d541b56743e8a68f49b78d2932a80ea4bf56b22a360d034a91",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.319824+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "4bbabb8196c49f3f54a7f898d43bd5957384732f093d05dd4915d8c1b1017b64",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.921445+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "15a6fe8f13642495861be6f9c51d1dda5bff845a2dc835293d7221bf902455a3",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.321874+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "1398b3a82929e1497f35bb747813cd7bb74ead67e59ee2c081b3725550e0a956",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.923390+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "73c2afa6fced468acc7aeb7f3297ef87c3dc2e1d5340ef6e52f368086960146b",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.324301+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "e45322c11fbf64fbcf7d0b986212d2bd94d4dc60cf899fbdc8e57209fec67495",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.925469+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "8298d148b13a30c1c0346eb57ffcbb0b658f8b6343d1672733817c4d730c17f6",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.327160+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "source_digest": "4451e9702cf39b3e539f72b27e3605ab0aa481ab672345c11dc039520975ac07",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.927792+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     },
     "20": {
-      "document_sha256": "ae090069b2e33213573b6cd4a230f8d4deae8148b3aa36b1545c5014c7be3f61",
-      "source_digest": "73c2afa6fced468acc7aeb7f3297ef87c3dc2e1d5340ef6e52f368086960146b",
-      "reviewed_by": "GPT A1 integrated policy review",
-      "review_note": "Reviewed authored terminology and explicit native status/caption roles, contextual Flet headers, original report and data preservation; 167 synthetic tests pass, independent review completed; actual accessibility, provider, legal and license evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:02:31.329048+00:00",
-      "source_commit": "e79ef2c1160242ddf86d5b381e1005f2ad627e16"
+      "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
+      "source_digest": "e45322c11fbf64fbcf7d0b986212d2bd94d4dc60cf899fbdc8e57209fec67495",
+      "reviewed_by": "GPT A3 integrated policy review",
+      "review_note": "Reviewed native result layouts, local glossary quoting, explicit provenance folding and critical-notice protection; 131 integrated synthetic tests and actual host geometry checks pass; original records preserved, real accessibility and publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:15:25.929786+00:00",
+      "source_commit": "e33063bca435edea502c985b75c42535846bedcd"
     }
   }
 }

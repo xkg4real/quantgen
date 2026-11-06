@@ -99,6 +99,16 @@ disabled, protected paths blocked and mutable state isolated:
 | Focused reading rerun | 9 passed in 7.492 s |
 | Independent-review stale-quote correction, including same-row/same-size refresh | 12 passed in 7.811 s |
 
+After A1 integration, the final 14-module guarded run passed **131 tests**
+(exit 0, 302.857 s), covering both A1/A3 modules, native calculation fixtures,
+language/report/payload contracts, Macro, commentary, typography and market tabs.
+A separate actual-host diagnostic passed: 12 narrow scroll positions across
+Library/System/Home/Markets and four wide docks kept critical content uncovered;
+viewport/scroll and reports remained unchanged. Four actual integrated synthetic
+captures covered Korean MC/Bonds/narrow help and English dark help. These are
+Linux offscreen fixtures, not owner-PC acceptance. All 20 source policies were
+reviewed after the implementation and independent-review corrections.
+
 These runs overlap and their counts must not be added. The one failing broader
 check is `test_platform_wide_header_options_fit_without_losing_selection_or_text`
 in `desktop_responsive_tools_acceptance`: its deliberately overflowing setup
@@ -111,7 +121,7 @@ local run, not a passing result.
 The runtime packaging workflow runs the two A3 modules in their own offscreen
 step. Adding that step is not evidence that CI passed: consult the checks for
 the final PR head after A1 integration. Physical Windows installation, user-PC
-DPI behavior, manual keyboard/screen-reader acceptance and the complete final
+DPI behavior, manual keyboard/screen-reader acceptance and any broader manual
 capture matrix remain separate evidence. These checks also establish no real
 API/provider comparison, pilot, legal/license, frozen-research, release or
 deployment result. Optional additional GPT/Gemini spec review remains

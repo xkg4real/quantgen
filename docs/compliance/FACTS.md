@@ -391,3 +391,19 @@ Claude의 AI 변경(`7c31417`, `401fe33`, `54b52eb`)과 후속 수정 작업 트
 
 01–20 정책을 현재 A1 소스와 대조하고 선택권·주장·키보드 문구만 직접 보강했습니다. 기존 법률·운영자·제공자 계약·라이선스·전송 동의·실제 공개/배포 조건, `review-required`와 공개 준비 `BLOCKED`를 보존합니다. 실제 Windows/API/파일럿·동결 연구 증거는 추가되지 않았고 Flet AI 체크박스 흐름도 여전히 미구현입니다. 최종 합성 실행·CI·병합과 소스 fingerprint는 통합 후 실제 결과로 별도 기록합니다.
 
+
+<a id="a3-reading-layout-2026-11-06"></a>
+## A3 네이티브 결과 배치·로컬 알아보기 — 2026-11-06 소스 검토
+
+A1 코드 `2715d9e` 이후 A3 통합 소스 `e33063b`의 범위입니다. A1 선행 병합, A3 최종 통합 검사·CI·병합과 실제 배포는 각각 확인해야 합니다. [A3 구현·실행 기록](../product/A3_READING_LAYOUT_2026-11-06.md)을 따릅니다.
+
+| 항목 | 확인한 소스 동작과 한계 | 근거 |
+| --- | --- | --- |
+| 결과 배치 | MC 제목→차트/서술→기존 7행 또는 GARCH 8행 표 순서. Bonds 기존 12개 지표와 실제 key-rate DV01 행을 같은 폭 두 G1 패널에 배치하고 내용 폭 820px 미만에서 세로 배치. 작은 지정 표만 실제 머리글·행·프레임·가로 스크롤 높이로 맞추며 다른 표의 스크롤은 유지. 계산·수치 형식·차트·원래 서술·보고서·AI 입력·공식 판정은 바꾸지 않음 | [표 높이·두 패널](../../quantgen_desktop/result_layout.py), [MC/호스트](../../quantgen_desktop/app.py), [채권](../../quantgen_desktop/bonds.py) |
+| 로컬 알아보기 | 창마다 한 제어기. F1 또는 표/선택한 라벨의 문맥 메뉴로 열고 기존 로컬 용어집의 후보를 명시적으로 선택해야 정의 표시. 선택 행의 보이는 셀과 선택 문구를 그대로 인용하며 3.000%·−0.00·— 같은 표시를 재계산/재형식화하지 않음. 새 정의·금융 해석·AI/네트워크 요청·파일/QSettings 저장 없음 | [도움말](../../quantgen_desktop/reading_panel.py) `TermPanel`, `ReadingHelp`, [기존 용어집](../../core/education/glossary.py), [한영 제어 문구](../../quantgen_desktop/reading_language.py) |
+| 문맥·복사 | 닫기·페이지/도구 전환·결과 초기화·원본 삭제, 같은 행 값/같은 크기 선택 문구 교체 시 인용 무효화. 원래 위젯이 남아 있고 표시·활성 상태이면 포커스와 원래 셀 복귀. 복사는 이용자가 선택할 때 OS 클립보드에 기록하며 인용 지우기가 클립보드·후속 사본 삭제나 메모리 보안 소거를 뜻하지 않음 | 같은 파일 `_snapshot`, `_source_contents`, `_check_quote`, `close`, `eventFilter`; [삭제 범위](20-deletion.md) |
+| 중요 안내·겹침 | 창 폭 1280px 이상은 340px 도킹, 좁으면 본문 폭을 유지하는 겹침 표시. 보이는 명시적 `reading_help_keep_visible` 영역을 피한 높이 260px 이상 구간만 사용하고 없으면 닫고 tooltip 안내. 일반 결과 행은 일시적으로 가려질 수 있음. 호스트는 동의/AI·연결/규칙/권리·프로젝트 상태·시장/관심종목·MC/Bonds/포트폴리오의 지정 안내를 보호. 태그/기하 검사와 실제 보조기술 검수는 별개 | [배치·회피](../../quantgen_desktop/reading_panel.py) `_overlay_rect`, `reflow`; [호스트 태그](../../quantgen_desktop/app.py), [Bonds 태그](../../quantgen_desktop/bonds.py), [포트폴리오 태그](../../quantgen_desktop/portfolio.py) |
+| 명시적 상세 접기 | `ToolPane.text`/`result_table`의 `display_role='provenance'`만 처음 접힌 상세 정보로 이동. 실제 연결 지점은 Macro 기준일·출처 개수 줄뿐. 별도 합성 ID·기술통계용 안내·짧은 표본 경고, 기본/알 수 없는/혼합/가정/지연/실패 문구는 본문 유지. 역할 메타데이터는 보고서 sections·AI 입력에 넣지 않음 | [위젯 배치](../../quantgen_desktop/tools.py), [Macro 호출](../../quantgen_desktop/macro.py), [접기 제어](../../quantgen_desktop/reading_panel.py) `DetailsFold` |
+| 검증 범위 | 지정 합성/offscreen 검사에는 F1/Esc·셀 복귀·언어/테마·폭 변경·정확 인용·실제 Macro 접기·기존 보고서/AI 입력 비교가 있음. 선행 실행의 통과 수를 합산하지 않으며 재현된 baseline 실패도 기록대로 유지. 실제 Windows/IME/DPI·스크린리더·전체 대비/캡처 행렬·Flet 동등 구현·실제 API/공개 배포 완료를 뜻하지 않음 | [레이아웃 검사](../../tests/desktop_a3_layout_acceptance.py), [읽기 검사](../../tests/desktop_a3_reading_acceptance.py), [실행 기록·한계](../product/A3_READING_LAYOUT_2026-11-06.md), [키보드 검수](15-keyboard.md) |
+
+01–20 정책을 현재 A3 소스와 대조하고 로컬 인용/명시적 복사, 선택권·주장·키보드·삭제에 직접 관련된 문구만 보강했습니다. 기존 법률·운영자·제공자 계약·라이선스·전송 동의·실제 공개/배포 조건, `review-required`와 공개 준비 `BLOCKED`를 유지합니다. Flet AI 체크박스 흐름·실제 Windows/API/파일럿·동결 연구 증거는 미완료이며 선택적 GPT/Gemini 추가 심사는 `NOT_PERFORMED`입니다. 최종 실행·CI·병합과 소스 fingerprint는 통합 후 실제 결과로 별도 기록합니다.
