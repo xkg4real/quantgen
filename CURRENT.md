@@ -6,12 +6,12 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T17:25:22+09:00
+updated_at: 2026-11-06T17:36:34+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ui-a3-20261106
 work_commit: f7b4a73fa08733b007b7ab499cbf377ab9970837
-uncommitted_changes: no
+uncommitted_changes: yes
 pr: https://github.com/xkg4real/quantgen/pull/77
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
@@ -399,3 +399,10 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - PR79 최종 head `9800b274569cb8f767a1d7b8d815a9f288ab3e3c`를 동일 gpt/rates-inline-language-20261106에 push/read-back했다. 상태표시 d1a62a2와 A3 f7b4a73를 정상병합했고 Rates source/tests는 기존11PASS 소스와 AST동일, app/helper/수정research_home test는 d1a62a2와 동일하다. FACTS충돌은 Rates·상태·A3 세 기록을 모두 보존해 해결했다.20정책정합성PASS587/publicationBLOCKED. 새41개Rates검사로 부풀리지 않고 상태/A3 통합41PASS와 Rates11PASS를 구분한다.
 - A3 f7b4a73 Runtime42186371159의 A3단계는 Windows3.11/3.12/3.14·Ubuntu3.12 모두success지만 전체Runtime은 아직진행중. Compliance42186371128success. 상태d1a62a2 Runtime42187169272진행/Compliance42187169132success. Rates9800b27도 새exact-head CI필요. PR77→78→79 순서·완료원장/Notion 조건 유지.
 - sapientia Remaining/1105에 f7수정·중간실패·진척을 최소 반영하고 read-back, queue22행보존. 완료취소선 추가없음.⑫-2/b/1 독립resolver는 명시합성metadata만 받는 새모듈/검사 구현중, 실제cost/routing/frozen/order/ledger로 연결하지 않는다.
+
+### GPT 독립 식별 소스 push·A3 종료 진단 — 2026-11-06T17:36:34+09:00
+
+- ⑫-2/b/1 `gpt/identity-resolver-20261106`의 `e04f1cc29733758f2440774959786a7fc9077b0d`를 push/read-back했다. 새 순수 모듈·합성검사·제품문서·CI목록/정책사실만 변경, 실제 비용/라우팅/동결연구/주문/원장 연결 없음.17제안사례를 포함한19PASS0.014s 및 독립동일19PASS0.012s(exit0,합산금지), FX대소문자동일통화2실패 재현 후 수정.20정책정합성PASS586/publicationBLOCKED. 아직PR/전체CI/부모완료 없음.
+- A3 f7b4a73 Runtime42186371159 Windows3.14 job127787571907는 A3단계20PASS 이후 차트·글꼴31검사 모두OK를 출력했으나 프로세스exit1로 실패했다. 전체CI성공으로 처리하지 않는다. 원본 선택로그 A3_F7_WINDOWS314_PROCESS_EXIT_FAILURE.log 보존. Linux정확4모듈 진단은30PASS+기존responsive음성대조1FAIL이며 Windows종료실패재현으로 주장하지 않는다.
+- 독립종료계측에서12개 ResearchWindow와12개 ReadingHelp가 DeferredDelete 대기인 채 남는 fixture수명문제를 확인했다. 관련테스트의 소유widget 명시정리만 수정중,31개기존조건/원래responsive사전조건은 유지한다. 이수명문제가Windowsexit1의직접원인인지는아직미확정. production예외억제/os._exit/강제통과 없음. 수정후각최종head전체CI가다시필요.
+- 상태d1a62a2와Rates9800b27는 각각최종CI 진행중이며 A3를먼저병합하기전 완료처리하지않는다. 식별모듈은 코드백업/read-back을 마쳤고 알려진A3 CI문제를 통합한 뒤별도PR/검증을연결한다.
