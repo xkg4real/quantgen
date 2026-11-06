@@ -5,11 +5,11 @@ from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1
-next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a, ⑨-3a/source-digests/1, ⑨-3a/series-digest/1
-updated_at: 2026-11-06T21:28:26+09:00
+next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a, ⑨-3a/source-digests/1, ⑨-3a/series-digest/1, ⑨-3a/series-format/1
+updated_at: 2026-11-06T21:29:57+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/run-registry-series-hash-20261106
+work_branch: gpt/run-registry-series-format-20261106
 work_commit: ea90521ddf057178d4d5eb182c426dd384256f4e
 uncommitted_changes: no
 pr: none
@@ -608,3 +608,10 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - Bounded child⑨-3a/series-digest/1 pushed/read-back ea90521ddf057178d4d5eb182c426dd384256f4e on gpt/run-registry-series-hash-20261106, clean six-file scope. New explicit25-byte domain/dtype header +two uint64LE dimensions +LEfloat64 C-order IEEE words, strict2D/no metadata, zeroaxes identity-only. Source96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043; prior five helpers unchanged. No storage, historical file parity or fullR3 claim.
 - Maintained15PASS0.011s; independent11 overlapping probes PASS0.008s; combined series15+source8+data15+keys13+store16+codec17=84PASS1.469s exit0. Fifteen literal preimages are fixtures, not extra product tests. All20 substantive policy GO; FACTS prefix-preserving15lines, consistencyPASS611/publicationBLOCKED. Previous workflow commands and5/30 budgets preserved. No failed product execution in this child.
 - Source PR86 exact9f623fd Runtime42216709846 still in progress, Compliance42216709861 success; do not complete from bounded-step success. Series PR/CI follows, sourcePR86 merges first. Sapientia two pages' progress sync read-back verified, private queue52 records; no new completion strike. Current next candidate is bounded in-memory NPY serialization/validation under approved§5.7, not claimed/implemented yet. Actual ownerWindows/provider/API/legal/license/pilot/frozen-study gaps and optional formal spec review NOT_PERFORMED retained.
+
+### GPT approved in-memory series NPY format claim — 2026-11-06T21:29:57+09:00
+
+- Same task/handoff/execution4bf1f03c-f677-4b28-af07-8c745e4cde07 claims bounded child⑨-3a/series-format/1 before edits. gpt/run-registry-series-format-20261106 created/pushed/read-back clean at verified ea90521ddf057178d4d5eb182c426dd384256f4e with protected sparse exclusions. Six handoff docs checked at 4c94194df83dcc22dbbcaf8b15ff709b62c349ea; no duplicate ID/equivalent core/quant format helper. SourcePR86/seriesPR87 remain incomplete; PR87 exactea905 Runtime42217989425/Compliance42217989406 begun. Preserve dependency merge order86→87→format.
+- Existing approved R3§5.7 lines851-856 covers numpy.save/allow_pickle=False and array content rehash. New detached encode_series(array, *, max_bytes)/decode_series(payload, expected_sha256, *, max_bytes), SeriesFormatError(ValueError), operates only on supplied arrays/bytes in memory. Strict new canonical NPY1.0 little-endian float64/C-order/2D domain; no historical artifact compatibility or full filesystem-store claim. Existing v1series_sha256 is the content recipe, not a hash of container bytes.
+- Caller serialized-byte limit must be plain positive int within platform index range; exactbytes/64lowerhex expected digest. Before parser/allocation, check NPYmagic/version, bounded actualheader length<=10000, finalLF/16bytealignment, ASTdict exact3unique keys with descr exact'<f8', fortran_order isFalse, shape tuple2plainints(no bool), each axis0..intp.max//8. Pythonint shape-product*8 must equal remaining payload; refuse pickle/object/ZIP/wrong rank/dtype/order/version, malformed/truncated/trailing data and digest mismatch. Encoder pre-copy budget plus bounded output writes; reader numpy.load allow_pickleFalse only after bounds, then content rehash; return read-only convenience, not immutable/security guarantee. Zeroaxes identity only; serialized ceiling is not total-memory/CPU sandbox. Preserve rawIEEE and stable caller-input requirements.
+- Author new module/acceptance/productdoc only; supporting workflow adds exact paths/module preserving all prior commands/budgets, FACTS append and all20-reviewed baseline required. No filesystem target/load/save path, series_ref/date/config/PnL semantic checks, provider/source authentication, Lab/recorder/event/ledger/frozen-study/criteria/owner effects. FullR3/realWindows/API/provider/legal/license/pilot evidence still open; additional formal spec review NOT_PERFORMED.
