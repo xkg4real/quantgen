@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05
 next_ids: ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a3, ⑬-2/a1, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T15:18:33.000+09:00
+updated_at: 2026-11-06T15:29:38.000+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/ai-commentary-review-20261106
@@ -49,6 +49,10 @@ session: 01a183c6-632a-70cc-a0e6-32e764f43087
 ### GPT 소유자 AI 선택 확정 — 2026-11-06T15:18:33.000+09:00
 
 사용자가 PR75의 AI 기본값 9개와 추가 표시 동작을 직접 확정했다. 관련 상태 문서만 반영한 최종 head `a419db99baaf911d9e6f06890ab7bce6cb4b5447`를 push/read-back했고 draft를 해제했다. 제품 코드/테스트는 239 PASS를 얻은 c8a0245와 동일하다. source consistency PASS, publication BLOCKED. exact-head Compliance 42173460398 success, Runtime 42173460454 진행 중. 이 최종 head의 모든 필수 Windows/Ubuntu/구문 CI 성공 후 PR 병합·원장·Notion 완료 갱신을 진행한다. A1/A3 설계 승인은 이 답변의 범위 밖이며 아직 미확정이다.
+
+### GPT A1/A3 구체안 승인 — 2026-11-06T15:29:38.000+09:00
+
+사용자가 권장안으로 A1/A3 구현을 명시 승인했다. 준비한 용어표·G1 기존 패널·로컬 설명 패널·제한적 병행 및 A1 선병합을 기준으로 진행한다. AI PR75 최종 CI·병합·기록을 먼저 마친 뒤 최신 main 기준의 전용 gpt 브랜치를 CURRENT CAS/read-back으로 연결한다. 숫자·원문 보고서·내보내기·AI payload·공식 상태 코드와 보호 범위를 유지하며 실제 Windows/API/연구 증거로 대체하지 않는다.
 
 ### Claude 인계 원문 (보존)
 
