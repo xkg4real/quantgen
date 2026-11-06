@@ -4,9 +4,9 @@ reason: usage_limit_weekly
 from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1
-next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a/data-hash/1
-updated_at: 2026-11-06T20:16:56+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1
+next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a
+updated_at: 2026-11-06T20:38:44+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: gpt/run-registry-data-hash-20261106
@@ -561,3 +561,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - PR84 final `a083f75138c44feaa9eca788d82d53215eed38c0` passed Runtime42205995118 all6 exact-head jobs and Compliance42205995086; merged as `9660352d4984649c5937cc8d95d0f9f1f7d20fc1` and PR/main read-back verified. LEDGER `ed34c371193a873000636101ae605aa930b9077a` adds only ⑨-3a/keys/1, preserving prior rows. Historical246c full success remains separate from integrateda083 success.
 - Pure planned keys only, not registered count/approval/fullT01b/R3. Maintained13 and independent7 checks overlap; historical-source generator1 separate. The current unchanged relocated writer ran26 synthetic-input cases in explicit fresh temp ledgers; historicalsource was selected/captured in memory to generate fixtures now. 66 original grid positions each at int50/float50.0 contribute132 of151 positions across27fixturecases. Integration46core/86UI/5responsive PASS separately, policyPASS602/publicationBLOCKED. Notion bounded completion next.
 - Datahash PR85 `8e6db5b0b385d486596e51dd94d155c4847cd3de` remains active and incomplete, Runtime42208104232 still requires full completion; Compliance42208104307 success observed. Its primary branch/head remains CURRENT. ExternalUI82 source4ce18cb4a3de811df3dc165b5e1c7e115e3db35a now observed Runtime42204806984 all6 and Compliance42204806985 success, attributed to its separate UI session. No whole Remaining Work, physical Windows/API/provider/legal/license/pilot/frozen-study or optional spec completion claimed.
+
+### GPT bounded R3 supplied-panel fingerprint completion — 2026-11-06T20:38:44+09:00
+
+- PR85 final `8e6db5b0b385d486596e51dd94d155c4847cd3de` passed Runtime42208104232 all6 exact-head jobs and Compliance42208104307; PR84 merged first and its merge tree equals a083 base. Expected-head merge `6ddf5146695de739e9f1ee5e2be609efd9d7be4c` and PR/main read-back verified. LEDGER `169a3ea65ea7d80befaacb8bbf7ae61212d7b9ba` adds only ⑨-3a/data-hash/1, preserving all rows. No source re-integration or inherited CI substitution.
+- Maintained15PASS0.013s, independent10 overlapping PASS0.009s, combined61PASS1.382s are separate guarded synthetic evidence. Exact raw LEfloat64 byte recipe, endian/strides/IEEE distinctions and refusals only; MD5 is not authentication or price/source validity. All20 policy GO/consistencyPASS605/publicationBLOCKED. No Lab/recorder/store or real-ledger/research/owner-effect integration. FullR3/actual ownerWindows/API/provider/legal/license/pilot/frozen-study remains incomplete; optional additional spec review NOT_PERFORMED.
+- Keys bounded Notion completion read-back verified on both sapientia pages; fingerprint bounded completion sync follows. Prepare full-week recovery checkpoint preserving previous failures, all merged children and next safe supplied-source raw/LF SHA256 child under existing approval. No weekly return/cooldown, duplicate schedule or new owner-approval blocker; current lineage/branch/head remains saved for validated continuation.
