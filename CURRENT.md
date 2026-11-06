@@ -5,14 +5,14 @@ from: gpt
 task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1
-next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a
-updated_at: 2026-11-06T21:05:47+09:00
+next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c, ⑨-3a, ⑨-3a/source-digests/1
+updated_at: 2026-11-06T21:09:01+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/run-registry-data-hash-20261106
-work_commit: 8e6db5b0b385d486596e51dd94d155c4847cd3de
+work_branch: gpt/run-registry-source-hash-20261106
+work_commit: 6ddf5146695de739e9f1ee5e2be609efd9d7be4c
 uncommitted_changes: no
-pr: 85
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -582,3 +582,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - Resume same task/handoff after previous execution6c40bb4c-51a4-439b-a64d-0233051168ab's saved partial checkpoint. STATE transitioncloud_owns_monitoring, expected environment/cwd/private context and prior OS-release receipt verified; OS exclusive RUN.lock acquired by new execution4bf1f03c-f677-4b28-af07-8c745e4cde07. Current task/session/branch/head8e6 and stored prior execution match; handoff six documents read from single latest ref56211f278860ba7df282a04221f68a288905e995. No other taken owner/CI/review decision is being overridden.
 - Latest main6ddf5146695de739e9f1ee5e2be609efd9d7be4c and prior gpt branch8e6 verified. Ledger preserves completed PR84/85; no duplicate source-digest ID/file entry. AUTO_STATE is unrelated periodic Claude branch and will not be applied or edited. Direct unfinished owner work resumes without weekly cooldown under the valid Nov5 handoff/Nov6 approvals; current prepare/deadline remain Nov10 16:00/17:00 KST.
 - Next scope is the already-approved detached supplied-source raw/LF SHA256 calculation; inspect exact §3.3/current code and record a new bounded gpt branch claim before edits. Actual source collection/frozen files/Lab/owner effects and real-evidence tasks remain outside this helper. Extra GPT/Gemini spec review NOT_PERFORMED. No code modified before this resume CAS/read-back.
+
+### GPT approved supplied-source digest child claim — 2026-11-06T21:09:01+09:00
+
+- Same task/handoff/new execution4bf1f03c-f677-4b28-af07-8c745e4cde07 claims only ⑨-3a/source-digests/1. New gpt/run-registry-source-hash-20261106 at verified main6ddf5146695de739e9f1ee5e2be609efd9d7be4c was created with protected sparse exclusions, pushed and read back clean before edits. LEDGER has neither this ID nor run_registry_source_hash.py; existing provenance.py hashes a different file bundle and will remain unchanged. Initial fetch updated FETCH_HEAD rather than stale origin/main; exact FETCH_HEAD was verified before branch creation. No source edits occurred in that setup failure/correction.
+- Exact approved §3.3 source at fa280591/7ca8411f was read directly: separate SHA256 of raw and CRLF-to-LF function text (UTF8), and corresponding supplied file bytes. This bounded API accepts supplied exactstr/bytes only, with no file/inspect/git/config/clock collector. Two functions source_text_hashes/source_bytes_hashes return fresh lf/raw lowerhex digests; text strictUTF8, bytes opaque, empty inputs valid, conversion hooks/subclasses refused. Single-pass replacement preserves originally loneCR, BOM, whitespace, finalLF and Unicode; no AST/dedent/semantic normalization.
+- Independent literal digest fixtures, mixed/overlapping newline cases, byte-invalidUTF8/text-surrogate distinctions, nonmutation and no-I/O tests required. Code edits begin only after this latest CURRENT CAS/execution read-back and local atomic claim. Full code identity/strategy provenance, behavior fingerprint, seriesstore/recorder/Lab and actual evidence remain incomplete. Extra formal GPT/Gemini spec review NOT_PERFORMED.
