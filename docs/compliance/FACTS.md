@@ -600,3 +600,35 @@ Home 표와 시장 관심종목 카드·검색·종목 제목에 로컬 문자 �
 | 합성 검증 | [유지 검사](../../tests/run_registry_source_hash_acceptance.py) 8개·0.002초, 별도 독립 검사 10개·0.002초가 각각 종료 코드 0으로 통과. root의 source hash 8개+data hash 15개+keys 13개+store 16개+codec 17개 통합 69개도 1.524초·종료 코드 0이며 서로 겹쳐 합산하지 않음. 별도 표준 라이브러리 고정 바이트 예제 준비 1개 통과는 제품 수용 검사 수가 아님. CRCRLF 관련 제품 설명만 더 정확하게 고쳤고 소스/검사 변경이나 실패 실행은 없었음. 모두 로컬 Linux 합성 근거이며 새 최종 head의 전체 CI·실제 사용자 Windows/API 증거는 별도 확인 대상 |
 
 [제품 범위·검증 기록](../product/R3_DETACHED_SOURCE_HASH_2026-11-06.md)에 따라 01–20 번호 정책은 유지합니다. 소스 수집·파일/git 메타데이터·전체 코드 식별·recorder/Lab·실제 원장·횟수/판정·소유자 승인·동결 연구·상위 R3 완료를 구현하거나 추정하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
+
+<a id="r3-detached-series-digest-2026-11-06"></a>
+## R3 전달받은 배열의 분리된 series SHA-256 — 2026-11-06
+
+기준 `9f623fd9`에서 [series digest 함수](../../core/quant/run_registry_series_hash.py)를 추가한 ⑨-3a/series-digest/1 범위입니다. 승인된 R3 §5.7의 dtype·shape·원시 배열 바이트를 해시하는 부분이며, 아래 바이트 framing은 이번에 명시한 새 v1 구현 규칙입니다. 설계 원문에 같은 framing이 이미 정해졌거나 과거 저장 파일·series_ref와 호환됨을 확인한 기록이 아닙니다.
+
+| 항목 | 확인한 동작과 한계 |
+| --- | --- |
+| 새 v1 조합 | `quantgen.r3.series/1` + NUL + `<f8` + NUL의 25바이트 헤더, 행/열 크기 각각 unsigned little-endian 8바이트, little-endian float64의 논리 C 순서 바이트를 연결해 소문자 64자리 SHA-256 반환. 고정 framing은 41바이트이며 JSON·끝 LF·파일명·`.npy` 머리말·날짜/기호/시각/공급자 메타데이터를 추가하지 않음 |
+| 지원 입력 | 정확히 2차원인 일반 `numpy.ndarray` float64와 dtype metadata 없음만 허용. 빈 metadata mapping도 거부. 다른 rank/dtype·list·coercion 객체·subclass/masked/memmap 객체는 변환하지 않고 거부. 0길이 축은 shape를 포함한 해시 입력으로만 허용하며 유효한 저장 series·완료 실행·연구 적격성을 뜻하지 않음. 날짜 열·설정 ID·PnL·가격·열 의미를 추정/검증하지 않음 |
+| 원시 비트·입력 보존 | 양 endian·C/F·음수/비단위/0 stride·읽기 전용·유효한 비정렬 버퍼를 지원. 정수 word view/변환으로 byte order만 맞추며 signed zero·무한대·quiet/signalling NaN payload와 논리 행/열 순서를 보존. 입력 바이트·shape·dtype·stride·쓰기 가능 상태를 변경하지 않음. 호출자가 입력을 안정되게 유지해야 하며 정확한 ndarray 타입이 backing buffer 출처·동시 수정 snapshot·자원 한도·보안 sandbox를 보장하지 않음 |
+| 효과·증거 한계 | 함수 자체의 파일/네트워크/설정/환경/시계 조회·저장 없음. SHA-256만으로 출처·저작자·이용권·소유자 승인·공급사/가격 정확성·날짜 순서·연구 유효성을 입증하지 않음. 이후 저장기/읽기기는 같은 framing 채택과 검증을 별도로 확정해야 하며 현재 파일·기존 data MD5/source hash/keys/codec/store를 변경·이전하지 않음 |
+| 합성 검증 | [유지 검사](../../tests/run_registry_series_hash_acceptance.py) 15개·0.011초, 독립 검사 11개·0.008초가 각각 종료 코드 0으로 통과. root의 series 15개+source 8개+data 15개+keys 13개+store 16개+codec 17개 통합 84개도 1.469초·종료 코드 0이며 서로 겹쳐 합산하지 않음. NumPy/새 함수를 쓰지 않고 미리 준비한 15개 원시 바이트 예제는 제품 검사 15회가 아님. memmap 거부 사례는 새 임시 파일만 사용. 이 하위 작업의 실패 실행은 없었으며 모두 로컬 Linux 합성 근거로 새 최종 head 전체 CI·실제 사용자 Windows/API 검증을 대신하지 않음 |
+
+[제품 범위·검증 기록](../product/R3_DETACHED_SERIES_HASH_2026-11-06.md)에 따라 01–20 번호 정책은 유지합니다. series 저장/읽기·pickle 거부·재해시·원자 쓰기·중복/손상 파일/재시도·series_ref·recorder/Lab·수명주기·횟수/판정·실제 원장·동결 연구·상위 R3 완료는 이 함수로 구현하거나 추정하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
+
+<a id="r3-in-memory-series-format-2026-11-06"></a>
+## R3 메모리 내 NPY 형식과 내용 대조 — 2026-11-06
+
+기준 `ea90521d`에 [메모리 encode/decode 함수](../../core/quant/run_registry_series_format.py)를 추가한 ⑨-3a/series-format/1 범위입니다. 승인된 R3 §5.7 중 전달받은 배열/바이트의 직렬화·내용 재해시만 구현하며, NPY1.0·LE float64·C 순서·2차원은 새로 명시한 지원 규칙입니다. 모든 NPY/과거 파일 호환이나 파일시스템 series-store 완료를 뜻하지 않습니다.
+
+| 항목 | 확인한 동작과 한계 |
+| --- | --- |
+| 입력·상한 | `max_bytes`는 필수인 양의 일반 int이며 `np.intp` 최댓값 이내. 배열은 일반 2D float64 ndarray와 dtype metadata 없음만 허용하며 각 축은 일반 int `0..min(intp_max//8, 2**64-1)`. 빈 축도 같은 상한을 적용하고 형식/내용 식별로만 허용. payload는 일반 bytes, 기대 해시는 일반 str 소문자 ASCII 64hex이며 변환 객체·subclass 등을 강제 변환하지 않음 |
+| 인코딩 | 큰 복사 전에 Python 정수로 원시 바이트 수와 작은 헤더를 포함한 크기를 확인. unsigned word로 endian/배치만 LE/C로 바꾸어 signed zero·무한대·quiet/signalling NaN payload를 보존. `np.save(..., allow_pickle=False)`는 메모리 버퍼만 사용하며 각 쓰기의 `memoryview.nbytes`로 한도 초과 성장 전에 거부하고 최종 크기·버전·헤더를 다시 확인. 입력은 변경하지 않고 호출 중 안정성을 전제로 함 |
+| 로드 전 검사 | magic/version·2바이트 LE 헤더 길이·10,000바이트 상한·실제 존재·끝 LF·헤더 종료의 16바이트 정렬을 먼저 확인. 제한된 AST/literal dict의 정확한 3개 고유 키·원문 `'<f8'`·`False`·두 정수 축과 Python 정수의 `행×열×8 == 남은 바이트`를 검사. 중복/추가 키·dtype 별칭/object/구조체·Fortran·다른 버전·ZIP·잘림·추가 바이트/연결 배열을 `np.load` 전에 거부. 헤더 순서·허용 공백/정렬 차이는 내용 해시와 구분 |
+| 반환·검증 의미 | 통과 후에만 `np.load(BytesIO(...), allow_pickle=False, max_header_size=10000)`를 호출하고 실제 배열/shape/dtype/C 상태·전체 소비를 대조한 뒤 기존 `series_sha256`와 기대 해시의 일치를 확인. 반환 배열의 read-only는 호출자가 쓰기 가능 상태로 되돌릴 수 있는 편의이며 불변성/접근통제가 아님. 내용 해시는 NPY 컨테이너 전체 해시와 다르며 양쪽을 바꿀 수 있는 호출자의 기대값이 출처·인증·이용권·소유자 권한·날짜/PnL/연구 유효성을 입증하지 않음 |
+| 자원·범위 | byte 상한은 직렬화 출력/입력 크기이며 peak memory·복사본·CPU·parser 복잡도·보안 sandbox의 상한이 아님. parser RecursionError는 형식 거부로 처리하고 MemoryError는 전파하며 성공 배열로 대체하지 않음. 정확한 ndarray 타입이 backing buffer 출처·동시 수정 snapshot을 증명하지 않음. 실제 파일/네트워크/설정/환경/시계·저장·자료 수집·Lab/원장·연구/소유자 결정은 연결하지 않음 |
+| 최종 합성 검증 | [유지 검사](../../tests/run_registry_series_format_acceptance.py) 최종 22개·0.035초, 별도 독립 13개·0.025초가 각각 종료 코드 0. root 통합은 format 22개+series 15개+source 8개+data 15개+keys 13개+store 16개+codec 17개, 총 106개·1.487초·종료 코드 0이며 모두 겹치는 범위라 합산하지 않음. 별도로 준비한 원시 NPY 예제와 parser 진단은 제품 검사 수가 아님. 로컬 Linux 메모리/합성 근거이며 새 최종 head의 전체 CI·실제 사용자 Windows/API/파일 내구성은 별도 |
+| 보존한 이력 | 최초 21개 실행의 20 PASS+1 fixture ERROR는 NumPy가 불가능한 대형 빈 배열을 encoder 호출 전에 거부한 사례로 보존. 이후 22개·0.036초/0.031초와 통합 106개·1.533초는 이전 중복 결과. memoryview 바이트 수 보강은 소스 검토 지적에서 시작했으며 독립 실행에서 제품 실패를 재현했다고 주장하지 않음. private parser 단계 예상 오류도 별도 보존. 긴 unary 입력의 parser 자원 경계는 환경에 따라 달라 최종 검사는 형식 거부 또는 계약상 MemoryError와 `np.load` 미호출을 확인하며, RecursionError 주입 검사를 실제 재현으로 바꾸지 않음 |
+
+[제품 범위·검증 기록](../product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md)에 따라 01–20 번호 정책은 유지합니다. 여기서의 메모리 로드·pickle 비허용·내용 대조를 파일 저장/읽기 경로·fsync/replace·중복/손상 target/동시 쓰기/재시도/보유·series_ref·날짜/설정 의미·recorder/Lab·수명주기/횟수/판정·실제 원장·동결 연구·전체 R3 완료로 확대하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.

@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "078569a1fa32a177b1ade0c2cecf0389b8e992fccc2227ac024e14a863ebac01",
+    ".github/workflows/runtime-smoke.yml": "59e2d233650c4350ce761e150efd6694a9421b0a0b374bdc82a57f6add357123",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -153,6 +153,8 @@
     "core/quant/run_registry_codec.py": "fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a",
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
+    "core/quant/run_registry_series_format.py": "241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc",
+    "core/quant/run_registry_series_hash.py": "96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043",
     "core/quant/run_registry_source_hash.py": "f38239e969a0127f8db00cbaf47fa9e1721c1642c525dff0ef5f7aa463e3bef6",
     "core/quant/run_registry_store.py": "77522bd80cb158bfac8b400435ede567c35514779ee37006be1007e8094a5eae",
     "core/quant/scenarios.py": "e65dda28f6cb9a3cd29cab547ae1093f556aa0e467f2c86b9d3c616090fbd205",
@@ -266,7 +268,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "ae5b59a6bc53d61285dddda44d85740d24cea0bd714c0c5c1150bd052abb0ac3",
+    "docs/compliance/FACTS.md": "eb1b771559846665e7781a5b39727b19c5ad7208521ec94d8c9271f6b6a910f9",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -315,6 +317,8 @@
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
+    "docs/product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md": "04634e2e49b8b9c7e7cb4ada8d4d9669f8bf2fb2f54ea76b77f40f3ed0f11d71",
+    "docs/product/R3_DETACHED_SERIES_HASH_2026-11-06.md": "aa144bbc25db49cffdda02ccc8cf55a88873dadc8f842d052c4ebf1cb6f48a2b",
     "docs/product/R3_DETACHED_SOURCE_HASH_2026-11-06.md": "1110e24650f40883e876b331d46f22780ef951d8dd7384401fbb99c555e53035",
     "docs/product/R3_SINGLE_SEGMENT_STORE_2026-11-06.md": "f49c6627c6744aec23c46e218be3579b8e91c6f4892862695f44b5fcadb76c1f",
     "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "9082a26aaf303662283b7aadd56e63b3017aab8a30ebefe7cd54db62493d4ca2",
@@ -531,6 +535,8 @@
     "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
+    "tests/run_registry_series_format_acceptance.py": "2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73",
+    "tests/run_registry_series_hash_acceptance.py": "f38a05fca045b00b3bf401a2ba3d0f2a71a6cc589acf5e790655c1e4fc76a156",
     "tests/run_registry_source_hash_acceptance.py": "461adaa26011177c0084d77aa35034ae32e5fbf800da08e0333c937d5eb80f96",
     "tests/run_registry_store_acceptance.py": "f54ca736727a198d7a15cc1996a66fbb966977cd8ecd4230c1b54f22e4ce6110",
     "tests/runtime_syntax_acceptance.py": "174dd84c35a1085a271baa27c0a8e651b519af0e348d912e62a6453027d94e7e",
@@ -618,163 +624,163 @@
   "reviews": {
     "1": {
       "document_sha256": "7ffeb30cbf22092284b48635e1769018e2259ea44c1a5647ac50ecaf3f815d63",
-      "source_digest": "6f85e7a90fa0951b9010a16cdbf23f0dc4521e7a9c6414c3b82ebc0253d109fb",
+      "source_digest": "8ac8ac91d4dab52c1c996035eca97143ff560e5bf1d0aac08c46f6a7f00c8617",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.581645+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.165150+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "6f85e7a90fa0951b9010a16cdbf23f0dc4521e7a9c6414c3b82ebc0253d109fb",
+      "source_digest": "8ac8ac91d4dab52c1c996035eca97143ff560e5bf1d0aac08c46f6a7f00c8617",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.584468+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.167872+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "baaf2e2973895c2cd581b8224affe6d4c84ce7fb1c3a58ab7b8825f6271346fd",
+      "source_digest": "9d035fedb84b0ba7cba35e58724bd91e2f2f8065d37fd1b9515c0d8c4eccde8f",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.586988+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.170153+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "b0c5ffaa35bba5c70455baa7551867f87cb6ea532ee4ecbf86dce3b2e644c4d2",
+      "source_digest": "ab858845935e3af6a751cd5d2d6706c1290a920fd286ec74f35691a9ac04492d",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.589155+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.172401+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "37c54cd073333b8b98a8c5ec7e37fe9485580676e721e5667c033e9c0b27f3b0",
+      "source_digest": "2d357e9a945297e873c1cae01b487a8c7c46150b7bed1705dac1e05e2fe1559d",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.591408+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.174408+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "c95aa18ec84ec51fa54b116687b6c9bf83ce48d1827c9c5541dde872b2a4be4a",
+      "source_digest": "33c5d6421c1dfe91c03f61614229853838edc07f02ea85cc5b06e01aceba4cdd",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.593521+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.176720+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "7": {
       "document_sha256": "cb99e2df664cbc0f5b4efa73259e32809a6a601fe4b64e08105020291a45932b",
-      "source_digest": "6f85e7a90fa0951b9010a16cdbf23f0dc4521e7a9c6414c3b82ebc0253d109fb",
+      "source_digest": "8ac8ac91d4dab52c1c996035eca97143ff560e5bf1d0aac08c46f6a7f00c8617",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.595514+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.178906+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "c95aa18ec84ec51fa54b116687b6c9bf83ce48d1827c9c5541dde872b2a4be4a",
+      "source_digest": "33c5d6421c1dfe91c03f61614229853838edc07f02ea85cc5b06e01aceba4cdd",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.597519+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.181330+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "37f44e4c86754cec45421edaa3df0933ec6efcbe39421a2a688351ee16fc41a7",
+      "source_digest": "e15cab939ea439c7a1b71e2749fb04277164b0c084da10c29ad485b789bea9e7",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.599727+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.183764+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "cb3a80b7c6146d8bd3b36e1d7aa7a88011e8570ffe66a61cd1d5094fed250374",
+      "source_digest": "0fc6dcab737884da1e54dea3ec8b91a2c1747b15d9c58e4f3f8480217197c4e4",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.601806+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.186220+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "41939b8cdfc4eaaf13c16319d5d2fc2dde254ecc8a4d594d21de9f5bf2043450",
+      "source_digest": "9cfe05202448084f4638134c0763af2c4487722b83442d1d71fcbba8f675a1a9",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.603939+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.188348+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "a986295388a925005208303f0feefbc4802af20f04c61b18e7c4c10e3862401f",
+      "source_digest": "e8a1dacf67a42c745f4eacc7f70ce35ce7fbdb08b9d3377df479632ad7d21363",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.605853+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.190495+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "13": {
       "document_sha256": "1c4d599950946958006cfc32af93ff68d1ca81c9f0ff4291d2c722978e3dc1f9",
-      "source_digest": "37f44e4c86754cec45421edaa3df0933ec6efcbe39421a2a688351ee16fc41a7",
+      "source_digest": "e15cab939ea439c7a1b71e2749fb04277164b0c084da10c29ad485b789bea9e7",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.607970+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.192799+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "14": {
       "document_sha256": "653d67e4d2540fd96d6d3bb70415f3ec11f8e89b10e662ef540779c16ac1d12a",
-      "source_digest": "37f44e4c86754cec45421edaa3df0933ec6efcbe39421a2a688351ee16fc41a7",
+      "source_digest": "e15cab939ea439c7a1b71e2749fb04277164b0c084da10c29ad485b789bea9e7",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.610049+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.195115+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "37f44e4c86754cec45421edaa3df0933ec6efcbe39421a2a688351ee16fc41a7",
+      "source_digest": "e15cab939ea439c7a1b71e2749fb04277164b0c084da10c29ad485b789bea9e7",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.612147+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.197760+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "268f9a2f014605a507149dde29d20456f0a171ec8ffae7844076b9154d5ee4c0",
+      "source_digest": "3889f9e97637b74c5558fe367d4731a6666049a31e0109a4c189533e426e9faf",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.614035+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.199976+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "c95aa18ec84ec51fa54b116687b6c9bf83ce48d1827c9c5541dde872b2a4be4a",
+      "source_digest": "33c5d6421c1dfe91c03f61614229853838edc07f02ea85cc5b06e01aceba4cdd",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.616039+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.202185+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "6f85e7a90fa0951b9010a16cdbf23f0dc4521e7a9c6414c3b82ebc0253d109fb",
+      "source_digest": "8ac8ac91d4dab52c1c996035eca97143ff560e5bf1d0aac08c46f6a7f00c8617",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.618050+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.204165+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "19": {
       "document_sha256": "040f40ebb5add2ebcaef8f1d878dacc9ed83522a871016806673764b3c92cfea",
-      "source_digest": "8388e7761033e435f18b19959ff991602edf6e0f3e0524d48d94a41662134aa2",
+      "source_digest": "ce1a083298ae897bafd7813a41184370c6eab44904516e1b3c9a6fc83f2b798a",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.620415+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.206430+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     },
     "20": {
       "document_sha256": "b84d55ab085dad8cb897528f1cda017a96eeb41e68188bd350f13fcb02ea0f88",
-      "source_digest": "6f85e7a90fa0951b9010a16cdbf23f0dc4521e7a9c6414c3b82ebc0253d109fb",
+      "source_digest": "8ac8ac91d4dab52c1c996035eca97143ff560e5bf1d0aac08c46f6a7f00c8617",
       "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All 20 policies substantively reviewed for detached supplied-source raw and single-pass LF SHA256. FACTS records synthetic8 and independent10 overlapping probes plus combined69 PASS. No collection, provenance, research or owner effects; publication BLOCKED and full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:17:42.622634+00:00",
-      "source_commit": "6ddf5146695de739e9f1ee5e2be609efd9d7be4c"
+      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
+      "reviewed_at": "2026-11-06T12:42:34.208531+00:00",
+      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
     }
   }
 }
