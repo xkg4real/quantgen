@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-03
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision
 next_ids: ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-06T18:34:31+09:00
+updated_at: 2026-11-06T18:41:06+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: gpt/run-registry-codec-20261106
+work_branch: gpt/run-registry-store-20261106
 work_commit: f3d6c5e2a0de766ab79a73d392eb77bd307c9862
 uncommitted_changes: no
-pr: https://github.com/xkg4real/quantgen/pull/81
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-10T17:00:00+09:00
@@ -483,3 +483,9 @@ git ls-remote origin claude/s10-ai-20261104 claude/handoff-materials-20261105
 - R3 pure codec source fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a/test c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e 유지. 17합성PASS0.010s+독립9검사PASS0.010s(중복합산금지), 결합20정책 검토GO/소스정합성PASS594/publicationBLOCKED. inherited A1 cleanup exact블롭과 검사명령 multiset 보존.
 - 완성 대상은 ⑨-3a/codec/1뿐이다. Envelope/정규JSON+LF/nonfinite표시/제공된 bytes MD5사슬/주입UTC·token LAB ID만 다룬다. 실제 원장/저장회전/keys/카논·Lab연결/동결연구/승인효과 없음. MD5는 인증 아님, 외부anchor없는 유효suffix삭제 판별불가. 전체⑨-3a와T-RUNREG02/09 미완료.
 - PR79 Runtime42194971104 진행중/Compliance42194971102success; PR80 Runtime42195764855 진행중/Compliance42195765001success. 일부A1단계 성공은 전체CI성공으로 대체하지 않는다. 실제 사용자Windows/API/공급사/법률·라이선스/파일럿 증거와 NOT_PERFORMED 선택spec 상태 유지. 다음은 세최종head 전체CI와 순차병합·원장·Notion 반영.
+
+### GPT 승인 R3 단일구간 저장소 하위 작업 인수 — 2026-11-06T18:41:06+09:00
+
+- 동일task/handoff/execution6c40bb4c-51a4-439b-a64d-0233051168ab 아래 ⑨-3a/store/1을 등록한다. gpt/run-registry-store-20261106 /workspace/work/quantgen-r3-store-20261106을 검증된f3d6c5e2a0de766ab79a73d392eb77bd307c9862에서 생성·push/read-back했고 코드수정은 아직 없다. 최신LEDGER979369ac에서 해당ID/파일 미완료·미기록 확인. 원래R3codec은PR81에서 계속CI확인하며 PR79→80→81 순서를 유지한다.
+- 승인 근거는 Nov3 소유자R3전부승인 및 Nov5유효인계, exactrev2계약fa280591 §5.2/5.5/9.1/9.3이다. 단일 활성구간의 명시적caller경로, read/append 전체chain검증, 프로세스+OSboundedlock, lock내중복STARTED/FINISHED거부, binaryLF/flush/fsync만 구현한다. 기본실제경로/config/env/네트워크 없음. rollover필요시거부하며 자동복구/회전/cache/human권한효과/recorder/Lab/keys/실제원장/동결연구는 제외한다. 전체T-RUNREG02/⑨-3a 완료아님.
+- 시험은격리temp합성에한정: 재열기/무결성·torn거부와원문보존, 중복경쟁,5threads×10events, 별도process OS잠금,timeout/쓰기실패, 최종Windows/UbuntuCI. 코드인수는 이CURRENT최신blob CAS·executionID원격read-back 이후에만 시작한다. 실제증거누락과 선택spec NOT_PERFORMED 유지.
