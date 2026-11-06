@@ -49,7 +49,7 @@ class BondsPane(QWidget):
         self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);inner.addWidget(self.run)
         self.status=label('곡선 출처와 관측일을 함께 표시합니다.','muted');self.status.setProperty('reading_help_keep_visible',True);inner.addWidget(self.status);layout.addWidget(box)
         from .result_layout import PairedResultPanels, fit_result_table
-        self.metrics=fit_result_table(table(['Metric','Value']))
+        self.metrics=fit_result_table(table(['Metric','Value']));self.metrics.setProperty('localized_columns', [0])
         metrics_box,metrics_layout=panel('Key metrics')
         metrics_layout.addWidget(self.metrics);metrics_layout.addStretch()
         self.krd=fit_result_table(table(['Key tenor · years','DV01 · currency / bp']))

@@ -27,6 +27,7 @@ from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
 import ui.fcharts as fcharts
+from ui.localization import table_header, literal_text
 
 _TOOLS = [("ppn", "Principal-protected note"), ("rc", "Reverse convertible"),
           ("dcd", "Dual-currency deposit"), ("steep", "Steepener note")]
@@ -117,14 +118,18 @@ def _qty(x: float) -> str:
     return f"{x:+,.2f}" if abs(x) < 100 else f"{x:+,.0f}"
 
 
+_HEADERS_KO = {'Leg': '구성요소', 'Kind': '유형', 'Detail': '상세',
+               'Quantity': '수량', 'Unit': '단위', 'Rationale': '근거'}
+
+
 def _table(columns: list[str], rows: list[list]) -> ft.Control:
     last = len(columns) - 1
 
     def cell(i: int, v) -> ft.DataCell:
-        return ft.DataCell(ft.Text(str(v), size=11, width=460 if i == last else None))
+        return ft.DataCell(literal_text(str(v), size=11, width=460 if i == last else None))
 
     return ft.Row([ft.DataTable(
-        columns=[ft.DataColumn(ft.Text(c, size=11)) for c in columns],
+        columns=[ft.DataColumn(table_header(c, ko=_HEADERS_KO.get(c), size=11)) for c in columns],
         rows=[ft.DataRow(cells=[cell(i, v) for i, v in enumerate(r)]) for r in rows],
         column_spacing=18, heading_row_height=34, data_row_min_height=34,
         data_row_max_height=88,

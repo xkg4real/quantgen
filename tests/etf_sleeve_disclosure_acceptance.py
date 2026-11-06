@@ -41,7 +41,8 @@ with patch.object(dotenv, 'load_dotenv', return_value=False):
     from core.research.tool_export import report_bytes
     from quantgen_desktop.market_diagnostics_language import decay_korean
     from quantgen_desktop.market_narrative_language import (etf_korean, letf_korean, letf_unavailable_korean,
-                                                            market_variants)
+                                                            market_variants, display_sharpe_note_korean,
+                                                            display_conventions_korean)
     from ui import etf_page
 import flet as ft
 from tests.desktop_fx_language_acceptance import numbers
@@ -51,7 +52,9 @@ RF = 0.03 / 252
 # the narratives, 4.642314207434303e+16 in JSON, '46,423,142,074,343,032.0000' in the native table. A bare '4642'
 # also occurs by chance in the exported price arrays, so the check matches the value's leading digits in each of
 # those formats, and any e16 exponent.
-DEFECT = re.compile(r'4\.?642,?314|46,423,142|[eE]\+?16\b')
+# Require a whole numeric token: report metadata can legitimately contain a
+# hexadecimal commit ending in "e16" or beginning with the defect's digits.
+DEFECT = re.compile(r'(?<![A-Za-z0-9_.])(?:4\.?642,?314[\d,.]*|46,423,142[\d,.]*|[-+]?\d+(?:\.\d+)?[eE]\+?16)(?![A-Za-z0-9_.])')
 SEED_2_DEFECT = re.compile(r'3\.?482,?646|34,826,467|[eE]\+?16\b')     # 3.4826467946423224e16
 PCT_NUMBERS = re.compile(r'[-+]?\d[\d,]*(?:\.\d+)?%?')
 
@@ -142,7 +145,7 @@ def old_etf_korean(a):
                      + decay_korean(ps.get('decay')))
     sl = a.get('sleeves')
     if sl:
-        parts.append(f"이 펀드의 자체 이력에서 10개월 추세 전환의 샤프비율은 {sl['trend']['sharpe']:.2f} "
+        parts.append(f"이 펀드의 자체 이력에서 10개월 추세 전환의 샤프 지수는 {sl['trend']['sharpe']:.2f} "
                      f"(최대 낙폭 {sl['trend']['max_drawdown']:.0%}, 투자 비중 {sl['exposure_trend']:.0%})이며, "
                      f"매수 후 보유는 {sl['buy_hold']['sharpe']:.2f} ({sl['buy_hold']['max_drawdown']:.0%}), "
                      f"12 % 변동성 목표는 {sl['vol_target']['sharpe']:.2f}입니다. 이는 표본 내 기술통계입니다. "
@@ -163,10 +166,10 @@ def old_etf_korean(a):
 
 def without_insertions(text, sl, korean=False):
     """The narrative with the NEW-M6-04 note and the NEW-M6-05 conventions removed."""
-    conventions = (SD.conventions_korean if korean else SD.conventions_text)(sl['conventions'])
+    conventions = (display_conventions_korean if korean else SD.conventions_text)(sl['conventions'])
     assert text.count(' ' + conventions) == 1
     text = text.replace(' ' + conventions, '')
-    note = (SD.sharpe_note_korean if korean else SD.sharpe_note)(sl)
+    note = (display_sharpe_note_korean if korean else SD.sharpe_note)(sl)
     if note:
         assert text.count(' ' + note) == 1
     return text.replace(' ' + note, '') if note else text
@@ -241,6 +244,13 @@ class OfflineCase(unittest.TestCase):
 
 
 class UndefinedSharpeTests(OfflineCase):
+    def test_defect_probe_matches_numeric_values_not_commit_metadata(self):
+        for value in ('1e16','-1.23e+16','46423142074343032.00','46,423,142,074,343,032.0000'):
+            self.assertRegex(value,DEFECT)
+        for commit in ('e79ef2c1160242ddf86d5b381e1005f2ad627e16',
+                       '4642314abcdef0123456789abcdef0123456789abc'):
+            self.assertNotRegex(json.dumps({'commit':commit}),DEFECT)
+
     def test_constant_cash_pnl_is_undefined_at_both_rounding_outcomes(self):
         for closes, numpy_sd_is_zero in ((505, False), (547, True)):
             with self.subTest(closes=closes):
@@ -300,8 +310,8 @@ class UndefinedSharpeTests(OfflineCase):
                 en, ko = out.narrative, etf_korean(d)
                 self.assertIn('earned Sharpe n/a (max drawdown 0%, 0% invested)', en)
                 self.assertIn('Sharpe n/a for the trend switch: the daily P&L did not vary', en)
-                self.assertIn('샤프비율은 계산 불가 (최대 낙폭 0%, 투자 비중 0%)', ko)
-                self.assertIn('추세 전환의 샤프비율은 계산 불가입니다', ko)
+                self.assertIn('샤프 지수는 계산 불가 (최대 낙폭 0%, 투자 비중 0%)', ko)
+                self.assertIn('추세 전환의 샤프 지수는 계산 불가입니다', ko)
                 for text in (en, ko, json.dumps(wf.payload(d), allow_nan=False)):
                     self.assertNotRegex(text, SEED_2_DEFECT)
                 self.assertEqual(numbers(en), numbers(ko))
@@ -312,8 +322,8 @@ class UndefinedSharpeTests(OfflineCase):
                 self.assertRegex(ko, r'12 % 변동성 목표는 -0\.\d\d입니다\. 이는 표본 내 기술통계입니다\.')
                 self.assertLess(en.index('Price basis for these sleeve numbers:'), en.index('Sharpe n/a for'))
                 self.assertLess(en.index('Sharpe n/a for'), en.index('Sleeve conventions:'))
-                self.assertLess(ko.index('이 전략별 수치의 가격 기준:'), ko.index('추세 전환의 샤프비율은 계산 불가입니다'))
-                self.assertLess(ko.index('추세 전환의 샤프비율은 계산 불가입니다'), ko.index('전략 계산 관례:'))
+                self.assertLess(ko.index('이 전략별 수치의 가격 기준:'), ko.index('추세 전환의 샤프 지수는 계산 불가입니다'))
+                self.assertLess(ko.index('추세 전환의 샤프 지수는 계산 불가입니다'), ko.index('전략 계산 관례:'))
 
     def test_flat_price_at_100_all_three_are_na_with_one_note(self):
         out = output(np.full(505, 100.0))
@@ -323,7 +333,7 @@ class UndefinedSharpeTests(OfflineCase):
         self.assertIn('earned Sharpe n/a', en); self.assertIn('against buy-and-hold n/a (0%)', en)
         self.assertIn('the 12 % vol target earned n/a. These are in-sample', en)
         self.assertIn('Sharpe n/a for the trend switch, the vol target and buy-and-hold:', en)
-        self.assertIn('추세 전환, 변동성 목표, 매수 후 보유의 샤프비율은 계산 불가입니다', ko)
+        self.assertIn('추세 전환, 변동성 목표, 매수 후 보유의 샤프 지수는 계산 불가입니다', ko)
         self.assertIn('12 % 변동성 목표는 계산 불가입니다. 이는 표본 내', ko)
         self.assertIn('the standard deviation is 0 and the ratio is undefined', en)
         self.assertIn('표준편차가 0이므로 비율이 정의되지 않습니다', ko)
@@ -353,7 +363,7 @@ class UndefinedSharpeTests(OfflineCase):
         en, ko = out.narrative, etf_korean(out.data)
         self.assertIn('earned Sharpe 20.80', en)
         self.assertIn('Sharpe n/a for the vol target and buy-and-hold:', en)
-        self.assertIn('변동성 목표, 매수 후 보유의 샤프비율은 계산 불가입니다', ko)
+        self.assertIn('변동성 목표, 매수 후 보유의 샤프 지수는 계산 불가입니다', ko)
         self.assertEqual(numbers(en), numbers(ko))
 
     def test_nan_close_is_non_finite_not_no_variation(self):
@@ -609,9 +619,9 @@ class NativePaneTests(OfflineCase):
                          < order.index(conventions) < order.index('sleeve_conventions'), True)
         self.assertIn({'type': 'sleeve_conventions', **sl['conventions']}, pane.sections)
         labels = {x.source_text: x for x in pane.findChildren(UiLabel) if getattr(x, 'localized_text', {})}
-        self.assertEqual(labels[note].localized_text, {'en': note, 'ko': SD.sharpe_note_korean(sl)})
+        self.assertEqual(labels[note].localized_text, {'en': note, 'ko': display_sharpe_note_korean(sl)})
         self.assertEqual(labels[conventions].localized_text,
-                         {'en': conventions, 'ko': SD.conventions_korean(sl['conventions'])})
+                         {'en': conventions, 'ko': display_conventions_korean(sl['conventions'])})
         report = deepcopy(pane.report)
         sections = json.dumps(pane.sections, sort_keys=True, default=lambda v: v.item())
         with patch.object(w.jobs, 'start', side_effect=AssertionError('no recomputation')):
@@ -666,7 +676,7 @@ class NativePaneTests(OfflineCase):
                          < order.index('sleeve_conventions'), True)
         labels = {x.source_text: x for x in pane.findChildren(UiLabel) if getattr(x, 'localized_text', {})}
         self.assertEqual(labels[conventions].localized_text,
-                         {'en': conventions, 'ko': SD.conventions_korean(sl['conventions'])})
+                         {'en': conventions, 'ko': display_conventions_korean(sl['conventions'])})
         commentary = commentary_payload(pane.report)
         self.assertIn(conventions, [s.get('text') for s in commentary['sections']])
         self.assertIn('sleeve_conventions', [s['type'] for s in commentary['sections']])
@@ -735,8 +745,12 @@ class FletPageTests(OfflineCase):
     def test_defined_sharpe_tooltip_is_a_short_pointer_with_a_korean_pair(self):
         from core.ui_legacy_messages import static_text
         pointer, korean = SD.SHARPE_CONVENTIONS_POINTER, SD.SHARPE_CONVENTIONS_POINTER_KO
+        display_korean=('준비 구간을 포함한 전체 기간의 샤프 지수이며, 현금 금리를 뺀 초과 수익 기준이 '
+                        '아닙니다. 계산 관례는 이 줄 아래 안내에 있습니다.')
         self.assertLess(len(pointer), 160)                      # not the whole conventions paragraph again
-        self.assertEqual(static_text(pointer, 'ko'), korean)    # Flet translates tooltips through this catalog
+        self.assertEqual(static_text(pointer, 'ko'), display_korean)  # display-only approved terminology
+        self.assertEqual(static_text(display_korean, 'en'), pointer)
+        self.assertIn('샤프비율이며', korean)  # the core source text remains unchanged
         self.assertEqual(static_text(korean, 'en'), pointer)
 
 if __name__ == '__main__':

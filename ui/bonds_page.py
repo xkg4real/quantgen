@@ -21,8 +21,12 @@ from core.ficc.curves import curve_from_snapshot
 from core.ficc.data import load_treasury_curve
 from core.theme import RADII, active
 from ui import fcharts
+from ui.localization import table_header, literal_text
 from ui.ai_panel import analysis_panel
 from ui.components import card, chip, empty_state, notice, section, stat
+
+_SCENARIO_HEADERS_KO = {'Scenario': '시나리오', 'Shock': '금리 충격', 'New price': '새 가격',
+                        'P&L': '손익', 'P&L %': '손익률 %'}
 
 _TOOLS = [("calc", "Calculator & risk"), ("scenarios", "Scenarios"),
           ("hedge", "Futures hedge")]
@@ -176,9 +180,9 @@ def build_bonds_page(page: ft.Page,
                     ], spacing=10, wrap=True))
                     blocks.append(card(fcharts.scenario_chart(rows)))
                     table = ft.DataTable(
-                        columns=[ft.DataColumn(ft.Text(h, size=11)) for h in
+                        columns=[ft.DataColumn(table_header(h, ko=_SCENARIO_HEADERS_KO.get(h), size=11)) for h in
                                  ("Scenario", "Shock", "New price", "P&L", "P&L %")],
-                        rows=[ft.DataRow(cells=[ft.DataCell(ft.Text(v, size=11)) for v in (
+                        rows=[ft.DataRow(cells=[ft.DataCell(literal_text(v, size=11)) for v in (
                             r.name, _shock_text(r.shock_bp), f"{r.new_price:.3f}",
                             _money(r.pnl, signed=True), f"{r.pnl_pct * 100:+.2f}%")])
                             for r in rows],

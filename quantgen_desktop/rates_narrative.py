@@ -28,7 +28,7 @@ def curve_korean(r, pca=None):
         f"마지막 값은 선도 파 스왑금리나 반기 복리 금리가 아닙니다. "
         f"1y 금리는 향후 일 년간 {_bp(d['1y_fwd_1y_ahead'])} 변화를 가격에 반영합니다.",
         f"{r.ns.method.replace('_','-')} 적합의 파 수익률 오차는 RMS {r.ns.rmse/BP:.1f}bp입니다 "
-        f"(가격 산출에는 {r.curve.method} 제로금리 사용).",
+        f"(가격 산출에는 {r.curve.method} 무이표 금리 사용).",
     ]
     if pca is not None:
         parts = ', '.join(f'{COMPONENTS.get(lbl,lbl)} {float(e)*100:.0f}%'

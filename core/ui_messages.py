@@ -183,9 +183,18 @@ _PAIRS = {
  'cat_app': ('QUANTGEN 용어', 'QUANTGEN term'),
 }
 
+# Approved A1 menu/display vocabulary; stable keys and English sources stay put.
+_A1_KOREAN = {'build': '설계/검증', 'risk': '분석', 'signals': '기술적 분석',
+              'execution': '모의투자', 'provider': '제공처', 'macro': '매크로',
+              'rights_search': '지표 코드·제공처로 검색'}
+_A1_LEGACY = {_PAIRS[key][0]: key for key in _A1_KOREAN}
+for _key, _korean in _A1_KOREAN.items():
+    _PAIRS[_key] = (_korean, _PAIRS[_key][1])
+
 MESSAGES = {language: {key: values[i] for key, values in _PAIRS.items()}
             for i, language in enumerate(('ko', 'en'))}
 LEGACY = {text: key for key, values in _PAIRS.items() for text in values}
+LEGACY.update(_A1_LEGACY)
 LEGACY.update({'Build && Test':'build','Portfolio && Risk':'risk','Light · A':'light',
                'Macro sheet':'macro','분포 분석 실행':'analyze','Symbol':'symbol',
                '연결 설정':'connections','분석 JSON 저장':'json_save','보고서 ZIP 저장':'zip_save',

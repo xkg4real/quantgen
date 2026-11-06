@@ -50,7 +50,7 @@ _STATUS = {
     "LOADING": ("조회 중", "Loading"),
     "UNAVAILABLE": ("조회 불가", "Unavailable"),
     "STALE": ("오래된 자료", "Stale"),
-    "OBSERVED": ("일별 관측", "Daily observation"),
+    "OBSERVED": ("정상 관측", "Daily observation"),
     "SNAPSHOT": ("조회 시세", "Quote snapshot"),
     "STREAMING": ("실시간 체결", "Live trades"),
 }
@@ -306,7 +306,8 @@ def _price_tooltip(row, ctx):
     return (" · ".join((_name(row, ctx), _price(row, ctx), _status(row, ctx))) + "\n"
             + _source_time(row, ctx) + "\n"
             + _text(ctx, "앱 수신: ", "App received: ") + _timestamp(row.get("received_at"), ctx)
-            + "\n" + _reason(row, ctx))
+            + "\n" + _reason(row, ctx)
+            + "\n" + _text(ctx, "상태 코드: ", "Status code: ") + str(row.get('status') or '—'))
 
 
 def _reason(row, ctx):
