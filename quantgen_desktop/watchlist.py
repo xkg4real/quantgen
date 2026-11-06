@@ -6,10 +6,9 @@ from datetime import datetime, timedelta, timezone
 import math
 import re
 from babel.dates import format_date
-from babel.numbers import format_compact_decimal
 
 from PyQt6.QtCore import QEvent, QRect, Qt, pyqtSignal
-from PyQt6.QtGui import QBrush, QColor, QFontMetrics
+from PyQt6.QtGui import QBrush, QColor, QFontMetrics, QPainter, QPalette
 from PyQt6.QtWidgets import (
     QAbstractItemView, QDialog, QFormLayout, QFrame, QHBoxLayout, QHeaderView,
     QLabel, QPushButton, QScrollArea, QSizePolicy, QTableWidget,
@@ -17,7 +16,9 @@ from PyQt6.QtWidgets import (
 )
 
 from core.i18n import LocaleContext
+from core.numfmt import compact_large_number
 from core.theme import LIGHT
+from .company_identity import CompanyMark
 from .typography import scaled_font, tone_colors, tone_for
 
 ROW_HEIGHT = 44
@@ -99,8 +100,8 @@ def _number(value, ctx, digits=2):
 
 
 def _compact(value, ctx):
-    value = _finite(value)
-    return "—" if value is None else format_compact_decimal(value, format_type="short", locale=ctx.locale, fraction_digits=2)
+    """Use one magnitude scale for volume/cap across every UI language."""
+    return compact_large_number(value, str(ctx.locale))
 
 
 def _metric(value, ctx):
@@ -382,6 +383,26 @@ class _IdentityDelegate(QStyledItemDelegate):
         # Keep the item's name for accessibility and legacy consumers, while
         # the ticker/name widget owns visible text. Otherwise both are drawn.
         option.text = ""
+
+
+class _CompanyName(QLabel):
+    """One crisp text line, with the full name available to assistive tools."""
+    def __init__(self, text, parent=None):
+        super().__init__(text, parent)
+        self.setObjectName("watchlistCompany")
+        self.setTextFormat(Qt.TextFormat.PlainText)
+        self.setAccessibleName(text)
+        self.setToolTip(text)
+        self.setMinimumWidth(0)
+        self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Expanding)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setFont(self.font())
+        painter.setPen(self.palette().color(QPalette.ColorRole.WindowText))
+        text = self.fontMetrics().elidedText(self.text(), Qt.TextElideMode.ElideRight, self.width())
+        painter.drawText(self.rect(), Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, text)
+        painter.end()
 
 
 class _HeaderHelpButton(QPushButton):
@@ -681,6 +702,7 @@ class WatchlistPanel(QWidget):
         header.addWidget(self.refresh)
         outer.addLayout(header)
         self.caption = _label()
+        self.caption.setObjectName("watchlistCaption")
         outer.addWidget(self.caption)
         live_controls = QHBoxLayout()
         self.live_button = QPushButton()
@@ -702,7 +724,7 @@ class WatchlistPanel(QWidget):
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.table.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
-        self.table.setAlternatingRowColors(True)
+        self.table.setAlternatingRowColors(False)
         self.table.setShowGrid(False)
         self.table.setWordWrap(False)
         self.table.verticalHeader().hide()
@@ -713,7 +735,7 @@ class WatchlistPanel(QWidget):
         self.table.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
         self.table.horizontalHeader().setMinimumSectionSize(64)
-        for column, width in enumerate((205, 110, 80, 80, 105, 80, 80, 100, 70, 150)):
+        for column, width in enumerate((260, 134, 78, 72, 100, 66, 68, 79, 68, 136)):
             self.table.setColumnWidth(column, width)
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.horizontalScrollBar().rangeChanged.connect(self._sync_table_height)
@@ -791,6 +813,9 @@ class WatchlistPanel(QWidget):
             ("종목 · 지표", "Instrument"), ("현재가", "Price"), ("변동", "Change"),
             ("거래량", "Volume"), ("시가총액", "Market cap"), ("PER", "PER"), ("EPS", "EPS"),
             ("업종", "Sector"), ("상세", "Details"), ("Q-SCORE", "Q-SCORE"))])
+        for column in range(self.table.columnCount()):
+            alignment = Qt.AlignmentFlag.AlignRight if column in (1, 2, 3, 4, 5, 6) else Qt.AlignmentFlag.AlignLeft
+            self.table.horizontalHeaderItem(column).setTextAlignment(alignment | Qt.AlignmentFlag.AlignVCenter)
         self.table.horizontalHeaderItem(self.score_column).setToolTip(self.score_help.toolTip())
         self.table.horizontalHeaderItem(4).setToolTip(_text(ctx, "KRW · 가격 × 상장 주식 수로 산출, 기준 시각은 상세에서 확인", "KRW · calculated from price × listed shares; open Details for timing"))
         for column in (5, 6):
@@ -808,12 +833,15 @@ class WatchlistPanel(QWidget):
             QWidget#marketWatchlistPanel {{ background: {p.bg}; color: {p.text}; }}
             QLabel {{ color: {p.text}; }}
             QLabel#watchlistTitle {{ font-size: 18px; font-weight: 600; color: {p.text}; }}
+            QLabel#watchlistCaption {{ font-size: 14px; font-weight: 500; color: {p.text}; }}
             QTableWidget {{ background: {p.surface}; alternate-background-color: {p.surface_2}; border: 1px solid {p.border}; border-radius: 10px; selection-background-color: {p.accent_soft}; selection-color: {p.text}; color: {p.text}; }}
             QTableWidget::item {{ padding: 1px 8px; border-bottom: 1px solid {p.border}; }}
+            QTableWidget::item:hover {{ background: {p.surface_2}; }}
+            QTableWidget::item:selected {{ background: {p.accent_soft}; color: {p.text}; }}
             QHeaderView::section {{ background: {p.surface_2}; color: {p.muted}; padding: 6px 8px; border: 0; font-size: 12px; font-weight: 600; }}
             QWidget#watchlistIdentity {{ background: transparent; }}
-            QWidget#watchlistIdentity QLabel {{ background: transparent; color: {p.text}; font-size: 13px; }}
-            QWidget#watchlistIdentity QLabel#watchlistTicker {{ background: {p.accent_soft}; color: {p.accent}; border-radius: 6px; padding: 3px 4px; font-size: 12px; font-weight: 600; }}
+            QWidget#watchlistIdentity QLabel {{ background: transparent; color: {p.text}; font-size: 14px; font-weight: 500; }}
+            QWidget#watchlistIdentity QLabel#watchlistTicker {{ background: {p.surface_2}; color: {p.text}; border-radius: 7px; padding: 3px 4px; font-size: 12px; font-weight: 600; }}
             QPushButton {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; border-radius: 8px; padding: 7px 10px; }}
             QPushButton:hover {{ background: {p.accent_soft}; }}
             QPushButton:focus {{ border: 2px solid {p.accent}; }}
@@ -874,16 +902,17 @@ class WatchlistPanel(QWidget):
             identity_layout.setContentsMargins(10, 1, 10, 1)
             identity_layout.setSpacing(8)
             symbol = str(row.get("symbol") or "—")
+            mark = CompanyMark(symbol, name, palette=self.colors, size=28)
+            identity_layout.addWidget(mark)
             badge = _label(_BADGES.get(symbol, symbol))
             badge.setObjectName("watchlistTicker")
-            badge.setFixedWidth(64)
+            badge.setFixedWidth(62)
             badge.setAlignment(Qt.AlignmentFlag.AlignCenter)
             badge.setWordWrap(False)
             identity_layout.addWidget(badge)
-            company = _label(name)
-            company.setMinimumWidth(0)
-            company.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Expanding)
+            company = _CompanyName(name)
             identity_layout.addWidget(company, 1)
+            identity.setToolTip(f"{name} · {symbol}")
             self.table.setCellWidget(index, 0, identity)
             button = QPushButton(_text(self.ctx, "상세", "Details"))
             button.setProperty("watchlistDetail", True)
@@ -915,11 +944,10 @@ class WatchlistPanel(QWidget):
                 item = QTableWidgetItem()
                 self.table.setItem(index, column, item)
             item.setText(value)
-            font = self.table.font()
-            font.setPixelSize(13)
+            font = scaled_font(self.table.font(), 14 if column == 1 else 13, 500 if column in (1, 2) else 400)
             item.setFont(font)
             item.setData(Qt.ItemDataRole.UserRole, row.get("symbol"))
-            tooltip = value
+            tooltip = f"{value} · {row.get('symbol', '')}" if column == 0 else value
             if column == 1:
                 tooltip = _price_tooltip(row, self.ctx)
             elif column == 3:

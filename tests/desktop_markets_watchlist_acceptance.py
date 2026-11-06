@@ -149,6 +149,38 @@ class MarketsWatchlistTests(unittest.TestCase):
         self.assertNotIn("raw provider", " ".join(self.visible_text()))
         self.assertEqual(load_cards(self.router, [SAMSUNG])[0].error, "RuntimeError")
 
+    def test_company_marks_follow_stock_language_and_theme_without_loading_data(self):
+        from core.theme import DARK
+        card = self.view.grid.cards[("domestic_stock", "005930", "")]
+        self.assertTrue(card.mark.isVisible())
+        self.assertEqual(card.mark.accessibleName(), "삼성전자")
+        self.view.open_instrument(SAMSUNG)
+        stock = self.view.stock
+        self.assertEqual(stock.mark.spec, card.mark.spec)
+        self.assertEqual(stock.mark.symbol, SAMSUNG.code)
+        self.window.set_language("en")
+        self.window.theme.setCurrentIndex(1)
+        self.app.processEvents()
+        self.assertEqual(stock.mark.accessibleName(), "Samsung Electronics")
+        self.assertEqual(stock.mark.colors, DARK)
+        self.assertEqual(card.mark.colors, DARK)
+        # A different stock must not retain Samsung's mark; arbitrary valid codes still work.
+        self.view.open_instrument(HYNIX)
+        self.assertEqual(stock.mark.spec.letters, "SK")
+        self.view.open_instrument(Instrument("domestic_stock", "123456"))
+        self.assertEqual(stock.mark.symbol, "123456")
+        self.assertTrue(stock.mark.isVisible())
+        self.view.open_instrument(Instrument("domestic_future", "101W12"))
+        self.assertFalse(stock.mark.isVisible())  # no company mark on a derivative
+        completer = self.view.completer
+        rows = completer.results("Samsung Electronics")
+        completer.model.set_rows(rows, "en")
+        index = completer.model.index(0)
+        self.assertFalse(completer.model.data(index, Qt.ItemDataRole.DecorationRole).isNull())
+        self.assertEqual(completer.model.data(index, Qt.ItemDataRole.EditRole), "005930")
+        self.assertEqual(self.router.calls, [])
+        self.assertEqual(self.profiles, [])
+
     def test_a_card_or_a_search_opens_one_screen_with_everything(self):
         self.load_cards()
         card = self.view.grid.cards[("domestic_stock", "005930", "")]

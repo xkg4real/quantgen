@@ -128,3 +128,8 @@ PER/EPS·업종·상장주수 필드 확인과 가격×상장주수 계산은 �
 - [Riverbank — PyQt Licensing](https://www.riverbankcomputing.com/commercial/license-faq)
 - [SIL — Open Font License](https://openfontlicense.org/)
 - 국내 저작권·공식 근거와 계약 검토 기준은 [공식 출처 대장](SOURCES.md)을 참고한다. 외부 약관·허락은 실제 계약 버전과 함께 보관한다.
+
+
+### 2026-11-06 로컬 기업 문자 식별자
+
+`quantgen_desktop/company_identity.py`의 S·SK·LG·H·KB 등 원형 문자 마크는 앱에서 직접 그리는 탐색 보조 식별자입니다. 기업 공식 로고 파일·외부 브랜드 CDN·새 글꼴 파일을 도입하지 않았습니다. 회사명·종목코드를 함께 표시하며 공식 로고 또는 해당 회사의 보증·제휴라고 주장하지 않습니다. 기존 QG Interface 글꼴과 OFL 고지는 유지합니다. 외부 사이트에서 이 표식을 도입하거나 공식 로고로 교체할 때의 권리 검토와 실제 공개 승인은 별도입니다.

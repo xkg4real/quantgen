@@ -114,6 +114,11 @@ class ResponsiveToolTests(unittest.TestCase):
             pane.tool.setCurrentIndex(pane.tool.findData('weekly'))
             pane.source.setCurrentIndex(pane.source.findData('fred'))
             w.navigate('markets');w.show_market_pane(pane);w.resize(1000,1000)
+            self.settle()
+            # The thinner rail leaves more room than the original 710px probe
+            # assumed. Force a genuinely oversized native hint on every font/DPI.
+            pane.tool.setProperty('platform_intrinsic_width',
+                                  max(251+459, w.stack.currentWidget().viewport().width()+100))
             choices=[[combo.itemData(i) for i in range(combo.count())] for combo in (pane.tool,pane.source)]
             policies=[combo.sizeAdjustPolicy() for combo in (pane.tool,pane.source)]
             request=pane.make_request()

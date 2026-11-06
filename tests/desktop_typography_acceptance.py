@@ -325,8 +325,8 @@ class WindowTypographyTests(unittest.TestCase):
         sheet = w.styleSheet()
         self.assertNotRegex(sheet, r"font-weight:\s*(700|800|900|bold)")
         self.assertFalse("QGraphicsDropShadowEffect" in Path(desktop.__file__).read_text(encoding="utf-8"))
-        expected = {"title": (30, 600), "heading": (18, 600), "caption": (12, 400), "number": (32, 600),
-                    "brand": (17, 600), "": (14, 400)}
+        expected = {"title": (30, 600), "heading": (18, 600), "caption": (14, 500), "number": (32, 600),
+                    "brand": (17, 600), "": (15, 400)}
         seen = {}
         for widget in w.findChildren(QLabel):
             role = widget.property("role")

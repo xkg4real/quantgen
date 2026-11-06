@@ -19,7 +19,7 @@ import threading
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 
-from PyQt6.QtCore import (QAbstractListModel, QByteArray, QModelIndex, QObject, QTimer, Qt, pyqtSignal,
+from PyQt6.QtCore import (QAbstractListModel, QByteArray, QModelIndex, QObject, QSize, QTimer, Qt, pyqtSignal,
                           pyqtSlot)
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (QComboBox, QCompleter, QFrame, QGridLayout, QHBoxLayout, QLineEdit, QPushButton,
@@ -27,6 +27,8 @@ from PyQt6.QtWidgets import (QComboBox, QCompleter, QFrame, QGridLayout, QHBoxLa
 
 from core.i18n import LocaleContext
 from core.market.models import ChartRequest, Instrument
+from core.theme import DARK, LIGHT
+from .company_identity import CompanyMark, company_icon
 from .jobs import Jobs
 from .tools import CurrentPageStack
 
@@ -207,6 +209,7 @@ class _ListingModel(QAbstractListModel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.listings, self.lang = [], "ko"
+        self.palette, self.dpr = LIGHT, 1.0
 
     def set_rows(self, listings, lang):
         self.beginResetModel()
@@ -228,6 +231,9 @@ class _ListingModel(QAbstractListModel):
             return f"{name}   {tail}" if name and name != listing.code else tail
         if role == Qt.ItemDataRole.EditRole:
             return listing.code
+        if role == Qt.ItemDataRole.DecorationRole:
+            return company_icon(listing.code, listing.label(self.lang), palette=self.palette,
+                                size=26, dpr=self.dpr)
         if role == Qt.ItemDataRole.ToolTipRole:
             return listing.label(self.lang)
         return None
@@ -261,6 +267,7 @@ class SymbolCompleter(QObject):
         self.completer.setMaxVisibleItems(limit)
         self.completer.setWidget(line_edit)
         self.completer.popup().setObjectName("symbolPopup")
+        self.completer.popup().setIconSize(QSize(26, 26))
         self.completer.activated[QModelIndex].connect(self._activated)
         line_edit.textEdited.connect(self._edited)
         line_edit.installEventFilter(self)
@@ -274,6 +281,11 @@ class SymbolCompleter(QObject):
         """The popup is a separate top-level window, so the window stylesheet never reaches it."""
         from .typography import popup_stylesheet
         self.completer.popup().setStyleSheet(popup_stylesheet(palette, dark))
+        self.model.palette = palette
+        self.model.dpr = self.edit.devicePixelRatioF()
+        if self.model.rowCount():
+            self.model.dataChanged.emit(self.model.index(0), self.model.index(self.model.rowCount() - 1),
+                                        [Qt.ItemDataRole.DecorationRole])
 
     def eventFilter(self, obj, event):
         from PyQt6.QtCore import QEvent
@@ -406,6 +418,9 @@ class WatchCard(QFrame):
         layout.setContentsMargins(16, 14, 16, 12)
         layout.setSpacing(4)
         head = QHBoxLayout()
+        head.setSpacing(10)
+        self.mark = CompanyMark(instrument.code, size=34)
+        head.addWidget(self.mark, 0, Qt.AlignmentFlag.AlignVCenter)
         names = QVBoxLayout()
         names.setSpacing(1)
         self.title = label("", "cardTitle", wrap=False)
@@ -440,6 +455,8 @@ class WatchCard(QFrame):
     def render(self, ctx, dark=False):
         self._ctx, self._dark = ctx, dark
         name = self.name()
+        self.mark.set_identity(self.instrument.code, name)
+        self.mark.set_theme(DARK if dark else LIGHT)
         self.title.setText(name)
         place = self.instrument.exchange or ("KRX" if self.instrument.asset == "domestic_stock" else "")
         self.code.setText(f"{self.instrument.code} · {place}" if place else self.instrument.code)
@@ -783,6 +800,10 @@ class StockView(QWidget):
         top.addWidget(self.watch_button)
         layout.addLayout(top)
         header = QHBoxLayout()
+        header.setSpacing(12)
+        self.mark = CompanyMark("", size=44)
+        self.mark.hide()
+        header.addWidget(self.mark, 0, Qt.AlignmentFlag.AlignVCenter)
         names = QVBoxLayout()
         names.setSpacing(2)
         self.code = label("", "eyebrow", wrap=False)
@@ -937,6 +958,7 @@ class StockView(QWidget):
         ctx = self.ctx
         instrument = self.instrument
         if instrument is None:
+            self.mark.hide()
             for field in (self.code, self.name, self.price, self.change):
                 field.setText("")
             return
@@ -946,6 +968,8 @@ class StockView(QWidget):
         if self.profile is not None and name == instrument.code:
             from core.research.stock_profile import display_name
             name = display_name(self.profile, ctx.language) or name
+        self.mark.set_identity(instrument.code, name)
+        self.mark.setVisible(instrument.asset in STOCK_ASSETS)
         place = instrument.exchange or ("KRX" if instrument.asset == "domestic_stock" else "")
         self.code.setText(f"{instrument.code} · {place}" if place else instrument.code)
         self.name.setText(name)
@@ -1004,6 +1028,7 @@ class StockView(QWidget):
 
     def set_theme(self, dark):
         self.dark = bool(dark)
+        self.mark.set_theme(DARK if self.dark else LIGHT)
 
     def stop(self):
         self._epoch += 1

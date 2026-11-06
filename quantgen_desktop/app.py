@@ -128,6 +128,9 @@ def load_interface_fonts(app):
             family = families[0]
     if family is not None:
         font = QFont(family, 10)
+        # Use an integer logical pixel size as the unstyled text baseline.
+        # Qt applies the screen scale itself; do not rescale text as a bitmap.
+        font.setPixelSize(14)
         font.setWeight(QFont.Weight.Normal)
         # Keep changing prices aligned without giving Korean labels a monospace face.
         font.setFeature(QFont.Tag.fromString("tnum"), 1)
