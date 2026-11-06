@@ -13,7 +13,7 @@
     "branch": "gpt/ui-a3-20261106",
     "pull_request": "https://github.com/xkg4real/quantgen/pull/77",
     "implementation_commit": "1131301580bb8e4c3c7a70ed7445066384167ad5",
-    "remote_status": "OPEN_DRAFT",
+    "remote_status": "OPEN",
     "merge_commit": null,
     "verified_head": null,
     "owner_design_confirmed_on": "2026-11-06"
@@ -42,14 +42,26 @@
       {
         "suite": "actual host geometry/source preservation diagnostic,12narrowpositions and4wide docks",
         "passed": 1
+      },
+      {
+        "suite": "MC inactive-tab correction: A3 layout and reading",
+        "passed": 17
+      },
+      {
+        "suite": "separate Strategy/chart regression after tab correction",
+        "passed": 10
       }
     ],
     "counts_note": "Counts overlap prior suites and must not be summed. Linux offscreen Qt, synthetic data, isolated state, no network/dotenv/protected stores. Four actual integrated synthetic captures inspected. Baseline responsive forced-overflow setup failed separately and is not claimed PASS.",
     "source_review": "20 policies consistency PASS; publication BLOCKED",
-    "ci": "PENDING_FINAL_HEAD",
-    "ci_runs": [],
+    "ci": "ORIGINAL_HEAD_FAILED_WINDOWS_A3_LAYOUT; CORRECTED_HEAD_CHECKS_PENDING",
+    "ci_runs": [
+      42179854778,
+      42179855683
+    ],
     "actual_provider_network": "NOT_RUN",
-    "user_pc": "NOT_RUN"
+    "user_pc": "NOT_RUN",
+    "windows_failure": "Original head67a8838 Runtime42179854778 failed new A3 step on Windows3.11/3.12/3.14; inspected Windows3.11 MC gbm/garch_t overflow286. Corrected existingCurrentPageTabs sizing requires fresh exact-head CI."
   },
   "website_application": {
     "status": "not_verified",
@@ -57,7 +69,7 @@
     "url": "https://quantgeneration.com/"
   },
   "limits_ko": [
-    "A1 PR76 선병합 후 이 PR의 최종 Windows/Ubuntu CI 성공과 병합이 필요합니다.",
+    "A1 PR76은 main에 선병합됐습니다. 이 A3 수정 head의 최종 Windows/Ubuntu CI 성공과 병합이 필요합니다.",
     "실제 Windows PC/DPI/스크린리더/API/법률/라이선스/공급사/파일럿/동결연구 증거는 별도 미확보입니다.",
     "추가 GPT/Gemini spec 공개·심사는 선택적 NOT_PERFORMED입니다.",
     "좁은 화면에서 명시적 보호 영역을 피할 공간이 없으면 도움말은 안내 후 열리지 않습니다. 전체 앱 접근성 완료를 뜻하지 않습니다."

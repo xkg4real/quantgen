@@ -3,8 +3,8 @@
 The owner approved the bounded A1/A3 recommendation on 2026-11-06: retain the
 existing G1 panels, improve native result layout, and reuse the local glossary.
 This document describes the A3 implementation and its observed cloud checks.
-A1 supplies the approved display vocabulary and is to merge before A3; the
-combined head still requires its own verification. This is not approval of G2
+A1 supplies the approved display vocabulary and merged through PR76 before A3.
+The combined A3 head still requires its own verification. This is not approval of G2
 transparency, new financial interpretation, or a Flet-wide layout change.
 
 ## Result layout
@@ -78,7 +78,7 @@ Source labels, provider choices and warning semantics are not removed.
 
 ## Verification and remaining evidence
 
-The focused modules are `tests.desktop_a3_layout_acceptance` (four tests) and
+The focused modules are `tests.desktop_a3_layout_acceptance` (five tests) and
 `tests.desktop_a3_reading_acceptance` (12 tests). The former checks title
 order, real row counts, wide/narrow layout, larger fonts and empty/reset
 results, while comparing values, charts, reports and commentary inputs. It
@@ -117,6 +117,25 @@ It reproduces independently and on the unchanged baseline; it occurs before
 the assertions for repaired layout. The test and baseline were not weakened
 or changed as part of A3. This remains a recorded limitation of the broader
 local run, not a passing result.
+
+The first A3 runtime run42179854778 (head67a8838) passed Ubuntu and syntax
+jobs but failed the new A3 layout step on Windows3.11/3.12/3.14. The inspected
+Windows3.11 log reports horizontal overflow286 in both MC model subcases. This
+failed evidence is preserved separately from the earlier Linux131-test result.
+
+The Quant tab host now reuses existing `CurrentPageTabs`, so the inactive
+Strategy form no longer contributes its platform-dependent minimum width to MC.
+A deterministic Linux regression gave the hidden Strategy pane a1800px minimum:
+it failed before the fix with overflow1057, and passes after the fix. This is a
+separate reproduction, not a measurement of Windows font geometry. The new test
+also checks actual chart/table edges, original values/export/AI inputs, selected
+Strategy minimum-width preservation, and return to MC. The original no-overflow
+assertion remains strict and now reports detailed geometry on failure.
+
+After the correction, layout5 + reading12 passed17 tests (69.661s, exit0).
+The final strengthened edge regression passed1 test (13.314s); it overlaps that
+suite. Separate Strategy/chart regression passed10 tests (6.731s, exit0).
+Exact-head Windows CI must pass before merge; these Linux checks do not replace it.
 
 The runtime packaging workflow runs the two A3 modules in their own offscreen
 step. Adding that step is not evidence that CI passed: consult the checks for

@@ -260,13 +260,13 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "8fbd8c70be83b31a3d5bdfff8c7c7dc58615fc99aa367a2b1b17c2096ddc079c",
+    "docs/compliance/FACTS.md": "564b038a6873419fa6e296654c6e96591526eb442edc137632f79f43fce1eed4",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
-    "docs/compliance/RELEASE_GAPS.md": "4fe2b9f4abafdb422ae5153dde65bccb57b491fc1ac6583fa30ff9818c2adc86",
+    "docs/compliance/RELEASE_GAPS.md": "0b5dd47d1d1e7004fd21732bda8b6411061added2645e4f008ebc13f91491eb2",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
-    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "1c4d17ebd782e8a19d0fc984fe3e5d232f4610daa08d73ae4278acdc83e8e962",
+    "docs/product/A3_READING_LAYOUT_2026-11-06.md": "76e29d092e101a51049fe39c78e10a0385566f6ab776163d4fd3afe781b2d845",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -326,7 +326,7 @@
     "pyproject.toml": "77589c755d38fe9bc4316841b4a4b69b1dd807f532c211d16d1658e1540926d4",
     "quantgen_desktop/__init__.py": "b4377c781313c4c405cb69f993f46adc31debeac8d59a618e28024a31984f295",
     "quantgen_desktop/__main__.py": "a72b9285ed75e3b5b8655255a23dca3fb8c60c1ab6bb12b5d6972117ad11a475",
-    "quantgen_desktop/app.py": "161eb1616c5cc0ba00b1c95aaaac10d051a90a92c342ebe1061740e37c8d0895",
+    "quantgen_desktop/app.py": "68ff793c70ce814bce60d566900db0e007c5abcad07e7fa866ea474a5b480882",
     "quantgen_desktop/bonds.py": "609e60e2497ac734cfe9ff4a6663910218014fe7828152f0b31f48040487cac6",
     "quantgen_desktop/bonds_portfolio_narrative.py": "008ff36812f8b26317929feae9731604798cd6e43850dfe72e99bb7eadb3841a",
     "quantgen_desktop/chart_study.py": "a86c90884b61281682f3ef95261e6cbceadf71028f53e9fae72b16028b6a1fff",
@@ -387,7 +387,7 @@
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_a1_status_acceptance.py": "e921669fc62347f09913c87db2d3aae5cca89d3eb45461371a93f061e566fb3a",
     "tests/desktop_a1_terms_acceptance.py": "e2b93cfbd295df742d218e893dd586d8b6b23fd7a63ac75877f2e7b4717b4280",
-    "tests/desktop_a3_layout_acceptance.py": "a9f73481cc99fb75e8aedb7a09423b97944ce909d478f66f11399177dc9ab406",
+    "tests/desktop_a3_layout_acceptance.py": "dbe303fce99664d4f39191c7fc32505bb0d337170fd27c09d5ea0ef76b42ad53",
     "tests/desktop_a3_reading_acceptance.py": "84d69d2df57bf9592ec5dff00c0df32b24dcc454e06d539e330e3964382ae847",
     "tests/desktop_acceptance.py": "922f93afe5bb0bbc852bc95df31cb52beb317e9121c192d7484debecdda9291d",
     "tests/desktop_ar1_decay_acceptance.py": "a5e8a86eaa8ce5b18d435144f5367aef20aa5a292ce56ec8215ca60ce011075a",
@@ -596,163 +596,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "ad103b46cde9ba2d1a749045044ba62f4c18a7a6ec8b6894a1c040ee5d0cb2fa",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.023178+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "35fefb72710f5bc77c05c81dd0ce76c8a2cdde9c5f25bffa9db36c3541b35cf3",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.574428+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "ad103b46cde9ba2d1a749045044ba62f4c18a7a6ec8b6894a1c040ee5d0cb2fa",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.025622+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "35fefb72710f5bc77c05c81dd0ce76c8a2cdde9c5f25bffa9db36c3541b35cf3",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.577343+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "33e58160b8eab494d80589242e89eb1a198752b895e4330214c686bb33f8545a",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.027882+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "f90b1da8825d1c6a506fece15f0dc3137a97566fcaea87d9b05bb9e976051ade",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.579735+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "cede5f0d68d2514993d9e3660a4de5f830a2ad73a7f4d258771468fc34bfa9f7",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.030344+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "11b0338e4c1b003b87b6dd0aa2fa08a93620dcbe1532b4a4b21092648c6df040",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.582279+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "daf76956df7acd630be957994c27111bb26ca30a98b9bea4243e69e95cd66cbf",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.032781+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "f512faf39f28d118493e75dce1a2124dae7f01ea158121ff8c78caca8a3ee94f",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.584597+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "fd1505562d3dd49c016d8bd83ab56bd51452d3bab198763fd5f4479e1d15bb0e",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.035123+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "b9b6c638b72a32df4a1bc2780449271f1b036cd9dccba86ea7407d524e6a5b39",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.586821+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "ad103b46cde9ba2d1a749045044ba62f4c18a7a6ec8b6894a1c040ee5d0cb2fa",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.037509+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "35fefb72710f5bc77c05c81dd0ce76c8a2cdde9c5f25bffa9db36c3541b35cf3",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.588861+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "fd1505562d3dd49c016d8bd83ab56bd51452d3bab198763fd5f4479e1d15bb0e",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.039594+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "b9b6c638b72a32df4a1bc2780449271f1b036cd9dccba86ea7407d524e6a5b39",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.590837+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "20c6ec040d819fe9262432f13f7b3a9d6058283730075ab9ae22f74e51777a8e",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.041932+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "66dcb534a04bf96aa2ff6aac8deeaee2ee666ecefd748f5d97d6a7b8b9b85129",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.593144+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "945cdfd22b08fc7a17e29aab2e221b7d8eb38c7d36dd52dcbfe837e5f732507e",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.043991+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "7a561ccc5ae7a5acbccb21815168ef8889b805f73bdcb9e44dea053dea7ff549",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.595209+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "926e7b83e5c9952ed139983f649da967bf3c256c9d8588b01b6306872b806e9e",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.046067+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "069cd4a0594af6ceaf7cac20acc49b595c49225feb218413d3a3070b9428d116",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.597194+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "12": {
       "document_sha256": "ea5017f8f93d973ad03aa62728aedaa39ed8d2d6c686feb41c0339c109fd590e",
-      "source_digest": "34c841aa46a5acd6a817f058230a0dd39bdf486008ddba25e23c456e13b8949b",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.048253+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "385c1b407d69b7162ad43a1c7c5d60b5ce46b41e3c8c6b4c07e22fedeae2c0de",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.599330+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "20c6ec040d819fe9262432f13f7b3a9d6058283730075ab9ae22f74e51777a8e",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.050526+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "66dcb534a04bf96aa2ff6aac8deeaee2ee666ecefd748f5d97d6a7b8b9b85129",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.601389+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "20c6ec040d819fe9262432f13f7b3a9d6058283730075ab9ae22f74e51777a8e",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.052606+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "66dcb534a04bf96aa2ff6aac8deeaee2ee666ecefd748f5d97d6a7b8b9b85129",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.603543+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "15": {
-      "document_sha256": "bdc7a10e280fdfcefd0ffc23f2803bef3674749c6d8e14bd8c1761054044f269",
-      "source_digest": "20c6ec040d819fe9262432f13f7b3a9d6058283730075ab9ae22f74e51777a8e",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.054632+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "document_sha256": "470bda66a33c2bdc9ff299940db8390750b54e0c73c978eff31abe5190f0df69",
+      "source_digest": "66dcb534a04bf96aa2ff6aac8deeaee2ee666ecefd748f5d97d6a7b8b9b85129",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.605686+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "8a3affe5b33ec81485d9a0bd90d3091995d53b0ed2181d8d8aefaa2198851a34",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.056749+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "f2cd008ec7ffc82848beeb8277b88da74847a193a790a1f5967385ee0ded452a",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.607875+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "fd1505562d3dd49c016d8bd83ab56bd51452d3bab198763fd5f4479e1d15bb0e",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.058945+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "b9b6c638b72a32df4a1bc2780449271f1b036cd9dccba86ea7407d524e6a5b39",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.609840+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "ad103b46cde9ba2d1a749045044ba62f4c18a7a6ec8b6894a1c040ee5d0cb2fa",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.060851+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "35fefb72710f5bc77c05c81dd0ce76c8a2cdde9c5f25bffa9db36c3541b35cf3",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.612068+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "7f0e50c25248cee02d24c6c66cdd8a0bfff390f17ad883d00f75f74161ad5678",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.062919+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "884b8f10dd93dd93cf9409c34c101ee3e8920c419b3635610fa3f3c32d93470c",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.614259+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "ad103b46cde9ba2d1a749045044ba62f4c18a7a6ec8b6894a1c040ee5d0cb2fa",
-      "reviewed_by": "GPT recorded-status implementation and independent policy reviewers",
-      "review_note": "Reviewed verified snapshot presentation, source consistency boundaries, owner launch decision versus technical evidence and actual publication, bilingual literal values, error handling, all twenty policy impacts. Publication evidence remains separate.",
-      "reviewed_at": "2026-11-06T07:34:09.064907+00:00",
-      "source_commit": "67a883875ca0a8242e880246ea2a009e688978f4"
+      "source_digest": "35fefb72710f5bc77c05c81dd0ce76c8a2cdde9c5f25bffa9db36c3541b35cf3",
+      "reviewed_by": "GPT integrated status-display and A3 policy reviewers",
+      "review_note": "Combined the reviewed snapshot display and active Quant tab sizing changes, preserved both claims and keyboard review sections and original failure receipts, reviewed all twenty policy dispositions; unchanged verification and approval semantics, publication evidence remains separate.",
+      "reviewed_at": "2026-11-06T07:41:32.616485+00:00",
+      "source_commit": "b423f0bbe8db3fdcd193b919f97a9a4c67e3aa90"
     }
   }
 }
