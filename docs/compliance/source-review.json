@@ -261,7 +261,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "2d696898a770c54552a25288f3c3220f8d5b49f929f2fa65e1ee813ceca329f4",
+    "docs/compliance/FACTS.md": "93495a4661d125c01d793aa3a7c1a8f22579a102389f7fdd3354fec2c01a9908",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -306,7 +306,7 @@
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
-    "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "cdf40dc23e97458f04e4cc9591a9e7ee7dee287db5fb946b694022d3af965002",
+    "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "9082a26aaf303662283b7aadd56e63b3017aab8a30ebefe7cd54db62493d4ca2",
     "docs/product/RATES_LANGUAGE_2026-10-31.md": "9a03892d1a780d44d5d737e3d8435067820feb386d42e9c0f196c8fc606fc345",
     "docs/product/RATES_REVALUATION_PARAMS_2026-11-02.md": "2a15d84a66329aae3fa69344cf4a4ecfb5beb419ecee9877f32ad7d1ed80d875",
     "docs/product/RECORDED_STATUS_DISPLAY_2026-11-06.md": "33e76e3cbc4ded9db268df780c0d406f67aa420bd726d2e5174827e6e72411d2",
@@ -601,163 +601,163 @@
   "reviews": {
     "1": {
       "document_sha256": "4e3ca9f05e4e164f0ea7f212a92b10c7e747f6617743bedcc6552607fd33f0dd",
-      "source_digest": "a4daef176d8f97d4c88f748ad3142a19ac94b59862927ea323d1b23bb7427eef",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.195587+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "fcd044d955b30c61f1e9990510fdc8adb2c405970c1f44ca8c08356aaa465e3b",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.677282+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "a4daef176d8f97d4c88f748ad3142a19ac94b59862927ea323d1b23bb7427eef",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.198574+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "fcd044d955b30c61f1e9990510fdc8adb2c405970c1f44ca8c08356aaa465e3b",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.679595+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "d263cdd4b1275990fe95569fa63ff7dc0aa94fb1927e62d8cc20a060dd5534cd",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.200850+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "733cf19dc0f2cd8f8044c8d89720968e7d5f1db1487bf34143304935267b6a58",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.681738+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "ee634c8706ea181bc47ec57f70962066ab0cdb7df95ac4e94f9c4894499c950c",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.203157+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "033882db487579c9255336e7953d411e226f14050de4b9d89ff83152c657a725",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.684085+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "07048f993658099d8905a3c0fdcc8aae243631c9661f427f2fc8fc07433fb2c3",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.205219+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "b602e655532e193dac16f86594e8968b8a4e6dabc0d7a472312d4961eced4f07",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.686294+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "576559f04941553ea5ff6912c72329862122c2894b79f2fb814b4915e0fcc8e0",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.207715+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "3621901ff837b5225d22b61fbcc454dfbf530dfe8c76b57a88a6984b236a7530",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.688610+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "7": {
       "document_sha256": "f944986834fc3b54589858e18c7419fbb8794ef7934df436b8a320a2ecd068cf",
-      "source_digest": "a4daef176d8f97d4c88f748ad3142a19ac94b59862927ea323d1b23bb7427eef",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.209979+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "fcd044d955b30c61f1e9990510fdc8adb2c405970c1f44ca8c08356aaa465e3b",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.690514+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "576559f04941553ea5ff6912c72329862122c2894b79f2fb814b4915e0fcc8e0",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.212382+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "3621901ff837b5225d22b61fbcc454dfbf530dfe8c76b57a88a6984b236a7530",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.692703+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "a01edcd28857f00ee3e0a4cb6c679a4c581c9f7ba611ce21f9d894375f39058d",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.215636+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "030b3df1d4778010513b39694a0ea48482a04f4257275fa797d8de2dbdf742d9",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.694718+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "6849eab7333931722f6ec20d4010be2513bccb7d0f0f598d128df3e9b260c571",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.217895+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "b2308b08919d7d8eab4f0bab0fe5a5ffffb8d5dcffaad9b337b1c676546a0af7",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.696695+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "f2d5ebffa61ff2f70212928ec761dfc73be22ac7592f2941b1f40f5f95584660",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.219995+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "9e3c1c2bd1e0a77193869a39e2d884d829ee4e0ded495c20304faeb83927190a",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.698992+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "7ff170a8dedb3202952a5ee8fbf2fea5be1e7877d6b54814eb4dc66136cbff78",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.222045+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "d9c61ef175039db69ce3932fd19da5059a33fff31e667e9b66b025ac55abafa1",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.701036+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "13": {
       "document_sha256": "6116164adb68938f39ce02ac5751cc15fd08afe175fc006594dc4ded796b8631",
-      "source_digest": "a01edcd28857f00ee3e0a4cb6c679a4c581c9f7ba611ce21f9d894375f39058d",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.224187+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "030b3df1d4778010513b39694a0ea48482a04f4257275fa797d8de2dbdf742d9",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.703287+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "14": {
       "document_sha256": "9c12a1b04091a81bf72d07f2cd58f3c5bea5f19c337939d247c6dc647f3dd22a",
-      "source_digest": "a01edcd28857f00ee3e0a4cb6c679a4c581c9f7ba611ce21f9d894375f39058d",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.226045+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "030b3df1d4778010513b39694a0ea48482a04f4257275fa797d8de2dbdf742d9",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.705488+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "a01edcd28857f00ee3e0a4cb6c679a4c581c9f7ba611ce21f9d894375f39058d",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.228185+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "030b3df1d4778010513b39694a0ea48482a04f4257275fa797d8de2dbdf742d9",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.707574+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "3e90e97e34b55c8fa99f1e0c61da33fe8776c7d0292070d9485fdbc0c9b6f527",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.230226+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "f478d50ab74fe3fac9784d6d47e1e9805f95b7d6ccff5280fa19a0b4781881be",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.709505+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "576559f04941553ea5ff6912c72329862122c2894b79f2fb814b4915e0fcc8e0",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.232217+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "3621901ff837b5225d22b61fbcc454dfbf530dfe8c76b57a88a6984b236a7530",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.711558+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "a4daef176d8f97d4c88f748ad3142a19ac94b59862927ea323d1b23bb7427eef",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.234186+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "fcd044d955b30c61f1e9990510fdc8adb2c405970c1f44ca8c08356aaa465e3b",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.713667+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "19": {
       "document_sha256": "4646918ac0a079a22edfd4c3aa09ef0983239f0bc3daa1944226746bead845b0",
-      "source_digest": "567ca263f4dd308c940a2f77a6aca625249cb372a578ab826252705bc27aa2cb",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.236267+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "88ab2db92211251b9e9c13e4592009d6ba00a4cd7e5f4773b46ea08b6c6eaa11",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.715850+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     },
     "20": {
       "document_sha256": "ee47c9fb36ecc542d0dc841051734f64d58ac8e9ba6ccae7759d46eda4227415",
-      "source_digest": "a4daef176d8f97d4c88f748ad3142a19ac94b59862927ea323d1b23bb7427eef",
-      "reviewed_by": "GPT identity A1 fixture lifecycle policy review",
-      "review_note": "All20 policies reviewed; only FACTS records measured A1 owned-fixture cleanup. Existing18 methods82 assertions, production, Flet and helper unchanged. Before9 retained owned widgets versus after9 destroyed and18PASS exit0; original Ubuntu segfault cause not established. Same CI commands with A1 moved earlier. Full fresh CI required; publication blocked.",
-      "reviewed_at": "2026-11-06T09:21:24.238227+00:00",
-      "source_commit": "b79d56d5aedd0a7d854421c933d87b31338e5177"
+      "source_digest": "fcd044d955b30c61f1e9990510fdc8adb2c405970c1f44ca8c08356aaa465e3b",
+      "reviewed_by": "GPT combined Identity Rates implementation reviewer",
+      "review_note": "All20 policies reviewed. Numbered policies and RELEASE_GAPS unchanged from both reviewed parents. FACTS retains every parent line and distinct CI failure records. Rates note matches reviewed622; no source test or workflow delta. Synthetic implementation scope only; full final-head CI required before merge and publication remains blocked.",
+      "reviewed_at": "2026-11-06T09:31:34.717903+00:00",
+      "source_commit": "e981ef7dce08d3463ae6bee2c6f0d4f68d238970"
     }
   }
 }
