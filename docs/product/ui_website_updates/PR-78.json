@@ -1,0 +1,69 @@
+{
+  "schema_version": "quantgen.ui-website-update/1",
+  "id": "quantgen-recorded-status-display-pr-78",
+  "delivery": {
+    "destination_title": "웹사이트 작업공간(AWS)",
+    "status": "queued",
+    "blocker": "No supported cross-chat sending tool is available; this file is not delivery evidence.",
+    "receipt": null,
+    "shared_handoff": "https://github.com/xkg4real/quantgen/blob/handoff/CURRENT.md"
+  },
+  "source": {
+    "repository": "https://github.com/xkg4real/quantgen",
+    "branch": "gpt/status-display-20261106",
+    "pull_request": "https://github.com/xkg4real/quantgen/pull/78",
+    "implementation_commit": "521ae861d4946ebd1658f79b3cb78a24438fa6e6",
+    "remote_status": "OPEN_DRAFT",
+    "merge_commit": null,
+    "verified_head": null
+  },
+  "summary_ko": [
+    "검증된 상태 자료의 OWNER_APPROVED 소유자 결정을 기술 준비·규제 승인·실제 공개 증거와 구분해 Native/Flet System에 표시합니다.",
+    "자료 검증 실패 시 승인 상태를 추정하지 않습니다. 기존 검증·생성·스키마·승인 규칙은 그대로입니다."
+  ],
+  "website_impact": {
+    "classification": "shared_browser_change",
+    "browser_code_changed": true,
+    "shared_sources": [
+      "core/recorded_status_display.py",
+      "ui/research_home.py"
+    ],
+    "requested_actions_ko": [
+      "웹의 프로젝트 상태 표시도 실제 사용하는 검증 자료와 대조하고 소유자 결정·준비 상태·실제 게시 증거를 구분하세요.",
+      "이 PR은 실제 웹 반영이나 공개 배포 증거가 아닙니다. 수신 작업공간의 적용·배포 기록을 별도로 남겨주세요."
+    ]
+  },
+  "verification": {
+    "tests": [
+      {
+        "suite": "focused display plus existing snapshot",
+        "passed": 21
+      },
+      {
+        "suite": "five-module isolated integration",
+        "passed": 43
+      },
+      {
+        "suite": "post-A3-merge status/snapshot/layout",
+        "passed": 26
+      }
+    ],
+    "counts_note": "Overlapping suites, do not sum. Five native synthetic captures plus separate baseline comparison. Existing narrow System inactive-Rules-tab overflow58/44 remains unchanged. All11 status lines readable. No full responsive or physical Windows acceptance.",
+    "source_review": "20 policies reviewed; consistency PASS586; publication BLOCKED",
+    "ci": "PENDING_FINAL_HEAD",
+    "ci_runs": [],
+    "actual_provider_network": "NOT_RUN",
+    "user_pc": "NOT_RUN"
+  },
+  "website_application": {
+    "status": "not_verified",
+    "deployment_status": "not_verified",
+    "url": "https://quantgeneration.com/"
+  },
+  "limits_ko": [
+    "⑫-1 표시 전용 하위 항목이며 부모 전체 완료가 아닙니다.",
+    "A3 PR77 선병합과 이 PR의 정확한 최종 head Windows/Ubuntu CI 통과 후 병합합니다.",
+    "실제 API/Windows PC/법률/라이선스/공급사/파일럿/동결연구 증거는 없습니다.",
+    "추가 GPT/Gemini spec 공개·심사는 선택적 NOT_PERFORMED입니다."
+  ]
+}
