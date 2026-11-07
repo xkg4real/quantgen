@@ -1,20 +1,20 @@
 ---
 kind: auto_snapshot
-reason: periodic
-created_at: 2026-11-04T02:07:21+09:00
-source_branch: claude/ui-markets-a4-20261103
-source_head: 96709a7
-upstream: origin/claude/ui-markets-a4-20261103
-patch_base: 96709a7
+reason: usage_limit_weekly
+created_at: 2026-11-07T10:02:38+09:00
+source_branch: claude/busy-tesla-j2e8l2
+source_head: 9d1eacd
+upstream: none
+patch_base: 9d1eacd
 unpushed_commits: 0
-uncommitted_files: 2
-patch: AUTO_STATE.patch (`git apply AUTO_STATE.patch` on patch_base)
-usage_pct: unknown
-usage_resets_at: unknown
-session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
-snapshot_key: none
-current_md_updated_at: 2026-11-04T01:35:00+09:00
-current_md_status: checkpoint
+uncommitted_files: 0
+patch: none
+usage_pct: 99.0
+usage_resets_at: 2026-11-10T08:00:00.000Z
+session: a975855b-5261-5431-a82c-9ad3c6b5b540
+snapshot_key: seven_day@2026-11-10T08:00:00.000Z
+current_md_updated_at: 2026-11-07T00:45:23+09:00
+current_md_status: returned
 ---
 
 # 자동 스냅샷 (모델 없이 생성)
@@ -26,21 +26,21 @@ current_md_status: checkpoint
 ## 최근 커밋
 
 ```
-96709a7 Report layout numbers when a tool form is clipped
-42105eb Make the wrapped-caption check independent of the runner's fonts
-e967fec Wait for nested layouts before checking form clipping (A2 CI fix)
-dbeb4b6 Queue the PR-67 operation fixes for the website workspace
-4ece546 Fix desktop operation bugs: wheel, bond digits, form clipping, icon, AI button (A2)
-c1a4e97 Merge pull request #66 from xkg4real/claude/ui-markets-a4-20261103
-8b88726 Queue the PR-66 market board change for the website workspace
-f6a76ce Show four market-indicator charts instead of the Markets table (UI-7)
-1682404 Merge pull request #65 from xkg4real/claude/ui-markets-a4-20261103
-7f90641 Search overseas stocks by name, drop exchange and bar-count inputs, zoom with the wheel (UI-16)
-e86873d Queue the PR-65 Markets asset-class change for the website workspace
-d6413d9 Split Markets into asset-class tabs and choose the chart provider automatically (UI-8)
-ba3b6b2 Merge pull request #64 from xkg4real/claude/ui-markets-a4-20261103
-9f7dc0e Queue the PR-64 guide search change for the website workspace
-7de46d4 Make the native indicator guide search-first with a bilingual market glossary (UI-13)
+9d1eacd Record PR89 main merge and pending remote runtime status
+6a09d3f Merge pull request #89 from xkg4real/gpt/compact-ui-final-20261107
+2f336a3 Sync final UI review fingerprint and AWS follow-up queue
+811cd35 Verify hinted font coverage, compact input preservation and policy provenance
+0222dba Compact native category navigation, forms and result tables
+4fb6125 Replace native Korean outlines with bundled hinted faces
+cd4019c Merge pull request #86 from xkg4real/gpt/run-registry-source-hash-20261106
+9f623fd Add detached raw and LF source SHA256 helpers
+6ddf514 Merge pull request #85 from xkg4real/gpt/run-registry-data-hash-20261106
+9660352 Merge pull request #84 from xkg4real/gpt/run-registry-keys-20261106
+8e6db5b Add detached R3 supplied-panel byte fingerprint
+a083f75 Integrate UI82 main while preserving detached R3 keys and policy evidence
+e4ec6ef Record merged PR82 UI change and queued website follow-up
+5b7988c Merge pull request #82 from xkg4real/gpt/font-clarity-20261106
+4ce18cb Integrate independently verified PR83; preserve byte-identical UI implementation
 ```
 
 ## 푸시되지 않은 커밋
@@ -52,16 +52,13 @@ ba3b6b2 Merge pull request #64 from xkg4real/claude/ui-markets-a4-20261103
 ## 커밋되지 않은 변경
 
 ```
-M quantgen_desktop/tools.py
- M tests/desktop_operation_fixes_acceptance.py
+(없음)
 ```
 
 `patch_base` 이후 바뀐 파일 (푸시 안 된 커밋 포함):
 
 ```
-quantgen_desktop/tools.py                   |  5 ++++-
- tests/desktop_operation_fixes_acceptance.py | 20 +++++++++++++++++++-
- 2 files changed, 23 insertions(+), 2 deletions(-)
+(없음)
 ```
 
-전체 diff: AUTO_STATE.patch (`git apply AUTO_STATE.patch` on patch_base)
+전체 diff: none
