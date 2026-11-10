@@ -3,13 +3,16 @@
 
 Spec tests: T-DEMOTE-01..05, I-14, T-TREND-01/03/04 (+ I-12 mechanics), T-USFUT-01/03/04 (+ I-13 logic), T-REF-01/02,
 T-BASIS-01 (S2 clause); REFDATA / OWNER: T-TREND-02, G-TR-01..05, T-USFUT-02 (fixture clause, TASK-M8-11), T-USFUT-05,
-G-REF-01/02, G-KR-05/05s, G-US-02a, G-POST-01 (M8 rows). Hermetic: every record, ledger, registry and governance log
+G-REF-01/02, G-KR-05/05s, G-US-02a, G-POST-01 (M8 rows; G-REF-01 checks the archived R-11 record and recomputes
+nothing, owner ruling 5 of 2026-11-11). Hermetic: every record, ledger, registry and governance log
 lives in a tempfile directory; the PIT stores are synthetic on the M1 StubClocks; seed 11; nothing under ~/.nextgen.
 """
 from __future__ import annotations
 
 import ast
+import csv
 import functools
+import io
 import json
 import math
 import tempfile
@@ -33,6 +36,7 @@ from core.quant import refusal as RF
 from core.quant import risk_layer as RL
 from core.rules import governance as G
 from core.rules import macro_rules as M
+from tests import golden_tools as GT
 from tests.macro_m0_schemas import synthetic_card
 from tests.macro_m1_pit import CLK, REG, U
 from tests.macro_m2_risk import _sessions
@@ -825,14 +829,301 @@ def test_ref_02_s2_retired_refusal_book_and_the_s2_momentum_clause():
 test_ref_02_s2_retired_refusal_book_and_the_s2_momentum_clause.test_ids = ["T-REF-02", "T-BASIS-01"]
 
 
+# G-REF-01, G-KR-05, G-KR-05s and the M8 row of G-POST-01: the R-11 record is checked, not recomputed. Owner ruling 5 of
+# 2026-11-11 (docs/nautilus_bridge/OWNER_RULINGS_LOG.md, the answers to the 14 remaining decisions, item 5): the test
+# only checks that the record exists and that its values equal goldens.csv. So no ^KS11, DEXKOUS or KRW=X history is
+# read, and no book, cost, onset rule or estimator is replayed (look-ahead audit LA-02, part 3: the body used to gate on
+# F13 and DEXKOUS.csv and then raise NotRun whatever the files held).
+# Where the record lives:
+#   - in the product: core/quant/refusal.REFUSAL_RECORDS["R-11"] ("Archived council records ...: values are records,
+#     never recomputed here"). It holds, per timing, the de-clustered onsets, the ETF 3 bp dMDD in percentage points
+#     and the tail ratio (spec L1647), and the record's verdict; its `golden_ids` are the four goldens of this test;
+#   - in the council archive, outside the repository. The one archived result table that has a fixture path is F20,
+#     results/QX_DLA_postpatch.csv (docs/macro_fixtures.REFERENCE_FILES; ACQUISITION.csv "DL-A section 7 post-patch
+#     values"), which spec L5815 and L5830 give as the source of G-POST-01, its G-KR-05 share row included.
+# F20's layout is declared nowhere (the generator copies a result table byte for byte), so the layout this body reads is
+# declared here: this part's assumption, listed as an owner question in docs/product/LOOKAHEAD_LA02_PART3_2026-11-11.md.
+#   - a header with the columns `golden_id`, `sub_id` and `value`; other columns ride along;
+#   - one row per recorded value, keyed as goldens.csv keys it, no key twice;
+#   - `value` in the golden row's own unit: a decimal fraction where goldens.csv holds one (dMDD -0.017, share 0.967), a
+#     count as a number, a verdict as its text;
+#   - the file is UTF-8, and a byte-order mark before the header is ignored.
+# Rows of other goldens, and the G-POST-01 rows of other milestones, ride along and are not read here.
+# The assumption is not the layout the spec describes. L5815-5834 print F20 as the DL-A section 7 table: one row per
+# item, with a pre-patch and a post-patch column, and among this test's 64 values it holds only the G-KR-05 share. On
+# such a file this body FAILs, at the layout or with 47 golden values unrecorded (the demonstration shows both). F20
+# is also a gate of the G-POST-01 data-row test (tests/macro_m1_fixtures.py), so listing it for that test turns this
+# one red until the owner says which archive file holds the R-11 record and in what layout.
+# `_check_g_ref_01` asserts three things, every expected value read from goldens.csv at its row's Level 1 tolerance:
+#   1. the product record exists, names this test's four goldens and its four timings, and each value it holds equals
+#      its G-REF-01 row;
+#   2. every value F20 records under G-REF-01, G-KR-05, G-KR-05s or an M8 row of G-POST-01 equals its golden row, and a
+#      key under those ids that goldens.csv does not hold is refused;
+#   3. the record exists for every one of those golden rows: each is recorded in F20 or, for G-REF-01, held by the
+#      product record. A golden row recorded in neither is a FAIL that names it.
+GREF01_RECORD = "QX_DLA_postpatch.csv"                                              # F20 (docs/macro_fixtures.py)
+GREF01_COLUMNS = ("golden_id", "sub_id", "value")
+GREF01_GOLDENS = ("G-REF-01", "G-KR-05", "G-KR-05s", "G-POST-01")                   # of G-POST-01, its M8 rows only
+# REFUSAL_RECORDS["R-11"]["timings"] key -> the G-REF-01 sub_id prefix of that timing (goldens.csv; spec L5879-5882)
+GREF01_TIMINGS = {"value": "value", "strict_H10": "strict_h10", "strict_H10_holiday_aware": "strict_h10_holiday",
+                  "yahoo_KRWX_lag2": "yahoo_krwx_lag2"}
+# (record field, G-REF-01 sub_id suffix, factor into the golden row's unit): the record's dMDD is in percentage points
+# ("dMDD vs the static book -1.3 pp", spec L1647), the golden row a decimal fraction; it is the ETF 3 bp column of
+# the G-REF-01 table (-1.7 / -1.3 / -1.3 / +0.3; the stock 35 bp column reads -1.7 / -1.4 / -1.5 / -0.4)
+GREF01_PRODUCT_FIELDS = (("onsets", "onsets", 1.0), ("dMDD_pp", "etf3_dmdd", 0.01), ("tail", "tail", 1.0))
+
+
+def _gref01_golden_keys() -> list[tuple[str, str]]:
+    """(golden_id, sub_id) of every goldens.csv row this test asserts: all rows of G-REF-01, G-KR-05 and G-KR-05s, and
+    the M8 rows of G-POST-01 (spec L5577)."""
+    return [(gid, r.sub_id) for gid in GREF01_GOLDENS for r in GT.golden(gid).rows
+            if gid != "G-POST-01" or r.runs_from == "M8"]
+
+
+def _gref01_record(text: str) -> dict[tuple[str, str], str]:
+    """F20 in the layout declared above as {(golden_id, sub_id): value text}, for the rows keyed to this test's four
+    golden ids (rows of any other id are not read). AssertionError naming the file and line on a departure: a declared
+    column absent, a blank key, a key recorded twice, a row of these goldens with no value, or no row at all."""
+    reader = csv.DictReader(io.StringIO(text.removeprefix("\ufeff")))             # a byte-order mark is no column name
+    missing = [c for c in GREF01_COLUMNS if c not in (reader.fieldnames or ())]
+    assert not missing, f"{GREF01_RECORD}: declared columns {missing} absent (header {reader.fieldnames})"
+    out: dict[tuple[str, str], str] = {}
+    seen: set[tuple[str, str]] = set()
+    for line, raw in enumerate(reader, start=2):
+        where = f"{GREF01_RECORD} line {line}"
+        gid, sub, value = ((raw[c] or "").strip() for c in GREF01_COLUMNS)
+        assert gid and sub, f"{where}: a blank golden_id or sub_id"
+        assert (gid, sub) not in seen, f"{where}: {gid}/{sub} is recorded twice"
+        seen.add((gid, sub))
+        if gid in GREF01_GOLDENS:
+            assert value, f"{where}: {gid}/{sub} has no recorded value"
+            out[(gid, sub)] = value
+    assert seen, f"{GREF01_RECORD}: no rows"
+    return out
+
+
+def _check_g_ref_01(recorded: dict[tuple[str, str], str], records=RF.REFUSAL_RECORDS) -> dict:
+    """The R-11 record against goldens.csv at Level 1 (owner ruling 5 of 2026-11-11: checked, never recomputed).
+    `recorded` is F20 as `_gref01_record` reads it; `records` the product's record table (core/quant/refusal). Asserts
+    the three clauses stated above: the product record, each recorded value of F20, and a record for every golden row.
+    Returns the counts."""
+    # 1. the product record
+    rec = records.get("R-11")
+    assert rec is not None, ("G-REF-01: core/quant/refusal.REFUSAL_RECORDS holds no R-11 record (owner ruling 5 of "
+                             "2026-11-11: the test checks that the record exists)")
+    assert set(rec.get("golden_ids") or ()) == set(GREF01_GOLDENS), (
+        f"G-REF-01: the product R-11 record names the goldens {rec.get('golden_ids')}, not {GREF01_GOLDENS}")
+    timings = rec.get("timings") or {}
+    assert set(timings) == set(GREF01_TIMINGS), (
+        f"G-REF-01: the product R-11 record holds the timings {sorted(timings)}, not {sorted(GREF01_TIMINGS)}")
+    held: dict[str, object] = {}
+    for key, prefix in GREF01_TIMINGS.items():
+        for field, suffix, unit in GREF01_PRODUCT_FIELDS:
+            assert field in timings[key], f"G-REF-01: the product R-11 record's {key} timing holds no {field}"
+            held[f"{prefix}_{suffix}"] = timings[key][field] * unit
+        held[f"{prefix}_verdict"] = rec.get("verdict")
+    try:
+        GT.assert_golden("G-REF-01", held)
+    except AssertionError as exc:
+        raise AssertionError("G-REF-01 on the product record (core/quant/refusal.REFUSAL_RECORDS['R-11']): "
+                             f"{exc}") from None
+    # 2. each value the archived table records
+    keys = _gref01_golden_keys()
+    read: dict[str, dict] = {}
+    for (gid, sub), text in recorded.items():
+        row = next((r for r in GT.golden(gid).rows if r.sub_id == sub), None)
+        assert row is not None, f"G-REF-01: {GREF01_RECORD} records {gid}/{sub}, which goldens.csv does not hold"
+        if (gid, sub) not in keys:
+            continue                                           # a G-POST-01 row of another milestone: not read here
+        if row.kind in ("verdict", "text") or isinstance(row.value, str):
+            read.setdefault(gid, {})[sub] = text
+            continue
+        try:
+            read.setdefault(gid, {})[sub] = float(text)
+        except ValueError:
+            raise AssertionError(f"G-REF-01: {GREF01_RECORD} records {gid}/{sub} as {text!r}, not a number") from None
+    for gid, got in read.items():
+        try:
+            GT.assert_golden(gid, got)
+        except AssertionError as exc:
+            raise AssertionError(f"G-REF-01 on {GREF01_RECORD}: {exc}") from None
+    # 3. the record exists for every golden row
+    unrecorded = [f"{gid}/{sub}" for gid, sub in keys
+                  if (gid, sub) not in recorded and not (gid == "G-REF-01" and sub in held)]
+    assert not unrecorded, (
+        f"G-REF-01: {len(unrecorded)} golden value(s) have no record, neither in {GREF01_RECORD} nor in the product "
+        "R-11 record (owner ruling 5 of 2026-11-11: the test checks that the record exists): " + ", ".join(unrecorded))
+    return {"product": len(held), "file": sum(len(v) for v in read.values()), "goldens": len(keys)}
+
+
 def test_g_ref_01_s1_goldens_refdata():
-    for f in ("yahoo_KS11_1996-12_2026-10-02.csv", "DEXKOUS.csv"):                  # F13; F18 FRED snapshot
-        require_fixture(f)
-    raise NotRun("REFDATA: G-KR-05 / G-KR-05s / G-REF-01 / G-POST-01 M8 rows need ^KS11 1997+, the FRED DEXKOUS snapshot of "
-                 "2026-10-02, KRW=X 2004+ and QX_DLA_postpatch.csv; the record is archived council evidence (DL-A)")
+    """G-REF-01, G-KR-05, G-KR-05s and the M8 row of G-POST-01 (spec L5776-5777, L5830, L5879-5882): the R-11 record is
+    checked, never recomputed (owner ruling 5 of 2026-11-11). NOT_RUN (REFDATA) until the archived result table F20
+    QX_DLA_postpatch.csv is listed with its md5; once listed it is read in the layout declared above and
+    `_check_g_ref_01` PASSes or FAILs at Level 1 against goldens.csv, on the product record
+    (core/quant/refusal.REFUSAL_RECORDS["R-11"]) and on every recorded value, with a record required for every golden
+    row (look-ahead audit LA-02, part 3: the body used to raise NotRun after its gate whatever the files held). No price
+    or FX history is read and nothing is replayed."""
+    recorded = _gref01_record(require_fixture(GREF01_RECORD).read_text(encoding="utf-8"))
+    out = _check_g_ref_01(recorded)
+    print(f"PRINTED G-REF-01 record check: {out['goldens']} golden values; {out['product']} held by the product R-11 "
+          f"record and {out['file']} recorded in {GREF01_RECORD}, all equal to goldens.csv at Level 1")
 
 
 test_g_ref_01_s1_goldens_refdata.test_ids = ["G-REF-01", "G-KR-05", "G-KR-05s", "G-POST-01"]
+
+
+def _gref01_cell(row) -> str:
+    """A goldens.csv value written as the declared layout writes it (for the demonstration): a verdict as its text, a
+    count as an integer, any other number as its decimal text."""
+    if isinstance(row.value, str):
+        return row.value
+    return str(int(row.value)) if row.kind.startswith("count") else repr(float(row.value))
+
+
+def _gref01_text(rows, columns=GREF01_COLUMNS) -> str:
+    """(golden_id, sub_id, value text) rows written in memory in the declared layout of F20."""
+    buf = io.StringIO()
+    out = csv.writer(buf, lineterminator="\n")
+    out.writerow(columns)
+    out.writerows(rows)
+    return buf.getvalue()
+
+
+def test_g_ref_01_body_passes_and_fails_on_an_invented_record():
+    """LA-02 part 3: the G-REF-01 body can PASS and can FAIL, and it replays nothing. An invented record table in the
+    declared layout (no council file: the 64 values are goldens.csv's own, one row each) passes with the shipped product
+    record; it also passes without the 16 G-REF-01 rows the product record holds, with rows of other goldens riding
+    along (a G-POST-01 M1 row at a wrong value is not read here), and with a value inside its Level 1 tolerance. It
+    fails, naming the golden and the value: for each of the 64 recorded values in turn moved just outside its Level 1
+    tolerance (by the tolerance plus 0.001; a count by one, a verdict changed); for each of the 48 values only the table
+    records when its row is absent; for a key under these goldens that goldens.csv does not hold; for a value that is
+    not a number. The product record fails for each of the 12 numbers it holds moved just outside tolerance, for another
+    verdict, for a missing timing, a missing field, other golden ids and no R-11 record. The layout refuses a missing
+    column, a blank key, a key recorded twice, a blank value and a file with no row; a byte-order mark before the
+    header is ignored. A table shaped as the spec prints F20 (L5815-5834: an item, a pre-patch and a post-patch
+    column) fails at the layout, and a table holding every G-POST-01 row in the declared layout fails with 47 golden
+    values unrecorded: the declared layout is an assumption the owner has not confirmed. The real test opens no other
+    fixture and its body calls none of this module's replay tools; while F20 is not listed its REFDATA reason names
+    it."""
+    keys = _gref01_golden_keys()
+    rows = {(gid, r.sub_id): r for gid in GREF01_GOLDENS for r in GT.golden(gid).rows if (gid, r.sub_id) in keys}
+    assert len(keys) == len(rows) == 64 and [k for k in keys if k[0] == "G-POST-01"] == [("G-POST-01", "gkr05_share")]
+    assert {gid: sum(1 for k in keys if k[0] == gid) for gid in GREF01_GOLDENS} == {
+        "G-REF-01": 28, "G-KR-05": 17, "G-KR-05s": 18, "G-POST-01": 1}
+    assert test_g_ref_01_s1_goldens_refdata.test_ids == list(GREF01_GOLDENS)
+    base = [(gid, sub, _gref01_cell(rows[(gid, sub)])) for gid, sub in keys]
+
+    def run(table=base, records=RF.REFUSAL_RECORDS):
+        return _check_g_ref_01(_gref01_record(_gref01_text(table)), records)
+
+    def fails(fn, *needles) -> str:
+        e = _raises(fn, AssertionError)
+        assert all(n in str(e) for n in needles), (needles, str(e)[:500])
+        return str(e)
+
+    assert run() == {"product": 16, "file": 64, "goldens": 64}
+    # the 16 values the shipped product record holds (4 timings x onsets, ETF 3 bp dMDD, tail, verdict) need not be in
+    # F20
+    held = {f"{p}_{s}" for p in GREF01_TIMINGS.values() for s in ("onsets", "etf3_dmdd", "tail", "verdict")}
+    only_file = [k for k in keys if not (k[0] == "G-REF-01" and k[1] in held)]
+    assert len(held) == 16 and len(only_file) == 48
+    assert run([r for r in base if (r[0], r[1]) in only_file]) == {"product": 16, "file": 48, "goldens": 64}
+    # rows of other goldens ride along; a G-POST-01 row of another milestone is not read here, even at a wrong value
+    assert run(base + [("G-POST-01", "kospi_close_2oct", "1.0"), ("G-KR-L01", "anything", "x")])["file"] == 64
+    # Level 1 tolerances are the rows' own (spec L5734-5735): inside passes
+    edge = {("G-KR-05", "gross_dsr_vs_bh"): 0.009, ("G-KR-05", "gross_share_vs_bh"): 0.029,
+            ("G-REF-01", "value_etf3_dmdd"): 0.009, ("G-REF-01", "value_tail"): 0.009, ("G-KR-05s", "days_on"): 0.009}
+    inside = [(g, s, repr(rows[(g, s)].value + edge[(g, s)])) if (g, s) in edge else (g, s, v) for g, s, v in base]
+    assert run(inside)["file"] == 64 and sum(a != b for a, b in zip(inside, base)) == len(edge)
+    # each recorded value in turn, moved just outside its Level 1 tolerance (the tolerance + 0.001; a count by one)
+    for gid, sub in keys:
+        row = rows[(gid, sub)]
+        wrong = ("PASS" if isinstance(row.value, str) else str(int(row.value) + 1) if row.kind.startswith("count")
+                 else repr(row.value + GT.tol(row.kind) + 0.001))
+        fails(lambda: run([(g, s, wrong if (g, s) == (gid, sub) else v) for g, s, v in base]),
+              f"G-REF-01 on QX_DLA_postpatch.csv: {gid} deviations: {sub}: got ")
+    # the record must exist: each value only the table records, absent
+    for gid, sub in only_file:
+        fails(lambda: run([r for r in base if (r[0], r[1]) != (gid, sub)]), "G-REF-01: 1 golden value(s) have no "
+              "record, neither in QX_DLA_postpatch.csv nor in the product R-11 record", f": {gid}/{sub}")
+    fails(lambda: run(base + [("G-REF-01", "value_onsets_raw", "65")]),
+          "G-REF-01: QX_DLA_postpatch.csv records G-REF-01/value_onsets_raw, which goldens.csv does not hold")
+    fails(lambda: run([(g, s, "-1.7%" if (g, s) == ("G-REF-01", "value_etf3_dmdd") else v) for g, s, v in base]),
+          "G-REF-01: QX_DLA_postpatch.csv records G-REF-01/value_etf3_dmdd as '-1.7%', not a number")
+    # the product record (an edited copy; the shipped constants are never written)
+    shipped = RF.REFUSAL_RECORDS["R-11"]
+
+    def product(**timing_edits):
+        timings = {k: dict(v) for k, v in shipped["timings"].items()}
+        for key, edit in timing_edits.items():
+            timings[key].update(edit)
+        return {"R-11": {**shipped, "timings": timings}}
+
+    for key, prefix in GREF01_TIMINGS.items():
+        # just outside Level 1: a count by one, the dMDD by 1.1 pp (mdd +/- 1 pp), the tail by 0.011 (ratio +/- 0.01)
+        for field, suffix, step in (("onsets", "onsets", 1), ("dMDD_pp", "etf3_dmdd", 1.1), ("tail", "tail", 0.011)):
+            fails(lambda: run(records=product(**{key: {field: shipped["timings"][key][field] + step}})),
+                  "G-REF-01 on the product record (core/quant/refusal.REFUSAL_RECORDS['R-11']): G-REF-01 deviations: "
+                  f"{prefix}_{suffix}: got ")
+    fails(lambda: run(records={"R-11": {**shipped, "verdict": "PASS"}}), "G-REF-01 on the product record",
+          "value_verdict: got 'PASS', want 'REJECT'", "yahoo_krwx_lag2_verdict: got 'PASS'")
+    three = {k: v for k, v in shipped["timings"].items() if k != "value"}
+    fails(lambda: run(records={"R-11": {**shipped, "timings": three}}), "G-REF-01: the product R-11 record holds the "
+          "timings ['strict_H10', 'strict_H10_holiday_aware', 'yahoo_KRWX_lag2']")
+    no_tail = {k: {f: x for f, x in v.items() if not (k == "value" and f == "tail")}
+               for k, v in shipped["timings"].items()}
+    fails(lambda: run(records={"R-11": {**shipped, "timings": no_tail}}),
+          "G-REF-01: the product R-11 record's value timing holds no tail")
+    fails(lambda: run(records={"R-11": {**shipped, "golden_ids": ("G-REF-01",)}}),
+          "G-REF-01: the product R-11 record names the goldens ('G-REF-01',)")
+    fails(lambda: run(records={"R-12": RF.REFUSAL_RECORDS["R-12"]}),
+          "G-REF-01: core/quant/refusal.REFUSAL_RECORDS holds no R-11 record")
+    assert run(records=product()) == {"product": 16, "file": 64, "goldens": 64}          # the unedited copy passes
+    assert run(records=product(value={"dMDD_pp": -2.6, "tail": 0.987}))["product"] == 16   # inside +/- 1 pp and +/- 0.01
+    # the layout
+    text = _gref01_text(base)
+    fails(lambda: _gref01_record(text.replace("golden_id,sub_id,value", "golden_id,sub_id,post_patch", 1)),
+          "QX_DLA_postpatch.csv: declared columns ['value'] absent")
+    fails(lambda: _gref01_record(_gref01_text(base + [base[5]])),
+          "QX_DLA_postpatch.csv line 66: G-REF-01/value_stock35_dsr is recorded twice")
+    fails(lambda: _gref01_record(_gref01_text(base[:3] + [("G-REF-01", "", "1")] + base[3:])),
+          "QX_DLA_postpatch.csv line 5: a blank golden_id or sub_id")
+    fails(lambda: _gref01_record(_gref01_text([(g, s, "" if (g, s) == keys[10] else v) for g, s, v in base])),
+          f"QX_DLA_postpatch.csv line 12: {keys[10][0]}/{keys[10][1]} has no recorded value")
+    fails(lambda: _gref01_record("golden_id,sub_id,value\n"), "QX_DLA_postpatch.csv: no rows")
+    assert _gref01_record("\ufeff" + text) == _gref01_record(text) and len(_gref01_record(text)) == 64
+    # F20 as the spec prints it (L5815-5834) is not in the declared layout, and it does not hold the G-REF-01 table or
+    # the G-KR-05 rows: this body fails on it either way (an owner question; see the layout declaration above)
+    fails(lambda: _gref01_record("item,pre_patch,post_patch\nKOSPI close 2 Oct,6943.66,7003.74\n"
+                                 "G-KR-05 KRW value timing (share),0.965,0.967\n"),
+          "QX_DLA_postpatch.csv: declared columns ['golden_id', 'sub_id', 'value'] absent (header ['item', 'pre_patch', "
+          "'post_patch'])")
+    post = [("G-POST-01", r.sub_id, _gref01_cell(r)) for r in GT.golden("G-POST-01").rows]
+    assert ("G-POST-01", "gkr05_share", "0.967") in post and len(post) > 1
+    msg = fails(lambda: run(post), "G-REF-01: 47 golden value(s) have no record, neither in QX_DLA_postpatch.csv nor "
+                "in the product R-11 record")
+    assert "G-POST-01/" not in msg.split("): ", 1)[1], msg
+    assert _gref01_record(_gref01_text([("G-KR-01", "sharpe", ""), base[0]])) == {(base[0][0], base[0][1]): base[0][2]}
+    # nothing is replayed: the real test opens one fixture, the record table, and neither it nor its helpers touch the
+    # stores, books, costs or refusal legs this module builds for the other tests
+    tree = ast.parse(Path(__file__).read_text(encoding="utf-8"))
+    defs = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+    body = [defs[n] for n in ("test_g_ref_01_s1_goldens_refdata", "_check_g_ref_01", "_gref01_record",
+                              "_gref01_golden_keys")]
+    gates = [c.args[0].id for c in ast.walk(body[0])
+             if isinstance(c, ast.Call) and getattr(c.func, "id", "") == "require_fixture"]
+    assert gates == ["GREF01_RECORD"] and GREF01_RECORD == "QX_DLA_postpatch.csv", gates
+    names = {n.id for fn in body for n in ast.walk(fn) if isinstance(n, ast.Name)}
+    assert not names & {"B", "CL", "MA", "S", "P", "cardp", "cards", "C", "F", "FS", "GL", "RL", "G", "M", "np", "CLK",
+                        "REG", "_krw_store", "_y10_store", "_sessions", "STORE"}, sorted(names)
+    assert {n.attr for fn in body for n in ast.walk(fn) if isinstance(n, ast.Attribute)
+            and isinstance(n.value, ast.Name) and n.value.id == "RF"} == {"REFUSAL_RECORDS"}
+    # while the record table is not listed the real test is NOT_RUN (REFDATA) and names it
+    from tests.notrun import load_manifest
+    if GREF01_RECORD not in load_manifest():
+        e = _raises(test_g_ref_01_s1_goldens_refdata, NotRun)
+        assert e.reason == f"REFDATA: {GREF01_RECORD} not in tests/fixtures/macro/MANIFEST.csv", e.reason
 
 
 def test_g_ref_02_s2_goldens_refdata():

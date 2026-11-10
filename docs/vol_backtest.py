@@ -50,6 +50,10 @@ FIXTURES = {"G-B5-01": ("yahoo_KS11_1996-12_2026-10-02.csv", "KR"), "G-B5-02": (
 ORIGINS_FROM = "2016-03-01"
 COLUMNS = ("section", "symbol", "market", "model", "form", "window", "refit", "sample", "n_origins", "exceedance",
            "band_lo", "band_hi", "pit_chi2_p", "pit_ks_p", "kupiec_p", "cc_p", "b5_status", "label")
+# The declared close layout of a G-B5 fixture (owner ruling 1 of 2026-11-11, docs/nautilus_bridge/OWNER_RULINGS_LOG.md):
+# the session date in `obs_date` and the close in a column named `close`, as docs/macro_fixtures.py writes the file
+# (docs/macro_fixtures.CLOSE_LAYOUT) and as the tests read it (tests/macro_m1_calendars.read_close_layout).
+FIXTURE_COLUMNS = ("obs_date", "close")
 
 
 def md5_file(path: Path) -> str:
@@ -115,20 +119,54 @@ def spec_form(dates, closes, market: str, symbol: str, *, full: bool = False) ->
     return rows
 
 
-def fixture_lines() -> list[dict]:
-    """(d) the G-B5 fixture reproductions, NOT_RUN with the file name until the fixtures are listed in the manifest."""
-    from tests.notrun import NotRun, require_fixture
+def fixture_closes(path: Path) -> tuple[list[str], np.ndarray]:
+    """Session dates and closes of a G-B5 fixture in the declared close layout (FIXTURE_COLUMNS). The file is refused,
+    with a ValueError naming it and the line, when a declared column is absent, a close is not a finite number > 0 (a
+    blank or "." cell is no close: the generator writes one row per reference row), an `obs_date` is not written
+    YYYY-MM-DD, the dates repeat or are out of order, or it holds fewer than two rows. No row is skipped."""
+    with path.open(encoding="utf-8", newline="") as fh:
+        reader = csv.DictReader(fh)
+        missing = [c for c in FIXTURE_COLUMNS if c not in (reader.fieldnames or ())]
+        if missing:
+            raise ValueError(f"{path.name}: declared columns {missing} absent (header {reader.fieldnames})")
+        data: list[tuple[str, float]] = []
+        for line, row in enumerate(reader, start=2):
+            where = f"{path.name} line {line}"
+            day = row["obs_date"] or ""
+            try:
+                iso = date.fromisoformat(day).isoformat()
+            except ValueError:
+                iso = None
+            if iso != day:
+                raise ValueError(f"{where}: obs_date {row['obs_date']!r} is not written YYYY-MM-DD")
+            try:
+                close = float((row["close"] or "").strip())
+            except ValueError:
+                close = math.nan
+            if not (math.isfinite(close) and close > 0):
+                raise ValueError(f"{where}: close {row['close']!r} is not a finite number > 0")
+            if data and day <= data[-1][0]:
+                raise ValueError(f"{where}: rows out of date order or repeated")
+            data.append((day, close))
+    if len(data) < 2:
+        raise ValueError(f"{path.name}: {len(data)} rows; a return needs two closes")
+    return [d for d, _ in data], np.asarray([v for _, v in data], dtype=float)
+
+
+def fixture_lines(manifest: Path | None = None) -> list[dict]:
+    """(d) the G-B5 fixture reproductions, NOT_RUN with the file name until the fixtures are listed in the manifest
+    (`manifest`: the fixture manifest to read, default the shipped tests/fixtures/macro/MANIFEST.csv). A listed fixture
+    is read in the declared close layout by `fixture_closes`; one that departs from it raises, it is never NOT_RUN."""
+    from tests.notrun import MANIFEST, NotRun, require_fixture
     rows = []
     for gid, (name, market) in FIXTURES.items():
         try:
-            path = require_fixture(name)
+            path = require_fixture(name, manifest=MANIFEST if manifest is None else Path(manifest))
         except (NotRun, ValueError) as exc:
             rows.append(_row("d_fixture", gid, market, "sma20", "fhs", 20, "-", name, {"status": "NOT_RUN"},
                              label=f"REFDATA: {getattr(exc, 'reason', exc)}"))
             continue
-        with path.open(encoding="utf-8", newline="") as fh:
-            data = [(row["obs_date"], float(row["value"])) for row in csv.DictReader(fh) if row.get("value")]
-        dates, closes = [d for d, _ in data], np.asarray([v for _, v in data], dtype=float)
+        dates, closes = fixture_closes(path)
         rows += [dict(x, label=f"FIXTURE {gid}: {name}") for x in spec_form(dates, closes, market, gid)]
     return rows
 
