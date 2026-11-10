@@ -615,3 +615,7 @@ Home 표와 시장 관심종목 카드·검색·종목 제목에 로컬 문자 �
 | 합성 검증 | [유지 검사](../../tests/run_registry_series_hash_acceptance.py) 15개·0.011초, 독립 검사 11개·0.008초가 각각 종료 코드 0으로 통과. root의 series 15개+source 8개+data 15개+keys 13개+store 16개+codec 17개 통합 84개도 1.469초·종료 코드 0이며 서로 겹쳐 합산하지 않음. NumPy/새 함수를 쓰지 않고 미리 준비한 15개 원시 바이트 예제는 제품 검사 15회가 아님. memmap 거부 사례는 새 임시 파일만 사용. 이 하위 작업의 실패 실행은 없었으며 모두 로컬 Linux 합성 근거로 새 최종 head 전체 CI·실제 사용자 Windows/API 검증을 대신하지 않음 |
 
 [제품 범위·검증 기록](../product/R3_DETACHED_SERIES_HASH_2026-11-06.md)에 따라 01–20 번호 정책은 유지합니다. series 저장/읽기·pickle 거부·재해시·원자 쓰기·중복/손상 파일/재시도·series_ref·recorder/Lab·수명주기·횟수/판정·실제 원장·동결 연구·상위 R3 완료는 이 함수로 구현하거나 추정하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
+
+## 네이티브 한글 서체·UI 밀도 — 2026-11-07
+
+Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작은 한글 렌더링을 개선합니다. 기존 Flet OTF·웹HTML은 변경하지 않습니다. 카테고리 버튼은 내용폭/줄바꿈, 입력은3/4열 제한폭, 작은 결과표는 내용폭/숫자정렬/최소34px행과 긴내용 확장으로 바뀝니다. 계산 엔진·요청·결과·보고서·수신 권한·원장은 그대로입니다. [검증기록](../product/COMPACT_NATIVE_UI_20261107.md)을 따릅니다. 13/14/15/19의 표시·라이선스 변경 외 20종 정책의 기존 조건과 `review-required`·공개 준비 `BLOCKED`를 유지합니다. Linux검사로 실제Windows디스플레이·계정/KIS·웹배포·전체R3 완료를 주장하지 않습니다.

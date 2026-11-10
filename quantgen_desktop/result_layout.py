@@ -213,7 +213,8 @@ class PairedResultPanels(QWidget):
         self.breakpoint = breakpoint
         self.split = QBoxLayout(QBoxLayout.Direction.LeftToRight, self)
         self.split.setContentsMargins(0, 0, 0, 0)
-        self.split.setSpacing(18)
+        self.setMaximumWidth(960)
+        self.split.setSpacing(12)
         self.split.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         for widget in self.panels:
             widget.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)

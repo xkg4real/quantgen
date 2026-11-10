@@ -127,7 +127,9 @@ class ResponsiveToolTests(unittest.TestCase):
                 combo.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContents)
                 combo.updateGeometry()
             self.settle()
-            self.assertGreater(w.stack.currentWidget().horizontalScrollBar().maximum(),0)
+            # The bounded panel can now contain even a bad native hint. Verify
+            # that the injected hint is oversized, then exercise the real policy.
+            self.assertGreater(pane.tool.minimumSizeHint().width(),w.stack.currentWidget().viewport().width())
             for combo,policy in zip((pane.tool,pane.source),policies):
                 combo.setSizeAdjustPolicy(policy)
                 combo.updateGeometry()

@@ -75,6 +75,7 @@ class ToolPane(QWidget):
     def __init__(self, title, tools, sources, fields):
         super().__init__()
         from .app import label, panel
+        from .form_layout import CompactFieldGrid, bound_input_panel, add_compact_action
         self.has_result = False
         self.report = None
         self.sections = []
@@ -86,6 +87,7 @@ class ToolPane(QWidget):
         layout.setSpacing(18)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.input_box, inner = panel(title)
+        bound_input_panel(self.input_box)
         # Preferred, not Maximum: a Maximum height is capped at the size hint, which Qt takes at the panel's
         # preferred width. Where captions wrap more at the real width (Windows fonts), that cap cut the
         # last form row (owner UI-6a). The pane's top alignment still keeps the panel from stretching.
@@ -114,8 +116,7 @@ class ToolPane(QWidget):
         inner.addLayout(top)
         self.forms, self.fields = CurrentPageStack(), {}
         for key, _ in tools:
-            host = QWidget()
-            form = QGridLayout(host)
+            pairs = []
             controls = {}
             for i, (name, text, default) in enumerate(fields[key]):
                 if isinstance(default, list):
@@ -124,17 +125,14 @@ class ToolPane(QWidget):
                 else: w = QLineEdit(str(default))
                 w.setAccessibleName(text)
                 controls[name] = w
-                row, col = (i//3)*2, i%3
-                form.addWidget(label(text, 'caption'), row, col)
-                form.addWidget(w, row+1, col)
-                form.setColumnStretch(col, 1)
+                pairs.append((label(text, 'caption'), w))
             self.fields[key] = controls
-            self.forms.addWidget(host)
+            self.forms.addWidget(CompactFieldGrid(pairs))
         inner.addWidget(self.forms)
         self.run = QPushButton('분석 실행')
         self.run.setProperty('primary', True)
         self.run.clicked.connect(self.submit)
-        inner.addWidget(self.run)
+        add_compact_action(inner, self.run)
         layout.addWidget(self.input_box)
         self.status = label('도구와 출처를 선택한 후 실행하세요.', 'muted')
         self.status.setProperty('reading_help_keep_visible', True)

@@ -1,3 +1,30 @@
+Native desktop fonts: hinted Gothic A1, renamed QG Interface (400/500/600).
+Pinned Google Fonts ref38411257417e616c5d4daa1b9e91a3dbcebe1c2e:
+https://github.com/google/fonts/tree/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/gothica1
+Copyright HanYang I&C Co., Ltd.; SIL OFL1.1 in OFL-GothicA1.txt.
+Actual TrueType glyph hints and all11172Hangul syllables are preserved.
+Missing symbols use the separate QG Symbols family derived from the existing
+Pretendard OTF; its OFL.txt and original license name records are preserved.
+No runtime download or OS font installation. Browser/Flet OTF stays unchanged.
+Rebuild: download GothicA1-{Regular,Medium,SemiBold}.ttf and OFL.txt at the pinned
+ref into /tmp/qg-fonts, then run python tools/ui/build_hinted_fonts.py from repo root.
+The script requires fontTools at build time only. Linux offscreen checks cannot
+prove rendering on every Windows display or display scale.
+
+GothicA1-Regular.ttf source SHA256 211151bea98098c579610ab1114bb1bfe909057207db561f357b896d076c21ac
+qg-interface.ttf SHA256 98c3a0825398ab5f2f7f90a7ce66911d47d5fed526855917f4e6278262922c7d
+qg-interface.otf source SHA256 90aded599c3206a647c88f6a81bc5df670fdec6ff2d9c9f241de2d0bf64b6b31
+qg-symbols.otf SHA256 292089940ba00a4284b8b2d6cef096f96f2f493e9b15955d93c72d02d241195f
+GothicA1-Medium.ttf source SHA256 c8a0eb56fa6b13448688fed0799d503fe536a8c6b7acfafdfd580edb9c4c2192
+qg-interface-medium.ttf SHA256 853a07f6eb4b756882c43ce6033305963e8be873a4895532272d48951c39beec
+qg-interface-medium.otf source SHA256 f52aa3022d241b4cd03eb71f64a9389fc298760e057a317305312e24bb44fbbc
+qg-symbols-medium.otf SHA256 78afc4d4d23a930455bfc86a4d1fba4e1b689c1ed742823e280e567a0a2211df
+GothicA1-SemiBold.ttf source SHA256 7ee3063f2d626936d8a59dfa21525e7ed19b4e89e8fbb0ea5a924cad9b0cc1f4
+qg-interface-semibold.ttf SHA256 40d3b08308d03a86beea77330cc9b29152aafc444dd6886153458456410d51a9
+qg-interface-semibold.otf source SHA256 97c53221c1d3fadc48d692fab9bf5a545159be95a5c0228dc3b8cc24db4ec8dd
+qg-symbols-semibold.otf SHA256 6446af4f101fcdfddc4e21f74af11622e4a685ffc9142500154390d6cff651f3
+
+LEGACY FLET FONT PROVENANCE (unchanged OTFs)
 QG Interface — Korean / Latin interface family, Regular / Medium / SemiBold.
 
 Current source: Pretendard 1.3.9 (orioncactus/pretendard), pinned source ref
