@@ -671,6 +671,22 @@ Home 표와 시장 관심종목 카드·검색·종목 제목에 로컬 문자 �
 
 Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작은 한글 렌더링을 개선합니다. 기존 Flet OTF·웹HTML은 변경하지 않습니다. 카테고리 버튼은 내용폭/줄바꿈, 입력은3/4열 제한폭, 작은 결과표는 내용폭/숫자정렬/최소34px행과 긴내용 확장으로 바뀝니다. 계산 엔진·요청·결과·보고서·수신 권한·원장은 그대로입니다. [검증기록](../product/COMPACT_NATIVE_UI_20261107.md)을 따릅니다. 13/14/15/19의 표시·라이선스 변경 외 20종 정책의 기존 조건과 `review-required`·공개 준비 `BLOCKED`를 유지합니다. Linux검사로 실제Windows디스플레이·계정/KIS·웹배포·전체R3 완료를 주장하지 않습니다.
 
+<a id="lookahead-la02-part1-2026-11-10"></a>
+## 미래 정보 누출 감사 LA-02 1부: 기준 데이터 시험 본문 — 2026-11-10
+
+2026-11-04 감사(`7749450`의 `docs/nautilus_bridge/LOOKAHEAD_AUDIT_2026-11-04.md` LA-02)에 대한 ⑨-1/2/b 범위입니다. 근거는 소유자 결정 L-2(`docs/nautilus_bridge/OWNER_RULINGS_LOG.md:546`)입니다. 첫 커밋 뒤 검토 지적 10건을 같은 범위에서 반영했습니다. 바뀐 것은 시험 파일과 이 기록뿐입니다. 앱·`core/`·동결 하네스 소스·`goldens.csv`·`ACQUISITION.csv`·`MANIFEST.csv`·`tests/macro_registry.csv`·`qa/acceptance_results.json`·원장·카드·달력 파일은 바꾸지 않았습니다.
+
+| 항목 | 확인한 동작과 한계 |
+| --- | --- |
+| 바뀐 시험 | T-PRINT-01·T-SAT-01 실제 종가 시험과 T-PLACEBO-01 양성 대조군 시험은 `require_fixture` 직후의 "unreachable"·"not implemented" 실패 대신 실제 본문(`_check_print01`, `_check_sat01`, `_check_placebo01_control`)을 실행합니다. T-AVAIL-01 공식 달력 시험은 서명·적용 범위 거부를 파일에서 계산하고, 거부가 없으면 같은 골든 표를 `CalendarClocks`로 실행합니다. 그때 표 안에서 난 적용 범위·서명 오류는 NOT_RUN이 아니라 FAIL입니다(`AVAIL01_NEEDS`가 계약). T-REGIME-01 전 구간 시험의 사유는 서명된 `kr_regime_tags.yaml`을 더 이상 "unsigned draft"라고 하지 않고, 읽은 서명 상태로 끝납니다. 기대값 파일에 ACQUISITION 행이 없어 OWNER NotRun은 유지합니다 |
+| 기대값 출처 | `goldens.csv`에는 행이 없어 편집하지 않았습니다. 사양 줄을 시험에 적었습니다: 5,251.87·-5.96%(L5631, L1382), 토요일 세션·완전성(L2097, 분산비 2.30은 출력만), LP 0.20 이상(L3430, L3444). L0 0.317·L1 0.035를 Level 1 점(Sharpe ±0.01, L5734)으로 확인하는 것은 이 부분의 L3461 해석이며, ⑨-2 전에 소유자가 유지 또는 출력만으로 정합니다 |
+| 선언한 파일 형식 | ACQUISITION.csv와 사양에 열 정의가 없어 시험이 선언합니다. F01은 `close` 열과 4.1절 출처 열을 씁니다. `KR_SOX_KRW_gate_B3.csv`에서 본문이 읽는 열은 `session_date`, `kr_return`, 같은 날짜 입력으로 R4 B3 규칙이 정한 `gate_m`, `multiplier`, `cost_bp`입니다. SOX·USD/KRW 종가와 임계값 열은 함께 실어도 읽지 않습니다. R4 B3 규칙이 사양에 없어 `gate_m`을 입력에서 다시 계산하지 못하며, 값이 1 또는 `multiplier`인지만 확인합니다. ⑨-2 소유자 질문: ACQUISITION.csv:34에 없는 `kr_return`·`gate_m` 추가, R4 B3 규칙 형태 제공, L0·L1 점 확인 여부, F01 `close` 열 이름입니다 |
+| 통과·실패 시연 | 본문 네 개를 모두 지어낸 메모리 데이터로 PASS와 FAIL 양쪽으로 시연하며, 각 FAIL은 해당 조항의 메시지를 확인합니다: 종가 5,251.88, 전일 종가 5,560, 전일 행 누락, 장중가; 토요일 누락, 구간 밖 행, 토요일 규칙이 틀린 달력 두 가지; 전 세션 입력(LP 0.026), L0만 또는 L1만 Level 1 밖, 원장 행 누락·분류 오류, `gate_m` 0.9, ACQUISITION 열만 있는 파일. 소유자 달력 관문 `_official_calendar`는 덮는 합성 세트를 돌려주고, 서명 없는 세트와 2026-27만 덮는 세트에는 OWNER 사유를 냅니다. 실제 KRX·SOX·FRED·R4 B3 자료는 쓰지 않았습니다 |
+| 래칫 | `test_la02_converted_pit_bodies_stay_convertible`은 이름을 적은 함수만 검사합니다(전환 4개, 남은 13개, 합계 17개). 고정 집합 `LA02_SITES`(17개)와 `LA02_CONVERTED_FLOOR`(4개)로 전환된 함수가 남은 목록으로 돌아가거나 새 함수가 추가되면 실패합니다. 상수 `if` 아래 NotRun, 대소문자·예외 종류와 무관한 unreachable·not implemented 문구, 호출하는 모듈 도우미 함수(`_official_calendar` 등)의 무조건 NotRun도 거부합니다. 바닥 집합을 낮추지 않는 한 남은 목록은 줄기만 합니다 |
+| 실행 범위 | 감사 훅 실행기(`docs/asset_expansion/cache`·`.env`·`~/.nextgen` 접근과 socket 연결 거부)로 지정한 시험 ID만 실행했습니다. 결과 수치는 [검증 기록](../product/LOOKAHEAD_LA02_PART1_2026-11-10.md)에 있습니다. 변이 23개를 시험 파일 사본 없이 제자리에서 적용·복원하며 모두 잡았습니다. 바꾸거나 새로 만든 시험은 캐시를 읽지 않지만, 바꾸지 않은 기존 시험 `test_stale_01_schedule_aware_clauses_and_local_smoke`는 `fred_DEXKOUS.csv` 캐시를 읽으므로 `tests.macro_m1_pit` 전체 실행은 캐시에 닿습니다. `tests/run_all.py`, 매크로 모듈 전체, `macro_m9_lab`, `macro_m8_pipeline`, registry 동기 시험은 실행하지 않았습니다(test_ids 정적 대조만). Windows·CI 확인은 하지 않았습니다 |
+
+[제품 범위·검증 기록](../product/LOOKAHEAD_LA02_PART1_2026-11-10.md)에 따라 실제 자료 시험은 ⑨-2 고정 파일이 md5와 함께 등록되거나 소유자가 KRX 달력 범위를 넓히기 전까지 NOT_RUN입니다. 이 변경은 연구 수치·판정·게이트 패키지 정의를 바꾸지 않습니다. I-05(LA-07, LA-30 필요)는 이 범위에 없습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
+
 <a id="adoption-strategy-checks-2026-11-10"></a>
 ## 새 모델 채택 기준의 전략 비교 줄 — 2026-11-10
 
