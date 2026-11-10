@@ -29,7 +29,8 @@
    `updated_at`을 지금 시각으로 고쳐 `handoff` 브랜치에 커밋하고 push합니다.
    커밋 메시지: `handoff: taken <task>`. push가 거절되면(다른 쪽이 먼저 바꿨다면)
    최신 `CURRENT.md`를 다시 읽고 1절부터 다시 판단합니다.
-2. `CURRENT.md` 9절의 지시문을 첫 지시로 삼고 0~8절을 모두 읽습니다. `AUTO_STATE.md`도
+2. 화면(UI) 작업이 조금이라도 들어 있으면, 먼저 `UI_SESSION_CURRENT.md` 맨 위의 "소유자 결정" 블록을
+   읽고 따릅니다(6절). 그다음 `CURRENT.md` 9절의 지시문을 첫 지시로 삼고 0~8절을 모두 읽습니다. `AUTO_STATE.md`도
    읽되, 그 `source_branch`가 `CURRENT.md`의 `work_branch`와 같을 때만 이 작업의 기록으로
    씁니다. 그 `created_at`이 `CURRENT.md`의 `updated_at`보다 나중이면, 그 사이에 생긴 커밋과
    커밋되지 않은 변경이 여기에 있습니다.
@@ -73,3 +74,19 @@
   우선합니다.
 - 이 레포는 실제 주문 경로가 없는 연구용 앱입니다. 브로커 주문 코드를 추가하지 않습니다.
 - 비밀 값(API 키, 토큰, 계좌번호)은 커밋하지 않고 문서에도 적지 않습니다.
+
+## 6. 화면(UI) 작업 기준 — 소유자 결정 (2026-11-11)
+
+소유자 지시(2026-11-11, Claude Code 채팅 원문): "네이티브로 통일하는데, 글꼴은 너가 쓴거 그대로 쓰면 되고 +
+오늘 변경한 부분들도 너가 썼던 걸로 진행하면돼. gpt한테 전달 똑바로하고, 대신 나머지 부분은 gpt가 수정한 ui사용해야해",
+이어서 "gpt와의 인계를 정확히 진행해라. 둘이 다른 기반으로 앱개발 하고있던게 말이되냐".
+
+- **UI 기준 앱은 네이티브 PyQt 하나입니다** (`quantgen_desktop/`, 실행 `python -m quantgen_desktop`,
+  `Start-QUANTGEN-Desktop.cmd`). 화면 수정은 네이티브에 합니다. Flet(`main.py`, `ui/*.py`)은 유지만 하고 새 화면
+  작업의 기준으로 쓰지 않습니다. 사용자 스크린샷이 Flet 화면이어도 같은 문제를 네이티브에서 고칩니다.
+- 2026-11-10 소유자 지적 14건은 Claude 해결 방식(PR #98, Flet)을 네이티브로 옮긴 것이 기준입니다. 그 밖의 네이티브
+  화면은 GPT의 PR #89 압축 UI(`form_layout`·`table_layout`·`result_layout`·`category_picker`·`typography`)를 유지합니다.
+- 글꼴은 `assets/fonts/qg-interface*.otf`(Pretendard 파생, 가족 이름 `QG Interface`)입니다. Gothic A1 TTF로 되돌리지 않습니다.
+- 금지: 14건 화면을 이전 모양으로 되돌리기, 글꼴을 Gothic A1로 되돌리기, 14건과 무관한 네이티브 화면을 Flet 모양으로 바꾸기.
+- 화면 작업을 시작하기 전에 `LEDGER.md`에서 `⑬-2/`로 시작하는 행과 `UI_SESSION_CURRENT.md`의 진행 중 항목을 확인해
+  같은 화면을 두 에이전트가 따로 고치지 않게 합니다. 끝낸 화면 작업은 `⑬-2/...` ID로 `LEDGER.md`에 기록합니다.

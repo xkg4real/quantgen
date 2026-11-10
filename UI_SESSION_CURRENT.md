@@ -18,7 +18,7 @@ GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기,
 
 # 네이티브 이식 진행 중 — 2026-11-11 KST (Claude, 위 UI-D1~D4 실행)
 
-- status: checkpoint · waiting_on: none · updated_at: 2026-11-11 06:25 KST
+- status: checkpoint · waiting_on: none · updated_at: 2026-11-11 07:30 KST · LEDGER ID: ⑬-2/owner-14-native (진행 중)
 - session: https://claude.ai/code/session_016uB1jf8m3p5GW1qzQVJe7k
 - work_branch: `claude/friendly-bardeen-r6xe8f` = main `1a8b29f` + 기반 커밋 `66470f4` (푸시됨). PR 없음(소유자 요청 시 생성).
 - 메인 `CURRENT.md`·`LEDGER.md`는 다른 Claude 세션(task claude-resume-20261103) 것이라 건드리지 않음.
@@ -27,6 +27,20 @@ GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기,
 1. 글꼴(UI-D4): `quantgen_desktop/font_policy.py`가 `qg-interface*.otf`(Pretendard 파생, 가족 이름 동일 `QG Interface`)를 등록. `ui/qcharts.py`(Flet 차트 PNG)도 같은 OTF. Gothic A1 TTF는 `assets/fonts`에 남기고 사용하지 않음. 글꼴로 폭을 재는 시험 4개도 OTF로.
 2. 이슈 11(분석 해설 한 덩어리): `quantgen_desktop/narrative_view.py` `NarrativeView` — 해설을 창 언어로 소제목+글머리표로 보여 주고 전체 문단은 아래 접기(`FullTextFold`). `ToolPane.finished(..., sections=)`가 모든 분석 도구에 적용. 내보내기 문장은 그대로. 문장 분할기는 Flet 없는 `ui/narrative_sections.py`로 옮김(`ui/ai_panel.py`가 재수출).
 3. `quantgen_desktop/owner_ui_language/<영역>.py`: 영역별 한국어 표시 문구(`PAIRS`), `translations.py`가 기존 카탈로그 뒤에 병합. 같은 영어에 영역마다 다른 한국어를 주면 거부.
+
+## 두 에이전트가 다른 앱을 고친 이유와 재발 방지 (2026-11-11, 소유자 지적)
+
+소유자: "gpt와의 인계를 정확히 진행해라. 둘이 다른 기반으로 앱개발 하고있던게 말이되냐"
+
+- 원인: 2026-10-30(⑬-2/d) 이후 화면 작업은 Claude·GPT 모두 네이티브(`quantgen_desktop/`)에서 했는데, 2026-11-10 소유자
+  스크린샷이 Flet 화면이어서 Claude UI 세션이 Flet(`ui/*.py`)을 고쳤습니다(PR #98). 시작 전에 `LEDGER.md`의 `⑬-2/` 기록으로
+  기준 앱을 확인하지 않았고, 끝낸 일을 `LEDGER.md`에 적지 않고 GPT가 읽지 않는 이 문서에만 적었습니다.
+- 조치: (1) 소유자 결정 UI-D1~D4 — UI 기준 앱은 네이티브 하나. (2) `AGENTS.md` 6절과 2절 2단계, `README.md` 파일 표에 이
+  문서를 GPT 필독으로 연결. (3) `LEDGER.md`에 ⑬-2/owner-14-flet(PR #98), ⑬-2/ui-base-owner-decision 기록. (4) 레포 루트
+  `AGENTS.md`·`CLAUDE.md`에도 같은 규칙(작업 브랜치 `claude/friendly-bardeen-r6xe8f`, main 병합 시 적용). (5) 메인
+  `CURRENT.md`를 쓰는 Claude 세션(task claude-resume-20261103, next_ids에 ⑬-2/a3·⑬-2/k)에 같은 내용을 전달.
+- 네이티브 이식 진행: 영역 5개 중 4개(market `fc2d8e3`, strategy `b278ad9`, ficc `dc1dc78`, risk `12b6ad5`) 병합·푸시,
+  charts_macro 진행 중. 그 뒤 전체 CI 단계 재실행 → 독립 검토 → 컴플라이언스 → 이 문서 `완료`, `LEDGER.md`에 ⑬-2/owner-14-native.
 
 ## 진행 중 — 영역 5개 병렬 (각자 브랜치 `owner-ui-native-<영역>`, 컨테이너 로컬 → 통합 후 work_branch로 병합)
 | 영역 | 파일 | 이슈 |
