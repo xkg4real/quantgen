@@ -187,3 +187,7 @@ MC 작은 결과표와 Bonds 두 결과 패널의 모든 행·가로 스크롤·
 - [W3C WCAG 2.2 — 2.4.7 Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html)
 - [W3C WCAG 2.2 — 2.4.11 Focus Not Obscured (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html)
 - 국내 적용 조건은 [공식 출처 대장](SOURCES.md)을 따른다.
+
+### 2026-11-07 네이티브 밀도 개선
+
+카테고리는 모든 버튼을 표시하며 좁으면 줄바꿈합니다. Tab/Space 선택과 기존 입력 컨트롤·포커스·값을 보존하고 넓은 표는 내부 스크롤합니다. 기존 공개 준비 및 운영 검증 조건을 유지합니다.

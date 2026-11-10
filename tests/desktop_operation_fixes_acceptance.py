@@ -219,7 +219,8 @@ class OperationFixTests(unittest.TestCase):
         wrapping = QLabel("wrap " * 120); wrapping.setWordWrap(True)  # ASCII: every platform font has it
         grid.addWidget(wrapping, grid.rowCount(), 0, 1, 3); settle(self.app)
         box = w.etf.input_box
-        self.assertLess(box.sizeHint().height(), box.heightForWidth(box.width()))  # the Windows condition holds
+        self.assertGreater(1600, box.width())  # oversized preferred width is now bounded
+        self.assertGreaterEqual(wrapping.height(), wrapping.heightForWidth(wrapping.width()))
         self.assertGreaterEqual(box.height(), box.heightForWidth(box.width()), layout_report(w.etf))
 
     def test_window_and_app_icons_carry_taskbar_sizes(self):

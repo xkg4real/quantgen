@@ -632,3 +632,7 @@ Home 표와 시장 관심종목 카드·검색·종목 제목에 로컬 문자 �
 | 보존한 이력 | 최초 21개 실행의 20 PASS+1 fixture ERROR는 NumPy가 불가능한 대형 빈 배열을 encoder 호출 전에 거부한 사례로 보존. 이후 22개·0.036초/0.031초와 통합 106개·1.533초는 이전 중복 결과. memoryview 바이트 수 보강은 소스 검토 지적에서 시작했으며 독립 실행에서 제품 실패를 재현했다고 주장하지 않음. private parser 단계 예상 오류도 별도 보존. 긴 unary 입력의 parser 자원 경계는 환경에 따라 달라 최종 검사는 형식 거부 또는 계약상 MemoryError와 `np.load` 미호출을 확인하며, RecursionError 주입 검사를 실제 재현으로 바꾸지 않음 |
 
 [제품 범위·검증 기록](../product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md)에 따라 01–20 번호 정책은 유지합니다. 여기서의 메모리 로드·pickle 비허용·내용 대조를 파일 저장/읽기 경로·fsync/replace·중복/손상 target/동시 쓰기/재시도/보유·series_ref·날짜/설정 의미·recorder/Lab·수명주기/횟수/판정·실제 원장·동결 연구·전체 R3 완료로 확대하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
+
+## 네이티브 한글 서체·UI 밀도 — 2026-11-07
+
+Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작은 한글 렌더링을 개선합니다. 기존 Flet OTF·웹HTML은 변경하지 않습니다. 카테고리 버튼은 내용폭/줄바꿈, 입력은3/4열 제한폭, 작은 결과표는 내용폭/숫자정렬/최소34px행과 긴내용 확장으로 바뀝니다. 계산 엔진·요청·결과·보고서·수신 권한·원장은 그대로입니다. [검증기록](../product/COMPACT_NATIVE_UI_20261107.md)을 따릅니다. 13/14/15/19의 표시·라이선스 변경 외 20종 정책의 기존 조건과 `review-required`·공개 준비 `BLOCKED`를 유지합니다. Linux검사로 실제Windows디스플레이·계정/KIS·웹배포·전체R3 완료를 주장하지 않습니다.
