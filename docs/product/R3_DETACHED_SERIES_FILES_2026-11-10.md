@@ -47,7 +47,8 @@ Deliberate deltas from §5.7:
   instances on one directory must share one `max_bytes`: a smaller reader
   refuses valid larger files with `IntegrityError`.
 - `lock_timeout`: plain `int` or `float`, finite, 0 to 10 seconds, default 2. It
-  bounds lock waits only, not filesystem calls, hashing or the replace retries.
+  bounds this digest's lock waits only, not filesystem calls, hashing, the
+  process-wide map lookup or the replace retries.
 
 `write(payload, expected_sha256) -> (sha256, created)` and
 `read(sha256) -> numpy.ndarray` (read-only flag set, as a convenience only).
@@ -66,11 +67,14 @@ decoder (write) or by an exact pattern check (read), so no other path is formed.
 
 1. One monotonic deadline covers both lock stages.
 2. A process lock per sidecar path (normalized with `os.path.normcase`) comes
-   from a guarded map. If the process ID differs from the one that built the map,
-   the map, its guard and the recorded PID are rebound before use; the same
-   reset runs as an `os.register_at_fork` child handler where available. This
-   fixes Python lock state only, not inherited descriptors or OS locks held
-   through them.
+   from a guarded map. The map guard is held for one dictionary lookup only and is
+   taken without a timeout, so even `lock_timeout=0` never fails because another
+   thread is looking up an unrelated digest; the deadline applies to this
+   digest's process lock and OS lock. If the process ID differs from the one
+   that built the map, the map, its guard and the recorded PID are rebound before
+   use; the same reset runs as an `os.register_at_fork` child handler where
+   available. This fixes Python lock state only, not inherited descriptors or OS
+   locks held through them.
 3. The sidecar is opened read-write without following links (`O_NOFOLLOW`,
    `O_NONBLOCK`, `O_BINARY` where defined); an existing non-regular sidecar is
    refused with `StoreError`.
@@ -108,16 +112,21 @@ decoder (write) or by an exact pattern check (read), so no other path is formed.
 
 | Retried | Not retried |
 | --- | --- |
-| `PermissionError` from `os.replace` only (EACCES, or a Windows access or sharing violation): at most 10 attempts within a 5 s monotonic budget, with waits 0.05, 0.1, 0.2, 0.4 and then 0.8 s (nine waits, 4.75 s in total), each cut to the remaining budget | `mkstemp`, a zero-progress write, the temp fsync or close, other `os.replace` errors, the state checks, unlink, the directory fsync, readback (including a Windows `PermissionError` on readback), unlock and close. OS-lock contention is a lock wait, bounded by `lock_timeout` |
+| `PermissionError` from `os.replace` only (EACCES, or a Windows access or sharing violation): at most 10 attempts within a 5 s monotonic budget, with waits 0.05, 0.1, 0.2, 0.4 and then 0.8 s (nine waits, 4.75 s in total). No attempt starts once 5 s have elapsed: a wait that would reach 5 s is not taken, and the clock is read again after each wait, so a late wake-up also ends the retries | `mkstemp`, a zero-progress write, the temp fsync or close, other `os.replace` errors, the state checks, unlink, the directory fsync, readback (including a Windows `PermissionError` on readback), unlock and close. OS-lock contention is a lock wait, bounded by `lock_timeout` |
 
 Before every attempt and again at exhaustion, the store requires the original
 temp (same identity, regular, same size) and an absent target name. A vanished or
 changed temp, or a target that appeared, raises `PublicationUncertain` and is never
 overwritten. Exhaustion with those conditions confirmed raises
 `ReplaceRetryExhausted` with `attempts` and `temp_removed`. No time limit applies
-to a single filesystem call. The lock stays held during the retry window, so
-another caller of the same digest with the default 2 s timeout can get
-`LockTimeout`; other digests are unaffected.
+to a single filesystem call, so the last attempt, started before 5 s, can end
+later. The lock stays held during the retry window, so another caller of the same
+digest with the default 2 s timeout can get `LockTimeout`; other digests are
+unaffected.
+
+The typed errors survive pickling, so a parent receives the same type,
+`attempts`, `temp_removed` and `cleanup_errors` from a worker process; as for any
+pickled exception, the traceback and `__cause__` are not carried.
 
 ## Read
 
@@ -142,7 +151,8 @@ cannot be read through this module.
 | `SidecarMissing`, `SeriesNotFound` | Nothing created or changed |
 | `IntegrityError` | Target untouched; no temp |
 | `ReleaseError` | A read or idempotent skip verified its result but unlock or a close failed; no publication by this call; the result is not returned |
-| Raw `OSError` or temp `StoreError` from write | No replace call; the owned temp is removed unless `cleanup_errors` says otherwise; a new sidecar may stay empty if its NUL initialization failed |
+| Raw `OSError` from `mkstemp`, the temp write, fsync or close | No replace call; the identity-matching temp is removed unless `cleanup_errors` says otherwise; a new sidecar may stay empty if its NUL initialization failed |
+| Temp `StoreError`, or an `lstat` failure right after `mkstemp` | No replace call; the temp is kept, because its ownership is unproven; a new sidecar may stay empty if its NUL initialization failed |
 | `ReplaceRetryExhausted` | Target absent at the final check; temp removed if `temp_removed` |
 | `PublicationUncertain` | Never overwrote a target it observed; the target may be absent, foreign, or published without completed checks. Do not blindly retry; a later `read()` verifies current bytes but not durability |
 | `KeyboardInterrupt`, `SystemExit` | Propagated unwrapped after cleanup (identity-checked temp removal, unlock, a single close, process-lock release). Before `os.replace` the owned temp is removed unless `cleanup_errors` says otherwise; during or after `os.replace` publication is unknown, so verify with `read()` |
@@ -178,8 +188,10 @@ wrapped; asynchronous interrupts arriving between cleanup steps are best effort.
   network mounts, fork during active I/O, inherited descriptors, and a
   non-cooperating writer creating the target after the absence check (see the
   owner question below).
-- One `.lock` per digest persists. Hidden `.<digest>.*.tmp` files can remain
-  after a kill or a cleanup failure. There is no automatic cleanup, retention,
+- One `.lock` per digest persists. Dot-prefixed `.<digest>.*.tmp` files can remain
+  after a kill or a cleanup failure; they are hidden only on POSIX and are visible
+  on Windows, where a leading dot sets no hidden attribute and the store sets
+  none. There is no automatic cleanup, retention,
   TTL or tombstone. The process-lock map grows by one entry per digest.
 - Deleting or omitting the `.lock` of an existing `.npy` (including restoring only
   the `.npy` from a backup) makes that digest permanently refused with
@@ -192,12 +204,16 @@ wrapped; asynchronous interrupts arriving between cleanup steps are best effort.
 
 ## Owner question
 
-The approved design and the claimed contract name `os.replace`. On POSIX, a
-target created by a non-cooperating writer after the absence check would be
-overwritten; on Windows, `MoveFileEx` fails with `PermissionError` while that
-target is open, and the next pre-attempt check then refuses. A no-clobber publish
-(Windows `os.rename`, or POSIX `os.link` plus `unlink`) would refuse to overwrite
-in that window. It is recorded here as a question, not implemented.
+The approved design and the claimed contract name `os.replace`. A target created
+by a non-cooperating writer after the last absence check and before `os.replace`
+is overwritten on both platforms; the readback then matches the payload and
+`write()` returns `(sha256, True)`. On Windows, `os.replace` is `MoveFileExW` with
+`MOVEFILE_REPLACE_EXISTING`, which replaces a foreign target that is closed or
+open with delete sharing. Only while that target is held open without delete
+sharing does it fail with `PermissionError`, and the next pre-attempt check then
+refuses. A no-clobber publish (Windows `os.rename`, or POSIX `os.link` plus
+`unlink`) would refuse to overwrite in that window on both platforms. It is
+recorded here as a question, not implemented.
 
 ## Boundaries
 
@@ -213,22 +229,39 @@ All local checks ran on Linux with Python 3.13 (`-B`, no bytecode), in fresh
 temporary directories only, with no network, real series, ledger or
 configuration.
 
-- `tests.run_registry_series_files_acceptance`: **41 tests**, run three times as a
-  flake check: 2.177 s, 2.196 s and 2.342 s, exit 0 each. An earlier development
-  run of the same 41 tests also passed (2.124 s); no run failed.
-- Combined R3 run (series files 41 + series format 22 + series hash 15 + source
-  hash 8 + data hash 15 + keys 13 + store 16 + codec 17): **147 tests in 5.144 s,
-  exit 0**. These overlap and are not added together.
-- Mutation run on scratch copies: **28 of 28 mutants killed** (18 clause mutants,
-  6 found in review, 4 specific to the revision 2 fixes). The first launch of
-  the mutation script stopped before any mutant ran (a relative interpreter path);
-  it was rerun with absolute paths.
-- `tests.runtime_syntax_acceptance` passed; the module compiled on Python 3.11 and
-  3.12, and `ast.parse(feature_version=(3, 10))` accepted it. A real 3.10 compile
-  is the CI syntax job.
+- `tests.run_registry_series_files_acceptance`: **45 tests** after the review
+  fixes below, run three times as a flake check: 1.400 s, 1.450 s and 1.435 s,
+  exit 0 each. Before them, the first 41 tests passed three times (2.177 s,
+  2.196 s, 2.342 s) and once in development (2.124 s); no run failed.
+- Combined R3 run (series files 45 + series format 22 + series hash 15 + source
+  hash 8 + data hash 15 + keys 13 + store 16 + codec 17): **151 tests in 3.519 s,
+  exit 0** (first round: 147 tests in 5.144 s). These overlap and are not added
+  together.
+- Mutation run on scratch copies: **41 of 41 mutants killed**: the first round's
+  28 (two retry mutants rewritten for the new retry code) plus 13 for the review
+  round (reverts of the three code fixes, six budget value and boundary mutants,
+  four interrupt sites). The first round killed 28 of 28 (18 clause mutants, 6
+  found in review, 4 specific to the revision 2 fixes); its first launch stopped
+  before any mutant ran (a relative interpreter path) and was rerun with absolute
+  paths.
+- `tests.runtime_syntax_acceptance` passed; the module and its test compiled on
+  Python 3.11 and 3.12, and `ast.parse(feature_version=(3, 10))` accepted them. A
+  real 3.10 compile is the CI syntax job.
 - Cross-process exclusion is covered deterministically by a spawned child holding
   the lock, a second descriptor's OS lock, the shared deadline and the sidecar
   race; two spawned writers of one digest and six threads are smoke checks only.
+
+Review round (same day). Three defects were reproduced on the first commit and
+fixed: an attempt started at exactly 5 s after the last wait was cut to the
+remaining budget (5.0002 s on the real clock); `ReplaceRetryExhausted` raised
+`TypeError` when unpickled; and with `lock_timeout=0` a busy map guard raised
+`LockTimeout` for an unrelated digest (664 of 3,200 reads in one stress probe
+with a 1 µs thread switch interval).
+After the fixes the same probes show no attempt at or after 5 s, a clean pickle
+round trip and no spurious `LockTimeout`. New tests also pin the 5 s value and
+four interrupt sites (the OS-lock wait, the temp phase, read verification and the
+post-rename readback). The owner question, the temp-file outcome rows and the
+dot-prefixed temp wording were corrected.
 
 The Windows branch was exercised on Linux only through a fake `msvcrt` that
 checks call order and offsets. Real `msvcrt`, `os.replace` under Defender,

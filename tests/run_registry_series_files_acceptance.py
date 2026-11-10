@@ -9,6 +9,7 @@ import errno
 import multiprocessing
 import os
 from pathlib import Path
+import pickle
 import socket
 import stat
 import sys
@@ -89,9 +90,13 @@ def _write_child(root, start):
 
 
 class FakeTime:
-    """Deterministic monotonic clock; sleep advances it without waiting."""
-    def __init__(self, start=1000.0, interrupt_sleep=False):
+    """Deterministic monotonic clock; sleep advances it without waiting.
+
+    ``overshoot`` is added to every sleep, like a real wake-up that comes late.
+    """
+    def __init__(self, start=1000.0, interrupt_sleep=False, overshoot=0.0):
         self.now, self.sleeps, self.interrupt_sleep = start, [], interrupt_sleep
+        self.overshoot = overshoot
 
     def monotonic(self):
         return self.now
@@ -100,7 +105,7 @@ class FakeTime:
         if self.interrupt_sleep:
             raise KeyboardInterrupt
         self.sleeps.append(seconds)
-        self.now += seconds
+        self.now += seconds + self.overshoot
 
 
 class StatOverride:
@@ -558,20 +563,44 @@ class SeriesFilesTests(unittest.TestCase):
 
     def test_one_deadline_spans_process_and_os_lock_stages(self):
         observed = []
-        real_process_lock = M._process_lock
-        def process_stage(key, deadline):
-            observed.append(deadline)
-            return real_process_lock(key, deadline)
+        real_remaining = M._remaining
+        def process_stage(deadline):
+            observed.append(deadline)  # only the process-lock acquire asks outside _acquire_os
+            return real_remaining(deadline)
         def os_stage(fd, deadline):
             observed.append(deadline)
             raise LockTimeout("synthetic remaining-budget timeout")
-        with patch.object(M, "_process_lock", side_effect=process_stage), \
+        with patch.object(M, "_remaining", side_effect=process_stage), \
                 patch.object(M, "_acquire_os", side_effect=os_stage):
             with self.assertRaises(LockTimeout):
                 self.files(lock_timeout=0.2).write(PAYLOAD, SHA)
         self.assertEqual(len(observed), 2)
         self.assertEqual(observed[0], observed[1])
         self.assertEqual(self.files(lock_timeout=0).write(PAYLOAD, SHA), (SHA, True))
+
+    def test_busy_map_guard_does_not_time_out_a_zero_timeout_caller(self):
+        # The guard covers one dictionary lookup for every digest in the process;
+        # lock_timeout applies to this digest's own locks, not to that lookup.
+        payload, digest = other_series()
+        guard, done, outcome = M._PROCESS_GUARD, threading.Event(), []
+        def worker():
+            try:
+                outcome.append(self.files(lock_timeout=0).write(payload, digest))
+            except BaseException as exc:
+                outcome.append(exc)
+            finally:
+                done.set()
+        guard.acquire()
+        try:
+            thread = threading.Thread(target=worker)
+            thread.start()
+            finished_while_held = done.wait(0.3)
+        finally:
+            guard.release()
+        thread.join(30)
+        self.assertFalse(finished_while_held, outcome)
+        self.assertEqual(outcome, [(digest, True)])
+        self.assert_no_temp()
 
     def test_spawned_process_holding_lock_blocks_writer_until_release(self):
         ctx = multiprocessing.get_context("spawn")
@@ -640,14 +669,14 @@ class SeriesFilesTests(unittest.TestCase):
     @unittest.skipUnless(hasattr(os, "fork") and os.name != "nt", "POSIX fork only")
     def test_fork_resets_python_process_lock_state_only(self):
         key = os.path.normcase(str(self.files().directory / (SHA + ".lock")))
-        local = M._process_lock(key, time.monotonic() + 1)
+        local = M._process_lock(key)
         self.assertTrue(local.acquire(timeout=1))
         try:
             pid = os.fork()
             if pid == 0:
                 code = 1
                 try:
-                    fresh = M._process_lock(key, time.monotonic() + 1)
+                    fresh = M._process_lock(key)
                     code = 0 if fresh is not local and fresh.acquire(timeout=0) else 2
                 finally:
                     os._exit(code)
@@ -660,23 +689,29 @@ class SeriesFilesTests(unittest.TestCase):
         key = os.path.normcase(str(self.files().directory / (SHA + ".lock")))
         with patch.object(M, "_PROCESS_LOCKS", {}), patch.object(M, "_PROCESS_GUARD", threading.Lock()), \
                 patch.object(M, "_LOCK_PID", M._LOCK_PID):
-            held = M._process_lock(key, time.monotonic() + 1)
+            held = M._process_lock(key)
             self.assertTrue(held.acquire(timeout=1))
             guard = M._PROCESS_GUARD
-            self.assertTrue(guard.acquire(timeout=1))
+            self.assertTrue(guard.acquire(timeout=1))  # as if a lost thread kept the old guard
+            # In a thread, so a missing reset fails the test instead of hanging it.
+            found = []
+            lookup = threading.Thread(target=lambda: found.append(M._process_lock(key)))
             try:
                 with patch.object(M.os, "getpid", return_value=os.getpid() + 1):
-                    started = time.monotonic()
-                    fresh = M._process_lock(key, time.monotonic() + 0.1)
-                    self.assertLess(time.monotonic() - started, 0.1)
+                    lookup.start()
+                    lookup.join(2)
+                    self.assertFalse(lookup.is_alive(), "lookup waited on the old guard")
+                    fresh = found[0]
                     self.assertIsNot(fresh, held)
                     self.assertIsNot(M._PROCESS_GUARD, guard)
                     self.assertTrue(fresh.acquire(timeout=0))
                     fresh.release()
-                    self.assertIs(M._process_lock(key, time.monotonic() + 0.1), fresh)
+                    self.assertIs(M._process_lock(key), fresh)
             finally:
                 guard.release()
                 held.release()
+                if lookup.ident is not None:
+                    lookup.join(10)
 
     # --- publish retries ------------------------------------------------------------
     def replace_failing(self, failures, effect=None):
@@ -731,6 +766,58 @@ class SeriesFilesTests(unittest.TestCase):
         self.assertEqual(len(calls), 4)
         self.assertEqual(clock.sleeps, [0.05, 0.1, 0.2])
         self.assertEqual(self.inventory(), [SHA + ".lock"])
+
+    def test_no_attempt_starts_once_the_budget_has_elapsed(self):
+        self.assertEqual((M.REPLACE_ATTEMPTS, M.REPLACE_BUDGET), (10, 5.0))
+        self.assertEqual(M._REPLACE_DELAYS, (0.05, 0.1, 0.2, 0.4, 0.8, 0.8, 0.8, 0.8, 0.8))
+        def run(first_cost, delays=None, overshoot=0.0):
+            clock, starts = FakeTime(overshoot=overshoot), []
+            def replace(src, dst):
+                starts.append(clock.now - 1000.0)
+                if len(starts) == 1:
+                    clock.now += first_cost
+                raise PermissionError(errno.EACCES, "synthetic sharing violation")
+            items = [patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", clock)]
+            if delays is not None:
+                items.append(patch.object(M, "_REPLACE_DELAYS", delays))
+            with Patches(items):
+                with self.assertRaises(M.ReplaceRetryExhausted) as caught:
+                    self.files().write(PAYLOAD, SHA)
+            self.assertEqual(caught.exception.attempts, len(starts))
+            self.assertTrue(all(start < M.REPLACE_BUDGET for start in starts), starts)
+            self.assertEqual(self.inventory(), [SHA + ".lock"])
+            return clock.sleeps, len(starts)
+        # 4.96875 s used: the 0.05 s wait would reach 5 s, so the store stops without it.
+        self.assertEqual(run(4.96875), ([], 1))
+        # 4.9375 s used: the full 0.05 s wait fits and one more attempt starts; 0.1 s would not.
+        self.assertEqual(run(4.9375), ([0.05], 2))
+        # Exact binary values: a wait that would end exactly at 5 s is not taken ...
+        self.assertEqual(run(4.9375, delays=(0.0625,) * 9), ([], 1))
+        # ... and a late wake-up that reaches 5 s ends the retries before another attempt.
+        self.assertEqual(run(4.875, delays=(0.0625,) * 9, overshoot=0.0625), ([0.0625], 1))
+
+    def test_typed_errors_survive_pickling(self):
+        # Worker processes (multiprocessing, ProcessPoolExecutor) hand errors back by pickle.
+        calls, replace = self.replace_failing(100)
+        with patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", FakeTime()):
+            with self.assertRaises(M.ReplaceRetryExhausted) as caught:
+                self.files().write(PAYLOAD, SHA)
+        back = pickle.loads(pickle.dumps(caught.exception))
+        self.assertIs(type(back), M.ReplaceRetryExhausted)
+        self.assertEqual((str(back), back.attempts, back.temp_removed),
+                         (str(caught.exception), 10, True))
+        classes = (M.ReplaceRetryExhausted, M.PublicationUncertain, M.ReleaseError,
+                   M.SidecarMissing, M.SeriesNotFound)
+        for cls in classes:
+            with self.subTest(cls=cls.__name__):
+                extra = {"attempts": 3, "temp_removed": False} if cls is M.ReplaceRetryExhausted else {}
+                error = M._attach(cls("synthetic", **extra), [OSError(errno.EIO, "cleanup")])
+                back = pickle.loads(pickle.dumps(error))
+                self.assertIs(type(back), cls)
+                self.assertEqual(str(back), "synthetic")
+                self.assertEqual([str(e) for e in back.cleanup_errors], ["[Errno 5] cleanup"])
+                for name, value in extra.items():
+                    self.assertEqual(getattr(back, name), value)
 
     def test_target_appearing_during_retry_is_uncertain_without_overwrite(self):
         def appear(src, dst):
@@ -1039,6 +1126,44 @@ class SeriesFilesTests(unittest.TestCase):
         self.assertEqual(self.target.read_bytes(), PAYLOAD)
         self.assert_no_temp()
         self.assertEqual(self.files().read(SHA).tobytes(), RAW)  # lock released
+
+    def test_interrupts_at_lock_temp_read_and_readback_sites(self):
+        # (d) while polling for the OS lock: the process lock and sidecar are released.
+        with patch.object(M, "_try_os_lock", side_effect=KeyboardInterrupt):
+            with self.assertRaises(KeyboardInterrupt) as caught:
+                self.files().write(PAYLOAD, SHA)
+        self.assertNotIsInstance(caught.exception, StoreError)
+        self.assertEqual(self.inventory(), [SHA + ".lock"])
+        # (e) in the temp fsync: the temp descriptor is closed once and the temp removed.
+        log = FdLog()
+        real_fsync = os.fsync
+        def fsync(fd):
+            if log.labels.get(fd, ("",))[0] == "tmp":
+                raise KeyboardInterrupt
+            return real_fsync(fd)
+        with Patches(log.patches() + [patch.object(M.os, "fsync", side_effect=fsync),
+                                      patch.object(M.os, "replace", side_effect=AssertionError("no replace"))]):
+            with self.assertRaises(KeyboardInterrupt) as caught:
+                self.files(lock_timeout=0).write(PAYLOAD, SHA)
+        self.assertNotIsInstance(caught.exception, StoreError)
+        self.assertEqual(log.close_counts("tmp"), [1])
+        self.assertEqual(self.inventory(), [SHA + ".lock"])
+        # (f) during read verification: the lock is released.
+        self.assertEqual(self.files(lock_timeout=0).write(PAYLOAD, SHA), (SHA, True))
+        with patch.object(M, "decode_series", side_effect=KeyboardInterrupt):
+            with self.assertRaises(KeyboardInterrupt) as caught:
+                self.files().read(SHA)
+        self.assertNotIsInstance(caught.exception, StoreError)
+        self.assertEqual(self.files(lock_timeout=0).read(SHA).tobytes(), RAW)
+        # (g) in the post-rename readback: propagated, not wrapped as PublicationUncertain.
+        self.reset()
+        with patch.object(M.SeriesFiles, "_read_target", side_effect=KeyboardInterrupt):
+            with self.assertRaises(KeyboardInterrupt) as caught:
+                self.files().write(PAYLOAD, SHA)
+        self.assertNotIsInstance(caught.exception, StoreError)
+        self.assertEqual(self.target.read_bytes(), PAYLOAD)
+        self.assert_no_temp()
+        self.assertEqual(self.files(lock_timeout=0).read(SHA).tobytes(), RAW)
 
     def test_sidecar_created_by_racing_writer_is_not_refused(self):
         real_open_regular = M._open_regular

@@ -71,9 +71,12 @@ class ReplaceRetryExhausted(StoreError):
 
     The original temp identity and target absence were confirmed after the last
     attempt. ``temp_removed`` says whether the owned temp file was deleted.
+    The keyword defaults exist only so that unpickling, which rebuilds the
+    exception from its message and then restores its attributes, works in a
+    worker process's parent.
     """
 
-    def __init__(self, message, *, attempts, temp_removed):
+    def __init__(self, message, *, attempts=None, temp_removed=None):
         super().__init__(message)
         self.attempts = attempts
         self.temp_removed = temp_removed
@@ -114,17 +117,19 @@ def _remaining(deadline):
     return max(0.0, deadline - time.monotonic())
 
 
-def _process_lock(key, deadline):
+def _process_lock(key):
+    """Return the process lock for ``key``; the caller applies its deadline to it.
+
+    The map guard is held only for one dictionary lookup, so it is taken
+    without a timeout: a zero lock_timeout must not fail because another
+    thread is looking up an unrelated digest.
+    """
     # A PID check also covers forks that bypass at-fork handlers.
     if _LOCK_PID != os.getpid():
         _reset_process_locks()
     guard, locks = _PROCESS_GUARD, _PROCESS_LOCKS
-    if not guard.acquire(timeout=_remaining(deadline)):
-        raise LockTimeout("Process lock-map timeout")
-    try:
+    with guard:
         return locks.setdefault(key, threading.Lock())
-    finally:
-        guard.release()
 
 
 def _close_once(fd):
@@ -373,7 +378,7 @@ class SeriesFiles:
     def _acquire(self, digest, *, create):
         sidecar, target = self._paths(digest)
         deadline = time.monotonic() + self.lock_timeout
-        local = _process_lock(os.path.normcase(str(sidecar)), deadline)
+        local = _process_lock(os.path.normcase(str(sidecar)))
         if not local.acquire(timeout=_remaining(deadline)):
             raise LockTimeout("Process sidecar lock timeout")
         held = _Held(local)
@@ -511,7 +516,11 @@ class SeriesFiles:
 
     @staticmethod
     def _replace(temp, target, identity, size):
-        """The only retry: os.replace on PermissionError, at most 10 attempts in 5 s."""
+        """The only retry: os.replace on PermissionError, at most 10 attempts in 5 s.
+
+        No attempt starts once 5 s have elapsed: a wait that would reach the
+        budget is not taken, and the clock is read again after each wait.
+        """
         start, attempts, last = time.monotonic(), 0, None
         try:
             while True:
@@ -527,15 +536,18 @@ class SeriesFiles:
                     raise _attach(PublicationUncertain(
                         "os.replace failed without PermissionError; publication is uncertain"),
                         errors) from exc
-                elapsed = time.monotonic() - start
-                if attempts >= REPLACE_ATTEMPTS or elapsed >= REPLACE_BUDGET:
-                    _require_unpublished(temp, target, identity, size, last)
-                    removed, errors = _remove_owned_temp(temp, identity)
-                    raise _attach(ReplaceRetryExhausted(
-                        "os.replace raised PermissionError on every bounded attempt; "
-                        "nothing was published", attempts=attempts, temp_removed=removed),
-                        errors) from last
-                time.sleep(min(_REPLACE_DELAYS[attempts - 1], REPLACE_BUDGET - elapsed))
+                if attempts < REPLACE_ATTEMPTS:
+                    wait = _REPLACE_DELAYS[attempts - 1]
+                    if time.monotonic() - start + wait < REPLACE_BUDGET:
+                        time.sleep(wait)
+                        if time.monotonic() - start < REPLACE_BUDGET:
+                            continue
+                _require_unpublished(temp, target, identity, size, last)
+                removed, errors = _remove_owned_temp(temp, identity)
+                raise _attach(ReplaceRetryExhausted(
+                    "os.replace raised PermissionError on every bounded attempt; "
+                    "nothing was published", attempts=attempts, temp_removed=removed),
+                    errors) from last
         except BaseException as primary:
             if isinstance(primary, Exception):
                 raise
