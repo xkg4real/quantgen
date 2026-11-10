@@ -11,8 +11,8 @@ Construction methods (`CURVE_METHODS`, chosen by `curve_from_snapshot`):
 
   exact (reprice every input par yield)
     bootstrap        sequential bootstrap, log-linear discount factors between quotes
-    cubic_spline     natural cubic spline through the par yields, read at every
-                     half-year and bootstrapped (the classic swap-desk recipe)
+    cubic_spline     natural cubic spline through the bond par yields (from 1y), read
+                     at every half-year and bootstrapped (the classic swap-desk recipe)
     pchip            the same with a shape-preserving monotone cubic (Fritsch &
                      Carlson 1980, SIAM J. Numer. Anal. 17(2)); no overshoot
     monotone_convex  Hagan & West (2006, Applied Mathematical Finance 13(2)):

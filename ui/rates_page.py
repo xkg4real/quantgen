@@ -127,6 +127,18 @@ def _money(x: float) -> str:
     return f"{x:,.0f}"
 
 
+_INPUT_NAMES_KO = {"Lookback": "변화 비교 기간", "Fixed rate": "고정금리", "Notional": "명목금액",
+                   "Strike": "행사가격", "Vol": "변동성", "Horizon": "기간", "Paths": "경로 수",
+                   "Threshold": "기준 금리", "Coupon": "채권 쿠폰"}
+
+
+class _InputError(ValueError):
+    """A field that is not a number; carries the Korean wording of the same message."""
+    def __init__(self, what: str, text: str | None):
+        super().__init__(f"{what}: cannot read {text!r} as a number.")
+        self.ko = f"{_INPUT_NAMES_KO.get(what, what)}: {text!r}은(는) 숫자로 읽을 수 없습니다."
+
+
 def _num(text: str | None, default: float | None, what: str) -> float | None:
     """Float from a text field; blank -> default; commas tolerated."""
     s = (text or "").strip().replace(",", "")
@@ -135,7 +147,18 @@ def _num(text: str | None, default: float | None, what: str) -> float | None:
     try:
         return float(s)
     except ValueError:
-        raise ValueError(f"{what}: cannot read {text!r} as a number.") from None
+        raise _InputError(what, text) from None
+
+
+def _error_notice(exc: Exception) -> ft.Control:
+    """The page's error banner; a bad number is said in the page language."""
+    box = notice(str(exc), "error", icon=ft.Icons.ERROR_OUTLINE)
+    row = getattr(box, "content", None)
+    if isinstance(exc, _InputError) and isinstance(row, ft.Row) and len(row.controls) > 1:
+        old = row.controls[1]
+        row.controls[1] = LocalText(exc.ko, str(exc), size=old.size, color=old.color,
+                                    expand=True, selectable=True)
+    return box
 
 
 _CURVE_HEADERS_KO = {'Tenor': '만기', 'Zero': '무이표 금리', 'DF': '할인계수',
@@ -345,7 +368,7 @@ def _run_swap(page, *, source: str, tenor_text: str, fixed_pct: float | None,
         _src_chip("curve", panel.source),
         _local_chip(f"곡선 기준일 {curve.date}", f"curve {curve.date}"),
         _local_chip(f"명목금액 {_money(swap.notional)}", f"notional {_money(swap.notional)}"),
-        _local_chip(f"양쪽 다리 연 {swap.freq}회 지급", f"{swap.freq}/yr both legs"),
+        _local_chip(f"고정·변동 다리 모두 연 {swap.freq}회 지급", f"{swap.freq}/yr both legs"),
     ], spacing=6, run_spacing=6, wrap=True))
     blocks.append(card(fcharts.krd_chart(rep.krd, f"Key-rate DV01 — {swap.label}")))
     blocks.append(_table(["Forward swap", "Par rate"],
@@ -723,7 +746,7 @@ def build_rates_page(page: ft.Page, on_open_settings: Optional[Callable] = None)
             try:
                 blocks = compute()
             except (FICCError, ValueError) as exc:
-                blocks = [notice(str(exc), "error", icon=ft.Icons.ERROR_OUTLINE)]
+                blocks = [_error_notice(exc)]
             except Exception as exc:
                 blocks = [notice(f"{type(exc).__name__}: {exc}", "error",
                                  icon=ft.Icons.ERROR_OUTLINE)]

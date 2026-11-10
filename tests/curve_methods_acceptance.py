@@ -19,6 +19,7 @@ from __future__ import annotations
 import math
 import unittest
 from dataclasses import replace
+from types import SimpleNamespace
 
 import numpy as np
 
@@ -393,6 +394,42 @@ class CurveMethodAcceptance(unittest.TestCase):
                 self.assertNotEqual(ko.text(text), text, text)              # a Korean caption exists
         for text in rates_page._KIND_TEXT.values():
             self.assertNotEqual(ko.text(text), text)
+
+    def test_rates_page_hides_the_source_and_explains_the_chosen_method(self):
+        from core.i18n import LocaleContext
+        from ui import rates_page
+        from ui.localization import translate_controls
+
+        class Page:
+            qg_locale = LocaleContext("ko_KR")
+            def update(self): pass
+            def run_thread(self, fn): fn()
+
+        view = rates_page.build_rates_page(Page())
+        translate_controls(view, Page.qg_locale)
+        tool, source, run = view.controls[1].controls[:3]
+        self.assertFalse(source.visible)                                  # issue 12: no source selector
+        self.assertEqual(source.value, "auto")
+        self.assertIn("auto", [o.key for o in source.options])
+        self.assertEqual(run.content, "실행")
+        method = view.controls[2].controls[0].controls[0]
+        info = view.controls[2].controls[1]
+        texts = lambda: [c.value for c in (info.content.controls[0].controls[0], info.content.controls[1])]
+        self.assertEqual(texts()[0], "부트스트랩")
+        method.value = "smith_wilson"
+        method.on_select(SimpleNamespace(control=method))
+        self.assertEqual(texts()[0], "Smith-Wilson")
+        self.assertIn("3.30%", texts()[1])
+        self.assertIn("가정", texts()[1])                                  # the UFR is an assumption
+        for block in view.controls[2:6]:                                  # no helper lines: one baseline
+            for field in block.controls[0].controls:
+                self.assertIsNone(getattr(field, "helper", None))
+                self.assertFalse(getattr(field, "expand", False))
+        source.value = "synthetic"
+        view.controls[2].controls[0].controls[1].value = "abc"
+        run.on_click(None)
+        host = view.controls[-1].controls[0]
+        self.assertIn("숫자로 읽을 수 없습니다", host.controls[0].content.controls[1].value)
 
     def test_korean_shape_and_regime_words_match_the_native_app(self):
         from quantgen_desktop.rates_narrative import REGIMES, SHAPES
