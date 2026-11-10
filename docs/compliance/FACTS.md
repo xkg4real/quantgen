@@ -761,3 +761,25 @@ Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작�
 | 검증 범위 | CI의 runtime-smoke 단계를 그대로 나눠 실행한 unittest 14묶음 1,069개 중 1,067개 통과. 실패 2개는 모두 main(`9d1eacd`)에서도 같은 조건에서 실패합니다: `tests.desktop_a3_layout_acceptance`의 MC 콤보 1개(다른 세션 PR #90 범위)와 `tests.desktop_market_chart_acceptance`의 오래된 시각 표시 1개(KST 자정 직후 날짜 경계에 걸리는 시간 의존 시험). 별도 스크립트형 시험 FICC 57/57, 확장 20개, Macro 표시 16/16·14/14, Quant 53개, 페이지 자체 점검 11개, 상태 스냅샷 점검이 통과했습니다. Linux headless Chromium의 Flet 캡처(ko_KR·en_US, 1000·1360px)로 14건을 화면에서 확인했습니다. 키가 없고 FRED/Yahoo가 막혀 결과는 모두 합성이었으며, 실제 제공처 응답·실제 Windows 디스플레이·스크린리더·키보드 Tab 순서는 확인하지 않았습니다 | 이 절 |
 
 01–20 정책을 대조해 07·08·12·13·14·15·19·20에 이 변경의 사실과 한계를 더했습니다. 나머지 정책이 다루는 결제·환불·쿠키·사업자·아동·광고·후기 운영 조건은 이 표시 변경으로 해결되지 않습니다. 모든 정책의 `review-required`, 공개 준비 `BLOCKED`, 그리고 실제 제공처 권리·법률 검토·Windows 수용·배포 확인의 미완료 상태를 유지합니다.
+
+<a id="owner-ui-native-2026-11-11"></a>
+## 네이티브 앱 통일과 소유자 UI 14건 이식 — 2026-11-11 소스·표시 검토
+
+소유자 결정 UI-D1~D4(2026-11-11): UI 기준 앱은 네이티브 PyQt 하나이고, 2026-11-10 지적 14건은 Claude의 Flet 해결(PR #98)을 네이티브로 옮기며, 그 밖의 네이티브 화면은 GPT의 PR #89 압축 UI를 유지하고, 글꼴은 Flet 화면 글꼴(Pretendard 파생 OTF)입니다. 기준 `1a8b29f`에서 `claude/friendly-bardeen-r6xe8f`까지를 대조했습니다.
+
+| 항목 | 사실 | 근거 |
+|---|---|---|
+| 글꼴 | 네이티브 `QG Interface`를 `qg-interface*.otf`(Pretendard 1.3.9 파생, 400/500/600, 한글 11,172자)로 등록하고 Flet 차트 PNG도 같은 OTF로 그립니다. Gothic A1 TTF는 남기되 등록하지 않습니다. 소유자가 요청한 다른 글꼴 시안(OFL만)은 검토 중이며 승인 전에는 바꾸지 않습니다 | [글꼴 정책](../../quantgen_desktop/font_policy.py), [차트 글꼴](../../ui/qcharts.py), [시험](../../tests/desktop_compact_ui_acceptance.py) |
+| 분석 해설(11) | 모든 분석 도구의 해설을 창 언어로 소제목+글머리표로 보이고 전체 문단은 접힘. 문장 분할은 Flet과 같은 `ui/narrative_sections.py`(Flet 의존 없음). 보고서·내보내기 문장은 그대로 | [해설 보기](../../quantgen_desktop/narrative_view.py), [도구 화면](../../quantgen_desktop/tools.py) `finished` |
+| 전략 실험실(01·06·07·09·10) | 판정 배너, 핵심 지표 타일, 검증 항목 표(한국어 항목·결과·기준·판정·뜻), 카드 34종 이름과 판정 요약 타일. 판정 코드는 한국어 낱말 옆에 유지, 게이트·임계값 불변 | [화면](../../quantgen_desktop/strategy_view.py), [표시 문구](../../core/research/strategy_display.py), [시험](../../tests/desktop_owner_ui_strategy_acceptance.py) |
+| 출처 선택(04·12) | 네이티브 Portfolio·Signals·Monte Carlo·Strategy Lab은 선택 상자를 숨기고 `best`로 요청(요청 검증이 `best`를 받음). ETF는 `auto` 이력을 `best`로 조회. 도구 화면은 기존 `hide_source`, 시작 안내에서 "출처" 문구 제거. Derivatives는 KIS 키 유무로 KIS 또는 합성 시연판 | [분석](../../core/research/analysis.py), [포트폴리오](../../core/research/portfolio_analysis.py), [시그널](../../core/research/signals_analysis.py), [전략](../../core/research/strategy_analysis.py), [시장](../../core/research/market_analysis.py), [시험](../../tests/desktop_owner_ui_integration_acceptance.py) |
+| 차트(02) | 정수·반올림 눈금(관측 순번에 소수 없음, "-0" 없음), 한국어 축·범례, 도구 차트 24개에 "이 차트 읽는 법", Macro z-점수 막대를 Flet 차트처럼(그룹 색, ±1 띠, ±2 기준선, 합성 빗금). 차트 높이는 폭의 1/2(최대 440px), 폭 최대 920px | [차트](../../quantgen_desktop/charts.py), [읽기 안내](../../quantgen_desktop/chart_study.py), [매크로](../../quantgen_desktop/macro.py), [시험](../../tests/desktop_owner_ui_charts_acceptance.py) |
+| 숫자·금리(03·08) | 금액 입력·결과의 천 단위 구분, DV01 이름표("DV01 (금리 1bp당 통화 금액)"), 선택한 곡선 방법의 설명 상자(9개 방법) | [채권](../../quantgen_desktop/bonds.py), [금리](../../quantgen_desktop/rates.py), [구조화](../../quantgen_desktop/structuring.py), [시험](../../tests/desktop_owner_ui_ficc_acceptance.py) |
+| 시세 표(05) | Home 관심종목 표의 머리글·값을 같은 여백으로 정렬, 숫자 오른쪽 끝 맞춤, 단위 고정 칸, 본문 13px 한 크기, 값 잘림 없음. 관심종목 카드는 넓은 화면에서 4열·차트 150px | [시세 표](../../quantgen_desktop/watchlist.py), [시장](../../quantgen_desktop/markets_view.py), [시험](../../tests/desktop_owner_ui_market_acceptance.py) |
+| 포트폴리오(13) | 결론 먼저 요약 카드, 목적함수 이름·예/아니오, 행 수에 맞춘 표, 실행 전 안내 문장, 해설 글머리표 | [포트폴리오](../../quantgen_desktop/portfolio.py), [표시 문구](../../quantgen_desktop/risk_display.py), [시험](../../tests/desktop_owner_ui_risk_acceptance.py) |
+| 한국어 통일(14) | 영역별 한국어 문구 모음(같은 영어에 다른 한국어를 주면 거부), 앱이 쓰는 자료 메모(합성 대체·키 없음·Yahoo 실패)의 한국어 읽기(그 밖의 제공처 원문은 그대로), 곡선 방법 이름 | [문구 모음](../../quantgen_desktop/owner_ui_language/__init__.py), [자료 메모](../../quantgen_desktop/source_notes.py) |
+| 바뀌지 않는 것 | 계산값·판정 코드·게이트·원장 규칙·보고서/내보내기·AI payload. 언어를 바꿔도 다시 계산하지 않고 보고서가 같다는 것을 영역별 시험이 확인 | 위 시험들 |
+| 검증 범위 | CI runtime-smoke의 unittest 단계를 그대로 나눠 실행: 13묶음 1,256개 전부 통과(설치 시험 429, Flet 실행 1, A3 20, 차트·반응형·글꼴 35, A1 18, 네이티브 통합 123, 시작·해설 언어 21, 결과 고지 89, 소유자 UI Flet 화면 120, 네이티브 14건 58, 시세·차트 287, 상태 표시 21, 지표 가이드 34). 이전 시험 중 바뀐 기대값은 소유자가 바꾸라고 한 표시(한국어 창의 영문 메모·방법 ID·카드 ID, 숨긴 출처 상자, 글꼴 정책)뿐입니다. 새 시험 6개 모듈은 CI 단계 "owner's 14 UI issues on the native app"에 등록 | [CI](../../.github/workflows/runtime-smoke.yml) |
+| 미검증 | 실제 Windows 화면(글꼴 선명도·DPI), 실제 제공처 응답(Yahoo·FRED·KIS), 스크린리더 발화. 검토 환경은 Linux offscreen이며 외부 요청은 차단 | — |
+
+01–20 정책 중 07·08·12·13·14·15·19에 이 변경의 사실과 한계를 더했습니다. 모든 정책의 `review-required`와 공개 준비 `BLOCKED`를 유지합니다.
