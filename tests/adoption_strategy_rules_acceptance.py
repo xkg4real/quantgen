@@ -58,6 +58,16 @@ def pair(T=756, seed=3, edge=0.0001, noise=0.0025):
     return base + rng.normal(0.0, noise, T) + edge, base
 
 
+def gate_fixture(T=1400, G=4, mu=0.0008, seed=21):
+    """A synthetic T x G grid, its walk-forward and the gate's own score (review case: gate DSR 0.9619 at N = G)."""
+    rng = np.random.default_rng(seed)
+    common = rng.normal(mu, 0.01, T)
+    full = np.column_stack([common + rng.normal(0.0, 0.004, T) + 0.0001 * g for g in range(G)])
+    wf = V.walk_forward(full, [d.isoformat() for d in sessions(T)])
+    score = V.score_strategy(wf, grid=[{"lookback": g} for g in range(G)], full_pnl=full, n_trials=G)
+    return full, wf, score
+
+
 def code_only(path):
     tree = ast.parse(path.read_text(encoding="utf-8"))
     for node in ast.walk(tree):
@@ -77,8 +87,10 @@ def fake_boot(d_sr, count, B=2000):
 class GoldenEquality(unittest.TestCase):
     def test_s2_values_equal_direct_validate_calls(self):
         a, _ = pair(T=1260, seed=5, edge=0.0004)
-        res = S.dsr_two_n(a, n_grid=12, n_raw={"L-FAM": 17, "R-FAM": 11}, sr_sd_daily=0.012, sr_sd_label="synthetic")
-        self.assertEqual(res.dsr_grid, V.deflated_sharpe(a, n_trials=12, sr_sd_daily=0.012))
+        res = S.dsr_two_n(a, n_grid=12, sr_sd_grid=0.010, n_raw={"L-FAM": 17, "R-FAM": 11}, sr_sd_daily=0.012,
+                          sr_sd_label="synthetic")
+        self.assertEqual(res.dsr_grid, V.deflated_sharpe(a, n_trials=12, sr_sd_daily=0.010))
+        self.assertEqual((res.sr_sd_grid, res.sr_sd_daily), (0.010, 0.012))
         by = {r.reading: r for r in res.readings}
         self.assertEqual(by["L-FAM"].dsr, V.deflated_sharpe(a, n_trials=17, sr_sd_daily=0.012))
         self.assertEqual(by["R-FAM"].dsr, V.deflated_sharpe(a, n_trials=11, sr_sd_daily=0.012))
@@ -86,20 +98,51 @@ class GoldenEquality(unittest.TestCase):
         self.assertEqual(res.n_sessions, 1260)
 
     def test_s2_with_gate_dispersion_reproduces_score_strategy_dsr(self):
-        T, G = 1400, 4
-        rng = np.random.default_rng(21)
-        common = rng.normal(0.0004, 0.01, T)
-        full = np.column_stack([common + rng.normal(0.0, 0.004, T) + 0.0001 * g for g in range(G)])
-        dates = [d.isoformat() for d in sessions(T)]
-        wf = V.walk_forward(full, dates)
-        grid = [{"lookback": g} for g in range(G)]
-        score = V.score_strategy(wf, grid=grid, full_pnl=full, n_trials=G)
+        G = 4
+        full, wf, score = gate_fixture(G=G, mu=0.0004)
         sd = S.gate_sr_sd_daily(full)
-        res = S.dsr_two_n(wf.pnl, n_grid=G, n_raw={"L-FAM": G}, sr_sd_daily=sd, sr_sd_label="gate term")
+        res = S.dsr_two_n(wf.pnl, n_grid=G, sr_sd_grid=sd, n_raw={"L-FAM": G}, sr_sd_daily=sd, sr_sd_label="gate term")
         self.assertTrue(math.isfinite(score.dsr))
-        self.assertAlmostEqual(res.dsr_grid, score.dsr, places=12)
+        self.assertEqual(res.dsr_grid, score.dsr)
         cols = V._col_sharpe(full) / math.sqrt(V.TRADING_DAYS)
-        self.assertAlmostEqual(sd, float(np.nanstd(cols)), places=14)
+        self.assertEqual(sd, float(np.nanstd(cols)))
+
+    def test_gate_term_helper_equals_the_gate_on_constant_columns(self):
+        rng = np.random.default_rng(3)
+        T = 1400
+        for c in (0.03 / 252, 0.025 / 252, 1e-4, 0.0):
+            with self.subTest(cash_daily=c):
+                full = np.column_stack([rng.normal(0.0004, 0.01, T), rng.normal(0.0003, 0.01, T), np.full(T, c)])
+                gate = float(np.nanstd(V._col_sharpe(full) / math.sqrt(V.TRADING_DAYS)))
+                self.assertEqual(S.gate_sr_sd_daily(full), gate)
+                if c:
+                    self.assertGreater(gate, 1e10)   # the gate's own term explodes; reported as the gate forms it
+        self.assertIn("floating noise", S.gate_sr_sd_daily.__doc__)
+
+    def test_grid_line_is_the_gate_dsr_when_the_n_raw_term_differs(self):
+        G = 4
+        full, wf, score = gate_fixture(G=G, mu=0.0008)
+        gate_term, family_term = S.gate_sr_sd_daily(full), 0.01595
+        res = S.dsr_two_n(wf.pnl, n_grid=G, sr_sd_grid=gate_term, n_raw={"L-FAM": 17}, sr_sd_daily=family_term,
+                          sr_sd_label="family term")
+        self.assertEqual(res.dsr_grid, score.dsr)
+        self.assertGreaterEqual(score.dsr, 0.95)
+        self.assertEqual(res.status_grid, "pass")
+        raw = res.readings[0]
+        self.assertEqual(raw.dsr, V.deflated_sharpe(wf.pnl, n_trials=17, sr_sd_daily=family_term))
+        self.assertTrue(0.90 <= raw.dsr < 0.95, raw.dsr)
+        self.assertEqual(raw.status, "borderline")             # criteria 6.2: gate DSR >= 0.95, second in [0.90, 0.95)
+        self.assertLess(V.deflated_sharpe(wf.pnl, n_trials=G, sr_sd_daily=family_term), 0.95)   # one shared term: below
+        text = "\n".join(res.lines())
+        self.assertIn("[the gate's own term]", text)
+        self.assertIn("[family term]", text)
+        # the contract review's numbers: T 1260, mu 0.00073, G 12, L-FAM 17, gate term 0.010, labelled term 0.020
+        x = np.random.default_rng(0).normal(0.0, 0.01, 1260)
+        x = (x - x.mean()) / x.std(ddof=1) * 0.01 + 0.00073
+        two = S.dsr_two_n(x, n_grid=12, sr_sd_grid=0.010, n_raw={"L-FAM": 17}, sr_sd_daily=0.020, sr_sd_label="alt")
+        self.assertEqual(two.dsr_grid, V.deflated_sharpe(x, n_trials=12, sr_sd_daily=0.010))
+        self.assertEqual((two.status_grid, two.readings[0].status), ("pass", "borderline"))
+        self.assertLess(V.deflated_sharpe(x, n_trials=12, sr_sd_daily=0.020), 0.95)
 
     def test_s3_s4_equal_direct_gate_stats_calls_and_seed_passes_through(self):
         a, b = pair()
@@ -116,6 +159,8 @@ class GoldenEquality(unittest.TestCase):
             self.assertEqual(got.p_lw, ref["p_lw"])
             self.assertEqual(got.p, GS.p_numeric(ref["p_lw"], ref["B"]))
             self.assertEqual(got.status, S.classify_comparison(ref["dSR"], got.p))
+            self.assertEqual(got.conforms_to_registration, seed is None)
+            self.assertEqual("OFF-REGISTRATION" in got.line(), seed is not None)
         self.assertEqual((S.ALPHA_ONE_SIDED, S.BORDERLINE_P_MAX, S.DSR_BORDERLINE_MIN), (0.10, 0.20, 0.90))
         self.assertEqual(GS.SEED_STUDY, 11)
         self.assertEqual(V.GATE["bootstrap_B"], 2000)
@@ -135,6 +180,11 @@ class GoldenEquality(unittest.TestCase):
         self.assertTrue(low.underpowered_vs_expected)
         self.assertFalse(high.underpowered_vs_expected)
         self.assertIn("printed only", low.line())
+        equal = S.power_line_s7(a, b, ds, ds, expected_dsr=got.mde80)       # criteria S-7: "크면", strictly greater
+        self.assertEqual(equal.mde80, equal.expected_dsr)
+        self.assertFalse(equal.underpowered_vs_expected)
+        just_below = S.power_line_s7(a, b, ds, ds, expected_dsr=math.nextafter(got.mde80, 0.0))
+        self.assertTrue(just_below.underpowered_vs_expected)
 
 
 class DirectionAndPValues(unittest.TestCase):
@@ -159,6 +209,8 @@ class DirectionAndPValues(unittest.TestCase):
         self.assertEqual(got.p, 1.0 / 400)
         self.assertEqual(got.status, "win")
         self.assertIn("< 1/B", got.line())
+        self.assertFalse(got.conforms_to_registration)
+        self.assertIn("OFF-REGISTRATION: B 400, seed 11; criteria 3.2 item 11 fixes B 2000 and seed 11", got.line())
 
     def test_comparison_edges_at_0p10_and_0p20(self):
         cases = [(0.3, 0.10, "win"), (0.3, math.nextafter(0.10, 1.0), "borderline"), (0.3, 0.20, "borderline"),
@@ -197,6 +249,12 @@ class DirectionAndPValues(unittest.TestCase):
         self.assertIn(">= 30", short.reason)
         power = S.power_line_s7(b, b.copy(), ds, ds, expected_dsr=0.1)
         self.assertEqual(power.status, "not_run")
+        for c in (0.0, 0.03 / 252):
+            with self.subTest(cash_daily=c):
+                cash = S.lw_compare(a, np.full(a.size, c), ds, ds, rule="S-4", other_label="cash")
+                self.assertEqual(cash.status, "not_run")
+                self.assertIn("CASH_BASELINE (criteria 2.3)", cash.reason)
+        self.assertNotIn("CASH_BASELINE", same.reason)
 
 
 class DsrLines(unittest.TestCase):
@@ -215,37 +273,41 @@ class DsrLines(unittest.TestCase):
         a, _ = pair()
         values = {12: 0.95, 17: 0.90, 11: math.nextafter(0.90, 0.0)}
         with patch.object(V, "deflated_sharpe", side_effect=lambda d, *, n_trials, sr_sd_daily: values[n_trials]):
-            res = S.dsr_two_n(a, n_grid=12, n_raw={"L-FAM": 17, "R-FAM": 11}, sr_sd_daily=0.01, sr_sd_label="x")
+            res = S.dsr_two_n(a, n_grid=12, sr_sd_grid=0.01, n_raw={"L-FAM": 17, "R-FAM": 11}, sr_sd_daily=0.01,
+                              sr_sd_label="x")
         by = {r.reading: r.status for r in res.readings}
         self.assertEqual((res.status_grid, by["L-FAM"], by["R-FAM"]), ("pass", "borderline", "below"))
         values = {12: math.nextafter(0.95, 0.0), 17: 0.93, 11: 0.96}
         with patch.object(V, "deflated_sharpe", side_effect=lambda d, *, n_trials, sr_sd_daily: values[n_trials]):
-            res = S.dsr_two_n(a, n_grid=12, n_raw={"L-FAM": 17, "R-FAM": 11}, sr_sd_daily=0.01, sr_sd_label="x")
+            res = S.dsr_two_n(a, n_grid=12, sr_sd_grid=0.01, n_raw={"L-FAM": 17, "R-FAM": 11}, sr_sd_daily=0.01,
+                              sr_sd_label="x")
         by = {r.reading: r.status for r in res.readings}
         self.assertEqual((res.status_grid, by["L-FAM"], by["R-FAM"]), ("below", "below", "pass"))
 
     def test_n_raw_below_grid_is_printed_not_refused(self):
         a, _ = pair()
-        res = S.dsr_two_n(a, n_grid=12, n_raw={"L-FAM": 8}, sr_sd_daily=0.01, sr_sd_label="x")
+        res = S.dsr_two_n(a, n_grid=12, sr_sd_grid=0.01, n_raw={"L-FAM": 8}, sr_sd_daily=0.01, sr_sd_label="x")
         by = {r.reading: r for r in res.readings}
         self.assertTrue(by["L-FAM"].below_grid)
         self.assertEqual(by["L-FAM"].dsr, V.deflated_sharpe(a, n_trials=8, sr_sd_daily=0.01))
         text = "\n".join(res.lines())
         self.assertIn("N_raw 8 < G 12: printed only", text)
         self.assertIn("10.2 B Q4", text)
-        equal = S.dsr_two_n(a, n_grid=12, n_raw={"L-FAM": 12}, sr_sd_daily=0.01, sr_sd_label="x")
+        equal = S.dsr_two_n(a, n_grid=12, sr_sd_grid=0.01, n_raw={"L-FAM": 12}, sr_sd_daily=0.01, sr_sd_label="x")
         self.assertFalse(any(r.below_grid for r in equal.readings))
 
     def test_both_readings_displayed_provisional_and_labelled(self):
         a, _ = pair()
-        one = S.dsr_two_n(a, n_grid=5, n_raw={"R-FAM": 9}, sr_sd_daily=0.0, sr_sd_label="caller term A")
+        one = S.dsr_two_n(a, n_grid=5, sr_sd_grid=0.004, n_raw={"R-FAM": 9}, sr_sd_daily=0.0,
+                          sr_sd_label="caller term A")
         self.assertEqual([r.reading for r in one.readings], ["L-FAM", "R-FAM"])
         self.assertEqual(one.readings[0].status, "not_supplied")
         self.assertIsNone(one.readings[0].n_raw)
         text = "\n".join(one.lines())
         self.assertIn("L-FAM", text)
         self.assertIn("not supplied", text)
-        self.assertIn("[caller term A]", text)
+        self.assertIn("dispersion term 0 per period [caller term A]", text)
+        self.assertIn("dispersion term 0.004 per period [the gate's own term]", text)
         self.assertTrue(one.provisional)
         self.assertTrue(all("[provisional]" in line for line in one.lines() if line.startswith("S-2")))
         self.assertIn("⑨-3d", text)
@@ -253,24 +315,32 @@ class DsrLines(unittest.TestCase):
 
     def test_counts_and_dispersion_inputs_refused(self):
         a, _ = pair()
-        good = dict(n_grid=12, n_raw={"L-FAM": 17}, sr_sd_daily=0.01, sr_sd_label="x")
+        good = dict(n_grid=12, sr_sd_grid=0.01, n_raw={"L-FAM": 17}, sr_sd_daily=0.01, sr_sd_label="x")
         bad = [dict(n_grid=0), dict(n_grid=-3), dict(n_grid=12.0), dict(n_grid=True), dict(n_grid="12"),
                dict(n_raw={}), dict(n_raw={"L-FAM": 0}), dict(n_raw={"L-FAM": 17.0}), dict(n_raw={"L-FAM": False}),
                dict(n_raw={"ledger": 17}), dict(n_raw=17), dict(n_raw=[("L-FAM", 17)]),
                dict(sr_sd_daily=-0.01), dict(sr_sd_daily=float("nan")), dict(sr_sd_daily=float("inf")),
-               dict(sr_sd_daily=None), dict(sr_sd_label=""), dict(sr_sd_label="  "), dict(sr_sd_label=None)]
+               dict(sr_sd_daily=None), dict(sr_sd_label=""), dict(sr_sd_label="  "), dict(sr_sd_label=None),
+               dict(sr_sd_grid=-0.01), dict(sr_sd_grid=float("nan")), dict(sr_sd_grid=None), dict(sr_sd_grid="0.01")]
         for change in bad:
             with self.subTest(change=change):
                 with self.assertRaises(S.AdoptionInputError):
                     S.dsr_two_n(a, **{**good, **change})
         with self.assertRaises(S.AdoptionInputError):
             S.dsr_two_n(np.array([0.01, float("nan"), 0.02]), **good)
+        for bad in ([str(v) for v in a[:60]], [True, False] * 30, np.array(a, dtype=object), a + 0j):
+            with self.subTest(dtype=np.asarray(bad).dtype):
+                with self.assertRaisesRegex(S.AdoptionInputError, "integer or float"):
+                    S.dsr_two_n(bad, **good)
         with self.assertRaises(S.AdoptionInputError):
             S.dsr_two_n(np.ones((3, 2)), **good)
+        with self.assertRaises(TypeError):
+            S.dsr_two_n(a, **{k: v for k, v in good.items() if k != "sr_sd_grid"})
         self.assertEqual(S.dsr_two_n(a, **{**good, "n_grid": np.int64(12)}).n_grid, 12)
 
     def test_nan_dsr_does_not_meet_s2(self):
-        short = S.dsr_two_n(np.array([0.01, 0.02]), n_grid=1, n_raw={"L-FAM": 1}, sr_sd_daily=0.0, sr_sd_label="x")
+        short = S.dsr_two_n(np.array([0.01, 0.02]), n_grid=1, sr_sd_grid=0.0, n_raw={"L-FAM": 1}, sr_sd_daily=0.0,
+                            sr_sd_label="x")
         self.assertTrue(math.isnan(V.deflated_sharpe(np.array([0.01, 0.02]), n_trials=1, sr_sd_daily=0.0)))
         self.assertEqual(short.status_grid, "nan")
         self.assertEqual(short.readings[0].status, "nan")
@@ -278,12 +348,14 @@ class DsrLines(unittest.TestCase):
         a, _ = pair()
         values = {12: 0.97, 17: float("nan")}
         with patch.object(V, "deflated_sharpe", side_effect=lambda d, *, n_trials, sr_sd_daily: values[n_trials]):
-            res = S.dsr_two_n(a, n_grid=12, n_raw={"L-FAM": 17}, sr_sd_daily=0.01, sr_sd_label="x")
+            res = S.dsr_two_n(a, n_grid=12, sr_sd_grid=0.01, n_raw={"L-FAM": 17}, sr_sd_daily=0.01, sr_sd_label="x")
         self.assertEqual((res.status_grid, res.readings[0].status), ("pass", "nan"))
         self.assertIn("(nan)", res.lines()[1])
 
     def test_gate_dispersion_helper_refuses_bad_matrices(self):
-        for bad in (np.ones(5), np.ones((1, 3)), np.ones((4, 0)), np.array([[0.1, float("nan")], [0.2, 0.3]])):
+        for bad in (np.ones(5), np.ones((1, 3)), np.ones((4, 0)), np.array([[0.1, float("nan")], [0.2, 0.3]]),
+                    [["0.1", "0.2"], ["0.3", "0.4"]], [[True, False], [False, True]],
+                    np.array([[0.1, 0.2], [0.3, 0.4]], dtype=object)):
             with self.subTest(shape=np.shape(bad)):
                 with self.assertRaises(S.AdoptionInputError):
                     S.gate_sr_sd_daily(bad)
@@ -299,7 +371,8 @@ class SessionsAndHoldout(unittest.TestCase):
         self.assertIn("HOLDOUT_TOUCHED", first_bad.line())
         self.assertEqual(S.check_sample_end("2026-12-31").last_session, date(2026, 12, 31))
         self.assertEqual(S.HOLDOUT_LAST_SESSION, date(2026, 12, 31))
-        for bad in (datetime(2026, 12, 31, 9, 0), "2026/12/31", "", 20261231, None):
+        for bad in (datetime(2026, 12, 31, 9, 0), "2026/12/31", "", 20261231, None, "20270101", "2027-W01-5",
+                    "2026-12-31T00:00", "2026-12-31 ", "\uff12026-12-31"):
             with self.subTest(bad=bad):
                 with self.assertRaises(S.AdoptionInputError):
                     S.check_sample_end(bad)
@@ -325,6 +398,10 @@ class SessionsAndHoldout(unittest.TestCase):
             (a, b, [d.isoformat() for d in ds[:-1]] + ["bad"], ds, "ISO date"),
             (a[:0], b[:0], (), (), "no sessions"),
             (["x"] * 60, b, ds, ds, "numeric daily P&L"),
+            ([str(v) for v in a], b, ds, ds, "numeric daily P&L (integer or float), got dtype <U"),
+            ([True, False] * 30, b, ds, ds, "got dtype bool"),
+            (a, np.array(list(b), dtype=object), ds, ds, "got dtype object"),
+            (a[:-1], b, ds, ds, "challenger: 59 values but 60 sessions"),
         ]
         for x_a, x_b, d_a, d_b, needle in cases:
             with self.subTest(needle=needle):
@@ -332,6 +409,8 @@ class SessionsAndHoldout(unittest.TestCase):
                     S.lw_compare(x_a, x_b, d_a, d_b, rule="S-4", other_label="baseline")
         iso = S.lw_compare(a, b, [d.isoformat() for d in ds], ds, rule="S-4", other_label="baseline")
         self.assertEqual(iso.n_sessions, 60)
+        ints = S.lw_compare(np.round(a * 1e6).astype(np.int64), b, ds, ds, rule="S-4", other_label="baseline")
+        self.assertEqual(ints.n_sessions, 60)
         with self.assertRaisesRegex(S.AdoptionInputError, "misaligned"):
             S.power_line_s7(a, b, ds, shifted, expected_dsr=0.2)
         for bad in (dict(rule="S-5"), dict(other_label=""), dict(B=0), dict(B=2000.0), dict(seed=-1), dict(seed=1.5)):
@@ -350,8 +429,8 @@ class CollectedLines(unittest.TestCase):
         rng = np.random.default_rng(9)
         self.base = {"equal-weight": (rng.normal(0.0002, 0.008, 756), self.ds),
                      "SMA-200": (rng.normal(0.0001, 0.007, 756), [d.isoformat() for d in self.ds])}
-        self.common = dict(challenger=self.a, challenger_dates=self.ds, n_grid=12, n_raw={"L-FAM": 17},
-                           sr_sd_daily=0.01, sr_sd_label="caller term", baselines=self.base)
+        self.common = dict(challenger=self.a, challenger_dates=self.ds, n_grid=12, sr_sd_grid=0.011,
+                           n_raw={"L-FAM": 17}, sr_sd_daily=0.01, sr_sd_label="caller term", baselines=self.base)
 
     def test_replace_runs_s2_s3_s4_s7_without_an_outcome(self):
         res = S.strategy_lines(kind="replace", incumbent=self.inc, incumbent_dates=self.ds, expected_dsr=0.25,
@@ -375,6 +454,12 @@ class CollectedLines(unittest.TestCase):
         direct = S.lw_compare(self.a, self.inc, self.ds, self.ds, rule="S-3", other_label="incumbent")
         self.assertEqual((res.s3.d_sr, res.s3.p_lw, res.s3.status), (direct.d_sr, direct.p_lw, direct.status))
         self.assertTrue(all(c.status in S.COMPARISON_STATUSES for c in (res.s3,) + res.s4))
+        self.assertTrue(all(c.conforms_to_registration for c in (res.s3,) + res.s4))
+        self.assertEqual(res.s2.dsr_grid, V.deflated_sharpe(self.a, n_trials=12, sr_sd_daily=0.011))
+        for name in ("B", "seed"):
+            with self.subTest(override=name), self.assertRaises(TypeError):
+                S.strategy_lines(kind="replace", incumbent=self.inc, incumbent_dates=self.ds, expected_dsr=0.25,
+                                 **{name: 50}, **self.common)
         self.assertTrue(all(r.status in S.DSR_STATUSES for r in res.s2.readings))
         self.assertIn(res.s2.status_grid, S.DSR_STATUSES)
 
@@ -383,9 +468,37 @@ class CollectedLines(unittest.TestCase):
         self.assertFalse(res.s3.counts)
         self.assertIn("printed only, addition (M-19)", res.s3.line())
         self.assertIsNone(res.s7)
+        self.assertTrue(all(c.rule == "S-4" and c.counts for c in res.s4))   # criteria 4.2.2: S-1, S-2, S-4 judge
         bare = S.strategy_lines(kind="add", **self.common)
         self.assertIsNone(bare.s3)
         self.assertEqual(len(bare.s4), 2)
+        for bad in (-5.0, 0.0, float("nan"), "0.2", True):
+            with self.subTest(expected_dsr=bad), self.assertRaisesRegex(S.AdoptionInputError, "expected_dsr"):
+                S.strategy_lines(kind="add", expected_dsr=bad, **self.common)
+        noted = S.strategy_lines(kind="add", expected_dsr=0.2, **self.common)
+        self.assertIsNone(noted.s7)
+        self.assertIn("no incumbent was supplied, so no S-7 line is printed", "\n".join(noted.lines()))
+
+    def test_declared_cash_baseline_is_replaced_by_the_gate_interval_check(self):
+        res = S.strategy_lines(kind="add", **{**self.common, "baselines": {"cash": S.CASH_BASELINE,
+                                                                           "equal-weight": self.base["equal-weight"]}})
+        cash, ew = res.s4
+        self.assertIsInstance(cash, S.CashBaseline)
+        self.assertEqual((cash.rule, cash.other, cash.status, cash.replaced_by, cash.counts),
+                         ("S-4", "cash", "replaced", "S-1", True))
+        self.assertIn(cash.status, S.COMPARISON_STATUSES)
+        line = cash.line()
+        for token in ("S-4 vs cash: REPLACED", "criteria 2.3", "Sharpe interval", "S-1", "no LW test is run"):
+            self.assertIn(token, line)
+        self.assertIn(line, res.lines())
+        self.assertEqual(ew.status, S.lw_compare(self.a, self.base["equal-weight"][0], self.ds, self.ds, rule="S-4",
+                                                 other_label="equal-weight").status)
+        only_cash = S.strategy_lines(kind="add", **{**self.common, "baselines": {"cash": S.CASH_BASELINE}})
+        self.assertEqual([c.status for c in only_cash.s4], ["replaced"])
+        with self.assertRaises(FrozenInstanceError):
+            cash.status = "win"
+        with self.assertRaisesRegex(S.AdoptionInputError, "CASH_BASELINE"):
+            S.strategy_lines(kind="add", **{**self.common, "baselines": {"cash": "cash"}})
 
     def test_registration_fields_refused_when_missing(self):
         with self.assertRaisesRegex(S.AdoptionInputError, "incumbent"):
@@ -409,8 +522,8 @@ class CollectedLines(unittest.TestCase):
         late = sessions(756, date(2024, 6, 3))
         self.assertGreater(late[-1], date(2026, 12, 31))
         base = {"cash": (np.full(756, 0.0001) + np.random.default_rng(1).normal(0, 1e-4, 756), late)}
-        res = S.strategy_lines(kind="add", challenger=self.a, challenger_dates=late, n_grid=3, n_raw={"R-FAM": 3},
-                               sr_sd_daily=0.0, sr_sd_label="x", baselines=base)
+        res = S.strategy_lines(kind="add", challenger=self.a, challenger_dates=late, n_grid=3, sr_sd_grid=0.0,
+                               n_raw={"R-FAM": 3}, sr_sd_daily=0.0, sr_sd_label="x", baselines=base)
         self.assertTrue(res.sample_end.holdout_touched)
         self.assertFalse(res.sample_end.adopt_allowed)
         self.assertIn("HOLDOUT_TOUCHED", res.lines()[1])
@@ -438,9 +551,10 @@ class ScopeGuards(unittest.TestCase):
         def run_all():
             S.check_sample_end("2026-06-30")
             S.gate_sr_sd_daily(np.column_stack([a, inc]))
-            S.strategy_lines(kind="replace", challenger=a, challenger_dates=ds, n_grid=4, n_raw={"L-FAM": 6, "R-FAM": 5},
-                             sr_sd_daily=0.01, sr_sd_label="x", baselines=base, incumbent=inc, incumbent_dates=ds,
-                             expected_dsr=0.2, B=200)
+            S.strategy_lines(kind="replace", challenger=a, challenger_dates=ds, n_grid=4, sr_sd_grid=0.01,
+                             n_raw={"L-FAM": 6, "R-FAM": 5}, sr_sd_daily=0.01, sr_sd_label="x",
+                             baselines={**base, "cash": S.CASH_BASELINE}, incumbent=inc, incumbent_dates=ds,
+                             expected_dsr=0.2)
             S.lw_compare(a[:20], inc[:20], ds[:20], ds[:20], rule="S-4", other_label="short")
             S.lw_compare(inc, inc.copy(), ds, ds, rule="S-4", other_label="itself", B=200)
 
@@ -493,8 +607,8 @@ print(json.dumps({"loaded": loaded, "file": os.path.abspath(S.__file__)}))
             names = {a.name for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) and n.module == "core.quant"
                      for a in n.names}
             if path == MODULE:
-                self.assertEqual(mods, {"__future__", "math", "collections.abc", "dataclasses", "datetime", "types",
-                                        "typing", "numpy", "core.quant"})
+                self.assertEqual(mods, {"__future__", "math", "re", "collections.abc", "dataclasses", "datetime",
+                                        "types", "typing", "numpy", "core.quant"})
                 self.assertEqual(names, {"validate", "gate_stats"})
             else:
                 self.assertEqual(mods, set())

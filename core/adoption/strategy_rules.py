@@ -10,10 +10,11 @@ What this module does. It computes, on caller-supplied daily OOS P&L arrays, wha
 the deflated Sharpe ratio at the grid size G and at the family N_raw (S-2), the Ledoit-Wolf studentized paired
 delta-Sharpe test against the incumbent (S-3) and against every registered baseline (S-4), the MDE80 power line
 (S-7), the borderline zones and the holdout guard. Every number comes from an existing function:
-`validate.deflated_sharpe`, `validate.sharpe`, `gate_stats.pw_block_psi`, `gate_stats.lw_studentized_boot`,
-`gate_stats.p_numeric` and `gate_stats.lw_hac_se`. Thresholds that exist are read from `validate.GATE` and
-`gate_stats` and never redefined; the only new constants are the ruled alpha 0.10 (M-2), the borderline bounds
-0.20 and 0.90 (M-11), the last session 2026-12-31 (M-14) and the L1 note (M-20).
+`validate.deflated_sharpe`, `validate._col_sharpe` (the gate's own dispersion term), `gate_stats.pw_block_psi`,
+`gate_stats.lw_studentized_boot`, `gate_stats.p_numeric` and `gate_stats.lw_hac_se`. Thresholds that exist are
+read from `validate.GATE` and `gate_stats` and never redefined; the only new constants are the ruled alpha 0.10
+(M-2), the borderline bounds 0.20 and 0.90 (M-11), the last session 2026-12-31 (M-14), the L1 note (M-20) and the
+cash-baseline marker (criteria 2.3, M-4).
 
 What it does not do. It assigns no outcome (ADOPT, KEEP, REVISE, REJECT, INSUFFICIENT_DATA): the outcome
 assembly waits for owner questions (the gate passing at G with a second DSR below 0.90 is mapped by neither KEEP
@@ -25,13 +26,16 @@ are later units.
 
 Provisional (M-3). The second DSR is labelled provisional until the ⑨-3c report and ⑨-3d. The meaning of the
 ledger N_raw was not decided by the owner's answer of 2026-11-10, so N_raw is a caller input under one or both
-named readings (`N_RAW_READINGS`) and both readings are displayed. The dispersion term paired with N_raw is a
-criterion reserved for ⑨-3d (R3 design 4.4; 10.2 B Q1), so it is an explicit, labelled caller input; N_raw below
-G is printed, not refused (R3 design 10.2 B Q4).
+named readings (`N_RAW_READINGS`) and both readings are displayed. The DSR at N = G is the gate's own DSR and
+always uses the gate's dispersion term (`sr_sd_grid`); criteria 6.2 keys the second DSR's borderline on it. The
+dispersion term paired with N_raw is a criterion reserved for ⑨-3d (R3 design 4.4; 10.2 B Q1), so it is a
+separate, explicit, labelled caller input used only for the N_raw lines; N_raw below G is printed, not refused
+(R3 design 10.2 B Q4). The L1 note (M-20) is printed on the collected `strategy_lines` result.
 """
 from __future__ import annotations
 
 import math
+import re
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import date, datetime
@@ -51,8 +55,9 @@ ALPHA_ONE_SIDED = 0.10                    # M-2: every adoption comparison is on
 BORDERLINE_P_MAX = 0.20                   # M-11, criteria 6.2: outside-gate one-sided p in (0.10, 0.20]
 DSR_BORDERLINE_MIN = 0.90                 # M-11, criteria 6.2: second DSR in [0.90, dsr_min) while the gate's passes
 HOLDOUT_LAST_SESSION = date(2026, 12, 31)   # M-14, criteria 3.3 (rule ⑧-2): a sample may end on this day at most
-L1_NOTE = "L1 미적용(브리지 미지원)"          # M-20, criteria 8.2: printed on every result
+L1_NOTE = "L1 미적용(브리지 미지원)"          # M-20, criteria 8.2: printed on the collected strategy_lines result
 KINDS = ("replace", "add")                # M-19, criteria 3.2 item 12
+CASH_BASELINE = "CASH_BASELINE"          # M-4, criteria 2.3: a declared cash baseline (pairs E8, S6)
 
 N_RAW_READINGS = MappingProxyType({
     "L-FAM": "family ledger row count (gate_ledger.FamilyLedger.n_raw, the number of ledger rows), "
@@ -61,17 +66,22 @@ N_RAW_READINGS = MappingProxyType({
 })
 
 DSR_STATUSES = ("pass", "borderline", "below", "nan", "not_supplied")
-COMPARISON_STATUSES = ("win", "borderline", "not_won", "not_run")
+COMPARISON_STATUSES = ("win", "borderline", "not_won", "not_run", "replaced")   # "replaced": cash, S-4 only
 
 _PROVISIONAL_NOTE = ("provisional (M-3): the second DSR stands until the ⑨-3c report and is reviewed at ⑨-3d; "
                      "the meaning of ledger N_raw is undecided (owner answer of 2026-11-10), so both readings "
                      "are shown")
-_PAIRING_NOTE = ("the dispersion term paired with N_raw is a criterion reserved for ⑨-3d (R3 design 4.4, "
-                 "10.2 B Q1); it is the caller's labelled input")
+_PAIRING_NOTE = ("the DSR at N = G uses the gate's own dispersion term; the term paired with N_raw is a criterion "
+                 "reserved for ⑨-3d (R3 design 4.4, 10.2 B Q1), so the N_raw lines use the caller's labelled term")
 _BELOW_GRID_NOTE = ("N_raw below G is printed only: whether a ledger-based N may fall below G is R3 design "
                     "10.2 B Q4, reserved for ⑨-3d")
 _NO_OUTCOME_NOTE = ("no outcome label: the outcome assembly (criteria 6.1) waits for the owner's answers on a "
                     "second DSR below 0.90 and on S-7")
+_CASH_NOTE = ("criteria 2.3 (M-4): the cash baseline is replaced by the gate's check that the Sharpe interval "
+              "excludes 0 (S-1, the caller's precondition); no LW test is run")
+_CASH_HINT = "; a cash baseline is declared with CASH_BASELINE (criteria 2.3), not as a constant series"
+_NUMERIC_KINDS = "iuf"                     # integer, unsigned or float dtypes; strings, bools and objects are refused
+_ISO_DATE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
 
 
 class AdoptionInputError(ValueError):
@@ -104,11 +114,19 @@ def _label(value, name: str) -> str:
     return value.strip()
 
 
-def _series(values, name: str) -> np.ndarray:
+def _numeric(values, name: str) -> np.ndarray:
+    """A float copy of an integer or float array; numeric strings, booleans and object arrays are refused."""
     try:
-        arr = np.asarray(values, dtype=float)
+        raw = np.asarray(values)
     except (TypeError, ValueError):
         raise AdoptionInputError(f"{name} must be numeric daily P&L") from None
+    if raw.dtype.kind not in _NUMERIC_KINDS:
+        raise AdoptionInputError(f"{name} must be numeric daily P&L (integer or float), got dtype {raw.dtype}")
+    return raw.astype(float)
+
+
+def _series(values, name: str) -> np.ndarray:
+    arr = _numeric(values, name)
     if arr.ndim != 1:
         raise AdoptionInputError(f"{name} must be one-dimensional daily P&L, got shape {arr.shape}")
     if not np.all(np.isfinite(arr)):
@@ -123,6 +141,8 @@ def _session(value, name: str) -> date:
         return value
     if isinstance(value, str):
         try:
+            if not _ISO_DATE.fullmatch(value):        # the same YYYY-MM-DD form on every Python version
+                raise ValueError(value)
             return date.fromisoformat(value)
         except ValueError:
             raise AdoptionInputError(f"{name}: {value!r} is not an ISO date (YYYY-MM-DD)") from None
@@ -209,16 +229,22 @@ def classify_dsr(value: float, *, grid_status: Optional[str] = None) -> str:
 
 def gate_sr_sd_daily(full_pnl) -> float:
     """S-2 helper (criteria 4.2.2 S-2, M-3): the gate's own trial-dispersion term, the population SD of the
-    full-sample per-period Sharpe ratios of the T x G grid columns, as `validate.score_strategy` forms it
-    (`validate.py:503-506`), here through the public `validate.sharpe`. Pairing this term with N_raw is one
-    reading only; the pairing is reserved for ⑨-3d, so `dsr_two_n` takes the term as a labelled input."""
-    M = np.asarray(full_pnl, dtype=float)
+    full-sample per-period Sharpe ratios of the T x G grid columns, formed exactly as `validate.score_strategy`
+    forms it (`validate.py:503-506`), with the same `validate._col_sharpe` (validate.py is a frozen harness source).
+    This is the term `dsr_two_n` needs as `sr_sd_grid` for the DSR at N = G.
+
+    The value is the gate's, not a repaired one. A column that is constant up to floating noise and not zero (a
+    configuration that stays in cash and earns the Lab's cash rate) has a sample SD at floating-noise level, so its
+    Sharpe and the gate's term are enormous (about 1e13 to 1e14 in a T 1400 synthetic probe); an exactly zero
+    column gives Sharpe 0. The public `validate.sharpe` computes that noise differently, which is why it is not
+    used here. Pairing this term with N_raw is one reading only (reserved for ⑨-3d)."""
+    M = _numeric(full_pnl, "full_pnl")
     if M.ndim != 2 or M.shape[0] < 2 or M.shape[1] < 1:
         raise AdoptionInputError(f"full_pnl must be a T x G matrix with T >= 2, got shape {M.shape}")
     if not np.all(np.isfinite(M)):
         raise AdoptionInputError("full_pnl has non-finite values")
-    per_period = np.array([V.sharpe(M[:, g]) for g in range(M.shape[1])]) / math.sqrt(V.TRADING_DAYS)
-    return float(np.nanstd(per_period)) if per_period.size > 1 else 0.0
+    full_sr = V._col_sharpe(M) / math.sqrt(V.TRADING_DAYS)
+    return float(np.nanstd(full_sr)) if full_sr.size > 1 else 0.0
 
 
 @dataclass(frozen=True)
@@ -237,7 +263,8 @@ class DsrTwoN:
     dsr_grid: float
     status_grid: str
     readings: tuple
-    sr_sd_daily: float
+    sr_sd_grid: float         # the gate's own dispersion term, used for the DSR at N = G only
+    sr_sd_daily: float        # the caller's labelled term, used for the N_raw lines only (pairing reserved, ⑨-3d)
     sr_sd_label: str
     dsr_min: float
     borderline_min: float
@@ -248,30 +275,43 @@ class DsrTwoN:
 
     def lines(self) -> tuple:
         out = [f"S-2 [provisional] DSR at N = G = {self.n_grid}: {_fmt(self.dsr_grid)} ({self.status_grid}); "
-               f"dispersion term {self.sr_sd_daily:.6g} per period [{self.sr_sd_label}]"]
+               f"dispersion term {self.sr_sd_grid:.6g} per period [the gate's own term]"]
         for r in self.readings:
             if r.n_raw is None:
                 out.append(f"S-2 [provisional] N_raw {r.reading} ({r.meaning}): not supplied")
                 continue
             tail = f"; N_raw {r.n_raw} < G {self.n_grid}: printed only" if r.below_grid else ""
-            out.append(f"S-2 [provisional] DSR at N_raw {r.reading} = {r.n_raw}: {_fmt(r.dsr)} ({r.status}){tail}")
+            out.append(f"S-2 [provisional] DSR at N_raw {r.reading} = {r.n_raw}: {_fmt(r.dsr)} ({r.status}); "
+                       f"dispersion term {self.sr_sd_daily:.6g} per period [{self.sr_sd_label}]{tail}")
         return tuple(out) + tuple(self.notes)
 
 
-def dsr_two_n(oos_daily, *, n_grid, n_raw: Mapping, sr_sd_daily, sr_sd_label: str) -> DsrTwoN:
-    """S-2 (criteria 4.2.2 S-2; rulings M-3 (나), M-11): `validate.deflated_sharpe` of the OOS daily P&L at
+def _dispersion(value, name: str) -> float:
+    out = _real(value, name)
+    if out < 0:
+        raise AdoptionInputError(f"{name} must be >= 0, got {out}")
+    return out
+
+
+def dsr_two_n(oos_daily, *, n_grid, sr_sd_grid, n_raw: Mapping, sr_sd_daily, sr_sd_label: str) -> DsrTwoN:
+    """S-2 (criteria 4.2.2 S-2, 6.2; rulings M-3 (나), M-11): `validate.deflated_sharpe` of the OOS daily P&L at
     N = G and at N = N_raw, each against `GATE['dsr_min']`, labelled provisional.
+
+    The two lines take separate dispersion terms. The DSR at N = G is the gate's DSR, so it uses `sr_sd_grid`, the
+    gate's own term (`gate_sr_sd_daily(full_pnl)` on the same T x G matrix the gate saw); with the gate's OOS P&L
+    and N = G it equals `validate.score_strategy(...).dsr`. Each N_raw line uses `sr_sd_daily` with its required
+    `sr_sd_label`, because the term paired with N_raw is reserved for ⑨-3d (R3 design 4.4, 10.2 B Q1); the caller
+    may pass the gate's term there too, under its own label. The N_raw statuses are keyed on the N = G line's
+    status, so "borderline" ([0.90, dsr_min)) needs the gate's DSR to pass, as criteria 6.2 says.
 
     `n_raw` maps one or both readings of `N_RAW_READINGS` ("L-FAM", "R-FAM") to an integer count supplied by the
     caller (read on the owner PC; this module opens no ledger). Both readings are always displayed; an absent one
-    shows as "not_supplied". `sr_sd_daily` (per-period Sharpe dispersion) and `sr_sd_label` are explicit inputs
-    because the pairing is reserved for ⑨-3d; `gate_sr_sd_daily` gives the gate's own term. N_raw < G is a
-    printed status, not a refusal. Counts must be integers >= 1; a NaN DSR is status "nan" (6.4, N12)."""
+    shows as "not_supplied". N_raw < G is a printed status, not a refusal. Counts must be integers >= 1; a NaN DSR
+    is status "nan" (6.4, N12)."""
     daily = _series(oos_daily, "oos_daily")
     g = _count(n_grid, "n_grid")
-    sd = _real(sr_sd_daily, "sr_sd_daily")
-    if sd < 0:
-        raise AdoptionInputError(f"sr_sd_daily must be >= 0, got {sd}")
+    sd_grid = _dispersion(sr_sd_grid, "sr_sd_grid")
+    sd = _dispersion(sr_sd_daily, "sr_sd_daily")
     label = _label(sr_sd_label, "sr_sd_label")
     if not isinstance(n_raw, Mapping) or not n_raw:
         raise AdoptionInputError("n_raw must map at least one of " + ", ".join(N_RAW_READINGS) + " to a count")
@@ -279,7 +319,7 @@ def dsr_two_n(oos_daily, *, n_grid, n_raw: Mapping, sr_sd_daily, sr_sd_label: st
     if unknown:
         raise AdoptionInputError(f"unknown N_raw reading(s) {unknown}; known: {list(N_RAW_READINGS)}")
     counts = {k: _count(v, f"n_raw[{k!r}]") for k, v in n_raw.items()}
-    dsr_grid = float(V.deflated_sharpe(daily, n_trials=g, sr_sd_daily=sd))
+    dsr_grid = float(V.deflated_sharpe(daily, n_trials=g, sr_sd_daily=sd_grid))
     status_grid = classify_dsr(dsr_grid)
     readings, notes = [], [_PROVISIONAL_NOTE, _PAIRING_NOTE]
     for key, meaning in N_RAW_READINGS.items():
@@ -294,7 +334,7 @@ def dsr_two_n(oos_daily, *, n_grid, n_raw: Mapping, sr_sd_daily, sr_sd_label: st
     if status_grid == "nan" or any(r.status == "nan" for r in readings):
         notes.append("a NaN DSR does not meet S-2 (criteria 6.4, N12)")
     return DsrTwoN(n_grid=g, dsr_grid=dsr_grid, status_grid=status_grid, readings=tuple(readings),
-                   sr_sd_daily=sd, sr_sd_label=label, dsr_min=float(V.GATE["dsr_min"]),
+                   sr_sd_grid=sd_grid, sr_sd_daily=sd, sr_sd_label=label, dsr_min=float(V.GATE["dsr_min"]),
                    borderline_min=DSR_BORDERLINE_MIN, n_sessions=int(daily.size), notes=tuple(notes))
 
 
@@ -338,12 +378,16 @@ class Comparison:
     n_sessions: int
     first_session: date
     last_session: date
+    conforms_to_registration: bool = True   # False: B or seed differs from criteria 3.2 item 11 (GATE B, seed 11)
     reason: str = ""
     alpha: float = ALPHA_ONE_SIDED
     borderline_max: float = BORDERLINE_P_MAX
 
     def line(self) -> str:
         role = "" if self.counts else " [printed only, addition (M-19)]"
+        if not self.conforms_to_registration:
+            role += (f" [OFF-REGISTRATION: B {self.B}, seed {self.seed}; criteria 3.2 item 11 fixes "
+                     f"B {int(V.GATE['bootstrap_B'])} and seed {int(GS.SEED_STUDY)}]")
         if self.status == "not_run":
             return f"{self.rule} vs {self.other}{role}: NOT_RUN ({self.reason})"
         return (f"{self.rule} vs {self.other}{role}: dSR {self.d_sr:+.4f}, LW p {self.p_lw} (one-sided, block "
@@ -360,7 +404,9 @@ def lw_compare(challenger, other, challenger_dates: Sequence, other_dates: Seque
     block = `gate_stats.pw_block_psi` (max(21, PW(psi)); its 250-session fallback is kept in `block_events`),
     B = `GATE['bootstrap_B']` and seed = `gate_stats.SEED_STUDY` unless given. The one-sided p is
     `gate_stats.p_numeric(p_lw, B)`; "< 1/B" compares as 1/B. The gate's `bench_p` (a lower-tail share of
-    `validate.sharpe_diff_bootstrap`) is not used.
+    `validate.sharpe_diff_bootstrap`) is not used. Another B or seed is for tests only: the result is marked
+    `conforms_to_registration=False` and its line says OFF-REGISTRATION (criteria 3.2 item 11, 6.4: B 2,000, seed
+    11). A cash baseline is not a series here: `strategy_lines` takes it as `CASH_BASELINE` (criteria 2.3).
 
     Unequal or misaligned sessions are refused (`AdoptionInputError`), never trimmed. When the statistic is
     undefined (zero HAC SE, a block longer than the sample, fewer than 30 sessions) the line is "not_run" with
@@ -378,14 +424,17 @@ def lw_compare(challenger, other, challenger_dates: Sequence, other_dates: Seque
     events: list = []
     block = int(GS.pw_block_psi(a, b, log=events))
     event_rows = tuple((str(e.get("event", "")), int(e.get("block", 0)), str(e.get("reason", ""))) for e in events)
+    conforms = B == int(V.GATE["bootstrap_B"]) and int(seed) == int(GS.SEED_STUDY)
     common = dict(rule=rule, other=other_label, counts=bool(counts), block=block, block_events=event_rows, B=B,
-                  seed=int(seed), n_sessions=int(a.size), first_session=sessions[0], last_session=sessions[-1])
+                  seed=int(seed), n_sessions=int(a.size), first_session=sessions[0], last_session=sessions[-1],
+                  conforms_to_registration=conforms)
     nan = float("nan")
     try:
         res = GS.lw_studentized_boot(a, b, block, B=B, seed=int(seed))
     except ValueError as exc:
+        hint = _CASH_HINT if np.all(b == b[0]) else ""
         return Comparison(status="not_run", d_sr=nan, se=nan, t_obs=nan, p_lw=None, p=nan, p_hac=nan, count=None,
-                          reason=f"lw_studentized_boot refused: {exc}", **common)
+                          reason=f"lw_studentized_boot refused: {exc}{hint}", **common)
     d_sr, se, t_obs = float(res["dSR"]), float(res["se"]), float(res["t_obs"])
     if not (math.isfinite(d_sr) and math.isfinite(se) and se > 0 and math.isfinite(t_obs)):
         return Comparison(status="not_run", d_sr=d_sr, se=se, t_obs=t_obs, p_lw=None, p=nan, p_hac=nan,
@@ -393,6 +442,22 @@ def lw_compare(challenger, other, challenger_dates: Sequence, other_dates: Seque
     p = float(GS.p_numeric(res["p_lw"], res["B"]))
     return Comparison(status=classify_comparison(d_sr, p), d_sr=d_sr, se=se, t_obs=t_obs, p_lw=res["p_lw"], p=p,
                       p_hac=float(res["p_hac"]), count=int(res["count"]), **common)
+
+
+@dataclass(frozen=True)
+class CashBaseline:
+    """S-4 line for a declared cash baseline (criteria 2.3, M-4): pairs (E8, S6) take cash as their baseline and
+    criteria 2.3 replaces that comparison with the gate's existing check that the Sharpe interval excludes 0, which
+    is part of S-1 (the caller's precondition). No LW test is run and no number is claimed here."""
+    other: str
+    rule: str = "S-4"
+    status: str = "replaced"
+    counts: bool = True
+    replaced_by: str = "S-1"
+    reason: str = _CASH_NOTE
+
+    def line(self) -> str:
+        return f"{self.rule} vs {self.other}: REPLACED ({self.reason})"
 
 
 # --------------------------------------------------------------------------- #
@@ -456,7 +521,7 @@ class StrategyLines:
     kind: str                 # "replace" or "add" (M-19)
     s2: DsrTwoN
     s3: Optional[Comparison]
-    s4: tuple                 # one Comparison per registered baseline, in the caller's order
+    s4: tuple                 # one Comparison (or CashBaseline) per registered baseline, in the caller's order
     s7: Optional[PowerS7]
     sample_end: SampleEnd
     notes: tuple
@@ -475,18 +540,22 @@ class StrategyLines:
         return tuple(out) + tuple(self.notes)
 
 
-def strategy_lines(*, kind: str, challenger, challenger_dates: Sequence, n_grid, n_raw: Mapping, sr_sd_daily,
-                   sr_sd_label: str, baselines: Mapping, incumbent=None, incumbent_dates: Optional[Sequence] = None,
-                   incumbent_label: str = "incumbent", expected_dsr=None, B: Optional[int] = None,
-                   seed: Optional[int] = None) -> StrategyLines:
+def strategy_lines(*, kind: str, challenger, challenger_dates: Sequence, n_grid, sr_sd_grid, n_raw: Mapping,
+                   sr_sd_daily, sr_sd_label: str, baselines: Mapping, incumbent=None,
+                   incumbent_dates: Optional[Sequence] = None, incumbent_label: str = "incumbent",
+                   expected_dsr=None) -> StrategyLines:
     """Collect S-2, S-3 and S-4 (and S-7) for one registration (criteria 4.2.2; rulings M-3, M-4, M-6, M-11,
     M-14, M-19, M-20). The gate (S-1) is the caller's precondition and is not re-run here.
 
     `kind` is "replace" or "add" (M-19, criteria 3.2 item 12). A replacement needs the incumbent and the registered
     expected dSR: S-3 counts and S-7 is printed. An addition is judged by S-2 and S-4; an incumbent comparison,
-    if supplied, is printed only and claims nothing. `baselines` maps each registered baseline's label to
-    `(daily_pnl, sessions)` (M-4: at least one); each is an S-4 line on the challenger's sessions. The holdout
-    guard reads the challenger's last session (M-14). Every result carries the L1 note (M-20) and no outcome."""
+    if supplied, is printed only and claims nothing. An expected dSR, whenever supplied, must be finite and > 0.
+    `sr_sd_grid` is the gate's dispersion term and `sr_sd_daily` / `sr_sd_label` the N_raw term (`dsr_two_n`).
+    `baselines` maps each registered baseline's label to `(daily_pnl, sessions)` or to `CASH_BASELINE` (M-4: at
+    least one; criteria 2.3: cash is replaced by the gate's Sharpe-interval check); each series is an S-4 line on
+    the challenger's sessions. B and seed are the registration's (criteria 3.2 item 11) and cannot be changed
+    here. The holdout guard reads the challenger's last session (M-14). The collected result carries the L1 note
+    (M-20) and no outcome. PCA butterfly (B2) has no gate daily P&L column (criteria 2.3) and is outside this unit."""
     kind = _label(kind, "kind")
     if kind not in KINDS:
         raise AdoptionInputError(f"kind must be one of {KINDS}, got {kind!r}")
@@ -503,20 +572,30 @@ def strategy_lines(*, kind: str, challenger, challenger_dates: Sequence, n_grid,
         raise AdoptionInputError("a replacement needs the registered expected dSR (S-7, criteria 3.2 item 8)")
     if (incumbent is None) != (incumbent_dates is None):
         raise AdoptionInputError("incumbent and incumbent_dates go together")
-    s2 = dsr_two_n(challenger, n_grid=n_grid, n_raw=n_raw, sr_sd_daily=sr_sd_daily, sr_sd_label=sr_sd_label)
+    if expected_dsr is not None:
+        expected_dsr = _real(expected_dsr, "expected_dsr")
+        if expected_dsr <= 0:
+            raise AdoptionInputError(f"expected_dsr must be > 0, got {expected_dsr}")
+    s2 = dsr_two_n(challenger, n_grid=n_grid, sr_sd_grid=sr_sd_grid, n_raw=n_raw, sr_sd_daily=sr_sd_daily,
+                   sr_sd_label=sr_sd_label)
     s3 = s7 = None
+    notes = [_NO_OUTCOME_NOTE]
     if incumbent is not None:
         s3 = lw_compare(challenger, incumbent, sessions, incumbent_dates, rule="S-3", other_label=incumbent_label,
-                        counts=(kind == "replace"), B=B, seed=seed)
+                        counts=(kind == "replace"))
         if expected_dsr is not None:
             s7 = power_line_s7(challenger, incumbent, sessions, incumbent_dates, expected_dsr=expected_dsr,
                                other_label=incumbent_label)
+    elif expected_dsr is not None:
+        notes.append("an expected dSR was registered but no incumbent was supplied, so no S-7 line is printed")
     s4 = []
     for label, pair in baselines.items():
+        name = _label(label, "baseline")
+        if isinstance(pair, str) and pair == CASH_BASELINE:
+            s4.append(CashBaseline(other=name))
+            continue
         if not isinstance(pair, (tuple, list)) or len(pair) != 2:
-            raise AdoptionInputError(f"baseline {label!r} must be (daily_pnl, sessions)")
-        s4.append(lw_compare(challenger, pair[0], sessions, pair[1], rule="S-4", other_label=_label(label, "baseline"),
-                             B=B, seed=seed))
-    notes = (_NO_OUTCOME_NOTE,)
+            raise AdoptionInputError(f"baseline {label!r} must be (daily_pnl, sessions) or CASH_BASELINE")
+        s4.append(lw_compare(challenger, pair[0], sessions, pair[1], rule="S-4", other_label=name))
     return StrategyLines(kind=kind, s2=s2, s3=s3, s4=tuple(s4), s7=s7, sample_end=check_sample_end(sessions[-1]),
-                         notes=notes)
+                         notes=tuple(notes))
