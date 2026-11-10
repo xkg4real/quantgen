@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "66d0d6aaebadc4651cca35076cc150676f4eae0074c1b23ec1efc7901d833af5",
+    ".github/workflows/runtime-smoke.yml": "600f5a7870606907a7a5c94b3e4ef7d8e12b1e41f9e5b94c51ac9db66dc4cd40",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -49,6 +49,8 @@
     "assets/ui/chevron-up-light.svg": "2265a4fb6c322734ffd4e35292fe0ba4c5e00fd6441368df6b1a32fd5f91dde8",
     "config.py": "266bf6754f40d83fafd5cbb2b1c06bea26c8bda63ad71ad2d7b85801b2d0d7a8",
     "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/adoption/__init__.py": "592263c22647b24151038499489911ec409ac81177e99ed3c33f3a359947953a",
+    "core/adoption/strategy_rules.py": "8f5daf22ab378051baaa590dbfa90dc43b1cc66792e5068f54631d07ce11ef01",
     "core/app_paths.py": "87cd28f423db0975e62402f09d29366d81aa1ac02b71cfb11f757c42a0f0d4cd",
     "core/calendars/__init__.py": "51bbdbd4d2326fb2ebfb2875db644b35fd874952769a7b0f07d051af3c76f8f2",
     "core/calendars/adapter.py": "fe925a34aeab1dca873aaac530a4aa5f2ba3be7b26f15ddc09f9c115324c7574",
@@ -276,13 +278,14 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "0f4a0ec2d4f1f0bd2cecb29aca4fa307f0358cc8e902d8c3f3f7c5dbc42838e7",
+    "docs/compliance/FACTS.md": "3fa0eb794de62e115d8beb94eecf208fea4eabf9a372cf28cc96adc3490f1d16",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
+    "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "2c15bbbf6dc60e18907fa7df343c6aeb07bb3db64f68457b4f3e9b7ac454d14b",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -407,6 +410,7 @@
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
+    "tests/adoption_strategy_rules_acceptance.py": "526181ecfc53f447db8c2810bff1c91608355d8319b92c9076ce512e424ade19",
     "tests/ai_connection_acceptance.py": "b074a2f0c8d708c68a28a19ff187b9e3ab1095c10c83c1a47cb6ede9d338f79f",
     "tests/ai_output_check_acceptance.py": "01c54460c470062df057d398b08233cae41c420115ee24693f19ab3711a02972",
     "tests/ai_payload_acceptance.py": "a4efa39af3a06c6859607306729a9190c4f44da320556a4567388f7ab107e138",
@@ -642,163 +646,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "661b24bf0aad31c9241b848d5d13e9ee27632709a3e973e0599917526e3e6f69",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:43.993896+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "dc0decf00fd3c54fc42b6f128ff027c48c46fc3ab3bc6d9ea2726e823b31619c",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.563505+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "661b24bf0aad31c9241b848d5d13e9ee27632709a3e973e0599917526e3e6f69",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.000438+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "dc0decf00fd3c54fc42b6f128ff027c48c46fc3ab3bc6d9ea2726e823b31619c",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.566542+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "72394228dad4f7e0604b210a3ef69a01fd18b605453cb381d265b64d91748f36",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.003920+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "2437ecaccd6db80ac79c94e2c4a1cb51c1d9a789c583e5c41bcb7a0cf0acd72e",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.569303+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "0166d9b84ae161b48ba1eb99b363f4d14094146c77ab4799feb7321529014a63",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.008270+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "893febd55ded24bd12e46523dfa3b1cef2ab215cd01d814bb17b3bc4d16a1897",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.571382+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "03708a56727973c6e3b798ebc8564af283c403011993b5f4e58f956186717bc2",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.011856+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "1c7395dbd959e6b570f505710b7ce9f0245b2837c3dfc2a2a99faac327bc2958",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.573801+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "ee4019facc6cf8a051394ce5e8b0a374423f17b6982d99d961a3025d19a6c173",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.016322+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "7b5b6c5b85451ab7f94143a09515a83df41e49c6c72377f68a066a2da645df60",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.576460+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "661b24bf0aad31c9241b848d5d13e9ee27632709a3e973e0599917526e3e6f69",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.019877+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "dc0decf00fd3c54fc42b6f128ff027c48c46fc3ab3bc6d9ea2726e823b31619c",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.578902+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "ee4019facc6cf8a051394ce5e8b0a374423f17b6982d99d961a3025d19a6c173",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.026184+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "7b5b6c5b85451ab7f94143a09515a83df41e49c6c72377f68a066a2da645df60",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.581192+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "67ea10a9fb9daf3851224f827c13e72d08c16316511747911050c4082ee5054f",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.031727+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "1781c686b35a224687715182a3a4a65cf6eedb59c073b0472987174997827a60",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.583283+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "d18fa77d6da3e77b53422f385ea4f6bbbda9909f1b0bdcb825dc145713e526d8",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.035704+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "7f49304b57d81a30a2baff1a53e12d503f637b87b1e98e6fe25619919dcecf35",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.587898+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "9707a78f77bfc04d971a251cdba2fc90e7bbc2dd27b1bbb224e9119846d623a1",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.039704+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "531c6cc209fa98a87b2b63f9a41d2ef2094c539bfb3e9bdc3fb5f850d9fc9ed7",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.590898+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "3e2d76101501d3523fe7649046f2dd5b1fa6d0d23bfdd376ccc10fae554c91fb",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.043750+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "6437cfd6174ab679dab594a01b151389e794dd6ef896a4caa666e804f16ed71e",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.592693+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "67ea10a9fb9daf3851224f827c13e72d08c16316511747911050c4082ee5054f",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.050189+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "1781c686b35a224687715182a3a4a65cf6eedb59c073b0472987174997827a60",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.595225+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "67ea10a9fb9daf3851224f827c13e72d08c16316511747911050c4082ee5054f",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.052447+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "1781c686b35a224687715182a3a4a65cf6eedb59c073b0472987174997827a60",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.597565+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "67ea10a9fb9daf3851224f827c13e72d08c16316511747911050c4082ee5054f",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.056173+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "1781c686b35a224687715182a3a4a65cf6eedb59c073b0472987174997827a60",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.599906+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "2c3a12d1bdd0e283f7198d22926b2f9d9ef12b4f1ea9f91193223a669c5526c7",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.060192+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "5896cf5160db298b5b34991431a276594edefae54899ec4877c963288eb0cb54",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.604689+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "ee4019facc6cf8a051394ce5e8b0a374423f17b6982d99d961a3025d19a6c173",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.067239+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "7b5b6c5b85451ab7f94143a09515a83df41e49c6c72377f68a066a2da645df60",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.607063+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "661b24bf0aad31c9241b848d5d13e9ee27632709a3e973e0599917526e3e6f69",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.069555+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "dc0decf00fd3c54fc42b6f128ff027c48c46fc3ab3bc6d9ea2726e823b31619c",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.608967+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "4a704dae74a29f96d99eb90d75bce1a00169fd3988c9ec389b11b0f75282b595",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.072023+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "5ef1bd4b2b70a1702ac5360db6e2391d662f8696b241487b1bf165ecf0cdbace",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.611470+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "661b24bf0aad31c9241b848d5d13e9ee27632709a3e973e0599917526e3e6f69",
-      "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
-      "reviewed_at": "2026-11-10T13:10:44.075975+00:00",
-      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
+      "source_digest": "dc0decf00fd3c54fc42b6f128ff027c48c46fc3ab3bc6d9ea2726e823b31619c",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated adoption checks (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T13:21:05.613862+00:00",
+      "source_commit": "2d87256f06e46f12abce4297c19005616c8d8db5"
     }
   }
 }
