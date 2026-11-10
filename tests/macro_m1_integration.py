@@ -295,7 +295,10 @@ def test_fixture_generator_instants_from_calendars_and_check_fixture_on_csv():
     assert available_at("KOSPI_OFFICIAL_CLOSE", date(2026, 9, 30), "official_close") == (U(2026, 9, 30, 6, 30), U(2026, 9, 30, 6, 30, 30))
     assert available_at("DGS10", date(2015, 1, 2), "first_release") == (U(2015, 1, 5, 21, 15), U(2015, 1, 5, 21, 15))
     _raises(lambda: available_at("USD_LIVE_PROXY", OCT2, "live_snapshot"), ValueError, "never infers")
-    _raises(lambda: available_at("KS11", OCT2, "vendor_close"), KeyError, "named")
+    # owner ruling 2 of 2026-11-11: KS11 is a declared reference series, unregistered and stamped from the KR calendar;
+    # an id that is neither registered nor declared (F08's SOX) is refused as KS11 was before
+    assert available_at("KS11", OCT2, "vendor_close") == (U(2026, 10, 2, 6, 30), DECISION) and not REG.is_series("KS11")
+    _raises(lambda: available_at("SOX", OCT2, "vendor_close"), KeyError, "named")
     _raises(lambda: available_at("KOSPI_OFFICIAL_CLOSE", date(2026, 10, 3), "official_close"), store.NotASession)
     tmp = _tmp()
     src = tmp / "ref.csv"

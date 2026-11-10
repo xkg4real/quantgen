@@ -74,6 +74,32 @@ REFERENCE_FILES: tuple[tuple[str, str, str, str, str, str, str], ...] = (
     ("F28", "treasury_par_yield_daily_posting_times.csv", "UST_PAR_YIELD", "first_release", "published", "US", "G-US-02a;G-REF-02;T-H15-01"),
 )
 CATALOG = "CATALOG.md"
+# Owner rulings 1 and 2 of 2026-11-11 (docs/nautilus_bridge/OWNER_RULINGS_LOG.md) on the reference close files.
+# Ruling 1, the layout: F13, F14 and F16 carry their value in a column named `close`; F27 is long form, one row per
+# `code` and session with its `close`. A reference file's own columns are copied unchanged and none is renamed, so
+# `generate` refuses one of these files whose header lacks a declared column rather than freeze a fixture that no
+# reader accepts (tests/macro_m1_calendars.read_close_layout, docs/vol_backtest.fixture_closes).
+CLOSE_LAYOUT: dict[str, tuple[str, ...]] = {"F13": ("close",), "F14": ("close",), "F16": ("close",),
+                                            "F27": ("code", "close")}
+
+
+def _reference_series(files=CLOSE_LAYOUT) -> dict[str, tuple[str, str]]:
+    """{series id: (market, value_status)} of `files` (the CLOSE_LAYOUT files), read from their REFERENCE_FILES rows; a
+    row that is not a close stamped `calendar_bound` on a named market cannot be declared."""
+    out: dict[str, tuple[str, str]] = {}
+    for fid, rel, series, value_status, source, market, _tests in REFERENCE_FILES:
+        if fid not in files:
+            continue
+        if value_status not in ("official_close", "vendor_close") or source != "calendar_bound" or not market:
+            raise ValueError(f"{fid} {rel}: a reference close file is a close stamped calendar_bound on a named market")
+        out.update({sid: (market, value_status) for sid in series.split(";")})
+    return out
+
+
+# Ruling 2, the instants: the series of these files (KS11, GSPC, KRWX, 005930, 000660) are reference series. They are
+# not registered (the registry lists the inputs of the operating signals, and stays as it is): `calendar_available_at`
+# stamps each from the market calendar its REFERENCE_FILES row names. Every other unregistered id is refused as before.
+REFERENCE_SERIES = _reference_series()
 
 
 class ReferenceMissing(FileNotFoundError):
@@ -105,10 +131,15 @@ def calendar_available_at(registry, clocks):
     """`available_at(series_id, obs_date, value_status) -> (obs_utc, available_at_utc)` from the signed calendars:
     a close is observed at the scheduled close and available at its close-print bound (`calendar_bound`); a
     published series at its publication instant. A series with no scheduled instant (live quote, as posted) is
-    refused: backfilled history is never `inferred_from_retrieval`. `clocks` is `core.calendars.adapter.CalendarClocks`."""
+    refused: backfilled history is never `inferred_from_retrieval`. `clocks` is `core.calendars.adapter.CalendarClocks`.
+    A declared reference series (REFERENCE_SERIES; owner ruling 2 of 2026-11-11) is not registered: its close is
+    stamped the same way, on the market calendar its REFERENCE_FILES row names. An id that is neither registered nor
+    declared is refused."""
     def available_at(series_id: str, obs_date: date, value_status: str):
         if not registry.is_series(series_id):
-            raise KeyError(f"{series_id}: not a registered series id (every fixture series is named)")
+            if series_id not in REFERENCE_SERIES:
+                raise KeyError(f"{series_id}: not a registered series id (every fixture series is named)")
+            return _reference_instants(clocks, series_id, obs_date, value_status)
         if registry.obs_kind(series_id) == "close":
             market = registry.market(series_id)
             return clocks.decision_time_utc(market, obs_date), clocks.close_print_bound_utc(market, obs_date)
@@ -117,6 +148,51 @@ def calendar_available_at(registry, clocks):
             raise ValueError(f"{series_id}: no scheduled publication instant; a fixture row never infers one from retrieval")
         return due, due
     return available_at
+
+
+def _reference_instants(clocks, series_id: str, obs_date: date, value_status: str):
+    """(obs_utc, available_at_utc) of a declared reference series' close: the scheduled close and the close-print
+    bound of the market its REFERENCE_FILES row names, read from `clocks` as for a registered close. Only the row's own
+    value_status is stamped. A market the calendars do not carry is refused: F16 names FX, and neither the spec's
+    market clocks (KRX, NYSE, CRYPTO; L1289-1291) nor core.calendars hold an FX clock, so KRW=X is not stamped until
+    the owner names its calendar. Nothing is inferred. A non-session, an unsigned file or a date outside coverage
+    raises from the clocks."""
+    market, declared = REFERENCE_SERIES[series_id]
+    if value_status != declared:
+        raise ValueError(f"{series_id}: a reference series is stamped as its REFERENCE_FILES row declares it "
+                         f"({declared}), not as {value_status!r}")
+    try:
+        return clocks.decision_time_utc(market, obs_date), clocks.close_print_bound_utc(market, obs_date)
+    except KeyError as exc:
+        raise KeyError(f"{series_id}: no market calendar for its REFERENCE_FILES market {market!r} "
+                       f"({exc.args[0] if exc.args else exc}); a reference series is stamped from a market calendar, "
+                       "never from retrieval") from exc
+
+
+class _ReferenceMarkets:
+    """`registry` as `core.ficc.pit.check_fixture` reads it, plus the market of a declared reference series
+    (REFERENCE_SERIES). Nothing is registered: `is_series` and every other answer are the registry's own, and an id
+    that is neither registered nor declared raises as the registry raises."""
+
+    def __init__(self, registry) -> None:
+        self._registry = registry
+
+    def __getattr__(self, name):
+        return getattr(self._registry, name)
+
+    def market(self, sid: str):
+        if sid in REFERENCE_SERIES and not self._registry.is_series(sid):
+            return REFERENCE_SERIES[sid][0]
+        return self._registry.market(sid)
+
+
+def calendar_check_fixture(registry, clocks):
+    """`check_fixture(path)` for `generate`: `core.ficc.pit.check_fixture` (T-FIX-01: a close-type row retrieved before
+    its session's close-print bound + 10 min is refused) on the same calendars as `calendar_available_at`, a declared
+    reference series' session being its REFERENCE_FILES market's."""
+    from core.ficc import pit
+    view = _ReferenceMarkets(registry)
+    return lambda path: pit.check_fixture(path, registry=view, clocks=clocks)
 
 
 def _iso(dt: datetime) -> str:
@@ -142,8 +218,9 @@ def _atomic_write(path: Path, text: str) -> None:
 
 
 def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_source: str, retrieved_at_utc: datetime,
-                 available_at=_refuse_available_at) -> tuple[list[str], list[dict]]:
-    """Reference rows with the section 4.1 provenance fields appended; values are copied unchanged."""
+                 available_at=_refuse_available_at, columns: tuple[str, ...] = ()) -> tuple[list[str], list[dict]]:
+    """Reference rows with the section 4.1 provenance fields appended; values are copied unchanged. `columns` are the
+    reference columns the file's declared layout names (CLOSE_LAYOUT): a header without one is refused."""
     if value_status not in VALUE_STATUSES or available_at_source not in AVAILABLE_AT_SOURCES:
         raise ValueError(f"{src.name}: value_status {value_status!r} / available_at_source {available_at_source!r}")
     with src.open(encoding="utf-8", newline="") as fh:
@@ -151,6 +228,10 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
         fields = list(reader.fieldnames or ())
         if not fields:
             raise ValueError(f"{src.name}: no header")
+        absent = [c for c in columns if c not in fields]
+        if absent:
+            raise ValueError(f"{src.name}: declared columns {absent} absent from the reference header {fields}; the "
+                             "generator copies a reference file's columns unchanged and renames none")
         date_col = fields[0]
         rows = []
         retrieved = _iso(retrieved_at_utc)
@@ -166,10 +247,20 @@ def fixture_rows(src: Path, *, series_id: str, value_status: str, available_at_s
     return fields + list(PROVENANCE_FIELDS), rows
 
 
+def fixture_text(fields: list[str], rows: list[dict]) -> str:
+    """A data fixture's text as `generate` writes it: the header, then one line per row."""
+    buf: list[str] = []
+    writer = csv.DictWriter(_Buf(buf), fieldnames=fields, lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(rows)
+    return "".join(buf)
+
+
 def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licence: str, owner: str,
              available_at=_refuse_available_at, check_fixture=None) -> list[dict]:
     """Write every fixture under `out_dir`; return its manifest rows (S1's ten columns). Refuses when any reference
-    file is absent. `check_fixture(path)` (core/ficc/pit.check_fixture, T-FIX-01) runs on every close-type fixture."""
+    file is absent, or when a reference close file lacks a column of its declared layout (CLOSE_LAYOUT).
+    `check_fixture(path)` (core/ficc/pit.check_fixture, T-FIX-01) runs on every close-type fixture."""
     ref_dir, out_dir = Path(ref_dir), Path(out_dir)
     missing = missing_files(ref_dir)
     if missing:
@@ -182,12 +273,8 @@ def generate(ref_dir: Path, out_dir: Path, *, retrieved_at_utc: datetime, licenc
         if value_status:                                       # data file: provenance added
             fields, rows = fixture_rows(src, series_id=series.split(";")[0], value_status=value_status,
                                         available_at_source=source, retrieved_at_utc=retrieved_at_utc,
-                                        available_at=available_at)
-            buf = []
-            writer = csv.DictWriter(_Buf(buf), fieldnames=fields, lineterminator="\n")
-            writer.writeheader()
-            writer.writerows(rows)
-            _atomic_write(dst, "".join(buf))
+                                        available_at=available_at, columns=CLOSE_LAYOUT.get(fid, ()))
+            _atomic_write(dst, fixture_text(fields, rows))
             span = f"{rows[0]['obs_date']}..{rows[-1]['obs_date']}" if rows else ""
             rule = f"{value_status}; available_at_source = {source}"
             if check_fixture is not None and value_status in ("official_close", "vendor_close", "live_snapshot"):
@@ -245,11 +332,11 @@ def main(argv=None) -> int:
         p.error("--retrieved-at-utc is required when generating")
     retrieved = datetime.strptime(args.retrieved_at_utc, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
     from core.calendars.adapter import CalendarClocks            # the shipped set: refuses until the owner signs
-    from core.ficc import contracts, pit
+    from core.ficc import contracts
     registry, clocks = contracts.default_registry(), CalendarClocks()
     rows = generate(ref, Path(args.out), retrieved_at_utc=retrieved, licence=args.licence, owner=args.owner,
                     available_at=calendar_available_at(registry, clocks),
-                    check_fixture=lambda p: pit.check_fixture(p, registry=registry, clocks=clocks))
+                    check_fixture=calendar_check_fixture(registry, clocks))
     added = freeze(Path(args.manifest), rows)
     print(f"{len(rows)} fixtures written under {args.out}; {added} manifest rows appended to {args.manifest}")
     return 0
