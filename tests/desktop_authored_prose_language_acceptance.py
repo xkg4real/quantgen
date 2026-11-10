@@ -168,6 +168,7 @@ class AuthoredProseLanguageTests(unittest.TestCase):
         from tests.strategy_exposure_acceptance import fixture
         from core.research.strategy_analysis import StrategyRequest, StrategyOutput
         from core.research.strategy_workflow import narrative, payload
+        from quantgen_desktop.strategy_view import CODE_ROLE
         for cost in (50, 1):
             data = fixture(cost=cost)
             variants = strategy_variants(data)
@@ -198,7 +199,11 @@ class AuthoredProseLanguageTests(unittest.TestCase):
                 text = '\n'.join(x.text() for x in w.strategy.findChildren(UiLabel))
                 self.assertIn('Historical 원문', text); self.assertIn('Historical evidence 12.34', text)
                 self.assertIn('Provider: ORIGINAL', text)
-                self.assertEqual(w.strategy.tables['Study scorecard'].item(0, 2).text(), 'REJECT')
+                # The verdict code stays visible and raw; a Korean window shows its meaning beside it
+                # ('기각 · REJECT', owner issue 09).
+                verdict = w.strategy.tables['Study scorecard'].item(0, 2)
+                self.assertEqual(verdict.text(), {'ko': '기각 · REJECT', 'en': 'REJECT'}[language])
+                self.assertEqual(verdict.data(CODE_ROLE), 'REJECT')
         finally:
             w.strategy.clear_result();w.deleteLater();self.app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
 
