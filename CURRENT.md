@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1
-next_ids: ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-10T19:58:30+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1
+next_ids: ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-10T20:10:54+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/run-registry-series-files-20261110
 work_commit: 93408c3
 uncommitted_changes: no
-pr: 91
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -65,7 +65,9 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - [x] ⑬-2/compact-ui 원인: PR89가 모든 compact 입력폼을 고정 696px(3×224+간격)로 제한. 18px 콤보에서 열 최소폭 236(Linux)/308(Windows) → 3열 불가 → 넓은 창에서도 2열. 수정: `form_layout.py`에서 224px를 상한이 아니라 기준으로(실제 최소폭이 요구하는 폭까지만 넓힘). A3 시험 그대로, 새 회귀 시험 추가. 로컬 CI 동등 데스크톱 9개 명령 647개 통과(Linux), 독립 검토 2명 승인, 컴플라이언스 PASS. 커밋 `05db49f`, 웹 기록 `30bca10`.
 - [x] ⑬-2/compact-ui PR #90 병합 `19a7375`(트리 = head `30bca10`). Runtime 42790177998 6/6(Windows 3.12는 첫 시도에서 15단계 KIS·관심종목 시험이 30분 제한에 걸려 취소, 재실행 1회 통과; 직전 head `05db49f`의 Runtime 42790128647 6/6), Compliance 42790178270 성공.
 - [x] ⑨-3a/series-digest/1 PR #87 병합 `9042f3e`(트리 = head `2f231cb`), Runtime 42799417249 6/6·Compliance 42799417582 성공.
-- [ ] ⑨-3a/series-format/1 PR #88 CI ← **여기**
+- [x] ⑨-3a/series-format/1 PR #88 병합 `d1346ff`(트리 = head `f3f56c3`), Runtime 42799673404 6/6·Compliance 성공.
+- [x] ⑨-3a/series-files/1 PR #91 병합 `ed8df4a`(트리 = head `93408c3`), Runtime 42799788975 6/6(Windows 3.11/3.12/3.14 포함)·Compliance 성공.
+- [ ] 다음: R3 남은 범위 확인(⑨-3a 부모), ⑨-1/2 LA-01·LA-02, ⑨-4/2 core/adoption ← **여기**
 - [ ] ⑨-3a/series-format/1 PR #88: PR #87 통합본 합침(`f3f56c3`), CI 대기. PR #87 병합 뒤 병합.
 - [ ] ⑨-3a/series-files/1 PR #91(`93408c3`): 설계→반박(11건)→구현→3관점 검토(8건 모두 수정). 시험 45개(3회), R3·구문·컴플라이언스 183개 통과, 변형 41/41 잡음. 정책 01·07·20 각 1행. PR #87·#88 뒤 병합.
 - [ ] ⑨-3a/series-files/1 설계·구현 워크플로 실행 중(브랜치 `claude/run-registry-series-files-20261110`, PR88 head `e7ed793`에서)
