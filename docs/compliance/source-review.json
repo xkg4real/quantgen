@@ -163,7 +163,7 @@
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
     "core/quant/run_registry_fold.py": "cb3b6aec8acea30a9cded039b1288c97b793dc5edb5e077b614b58a8f9fd24c2",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
-    "core/quant/run_registry_series_files.py": "50d76cfe5e8021530367b96a6a6ea1eab683db04e4ccfb866bfb7c850087f324",
+    "core/quant/run_registry_series_files.py": "734a6ed470bdf3631becec5f0a686128210309f03168c9b1a9e6a7d3e4c4a146",
     "core/quant/run_registry_series_format.py": "241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc",
     "core/quant/run_registry_series_hash.py": "96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043",
     "core/quant/run_registry_source_hash.py": "f38239e969a0127f8db00cbaf47fa9e1721c1642c525dff0ef5f7aa463e3bef6",
@@ -287,14 +287,14 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "fc83034df24be681a4309b80bf256366bb28ce9f18bc7c5890439ff833370d6c",
+    "docs/compliance/FACTS.md": "a381bdd4fdccb7fdb5150db4800eb4b9d7569563aa89c72dfd0c846c52aa618a",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
-    "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "3642c27ea7765d4dbbeb08f1a69dd478d748f86448498dacf84c4f70ba072d1b",
+    "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "a4c64ad6e92761e188d353bf8012e292bfed6648fa51c4bba8e60403181986ae",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -342,7 +342,7 @@
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
     "docs/product/R3_DETACHED_RUN_FOLD_2026-11-10.md": "f524a2a1afc51ec04809fdc50dc45c220e4a7ec38898cfcebef4c17157066cf9",
-    "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "c63c53d505d1b443b0061a5ec69455d72acd3a4e9deac3e864d59a4aee8c3ab1",
+    "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "51f38281e1859acf2df37b78e25747a46c5e6ef604aa87596ffac5c09da797c4",
     "docs/product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md": "04634e2e49b8b9c7e7cb4ada8d4d9669f8bf2fb2f54ea76b77f40f3ed0f11d71",
     "docs/product/R3_DETACHED_SERIES_HASH_2026-11-06.md": "aa144bbc25db49cffdda02ccc8cf55a88873dadc8f842d052c4ebf1cb6f48a2b",
     "docs/product/R3_DETACHED_SOURCE_HASH_2026-11-06.md": "1110e24650f40883e876b331d46f22780ef951d8dd7384401fbb99c555e53035",
@@ -422,7 +422,7 @@
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
-    "tests/adoption_strategy_rules_acceptance.py": "440631da8025a756a4beeac5b0d978afec6870ea7d6bf297083f9de465dd8138",
+    "tests/adoption_strategy_rules_acceptance.py": "f1b57cf6ec5613986f57ed5f81f4ed136e064c40c1511e4c265b15de18a0ed6f",
     "tests/ai_connection_acceptance.py": "b074a2f0c8d708c68a28a19ff187b9e3ab1095c10c83c1a47cb6ede9d338f79f",
     "tests/ai_output_check_acceptance.py": "01c54460c470062df057d398b08233cae41c420115ee24693f19ab3711a02972",
     "tests/ai_payload_acceptance.py": "a4efa39af3a06c6859607306729a9190c4f44da320556a4567388f7ab107e138",
@@ -574,7 +574,7 @@
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
     "tests/run_registry_fold_acceptance.py": "7627a1ed0ba20bf04feecab8f607a59730ed3e4877626f8b5543bcc8f8f53e3a",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
-    "tests/run_registry_series_files_acceptance.py": "d2a60102ed15e4d5c5054f51e7df26d699bd79e56b725db53eae9fa0dcbb10ca",
+    "tests/run_registry_series_files_acceptance.py": "4936d5f20319b1f1cc0e91856caa605bec18eb5f96c1ddd2be6a2331b21598fe",
     "tests/run_registry_series_format_acceptance.py": "2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73",
     "tests/run_registry_series_hash_acceptance.py": "f38a05fca045b00b3bf401a2ba3d0f2a71a6cc589acf5e790655c1e4fc76a156",
     "tests/run_registry_source_hash_acceptance.py": "461adaa26011177c0084d77aa35034ae32e5fbf800da08e0333c937d5eb80f96",
@@ -670,163 +670,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "1f97a8486192c99b15c8916f6005aa25f1e2cc0360667a2b7efd636670e5d4c5",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.111306+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "3db6bb8da02ed7da14f35b3ad642c6290221829d30ce3ba7861e262313190314",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.026644+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "1f97a8486192c99b15c8916f6005aa25f1e2cc0360667a2b7efd636670e5d4c5",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.113763+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "3db6bb8da02ed7da14f35b3ad642c6290221829d30ce3ba7861e262313190314",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.029833+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "03e4fb95f3093226f4bf38298bf575410b951ef80c5503ed7f9905e89bf899ec",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.115687+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "61a6dba06cff76bb61e474c5903bcdb872b48c905e1ca35dc4fec8e0b341bfbd",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.034844+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "826d7ea751613d27117e7859bdbbacd7125bfb9a35ba2cdeb990d90e3d34f835",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.117487+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "ebb1f5f7f95a4da719f18420926b24b8d15a711f264f2d6d3c696f86064c9a79",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.036819+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "e771c7d27dbb77f62cd7d5eb941170390a66f6a46c2533202c67e1a4bd2f2e9d",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.119282+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "57c338fa7d0d3e353ade0bbb69ce0d2fc6bb80193ad7072da508b640e62c7bbb",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.038697+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "7ab5900421897ad589a803793630bd8c08f6f8f384be2a02a5fe66253625606f",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.121201+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "87a1e756bb69a4b57df378e9423474f7d279785831c870e83fb5b36d925bad5d",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.040724+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "1f97a8486192c99b15c8916f6005aa25f1e2cc0360667a2b7efd636670e5d4c5",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.122902+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "3db6bb8da02ed7da14f35b3ad642c6290221829d30ce3ba7861e262313190314",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.042502+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "8": {
       "document_sha256": "455d8b429619c6914d3bd315efd69c1aaf083a6f995c84527511313055fc2a45",
-      "source_digest": "7ab5900421897ad589a803793630bd8c08f6f8f384be2a02a5fe66253625606f",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.124694+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "87a1e756bb69a4b57df378e9423474f7d279785831c870e83fb5b36d925bad5d",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.044270+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "d31596a7d9565a73999a6bd15a69bd5f8588e70840fd5f91c700fc2d0546477e",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.126398+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "a23ac7732e911d3f8c6e5f25f6af7935755f3a3b0a3b41b4bdc8b9187f801d4c",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.046411+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "0af570d6934ebc6662751c0f2d34893ccdcf17c5f327c4458a24e87e0a972c9d",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.128418+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "6afd6815162a11035c165f31c0df4b104fb8ee95565a7a6d3f48762c85088492",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.049125+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "694190799a0e8f1b0595f41caebcf0120509b3e1dc549a3963eb590688f0a225",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.130123+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "f03c1252d88eb341e5051ec4d49c706ddb5054c1076be8c9a7c172e949a9f3df",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.050845+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "a627a4d5cb1aa4a6a1f809cfb6f1f1ae5234cde77ca3147ba92978d744023119",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.132019+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "e0f4bd398a057f5ba8b1b7c1095b63f5ae5d352554b9d9d8a6dd1228bf22d24e",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.052552+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "d31596a7d9565a73999a6bd15a69bd5f8588e70840fd5f91c700fc2d0546477e",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.133808+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "a23ac7732e911d3f8c6e5f25f6af7935755f3a3b0a3b41b4bdc8b9187f801d4c",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.054704+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "d31596a7d9565a73999a6bd15a69bd5f8588e70840fd5f91c700fc2d0546477e",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.135525+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "a23ac7732e911d3f8c6e5f25f6af7935755f3a3b0a3b41b4bdc8b9187f801d4c",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.056405+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "d31596a7d9565a73999a6bd15a69bd5f8588e70840fd5f91c700fc2d0546477e",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.137324+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "a23ac7732e911d3f8c6e5f25f6af7935755f3a3b0a3b41b4bdc8b9187f801d4c",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.058627+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "abe68bfabe5182d499f0081660a236229b8e994366c71bf8334a64a471677fee",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.139082+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "c98251ad446372b72301ce158e933b5c9ebe680a5d0a32e0ed4273716bd6969a",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.060283+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "7ab5900421897ad589a803793630bd8c08f6f8f384be2a02a5fe66253625606f",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.140822+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "87a1e756bb69a4b57df378e9423474f7d279785831c870e83fb5b36d925bad5d",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.062375+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "1f97a8486192c99b15c8916f6005aa25f1e2cc0360667a2b7efd636670e5d4c5",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.142526+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "3db6bb8da02ed7da14f35b3ad642c6290221829d30ce3ba7861e262313190314",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.063964+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "da99d88680fcee6f83ca15238fdcb6b1feae98a284a75dbfdf90c098b26d1e85",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.144565+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "afb6b205747a2876f1fb8cfd54e7ef23a3cea4d6bdb96323986b0b16d583d0f4",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.066054+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "1f97a8486192c99b15c8916f6005aa25f1e2cc0360667a2b7efd636670e5d4c5",
-      "reviewed_by": "Claude owner rulings code-review fixes",
-      "review_note": "Code review fixes on the owner rulings branch: publish keeps its temp until the outcome is known, existing targets are synced, retry is Windows only, names renamed, one source for the reading of record",
-      "reviewed_at": "2026-11-10T20:13:39.146450+00:00",
-      "source_commit": "e4b0772e8240250902cf687c0e0d4a5c9be03b8b"
+      "source_digest": "3db6bb8da02ed7da14f35b3ad642c6290221829d30ce3ba7861e262313190314",
+      "reviewed_by": "Claude owner rulings code-review verification fixes",
+      "review_note": "Verification fixes to the series files /code-review round (series-files/3): a look made before a late wake-up is not used, a name that is not a regular file is refused at once, tests and record wording; adoption record names main before PR 100; rows 01, 07 and 20 compared, stored file kinds, leftovers and deletion order unchanged",
+      "reviewed_at": "2026-11-10T22:12:03.067703+00:00",
+      "source_commit": "51bd45cfa42a04aaa9bab60251b94292d68e8e04"
     }
   }
 }

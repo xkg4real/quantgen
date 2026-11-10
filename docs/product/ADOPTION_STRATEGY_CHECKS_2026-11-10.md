@@ -9,7 +9,9 @@ parent item ⑨-4/2 stays open.
 
 **⑨-4/2/b** (2026-11-11) names the N_raw reading of record after owner ruling 7: R-FAM, the R3 run-registry count.
 Both readings are still shown and the second DSR stays provisional until the R3 recorder exists. No threshold,
-status, gate or outcome rule changed; see the section "⑨-4/2/b" below.
+status, gate or outcome rule changed; see the section "⑨-4/2/b" below. **⑨-4/2/b/2** (2026-11-11) is the
+/code-review fix to it: the reading of record is stored in one place (the "/code-review fix" block of that
+section).
 
 ## Sources and rulings
 
@@ -241,7 +243,8 @@ Verification (local, synthetic, Linux, Python 3.13.17):
 - `compile()` and `ast.parse(feature_version=(3, 10))` of the module and its test pass under Python 3.11.17,
   3.12.3 and 3.13.17; `tests.runtime_syntax_acceptance` passed.
 
-/code-review fix (2026-11-11, pull request #100 at `e4b0772`): one source for the reading of record.
+/code-review fix (roadmap ⑨-4/2/b/2, 2026-11-11, pull request #100 at `e4b0772`): one source for the reading of
+record. ⑨-4/2/b was closed when pull request #100 merged, so this fix has its own ID.
 
 - The finding. The reading of record was stored three times: the constant, an `of_record` field on each
   `RawReading` and a `reading_of_record` field on `DsrTwoN`. `lines()` read only the per-reading field. Reproduced
@@ -249,8 +252,16 @@ Verification (local, synthetic, Linux, Python 3.13.17):
   while its printed lines still named R-FAM as the reading of record.
 - The fix. `N_RAW_READING_OF_RECORD` is the only place the reading of record is stored. `RawReading.of_record` and
   `DsrTwoN.reading_of_record` are read-only properties computed from it, and `role()` follows `of_record`. The
-  constructors of both classes are the ones main has: `RawReading` takes six arguments again, and `DsrTwoN` has no
-  `reading_of_record` argument, so `dataclasses.replace` with either name raises `TypeError`.
+  constructors of both classes are those of main before pull request #100 (`7ddb568`): `RawReading` takes six
+  arguments again, and `DsrTwoN` has no `reading_of_record` argument, so `dataclasses.replace` with either name
+  raises `TypeError`.
+- Correction from the verification of this fix. This block first said the constructors "are the ones main has".
+  That was no longer true when the fix was committed (2026-11-10 20:15 UTC): pull request #100 had merged into
+  main 26 minutes earlier (`1a8b29f`, 19:48 UTC), so main then had the `e4b0772` classes, with a seventh
+  `RawReading` field (`of_record`) and a `DsrTwoN.reading_of_record` field. Checked with `dataclasses.fields` on
+  both classes: the lists at this fix and at `7ddb568` are equal, and those at `e4b0772`, `1a8b29f` and the later
+  main `96cca1f` are equal to each other and have the two extra fields. The code was right and only the sentence
+  was wrong; the same wording is corrected in FACTS and in two comments of the test.
 - The printed lines are the same text. The SHA-256 of all lines for three inputs (both readings, only L-FAM, only
   R-FAM) is equal before and after, and a new test pins the three S-2 lines in full for each input.
 - Checks: `tests.adoption_strategy_rules_acceptance`, **35 tests** (33 before; two added), three runs of 3.691 s,

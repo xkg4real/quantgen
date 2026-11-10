@@ -385,12 +385,12 @@ class DsrLines(unittest.TestCase):
         a, _ = pair()
         kw = dict(n_grid=12, sr_sd_grid=0.01, sr_sd_daily=0.012, sr_sd_label="caller term")
         res = S.dsr_two_n(a, n_raw={"L-FAM": 17, "R-FAM": 11}, **kw)
-        # The constructors are the ones main has: no stored copy of the reading of record.
+        # The constructors are those of main before PR #100 (7ddb568): no stored copy of the reading of record.
         self.assertEqual([f.name for f in fields(S.RawReading)],
                          ["reading", "meaning", "n_raw", "dsr", "status", "below_grid"])
         self.assertNotIn("reading_of_record", {f.name for f in fields(S.DsrTwoN)})
         self.assertEqual(S.DsrTwoN.__dataclass_fields__["provisional"].default, True)
-        built = S.RawReading("L-FAM", "meaning", 17, 0.5, "below", False)        # six arguments, as on main
+        built = S.RawReading("L-FAM", "meaning", 17, 0.5, "below", False)        # six arguments, as at 7ddb568
         self.assertEqual((built.of_record, built.role()), (False, "shown for comparison"))
         with self.assertRaises(TypeError):
             S.RawReading("L-FAM", "meaning", 17, 0.5, "below", False, True)        # no seventh, stored flag

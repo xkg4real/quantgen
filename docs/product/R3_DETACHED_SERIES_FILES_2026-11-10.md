@@ -20,16 +20,19 @@ caller. A target that appears while a write is in progress is now verified
 `NoClobberUnsupported`. Child 2 left the locks, the temp file handling, the retry
 limits, the bounded reads and the other typed errors as child 1 had them.
 
-A `/code-review` round on child 2 (2026-11-11, section "/code-review fixes")
-changed four things a caller can see. A target that blocks the publish is no
-longer judged on a single look taken after this call's temp was deleted: the
-temp is kept and the target is looked at again within the 10 attempts and 5 s.
-On POSIX an existing target is fsynced, together with the directory, before
-`created=False` is returned. POSIX `os.link` errors are never retried: a
-`PermissionError` from it (EACCES) is `NoClobberUnsupported` at once, and only
-the Windows publish call is retried on `PermissionError`. `ReplaceRetryExhausted`,
-`REPLACE_ATTEMPTS` and `REPLACE_BUDGET` are now `PublishRetryExhausted`,
-`PUBLISH_ATTEMPTS` and `PUBLISH_BUDGET`, with no aliases.
+Child **⑨-3a/series-files/3** (2026-11-11) is the `/code-review` round on
+child 2 and the verification of its fixes (sections "Child 3: /code-review
+fixes" and "Child 3: verification of the fixes"). It changed four things a
+caller can see. A target that blocks the publish is no longer judged on a
+single look taken after this call's temp was deleted: the temp is kept, and a
+regular file that does not verify yet is looked at again within the 10 attempts
+and 5 s. On POSIX an existing target is fsynced, together with the directory,
+before `created=False` is returned. No POSIX `os.link` error is retried: a
+`PermissionError` from it (EACCES), with no target name in the way, is
+`NoClobberUnsupported` at once, and only the Windows publish call is retried on
+`PermissionError`. `ReplaceRetryExhausted`, `REPLACE_ATTEMPTS` and
+`REPLACE_BUDGET` are now `PublishRetryExhausted`, `PUBLISH_ATTEMPTS` and
+`PUBLISH_BUDGET`, with no aliases.
 
 The sections below describe the current behaviour; the earlier verification
 records are kept as written.
@@ -56,7 +59,10 @@ Deliberate deltas from §5.7:
   `PermissionError`, because OneDrive, Defender and the indexer open new files".
   That reason exists on Windows. On POSIX the publish call is `os.link`, whose
   `PermissionError`s (EPERM, EACCES) do not pass by waiting, so they end the
-  write at once with `NoClobberUnsupported`. The limits (10 and 5 s) are
+  write at once with `NoClobberUnsupported`. A refused `os.link` is not
+  repeated because of its error; it is made again only when a foreign name
+  found at the check after the refusal is gone again, within the same rounds
+  and budget ("When os.link refuses"). The limits (10 and 5 s) are
   unchanged and also bound the looks at a blocking target. No sentence of §5.7,
   of the bridge rule or of the child 1 claim asks for the retry on POSIX; the
   child 2 text of this record listed "POSIX EACCES" as retried, which described
@@ -162,28 +168,40 @@ budget (`PUBLISH_BUDGET`), with waits of 0.05, 0.1, 0.2, 0.4 and then 0.8 s
 between rounds (nine waits, 4.75 s in total). A round is one publish call, one
 look at a target name that blocks it, or both. No round starts once 5 s have
 elapsed: a wait that would reach 5 s is not taken, and the clock is read again
-after each wait, so a late wake-up also ends the rounds.
+after each wait, so a late wake-up also ends the rounds. What a look found
+before a wait that ended late is then not used: the name is looked at once
+more, and no publish call is made after the 5 s ("No-clobber publish").
 
 | Repeated in the next round | Not repeated |
 | --- | --- |
-| The Windows publish call (`os.rename`) after a `PermissionError` (an access or sharing violation while another program holds the new file open). On both platforms, the look at a target name that blocks the publish, while that target does not verify (`IntegrityError`), cannot be opened or read (`PermissionError`) or is gone again (`FileNotFoundError`; the publish call is then made again) | `mkstemp`, a zero-progress write, the temp fsync or close, every error of POSIX `os.link` (`FileExistsError` leads to a look; a `PermissionError` or a no-hard-link error ends the write at once, see "No-clobber publish"), other publish errors, any other failure to read a blocking target, the fsync of an existing target or of its directory, the state checks, unlink, the directory fsync, readback (including a Windows `PermissionError` on readback), unlock and close. A target that is already there when the call begins (step 3) is looked at once. OS-lock contention is a lock wait, bounded by `lock_timeout` |
+| The Windows publish call (`os.rename`) after a `PermissionError` (an access or sharing violation while another program holds the new file open). On both platforms, the look at a target name that blocks the publish, while that target is a regular file that does not verify (`IntegrityError`), cannot be opened or read (`PermissionError`) or is gone again (`FileNotFoundError`; the publish call is then made again) | `mkstemp`, a zero-progress write, the temp fsync or close, every error of POSIX `os.link` (`FileExistsError` leads to a look; a `PermissionError` or a no-hard-link error with no target name in the way ends the write at once; `os.link` is made again only by the rule for a name that is gone again, see "When os.link refuses"), other publish errors, the look at a blocking name that is not a regular file (`IntegrityError` at once), any other failure to read a blocking target, the fsync of an existing target or of its directory, the state checks, unlink, the directory fsync, readback (including a Windows `PermissionError` on readback), unlock and close. A target that is already there when the call begins (step 3) is looked at once. OS-lock contention is a lock wait, bounded by `lock_timeout` |
 
 Before every round, and again when the rounds are used up after a refused
-publish call, the store requires the original temp (same identity, regular, same
-size); a vanished or changed temp raises `PublicationUncertain`. A target name
-found at those checks is looked at as "No-clobber publish" describes and is
-never overwritten. When the
+publish call or after a late wake-up, the store requires the original temp (same
+identity, regular, same size); a vanished or changed temp raises
+`PublicationUncertain`. When the rounds end with a look made in the last round,
+that look decides and the temp is not checked again. A target name found at
+those checks is looked at as "No-clobber publish" describes and is never
+overwritten. When the
 rounds are used up with the original temp and an absent target confirmed, the
 Windows branch raises `PublishRetryExhausted` with `attempts` (the publish calls
-made) and `temp_removed`. The POSIX branch cannot end that way, because it
-never repeats a refused publish call. Until the /code-review round the three
+made) and `temp_removed`. The POSIX branch cannot end that way: a refused
+`os.link` with no target name in the way ends the call at once, and a name that
+was in the way and is gone when the rounds are used up ends it in
+`PublicationUncertain`. Until the /code-review round the three
 names were `REPLACE_ATTEMPTS`, `REPLACE_BUDGET` and `ReplaceRetryExhausted`; the
 values (10 and 5.0) are unchanged, and the old names are gone without aliases,
 because nothing is replaced any more and only this module's own test imports it.
 No time limit applies to a single filesystem call, so the last round, started
 before 5 s, can end later. The lock stays held during the rounds, so another
 caller of the same digest with the default 2 s timeout can get `LockTimeout`;
-other digests are unaffected.
+other digests are unaffected. How long that is for a name that never passes
+(Linux, real clock, child 3 verification): a regular file that does not verify
+holds both locks for 4.76 s and is opened ten times; a 64 MiB file with one
+wrong byte for 4.81 s, read and hashed in each of eight rounds; in both cases a
+reader of the same digest that started 0.3 s in got `LockTimeout` after 2.0 s.
+A name that is not a regular file is refused at the first look, in 0.003 to
+0.008 s, and the reader gets its `IntegrityError` at once.
 
 ## No-clobber publish
 
@@ -200,8 +218,9 @@ for them.
 A target name that exists at publish time was created outside the cooperating
 lock, after this call's absence check. It is found in one of four places: the
 check before a round, the publish call itself (`FileExistsError`), the check
-when the rounds are used up and, on POSIX, the check that follows a refused
-`os.link` (below). All four are handled alike. This call's verified temp is
+when the rounds are used up (after a refused publish call or a late wake-up)
+and, on POSIX, the check that follows a refused `os.link` (below). All four
+are handled alike. This call's verified temp is
 kept, and the target is looked at: validated as in Read, and never written,
 repaired or removed.
 
@@ -209,11 +228,19 @@ repaired or removed.
   then this call's temp is removed and the call returns `created=False`. The
   file is kept byte for byte (the other writer's container wins, as for any
   existing target).
-- It does not verify (wrong or partial bytes, a link, a directory): the store
+- A regular file that does not verify (wrong or partial bytes): the store
   cannot tell a file that is still being written from one that is wrong, so it
   waits and looks again in the next round. If the target still does not verify
   when the rounds are used up, the temp is removed and the call raises
   `IntegrityError`; the target is left untouched.
+- Not a regular file (a link, a directory, a FIFO or another special file):
+  nobody is still writing one into a series, and waiting cannot make it verify.
+  The temp is removed and the call raises `IntegrityError` at the first look,
+  so the locks are not held for the rest of the 5 s. The name is refused from
+  `lstat`, never opened, and left untouched. The store reads the name once more
+  to decide this; if it is gone by then, the call waits as for any name that
+  is gone again. Between the /code-review round and its verification such a
+  name was looked at in all ten rounds (4.75 s with both locks held).
 - It cannot be opened or read because of a `PermissionError` (a Windows sharing
   violation while the program that created it still holds it open; on POSIX a
   file this process may not read yet): the store waits and looks again. If that
@@ -223,6 +250,15 @@ repaired or removed.
   call again with the temp it kept. If a name still blocks the call and is gone
   again at the look when the rounds are used up, the call raises
   `PublicationUncertain` ("vanished before it could be verified").
+- The wake-up from a wait comes late and the 5 s are used: what the look before
+  that wait found may no longer be so, and it is not used. The name is looked
+  at once more and that look decides as above: `created=False` for a target
+  that verifies now, `IntegrityError` for one that still does not. No publish
+  call is made after the 5 s, so a name that is gone at that look ends the call
+  in `PublicationUncertain` ("vanished before it could be verified") with
+  nothing stored. Between the /code-review round and its verification the look
+  from before the wait decided: a target completed during that wait, or a name
+  removed during it, gave `IntegrityError`.
 - Any other failure to open or read it (an I/O error): `PublicationUncertain`
   at once, with the OS error as `__cause__`.
 
@@ -236,7 +272,26 @@ A target that was already there when the call began (step 3 of Write), and any
 target in `read()`, is looked at once. No temp exists yet, so nothing of this
 call is lost by answering at once. Such a target raises `IntegrityError` when it
 does not verify, also when another program is still writing it, and the OS
-error itself when it cannot be opened or read, as in child 1 (see Outcomes).
+error itself when it cannot be opened or read, as in child 1 (see Outcomes);
+that includes `FileNotFoundError` when the name is gone between the existence
+check and the open.
+
+Why the waits stop at step 3. A name found after this call's own absence check
+is known to be new, so it may well still be written. A target found at step 3
+can be of any age: waiting on each one would hold both locks for 4.75 s in
+every write that meets a damaged file, and a reader of that digest would get
+`LockTimeout` where it now gets `IntegrityError`. The price is that the states
+the rounds wait for are answered at once when they are met a moment earlier.
+Measured in the child 3 verification with real threads and the real clock: on
+the POSIX branch (10,000 calls against a writer outside the lock) 709 calls
+raised `IntegrityError` at step 3, 173 of them for a file that its writer
+completed within 0.3 s and 271 for one that it removed within 0.3 s, and 6
+raised `FileNotFoundError` for a name that was removed between the existence
+check and the open; on the simulated Windows branch (4,500 calls) 478 calls
+raised `PermissionError` at step 3 for a file its writer still held open.
+The caller still has the payload and nothing was changed, so calling again is
+safe. Whether step 3 should wait as well was raised in the verification and is
+not decided ("Child 3: verification of the fixes").
 
 ### Sync of an existing target
 
@@ -261,7 +316,8 @@ is taken from its documentation; it was not executed here.
 
 ### When os.link refuses
 
-POSIX `os.link` errors are never retried. A filesystem that cannot make the hard
+No POSIX `os.link` error is retried: the call is not made again because of the
+error it raised. A filesystem that cannot make the hard
 link (FAT, exFAT, some FUSE and network mounts) fails `os.link` with EPERM,
 ENOTSUP, EOPNOTSUPP, ENOSYS, EMLINK or EXDEV (six names; five values on Linux,
 where ENOTSUP and EOPNOTSUPP are the same number). EPERM does not always mean
@@ -280,7 +336,13 @@ not fall back to an overwriting call", and not a cause; the OS error is
 `__cause__`. Nothing is overwritten in any of these cases. After confirming the
 original temp and an absent target, the call removes the temp and raises the
 typed `NoClobberUnsupported` at once; a target name that exists at that check is
-looked at as above. There is no fallback to a call that can overwrite, and no
+looked at as above. One case has a second `os.link` call after a refused one:
+the name found at that check does not verify yet and is gone again at the next
+round. The publish call is then made again with the same temp, as for any name
+that is gone again, within the same 10 rounds and 5 s; refused again with no
+name in the way, it raises `NoClobberUnsupported` (run in the child 3
+verification: EPERM and EACCES, two calls, one wait of 0.05 s). There is no
+fallback to a call that can overwrite, and no
 second primitive is tried: on POSIX a directory without hard links cannot hold
 series files (see "Platform notes"). Windows is not affected: `os.rename` makes
 no hard link,
@@ -322,14 +384,14 @@ cannot be read through this module.
 | `SeriesFormatError`, constructor `StoreError` | Nothing created |
 | `LockTimeout` | No temp created; an existing target untouched; a newly created empty sidecar may remain |
 | `SidecarMissing`, `SeriesNotFound` | Nothing created or changed |
-| `IntegrityError` | Target untouched. Raised at once, with no temp made, for a target that was there before the call. For a target name that appeared during the publish it is raised only when the rounds are used up and the target still does not verify; this call's temp is then removed unless `cleanup_errors` says otherwise |
+| `IntegrityError` | Target untouched. Raised at once, with no temp made, for a target that was there before the call. For a target name that appeared during the publish it is raised at the first look when the name is not a regular file, and for a regular file only when the rounds are used up and the target still does not verify; this call's temp is then removed unless `cleanup_errors` says otherwise |
 | `ReleaseError` | A read or an existing-target check (the idempotent skip, or a valid target that appeared during the publish) verified its result, and on POSIX synced it, but unlock, a close or the removal of this call's temp failed; no publication by this call; the result is not returned |
-| Raw `OSError` while opening or reading a target that was there before the call (`read()`, or step 3 of Write) | No temp and no publish call; the target is untouched |
+| Raw `OSError` while opening or reading a target that was there before the call (`read()`, or step 3 of Write), `FileNotFoundError` included when the name is gone between the existence check and the open | No temp and no publish call; the target is untouched |
 | Raw `OSError` from `mkstemp`, the temp write, fsync or close | No publish call; the identity-matching temp is removed unless `cleanup_errors` says otherwise; a new sidecar may stay empty if its NUL initialization failed |
 | Temp `StoreError`, or an `lstat` failure right after `mkstemp` | No publish call; the temp is kept, because its ownership is unproven; a new sidecar may stay empty if its NUL initialization failed |
 | `PublishRetryExhausted` | Windows only: `os.rename` still raised `PermissionError` when the rounds were used up. Target absent at the final check; temp removed if `temp_removed`; `attempts` is the number of publish calls made |
-| `NoClobberUnsupported` | POSIX only, raised at once: `os.link` refused the hard link (a filesystem without hard links, an EPERM refusal for another reason, or EACCES; the message names the errno). Nothing published and nothing overwritten; the original temp and an absent target were confirmed; the temp is removed unless `cleanup_errors` says otherwise. The digest's `.lock` stays |
-| `PublicationUncertain` | Never overwrote a target; the target may be absent, foreign, or published without completed checks. Foreign includes a target that appeared during the publish and, when the rounds were used up, had vanished again or still could not be opened; one that could not be read for another reason; and an existing target that verified but whose fsync or directory fsync failed (POSIX). Published without completed checks includes, on POSIX, a published file whose temp name could not be unlinked and is still a hard link to it. Do not blindly retry; a later `read()` verifies current bytes but not durability |
+| `NoClobberUnsupported` | POSIX only: `os.link` refused the hard link (a filesystem without hard links, an EPERM refusal for another reason, or EACCES; the message names the errno) while no target name exists. It is raised right after that call, with no wait and no retry of the error; the call is the first one unless a foreign name that was in the way after an earlier refusal is gone again ("When os.link refuses"). Nothing published and nothing overwritten; the original temp and an absent target were confirmed; the temp is removed unless `cleanup_errors` says otherwise. The digest's `.lock` stays |
+| `PublicationUncertain` | Never overwrote a target; the target may be absent, foreign, or published without completed checks. Foreign includes a target that appeared during the publish and, when the rounds were used up or a wake-up came after the 5 s, had vanished again or still could not be opened; one that could not be read for another reason; and an existing target that verified but whose fsync or directory fsync failed (POSIX). Published without completed checks includes, on POSIX, a published file whose temp name could not be unlinked and is still a hard link to it. Do not blindly retry; a later `read()` verifies current bytes but not durability |
 | `KeyboardInterrupt`, `SystemExit` | Propagated unwrapped after cleanup (identity-checked temp removal, unlock, a single close, process-lock release). Before the publish call, and in a wait between rounds, the owned temp is removed unless `cleanup_errors` says otherwise; during or after the publish call publication is unknown, so verify with `read()` |
 
 Any raised exception may carry `cleanup_errors`, a tuple of cleanup failures.
@@ -445,18 +507,19 @@ first; base `e7ed793` is PR88's head. Child 2 changes only
 `core/quant/run_registry_series_files.py`, its test and this record, plus the
 series-files section of `docs/compliance/FACTS.md` and the compliance baseline
 (`docs/compliance/source-review.json`); no 01-20 policy row names the publish
-call, so none changed. The /code-review round changed the same files for this
-unit. No 01-20 policy row names the retry constants or the typed error either,
-and the stored file kinds, the leftovers and the deletion order are as before,
-so again none changed. The module is still detached: only its own test imports
-it.
+call, so none changed. The /code-review round and its verification (child 3)
+changed the same files for this unit. No 01-20 policy row names the retry
+constants or the typed error either, and the stored file kinds, the leftovers
+and the deletion order are as before, so again none changed. The module is
+still detached: only its own test imports it.
 
 ## Verification
 
 The first part is the child 1 record of 2026-11-10, kept as written (it names
 `os.replace`, which the module no longer calls, and `ReplaceRetryExhausted`,
-which is now `PublishRetryExhausted`). The child 2 records and the /code-review
-round follow it; each is kept as written when a later round adds to it.
+which is now `PublishRetryExhausted`). The child 2 records and the two child 3
+records (the /code-review round and its verification) follow it; each is kept
+as written when a later round adds to it.
 
 All local checks ran on Linux with Python 3.13 (`-B`, no bytecode), in fresh
 temporary directories only, with no network, real series, ledger or
@@ -621,7 +684,11 @@ directories only:
 Still not executed locally: Windows, macOS, a filesystem without hard links and
 a uid-mapped mount.
 
-### /code-review fixes (2026-11-11)
+### Child 3: /code-review fixes (2026-11-11)
+
+Roadmap ID ⑨-3a/series-files/3. Child 2 (⑨-3a/series-files/2) was closed when
+pull request #100 merged, so this round and its verification below are a new
+child and not more work under the closed ID.
 
 A `/code-review` of pull request #100 at `e4b0772` (the child 2 commits merged
 with main `7ddb568`) reported findings on this module. Four were accepted as
@@ -735,6 +802,143 @@ Still not executed locally: Windows (real `os.rename`, `msvcrt`, and
 `os.fsync` on a read-only handle), macOS, a filesystem without hard links, a
 uid-mapped mount and a real power loss. The first real Windows execution is the
 Runtime CI matrix.
+
+### Child 3: verification of the fixes (2026-11-11)
+
+Roadmap ID ⑨-3a/series-files/3, the same child as the round above. A
+verification pass over the /code-review commit (`51bd45c`) found no case in
+which the module overwrites, removes or adopts a foreign target, and no false
+success. It reported six findings on this unit and one on the adoption checks
+(recorded in `ADOPTION_STRATEGY_CHECKS_2026-11-10.md`). Each was reproduced on
+`51bd45c` before anything was changed. Two became code changes, one added
+tests, two corrected records, and one was left as it is, with the reason given.
+The numbers of the rounds above are kept as written.
+
+- **A late wake-up let a stale look decide (code).** When the sleep itself
+  carried the elapsed time past 5 s, the rounds ended on the result of the look
+  made before that sleep, and the look at exhaustion was skipped. Reproduced
+  with a fake clock: a half-written foreign target completed during the ninth
+  wait, with a wake-up 0.3 s late, gave `IntegrityError` although the target
+  was a valid series when the call ended (last look at 3.95 s, end at 5.05 s);
+  an invalid target removed during that wait gave `IntegrityError` for a name
+  that was absent; with looks of 28 ms a wake-up 1 ms late was enough. On time,
+  the same cases gave `created=False` and `created=True`. The `e4b0772` code
+  always looked again at exhaustion, so the corner came in with the
+  /code-review round. Nothing was overwritten and no success was reported.
+  Now the result from before the wait is set aside and the name is looked at
+  once more. The same three probes return `created=False`,
+  `PublicationUncertain` ("vanished", nothing stored, no publish call after the
+  5 s) and `created=False`.
+- **A name that is not a regular file was waited on for the whole budget
+  (code).** The verification asked whether the lock hold is wanted for states
+  that cannot pass. For a link, a directory or a FIFO it is not: nobody is
+  still writing one, and `e4b0772` answered at once. Reproduced with the real
+  clock: each of the three took 4.755 or 4.756 s before `IntegrityError`, with
+  both locks held, and a reader of the same digest that started 0.3 s in got
+  `LockTimeout` after 2.0 s. Now: 0.008 s, 0.004 s and 0.003 s, and the reader
+  gets `IntegrityError`. Not changed, because it is what keeping the temp for
+  a file that may still be written costs: a regular file that never verifies
+  holds both locks for 4.76 s (ten opens), and a 64 MiB file with one wrong
+  byte for 4.81 s (read and hashed in each of eight rounds); the reader got
+  `LockTimeout` after 2.0 s in both.
+- **Three test gaps (tests only).** Of the verification's 53 scratch mutants,
+  48 were killed by behavioural tests, 3 by the source check only and 2
+  survived. (a) A store that unlinked an existing target just before the
+  publish call was caught by the source check only, because every test
+  created the foreign file inside the publish call. A new test creates it
+  right after the store's last absence check, on both branches and for every
+  kind of foreign name. (b) A store that adopted a blocking target of the
+  temp's size without checking its content survived: no mid-publish fixture
+  had that size and wrong bytes. `FOREIGN` now has one (the payload with one
+  data byte flipped), and it runs through every foreign-target test. (c) The
+  late wake-up with a blocking target had no test; see the first item.
+- **Sentences that were too absolute (records and docstrings; no code).**
+  "POSIX `os.link` errors are never retried", "never repeats a refused publish
+  call" and "raised at once" do not hold in one corner: `os.link` is refused
+  (EPERM or EACCES) while a foreign file that does not verify sits on the
+  target name, and that name is gone at the next round. Probe on `51bd45c`:
+  two `os.link` calls, one wait of 0.05 s, then `NoClobberUnsupported`. The
+  second call is the rule for a name that is gone again and stays inside the
+  10 rounds and 5 s, so the behaviour is kept; the sentences now say it, here,
+  in FACTS and in the module's docstrings, and a new test pins the two calls.
+  FACTS also said the temp is checked again "at exhaustion"; that is done only
+  after a refused publish call (and, since this round, after a late wake-up).
+  Probe: a temp removed during the tenth look gives `IntegrityError` for the
+  target, not `PublicationUncertain`.
+- **Step 3 still answers at once (not changed).** The states the rounds wait
+  for are still answered at once when the target is already there when the
+  call begins. In the real-thread races below: 709 `IntegrityError` and 6
+  `FileNotFoundError` at step 3 on the POSIX branch (173 of the 709 for a file
+  completed within 0.3 s, 271 for one removed within 0.3 s), and 478
+  `PermissionError` at step 3 on the simulated Windows branch, for a file its
+  writer still held open. The reason for stopping the waits there is in
+  "No-clobber publish": a target found at step 3 can be of any age, and
+  waiting on each one would hold both locks for 4.75 s in every write that
+  meets a damaged file, which is the hold the second item removes where it
+  can. The /code-review finding was about a temp in hand, and here none
+  exists: the caller still has the payload and nothing was changed. If step 3
+  is to wait as well, the change is: on `IntegrityError`, `PermissionError` or
+  `FileNotFoundError` there, look again within the same 10 rounds and 5 s,
+  and go on to `mkstemp` and the publish when the name is gone. That is a
+  decision about the contract child 1 pinned (a raw `OSError` and an immediate
+  `IntegrityError` at step 3), and it is left open here.
+- **Roadmap ID.** The /code-review commit was titled with the IDs of child 2
+  and of ⑨-4/2/b, which the ledger has as finished at `1a8b29f`. The round and
+  this verification are ⑨-3a/series-files/3; the headings above and the FACTS
+  rows now carry it.
+
+Checks after the changes, on Linux (ext4) with Python 3.13.17 (`-B`), fresh
+temporary directories only, no network:
+
+- `tests.run_registry_series_files_acceptance`: **72 tests** (67 before; five
+  added, and the same-size fixture and the non-regular names added to
+  existing ones), three runs of 1.907 s, 1.826 s and 1.882 s, exit 0 each, and
+  once more with `-W error::ResourceWarning` (1.671 s).
+- Fail before, pass after. Against the `51bd45c` module the same 72 tests give
+  26 failures and 4 errors in 5 test methods. The two tests for the code
+  changes fail there in every sub-case (the late wake-up: 6; a name that
+  is not a regular file: 6), and two existing foreign-target tests and the new
+  gap test fail in their link and directory sub-cases, which now expect no
+  wait. The rest of the new tests pass before and after: the gap test in its
+  regular-file sub-cases, the test of a name that is gone right after a failed
+  look, and the pin of the second `os.link` call. With only one of the two
+  code changes undone, the test of that change fails (mutants V1a and V4a
+  below).
+- Combined run with the fold, the adoption checks and the seven other R3
+  modules: **260 tests in 6.370 s, exit 0** (255 before this round;
+  overlapping, not added together). `tests.runtime_syntax_acceptance` passed;
+  the module and its test compiled on Python 3.11.17, 3.12.3 and 3.13.17 and
+  `ast.parse(feature_version=(3, 10))` accepted them.
+- Mutation run on scratch copies: **70 of 70 mutants killed**, each by at
+  least one behavioural test and not only by the source check: the
+  verification's 53, re-anchored to the new code (the 3 and the 2 above are
+  now killed by the gap test, the same-size fixture and the late wake-up
+  test), and 17 for this round's two code changes (8 for the late wake-up, 9
+  for the names that are not regular files, among them a publish call after
+  the budget, a removed link or directory and a stale look kept). This run is
+  separate from the 76, the 47 and the 26 above.
+- Model fuzz, fake clock, scratch only: 80,000 schedules in which a foreign
+  actor creates, completes, removes or replaces the target at the points where
+  the store looks at or touches the name. On each branch 20,000 schedules keep
+  that actor quiet during the last sync and cleanup steps, so the end state is
+  checked exactly, and 20,000 let it act at every step. No store-made change
+  to a foreign file and no unverified `created=False` in any schedule. Four of
+  the mutants above, run through the same model on the POSIX branch, were each
+  reported as violations.
+- Real-thread races, real clock, scratch only: POSIX branch 10,000 calls (4
+  runs of 2,500 fresh directories), simulated Windows branch 4,500 calls (3
+  runs of 1,500; `os.rename` as `renameat2` with `RENAME_NOREPLACE`, and the
+  open of a file its writer holds refused). In no call was a foreign file
+  changed or removed by the store, `created=True` returned while a foreign
+  file held the name, or `created=False` returned without a valid foreign
+  file. 402 POSIX and 1,285 Windows-branch calls met a foreign file during the
+  publish and returned `created=False`. A count of zero is not a proof.
+
+Still not executed locally: Windows (real `os.rename` onto a directory or a
+link, `msvcrt`, `os.fsync` on a read-only handle), macOS, a filesystem without
+hard links, a uid-mapped mount and a real power loss. The new tests run both
+branches on every platform; their first real Windows execution is the Runtime
+CI matrix.
 
 Publication readiness remains BLOCKED. Optional additional GPT/Gemini
 specification review remains NOT_PERFORMED.

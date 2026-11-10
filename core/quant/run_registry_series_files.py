@@ -14,17 +14,24 @@ on Windows. ``os.replace`` and POSIX ``os.rename`` are never called. A target
 name that exists at publish time is never overwritten, repaired or removed.
 This call's verified temp is kept while the target is looked at, at most
 ``PUBLISH_ATTEMPTS`` times within ``PUBLISH_BUDGET`` seconds: a target that
-verifies against the digest is reported as already present; one that does
-not verify or cannot be opened yet is looked at again; when the name is gone
-again the publish call is made again. At the end of the budget a target that
-does not verify is refused (``IntegrityError``) and one that cannot be opened
-or read is ``PublicationUncertain``. A target that is already there when the
-call begins is looked at once, as in ``read``, before any temp exists.
+verifies against the digest is reported as already present; a regular file
+that does not verify or cannot be opened yet is looked at again; when the
+name is gone again the publish call is made again. A name that is not a
+regular file (a link, a directory) is refused at once (``IntegrityError``).
+At the end of the budget a target that does not verify is refused
+(``IntegrityError``) and one that cannot be opened or read is
+``PublicationUncertain``. A look made before a wait that ended late is not
+used for that: the name is looked at once more. A target that is already
+there when the call begins is looked at once, as in ``read``, before any temp
+exists.
 
 When POSIX ``os.link`` refuses the hard link (a filesystem without hard links,
-a kernel refusal, or a ``PermissionError``) the write raises
-``NoClobberUnsupported`` at once; there is no overwriting fallback. Only the
-Windows publish call is retried on ``PermissionError``.
+a kernel refusal, or a ``PermissionError``) and no target name exists, the
+write raises ``NoClobberUnsupported`` at once; there is no overwriting
+fallback. Only the Windows publish call is retried on ``PermissionError``. A
+refused ``os.link`` is not repeated because of its error: it is made again
+only when a foreign name found at the check after the refusal is gone again,
+within the same rounds and budget.
 
 This is not a path-security sandbox. Hostile path changes, hard-link aliases
 made by others, sync folders, network mounts, fork during active I/O and
@@ -102,9 +109,10 @@ class PublishRetryExhausted(StoreError):
     """The Windows publish call still raised PermissionError when the budget ended.
 
     Windows only: os.rename is retried on PermissionError (an access or
-    sharing violation while another program holds the new file open); POSIX
-    os.link is never retried. Nothing was published. The original temp
-    identity and target absence were confirmed after the last attempt.
+    sharing violation while another program holds the new file open); a POSIX
+    os.link is not repeated because of its error. Nothing was published. The
+    original temp identity and target absence were confirmed after the last
+    attempt.
     ``attempts`` counts the publish calls made; ``temp_removed`` says whether
     the owned temp file was deleted. The keyword defaults exist only so that
     unpickling, which rebuilds the exception from its message and then
@@ -130,17 +138,23 @@ class PublicationUncertain(StoreError):
 class NoClobberUnsupported(StoreError):
     """os.link refused the hard link, so nothing was published.
 
-    POSIX only, raised at once: no os.link error is retried. The usual cause
-    is a filesystem without hard links (for example FAT or exFAT): use a
-    directory on a filesystem that has them. link(2) also returns EPERM when
-    the kernel's protected-hardlinks policy refuses (the temp file's owner is
-    not the caller, as on some uid-mapped mounts) and when the file is
-    immutable or append-only, and EACCES when the directory may not be
-    written or a directory of either path may not be searched. The store
-    cannot tell these apart, so the message names the errno and not a cause;
-    the OS error is ``__cause__``. In every case nothing was overwritten, the
-    original temp and an absent target were confirmed, and the store does not
-    fall back to a call that replaces.
+    POSIX only. Raised by the os.link call that was refused while no target
+    name exists, with no wait after that call: os.link is not repeated because
+    of its error. (It is made again only when a foreign name found at the
+    check after a refusal is gone again. That is the rule for a name that
+    vanished, within the same rounds and budget; a second refusal with no
+    name in the way raises this error.)
+
+    The usual cause is a filesystem without hard links (for example FAT or
+    exFAT): use a directory on a filesystem that has them. link(2) also
+    returns EPERM when the kernel's protected-hardlinks policy refuses (the
+    temp file's owner is not the caller, as on some uid-mapped mounts) and
+    when the file is immutable or append-only, and EACCES when the directory
+    may not be written or a directory of either path may not be searched. The
+    store cannot tell these apart, so the message names the errno and not a
+    cause; the OS error is ``__cause__``. In every case nothing was
+    overwritten, the original temp and an absent target were confirmed, and
+    the store does not fall back to a call that replaces.
     """
 
 
@@ -204,6 +218,14 @@ def _lexists(path):
     except FileNotFoundError:
         return False
     return True
+
+
+def _not_regular(path):
+    """True when the name exists and lstat says it is not a regular file."""
+    try:
+        return not stat.S_ISREG(os.lstat(path).st_mode)
+    except OSError:
+        return False
 
 
 def _open_regular(path, flags, error):
@@ -650,17 +672,24 @@ class SeriesFiles:
         verified against the digest and was synced (_confirm_existing); only
         then is the temp removed, and the caller reports the target as already
         present. Otherwise the reason is returned, with the temp still in
-        hand, for the three states that can pass: IntegrityError (it does not
-        verify now; a writer outside the lock may still be writing it),
-        PermissionError (it cannot be opened or read now; on Windows its
-        writer may still hold it open) and FileNotFoundError (the name is gone
-        again). Any other failure ends the call: the temp is removed and the
-        target is left as it is.
+        hand, for the three states that can pass: IntegrityError (a regular
+        file that does not verify now; a writer outside the lock may still be
+        writing it), PermissionError (it cannot be opened or read now; on
+        Windows its writer may still hold it open) and FileNotFoundError (the
+        name is gone again). Any other failure ends the call: the temp is
+        removed and the target is left as it is. That includes a name that is
+        not a regular file (a link, a directory, a device): nobody is still
+        writing one into a series, so it is refused at once (IntegrityError)
+        and the locks are not held for the rest of the budget.
         """
         try:
             self._confirm_existing(target, digest)
-        except (IntegrityError, PermissionError, FileNotFoundError) as exc:
+        except (PermissionError, FileNotFoundError) as exc:
             return exc
+        except IntegrityError as exc:
+            if not _not_regular(target):
+                return exc
+            raise _attach(exc, _remove_owned_temp(temp, identity)[1])
         except OSError as exc:
             errors = _remove_owned_temp(temp, identity)[1]
             raise _attach(PublicationUncertain(
@@ -684,20 +713,25 @@ class SeriesFiles:
         publish call when the target name is absent, and looks at the target
         (_look) when the name exists: before the call, when the call itself
         says so (FileExistsError), or after POSIX os.link refused. A target
-        that verifies ends the call (False). The call waits and goes round
-        again, with the temp in hand, when the target does not verify yet,
-        cannot be opened yet or is gone again, and, on Windows only, when the
-        publish call raised PermissionError. POSIX os.link errors are never
-        retried. When the rounds are used up the last look decides:
+        that verifies ends the call (False), and a name that is not a regular
+        file ends it at once (IntegrityError). The call waits and goes round
+        again, with the temp in hand, when the target is a regular file that
+        does not verify yet, cannot be opened yet or is gone again, and, on
+        Windows only, when the publish call raised PermissionError. A POSIX
+        os.link is not repeated because of its error: it is made again only
+        when a foreign name found at the check after the refusal is gone
+        again. When the rounds are used up the last look decides:
         IntegrityError for a target that does not verify, PublicationUncertain
         for one that cannot be opened or that vanished; with no target,
-        PublishRetryExhausted.
+        PublishRetryExhausted. A look made before a wait that ended late, past
+        the budget, is not the last look: the name is looked at once more, and
+        no publish call is made after the budget.
         """
         start, rounds, calls, refused = time.monotonic(), 0, 0, None
         try:
             while True:
                 rounds += 1
-                blocked = None
+                blocked = stale = None
                 present = _target_present(temp, target, identity, size, refused)
                 if not present:
                     calls += 1
@@ -741,10 +775,17 @@ class SeriesFiles:
                         time.sleep(wait)
                         if time.monotonic() - start < PUBLISH_BUDGET:
                             continue
-                if blocked is None and _target_present(temp, target, identity, size, refused):
-                    blocked = self._look(temp, target, identity, digest)
-                    if blocked is None:
-                        return False
+                        # The wake-up came late and the budget is used up. What the look
+                        # before this wait found may no longer be so: it is set aside and
+                        # the name is looked at once more. No publish call follows.
+                        stale, blocked = blocked, None
+                if blocked is None:
+                    if _target_present(temp, target, identity, size, refused):
+                        blocked = self._look(temp, target, identity, digest)
+                        if blocked is None:
+                            return False
+                    elif stale is not None:
+                        blocked = FileNotFoundError(errno.ENOENT, "the blocking name is gone again")
                 removed, errors = _remove_owned_temp(temp, identity)
                 if blocked is None:
                     raise _attach(PublishRetryExhausted(

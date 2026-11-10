@@ -993,51 +993,74 @@ class SeriesFilesTests(unittest.TestCase):
     # A target name that appears after the absence check, created by a writer outside the
     # cooperating lock, is never overwritten: valid bytes are reported as already present
     # (created False, the foreign container kept), anything else is refused and preserved.
-    # One that does not verify is looked at again until the attempts or the 5 s are used
-    # (/code-review F1), so these tests run on a FakeTime clock and check its waits.
-    FOREIGN = (("valid", ALT_PAYLOAD), ("invalid", b"foreign"))
+    # A regular file that does not verify is looked at again until the attempts or the 5 s
+    # are used (/code-review F1), so these tests run on a FakeTime clock and check its waits.
+    # A name that is not a regular file is refused at once (⑨-3a/series-files/3).
+    # "same_size" has the size of this call's temp and one wrong data byte: a store that
+    # compared sizes and not content would adopt it.
+    SAME_SIZE = PAYLOAD[:-1] + bytes([PAYLOAD[-1] ^ 1])
+    FOREIGN = (("valid", ALT_PAYLOAD), ("invalid", b"foreign"), ("same_size", SAME_SIZE))
+    NOT_REGULAR = ("dangling_symlink", "directory", "fifo")
 
     def write_meets_foreign(self, label, clock=None, waits=None):
         """write() meets a foreign target; ``waits`` are the waits expected on ``clock``.
 
-        Default: none for a valid target, and every wait of the budget for one that never
-        verifies.
+        Default: none for a valid target and for a name that is not a regular file, and
+        every wait of the budget for a regular file that never verifies.
         """
         if label == "valid":
             self.assertEqual(self.files().write(PAYLOAD, SHA), (SHA, False))
         else:
             with self.assertRaises(IntegrityError) as caught:
                 self.files().write(PAYLOAD, SHA)
-            self.assertNotIsInstance(caught.exception, (M.PublicationUncertain, M.PublishRetryExhausted))
+            self.assertIs(type(caught.exception), IntegrityError)
         if clock is not None:
             if waits is None:
-                waits = [] if label == "valid" else list(M._PUBLISH_DELAYS)
+                waits = [] if label == "valid" or label in self.NOT_REGULAR else list(M._PUBLISH_DELAYS)
             self.assertEqual(clock.sleeps, waits)
 
     def assert_foreign_kept(self, data):
         self.assertEqual(self.target.read_bytes(), data)
         self.assertEqual(self.inventory(), [SHA + ".lock", SHA + ".npy"])
 
-    def foreign_makers(self):
-        """Ways a non-cooperating writer can occupy the target name (label, make(dst))."""
+    def foreign_makers(self, fifo=False):
+        """Ways a non-cooperating writer can occupy the target name (label, make(dst)).
+
+        Regular files first, then the names that are not regular files. A kind this platform
+        or this account cannot create (a symlink on Windows without the privilege, a FIFO
+        where there is none) is left out.
+        """
         def symlink(dst):
             os.symlink(self.root / "missing", dst)
-        return (("valid", lambda dst: dst.write_bytes(ALT_PAYLOAD)),
-                ("invalid", lambda dst: dst.write_bytes(b"foreign")),
-                ("dangling_symlink", symlink), ("directory", lambda dst: dst.mkdir()))
+        makers = [(label, lambda dst, data=data: dst.write_bytes(data)) for label, data in self.FOREIGN]
+        probe = self.root / "probe-link"
+        try:
+            symlink(probe)
+        except (OSError, NotImplementedError):
+            pass
+        else:
+            probe.unlink()
+            makers.append(("dangling_symlink", symlink))
+        makers.append(("directory", lambda dst: dst.mkdir()))
+        if fifo and hasattr(os, "mkfifo"):
+            makers.append(("fifo", lambda dst: os.mkfifo(dst)))
+        return tuple(makers)
 
     def assert_made_kept(self, label):
         """The name a maker occupied is exactly as it was made, and no temp is left."""
         self.assertEqual(self.inventory(), [SHA + ".lock", SHA + ".npy"])
-        if label == "valid":
-            self.assertEqual(self.target.read_bytes(), ALT_PAYLOAD)
-            self.assertEqual(self.target.stat().st_nlink, 1)
-            self.assertEqual(self.files().read(SHA).tobytes(), RAW)
-        elif label == "invalid":
-            self.assertEqual(self.target.read_bytes(), b"foreign")
+        files = dict(self.FOREIGN)
+        if label in files:
+            self.assertEqual(self.target.read_bytes(), files[label])
+            if os.name != "nt":
+                self.assertEqual(self.target.stat().st_nlink, 1)  # and no second name was given to it
+            if label == "valid":
+                self.assertEqual(self.files().read(SHA).tobytes(), RAW)
         elif label == "directory":
             self.assertTrue(self.target.is_dir() and not self.target.is_symlink())
             self.assertEqual(list(self.target.iterdir()), [])
+        elif label == "fifo":
+            self.assertTrue(stat.S_ISFIFO(os.lstat(self.target).st_mode))
         else:
             self.assertEqual(Path(os.readlink(self.target)).name, "missing")
 
@@ -1077,6 +1100,31 @@ class SeriesFilesTests(unittest.TestCase):
                 self.assertEqual(len(synced), 1 if label == "valid" else 0)
                 self.assert_no_temp()
                 self.assert_made_kept(label)
+
+    def test_target_made_right_after_the_absence_check_is_never_removed_before_the_publish_call(self):
+        # The tests around this one create the foreign file inside the publish call. Here it is
+        # made one step earlier, right after the store's last absence check and before the
+        # call: a store that cleared the name before os.link or os.rename would remove the
+        # file and publish over it. Until this test only the source check caught that.
+        real_present = M._target_present
+        self.assertEqual(len(self.SAME_SIZE), len(PAYLOAD))
+        for name in self.BRANCHES:
+            for label, make in self.foreign_makers():
+                with self.subTest(branch=name, label=label):
+                    self.reset()
+                    clock, made = FakeTime(), []
+                    def present(temp, target, identity, size, cause):
+                        found = real_present(temp, target, identity, size, cause)
+                        if not found and not made:
+                            made.append(label)
+                            make(Path(target))  # the other writer takes the name right here
+                        return found
+                    calls, items = self.branch(name)
+                    with Patches(items + [patch.object(M, "_target_present", side_effect=present),
+                                          patch.object(M, "time", clock)]):
+                        self.write_meets_foreign(label, clock)
+                    self.assertEqual((len(calls), made), (1, [label]))  # the call met the name
+                    self.assert_made_kept(label)
 
     def test_windows_rename_never_overwrites_a_target_created_between_check_and_publish(self):
         for label, data in self.FOREIGN:
@@ -1191,6 +1239,31 @@ class SeriesFilesTests(unittest.TestCase):
                     self.assertEqual(len(calls), 1)  # the refused call is not made again
                     self.assertEqual(len(synced), 1 if label == "valid" else 0)
                     self.assert_made_kept(label)
+
+    @unittest.skipIf(os.name == "nt", "POSIX branch: os.link")
+    def test_refused_link_is_made_again_only_when_a_foreign_name_is_gone_again(self):
+        # No os.link error is retried. One case still has a second os.link call after a
+        # refused one: a foreign name that does not verify was found at the check after the
+        # refusal and is gone again at the next round. That is the rule for a name that
+        # vanished (/code-review F1), inside the same rounds and budget; the call is made with
+        # the same temp, and the second refusal, with no name in the way, ends the write.
+        for code in (errno.EPERM, errno.EACCES):
+            with self.subTest(errno=errno.errorcode[code]):
+                self.reset()
+                calls = []
+                def link(src, dst):
+                    calls.append(Path(src))
+                    if len(calls) == 1:
+                        Path(dst).write_bytes(b"foreign")
+                    raise OSError(code, "synthetic: no hard link was made")
+                clock = FakeTime(during=lambda n: self.target.unlink())
+                with patch.object(M.os, "link", side_effect=link), patch.object(M, "time", clock):
+                    with self.assertRaises(M.NoClobberUnsupported) as caught:
+                        self.files().write(PAYLOAD, SHA)
+                self.assertEqual(caught.exception.__cause__.errno, code)
+                self.assertEqual((len(calls), clock.sleeps), (2, [0.05]))
+                self.assertEqual(calls[0], calls[1])
+                self.assertEqual(self.inventory(), [SHA + ".lock"])
 
     @unittest.skipIf(os.name == "nt", "POSIX branch: os.link, then the temp name's unlink")
     def test_posix_temp_unlink_failure_after_link_is_publication_uncertain(self):
@@ -1414,6 +1487,101 @@ class SeriesFilesTests(unittest.TestCase):
                 self.assertEqual((clock.sleeps, len(starts)), ([0.05, 0.1, 0.2], 4))
                 self.assertTrue(all(start < M.PUBLISH_BUDGET for start in starts), starts)
                 self.assert_foreign_kept(b"foreign")
+
+    # --- verification of the /code-review fixes (⑨-3a/series-files/3) ---------------------------
+    def test_late_wake_up_discards_the_look_made_before_that_wait(self):
+        # Every wake-up comes 0.3 s late. Six waits end at 4.15 s; the seventh (0.8 s) is
+        # taken because 4.95 s is inside the budget, and it ends at 5.25 s. The rounds are
+        # over, but the look made before that wait is 1.1 s old. Before the fix it decided the
+        # outcome: IntegrityError for a target that had become valid, or for a name that was
+        # gone. Now the name is looked at once more, and no publish call follows the budget.
+        late_wait = 7
+        def complete():
+            with open(self.target, "ab") as handle:
+                handle.write(ALT_PAYLOAD[60:])
+        cases = (("completed", ALT_PAYLOAD[:60], complete, ALT_PAYLOAD),
+                 ("removed", b"foreign", lambda: self.target.unlink(), None),
+                 ("unchanged", b"foreign", lambda: None, b"foreign"))
+        for name in self.BRANCHES:
+            for label, first, change, left in cases:
+                with self.subTest(branch=name, during_the_last_wait=label):
+                    self.reset()
+                    clock = FakeTime(overshoot=0.3, during=lambda n: change() if n == late_wait else None)
+                    opens, counting = self.target_opens()
+                    calls, items = self.branch(name, lambda src, dst: dst.write_bytes(first))
+                    with Patches(items + [counting, patch.object(M, "time", clock)]):
+                        if label == "completed":
+                            self.assertEqual(self.files().write(PAYLOAD, SHA), (SHA, False))
+                        elif label == "removed":
+                            with self.assertRaises(M.PublicationUncertain) as caught:
+                                self.files().write(PAYLOAD, SHA)
+                            self.assertIn("vanished before it could be verified", str(caught.exception))
+                            self.assertIsInstance(caught.exception.__cause__, FileNotFoundError)
+                        else:
+                            with self.assertRaises(IntegrityError) as caught:
+                                self.files().write(PAYLOAD, SHA)
+                            self.assertIs(type(caught.exception), IntegrityError)
+                    self.assertEqual(clock.sleeps, list(M._PUBLISH_DELAYS[:late_wait]))
+                    self.assertGreaterEqual(clock.now - 1000.0, M.PUBLISH_BUDGET)
+                    self.assertEqual(len(calls), 1)  # no publish call once the budget is used
+                    # One look in each of the seven rounds, and one more after the late wake-up
+                    # when the name is still there.
+                    self.assertEqual(len(opens), late_wait + (0 if left is None else 1))
+                    if left is None:
+                        self.assertEqual(self.inventory(), [SHA + ".lock"])  # nothing stored; temp removed
+                    else:
+                        self.assert_foreign_kept(left)
+
+    def test_blocking_name_that_is_not_a_regular_file_is_refused_at_once(self):
+        # A link, a directory or a FIFO is not a file somebody is still writing, and waiting
+        # cannot make it verify. Before the fix the call looked at it in all ten rounds and
+        # held both locks for 4.75 s; now it ends at the first look, as it did before the
+        # /code-review round. The name is refused from lstat and is never opened.
+        makers = [(label, make) for label, make in self.foreign_makers(fifo=True)
+                  if label in self.NOT_REGULAR]
+        self.assertGreaterEqual(len(makers), 1)
+        for name in self.BRANCHES:
+            for label, make in makers:
+                with self.subTest(branch=name, label=label):
+                    self.reset()
+                    clock = FakeTime()
+                    opens, counting = self.target_opens()
+                    calls, items = self.branch(name, lambda src, dst: make(dst))
+                    with Patches(items + [counting, patch.object(M, "time", clock)]):
+                        with self.assertRaises(IntegrityError) as caught:
+                            self.files().write(PAYLOAD, SHA)
+                    self.assertIs(type(caught.exception), IntegrityError)
+                    self.assertIn("must be regular files", str(caught.exception))
+                    self.assertFalse(hasattr(caught.exception, "cleanup_errors"))
+                    self.assertEqual((len(calls), clock.sleeps, opens), (1, [], []))
+                    self.assert_made_kept(label)  # as it was made, and this call's temp is gone
+                    with self.assertRaises(IntegrityError):  # both locks were released
+                        self.files().read(SHA)
+
+    def test_name_that_fails_verification_and_is_gone_a_moment_later_is_waited_on(self):
+        # The check that ends the call for a link or a directory reads the name once more.
+        # When the name is gone by then, nothing says it was not a regular file: the call
+        # waits, and the next round publishes from the kept temp, as for any vanished name.
+        real_confirm = M.SeriesFiles._confirm_existing
+        def confirm(store, target, digest):
+            try:
+                return real_confirm(store, target, digest)
+            except IntegrityError:
+                Path(target).unlink()  # its writer removes it right after the look
+                raise
+        for name in self.BRANCHES:
+            with self.subTest(branch=name):
+                self.reset()
+                clock = FakeTime()
+                calls, items = self.branch(
+                    name, lambda src, dst: dst.write_bytes(b"foreign") if len(calls) == 1 else None)
+                with Patches(items + [patch.object(M.SeriesFiles, "_confirm_existing", confirm),
+                                      patch.object(M, "time", clock)]):
+                    self.assertEqual(self.files().write(PAYLOAD, SHA), (SHA, True))
+                self.assertEqual((len(calls), clock.sleeps), (2, [0.05]))
+                self.assertEqual(calls[0][0], calls[1][0])  # the kept temp was published
+                self.assertEqual(self.target.read_bytes(), PAYLOAD)
+                self.assertEqual(self.inventory(), [SHA + ".lock", SHA + ".npy"])
 
     # --- an existing target is synced before it is reported as stored (/code-review F4) ---------
     # A writer outside the lock may have synced neither its file nor the directory entry. Before
