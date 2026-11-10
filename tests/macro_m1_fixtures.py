@@ -281,12 +281,15 @@ LA02_CONVERTED = (                              # each runs a real body once its
     "macro_m2_risk.py::test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata",
     "macro_m2_risk.py::test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
     "macro_m3_estimators.py::test_t_b5_01_kospi_golden_refdata",
+    # part 3 (2026-11-11, owner rulings 5 and 6)
+    "macro_m1_calendars.py::test_regime01_full_range_expected_values_file",
+    "macro_m8_forward.py::test_g_ref_01_s1_goldens_refdata",
 )
 LA02_REMAINING = {                              # not converted yet; a later part moves each up, so the list only shrinks
-    "macro_m1_pit.py::test_fix_01_regeneration_at_level_1_tolerance_refdata": "T-FIX-01: council archive outside the repo",
-    "macro_m1_calendars.py::test_regime01_full_range_expected_values_file": "T-REGIME-01: no ACQUISITION row for the file",
-    "macro_m7_cardp.py::test_i05_full_sample_lag_audit_over_compliant_goldens_refdata": "I-05: LA-07 and LA-30 first",
-    "macro_m8_forward.py::test_g_ref_01_s1_goldens_refdata": "G-REF-01: no product R-11 replay; owner inputs from 1997",
+    "macro_m1_pit.py::test_fix_01_regeneration_at_level_1_tolerance_refdata":
+        "T-FIX-01: council archive outside the repo; held by the owner (ruling 6 of 2026-11-11)",
+    "macro_m7_cardp.py::test_i05_full_sample_lag_audit_over_compliant_goldens_refdata":
+        "I-05: LA-07 and LA-30 first; the LA-30 vintages come with the reference data (ruling 12 of 2026-11-11)",
 }
 # Frozen at part 1 (2026-11-10); a part never edits LA02_SITES. LA02_CONVERTED_FLOOR holds every conversion made so
 # far: a later part that converts a site moves it from LA02_REMAINING to LA02_CONVERTED, adds it here and raises
@@ -326,8 +329,11 @@ LA02_CONVERTED_FLOOR = frozenset({
     "macro_m2_risk.py::test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata",
     "macro_m2_risk.py::test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
     "macro_m3_estimators.py::test_t_b5_01_kospi_golden_refdata",
+    # part 3 (2026-11-11, owner rulings 5 and 6)
+    "macro_m1_calendars.py::test_regime01_full_range_expected_values_file",
+    "macro_m8_forward.py::test_g_ref_01_s1_goldens_refdata",
 })
-LA02_FLOOR_SIZE = 13                            # the floor's size after part 2; a later part raises it, never lowers it
+LA02_FLOOR_SIZE = 15                            # the floor's size after part 3; a later part raises it, never lowers it
 _GATES = ("require_fixture", "_refdata")
 _LA02_WORDS = ("unreachable", "not implemented")
 _CONST_NODES = (ast.Constant, ast.BoolOp, ast.UnaryOp, ast.BinOp, ast.Compare, ast.Tuple, ast.List, ast.expr_context,
@@ -553,7 +559,10 @@ test_t_pbo_01_noise_control_reproduces.test_ids = ["T-PBO-01"]
 # Every row carries the series_id, value_status and available_at_source that docs/macro_fixtures.REFERENCE_FILES gives
 # its file (F27: either of its two series ids), obs_date = session_date (ISO), and obs_utc / available_at_utc written
 # YYYY-MM-DDTHH:MM:SSZ. F01, F13 and F16 hold one row per date and F27 one per code and date, in date order. One reader,
-# tests.macro_m1_calendars.read_close_layout, reads the four files here and in the other part 2 bodies. F20
+# tests.macro_m1_calendars.read_close_layout, reads the four files here and in the other part 2 bodies. A price is
+# compared as owner ruling 4 of 2026-11-11 sets it (tests.macro_m1_calendars.price_as_compared; an owner-approved
+# exception to spec L5735, Level 1 `price` "prices exact"): the Yahoo vendor closes of F13 and F16 rounded to two
+# decimals, the KRX official closes of F01 and F27 exactly. F20
 # (results/QX_DLA_postpatch.csv, the result table the rows were printed from) is gated with the others because
 # goldens.csv lists it for kospi_close_2oct; its layout is not declared and the body does not read it (T-FIX-01
 # regenerates it).
@@ -561,6 +570,10 @@ GPOST_READ = ("F01", "F13", "F16", "F27")
 GPOST_COLUMNS = ("close", "series_id", "obs_date", "session_date", "obs_utc", "available_at_utc", "available_at_source",
                  "value_status")
 GPOST_F27_CODES = ("005930", "000660")     # REFERENCE_FILES F27; G-POST-01/samsung_close_2oct and hynix_close_2oct
+# The file each M1 price row of G-POST-01 is read from, which sets how it is compared (owner ruling 4 of 2026-11-11):
+# the ^KS11 close (F13) and the KRW=X last row (F16) are Yahoo vendor prices, the two won closes (F27) KRX official.
+GPOST_PRICE_FILES = {"kospi_close_2oct": "F13", "samsung_close_2oct": "F27", "hynix_close_2oct": "F27",
+                     "krwx_last_row": "F16"}
 # The decision: the KRX close of 2 Oct 2026 (goldens.csv G-POST-01 quantities "... 2 Oct 2026"), scheduled at 06:30:00Z
 # (spec L1289) and stamped 06:30:30Z, close_print_bound_utc('KR', 2026-10-02) (L2096, L6278). A datum enters it only if
 # its available_at_utc is at or before that instant (L539); goldens.csv times every M1 row COMPLIANT.
@@ -596,8 +609,11 @@ def check_gpost01_rows(ks: list[dict], fx: list[dict], samsung: float, hynix: fl
     rows it reads, and `samsung` / `hynix` the 2-Oct KRX closes; `label` says how the caller read them. Asserts 200
     closes for close_over_200d and 21 KRW=X rows for the 20-observation dlog, KRW=X's last row on 1 Oct (the
     provisional 2-Oct row dropped), that the computed rows are exactly goldens.csv's M1 rows, every row at Level 1
-    (`G.assert_golden`: a price exactly, kind `price`, spec L5735), and the peak, 9,114.55 on 22 Jun 2026, compared as
-    a price. Returns the values and the peak."""
+    (`G.assert_golden`), and the peak, 9,114.55 on 22 Jun 2026. A price (kind `price`) is compared as
+    tests.macro_m1_calendars.price_as_compared reads it, owner ruling 4 of 2026-11-11: the Yahoo vendor prices (the
+    ^KS11 close, the peak and the KRW=X last row) rounded to two decimals, the KRX won prices of Samsung and SK hynix
+    exactly (spec L5735). Returns the values as read, unrounded, and the peak."""
+    from tests.macro_m1_calendars import price_as_compared
     assert len(ks) >= GPOST_SMA_N, f"G-POST-01: {len(ks)} KS11 rows {label}, fewer than the {GPOST_SMA_N} of close_over_200d"
     assert fx and fx[-1]["date"] == GPOST_KRWX_LAST, (
         f"G-POST-01: the last KRW=X row {label} is {fx[-1]['date'] if fx else None}, not {GPOST_KRWX_LAST} (the "
@@ -613,14 +629,25 @@ def check_gpost01_rows(ks: list[dict], fx: list[dict], samsung: float, hynix: fl
            "hynix_close_2oct": hynix,
            "krwx_last_row": fx[-1]["close"],
            "krwx_dlog20": math.log(fx[-1]["close"] / fx[-1 - GPOST_DLOG_N]["close"])}
-    m1 = {r.sub_id for r in G.golden("G-POST-01").rows if r.runs_from == "M1"}
+    m1_rows = [r for r in G.golden("G-POST-01").rows if r.runs_from == "M1"]
+    m1 = {r.sub_id for r in m1_rows}
     assert set(got) == m1, f"G-POST-01: goldens.csv M1 rows {sorted(m1)} != the computed rows {sorted(got)}"
+    prices = {r.sub_id for r in m1_rows if r.kind == "price"}
+    assert prices == set(GPOST_PRICE_FILES), (f"G-POST-01: goldens.csv M1 price rows {sorted(prices)} != the rows with "
+                                              f"a price rule {sorted(GPOST_PRICE_FILES)}")
     print(f"PRINTED G-POST-01 M1 rows on {GPOST_DAY} ({label}): " + ", ".join(f"{k} {v:.6g}" for k, v in got.items())
           + f"; peak {peak['close']} on {peak['date']}")
-    G.assert_golden("G-POST-01", got)
-    assert peak["date"] == GPOST_PEAK[0] and G.within("price", peak["close"], GPOST_PEAK[1]), (
+    # Owner ruling 4 of 2026-11-11, an owner-approved exception to spec L5735 (Level 1 `price`: "prices exact"), for
+    # vendor prices only: the Yahoo ^KS11 close, its peak and the KRW=X last row are compared after rounding to two
+    # decimals (their goldens are printed at two decimals; a vendor file may carry float artefacts such as
+    # 7003.740234375). The KRX official won prices of Samsung and SK hynix stay exact.
+    G.assert_golden("G-POST-01", {k: price_as_compared(GPOST_PRICE_FILES[k], v) if k in GPOST_PRICE_FILES else v
+                                  for k, v in got.items()})
+    peak_price = price_as_compared("F13", peak["close"])
+    assert peak["date"] == GPOST_PEAK[0] and G.within("price", peak_price, GPOST_PEAK[1]), (
         f"G-POST-01: the peak of the KS11 closes {label} is {peak['close']} on {peak['date']}, not {GPOST_PEAK[1]} on "
-        f"{GPOST_PEAK[0]} (G-POST-01/drawdown_from_peak; a price, exact: L5735)")
+        f"{GPOST_PEAK[0]} (G-POST-01/drawdown_from_peak; a Yahoo vendor price, compared at two decimals: owner ruling "
+        "4 of 2026-11-11, an exception to L5735)")
     return {**got, "peak": (peak["date"], peak["close"])}
 
 
@@ -632,8 +659,10 @@ def _check_g_post_01(f01: list[dict], f13: list[dict], f16: list[dict], f27: lis
     at the scheduled close 06:30:00Z: an intraday print is not a close (the pre-patch 6,943.66 came from a file written
     at 10:56 KST, L6286). The previous visible KS11 row is dated the previous KRX session of the signed calendar `cal`
     (`clocks.prev_session`). Then `check_gpost01_rows` on the visible KS11 and KRW=X rows and the two stock closes, and
-    F01's official close against kospi_close_2oct at Level 1 (a price, exact). Returns the values."""
+    F01's official close against kospi_close_2oct at Level 1: a KRX official price, compared exactly (spec L5735; owner
+    ruling 4 of 2026-11-11 rounds vendor prices only). Returns the values."""
     from core.calendars import clocks
+    from tests.macro_m1_calendars import price_as_compared
     label = f"visible at the {GPOST_DAY} decision"
 
     def visible(rows):
@@ -662,7 +691,7 @@ def _check_g_post_01(f01: list[dict], f13: list[dict], f16: list[dict], f27: lis
     official = close_of(f01, "KOSPI_OFFICIAL_CLOSE")
     print(f"PRINTED G-POST-01 F01 official close on {GPOST_DAY}: {official}")
     try:
-        G.assert_golden("G-POST-01", {"kospi_close_2oct": official})
+        G.assert_golden("G-POST-01", {"kospi_close_2oct": price_as_compared("F01", official)})   # official: exact
     except AssertionError as exc:
         raise AssertionError(f"G-POST-01 on the F01 official close: {exc}") from None
     return {**got, "kospi_official_close_2oct": official}
@@ -743,24 +772,27 @@ def _gpost_fails(fn, needle: str) -> str:
 
 
 def test_g_post_01_body_passes_and_fails_on_invented_rows():
-    """LA-02 part 2: the G-POST-01 M1 body can PASS and can FAIL. Invented rows in the declared layouts (no KRX, Yahoo or
-    QX data) built to the goldens.csv values pass. It fails, naming the clause, when: a 2-Oct row is not visible at
-    06:30:30Z or is an intraday print (F13, F01, F27); a later row is visible; the KS11 close (also by a float32
-    artefact: a price is exact), the F01 official close, the previous close, the peak (beyond and within the drawdown
-    tolerance, or on another day), the flat level, a stock close, KRW=X's last close or its row 20 observations back is
-    off; the previous visible KS11 row is not 1 Oct (that row missing with 30 Sep at its level, or available only at
-    07:00Z); the provisional 2-Oct KRW=X row is visible; there are too few KS11 or KRW=X rows; and, at the layout (the
-    shared reader), a declared column is absent, a row is not of its file's series and status, rows are out of order, a
-    row is available before its obs_utc, a close is blank, ".", 0 or negative, a date repeats (F16; F27 date and code),
-    obs_date is not session_date or not written YYYY-MM-DD, an instant is not written zero-padded YYYY-MM-DDTHH:MM:SSZ
-    (unpadded, or with fractional seconds), or the file holds no row. The row 201 closes back is outside the 200-close
-    window (its level does not move the ratio) and the row 200 back inside it. tests/macro_m1_pit.py's G-POST-01 body
-    returns the same eight rows on the same files. A KRW=X row dated 2026-10-05, after F16's last day, stamped available
-    on 1 Oct (a look-ahead stamp) FAILs here while the by-date body returns the same eight rows (it does not read the
-    row); stamped on 5 Oct, it is visible at neither and both pass. The calendar is the
-    calendars module's synthetic signed set, through the owner gate. While a fixture is absent, the real test's REFDATA
-    reason names it."""
-    from tests.macro_m1_calendars import F01_COLUMNS, _official_calendar, _official_calendar_on, drafts_set, fixture_set
+    """LA-02 part 2: the G-POST-01 M1 body can PASS and can FAIL. Invented rows in the declared layouts (no KRX, Yahoo
+    or QX data) built to the goldens.csv values pass. It fails, naming the clause, when: a 2-Oct row is not visible at
+    06:30:30Z or is an intraday print (F13, F01, F27); a later row is visible; the KS11 close (by a cent), the F01
+    official close (also by a float32 artefact: a KRX official price is exact), the previous close, the peak (beyond and
+    within the drawdown tolerance, by a cent, or on another day), the flat level, a stock close (also by less than a
+    cent), KRW=X's last close (by a cent) or its row 20 observations back is off; the previous visible KS11 row is not 1
+    Oct (that row missing with 30 Sep at its level, or available only at 07:00Z); the provisional 2-Oct KRW=X row is
+    visible; there are too few KS11 or KRW=X rows; and, at the layout (the shared reader), a declared column is absent,
+    a row is not of its file's series and status, rows are out of order, a row is available before its obs_utc, a close
+    is blank, ".", 0 or negative, a date repeats (F16; F27 date and code), obs_date is not session_date or not written
+    YYYY-MM-DD, an instant is not written zero-padded YYYY-MM-DDTHH:MM:SSZ (unpadded, or with fractional seconds), or
+    the file holds no row. The row 201 closes back is outside the 200-close window (its level does not move the ratio)
+    and the row 200 back inside it. tests/macro_m1_pit.py's G-POST-01 body returns the same eight rows on the same
+    files. A KRW=X row dated 2026-10-05, after F16's last day, stamped available on 1 Oct (a look-ahead stamp) FAILs
+    here while the by-date body returns the same eight rows (it does not read the row); stamped on 5 Oct, it is visible
+    at neither and both pass. A float32 artefact of the Yahoo files on the KS11 close, on the peak or on KRW=X's last
+    row passes: a vendor price is compared at two decimals (owner ruling 4 of 2026-11-11, an owner-approved exception to
+    spec L5735). The calendar is the calendars module's synthetic signed set, through the owner gate. While a fixture is
+    absent, the real test's REFDATA reason names it."""
+    from tests.macro_m1_calendars import (F01_COLUMNS, VENDOR_PRICE_FILES, _official_calendar, _official_calendar_on,
+                                          close_layout_file, drafts_set, fixture_set, price_as_compared)
     assert GPOST_COLUMNS == F01_COLUMNS                     # one declared F01 layout (part 1)
     inv = _gpost_invented()
     texts = {fid: _gpost_csv(fid, inv[fid]) for fid in GPOST_READ}
@@ -833,12 +865,41 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
          "the peak of the KS11 closes visible at the 2026-10-02 decision is 9114.55 on 2026-06-23"),
         (dict(F13=lambda rows: rows[-150:]), "150 KS11 rows visible at the 2026-10-02 decision, fewer than the 200"),
         (dict(F16=lambda rows: rows[-15:]), "15 KRW=X rows visible at the 2026-10-02 decision, too few for a 20-observation"),
-        # a price is compared exactly at both G-POST-01 sites (Level 1 `price`, spec L5735; owner question 4): a float32
-        # artefact on the 2-Oct close is not 7,003.74
-        (dict(F13=at(oct2, close=7003.740234375)), "G-POST-01 deviations: kospi_close_2oct: got 7003.740234375"),
+        # owner ruling 4 of 2026-11-11: a vendor price a cent away at two decimals is off (7,003.7451 rounds to
+        # 7,003.75; the peak 9,114.56 is inside the drawdown tolerance and fails the peak clause)
+        (dict(F13=at(oct2, close=7003.7451)), "G-POST-01 deviations: kospi_close_2oct: got 7003.75, want 7003.74"),
+        (dict(F13=at(GPOST_PEAK[0], close=9114.56)),
+         "the peak of the KS11 closes visible at the 2026-10-02 decision is 9114.56 on 2026-06-22"),
+        # ... and a KRX official price stays exact (spec L5735): the won closes of F27 and F01's official KOSPI close
+        # fail on less than a cent, F01 also on the float32 artefact that F13 may carry
+        (dict(F27=at(oct2, "005930", close=276000.004)), "G-POST-01 deviations: samsung_close_2oct: got 276000.004"),
+        (dict(F27=at(oct2, "000660", close=1841000.004)), "G-POST-01 deviations: hynix_close_2oct: got 1841000.004"),
+        (dict(F01=at(oct2, close=7003.740234375)),
+         "G-POST-01 on the F01 official close: G-POST-01 deviations: kospi_close_2oct: got 7003.740234375"),
     )
     for edits, needle in cases:
         _gpost_fails(lambda: run(**edits), needle)
+    # Owner ruling 4 of 2026-11-11, an owner-approved exception to spec L5735 ("prices exact") for vendor prices only: a
+    # Yahoo price is compared after rounding to two decimals, so a float32 artefact of the vendor file passes, on the
+    # 2-Oct KS11 close, on KRW=X's last row and on the peak, and so does 7,003.7449 (it rounds to 7,003.74). The rows
+    # are returned as read. The goldens of the vendor rows are printed at two decimals, so the rounding loses nothing.
+    for edits, key, as_read in ((dict(F13=at(oct2, close=7003.740234375)), "kospi_close_2oct", 7003.740234375),
+                                (dict(F13=at(oct2, close=7003.7449)), "kospi_close_2oct", 7003.7449),
+                                (dict(F16=at(GPOST_KRWX_LAST, close=1356.8399658203125)), "krwx_last_row",
+                                 1356.8399658203125)):
+        assert run(**edits)[key] == as_read, key
+    assert run(F13=at(GPOST_PEAK[0], close=9114.5498046875))["peak"] == (GPOST_PEAK[0], 9114.5498046875)
+    assert VENDOR_PRICE_FILES == ("F13", "F16") and GPOST_PRICE_FILES == {
+        "kospi_close_2oct": "F13", "samsung_close_2oct": "F27", "hynix_close_2oct": "F27", "krwx_last_row": "F16"}
+    assert [close_layout_file(f)[2] for f in ("F13", "F16", "F27", "F01")] == ["vendor_close", "vendor_close",
+                                                                               "official_close", "official_close"]
+    assert all(round(g.want(k), 2) == g.want(k) for k in ("kospi_close_2oct", "krwx_last_row"))
+    assert round(GPOST_PEAK[1], 2) == GPOST_PEAK[1]
+    assert price_as_compared("F13", 7003.740234375) == 7003.74
+    assert price_as_compared("F16", 1356.8399658203125) == 1356.84
+    assert price_as_compared("F27", 276000.004) == 276000.004           # a KRX official price is not rounded
+    assert price_as_compared("F01", 7003.740234375) == 7003.740234375
+    _gpost_fails(lambda: price_as_compared("F14", 5000.0), "F14: no price comparison rule for a vendor_close file")
     # the layout
     _gpost_fails(lambda: _gpost_rows("F13", texts["F13"].replace(",close,", ",Close,", 1)),
                  "yahoo_KS11_1996-12_2026-10-02.csv: declared columns ['close'] absent")

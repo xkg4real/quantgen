@@ -10,7 +10,9 @@ part 1): they read the listed fixture through `require_fixture` and use the ship
 and cover the fixture's dates (otherwise NotRun "OWNER: ...", computed from the files). T-CLOSE-02 on the signed files
 (LA-02, part 2) runs its clauses on the shipped set once every file they read loads and covers their days, the
 owner-signed kr_sessions rows they need exist and no kr_sessions `owner_must_sign` entry covers a row they read
-(otherwise NotRun "OWNER: ...", computed from the files). No module global is patched.
+(otherwise NotRun "OWNER: ...", computed from the files). T-REGIME-01's full-range clause (LA-02, part 3; owner ruling
+6 of 2026-11-11) reads the listed expected-values file through `require_fixture` and compares it with the shipped signed
+kr_regime_tags.yaml once that file loads and covers 1995-01-01..2026-12-31. No module global is patched.
 """
 from __future__ import annotations
 
@@ -31,7 +33,7 @@ import yaml
 
 from core.calendars import clocks, events, publication, regime, store
 from core.calendars.store import CalendarCoverageError, CalendarSet, CalendarUnsigned, NotASession, content_md5
-from tests.notrun import NotRun, require_fixture
+from tests.notrun import NotRun, load_manifest, require_fixture
 
 SIGNER = "TEST-FIXTURE (not an owner sign-off)"
 SIGNED_UTC = "2026-10-06T00:00:00Z"
@@ -422,6 +424,32 @@ def close_layout_text(fid: str, rows) -> str:
                       obs.astimezone(UTC).strftime(CLOSE_LAYOUT_INSTANT), avail.astimezone(UTC).strftime(CLOSE_LAYOUT_INSTANT),
                       source, status))
     return buf.getvalue()
+
+
+# Owner ruling 4 of 2026-11-11 (docs/nautilus_bridge/OWNER_RULINGS_LOG.md, the answers to the 14 remaining decisions,
+# item 4): an owner-approved exception to spec L5735 (Level 1 `price`: "prices exact"). A vendor (Yahoo) price, the
+# ^KS11 closes of F13 and the KRW=X closes of F16, is compared after rounding to two decimals, the precision its
+# expected values are printed at (7,003.74, 9,114.55, 5,251.87, 1,356.84): a float artefact of the vendor file such as
+# 7003.740234375 then reads 7,003.74, and a value one cent away does not. A KRX official price stays exact, as L5735
+# states: the Samsung 005930 and SK hynix 000660 won closes of F27 and the official KOSPI close of F01. The ruling
+# names no other file, so a price of any other file has no rule here and is refused.
+VENDOR_PRICE_FILES = ("F13", "F16")
+VENDOR_PRICE_DECIMALS = 2
+
+
+def price_as_compared(fid: str, price: float) -> float:
+    """`price`, a close of the declared close-layout file `fid`, as a Level 1 `price` comparison reads it (owner ruling
+    4 of 2026-11-11, above): rounded to two decimals for the Yahoo vendor closes of F13 and F16, unchanged for the KRX
+    official closes of F01 and F27 (exact, spec L5735). The file's value_status is read from
+    docs/macro_fixtures.REFERENCE_FILES; AssertionError for a file the ruling gives no rule."""
+    _name, _series, status, _source = close_layout_file(fid)
+    if fid in VENDOR_PRICE_FILES:
+        assert status == "vendor_close", f"{fid}: a vendor price file whose REFERENCE_FILES row is {status!r}"
+        return round(float(price), VENDOR_PRICE_DECIMALS)
+    assert status == "official_close", (
+        f"{fid}: no price comparison rule for a {status} file (owner ruling 4 of 2026-11-11 names the vendor closes of "
+        f"{VENDOR_PRICE_FILES} and leaves the KRX official closes exact)")
+    return float(price)
 
 
 def _official_calendar(lo: date, hi: date, live: CalendarSet | None = None) -> CalendarSet:
@@ -1638,7 +1666,8 @@ def test_regime01_point_clauses_and_fail_closed():
     tags = R(date(2026, 10, 2))
     assert tuple(tags) == regime.TAGS and all(v is not None for v in tags.values())
     assert tags["close_time_kst"] == "15:30" and tags["random_end"] == "unconditional_le_30s" and tags["usdkrw_onshore_hours"] == "24h"
-    # every date of the fixture span returns a full tag set (the committed expected-values comparison is OWNER)
+    # every date of the fixture span returns a full tag set (the comparison with the committed expected-values file is
+    # test_regime01_full_range_expected_values_file's)
     d = date(1995, 1, 1)
     while d <= date(2026, 12, 31):
         assert tuple(R(d)) == regime.TAGS
@@ -1660,39 +1689,313 @@ def test_regime01_point_clauses_and_fail_closed():
 test_regime01_point_clauses_and_fail_closed.test_ids = ["T-REGIME-01"]
 
 
+# T-REGIME-01, the full-range clause (spec L2098: "Every date from 1995-01-01 to 2026-12-31 returns a full tag set,
+# equal to a committed expected-values file built from the official notices (including `price_limit` before
+# Apr-1995)."). The file is tests/fixtures/macro/kr_regime_tags_expected.csv, the name the shipped kr_regime_tags.yaml
+# gives it under owner_must_sign; ACQUISITION.csv lists it as an open owner deliverable since owner ruling 6 of
+# 2026-11-11 (docs/nautilus_bridge/OWNER_RULINGS_LOG.md). Neither the spec nor ACQUISITION.csv names its columns, so the
+# layout is declared here, an input contract the owner confirms or changes when the file is built:
+#   - a header of exactly `date` and one column per tag of core.calendars.regime.TAGS, in any order;
+#   - one row per calendar date from 1995-01-01 to 2026-12-31, in date order, none missing and none repeated, the date
+#     written YYYY-MM-DD;
+#   - a cell states the tag's value on that date: `true` or `false` for a boolean tag (as spec L2098 writes
+#     `etf_available` = false), a plain decimal number for a numeric tag (`price_limit` a fraction, `sell_tax_pct` in
+#     percent: the units of core/calendars/regime.py), the text itself for a text tag, and an empty cell where the
+#     signed file holds no value (null: the shipped file signs `price_limit` before 1995-04-01 so).
+# The body compares every tag of every date with the signed kr_regime_tags.yaml and asserts the spec's own values
+# (L2098) on the signed tags, so a value that both files carry wrong still fails.
+REGIME01_FILE = "kr_regime_tags_expected.csv"
+REGIME01_SPAN = (date(1995, 1, 1), date(2026, 12, 31))                                                 # spec L2098
+REGIME01_COLUMNS = ("date",) + regime.TAGS
+REGIME01_POINTS = (                                                                                    # spec L2098
+    (date(1997, 6, 2), "price_limit", 0.08), (date(1998, 6, 1), "price_limit", 0.12),
+    (date(1999, 6, 1), "price_limit", 0.15), (date(2015, 6, 15), "price_limit", 0.30),
+    (date(1997, 10, 1), "fx_regime", "peg_1997"), (date(2002, 1, 2), "etf_available", False),
+    (date(2024, 6, 3), "short_sale_ban", True), (date(2026, 10, 2), "sell_tax_pct", 0.20),
+)
+REGIME01_SHOWN = 5                              # differences listed in a failure message; their count is always given
+
+
+def _regime01_expected(text: str) -> list[tuple[date, dict]]:
+    """The expected-values file in its declared layout as (date, {tag: cell}) rows; AssertionError naming the file and
+    line on any departure from it."""
+    lo, hi = REGIME01_SPAN
+    reader = csv.DictReader(io.StringIO(text))
+    header = tuple(reader.fieldnames or ())
+    assert sorted(header) == sorted(REGIME01_COLUMNS), (
+        f"{REGIME01_FILE}: the header must be `date` and the {len(regime.TAGS)} tags of core.calendars.regime.TAGS, "
+        f"each once: absent {sorted(set(REGIME01_COLUMNS) - set(header))}, extra or repeated "
+        f"{sorted(c for c in set(header) if c not in REGIME01_COLUMNS or header.count(c) > 1)}")
+    rows: list[tuple[date, dict]] = []
+    want = lo
+    for line, raw in enumerate(reader, start=2):
+        where = f"{REGIME01_FILE} line {line}"
+        assert None not in raw and None not in raw.values(), f"{where}: not {len(REGIME01_COLUMNS)} cells"
+        try:
+            d = date.fromisoformat(raw["date"])
+        except ValueError:
+            d = None
+        assert d is not None and raw["date"] == d.isoformat(), (
+            f"{where}: date {raw['date']!r} is not written YYYY-MM-DD")
+        assert d == want, f"{where}: date {d}, not {want} (one row per date from {lo} to {hi}, in date order)"
+        want = d + timedelta(days=1)
+        rows.append((d, {tag: raw[tag] for tag in regime.TAGS}))
+    assert rows and rows[-1][0] == hi, f"{REGIME01_FILE}: the last row is {rows[-1][0] if rows else None}, not {hi}"
+    return rows
+
+
+def _regime01_cell_is(cell: str, value) -> bool:
+    """Whether the expected-values cell `cell` states the tag value `value`, read by the value's type as the declared
+    layout writes it: empty for None, `true` / `false` for a boolean, a plain decimal number for a number (compared as a
+    number: 0.30 is 0.3), the text itself otherwise."""
+    if value is None:
+        return cell == ""
+    if isinstance(value, bool):
+        return cell == ("true" if value else "false")
+    if isinstance(value, (int, float)):
+        return re.fullmatch(r"-?\d+(\.\d+)?", cell) is not None and float(cell) == float(value)
+    return cell == str(value)
+
+
+def _regime01_waiting(live: CalendarSet) -> list[str]:
+    """The refusal or the coverage gap of `live`'s signed kr_regime_tags.yaml over REGIME01_SPAN, computed from the
+    file; empty when the full-range clause can run."""
+    lo, hi = REGIME01_SPAN
+    why = live.refusal(regime.FILE_ID)
+    if why is not None:
+        return [f"{regime.FILE_ID}.yaml refused ({why})"]
+    f = live.file(regime.FILE_ID)
+    if not (f.covers(lo) and f.covers(hi)):
+        return [f"{regime.FILE_ID}.yaml v{f.version} covers {f.covers_from}..{f.covers_to}, needs {lo}..{hi}"]
+    return []
+
+
+def _regime01_signed(live: CalendarSet | None = None) -> CalendarSet:
+    """The shipped owner-signed set (`live`, default `CalendarSet()`) once its kr_regime_tags.yaml loads and covers
+    REGIME01_SPAN; otherwise NotRun("OWNER: ...") naming the refusal or the coverage gap (`_regime01_waiting`). The
+    demonstrations pass `live`, as `_official_calendar` takes it."""
+    live = CalendarSet() if live is None else live
+    waiting = _regime01_waiting(live)
+    if waiting:
+        raise NotRun("OWNER: T-REGIME-01 on the signed regime tags waits for " + "; ".join(waiting))
+    return live
+
+
+def _check_regime01(expected: list[tuple[date, dict]], cal: CalendarSet, regime_tags=regime.regime_tags) -> dict:
+    """T-REGIME-01's full-range clause on the signed regime tags of `cal` (spec L2098): the spec's own values hold on
+    the signed tags (REGIME01_POINTS); every date of the expected rows returns the full tag set, regime.TAGS in order;
+    and every tag of every date equals its expected cell (`_regime01_cell_is`). A failure gives the number of differing
+    values and lists the first REGIME01_SHOWN. `regime_tags` is core.calendars.regime.regime_tags (the demonstration
+    passes a stand-in that drops a tag). Returns the counts."""
+    for d, tag, want in REGIME01_POINTS:
+        got = regime_tags("KR", d, cal=cal)[tag]
+        assert type(got) is type(want) and got == want, (
+            f"T-REGIME-01: regime_tags('KR', {d}).{tag} is {got!r}, not {want!r} (spec L2098)")
+    bad, n = [], 0
+    for d, cells in expected:
+        tags = regime_tags("KR", d, cal=cal)
+        assert tuple(tags) == regime.TAGS, (f"T-REGIME-01: regime_tags('KR', {d}) returns {tuple(tags)}, not the full "
+                                            f"tag set {regime.TAGS} (spec L2098)")
+        for tag in regime.TAGS:
+            n += 1
+            if not _regime01_cell_is(cells[tag], tags[tag]):
+                bad.append(f"{d} {tag}: regime_tags {tags[tag]!r} != expected {cells[tag]!r}")
+    assert not bad, (f"T-REGIME-01: {len(bad)} of {n} tag values differ from {REGIME01_FILE} (the first "
+                     f"{min(len(bad), REGIME01_SHOWN)}): " + "; ".join(bad[:REGIME01_SHOWN]))
+    return {"dates": len(expected), "values": n}
+
+
 def test_regime01_full_range_expected_values_file():
-    """The full-range clause needs the committed expected-values file, an owner deliverable that no ACQUISITION.csv or
-    MANIFEST.csv row lists yet (a `require_fixture` on it would fail T-HERM-01). The reason states the shipped tag
-    file's signing state as read now (look-ahead audit LA-02: the old text still called the signed file a draft)."""
-    raise NotRun("OWNER: tests/fixtures/macro/kr_regime_tags_expected.csv (1995-01-01..2026-12-31, built from the official "
-                 "notices incl. the pre-Apr-1995 price limit, sell-tax steps, BoK fx regimes) is an owner deliverable with "
-                 f"no ACQUISITION.csv or MANIFEST.csv row yet; {_regime01_tag_state(CalendarSet())}")
+    """T-REGIME-01, the full-range clause (spec L2098), on the committed expected-values file: NOT_RUN (REFDATA) until
+    kr_regime_tags_expected.csv is listed with its md5 (ACQUISITION.csv lists it as an open owner deliverable since
+    owner ruling 6 of 2026-11-11); once listed it is read in its declared layout; NOT_RUN (OWNER) while the signed
+    kr_regime_tags.yaml is refused or does not cover 1995-01-01..2026-12-31 (computed from the file by
+    `_regime01_signed`); then PASS or FAIL on `_check_regime01` (look-ahead audit LA-02, part 3: it used to be NOT_RUN
+    whatever the files held)."""
+    rows = _regime01_expected(require_fixture(REGIME01_FILE).read_text(encoding="utf-8"))
+    out = _check_regime01(rows, _regime01_signed())
+    print(f"PRINTED T-REGIME-01 full range: {out['values']} tag values on {out['dates']} dates equal {REGIME01_FILE}")
 
 
 test_regime01_full_range_expected_values_file.test_ids = ["T-REGIME-01"]
 
 
-def _regime01_tag_state(live: CalendarSet) -> str:
-    """The signing state of `live`'s kr_regime_tags.yaml, as the T-REGIME-01 full-range reason states it."""
-    why = live.refusal("kr_regime_tags")
-    if why is None:
-        f = live.file("kr_regime_tags")
-        return (f"kr_regime_tags.yaml v{f.version} is signed ({f.signed_utc}, covers {f.covers_from}..{f.covers_to}); "
-                "only the expected-values file is missing")
-    return f"kr_regime_tags.yaml is refused at load ({why})"
+def regime_short_set() -> CalendarSet:
+    """The synthetic set with kr_regime_tags.yaml signed for 1996-01-01..2027-12-31 only, so 1995 is a coverage gap
+    (the OWNER branch of T-REGIME-01's full-range gate)."""
+    docs = fixture_docs()
+    docs["kr_regime_tags"]["covers"] = {"from": "1996-01-01", "to": "2027-12-31"}
+    return fixture_set("regime_1996_2027", docs)
 
 
 def test_regime01_full_range_reason_reads_the_signing_state():
-    """LA-02 part 1: the T-REGIME-01 full-range NotRun reason ends with the tag file's signing state as read now and,
-    while the shipped file loads, never carries the stale "unsigned draft" clause. The state text is shown on a signed
-    and on a refused synthetic set."""
+    """LA-02 parts 1 and 3: both NOT_RUN reasons of the T-REGIME-01 full-range test are computed, never fixed text.
+    While the expected-values file is not listed the reason is REFDATA and names it. The OWNER reason is read from the
+    signing state of kr_regime_tags.yaml: nothing waits on the synthetic signed set; a file refused at load is named
+    with its refusal; a file signed for 1996-2027 only is named with its span and the span needed. On the shipped file
+    the gate waits exactly when the file is refused or does not cover 1995-01-01..2026-12-31, as read now."""
+    if REGIME01_FILE not in load_manifest():
+        reason = _raises(test_regime01_full_range_expected_values_file, NotRun).reason
+        assert reason == f"REFDATA: {REGIME01_FILE} not in tests/fixtures/macro/MANIFEST.csv", reason
+    assert _regime01_waiting(fixture_set()) == [] and _regime01_signed(fixture_set()) is fixture_set()
+    refused = _raises(lambda: _regime01_signed(drafts_set()), NotRun).reason
+    assert refused.startswith("OWNER: T-REGIME-01 on the signed regime tags waits for kr_regime_tags.yaml refused "
+                              "(kr_regime_tags.yaml: signed_off_by is empty"), refused
+    short = _raises(lambda: _regime01_signed(regime_short_set()), NotRun).reason
+    assert short == ("OWNER: T-REGIME-01 on the signed regime tags waits for kr_regime_tags.yaml v1.0.0-fixture covers "
+                     "1996-01-01..2027-12-31, needs 1995-01-01..2026-12-31"), short
     live = CalendarSet()
-    reason = _raises(test_regime01_full_range_expected_values_file, NotRun).reason
-    assert reason.startswith("OWNER: ") and reason.endswith(_regime01_tag_state(live)), reason
-    if live.refusal("kr_regime_tags") is None:
-        assert "unsigned draft" not in reason and " is signed (" in reason, reason
-    assert _regime01_tag_state(fixture_set()).startswith("kr_regime_tags.yaml v1.0.0-fixture is signed (")
-    assert _regime01_tag_state(drafts_set()).startswith("kr_regime_tags.yaml is refused at load (")
+    loads = live.refusal("kr_regime_tags") is None
+    covered = loads and all(live.file("kr_regime_tags").covers(d) for d in REGIME01_SPAN)
+    assert (_regime01_waiting(live) == []) == covered, _regime01_waiting(live)
+    print(f"PRINTED T-REGIME-01 full range, shipped kr_regime_tags.yaml: waiting {_regime01_waiting(live)}")
+
+
+def _regime01_cell(value) -> str:
+    """A tag value written as the declared layout writes it (for the demonstrations)."""
+    if value is None:
+        return ""
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    return repr(float(value)) if isinstance(value, (int, float)) else str(value)
+
+
+def _regime01_rows(cal: CalendarSet) -> list[tuple[date, dict]]:
+    """Expected rows over REGIME01_SPAN stating `cal`'s own regime tags (for the demonstrations)."""
+    out, d = [], REGIME01_SPAN[0]
+    while d <= REGIME01_SPAN[1]:
+        out.append((d, {tag: _regime01_cell(v) for tag, v in regime.regime_tags("KR", d, cal=cal).items()}))
+        d += timedelta(days=1)
+    return out
+
+
+def _regime01_text(rows, columns=REGIME01_COLUMNS) -> str:
+    """(date or date text, {tag: cell}) rows written in memory as the expected-values file with the header `columns`."""
+    buf = io.StringIO()
+    out = csv.writer(buf, lineterminator="\n")
+    out.writerow(columns)
+    for d, cells in rows:
+        row = {"date": d if isinstance(d, str) else d.isoformat(), **cells}
+        out.writerow([row.get(c, "") for c in columns])
+    return buf.getvalue()
+
+
+def _regime01_tags_set(key: str, edit) -> CalendarSet:
+    """A signed synthetic set holding only kr_regime_tags.yaml, its rows passed through `edit(rows)` (cached by key)."""
+    doc = fixture_docs()["kr_regime_tags"]
+    doc["rows"] = edit(doc["rows"])
+    return fixture_set(f"regime01_{key}", {"kr_regime_tags": doc})
+
+
+def _regime01_revalue(tag: str, d: date, value):
+    """A row edit: the row of `tag` effective on `d` carries `value`."""
+    def edit(rows):
+        hit = [r for r in rows if r["tag"] == tag and store.effective_rows([r], d)]
+        assert len(hit) == 1, (tag, d, hit)
+        return [{**r, "value": value} if r is hit[0] else r for r in rows]
+    return edit
+
+
+def test_regime01_full_range_body_passes_and_fails_on_invented_expected_values():
+    """LA-02 part 3: the T-REGIME-01 full-range body can PASS and can FAIL. Expected rows stating the synthetic signed
+    set's own tags for every date of 1995-01-01..2026-12-31 (no notice data; written in the declared layout, also with
+    the columns in another order) pass on that set: 11,688 dates, 175,320 tag values. It fails, naming the date and the
+    tag, when one expected cell of any one tag is changed (each of the 15 tags in turn), when a boolean is written
+    `True` or `1`, a number `15%` or with a space, a text in another letter case or left empty, and when the signed file
+    differs from the expected rows on one day (the value_up split signed a day late). A null signed value passes only on
+    an empty cell: on a set that signs `price_limit` before 1995-04-01 as null (as the shipped file does) the empty cell
+    passes and 0.046 fails on its 90 dates, the first five listed. Each of the spec's values (L2098) fails on a signed
+    set that carries it wrong, even when the expected rows state the same wrong value. A stand-in for regime_tags that
+    drops a tag fails the full-tag-set clause. The layout refuses, naming file and line: an absent, an extra and a
+    repeated column, a row short of cells, a first row after 1995-01-01, a missing, a repeated and an out-of-order date,
+    a last row before or after 2026-12-31, and a date not written YYYY-MM-DD. The OWNER gate returns the synthetic
+    signed set."""
+    cal = fixture_set()
+    base = _regime01_rows(cal)
+    n_dates = (REGIME01_SPAN[1] - REGIME01_SPAN[0]).days + 1
+    assert len(base) == n_dates == 11688 and REGIME01_COLUMNS == ("date",) + regime.TAGS and len(regime.TAGS) == 15
+    good = _regime01_text(base)
+    want = {"dates": 11688, "values": 11688 * 15}
+    assert _check_regime01(_regime01_expected(good), _regime01_signed(cal)) == want
+    assert _check_regime01(_regime01_expected(_regime01_text(base, ("date",) + regime.TAGS[::-1])), cal) == want
+    assert {type(v) for v in regime.regime_tags("KR", date(2010, 3, 3), cal=cal).values()} == {bool, float, str}
+
+    def fails(fn, *needles) -> str:
+        e = _raises(fn, AssertionError)
+        assert all(n in str(e) for n in needles), (needles, str(e)[:600])
+        return str(e)
+
+    def recell(d: date, tag: str, cell: str):
+        return [(x, {**cells, tag: cell}) if x == d else (x, cells) for x, cells in base]
+
+    # one changed cell of each tag in turn, on a different day for each
+    for i, tag in enumerate(regime.TAGS):
+        d = date(1996, 2, 5) + timedelta(days=701 * i)
+        value = regime.regime_tags("KR", d, cal=cal)[tag]
+        wrong = _regime01_cell((not value) if isinstance(value, bool) else value + 0.01 if isinstance(value, float)
+                               else value + "_x")
+        fails(lambda: _check_regime01(recell(d, tag, wrong), cal), "T-REGIME-01: 1 of 175320 tag values differ from "
+              "kr_regime_tags_expected.csv", f"{d} {tag}: regime_tags {value!r} != expected {wrong!r}")
+    # the declared cell forms: a boolean is `true` / `false`, a number a plain decimal number, read as a number
+    d = date(2010, 3, 3)
+    assert regime.regime_tags("KR", d, cal=cal)["etf_available"] is True
+    for tag, cell in (("etf_available", "True"), ("etf_available", "1"), ("price_limit", "15%"),
+                      ("price_limit", " 0.15"), ("price_limit", ""), ("price_limit", "0.15 "),
+                      ("close_time_kst", "15:00:00"), ("lunch_break", ""), ("random_end", "Conditional")):
+        fails(lambda: _check_regime01(recell(d, tag, cell), cal), "1 of 175320", f"{d} {tag}: regime_tags ",
+              f"!= expected {cell!r}")
+    assert _check_regime01(recell(d, "price_limit", "0.150"), cal) == want                # 0.150 is 0.15
+    # the signed file differs from the expected rows on one day: the value_up split signed a day late
+    late = _regime01_tags_set("value_up_late", lambda rows: [
+        {**r, "effective_to": "2024-02-26"} if r["tag"] == "value_up" and r["effective_to"] == "2024-02-25" else
+        {**r, "effective_from": "2024-02-27"} if r["tag"] == "value_up" and r["effective_from"] == "2024-02-26" else r
+        for r in rows])
+    fails(lambda: _check_regime01(base, late), "T-REGIME-01: 1 of 175320 tag values differ",
+          "2024-02-26 value_up: regime_tags 'pre' != expected 'post_2024_02_26'")
+    # a null signed value (the shipped file signs price_limit before 1995-04-01 as null) passes only on an empty cell
+    null = _regime01_tags_set("price_limit_null", _regime01_revalue("price_limit", date(1995, 1, 1), None))
+    assert regime.regime_tags("KR", date(1995, 3, 31), cal=null)["price_limit"] is None
+    assert _check_regime01(_regime01_rows(null), null) == want and _regime01_rows(null)[0][1]["price_limit"] == ""
+    msg = fails(lambda: _check_regime01(base, null), "T-REGIME-01: 90 of 175320 tag values differ from "
+                "kr_regime_tags_expected.csv (the first 5): 1995-01-01 price_limit: regime_tags None != expected "
+                "'0.046'", "1995-01-05 price_limit")
+    assert "1995-01-06" not in msg, msg
+    # the spec's own values (L2098): a signed set that carries one wrong fails, also against rows stating the same value
+    for d, tag, value in REGIME01_POINTS:
+        wrong = ((not value) if isinstance(value, bool) else round(value + 0.01, 4) if isinstance(value, float)
+                 else "free_float")
+        bad_set = _regime01_tags_set(f"point_{tag}_{d}", _regime01_revalue(tag, d, wrong))
+        fails(lambda: _check_regime01(_regime01_rows(bad_set), bad_set),
+              f"T-REGIME-01: regime_tags('KR', {d}).{tag} is {wrong!r}, not {value!r} (spec L2098)")
+    # the full tag set: a stand-in that drops a tag
+    fails(lambda: _check_regime01(base, cal, regime_tags=lambda m, x, cal: {
+        k: v for k, v in regime.regime_tags(m, x, cal=cal).items() if not (k == "value_up" and x == date(2001, 1, 1))}),
+        "T-REGIME-01: regime_tags('KR', 2001-01-01) returns ", "not the full tag set")
+    # the layout (file and line named)
+    lines = good.split("\n")
+    assert lines[1].startswith("1995-01-01,") and lines[n_dates].startswith("2026-12-31,") and lines[n_dates + 1] == ""
+    name = "kr_regime_tags_expected.csv"
+    for text, needle in (
+            (_regime01_text(base, REGIME01_COLUMNS[:-1]), f"{name}: the header must be `date` and the 15 tags of "
+             "core.calendars.regime.TAGS, each once: absent ['value_up'], extra or repeated []"),
+            (_regime01_text(base, REGIME01_COLUMNS + ("regime_note",)), "absent [], extra or repeated ['regime_note']"),
+            (_regime01_text(base, REGIME01_COLUMNS + ("value_up",)), "absent [], extra or repeated ['value_up']"),
+            ("\n".join(lines[:9] + [lines[9].rsplit(",", 1)[0]] + lines[10:]), f"{name} line 10: not 16 cells"),
+            ("\n".join(lines[:1] + lines[2:]), f"{name} line 2: date 1995-01-02, not 1995-01-01 (one row per date from "
+             "1995-01-01 to 2026-12-31, in date order)"),
+            ("\n".join(lines[:500] + lines[501:]), f"{name} line 501: date 1996-05-15, not 1996-05-14"),
+            ("\n".join(lines[:500] + lines[499:]), f"{name} line 501: date 1996-05-13, not 1996-05-14"),
+            ("\n".join(lines[:500] + [lines[501], lines[500]] + lines[502:]),
+             f"{name} line 501: date 1996-05-15, not 1996-05-14"),
+            ("\n".join(lines[:n_dates] + [""]), f"{name}: the last row is 2026-12-30, not 2026-12-31"),
+            (_regime01_text(base + [(date(2027, 1, 1), base[-1][1])]),
+             f"{name}: the last row is 2027-01-01, not 2026-12-31"),
+            (lines[0] + "\n", f"{name}: the last row is None, not 2026-12-31"),
+            (_regime01_text([("19950101", base[0][1])] + base[1:]),
+             f"{name} line 2: date '19950101' is not written YYYY-MM-DD"),
+            (_regime01_text([("1995-1-1", base[0][1])] + base[1:]),
+             f"{name} line 2: date '1995-1-1' is not written YYYY-MM-DD")):
+        fails(lambda: _regime01_expected(text), needle)
 
 
 # --------------------------------------------------------------------------- #
