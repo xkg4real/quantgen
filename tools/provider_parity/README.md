@@ -19,30 +19,31 @@ commit for the summaries of a sitting. Either form is valid; the rules are those
 ## Before the first run: the tool's branch, commit and sha256
 
 Spec 10.5 names the tool's branch `claude/provider-parity-5-2` and leaves the tool's commit and sha256 to an owner
-ruling before the first run. Neither is settled, so this guide is not ready to be followed yet:
+ruling before the first run. The owner gave that ruling on 2026-11-11 (P1, option 1: fixed on main's side; recorded
+verbatim in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` and in `results/RULINGS.md`):
 
-- As of 2026-11-11 `claude/provider-parity-5-2` still holds the unfinished tool of 2026-11-05 (commit `777fc5b`,
-  marked "do not merge"). The Setup below would clone that file, not the reviewed one. The reviewed tool has to be
-  brought onto that branch first, or an owner ruling has to name another branch (with a spec-only commit on the
-  research branch).
-- Then an owner ruling fixes the commit and the sha256 of `parity_check.py`, and both are written on the two lines
-  below. A change to the tool after that changes its sha256, and the suite fails until the line is right again.
+- The reviewed tool is on `main` (PR #102). `claude/provider-parity-5-2` still holds the unfinished tool of 2026-11-05
+  (commit `777fc5b`, marked "do not merge") and is not used. The difference from the branch name in spec 10.5 is
+  carried into the Step 10 execution record; the research branch gets no extra commit for it.
+- The owner clones the run branch `claude/provider-parity-runs-20261111`, which is cut from `main` and contains the fixed commit. Summaries are
+  pushed to that branch, never to `main`.
+- A change to the tool after the ruling changes its sha256, and the suite fails until the line below is right again.
 
 ```
-Tool commit fixed by the owner ruling: not fixed yet
-Tool sha256 fixed by the owner ruling: not fixed yet
+Tool commit fixed by the owner ruling: 49a3a67b246d020381b27067103d1a7ba4795f9e
+Tool sha256 fixed by the owner ruling: d651795e4b4776d096601a43989c7f45c375ae120b75a64179432f469d2daca1
 ```
 
-Run nothing for the record while either line says `not fixed yet`. Every summary records the sha256 of the tool that
-wrote it (`tool.sha256`); a run with other tool bytes counts only by an owner ruling (spec 10.5, Tool).
+Every summary records the sha256 of the tool that wrote it (`tool.sha256`); a run with other tool bytes counts only by
+an owner ruling (spec 10.5, Tool).
 
 ## Setup (PowerShell)
 
 ```powershell
 $rc = "<the research clone>"                         # read only: the tables, the pinned files and its .env
-$fixed = "<the tool commit fixed by the owner ruling>"
+$fixed = "49a3a67b246d020381b27067103d1a7ba4795f9e"
 $origin = git -C $rc remote get-url origin
-git clone --branch claude/provider-parity-5-2 --single-branch $origin "$env:LOCALAPPDATA\quantgen\pp_clone"
+git clone --branch claude/provider-parity-runs-20261111 --single-branch $origin "$env:LOCALAPPDATA\quantgen\pp_clone"
 cd "$env:LOCALAPPDATA\quantgen\pp_clone"
 git merge-base --is-ancestor $fixed HEAD; $LASTEXITCODE                                  # 0: the fixed commit is here
 git diff --quiet $fixed HEAD -- tools/provider_parity/parity_check.py; $LASTEXITCODE     # 0: the tool is as it was there
@@ -182,9 +183,10 @@ git push
   does not; Step 9 likewise for BTC-USD. The runner does not check this gate.
 - Send Claude the three `PARITY` lines; Claude reads only the pushed `summary.json` files.
 
-## Owner rulings (`results/RULINGS.md` on the tool's branch, P-D9)
+## Owner rulings (`results/RULINGS.md`, P-D9)
 
-The file is written when the first ruling is needed; Step 10 carries its rulings into the execution record and the
+The file starts with the ruling of 2026-11-11 that fixes the tool; later rulings are added on the run branch next to
+the result they concern. Step 10 carries its rulings into the execution record and the
 spec's Status block. A ruling is needed before:
 
 - a later run of a series that already has a run of record counts (new fetches or the same files);
