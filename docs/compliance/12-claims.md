@@ -131,6 +131,11 @@ Rates의 곡선 방법 설명은 각 방법의 가정과 쓰임새를 설명하�
 
 검증은 Linux headless Chromium에서 찍은 Flet 화면 캡처와 오프라인 수용 시험입니다. FMP/KIS 키가 없고 FRED/Yahoo가 프록시로 막혀 모든 결과가 합성 자료였습니다. 실제 Windows 디스플레이, 실제 제공처, 법률 검토는 이 검증에 포함되지 않습니다. 기존 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)
 
+
+### 2026-11-11 네이티브 앱 통일(UI-D1~D4)
+
+네이티브 Strategy Lab의 판정 배너·지표 타일·검증 항목 표·카드 이름([화면](../../quantgen_desktop/strategy_view.py))은 Flet과 같은 표시 문구([표시 문구](../../core/research/strategy_display.py))를 써서 위 절의 한계를 그대로 따릅니다: 합성 자료 실행은 "연습용 판정(합성 데이터)", 판정 코드(PASS·REVISE·REJECT·INSUFFICIENT_DATA)는 한국어 낱말 옆에 유지, 게이트·임계값·기록된 판정은 바꾸지 않습니다. Portfolio 요약은 "공식 투자 판정 없음", Signals 요약은 표본 기간 단서를 붙입니다. 차트 아래 "이 차트 읽는 법"은 축·선의 뜻만 설명하며 매매 신호나 예측을 말하지 않습니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
+
 ## 정책 또는 구현 기준
 
 1. 배포하는 주장은 주장 ID, 정확한 표현, 노출 위치, 근거 버전·시점·커밋, 검토자를 가져야 한다. 근거가 없거나 더 이상 해당 버전에 적용되지 않으면 표현을 제거하거나 사실에 맞게 좁힌다.

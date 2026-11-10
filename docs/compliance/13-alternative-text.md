@@ -144,3 +144,7 @@ Flet 차트(`ui/qcharts.py`, `ui/fcharts.py`, `ui/xcharts.py`)는 화면 언어�
 Macro z-점수 차트는 막대 끝에 값을 쓰고 합성 지표를 빗금과 범례 글자로 구분하며, 같은 값이 아래 지표 표에도 있습니다. Strategy Lab 누적 수익 차트는 판정에 쓰인 수치를 지표 타일과 검증 항목 표로 제공하지만 날짜별 누적 값 표는 없습니다. 그 밖의 차트에도 동등한 표가 없습니다. 분석 요약은 제목별 문장 목록과 접힌 원문으로 바뀌었지만 내용은 같은 로컬 해설입니다.
 
 검증 범위는 Linux headless Chromium 캡처에서 한글이 상자로 깨지지 않고 읽기 안내가 보이는 것까지입니다. 스크린리더 발화, 실제 Windows, 확대 배율은 확인하지 않았습니다. 기존 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)
+
+### 2026-11-11 네이티브 앱 통일(UI-D1~D4)
+
+네이티브 차트는 QPainter 위젯입니다. 축 눈금을 정수·반올림 값으로 바꾸고(관측 순번에 소수 눈금 없음, "-0" 없음) 한국어 창에서는 축 제목·범례를 한국어로 그립니다([차트](../../quantgen_desktop/charts.py)). Flet에 읽기 안내가 있는 네이티브 도구 차트 24개에 같은 네 항목의 "이 차트 읽는 법"을 차트 아래 글자로 둡니다([읽기 안내](../../quantgen_desktop/chart_study.py)). Macro z-점수 막대는 값과 합성 여부를 글자로도 씁니다. 분석 해설은 소제목과 글머리표로 보이고 전체 문단은 "해설 전체 문단 보기"로 펼칩니다([해설 보기](../../quantgen_desktop/narrative_view.py)). 검증은 Linux offscreen 캡처까지이며 스크린리더 발화, 실제 Windows, 확대 배율은 확인하지 않았습니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)

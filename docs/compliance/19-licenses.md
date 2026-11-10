@@ -147,3 +147,7 @@ OFL 5항은 글꼴로 만든 문서에 라이선스 유지 요건을 적용하�
 새 패키지·글꼴·이미지 파일은 없습니다(`pyproject.toml`, `requirements.txt` 변경 없음). 곡선 방법은 기존 scipy(BSD-3-Clause) 함수만 씁니다. Strategy Lab 카드 설명의 SPY·KODEX·TIGER·삼성전자 등은 검증 대상을 가리키는 이름이며 로고나 제휴·보증 표시가 아닙니다. Yahoo 자료는 연구 화면 다섯 곳에서 키가 없을 때 자동 대체로 쓰이며 표시 권리는 `rights_replace` 그대로입니다([08번](08-third-parties.md)).
 
 OFL 판단은 법률 의견이 아닙니다. 실제 배포 패키지의 고지 포함 여부와 데이터 권리 승인은 별도로 확인하며 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)
+
+### 2026-11-11 네이티브 앱 통일(UI-D1~D4)
+
+네이티브 앱과 Flet 차트 PNG가 모두 Pretendard 1.3.9 파생 OTF(이름 QG Interface, [OFL.txt](../../assets/fonts/OFL.txt), Reserved Font Name Pretendard는 파생물 가족 이름에 쓰지 않음)를 씁니다([차트 글꼴](../../ui/qcharts.py), [글꼴 정책](../../quantgen_desktop/font_policy.py)). 2026-11-07 절의 "Flet OTF를 네이티브에 중복 등록하지 않습니다"는 소유자 결정 UI-D4로 바뀌었고, Gothic A1 TTF와 [OFL-GothicA1.txt](../../assets/fonts/OFL-GothicA1.txt)는 되돌림에 대비해 남깁니다. 새 글꼴·패키지 파일은 없습니다. 소유자가 요청한 다른 글꼴 시안은 SIL OFL 1.1 또는 Apache 2.0처럼 앱 동봉·재배포를 허용하는 라이선스만 후보로 삼으며, 채택 전에 이 문서와 [글꼴 기록](../../assets/fonts/README.txt)을 갱신합니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)

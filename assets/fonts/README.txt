@@ -1,10 +1,15 @@
-Native desktop fonts: hinted Gothic A1, renamed QG Interface (400/500/600).
+Owner decision UI-D4 (2026-11-11): the native desktop app and the Flet chart PNGs use the
+Pretendard-derived QG Interface OTFs described under LEGACY FLET FONT PROVENANCE below
+(quantgen_desktop/font_policy.py, ui/qcharts.py). The hinted Gothic A1 TTFs below keep the same
+family name and stay in this folder unused, for rollback only.
+
+Earlier native desktop fonts (2026-11-07, now unused): hinted Gothic A1, renamed QG Interface (400/500/600).
 Pinned Google Fonts ref38411257417e616c5d4daa1b9e91a3dbcebe1c2e:
 https://github.com/google/fonts/tree/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/gothica1
 Copyright HanYang I&C Co., Ltd.; SIL OFL1.1 in OFL-GothicA1.txt.
 Actual TrueType glyph hints and all11172Hangul syllables are preserved.
-Also registered with matplotlib (ui/qcharts.py, 2026-11-10) to draw Flet chart PNGs on the
-server; only rendered pixels reach the browser and the font file itself is not served.
+Registered with matplotlib (ui/qcharts.py) on 2026-11-10 to draw Flet chart PNGs; since
+2026-11-11 the charts use the OTFs instead. Only rendered pixels reach the browser.
 Missing symbols use the separate QG Symbols family derived from the existing
 Pretendard OTF; its OFL.txt and original license name records are preserved.
 No runtime download or OS font installation. Browser/Flet OTF stays unchanged.

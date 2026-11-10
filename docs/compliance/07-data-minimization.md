@@ -87,6 +87,13 @@ Yahoo 응답은 기존 시세 캐시 규칙에 따라 FICC 캐시 폴더에 `HIS
 
 숨긴 선택 상자, 접힌 원문은 표시 변경이며 처리 항목을 줄이지 않습니다. 분석 패널은 같은 영문 해설을 전송 대상으로 유지하고 한국어 해설은 로컬 표시용입니다. AI payload·보고서·계산값은 바뀌지 않았습니다. 숫자 칸의 천 단위 구분(`number_field`, `parse_number`)은 표시와 해석만 바꿉니다. 검증은 Linux headless Chromium의 Flet 화면 캡처와 오프라인 수용 시험이며, FMP/KIS 키가 없고 FRED/Yahoo가 프록시로 막힌 환경이라 실제 제공처 응답과 실제 Windows 환경은 확인하지 않았습니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)을 따르며 `review-required`와 공개 준비 `BLOCKED`를 유지합니다.
 
+
+### 2026-11-11 네이티브 앱 통일(UI-D1~D4)
+
+소유자 결정으로 네이티브 PyQt 앱이 주력 앱이 되어, 위 절의 `source="best"` 경로가 네이티브 화면에도 적용됩니다. Monte Carlo·Portfolio·Signals·Strategy Lab의 요청 검증이 `best`를 받고([분석](../../core/research/analysis.py), [포트폴리오](../../core/research/portfolio_analysis.py), [시그널](../../core/research/signals_analysis.py), [전략](../../core/research/strategy_analysis.py)) 숨긴 선택 상자의 기본값이 `best`입니다. ETF는 `auto`로 요청한 시세 이력을 `best`로 조회합니다([시장 분석](../../core/research/market_analysis.py) `execute_etf`). 그래서 키가 없는 네이티브 실행도 종목 기호·기간을 Yahoo에 보내고, 위 절과 같은 Yahoo 응답 캐시와 yfinance의 `cookies.db`·`tkr-tz.db`가 생깁니다. Strategy Lab에서 실제 자료로 한 실행은 기존 규칙대로 연구 원장에 시행을 기록합니다(이전 네이티브 기본값 `synthetic`은 원장에 쓰지 않았습니다).
+
+분석 해설의 소제목·글머리표, 천 단위 구분, 앱이 쓰는 자료 메모의 한국어 표시([자료 메모](../../quantgen_desktop/source_notes.py))는 표시만 바꿉니다. 보고서·내보내기·AI payload·계산값은 그대로이며 언어 전환 시험이 이를 확인합니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
+
 ## 정책 또는 구현 기준
 
 ### 필드 도입 기준

@@ -205,3 +205,7 @@ MC 작은 결과표와 Bonds 두 결과 패널의 모든 행·가로 스크롤·
 중요한 경고는 tooltip에만 두지 않습니다. Signals·Quant Lab·Portfolio의 합성 자료 원인은 접힌 "제공처 메시지"로, Strategy Lab의 제공 정책 문장은 요약 타일 아래 보이는 글로 옮겼습니다. tooltip에만 남은 정보는 지표 타일의 용어 설명, 출처 칩의 제공처 원문, Macro 주요 지표 타일의 1일 변화·z-점수(지표 표에도 있음)입니다.
 
 실제 Tab 순서, 포커스 표시, 클릭할 수 있는 표 줄의 Enter 동작, 스크린리더는 확인하지 않았습니다. Linux headless Chromium 캡처와 오프라인 시험만 수행했으며 Windows 수동 확인은 남아 있습니다. 기존 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)
+
+### 2026-11-11 네이티브 앱 통일(UI-D1~D4)
+
+네이티브 Portfolio·Signals·Monte Carlo·Strategy Lab의 출처 선택 상자를 숨기고 입력 칸 Tab 순서에서 뺐습니다(도구 화면은 기존 `hide_source`). 새 상호작용: 분석 해설의 "해설 전체 문단 보기" 펼침, Strategy Lab 카드 선택 상자와 카드 표의 줄 선택으로 상세 이동, 검증 기록 원문 펼침, 금액 입력 칸은 편집을 마칠 때 천 단위 구분을 정리합니다. 키보드만으로 실제 Windows에서 끝까지 조작하는 검사는 하지 않았습니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)

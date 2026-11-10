@@ -76,6 +76,11 @@ Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Ya
 
 새 외부 서비스·SDK·패키지는 없습니다(`pyproject.toml`, `requirements.txt` 변경 없음). 곡선 방법은 기존 scipy(`CubicSpline`, `PchipInterpolator`, `least_squares`)만 씁니다. Anthropic 요청 대상, 전송 안내, 응답한 해설 엔진 표시는 그대로입니다. 분석 패널의 한국어 해설은 네이티브 앱의 기존 한국어 해설 함수로 로컬에서 만든 표시이며 외부로 보내지 않습니다. 실제 Yahoo·FRED·FMP·KIS 응답, 호출 한도, 상업 이용 조건은 이번 검토에서 확인하지 않았으며 `NOT_VERIFIED`, `review-required`, 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)
 
+
+### 2026-11-11 네이티브 앱 통일(UI-D1~D4)
+
+네이티브 앱에서 FMP/KIS 키가 없을 때 Yahoo Finance(yfinance)에 자동으로 요청하는 화면은 Monte Carlo·Portfolio·Signals·Strategy Lab·ETF입니다. 보내는 내용은 위 절과 같이 종목 기호와 기간뿐입니다. Derivatives는 KIS 키가 설정돼 있으면 KIS 호가판, 없으면 표시된 합성 시연판을 고릅니다. 새 외부 서비스·SDK·패키지는 없습니다(`pyproject.toml`, `requirements.txt` 변경 없음). [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
+
 ## 정책 또는 구현 기준
 
 ### 외부 서비스 인벤토리
