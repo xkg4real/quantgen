@@ -6,7 +6,7 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1
 next_ids: ⑨-1/2/a, ⑨-3a/fold/1, ⑨-1/2/b, ⑨-4/2/a, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-10T20:58:46+09:00
+updated_at: 2026-11-10T21:03:54+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/lookahead-la01-20261110
@@ -70,7 +70,9 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - [x] 범위 조사(읽기 전용 워크플로, 3개 + 비판): 소유자 확인 없이 시작 가능한 단위는 ⑨-1/2/a(LA-01, 가치 최고), ⑨-3a/fold/1, ⑨-1/2/b(LA-02 1부, 재범위), ⑨-4/2/a(채택 모듈, 잠정). 결과: 스크래치 `scope_results.json`.
 - [ ] ⑨-1/2/a LA-01(`claude/lookahead-la01-20261110`)와 ⑨-3a/fold/1(`claude/run-registry-fold-20261110`) 구현·검토 워크플로 실행 중 ← **여기**
   - LA-01은 Runtime CI 경로 필터에 걸리지 않으므로 완료 기준은 Compliance CI + 캐시 없는 사본 전체 실행(FAIL 0, 알려진 I-01 환경 FAIL 제외) + 병합.
-- 소유자 질문 대기(작업은 막지 않음): I-05/LA-07 동결 하네스 변경 여부, 새 시험 test_ids(macro_registry.csv) 허용 여부, ⑨-4 Q1~Q7(특히 채택 기준 문서 main 반영 Q6, ledger N_raw 의미), R3 Lab UI 작업 허용(소유자가 UI 범위를 PR89로 제한), 설계 0b(P-01), Q12 파일 목록, ⑨-3c 동결 지시, series-files no-clobber 질문.
+- [x] 소유자 승인 2026-11-10 ("전부 승인합니노.") 원문 기록 + 누출 감사 보고서(L-1)·채택 기준 문서(초안 표시 해제)를 main에 반영: PR #92 병합 `f4e034d`(트리 = head `85fad1b`, Compliance 성공). 승인 범위: I-05용 LA-07 하네스 변경, 채택 기준 main 반영, R3 실험실 UI(네이티브 Qt 포함), 696ee3c 사후 승인. 미결: 'ledger N_raw' 뜻(두 해석 중 미선택), 설계 0b(P-01)·Q12 파일 목록.
+- [ ] ⑨-4/2/a 채택 모듈 1부와 ⑨-1/2/b LA-02 1부 워크플로 실행 중(브랜치 `claude/adoption-strategy-checks-20261110`, `claude/lookahead-la02-part1-20261110`)
+- (이전) 소유자 질문 대기(작업은 막지 않음): I-05/LA-07 동결 하네스 변경 여부, 새 시험 test_ids(macro_registry.csv) 허용 여부, ⑨-4 Q1~Q7(특히 채택 기준 문서 main 반영 Q6, ledger N_raw 의미), R3 Lab UI 작업 허용(소유자가 UI 범위를 PR89로 제한), 설계 0b(P-01), Q12 파일 목록, ⑨-3c 동결 지시, series-files no-clobber 질문.
 - 참고(소유자 보고 필요): 커밋 696ee3c(10-30, GPT)가 동결 하네스 core/quant/strategies.py를 수정했는데 결정 기록에 해당 항목이 없음. 이번 작업은 막지 않음.
 - [ ] ⑨-3a/series-format/1 PR #88: PR #87 통합본 합침(`f3f56c3`), CI 대기. PR #87 병합 뒤 병합.
 - [ ] ⑨-3a/series-files/1 PR #91(`93408c3`): 설계→반박(11건)→구현→3관점 검토(8건 모두 수정). 시험 45개(3회), R3·구문·컴플라이언스 183개 통과, 변형 41/41 잡음. 정책 01·07·20 각 1행. PR #87·#88 뒤 병합.
