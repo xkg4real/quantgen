@@ -1,3 +1,21 @@
+# 소유자 결정 — 2026-11-11 05:40 KST (UI 앱 통일) · 모든 에이전트(Claude·GPT) 필독
+
+소유자 원문(2026-11-11, Claude Code 채팅):
+> 네이티브로 통일하는데, 글꼴은 너가 쓴거 그대로 쓰면 되고 + 오늘 변경한 부분들도 너가 썼던 걸로 진행하면돼. gpt한테 전달 똑바로하고, 대신 나머지 부분은 gpt가 수정한 ui사용해야해
+
+앞선 선택(같은 날 AskUserQuestion): 주력 앱 = **네이티브 앱으로 통일**, 글꼴 = **Flet 화면 글꼴(Pretendard 기반)**.
+
+| ID | 결정 | 구체적 의미 |
+|---|---|---|
+| UI-D1 | 주력 앱은 네이티브 PyQt (`python -m quantgen_desktop`, `Start-QUANTGEN-Desktop.cmd`) | 앞으로의 UI 수정은 네이티브 기준. Flet(`main.py`)은 유지하되 기준 앱이 아님 |
+| UI-D2 | 2026-11-10 소유자 지적 14건의 해결은 **Claude 버전**(PR #98, Flet에 구현된 것)을 네이티브로 옮김 | 전략 실험실 판정 배너·요약 타일·카드 이름(`core/research/strategy_display.py`), 분석 요약 정리, 차트 읽는 법, 천 단위 콤마, 출처 선택기 제거·`source="best"`, 실시간 시세 정렬, 곡선 방법 9개, 한국어 통일 등 |
+| UI-D3 | 그 밖의 화면·구조는 **GPT 버전**(PR #89 네이티브 압축 UI: 내용폭 메뉴, `form_layout`·`table_layout`·`category_picker`·`result_layout`, 여백·표 밀도) 유지 | 14건과 무관한 네이티브 화면을 Flet 모양으로 바꾸지 않음. 14건을 옮길 때도 GPT의 배치 도구를 그대로 사용 |
+| UI-D4 | 글꼴 = Flet 화면 글꼴 `assets/fonts/qg-interface*.otf`(Pretendard 1.3.9 기반, 한글 11172자) + `QG Symbols` | 네이티브 `font_policy.py`가 Gothic A1 TTF 대신 이 OTF를 등록. Flet·네이티브 차트 글자도 같은 글꼴. Gothic A1 TTF 파일은 저장소에 남겨 두되 사용하지 않음(되돌릴 때 대비) |
+
+GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기, 글꼴을 Gothic A1로 되돌리기, 14건과 무관한 GPT 압축 UI를 Flet 모양으로 바꾸기.
+
+---
+
 # UI 세션 진행 중 — 2026-11-10 KST (Claude, 소유자 UI/UX 검토 14건)
 
 - status: 완료 · main 병합됨 (UI 세션 전용 기록. 메인 `CURRENT.md`·`LEDGER.md`는 다른 Claude 세션
