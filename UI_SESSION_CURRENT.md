@@ -1,3 +1,50 @@
+# UI 세션 진행 중 — 2026-11-10 KST (Claude, 소유자 UI/UX 검토 14건)
+
+- status: checkpoint (UI 세션 전용 기록. 메인 `CURRENT.md`·`LEDGER.md`는 다른 Claude 세션
+  session_01H6RrzMUzF8vwK8xkX977mB가 쓰는 중이라 건드리지 않음)
+- session: https://claude.ai/code/session_016uB1jf8m3p5GW1qzQVJe7k
+- work_branch: `claude/friendly-bardeen-r6xe8f` (main `9d1eacd`에서 시작), 기반 커밋 `55bcba9`
+- updated_at: 2026-11-10 KST, waiting_on: none
+
+## 소유자 요청 (원문)
+
+> @"C:\Users\whydi\Downloads\QUANTGEN_인계_1107.zip" 다음 파일을 바탕으로 앱 내부 UI/UX을 수정해주세요. 제목을 보면 뭘 수정해야할지를 어느정도 알 수 있도록 써놓았기 때문에 잘 보시고 수정해주세요
+>
+> /ui-ux-pro-max /karpathy-guidelines 등을 적극적으로 사용해주시되, UI/UX의 기본적인 mood나 틀에서 크게 벗어나지 않도록 주의해주세요
+
+zip = Flet 앱(main.py, ui/*.py) 스크린샷 14장. 파일 제목이 곧 지시입니다. 요지:
+01 검증 요약 칩이 너무 작음 · 02 매크로 z-점수 차트와 해설 패널을 아무도 못 읽음 · 03 숫자 천 단위 콤마(명목금액), DV01 라벨 줄바꿈 ·
+04/12 데이터 출처 선택기 삭제(앱이 알아서 가져올 것), 자동/auto 불일치 · 05 실시간 시세 화면 행·열 정렬과 글자 크기 ·
+06 전략 결과에 좋은/나쁜 전략 판정이 없음 · 07 카드 ID(M_C4_funding) 노출 · 08 금리 곡선 방법이 3개뿐 · 09 검증 표가 외계어 ·
+10 전략 실험실 전체 정리 · 11 분석 패널이 한 덩어리 문단 · 13 포트폴리오 회색 화면 · 14 한국어/영어 섞임.
+
+## 결정과 이유
+
+| 결정 | 이유 |
+|---|---|
+| 대상은 Flet 화면(ui/*.py). 네이티브 PyQt는 공유 core와 금리 방법 목록만 | 스크린샷이 Flet(Flutter 회색 오류 상자, '5초마다 조회' 문구 등)임을 코드로 확인 |
+| 13 원인: `expand=True` 입력칸이 `Row(wrap=True)` 안에 있어 Flutter가 회색 상자를 그림 | 컨테이너에서 Flet 웹+Playwright로 재현하고, 폭 고정 시 정상 렌더 확인 |
+| 출처 선택기는 숨기고(visible=False) 값은 유지, `core.quant.history`에 `source="best"` 추가 | UI-8 선례(2026-11-03). 기존 `auto`는 FMP 키가 없으면 합성으로 떨어지고 그 불변식이 테스트로 고정돼 있어, 화면용으로 키 없는 Yahoo를 먼저 묻는 경로를 따로 둠 |
+| 번역은 페이지 묶음별 `core/ui_page_messages/*.py`(setdefault 병합) + `LocalText` | 병렬 작업 충돌 방지, 기존 검토된 번역 우선 |
+| 판정 코드 PASS/REVISE/REJECT는 그대로 두고 한국어 뜻을 옆에 | `core/ui_messages.py` 정책: 판정 코드는 바꾸지 않음 |
+
+## 진행 상황
+
+- [x] 기반 커밋 `ae8a313`(LocalText·number_field·페이지별 번역 카탈로그), `55bcba9`(source="best" + 테스트). 브랜치 push 완료.
+- [x] 수정 전 화면 캡처: 컨테이너의 `/tmp/claude-0/qgshots/before/` (세션 종료 시 사라짐)
+- [ ] 6개 영역 병렬 구현(각 worktree 브랜치 `ui-fix/a-strategy`, `b-charts`, `c-rates`, `d-quotes`, `e-ficc`, `f-build`) ← 여기
+- [ ] 통합(merge) → 전체 테스트 → 독립 검토 → 수정 → 컴플라이언스 문서 검토와 기준선 갱신 → 수정 후 캡처 → push → 소유자 보고
+
+## 다음 할 일 (세션이 끊기면)
+
+1. `git fetch origin claude/friendly-bardeen-r6xe8f` 후 이 브랜치에서 계속. 영역 브랜치는 로컬 전용이었으므로, 끊겼다면 위 표의 이슈를
+   영역별로 다시 구현해야 합니다(파일 소유는 이 문서의 영역 구분을 따름).
+2. 완료 기준: 14건 각각 화면 캡처로 확인, `tests.flet_runtime_acceptance`·`tests.flet_a1_headers_acceptance`와 각 영역 테스트 통과,
+   `python -m tools.compliance.check --check` PASS(문서 재검토 후 `--refresh-baseline`).
+
+---
+이전 기록 (2026-11-07 GPT UI 세션)
+
 # 최종 상태 — 2026-11-07 KST
 
 **PR89 main 병합 완료**: https://github.com/xkg4real/quantgen/pull/89
