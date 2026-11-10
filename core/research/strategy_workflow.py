@@ -125,6 +125,13 @@ def narrative(r: dict) -> str:
             f"The last in-sample winner was {r['chosen']}.")
     return head + " " + " ".join(exposure_lines(r.get("exposure")) + list(sc.lines))
 
+def narrative_sections(r: dict, language: str) -> list[tuple[str, list[str]]]:
+    """The same result as narrative(), organised for reading: conclusion, data and setup, validation
+    results, risks and notes, in Korean ("ko") or English. Presentation only; narrative() and payload()
+    are unchanged."""
+    from .strategy_display import run_sections
+    return run_sections(r, "ko" if language == "ko" else "en")
+
 def payload(r: dict) -> dict:
     sc = r["score"]
     hide = ("decision", "reason", "revise_target") if r.get("withheld") else ()   # no verdict leaks into analysis
