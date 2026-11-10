@@ -653,3 +653,18 @@ Home 표와 시장 관심종목 카드·검색·종목 제목에 로컬 문자 �
 ## 네이티브 한글 서체·UI 밀도 — 2026-11-07
 
 Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작은 한글 렌더링을 개선합니다. 기존 Flet OTF·웹HTML은 변경하지 않습니다. 카테고리 버튼은 내용폭/줄바꿈, 입력은3/4열 제한폭, 작은 결과표는 내용폭/숫자정렬/최소34px행과 긴내용 확장으로 바뀝니다. 계산 엔진·요청·결과·보고서·수신 권한·원장은 그대로입니다. [검증기록](../product/COMPACT_NATIVE_UI_20261107.md)을 따릅니다. 13/14/15/19의 표시·라이선스 변경 외 20종 정책의 기존 조건과 `review-required`·공개 준비 `BLOCKED`를 유지합니다. Linux검사로 실제Windows디스플레이·계정/KIS·웹배포·전체R3 완료를 주장하지 않습니다.
+
+<a id="lookahead-la01-2026-11-10"></a>
+## 매크로 일일 실행의 NAV 라인 종가 바인딩 보존(LA-01) — 2026-11-10
+
+기준 main `ed8df4a`에서 [매크로 일일 실행](../../core/skills/macro_daily.py)만 고친 ⑨-1/2/a 범위입니다(소유자 결정 L-2, 미래 정보 누출 감사 2026-11-04의 LA-01, 감사 보고서 `docs/nautilus_bridge/LOOKAHEAD_AUDIT_2026-11-04.md`는 `7749450`에서 작성되어 이 브랜치 기준 `ed8df4a` 뒤에 main으로 `3059581`에서 병합됨). `KRX_069500_OFFICIAL_CLOSE`는 같은 consumer `nav`에 acting(recommended·specification, `halt_after 3`)과 forward_sim(R-28·R-29) 두 바인딩이 있는데, 기존 `pit_snapshot`이 키 `(series, consumer)`마다 마지막 바인딩만 저장해 결측·감사 위반이 acting으로 처리되지 않았습니다.
+
+| 항목 | 확인한 동작과 한계 |
+| --- | --- |
+| 변경 | `pit_snapshot`은 키별 바인딩을 모두 튜플로 보관하고 입력 값·키 모양은 그대로. `data_ok`는 바인딩마다 자기 실패 조치를 적용(acting: 두 KR 장부 fail-closed·계수기·`ACTING_INPUT_FAIL_CLOSED`, forward_sim: R-28·R-29 `forward_failed`). `INPUT_DISPUTED`는 키당 한 번만, 묶인 장부 전체를 적어 냄. `lag_audit`은 역할의 합집합을 사용 |
+| 달라지는 실행 결과 | 합성 KR 저장소의 라이브 결정 기준: NAV 종가 결측 시 두 KR 장부 fail-closed·`macro_state.fail_closed` true, 세 번째 연속 결정에서 OPS `acting_input_stale` HALT. 발행 시각 전 `available_at` 위반 시 두 KR 장부 OPS `lag_audit_violation` HALT(운영자 재가동)와 page 알림 1건. 결정 시각 뒤로 찍힌 `available_at`(늦은 스탬프)은 읽기에 보이지 않아 결측과 같이 두 KR 장부 fail-closed, `lag_audit`는 통과. 분쟁 종가는 알림 1건(네 장부 표기), 실패 아님 |
+| 바뀌지 않는 것 | 레지스트리·규칙 저장소·`contracts.py`·카드·판정·원장·골든·`tests/macro_registry.csv`·게이트 패키지(`HARNESS_SOURCES` 밖). 정상 입력 3회 KR·1회 US 결정의 산출물 32개·단계 결과·알림 20행은 `provenance.tree_hash`(소스 바이트 해시, 정의상 변경) 외 동일. 외부 전송·저장 경로·개인정보 처리 변화 없음 |
+| 검증 범위 | 새 회귀 검사(결측·이른 스탬프·늦은 스탬프·분쟁, `test_ids` 없음)는 수정 전 코드에서 FAIL, 수정 뒤 PASS. 매크로 M8 파이프라인 20개(벤더 캐시를 읽는 I-01 dry run과 REFDATA NOT_RUN 제외)·통합 3개·M6 정적 검사 1개를 이름으로 각각 실행해 통과. 모두 캐시·`.env`·`~/.nextgen` 열기와 네트워크 연결을 거부하는 audit hook 아래 로컬 Linux 실행 |
+| 미검증 | 소유자 PC(Windows)의 라이브 실행. 소유자 PC처럼 시가총액 3개·KODEX 바스켓 행·NAV 종가가 모두 없는 합성 저장소의 연속 KR 결정 4회에서는 첫 HALT(2번째 결정, `acting_input_stale:KRX_005930_MARKET_CAP`)와 page 알림 2건이 수정 전과 같고, 매 결정 `fail_closed` 구성요소와 `ACTING_INPUT_FAIL_CLOSED` 알림이 1개씩 늘며, 3번째 결정에서 KR 장부마다 HALT 원인 `acting_input_stale:KRX_069500_OFFICIAL_CLOSE`가 더해지고(거버넌스 로그 halt 이벤트 +2) 자동 재가동에는 NAV 종가도 새로 있어야 함. 실제 PC 결과는 미검증. `python -m tests.macro_m8_pipeline` 전체와 `tests/run_all.py`(캐시 없는 사본 하네스 필요), 벤더 캐시로 실제 dry run을 하는 `tests/macro_ui_overlay.py`의 Run 버튼 검사(DISARMED 장부는 HALT되지 않으므로 통과 예상, 코드 읽기만), T-RO-01·T-HERM-01 정적 검사, CI(매크로 검사는 CI 경로에 없음), 연구 브랜치와의 병합 |
+
+[제품 범위·검증 기록](../product/LOOKAHEAD_LA01_FIX_2026-11-10.md)에 따라 01–20 정책의 전송·저장·주장 범위는 바꾸지 않습니다. 이 변경은 일일 매크로 런타임의 실패 경로 분류만 고치며 LA-02(REFDATA 시점 검사)·라이브 적재 연결(LA-03)·실제 데이터 확보(⑨-2)를 해결하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`를 유지합니다.

@@ -435,6 +435,88 @@ def test_scope_01_e_f_hedge_exception_and_context_log_failure_halt_nothing():
 test_scope_01_e_f_hedge_exception_and_context_log_failure_halt_nothing.test_ids = ["T-SCOPE-01", "T-OBS-01"]
 
 
+def test_la01_nav_line_close_keeps_the_failure_action_of_each_binding():
+    """LA-01 (look-ahead audit 2026-11-04 at 7749450, ⑨-1/2/a): KRX_069500_OFFICIAL_CLOSE carries two bindings under
+    the one consumer `nav` (NAV_LINE_CLOSES: acting for recommended + specification with halt_after 3, then forward_sim
+    for R-28 + R-29). Each keeps its own failure action (R-19 rule 4; spec L1891): a missing close fails both KR books
+    closed AND fails the forward books; a look-ahead stamp HALTs both KR books (OPS) and pages; a stamp after the decision
+    instant reads as missing; a dispute alerts once."""
+    nav_sid, fwd = "KRX_069500_OFFICIAL_CLOSE", ("forward_sim:R-28", "forward_sim:R-29")
+
+    def store_with(nav_rows):                       # kr_store() with the NAV line rows replaced (as la01_nav_line.py builds it)
+        store, days, px = _kospi_store(40, scale_sigma_to=0.2882)
+        rows = kr_rows(days, px, nav=False) + nav_rows(days, px)
+        hs = _hedge_store()
+        for sid in hs.series_ids():
+            rows += hs.rows(sid)
+        store.append(rows)
+        return store
+
+    def nav_alerts(state, code):
+        return [a for a in state["alerts"] if a["code"] == code and a["series_id"] == nav_sid]
+
+    # (1) the NAV close absent on three live KR decisions: acting fail-closed for both KR books, HALT at the third
+    tmp = _tmp("la01_")
+    s = services(tmp, store_with(lambda days, px: []), None)
+    reg = s.book_registry
+    for i, d in enumerate(_sessions("KR", OCT2, 3)):
+        rec = run(s, "KR", d)
+        dok = step(rec, "data_ok")["result"]
+        assert dok["status"] == "fail_closed" and [c["series_id"] for c in dok["fail_closed"]] == [nav_sid]
+        assert dok["fail_closed"][0]["books"] == [REC, SPEC]
+        assert all(nav_sid in dok["forward_failed"].get(b, []) for b in fwd)      # the forward_sim action is kept too
+        state = state_of(tmp, rec)
+        assert state["fail_closed"] is True and len(nav_alerts(state, "ACTING_INPUT_FAIL_CLOSED")) == 1
+        assert len(nav_alerts(state, "FORWARD_SIM_INPUT_FAIL_CLOSED")) == 1
+        if i < 2:                                                                   # halt_after 3, not the default 2
+            assert _modes(reg)[REC] == _modes(reg)[SPEC] == "ARMED" and rec["halts"] == []
+    for b in (REC, SPEC):
+        assert reg.get(b).halted and reg.get(b).halt["class"] == "OPS" and reg.get(b).halt["reason_code"] == "acting_input_stale:" + nav_sid
+    assert sorted(h["book_id"] for h in rec["halts"]) == [REC, SPEC] and _modes(reg)[UREC] == _modes(reg)[USPEC] == "ARMED"
+
+    # (2) the last NAV close stamped available_at 06:00Z, before its 06:30:30Z publication bound: OPS HALT of both KR books + page
+    def early(days, px):
+        at = _dec("KR", days[-1]).replace(hour=6, minute=0, second=0)
+        return [_close_row(nav_sid, d, px[i] * 10.0, market="KR", available=at if d == days[-1] else None) for i, d in enumerate(days)]
+    tmp = _tmp("la01_")
+    s = services(tmp, store_with(early), None)
+    reg = s.book_registry
+    rec = run(s, "KR", OCT2)
+    la = step(rec, "macro.lag_audit")["result"]
+    assert la["status"] == "fail" and [(v["series_id"], v["check"]) for v in la["violations"]] == [(nav_sid, "available_at_utc >= publication_instant")]
+    assert la["halted"] == [REC, SPEC] and _modes(reg)[UREC] == _modes(reg)[USPEC] == "ARMED"
+    for b in (REC, SPEC):
+        assert reg.get(b).halted and reg.get(b).halt == {**reg.get(b).halt, "class": "OPS", "reason_code": "lag_audit_violation", "rearm_mode": "operator"}
+    pages = [a for a in s.alerts.open("page") if a["code"] == "LAG_AUDIT_VIOLATION" and a["series_id"] == nav_sid]
+    assert len(pages) == 1 and pages[0]["books"] == [REC, SPEC]
+
+    # (2b) the last NAV close stamped available 5 min AFTER the decision instant: invisible to the read, so the acting close
+    # is missing (fail-closed for both KR books), the forward books still fail, and lag_audit has nothing to flag
+    def late(days, px):
+        at = _dec("KR", days[-1]) + timedelta(minutes=5)
+        return [_close_row(nav_sid, d, px[i] * 10.0, market="KR", available=at if d == days[-1] else None) for i, d in enumerate(days)]
+    tmp = _tmp("la01_")
+    rec = run(services(tmp, store_with(late), None), "KR", OCT2)
+    dok = step(rec, "data_ok")["result"]
+    assert [(c["series_id"], c["status"], c["books"]) for c in dok["fail_closed"]] == [(nav_sid, "missing", [REC, SPEC])]
+    assert all(nav_sid in dok["forward_failed"].get(b, []) for b in fwd) and step(rec, "macro.lag_audit")["result"]["status"] == "pass"
+
+    # (3) a disputed NAV close (official vs vendor differ; never a failure): one INPUT_DISPUTED alert naming every bound book
+    def disputed(days, px):
+        rows = [_close_row(nav_sid, d, px[i] * 10.0, market="KR") for i, d in enumerate(days)]
+        return rows + [_close_row(nav_sid, days[-1], px[-1] * 10.0 + 5.0, market="KR", source="Yahoo", status="vendor_close")]
+    tmp = _tmp("la01_")
+    s = services(tmp, store_with(disputed), None)
+    reg = s.book_registry
+    rec = run(s, "KR", OCT2)
+    dok, state = step(rec, "data_ok")["result"], state_of(tmp, rec)
+    assert dok["status"] == "pass" and not any(nav_sid in v for v in dok["forward_failed"].values())
+    assert _modes(reg)[REC] == _modes(reg)[SPEC] == "ARMED"
+    alerts = nav_alerts(state, "INPUT_DISPUTED")
+    assert len(alerts) == 1 and sorted(alerts[0]["books"]) == sorted((REC, SPEC) + fwd)
+    assert len([a for a in s.alerts.open() if a["code"] == "INPUT_DISPUTED" and a["series_id"] == nav_sid]) == 1
+
+
 def _snapshot_rows(store, knowledge: datetime) -> list[dict]:
     return [r for sid in store.series_ids() for r in store.rows(sid) if r["retrieved_at_utc"] <= knowledge]
 
