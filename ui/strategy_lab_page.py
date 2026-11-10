@@ -19,6 +19,7 @@ from __future__ import annotations
 
 from collections import Counter
 from pathlib import Path
+import re
 from typing import Callable, Optional
 
 import flet as ft
@@ -28,6 +29,7 @@ from core.quant import validate as V
 from core.quant.history import HistoryError, load_history
 from core.research import strategy_display as D
 from core.theme import RADII, active
+from core.ui_legacy_messages import static_text
 from ui.ai_panel import analysis_panel
 from ui.components import LocalText, card, colour_for, empty_state, notice, number_field, parse_number, section
 import ui.xcharts as xc
@@ -71,6 +73,17 @@ def _text(value: str, *, size: int = 13, color: Optional[str] = None, weight=Non
     return ft.Text(value, size=size, color=color or active().text, weight=weight, italic=italic,
                    selectable=selectable, data={"qg_literal_value": True},
                    style=ft.TextStyle(height=height) if height else None, **kwargs)
+
+
+# Flutter breaks Korean between any two syllables and has no `word-break: keep-all`. A word joiner (U+2060,
+# zero width, no glyph) next to every Hangul syllable inside a word leaves the spaces as the only break points.
+_INSIDE_WORD = re.compile(r"(?<=[가-힣])(?=\S)|(?<=\S)(?=[가-힣])")
+WORD_JOINER = "\u2060"
+
+
+def _keep_words(value: str) -> str:
+    """Korean text that wraps between words only (display copy; the visible characters are unchanged)."""
+    return _INSIDE_WORD.sub(WORD_JOINER, value)
 
 
 def _pill(value: str, token: str = "muted", *, size: int = 12, tooltip: str = "") -> ft.Container:
@@ -151,35 +164,40 @@ def _summary(cards: list[dict], lang: str) -> ft.Control:
             border=ft.Border.all(1.5, colour), border_radius=RADII["lg"]))
     total = (f"검증 카드 {len(cards)}개 · 연구 보고서의 판정을 그대로 보여 줍니다" if lang == "ko" else
              f"{len(cards)} study cards · the verdicts as the study recorded them")
-    policy = ("PASS는 기본으로 제공하고, REVISE는 보완 목표와 함께 제공하며, REJECT와 INSUFFICIENT_DATA는 거절 사실이 "
-              "보이도록 목록에 남깁니다. 모든 기록에는 수치, 기준, 표본이 함께 적혀 있습니다." if lang == "ko" else
+    policy = ("통과 · PASS는 기본으로 제공하고, 보완 필요 · REVISE는 보완 목표와 함께 제공하며, 기각 · REJECT와 "
+              "데이터 부족 · INSUFFICIENT_DATA는 거절 사실이 보이도록 목록에 남깁니다. 모든 기록에는 수치, 기준, "
+              "표본이 함께 적혀 있습니다." if lang == "ko" else
               "PASS is offered by default; REVISE is offered with its revise target shown; REJECT and "
               "INSUFFICIENT_DATA are listed so the refusal is visible. Every line states the number, the threshold "
               "and the sample behind it.")
     return ft.Column([
         ft.ResponsiveRow(tiles, spacing=12, run_spacing=12),
-        ft.Container(_text(total, size=12, color=pal.muted), tooltip=f"docs/asset_expansion/cards\n{policy}"),
+        ft.Column([ft.Container(_text(total, size=12, color=pal.muted), tooltip="docs/asset_expansion/cards"),
+                   _text(policy, size=12, color=pal.muted, height=1.4)], spacing=4),
     ], spacing=10)
 
 
-_TABLE_COLS = [{"xs": 24, "md": 6}, {"xs": 8, "md": 2}, {"xs": 16, "md": 4}, {"xs": 24, "md": 7}, {"xs": 24, "md": 5}]
+# Card (name, kind and id), verdict, reason, key numbers. The kind sits under the card name and the verdict
+# column is as narrow as its pill allows, so the reason gets the width (no mid-word breaks at 1000-1360 px).
+_TABLE_COLS = [{"xs": 24, "md": 6}, {"xs": 24, "md": 4, "xl": 3}, {"xs": 24, "md": 9, "xl": 10},
+               {"xs": 24, "md": 5}]
 
 
 def _scorecard_rows(cards: list[dict], lang: str, on_pick) -> ft.Control:
     pal = active()
-    heads = (["카드", "종류", "판정", "이유", "핵심 수치"] if lang == "ko" else
-             ["Card", "Kind", "Verdict", "Why", "Key numbers"])
+    heads = (["카드 · 종류", "판정", "이유", "핵심 수치"] if lang == "ko" else
+             ["Card · kind", "Verdict", "Why", "Key numbers"])
     rows: list[ft.Control] = [_rows_header(heads, _TABLE_COLS)]
     for c in cards:
         t = D.card_text(c)
         (reason, _) = D.reason_text(c["decision_reason"], c)
         numbers = [n for n in D.key_numbers(c, lang).split(" · ") if n]
         rows.append(_row([
-            ft.Column([_text(D.pick(t.name, lang), size=13, weight=_W600),
-                       _text(c["card_id"], size=11, color=pal.muted)], spacing=2),
-            _text(D.pick(D.kind_label(c["kind"]), lang), size=12, color=pal.muted),
+            ft.Column([_text(_keep_words(D.pick(t.name, lang)), size=13, weight=_W600),
+                       _text(f"{D.pick(D.kind_label(c['kind']), lang)} · {c['card_id']}", size=11,
+                             color=pal.muted)], spacing=2),
             ft.Row([_pill(D.pick(D.verdict_label(c["decision"]), lang), _TOKEN.get(c["decision"], "muted"))]),
-            _text(D.pick(reason, lang), size=13, height=1.35),
+            _text(_keep_words(D.pick(reason, lang)), size=13, height=1.35),
             ft.Column([_text(n, size=12, color=pal.muted) for n in numbers], spacing=2),
         ], _TABLE_COLS, on_click=lambda e, cid=c["card_id"]: on_pick(cid)))
     return ft.Column(rows, spacing=0)
@@ -297,31 +315,42 @@ def _verdict_banner(v: dict, lang: str) -> ft.Control:
                         border=ft.Border.all(2, colour), border_radius=RADII["lg"])
 
 
+_TILE_HEIGHT = 168       # one fixed height: the four headline tiles line up whatever their text
+
+
 def _metric_tile(c: D.Check, lang: str) -> ft.Control:
     pal = active()
     token = D.STATUS_TOKEN[c.status]
     colour = colour_for(token)
     detail = D.pick(c.detail, lang)
     threshold = D.pick(c.threshold, lang)
-    if c.gated:
+    if c.gated and threshold:
         threshold = ("기준 " if lang == "ko" else "Needs ") + threshold
     rows: list[ft.Control] = [
-        _text(D.pick(c.label, lang), size=12, color=pal.muted, height=1.3),
-        _text(c.value, size=22, weight=_W600, color=colour if c.status in ("pass", "fail") else pal.text),
-        ft.Row([ft.Icon(_STATUS_ICON[c.status], size=14, color=colour),
-                _text(D.pick(D.STATUS[c.status], lang), size=12, weight=_W600, color=colour)], spacing=4),
-        _text(threshold, size=11, color=pal.muted),
+        _text(D.pick(c.label, lang), size=13, color=pal.muted, weight=_W600, max_lines=2,
+              overflow=ft.TextOverflow.ELLIPSIS, height=1.25),
+        _text(c.value, size=26, weight=_W600, color=colour if c.status in ("pass", "fail") else pal.text),
+        ft.Row([ft.Icon(_STATUS_ICON[c.status], size=16, color=colour),
+                _text(D.pick(D.STATUS[c.status], lang), size=13, weight=_W600, color=colour)], spacing=4),
     ]
-    if detail:
-        rows.append(_text(detail, size=11, color=pal.muted))
-    return ft.Container(ft.Column(rows, spacing=4), col={"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 2},
-                        padding=ft.Padding(14, 12, 14, 12), bgcolor=pal.surface_2,
+    for line in (threshold, detail):
+        if line:
+            rows.append(_text(line, size=12, color=pal.muted, max_lines=1, overflow=ft.TextOverflow.ELLIPSIS))
+    return ft.Container(ft.Column(rows, spacing=4), col={"xs": 12, "sm": 6, "lg": 3}, height=_TILE_HEIGHT,
+                        padding=ft.Padding(16, 14, 16, 14), bgcolor=pal.surface_2,
                         border=ft.Border.all(1, colour if c.status == "fail" else pal.border),
                         border_radius=RADII["md"], tooltip=D.pick(c.help, lang))
 
 
 def _metric_grid(checks: list[D.Check], lang: str) -> ft.Control:
-    return ft.ResponsiveRow([_metric_tile(c, lang) for c in checks], spacing=10, run_spacing=10)
+    """Four headline tiles; the full checklist (every criterion) is the card below the chart."""
+    pal = active()
+    note = (f"핵심 지표 4개입니다. 검증 항목 {len(checks)}개 전체는 아래 '검증 항목별 결과'에 있습니다." if lang == "ko"
+            else f"Four headline numbers; all {len(checks)} criteria are under 'Result per criterion' below.")
+    return ft.Column([
+        ft.ResponsiveRow([_metric_tile(c, lang) for c in D.headline_checks(checks)], spacing=10, run_spacing=10),
+        _text(note, size=12, color=pal.muted),
+    ], spacing=8)
 
 
 _CHECK_COLS = [{"xs": 24, "md": 7}, {"xs": 12, "md": 7}, {"xs": 12, "md": 6}, {"xs": 24, "md": 4}]
@@ -354,8 +383,8 @@ def _provenance(r: dict, lang: str) -> ft.Control:
              for s, src, note in zip(r["symbols"], r["sources"], r["notes"])]
     chips.append(_pill(D.pick(D.walk_forward_text(r["wf"].note), lang), "muted", size=11, tooltip=r["wf"].note))
     if r.get("ledger_n"):
-        chips.append(_pill((f"{FAMILY_ID[r['family']]} 계열 누적 설정 {r['ledger_n']}개" if ko else
-                            f"{FAMILY_ID[r['family']]} ledger: {r['ledger_n']} configurations"), "muted", size=11,
+        chips.append(_pill((f"{FAMILY_ID[r['family']]} 계열 누적 설정 {r['ledger_n']:,}개" if ko else
+                            f"{FAMILY_ID[r['family']]} ledger: {r['ledger_n']:,} configurations"), "muted", size=11,
                            tooltip=("이 계열에서 지금까지 실행한 모든 설정 수입니다. 위의 보정 샤프는 이번 실행의 설정만 셉니다."
                                     if ko else "Every configuration ever run in this family. The deflated Sharpe "
                                                "above counts only this run's grid.")))
@@ -474,10 +503,11 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
                 failed(exc); return
             sc = r["score"]
             verdict = D.run_verdict(r)
-            blocks: list[ft.Control] = [_Localized(lambda lang: _verdict_banner(verdict, lang), page)]
-            if "SYNTHETIC" in r["sources"]:
-                blocks.append(notice("Synthetic data in the panel: the verdict below is a toy.", "error",
+            blocks: list[ft.Control] = []
+            if "SYNTHETIC" in r["sources"]:         # read before the verdict, whose title also says "practice"
+                blocks.append(notice("Synthetic data in the panel: this verdict is a toy.", "error",
                                      icon=ft.Icons.SCIENCE_OUTLINED))
+            blocks.append(_Localized(lambda lang: _verdict_banner(verdict, lang), page))
             if r.get("convention"):
                 blocks.append(_Localized(lambda lang: _plain_notice(D.pick(D.convention_text(r["convention"]), lang),
                                                                     "error"), page))
@@ -495,7 +525,8 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
                           "Out-of-sample growth of 1: strategy and benchmark (equal-weight hold)",
                           size=15, weight=_W600, color=pal.text),
                 xc.equity_chart(equity_dates, r["equity"], r["bench_equity"],
-                                title=f"{r['label']}: out-of-sample equity"),
+                                title=f"{r['label']}: out-of-sample equity",
+                                title_ko=f"{static_text(r['label'], 'ko')}: 표본 외(OOS) 누적 성과"),
             ], spacing=10)))
             blocks.append(card(ft.Column([
                 LocalText("검증 항목별 결과", "Result per criterion", size=15, weight=_W600, color=pal.text),
@@ -511,7 +542,8 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
             ], spacing=10)))
             blocks.append(analysis_panel(page, kind="strategy_gate", narrative=narrative(r),
                                          payload_fn=lambda p=payload(r): p, deep_fn=insights.deep_analysis,
-                                         sections=lambda ctx, r=r: narrative_sections(r, _language(ctx))))
+                                         sections=lambda ctx, r=r: narrative_sections(
+                                             r, _language(ctx), include_results=False)))
             host.controls = blocks; busy.visible = False; page.update()
 
         page.run_thread(worker)
@@ -528,7 +560,7 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
               "Choose a strategy family and symbols and press Run: the same criteria as the study apply. The app "
               "fetches prices from a suitable provider itself and shows which one answered."),
         ft.ExpansionTile(
-            title=LocalText("변동성 목표·암호화폐 추세 전략은 자산마다 따로 비중을 정해, 자산이 N개면 총 노출이 최대 "
+            title=LocalText("변동성 목표·가상자산 추세 전략은 자산마다 따로 비중을 정해, 자산이 N개면 총 노출이 최대 "
                             "N배가 될 수 있습니다.",
                             "Volatility target and Crypto trend size each asset separately: with N assets, total "
                             "exposure can reach N×.", size=13, color=pal.text),
@@ -541,7 +573,7 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
         ft.Container(ft.Column([
             ft.ResponsiveRow([ft.Container(family, col={"xs": 12}), symbols, cost, days, source],
                              spacing=12, run_spacing=14, vertical_alignment=ft.CrossAxisAlignment.CENTER),
-            LocalText("예: 미국 SPY, QQQ · 국내 ETF 069500 · 코인 BTC-USD, KRW-BTC · 페어 전략은 두 종목(y, x 순서). "
+            LocalText("예: 미국 SPY, QQQ · 국내 ETF 069500 · 가상자산 BTC-USD, KRW-BTC · 페어 전략은 두 종목(y, x 순서). "
                       "거래비용을 비워 두면 QUANTGEN 기준 비용을 씁니다.",
                       "Examples: US SPY, QQQ · Korean ETF 069500 · crypto BTC-USD, KRW-BTC · pairs take two symbols "
                       "(y then x). A blank cost charges QUANTGEN's table rate.", size=12, color=pal.muted),
