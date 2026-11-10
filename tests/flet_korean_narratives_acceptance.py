@@ -7,8 +7,12 @@ what the page hands `analysis_panel`, and checks:
     page gave the native Korean function, so both languages describe the same result);
   * `sections(en_US)` shows that English narrative, every sentence, in order;
   * `sections(ko_KR)` shows exactly the native Korean text, every sentence, in order, under Korean
-    headings, and the bullets are Korean.
-Pages without a native Korean narrative (Quant Lab's Monte Carlo) pass no sections.
+    headings, and the bullets are Korean. The one display change is `ns.ko_terms`: raw identifiers the
+    native text leaves (`ma_cross`, `equal_weight`, `nelson-siegel`, `SYNTHETIC`, ...) read by their
+    Korean names (review finding 4, 2026-11-10), so the expected Korean is `ns.ko_terms(native)`.
+Quant Lab's Monte Carlo has no native Korean narrative; its Korean twin `ns.monte_carlo_korean` (review
+finding 1) is checked against `core.quant.insights.narrate_monte_carlo` for every model and drift mode:
+same sentences in order, and every figure of the English read appears in the Korean one.
 """
 from contextlib import ExitStack
 import os
@@ -40,6 +44,10 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
 
 KO, EN = LocaleContext("ko_KR"), LocaleContext("en_US")
 HANGUL = re.compile(r"[가-힣]")
+# Strategy / objective / curve-method ids and the bare data-status code must not reach a Korean bullet.
+RAW_IDS = re.compile(r"(?<![A-Za-z0-9_\-])(?:ma_cross|rsi_revert|momentum|equal[_-]weight|max[_-]sharpe|"
+                     r"min[_-]vol|risk[_-]parity|bootstrap|nelson[_-]siegel|svensson|(?<!합성\()SYNTHETIC)"
+                     r"(?![A-Za-z0-9_\-])")
 KO_HEADINGS = {ko for ko, _ in ns.HEADINGS.values()} | {"선물 헤지", "제약 조건"}
 EN_HEADINGS = {en for _, en in ns.HEADINGS.values()} | {"Futures hedge", "Constraints"}
 
@@ -93,6 +101,51 @@ class SectionHelpers(unittest.TestCase):
         self.assertIn("마지막 값은 비교 기준이 아닙니다.", sections[1][1])
         self.assertEqual(sections[2][1], ["이 해설은 예측이 아닙니다.", "투자 권고가 아닙니다."])
         self.assertEqual(joined(sections), squash(text))
+
+    def test_long_figure_lists_keep_six_key_figures_and_move_the_rest_in_order(self):
+        figures = [f"수치 {i}입니다." for i in range(1, 12)]
+        text = " ".join(["요약 1입니다."] + figures + ["예측이 아닙니다."])
+        sections = ns.organise(text, "ko")
+        self.assertEqual([h for h, _ in sections], ["요약", "핵심 수치", "세부 수치", "해석과 한계"])
+        self.assertEqual(sections[1][1], figures[:ns.KEY_FIGURES])
+        self.assertEqual(sections[2][1], figures[ns.KEY_FIGURES:])      # order unchanged, nothing dropped
+        self.assertEqual(joined(sections), squash(text))
+        english = ns.organise(" ".join(["Summary 1."] + [f"Figure {i}." for i in range(1, 9)]), "en")
+        self.assertEqual([h for h, _ in english], ["Summary", "Key figures", "More figures"])
+        self.assertEqual(len(english[1][1]), 6)
+        # six figures or fewer: no second heading
+        self.assertNotIn("세부 수치", [h for h, _ in ns.organise(" ".join(["요약 1입니다."] + figures[:6]), "ko")])
+
+    def test_raw_identifiers_read_by_their_korean_names_whole_tokens_only(self):
+        cases = {
+            "AAPL의 ma_cross 전략은": "AAPL의 이동평균 교차 전략은",
+            "모두 롱온리이며 equal_weight는 각 비중을": "모두 롱온리이며 동일 비중은 각 비중을",
+            "선택 목적 min_vol: 종목당": "선택 목적 최소 변동성: 종목당",
+            "risk-parity 포트폴리오": "리스크 패리티(위험 균등) 포트폴리오",
+            "max-sharpe를 고릅니다": "최대 샤프 지수를 고릅니다",
+            "nelson-siegel 적합의 오차 (가격 산출에는 bootstrap 무이표 금리 사용)":
+                "Nelson-Siegel 적합의 오차 (가격 산출에는 부트스트랩 무이표 금리 사용)",
+            "momentum과 rsi_revert": "모멘텀과 RSI 평균회귀",
+            "역사적 백분위 58% (normal)입니다.": "역사적 백분위 58% (보통)입니다.",
+            "2026-11-10의 SYNTHETIC 파 곡선. 시계열은 SYNTHETIC이며": "2026-11-10의 합성 파 곡선. 시계열은 합성이며",
+            "효율적 투자선과 무작위 구름": "효율적 프런티어와 무작위 구름",
+            # not whole tokens, or already Korean, or a different meaning: unchanged
+            "S_E1_trend_krx, ma_cross_fast, xbootstrap": "S_E1_trend_krx, ma_cross_fast, xbootstrap",
+            "18개 행이 합성(SYNTHETIC)입니다": "18개 행이 합성(SYNTHETIC)입니다",
+            "베가 318 per 1bp normal vol": "베가 318 per 1bp normal vol",
+        }
+        for raw, shown in cases.items():
+            with self.subTest(raw=raw):
+                self.assertEqual(ns.ko_terms(raw), shown)
+                self.assertEqual(ns.ko_terms(shown), shown)                 # idempotent
+        self.assertIsNone(ns.ko_terms(None))
+        self.assertEqual(ns.korean(lambda: "AAPL의 ma_cross 전략"), "AAPL의 이동평균 교차 전략")
+        sections = ns.localized("The ma_cross strategy.", "AAPL의 ma_cross 전략입니다.",
+                                extra=[(("제약 조건", "Constraints"), ["equal_weight는 1/N입니다."], "equal_weight is 1/N.")])
+        self.assertEqual(sections(KO), [("요약", ["AAPL의 이동평균 교차 전략입니다."]),
+                                        ("제약 조건", ["동일 비중은 1/N입니다."])])
+        self.assertEqual(sections(EN), [("Summary", ["The ma_cross strategy."]),      # English unchanged
+                                        ("Constraints", ["equal_weight is 1/N."])])
 
     def test_korean_sentence_end_splits_before_lower_case_notes_and_signs(self):
         text = "가격은 1입니다. nelson-siegel 적합 오차는 0.1bp입니다. +1bp 이동 시 손실 2입니다."
@@ -156,6 +209,9 @@ class PageWiring(unittest.TestCase):
         sections = kw.get("sections")
         self.assertTrue(callable(sections), kw.get("kind"))
         self.assertTrue(korean_text and HANGUL.search(korean_text))
+        # the native text with its raw identifiers read by their Korean names (finding 4), nothing else
+        korean_text = ns.ko_terms(korean_text)
+        extra_ko = [[ns.ko_terms(line) for line in lines] for lines in extra_ko]
         ko, en = sections(KO), sections(EN)
         # English: exactly the narrative argument, every sentence, in order.
         self.assertEqual(joined(en), squash(kw["narrative"]), kw["kind"])
@@ -167,6 +223,11 @@ class PageWiring(unittest.TestCase):
         lines = [line for _, items in ko for line in items]
         korean_share = sum(bool(HANGUL.search(line)) for line in lines) / len(lines)
         self.assertGreaterEqual(korean_share, 0.6, (kw["kind"], lines))
+        for heading, items in ko + en:                    # long figure lists are split (finding 5)
+            if heading in ns.HEADINGS["figures"]:
+                self.assertLessEqual(len(items), ns.KEY_FIGURES, (kw["kind"], heading))
+        raw = RAW_IDS.findall(" ".join(lines))
+        self.assertEqual(raw, [], (kw["kind"], raw))
 
     # ---------------------------------------------------------------- Rates (five tools)
     def test_rates_every_tool(self):
@@ -349,11 +410,60 @@ class PageWiring(unittest.TestCase):
                 self.assertEqual(kw["narrative"], fi.narrate_structured(call.args[0]))
                 self.assert_bilingual(kw, model_ko.structured_korean(call.args[0]))
 
-    # ---------------------------------------------------------------- not wired
-    def test_quant_lab_has_no_native_korean_narrative_and_keeps_the_default(self):
-        import inspect
-        self.assertNotIn("sections=", inspect.getsource(quant_lab_page))
-        self.assertFalse(any("monte" in name.lower() for name in dir(model_ko) + dir(mnl)))
+    # ---------------------------------------------------------------- Quant Lab (Monte Carlo twin)
+    def test_quant_lab_every_model(self):
+        from core.research.runs import SessionResearch
+        panels, results = self.capture(quant_lab_page), []
+        engine = quant_lab_page.run_monte_carlo
+
+        def run(*a, **k):
+            results.append(engine(*a, **k))
+            return results[-1]
+        self.stack.enter_context(patch.object(quant_lab_page, "run_monte_carlo", side_effect=run))
+        self.stack.enter_context(patch.object(quant_lab_page, "session_for", return_value=SessionResearch()))
+        self.stack.enter_context(patch.object(quant_lab_page, "_lab_grade", return_value=None))
+        self.stack.enter_context(patch.object(quant_lab_page, "load_history",
+                                              return_value=synthetic_history("AAPL", days=504)))
+        root = quant_lab_page.build_quant_lab_page(page())
+        next(c for c in walk(root) if isinstance(c, ft.TextField) and c.label == "Paths").value = "400"
+        next(c for c in walk(root) if isinstance(c, ft.TextField)
+             and c.label == "Target price (optional)").value = "300"
+        models = ("garch_t", "gbm", "jump", "bootstrap")
+        for model in models:
+            dropdown(root, "Model").value = model
+            dropdown(root, "Drift").value = "zero"            # no risk-free fetch
+            button(root, "Simulate").on_click(None)
+        self.assertEqual([kw["kind"] for kw in panels], ["monte_carlo"] * len(models))
+        self.assertEqual([mc.model for mc in results], list(models))
+        for kw, mc in zip(panels, results):
+            with self.subTest(model=mc.model):
+                self.assertEqual(kw["narrative"], qi.narrate_monte_carlo(mc))
+                self.assert_bilingual(kw, ns.monte_carlo_korean(mc))
+                self.assertEqual(kw["sections"](KO)[0][1][0].split("모형으로")[0].strip(),
+                                 ns._MC_MODEL_KO[mc.model])               # the model by its display name
+
+    def test_monte_carlo_twin_states_the_english_figures_for_every_model_and_drift(self):
+        from core.quant.montecarlo import run_monte_carlo
+        hist = synthetic_history("AAPL", days=504)
+        number = re.compile(r"\d+(?:[.,]\d+)*")
+        for model in ("garch_t", "gbm", "jump", "bootstrap"):
+            for drift in ("premium", "rf", "zero", "sample"):
+                with self.subTest(model=model, drift=drift):
+                    mc = run_monte_carlo(hist, model=model, n_paths=300, horizon_days=63, drift=drift,
+                                         rf_rate=0.03, erp=0.04, target=hist.last * 1.1)
+                    english, korean_text = qi.narrate_monte_carlo(mc), ns.monte_carlo_korean(mc)
+                    self.assertTrue(korean_text and HANGUL.search(korean_text))
+                    en, ko = set(number.findall(english)), set(number.findall(korean_text))
+                    self.assertEqual(en - ko, set())                      # every English figure is stated
+                    # ... and no new one: "0 드리프트" and "2년치" spell out English words (zero, two years)
+                    self.assertTrue(ko - en <= {"0", "2"}, ko - en)
+                    self.assertNotIn("normal", korean_text)
+                    self.assertEqual(ns.ko_terms(korean_text), korean_text)
+        # a note the twin cannot read keeps the English panel (no half-translated read)
+        mc = run_monte_carlo(hist, model="gbm", n_paths=300, horizon_days=63, drift="zero")
+        from dataclasses import replace
+        self.assertIsNone(ns.monte_carlo_korean(replace(mc, drift_note="an unknown drift note")))
+        self.assertIsNone(ns.localized(qi.narrate_monte_carlo(mc), None))
 
 
 if __name__ == "__main__":

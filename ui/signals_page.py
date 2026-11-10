@@ -30,7 +30,7 @@ from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
 from ui.narrative_sections import korean, localized
 from quantgen_desktop.model_narrative_language import signals_korean
-from ui.build_widgets import local_notice, provenance_chips
+from ui.build_widgets import provenance_chips, synthetic_banner
 from ui.components import LocalText, card, chip, empty_state, notice, section, stat
 import ui.qcharts as qcharts
 
@@ -169,8 +169,17 @@ def _trade_statistics_block(bt):
         + [ft.Text(count_note, size=12, color=pal.muted)], spacing=8))
 
 
+def _sign_token(x: float) -> str:
+    """A return tile reads by its own sign: green only for a gain, red only for a loss."""
+    return "success" if x > 0 else "error" if x < 0 else "text"
+
+
 def _summary(report: SignalReport, bt, hist) -> ft.Control:
-    """Verdict first: the composite in words, then whether the costed strategy beat buy-and-hold."""
+    """Verdict first: the composite in words, then whether the costed strategy beat buy-and-hold.
+
+    Beating buy-and-hold is a comparison, not a gain (both can be losses), so its chip is neutral and
+    the strategy-return tile takes the colour of its own sign. The period and the one-backtest caveat
+    sit under the sentence (owner UI review, 2026-11-10)."""
     pal = active()
     token = _stance_token(report.composite)
     strat_en = _STRAT_LABELS[bt.strategy]
@@ -188,12 +197,17 @@ def _summary(report: SignalReport, bt, hist) -> ft.Control:
             LocalText(f"{report.symbol} 기술적 관측", f"{report.symbol} technical read",
                       size=16, weight=ft.FontWeight.W_600, color=pal.text),
             chip(report.stance, token),
-            chip("beats buy & hold" if beat else "trails buy & hold", "success" if beat else "error"),
+            chip("beats buy & hold" if beat else "trails buy & hold", "muted"),
         ], spacing=8, wrap=True, vertical_alignment=ft.CrossAxisAlignment.CENTER),
         sentence,
+        LocalText(f"기간: {hist.first_date} ~ {hist.last_date}. "
+                  "한 구간의 과거 백테스트이며 통계 검정이나 표본 외 검증이 아닙니다.",
+                  f"Period: {hist.first_date} to {hist.last_date}. "
+                  "One historical backtest; not a statistical test or out-of-sample validation.",
+                  size=12, color=pal.muted),
         ft.Row([
             stat("Strategy return", f"{bt.total_return * 100:+.1f}%",
-                 token="success" if beat else "error"),
+                 token=_sign_token(bt.total_return)),
             stat("Buy & hold", f"{bt.bench_return * 100:+.1f}%"),
             stat("Sharpe", f"{bt.sharpe:.2f}"),
             stat("Max drawdown", f"{bt.max_drawdown * 100:.1f}%"),
@@ -263,12 +277,9 @@ def build_signals_page(page: ft.Page,
                 return
 
             blocks: list[ft.Control] = []
-            if hist.source == "SYNTHETIC":
-                blocks.append(local_notice(
-                    "합성 데이터입니다. 시세 제공자가 응답하지 않아 모의 가격 경로로 계산했으므로, 아래 결과는 "
-                    "화면 시연용이며 실제 시장에 대한 판단 근거가 아닙니다. 자세한 원인은 이 안내 위에 마우스를 올리면 표시됩니다.",
-                    "Synthetic data: " + hist.note, "error", icon=ft.Icons.SCIENCE_OUTLINED,
-                    tooltip=hist.note))
+            banner = synthetic_banner([hist])
+            if banner is not None:
+                blocks.append(banner)
             blocks.append(_summary(report, bt, hist))
             blocks.append(card(qcharts.price_chart(hist)))
             blocks.append(card(_signal_block(report)))

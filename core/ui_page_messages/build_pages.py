@@ -3,7 +3,7 @@
 EN_TO_KO: dict[str, str] = {
     # ------------------------------------------------------------------ shared inputs
     "Auto": "자동",
-    "Auto (keyed providers only)": "자동 (키가 있는 제공자만)",
+    "Auto (keyed providers only)": "자동 (키가 있는 제공처만)",
     "AAPL or 005930": "예: AAPL 또는 005930",
     "Data from": "데이터 출처",
 
@@ -47,13 +47,13 @@ EN_TO_KO: dict[str, str] = {
     # ------------------------------------------------------------------ Portfolio (포트폴리오)
     "Mean-variance optimization, risk parity, and the efficient frontier — solved with scipy on aligned daily "
     "histories.":
-        "여러 종목을 묶어 평균-분산 최적화, 위험 균형(리스크 패리티), 효율적 투자선을 계산합니다. 종목들의 "
+        "여러 종목을 묶어 평균-분산 최적화, 리스크 패리티(위험 균등), 효율적 프런티어를 계산합니다. 종목들의 "
         "일별 가격을 같은 날짜로 맞춘 뒤 scipy로 풉니다.",
     "Symbols (comma separated)": "종목 (쉼표로 구분)",
     "AAPL, MSFT, NVDA, TLT, GLD": "예: AAPL, MSFT, NVDA, TLT, GLD",
-    "Max Sharpe": "샤프 지수 최대화",
+    "Max Sharpe": "최대 샤프 지수",
     "Minimum volatility": "최소 변동성",
-    "Risk parity": "위험 균형 (리스크 패리티)",
+    "Risk parity": "리스크 패리티(위험 균등)",
     "Equal weight": "동일 비중",
     "Max weight/asset": "종목당 최대 비중 (0~1)",
     "Per-asset weight cap for the selected objective, 0 to 1 (1.0 = no cap).":
@@ -64,7 +64,7 @@ EN_TO_KO: dict[str, str] = {
     "List symbols and pick an objective. All four objectives are computed and marked on the frontier so the "
     "trade-offs are visible, not implied.":
         "종목을 쉼표로 나눠 입력하고 목적함수를 고른 뒤 [최적화 실행]을 누르세요. 네 가지 목적함수를 모두 "
-        "계산해 효율적 투자선 위에 함께 표시하므로, 서로의 장단점을 직접 비교할 수 있습니다.",
+        "계산해 효율적 프런티어 위에 함께 표시하므로, 서로의 장단점을 직접 비교할 수 있습니다.",
     "List at least two symbols, comma separated.": "종목을 두 개 이상, 쉼표로 나눠 입력하세요.",
     "At most 15 symbols — the covariance of more is not estimable on two years of dailies.":
         "종목은 최대 15개까지입니다. 그보다 많으면 2년치 일별 자료로 공분산을 안정적으로 추정할 수 없습니다.",
@@ -76,9 +76,9 @@ EN_TO_KO: dict[str, str] = {
     "All four objectives compared": "네 가지 목적함수 비교",
     "Role": "구분",
     "Per-asset cap": "종목당 상한",
-    "Efficient frontier": "효율적 투자선",
+    "Efficient frontier": "효율적 프런티어",
     "Frontier / random cloud: 100% per-asset bound; markers use each row's cap.":
-        "효율적 투자선과 무작위 포트폴리오 점은 종목당 100% 상한으로, 목적함수 표식은 각 행의 상한으로 계산했습니다.",
+        "효율적 프런티어와 무작위 포트폴리오 점은 종목당 100% 상한으로, 목적함수 표식은 각 행의 상한으로 계산했습니다.",
     "Correlation of daily returns": "일별 수익률의 상관관계",
     "Yahoo (total return)": "야후 (총수익 기준)",
 
@@ -128,7 +128,7 @@ EN_TO_KO: dict[str, str] = {
         "보정 구간: 최근 504개 일별 종가(기본값). 설명용 적합이며 R-16 등급 평가를 거친 적합이 아닙니다. "
         "등급 평가는 확장 구간 방식(docs/quant_lab)이며, 저장된 결과가 있으면 아래에 표시합니다.",
     "SMOKE · vendor data, not an official close, not a card run · gates nothing":
-        "SMOKE · 공식 종가가 아닌 데이터 제공업체 자료, 카드 실행 아님 · 어떤 관문 판정에도 쓰이지 않음",
+        "SMOKE · 공식 종가가 아닌 데이터 제공처 자료, 카드 실행 아님 · 어떤 게이트 판정에도 쓰이지 않음",
     "Grading report details": "검증 보고서 세부 내용",
     "GARCH fit": "GARCH 적합 결과",
     "GARCH alpha": "GARCH 알파 (충격 반응)",
@@ -178,15 +178,16 @@ EN_TO_KO: dict[str, str] = {
     "is indicative only":
         "95% 신뢰구간이 안전장치 경계(알파·베타의 0 또는 상한, nu = 2.5)를 넘습니다. 그 근처의 대칭 구간은 참고용입니다",
     "an integrated variance is not excluded at 95%: the sample cannot pin down where vol settles":
-        "95% 수준에서 적분형 분산을 배제할 수 없습니다. 이 표본으로는 변동성이 결국 어디에 자리 잡을지 정할 수 없습니다",
+        "95% 수준에서 지속성 1(충격이 사라지지 않는 IGARCH형 분산)을 배제할 수 없습니다. 이 표본으로는 변동성이 결국 "
+        "어디에 자리 잡을지 정할 수 없습니다",
 
     # ------------------------------------------------------------------ Settings (설정)
     "Credential presence only. No key is ever displayed here.":
         "API 키가 설정되어 있는지만 보여 줍니다. 키 값은 이 화면에 절대 표시하지 않습니다.",
-    "Quant analysis providers": "분석용 데이터 제공자",
-    "FICC data providers": "금리·채권·외환(FICC) 데이터 제공자",
-    "Korean market providers": "국내 시장 데이터 제공자",
-    "Crypto providers": "가상자산 데이터 제공자",
+    "Quant analysis providers": "분석용 데이터 제공처",
+    "FICC data providers": "금리·채권·외환(FICC) 데이터 제공처",
+    "Korean market providers": "국내 시장 데이터 제공처",
+    "Crypto providers": "가상자산 데이터 제공처",
     "configured": "설정됨",
     "not set": "미설정",
     "Claude API (deep analysis)": "Claude API (심층 분석)",
@@ -251,6 +252,8 @@ EN_TO_KO: dict[str, str] = {
         "장내 채권 시세를 조회할 수 있습니다. 시세 조회 전용이며 파생상품 계좌는 필요 없습니다 (2026-09-25 확인). "
         "CME ES/NQ/ZN/6E/GC/CL 과거 시세는 주식 계좌 키로는 HTTP 500을 돌려줍니다.",
     "Test KIS asset domains": "KIS 자산군별 연결 확인",
+    "KISUnavailable: Set KIS_APP_KEY and KIS_APP_SECRET to enable KIS":
+        "KISUnavailable: KIS_APP_KEY와 KIS_APP_SECRET을 설정하면 KIS를 쓸 수 있습니다",
     "one read-only call per KIS asset domain…": "KIS 자산군마다 조회 요청을 한 번씩 보내는 중…",
     "Upbit and Binance public data are keyless. An Upbit key is optional and must be issued with 자산조회 "
     "(balance) scope only; QUANTGEN never submits orders, withdrawals or transfers and never holds a wallet key.":
@@ -412,7 +415,7 @@ EN_TO_KO: dict[str, str] = {
     "Confirm": "확인",
     "Give the rule a name so you can find it later.": "나중에 찾을 수 있도록 규칙 이름을 정하세요.",
     "Enter the instrument code this rule applies to.": "이 규칙을 적용할 종목 코드를 입력하세요.",
-    "Choose the market so quotes resolve to the right provider.": "올바른 시세 제공자로 연결되도록 시장을 고르세요.",
+    "Choose the market so quotes resolve to the right provider.": "올바른 시세 제공처로 연결되도록 시장을 고르세요.",
     "Choose buy or sell.": "매수 또는 매도를 고르세요.",
     "Choose whether the size is a share count or a cash amount.": "수량을 주식 수로 할지 금액으로 할지 고르세요.",
     "Enter the size. This program does not choose one for you.": "수량을 입력하세요. 이 프로그램은 수량을 대신 정하지 않습니다.",

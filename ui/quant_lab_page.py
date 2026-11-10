@@ -32,8 +32,9 @@ from core.quant.montecarlo import MODELS, run_monte_carlo
 from core.quant import insights
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
-from ui.build_widgets import local_chip, local_notice, local_stat, provenance_chips
+from ui.build_widgets import local_chip, local_stat, provenance_chips, synthetic_banner
 from ui.components import LocalText, card, chip, empty_state, notice, number_field, section, stat as _stat
+from ui.narrative_sections import drift_note_korean, korean, localized, monte_carlo_korean
 import ui.qcharts as qcharts
 
 # "best" is the app's own routing (keyless Yahoo before a synthetic fallback). The selector is
@@ -60,10 +61,10 @@ _GRADES = Path(__file__).resolve().parents[1] / "docs" / "quant_lab"
 _GRADE_FILE = {"069500": "KODEX200", "069500.KS": "KODEX200", "^KS11": "KOSPI"}   # docs/quant_lab_grading.py names
 _GRADE_STYLE = {"PASS": ("PASS", "success"), "FAIL": ("FAIL", "error"), "NOT_RUN": ("NOT RUN", "muted")}
 _BASEL_TOKEN = {"green": "success", "yellow": "warning", "red": "error"}
-_WORD_KO = {"PASS": "통과 · PASS", "FAIL": "불합격 · FAIL", "NOT RUN": "미실행 · NOT RUN"}   # codes stay visible
+_WORD_KO = {"PASS": "통과 · PASS", "FAIL": "미달 · FAIL", "NOT RUN": "미실행 · NOT_RUN"}   # codes stay visible
 _DECISION_KO = {"PASS": "통과 · PASS", "REVISE": "보완 필요 · REVISE", "REJECT": "기각 · REJECT",
-                "INSUFFICIENT_DATA": "자료 부족 · INSUFFICIENT_DATA"}
-_ZONE_KO = {"green": "녹색 · green", "yellow": "황색 · yellow", "red": "적색 · red", "NOT RUN": "미실행 · NOT RUN"}
+                "INSUFFICIENT_DATA": "데이터 부족 · INSUFFICIENT_DATA"}
+_ZONE_KO = {"green": "녹색 · green", "yellow": "황색 · yellow", "red": "적색 · red", "NOT RUN": "미실행 · NOT_RUN"}
 SMOKE_CHIP = "SMOKE · vendor data, not an official close, not a card run · gates nothing"   # rulings section 1
 _GRADE_LINES = (("var99_kupiec_p", "var99_kupiec_p_min", "Kupiec 99% VaR"),
                 ("var99_cc_p", "var99_cc_p_min", "Christoffersen CC 99%"),
@@ -71,49 +72,11 @@ _GRADE_LINES = (("var99_kupiec_p", "var99_kupiec_p_min", "Kupiec 99% VaR"),
                 ("fan_pit_h21_chi2_p", "fan_pit_h21_chi2_p_min", "Fan PIT h21"))
 
 
-# Korean readings of the engine's drift note (core.quant.montecarlo._drift_note). Display only:
-# the English note stays the source and the payload; an unmatched note is shown as is.
-_HOW_KO = (
-    (r"per step from each path's conditional variance, horizon average; t innovations bounded at ±(\S+)",
-     lambda m: f"경로별 조건부 분산으로 매 단계 계산한 기간 평균, t 분포 충격은 ±{m[1]}에서 절단"),
-    (r"per step from each path's conditional variance, horizon average; normal innovations",
-     lambda m: "경로별 조건부 분산으로 매 단계 계산한 기간 평균, 정규분포 충격"),
-    (r"half the sample variance, sigma (\S+)", lambda m: f"표본 분산의 절반, 변동성 {m[1]}"),
-    (r"half the diffusion variance plus the jump compensator", lambda m: "확산 분산의 절반과 점프 보정항의 합"),
-    (r"the empirical block log-MGF of the demeaned sample",
-     lambda m: "평균을 뺀 표본의 블록 단위 경험적 로그 적률생성함수"),
-)
-
-
-def _how_ko(how: str) -> str:
-    for pattern, render in _HOW_KO:
-        m = re.fullmatch(pattern, how)
-        if m:
-            return render(m)
-    return how
-
-
+# Korean reading of the engine's drift note (core.quant.montecarlo._drift_note), shared with the
+# Korean Monte Carlo read in ui.narrative_sections. Display only: the English note stays the source
+# and the payload; an unmatched note is shown as is.
 def _drift_note_ko(note: str) -> str:
-    m = re.fullmatch(r"risk premium: rf (\S+) \+ ERP (\S+) = expected \(arithmetic\) return (\S+); log drift = "
-                     r"that - convexity correction (\S+) \((.*?)\) = (\S+?)"
-                     r"( - the median sits below spot only because the variance is large; "
-                     r"the mean path still earns the premium)?", note or "")
-    if m:
-        return (f"위험프리미엄 방식: 무위험 금리 {m[1]} + 주식 위험프리미엄 {m[2]} = 기대(산술) 수익률 {m[3]}. "
-                f"로그 드리프트 = 여기서 볼록성 보정 {m[4]}({_how_ko(m[5])})을 뺀 {m[6]}"
-                + (". 중앙값이 현재가보다 낮은 것은 분산이 크기 때문일 뿐, 평균 경로는 프리미엄을 얻습니다"
-                   if m[7] else ""))
-    m = re.fullmatch(r"risk-neutral: rf (\S+) - convexity correction (\S+) \((.*?)\) = (\S+); "
-                     r"a pricing measure, not a forecast", note or "")
-    if m:
-        return (f"위험중립 방식: 무위험 금리 {m[1]} - 볼록성 보정 {m[2]}({_how_ko(m[3])}) = {m[4]}. "
-                "가격 평가용 기준이며 예측이 아닙니다")
-    if note == "zero: the cone centres on spot (stress view)":
-        return "0 드리프트: 분포가 현재가를 중심으로 퍼집니다 (스트레스 관점)"
-    m = re.fullmatch(r"sample mean (\S+): noisy, standard error about (\S+) on two years of data", note or "")
-    if m:
-        return f"표본 평균 방식 {m[1]}: 잡음이 크며, 2년치 자료로는 표준오차가 약 {m[2]}입니다"
-    return note
+    return drift_note_korean(note, strict=False) or note
 
 
 def _fmt_sessions(x: float) -> str:
@@ -287,7 +250,7 @@ def _grade_blocks(g) -> list[ft.Control]:
     tone = (lambda t: "muted") if smoke else (lambda t: t)
     label, tok = _GRADE_STYLE.get(gate["status"], (str(gate["status"]), "muted"))
     chips = [chip(SMOKE_CHIP, "error", tooltip=str(note))] if smoke else []
-    chips.append(local_chip(f"M9 검증 관문: {_WORD_KO.get(label, label)}", f"M9 gate: {label}", tone(tok),
+    chips.append(local_chip(f"M9 검증 게이트: {_WORD_KO.get(label, label)}", f"M9 gate: {label}", tone(tok),
                             tooltip=str(gate.get("reason") or f"period {gate.get('period')}, n {gate.get('n')}")))
     zone = ((((rep.get("periods") or {}).get(gate.get("period")) or {}).get("basel") or {}).get("last_250"))
     for key, tkey, name in _GRADE_LINES:
@@ -399,13 +362,9 @@ def build_quant_lab_page(page: ft.Page,
 
             vol_info = volatility_disclosure(mc)
             blocks: list[ft.Control] = []
-            if hist.source == "SYNTHETIC":
-                blocks.append(local_notice(
-                    "합성 데이터입니다. 시세 제공자가 응답하지 않아 모의 가격 경로로 보정했으므로, 아래 분포는 "
-                    "화면 시연용이며 실제 시장에 대한 판단 근거가 아닙니다. 자세한 원인은 이 안내 위에 마우스를 "
-                    "올리면 표시됩니다.",
-                    "Synthetic data: " + hist.note, "error", icon=ft.Icons.SCIENCE_OUTLINED,
-                    tooltip=hist.note))
+            banner = synthetic_banner([hist])
+            if banner is not None:
+                blocks.append(banner)
             model_en = _MODEL_LABELS[mc.model]
             drift_short = _DRIFT_SHORT.get(mc.drift_mode, mc.drift_mode)
             resampling = bootstrap_disclosure(mc.model)   # None for every model but bootstrap
@@ -495,9 +454,10 @@ def build_quant_lab_page(page: ft.Page,
                     "half_life_interval_95": fit.half_life_interval,
                     "interval_at_bound": list(fit.interval_at_bound),
                 }
-            blocks.append(analysis_panel(page, kind="monte_carlo",
-                                         narrative=insights.narrate_monte_carlo(mc),
-                                         payload_fn=lambda p=payload: p))
+            narrative = insights.narrate_monte_carlo(mc)
+            blocks.append(analysis_panel(page, kind="monte_carlo", narrative=narrative,
+                                         payload_fn=lambda p=payload: p,
+                                         sections=localized(narrative, korean(monte_carlo_korean, mc))))
             result_host.controls = blocks
             busy.visible = False
             page.update()

@@ -34,6 +34,27 @@ def _note(text: str) -> ft.Text:
         ko = f"계산 결과를 AI가 글로 해설합니다. 사용 모형: {m[1]}."
     return LocalText(ko, text, size=12, color=pal.muted)
 
+# KIS asset domains probed by data.kis_markets.KISMarkets.probe, by their display names.
+_KIS_DOMAINS = {
+    "etf": ("ETF", "ETF"), "index_futures": ("지수 선물", "Index futures"),
+    "ktb_futures": ("국채 선물", "KTB futures"), "options": ("옵션", "Options"),
+    "overseas_stock": ("해외 주식", "Overseas stock"), "krw_yields": ("원화 지표 금리", "KRW yields"),
+    "overseas_futures": ("해외 선물", "Overseas futures"), "bonds": ("장내 채권", "Bonds"),
+    "kis": ("KIS", "KIS"),
+}
+
+
+def _kis_state(result: dict) -> tuple[str, str, str]:
+    """(Korean, English, token) for one KIS probe result. `KISUnavailable` naming KIS_APP_KEY is raised
+    before any request when the key is not configured, so it reads 'key not set', not as a failed check."""
+    detail = str(result.get("detail", ""))
+    if result.get("ok"):
+        return "정상", "ok", "success"
+    if detail.startswith("KISUnavailable") and "KIS_APP_KEY" in detail:
+        return "키 미설정", "Key not set", "muted"
+    return "확인 실패", "Check failed", "error"
+
+
 _SIGNUP = {
     "fred": "fred.stlouisfed.org (no key needed)",
     "yfinance": "finance.yahoo.com (no key needed)",
@@ -148,10 +169,18 @@ def build_settings_page(page: ft.Page) -> ft.Control:
             except Exception as exc:
                 result = {"kis": {"ok": False, "detail": f"{type(exc).__name__}: {exc}"}}
             rows = []
-            for key, r in result.items():
-                rows.append(local_chip(f"{key}: " + ("정상" if r.get("ok") else "응답 없음"),
-                                       f"{key}: " + ("ok" if r.get("ok") else "no"), "success" if r.get("ok") else "error",
-                                       tooltip=str(r.get("detail", ""))))
+            states = {key: _kis_state(r) for key, r in result.items()}
+            if states and all(s[1] == "Key not set" for s in states.values()):
+                # No request was sent for any domain: one chip and the one reason, not the same line per domain.
+                detail = str(next(iter(result.values())).get("detail", ""))
+                rows += [local_chip("KIS: 키 미설정 (요청을 보내지 않음)", "KIS: Key not set (no request sent)", "muted"),
+                         ft.Text(detail, size=11, color=pal.muted, selectable=True)]
+            for key, r in (() if rows else result.items()):
+                ko, en, token = states[key]
+                name_ko, name_en = _KIS_DOMAINS.get(key, (key, key))
+                rows.append(local_chip(f"{name_ko}: {ko}", f"{name_en}: {en}", token))
+                # The detail is visible, not hover-only: a missing key and a refused request read differently.
+                rows.append(ft.Text(str(r.get("detail", "")), size=11, color=pal.muted, selectable=True))
             kis_probe_host.controls = rows
             page.update()
         page.run_thread(worker)
