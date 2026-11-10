@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "d9b442d86c71981e913661a82fc7194181e7cebff3e1807e6b587e577d703b83",
+    ".github/workflows/runtime-smoke.yml": "eb38e8f62be4080cb7954d195c4ca9014c8abc38542fe4ce4db3acf6e16552d9",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -160,6 +160,7 @@
     "core/quant/run_registry_codec.py": "fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a",
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
+    "core/quant/run_registry_series_hash.py": "96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043",
     "core/quant/run_registry_source_hash.py": "f38239e969a0127f8db00cbaf47fa9e1721c1642c525dff0ef5f7aa463e3bef6",
     "core/quant/run_registry_store.py": "77522bd80cb158bfac8b400435ede567c35514779ee37006be1007e8094a5eae",
     "core/quant/scenarios.py": "e65dda28f6cb9a3cd29cab547ae1093f556aa0e467f2c86b9d3c616090fbd205",
@@ -273,7 +274,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "81015813ffb6e40c76741dbb742f03a0a6b90156abc5e3177446146abb7554eb",
+    "docs/compliance/FACTS.md": "5c13d4c43e6dd3ffc4ec84ecca79881169beda90d71dc1598db335bde33f6c17",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -323,6 +324,7 @@
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
+    "docs/product/R3_DETACHED_SERIES_HASH_2026-11-06.md": "aa144bbc25db49cffdda02ccc8cf55a88873dadc8f842d052c4ebf1cb6f48a2b",
     "docs/product/R3_DETACHED_SOURCE_HASH_2026-11-06.md": "1110e24650f40883e876b331d46f22780ef951d8dd7384401fbb99c555e53035",
     "docs/product/R3_SINGLE_SEGMENT_STORE_2026-11-06.md": "f49c6627c6744aec23c46e218be3579b8e91c6f4892862695f44b5fcadb76c1f",
     "docs/product/RATES_INLINE_LANGUAGE_2026-11-06.md": "9082a26aaf303662283b7aadd56e63b3017aab8a30ebefe7cd54db62493d4ca2",
@@ -544,6 +546,7 @@
     "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
+    "tests/run_registry_series_hash_acceptance.py": "f38a05fca045b00b3bf401a2ba3d0f2a71a6cc589acf5e790655c1e4fc76a156",
     "tests/run_registry_source_hash_acceptance.py": "461adaa26011177c0084d77aa35034ae32e5fbf800da08e0333c937d5eb80f96",
     "tests/run_registry_store_acceptance.py": "f54ca736727a198d7a15cc1996a66fbb966977cd8ecd4230c1b54f22e4ce6110",
     "tests/runtime_syntax_acceptance.py": "174dd84c35a1085a271baa27c0a8e651b519af0e348d912e62a6453027d94e7e",
@@ -632,163 +635,163 @@
   "reviews": {
     "1": {
       "document_sha256": "7ffeb30cbf22092284b48635e1769018e2259ea44c1a5647ac50ecaf3f815d63",
-      "source_digest": "d818cf5a16da35913ffc20712329c122cb95e80cb34801278053f2009730d827",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.664687+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "c13f1f5f4ed5365efce8dc85d3c965aba8fc758f45a2aa4d6057a554bf4a4466",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.957462+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "d818cf5a16da35913ffc20712329c122cb95e80cb34801278053f2009730d827",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.667635+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "c13f1f5f4ed5365efce8dc85d3c965aba8fc758f45a2aa4d6057a554bf4a4466",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.960288+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "58f027d0de0394943402a64fa561b4a327873a8cad0ceef155fa2013f8fa28c1",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.669754+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "92ea3fa5fc03428c7ed9bf7a7d288c34b5bec228b398819e904d2275c643a14d",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.965703+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "174600396fe7ce51ee310b08d41fa1c0068c86bb098d238c2c1aa1782be22e31",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.672068+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "780e553ad254c9dde693432cf8f9ff9181fc27cc75e01b88b885d0c5a92b7262",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.967435+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "a8eb159598d77e769aab2106e2a4cd3d635d56838549179e1315e1f79d1860b7",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.674277+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "4fe48e776661d03b049a9aace7b62e5e82ee0d98fa3f650149d16d1d7af3c10e",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.969155+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "6f0095f7c6fc3bf8e539bf9a164ea96ba3e9dcceb8b155937ab72da53888f882",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.676083+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "6a67e8f52d73b358a2d244d5b2878450fec1a700ff7192d6ca189158c31186a1",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.971421+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "7": {
       "document_sha256": "cb99e2df664cbc0f5b4efa73259e32809a6a601fe4b64e08105020291a45932b",
-      "source_digest": "d818cf5a16da35913ffc20712329c122cb95e80cb34801278053f2009730d827",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.678346+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "c13f1f5f4ed5365efce8dc85d3c965aba8fc758f45a2aa4d6057a554bf4a4466",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.973095+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "6f0095f7c6fc3bf8e539bf9a164ea96ba3e9dcceb8b155937ab72da53888f882",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.680635+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "6a67e8f52d73b358a2d244d5b2878450fec1a700ff7192d6ca189158c31186a1",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.974900+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "33024af1dc2b7fc0b065a5b84fe01d5126c337c6209c3c6565607b74d58c5838",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.682331+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "d7ab196a98384d785f1bcd1e537ce528de1cabc2ac0782d60dfdbd47e45a90c5",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.977091+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "d5aa2d54b4489ff52fd289f7fb8e59399d8768427f4307ce8ecda3e5c920cdf4",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.684479+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "90d37d9de439826e68533c0177176775da1c98e163337021d8eadc3bac756908",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.978800+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "5c2aacf5cfb2a019eb0778390ee96a86475807ba58e52456b4c112037fca22cc",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.686426+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "b047c20361888a9c47e39ed02d79112ee4d477f795e047da9822d20fd69e687a",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.980409+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "23422007c94360ae61fdc5b356c2774ae50d633edcb9df3436db923befaa0259",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.688478+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "3163532955f43bb465910d7188c500c1e707379990ad57b921632378dfb372c0",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.982846+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "33024af1dc2b7fc0b065a5b84fe01d5126c337c6209c3c6565607b74d58c5838",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.690023+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "d7ab196a98384d785f1bcd1e537ce528de1cabc2ac0782d60dfdbd47e45a90c5",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.984430+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "33024af1dc2b7fc0b065a5b84fe01d5126c337c6209c3c6565607b74d58c5838",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.692050+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "d7ab196a98384d785f1bcd1e537ce528de1cabc2ac0782d60dfdbd47e45a90c5",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.986366+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "33024af1dc2b7fc0b065a5b84fe01d5126c337c6209c3c6565607b74d58c5838",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.693982+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "d7ab196a98384d785f1bcd1e537ce528de1cabc2ac0782d60dfdbd47e45a90c5",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.988088+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "8df5af3ec0c472ae6997d12b99d8609acb5dfca49b1a728809dd1243f9668c0e",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.696008+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "7e4eee6bbf25e591b6e2ad88c884cb12cb6ff6189b12579f533e52f75beefeb0",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.989894+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "6f0095f7c6fc3bf8e539bf9a164ea96ba3e9dcceb8b155937ab72da53888f882",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.697938+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "6a67e8f52d73b358a2d244d5b2878450fec1a700ff7192d6ca189158c31186a1",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.992215+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "d818cf5a16da35913ffc20712329c122cb95e80cb34801278053f2009730d827",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.699560+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "c13f1f5f4ed5365efce8dc85d3c965aba8fc758f45a2aa4d6057a554bf4a4466",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.994316+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "9936260b39286e29ad0a82c5d999747bc4041f782659624f2deb53a888b590de",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.701484+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "d59dbd893e38e1c0c09116a08347de520e53bf6de122c7766e2d608824e7977e",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.996119+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "20": {
       "document_sha256": "b84d55ab085dad8cb897528f1cda017a96eeb41e68188bd350f13fcb02ea0f88",
-      "source_digest": "d818cf5a16da35913ffc20712329c122cb95e80cb34801278053f2009730d827",
-      "reviewed_by": "Claude compact UI CI fix review",
-      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
-      "reviewed_at": "2026-11-10T09:21:38.703406+00:00",
-      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
+      "source_digest": "c13f1f5f4ed5365efce8dc85d3c965aba8fc758f45a2aa4d6057a554bf4a4466",
+      "reviewed_by": "Claude PR87 integration review",
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.997885+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     }
   }
 }
