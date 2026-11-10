@@ -386,8 +386,7 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
     body = ft.Column(scroll=ft.ScrollMode.AUTO, expand=True, spacing=16)
 
     # ---- sections 1 and 2: the study scorecard ------------------------------------
-    picker = _CardPicker(cards, page, value=cards[0]["card_id"] if cards else None, menu_height=420,
-                         col={"xs": 12, "md": 8})
+    picker = _CardPicker(cards, page, value=cards[0]["card_id"] if cards else None, menu_height=420, width=600)
     detail = _Localized(lambda lang: _card_detail(next((x for x in cards if x["card_id"] == picker.value), None),
                                                   lang), page, key=ft.ScrollKey(_DETAIL_KEY))
 
@@ -419,7 +418,7 @@ def build_strategy_lab_page(page: ft.Page, on_open_settings: Optional[Callable] 
                   "What each card tested and why it got its verdict, in plain words. Click a row for the details below."),
             _Localized(lambda lang: _scorecard_rows(cards, lang, pick_card), page),
             LocalText("선택한 카드 자세히 보기", "Card details", size=15, weight=_W600, color=pal.text),
-            ft.ResponsiveRow([picker], spacing=10),
+            picker,
             detail,
         ]
     else:

@@ -13,7 +13,7 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import dataclass
-from typing import Any, Iterable, Mapping, Optional
+from typing import Any, Mapping, Optional
 
 from core.quant import validate as V
 
@@ -930,15 +930,3 @@ def run_sections(r: Mapping, language: str) -> list[tuple[str, list[str]]]:
     heads = (("결론", "데이터와 설정", "검증 결과", "위험과 참고") if ko else
              ("Conclusion", "Data and setup", "Validation results", "Risks and notes"))
     return [(heads[0], conclusion), (heads[1], [x for x in data if x]), (heads[2], results), (heads[3], risks)]
-
-
-def iter_display_texts(card: Mapping) -> Iterable[str]:
-    """Every catalogue string the scorecard shows for a card (both languages), for the acceptance test."""
-    t = card_text(card)
-    (reason, _) = reason_text(card.get("decision_reason", ""), card)
-    target = revise_target_text(card.get("revise_target"))
-    yield from (*t.name, *t.what, *reason, *kind_label(card.get("kind", "")))
-    yield key_numbers(card, "ko")
-    yield key_numbers(card, "en")
-    if target:
-        yield from target
