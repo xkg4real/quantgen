@@ -9,9 +9,9 @@ would have stopped the reference files from being built or read, changes how a v
 more tests, and lists what the owner has to sign. No test changes status today: every real-data test below is still
 NOT_RUN until ⑨-2 lists its fixture, or until the owner extends a signed calendar file.
 
-Three things are not finished:
+Two things are not finished (a third, the stale `MANIFEST.csv` cell, was closed by the fifth commit; see "Manifest row
+refreshed"):
 
-- **A merge is blocked** by one stale cell of `MANIFEST.csv`. See "Follow-up needed before merge".
 - **Ruling 2 is carried out for four of its five ids.** KS11, GSPC, 005930 and 000660 are stamped from their market
   calendar. KRWX (F16, Yahoo KRW=X) is declared and refused, because no calendar rule exists for an FX close. Both
   G-POST-01 sites gate on F16, so they cannot run on real data until the owner answers question 1.
@@ -342,19 +342,21 @@ unchanged, the lists still partition it, and `LA02_FLOOR_SIZE` is 15.
   T-AVAIL-01 on the official calendars needs no fixture: it runs as soon as `holidays_KRX` covers 2015-01-01..2015-01-06
   and 2025-11-13.
 
-## Follow-up needed before merge
+## Manifest row refreshed (fifth commit)
 
 `tests/fixtures/macro/MANIFEST.csv` lists `ACQUISITION.csv` with its md5, and `tests/fixtures/macro/README.md` says
 that every edit of the register refreshes its manifest row. Adding the row ruling 6 approves changed the md5 of
-`ACQUISITION.csv` from `05aee15bfb9d70ef58db7c1535fb5a2f` to `bfa8526ef8515de38af34fb41d06233a`. The task that produced
-the second commit was not allowed to edit `MANIFEST.csv`, and neither was the fix commit, so the manifest row is still
-stale. `tests/macro_m0_harness.py::test_manifest_lists_every_fixture_with_a_matching_md5` (T-HERM-01) FAILs with
-"stale md5 ['ACQUISITION.csv: bfa8526e... != 05aee15b...']". It passed on the first commit; it failed on the second,
-on the merge and on the fix commit, run by id each time. The fix is one cell: the md5 of the `ACQUISITION.csv` row of
-`MANIFEST.csv`, set to the current `md5sum tests/fixtures/macro/ACQUISITION.csv`, with nothing else in the file
-changed. It needs the owner's or the orchestrating session's say-so, and the branch must not merge before it. After
-it, this section, the opening of this record, the verification list and the FACTS.md row "병합 전 후속" have to be
-corrected and the compliance baseline refreshed.
+`ACQUISITION.csv` from `05aee15bfb9d70ef58db7c1535fb5a2f` to `bfa8526ef8515de38af34fb41d06233a`. The second commit,
+the merge and the fix commit left the manifest cell stale, because those stages were told not to edit `MANIFEST.csv`,
+and `tests/macro_m0_harness.py::test_manifest_lists_every_fixture_with_a_matching_md5` (T-HERM-01) FAILed on each of
+them with "stale md5 ['ACQUISITION.csv: bfa8526e... != 05aee15b...']".
+
+The coordinating session then refreshed that one cell (the md5 of the `ACQUISITION.csv` row) to
+`bfa8526ef8515de38af34fb41d06233a`, as the fixtures README requires for an edit of the register. Nothing else in
+`MANIFEST.csv` changed. It is the bookkeeping consequence of the row ruling 6 approved, not a new fixture: no data
+file was listed, and no licence, owner or data md5 was written. After it, run by id: the manifest test, T-HERM-01
+(`test_every_required_fixture_is_generated_or_registered`), `test_acquisition_csv_integrity` and both ratchet tests
+PASS (5 of 5, no guard refusal).
 
 ## What did not change
 
@@ -364,8 +366,9 @@ corrected and the compliance baseline refreshed.
   `tests/macro_m7_integration.py`. `core/quant/refusal.py` is read, not edited. The merge brought main's files in
   unchanged.
 - No signature was written and no calendar file under `core/calendars/data` changed.
-- `goldens.csv`, `MANIFEST.csv`, `tests/macro_registry.csv`, the `data/macro` registries and rules,
-  `qa/acceptance_results.json`, ledgers, cards and registers are unchanged. `ACQUISITION.csv` gained exactly one row.
+- `goldens.csv`, `tests/macro_registry.csv`, the `data/macro` registries and rules,
+  `qa/acceptance_results.json`, ledgers, cards and registers are unchanged. `ACQUISITION.csv` gained exactly one row. `MANIFEST.csv`
+  changed in one cell only, the md5 of the `ACQUISITION.csv` row (see "Manifest row refreshed").
 - Every existing test keeps its name and its `test_ids`, checked statically against `5f1ead5`, against the first
   commit and, for the fix commit, against the merge, for the seven test modules involved. The six new tests carry no
   `test_ids`, so the `implemented_in` column stays in sync. `tests/macro_m1_fixtures.py` stays CRLF; the other modules
@@ -402,7 +405,7 @@ scandir or mkdir under `docs/asset_expansion/cache`, any `.env` and anything und
   - Both LA-02 ratchet tests, `test_every_required_fixture_is_generated_or_registered`,
     `test_no_golden_test_passes_on_its_fixture_gate_alone` and `test_acquisition_csv_integrity` PASS.
   - Outside that list, `macro_m0_harness.py::test_manifest_lists_every_fixture_with_a_matching_md5` was run on its own:
-    PASS before the ACQUISITION row, FAIL after it (see "Follow-up needed before merge").
+    PASS before the ACQUISITION row, FAIL after it (now PASS again after the fifth commit; see "Manifest row refreshed").
 - **Mutation probe, second commit.** 49 mutants, each compiled in memory from a test module's source into a fresh
   module object; the worktree files were never written. 48 are caught by a demonstration, and the unmutated
   demonstrations pass before and after. They include: vendor prices exact again, at one decimal, at three decimals;
@@ -441,8 +444,8 @@ scandir or mkdir under `docs/asset_expansion/cache`, any `.env` and anything und
 A code review of the first two commits reported 19 findings from two reviewers, 14 distinct. A probe reproduced every
 code finding on the merged tree before any change. What was done, by defect:
 
-1. **The stale manifest row (blocker, both reviewers). Confirmed, not fixed.** The fix stage was not allowed to edit
-   `MANIFEST.csv` either. See "Follow-up needed before merge".
+1. **The stale manifest row (blocker, both reviewers). Confirmed; fixed by the fifth commit.** The fix stage was not
+   allowed to edit `MANIFEST.csv`; the coordinating session refreshed the one cell. See "Manifest row refreshed".
 2. **The branch was behind main (major, both).** Main `1a8b29f` is merged in by `7611064`. The only files both sides
    change are `docs/compliance/FACTS.md` and `docs/compliance/source-review.json`. Main's FACTS text is kept
    unchanged and this part's section follows it; the baseline was regenerated with the refresh command, not merged by

@@ -287,7 +287,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "8f2eb09902df4ac94a7996a9aeedb01b7a0f0a2f741a792e41c489be8bbcf3a8",
+    "docs/compliance/FACTS.md": "3e22947ae967716de63173ae2b8035cfca2f937effe492ea5606184b42bab854",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -328,7 +328,7 @@
     "docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md": "9ccc09cc2982dc78907e71cd596b980115efa4f8d05d0aeef340db91dc73864e",
     "docs/product/LOOKAHEAD_LA02_PART1_2026-11-10.md": "f4ce44fcfc95c76213c6df187e2444a7fc860bf6d72aa6e514ef11917e38a44f",
     "docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md": "539ed67d4b716cb5c7bc0a6ee9ac90b9a41e032321b962929966bf1dcb8b91b4",
-    "docs/product/LOOKAHEAD_LA02_PART3_2026-11-11.md": "abb49c6b84f786321e067f78a9a4a6457426025d495e17886d294fd2f60e09e7",
+    "docs/product/LOOKAHEAD_LA02_PART3_2026-11-11.md": "8fa59c5d84703bfebcef638e77df1eeeb527321a0162c678377cb313e21405e5",
     "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "71dffdb67f3b38ed8b726f273c8651a8a65ec832cdfedc84ba5431bebaca2494",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
@@ -672,163 +672,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "54ff12d43c844b197ce432c06325f254004e41467ec46e503db8aed63eaacbaa",
+      "source_digest": "79750a4594c3b85bfcf08a07928e2df75e1af0ea1a735e00dca728f88efaa0aa",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.344782+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.002867+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "54ff12d43c844b197ce432c06325f254004e41467ec46e503db8aed63eaacbaa",
+      "source_digest": "79750a4594c3b85bfcf08a07928e2df75e1af0ea1a735e00dca728f88efaa0aa",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.347206+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.005482+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "0e6b6f3fb0716d297c534905d7369611babdd42633f887fcb69d19159db33b4b",
+      "source_digest": "53caf0b221229d6c26c32a29d640c481439a718e3578c6f3798ded0a60240451",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.349388+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.007698+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "7b38e4d4f20106f370dd3df9f4748aba897196ea912f25de054a459f1d701ec8",
+      "source_digest": "e5c098223d36ae43a0d8ef96ef98998cc1ab2b8221675ddbcca35d89716bca55",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.351192+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.009783+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "a174fa1c83ae1fd7f2de7ade04c429c4908dd3734a2b1cf6735475342dd0f9fc",
+      "source_digest": "8528f345ece84d9a12e04d5b3cc2f9609e76d319751db031ee0098a746c7a6a5",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.353642+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.011766+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "026ad882482acc0627fdb2119f85d48c6e0f4756a84c1844d117423c7f4223ef",
+      "source_digest": "658c8e6d8ad75b3ce711fa4cc46e7ce452528805f931c8c9788ab22a95218241",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.355444+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.013625+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "54ff12d43c844b197ce432c06325f254004e41467ec46e503db8aed63eaacbaa",
+      "source_digest": "79750a4594c3b85bfcf08a07928e2df75e1af0ea1a735e00dca728f88efaa0aa",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.357297+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.015571+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "8": {
       "document_sha256": "455d8b429619c6914d3bd315efd69c1aaf083a6f995c84527511313055fc2a45",
-      "source_digest": "026ad882482acc0627fdb2119f85d48c6e0f4756a84c1844d117423c7f4223ef",
+      "source_digest": "658c8e6d8ad75b3ce711fa4cc46e7ce452528805f931c8c9788ab22a95218241",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.359753+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.017376+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "4a0c6f49faf2647981114b7c1188ea51121f3c79ef0a8d728d576c3b9e08964a",
+      "source_digest": "eabe853f667ea73c2e35869eb135cf332204b04bc559877f099ca70525552f81",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.361476+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.019177+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "8cf190899cb1910d13d0a1672eff94895cbb0878a9263af9d3a1050747fdf59c",
+      "source_digest": "d687fe97a6f61d7f5cef68195ce5a0aa70440e36b36c22fd6ea82b912bf3ce8e",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.363861+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.020885+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "01426a97462eeef3e65cadb3f4d6d362b3e904d111ca34f8bf5887f73849e53e",
+      "source_digest": "57c6d1e02de69413d403d40013fe4a711a6892c4d199a42d5e6438cfeaae7a88",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.365613+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.022662+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "201830e7f0480365b12c6a762bddb5fd479aaab201e23931e4ba9a321af47be9",
+      "source_digest": "7bdd5f6add204820437c2458891cbb2c4db5a23cf7e71daa1a66345544f6dbd5",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.368085+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.024442+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "4a0c6f49faf2647981114b7c1188ea51121f3c79ef0a8d728d576c3b9e08964a",
+      "source_digest": "eabe853f667ea73c2e35869eb135cf332204b04bc559877f099ca70525552f81",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.369799+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.026319+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "4a0c6f49faf2647981114b7c1188ea51121f3c79ef0a8d728d576c3b9e08964a",
+      "source_digest": "eabe853f667ea73c2e35869eb135cf332204b04bc559877f099ca70525552f81",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.372333+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.028139+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "4a0c6f49faf2647981114b7c1188ea51121f3c79ef0a8d728d576c3b9e08964a",
+      "source_digest": "eabe853f667ea73c2e35869eb135cf332204b04bc559877f099ca70525552f81",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.374144+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.029823+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "12b7517bdec5b5cd6573920b16952fdef2015737845ea6e5b47c6c6fa95c73dd",
+      "source_digest": "a9b1ce98207e468d3168e6025915cbc3f3564e46b3466de759ea0b44a2f9069b",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.376358+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.031756+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "026ad882482acc0627fdb2119f85d48c6e0f4756a84c1844d117423c7f4223ef",
+      "source_digest": "658c8e6d8ad75b3ce711fa4cc46e7ce452528805f931c8c9788ab22a95218241",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.378169+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.033453+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "54ff12d43c844b197ce432c06325f254004e41467ec46e503db8aed63eaacbaa",
+      "source_digest": "79750a4594c3b85bfcf08a07928e2df75e1af0ea1a735e00dca728f88efaa0aa",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.380349+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.035302+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "7036420016e5b42562249b9a66764312c2c46327394beb1eb8f522f7b9fe7575",
+      "source_digest": "cca64d562d60f26010d8acccf85ce2c9ea4cec94b113c62322270de939abf369",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.382437+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.037105+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "54ff12d43c844b197ce432c06325f254004e41467ec46e503db8aed63eaacbaa",
+      "source_digest": "79750a4594c3b85bfcf08a07928e2df75e1af0ea1a735e00dca728f88efaa0aa",
       "reviewed_by": "Claude reference-data prep review",
-      "review_note": "Code-review fixes to the reference-data prep (owner rulings 1 to 6 of 2026-11-11): generator row rules, per-file selection and staged writes, F27 row ids, byte-order mark handling, T-REGIME-01 gate source check; part 3 record, signing request and FACTS corrected, part 2 note added; the MANIFEST md5 follow-up is still open",
-      "reviewed_at": "2026-11-10T20:41:06.384644+00:00",
-      "source_commit": "7611064f27c553e9a34122f39ab4e01200d8011a"
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.038913+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     }
   }
 }
