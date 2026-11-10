@@ -276,7 +276,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "5f98c0253b3809f3e987c0659ea3cbeeeb2cd92815da6c90719ab16499fe20e9",
+    "docs/compliance/FACTS.md": "0f4a0ec2d4f1f0bd2cecb29aca4fa307f0358cc8e902d8c3f3f7c5dbc42838e7",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -312,7 +312,7 @@
     "docs/product/LETF_ASSUMPTIONS_2026-11-02.md": "4fd6fbcd5caad90146799feb6fa7ae61a38603e22c752970474e3d23b757fd0b",
     "docs/product/LETF_INDEX_2026-10-31.md": "7c10b178f33c59f2afb2783c94413cc2c949ba3d5f0e7b4412246d0da1f54693",
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
-    "docs/product/LOOKAHEAD_LA02_PART1_2026-11-10.md": "26f851d95739e5bf2068cc3a4dbc61525f7019c5bea067012a0faacbecf22105",
+    "docs/product/LOOKAHEAD_LA02_PART1_2026-11-10.md": "f4ce44fcfc95c76213c6df187e2444a7fc860bf6d72aa6e514ef11917e38a44f",
     "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "71dffdb67f3b38ed8b726f273c8651a8a65ec832cdfedc84ba5431bebaca2494",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
@@ -493,10 +493,10 @@
     "tests/macro_m0_rules.py": "7cb91771c62286132b269f71ac2c2c351548ff844d6bc474b1e4abcc65a09219",
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
-    "tests/macro_m1_calendars.py": "d5be667afb750a4e632543128582566469c4eb3cfd94df32410b93093925c088",
-    "tests/macro_m1_fixtures.py": "26581e3856c6f85ad0f9b72c3d3a3f305ba6d669bd6be24253e2dee12f8e32b0",
+    "tests/macro_m1_calendars.py": "6a966c14154dacbfae56e2dfcb7de6999b29a7b3c0817d117aae9ee5abc36224",
+    "tests/macro_m1_fixtures.py": "600f3c1892432b7875110035894e2e746c513d621b2abc70dca04a75ebf53bbc",
     "tests/macro_m1_integration.py": "4a370e688d1fa8a5130ed470f8148712da8c8852144f9e07a60954bc286e7680",
-    "tests/macro_m1_pit.py": "a784bfef83bfc483cbe80663398e89abd4248f331a48c99aedc30cd0af0233db",
+    "tests/macro_m1_pit.py": "ff67c5ada20e57d794b8848c8f0d6727f920d33ebae73c2f15d85b0d71dbb954",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
     "tests/macro_m2_risk.py": "8e215f0907d0892baa2d8b53ad2c487fb8471125d5a23228049dd7bfa5d5aaa1",
     "tests/macro_m3_estimators.py": "15ae23faa6b3c313771ad286985098f30fe868a485848c4e6a8e83925d8fdddb",
@@ -506,7 +506,7 @@
     "tests/macro_m5_fills_events.py": "69a5da5f1a59b076cecb86e24f2bc25428ede2c2124120cdad31313543fd185c",
     "tests/macro_m5_integration.py": "a2b3aef06f2120de05a934723d04878039a7eb756207a44add24cc6fdc87d123",
     "tests/macro_m6_context.py": "523e7096bfe6e8c737d7d134a3a843c33ef7ae056b4856a1535d5c275374da67",
-    "tests/macro_m7_cardp.py": "91328d68b86edb0a54c9b85fee73249a4e4e3262200c43467156e9f5dcd694bf",
+    "tests/macro_m7_cardp.py": "2cac5fbbca12a692ac755cf54a8b4ede7adc57c78dabd7f4b1fc0a6848230132",
     "tests/macro_m7_cards.py": "3071a26fd8f2291a81bfee3f46aa2ceb81cb99fb7fab878e20716d44487c2d06",
     "tests/macro_m7_integration.py": "eae519a24f19efdc94e39097de10eb03fe900180b097756dee64f787422e87f4",
     "tests/macro_m7_ledger.py": "c0aed45d39017d618f4a0e96f8c8b5130d37b92b54f5cbb64233d316254dfb80",
@@ -642,163 +642,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "25fb8e45fc8863d7932cf150c1ffd06710222747bccd4f42cbceda3f42c0b7e2",
+      "source_digest": "661b24bf0aad31c9241b848d5d13e9ee27632709a3e973e0599917526e3e6f69",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.873075+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:43.993896+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "25fb8e45fc8863d7932cf150c1ffd06710222747bccd4f42cbceda3f42c0b7e2",
+      "source_digest": "661b24bf0aad31c9241b848d5d13e9ee27632709a3e973e0599917526e3e6f69",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.875463+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.000438+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "82250d243eb7e5fae766bb8fa5d51401c2d9e477933e35bdb8ff69312a9018a9",
+      "source_digest": "72394228dad4f7e0604b210a3ef69a01fd18b605453cb381d265b64d91748f36",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.877506+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.003920+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "ae0aaab6683a8fbabbefdd6e623188ab05a4aca2154543cdee88a75c85e02435",
+      "source_digest": "0166d9b84ae161b48ba1eb99b363f4d14094146c77ab4799feb7321529014a63",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.880840+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.008270+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "8dffec8968f89c5ca8d128651b8f6c16e3e07c45a17fcc55485bc1fa8facea74",
+      "source_digest": "03708a56727973c6e3b798ebc8564af283c403011993b5f4e58f956186717bc2",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.882805+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.011856+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "789e1a899aa19747e9911aeb212a12f698abc5dcd9dd3776fc1fe353484c62bc",
+      "source_digest": "ee4019facc6cf8a051394ce5e8b0a374423f17b6982d99d961a3025d19a6c173",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.884542+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.016322+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "25fb8e45fc8863d7932cf150c1ffd06710222747bccd4f42cbceda3f42c0b7e2",
+      "source_digest": "661b24bf0aad31c9241b848d5d13e9ee27632709a3e973e0599917526e3e6f69",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.887025+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.019877+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "789e1a899aa19747e9911aeb212a12f698abc5dcd9dd3776fc1fe353484c62bc",
+      "source_digest": "ee4019facc6cf8a051394ce5e8b0a374423f17b6982d99d961a3025d19a6c173",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.888713+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.026184+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "eb53f59eda34d19939df0c8ab6034f970ad91b81c378c4199148efe6b5d9f0ab",
+      "source_digest": "67ea10a9fb9daf3851224f827c13e72d08c16316511747911050c4082ee5054f",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.890513+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.031727+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "81f1150fa746cdedf0adde97809d020fe0bd611505ed80d55e5ceea91713640a",
+      "source_digest": "d18fa77d6da3e77b53422f385ea4f6bbbda9909f1b0bdcb825dc145713e526d8",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.892228+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.035704+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "7b622f3c5a9d70948139f6d3b959b9f4b33ba832ce7f2f98a4f88101460023d8",
+      "source_digest": "9707a78f77bfc04d971a251cdba2fc90e7bbc2dd27b1bbb224e9119846d623a1",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.894290+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.039704+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "daef270fd4913affd73af706797c34cdf4567fddcc50b8f211c80b9eb25fd347",
+      "source_digest": "3e2d76101501d3523fe7649046f2dd5b1fa6d0d23bfdd376ccc10fae554c91fb",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.896104+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.043750+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "eb53f59eda34d19939df0c8ab6034f970ad91b81c378c4199148efe6b5d9f0ab",
+      "source_digest": "67ea10a9fb9daf3851224f827c13e72d08c16316511747911050c4082ee5054f",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.897684+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.050189+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "eb53f59eda34d19939df0c8ab6034f970ad91b81c378c4199148efe6b5d9f0ab",
+      "source_digest": "67ea10a9fb9daf3851224f827c13e72d08c16316511747911050c4082ee5054f",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.899602+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.052447+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "eb53f59eda34d19939df0c8ab6034f970ad91b81c378c4199148efe6b5d9f0ab",
+      "source_digest": "67ea10a9fb9daf3851224f827c13e72d08c16316511747911050c4082ee5054f",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.901183+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.056173+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "7ba3b33978c0922e9b221fd46b19afb1600541f4125c9b1f0f6d2fa8f6dbc808",
+      "source_digest": "2c3a12d1bdd0e283f7198d22926b2f9d9ef12b4f1ea9f91193223a669c5526c7",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.903310+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.060192+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "789e1a899aa19747e9911aeb212a12f698abc5dcd9dd3776fc1fe353484c62bc",
+      "source_digest": "ee4019facc6cf8a051394ce5e8b0a374423f17b6982d99d961a3025d19a6c173",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.905051+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.067239+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "25fb8e45fc8863d7932cf150c1ffd06710222747bccd4f42cbceda3f42c0b7e2",
+      "source_digest": "661b24bf0aad31c9241b848d5d13e9ee27632709a3e973e0599917526e3e6f69",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.907034+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.069555+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "be80206594892e43b2e952b5096caf9edf1d88d14bd8b81d0bf8468c90493729",
+      "source_digest": "4a704dae74a29f96d99eb90d75bce1a00169fd3988c9ec389b11b0f75282b595",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.908592+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.072023+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "25fb8e45fc8863d7932cf150c1ffd06710222747bccd4f42cbceda3f42c0b7e2",
+      "source_digest": "661b24bf0aad31c9241b848d5d13e9ee27632709a3e973e0599917526e3e6f69",
       "reviewed_by": "Claude la02 review",
-      "review_note": "LA-02 part 1: REFDATA test bodies, declared fixture layouts, ratchet test, product record and FACTS section; test files and docs only, no runtime, data or harness change",
-      "reviewed_at": "2026-11-10T12:26:04.910254+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-02 part 1 review fixes: test bodies, FAIL cases, ratchet floor and records; no app or core change",
+      "reviewed_at": "2026-11-10T13:10:44.075975+00:00",
+      "source_commit": "7ba714dc623e873632c83b60558eec6c248265dd"
     }
   }
 }

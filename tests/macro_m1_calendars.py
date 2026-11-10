@@ -11,6 +11,7 @@ and cover the fixture's dates (otherwise NotRun "OWNER: ...", computed from the 
 """
 from __future__ import annotations
 
+import copy
 import csv
 import io
 import math
@@ -314,10 +315,12 @@ def _kospi_closes(text: str) -> list[dict]:
     return rows
 
 
-def _official_calendar(lo: date, hi: date) -> CalendarSet:
-    """The shipped owner-signed KRX clock files when each loads and covers [lo, hi]; otherwise NotRun("OWNER: ...")
-    naming every refusal and coverage gap, computed from the files as test_close02_on_the_real_signed_files does."""
-    live = CalendarSet()
+def _official_calendar(lo: date, hi: date, live: CalendarSet | None = None) -> CalendarSet:
+    """The shipped owner-signed KRX clock files (`live`, default `CalendarSet()`) when each loads and covers [lo, hi];
+    otherwise NotRun("OWNER: ...") naming every refusal and coverage gap, computed from the files as
+    test_close02_on_the_real_signed_files does. Both branches are pinned by the T-PRINT-01 and T-SAT-01 demonstrations
+    on synthetic sets."""
+    live = CalendarSet() if live is None else live
     waiting = []
     for f in store.MARKET_FILES["KR"]:
         why = live.refusal(f)
@@ -329,6 +332,14 @@ def _official_calendar(lo: date, hi: date) -> CalendarSet:
     if waiting:
         raise NotRun(f"OWNER: the signed KRX clock files must cover {lo}..{hi}: " + "; ".join(waiting))
     return live
+
+
+def _official_calendar_on(lo: date, hi: date, live: CalendarSet) -> CalendarSet:
+    """`_official_calendar` on a set that covers [lo, hi], for the demonstrations: a NotRun there is a FAIL."""
+    try:
+        return _official_calendar(lo, hi, live=live)
+    except NotRun as exc:
+        raise AssertionError(f"_official_calendar refused a covering set: {exc.reason}") from None
 
 
 def _check_print01(rows: list[dict], cal: CalendarSet) -> float:
@@ -356,20 +367,25 @@ def _check_print01(rows: list[dict], cal: CalendarSet) -> float:
 
 def _check_sat01(rows: list[dict], cal: CalendarSet, start: date, end: date) -> dict:
     """T-SAT-01 on official closes: no row lies outside [start, end]; every `is_session` date of it has exactly one close
-    row and no row falls on a non-session (`clocks.completeness_check`); the Saturday sessions before 1998-12-12 are in
-    the rows, so the same rows without them fail the check with exactly those Saturdays missing. Returns the counts and
-    the Monday / Tue-Fri variance ratio of the 1997-98 close-to-close returns (None outside that span)."""
+    row and no row falls on a non-session (`clocks.completeness_check`); no Saturday row lies on or after 1998-12-12;
+    and, when the span starts before 1998-12-12, the same rows without their Saturday closes fail the completeness check
+    with exactly those Saturdays missing (spec L2097: "A KOSPI fixture that lacks those Saturdays fails the completeness
+    check"). On a calendar consistent with the rows, the last two clauses fail only when the calendar's Saturday rule
+    is wrong (no Saturday sessions, or Saturday sessions past 1998-12-11); the demonstrations show both. Returns the
+    counts and the Monday / Tue-Fri variance ratio of the 1997-98 close-to-close returns (None outside that span)."""
     dates = [r["date"] for r in rows]
     assert start <= dates[0] and dates[-1] <= end, f"T-SAT-01: rows span {dates[0]}..{dates[-1]}, outside {start}..{end}"
     rep = clocks.completeness_check("KR", dates, start, end, cal=cal)
     assert rep.ok, (f"T-SAT-01: completeness fails: missing {list(rep.missing[:8])} of {len(rep.missing)}, "
                     f"duplicates {list(rep.duplicates[:8])}, extra {list(rep.extra[:8])}")
     sats = tuple(d for d in dates if d.weekday() == 5)
-    assert all(d < SAT01_BEFORE for d in sats), "T-SAT-01: a Saturday close on or after 1998-12-12"
+    late = [d for d in sats if d >= SAT01_BEFORE]
+    assert not late, f"T-SAT-01: a Saturday close on or after 1998-12-12 ({late[0]}; spec L2097)"
     if start < SAT01_BEFORE:
-        assert sats, "T-SAT-01: no Saturday session before 1998-12-12 in the rows"
         gap = clocks.completeness_check("KR", [d for d in dates if d.weekday() != 5], start, end, cal=cal)
-        assert gap.missing == sats and not gap.duplicates and not gap.extra, "T-SAT-01: dropping the Saturdays is not caught"
+        assert sats and not gap.ok and gap.missing == sats and not gap.duplicates and not gap.extra, (
+            f"T-SAT-01: the rows without their Saturday closes do not fail the completeness check with exactly those "
+            f"Saturdays missing ({len(sats)} Saturday rows, missing {list(gap.missing[:8])}; spec L2097)")
     mon, tue_fri = [], []
     for a, b in zip(rows, rows[1:]):
         if SAT01_RATIO_SPAN[0] <= b["date"] <= SAT01_RATIO_SPAN[1] and b["date"].weekday() < 5:
@@ -378,12 +394,15 @@ def _check_sat01(rows: list[dict], cal: CalendarSet, start: date, end: date) -> 
     return {"sessions": len(dates), "saturdays": len(sats), "ratio": ratio}
 
 
-def _invented_closes(cal: CalendarSet, lo: date, hi: date, last=()) -> list[tuple]:
+def _invented_closes(cal: CalendarSet, lo: date, hi: date, last=(), stamped: bool = True) -> list[tuple]:
     """Invented closes (not KRX data) on every KR session of [lo, hi] of `cal`, stamped as docs/macro_fixtures stamps F01
-    (obs_utc the scheduled close, available_at_utc the close-print bound); `last` replaces the final closes."""
+    (obs_utc the scheduled close, available_at_utc the close-print bound); `last` replaces the final closes.
+    `stamped=False` writes 00:00Z on the session date instead (well-formed instants; the T-SAT-01 body reads no stamp)."""
     days = clocks.sessions_between("KR", lo, hi, cal=cal)
     closes = [700.0 + (i % 23) * 1.5 - (i % 7) for i in range(len(days))]
     closes[len(days) - len(last):] = list(last)
+    if not stamped:
+        return [(d, c, U(d.year, d.month, d.day), U(d.year, d.month, d.day)) for d, c in zip(days, closes)]
     stamps = [clocks.close_stamp("KR", d, cal=cal) for d in days]
     return [(d, c, s.obs_utc, s.available_at_utc) for d, c, s in zip(days, closes, stamps)]
 
@@ -398,6 +417,33 @@ def _f01_text(rows) -> str:
         out.writerow((d.isoformat(), repr(close), "KOSPI_OFFICIAL_CLOSE", d.isoformat(), d.isoformat(), z(obs), z(avail),
                       "calendar_bound", "official_close"))
     return buf.getvalue()
+
+
+def krx_short_set() -> CalendarSet:
+    """The synthetic set with holidays_KRX cut to 2026-01-01..2027-12-31, the span of the shipped signed file, so every
+    earlier KRX date is a coverage gap (the OWNER branch of `_official_calendar` and of T-AVAIL-01's waiting list)."""
+    docs = fixture_docs()
+    krx = docs["holidays_KRX"]
+    krx["covers"] = {"from": "2026-01-01", "to": "2027-12-31"}
+    krx["rows"] = [r for r in krx["rows"] if r["date"] >= "2026-01-01"]
+    return fixture_set("krx_2026_2027", docs)
+
+
+def drafts_set() -> CalendarSet:
+    """The synthetic set with holidays_KRX and kr_regime_tags unsigned, so both are refused at load."""
+    docs = fixture_docs()
+    for f in ("holidays_KRX", "kr_regime_tags"):
+        docs[f]["signed_off_by"] = None
+    return fixture_set("krx_drafts", docs)
+
+
+def _saturday_rule_set(before: str) -> CalendarSet:
+    """fixture_set()'s files under a calendars config whose KR `saturday_sessions_before` is `before`: a wrong Saturday
+    rule, for the T-SAT-01 FAIL demonstrations (the config is injected into a new CalendarSet; nothing is patched)."""
+    base = fixture_set()
+    cfg = copy.deepcopy(base.config)
+    cfg["KR"]["saturday_sessions_before"] = before
+    return CalendarSet(base.data_dir, config=cfg)
 
 
 # --------------------------------------------------------------------------- #
@@ -536,16 +582,32 @@ test_print01_real_kospi_close_2026_03_09.test_ids = ["T-PRINT-01"]
 
 def test_print01_body_passes_and_fails_on_invented_closes():
     """LA-02 part 1: the T-PRINT-01 body can PASS and can FAIL. Invented closes in the F01 layout on the synthetic
-    calendars (no KRX data): the close 5,251.87 after 5,584.71 passes; the 10:31 KST print (5,131.12, -8.11%) stored as
-    the 2026-03-09 close, or stored beside it, fails."""
+    calendars (no KRX data): the close 5,251.87 after 5,584.71 passes. It fails when the 10:31 KST print (5,131.12,
+    -8.11%) is stored as the 2026-03-09 close or beside it; when the close is 5,251.88 with correct stamps; when the
+    previous close is 5,560 (-5.54%); and when the previous session's row is missing. The owner-calendar gate returns a
+    covering set and refuses a set whose KRX holiday file is unsigned."""
     cal = fixture_set()
-    good = _invented_closes(cal, date(2026, 2, 23), PRINT01_DATE, last=(5584.71, PRINT01_CLOSE))
+    lo = date(2026, 2, 23)
+    good = _invented_closes(cal, lo, PRINT01_DATE, last=(5584.71, PRINT01_CLOSE))
     assert abs(_check_print01(_kospi_closes(_f01_text(good)), cal) - PRINT01_RETURN_PCT) <= PRINTED_PCT
     cb_print = (PRINT01_DATE, 5131.12, U(2026, 3, 9, 1, 31), U(2026, 3, 9, 1, 31))
     as_close = _raises(lambda: _check_print01(_kospi_closes(_f01_text(good[:-1] + [cb_print])), cal), AssertionError)
     assert "not an official close" in str(as_close)
     beside = _raises(lambda: _check_print01(_kospi_closes(_f01_text(good + [cb_print])), cal), AssertionError)
     assert "2 rows on 2026-03-09" in str(beside)
+    for last, needle in (((5584.71, 5251.88), "close 5251.88 != 5251.87 (spec L5631)"),
+                         ((5560.0, PRINT01_CLOSE), "return -5.5419% != -5.96%")):
+        rows = _invented_closes(cal, lo, PRINT01_DATE, last=last)
+        e = _raises(lambda: _check_print01(_kospi_closes(_f01_text(rows)), cal), AssertionError)
+        assert needle in str(e), e
+    assert good[-2][0] == date(2026, 3, 6)
+    gap = _raises(lambda: _check_print01(_kospi_closes(_f01_text(good[:-2] + good[-1:])), cal), AssertionError)
+    assert "no row for the previous session 2026-03-06" in str(gap), gap
+    hi = PRINT01_DATE
+    assert _official_calendar_on(hi - timedelta(days=14), hi, cal) is cal
+    owner = _raises(lambda: _official_calendar(hi - timedelta(days=14), hi, live=drafts_set()), NotRun)
+    assert owner.reason.startswith("OWNER: the signed KRX clock files must cover 2026-02-23..2026-03-09: "
+                                   "holidays_KRX.yaml refused (holidays_KRX.yaml: signed_off_by is empty"), owner.reason
 
 
 # --------------------------------------------------------------------------- #
@@ -902,20 +964,35 @@ def test_regime01_full_range_expected_values_file():
     """The full-range clause needs the committed expected-values file, an owner deliverable that no ACQUISITION.csv or
     MANIFEST.csv row lists yet (a `require_fixture` on it would fail T-HERM-01). The reason states the shipped tag
     file's signing state as read now (look-ahead audit LA-02: the old text still called the signed file a draft)."""
-    live = CalendarSet()
-    why = live.refusal("kr_regime_tags")
-    if why is None:
-        f = live.file("kr_regime_tags")
-        state = (f"the shipped kr_regime_tags.yaml v{f.version} is owner-signed ({f.signed_utc}, covers {f.covers_from}.."
-                 f"{f.covers_to}); only the expected-values file is missing")
-    else:
-        state = f"the shipped kr_regime_tags.yaml is refused at load ({why})"
     raise NotRun("OWNER: tests/fixtures/macro/kr_regime_tags_expected.csv (1995-01-01..2026-12-31, built from the official "
                  "notices incl. the pre-Apr-1995 price limit, sell-tax steps, BoK fx regimes) is an owner deliverable with "
-                 f"no ACQUISITION.csv or MANIFEST.csv row yet; {state}")
+                 f"no ACQUISITION.csv or MANIFEST.csv row yet; {_regime01_tag_state(CalendarSet())}")
 
 
 test_regime01_full_range_expected_values_file.test_ids = ["T-REGIME-01"]
+
+
+def _regime01_tag_state(live: CalendarSet) -> str:
+    """The signing state of `live`'s kr_regime_tags.yaml, as the T-REGIME-01 full-range reason states it."""
+    why = live.refusal("kr_regime_tags")
+    if why is None:
+        f = live.file("kr_regime_tags")
+        return (f"kr_regime_tags.yaml v{f.version} is signed ({f.signed_utc}, covers {f.covers_from}..{f.covers_to}); "
+                "only the expected-values file is missing")
+    return f"kr_regime_tags.yaml is refused at load ({why})"
+
+
+def test_regime01_full_range_reason_reads_the_signing_state():
+    """LA-02 part 1: the T-REGIME-01 full-range NotRun reason ends with the tag file's signing state as read now and,
+    while the shipped file loads, never carries the stale "unsigned draft" clause. The state text is shown on a signed
+    and on a refused synthetic set."""
+    live = CalendarSet()
+    reason = _raises(test_regime01_full_range_expected_values_file, NotRun).reason
+    assert reason.startswith("OWNER: ") and reason.endswith(_regime01_tag_state(live)), reason
+    if live.refusal("kr_regime_tags") is None:
+        assert "unsigned draft" not in reason and " is signed (" in reason, reason
+    assert _regime01_tag_state(fixture_set()).startswith("kr_regime_tags.yaml v1.0.0-fixture is signed (")
+    assert _regime01_tag_state(drafts_set()).startswith("kr_regime_tags.yaml is refused at load (")
 
 
 # --------------------------------------------------------------------------- #
@@ -968,8 +1045,10 @@ test_sat01_real_kospi_completeness_and_variance_ratio.test_ids = ["T-SAT-01"]
 
 def test_sat01_body_passes_and_fails_on_invented_closes():
     """LA-02 part 1: the T-SAT-01 body can PASS and can FAIL. Invented closes in the F01 layout on the synthetic
-    calendars (no KRX data), 1997-01-03..1998-12-31: one close per session, Saturdays included, passes; the same file
-    without its Saturday closes fails the completeness check."""
+    calendars (no KRX data), 1997-01-03..1998-12-31: one close per session, Saturdays included, passes. It fails when
+    the Saturday closes are dropped, when a row lies outside the span, and, on a calendar with a wrong Saturday rule,
+    when there are no Saturday sessions or a Saturday session falls on 1998-12-12 or later. The owner-calendar gate
+    returns a covering set and names the coverage gap of a set whose KRX holiday file covers 2026-27 only."""
     cal = fixture_set()
     start, end = date(1997, 1, 3), date(1998, 12, 31)
     rows = _invented_closes(cal, start, end)
@@ -978,6 +1057,23 @@ def test_sat01_body_passes_and_fails_on_invented_closes():
     weekdays = [r for r in rows if r[0].weekday() != 5]
     e = _raises(lambda: _check_sat01(_kospi_closes(_f01_text(weekdays)), cal, start, end), AssertionError)
     assert "completeness fails: missing" in str(e)
+    span = _raises(lambda: _check_sat01(_kospi_closes(_f01_text(rows)), cal, start, date(1998, 6, 30)), AssertionError)
+    assert "outside 1997-01-03..1998-06-30" in str(span), span
+    # the Saturday clauses fail on a calendar whose Saturday rule is wrong (rows consistent with that calendar)
+    no_sat = _saturday_rule_set("1995-01-01")
+    plain = _invented_closes(no_sat, start, end)
+    e = _raises(lambda: _check_sat01(_kospi_closes(_f01_text(plain)), no_sat, start, end), AssertionError)
+    assert "do not fail the completeness check" in str(e) and "0 Saturday rows" in str(e), e
+    late_sat = _saturday_rule_set("1999-07-03")
+    lo, hi = date(1998, 11, 2), date(1999, 1, 29)
+    late = _invented_closes(late_sat, lo, hi, stamped=False)
+    e = _raises(lambda: _check_sat01(_kospi_closes(_f01_text(late)), late_sat, lo, hi), AssertionError)
+    assert "a Saturday close on or after 1998-12-12 (1998-12-12" in str(e), e
+    # the owner-calendar gate: a covering set is returned; the shipped span of holidays_KRX (2026-27) is a gap
+    assert _official_calendar_on(*F01_SPAN, cal) is cal
+    owner = _raises(lambda: _official_calendar(*F01_SPAN, live=krx_short_set()), NotRun)
+    assert owner.reason == ("OWNER: the signed KRX clock files must cover 1997-01-03..2026-10-02: holidays_KRX.yaml "
+                            "v1.0.0-fixture covers 2026-01-01..2027-12-31"), owner.reason
 
 
 # --------------------------------------------------------------------------- #

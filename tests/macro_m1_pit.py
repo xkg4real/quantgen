@@ -615,17 +615,16 @@ def _avail01_waiting(live) -> list[str]:
 def test_avail_01_official_calendars_are_owner_signed():
     """The same golden table on the owner-signed calendars (core.calendars.adapter.CalendarClocks over the shipped
     files). NOT_RUN (OWNER) names every refusal and coverage gap, computed from the files; once they load and cover the
-    golden days the table runs and PASSes or FAILs (look-ahead audit LA-02: it used to be NOT_RUN whatever the files)."""
+    golden days the table runs and PASSes or FAILs (look-ahead audit LA-02: it used to be NOT_RUN whatever the files).
+    AVAIL01_NEEDS is the contract: once nothing is waiting, a coverage or signing error raised inside the table (a file
+    or a date the list does not declare, such as a calendar read past the golden day) is a FAIL, not a NOT_RUN."""
     from core.calendars.adapter import CalendarClocks
-    from core.calendars.store import CalendarCoverageError, CalendarSet, CalendarUnsigned
+    from core.calendars.store import CalendarSet
     live = CalendarSet()
     waiting = _avail01_waiting(live)
     if waiting:
         raise NotRun("OWNER: T-AVAIL-01 on the signed calendars waits for " + "; ".join(waiting))
-    try:
-        _check_avail01_table(CalendarClocks(REG, cal=live), lambda reg: CalendarClocks(reg, cal=live))
-    except (CalendarCoverageError, CalendarUnsigned) as exc:     # a file AVAIL01_NEEDS does not name
-        raise NotRun(f"OWNER: T-AVAIL-01 on the signed calendars: {exc}") from None
+    _check_avail01_table(CalendarClocks(REG, cal=live), lambda reg: CalendarClocks(reg, cal=live))
 
 
 test_avail_01_official_calendars_are_owner_signed.test_ids = ["T-AVAIL-01"]
@@ -634,12 +633,22 @@ test_avail_01_official_calendars_are_owner_signed.test_ids = ["T-AVAIL-01"]
 def test_avail_01_official_path_passes_and_fails_on_a_synthetic_signed_set():
     """LA-02 part 1: the official-calendar body can PASS and can FAIL. On the calendars module's synthetic set (signed
     in a temp dir by that test module, 1995-2027; not the owner's files) nothing is waiting and the table passes
-    through CalendarClocks; the same clocks over a registry with H.15 posted at D fail it."""
+    through CalendarClocks; the same clocks over a registry with H.15 posted at D fail it. The waiting list is exact:
+    on a synthetic set whose holidays_KRX covers 2026-27 only (the shipped file's span) it names the 2015 and CSAT
+    rows' gaps and nothing else, and on a set whose holidays_KRX is unsigned it names that refusal for every row that
+    reads the file."""
     import dataclasses
     from core.calendars.adapter import CalendarClocks
-    from tests.macro_m1_calendars import fixture_set
+    from tests.macro_m1_calendars import drafts_set, fixture_set, krx_short_set
     cal = fixture_set()
     assert _avail01_waiting(cal) == []
+    gap = "holidays_KRX.yaml v1.0.0-fixture covers 2026-01-01..2027-12-31, needs"
+    assert _avail01_waiting(krx_short_set()) == [
+        f"DGS10 dated Fri 2015-01-02 -> KRX close Tue 2015-01-06: {gap} 2015-01-01..2015-01-06",
+        f"CSAT close 2025-11-13 07:30Z: {gap} 2025-11-13..2025-11-13"], _avail01_waiting(krx_short_set())
+    refused = _avail01_waiting(drafts_set())
+    assert [w.split(": ")[0] for w in refused] == [row for row, files, _, _ in AVAIL01_NEEDS if "holidays_KRX" in files]
+    assert all(": holidays_KRX.yaml refused (holidays_KRX.yaml: signed_off_by is empty" in w for w in refused), refused
     _check_avail01_table(CalendarClocks(REG, cal=cal), lambda reg: CalendarClocks(reg, cal=cal))
     wrong = dict(REG.series)
     wrong["DGS10"] = {**REG.series["DGS10"], "schedule": "VIXCLS"}
