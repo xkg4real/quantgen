@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "4dba76aec2709db381c8d9f51b40b2e6519b18a1a9be5855f9b3c791b0c3d9b5",
+    ".github/workflows/runtime-smoke.yml": "a3dd8d9b57b786bbfeb6def42ecab5200cad641ad6f905e09e56b2d5c4fd2b85",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -287,7 +287,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "6c4d4262baa20576d02b9d6068aaa8894f7ba91c84961e0a1a638c12ad1e8f5d",
+    "docs/compliance/FACTS.md": "25992b1161464c37ac1b1d233e379012ab4f1c62b73bd4eaa6211dda570368fd",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -339,7 +339,7 @@
     "docs/product/OPTION_DISCLOSURE_2026-11-04.md": "ff314ee2043b524cdb8456f4af5c2ffe5f19f19d341ac28be471a6d3c7588373",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
-    "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "742c2acf1816244e2e6bd6a2625585b7b1da4f3a232dd1fd82cac79842188696",
+    "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "5510ffc40d0cf3f586bf7db7b8fdc9bb197add7b1ec2711b5c8b56e2b7870da3",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
@@ -563,7 +563,7 @@
     "tests/packaging_policy_acceptance.py": "936034aeaab8d118f83fce8728897650acc2f306cb5405172fef4893fef0b04f",
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
-    "tests/provider_parity_acceptance.py": "dfe435c41481b3b1b8786c98b1d917f050c45afd9d497731b51d516b7d4357f8",
+    "tests/provider_parity_acceptance.py": "7441de12e0522ede99ade9de6c8958323e20120527d17ece743e14d498152028",
     "tests/qscore_acceptance.py": "52d0c74fd0e5455b3d333618e011e5a6d7372e4521b750986ff15a30a78559ac",
     "tests/qt_fixture_cleanup.py": "56b1c3ee6e6def041b391d40d3c7d40faa8bab0b3856901f671522c6121fdf04",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
@@ -624,7 +624,7 @@
     "tools/paper/selfcheck.py": "4beb757ebe8835b257655b0466c0a5df78385e332ce108cd37bd535622245ea1",
     "tools/paper/study.py": "893e864e2184d4a09d67ecafa487994021dd91e4a7ac93788c7da0d5985b2a6e",
     "tools/provider_parity/__init__.py": "e4660d4a5f42e868621d4b27be7f4b3efd78bba4b584c64fab21e145f817ade3",
-    "tools/provider_parity/parity_check.py": "d651795e4b4776d096601a43989c7f45c375ae120b75a64179432f469d2daca1",
+    "tools/provider_parity/parity_check.py": "f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184",
     "tools/sign_calendars.py": "2908e084ea1ea41d8439d7cf7aec7095de901d78782876356c6fe62dce5a6d7f",
     "tools/status/__init__.py": "029709c7d3b9b69d44f7b2d8e4d8459e9d6a0f31b5cc5769c60f1de927025099",
     "tools/status/data_readiness.py": "d8cfea410cbedee6c55cfa7d283e9dd313d74e9cb8770e3aadf656d2498c4115",
@@ -676,163 +676,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "042ec225d9eb6a220dc686e08dc7451eb7babcbec8b33908e3a38fe4a7afef41",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.128984+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "e63de8be3d864fa35ce9e74f36a6dd1e67b2048eb4fdd1d1f5ff551103255d09",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.860390+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "042ec225d9eb6a220dc686e08dc7451eb7babcbec8b33908e3a38fe4a7afef41",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.132247+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "e63de8be3d864fa35ce9e74f36a6dd1e67b2048eb4fdd1d1f5ff551103255d09",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.863654+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "ce7e14a75e9679945ed9cff33bfb8aa2c135c2ff34f25dd6e6d925d33371e96f",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.134326+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "76e1357d006d778496099dfd6f6b5aedef13b77e9e137e1626cbca4de90e1114",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.866845+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "302b06c0ae22df42a536d1e8716f741f14da3a78f2723a7660a05227264d4342",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.137191+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "5f3a910d6d022018d8aec9b8cb665e9df9c1c231da3ff4c5d0ab7e79909d6441",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.869154+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "d3af2dbf04959311f1dca853495e4b476e1a7b5aad28983d857856df87f4bac1",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.139042+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "9d7544878311deb35eed34fcd3001ee9c95941efe54b6759290ad29ed45430f3",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.871382+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "c9e9a47fcb265745b31405b9489b68dff2229a981c25077dd8bcd7ad127cdae7",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.141600+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "41ca07c33c368a11da692a25d1b6ecd1bc896b60759d829df9b481acbfcfd10c",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.873609+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "042ec225d9eb6a220dc686e08dc7451eb7babcbec8b33908e3a38fe4a7afef41",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.143485+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "e63de8be3d864fa35ce9e74f36a6dd1e67b2048eb4fdd1d1f5ff551103255d09",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.875270+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "c9e9a47fcb265745b31405b9489b68dff2229a981c25077dd8bcd7ad127cdae7",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.145796+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "41ca07c33c368a11da692a25d1b6ecd1bc896b60759d829df9b481acbfcfd10c",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.876889+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "dbcf0f0acd0c0f1bdb2fbb6cbefba5dd51f28760d19cfdb150704f2c898c213c",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.148212+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "f9c2b2279be976bde5d22d56d9a484724976f6ae68030050c52d963be1995dca",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.878887+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "16a8aee50521e85bc7c325248caf11b6c055fe7f1a892750f7bee841dc581941",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.150598+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "391dee2b5351eb48f39afb02c69fb0ca337bca60aac590a00836154506217666",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.881489+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "551d7f8d1c149c2c6cb8efd48f2afce6526ab062aa0978fb58c3e2aedc484349",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.152339+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "6b6c167caea1f740c90b0dc1b260384a0bf7ae24b1c99314efd66bd96fedc23e",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.883409+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "a3c1ef15ec6c4b87bba339c9cacad7860cc5a05de19d1027d787fc0022daf9b5",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.154601+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "60454b97b0755a4baa3c84cf65306fd3939e25db01f661988dbaf3423ff4dbb6",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.885728+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "dbcf0f0acd0c0f1bdb2fbb6cbefba5dd51f28760d19cfdb150704f2c898c213c",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.156980+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "f9c2b2279be976bde5d22d56d9a484724976f6ae68030050c52d963be1995dca",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.888050+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "dbcf0f0acd0c0f1bdb2fbb6cbefba5dd51f28760d19cfdb150704f2c898c213c",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.158941+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "f9c2b2279be976bde5d22d56d9a484724976f6ae68030050c52d963be1995dca",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.890066+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "dbcf0f0acd0c0f1bdb2fbb6cbefba5dd51f28760d19cfdb150704f2c898c213c",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.161334+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "f9c2b2279be976bde5d22d56d9a484724976f6ae68030050c52d963be1995dca",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.892518+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "f4396b533a7a2c40748f5c4a07db6e2efd845f2351ffcb9939b965111cba8474",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.163701+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "c9723c71e57acf769b4f2a15bd7e30a5b3527010ba52f4548a3e39e231c92af0",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.894791+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "c9e9a47fcb265745b31405b9489b68dff2229a981c25077dd8bcd7ad127cdae7",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.165581+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "41ca07c33c368a11da692a25d1b6ecd1bc896b60759d829df9b481acbfcfd10c",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.896928+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "042ec225d9eb6a220dc686e08dc7451eb7babcbec8b33908e3a38fe4a7afef41",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.168117+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "e63de8be3d864fa35ce9e74f36a6dd1e67b2048eb4fdd1d1f5ff551103255d09",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.898741+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "499ef7d7a3122e3f0ebd2d8d6d86da18bcbde78ca0921324b0adec08792fb767",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.169748+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "8acdba14547b0f39576519262061023f57ee6c720b72ee76f64a9706ad5a6820",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.900435+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "042ec225d9eb6a220dc686e08dc7451eb7babcbec8b33908e3a38fe4a7afef41",
-      "reviewed_by": "Claude provider parity review",
-      "review_note": "Owner ruling P1 of 2026-11-11 recorded: tool commit and sha256 fixed on main's side, run branch named; guide and rulings file filled in; tool file unchanged",
-      "reviewed_at": "2026-11-10T21:22:38.172039+00:00",
-      "source_commit": "49a3a67b246d020381b27067103d1a7ba4795f9e"
+      "source_digest": "e63de8be3d864fa35ce9e74f36a6dd1e67b2048eb4fdd1d1f5ff551103255d09",
+      "reviewed_by": "Claude provider parity code-review fixes",
+      "review_note": "Code review fixes before the owner run: H.15 column chosen by identifier, fetch window checked against the table, docstring and pin values updated; thresholds and outcome rules unchanged",
+      "reviewed_at": "2026-11-10T22:10:45.902160+00:00",
+      "source_commit": "74397dad0b46f5dbe25725408bb2a8d8251828d4"
     }
   }
 }
