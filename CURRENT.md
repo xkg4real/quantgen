@@ -5,12 +5,12 @@ from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c
-next_ids: ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T02:40:00+09:00
+next_ids: ⑤-2/b, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-11T03:10:00+09:00
 stale_after_hours: 3
-waiting_on: owner
-work_branch: main
-work_commit: 5f1ead5
+waiting_on: none
+work_branch: claude/owner-rulings-20261111
+work_commit: 275ec93
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -85,16 +85,28 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 
 ## 5. 중단 지점
 
-⑨-1/2/c 완료. [PR #97](https://github.com/xkg4real/quantgen/pull/97)은 소유자가 `e60daf5`에서 직접 병합(main `51792f1`, 2026-11-11 01:40 KST)했고, `/code-review high`의 10건 + 검증 수정은 후속 [PR #99](https://github.com/xkg4real/quantgen/pull/99)로 main `5f1ead5`(트리 = head `a09735a`)에 병합. 캐시 없는 전체 실행: `e60daf5` 763/889, `a09735a` 763/889(바뀐 행 0), FAIL 2는 기존 환경 탓. 디스크가 한 번 가득 차서 끝난 scratch(plan_step2, bonds_work, 병합된 워크트리)를 지웠습니다.
+소유자가 2026-11-11 02:4x KST에 결정 14건에 답했습니다(원문):
 
-다른 세션의 UI PR [#98](https://github.com/xkg4real/quantgen/pull/98)(Flet 14화면, `claude/friendly-bardeen-r6xe8f`)이 열려 있음. 이 세션 범위 밖이며 건드리지 않음. FACTS·source-review가 겹치므로 병합 순서에 따라 충돌 가능.
+> 1-승인, 2-승인, 3-승인, 4-승인, 5-승인, 6-승인, 7-권장대로 요청, 8-승인, 9-현행유지, 10-승인, 11-정리보고요청, 12-함께, 13-수치제시, 14-보류
+>
+> 그리고 Remaining Work에서 6. 실제파일럿 이랑 7. 마감/병합 부분은 도대체 언제 완료될까요? 얘네만 지금 한번도 손에 못댄 채 있는데, 빨리빨리 얘네도 처리해야합니다.
+
+결정표 전문과 각 답을 어떻게 받았는지는 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` 마지막 절(브랜치 `claude/owner-rulings-20261111`, 커밋 `275ec93`, push됨)에 있습니다. 6·7번이 멈춘 원인: 선행 단계 ⑤-2 공급사 대조 도구가 `777fc5b`(11-05 미완성본, `origin/claude/provider-parity-5-2`)에서 멈춰 있었고 연구 브랜치는 `8a8c247` 이후 변화가 없습니다. Step 7A 세션(session_016uB1jgeiPdP8gPkAez3Wrx)은 11-05 이후 쉬는 상태입니다. 도구는 `tools/provider_parity/`(main 계열)라 연구 브랜치를 건드리지 않고 이 세션에서 완성합니다.
+
+실행 중인 워크플로 3개(모두 push 전, 스크래치 워크트리):
+
+| 워크플로 | 워크트리·브랜치 | 내용 | 원장 ID |
+|---|---|---|---|
+| wpjte04dg | `parity`, `claude/provider-parity-tool-20261111` | `777fc5b`를 main으로 옮겨 스펙 10.5 대조·완성 → 2관점 검토 → 수정 → 소유자 PC 실행 안내서(한국어). 병행: 파일럿·마감 경로 조사(읽기 전용) | ⑤-2/b |
+| wepxxu8m9 | `rul`, `claude/owner-rulings-20261111` | 결정 10 no-clobber(`run_registry_series_files.py`), 결정 8·9 fold 문서 확정, 결정 7 R-FAM 공식 표기(`core/adoption`) → 검토 → 수정. 병행 보고 3건: ⑨-4 Q표, 설계 0b·Q12, M-12 수치안 | ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b |
+| wqpk44vep | `prep`, `claude/refdata-prep-20261111` | 결정 1·2(`close` 열, 생성기 수정), 4(공급사 가격 소수 둘째 자리), 5(G-REF-01 기록 확인), 6(T-REGIME-01 ACQUISITION 행), 3(달력 서명 요청 목록 문서) → 검토 → 수정 | ⑨-1/2/d |
 
 ## 6. 다음 할 일 (순서대로)
 
-0. 2026-11-11 02:40 KST 소유자에게 아래 질문을 정리해 보고했고 답을 기다립니다(waiting_on: owner). 남은 next_ids(⑨-3a 다음 단위, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c)는 모두 소유자 결정·외부 검토·UI 범위 제한(UI는 PR89 범위만) 중 하나에 걸려 있습니다.
-1. 소유자 질문 정리 보고: LA-02 2부 레이아웃(F13/F14/F16 `close`, F27 long form, F18 열 이름)·달력 서명 범위(1997/2015~)·미등록 시계열(KS11·GSPC·KRWX·005930; 생성기 거부)·`docs/vol_backtest.fixture_lines`의 F13 obs_date/value 불일치, ledger N_raw 뜻, ⑨-4 Q1~Q5·Q7, 설계 0b(P-01)·Q12, I-05용 LA-30 자료, 실시간 주문 전 M-12.
-2. 답에 따라: ⑨-4 다음 단위, R3 Lab UI(허용됨), 실시간 주문 안전 설계.
-3. #98이 병합되면 UI 변경 결과를 1107 페이지 UI 항목에 반영(소유자 지시: 다른 세션 UI 보고 시 반영).
+1. 각 워크플로 결과를 검토(`git log origin/main..HEAD`, 검토 지적과 수정 대조) → push → PR → `/code-review` → CI + 캐시 없는 전체 실행(`scratchpad/full_commit313.sh <name> <commit>`, `m1_compare.py`로 `la02d` 대비; 끝나면 `full_<name>` 삭제) → 병합(expectedHeadSha, 트리 확인) → 원장 `--done` → Notion 두 페이지 취소선. FACTS.md·source-review.json이 서로 겹치므로 rulings → prep → parity 순으로 이어 병합(`scratchpad/merge_chain.py`). 다른 세션의 UI PR #98도 같은 파일을 고칩니다.
+2. 소유자에게 보고: (가) ⑤-2 PC 실행 안내서와 파일럿·마감 일정, (나) ⑨-4 Q표, (다) 설계 0b·Q12, (라) M-12 수치안(확인 전 주문 기능 시작 금지), (마) 달력 서명 요청 목록.
+3. 소유자 PC 실행 결과가 오면: ⑤-2 대조 판정 → ⑥-1 Pilot 1(SPY) → ⑥-2 Pilot 2(BTC) → ⑦-1 Step 10 → ⑦-2 main 병합(소유자 --no-ff). 파일럿과 Step 10은 연구 브랜치·소유자 PC 작업입니다.
+4. 결정 9(현행 유지)의 조건: 기록기 단위는 `run_family` 안에서 PNL_COMPUTED보다 낮은 PROGRESS를 쓰지 않습니다. 결정 14: N-M1-02/b 보류 유지.
 
 ## 7. 주의사항
 
