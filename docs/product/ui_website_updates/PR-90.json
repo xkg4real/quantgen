@@ -1,0 +1,32 @@
+{
+  "id": "PR-90",
+  "source_pr": "https://github.com/xkg4real/quantgen/pull/90",
+  "source_branch": "claude/ui-compact-ci-fix-20261110",
+  "source_commit": "05db49fb133b",
+  "summary": "Compact input forms keep the 224px base width but widen to the native minimum needed for their full column count instead of dropping a column; fixes PR89 Runtime CI.",
+  "changed_files": [
+    "quantgen_desktop/form_layout.py",
+    "tests/desktop_compact_ui_acceptance.py",
+    "docs/product/COMPACT_NATIVE_UI_20261107.md",
+    "docs/compliance/source-review.json"
+  ],
+  "verification": {
+    "local_ui": "A3 layout+reading 20/20; all 9 CI desktop unittest commands 647 tests 0 failures (Linux offscreen, source tree)",
+    "regression_test": "new cap test fails on the PR89 fixed cap (696,730,2 vs 732,766,3)",
+    "limitations": "Windows behaviour checked only by hosted CI; installed-wheel smoke and user-PC rendering not run here",
+    "remote": "pending CI on this PR"
+  },
+  "website_impact": {
+    "classification": "native-only layout rule",
+    "action": "If the website mirrors compact input forms, treat 224px as a base width that may grow to fit content, not a hard maximum. No website code change is made here."
+  },
+  "delivery": {
+    "status": "queued",
+    "destination": "웹사이트 작업공간(AWS)",
+    "reason": "Website is maintained by a separate session; this file records the change only."
+  },
+  "website_application": "unverified",
+  "deployment": "unverified",
+  "merge_commit": "",
+  "merge_status": "open"
+}

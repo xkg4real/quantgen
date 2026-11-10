@@ -290,7 +290,7 @@
     "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md": "3f05520af76a14bbeb8fab8f7db874b25f18e52d4e884ec6b46e305e58f7ca44",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
-    "docs/product/COMPACT_NATIVE_UI_20261107.md": "c366e29b51988ec88c391e1390d91a29efa08d5e9cc58a5d9f5d3fe00918848e",
+    "docs/product/COMPACT_NATIVE_UI_20261107.md": "1749bda315e43413f59f68a250d6424566451f3919db7a1cfc7c4d9a1947578b",
     "docs/product/COMPANY_MARKS_READABILITY_20261106.md": "cea321847ed32fe5f077180665bcaa485dff75444bdce86526e8357ee2626be3",
     "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
@@ -360,7 +360,7 @@
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
     "quantgen_desktop/display_prose_catalog.py": "85cd9be4469c96b83a71aa0ac3c0dad0b04cbbf35649da8beb7cef12c9eb7708",
     "quantgen_desktop/font_policy.py": "474c8169d903f5c0197305a2ba53d451235418db0cac31542fcd33c1632f7b21",
-    "quantgen_desktop/form_layout.py": "a07e00aa38f8a8dc79838d76446a962b9fe0cc25a5006984573eecbbb70cb670",
+    "quantgen_desktop/form_layout.py": "cb531c0e9f0592e18851b43308e6b084c77de8dad86b8e6ccdc5e3cf4d86ff89",
     "quantgen_desktop/fx.py": "89e77de9e85e2f1673c7ef32947893be4043eb5236292f587f400303db7456a6",
     "quantgen_desktop/fx_narrative.py": "1078cff2724ff7c6bc75f8146e7893622323899ee5bb1c52100007c11649e52e",
     "quantgen_desktop/indicator_guide.py": "ce6f8c970fcd2dea89e318e68785bacdf8367c0152ac800d5e38623f618a5559",
@@ -423,7 +423,7 @@
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "3e0a71ecbd3d2a4aec8669d6fc66c5e3bf18ac0c7760f94ff8a8a3e592eb8db0",
     "tests/desktop_commentary_acceptance.py": "ed1f58c2e133796d77ba3b6cdc5d187321f7491c1091ba3b36853aff773c8250",
-    "tests/desktop_compact_ui_acceptance.py": "d8eb1ceb437b08ddaab008f45b7f5394345d2ceb4229b1fa2f5bd72c43ad1586",
+    "tests/desktop_compact_ui_acceptance.py": "9c60e89c66fb5b989d46e76aae27272668290a7a63be778a19c7790d03966b13",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "1514c7b2446c314ad3514b21de3fccd7814f8db4e1081a7fc27480fe4163c687",
@@ -632,163 +632,163 @@
   "reviews": {
     "1": {
       "document_sha256": "7ffeb30cbf22092284b48635e1769018e2259ea44c1a5647ac50ecaf3f815d63",
-      "source_digest": "918d2ac1955bddd9c8dcd6ae39a8d53091e7451981e746a8370537f4c11bc8f0",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.803884+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "d818cf5a16da35913ffc20712329c122cb95e80cb34801278053f2009730d827",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.664687+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "918d2ac1955bddd9c8dcd6ae39a8d53091e7451981e746a8370537f4c11bc8f0",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.807372+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "d818cf5a16da35913ffc20712329c122cb95e80cb34801278053f2009730d827",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.667635+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "4d2a3135dff5f0c7bfed74ab2f70207018170d886d0a7187601d61a8eb150862",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.809284+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "58f027d0de0394943402a64fa561b4a327873a8cad0ceef155fa2013f8fa28c1",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.669754+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "48f93a40b608980d5eb91770ead83e1adda5e35abb91da5d5b3a8f6beb7a831f",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.810903+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "174600396fe7ce51ee310b08d41fa1c0068c86bb098d238c2c1aa1782be22e31",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.672068+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "dbd47b2868919496d68c94b055544d5a48aaba5ec33c02c01219a91dd9652d33",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.812250+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "a8eb159598d77e769aab2106e2a4cd3d635d56838549179e1315e1f79d1860b7",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.674277+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "11c6003ad89d6f2cdcd83d7e7851b2e096f7232c795075724149db7e2d7e336a",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.813670+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "6f0095f7c6fc3bf8e539bf9a164ea96ba3e9dcceb8b155937ab72da53888f882",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.676083+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "7": {
       "document_sha256": "cb99e2df664cbc0f5b4efa73259e32809a6a601fe4b64e08105020291a45932b",
-      "source_digest": "918d2ac1955bddd9c8dcd6ae39a8d53091e7451981e746a8370537f4c11bc8f0",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.815567+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "d818cf5a16da35913ffc20712329c122cb95e80cb34801278053f2009730d827",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.678346+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "11c6003ad89d6f2cdcd83d7e7851b2e096f7232c795075724149db7e2d7e336a",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.817815+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "6f0095f7c6fc3bf8e539bf9a164ea96ba3e9dcceb8b155937ab72da53888f882",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.680635+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "c83f06c923eae239035a4d7cdf7c7b8a7b3c03c73f9714a4af36e44aaff6de42",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.819268+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "33024af1dc2b7fc0b065a5b84fe01d5126c337c6209c3c6565607b74d58c5838",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.682331+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "08fa6333f5af519967f0bb89a1d4eba2c98f14efab4d14045926066c1a62357f",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.821842+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "d5aa2d54b4489ff52fd289f7fb8e59399d8768427f4307ce8ecda3e5c920cdf4",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.684479+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "eac6c1dbd7182456c48a35f57695b94d8859c68821b9dba9c7a9f905a0c80ac2",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.823244+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "5c2aacf5cfb2a019eb0778390ee96a86475807ba58e52456b4c112037fca22cc",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.686426+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "540b6aa4d8d045e47620e630297295d8088b8d8f3fc17de2954ff38cbea66a91",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.825691+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "23422007c94360ae61fdc5b356c2774ae50d633edcb9df3436db923befaa0259",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.688478+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "c83f06c923eae239035a4d7cdf7c7b8a7b3c03c73f9714a4af36e44aaff6de42",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.827471+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "33024af1dc2b7fc0b065a5b84fe01d5126c337c6209c3c6565607b74d58c5838",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.690023+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "c83f06c923eae239035a4d7cdf7c7b8a7b3c03c73f9714a4af36e44aaff6de42",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.828712+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "33024af1dc2b7fc0b065a5b84fe01d5126c337c6209c3c6565607b74d58c5838",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.692050+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "c83f06c923eae239035a4d7cdf7c7b8a7b3c03c73f9714a4af36e44aaff6de42",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.830145+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "33024af1dc2b7fc0b065a5b84fe01d5126c337c6209c3c6565607b74d58c5838",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.693982+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "5669780209b1ec24cb9f5390e0d7c9e1c0a3d8286e24e0220d2ce2ace9b9ca40",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.831849+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "8df5af3ec0c472ae6997d12b99d8609acb5dfca49b1a728809dd1243f9668c0e",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.696008+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "11c6003ad89d6f2cdcd83d7e7851b2e096f7232c795075724149db7e2d7e336a",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.833169+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "6f0095f7c6fc3bf8e539bf9a164ea96ba3e9dcceb8b155937ab72da53888f882",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.697938+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "918d2ac1955bddd9c8dcd6ae39a8d53091e7451981e746a8370537f4c11bc8f0",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.834983+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "d818cf5a16da35913ffc20712329c122cb95e80cb34801278053f2009730d827",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.699560+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "4eb7f036816144cff44420bb09139fd5434f8711ebcd73f5ded3d9da5a345552",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.836266+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "9936260b39286e29ad0a82c5d999747bc4041f782659624f2deb53a888b590de",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.701484+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     },
     "20": {
       "document_sha256": "b84d55ab085dad8cb897528f1cda017a96eeb41e68188bd350f13fcb02ea0f88",
-      "source_digest": "918d2ac1955bddd9c8dcd6ae39a8d53091e7451981e746a8370537f4c11bc8f0",
-      "reviewed_by": "QUANTGEN UI session",
-      "review_note": "Final compact UI verification record and AWS queue synchronized; existing publication gates unchanged",
-      "reviewed_at": "2026-11-06T15:44:43.837987+00:00",
-      "source_commit": "811cd354a7cf1d6eae7782e0cdfe2a2dfe469bb8"
+      "source_digest": "d818cf5a16da35913ffc20712329c122cb95e80cb34801278053f2009730d827",
+      "reviewed_by": "Claude compact UI CI fix review",
+      "review_note": "Compact form width cap now follows native control minima; layout only, no data, storage, network, permission or provider change",
+      "reviewed_at": "2026-11-10T09:21:38.703406+00:00",
+      "source_commit": "8cc572c8dc2ef197c588a6c0581c27677dd9949e"
     }
   }
 }
