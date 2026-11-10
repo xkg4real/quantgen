@@ -110,7 +110,7 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 
 > 전부승인
 
-바로 앞 Claude 안내는 승인 대기 묶음을 P2·P3·P4, A-1~3, B·C·D로 나열하고 "한 묶음을 전부 권장대로 하시려면 `P 전부 승인`처럼 답하시면 됩니다"였습니다. Claude는 이 답을 **다섯 묶음 모두 권장대로 승인**으로 받았고 소유자에게 그렇게 알렸습니다. 권장 문구 전체와 반영 내용은 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`의 마지막 절(브랜치 `claude/series-files-followup-20261111`, 로컬 커밋, PR #102 병합 뒤 push)에 있고, 초안 사본은 `scratchpad/rulings_1111_all.md`입니다.
+바로 앞 Claude 안내는 승인 대기 묶음을 P2·P3·P4, A-1~3, B·C·D로 나열하고 "한 묶음을 전부 권장대로 하시려면 `P 전부 승인`처럼 답하시면 됩니다"였습니다. Claude는 이 답을 **다섯 묶음 모두 권장대로 승인**으로 받았고 소유자에게 그렇게 알렸습니다. 권장 문구 전체와 반영 내용은 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`의 마지막 절(브랜치 `claude/series-files-followup-20261111`, 커밋 `45af437`, push됨. PR은 #102 병합 뒤에 엽니다)에 있고, 초안 사본은 `scratchpad/rulings_1111_all.md`입니다.
 
 - **P2:** 이 세션이 연구 브랜치에 커밋 가능. 범위는 Step 10 마감 기록·스펙·README·`docs/nautilus_bridge/runs/`로 한정. `tools/nautilus/**`, `tests/nautilus_*.py`, 러너, 표, `owner_confirmed`, `host_fingerprint`는 계속 금지.
 - **P3:** Step 10 확인 뒤 Claude가 main을 연구 브랜치에 합쳐 충돌 해결 + 캐시 없는 전체 테스트. 그 전에는 합치지 않음(H-D5). main 병합 커밋은 소유자.
