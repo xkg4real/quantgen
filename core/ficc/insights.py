@@ -53,6 +53,18 @@ def _money(x, signed: bool = False) -> str:
     return f"{x:+,.0f}" if signed else f"{x:,.0f}"
 
 
+def _greek(x: float) -> str:
+    """Signed sensitivity for a narrative: grouped whole units from 1,000 up, else 4 significant
+    digits, and never scientific notation in the range a note's Greeks take."""
+    if x is None or not math.isfinite(x):
+        return _NA
+    if abs(x) >= 1000:
+        return f"{x:+,.0f}"
+    if x == 0 or abs(x) >= 1e-4:
+        return f"{x:+.4g}"
+    return f"{x:+.2e}"
+
+
 def _px(x: float) -> str:
     """FX level: 2 decimals for JPY/KRW-style quotes, 4 otherwise."""
     return f"{x:,.2f}" if x > 20 else f"{x:.4f}"
@@ -90,7 +102,7 @@ def narrate_curve(report: CurveReport, pca: PCAResult | None = None) -> str:
         f"and the five-year simple-compounded 5y5y at {_pct(d['5y5y'])}; "
         f"the latter is not a forward par swap rate or a semiannually compounded rate. "
         f"The 1y rate is priced to move {_bp(d['1y_fwd_1y_ahead'])} over "
-        f"the next year.",
+        f"the next year (what the forwards price in, not a forecast).",
         f"The {report.ns.method.replace('_', '-')} fit misses the par points by "
         f"{report.ns.rmse / BP:.1f}bp rms ({report.curve.method} zeros used for pricing).",
     ]
@@ -548,7 +560,7 @@ def narrate_structured(p) -> str:
     g = dict(getattr(p, "greeks", {}) or {})
     if g:
         lines.append("Whole-note risk: " + ", ".join(
-            f"{k} {_money(v, signed=True)}" if k == "dv01" else f"{k} {v:+.4g}"
+            f"{k} {_money(v, signed=True)}" if k == "dv01" else f"{k} {_greek(v)}"
             for k, v in g.items()) + ".")
     if getattr(p, "payoff_grid", ()):
         lo, hi = p.payoff_grid[0], p.payoff_grid[-1]

@@ -79,6 +79,14 @@ AI 직렬화는 알려진 private 구조 필드를 제외한 뒤 배열·pandas 
 
 Macro의 기준일·출처 개수 줄을 접히는 상세 영역으로 옮기는 것은 표시 변경이며 처리 항목의 최소화·삭제가 아닙니다. 원래 보고서·AI 입력·계산값은 보존합니다. [A3 사실 기록](FACTS.md#a3-reading-layout-2026-11-06)의 소스 범위와 기존 보유·동의·운영 조건을 유지합니다.
 
+### 2026-11-10 소유자 UI 검토 14건
+
+Strategy Lab·Portfolio·Quant Lab·Signals·ETF의 데이터 출처 선택 상자를 숨기고 앱이 `load_history(source="best")`로 제공처를 고릅니다([시세 이력](../../core/quant/history.py) `_best_history`, `_yahoo_candidates`). FMP·KIS 키가 있으면 기존 `auto`와 같은 경로이며, 설정된 제공처가 실패하면 다른 제공처로 넘어가지 않고 오류를 표시합니다. 키가 없어 `auto`가 합성 시계열을 돌려줄 때에만 Yahoo Finance에 묻습니다. 보내는 항목은 화면에 입력한 종목 기호(6자리 국내 코드는 `.KS`, 실패하면 `.KQ`; `NAS:AAPL` 형식은 `AAPL`)와 조회 기간뿐이며 키·계좌·질문·메모는 보내지 않습니다. KIS 전용 형식(국내 파생 코드·채권 ISIN·`Y0` 금리)은 Yahoo로 보내지 않습니다. 이전에는 키가 없으면 일반 티커와 6자리 코드를 네트워크 요청 없이 합성 시계열로 계산했으므로(`^`·`=F`·`-USD` 형식과 가상자산 기호는 이전에도 키 없이 요청), 실행 버튼만으로 외부 요청이 생기는 범위가 넓어졌습니다. `auto` 자체의 동작은 바뀌지 않았습니다.
+
+Yahoo 응답은 기존 시세 캐시 규칙에 따라 FICC 캐시 폴더에 `HIST_YFINANCE_<기호>_<일수>.json`으로 저장됩니다. yfinance 라이브러리는 사용자 캐시 폴더의 `py-yfinance/`에 `cookies.db`와 `tkr-tz.db`를 만듭니다(검토 환경 yfinance 1.8.0에서 관측). 두 파일은 조회한 종목 기호를 남기며 캐시 TTL은 다시 쓸지를 정하는 기준일 뿐 파기 기한이 아닙니다([삭제](20-deletion.md) 절). Yahoo도 실패하면 합성 시계열의 설명(note)에 실패 사유가 최대 240자 붙습니다. 이 설명은 화면의 접힌 "제공처 메시지" 영역에만 쓰이며 AI 전송 payload에는 제공처 이름(`sources`)만 들어갑니다.
+
+숨긴 선택 상자, 접힌 원문은 표시 변경이며 처리 항목을 줄이지 않습니다. 분석 패널은 같은 영문 해설을 전송 대상으로 유지하고 한국어 해설은 로컬 표시용입니다. AI payload·보고서·계산값은 바뀌지 않았습니다. 숫자 칸의 천 단위 구분(`number_field`, `parse_number`)은 표시와 해석만 바꿉니다. 검증은 Linux headless Chromium의 Flet 화면 캡처와 오프라인 수용 시험이며, FMP/KIS 키가 없고 FRED/Yahoo가 프록시로 막힌 환경이라 실제 제공처 응답과 실제 Windows 환경은 확인하지 않았습니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)을 따르며 `review-required`와 공개 준비 `BLOCKED`를 유지합니다.
+
 ## 정책 또는 구현 기준
 
 ### 필드 도입 기준

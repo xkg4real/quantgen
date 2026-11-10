@@ -21,12 +21,17 @@ import flet as ft
 from core.ficc import insights, structured
 from core.research.structured_disclosure import cms_coupon_context
 from core.ficc.common import BP, FICCError, parse_tenor, pct_text, tenor_label
-from core.ficc.curves import curve_from_snapshot
+from core.ficc.curves import METHOD_NAMES, curve_from_snapshot
 from core.ficc.data import load_treasury_curve
 from core.theme import RADII, active
+from core.ui_legacy_messages import static_text
 from ui.ai_panel import analysis_panel
-from ui.components import card, chip, empty_state, notice, section, stat
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.model_narrative_language import structured_korean
+from quantgen_desktop.translations import translate
+from ui.components import LocalText, card, empty_state, notice, number_field, parse_number, section, stat
 import ui.fcharts as fcharts
+from ui.ficc_widgets import GAP, action, hide_source, lchip, synthetic_notice, with_helper
 from ui.localization import table_header, literal_text
 
 _TOOLS = [("ppn", "Principal-protected note"), ("rc", "Reverse convertible"),
@@ -37,28 +42,32 @@ _DEFAULT_MATURITY = {"ppn": "3y", "rc": "1y", "dcd": "3m", "steep": "5y"}
 
 # Per-product term sheet: (key, label, default text, width). Percent keys are
 # typed in percent and handed to the pricer as decimals; blank optional keys
-# mean "solve it" / "none".
+# mean "solve it" / "none". The widths are the fields' natural sizes; on the
+# page the inputs sit in a 12-column grid (`_spread`) that sets their width.
+_W, _WL = 140, 200
 _FIELDS: dict[str, list[tuple[str, str, str, int]]] = {
-    "ppn": [("spot", "Spot", "1.10", 110), ("vol", "Vol (%)", "8", 100),
-            ("r_for", "Foreign rate / dividend (%)", "2", 190),
-            ("protection", "Protection (%)", "100", 130),
-            ("issue", "Issue price", "100", 110), ("margin", "Margin (per 100)", "1.0", 140)],
-    "rc": [("spot", "Spot", "1.10", 110), ("vol", "Vol (%)", "10", 100),
-           ("r_for", "Foreign rate / dividend (%)", "2", 190),
-           ("strike_pct", "Strike (% of spot)", "95", 150),
-           ("coupon", "Coupon (%, blank = solve)", "", 190),
-           ("issue", "Issue price", "100", 110), ("margin", "Margin (per 100)", "1.0", 140)],
-    "dcd": [("base_ccy", "Base ccy", "USD", 100), ("quote_ccy", "Quote ccy", "KRW", 100),
-            ("spot", "Spot", "1350", 110), ("strike", "Strike", "1300", 110),
-            ("vol", "Vol (%)", "9", 100), ("r_for", "Base-ccy rate (%)", "4.5", 150),
-            ("margin", "Margin (per 100)", "0.25", 140)],
-    "steep": [("leverage", "Leverage (x)", "4", 110), ("floor", "Floor (%)", "0", 100),
-              ("cap", "Cap (%, blank = none)", "", 170), ("freq", "Coupons / yr", "1", 110),
-              ("issue", "Issue price", "100", 110)],
+    "ppn": [("spot", "Spot", "1.10", _W), ("vol", "Vol (%)", "8", _W),
+            ("r_for", "Foreign rate / dividend (%)", "2", _WL),
+            ("protection", "Protection (%)", "100", _W),
+            ("issue", "Issue price", "100", _W), ("margin", "Margin (per 100)", "1.0", _W)],
+    "rc": [("spot", "Spot", "1.10", _W), ("vol", "Vol (%)", "10", _W),
+           ("r_for", "Foreign rate / dividend (%)", "2", _WL),
+           ("strike_pct", "Strike (% of spot)", "95", _WL),
+           ("coupon", "Coupon (%)", "", _W),
+           ("issue", "Issue price", "100", _W), ("margin", "Margin (per 100)", "1.0", _W)],
+    "dcd": [("base_ccy", "Base ccy", "USD", _W), ("quote_ccy", "Quote ccy", "KRW", _W),
+            ("spot", "Spot", "1350", _W), ("strike", "Strike", "1300", _W),
+            ("vol", "Vol (%)", "9", _W), ("r_for", "Base-ccy rate (%)", "4.5", _W),
+            ("margin", "Margin (per 100)", "0.25", _W)],
+    "steep": [("leverage", "Leverage (x)", "4", _W), ("floor", "Floor (%)", "0", _W),
+              ("cap", "Cap (%)", "", _W), ("freq", "Coupons / yr", "1", _W),
+              ("issue", "Issue price", "100", _W)],
 }
 _PCT = {"vol", "r_for", "protection", "strike_pct", "coupon", "floor", "cap"}
 _OPTIONAL = {"coupon", "cap"}
 _TEXT = {"base_ccy", "quote_ccy"}
+_GROUPED = {"spot", "strike"}            # can be 1,350 / 1,300: thousands separators
+_HELPERS = {"coupon": "Blank = solve", "cap": "Blank = no cap"}
 _GREEK_LABELS = {"delta": "Delta (per +1% spot)", "gamma": "Gamma (per +1%)",
                  "vega": "Vega (per vol-pt)", "dv01": "DV01 (per -1bp)",
                  "dv01_2s10s": "2s10s DV01 (per +1bp)"}
@@ -83,7 +92,7 @@ def _parse(raw: dict[str, tuple[str, str]]) -> dict:
                 continue
             raise ValueError(f"{label} is required.")
         try:
-            x = float(text)
+            x = parse_number(text)
         except ValueError:
             raise ValueError(f"{label}: cannot read {text!r}.") from None
         out[key] = x / 100.0 if key in _PCT else x
@@ -120,20 +129,79 @@ def _qty(x: float) -> str:
 
 _HEADERS_KO = {'Leg': '구성요소', 'Kind': '유형', 'Detail': '상세',
                'Quantity': '수량', 'Unit': '단위', 'Rationale': '근거'}
+_NUMERIC = {'Value', 'Quantity'}
+
+# Leg kinds (`core.ficc.structured.Leg.kind`) in Korean; the code itself is shown in English.
+_KIND_KO = {'zcb': '무이표채', 'coupon_bond': '이표채', 'option': '옵션', 'swap': '스왑',
+            'bond': '채권', 'deposit': '예금'}
+# Reviewed wording for the report strings the native catalogue does not carry.
+_TEXT_KO = {'ATM call': 'ATM 콜'}
+_UNDERLYING_KO = {'FX': '외환', 'EQ': '주식', 'CMS 10y-2y': 'CMS 10년-2년'}   # as ui/fcharts.py
+
+
+def _ko(text) -> str:
+    """Korean for an authored report string (leg name and detail, hedge instrument, unit and
+    rationale). The reviewed native catalogue (`quantgen_desktop.translations`) rebuilds each
+    sentence around the very numbers the report printed, so no number is recomputed; a string
+    neither it nor `_TEXT_KO` knows (a user's ticker, say) is shown as given."""
+    text = str(text)
+    return _TEXT_KO.get(text) or translate(text, 'ko')
+
+
+def _local(ko: str, en: str) -> LocalText:
+    return LocalText(ko, en, size=12, color=active().text, selectable=True)
 
 
 def _table(columns: list[str], rows: list[list]) -> ft.Control:
-    last = len(columns) - 1
-
-    def cell(i: int, v) -> ft.DataCell:
-        return ft.DataCell(literal_text(str(v), size=11, width=460 if i == last else None))
+    """Full card width, one ~40 px line per row that grows only when a long sentence wraps.
+    A cell is a control (a `LocalText` with both wordings) or a value shown as given."""
+    def cell(v) -> ft.DataCell:
+        return ft.DataCell(v if isinstance(v, ft.Control) else literal_text(str(v), size=12))
 
     return ft.Row([ft.DataTable(
-        columns=[ft.DataColumn(table_header(c, ko=_HEADERS_KO.get(c), size=11)) for c in columns],
-        rows=[ft.DataRow(cells=[cell(i, v) for i, v in enumerate(r)]) for r in rows],
-        column_spacing=18, heading_row_height=34, data_row_min_height=34,
-        data_row_max_height=88,
-    )], scroll=ft.ScrollMode.AUTO)
+        columns=[ft.DataColumn(table_header(c, ko=_HEADERS_KO.get(c), size=12, color=active().muted),
+                               numeric=c in _NUMERIC) for c in columns],
+        rows=[ft.DataRow(cells=[cell(v) for v in r]) for r in rows],
+        column_spacing=24, heading_row_height=36, data_row_min_height=40,
+        data_row_max_height=float('inf'), expand=True,
+    )])
+
+
+# Fields per line of the 12-column input grid. Flet picks the breakpoint from the window width
+# (sm 576, md 768, lg 992, xl 1200, xxl 1400 px); beside the 224 px navigation rail the page
+# itself is ~280 px narrower, so a 1000 px window fits three fields a line and 1360 px four.
+_PER_LINE = {'xs': 1, 'sm': 2, 'md': 2, 'lg': 3, 'xl': 4, 'xxl': 5}
+
+
+def _spread(controls) -> None:
+    """Give the visible inputs `col` spans so every line of the grid is full and the lines hold
+    nearly the same number of fields, the fuller lines last: seven fields at four a line become
+    3 + 4, never 4 + 3 and never a line holding only the Price button (unless one field a line).
+    Hidden controls take no space in a ResponsiveRow and get no span."""
+    shown = [c for c in controls if c.visible is not False]
+    spans: list[dict] = [{} for _ in shown]
+    for bp, most in _PER_LINE.items():
+        lines = max(1, -(-len(shown) // most))
+        base, extra = divmod(len(shown), lines)
+        i = 0
+        for line in range(lines):
+            count = base + (1 if line >= lines - extra else 0)
+            width, rest = divmod(12, count)
+            for j in range(count):
+                spans[i][bp] = width + (1 if j < rest else 0)
+                i += 1
+    for control, span in zip(shown, spans):
+        control.col = span
+
+
+def _grid(controls: list[ft.Control]) -> ft.ResponsiveRow:
+    for c in controls:
+        # The grid sets the width. A dropdown sizes itself to its options instead, so it is
+        # told to take all the width its grid cell allows.
+        c.width = float("inf") if isinstance(c, ft.Dropdown) else None
+    _spread(controls)
+    return ft.ResponsiveRow(controls, spacing=GAP, run_spacing=GAP,
+                            vertical_alignment=ft.CrossAxisAlignment.START)
 
 
 def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
@@ -143,8 +211,12 @@ def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
     synthetic = panel.source == "SYNTHETIC"
     blocks: list[ft.Control] = []
     if synthetic:
-        blocks.append(notice("Synthetic data: " + (panel.note or "simulated curve panel."),
-                             "error", icon=ft.Icons.SCIENCE_OUTLINED))
+        blocks.append(synthetic_notice(
+            "합성 데이터: 금리 곡선을 FRED에서 받지 못해 시뮬레이션한 곡선으로 계산했습니다. "
+            "아래 숫자는 계산 방식의 시연이며 시장 시세가 아닙니다.",
+            "Synthetic data: the curve is simulated because FRED did not answer; every number below "
+            "is a demonstration of the mechanics, not a market read.",
+            panel.note or "simulated curve panel."))
 
     stats = [stat("Fair value", f"{r.fair_value:.2f}"),
              stat("Issue price", f"{r.issue_price:.2f}"),
@@ -159,20 +231,24 @@ def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
         stats.append(stat(coupon_label, pct_text(r.coupon)))
     stats += [stat("Maturity", tenor_label(r.maturity)),
               stat("Notional", f"{r.notional:,.0f} {r.currency}")]
-    blocks.append(ft.Row(stats, spacing=10, wrap=True))
+    blocks.append(ft.Row(stats, spacing=12, run_spacing=12, wrap=True))
 
-    chips = [chip(f"curve: {panel.source}", "muted" if synthetic else "success"),
-             chip(f"as of {curve.date}"), chip(f"{curve.method} zeros"), chip(r.underlying)]
+    source_ko = "합성 데이터" if synthetic else panel.source
+    method_ko = static_text(METHOD_NAMES.get(curve.method, curve.method), "ko")
+    chips = [lchip(f"곡선 출처: {source_ko}", f"curve: {panel.source}", "muted" if synthetic else "success"),
+             lchip(f"기준일 {curve.date}", f"as of {curve.date}"),
+             lchip(f"{method_ko} 무이표 곡선", f"{curve.method} zeros"),
+             lchip(_UNDERLYING_KO.get(r.underlying, r.underlying), r.underlying)]
     if r.spot is not None:
-        chips.append(chip(f"spot {r.spot:g}"))
+        chips.append(lchip(f"현물 {r.spot:,g}", f"spot {r.spot:g}"))
     if r.strike is not None:
-        chips.append(chip(f"strike {r.strike:g}"))
+        chips.append(lchip(f"행사가격 {r.strike:,g}", f"strike {r.strike:g}"))
     if r.vol is not None:
-        chips.append(chip(f"vol {pct_text(r.vol, decimals=1)}"))
-    blocks.append(ft.Row(chips, spacing=6, wrap=True))
+        chips.append(lchip(f"변동성 {pct_text(r.vol, decimals=1)}", f"vol {pct_text(r.vol, decimals=1)}"))
+    blocks.append(ft.Row(chips, spacing=8, wrap=True))
 
     blocks.append(ft.Row([stat(_GREEK_LABELS.get(k, k), f"{v:,.0f} {r.currency}")
-                          for k, v in r.greeks.items()], spacing=10, wrap=True))
+                          for k, v in r.greeks.items()], spacing=12, run_spacing=12, wrap=True))
 
     # The chart plots the grid as given; the steepener grid is a spread in decimals.
     src = replace(r, payoff_grid=tuple((x / BP, y) for x, y in r.payoff_grid)) if cms else r
@@ -186,10 +262,12 @@ def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
         ft.Text("Legs (per 100 of notional, signed for the holder)", size=13,
                 weight=ft.FontWeight.W_600, color=pal.text),
         _table(["Leg", "Kind", "Value", "Detail"],
-               [[leg.name, leg.kind, f"{leg.value:+.2f}", leg.detail] for leg in r.legs]),
+               [[_local(_ko(leg.name), leg.name), _local(_KIND_KO.get(leg.kind, leg.kind), leg.kind),
+                 f"{leg.value:+.2f}", _local(_ko(leg.detail), leg.detail)] for leg in r.legs]),
     ], spacing=8)))
 
-    hedge_rows = [[h.instrument, _qty(h.quantity), h.unit, h.rationale] for h in r.hedge]
+    hedge_rows = [[_local(_ko(h.instrument), h.instrument), _qty(h.quantity), _local(_ko(h.unit), h.unit),
+                   _local(_ko(h.rationale), h.rationale)] for h in r.hedge]
     blocks.append(card(ft.Column([
         ft.Text("Hedge sheet (+ buy / pay fixed, - sell / receive)", size=13,
                 weight=ft.FontWeight.W_600, color=pal.text),
@@ -214,9 +292,10 @@ def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
     }
     if cms:
         payload["coupon_interpretation"] = cms_coupon_context(r)
-    blocks.append(analysis_panel(page, kind="structured_product",
-                                 narrative=insights.narrate_structured(r),
-                                 payload_fn=lambda p=payload: p))
+    narrative = insights.narrate_structured(r)
+    blocks.append(analysis_panel(page, kind="structured_product", narrative=narrative,
+                                 payload_fn=lambda p=payload: p,
+                                 sections=localized(narrative, korean(structured_korean, r))))
     return blocks
 
 
@@ -226,34 +305,50 @@ def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
 def build_structuring_page(page: ft.Page,
                            on_open_settings: Optional[Callable] = None) -> ft.Control:
     pal = active()
-    tool = ft.Dropdown(label="Product", width=250, value="ppn",
+    tool = ft.Dropdown(label="Product", width=280, value="ppn",
                        options=[ft.dropdown.Option(k, v) for k, v in _TOOLS])
-    source = ft.Dropdown(label="Curve source", width=250, value="auto",
-                         options=[ft.dropdown.Option(k, v) for k, v in _SOURCES])
-    underlying = ft.Dropdown(label="Underlying", width=120, value="FX",
+    # The app fetches the curve itself (FRED, else a labelled synthetic curve);
+    # the selector stays for tests and self-checks but is not shown.
+    source = hide_source(ft.Dropdown(label="Curve source", width=250, value="auto",
+                                     options=[ft.dropdown.Option(k, v) for k, v in _SOURCES]), "auto")
+    underlying = ft.Dropdown(label="Underlying", width=_W, value="FX",
                              options=[ft.dropdown.Option("FX", "FX"),
                                       ft.dropdown.Option("EQ", "Equity")])
-    maturity = ft.TextField(label="Maturity", width=110, value=_DEFAULT_MATURITY["ppn"],
+    maturity = ft.TextField(label="Maturity", width=_W, value=_DEFAULT_MATURITY["ppn"],
                             hint_text="3y, 6m", border_radius=RADII["md"])
-    notional = ft.TextField(label="Notional", width=130, value="1000000",
-                            border_radius=RADII["md"])
-    futures = ft.TextField(label="Futures DV01 / contract (optional)", width=220,
-                           border_radius=RADII["md"])
+    notional = number_field("Notional", "1000000", width=180)
+    futures = with_helper(number_field("Futures DV01 / contract", width=240), "Optional")
     busy = ft.ProgressRing(visible=False, width=20, height=20)
-    result_host = ft.Column(spacing=14)
+    result_host = ft.Column(spacing=16)
 
-    fields = {k: {key: ft.TextField(label=label, value=default, width=width,
-                                    border_radius=RADII["md"])
-                  for key, label, default, width in spec}
+    def term_field(key: str, label: str, default: str, width: int) -> ft.TextField:
+        if key in _TEXT:
+            return ft.TextField(label=label, value=default, width=width, border_radius=RADII["md"])
+        field = number_field(label, default, width=width) if key in _GROUPED else \
+            ft.TextField(label=label, value=default, width=width, border_radius=RADII["md"],
+                         text_align=ft.TextAlign.RIGHT)
+        return with_helper(field, _HELPERS[key]) if key in _HELPERS else field
+
+    fields = {k: {key: term_field(key, label, default, width) for key, label, default, width in spec}
               for k, spec in _FIELDS.items()}
-    rows = {k: ft.Row(list(f.values()), spacing=10, wrap=True, visible=k == "ppn")
-            for k, f in fields.items()}
+    for k, f in fields.items():
+        for field in f.values():
+            field.visible = k == "ppn"
+    # The term sheet: only the chosen product's fields are visible, and the
+    # price button closes the grid so it reads "fill in, then price".
+    price_button = ft.Button("Price", icon=ft.Icons.PLAY_ARROW_ROUNDED, tooltip="Price the term sheet")
+    inputs = _grid([tool, source, underlying, maturity, notional, futures])
+    term_sheet = _grid([field for f in fields.values() for field in f.values()]
+                       + [action(price_button, busy)])
 
     def switch(e=None) -> None:
         k = tool.value or "ppn"
-        for name, row in rows.items():
-            row.visible = name == k
+        for name, f in fields.items():
+            for field in f.values():
+                field.visible = name == k
         underlying.visible = k in ("ppn", "rc")
+        _spread(inputs.controls)                # re-balance the lines for this product's fields
+        _spread(term_sheet.controls)
         if maturity.value in _DEFAULT_MATURITY.values():
             maturity.value = _DEFAULT_MATURITY[k]
         if e is not None:                       # a real switch, not the initial layout
@@ -294,6 +389,7 @@ def build_structuring_page(page: ft.Page,
 
         page.run_thread(worker)
 
+    price_button.on_click = run
     result_host.controls = [empty_state(
         "Structure a product",
         "Pick a product and type the term sheet. Without FRED the note prices off a "
@@ -304,12 +400,10 @@ def build_structuring_page(page: ft.Page,
         section("Structuring", subtitle="Structured products decomposed into legs, priced "
                                         "off the latest UST par curve, with Greeks and the "
                                         "first-order hedge sheet."),
-        ft.Row([tool, source, underlying, maturity, notional, futures,
-                ft.Button("Price", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy],
-               spacing=10, wrap=True),
-        *rows.values(),
+        inputs,
+        term_sheet,
         ft.Column([result_host], scroll=ft.ScrollMode.AUTO, expand=True),
-    ], spacing=14, expand=True)
+    ], spacing=16, expand=True)
 
 
 # --------------------------------------------------------------------------- #
@@ -327,7 +421,8 @@ if __name__ == "__main__":
                      underlying="FX", v=v)
         blocks = _render(fake, k, rep, panel, curve)
         assert rep.fair_value > 0 and len(blocks) == 8, (k, len(blocks))   # synthetic notice
-        assert isinstance(blocks[0], ft.Container) and isinstance(blocks[-1], ft.Container)
+        # The synthetic banner folds the provider's message underneath: a Column.
+        assert isinstance(blocks[0], ft.Column) and isinstance(blocks[-1], ft.Container)
     try:
         _parse({"spot": ("Spot", "abc")})
         raise AssertionError("expected ValueError")
@@ -338,12 +433,23 @@ if __name__ == "__main__":
     # Drive the real handler once with a synchronous "thread".
     col = build_structuring_page(fake)
     assert isinstance(col, ft.Column)
-    inputs = col.controls[1]
-    next(c for c in inputs.controls if isinstance(c, ft.Dropdown)
-         and c.label == "Curve source").value = "synthetic"
+    inputs, sheet = col.controls[1], col.controls[2]
+    src = next(c for c in inputs.controls if isinstance(c, ft.Dropdown) and c.label == "Curve source")
+    assert src.visible is False and src.value == "auto"         # hidden, still a valid option
+    src.value = "synthetic"
+    assert next(c for c in inputs.controls if c.label == "Notional").value == "1,000,000"
     next(c for c in inputs.controls if isinstance(c, ft.TextField)
          and c.label.startswith("Futures")).value = "65"
-    next(c for c in inputs.controls if isinstance(c, ft.Button)).on_click(None)
+    sheet.controls[-1].content.controls[0].on_click(None)
     host = col.controls[-1].controls[0]
     assert len(host.controls) == 8, len(host.controls)
+    tool_dd = inputs.controls[0]
+    tool_dd.value = "dcd"
+    tool_dd.on_select(None)
+    shown = [c.label for c in sheet.controls if isinstance(c, ft.TextField) and c.visible]
+    assert shown[:4] == ["Base ccy", "Quote ccy", "Spot", "Strike"], shown
+    assert [c.value for c in sheet.controls if isinstance(c, ft.TextField) and c.visible
+            and c.label in ("Spot", "Strike")] == ["1,350", "1,300"]
+    sheet.controls[-1].content.controls[0].on_click(None)
+    assert len(host.controls) == 8, [getattr(c, "content", c) for c in host.controls[:1]]
     print("ok")
