@@ -30,6 +30,7 @@ from core.ficc.common import BP, FICCError
 from core.ficc.macro import DESCRIPTIVE_READ_NOTE, MacroRow, MacroSheet, Regime, daily_brief, macro_sheet, weekly_brief
 from core.theme import RADII, TRANSITION_MS, active
 from ui.ai_panel import analysis_panel
+from ui.narrative_sections import localized, macro_text
 from ui.charts_terms import (CURVE_WORDS, DOLLAR_WORDS, GROUP_NAMES, INDICATOR_NAMES, INFLATION_WORDS, REAL_WORDS,
                              RISK_WORDS, SHORT_NAMES, LocalTip, local_chip, local_notice, name, regime_evidence)
 from ui.components import LocalText, card, chip, empty_state, notice, section
@@ -205,10 +206,11 @@ def build_macro_page(page: ft.Page,
 
     def sheet_analysis(sheet: MacroSheet) -> ft.Control:
         payload = daily_brief(sheet)
-        return analysis_panel(page, kind="macro_sheet",
-                              narrative=insights.narrate_macro(sheet),
+        narrative = insights.narrate_macro(sheet)
+        return analysis_panel(page, kind="macro_sheet", narrative=narrative,
                               payload_fn=lambda p=payload: p,
-                              deep_fn=insights.deep_analysis)
+                              deep_fn=insights.deep_analysis,
+                              sections=localized(narrative, macro_text(sheet, "sheet", narrative)))
 
     def report(sheet: MacroSheet, which: str) -> None:
         title, kind = _REPORTS[which]
@@ -227,7 +229,8 @@ def build_macro_page(page: ft.Page,
                           ft.Text("Deep-analysis format: " + prompt, size=12, color=pal.muted, selectable=True)],
                 expanded=False, tile_padding=ft.Padding(0, 0, 0, 0)),
             analysis_panel(page, kind=kind, narrative=text, payload_fn=lambda p=payload: p,
-                           deep_fn=insights.deep_analysis),
+                           deep_fn=insights.deep_analysis,
+                           sections=localized(text, macro_text(sheet, which, text))),
         ]
         page.update()
 

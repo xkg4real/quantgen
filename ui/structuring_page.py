@@ -25,6 +25,8 @@ from core.ficc.curves import curve_from_snapshot
 from core.ficc.data import load_treasury_curve
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.model_narrative_language import structured_korean
 from ui.components import card, empty_state, notice, number_field, parse_number, section, stat
 import ui.fcharts as fcharts
 from ui.ficc_widgets import action, form_row, hide_source, lchip, synthetic_notice, with_helper
@@ -225,9 +227,10 @@ def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
     }
     if cms:
         payload["coupon_interpretation"] = cms_coupon_context(r)
-    blocks.append(analysis_panel(page, kind="structured_product",
-                                 narrative=insights.narrate_structured(r),
-                                 payload_fn=lambda p=payload: p))
+    narrative = insights.narrate_structured(r)
+    blocks.append(analysis_panel(page, kind="structured_product", narrative=narrative,
+                                 payload_fn=lambda p=payload: p,
+                                 sections=localized(narrative, korean(structured_korean, r))))
     return blocks
 
 

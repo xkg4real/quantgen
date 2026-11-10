@@ -34,6 +34,8 @@ from core.ficc.data import (G10_KRW, Series, load_fx_spot, load_policy_rates,
 from core.quant.validate import cost_bp
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
+from ui.narrative_sections import fx_text, korean, localized
+from quantgen_desktop.fx_narrative import carry_korean
 from ui.components import card, empty_state, notice, number_field, parse_number, section, stat
 import ui.fcharts as fcharts
 from ui.ficc_widgets import action, form_row, hide_source, ko_stat, lchip, synthetic_notice, with_helper
@@ -257,10 +259,13 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
             "implied_basis_note": insights.fx_basis_note(basis),
             "forward_curve": [{"tenor": tenor_label(t), "forward": f} for t, f in curve_pts],
         }
+        narrative = insights.narrate_fx_forward(p, S, F, pts, cy, basis)
+        # The keys `core.research.fx_analysis.execute_fx` gives `fx_korean` for this tool.
+        ko_text = fx_text("forward", {"pair": p, "S": S, "forward": F, "points": pts,
+                                      "carry": cy, "basis": basis})
         blocks.append(analysis_panel(
-            page, kind="fx_forward",
-            narrative=insights.narrate_fx_forward(p, S, F, pts, cy, basis),
-            payload_fn=lambda d=payload: d))
+            page, kind="fx_forward", narrative=narrative,
+            payload_fn=lambda d=payload: d, sections=localized(narrative, ko_text)))
         return blocks
 
     def do_option() -> list[ft.Control]:
@@ -334,9 +339,11 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
             "sabr": {"alpha": fit.alpha, "beta": fit.beta, "rho": fit.rho, "nu": fit.nu,
                      "rmse": fit.rmse, "converged": fit.converged},
         }
+        narrative = insights.narrate_fx_option(gk, pts, fit, diagnostics=diag)
+        ko_text = fx_text("option", {"report": gk, "points": pts, "sabr_diagnostics": diag})
         blocks.append(analysis_panel(
-            page, kind="fx_option", narrative=insights.narrate_fx_option(gk, pts, fit, diagnostics=diag),
-            payload_fn=lambda d=payload: d))
+            page, kind="fx_option", narrative=narrative,
+            payload_fn=lambda d=payload: d, sections=localized(narrative, ko_text)))
         return blocks
 
     def do_carry() -> list[ft.Control]:
@@ -409,9 +416,10 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
                          "latest_long": list(longs), "latest_short": list(shorts),
                          "note": bt.note},
         }
+        narrative = insights.narrate_carry(table_rows, bt)
         blocks.append(analysis_panel(
-            page, kind="fx_carry", narrative=insights.narrate_carry(table_rows, bt),
-            payload_fn=lambda d=payload: d))
+            page, kind="fx_carry", narrative=narrative, payload_fn=lambda d=payload: d,
+            sections=localized(narrative, korean(carry_korean, table_rows, bt))))
         return blocks
 
     tools = {"forward": do_forward, "option": do_option, "carry": do_carry}

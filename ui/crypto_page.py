@@ -19,6 +19,8 @@ from core.crypto import analytics as CA
 from core.quant import insights
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.market_narrative_language import crypto_korean
 from ui.components import card, empty_state, notice, section, stat
 from ui.ficc_widgets import action, form_row, hide_source, ko_notice, ko_stat, lchip, ltext, verdict_ko
 from ui.localization import literal_text, table_header
@@ -140,7 +142,8 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
             elif not config.upbit_ready():
                 blocks.append(ft.Text("Set UPBIT_ACCESS_KEY / UPBIT_SECRET_KEY (자산조회 scope only) to show holdings.", size=12, color=pal.muted))
             blocks.append(analysis_panel(page, kind="crypto_market", narrative=narrative(a),
-                                         payload_fn=lambda p=payload(a): p, deep_fn=insights.deep_analysis))
+                                         payload_fn=lambda p=payload(a): p, deep_fn=insights.deep_analysis,
+                                         sections=localized(narrative(a), korean(crypto_korean, a))))
             host.controls = blocks; busy.visible = False; page.update()
 
         page.run_thread(worker)

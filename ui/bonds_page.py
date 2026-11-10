@@ -23,6 +23,8 @@ from core.theme import RADII, active
 from ui import fcharts
 from ui.localization import table_header, literal_text
 from ui.ai_panel import analysis_panel
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.bonds_portfolio_narrative import bond_korean, hedge_text
 from ui.components import card, empty_state, notice, number_field, parse_number, section, stat
 from ui.ficc_widgets import action, form_row, hide_source, ko_notice, ko_stat, lchip, synthetic_notice, with_helper
 
@@ -152,6 +154,8 @@ def build_bonds_page(page: ft.Page,
                     stat("z-spread", bp_text(a.z_spread), tooltip=f"Curve price {a.curve_price:.3f}"),
                 ], spacing=12, run_spacing=12, wrap=True))
                 narrative = insights.narrate_bond(a, rows)
+                bond_text = narrative           # the bond read alone; the hedge tool appends its sentence
+                extra = []
                 payload = {
                     "tool": kind, "data_source": panel.source,
                     "bond": {"coupon": bond.coupon, "maturity": bond.maturity, "freq": bond.freq,
@@ -223,15 +227,19 @@ def build_bonds_page(page: ft.Page,
                         f"계약 수 = 포지션 DV01 × 전환계수 / CTD DV01 = {_money(pos)} × {c:.4f} / "
                         f"{ctd:,.2f} = {n:,.2f}. 매수 포지션의 금리 위험을 없애려면 이만큼 매도합니다. "
                         f"반올림 후 남는 위험은 1bp당 {residual}입니다."))
-                    narrative += (f" Hedging {_money(pos)} per bp of DV01 with a future whose CTD "
-                                  f"has DV01 {ctd:,.2f} per contract and conversion factor "
-                                  f"{c:.4f} takes {n:,.2f} contracts sold ({round(n):,d} rounded).")
+                    hedge_en = (f"Hedging {_money(pos)} per bp of DV01 with a future whose CTD "
+                                f"has DV01 {ctd:,.2f} per contract and conversion factor "
+                                f"{c:.4f} takes {n:,.2f} contracts sold ({round(n):,d} rounded).")
+                    narrative += " " + hedge_en
+                    extra = [(("선물 헤지", "Futures hedge"), hedge_text(hedge, "ko").splitlines(), [hedge_en])]
                     payload["hedge"] = {"position_dv01": pos, "ctd_dv01_per_contract": ctd,
                                         "conversion_factor": c, "contracts": n}
                 if a.note:
                     blocks.append(notice(a.note, "muted", icon=ft.Icons.INFO_OUTLINE))
                 blocks.append(analysis_panel(page, kind=f"bond_{kind}", narrative=narrative,
-                                             payload_fn=lambda p=payload: p))
+                                             payload_fn=lambda p=payload: p,
+                                             sections=localized(bond_text, korean(bond_korean, a, rows or ()),
+                                                                extra=extra)))
                 result_host.controls = blocks
                 busy.visible = False
                 page.update()
