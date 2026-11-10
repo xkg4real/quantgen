@@ -102,7 +102,9 @@ class _NarrativeBlock(ft.Column):
             for heading, items in sections:
                 blocks.append(ft.Column([_literal(str(heading), size=14, weight=ft.FontWeight.W_600, color=pal.text),
                                          *_bullets([str(x) for x in items])], spacing=6))
-            more = "전체 해설 원문 보기" if korean else "Full local commentary"
+            # The full paragraph is the engine's English write-up unless the catalogue translated it.
+            hangul = any("\uac00" <= ch <= "\ud7a3" for ch in text)
+            more = ("전체 해설 원문 보기" if hangul else "영문 원문 보기") if korean else "Full local commentary"
         blocks.append(ft.ExpansionTile(
             title=_literal(more, size=13, weight=ft.FontWeight.W_500, color=pal.text),
             controls=[ft.Container(paragraph, padding=ft.Padding(0, 0, 0, 8))],

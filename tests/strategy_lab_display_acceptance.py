@@ -258,7 +258,7 @@ class AnalysisPanelTests(unittest.TestCase):
                                                 sections=sections)
         translate_controls(panel, LocaleContext("ko_KR"))
         shown = texts(panel)
-        for caption in ("분석 요약", "결론", "로컬 해설", "전체 해설 원문 보기"):
+        for caption in ("분석 요약", "결론", "로컬 해설", "영문 원문 보기"):
             self.assertIn(caption, shown)
         labels = [c.label for c in walk(panel) if isinstance(c, ft.TextField)]
         self.assertEqual(labels, ["AI 분석가에게 물어볼 질문 (선택)"])
