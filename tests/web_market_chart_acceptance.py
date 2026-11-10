@@ -94,13 +94,43 @@ class WebMarketTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(self.view.image.src.startswith("data:image/svg+xml;base64,"))
         self.assertIn("005930", self.view.image.semantics_label)
         self.assertIn("2026-11-02", self.view.source.value)
-        self.assertIn("SMA20", self.view.metrics.value)
+        # Indicator readings are a row of labelled values (label over value), not one run-on line.
+        labels = [item.content.controls[0].value for item in self.view.metrics.controls]
+        self.assertEqual(labels[:3], ["SMA20", "RSI14", "MACD"])
         self.assertIn("거래량 10", self.view.reading.value)
         self.view.render_locale(LocaleContext("en_US"))
         self.assertIn("V 10", self.view.reading.value)
         self.view.render_locale(LocaleContext("ko_KR"))
         self.assertIn("거래량 10", self.view.reading.value)
         self.assertIsNone(self.view.cursor)
+
+    async def test_quote_headline_status_and_provider_notes_read_in_one_language(self):
+        # The code field enforces its length without the counter line that pushed it off the row.
+        self.assertEqual(self.view.code.max_length, 32)
+        self.assertEqual(self.view.code.counter, "")
+        self.assertFalse(self.view.quote_card.visible)
+        request = self.view.current_request()
+        data = snapshot(request)
+        availability = ("KRX market · latest candle is provisional; the forming minute volume is unavailable until "
+                        "confirmed because KIS can temporarily repeat the preceding minute volume. "
+                        "No empty-session candles are fabricated.")
+        self.service.load.side_effect = None
+        self.service.load.return_value = replace(
+            data, note=availability + " Partial history: 80/240 requested bars (provider window or paging limit).",
+            quote=replace(data.quote, change=-8000, change_pct=-3.97,
+                          note=availability + " REST snapshot; market timestamp not provided."))
+        self.assertTrue(await self.view.load_chart())
+        self.assertTrue(self.view.quote_card.visible)
+        self.assertEqual(self.view.change.value, "▼ 8,000 (-3.97%)")
+        self.assertIn("2026-11-02 10:19:00 UTC+9", self.view.source.value)
+        # Coverage is shown once (status block); the note keeps only the extra caveats, in Korean.
+        self.assertNotIn("KRX market", self.view.note.value)
+        self.assertIn("요청한 240봉 중 80봉만", self.view.note.value)
+        self.assertIn("거래소 시세 시각은 제공되지 않습니다", self.view.note.value)
+        self.view.render_locale(LocaleContext("en_US"))
+        self.assertIn("Partial history: 80/240", self.view.note.value)
+        self.assertEqual(self.view.metric_labels["SIGNAL"].value, "MACD signal")
+        self.assertIn("Last candle 2026-11-02 10:19:00 UTC+9", self.view.source.value)
 
     async def test_current_price_keeps_small_contract_precision(self):
         request = self.view.current_request()
