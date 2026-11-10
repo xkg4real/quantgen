@@ -1,31 +1,44 @@
 """Suite `provider_parity`: tools/provider_parity/parity_check.py (spec 2026-10-26 section 10.5, roadmap item 5-2).
 
 Synthetic series and mocked HTTP only: every test runs with socket connects and the tool's own HTTP layer patched to
-raise, so a test that reached the network would fail. No real price, rate, pilot table or key is read; every file is
-written into a fresh folder under the system temp dir, and nothing in the repository is read except the tool itself.
+raise, so a test that reached the network would fail (the one case that runs the tool's HTTP function replaces
+`urlopen`). No real price, rate, pilot table or key is read; every file is written into a fresh folder under the
+system temp dir. In the repository the suite reads the tool, its guide and its section of docs/compliance/FACTS.md
+(the documents are held to the tool), and the root README.md and tests/run_all.py (to see that they do not name it).
 
     python -B -m unittest tests.provider_parity_acceptance -v     # `load_tests` below hands unittest the same cases
-    python -B -m tests.provider_parity_acceptance                 # or: python tests/run_all.py --suite provider_parity
+    python -B -m tests.provider_parity_acceptance                 # the same cases, one PASS or FAIL line each
+
+The suite is not registered in tests/run_all.py (the owner has not asked for that); CI runs the unittest command.
 
 Covered: every outcome (PASS, FAIL, WARN, WITHHELD, REFUSED, ERROR) for SPY, BTC-USD and DGS3MO; each threshold of
 10.5.1 on both sides (a case inside it and a case outside it); the late-starting provider rule (P-D5); the 2027-01-01
 cut-off in fetch and compare; md5 refusal; the 10.5.2 summary allow-list; that no key value is ever printed or
-written; every fetcher over a fake transport; COMPUTES against the checks (selftest); where the tool may write; a cp949
+written; every fetcher over a fake transport, against request parameters, epoch seconds and rows typed by hand; the
+tool's own HTTP function with `urlopen` replaced; COMPUTES against the checks (selftest); where the tool may write
+(letter case, links, nested folders, OneDrive); a fetch record's sha256; what a failed run prints and leaves; a cp949
 console; UTF-8 and LF in every file the tool writes; the tool run as the owner runs it (`python -B -m ...`).
 """
 from __future__ import annotations
 
+import calendar
 import contextlib
+import email.message
 import hashlib
 import io
 import json
 import os
 import re
+import shutil
 import socket
 import subprocess
 import sys
 import tempfile
+import time
+import types
 import unittest
+import urllib.error
+import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -39,6 +52,9 @@ if str(ROOT) not in sys.path:
 from tools.provider_parity import parity_check as pc  # noqa: E402
 
 NOW = datetime(2026, 11, 5, 12, 0, 0, tzinfo=timezone.utc)
+REAL_URLLIB_GET = pc.urllib_get            # the tool's own HTTP function, kept before `no_network` replaces it
+GUIDE = ROOT / "tools" / "provider_parity" / "README.md"
+FACTS = ROOT / "docs" / "compliance" / "FACTS.md"
 FMP_KEY, KIS_KEY, KIS_SECRET = "fmpKEY-7f3a9c", "kisAPPKEY-51d2", "kisSECRET-88e0"
 
 
@@ -75,6 +91,7 @@ def env_without(*names):
 def tmp() -> Path:
     root = Path(tempfile.mkdtemp(prefix="pp_test_")).resolve()
     assert not pc.inside_git_worktree(root), f"{root} lies inside a git work tree; set TMPDIR elsewhere"
+    assert not pc.in_synced_folder(root), f"{root} lies inside a OneDrive folder; set TMPDIR elsewhere"
     return root
 
 
@@ -1206,8 +1223,11 @@ def fmp_handler(url, params):
                     for i in reversed(in_span(d0, params["from"], params["to"]))])
 
 
-def fake_kis(calls: list):
+def fake_kis(calls: list, labels: list | None = None):
+    """The app's KIS getter over the synthetic SPY path; `labels` gives each bar another date (a provider that
+    labels its days differently)."""
     d0, raw0, _, _ = SPY
+    d0 = d0 if labels is None else labels
 
     def get(path, tr_id, params):
         assert (path, tr_id) == (pc.KIS_PATH, pc.KIS_TR_ID) and re.fullmatch(r"\d{8}", params["BYMD"]), params
@@ -1638,6 +1658,826 @@ def test_load_keys_reads_only_the_named_keys():
     say.secrets[:] = [FMP_KEY]
     _, out = capture(lambda: say(f"request to x?apikey={FMP_KEY} failed") or 0)
     assert out == "request to x?apikey=<redacted> failed\n", out
+
+
+# --------------------------------------------------------------------------- #
+# Review of 2026-11-11, part 1: fetchers against values typed by hand, not made with the tool's own helpers
+# --------------------------------------------------------------------------- #
+E_2017_01_02 = 1483315200              # 2017-01-02T00:00:00Z, typed by hand
+E_2017_01_01, E_2016_12_01, E_2017_01_27, E_2026_12_30 = 1483228800, 1480550400, 1485475200, 1798588800
+DAY = 86400
+assert [calendar.timegm((y, m, d, 0, 0, 0)) for y, m, d in
+        ((2017, 1, 2), (2017, 1, 1), (2016, 12, 1), (2017, 1, 27), (2026, 12, 30))] == \
+    [E_2017_01_02, E_2017_01_01, E_2016_12_01, E_2017_01_27, E_2026_12_30]      # the stdlib's own UTC clock agrees
+
+
+def fetch_rows(series, provider, start, end, **kw):
+    with env_without(*pc.KEY_NAMES):
+        code, out, folder = fetch(series, provider, start=start, end=end, **kw)
+    return code, out, read_csv_rows(folder / f"{series}_{provider}.csv") if code == 0 else None
+
+
+def test_utc_helpers_do_not_follow_the_machine_time_zone():
+    """`_unix` and `_iso_from_unix` label days in UTC whatever the machine's zone is (the owner's PC is on KST). The
+    zone is switched with `time.tzset`, which POSIX has and Windows lacks; there the case runs in the machine's own
+    zone only."""
+    saved = os.environ.get("TZ")
+    zones = ("America/New_York", "Asia/Seoul", "UTC") if hasattr(time, "tzset") else (None,)
+    try:
+        for tz in zones:
+            if tz is not None:
+                os.environ["TZ"] = tz
+                time.tzset()
+            assert pc._unix("2017-01-02") == E_2017_01_02, (tz, pc._unix("2017-01-02"))
+            assert pc._iso_from_unix(E_2017_01_02) == "2017-01-02", tz
+            assert pc._iso_from_unix(E_2017_01_02 + DAY - 1) == "2017-01-02", tz
+            assert pc._iso_from_unix(E_2017_01_02 - 1) == "2017-01-01", tz
+    finally:
+        if hasattr(time, "tzset"):
+            if saved is None:
+                os.environ.pop("TZ", None)
+            else:
+                os.environ["TZ"] = saved
+            time.tzset()
+
+
+def test_coinbase_rows_are_the_candle_start_date_and_the_close():
+    seen = []
+
+    def handler(url, params):
+        seen.append(params)
+        # [time, low, high, open, close, volume]; two candles, newest first, as the exchange answers
+        return ok_json([[E_2017_01_02 + DAY, 5.0, 6.0, 7.0, 951.25, 9.0], [E_2017_01_02, 1.0, 2.0, 3.0, 950.5, 4.0]])
+    code, out, rows = fetch_rows("btc", "coinbase", "2017-01-01", "2017-01-20", http=FakeHttp(handler))
+    assert code == 0 and rows == [("2017-01-02", "950.5"), ("2017-01-03", "951.25")], (out, rows)
+    assert seen == [{"granularity": "86400", "start": "2016-12-01T00:00:00Z", "end": "2017-01-27T00:00:00Z"}], seen
+
+
+def test_binance_rows_are_the_open_time_date_and_the_close_of_btcusdt_daily():
+    seen = []
+
+    def handler(url, params):
+        seen.append((url, params))
+        # [open time, open, high, low, close, volume, close time]
+        return ok_json([[E_2017_01_02 * 1000, "3.0", "2.0", "1.0", "950.5", "4", (E_2017_01_02 + DAY) * 1000 - 1],
+                        [(E_2017_01_02 + DAY) * 1000, "7.0", "6.0", "5.0", "951.25", "9",
+                         (E_2017_01_02 + 2 * DAY) * 1000 - 1]])
+    code, out, rows = fetch_rows("btc", "binance", "2017-01-01", "2017-01-20", http=FakeHttp(handler))
+    assert code == 0 and rows == [("2017-01-02", "950.5"), ("2017-01-03", "951.25")], (out, rows)
+    assert seen == [("https://data-api.binance.vision/api/v3/klines",
+                     {"symbol": "BTCUSDT", "interval": "1d", "limit": "1000", "startTime": str(E_2016_12_01 * 1000),
+                      "endTime": str((E_2017_01_27 + DAY) * 1000 - 1)})], seen
+
+
+def test_bitstamp_rows_are_the_candle_start_date_and_the_close_daily():
+    seen = []
+
+    def handler(url, params):
+        seen.append((url, params))
+        return ok_json({"data": {"pair": "BTC/USD", "ohlc": [
+            {"timestamp": str(E_2017_01_02), "open": "3.0", "high": "2.0", "low": "1.0", "close": "950.5"},
+            {"timestamp": str(E_2017_01_02 + DAY), "open": "7.0", "high": "6.0", "low": "5.0", "close": "951.25"}]}})
+    code, out, rows = fetch_rows("btc", "bitstamp", "2017-01-01", "2017-01-20", http=FakeHttp(handler))
+    assert code == 0 and rows == [("2017-01-02", "950.5"), ("2017-01-03", "951.25")], (out, rows)
+    assert seen == [("https://www.bitstamp.net/api/v2/ohlc/btcusd/",
+                     {"step": "86400", "limit": "1000", "start": str(E_2016_12_01), "end": str(E_2017_01_27)})], seen
+
+
+def test_treasury_rows_are_the_three_month_column_of_each_yearly_file():
+    seen = []
+
+    def handler(url, params):
+        seen.append((url, params))
+        body = ('<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" '
+                'xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" '
+                'xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices">')
+        if params["field_tdr_date_value"] == "2017":
+            body += ('<entry><content type="application/xml"><m:properties>'
+                     '<d:NEW_DATE m:type="Edm.DateTime">2017-01-03T00:00:00</d:NEW_DATE>'
+                     '<d:BC_1MONTH m:type="Edm.Double">0.52</d:BC_1MONTH>'
+                     '<d:BC_3MONTH m:type="Edm.Double">0.53</d:BC_3MONTH>'
+                     '<d:BC_6MONTH m:type="Edm.Double">0.65</d:BC_6MONTH></m:properties></content></entry>')
+        return pc.Response(200, (body + "</feed>").encode("utf-8"))
+    code, out, rows = fetch_rows("rf", "treasury", "2017-01-01", "2017-01-20", http=FakeHttp(handler))
+    assert code == 0 and rows == [("2017-01-03", "0.53")], (out, rows)
+    url = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml"
+    assert seen == [(url, {"data": "daily_treasury_yield_curve", "field_tdr_date_value": y})
+                    for y in ("2016", "2017")], seen
+
+
+def test_kis_asks_for_daily_split_adjusted_spy_bars():
+    d0, raw0, _, _ = SPY
+    seen = []
+    inner = fake_kis([])
+
+    def get(path, tr_id, params):
+        seen.append((path, tr_id, dict(params)))
+        return inner(path, tr_id, params)
+    root = tmp()
+    code, out, rows = fetch_rows("spy", "kis", SPY_WIN[0], SPY_WIN[1], kis=get, env_file=key_file(root), root=root)
+    assert code == 0 and len(seen) >= 18, out
+    for path, tr_id, params in seen:
+        assert (path, tr_id) == ("/uapi/overseas-price/v1/quotations/dailyprice", "HHDFS76240000"), (path, tr_id)
+        assert {k: v for k, v in params.items() if k != "BYMD"} == \
+            {"AUTH": "", "EXCD": "AMS", "SYMB": "SPY", "GUBN": "0", "MODP": "1"}, params
+    i = d0.index("2013-05-15")
+    assert dict(rows)["2013-05-15"] == repr(float(f"{raw0[i]:.4f}")), dict(rows)["2013-05-15"]
+
+
+def test_fetch_refuses_one_date_with_two_values_and_a_date_that_is_not_a_date():
+    def two(url, params):
+        return pc.Response(200, b"observation_date,DGS3MO\n2016-12-28,0.51\n2016-12-28,0.52\n")
+    code, out, rows = fetch_rows("rf", "fred_now", *RF_WIN, http=FakeHttp(two))
+    assert code == 4 and last_line(out) == "FETCH rf fred_now UNAVAILABLE fetch_failed exit=4 csv=-", out
+    assert "a date with two different values" in out and "0.51" not in out, out
+
+    def bad(url, params):
+        return ok_json([{"date": "2016-13-45", "adjClose": 1.0}])
+    root = tmp()
+    code, out, rows = fetch_rows("spy", "fmp", *SPY_WIN, http=FakeHttp(bad), env_file=key_file(root), root=root)
+    assert code == 4 and last_line(out) == "FETCH spy fmp UNAVAILABLE fetch_failed exit=4 csv=-", out
+    assert "a row without an ISO date" in out, out
+
+
+class _Answer:
+    """What `urlopen` hands back: a context manager with a status and a body."""
+
+    def __init__(self, status: int, body: bytes):
+        self.status, self._body = status, body
+
+    def read(self) -> bytes:
+        return self._body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_exc):
+        return False
+
+
+def test_the_tool_s_own_http_function_types_every_failure_and_never_prints_the_url():
+    """`urllib_get` is the one network function the tool owns, and every other case replaces it. Here it runs with
+    `urlopen` replaced: an answer comes back as it is, an HTTP error status is returned with its body, and a
+    transport failure becomes `fetch_failed` with the exception type only, because the text of such an error quotes
+    the URL and FMP's URL holds the key."""
+    root = tmp()
+    keys = key_file(root)
+    seen = []
+    saved_open, saved_gap = urllib.request.urlopen, pc._MIN_GAP_S
+    pc._MIN_GAP_S = 0.0
+    try:
+        def answer(request, timeout=None):
+            seen.append((request.full_url, dict(request.header_items()), timeout))
+            return _Answer(200, b"observation_date,DGS3MO\n2016-12-28,0.51\n")
+        urllib.request.urlopen = answer
+        resp = REAL_URLLIB_GET("https://example.invalid/x", {"id": "DGS3MO", "coed": "2017-01-06"}, {})
+        assert (resp.status, resp.body) == (200, b"observation_date,DGS3MO\n2016-12-28,0.51\n"), resp
+        url, headers, timeout = seen[0]
+        assert url == "https://example.invalid/x?id=DGS3MO&coed=2017-01-06" and timeout == 30.0, seen[0]
+        assert headers.get("User-agent") == "provider-parity-check/1", headers     # says nothing of the owner
+
+        def forbidden(request, timeout=None):
+            raise urllib.error.HTTPError(request.full_url, 403, "Forbidden", email.message.Message(),
+                                         io.BytesIO(b"no"))
+        urllib.request.urlopen = forbidden
+        resp = REAL_URLLIB_GET("https://example.invalid/x", {"a": "1"}, {})
+        assert (resp.status, resp.body) == (403, b"no"), resp
+
+        def unreachable(request, timeout=None):
+            raise urllib.error.URLError(f"cannot reach {request.full_url}")
+        urllib.request.urlopen = unreachable
+        with env_without(*pc.KEY_NAMES):
+            code, out, folder = fetch("spy", "fmp", start=SPY_WIN[0], end=SPY_WIN[1], env_file=keys, root=root,
+                                      http=REAL_URLLIB_GET)
+        assert code == 4 and last_line(out) == "FETCH spy fmp UNAVAILABLE fetch_failed exit=4 csv=-", out
+        assert out.splitlines()[-2] == "UNAVAILABLE: request failed (URLError)" and not folder.exists(), out
+        assert "apikey" not in out and "financialmodelingprep" not in out and FMP_KEY not in out, out
+
+        def slow(request, timeout=None):
+            raise TimeoutError(f"timed out reading {request.full_url}")
+        urllib.request.urlopen = slow
+        try:
+            REAL_URLLIB_GET("https://example.invalid/x", {"apikey": FMP_KEY}, {})
+        except pc.FetchFailed as exc:
+            assert (exc.reason, str(exc)) == ("fetch_failed", "request failed (TimeoutError)"), (exc.reason, str(exc))
+        else:
+            raise AssertionError("a timeout was not typed")
+    finally:
+        urllib.request.urlopen, pc._MIN_GAP_S = saved_open, saved_gap
+
+
+def facts_section() -> str:
+    """The tool's own section of docs/compliance/FACTS.md, from its anchor to the next one."""
+    text = FACTS.read_text(encoding="utf-8")
+    start = text.index('<a id="provider-parity-2026-11-11"></a>')
+    end = text.find('<a id="', start + 10)
+    return text[start:] if end < 0 else text[start:end]
+
+
+def test_every_request_is_bounded_before_2027_and_the_documents_say_how():
+    """No observation dated on or after 2027-01-01 is requested (spec 10.5). With a window that ends on 2026-12-29
+    the fetch would run 7 days on, and each provider's request stops short of 2027 in its own way: an explicit last
+    date of 2026-12-30 (an exclusive end of 2026-12-31 for yfinance, the last millisecond of 2026-12-30 for Binance)
+    or, for the Treasury's yearly file, the calendar year 2026. The tool's docstring, the owner guide and the
+    compliance facts say that, and no longer that every request names a last date."""
+    root = tmp()
+    keys = key_file(root)
+    kis_calls, yf_calls, seen = [], [], {}
+
+    def kis(path, tr_id, params):
+        kis_calls.append(dict(params))
+        return {"rt_cd": "0", "output2": []}
+
+    def yf(symbol, start, end):
+        yf_calls.append((symbol, start, end))
+        return pd.DataFrame()
+    empty = {"fmp": ok_json([]), "coinbase": ok_json([]), "bitstamp": ok_json({"data": {"ohlc": []}}),
+             "binance": ok_json([]), "h15": pc.Response(200, b""),
+             "treasury": pc.Response(200, b'<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"></feed>'),
+             "fred_now": pc.Response(200, b"observation_date,DGS3MO\n")}
+    for series, table in pc.PROVIDERS.items():
+        for provider in table:
+            http = FakeHttp(lambda url, params, provider=provider: empty[provider])
+            with env_without(*pc.KEY_NAMES):
+                code, out, folder = fetch(series, provider, start="2025-06-01", end="2026-12-29", http=http, yf=yf,
+                                          kis=kis, env_file=keys, root=root)
+            assert code == 4 and not folder.exists(), (provider, out)        # an empty answer: nothing is written
+            seen[provider] = [params for _, params in http.calls]
+    assert seen["fmp"] == [{"symbol": "SPY", "from": "2025-05-01", "to": "2026-12-30", "apikey": FMP_KEY}], seen["fmp"]
+    assert [c["BYMD"] for c in kis_calls] == ["20261230"], kis_calls
+    assert yf_calls == [("SPY", "2025-05-01", "2026-12-31")], yf_calls
+    assert len(seen["coinbase"]) == 3 and seen["coinbase"][-1]["end"] == "2026-12-30T00:00:00Z", seen["coinbase"]
+    assert [p["end"] for p in seen["bitstamp"]] == [str(E_2026_12_30)], seen["bitstamp"]
+    assert [p["endTime"] for p in seen["binance"]] == [str((E_2026_12_30 + DAY) * 1000 - 1)], seen["binance"]
+    assert seen["treasury"] == [{"data": "daily_treasury_yield_curve", "field_tdr_date_value": y}
+                                for y in ("2025", "2026")], seen["treasury"]
+    assert (seen["h15"][0]["from"], seen["h15"][0]["to"]) == ("05/01/2025", "12/30/2026"), seen["h15"]
+    assert seen["fred_now"] == [{"id": "DGS3MO", "cosd": "2025-05-01", "coed": "2026-12-30"}], seen["fred_now"]
+    for name, text, old, new in (
+            ("docstring", pc.__doc__, "Every request names an explicit last date", "calendar year of at most 2026"),
+            ("guide", GUIDE.read_text(encoding="utf-8"), "Every request names its last date",
+             "calendar year of at most 2026"),
+            ("facts", facts_section(), "모든 요청이 끝 날짜", "달력 연도")):
+        flat = " ".join(text.split())
+        assert old not in flat and new in flat, name
+
+
+# --------------------------------------------------------------------------- #
+# Review of 2026-11-11, part 2: rules no case held, and guards from their other side
+# --------------------------------------------------------------------------- #
+def test_duplicated_or_unsorted_dates_are_refused_on_both_sides():
+    d0, _, adj0, _ = SPY
+    b = provider_text(d0, adj0 * 0.987, 6).splitlines(keepends=True)
+    for name, text in (("a date twice", "".join(b[:500] + [b[499]] + b[500:])),
+                       ("two dates swapped", "".join(b[:500] + [b[501], b[500]] + b[502:]))):
+        w = spy_world()
+        code, out, s, path = w.compare([("fmp", w.file("dup.csv", text))])
+        assert code == 2 and s is None and not path.exists() and "strictly increasing and unique" in out, (name, out)
+        assert last_line(out) == "PARITY spy REFUSED exit=2 summary=-", out
+    a = pinned_text("Date,yf_SPY", d0, adj0).splitlines(keepends=True)
+    for name, text in (("a date twice", "".join(a[:900] + [a[899]] + a[900:])),
+                       ("two dates swapped", "".join(a[:900] + [a[901], a[900]] + a[902:]))):
+        w = World("spy", text, start=SPY_WIN[0], end=SPY_WIN[1])
+        code, out, s, path = w.compare([("fmp", w.file("ok.csv", "".join(b)))])
+        assert code == 2 and s is None and not path.exists() and "strictly increasing and unique" in out, (name, out)
+
+
+def test_a_close_that_is_not_positive_in_a_fails_its_integrity_check():
+    """A zero or negative close is dropped as the study drops it, and the dropped row fails A's integrity check."""
+    d0, _, adj0, _ = SPY
+    vals = adj0.copy()
+    vals[d0.index("2013-05-15")] = 0.0
+    w = spy_world(adj=vals)
+    fmp, _, _ = spy_b(w)
+    code, out, s, _ = w.compare([("fmp", fmp)])
+    integ = s["integrity"][0]
+    assert code == 1 and integ["outcome"] == "FAIL" and integ["no_split_shaped_jump"] is True, integ
+    assert integ["n_dropped_nonpositive"] == 1 and integ["n_rows"] == 1824, integ
+    d, p, v = BTC
+    bp = p.copy()
+    bp[900] = -1.0
+    code, out, s, _ = btc_run(btc_world(a_vals=bp), d, v)
+    integ = s["integrity"][0]
+    assert code == 1 and integ["outcome"] == "FAIL" and integ["n_dropped_nonpositive"] == 1, integ
+    assert integ["no_implausible_jump"] is True and integ["n_missing_days_a"] == 1, integ
+
+
+def test_summary_hashes_are_the_files_own():
+    """10.5: a run with other tool bytes must be recognisable, so `tool.sha256` is the sha256 of the tool file that
+    ran and each pair's `file_sha256` is that of the file compared."""
+    w = spy_world()
+    fmp, kis, _ = spy_b(w)
+    code, out, s, _ = w.compare([("fmp", fmp), ("kis", kis)])
+    assert code == 0 and s["tool"]["sha256"] == hashlib.sha256(Path(pc.__file__).read_bytes()).hexdigest(), out
+    assert {p["provider"]: p["file_sha256"] for p in s["pairs"]} == {
+        "fmp": hashlib.sha256(fmp.read_bytes()).hexdigest(), "kis": hashlib.sha256(kis.read_bytes()).hexdigest()}
+    assert s["pinned"]["md5"] == hashlib.md5((w.repo / "synthetic" / "yf_SPY.csv").read_bytes()).hexdigest()
+
+
+def test_out_folder_deep_inside_a_work_tree_and_names_in_another_case_are_refused():
+    w = spy_world()
+    fmp, _, _ = spy_b(w)
+    code, out, _, _ = w.compare([("fmp", fmp)], out=w.repo / "a" / "b" / "c" / "pp_out")
+    assert code == 2 and "git work tree" in out and not (w.repo / "a").exists(), out
+    code, out, _, _ = w.compare([("fmp", fmp)], out=w.root / "x" / "Asset_Expansion" / "run")
+    assert code == 2 and "asset_expansion" in out and not (w.root / "x").exists(), out
+    table = json.loads(w.table.read_text(encoding="utf-8"))
+    for rel, why in (("docs/Asset_Expansion/CACHE/yf_SPY.csv", "--owner-run"),
+                     ("synthetic\\..\\..\\elsewhere/yf_SPY.csv", "relative path to yf_SPY.csv"),
+                     (str((w.repo / "synthetic" / "yf_SPY.csv").resolve()), "relative path to yf_SPY.csv")):
+        table["prices_file"] = rel
+        w.table.write_text(json.dumps(table), encoding="utf-8")
+        code, out, s, path = w.compare([("fmp", fmp)])
+        assert code == 2 and s is None and not path.exists() and why in out, (rel, out)
+
+
+def test_spy_drift_alone_and_one_day_maximum_alone_each_fail_the_pair():
+    """drift_range_max 5e-3 and ret_diff_max 2e-3 each decide alone: a provider that drifts away by 1e-5 a day has no
+    day above the tolerance, and one tick 0.3% off moves two days above ret_diff_max without moving the drift."""
+    d0, _, adj0, _ = SPY
+    w = spy_world()
+    steady = adj0 * np.exp(-1e-5 * np.arange(len(d0)))
+    code, out, s, _ = w.compare([("fmp", w.file("drift.csv", provider_text(d0, steady, 8)))])
+    same = check_of(s, "fmp", "returns_same_convention")
+    assert same["n_over_tol"] == 0 and same["max_ok"] is True and same["drift_ok"] is False, same
+    assert code == 1 and same["outcome"] == "FAIL" and s["outcome"] == "FAIL", out
+    tick = adj0 * 0.987
+    tick[d0.index("2014-02-12")] *= 1.003
+    w = spy_world()
+    code, out, s, _ = w.compare([("fmp", w.file("tick.csv", provider_text(d0, tick, 8)))])
+    same = check_of(s, "fmp", "returns_same_convention")
+    assert same["n_over_tol"] == 2 <= same["n_allowed"] and same["drift_ok"] is True and same["max_ok"] is False, same
+    assert code == 1 and same["outcome"] == "FAIL" and s["outcome"] == "FAIL", out
+
+
+def test_env_file_whose_first_line_is_a_key_after_a_bom():
+    root = tmp()
+    path = root / "env.txt"
+    path.write_bytes(b"\xef\xbb\xbf" + f"FMP_API_KEY={FMP_KEY}\r\n".encode("ascii"))
+    assert pc.load_keys(path, environ={}) == {"FMP_API_KEY": FMP_KEY}
+
+
+def test_a_provider_file_needs_the_date_value_header():
+    d0, _, adj0, _ = SPY
+    w = spy_world()
+    text = provider_text(d0, adj0 * 0.987, 6).replace("date,value", "Date,Close", 1)
+    code, out, s, path = w.compare([("fmp", w.file("hdr.csv", text))])
+    assert code == 2 and s is None and not path.exists() and "the header must be `date,value`" in out, out
+
+
+def test_a_pinned_file_with_one_value_in_the_window_is_refused():
+    d0, _, adj0, _ = SPY
+    w = World("spy", pinned_text("Date,yf_SPY", d0, adj0), start="2013-05-15", end="2013-05-15")
+    code, out, s, path = w.compare([("fmp", w.file("spy_fmp.csv", provider_text(d0, adj0 * 0.987, 6)))])
+    assert code == 2 and s is None and not path.exists() and "fewer than two values" in out, out
+
+
+def test_kis_and_yfinance_failures_print_the_exception_type_never_its_text():
+    root = tmp()
+    keys = key_file(root)
+
+    def kis_boom(path, tr_id, params):
+        raise RuntimeError("request with close 4321.12 failed")
+
+    class KISUnavailable(RuntimeError):
+        pass
+
+    def kis_unset(path, tr_id, params):
+        raise KISUnavailable("no key; last close 4321.12")
+    for getter, said, reason in ((kis_boom, "RuntimeError", "fetch_failed"), (kis_unset, "KISUnavailable", "no_key")):
+        with env_without(*pc.KEY_NAMES):
+            code, out, folder = fetch("spy", "kis", start=SPY_WIN[0], end=SPY_WIN[1], kis=getter, env_file=keys,
+                                      root=root)
+        assert code == 4 and out.splitlines()[-2] == f"UNAVAILABLE: kis request failed ({said})", out
+        assert last_line(out) == f"FETCH spy kis UNAVAILABLE {reason} exit=4 csv=-" and "4321" not in out, out
+        assert not folder.exists()
+
+    def yf_boom(symbol, start, end):
+        raise ValueError("SPY close 4321.12 could not be parsed")
+    code, out, folder = fetch("spy", "yahoo_now", start=SPY_WIN[0], end=SPY_WIN[1], yf=yf_boom, root=root)
+    assert code == 4 and out.splitlines()[-2] == "UNAVAILABLE: yfinance failed (ValueError)", out
+    assert last_line(out) == "FETCH spy yahoo_now UNAVAILABLE fetch_failed exit=4 csv=-" and "4321" not in out, out
+
+
+def test_a_key_value_in_the_fetch_record_is_refused():
+    """A fetcher that let the key into the request parameters it records: the fetch record would carry it, so the
+    fetch is refused and nothing is written."""
+    root = tmp()
+    real = pc.FETCHERS["fmp"]
+
+    def leaky(ctx):
+        got = real(ctx)
+        return pc.Fetched([{**got.requests[0], "apikey": ctx.key("FMP_API_KEY")}], got.pages, got.rows)
+    pc.FETCHERS["fmp"] = leaky
+    try:
+        with env_without(*pc.KEY_NAMES):
+            code, out, folder = fetch("spy", "fmp", start=SPY_WIN[0], end=SPY_WIN[1], http=FakeHttp(fmp_handler),
+                                      env_file=key_file(root), root=root)
+    finally:
+        pc.FETCHERS["fmp"] = real
+    assert code == 2 and not folder.exists() and "a key value reached the fetch record" in out, out
+    assert FMP_KEY not in out and last_line(out) == "FETCH spy fmp REFUSED exit=2 csv=-", out
+
+
+def test_yfinance_is_asked_for_adjusted_closes_with_its_cache_in_a_temporary_folder():
+    """`yahoo_now` is today's vintage of the pinned file, which was made with auto_adjust=True. A stand-in module
+    named yfinance takes the call `_yf_default` makes: the adjusted series, the dates as given, no progress bar and no
+    threads, and a cache folder that exists for the call only (never under the home folder)."""
+    calls, located, existed = [], [], []
+    stand_in = types.ModuleType("yfinance")
+
+    def download(symbol, **kw):
+        calls.append((symbol, kw))
+        existed.append(Path(located[-1]).is_dir())
+        return "frame"
+    stand_in.download = download
+    stand_in.set_tz_cache_location = located.append
+    saved = sys.modules.get("yfinance", _ABSENT)
+    sys.modules["yfinance"] = stand_in
+    try:
+        got = pc._yf_default("SPY", "2016-12-01", "2017-01-28")
+    finally:
+        if saved is _ABSENT:
+            sys.modules.pop("yfinance", None)
+        else:
+            sys.modules["yfinance"] = saved
+    assert got == "frame" and calls == [("SPY", {"start": "2016-12-01", "end": "2017-01-28", "auto_adjust": True,
+                                                 "progress": False, "threads": False})], calls
+    assert len(located) == 1 and existed == [True] and not Path(located[0]).exists(), located
+    assert Path(located[0]).resolve().is_relative_to(Path(tempfile.gettempdir()).resolve()), located
+
+
+def test_text_files_keep_lf_where_text_mode_would_write_crlf():
+    """Windows text mode writes CRLF for every newline unless a file is opened with newline="\\n", and pandas'
+    to_csv ends its lines with os.linesep. On Windows that is the platform's own behaviour, and the case
+    test_every_file_the_tool_writes_is_utf8_with_lf_only meets it. Elsewhere it is simulated here: `_pyio.open`, the
+    pure Python `open` that takes its line ending from os.linesep, in place of the tool's `open`, with os.linesep set
+    to CRLF."""
+    if os.linesep == "\r\n":
+        return
+    import _pyio
+    root = tmp()
+    keys = key_file(root)
+    saved = os.linesep
+    pc.open = _pyio.open
+    os.linesep = "\r\n"
+    try:
+        folders = []
+        with env_without(*pc.KEY_NAMES):
+            for provider, kw in (("fmp", dict(http=FakeHttp(fmp_handler))), ("kis", dict(kis=fake_kis([]))),
+                                 ("yahoo_now", dict(yf=fake_yf([])))):
+                code, out, folder = fetch("spy", provider, start=SPY_WIN[0], end=SPY_WIN[1], env_file=keys,
+                                          root=root, **kw)
+                assert code == 0, out
+                folders.append(folder)
+        w = spy_world()
+        code, out, _, compared = w.compare([(q, f / f"spy_{q}.csv")
+                                            for q, f in zip(("fmp", "kis", "yahoo_now"), folders)])
+        assert code == 0, out
+    finally:
+        os.linesep = saved
+        del pc.open
+    files = [x for f in (*folders, compared) for x in sorted(f.rglob("*")) if x.is_file()]
+    assert len(files) >= 11 and not [x.name for x in files if b"\r" in x.read_bytes()], files
+    for folder in folders:
+        meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
+        assert hashlib.sha256((folder / meta["csv"]["file"]).read_bytes()).hexdigest() == meta["csv"]["sha256"]
+
+
+# --------------------------------------------------------------------------- #
+# Review of 2026-11-11, part 3: what the review changed in the tool
+# --------------------------------------------------------------------------- #
+def test_a_pinned_cache_path_is_judged_as_spelled_and_as_it_resolves():
+    """Without --owner-run a file under a folder named asset_expansion/cache is refused before it is opened, in any
+    letter case, as the pinned file or as a provider file, and also when the path only leads there through a link (a
+    junction on Windows). The folder here is a synthetic one in the temp dir."""
+    w = spy_world()
+    fmp, _, _ = spy_b(w)
+    cache = w.repo / "docs" / "Asset_Expansion" / "Cache"
+    cache.mkdir(parents=True)
+    (cache / "yf_SPY.csv").write_bytes((w.repo / "synthetic" / "yf_SPY.csv").read_bytes())
+    held = cache / "spy_fmp.csv"
+    held.write_bytes(fmp.read_bytes())
+    code, out, s, path = w.compare([("fmp", held)])                 # a provider file kept in the cache folder
+    assert code == 2 and s is None and "--owner-run" in out and not path.exists(), out
+    code, out, s, _ = w.compare([("fmp", held)], extra=["--owner-run"])
+    assert code == 0 and s["outcome"] == "PASS", out
+    try:
+        (w.repo / "alias").symlink_to(cache, target_is_directory=True)
+    except (OSError, NotImplementedError):                          # no right to make a link on this machine
+        return
+    code, out, s, path = w.compare([("fmp", w.repo / "alias" / "spy_fmp.csv")])
+    assert code == 2 and s is None and "--owner-run" in out and not path.exists(), out
+    elsewhere = w.root / "elsewhere"                                # and a `cache` that is itself a link out
+    elsewhere.mkdir()
+    (elsewhere / "spy_fmp.csv").write_bytes(fmp.read_bytes())
+    (w.root / "data" / "asset_expansion").mkdir(parents=True)
+    (w.root / "data" / "asset_expansion" / "cache").symlink_to(elsewhere, target_is_directory=True)
+    code, out, s, path = w.compare([("fmp", w.root / "data" / "asset_expansion" / "cache" / "spy_fmp.csv")])
+    assert code == 2 and s is None and "--owner-run" in out and not path.exists(), out
+    table = json.loads(w.table.read_text(encoding="utf-8"))
+    table["prices_file"] = "alias/yf_SPY.csv"
+    w.table.write_text(json.dumps(table), encoding="utf-8")
+    code, out, s, path = w.compare([("fmp", fmp)])
+    assert code == 2 and s is None and "--owner-run" in out and not path.exists(), out
+    assert last_line(out) == "PARITY spy REFUSED exit=2 summary=-", out
+    code, out, s, _ = w.compare([("fmp", fmp)], extra=["--owner-run"])
+    assert code == 0 and s["outcome"] == "PASS", out
+
+
+def test_a_provider_file_must_be_the_one_its_fetch_record_describes():
+    """A fetch folder records its CSV's name and sha256. A file changed, renamed or replaced after its fetch is
+    refused; a file with no fetch record beside it is compared, and the summary says so for each pair."""
+    root = tmp()
+    keys = key_file(root)
+    with env_without(*pc.KEY_NAMES):
+        code, out, f_fmp = fetch("spy", "fmp", start=SPY_WIN[0], end=SPY_WIN[1], http=FakeHttp(fmp_handler),
+                                 env_file=keys, root=root)
+        code2, out2, f_yahoo = fetch("spy", "yahoo_now", start=SPY_WIN[0], end=SPY_WIN[1], yf=fake_yf([]), root=root)
+    assert code == 0 and code2 == 0, (out, out2)
+    w = spy_world()
+    _, kis, _ = spy_b(w)                                             # a loose file: no fetch record beside it
+    code, out, s, _ = w.compare([("fmp", f_fmp / "spy_fmp.csv"), ("kis", kis),
+                                 ("yahoo_now", f_yahoo / "spy_yahoo_now.csv")])
+    assert code == 0 and s["outcome"] == "PASS", out
+    assert {p["provider"]: p["has_fetch_record"] for p in s["pairs"]} == {"fmp": True, "kis": False,
+                                                                          "yahoo_now": True}, s["pairs"]
+    # the yahoo_now file is refused as fmp where its record is; copied elsewhere it is compared, without a record
+    code, out, s, _ = w.compare([("fmp", f_yahoo / "spy_yahoo_now.csv")])
+    assert code == 2 and "another provider" in out, out
+    loose = root / "loose" / "spy_fmp.csv"
+    loose.parent.mkdir()
+    loose.write_bytes((f_yahoo / "spy_yahoo_now.csv").read_bytes())
+    code, out, s, _ = w.compare([("fmp", loose)])
+    assert code == 0 and s["pairs"][0]["has_fetch_record"] is False, out
+    # the fetched file under another name in its folder, then one value changed by hand
+    csv = f_fmp / "spy_fmp.csv"
+    renamed = f_fmp / "spy_fmp_edited.csv"
+    renamed.write_bytes(csv.read_bytes())
+    lines = csv.read_text(encoding="utf-8").splitlines()
+    lines[900] = lines[900].split(",")[0] + "," + lines[899].split(",")[1]
+    csv.write_bytes(("\n".join(lines) + "\n").encode("utf-8"))
+    for path in (renamed, csv):
+        code, out, s, folder = w.compare([("fmp", path)])
+        assert code == 2 and s is None and not folder.exists(), (path.name, out)
+        assert "not the file its fetch record describes" in out, out
+        assert last_line(out) == "PARITY spy REFUSED exit=2 summary=-", out
+
+
+def test_rf_infinite_value_is_a_value_outside_the_range_and_is_refused_in_a_provider_file():
+    """For the cash rate only a missing value is a published blank. An infinite value in the pinned file is a value
+    outside range_pct (the runner's dropna keeps it too), so the units check fails; a provider file never holds one
+    (a fetch writes a finite number or a blank cell), so such a file is refused, for every series."""
+    days, vals, hol = RF
+    m = next(i for i, d in enumerate(days) if d >= "2013-05-15" and i not in hol)
+    for cell in ("inf", "-inf"):
+        a = pinned_text("DATE,DGS3MO", days, [np.nan if i in hol else x for i, x in enumerate(vals)])
+        a = a.splitlines(keepends=True)
+        a[m + 1] = f"{days[m]},{cell}\n"
+        w = World("rf", "".join(a), start=RF_WIN[0], end=RF_WIN[1])
+        code, out, s, _ = rf_run(w, *rf_b(vals, drop_holidays=False))
+        units = s["integrity"][0]
+        assert units["id"] == "units" and units["outcome"] == "FAIL" and units["percent_units_ok"] is False, (cell, s)
+        assert code == 1 and s["outcome"] == "FAIL", (cell, out)
+        blanks = check_of(s, "treasury", "blanks")
+        assert blanks["n_blank_a_value_b"] > 0 and days[m] not in blanks["blank_a_value_b"], (cell, blanks)
+        assert check_of(s, "treasury", "values")["n_off_by_tol"] == 1, cell
+    b_days, b_vals = rf_b(vals)
+    b = provider_text(b_days, b_vals, 2).splitlines(keepends=True)
+    k = b_days.index(days[m]) + 1
+    d0, _, adj0, _ = SPY
+    spy_lines = provider_text(d0, adj0 * 0.987, 6).splitlines(keepends=True)
+    j = d0.index("2013-05-15") + 1
+    for cell in ("inf", "-inf"):
+        w = rf_world()
+        code, out, s, path = w.compare([("treasury", w.file("rf_inf.csv", "".join(b[:k] + [f"{days[m]},{cell}\n"]
+                                                                                 + b[k + 1:])))])
+        assert code == 2 and s is None and not path.exists() and "not a finite number" in out, (cell, out)
+        w = spy_world()
+        code, out, s, path = w.compare([("fmp", w.file("spy_inf.csv", "".join(spy_lines[:j] + [f"2013-05-15,{cell}\n"]
+                                                                              + spy_lines[j + 1:])))])
+        assert code == 2 and s is None and not path.exists() and "not a finite number" in out, (cell, out)
+
+
+def test_a_failed_write_never_leaves_a_summary_and_names_a_folder_it_cannot_remove():
+    """detail.json is written first and summary.json last. When a write fails and the folder cannot be removed
+    either (a file held by a scanner or a sync client), what is left is never a summary without its detail, and the
+    line above the ERROR line names the folder; when the folder can be removed, nothing is left and nothing is said."""
+    real_rmtree, real_open = shutil.rmtree, open
+
+    def held(path, ignore_errors=False, **_k):                      # the removal changes nothing
+        if not ignore_errors:
+            raise PermissionError(13, "sharing violation")
+    for blocked, removable in (("detail.json", False), ("summary.json", False), ("summary.json", True)):
+        def failing_open(file, mode="r", *a, blocked=blocked, **k):
+            if Path(file).name == blocked and "x" in mode:
+                raise PermissionError(13, "used by another process")
+            return real_open(file, mode, *a, **k)
+        w = spy_world()
+        fmp, kis, _ = spy_b(w)
+        pc.open = failing_open
+        if not removable:
+            pc.shutil.rmtree = held
+        try:
+            code, out, s, folder = w.compare([("fmp", fmp), ("kis", kis)])
+        finally:
+            pc.shutil.rmtree = real_rmtree
+            del pc.open
+        lines = out.strip().splitlines()
+        assert code == 4 and s is None and lines[-1] == "PARITY spy ERROR exit=4 summary=-", out
+        assert lines[-2].startswith("ERROR: PermissionError at parity_check.py lines "), out
+        if removable:
+            assert "LEFT BEHIND" not in out and not folder.exists(), out
+            continue
+        assert lines[-3] == f"LEFT BEHIND: {folder} could not be removed; it is not a result, delete it by hand", out
+        assert sorted(p.name for p in folder.iterdir()) == ([] if blocked == "detail.json" else ["detail.json"])
+
+
+def test_fetch_prints_one_calendar_fact_of_the_provider_s_own_dates():
+    """A date label one calendar day off (a Korean date, or UTC midnight read in local time) shows at fetch, before
+    compare makes the run of record: `weekend dates` for SPY and DGS3MO, whose dates have none when they are session
+    dates, and `missing days` inside the file's own span for BTC-USD. Counts of dates only."""
+    d0, _, _, _ = SPY
+    root = tmp()
+    keys = key_file(root)
+    next_day = [(date.fromisoformat(x) + timedelta(days=1)).isoformat() for x in d0]
+    for name, labels in (("session", d0), ("next_day", next_day)):
+        with env_without(*pc.KEY_NAMES):
+            code, out, folder = fetch("spy", "kis", start=SPY_WIN[0], end=SPY_WIN[1], kis=fake_kis([], labels),
+                                      env_file=keys, root=root / name)
+        assert code == 0, out
+        rows = read_csv_rows(folder / "spy_kis.csv")
+        weekend = sum(1 for x, _ in rows if date.fromisoformat(x).weekday() >= 5)
+        assert (weekend == 0) if name == "session" else (weekend > 300), (name, weekend)
+        assert out.splitlines()[-2] == f"rows {len(rows)}, first {rows[0][0]}, last {rows[-1][0]}, " \
+                                       f"weekend dates {weekend}", out
+        assert json.loads((folder / "meta.json").read_text(encoding="utf-8"))["csv"]["n_weekend_dates"] == weekend
+    d, _, v = BTC
+    gone = {d[200], d[201], d[900]}
+
+    def coinbase_with_an_outage(url, params):
+        lo, hi = params["start"][:10], params["end"][:10]
+        return ok_json([[calendar.timegm(date.fromisoformat(d[i]).timetuple()), 0, 0, 0, round(float(v[i]), 2), 1.0]
+                        for i in reversed(in_span(d, lo, hi)) if d[i] not in gone])
+    code, out, folder = fetch("btc", "coinbase", start=BTC_WIN[0], end=BTC_WIN[1],
+                              http=FakeHttp(coinbase_with_an_outage), root=root)
+    rows = read_csv_rows(folder / "btc_coinbase.csv")
+    assert code == 0 and out.splitlines()[-2] == f"rows {len(rows)}, first {d[0]}, last {d[-1]}, missing days 3", out
+    assert json.loads((folder / "meta.json").read_text(encoding="utf-8"))["csv"]["n_missing_days"] == 3
+    code, out, folder = fetch("rf", "fred_now", start=RF_WIN[0], end=RF_WIN[1], http=FakeHttp(fred_handler), root=root)
+    assert code == 0 and out.splitlines()[-2].endswith(", weekend dates 0"), out
+
+
+def test_an_error_answer_is_quoted_for_a_provider_without_a_key_and_never_for_fmp():
+    """A first run that fails has to be diagnosed from the two lines the owner sends back. For the providers that
+    take no key, the line above the result quotes the start of the provider's error answer: at most 200 bytes,
+    printable ASCII only (anything else, and the backslash, as \\xNN) and every decimal number masked. Not for fmp,
+    whose URL holds the key, and not for an answer that is not an error."""
+    body = b'{"message":"granularity too small for the requested time range"}'
+    code, out, folder = fetch("btc", "coinbase", start="2017-01-01", end="2017-01-20",
+                              http=FakeHttp(lambda u, p: pc.Response(400, body)))
+    assert out.splitlines()[-2] == ('UNAVAILABLE: coinbase: HTTP 400, the answer starts: '
+                                    '{"message":"granularity too small for the requested time range"}'), out
+    assert code == 4 and last_line(out) == "FETCH btc coinbase UNAVAILABLE fetch_failed exit=4 csv=-", out
+    head = "<html>접근 \\ last 43210.55 at 1.5\r\n".encode("utf-8")
+    code, out, folder = fetch("rf", "fred_now", start=RF_WIN[0], end=RF_WIN[1],
+                              http=FakeHttp(lambda u, p: pc.Response(403, head + b"x" * 400)))
+    line = out.splitlines()[-2]
+    kept = 200 - len(head)
+    assert line.startswith("UNAVAILABLE: fred_now: HTTP 403, the answer starts: <html>\\xec\\xa0\\x91\\xea\\xb7\\xbc "
+                           "\\x5c last #.# at #.#\\x0d\\x0a"), line
+    assert line.isascii() and "43210" not in line and line.endswith("\\x0a" + "x" * kept), line
+    assert code == 4 and last_line(out) == "FETCH rf fred_now UNAVAILABLE plan_or_access exit=4 csv=-", out
+    code, out, folder = fetch("btc", "coinbase", start="2017-01-01", end="2017-01-20",
+                              http=FakeHttp(lambda u, p: pc.Response(204, b"close 43210.55")))
+    assert out.splitlines()[-2] == "UNAVAILABLE: coinbase: HTTP 204" and "43210" not in out, out
+    root = tmp()
+    code, out, folder = fetch("spy", "fmp", start=SPY_WIN[0], end=SPY_WIN[1], env_file=key_file(root), root=root,
+                              http=FakeHttp(lambda u, p: pc.Response(402, b'{"Error Message":"upgrade the plan"}')))
+    assert out.splitlines()[-2] == "UNAVAILABLE: fmp: HTTP 402", out
+    assert code == 4 and last_line(out) == "FETCH spy fmp UNAVAILABLE plan_or_access exit=4 csv=-", out
+    assert pc.KEYLESS == {"coinbase", "bitstamp", "binance", "treasury", "h15", "fred_now"}
+
+
+def test_kis_failure_line_gives_the_status_and_the_message_code_only():
+    """The app's KIS client raises KISError with a message of its own making. The line names what fixed patterns
+    find in it (the token step, the HTTP status, KIS's message code, a transport error's type) and never the text,
+    which can hold the provider's free wording."""
+    class KISError(RuntimeError):
+        pass
+    root = tmp()
+    keys = key_file(root)
+    cases = {"HHDFS76240000: HTTP 500 (EGW00123: 기간이 만료된 token 4321.12)":
+             "KISError; HTTP 500, msg_cd EGW00123",
+             "token rejected (HTTP 403)": "KISError; token, HTTP 403",
+             "token request failed: ConnectionError": "KISError; token, ConnectionError",
+             "HHDFS76240000: ConnectTimeout": "KISError; ConnectTimeout",
+             "HHDFS76240000: 해당 종목정보가 없습니다 4321.12": "KISError"}
+    for n, (text, said) in enumerate(cases.items()):
+        def getter(path, tr_id, params, text=text):
+            raise KISError(text)
+        with env_without(*pc.KEY_NAMES):
+            code, out, folder = fetch("spy", "kis", start=SPY_WIN[0], end=SPY_WIN[1], kis=getter, env_file=keys,
+                                      root=root / str(n))
+        assert code == 4 and out.splitlines()[-2] == f"UNAVAILABLE: kis request failed ({said})", (text, out)
+        assert last_line(out) == "FETCH spy kis UNAVAILABLE fetch_failed exit=4 csv=-", out
+        assert "4321" not in out and "종목" not in out and "만료" not in out, out
+
+
+def test_an_unexpected_exception_names_the_tool_s_own_lines_and_nothing_else():
+    """ERROR prints the exception type and where in the tool it passed: line numbers only, outermost first. The
+    numbers are real lines of the tool file; the exception's text is never printed."""
+    w = spy_world()
+    fmp, kis, _ = spy_b(w)
+    real = pc.assert_summary_safe
+
+    def boom(*_a, **_k):
+        raise ValueError("close 4321.12 leaked")
+    pc.assert_summary_safe = boom
+    try:
+        code, out, s, path = w.compare([("fmp", fmp), ("kis", kis)])
+    finally:
+        pc.assert_summary_safe = real
+    found = re.fullmatch(r"ERROR: ValueError at parity_check\.py lines (\d+(?: > \d+)*)", out.splitlines()[-2])
+    assert code == 4 and s is None and not path.exists() and found, out
+    assert "4321.12" not in out and "leaked" not in out, out
+    source = Path(pc.__file__).read_text(encoding="utf-8").splitlines()
+    numbers = [int(x) for x in found.group(1).split(" > ")]
+    assert "run_compare(" in source[numbers[0] - 1], numbers
+    assert "assert_summary_safe(summary)" in source[numbers[-1] - 1], numbers
+
+
+def test_an_output_folder_inside_onedrive_is_refused():
+    """OneDrive uploads what is written into its folder, and detail.json and the raw responses stay on the owner's
+    machine (spec 10.5, Outputs). A folder whose path has a part starting with OneDrive is refused, in any letter
+    case, and so is one inside the folder a OneDrive environment variable names, before anything is fetched."""
+    w = spy_world()
+    fmp, _, _ = spy_b(w)
+    base = w.root / "Users" / "사용자"
+    for part in ("OneDrive", "onedrive - Example Org"):
+        code, text, s, _ = w.compare([("fmp", fmp)], out=base / part / "문서" / "pp" / "C-1")
+        assert code == 2 and s is None and "OneDrive" in text and not base.exists(), (part, text)
+        assert last_line(text) == "PARITY spy REFUSED exit=2 summary=-", text
+        http = FakeHttp(fmp_handler)
+        code, text, folder = fetch("spy", "fmp", start=SPY_WIN[0], end=SPY_WIN[1], http=http, root=base / part / "pp")
+        assert code == 2 and http.calls == [] and "OneDrive" in text and not base.exists(), (part, text)
+    assert pc.SYNCED_ROOT_NAMES == ("OneDrive", "OneDriveConsumer", "OneDriveCommercial")
+    moved = w.root / "CloudFiles"                                   # a OneDrive folder under another name
+    saved = {n: os.environ.get(n) for n in pc.SYNCED_ROOT_NAMES}
+    try:
+        for k, name in enumerate(pc.SYNCED_ROOT_NAMES):
+            for n in pc.SYNCED_ROOT_NAMES:
+                os.environ.pop(n, None)
+            os.environ[name] = str(moved)
+            code, text, s, _ = w.compare([("fmp", fmp)], out=moved / "pp" / "C-1")
+            assert code == 2 and s is None and "OneDrive" in text and not moved.exists(), (name, text)
+            code, text, s, _ = w.compare([("fmp", fmp)], out=w.root / "CloudFilesToo" / f"C-{k}")
+            assert code == 0 and s["outcome"] == "PASS", (name, text)     # a sibling whose name only starts alike
+        for n in pc.SYNCED_ROOT_NAMES:
+            os.environ.pop(n, None)
+        code, text, s, _ = w.compare([("fmp", fmp)], out=moved / "pp" / "C-1")       # no variable names it now
+        assert code == 0 and s["outcome"] == "PASS", text
+    finally:
+        for n, value in saved.items():
+            if value is None:
+                os.environ.pop(n, None)
+            else:
+                os.environ[n] = value
+
+
+# --------------------------------------------------------------------------- #
+# Review of 2026-11-11, part 4: the documents and the files this branch leaves alone
+# --------------------------------------------------------------------------- #
+def test_the_guide_matches_the_tool_and_says_what_is_not_settled():
+    """The owner follows the guide, so it is held to the tool: the number of cases; the tool's sha256 once an owner
+    ruling has fixed it (until then both lines say so, and the guide says it is not ready and why); and the notes a
+    reader needs on what the tool leaves out and what a WITHHELD or a failed run means."""
+    guide = GUIDE.read_text(encoding="utf-8")
+    flat = " ".join(guide.split())
+    assert f"{len(tests())} cases on synthetic series" in flat, len(tests())
+    fixed = dict(re.findall(r"^Tool (commit|sha256) fixed by the owner ruling: (.+)$", guide, flags=re.M))
+    assert set(fixed) == {"commit", "sha256"}, fixed
+    unset = "not fixed yet"
+    assert fixed["sha256"] in (unset, hashlib.sha256(Path(pc.__file__).read_bytes()).hexdigest()), \
+        "the guide fixes a sha256 that is not this tool file's"
+    assert (fixed["commit"] == unset) == (fixed["sha256"] == unset), fixed
+    assert fixed["commit"] == unset or re.fullmatch(r"[0-9a-f]{40}", fixed["commit"]), fixed
+    if fixed["sha256"] == unset:
+        assert "not ready to be followed" in flat and "777fc5b" in flat, "the guide must say why it cannot be run yet"
+    for phrase in ("signed NYSE calendar. That check is not built",             # the draft's 4.1 clause, left out
+                   "`n_common` near 80 % of `n_a`",                             # a date label one day off
+                   "`weekend dates` must be 0", "`has_fetch_record`", "LEFT BEHIND", "OneDrive",
+                   "is not registered in `tests/run_all.py`"):
+        assert phrase in flat, phrase
+
+
+def test_the_root_readme_and_run_all_do_not_name_this_suite():
+    """The root README.md and tests/run_all.py stay as they are on main. A README edit without a regenerated
+    qa/research_status.json fails `python -m tools.status.snapshot --check` in CI, and both files are where the
+    research branch adds its own rows, so an edit here would hand the owner conflicts in the Step 10 merge.
+    Registering the suite is the owner's decision; when he makes it, this case goes with that edit."""
+    for rel in ("README.md", "tests/run_all.py"):
+        assert "provider_parity" not in (ROOT / rel).read_text(encoding="utf-8"), rel
 
 
 # --------------------------------------------------------------------------- #

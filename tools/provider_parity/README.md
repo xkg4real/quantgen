@@ -10,21 +10,44 @@ It runs on the owner's machine only, after Step 7A and before Step 8, from a sep
 never while a pilot, the suite or a readout runs. Claude builds and tests it on synthetic data only and reads only
 `summary.json`.
 
-Spec 10.5 names the tool's branch `claude/provider-parity-5-2` and leaves its commit and sha256 to an owner ruling
-before the first run. Clone that branch at the commit fixed for the run, and before the first run compare
-`git rev-parse HEAD` and `(Get-FileHash tools\provider_parity\parity_check.py -Algorithm SHA256).Hash.ToLower()` with
-the fixed values. Every summary records the sha256 of the tool that wrote it (`tool.sha256`).
+## Before the first run: the tool's branch, commit and sha256
+
+Spec 10.5 names the tool's branch `claude/provider-parity-5-2` and leaves the tool's commit and sha256 to an owner
+ruling before the first run. Neither is settled, so this guide is not ready to be followed yet:
+
+- As of 2026-11-11 `claude/provider-parity-5-2` still holds the unfinished tool of 2026-11-05 (commit `777fc5b`,
+  marked "do not merge"). The Setup below would clone that file, not the reviewed one. The reviewed tool has to be
+  brought onto that branch first, or an owner ruling has to name another branch (with a spec-only commit on the
+  research branch).
+- Then an owner ruling fixes the commit and the sha256 of `parity_check.py`, and both are written on the two lines
+  below. A change to the tool after that changes its sha256, and the suite fails until the line is right again.
+
+```
+Tool commit fixed by the owner ruling: not fixed yet
+Tool sha256 fixed by the owner ruling: not fixed yet
+```
+
+Run nothing for the record while either line says `not fixed yet`. Every summary records the sha256 of the tool that
+wrote it (`tool.sha256`); a run with other tool bytes counts only by an owner ruling (spec 10.5, Tool).
 
 ## Setup (PowerShell)
 
 ```powershell
 $rc = "<the research clone>"                         # read only: the tables, the pinned files and its .env
+$fixed = "<the tool commit fixed by the owner ruling>"
 $origin = git -C $rc remote get-url origin
 git clone --branch claude/provider-parity-5-2 --single-branch $origin "$env:LOCALAPPDATA\quantgen\pp_clone"
 cd "$env:LOCALAPPDATA\quantgen\pp_clone"
+git merge-base --is-ancestor $fixed HEAD; $LASTEXITCODE                                  # 0: the fixed commit is here
+git diff --quiet $fixed HEAD -- tools/provider_parity/parity_check.py; $LASTEXITCODE     # 0: the tool is as it was there
+(Get-FileHash tools\provider_parity\parity_check.py -Algorithm SHA256).Hash.ToLower()    # the fixed sha256
 $pp = "$env:LOCALAPPDATA\quantgen\provider_parity"   # every output folder goes under here, outside every git clone
 python -B -m tools.provider_parity.parity_check selftest   # last line: SELFTEST PASS checks=11 failures=0
 ```
+
+If either git line prints anything but 0, or the hash differs from the fixed sha256 above, stop: it is not the tool
+the ruling fixed. (The branch's head moves on after the fixed commit: this guide's two lines and every committed
+summary come later, so the head itself is not the fixed commit.)
 
 Use the global interpreter the app uses (numpy, pandas, requests; yfinance for `yahoo_now`), not the dedicated
 Nautilus interpreter. Keys are read by name from `--env-file` (FMP_API_KEY for `fmp`; KIS_APP_KEY, KIS_APP_SECRET and
@@ -34,8 +57,12 @@ rewrite its access token `~/.nextgen/kis_token.json`; nothing else under `~/.nex
 
 Every `--out` is a folder that does not exist yet. The tool refuses one inside any git work tree (the research clone,
 this clone or another) and one under a folder named `asset_expansion`, `.nextgen` or `ledgers`, so nothing it writes
-enters the research clone, `docs/asset_expansion/` or a ledger. Files are UTF-8 with LF. Console lines use the
-console's own encoding (cp949 or UTF-8); a character it lacks is printed as a backslash escape.
+enters the research clone, `docs/asset_expansion/` or a ledger. It also refuses one inside a OneDrive folder (a folder
+whose name starts with `OneDrive`, or the folder the `OneDrive`, `OneDriveConsumer` or `OneDriveCommercial`
+environment variable names): OneDrive uploads what is written there, and `detail.json` and the raw responses stay on
+this machine. Documents and Desktop are often inside OneDrive; `%LOCALAPPDATA%` is not. The tool does not know other
+sync clients (Dropbox, Google Drive, iCloud), so keep the outputs out of their folders too. Files are UTF-8 with LF.
+Console lines use the console's own encoding (cp949 or UTF-8); a character it lacks is printed as a backslash escape.
 
 ## Fetch (one provider per call; each `--out` is a new folder)
 
@@ -55,15 +82,33 @@ Each call ends with `FETCH <series> <provider> OK exit=0 csv=<file>`, or `... UN
 the reason to give compare (`no_key`, `plan_or_access`, `fetch_failed`) and a line above it that says what is missing
 (for example `UNAVAILABLE: FMP_API_KEY is not set (--env-file or the environment)`), or `REFUSED exit=2`/`ERROR exit=4`.
 Only an `OK` fetch writes a folder: the raw responses, the `date,value` CSV (window start - 31 days to window end + 7
-days) and `meta.json`. Every request names its last date (at most 2026-12-30), and a response holding an observation
-dated on or after 2027-01-01 is refused before anything is written. When a fetch succeeds but its first date is far
-after the window start, compare still takes the file: its coverage check counts the uncovered days. `short_history` is
-the reason to declare when a provider cannot serve the window at all.
+days) and `meta.json`. Every request is bounded before 2027-01-01: by an explicit last date of at most 2026-12-30 or,
+for the Treasury's yearly file, by a calendar year of at most 2026. A response holding an observation dated on or
+after 2027-01-01 is refused before anything is written. When a fetch succeeds but its first date is far after the
+window start, compare still takes the file: its coverage check counts the uncovered days. `short_history` is the
+reason to declare when a provider cannot serve the window at all.
+
+The line above `FETCH ... OK` reads `rows <n>, first <date>, last <date>, weekend dates <n>` for SPY and DGS3MO, and
+`..., missing days <n>` for BTC-USD. `weekend dates` must be 0: a US session or a Treasury business day never falls on
+a weekend, so any other count means the provider labels its days differently (a Korean date, or a UTC time read in
+local time). Do not compare that file and do not declare `short_history`; send Claude the line. `missing days` counts
+the UTC days absent inside the file's own span; compare lists them as a calendar WARN.
 
 Settle every fetch of a series before its compare. A fetch is not a run and may be repeated into a new folder;
 compare is what makes the run of record. No provider endpoint has been called while the tool was built (see the last
-section), so if a fetch ends `UNAVAILABLE fetch_failed` or `ERROR`, send Claude that line and the line above it (they
-carry no value and no key) before declaring the provider unavailable.
+section), so if a fetch ends `UNAVAILABLE fetch_failed` or `ERROR`, or `UNAVAILABLE plan_or_access` for a provider
+that needs no key, send Claude that line and the line above it before declaring the provider unavailable. The two
+lines carry no key, and the only part of a provider's answer they quote is the start of an error answer. The line
+above says:
+
+- for a provider without a key (coinbase, bitstamp, binance, treasury, h15, fred_now): the HTTP status and, for a
+  status of 400 or above, the first 200 bytes of the provider's error answer, with every byte outside printable ASCII
+  as `\xNN` and every decimal number masked as `#.#`. `HTTP 403` from one of these is usually a proxy or a firewall
+  on the way, not the provider's plan, although the tool files 401, 402 and 403 under `plan_or_access`;
+- for `fmp`: the HTTP status only, because its URL holds the key;
+- for `kis`: the exception type and, when the app's client reports them, `token`, the HTTP status and KIS's message
+  code (`msg_cd`), never the message text;
+- for `ERROR`: the exception type and the tool's own line numbers (`at parity_check.py lines ...`).
 
 ## Compare (one call per series)
 
@@ -88,8 +133,20 @@ python -B -m tools.provider_parity.parity_check compare --series btc --table "$t
 - The output folder holds `summary.json` (counts, outcomes, decade buckets, calendar dates; the tool refuses to write
   anything else) and `detail.json` (the per-date values and differences). `detail.json` stays on this machine.
 - `--owner-run` says this is the owner's machine: without it the tool refuses a file under `asset_expansion/cache`
-  before opening or hashing it. `--repo` is the research clone and must not contain this tool: a clone that holds
-  the tool is refused, because the tool runs from a separate clone (U5).
+  before opening or hashing it, whether the path is spelled that way or only leads there (a link or a junction).
+  `--repo` is the research clone and must not contain this tool: a clone that holds the tool is refused, because the
+  tool runs from a separate clone (U5).
+- A `--pair` file inside its fetch folder is checked against that folder's `meta.json`: a file edited, renamed or
+  replaced after its fetch is refused (fetch again into a new folder). Each pair in the summary carries
+  `has_fetch_record`; a file compared from anywhere else shows `false`, and Claude will ask where it came from.
+- A SPY pair that ends WITHHELD on coverage with `n_common` near 80 % of `n_a` points to a date label one calendar
+  day off, not to a short history. The calendar check does not run on a WITHHELD pair, so the summary shows the
+  coverage counts only. Report it; do not declare `short_history`. The fetch line's `weekend dates` shows the same
+  thing before compare.
+- If the lines above the result are `LEFT BEHIND: <folder> ...` and `ERROR: ...`, a write failed and the folder could
+  not be removed (a virus scanner or a sync client held a file). It is not a run, and whatever it holds is not a
+  result (`detail.json` is written first, so there is never a summary without its detail): delete it by hand and run
+  again into a new folder.
 - A provider whose history starts late is compared inside its own span (P-D5); A's dates outside the span count
   against `edge_uncovered_max` (5 for SPY and DGS3MO, 471 for BTC-USD), and above that the pair is WITHHELD on
   coverage. The repository's own Binance client notes that BTCUSDT starts on 2017-08-17; if the fetched file starts
@@ -135,10 +192,26 @@ The earlier result is never removed.
 python -B -m unittest tests.provider_parity_acceptance -v
 ```
 
-78 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
+110 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
 threshold of 10.5.1 from both sides, every outcome and exit code, the provider map, the 2027-01-01 cut-off, the summary
-allow-list, where the tool may write, key handling, a cp949 console, and the tool started as a module. The suite reads
-no cache file, no `.env` and nothing under `~/.nextgen`.
+allow-list, where the tool may write, key handling, a cp949 console, and the tool started as a module. The fetchers are
+checked against values typed by hand (epoch seconds, request parameters, expected rows), and the tool's own HTTP
+function runs with `urlopen` replaced. The suite reads no cache file, no `.env` and nothing under `~/.nextgen`; in the
+repository it reads the tool, this guide, the tool's section of `docs/compliance/FACTS.md`, the root `README.md` and
+`tests/run_all.py` (the last two only to see that they do not name this suite).
+
+The suite is not registered in `tests/run_all.py` and has no row in the root `README.md`: both files are left as they
+are on main until the owner says otherwise, so the Step 10 merge of the research branch meets no conflict there. CI
+runs the suite in the "bounded source fixtures" step of `.github/workflows/runtime-smoke.yml`.
+
+## Not included
+
+- The design draft (4.1 and its test plan) also has the formal tool compare the 2025-2026 SPY sessions with the signed
+  NYSE calendar. That check is not built: spec 10.5 and 10.5.1 do not list it, and it would have to enter `COMPUTES`
+  and 10.5.1 before any summary exists. It is an open question for the owner.
+- The same draft expects a SPY provider with next-day labels to end `calendar` FAIL. Here coverage is judged first
+  (10.5.1), so such a pair ends WITHHELD and its calendar check does not run; with another evidence pair clean, the
+  series can still PASS. The fetch line's `weekend dates` and the note under Compare are what show the shift.
 
 ## Not verified (no network was used to build the tool)
 
@@ -151,7 +224,10 @@ no cache file, no `.env` and nothing under `~/.nextgen`.
   `UNAVAILABLE fetch_failed`; a well-formed response of the wrong series shows as a coverage, calendar or value
   disagreement in compare.
 - The tool has not run on Windows and has not read a real pilot file. The suite was run on Linux only (Python 3.13,
-  numpy 2.3.5, pandas 2.3.3).
+  numpy 2.3.5, pandas 2.3.3). Checked on Linux only, with stand-ins: a link to a folder named `asset_expansion/cache`
+  (not a Windows junction or an 8.3 short name), a folder named `OneDrive` and the three OneDrive variable names
+  (not a real OneDrive), LF under simulated Windows text mode, and a folder that cannot be removed (simulated).
+- The PowerShell lines of this guide have not been run.
 - The thresholds of 10.5.1 were set without real data, so the rate of false FAIL on real series is unknown.
 - yfinance 1.7.0 routes its tz, cookie and ISIN caches through `set_tz_cache_location` (read from its source, not
   from a download); another version may keep a cache elsewhere.

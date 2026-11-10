@@ -19,27 +19,34 @@ Run on the owner's machine only, from the root of a clone of branch claude/provi
 
 fetch
 - One provider of one series per call. Each provider is a small function over an injected HTTP layer (`http_get`; the
-  `kis` fetch goes through the app's KIS client for its token, `yahoo_now` through yfinance). Every request names an
-  explicit last date, at most LAST_REQUEST_DAY, so no observation dated on or after 2027-01-01 is ever requested; a
-  response that still holds one is refused before anything is written.
+  `kis` fetch goes through the app's KIS client for its token, `yahoo_now` through yfinance). Every request is
+  bounded before 2027-01-01: by an explicit last date of at most LAST_REQUEST_DAY or, for the Treasury's yearly
+  file, by a calendar year of at most 2026. A response that still holds an observation dated on or after 2027-01-01
+  is refused before anything is written.
 - Keys are read by NAME only (KEY_NAMES), from --env-file or the process environment, and never printed or written.
-- It writes into a new folder outside every git work tree, and never under docs/asset_expansion, ~/.nextgen or a
-  ledger folder: the raw response bytes, the normalised `date,value` CSV (window start - 31 days to window end + 7
-  days) and `meta.json`. A provider that cannot serve the request ends `UNAVAILABLE <reason>` with a reason for
-  compare's --unavailable; nothing is written then.
+- It writes into a new folder outside every git work tree, and never under docs/asset_expansion, ~/.nextgen, a
+  ledger folder or a OneDrive folder: the raw response bytes, the normalised `date,value` CSV (window start - 31
+  days to window end + 7 days) and `meta.json`. A provider that cannot serve the request ends `UNAVAILABLE <reason>`
+  with a reason for compare's --unavailable; nothing is written then.
+- The line before `FETCH ... OK` gives one calendar fact of the provider's own dates (weekend dates for spy and rf,
+  missing UTC days for btc; calendar membership, the 3.9 exception), so a date label one day off shows before compare.
 
 compare
 - Reads the pilot table (--table, inside --repo) read-only, then its `prices_file` (spy, btc) or `rf_file` (rf), checks
   the md5 against the table and reads the table's window the way the runner does (lines filtered by their date text
-  before any value is parsed). Provider files are `date,value` CSVs.
+  before any value is parsed). Provider files are `date,value` CSVs. A file that sits beside a fetch record
+  (`meta.json`) must be the file that record describes (provider, series, sha256); the summary says for each pair
+  whether it had one (`has_fetch_record`).
 - Roles and conventions come from PROVIDERS (10.5.1) only; every required provider is compared or declared unavailable
   with a reason. Thresholds are THRESHOLDS (10.5.1). It computes only the kinds COMPUTES names (the 3.9 exception of
   10.5); `selftest` holds the two together.
-- Writes `summary.json` (the 10.5.2 fields; `assert_summary_safe` refuses anything else) and `detail.json` (the
-  per-date differences; it stays on the owner's machine) into a new folder outside every git work tree. Nothing is
-  written into the research clone, docs/asset_expansion/ or a ledger.
+- Writes `detail.json` (the per-date differences; it stays on the owner's machine) and then `summary.json` (the
+  10.5.2 fields; `assert_summary_safe` refuses anything else) into a new folder outside every git work tree and
+  outside OneDrive. Nothing is written into the research clone, docs/asset_expansion/ or a ledger.
 - Exit codes 0 PASS, 1 FAIL, 3 WITHHELD, 2 refused, 4 error; the result is the last console line
-  `PARITY <series> <outcome> exit=<n> summary=<path or ->`. A refused or failed run writes nothing.
+  `PARITY <series> <outcome> exit=<n> summary=<path or ->`. A refused or failed run writes nothing; if the folder of
+  a failed write cannot be removed again, a `LEFT BEHIND` line names it, and it never holds a summary without its
+  detail.
 
 Every text file is written as UTF-8 with LF, and console lines are written in the console's own encoding (cp949 or
 UTF-8) with a backslash escape for a character it lacks, so a run reads the same on Windows and Linux.
@@ -199,11 +206,23 @@ class Check:
 # --------------------------------------------------------------------------- #
 # Places
 # --------------------------------------------------------------------------- #
+def _names_pinned_cache(path: Path) -> bool:
+    parts = [p.lower() for p in path.parts]
+    return any(parts[i:i + 2] == ["asset_expansion", "cache"] for i in range(len(parts) - 1))
+
+
 def guard_path(path: Path, owner_run: bool) -> None:
-    """Refuse a pinned cache path before it is opened or hashed, unless the owner says this is his machine."""
-    parts = [p.lower() for p in Path(path).parts]
-    pinned = any(parts[i:i + 2] == ["asset_expansion", "cache"] for i in range(len(parts) - 1))
-    if pinned and not owner_run:
+    """Refuse a pinned cache path before it is opened or hashed, unless the owner says this is his machine. The path
+    is judged as it is spelled and as it resolves: a link or a junction to the folder, and on Windows an 8.3 short
+    name of it, lead to the same files."""
+    if owner_run:
+        return
+    spelled = Path(path)
+    try:
+        resolved = spelled.resolve()
+    except (OSError, RuntimeError, ValueError):     # a link loop or a malformed name: where it leads cannot be told
+        raise Refused(f"{path}: the path cannot be resolved") from None
+    if _names_pinned_cache(spelled) or _names_pinned_cache(resolved):
         raise Refused(f"{path}: a pinned cache file is read only on the owner's machine (--owner-run)")
 
 
@@ -213,12 +232,37 @@ def inside_git_worktree(path: Path) -> bool:
 
 
 NO_WRITE_PARTS = ("asset_expansion", ".nextgen", "ledgers")     # spec 10.5, Writes
+# A OneDrive folder is uploaded: detail.json and the raw responses would leave the machine (spec 10.5, Outputs).
+SYNCED_PART_PREFIX = "onedrive"                                 # "OneDrive", "OneDrive - <organisation>"
+SYNCED_ROOT_NAMES = ("OneDrive", "OneDriveConsumer", "OneDriveCommercial")     # environment variables, by name
+
+
+def in_synced_folder(path: Path, environ: dict | None = None) -> bool:
+    """True when a part of the resolved path starts with `OneDrive` (any case), or the path lies in a folder one of
+    the OneDrive environment variables names (a OneDrive folder that was moved or renamed)."""
+    environ = os.environ if environ is None else environ
+    p = Path(path).resolve()
+    if any(part.lower().startswith(SYNCED_PART_PREFIX) for part in p.parts):
+        return True
+    here = os.path.normcase(str(p))
+    for name in SYNCED_ROOT_NAMES:
+        value = (environ.get(name) or "").strip()
+        if not value:
+            continue
+        try:
+            root = os.path.normcase(str(Path(value).resolve()))
+        except (OSError, RuntimeError, ValueError):
+            continue
+        if here == root or here.startswith(root.rstrip("\\/") + os.sep):
+            return True
+    return False
 
 
 def check_new_out(out: Path) -> None:
     """The output folder must not exist yet and must lie outside every git work tree (the research clone, this
-    tool's clone and any other), so nothing the tool writes can be committed by accident; and never under
-    docs/asset_expansion, ~/.nextgen or a ledger folder (spec 10.5, Writes)."""
+    tool's clone and any other), so nothing the tool writes can be committed by accident; never under
+    docs/asset_expansion, ~/.nextgen or a ledger folder (spec 10.5, Writes); and never in a OneDrive folder, which
+    would upload detail.json and the raw responses (spec 10.5, Outputs)."""
     if out.exists() or out.is_symlink():
         raise Refused(f"{out}: the output folder must be new")
     if inside_git_worktree(out.parent):
@@ -226,12 +270,17 @@ def check_new_out(out: Path) -> None:
     named = sorted({p.lower() for p in Path(out).resolve().parts} & set(NO_WRITE_PARTS))
     if named:
         raise Refused(f"{out}: the output folder must not lie under a folder named {', '.join(named)}")
+    if in_synced_folder(out):
+        raise Refused(f"{out}: the output folder must not lie in a OneDrive folder (it is uploaded); use a folder "
+                      "under %LOCALAPPDATA%")
 
 
 def _write_new_folder(out: Path, texts: dict[str, str], blobs: dict[str, bytes] | None = None) -> None:
     """Every file is built before this call; the folder and its files are created only here, each with mode x. Text
-    is UTF-8 with LF on every platform. If a write fails, the folder is removed again, so a run that does not end
-    with a result leaves nothing behind."""
+    is UTF-8 with LF on every platform. `blobs` are written first and `texts` in the order given, so the caller puts
+    the file that stands for the result (summary.json, meta.json) last. If a write fails, the folder is removed
+    again, so a run that does not end with a result leaves nothing behind; if the removal fails too (a file held
+    open by a scanner or a sync client), the exception carries the folder as `left_behind` and `run` names it."""
     out.mkdir(parents=True, exist_ok=False)
     try:
         for rel, data in (blobs or {}).items():
@@ -242,8 +291,11 @@ def _write_new_folder(out: Path, texts: dict[str, str], blobs: dict[str, bytes] 
             (out / rel).parent.mkdir(parents=True, exist_ok=True)
             with open(out / rel, "x", encoding="utf-8", newline="\n") as fh:
                 fh.write(text)
-    except BaseException:
+    except BaseException as exc:
         shutil.rmtree(out, ignore_errors=True)
+        if out.exists():
+            with contextlib.suppress(Exception):    # an exception type that takes no attribute: the folder goes unnamed
+                exc.left_behind = out
         raise
 
 
@@ -412,12 +464,28 @@ class Fetched:
     rows: list[tuple[str, float | None]]
 
 
+# Providers whose requests carry no key: the first bytes of their error answers may be printed. Never fmp, whose URL
+# holds the key, and never kis (its client's own message is read by _kis_detail).
+KEYLESS = frozenset({"coinbase", "bitstamp", "binance", "treasury", "h15", "fred_now"})
+ERROR_EXCERPT_BYTES = 200
+_DECIMAL = re.compile(r"\d+\.\d+")
+
+
+def _excerpt(body: bytes) -> str:
+    """The first bytes of an error answer for the console: printable ASCII as it is, every other byte and the
+    backslash as \\xNN, and each decimal number masked. Only an error answer (status 400 or above) of a provider
+    that takes no key is quoted, so the line can be sent on."""
+    text = "".join(chr(b) if 32 <= b < 127 and b != 92 else f"\\x{b:02x}" for b in body[:ERROR_EXCERPT_BYTES])
+    return _DECIMAL.sub("#.#", text)
+
+
 def _ok(resp: Response, what: str) -> bytes:
     if resp.status == 200:
         return resp.body
-    if resp.status in (401, 402, 403):
-        raise FetchFailed("plan_or_access", f"{what}: HTTP {resp.status}")
-    raise FetchFailed("fetch_failed", f"{what}: HTTP {resp.status}")
+    said = f"{what}: HTTP {resp.status}"
+    if what in KEYLESS and resp.status >= 400 and resp.body:
+        said += f", the answer starts: {_excerpt(resp.body)}"
+    raise FetchFailed("plan_or_access" if resp.status in (401, 402, 403) else "fetch_failed", said)
 
 
 def _json(body: bytes, what: str):
@@ -482,6 +550,26 @@ def _kis_default_get(keys: dict) -> Callable:
     return client._get
 
 
+_KIS_HTTP = re.compile(r"\bHTTP (\d{3})\b")
+_KIS_CODE = re.compile(r"\(([A-Z]{2,6}\d{3,8}): ")                       # the app client's "(<msg_cd>: <msg1>)"
+_KIS_INNER = re.compile(r": ([A-Za-z_]{3,40}(?:Error|Exception|Timeout))$")  # the app client's "<tr_id>: <type>"
+
+
+def _kis_detail(exc: BaseException) -> str:
+    """What may be said of a KIS failure: the exception type and, read from the app client's own message by fixed
+    patterns only, whether the token request failed, the HTTP status, KIS's message code and the transport error's
+    type. The message itself is never printed (it can quote the provider's free text)."""
+    text = str(exc)
+    said = []
+    if text.startswith("token"):
+        said.append("token")
+    for pattern, label in ((_KIS_HTTP, "HTTP {}"), (_KIS_CODE, "msg_cd {}"), (_KIS_INNER, "{}")):
+        m = pattern.search(text)
+        if m:
+            said.append(label.format(m.group(1)))
+    return type(exc).__name__ + ("; " + ", ".join(said) if said else "")
+
+
 def fetch_kis(ctx: FetchContext) -> Fetched:
     """KIS overseas daily bars with MODP=1 (split-adjusted, dividends not reinvested): 100 rows per call, paged back
     from BYMD = the last requested date. BYMD is never left blank (blank means today)."""
@@ -500,7 +588,7 @@ def fetch_kis(ctx: FetchContext) -> Fetched:
             raise
         except Exception as exc:
             reason = "no_key" if type(exc).__name__ == "KISUnavailable" else "fetch_failed"
-            raise FetchFailed(reason, f"kis request failed ({type(exc).__name__})") from None
+            raise FetchFailed(reason, f"kis request failed ({_kis_detail(exc)})") from None
         requests.append(dict(params))
         pages.append((f"kis_{k:03d}.json", json.dumps(payload, sort_keys=True).encode("utf-8")))
         page = payload.get("output2") if isinstance(payload, dict) else None
@@ -722,6 +810,17 @@ def provider_csv(rows: list[tuple[str, float | None]]) -> str:
     return "date,value\n" + "".join(f"{d},{'' if v is None else repr(float(v))}\n" for d, v in rows)
 
 
+def provider_calendar_fact(series: str, rows: list[tuple[str, float | None]]) -> tuple[str, str, int]:
+    """One calendar-membership count of a provider's own dates (the 3.9 exception of spec 10.5), as (meta key,
+    console words, count): weekend dates for spy and rf, which have none when the dates are session dates, and the
+    UTC days missing inside the file's own first-to-last span for btc. A date label one calendar day off (a Korean
+    date, or UTC midnight read in local time) shows here, before compare makes the run of record."""
+    dates = [d for d, _ in rows]
+    if series == "btc":
+        return "n_missing_days", "missing days", len(set(_calendar_days(dates[0], dates[-1])) - set(dates))
+    return "n_weekend_dates", "weekend dates", sum(1 for d in dates if date.fromisoformat(d).weekday() >= 5)
+
+
 def run_fetch(args, *, http: HttpGet, yf_download, kis_get, now: datetime, say) -> int:
     series, provider = args.series, args.provider
     if provider not in PROVIDERS[series]:
@@ -748,6 +847,7 @@ def run_fetch(args, *, http: HttpGet, yf_download, kis_get, now: datetime, say) 
     role, convention, required = PROVIDERS[series][provider]
     csv_name = f"{series}_{provider}.csv"
     csv_text = provider_csv(rows)
+    fact_key, fact_words, fact = provider_calendar_fact(series, rows)
     meta = {"schema": FETCH_SCHEMA, "series": series, "provider": provider, "role": role, "convention": convention,
             "required": required, **SOURCES[provider], "window": {"start": args.start, "end": args.end},
             "requested": {"first": first, "last": last}, "requests": fetched.requests,
@@ -756,7 +856,7 @@ def run_fetch(args, *, http: HttpGet, yf_download, kis_get, now: datetime, say) 
                     for n, b in fetched.pages],
             "csv": {"file": csv_name, "sha256": hashlib.sha256(csv_text.encode("utf-8")).hexdigest(),
                     "n_rows": len(rows), "n_blank": sum(1 for _, v in rows if v is None),
-                    "first_date": rows[0][0], "last_date": rows[-1][0]},
+                    "first_date": rows[0][0], "last_date": rows[-1][0], fact_key: fact},
             "keys_read_by_name": [n for n in KEY_NAMES if n in keys],
             "tool": {"name": TOOL_NAME, "sha256": tool_sha256()}}
     meta_text = json.dumps(meta, indent=1, sort_keys=True) + "\n"
@@ -764,7 +864,7 @@ def run_fetch(args, *, http: HttpGet, yf_download, kis_get, now: datetime, say) 
         raise Refused("a key value reached the fetch record; nothing is written")
     _write_new_folder(args.out, {csv_name: csv_text, "meta.json": meta_text},
                       {f"raw/{n}": b for n, b in fetched.pages})
-    say(f"rows {len(rows)}, first {rows[0][0]}, last {rows[-1][0]}")
+    say(f"rows {len(rows)}, first {rows[0][0]}, last {rows[-1][0]}, {fact_words} {fact}")
     say(f"FETCH {series} {provider} OK exit=0 csv={args.out / csv_name}")
     return 0
 
@@ -851,30 +951,47 @@ def read_pinned(path: Path, *, md5: str, start: str, end: str, owner_run: bool, 
 
 
 def read_provider(path: Path, *, provider: str, series: str, start: str, end: str, owner_run: bool,
-                  keep_blanks: bool = False) -> tuple[Series, str]:
+                  keep_blanks: bool = False) -> tuple[Series, str, bool]:
+    """A provider's `date,value` file: (series, file sha256, whether it came with its fetch record). A fetch folder
+    says which provider and series its CSV holds and what the CSV's sha256 was when it was fetched: a file beside a
+    fetch record that names another provider or series, another file or other bytes is refused. A file with no
+    fetch record beside it is compared, and the summary says so (`has_fetch_record` false)."""
     guard_path(path, owner_run)
+    name = Path(path).name
+    try:
+        data = Path(path).read_bytes()
+    except OSError as exc:
+        raise Refused(f"{name}: cannot be read ({type(exc).__name__})") from None
+    sha = hashlib.sha256(data).hexdigest()
+    has_record = False
     meta = Path(path).parent / "meta.json"
-    if meta.is_file():                       # a fetch folder says which provider and series its CSV holds
+    if meta.is_file():
         try:
             m = json.loads(meta.read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, ValueError):
             raise Refused(f"{meta}: unreadable fetch record") from None
-        if isinstance(m, dict) and m.get("schema") == FETCH_SCHEMA and \
-                (m.get("provider"), m.get("series")) != (provider, series):
-            raise Refused(f"{Path(path).name}: its fetch record names another provider or series")
-    try:
-        data = Path(path).read_bytes()
-    except OSError as exc:
-        raise Refused(f"{Path(path).name}: cannot be read ({type(exc).__name__})") from None
+        if isinstance(m, dict) and m.get("schema") == FETCH_SCHEMA:
+            if (m.get("provider"), m.get("series")) != (provider, series):
+                raise Refused(f"{name}: its fetch record names another provider or series")
+            recorded = m.get("csv") if isinstance(m.get("csv"), dict) else {}
+            if recorded.get("file") != name or recorded.get("sha256") != sha:
+                raise Refused(f"{name}: not the file its fetch record describes (name or sha256 differs); fetch "
+                              "again into a new folder")
+            has_record = True
     lines = data.decode("utf-8", errors="replace").splitlines()
     if not lines or lines[0].strip() != "date,value":
-        raise Refused(f"{Path(path).name}: the header must be `date,value`")
+        raise Refused(f"{name}: the header must be `date,value`")
     if any(_DATE.fullmatch(x[:10]) and x[:10] >= CUTOFF for x in lines[1:]):
-        raise Refused(f"{Path(path).name}: holds an observation dated on or after 2027-01-01")
+        raise Refused(f"{name}: holds an observation dated on or after 2027-01-01")
     try:
-        return _to_series(_window_frame(data, start, end), keep_blanks), hashlib.sha256(data).hexdigest()
+        frame = _window_frame(data, start, end)
+        infinite = bool(np.isinf(frame.to_numpy(dtype=float)).any())
+        s = None if infinite else _to_series(frame, keep_blanks)
     except (UnicodeDecodeError, ValueError, TypeError, IndexError, KeyError) as exc:
-        raise Refused(f"{Path(path).name}: cannot be read ({type(exc).__name__})") from None
+        raise Refused(f"{name}: cannot be read ({type(exc).__name__})") from None
+    if infinite:                              # a fetch writes a finite number or a blank cell, never inf
+        raise Refused(f"{name}: holds a value that is not a finite number")
+    return s, sha, has_record
 
 
 # --------------------------------------------------------------------------- #
@@ -928,7 +1045,7 @@ def _demote(check: Check, role: str) -> Check:
 # --------------------------------------------------------------------------- #
 def _base_dates(series: str, a: Series) -> list[str]:
     """A's dates that coverage counts: every date, or for the cash rate every date with a published value."""
-    return [d for d, v in zip(a.dates, a.values) if math.isfinite(v)] if series == "rf" else list(a.dates)
+    return [d for d, v in zip(a.dates, a.values) if not math.isnan(v)] if series == "rf" else list(a.dates)
 
 
 def check_coverage(series: str, a: Series, b: Series) -> Check:
@@ -1124,19 +1241,21 @@ def check_btc_levels(a: Series, b: Series) -> Check:
 
 
 def check_rf_units(a: Series) -> Check:
-    """A alone: every published value inside range_pct and the window maximum at least unit_max_at_least_pct."""
+    """A alone: every published value inside range_pct and the window maximum at least unit_max_at_least_pct. Only
+    NaN is a published blank: plus or minus infinity is a value outside the range, as it is for the runner, whose
+    dropna keeps it."""
     t = THRESHOLDS["rf"]
-    finite = a.values[np.isfinite(a.values)]
+    published = a.values[~np.isnan(a.values)]
     lo, hi = t["range_pct"]
-    outside = [d for d, v in zip(a.dates, a.values) if math.isfinite(v) and not lo <= v <= hi]
-    ok = bool(finite.size) and not outside and float(np.max(finite)) >= t["unit_max_at_least_pct"]
+    outside = [d for d, v in zip(a.dates, a.values) if not math.isnan(v) and not lo <= v <= hi]
+    ok = bool(published.size) and not outside and float(np.max(published)) >= t["unit_max_at_least_pct"]
     return Check("units", "hard", "PASS" if ok else "FAIL", {"percent_units_ok": ok}, {"outside_range": outside})
 
 
 def check_rf_seed(a: Series, start: str) -> Check:
     """A alone: a published value on or before the window start, inside the seed lookback (the runner's ffill)."""
-    finite = [d for d, v in zip(a.dates, a.values) if math.isfinite(v)]
-    ok = bool(finite) and finite[0] <= start
+    published = [d for d, v in zip(a.dates, a.values) if not math.isnan(v)]
+    ok = bool(published) and published[0] <= start
     return Check("seed", "hard", "PASS" if ok else "FAIL", {"seed_before_start": ok})
 
 
@@ -1146,12 +1265,12 @@ def check_rf(a: Series, b: Series, role: str) -> list[Check]:
     t = THRESHOLDS["rf"]
     av = dict(zip(a.dates, a.values))
     bv = dict(zip(b.dates, b.values))
-    both = [d for d in a.dates if d in bv and math.isfinite(av[d]) and math.isfinite(bv[d])]
+    both = [d for d in a.dates if d in bv and not math.isnan(av[d]) and not math.isnan(bv[d])]
     diff = [abs(av[d] - bv[d]) for d in both]
-    off = [d for d, x in zip(both, diff) if x >= t["value_tol_pct"]]
-    blank_a_value_b = [d for d in a.dates if not math.isfinite(av[d]) and d in bv and math.isfinite(bv[d])]
+    off = [d for d, x in zip(both, diff) if not x < t["value_tol_pct"]]      # an infinite A value is off as well
+    blank_a_value_b = [d for d in a.dates if math.isnan(av[d]) and d in bv and not math.isnan(bv[d])]
     weekday = [d for d in a.dates if date.fromisoformat(d).weekday() < 5]
-    value_a_absent_b = [d for d in weekday if math.isfinite(av[d]) and not math.isfinite(bv.get(d, math.nan)) and
+    value_a_absent_b = [d for d in weekday if not math.isnan(av[d]) and math.isnan(bv.get(d, math.nan)) and
                         b.dates and b.dates[0] <= d <= b.dates[-1]]
     checks = [
         Check("values", "hard", "FAIL" if off else "PASS",
@@ -1177,9 +1296,11 @@ PAIR_CHECKS = {
 
 
 def compare(series: str, a: Series, pairs: list[tuple[str, str, str, Series, str]],
-            unavailable: list[tuple[str, str]] = (), *, start: str | None = None) -> tuple[dict, dict, str]:
+            unavailable: list[tuple[str, str]] = (), *, start: str | None = None,
+            fetch_records: frozenset[str] = frozenset()) -> tuple[dict, dict, str]:
     """pairs: (role, convention, provider, series, file sha256); unavailable: (provider, reason) for each provider the
-    owner could not fetch; start: the window start (the rf seed). Returns (summary body, detail, outcome)."""
+    owner could not fetch; start: the window start (the rf seed); fetch_records: the providers whose file came with
+    its own fetch record. Returns (summary body, detail, outcome)."""
     if series == "spy":
         integrity = [check_spy_integrity(a)]
     elif series == "btc":
@@ -1206,7 +1327,8 @@ def compare(series: str, a: Series, pairs: list[tuple[str, str, str, Series, str
         else:
             p_out = "WARN" if any(c.outcome == "WARN" for c in checks) else "PASS"
         out_pairs.append({"provider": provider, "role": role, "convention": conv, "file_sha256": sha,
-                          "outcome": p_out, "checks": [c.public() for c in checks]})
+                          "has_fetch_record": provider in fetch_records, "outcome": p_out,
+                          "checks": [c.public() for c in checks]})
         det_pairs.append({"provider": provider, "role": role, "checks": {c.id: c.detail for c in checks}})
     evidence = [p for p in out_pairs if p["role"] in ("independent", "cross")]
     withheld = [f"{provider} not compared: {reason}" for provider, reason in unavailable]
@@ -1259,8 +1381,9 @@ TOP_KEYS = ("schema", "tool", "run_id", "created_utc", "series", "window", "pinn
 _NESTED = {"tool", "window", "pinned", "integrity", "pairs", "checks", "late", "early"}
 _DATE_LISTS = {"only_a", "only_b", "missing_a", "blank_a_value_b", "value_a_absent_b"}
 _DATE_SCALARS = {"first_date", "last_date", "start", "end"}
-_BOOLS = {"md5_ok", "coverage_ok", "truncated", "no_split_shaped_jump", "max_ok", "drift_ok", "yield_band_ok",
-          "lag0_strictly_fewest", "within_band", "percent_units_ok", "seed_before_start", "no_implausible_jump"}
+_BOOLS = {"md5_ok", "has_fetch_record", "coverage_ok", "truncated", "no_split_shaped_jump", "max_ok", "drift_ok",
+          "yield_band_ok", "lag0_strictly_fewest", "within_band", "percent_units_ok", "seed_before_start",
+          "no_implausible_jump"}
 _HEX = {"sha256": re.compile(r"[0-9a-f]{64}"), "file_sha256": re.compile(r"[0-9a-f]{64}"),
         "md5": re.compile(r"[0-9a-f]{32}")}
 _BUCKET = re.compile(r"<=1e-0\d|>1e-01|n/a")
@@ -1381,12 +1504,15 @@ def run_compare(args, *, now: datetime, say) -> int:
         first = (date.fromisoformat(tab["start"]) - timedelta(days=THRESHOLDS["rf"]["seed_lookback_days"])).isoformat()
     a = read_pinned(tab["path"], md5=tab["md5"], start=first, end=tab["end"], owner_run=args.owner_run,
                     keep_blanks=rf)
-    pairs = []
+    pairs, with_record = [], set()
     for role, conv, provider, path in pair_specs:
-        b, sha = read_provider(path, provider=provider, series=args.series, start=first, end=tab["end"],
-                               owner_run=args.owner_run, keep_blanks=rf)
+        b, sha, has_record = read_provider(path, provider=provider, series=args.series, start=first, end=tab["end"],
+                                           owner_run=args.owner_run, keep_blanks=rf)
         pairs.append((role, conv, provider, b, sha))
-    body, detail, outcome = compare(args.series, a, pairs, unavailable, start=tab["start"])
+        if has_record:
+            with_record.add(provider)
+    body, detail, outcome = compare(args.series, a, pairs, unavailable, start=tab["start"],
+                                    fetch_records=frozenset(with_record))
     summary = build_summary(args.series, body, file=tab["file"], md5=tab["md5"], start=tab["start"], end=tab["end"],
                             now=now)
     assert_summary_safe(summary)
@@ -1394,7 +1520,8 @@ def run_compare(args, *, now: datetime, say) -> int:
     s_text = json.dumps(summary, indent=1, sort_keys=True, ensure_ascii=True, default=_json_default) + "\n"
     d_text = json.dumps({"schema": DETAIL_SCHEMA, "run_id": summary["run_id"], **detail}, indent=1,
                         sort_keys=True, default=_json_default) + "\n"
-    _write_new_folder(args.out, {"summary.json": s_text, "detail.json": d_text})
+    # detail.json first and summary.json last: whatever a failed write leaves, it is never a summary without its detail
+    _write_new_folder(args.out, {"detail.json": d_text, "summary.json": s_text})
     code = EXIT[outcome]
     say(f"PARITY {args.series} {outcome} exit={code} summary={args.out / 'summary.json'}")
     return code
@@ -1511,6 +1638,25 @@ def selftest() -> list[str]:
 # --------------------------------------------------------------------------- #
 # Command line
 # --------------------------------------------------------------------------- #
+def _where(exc: BaseException) -> str:
+    """The tool's own line numbers on the way to an unexpected exception, outermost first. Numbers only: the
+    exception's text can quote a value or a URL with a key, so it is never printed."""
+    here = os.path.normcase(os.path.abspath(__file__))
+    lines, tb = [], exc.__traceback__
+    while tb is not None:
+        if os.path.normcase(os.path.abspath(tb.tb_frame.f_code.co_filename)) == here:
+            lines.append(str(tb.tb_lineno))
+        tb = tb.tb_next
+    return f" at {TOOL_NAME} lines {' > '.join(lines)}" if lines else ""
+
+
+def _say_error(say, exc: BaseException) -> None:
+    left = getattr(exc, "left_behind", None)
+    if left is not None:
+        say(f"LEFT BEHIND: {left} could not be removed; it is not a result, delete it by hand")
+    say(f"ERROR: {type(exc).__name__}{_where(exc)}")
+
+
 class _Say:
     """print() with every loaded key value replaced, as a last guard; the tool never formats a key into a line. A
     character the console encoding lacks (cp949, or any other) is written as a backslash escape, so a line never
@@ -1578,7 +1724,7 @@ def run(argv: list[str] | None = None, *, now: datetime | None = None, http: Htt
             say(f"{tag} UNAVAILABLE {exc.reason} exit={EXIT_ERROR} csv=-")
             return EXIT_ERROR
         except Exception as exc:              # the text can quote a value or a URL with a key, so only the type
-            say(f"ERROR: {type(exc).__name__}")
+            _say_error(say, exc)
             say(f"{tag} ERROR exit={EXIT_ERROR} csv=-")
             return EXIT_ERROR
     try:
@@ -1588,7 +1734,7 @@ def run(argv: list[str] | None = None, *, now: datetime | None = None, http: Htt
         say(f"PARITY {args.series} REFUSED exit={EXIT_REFUSED} summary=-")
         return EXIT_REFUSED
     except Exception as exc:                  # never FAIL by accident; the text can quote a value, so only the type
-        say(f"ERROR: {type(exc).__name__}")
+        _say_error(say, exc)
         say(f"PARITY {args.series} ERROR exit={EXIT_ERROR} summary=-")
         return EXIT_ERROR
 
