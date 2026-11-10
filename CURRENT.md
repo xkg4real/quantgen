@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a
-next_ids: ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-10T22:52:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b
+next_ids: ⑨-1/2/c, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-10T23:25:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/lookahead-la02-part1-20261110
-work_commit: 8e88814
+work_branch: main
+work_commit: b0d2862
 uncommitted_changes: no
-pr: 93, 95, 96
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -74,7 +74,10 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
   - adoption `claude/adoption-strategy-checks-20261110` = `f92a35b`(fold 포함). runtime-smoke.yml 충돌은 두 쪽의 새 시험 모듈(run_registry_fold_acceptance, adoption_strategy_rules_acceptance)을 R3 unittest 단계와 paths 필터에 모두 남겨 해결. 기준선 재생성, consistency PASS. fold·adoption·series-files 시험 124개 통과.
   - LA-02 `claude/lookahead-la02-part1-20261110` = `8e88814`(adoption 포함). 그 전 병합 `f43ce06`은 adoption의 옛 head `7282c73`을 가져와 main·fold가 빠져 있었음. 기준선 재생성, consistency PASS.
 - [x] LA-02 1부 단독 전체 실행(`2d87256`, 캐시 없는 사본): 753/879, main `ed8df4a` 기준 746/872 대비 새 시험 7개 PASS만 추가, 바뀐 행 0, FAIL 2는 기존 환경 탓(macro_m8 dry_run 로컬 캐시, papers 프로세스 트리), acceptance_results md5 불변.
-- [ ] ⑨-3a/fold/1 PR #93(`239123a`), ⑨-4/2/a PR #95(`f92a35b`), ⑨-1/2/b PR #96(`8e88814`) CI 실행 중. 세 개를 합친 `8e88814`의 캐시 없는 전체 실행(scratchpad `chain_final`) 실행 중 ← **여기**
+- [x] 세 PR을 합친 `8e88814`의 캐시 없는 전체 실행: 754/880, main `ed8df4a` 기준 746/872 대비 새 시험 8개(LA-02 7, LA-01 1) PASS만 추가, 바뀐 행 0, FAIL 2는 기존 환경 탓, acceptance_results md5 불변.
+- [x] ⑨-3a/fold/1 PR #93 병합 `2d6b796`(트리 = head `239123a`). Runtime 42823727729 6/6(Windows 3.12 첫 시도는 17단계 시작 40초 뒤 30분 제한으로 취소, 1~16단계 통과; 재실행 1회 통과), Compliance 42823727852 성공.
+- [x] ⑨-4/2/a PR #95 병합 `d97fdff`(트리 = head `f92a35b`). Runtime 42824126370 6/6, Compliance 42824126418 성공.
+- [x] ⑨-1/2/b PR #96 병합 `b0d2862`(트리 = head `8e88814`). Runtime 42824252097 6/6, Compliance 42824252061 성공.
 - [ ] ⑨-1/2/c LA-02 2부 워크플로 실행 중(워크트리 `la02c`, 브랜치 `claude/lookahead-la02-part2-20261110`, `8e88814`에서). 4그룹: m1_pit(G-POST-01·T-PRINT-01 F13·G-STALE-01·T-MISS-01), m1_fixtures G-POST + m1_calendars T-CLOSE-02, m2_risk(T-VT-01·T-LABEL-01), m3 T-B5-01 + m8_forward G-REF-01. 제외: T-FIX-01(저장소 밖 자료), T-REGIME-01(ACQUISITION 행 없음), I-05(LA-30 자료). PR은 #96 병합 뒤 main 기준으로 엽니다.
 - [x] 소유자 승인 2026-11-10 ("전부 승인합니노.") 원문 기록 + 누출 감사 보고서(L-1)·채택 기준 문서(초안 표시 해제)를 main에 반영: PR #92 병합 `f4e034d`(트리 = head `85fad1b`, Compliance 성공). 승인 범위: I-05용 LA-07 하네스 변경, 채택 기준 main 반영, R3 실험실 UI(네이티브 Qt 포함), 696ee3c 사후 승인. 미결: 'ledger N_raw' 뜻(두 해석 중 미선택), 설계 0b(P-01)·Q12 파일 목록.
 - (이전) 소유자 질문 대기(작업은 막지 않음): I-05/LA-07 동결 하네스 변경 여부, 새 시험 test_ids(macro_registry.csv) 허용 여부, ⑨-4 Q1~Q7(특히 채택 기준 문서 main 반영 Q6, ledger N_raw 의미), R3 Lab UI 작업 허용(소유자가 UI 범위를 PR89로 제한), 설계 0b(P-01), Q12 파일 목록, ⑨-3c 동결 지시, series-files no-clobber 질문.
@@ -82,14 +85,12 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 
 ## 5. 중단 지점
 
-세 PR의 CI와 합친 전체 실행 결과를 기다리는 중입니다. LA-02 2부 워크플로가 같은 시간에 돌고 있습니다.
+main `b0d2862`에 fold/1, 채택 모듈 1부, LA-02 1부까지 들어갔습니다. LA-02 2부 워크플로(wwgnh8fma)가 실행 중입니다(워크트리 `la02c`, 브랜치 `claude/lookahead-la02-part2-20261110`, `8e88814`에서 시작, 아직 push 안 함).
 
 ## 6. 다음 할 일 (순서대로)
 
-1. PR #93 CI 6/6 + Compliance 성공 → `expectedHeadSha 239123a`로 병합, 병합 트리 = head 트리 확인 → 원장 `--done "⑨-3a/fold/1 | ..."` → Notion 두 페이지 취소선.
-2. PR #95(`f92a35b`) 같은 절차 → 원장 ⑨-4/2/a. PR #96(`8e88814`) 같은 절차 + `chain_final` 전체 실행이 `base_ed8` 대비 새 시험 PASS만 추가인지 비교(`python3 scratchpad/m1_compare.py <S> base_ed8 chain_final`) → 원장 ⑨-1/2/b. 끝나면 `scratchpad/full_chain_final` 삭제.
-3. LA-02 2부 워크플로 결과 확인 → 브랜치 push → main(#96 포함) 합치기 → PR → CI·캐시 없는 전체 실행 → 병합 → 원장 ⑨-1/2/c → Notion.
-4. 그다음: ⑨-4 다음 단위(소유자 답 필요: Q1~Q5, Q7, ledger N_raw 뜻), R3 Lab UI(허용됨, 설계 0b·Q12 먼저 질문), 실시간 주문(M-12 재확인 먼저).
+1. LA-02 2부 워크플로 결과 확인 → 결과 검토 → 브랜치에 origin/main(`b0d2862`) 합치기(`8e88814` = 그 부모라 충돌 없음 예상) → push → PR → CI·캐시 없는 전체 실행(`scratchpad/full_commit313.sh la02c <commit>`, `m1_compare.py`로 `chain_final` 대비) → 병합 → 원장 ⑨-1/2/c → Notion.
+2. 그다음: ⑨-4 다음 단위(소유자 답 필요: Q1~Q5, Q7, ledger N_raw 뜻), R3 Lab UI(허용됨, 설계 0b·Q12 먼저 질문), 실시간 주문(M-12 재확인 먼저).
 
 ## 7. 주의사항
 
