@@ -22,9 +22,11 @@ class BondsPane(QWidget):
     def __init__(self):
         super().__init__()
         from .app import label,panel,table
+        from .form_layout import CompactFieldGrid,bound_input_panel,add_compact_action
         layout=QVBoxLayout(self);layout.setContentsMargins(0,12,0,0);layout.setSpacing(18)
         box,inner=panel('Bonds · 가격·위험·시나리오·선물 헤지')
-        form=QGridLayout();self.fields={}
+        bound_input_panel(box,columns=4)
+        pairs=[];self.fields={}
         fields=[('Coupon %','4.50'),('Maturity · years','10'),('Notional','1000000'),
                 ('Price · per 100',''),('Yield %','4.50'),('Position DV01 · optional',''),
                 ('CTD DV01 / contract','65'),('Conversion factor','0.8')]
@@ -32,7 +34,7 @@ class BondsPane(QWidget):
             # Owner UI-4: amounts read with thousands separators (1,000,000); parsing strips them.
             w=QLineEdit(group_digits(value));w.setAccessibleName(name);self.fields[name]=w
             w.editingFinished.connect(lambda w=w:w.setText(group_digits(w.text())))
-            form.addWidget(label(name,'caption'),2*(i//4),i%4);form.addWidget(w,2*(i//4)+1,i%4)
+            pairs.append((label(name,'caption'),w))
         self.frequency=QComboBox()
         for text,value in [('Annual',1),('Semi-annual',2),('Quarterly',4)]:self.frequency.addItem(text,value)
         self.frequency.setCurrentIndex(1)
@@ -41,12 +43,13 @@ class BondsPane(QWidget):
         self.tool=QComboBox()
         for text,value in [('Calculator & risk','calc'),('Scenarios','scenarios'),('Futures hedge','hedge')]:self.tool.addItem(text,value)
         for i,(name,w) in enumerate((('Coupons / year',self.frequency),('Tool',self.tool))):
-            w.setAccessibleName(name);form.addWidget(label(name,'caption'),4,i);form.addWidget(w,5,i)
+            w.setAccessibleName(name);pairs.append((label(name,'caption'),w))
         # Owner UI-8: the curve provider is automatic (FRED, labelled synthetic fallback); no selector.
         self.source.setAccessibleName('Curve source');self.source.hide()
-        inner.addLayout(form)
+        self.form=CompactFieldGrid(pairs,max_columns=4)
+        inner.addWidget(self.form)
         inner.addWidget(label('가격과 수익률 중 하나만 입력하세요. Price를 입력할 때는 Yield를 비웁니다.','caption'))
-        self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);inner.addWidget(self.run)
+        self.run=QPushButton('채권 분석 실행');self.run.setProperty('primary',True);self.run.clicked.connect(self.submit);add_compact_action(inner,self.run)
         self.status=label('곡선 출처와 관측일을 함께 표시합니다.','muted');self.status.setProperty('reading_help_keep_visible',True);inner.addWidget(self.status);layout.addWidget(box)
         from .result_layout import PairedResultPanels, fit_result_table
         self.metrics=fit_result_table(table(['Metric','Value']));self.metrics.setProperty('localized_columns', [0])

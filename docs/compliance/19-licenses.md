@@ -6,7 +6,7 @@
 
 QUANTGEN의 이미지·브랜드·아이콘·폰트, 설치물에 포함하는 소프트웨어와 전이 의존성, 금융 데이터·문서·AI 출력의 이용·표시·배포·내보내기에 적용한다. 원래 사진의 이미지·폰트 항목을 실제 금융 연구 제품의 배포 범위에 맞춰 확장했다.
 
-- 현재 QG Interface는 Pretendard 1.3.9의 이름을 바꾼 Regular·Medium·SemiBold 서브셋이며 SIL OFL 1.1이다. `assets/fonts/README.txt`에 출처·원본/동봉 SHA256·재생성 명령이 있고 현재 `OFL.txt`와 이전 Noto 고지 `OFL-Noto-legacy.txt`를 구분한다. 실제 배포물의 고지 포함 여부는 따로 검사한다.
+- 현재 네이티브 QG Interface는 Gothic A1 기반 hinted TrueType 400/500/600이며, 누락 기호는 Pretendard 기반 QG Symbols로 보충한다. Flet의 기존 Pretendard OTF는 유지한다. 각각 SIL OFL 1.1이다. `assets/fonts/README.txt`에 출처·원본/동봉 SHA256·재생성 명령이 있고 현재 `OFL.txt`와 이전 Noto 고지 `OFL-Noto-legacy.txt`를 구분한다. 실제 배포물의 고지 포함 여부는 따로 검사한다.
 - `assets/branding/`의 SVG, 아이콘·로고 PNG는 저장소에 있지만 파일별 창작·양도·허락 근거를 확인하지 못했다. 존재 자체를 상업적 이용 허락으로 간주하지 않는다. `assets/manifest.json`은 웹 앱 구성 파일이며 권리 대장이 아니다.
 - `pyproject.toml`은 선택 의존성으로 PyQt6 6.12.0을 지정한다. 배포 방식에 맞는 GPL 의무 준수 또는 유효한 상업 라이선스 등의 선택·검토 증거가 필요하다. 상업 소프트웨어라는 사실만으로 반드시 상업 라이선스만 가능한 것으로 단정하지 않는다.
 - 금융 데이터 API 접근 가능 여부와 상업적 화면 표시·재배포·다운로드 허락은 다르다. 네이티브 시장 화면도 데이터 권리가 미검증이라고 표시한다. 공급자별 계약과 실제 사용 범위를 확정해야 한다. FRED는 제삼자 제공 계열도 포함하므로 FRED에 공개되어 있다는 이유로 모든 계열의 상업 이용을 허용된 것으로 처리하지 않는다.
@@ -38,7 +38,7 @@ Home의 추가 국내주식 시세·수정 일별 이력·실시간 목록과 �
 
 ### 2026-11-02 종목 정보·글꼴 확장 후속
 
-현재 동봉 글꼴은 Pretendard1.3.9의 Regular400·Medium500·SemiBold600을 서브셋하고 QG Interface로 이름을 바꾼 파생물입니다. 원본은 `orioncactus/pretendard`의 고정 커밋 `5c41199ea0024a9e0b2cb31735265056e5472d76`이며 원본/동봉 해시·재생성 명령·귀속은 [글꼴 README](../../assets/fonts/README.txt)에 기록합니다. 예약 이름 Pretendard를 파생물의 기본 가족 이름으로 사용하지 않고 기존 가족 참조를 유지합니다.
+당시 도입한 글꼴(현재 Flet 및 기호 보충 원본)은 Pretendard1.3.9의 Regular400·Medium500·SemiBold600을 서브셋하고 QG Interface로 이름을 바꾼 파생물입니다. 원본은 `orioncactus/pretendard`의 고정 커밋 `5c41199ea0024a9e0b2cb31735265056e5472d76`이며 원본/동봉 해시·재생성 명령·귀속은 [글꼴 README](../../assets/fonts/README.txt)에 기록합니다. 예약 이름 Pretendard를 파생물의 기본 가족 이름으로 사용하지 않고 기존 가족 참조를 유지합니다.
 
 현재 원본 [OFL.txt](../../assets/fonts/OFL.txt)는 Copyright2021 KilHyung-jin·예약명 Pretendard와 SIL OFL1.1을 담습니다. 글꼴 내부의 원래 저작권·라이선스 기록을 보존하고, 단독 판매 금지·저작권/라이선스 동봉·파생물의 동일OFL·예약명·권리자 추천 표현 제한을 지킵니다. 이전 Noto 기반 자산의 고지는 [OFL-Noto-legacy.txt](../../assets/fonts/OFL-Noto-legacy.txt)로 이력을 보존합니다. 실제 패키지에 세 글꼴과 해당 고지가 포함되는지는 빌드 검증으로 따로 확인합니다.
 
@@ -133,3 +133,7 @@ PER/EPS·업종·상장주수 필드 확인과 가격×상장주수 계산은 �
 ### 2026-11-06 로컬 기업 문자 식별자
 
 `quantgen_desktop/company_identity.py`의 S·SK·LG·H·KB 등 원형 문자 마크는 앱에서 직접 그리는 탐색 보조 식별자입니다. 기업 공식 로고 파일·외부 브랜드 CDN·새 글꼴 파일을 도입하지 않았습니다. 회사명·종목코드를 함께 표시하며 공식 로고 또는 해당 회사의 보증·제휴라고 주장하지 않습니다. 기존 QG Interface 글꼴과 OFL 고지는 유지합니다. 외부 사이트에서 이 표식을 도입하거나 공식 로고로 교체할 때의 권리 검토와 실제 공개 승인은 별도입니다.
+
+### 2026-11-07 네이티브 글꼴 교체
+
+Gothic A1(HanYang I&C)의 고정 Google Fonts ref `38411257417e616c5d4daa1b9e91a3dbcebe1c2e`를 QG Interface로 이름 변경·서브셋하여 동봉합니다. 한글11172자·400/500/600 실제굵기·TrueType 힌트를 보존합니다. [OFL-GothicA1.txt](../../assets/fonts/OFL-GothicA1.txt), 기존 기호 보충 원본의 OFL.txt, README의 출처·해시·재생성 명령과 내장 저작권 기록을 유지합니다. 별도 QG Symbols 가족을 사용하며 Flet OTF를 네이티브에 중복 등록하지 않습니다. 런타임 다운로드·OS 설치·권리자의 추천/제휴 주장은 없습니다. 전체 앱/시장자료의 권리 승인과 실제 Windows 디스플레이의 선명도 보장은 별개이며 기존 공개 준비 `BLOCKED`를 유지합니다.

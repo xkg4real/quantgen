@@ -58,4 +58,4 @@ web = "assets/icon_192.png"
 "share/quantgen/assets/icons" = ["assets/icons/*.png"]
 "share/quantgen/assets/branding" = ["assets/branding/*.svg"]
 "share/quantgen/assets/ui" = ["assets/ui/*.svg"]
-"share/quantgen/assets/fonts" = ["assets/fonts/*.otf", "assets/fonts/*.txt"]
+"share/quantgen/assets/fonts" = ["assets/fonts/*.otf", "assets/fonts/*.ttf", "assets/fonts/*.txt"]

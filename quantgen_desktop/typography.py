@@ -184,20 +184,24 @@ def window_stylesheet(p, dark: bool) -> str:
           QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
           QLabel[role='caption'] {{ font-size: 14px; font-weight: 500; }}
           QToolTip {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; padding: 7px 10px; font-size: 14px; font-weight: 400; }}
-          QPushButton {{ padding: 10px 14px; border: 1px solid {p.border}; border-radius: 8px; background: {p.surface}; font-weight: 500; }}
+          QPushButton {{ padding: 7px 12px; border: 1px solid {p.border}; border-radius: 8px; background: {p.surface}; font-weight: 500; }}
           QPushButton:hover {{ background: {p.accent_soft}; }}
           QPushButton:focus, QLineEdit:focus, QComboBox:focus {{ border: 2px solid {p.accent}; }}
           QPushButton[primary='true'], QPushButton:checked {{ background: {p.accent}; color: {p.on_accent}; }}
           QPushButton[primary='true'] {{ font-weight: 600; }}
           QPushButton[nav='true'] {{ text-align: left; border: 0; padding: {nav_v}px {nav_h}px; min-height: 20px; font-size: 14px; font-weight: 500; }}
+          QPushButton[tool='true'] {{ padding: 7px 12px; border: 0; border-bottom: 2px solid transparent; border-radius: 5px; font-size: 14px; }}
+          QPushButton[tool='true']:checked {{ background: {p.accent_soft}; color: {p.accent}; border-bottom: 2px solid {p.accent}; font-weight: 600; }}
+          QPushButton[tool='true']:focus {{ border: 2px solid {p.accent}; }}
           QPushButton[nav='true']:checked {{ font-weight: 600; }}
           QPushButton:disabled {{ color: {p.muted}; background: {p.surface_2}; }}
-          QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ min-height: 28px; padding: 5px; border: 1px solid {p.border}; border-radius: 6px; background: {p.surface}; }}
-          QTableWidget {{ background: {p.surface}; alternate-background-color: {p.surface_2}; gridline-color: {p.border}; border: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
-          QHeaderView::section {{ padding: 8px; border: 0; background: {p.surface_2}; color: {p.muted}; font-size: 12px; font-weight: 600; }}
+          QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ min-height: 24px; padding: 5px; border: 1px solid {p.border}; border-radius: 6px; background: {p.surface}; }}
+          QTableWidget {{ font-size: 14px; background: {p.surface}; alternate-background-color: {p.surface_2}; gridline-color: {p.border}; border: 0; selection-background-color: {p.accent_soft}; selection-color: {p.text}; }}
+          QTableWidget::item {{ padding: 4px 8px; }}
+          QHeaderView::section {{ padding: 6px 8px; border: 0; background: {p.surface_2}; color: {p.muted}; font-size: 12px; font-weight: 600; }}
           QScrollArea {{ border: 0; }}
           QTabWidget::pane {{ border: 0; }}
-          QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 10px 18px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-size: 13px; font-weight: 500; }}
+          QTabBar::tab {{ background: {p.surface_2}; color: {p.muted}; padding: 7px 12px; margin-right: 4px; border-top-left-radius: 7px; border-top-right-radius: 7px; font-size: 13px; font-weight: 500; }}
           QTabBar::tab:selected {{ background: {p.accent}; color: {p.on_accent}; font-weight: 600; }}
           QTabWidget#marketInnerTabs QTabBar::tab {{ background: transparent; color: {p.muted}; padding: 7px 14px; margin-right: 6px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; }}
           QTabWidget#marketInnerTabs QTabBar::tab:selected {{ background: transparent; color: {p.accent}; border-bottom: 2px solid {p.accent}; font-weight: 600; }}
