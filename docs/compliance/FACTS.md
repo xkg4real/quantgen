@@ -650,6 +650,23 @@ Home 표와 시장 관심종목 카드·검색·종목 제목에 로컬 문자 �
 
 [제품 범위·검증 기록](../product/R3_DETACHED_SERIES_FILES_2026-11-10.md)에 따라 01–20 정책을 재대조하여 01·07·20의 처리/최소화/삭제 지도에 새 `.npy`·`.lock`·남을 수 있는 점(.)으로 시작하는 임시 파일(POSIX에서만 숨김)과 삭제 순서·백업 쌍 보존만 추가했습니다. 행렬 의미(날짜/PnL/설정 순서)·series_ref·recorder/Lab·series_error·보존·수명주기/횟수/판정·실제 원장·동결 연구·전체 R3 완료는 구현하거나 추정하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
 
+<a id="r3-run-fold-2026-11-10"></a>
+## R3 실행 수명주기·고아 실행의 메모리 내 fold — 2026-11-10
+
+기준 `ed8df4a`의 코덱 위에 [순수 수명주기 fold](../../core/quant/run_registry_fold.py)를 추가한 ⑨-3a/fold/1 범위입니다. 소유자가 승인한 R3 설계 rev 2(OWNER_RULINGS_LOG 5~6번)의 §3.12 TOTAL·§5.3 이벤트·§5.6 상태/단계·6시간 고아 규칙만 구현하며 시험 분류·N_raw·N_eff·원장 연결·recorder·Lab·UI·판정·소유자 결정 효과에는 연결하지 않습니다. 결과를 사용하는 코드는 아직 없습니다(Q17 shadow).
+
+| 항목 | 확인한 동작과 한계 |
+| --- | --- |
+| 체인 신뢰 경계 | 호출자 순서를 신뢰하지 않음. 전달된 각 이벤트를 정규 줄로 다시 인코딩하고 기존 코덱 `verify_event_lines`로 segment 0 첫 줄(`prev_row_md5` null)부터 row MD5·이전 줄 MD5 연결을 확인. 따라서 입력은 `SingleSegmentStore.read()` 결과 또는 그 앞쪽 n개처럼 위치로 자른 단일 segment 접두부여야 함. 순서 바뀜·이어 붙임·편집·중복·중간 삭제·중간부터 시작·chain 필드 없음·dict 아님·재인코딩 불가(NaN, JSON 아닌 값, 문자열 아닌/섞인 키, 단독 surrogate)는 이벤트 번호와 함께 `FoldError`로 거부. 완전한 뒤쪽 기록 삭제는 알아낼 수 없으며 이것이 호출자가 앞 위치에서 자르는 방식이므로 `events_folded`·`tail_line_md5`로 접은 접두부를 표시. MD5는 인증이 아님. 호출자 dict는 변경하지 않고 새로 decode한 사본만 사용 |
+| 시각 | `as_of`는 UTC offset 0의 정확한 `datetime`만 허용(naive·다른 offset·date·문자열·subclass 거부). fold는 시각으로 자르지 않으며 호출자가 위치로 자른 접두부 안에 `as_of`보다 늦은 `recorded_utc`가 있으면 guard로 거부. 체인 안의 기록 시각 순서는 검사하지 않고 체인 순서를 따름 |
+| 구조 거부 | 기계 이벤트(STARTED·PROGRESS·FINGERPRINT·SHADOW·FINISHED)만 허용하고 사람/SEGMENT_START 이벤트는 거부하므로 SUPERSEDED를 만들지 않음. 실행의 첫 이벤트가 STARTED가 아님·두 번째 STARTED/FINISHED·FINISHED 뒤 이벤트·run ID와 다른/없는 `family_id`·알 수 없는 단계/상태·감소하는 PROGRESS 단계·bool이 아닌 FINISHED `displayed`·형식이 틀린 `planned`/`registered`(정확히 `theta_index` 0 이상 int·`config_id` 소문자 32hex 목록 또는 null)·PNL_COMPUTED 밖이나 두 번째인 `registered`·LAB ID frozenset이 아닌 outage 집합은 fold 전체를 거부 |
+| 수명주기 | FINISHED가 있으면 단계는 `stage_reached`와 마지막 PROGRESS 단계 중 큰 값. FINISHED와 PROGRESS가 어긋나면 STATUS_STAGE_CONFLICT·PROGRESS_MISSING 표시를 붙이고 유효 상태를 낮추지 않음(FAILED_BEFORE_STATS가 PNL_COMPUTED 이상이면 FAILED_AFTER_STATS로 올림, COMPLETED·FAILED_AFTER_STATS 유지, 기록된 ABORTED는 단계로 결정). FINISHED 없는 실행은 `as_of`−STARTED 기록 시각이 6시간 이하(정확히 6시간 포함)면 OPEN, 초과하면 ABORTED(INFERRED): PROGRESS가 있으면 마지막 단계로, 없고 outage 집합에 없으면 FAILED_BEFORE_STATS·STAGE_INFERRED, outage 집합에 있으면 FAILED_AFTER_STATS·STAGE_UNKNOWN(fail closed) |
+| 키·집계 | FAILED_BEFORE_STATS·OPEN은 키 없음. 그 외에는 PNL_COMPUTED PROGRESS의 `registered`, 없거나 null이면 `planned`와 REGISTERED_KEYS_MISSING, 그것도 없으면 키 없음과 KEYS_UNAVAILABLE. 중복 위치는 받은 그대로 유지하며 시험 수를 세지 않음. `total_by_family`는 OPEN을 포함한 모든 STARTED 수(§3.12), `open_by_family`·`open_run_ids`로 OPEN을 따로 보고(§5.6과의 차이는 제품 기록에 표시). family 전체 범위만 제공하며 시장별 TOTAL은 보류. 모든 결과는 frozen dataclass·읽기 전용 mapping·tuple로 결정적 |
+| 효과 범위 | fold 자체 코드는 파일/네트워크/설정/환경/시계/난수 조회와 저장이 없고 표준 라이브러리와 코덱만 import. 코덱의 `datetime.strptime`은 프로세스에서 처음 cache를 만들 때 표준 라이브러리 안에서 `time.tzset`을 부를 수 있음. 새 파일·잠금·보존 대상이 없어 01·07·20 처리/최소화/삭제 지도 변경이 필요하지 않음 |
+| 실제 검증 범위 | 감사 hook 안전 실행기(테스트 import 전 설치, `asset_expansion/cache`·`.env` 경로 열기와 `socket.connect`/`getaddrinfo` 거부, 거부 0회)에서 [합성 검사](../../tests/run_registry_fold_acceptance.py) 45개가 Python 3.13 3회(실행기 경과 0.446초/0.437초/0.512초), 3.11(0.347초)·3.12(0.481초) 각 종료 코드 0으로 통과. 상태를 낮추지 않음을 288개 조합으로 확인하는 속성 검사, import/이름 정적 검사, `open`·`os.open`·`os.getenv`·`time.*`·`time.tzset`·`socket.connect`를 실패시키는 호출, 새 임시 디렉터리 안으로 파일 접근을 제한한 `SingleSegmentStore` 왕복 1개 포함. R3 9개 모듈 통합 196개·3.843초·종료 코드 0(겹침, 합산하지 않음). 첫 통합 시도는 임시 실행기에 `__main__` guard가 없어 series-files spawn 검사 2개가 실패했으며 실행기만 고친 뒤 통과(제품 파일 변경 없음). 임시 사본 변이 55개 모두 검출(첫 실행에서 살아남은 dict subclass 변이 1개 때문에 검사 1개를 강화). Windows·실제 registry/원장·사용자 환경은 로컬 미실행 |
+
+[제품 범위·검증 기록](../product/R3_DETACHED_RUN_FOLD_2026-11-10.md)에 따라 01–20 번호 정책을 재대조했고 새 저장 파일이 없어 번호 문서 조항은 바꾸지 않았습니다. outage 기록의 run ID 저장 의무(이후 outage 작성기)·시험 분류/횟수·원장 연결·recorder/Lab·사람 이벤트·segment·판정·실제 원장·동결 연구·전체 R3 완료는 구현하거나 추정하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
+
 ## 네이티브 한글 서체·UI 밀도 — 2026-11-07
 
 Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작은 한글 렌더링을 개선합니다. 기존 Flet OTF·웹HTML은 변경하지 않습니다. 카테고리 버튼은 내용폭/줄바꿈, 입력은3/4열 제한폭, 작은 결과표는 내용폭/숫자정렬/최소34px행과 긴내용 확장으로 바뀝니다. 계산 엔진·요청·결과·보고서·수신 권한·원장은 그대로입니다. [검증기록](../product/COMPACT_NATIVE_UI_20261107.md)을 따릅니다. 13/14/15/19의 표시·라이선스 변경 외 20종 정책의 기존 조건과 `review-required`·공개 준비 `BLOCKED`를 유지합니다. Linux검사로 실제Windows디스플레이·계정/KIS·웹배포·전체R3 완료를 주장하지 않습니다.

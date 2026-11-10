@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "66d0d6aaebadc4651cca35076cc150676f4eae0074c1b23ec1efc7901d833af5",
+    ".github/workflows/runtime-smoke.yml": "21dbc1438fc2f597ca3809b1aee8e4f4a6c871fa292b21011720732d7693eb10",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -159,6 +159,7 @@
     "core/quant/risk_layer.py": "9ca19aa23c50a01527aa08842c06bd92f311b535628ce62cb87509ba6238ba84",
     "core/quant/run_registry_codec.py": "fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a",
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
+    "core/quant/run_registry_fold.py": "b5797b035f9af8f2d8b1aebf2cd96babe2ff1cfb6dffc5ee685083b01f0206bf",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
     "core/quant/run_registry_series_files.py": "7795a3c65d627de80f99b5ffeb1754c5016ea28fed594f33ed7e314c09db8465",
     "core/quant/run_registry_series_format.py": "241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc",
@@ -276,7 +277,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "1a7a42f26e1a71d544e6761f58a6e84b266bb7e8a59ebfafa2b04a376438007d",
+    "docs/compliance/FACTS.md": "c57226ef5b2f78715291270476171c819c7febee548da66bc9b9bd33ee5b7151",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -326,6 +327,7 @@
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
+    "docs/product/R3_DETACHED_RUN_FOLD_2026-11-10.md": "d166035357905177e23110ecdc6757464377eda428f7b635d1b3cc5257ead1e3",
     "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "06e00a0fe992f4828b32415b79889907ec4da03b34194a6bbc3cdb917dde01bd",
     "docs/product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md": "04634e2e49b8b9c7e7cb4ada8d4d9669f8bf2fb2f54ea76b77f40f3ed0f11d71",
     "docs/product/R3_DETACHED_SERIES_HASH_2026-11-06.md": "aa144bbc25db49cffdda02ccc8cf55a88873dadc8f842d052c4ebf1cb6f48a2b",
@@ -549,6 +551,7 @@
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
     "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
+    "tests/run_registry_fold_acceptance.py": "bff783038a447453136e698fa81be64d31ccea5890785d939c91c07ab5255ca1",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
     "tests/run_registry_series_files_acceptance.py": "042b56defbd8f444b5e70e1946e0dec32fc24c90fc1f72cf01721df773b3d187",
     "tests/run_registry_series_format_acceptance.py": "2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73",
@@ -641,163 +644,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "195a7ce380c3d60f731b68f2bfd94cd6a5e4d59bebb474e654f8a3a090da497d",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.042151+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "fe71043d419643cf70e4e05766dc56cf36c5456d2010e8569233b4e27508dd9f",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.773670+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "195a7ce380c3d60f731b68f2bfd94cd6a5e4d59bebb474e654f8a3a090da497d",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.044795+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "fe71043d419643cf70e4e05766dc56cf36c5456d2010e8569233b4e27508dd9f",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.779981+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "fe7058a94ea539b22899d583a04c0385fdefb07ef6df5c06361c0706cca727e1",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.049404+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "e084f7759ffe471839cbcc94e11f05ff4a331cba33b08388fd665af30eab26ee",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.782695+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "8963dd9a8343deaff2d855e03dd521503967cd75a3cdad28443c35a0d2702055",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.051829+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "fae16cbba487ec633ef539be4696ca008e06adc10d5e47bd6852738484a097eb",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.785156+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "e5f389ceb0283cf3afec79879a77653997292b524c30a923bbd8a96b645cd4e1",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.053852+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "ada0a33f981ac74ebabe927a6c9c017cb57f24ef23b1490882c30e3dde141676",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.787685+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "a97bfeb30b66e94e2a592ce995fa469403fdd6f266b2cc1f6d0a79455de09223",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.055686+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "7b21714c7714fb87ddc4bedff19e9620d50e1bce9d40503fb9de26b687bd4057",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.789986+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "195a7ce380c3d60f731b68f2bfd94cd6a5e4d59bebb474e654f8a3a090da497d",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.057479+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "fe71043d419643cf70e4e05766dc56cf36c5456d2010e8569233b4e27508dd9f",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.791875+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "a97bfeb30b66e94e2a592ce995fa469403fdd6f266b2cc1f6d0a79455de09223",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.059640+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "7b21714c7714fb87ddc4bedff19e9620d50e1bce9d40503fb9de26b687bd4057",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.794168+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "e05b41c3f78800c7e3e38914ca100599a3e0f356a1786fc6c324108f08b4c509",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.061647+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "ca890ef72a9b1f2cf722e5dcccb3053faad7346d10f0f36e0365554d28d1ac49",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.796461+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "c6f3fe2b9590ecc5af14efbf52788fc634db1407bea2208d1e763f290de63e80",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.063611+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "ed7e4f26f494f39245904f93aeadd2306998a2ba299055560c24e8729b1296ee",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.798532+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "c81bed6d37f00e9812a3f8774e1eddf9ce2d2d2866fc1a3ee8911a1a0e94f7c3",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.065810+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "4d684285bb77bf5edae1461c18d163a7b5410d79fca6691d9629c1c494a64c66",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.800502+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "ed52e1e901ac49005b41a66ff0cb0d418d6044821d42f3758c8bcc0c1d10e3e0",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.067495+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "c85555d45cfa64c49c15e37f53b86177a3eff1a4a281f5bcdf98f2edacfa7b86",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.802329+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "e05b41c3f78800c7e3e38914ca100599a3e0f356a1786fc6c324108f08b4c509",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.069268+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "ca890ef72a9b1f2cf722e5dcccb3053faad7346d10f0f36e0365554d28d1ac49",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.804074+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "e05b41c3f78800c7e3e38914ca100599a3e0f356a1786fc6c324108f08b4c509",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.071399+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "ca890ef72a9b1f2cf722e5dcccb3053faad7346d10f0f36e0365554d28d1ac49",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.805689+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "e05b41c3f78800c7e3e38914ca100599a3e0f356a1786fc6c324108f08b4c509",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.073106+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "ca890ef72a9b1f2cf722e5dcccb3053faad7346d10f0f36e0365554d28d1ac49",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.807523+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "87853c44c8aafe99e91dc64d1a5cfa848ea1407f31b4d48385811b2e0c1e9ace",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.074931+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "3ccc860faa54f6506a5c8cd16868e61640f330795adf17a028250651764745ff",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.812767+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "a97bfeb30b66e94e2a592ce995fa469403fdd6f266b2cc1f6d0a79455de09223",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.076623+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "7b21714c7714fb87ddc4bedff19e9620d50e1bce9d40503fb9de26b687bd4057",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.814566+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "195a7ce380c3d60f731b68f2bfd94cd6a5e4d59bebb474e654f8a3a090da497d",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.078272+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "fe71043d419643cf70e4e05766dc56cf36c5456d2010e8569233b4e27508dd9f",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.816372+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "87b3cdee48f4c0aa8d58df1ace672ede2b5aca53398680d13e554d4f43b921bd",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.079978+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "61c99577724fafbf146a7bb84163fc69a50ac476f6588c7015847ed9d07446d0",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.818288+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "195a7ce380c3d60f731b68f2bfd94cd6a5e4d59bebb474e654f8a3a090da497d",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.081647+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "fe71043d419643cf70e4e05766dc56cf36c5456d2010e8569233b4e27508dd9f",
+      "reviewed_by": "Claude fold review",
+      "review_note": "R3 fold/1: pure in-memory run lifecycle fold module, its synthetic acceptance test, product record, FACTS section and runtime workflow entry re-read against policies 01-20; it stores no file, so no policy row changes",
+      "reviewed_at": "2026-11-10T12:16:58.819978+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     }
   }
 }
