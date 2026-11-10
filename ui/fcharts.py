@@ -505,7 +505,7 @@ def macro_z_chart(sheet: MacroSheet) -> ft.Control:
         pal = active()
         colours = {"rates": pal.accent, "credit": pal.error, "fx": pal.success, "risk": pal.muted}
         n = len(rows)
-        fig, ax = _fig(8.6, 0.36 * n + 2.3, pal)
+        fig, ax = _fig(8.2, 0.38 * n + 2.5, pal)
         ax.grid(False)
         ax.grid(True, axis="x", color=pal.border, alpha=0.5, linewidth=0.6)
         ax.set_axisbelow(True)
@@ -522,32 +522,32 @@ def macro_z_chart(sheet: MacroSheet) -> ft.Control:
                     linewidth=0.6, hatch="///" if r.id in synthetic else None, zorder=3)
             if np.isfinite(r.z_1y):
                 ax.text(r.z_1y + (0.08 if r.z_1y >= 0 else -0.08), yi, f"{r.z_1y:+.1f}", va="center",
-                        ha="left" if r.z_1y >= 0 else "right", fontsize=8.5, color=pal.text, zorder=4,
+                        ha="left" if r.z_1y >= 0 else "right", fontsize=9.5, color=pal.text, zorder=4,
                         bbox=dict(facecolor=pal.surface, edgecolor="none", pad=0.8))
         for k in range(1, n):                                  # a rule between indicator groups
             if rows[k].group != rows[k - 1].group:
                 ax.axhline(k - 0.5, color=pal.border, linewidth=1.0, zorder=1)
         ax.set_yticks(y)
-        ax.set_yticklabels([pick(name(INDICATOR_NAMES, r.id, r.label)) for r in rows], fontsize=9)
+        ax.set_yticklabels([pick(name(INDICATOR_NAMES, r.id, r.label)) for r in rows], fontsize=10)
         ax.tick_params(axis="y", length=0, colors=pal.text)
-        ax.tick_params(axis="x", labelsize=8.5)
+        ax.tick_params(axis="x", labelsize=9.5)
         ax.set_xlim(-lim, lim)
         ax.set_ylim(n - 0.5, -0.5)
         top = offset_copy(ax.get_xaxis_transform(), fig=fig, y=3, units="points")
         ax.text(0, 1.0, pick(("평소 범위 (±1)", "Usual range (±1)")), transform=top, ha="center", va="bottom",
-                fontsize=8.5, color=pal.muted)
+                fontsize=9.5, color=pal.muted)
         for v in (-2, 2):
             ax.text(v, 1.0, pick(("이례적", "Unusual")), transform=top, ha="center", va="bottom",
-                    fontsize=8.5, color=pal.muted)
+                    fontsize=9.5, color=pal.muted)
         ax.set_xlabel(pick(("1년 z-점수 (0 = 1년 평균, ±2 = 이례적)",
-                            "1-year z-score (0 = 1-year average, ±2 = unusual)")), fontsize=9)
+                            "1-year z-score (0 = 1-year average, ±2 = unusual)")), fontsize=10)
         ax.set_title(pick(("주요 거시 지표: 1년 평균 대비 현재 위치 (z-점수)",
-                           "Key macro indicators: where each stands against its 1-year average (z-score)")),
-                     fontsize=12, fontweight="semibold", loc="left", pad=40)
+                           "Key macro indicators against their 1-year average (z-score)")),
+                     fontsize=13, fontweight="semibold", loc="left", pad=44)
         ax.text(0, 1.0, pick((f"기준일 {sheet.as_of} · 막대 끝 숫자 = z-점수",
                               f"As of {sheet.as_of} · number at bar end = z-score")),
-                transform=offset_copy(ax.transAxes, fig=fig, y=20, units="points"),
-                ha="left", va="bottom", fontsize=9, color=pal.muted)
+                transform=offset_copy(ax.transAxes, fig=fig, y=22, units="points"),
+                ha="left", va="bottom", fontsize=10, color=pal.muted)
         groups = list(dict.fromkeys(r.group for r in rows))
         handles = [Patch(facecolor=colours.get(g, pal.text), edgecolor=pal.surface,
                          label=pick(name(GROUP_NAMES, g, g))) for g in groups]
@@ -556,7 +556,7 @@ def macro_z_chart(sheet: MacroSheet) -> ft.Control:
                                  label=pick(("합성 데이터 · 실제 관측 아님", "Synthetic data · not observed"))))
         fig.set_layout_engine("constrained")
         fig.legend(handles=handles, loc="outside lower center", ncol=len(handles), frameon=False,
-                   fontsize=9, labelcolor=pal.text, handlelength=1.4, columnspacing=1.6)
+                   fontsize=10, labelcolor=pal.text, handlelength=1.4, columnspacing=1.6)
         _reading(fig, **MACRO_READING)
         return fig
 

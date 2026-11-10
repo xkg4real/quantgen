@@ -10,8 +10,8 @@ from core.theme import active, token_names
 
 def study_row(chart, reading):
     return ft.ResponsiveRow([
-        ft.Container(chart, col={'xs':12, 'md':8}),
-        ft.Container(reading, col={'xs':12, 'md':4}),
+        ft.Container(chart, col={'xs':12, 'xl':8}),
+        ft.Container(reading, col={'xs':12, 'xl':4}),
     ], spacing=18, run_spacing=18, vertical_alignment=ft.CrossAxisAlignment.START)
 
 
