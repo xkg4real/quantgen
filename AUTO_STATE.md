@@ -1,18 +1,18 @@
 ---
 kind: auto_snapshot
-reason: usage_limit_weekly
-created_at: 2026-11-07T10:02:38+09:00
-source_branch: claude/busy-tesla-j2e8l2
-source_head: 9d1eacd
+reason: periodic
+created_at: 2026-11-10T17:09:15+09:00
+source_branch: HEAD
+source_head: aa4b550
 upstream: none
-patch_base: 9d1eacd
+patch_base: aa4b550
 unpushed_commits: 0
 uncommitted_files: 0
 patch: none
-usage_pct: 99.0
-usage_resets_at: 2026-11-10T08:00:00.000Z
-session: a975855b-5261-5431-a82c-9ad3c6b5b540
-snapshot_key: seven_day@2026-11-10T08:00:00.000Z
+usage_pct: unknown
+usage_resets_at: unknown
+session: 244a07c1-ef5e-50fd-a9f1-360db0f46038
+snapshot_key: none
 current_md_updated_at: 2026-11-07T00:45:23+09:00
 current_md_status: returned
 ---
@@ -26,21 +26,21 @@ current_md_status: returned
 ## 최근 커밋
 
 ```
-9d1eacd Record PR89 main merge and pending remote runtime status
-6a09d3f Merge pull request #89 from xkg4real/gpt/compact-ui-final-20261107
-2f336a3 Sync final UI review fingerprint and AWS follow-up queue
-811cd35 Verify hinted font coverage, compact input preservation and policy provenance
-0222dba Compact native category navigation, forms and result tables
-4fb6125 Replace native Korean outlines with bundled hinted faces
-cd4019c Merge pull request #86 from xkg4real/gpt/run-registry-source-hash-20261106
-9f623fd Add detached raw and LF source SHA256 helpers
-6ddf514 Merge pull request #85 from xkg4real/gpt/run-registry-data-hash-20261106
-9660352 Merge pull request #84 from xkg4real/gpt/run-registry-keys-20261106
-8e6db5b Add detached R3 supplied-panel byte fingerprint
-a083f75 Integrate UI82 main while preserving detached R3 keys and policy evidence
-e4ec6ef Record merged PR82 UI change and queued website follow-up
-5b7988c Merge pull request #82 from xkg4real/gpt/font-clarity-20261106
-4ce18cb Integrate independently verified PR83; preserve byte-identical UI implementation
+aa4b550 Record the PR-73 website update for the bootstrap and ETF sleeve disclosures
+2710cd0 Record §10 N-M1-02/a, NEW-M6-04 and NEW-M6-05 in the queue, triage, FACTS and CI
+46f4950 Merge branch 'claude/s10-mc-bootstrap-20261104' into claude/s10-models-20261104
+2d61712 Correct the ETF sleeve disclosures after review (§10 NEW-M6-04, NEW-M6-05)
+857706d Fix the block bootstrap wording the reviewers found untrue (§10 N-M1-02/a)
+acc736c Say when an ETF sleeve Sharpe is undefined and which conventions the sleeves use (§10 NEW-M6-04, NEW-M6-05)
+302aced Correct the block bootstrap wording in README, primer source and a product note
+804f478 Disclose the Monte Carlo block bootstrap scheme (§10 N-M1-02/a)
+a32106b Merge pull request #72 from xkg4real/claude/s10-options-20261104
+d88277a Record the PR-72 website update for the option-board disclosures
+6048ba9 Merge main d5e73ae (Markets rework, Crypto) into the option-board branch
+d5e73ae Merge pull request #71 from xkg4real/claude/ui-markets-watchlist-20261104
+3c0fd24 Refresh the compliance baseline for all 20 documents after the test fix
+51f3921 Make the wider-preferred-width layout test hold on every platform font
+31086ac Regenerate the recorded status snapshot after the README change
 ```
 
 ## 푸시되지 않은 커밋
