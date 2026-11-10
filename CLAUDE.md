@@ -26,7 +26,8 @@ Tuesday 17:00 KST. One task runs at a time.
   - When the owner resumes an existing session, run `--show` again before continuing.
 - **UI work:** the UI base is the native PyQt app (`quantgen_desktop/`) for every agent (owner decision
   UI-D1..D4, 2026-11-11); Flet (`main.py`, `ui/*.py`) is kept but is not the base for new UI work, even when the
-  owner's screenshot shows it. Before UI work read the owner-decision block of
+  owner's screenshot shows it. Native fonts (UI-D5): text IBM Plex Sans KR, figures QG Interface
+  (Pretendard OTF). Before UI work read the owner-decision block of
   `git show origin/handoff:UI_SESSION_CURRENT.md` and the `⑬-2/` ledger rows, and record finished UI work in
   `LEDGER.md` under a `⑬-2/` ID (a side document alone does not reach GPT).
 - **Before starting any roadmap item:** look it up in the ledger by ID and by the files it would change. An ID

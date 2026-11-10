@@ -13,10 +13,14 @@
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
     "assets/branding/f1-wordmark.svg": "145715bc8df17cb3c99b734d4c7cb2b8e9bf1878e87c401f518f46b944ba41aa",
     "assets/favicon.png": "c8d4ecdcc08015073632c1d4a89e3b47c9bb312203e46f9937691131102fae46",
+    "assets/fonts/IBMPlexSansKR-Medium.ttf": "4a7130f56ce50bf10f9d383f624e50bad2c80bebc63e51f4269ece2c7d919166",
+    "assets/fonts/IBMPlexSansKR-Regular.ttf": "53750379270312368cf7641901f43a98dd892e3d9d5798cf25cdc245c85c71c0",
+    "assets/fonts/IBMPlexSansKR-SemiBold.ttf": "823c1956adf56c27c06b062725dfce23f266e4fd1366290f2957c8407482a817",
     "assets/fonts/OFL-GothicA1.txt": "ed95c33f80ccca002e3a360b683c43368f9c5eb024e5b992abb51af3c10b59bc",
+    "assets/fonts/OFL-IBMPlexSansKR.txt": "37784b44044a4ffd9256702b7c0982c37e5c8887ba90c6dca0479aea93dc898d",
     "assets/fonts/OFL-Noto-legacy.txt": "e42004c233f81eac2bd0ad6657381079b9207b78fd800e2b515724432e3c0624",
     "assets/fonts/OFL.txt": "d31ddd9f2bed32fd7e302a205cf2380ba0de6529152d239ef99cfb6f261bfc04",
-    "assets/fonts/README.txt": "1155d54d4a97a92acc03eb767cbae7a5ee0c05fe61fc9a6737a35b2dc59f273b",
+    "assets/fonts/README.txt": "7f6c380f3b9ca15105f5dd009c1a21c02d861a29a89b5617a49ed9ed17a705cc",
     "assets/fonts/qg-interface-medium.otf": "f52aa3022d241b4cd03eb71f64a9389fc298760e057a317305312e24bb44fbbc",
     "assets/fonts/qg-interface-medium.ttf": "853a07f6eb4b756882c43ce6033305963e8be873a4895532272d48951c39beec",
     "assets/fonts/qg-interface-semibold.otf": "97c53221c1d3fadc48d692fab9bf5a545159be95a5c0228dc3b8cc24db4ec8dd",
@@ -287,7 +291,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "c58899a897d65441dd09bf1c948a00856c181f5ff658ddcac1d137bb6631851e",
+    "docs/compliance/FACTS.md": "48a682f52c4671d732c56cd51fb47608473c9b9a0bb8dc3929fe320249fd489a",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -375,13 +379,13 @@
     "quantgen_desktop/bonds_portfolio_narrative.py": "5514b58f6025261d2b1feab0b112a74fae5a5cf4a8b654eb6c8204c7513bbfcf",
     "quantgen_desktop/category_picker.py": "7061468ea7104e6a2a3ff6989dd61373f653fc9acfb8ec587e3c077b6ed9e18d",
     "quantgen_desktop/chart_study.py": "a6fe42b73f5b3ea43cb2a53811036fb934ac8a687883354f9f593f668d3da887",
-    "quantgen_desktop/charts.py": "efbdfc4d9f832f98b4cd67bd9a0a9635e8c1c816311719a5622ccd41ef3eeae8",
+    "quantgen_desktop/charts.py": "23915d9a25c46114215c42ab8f5b5d94e07bf61f13582da6a00ea981ce2a526b",
     "quantgen_desktop/commentary.py": "ca24bc71353f5abe6feaa8e57ad2b490c50d41e23997cf74750cc802b4fd602f",
     "quantgen_desktop/company_identity.py": "5267d47f4aeff0395a483dc084eef7934bf4625bafbc86aa8ce6a5e2a7578891",
     "quantgen_desktop/connections.py": "abef3e9ace3b2fa02660507eb171835d5b7290180c38a687395fc7a203e38eef",
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
     "quantgen_desktop/display_prose_catalog.py": "85cd9be4469c96b83a71aa0ac3c0dad0b04cbbf35649da8beb7cef12c9eb7708",
-    "quantgen_desktop/font_policy.py": "e43ea8d7832b287ebf7e4437df9ee9b422acf502740044075df957e2c239fb7f",
+    "quantgen_desktop/font_policy.py": "dfa85a88a18c2c0013a794c842a64aee28e9bb87bba66987ae6e962a4c4a163d",
     "quantgen_desktop/form_layout.py": "cb531c0e9f0592e18851b43308e6b084c77de8dad86b8e6ccdc5e3cf4d86ff89",
     "quantgen_desktop/fx.py": "30c519dee7dac02b55b683773ddee46fe86d78a1e31d155736e5634aa7b05d96",
     "quantgen_desktop/fx_narrative.py": "1078cff2724ff7c6bc75f8146e7893622323899ee5bb1c52100007c11649e52e",
@@ -423,11 +427,11 @@
     "quantgen_desktop/strategy.py": "0b44d9c87f8a174d5c87eff60ffe2a68671ac381644fa6243f26f06812ca5b66",
     "quantgen_desktop/strategy_view.py": "3d44b759bb806d92cc1a299fd61790c449be392a262c8b46c1a9bd46a1a0bff8",
     "quantgen_desktop/structuring.py": "5129a870305e9fefee5c92549879408f440cea19e15fba67ed3ee88b038a70fc",
-    "quantgen_desktop/table_layout.py": "a43d6439674a674930ded751ba91f1902e8e2d6b8518b87b94b385e0f994eda8",
+    "quantgen_desktop/table_layout.py": "88fe45b9e8df59328bee520d1147f4189d4e4fffc1e8cf488340bb8eeb744eeb",
     "quantgen_desktop/tools.py": "09dd81fdc75947d32da6e15f96f618c09126c952bfa5b9ae35d5ef86e92885b9",
     "quantgen_desktop/translations.py": "2b94a001ff0d925a570ce1efff3d73f8a08e1de212343f23973e6ba753e6f943",
-    "quantgen_desktop/typography.py": "6918efdaaf7cc34eca347a839dc5d098f763ee32716181d7a1adaeae09fd3daf",
-    "quantgen_desktop/watchlist.py": "ea1f781455e362082aeb8a785c45339d194be0c064aa92bb0a34c4195b34f9b9",
+    "quantgen_desktop/typography.py": "19b584b70576802ac50ebe949d7265a58e0a7683ccb361377104cf9e9e2ffa6f",
+    "quantgen_desktop/watchlist.py": "c40a4ad9097d24f44c7f3d7abd9febee4c2a4b174731a3d43b35ef7b6ac1d68e",
     "quantgen_desktop/watchlist_live.py": "6d7b9dca2f18adf8a7b01a09ca395a6b776835f82d863669d00f90d426994597",
     "quantgen_desktop/wheel_guard.py": "44bfee9b20b358b794cfebdd71f0760b28b99bcd39a45cc36fa450a8d2ce68f6",
     "requirements-dev.txt": "68e53cf3ee88acde8c72ee8addd3b0f680b3524c2f274f4d9f2c1885531aeada",
@@ -462,7 +466,7 @@
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "1c23ec3b8fe6fc0d327cefb361ebd9866614e58c4a98e87a5c6bf066cb17bac9",
     "tests/desktop_commentary_acceptance.py": "ed1f58c2e133796d77ba3b6cdc5d187321f7491c1091ba3b36853aff773c8250",
-    "tests/desktop_compact_ui_acceptance.py": "d83d82daaa4da65267b281dddc45b07e70b9916b65e77eda837449962df389fc",
+    "tests/desktop_compact_ui_acceptance.py": "f328c4212208825cc72c1fec8b5cdabc644c73b4aa3ccf1b96160a09da5d6d3f",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "1514c7b2446c314ad3514b21de3fccd7814f8db4e1081a7fc27480fe4163c687",
@@ -477,7 +481,7 @@
     "tests/desktop_market_acceptance.py": "ac5ca0057c5111dd7deda51acc6a76365b5a3ebf000378dabb9753ebd1f5fa84",
     "tests/desktop_market_chart_acceptance.py": "cb07b4d093bb0d7f28d93a19b22cd7a1636bfcdf855fdf82cbf4ff605ca53382",
     "tests/desktop_market_diagnostics_language_acceptance.py": "2a1923d8da1a0f4528b662c1da4fdb37fd646880bf1a0d58bc620b1bd0a5e39f",
-    "tests/desktop_market_layout_acceptance.py": "215764cefa9108907c3480cad377b261dcf404c7a7342ecb0047ed43b7ea0023",
+    "tests/desktop_market_layout_acceptance.py": "44a353accc648d1c05114036176c2fd677a56524a2f9ab8fe4afed1a9fd619bc",
     "tests/desktop_market_tabs_acceptance.py": "152fb2d3f1a85e5b4417f00d3adc2b3f407ef7e19e43a2eaa7ac1275410236ec",
     "tests/desktop_markets_watchlist_acceptance.py": "6b10fe17e4193e9c742419e742580a74b2f6281642a18ee30206f3bb19a5d2ea",
     "tests/desktop_operation_fixes_acceptance.py": "2a18f23af3cadfa2b7029ba02798230c8c08187e47d9799b729df05c3b31fec0",
@@ -498,8 +502,8 @@
     "tests/desktop_strategy_acceptance.py": "6da05d532c1b74b807ba32ecc9e5cfbce7df042ba32f8d2f9e4a0433b49d6f40",
     "tests/desktop_strategy_exposure_acceptance.py": "30c7e9f5c9132d77e546827f15232f769c27f19a60c6b21c3664772207c10ce4",
     "tests/desktop_swaption_conversion_acceptance.py": "113e1af795d0a9d592827330a2fdf115487dc4bb0b496d4ee3f3ba0d3b9185af",
-    "tests/desktop_typography_acceptance.py": "27d54bc06d65321919acd26a6dac50b914e37f327ebb23bb3f6dcf4ba1b6d932",
-    "tests/desktop_watchlist_acceptance.py": "acfdabe8a84d5011bc1e54b75448358b3ad645ee43351e2be7c25dd1746c75db",
+    "tests/desktop_typography_acceptance.py": "000a136f03feb6a7a7f2bb9d7560d058c4bcf87f8bc463d777c1704a7c286f8b",
+    "tests/desktop_watchlist_acceptance.py": "42dc54bdc550c7f74a81d8d878ac38428195f5395db4526da9d7a09aa46693ea",
     "tests/engine_acceptance.py": "1dffac9fbaada2a39a9bba1a2cf76ea802ef806b7a463b0efb35c525fcec134c",
     "tests/etf_sleeve_disclosure_acceptance.py": "fa0338f032dfa63d6b003b42b8803cef1d6391be8b36d83e18c021d53cb7fe8a",
     "tests/expansion_acceptance.py": "7c9bff8790d88abdc324057a1e49426c5c0f2b5072acd15e652258a6fb27fc7e",
@@ -689,163 +693,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "77bab93d8241d4d1732c69f9ed2bf7eb71c9be98ae795d97aa6c62b71766c6ab",
+      "source_digest": "d2fe24f307b16a031ca442e133774811a3c0c8d923ad1896bb6c70a215696b80",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.924387+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.772258+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "77bab93d8241d4d1732c69f9ed2bf7eb71c9be98ae795d97aa6c62b71766c6ab",
+      "source_digest": "d2fe24f307b16a031ca442e133774811a3c0c8d923ad1896bb6c70a215696b80",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.926149+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.774400+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "8dc8b7241601710f4f9c48d08a8377464f4a33d0385188e34e7ec130d135ccb9",
+      "source_digest": "f0c4096774ec16d5583a7f40db2cbf8adf64df925d0bcbd1e49ee21671266c67",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.927657+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.775871+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "c5795144e96e4ebef5c0c8e3cb25b68984ba2d445b029e99aed2edc4de572493",
+      "source_digest": "081b35036a658c99ccbe0db86dc8cf1999082f390b4e098f424132e3da9a38c6",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.929480+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.777680+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "ca2d592a14daa441f4409a66e81be23d9aa3a74cfb3dfc52cdaaa4c6f3b575a6",
+      "source_digest": "2a66e300fa8bee47c27c43122960cf0cbf9bcb74dcc0edc411945ccf5597539c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.930726+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.779189+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "7394f1da9816c91a0ffdefcd924e211cd39109c2e437358543301dbc1bfe93f5",
+      "source_digest": "3b1810eecc401c20a02133b2a05d93cb6e30334f38fd8c0bbe44aa491eb3109f",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.931985+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.781130+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "7": {
       "document_sha256": "7a4399a1d194672d9ab3482babd412e894ffbde9070f9db4ba662a43eeb01c17",
-      "source_digest": "77bab93d8241d4d1732c69f9ed2bf7eb71c9be98ae795d97aa6c62b71766c6ab",
+      "source_digest": "d2fe24f307b16a031ca442e133774811a3c0c8d923ad1896bb6c70a215696b80",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.933252+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.782564+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "8": {
       "document_sha256": "94b5b0a31f95e82c4215c5db477ef2716cec3b5da02f57d65c56f227903c1d05",
-      "source_digest": "7394f1da9816c91a0ffdefcd924e211cd39109c2e437358543301dbc1bfe93f5",
+      "source_digest": "3b1810eecc401c20a02133b2a05d93cb6e30334f38fd8c0bbe44aa491eb3109f",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.934746+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.783906+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "5d1bbfa2c811103ba4ecf1927fcc2feeb8c0696f978a6efb1a26534714c4aab7",
+      "source_digest": "8fb459b895234eb4f2a0ccbdf83fcbec5e5ef1451c4d35095772ff01bb0837a9",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.935900+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.785278+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "4e7f08338e1ccb469222a8b513527d3aa67cdba3004a4c7a152416ee3f58b869",
+      "source_digest": "cca898041ef16c2c6b7c29dcfada68e36549070e3e20d16da35d0ea7fc375973",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.937432+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.786765+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "66aa0b9d3445bdb9ba7357b7ed1234e2c164d8072ea81834664aff1d9454eaff",
+      "source_digest": "e1f0694d6b4abc6e8f762ec39858dc80cca8465a4e70b66830a365431ed0e98c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.938552+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.788201+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "12": {
       "document_sha256": "db67cb047f3d16af0b527e27817e51336ffd759d50e8e67f07d34f594f6b1b40",
-      "source_digest": "2251bcb861470db6cab0b17df0115041bc08f6a120acae18cba2860228b46aca",
+      "source_digest": "904fdb973a5350d7d87934e93d2b58f6c3fff9c498046ff918083b818ceb5e47",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.939693+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.789590+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "13": {
       "document_sha256": "15db4fa578c05662fa65624ad6bc02b471744443f4fa5e68cfd7f6e11cc5dcc2",
-      "source_digest": "5d1bbfa2c811103ba4ecf1927fcc2feeb8c0696f978a6efb1a26534714c4aab7",
+      "source_digest": "8fb459b895234eb4f2a0ccbdf83fcbec5e5ef1451c4d35095772ff01bb0837a9",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.941216+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.791077+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "14": {
-      "document_sha256": "abbeb8d35a831d53522e875a7feae93749fcbd00eaf7a0c00b9f18752e19b67c",
-      "source_digest": "5d1bbfa2c811103ba4ecf1927fcc2feeb8c0696f978a6efb1a26534714c4aab7",
+      "document_sha256": "b9c6e8b903526e1bb3130c58395cb0eda594659ca68b7a8cfc427c8063c5f9e6",
+      "source_digest": "8fb459b895234eb4f2a0ccbdf83fcbec5e5ef1451c4d35095772ff01bb0837a9",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.942382+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.792549+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "15": {
       "document_sha256": "9896586c46be4ccf85029ea7d2ad747f941c9eef4c737c822d2f57b417975b78",
-      "source_digest": "5d1bbfa2c811103ba4ecf1927fcc2feeb8c0696f978a6efb1a26534714c4aab7",
+      "source_digest": "8fb459b895234eb4f2a0ccbdf83fcbec5e5ef1451c4d35095772ff01bb0837a9",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.943834+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.793921+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "4d78721eb39b57c37312f873eaab5cbfe4fcec32e18fa1068f0780c093d70676",
+      "source_digest": "354ec3db36cf53900da606c74544b226c70cee4032a04d86393547620d15a7c3",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.945427+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.795225+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "7394f1da9816c91a0ffdefcd924e211cd39109c2e437358543301dbc1bfe93f5",
+      "source_digest": "3b1810eecc401c20a02133b2a05d93cb6e30334f38fd8c0bbe44aa491eb3109f",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.946642+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.796889+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "77bab93d8241d4d1732c69f9ed2bf7eb71c9be98ae795d97aa6c62b71766c6ab",
+      "source_digest": "d2fe24f307b16a031ca442e133774811a3c0c8d923ad1896bb6c70a215696b80",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.947782+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.798328+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "19": {
-      "document_sha256": "925ec8c4b8ceb04c84ce635d3f939d35226cd45ac741eef9b2559fbabfd177e5",
-      "source_digest": "b9e11088de4e5a4f9ff86ab18e8c77711a47132e7b16a06c1baeed44459c4bf1",
+      "document_sha256": "aa3200e4d7e34e97bdcd7a70841eab5f88d6d55c865f87669b7ded3f6e909eaf",
+      "source_digest": "06b2a508892af4b1dd94ad9dd34350732bb9c4d861b047155bf2eed5c0f78255",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.949274+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.799968+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "77bab93d8241d4d1732c69f9ed2bf7eb71c9be98ae795d97aa6c62b71766c6ab",
+      "source_digest": "d2fe24f307b16a031ca442e133774811a3c0c8d923ad1896bb6c70a215696b80",
       "reviewed_by": "Claude integration review",
-      "review_note": "Native UI port of the owner's 14 issues (UI-D1..D4): Strategy Lab, charts/macro, FICC tools, watchlist/market tools, portfolio/signals/MC, Pretendard OTF font, source best on native screens, Korean app notes, chart proportions; docs 07/08/12/13/14/15/19 and FACTS updated",
-      "reviewed_at": "2026-11-10T22:50:09.950433+00:00",
-      "source_commit": "4a2c28b401e320f264952c6a63a4076916b761bf"
+      "review_note": "Owner font decision UI-D5 (plan A): IBM Plex Sans KR text files and OFL added, figures kept in QG Interface; docs 14/19, FACTS, font README, AGENTS/CLAUDE rules updated",
+      "reviewed_at": "2026-11-10T23:06:30.801524+00:00",
+      "source_commit": "cf55a5d9c128b81478fdaa509b0df4fcc17c43e8"
     }
   }
 }

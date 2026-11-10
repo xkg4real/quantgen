@@ -191,3 +191,7 @@ Home 목록의 등락은 부호·수치로, 수신·산정 불가 상태는 텍�
 네이티브 글꼴을 Flet 화면 글꼴인 Pretendard 파생 OTF(`assets/fonts/qg-interface*.otf`, 400/500/600)로 바꿨습니다([글꼴 정책](../../quantgen_desktop/font_policy.py)). 2026-11-07 절의 Gothic A1 TTF(TrueType 힌트)는 저장소에 남지만 등록하지 않으며, OTF는 CFF PostScript 힌트를 씁니다. 실제 Windows 화면의 선명도는 확인하지 않았습니다. 소유자가 다른 글꼴 시안을 검토 중이며 승인 전에는 바꾸지 않습니다.
 
 Home 실시간 시세 표는 본문을 13px 한 크기로 맞추고 머리글은 12px/600을 유지합니다. 숫자는 같은 오른쪽 끝에 맞추고 단위는 숫자 뒤 고정 칸에 둡니다. Strategy Lab의 통과·미달 색은 기존 테마 색에서 만들며 낱말("통과·미달·참고")과 기준값을 함께 씁니다. 색만으로 판정을 전하지 않습니다. Linux offscreen 캡처만 확인했습니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
+
+### 2026-11-11 글꼴 A안(UI-D5)
+
+네이티브 글자는 IBM Plex Sans KR, 숫자(지표 큰 숫자·가격·등락 알약·숫자만 있는 표 칸·관심종목 숫자 열·차트 눈금)는 QG Interface(Pretendard 파생)로 그립니다. 글자 크기·굵기(400/500/600)와 색상 토큰은 바꾸지 않았습니다. Plex에 없는 μ·σ는 QG Interface가 대신 그리며, 화면 문자열이 세 글꼴(Plex, QG Interface, QG Symbols) 중 하나에 있는지 [시험](../../tests/desktop_typography_acceptance.py)이 확인합니다. Plex TTF에는 TrueType 힌트가 있지만 실제 Windows 화면의 선명도는 확인하지 않았습니다. [변경 사실](FACTS.md#owner-ui-native-2026-11-11)
