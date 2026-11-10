@@ -184,14 +184,18 @@
 ## 자료 생성기가 읽는 범위 (시험이 아니라 자료 만들기 단계)
 
 결정 2로 고친 생성기(`docs/macro_fixtures.py`)는 참조 종가 파일의 각 행에 그 시장 달력의 종가 시각을 찍습니다. 시험의
-대기와는 별개로, 자료 확보(⑨-2) 때 이 범위가 서명되어 있어야 파일을 만들 수 있습니다.
+대기와는 별개로, 자료 확보(⑨-2) 때 이 범위가 서명되어 있어야 파일을 만들 수 있습니다. 생성기는 `--only F13 F14 F27`처럼
+파일을 골라 쓸 수 있고(검토 반영), 고른 파일 가운데 하나라도 거부되면 아무 파일도 쓰지 않습니다. `--only` 없이 전체를
+한 번에 쓰는 실행은 서명 범위를 넓혀도 거부됩니다. 자료 행 40개 가운데 24개는 달력 범위가 아니라 규칙 때문에 시각을
+찍지 못합니다(등록도 선언도 안 된 id 17개, F16, 발표 시각 일정이 없는 계열 6개. 배포 달력에서 2026-10-01 날짜 하나로
+확인). 그 24개는 이 문서의 서명 범위와 무관하며 3부 기록의 질문 4에 있습니다.
 
 | 파일 | 계열 | 읽는 달력 | 필요한 범위 | 확인한 방법 |
 | --- | --- | --- | --- | --- |
 | F13 `yahoo_KS11_1996-12_2026-10-02.csv` | KS11 | `kr_sessions`, `holidays_KRX` | 1996-01-01부터 | 실행함: 배포 달력에서 1996-12-02 행은 "holidays_KRX ... 1996-12-02 is outside"로 거부. `holidays_KRX`가 1996-06-01에 시작하는 합성 달력에서는 "1996-01-01 is outside"로 거부(1월 1일부터 읽음) |
 | F14 `yahoo_GSPC_1990_2026-10-01.csv` | GSPC | `holidays_NYSE` | 1990-01-02부터 | 실행함: 배포 달력에서 1990-01-02 행은 "holidays_NYSE ... is outside"로 거부 |
 | F27 `krx_005930_000660_closes_mcap.csv` | 005930, 000660 | `kr_sessions`, `holidays_KRX` | 파일의 첫 날짜가 속한 해의 1월 1일부터 | 2026-10-02 행은 배포 달력에서 찍힘. 파일의 시작 날짜는 모릅니다 |
-| F01 `krx_kospi_official_close_1997-01-03_2026-10-02.csv` | KOSPI_OFFICIAL_CLOSE | `kr_sessions`, `holidays_KRX` | 1997-01-01부터, 그리고 1998-12-12 이전 토요일마다 `saturday_close` 행 | 코드로 읽음(`core/calendars/clocks.py`의 `_close_time_of`: 토요일은 `saturday_close` 행이 정확히 하나여야 함). 서명 달력으로는 실행하지 못함 |
+| F01 `krx_kospi_official_close_1997-01-03_2026-10-02.csv` | KOSPI_OFFICIAL_CLOSE | `kr_sessions`, `holidays_KRX` | 1997-01-01부터, 그리고 1998-12-12 이전의 모든 토요일 거래일에 유효한 `saturday_close` 행. 토요일 종가 시각이 바뀐 적이 없으면 유효 기간을 적은 행 하나로 충분하고, 바뀌었으면 기간마다 한 행 | 코드로 읽음(`core/calendars/clocks.py`의 `_close_time_of`: 토요일에는 그 날짜에 유효한 `saturday_close` 행이 정확히 하나여야 함. 합성 달력은 `effective_to`가 1998-12-11인 행 하나를 씀). 서명 달력으로는 실행하지 못함 |
 | F16 `yahoo_KRWX_2004_2026-10-01.csv` | KRWX | 없음 | 정해지지 않음 | 실행함: "no market calendar for its REFERENCE_FILES market 'FX'"로 거부 |
 
 F16은 서명 범위가 아니라 규칙의 문제입니다. 사양의 시장 시계 표(L1289-1291)와 `core/calendars`에 외환 시장의 종가 시계가

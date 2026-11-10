@@ -1,5 +1,13 @@
 # Look-ahead audit LA-02, part 2 (⑨-1/2/c)
 
+> **Note added 2026-11-11: parts of this record are superseded.** Part 3
+> (`docs/product/LOOKAHEAD_LA02_PART3_2026-11-11.md`) carries out the owner's rulings of 2026-11-11 on questions 1 to 4
+> below. Since then the product reader `docs/vol_backtest.fixture_closes` reads F13 from `close`, not `value`; the
+> generator stamps KS11, GSPC, 005930 and 000660 from the market calendar (KRWX is still refused); a Yahoo price is
+> compared at two decimals; and T-REGIME-01 full range and G-REF-01 are converted. The statements below that say
+> otherwise are left as they were written on 2026-11-10: questions 1 to 4, the last "unverified" bullet, "Next parts"
+> and the counts.
+
 This is the second part of the LA-02 fix from the 2026-11-04 look-ahead audit
 (`git show 7749450:docs/nautilus_bridge/LOOKAHEAD_AUDIT_2026-11-04.md`, LA-02 at lines 279-284). It follows the pattern
 of part 1 (`docs/product/LOOKAHEAD_LA02_PART1_2026-11-10.md`): each REFDATA or owner-input point-in-time test that used

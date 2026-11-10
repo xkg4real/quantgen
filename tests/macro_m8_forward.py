@@ -846,8 +846,14 @@ test_ref_02_s2_retired_refusal_book_and_the_s2_momentum_clause.test_ids = ["T-RE
 #   - a header with the columns `golden_id`, `sub_id` and `value`; other columns ride along;
 #   - one row per recorded value, keyed as goldens.csv keys it, no key twice;
 #   - `value` in the golden row's own unit: a decimal fraction where goldens.csv holds one (dMDD -0.017, share 0.967), a
-#     count as a number, a verdict as its text.
+#     count as a number, a verdict as its text;
+#   - the file is UTF-8, and a byte-order mark before the header is ignored.
 # Rows of other goldens, and the G-POST-01 rows of other milestones, ride along and are not read here.
+# The assumption is not the layout the spec describes. L5815-5834 print F20 as the DL-A section 7 table: one row per
+# item, with a pre-patch and a post-patch column, and among this test's 64 values it holds only the G-KR-05 share. On
+# such a file this body FAILs, at the layout or with 47 golden values unrecorded (the demonstration shows both). F20
+# is also a gate of the G-POST-01 data-row test (tests/macro_m1_fixtures.py), so listing it for that test turns this
+# one red until the owner says which archive file holds the R-11 record and in what layout.
 # `_check_g_ref_01` asserts three things, every expected value read from goldens.csv at its row's Level 1 tolerance:
 #   1. the product record exists, names this test's four goldens and its four timings, and each value it holds equals
 #      its G-REF-01 row;
@@ -878,7 +884,7 @@ def _gref01_record(text: str) -> dict[tuple[str, str], str]:
     """F20 in the layout declared above as {(golden_id, sub_id): value text}, for the rows keyed to this test's four
     golden ids (rows of any other id are not read). AssertionError naming the file and line on a departure: a declared
     column absent, a blank key, a key recorded twice, a row of these goldens with no value, or no row at all."""
-    reader = csv.DictReader(io.StringIO(text))
+    reader = csv.DictReader(io.StringIO(text.removeprefix("\ufeff")))             # a byte-order mark is no column name
     missing = [c for c in GREF01_COLUMNS if c not in (reader.fieldnames or ())]
     assert not missing, f"{GREF01_RECORD}: declared columns {missing} absent (header {reader.fieldnames})"
     out: dict[tuple[str, str], str] = {}
@@ -994,7 +1000,10 @@ def test_g_ref_01_body_passes_and_fails_on_an_invented_record():
     records when its row is absent; for a key under these goldens that goldens.csv does not hold; for a value that is
     not a number. The product record fails for each of the 12 numbers it holds moved just outside tolerance, for another
     verdict, for a missing timing, a missing field, other golden ids and no R-11 record. The layout refuses a missing
-    column, a blank key, a key recorded twice, a blank value and a file with no row. The real test opens no other
+    column, a blank key, a key recorded twice, a blank value and a file with no row; a byte-order mark before the
+    header is ignored. A table shaped as the spec prints F20 (L5815-5834: an item, a pre-patch and a post-patch
+    column) fails at the layout, and a table holding every G-POST-01 row in the declared layout fails with 47 golden
+    values unrecorded: the declared layout is an assumption the owner has not confirmed. The real test opens no other
     fixture and its body calls none of this module's replay tools; while F20 is not listed its REFDATA reason names
     it."""
     keys = _gref01_golden_keys()
@@ -1083,6 +1092,18 @@ def test_g_ref_01_body_passes_and_fails_on_an_invented_record():
     fails(lambda: _gref01_record(_gref01_text([(g, s, "" if (g, s) == keys[10] else v) for g, s, v in base])),
           f"QX_DLA_postpatch.csv line 12: {keys[10][0]}/{keys[10][1]} has no recorded value")
     fails(lambda: _gref01_record("golden_id,sub_id,value\n"), "QX_DLA_postpatch.csv: no rows")
+    assert _gref01_record("\ufeff" + text) == _gref01_record(text) and len(_gref01_record(text)) == 64
+    # F20 as the spec prints it (L5815-5834) is not in the declared layout, and it does not hold the G-REF-01 table or
+    # the G-KR-05 rows: this body fails on it either way (an owner question; see the layout declaration above)
+    fails(lambda: _gref01_record("item,pre_patch,post_patch\nKOSPI close 2 Oct,6943.66,7003.74\n"
+                                 "G-KR-05 KRW value timing (share),0.965,0.967\n"),
+          "QX_DLA_postpatch.csv: declared columns ['golden_id', 'sub_id', 'value'] absent (header ['item', 'pre_patch', "
+          "'post_patch'])")
+    post = [("G-POST-01", r.sub_id, _gref01_cell(r)) for r in GT.golden("G-POST-01").rows]
+    assert ("G-POST-01", "gkr05_share", "0.967") in post and len(post) > 1
+    msg = fails(lambda: run(post), "G-REF-01: 47 golden value(s) have no record, neither in QX_DLA_postpatch.csv nor "
+                "in the product R-11 record")
+    assert "G-POST-01/" not in msg.split("): ", 1)[1], msg
     assert _gref01_record(_gref01_text([("G-KR-01", "sharpe", ""), base[0]])) == {(base[0][0], base[0][1]): base[0][2]}
     # nothing is replayed: the real test opens one fixture, the record table, and neither it nor its helpers touch the
     # stores, books, costs or refusal legs this module builds for the other tests

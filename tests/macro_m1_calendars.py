@@ -16,6 +16,7 @@ kr_regime_tags.yaml once that file loads and covers 1995-01-01..2026-12-31. No m
 """
 from __future__ import annotations
 
+import ast
 import copy
 import csv
 import dataclasses
@@ -326,8 +327,9 @@ def _kospi_closes(text: str) -> list[dict]:
 # The declared close layout of the LA-02 part 2 REFDATA bodies, read by one reader. F13 (yahoo_KS11), F14
 # (yahoo_GSPC), F16 (yahoo_KRWX) and F27 (krx_005930_000660, long form) are declared in F01's layout above, and F01 is
 # read in it where G-POST-01 reads it: the close in `close`, then the section 4.1 provenance columns docs/macro_fixtures.py
-# writes, with the series_id (F27: either of its two ids), value_status and available_at_source its REFERENCE_FILES row
-# gives the file; F27 adds `code`, one of its two ids. Every part 2 body that reads one of these files
+# writes, with the series_id (F27: either of its two ids; the generator writes the row's own code), value_status and
+# available_at_source its REFERENCE_FILES row gives the file; F27 adds `code`, one of its two ids. Every part 2 body
+# that reads one of these files
 # (tests/macro_m1_pit.py, tests/macro_m1_fixtures.py, tests/macro_m2_risk.py, tests/macro_m3_estimators.py) calls
 # `read_close_layout`, so one rule holds for all of them:
 #   - a close is a finite number > 0; a blank or "." cell (FRED's missing-value marker) is no close, and the file is
@@ -411,8 +413,9 @@ def read_close_layout(fid: str, text: str) -> list[dict]:
 def close_layout_text(fid: str, rows) -> str:
     """(date, close, obs_utc, available_at_utc[, code]) rows written in memory in the declared close layout of `fid`,
     as docs/macro_fixtures.py writes the file: a `date` reference column (and `code` for F27), then F01_COLUMNS, every
-    row carrying the file's first series id. A close given as a string is written verbatim (a demonstration's blank or
-    "." cell). For the demonstrations."""
+    row carrying the file's first series id (the generator stamps an F27 row with its own code; the reader accepts
+    either id of the file, and no body reads the column). A close given as a string is written verbatim (a
+    demonstration's blank or "." cell). For the demonstrations."""
     _name, series, status, source = close_layout_file(fid)
     key = CLOSE_LAYOUT_KEYS.get(fid)
     buf = io.StringIO()
@@ -1701,7 +1704,9 @@ test_regime01_point_clauses_and_fail_closed.test_ids = ["T-REGIME-01"]
 #   - a cell states the tag's value on that date: `true` or `false` for a boolean tag (as spec L2098 writes
 #     `etf_available` = false), a plain decimal number for a numeric tag (`price_limit` a fraction, `sell_tax_pct` in
 #     percent: the units of core/calendars/regime.py), the text itself for a text tag, and an empty cell where the
-#     signed file holds no value (null: the shipped file signs `price_limit` before 1995-04-01 so).
+#     signed file holds no value (null: the shipped file signs `price_limit` before 1995-04-01 so);
+#   - the file is UTF-8. A byte-order mark before the header, which a spreadsheet's "CSV UTF-8" export writes, is
+#     ignored; without that the first column would read as a column other than `date`. CRLF line ends are read as LF.
 # The body compares every tag of every date with the signed kr_regime_tags.yaml and asserts the spec's own values
 # (L2098) on the signed tags, so a value that both files carry wrong still fails.
 REGIME01_FILE = "kr_regime_tags_expected.csv"
@@ -1714,13 +1719,14 @@ REGIME01_POINTS = (                                                             
     (date(2024, 6, 3), "short_sale_ban", True), (date(2026, 10, 2), "sell_tax_pct", 0.20),
 )
 REGIME01_SHOWN = 5                              # differences listed in a failure message; their count is always given
+BOM = "\ufeff"                                  # the UTF-8 byte-order mark as `read_text(encoding="utf-8")` returns it
 
 
 def _regime01_expected(text: str) -> list[tuple[date, dict]]:
     """The expected-values file in its declared layout as (date, {tag: cell}) rows; AssertionError naming the file and
     line on any departure from it."""
     lo, hi = REGIME01_SPAN
-    reader = csv.DictReader(io.StringIO(text))
+    reader = csv.DictReader(io.StringIO(text.removeprefix(BOM)))
     header = tuple(reader.fieldnames or ())
     assert sorted(header) == sorted(REGIME01_COLUMNS), (
         f"{REGIME01_FILE}: the header must be `date` and the {len(regime.TAGS)} tags of core.calendars.regime.TAGS, "
@@ -1833,7 +1839,10 @@ def test_regime01_full_range_reason_reads_the_signing_state():
     While the expected-values file is not listed the reason is REFDATA and names it. The OWNER reason is read from the
     signing state of kr_regime_tags.yaml: nothing waits on the synthetic signed set; a file refused at load is named
     with its refusal; a file signed for 1996-2027 only is named with its span and the span needed. On the shipped file
-    the gate waits exactly when the file is refused or does not cover 1995-01-01..2026-12-31, as read now."""
+    the gate waits exactly when the file is refused or does not cover 1995-01-01..2026-12-31, as read now. The real
+    test goes through both gates, read from its source: it opens the one fixture, takes its calendar from
+    `_regime01_signed()` with no argument (the shipped set) and builds no calendar set itself, so an unsigned or short
+    shipped file is NOT_RUN (OWNER), never a FAIL."""
     if REGIME01_FILE not in load_manifest():
         reason = _raises(test_regime01_full_range_expected_values_file, NotRun).reason
         assert reason == f"REFDATA: {REGIME01_FILE} not in tests/fixtures/macro/MANIFEST.csv", reason
@@ -1848,6 +1857,16 @@ def test_regime01_full_range_reason_reads_the_signing_state():
     loads = live.refusal("kr_regime_tags") is None
     covered = loads and all(live.file("kr_regime_tags").covers(d) for d in REGIME01_SPAN)
     assert (_regime01_waiting(live) == []) == covered, _regime01_waiting(live)
+    real = next(n for n in ast.parse(Path(__file__).read_text(encoding="utf-8")).body
+                if isinstance(n, ast.FunctionDef) and n.name == "test_regime01_full_range_expected_values_file")
+    calls = {name: [ast.unparse(c) for c in ast.walk(real)
+                    if isinstance(c, ast.Call) and getattr(c.func, "id", "") == name]
+             for name in ("require_fixture", "_regime01_expected", "_regime01_signed", "_check_regime01", "CalendarSet")}
+    assert calls == {
+        "require_fixture": ["require_fixture(REGIME01_FILE)"],
+        "_regime01_expected": ["_regime01_expected(require_fixture(REGIME01_FILE).read_text(encoding='utf-8'))"],
+        "_regime01_signed": ["_regime01_signed()"],
+        "_check_regime01": ["_check_regime01(rows, _regime01_signed())"], "CalendarSet": []}, calls
     print(f"PRINTED T-REGIME-01 full range, shipped kr_regime_tags.yaml: waiting {_regime01_waiting(live)}")
 
 
@@ -1901,15 +1920,16 @@ def test_regime01_full_range_body_passes_and_fails_on_invented_expected_values()
     set's own tags for every date of 1995-01-01..2026-12-31 (no notice data; written in the declared layout, also with
     the columns in another order) pass on that set: 11,688 dates, 175,320 tag values. It fails, naming the date and the
     tag, when one expected cell of any one tag is changed (each of the 15 tags in turn), when a boolean is written
-    `True` or `1`, a number `15%` or with a space, a text in another letter case or left empty, and when the signed file
-    differs from the expected rows on one day (the value_up split signed a day late). A null signed value passes only on
-    an empty cell: on a set that signs `price_limit` before 1995-04-01 as null (as the shipped file does) the empty cell
-    passes and 0.046 fails on its 90 dates, the first five listed. Each of the spec's values (L2098) fails on a signed
-    set that carries it wrong, even when the expected rows state the same wrong value. A stand-in for regime_tags that
-    drops a tag fails the full-tag-set clause. The layout refuses, naming file and line: an absent, an extra and a
-    repeated column, a row short of cells, a first row after 1995-01-01, a missing, a repeated and an out-of-order date,
-    a last row before or after 2026-12-31, and a date not written YYYY-MM-DD. The OWNER gate returns the synthetic
-    signed set."""
+    `True` or `1`, a number `15%` or with a space, a text in another letter case, left empty or with a space before or
+    after it, and when the signed file differs from the expected rows on one day (the value_up split signed a day late).
+    A null signed value passes only on an empty cell: on a set that signs `price_limit` before 1995-04-01 as null (as
+    the shipped file does) the empty cell passes and 0.046 fails on its 90 dates, the first five listed. Each of the
+    spec's values (L2098) fails on a signed set that carries it wrong, even when the expected rows state the same wrong
+    value. A stand-in for regime_tags that drops a tag fails the full-tag-set clause. The layout refuses, naming file
+    and line: an absent, an extra and a repeated column, a row short of cells, a first row after 1995-01-01, a missing,
+    a repeated and an out-of-order date, a last row before or after 2026-12-31, and a date not written YYYY-MM-DD. A
+    byte-order mark before the header is ignored (the file reads as it does without one); one anywhere else is not.
+    The OWNER gate returns the synthetic signed set."""
     cal = fixture_set()
     base = _regime01_rows(cal)
     n_dates = (REGIME01_SPAN[1] - REGIME01_SPAN[0]).days + 1
@@ -1945,6 +1965,12 @@ def test_regime01_full_range_body_passes_and_fails_on_invented_expected_values()
         fails(lambda: _check_regime01(recell(d, tag, cell), cal), "1 of 175320", f"{d} {tag}: regime_tags ",
               f"!= expected {cell!r}")
     assert _check_regime01(recell(d, "price_limit", "0.150"), cal) == want                # 0.150 is 0.15
+    # a text cell is the text itself: a space before or after it is not trimmed
+    text = regime.regime_tags("KR", d, cal=cal)["random_end"]
+    assert text == "conditional" and _check_regime01(recell(d, "random_end", text), cal) == want
+    for cell in (text + " ", " " + text):
+        fails(lambda: _check_regime01(recell(d, "random_end", cell), cal), "1 of 175320",
+              f"{d} random_end: regime_tags 'conditional' != expected {cell!r}")
     # the signed file differs from the expected rows on one day: the value_up split signed a day late
     late = _regime01_tags_set("value_up_late", lambda rows: [
         {**r, "effective_to": "2024-02-26"} if r["tag"] == "value_up" and r["effective_to"] == "2024-02-25" else
@@ -1996,6 +2022,13 @@ def test_regime01_full_range_body_passes_and_fails_on_invented_expected_values()
             (_regime01_text([("1995-1-1", base[0][1])] + base[1:]),
              f"{name} line 2: date '1995-1-1' is not written YYYY-MM-DD")):
         fails(lambda: _regime01_expected(text), needle)
+    # a UTF-8 byte-order mark before the header (a spreadsheet's "CSV UTF-8" export) is ignored, also with CRLF line
+    # ends; a mark anywhere else is part of its cell
+    assert BOM == chr(0xFEFF) and (BOM + good).encode("utf-8")[:3] == b"\xef\xbb\xbf"
+    assert _regime01_expected(BOM + good) == _regime01_expected(good) == _regime01_expected(
+        BOM + good.replace("\n", "\r\n"))
+    fails(lambda: _regime01_expected(good.replace("\n1995-01-02,", "\n" + BOM + "1995-01-02,", 1)),
+          f"{name} line 3: date '\\ufeff1995-01-02' is not written YYYY-MM-DD")
 
 
 # --------------------------------------------------------------------------- #

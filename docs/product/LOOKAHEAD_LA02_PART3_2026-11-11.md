@@ -6,18 +6,29 @@ This is the third part of the LA-02 fix from the 2026-11-04 look-ahead audit
 REFDATA or owner-input point-in-time tests a real body and left questions for the owner. On 2026-11-11 the owner
 ruled on six points those parts had left open. This part carries the six rulings out: it removes the two conflicts that
 would have stopped the reference files from being built or read, changes how a vendor price is compared, converts two
-more tests, and lists what the owner has to sign. No test changes status today: every real-data test below is still NOT_RUN until ⑨-2 lists
-its fixture, or until the owner extends a signed calendar file.
+more tests, and lists what the owner has to sign. No test changes status today: every real-data test below is still
+NOT_RUN until ⑨-2 lists its fixture, or until the owner extends a signed calendar file.
 
-One thing is not finished and blocks a merge: see "Follow-up needed before merge".
+Three things are not finished:
+
+- **A merge is blocked** by one stale cell of `MANIFEST.csv`. See "Follow-up needed before merge".
+- **Ruling 2 is carried out for four of its five ids.** KS11, GSPC, 005930 and 000660 are stamped from their market
+  calendar. KRWX (F16, Yahoo KRW=X) is declared and refused, because no calendar rule exists for an FX close. Both
+  G-POST-01 sites gate on F16, so they cannot run on real data until the owner answers question 1.
+- **The G-REF-01 body would FAIL on the real F20 as the spec describes it.** The body reads F20 in a layout this part
+  assumed. The owner has to say where the R-11 record is archived and in what layout before ⑨-2 lists F20 (question 2).
+
+A code review of the first two commits led to a merge of main and a fix commit. "/code-review fixes" lists what changed
+and what was left for the owner.
 
 ## Authority and scope
 
 The authority is the owner's reply of 2026-11-11 to Claude's table of 14 remaining decisions. The reply and Claude's
 reading of each answer are recorded in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` by commit `275ec93`, section
-"2026-11-11, Claude Code 채팅: 남은 결정 14건에 대한 답 (원문)". That commit is on another branch and is not on this
-one yet. The reply, verbatim, for the six decisions this part covers: "1-승인, 2-승인, 3-승인, 4-승인, 5-승인, 6-승인".
-The table rows the reply answers, each with its recommendation as the owner read it (verbatim):
+"2026-11-11, Claude Code 채팅: 남은 결정 14건에 대한 답 (원문)". That commit reached main with PR #100 (`1a8b29f`)
+and this branch with the merge of main (`7611064`), so the cited section is in the tree. The reply, verbatim, for the
+six decisions this part covers: "1-승인, 2-승인, 3-승인, 4-승인, 5-승인, 6-승인". The table rows the reply answers, each
+with its recommendation as the owner read it (verbatim):
 
 1. **자료 파일 열 이름.** "`close`로 통일하고 `fixture_lines` 한 곳만 수정. 1부의 F01 형식과 같고, 시험 5곳이 이미 이
    형식이라 고칠 곳이 가장 적습니다. 생성기가 실제로 쓰는 열 이름은 수정 전에 확인하겠습니다." Answer form `1-승인`.
@@ -38,9 +49,12 @@ The table rows the reply answers, each with its recommendation as the owner read
 Ruling 12 of the same reply ("12-함께") puts the LA-30 point-in-time data that I-05 needs with the reference-data
 stage ⑨-2; it is cited under "What is left".
 
-- Base: main `5f1ead5` (parts 1 and 2 are on main). Branch `claude/refdata-prep-20261111`.
-- Two commits. The first, `5926eeb`, carries rulings 1 and 2 (product code under `docs/` and their tests). The second
-  carries rulings 3 to 6 (test files, one register row, the signing request and this record).
+- Branch `claude/refdata-prep-20261111`, started from main `5f1ead5` (parts 1 and 2 are on main). Main `1a8b29f`
+  (PR #98, the owner UI review, and PR #100, owner rulings 7 to 10) was merged in by `7611064`. Against that main the
+  branch changes 14 files: the 13 of the first two commits and the part 2 record, which gained a note.
+- Four commits. `5926eeb` carries rulings 1 and 2 (product code under `docs/` and their tests). `8ed8112` carries
+  rulings 3 to 6 (test files, one register row, the signing request and this record). `7611064` merges main. The
+  fourth carries the review fixes.
 - Scope: the four sites part 2 left in `LA02_REMAINING`. This part converts two (T-REGIME-01 full range, G-REF-01).
   T-FIX-01 stays, held by the owner (ruling 6). I-05 stays, waiting for data (ruling 12).
 
@@ -49,8 +63,9 @@ stage ⑨-2; it is cited under "What is left".
 | Item | Before | Now |
 | --- | --- | --- |
 | Ruling 1. The product's F13 reader, `docs/vol_backtest.fixture_lines` | Read `obs_date` / `value` and skipped blank cells; a probe on `5f1ead5` showed an `IndexError` on a file with a `close` column, the layout every part 2 body reads | `fixture_closes` reads `obs_date` / `close` (`FIXTURE_COLUMNS`). It raises `ValueError` naming file and line for an absent column, a blank, "." or non-positive close, an `obs_date` not written YYYY-MM-DD, a repeated or out-of-order date, or fewer than two rows. No row is skipped. `fixture_lines` takes an optional manifest |
-| Ruling 1. The generator, `docs/macro_fixtures.py` | Copied a reference file's own header and named no value column, so whether F13 carried `close` depended on the reference file alone | `CLOSE_LAYOUT` declares `close` for F13, F14 and F16 and `code`, `close` for F27. `generate` refuses a reference file whose header lacks a declared column. Nothing is renamed |
-| Ruling 2. The generator's instants, `calendar_available_at` | `KeyError` for KS11, GSPC, KRWX, 005930 and 000660, which are not registered, so F13, F14, F16 and F27 could not be stamped (part 2 question 3) | The five ids are declared reference series (`REFERENCE_SERIES`, derived from `REFERENCE_FILES`). Each is stamped at the scheduled close and the close-print bound of the market its `REFERENCE_FILES` row names. `calendar_check_fixture` runs the post-close check on the same market. An id that is neither registered nor declared is refused with the same error text. The registries are unchanged |
+| Ruling 1. The generator, `docs/macro_fixtures.py` | Copied a reference file's own header and named no value column, so whether F13 carried `close` depended on the reference file alone | `CLOSE_LAYOUT` declares `close` for F13, F14 and F16 and `code`, `close` for F27. `generate` refuses a reference file whose header lacks a declared column. Nothing is renamed. Since the review fix it also refuses a row a reader would refuse (`CLOSE_FILES`, below), and it stamps an F27 row with its own code as `series_id` |
+| Ruling 2. The generator's instants, `calendar_available_at` | `KeyError` for KS11, GSPC, KRWX, 005930 and 000660, which are not registered, so F13, F14, F16 and F27 could not be stamped (part 2 question 3) | The five ids are declared reference series (`REFERENCE_SERIES`, derived from `REFERENCE_FILES`). Four are stamped at the scheduled close and the close-print bound of the market their `REFERENCE_FILES` row names: KS11, 005930 and 000660 on KR, GSPC on US. The fifth, KRWX, is refused by name: its row names the market FX, and no FX clock exists (question 1). `calendar_check_fixture` runs the post-close check on the same market. An id that is neither registered nor declared is refused with the same error text. The registries are unchanged |
+| Review fix. A generator run, `generate` and the command line | Wrote the whole set or nothing, and wrote each file as it went: a run refused at F02 left F01's fixture in the output directory with no manifest row | `--only F13 F14 F27` (or `only=`) writes the files of the named fixture ids. Every file is built and checked in a temporary directory, and the output directory is written only when the last one passed |
 | Ruling 4. Price comparison at both G-POST-01 sites and in T-PRINT-01 on F13 | Every price exact (spec L5735), so a float artefact such as 7003.740234375 failed | A Yahoo vendor price (the ^KS11 closes of F13, the KRW=X closes of F16) is compared after rounding to two decimals. A KRX official price (the won closes of F27, the official KOSPI close of F01) stays exact. One rule, `tests.macro_m1_calendars.price_as_compared` |
 | Ruling 5. G-REF-01, `tests/macro_m8_forward.py::test_g_ref_01_s1_goldens_refdata` (ids G-REF-01, G-KR-05, G-KR-05s, G-POST-01) | Gated on F13 and `DEXKOUS.csv`, then an unconditional `NotRun` | Gate on the archived record table F20 `QX_DLA_postpatch.csv`. It is read in a declared layout and `_check_g_ref_01` compares the record with `goldens.csv` at Level 1. Nothing is recomputed and no price or FX history is read |
 | Ruling 6. T-REGIME-01 full range, `tests/macro_m1_calendars.py::test_regime01_full_range_expected_values_file` | Unconditional `NotRun("OWNER: ...")`: the expected-values file had no register row, so a fixture gate on it would have failed T-HERM-01 | `require_fixture("kr_regime_tags_expected.csv")`, the file read in a declared layout, a computed OWNER gate on the signed `kr_regime_tags.yaml` (`_regime01_signed`), then `_check_regime01` |
@@ -64,6 +79,8 @@ New tests, none with `test_ids`:
   `test_macro_fixtures_close_layout_is_one_layout_for_three_readers`.
 - Second commit: `tests/macro_m1_calendars.py::test_regime01_full_range_body_passes_and_fails_on_invented_expected_values`
   and `tests/macro_m8_forward.py::test_g_ref_01_body_passes_and_fails_on_an_invented_record`.
+- Fix commit, `tests/macro_m1_fixtures.py`: `test_macro_fixtures_refuses_close_rows_no_reader_accepts` and
+  `test_macro_fixtures_writes_nothing_when_refused_and_only_the_selected_files`.
 
 Existing tests whose bodies changed (name and `test_ids` kept):
 
@@ -74,6 +91,9 @@ Existing tests whose bodies changed (name and `test_ids` kept):
 - The three part 2 demonstrations that showed a float artefact FAIL
   (`test_g_post_01_body_passes_and_fails_on_invented_rows` in `macro_m1_pit.py` and in `macro_m1_fixtures.py`,
   `test_print_01_body_passes_and_fails_on_invented_ks11_closes`) now show it PASS, and a value one cent away FAIL.
+- Fix commit. The two generator tests of the first commit pinned 005930 as the `series_id` of every F27 row; they now
+  pin the row's own code. The T-REGIME-01 reason test also reads the real test's source. The T-REGIME-01 and G-REF-01
+  demonstrations gained cases (see "Demonstrations on invented data").
 
 ### Expected values and where they come from
 
@@ -128,6 +148,14 @@ The spec is `QUANTGEN_Quant_Council_2026-10-03/claude_code/QUANTGEN_MACRO_INTEGR
   declaration: `close` for F13, F14 and F16, and `code` plus `close` for F27. Three readers read it:
   `tests.macro_m1_calendars.read_close_layout`, `docs/vol_backtest.fixture_closes` and the generator's refusal. The
   product reader also reads F15 (SPY) for G-B5-02, so F15 must carry `close` too, although no ruling names it.
+  - The generator's `CLOSE_FILES` is every file read in this layout: the four of the ruling, F01 and F15. For each it
+    applies the readers' rules to the reference rows before it writes anything: a close is a finite number above
+    zero; rows are in date order and no date repeats (F27: no date and code pair repeats, and every code is one of
+    005930 and 000660); F13 and F15, which the product reader reads, hold at least two rows and every other file at
+    least one. F01 and F15 declare no reference series: `REFERENCE_SERIES` is still the ruling's five ids, and SPY is
+    still refused when stamped.
+  - An F27 row carries its own code in `series_id`. Before the fix the generator wrote 005930 on every row, the
+    000660 rows included. The shared reader accepts either id of the file (question 5).
 - **F20 `QX_DLA_postpatch.csv` (ruling 5).** Nothing declares its layout: the generator copies a result table byte for
   byte, and part 2 gated the file without reading it. The layout the G-REF-01 body reads is therefore this part's
   assumption (question 2 below):
@@ -138,7 +166,14 @@ The spec is `QUANTGEN_Quant_Council_2026-10-03/claude_code/QUANTGEN_MACRO_INTEGR
 
   Rows of other goldens are not read. A G-POST-01 row of another milestone is not read either. A row under one of the
   four ids whose key `goldens.csv` does not hold is refused, and so are a blank key, a key recorded twice, a blank value
-  and a value that is not a number where the golden is one.
+  and a value that is not a number where the golden is one. A UTF-8 byte-order mark before the header is ignored.
+
+  This is not the layout the spec describes. L5815-5834 print F20 as the DL-A section 7 table, one row per item with
+  a pre-patch and a post-patch column, and of the 64 values it holds only the G-KR-05 share. On such a file the body
+  FAILs: "declared columns ['golden_id', 'sub_id', 'value'] absent". If the file instead holds every G-POST-01 row in
+  the assumed layout, the body FAILs with "47 golden value(s) have no record". Both are in the demonstration. F20 is
+  also a gate of the G-POST-01 data-row test in `tests/macro_m1_fixtures.py`, so listing F20 for that test turns
+  G-REF-01 red until question 2 is answered.
 - **`kr_regime_tags_expected.csv` (ruling 6).** Neither the spec nor ACQUISITION.csv names its columns. The layout the
   body reads is declared in `tests/macro_m1_calendars.py`:
   - a header of exactly `date` and one column for each of the 15 tags of `core.calendars.regime.TAGS`, in any order;
@@ -146,35 +181,68 @@ The spec is `QUANTGEN_Quant_Council_2026-10-03/claude_code/QUANTGEN_MACRO_INTEGR
     repeated, the date written YYYY-MM-DD;
   - a cell states the tag's value on that date: `true` or `false` for a boolean tag, a plain decimal number for a
     numeric tag (compared as a number, so 0.30 is 0.3), the text itself for a text tag, and an empty cell where the
-    signed file holds null.
+    signed file holds null;
+  - the file is UTF-8. A byte-order mark before the header, which a spreadsheet's "CSV UTF-8" export writes, is
+    ignored. CRLF line ends are read as LF.
+
+### What ruling 1 changed beyond one place
+
+The recommendation the owner approved said "`close`로 통일하고 `fixture_lines` 한 곳만 수정". Carrying it out changed more
+than that one place. Each change follows from one layout for every reader, and the owner can object to any of them:
+
+1. **The product reader is stricter, not only renamed.** `docs/vol_backtest.fixture_closes` used to skip a blank
+   cell. It now raises `ValueError` for a blank, "." or non-positive close, a repeated or out-of-order date, a date not
+   written YYYY-MM-DD and a one-row file.
+2. **The generator refuses files it used to copy.** A reference file whose header lacks `close` (or `code` for F27)
+   is refused, so the columns of a raw Yahoo file, `Date` and `Close`, have to be renamed before it is used. Since the
+   review fix a reference row that a reader would refuse is refused too.
+3. **F15 (SPY) and F01 are held to the same layout.** The same product reader reads F15 for G-B5-02, and the same
+   test reader reads F01. No ruling names either file. The generator's row rules apply to both; neither is declared
+   a reference series.
 
 ### Questions for the owner
 
-1. **KRW=X has no calendar (blocks G-POST-01 on real data).** `REFERENCE_FILES` names the market FX for F16, and
-   neither the spec's market clocks (L1289-1291: KRX, NYSE, CRYPTO) nor `core.calendars` holds an FX clock. The generator
-   refuses F16 by name. Which signed calendar stamps a Yahoo KRW=X daily close? (a) The NYSE calendar: rows dated on
-   NYSE holidays would then be refused as non-sessions, and 16:00 ET is before the FX day ends. (b) A new signed FX close
-   rule in the calendar files. (c) Leave F16 out.
-2. **Where is the R-11 record, and in what layout?** The body assumes F20 records, in the keyed layout above, every one
-   of the 64 values except the 16 the product record holds. The spec only says F20 holds the DL-A section 7 post-patch
-   values (L5815), which include the G-KR-05 share. It does not say which archive file holds the G-REF-01 table (DL-A's
-   long-history refusal legs) or the R4 and R4b values of G-KR-05 and G-KR-05s (section 11 names `R4_golden_values.csv`
-   and `R4b_golden_values_net.csv`). If they are in other files, those files need ACQUISITION rows and the gate must name
-   them. If F20 keeps its own column names, the body needs them. On a table that holds only the G-POST-01 share row, the
-   real body FAILs and lists 47 golden values with no record (run in the end-to-end probe).
-3. **`price_limit` before April 1995.** The spec says the expected-values file includes it. The signed
+Questions 1, 2 and 3 block ⑨-2 for the tests they name: the answer is needed before the file is built or listed.
+
+1. **KRW=X has no calendar. Blocks G-POST-01 on real data, at both sites.** Ruling 2 names KRWX among the ids to be
+   stamped from the market calendar, and it is the one id not stamped. `REFERENCE_FILES` names the market FX for F16,
+   and neither the spec's market clocks (L1289-1291: KRX, NYSE, CRYPTO) nor `core.calendars` holds an FX clock, so
+   there is no rule to choose from and the generator refuses F16 by name. Which signed calendar stamps a Yahoo KRW=X
+   daily close? (a) The NYSE calendar: rows dated on NYSE holidays would then be refused as non-sessions, and 16:00 ET
+   is before the FX day ends. (b) A new signed FX close rule in the calendar files. (c) Leave F16 out; G-POST-01 then
+   stays NOT_RUN. Nothing is implemented until the answer.
+2. **Where is the R-11 record, and in what layout? Blocks G-REF-01, and blocks listing F20 for any test.** The body
+   assumes F20 records, in the keyed layout above, every one of the 64 values except the 16 the product record holds.
+   The spec only says F20 holds the DL-A section 7 post-patch values (L5815), which include the G-KR-05 share. It
+   does not say which archive file holds the G-REF-01 table (DL-A's long-history refusal legs) or the R4 and R4b
+   values of G-KR-05 and G-KR-05s (section 11 names `R4_golden_values.csv` and `R4b_golden_values_net.csv`). The
+   generator copies a result table unchanged, so the archived F20 cannot be expected to carry this part's column
+   names. On an F20 shaped as the spec prints it the body FAILs whatever the record says, and F20 is also a gate of the
+   G-POST-01 data-row test in `tests/macro_m1_fixtures.py`. Two ways out, both the owner's call:
+   - a keyed transcription of the record under its own file name, with its own ACQUISITION row (a new row needs
+     approval), and the gate pointed at it instead of F20;
+   - or the body reads from F20 only the one row the spec gives it (G-POST-01 `gkr05_share`), and the owner names the
+     archive files that hold the other 47 values.
+3. **`price_limit` before April 1995. To settle before the expected-values file is built.** The spec asks for a full
+   tag set equal to a file built from the notices "including `price_limit` before Apr-1995" (L2098). The signed
    `kr_regime_tags.yaml` holds null there (its `unverified` list: "a 17-step fixed-amount schedule, no single
-   fraction"). If the expected file states a number, the 90 dates from 1995-01-01 to 1995-03-31 FAIL (run in the
-   end-to-end probe with 0.046). Should the expected file leave the cell empty, or should the signed row change in a
-   new version?
-4. **The generator cannot yet write the three stampable files.** `generate` writes the whole set in one pass, refuses if
-   any reference file is absent, and stops at the first refusal (F02, "no scheduled publication instant"). The first
-   commit's probe on the synthetic signed set found that 10 of the 40 data rows stamp and 30 refuse: 17 ids that are
-   neither registered nor declared, F16, 6 as-posted ids, and 6 BLS and BEA ids that need the release calendar (absent
-   from the synthetic set only). If ⑨-2 is to build F13, F14 and F27 with this tool, it needs either a per-file option or
-   rulings for the other rows. This is a decision, not a bug fix.
-5. **F27's `series_id`.** The generator writes the file's first id, 005930, on every row, the 000660 rows included.
-   The shared reader accepts either id and the new test pins the behaviour. Should the 000660 rows carry 000660?
+   fraction"). As the body stands, an expected file that leaves those cells empty PASSes on the shipped signed file
+   (run through the real test's gates on a scratch file), so the full-range clause can pass with a null tag. That
+   reading of L2098 is this part's, not the owner's. If the expected file states a number instead, the 90 dates from
+   1995-01-01 to 1995-03-31 FAIL (run with 0.046). Should a null tag be accepted there, or should the signed row carry
+   a value in a new version and the body refuse a null?
+4. **Whether ⑨-2 builds the reference files one at a time.** The spec has the fixtures "generated once, at M1's exit"
+   (L22). Since the review fix the tool can write a chosen subset (`--only F13 F14 F27`), which is what makes rulings
+   1 and 2 reachable from the command line; without `--only` it still writes the whole set or nothing. A whole-set
+   run is refused today whatever is signed: on the shipped calendars 24 of the 40 data rows cannot be stamped by rule
+   (17 ids that are neither registered nor declared, F16, and 6 as-posted ids with no scheduled publication instant;
+   probed on one 2026 date). On the synthetic set 6 BLS and BEA ids are refused as well, because that set has no
+   release calendar. Those rows need rulings of their own before the whole set can be generated.
+5. **F27's `series_id`: please confirm.** Since the review fix a row carries its own code, so a 000660 row reads
+   000660, not 005930. This follows rulings 1 and 2 as recorded (F27 carries `code`, `series_id` and `close`; 000660 is
+   one of the five ids stamped from the market calendar), but the owner did not rule on it in these words. F27 has
+   never been generated, so no md5 depends on it yet. If the file's first id on every row is wanted, say so before
+   ⑨-2 builds F27.
 6. Part 2's questions 5 to 18 are still open. Its questions 1 to 4 are answered by rulings 1, 2 and 4. Question 14 (the
    `owner_must_sign` contract) and question 15 (extending signed coverage) are restated in the signing request.
 
@@ -204,6 +272,9 @@ used. Each FAIL case asserts the message of the clause it targets.
 
   The demonstration also parses the real test: it opens one fixture, `GREF01_RECORD`, and neither it nor its helpers
   name any of the stores, books, cost or refusal-leg tools the module builds for its other tests.
+
+  Since the review fix it also shows the two failures on a spec-shaped F20 named under "Declared fixture layouts", and
+  that a byte-order mark before the header changes nothing.
 - **T-REGIME-01 full range (ruling 6).** Expected rows that state the synthetic signed set's own tags pass on that set:
   11,688 dates, 175,320 tag values, also with the columns in another order. It fails:
   - when one cell of any one tag is changed, each of the 15 tags in turn, on a different day for each;
@@ -220,6 +291,10 @@ used. Each FAIL case asserts the message of the clause it targets.
 
   The reason test pins the two computed reasons: REFDATA naming the file while it is not listed, and OWNER naming a
   refusal (the unsigned synthetic set) or a coverage gap (a set signed for 1996-2027 only).
+
+  Since the review fix: a text cell with a space before or after it fails; a byte-order mark before the header is
+  ignored and one inside the file is not; and the reason test reads the real test's source and asserts that it opens
+  the one fixture, takes its calendar from `_regime01_signed()` with no argument and builds no calendar set itself.
 - **Rulings 1 and 2** (first commit). On invented rows over the synthetic signed set the generator stamps F13, F14 and
   F27 at the scheduled close and the close-print bound, refuses F16, and refuses an id that is neither registered nor
   declared. `generate` writes the four files in the declared layout and the shared test reader accepts each; from F13
@@ -227,6 +302,23 @@ used. Each FAIL case asserts the message of the clause it targets.
   (Yahoo's own `Close`; F27 without `code`). The product reader refuses the old `value` column, a blank, "." or
   negative close, a repeated or badly written date and a one-row file, and `fixture_lines` raises on a listed file in
   the old layout: it does not report NOT_RUN.
+- **Generator row rules and runs (fix commit).** On invented rows over the synthetic signed set, through
+  `generate(only=...)` with the real calendar function and the post-close check:
+  - 18 reference files are refused with the file and line named, and for each the same rows stamped the old way are
+    refused by the shared test reader: in F13 a blank, "null", ".", zero, negative, nan or inf close, a repeated date,
+    newest-first dates and a header with no rows; a header-only F14; in F27 a code 005935, a code "5930", a repeated
+    date and code pair, rows out of date order and a blank close; in F01 a "." close and a repeated date. A one-row F13
+    is refused too; the test reader takes that file and the product reader does not. A one-row F15 and a blank F15
+    close are refused, and a well-formed F15 is still refused when stamped ("SPY: not a registered series id").
+  - A good F13, a one-row F14 and a good F27 are written. The shared test reader reads each back, and the product
+    reader reads F13. Each F27 row carries its own code.
+  - A whole invented set is refused at F02 and no output directory exists afterwards. A refused regeneration leaves
+    an earlier generation of 50 files byte for byte as it was, although F01's reference had changed.
+  - With `only=("F13", "F14", "F27")` a reference directory holding `CATALOG.md` and those three files is enough.
+    The three fixtures are written in `REFERENCE_FILES` order and frozen. Without `only` the same directory is
+    refused. An unknown id and an empty selection are refused. A selection that includes F16, or one retrieved one
+    second before its bound plus 10 minutes, writes none of its files. The command line with `--only` writes the same
+    three files and manifest rows; it refuses `--only F12`, and with a selected file absent it lists that file only.
 
 ### Ratchet
 
@@ -255,29 +347,39 @@ unchanged, the lists still partition it, and `LA02_FLOOR_SIZE` is 15.
 `tests/fixtures/macro/MANIFEST.csv` lists `ACQUISITION.csv` with its md5, and `tests/fixtures/macro/README.md` says
 that every edit of the register refreshes its manifest row. Adding the row ruling 6 approves changed the md5 of
 `ACQUISITION.csv` from `05aee15bfb9d70ef58db7c1535fb5a2f` to `bfa8526ef8515de38af34fb41d06233a`. The task that produced
-this commit was not allowed to edit `MANIFEST.csv`, so the manifest row is stale, and
-`tests/macro_m0_harness.py::test_manifest_lists_every_fixture_with_a_matching_md5` (T-HERM-01) FAILs on this commit with
-"stale md5 ['ACQUISITION.csv: bfa8526e... != 05aee15b...']". It passed on the first commit. The fix is one cell: the md5
-of the `ACQUISITION.csv` row of `MANIFEST.csv`. It needs the owner's or the orchestrating session's say-so.
+the second commit was not allowed to edit `MANIFEST.csv`, and neither was the fix commit, so the manifest row is still
+stale. `tests/macro_m0_harness.py::test_manifest_lists_every_fixture_with_a_matching_md5` (T-HERM-01) FAILs with
+"stale md5 ['ACQUISITION.csv: bfa8526e... != 05aee15b...']". It passed on the first commit; it failed on the second,
+on the merge and on the fix commit, run by id each time. The fix is one cell: the md5 of the `ACQUISITION.csv` row of
+`MANIFEST.csv`, set to the current `md5sum tests/fixtures/macro/ACQUISITION.csv`, with nothing else in the file
+changed. It needs the owner's or the orchestrating session's say-so, and the branch must not merge before it. After
+it, this section, the opening of this record, the verification list and the FACTS.md row "병합 전 후속" have to be
+corrected and the compliance baseline refreshed.
 
 ## What did not change
 
 - No product code changed in the second commit: nothing under `core/`, `data/`, `ui/` or `docs/*.py`. The first commit
-  changed `docs/vol_backtest.py` and `docs/macro_fixtures.py` only; neither is in
-  `core/quant/gate_package.HARNESS_SOURCES` or in the source tuple of `tests/macro_m7_integration.py`.
-  `core/quant/refusal.py` is read, not edited.
+  changed `docs/vol_backtest.py` and `docs/macro_fixtures.py` only, and the fix commit `docs/macro_fixtures.py` only;
+  neither file is in `core/quant/gate_package.HARNESS_SOURCES` or in the source tuple of
+  `tests/macro_m7_integration.py`. `core/quant/refusal.py` is read, not edited. The merge brought main's files in
+  unchanged.
 - No signature was written and no calendar file under `core/calendars/data` changed.
 - `goldens.csv`, `MANIFEST.csv`, `tests/macro_registry.csv`, the `data/macro` registries and rules,
   `qa/acceptance_results.json`, ledgers, cards and registers are unchanged. `ACQUISITION.csv` gained exactly one row.
-- Every existing test keeps its name and its `test_ids`, checked statically against `5f1ead5` and against the first
-  commit for the seven test modules involved. The four new tests carry no `test_ids`, so the `implemented_in` column
-  stays in sync. `tests/macro_m1_fixtures.py` stays CRLF; the other modules stay LF; `macro_m1_calendars.py` and
-  `macro_m1_pit.py` stay ASCII.
+- Every existing test keeps its name and its `test_ids`, checked statically against `5f1ead5`, against the first
+  commit and, for the fix commit, against the merge, for the seven test modules involved. The six new tests carry no
+  `test_ids`, so the `implemented_in` column stays in sync. `tests/macro_m1_fixtures.py` stays CRLF; the other modules
+  stay LF; `macro_m1_calendars.py` and `macro_m1_pit.py` stay ASCII. The `REFERENCE_FILES` table of
+  `docs/macro_fixtures.py` stays on lines 44 to 75; comments in `macro_m1_pit.py` and `macro_m3_estimators.py` cite
+  its rows by line.
 - The new and changed tests read the data fixtures only through `require_fixture`, `goldens.csv` through
   `tests/golden_tools`, and the shipped calendar files only for their signing and coverage state. None reads
   `docs/asset_expansion/cache`.
 
 ## Verification (Linux, 2026-11-11 KST)
+
+The lists below down to "/code-review fixes" are the runs of the first two commits, as they were reported then. The
+runs on the merged tree and on the fix commit are under "/code-review fixes".
 
 All runs used the scratch runner of parts 1 and 2. It installs `sys.addaudithook`, which refuses any open, listdir,
 scandir or mkdir under `docs/asset_expansion/cache`, any `.env` and anything under `~/.nextgen`, and refuses every
@@ -334,6 +436,67 @@ scandir or mkdir under `docs/asset_expansion/cache`, any `.env` and anything und
   statuses gave 6,592 identical calls of 6,912; the other 320 are the five declared ids. `generate` wrote the same 50
   files byte for byte on one reference set.
 
+### /code-review fixes (merge `7611064` and the fix commit)
+
+A code review of the first two commits reported 19 findings from two reviewers, 14 distinct. A probe reproduced every
+code finding on the merged tree before any change. What was done, by defect:
+
+1. **The stale manifest row (blocker, both reviewers). Confirmed, not fixed.** The fix stage was not allowed to edit
+   `MANIFEST.csv` either. See "Follow-up needed before merge".
+2. **The branch was behind main (major, both).** Main `1a8b29f` is merged in by `7611064`. The only files both sides
+   change are `docs/compliance/FACTS.md` and `docs/compliance/source-review.json`. Main's FACTS text is kept
+   unchanged and this part's section follows it; the baseline was regenerated with the refresh command, not merged by
+   hand. On the merged tree the 165 ids keep their status and NOT_RUN reason.
+3. **The cited rulings section was not in the tree (minor, both).** It arrived with the merge: PR #100, which carries
+   `275ec93`, had reached main.
+4. **G-REF-01 would FAIL on a spec-shaped F20 (major, both). Left for the owner; stated plainly.** The body is
+   unchanged. Question 2 now says it blocks listing F20, the layout declaration says what the spec describes, and
+   the demonstration shows both failures.
+5. **Ruling 2 covers four of five ids (major). Left for the owner; stated plainly.** No calendar is chosen for KRW=X.
+   The opening, the table and question 1 no longer say that all five are stamped.
+6. **The command line could not write F13, F14 or F27, and a refused run left a stray file (major). Fixed.**
+   `generate(only=...)` and `--only`; every file is built and checked in a temporary directory first.
+7. **The generator wrote close files the readers refuse (minor). Fixed.** `fixture_rows` applies the readers' rules
+   to F01, F13, F14, F15, F16 and F27. F01 and F15 are added to the declaration (`CLOSE_FILES`), not left out.
+8. **F27's 000660 rows carried `series_id` 005930 (minor, both). Changed, pending the owner's confirmation.** A row
+   carries its own code; the two assertions that pinned the old label now pin the new one. Question 5 asks the
+   owner to confirm.
+9. **Two mutants survived the demonstrations (minor). Fixed.** The reason test checks the real T-REGIME-01 test's
+   source for both gates, and the demonstration has a text cell with a space on either side.
+10. **A null tag passes the full-range clause (minor). Left for the owner.** The signed calendar file cannot be
+    edited here, and refusing a null would make the clause unpassable until the owner signs a value. Question 3 now
+    says the reading is not owner-approved.
+11. **A byte-order mark broke the two hand-built files' readers (minor). Fixed.** Both readers ignore one before
+    the header. The close-layout readers are not changed: they do not read the first column.
+12. **Ruling 1 changed more than one place (minor). Stated.** See "What ruling 1 changed beyond one place".
+13. **The signing request asked for a `saturday_close` row per Saturday (minor). Reworded.** One effective-dated row
+    is enough if the close time never changed.
+14. **Part 2's text is out of date (minor). Noted there.** A note at the top of the part 2 record and one in its
+    FACTS.md row point here. The old text is not rewritten.
+
+Verification of the merge and the fix commit:
+
+- **By id, fix commit.** 167 test functions: the 165 of the second commit's list and the two new tests. Result: 126
+  PASS, 41 NOT_RUN, 0 FAIL, no guard refusal. The 165 keep the status and the NOT_RUN reason they had on `8ed8112` and
+  on the merge. Run on its own, `macro_m0_harness.py::test_manifest_lists_every_fixture_with_a_matching_md5` FAILs as
+  stated above. Both ratchet tests, `test_every_required_fixture_is_generated_or_registered`,
+  `test_no_golden_test_passes_on_its_fixture_gate_alone`, `test_acquisition_csv_integrity` and
+  `macro_acceptance.py::test_t_herm_01_every_touchpoint_raises` PASS.
+- **Before and after.** One probe script ran on the merged tree before the fixes and again after them. Before: the
+  stray F01 file, no `only`, each of the bad F13 and F27 references written, 000660 rows labelled 005930, both
+  byte-order-mark failures, and both demonstrations passing on the two surviving mutants. After: each is refused,
+  written correctly or caught. The KRWX refusal, the two failures on a spec-shaped F20 and the PASS with a null tag
+  are the same before and after, as intended.
+- **Mutants on disk.** 76 mutants, each applied to a scratch copy of the tree (never the worktree) and run against 20
+  demonstrations: the reviewer's 47, one of them re-targeted at a line this commit rewrote, and 29 of the new code.
+  All 76 are caught. A first run caught 75. The survivor made the command line ignore the calendars it is given; the
+  test could not tell, because the shipped calendars stamp the same 2026 instants. The test now counts the use of the
+  calendars it passes, and the full run was repeated. The reviewer's two survivors are caught now.
+- **Compliance.** `python -m tools.compliance.check --check`: consistency PASS, publication BLOCKED, 20 documents,
+  662 source files, after the refresh of the merge and again after the refresh of the fix commit.
+- **Static.** `ruff check --select F,E9` on the four files the fix commit changes under `tests/` and `docs/*.py`: one
+  unused import in `tests/macro_m1_fixtures.py`, the same as on the merge, and nothing new.
+
 ### Not run, and unverified
 
 - `tests/run_all.py`, whole macro modules, `tests.macro_m9_lab` and `tests.macro_m8_pipeline` were not run.
@@ -353,13 +516,21 @@ scandir or mkdir under `docs/asset_expansion/cache`, any `.env` and anything und
 - The stamping of rulings 1 and 2 was checked on the synthetic signed calendars with invented rows. The coverage the
   generator needs (the KR files from 1 January of each row's year, so from 1996-01-01 for F13; `holidays_NYSE` from 1990
   for F14) was probed on the shipped set and on a cut synthetic set for single dates, not on real files.
-- `docs/vol_backtest.run()` and its CLI were not executed (they read `docs/asset_expansion/cache`), and
-  `docs/macro_fixtures.main()` was not run end to end.
+- `docs/vol_backtest.run()` and its CLI were not executed (they read `docs/asset_expansion/cache`).
+  `docs/macro_fixtures.main()` has run end to end only in the new test, on invented rows and the synthetic signed
+  calendars; it has never run on the shipped calendars or on real reference files.
+- Two things seen in `docs/macro_fixtures.py` and not changed, because no finding names them. A result table is read
+  with `read_text`, which turns CRLF line ends into LF, so "copied byte for byte" holds for an LF table only. A
+  reference date that is not ISO raises a plain `ValueError` without the file name.
+- The generator's row rules were written from the two readers' code and are checked against the shared test reader
+  case by case, and against the product reader for the one-row file. That the three stay in step later rests on the
+  new test.
 - The real G-REF-01 and T-REGIME-01 bodies' gate wiring is checked by the end-to-end probe and, for G-REF-01, by parsing
   the source. A mutant of the gate lines themselves cannot be judged by the in-memory harness, because the parse reads
   the file on disk.
 - Statements in the part 2 record that this part makes out of date are left as written there: its questions 1 to 4, its
-  last "unverified" bullet (the generator's `KeyError`), its "Next parts" list and its counts.
+  last "unverified" bullet (the generator's `KeyError`), its "Next parts" list and its counts. Since the fix commit a
+  note at the top of that record, and one in its FACTS.md row, say so and point here.
 
 ## What is left
 
@@ -371,5 +542,8 @@ Still unconverted, as listed in `LA02_REMAINING`:
   LA-07 harness change and the LA-30 ALFRED vintages. By ruling 12 the LA-30 data is acquired with the reference-data
   stage ⑨-2.
 
-Before ⑨-2 can run the converted bodies on real data: the one-cell manifest follow-up above; the owner's answers to
-questions 1 to 5; the signatures listed in the signing request; and the reference files themselves.
+Before this branch can merge: the one-cell manifest follow-up above.
+
+Before ⑨-2 can run the converted bodies on real data: the owner's answers to questions 1 to 3, each before the file
+it names is built or listed (F16; F20; the expected-values file); the answers to questions 4 and 5 before the
+generator is run; the signatures listed in the signing request; and the reference files themselves.
