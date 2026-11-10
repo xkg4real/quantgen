@@ -56,6 +56,30 @@ class CompactUiTests(unittest.TestCase):
                     button.setFocus();QTest.keyClick(button,Qt.Key.Key_Space);self.settle()
                     self.assertIs(w.tool_host.currentWidget(),getattr(w,name));self.assertTrue(button.isChecked())
                 w.show_tool(w.bonds)
+    def test_compact_form_keeps_224px_base_and_widens_only_for_native_minima(self):
+        # Owner PR89: 3 columns at a 224px base, reflow only when narrow. The base is not a
+        # ceiling: real control minima above it (larger fonts, Windows metrics) widen the cap
+        # just enough for every column, so a wide window never drops a column (A3 rule).
+        from PyQt6.QtWidgets import QFrame,QLabel,QLineEdit,QVBoxLayout,QWidget
+        from quantgen_desktop.form_layout import CompactFieldGrid,bound_input_panel
+        host=QWidget();self.addCleanup(delete_owned_widget,host)
+        outer=QVBoxLayout(host);outer.setContentsMargins(0,0,0,0)
+        box=QFrame();inner=QVBoxLayout(box);inner.setContentsMargins(16,16,16,16);bound_input_panel(box)
+        fields=[(QLabel(f'Field {index}'),QLineEdit(str(index))) for index in range(9)]
+        form=CompactFieldGrid(fields);inner.addWidget(form);outer.addWidget(box)
+        host.resize(1600,900);host.show();self.settle()
+        for minimum,width,columns,cap in ((200,1600,3,696),(236,1600,3,732),(236,600,2,732),(200,1600,3,696)):
+            for _,control in fields:control.setMinimumWidth(minimum)
+            host.resize(width,900);self.settle()
+            self.assertEqual((form.maximumWidth(),box.maximumWidth(),form.columns),(cap,cap+34,columns))
+            self.assertLessEqual(form.width(),cap)
+            for index,(caption,control) in enumerate(fields):
+                row,column=(index//columns)*2,index%columns
+                self.assertIs(form.grid.itemAtPosition(row,column).widget(),caption)
+                self.assertIs(form.grid.itemAtPosition(row+1,column).widget(),control)
+                self.assertGreaterEqual(control.width(),minimum)
+                self.assertLessEqual(control.x()+control.width(),form.width())
+                self.assertEqual(control.text(),str(index))
     def test_small_table_is_content_sized_and_full_values_remain(self):
         t=table(['Metric','Value']);self.addCleanup(delete_owned_widget,t)
         rows=[('Price','123,456.75'),('Duration','12.25')];table_rows(t,rows);t.resize(1600,300);t.show();self.settle()

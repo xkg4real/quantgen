@@ -11,3 +11,10 @@ The initial31-test run passed29; two historical fixture preconditions assumed un
 ## Website handoff
 
 Native-only source. AWS should review density/type equivalents against actual browser source; never copy Qt code directly. No website HTML or deployment is included. Direct cross-chat sending is unavailable, so a saved queue is not a delivery receipt.
+
+## 2026-11-10 correction: 224px is a base, not a ceiling
+
+Runtime CI on PR89 (run 42245900881) failed in `tests.desktop_a3_layout_acceptance` on all four platforms: with 18px combo fonts the Monte Carlo form showed 2 columns at a 1360px window. PR89 capped every compact form at a fixed `max_columns*224+gaps` (696px for 3 columns, panel 730px), so native control minima above about 224px forced fewer columns at any window width.
+
+`quantgen_desktop/form_layout.py` now caps a compact form at the larger of the 224px base and the width its full column count needs from the real control minima, and the bounded panel follows the visible form. With default fonts on Linux the widths are unchanged (Monte Carlo 696/730, Bonds 932/966); on Windows, where some default control minima are already above 224px, forms may be slightly wider than 696px instead of dropping a column. Narrow windows still reflow to 2 or 1 columns. Column choice still follows the A3 rule (actual minima plus spacing). Values, field order, reports and requests are unchanged. Windows rendering was checked only through hosted CI, not on a user PC.
+
