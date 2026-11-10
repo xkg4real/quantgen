@@ -25,12 +25,18 @@ imports only `core.quant.validate` and `core.quant.gate_stats` (never `core.quan
 are later units.
 
 Provisional (M-3). The second DSR is labelled provisional until the ⑨-3c report and ⑨-3d. The meaning of the
-ledger N_raw was not decided by the owner's answer of 2026-11-10, so N_raw is a caller input under one or both
-named readings (`N_RAW_READINGS`) and both readings are displayed. The DSR at N = G is the gate's own DSR and
-always uses the gate's dispersion term (`sr_sd_grid`); criteria 6.2 keys the second DSR's borderline on it. The
-dispersion term paired with N_raw is a criterion reserved for ⑨-3d (R3 design 4.4; 10.2 B Q1), so it is a
-separate, explicit, labelled caller input used only for the N_raw lines; N_raw below G is printed, not refused
-(R3 design 10.2 B Q4). The L1 note (M-20) is printed on the collected `strategy_lines` result.
+ledger N_raw was not decided by the owner's answer of 2026-11-10; owner ruling 7 of 2026-11-11 decided it
+(roadmap ⑨-4/2/b): R-FAM, the R3 run-registry count, is the N_raw reading of record (`N_RAW_READING_OF_RECORD`).
+Until the R3 recorder exists no count comes from the registry itself, so N_raw stays a caller input under one or
+both named readings (`N_RAW_READINGS`), both readings are still displayed (L-FAM for comparison) and the second
+DSR stays provisional. Naming the reading of record changes no threshold, status or gate rule: every line is
+computed and classified as before.
+
+The DSR at N = G is the gate's own DSR and always uses the gate's dispersion term (`sr_sd_grid`); criteria 6.2
+keys the second DSR's borderline on it. The dispersion term paired with N_raw is a criterion reserved for ⑨-3d
+(R3 design 4.4; 10.2 B Q1), so it is a separate, explicit, labelled caller input used only for the N_raw lines;
+N_raw below G is printed, not refused (R3 design 10.2 B Q4). The L1 note (M-20) is printed on the collected
+`strategy_lines` result.
 """
 from __future__ import annotations
 
@@ -64,13 +70,20 @@ N_RAW_READINGS = MappingProxyType({
              "read on the owner PC",
     "R-FAM": "R3 registry literal family-wide count (R3 design 3.13: |K| + |L minus cfg(K)|)",
 })
+# Owner ruling 7 of 2026-11-11 (M-3, roadmap ⑨-4/2/b): the R3 run-registry count is the N_raw reading of record.
+# Until the R3 recorder exists both readings are still shown and the second DSR stays provisional.
+N_RAW_READING_OF_RECORD = "R-FAM"
 
 DSR_STATUSES = ("pass", "borderline", "below", "nan", "not_supplied")
 COMPARISON_STATUSES = ("win", "borderline", "not_won", "not_run", "replaced")   # "replaced": cash, S-4 only
 
 _PROVISIONAL_NOTE = ("provisional (M-3): the second DSR stands until the ⑨-3c report and is reviewed at ⑨-3d; "
-                     "the meaning of ledger N_raw is undecided (owner answer of 2026-11-10), so both readings "
-                     "are shown")
+                     f"{N_RAW_READING_OF_RECORD}, the R3 run-registry count, is the N_raw reading of record "
+                     "(owner ruling 7 of 2026-11-11); until the R3 recorder exists both readings are shown")
+_OF_RECORD_ROLE = "reading of record (owner ruling 7, 2026-11-11)"
+_COMPARISON_ROLE = "shown for comparison"
+_RECORD_MISSING = ("the reading of record was not supplied, so this result has no second DSR of record and "
+                   "stays provisional")
 _PAIRING_NOTE = ("the DSR at N = G uses the gate's own dispersion term; the term paired with N_raw is a criterion "
                  "reserved for ⑨-3d (R3 design 4.4, 10.2 B Q1), so the N_raw lines use the caller's labelled term")
 _BELOW_GRID_NOTE = ("N_raw below G is printed only: whether a ledger-based N may fall below G is R3 design "
@@ -255,6 +268,10 @@ class RawReading:
     dsr: float
     status: str               # pass / borderline / below / nan / not_supplied
     below_grid: bool          # N_raw < G, printed only
+    of_record: bool           # True for N_RAW_READING_OF_RECORD (ruling 7); the other reading is for comparison
+
+    def role(self) -> str:
+        return _OF_RECORD_ROLE if self.of_record else _COMPARISON_ROLE
 
 
 @dataclass(frozen=True)
@@ -271,18 +288,20 @@ class DsrTwoN:
     n_sessions: int
     notes: tuple
     rule: str = "S-2"
-    provisional: bool = True
+    provisional: bool = True  # stays True until the R3 recorder exists, with or without the reading of record
+    reading_of_record: str = N_RAW_READING_OF_RECORD
 
     def lines(self) -> tuple:
         out = [f"S-2 [provisional] DSR at N = G = {self.n_grid}: {_fmt(self.dsr_grid)} ({self.status_grid}); "
                f"dispersion term {self.sr_sd_grid:.6g} per period [the gate's own term]"]
         for r in self.readings:
             if r.n_raw is None:
-                out.append(f"S-2 [provisional] N_raw {r.reading} ({r.meaning}): not supplied")
+                missing = f"; {_RECORD_MISSING}" if r.of_record else ""
+                out.append(f"S-2 [provisional] N_raw {r.reading} ({r.meaning}) [{r.role()}]: not supplied{missing}")
                 continue
             tail = f"; N_raw {r.n_raw} < G {self.n_grid}: printed only" if r.below_grid else ""
-            out.append(f"S-2 [provisional] DSR at N_raw {r.reading} = {r.n_raw}: {_fmt(r.dsr)} ({r.status}); "
-                       f"dispersion term {self.sr_sd_daily:.6g} per period [{self.sr_sd_label}]{tail}")
+            out.append(f"S-2 [provisional] DSR at N_raw {r.reading} = {r.n_raw} [{r.role()}]: {_fmt(r.dsr)} "
+                       f"({r.status}); dispersion term {self.sr_sd_daily:.6g} per period [{self.sr_sd_label}]{tail}")
         return tuple(out) + tuple(self.notes)
 
 
@@ -306,8 +325,11 @@ def dsr_two_n(oos_daily, *, n_grid, sr_sd_grid, n_raw: Mapping, sr_sd_daily, sr_
 
     `n_raw` maps one or both readings of `N_RAW_READINGS` ("L-FAM", "R-FAM") to an integer count supplied by the
     caller (read on the owner PC; this module opens no ledger). Both readings are always displayed; an absent one
-    shows as "not_supplied". N_raw < G is a printed status, not a refusal. Counts must be integers >= 1; a NaN DSR
-    is status "nan" (6.4, N12)."""
+    shows as "not_supplied". R-FAM is the reading of record (`N_RAW_READING_OF_RECORD`, owner ruling 7 of
+    2026-11-11) and its line says so; the L-FAM line says it is shown for comparison. When R-FAM is not supplied
+    its line says that the reading of record is missing. The result is provisional in every case until the R3
+    recorder exists, and each reading is computed and classified exactly as before the ruling. N_raw < G is a
+    printed status, not a refusal. Counts must be integers >= 1; a NaN DSR is status "nan" (6.4, N12)."""
     daily = _series(oos_daily, "oos_daily")
     g = _count(n_grid, "n_grid")
     sd_grid = _dispersion(sr_sd_grid, "sr_sd_grid")
@@ -323,12 +345,13 @@ def dsr_two_n(oos_daily, *, n_grid, sr_sd_grid, n_raw: Mapping, sr_sd_daily, sr_
     status_grid = classify_dsr(dsr_grid)
     readings, notes = [], [_PROVISIONAL_NOTE, _PAIRING_NOTE]
     for key, meaning in N_RAW_READINGS.items():
+        of_record = key == N_RAW_READING_OF_RECORD
         if key not in counts:
-            readings.append(RawReading(key, meaning, None, float("nan"), "not_supplied", False))
+            readings.append(RawReading(key, meaning, None, float("nan"), "not_supplied", False, of_record))
             continue
         value = float(V.deflated_sharpe(daily, n_trials=counts[key], sr_sd_daily=sd))
         readings.append(RawReading(key, meaning, counts[key], value, classify_dsr(value, grid_status=status_grid),
-                                   counts[key] < g))
+                                   counts[key] < g, of_record))
     if any(r.below_grid for r in readings):
         notes.append(_BELOW_GRID_NOTE)
     if status_grid == "nan" or any(r.status == "nan" for r in readings):
