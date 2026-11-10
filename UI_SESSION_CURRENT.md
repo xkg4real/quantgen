@@ -1,10 +1,10 @@
 # UI 세션 진행 중 — 2026-11-10 KST (Claude, 소유자 UI/UX 검토 14건)
 
-- status: 완료 · 소유자 확인 대기 (UI 세션 전용 기록. 메인 `CURRENT.md`·`LEDGER.md`는 다른 Claude 세션
+- status: 완료 · main 병합됨 (UI 세션 전용 기록. 메인 `CURRENT.md`·`LEDGER.md`는 다른 Claude 세션
   session_01H6RrzMUzF8vwK8xkX977mB가 쓰는 중이라 건드리지 않음)
 - session: https://claude.ai/code/session_016uB1jf8m3p5GW1qzQVJe7k
-- work_branch: `claude/friendly-bardeen-r6xe8f` (main `9d1eacd`에서 시작), 최신 main `b0d2862` 병합 후 `ba3736f`, [PR #98](https://github.com/xkg4real/quantgen/pull/98) 열림(소유자 병합 대기). 병합 트리 재검사 1,231개 실패 0
-- updated_at: 2026-11-11 00:20 KST, waiting_on: owner
+- work_branch: `claude/friendly-bardeen-r6xe8f` (main `9d1eacd`에서 시작), [PR #98](https://github.com/xkg4real/quantgen/pull/98) main 병합 완료 — merge `7ddb568` (head `6941e6d`, main PR 97·99 포함). GitHub CI 전부 통과(Ubuntu 3.12, Windows 3.11/3.12/3.14, 구문 3.10/3.11, 문서 정합성), Vercel은 소유자 규칙으로 무시
+- updated_at: 2026-11-11 03:12 KST, waiting_on: none
 
 ## 소유자 요청 (원문)
 
@@ -39,7 +39,7 @@ zip = Flet 앱(main.py, ui/*.py) 스크린샷 14장. 파일 제목이 곧 지시
 
 ## 남은 일 (소유자 결정 또는 후속)
 
-1. PR #98 병합은 소유자가 PC에서 브랜치를 확인한 뒤 결정. 실제 Windows 화면·실제 제공처(Yahoo/FRED/KIS) 응답은 미확인.
+1. 병합 후 CI 조정: 곡선 기존 방법 기록값 비교는 NS/NSS의 적합 곡선(0.05bp)과 RMSE로(매개변수는 플랫폼마다 다름), installed 작업 제한 45분. 실제 Windows 화면·실제 제공처(Yahoo/FRED/KIS) 응답은 미확인.
 2. 알려진 한계: 네이티브 PyQt 화면은 공유 core 외 미변경. 실시간 차트 SVG 머리글 '1d'와 구분 기호(core/market/presentation.py, 네이티브 공유), 금리 결과표 만기 1m/1y(flet_a1_headers 시험이 언어 간 셀 동일성을 요구), '오 년 단리'(forward_convention 시험이 문자열 고정), 일부 네이티브 한국어 해설 안의 영문 조각(ETF 제공처 원문, ETH/BTC ADF 문장).
 3. 시간 의존 시험 `test_old_market_timestamp_is_labelled_stale_despite_fresh_transport` 고정 시계 적용 제안.
 
