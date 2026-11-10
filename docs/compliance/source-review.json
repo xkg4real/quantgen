@@ -287,7 +287,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "4d17b765b3058bd1d94e7a97f78e1e7fa8e2fe30fa146b7e6e3e601027f07d26",
+    "docs/compliance/FACTS.md": "29ed1e36a7fc287921e70f0a8778e56b1719b2beb46b423d1ff36d50c3219ce2",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -337,6 +337,7 @@
     "docs/product/OPTION_DISCLOSURE_2026-11-04.md": "ff314ee2043b524cdb8456f4af5c2ffe5f19f19d341ac28be471a6d3c7588373",
     "docs/product/PACKAGING_2026-10-29.md": "b2b0cbb23370530dfc343bceb9033edcd98459c490641435a5a5217036b50ade",
     "docs/product/PORTFOLIO_SCOPE_2026-10-30.md": "dab48baf2447f40edbd71ae2a7168822e69674ab1b0cc48b114d5986eff6ca0d",
+    "docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md": "08207e523e154120844c0f7b3890e17b96a11d6f859e66116f34f579f4e11dcc",
     "docs/product/QUOTE_COVERAGE_2026-10-31.md": "31484f05d01c7a90ff58e91fb6063ee19dad72905cd7f6344e17a83faf650963",
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
@@ -673,163 +674,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "db073645101e5d92a4a43f47c5c2ec917ad56e424d58dbda0876dc89d1159a1b",
+      "source_digest": "08eadabb73628e1760dc0c9699934d94c6b82bfe535751c87056536534298179",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.941706+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.076380+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "db073645101e5d92a4a43f47c5c2ec917ad56e424d58dbda0876dc89d1159a1b",
+      "source_digest": "08eadabb73628e1760dc0c9699934d94c6b82bfe535751c87056536534298179",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.945233+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.080161+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "44c528492b832580213697cc594a094a09e050f219205a26f6bc57af64bed8bf",
+      "source_digest": "5bc8cc7f762e8050775035055dce3340cb034267cf20902859e8ec23455b959f",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.948115+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.082933+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "9d5c37cde0f76f41ed033b6785d67023fbb6bdc41b887dd2b2ef1450cf61b9ca",
+      "source_digest": "2fd6c030204459dc23ab69b4f806cf42a494c477b5a7737036089ffc84b1951c",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.951642+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.086644+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "e184bf86ebf338876b006f2033c8b7b8b58d626b95365fa05364dbd431c0cb5b",
+      "source_digest": "c64989cd4091440468edc2eb65c6a0808ab7893c12c24c25c917bc149285befc",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.955646+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.088901+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "55f9e2918b983dcf4f33f983ce040ba7927180dcb4b62888dc66fd66e3a0a559",
+      "source_digest": "a8ac3ee06dd0f9fec50f8958fb55270fc1caa8528518ba3af2adb6b1d23a08fe",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.958872+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.091935+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "db073645101e5d92a4a43f47c5c2ec917ad56e424d58dbda0876dc89d1159a1b",
+      "source_digest": "08eadabb73628e1760dc0c9699934d94c6b82bfe535751c87056536534298179",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.962427+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.093854+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "8": {
       "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
-      "source_digest": "55f9e2918b983dcf4f33f983ce040ba7927180dcb4b62888dc66fd66e3a0a559",
+      "source_digest": "a8ac3ee06dd0f9fec50f8958fb55270fc1caa8528518ba3af2adb6b1d23a08fe",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.965001+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.096810+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "b4baaf7ceaf21b730714f6fe3c7bbafc5c3b1479e9bb911929b44cb05776a2f4",
+      "source_digest": "117e039d739c4f4225679d10396379b9c45f516b453fda993eabd53014fcf5e6",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.967623+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.103333+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "95fc244126303d11ced6659e5a56f32e5d509f0159d071ef97f9e295818ecafa",
+      "source_digest": "eb020919a97e33fee529cb26c0cf40f7b312a6918e608fc04d4a8f697f3671a3",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.970672+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.106307+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "843b7375b5f49b396709920a4506ed5f44bf9d986f132e6cf4f6c09b13d7efa2",
+      "source_digest": "d567a16e0fc35e70da5e6d23e85de3b17f5942356a588befad1761ff944acd30",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.973889+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.108289+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "5c87ee0341f56240f0c4112974d87c4f44c2bb07d0310986a2f07d3b54cee093",
+      "source_digest": "ef62ad906007c95887677dd73a9bef51767404267599d21db8359b1f53583846",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.976270+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.111136+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "b4baaf7ceaf21b730714f6fe3c7bbafc5c3b1479e9bb911929b44cb05776a2f4",
+      "source_digest": "117e039d739c4f4225679d10396379b9c45f516b453fda993eabd53014fcf5e6",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.978634+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.113063+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "b4baaf7ceaf21b730714f6fe3c7bbafc5c3b1479e9bb911929b44cb05776a2f4",
+      "source_digest": "117e039d739c4f4225679d10396379b9c45f516b453fda993eabd53014fcf5e6",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.981184+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.115225+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "b4baaf7ceaf21b730714f6fe3c7bbafc5c3b1479e9bb911929b44cb05776a2f4",
+      "source_digest": "117e039d739c4f4225679d10396379b9c45f516b453fda993eabd53014fcf5e6",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.983409+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.117642+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "6df5b7bf2bab0c4ccc8c1ec572aeabc16fb8d29cefd5b22060e1e991f99d776e",
+      "source_digest": "2ee016862bf19aa02097f57dfccf419c6bae6a30ea5c61207b2990e7579eea88",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.985988+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.119590+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "55f9e2918b983dcf4f33f983ce040ba7927180dcb4b62888dc66fd66e3a0a559",
+      "source_digest": "a8ac3ee06dd0f9fec50f8958fb55270fc1caa8528518ba3af2adb6b1d23a08fe",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.988749+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.121524+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "db073645101e5d92a4a43f47c5c2ec917ad56e424d58dbda0876dc89d1159a1b",
+      "source_digest": "08eadabb73628e1760dc0c9699934d94c6b82bfe535751c87056536534298179",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.991201+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.125096+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "474fb91210bd159a4a2134ffd066421816b4b876d9288ab8a0b87518c374ce8b",
+      "source_digest": "1e576deadf082fb6308ede4fd2108ea1dcfc88e5e4777473b999b9413375dce5",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.993832+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.127293+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "db073645101e5d92a4a43f47c5c2ec917ad56e424d58dbda0876dc89d1159a1b",
+      "source_digest": "08eadabb73628e1760dc0c9699934d94c6b82bfe535751c87056536534298179",
       "reviewed_by": "Claude provider parity review",
-      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
-      "reviewed_at": "2026-11-10T20:30:56.996859+00:00",
-      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
+      "review_note": "Owner run guide (Korean) for the provider parity tool added under docs/product and its row in FACTS.md; no tool, transport, storage, screen or claim change; document 08's tool rows (destinations, keys by name, what leaves the PC) compared with the guide and left as they are",
+      "reviewed_at": "2026-11-10T21:03:55.130421+00:00",
+      "source_commit": "d63fe1e992cdd367890fb9d09c034896f17c19aa"
     }
   }
 }
