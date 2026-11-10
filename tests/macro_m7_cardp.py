@@ -5,7 +5,8 @@ SYNTH: T-ES-01, T-DNH-01, T-ORDER-01, T-EPIS-01 (builder logic, open bear), T-EX
 clause), T-BAND-01, T-PLACEBO-01 (FR arithmetic, synthetic look-ahead control, ledger rows, noise-overlay family),
 T-PLACEBO-02 (probe isolation), T-LAG-01/02 (probe clauses), T-GATE-04 (bounded redesign), I-05 (synthetic end to end).
 REFDATA: I-08, T-GATE-01, T-GATE-03, T-EPIS-01 counts, T-EPIS-02, T-TROUGH-01, T-ES-02, T-RLAYER-01, T-PLACEBO-01 control
-fixture, I-05 golden lag audit. OWNER: T-EXCESS-01 ECOS clause.
+fixture (a declared layout and a real body, `_check_placebo01_control`, shown to PASS and FAIL on invented rows; look-ahead
+audit LA-02), I-05 golden lag audit. OWNER: T-EXCESS-01 ECOS clause.
 
 Hermetic: seeded synthetic series, tempfile directories for every log, no clock, no network. Nothing is written under
 `config.macro_dir()`; the production `gate/acceptance_runs.jsonl` is asserted empty. No formal card is evaluated.
@@ -13,6 +14,8 @@ Hermetic: seeded synthetic series, tempfile directories for every log, no clock,
 from __future__ import annotations
 
 import ast
+import csv
+import io
 import json
 import os
 import tempfile
@@ -28,6 +31,7 @@ from core.quant import cardp as CP
 from core.quant import costed as C
 from core.quant import gate_stats as GS
 from core.rules import governance
+from tests import golden_tools as G
 from tests.notrun import NotRun, require_fixture
 
 # R-24 power block at mde80 = 0.05 (cardp_evaluate refuses a card without every L2612 field, T-POWER-02)
@@ -472,12 +476,112 @@ def test_placebo_01_noise_overlay_family_passes_pc1_rarely():
 test_placebo_01_noise_overlay_family_passes_pc1_rarely.test_ids = ["T-PLACEBO-01"]
 
 
+# KR_SOX_KRW_gate_B3.csv layout, declared here: spec L3430 and ACQUISITION.csv name its contents (the R4 B3 inputs, SOX
+# and USD/KRW closes, and the gate's thresholds and multiplier) but no columns. One row per KRX session, in date order:
+#   session_date             ISO date of the KRX session K
+#   kr_return                the KOSPI close-to-close return earned on K (the overlay-off book)
+#   sox_close, usdkrw_close  the R4 B3 inputs dated K (the US session dated K for KRX session K)
+#   gate_m                   the multiplier R4 B3's rule sets from the inputs dated K: same-date timing, the L = 0 row,
+#                            which spec L1335 names as the forbidden case that the positive control reproduces
+#   sox_threshold, krw_threshold, multiplier, cost_bp
+#                            R4 B3's rule parameters and its cost per side in bp, one value repeated on every row
+# The spec quotes R4 B3's rule without reproducing it (research_notes/QUANTGEN v2 integration map/spec_M7_gate_package.md
+# :686, item 5), so whoever builds the fixture from R4 B3 applies it and writes gate_m; the parameters ride along and
+# gate_m may take only the values 1 and `multiplier`. The body re-times gate_m by L with this module's `shift`, which is
+# what `run(card, lag=L)` does to a rule read on same-date inputs.
+CONTROL_FIXTURE = "KR_SOX_KRW_gate_B3.csv"
+CONTROL_COLUMNS = ("session_date", "kr_return", "sox_close", "usdkrw_close", "gate_m", "sox_threshold", "krw_threshold",
+                   "multiplier", "cost_bp")
+# Spec L3461 (T-PLACEBO-01) and L3474 (evidence: control 0.317 / 0.035): flagged, LP 0.28 >= 0.20 (L0 +0.317; L1 +0.035).
+# The trip (LP >= LP_MIN, spec L3430 and L3444) is the pass condition; L0 and L1 are checked at the Level 1 Sharpe
+# tolerance (+/- 0.01, spec L5734; tests.golden_tools.LEVEL1). goldens.csv has no T-PLACEBO-01 row and is not edited.
+CONTROL_L0, CONTROL_L1 = 0.317, 0.035
+
+
+def _control_rows(text: str) -> dict:
+    """The fixture in the declared layout as arrays; AssertionError on any departure from it."""
+    reader = csv.DictReader(io.StringIO(text))
+    missing = [c for c in CONTROL_COLUMNS if c not in (reader.fieldnames or ())]
+    assert not missing, f"{CONTROL_FIXTURE}: declared columns {missing} absent (header {reader.fieldnames})"
+    rows = list(reader)
+    assert len(rows) > max(CP.HONEST_LAGS), f"{CONTROL_FIXTURE}: {len(rows)} rows"
+    dates = [date.fromisoformat(r["session_date"]) for r in rows]
+    assert all(a < b for a, b in zip(dates, dates[1:])), f"{CONTROL_FIXTURE}: session dates not strictly increasing"
+    num = {c: np.array([float(r[c]) for r in rows]) for c in CONTROL_COLUMNS[1:]}
+    assert all(np.isfinite(v).all() for v in num.values()), f"{CONTROL_FIXTURE}: a non-finite value"
+    assert (num["sox_close"] > 0).all() and (num["usdkrw_close"] > 0).all(), f"{CONTROL_FIXTURE}: a close <= 0"
+    for c in ("sox_threshold", "krw_threshold", "multiplier", "cost_bp"):
+        assert (num[c] == num[c][0]).all(), f"{CONTROL_FIXTURE}: {c} is not one value on every row"
+    assert np.isin(num["gate_m"], (1.0, num["multiplier"][0])).all(), f"{CONTROL_FIXTURE}: gate_m outside {{1, multiplier}}"
+    assert num["cost_bp"][0] >= 0, f"{CONTROL_FIXTURE}: cost_bp < 0"
+    return {"dates": dates, "kr_return": num["kr_return"], "gate_m": num["gate_m"], "cost_bp": float(num["cost_bp"][0])}
+
+
+def _check_placebo01_control(fx: dict) -> dict:
+    """T-PLACEBO-01's positive control: `timing_probe` (the sandbox, called from tests/) over the fixture's books at
+    every lag. The control trips (LP >= 0.20), L0 and L1 match the spec at Level 1, every lag is one family-ledger row
+    with L <= 0 NON-COMPLIANT, and no honest row records a lag-audit violation. Returns the control's result."""
+    rows = []
+
+    def data_fn(L):
+        return CP.build_books(shift(fx["gate_m"], L), fx["kr_return"], fx["cost_bp"], fx["dates"])
+
+    prof = CP.timing_probe({"card_id": "KR_SOX_KRW_gate_B3", "family_id": "CTRL", "config": {"rule": "R4_B3"}}, data_fn,
+                           sandbox=True, B=50, seed=SEED, ledger_append=lambda fid, row: rows.append((fid, row)))
+    ctl = CP.lookahead_positive_control(prof)
+    assert ctl["tripped"] and ctl["LP"] >= CP.LP_MIN, (f"T-PLACEBO-01: the positive control did not trip (LP {ctl['LP']} "
+                                                       f"< {CP.LP_MIN}); the detector is broken (spec L3430)")
+    G.assert_close(ctl["L0"], CONTROL_L0, "sharpe", label="T-PLACEBO-01 control dSR at L0 (spec L3461)")
+    G.assert_close(ctl["L1"], CONTROL_L1, "sharpe", label="T-PLACEBO-01 control dSR at L1 (spec L3461)")
+    assert [row["lag"] for _, row in rows] == [1, 2, 3, -1, 0], [row["lag"] for _, row in rows]
+    assert all(fid == "CTRL" and row["timing_class"] == ("NON-COMPLIANT" if row["lag"] <= 0 else "COMPLIANT")
+               for fid, row in rows)
+    assert prof["synthetic_lookahead"] and prof["lag_audit_violations"] == 0
+    return ctl
+
+
+def _invented_control_csv(look_ahead: bool = True) -> str:
+    """Invented rows in the declared layout, in memory (neither R4 B3 data nor its rule): KR returns from
+    `regime_returns`, SOX and USD/KRW returns built to co-move with the same session's KR return and its 10-session
+    mean, and an invented gate (0.8 when the SOX return is below -1.013% and the USD/KRW return above -0.031%) read on
+    the same session's inputs; its parameters were chosen so that L0 and L1 land within Level 1 of the spec's 0.317 and
+    0.035. `look_ahead=False` reads the gate on the previous session's inputs instead."""
+    r = regime_returns(seed=5, n_cycles=3)
+    z = np.random.default_rng(7).standard_normal((2, r.size))
+    sd, mean10 = r.std(), np.convolve(r, np.ones(10) / 10, mode="full")[: r.size]
+    sox = 0.01 * (0.225 * r / sd + 3.0 * mean10 / sd + z[0])
+    krw = 0.01 * (-0.5 * r / sd + z[1])
+    gate = np.where((sox < -0.01013) & (krw > -0.00031), 0.8, 1.0)
+    if not look_ahead:
+        gate = shift(gate, 1)
+    sox_close, krw_close = 1000.0 * np.cumprod(1.0 + sox), 1200.0 * np.cumprod(1.0 + krw)
+    buf = io.StringIO()
+    out = csv.writer(buf, lineterminator="\n")
+    out.writerow(CONTROL_COLUMNS)
+    for i, d in enumerate(_bdays(date(2001, 1, 2), r.size)):
+        out.writerow((d.isoformat(), repr(float(r[i])), repr(float(sox_close[i])), repr(float(krw_close[i])),
+                      repr(float(gate[i])), "-0.01013", "-0.00031", "0.8", "3.0"))
+    return buf.getvalue()
+
+
 def test_placebo_01_positive_control_fixture_refdata():
-    require_fixture("KR_SOX_KRW_gate_B3.csv")
-    raise AssertionError("fixture listed: golden assertion not implemented")
+    """T-PLACEBO-01's positive control on the R4 B3 fixture (spec L3430, L3461): NOT_RUN (REFDATA) until
+    KR_SOX_KRW_gate_B3.csv is listed with its md5; then PASS or FAIL on `_check_placebo01_control`."""
+    text = require_fixture(CONTROL_FIXTURE).read_text(encoding="utf-8")
+    _check_placebo01_control(_control_rows(text))
 
 
 test_placebo_01_positive_control_fixture_refdata.test_ids = ["T-PLACEBO-01"]
+
+
+def test_placebo_01_control_body_passes_and_fails_on_invented_rows():
+    """LA-02 part 1: the control body can PASS and can FAIL. On invented rows the gate read on same-session inputs
+    trips the control with L0 / L1 within Level 1 of 0.317 / 0.035; the same gate read on the previous session's
+    inputs does not trip it."""
+    ctl = _check_placebo01_control(_control_rows(_invented_control_csv(look_ahead=True)))
+    assert ctl["tripped"] and ctl["LP"] >= CP.LP_MIN
+    _raises(lambda: _check_placebo01_control(_control_rows(_invented_control_csv(look_ahead=False))), AssertionError,
+            "did not trip")
 
 
 def _static_names(path: Path, needles) -> dict[str, list[str]]:

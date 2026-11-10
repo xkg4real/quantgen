@@ -5,10 +5,16 @@ calendar halves of T-H15-01, T-H10-02, T-VIX-01, T-AVAIL-01, I-06b).
 Hermetic: every calendar file is a synthetic fixture written into a tempfile directory and signed there by the
 test itself (signer "TEST-FIXTURE (not an owner sign-off)"); the library never writes a signature. The shipped
 files under core/calendars/data/ are read only to check their signing state (a draft is refused, an owner-signed file
-is complete). No module global is patched.
+is complete), and by the two REFDATA bodies on the KRX official closes (T-PRINT-01, T-SAT-01; look-ahead audit LA-02,
+part 1): they read the listed fixture through `require_fixture` and use the shipped KRX clock files only when those load
+and cover the fixture's dates (otherwise NotRun "OWNER: ...", computed from the files). No module global is patched.
 """
 from __future__ import annotations
 
+import csv
+import io
+import math
+import statistics
 import tempfile
 from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
@@ -261,6 +267,140 @@ def _raises(fn, exc) -> Exception:
 
 
 # --------------------------------------------------------------------------- #
+# REFDATA bodies on the KRX official closes (look-ahead audit LA-02, part 1: T-PRINT-01, T-SAT-01)
+# --------------------------------------------------------------------------- #
+# F01 is written by docs/macro_fixtures.py: the reference file's own columns, then the section 4.1 provenance columns.
+# ACQUISITION.csv and the spec name no reference column, so the layout is declared here: the official close is the
+# column `close`; obs_date and session_date are ISO dates (equal); obs_utc and available_at_utc are UTC instants written
+# YYYY-MM-DDTHH:MM:SSZ; every row is KOSPI_OFFICIAL_CLOSE / official_close / calendar_bound (the F01 row of
+# docs/macro_fixtures.REFERENCE_FILES); rows are in date order. Other columns are ignored.
+F01 = "krx_kospi_official_close_1997-01-03_2026-10-02.csv"
+F01_SPAN = (date(1997, 1, 3), date(2026, 10, 2))
+F01_COLUMNS = ("close", "series_id", "obs_date", "session_date", "obs_utc", "available_at_utc", "available_at_source",
+               "value_status")
+# T-PRINT-01 (spec L5631; L1382): "The KOSPI close on 2026-03-09 is 5,251.87 (-5.96%). The intraday -8.11% is never
+# stored as a close." The close is a price (Level 1 `price`, exact); the returns are checked at their printed precision.
+PRINT01_DATE, PRINT01_CLOSE, PRINT01_RETURN_PCT, PRINT01_INTRADAY_PCT = date(2026, 3, 9), 5251.87, -5.96, -8.11
+PRINTED_PCT = 0.005
+# T-SAT-01 (spec L2097): Saturday sessions before 1998-12-12 (rules calendars.KR.saturday_sessions_before); the Monday /
+# Tue-Fri variance ratio of 1997-98 (2.30, EX2) is printed, not asserted.
+SAT01_BEFORE, SAT01_RATIO_SPAN = date(1998, 12, 12), (date(1997, 1, 1), date(1998, 12, 31))
+
+
+def _utc_z(text: str) -> datetime:
+    if not text.endswith("Z"):
+        raise AssertionError(f"{F01}: instant {text!r} is not written YYYY-MM-DDTHH:MM:SSZ")
+    return datetime.fromisoformat(text[:-1]).replace(tzinfo=UTC)
+
+
+def _kospi_closes(text: str) -> list[dict]:
+    """F01 rows in the declared layout as {date, close, obs_utc, available_at_utc}; AssertionError on any departure."""
+    reader = csv.DictReader(io.StringIO(text))
+    missing = [c for c in F01_COLUMNS if c not in (reader.fieldnames or ())]
+    assert not missing, f"{F01}: declared columns {missing} absent (header {reader.fieldnames})"
+    rows: list[dict] = []
+    for line, raw in enumerate(reader, start=2):
+        where = f"{F01} line {line}"
+        assert (raw["series_id"], raw["value_status"], raw["available_at_source"]) == (
+            "KOSPI_OFFICIAL_CLOSE", "official_close", "calendar_bound"), f"{where}: not an official KOSPI close row"
+        d = date.fromisoformat(raw["session_date"])
+        assert date.fromisoformat(raw["obs_date"]) == d, f"{where}: obs_date != session_date"
+        close = float(raw["close"])
+        assert math.isfinite(close) and close > 0, f"{where}: close {raw['close']!r}"
+        assert not rows or rows[-1]["date"] <= d, f"{where}: rows out of date order"
+        rows.append({"date": d, "close": close, "obs_utc": _utc_z(raw["obs_utc"]),
+                     "available_at_utc": _utc_z(raw["available_at_utc"])})
+    assert rows, f"{F01}: no rows"
+    return rows
+
+
+def _official_calendar(lo: date, hi: date) -> CalendarSet:
+    """The shipped owner-signed KRX clock files when each loads and covers [lo, hi]; otherwise NotRun("OWNER: ...")
+    naming every refusal and coverage gap, computed from the files as test_close02_on_the_real_signed_files does."""
+    live = CalendarSet()
+    waiting = []
+    for f in store.MARKET_FILES["KR"]:
+        why = live.refusal(f)
+        if why is not None:
+            waiting.append(f"{f}.yaml refused ({why})")
+        elif not (live.file(f).covers(lo) and live.file(f).covers(hi)):
+            cf = live.file(f)
+            waiting.append(f"{f}.yaml v{cf.version} covers {cf.covers_from}..{cf.covers_to}")
+    if waiting:
+        raise NotRun(f"OWNER: the signed KRX clock files must cover {lo}..{hi}: " + "; ".join(waiting))
+    return live
+
+
+def _check_print01(rows: list[dict], cal: CalendarSet) -> float:
+    """T-PRINT-01 on official closes: exactly one row on 2026-03-09, stamped at the scheduled close and inside the
+    close-print bound (`clocks.close_stamp`: an intraday print is refused), close 5,251.87, -5.96% against the previous
+    session's row, and not the -8.11% print. Returns the return in percent."""
+    d = PRINT01_DATE
+    on_day = [r for r in rows if r["date"] == d]
+    assert len(on_day) == 1, f"T-PRINT-01: {len(on_day)} rows on {d}; exactly one official close is stored"
+    row = on_day[0]
+    try:
+        stamp = clocks.close_stamp("KR", d, row["available_at_utc"], cal=cal)
+    except (clocks.IntradayPrint, clocks.CloseAfterBound) as exc:
+        raise AssertionError(f"T-PRINT-01: the {d} row is not an official close: {exc}") from None
+    assert row["obs_utc"] == stamp.obs_utc, f"T-PRINT-01: obs_utc {row['obs_utc']} != scheduled close {stamp.obs_utc}"
+    assert row["close"] == PRINT01_CLOSE, f"T-PRINT-01: close {row['close']!r} != {PRINT01_CLOSE} (spec L5631)"
+    before = [r for r in rows if r["date"] < d]
+    prev_day = clocks.prev_session("KR", d, cal=cal)
+    assert before and before[-1]["date"] == prev_day, f"T-PRINT-01: no row for the previous session {prev_day}"
+    ret_pct = 100.0 * (row["close"] / before[-1]["close"] - 1.0)
+    assert abs(ret_pct - PRINT01_RETURN_PCT) <= PRINTED_PCT + 1e-9, f"T-PRINT-01: return {ret_pct:.4f}% != -5.96%"
+    assert abs(ret_pct - PRINT01_INTRADAY_PCT) > PRINTED_PCT, "T-PRINT-01: the -8.11% intraday print is stored as the close"
+    return ret_pct
+
+
+def _check_sat01(rows: list[dict], cal: CalendarSet, start: date, end: date) -> dict:
+    """T-SAT-01 on official closes: no row lies outside [start, end]; every `is_session` date of it has exactly one close
+    row and no row falls on a non-session (`clocks.completeness_check`); the Saturday sessions before 1998-12-12 are in
+    the rows, so the same rows without them fail the check with exactly those Saturdays missing. Returns the counts and
+    the Monday / Tue-Fri variance ratio of the 1997-98 close-to-close returns (None outside that span)."""
+    dates = [r["date"] for r in rows]
+    assert start <= dates[0] and dates[-1] <= end, f"T-SAT-01: rows span {dates[0]}..{dates[-1]}, outside {start}..{end}"
+    rep = clocks.completeness_check("KR", dates, start, end, cal=cal)
+    assert rep.ok, (f"T-SAT-01: completeness fails: missing {list(rep.missing[:8])} of {len(rep.missing)}, "
+                    f"duplicates {list(rep.duplicates[:8])}, extra {list(rep.extra[:8])}")
+    sats = tuple(d for d in dates if d.weekday() == 5)
+    assert all(d < SAT01_BEFORE for d in sats), "T-SAT-01: a Saturday close on or after 1998-12-12"
+    if start < SAT01_BEFORE:
+        assert sats, "T-SAT-01: no Saturday session before 1998-12-12 in the rows"
+        gap = clocks.completeness_check("KR", [d for d in dates if d.weekday() != 5], start, end, cal=cal)
+        assert gap.missing == sats and not gap.duplicates and not gap.extra, "T-SAT-01: dropping the Saturdays is not caught"
+    mon, tue_fri = [], []
+    for a, b in zip(rows, rows[1:]):
+        if SAT01_RATIO_SPAN[0] <= b["date"] <= SAT01_RATIO_SPAN[1] and b["date"].weekday() < 5:
+            (mon if b["date"].weekday() == 0 else tue_fri).append(b["close"] / a["close"] - 1.0)
+    ratio = statistics.variance(mon) / statistics.variance(tue_fri) if len(mon) > 1 and len(tue_fri) > 1 else None
+    return {"sessions": len(dates), "saturdays": len(sats), "ratio": ratio}
+
+
+def _invented_closes(cal: CalendarSet, lo: date, hi: date, last=()) -> list[tuple]:
+    """Invented closes (not KRX data) on every KR session of [lo, hi] of `cal`, stamped as docs/macro_fixtures stamps F01
+    (obs_utc the scheduled close, available_at_utc the close-print bound); `last` replaces the final closes."""
+    days = clocks.sessions_between("KR", lo, hi, cal=cal)
+    closes = [700.0 + (i % 23) * 1.5 - (i % 7) for i in range(len(days))]
+    closes[len(days) - len(last):] = list(last)
+    stamps = [clocks.close_stamp("KR", d, cal=cal) for d in days]
+    return [(d, c, s.obs_utc, s.available_at_utc) for d, c, s in zip(days, closes, stamps)]
+
+
+def _f01_text(rows) -> str:
+    """(date, close, obs_utc, available_at_utc) rows written in the declared F01 layout, in memory."""
+    buf = io.StringIO()
+    out = csv.writer(buf, lineterminator="\n")
+    out.writerow(("date",) + F01_COLUMNS)
+    z = lambda t: t.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")                     # noqa: E731
+    for d, close, obs, avail in rows:
+        out.writerow((d.isoformat(), repr(close), "KOSPI_OFFICIAL_CLOSE", d.isoformat(), d.isoformat(), z(obs), z(avail),
+                      "calendar_bound", "official_close"))
+    return buf.getvalue()
+
+
+# --------------------------------------------------------------------------- #
 # T-CLOSE-01 / T-CLOSE-02 / T-PRINT-01
 # --------------------------------------------------------------------------- #
 def test_close01_decision_time_and_bound():
@@ -384,11 +524,28 @@ test_print01_intraday_print_is_never_a_close.test_ids = ["T-PRINT-01"]
 
 
 def test_print01_real_kospi_close_2026_03_09():
-    require_fixture("krx_kospi_official_close_1997-01-03_2026-10-02.csv")
-    raise AssertionError("unreachable: the fixture is not listed")
+    """T-PRINT-01 on the KRX official closes (F01): NOT_RUN (REFDATA) until F01 is listed with its md5, NOT_RUN (OWNER)
+    while the signed KRX clock files do not cover the week of 2026-03-09; then PASS or FAIL on `_check_print01`."""
+    text = require_fixture(F01).read_text(encoding="utf-8")
+    rows = _kospi_closes(text)
+    _check_print01(rows, _official_calendar(PRINT01_DATE - timedelta(days=14), PRINT01_DATE))
 
 
 test_print01_real_kospi_close_2026_03_09.test_ids = ["T-PRINT-01"]
+
+
+def test_print01_body_passes_and_fails_on_invented_closes():
+    """LA-02 part 1: the T-PRINT-01 body can PASS and can FAIL. Invented closes in the F01 layout on the synthetic
+    calendars (no KRX data): the close 5,251.87 after 5,584.71 passes; the 10:31 KST print (5,131.12, -8.11%) stored as
+    the 2026-03-09 close, or stored beside it, fails."""
+    cal = fixture_set()
+    good = _invented_closes(cal, date(2026, 2, 23), PRINT01_DATE, last=(5584.71, PRINT01_CLOSE))
+    assert abs(_check_print01(_kospi_closes(_f01_text(good)), cal) - PRINT01_RETURN_PCT) <= PRINTED_PCT
+    cb_print = (PRINT01_DATE, 5131.12, U(2026, 3, 9, 1, 31), U(2026, 3, 9, 1, 31))
+    as_close = _raises(lambda: _check_print01(_kospi_closes(_f01_text(good[:-1] + [cb_print])), cal), AssertionError)
+    assert "not an official close" in str(as_close)
+    beside = _raises(lambda: _check_print01(_kospi_closes(_f01_text(good + [cb_print])), cal), AssertionError)
+    assert "2 rows on 2026-03-09" in str(beside)
 
 
 # --------------------------------------------------------------------------- #
@@ -742,9 +899,20 @@ test_regime01_point_clauses_and_fail_closed.test_ids = ["T-REGIME-01"]
 
 
 def test_regime01_full_range_expected_values_file():
+    """The full-range clause needs the committed expected-values file, an owner deliverable that no ACQUISITION.csv or
+    MANIFEST.csv row lists yet (a `require_fixture` on it would fail T-HERM-01). The reason states the shipped tag
+    file's signing state as read now (look-ahead audit LA-02: the old text still called the signed file a draft)."""
+    live = CalendarSet()
+    why = live.refusal("kr_regime_tags")
+    if why is None:
+        f = live.file("kr_regime_tags")
+        state = (f"the shipped kr_regime_tags.yaml v{f.version} is owner-signed ({f.signed_utc}, covers {f.covers_from}.."
+                 f"{f.covers_to}); only the expected-values file is missing")
+    else:
+        state = f"the shipped kr_regime_tags.yaml is refused at load ({why})"
     raise NotRun("OWNER: tests/fixtures/macro/kr_regime_tags_expected.csv (1995-01-01..2026-12-31, built from the official "
-                 "notices incl. the pre-Apr-1995 price limit, sell-tax steps, BoK fx regimes) is an owner deliverable; "
-                 "the shipped kr_regime_tags.yaml is an unsigned draft")
+                 "notices incl. the pre-Apr-1995 price limit, sell-tax steps, BoK fx regimes) is an owner deliverable with "
+                 f"no ACQUISITION.csv or MANIFEST.csv row yet; {state}")
 
 
 test_regime01_full_range_expected_values_file.test_ids = ["T-REGIME-01"]
@@ -784,11 +952,32 @@ test_sat01_saturday_sessions_and_completeness.test_ids = ["T-SAT-01"]
 
 
 def test_sat01_real_kospi_completeness_and_variance_ratio():
-    require_fixture("krx_kospi_official_close_1997-01-03_2026-10-02.csv")
-    raise AssertionError("unreachable")
+    """T-SAT-01 on the KRX official closes (F01, 1997-01-03..2026-10-02): NOT_RUN (REFDATA) until F01 is listed with its
+    md5, NOT_RUN (OWNER) while the signed KRX clock files do not cover that span (holidays_KRX starts in 2026); then PASS
+    or FAIL on `_check_sat01`. The 1997-98 Monday / Tue-Fri variance ratio is printed (spec L2097: 2.30, EX2)."""
+    text = require_fixture(F01).read_text(encoding="utf-8")
+    rows = _kospi_closes(text)
+    out = _check_sat01(rows, _official_calendar(*F01_SPAN), *F01_SPAN)
+    ratio = "n/a" if out["ratio"] is None else f"{out['ratio']:.2f}"
+    print(f"PRINTED T-SAT-01 F01: {out['sessions']} sessions, {out['saturdays']} Saturday sessions; Monday / Tue-Fri "
+          f"variance ratio 1997-98 {ratio} (spec L2097 prints 2.30, EX2; not asserted)")
 
 
 test_sat01_real_kospi_completeness_and_variance_ratio.test_ids = ["T-SAT-01"]
+
+
+def test_sat01_body_passes_and_fails_on_invented_closes():
+    """LA-02 part 1: the T-SAT-01 body can PASS and can FAIL. Invented closes in the F01 layout on the synthetic
+    calendars (no KRX data), 1997-01-03..1998-12-31: one close per session, Saturdays included, passes; the same file
+    without its Saturday closes fails the completeness check."""
+    cal = fixture_set()
+    start, end = date(1997, 1, 3), date(1998, 12, 31)
+    rows = _invented_closes(cal, start, end)
+    out = _check_sat01(_kospi_closes(_f01_text(rows)), cal, start, end)
+    assert out["saturdays"] > 0 and out["ratio"] is not None and out["sessions"] == len(rows)
+    weekdays = [r for r in rows if r[0].weekday() != 5]
+    e = _raises(lambda: _check_sat01(_kospi_closes(_f01_text(weekdays)), cal, start, end), AssertionError)
+    assert "completeness fails: missing" in str(e)
 
 
 # --------------------------------------------------------------------------- #

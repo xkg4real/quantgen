@@ -653,3 +653,19 @@ Home 표와 시장 관심종목 카드·검색·종목 제목에 로컬 문자 �
 ## 네이티브 한글 서체·UI 밀도 — 2026-11-07
 
 Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작은 한글 렌더링을 개선합니다. 기존 Flet OTF·웹HTML은 변경하지 않습니다. 카테고리 버튼은 내용폭/줄바꿈, 입력은3/4열 제한폭, 작은 결과표는 내용폭/숫자정렬/최소34px행과 긴내용 확장으로 바뀝니다. 계산 엔진·요청·결과·보고서·수신 권한·원장은 그대로입니다. [검증기록](../product/COMPACT_NATIVE_UI_20261107.md)을 따릅니다. 13/14/15/19의 표시·라이선스 변경 외 20종 정책의 기존 조건과 `review-required`·공개 준비 `BLOCKED`를 유지합니다. Linux검사로 실제Windows디스플레이·계정/KIS·웹배포·전체R3 완료를 주장하지 않습니다.
+
+<a id="lookahead-la02-part1-2026-11-10"></a>
+## 미래 정보 누출 감사 LA-02 1부: 기준 데이터 시험 본문 — 2026-11-10
+
+2026-11-04 감사(`7749450`의 `docs/nautilus_bridge/LOOKAHEAD_AUDIT_2026-11-04.md` LA-02)에 대한 ⑨-1/2/b 범위입니다. 근거는 소유자 결정 L-2(`docs/nautilus_bridge/OWNER_RULINGS_LOG.md:546`)입니다. 바뀐 것은 시험 파일과 이 기록뿐입니다. 앱·`core/`·동결 하네스 소스·`goldens.csv`·`ACQUISITION.csv`·`MANIFEST.csv`·`tests/macro_registry.csv`·`qa/acceptance_results.json`·원장·카드·달력 파일은 바꾸지 않았습니다.
+
+| 항목 | 확인한 동작과 한계 |
+| --- | --- |
+| 바뀐 시험 | T-PRINT-01·T-SAT-01 실제 종가 시험과 T-PLACEBO-01 양성 대조군 시험은 `require_fixture` 직후의 "unreachable"·"not implemented" 실패 대신 실제 본문(`_check_print01`, `_check_sat01`, `_check_placebo01_control`)을 실행합니다. T-AVAIL-01 공식 달력 시험은 서명·적용 범위 거부를 파일에서 계산하고, 거부가 없으면 같은 골든 표를 `CalendarClocks`로 실행합니다. T-REGIME-01 전 구간 시험의 사유는 서명된 `kr_regime_tags.yaml`을 더 이상 "unsigned draft"라고 하지 않습니다. 기대값 파일에 ACQUISITION 행이 없어 OWNER NotRun은 유지합니다 |
+| 기대값 출처 | `goldens.csv`에는 행이 없어 편집하지 않았습니다. 사양 줄을 시험에 적었습니다: 5,251.87·-5.96%(L5631, L1382), 토요일 세션·완전성(L2097, 분산비 2.30은 출력만), LP 0.20 이상·L0 0.317·L1 0.035(L3430, L3461, L3474; Level 1 Sharpe ±0.01, L5734) |
+| 선언한 파일 형식 | ACQUISITION.csv와 사양에 열 정의가 없어 시험이 선언합니다. F01은 `close` 열과 4.1절 출처 열을 씁니다. `KR_SOX_KRW_gate_B3.csv`는 세션별 `kr_return`, `sox_close`, `usdkrw_close`, 같은 날짜 입력으로 R4 B3 규칙이 정한 `gate_m`, 반복 규칙값 네 개를 씁니다. ⑨-2 파일이 이 형식을 따를지는 확인하지 않았습니다 |
+| 통과·실패 시연 | 본문 네 개를 모두 지어낸 메모리 데이터로 PASS와 FAIL 양쪽으로 시연합니다. 대조군 시연은 L0 0.3173, L1 0.0300(LP 0.287)이고, 전 세션 입력으로 읽으면 LP 0.026으로 대조군이 걸리지 않습니다. 실제 KRX·SOX·FRED·R4 B3 자료는 쓰지 않았습니다 |
+| 래칫 | `test_la02_converted_pit_bodies_stay_convertible`은 이름을 적은 함수만 검사합니다(전환 4개, 남은 13개, 합계 17개). 모듈 전체는 검사하지 않습니다. 남은 목록은 줄기만 합니다. 래칫 규칙은 변이 5개를 모두 잡았습니다 |
+| 실행 범위 | 감사 훅 실행기(`docs/asset_expansion/cache`·`.env`·`~/.nextgen` 접근과 socket 연결 거부)로 지정한 시험 ID 16개를 실행했습니다: PASS 11, NOT_RUN 5, FAIL 0, 거부 기록 0. `tests/run_all.py`, 매크로 모듈 전체, `macro_m9_lab`, `macro_m8_pipeline`, registry 동기 시험은 실행하지 않았습니다(test_ids 정적 대조만). Windows·CI 확인은 하지 않았습니다 |
+
+[제품 범위·검증 기록](../product/LOOKAHEAD_LA02_PART1_2026-11-10.md)에 따라 실제 자료 시험은 ⑨-2 고정 파일이 md5와 함께 등록되거나 소유자가 KRX 달력 범위를 넓히기 전까지 NOT_RUN입니다. 이 변경은 연구 수치·판정·게이트 패키지 정의를 바꾸지 않습니다. I-05(LA-07, LA-30 필요)는 이 범위에 없습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.

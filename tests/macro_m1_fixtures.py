@@ -262,6 +262,121 @@ test_no_golden_test_passes_on_its_fixture_gate_alone.test_ids = ["T-HERM-01"]
 
 
 # --------------------------------------------------------------------------- #
+# Look-ahead audit LA-02 ratchet (docs/nautilus_bridge/LOOKAHEAD_AUDIT_2026-11-04.md at 7749450, LA-02): the named
+# REFDATA / OWNER point-in-time bodies, not whole modules (the rule above still lets other golden tests fail as not
+# implemented after their gate)
+# --------------------------------------------------------------------------- #
+LA02_CONVERTED = (                              # each runs a real body once its fixture or calendar input arrives
+    "macro_m1_calendars.py::test_print01_real_kospi_close_2026_03_09",
+    "macro_m1_calendars.py::test_sat01_real_kospi_completeness_and_variance_ratio",
+    "macro_m1_pit.py::test_avail_01_official_calendars_are_owner_signed",
+    "macro_m7_cardp.py::test_placebo_01_positive_control_fixture_refdata",
+)
+LA02_REMAINING = {                              # not converted yet; a later part moves each up, so the list only shrinks
+    "macro_m1_pit.py::test_fix_01_regeneration_at_level_1_tolerance_refdata": "T-FIX-01: council archive outside the repo",
+    "macro_m1_pit.py::test_g_post_01_m1_data_rows_refdata": "G-POST-01 data rows",
+    "macro_m1_pit.py::test_print_01_real_kospi_close_refdata": "T-PRINT-01 on Yahoo ^KS11 (F13)",
+    "macro_m1_pit.py::test_stale_01_g_stale_01_reference_table_refdata": "G-STALE-01",
+    "macro_m1_pit.py::test_miss_01_cpi_yoy_3_353_refdata": "T-MISS-01 CPI",
+    "macro_m1_calendars.py::test_close02_on_the_real_signed_files_is_owner_input": "T-CLOSE-02 on the signed files",
+    "macro_m1_calendars.py::test_regime01_full_range_expected_values_file": "T-REGIME-01: no ACQUISITION row for the file",
+    "macro_m1_fixtures.py::test_g_post_01_m1_data_rows_refdata": "G-POST-01 row replay",
+    "macro_m2_risk.py::test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata": "T-VT-01",
+    "macro_m2_risk.py::test_label_01_kospi_elevated_stressed_and_us_normal_refdata": "T-LABEL-01",
+    "macro_m3_estimators.py::test_t_b5_01_kospi_golden_refdata": "T-B5-01 estimator replay",
+    "macro_m7_cardp.py::test_i05_full_sample_lag_audit_over_compliant_goldens_refdata": "I-05: LA-07 and LA-30 first",
+    "macro_m8_forward.py::test_g_ref_01_s1_goldens_refdata": "G-REF-01",
+}
+_GATES = ("require_fixture", "_refdata")
+
+
+def _la02_defects(fn: ast.FunctionDef, defs: dict) -> list[str]:
+    """Why `fn` is not a convertible body: a NotRun raised at the top level of the body (whatever the fixture or
+    calendar state), an 'unreachable' / 'not implemented' failure, or no `_check_*` body that asserts."""
+    out = []
+    for stmt in fn.body:
+        exc = stmt.exc if isinstance(stmt, ast.Raise) else None
+        name = getattr(getattr(exc, "func", exc), "id", "")
+        if name in ("NotRun", "require_owner"):
+            out.append(f"line {stmt.lineno}: unconditional NotRun")
+    for node in ast.walk(fn):
+        if isinstance(node, ast.Raise) and node.exc is not None:
+            name = getattr(getattr(node.exc, "func", node.exc), "id", "")
+            text = " ".join(c.value for c in ast.walk(node.exc) if isinstance(c, ast.Constant) and isinstance(c.value, str))
+            if name == "NotImplementedError" or (name == "AssertionError" and
+                                                 ("unreachable" in text or "not implemented" in text)):
+                out.append(f"line {node.lineno}: fails as unreachable / not implemented")
+        if isinstance(node, ast.Assert) and isinstance(node.test, ast.Constant) and not node.test.value:
+            out.append(f"line {node.lineno}: assert False")
+    checks = sorted({n.func.id for n in ast.walk(fn) if isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
+                     and n.func.id.startswith("_check_")})
+    if not checks:
+        out.append("calls no _check_* body")
+    for name in checks:
+        if name not in defs or not any(isinstance(n, ast.Assert) for n in ast.walk(defs[name])):
+            out.append(f"{name} is not a module function that asserts")
+    return out
+
+
+def test_la02_converted_pit_bodies_stay_convertible():
+    """LA-02 ratchet (look-ahead audit 2026-11-04): a converted REFDATA / OWNER point-in-time test opens with its
+    fixture gate or a computed owner check, never raises NotRun unconditionally, never fails as unreachable or not
+    implemented, and runs a module `_check_*` body that asserts; each body is also shown to PASS and to FAIL on invented
+    data next to it. The remaining sites are listed by name and must still be unconverted, so the list only shrinks.
+    17 sites: the 18 the ⑨-1/2 scoping cited for LA-02, less macro_m1_fixtures.py::test_kis_quote_check_owner_record
+    (T-RO-02, an owner live-quote record, not a PIT golden); the audit's own count of 19 is not reproduced."""
+    defs_of: dict[str, dict] = {}
+
+    def lookup(ref: str):
+        module, name = ref.split("::")
+        if module not in defs_of:
+            tree = ast.parse((ROOT / "tests" / module).read_text(encoding="utf-8"))
+            defs_of[module] = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+        return defs_of[module].get(name), defs_of[module]
+
+    assert not set(LA02_CONVERTED) & set(LA02_REMAINING) and len(LA02_CONVERTED) + len(LA02_REMAINING) == 17
+    bad = []
+    for ref in LA02_CONVERTED:
+        fn, defs = lookup(ref)
+        if fn is None:
+            bad.append(f"{ref}: missing")
+            continue
+        bad += [f"{ref}: {d}" for d in _la02_defects(fn, defs)]
+        first_gate = next((n.lineno for n in ast.walk(fn) if isinstance(n, ast.Call)
+                           and getattr(n.func, "id", "") in _GATES), None)
+        notrun_lines = [n.lineno for n in ast.walk(fn) if isinstance(n, ast.Raise)
+                        and getattr(getattr(n.exc, "func", n.exc), "id", "") == "NotRun"]
+        if first_gate is not None and any(line < first_gate for line in notrun_lines):
+            bad.append(f"{ref}: NotRun before its fixture gate")
+    for ref in LA02_REMAINING:
+        fn, defs = lookup(ref)
+        if fn is None:
+            bad.append(f"{ref}: listed as remaining but missing")
+        elif not _la02_defects(fn, defs):
+            bad.append(f"{ref}: converted; move it to LA02_CONVERTED")
+    assert not bad, bad
+
+
+def test_la02_ratchet_refuses_the_old_forms():
+    """The ratchet's rule on the forms LA-02 found (invented sources, parsed only): the gate followed by an
+    'unreachable' assertion, an unconditional NotRun, a gate with nothing after it are refused; a gated `_check_*`
+    body with a computed owner check passes."""
+    def defects(src: str) -> list[str]:
+        tree = ast.parse(src)
+        defs = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+        return _la02_defects(defs["test_x"], defs)
+    assert defects('def test_x():\n    require_fixture("a.csv")\n    raise AssertionError("unreachable")\n')
+    assert defects('def test_x():\n    require_fixture("a.csv")\n    raise AssertionError(f"{A} listed: golden assertion '
+                   'not implemented")\n')
+    assert defects('def test_x():\n    raise NotRun("REFDATA: a.csv absent")\n')
+    assert defects('def test_x():\n    _refdata(["F13"])\n    raise NotRun("REFDATA: present but not wired")\n')
+    assert defects('def test_x():\n    require_fixture("a.csv")\n    _check_x(1)\n\ndef _check_x(v):\n    return v\n')
+    ok = ('def test_x():\n    text = require_fixture("a.csv").read_text()\n    if not text:\n'
+          '        raise NotRun("OWNER: computed")\n    _check_x(text)\n\ndef _check_x(v):\n    assert v\n')
+    assert defects(ok) == [], defects(ok)
+
+
+# --------------------------------------------------------------------------- #
 # The first two real golden checks (SYNTH; reproduce on core/quant/validate.py)
 # --------------------------------------------------------------------------- #
 def test_g_dsr_01_reproduces_bldp():
