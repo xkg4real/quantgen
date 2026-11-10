@@ -122,19 +122,38 @@ def convention_korean(out):
             '(KRX 코드는 005930.KS), 가격수익률은 KIS (미국 티커는 NAS:AAPL)를 사용합니다.')
 
 
+def _bullets(text, language):
+    """The app's own narrative as short headed bullets (owner issue 11: no wall of text). Plain text,
+    because the Bonds reading pane is one label: a heading line, then '• ' sentences, a blank line
+    between sections. Sentences and numbers are the narrative's own, in its order."""
+    from .narrative_view import sections_for
+    blocks = []
+    for heading, lines in sections_for(text, language):
+        rows = [f'• {line}' if len(lines) > 1 else line for line in lines]
+        blocks.append('\n'.join(([heading] if heading else []) + rows))
+    return '\n\n'.join(blocks) or text
+
+
 def bond_notes(out, language):
     ko = language == 'ko'
     narrative = out.narrative
-    if ko and narrative == narrate_bond(out.analytics,list(out.scenarios) if out.scenarios else None):
+    generated = narrative == narrate_bond(out.analytics,list(out.scenarios) if out.scenarios else None)
+    if ko and generated:
         narrative = bond_korean(out.analytics,out.scenarios)
+    if generated and narrative:
+        narrative = _bullets(narrative, language)
     source = out.panel.source
     if source == 'SYNTHETIC':
         source = '합성 곡선 · 현재 시장 데이터 아님' if ko else 'Synthetic curve · not current market data'
-    return '\n'.join(n for n in [source,
+    # A curve built from the panel repeats the panel's note: show it once.
+    curve_note = out.curve.note if out.curve.note != out.panel.note else ''
+    head = '\n'.join(n for n in [source,
         f'{out.curve.source} · {out.curve.date} · {out.curve.method} · {len(out.panel)} '
         + ('거래일' if ko else 'sessions'),
-        out.panel.note,out.curve.note,
-        model_note_korean(out.analytics.note) if ko else out.analytics.note,narrative] if n)
+        out.panel.note,curve_note,
+        model_note_korean(out.analytics.note) if ko else out.analytics.note] if n)
+    # A custom narrative (not the app's own) stays one paragraph, verbatim.
+    return (head+'\n\n'+narrative if generated else head+'\n'+narrative) if narrative else head
 
 
 def hedge_text(hedge, language):
