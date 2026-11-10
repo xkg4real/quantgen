@@ -88,6 +88,17 @@ def execute_etf(request, *, analyze_fn=None, study_cards=None):
     if request.letf_benchmark != 'zero_rate_reference':
         options = {name: getattr(request, name) for name in
                    ('letf_funding_rate', 'letf_annual_fee', 'letf_benchmark', 'letf_dividend_yield')}
+    if analyze_fn is None:
+        # The native ETF pane hides its source selector (owner issues 04/12, 2026-11-10) and sends
+        # `auto`. As in the Flet page (ui/etf_page.py), a price history asked for with `auto` is
+        # fetched with `best`: the same route while FMP / KIS answer, keyless Yahoo before a
+        # labelled synthetic series when their keys are missing. KIS quote/NAV data still comes
+        # first for KRX codes when KIS is configured; an explicit source passes through.
+        from core.quant.history import load_history
+
+        def history(symbol, *, source, days):
+            return load_history(symbol, source='best' if source == 'auto' else source, days=days)
+        options['history_loader'] = history
     data = (analyze_fn or analyze)(request.code.strip().upper(), days=request.days, source=request.source,
                                   card_loader=lambda path: tuple(study_cards or ()), **options)
     return MarketOutput(request, data, narrative(data), 'PROVIDED' if study_cards is not None else 'NOT_LOADED')
