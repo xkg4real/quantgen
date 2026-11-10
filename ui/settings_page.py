@@ -12,10 +12,27 @@ from __future__ import annotations
 
 import flet as ft
 
+import re
+
 import config
+from core.i18n import LocaleContext
 from core.theme import RADII, active
 from data.krx.krx_market_client import KRXMarketClient
-from ui.components import chip, notice, section
+from ui.build_widgets import local_chip
+from ui.components import LocalText, chip, notice, section
+
+_KO = LocaleContext("ko_KR").text          # the reviewed Korean caption of a static English string
+
+
+def _note(text: str) -> ft.Text:
+    """A provider note in both languages: the page catalogue for the fixed notes, plus the one
+    note that interpolates the configured AI model name."""
+    pal = active()
+    ko = _KO(text)
+    m = re.fullmatch(r"AI narrative analysis of quant results\. Model: (.+)\.", text or "")
+    if m:
+        ko = f"계산 결과를 AI가 글로 해설합니다. 사용 모형: {m[1]}."
+    return LocalText(ko, text, size=12, color=pal.muted)
 
 _SIGNUP = {
     "fred": "fred.stlouisfed.org (no key needed)",
@@ -57,7 +74,7 @@ def build_settings_page(page: ft.Page) -> ft.Control:
                     chip("configured" if ready else "not set",
                          "success" if ready else "muted"),
                 ], spacing=8),
-                ft.Text(entry.get("note", ""), size=11, color=pal.muted),
+                _note(entry.get("note", "")),
                 ft.Row([ft.Text(" · ".join(entry["vars"]), size=11, color=pal.muted,
                                 selectable=True, expand=True),
                         ft.Text(_SIGNUP.get(entry["id"], ""), size=11, color=pal.accent,
@@ -77,7 +94,7 @@ def build_settings_page(page: ft.Page) -> ft.Control:
             probe_host.controls = [
                 chip("reachable" if result["ready"] else "unavailable",
                      "success" if result["ready"] else "error"),
-                ft.Text(f"path: {result['path']}", size=11, color=pal.muted),
+                LocalText(f"경로: {result['path']}", f"path: {result['path']}", size=11, color=pal.muted),
                 ft.Text(result["reason"], size=11, color=pal.muted, selectable=True,
                         expand=True),
             ]
@@ -105,8 +122,9 @@ def build_settings_page(page: ft.Page) -> ft.Control:
             rows = []
             for key, label in (("fred", "FRED"), ("yfinance", "Yahoo Finance")):
                 r = result.get(key) or {}
-                rows.append(chip(f"{label}: " + ("reachable" if r.get("ok") else "unavailable"),
-                                 "success" if r.get("ok") else "error"))
+                rows.append(local_chip(f"{_KO(label)}: " + ("연결됨" if r.get("ok") else "연결 안 됨"),
+                                       f"{label}: " + ("reachable" if r.get("ok") else "unavailable"),
+                                       "success" if r.get("ok") else "error"))
                 rows.append(ft.Text(str(r.get("detail", "")), size=11, color=pal.muted,
                                     selectable=True))
             ficc_probe_host.controls = rows
@@ -131,8 +149,9 @@ def build_settings_page(page: ft.Page) -> ft.Control:
                 result = {"kis": {"ok": False, "detail": f"{type(exc).__name__}: {exc}"}}
             rows = []
             for key, r in result.items():
-                rows.append(chip(f"{key}: " + ("ok" if r.get("ok") else "no"), "success" if r.get("ok") else "error",
-                                 tooltip=str(r.get("detail", ""))))
+                rows.append(local_chip(f"{key}: " + ("정상" if r.get("ok") else "응답 없음"),
+                                       f"{key}: " + ("ok" if r.get("ok") else "no"), "success" if r.get("ok") else "error",
+                                       tooltip=str(r.get("detail", ""))))
             kis_probe_host.controls = rows
             page.update()
         page.run_thread(worker)
@@ -154,8 +173,9 @@ def build_settings_page(page: ft.Page) -> ft.Control:
                 result = {"crypto": {"ok": False, "detail": f"{type(exc).__name__}: {exc}"}}
             rows = []
             for key, r in result.items():
-                rows.append(chip(f"{key}: " + ("reachable" if r.get("ok") else "unavailable"),
-                                 "success" if r.get("ok") else "error"))
+                rows.append(local_chip(f"{key}: " + ("연결됨" if r.get("ok") else "연결 안 됨"),
+                                       f"{key}: " + ("reachable" if r.get("ok") else "unavailable"),
+                                       "success" if r.get("ok") else "error"))
                 rows.append(ft.Text(str(r.get("detail", "")), size=11, color=pal.muted, selectable=True))
             crypto_probe_host.controls = rows
             page.update()
@@ -164,7 +184,7 @@ def build_settings_page(page: ft.Page) -> ft.Control:
     crypto_probe_host.controls = [ft.Button("Test crypto data access", icon=ft.Icons.NETWORK_CHECK, on_click=run_crypto_probe)]
 
     env_help = (
-        "# .env — QUANTGEN reads these from this machine only.\n"
+        "# .env\n"
         "FMP_API_KEY=\n"
         "KIS_APP_KEY=\nKIS_APP_SECRET=\n"
         "OPENDART_API_KEY=\n"
@@ -190,7 +210,7 @@ def build_settings_page(page: ft.Page) -> ft.Control:
         bits.append(chip("Marquee session " + ("active" if st.session_active else "off"),
                          "success" if st.session_active else "muted"))
         return ft.Column([ft.Row(bits, spacing=6, wrap=True),
-                          ft.Text(st.detail, size=11, color=pal.muted)], spacing=6)
+                          ft.Text(st.detail, size=12, color=pal.muted)], spacing=6)
 
     controls += [
         ft.Text("Quant analysis providers", size=15, weight=ft.FontWeight.W_600,
@@ -235,6 +255,7 @@ def build_settings_page(page: ft.Page) -> ft.Control:
 
         ft.Divider(color=pal.border),
         ft.Text("Environment template", size=15, weight=ft.FontWeight.W_600, color=pal.text),
+        ft.Text("QUANTGEN reads these from this machine only.", size=12, color=pal.muted),
         ft.Container(ft.Text(env_help, size=11, color=pal.muted, selectable=True,
                              font_family="Consolas, monospace"),
                      padding=12, bgcolor=pal.bg, border=ft.Border.all(1, pal.border),
