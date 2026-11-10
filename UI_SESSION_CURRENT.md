@@ -16,7 +16,48 @@ GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기,
 
 ---
 
-# 네이티브 이식 진행 중 — 2026-11-11 KST (Claude, 위 UI-D1~D4 실행)
+# 네이티브 이식 완료 — 2026-11-11 KST (Claude, ⑬-2/owner-14-native) · GPT 필독
+
+- status: 완료(작업 브랜치 푸시됨, PR은 소유자 요청 시) · waiting_on: owner(글꼴 시안 승인) · updated_at: 2026-11-11 07:55 KST
+- session: https://claude.ai/code/session_016uB1jf8m3p5GW1qzQVJe7k
+- work_branch: `claude/friendly-bardeen-r6xe8f` = main `1a8b29f` + 커밋 `c725663` (main에 아직 병합 안 됨)
+- LEDGER: ⑬-2/owner-14-native (이 브랜치), 앞서 ⑬-2/owner-14-flet(PR #98), ⑬-2/ui-base-owner-decision
+
+## 무엇이 바뀌었나 (네이티브 `quantgen_desktop/`)
+| 이슈 | 네이티브 결과 | 파일 |
+|---|---|---|
+| 01·06·07·09·10 전략 실험실 | 판정 배너 → 핵심 지표 타일 → 누적 수익 차트 → 검증 항목 표(한국어·결과·기준·판정·뜻) → 제공처 메모. 카드 보기: 판정별 개수 타일, 카드 34종 이름, 카드 선택 상세. 출처 상자 숨김(`best`) | `strategy.py`, `strategy_view.py`(새), `core/research/strategy_analysis.py` |
+| 02 차트 | 정수·반올림 눈금, 한국어 축·범례(`charts.chart_text`), 도구 차트 24개 "이 차트 읽는 법", Macro z-점수 막대 Flet식 | `charts.py`, `chart_study.py`, `macro.py`, `macro_records.py` |
+| 03·08 숫자·금리 | 천 단위 구분, DV01 이름표, 곡선 방법 설명 상자(9개) | `bonds.py`, `rates.py`, `structuring.py`, `fx.py` |
+| 04·12 출처 선택 | Portfolio·Signals·Monte Carlo·Strategy Lab 숨김+`best`, ETF 이력 `best`, Derivatives 자동(KIS/합성) | `portfolio.py`, `signals.py`, `app.py`, `core/research/{analysis,portfolio_analysis,signals_analysis,market_analysis}.py` |
+| 05 시세 표 | 머리글·값 같은 여백, 숫자 오른쪽 끝 맞춤, 단위 고정 칸, 본문 13px | `watchlist.py` |
+| 11 해설 | 모든 도구 해설 = 소제목+글머리표, 전체 문단 접힘 | `narrative_view.py`(새), `tools.py` `finished` |
+| 13 포트폴리오 | 결론 요약 카드, 목적함수 이름, 표 크기 맞춤, 실행 전 안내 | `portfolio.py`, `risk_display.py`(새) |
+| 14 한국어 | 영역별 문구 `owner_ui_language/*.py`, 앱 자료 메모 한국어(`source_notes.py`) | — |
+| 글꼴(UI-D4) | Pretendard 파생 OTF 등록(Gothic A1 TTF는 미사용 보관) | `font_policy.py`, `ui/qcharts.py` |
+| 비율(소유자 추가 지시) | 관심종목 카드 4열·차트 150px, 모든 차트 높이=폭/2(최대 440), 폭 최대 920 | `markets_view.py`, `charts.py` |
+
+## GPT가 지켜야 할 것
+- UI 기준 앱은 네이티브 하나(`AGENTS.md` 6절). 위 화면을 이전 모양으로 되돌리지 말 것, 글꼴을 Gothic A1로 되돌리지 말 것, 14건과 무관한 GPT 압축 UI를 Flet 모양으로 바꾸지 말 것.
+- 표시만 바꾸는 규칙: 계산값·판정 코드·내보내기(`pane.sections`/`report`)는 언어와 무관하게 같아야 함. 한국어 문구는 `owner_ui_language/<영역>.py`에 추가(같은 영어에 다른 한국어를 주면 import 시 오류).
+- 해설 줄(`narrative_view.NarrativeLine`)은 UiLabel이 아님. 시험·내보내기는 UiLabel.source_text로 원문을 찾음.
+- 차트 문구는 `owner_ui_language/charts.CHART_TERMS`(차트 전용 뜻)와 `READINGS`(읽는 법). 새 도구 차트는 READINGS 항목이 없으면 시험 실패.
+- 숨긴 출처 상자는 지우지 말 것(시험이 `findData('synthetic')`으로 고름).
+
+## 남은 일
+1. 글꼴: 소유자가 시안 14종(0 현재, A~M) 중 승인하면 교체. OFL/Apache만. 승인 전 변경 금지.
+2. PR 생성·main 병합(소유자 요청 시). 다른 Claude 세션의 PR #102와 `docs/compliance/FACTS.md`·`source-review.json`·`runtime-smoke.yml`이 겹침 — 나중에 병합하는 쪽이 main을 합치고 기준선 갱신.
+3. 실제 Windows 화면 확인(글꼴 선명도·DPI), 실제 제공처 응답 확인.
+
+## 검증
+- GitHub CI `runtime-smoke.yml`의 unittest 단계를 그대로 나눠 컨테이너에서 실행(offscreen): 13묶음 1,256개 전부 통과.
+- 새 시험: `tests/desktop_owner_ui_{integration,strategy,ficc,market,risk,charts}_acceptance.py` (CI 단계 "Verify the owner's 14 UI issues on the native app"에 등록).
+- 컴플라이언스: `python -m tools.compliance.check --check` → consistency PASS, publication BLOCKED(변화 없음), FACTS `owner-ui-native-2026-11-11`.
+- 수정 전후 캡처는 컨테이너 임시 폴더라 세션 종료 시 사라짐. 다시 만들려면 시험 픽스처로 `ResearchWindow`를 띄워 `grab()`(오프스크린).
+
+---
+
+# 네이티브 이식 진행 기록(이전) — 2026-11-11 KST (Claude, 위 UI-D1~D4 실행)
 
 - status: checkpoint · waiting_on: none · updated_at: 2026-11-11 07:30 KST · LEDGER ID: ⑬-2/owner-14-native (진행 중)
 - session: https://claude.ai/code/session_016uB1jf8m3p5GW1qzQVJe7k
