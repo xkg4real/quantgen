@@ -10,6 +10,12 @@ It runs on the owner's machine only, after Step 7A and before Step 8, from a sep
 never while a pilot, the suite or a readout runs. Claude builds and tests it on synthetic data only and reads only
 `summary.json`.
 
+The owner's step-by-step guide, in Korean with one command per step and what the screen should show, is
+`docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md`. It runs the same tool commands as this file. It differs in
+form only: fixed folder names (`fetch1-<series>-<provider>`, `compare1-<series>`) instead of the time stamp `$t`, one
+line per fetch instead of the loops, a Python line instead of `Get-FileHash` and of the PowerShell copy lines, and one
+commit for the summaries of a sitting. Either form is valid; the rules are those of spec 10.5.
+
 ## Before the first run: the tool's branch, commit and sha256
 
 Spec 10.5 names the tool's branch `claude/provider-parity-5-2` and leaves the tool's commit and sha256 to an owner
@@ -147,6 +153,10 @@ python -B -m tools.provider_parity.parity_check compare --series btc --table "$t
   not be removed (a virus scanner or a sync client held a file). It is not a run, and whatever it holds is not a
   result (`detail.json` is written first, so there is never a summary without its detail): delete it by hand and run
   again into a new folder.
+- The pilot table is read as plain UTF-8 JSON. A table saved with a BOM is refused (`cannot be read as a pilot table
+  (JSONDecodeError)`), although the runner's `--fingerprint` tolerates one. Do not re-save a table to cure it (its
+  bytes are what `owner_confirmed` quotes): send Claude the line. The two tables as committed at Step 7A.3 (`563db54`
+  on the research branch) have no BOM.
 - A provider whose history starts late is compared inside its own span (P-D5); A's dates outside the span count
   against `edge_uncovered_max` (5 for SPY and DGS3MO, 471 for BTC-USD), and above that the pair is WITHHELD on
   coverage. The repository's own Binance client notes that BTCUSDT starts on 2017-08-17; if the fetched file starts
@@ -227,7 +237,10 @@ runs the suite in the "bounded source fixtures" step of `.github/workflows/runti
   numpy 2.3.5, pandas 2.3.3). Checked on Linux only, with stand-ins: a link to a folder named `asset_expansion/cache`
   (not a Windows junction or an 8.3 short name), a folder named `OneDrive` and the three OneDrive variable names
   (not a real OneDrive), LF under simulated Windows text mode, and a folder that cannot be removed (simulated).
-- The PowerShell lines of this guide have not been run.
+- The PowerShell lines of this guide have not been run. The steps of the Korean guide were followed on Linux only:
+  the same git and python commands rewritten for bash, a synthetic research clone and stand-in transports (`urlopen`,
+  a stand-in `yfinance` module and a stand-in for the app's KIS client module), with the clone and the push against a
+  scratch repository. Its last section lists what that could not show.
 - The thresholds of 10.5.1 were set without real data, so the rate of false FAIL on real series is unknown.
 - yfinance 1.7.0 routes its tz, cookie and ISIN caches through `set_tz_cache_location` (read from its source, not
   from a download); another version may keep a cache elsewhere.
