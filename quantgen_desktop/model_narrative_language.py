@@ -80,7 +80,7 @@ def signals_korean(s, b):
 
 def structured_korean(p):
     from core.ficc.common import BP, tenor_label
-    from core.ficc.insights import _money, _pct
+    from core.ficc.insights import _greek, _money, _pct
     tr = lambda value: translate(value, 'ko')
     cms = str(getattr(p, 'underlying', '')).startswith('CMS')
     ux = (lambda x: f'{x / BP:+.0f}bp') if cms else (lambda x: f'{x:g}')
@@ -100,10 +100,10 @@ def structured_korean(p):
             if cms else f'연간 쿠폰은 {_pct(p.coupon)}입니다.')
     g = dict(getattr(p, 'greeks', {}) or {})
     if g:
-        # Greek names and their currency in Korean. The figures keep the English narrative's exact
-        # formatting so both languages carry the same number tokens (desktop prose tests).
+        # Greek names and their currency in Korean. The figures use the English narrative's own
+        # formatter (core.ficc.insights._greek) so both languages carry the same number tokens.
         lines.append(f'상품 전체 위험 (단위 {p.currency}): ' + ', '.join(
-            f'{GREEK_KO.get(k, k)} {_money(v, signed=True)}' if k == 'dv01' else f'{GREEK_KO.get(k, k)} {v:+.4g}'
+            f'{GREEK_KO.get(k, k)} {_money(v, signed=True)}' if k == 'dv01' else f'{GREEK_KO.get(k, k)} {_greek(v)}'
             for k, v in g.items()) + '.')
     if getattr(p, 'payoff_grid', ()):
         lo, hi = p.payoff_grid[0], p.payoff_grid[-1]

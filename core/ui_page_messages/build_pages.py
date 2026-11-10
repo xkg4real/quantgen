@@ -379,7 +379,7 @@ EN_TO_KO: dict[str, str] = {
     "is at or above": "이상일 때",
     "crosses down through": "아래로 뚫고 내려갈 때",
     "crosses up through": "위로 뚫고 올라갈 때",
-    "price": "가격",
+    "price level": "가격",
     "Remove": "삭제",
     "Add condition": "조건 추가",
     "What it does": "무엇을 할지",
@@ -396,7 +396,7 @@ EN_TO_KO: dict[str, str] = {
     "Limit order": "지정가 주문",
     "Limit price": "지정가",
     "Only for a limit order": "지정가 주문일 때만 입력",
-    "Limits": "한도",
+    "Order limits": "주문 한도",
     "Ceilings this rule may never cross. Leave blank for none — blank means no ceiling, not a safe default.":
         "이 규칙이 절대 넘지 않을 상한입니다. 비워 두면 상한이 없다는 뜻이며, 안전한 기본값이 아닙니다.",
     "Max times this rule may fire": "최대 실행 횟수",

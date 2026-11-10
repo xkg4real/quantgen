@@ -514,7 +514,7 @@ def build_rules_page(page: ft.Page, store, *,
                                                     text=COMPARATOR_LABEL[c])
                                  for c in Comparator]),
                     ft.TextField(value=entry["level"], dense=True, width=140,
-                                 hint_text="price", on_change=on_level,
+                                 hint_text="price level", on_change=on_level,
                                  border_radius=RADII["sm"]),
                     ft.IconButton(ft.Icons.REMOVE_CIRCLE_OUTLINE,
                                   on_click=on_remove, tooltip="Remove"),
@@ -651,7 +651,7 @@ def build_rules_page(page: ft.Page, store, *,
                       ft.Container(order_kind_c, col={"xs": 12, "md": 3}),
                       ft.Container(limit_price_c, col={"xs": 12, "md": 4}),
                   ], spacing=12, run_spacing=4)),
-            group("Limits",
+            group("Order limits",
                   "Ceilings this rule may never cross. Leave blank for none — "
                   "blank means no ceiling, not a safe default.",
                   ft.ResponsiveRow([

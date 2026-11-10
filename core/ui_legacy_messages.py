@@ -325,7 +325,10 @@ for _source, _name in {'vasicek':'Vasicek', 'cir':'CIR', 'hull_white':'Hull-Whit
 
 # Page-level Flet captions (owner UI review 2026-11-10): reviewed entries above win.
 from core.ui_page_messages import PAGE_EN_TO_KO as _PAGE_EN_TO_KO
+from core.ui_messages import LEGACY as _REVIEWED_KEYS
 for _english, _korean in _PAGE_EN_TO_KO.items():
+    if _english in _REVIEWED_KEYS:
+        continue  # a reviewed message key (e.g. 'price' -> 기준값) keeps its caption everywhere
     EN_TO_KO.setdefault(_english, _korean)
     KO_TO_EN.setdefault(_korean, _english)
 
