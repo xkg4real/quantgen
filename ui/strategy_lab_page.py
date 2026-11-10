@@ -151,9 +151,14 @@ def _summary(cards: list[dict], lang: str) -> ft.Control:
             border=ft.Border.all(1.5, colour), border_radius=RADII["lg"]))
     total = (f"검증 카드 {len(cards)}개 · 연구 보고서의 판정을 그대로 보여 줍니다" if lang == "ko" else
              f"{len(cards)} study cards · the verdicts as the study recorded them")
+    policy = ("PASS는 기본으로 제공하고, REVISE는 보완 목표와 함께 제공하며, REJECT와 INSUFFICIENT_DATA는 거절 사실이 "
+              "보이도록 목록에 남깁니다. 모든 기록에는 수치, 기준, 표본이 함께 적혀 있습니다." if lang == "ko" else
+              "PASS is offered by default; REVISE is offered with its revise target shown; REJECT and "
+              "INSUFFICIENT_DATA are listed so the refusal is visible. Every line states the number, the threshold "
+              "and the sample behind it.")
     return ft.Column([
         ft.ResponsiveRow(tiles, spacing=12, run_spacing=12),
-        ft.Container(_text(total, size=12, color=pal.muted), tooltip="docs/asset_expansion/cards"),
+        ft.Container(_text(total, size=12, color=pal.muted), tooltip=f"docs/asset_expansion/cards\n{policy}"),
     ], spacing=10)
 
 
