@@ -6,7 +6,9 @@ T-MISS-01/02, T-SER-01/02, T-H10-01/02, T-H15-01, T-VIX-01, T-XMKT-01 (data clau
 
 Hermetic: every store is a tempfile directory; no network; no wall clock (every instant is pinned); module globals
 that a test patches are restored in `finally`. Calendar functions come from `StubClocks` below, a deterministic
-stand-in for `core.calendars.clocks` (package B), keyed on the registry's schedule ids.
+stand-in for `core.calendars.clocks` (package B), keyed on the registry's schedule ids. One clause reads the shipped
+owner-signed calendar files instead: T-AVAIL-01 on the official calendars runs the same golden table through
+`core.calendars.adapter.CalendarClocks` once those files load and cover the golden days (look-ahead audit LA-02).
 """
 from __future__ import annotations
 
@@ -559,31 +561,100 @@ def _first_decision_at_or_after(market, instant, clocks=CLK):
             return d
 
 
-def test_avail_01_golden_availability_table_on_synthetic_calendars():
-    exp = lambda sid, d, clk=CLK: C.expected_available_utc(REG, sid, d, clk)      # noqa: E731
+def _check_avail01_table(clk, clocks_for) -> None:
+    """The T-AVAIL-01 golden availability table (spec L2099, L5619) on `clk`, exact match, and the injected registry
+    error (H.15 posted at D, not D+1: L3463) on `clocks_for(<registry with the error>)`, which must move the instant."""
+    exp = lambda sid, d, c=clk: C.expected_available_utc(REG, sid, d, c)          # noqa: E731
     dgs = exp("DGS10", date(2015, 1, 1))                 # next obs Fri 2015-01-02 -> posted Mon 01-05 16:15 EST
-    assert dgs == U(2015, 1, 5, 21, 15) and _first_decision_at_or_after("KR", dgs) == date(2015, 1, 6)
+    assert dgs == U(2015, 1, 5, 21, 15) and _first_decision_at_or_after("KR", dgs, clk) == date(2015, 1, 6)
     h10 = exp("DEXKOUS", date(2026, 10, 2))              # week of 10-05 -> Columbus Day Monday -> Tue 10-13 16:15 EDT
-    assert h10 == U(2026, 10, 13, 20, 15) and _first_decision_at_or_after("KR", h10) == date(2026, 10, 14)
+    assert h10 == U(2026, 10, 13, 20, 15) and _first_decision_at_or_after("KR", h10, clk) == date(2026, 10, 14)
     d10 = exp("DGS10", date(2026, 10, 8))                # obs Fri 10-09 -> next Fed bday after = Tue 10-13
-    assert d10 == U(2026, 10, 13, 20, 15) and _first_decision_at_or_after("US", d10) == date(2026, 10, 14)
-    assert CLK.close_print_bound_utc("KR", date(2025, 11, 13)) == U(2025, 11, 13, 7, 30, 30)
+    assert d10 == U(2026, 10, 13, 20, 15) and _first_decision_at_or_after("US", d10, clk) == date(2026, 10, 14)
+    assert clk.close_print_bound_utc("KR", date(2025, 11, 13)) == U(2025, 11, 13, 7, 30, 30)
     import dataclasses
     wrong = dict(REG.series)
     wrong["DGS10"] = {**REG.series["DGS10"], "schedule": "VIXCLS"}    # injected registry error: H.15 posted at D
     bad = dataclasses.replace(REG, series=wrong)
-    assert exp("DGS10", date(2015, 1, 1), StubClocks(bad)) != dgs
+    assert exp("DGS10", date(2015, 1, 1), clocks_for(bad)) != dgs
+
+
+def test_avail_01_golden_availability_table_on_synthetic_calendars():
+    _check_avail01_table(CLK, StubClocks)
 
 
 test_avail_01_golden_availability_table_on_synthetic_calendars.test_ids = ["T-AVAIL-01"]
 
 
+# The signed calendar files each golden row reads (core/calendars/data; core.calendars.adapter.CalendarClocks) and the
+# days it reads them on. The injected-error row reads the same files as the first row.
+_AVAIL01_KR = ("holidays_FED", "publication_schedules", "source_skipped", "kr_sessions", "holidays_KRX")
+AVAIL01_NEEDS = (
+    ("DGS10 dated Fri 2015-01-02 -> KRX close Tue 2015-01-06", _AVAIL01_KR, date(2015, 1, 1), date(2015, 1, 6)),
+    ("DEXKOUS week of 2026-10-05 -> KRX close Wed 2026-10-14", _AVAIL01_KR, date(2026, 10, 2), date(2026, 10, 14)),
+    ("DGS10 dated 2026-10-09 -> US close 2026-10-14",
+     ("holidays_FED", "publication_schedules", "source_skipped", "holidays_NYSE"), date(2026, 10, 8), date(2026, 10, 14)),
+    ("CSAT close 2025-11-13 07:30Z", ("kr_sessions", "holidays_KRX"), date(2025, 11, 13), date(2025, 11, 13)),
+)
+
+
+def _avail01_waiting(live) -> list[str]:
+    """Each refusal or coverage gap of the signed files the golden rows read (empty when the table can run)."""
+    out = []
+    for row, files, lo, hi in AVAIL01_NEEDS:
+        for f in files:
+            why = live.refusal(f)
+            if why is not None:
+                out.append(f"{row}: {f}.yaml refused ({why})")
+            elif not (live.file(f).covers(lo) and live.file(f).covers(hi)):
+                cf = live.file(f)
+                out.append(f"{row}: {f}.yaml v{cf.version} covers {cf.covers_from}..{cf.covers_to}, needs {lo}..{hi}")
+    return out
+
+
 def test_avail_01_official_calendars_are_owner_signed():
-    raise NotRun("OWNER: signed historical KRX / NYSE / FED / SIFMA calendar files (2015, 2025) absent; the golden "
-                 "table above runs on the stub clocks (core/calendars, package B)")
+    """The same golden table on the owner-signed calendars (core.calendars.adapter.CalendarClocks over the shipped
+    files). NOT_RUN (OWNER) names every refusal and coverage gap, computed from the files; once they load and cover the
+    golden days the table runs and PASSes or FAILs (look-ahead audit LA-02: it used to be NOT_RUN whatever the files).
+    AVAIL01_NEEDS is the contract: once nothing is waiting, a coverage or signing error raised inside the table (a file
+    or a date the list does not declare, such as a calendar read past the golden day) is a FAIL, not a NOT_RUN."""
+    from core.calendars.adapter import CalendarClocks
+    from core.calendars.store import CalendarSet
+    live = CalendarSet()
+    waiting = _avail01_waiting(live)
+    if waiting:
+        raise NotRun("OWNER: T-AVAIL-01 on the signed calendars waits for " + "; ".join(waiting))
+    _check_avail01_table(CalendarClocks(REG, cal=live), lambda reg: CalendarClocks(reg, cal=live))
 
 
 test_avail_01_official_calendars_are_owner_signed.test_ids = ["T-AVAIL-01"]
+
+
+def test_avail_01_official_path_passes_and_fails_on_a_synthetic_signed_set():
+    """LA-02 part 1: the official-calendar body can PASS and can FAIL. On the calendars module's synthetic set (signed
+    in a temp dir by that test module, 1995-2027; not the owner's files) nothing is waiting and the table passes
+    through CalendarClocks; the same clocks over a registry with H.15 posted at D fail it. The waiting list is exact:
+    on a synthetic set whose holidays_KRX covers 2026-27 only (the shipped file's span) it names the 2015 and CSAT
+    rows' gaps and nothing else, and on a set whose holidays_KRX is unsigned it names that refusal for every row that
+    reads the file."""
+    import dataclasses
+    from core.calendars.adapter import CalendarClocks
+    from tests.macro_m1_calendars import drafts_set, fixture_set, krx_short_set
+    cal = fixture_set()
+    assert _avail01_waiting(cal) == []
+    gap = "holidays_KRX.yaml v1.0.0-fixture covers 2026-01-01..2027-12-31, needs"
+    assert _avail01_waiting(krx_short_set()) == [
+        f"DGS10 dated Fri 2015-01-02 -> KRX close Tue 2015-01-06: {gap} 2015-01-01..2015-01-06",
+        f"CSAT close 2025-11-13 07:30Z: {gap} 2025-11-13..2025-11-13"], _avail01_waiting(krx_short_set())
+    refused = _avail01_waiting(drafts_set())
+    assert [w.split(": ")[0] for w in refused] == [row for row, files, _, _ in AVAIL01_NEEDS if "holidays_KRX" in files]
+    assert all(": holidays_KRX.yaml refused (holidays_KRX.yaml: signed_off_by is empty" in w for w in refused), refused
+    _check_avail01_table(CalendarClocks(REG, cal=cal), lambda reg: CalendarClocks(reg, cal=cal))
+    wrong = dict(REG.series)
+    wrong["DGS10"] = {**REG.series["DGS10"], "schedule": "VIXCLS"}
+    bad = dataclasses.replace(REG, series=wrong)
+    _raises(lambda: _check_avail01_table(CalendarClocks(bad, cal=cal), lambda reg: CalendarClocks(reg, cal=cal)),
+            AssertionError)
 
 
 def _dexkous_rows(clocks, weeks):

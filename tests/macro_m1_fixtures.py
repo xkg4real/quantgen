@@ -262,6 +262,233 @@ test_no_golden_test_passes_on_its_fixture_gate_alone.test_ids = ["T-HERM-01"]
 
 
 # --------------------------------------------------------------------------- #
+# Look-ahead audit LA-02 ratchet (docs/nautilus_bridge/LOOKAHEAD_AUDIT_2026-11-04.md at 7749450, LA-02): the named
+# REFDATA / OWNER point-in-time bodies, not whole modules (the rule above still lets other golden tests fail as not
+# implemented after their gate)
+# --------------------------------------------------------------------------- #
+LA02_CONVERTED = (                              # each runs a real body once its fixture or calendar input arrives
+    "macro_m1_calendars.py::test_print01_real_kospi_close_2026_03_09",
+    "macro_m1_calendars.py::test_sat01_real_kospi_completeness_and_variance_ratio",
+    "macro_m1_pit.py::test_avail_01_official_calendars_are_owner_signed",
+    "macro_m7_cardp.py::test_placebo_01_positive_control_fixture_refdata",
+)
+LA02_REMAINING = {                              # not converted yet; a later part moves each up, so the list only shrinks
+    "macro_m1_pit.py::test_fix_01_regeneration_at_level_1_tolerance_refdata": "T-FIX-01: council archive outside the repo",
+    "macro_m1_pit.py::test_g_post_01_m1_data_rows_refdata": "G-POST-01 data rows",
+    "macro_m1_pit.py::test_print_01_real_kospi_close_refdata": "T-PRINT-01 on Yahoo ^KS11 (F13)",
+    "macro_m1_pit.py::test_stale_01_g_stale_01_reference_table_refdata": "G-STALE-01",
+    "macro_m1_pit.py::test_miss_01_cpi_yoy_3_353_refdata": "T-MISS-01 CPI",
+    "macro_m1_calendars.py::test_close02_on_the_real_signed_files_is_owner_input": "T-CLOSE-02 on the signed files",
+    "macro_m1_calendars.py::test_regime01_full_range_expected_values_file": "T-REGIME-01: no ACQUISITION row for the file",
+    "macro_m1_fixtures.py::test_g_post_01_m1_data_rows_refdata": "G-POST-01 row replay",
+    "macro_m2_risk.py::test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata": "T-VT-01",
+    "macro_m2_risk.py::test_label_01_kospi_elevated_stressed_and_us_normal_refdata": "T-LABEL-01",
+    "macro_m3_estimators.py::test_t_b5_01_kospi_golden_refdata": "T-B5-01 estimator replay",
+    "macro_m7_cardp.py::test_i05_full_sample_lag_audit_over_compliant_goldens_refdata": "I-05: LA-07 and LA-30 first",
+    "macro_m8_forward.py::test_g_ref_01_s1_goldens_refdata": "G-REF-01",
+}
+# Frozen at part 1 (2026-11-10); a part never edits LA02_SITES. LA02_CONVERTED_FLOOR holds every conversion made so
+# far: a later part that converts a site moves it from LA02_REMAINING to LA02_CONVERTED and adds it here; nothing
+# leaves the floor. So LA02_REMAINING only shrinks and LA02_CONVERTED only grows.
+LA02_SITES = frozenset({
+    "macro_m1_calendars.py::test_print01_real_kospi_close_2026_03_09",
+    "macro_m1_calendars.py::test_sat01_real_kospi_completeness_and_variance_ratio",
+    "macro_m1_pit.py::test_avail_01_official_calendars_are_owner_signed",
+    "macro_m7_cardp.py::test_placebo_01_positive_control_fixture_refdata",
+    "macro_m1_pit.py::test_fix_01_regeneration_at_level_1_tolerance_refdata",
+    "macro_m1_pit.py::test_g_post_01_m1_data_rows_refdata",
+    "macro_m1_pit.py::test_print_01_real_kospi_close_refdata",
+    "macro_m1_pit.py::test_stale_01_g_stale_01_reference_table_refdata",
+    "macro_m1_pit.py::test_miss_01_cpi_yoy_3_353_refdata",
+    "macro_m1_calendars.py::test_close02_on_the_real_signed_files_is_owner_input",
+    "macro_m1_calendars.py::test_regime01_full_range_expected_values_file",
+    "macro_m1_fixtures.py::test_g_post_01_m1_data_rows_refdata",
+    "macro_m2_risk.py::test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata",
+    "macro_m2_risk.py::test_label_01_kospi_elevated_stressed_and_us_normal_refdata",
+    "macro_m3_estimators.py::test_t_b5_01_kospi_golden_refdata",
+    "macro_m7_cardp.py::test_i05_full_sample_lag_audit_over_compliant_goldens_refdata",
+    "macro_m8_forward.py::test_g_ref_01_s1_goldens_refdata",
+})
+LA02_CONVERTED_FLOOR = frozenset({
+    "macro_m1_calendars.py::test_print01_real_kospi_close_2026_03_09",
+    "macro_m1_calendars.py::test_sat01_real_kospi_completeness_and_variance_ratio",
+    "macro_m1_pit.py::test_avail_01_official_calendars_are_owner_signed",
+    "macro_m7_cardp.py::test_placebo_01_positive_control_fixture_refdata",
+})
+_GATES = ("require_fixture", "_refdata")
+_LA02_WORDS = ("unreachable", "not implemented")
+_CONST_NODES = (ast.Constant, ast.BoolOp, ast.UnaryOp, ast.BinOp, ast.Compare, ast.Tuple, ast.List, ast.expr_context,
+                ast.boolop, ast.unaryop, ast.operator, ast.cmpop)
+
+
+def _la02_list_defects(converted, remaining) -> list[str]:
+    """The two lists against the frozen sites and floor: they partition LA02_SITES, and LA02_CONVERTED holds the floor."""
+    out = []
+    conv, rem = set(converted), set(remaining)
+    if conv & rem:
+        out.append(f"listed as both converted and remaining: {sorted(conv & rem)}")
+    if conv | rem != LA02_SITES:
+        out.append(f"the lists differ from the 17 frozen sites: extra {sorted((conv | rem) - LA02_SITES)}, "
+                   f"missing {sorted(LA02_SITES - conv - rem)}")
+    if not LA02_CONVERTED_FLOOR <= conv or len(conv) < len(LA02_CONVERTED_FLOOR) or len(LA02_CONVERTED_FLOOR) < 4:
+        out.append(f"converted sites left LA02_CONVERTED: {sorted(LA02_CONVERTED_FLOOR - conv)} (the list only grows)")
+    return out
+
+
+def _exc_name(exc) -> str:
+    target = exc.func if isinstance(exc, ast.Call) else exc
+    return target.id if isinstance(target, ast.Name) else getattr(target, "attr", "")
+
+
+def _constant_truth(test: ast.expr):
+    """True / False for a test built from constants only (`if True:`, `if 1 == 1:`, `assert 0`), else None."""
+    if not all(isinstance(n, _CONST_NODES) for n in ast.walk(test)):
+        return None
+    try:
+        return bool(eval(compile(ast.Expression(test), "<la02>", "eval"), {"__builtins__": {}}, {}))
+    except Exception:                                   # noqa: BLE001
+        return None
+
+
+def _always_run(stmts):
+    """The statements that run whenever `stmts` runs: each one, and recursively the bodies of `with`, the `try` body and
+    `finally`, and the live branch of an `if` / `while` whose test is a constant."""
+    for st in stmts:
+        yield st
+        if isinstance(st, (ast.With, ast.AsyncWith)):
+            yield from _always_run(st.body)
+        elif isinstance(st, ast.Try):
+            yield from _always_run(st.body)
+            yield from _always_run(st.finalbody)
+        elif isinstance(st, (ast.If, ast.While)):
+            truth = _constant_truth(st.test)
+            if truth is True:
+                yield from _always_run(st.body)
+            elif truth is False:
+                yield from _always_run(st.orelse)
+
+
+def _parking_defects(fn: ast.FunctionDef) -> list[str]:
+    """A NotRun that runs whatever the inputs (at the top level, or under a constant `if`), an exception whose message
+    says unreachable / not implemented (any exception class, any letter case), NotImplementedError, a constant-false
+    assert."""
+    out = []
+    for st in _always_run(fn.body):
+        if isinstance(st, ast.Raise) and st.exc is not None and _exc_name(st.exc) in ("NotRun", "require_owner"):
+            out.append(f"line {st.lineno}: unconditional NotRun")
+    for node in ast.walk(fn):
+        if isinstance(node, ast.Raise) and node.exc is not None:
+            text = " ".join(c.value for c in ast.walk(node.exc) if isinstance(c, ast.Constant) and isinstance(c.value, str))
+            if _exc_name(node.exc) == "NotImplementedError" or any(w in text.lower() for w in _LA02_WORDS):
+                out.append(f"line {node.lineno}: fails as unreachable / not implemented")
+        if isinstance(node, ast.Assert) and _constant_truth(node.test) is False:
+            out.append(f"line {node.lineno}: assert False")
+    return out
+
+
+def _la02_defects(fn: ast.FunctionDef, defs: dict) -> list[str]:
+    """Why `fn` is not a convertible body: a parking form (`_parking_defects`) in it or in a module function it calls
+    (followed through the module's own functions, so a gate helper such as `_official_calendar` is covered), or no
+    `_check_*` body that asserts."""
+    out = list(_parking_defects(fn))
+    seen, todo = {fn.name}, [fn]
+    while todo:
+        for n in ast.walk(todo.pop()):
+            name = n.func.id if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) else None
+            if name in defs and name not in seen:
+                seen.add(name)
+                todo.append(defs[name])
+                out += [f"helper {name}: {d}" for d in _parking_defects(defs[name])]
+    checks = sorted({n.func.id for n in ast.walk(fn) if isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
+                     and n.func.id.startswith("_check_")})
+    if not checks:
+        out.append("calls no _check_* body")
+    for name in checks:
+        if name not in defs or not any(isinstance(n, ast.Assert) for n in ast.walk(defs[name])):
+            out.append(f"{name} is not a module function that asserts")
+    return out
+
+
+def test_la02_converted_pit_bodies_stay_convertible():
+    """LA-02 ratchet (look-ahead audit 2026-11-04): a converted REFDATA / OWNER point-in-time test opens with its
+    fixture gate or a computed owner check, never raises NotRun whatever the inputs (also not under a constant `if`,
+    and not in a module helper it calls), never fails as unreachable or not implemented (any exception, any case), and
+    runs a module `_check_*` body that asserts; each body is also shown to PASS and to FAIL on invented data next to it.
+    The lists partition the 17 frozen sites (LA02_SITES), LA02_CONVERTED holds LA02_CONVERTED_FLOOR, and every remaining
+    site must still be unconverted, so LA02_REMAINING only shrinks. 17 sites: the 18 the ⑨-1/2 scoping cited for LA-02,
+    less macro_m1_fixtures.py::test_kis_quote_check_owner_record (T-RO-02, an owner live-quote record, not a PIT golden);
+    the audit's own count of 19 is not reproduced."""
+    defs_of: dict[str, dict] = {}
+
+    def lookup(ref: str):
+        module, name = ref.split("::")
+        if module not in defs_of:
+            tree = ast.parse((ROOT / "tests" / module).read_text(encoding="utf-8"))
+            defs_of[module] = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+        return defs_of[module].get(name), defs_of[module]
+
+    bad = _la02_list_defects(LA02_CONVERTED, LA02_REMAINING)
+    for ref in LA02_CONVERTED:
+        fn, defs = lookup(ref)
+        if fn is None:
+            bad.append(f"{ref}: missing")
+            continue
+        bad += [f"{ref}: {d}" for d in _la02_defects(fn, defs)]
+        first_gate = next((n.lineno for n in ast.walk(fn) if isinstance(n, ast.Call)
+                           and getattr(n.func, "id", "") in _GATES), None)
+        notrun_lines = [n.lineno for n in ast.walk(fn) if isinstance(n, ast.Raise)
+                        and getattr(getattr(n.exc, "func", n.exc), "id", "") == "NotRun"]
+        if first_gate is not None and any(line < first_gate for line in notrun_lines):
+            bad.append(f"{ref}: NotRun before its fixture gate")
+    for ref in LA02_REMAINING:
+        fn, defs = lookup(ref)
+        if fn is None:
+            bad.append(f"{ref}: listed as remaining but missing")
+        elif not _la02_defects(fn, defs):
+            bad.append(f"{ref}: converted; move it to LA02_CONVERTED and LA02_CONVERTED_FLOOR")
+    assert not bad, bad
+
+
+def test_la02_ratchet_refuses_the_old_forms():
+    """The ratchet's rule on the forms LA-02 found and on the review's evasions (invented sources, parsed only): the
+    gate followed by an 'unreachable' assertion (any exception class, any case), an unconditional NotRun (also under a
+    constant `if`, or in a gate helper), a gate with nothing after it are refused; a gated `_check_*` body with a
+    computed owner check passes. The lists: a converted site moved back to LA02_REMAINING, or a new remaining site, is
+    refused."""
+    def defects(src: str) -> list[str]:
+        tree = ast.parse(src)
+        defs = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+        return _la02_defects(defs["test_x"], defs)
+    gated = 'def test_x():\n    text = require_fixture("a.csv").read_text()\n    _check_x(text)\n{}\n' \
+            'def _check_x(v):\n    assert v\n'
+    assert defects('def test_x():\n    require_fixture("a.csv")\n    raise AssertionError("unreachable")\n')
+    assert defects('def test_x():\n    require_fixture("a.csv")\n    raise AssertionError(f"{A} listed: golden assertion '
+                   'not implemented")\n')
+    assert defects('def test_x():\n    raise NotRun("REFDATA: a.csv absent")\n')
+    assert defects('def test_x():\n    _refdata(["F13"])\n    raise NotRun("REFDATA: present but not wired")\n')
+    assert defects('def test_x():\n    require_fixture("a.csv")\n    _check_x(1)\n\ndef _check_x(v):\n    return v\n')
+    for tail in ('    if True:\n        raise NotRun("OWNER: parked")', '    if 1 == 1:\n        raise NotRun("OWNER: x")',
+                 '    raise RuntimeError("unreachable")', '    raise AssertionError("Unreachable")',
+                 '    raise ValueError("Not Implemented yet")', '    raise NotImplementedError', '    assert 0, "x"',
+                 '    with open("f"):\n        raise NotRun("OWNER: x")'):
+        assert defects(gated.format(tail)), tail
+    helper = ('def test_x():\n    text = require_fixture("a.csv").read_text()\n    _check_x(text, _gate())\n\n'
+              'def _gate():\n    waiting = []\n    if {}:\n        raise NotRun("OWNER: " + "; ".join(waiting))\n    return 1\n\n'
+              'def _check_x(v, cal):\n    assert v\n')
+    assert defects(helper.format("True")) == ["helper _gate: line 8: unconditional NotRun"], defects(helper.format("True"))
+    assert defects(helper.format("waiting")) == [], defects(helper.format("waiting"))
+    ok = ('def test_x():\n    text = require_fixture("a.csv").read_text()\n    if not text:\n'
+          '        raise NotRun("OWNER: computed")\n    _check_x(text)\n\ndef _check_x(v):\n    assert v\n')
+    assert defects(ok) == [], defects(ok)
+    assert _la02_list_defects(LA02_CONVERTED, LA02_REMAINING) == []
+    sat = "macro_m1_calendars.py::test_sat01_real_kospi_completeness_and_variance_ratio"
+    back = _la02_list_defects([c for c in LA02_CONVERTED if c != sat], {**LA02_REMAINING, sat: "parked again"})
+    assert back and "left LA02_CONVERTED" in back[0] and sat in back[0], back
+    grown = _la02_list_defects(LA02_CONVERTED, {**LA02_REMAINING, "macro_m9_lab.py::test_new_refdata": "new"})
+    assert grown and "extra ['macro_m9_lab.py::test_new_refdata']" in grown[0], grown
+
+
+# --------------------------------------------------------------------------- #
 # The first two real golden checks (SYNTH; reproduce on core/quant/validate.py)
 # --------------------------------------------------------------------------- #
 def test_g_dsr_01_reproduces_bldp():
