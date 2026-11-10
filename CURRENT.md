@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b
 next_ids: ⑨-1/2/c, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-10T23:25:00+09:00
+updated_at: 2026-11-10T23:58:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: main
-work_commit: b0d2862
+work_branch: claude/lookahead-la02-part2-20261110
+work_commit: e60daf5
 uncommitted_changes: no
-pr: none
+pr: 97
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -85,12 +85,13 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 
 ## 5. 중단 지점
 
-main `b0d2862`에 fold/1, 채택 모듈 1부, LA-02 1부까지 들어갔습니다. LA-02 2부 워크플로(wwgnh8fma)가 실행 중입니다(워크트리 `la02c`, 브랜치 `claude/lookahead-la02-part2-20261110`, `8e88814`에서 시작, 아직 push 안 함).
+⑨-1/2/c LA-02 2부: [PR #97](https://github.com/xkg4real/quantgen/pull/97), head `e60daf5`(= `4bf77c4` 구현 + `bfb1eb2` 검토 수정 + main `b0d2862` 병합). 13곳 중 9곳 전환(G-POST-01 두 곳, T-PRINT-01 F13, G-STALE-01, T-MISS-01, T-CLOSE-02, T-VT-01, T-LABEL-01, T-B5-01). 남김: T-FIX-01, T-REGIME-01 전체, I-05, G-REF-01(R-11 재계산 하네스 없음). `/code-review high 97`이 10건 지적 → 수정 워크플로 wcj0kv3jx 실행 중(수정 → 2관점 검증 → 재수정). `e60daf5`의 캐시 없는 전체 실행(scratchpad `la02c`) 실행 중.
 
 ## 6. 다음 할 일 (순서대로)
 
-1. LA-02 2부 워크플로 결과 확인 → 결과 검토 → 브랜치에 origin/main(`b0d2862`) 합치기(`8e88814` = 그 부모라 충돌 없음 예상) → push → PR → CI·캐시 없는 전체 실행(`scratchpad/full_commit313.sh la02c <commit>`, `m1_compare.py`로 `chain_final` 대비) → 병합 → 원장 ⑨-1/2/c → Notion.
-2. 그다음: ⑨-4 다음 단위(소유자 답 필요: Q1~Q5, Q7, ledger N_raw 뜻), R3 Lab UI(허용됨, 설계 0b·Q12 먼저 질문), 실시간 주문(M-12 재확인 먼저).
+1. 수정 워크플로 결과 확인 → push → 새 head의 캐시 없는 전체 실행(`scratchpad/full_commit313.sh la02c2 <commit>`, `python3 scratchpad/m1_compare.py <S> chain_final la02c2`: 새 demo 시험 PASS 추가만, 바뀐 행 0, FAIL 2 기존 환경) → CI(Compliance; 시험 파일만이라 Runtime 경로 필터에 안 걸릴 수 있음) → 병합 → 원장 ⑨-1/2/c → Notion 두 페이지 → `full_*` 삭제.
+2. 소유자 질문 정리 보고(LA-02 2부 레이아웃·달력 서명 범위·미등록 시계열, ledger N_raw, ⑨-4 Q1~Q5·Q7, 설계 0b·Q12, LA-30, M-12).
+3. 그다음: ⑨-4 다음 단위(답 필요), R3 Lab UI(설계 0b·Q12 질문 먼저), 실시간 주문(M-12 먼저).
 
 ## 7. 주의사항
 
