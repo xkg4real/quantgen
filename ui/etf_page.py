@@ -27,38 +27,97 @@ from core.quant import strategies as S
 from core.quant.history import HistoryError, load_history, synthetic_history
 from core.quant.validate import load_cards
 from core.research.decay_disclosure import decay_value, decay_text
-from core.research.sleeve_disclosure import SHARPE_CONVENTIONS_POINTER, conventions_text, sharpe_text, sharpe_tooltip
+from core.research.sleeve_disclosure import (SHARPE_CONVENTIONS_POINTER, conventions_korean, conventions_text,
+                                             sharpe_text, sharpe_tooltip)
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
-from ui.components import card, chip, empty_state, notice, section, stat
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.market_narrative_language import etf_korean, letf_korean, letf_unavailable_korean
+from quantgen_desktop.market_diagnostics_language import decay_korean
+from core.i18n import LocaleContext
+from ui.components import card, empty_state, notice, section, stat
+from ui.ficc_widgets import (action, decay_value_ko, form_row, hide_source, ko_notice, ko_stat, ko_verdict, lchip,
+                             synthetic_notice)
 import ui.xcharts as xc
 from core.research.etf_workflow import _clean, analyze as _analyze, narrative, payload, LETF, _CARD_FOR
 
 ROOT = Path(__file__).resolve().parents[1]
+_KO = LocaleContext("ko_KR")
+
+
+def _error(exc: Exception) -> ft.Control:
+    """The error banner: the message as raised in English; in Korean the catalogue wording when the
+    message is a known sentence, else a Korean lead-in before the original message."""
+    en = str(exc) if isinstance(exc, (HistoryError, ValueError)) else f"{type(exc).__name__}: {exc}"
+    known = _KO.text(en)
+    ko = known if known != en else f"분석하지 못했습니다. 종목코드와 입력값을 확인하세요 — {en}"
+    return ko_notice(notice(en, "error", icon=ft.Icons.ERROR_OUTLINE), ko)
+
+
+def _trend_reading(conventions: Optional[dict]) -> dict:
+    """Reading guidance for the ETF's trend-switch chart: a full-period backtest (no held-out
+    out-of-sample segment), flat while the 10-month average warms up, never a forecast."""
+    n = (conventions or {}).get("trend_warmup_daily_returns")
+    first_ko = f"처음 {n}거래일" if n else "처음 10개월"
+    first_en = f"the first {n} sessions" if n else "the first 10 months"
+    return {
+        "meaning": ("처음에 1을 넣었다면 10개월 추세 전환 전략(진한 선)과 매수 후 보유(회색 선)가 각각 얼마가 "
+                    "되었는지를 날짜별로 보여 줍니다. 표본 외 구간을 따로 떼어 두지 않은 전체 기간 백테스트입니다.",
+                    "What 1 invested at the start became, day by day, for the 10-month trend switch (dark line) and "
+                    "buy-and-hold (grey line). A backtest over the whole period, with no held-out out-of-sample part."),
+        "look": (f"{first_ko}은 10개월 이동평균을 계산하는 준비 구간이라 전략은 현금으로 있고, 진한 선은 고정 현금 "
+                 "수익만 받아 1.0 근처에서 거의 평평합니다. 그 뒤 오른쪽 끝에서 두 선의 높이와 크게 떨어진 구간"
+                 "(낙폭)을 비교하세요.",
+                 f"For {first_en} the 10-month average is still warming up, so the strategy sits in cash and the "
+                 "dark line stays nearly flat near 1.0, earning only the fixed cash return. After that, compare "
+                 "the two lines at the right end and the deep dips along the way (drawdowns)."),
+        "interpret": ("진한 선이 회색 선보다 위에서 끝나면 같은 기간 매수 후 보유보다 성과가 좋았습니다. 추세 전환은 "
+                      "하락 추세에서 현금으로 피해 낙폭을 줄이려는 규칙이라, 상승장에서는 뒤처질 수 있습니다.",
+                      "Ending above the grey line means the switch beat buy-and-hold over the period. The switch "
+                      "steps into cash in a downtrend to cut drawdowns, so it can lag in a rising market."),
+        "limit": ("이 펀드의 과거 가격으로 다시 계산한 결과이며 예측이 아닙니다. 준비 구간 때문에 매수 후 보유와 같은 "
+                  "조건의 비교가 아닙니다. 좋은 규칙인지는 화면의 연구 판정과 함께 보세요.",
+                  "Recomputed on this fund's past prices; not a forecast. The warm-up makes the comparison with "
+                  "buy-and-hold not like-for-like. Judge the rule with the study verdict shown on the page."),
+    }
 
 
 def analyze(code: str, *, days: int = 504, source: str = "auto", **letf_options) -> dict:
-    """Retain the browser adapter's injectable provider boundary."""
+    """Retain the browser adapter's injectable provider boundary.
+
+    The page shows no source selector, so a history the workflow asks for with
+    `auto` is fetched with `best`: the same route while FMP / KIS answer, but
+    keyless Yahoo before a labelled synthetic series when their keys are
+    missing. KIS ETF quote/NAV data still comes first for KRX codes when KIS
+    is configured; an explicit source ('kis', 'synthetic') passes through."""
+    def history(symbol, *, source, days):
+        return load_history(symbol, source="best" if source == "auto" else source, days=days)
     return _analyze(code, days=days, source=source,
-                    history_loader=load_history, card_loader=load_cards, **letf_options)
+                    history_loader=history, card_loader=load_cards, **letf_options)
 
 
 def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -> ft.Control:
     pal = active()
     code = ft.TextField(label="ETF code", value="069500", hint_text="069500, 122630, SPY", width=160, border_radius=RADII["md"])
-    days = ft.TextField(label="Sessions", value="504", width=110, border_radius=RADII["md"])
-    source = ft.Dropdown(label="Source", width=220, value="auto",
-                         options=[ft.dropdown.Option("auto", "Auto (KIS for KRX codes)"), ft.dropdown.Option("synthetic", "Synthetic demo")])
-    benchmark = ft.Dropdown(label="LETF comparison", width=270, value="zero_rate_reference",
+    days = ft.TextField(label="Sessions", value="504", width=140, border_radius=RADII["md"],
+                        text_align=ft.TextAlign.RIGHT)
+    # The app chooses the provider itself (KIS for KRX codes, then keyless
+    # Yahoo, else a labelled synthetic series); the selector stays for tests.
+    source = hide_source(ft.Dropdown(label="Source", width=220, value="auto",
+                                     options=[ft.dropdown.Option("auto", "Auto (KIS for KRX codes)"),
+                                              ft.dropdown.Option("synthetic", "Synthetic demo")]), "auto")
+    benchmark = ft.Dropdown(label="LETF comparison", width=280, value="zero_rate_reference",
                            options=[ft.dropdown.Option("zero_rate_reference", "Zero-rate reference (legacy)"),
                                     ft.dropdown.Option("total_return", "Total-return scenario"),
                                     ft.dropdown.Option("price_return", "Price-return scenario")])
-    funding = ft.TextField(label="Annual funding rate (%)", value="", width=200, disabled=True,
-                          hint_text="Explicit assumption, e.g. 3.21")
-    fee = ft.TextField(label="Annual fee (%)", value="", width=170, disabled=True,
-                      hint_text="Explicit assumption")
-    dividend = ft.TextField(label="Annual dividend yield (%)", value="", width=220, disabled=True,
-                           hint_text="Required for price return")
+    funding = ft.TextField(label="Annual funding rate (%)", value="", width=220, disabled=True,
+                          hint_text="Explicit assumption, e.g. 3.21", border_radius=RADII["md"],
+                          text_align=ft.TextAlign.RIGHT)
+    fee = ft.TextField(label="Annual fee (%)", value="", width=180, disabled=True,
+                      hint_text="Explicit assumption", border_radius=RADII["md"], text_align=ft.TextAlign.RIGHT)
+    dividend = ft.TextField(label="Annual dividend yield (%)", value="", width=240, disabled=True,
+                           hint_text="Required for price return", border_radius=RADII["md"],
+                           text_align=ft.TextAlign.RIGHT)
 
     def comparison_changed(_event=None):
         funding.disabled = fee.disabled = benchmark.value == "zero_rate_reference"
@@ -67,7 +126,7 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
 
     benchmark.on_select = comparison_changed
     busy = ft.ProgressRing(visible=False, width=20, height=20)
-    host = ft.Column(spacing=14)
+    host = ft.Column(spacing=16)
 
     def run(e=None) -> None:
         busy.visible = True; host.controls = []; page.update()
@@ -84,48 +143,61 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                                "letf_annual_fee": annual(fee),
                                "letf_dividend_yield": annual(dividend) if benchmark.value == "price_return" else None}
                 a = analyze(code.value or "069500", days=int(float(days.value or "504")), source=source.value or "auto", **options)
-            except (HistoryError, ValueError) as exc:
-                host.controls = [notice(str(exc), "error", icon=ft.Icons.ERROR_OUTLINE)]; busy.visible = False; page.update(); return
             except Exception as exc:
-                host.controls = [notice(f"{type(exc).__name__}: {exc}", "error", icon=ft.Icons.ERROR_OUTLINE)]
+                host.controls = [_error(exc)]
                 busy.visible = False; page.update(); return
             blocks: list[ft.Control] = []
             if a.get("data_source") == "SYNTHETIC":
-                blocks.append(notice("Synthetic data: " + a.get("note", ""), "error", icon=ft.Icons.SCIENCE_OUTLINED))
+                blocks.append(synthetic_notice(
+                    "합성 데이터: 가격 이력을 제공처에서 받지 못해 시뮬레이션한 시계열로 계산했습니다. "
+                    "아래 숫자는 계산 방식의 시연이며 시장 시세가 아닙니다.",
+                    "Synthetic data: the price history is simulated because no provider answered; the numbers "
+                    "below demonstrate the mechanics, not a market read.", a.get("note", "")))
             q = a.get("quote")
             if q:
                 blocks.append(ft.Row([
                     stat("Price", f"{q['price']:,.0f}"), stat("NAV", f"{q['nav']:,.2f}"),
-                    stat("Premium", f"{q['premium_pct']:+.2f}%", token="error" if abs(q["premium_pct"] or 0) > 0.5 else "text"),
+                    ko_stat(stat("Premium", f"{q['premium_pct']:+.2f}%", token="error" if abs(q["premium_pct"] or 0) > 0.5 else "text"),
+                            "괴리율 (시장가격 vs NAV)"),
                     stat("Tracking error", f"{q['tracking_error_pct']:.2f}%"), stat("AUM", f"{(q['aum'] or 0) / 1e8:,.0f}억"),
                     stat("CU shares", f"{q['cu_units']:,.0f}"), stat("LP holding", f"{q['lp_holding_pct']:.1f}%"),
                     stat("Listed", q["listed"]),
-                ], spacing=10, wrap=True))
+                ], spacing=12, run_spacing=12, wrap=True))
             ps = a.get("premium_stats")
             if ps:
-                blocks.append(notice(decay_text(ps.get('decay')), "accent"))
-                blocks.append(ft.Row([chip(f"premium z {ps['z']:+.2f}", "accent"), chip(f"|premium| mean {ps['abs_mean']:.2f}%"),
-                                      chip(f"AR(1) amplitude half-life {decay_value(ps.get('decay'))} observations"), chip(f"ADF p {ps['adf_p']:.3f}"),
-                                      chip(f"source: {a['data_source']}", "success" if a["data_source"] != "SYNTHETIC" else "muted")],
-                                     spacing=6, wrap=True))
+                blocks.append(ko_notice(notice(decay_text(ps.get('decay')), "accent"), decay_korean(ps.get('decay'))))
+                half_life = decay_value(ps.get('decay'))
+                src = a['data_source']
+                blocks.append(ft.Row([
+                    lchip(f"괴리율 z {ps['z']:+.2f}", f"premium z {ps['z']:+.2f}", "accent"),
+                    lchip(f"|괴리율| 평균 {ps['abs_mean']:.2f}%", f"|premium| mean {ps['abs_mean']:.2f}%"),
+                    lchip(f"AR(1) 진폭 반감기 {decay_value_ko(ps.get('decay'))} (관측 단위)",
+                          f"AR(1) amplitude half-life {half_life} observations"),
+                    lchip(f"ADF p {ps['adf_p']:.3f}", f"ADF p {ps['adf_p']:.3f}"),
+                    lchip(f"출처: {'합성 데이터' if src == 'SYNTHETIC' else src}", f"source: {src}",
+                          "success" if src != "SYNTHETIC" else "muted")],
+                    spacing=8, wrap=True))
                 blocks.append(card(xc.premium_chart(a["dates"], a["price"], a["nav"], a["premium_pct"],
                                                     title=f"{a['code']} price vs NAV")))
             lt = a.get("letf")
             if lt and "rows" in lt:
-                blocks.append(notice(letf_text(lt), "accent"))
-                blocks.append(ft.Row([stat(f"{lt['name']} AZ proxy · prior-quarter variance", f"{lt['last_quarter_drag_bp']:+.0f} bp / qtr",
-                                           token="error" if lt['last_quarter_drag_bp'] < 0 else "text", tooltip=letf_text(lt))] +
-                                     [stat(f"GARCH variance proxy {r['sessions']} sessions", f"{r['drag_bp']:+.0f} bp",
+                blocks.append(ko_notice(notice(letf_text(lt), "accent"), letf_korean(lt)))
+                blocks.append(ft.Row([ko_stat(stat(f"{lt['name']} AZ proxy · prior-quarter variance", f"{lt['last_quarter_drag_bp']:+.0f} bp / qtr",
+                                           token="error" if lt['last_quarter_drag_bp'] < 0 else "text", tooltip=letf_text(lt)),
+                                              f"{lt['name']} AZ 근사 · 직전 분기 분산")] +
+                                     [ko_stat(stat(f"GARCH variance proxy {r['sessions']} sessions", f"{r['drag_bp']:+.0f} bp",
                                            tooltip=f"variance {r['variance_bp']:+.2f} bp, funding {r.get('funding_bp', 0):+.2f} bp, "
                                                    f"fee {r['fee_bp']:+.2f} bp, dividend {r.get('dividend_bp', 0):+.2f} bp; "
-                                                   f"zero-rate reference {r.get('reference_drag_bp', r['drag_bp']):+.2f} bp")
+                                                   f"zero-rate reference {r.get('reference_drag_bp', r['drag_bp']):+.2f} bp"),
+                                              f"GARCH 분산 근사 {r['sessions']}거래일")
                                       for r in lt["rows"]] + [stat("Index cond. vol", f"{lt['cond_vol']:.1%}"),
                                                               stat("ν", f"{lt['nu']:.1f}"),
-                                                              stat("Historical 122630 study · not current validation", lt.get("verdict", "not run"),
+                                                              ko_verdict(stat("Historical 122630 study · not current validation", lt.get("verdict", "not run"),
                                                                    token="muted",
-                                                                   tooltip=letf_text(lt) + " " + lt.get("verdict_reason", ""))], spacing=10, wrap=True))
+                                                                   tooltip=letf_text(lt) + " " + lt.get("verdict_reason", "")))],
+                                     spacing=12, run_spacing=12, wrap=True))
             elif lt:
-                blocks.append(notice(letf_unavailable_text(lt), "error"))
+                blocks.append(ko_notice(notice(letf_unavailable_text(lt), "error"), letf_unavailable_korean(lt)))
             sl = a.get("sleeves")
             if sl:
                 # §10 NEW-M6-04: an undefined Sharpe shows "n/a" and says why; NEW-M6-05: a defined one carries the
@@ -140,15 +212,18 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                     sharpe_stat("Trend switch Sharpe", "trend"), stat("Trend MDD", f"{sl['trend']['max_drawdown']:.0%}"),
                     sharpe_stat("Vol-target Sharpe", "vol_target"), sharpe_stat("Buy & hold Sharpe", "buy_hold"),
                     stat("B&H MDD", f"{sl['buy_hold']['max_drawdown']:.0%}"),
-                    stat("Study verdict: trend", a["verdicts"]["trend"], token="success" if a["verdicts"]["trend"] == "PASS" else "error",
-                         tooltip=a["verdict_reasons"]["trend"]),
-                    stat("Study verdict: vol target", a["verdicts"]["vol"], token="success" if a["verdicts"]["vol"] == "PASS" else "error",
-                         tooltip=a["verdict_reasons"]["vol"]),
-                ], spacing=10, wrap=True))
+                    ko_verdict(stat("Study verdict: trend", a["verdicts"]["trend"], token="success" if a["verdicts"]["trend"] == "PASS" else "error",
+                                    tooltip=a["verdict_reasons"]["trend"])),
+                    ko_verdict(stat("Study verdict: vol target", a["verdicts"]["vol"], token="success" if a["verdicts"]["vol"] == "PASS" else "error",
+                                    tooltip=a["verdict_reasons"]["vol"])),
+                ], spacing=12, run_spacing=12, wrap=True))
                 if conventions:
-                    blocks.append(notice(conventions, "accent"))
+                    blocks.append(ko_notice(notice(conventions, "accent"), conventions_korean(sl["conventions"])))
                 blocks.append(card(xc.equity_chart(a.get("sleeve_dates", a["dates"]), sl["equity_trend"], sl["equity_bh"],
-                                                   title=f"10-month trend switch vs buy-and-hold ({sl['cost_bps']:.0f} bp per side)")))
+                                                   title=f"10-month trend switch vs buy-and-hold ({sl['cost_bps']:.0f} bp per side)",
+                                                   labels=("10-month trend switch", "buy-and-hold"),
+                                                   labels_ko=("10개월 추세 전환", "매수 후 보유"),
+                                                   reading=_trend_reading(sl.get("conventions")))))
             comps = a.get("components") or []
             if comps:
                 top = sorted(comps, key=lambda c: -(c["weight_pct"] or 0))[:10]
@@ -156,7 +231,8 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                                              [ft.Text(f"{c['code']}  {c['name']}  {c['weight_pct']:.2f}%", size=12, color=pal.text)
                                               for c in top], spacing=3)))
             blocks.append(analysis_panel(page, kind="etf_structure", narrative=narrative(a),
-                                         payload_fn=lambda p=payload(a): p, deep_fn=insights.deep_analysis))
+                                         payload_fn=lambda p=payload(a): p, deep_fn=insights.deep_analysis,
+                                         sections=localized(narrative(a), korean(etf_korean, a))))
             host.controls = blocks; busy.visible = False; page.update()
 
         page.run_thread(worker)
@@ -167,13 +243,13 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                                  action=ft.Button("Open Settings", on_click=lambda e: on_open_settings()) if on_open_settings else None)]
     return ft.Column([
         section("ETF", subtitle="NAV premium, basket, leveraged-fund drag, sleeve rules."),
-        ft.Row([code, days, source, ft.Button("Analyze", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy], spacing=10, wrap=True),
-        ft.Row([benchmark, funding, fee, dividend], spacing=10, wrap=True),
+        form_row([code, days, source, action(ft.Button("Analyze", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy)]),
+        form_row([benchmark, funding, fee, dividend]),
         ft.Text("LETF inputs are annual continuous-rate assumptions, not live market observations. "
                 "Price-return comparison requires dividends; total-return already includes them. "
                 "The zero-rate reference preserves the previous calculation.", size=12, color=pal.muted),
         ft.Column([host], scroll=ft.ScrollMode.AUTO, expand=True),
-    ], spacing=14, expand=True)
+    ], spacing=16, expand=True)
 
 
 if __name__ == "__main__":

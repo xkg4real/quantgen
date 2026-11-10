@@ -3,6 +3,8 @@ Pinned Google Fonts ref38411257417e616c5d4daa1b9e91a3dbcebe1c2e:
 https://github.com/google/fonts/tree/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/gothica1
 Copyright HanYang I&C Co., Ltd.; SIL OFL1.1 in OFL-GothicA1.txt.
 Actual TrueType glyph hints and all11172Hangul syllables are preserved.
+Also registered with matplotlib (ui/qcharts.py, 2026-11-10) to draw Flet chart PNGs on the
+server; only rendered pixels reach the browser and the font file itself is not served.
 Missing symbols use the separate QG Symbols family derived from the existing
 Pretendard OTF; its OFL.txt and original license name records are preserved.
 No runtime download or OS font installation. Browser/Flet OTF stays unchanged.

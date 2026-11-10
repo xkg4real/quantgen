@@ -137,3 +137,13 @@ PER/EPS·업종·상장주수 필드 확인과 가격×상장주수 계산은 �
 ### 2026-11-07 네이티브 글꼴 교체
 
 Gothic A1(HanYang I&C)의 고정 Google Fonts ref `38411257417e616c5d4daa1b9e91a3dbcebe1c2e`를 QG Interface로 이름 변경·서브셋하여 동봉합니다. 한글11172자·400/500/600 실제굵기·TrueType 힌트를 보존합니다. [OFL-GothicA1.txt](../../assets/fonts/OFL-GothicA1.txt), 기존 기호 보충 원본의 OFL.txt, README의 출처·해시·재생성 명령과 내장 저작권 기록을 유지합니다. 별도 QG Symbols 가족을 사용하며 Flet OTF를 네이티브에 중복 등록하지 않습니다. 런타임 다운로드·OS 설치·권리자의 추천/제휴 주장은 없습니다. 전체 앱/시장자료의 권리 승인과 실제 Windows 디스플레이의 선명도 보장은 별개이며 기존 공개 준비 `BLOCKED`를 유지합니다.
+
+### 2026-11-10 소유자 UI 검토 14건
+
+Flet 서버의 matplotlib 차트가 동봉 QG Interface TTF 세 개(`qg-interface.ttf`, `qg-interface-medium.ttf`, `qg-interface-semibold.ttf`)를 등록해 한글을 그립니다([차트 글꼴](../../ui/qcharts.py) `_register_fonts`). 없는 글리프는 matplotlib에 동봉된 DejaVu Sans로 대체합니다. 이 TTF는 2026-11-07 절의 Gothic A1(HanYang I&C) 파생본이며 [OFL-GothicA1.txt](../../assets/fonts/OFL-GothicA1.txt)는 SIL OFL 1.1이고 Reserved Font Name을 두지 않습니다. 내장된 저작권·라이선스 이름 레코드를 유지합니다.
+
+OFL 5항은 글꼴로 만든 문서에 라이선스 유지 요건을 적용하지 않습니다. 차트를 PNG 픽셀로 만들어 브라우저에 보내는 사용은 이 범위로 판단했으며, 이 경로는 글꼴 파일을 브라우저에 보내거나 따로 배포하지 않습니다. [글꼴 기록](../../assets/fonts/README.txt)에 이 용도를 적었습니다. Flet 화면의 일반 글자는 기존 Pretendard 파생 OTF를 그대로 씁니다.
+
+새 패키지·글꼴·이미지 파일은 없습니다(`pyproject.toml`, `requirements.txt` 변경 없음). 곡선 방법은 기존 scipy(BSD-3-Clause) 함수만 씁니다. Strategy Lab 카드 설명의 SPY·KODEX·TIGER·삼성전자 등은 검증 대상을 가리키는 이름이며 로고나 제휴·보증 표시가 아닙니다. Yahoo 자료는 연구 화면 다섯 곳에서 키가 없을 때 자동 대체로 쓰이며 표시 권리는 `rights_replace` 그대로입니다([08번](08-third-parties.md)).
+
+OFL 판단은 법률 의견이 아닙니다. 실제 배포 패키지의 고지 포함 여부와 데이터 권리 승인은 별도로 확인하며 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)

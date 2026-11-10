@@ -128,7 +128,7 @@ class RatesRevaluationParamsTests(unittest.TestCase):
                     if model == "hull_white":
                         self.assertNotEqual(original.r0, output.report.params.r0)
                     captures = []
-                    def analysis(_page, *, kind, narrative, payload_fn):
+                    def analysis(_page, *, kind, narrative, payload_fn, sections=None):
                         captures.append((kind, narrative, payload_fn()))
                         return ft.Text(narrative)
                     with patch.object(rates_page, "load_short_rate", return_value=series), \

@@ -68,6 +68,14 @@ PER·EPS·업종·상장주수는 이미 호출하는 KIS `inquire-price` 응답
 
 기존 Anthropic 목적지·인증을 유지하고 계산 JSON의 전체 배열·의미가 있는 비유한 값 표기, 고정 작성 지시문·해당 시 값 표기 설명을 전송 범위에 명시합니다. 계산 JSON 180,000 UTF-8 바이트 초과·변환/인코딩 실패는 로컬에서 거부하며 정상 종료된 응답만 성공으로 받습니다. 한 번의 POST와 출력 예산 1,500은 계약·보존·학습 이용·요금·전체 요청 크기 보증이 아닙니다. 새 외부 제공자나 의존성 승인을 추가하지 않고 [현재 구현 한계](FACTS.md#ai-commentary-guards-2026-11-06)와 `NOT_VERIFIED`·공개 준비 `BLOCKED`를 유지합니다.
 
+### 2026-11-10 소유자 UI 검토 14건
+
+[07번](07-data-minimization.md) 절의 `source="best"` 때문에 Strategy Lab·Portfolio·Quant Lab·Signals·ETF는 FMP/KIS 키가 없을 때 일반 티커와 국내 6자리 코드를 Yahoo Finance(yfinance)에 자동으로 요청합니다. 전송 내용은 기존 인벤토리와 같이 종목 기호와 기간뿐이고, yfinance는 이력 요청 전에 Yahoo cookie/crumb도 요청합니다. 검토 환경에서는 Strategy Lab 실행 한 번에 SPY·QQQ·TLT·GLD 요청과 cookie/crumb 요청이 시도되었고, 프록시 차단으로 실패한 뒤 합성 시계열로 계산했습니다. 결과 화면은 응답한 제공처 이름을 칩으로 보이고 제공처 설명은 접힌 영역에 둡니다. Yahoo 시계열은 수정 종가(배당 반영)입니다. Yahoo 표시 권리는 [권리 목록](../../core/research/display_rights.json)의 `yahoo` `rights_replace`(계약된 공급처로 대체 필요) 그대로이며, 이 변경이 상업 표시나 재배포 권리를 확정하지 않습니다.
+
+Macro·Rates·FX·Bonds·Structuring은 기존 `auto` 경로(키 없이 FRED·Yahoo 중 해당 자료를 받고, 실패하면 표시된 합성 자료)를 씁니다. Derivatives는 KIS 키가 있으면 KIS 호가판, 없으면 합성 시연판을 고르고 Crypto는 기존 Upbit·Binance 공개 API를 씁니다. 모두 선택 상자만 숨겼습니다. 제공처 상태어는 확인한 범위만 말합니다. Macro 화면의 FRED/Yahoo 칩은 패키지 설치 여부라서 "설치됨/미설치"(중립색)로, KRX 화면은 키 존재라서 "키 설정됨/미설정"으로, Settings의 KIS 점검은 키가 없으면 "키 미설정(요청을 보내지 않음)", 그 밖의 실패는 "확인 실패"로 표시합니다. 실제로 응답한 제공처는 결과의 출처 칩이 말합니다.
+
+새 외부 서비스·SDK·패키지는 없습니다(`pyproject.toml`, `requirements.txt` 변경 없음). 곡선 방법은 기존 scipy(`CubicSpline`, `PchipInterpolator`, `least_squares`)만 씁니다. Anthropic 요청 대상, 전송 안내, 응답한 해설 엔진 표시는 그대로입니다. 분석 패널의 한국어 해설은 네이티브 앱의 기존 한국어 해설 함수로 로컬에서 만든 표시이며 외부로 보내지 않습니다. 실제 Yahoo·FRED·FMP·KIS 응답, 호출 한도, 상업 이용 조건은 이번 검토에서 확인하지 않았으며 `NOT_VERIFIED`, `review-required`, 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)
+
 ### 2026-11-11 파일럿 시계열 공급사 대조 도구(⑤-2)
 
 소유자 PC의 별도 클론에서만 실행하는 연구 도구 [`parity_check.py`](../../tools/provider_parity/parity_check.py)가 저장소 코드에 새 외부 목적지 넷을 더합니다: Coinbase Exchange 공개 일봉, Bitstamp 공개 일봉, 미국 재무부 일별 수익률 곡선 XML, 연준 H.15 Data Download Program. FMP·KIS 해외 일봉·Yahoo Finance(yfinance)·Binance 공개 일봉·FRED `fredgraph.csv`는 기존 목적지에 대한 이 도구 자체의 요청입니다. 앱 화면·자동 갱신·설치 wheel에는 들어가지 않고, 소유자가 명령을 줄 때만 공급사 하나씩 요청합니다. 전송 항목은 종목·시계열 식별자와 날짜 구간, FMP의 `FMP_API_KEY`(쿼리 문자열), KIS의 기존 토큰·앱 키 헤더이며 계좌·주문·사용자 입력은 보내지 않습니다. 받은 원자료·정규화 CSV·`detail.json`은 소유자 PC의 git 작업 트리 밖 새 폴더에만 두고, 커밋 대상인 `summary.json`은 개수·판정·10단위 구간·달력 날짜만 담습니다.

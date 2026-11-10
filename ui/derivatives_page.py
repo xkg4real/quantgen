@@ -26,27 +26,42 @@ from core.ficc.swaps import black76
 from core.quant import insights
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
-from ui.components import card, chip, empty_state, notice, section, stat
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.market_narrative_language import derivatives_korean
+from ui.components import card, empty_state, notice, number_field, parse_number, section, stat
+from ui.ficc_widgets import action, form_row, hide_source, ko_notice, ko_value, ko_verdict, lchip, with_helper
 import ui.xcharts as xc
 from core.research.derivatives_workflow import synthetic_board, snapshot, narrative, payload
-from core.research.quote_coverage import butterfly_display, quote_coverage_text
-from core.research.option_disclosure import box_tooltip, hedge_text, mfiv_strip, mfiv_text, same_vol
+from core.research.quote_coverage import butterfly_display, quote_coverage_text, quote_coverage_text_ko
+from core.research.option_disclosure import box_tooltip, hedge_korean, hedge_text, mfiv_strip, mfiv_text, same_vol
 
 _SOURCES = [("kis", "KIS live (KOSPI200 board)"), ("synthetic", "Synthetic demo board")]
 _ENGINES = [("gbm", "GBM at the ATM vol"), ("garch_t", "GARCH(1,1)-t on the index history")]
+# Workflow labels shown inside chips (core.research.derivatives_workflow), in Korean.
+_VALUE_KO = {"synthetic": "합성", "assumed": "가정", "DEMO": "시연용", "input": "직접 입력",
+             "CD 91d (KIS)": "CD 91일물 (KIS)"}
+
+
+def _vk(value) -> str:
+    return _VALUE_KO.get(str(value), str(value))
 
 
 def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -> ft.Control:
     pal = active()
-    source = ft.Dropdown(label="Board", width=260, value="kis" if config.kis_ready() else "synthetic",
-                         options=[ft.dropdown.Option(k, v) for k, v in _SOURCES])
-    expiry = ft.TextField(label="Expiry YYYYMM", hint_text="blank = nearest", width=150, border_radius=RADII["md"])
-    rate = ft.TextField(label="Rate % (blank = CD 91d)", width=170, border_radius=RADII["md"])
-    engine = ft.Dropdown(label="Hedge-sim engine", width=260, value="gbm",
+    # The app picks the board itself: KIS when its keys are set, else the
+    # labelled synthetic demo board. The selector stays for tests but is not shown.
+    board = "kis" if config.kis_ready() else "synthetic"
+    source = hide_source(ft.Dropdown(label="Board", width=260, value=board,
+                                     options=[ft.dropdown.Option(k, v) for k, v in _SOURCES]), board)
+    expiry = with_helper(ft.TextField(label="Expiry (YYYYMM)", hint_text="blank = nearest", width=170,
+                                      border_radius=RADII["md"]), "Blank = nearest expiry")
+    rate = with_helper(ft.TextField(label="Risk-free rate %", width=170, border_radius=RADII["md"],
+                                    text_align=ft.TextAlign.RIGHT), "Blank = CD 91-day rate")
+    engine = ft.Dropdown(label="Hedge-sim engine", width=300, value="gbm",
                          options=[ft.dropdown.Option(k, v) for k, v in _ENGINES])
-    paths = ft.TextField(label="Paths", value="3000", width=100, border_radius=RADII["md"])
+    paths = number_field("Paths", "3000", width=140)
     busy = ft.ProgressRing(visible=False, width=20, height=20)
-    host = ft.Column(spacing=14)
+    host = ft.Column(spacing=16)
 
     def run(e=None) -> None:
         busy.visible = True
@@ -55,9 +70,9 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
 
         def worker():
             try:
-                rp = float(rate.value) if (rate.value or "").strip() else None
+                rp = parse_number(rate.value) if (rate.value or "").strip() else None
                 s = snapshot(source=source.value or "kis", expiry=expiry.value or "", rate_pct=rp,
-                             engine=engine.value or "gbm", n_paths=int(float(paths.value or "3000")))
+                             engine=engine.value or "gbm", n_paths=int(parse_number(paths.value or "3000")))
             except (FICCError, ValueError) as exc:
                 host.controls = [notice(str(exc), "error", icon=ft.Icons.ERROR_OUTLINE)]
                 busy.visible = False; page.update(); return
@@ -72,39 +87,57 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
                 blocks.append(notice("Synthetic board: a smile-shaped demo chain, not market quotes.", "error",
                                      icon=ft.Icons.SCIENCE_OUTLINED))
             if not s.get("live_quotes", True):
-                blocks.append(notice(f"Market closed: these are the last prints of {s['session']}, struck at different moments, "
-                                     "not quotes. Checks requiring two-sided quotes remain NOT_RUN without sufficient coverage.",
-                                     "error", icon=ft.Icons.NIGHTLIGHT_OUTLINED))
-            blocks.append(ft.Row([chip(f"expiry {s['expiry']} → {s['expiry_date']}"), chip(f"as of {s['as_of']}"),
-                                  chip(f"prices of {s.get('session', '?')}"), chip(f"rate {s['rate']:.2%} ({s['rate_source']})"),
-                                  chip(f"{s['n_quotes']} strikes"),
-                                  chip(f"{len(s['points'])} {'quoted' if s.get('live_quotes', True) else 'last-print'} near-ATM", "accent")],
-                                 spacing=6, wrap=True))
+                blocks.append(ko_notice(notice(
+                    f"Market closed: these are the last prints of {s['session']}, struck at different moments, "
+                    "not quotes. Checks requiring two-sided quotes remain NOT_RUN without sufficient coverage.",
+                    "error", icon=ft.Icons.NIGHTLIGHT_OUTLINED),
+                    f"장 마감: {s['session']}의 마지막 체결가이며 서로 다른 시각에 체결된 값이라 호가가 아닙니다. "
+                    "매수·매도 양방향 호가가 필요한 점검은 호가가 충분하지 않으면 NOT_RUN으로 남습니다."))
+            quoted = s.get("live_quotes", True)
+            near = len(s['points'])
+            blocks.append(ft.Row([
+                lchip(f"만기 {_vk(s['expiry'])} → {s['expiry_date']}", f"expiry {s['expiry']} → {s['expiry_date']}"),
+                lchip(f"기준 {_vk(s['as_of'])}", f"as of {s['as_of']}"),
+                lchip(f"{_vk(s.get('session', '?'))} 가격", f"prices of {s.get('session', '?')}"),
+                lchip(f"금리 {s['rate']:.2%} ({_vk(s['rate_source'])})", f"rate {s['rate']:.2%} ({s['rate_source']})"),
+                lchip(f"행사가격 {s['n_quotes']}개", f"{s['n_quotes']} strikes"),
+                lchip(f"ATM 근처 {'호가' if quoted else '마지막 체결가'} {near}개",
+                      f"{near} {'quoted' if quoted else 'last-print'} near-ATM", "accent")],
+                spacing=8, wrap=True))
             blocks.append(ft.Row([
                 stat("Forward (parity)", f"{s['F']:.2f}"), stat("Front future", f"{s['futures']['price']:.2f}"),
                 stat("Basis (pts)", f"{b.basis_pts:+.2f}"), stat("Fair value", f"{b.fair:.2f}"),
                 stat("Mispricing", f"{b.mispricing_bp:+.0f} bp", token="error" if abs(b.mispricing_bp) > 20 else "text"),
                 stat("Implied funding", f"{b.implied_rate:.2%}"),
-                stat("KIS theo gap", f"{b.theo_gap_pts:+.2f} pts" if b.theo_gap_pts is not None else "n/a"),
-            ], spacing=10, wrap=True))
+                ko_value(stat("KIS theo gap", f"{b.theo_gap_pts:+.2f} pts"), f"{b.theo_gap_pts:+.2f} pt")
+                if b.theo_gap_pts is not None else stat("KIS theo gap", "n/a"),
+            ], spacing=12, run_spacing=12, wrap=True))
             blocks.append(ft.Row([
                 stat("ATM IV", f"{s['atm'].iv:.1%}"),
                 stat("MFIV", f"{s['mfiv'].get('vol', float('nan')):.1%}" if s["mfiv"].get("n_strikes") else "n/a",
                      tooltip=mfiv_text(strip) or "Model-free variance not computed"),
-                stat("MFIV strike range", f"{strip['lower_moneyness']:+.1%} / {strip['upper_moneyness']:+.1%} of F"
-                     if strip["status"] == "COMPUTED" else "n/a", token="muted",
+                ko_value(stat("MFIV strike range", f"{strip['lower_moneyness']:+.1%} / {strip['upper_moneyness']:+.1%} of F",
+                               token="muted",
+                               tooltip="Options outside this range are omitted; the omitted wings bias MFIV downward (truncated strip)."),
+                          f"F 대비 {strip['lower_moneyness']:+.1%} / {strip['upper_moneyness']:+.1%}")
+                if strip["status"] == "COMPUTED" else
+                stat("MFIV strike range", "n/a", token="muted",
                      tooltip="Options outside this range are omitted; the omitted wings bias MFIV downward (truncated strip)."),
-                stat("SVI ρ", f"{fit.rho:+.2f}"), stat("SVI RMSE", f"{fit.rmse_volpts:.2f} pts",
-                                                       token="error" if fit.rmse_volpts > 1.0 else "text"),
-                stat("IV gap vs KIS", f"{rec['median_volpts']:.2f} pts", token="success" if rec["ok"] else "error",
-                     tooltip="median |σ_app − σ_KIS| on quoted strikes within ±15 % of F; gate 0.5"),
-                stat("Butterfly viol.", butterfly_value, token=butterfly_token,
-                     tooltip=quote_coverage_text(s['quote_coverage'])),
+                stat("SVI ρ", f"{fit.rho:+.2f}"),
+                ko_value(stat("SVI RMSE", f"{fit.rmse_volpts:.2f} pts", token="error" if fit.rmse_volpts > 1.0 else "text"),
+                          f"{fit.rmse_volpts:.2f} %p"),
+                ko_value(stat("IV gap vs KIS", f"{rec['median_volpts']:.2f} pts", token="success" if rec["ok"] else "error",
+                               tooltip="median |σ_app − σ_KIS| on quoted strikes within ±15 % of F; gate 0.5"),
+                          f"{rec['median_volpts']:.2f} %p"),
+                ko_verdict(stat("Butterfly viol.", butterfly_value, token=butterfly_token,
+                                tooltip=quote_coverage_text(s['quote_coverage']))),
                 stat("Box rate (quote check)", f"{s['box']['rate']:.2%}" if s["box"] else "n/a", tooltip=box_tooltip(s)),
                 stat("RND ∫", f"{s['rnd']['integral']:.3f}"),
-            ], spacing=10, wrap=True))
-            blocks.append(notice(quote_coverage_text(s['quote_coverage']), "accent"))
-            blocks.append(card(xc.smile_chart(s["points"], fit, s["F"], title=f"KOSPI200 {s['expiry']} smile")))
+            ], spacing=12, run_spacing=12, wrap=True))
+            blocks.append(ko_notice(notice(quote_coverage_text(s['quote_coverage']), "accent"),
+                                    quote_coverage_text_ko(s['quote_coverage'])))
+            blocks.append(card(xc.smile_chart(s["points"], fit, s["F"], title=f"KOSPI200 {s['expiry']} smile",
+                                              title_ko=f"KOSPI200 {_vk(s['expiry'])} 변동성 스마일")))
             p_samples = None
             if s.get("garch") is not None:
                 from core.quant.garch import simulate_returns
@@ -125,12 +158,13 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
                      tooltip="GBM engine: equals σ_h by construction, up to Monte Carlo noise" if same_vol(s) else ""),
                 stat("Identity slope / R²", f"{sim.identity_slope:.2f} / {sim.identity_r2:.2f}"),
                 stat("Engine", sim.engine),
-            ], spacing=10, wrap=True))
+            ], spacing=12, run_spacing=12, wrap=True))
             hedge_note = hedge_text(s)
             if hedge_note:
-                blocks.append(notice(hedge_note, "accent"))
+                blocks.append(ko_notice(notice(hedge_note, "accent"), hedge_korean(s)))
             blocks.append(analysis_panel(page, kind="kospi200_derivatives", narrative=narrative(s),
-                                         payload_fn=lambda p=payload(s): p, deep_fn=insights.deep_analysis))
+                                         payload_fn=lambda p=payload(s): p, deep_fn=insights.deep_analysis,
+                                         sections=localized(narrative(s), korean(derivatives_korean, s))))
             host.controls = blocks
             busy.visible = False
             page.update()
@@ -146,10 +180,10 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
                                  if on_open_settings else None)]
     return ft.Column([
         section("Derivatives", subtitle="KOSPI200 futures basis, option surface, risk-neutral density, box rate, hedge P&L."),
-        ft.Row([source, expiry, rate, engine, paths, ft.Button("Load", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy],
-               spacing=10, wrap=True),
+        form_row([source, expiry, rate, engine, paths,
+                  action(ft.Button("Load", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy)]),
         ft.Column([host], scroll=ft.ScrollMode.AUTO, expand=True),
-    ], spacing=14, expand=True)
+    ], spacing=16, expand=True)
 
 
 if __name__ == "__main__":

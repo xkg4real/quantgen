@@ -23,7 +23,10 @@ from core.theme import RADII, active
 from ui import fcharts
 from ui.localization import table_header, literal_text
 from ui.ai_panel import analysis_panel
-from ui.components import card, chip, empty_state, notice, section, stat
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.bonds_portfolio_narrative import bond_korean, hedge_text
+from ui.components import card, empty_state, notice, number_field, parse_number, section, stat
+from ui.ficc_widgets import action, form_row, hide_source, ko_notice, ko_stat, lchip, synthetic_notice, with_helper
 
 _SCENARIO_HEADERS_KO = {'Scenario': '시나리오', 'Shock': '금리 충격', 'New price': '새 가격',
                         'P&L': '손익', 'P&L %': '손익률 %'}
@@ -45,7 +48,7 @@ def _num(field: ft.TextField, default: Optional[float] = None) -> Optional[float
     if not raw:
         return default
     try:
-        v = float(raw)
+        v = parse_number(raw)
     except ValueError:
         v = float("nan")
     if not math.isfinite(v):                      # rejects 'abc', 'nan', 'inf', '1e400'
@@ -64,32 +67,36 @@ def build_bonds_page(page: ft.Page,
                      on_open_settings: Optional[Callable] = None) -> ft.Control:
     pal = active()
 
-    coupon = ft.TextField(label="Coupon %", width=110, value="4.50",
-                          border_radius=RADII["md"])
-    maturity = ft.TextField(label="Maturity (years)", width=140, value="10",
-                            border_radius=RADII["md"])
-    freq = ft.Dropdown(label="Coupons / year", width=150, value="2",
+    def num(label: str, value: str = "", width: int = 140, **kw) -> ft.TextField:
+        """A small number (percent, years, ratio): plain, right-aligned like every number."""
+        return ft.TextField(label=label, value=value, width=width, border_radius=RADII["md"],
+                            text_align=ft.TextAlign.RIGHT, **kw)
+
+    coupon = num("Coupon %", "4.50", 120)
+    maturity = num("Maturity (years)", "10", 120)
+    freq = ft.Dropdown(label="Coupons / year", width=180, value="2",
                        options=[ft.dropdown.Option(k, v) for k, v in _FREQS])
-    price = ft.TextField(label="Price (per 100)", width=140, hint_text="blank = from yield",
-                         border_radius=RADII["md"])
-    ytm = ft.TextField(label="Yield %", width=120, value="4.50", hint_text="blank = from price",
-                       border_radius=RADII["md"])
-    notional = ft.TextField(label="Notional", width=140, value="1000000",
-                            border_radius=RADII["md"])
-    source = ft.Dropdown(label="Curve source", width=240, value="auto",
-                         options=[ft.dropdown.Option(k, v) for k, v in _SOURCES])
-    ctd_dv01 = ft.TextField(label="CTD DV01 / contract", width=170, value="65",
-                            border_radius=RADII["md"])
-    cf = ft.TextField(label="Conversion factor", width=150, value="0.8",
-                      border_radius=RADII["md"])
-    pos_dv01 = ft.TextField(label="Position DV01 (blank = calculator)", width=250,
-                            border_radius=RADII["md"])
-    hedge_row = ft.Row([ctd_dv01, cf, pos_dv01], spacing=10, wrap=True, visible=False)
+    # Quote by price or by yield: the helper line says which blank means what.
+    price = with_helper(num("Price (per 100)", width=160, hint_text="blank = from yield"),
+                        "Blank = from yield")
+    ytm = with_helper(num("Yield %", "4.50", 160, hint_text="blank = from price"), "Blank = from price")
+    notional = number_field("Notional", "1000000", width=160)
+    # The app fetches the UST curve itself (FRED, else a labelled synthetic
+    # curve); the selector stays for tests and self-checks but is not shown.
+    source = hide_source(ft.Dropdown(label="Curve source", width=240, value="auto",
+                                     options=[ft.dropdown.Option(k, v) for k, v in _SOURCES]), "auto")
+    ctd_dv01 = number_field("CTD DV01 / contract", "65", width=180)
+    cf = num("Conversion factor", "0.8", 160)
+    pos_dv01 = with_helper(number_field("Position DV01", width=180), "Blank = from the calculator")
+    hedge_fields = (ctd_dv01, cf, pos_dv01)          # shown only for the futures hedge
+    for f in hedge_fields:
+        f.visible = False
     busy = ft.ProgressRing(visible=False, width=20, height=20)
-    result_host = ft.Column(spacing=14)
+    result_host = ft.Column(spacing=16)
 
     def on_tool(e=None) -> None:
-        hedge_row.visible = tool.value == "hedge"
+        for f in hedge_fields:
+            f.visible = tool.value == "hedge"
         page.update()
 
     tool = ft.Dropdown(label="Tool", width=200, value="calc", on_select=on_tool,
@@ -124,14 +131,19 @@ def build_bonds_page(page: ft.Page,
                 synthetic = panel.source == "SYNTHETIC"
                 blocks: list[ft.Control] = []
                 if synthetic:
-                    blocks.append(notice("Synthetic data: " + panel.note, "error",
-                                         icon=ft.Icons.SCIENCE_OUTLINED))
+                    blocks.append(synthetic_notice(
+                        "합성 데이터: 금리 곡선을 FRED에서 받지 못해 시뮬레이션한 곡선으로 계산했습니다. "
+                        "아래 숫자는 계산 방식의 시연이며 시장 시세가 아닙니다.",
+                        "Synthetic data: the curve is simulated because FRED did not answer; every number "
+                        "below is a demonstration of the mechanics, not a market read.", panel.note))
+                source_ko = "합성 데이터" if synthetic else curve.source
                 blocks.append(ft.Row([
-                    chip(f"curve: {curve.source} {curve.date}", "muted" if synthetic else "success"),
-                    chip(f"{curve.method}, {len(panel)} sessions"),
-                    chip(f"{bond.freq}x coupons"),
-                    chip(f"notional {_money(bond.notional)}"),
-                ], spacing=6, wrap=True))
+                    lchip(f"곡선 출처: {source_ko} · 기준일 {curve.date}",
+                          f"curve: {curve.source} {curve.date}", "muted" if synthetic else "success"),
+                    lchip(f"{curve.method}, {len(panel)}거래일", f"{curve.method}, {len(panel)} sessions"),
+                    lchip(f"연 {bond.freq}회 이자 지급", f"{bond.freq}x coupons"),
+                    lchip(f"명목금액 {_money(bond.notional)}", f"notional {_money(bond.notional)}"),
+                ], spacing=8, wrap=True))
                 blocks.append(ft.Row([
                     stat("Price", f"{a.price:.3f}"),
                     stat("Yield", pct_text(a.ytm, decimals=3)),
@@ -140,8 +152,10 @@ def build_bonds_page(page: ft.Page,
                     stat("Convexity", f"{a.convexity:.1f}"),
                     stat("DV01", _money(a.dv01), tooltip="Currency per bp, positive for a long"),
                     stat("z-spread", bp_text(a.z_spread), tooltip=f"Curve price {a.curve_price:.3f}"),
-                ], spacing=10, wrap=True))
+                ], spacing=12, run_spacing=12, wrap=True))
                 narrative = insights.narrate_bond(a, rows)
+                bond_text = narrative           # the bond read alone; the hedge tool appends its sentence
+                extra = []
                 payload = {
                     "tool": kind, "data_source": panel.source,
                     "bond": {"coupon": bond.coupon, "maturity": bond.maturity, "freq": bond.freq,
@@ -158,15 +172,16 @@ def build_bonds_page(page: ft.Page,
                 }
                 if kind == "calc":
                     blocks.append(ft.Row([
-                        stat(f"Carry ({tenor_label(cr.horizon)})", f"{cr.carry:+.3f}",
-                             token="success" if cr.carry >= 0 else "error"),
+                        ko_stat(stat(f"Carry ({tenor_label(cr.horizon)})", f"{cr.carry:+.3f}",
+                                     token="success" if cr.carry >= 0 else "error"),
+                                f"캐리 ({tenor_label(cr.horizon)})"),
                         stat("Roll-down", f"{cr.rolldown:+.3f}",
                              token="success" if cr.rolldown >= 0 else "error"),
                         stat("Carry + roll", f"{cr.total:+.3f}",
                              token="success" if cr.total >= 0 else "error"),
                         stat("Breakeven", f"{cr.breakeven_bp:+.1f}bp",
                              tooltip="Yield rise that wipes out carry + roll"),
-                    ], spacing=10, wrap=True))
+                    ], spacing=12, run_spacing=12, wrap=True))
                     blocks.append(card(fcharts.price_yield_chart(bond, a.ytm)))
                     blocks.append(card(fcharts.krd_chart(
                         a.krd, title=f"Key-rate DV01, z-spread {bp_text(a.z_spread)} held")))
@@ -177,7 +192,7 @@ def build_bonds_page(page: ft.Page,
                              token="error"),
                         stat("Best", f"{best.name}: {_money(best.pnl, signed=True)}",
                              token="success"),
-                    ], spacing=10, wrap=True))
+                    ], spacing=12, run_spacing=12, wrap=True))
                     blocks.append(card(fcharts.scenario_chart(rows)))
                     table = ft.DataTable(
                         columns=[ft.DataColumn(table_header(h, ko=_SCENARIO_HEADERS_KO.get(h), size=11)) for h in
@@ -202,21 +217,29 @@ def build_bonds_page(page: ft.Page,
                         stat("Futures DV01", f"{ctd / c:,.2f}", tooltip="CTD DV01 / CF"),
                         stat("Contracts to sell", f"{n:,.2f}", token="accent"),
                         stat("Rounded", f"{round(n):,d}"),
-                    ], spacing=10, wrap=True))
-                    blocks.append(notice(
+                    ], spacing=12, run_spacing=12, wrap=True))
+                    residual = _money(pos - round(n) * ctd / c, signed=True)
+                    blocks.append(ko_notice(notice(
                         f"contracts = position DV01 x CF / CTD DV01 = {_money(pos)} x {c:.4f} / "
                         f"{ctd:,.2f} = {n:,.2f}. Sell that many to flatten a long position; the "
-                        f"residual after rounding is {_money(pos - round(n) * ctd / c, signed=True)}"
-                        f" per bp.", "muted", icon=ft.Icons.INFO_OUTLINE))
-                    narrative += (f" Hedging {_money(pos)} per bp of DV01 with a future whose CTD "
-                                  f"has DV01 {ctd:,.2f} per contract and conversion factor "
-                                  f"{c:.4f} takes {n:,.2f} contracts sold ({round(n):,d} rounded).")
+                        f"residual after rounding is {residual}"
+                        f" per bp.", "muted", icon=ft.Icons.INFO_OUTLINE),
+                        f"계약 수 = 포지션 DV01 × 전환계수 / CTD DV01 = {_money(pos)} × {c:.4f} / "
+                        f"{ctd:,.2f} = {n:,.2f}. 매수 포지션의 금리 위험을 없애려면 이만큼 매도합니다. "
+                        f"반올림 후 남는 위험은 1bp당 {residual}입니다."))
+                    hedge_en = (f"Hedging {_money(pos)} per bp of DV01 with a future whose CTD "
+                                f"has DV01 {ctd:,.2f} per contract and conversion factor "
+                                f"{c:.4f} takes {n:,.2f} contracts sold ({round(n):,d} rounded).")
+                    narrative += " " + hedge_en
+                    extra = [(("선물 헤지", "Futures hedge"), hedge_text(hedge, "ko").splitlines(), [hedge_en])]
                     payload["hedge"] = {"position_dv01": pos, "ctd_dv01_per_contract": ctd,
                                         "conversion_factor": c, "contracts": n}
                 if a.note:
                     blocks.append(notice(a.note, "muted", icon=ft.Icons.INFO_OUTLINE))
                 blocks.append(analysis_panel(page, kind=f"bond_{kind}", narrative=narrative,
-                                             payload_fn=lambda p=payload: p))
+                                             payload_fn=lambda p=payload: p,
+                                             sections=localized(bond_text, korean(bond_korean, a, rows or ()),
+                                                                extra=extra)))
                 result_host.controls = blocks
                 busy.visible = False
                 page.update()
@@ -237,12 +260,10 @@ def build_bonds_page(page: ft.Page,
         section("Bonds", subtitle="Price, yield, duration and convexity; key-rate DV01s, "
                                   "z-spread and carry/roll off the UST curve; curve "
                                   "scenarios; a Treasury-futures hedge."),
-        ft.Row([tool, coupon, maturity, freq, price, ytm, notional, source,
-                ft.Button("Run", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy],
-               spacing=10, wrap=True),
-        hedge_row,
+        form_row([tool, coupon, maturity, freq, price, ytm, notional, source, *hedge_fields,
+                  action(ft.Button("Run", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy)]),
         ft.Column([result_host], scroll=ft.ScrollMode.AUTO, expand=True),
-    ], spacing=14, expand=True)
+    ], spacing=16, expand=True)
 
 
 # --------------------------------------------------------------------------- #
@@ -254,7 +275,8 @@ if __name__ == "__main__":
     def walk(c):
         yield c
         for attr in ("controls", "rows", "cells", "columns"):
-            for child in getattr(c, attr, None) or []:
+            kids = getattr(c, attr, None)
+            for child in kids if isinstance(kids, (list, tuple)) else []:   # ResponsiveRow.columns is a number
                 yield from walk(child)
         for attr in ("content", "label"):
             child = getattr(c, attr, None)

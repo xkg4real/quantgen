@@ -6,6 +6,11 @@ lifecycle record per run and a family-wide TOTAL. It classifies no trial, builds
 no experiment key, counts no N_raw or N_eff, reads no ledger and changes no
 verdict. Nothing consumes its output yet (shadow only, Q17).
 
+Two questions that fold/1 left open were decided by the owner on 2026-11-11
+(rulings 8 and 9; child fold/2 records them and changes no behaviour). Ruling
+8: OPEN runs stay in TOTAL (3.12) and are also reported separately. Ruling 9:
+the orphan rule below is kept as it is, not made fail closed.
+
 Chain-trust boundary. The fold does not trust the order the caller supplies. It
 re-encodes every event to its canonical line and verifies the lines with
 ``run_registry_codec.verify_event_lines`` from the first line of segment 0
@@ -29,10 +34,16 @@ PROGRESS are flagged and never lower the effective status: a last PROGRESS stage
 that differs from ``stage_reached`` is STATUS_STAGE_CONFLICT, and no PROGRESS at
 or above ``stage_reached`` (the page's closing PROGRESS) is PROGRESS_MISSING.
 An orphan's stage is its last PROGRESS stage even when an outage record names
-it (design 5.6); see the product record's open question. The fold's own code
-performs no I/O and reads no clock, environment, configuration or random source.
-The codec it calls parses times with ``datetime.strptime``, whose standard-library
-cache may call ``time.tzset`` when it is first built in a process.
+it (design 5.6), so an outage-named orphan whose last PROGRESS is below
+PNL_COMPUTED folds to FAILED_BEFORE_STATS with no keys (kept by ruling 9). This
+under-counts nothing only while the recorder writes no in-run PROGRESS below
+PNL_COMPUTED inside ``run_family``; if a recorder unit needs one, the question
+returns to the owner first.
+
+The fold's own code performs no I/O and reads no clock, environment,
+configuration or random source. The codec it calls parses times with
+``datetime.strptime``, whose standard-library cache may call ``time.tzset`` when
+it is first built in a process.
 """
 from collections.abc import Mapping
 from dataclasses import dataclass
@@ -99,7 +110,8 @@ class RunRecord:
 class Fold:
     """The fold of one chain prefix at one ``as_of``.
 
-    ``total_by_family`` counts STARTED events, OPEN runs included (3.12).
+    ``total_by_family`` counts STARTED events, OPEN runs included (3.12; owner
+    ruling 8 of 2026-11-11). OPEN runs are also reported on their own:
     ``open_by_family`` lists every family of the prefix, zero when none is open.
     Both are read-only mappings sorted by family ID. ``tail_line_md5`` is the MD5
     of the last folded line, the ``prev_row_md5`` the next event would carry.
