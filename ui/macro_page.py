@@ -1,7 +1,7 @@
 """Macro — a view selector over the cross-asset sheet and the v2 overlay state.
 
-"Macro sheet" (default): pick a source, press Refresh, and the page shows the
-descriptive-read chips (a descriptive read, not a regime model, P19), the headline levels, the indicator table (last, 1d/1w/1m changes, 1y z-score
+"Macro sheet" (default): press Refresh (the source is chosen automatically) and the page shows the
+labelled descriptive-read summary (a descriptive read, not a regime model, P19), the headline levels, the indicator table (last, 1d/1w/1m changes, 1y z-score
 and percentile), the z-score chart, and an analysis card. "Daily market
 commentary" and "Weekly rates and FX note" swap that card for the report's
 local narrative and a deep-analysis panel with the matching `kind`, routed
@@ -18,6 +18,7 @@ with its own Refresh; all four share the app's 180 ms switcher.
 """
 from __future__ import annotations
 
+import re
 from typing import Callable, Optional
 
 import flet as ft
@@ -27,9 +28,11 @@ import config
 from core.ficc import insights
 from core.ficc.common import BP, FICCError
 from core.ficc.macro import DESCRIPTIVE_READ_NOTE, MacroRow, MacroSheet, Regime, daily_brief, macro_sheet, weekly_brief
-from core.theme import TRANSITION_MS, active
+from core.theme import RADII, TRANSITION_MS, active
 from ui.ai_panel import analysis_panel
-from ui.components import card, chip, empty_state, notice, section, stat
+from ui.charts_terms import (CURVE_WORDS, DOLLAR_WORDS, GROUP_NAMES, INDICATOR_NAMES, INFLATION_WORDS, REAL_WORDS,
+                             RISK_WORDS, SHORT_NAMES, LocalTip, local_chip, local_notice, name, regime_evidence)
+from ui.components import LocalText, card, chip, empty_state, notice, section
 import ui.fcharts as fcharts
 from ui.macro_cards_view import build_cards_view
 from ui.macro_state_panel import build_overlay_view
@@ -76,36 +79,94 @@ def _chg(r: MacroRow, chg: float | None) -> str:
     return f"{chg:+.2f}"
 
 
-def read_row(rg: Regime) -> ft.Row:
-    """The rule-based read of the sheet, captioned as what it is (rulings 3.9; P19). Feeds nothing."""
+_READ_ITEMS = (  # (Regime field, label shown, evidence key, word table)
+    ("curve", "Yield curve (20 sessions)", "curve", CURVE_WORDS),
+    ("risk", "Risk appetite", "risk", RISK_WORDS),
+    ("dollar", "Dollar", "dollar", DOLLAR_WORDS),
+    ("inflation", "Inflation expectations (1 month)", "inflation", INFLATION_WORDS),
+    ("real_rates", "Real yields (1 month)", "real", REAL_WORDS),
+)
+
+
+def _heading(text: str) -> ft.Text:
+    return ft.Text(text, size=15, weight=ft.FontWeight.W_600, color=active().text)
+
+
+def read_row(rg: Regime) -> ft.Control:
+    """The rule-based read of the sheet as a labelled summary, captioned as what it is (rulings 3.9; P19).
+
+    Each term carries its plain meaning and the numbers the core printed in `Regime.summary`; the
+    full summary sentence stays one click away. Feeds nothing."""
     pal = active()
-    return ft.Row([
-        ft.Text(DESCRIPTIVE_CAPTION, size=11, color=pal.muted),
-        chip(f"curve: {rg.curve}", "accent"),
-        chip(f"risk: {rg.risk}", _REGIME_TOKEN.get(rg.risk, "accent")),
-        chip(f"dollar: {rg.dollar}", "accent"),
-        chip(f"breakevens: {rg.inflation}", "accent"),
-        chip(f"real yields: {rg.real_rates}", "accent"),
-    ], spacing=6, wrap=True)
+    evidence = regime_evidence(rg.summary)
+    items = []
+    for field, label, key, words in _READ_ITEMS:
+        value = getattr(rg, field)
+        word_ko, mean_ko, mean_en = words.get(value, (value, "", ""))
+        token = _REGIME_TOKEN.get(value, "text") if field == "risk" else "text"
+        body = [ft.Text(label, size=12, color=pal.muted),
+                LocalText(word_ko, value, size=16, weight=ft.FontWeight.W_600, color=getattr(pal, token))]
+        if mean_ko:
+            body.append(LocalText(mean_ko, mean_en, size=12, color=pal.text))
+        if key in evidence:
+            body.append(LocalText(*evidence[key], size=12, color=pal.muted))
+        items.append(ft.Container(ft.Column(body, spacing=4), padding=12, bgcolor=pal.surface_2,
+                                  border=ft.Border.all(1, pal.border), border_radius=12,
+                                  col={"xs": 12, "sm": 6, "lg": 4}))
+    detail = ft.ExpansionTile(
+        title=ft.Text("Rule calculation (original summary)", size=12, color=pal.muted),
+        controls=[ft.Text(rg.summary, size=12, color=pal.muted, selectable=True)],
+        expanded=False, tile_padding=ft.Padding(0, 0, 0, 0))
+    return ft.Column([
+        ft.Text(DESCRIPTIVE_CAPTION, size=12, color=pal.muted),
+        ft.ResponsiveRow(items, spacing=12, run_spacing=12),
+        detail,
+    ], spacing=8)
+
+
+_SOURCE_NAMES = {"FRED": ("FRED", "FRED"), "YFINANCE": ("Yahoo", "YFINANCE"), "SYNTHETIC": ("합성", "SYNTHETIC")}
+
+
+def _synthetic_notice(sheet: MacroSheet) -> ft.Control:
+    """The loud synthetic-data notice, in both languages; the English text is the core's own note."""
+    ids = ", ".join(sheet.synthetic_ids)
+    ko = (f"합성 데이터 사용 중: 지표 {len(sheet.rows)}개 중 {len(sheet.synthetic_ids)}개가 실제 관측이 아닌 "
+          f"합성 시계열입니다 ({ids}). 차트에서는 빗금 막대로 표시됩니다.")
+    short = re.search(r"Shortest series has (\d+) obs", sheet.note or "")
+    if short:
+        ko += f" 가장 짧은 시계열이 {short.group(1)}개 관측이라 z-점수·백분위는 252개보다 적은 관측으로 계산했습니다."
+    return local_notice(ko, "Synthetic data: " + sheet.note, "error", icon=ft.Icons.SCIENCE_OUTLINED)
 
 
 def build_macro_page(page: ft.Page,
                      on_open_settings: Optional[Callable] = None) -> ft.Control:
     pal = active()
-    source = ft.Dropdown(label="Data source", width=300, value="auto",
+    # The source is chosen automatically (owner decision 2026-11-10: no data-source selector on screens).
+    # The control stays, hidden, so tests and self-checks can still pick "synthetic".
+    source = ft.Dropdown(label="Data source", width=300, value="auto", visible=False,
                          options=[ft.dropdown.Option(k, v) for k, v in _SOURCES])
     busy = ft.ProgressRing(visible=False, width=20, height=20)
-    result_host = ft.Column(spacing=14)
+    result_host = ft.Column(spacing=16)
     analysis_host = ft.Column(spacing=14)
 
-    def provider_bar() -> ft.Control:
-        chips = [chip(f"{s['id']}: " + ("ready" if s.get("ready") else "not installed"),
-                      "success" if s.get("ready") else "muted", tooltip=s.get("note", ""))
-                 for s in config.ficc_provider_status()]
-        return ft.Row(chips, spacing=6, wrap=True)
+    def provider_bar() -> list[ft.Control]:
+        out = []
+        for s in config.ficc_provider_status():
+            label = {"fred": "FRED", "yfinance": "Yahoo"}.get(s["id"], s["id"])
+            ready = bool(s.get("ready"))
+            out.append(local_chip(f"{label} " + ("사용 가능" if ready else "미설치"),
+                                  f"{s['id']}: " + ("ready" if ready else "not installed"),
+                                  "success" if ready else "muted", tooltip=s.get("note", "")))
+        return out
 
     def cell(text: str, *, token: str = "text") -> ft.DataCell:
-        return ft.DataCell(literal_text(text, size=11, color=getattr(pal, token)))
+        return ft.DataCell(literal_text(text, size=12, color=getattr(pal, token)))
+
+    def named(table: dict, key: str, fallback: str, *, token: str = "text") -> ft.DataCell:
+        """Authored Korean/English name for a known id or group; anything else is shown as it came."""
+        if key not in table:
+            return cell(fallback, token=token)
+        return ft.DataCell(LocalText(*table[key], size=12, color=getattr(pal, token)))
 
     def sign_token(x: float | None) -> str:
         return "text" if not x else ("success" if x > 0 else "error")
@@ -114,7 +175,7 @@ def build_macro_page(page: ft.Page,
         rows = []
         for r in sheet.rows:
             rows.append(ft.DataRow(cells=[
-                cell(r.group, token="muted"), cell(r.label),
+                named(GROUP_NAMES, r.group, r.group, token="muted"), named(INDICATOR_NAMES, r.id, r.label),
                 cell(_level(r)),
                 cell(_chg(r, r.chg_1d), token=sign_token(r.chg_1d)),
                 cell(_chg(r, r.chg_1w), token=sign_token(r.chg_1w)),
@@ -122,14 +183,25 @@ def build_macro_page(page: ft.Page,
                 cell(_chg(r, r.chg_3m), token=sign_token(r.chg_3m)),
                 cell(f"{r.z_1y:+.2f}", token="error" if abs(r.z_1y) >= 2 else "text"),
                 cell(f"{r.pct_1y * 100:.0f}%"),
-                cell(r.source, token="error" if r.source == "SYNTHETIC" else "muted"),
+                named(_SOURCE_NAMES, r.source, r.source, token="error" if r.source == "SYNTHETIC" else "muted"),
             ]))
         dt = ft.DataTable(
-            columns=[ft.DataColumn(table_header(c, ko=_HEADERS_KO.get(c), size=11, color=pal.muted),
+            columns=[ft.DataColumn(table_header(c, ko=_HEADERS_KO.get(c), size=12, color=pal.muted),
                                    numeric=i >= 2 and c != "Source")
                      for i, c in enumerate(_COLUMNS)],
-            rows=rows, column_spacing=16, heading_row_height=34, data_row_max_height=32)
+            rows=rows, column_spacing=16, heading_row_height=36, data_row_max_height=34)
         return ft.Row([dt], scroll=ft.ScrollMode.AUTO)
+
+    def tile(r: MacroRow) -> ft.Control:
+        token = "error" if abs(r.z_1y) >= 2 else "text"
+        chg = _chg(r, r.chg_1d)
+        return LocalTip(
+            ft.Column([LocalText(*name(SHORT_NAMES, r.id, r.label), size=12, color=pal.muted),
+                       literal_text(_level(r), size=16, weight=ft.FontWeight.W_600, color=getattr(pal, token))],
+                      spacing=2),
+            padding=ft.Padding(14, 10, 14, 10), bgcolor=pal.surface_2, border=ft.Border.all(1, pal.border),
+            border_radius=RADII["md"],
+            tips=(f"1일 변화 {chg} · 1년 z-점수 {r.z_1y:+.2f}", f"1d {chg} · z (1y) {r.z_1y:+.2f}"))
 
     def sheet_analysis(sheet: MacroSheet) -> ft.Control:
         payload = daily_brief(sheet)
@@ -146,9 +218,14 @@ def build_macro_page(page: ft.Page,
             text, payload = insights.narrate_weekly_strategy(sheet), weekly_brief(sheet)
         prompt = insights.report_prompt(kind)
         analysis_host.controls = [
-            ft.Row([ft.Text(title, size=15, weight=ft.FontWeight.W_600, color=pal.text),
-                    chip(f"kind: {kind}", "accent"), chip(sheet.as_of)], spacing=8, wrap=True),
-            ft.Text("Deep-analysis format: " + prompt, size=11, color=pal.muted),
+            ft.Row([_heading(title), chip(sheet.as_of)], spacing=8, wrap=True,
+                   vertical_alignment=ft.CrossAxisAlignment.CENTER),
+            ft.ExpansionTile(
+                title=ft.Text("Deep-analysis format (instructions sent with a deep analysis)", size=12,
+                              color=pal.muted),
+                controls=[ft.Text(f"kind: {kind}", size=12, color=pal.muted, selectable=True),
+                          ft.Text("Deep-analysis format: " + prompt, size=12, color=pal.muted, selectable=True)],
+                expanded=False, tile_padding=ft.Padding(0, 0, 0, 0)),
             analysis_panel(page, kind=kind, narrative=text, payload_fn=lambda p=payload: p,
                            deep_fn=insights.deep_analysis),
         ]
@@ -157,24 +234,28 @@ def build_macro_page(page: ft.Page,
     def render(sheet: MacroSheet) -> list[ft.Control]:
         blocks: list[ft.Control] = []
         if sheet.synthetic_ids:
-            blocks.append(notice("Synthetic data: " + sheet.note, "error",
-                                 icon=ft.Icons.SCIENCE_OUTLINED))
+            blocks.append(_synthetic_notice(sheet))
         elif sheet.note:
             blocks.append(notice(sheet.note, "muted"))
         rg = sheet.regime
-        blocks.append(ft.Row([chip(f"as of {sheet.as_of}")]
-                             + [chip(f"{src}: {n}", "error" if src == "SYNTHETIC" else "success")
-                                for src, n in sheet.sources.items()], spacing=6, wrap=True))
+        provenance = [local_chip(f"기준일 {sheet.as_of}", f"as of {sheet.as_of}")]
+        for src, n in sheet.sources.items():
+            ko_src, en_src = _SOURCE_NAMES.get(src, (src, src))
+            provenance.append(local_chip(f"{ko_src} {n}개 지표", f"{en_src}: {n}",
+                                         "error" if src == "SYNTHETIC" else "success"))
+        blocks.append(ft.Row([ft.Text("Data", size=12, color=pal.muted)] + provenance, spacing=6, wrap=True,
+                             vertical_alignment=ft.CrossAxisAlignment.CENTER))
+        blocks.append(_heading("Market summary"))
         blocks.append(read_row(rg))
-        blocks.append(ft.Text(rg.summary, size=12, color=pal.muted, selectable=True))
-        tiles = [stat(r.label, _level(r), tooltip=f"1d {_chg(r, r.chg_1d)}, z {r.z_1y:+.2f}",
-                      token="error" if abs(r.z_1y) >= 2 else "text")
-                 for r in (sheet.row(i) for i in _HEADLINE) if r is not None]
-        blocks.append(ft.Row(tiles, spacing=10, wrap=True))
-        blocks.append(table(sheet))
+        tiles = [tile(r) for r in (sheet.row(i) for i in _HEADLINE) if r is not None]
+        blocks.append(_heading("Key levels"))
+        blocks.append(ft.Row(tiles, spacing=10, run_spacing=10, wrap=True))
         blocks.append(card(ft.Column([
             ft.Text(f"1y z-scores · {DESCRIPTIVE_READ_NOTE}", size=12, color=pal.muted),
-            fcharts.macro_z_chart(sheet)], spacing=6)))
+            fcharts.macro_z_chart(sheet)], spacing=8)))
+        blocks.append(_heading("All indicators"))
+        blocks.append(table(sheet))
+        blocks.append(_heading("Reports"))
         blocks.append(ft.Row([
             ft.Button(_REPORTS["daily"][0], icon=ft.Icons.TODAY_OUTLINED,
                       on_click=lambda e: report(sheet, "daily")),
@@ -216,9 +297,10 @@ def build_macro_page(page: ft.Page,
         if on_open_settings else None)]
 
     sheet_view = ft.Column([
-        provider_bar(),
-        ft.Row([source, ft.Button("Refresh", icon=ft.Icons.REFRESH, on_click=refresh), busy],
-               spacing=10, wrap=True),
+        ft.Row([ft.Button("Refresh", icon=ft.Icons.REFRESH, on_click=refresh), busy, source,
+                ft.Text("Data is fetched automatically (FRED and Yahoo, no key needed).", size=12,
+                        color=pal.muted)] + provider_bar(),
+               spacing=10, run_spacing=8, wrap=True, vertical_alignment=ft.CrossAxisAlignment.CENTER),
         ft.Column([result_host], scroll=ft.ScrollMode.AUTO, expand=True),
     ], spacing=14, expand=True)
     views: dict[str, ft.Control] = {"sheet": sheet_view}
