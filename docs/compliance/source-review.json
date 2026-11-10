@@ -7,8 +7,8 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "47975cc9df7a696012f371111774fdd39fe85df6f7b311b214e0b443a8e75ad9",
-    "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
+    ".github/workflows/runtime-smoke.yml": "795a6d931e770383c887d4dad3f7a812988aea1630c6d3dcece0e74aaa51be90",
+    "README.md": "8969524ea9c7dd9f60dac992022b530500e9bcbc12ff2b38bdb8e41579a665ea",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
     "assets/branding/f1-wordmark.svg": "145715bc8df17cb3c99b734d4c7cb2b8e9bf1878e87c401f518f46b944ba41aa",
@@ -279,7 +279,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "ac915ccaa5a2eae43d518af0f50c8578e3d31ed9c26b6b6bb35e03c3783e3450",
+    "docs/compliance/FACTS.md": "02b9e35ad130eb797c9225ad59aaf6e622620089edac7b36f048a8d4f80bceea",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -546,6 +546,7 @@
     "tests/packaging_policy_acceptance.py": "936034aeaab8d118f83fce8728897650acc2f306cb5405172fef4893fef0b04f",
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
+    "tests/provider_parity_acceptance.py": "9d3d9455000dd2151cebed125f2cb1ebe4cbb9d0bdd62468bcd02dcc06759751",
     "tests/qscore_acceptance.py": "52d0c74fd0e5455b3d333618e011e5a6d7372e4521b750986ff15a30a78559ac",
     "tests/qt_fixture_cleanup.py": "56b1c3ee6e6def041b391d40d3c7d40faa8bab0b3856901f671522c6121fdf04",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
@@ -555,7 +556,7 @@
     "tests/reference/reference_mode.py": "f79ad9f482323344ee20c6685edf08b8abd64f11dfad25ab40cd132ad9339c37",
     "tests/research_contract_acceptance.py": "0d6f8d806cb0384915084d6946af075cc28fbd87bb9c5de6f63cd9d6f330f572",
     "tests/research_home_acceptance.py": "a6ba826451e019e3bec8cbc145c3e89878b6e01caa6b976266af0e722f19b157",
-    "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
+    "tests/run_all.py": "bebd5698def6a3d41c919be31c1a812f3f38632f471c9efccd74887897741fd5",
     "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
     "tests/run_registry_fold_acceptance.py": "4aa3227d95e4365afd2fcf9866c0529fe7903f0baba2ab2b816c88a6ae02c458",
@@ -604,6 +605,8 @@
     "tools/paper/refs.py": "9a743e5981c5c5818f72dbf9bd89250c9e4e284d19e7dd94b78e7223a021a676",
     "tools/paper/selfcheck.py": "4beb757ebe8835b257655b0466c0a5df78385e332ce108cd37bd535622245ea1",
     "tools/paper/study.py": "893e864e2184d4a09d67ecafa487994021dd91e4a7ac93788c7da0d5985b2a6e",
+    "tools/provider_parity/__init__.py": "e4660d4a5f42e868621d4b27be7f4b3efd78bba4b584c64fab21e145f817ade3",
+    "tools/provider_parity/parity_check.py": "f3746e80f8c60f1e9b090db1d956f6d15fd28fae190006967a3b12dee6fd654a",
     "tools/sign_calendars.py": "2908e084ea1ea41d8439d7cf7aec7095de901d78782876356c6fe62dce5a6d7f",
     "tools/status/__init__.py": "029709c7d3b9b69d44f7b2d8e4d8459e9d6a0f31b5cc5769c60f1de927025099",
     "tools/status/data_readiness.py": "d8cfea410cbedee6c55cfa7d283e9dd313d74e9cb8770e3aadf656d2498c4115",
@@ -651,163 +654,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "5935afb05607d1503f0e5be048cf8a1bbb7b36f94118520339ea774e07e59840",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.933384+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "f87d1ef06ab099877bb318aea6fc2104a5e9255d0998e79c11de2cb175ca46b1",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.887382+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "5935afb05607d1503f0e5be048cf8a1bbb7b36f94118520339ea774e07e59840",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.936058+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "f87d1ef06ab099877bb318aea6fc2104a5e9255d0998e79c11de2cb175ca46b1",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.889938+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "6bc9928ee0f7aeb13caf293fcd4a1e4895d7fdacf640e4ad11b4198e20021bd3",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.938943+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "9b4bd898c21b2e3a8d4ad1d57dd8e14c65142707a2865c971de566bd2d0507d8",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.892500+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "7676cadbcc88dfa59623a9e6f37837db485ed0813d1b35b937e02a585769d74e",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.940789+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "b84f1d16d93ce60aa7e8d5a2f43f06a5d52758314222c5218e8105c086b71b4a",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.894241+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "55338f32a85f6769d7e3c7b405e4dac6b71c5d929088c3d33ad0b2ab379f16d4",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.942697+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "0e3796fa74438dff24b56e5eed349bc53d63229297414a22b5bf8564ac489c87",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.896524+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "2f15c0f0923ca43be2d1a80d943efb1e3a1d6e9a149152bb3cd6c6613d54e2d9",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.945025+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "1cef2d15d571f8a3b2381ca5543affa5c424437cef59e7d5317bd1d4777b0f58",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.898241+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "5935afb05607d1503f0e5be048cf8a1bbb7b36f94118520339ea774e07e59840",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.947439+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "f87d1ef06ab099877bb318aea6fc2104a5e9255d0998e79c11de2cb175ca46b1",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.900493+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "8": {
-      "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "2f15c0f0923ca43be2d1a80d943efb1e3a1d6e9a149152bb3cd6c6613d54e2d9",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.949123+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "document_sha256": "e550651cfaa5de6318ef8e97a6b2250eea0e4c48e926d8aed5a0e89db00e96db",
+      "source_digest": "1cef2d15d571f8a3b2381ca5543affa5c424437cef59e7d5317bd1d4777b0f58",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.902242+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "08f070311d141c810bb99a7698faf4c18ad756d99ed98e5ce3f420b18f585ad5",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.950855+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "4da24572e505d2c0d86a074dcaaad597c2cea1340f47e8ca0a7b752934d767c4",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.903993+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "9459c3c7eb071e1e80f94666d12124dc81b465e451116432f282c490c7144ab5",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.953115+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "b12229699322fd83518ba72bb2b8faae86f93a2f1507ea9cf12dc9a7770a9299",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.906097+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "db0dcbb327ebed0b62cc523546cce4fbe6d8d17db7de5fbcf5c86f517a308b7e",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.955657+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "4c8967edb0444b9df0b7ec1bc82f522f988937409f353e6043d171034792957f",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.907815+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "740a8059c17d64315e8ab476788dee3cf9583271a797799e064d14d12aaf0c5c",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.957750+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "812fed5c84e1323f82b915c815226a8f34daf0fe7fd167f3def60f30fe48ebca",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.909619+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "08f070311d141c810bb99a7698faf4c18ad756d99ed98e5ce3f420b18f585ad5",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.962190+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "4da24572e505d2c0d86a074dcaaad597c2cea1340f47e8ca0a7b752934d767c4",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.912047+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "08f070311d141c810bb99a7698faf4c18ad756d99ed98e5ce3f420b18f585ad5",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.964033+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "4da24572e505d2c0d86a074dcaaad597c2cea1340f47e8ca0a7b752934d767c4",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.914096+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "08f070311d141c810bb99a7698faf4c18ad756d99ed98e5ce3f420b18f585ad5",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.965808+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "4da24572e505d2c0d86a074dcaaad597c2cea1340f47e8ca0a7b752934d767c4",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.915775+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "b742626609fe170699bfb29ffc5e92dffc0c0267274684db3221baead9172d7c",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.967586+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "e6c8fa63b77c9af005898f0f9edc845b45dc367b012ff43b1f1ac4c4503d0e34",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.918091+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "2f15c0f0923ca43be2d1a80d943efb1e3a1d6e9a149152bb3cd6c6613d54e2d9",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.969179+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "1cef2d15d571f8a3b2381ca5543affa5c424437cef59e7d5317bd1d4777b0f58",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.924360+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "5935afb05607d1503f0e5be048cf8a1bbb7b36f94118520339ea774e07e59840",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.970903+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "f87d1ef06ab099877bb318aea6fc2104a5e9255d0998e79c11de2cb175ca46b1",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.926588+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "919cf48ccd424670480cb85ba59bdaa5a70d9381d633472bc96c8f1fb3d01fb1",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.973013+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "c3638ab71e4fa80bb18bca7d9ac17fd6c81a52d176d8c0b36027d8720e7aa8ac",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.928318+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "5935afb05607d1503f0e5be048cf8a1bbb7b36f94118520339ea774e07e59840",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.974845+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "f87d1ef06ab099877bb318aea6fc2104a5e9255d0998e79c11de2cb175ca46b1",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Provider parity tool completed against spec 10.5; tool, tests and docs",
+      "reviewed_at": "2026-11-10T19:13:24.932345+00:00",
+      "source_commit": "ffdc9acd7d8537b2141c6f32c03f5f717eaf97a4"
     }
   }
 }
