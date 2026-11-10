@@ -29,12 +29,23 @@ import re
 from types import SimpleNamespace
 from typing import Callable, Optional, Sequence, Union
 
-from ui.ai_panel import split_sentences
 
 Sections = list[tuple[str, list[str]]]
 Body = Union[str, Sequence[str]]
 # An extra part: ((Korean heading, English heading), Korean body or None when there is none, English body).
 Extra = tuple[tuple[str, str], Optional[Body], Body]
+
+# A sentence ends at . ! ? followed by space and a capital, digit, Hangul or an opening bracket/quote;
+# decimals (0.72) and lower-case continuations (e.g. how) do not split. Kept here, free of Flet, so the
+# native app (quantgen_desktop.narrative_view) shares it; ui.ai_panel re-exports it.
+_SENTENCE_END = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9가-힣(\"'“‘\[{])")
+
+
+def split_sentences(text: str) -> list[str]:
+    """Sentences of a narrative; joined with single spaces they give the text back (whitespace aside)."""
+    parts = [p.strip() for p in _SENTENCE_END.split(str(text or "").strip())]
+    return [p for p in parts if p]
+
 
 HEADINGS = {
     "summary": ("요약", "Summary"),
@@ -59,7 +70,7 @@ def _ko(language: str) -> bool:
 
 
 def sentences(text: str, language: str) -> list[str]:
-    """`ui.ai_panel.split_sentences`, plus the Korean "다." ending; joined with spaces they give the text back."""
+    """`split_sentences`, plus the Korean "다." ending; joined with spaces they give the text back."""
     parts = split_sentences(text)
     if not _ko(language):
         return parts

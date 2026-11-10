@@ -176,7 +176,7 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
 
     def test_company_names_keep_full_accessible_text_in_compact_rows(self):
         from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics
-        path = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.ttf"
+        path = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.otf"
         font_id = QFontDatabase.addApplicationFont(str(path))
         families = QFontDatabase.applicationFontFamilies(font_id)
         self.assertTrue(families)
@@ -233,7 +233,7 @@ class DesktopWatchlistAcceptance(unittest.TestCase):
 
     def test_price_column_fits_large_domestic_quotes_without_abbreviation(self):
         from PyQt6.QtGui import QFont, QFontDatabase, QFontMetrics
-        path = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.ttf"
+        path = Path(__file__).resolve().parents[1] / "assets/fonts/qg-interface.otf"
         font_id = QFontDatabase.addApplicationFont(str(path))
         font = QFont(QFontDatabase.applicationFontFamilies(font_id)[0])
         self.panel.setFont(font)

@@ -31,7 +31,7 @@ from quantgen_desktop.typography import (NAV_PADDING, SIDEBAR_WIDTH_RANGE, TONE_
 
 ROOT = Path(__file__).resolve().parents[1]
 SYMBOL_FILES = ("qg-symbols.otf", "qg-symbols-medium.otf", "qg-symbols-semibold.otf")
-FONT_FILES = ("qg-interface.ttf", "qg-interface-medium.ttf", "qg-interface-semibold.ttf")
+FONT_FILES = ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf")  # owner UI-D4
 SVG = "{http://www.w3.org/2000/svg}"
 
 # Modules whose string literals the native window shows: its own widgets plus the
@@ -390,7 +390,7 @@ class FontLoadingTests(unittest.TestCase):
                 self.assertLogs("quantgen_desktop.app", level="WARNING") as logs:
             self.assertIsNone(desktop.load_interface_fonts(self.app))
         self.assertEqual(self.app.font(), before)
-        self.assertTrue(any("qg-interface.ttf" in line for line in logs.output))
+        self.assertTrue(any("qg-interface.otf" in line for line in logs.output))
         self.assertTrue(any("platform font" in line for line in logs.output))
 
 

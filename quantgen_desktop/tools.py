@@ -270,14 +270,28 @@ class ToolPane(QWidget):
         self.result_layout.addWidget(chart)
         self.charts[name] = chart
 
-    def finished(self, narrative, *, localized=None):
+    def finished(self, narrative, *, localized=None, sections=None):
+        """Show the narrative as headed bullets (owner issue 11), the full paragraph folded below.
+
+        `localized` gives reviewed per-language texts ({'ko': ...}); `sections` optionally gives ready
+        headed bullets per language ({'ko': [(heading, [line, ...]), ...]}). Export text is unchanged."""
         from .app import label
+        from .narrative_view import FullTextFold, NarrativeView
         notice = ('Analysis narrative · display language; original retained in export' if localized else
                   'Analysis narrative · original source language retained')
         self.result_reading_layout.addWidget(label(notice, 'caption'))
         narrative_widget=self.text(narrative, localized=localized)
         self.result_layout.removeWidget(narrative_widget)
-        self.result_reading_layout.addWidget(narrative_widget)
+        variants = {'en': narrative_widget.source_text}
+        if localized:
+            variants.update({k: v for k, v in narrative_widget.localized_text.items() if v})
+        if sections:
+            variants.update(sections)
+        self.narrative_view = NarrativeView(variants)
+        self.result_reading_layout.addWidget(self.narrative_view)
+        # The folded paragraph is secondary: closed by default, so it does not ask to stay visible.
+        narrative_widget.setProperty('reading_help_keep_visible', False)
+        self.result_reading_layout.addWidget(FullTextFold(narrative_widget))
         self.result_reading.show()
         self.has_result = True
         self.status.setText('계산 완료 · 출처·관측일·가정을 확인하세요. 공식 검증 판정은 별도입니다.')

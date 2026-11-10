@@ -1,9 +1,13 @@
-"""Hinted native Korean fonts with an offline symbol fallback."""
+"""Native interface font: the Flet screen font (owner UI-D4, 2026-11-11) with an offline symbol fallback.
+
+QG Interface is the Pretendard 1.3.9-derived OTF set the Flet app uses (400/500/600, all 11,172 Hangul
+syllables). The hinted Gothic A1 TTFs (same family name) stay in assets/fonts unused, for rollback only.
+"""
 from pathlib import Path
 import logging
 from PyQt6.QtCore import QChar
 from PyQt6.QtGui import QFont,QFontDatabase
-INTERFACE_FILES=('qg-interface.ttf','qg-interface-medium.ttf','qg-interface-semibold.ttf')
+INTERFACE_FILES=('qg-interface.otf','qg-interface-medium.otf','qg-interface-semibold.otf')
 SYMBOL_FILES=('qg-symbols.otf','qg-symbols-medium.otf','qg-symbols-semibold.otf')
 def configure_interface_font(app,font_directory,*,logger=None):
     logger=logger or logging.getLogger(__name__)
