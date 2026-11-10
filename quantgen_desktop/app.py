@@ -524,8 +524,11 @@ class ResearchWindow(QMainWindow):
         box, inner = panel("분석 설정")
         self.symbol = QLineEdit("AAPL")
         self.symbol.setMaxLength(120)
+        # Owner issues 04/12: no data-source selector; the app fetches by itself ("best": keyless Yahoo
+        # before a labelled synthetic fallback). The combo stays, hidden, for tests and scripts.
         self.source = QComboBox()
-        for text, value in [("Auto · KIS / FMP", "auto"), ("FMP", "fmp"), ("KIS · KRX", "kis"), ("Synthetic demo", "synthetic")]:
+        for text, value in [("Auto", "best"), ("Auto · KIS / FMP", "auto"), ("FMP", "fmp"), ("KIS · KRX", "kis"),
+                            ("Synthetic demo", "synthetic")]:
             self.source.addItem(text, value)
         self.model = QComboBox()
         for text, value in [("GARCH(1,1)-t", "garch_t"), ("GBM", "gbm"), ("Jump diffusion", "jump"), ("Block bootstrap", "bootstrap")]:
@@ -538,10 +541,10 @@ class ResearchWindow(QMainWindow):
         self.seed = QSpinBox(); self.seed.setRange(0, 2147483647); self.seed.setValue(7)
         self.erp = QDoubleSpinBox(); self.erp.setRange(-100, 100); self.erp.setDecimals(2); self.erp.setValue(4)
         self.target = QLineEdit(); self.target.setPlaceholderText("선택 입력")
-        fields = (("Symbol", self.symbol), ("Data source", self.source), ("Model", self.model),
+        fields = (("Symbol", self.symbol), ("Model", self.model),
                   ("Drift", self.drift), ("Horizon · sessions", self.horizon), ("Paths", self.paths),
                   ("Seed", self.seed), ("ERP · %", self.erp), ("Target price", self.target))
-        for name, widget in fields:
+        for name, widget in (*fields, ("Data source", self.source)):
             widget.setAccessibleName(name)
             if isinstance(widget, QComboBox):
                 # Match the shared tool header: native option/font widths must
@@ -557,6 +560,8 @@ class ResearchWindow(QMainWindow):
         bound_input_panel(box)
         self.quant_form = CompactFieldGrid([(label(name, "caption"), widget) for name, widget in fields])
         inner.addWidget(self.quant_form)
+        inner.addWidget(self.source)
+        self.source.hide()
         self.run_button = QPushButton("분포 분석 실행")
         self.run_button.setProperty("primary", True)
         self.run_button.clicked.connect(self.run_analysis)
@@ -592,6 +597,8 @@ class ResearchWindow(QMainWindow):
         self.portfolio.requested.connect(self.run_portfolio)
         self.signals=SignalsPane();self.signals.requested.connect(lambda q:self.run_tool('signals',q))
         self.risk_tabs=CurrentPageTabs();self.risk_tabs.addTab(self.portfolio,'Portfolio');self.risk_tabs.addTab(self.signals,'Signals')
+        # As tall as the selected page: spare height goes below the risk notes, not inside a short tab.
+        self.risk_tabs.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         from .paper import PaperPane
         self.paper = PaperPane(self.paper_session)
         self.paper.setProperty("reading_help_keep_visible", True)
@@ -600,8 +607,15 @@ class ResearchWindow(QMainWindow):
         layout.addWidget(label("개별 가격 시뮬레이션 위험", "heading"))
         self.risk_table = table(["Symbol", "Model", "P(loss)", "VaR 95", "CVaR", "Source"])
         self.risk_table.setProperty('localized_columns', [1])
-        self.risk_table.setMinimumHeight(300)
+        self.risk_table._qg_status_columns = {5: 'official'}   # SYNTHETIC -> 합성 데이터(SYNTHETIC)
+        from .result_layout import fit_result_table
+        fit_result_table(self.risk_table)   # as tall as its rows; no empty body
         layout.addWidget(self.risk_table)
+        # Until a Monte Carlo run completes, say where the rows come from instead of an empty table.
+        self.risk_empty = label("No Monte Carlo run in this session yet. Run one under Build & Test → Monte Carlo; "
+                                "each completed run adds a row here.", "muted")
+        self.risk_empty.setProperty("reading_help_keep_visible", True)
+        layout.addWidget(self.risk_empty)
         notice = label("각 행은 개별 가격 시뮬레이션입니다. 포트폴리오 전체 위험이나 전략 백테스트가 아닙니다.", "muted")
         notice.setProperty("reading_help_keep_visible", True)
         layout.addWidget(notice)
@@ -931,29 +945,39 @@ class ResearchWindow(QMainWindow):
                 ("Paths / horizon / seed", f"{r.n_paths:,} / {r.horizon_days} / {value.run['parameters']['seed']}"),
                 ("P(terminal ≥ target)", "—" if r.prob_target is None else f"{r.prob_target:.1%}")] +
                 ([("Horizon-average vol (ann.)", f"{r.garch_horizon_vol:.1%}")] if r.garch is not None else []))
-            notes = [f"{'합성 데이터 · ' if h.source=='SYNTHETIC' else ''}{h.source} · {h.first_date} → {h.last_date}",
-                     h.note, value.funding_note, r.drift_note, r.bound_note, r.jump_note]
+            # (group, line): the plain lines are the source text; the display groups them under short
+            # headings with a Korean reading per line (owner issues 11 and 14). Display only.
+            entries = [("data", f"{'합성 데이터 · ' if h.source=='SYNTHETIC' else ''}{h.source} · {h.first_date} → {h.last_date}"),
+                       ("data", h.note), ("assumptions", value.funding_note), ("assumptions", r.drift_note),
+                       ("assumptions", r.bound_note), ("assumptions", r.jump_note)]
             resampling = bootstrap_disclosure(r.model)   # None for every model but bootstrap
             if resampling is not None:
-                notes.append(resampling["description"])
-            notes.append(vol_info["description"])
+                entries.append(("assumptions", resampling["description"]))
+            entries.append(("volatility", vol_info["description"]))
             if vol_info["horizon_basis"]:
-                notes.append("Horizon-average volatility: " + vol_info["horizon_basis"])
+                entries.append(("volatility", "Horizon-average volatility: " + vol_info["horizon_basis"]))
             if r.prob_target is not None:
-                notes.append(f"Target probability: final price >= {r.target:,.2f} after {r.horizon_days} sessions. Only the final session is used.")
+                entries.append(("volatility", f"Target probability: final price >= {r.target:,.2f} after {r.horizon_days} sessions. Only the final session is used."))
             if r.garch is not None:
                 fit = r.garch
-                notes.append(f"GARCH fit: alpha={fit.alpha:.4f}, beta={fit.beta:.4f}, nu={fit.nu:.3f}")
-                notes.append(f"converged={fit.converged} · persistence={fit.persistence:.4f} · half-life={fit.half_life:.2f} sessions")
+                entries.append(("garch", f"GARCH fit: alpha={fit.alpha:.4f}, beta={fit.beta:.4f}, nu={fit.nu:.3f}"))
+                entries.append(("garch", f"converged={fit.converged} · persistence={fit.persistence:.4f} · half-life={fit.half_life:.2f} sessions"))
                 for field in ("at_bound", "note", "se_note", "interval_at_bound"):
                     info = getattr(fit, field)
-                    if info: notes.append(f"{field}: {info}")
+                    if info: entries.append(("garch", f"{field}: {info}"))
                 for field in ("alpha", "beta", "persistence"):
                     interval = fit.interval(field)
-                    if interval: notes.append(f"{field} 95% Wald interval: {interval}")
-                if fit.eta_interval: notes.append(f"eta 95% profile interval: {fit.eta_interval}")
-            self.quant_notes.setText("\n".join(str(n) for n in notes if n))
+                    if interval: entries.append(("garch", f"{field} 95% Wald interval: {interval}"))
+                if fit.eta_interval: entries.append(("garch", f"eta 95% profile interval: {fit.eta_interval}"))
+            self.quant_notes.setText("\n".join(str(n) for _, n in entries if n))
+            from .risk_display import grouped_notes
+            self.quant_notes.localized_text = {language: grouped_notes(entries, language, result=r, history=h)
+                                               for language in ("en", "ko")}
+            self.quant_notes.retranslate()
             self.analysis_status.setText("COMPLETED · 검증 NOT_RUN · 재현성 PARTIAL")
+            # Owner issue 14: status codes stay visible with their Korean meaning beside them.
+            self.analysis_status.localized_text = {"ko": "완료 · 검증 미실행(NOT_RUN) · 재현성 부분(PARTIAL)"}
+            self.analysis_status.retranslate()
         self.refresh_views()
 
     @pyqtSlot(str)
@@ -1023,15 +1047,32 @@ class ResearchWindow(QMainWindow):
         table_rows(self.run_table, [[r["parameters"].get("symbol", "—"), r["parameters"].get("model", "—"),
             r["execution_status"], r["verdict"], self.ctx.timestamp(r["created_at"])] for r in runs], [r["run_id"] for r in runs])
         complete = [r for r in runs if r["execution_status"] == "COMPLETED"]
-        table_rows(self.risk_table, [[r["parameters"]["symbol"], r["parameters"]["model"],
+        from .risk_display import MC_MODEL_LABELS, ko, source_name, status_ko
+        table_rows(self.risk_table, [[r["parameters"]["symbol"],
+            MC_MODEL_LABELS.get(r["parameters"]["model"], r["parameters"]["model"]),
             f"{r['metrics']['prob_loss']:.1%}", f"{r['metrics']['var_pct']:.1%}", f"{r['metrics']['cvar_pct']:.1%}",
             r["data"]["source"]] for r in complete])
+        self.risk_table.setVisible(bool(complete))
+        self.risk_empty.setVisible(not complete)
         if complete:
             r = complete[0]
             if r["run_id"] in self.outputs: self.home_chart.set_result(self.outputs[r["run_id"]].result)
             self.home_summary.setText(f"{r['parameters']['symbol']} · {r['parameters']['model']} · {r['data']['source']}\n"
                 f"P5 {r['metrics']['p05']:,.2f} / P50 {r['metrics']['p50']:,.2f} / P95 {r['metrics']['p95']:,.2f}\n"
                 f"관측 {r['data']['last_observation']} · 판정 {r['verdict']} · 재현성 {r['reproducibility']}")
+            # Owner issue 14: model and source as words, status codes with their Korean meaning.
+            model = MC_MODEL_LABELS.get(r['parameters']['model'], r['parameters']['model'])
+            band = f"P5 {r['metrics']['p05']:,.2f} / P50 {r['metrics']['p50']:,.2f} / P95 {r['metrics']['p95']:,.2f}"
+            source = r['data']['source']
+            self.home_summary.localized_text = {
+                'en': (f"{r['parameters']['symbol']} · {model} · {source}\n{band}\n"
+                       f"Observed {r['data']['last_observation']} · verdict {r['verdict']} · "
+                       f"reproducibility {r['reproducibility']}"),
+                'ko': (f"{r['parameters']['symbol']} · {ko(model)} · "
+                       f"{'합성 데이터' if source == 'SYNTHETIC' else source_name(source, 'ko')}\n{band}\n"
+                       f"관측 {r['data']['last_observation']} · 판정 {status_ko(r['verdict'])} · "
+                       f"재현성 {status_ko(r['reproducibility'])}")}
+            self.home_summary.retranslate()
         self.localizer.apply()
 
     def export_selected(self, bundle):

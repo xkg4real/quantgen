@@ -153,7 +153,9 @@ class A3ResultLayoutTests(unittest.TestCase):
     def test_mc_wide_option_captions_preserve_choices_without_page_overflow(self):
         w = self.window
         output = self.put_analysis('gbm')
-        controls = (w.source, w.model, w.drift)
+        # Owner issues 04/12 (2026-11-10): the data source is chosen by the app; its selector is hidden.
+        self.assertTrue(w.source.isHidden()); self.assertNotIn(w.source, [c for _, c in w.quant_form.fields])
+        controls = (w.model, w.drift)
         choices = [[combo.itemData(i) for i in range(combo.count())] for combo in controls]
         selection = [combo.currentData() for combo in controls]
         values = self.values(w.quant_metrics)
@@ -183,7 +185,7 @@ class A3ResultLayoutTests(unittest.TestCase):
                         self.assertEqual(combo.toolTip(), combo.currentText())
                         self.assertEqual(combo.view().model().index(combo.currentIndex(), 0).data(),
                                          combo.currentText())
-                    for widget in (w.symbol, w.source, w.model, w.drift, w.horizon, w.paths,
+                    for widget in (w.symbol, w.model, w.drift, w.horizon, w.paths,
                                    w.seed, w.erp, w.target, w.quant_study, w.quant_metrics):
                         left = widget.mapTo(scroll.viewport(), QPoint(0, 0)).x()
                         self.assertGreaterEqual(left, 0)
@@ -198,13 +200,13 @@ class A3ResultLayoutTests(unittest.TestCase):
     def test_mc_larger_combo_fonts_reflow_and_keep_field_order_and_evidence(self):
         w = self.window
         output = self.put_analysis('gbm')
-        controls = (w.symbol, w.source, w.model, w.drift, w.horizon, w.paths,
+        controls = (w.symbol, w.model, w.drift, w.horizon, w.paths,
                     w.seed, w.erp, w.target)
         values = self.values(w.quant_metrics)
         run = export_bytes(output.run)
         payload = deepcopy(w.commentary_sources())
-        selection = [combo.currentData() for combo in (w.source, w.model, w.drift)]
-        for combo in (w.source, w.model, w.drift):
+        selection = [combo.currentData() for combo in (w.model, w.drift)]
+        for combo in (w.model, w.drift):
             combo.setStyleSheet('QComboBox { font-size: 18px; }')
         with patch.object(w.jobs, 'start', side_effect=AssertionError('no recompute')):
             for width in (1000, 1360, 1000):
@@ -235,7 +237,7 @@ class A3ResultLayoutTests(unittest.TestCase):
                         self.assertIs(self.app.focusWidget(), current)
                         QTest.keyClick(current, Qt.Key.Key_Tab)
                     self.assertIs(self.app.focusWidget(), w.run_button)
-                    self.assertEqual([combo.currentData() for combo in (w.source, w.model, w.drift)], selection)
+                    self.assertEqual([combo.currentData() for combo in (w.model, w.drift)], selection)
                     self.assertEqual(self.values(w.quant_metrics), values)
                     self.assertEqual(export_bytes(output.run), run)
                     self.assertEqual(w.commentary_sources(), payload)
