@@ -15,10 +15,23 @@ def study_row(chart, reading):
     ], spacing=18, run_spacing=18, vertical_alignment=ft.CrossAxisAlignment.START)
 
 
-def figure_image(figure):
+# PNG pixels per logical pixel (owner UI review 2026-11-10: blurry charts). A chart is drawn at twice its
+# design resolution and shown no wider than its design width, so it is sharp on high-density screens and
+# only ever scaled down, never up.
+SCALE=2
+
+
+def figure_png(figure):
+    """(PNG bytes, width px, height px) of the figure at SCALE times its own dpi."""
     buffer=BytesIO()
-    figure.savefig(buffer, format='png', bbox_inches='tight', facecolor=figure.get_facecolor())
-    return 'data:image/png;base64,'+base64.b64encode(buffer.getvalue()).decode('ascii')
+    figure.savefig(buffer, format='png', bbox_inches='tight', facecolor=figure.get_facecolor(),
+                   dpi=figure.dpi*SCALE)
+    data=buffer.getvalue()
+    return data,int.from_bytes(data[16:20],'big'),int.from_bytes(data[20:24],'big')   # IHDR width, height
+
+
+def figure_image(figure):
+    return 'data:image/png;base64,'+base64.b64encode(figure_png(figure)[0]).decode('ascii')
 
 
 def recolour_figure(figure, old, new):
@@ -71,9 +84,17 @@ class FigureStudy(ft.Column):
         self.palette=getattr(figure,'_qg_palette',active())
         self.ctx=LocaleContext()
         self.figure_language=getattr(figure,'_qg_language',None)
-        self.image=ft.Image(src='',fit=ft.BoxFit.CONTAIN,expand=True)
+        # At most the design width (SCALE_DOWN inside a left-aligned frame): a narrow column shrinks the chart,
+        # a wide one leaves it at its own size instead of stretching it to the card.
+        self.image=ft.Image(src='',fit=ft.BoxFit.SCALE_DOWN,filter_quality=ft.FilterQuality.HIGH)
+        self.frame=ft.Container(self.image,alignment=ft.Alignment.TOP_LEFT)
         self._use(figure)
         self.render_locale(self.ctx)
+
+    def _paint(self, figure):
+        data,width,_height=figure_png(figure)
+        self.image.src='data:image/png;base64,'+base64.b64encode(data).decode('ascii')
+        self.image.width=width/SCALE                  # the design width in logical pixels
 
     def _use(self, figure):
         self.figure=figure
@@ -83,7 +104,7 @@ class FigureStudy(ft.Column):
         legends=[ax.get_legend() for ax in axes if ax.get_legend()]+list(getattr(figure,'legends',()))
         self.legend_text=' · '.join(dict.fromkeys(text.get_text() for legend in legends for text in legend.get_texts()))
         self.reading=getattr(figure,'_qg_reading',None) or {}
-        self.image.src=figure_image(figure)
+        self._paint(figure)
         self.image.semantics_label=self.chart_title or 'QUANTGEN chart'
 
     @property
@@ -127,12 +148,12 @@ class FigureStudy(ft.Column):
                                                    text(body,literal=literal)],spacing=6)
             for i,(heading,body,literal) in enumerate(details,1)],spacing=18),padding=18,
             bgcolor=p.surface_2,border=ft.Border.all(1,p.border),border_radius=12)
-        self.controls=[study_row(self.image,reading)]
+        self.controls=[study_row(self.frame,reading)]
 
     def render_theme(self, palette):
         if palette==self.palette:return
         recolour_figure(self.figure,self.palette,palette)
         self.palette=palette
         self.figure._qg_palette=palette
-        self.image.src=figure_image(self.figure)
+        self._paint(self.figure)
         self.render_locale(self.ctx)

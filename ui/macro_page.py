@@ -29,6 +29,7 @@ from core.ficc import insights
 from core.ficc.common import BP, FICCError
 from core.ficc.macro import DESCRIPTIVE_READ_NOTE, MacroRow, MacroSheet, Regime, daily_brief, macro_sheet, weekly_brief
 from core.theme import RADII, TRANSITION_MS, active
+from core.ui_legacy_messages import static_text
 from ui.ai_panel import analysis_panel
 from ui.narrative_sections import localized, macro_text
 from ui.charts_terms import (CURVE_WORDS, DOLLAR_WORDS, GROUP_NAMES, INDICATOR_NAMES, INFLATION_WORDS, REAL_WORDS,
@@ -54,6 +55,13 @@ _VIEWS = (("sheet", "Macro sheet"), ("overlay", "Overlay state"), ("cards", "Mod
 _BUILDERS = {"overlay": build_overlay_view, "cards": build_cards_view,     # view key -> builder(page);
              "research": build_research_view}                             # "sheet" is built inline
 DESCRIPTIVE_CAPTION = DESCRIPTIVE_READ_NOTE[:1].upper() + DESCRIPTIVE_READ_NOTE[1:]
+# Korean shows the disclosure in words; the ruling id (P19) sits in the tooltip instead of the sentence.
+DESCRIPTIVE_CAPTION_KO = "현재 상태를 설명하는 해석 — 국면 모형 아님"
+_P19_TIP = ("운영 규칙 P19: 정해진 규칙으로 현재 상태를 설명할 뿐이며, 국면(레짐) 모형이나 예측이 아닙니다.",
+            "Ruling P19: a rule-based description of the present, not a regime model or a forecast.")
+_INSTALLED_TIP = ("설치 여부만 표시합니다. 이번 결과에 실제로 응답한 출처는 결과 위의 '데이터' 칩에 표시됩니다.",
+                  "Shows only whether the client is installed. The Data chips above the result say which "
+                  "provider actually answered.")
 _REPORTS = {
     "daily": ("Daily market commentary", "daily_market_commentary"),
     "weekly": ("Weekly rates and FX note", "weekly_fi_fx_strategy"),
@@ -119,7 +127,7 @@ def read_row(rg: Regime) -> ft.Control:
         controls=[ft.Text(rg.summary, size=12, color=pal.muted, selectable=True)],
         expanded=False, tile_padding=ft.Padding(0, 0, 0, 0))
     return ft.Column([
-        ft.Text(DESCRIPTIVE_CAPTION, size=12, color=pal.muted),
+        LocalTip(LocalText(DESCRIPTIVE_CAPTION_KO, DESCRIPTIVE_CAPTION, size=12, color=pal.muted), tips=_P19_TIP),
         ft.ResponsiveRow(items, spacing=12, run_spacing=12),
         detail,
     ], spacing=8)
@@ -151,13 +159,17 @@ def build_macro_page(page: ft.Page,
     analysis_host = ft.Column(spacing=14)
 
     def provider_bar() -> list[ft.Control]:
+        """Which provider clients are installed: presence only, so always muted. What actually answered is
+        stated by the result's Data chips (FRED / Yahoo / 합성 with the indicator count)."""
         out = []
         for s in config.ficc_provider_status():
             label = {"fred": "FRED", "yfinance": "Yahoo"}.get(s["id"], s["id"])
             ready = bool(s.get("ready"))
-            out.append(local_chip(f"{label} " + ("사용 가능" if ready else "미설치"),
-                                  f"{s['id']}: " + ("ready" if ready else "not installed"),
-                                  "success" if ready else "muted", tooltip=s.get("note", "")))
+            note = s.get("note", "")
+            out.append(local_chip(f"{label} " + ("설치됨" if ready else "미설치"),
+                                  f"{label}: " + ("installed" if ready else "not installed"), "muted",
+                                  tips=(_INSTALLED_TIP[0] + (" " + static_text(note, "ko") if note else ""),
+                                        _INSTALLED_TIP[1] + (" " + note if note else ""))))
         return out
 
     def cell(text: str, *, token: str = "text") -> ft.DataCell:
@@ -254,7 +266,8 @@ def build_macro_page(page: ft.Page,
         blocks.append(_heading("Key levels"))
         blocks.append(ft.Row(tiles, spacing=10, run_spacing=10, wrap=True))
         blocks.append(card(ft.Column([
-            ft.Text(f"1y z-scores · {DESCRIPTIVE_READ_NOTE}", size=12, color=pal.muted),
+            LocalTip(LocalText(f"1년 z-점수 · {DESCRIPTIVE_CAPTION_KO}", f"1y z-scores · {DESCRIPTIVE_READ_NOTE}",
+                               size=12, color=pal.muted), tips=_P19_TIP),
             fcharts.macro_z_chart(sheet)], spacing=8)))
         blocks.append(_heading("All indicators"))
         blocks.append(table(sheet))

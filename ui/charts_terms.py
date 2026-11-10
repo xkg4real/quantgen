@@ -14,6 +14,7 @@ import re
 import flet as ft
 
 from core.theme import active
+from quantgen_desktop.rates_narrative import REGIMES
 from ui.components import LocalText, chip, notice
 
 # Indicator id -> (Korean name (code), English name (code)).
@@ -41,7 +42,7 @@ INDICATOR_NAMES: dict[str, tuple[str, str]] = {
 # Short names for the headline tiles.
 SHORT_NAMES: dict[str, tuple[str, str]] = {
     "DGS2": ("미 국채 2년", "UST 2y"), "DGS10": ("미 국채 10년", "UST 10y"),
-    "DGS30": ("미 국채 30년", "UST 30y"), "T10Y2Y": ("장단기 금리차 (2s10s)", "2s10s"),
+    "DGS30": ("미 국채 30년", "UST 30y"), "T10Y2Y": ("장단기 금리차 (10년−2년)", "2s10s"),
     "DFII10": ("10년 실질금리", "10y real (TIPS)"), "T10YIE": ("10년 기대인플레이션", "10y breakeven"),
     "VIXCLS": ("변동성 지수 (VIX)", "VIX"), "BAMLH0A0HYM2": ("하이일드 스프레드", "HY OAS"),
     "DTWEXBGS": ("달러 지수", "Broad USD"),
@@ -55,39 +56,47 @@ GROUP_NAMES: dict[str, tuple[str, str]] = {
     "risk": ("위험선호", "Risk appetite"),
 }
 
-# Regime word -> (Korean word, Korean meaning, English meaning). The English word is the core's own.
+# Regime word -> (Korean word, Korean meaning, English meaning). The English word is the core's own; the
+# Korean curve words are the one shared vocabulary (quantgen_desktop.rates_narrative.REGIMES, the reviewed
+# native words), so the Macro page, the Rates page and every chart say the same thing.
 CURVE_WORDS: dict[str, tuple[str, str, str]] = {
-    "bull steepener": ("강세 가팔라짐",
+    "bull steepener": (REGIMES["bull steepener"],
                        "금리가 내리는 가운데 단기 금리가 더 많이 내려 장단기 금리차가 벌어졌습니다.",
                        "Yields fell and the short end fell more, so the 10y-2y gap widened."),
-    "bear steepener": ("약세 가팔라짐",
+    "bear steepener": (REGIMES["bear steepener"],
                        "금리가 오르는 가운데 장기 금리가 더 많이 올라 장단기 금리차가 벌어졌습니다.",
                        "Yields rose and the long end rose more, so the 10y-2y gap widened."),
-    "bull flattener": ("강세 평탄화",
+    "bull flattener": (REGIMES["bull flattener"],
                        "금리가 내리는 가운데 장기 금리가 더 많이 내려 장단기 금리차가 줄었습니다.",
                        "Yields fell and the long end fell more, so the 10y-2y gap narrowed."),
-    "bear flattener": ("약세 평탄화",
+    "bear flattener": (REGIMES["bear flattener"],
                        "금리가 오르는 가운데 단기 금리가 더 많이 올라 장단기 금리차가 줄었습니다.",
                        "Yields rose and the short end rose more, so the 10y-2y gap narrowed."),
-    "parallel up": ("나란히 상승", "장단기 금리가 비슷한 폭으로 올랐습니다.",
+    "parallel up": (REGIMES["parallel up"], "장단기 금리가 비슷한 폭으로 올랐습니다.",
                     "Short and long yields rose by similar amounts."),
-    "parallel down": ("나란히 하락", "장단기 금리가 비슷한 폭으로 내렸습니다.",
+    "parallel down": (REGIMES["parallel down"], "장단기 금리가 비슷한 폭으로 내렸습니다.",
                       "Short and long yields fell by similar amounts."),
-    "unchanged": ("변화 없음", "20거래일 동안 10년 금리와 장단기 금리차가 5bp 미만으로 움직였습니다.",
+    "unchanged": (REGIMES["unchanged"], "20거래일 동안 10년 금리와 장단기 금리차가 5bp 미만으로 움직였습니다.",
                   "The 10y yield and the 10y-2y gap moved less than 5bp over 20 sessions."),
 }
+# The rule of core/ficc/macro.py: the average of the VIX and high-yield spread 1-year z-scores, risk-off above
+# +0.75, risk-on below -0.5, neutral in between.
 RISK_WORDS: dict[str, tuple[str, str, str]] = {
-    "risk-on": ("위험 선호", "VIX와 하이일드 스프레드가 1년 평균보다 낮아 시장이 위험을 감수하는 분위기입니다.",
-                "VIX and high-yield spreads sit below their 1-year average: markets are taking risk."),
-    "risk-off": ("위험 회피", "VIX와 하이일드 스프레드가 1년 평균보다 높아 시장이 위험을 피하는 분위기입니다.",
-                 "VIX and high-yield spreads sit above their 1-year average: markets are avoiding risk."),
-    "neutral": ("중립", "VIX와 하이일드 스프레드가 어느 한쪽으로 뚜렷하게 기울지 않았습니다.",
-                "VIX and high-yield spreads lean neither way."),
+    "risk-on": ("위험 선호", "VIX와 하이일드 스프레드의 1년 z-점수 평균이 -0.5보다 낮습니다(위험을 감수하는 쪽).",
+                "The average of the VIX and high-yield spread 1-year z-scores is below -0.5 (leaning toward "
+                "taking risk)."),
+    "risk-off": ("위험 회피", "VIX와 하이일드 스프레드의 1년 z-점수 평균이 +0.75보다 높습니다(위험을 피하는 쪽).",
+                 "The average of the VIX and high-yield spread 1-year z-scores is above +0.75 (leaning toward "
+                 "avoiding risk)."),
+    "neutral": ("중립", "VIX와 하이일드 스프레드의 1년 z-점수 평균이 -0.5와 +0.75 사이입니다(어느 쪽으로도 뚜렷하게 "
+                "기울지 않음).",
+                "The average of the VIX and high-yield spread 1-year z-scores is between -0.5 and +0.75 (no clear "
+                "lean)."),
 }
 DOLLAR_WORDS: dict[str, tuple[str, str, str]] = {
     "strong": ("강세", "달러 지수가 한 달 동안 1.5% 넘게 올랐습니다.", "The broad dollar rose more than 1.5% in a month."),
     "weak": ("약세", "달러 지수가 한 달 동안 1.5% 넘게 내렸습니다.", "The broad dollar fell more than 1.5% in a month."),
-    "range": ("박스권", "달러 지수의 한 달 변화가 ±1.5% 안에 머물렀습니다.",
+    "range": ("횡보", "달러 지수의 한 달 변화가 ±1.5% 안에 머물렀습니다.",
               "The broad dollar stayed within ±1.5% over a month."),
 }
 INFLATION_WORDS: dict[str, tuple[str, str, str]] = {
@@ -153,11 +162,18 @@ class LocalTip(ft.Container):
             self.tooltip = self.qg_tips[0] if getattr(ctx, "language", "en") == "ko" else self.qg_tips[1]
 
 
-def local_chip(ko: str, en: str, token: str = "muted", *, tooltip: str = "") -> ft.Container:
-    """`components.chip` with authored Korean and English wording (for chips that carry numbers)."""
+def local_chip(ko: str, en: str, token: str = "muted", *, tooltip: str = "",
+               tips: tuple[str, str] | None = None) -> ft.Container:
+    """`components.chip` with authored Korean and English wording (for chips that carry numbers).
+
+    `tips` = (Korean, English) gives a tooltip that follows the page language as well."""
     out = chip(en, token, tooltip=tooltip)
     old = out.content
-    out.content = LocalText(ko, en, size=old.size, color=old.color, weight=old.weight)
+    text = LocalText(ko, en, size=old.size, color=old.color, weight=old.weight)
+    if tips:
+        return LocalTip(text, padding=out.padding, bgcolor=out.bgcolor, border=out.border,
+                        border_radius=out.border_radius, tips=tips)
+    out.content = text
     return out
 
 

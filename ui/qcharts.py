@@ -65,6 +65,21 @@ def _ko(ctx) -> bool:
     return getattr(ctx, "language", "en") == "ko"
 
 
+def _source_ko(source) -> str:
+    """The data-source tag of a Korean chart title: 'SYNTHETIC' reads '합성'; a provider name is shown as given."""
+    return "합성" if str(source).upper() == "SYNTHETIC" else str(source)
+
+
+# Monte Carlo model ids -> the names a title prints (GARCH-t, not GARCH_T).
+_MC_MODELS = {"garch_t": ("GARCH-t", "GARCH-t"), "gbm": ("GBM", "GBM"), "jump": ("Merton 점프 확산", "Merton jump"),
+              "bootstrap": ("부트스트랩", "bootstrap")}
+
+
+def _mc_model(model: str, ko: bool) -> str:
+    names = _MC_MODELS.get(str(model).lower())
+    return (names[0] if ko else names[1]) if names else str(model).upper()
+
+
 def _reading(fig, **pairs: tuple[str, str]) -> None:
     """Chart-specific reading guidance for the side panel: meaning/look/interpret/limit = (Korean, English)."""
     fig._qg_reading = dict(pairs)
@@ -144,7 +159,7 @@ def price_chart(history: History, *, sma_windows: tuple[int, ...] = (50, 200)) -
         ax.set_xticks(idx)
         ax.set_xticklabels(labels, rotation=0)
         _legend(ax, pal)
-        ax.set_title(f"{history.symbol} 종가와 이동평균 — {len(history)}거래일 ({history.source})" if ko else
+        ax.set_title(f"{history.symbol} 종가와 이동평균 — {len(history)}거래일 ({_source_ko(history.source)})" if ko else
                      f"{history.symbol} — {len(history)} sessions ({history.source})", fontsize=10, loc="left")
         _reading(fig,
                  meaning=("일별 종가(실선)와 50일·200일 단순이동평균(점선)을 함께 그린 가격 흐름입니다.",
@@ -158,7 +173,7 @@ def price_chart(history: History, *, sma_windows: tuple[int, ...] = (50, 200)) -
                             "넘어서는 것은 이미 일어난 상승을 요약할 뿐입니다.",
                             "A close above an average means recent prices exceed that period's mean. A 50-over-200 "
                             "cross summarises a rise that has already happened."),
-                 limit=("지나간 가격만 보여 주며 앞으로의 방향을 예측하지 않습니다. 출처가 SYNTHETIC이면 실제 시장 "
+                 limit=("지나간 가격만 보여 주며 앞으로의 방향을 예측하지 않습니다. 제목의 출처가 '합성'이면 실제 시장 "
                         "가격이 아닙니다.",
                         "Past prices only, not a forecast. A SYNTHETIC source means these are not market prices."))
         return fig
@@ -189,8 +204,9 @@ def fan_chart(history: History, mc: MCResult, *, tail_sessions: int = 90) -> ft.
                        label=f"목표가 {mc.target:,.0f}" if ko else f"Target {mc.target:,.0f}")
         ax.axvline(0, color=pal.border, linewidth=0.8)
         _legend(ax, pal)
-        ax.set_title(f"{mc.symbol} 가격 시뮬레이션 — {mc.model.upper()} 경로 {mc.n_paths:,}개, {mc.horizon_days}거래일"
-                     if ko else f"{mc.symbol} — {mc.n_paths:,} {mc.model.upper()} paths, {mc.horizon_days} sessions",
+        ax.set_title(f"{mc.symbol} 가격 시뮬레이션 — {_mc_model(mc.model, True)} 경로 {mc.n_paths:,}개, "
+                     f"{mc.horizon_days}거래일" if ko else
+                     f"{mc.symbol} — {mc.n_paths:,} {_mc_model(mc.model, False)} paths, {mc.horizon_days} sessions",
                      fontsize=10, loc="left")
         ax.set_xlabel("오늘(0)부터의 거래일" if ko else "Sessions from today")
         _reading(fig,
@@ -287,7 +303,7 @@ def equity_chart(bt: BacktestResult) -> ft.Control:
     return _localized(build)
 
 
-_OBJECTIVE_KO = {"max_sharpe": "최대 샤프 지수", "min_vol": "최소 변동성", "risk_parity": "위험 균형",
+_OBJECTIVE_KO = {"max_sharpe": "최대 샤프 지수", "min_vol": "최소 변동성", "risk_parity": "리스크 패리티(위험 균등)",
                  "equal_weight": "동일 비중"}
 
 
@@ -304,7 +320,7 @@ def frontier_chart(frontier: Frontier,
         cbar.outline.set_edgecolor(pal.border)
         if frontier.vols.size:
             ax.plot(frontier.vols * 100, frontier.rets * 100, color=pal.text,
-                    linewidth=1.6, label="효율적 투자선" if ko else "Efficient frontier")
+                    linewidth=1.6, label="효율적 프런티어" if ko else "Efficient frontier")
         markers = {"max_sharpe": ("*", pal.success, 180),
                    "min_vol": ("D", pal.accent, 60),
                    "risk_parity": ("s", pal.error, 60),
@@ -317,14 +333,14 @@ def frontier_chart(frontier: Frontier,
         ax.set_xlabel("연 변동성 (%)" if ko else "Annualized volatility (%)")
         ax.set_ylabel("연 수익률 (%)" if ko else "Annualized return (%)")
         _legend(ax, pal, "lower right")
-        ax.set_title("위험과 수익 — 무작위 포트폴리오와 효율적 투자선" if ko else
+        ax.set_title("위험과 수익 — 무작위 포트폴리오와 효율적 프런티어" if ko else
                      "Risk / return — random portfolios and the frontier", fontsize=10, loc="left")
         _reading(fig,
                  meaning=("점 하나가 무작위로 비중을 정한 포트폴리오 하나입니다. 가로는 위험(연 변동성), 세로는 과거 연 "
                           "수익률, 점 색은 샤프 지수(위험 대비 수익)입니다.",
                           "Each dot is one randomly weighted portfolio: across is risk (annual volatility), up is "
                           "past annual return, dot colour is the Sharpe ratio (return per unit of risk)."),
-                 look=("검은 선(효율적 투자선)과 별·마름모 등 표시된 최적화 결과의 위치를 보세요.",
+                 look=("진한 선(효율적 프런티어)과 별·마름모 등 표시된 최적화 결과의 위치를 보세요.",
                        "Look at the dark line (efficient frontier) and where the marked optimised portfolios sit."),
                  interpret=("같은 위험이라면 위쪽 점이, 같은 수익이라면 왼쪽 점이 과거 기준으로 더 효율적이었습니다. 선 "
                             "위의 점은 그 위험에서 가장 높았던 수익입니다.",

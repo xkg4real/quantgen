@@ -44,6 +44,9 @@ METRICS = (
     ("HISTOGRAM", "MACD 히스토그램", "MACD histogram", "MACD − 시그널", "MACD minus signal"),
 )
 LITERAL = {"qg_literal_value": True}  # page-authored per locale; the catalogue must not rewrite it
+# The candle colours of core.market.presentation.chart_svg (`up, down`), reused so the price headline and
+# the candles show a rise and a fall in the same colours (that module keeps them local to the chart).
+CANDLE_UP, CANDLE_DOWN = "#D94A52", "#397AC4"
 _SENTENCE_BREAK = re.compile(r"(?<=\.)\s+(?=[A-Z])")
 _PARTIAL_HISTORY = re.compile(r"Partial history: (\d+)/(\d+) requested bars \(provider window or paging limit\)\.")
 
@@ -664,9 +667,9 @@ class MarketChartPage(ft.Column):
         self.quote_card.visible = True
 
     def _change_text(self, quote):
-        """'▼ 8,000 (-3.97%)' and its colour. As on the chart's candles (KRX convention), a rise
-        is red; the palette has no blue, so a fall uses the accent. The arrow and sign carry the
-        direction without colour."""
+        """'▼ 8,000 (-3.97%)' and its colour: the chart's own candle pair (KRX convention, rise red,
+        fall blue), so the headline and the candles agree. The arrow and sign carry the direction
+        without colour."""
         from core.market.presentation import number as market_number
         finite = lambda value: value if value is not None and math.isfinite(value) else None
         change = finite(quote.change) if quote else None
@@ -675,9 +678,9 @@ class MarketChartPage(ft.Column):
         if direction is None:
             return "", self._palette.muted
         if direction > 0:
-            mark, colour = "▲", self._palette.error
+            mark, colour = "▲", CANDLE_UP
         elif direction < 0:
-            mark, colour = "▼", self._palette.accent
+            mark, colour = "▼", CANDLE_DOWN
         else:
             mark, colour = "", self._palette.muted
         pieces = [mark] if mark else []

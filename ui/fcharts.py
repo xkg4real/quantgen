@@ -26,7 +26,8 @@ from core.ficc.bonds import Bond, modified_duration, price_from_yield
 from core.ficc.common import BP, tenor_label
 from core.ficc.curves import CurveReport, PCAResult, nelson_siegel, svensson
 from core.theme import active
-from ui.qcharts import _fig, _ko, _localized, _reading, _style, _thin_dates
+from quantgen_desktop.rates_narrative import REGIMES
+from ui.qcharts import _fig, _ko, _localized, _reading, _source_ko, _style, _thin_dates
 
 if TYPE_CHECKING:                                    # pragma: no cover
     from core.ficc.bonds import ScenarioRow
@@ -84,11 +85,10 @@ def _catalogue_ko(text: str) -> str:
     return static_text(text, "ko")
 
 
-# Same Korean words as the Rates page (ui/rates_page.py) and the native app.
+# Same Korean words as the Rates page (ui/rates_page.py) and the native app: the curve-move words are the
+# one shared dict of quantgen_desktop.rates_narrative (the reviewed native vocabulary).
 _SHAPES_KO = {"normal": "정상 우상향", "inverted": "역전", "humped": "중간 만기 돌출", "flat": "평탄"}
-_REGIMES_KO = {"bull steepener": "금리 하락·기울기 확대", "bull flattener": "금리 하락·기울기 축소",
-               "bear steepener": "금리 상승·기울기 확대", "bear flattener": "금리 상승·기울기 축소",
-               "parallel up": "평행 상승", "parallel down": "평행 하락", "unchanged": "변화 없음"}
+_REGIMES_KO = REGIMES
 _RATE_MODELS = {"vasicek": "Vasicek", "cir": "CIR", "hull_white": "Hull-White"}
 
 
@@ -96,6 +96,26 @@ def _date_axis(ax, dates) -> None:
     idx, labels = _thin_dates(dates)
     ax.set_xticks(idx)
     ax.set_xticklabels(labels)
+
+
+def _spaced_ticks(ax, ticks, *, pad_pt: float = 6.0, size: float = 8.0) -> None:
+    """x ticks from (position, label) pairs given in priority order: a label is kept only when it does not
+    run into one already kept (widths measured with the figure's renderer), so dates and tenors never
+    print over each other. Positions inside the data range, so the view limits do not move."""
+    from matplotlib.text import Text
+    fig = ax.figure
+    renderer = fig.canvas.get_renderer()
+    lo, hi = ax.get_xlim()
+    per_px = (hi - lo) / max(ax.get_window_extent(renderer).width, 1.0)
+    kept: list[tuple[float, str, float]] = []
+    for x, label in ticks:
+        width = Text(0, 0, label, fontsize=size, figure=fig).get_window_extent(renderer).width
+        half = (width / 2 + pad_pt) * per_px
+        if all(abs(x - kx) >= half + kh for kx, _, kh in kept):
+            kept.append((float(x), label, half))
+    kept.sort()
+    ax.set_xticks([k[0] for k in kept])
+    ax.set_xticklabels([k[1] for k in kept])
 
 
 # --------------------------------------------------------------------------- #
@@ -127,8 +147,8 @@ def curve_chart(report: CurveReport) -> ft.Control:
         ko, pal = _ko(ctx), active()
         fig, ax = _fig(7.5, 3.2, pal)
         ax.plot(tp, par * 100, color=pal.accent, linewidth=1.6,
-                label="파 수익률 (반기 복리)" if ko else "Par (semi-annual)")
-        ax.plot(t, zero, color=pal.text, linewidth=1.2, label="제로 금리 (연속 복리)" if ko else "Zero (cont.)")
+                label="파 금리 (반기 복리)" if ko else "Par (semi-annual)")
+        ax.plot(t, zero, color=pal.text, linewidth=1.2, label="무이표 금리 (연속 복리)" if ko else "Zero (cont.)")
         ax.plot(tf, fwd * 100, "--", color=pal.success, linewidth=1.1, label="1년 선도금리" if ko else "1y forward")
         ax.plot(t, fitted, ":", color=pal.muted, linewidth=1.2,
                 label=(f"{_catalogue_ko(fit_name)} 적합, 오차 RMSE {rmse:.1f}bp" if ko else
@@ -139,14 +159,14 @@ def curve_chart(report: CurveReport) -> ft.Control:
         ax.set_xlabel("만기" if ko else "Maturity")
         ax.set_ylabel("금리 (%)" if ko else "Rate (%)")
         _legend_below(fig, pal, ax)
-        ax.set_title((f"{snap.date} {snap.source} 수익률 곡선 ({_catalogue_ko(method)}) — "
+        ax.set_title((f"{snap.date} {_source_ko(snap.source)} 수익률 곡선 ({_catalogue_ko(method)}) — "
                       f"{_SHAPES_KO.get(report.shape, report.shape)}, 최근 {report.lookback}거래일 "
                       f"{_REGIMES_KO.get(report.regime, report.regime)}") if ko else
                      (f"{snap.date} {snap.source} {method} curve — {report.shape}, {report.regime} "
                       f"over {report.lookback} sessions"), fontsize=10, loc="left")
         _reading(fig,
-                 meaning=("고시된 국채 금리(점)로 만든 수익률 곡선입니다. 파 수익률(액면가에 거래되는 채권의 수익률), "
-                          "제로 금리(만기에 한 번 받는 돈의 할인율), 1년 선도금리(그 만기부터 1년 동안 적용되는 금리)를 "
+                 meaning=("고시된 국채 금리(점)로 만든 수익률 곡선입니다. 파 금리(액면가에 거래되는 채권의 수익률), "
+                          "무이표 금리(만기에 한 번 받는 돈의 할인율), 1년 선도금리(그 만기부터 1년 동안 적용되는 금리)를 "
                           "함께 그리고, 점선은 매끄러운 모수 모형으로 맞춘 곡선입니다.",
                           "The yield curve built from the quoted Treasury yields (dots): par yields (the yield of a "
                           "bond priced at par), zero rates (the discount rate of one payment at maturity) and 1-year "
@@ -158,13 +178,13 @@ def curve_chart(report: CurveReport) -> ft.Control:
                        "(left) to the long end (right), and how closely the dotted fit passes the dots. The title "
                        "names the curve shape and the recent move."),
                  interpret=("장기 금리가 단기보다 높으면 정상(우상향), 낮으면 역전된 곡선입니다. 1년 선도금리가 같은 "
-                            "만기의 제로 금리보다 높으면 그 뒤 구간에서 곡선이 오른다는 뜻입니다. 범례의 오차(RMSE)가 "
+                            "만기의 무이표 금리보다 높으면 그 뒤 구간에서 곡선이 오른다는 뜻입니다. 범례의 오차(RMSE)가 "
                             "작을수록 모수 모형이 고시 금리를 잘 따라갑니다.",
                             "Long yields above short ones is a normal (upward) curve; below is inverted. A 1-year "
                             "forward above the zero rate of the same maturity means the curve rises after it. The "
                             "smaller the fit error (RMSE) in the legend, the closer the model follows the quotes."),
                  limit=("선도금리는 오늘 곡선에서 계산한 값이며 미래 금리 전망이 아닙니다. 구축 방법에 따라 고시 금리 "
-                        "사이의 모양이 달라집니다. 출처가 SYNTHETIC이면 실제 금리가 아닙니다.",
+                        "사이의 모양이 달라집니다. 제목의 출처가 '합성'이면 실제 금리가 아닙니다.",
                         "Forward rates are arithmetic on today's curve, not a forecast. The construction method "
                         "changes the shape between quotes. A SYNTHETIC source means these are not market yields."))
         return fig
@@ -196,7 +216,7 @@ def curve_history_chart(panel: CurvePanel,
         _date_axis(ax, panel.dates)
         ax.set_ylabel("금리 (%)" if ko else "%")
         _legend(ax, pal)
-        ax.set_title(f"국채 금리 추이 — {len(panel)}거래일 ({panel.source})" if ko else
+        ax.set_title(f"국채 금리 추이 — {len(panel)}거래일 ({_source_ko(panel.source)})" if ko else
                      f"Par yields — {len(panel)} sessions ({panel.source})", fontsize=10, loc="left")
         _reading(fig,
                  meaning=("만기별(예: 2년·10년·30년) 국채 금리가 날짜에 따라 어떻게 움직였는지 보여 줍니다.",
@@ -208,8 +228,8 @@ def curve_history_chart(panel: CurvePanel,
                             "단기 금리 선이 장기 금리 선보다 위에 있으면 곡선이 역전된 상태입니다.",
                             "Lines moving together mean the level changed; a changing gap means the slope changed. "
                             "A short-maturity line above a long one means the curve is inverted."),
-                 limit=("관측된 금리를 그린 것이며 앞으로의 금리를 예측하지 않습니다. 출처가 SYNTHETIC이면 실제 금리가 "
-                        "아닙니다.",
+                 limit=("관측된 금리를 그린 것이며 앞으로의 금리를 예측하지 않습니다. 제목의 출처가 '합성'이면 실제 "
+                        "금리가 아닙니다.",
                         "Observed yields only, not a forecast. A SYNTHETIC source means these are not market "
                         "yields."))
         return fig
@@ -343,13 +363,13 @@ def krd_chart(krd: dict[float, float], title: str = "Key-rate DV01", *,
     return _localized(build)
 
 
-_SCENARIOS_KO = {"bear steepener": "금리 상승·기울기 확대", "bull steepener": "금리 하락·기울기 확대",
-                 "bear flattener": "금리 상승·기울기 축소", "bull flattener": "금리 하락·기울기 축소",
+_SCENARIOS_KO = {**{k: REGIMES[k] for k in ("bear steepener", "bull steepener", "bear flattener",
+                                               "bull flattener")},
                  "2y-5y-10y fly": "2년-5년-10년 버터플라이"}
 
 
 def _scenario_ko(name: str) -> str:
-    """'+25bp parallel' -> '+25bp 평행 이동', 'bear steepener' -> '금리 상승·기울기 확대'; else unchanged."""
+    """'+25bp parallel' -> '+25bp 평행 이동', 'bear steepener' -> '금리 상승·곡선 가팔라짐'; else unchanged."""
     m = re.fullmatch(r"([+-]?[\d.]+bp) parallel", name)
     return f"{m[1]} 평행 이동" if m else _SCENARIOS_KO.get(name, name)
 
@@ -539,7 +559,7 @@ def smile_chart(strikes, vols, points: Sequence[SmilePoint], forward: float) -> 
         ax.set_title("변동성 스마일 — 시장 호가 점과 SABR 적합" if ko else
                      "Volatility smile — market points and SABR fit", fontsize=10, loc="left")
         _reading(fig,
-                 meaning=("행사가격마다 통화옵션 시장이 매기는 내재변동성입니다. 점은 시장 호가(등가격·25델타 리스크리버설·"
+                 meaning=("행사가격마다 통화옵션 시장이 매기는 내재변동성입니다. 점은 시장 호가(등가격·25델타 리스크 리버설·"
                           "버터플라이)에서 계산한 값이고, 선은 그 점들에 맞춘 SABR 모형 곡선입니다.",
                           "The implied volatility the FX option market sets at each strike. The dots come from the "
                           "market quotes (at-the-money, 25-delta risk reversal and butterfly); the line is the SABR "
@@ -571,33 +591,47 @@ def fx_spot_chart(series: Series, forward_points_line=None) -> ft.Control:
         ko, pal = _ko(ctx), active()
         fig, ax = _fig(7.5, 2.9, pal)
         ax.plot(np.arange(px.size), px, color=pal.accent, linewidth=1.4, label="현물 환율" if ko else "Spot")
+        pts: list[tuple[float, float]] = []
         if forward_points_line is not None:
             if np.isscalar(forward_points_line):
                 f = float(forward_points_line)
                 ax.axhline(f, color=pal.success, linestyle="--", linewidth=1.0,
-                           label=f"선도 환율 {f:.4f}" if ko else f"Forward {f:.4f}")
+                           label=f"선도환율 {f:.4f}" if ko else f"Forward {f:.4f}")
             else:
                 pts = sorted((float(t), float(f)) for t, f in forward_points_line)
                 ax.plot([px.size - 1] + [px.size - 1 + t * 252 for t, _ in pts],
                         [px[-1]] + [f for _, f in pts], "--o", color=pal.success,
-                        linewidth=1.2, markersize=3, label="선도 환율 곡선" if ko else "Forward curve")
-        _date_axis(ax, series.dates)
+                        linewidth=1.2, markersize=3, label="선도환율 곡선" if ko else "Forward curve")
+        # A few dates over the history (today first) and a tenor under each forward point, longest first;
+        # a label that would run into one already placed is dropped, so nothing prints over anything.
+        last = px.size - 1
+        dates = list(series.dates)
+        ticks = [(last, dates[last])] if dates else []
+        ticks += [(0, dates[0])] if dates else []
+        ticks += [(last + t * 252, _tenor_tick(tenor_label(t), ko)) for t, _ in sorted(pts, reverse=True)]
+        ticks += [(i, dates[i]) for i in (round(last * 2 / 3), round(last / 3)) if 0 < i < last]
+        _spaced_ticks(ax, ticks)
         _legend(ax, pal)
-        ax.set_title(f"{series.label} 환율 — {len(series)}거래일 ({series.source}), 최근 {series.last:.4f}" if ko else
+        ax.set_title(f"{series.label} 환율 — {len(series)}거래일 ({_source_ko(series.source)}), "
+                     f"최근 {series.last:.4f}" if ko else
                      f"{series.label} — {len(series)} sessions ({series.source}), last {series.last:.4f}",
                      fontsize=10, loc="left")
         _reading(fig,
-                 meaning=("현물 환율의 흐름(실선)과 두 통화의 금리 차이로 계산한 선도 환율(점선)을 함께 보여 줍니다.",
+                 meaning=("현물 환율의 흐름(실선)과 두 통화의 금리 차이로 계산한 선도환율(점선)을 함께 보여 줍니다."
+                          + (" 가로축의 날짜는 지난 기간, 점선 아래의 만기(3개월·1년·2년 등)는 오늘부터 각 선도환율까지의 "
+                             "기간입니다." if pts else ""),
                           "The spot rate over time (solid) with the forward rate implied by the two currencies' "
-                          "interest-rate gap (dashed)."),
+                          "interest-rate gap (dashed)."
+                          + (" Dates on the axis are the past; the tenors under the dashed line (3m, 1y, 2y...) are "
+                             "the time from today to each forward." if pts else "")),
                  look=("실선의 오른쪽 끝(오늘)과 점선의 차이를 보세요. 제목 괄호 안은 데이터 출처입니다.",
                        "Compare the right end of the solid line (today) with the dashed line. The data source is "
                        "in brackets in the title."),
-                 interpret=("선도 환율이 현물보다 높거나 낮은 것은 금리 차이를 반영한 계산 결과입니다. 환율이 그 방향으로 "
+                 interpret=("선도환율이 현물보다 높거나 낮은 것은 금리 차이를 반영한 계산 결과입니다. 환율이 그 방향으로 "
                             "움직인다는 뜻은 아닙니다.",
                             "A forward above or below spot reflects the interest-rate gap; it does not mean the rate "
                             "will move that way."),
-                 limit=("선도 환율은 전망이 아니라 금리 차이로 계산한 값입니다. 출처가 SYNTHETIC이면 실제 시세가 "
+                 limit=("선도환율은 전망이 아니라 금리 차이로 계산한 값입니다. 제목의 출처가 '합성'이면 실제 시세가 "
                         "아닙니다.",
                         "The forward is arithmetic on the rate gap, not a forecast. A SYNTHETIC source means these "
                         "are not market quotes."))
@@ -787,7 +821,7 @@ def rate_fan_chart(sim: RateSimResult) -> ft.Control:
                               f"Long-run mean {sim.params.theta * 100:.2f}%"))
         if sim.threshold is not None:
             ax.axhline(sim.threshold * 100, color=pal.error, linestyle="--", linewidth=1.0,
-                       label=(f"기준 금리 {sim.threshold * 100:.2f}% (기간 끝 초과 비율 {sim.prob_above * 100:.0f}%)"
+                       label=(f"비교 금리 {sim.threshold * 100:.2f}% (기간 끝 초과 비율 {sim.prob_above * 100:.0f}%)"
                               if ko else f"Threshold {sim.threshold * 100:.2f}% "
                                          f"(P above {sim.prob_above * 100:.0f}%)"))
         ax.set_xlabel("경과 기간 (년)" if ko else "Years")
@@ -807,11 +841,11 @@ def rate_fan_chart(sim: RateSimResult) -> ft.Control:
                           "The spread of future short-rate paths from a model fitted to past short rates. The "
                           "light band holds 90% of the paths, the dark band 50%, and the middle line is the median. "
                           "The square brackets in the title are the 5th and 95th percentiles of the final rate."),
-                 look=("시간이 지나면서 띠가 얼마나 넓어지는지, 중앙값이 장기 평균 점선 쪽으로 다가가는지, 빨간 점선(기준 "
+                 look=("시간이 지나면서 띠가 얼마나 넓어지는지, 중앙값이 장기 평균 점선 쪽으로 다가가는지, 빨간 점선(비교 "
                        "금리)이 띠의 어디에 있는지 보세요.",
                        "See how fast the bands widen, whether the median drifts toward the dotted long-run mean, "
                        "and where the red dashed threshold sits within the bands."),
-                 interpret=("띠가 넓을수록 모형이 보는 금리의 불확실성이 큽니다. 범례의 초과 비율은 기간 끝에 기준 금리를 "
+                 interpret=("띠가 넓을수록 모형이 보는 금리의 불확실성이 큽니다. 범례의 초과 비율은 기간 끝에 비교 금리를 "
                             "넘은 경로의 비율로, 모형 안에서만 의미가 있습니다.",
                             "Wider bands mean more rate uncertainty in the model. The share above the threshold in "
                             "the legend is the fraction of paths ending above it, meaningful only inside the "
@@ -882,7 +916,7 @@ MACRO_READING = {
                   "Hatched bars are synthetic data, not observations. Credit spreads and VIX both to the right "
                   "mean markets are avoiding risk. The market summary above the chart sums up recent changes "
                   "of the same indicators with fixed rules."),
-    "limit": ("지금 상태를 설명할 뿐이며 국면 모형이나 예측이 아닙니다(P19). z-점수는 지난 1년만 비교하므로 "
+    "limit": ("지금 상태를 설명할 뿐이며 국면 모형이나 예측이 아닙니다. z-점수는 지난 1년만 비교하므로 "
               "1년 내내 이례적이었다면 0이 '정상'을 뜻하지 않습니다. 매매 신호나 투자 권유로 쓰지 마세요.",
               "A descriptive read of the present, not a regime model or a forecast (P19). The z-score compares "
               "with the past year only, so 0 is not 'normal' if the whole year was unusual. Not a trading "
