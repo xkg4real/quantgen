@@ -255,8 +255,10 @@ class OrphanTests(unittest.TestCase):
 
     def test_outage_record_changes_neither_finished_runs_nor_orphans_with_progress(self):
         # Design 5.6: an orphan's stage is that of its last PROGRESS, also below
-        # PNL_COMPUTED (R3 here). Open question for the recorder/outage unit: see the
-        # product record; this pins the current, design-literal reading.
+        # PNL_COMPUTED (R3 here). Owner ruling 9 of 2026-11-11 kept this rule ("9-현행유지")
+        # and did not adopt the fail-closed alternative, so an outage-named orphan below
+        # PNL_COMPUTED folds to FAILED_BEFORE_STATS with no keys. The recorder must
+        # therefore write no in-run PROGRESS below PNL_COMPUTED inside run_family.
         events = chain(*completed_run(R1), started(R2, 6 * SEC), pnl(R2, 7 * SEC),
                        started(R3, 8 * SEC), progress(R3, 9 * SEC, "DATA_LOADED"))
         as_of = T0 + 7 * HOUR
@@ -266,6 +268,18 @@ class OrphanTests(unittest.TestCase):
         self.assertEqual(marked.unmatched_outage_run_ids, ())
         self.assertEqual((marked.runs[2].effective_status, marked.runs[2].stage, marked.runs[2].keys),
                          ("FAILED_BEFORE_STATS", "DATA_LOADED", None))
+        below = F.STAGES[:F.STAGES.index("PNL_COMPUTED")]
+        self.assertEqual(below, ("REQUESTED", "COST_RESOLVED", "DATA_LOADED"))
+        for stage in below:  # ruling 9 covers every stage below PNL_COMPUTED
+            with self.subTest(stage=stage):
+                orphan = chain(started(R1), progress(R1, SEC, stage))
+                named = fold(orphan, as_of=as_of, outage_run_ids=frozenset({R1}))
+                run = named.runs[0]
+                self.assertEqual((run.status, run.status_source, run.effective_status, run.stage),
+                                 ("ABORTED", "INFERRED", "FAILED_BEFORE_STATS", stage))
+                self.assertEqual((run.flags, run.keys, run.keys_source), ((), None, None))
+                self.assertEqual(named.runs, fold(orphan, as_of=as_of).runs)
+                self.assertEqual(dict(named.total_by_family), {"E1": 1})  # still one STARTED in TOTAL
 
     def test_unmatched_outage_run_ids_are_sorted_and_respect_the_prefix(self):
         events = chain(started(R2), started(R1, SEC))
@@ -279,6 +293,8 @@ class OrphanTests(unittest.TestCase):
         self.assertEqual(fold(events, outage_run_ids=frozenset({R1})).unmatched_outage_run_ids, ())
 
     def test_open_runs_count_in_total_and_are_reported_separately(self):
+        # Owner ruling 8 of 2026-11-11 ("8-승인"): OPEN runs stay in TOTAL (design 3.12),
+        # and 5.6's "left out of counts" is met by reporting them separately.
         events = chain(*completed_run(R1), started(R2, 10 * SEC), pnl(R2, 11 * SEC),
                        started(R3, 12 * SEC), started(R4, 13 * SEC),
                        finished(R4, 14 * SEC, "FAILED_BEFORE_STATS", "REQUESTED", False))
