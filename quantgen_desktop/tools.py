@@ -167,6 +167,9 @@ class ToolPane(QWidget):
         self.source.hide()
         self.source_label.hide()
         self._top_grid.setColumnStretch(1, 0)
+        # With no selector the prompt must not ask for a source (owner issues 04/12).
+        if self.status.source_text == '도구와 출처를 선택한 후 실행하세요.':
+            self.status.setText('Choose a tool, then run.')
 
     def set_source_caption(self, text):
         self.source_label.setText(text)
