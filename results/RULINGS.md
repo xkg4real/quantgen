@@ -26,8 +26,13 @@ Owner's words, verbatim:
 > 1번으로 승인하겠노
 
 What follows:
-- Tool commit fixed: `49a3a67b246d020381b27067103d1a7ba4795f9e`
-- Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `d651795e4b4776d096601a43989c7f45c375ae120b75a64179432f469d2daca1`
+- Tool commit fixed: `5202482e3c24de871b8483608b8a03beb07abe1e`
+- Tool sha256 fixed (`tools/provider_parity/parity_check.py`): `f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184`
+- 2026-11-11 (KST), before PR #102 merged: the two values above replace those first recorded here (commit `49a3a67`,
+  sha256 `d651795e...`), because a code review of PR #102 found faults in the tool that could have cost the owner a
+  run of record (F1: the H.15 fetch could read another maturity's column and end the DGS3MO run FAIL; F2: a file
+  fetched for other dates than the table's was compared and could end a series WITHHELD) and the tool was changed to
+  fix them; no run existed.
 - Run branch the owner clones and pushes summaries to: `claude/provider-parity-runs-20261111` (cut from `main`; it contains the fixed commit).
 - The research branch gets no commit for this. The spec's branch name (`claude/provider-parity-5-2`) differs from the
   above; Step 10 records the difference in the execution record.

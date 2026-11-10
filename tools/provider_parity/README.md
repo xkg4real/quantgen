@@ -33,9 +33,12 @@ verbatim in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` and in `results/RULINGS.
   records and are checked by hand.
 
 ```
-Tool commit fixed by the owner ruling: 49a3a67b246d020381b27067103d1a7ba4795f9e
-Tool sha256 fixed by the owner ruling: d651795e4b4776d096601a43989c7f45c375ae120b75a64179432f469d2daca1
+Tool commit fixed by the owner ruling: 5202482e3c24de871b8483608b8a03beb07abe1e
+Tool sha256 fixed by the owner ruling: f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184
 ```
+
+These two values replaced the ones first recorded (commit `49a3a67`, sha256 `d651795e...`) on 2026-11-11 (KST), before
+PR #102 merged and before any run: a code review found faults in the tool and it was changed (`results/RULINGS.md`).
 
 Every summary records the sha256 of the tool that wrote it (`tool.sha256`); a run with other tool bytes counts only by
 an owner ruling (spec 10.5, Tool).
@@ -44,7 +47,7 @@ an owner ruling (spec 10.5, Tool).
 
 ```powershell
 $rc = "<the research clone>"                         # read only: the tables, the pinned files and its .env
-$fixed = "49a3a67b246d020381b27067103d1a7ba4795f9e"
+$fixed = "5202482e3c24de871b8483608b8a03beb07abe1e"
 $origin = git -C $rc remote get-url origin
 git clone --branch claude/provider-parity-runs-20261111 --single-branch $origin "$env:LOCALAPPDATA\quantgen\pp_clone"
 cd "$env:LOCALAPPDATA\quantgen\pp_clone"

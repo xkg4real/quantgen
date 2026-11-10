@@ -688,7 +688,8 @@ Claude가 2026-11-11 03:5x KST 결정 요청표에 올린 항목입니다(원문
 > 1번으로 승인하겠노
 
 - **Claude가 이렇게 반영합니다:**
-  - 도구 커밋 `49a3a67b246d020381b27067103d1a7ba4795f9e`, 도구 파일(`tools/provider_parity/parity_check.py`) sha256 `d651795e4b4776d096601a43989c7f45c375ae120b75a64179432f469d2daca1`를 고정값으로 `results/RULINGS.md`와 도구 안내서(`tools/provider_parity/README.md`), 한국어 실행 안내서에 적습니다.
+  - 도구 커밋 `5202482e3c24de871b8483608b8a03beb07abe1e`, 도구 파일(`tools/provider_parity/parity_check.py`) sha256 `f2fe72cdee6344076fd6dfec8943259f44bc52445c66cdaf482a19e269770184`를 고정값으로 `results/RULINGS.md`와 도구 안내서(`tools/provider_parity/README.md`), 한국어 실행 안내서에 적습니다.
+  - 2026-11-11(KST), PR #102 병합 전: 처음 적은 고정값(커밋 `49a3a67`, sha256 `d651795e…`)은 PR #102 코드 검토에서 소유자의 기록 실행을 잃게 할 수 있는 도구 결함(F1: H.15 수신이 다른 만기의 열을 읽어 DGS3MO 대조가 FAIL로 끝날 수 있음, F2: 표와 다른 날짜로 받은 파일이 그대로 대조되어 WITHHELD로 끝날 수 있음)이 나와 도구를 고치면서 위 값으로 바꿨으며, 그때까지 실행은 없었습니다.
   - 소유자는 main에서 갈라낸 실행 브랜치 `claude/provider-parity-runs-20261111`를 따로 클론해 대조를 돌리고, 결과 요약(`summary.json`)을 그 브랜치에 올립니다. main에 직접 올리지 않습니다.
   - 연구 브랜치에는 이 건으로 커밋하지 않습니다. 스펙 10.5 본문의 브랜치 이름(`claude/provider-parity-5-2`)과 다른 점은 Step 10 마감 기록에 적습니다.
   - P2~P4와 A·B·C·D 묶음은 이 답에 들어 있지 않습니다. 답을 기다립니다.
