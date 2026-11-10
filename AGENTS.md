@@ -86,7 +86,7 @@
   작업의 기준으로 쓰지 않습니다. 사용자 스크린샷이 Flet 화면이어도 같은 문제를 네이티브에서 고칩니다.
 - 2026-11-10 소유자 지적 14건은 Claude 해결 방식(PR #98, Flet)을 네이티브로 옮긴 것이 기준입니다. 그 밖의 네이티브
   화면은 GPT의 PR #89 압축 UI(`form_layout`·`table_layout`·`result_layout`·`category_picker`·`typography`)를 유지합니다.
-- 글꼴은 `assets/fonts/qg-interface*.otf`(Pretendard 파생, 가족 이름 `QG Interface`)입니다. Gothic A1 TTF로 되돌리지 않습니다.
+- 글꼴(UI-D5): 네이티브 글자는 IBM Plex Sans KR, 숫자는 `assets/fonts/qg-interface*.otf`(Pretendard 파생, `QG Interface`)입니다(`quantgen_desktop/font_policy.py` `number_font`). Gothic A1 TTF로 되돌리지 않습니다.
 - 금지: 14건 화면을 이전 모양으로 되돌리기, 글꼴을 Gothic A1로 되돌리기, 14건과 무관한 네이티브 화면을 Flet 모양으로 바꾸기.
 - 화면 작업을 시작하기 전에 `LEDGER.md`에서 `⑬-2/`로 시작하는 행과 `UI_SESSION_CURRENT.md`의 진행 중 항목을 확인해
   같은 화면을 두 에이전트가 따로 고치지 않게 합니다. 끝낸 화면 작업은 `⑬-2/...` ID로 `LEDGER.md`에 기록합니다.

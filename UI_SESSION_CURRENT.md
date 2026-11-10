@@ -10,17 +10,18 @@
 | UI-D1 | 주력 앱은 네이티브 PyQt (`python -m quantgen_desktop`, `Start-QUANTGEN-Desktop.cmd`) | 앞으로의 UI 수정은 네이티브 기준. Flet(`main.py`)은 유지하되 기준 앱이 아님 |
 | UI-D2 | 2026-11-10 소유자 지적 14건의 해결은 **Claude 버전**(PR #98, Flet에 구현된 것)을 네이티브로 옮김 | 전략 실험실 판정 배너·요약 타일·카드 이름(`core/research/strategy_display.py`), 분석 요약 정리, 차트 읽는 법, 천 단위 콤마, 출처 선택기 제거·`source="best"`, 실시간 시세 정렬, 곡선 방법 9개, 한국어 통일 등 |
 | UI-D3 | 그 밖의 화면·구조는 **GPT 버전**(PR #89 네이티브 압축 UI: 내용폭 메뉴, `form_layout`·`table_layout`·`category_picker`·`result_layout`, 여백·표 밀도) 유지 | 14건과 무관한 네이티브 화면을 Flet 모양으로 바꾸지 않음. 14건을 옮길 때도 GPT의 배치 도구를 그대로 사용 |
+| UI-D5 (2026-11-11, UI-D4의 네이티브 글자 부분을 대체) | 네이티브 글자 = IBM Plex Sans KR, 숫자 = 지금 글꼴(QG Interface, Pretendard OTF). 소유자 원문: "일단 A로 바꾸고 숫자는 지금 폰트 유지해줘" (글꼴 시안 14종 중 A) | `quantgen_desktop/font_policy.py`: 앱 글꼴 Plex, `number_font()`로 숫자(지표·가격·등락·숫자 표 칸·관심종목 숫자 열·차트 눈금)는 QG Interface. Flet·Flet 차트는 QG Interface 그대로. 파일 `assets/fonts/IBMPlexSansKR-*.ttf` + `OFL-IBMPlexSansKR.txt` |
 | UI-D4 | 글꼴 = Flet 화면 글꼴 `assets/fonts/qg-interface*.otf`(Pretendard 1.3.9 기반, 한글 11172자) + `QG Symbols` | 네이티브 `font_policy.py`가 Gothic A1 TTF 대신 이 OTF를 등록. Flet·네이티브 차트 글자도 같은 글꼴. Gothic A1 TTF 파일은 저장소에 남겨 두되 사용하지 않음(되돌릴 때 대비) |
 
-GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기, 글꼴을 Gothic A1로 되돌리기, 14건과 무관한 GPT 압축 UI를 Flet 모양으로 바꾸기.
+GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기, 글꼴을 Gothic A1로 되돌리거나 UI-D5(글자 Plex·숫자 QG Interface)를 바꾸기, 14건과 무관한 GPT 압축 UI를 Flet 모양으로 바꾸기.
 
 ---
 
 # 네이티브 이식 완료 — 2026-11-11 KST (Claude, ⑬-2/owner-14-native) · GPT 필독
 
-- status: 완료(작업 브랜치 푸시됨, PR은 소유자 요청 시) · waiting_on: owner(글꼴 시안 승인) · updated_at: 2026-11-11 07:55 KST
+- status: 완료(작업 브랜치 푸시됨, PR은 소유자 요청 시) · waiting_on: owner(PR 여부) · updated_at: 2026-11-11 08:30 KST
 - session: https://claude.ai/code/session_016uB1jf8m3p5GW1qzQVJe7k
-- work_branch: `claude/friendly-bardeen-r6xe8f` = main `1a8b29f` + 커밋 `c725663` (main에 아직 병합 안 됨)
+- work_branch: `claude/friendly-bardeen-r6xe8f` = main `1a8b29f` + 커밋 `c709328` (main에 아직 병합 안 됨)
 - LEDGER: ⑬-2/owner-14-native (이 브랜치), 앞서 ⑬-2/owner-14-flet(PR #98), ⑬-2/ui-base-owner-decision
 
 ## 무엇이 바뀌었나 (네이티브 `quantgen_desktop/`)
@@ -34,7 +35,7 @@ GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기,
 | 11 해설 | 모든 도구 해설 = 소제목+글머리표, 전체 문단 접힘 | `narrative_view.py`(새), `tools.py` `finished` |
 | 13 포트폴리오 | 결론 요약 카드, 목적함수 이름, 표 크기 맞춤, 실행 전 안내 | `portfolio.py`, `risk_display.py`(새) |
 | 14 한국어 | 영역별 문구 `owner_ui_language/*.py`, 앱 자료 메모 한국어(`source_notes.py`) | — |
-| 글꼴(UI-D4) | Pretendard 파생 OTF 등록(Gothic A1 TTF는 미사용 보관) | `font_policy.py`, `ui/qcharts.py` |
+| 글꼴(UI-D5) | 글자 IBM Plex Sans KR, 숫자 QG Interface(Pretendard OTF). Gothic A1 TTF는 미사용 보관 | `font_policy.py`, `typography.py`, `table_layout.py`, `watchlist.py`, `charts.py` |
 | 비율(소유자 추가 지시) | 관심종목 카드 4열·차트 150px, 모든 차트 높이=폭/2(최대 440), 폭 최대 920 | `markets_view.py`, `charts.py` |
 
 ## GPT가 지켜야 할 것
@@ -45,7 +46,7 @@ GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기,
 - 숨긴 출처 상자는 지우지 말 것(시험이 `findData('synthetic')`으로 고름).
 
 ## 남은 일
-1. 글꼴: 소유자가 시안 14종(0 현재, A~M) 중 승인하면 교체. OFL/Apache만. 승인 전 변경 금지.
+1. 글꼴: 소유자가 A안 승인 → 적용 완료(`cf55a5d`, 기록 `c709328`). 소유자 평: "다별론데.. 일단 A로" — 다른 글꼴을 다시 원할 수 있음. 바꿀 때는 OFL/Apache만, 시안 승인 후.
 2. PR 생성·main 병합(소유자 요청 시). 다른 Claude 세션의 PR #102와 `docs/compliance/FACTS.md`·`source-review.json`·`runtime-smoke.yml`이 겹침 — 나중에 병합하는 쪽이 main을 합치고 기준선 갱신.
 3. 실제 Windows 화면 확인(글꼴 선명도·DPI), 실제 제공처 응답 확인.
 
