@@ -1,10 +1,10 @@
 # UI 세션 진행 중 — 2026-11-10 KST (Claude, 소유자 UI/UX 검토 14건)
 
-- status: checkpoint (UI 세션 전용 기록. 메인 `CURRENT.md`·`LEDGER.md`는 다른 Claude 세션
+- status: 완료 · 소유자 확인 대기 (UI 세션 전용 기록. 메인 `CURRENT.md`·`LEDGER.md`는 다른 Claude 세션
   session_01H6RrzMUzF8vwK8xkX977mB가 쓰는 중이라 건드리지 않음)
 - session: https://claude.ai/code/session_016uB1jf8m3p5GW1qzQVJe7k
-- work_branch: `claude/friendly-bardeen-r6xe8f` (main `9d1eacd`에서 시작), 현재 `970058f`
-- updated_at: 2026-11-10 KST, waiting_on: none
+- work_branch: `claude/friendly-bardeen-r6xe8f` (main `9d1eacd`에서 시작), 최종 `70cbfbb` push 완료, PR 미생성(소유자 요청 시 생성)
+- updated_at: 2026-11-11 00:20 KST, waiting_on: owner
 
 ## 소유자 요청 (원문)
 
@@ -31,18 +31,17 @@ zip = Flet 앱(main.py, ui/*.py) 스크린샷 14장. 파일 제목이 곧 지시
 ## 진행 상황
 
 - [x] 기반 커밋 `ae8a313`, `55bcba9` (공용 헬퍼, source="best").
-- [x] 영역 브랜치 8개 구현·병합: a-strategy(01·06·07·09·10·11·12), b-charts(02, 한글 차트 글꼴·읽는 법), c-rates(08, 곡선 방법 6개 추가),
-  d-quotes(05), e-ficc(03·04·14), f-build(13·14·04), g-narratives(분석 요약 한국어), h-charts(나머지 차트 한국어). 병합 `970058f`, push 완료.
-- [x] CI 단계별 재현: 전 단계 통과. 단, `tests.desktop_a3_layout_acceptance`의 MC 콤보 1건은 main(9d1eacd)에서도 실패(다른 세션 PR #90 범위).
-- [ ] 독립 검토 4관점(버그·소유자 14건 화면·한국어·표현/컴플라이언스) 진행 중 ← 여기
-- [ ] 검토 반영 → 컴플라이언스 문서 07/08/12/13/14/15/19/FACTS 갱신과 `--refresh-baseline` → 수정 후 캡처 → push → 소유자 보고
+- [x] 영역 브랜치 8개 구현·병합(a–h), 독립 검토 4관점(정확성·소유자 14건 화면·한국어·주장/고지) → 검토 반영 브랜치 4개(s/q/f/m) 병합.
+- [x] 통합 정리: 페이지 문구가 검토된 메시지 키(price→기준값 등)를 가리지 않게 함, 그릭스 지수 표기 제거(영문·한국어 공용 `_greek`), 매크로 한국어 만기 표기, CRLF 복구, CI 경로 필터·새 시험 6종.
+- [x] 컴플라이언스 07/08/12/13/14/15/19/20·FACTS 갱신, `--refresh-baseline` → consistency PASS, publication BLOCKED(변화 없음), 소스 641.
+- [x] CI 단계별 재현: unittest 14묶음 1,069개 중 1,067개 통과. 실패 2개는 main에서도 동일: A3 MC 콤보(다른 세션 PR #90), `desktop_market_chart_acceptance` 오래된 시각 표시(KST 자정 직후 날짜 경계 시간 의존). 스크립트형 시험 전부 통과.
+- [x] 수정 후 캡처(ko 1360/1000, en): 컨테이너 `/tmp/claude-0/qgshots/final/` (세션 종료 시 사라짐).
 
-## 다음 할 일 (세션이 끊기면)
+## 남은 일 (소유자 결정 또는 후속)
 
-1. `git fetch origin claude/friendly-bardeen-r6xe8f` 후 이 브랜치에서 계속. 영역 브랜치는 로컬 전용이었으므로, 끊겼다면 위 표의 이슈를
-   영역별로 다시 구현해야 합니다(파일 소유는 이 문서의 영역 구분을 따름).
-2. 완료 기준: 14건 각각 화면 캡처로 확인, `tests.flet_runtime_acceptance`·`tests.flet_a1_headers_acceptance`와 각 영역 테스트 통과,
-   `python -m tools.compliance.check --check` PASS(문서 재검토 후 `--refresh-baseline`).
+1. PR 생성은 소유자 요청 시. 실제 Windows 화면·실제 제공처(Yahoo/FRED/KIS) 응답은 미확인.
+2. 알려진 한계: 네이티브 PyQt 화면은 공유 core 외 미변경. 실시간 차트 SVG 머리글 '1d'와 구분 기호(core/market/presentation.py, 네이티브 공유), 금리 결과표 만기 1m/1y(flet_a1_headers 시험이 언어 간 셀 동일성을 요구), '오 년 단리'(forward_convention 시험이 문자열 고정), 일부 네이티브 한국어 해설 안의 영문 조각(ETF 제공처 원문, ETH/BTC ADF 문장).
+3. 시간 의존 시험 `test_old_market_timestamp_is_labelled_stale_despite_fresh_transport` 고정 시계 적용 제안.
 
 ---
 이전 기록 (2026-11-07 GPT UI 세션)
