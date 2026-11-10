@@ -287,7 +287,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "cf2a074a32d1bef2fe8fed66ac7f1ec9543d5956d93ae14c1a5396b732a6e4ec",
+    "docs/compliance/FACTS.md": "3e22947ae967716de63173ae2b8035cfca2f937effe492ea5606184b42bab854",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -300,6 +300,7 @@
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
     "docs/product/BONDS_PORTFOLIO_LANGUAGE_2026-10-31.md": "469c32828b75b54797bf1ac81a8645688452bce5f0cf7c69132e7236f96f8e59",
     "docs/product/BS21_FUNDING_2026-10-30.md": "a8060c8d57b2532eed9b06c429a97568c77a3ba3c9e0370f273e1d3ac9bc8c4d",
+    "docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md": "7535fbf8e28e613af39b5c85b8ab8b2658f0d32ff1d76426efd42ffa2aaa59e5",
     "docs/product/CARRY_LANGUAGE_2026-10-31.md": "7cf0c8152b053bfaeaf44dd72e7244acb076426ae5618fd20291eb2b2b26a691",
     "docs/product/CHART_C_DESIGN_2026-10-31.md": "4ef295e78271c6335666df6ac1456459235a0a0b35ddfd9de813952e524221ae",
     "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md": "3f05520af76a14bbeb8fab8f7db874b25f18e52d4e884ec6b46e305e58f7ca44",
@@ -326,7 +327,8 @@
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
     "docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md": "9ccc09cc2982dc78907e71cd596b980115efa4f8d05d0aeef340db91dc73864e",
     "docs/product/LOOKAHEAD_LA02_PART1_2026-11-10.md": "f4ce44fcfc95c76213c6df187e2444a7fc860bf6d72aa6e514ef11917e38a44f",
-    "docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md": "2389a58f87be08e40916e2dbf179cbf6e8f7b1ddaaa3c9e7f51e57d4c320de36",
+    "docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md": "539ed67d4b716cb5c7bc0a6ee9ac90b9a41e032321b962929966bf1dcb8b91b4",
+    "docs/product/LOOKAHEAD_LA02_PART3_2026-11-11.md": "8fa59c5d84703bfebcef638e77df1eeeb527321a0162c678377cb313e21405e5",
     "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "71dffdb67f3b38ed8b726f273c8651a8a65ec832cdfedc84ba5431bebaca2494",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
@@ -515,13 +517,13 @@
     "tests/macro_m0_rules.py": "7cb91771c62286132b269f71ac2c2c351548ff844d6bc474b1e4abcc65a09219",
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
-    "tests/macro_m1_calendars.py": "1a65d6fb82dec6f8fb11550016ad3d22ae6c2a75a8be5f18462e6173c118b184",
-    "tests/macro_m1_fixtures.py": "ff89ddeebaa0acf0e3ffe6fb609fc3249092c64d51303f9d394c2ccbdd4a0289",
-    "tests/macro_m1_integration.py": "4a370e688d1fa8a5130ed470f8148712da8c8852144f9e07a60954bc286e7680",
-    "tests/macro_m1_pit.py": "e588cb70d329331c2c8f2c29e0f1ced9de8e1b818edf5360547c3e8add8177d9",
+    "tests/macro_m1_calendars.py": "5c7322e62e81accc6b3352cff173792785c20021a0b618b34bf47dd8c96e49b2",
+    "tests/macro_m1_fixtures.py": "be359873aa592f12ee7079afab3bf87058d764299e10353e1bea9c37e9398788",
+    "tests/macro_m1_integration.py": "5f965cea2c757631c3cd8a88995854aa702f1cdd95ed00b9fd7a3c7cbf647fb5",
+    "tests/macro_m1_pit.py": "47c7f40fa275632785e7edb59067bdb8b8c74bd3dac67cf7117d2589b37dd8ed",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
     "tests/macro_m2_risk.py": "2d38e1d5b67ed91f4fe1de2f7700303673b755e44875b746d473c205ba28691d",
-    "tests/macro_m3_estimators.py": "329a53563e5d2e3dbcbf0b90130aff06a2fd364e33c7a9e1c04987592a477fe9",
+    "tests/macro_m3_estimators.py": "d35866ed600574569b19d7356ccc44f87d34b7b54222a31f967333985e68c008",
     "tests/macro_m4_integration.py": "b3cb2979c31e0450cbbf1be01c9088e87a0ef4b1882ae8adba9b95218222918d",
     "tests/macro_m4_sleeves.py": "a14f5eec30de07244b572ee1585890a03a963eb71389082ce2432e87db8b8bc3",
     "tests/macro_m5_books.py": "66f09499042dd365a4908cee882f4c5e4d5bb26d54865ef49ac9c8e9b9048a6d",
@@ -533,7 +535,7 @@
     "tests/macro_m7_integration.py": "eae519a24f19efdc94e39097de10eb03fe900180b097756dee64f787422e87f4",
     "tests/macro_m7_ledger.py": "c0aed45d39017d618f4a0e96f8c8b5130d37b92b54f5cbb64233d316254dfb80",
     "tests/macro_m7_stats.py": "b901aa6f16c320a3244841a2fe94823f3c70b099645bdb42423f13748a1fdd8e",
-    "tests/macro_m8_forward.py": "5be770aa0a9685c81d5c7aa822e427a65623048b16f0ad0cb20cb93ce12a624d",
+    "tests/macro_m8_forward.py": "2de41b68da4cfc67546112680dbffee1e46b66e48fc80fcd1bbabf520e4654e6",
     "tests/macro_m8_integration.py": "d72b6f46128f356526c76e29aab8a05749044bc920c5a881beb80ba020d5b65e",
     "tests/macro_m8_pipeline.py": "0a1ad39baf9e45b2dff03c6f489a0b90f71ab543ec74a603e7d955e822ff5ee4",
     "tests/macro_m9_lab.py": "c0a16636f3807ceff042ecb14740118afcb14dc48d1ba0d0ecbc301a09e0462a",
@@ -670,163 +672,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.744572+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "79750a4594c3b85bfcf08a07928e2df75e1af0ea1a735e00dca728f88efaa0aa",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.002867+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.747761+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "79750a4594c3b85bfcf08a07928e2df75e1af0ea1a735e00dca728f88efaa0aa",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.005482+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "7fd18d7a598444c468e572636dd6d8b0cb0c8fdadb9aae671152ef9ddfad848f",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.750379+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "53caf0b221229d6c26c32a29d640c481439a718e3578c6f3798ded0a60240451",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.007698+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "45f044a578ffd2a9fe471e5db816b4c121de6a1acf7cb8852d732db7ea1e4c80",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.752755+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "e5c098223d36ae43a0d8ef96ef98998cc1ab2b8221675ddbcca35d89716bca55",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.009783+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "dcebb912c449a2de77f27d40de48f8ffddbcd46c6588ea0a5830c06e76b2ca63",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.755063+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "8528f345ece84d9a12e04d5b3cc2f9609e76d319751db031ee0098a746c7a6a5",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.011766+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "bb7865cf804fa794c44805c478124afd8f627c7115c144e067264ea1e696f26b",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.757379+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "658c8e6d8ad75b3ce711fa4cc46e7ce452528805f931c8c9788ab22a95218241",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.013625+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.759559+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "79750a4594c3b85bfcf08a07928e2df75e1af0ea1a735e00dca728f88efaa0aa",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.015571+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "8": {
       "document_sha256": "455d8b429619c6914d3bd315efd69c1aaf083a6f995c84527511313055fc2a45",
-      "source_digest": "bb7865cf804fa794c44805c478124afd8f627c7115c144e067264ea1e696f26b",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.761796+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "658c8e6d8ad75b3ce711fa4cc46e7ce452528805f931c8c9788ab22a95218241",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.017376+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.764143+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "eabe853f667ea73c2e35869eb135cf332204b04bc559877f099ca70525552f81",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.019177+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "da45d872b1575048c7966afb3cecccc4196c7edd15e2a426c007cc25e68b56c8",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.766426+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "d687fe97a6f61d7f5cef68195ce5a0aa70440e36b36c22fd6ea82b912bf3ce8e",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.020885+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "de59fddb8af43367da4988c47db35ca57b39e19dccda649ed13253b2c796002e",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.768916+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "57c6d1e02de69413d403d40013fe4a711a6892c4d199a42d5e6438cfeaae7a88",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.022662+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "3671aebc986768af31752ebb252c7045c70fc744802963aff11850647a11eae9",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.771341+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "7bdd5f6add204820437c2458891cbb2c4db5a23cf7e71daa1a66345544f6dbd5",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.024442+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.773364+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "eabe853f667ea73c2e35869eb135cf332204b04bc559877f099ca70525552f81",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.026319+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.775141+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "eabe853f667ea73c2e35869eb135cf332204b04bc559877f099ca70525552f81",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.028139+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.776838+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "eabe853f667ea73c2e35869eb135cf332204b04bc559877f099ca70525552f81",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.029823+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "c2d96dc2051e7317a31f38fbbde56fd5d5322c25860f39d3b229e948751dca60",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.778519+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "a9b1ce98207e468d3168e6025915cbc3f3564e46b3466de759ea0b44a2f9069b",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.031756+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "bb7865cf804fa794c44805c478124afd8f627c7115c144e067264ea1e696f26b",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.780204+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "658c8e6d8ad75b3ce711fa4cc46e7ce452528805f931c8c9788ab22a95218241",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.033453+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.783251+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "79750a4594c3b85bfcf08a07928e2df75e1af0ea1a735e00dca728f88efaa0aa",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.035302+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "5a73d563a414eaac5607183377a83b2dd58fc9e217c58044cda3c2a34c31196d",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.784999+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "cca64d562d60f26010d8acccf85ce2c9ea4cec94b113c62322270de939abf369",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.037105+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.786696+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "79750a4594c3b85bfcf08a07928e2df75e1af0ea1a735e00dca728f88efaa0aa",
+      "reviewed_by": "Claude reference-data prep review",
+      "review_note": "Manifest md5 cell of the acquisition register refreshed after the approved row; record and FACTS corrected; no data file listed",
+      "reviewed_at": "2026-11-10T20:50:12.038913+00:00",
+      "source_commit": "54d4c1ed58a807175926764be9ebfd8dcea7b76d"
     }
   }
 }

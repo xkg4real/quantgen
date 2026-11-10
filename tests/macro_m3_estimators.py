@@ -543,9 +543,9 @@ MKTRF = "french_daily_mktrf_rf_1926-07_2026-08.csv"
 #   obs_utc, available_at_utc                       YYYY-MM-DDTHH:MM:SSZ, available_at_utc not before obs_utc
 # The replay is the product's B5 harness, `docs/vol_backtest.spec_form` (spec L6365 names docs/vol_backtest.py as the
 # B5 harness): SMA20 and EWMA(0.94) in FHS and normal form, origins from vol_backtest.ORIGINS_FROM (2016-03-01), the
-# residual pool from the earlier history, seed 11. Its own fixture reader `vol_backtest.fixture_lines` reads a column
-# named `value`, not `close`, so the body parses the file itself and calls spec_form (an owner question before F13 is
-# listed: which column of the generated file holds the close).
+# residual pool from the earlier history, seed 11. Its own fixture reader `vol_backtest.fixture_closes` reads the same
+# `close` column since owner ruling 1 of 2026-11-11 (before it, a column named `value`); the body still parses the file
+# through the shared test reader, which also checks the provenance and the instants, and calls spec_form.
 B501_COLUMNS = ("close", "series_id", "obs_date", "session_date", "obs_utc", "available_at_utc", "available_at_source",
                 "value_status")
 B501_PROVENANCE = (("series_id", "KS11"), ("value_status", "vendor_close"), ("available_at_source", "calendar_bound"))
@@ -702,10 +702,10 @@ def test_t_b5_01_body_passes_and_fails_on_invented_closes():
     misses the exceedance (5.44%) or the PIT p (0.999), when a wrapped harness reports FAIL for the passing line or
     NOT_RUN, and when the sigma x 0.7 run is not scaled. A wrapped harness that moves the band edge next to the
     exceedance may report FAIL: the verdict is then a class (golden_tools.assert_class, spec L5737). At the layout (the
-    shared reader) it fails when the close is in a column named `value` (what docs/vol_backtest.fixture_lines reads),
-    when a row carries F01's series id, when two rows are out of date order, and on a "." close. The declared
-    provenance equals the generator's table (docs/macro_fixtures.REFERENCE_FILES F13), and the declared columns are
-    part 1's F01 layout."""
+    shared reader) it fails when the close is in a column named `value` (the product reader's column before owner
+    ruling 1 of 2026-11-11), when a row carries F01's series id, when two rows are out of date order, and on a "."
+    close. The declared provenance equals the generator's table (docs/macro_fixtures.REFERENCE_FILES F13), and the
+    declared columns are part 1's F01 layout."""
     from docs import macro_fixtures as MF
     from docs import vol_backtest as VB
     from tests.macro_m1_calendars import F01_COLUMNS
