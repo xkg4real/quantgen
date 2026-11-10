@@ -402,7 +402,7 @@ class EveryChartTests(unittest.TestCase):
             "fcharts.krd_chart": "만기별 DV01 (z-스프레드 +12.3bp 고정) — 합계",
             "fcharts.krd_chart:swap": "만기별 DV01 — 1년 후 시작 5년 고정금리 지급 스왑, 합계",
             "fcharts.payoff_chart": "원금보장형 노트 (외환) — 공정가치",
-            "fcharts.payoff_chart:rc": "역전환사채형 노트 (주식) — 공정가치",
+            "fcharts.payoff_chart:rc": "역전환형 노트 (주식) — 공정가치",
             "fcharts.payoff_chart:dcd": "이중통화예금 EURUSD (행사가격 1.08) — 공정가치",
             "fcharts.price_yield_chart": "쿠폰 4% · 10년 만기 채권 — 가격과 수익률",
             "xcharts.lines_chart": "김치 프리미엄 (업비트 KRW-BTC 대 바이낸스 × 달러/원 환율)",

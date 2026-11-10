@@ -29,14 +29,21 @@ from ui.ai_panel import analysis_panel
 from ui.narrative_sections import korean, localized
 from quantgen_desktop.market_narrative_language import derivatives_korean
 from ui.components import card, empty_state, notice, number_field, parse_number, section, stat
-from ui.ficc_widgets import action, form_row, hide_source, ko_notice, ko_verdict, lchip, with_helper
+from ui.ficc_widgets import action, form_row, hide_source, ko_notice, ko_value, ko_verdict, lchip, with_helper
 import ui.xcharts as xc
 from core.research.derivatives_workflow import synthetic_board, snapshot, narrative, payload
-from core.research.quote_coverage import butterfly_display, quote_coverage_text
+from core.research.quote_coverage import butterfly_display, quote_coverage_text, quote_coverage_text_ko
 from core.research.option_disclosure import box_tooltip, hedge_korean, hedge_text, mfiv_strip, mfiv_text, same_vol
 
 _SOURCES = [("kis", "KIS live (KOSPI200 board)"), ("synthetic", "Synthetic demo board")]
 _ENGINES = [("gbm", "GBM at the ATM vol"), ("garch_t", "GARCH(1,1)-t on the index history")]
+# Workflow labels shown inside chips (core.research.derivatives_workflow), in Korean.
+_VALUE_KO = {"synthetic": "합성", "assumed": "가정", "DEMO": "시연용", "input": "직접 입력",
+             "CD 91d (KIS)": "CD 91일물 (KIS)"}
+
+
+def _vk(value) -> str:
+    return _VALUE_KO.get(str(value), str(value))
 
 
 def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -> ft.Control:
@@ -89,10 +96,10 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
             quoted = s.get("live_quotes", True)
             near = len(s['points'])
             blocks.append(ft.Row([
-                lchip(f"만기 {s['expiry']} → {s['expiry_date']}", f"expiry {s['expiry']} → {s['expiry_date']}"),
-                lchip(f"기준 {s['as_of']}", f"as of {s['as_of']}"),
-                lchip(f"{s.get('session', '?')} 가격", f"prices of {s.get('session', '?')}"),
-                lchip(f"금리 {s['rate']:.2%} ({s['rate_source']})", f"rate {s['rate']:.2%} ({s['rate_source']})"),
+                lchip(f"만기 {_vk(s['expiry'])} → {s['expiry_date']}", f"expiry {s['expiry']} → {s['expiry_date']}"),
+                lchip(f"기준 {_vk(s['as_of'])}", f"as of {s['as_of']}"),
+                lchip(f"{_vk(s.get('session', '?'))} 가격", f"prices of {s.get('session', '?')}"),
+                lchip(f"금리 {s['rate']:.2%} ({_vk(s['rate_source'])})", f"rate {s['rate']:.2%} ({s['rate_source']})"),
                 lchip(f"행사가격 {s['n_quotes']}개", f"{s['n_quotes']} strikes"),
                 lchip(f"ATM 근처 {'호가' if quoted else '마지막 체결가'} {near}개",
                       f"{near} {'quoted' if quoted else 'last-print'} near-ATM", "accent")],
@@ -102,26 +109,35 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
                 stat("Basis (pts)", f"{b.basis_pts:+.2f}"), stat("Fair value", f"{b.fair:.2f}"),
                 stat("Mispricing", f"{b.mispricing_bp:+.0f} bp", token="error" if abs(b.mispricing_bp) > 20 else "text"),
                 stat("Implied funding", f"{b.implied_rate:.2%}"),
-                stat("KIS theo gap", f"{b.theo_gap_pts:+.2f} pts" if b.theo_gap_pts is not None else "n/a"),
+                ko_value(stat("KIS theo gap", f"{b.theo_gap_pts:+.2f} pts"), f"{b.theo_gap_pts:+.2f} pt")
+                if b.theo_gap_pts is not None else stat("KIS theo gap", "n/a"),
             ], spacing=12, run_spacing=12, wrap=True))
             blocks.append(ft.Row([
                 stat("ATM IV", f"{s['atm'].iv:.1%}"),
                 stat("MFIV", f"{s['mfiv'].get('vol', float('nan')):.1%}" if s["mfiv"].get("n_strikes") else "n/a",
                      tooltip=mfiv_text(strip) or "Model-free variance not computed"),
-                stat("MFIV strike range", f"{strip['lower_moneyness']:+.1%} / {strip['upper_moneyness']:+.1%} of F"
-                     if strip["status"] == "COMPUTED" else "n/a", token="muted",
+                ko_value(stat("MFIV strike range", f"{strip['lower_moneyness']:+.1%} / {strip['upper_moneyness']:+.1%} of F",
+                               token="muted",
+                               tooltip="Options outside this range are omitted; the omitted wings bias MFIV downward (truncated strip)."),
+                          f"F 대비 {strip['lower_moneyness']:+.1%} / {strip['upper_moneyness']:+.1%}")
+                if strip["status"] == "COMPUTED" else
+                stat("MFIV strike range", "n/a", token="muted",
                      tooltip="Options outside this range are omitted; the omitted wings bias MFIV downward (truncated strip)."),
-                stat("SVI ρ", f"{fit.rho:+.2f}"), stat("SVI RMSE", f"{fit.rmse_volpts:.2f} pts",
-                                                       token="error" if fit.rmse_volpts > 1.0 else "text"),
-                stat("IV gap vs KIS", f"{rec['median_volpts']:.2f} pts", token="success" if rec["ok"] else "error",
-                     tooltip="median |σ_app − σ_KIS| on quoted strikes within ±15 % of F; gate 0.5"),
+                stat("SVI ρ", f"{fit.rho:+.2f}"),
+                ko_value(stat("SVI RMSE", f"{fit.rmse_volpts:.2f} pts", token="error" if fit.rmse_volpts > 1.0 else "text"),
+                          f"{fit.rmse_volpts:.2f} %p"),
+                ko_value(stat("IV gap vs KIS", f"{rec['median_volpts']:.2f} pts", token="success" if rec["ok"] else "error",
+                               tooltip="median |σ_app − σ_KIS| on quoted strikes within ±15 % of F; gate 0.5"),
+                          f"{rec['median_volpts']:.2f} %p"),
                 ko_verdict(stat("Butterfly viol.", butterfly_value, token=butterfly_token,
                                 tooltip=quote_coverage_text(s['quote_coverage']))),
                 stat("Box rate (quote check)", f"{s['box']['rate']:.2%}" if s["box"] else "n/a", tooltip=box_tooltip(s)),
                 stat("RND ∫", f"{s['rnd']['integral']:.3f}"),
             ], spacing=12, run_spacing=12, wrap=True))
-            blocks.append(notice(quote_coverage_text(s['quote_coverage']), "accent"))
-            blocks.append(card(xc.smile_chart(s["points"], fit, s["F"], title=f"KOSPI200 {s['expiry']} smile")))
+            blocks.append(ko_notice(notice(quote_coverage_text(s['quote_coverage']), "accent"),
+                                    quote_coverage_text_ko(s['quote_coverage'])))
+            blocks.append(card(xc.smile_chart(s["points"], fit, s["F"], title=f"KOSPI200 {s['expiry']} smile",
+                                              title_ko=f"KOSPI200 {_vk(s['expiry'])} 변동성 스마일")))
             p_samples = None
             if s.get("garch") is not None:
                 from core.quant.garch import simulate_returns

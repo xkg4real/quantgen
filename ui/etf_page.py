@@ -32,13 +32,54 @@ from core.research.sleeve_disclosure import (SHARPE_CONVENTIONS_POINTER, convent
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
 from ui.narrative_sections import korean, localized
-from quantgen_desktop.market_narrative_language import etf_korean
+from quantgen_desktop.market_narrative_language import etf_korean, letf_korean, letf_unavailable_korean
+from quantgen_desktop.market_diagnostics_language import decay_korean
+from core.i18n import LocaleContext
 from ui.components import card, empty_state, notice, section, stat
-from ui.ficc_widgets import action, form_row, hide_source, ko_notice, ko_stat, ko_verdict, lchip, synthetic_notice
+from ui.ficc_widgets import (action, decay_value_ko, form_row, hide_source, ko_notice, ko_stat, ko_verdict, lchip,
+                             synthetic_notice)
 import ui.xcharts as xc
 from core.research.etf_workflow import _clean, analyze as _analyze, narrative, payload, LETF, _CARD_FOR
 
 ROOT = Path(__file__).resolve().parents[1]
+_KO = LocaleContext("ko_KR")
+
+
+def _error(exc: Exception) -> ft.Control:
+    """The error banner: the message as raised in English; in Korean the catalogue wording when the
+    message is a known sentence, else a Korean lead-in before the original message."""
+    en = str(exc) if isinstance(exc, (HistoryError, ValueError)) else f"{type(exc).__name__}: {exc}"
+    known = _KO.text(en)
+    ko = known if known != en else f"분석하지 못했습니다. 종목코드와 입력값을 확인하세요 — {en}"
+    return ko_notice(notice(en, "error", icon=ft.Icons.ERROR_OUTLINE), ko)
+
+
+def _trend_reading(conventions: Optional[dict]) -> dict:
+    """Reading guidance for the ETF's trend-switch chart: a full-period backtest (no held-out
+    out-of-sample segment), flat while the 10-month average warms up, never a forecast."""
+    n = (conventions or {}).get("trend_warmup_daily_returns")
+    first_ko = f"처음 {n}거래일" if n else "처음 10개월"
+    first_en = f"the first {n} sessions" if n else "the first 10 months"
+    return {
+        "meaning": ("처음에 1을 넣었다면 10개월 추세 전환 전략(진한 선)과 매수 후 보유(회색 선)가 각각 얼마가 "
+                    "되었는지를 날짜별로 보여 줍니다. 표본 외 구간을 따로 떼어 두지 않은 전체 기간 백테스트입니다.",
+                    "What 1 invested at the start became, day by day, for the 10-month trend switch (dark line) and "
+                    "buy-and-hold (grey line). A backtest over the whole period, with no held-out out-of-sample part."),
+        "look": (f"{first_ko}은 10개월 이동평균을 계산하는 준비 구간이라 전략은 현금으로 있고, 진한 선은 고정 현금 "
+                 "수익만 받아 1.0 근처에서 거의 평평합니다. 그 뒤 오른쪽 끝에서 두 선의 높이와 크게 떨어진 구간"
+                 "(낙폭)을 비교하세요.",
+                 f"For {first_en} the 10-month average is still warming up, so the strategy sits in cash and the "
+                 "dark line stays nearly flat near 1.0, earning only the fixed cash return. After that, compare "
+                 "the two lines at the right end and the deep dips along the way (drawdowns)."),
+        "interpret": ("진한 선이 회색 선보다 위에서 끝나면 같은 기간 매수 후 보유보다 성과가 좋았습니다. 추세 전환은 "
+                      "하락 추세에서 현금으로 피해 낙폭을 줄이려는 규칙이라, 상승장에서는 뒤처질 수 있습니다.",
+                      "Ending above the grey line means the switch beat buy-and-hold over the period. The switch "
+                      "steps into cash in a downtrend to cut drawdowns, so it can lag in a rising market."),
+        "limit": ("이 펀드의 과거 가격으로 다시 계산한 결과이며 예측이 아닙니다. 준비 구간 때문에 매수 후 보유와 같은 "
+                  "조건의 비교가 아닙니다. 좋은 규칙인지는 화면의 연구 판정과 함께 보세요.",
+                  "Recomputed on this fund's past prices; not a forecast. The warm-up makes the comparison with "
+                  "buy-and-hold not like-for-like. Judge the rule with the study verdict shown on the page."),
+    }
 
 
 def analyze(code: str, *, days: int = 504, source: str = "auto", **letf_options) -> dict:
@@ -102,10 +143,8 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                                "letf_annual_fee": annual(fee),
                                "letf_dividend_yield": annual(dividend) if benchmark.value == "price_return" else None}
                 a = analyze(code.value or "069500", days=int(float(days.value or "504")), source=source.value or "auto", **options)
-            except (HistoryError, ValueError) as exc:
-                host.controls = [notice(str(exc), "error", icon=ft.Icons.ERROR_OUTLINE)]; busy.visible = False; page.update(); return
             except Exception as exc:
-                host.controls = [notice(f"{type(exc).__name__}: {exc}", "error", icon=ft.Icons.ERROR_OUTLINE)]
+                host.controls = [_error(exc)]
                 busy.visible = False; page.update(); return
             blocks: list[ft.Control] = []
             if a.get("data_source") == "SYNTHETIC":
@@ -126,13 +165,14 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                 ], spacing=12, run_spacing=12, wrap=True))
             ps = a.get("premium_stats")
             if ps:
-                blocks.append(notice(decay_text(ps.get('decay')), "accent"))
+                blocks.append(ko_notice(notice(decay_text(ps.get('decay')), "accent"), decay_korean(ps.get('decay'))))
                 half_life = decay_value(ps.get('decay'))
                 src = a['data_source']
                 blocks.append(ft.Row([
                     lchip(f"괴리율 z {ps['z']:+.2f}", f"premium z {ps['z']:+.2f}", "accent"),
                     lchip(f"|괴리율| 평균 {ps['abs_mean']:.2f}%", f"|premium| mean {ps['abs_mean']:.2f}%"),
-                    lchip(f"AR(1) 진폭 반감기 {half_life} 관측치", f"AR(1) amplitude half-life {half_life} observations"),
+                    lchip(f"AR(1) 진폭 반감기 {decay_value_ko(ps.get('decay'))} (관측 단위)",
+                          f"AR(1) amplitude half-life {half_life} observations"),
                     lchip(f"ADF p {ps['adf_p']:.3f}", f"ADF p {ps['adf_p']:.3f}"),
                     lchip(f"출처: {'합성 데이터' if src == 'SYNTHETIC' else src}", f"source: {src}",
                           "success" if src != "SYNTHETIC" else "muted")],
@@ -141,7 +181,7 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                                                     title=f"{a['code']} price vs NAV")))
             lt = a.get("letf")
             if lt and "rows" in lt:
-                blocks.append(notice(letf_text(lt), "accent"))
+                blocks.append(ko_notice(notice(letf_text(lt), "accent"), letf_korean(lt)))
                 blocks.append(ft.Row([ko_stat(stat(f"{lt['name']} AZ proxy · prior-quarter variance", f"{lt['last_quarter_drag_bp']:+.0f} bp / qtr",
                                            token="error" if lt['last_quarter_drag_bp'] < 0 else "text", tooltip=letf_text(lt)),
                                               f"{lt['name']} AZ 근사 · 직전 분기 분산")] +
@@ -157,7 +197,7 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                                                                    tooltip=letf_text(lt) + " " + lt.get("verdict_reason", "")))],
                                      spacing=12, run_spacing=12, wrap=True))
             elif lt:
-                blocks.append(notice(letf_unavailable_text(lt), "error"))
+                blocks.append(ko_notice(notice(letf_unavailable_text(lt), "error"), letf_unavailable_korean(lt)))
             sl = a.get("sleeves")
             if sl:
                 # §10 NEW-M6-04: an undefined Sharpe shows "n/a" and says why; NEW-M6-05: a defined one carries the
@@ -180,7 +220,10 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                 if conventions:
                     blocks.append(ko_notice(notice(conventions, "accent"), conventions_korean(sl["conventions"])))
                 blocks.append(card(xc.equity_chart(a.get("sleeve_dates", a["dates"]), sl["equity_trend"], sl["equity_bh"],
-                                                   title=f"10-month trend switch vs buy-and-hold ({sl['cost_bps']:.0f} bp per side)")))
+                                                   title=f"10-month trend switch vs buy-and-hold ({sl['cost_bps']:.0f} bp per side)",
+                                                   labels=("10-month trend switch", "buy-and-hold"),
+                                                   labels_ko=("10개월 추세 전환", "매수 후 보유"),
+                                                   reading=_trend_reading(sl.get("conventions")))))
             comps = a.get("components") or []
             if comps:
                 top = sorted(comps, key=lambda c: -(c["weight_pct"] or 0))[:10]

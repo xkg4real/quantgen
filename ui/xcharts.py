@@ -267,7 +267,7 @@ def _equity_title_ko(title: str) -> str:
 
 EQUITY_READING = {
     "meaning": ("처음에 1을 넣었다면 전략(진한 선)과 비교 기준(회색 선)이 각각 얼마가 되었는지를 날짜별로 보여 줍니다. "
-                "Strategy Lab에서는 전략을 정하는 데 쓰지 않은 기간(표본 외, OOS)의 성과입니다.",
+                "전략 실험실에서는 전략을 정하는 데 쓰지 않은 기간(표본 외, OOS)의 성과입니다.",
                 "What 1 invested at the start became, day by day, for the strategy (dark line) and the benchmark "
                 "(grey line). In the Strategy Lab this is the out-of-sample period, not used to choose the strategy."),
     "look": ("오른쪽 끝에서 두 선의 높이를 비교하고, 중간에 크게 떨어진 구간(낙폭)이 어디였는지 보세요. 점선 1.0이 "
@@ -287,9 +287,13 @@ EQUITY_READING = {
 
 def equity_chart(dates: Sequence[str], equity: np.ndarray, bench: Optional[np.ndarray] = None, *,
                  title: str = "Equity", labels: tuple[str, str] = ("strategy", "benchmark"),
-                 title_ko: Optional[str] = None, labels_ko: Optional[tuple[str, str]] = None) -> ft.Control:
+                 title_ko: Optional[str] = None, labels_ko: Optional[tuple[str, str]] = None,
+                 reading: Optional[dict] = None) -> ft.Control:
     """Strategy vs benchmark growth of 1. `title_ko` / `labels_ko` give the Korean wording; without
-    them the known caller titles and the default labels are translated, anything else is shown as given."""
+    them the known caller titles and the default labels are translated, anything else is shown as given.
+    `reading` replaces the side-panel guidance ({'meaning'|'look'|'interpret'|'limit': (Korean, English)});
+    the default describes the Strategy Lab's out-of-sample equity."""
+    guidance = reading or EQUITY_READING
     eq = np.asarray(equity, dtype=float)
     b = np.asarray(bench, dtype=float) if bench is not None else None
     if labels_ko is None:
@@ -309,7 +313,7 @@ def equity_chart(dates: Sequence[str], equity: np.ndarray, bench: Optional[np.nd
         ax.set_ylabel("1에서 시작한 누적 성과" if ko else "Growth of 1", fontsize=8)
         ax.set_title((title_ko or _equity_title_ko(title)) if ko else title, fontsize=10, loc="left")
         ax.legend(loc="upper left", fontsize=8, frameon=False, labelcolor=pal.text)
-        _reading(fig, **EQUITY_READING)
+        _reading(fig, **guidance)
         return fig
 
     return _localized(build)
