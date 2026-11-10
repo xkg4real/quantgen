@@ -14,6 +14,10 @@ with patch.object(dotenv, "load_dotenv", return_value=False):
     from quantgen_desktop.app import ResearchWindow
 from PyQt6.QtWidgets import QApplication
 
+# One application for the whole module: a QApplication made inside a test and dropped at its end
+# deletes Qt objects other modules keep (wheel_guard's filter) when several modules share a process.
+APP = QApplication.instance() or QApplication([])
+
 
 class CatalogueTests(unittest.TestCase):
     def test_area_catalogues_merge_without_conflicts(self):
@@ -45,7 +49,7 @@ class AutomaticSourceTests(unittest.TestCase):
             self.assertEqual(asked, ["synthetic"])
 
     def test_tool_panes_without_a_selector_do_not_ask_for_a_source(self):
-        app = QApplication.instance() or QApplication([])
+        app = APP
         for language, prompt in (("ko", "도구를 고른 뒤 실행하세요."), ("en", "Choose a tool, then run.")):
             w = ResearchWindow(auto_refresh=False, market_loader=lambda: [], language=language)
             try:
@@ -86,7 +90,7 @@ class AppNotesTests(unittest.TestCase):
         self.assertEqual(method_korean("unknown_method"), "unknown_method")
 
     def test_hidden_columns_take_no_table_width(self):
-        app = QApplication.instance() or QApplication([])
+        app = APP
         from quantgen_desktop.app import table, table_rows
         from quantgen_desktop.table_layout import configure_compact_table
         t = table(["Name", "Value", "Provider", "Observed"])

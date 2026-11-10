@@ -45,6 +45,7 @@ with patch.object(dotenv, 'load_dotenv', return_value=False):
                                                             display_conventions_korean)
     from ui import etf_page
 import flet as ft
+from quantgen_desktop.market_narrative_language import display_korean as screen_korean  # owner issue 07: card names on screen
 from tests.desktop_fx_language_acceptance import numbers
 
 RF = 0.03 / 252
@@ -621,7 +622,7 @@ class NativePaneTests(OfflineCase):
         labels = {x.source_text: x for x in pane.findChildren(UiLabel) if getattr(x, 'localized_text', {})}
         self.assertEqual(labels[note].localized_text, {'en': note, 'ko': display_sharpe_note_korean(sl)})
         self.assertEqual(labels[conventions].localized_text,
-                         {'en': conventions, 'ko': display_conventions_korean(sl['conventions'])})
+                         {'en': conventions, 'ko': screen_korean(display_conventions_korean(sl['conventions']))})
         report = deepcopy(pane.report)
         sections = json.dumps(pane.sections, sort_keys=True, default=lambda v: v.item())
         with patch.object(w.jobs, 'start', side_effect=AssertionError('no recomputation')):
@@ -676,7 +677,7 @@ class NativePaneTests(OfflineCase):
                          < order.index('sleeve_conventions'), True)
         labels = {x.source_text: x for x in pane.findChildren(UiLabel) if getattr(x, 'localized_text', {})}
         self.assertEqual(labels[conventions].localized_text,
-                         {'en': conventions, 'ko': display_conventions_korean(sl['conventions'])})
+                         {'en': conventions, 'ko': screen_korean(display_conventions_korean(sl['conventions']))})
         commentary = commentary_payload(pane.report)
         self.assertIn(conventions, [s.get('text') for s in commentary['sections']])
         self.assertIn('sleeve_conventions', [s['type'] for s in commentary['sections']])
