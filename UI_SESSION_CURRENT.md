@@ -3,7 +3,7 @@
 - status: checkpoint (UI 세션 전용 기록. 메인 `CURRENT.md`·`LEDGER.md`는 다른 Claude 세션
   session_01H6RrzMUzF8vwK8xkX977mB가 쓰는 중이라 건드리지 않음)
 - session: https://claude.ai/code/session_016uB1jf8m3p5GW1qzQVJe7k
-- work_branch: `claude/friendly-bardeen-r6xe8f` (main `9d1eacd`에서 시작), 기반 커밋 `55bcba9`
+- work_branch: `claude/friendly-bardeen-r6xe8f` (main `9d1eacd`에서 시작), 현재 `970058f`
 - updated_at: 2026-11-10 KST, waiting_on: none
 
 ## 소유자 요청 (원문)
@@ -30,10 +30,12 @@ zip = Flet 앱(main.py, ui/*.py) 스크린샷 14장. 파일 제목이 곧 지시
 
 ## 진행 상황
 
-- [x] 기반 커밋 `ae8a313`(LocalText·number_field·페이지별 번역 카탈로그), `55bcba9`(source="best" + 테스트). 브랜치 push 완료.
-- [x] 수정 전 화면 캡처: 컨테이너의 `/tmp/claude-0/qgshots/before/` (세션 종료 시 사라짐)
-- [ ] 6개 영역 병렬 구현(각 worktree 브랜치 `ui-fix/a-strategy`, `b-charts`, `c-rates`, `d-quotes`, `e-ficc`, `f-build`) ← 여기
-- [ ] 통합(merge) → 전체 테스트 → 독립 검토 → 수정 → 컴플라이언스 문서 검토와 기준선 갱신 → 수정 후 캡처 → push → 소유자 보고
+- [x] 기반 커밋 `ae8a313`, `55bcba9` (공용 헬퍼, source="best").
+- [x] 영역 브랜치 8개 구현·병합: a-strategy(01·06·07·09·10·11·12), b-charts(02, 한글 차트 글꼴·읽는 법), c-rates(08, 곡선 방법 6개 추가),
+  d-quotes(05), e-ficc(03·04·14), f-build(13·14·04), g-narratives(분석 요약 한국어), h-charts(나머지 차트 한국어). 병합 `970058f`, push 완료.
+- [x] CI 단계별 재현: 전 단계 통과. 단, `tests.desktop_a3_layout_acceptance`의 MC 콤보 1건은 main(9d1eacd)에서도 실패(다른 세션 PR #90 범위).
+- [ ] 독립 검토 4관점(버그·소유자 14건 화면·한국어·표현/컴플라이언스) 진행 중 ← 여기
+- [ ] 검토 반영 → 컴플라이언스 문서 07/08/12/13/14/15/19/FACTS 갱신과 `--refresh-baseline` → 수정 후 캡처 → push → 소유자 보고
 
 ## 다음 할 일 (세션이 끊기면)
 
