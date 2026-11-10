@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d
 next_ids: ⑤-2/b, ⑨-3a/series-files/3, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T06:25:00+09:00
+updated_at: 2026-11-11T06:45:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: main
-work_commit: 96cca1f
+work_branch: claude/provider-parity-tool-20261111
+work_commit: ba8b400
 uncommitted_changes: no
-pr: none
+pr: 102
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -97,7 +97,10 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 
 - [x] 결정 7·8·9·10: [PR #100](https://github.com/xkg4real/quantgen/pull/100) 병합 `1a8b29f`(트리 = head `e4b0772`). Runtime 42883511339 6/6·Compliance 42883511196 성공. 캐시 없는 전체 실행: main `7ddb568` 763/889, `e4b0772` 763/889, 바뀐 행 0(FAIL 2 기존 환경). 결정 기록 원문도 이 PR로 main에 들어감.
 - [ ] PR #100 `/code-review high` 9건 → 수정 워크플로 ws08qnsb0(워크트리 `rul`, 로컬 커밋, push 전): F1 임시 파일을 결과 확정까지 유지, F4 기존 대상 fsync, F7 공식 기준 단일 출처, F8 REPLACE_ 이름 변경, F9 재시도 Windows 한정, F3·F5 문서. 미수용 2건: fold flag(결정 9), "owner ruling 7" 문구. 끝나면 main에서 새 브랜치로 옮겨 후속 PR(⑨-3a/series-files/3).
-- [ ] ⑤-2/b 워크플로 wpjte04dg(워크트리 `parity`): 구현 완료, 검토 2관점 진행 중 → 수정 → 한국어 실행 안내서. 구현자가 남긴 임시 폴더 64,279개(9.8GB)는 지움. 시험이 임시 폴더를 남기는지 확인 필요.
+- [ ] ⑤-2/b: 워크플로 wpjte04dg 완료 → [PR #102](https://github.com/xkg4real/quantgen/pull/102), head `ba8b400`(도구 완성 `49a3a67` + P1 고정 기록). 시험 110개, 한국어 실행 안내서 `docs/product/PROVIDER_PARITY_OWNER_RUN_2026-11-11.md`(PowerShell 34단계). 시험이 임시 폴더를 남기던 문제 수정(159개 → 0개). CI와 `49a3a67`의 캐시 없는 전체 실행(scratchpad `parity`, `m1_compare.py <S> prep parity`) 대기.
+  - **소유자 결정 P1 (2026-11-11 06:3x KST, 원문):** "1번으로 승인하겠노" = 도구 버전을 main 쪽에 고정. 도구 커밋 `49a3a67b246d020381b27067103d1a7ba4795f9e`, 도구 파일 sha256 `d651795e4b4776d096601a43989c7f45c375ae120b75a64179432f469d2daca1`. 기록: `OWNER_RULINGS_LOG.md` 마지막 절, `results/RULINGS.md`, 도구 README, 한국어 안내서.
+  - **병합 직후 할 일:** main에서 실행 브랜치 `claude/provider-parity-runs-20261111`을 만들어 push(`git push origin origin/main:refs/heads/claude/provider-parity-runs-20261111`), `git branch -r --contains 49a3a67`로 확인 → 소유자에게 안내서와 "시작해도 됩니다" 전달 → 원장 `--done "⑤-2/b | ..."` → Notion.
+  - 소유자 PC 실행 뒤: 마지막 두 줄씩 18줄 + PARITY 3줄을 받아 판독. PASS가 아니면 선택지 정리 → 판정을 `results/RULINGS.md`에 원문 기록.
 - [x] ⑨-1/2/d 결정 1~6: [PR #101](https://github.com/xkg4real/quantgen/pull/101) 병합 `96cca1f`(트리 = head `30f009d`). Compliance 42899220664 성공(Runtime 경로 필터 밖), 캐시 없는 전체 실행 769/895 = main 763/889 + 새 시험 6개 PASS, 바뀐 행 0. 미완: KRWX(F16)는 FX 시계가 없어 생성기가 거부(소유자 질문 A-1), G-REF-01 기록 파일 위치·형식(A-2), 1995-04 이전 가격제한폭 빈 값(A-3). `MANIFEST.csv`의 ACQUISITION md5 한 칸을 총괄 세션이 갱신(README 규칙). 달력 서명 요청 목록: `docs/product/CALENDAR_SIGNING_REQUEST_2026-11-11.md`. `/code-review`는 병합 뒤 실행해 후속 PR에 묶음.
 - [x] 소유자 보고(03:5x KST): 파일럿·마감 경로와 일정 추정(도구 병합 뒤 4~6일, 현실적으로 1~2주), 결정 요청 P1~P4(도구 고정 위치, 연구 브랜치 담당, 병합 충돌 처리, 병합 전 main 보류 항목), B-Q1~Q5·Q7(채택 기준), C(0b, Q12, Qt, Q22, 확인용 6건), D-1~14(M-12 수치안). 상세본 `scratchpad/OWNER_REPORT_2026-11-11.md`(소유자에게 파일 전달). 원자료: `scratchpad/pilot_path_1111.json`, `scratchpad/reports_1111.json`. 답 대기 중이나 작업은 계속.
 - 참고: Windows CI 작업이 30분 제한에 근접(PR #100에서 3.11 30:00, 3.12 30:19). 제한 상향(30→45분)을 다음 PR에서 제안.
