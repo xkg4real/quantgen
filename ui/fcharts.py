@@ -62,8 +62,9 @@ def _date_axis(ax, dates) -> None:
 # Curves
 # --------------------------------------------------------------------------- #
 def curve_chart(report: CurveReport) -> ft.Control:
-    """Par, zero and 1y-forward curves off the fitted `YieldCurve`, the NS/NSS
-    fit dotted, and the snapshot's par yields as markers."""
+    """Par, zero and 1y-forward curves off the constructed `YieldCurve`, the
+    parametric fit dotted (the method's own, else the Nelson-Siegel reference),
+    and the snapshot's par yields as markers."""
     pal = active()
     snap, curve = report.snapshot, report.curve
     lo, hi = min(snap.tenors), max(snap.tenors)
@@ -74,21 +75,26 @@ def curve_chart(report: CurveReport) -> ft.Control:
     tp = tp[tp <= hi]
     par = np.array([curve.par_rate(x, 2) if x >= 1.0 else (1.0 / curve.df(x) - 1.0) / x
                     for x in tp])
-    fwd = np.array([curve.fwd(x, x + 1.0) for x in t])
-    fn = svensson if report.ns.method == "svensson" else nelson_siegel
+    tf = t[t + 1.0 <= hi + 1e-9]          # a 1y forward must end inside the quotes (no extrapolation)
+    fwd = np.array([curve.fwd(x, x + 1.0) for x in tf])
+    from core.ficc.curves import METHOD_NAMES, parametric_function   # the fit's own yield function
+    fn = parametric_function(report.ns.method)
     fig, ax = _fig(7.5, 3.2, pal)
     ax.plot(tp, par * 100, color=pal.accent, linewidth=1.6, label="Par (semi-annual)")
     ax.plot(t, curve.zero(t) * 100, color=pal.text, linewidth=1.2, label="Zero (cont.)")
-    ax.plot(t, fwd * 100, "--", color=pal.success, linewidth=1.1, label="1y forward")
+    ax.plot(tf, fwd * 100, "--", color=pal.success, linewidth=1.1, label="1y forward")
     ax.plot(t, fn(t, *report.ns.params) * 100, ":", color=pal.muted, linewidth=1.2,
-            label=f"{report.ns.method.replace('_', '-')} fit, rmse {report.ns.rmse / BP:.1f}bp")
+            label=f"{METHOD_NAMES.get(report.ns.method, report.ns.method)} fit, "
+                  f"rmse {report.ns.rmse / BP:.1f}bp")
     ax.scatter(snap.tenors, np.asarray(snap.par_yields) * 100, color=pal.accent, s=18,
                zorder=5)
     _tenor_axis(ax, snap.tenors)
-    ax.set_ylabel("%")
+    ax.set_xlabel("Maturity")
+    ax.set_ylabel("Rate (%)")
     _legend(ax, pal)
-    ax.set_title(f"{snap.date} {snap.source} — {report.shape}, {report.regime} over "
-                 f"{report.lookback} sessions", fontsize=10, loc="left")
+    ax.set_title(f"{snap.date} {snap.source} {METHOD_NAMES.get(curve.method, curve.method)} "
+                 f"curve — {report.shape}, {report.regime} over {report.lookback} sessions",
+                 fontsize=10, loc="left")
     return _to_image(fig)
 
 
