@@ -44,8 +44,9 @@ from core.i18n import LocaleContext
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
 from ui.narrative_sections import korean, localized
-from quantgen_desktop.rates_narrative import (cap_floor_korean, curve_korean, simulation_korean,
-                                              swap_korean, swaption_korean)
+from quantgen_desktop.rates_narrative import (REGIMES, SHAPES, cap_floor_korean, curve_korean,
+                                              simulation_korean, swap_korean, swap_name_ko, swaption_korean,
+                                              tenor_ko, tenor_word)
 from ui.components import (LocalText, card, chip, empty_state, notice, number_field, section,
                            stat)
 import ui.fcharts as fcharts
@@ -80,10 +81,12 @@ _METHOD_TEXT = {
                        "a change in one quote moves the curve only nearby, while every quote is "
                        "repriced exactly. The U.S. Treasury has used it for its official par yield "
                        "curve since December 2021.",
-    "smith_wilson": "The method insurance supervisors use (EIOPA, Solvency II): it passes exactly "
+    "smith_wilson": "The method EIOPA has used for the Solvency II risk-free interest rate curves (its "
+                    "extrapolation method is due to change from 30 January 2027). It passes exactly "
                     "through every quote and, beyond the last one, bends the forward rate toward an "
                     "assumed ultimate forward rate of 3.30% (convergence speed alpha 0.10). Both "
-                    "values are assumptions, not estimates; use it to see a long-end extrapolation.",
+                    "values are assumptions, not estimates. The curve is computed out to 60 years "
+                    "and held flat beyond, so values past 60 years are not Smith-Wilson.",
     "nelson_siegel": "Fits three factors (level, slope and curvature) plus one decay parameter by "
                      "least squares. Smooth and easy to read, but it misses individual quotes; the "
                      "fit error is shown with the result.",
@@ -100,11 +103,9 @@ _METHOD_TEXT = {
 _KIND_TEXT = {True: "Exact fit: reprices every quoted yield",
               False: "Smooth fit: the fit error is shown"}
 
-# Same Korean words as the native app (quantgen_desktop/rates_narrative.py).
-_SHAPES_KO = {"normal": "정상 우상향", "inverted": "역전", "humped": "중간 만기 돌출", "flat": "평탄"}
-_REGIMES_KO = {"bull steepener": "금리 하락·기울기 확대", "bull flattener": "금리 하락·기울기 축소",
-               "bear steepener": "금리 상승·기울기 확대", "bear flattener": "금리 상승·기울기 축소",
-               "parallel up": "평행 상승", "parallel down": "평행 하락", "unchanged": "변화 없음"}
+# The native app's words (quantgen_desktop/rates_narrative.py): one shared dict, not a copy.
+_SHAPES_KO = SHAPES
+_REGIMES_KO = REGIMES
 
 _SYNTHETIC_TEXT = {
     "curve": "Synthetic curve, not market data: a simulated demo curve stands in for the FRED "
@@ -131,8 +132,8 @@ def _money(x: float) -> str:
 
 
 _INPUT_NAMES_KO = {"Lookback": "변화 비교 기간", "Fixed rate": "고정금리", "Notional": "명목금액",
-                   "Strike": "행사가격", "Vol": "변동성", "Horizon": "기간", "Paths": "경로 수",
-                   "Threshold": "기준 금리", "Coupon": "채권 쿠폰"}
+                   "Strike": "행사금리", "Vol": "변동성", "Horizon": "기간", "Paths": "경로 수",
+                   "Threshold": "비교 금리", "Coupon": "채권 쿠폰"}
 
 
 class _InputError(ValueError):
@@ -173,16 +174,31 @@ def _ko(text: str) -> str:
     return _KO_CTX.text(text)
 
 
-def _table(columns: list[str], rows: list[list[str]], *, headers_ko=None) -> ft.Control:
+def _tenor_cell(label: str) -> ft.Control:
+    """A tenor as the chart reads it: '1개월' / '1년' in Korean, tenor_label's '1m' / '1y' in English."""
+    return LocalText(tenor_word(label), label, size=12)
+
+
+def _forward_name(label: str) -> ft.Control:
+    """'1y1y' -> '1년 후 1년' in Korean; the market name in English."""
+    import re
+    m = re.fullmatch(r"([\d.]+[mywd])([\d.]+[mywd])", label)
+    ko = f"{tenor_word(m[1])} 후 {tenor_word(m[2])}" if m else label
+    return LocalText(ko, label, size=12)
+
+
+def _table(columns: list[str], rows: list[list], *, headers_ko=None) -> ft.Control:
     # Only the approved table surfaces opt into source-preserving localization.
-    # Numbers are right-aligned (every column after the first label column).
+    # Numbers are right-aligned (every column after the first label column). A cell may be a
+    # control (a tenor authored in both languages); anything else is printed as given.
     text_cell = literal_text if headers_ko is not None else ft.Text
     return ft.Row([ft.DataTable(
         columns=[ft.DataColumn(table_header(c, ko=headers_ko.get(c), size=12)
                                if headers_ko is not None else ft.Text(c, size=12),
                                numeric=headers_ko is not None and i > 0)
                  for i, c in enumerate(columns)],
-        rows=[ft.DataRow(cells=[ft.DataCell(text_cell(v, size=12)) for v in r]) for r in rows],
+        rows=[ft.DataRow(cells=[ft.DataCell(v if isinstance(v, ft.Control) else text_cell(v, size=12))
+                                for v in r]) for r in rows],
         column_spacing=24, heading_row_height=36, data_row_max_height=36,
     )], scroll=ft.ScrollMode.AUTO)
 
@@ -316,6 +332,8 @@ def _run_curve(page, *, source: str, method: str, lookback: int) -> list[ft.Cont
     rows = []
     for r in curve.table():
         chg = report.changes.get(r["label"])
+        # The tenor stays the literal tenor_label here: tests/flet_a1_headers_acceptance.py requires this
+        # table's cells to be identical in both languages (the other rates tables read '1개월' / '1년').
         rows.append([r["label"], _pct(r["zero"], 3), f"{r['df']:.4f}", _pct(r["par"], 3),
                      _pct(r["fwd_1y"], 3), _bp(chg) if chg is not None else "—"])
     blocks.append(_table(["Tenor", "Zero", "DF", "Par", "1y fwd", f"Chg {report.lookback}d"],
@@ -365,8 +383,7 @@ def _run_swap(page, *, source: str, tenor_text: str, fixed_pct: float | None,
         stat("Carry (first period)", _money(rep.carry_1y)),
         stat("Roll-down 1y", _money(rep.rolldown_1y)),
     ], spacing=8, run_spacing=8, wrap=True))
-    side_ko = "고정금리 지급" if pay_fixed else "고정금리 수취"
-    name_ko = f"{tenor_label(start) if start > 0 else ''}{tenor_label(tenor)} {side_ko} 스왑"
+    name_ko = swap_name_ko(swap.label)
     blocks.append(ft.Row([
         _local_chip(name_ko, swap.label, "accent"),
         _src_chip("curve", panel.source),
@@ -376,8 +393,8 @@ def _run_swap(page, *, source: str, tenor_text: str, fixed_pct: float | None,
     ], spacing=6, run_spacing=6, wrap=True))
     blocks.append(card(fcharts.krd_chart(rep.krd, f"Key-rate DV01 — {swap.label}")))
     blocks.append(_table(["Forward swap", "Par rate"],
-                         [[n, _pct(v, 3)] for n, v in rep.fwd_rates.items()],
-                         headers_ko={"Forward swap": "선도 스왑", "Par rate": "파 스왑금리"}))
+                         [[_forward_name(n), _pct(v, 3)] for n, v in rep.fwd_rates.items()],
+                         headers_ko={"Forward swap": "선도 스왑", "Par rate": "파 금리"}))
     payload = {
         "swap": swap.label, "tenor": tenor, "start": start, "pay_fixed": pay_fixed,
         "notional": notional, "fixed_rate": k, "par_rate": rep.par_rate, "pv": rep.pv,
@@ -416,10 +433,10 @@ def _run_option(page, *, source: str, kind: str, expiry_text: str, tenor_text: s
             other = f"{rep.other_model_vol / BP:.0f}bp normal"
         side = "payer" if payer else "receiver"
         label = f"{tenor_label(sw.expiry)}x{tenor_label(sw.tenor)} {side}"
-        side_ko = "지급자형 (payer)" if payer else "수취자형 (receiver)"
+        side_ko = "고정금리 지급 (Payer)" if payer else "고정금리 수취 (Receiver)"
         blocks.append(ft.Row([
-            stat("Forward", _pct(rep.forward, 3)),
-            stat("Strike (ATM)" if strike is None else "Strike", _pct(rep.strike, 3)),
+            stat("Forward swap rate", _pct(rep.forward, 3)),
+            stat("Strike (ATM)" if strike is None else "Strike rate", _pct(rep.strike, 3)),
             stat("Premium", _money(rep.premium)),
             stat("Premium (bp of notional)", f"{rep.premium_bp:.1f}bp"),
             stat("Delta (per +1bp fwd)", _money(rep.delta)),
@@ -429,7 +446,7 @@ def _run_option(page, *, source: str, kind: str, expiry_text: str, tenor_text: s
             stat("Other-model vol", other),
         ], spacing=8, run_spacing=8, wrap=True))
         blocks.append(ft.Row([
-            _local_chip(f"{tenor_label(sw.expiry)}x{tenor_label(sw.tenor)} 스왑션 · {side_ko}",
+            _local_chip(f"{tenor_ko(sw.expiry)}×{tenor_ko(sw.tenor)} 스왑션 · {side_ko}",
                         label, "accent"),
             _local_chip(f"{_ko(_OPTION_MODELS[model])}: {_vol_text_ko(model, vol_in)}",
                         f"{model}: {vol_text}"),
@@ -460,19 +477,21 @@ def _run_option(page, *, source: str, kind: str, expiry_text: str, tenor_text: s
     rep = price_cap_floor(curve, tenor, strike, vol=vol, model=model, cap=kind == "cap",
                           notional=notional)
     dearest = max(rep.caplets, key=lambda c: c[3]) if rep.caplets else None
+    kind_ko = {"cap": "캡", "floor": "플로어"}.get(kind, kind)
     blocks.append(ft.Row([
-        stat("Strike (ATM)" if strike is None else "Strike", _pct(rep.strike, 3)),
+        stat("Strike (ATM)" if strike is None else "Strike rate", _pct(rep.strike, 3)),
         stat("ATM (par swap)", _pct(rep.atm_strike, 3)),
         stat("Premium", _money(rep.premium)),
         stat("Premium (bp of notional)", f"{rep.premium_bp:.1f}bp"),
-        stat("Caplets", str(len(rep.caplets))),
-        stat("Dearest caplet",
-             f"{tenor_label(dearest[0])}-{tenor_label(dearest[1])}: {_money(dearest[3])}"
-             if dearest else "—"),
+        _local_stat(f"{kind_ko}렛 수", "Caplet count", str(len(rep.caplets))),
+        _local_stat(f"가장 비싼 {kind_ko}렛", "Dearest caplet",
+                    f"{tenor_label(dearest[0])}-{tenor_label(dearest[1])}: {_money(dearest[3])}"
+                    if dearest else "—",
+                    value_ko=(f"{tenor_ko(dearest[0])}-{tenor_ko(dearest[1])}: {_money(dearest[3])}"
+                              if dearest else "—")),
     ], spacing=8, run_spacing=8, wrap=True))
-    kind_ko = {"cap": "캡", "floor": "플로어"}.get(kind, kind)
     blocks.append(ft.Row([
-        _local_chip(f"{tenor_label(tenor)} {kind_ko}", f"{tenor_label(tenor)} {kind}", "accent"),
+        _local_chip(f"{tenor_ko(tenor)} {kind_ko}", f"{tenor_label(tenor)} {kind}", "accent"),
         _local_chip(f"{_ko(_OPTION_MODELS[model])}: {_vol_text_ko(model, vol_in)}",
                     f"{model}: {vol_text}"),
         _src_chip("curve", panel.source),
@@ -481,7 +500,8 @@ def _run_option(page, *, source: str, kind: str, expiry_text: str, tenor_text: s
     ], spacing=6, run_spacing=6, wrap=True))
     blocks.append(card(fcharts.caplet_chart(rep)))
     blocks.append(_table(["Start", "End", "Forward", "Premium"],
-                         [[f"{a:.2f}y", f"{b:.2f}y", _pct(f, 3), _money(p)]
+                         [[LocalText(f"{a:.2f}년", f"{a:.2f}y", size=12), LocalText(f"{b:.2f}년", f"{b:.2f}y", size=12),
+                           _pct(f, 3), _money(p)]
                           for a, b, f, p in rep.caplets],
                          headers_ko={"Start": "시작", "End": "종료", "Forward": "선도금리",
                                      "Premium": "프리미엄"}))
@@ -527,7 +547,8 @@ def _run_sim(page, *, source: str, model: str, horizon: float, n_paths: int,
     blocks.append(ft.Row([
         stat("Model", _MODEL_LABELS.get(model, model)),
         stat("Mean reversion (kappa)", f"{p.kappa:.2f}/yr"),
-        stat("Half-life", f"{math.log(2) / p.kappa:.1f}y"),
+        _local_stat("반감기", "Half-life", f"{math.log(2) / p.kappa:.1f}y",
+                    value_ko=f"{math.log(2) / p.kappa:.1f}년"),
         stat("Long-run mean (theta)", _pct(p.theta)), stat("Volatility (sigma)", sigma),
         stat("Current rate (r0)", _pct(p.r0)),
         _local_stat(f"{horizon:g}년 후 평균", f"Mean at {horizon:g}y", _pct(sim.mean_terminal)),
@@ -546,11 +567,11 @@ def _run_sim(page, *, source: str, model: str, horizon: float, n_paths: int,
     blocks.append(card(fcharts.rate_fan_chart(sim)))
     zero_header = f"Model zero at {horizon:g}y (median path)"
     blocks.append(_table(["Tenor", zero_header],
-                         [[tenor_label(t), _pct(z, 3)] for t, z in sim.model_curve_at_horizon],
+                         [[_tenor_cell(tenor_label(t)), _pct(z, 3)] for t, z in sim.model_curve_at_horizon],
                          headers_ko={"Tenor": "만기",
                                      zero_header: f"{horizon:g}년 후 모형 무이표 금리 (중앙 경로)"}))
     if hpv is not None:
-        length = tenor_label(parse_tenor(instr_tenor_text))
+        length = tenor_ko(parse_tenor(instr_tenor_text))
         what_ko = (f"{_pct(coupon_pct / 100.0)} {length} 채권" if instrument == "bond"
                    else f"{length} 고정금리 지급 스왑")
         blocks.append(ft.Row([
@@ -676,9 +697,9 @@ def build_rates_page(page: ft.Page, on_open_settings: Optional[Callable] = None)
                   [("swaption", "Swaption"), ("cap", "Cap"), ("floor", "Floor")])
     opt_expiry = tf("Option expiry", 130, "1y")
     opt_tenor = tf("Swap / cap length", 150, "5y")
-    opt_strike = nf("Strike %", 120, hint="blank = ATM")
-    opt_side = dd("Swaption side", 170, "payer", [("payer", "Payer"), ("receiver", "Receiver")])
-    opt_model = dd("Option model", 180, "bachelier", list(_OPTION_MODELS.items()),
+    opt_strike = nf("Strike rate %", 130, hint="blank = ATM")
+    opt_side = dd("Swaption side", 250, "payer", [("payer", "Payer"), ("receiver", "Receiver")])
+    opt_model = dd("Option model", 200, "bachelier", list(_OPTION_MODELS.items()),
                    on_select=vol_unit)
     opt_vol = nf(_VOL_LABELS["bachelier"], 150, _VOL_DEFAULTS["bachelier"])
     opt_notional = nf("Notional", 160, "1000000")

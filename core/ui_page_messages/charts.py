@@ -31,9 +31,10 @@ EN_TO_KO: dict[str, str] = {
     "Key levels": "주요 지표 수준",
     "All indicators": "전체 지표",
     "Reports": "보고서",
-    "Descriptive read — not a regime model (P19)": "현재 상태를 설명하는 해석 — 국면 모형 아님 (P19)",
+    # The ruling id (P19) stays in the English caption and in the Korean tooltip, not in the Korean sentence.
+    "Descriptive read — not a regime model (P19)": "현재 상태를 설명하는 해석 — 국면 모형 아님",
     "1y z-scores · descriptive read — not a regime model (P19)":
-        "1년 z-점수 · 현재 상태를 설명하는 해석 — 국면 모형 아님 (P19)",
+        "1년 z-점수 · 현재 상태를 설명하는 해석 — 국면 모형 아님",
     "Yield curve (20 sessions)": "금리 곡선 (20거래일)",
     "Risk appetite": "위험선호",
     "Dollar": "달러",
@@ -52,7 +53,7 @@ EN_TO_KO: dict[str, str] = {
     "Dry run (macro dir/dry_run)": "모의 실행 (macro 폴더/dry_run)",
     "Run macro_daily": "macro_daily 실행",
     "Run": "실행",
-    "Dry run (local vendor data)": "모의 실행 (로컬 공급사 데이터)",
+    "Dry run (local vendor data)": "모의 실행 (로컬 제공처 데이터)",
     "Live (needs KIS, signed calendars)": "실제 실행 (KIS·서명된 거래 달력 필요)",
     "Running… (hermetic, local data)": "실행 중… (외부 연결 없이 로컬 데이터 사용)",
     "Running one live decision…": "실제 결정 1건 실행 중…",
@@ -65,10 +66,10 @@ EN_TO_KO: dict[str, str] = {
     "No macro state yet": "아직 매크로 상태 기록이 없습니다",
     "Run macro_daily (dry run on local vendor data) to see the pipeline end to end; books stay DISARMED until "
     "official closes and signed calendars exist.":
-        "macro_daily를 모의 실행(로컬 공급사 데이터)하면 전체 과정을 처음부터 끝까지 볼 수 있습니다. 공식 종가와 "
+        "macro_daily를 모의 실행(로컬 제공처 데이터)하면 전체 과정을 처음부터 끝까지 볼 수 있습니다. 공식 종가와 "
         "서명된 거래 달력이 생기기 전까지 모든 북은 DISARMED(비활성) 상태입니다.",
     "VENDOR DATA · DRY RUN · not an official close · not a card run":
-        "공급사 데이터 · 모의 실행 · 공식 종가 아님 · 카드 실행 아님",
+        "제공처 데이터 · 모의 실행 · 공식 종가 아님 · 카드 실행 아님",
     "volatility labels (display only)": "변동성 라벨 (표시 전용)",
     "Acknowledge": "확인",
     "Alerts": "알림",
@@ -110,7 +111,9 @@ EN_TO_KO: dict[str, str] = {
     "Dispute": "이의 제기",
     "Event": "이벤트",
     "Region": "지역",
-    "Disposition": "처분",
+    "Disposition": "용도 구분",
+    "Rule": "규칙",
+    "Card": "카드",
     "First seen (UTC)": "처음 발생 (UTC)",
     "Obs date": "관측일",
     "Value status": "값 상태",
@@ -122,33 +125,37 @@ EN_TO_KO: dict[str, str] = {
     # Macro -> Model cards (ui/macro_cards_view.py)
     "Macro model cards": "매크로 모형 카드",
     "CARD-O / CARD-P registry. Nothing here reaches the recommended book until it PASSes under a frozen gate package.":
-        "CARD-O / CARD-P 등록부. 동결된 게이트 패키지에서 PASS하기 전에는 어떤 항목도 권장 북에 들어가지 않습니다.",
-    "Registered REJECT — a fact about the instrument": "등록된 REJECT — 해당 상품에 대한 사실 기록",
+        "CARD-O / CARD-P 등록부. 동결된 게이트 패키지에서 통과(PASS)하기 전에는 어떤 항목도 권장 북에 들어가지 "
+        "않습니다.",
+    "Registered REJECT — a fact about the instrument": "등록된 기각(REJECT) — 해당 상품에 대한 사실 기록",
     "Registered card: never re-run, never rebuilt.": "등록된 카드: 다시 실행하거나 다시 만들지 않습니다.",
     "FORWARD-SIM books — not a recommendation": "FORWARD-SIM 북 — 권유 아님",
     "Display only: a FORWARD-SIM multiplier never reaches the recommended book, and a forward record never validates.":
         "표시 전용: FORWARD-SIM 배수는 권장 북에 들어가지 않으며, 이후 기록이 검증을 대신하지 않습니다.",
     "Refusal books — not a recommendation": "거절 북 — 권유 아님",
     "Retired legs kept as labelled REJECTs (archived council records); display only.":
-        "퇴역한 구성요소를 REJECT 표시와 함께 보관한 기록(위원회 기록), 표시 전용.",
+        "퇴역한 구성요소를 기각(REJECT) 표시와 함께 보관한 기록(위원회 기록)이며 표시 전용입니다.",
     "Reading… (local files, read-only)": "읽는 중… (로컬 파일, 읽기 전용)",
     "Read-only records. A verdict chip shows only a gate result; BUILD-AS-INSURANCE, FORWARD-SIM and refusal are "
     "dispositions, shown beside it. Labels are printed verbatim.":
-        "읽기 전용 기록입니다. 판정 칩은 게이트 결과만 보여 주며, BUILD-AS-INSURANCE·FORWARD-SIM·거절은 처분으로 "
-        "옆에 따로 표시합니다. 라벨은 원문 그대로 표시합니다.",
+        "읽기 전용 기록입니다. 판정 칩은 게이트 결과만 보여 주며, BUILD-AS-INSURANCE·FORWARD-SIM·거절은 용도 구분으로 "
+        "옆에 따로 표시합니다. 등록부의 라벨은 '원문 보기'에 그대로 있습니다.",
     "No macro card runs before the freeze: every card stays NOT RUN until the package is frozen and its formal run "
     "is recorded (P11).":
-        "동결 전에는 매크로 카드를 실행하지 않습니다. 패키지가 동결되고 정식 실행이 기록될 때까지 모든 카드는 NOT RUN"
-        "입니다 (P11).",
+        "동결 전에는 매크로 카드를 실행하지 않습니다. 패키지가 동결되고 정식 실행이 기록될 때까지 모든 카드는 "
+        "미실행 상태입니다.",
+    "Ruling P11: no card runs before the gate package is frozen and its formal run is recorded.":
+        "운영 규칙 P11: 게이트 패키지가 동결되고 정식 실행이 기록되기 전에는 어떤 카드도 실행하지 않습니다.",
+    "Original record": "원문 보기",
     "Model cards not shown: the card registry, verdict chain or gate status is missing or invalid (fail closed).":
         "모형 카드를 표시하지 않습니다: 카드 등록부, 판정 기록 또는 게이트 상태가 없거나 올바르지 않습니다 (안전 차단).",
     "Gate package": "게이트 패키지",
     "Tech-fund card drafts — not run, not a recommendation": "테크 펀드 카드 초안 — 미실행, 권유 아님",
     "Proposals pending owner confirmation; Council v2.0 governs on conflict.":
         "소유자 확인을 기다리는 제안입니다. 충돌하면 Council v2.0을 따릅니다.",
-    "CRY-1 control results (crypto card C3)": "CRY-1 대조 결과 (암호화폐 카드 C3)",
+    "CRY-1 control results (crypto card C3)": "CRY-1 대조 결과 (가상자산 카드 C3)",
     "Vendor data, labelled trials, not formal card runs; the stored C3 verdict is not rewritten.":
-        "공급사 데이터로 표시한 시험이며 정식 카드 실행이 아닙니다. 저장된 C3 판정은 바뀌지 않습니다.",
+        "제공처 데이터로 표시한 시험이며 정식 카드 실행이 아닙니다. 저장된 C3 판정은 바뀌지 않습니다.",
     "No tech-fund card drafts found under docs/techfund.": "docs/techfund에서 테크 펀드 카드 초안을 찾지 못했습니다.",
     "No CRY-1 results found under docs/techfund.": "docs/techfund에서 CRY-1 결과를 찾지 못했습니다.",
 }

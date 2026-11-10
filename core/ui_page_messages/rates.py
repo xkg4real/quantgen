@@ -49,13 +49,16 @@ EN_TO_KO: dict[str, str] = {
         "Hagan-West 방법: 선도금리가 끊기지 않고 양수로 유지되며, 한 만기의 금리가 바뀌어도 그 주변만 "
         "움직입니다. 모든 고시 금리를 정확히 재현하며, 미국 재무부가 2021년 12월부터 공식 파 수익률 "
         "곡선에 쓰고 있습니다.",
-    "The method insurance supervisors use (EIOPA, Solvency II): it passes exactly through every "
+    "The method EIOPA has used for the Solvency II risk-free interest rate curves (its "
+    "extrapolation method is due to change from 30 January 2027). It passes exactly through every "
     "quote and, beyond the last one, bends the forward rate toward an assumed ultimate forward rate "
-    "of 3.30% (convergence speed alpha 0.10). Both values are assumptions, not estimates; use it to "
-    "see a long-end extrapolation.":
-        "보험 감독(EIOPA, 지급여력제도 Solvency II)에서 쓰는 방법입니다. 모든 고시 금리를 정확히 지나고, "
-        "마지막 만기 뒤의 선도금리는 미리 가정한 장기 선도금리(UFR) 3.30%로 수렴시킵니다(수렴 속도 alpha "
-        "0.10). 두 값은 추정치가 아닌 가정이며, 초장기 구간의 외삽을 볼 때 씁니다.",
+    "of 3.30% (convergence speed alpha 0.10). Both values are assumptions, not estimates. The curve "
+    "is computed out to 60 years and held flat beyond, so values past 60 years are not "
+    "Smith-Wilson.":
+        "EIOPA가 Solvency II 무위험 금리 곡선에 써 온 방법입니다(2027-01-30부터 외삽 방식 개정 예정). "
+        "모든 고시 금리를 정확히 지나고, 마지막 만기 뒤의 선도금리는 미리 가정한 장기 선도금리(UFR) "
+        "3.30%로 수렴시킵니다(수렴 속도 alpha 0.10). 두 값은 추정치가 아닌 가정입니다. 곡선은 60년까지만 "
+        "계산하고 그 뒤는 평탄하게 두므로, 60년을 넘는 값은 Smith-Wilson 결과가 아닙니다.",
     "Fits three factors (level, slope and curvature) plus one decay parameter by least squares. "
     "Smooth and easy to read, but it misses individual quotes; the fit error is shown with the "
     "result.":
@@ -94,20 +97,21 @@ EN_TO_KO: dict[str, str] = {
     "Swap / cap length": "스왑·캡 기간",
     "blank = ATM": "비우면 ATM",
     "Swaption side": "스왑션 방향",
-    "Payer": "지급자형 (Payer)",
-    "Receiver": "수취자형 (Receiver)",
+    "Payer": "고정금리 지급 (Payer)",
+    "Receiver": "고정금리 수취 (Receiver)",
     "Option model": "옵션 모형",
     "Bachelier (normal)": "Bachelier (정규)",
     "Normal vol (bp)": "정규 변동성 (bp)",
     "Black vol (%)": "Black 변동성 (%)",
+    "Strike rate %": "행사금리 %",
     "Option expiry applies to swaptions only. Length is the underlying swap, or the whole cap or "
     "floor. Leave the strike blank for at-the-money.":
         "옵션 만기는 스왑션에만 쓰입니다. 기간은 기초 스왑의 길이, 또는 캡·플로어 전체 기간입니다. "
-        "행사가를 비우면 등가격(ATM)으로 계산합니다.",
+        "행사금리를 비우면 등가격(ATM)으로 계산합니다.",
     # Rate simulation inputs
     "Rate model": "금리 모형",
     "Horizon (years)": "기간 (년)",
-    "Threshold % (optional)": "기준 금리 % (선택)",
+    "Threshold % (optional)": "비교 금리 % (선택)",
     "Revalue": "재평가 대상",
     "Nothing": "없음",
     "Bond": "채권",
@@ -116,7 +120,7 @@ EN_TO_KO: dict[str, str] = {
     "Bond coupon %": "채권 쿠폰 %",
     "The model is calibrated on the SOFR history. The threshold (optional) adds the probability "
     "of ending above it; tenor and coupon are used only when an instrument is revalued.":
-        "모형은 SOFR 과거 자료로 보정합니다. 기준 금리(선택)를 넣으면 기간 말에 그보다 높을 확률을 "
+        "모형은 SOFR 과거 자료로 보정합니다. 비교 금리(선택)를 넣으면 기간 말에 그보다 높을 확률을 "
         "함께 보여 주며, 상품 만기와 쿠폰은 재평가할 상품을 고른 경우에만 쓰입니다.",
     # Result notices
     "Synthetic curve, not market data: a simulated demo curve stands in for the FRED Treasury "
@@ -136,9 +140,10 @@ EN_TO_KO: dict[str, str] = {
     "Level (2/5/10y)": "금리 수준 (2·5·10년 평균)",
     "1y1y": "1y1y (1년 뒤 1년 선도)",
     "2y1y": "2y1y (2년 뒤 1년 선도)",
-    "1y fwd vs 1y": "1년 금리의 1년 뒤 예상 변화",
+    # A forward minus spot is arithmetic on today's curve, never an expectation.
+    "1y fwd vs 1y": "1년 선도 − 1년 현물 (곡선에 반영된 변화)",
     # Swap results
-    "Par rate": "파 스왑금리",
+    "Par rate": "파 금리",
     "Fixed rate": "고정금리",
     "Fixed rate (par)": "고정금리 (= 파 금리)",
     "PV": "현재가치 (PV)",
@@ -147,9 +152,12 @@ EN_TO_KO: dict[str, str] = {
     "Carry (first period)": "캐리 (첫 이자기간)",
     "Roll-down 1y": "1년 롤다운",
     "Forward swap": "선도 스왑",
-    # Swaption / cap-floor results
-    "Forward": "선도 스왑금리",
-    "Strike (ATM)": "행사가격 (ATM)",
+    # Swaption / cap-floor results. "Forward" alone is shared app-wide (FX forward, caplet forward), so it
+    # stays generic; the swaption tile uses its own key.
+    "Forward": "선도",
+    "Forward swap rate": "선도 스왑금리",
+    "Strike rate": "행사금리",
+    "Strike (ATM)": "행사금리 (ATM)",
     "Premium": "프리미엄",
     "Premium (bp of notional)": "프리미엄 (명목금액 대비 bp)",
     "Delta (per +1bp fwd)": "델타 (선도금리 +1bp당)",
@@ -159,8 +167,9 @@ EN_TO_KO: dict[str, str] = {
     "Theta (1d)": "세타 (1일)",
     "Other-model vol": "다른 모형으로 환산한 변동성",
     "ATM (par swap)": "ATM (파 스왑금리)",
-    "Caplets": "캐플릿 수",
-    "Dearest caplet": "가장 비싼 캐플릿",
+    "Caplets": "캡렛",
+    "Caplet count": "캡렛 수",
+    "Dearest caplet": "가장 비싼 캡렛",
     # Simulation results
     "Mean reversion (kappa)": "평균회귀 속도 (kappa)",
     "Half-life": "반감기",

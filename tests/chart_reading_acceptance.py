@@ -133,7 +133,10 @@ class MacroChartTests(unittest.TestCase):
         translate_controls(root, KO)
         shown = " ".join(texts(root))
         self.assertIn("0의 오른쪽이면 1년 평균보다 높고", shown)
-        self.assertIn("P19", shown)
+        # Owner review 2026-11-10: the disclosure is said in words in Korean; the ruling id (P19) moved to the
+        # caption's tooltip (MacroPageTests checks it there) and stays in the English text.
+        self.assertIn("국면 모형이나 예측이 아닙니다", shown)
+        self.assertNotIn("P19", shown)
         translate_controls(root, EN)
         shown = " ".join(texts(root))
         self.assertIn("Bars right of 0 are above the 1-year average", shown)
@@ -449,9 +452,12 @@ class MacroPageTests(unittest.TestCase):
         translate_controls(root, KO)
         shown = texts(root)
         joined = " ".join(shown)
-        for caption in ("시장 요약", "현재 상태를 설명하는 해석 — 국면 모형 아님 (P19)", "금리 곡선 (20거래일)",
+        # Owner review 2026-11-10: the Korean caption says the disclosure in words; the ruling id is its tooltip.
+        for caption in ("시장 요약", "현재 상태를 설명하는 해석 — 국면 모형 아님", "금리 곡선 (20거래일)",
                         "위험선호", "미 국채 2년 금리 (UST 2y)"):
             self.assertIn(caption, shown)
+        tips = [c.tooltip for c in walk(root) if isinstance(c, ft.Container) and isinstance(c.tooltip, str)]
+        self.assertTrue(any("P19" in t and "국면" in t for t in tips), tips)
         self.assertIn("새로고침", [b.content for b in walk(root) if isinstance(b, ft.Button)])
         self.assertIn("합성 데이터 사용 중", joined)                      # the synthetic notice stays loud
         translate_controls(root, EN)
@@ -462,6 +468,205 @@ class MacroPageTests(unittest.TestCase):
         self.assertIn("US Treasury 2-year yield (UST 2y)", shown)
         self.assertNotIn("시장 요약", shown)
         self.assertIn("Refresh", [b.content for b in walk(root) if isinstance(b, ft.Button)])
+
+    def test_provider_chips_say_installed_in_muted_never_ready_in_green(self):
+        from ui import macro_page
+        status = [{"id": "fred", "ready": True, "note": "Keyless. Treasury curve, SOFR, OECD short rates, credit "
+                                                        "OAS, macro."},
+                  {"id": "yfinance", "ready": False, "note": ""}]
+        with patch.object(macro_page.config, "ficc_provider_status", return_value=status):
+            root, _ = self.build()
+        translate_controls(root, KO)
+        shown = texts(root)
+        self.assertIn("FRED 설치됨", shown)
+        self.assertIn("Yahoo 미설치", shown)
+        self.assertFalse(any("사용 가능" in t for t in shown))
+        muted = active_palette().muted
+        chips = [c for c in walk(root) if isinstance(c, ft.Text) and c.value in ("FRED 설치됨", "Yahoo 미설치")]
+        self.assertTrue(chips and all(c.color == muted for c in chips))
+        self.assertIn("합성 18개 지표", shown)                       # what answered is the provenance chip's job
+        translate_controls(root, EN)
+        self.assertIn("FRED: installed", texts(root))
+
+    def test_market_summary_words_follow_the_core_rules_and_the_shared_vocabulary(self):
+        from quantgen_desktop.macro_narrative_language import PAIRS
+        from quantgen_desktop.rates_narrative import REGIMES
+        from ui import charts_terms, rates_page
+        for word, korean in REGIMES.items():
+            self.assertEqual(korean, PAIRS[word])
+            self.assertEqual(charts_terms.CURVE_WORDS[word][0], korean)
+            self.assertEqual(fcharts._REGIMES_KO[word], korean)
+            self.assertEqual(rates_page._REGIMES_KO[word], korean)
+        for word in ("bear steepener", "bull flattener"):
+            self.assertEqual(fcharts._scenario_ko(word), REGIMES[word])
+        self.assertEqual(charts_terms.DOLLAR_WORDS["range"][0], "횡보")
+        on, off, neutral = (charts_terms.RISK_WORDS[k] for k in ("risk-on", "risk-off", "neutral"))
+        self.assertIn("-0.5보다 낮습니다", on[1]); self.assertIn("below -0.5", on[2])
+        self.assertIn("+0.75보다 높습니다", off[1]); self.assertIn("above +0.75", off[2])
+        self.assertIn("-0.5와 +0.75 사이", neutral[1]); self.assertIn("between -0.5 and +0.75", neutral[2])
+        for _, ko, en in (on, off, neutral):
+            self.assertIn("z-점수 평균", ko)
+            self.assertIn("average of the VIX and high-yield spread 1-year z-scores", en)
+
+
+def active_palette():
+    from core.theme import active
+    return active()
+
+
+def visible_texts(root):
+    """Text values outside collapsed ExpansionTiles (what a reader sees before opening anything)."""
+    seen, out = set(), []
+
+    def visit(control):
+        if not isinstance(control, ft.Control) or id(control) in seen:
+            return
+        seen.add(id(control))
+        if isinstance(control, ft.ExpansionTile):
+            visit(control.title)
+            if not control.expanded:
+                return
+        if isinstance(control, ft.Text) and isinstance(control.value, str):
+            out.append(control.value)
+        for name in ("controls", "content", "title", "rows", "cells", "columns", "label"):
+            value = getattr(control, name, None)
+            for child in value if isinstance(value, (list, tuple)) else [value]:
+                visit(child)
+    visit(root)
+    return out
+
+
+class OwnerReviewFollowUpTests(unittest.TestCase):
+    """Owner UI review 2026-11-10, second round: sharp charts, readable ticks, Korean wording."""
+
+    def tearDown(self):
+        set_mode("light")
+
+    def test_charts_are_drawn_at_twice_their_size_and_never_shown_wider_than_designed(self):
+        from core.ficc import data
+        from core.ficc.curves import analyze_curve
+        from core.quant.history import synthetic_history
+        from core.quant.risk import align_histories
+        from ui import chart_study
+        stats = align_histories([synthetic_history(s) for s in ("AAPL", "MSFT", "NVDA")])
+        report = analyze_curve(data.synthetic_curve_panel(days=60), method="nelson_siegel")
+        for study in (fcharts.curve_chart(report), qcharts.corr_heatmap(stats.corr, stats.symbols)):
+            with self.subTest(chart=study.chart_title):
+                _png, width, height = chart_study.figure_png(study.figure)
+                self.assertEqual(chart_study.SCALE, 2)
+                self.assertAlmostEqual(study.image.width, width / 2)
+                self.assertAlmostEqual(width / 2, study.figure.get_figwidth() * study.figure.dpi, delta=60)
+                self.assertEqual(study.image.fit, ft.BoxFit.SCALE_DOWN)        # only ever scaled down
+                self.assertIs(study.frame.content, study.image)
+                self.assertEqual(study.frame.alignment, ft.Alignment.TOP_LEFT)  # left-aligned, never stretched
+                self.assertIs(study.controls[0].controls[0].content, study.frame)
+                study.render_theme(DARK)                                         # a theme redraw keeps the size
+                self.assertAlmostEqual(study.image.width, width / 2, delta=1)
+                study.render_locale(EN)
+                self.assertTrue(study.src.startswith("data:image/png;base64,"))
+        heat = qcharts.corr_heatmap(stats.corr, stats.symbols)
+        self.assertLess(heat.image.width, 600)                                  # its own size, not the card's
+
+    def test_fx_forward_chart_ticks_never_overlap_and_name_the_tenors(self):
+        from matplotlib.backends.backend_agg import FigureCanvasAgg
+        from core.ficc import data
+        spot = data.synthetic_fx("EURUSD", days=500)
+        curve = tuple((t, 1.10 + 0.01 * t) for t in (1 / 12, 0.25, 0.5, 1.0, 2.0))
+        study = fcharts.fx_spot_chart(spot, curve)
+        for ctx, tenors in ((KO, ("1년", "2년")), (EN, ("1y", "2y"))):
+            with self.subTest(language=ctx.language):
+                study.render_locale(ctx)
+                fig = study.figure
+                canvas = FigureCanvasAgg(fig)
+                canvas.draw()
+                ax = fig.axes[0]
+                labels = [t for t in ax.get_xticklabels() if t.get_text()]
+                names = [t.get_text() for t in labels]
+                for tenor in tenors:
+                    self.assertIn(tenor, names)
+                self.assertIn(spot.dates[-1], names)                               # today is always labelled
+                self.assertGreaterEqual(sum(bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", n)) for n in names), 3)
+                boxes = sorted((t.get_window_extent(canvas.get_renderer()) for t in labels), key=lambda b: b.x0)
+                for a, b in zip(boxes, boxes[1:]):
+                    self.assertLessEqual(a.x1, b.x0, names)                       # no two labels collide
+        self.assertNotIn("SYNTHETIC", fcharts.fx_spot_chart(spot, curve).chart_title)
+        self.assertIn("(합성)", fcharts.fx_spot_chart(spot, curve).chart_title)
+
+    def test_rate_and_chart_wording_follows_the_agreed_vocabulary(self):
+        from core.ui_legacy_messages import static_text
+        ko = lambda text: static_text(text, "ko")
+        self.assertEqual(ko("1y fwd vs 1y"), "1년 선도 − 1년 현물 (곡선에 반영된 변화)")
+        self.assertNotIn("예상", ko("1y fwd vs 1y"))                    # a forward difference is not an expectation
+        self.assertTrue(ko("Threshold % (optional)").startswith("비교 금리"))
+        for english, korean in (("Forward", "선도"), ("Forward swap rate", "선도 스왑금리"),
+                                ("Strike (ATM)", "행사금리 (ATM)"), ("Payer", "고정금리 지급 (Payer)"),
+                                ("Receiver", "고정금리 수취 (Receiver)"), ("Caplet count", "캡렛 수"),
+                                ("Dearest caplet", "가장 비싼 캡렛"), ("Disposition", "용도 구분"), ("Rule", "규칙"),
+                                ("Card", "카드"), ("Par rate", "파 금리")):
+            self.assertEqual(ko(english), korean)
+        sw = ko(next(t for t in __import__("ui.rates_page", fromlist=["_METHOD_TEXT"])._METHOD_TEXT.values()
+                     if t.startswith("The method EIOPA")))
+        self.assertIn("2027-01-30부터 외삽 방식 개정 예정", sw)
+        self.assertIn("60년을 넘는 값은 Smith-Wilson 결과가 아닙니다", sw)
+        from core.ficc import data, ratesim
+        sim = ratesim.simulate(ratesim.calibrate(data.load_short_rate("USD", source="synthetic", days=300)),
+                               horizon=1.0, n_paths=100, threshold=0.05)
+        legend = fcharts.rate_fan_chart(sim).legend_text
+        self.assertIn("비교 금리", legend)
+        self.assertNotIn("기준 금리", legend)
+        from core.ficc.curves import analyze_curve
+        study = fcharts.curve_chart(analyze_curve(data.synthetic_curve_panel(days=60)))
+        self.assertIn("무이표 금리", study.legend_text)
+        self.assertNotIn("제로 금리", " ".join(study.reading["meaning"] + study.reading["interpret"]))
+        self.assertNotIn("SYNTHETIC", study.chart_title)
+        from core.quant.history import synthetic_history
+        from core.quant.montecarlo import run_monte_carlo
+        h = synthetic_history("AAPL")
+        fan = qcharts.fan_chart(h, run_monte_carlo(h, n_paths=100, horizon_days=10))
+        self.assertIn("GARCH-t", fan.chart_title)
+        self.assertNotIn("GARCH_T", fan.chart_title)
+        self.assertEqual(qcharts._OBJECTIVE_KO["risk_parity"], "리스크 패리티(위험 균등)")
+        self.assertEqual(qcharts._OBJECTIVE_KO["max_sharpe"], "최대 샤프 지수")
+
+    def test_live_quote_headline_uses_the_candle_colours(self):
+        from core.market import presentation
+        from ui import market_chart_page as M
+        self.assertIn(f'up, down = "{M.CANDLE_UP}", "{M.CANDLE_DOWN}"', inspect.getsource(presentation.chart_svg))
+        view = SimpleNamespace(_palette=LIGHT, ctx=KO)
+        fall = M.MarketChartPage._change_text(view, SimpleNamespace(change=-8000.0, change_pct=-3.97))
+        rise = M.MarketChartPage._change_text(view, SimpleNamespace(change=500.0, change_pct=1.2))
+        self.assertEqual(fall, ("▼ 8,000 (-3.97%)", M.CANDLE_DOWN))
+        self.assertEqual(rise[1], M.CANDLE_UP)
+
+    def test_model_cards_read_in_korean_with_the_record_one_click_away(self):
+        import tempfile
+        from pathlib import Path
+        from ui import macro_cards_view as MV
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "root" / "cards").mkdir(parents=True)
+            (root / "root" / "cards" / "verdicts.jsonl").write_bytes(b"")
+            (root / "macro").mkdir()
+            d = MV.load_inputs(macro_dir=root / "macro", cards_root=root / "root")
+        blocks = MV.cards_blocks(d["cards"], d["verdicts"], d["gate_status"], d["headers"],
+                                 techfund=d["techfund"], cry1=d["cry1"])
+        view = ft.Column(blocks)
+        translate_controls(view, KO)
+        seen = visible_texts(view)
+        joined = " ".join(seen)
+        self.assertIn("미실행 · NOT_RUN", seen)
+        self.assertIn("게이트 패키지 동결 전", seen)
+        self.assertIn("사유: 동결 전", seen)
+        self.assertIn("원문 보기", seen)
+        self.assertIn("게이트 패키지가 동결되기 전이라 아직 실행하지 않은 카드입니다. 권장 북에는 들어가지 않습니다.", seen)
+        self.assertNotIn("(P11)", joined)
+        self.assertFalse(re.search(r"(/tmp/|/home/|[A-Za-z]:\\\\)", joined), joined)  # no local path on screen
+        self.assertNotIn("Crisis-clustering insurance", joined)                 # the verbatim label is collapsed
+        everything = texts(view)                                                 # ... but nothing is dropped
+        self.assertTrue(any(t.startswith("Crisis-clustering insurance") for t in everything))
+        self.assertTrue(any(t.startswith("• NOT_FROZEN: acceptance test not passed") for t in everything))
+        translate_controls(view, EN)
+        self.assertIn("NOT RUN", visible_texts(view))
 
 
 if __name__ == "__main__":

@@ -13,13 +13,18 @@ Construction methods (`CURVE_METHODS`, chosen by `curve_from_snapshot`):
     bootstrap        sequential bootstrap, log-linear discount factors between quotes
     cubic_spline     natural cubic spline through the bond par yields (from 1y), read
                      at every half-year and bootstrapped (the classic swap-desk recipe)
-    pchip            the same with a shape-preserving monotone cubic (Fritsch &
-                     Carlson 1980, SIAM J. Numer. Anal. 17(2)); no overshoot
+    pchip            the same with a shape-preserving monotone cubic (monotonicity:
+                     Fritsch & Carlson 1980, SIAM J. Numer. Anal. 17(2); scipy's
+                     PchipInterpolator sets the derivatives per Fritsch & Butland
+                     1984); no overshoot
     monotone_convex  Hagan & West (2006, Applied Mathematical Finance 13(2)):
                      continuous, positive forwards, solved jointly with the bonds
-    smith_wilson     Smith & Wilson (2001) as specified by EIOPA for Solvency II:
-                     kernel fit through the cash flows, extrapolated to an
-                     ultimate forward rate (UFR and alpha are stated assumptions)
+    smith_wilson     Smith & Wilson (2001) as EIOPA has used it for the Solvency II
+                     risk-free curves (its extrapolation method is due to change
+                     from 30 January 2027): kernel fit through the cash flows,
+                     extrapolated to an ultimate forward rate (UFR and alpha are
+                     stated assumptions); stored to 60y and flat beyond, so values
+                     past 60y are not Smith-Wilson
   smooth (least squares; the fit error is reported in the note)
     nelson_siegel    Nelson & Siegel (1987), four parameters
     diebold_li       Nelson-Siegel with lambda fixed at 0.0609 per month (Diebold
@@ -79,10 +84,12 @@ METHOD_NAMES: dict[str, str] = {                      # English display names (U
 
 DIEBOLD_LI_LAMBDA = 0.0609 * 12.0   # Diebold & Li (2006): 0.0609 per month -> per year
 SW_UFR = 0.033                      # Smith-Wilson ultimate forward rate (annual compounding): an
-                                    # ASSUMPTION, the euro UFR EIOPA set for 2024
+                                    # ASSUMPTION, the euro UFR EIOPA has applied since 1 Jan 2024
+                                    # (unchanged for 2025-2027)
 SW_ALPHA = 0.10                     # Smith-Wilson convergence speed: an ASSUMPTION (the QIS5 value;
                                     # EIOPA now calibrates alpha >= 0.05 per currency, not done here)
-SW_HORIZON = 60.0                   # Smith-Wilson extrapolation is sampled to 60y, flat zero beyond
+SW_HORIZON = 60.0                   # Smith-Wilson extrapolation is sampled to 60y, flat zero beyond:
+                                    # a value past 60y is that flat extension, not Smith-Wilson
 
 
 def coupon_times(maturity: float, freq: int = 2, start: float = 0.0) -> np.ndarray:
@@ -321,9 +328,10 @@ def par_spline_curve(tenors, par_yields, *, kind: str = "cubic_spline", freq: in
     """Interpolate the PAR yields, then bootstrap them at every half-year.
 
     kind="cubic_spline": natural cubic spline (second derivative zero at both ends).
-    kind="pchip": monotone piecewise cubic Hermite interpolation (Fritsch & Carlson
-    1980, as in scipy's PchipInterpolator) — between two quotes it never leaves
-    their range, so it cannot invent bumps the quotes do not show.
+    kind="pchip": monotone piecewise cubic Hermite interpolation (monotonicity per
+    Fritsch & Carlson 1980; scipy's PchipInterpolator sets the derivatives per
+    Fritsch & Butland 1984) — between two quotes it never leaves their range, so it
+    cannot invent bumps the quotes do not show.
 
     The spline runs through the bond par yields (tenors from 1y; at least three)
     and is read at every half-year from the first to the last of them (no
@@ -473,8 +481,9 @@ def smith_wilson_curve(tenors, par_yields, *, ufr: float = SW_UFR, alpha: float 
                        freq: int = 2, horizon: float = SW_HORIZON, date: str = "",
                        source: str = "", note: str = "") -> YieldCurve:
     """Smith & Wilson (2001), "Fitting yield curves with long term constraints",
-    in the form EIOPA specifies for the Solvency II risk-free curve (EIOPA-BoS
-    technical documentation of the RFR methodology, section on Smith-Wilson).
+    in the form EIOPA has used for the Solvency II risk-free curves (EIOPA-BoS
+    technical documentation of the RFR methodology, section on Smith-Wilson); the
+    extrapolation method is due to change from 30 January 2027.
 
     P(t) = e^{-ωt} + Σ_j ζ_j·W(t, u_j) with ω = ln(1 + UFR) and the Wilson kernel
     `_sw_kernel`. Each input is an instrument priced at 1: a money-market deposit
@@ -484,9 +493,10 @@ def smith_wilson_curve(tenors, par_yields, *, ufr: float = SW_UFR, alpha: float 
     converges to the UFR at a speed set by alpha.
 
     `ufr` (annually compounded) and `alpha` are ASSUMPTIONS, not estimates: the
-    defaults are 3.30% (the euro UFR EIOPA set for 2024) and 0.10 (the QIS5
-    value); EIOPA calibrates alpha per currency, which is not done here. Sampled
-    monthly up to `horizon` years, flat zero beyond."""
+    defaults are 3.30% (the euro UFR EIOPA has applied since 1 Jan 2024,
+    unchanged for 2025-2027) and 0.10 (the QIS5 value); EIOPA calibrates alpha per
+    currency, which is not done here. Sampled monthly up to `horizon` years, flat
+    zero beyond: a value past `horizon` is that flat extension, not Smith-Wilson."""
     if not (math.isfinite(ufr) and ufr > -1.0 and math.isfinite(alpha) and alpha > 0):
         raise FICCError(f"Smith-Wilson needs ufr > -100% and alpha > 0, got {ufr}, {alpha}.")
     t, y = _inputs(tenors, par_yields, need=2, what="Smith-Wilson")
@@ -513,7 +523,7 @@ def smith_wilson_curve(tenors, par_yields, *, ufr: float = SW_UFR, alpha: float 
     if not np.all(df > 0):
         raise FICCError("Smith-Wilson produced a non-positive discount factor.")
     text = (f"{note} Smith-Wilson, UFR {ufr:.2%} and alpha {alpha:g} assumed, "
-            f"extrapolated to {grid[-1]:g}y").strip()
+            f"extrapolated to {grid[-1]:g}y; flat beyond, not Smith-Wilson").strip()
     return _sampled(np.log(df), grid, method="smith_wilson", t=t, date=date, source=source,
                     note=text, params=(float(ufr), float(alpha)))
 
