@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "600f5a7870606907a7a5c94b3e4ef7d8e12b1e41f9e5b94c51ac9db66dc4cd40",
+    ".github/workflows/runtime-smoke.yml": "47975cc9df7a696012f371111774fdd39fe85df6f7b311b214e0b443a8e75ad9",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -161,6 +161,7 @@
     "core/quant/risk_layer.py": "9ca19aa23c50a01527aa08842c06bd92f311b535628ce62cb87509ba6238ba84",
     "core/quant/run_registry_codec.py": "fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a",
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
+    "core/quant/run_registry_fold.py": "110bc2bdb999ecbf3e595b1f6d885ebc81589b6e3f944482837914321866c4c8",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
     "core/quant/run_registry_series_files.py": "7795a3c65d627de80f99b5ffeb1754c5016ea28fed594f33ed7e314c09db8465",
     "core/quant/run_registry_series_format.py": "241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc",
@@ -230,7 +231,7 @@
     "core/search_text.py": "50a77a6fc496d17d8bb29156f007c34f27ef8dfd6ee552d58260f3b898e6359e",
     "core/skills/__init__.py": "45445dd8665a0c6f9f2494483bf6ee418b17596465b5d3fd2b35d11393e2209f",
     "core/skills/alerts.py": "d5fb5378936b80834b3ae9f76696cf5a7de55fd5f322c4bb39605eac03c50b79",
-    "core/skills/macro_daily.py": "273dcac15743f88c5e2d2769d6e6561cfc85a7a5b47d2375b0303b0f9a311a0d",
+    "core/skills/macro_daily.py": "ec2256a50546e2a1783f5c9b6a110b93a4377cf3efdf5f2c64d0195359bbb4f5",
     "core/skills/macro_workflows/macro_daily.yaml": "f2421b2ec71626ab13aa0af8d5bb4c411934cee90f1c758c201c7c51dd89e714",
     "core/skills/pipeline.py": "36ffef2011c2fde331cf59d079982232da8ac017ff8837900d6f6843fc474697",
     "core/techfund.py": "1108820d937dc1047f5302b2628ccde26f99ec82d03db197f9892b31d74d9629",
@@ -278,7 +279,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "8698182272123f64579d4ebf6ea9787270923a878d14bb0884028dbedfd86465",
+    "docs/compliance/FACTS.md": "a2cf9da9c37ba3746b8787a718b6b4c2570580f7bff4a8d5fcf746017c7d6045",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -315,6 +316,7 @@
     "docs/product/LETF_ASSUMPTIONS_2026-11-02.md": "4fd6fbcd5caad90146799feb6fa7ae61a38603e22c752970474e3d23b757fd0b",
     "docs/product/LETF_INDEX_2026-10-31.md": "7c10b178f33c59f2afb2783c94413cc2c949ba3d5f0e7b4412246d0da1f54693",
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
+    "docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md": "9ccc09cc2982dc78907e71cd596b980115efa4f8d05d0aeef340db91dc73864e",
     "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "71dffdb67f3b38ed8b726f273c8651a8a65ec832cdfedc84ba5431bebaca2494",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
@@ -329,6 +331,7 @@
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
+    "docs/product/R3_DETACHED_RUN_FOLD_2026-11-10.md": "ff4aad9febbee475e144111f11552292bacc5a368df577c4127c8ac7b483bb08",
     "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "06e00a0fe992f4828b32415b79889907ec4da03b34194a6bbc3cdb917dde01bd",
     "docs/product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md": "04634e2e49b8b9c7e7cb4ada8d4d9669f8bf2fb2f54ea76b77f40f3ed0f11d71",
     "docs/product/R3_DETACHED_SERIES_HASH_2026-11-06.md": "aa144bbc25db49cffdda02ccc8cf55a88873dadc8f842d052c4ebf1cb6f48a2b",
@@ -516,7 +519,7 @@
     "tests/macro_m7_stats.py": "b901aa6f16c320a3244841a2fe94823f3c70b099645bdb42423f13748a1fdd8e",
     "tests/macro_m8_forward.py": "5be770aa0a9685c81d5c7aa822e427a65623048b16f0ad0cb20cb93ce12a624d",
     "tests/macro_m8_integration.py": "d72b6f46128f356526c76e29aab8a05749044bc920c5a881beb80ba020d5b65e",
-    "tests/macro_m8_pipeline.py": "71d77e0fe00c7b60cb4490a63c425d15ad4b933de330ffbed61f033e4db4118f",
+    "tests/macro_m8_pipeline.py": "0a1ad39baf9e45b2dff03c6f489a0b90f71ab543ec74a603e7d955e822ff5ee4",
     "tests/macro_m9_lab.py": "c0a16636f3807ceff042ecb14740118afcb14dc48d1ba0d0ecbc301a09e0462a",
     "tests/macro_m9_scenarios.py": "4a0d7ae0b0f32d37fa2d532584ea7bd6cc38c3608c648cc2f0ef5a3a35b2cb1c",
     "tests/macro_tf_data.py": "afa04c4786c154df280269a9a1e96f43af47b9ace44a5dd6c5b88cd139654a87",
@@ -553,6 +556,7 @@
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
     "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
+    "tests/run_registry_fold_acceptance.py": "4aa3227d95e4365afd2fcf9866c0529fe7903f0baba2ab2b816c88a6ae02c458",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
     "tests/run_registry_series_files_acceptance.py": "042b56defbd8f444b5e70e1946e0dec32fc24c90fc1f72cf01721df773b3d187",
     "tests/run_registry_series_format_acceptance.py": "2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73",
@@ -645,163 +649,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "08a5ec6c64fd47434b62c72466dd3fd993b746f81e8ab967910fb80df0de8449",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.415077+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "1493d711ed05fde8a6ad010ae78ef177bf026357fa8fd299b3a286a00c4fb40c",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.719327+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "08a5ec6c64fd47434b62c72466dd3fd993b746f81e8ab967910fb80df0de8449",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.418351+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "1493d711ed05fde8a6ad010ae78ef177bf026357fa8fd299b3a286a00c4fb40c",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.722378+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "db6646123c061236ac5fd95d1fe7c05bd7cb67ffaf990472a77ac8ad11249ea1",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.424431+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "404333d7cb0204f56a48f780265b3aee283e4b61a6a61f34aaf0b4da78917b92",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.724622+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "92a21f4f4548e4c2cc7d271ecc10a148eb3886866959263f47398a572748e8b4",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.428248+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "f86dcb39ab4e78da6223726964b63199b0847e7f747af8601120272cb113fbb9",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.727225+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "853d55ae1eb5293db09ff637a0df9892dd26ca6fd7c5cfbfb372faf1397495b1",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.434221+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "c176bcba56c38b3c8416aa2ecbca33c26b852fa03efccf313b4a37cc1d42fc8e",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.730411+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "a9c4de5039c09eed39a48d8070f34b6e2affb209e2fdfa6e326d3666cb31e148",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.436467+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "f076cf3403da7b9d1af7463277564436cc0c8eb6ebfdbd7b06cded02084fc009",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.732264+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "08a5ec6c64fd47434b62c72466dd3fd993b746f81e8ab967910fb80df0de8449",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.438662+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "1493d711ed05fde8a6ad010ae78ef177bf026357fa8fd299b3a286a00c4fb40c",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.734663+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "a9c4de5039c09eed39a48d8070f34b6e2affb209e2fdfa6e326d3666cb31e148",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.440770+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "f076cf3403da7b9d1af7463277564436cc0c8eb6ebfdbd7b06cded02084fc009",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.737125+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "1b8264d71f6b27630c02a2d2697cbeadf58d96ab3a22a966e1d0cf21ca44122b",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.442889+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "e9b0a590910f0a7552a57eafb097db3e5941284d7872a412715cc34c48e0e7c0",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.739460+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "ac6e83ddf0e393cc906d77b627cf3f69db59b744638d17cd9d359a05a4798cfc",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.445049+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "511df08608c7ce4c94df2a917d2a9be93433822442663542649750181b612213",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.741964+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "758ee1ec939544859b69482c7e3d45d9907afa2b6588568cfc3719c03ea620ac",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.447148+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "e8180a0c0e1af1a57198dafa8822149b9b19734260745a51ffb47759d2ad40cd",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.744471+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "56a98398b95f5f8dc11af3c61431806a33ba720f7329528a86859bad9de62fb1",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.449231+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "969e62cec43b3371eb885f331cbf66dc19e6a1976f7cfd43e545cc18ab8a57e6",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.746447+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "1b8264d71f6b27630c02a2d2697cbeadf58d96ab3a22a966e1d0cf21ca44122b",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.451422+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "e9b0a590910f0a7552a57eafb097db3e5941284d7872a412715cc34c48e0e7c0",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.748299+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "1b8264d71f6b27630c02a2d2697cbeadf58d96ab3a22a966e1d0cf21ca44122b",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.453468+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "e9b0a590910f0a7552a57eafb097db3e5941284d7872a412715cc34c48e0e7c0",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.750944+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "1b8264d71f6b27630c02a2d2697cbeadf58d96ab3a22a966e1d0cf21ca44122b",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.455553+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "e9b0a590910f0a7552a57eafb097db3e5941284d7872a412715cc34c48e0e7c0",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.752873+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "6cb3b6fcfa4c3a01fc171c0cdcc24a1d7ad4a43e294f003cd74773095095c985",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.457548+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "5748ae9bde5b12ca20542e53a016afd1a01881025e9b952273bbc404a9349de2",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.754765+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "a9c4de5039c09eed39a48d8070f34b6e2affb209e2fdfa6e326d3666cb31e148",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.459614+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "f076cf3403da7b9d1af7463277564436cc0c8eb6ebfdbd7b06cded02084fc009",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.757731+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "08a5ec6c64fd47434b62c72466dd3fd993b746f81e8ab967910fb80df0de8449",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.461681+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "1493d711ed05fde8a6ad010ae78ef177bf026357fa8fd299b3a286a00c4fb40c",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.761075+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "4a3a0365a8d88756d739e70e30bdeae19eae3ca7632a97cf93a11d5fdfc0418a",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.463843+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "d1e0df0f3ff7c8e9da91b352730db924b9dc0c6efd341795335c44987cf5d46f",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.763583+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "08a5ec6c64fd47434b62c72466dd3fd993b746f81e8ab967910fb80df0de8449",
-      "reviewed_by": "Claude adopt review",
-      "review_note": "Adoption strategy checks review fixes: separate gate and N_raw dispersion terms, declared cash baseline, registration B and seed flag, stricter input types; no data flow, storage or policy change",
-      "reviewed_at": "2026-11-10T13:04:42.465897+00:00",
-      "source_commit": "6aaaf39b533da0e332d1f3302c119413f417c023"
+      "source_digest": "1493d711ed05fde8a6ad010ae78ef177bf026357fa8fd299b3a286a00c4fb40c",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.765574+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     }
   }
 }
