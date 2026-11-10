@@ -4,15 +4,15 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b
-next_ids: ⑨-1/2/c, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-10T23:58:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c
+next_ids: ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-11T02:25:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/lookahead-la02-part2-20261110
-work_commit: e60daf5
+work_branch: main
+work_commit: 5f1ead5
 uncommitted_changes: no
-pr: 97
+pr: none
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -85,13 +85,15 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 
 ## 5. 중단 지점
 
-⑨-1/2/c LA-02 2부: [PR #97](https://github.com/xkg4real/quantgen/pull/97), head `e60daf5`(= `4bf77c4` 구현 + `bfb1eb2` 검토 수정 + main `b0d2862` 병합). 13곳 중 9곳 전환(G-POST-01 두 곳, T-PRINT-01 F13, G-STALE-01, T-MISS-01, T-CLOSE-02, T-VT-01, T-LABEL-01, T-B5-01). 남김: T-FIX-01, T-REGIME-01 전체, I-05, G-REF-01(R-11 재계산 하네스 없음). `/code-review high 97`이 10건 지적 → 수정 워크플로 wcj0kv3jx 실행 중(수정 → 2관점 검증 → 재수정). `e60daf5`의 캐시 없는 전체 실행(scratchpad `la02c`) 실행 중.
+⑨-1/2/c 완료. [PR #97](https://github.com/xkg4real/quantgen/pull/97)은 소유자가 `e60daf5`에서 직접 병합(main `51792f1`, 2026-11-11 01:40 KST)했고, `/code-review high`의 10건 + 검증 수정은 후속 [PR #99](https://github.com/xkg4real/quantgen/pull/99)로 main `5f1ead5`(트리 = head `a09735a`)에 병합. 캐시 없는 전체 실행: `e60daf5` 763/889, `a09735a` 763/889(바뀐 행 0), FAIL 2는 기존 환경 탓. 디스크가 한 번 가득 차서 끝난 scratch(plan_step2, bonds_work, 병합된 워크트리)를 지웠습니다.
+
+다른 세션의 UI PR [#98](https://github.com/xkg4real/quantgen/pull/98)(Flet 14화면, `claude/friendly-bardeen-r6xe8f`)이 열려 있음. 이 세션 범위 밖이며 건드리지 않음. FACTS·source-review가 겹치므로 병합 순서에 따라 충돌 가능.
 
 ## 6. 다음 할 일 (순서대로)
 
-1. 수정 워크플로 결과 확인 → push → 새 head의 캐시 없는 전체 실행(`scratchpad/full_commit313.sh la02c2 <commit>`, `python3 scratchpad/m1_compare.py <S> chain_final la02c2`: 새 demo 시험 PASS 추가만, 바뀐 행 0, FAIL 2 기존 환경) → CI(Compliance; 시험 파일만이라 Runtime 경로 필터에 안 걸릴 수 있음) → 병합 → 원장 ⑨-1/2/c → Notion 두 페이지 → `full_*` 삭제.
-2. 소유자 질문 정리 보고(LA-02 2부 레이아웃·달력 서명 범위·미등록 시계열, ledger N_raw, ⑨-4 Q1~Q5·Q7, 설계 0b·Q12, LA-30, M-12).
-3. 그다음: ⑨-4 다음 단위(답 필요), R3 Lab UI(설계 0b·Q12 질문 먼저), 실시간 주문(M-12 먼저).
+1. 소유자 질문 정리 보고: LA-02 2부 레이아웃(F13/F14/F16 `close`, F27 long form, F18 열 이름)·달력 서명 범위(1997/2015~)·미등록 시계열(KS11·GSPC·KRWX·005930; 생성기 거부)·`docs/vol_backtest.fixture_lines`의 F13 obs_date/value 불일치, ledger N_raw 뜻, ⑨-4 Q1~Q5·Q7, 설계 0b(P-01)·Q12, I-05용 LA-30 자료, 실시간 주문 전 M-12.
+2. 답에 따라: ⑨-4 다음 단위, R3 Lab UI(허용됨), 실시간 주문 안전 설계.
+3. #98이 병합되면 UI 변경 결과를 1107 페이지 UI 항목에 반영(소유자 지시: 다른 세션 UI 보고 시 반영).
 
 ## 7. 주의사항
 
