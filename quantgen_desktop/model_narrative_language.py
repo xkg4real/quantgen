@@ -6,6 +6,9 @@ recomputed; unknown/user/provider text is left intact.
 from .translations import translate
 
 SIGNAL_STANCES = frozenset(('strong bullish', 'bullish', 'neutral', 'bearish', 'strong bearish'))
+# Whole-note Greek keys of `core.ficc.structured.ProductReport.greeks`; the 2s10s name keeps the
+# key's digits (2, 10, 01) so the number tokens match the English narrative.
+GREEK_KO = {'delta': '델타', 'gamma': '감마', 'vega': '베가', 'dv01': 'DV01', 'dv01_2s10s': '2년·10년 스프레드 DV01'}
 
 
 def localize_columns(table, columns):
@@ -97,8 +100,11 @@ def structured_korean(p):
             if cms else f'연간 쿠폰은 {_pct(p.coupon)}입니다.')
     g = dict(getattr(p, 'greeks', {}) or {})
     if g:
-        lines.append('상품 전체 위험: ' + ', '.join(
-            f'{k} {_money(v, signed=True)}' if k == 'dv01' else f'{k} {v:+.4g}' for k, v in g.items()) + '.')
+        # Greek names and their currency in Korean. The figures keep the English narrative's exact
+        # formatting so both languages carry the same number tokens (desktop prose tests).
+        lines.append(f'상품 전체 위험 (단위 {p.currency}): ' + ', '.join(
+            f'{GREEK_KO.get(k, k)} {_money(v, signed=True)}' if k == 'dv01' else f'{GREEK_KO.get(k, k)} {v:+.4g}'
+            for k, v in g.items()) + '.')
     if getattr(p, 'payoff_grid', ()):
         lo, hi = p.payoff_grid[0], p.payoff_grid[-1]
         lines.append(f'만기 지급액은 기초자산 {ux(lo[0])}에서 100당 {lo[1]:.2f}, '

@@ -8,6 +8,7 @@ balance read. Nothing here trades, and the page says so.
 from __future__ import annotations
 
 from core.research.funding_disclosure import funding_text
+from core.research.strategy_display import CARDS
 import math
 from typing import Callable, Optional
 
@@ -21,8 +22,10 @@ from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
 from ui.narrative_sections import korean, localized
 from quantgen_desktop.market_narrative_language import crypto_korean
+from quantgen_desktop.market_diagnostics_language import decay_korean, funding_korean
 from ui.components import card, empty_state, notice, section, stat
-from ui.ficc_widgets import action, form_row, hide_source, ko_notice, ko_stat, lchip, ltext, verdict_ko
+from ui.ficc_widgets import (action, decay_value_ko, form_row, hide_source, ko_notice, ko_stat, ko_value, lchip,
+                             ltext, verdict_ko)
 from ui.localization import literal_text, table_header
 import ui.xcharts as xc
 from core.research.crypto_workflow import (_synthetic, _live, analyze, narrative, payload, CRYPTO_DAYS,
@@ -33,6 +36,20 @@ from core.research.decay_disclosure import decay_value, decay_text
 _WEEKDAY_HEADERS_KO = {"Day": "요일", "n": "관측 수", "Mean return %": "평균 수익률 %", "Vol %": "변동성 %",
                        "Mean quote volume": "평균 거래대금"}
 _DAY_KO = {"Mon": "월", "Tue": "화", "Wed": "수", "Thu": "목", "Fri": "금", "Sat": "토", "Sun": "일"}
+_SOURCE_KO = {"LIVE": "실시간 (Upbit · Binance)", "SYNTHETIC": "합성 데이터", "synthetic": "합성 데이터"}
+
+
+def study_chip(card_id: str, verdict) -> ft.Control:
+    """A study-card verdict chip: the card's plain name (the Strategy Lab catalogue) and the verdict
+    in both words, e.g. '김치 프리미엄 신호: 보완 필요 · REVISE'. An unknown card keeps its id."""
+    card_text = CARDS.get(card_id)
+    name_ko, name_en = card_text.name if card_text else (card_id, card_id)
+    shown = str(verdict)
+    word = verdict_ko("NOT_RUN" if shown == "not run" else shown)
+    historical = card_id == "M_C4_funding"   # recorded under retired inference rules; shown, never relied on
+    return lchip(f"{name_ko}: {word}" + (" · 과거 연구 결과, 재검증 안 됨" if historical else ""),
+                 f"{name_en}: {shown}" + (" · historical, not revalidated" if historical else ""),
+                 "success" if shown == "PASS" and not historical else "muted")
 
 
 def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -> ft.Control:
@@ -59,22 +76,24 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
                 busy.visible = False; page.update(); return
             kp, fc, g = a["kimchi"], a["funding"], a["garch"]
             blocks: list[ft.Control] = []
-            blocks.append(notice(decay_text(getattr(kp, "decay", None)), "accent"))
-            blocks.append(notice("ETH/BTC: " + decay_text(a['ethbtc'].get('decay')), "accent"))
+            blocks.append(ko_notice(notice(decay_text(getattr(kp, "decay", None)), "accent"),
+                                    decay_korean(getattr(kp, "decay", None))))
+            blocks.append(ko_notice(notice("ETH/BTC: " + decay_text(a['ethbtc'].get('decay')), "accent"),
+                                    "ETH/BTC: " + decay_korean(a['ethbtc'].get('decay'))))
             blocks.append(notice("Read-only: QUANTGEN never submits crypto orders, never holds a wallet key, and never assumes an "
                                  "account on an unregistered foreign exchange. Binance is public data only.", "accent",
                                  icon=ft.Icons.LOCK_OUTLINE))
             if a["source"] == "SYNTHETIC":
                 blocks.append(notice("Synthetic data: every series here is simulated.", "error", icon=ft.Icons.SCIENCE_OUTLINED))
-            src = {"LIVE": "실시간 (Upbit · Binance)", "SYNTHETIC": "합성 데이터"}.get(a["source"], a["source"])
+            src = _SOURCE_KO.get(a["source"], a["source"])
+            fx_src = _SOURCE_KO.get(a["usdkrw_source"], a["usdkrw_source"])
             blocks.append(ft.Row([lchip(f"출처: {src}", f"source: {a['source']}", "success" if a["source"] == "LIVE" else "muted"),
-                                  lchip(f"USD/KRW 환율 출처: {a['usdkrw_source']}", f"USD/KRW: {a['usdkrw_source']}"),
-                                  lchip(f"프리미엄 관측 {kp.n}일", f"{kp.n} premium days")] +
-                                 [lchip(f"{k.split('_', 2)[-1]}: {verdict_ko(v)}" + (" · 과거 연구 결과, 재검증 안 됨" if k == "M_C4_funding" else ""),
-                                        f"{k.split('_', 2)[-1]}: {v}" + (" · historical, not revalidated" if k == "M_C4_funding" else ""),
-                                        "success" if v == "PASS" and k != "M_C4_funding" else "muted")
-                                  for k, v in a["verdicts"].items()],
+                                  lchip(f"USD/KRW 환율 출처: {fx_src}", f"USD/KRW: {a['usdkrw_source']}"),
+                                  lchip(f"프리미엄 관측 {kp.n}일", f"{kp.n} premium days")],
                                  spacing=8, wrap=True))
+            # The validation study's verdict for each related card, named in plain words.
+            blocks.append(ft.Row([study_chip(k, v) for k, v in a["verdicts"].items()],
+                                 spacing=8, run_spacing=8, wrap=True))
             perp, z, zw = perp_premium_pct(a["premium_index"]), z_text(kp.last_z, 2), z_short_window(kp)
             blocks.append(ft.Row([
                 stat("Kimchi premium", f"{kp.last_pct:+.2f}%", token="error" if abs(kp.last_pct) > 3 else "text"),
@@ -82,7 +101,9 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
                      tooltip=("Not computed: fewer than 91 observations or no variation in the window." if not z else
                               f"Less than a year of history: the z uses the {zw} earlier observations." if zw else "")),
                         f"프리미엄 z ({zw}개 관측)" if zw else "프리미엄 z (1년)"),
-                stat("AR(1) amplitude half-life", decay_value(getattr(kp, "decay", None)), tooltip=decay_text(getattr(kp, "decay", None)) + " Unit: observations."),
+                ko_value(stat("AR(1) amplitude half-life", decay_value(getattr(kp, "decay", None)),
+                              tooltip=decay_text(getattr(kp, "decay", None)) + " Unit: observations."),
+                         decay_value_ko(getattr(kp, "decay", None))),
                 stat("Funding (ann.)", f"{fc.last_ann_pct:+.1f}%" if fc else "n/a", token="error" if fc and fc.flag != "normal" else "text",
                      tooltip=fc.flag if fc else ""),
                 stat("Funding pct", f"{fc.percentile:.0%}" if fc else "n/a"),
@@ -93,7 +114,7 @@ def build_crypto_page(page: ft.Page, on_open_settings: Optional[Callable] = None
             blocks.append(card(xc.lines_chart(kp.dates, {"kimchi premium %": kp.premium_pct}, title="Kimchi premium (Upbit KRW-BTC vs Binance × USD/KRW)",
                                               hlines={"0": 0.0}, pct=True)))
             if fc:
-                blocks.append(notice(funding_text(fc), "accent"))
+                blocks.append(ko_notice(notice(funding_text(fc), "accent"), funding_korean(fc)))
                 blocks.append(card(xc.lines_chart(fc.dates, {"funding (ann. %)": fc.carry_ann_pct}, title="Perpetual funding, 7-day mean annualised",
                                                   hlines={"0": 0.0}, pct=True)))
             px = a["btc"]

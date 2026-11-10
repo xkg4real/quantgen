@@ -38,7 +38,9 @@ from ui.narrative_sections import fx_text, korean, localized
 from quantgen_desktop.fx_narrative import carry_korean
 from ui.components import card, empty_state, notice, number_field, parse_number, section, stat
 import ui.fcharts as fcharts
-from ui.ficc_widgets import action, form_row, hide_source, ko_stat, lchip, synthetic_notice, with_helper
+from ui.ficc_widgets import (action, form_row, hide_source, ko_notice, ko_stat, ko_value, lchip, synthetic_notice,
+                             with_helper)
+from quantgen_desktop.fx_narrative import sabr_korean
 
 _TOOLS = [("forward", "Spot, forward & carry"), ("option", "Option & smile"),
           ("carry", "Carry basket")]
@@ -55,6 +57,14 @@ def _px(x: float) -> str:
     return f"{x:,.2f}" if x >= 20 else f"{x:.4f}"
 
 
+class _InputError(ValueError):
+    """A typed value the page cannot read; carries its Korean wording for the error banner."""
+
+    def __init__(self, en: str, ko: str):
+        super().__init__(en)
+        self.ko = ko
+
+
 def _num(field: ft.TextField, default: float | None = None) -> float | None:
     t = (field.value or "").strip()
     if not t:
@@ -62,10 +72,20 @@ def _num(field: ft.TextField, default: float | None = None) -> float | None:
     try:
         v = parse_number(t)
     except ValueError:
-        raise ValueError(f"{field.label}: {t!r} is not a number.") from None
+        raise _InputError(f"{field.label}: {t!r} is not a number.",
+                          f"{field.label}: {t!r}은(는) 숫자가 아닙니다.") from None
     if not math.isfinite(v):
-        raise ValueError(f"{field.label}: {t!r} is not a number.")
+        raise _InputError(f"{field.label}: {t!r} is not a number.",
+                          f"{field.label}: {t!r}은(는) 숫자가 아닙니다.")
     return v
+
+
+def _error(exc: Exception) -> ft.Control:
+    """The error banner: the message as raised in English, in Korean the authored wording when the
+    page raised it, else a Korean lead-in before the original message."""
+    en = str(exc) if isinstance(exc, (FICCError, ValueError)) else f"{type(exc).__name__}: {exc}"
+    ko = getattr(exc, "ko", None) or f"계산하지 못했습니다. 입력값을 확인하세요 — {en}"
+    return ko_notice(notice(en, "error", icon=ft.Icons.ERROR_OUTLINE), ko)
 
 
 def _rate(field: ft.TextField, ccy: str, source: str) -> tuple[float, Series | None]:
@@ -90,7 +110,8 @@ def _strike(text: str, S: float, T: float, rd: float, rf: float, vol: float,
     try:
         return parse_number(t)
     except ValueError:
-        raise ValueError(f"Strike: {text!r} is not a level, a delta like 25d, or ATM.") from None
+        raise _InputError(f"Strike: {text!r} is not a level, a delta like 25d, or ATM.",
+                          f"행사가격: {text!r}은(는) 환율 수준, 25d 같은 델타, ATM 가운데 하나가 아닙니다.") from None
 
 
 _SMILE_HEADERS_KO = {'Point': '구분', 'Vol': '변동성', 'Spot delta': '현물 델타'}
@@ -113,9 +134,25 @@ def _table(columns: list[str], rows: list[list[str]], *, headers_ko=None) -> ft.
     return ft.Row([table], scroll=ft.ScrollMode.AUTO)
 
 
+# The short-rate series names `core.ficc.data.load_short_rate` gives ("EUR short rate (ECB deposit
+# facility rate)"), reviewed Korean wording; an unknown name is shown as given.
+_RATE_NAME_KO = {"SOFR": "SOFR", "Fed funds effective": "연방기금 실효금리",
+                 "ECB deposit facility rate": "ECB 예금금리", "SONIA": "SONIA",
+                 "3m interbank": "3개월 은행간 금리", "call rate": "콜금리"}
+_SHORT_RATE = re.compile(r"(?P<ccy>[A-Z]{3}) short rate \((?P<name>.+)\)")
+
+
+def _label_ko(label: str) -> str:
+    """'USD short rate (SOFR)' -> 'USD 단기금리 (SOFR)'; pair labels ('EUR/USD') stay as they are."""
+    m = _SHORT_RATE.fullmatch(str(label))
+    if not m:
+        return str(label)
+    return f"{m['ccy']} 단기금리 ({_RATE_NAME_KO.get(m['name'], m['name'])})"
+
+
 def _chips(*series: Series | None) -> list[ft.Control]:
     """Provenance: which provider answered for each series, and its last date."""
-    return [lchip(f"{s.label}: {'합성 데이터' if s.source == 'SYNTHETIC' else s.source} · 관측일 {s.last_date}",
+    return [lchip(f"{_label_ko(s.label)}: {'합성 데이터' if s.source == 'SYNTHETIC' else s.source} · 관측일 {s.last_date}",
                   f"{s.label}: {s.source} · {s.last_date}",
                   "muted" if s.source == "SYNTHETIC" else "success", tooltip=s.note)
             for s in series if s is not None]
@@ -126,8 +163,9 @@ def _synthetic_notice(*series: Series | None) -> ft.Control | None:
     if not syn:
         return None
     names = ", ".join(s.label for s in syn)
+    names_ko = ", ".join(_label_ko(s.label) for s in syn)
     return synthetic_notice(
-        f"합성 데이터: {names}. 제공처에서 받지 못해 시뮬레이션한 시계열이며, 아래 숫자는 계산 방식의 "
+        f"합성 데이터: {names_ko}. 제공처에서 받지 못해 시뮬레이션한 시계열이며, 아래 숫자는 계산 방식의 "
         "시연이고 시장 시세가 아닙니다.",
         f"Synthetic data: {names}. Simulated because the provider did not answer; the numbers below "
         "demonstrate the mechanics, not a market read.", syn[0].note)
@@ -231,8 +269,8 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
             stat("Spot", _px(S)),
             ko_stat(stat(f"Forward {tenor_label(T)}", _px(F)), f"선도환율 {tenor_label(T)}"),
             stat("Points", f"{pts:+.1f}", tooltip=f"pip = {pip:g}"),
-            ko_stat(stat(f"Carry, long {base}", f"{cy * 100:+.2f}% p.a.",
-                         token="success" if cy >= 0 else "error"), f"캐리 ({base} 매수, 연율)"),
+            ko_value(ko_stat(stat(f"Carry, long {base}", f"{cy * 100:+.2f}% p.a.",
+                         token="success" if cy >= 0 else "error"), f"캐리 ({base} 매수, 연율)"), f"{cy * 100:+.2f}%"),
             ko_stat(stat(f"{quote} rate", f"{rd * 100:.2f}%"), f"{quote} 금리"),
             ko_stat(stat(f"{base} rate", f"{rf * 100:.2f}%"), f"{base} 금리"),
         ]
@@ -319,7 +357,7 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
             ["Point", "Strike", "Vol", "Spot delta"],
             [[x.label, _px(x.strike), f"{x.vol * 100:.2f}%", f"{x.delta:+.3f}"] for x in pts],
             headers_ko=_SMILE_HEADERS_KO)))
-        blocks.append(notice(diagnostic_text(diag), diagnostic_tone(diag)))
+        blocks.append(ko_notice(notice(diagnostic_text(diag), diagnostic_tone(diag)), sabr_korean(diag)))
         blocks.append(card(_table(
             ["Point", "Quoted vol %", "Fitted vol %", "Residual · vol points"],
             [[r["label"], f"{r['quoted_vol']*100:.6f}", f"{r['fitted_vol']*100:.6f}",
@@ -433,10 +471,9 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
             try:
                 result_host.controls = tools[tool.value or "forward"]()
             except (FICCError, ValueError) as exc:
-                result_host.controls = [notice(str(exc), "error", icon=ft.Icons.ERROR_OUTLINE)]
+                result_host.controls = [_error(exc)]
             except Exception as exc:
-                result_host.controls = [notice(f"{type(exc).__name__}: {exc}", "error",
-                                               icon=ft.Icons.ERROR_OUTLINE)]
+                result_host.controls = [_error(exc)]
             busy.visible = False
             page.update()
 

@@ -21,15 +21,17 @@ import flet as ft
 from core.ficc import insights, structured
 from core.research.structured_disclosure import cms_coupon_context
 from core.ficc.common import BP, FICCError, parse_tenor, pct_text, tenor_label
-from core.ficc.curves import curve_from_snapshot
+from core.ficc.curves import METHOD_NAMES, curve_from_snapshot
 from core.ficc.data import load_treasury_curve
 from core.theme import RADII, active
+from core.ui_legacy_messages import static_text
 from ui.ai_panel import analysis_panel
 from ui.narrative_sections import korean, localized
 from quantgen_desktop.model_narrative_language import structured_korean
-from ui.components import card, empty_state, notice, number_field, parse_number, section, stat
+from quantgen_desktop.translations import translate
+from ui.components import LocalText, card, empty_state, notice, number_field, parse_number, section, stat
 import ui.fcharts as fcharts
-from ui.ficc_widgets import action, form_row, hide_source, lchip, synthetic_notice, with_helper
+from ui.ficc_widgets import GAP, action, hide_source, lchip, synthetic_notice, with_helper
 from ui.localization import table_header, literal_text
 
 _TOOLS = [("ppn", "Principal-protected note"), ("rc", "Reverse convertible"),
@@ -40,7 +42,8 @@ _DEFAULT_MATURITY = {"ppn": "3y", "rc": "1y", "dcd": "3m", "steep": "5y"}
 
 # Per-product term sheet: (key, label, default text, width). Percent keys are
 # typed in percent and handed to the pricer as decimals; blank optional keys
-# mean "solve it" / "none". Two widths only, so the grid lines up.
+# mean "solve it" / "none". The widths are the fields' natural sizes; on the
+# page the inputs sit in a 12-column grid (`_spread`) that sets their width.
 _W, _WL = 140, 200
 _FIELDS: dict[str, list[tuple[str, str, str, int]]] = {
     "ppn": [("spot", "Spot", "1.10", _W), ("vol", "Vol (%)", "8", _W),
@@ -126,20 +129,79 @@ def _qty(x: float) -> str:
 
 _HEADERS_KO = {'Leg': '구성요소', 'Kind': '유형', 'Detail': '상세',
                'Quantity': '수량', 'Unit': '단위', 'Rationale': '근거'}
+_NUMERIC = {'Value', 'Quantity'}
+
+# Leg kinds (`core.ficc.structured.Leg.kind`) in Korean; the code itself is shown in English.
+_KIND_KO = {'zcb': '무이표채', 'coupon_bond': '이표채', 'option': '옵션', 'swap': '스왑',
+            'bond': '채권', 'deposit': '예금'}
+# Reviewed wording for the report strings the native catalogue does not carry.
+_TEXT_KO = {'ATM call': 'ATM 콜'}
+_UNDERLYING_KO = {'FX': '외환', 'EQ': '주식', 'CMS 10y-2y': 'CMS 10년-2년'}   # as ui/fcharts.py
+
+
+def _ko(text) -> str:
+    """Korean for an authored report string (leg name and detail, hedge instrument, unit and
+    rationale). The reviewed native catalogue (`quantgen_desktop.translations`) rebuilds each
+    sentence around the very numbers the report printed, so no number is recomputed; a string
+    neither it nor `_TEXT_KO` knows (a user's ticker, say) is shown as given."""
+    text = str(text)
+    return _TEXT_KO.get(text) or translate(text, 'ko')
+
+
+def _local(ko: str, en: str) -> LocalText:
+    return LocalText(ko, en, size=12, color=active().text, selectable=True)
 
 
 def _table(columns: list[str], rows: list[list]) -> ft.Control:
-    last = len(columns) - 1
-
-    def cell(i: int, v) -> ft.DataCell:
-        return ft.DataCell(literal_text(str(v), size=11, width=460 if i == last else None))
+    """Full card width, one ~40 px line per row that grows only when a long sentence wraps.
+    A cell is a control (a `LocalText` with both wordings) or a value shown as given."""
+    def cell(v) -> ft.DataCell:
+        return ft.DataCell(v if isinstance(v, ft.Control) else literal_text(str(v), size=12))
 
     return ft.Row([ft.DataTable(
-        columns=[ft.DataColumn(table_header(c, ko=_HEADERS_KO.get(c), size=11)) for c in columns],
-        rows=[ft.DataRow(cells=[cell(i, v) for i, v in enumerate(r)]) for r in rows],
-        column_spacing=18, heading_row_height=34, data_row_min_height=34,
-        data_row_max_height=88,
-    )], scroll=ft.ScrollMode.AUTO)
+        columns=[ft.DataColumn(table_header(c, ko=_HEADERS_KO.get(c), size=12, color=active().muted),
+                               numeric=c in _NUMERIC) for c in columns],
+        rows=[ft.DataRow(cells=[cell(v) for v in r]) for r in rows],
+        column_spacing=24, heading_row_height=36, data_row_min_height=40,
+        data_row_max_height=float('inf'), expand=True,
+    )])
+
+
+# Fields per line of the 12-column input grid. Flet picks the breakpoint from the window width
+# (sm 576, md 768, lg 992, xl 1200, xxl 1400 px); beside the 224 px navigation rail the page
+# itself is ~280 px narrower, so a 1000 px window fits three fields a line and 1360 px four.
+_PER_LINE = {'xs': 1, 'sm': 2, 'md': 2, 'lg': 3, 'xl': 4, 'xxl': 5}
+
+
+def _spread(controls) -> None:
+    """Give the visible inputs `col` spans so every line of the grid is full and the lines hold
+    nearly the same number of fields, the fuller lines last: seven fields at four a line become
+    3 + 4, never 4 + 3 and never a line holding only the Price button (unless one field a line).
+    Hidden controls take no space in a ResponsiveRow and get no span."""
+    shown = [c for c in controls if c.visible is not False]
+    spans: list[dict] = [{} for _ in shown]
+    for bp, most in _PER_LINE.items():
+        lines = max(1, -(-len(shown) // most))
+        base, extra = divmod(len(shown), lines)
+        i = 0
+        for line in range(lines):
+            count = base + (1 if line >= lines - extra else 0)
+            width, rest = divmod(12, count)
+            for j in range(count):
+                spans[i][bp] = width + (1 if j < rest else 0)
+                i += 1
+    for control, span in zip(shown, spans):
+        control.col = span
+
+
+def _grid(controls: list[ft.Control]) -> ft.ResponsiveRow:
+    for c in controls:
+        # The grid sets the width. A dropdown sizes itself to its options instead, so it is
+        # told to take all the width its grid cell allows.
+        c.width = float("inf") if isinstance(c, ft.Dropdown) else None
+    _spread(controls)
+    return ft.ResponsiveRow(controls, spacing=GAP, run_spacing=GAP,
+                            vertical_alignment=ft.CrossAxisAlignment.START)
 
 
 def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
@@ -172,10 +234,11 @@ def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
     blocks.append(ft.Row(stats, spacing=12, run_spacing=12, wrap=True))
 
     source_ko = "합성 데이터" if synthetic else panel.source
+    method_ko = static_text(METHOD_NAMES.get(curve.method, curve.method), "ko")
     chips = [lchip(f"곡선 출처: {source_ko}", f"curve: {panel.source}", "muted" if synthetic else "success"),
              lchip(f"기준일 {curve.date}", f"as of {curve.date}"),
-             lchip(f"{curve.method} 무이표 곡선", f"{curve.method} zeros"),
-             lchip(r.underlying, r.underlying)]
+             lchip(f"{method_ko} 무이표 곡선", f"{curve.method} zeros"),
+             lchip(_UNDERLYING_KO.get(r.underlying, r.underlying), r.underlying)]
     if r.spot is not None:
         chips.append(lchip(f"현물 {r.spot:,g}", f"spot {r.spot:g}"))
     if r.strike is not None:
@@ -199,10 +262,12 @@ def _render(page: ft.Page, tool: str, r: structured.ProductReport, panel,
         ft.Text("Legs (per 100 of notional, signed for the holder)", size=13,
                 weight=ft.FontWeight.W_600, color=pal.text),
         _table(["Leg", "Kind", "Value", "Detail"],
-               [[leg.name, leg.kind, f"{leg.value:+.2f}", leg.detail] for leg in r.legs]),
+               [[_local(_ko(leg.name), leg.name), _local(_KIND_KO.get(leg.kind, leg.kind), leg.kind),
+                 f"{leg.value:+.2f}", _local(_ko(leg.detail), leg.detail)] for leg in r.legs]),
     ], spacing=8)))
 
-    hedge_rows = [[h.instrument, _qty(h.quantity), h.unit, h.rationale] for h in r.hedge]
+    hedge_rows = [[_local(_ko(h.instrument), h.instrument), _qty(h.quantity), _local(_ko(h.unit), h.unit),
+                   _local(_ko(h.rationale), h.rationale)] for h in r.hedge]
     blocks.append(card(ft.Column([
         ft.Text("Hedge sheet (+ buy / pay fixed, - sell / receive)", size=13,
                 weight=ft.FontWeight.W_600, color=pal.text),
@@ -269,11 +334,12 @@ def build_structuring_page(page: ft.Page,
     for k, f in fields.items():
         for field in f.values():
             field.visible = k == "ppn"
-    # One term-sheet row: only the chosen product's fields are visible, and the
-    # price button closes the row so it reads "fill in, then price".
+    # The term sheet: only the chosen product's fields are visible, and the
+    # price button closes the grid so it reads "fill in, then price".
     price_button = ft.Button("Price", icon=ft.Icons.PLAY_ARROW_ROUNDED, tooltip="Price the term sheet")
-    term_sheet = form_row([field for f in fields.values() for field in f.values()]
-                          + [action(price_button, busy)])
+    inputs = _grid([tool, source, underlying, maturity, notional, futures])
+    term_sheet = _grid([field for f in fields.values() for field in f.values()]
+                       + [action(price_button, busy)])
 
     def switch(e=None) -> None:
         k = tool.value or "ppn"
@@ -281,6 +347,8 @@ def build_structuring_page(page: ft.Page,
             for field in f.values():
                 field.visible = name == k
         underlying.visible = k in ("ppn", "rc")
+        _spread(inputs.controls)                # re-balance the lines for this product's fields
+        _spread(term_sheet.controls)
         if maturity.value in _DEFAULT_MATURITY.values():
             maturity.value = _DEFAULT_MATURITY[k]
         if e is not None:                       # a real switch, not the initial layout
@@ -332,7 +400,7 @@ def build_structuring_page(page: ft.Page,
         section("Structuring", subtitle="Structured products decomposed into legs, priced "
                                         "off the latest UST par curve, with Greeks and the "
                                         "first-order hedge sheet."),
-        form_row([tool, source, underlying, maturity, notional, futures]),
+        inputs,
         term_sheet,
         ft.Column([result_host], scroll=ft.ScrollMode.AUTO, expand=True),
     ], spacing=16, expand=True)

@@ -15,7 +15,7 @@ EN_TO_KO: dict[str, str] = {
     "Optional": "선택 입력",
     "Open Settings": "설정 열기",
     "n/a": "해당 없음",
-    "not run": "실행 안 됨",
+    "not run": "미실행",
     "Equity": "주식",
     "Tenor": "만기",
     "Premium": "프리미엄",
@@ -31,7 +31,7 @@ EN_TO_KO: dict[str, str] = {
         "민감도(그릭스)와 1차 헤지표를 함께 보여 줍니다.",
     "Product": "상품",
     "Principal-protected note": "원금보장형 노트",
-    "Reverse convertible": "역전환사채형 노트",
+    "Reverse convertible": "역전환형 노트",
     "Dual-currency deposit": "이중통화예금",
     "Steepener note": "스티프너 노트 (CMS)",
     "Curve source": "곡선 출처",
@@ -216,7 +216,7 @@ EN_TO_KO: dict[str, str] = {
 
     # ----------------------------------------------------------------------- ETF
     "NAV premium, basket, leveraged-fund drag, sleeve rules.":
-        "NAV 괴리율, 구성종목, 레버리지 ETF 보유비용(드래그), 슬리브 규칙을 분석합니다.",
+        "NAV 괴리율, 구성종목, 레버리지 ETF 성과 저하(드래그), 슬리브 규칙을 분석합니다.",
     "ETF code": "ETF 종목코드",
     "069500, 122630, SPY": "예: 069500, 122630, SPY",
     "Auto (KIS for KRX codes)": "자동 (국내 종목은 KIS)",
@@ -238,7 +238,7 @@ EN_TO_KO: dict[str, str] = {
     "Pick an ETF": "ETF를 고르세요",
     "NAV premium and its half-life, the basket, the leveraged-fund drag from the GARCH variance term structure, "
     "and the trend / vol-target sleeve rules with the validation study's verdict.":
-        "NAV 괴리율과 그 반감기, 구성종목, GARCH 분산 기간구조로 구한 레버리지 ETF 보유비용(드래그), "
+        "NAV 괴리율과 그 반감기, 구성종목, GARCH 분산 기간구조로 구한 레버리지 ETF 성과 저하(드래그), "
         "추세·변동성 목표 슬리브 규칙과 검증 연구의 판정을 보여 줍니다. 데이터는 앱이 자동으로 가져옵니다.",
     "Enter explicit funding and fee assumptions; price-return also needs a dividend yield.":
         "조달금리와 보수 가정을 직접 입력하세요. 가격수익 비교에는 배당수익률도 필요합니다.",
@@ -312,4 +312,10 @@ EN_TO_KO: dict[str, str] = {
     "Change %": "등락률",
     "Open / High / Low": "시가 / 고가 / 저가",
     "Market cap": "시가총액",
+    # Provider-chip tooltips: the key / library state each client reports (data.krx.*.status()).
+    "KIS_APP_KEY / KIS_APP_SECRET not set": "KIS_APP_KEY / KIS_APP_SECRET이 설정되지 않았습니다",
+    "OPENDART_API_KEY not set": "OPENDART_API_KEY가 설정되지 않았습니다",
+    "requests library unavailable": "requests 라이브러리를 사용할 수 없습니다",
+    "no KRX_API_KEY; the keyless export is blocked by KRX": "KRX_API_KEY가 없습니다. KRX의 키 없는 내보내기는 차단되어 있습니다",
+    "KRX Open API key set": "KRX Open API 키가 설정되어 있습니다",
 }

@@ -82,7 +82,7 @@ def ko_stat(tile, ko: str):
 
 # Verdict codes never change (repository policy); Korean shows their meaning beside them.
 VERDICT_KO = {"PASS": "통과", "REVISE": "보완 필요", "REJECT": "기각",
-              "INSUFFICIENT_DATA": "데이터 부족", "NOT_RUN": "실행 안 됨"}
+              "INSUFFICIENT_DATA": "데이터 부족", "NOT_RUN": "미실행"}
 
 
 def verdict_ko(code) -> str:
@@ -99,6 +99,28 @@ def ko_verdict(tile):
             and str(items[1].value) in VERDICT_KO:
         items[1] = _local(items[1], verdict_ko(items[1].value))
     return tile
+
+
+def ko_value(tile, ko: str):
+    """Korean wording for a `stat` tile's value when the value carries English words or units."""
+    col = getattr(tile, "content", None)
+    items = getattr(col, "controls", None)
+    if isinstance(col, ft.Column) and items and len(items) > 1 and isinstance(items[1], ft.Text) \
+            and isinstance(items[1].value, str):
+        items[1] = _local(items[1], ko)
+    return tile
+
+
+_DECAY_KO = {"monotone": "단조 감쇠", "oscillating": "부호 진동", "no_memory": "기억 없음"}
+
+
+def decay_value_ko(info) -> str:
+    """Korean twin of `core.research.decay_disclosure.decay_value`: the same half-life, Korean status."""
+    status = (info or {}).get("status", "NOT_ESTIMATED")
+    value = (info or {}).get("half_life")
+    if value is None:
+        return "감쇠 없음" if status == "NON_DECAYING" else "추정 불가"
+    return f"{value:.2f} · {_DECAY_KO.get(status.lower(), status.lower())}"
 
 
 def ko_notice(box, ko: str):
