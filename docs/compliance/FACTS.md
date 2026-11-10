@@ -633,6 +633,23 @@ Home 표와 시장 관심종목 카드·검색·종목 제목에 로컬 문자 �
 
 [제품 범위·검증 기록](../product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md)에 따라 01–20 번호 정책은 유지합니다. 여기서의 메모리 로드·pickle 비허용·내용 대조를 파일 저장/읽기 경로·fsync/replace·중복/손상 target/동시 쓰기/재시도/보유·series_ref·날짜/설정 의미·recorder/Lab·수명주기/횟수/판정·실제 원장·동결 연구·전체 R3 완료로 확대하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
 
+<a id="r3-series-files-2026-11-10"></a>
+## R3 검증된 series 파일 저장의 분리된 일부 구현 — 2026-11-10
+
+기준 `e7ed7934`의 NPY 형식·내용 대조 함수 위에 [호출자 디렉터리 series 파일 저장](../../core/quant/run_registry_series_files.py)을 추가한 ⑨-3a/series-files/1 범위입니다. 소유자가 승인한 R3 설계 rev 2(OWNER_RULINGS_LOG 5~6번)의 §5.7 중 같은 디렉터리 임시 파일·fsync·`os.replace`·`PermissionError` 제한 재시도·기존 이름 건너뛰기만 구현하며 앱·Lab·실제 원장·환경/설정 경로·recorder·`series_error` 기록·공급자·소유자 결정 효과에는 연결하지 않습니다.
+
+| 항목 | 확인한 동작과 한계 |
+| --- | --- |
+| 경로·입력 | 이미 있는 절대 디렉터리만 받고 객체 생성은 디렉터리·파일을 만들지 않으며 모든 생성 거부는 `StoreError`. `max_bytes`는 필수 일반 양의 int(`np.intp` 이내), 잠금 대기 0–10초·기본 2초. 쓰기는 일반 bytes NPY1 payload와 소문자 64hex 내용 SHA를 기존 `decode_series`로 먼저 검증하고 거부 시 파일을 만들지 않음. 이름은 `<digest>.npy`·`<digest>.lock` 고정 |
+| 협력 잠금 | sidecar별 프로세스 잠금과 OS 잠금(POSIX `flock`, Windows `msvcrt.locking` 1바이트·잠금/해제 전 0번 바이트 seek)을 하나의 예산으로 획득하고 sidecar는 잠금 뒤에만 NUL 1바이트로 초기화하며 읽기는 sidecar를 쓰지 않음. sidecar 없는 기존 target(링크 포함)은 sidecar를 다시 확인한 뒤에도 없을 때만 생성 전에 거부. 프로세스 잠금 지도의 guard는 사전 조회 한 번 동안만 잡고 시간 제한 없이 획득하므로 잠금 대기 0초 호출도 무관한 digest의 조회 때문에 `LockTimeout`이 되지 않으며 대기 예산은 해당 digest의 프로세스·OS 잠금에만 적용. fork·PID 변경 시 Python 잠금 상태만 초기화하며 상속 FD·실행 중 fork·동기화/네트워크 폴더·하드링크·적대적 경로 변경은 지원하지 않음 |
+| 기존 파일 | 크기 상한·정규 파일·청크 읽기·추가 바이트·변경 확인·형식/내용 재해시를 통과한 target만 `created=False`로 건너뜀. 손상·초과·링크·디렉터리·특수 파일은 `IntegrityError`로 거부하고 복구·채택·삭제·덮어쓰기를 하지 않음. 같은 내용의 다른 NPY 헤더는 기존 바이트를 유지하며 저장 바이트가 `numpy.save` 정규형일 필요는 없음 |
+| 새 쓰기·재시도 | 같은 디렉터리 `mkstemp`, 짧은 쓰기 반복, fsync·close 후 `os.replace`. `os.replace`의 `PermissionError`만 최대 10회·5초 예산(대기 합 4.75초, 단일 파일시스템 호출 시간 제한 아님)으로 재시도. 5초에 이르는 대기는 하지 않고 대기 뒤 시각을 다시 확인하므로 5초가 지난 뒤에는 새 시도를 시작하지 않음(5초 전에 시작한 마지막 시도는 그 뒤에 끝날 수 있음). 매 시도 전과 최종 소진 시 원래 임시 파일 식별·크기·target 부재를 확인하며, 바뀌거나 사라진 임시 파일·나타난 target은 덮어쓰지 않고 `PublicationUncertain`. 정리는 일치하는 자기 임시 파일만 삭제. `ReplaceRetryExhausted`(`attempts`·`temp_removed`)와 다른 형식 오류는 pickle 왕복 뒤에도 형식·속성·`cleanup_errors`를 유지(traceback·`__cause__`는 일반 예외처럼 전달되지 않음) |
+| 게시 후 불확실성·중단 | rename 뒤 POSIX 디렉터리 fsync·재읽기 바이트 대조·잠금 해제·close 실패는 `PublicationUncertain`. 읽기/건너뛰기의 해제·close 실패는 게시를 주장하지 않는 `ReleaseError`. 주 오류와 `cleanup_errors`를 함께 보존하고 close는 한 번만 시도. KeyboardInterrupt/SystemExit는 정리 후 감싸지 않고 전파하며 rename 도중·이후 중단은 게시 여부 미확정 |
+| 플랫폼·내구성·자원 | Windows는 디렉터리 fsync 없이 rename 전 파일 fsync만 수행. 전원 장애·OneDrive·Defender·인덱서·네트워크 드라이브 내구성/성공을 보장하지 않음. 파일에서 읽는 바이트는 `max_bytes`+1 이하이나 peak memory는 상한이 아님(Linux 1회 측정: 읽기 약 3배, 쓰기 약 2배). 소진 시 정리 실패·프로세스 중단 시 점(.)으로 시작하는 `.<digest>.*.tmp`가 남을 수 있고(POSIX에서만 숨김, Windows에서는 점이 숨김 속성을 만들지 않고 저장소도 설정하지 않아 보임) 자동 정리·보존기간·TTL 없음 |
+| 실제 검증 범위 | 같은 날 검토 반영 뒤 [합성 검사](../../tests/run_registry_series_files_acceptance.py) 45개·1.400초/1.450초/1.435초(3회 반복)·각 종료 코드 0, R3 통합 151개·3.519초·종료 코드 0(겹침, 합산하지 않음), 변이 41개 모두 검출(1차 28개 중 재시도 변이 2개를 새 코드에 맞게 고치고 검토 변이 13개 추가). 1차 기록 41개·2.177초/2.196초/2.342초, 통합 147개·5.144초, 변이 28개 모두 검출도 보존. 검토에서 1차 코드로 재현한 결함 세 가지(잘린 마지막 대기 뒤 정확히 5초에 시작한 시도·실제 시계 5.0002초, `ReplaceRetryExhausted` unpickle `TypeError`, 잠금 대기 0초 호출이 바쁜 guard 때문에 받은 `LockTimeout`·스레드 전환 간격 1µs 탐침의 3,200회 읽기 중 664회)는 수정 뒤 같은 탐침에서 재현되지 않음. spawn 두 프로세스 잠금 경쟁·같은 digest 동시 쓰기·sidecar 생성 경쟁·재시도 소진·5초 예산 경계·target 출현·OS 잠금 대기/임시 파일 단계/읽기 검증/rename 뒤 재읽기의 중단 정리·pickle 왕복·손상/초과/링크/비정규 target 보존 포함. 개발 중 41개 1회 실행(2.124초)도 통과했고 제품 검사 실패 실행은 없었으며, 변이 스크립트의 첫 호출은 상대 인터프리터 경로 오류로 변이 실행 전에 중단되어 절대 경로로 다시 실행함. Windows 분기는 Linux에서 가짜 `msvcrt`로 순서만 확인했으며 실제 `msvcrt`·Defender/OneDrive는 로컬 미실행 |
+
+[제품 범위·검증 기록](../product/R3_DETACHED_SERIES_FILES_2026-11-10.md)에 따라 01–20 정책을 재대조하여 01·07·20의 처리/최소화/삭제 지도에 새 `.npy`·`.lock`·남을 수 있는 점(.)으로 시작하는 임시 파일(POSIX에서만 숨김)과 삭제 순서·백업 쌍 보존만 추가했습니다. 행렬 의미(날짜/PnL/설정 순서)·series_ref·recorder/Lab·series_error·보존·수명주기/횟수/판정·실제 원장·동결 연구·전체 R3 완료는 구현하거나 추정하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
+
 ## 네이티브 한글 서체·UI 밀도 — 2026-11-07
 
 Gothic A1 기반 hinted TTF400/500/600과 별도 QG Symbols를 동봉하여 작은 한글 렌더링을 개선합니다. 기존 Flet OTF·웹HTML은 변경하지 않습니다. 카테고리 버튼은 내용폭/줄바꿈, 입력은3/4열 제한폭, 작은 결과표는 내용폭/숫자정렬/최소34px행과 긴내용 확장으로 바뀝니다. 계산 엔진·요청·결과·보고서·수신 권한·원장은 그대로입니다. [검증기록](../product/COMPACT_NATIVE_UI_20261107.md)을 따릅니다. 13/14/15/19의 표시·라이선스 변경 외 20종 정책의 기존 조건과 `review-required`·공개 준비 `BLOCKED`를 유지합니다. Linux검사로 실제Windows디스플레이·계정/KIS·웹배포·전체R3 완료를 주장하지 않습니다.
