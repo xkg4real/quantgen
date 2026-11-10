@@ -79,7 +79,7 @@ VERDICT_MEANING: dict[str, Pair] = {
                "Not enough evidence to use it; listed so the refusal is visible."),
     "INSUFFICIENT_DATA": ("데이터가 부족해 아직 판단할 수 없습니다. 이유를 볼 수 있게 남겨 둡니다.",
                           "Too little data to decide yet; listed so the refusal is visible."),
-    "UNKNOWN": ("이 화면의 자산 확장 검증 카드 형식이 아닙니다 (v2 매크로 카드는 매크로 → 모델 카드).",
+    "UNKNOWN": ("이 화면의 자산 확장 검증 카드 형식이 아닙니다 (v2 매크로 카드는 매크로 → 모형 카드).",
                 "Not an asset-expansion study card (v2 macro cards: Macro → Model cards)."),
 }
 
@@ -97,7 +97,7 @@ def verdict_label(decision: str) -> Pair:
 
 SOURCE: dict[str, Pair] = {
     "YFINANCE": ("Yahoo", "Yahoo"), "FMP": ("FMP", "FMP"), "KIS": ("한국투자증권(KIS)", "KIS"),
-    "UPBIT": ("업비트", "Upbit"), "BINANCE": ("바이낸스", "Binance"), "CRYPTO": ("암호화폐 거래소", "crypto exchange"),
+    "UPBIT": ("업비트", "Upbit"), "BINANCE": ("바이낸스", "Binance"), "CRYPTO": ("가상자산 거래소", "crypto exchange"),
     "SYNTHETIC": ("합성 데이터", "synthetic"),
 }
 
@@ -191,7 +191,7 @@ CARDS: dict[str, CardText] = {
          "Tests whether high perpetual-futures funding (crowded longs) is followed by weaker 30-day bitcoin "
          "returns.")),
     "M_C7_weekday": CardText(
-        ("암호화폐 요일 효과와 주말 유동성", "Crypto weekday effect and weekend liquidity"),
+        ("가상자산 요일 효과와 주말 유동성", "Crypto weekday effect and weekend liquidity"),
         ("요일별 수익률에 지속적인 차이가 없는지(예상된 결론), 주말 거래량이 적어 거래비용을 더 잡아야 "
          "하는지 확인했습니다.",
          "Checks that weekday returns carry no persistent effect (the expected result) and that thinner "
@@ -203,17 +203,17 @@ CARDS: dict[str, CardText] = {
          "Tests whether the ETH/BTC price ratio reverts to a stable level; no reversion is the expected "
          "result.")),
     "M_E4_letf_drag": CardText(
-        ("레버리지 ETF 괴리(드래그) 예측", "Leveraged ETF drag forecast"),
+        ("레버리지 ETF 성과 저하(드래그) 예측", "Leveraged ETF drag forecast"),
         ("KODEX 레버리지가 KOSPI200 2배 수익률보다 분기마다 얼마나 뒤처지는지 GARCH 변동성으로 미리 "
          "예측할 수 있는지 검정했습니다.",
          "Tests whether a GARCH-based variance forecast predicts how far KODEX Leverage falls short of "
          "2× KOSPI200 each quarter.")),
     "M_O1_board_today": CardText(
         ("KOSPI200 옵션 호가판 대조", "KOSPI200 option board reconciliation"),
-        ("앱의 내재변동성 계산(Black-76, SVI, MFIV)이 실제 KOSPI200 옵션 호가판과 맞는지 그날 "
-         "스냅숏으로 대조했습니다.",
-         "Reconciles the app's implied-volatility calculations (Black-76, SVI, MFIV) with that day's live "
-         "KOSPI200 option board.")),
+        ("앱의 내재변동성 계산(Black-76, SVI, MFIV)을 장중 KOSPI200 옵션 호가판 스냅숏과 대조하는 "
+         "점검입니다.",
+         "A check that reconciles the app's implied-volatility calculations (Black-76, SVI, MFIV) with an "
+         "intraday snapshot of the KOSPI200 option board.")),
     "M_O2_basis_today": CardText(
         ("KOSPI200 선물 베이시스 대조", "KOSPI200 futures basis reconciliation"),
         ("앱이 계산한 선물 이론가(보유비용 모형)가 배당을 맞춘 뒤 한국투자증권(KIS) 이론가와 같은지 "
@@ -297,7 +297,7 @@ CHECK_NAMES: dict[str, Pair] = {
     "regime": ("연도별 일관성", "consistency across years"),
     "plateau": ("설정 안정성", "parameter stability"),
     "sample": ("거래 횟수", "number of trades"),
-    "interval": ("수익 신뢰구간", "Sharpe interval"),
+    "interval": ("샤프 지수 신뢰구간", "Sharpe interval"),
     # distribution gate (validate.score_distribution)
     "tails": ("손실 한도 초과 빈도(95% VaR)", "tail frequency (95 % VaR)"),
     "clustering": ("손실 몰림(군집)", "loss clustering"),
@@ -334,8 +334,11 @@ _EXACT_REASONS: dict[str, tuple[Pair, Optional[str]]] = {
         ("모형 추정이 5%가 넘는 시점에서 수렴하지 않았습니다.", "The model failed to converge at more than 5 % of "
                                                   "origins."), None),
     "BIS sign confirmed": (
-        ("펀딩비가 높으면 이후 수익률이 낮다는 BIS 연구의 방향이 확인됐습니다.",
-         "Confirmed the BIS finding: high funding is followed by weaker returns."), None),
+        ("이 표본에서는 펀딩비 상위 10% 뒤 30일 수익률이 하위 10% 뒤보다 낮아 BIS 연구와 같은 방향이었습니다 "
+         "(부트스트랩 p < 0.05). 앞으로도 그렇다는 보장은 아닙니다.",
+         "In this sample, 30-day returns after top-decile funding were lower than after bottom-decile funding, "
+         "the same direction as the BIS study (bootstrap p < 0.05). That is no guarantee it will continue."),
+        None),
     "cost input set": (
         ("요일 효과는 없었고(예상대로), 주말 거래량이 적어 주말 거래비용을 2배로 반영했습니다.",
          "No weekday effect (as expected); thinner weekend volume is now a 2× weekend cost input."), None),
@@ -392,7 +395,7 @@ def _insufficient(m):
           r"([\d,]+) sessions to certify and ([\d,]+) were available")
 def _short_record(m):
     sr, need, have = m.groups()
-    return (f"보정 샤프와 과최적화 점검은 통과했지만, 샤프 {sr}를 확신하려면 약 {need}거래일이 필요한데 "
+    return (f"보정 샤프와 과최적화 점검은 통과했지만, 샤프 지수 {sr} 수준을 확신하려면 약 {need}거래일이 필요한데 "
             f"{have}거래일뿐입니다.",
             f"Deflated Sharpe and PBO pass, but a Sharpe of {sr} needs about {need} sessions to certify and only "
             f"{have} were available."), "interval"
@@ -433,7 +436,8 @@ def _see_lines(card: Mapping) -> Optional[Pair]:
     st = card.get("stats") or {}
     cid = card.get("card_id")
     if cid == "M_E4_letf_drag" and _num(st.get("mae_garch_bp")) is not None:
-        return ("GARCH 기반 괴리 예측이 단순한 예측보다 충분히 정확하지 않았고, 실제 괴리와의 관계도 약했습니다.",
+        return ("GARCH 기반 성과 저하(드래그) 예측이 단순한 예측보다 충분히 정확하지 않았고, 실제 성과 저하와의 "
+                "관계도 약했습니다.",
                 "The GARCH-based drag forecast was not clearly more accurate than simple forecasts and tracked "
                 "the realised drag weakly.")
     if cid == "S_B2_pca_fly" and _num(st.get("mean_pnl_per_trade_bp")) is not None:
@@ -476,8 +480,9 @@ REVISE_TARGET: dict[str, Pair] = {
          "Widen the grid (edge) or move to the plateau centre and re-run."),
     "extend history or lengthen the sample": ("더 긴 기간의 자료로 다시 검증하세요.",
                                               "Extend the history or lengthen the sample."),
-    "the Sharpe interval includes zero: extend history": ("수익 신뢰구간이 0을 포함합니다: 더 긴 자료가 필요합니다.",
-                                                          "The Sharpe interval includes zero: extend the history."),
+    "the Sharpe interval includes zero: extend history":
+        ("샤프 지수 신뢰구간이 0을 포함합니다: 더 긴 자료가 필요합니다.",
+         "The Sharpe interval includes zero: extend the history."),
     "the sleeve set or the cost model, not the rule: the benchmark is as good":
         ("규칙이 아니라 자산 구성이나 비용 모형을 바꿔야 합니다: 단순 보유도 이만큼 좋습니다.",
          "Change the sleeve set or the cost model, not the rule: the benchmark is as good."),
@@ -667,23 +672,23 @@ def strategy_checks(score) -> list[Check]:
         (f"90% 구간 {_f2(lo)} ~ {_f2(hi)}", f"90 % interval {_f2(lo)} to {_f2(hi)}"),
         ("90% 구간 하단 > 0", "interval lower bound > 0"),
         _status(lo is not None and lo > 0, sr, lo),
-        ("처음 보는 구간(표본 외)에서 낸 위험 대비 수익입니다. 1 이상이면 좋은 편이며, 90% 신뢰구간의 아래쪽 "
-         "끝이 0보다 커야 수익이 우연이 아니라고 봅니다.",
-         "Return per unit of risk on data the rule never saw. Above 1 is good; the lower end of the 90 % "
-         "interval must be above zero for the return not to be luck."), True))
+        ("처음 보는 구간(표본 외)에서 낸 위험 대비 수익입니다. 게이트 기준은 90% 구간 하단 > 0입니다"
+         "(우연일 가능성을 줄이기 위한 기준).",
+         "Return per unit of risk on data the rule never saw. The gate needs the lower end of the 90 % "
+         "interval above zero (a bar against luck)."), True))
     out.append(Check(
-        "dsr", ("보정 샤프 (DSR)", "Deflated Sharpe (DSR)"), _f2(dsr), ("", ""),
+        "dsr", ("보정 샤프(DSR)", "Deflated Sharpe (DSR)"), _f2(dsr), ("", ""),
         (f"≥ {g['dsr_min']}", f"≥ {g['dsr_min']}"), _status(dsr is not None and dsr >= g["dsr_min"], dsr),
-        ("설정을 여러 번 바꿔 시험하면 우연히 좋은 결과가 나오기 쉽습니다. 시험 횟수를 감안해 성과가 진짜일 "
-         f"확률을 계산한 값으로, {g['dsr_min']} 이상이어야 합니다.",
-         "Trying many setups makes a lucky result likely. This is the probability the result is real after "
-         f"allowing for the number of trials; it must be at least {g['dsr_min']}."), True))
+        ("설정을 여러 번 바꿔 시험하면 우연히 좋은 결과가 나오기 쉽습니다. 시험 횟수를 감안했을 때 실제 샤프가 "
+         f"0보다 클 확률의 추정치로, {g['dsr_min']} 이상이어야 합니다.",
+         "Trying many setups makes a lucky result likely. This estimates the probability that the true Sharpe "
+         f"is above zero after allowing for the number of trials; it must be at least {g['dsr_min']}."), True))
     meaningful = n_cfg is not None and n_cfg >= g["pbo_min_configs"]
     n_txt = "—" if n_cfg is None else f"{n_cfg:.0f}"
     flat = pl is not None and pl <= g["prob_loss_max"]
     if meaningful:
         out.append(Check(
-            "pbo", ("과최적화 확률 (PBO)", "Overfitting probability (PBO)"), _f2(pbo),
+            "pbo", ("과최적화 확률(PBO)", "Overfitting probability (PBO)"), _f2(pbo),
             (f"최적 설정 패배율 {_pct(pl)}", f"in-sample winner lost in {_pct(pl)} of splits"),
             (f"≤ {g['pbo_max']} (또는 최적 설정 패배율 ≤ {g['prob_loss_max']:.0%})",
              f"≤ {g['pbo_max']}, or losing splits ≤ {g['prob_loss_max']:.0%}"),
@@ -696,7 +701,7 @@ def strategy_checks(score) -> list[Check]:
              "is read with it."), True))
     else:
         out.append(Check(
-            "pbo", ("과최적화 점검 (최적 설정 패배율)", "Over-search check (in-sample winner lost)"), _pct(pl),
+            "pbo", ("과최적화 점검(최적 설정 패배율)", "Over-search check (in-sample winner lost)"), _pct(pl),
             (f"PBO {_f2(pbo)} 참고용 · 설정 {n_txt}개 < {g['pbo_min_configs']}개",
              f"PBO {_f2(pbo)} reported only · {n_txt} setups < {g['pbo_min_configs']}"),
             (f"≤ {g['prob_loss_max']:.0%}", f"≤ {g['prob_loss_max']:.0%}"), _status(flat, pl),
@@ -755,13 +760,15 @@ def strategy_checks(score) -> list[Check]:
         ("고점에서 가장 크게 떨어졌던 폭입니다. 판정에는 쓰지 않고 참고로 보여 줍니다.",
          "The largest fall from a peak. Shown for reference; it does not decide the verdict."), False))
     out.append(Check(
-        "haircut", ("예상 실전 샤프 (할인 후)", "Expected live Sharpe (haircut)"), _f2(haircut), ("", ""),
-        (f"참고: 표본 외 샤프 × {g['haircut']}", f"reference: OOS Sharpe × {g['haircut']}"),
+        "haircut", (f"할인 적용 샤프 (참고값, 표본 외 × {g['haircut']})",
+                    f"Haircut Sharpe (reference, OOS × {g['haircut']})"), _f2(haircut), ("", ""),
+        ("판정에 쓰지 않음", "reported, not gated"),
         "info" if haircut is not None else "na",
-        ("발표된 전략은 실전에서 성과가 26~58% 줄어든다는 연구(McLean–Pontiff)를 반영해 표본 외 샤프에 "
-         f"{g['haircut']}을 곱한 예상치입니다.",
-         "Published strategies lose 26–58 % of their performance live (McLean–Pontiff); this is the "
-         f"out-of-sample Sharpe × {g['haircut']}."), False))
+        ("학술지에 발표된 주식 수익률 예측 변수 97개의 포트폴리오 수익이 표본 밖에서 26%, 발표 후 58% 낮았다는 "
+         "연구(McLean–Pontiff 2016)를 참고한 고정 할인입니다. 예측치가 아닙니다.",
+         "A fixed discount after McLean–Pontiff (2016): portfolio returns on 97 published stock-return "
+         "predictors were 26 % lower out of sample and 58 % lower after publication. It is not a forecast."),
+        False))
     return out
 
 
@@ -784,8 +791,8 @@ VERDICT_TITLE: dict[str, Pair] = {
     "REVISE": ("보완 필요: 일부 기준을 통과하지 못해 고칠 점이 있습니다",
                "Needs revision: some criteria failed and must be fixed first"),
     "REJECT": ("기각: 이 전략은 채택 근거가 부족합니다", "Rejected: the evidence does not support using this strategy"),
-    "INSUFFICIENT_DATA": ("판단 보류: 데이터가 부족해 결론을 낼 수 없습니다",
-                          "Undecided: there is not enough data to reach a verdict"),
+    "INSUFFICIENT_DATA": ("데이터 부족: 데이터가 부족해 결론을 낼 수 없습니다",
+                          "Insufficient data: there is not enough data to reach a verdict"),
     "WITHHELD": ("판정 없음: 이번 실행은 비용 민감도 실험입니다", "No verdict: this run is a cost sensitivity"),
 }
 
@@ -802,22 +809,52 @@ def withheld_text(r: Mapping) -> Pair:
     return ko, en
 
 
+# A run on synthetic prices is a practice run: the banner title itself says so (owner UI review 2026-11-10).
+SYNTHETIC_PREFIX: Pair = ("연습용 판정(합성 데이터) · ", "Practice verdict (synthetic data) · ")
+SYNTHETIC_REASON: Pair = ("이 판정은 합성(가상) 데이터로 계산한 연습용이며 실제 시장 결과가 아닙니다.",
+                          "This verdict is computed on synthetic data: a toy, not a market result.")
+# A withheld run has no verdict to call "practice": the same qualifier names the run instead.
+SYNTHETIC_RUN_PREFIX: Pair = ("연습용 실행(합성 데이터) · ", "Practice run (synthetic data) · ")
+SYNTHETIC_RUN_REASON: Pair = ("이 실행은 합성(가상) 데이터로 계산한 연습용이며 실제 시장 결과가 아닙니다.",
+                              "This run is computed on synthetic data: a toy, not a market result.")
+
+
+def is_synthetic(r: Mapping) -> bool:
+    return "SYNTHETIC" in (r.get("sources") or ())
+
+
+def _prefixed(prefix: Pair, title: Pair) -> Pair:
+    return prefix[0] + title[0], prefix[1] + title[1]
+
+
 def run_verdict(r: Mapping) -> dict:
-    """Title, colour token, 1-3 decisive reasons and the next step for a Lab run result."""
+    """Title, colour token, 1-3 decisive reasons and the next step for a Lab run result. A run with
+    synthetic prices says so in the title and in its first reason."""
     sc = r["score"]
     checks = strategy_checks(sc)
+    synthetic = is_synthetic(r)
     if r.get("withheld"):
-        return {"code": "NO VERDICT", "decision": "WITHHELD", "token": "muted", "title": VERDICT_TITLE["WITHHELD"],
-                "reasons": [withheld_text(r)], "next": None, "checks": checks}
+        title = VERDICT_TITLE["WITHHELD"]
+        reasons = [withheld_text(r)]
+        if synthetic:
+            title, reasons = _prefixed(SYNTHETIC_RUN_PREFIX, title), [SYNTHETIC_RUN_REASON, *reasons]
+        return {"code": "NO VERDICT", "decision": "WITHHELD", "token": "muted", "title": title,
+                "reasons": reasons, "next": None, "checks": checks, "synthetic": synthetic}
     decision = sc.decision if sc.decision in VERDICT_TITLE else "INSUFFICIENT_DATA"
     (primary, linked) = reason_text(sc.reason)
     reasons: list[Pair] = [primary]
     if decision == "PASS":
         haircut = next((c for c in checks if c.key == "haircut"), None)
-        reasons.append((f"과거 자료로 한 검증입니다. 실전 성과는 더 낮을 수 있습니다 (할인 후 예상 샤프 "
-                        f"{haircut.value if haircut else '—'}).",
-                        f"This is a test on past data; live results can be weaker (expected live Sharpe after the "
-                        f"haircut {haircut.value if haircut else '—'})."))
+        reasons.append((f"과거 자료로 한 검증입니다. 실전 성과는 더 낮을 수 있습니다 (할인 적용 샤프 "
+                        f"{haircut.value if haircut else '—'}, 참고값).",
+                        f"This is a test on past data; live results can be weaker (haircut Sharpe "
+                        f"{haircut.value if haircut else '—'}, reference)."))
+        ledger_n, grid_n = r.get("ledger_n"), len(r.get("grid") or ())
+        if isinstance(ledger_n, int) and not isinstance(ledger_n, bool) and ledger_n > grid_n:
+            reasons.append((f"보정 샤프는 이번 실행의 설정 {grid_n:,}개만 셉니다. 이 계열에서 지금까지 시험한 설정은 "
+                            f"{ledger_n:,}개입니다.",
+                            f"The deflated Sharpe counts only this run's {grid_n:,} setups; this family has tried "
+                            f"{ledger_n:,} setups so far."))
     else:
         failed = [c for c in checks if c.gated and c.status == "fail" and c.key != linked]
         for c in failed[:2]:
@@ -826,9 +863,28 @@ def run_verdict(r: Mapping) -> dict:
                             f" — 기준 {c.threshold[0]}",
                             f"{c.label[1]} {c.value}" + (f" ({detail[1]})" if detail[1] else "") +
                             f" — needs {c.threshold[1]}"))
+    title = VERDICT_TITLE[decision]
+    if synthetic:
+        title, reasons = _prefixed(SYNTHETIC_PREFIX, title), [SYNTHETIC_REASON, *reasons]
     return {"code": sc.decision, "decision": decision, "token": VERDICT_TOKEN.get(decision, "muted"),
-            "title": VERDICT_TITLE[decision], "reasons": reasons, "next": revise_target_text(sc.revise_target),
-            "checks": checks}
+            "title": title, "reasons": reasons, "next": revise_target_text(sc.revise_target),
+            "checks": checks, "synthetic": synthetic}
+
+
+# The four numbers the Lab shows as tiles; every criterion stays in the checklist below them.
+HEADLINE_KEYS = ("interval", "dsr", "bench", "mdd")
+_NO_BENCH = Check(
+    "bench", ("벤치마크 대비 샤프 차이", "Sharpe difference vs benchmark"), "—",
+    ("벤치마크 없음", "no benchmark"), ("", ""), "na",
+    ("이번 실행에는 동일 비중 보유 벤치마크가 없습니다(페어 거래는 두 종목을 함께 사고팔아 비교하지 않음).",
+     "This run has no equal-weight hold benchmark (a pair trade is long one leg and short the other)."), False)
+
+
+def headline_checks(checks: list[Check]) -> list[Check]:
+    """Out-of-sample Sharpe, deflated Sharpe, Sharpe difference vs benchmark and maximum drawdown, in that
+    order (a run without a benchmark shows that tile as not applicable)."""
+    by_key = {c.key: c for c in checks}
+    return [by_key.get(k, _NO_BENCH if k == "bench" else None) for k in HEADLINE_KEYS if k in by_key or k == "bench"]
 
 
 # --------------------------------------------------------------------------- #
@@ -859,7 +915,7 @@ def walk_forward_text(note: str) -> Pair:
     if not m:
         return str(note), str(note)
     w_is, w_oos, emb, n_o, n_c = m.groups()
-    return (f"학습 {w_is}일 · 검증 {w_oos}일 · 간격 {emb}일 · 재선정 {n_o}회 · 설정 후보 {n_c}개",
+    return (f"학습 {w_is}거래일 · 검증 {w_oos}거래일 · 간격 {emb}거래일 · 재선정 {n_o}회 · 설정 후보 {n_c}개",
             f"train {w_is} · test {w_oos} · gap {emb} sessions · {n_o} re-selections · {n_c} setups")
 
 
@@ -876,10 +932,37 @@ def convention_text(text: str) -> Pair:
 PARAM: dict[str, Pair] = {
     "rule": ("규칙", "rule"), "lookback": ("관측 기간", "lookback"), "step": ("재조정 간격", "step"),
     "target": ("목표 변동성", "target"), "window": ("추정 기간", "window"), "skip": ("제외 기간", "skip"),
-    "top": ("상위 비율", "top"), "long_only": ("매수만", "long only"), "vol_target_ann": ("연 목표 변동성", "vol target"),
+    "top": ("상위 비율", "top"), "long_only": ("포지션", "positions"), "vol_target_ann": ("연 목표 변동성", "vol target"),
     "cap": ("상한", "cap"), "hysteresis": ("완충 폭", "hysteresis"), "formation": ("형성 기간", "formation"),
     "trading": ("거래 기간", "trading"), "entry": ("진입 z", "entry z"), "exit": ("청산 z", "exit z"),
 }
+# Values of those parameters in words: the grid's raw ids (rule "tsmom") never reach the reader.
+_RULE: dict[str, Pair] = {"sma": ("Faber 이동평균", "Faber SMA"),
+                          "tsmom": ("시계열 모멘텀(MOP 부호)", "time-series momentum (MOP sign)")}
+_SESSION_PARAMS = frozenset({"lookback", "step", "window", "skip", "formation", "trading"})
+_PERCENT_PARAMS = frozenset({"target", "vol_target_ann"})
+
+
+def param_text(key: str, value) -> Pair:
+    """'시계열 모멘텀(MOP 부호)', '126거래일', '10%', '1/3', '매수만': a grid value as the reader sees it."""
+    if key == "rule":
+        return _RULE.get(str(value), (str(value), str(value)))
+    if key == "long_only" and isinstance(value, bool):
+        return ("매수만", "long only") if value else ("매수·매도", "long and short")
+    v = _num(value)
+    if v is None:
+        return str(value), str(value)
+    if key in _SESSION_PARAMS:
+        return f"{v:,.0f}거래일", f"{v:,.0f} sessions"
+    if key in _PERCENT_PARAMS:
+        return f"{round(v * 100, 2):g}%", f"{round(v * 100, 2):g}%"
+    if key == "top":
+        if abs(v - 1 / 3) < 1e-9:
+            return "1/3", "1/3"
+        return f"{round(v * 100, 2):g}%", f"{round(v * 100, 2):g}%"
+    if key == "cap":
+        return f"{v:g}배", f"{v:g}×"
+    return f"{v:g}", f"{v:g}"
 
 
 def _korean(text: str) -> str:
@@ -888,18 +971,67 @@ def _korean(text: str) -> str:
     return static_text(text, "ko")
 
 
-def run_sections(r: Mapping, language: str) -> list[tuple[str, list[str]]]:
-    """Structured local commentary for a Lab run: conclusion, data and setup, results, risks."""
+# What a run's verdict means for the reader, and what to do next. The verdict box above the analysis
+# already states the title, the reasons and the revise target; the conclusion adds the meaning.
+RUN_MEANING: dict[str, Pair] = {
+    "PASS": ("통과 · PASS는 연구가 기본으로 제공하는 수준의 근거를 갖췄다는 뜻입니다. 같은 규칙이 다른 기간이나 "
+             "종목에서도 유지되는지 확인하면 근거가 더 단단해집니다.",
+             "PASS means the evidence reaches the level the study offers by default. Checking that the same rule "
+             "holds on other periods or symbols makes it firmer."),
+    "REVISE": ("보완 필요 · REVISE는 아직 쓰지 않는다는 뜻입니다. 판정 상자의 다음 단계를 반영한 뒤 새 실행으로 "
+               "다시 검증하세요.",
+               "REVISE means not for use yet. Make the change the verdict box gives as the next step, then "
+               "validate again in a new run."),
+    "REJECT": ("기각 · REJECT는 이 설정을 쓰지 않는다는 뜻입니다. 결과를 본 뒤 규칙을 조금씩 바꿔 다시 돌리면 "
+               "과최적화되기 쉬우므로, 바꾸려면 새 가설로 처음부터 검증하세요.",
+               "REJECT means do not use this setup. Tweaking the rule after seeing the result invites "
+               "overfitting; treat any change as a new hypothesis and validate it from scratch."),
+    "INSUFFICIENT_DATA": ("데이터 부족 · INSUFFICIENT_DATA는 좋은지 나쁜지 아직 말할 수 없다는 뜻입니다. 더 긴 "
+                          "기간의 자료로 다시 실행하세요.",
+                          "INSUFFICIENT_DATA means the run cannot yet say whether the setup is good or bad. "
+                          "Re-run with a longer history."),
+}
+_REVISE_NO_TARGET: Pair = ("보완 필요 · REVISE는 아직 쓰지 않는다는 뜻입니다. 미달인 검증 항목을 고친 뒤 새 실행으로 "
+                           "다시 검증하세요.",
+                           "REVISE means not for use yet. Fix the failed criteria, then validate again in a new run.")
+_SYNTHETIC_NEXT: Pair = ("합성 데이터로 계산한 연습용 결과입니다. 실제 시장 가격으로 다시 실행해야 의미 있는 판정이 "
+                         "됩니다.",
+                         "A practice result on synthetic data. Run again on market prices for a verdict that means "
+                         "something.")
+_WITHHELD_NEXT: Pair = ("이번 실행은 판정을 내지 않습니다. 판정을 받으려면 거래비용 칸을 비워 두고(QUANTGEN 기준 비용) "
+                        "다시 실행하세요.",
+                        "This run gives no verdict. For one, leave the cost blank (QUANTGEN's table rate) and run "
+                        "again.")
+_WITHHELD_UNCOSTED_NEXT: Pair = ("이번 실행은 판정을 내지 않습니다. 판정을 받으려면 QUANTGEN 비용표에 있는 종목으로 "
+                                 "다시 실행하세요.",
+                                 "This run gives no verdict. For one, run again with symbols QUANTGEN's cost table "
+                                 "covers.")
+
+
+def _conclusion(v: Mapping, r: Mapping) -> list[Pair]:
+    out: list[Pair] = [_SYNTHETIC_NEXT] if v.get("synthetic") else []
+    if v["decision"] == "WITHHELD":
+        out.append(_WITHHELD_UNCOSTED_NEXT if r.get("cost_floor") is None else _WITHHELD_NEXT)
+    elif v["decision"] == "REVISE" and not v.get("next"):
+        out.append(_REVISE_NO_TARGET)
+    else:
+        out.append(RUN_MEANING[v["decision"]])
+    return out
+
+
+def run_sections(r: Mapping, language: str, *, include_results: bool = True) -> list[tuple[str, list[str]]]:
+    """Structured local commentary for a Lab run: conclusion, data and setup, results, risks.
+    `include_results=False` leaves out the per-criterion section for a page that already shows the
+    checklist (the Strategy Lab). The conclusion says what the verdict means and what to do next; it
+    does not restate the verdict box's title and reasons."""
     ko = language == "ko"
     v = run_verdict(r)
     sc = r["score"]
-    conclusion = [f"{pick(v['title'], language)} ({v['code']})"] + [pick(x, language) for x in v["reasons"]]
-    if v["next"]:
-        conclusion.append(("다음 단계: " if ko else "Next step: ") + pick(v["next"], language))
+    conclusion = [pick(x, language) for x in _conclusion(v, r)]
     panel = r["panel"]
     dates = list(getattr(panel, "dates", []) or [])
     srcs = ", ".join(f"{s} {pick(source_label(src), language)}" for s, src in zip(r["symbols"], r["sources"]))
-    chosen = ", ".join(f"{pick(PARAM.get(k, (k, k)), language)} {v_}"
+    chosen = ", ".join(f"{pick(PARAM.get(k, (k, k)), language)} {pick(param_text(k, v_), language)}"
                        for k, v_ in dict(r.get("chosen") or {}).items()) or "—"
     data = [
         (f"전략: {_korean(r['label'])} · 종목: {', '.join(r['symbols'])}" if ko else
@@ -907,8 +1039,9 @@ def run_sections(r: Mapping, language: str) -> list[tuple[str, list[str]]]:
         (f"데이터: {srcs}" if ko else f"Data: {srcs}"),
         (f"기간: {dates[0]} ~ {dates[-1]} (공통 거래일 {len(panel):,}일)" if ko and dates else
          f"Period: {dates[0]} to {dates[-1]} ({len(panel):,} shared sessions)" if dates else ""),
-        (f"편도 거래비용 {r['cost_bps']:g}bp · 시험한 설정 {len(r['grid'])}개 = 시험 횟수 {sc.n_trials}회" if ko else
-         f"Cost {r['cost_bps']:g} bp per side · {len(r['grid'])} setups tried = {sc.n_trials} trials"),
+        (f"편도 거래비용 {r['cost_bps']:g}bp · 시험한 설정 {len(r['grid']):,}개 = 시험 횟수 {sc.n_trials:,}회"
+         if ko else
+         f"Cost {r['cost_bps']:g} bp per side · {len(r['grid']):,} setups tried = {sc.n_trials:,} trials"),
         ("워크포워드: " if ko else "Walk-forward: ") + pick(walk_forward_text(r["wf"].note), language),
         (f"마지막 학습 구간의 최적 설정: {chosen}" if ko else f"Last in-sample winner: {chosen}"),
     ]
@@ -923,10 +1056,14 @@ def run_sections(r: Mapping, language: str) -> list[tuple[str, list[str]]]:
     from core.research.strategy_exposure import exposure_lines
     risks += exposure_lines_ko(r.get("exposure")) if ko else exposure_lines(r.get("exposure"))
     if "SYNTHETIC" in r["sources"]:
-        risks.append("합성(가상) 데이터가 섞여 있어 이 판정은 연습용입니다." if ko else
+        risks.append("합성(가상) 데이터가 포함되어 있어 이 판정은 연습용입니다." if ko else
                      "Synthetic data in the panel: the verdict is a toy.")
     risks.append("과거 자료에 대한 검증이며 미래 수익을 보장하지 않습니다." if ko else
                  "A test on past data; it does not promise future returns.")
     heads = (("결론", "데이터와 설정", "검증 결과", "위험과 참고") if ko else
              ("Conclusion", "Data and setup", "Validation results", "Risks and notes"))
-    return [(heads[0], conclusion), (heads[1], [x for x in data if x]), (heads[2], results), (heads[3], risks)]
+    sections = [(heads[0], conclusion), (heads[1], [x for x in data if x])]
+    if include_results:
+        sections.append((heads[2], results))
+    sections.append((heads[3], risks))
+    return sections

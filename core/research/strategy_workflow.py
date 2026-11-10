@@ -125,12 +125,13 @@ def narrative(r: dict) -> str:
             f"The last in-sample winner was {r['chosen']}.")
     return head + " " + " ".join(exposure_lines(r.get("exposure")) + list(sc.lines))
 
-def narrative_sections(r: dict, language: str) -> list[tuple[str, list[str]]]:
+def narrative_sections(r: dict, language: str, *, include_results: bool = True) -> list[tuple[str, list[str]]]:
     """The same result as narrative(), organised for reading: conclusion, data and setup, validation
     results, risks and notes, in Korean ("ko") or English. Presentation only; narrative() and payload()
-    are unchanged."""
+    are unchanged. `include_results=False` omits the validation-results section for a page that already
+    shows every criterion in its own checklist (the Strategy Lab)."""
     from .strategy_display import run_sections
-    return run_sections(r, "ko" if language == "ko" else "en")
+    return run_sections(r, "ko" if language == "ko" else "en", include_results=include_results)
 
 def payload(r: dict) -> dict:
     sc = r["score"]

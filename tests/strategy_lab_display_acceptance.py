@@ -126,8 +126,13 @@ class RunResultTests(unittest.TestCase):
         v = D.run_verdict(r)
         sc = r["score"]
         self.assertEqual(v["code"], sc.decision)
-        self.assertEqual(v["title"], D.VERDICT_TITLE[sc.decision])
-        self.assertTrue(1 <= len(v["reasons"]) <= 3)
+        # a synthetic run says so in the banner title itself and in its first reason
+        title = D.VERDICT_TITLE[sc.decision]
+        self.assertEqual(v["title"], ("연습용 판정(합성 데이터) · " + title[0],
+                                      "Practice verdict (synthetic data) · " + title[1]))
+        self.assertEqual(v["reasons"][0], ("이 판정은 합성(가상) 데이터로 계산한 연습용이며 실제 시장 결과가 아닙니다.",
+                                           "This verdict is computed on synthetic data: a toy, not a market result."))
+        self.assertTrue(1 <= len(v["reasons"]) - 1 <= 3, "1-3 decisive reasons after the synthetic qualifier")
         by_key = {c.key: c for c in v["checks"]}
         self.assertEqual(by_key["dsr"].status, "pass" if sc.dsr >= V.GATE["dsr_min"] else "fail")
         self.assertEqual(by_key["interval"].status, "pass" if sc.ci90[0] > 0 else "fail")
@@ -138,8 +143,10 @@ class RunResultTests(unittest.TestCase):
         r = fixture(cost=1.0)
         v = D.run_verdict(r)
         self.assertEqual((v["code"], v["decision"]), ("NO VERDICT", "WITHHELD"))
-        self.assertEqual(v["reasons"][0][1], r["withheld"])
-        self.assertRegex(v["reasons"][0][0], HANGUL)
+        self.assertEqual(v["reasons"][0][0], "이 실행은 합성(가상) 데이터로 계산한 연습용이며 실제 시장 결과가 아닙니다.")
+        self.assertTrue(v["title"][0].startswith("연습용 실행(합성 데이터) · 판정 없음"))
+        self.assertEqual(v["reasons"][1][1], r["withheld"])
+        self.assertRegex(v["reasons"][1][0], HANGUL)
         self.assertNotIn(r["score"].decision, " ".join(D.pick(x, "en") for x in v["reasons"]))
 
     def test_sections_are_presentation_only(self):
@@ -155,6 +162,67 @@ class RunResultTests(unittest.TestCase):
             self.assertIn(line, risks_en)
         self.assertEqual(len(D.exposure_lines_ko(r["exposure"])), len(exposure_lines(r["exposure"])))
         self.assertTrue(all(HANGUL.search(x) for _, items in ko for x in items if not x.startswith(("SPY", "QQQ"))))
+
+    def test_lab_sections_omit_the_criteria_and_do_not_restate_the_banner(self):
+        r = fixture()
+        v = D.run_verdict(r)
+        for language, heads in (("ko", ["결론", "데이터와 설정", "위험과 참고"]),
+                                ("en", ["Conclusion", "Data and setup", "Risks and notes"])):
+            with self.subTest(language=language):
+                lab = flow.narrative_sections(r, language, include_results=False)
+                self.assertEqual([h for h, _ in lab], heads)
+                conclusion = lab[0][1]
+                self.assertTrue(conclusion)
+                banner = [D.pick(v["title"], language)] + [D.pick(x, language) for x in v["reasons"]]
+                if v["next"]:
+                    banner.append(D.pick(v["next"], language))
+                for line in conclusion:
+                    for said in banner:
+                        self.assertNotIn(said, line, "the conclusion adds meaning, it does not repeat the banner")
+                self.assertIn(v["code"], " ".join(conclusion))
+                full = flow.narrative_sections(r, language)
+                self.assertEqual(len(full), 4, "other callers keep the validation-results section")
+
+    def test_setup_lines_name_parameters_in_words(self):
+        self.assertEqual(D.param_text("rule", "tsmom"), ("시계열 모멘텀(MOP 부호)", "time-series momentum (MOP sign)"))
+        self.assertEqual(D.param_text("lookback", 126), ("126거래일", "126 sessions"))
+        self.assertEqual(D.param_text("target", 0.1), ("10%", "10%"))
+        self.assertEqual(D.param_text("top", 1 / 3), ("1/3", "1/3"))
+        self.assertEqual(D.param_text("long_only", False), ("매수·매도", "long and short"))
+        for family in ("trend_switch", "vol_target"):
+            r = fixture(family)
+            data = dict(flow.narrative_sections(r, "ko"))["데이터와 설정"]
+            setup = next(x for x in data if x.startswith("마지막 학습 구간의 최적 설정"))
+            for raw in ("tsmom", "sma", "True", "False", "0.333"):
+                self.assertNotIn(raw, setup.split(": ", 1)[1])
+            walk = next(x for x in data if x.startswith("워크포워드"))
+            self.assertRegex(walk, r"학습 \d+거래일 · 검증 \d+거래일 · 간격 \d+거래일")
+
+    def test_pass_banner_states_the_haircut_and_the_family_ledger(self):
+        from dataclasses import replace
+        r = fixture()
+        passed = dict(r, score=replace(r["score"], decision="PASS", reason="every gate criterion met",
+                                       revise_target=None), sources=["YFINANCE"] * 3, ledger_n=1240)
+        v = D.run_verdict(passed)
+        self.assertEqual(v["title"], D.VERDICT_TITLE["PASS"], "no practice qualifier on market data")
+        ko = [x[0] for x in v["reasons"]]
+        self.assertTrue(any("할인 적용 샤프" in x and "참고값" in x for x in ko))
+        self.assertIn(f"보정 샤프는 이번 실행의 설정 {len(r['grid'])}개만 셉니다. 이 계열에서 지금까지 시험한 설정은 "
+                      "1,240개입니다.", ko)
+        self.assertEqual(len(D.run_verdict(dict(passed, ledger_n=len(r["grid"])))["reasons"]), 2)
+        haircut = next(c for c in v["checks"] if c.key == "haircut")
+        self.assertEqual(haircut.label, (f"할인 적용 샤프 (참고값, 표본 외 × {V.GATE['haircut']})",
+                                         f"Haircut Sharpe (reference, OOS × {V.GATE['haircut']})"))
+        self.assertIn("McLean–Pontiff 2016", haircut.help[0])
+        self.assertIn("예측치가 아닙니다", haircut.help[0])
+        self.assertEqual(D.VERDICT_TITLE["INSUFFICIENT_DATA"][0], "데이터 부족: 데이터가 부족해 결론을 낼 수 없습니다")
+
+    def test_funding_reason_matches_its_card(self):
+        card = next(json.loads(p.read_text(encoding="utf-8")) for p in CARD_FILES if p.stem == "M_C4_funding")
+        (reason, _) = D.reason_text(card["decision_reason"], card)
+        self.assertIn("부트스트랩 p < 0.05", reason[0])
+        self.assertLess(card["tests"]["bootstrap_p"], 0.05, "the sentence claims p < 0.05")
+        self.assertLess(card["stats"]["top_decile_fwd30"], card["stats"]["bottom_decile_fwd30"])
 
 
 class PageTests(unittest.TestCase):
@@ -203,7 +271,7 @@ class PageTests(unittest.TestCase):
         self.assertIn("BTC 무기한선물 펀딩비 신호 — 통과 · PASS", [o.text for o in picker.options])
         self.assertIn("M_C4_funding", picker.value)
         # the full disclosures stay available (expandables), and the analysis gets organised sections
-        self.assertTrue(any(EXPOSURE_HELP in t or "변동성 목표와 암호화폐 추세 전략은 자산마다" in t for t in shown))
+        self.assertTrue(any(EXPOSURE_HELP in t or "변동성 목표와 가상자산 추세 전략은 자산마다" in t for t in shown))
         for line in fixture()["score"].lines:
             self.assertIn(line, joined)
         self.assertEqual(captured["kind"], "strategy_gate")
@@ -213,6 +281,45 @@ class PageTests(unittest.TestCase):
         joined_en = "\n".join(texts(root))
         self.assertIn(D.VERDICT_TITLE[fixture()["score"].decision][1], joined_en)
         self.assertNotRegex(joined_en, r"검증 결과 요약|카드별 결과|직접 검증해 보기")
+
+    def test_run_result_reads_once_with_four_equal_tiles(self):
+        with patch.object(page_module.xc, "equity_chart", wraps=page_module.xc.equity_chart) as chart:
+            root, captured = self.build(locale="ko_KR")
+        translate_controls(root, LocaleContext("ko_KR"))
+        shown = texts(root)
+        joined = "\n".join(shown)
+        # the synthetic notice comes before the banner, and the banner title carries the qualifier
+        notice_at = next(i for i, t in enumerate(shown) if t.startswith("합성(가상) 데이터가 포함되어 있습니다. 이 판정은"))
+        title_at = next(i for i, t in enumerate(shown) if t.startswith("연습용 판정(합성 데이터) · "))
+        self.assertLess(notice_at, title_at)
+        # four headline tiles of one fixed height; every criterion stays in the checklist
+        tiles = [c for c in walk(root) if isinstance(c, ft.Container) and c.height == page_module._TILE_HEIGHT]
+        self.assertEqual(len(tiles), 4)
+        labels = [texts(t)[0] for t in tiles]
+        self.assertEqual(labels, ["표본 외 샤프 지수", "보정 샤프(DSR)", "벤치마크 대비 샤프 차이", "최대 낙폭"])
+        self.assertTrue(all(t.tooltip for t in tiles), "each tile explains itself")
+        for c in D.run_verdict(fixture())["checks"]:
+            self.assertIn(c.label[0], joined)
+        self.assertEqual([h for h, _ in captured["sections"](LocaleContext("ko_KR"))],
+                         ["결론", "데이터와 설정", "위험과 참고"])
+        self.assertEqual(chart.call_args.kwargs["title_ko"], "추세 전환 (Faber 이동평균 / MOP 부호): 표본 외(OOS) 누적 성과")
+        # the offer policy is a visible line, and the agreed vocabulary is used
+        self.assertTrue(any(t.startswith("통과 · PASS는 기본으로 제공하고") for t in shown))
+        for word in ("암호화폐", "모델 카드", "· 코인 ", "수익 신뢰구간", "판단 보류", "섞여 있습니다", "아래 판정"):
+            self.assertNotIn(word, joined)
+        self.assertIn("가상자산 BTC-USD, KRW-BTC", joined)
+
+    def test_scorecard_korean_wraps_between_words_only(self):
+        root, _ = self.build(r=False, locale="ko_KR")
+        translate_controls(root, LocaleContext("ko_KR"))
+        joined = [t for t in texts(root) if page_module.WORD_JOINER in t]
+        cards = [flow._study_card(json.loads(p.read_text(encoding="utf-8"))) for p in CARD_FILES]
+        reasons = {D.reason_text(c["decision_reason"], c)[0][0] for c in cards}
+        names = {D.card_text(c).name[0] for c in cards}
+        plain = {t.replace(page_module.WORD_JOINER, "") for t in joined}
+        self.assertEqual(reasons | names, plain, "only the scorecard's names and reasons, characters unchanged")
+        for t in joined:
+            self.assertIsNone(re.search(r"[가-힣][^\s⁠]|[^\s⁠][가-힣]", t), t)
 
     def test_summary_tiles_count_every_verdict(self):
         root, _ = self.build(r=False)
