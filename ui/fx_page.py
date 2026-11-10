@@ -34,8 +34,9 @@ from core.ficc.data import (G10_KRW, Series, load_fx_spot, load_policy_rates,
 from core.quant.validate import cost_bp
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
-from ui.components import card, chip, empty_state, notice, section, stat
+from ui.components import card, empty_state, notice, number_field, parse_number, section, stat
 import ui.fcharts as fcharts
+from ui.ficc_widgets import action, form_row, hide_source, ko_stat, lchip, synthetic_notice, with_helper
 
 _TOOLS = [("forward", "Spot, forward & carry"), ("option", "Option & smile"),
           ("carry", "Carry basket")]
@@ -57,7 +58,7 @@ def _num(field: ft.TextField, default: float | None = None) -> float | None:
     if not t:
         return default
     try:
-        v = float(t)
+        v = parse_number(t)
     except ValueError:
         raise ValueError(f"{field.label}: {t!r} is not a number.") from None
     if not math.isfinite(v):
@@ -85,12 +86,15 @@ def _strike(text: str, S: float, T: float, rd: float, rf: float, vol: float,
     if m:
         return fx.strike_from_delta(float(m.group(1)) / 100.0, S, T, rd, rf, vol, call=call)
     try:
-        return float(t)
+        return parse_number(t)
     except ValueError:
         raise ValueError(f"Strike: {text!r} is not a level, a delta like 25d, or ATM.") from None
 
 
 _SMILE_HEADERS_KO = {'Point': '구분', 'Vol': '변동성', 'Spot delta': '현물 델타'}
+_FORWARD_HEADERS_KO = {'Tenor': '만기', 'Forward': '선도환율', 'Points': '스왑포인트'}
+_RESIDUAL_HEADERS_KO = {'Point': '구분', 'Quoted vol %': '호가 변동성 %', 'Fitted vol %': '적합 변동성 %',
+                        'Residual · vol points': '잔차 · 변동성 %p'}
 _CARRY_HEADERS_KO = {'Pair': '통화쌍', 'Ccy': '통화', 'Spot': '현물환율', 'Rate': '금리',
                      'USD rate': 'USD 금리', 'Carry': '캐리', '3m vol': '3개월 변동성',
                      'Carry/vol': '캐리/변동성 비율', '3m mom': '3개월 모멘텀', 'Score': '점수'}
@@ -108,8 +112,10 @@ def _table(columns: list[str], rows: list[list[str]], *, headers_ko=None) -> ft.
 
 
 def _chips(*series: Series | None) -> list[ft.Control]:
-    return [chip(f"{s.label}: {s.source} · {s.last_date}",
-                 "muted" if s.source == "SYNTHETIC" else "success", tooltip=s.note)
+    """Provenance: which provider answered for each series, and its last date."""
+    return [lchip(f"{s.label}: {'합성 데이터' if s.source == 'SYNTHETIC' else s.source} · 관측일 {s.last_date}",
+                  f"{s.label}: {s.source} · {s.last_date}",
+                  "muted" if s.source == "SYNTHETIC" else "success", tooltip=s.note)
             for s in series if s is not None]
 
 
@@ -117,8 +123,12 @@ def _synthetic_notice(*series: Series | None) -> ft.Control | None:
     syn = [s for s in series if s is not None and s.source == "SYNTHETIC"]
     if not syn:
         return None
-    return notice("Synthetic data: " + ", ".join(s.label for s in syn) + ". " + syn[0].note,
-                  "error", icon=ft.Icons.SCIENCE_OUTLINED)
+    names = ", ".join(s.label for s in syn)
+    return synthetic_notice(
+        f"합성 데이터: {names}. 제공처에서 받지 못해 시뮬레이션한 시계열이며, 아래 숫자는 계산 방식의 "
+        "시연이고 시장 시세가 아닙니다.",
+        f"Synthetic data: {names}. Simulated because the provider did not answer; the numbers below "
+        "demonstrate the mechanics, not a market read.", syn[0].note)
 
 
 def _pair_of(spot: Series) -> tuple[str, str, str]:
@@ -133,54 +143,58 @@ def _pair_of(spot: Series) -> tuple[str, str, str]:
 def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -> ft.Control:
     pal = active()
 
-    tool = ft.Dropdown(label="Tool", width=230, value="forward",
+    def num(label: str, value: str = "", width: int = 140, **kw) -> ft.TextField:
+        """A small number (percent, bp, count): plain, right-aligned like every number."""
+        return ft.TextField(label=label, value=value, width=width, border_radius=RADII["md"],
+                            text_align=ft.TextAlign.RIGHT, **kw)
+
+    tool = ft.Dropdown(label="Tool", width=240, value="forward",
                        options=[ft.dropdown.Option(k, v) for k, v in _TOOLS])
-    source = ft.Dropdown(label="Data source", width=250, value="auto",
-                         options=[ft.dropdown.Option(k, v) for k, v in _SOURCES])
+    # The app fetches spot and rates itself (Yahoo spot, FRED rates, else a
+    # labelled synthetic series); the selector stays for tests but is not shown.
+    source = hide_source(ft.Dropdown(label="Data source", width=250, value="auto",
+                                     options=[ft.dropdown.Option(k, v) for k, v in _SOURCES]), "auto")
     pair = ft.TextField(label="Pair", value="EURUSD", hint_text="EURUSD or USD/KRW",
-                        width=130, border_radius=RADII["md"])
-    r_dom = ft.TextField(label="Quote-ccy rate %", hint_text="blank = short rate", width=150,
-                         border_radius=RADII["md"], tooltip="USD for EURUSD; KRW for USDKRW")
-    r_for = ft.TextField(label="Base-ccy rate %", hint_text="blank = short rate", width=150,
-                         border_radius=RADII["md"], tooltip="EUR for EURUSD; USD for USDKRW")
+                        width=140, border_radius=RADII["md"])
+    r_dom = with_helper(num("Quote-ccy rate %", width=170, hint_text="blank = short rate",
+                            tooltip="USD for EURUSD; KRW for USDKRW"), "Blank = latest short rate")
+    r_for = with_helper(num("Base-ccy rate %", width=170, hint_text="blank = short rate",
+                            tooltip="EUR for EURUSD; USD for USDKRW"), "Blank = latest short rate")
     busy = ft.ProgressRing(visible=False, width=20, height=20)
-    result_host = ft.Column(spacing=14)
+    result_host = ft.Column(spacing=16)
 
     # Spot, forward & carry
-    tenor = ft.TextField(label="Tenor", value="3m", width=90, border_radius=RADII["md"])
-    mkt_fwd = ft.TextField(label="Market forward (optional)", hint_text="outright, e.g. 1.1050",
-                           width=190, border_radius=RADII["md"])
-    row_forward = ft.Row([tenor, mkt_fwd], spacing=10, wrap=True)
+    tenor = ft.TextField(label="Tenor", value="3m", width=120, border_radius=RADII["md"])
+    mkt_fwd = number_field("Market forward (optional)", width=220, hint_text="outright, e.g. 1.1050")
 
     # Option & smile
-    expiry = ft.TextField(label="Expiry", value="3m", width=90, border_radius=RADII["md"])
-    strike = ft.TextField(label="Strike", value="ATM", hint_text="1.12, 25d or ATM", width=130,
-                          border_radius=RADII["md"])
-    side = ft.Dropdown(label="Side", width=110, value="call",
+    expiry = ft.TextField(label="Expiry", value="3m", width=120, border_radius=RADII["md"])
+    strike = number_field("Strike", "ATM", width=140, hint_text="1.12, 25d or ATM")
+    side = ft.Dropdown(label="Side", width=120, value="call",
                        options=[ft.dropdown.Option("call", "Call"),
                                 ft.dropdown.Option("put", "Put")])
-    atm = ft.TextField(label="ATM vol %", value="8", width=100, border_radius=RADII["md"])
-    rr = ft.TextField(label="25d RR %", value="0.5", width=100, border_radius=RADII["md"],
-                      tooltip="25d call vol minus 25d put vol")
-    bf = ft.TextField(label="25d BF %", value="0.3", width=100, border_radius=RADII["md"])
-    row_option = ft.Row([expiry, strike, side, atm, rr, bf], spacing=10, wrap=True)
+    atm = num("ATM vol %", "8", 120)
+    rr = num("25d RR %", "0.5", 120, tooltip="25d call vol minus 25d put vol")
+    bf = num("25d BF %", "0.3", 120, tooltip="25d butterfly: wing vol over ATM vol")
 
     # Carry basket
-    top_n = ft.TextField(label="Top n", value="3", width=80, border_radius=RADII["md"])
-    cost_bps = ft.TextField(label="Cost (bp)", value=f"{cost_bp('fx'):g}", width=90, border_radius=RADII["md"],
-                            tooltip="Per side; defaults to QUANTGEN's FX table rate")
-    rebal = ft.TextField(label="Rebalance (sessions)", value="21", width=150,
-                         border_radius=RADII["md"])
-    n_days = ft.TextField(label="History (sessions)", value="504", width=140,
-                          border_radius=RADII["md"])
-    row_carry = ft.Row([top_n, cost_bps, rebal, n_days], spacing=10, wrap=True)
+    top_n = num("Top n", "3", 120)
+    cost_bps = num("Cost (bp)", f"{cost_bp('fx'):g}", 120,
+                   tooltip="Per side; defaults to QUANTGEN's FX table rate")
+    rebal = num("Rebalance (sessions)", "21", 170)
+    n_days = num("History (sessions)", "504", 170)
 
-    rows = {"forward": row_forward, "option": row_option, "carry": row_carry}
+    groups = {"forward": [tenor, mkt_fwd], "option": [expiry, strike, side, atm, rr, bf],
+              "carry": [top_n, cost_bps, rebal, n_days]}
+    run_button = ft.Button("Run", icon=ft.Icons.PLAY_ARROW_ROUNDED)
+    # One row for the chosen tool's inputs; the run button closes it.
+    row_tool = form_row([f for group in groups.values() for f in group] + [action(run_button, busy)])
 
     def switch(e=None) -> None:
         k = tool.value or "forward"
-        for key, row in rows.items():
-            row.visible = key == k
+        for key, group in groups.items():
+            for f in group:
+                f.visible = key == k
         for f in (pair, r_dom, r_for):
             f.visible = k != "carry"
         if e is not None:                       # a real switch, not the initial layout
@@ -213,25 +227,26 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
             blocks.append(syn)
         stats = [
             stat("Spot", _px(S)),
-            stat(f"Forward {tenor_label(T)}", _px(F)),
+            ko_stat(stat(f"Forward {tenor_label(T)}", _px(F)), f"선도환율 {tenor_label(T)}"),
             stat("Points", f"{pts:+.1f}", tooltip=f"pip = {pip:g}"),
-            stat(f"Carry, long {base}", f"{cy * 100:+.2f}% p.a.",
-                 token="success" if cy >= 0 else "error"),
-            stat(f"{quote} rate", f"{rd * 100:.2f}%"),
-            stat(f"{base} rate", f"{rf * 100:.2f}%"),
+            ko_stat(stat(f"Carry, long {base}", f"{cy * 100:+.2f}% p.a.",
+                         token="success" if cy >= 0 else "error"), f"캐리 ({base} 매수, 연율)"),
+            ko_stat(stat(f"{quote} rate", f"{rd * 100:.2f}%"), f"{quote} 금리"),
+            ko_stat(stat(f"{base} rate", f"{rf * 100:.2f}%"), f"{base} 금리"),
         ]
         if basis is not None:
             stats.append(stat("Implied basis", f"{basis / BP:+.1f}bp",
                               token="text",
                               tooltip=f"market forward {_px(mf)} vs CIP {_px(F)}. "
                                       + insights.fx_basis_note(basis)))
-        blocks.append(ft.Row(stats, spacing=10, wrap=True))
+        blocks.append(ft.Row(stats, spacing=12, run_spacing=12, wrap=True))
         blocks.append(ft.Row(_chips(spot_s, rd_s, rf_s)
-                             + [chip("flat rates across tenors")], spacing=6, wrap=True))
+                             + [lchip("모든 만기에 같은 금리 적용", "flat rates across tenors")], spacing=8, wrap=True))
         blocks.append(card(fcharts.fx_spot_chart(spot_s, curve_pts)))
         blocks.append(card(_table(
             ["Tenor", "Forward", "Points"],
-            [[tenor_label(t), _px(f), f"{fx.forward_points(S, f):+.1f}"] for t, f in curve_pts])))
+            [[tenor_label(t), _px(f), f"{fx.forward_points(S, f):+.1f}"] for t, f in curve_pts],
+            headers_ko=_FORWARD_HEADERS_KO)))
         payload = {
             "pair": p, "spot": S, "spot_source": spot_s.source, "spot_date": spot_s.last_date,
             "tenor_years": T, "r_dom": rd, "r_for": rf,
@@ -273,9 +288,9 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
         if syn is not None:
             blocks.append(syn)
         blocks.append(ft.Row([
-            stat(f"Premium ({quote} per {base})", f"{gk.price:.5f}"),
+            ko_stat(stat(f"Premium ({quote} per {base})", f"{gk.price:.5f}"), f"프리미엄 ({base} 1단위당 {quote})"),
             stat("% of spot", f"{gk.price_pct_spot * 100:.3f}%"),
-            stat(f"Premium / 1m {base}", f"{gk.price * 1e6:,.0f} {quote}"),
+            ko_stat(stat(f"Premium / 1m {base}", f"{gk.price * 1e6:,.0f} {quote}"), f"프리미엄 / {base} 100만"),
             stat("Spot / forward", f"{_px(S)} / {_px(F)}"),
             stat("Strike", _px(K)),
             stat("Vol used", f"{vol_k * 100:.2f}%", tooltip="SABR vol at the strike"),
@@ -283,14 +298,17 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
             stat("Gamma / 1%", f"{gk.gamma_1pct:+.4f}"),
             stat("Vega / vol-pt", f"{gk.vega:.5f}"),
             stat("Theta / day", f"{gk.theta_1d:+.6f}"),
-            stat(f"Rho {quote} / bp", f"{gk.rho_dom * BP:+.6f}"),
-            stat(f"Rho {base} / bp", f"{gk.rho_for * BP:+.6f}"),
-        ], spacing=10, wrap=True))
+            ko_stat(stat(f"Rho {quote} / bp", f"{gk.rho_dom * BP:+.6f}"), f"로 {quote} / bp"),
+            ko_stat(stat(f"Rho {base} / bp", f"{gk.rho_for * BP:+.6f}"), f"로 {base} / bp"),
+        ], spacing=12, run_spacing=12, wrap=True))
+        sabr = f"rho {fit.rho:+.3f} · nu {fit.nu:.3f}"
         blocks.append(ft.Row(_chips(spot_s, rd_s, rf_s) + [
-            chip(f"{'call' if call else 'put'} {tenor_label(T)}", "accent"),
-            chip(f"SABR solver {diag['solver_status']} · rho {fit.rho:+.3f} · nu {fit.nu:.3f}",
-                 diagnostic_tone(diag), tooltip="Solver status only; independent validation NOT_RUN"),
-        ], spacing=6, wrap=True))
+            lchip(f"{'콜' if call else '풋'} {tenor_label(T)}", f"{'call' if call else 'put'} {tenor_label(T)}",
+                  "accent"),
+            lchip(f"SABR 적합 상태 {diag['solver_status']} · {sabr}",
+                  f"SABR solver {diag['solver_status']} · {sabr}",
+                  diagnostic_tone(diag), tooltip="Solver status only; independent validation NOT_RUN"),
+        ], spacing=8, wrap=True))
         blocks.append(card(fcharts.smile_chart(grid, vols, pts, F)))
         blocks.append(card(_table(
             ["Point", "Strike", "Vol", "Spot delta"],
@@ -300,7 +318,8 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
         blocks.append(card(_table(
             ["Point", "Quoted vol %", "Fitted vol %", "Residual · vol points"],
             [[r["label"], f"{r['quoted_vol']*100:.6f}", f"{r['fitted_vol']*100:.6f}",
-              f"{r['residual_vol_points']:+.6f}"] for r in diag["residuals"]])))
+              f"{r['residual_vol_points']:+.6f}"] for r in diag["residuals"]],
+            headers_ko=_RESIDUAL_HEADERS_KO)))
         payload = {
             "sabr_diagnostics": diag,
             "pair": p, "spot": S, "spot_source": spot_s.source, "forward": F,
@@ -349,18 +368,22 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
             stat("Sharpe", f"{bt.sharpe:.2f}"),
             stat("Max drawdown", f"{bt.max_drawdown * 100:.1f}%", token="error"),
             stat("Equal-weight long", f"{bench:+.1%}"),
-        ], spacing=10, wrap=True))
+        ], spacing=12, run_spacing=12, wrap=True))
         _, longs, shorts = bt.positions[-1]
+        spot_src = ", ".join(sorted({s.source for s in spots.values()}))
+        rate_src = ", ".join(sorted({s.source for s in rates.values()}))
         blocks.append(ft.Row([
-            chip("spots: " + ", ".join(sorted({s.source for s in spots.values()})),
-                 "muted" if any(s.source == "SYNTHETIC" for s in spots.values()) else "success"),
-            chip("rates: " + ", ".join(sorted({s.source for s in rates.values()})),
-                 "muted" if any(s.source == "SYNTHETIC" for s in rates.values()) else "success"),
-            chip(f"{bt.dates[0]} → {bt.dates[-1]} · {len(bt.dates)} sessions"),
-            chip(f"{bt.n_rebalances} rebalances · {bt.cost_bps:g}bp"),
-            chip(f"long {', '.join(longs)}", "success"),
-            chip(f"short {', '.join(shorts)}", "error"),
-        ], spacing=6, wrap=True))
+            lchip(f"현물환율 출처: {spot_src}", "spots: " + spot_src,
+                  "muted" if any(s.source == "SYNTHETIC" for s in spots.values()) else "success"),
+            lchip(f"금리 출처: {rate_src}", "rates: " + rate_src,
+                  "muted" if any(s.source == "SYNTHETIC" for s in rates.values()) else "success"),
+            lchip(f"{bt.dates[0]} → {bt.dates[-1]} · {len(bt.dates)}거래일",
+                  f"{bt.dates[0]} → {bt.dates[-1]} · {len(bt.dates)} sessions"),
+            lchip(f"리밸런싱 {bt.n_rebalances}회 · 편도 {bt.cost_bps:g}bp",
+                  f"{bt.n_rebalances} rebalances · {bt.cost_bps:g}bp"),
+            lchip(f"매수 {', '.join(longs)}", f"long {', '.join(longs)}", "success"),
+            lchip(f"매도 {', '.join(shorts)}", f"short {', '.join(shorts)}", "error"),
+        ], spacing=8, wrap=True))
         blocks.append(card(fcharts.carry_bar_chart(table_rows)))
         blocks.append(card(_table(
             ["Pair", "Ccy", "Spot", "Rate", "USD rate", "Carry", "3m vol", "Carry/vol",
@@ -411,6 +434,7 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
 
         page.run_thread(worker)
 
+    run_button.on_click = run
     result_host.controls = [empty_state(
         "Pick a tool and press Run",
         "Forwards and carry, a vanilla on the smile, or the carry basket. Blank rate "
@@ -421,12 +445,10 @@ def build_fx_page(page: ft.Page, on_open_settings: Optional[Callable] = None) ->
     return ft.Column([
         section("FX", subtitle="Forwards, carry, Garman-Kohlhagen on a SABR smile, and a "
                                "no-lookahead G10+KRW carry backtest."),
-        ft.Row([tool, source, pair, r_dom, r_for,
-                ft.Button("Run", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy],
-               spacing=10, wrap=True),
-        row_forward, row_option, row_carry,
+        form_row([tool, source, pair, r_dom, r_for]),
+        row_tool,
         ft.Column([result_host], scroll=ft.ScrollMode.AUTO, expand=True),
-    ], spacing=14, expand=True)
+    ], spacing=16, expand=True)
 
 
 # --------------------------------------------------------------------------- #
@@ -439,7 +461,9 @@ if __name__ == "__main__":
     _real_notice = notice
 
     def _spy(text, token="accent", **kw):
-        if token == "error" and not text.startswith("Synthetic data"):
+        # The SABR diagnostic banner is a disclosure (an extrapolated strike is shown in the error
+        # tone on purpose), not a failure of the run.
+        if token == "error" and not text.startswith(("Synthetic data", "SABR solver")):
             errors.append(text)
         return _real_notice(text, token, **kw)
 
