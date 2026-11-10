@@ -16,6 +16,41 @@ GPT 인수 시 금지: 위 14건 화면을 GPT 이전 버전으로 되돌리기,
 
 ---
 
+# 네이티브 이식 진행 중 — 2026-11-11 KST (Claude, 위 UI-D1~D4 실행)
+
+- status: checkpoint · waiting_on: none · updated_at: 2026-11-11 06:25 KST
+- session: https://claude.ai/code/session_016uB1jf8m3p5GW1qzQVJe7k
+- work_branch: `claude/friendly-bardeen-r6xe8f` = main `1a8b29f` + 기반 커밋 `66470f4` (푸시됨). PR 없음(소유자 요청 시 생성).
+- 메인 `CURRENT.md`·`LEDGER.md`는 다른 Claude 세션(task claude-resume-20261103) 것이라 건드리지 않음.
+
+## 끝난 것 — 기반 커밋 `66470f4`
+1. 글꼴(UI-D4): `quantgen_desktop/font_policy.py`가 `qg-interface*.otf`(Pretendard 파생, 가족 이름 동일 `QG Interface`)를 등록. `ui/qcharts.py`(Flet 차트 PNG)도 같은 OTF. Gothic A1 TTF는 `assets/fonts`에 남기고 사용하지 않음. 글꼴로 폭을 재는 시험 4개도 OTF로.
+2. 이슈 11(분석 해설 한 덩어리): `quantgen_desktop/narrative_view.py` `NarrativeView` — 해설을 창 언어로 소제목+글머리표로 보여 주고 전체 문단은 아래 접기(`FullTextFold`). `ToolPane.finished(..., sections=)`가 모든 분석 도구에 적용. 내보내기 문장은 그대로. 문장 분할기는 Flet 없는 `ui/narrative_sections.py`로 옮김(`ui/ai_panel.py`가 재수출).
+3. `quantgen_desktop/owner_ui_language/<영역>.py`: 영역별 한국어 표시 문구(`PAIRS`), `translations.py`가 기존 카탈로그 뒤에 병합. 같은 영어에 영역마다 다른 한국어를 주면 거부.
+
+## 진행 중 — 영역 5개 병렬 (각자 브랜치 `owner-ui-native-<영역>`, 컨테이너 로컬 → 통합 후 work_branch로 병합)
+| 영역 | 파일 | 이슈 |
+|---|---|---|
+| strategy | `quantgen_desktop/strategy.py`(+`strategy_view.py`), `core/research/strategy_analysis.py`(source "best") | 01·06·07·09·10·11·14·04 |
+| charts_macro | `charts.py`, `chart_study.py`, `macro.py`, `macro_records.py`, `macro_narrative_language.py` | 02·11·14 |
+| ficc | `bonds.py`, `rates.py`, `structuring.py`, `fx.py` 및 해설 모듈 | 03·08·11·14·04 |
+| market | `watchlist*.py`, `qscore.py`, `market_tools.py`, `markets_view.py`, `market_chart.py` | 05·04·14·03·11 |
+| risk | `app.py`(몬테카를로·셸), `portfolio.py`, `signals.py`, `core/research/{analysis,portfolio_analysis,signals_analysis}.py`(source "best") | 13·04/12·14·11 |
+
+규칙(모든 영역): 표시만 바꿈 — 계산값·판정 코드·내보내기 보고서 불변, 영어/한국어 실행 중 전환 유지, GPT의 배치 도구(`form_layout`·`table_layout`·`result_layout`·`category_picker`·`typography` 역할) 사용, 줄바꿈 바이트 그대로.
+
+## 다음 (Claude가 이어서)
+1. 영역 브랜치 병합 → CI와 같은 단계별 unittest(`runtime-smoke.yml`의 unittest 줄을 한 줄씩, `QT_QPA_PLATFORM=offscreen`) → 수정 전후 캡처 비교.
+2. 독립 검토(정확성·소유자 14건 화면·한국어·GPT UI 보존) → 반영.
+3. 컴플라이언스 13/14/19·FACTS 갱신, `python -m tools.compliance.check --refresh-baseline ...` → `--check` PASS.
+4. work_branch 푸시, 이 문서를 `status: 완료`로 갱신.
+
+## 세션이 끊겨 GPT가 이어받는 경우
+- 컨테이너의 영역 브랜치는 사라짐. work_branch `66470f4`에서 위 표의 영역별로 다시 진행. 각 이슈의 Claude 해결 방식은 `git diff 7ddb568^1 7ddb568 -- ui/<해당 페이지>.py`와 아래 2026-11-10 기록이 기준.
+- 금지(위 소유자 결정 그대로): 14건 화면을 이전으로 되돌리기, 글꼴을 Gothic A1로 되돌리기, 14건과 무관한 GPT 네이티브 UI를 Flet 모양으로 바꾸기.
+
+---
+
 # UI 세션 진행 중 — 2026-11-10 KST (Claude, 소유자 UI/UX 검토 14건)
 
 - status: 완료 · main 병합됨 (UI 세션 전용 기록. 메인 `CURRENT.md`·`LEDGER.md`는 다른 Claude 세션
