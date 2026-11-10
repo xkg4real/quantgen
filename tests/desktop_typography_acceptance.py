@@ -31,7 +31,10 @@ from quantgen_desktop.typography import (NAV_PADDING, SIDEBAR_WIDTH_RANGE, TONE_
 
 ROOT = Path(__file__).resolve().parents[1]
 SYMBOL_FILES = ("qg-symbols.otf", "qg-symbols-medium.otf", "qg-symbols-semibold.otf")
-FONT_FILES = ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf")  # owner UI-D4
+# Owner UI-D5 (2026-11-11): text in IBM Plex Sans KR; QG Interface (Pretendard OTF) draws figures and is
+# the first fallback, QG Symbols the last. A shown character must be in one of them.
+FONT_FILES = ("IBMPlexSansKR-Regular.ttf", "IBMPlexSansKR-Medium.ttf", "IBMPlexSansKR-SemiBold.ttf")
+NUMBER_FILES = ("qg-interface.otf", "qg-interface-medium.otf", "qg-interface-semibold.otf")
 SVG = "{http://www.w3.org/2000/svg}"
 
 # Modules whose string literals the native window shows: its own widgets plus the
@@ -76,6 +79,7 @@ class BundledFontCoverageTests(unittest.TestCase):
         cls.app = QApplication.instance() or QApplication([])
         cls.faces = {name: QRawFont(str(ROOT / "assets/fonts" / name), 16) for name in FONT_FILES}
         cls.symbols = {name: QRawFont(str(ROOT / "assets/fonts" / name), 16) for name in SYMBOL_FILES}
+        cls.numbers = {name: QRawFont(str(ROOT / "assets/fonts" / name), 16) for name in NUMBER_FILES}
         for name, face in cls.faces.items():
             assert face.isValid(), name
 
@@ -87,8 +91,9 @@ class BundledFontCoverageTests(unittest.TestCase):
 
     def missing(self, text):
         return sorted({ch for ch in text if ord(ch) >= 0x20 and not self.noncharacter(ch)
-                       for face, supplement in zip(self.faces.values(), self.symbols.values())
-                       if not face.supportsCharacter(ord(ch)) and not supplement.supportsCharacter(ord(ch))})
+                       for face, number, supplement in zip(self.faces.values(), self.numbers.values(),
+                                                           self.symbols.values())
+                       if not any(f.supportsCharacter(ord(ch)) for f in (face, number, supplement))})
 
     def test_every_shown_string_literal_is_in_the_bundled_font(self):
         problems = []
@@ -272,7 +277,7 @@ class WindowTypographyTests(unittest.TestCase):
             self.app.processEvents()
 
     def test_bundled_family_is_registered(self):
-        self.assertEqual(self.family, "QG Interface")
+        self.assertEqual(self.family, "IBM Plex Sans KR")  # owner UI-D5; figures stay QG Interface
 
     def test_sidebar_is_thinner_and_every_nav_label_fits_in_both_languages(self):
         w = self.window

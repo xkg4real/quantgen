@@ -49,6 +49,10 @@ class CompactTableLayout(QObject):
                         side=Qt.AlignmentFlag.AlignRight if c>0 and _NUMBER.fullmatch(item.text().strip()) else Qt.AlignmentFlag.AlignLeft
                         # Explicit alignment set by result contracts takes priority.
                         if not item.data(Qt.ItemDataRole.TextAlignmentRole):item.setTextAlignment(side|Qt.AlignmentFlag.AlignVCenter)
+                        # Owner UI-D5: a cell that is only a figure keeps the number face (QG Interface).
+                        if _NUMBER.fullmatch(item.text().strip()) and item.data(Qt.ItemDataRole.FontRole) is None:
+                            from .font_policy import number_font
+                            item.setFont(number_font(t.font()))
             t.verticalHeader().setMinimumSectionSize(max(34,m.height()+10));t.resizeRowsToContents()
         finally:self.measuring=False
 def configure_compact_table(table):

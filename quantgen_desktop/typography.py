@@ -174,13 +174,14 @@ def window_stylesheet(p, dark: bool) -> str:
           QLabel[role='title'] {{ font-size: 30px; font-weight: 600; letter-spacing: -0.6px; }}
           QLabel[role='heading'] {{ font-size: 18px; font-weight: 600; border: 0; border-left: 3px solid {p.accent}; padding-left: 8px; }}
           QLabel[role='cardTitle'] {{ font-size: 15px; font-weight: 600; }}
-          QLabel[role='price'] {{ font-size: 15px; font-weight: 600; }}
+          QLabel[role='price'] {{ font-size: 15px; font-weight: 600; font-family: "QG Interface"; }}
           QLabel[role='eyebrow'] {{ font-size: 12px; font-weight: 600; letter-spacing: 1px; color: {p.accent}; }}
-          QLabel[role='delta'], QFrame#panel QLabel[role='delta'] {{ font-size: 13px; font-weight: 600; padding: 2px 7px; border-radius: 6px; color: {t['flat']}; background: {t['flat_tint']}; }}
+          QLabel[role='delta'], QFrame#panel QLabel[role='delta'] {{ font-size: 13px; font-weight: 600; font-family: "QG Interface"; padding: 2px 7px; border-radius: 6px; color: {t['flat']}; background: {t['flat_tint']}; }}
           QLabel[role='delta'][tone='up'], QFrame#panel QLabel[role='delta'][tone='up'] {{ color: {t['up']}; background: {t['up_tint']}; }}
           QLabel[role='delta'][tone='down'], QFrame#panel QLabel[role='delta'][tone='down'] {{ color: {t['down']}; background: {t['down_tint']}; }}
           QLabel[role='brand'] {{ font-size: 17px; font-weight: 600; letter-spacing: 0.15px; color: {p.accent}; }}
-          QLabel[role='number'] {{ font-size: 32px; font-weight: 600; letter-spacing: -0.6px; }}
+          QLabel[role='number'] {{ font-size: 32px; font-weight: 600; letter-spacing: -0.6px; font-family: "QG Interface"; }}
+          /* Owner UI-D5 (2026-11-11): text in IBM Plex Sans KR, figures kept in QG Interface (font_policy). */
           QLabel[role='muted'], QLabel[role='caption'] {{ color: {p.muted}; }}
           QLabel[role='caption'] {{ font-size: 14px; font-weight: 500; }}
           QToolTip {{ background: {p.surface}; color: {p.text}; border: 1px solid {p.border}; padding: 7px 10px; font-size: 14px; font-weight: 400; }}

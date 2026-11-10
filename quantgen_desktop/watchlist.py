@@ -416,6 +416,9 @@ class _CellDelegate(QStyledItemDelegate):
         painter.setPen(color)
         column = index.column()
         if column in NUMERIC_COLUMNS:
+            from .font_policy import number_font
+            opt.font = number_font(opt.font)  # owner UI-D5: figures keep the number face
+            painter.setFont(opt.font)
             number, unit, spaced = _split_number(text)
             slot = self.unit_widths.get(column, 0)
             right = rect.right() - (slot + UNIT_GAP if slot else 0)

@@ -116,9 +116,18 @@ def _chart_layout(widget, y_labels=(), x_labels=(), legends=(), footer="", capti
                         caption_rect)
 
 
+def _number_face(painter):
+    """Owner UI-D5: tick figures keep the number face (QG Interface); the caller restores the font."""
+    from .font_policy import number_font
+    painter.save()
+    painter.setFont(number_font(painter.font()))
+
+
 def _draw_y_tick(painter, layout, y, text):
+    _number_face(painter)
     painter.drawText(QRectF(8, y-layout.line_height/2, layout.plot.left()-16, layout.line_height),
                      Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter, text)
+    painter.restore()
 
 
 def _draw_x_tick(painter, layout, index, text):
@@ -128,12 +137,15 @@ def _draw_x_tick(painter, layout, index, text):
         (0, 2, 4) if spacing*2 >= layout.x_tick_width+6 else (0, 4))
     if index in indices:
         x = layout.plot.left() + spacing*index
+        _number_face(painter)
         painter.drawText(QRectF(x-layout.x_tick_width/2, layout.plot.bottom()+6,
                                layout.x_tick_width, layout.line_height), Qt.AlignmentFlag.AlignCenter, text)
+        painter.restore()
 
 
 def _draw_x_ticks_at(painter, layout, ticks):
     """Ticks at their own x positions, [(x, text)] in plot order; thinned until no two labels touch."""
+    _number_face(painter)
     metrics = QFontMetricsF(painter.font())
     shown = list(ticks)
     for stride in range(1, len(ticks) + 1):
@@ -147,6 +159,7 @@ def _draw_x_ticks_at(painter, layout, ticks):
         left = min(max(2., x - width / 2), painter.device().width() - width - 2)
         painter.drawText(QRectF(left, layout.plot.bottom() + 6, width, layout.line_height),
                          Qt.AlignmentFlag.AlignCenter, text)
+    painter.restore()
 
 
 def _draw_chart_text(painter, layout, colors, footer, series_colors=(), caption=""):
