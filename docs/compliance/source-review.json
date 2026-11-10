@@ -436,7 +436,7 @@
     "tests/compliance_export_acceptance.py": "96654dede55fd5daa067a87c02a96243a2f39e38f7c79b7ea005264e662fe3f6",
     "tests/crypto_hac_acceptance.py": "25d059be087c96fd9c72baa21bfd14fd6c2cc28c00a46a7ff53f10d43b5f670f",
     "tests/crypto_missing_values_acceptance.py": "be07db163184acb8c0a67dd9c0562045e9f486506539ed9eadb2d06bec2ca038",
-    "tests/curve_methods_acceptance.py": "89da1bc70edd5caf709d3f854f1d01e141083cbe81a9b87948f039aa1858231b",
+    "tests/curve_methods_acceptance.py": "deef873068340e2c72efb3632206d9752e60ec72a54713c38456bb1ec5042830",
     "tests/data_readiness_acceptance.py": "7f976932da8c478cbfb3c84db7e5938e1a05630b26f68d88c79c84301c07aac8",
     "tests/desktop_a1_status_acceptance.py": "8993fa2d3914aa8285fb4b8dcfc81168ad62a42b7e8cace87f455865b8d70a7e",
     "tests/desktop_a1_terms_acceptance.py": "2e8613a5e6c25766a138e483c449bfbe8e4098ed48e05d3513a5ca6b46fa781d",
@@ -672,161 +672,161 @@
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
       "source_digest": "1f862ee06685bcbe75df3622b9810ba5dbb61b108150dd8c35463a5309902614",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.727890+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.273485+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
       "source_digest": "1f862ee06685bcbe75df3622b9810ba5dbb61b108150dd8c35463a5309902614",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.729960+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.275397+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
       "source_digest": "1216bea3db4b0a674473925ff1a08045042d220f14d8eed1e88d440a66288c67",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.732270+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.276985+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
       "source_digest": "ff2d0ebe260a1f212db5986e1e490d5b05056e0b7def120cdc6ecb7864b162dc",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.733622+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.278499+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
       "source_digest": "bb62bebd4d67276722252f5aedfd791655788d6e28fe7639170974c537af7bb1",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.734968+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.280015+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
       "source_digest": "3f5798511081cd1be79cde394d8a47bacd19144e2e96377f8b98b5085d742123",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.736966+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.281320+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
       "source_digest": "1f862ee06685bcbe75df3622b9810ba5dbb61b108150dd8c35463a5309902614",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.738228+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.282671+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "8": {
       "document_sha256": "455d8b429619c6914d3bd315efd69c1aaf083a6f995c84527511313055fc2a45",
       "source_digest": "3f5798511081cd1be79cde394d8a47bacd19144e2e96377f8b98b5085d742123",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.739882+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.283924+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
       "source_digest": "c52e4a294ad0001e0bb71696241a239c90ae131f1488d54c7ad1ba12a39b3123",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.741081+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.285151+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
       "source_digest": "52312589bec67cff4d4cfc0b7707756aebdf452ef2311b875c66aa7c3ef18b1a",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.742996+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.286349+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
       "source_digest": "c6029ba832c4e85341af38db79b4fa27763049707bc4a3a6aa997615ed281533",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.745099+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.287595+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "3fe90c5dd4714158ec931cd832e307c2e21bb86eaed310cc164347157e6fa99a",
+      "source_digest": "3912f0f6fabbf98d218dbab410fb7197b01666cf5e6bac76ab617c909cac2e34",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.747256+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.288839+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
       "source_digest": "c52e4a294ad0001e0bb71696241a239c90ae131f1488d54c7ad1ba12a39b3123",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.748535+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.290075+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
       "source_digest": "c52e4a294ad0001e0bb71696241a239c90ae131f1488d54c7ad1ba12a39b3123",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.750022+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.291298+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
       "source_digest": "c52e4a294ad0001e0bb71696241a239c90ae131f1488d54c7ad1ba12a39b3123",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.752344+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.292430+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
       "source_digest": "3e25d8e1c43e73cc74d39275be58bb06800220233becf876cf2ae20e6dd0d4de",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.753566+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.293863+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
       "source_digest": "3f5798511081cd1be79cde394d8a47bacd19144e2e96377f8b98b5085d742123",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.755116+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.295094+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
       "source_digest": "1f862ee06685bcbe75df3622b9810ba5dbb61b108150dd8c35463a5309902614",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.757171+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.296367+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
       "source_digest": "d9be518e1b061281588bed1884252644f1355341d367340894da8b758a2a9f7b",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.758558+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.297571+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
       "source_digest": "1f862ee06685bcbe75df3622b9810ba5dbb61b108150dd8c35463a5309902614",
       "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Owner UI review branch merged with main PR 97 (LA-02 part 2, test files and docs only); FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T16:45:26.760532+00:00",
-      "source_commit": "e75c51936bad034839e924f4c0f39b98f176904f"
+      "review_note": "Cross-platform tolerance for optimizer-fitted legacy curve values in tests/curve_methods_acceptance.py; no product source change; publication gates unchanged",
+      "reviewed_at": "2026-11-10T16:47:08.298721+00:00",
+      "source_commit": "835ab5128a8c087f4a4937c9c754901cd39c187a"
     }
   }
 }
