@@ -40,6 +40,14 @@ DELAYED_POLL_SECONDS = 900
 RETRY_SECONDS = (60, 120, 300, 900)
 STALE_DAYS = 7
 CARD_BARS = 120
+# Owner, 2026-11-11: watchlist cards looked flat ("좌우를 줄이고 상하 살짝 늘려줘"): four columns on a
+# wide page and a taller sparkline.
+CARD_CHART_HEIGHT = 150
+
+
+def card_columns(width):
+    """Watchlist card columns for a page width: about 300px per card on a wide page."""
+    return 4 if width >= 1200 else 3 if width >= 900 else 2 if width >= 600 else 1
 STOCK_ASSETS = ("domestic_stock", "overseas_stock")
 # US tickers load by their bare code in the analysis tools; HKS/TSE codes ('00700', '7203') would not.
 US_EXCHANGES = ("NAS", "NYS", "AMS")
@@ -442,7 +450,7 @@ class WatchCard(QFrame):
         figures.addStretch()
         layout.addLayout(figures)
         self.chart = QSvgWidget()
-        self.chart.setFixedHeight(112)
+        self.chart.setFixedHeight(CARD_CHART_HEIGHT)  # owner 2026-11-11: narrower, taller cards
         self.chart.setMinimumWidth(200)
         layout.addWidget(self.chart)
         self.state = label("", "caption", wrap=False)
@@ -510,7 +518,7 @@ class WatchCard(QFrame):
         snapshot = self.result.snapshot if self.result else None
         dates, closes = _closes(snapshot) if snapshot is not None else ((), ())
         decimals = 0 if self.instrument.asset == "domestic_stock" else 2
-        svg = card_svg(dates, closes, width=max(self.chart.width(), 220), height=112, dark=self._dark,
+        svg = card_svg(dates, closes, width=max(self.chart.width(), 220), height=CARD_CHART_HEIGHT, dark=self._dark,
                        label=self.name(), decimals=decimals)
         self.chart.load(QByteArray(svg.encode("utf-8")))
 
@@ -599,19 +607,19 @@ class WatchlistGrid(QWidget):
     def _arrange(self, order=None):
         order = order if order is not None else list(self.cards.values())
         width = self.width()
-        columns = 3 if width >= 1060 else 2 if width >= 640 else 1
+        columns = card_columns(width)
         self._columns = columns
         for card in order:
             self.grid.removeWidget(card)
         for index, card in enumerate(order):
             self.grid.addWidget(card, index // columns, index % columns)
-        for column in range(3):
+        for column in range(4):
             self.grid.setColumnStretch(column, 1 if column < columns else 0)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
         width = event.size().width()
-        columns = 3 if width >= 1060 else 2 if width >= 640 else 1
+        columns = card_columns(width)
         if columns != self._columns:
             self._columns = 0
             self._arrange(list(self.cards.values()))

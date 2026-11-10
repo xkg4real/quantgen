@@ -2,9 +2,9 @@
 import math
 from dataclasses import dataclass
 import re
-from PyQt6.QtCore import QEvent, QPointF, QRectF, Qt
+from PyQt6.QtCore import QEvent, QPointF, QRectF, QSize, Qt
 from PyQt6.QtGui import QBrush, QColor, QFontMetricsF, QPainter, QPainterPath, QPen
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QSizePolicy, QWidget
 
 from core.theme import LIGHT
 from .translations import display
@@ -164,10 +164,30 @@ def _draw_chart_text(painter, layout, colors, footer, series_colors=(), caption=
 
 
 class _CartesianChart(QWidget):
+    # Owner, 2026-11-11: charts read "too wide and too short". A chart's height follows its width
+    # (ASPECT), within [minimum height, MAX_HEIGHT], and a chart is never wider than MAX_WIDTH.
+    ASPECT = 0.5
+    MAX_HEIGHT = 440
+    MAX_WIDTH = 920
+
     def __init__(self, minimum_height, parent=None):
         super().__init__(parent)
         self._base_height = minimum_height
         self.setMinimumSize(350, minimum_height)
+        self.setMaximumWidth(self.MAX_WIDTH)
+        policy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        policy.setHeightForWidth(True)
+        self.setSizePolicy(policy)
+
+    def hasHeightForWidth(self):
+        return True
+
+    def heightForWidth(self, width):
+        return max(self.minimumHeight(), min(self.MAX_HEIGHT, round(width * self.ASPECT)))
+
+    def sizeHint(self):
+        width = min(self.MAX_WIDTH, max(self.minimumWidth(), self.width()))
+        return QSize(width, self.heightForWidth(width))
 
     def _legend_names(self):
         return []

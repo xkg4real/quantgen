@@ -13,6 +13,7 @@ Offline: synthetic workflows and fakes only; HTTP is refused.
 import os
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 import json
+import re
 import unittest
 from copy import deepcopy
 from unittest.mock import patch
@@ -185,8 +186,14 @@ class MarketToolsKoreanTests(unittest.TestCase):
             self.assertEqual(pane.tables["Hedge simulation"].item(0, 1).text(), "GBM")
             headings = {w.text() for w in pane.findChildren(QLabel) if w.property("role") == "heading"}
             self.assertIn("정적 차익거래 점검" if korean else "Static arbitrage checks", headings)
-            self.assertEqual(pane.charts["Risk-neutral density"]._footer_text(),
-                             "지수 포인트 · 밀도" if korean else "Index points · Density")
+            # The chart area puts the x caption under the plot and the y caption above it (owner issue 02).
+            density = pane.charts["Risk-neutral density"]
+            footer, caption = density._footer_text(), density._caption_text()
+            self.assertTrue(footer and caption)
+            if korean:
+                self.assertIsNone(re.search(r"[A-Za-z]{3,}", footer + caption), footer + caption)
+            else:
+                self.assertIsNone(re.search(r"[가-힣]", footer + caption), footer + caption)
             self.assert_display_only(pane, report, sections)
         bullets = " ".join(pane.narrative_view.lines("ko"))
         self.assertIn("콜 수직 스프레드", bullets)
