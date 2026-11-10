@@ -4,13 +4,13 @@ reason: manual
 from: claude
 task: claude-resume-20261103
 cycle: 2026-11-10
-done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c
-next_ids: ⑤-2/b, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b, ⑨-1/2/d, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-11T03:10:00+09:00
+done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1, ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-1/2/a, ⑨-3a/fold/1, ⑨-4/2/a, ⑨-1/2/b, ⑨-1/2/c, ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b
+next_ids: ⑤-2/b, ⑨-1/2/d, ⑨-3a/series-files/3, ⑥-1, ⑥-2, ⑦-1, ⑦-2, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
+updated_at: 2026-11-11T04:55:00+09:00
 stale_after_hours: 3
 waiting_on: none
-work_branch: claude/owner-rulings-20261111
-work_commit: 275ec93
+work_branch: main
+work_commit: 1a8b29f
 uncommitted_changes: no
 pr: none
 usage_weekly_pct: unknown
@@ -93,13 +93,15 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 
 결정표 전문과 각 답을 어떻게 받았는지는 `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` 마지막 절(브랜치 `claude/owner-rulings-20261111`, 커밋 `275ec93`, push됨)에 있습니다. 6·7번이 멈춘 원인: 선행 단계 ⑤-2 공급사 대조 도구가 `777fc5b`(11-05 미완성본, `origin/claude/provider-parity-5-2`)에서 멈춰 있었고 연구 브랜치는 `8a8c247` 이후 변화가 없습니다. Step 7A 세션(session_016uB1jgeiPdP8gPkAez3Wrx)은 11-05 이후 쉬는 상태입니다. 도구는 `tools/provider_parity/`(main 계열)라 연구 브랜치를 건드리지 않고 이 세션에서 완성합니다.
 
-실행 중인 워크플로 3개(모두 push 전, 스크래치 워크트리):
+진행 (2026-11-11 04:55 KST):
 
-| 워크플로 | 워크트리·브랜치 | 내용 | 원장 ID |
-|---|---|---|---|
-| wpjte04dg | `parity`, `claude/provider-parity-tool-20261111` | `777fc5b`를 main으로 옮겨 스펙 10.5 대조·완성 → 2관점 검토 → 수정 → 소유자 PC 실행 안내서(한국어). 병행: 파일럿·마감 경로 조사(읽기 전용) | ⑤-2/b |
-| wepxxu8m9 | `rul`, `claude/owner-rulings-20261111` | 결정 10 no-clobber(`run_registry_series_files.py`), 결정 8·9 fold 문서 확정, 결정 7 R-FAM 공식 표기(`core/adoption`) → 검토 → 수정. 병행 보고 3건: ⑨-4 Q표, 설계 0b·Q12, M-12 수치안 | ⑨-3a/series-files/2, ⑨-3a/fold/2, ⑨-4/2/b |
-| wqpk44vep | `prep`, `claude/refdata-prep-20261111` | 결정 1·2(`close` 열, 생성기 수정), 4(공급사 가격 소수 둘째 자리), 5(G-REF-01 기록 확인), 6(T-REGIME-01 ACQUISITION 행), 3(달력 서명 요청 목록 문서) → 검토 → 수정 | ⑨-1/2/d |
+- [x] 결정 7·8·9·10: [PR #100](https://github.com/xkg4real/quantgen/pull/100) 병합 `1a8b29f`(트리 = head `e4b0772`). Runtime 42883511339 6/6·Compliance 42883511196 성공. 캐시 없는 전체 실행: main `7ddb568` 763/889, `e4b0772` 763/889, 바뀐 행 0(FAIL 2 기존 환경). 결정 기록 원문도 이 PR로 main에 들어감.
+- [ ] PR #100 `/code-review high` 9건 → 수정 워크플로 ws08qnsb0(워크트리 `rul`, 로컬 커밋, push 전): F1 임시 파일을 결과 확정까지 유지, F4 기존 대상 fsync, F7 공식 기준 단일 출처, F8 REPLACE_ 이름 변경, F9 재시도 Windows 한정, F3·F5 문서. 미수용 2건: fold flag(결정 9), "owner ruling 7" 문구. 끝나면 main에서 새 브랜치로 옮겨 후속 PR(⑨-3a/series-files/3).
+- [ ] ⑤-2/b 워크플로 wpjte04dg(워크트리 `parity`): 구현 완료, 검토 2관점 진행 중 → 수정 → 한국어 실행 안내서. 구현자가 남긴 임시 폴더 64,279개(9.8GB)는 지움. 시험이 임시 폴더를 남기는지 확인 필요.
+- [ ] ⑨-1/2/d 워크플로 wqpk44vep(워크트리 `prep`): 1단계(생성기) 완료, 2단계(시험·서명 요청 목록) 진행 중.
+- [x] 소유자 보고(03:5x KST): 파일럿·마감 경로와 일정 추정(도구 병합 뒤 4~6일, 현실적으로 1~2주), 결정 요청 P1~P4(도구 고정 위치, 연구 브랜치 담당, 병합 충돌 처리, 병합 전 main 보류 항목), B-Q1~Q5·Q7(채택 기준), C(0b, Q12, Qt, Q22, 확인용 6건), D-1~14(M-12 수치안). 상세본 `scratchpad/OWNER_REPORT_2026-11-11.md`(소유자에게 파일 전달). 원자료: `scratchpad/pilot_path_1111.json`, `scratchpad/reports_1111.json`. 답 대기 중이나 작업은 계속.
+- 참고: Windows CI 작업이 30분 제한에 근접(PR #100에서 3.11 30:00, 3.12 30:19). 제한 상향(30→45분)을 다음 PR에서 제안.
+- 규칙 위반 보고(소유자에게 알림): 하위 작업자가 보호 캐시 폴더를 이름으로 두 번 훑음(git 색인 조회, find). 파일을 열지는 않음. 이후 지시문에 제외 방법을 명시.
 
 ## 6. 다음 할 일 (순서대로)
 
