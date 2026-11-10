@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "863e78ab02e086e005a292c3ab2db0d6f54591e5594e56d2d20422df23d25fe5",
+    ".github/workflows/runtime-smoke.yml": "4dba76aec2709db381c8d9f51b40b2e6519b18a1a9be5855f9b3c791b0c3d9b5",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -287,7 +287,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "cf2a074a32d1bef2fe8fed66ac7f1ec9543d5956d93ae14c1a5396b732a6e4ec",
+    "docs/compliance/FACTS.md": "4d17b765b3058bd1d94e7a97f78e1e7fa8e2fe30fa146b7e6e3e601027f07d26",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -560,6 +560,7 @@
     "tests/packaging_policy_acceptance.py": "936034aeaab8d118f83fce8728897650acc2f306cb5405172fef4893fef0b04f",
     "tests/paper_live_acceptance.py": "0694c446b175336efcb126e53147a95b9c6d93356f81357d95d8b568d4032e06",
     "tests/portfolio_scope_acceptance.py": "0600d54a8407a79eceaf0fb29d35f5f541ab1f013d033863dc249259dff4a834",
+    "tests/provider_parity_acceptance.py": "da72adbd8fffb116bf03b938f6290559f0d3c2043a8740db5214a7f34c1c56f9",
     "tests/qscore_acceptance.py": "52d0c74fd0e5455b3d333618e011e5a6d7372e4521b750986ff15a30a78559ac",
     "tests/qt_fixture_cleanup.py": "56b1c3ee6e6def041b391d40d3c7d40faa8bab0b3856901f671522c6121fdf04",
     "tests/quant_acceptance.py": "1b6d042dbd01d5bf78773b836a132b22409013ac61f8f46138e3bd4a5b7f6f08",
@@ -619,6 +620,8 @@
     "tools/paper/refs.py": "9a743e5981c5c5818f72dbf9bd89250c9e4e284d19e7dd94b78e7223a021a676",
     "tools/paper/selfcheck.py": "4beb757ebe8835b257655b0466c0a5df78385e332ce108cd37bd535622245ea1",
     "tools/paper/study.py": "893e864e2184d4a09d67ecafa487994021dd91e4a7ac93788c7da0d5985b2a6e",
+    "tools/provider_parity/__init__.py": "e4660d4a5f42e868621d4b27be7f4b3efd78bba4b584c64fab21e145f817ade3",
+    "tools/provider_parity/parity_check.py": "d651795e4b4776d096601a43989c7f45c375ae120b75a64179432f469d2daca1",
     "tools/sign_calendars.py": "2908e084ea1ea41d8439d7cf7aec7095de901d78782876356c6fe62dce5a6d7f",
     "tools/status/__init__.py": "029709c7d3b9b69d44f7b2d8e4d8459e9d6a0f31b5cc5769c60f1de927025099",
     "tools/status/data_readiness.py": "d8cfea410cbedee6c55cfa7d283e9dd313d74e9cb8770e3aadf656d2498c4115",
@@ -670,163 +673,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.744572+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "db073645101e5d92a4a43f47c5c2ec917ad56e424d58dbda0876dc89d1159a1b",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.941706+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.747761+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "db073645101e5d92a4a43f47c5c2ec917ad56e424d58dbda0876dc89d1159a1b",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.945233+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "7fd18d7a598444c468e572636dd6d8b0cb0c8fdadb9aae671152ef9ddfad848f",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.750379+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "44c528492b832580213697cc594a094a09e050f219205a26f6bc57af64bed8bf",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.948115+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "45f044a578ffd2a9fe471e5db816b4c121de6a1acf7cb8852d732db7ea1e4c80",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.752755+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "9d5c37cde0f76f41ed033b6785d67023fbb6bdc41b887dd2b2ef1450cf61b9ca",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.951642+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "dcebb912c449a2de77f27d40de48f8ffddbcd46c6588ea0a5830c06e76b2ca63",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.755063+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "e184bf86ebf338876b006f2033c8b7b8b58d626b95365fa05364dbd431c0cb5b",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.955646+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "bb7865cf804fa794c44805c478124afd8f627c7115c144e067264ea1e696f26b",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.757379+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "55f9e2918b983dcf4f33f983ce040ba7927180dcb4b62888dc66fd66e3a0a559",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.958872+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.759559+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "db073645101e5d92a4a43f47c5c2ec917ad56e424d58dbda0876dc89d1159a1b",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.962427+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "8": {
-      "document_sha256": "455d8b429619c6914d3bd315efd69c1aaf083a6f995c84527511313055fc2a45",
-      "source_digest": "bb7865cf804fa794c44805c478124afd8f627c7115c144e067264ea1e696f26b",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.761796+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "document_sha256": "50659615e7a2ad431f0ba7c6d124c6da1d1fc63b1ee67b7392362d8e79344f26",
+      "source_digest": "55f9e2918b983dcf4f33f983ce040ba7927180dcb4b62888dc66fd66e3a0a559",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.965001+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.764143+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "b4baaf7ceaf21b730714f6fe3c7bbafc5c3b1479e9bb911929b44cb05776a2f4",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.967623+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "da45d872b1575048c7966afb3cecccc4196c7edd15e2a426c007cc25e68b56c8",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.766426+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "95fc244126303d11ced6659e5a56f32e5d509f0159d071ef97f9e295818ecafa",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.970672+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "de59fddb8af43367da4988c47db35ca57b39e19dccda649ed13253b2c796002e",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.768916+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "843b7375b5f49b396709920a4506ed5f44bf9d986f132e6cf4f6c09b13d7efa2",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.973889+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "3671aebc986768af31752ebb252c7045c70fc744802963aff11850647a11eae9",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.771341+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "5c87ee0341f56240f0c4112974d87c4f44c2bb07d0310986a2f07d3b54cee093",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.976270+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.773364+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "b4baaf7ceaf21b730714f6fe3c7bbafc5c3b1479e9bb911929b44cb05776a2f4",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.978634+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.775141+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "b4baaf7ceaf21b730714f6fe3c7bbafc5c3b1479e9bb911929b44cb05776a2f4",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.981184+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.776838+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "b4baaf7ceaf21b730714f6fe3c7bbafc5c3b1479e9bb911929b44cb05776a2f4",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.983409+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "c2d96dc2051e7317a31f38fbbde56fd5d5322c25860f39d3b229e948751dca60",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.778519+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "6df5b7bf2bab0c4ccc8c1ec572aeabc16fb8d29cefd5b22060e1e991f99d776e",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.985988+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "bb7865cf804fa794c44805c478124afd8f627c7115c144e067264ea1e696f26b",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.780204+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "55f9e2918b983dcf4f33f983ce040ba7927180dcb4b62888dc66fd66e3a0a559",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.988749+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.783251+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "db073645101e5d92a4a43f47c5c2ec917ad56e424d58dbda0876dc89d1159a1b",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.991201+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "5a73d563a414eaac5607183377a83b2dd58fc9e217c58044cda3c2a34c31196d",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.784999+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "474fb91210bd159a4a2134ffd066421816b4b876d9288ab8a0b87518c374ce8b",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.993832+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T19:15:22.786696+00:00",
-      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
+      "source_digest": "db073645101e5d92a4a43f47c5c2ec917ad56e424d58dbda0876dc89d1159a1b",
+      "reviewed_by": "Claude provider parity review",
+      "review_note": "Review fixes to the provider parity tool, its tests, guide and facts on main 1a8b29f; root README.md and tests/run_all.py are main's bytes again",
+      "reviewed_at": "2026-11-10T20:30:56.996859+00:00",
+      "source_commit": "671b1c1c59eaba451b563f9581189ae346fe02ca"
     }
   }
 }
