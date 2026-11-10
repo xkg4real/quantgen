@@ -43,6 +43,9 @@ from core.ficc.swaps import Swap, Swaption, analyze_swap, price_cap_floor, price
 from core.i18n import LocaleContext
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.rates_narrative import (cap_floor_korean, curve_korean, simulation_korean,
+                                              swap_korean, swaption_korean)
 from ui.components import (LocalText, card, chip, empty_state, notice, number_field, section,
                            stat)
 import ui.fcharts as fcharts
@@ -334,9 +337,10 @@ def _run_curve(page, *, source: str, method: str, lookback: int) -> list[ft.Cont
                   for r in curve.table()],
         "note": panel.note,
     }
-    blocks.append(analysis_panel(page, kind="rates_curve",
-                                 narrative=insights.narrate_curve(report, pca),
-                                 payload_fn=lambda p=payload: p))
+    narrative = insights.narrate_curve(report, pca)
+    blocks.append(analysis_panel(page, kind="rates_curve", narrative=narrative,
+                                 payload_fn=lambda p=payload: p,
+                                 sections=localized(narrative, korean(curve_korean, report, pca))))
     return blocks
 
 
@@ -383,9 +387,10 @@ def _run_swap(page, *, source: str, tenor_text: str, fixed_pct: float | None,
         "fwd_rates": dict(rep.fwd_rates), "curve_date": curve.date,
         "curve_source": panel.source, "note": rep.note,
     }
-    blocks.append(analysis_panel(page, kind="rates_swap",
-                                 narrative=insights.narrate_swap(rep),
-                                 payload_fn=lambda p=payload: p))
+    narrative = insights.narrate_swap(rep)
+    blocks.append(analysis_panel(page, kind="rates_swap", narrative=narrative,
+                                 payload_fn=lambda p=payload: p,
+                                 sections=localized(narrative, korean(swap_korean, rep))))
     return blocks
 
 
@@ -446,9 +451,10 @@ def _run_option(page, *, source: str, kind: str, expiry_text: str, tenor_text: s
             "other_model_reason": rep.other_model_reason,
             "curve_date": curve.date, "curve_source": panel.source, "note": rep.note,
         }
-        blocks.append(analysis_panel(page, kind="rates_swaption",
-                                     narrative=insights.narrate_swaption(rep),
-                                     payload_fn=lambda p=payload: p))
+        narrative = insights.narrate_swaption(rep)
+        blocks.append(analysis_panel(page, kind="rates_swaption", narrative=narrative,
+                                     payload_fn=lambda p=payload: p,
+                                     sections=localized(narrative, korean(swaption_korean, rep))))
         return blocks
 
     rep = price_cap_floor(curve, tenor, strike, vol=vol, model=model, cap=kind == "cap",
@@ -489,9 +495,10 @@ def _run_option(page, *, source: str, kind: str, expiry_text: str, tenor_text: s
                     for a, b, f, p in rep.caplets],
         "curve_date": curve.date, "curve_source": panel.source, "note": rep.note,
     }
-    blocks.append(analysis_panel(page, kind="rates_cap_floor",
-                                 narrative=insights.narrate_cap_floor(rep),
-                                 payload_fn=lambda p=payload: p))
+    narrative = insights.narrate_cap_floor(rep)
+    blocks.append(analysis_panel(page, kind="rates_cap_floor", narrative=narrative,
+                                 payload_fn=lambda p=payload: p,
+                                 sections=localized(narrative, korean(cap_floor_korean, rep))))
     return blocks
 
 
@@ -570,9 +577,10 @@ def _run_sim(page, *, source: str, model: str, horizon: float, n_paths: int,
                        if hpv is not None else None),
         "curve_source": panel.source, "note": sim.note,
     }
-    blocks.append(analysis_panel(page, kind="rates_simulation",
-                                 narrative=insights.narrate_ratesim(sim, hpv),
-                                 payload_fn=lambda p=payload: p))
+    narrative = insights.narrate_ratesim(sim, hpv)
+    blocks.append(analysis_panel(page, kind="rates_simulation", narrative=narrative,
+                                 payload_fn=lambda p=payload: p,
+                                 sections=localized(narrative, korean(simulation_korean, sim, hpv))))
     return blocks
 
 

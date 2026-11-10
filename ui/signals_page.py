@@ -28,6 +28,8 @@ from core.quant.signals import SignalReport, compute_signals
 from core.quant import insights
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.model_narrative_language import signals_korean
 from ui.build_widgets import local_notice, provenance_chips
 from ui.components import LocalText, card, chip, empty_state, notice, section, stat
 import ui.qcharts as qcharts
@@ -297,7 +299,8 @@ def build_signals_page(page: ft.Page,
                          insights.narrate_backtest(bt))
             blocks.append(analysis_panel(page, kind="signals_and_backtest",
                                          narrative=narrative,
-                                         payload_fn=lambda p=payload: p))
+                                         payload_fn=lambda p=payload: p,
+                                         sections=localized(narrative, korean(signals_korean, report, bt))))
             result_host.controls = blocks
             busy.visible = False
             page.update()

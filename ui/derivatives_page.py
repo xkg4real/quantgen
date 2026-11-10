@@ -26,6 +26,8 @@ from core.ficc.swaps import black76
 from core.quant import insights
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.market_narrative_language import derivatives_korean
 from ui.components import card, empty_state, notice, number_field, parse_number, section, stat
 from ui.ficc_widgets import action, form_row, hide_source, ko_notice, ko_verdict, lchip, with_helper
 import ui.xcharts as xc
@@ -145,7 +147,8 @@ def build_derivatives_page(page: ft.Page, on_open_settings: Optional[Callable] =
             if hedge_note:
                 blocks.append(ko_notice(notice(hedge_note, "accent"), hedge_korean(s)))
             blocks.append(analysis_panel(page, kind="kospi200_derivatives", narrative=narrative(s),
-                                         payload_fn=lambda p=payload(s): p, deep_fn=insights.deep_analysis))
+                                         payload_fn=lambda p=payload(s): p, deep_fn=insights.deep_analysis,
+                                         sections=localized(narrative(s), korean(derivatives_korean, s))))
             host.controls = blocks
             busy.visible = False
             page.update()

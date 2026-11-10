@@ -31,6 +31,8 @@ from core.quant import insights
 from core.research.portfolio_disclosure import cap_label, portfolio_disclosure
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.bonds_portfolio_narrative import portfolio_korean, portfolio_scope_korean
 from ui.build_widgets import local_notice, provenance_chips
 from ui.components import LocalText, card, chip, data_table, empty_state, notice, section, stat
 import ui.qcharts as qcharts
@@ -295,9 +297,14 @@ def build_portfolio_page(page: ft.Page,
                                      "sharpe": ports[o].sharpe} for o in OBJECTIVES},
                 "synthetic_symbols": synth,
             }
+            read = insights.narrate_portfolio(chosen)
+            scope = (("제약 조건", "Constraints"),
+                     korean(portfolio_scope_korean, ports, chosen.objective), disclosure["summary"])
             blocks.append(analysis_panel(page, kind="portfolio_optimization",
-                                         narrative=insights.narrate_portfolio(chosen) + " " + disclosure["summary"],
-                                         payload_fn=lambda p=payload: p))
+                                         narrative=read + " " + disclosure["summary"],
+                                         payload_fn=lambda p=payload: p,
+                                         sections=localized(read, korean(portfolio_korean, chosen),
+                                                            extra=[scope])))
             result_host.controls = blocks
             busy.visible = False
             page.update()

@@ -31,6 +31,8 @@ from core.research.sleeve_disclosure import (SHARPE_CONVENTIONS_POINTER, convent
                                              sharpe_text, sharpe_tooltip)
 from core.theme import RADII, active
 from ui.ai_panel import analysis_panel
+from ui.narrative_sections import korean, localized
+from quantgen_desktop.market_narrative_language import etf_korean
 from ui.components import card, empty_state, notice, section, stat
 from ui.ficc_widgets import action, form_row, hide_source, ko_notice, ko_stat, ko_verdict, lchip, synthetic_notice
 import ui.xcharts as xc
@@ -186,7 +188,8 @@ def build_etf_page(page: ft.Page, on_open_settings: Optional[Callable] = None) -
                                              [ft.Text(f"{c['code']}  {c['name']}  {c['weight_pct']:.2f}%", size=12, color=pal.text)
                                               for c in top], spacing=3)))
             blocks.append(analysis_panel(page, kind="etf_structure", narrative=narrative(a),
-                                         payload_fn=lambda p=payload(a): p, deep_fn=insights.deep_analysis))
+                                         payload_fn=lambda p=payload(a): p, deep_fn=insights.deep_analysis,
+                                         sections=localized(narrative(a), korean(etf_korean, a))))
             host.controls = blocks; busy.visible = False; page.update()
 
         page.run_thread(worker)
