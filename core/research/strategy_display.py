@@ -62,7 +62,7 @@ VERDICT: dict[str, Pair] = {
     "PASS": ("통과", "Passed"),
     "REVISE": ("보완 필요", "Needs revision"),
     "REJECT": ("기각", "Rejected"),
-    "INSUFFICIENT_DATA": ("자료 부족", "Insufficient data"),
+    "INSUFFICIENT_DATA": ("데이터 부족", "Insufficient data"),
     "UNKNOWN": ("판정 없음", "No verdict"),
 }
 
@@ -77,7 +77,7 @@ VERDICT_MEANING: dict[str, Pair] = {
                "Missed some criteria; offered with what must be fixed."),
     "REJECT": ("근거가 부족해 제공하지 않습니다. 이유를 볼 수 있게 남겨 둡니다.",
                "Not enough evidence to use it; listed so the refusal is visible."),
-    "INSUFFICIENT_DATA": ("자료가 부족해 아직 판단할 수 없습니다. 이유를 볼 수 있게 남겨 둡니다.",
+    "INSUFFICIENT_DATA": ("데이터가 부족해 아직 판단할 수 없습니다. 이유를 볼 수 있게 남겨 둡니다.",
                           "Too little data to decide yet; listed so the refusal is visible."),
     "UNKNOWN": ("이 화면의 자산 확장 검증 카드 형식이 아닙니다 (v2 매크로 카드는 매크로 → 모델 카드).",
                 "Not an asset-expansion study card (v2 macro cards: Macro → Model cards)."),
@@ -382,7 +382,7 @@ def _check_failed(m):
           r"≥ (\d+) full years of ≥ ([\d,]+) sessions")
 def _insufficient(m):
     n, y, s, nt, ny, ns = m.groups()
-    return (f"판단하기에 자료가 부족합니다: 표본 외 거래 {n}회, {y}년({s}거래일). 최소 {nt}회, {ny}년({ns}거래일)이 "
+    return (f"판단하기에 데이터가 부족합니다: 표본 외 거래 {n}회, {y}년({s}거래일). 최소 {nt}회, {ny}년({ns}거래일)이 "
             f"필요합니다.",
             f"Not enough data to judge: {n} trades over {y} out-of-sample years ({s} sessions); needs ≥ {nt} "
             f"trades and ≥ {ny} full years ({ns} sessions)."), "trades"
@@ -784,7 +784,7 @@ VERDICT_TITLE: dict[str, Pair] = {
     "REVISE": ("보완 필요: 일부 기준을 통과하지 못해 고칠 점이 있습니다",
                "Needs revision: some criteria failed and must be fixed first"),
     "REJECT": ("기각: 이 전략은 채택 근거가 부족합니다", "Rejected: the evidence does not support using this strategy"),
-    "INSUFFICIENT_DATA": ("판단 보류: 자료가 부족해 결론을 낼 수 없습니다",
+    "INSUFFICIENT_DATA": ("판단 보류: 데이터가 부족해 결론을 낼 수 없습니다",
                           "Undecided: there is not enough data to reach a verdict"),
     "WITHHELD": ("판정 없음: 이번 실행은 비용 민감도 실험입니다", "No verdict: this run is a cost sensitivity"),
 }

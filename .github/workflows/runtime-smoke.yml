@@ -123,6 +123,10 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: python -m unittest tests.fx_basis_disclosure_acceptance tests.cms_coupon_disclosure_acceptance tests.signals_trade_count_acceptance tests.forward_convention_acceptance tests.rates_revaluation_params_acceptance tests.crypto_missing_values_acceptance tests.option_disclosure_acceptance tests.mc_bootstrap_disclosure_acceptance tests.etf_sleeve_disclosure_acceptance -v
+      - name: Verify owner UI review screens, curve methods and automatic data routing
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest tests.history_best_source_acceptance tests.curve_methods_acceptance tests.strategy_lab_display_acceptance tests.chart_reading_acceptance tests.ficc_pages_display_acceptance tests.build_pages_display_acceptance -v
       - name: Verify shared KIS charts and realtime lifecycle with offline fixtures
         env:
           QT_QPA_PLATFORM: offscreen

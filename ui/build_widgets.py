@@ -54,7 +54,7 @@ def local_stat(label: str, ko_value: str, en_value: str, *, token: str = "text",
     pal = active()
     return ft.Container(
         ft.Column([
-            ft.Text(label, size=10, color=pal.muted),
+            ft.Text(label, size=11, color=pal.muted),
             LocalText(ko_value, en_value, size=16, weight=ft.FontWeight.W_600,
                       color=getattr(pal, token, pal.text)),
         ], spacing=2),

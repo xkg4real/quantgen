@@ -330,7 +330,7 @@ EN_TO_KO: dict[str, str] = {
     "Draft": "초안",
     "Confirmed": "확인됨",
     "Active": "활성",
-    "Paused": "일시 중지",
+    "Paused": "일시 중지됨",
     "Exhausted": "한도 소진",
     "Expired": "기간 만료",
     "Cancelled": "취소됨",

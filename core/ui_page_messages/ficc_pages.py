@@ -11,7 +11,7 @@ EN_TO_KO: dict[str, str] = {
     "Run": "실행",
     "Load": "불러오기",
     "Refresh": "새로고침",
-    "Analyze": "분석",
+    "Analyze": "분석 실행",
     "Optional": "선택 입력",
     "Open Settings": "설정 열기",
     "n/a": "해당 없음",
