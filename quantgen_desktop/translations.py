@@ -708,6 +708,15 @@ for _source, _target in {
     'nelson_siegel': 'Nelson-Siegel', 'svensson': 'Svensson',
 }.items():
     KO[_source] = EN[_source] = KO[_target] = EN[_target] = _target
+# Yield-curve construction method names (core.ficc.curves.METHOD_NAMES); combo data stays the id.
+for _source, _target in {
+    'Bootstrap': '부트스트랩', 'Natural cubic spline': '자연 3차 스플라인',
+    'Monotone cubic (PCHIP)': '단조 3차 보간 (PCHIP)',
+    'Monotone convex (Hagan-West)': '단조 볼록 보간 (Hagan-West)',
+    'Smith-Wilson': 'Smith-Wilson', 'Diebold-Li': 'Diebold-Li (λ 고정)',
+    'Björk-Christensen': 'Björk-Christensen',
+}.items():
+    KO[_source], EN[_target] = _target, _source
 KO['Build && Test'] = KO['Build & Test']
 KO['Portfolio && Risk'] = KO['Portfolio & Risk']
 

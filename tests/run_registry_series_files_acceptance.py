@@ -2,7 +2,8 @@
 
 Every filesystem effect uses a fresh TemporaryDirectory. No ledger, macro
 directory, configuration, environment, provider, network or real series is used.
-Windows branches are simulated with a fake msvcrt on other platforms.
+Windows branches are simulated with a fake msvcrt on other platforms, and with
+a stand-in os.rename that refuses an existing destination as Windows does.
 """
 import ast
 import errno
@@ -36,8 +37,38 @@ RAW = bytes.fromhex('0000000000000000000000000000f03f000000000000004000000000000
 SHA = '428709959da4b04f950606cf66e0d52f48ba4296b605b6d28ecae3135bb0809c'
 BUDGET = 4096
 REAL_REPLACE = os.replace
+REAL_RENAME = os.rename
 REAL_OPEN = os.open
 REAL_CLOSE = os.close
+# The no-clobber call this platform's branch makes (owner ruling 10, 2026-11-11).
+PUBLISH = "rename" if os.name == "nt" else "link"
+REAL_PUBLISH = getattr(os, PUBLISH)
+NO_PUBLISH = AssertionError("no publish")
+# Calls that can replace an existing name; the store must never reach them.
+OVERWRITING = ("replace",) if os.name == "nt" else ("replace", "rename")
+
+
+def windows_rename(src, dst):
+    """os.rename as Windows performs it: an existing destination is never replaced."""
+    if os.path.lexists(dst):
+        raise FileExistsError(errno.EEXIST, "synthetic ERROR_ALREADY_EXISTS", os.fspath(dst))
+    return REAL_RENAME(src, dst)
+
+
+def deny_target_open(path, flags, mode=0o777, *, dir_fd=None):
+    """os.open that refuses the series target only, like a file its writer still holds open."""
+    if os.fsdecode(path).endswith(".npy"):
+        raise PermissionError(errno.EACCES, "synthetic sharing violation", os.fspath(path))
+    return REAL_OPEN(path, flags, mode, dir_fd=dir_fd)
+
+
+class QuietMsvcrt:
+    """A stand-in msvcrt whose byte lock always succeeds (single-caller tests only)."""
+    LK_NBLCK, LK_UNLCK = 2, 0
+
+    @staticmethod
+    def locking(fd, mode, nbytes):
+        return None
 
 
 def other_series(rows=5, cols=3, start=0.0):
@@ -184,6 +215,10 @@ class SeriesFilesTests(unittest.TestCase):
         self.root = Path(self.tmp.name)
         self.target = self.root / (SHA + ".npy")
         self.sidecar = self.root / (SHA + ".lock")
+        for name in OVERWRITING:  # os.replace, and POSIX os.rename, replace an existing name
+            guard = patch.object(M.os, name, side_effect=AssertionError(f"os.{name} can overwrite"))
+            guard.start()
+            self.addCleanup(guard.stop)
 
     def files(self, **kwargs):
         kwargs.setdefault("max_bytes", BUDGET)
@@ -201,8 +236,33 @@ class SeriesFilesTests(unittest.TestCase):
 
     def reset(self):
         for path in (self.target, self.sidecar):
-            if path.is_symlink() or path.exists():
+            if path.is_dir() and not path.is_symlink():
+                path.rmdir()
+            elif path.is_symlink() or path.exists():
                 path.unlink()
+
+    def windows_branch(self, before=None):
+        """Patches that run the store's Windows branch, and the os.rename calls it makes.
+
+        On Windows the real os.rename and msvcrt are used. Elsewhere the branch
+        is selected with a stand-in msvcrt, and os.rename is the stand-in that
+        refuses an existing destination, because POSIX rename would replace it.
+        ``before(src, dst)`` runs inside each call, before the rename itself.
+        """
+        calls = []
+        real = REAL_RENAME if os.name == "nt" else windows_rename
+        def rename(src, dst):
+            calls.append((Path(src), Path(dst)))
+            if before is not None:
+                before(Path(src), Path(dst))
+            return real(src, dst)
+        items = [patch.object(M.os, "rename", side_effect=rename),
+                 patch.object(M.os, "link", side_effect=AssertionError("POSIX branch only"))]
+        if os.name != "nt":
+            items += [patch.object(M, "_WINDOWS", True),
+                      patch.object(M, "msvcrt", QuietMsvcrt, create=True),
+                      patch.object(M, "_fsync_directory", side_effect=AssertionError("POSIX only"))]
+        return calls, items
 
     def corrupt_after_valid_write(self, data):
         self.files().write(PAYLOAD, SHA)
@@ -282,9 +342,9 @@ class SeriesFilesTests(unittest.TestCase):
         self.assertEqual(self.target.read_bytes(), PAYLOAD)
         self.assertEqual(self.inventory(), [SHA + ".lock", SHA + ".npy"])
 
-    def test_temp_is_same_directory_fsynced_and_closed_before_replace(self):
+    def test_temp_is_same_directory_fsynced_and_closed_before_publish(self):
         log, temps = [], []
-        real_mkstemp, real_fsync = tempfile.mkstemp, os.fsync
+        real_mkstemp, real_fsync, real_unlink = tempfile.mkstemp, os.fsync, os.unlink
         def mkstemp(*args, **kwargs):
             fd, name = real_mkstemp(*args, **kwargs)
             temps.append((fd, Path(name)))
@@ -294,7 +354,7 @@ class SeriesFilesTests(unittest.TestCase):
             info = os.fstat(fd)
             if stat.S_ISDIR(info.st_mode):
                 kind = "dir"
-            elif temps and fd == temps[0][0] and "replace" not in log:
+            elif temps and fd == temps[0][0] and "publish" not in log:
                 kind = "temp"
             elif self.sidecar.exists() and os.path.samestat(info, os.stat(self.sidecar)):
                 kind = "sidecar"
@@ -303,27 +363,34 @@ class SeriesFilesTests(unittest.TestCase):
             log.append("fsync-" + kind)
             return real_fsync(fd)
         def close(fd):
-            if temps and fd == temps[0][0] and "replace" not in log:
+            if temps and fd == temps[0][0] and "publish" not in log:
                 log.append("close-temp")
             return REAL_CLOSE(fd)
-        def replace(src, dst):
-            log.append("replace")
+        def publish(src, dst):
+            log.append("publish")
             self.assertEqual(Path(src), temps[0][1])
             self.assertEqual(Path(dst), self.files().directory / (SHA + ".npy"))
-            return REAL_REPLACE(src, dst)
+            return REAL_PUBLISH(src, dst)
+        def unlink(path, *args, **kwargs):
+            if temps and Path(os.fsdecode(path)) == temps[0][1]:
+                log.append("unlink-temp")
+            return real_unlink(path, *args, **kwargs)
         with patch.object(M.tempfile, "mkstemp", side_effect=mkstemp), \
                 patch.object(M.os, "fsync", side_effect=fsync), \
                 patch.object(M.os, "close", side_effect=close), \
-                patch.object(M.os, "replace", side_effect=replace):
+                patch.object(M.os, "unlink", side_effect=unlink), \
+                patch.object(M.os, PUBLISH, side_effect=publish):
             self.assertEqual(self.files().write(PAYLOAD, SHA), (SHA, True))
         name = temps[0][1]
         self.assertEqual(name.parent, self.files().directory)
         self.assertTrue(name.name.startswith("." + SHA + ".") and name.name.endswith(".tmp"))
-        expected = ["fsync-sidecar", "mkstemp", "fsync-temp", "close-temp", "replace"]
+        expected = ["fsync-sidecar", "mkstemp", "fsync-temp", "close-temp", "publish"]
         if os.name != "nt":
-            expected.append("fsync-dir")
+            # POSIX: the link, then the temp name's unlink, then one directory fsync for both.
+            expected += ["unlink-temp", "fsync-dir"]
         self.assertEqual(log, expected)
         self.assert_no_temp()
+        self.assertEqual(self.target.stat().st_nlink, 1)
 
     def test_existing_valid_target_is_validated_then_skipped_without_overwrite(self):
         self.files().write(PAYLOAD, SHA)
@@ -335,7 +402,7 @@ class SeriesFilesTests(unittest.TestCase):
             return real_decode(payload, digest, max_bytes=max_bytes)
         with patch.object(M, "decode_series", side_effect=counted), \
                 patch.object(M.tempfile, "mkstemp", side_effect=AssertionError("no temp")), \
-                patch.object(M.os, "replace", side_effect=AssertionError("no replace")):
+                patch.object(M.os, PUBLISH, side_effect=NO_PUBLISH):
             self.assertEqual(self.files().write(ALT_PAYLOAD, SHA), (SHA, False))
         self.assertEqual(calls, [ALT_PAYLOAD, PAYLOAD])  # input, then existing target
         after = self.target.stat()
@@ -361,7 +428,7 @@ class SeriesFilesTests(unittest.TestCase):
             with self.subTest(variant=name):
                 self.remove_target()
                 self.corrupt_after_valid_write(data)
-                with patch.object(M.os, "replace", side_effect=AssertionError("no replace")), \
+                with patch.object(M.os, PUBLISH, side_effect=NO_PUBLISH), \
                         patch.object(M.tempfile, "mkstemp", side_effect=AssertionError("no temp")):
                     with self.assertRaises(IntegrityError) as written:
                         self.files().write(PAYLOAD, SHA)
@@ -521,11 +588,19 @@ class SeriesFilesTests(unittest.TestCase):
             if os.fstat(fd).st_size == 0 and bytes(data) == b"\0":
                 events.append(("nul",))
             return real_write(fd, data)
+        renames = []
+        def rename(src, dst):
+            renames.append((Path(src).name.endswith(".tmp"), Path(dst).name))
+            return windows_rename(src, dst)
         with patch.object(M, "_WINDOWS", True), patch.object(M, "msvcrt", FakeMsvcrt, create=True), \
                 patch.object(M.os, "write", side_effect=logged_write), \
+                patch.object(M.os, "rename", side_effect=rename), \
+                patch.object(M.os, "link", side_effect=AssertionError("POSIX branch only")), \
                 patch.object(M, "_fsync_directory", side_effect=AssertionError("POSIX only")):
             self.assertEqual(self.files().write(PAYLOAD, SHA), (SHA, True))
             self.assertEqual(self.files().read(SHA).tobytes(), RAW)
+        self.assertEqual(renames, [(True, SHA + ".npy")])  # one os.rename, no link, no directory fsync
+        self.assert_no_temp()
         self.assertEqual(events, [("locking", 2, 1, 0, 0), ("nul",), ("locking", 0, 1, 0, 1),
                                   ("locking", 2, 1, 0, 1), ("locking", 0, 1, 0, 1)])
 
@@ -714,21 +789,21 @@ class SeriesFilesTests(unittest.TestCase):
                     lookup.join(10)
 
     # --- publish retries ------------------------------------------------------------
-    def replace_failing(self, failures, effect=None):
+    def publish_failing(self, failures, effect=None):
         calls = []
-        def replace(src, dst):
+        def publish(src, dst):
             calls.append((src, dst))
             if len(calls) <= failures:
                 if effect is not None:
                     effect(Path(src), Path(dst))
                 raise PermissionError(errno.EACCES, "synthetic sharing violation")
-            return REAL_REPLACE(src, dst)
-        return calls, replace
+            return REAL_PUBLISH(src, dst)
+        return calls, publish
 
     def test_permission_error_is_retried_then_published(self):
         clock = FakeTime()
-        calls, replace = self.replace_failing(2)
-        with patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", clock):
+        calls, publish = self.publish_failing(2)
+        with patch.object(M.os, PUBLISH, side_effect=publish), patch.object(M, "time", clock):
             self.assertEqual(self.files().write(PAYLOAD, SHA), (SHA, True))
         self.assertEqual(len(calls), 3)
         self.assertEqual(len({src for src, _ in calls}), 1)
@@ -738,8 +813,8 @@ class SeriesFilesTests(unittest.TestCase):
 
     def test_retry_exhaustion_is_ten_attempts_and_leaves_no_temp(self):
         clock = FakeTime()
-        calls, replace = self.replace_failing(100)
-        with patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", clock):
+        calls, publish = self.publish_failing(100)
+        with patch.object(M.os, PUBLISH, side_effect=publish), patch.object(M, "time", clock):
             with self.assertRaises(M.ReplaceRetryExhausted) as caught:
                 self.files().write(PAYLOAD, SHA)
         self.assertEqual(len(calls), 10)
@@ -758,8 +833,8 @@ class SeriesFilesTests(unittest.TestCase):
         clock = FakeTime()
         def slow(src, dst):
             clock.now += 1.5
-        calls, replace = self.replace_failing(100, slow)
-        with patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", clock):
+        calls, publish = self.publish_failing(100, slow)
+        with patch.object(M.os, PUBLISH, side_effect=publish), patch.object(M, "time", clock):
             with self.assertRaises(M.ReplaceRetryExhausted) as caught:
                 self.files().write(PAYLOAD, SHA)
         self.assertEqual(caught.exception.attempts, 4)
@@ -772,12 +847,12 @@ class SeriesFilesTests(unittest.TestCase):
         self.assertEqual(M._REPLACE_DELAYS, (0.05, 0.1, 0.2, 0.4, 0.8, 0.8, 0.8, 0.8, 0.8))
         def run(first_cost, delays=None, overshoot=0.0):
             clock, starts = FakeTime(overshoot=overshoot), []
-            def replace(src, dst):
+            def publish(src, dst):
                 starts.append(clock.now - 1000.0)
                 if len(starts) == 1:
                     clock.now += first_cost
                 raise PermissionError(errno.EACCES, "synthetic sharing violation")
-            items = [patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", clock)]
+            items = [patch.object(M.os, PUBLISH, side_effect=publish), patch.object(M, "time", clock)]
             if delays is not None:
                 items.append(patch.object(M, "_REPLACE_DELAYS", delays))
             with Patches(items):
@@ -798,8 +873,8 @@ class SeriesFilesTests(unittest.TestCase):
 
     def test_typed_errors_survive_pickling(self):
         # Worker processes (multiprocessing, ProcessPoolExecutor) hand errors back by pickle.
-        calls, replace = self.replace_failing(100)
-        with patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", FakeTime()):
+        calls, publish = self.publish_failing(100)
+        with patch.object(M.os, PUBLISH, side_effect=publish), patch.object(M, "time", FakeTime()):
             with self.assertRaises(M.ReplaceRetryExhausted) as caught:
                 self.files().write(PAYLOAD, SHA)
         back = pickle.loads(pickle.dumps(caught.exception))
@@ -807,7 +882,7 @@ class SeriesFilesTests(unittest.TestCase):
         self.assertEqual((str(back), back.attempts, back.temp_removed),
                          (str(caught.exception), 10, True))
         classes = (M.ReplaceRetryExhausted, M.PublicationUncertain, M.ReleaseError,
-                   M.SidecarMissing, M.SeriesNotFound)
+                   M.SidecarMissing, M.SeriesNotFound, M.NoClobberUnsupported)
         for cls in classes:
             with self.subTest(cls=cls.__name__):
                 extra = {"attempts": 3, "temp_removed": False} if cls is M.ReplaceRetryExhausted else {}
@@ -819,32 +894,360 @@ class SeriesFilesTests(unittest.TestCase):
                 for name, value in extra.items():
                     self.assertEqual(getattr(back, name), value)
 
-    def test_target_appearing_during_retry_is_uncertain_without_overwrite(self):
-        def appear(src, dst):
-            dst.write_bytes(b"foreign")
-        calls, replace = self.replace_failing(1, appear)
-        with patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", FakeTime()):
-            with self.assertRaises(M.PublicationUncertain) as caught:
-                self.files().write(PAYLOAD, SHA)
-        self.assertEqual(len(calls), 1)
-        self.assertIsInstance(caught.exception.__cause__, PermissionError)
-        self.assertEqual(self.target.read_bytes(), b"foreign")
+    # --- no-clobber publish (owner ruling 10, 2026-11-11) -----------------------------
+    # A target name that appears after the absence check, created by a writer outside the
+    # cooperating lock, is never overwritten: valid bytes are reported as already present
+    # (created False, the foreign container kept), anything else is refused and preserved.
+    FOREIGN = (("valid", ALT_PAYLOAD), ("invalid", b"foreign"))
+
+    def write_meets_foreign(self, label):
+        if label == "valid":
+            self.assertEqual(self.files().write(PAYLOAD, SHA), (SHA, False))
+            return
+        with self.assertRaises(IntegrityError) as caught:
+            self.files().write(PAYLOAD, SHA)
+        self.assertNotIsInstance(caught.exception, (M.PublicationUncertain, M.ReplaceRetryExhausted))
+
+    def assert_foreign_kept(self, data):
+        self.assertEqual(self.target.read_bytes(), data)
         self.assertEqual(self.inventory(), [SHA + ".lock", SHA + ".npy"])
 
-    def test_target_appearing_on_final_attempt_is_uncertain_not_exhausted(self):
-        calls = []
-        def replace(src, dst):
-            calls.append(src)
-            if len(calls) == M.REPLACE_ATTEMPTS:
-                Path(dst).write_bytes(b"foreign")
+    def foreign_makers(self):
+        """Ways a non-cooperating writer can occupy the target name (label, make(dst))."""
+        def symlink(dst):
+            os.symlink(self.root / "missing", dst)
+        return (("valid", lambda dst: dst.write_bytes(ALT_PAYLOAD)),
+                ("invalid", lambda dst: dst.write_bytes(b"foreign")),
+                ("dangling_symlink", symlink), ("directory", lambda dst: dst.mkdir()))
+
+    def assert_made_kept(self, label):
+        """The name a maker occupied is exactly as it was made, and no temp is left."""
+        self.assertEqual(self.inventory(), [SHA + ".lock", SHA + ".npy"])
+        if label == "valid":
+            self.assertEqual(self.target.read_bytes(), ALT_PAYLOAD)
+            self.assertEqual(self.target.stat().st_nlink, 1)
+            self.assertEqual(self.files().read(SHA).tobytes(), RAW)
+        elif label == "invalid":
+            self.assertEqual(self.target.read_bytes(), b"foreign")
+        elif label == "directory":
+            self.assertTrue(self.target.is_dir() and not self.target.is_symlink())
+            self.assertEqual(list(self.target.iterdir()), [])
+        else:
+            self.assertEqual(Path(os.readlink(self.target)).name, "missing")
+
+    def test_target_created_before_the_first_attempt_is_verified_never_overwritten(self):
+        real_mkstemp = tempfile.mkstemp
+        for label, data in self.FOREIGN:
+            with self.subTest(label=label):
+                self.reset()
+                def mkstemp(*args, **kwargs):
+                    result = real_mkstemp(*args, **kwargs)
+                    self.target.write_bytes(data)  # after the store's absence check
+                    return result
+                with patch.object(M.tempfile, "mkstemp", side_effect=mkstemp), \
+                        patch.object(M.os, PUBLISH, side_effect=NO_PUBLISH):
+                    self.write_meets_foreign(label)
+                self.assert_foreign_kept(data)
+
+    @unittest.skipIf(os.name == "nt", "POSIX branch: os.link")
+    def test_posix_link_never_overwrites_a_target_created_between_check_and_publish(self):
+        # The hook runs inside the publish call, after the store's last absence check, and
+        # then calls the real os.link: the kernel itself refuses the existing name.
+        for label, make in self.foreign_makers():
+            with self.subTest(label=label):
+                self.reset()
+                calls = []
+                def link(src, dst):
+                    calls.append((Path(src), Path(dst)))
+                    make(Path(dst))
+                    return REAL_PUBLISH(src, dst)
+                with patch.object(M.os, "link", side_effect=link), \
+                        patch.object(M, "_fsync_directory", side_effect=AssertionError("nothing published")):
+                    self.write_meets_foreign(label)
+                self.assertEqual(calls, [(calls[0][0], self.files().directory / (SHA + ".npy"))])
+                self.assertTrue(calls[0][0].name.endswith(".tmp"))
+                self.assert_no_temp()
+                self.assert_made_kept(label)
+
+    def test_windows_rename_never_overwrites_a_target_created_between_check_and_publish(self):
+        for label, data in self.FOREIGN:
+            with self.subTest(label=label):
+                self.reset()
+                calls, items = self.windows_branch(lambda src, dst: dst.write_bytes(data))
+                with Patches(items):
+                    self.write_meets_foreign(label)
+                self.assertEqual(calls, [(calls[0][0], self.files().directory / (SHA + ".npy"))])
+                self.assertTrue(calls[0][0].name.endswith(".tmp"))
+                self.assert_foreign_kept(data)
+
+    def test_windows_branch_publishes_with_one_rename_and_retries_every_permission_error(self):
+        # The "cannot hard-link" errors are a POSIX os.link matter; on Windows os.rename
+        # needs no hard link, and every PermissionError (EPERM included) is retried.
+        clock = FakeTime()
+        failures = [PermissionError(errno.EPERM, "synthetic"), PermissionError(errno.EACCES, "synthetic")]
+        def before(src, dst):
+            if failures:
+                raise failures.pop(0)
+        calls, items = self.windows_branch(before)
+        with Patches(items + [patch.object(M, "time", clock)]):
+            self.assertEqual(self.files().write(PAYLOAD, SHA), (SHA, True))
+        self.assertEqual(len(calls), 3)
+        self.assertEqual(clock.sleeps, [0.05, 0.1])
+        self.assertEqual(self.target.read_bytes(), PAYLOAD)
+        self.assert_no_temp()
+
+    def test_windows_branch_verifies_a_foreign_target_at_every_check(self):
+        # The three checks around os.rename, on the Windows branch: before the first
+        # attempt, before the attempt that follows a PermissionError, and at exhaustion.
+        real_mkstemp = tempfile.mkstemp
+        for label, data in self.FOREIGN:
+            with self.subTest(where="before the first attempt", label=label):
+                self.reset()
+                def mkstemp(*args, **kwargs):
+                    result = real_mkstemp(*args, **kwargs)
+                    self.target.write_bytes(data)  # after the store's absence check
+                    return result
+                calls, items = self.windows_branch()
+                with Patches(items + [patch.object(M.tempfile, "mkstemp", side_effect=mkstemp)]):
+                    self.write_meets_foreign(label)
+                self.assertEqual(calls, [])
+                self.assert_foreign_kept(data)
+            for appears_on in (1, M.REPLACE_ATTEMPTS):
+                with self.subTest(where="attempt %d" % appears_on, label=label):
+                    self.reset()
+                    seen = []
+                    def before(src, dst):
+                        seen.append(src)
+                        if len(seen) == appears_on:
+                            dst.write_bytes(data)
+                        raise PermissionError(errno.EACCES, "synthetic sharing violation")
+                    calls, items = self.windows_branch(before)
+                    with Patches(items + [patch.object(M, "time", FakeTime())]):
+                        self.write_meets_foreign(label)
+                    self.assertEqual(len(calls), appears_on)
+                    self.assert_foreign_kept(data)
+
+    def test_windows_branch_retry_exhaustion_publishes_nothing(self):
+        clock = FakeTime()
+        def before(src, dst):
             raise PermissionError(errno.EACCES, "synthetic sharing violation")
-        with patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", FakeTime()):
+        calls, items = self.windows_branch(before)
+        with Patches(items + [patch.object(M, "time", clock)]):
+            with self.assertRaises(M.ReplaceRetryExhausted) as caught:
+                self.files().write(PAYLOAD, SHA)
+        self.assertEqual((len(calls), caught.exception.attempts, caught.exception.temp_removed),
+                         (M.REPLACE_ATTEMPTS, M.REPLACE_ATTEMPTS, True))
+        self.assertEqual(clock.sleeps, list(M._REPLACE_DELAYS))
+        self.assertEqual(self.inventory(), [SHA + ".lock"])  # no target was made by another route
+
+    def test_target_appearing_during_retry_is_verified_without_overwrite(self):
+        for label, data in self.FOREIGN:
+            with self.subTest(label=label):
+                self.reset()
+                calls, publish = self.publish_failing(1, lambda src, dst: dst.write_bytes(data))
+                with patch.object(M.os, PUBLISH, side_effect=publish), patch.object(M, "time", FakeTime()):
+                    self.write_meets_foreign(label)
+                self.assertEqual(len(calls), 1)
+                self.assert_foreign_kept(data)
+
+    def test_target_appearing_on_final_attempt_is_verified_not_exhausted(self):
+        for label, data in self.FOREIGN:
+            with self.subTest(label=label):
+                self.reset()
+                calls = []
+                def publish(src, dst):
+                    calls.append(src)
+                    if len(calls) == M.REPLACE_ATTEMPTS:
+                        Path(dst).write_bytes(data)
+                    raise PermissionError(errno.EACCES, "synthetic sharing violation")
+                with patch.object(M.os, PUBLISH, side_effect=publish), patch.object(M, "time", FakeTime()):
+                    self.write_meets_foreign(label)
+                self.assertEqual(len(calls), M.REPLACE_ATTEMPTS)
+                self.assert_foreign_kept(data)
+
+    @unittest.skipIf(os.name == "nt", "POSIX branch: os.link")
+    def test_filesystem_without_hard_links_is_a_typed_error_with_no_overwriting_fallback(self):
+        # Six names; five values on Linux, where ENOTSUP and EOPNOTSUPP are the same number.
+        codes = {errno.EPERM, errno.ENOTSUP, errno.EOPNOTSUPP, errno.ENOSYS, errno.EMLINK, errno.EXDEV}
+        self.assertEqual(M._NO_HARD_LINK, frozenset(codes))
+        self.assertIsInstance(OSError(errno.EPERM, "x"), PermissionError)  # and still not retried
+        for code in sorted(codes):
+            with self.subTest(errno=errno.errorcode[code]):
+                self.reset()
+                calls = []
+                def link(src, dst):
+                    calls.append(src)
+                    raise OSError(code, "synthetic: this filesystem has no hard links")
+                with patch.object(M.os, "link", side_effect=link), \
+                        patch.object(M.time, "sleep", side_effect=AssertionError("no retry wait")):
+                    with self.assertRaises(M.NoClobberUnsupported) as caught:
+                        self.files().write(PAYLOAD, SHA)
+                self.assertEqual(len(calls), 1)  # setUp's guards: no os.replace or os.rename either
+                self.assertEqual(caught.exception.__cause__.errno, code)
+                self.assertNotIsInstance(caught.exception, (M.PublicationUncertain, M.ReplaceRetryExhausted))
+                self.assertEqual(self.inventory(), [SHA + ".lock"])
+                # The message names the error and does not blame the filesystem: link(2) also
+                # returns EPERM for a kernel hard-link restriction or an immutable file.
+                message = str(caught.exception)
+                self.assertIn("os.link refused the hard link (%s)" % errno.errorcode[code], message)
+                self.assertIn("does not fall back to an overwriting call", message)
+                self.assertNotIn("filesystem", message)
+
+    @unittest.skipIf(os.name == "nt", "POSIX branch: os.link")
+    def test_target_appearing_in_the_no_hard_link_window_is_verified_or_refused(self):
+        # The fourth place a foreign target is found: after os.link failed with a
+        # no-hard-link error. It is verified or refused like the other three, never
+        # overwritten, removed or reported as an unsupported filesystem.
+        for code in sorted(M._NO_HARD_LINK):
+            for label, make in self.foreign_makers():
+                with self.subTest(errno=errno.errorcode[code], label=label):
+                    self.reset()
+                    calls = []
+                    def link(src, dst):
+                        calls.append(src)
+                        make(Path(dst))
+                        raise OSError(code, "synthetic: no hard link was made")
+                    with patch.object(M.os, "link", side_effect=link), \
+                            patch.object(M.time, "sleep", side_effect=AssertionError("no retry wait")), \
+                            patch.object(M, "_fsync_directory", side_effect=AssertionError("nothing published")):
+                        self.write_meets_foreign(label)
+                    self.assertEqual(len(calls), 1)
+                    self.assert_made_kept(label)
+
+    @unittest.skipIf(os.name == "nt", "POSIX branch: os.link, then the temp name's unlink")
+    def test_posix_temp_unlink_failure_after_link_is_publication_uncertain(self):
+        with patch.object(M.os, "unlink", side_effect=PermissionError(errno.EACCES, "held")), \
+                patch.object(M, "_fsync_directory", side_effect=AssertionError("after the unlink only")):
             with self.assertRaises(M.PublicationUncertain) as caught:
                 self.files().write(PAYLOAD, SHA)
-        self.assertNotIsInstance(caught.exception, M.ReplaceRetryExhausted)
-        self.assertEqual(len(calls), M.REPLACE_ATTEMPTS)
-        self.assertEqual(self.target.read_bytes(), b"foreign")
-        self.assertEqual(self.inventory(), [SHA + ".lock", SHA + ".npy"])
+        self.assertIsInstance(caught.exception.__cause__, PermissionError)
+        self.assertEqual(self.target.read_bytes(), PAYLOAD)  # published; the temp name is its hard link
+        temps = [n for n in self.inventory() if n.endswith(".tmp")]
+        self.assertEqual(len(temps), 1)
+        self.assertTrue(os.path.samestat(os.lstat(self.root / temps[0]), os.lstat(self.target)))
+        (self.root / temps[0]).unlink()
+        self.assertEqual(self.files().read(SHA).tobytes(), RAW)  # lock released
+        self.assertEqual(self.files().write(PAYLOAD, SHA), (SHA, False))
+
+    def test_blocking_target_that_vanishes_before_verification_is_uncertain(self):
+        def publish(src, dst):
+            raise FileExistsError(errno.EEXIST, "synthetic: a name that is gone again")
+        with patch.object(M.os, PUBLISH, side_effect=publish):
+            with self.assertRaises(M.PublicationUncertain) as caught:
+                self.files().write(PAYLOAD, SHA)
+        self.assertIsInstance(caught.exception.__cause__, FileNotFoundError)
+        self.assertEqual(self.inventory(), [SHA + ".lock"])
+
+    def test_blocking_target_that_cannot_be_opened_or_read_is_uncertain_and_untouched(self):
+        # A file another program has just created is often still held open by it: on
+        # Windows the open is then a sharing violation, on POSIX the file may be unreadable
+        # to this process. The typed error keeps the OS error as its cause.
+        def native(data):
+            def publish(src, dst):
+                Path(dst).write_bytes(data)  # inside the publish call, after the last absence check
+                return REAL_PUBLISH(src, dst)
+            return [patch.object(M.os, PUBLISH, side_effect=publish)]
+        def windows(data):
+            return self.windows_branch(lambda src, dst: dst.write_bytes(data))[1]
+        failures = (("open", lambda: patch.object(M.os, "open", side_effect=deny_target_open),
+                     PermissionError, errno.EACCES),
+                    ("read", lambda: patch.object(M.os, "read", side_effect=OSError(errno.EIO, "synthetic")),
+                     OSError, errno.EIO))
+        for branch, items_for in (("this platform", native), ("windows branch", windows)):
+            for label, data in self.FOREIGN:
+                for step, failure, kind, code in failures:
+                    with self.subTest(branch=branch, label=label, step=step):
+                        self.reset()
+                        with Patches(items_for(data) + [failure()]):
+                            with self.assertRaises(M.PublicationUncertain) as caught:
+                                self.files().write(PAYLOAD, SHA)
+                        self.assertIs(type(caught.exception), M.PublicationUncertain)
+                        self.assertIsInstance(caught.exception.__cause__, kind)
+                        self.assertEqual(caught.exception.__cause__.errno, code)
+                        self.assertIn("could not be opened or read", str(caught.exception))
+                        self.assertFalse(hasattr(caught.exception, "cleanup_errors"))
+                        self.assert_foreign_kept(data)       # untouched, and this call's temp is gone
+                        self.write_meets_foreign(label)      # lock released; a later call verifies it
+                        self.assert_foreign_kept(data)
+
+    def test_unopenable_blocking_target_keeps_the_temp_removal_error(self):
+        def publish(src, dst):
+            Path(dst).write_bytes(ALT_PAYLOAD)
+            return REAL_PUBLISH(src, dst)
+        with patch.object(M.os, PUBLISH, side_effect=publish), \
+                patch.object(M.os, "open", side_effect=deny_target_open), \
+                patch.object(M.os, "unlink", side_effect=OSError(errno.EBUSY, "held")):
+            with self.assertRaises(M.PublicationUncertain) as caught:
+                self.files().write(PAYLOAD, SHA)
+        self.assertEqual(caught.exception.__cause__.errno, errno.EACCES)
+        self.assertEqual([error.errno for error in caught.exception.cleanup_errors], [errno.EBUSY])
+        self.assertEqual(self.target.read_bytes(), ALT_PAYLOAD)
+        temps = [n for n in self.inventory() if n.endswith(".tmp")]
+        self.assertEqual(len(temps), 1)
+        (self.root / temps[0]).unlink()
+        self.assertEqual(self.files().write(PAYLOAD, SHA), (SHA, False))  # lock released
+
+    def test_unopenable_target_present_before_the_call_is_a_raw_os_error(self):
+        # Unchanged from child 1: a target that was there before the call, in write() and in
+        # read(), raises the OS error itself. No temp exists yet and no publish is attempted.
+        self.files().write(PAYLOAD, SHA)
+        for label, call in (("write", lambda: self.files().write(PAYLOAD, SHA)),
+                            ("read", lambda: self.files().read(SHA))):
+            with self.subTest(call=label):
+                with patch.object(M.os, "open", side_effect=deny_target_open), \
+                        patch.object(M.tempfile, "mkstemp", side_effect=AssertionError("no temp")), \
+                        patch.object(M.os, PUBLISH, side_effect=NO_PUBLISH):
+                    with self.assertRaises(PermissionError) as caught:
+                        call()
+                self.assertIs(type(caught.exception), PermissionError)
+                self.assertEqual(self.target.read_bytes(), PAYLOAD)
+                self.assertEqual(self.inventory(), [SHA + ".lock", SHA + ".npy"])
+        self.assertEqual(self.files().read(SHA).tobytes(), RAW)  # lock released
+
+    def test_verified_existing_target_with_an_unremoved_temp_is_a_release_error(self):
+        real_mkstemp = tempfile.mkstemp
+        def mkstemp(*args, **kwargs):
+            result = real_mkstemp(*args, **kwargs)
+            self.target.write_bytes(ALT_PAYLOAD)
+            return result
+        with patch.object(M.tempfile, "mkstemp", side_effect=mkstemp), \
+                patch.object(M.os, "unlink", side_effect=PermissionError(errno.EACCES, "held")), \
+                patch.object(M.os, PUBLISH, side_effect=NO_PUBLISH):
+            with self.assertRaises(M.ReleaseError) as caught:
+                self.files().write(PAYLOAD, SHA)
+        self.assertNotIsInstance(caught.exception, M.PublicationUncertain)
+        self.assertIsInstance(caught.exception.__cause__, PermissionError)
+        self.assertEqual(self.target.read_bytes(), ALT_PAYLOAD)
+        temps = [n for n in self.inventory() if n.endswith(".tmp")]
+        self.assertEqual(len(temps), 1)
+        (self.root / temps[0]).unlink()
+        self.assertEqual(self.files().read(SHA).tobytes(), RAW)  # lock released
+
+    def test_only_the_no_clobber_calls_can_give_a_file_the_target_name(self):
+        tree = ast.parse(Path(M.__file__).read_text(encoding="utf-8"))
+        os_calls = [node.func.attr for node in ast.walk(tree)
+                    if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                    and isinstance(node.func.value, ast.Name) and node.func.value.id == "os"]
+        self.assertEqual((os_calls.count("link"), os_calls.count("rename"), os_calls.count("unlink")),
+                         (1, 1, 1))
+        attributes = [node.attr for node in ast.walk(tree) if isinstance(node, ast.Attribute)]
+        for overwriting in ("replace", "renames", "copyfile", "copy", "copy2", "move", "symlink",
+                            "truncate", "ftruncate", "remove", "rmdir"):
+            self.assertNotIn(overwriting, attributes)
+        # No other way to write, create or remove a name, whatever object it is called on:
+        # os.open twice (the regular-file open and the directory fsync), one rename, one
+        # link, one unlink, one mkstemp; no pathlib writer and no builtin open().
+        for name, allowed in (("open", 2), ("rename", 1), ("link", 1), ("unlink", 1), ("mkstemp", 1),
+                              ("write_bytes", 0), ("write_text", 0), ("touch", 0), ("fdopen", 0),
+                              ("mkdir", 0), ("makedirs", 0), ("hardlink_to", 0), ("symlink_to", 0)):
+            self.assertEqual(attributes.count(name), allowed, name)
+        builtin_calls = {node.func.id for node in ast.walk(tree)
+                         if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)}
+        self.assertNotIn("open", builtin_calls)
+        function = next(node for node in ast.walk(tree)
+                        if isinstance(node, ast.FunctionDef) and node.name == "_no_clobber")
+        self.assertEqual([ast.unparse(node) for node in function.body[1:]],
+                         ["if _WINDOWS:\n    os.rename(temp, target)\nelse:\n    os.link(temp, target)"])
 
     def test_changed_or_vanished_temp_during_retry_is_uncertain(self):
         def swap(src, dst):
@@ -858,8 +1261,8 @@ class SeriesFilesTests(unittest.TestCase):
             os.truncate(src, 0)  # same identity, different size
         for label, effect in (("swapped", swap), ("vanished", vanish), ("truncated", truncated)):
             with self.subTest(label=label):
-                calls, replace = self.replace_failing(1, effect)
-                with patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", FakeTime()):
+                calls, publish = self.publish_failing(1, effect)
+                with patch.object(M.os, PUBLISH, side_effect=publish), patch.object(M, "time", FakeTime()):
                     with self.assertRaises(M.PublicationUncertain):
                         self.files().write(PAYLOAD, SHA)
                 self.assertEqual(len(calls), 1)
@@ -871,31 +1274,18 @@ class SeriesFilesTests(unittest.TestCase):
                     (self.root / name).unlink()
                 self.assertEqual(self.inventory(), [SHA + ".lock"])
 
-    def test_other_replace_errors_are_uncertain_and_not_retried(self):
+    def test_other_publish_errors_are_uncertain_and_not_retried(self):
         calls = []
-        def replace(src, dst):
+        def publish(src, dst):
             calls.append(src)
             raise OSError(errno.EIO, "synthetic I/O error")
-        with patch.object(M.os, "replace", side_effect=replace), \
+        with patch.object(M.os, PUBLISH, side_effect=publish), \
                 patch.object(M.time, "sleep", side_effect=AssertionError("no retry wait")):
             with self.assertRaises(M.PublicationUncertain) as caught:
                 self.files().write(PAYLOAD, SHA)
         self.assertEqual(len(calls), 1)
         self.assertEqual(caught.exception.__cause__.errno, errno.EIO)
         self.assertEqual(self.inventory(), [SHA + ".lock"])
-
-    def test_target_appearing_before_first_replace_is_uncertain(self):
-        real_mkstemp = tempfile.mkstemp
-        def mkstemp(*args, **kwargs):
-            result = real_mkstemp(*args, **kwargs)
-            self.target.write_bytes(b"foreign")
-            return result
-        with patch.object(M.tempfile, "mkstemp", side_effect=mkstemp), \
-                patch.object(M.os, "replace", side_effect=AssertionError("no replace")):
-            with self.assertRaises(M.PublicationUncertain):
-                self.files().write(PAYLOAD, SHA)
-        self.assertEqual(self.target.read_bytes(), b"foreign")
-        self.assert_no_temp()
 
     # --- temp file failures ---------------------------------------------------------
     def test_short_writes_complete_and_zero_progress_fails_closed(self):
@@ -912,7 +1302,7 @@ class SeriesFilesTests(unittest.TestCase):
         def stalled(fd, data):
             return 0 if len(data) > 1 else real_write(fd, data)
         with patch.object(M.os, "write", side_effect=stalled), \
-                patch.object(M.os, "replace", side_effect=AssertionError("no replace")):
+                patch.object(M.os, PUBLISH, side_effect=NO_PUBLISH):
             with self.assertRaises(OSError) as caught:
                 self.files().write(PAYLOAD, SHA)
         self.assertEqual(caught.exception.errno, errno.EIO)
@@ -931,7 +1321,7 @@ class SeriesFilesTests(unittest.TestCase):
                 log = FdLog(fail_close=(lambda item: item[0] == "tmp") if label == "close" else None)
                 extra = [patch.object(M.os, "fsync", side_effect=failing_fsync(log))] if label == "fsync" else []
                 with Patches(log.patches() + extra + [
-                        patch.object(M.os, "replace", side_effect=AssertionError("no replace"))]):
+                        patch.object(M.os, PUBLISH, side_effect=NO_PUBLISH)]):
                     with self.assertRaises(OSError) as caught:
                         self.files().write(PAYLOAD, SHA)
                 self.assertNotIsInstance(caught.exception, M.PublicationUncertain)
@@ -948,7 +1338,7 @@ class SeriesFilesTests(unittest.TestCase):
             return result
         log = FdLog()
         with Patches(log.patches() + [patch.object(M.os, "lstat", side_effect=lstat),
-                                      patch.object(M.os, "replace", side_effect=AssertionError("no replace"))]):
+                                      patch.object(M.os, PUBLISH, side_effect=NO_PUBLISH)]):
             with self.assertRaises(StoreError) as caught:
                 self.files().write(PAYLOAD, SHA)
         self.assertNotIsInstance(caught.exception, M.PublicationUncertain)
@@ -959,17 +1349,17 @@ class SeriesFilesTests(unittest.TestCase):
         self.assertEqual(self.inventory(), [SHA + ".lock"])
 
     # --- post-publication uncertainty -------------------------------------------------
-    def test_post_rename_failures_are_publication_uncertain(self):
+    def test_post_publish_failures_are_publication_uncertain(self):
         state = {}
-        def replace(src, dst):
-            REAL_REPLACE(src, dst)
-            state["replaced"] = True
+        def publish(src, dst):
+            REAL_PUBLISH(src, dst)
+            state["published"] = True
         def readback_open(path, flags, *args, **kwargs):
-            if state.get("replaced") and Path(os.fsdecode(path)).name == self.target.name:
+            if state.get("published") and Path(os.fsdecode(path)).name == self.target.name:
                 raise OSError(errno.EIO, "synthetic readback failure")
             return REAL_OPEN(path, flags, *args, **kwargs)
-        def tamper_replace(src, dst):
-            REAL_REPLACE(src, dst)
+        def tamper_publish(src, dst):
+            REAL_PUBLISH(src, dst)
             with open(dst, "r+b") as handle:
                 handle.seek(-1, os.SEEK_END)
                 handle.write(b"\x81")
@@ -977,9 +1367,9 @@ class SeriesFilesTests(unittest.TestCase):
             raise OSError(errno.EIO, "synthetic directory fsync failure")
         def unlock(fd):
             raise OSError(errno.EIO, "synthetic unlock failure")
-        cases = [("readback", lambda: [patch.object(M.os, "replace", side_effect=replace),
+        cases = [("readback", lambda: [patch.object(M.os, PUBLISH, side_effect=publish),
                                        patch.object(M.os, "open", side_effect=readback_open)]),
-                 ("mismatch", lambda: [patch.object(M.os, "replace", side_effect=tamper_replace)]),
+                 ("mismatch", lambda: [patch.object(M.os, PUBLISH, side_effect=tamper_publish)]),
                  ("unlock", lambda: [patch.object(M, "_unlock_os", side_effect=unlock)]),
                  ("sidecar_close", lambda: FdLog(fail_close=lambda item: item[0] == "lock").patches())]
         if os.name != "nt":
@@ -1008,7 +1398,7 @@ class SeriesFilesTests(unittest.TestCase):
         def unlock(fd):
             raise OSError(errno.EIO, "synthetic unlock failure")
         with patch.object(M, "_unlock_os", side_effect=unlock), \
-                patch.object(M.os, "replace", side_effect=AssertionError("no replace")):
+                patch.object(M.os, PUBLISH, side_effect=NO_PUBLISH):
             with self.assertRaises(M.ReleaseError) as read_error:
                 self.files().read(SHA)
             with self.assertRaises(M.ReleaseError) as skip_error:
@@ -1075,8 +1465,8 @@ class SeriesFilesTests(unittest.TestCase):
                          ["[Errno 5] synthetic unlock failure"])
         self.assertIsInstance(caught.exception.__cause__, SeriesFormatError)
         self.target.unlink()
-        calls, replace = self.replace_failing(100)
-        with patch.object(M.os, "replace", side_effect=replace), patch.object(M, "time", FakeTime()), \
+        calls, publish = self.publish_failing(100)
+        with patch.object(M.os, PUBLISH, side_effect=publish), patch.object(M, "time", FakeTime()), \
                 patch.object(M.os, "unlink", side_effect=PermissionError(errno.EACCES, "held")):
             with self.assertRaises(M.ReplaceRetryExhausted) as exhausted:
                 self.files().write(PAYLOAD, SHA)
@@ -1089,8 +1479,8 @@ class SeriesFilesTests(unittest.TestCase):
 
     def test_interrupts_clean_up_and_propagate_unwrapped(self):
         # (a) interrupt in the retry wait: owned temp removed, interrupt unwrapped.
-        calls, replace = self.replace_failing(100)
-        with patch.object(M.os, "replace", side_effect=replace), \
+        calls, publish = self.publish_failing(100)
+        with patch.object(M.os, PUBLISH, side_effect=publish), \
                 patch.object(M, "time", FakeTime(interrupt_sleep=True)):
             with self.assertRaises(KeyboardInterrupt) as caught:
                 self.files().write(PAYLOAD, SHA)
@@ -1115,12 +1505,12 @@ class SeriesFilesTests(unittest.TestCase):
                 self.assertNotIsInstance(caught.exception, StoreError)
                 self.assertEqual(log.close_counts("lock"), [1])
                 self.assertEqual(self.files().read(SHA).tobytes(), RAW)
-        # (c) interrupt right after the rename: publication happened, no temp left.
+        # (c) interrupt right after the publish call: publication happened, no temp left.
         self.reset()
-        def replace_then_interrupt(src, dst):
-            REAL_REPLACE(src, dst)
+        def publish_then_interrupt(src, dst):
+            REAL_PUBLISH(src, dst)
             raise KeyboardInterrupt
-        with patch.object(M.os, "replace", side_effect=replace_then_interrupt):
+        with patch.object(M.os, PUBLISH, side_effect=publish_then_interrupt):
             with self.assertRaises(KeyboardInterrupt):
                 self.files().write(PAYLOAD, SHA)
         self.assertEqual(self.target.read_bytes(), PAYLOAD)
@@ -1142,7 +1532,7 @@ class SeriesFilesTests(unittest.TestCase):
                 raise KeyboardInterrupt
             return real_fsync(fd)
         with Patches(log.patches() + [patch.object(M.os, "fsync", side_effect=fsync),
-                                      patch.object(M.os, "replace", side_effect=AssertionError("no replace"))]):
+                                      patch.object(M.os, PUBLISH, side_effect=NO_PUBLISH)]):
             with self.assertRaises(KeyboardInterrupt) as caught:
                 self.files(lock_timeout=0).write(PAYLOAD, SHA)
         self.assertNotIsInstance(caught.exception, StoreError)
@@ -1155,7 +1545,7 @@ class SeriesFilesTests(unittest.TestCase):
                 self.files().read(SHA)
         self.assertNotIsInstance(caught.exception, StoreError)
         self.assertEqual(self.files(lock_timeout=0).read(SHA).tobytes(), RAW)
-        # (g) in the post-rename readback: propagated, not wrapped as PublicationUncertain.
+        # (g) in the post-publish readback: propagated, not wrapped as PublicationUncertain.
         self.reset()
         with patch.object(M.SeriesFiles, "_read_target", side_effect=KeyboardInterrupt):
             with self.assertRaises(KeyboardInterrupt) as caught:
@@ -1244,7 +1634,7 @@ class SeriesFilesTests(unittest.TestCase):
         names = {node.id for node in ast.walk(tree) if isinstance(node, ast.Name)}
         names |= {node.attr for node in ast.walk(tree) if isinstance(node, ast.Attribute)}
         for forbidden in ("environ", "getenv", "macro_dir", "series_error", "mkdir", "makedirs",
-                          "rmtree", "datetime", "home", "expanduser", "gettempdir"):
+                          "rmtree", "datetime", "home", "expanduser", "gettempdir", "replace"):
             self.assertNotIn(forbidden, names)
 
 

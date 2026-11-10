@@ -7,6 +7,10 @@ borderline zones and the 2027-01-01 holdout guard, on daily OOS P&L arrays the c
 adoption outcome, re-runs no gate, and is not connected to the Lab, the app, any ledger, card or register. The
 parent item ⑨-4/2 stays open.
 
+**⑨-4/2/b** (2026-11-11) names the N_raw reading of record after owner ruling 7: R-FAM, the R3 run-registry count.
+Both readings are still shown and the second DSR stays provisional until the R3 recorder exists. No threshold,
+status, gate or outcome rule changed; see the section "⑨-4/2/b" below.
+
 ## Sources and rulings
 
 - Criteria: `docs/nautilus_bridge/MODEL_ADOPTION_CRITERIA_DRAFT_2026-11-04.md` (commits `c96f338`, `c814d22`),
@@ -22,6 +26,9 @@ parent item ⑨-4/2 stays open.
 - 2026-11-10 owner answer, as recorded in the log: the meaning of "ledger N_raw" in M-3 was **not** decided
   (the question offered two readings). This unit therefore takes N_raw as a caller input under either or both
   readings, shows both, and labels the second DSR provisional.
+- 2026-11-11 owner ruling 7 (log section "2026-11-11, Claude Code 채팅: 남은 결정 14건에 대한 답 (원문)"): the
+  meaning is decided. R-FAM is the reading of record; until the R3 recorder exists both readings are still shown
+  (⑨-4/2/b, below).
 - This branch is based on main `ed8df4a`. PR #92 (docs only) merged after the branch point; it touches none of
   this unit's files.
 
@@ -74,7 +81,8 @@ and `gate_stats`.
 - **Two N_raw readings.** `N_RAW_READINGS` names `L-FAM` (family ledger row count, `FamilyLedger.n_raw`, read on
   the owner PC) and `R-FAM` (R3 design 3.13 literal family-wide count, |K| + |L minus cfg(K)|). The caller supplies
   one or both as integers >= 1; a reading not supplied is shown as "not supplied". The module never opens a
-  ledger.
+  ledger. Since ⑨-4/2/b, `N_RAW_READING_OF_RECORD` names R-FAM as the reading of record and each line prints its
+  role.
 - **N_raw below G is printed, not refused.** R3 design 10.2 B Q4 ("may a ledger-based N fall below G?") is
   reserved for ⑨-3d, so `below_grid` is a printed status. The scoping proposal to refuse it was dropped on review.
 - **Direction applies to the borderline zone.** Criteria 6.2 names only the p range (0.10, 0.20]; this unit also
@@ -101,7 +109,8 @@ and `gate_stats`.
 
 - No outcome (ADOPT, KEEP, REVISE, REJECT, INSUFFICIENT_DATA). Outcome assembly waits for owner answers: the gate
   passing at G with the second DSR below 0.90 (criteria 6.1 maps it to neither KEEP nor REJECT), whether S-7
-  converts S-3, which dispersion term pairs with N_raw, and which N_raw reading is of record.
+  converts S-3, and which dispersion term pairs with N_raw. Which N_raw reading is of record was the fourth
+  question; ruling 7 of 2026-11-11 answered it (R-FAM).
 - No S-1 (the gate is the caller's precondition), no S-5 SPA or S-6 break-even (`tf_gov`), no SMA-200 or 60/40
   baseline P&L (`core.quant.strategies` is never imported, so `config` and `.env` are never loaded), no forecast,
   risk, data or registration rules, no L2/L3.
@@ -170,6 +179,69 @@ Nine review findings (two of them the same defect) were each reproduced on the f
 | `L1_NOTE` comment said "every result" | only `StrategyLines` carries it | comment and docstrings now say the collected `strategy_lines` result |
 
 No finding was rejected.
+
+## ⑨-4/2/b: R-FAM is the N_raw reading of record (2026-11-11)
+
+The ruling. Item 7 of the decision table of 2026-11-11 asked for the meaning of "ledger N_raw" and the ⑨-4
+questions Q1 to Q5 and Q7. Its recommendation was "R-FAM을 공식 기준으로 하고, R3 기록기가 완성될 때까지는 둘 다
+표시(현행 유지). 시행 횟수를 크게 잡는 쪽이 더 보수적인 판정이고, R3의 목적이 원장 기반 시행 횟수입니다. Q1~Q5·Q7은
+내용이 길어 별도 표로 다시 보고하겠습니다." The owner answered "7-권장대로 요청". The log takes this as the
+recommendation (R-FAM of record, both readings shown until the R3 recorder is complete) together with a request
+for the Q1 to Q5 and Q7 table, and asks the owner to say so if it meant something else. The Q table is reported
+separately and is not part of this unit.
+
+What changed in `core/adoption/strategy_rules.py`:
+
+- `N_RAW_READING_OF_RECORD = "R-FAM"`, a key of `N_RAW_READINGS`.
+- `RawReading.of_record` (True for R-FAM only) and `RawReading.role()`; `DsrTwoN.reading_of_record`.
+- The printed N_raw lines carry the role. With both readings supplied (synthetic input):
+
+  ```
+  S-2 [provisional] DSR at N_raw L-FAM = 17 [shown for comparison]: 0.9736 (pass); dispersion term 0.012 per period [caller term]
+  S-2 [provisional] DSR at N_raw R-FAM = 11 [reading of record (owner ruling 7, 2026-11-11)]: 0.9774 (pass); dispersion term 0.012 per period [caller term]; N_raw 11 < G 12: printed only
+  ```
+
+  With R-FAM not supplied, its line reads "... [reading of record (owner ruling 7, 2026-11-11)]: not supplied; the
+  reading of record was not supplied, so this result has no second DSR of record and stays provisional". A missing
+  L-FAM reads "[shown for comparison]: not supplied".
+- The provisional note now says that R-FAM is the reading of record and that both readings are shown until the R3
+  recorder exists; it no longer says the meaning is undecided.
+
+What did not change:
+
+- No threshold, zone, status or gate rule. Each reading's DSR is still `validate.deflated_sharpe` at its own N
+  with the caller's labelled dispersion term, classified by the same `classify_dsr` against the N = G line. The
+  reading of record gets no different treatment, and `dsr_min`, 0.90, alpha and the borderline bounds are
+  untouched. The module still assigns no outcome.
+- Every result stays provisional (`provisional=True`), with or without R-FAM. No R3 recorder exists, so an R-FAM
+  count is a caller input like L-FAM and does not come from the registry itself. Lifting the label belongs to the
+  unit that connects the recorder (⑨-3c, ⑨-3d).
+- Imports are the same (`core.quant.validate` and `core.quant.gate_stats` only), and `core/quant` is not edited.
+
+Verification (local, synthetic, Linux, Python 3.13.17):
+
+- `tests.adoption_strategy_rules_acceptance`: **33 tests** (32 before; one added, one extended), three runs of
+  3.931 s, 3.614 s and 3.659 s and one with `-W error::RuntimeWarning` (3.599 s), all OK. The new test checks the
+  constant, the role on each line with both, only L-FAM and only R-FAM supplied, the missing-record wording,
+  `provisional=True` in each case, and that numbers and statuses equal direct `validate.deflated_sharpe` and
+  `classify_dsr` calls, including a stubbed case where both readings sit in the borderline zone.
+- Together with the fold, the series files and the seven other R3 modules: **239 tests in 7.338 s, OK**
+  (overlapping; not added together).
+- The static guard: `macro_m7_ledger::test_step3_02_no_ledger_hash_refused_and_no_kish_anywhere`, which scans
+  `core/**/*.py` and `docs/**/*.py` with `gate_ledger.scan_forbidden`, passed in the guarded runner. The runner
+  refused the test's two attempts to list `docs/asset_expansion/cache` (its guard does that by design), so files
+  under that directory were not part of the scan, and the runner exits 1 for the recorded refusals although the
+  test itself passed.
+- Mutation run on a scratch copy: 11 single-change mutants (the constant set to L-FAM, roles swapped, the missing
+  note dropped or put on the other reading, the flag never set, the role not printed, `provisional` False, the
+  old "undecided" note, the reading of record classified without the grid line, the record line dropped when
+  missing) were all killed by the reading-of-record tests. One unrelated test fails in the scratch copy because
+  the copy has no schema JSON files; it passes in the repository and was not counted.
+- `compile()` and `ast.parse(feature_version=(3, 10))` of the module and its test pass under Python 3.11.17,
+  3.12.3 and 3.13.17; `tests.runtime_syntax_acceptance` passed.
+
+Not verified here: the CI matrix (Windows, Python 3.10 execution), any real P&L, and any real R-FAM or L-FAM
+count. The R3 recorder that would produce R-FAM does not exist yet.
 
 ## CI and compliance
 
