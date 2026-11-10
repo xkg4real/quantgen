@@ -22,7 +22,6 @@ import json
 import math
 import os
 import re
-import statistics
 import tempfile
 import time as _time
 from datetime import date, datetime, timedelta, timezone
@@ -389,20 +388,23 @@ test_history_cache_b_marks_a_running_bar_provisional.test_ids = ["T-PROV-01"]
 # docs/macro_fixtures.py writes every data fixture as the reference file's own columns followed by the section 4.1
 # provenance columns (series_id, obs_date, session_date, ..., value_status), one row per reference row, with obs_date
 # and session_date both the reference row's date (ISO). ACQUISITION.csv and the spec name no reference column, so each
-# body below declares the value columns it reads and the provenance values the generator writes for that file
-# (docs/macro_fixtures.REFERENCE_FILES). Each declaration is an input contract for the owner to confirm at the
-# acquisition step. The obs_utc / available_at_utc instants are not read: the generator's calendar_available_at
-# refuses the series ids KS11, KRWX and 005930 (not in the registry), so the instants those files will carry are not
-# settled; the staleness body stamps its FRED rows from the signed calendars itself.
+# body below declares the columns it reads. Each declaration is an input contract for the owner to confirm at the
+# acquisition step. The close files (F13 ^KS11, F16 KRW=X, F27 KRX stocks) are read in the declared close layout by the
+# one reader of tests/macro_m1_calendars.py, `read_close_layout`, which the part 2 bodies of tests/macro_m1_fixtures.py,
+# tests/macro_m2_risk.py and tests/macro_m3_estimators.py share. The FRED files (F18 <id>.csv, F07 VIXCLS) are read
+# here, by `_fixture_csv`: the value column named by the FRED id, the provenance the generator writes for that file
+# (docs/macro_fixtures.REFERENCE_FILES), FRED's missing-value marker, one row per date; their obs_utc /
+# available_at_utc instants are not read (the staleness body stamps its FRED rows from the signed calendars itself).
 FRED_MISSING = ("", ".")                    # a blank or "." value is no observation (FRED's missing-value marker)
 
 
 def _fixture_csv(name: str, text: str, values: tuple[str, ...], provenance: tuple[tuple[str, str], ...],
                  keys: tuple[str, ...] = ()) -> list[dict]:
-    """Rows of a generated fixture in a declared layout, as {"date": obs_date, <value column>: float | None, <key
-    column>: str}; AssertionError on any departure: a declared column absent, a provenance value other than the
-    declared one, obs_date != session_date, rows out of date order, a value that is neither a finite number nor FRED's
-    missing marker. Two rows on one date are kept: the bodies count the rows on the days they read."""
+    """Rows of a generated FRED fixture (F18, F07) in a declared layout, as {"date": obs_date, <value column>: float |
+    None, <key column>: str}; AssertionError naming the file and line on any departure: a declared column absent, a
+    provenance value other than the declared one, obs_date != session_date, rows out of date order or a repeated date
+    (an ALFRED file with one row per date and vintage included), a value that is neither a finite number nor FRED's
+    missing marker."""
     reader = csv.DictReader(io.StringIO(text))
     need = tuple(values) + tuple(keys) + tuple(k for k, _ in provenance) + ("obs_date", "session_date")
     missing = [c for c in need if c not in (reader.fieldnames or ())]
@@ -414,7 +416,7 @@ def _fixture_csv(name: str, text: str, values: tuple[str, ...], provenance: tupl
         assert got == tuple(provenance), f"{where}: provenance {dict(got)} != declared {dict(provenance)}"
         d = date.fromisoformat(raw["obs_date"])
         assert date.fromisoformat(raw["session_date"]) == d, f"{where}: obs_date != session_date"
-        assert not rows or rows[-1]["date"] <= d, f"{where}: rows out of date order"
+        assert not rows or rows[-1]["date"] < d, f"{where}: rows out of date order or repeated"
         row: dict = {"date": d, **{k: raw[k] for k in keys}}
         for col in values:
             cell = (raw[col] or "").strip()
@@ -488,31 +490,24 @@ def test_fix_01_regeneration_at_level_1_tolerance_refdata():
 test_fix_01_regeneration_at_level_1_tolerance_refdata.test_ids = ["T-FIX-01"]
 
 
-# G-POST-01, the M1 data rows (spec L5819-5834; goldens.csv G-POST-01 rows whose runs_from is M1). Declared layouts:
-# F13 (docs/macro_fixtures.py:59): Yahoo ^KS11 daily, the close in `close`, series_id KS11, vendor_close, calendar_bound.
-# F16 (docs/macro_fixtures.py:62): Yahoo KRW=X daily, the close in `close`, series_id KRWX, vendor_close, calendar_bound.
-# F27 (docs/macro_fixtures.py:73): KRX Samsung 005930 and SK hynix 000660 closes and market caps in long form, one row
-#   per code and KRX session: `code` (005930 or 000660) and its `close` (the market-cap columns ride along, unread);
-#   series_id either id of "005930;000660" (the generator writes the first), official_close, calendar_bound.
-# These are the layouts tests/macro_m1_fixtures.py declares for the same files (G-POST-01 row replay; `close` as in
-# part 1's F01 and the generator test's reference files); the instants that file also reads are not read here.
+# G-POST-01, the M1 data rows (spec L5819-5834; goldens.csv G-POST-01 rows whose runs_from is M1), on F13 (Yahoo ^KS11,
+# docs/macro_fixtures.py:59), F16 (Yahoo KRW=X, :62) and F27 (KRX Samsung 005930 and SK hynix 000660 closes and market
+# caps, :73; long form, one row per `code` and KRX session, the market-cap columns unread). The three files are read by
+# the one reader of the declared close layout, tests.macro_m1_calendars.read_close_layout (part 1's F01 layout), as
+# tests/macro_m1_fixtures.py reads them, and the eight rows come from the helper both sites share,
+# tests.macro_m1_fixtures.check_gpost01_rows (a price compared exactly: Level 1 `price`, spec L5735). The two sites read
+# different rows. This one reads by date: every row dated up to the 2-Oct decision and none after it (F13 ends on 2 Oct
+# and F16 on 1 Oct by their names, so a later-dated row is outside the decision by its date and is not read). It does
+# not use the instants: the point-in-time reading (a row available after the 06:30:30Z decision is not visible, a later
+# row visible at the decision is a look-ahead FAIL, the 2-Oct closes are stamped at 06:30:00Z) is
+# tests/macro_m1_fixtures.py's, which also reads F01's official close.
 F13 = "yahoo_KS11_1996-12_2026-10-02.csv"
-F13_CLOSE = "close"
-F13_PROVENANCE = (("series_id", "KS11"), ("value_status", "vendor_close"), ("available_at_source", "calendar_bound"))
 F16 = "yahoo_KRWX_2004_2026-10-01.csv"
-F16_CLOSE = "close"
-F16_PROVENANCE = (("series_id", "KRWX"), ("value_status", "vendor_close"), ("available_at_source", "calendar_bound"))
 F27 = "krx_005930_000660_closes_mcap.csv"
-F27_CLOSE, F27_KEYS = "close", ("code", "series_id")
 F27_CODES = ("005930", "000660")                # docs/macro_fixtures.py:73 series "005930;000660"
-F27_PROVENANCE = (("value_status", "official_close"), ("available_at_source", "calendar_bound"))
 GPOST01_FIXTURES = ("yahoo_KS11_1996-12_2026-10-02.csv", "yahoo_KRWX_2004_2026-10-01.csv",
                     "krx_005930_000660_closes_mcap.csv")           # F13, F16, F27 spelled out: T-HERM-01 checks each name
 GPOST01_DAY = date(2026, 10, 2)                 # G-POST-01/kospi_close_2oct, samsung_close_2oct, hynix_close_2oct: "2 Oct 2026"
-GPOST01_KRWX_LAST = date(2026, 10, 1)           # G-POST-01/krwx_last_row: "KRW=X last row (1 Oct 2026)", "provisional 2-Oct row dropped"
-GPOST01_PEAK = (date(2026, 6, 22), 9114.55)     # G-POST-01/drawdown_from_peak: "the 9,114.55 peak (22 Jun 2026)"; spec L5821
-GPOST01_SMA_N = 200                             # G-POST-01/close_over_200d note: "mean of last 200 closes incl. 2 Oct"
-GPOST01_DLOG_N = 20                             # G-POST-01/krwx_dlog20: "KRW=X 20-observation dlog" (spec L5834 "20-observation change")
 # The signed KRX clock files the body reads: the previous KRX session of 2 Oct (G-POST-01/kospi_return_2oct note
 # "7,003.74 / prev close - 1"), read on the fortnight to 2 Oct as T-PRINT-01 reads its own (the part-1 owner gate
 # tests.macro_m1_calendars._official_calendar; the shipped holidays_KRX covers 2026).
@@ -520,69 +515,37 @@ GPOST01_CAL_SPAN = (GPOST01_DAY - timedelta(days=14), GPOST01_DAY)
 
 
 def _check_gpost01_m1(ks11: list[dict], krwx: list[dict], stocks: list[dict], cal) -> dict:
-    """G-POST-01, the M1 data rows, at Level 1 from goldens.csv (read only): the 2-Oct KOSPI close (not the 6,943.66
-    intraday print), its return on the previous row, which must be dated the previous KRX session of the signed
-    calendar `cal` (`clocks.prev_session`, as T-PRINT-01's helper checks), the drawdown from the peak, the close over
-    the mean of the last 200 closes, the 2-Oct Samsung and SK hynix closes, the KRW=X last row (1 Oct: the provisional
-    2-Oct row dropped) and its 20-observation dlog. ^KS11 rows dated after 2 Oct are not read. A vendor price is
-    compared at its printed precision (two decimals: a vendor file may carry float artefacts such as 7003.7399...), a
-    KRX won price exactly. The ^KS11 peak up to 2 Oct must be 9,114.55 on 2026-06-22, and the computed rows must be
-    exactly goldens.csv's M1 rows. Returns the computed values."""
+    """G-POST-01, the M1 data rows, read by date: the ^KS11, KRW=X and KRX stock rows dated up to 2 Oct, none later.
+    Exactly one ^KS11 row and one row per code (005930, 000660) on 2 Oct; the ^KS11 row before it must be dated the
+    previous KRX session of the signed calendar `cal` (`clocks.prev_session`, as T-PRINT-01's helper checks); then
+    tests.macro_m1_fixtures.check_gpost01_rows: the eight rows at Level 1 against goldens.csv (read only; a price
+    exactly, spec L5735, so neither the 6,943.66 intraday print nor a float artefact is 7,003.74), KRW=X's last row on
+    1 Oct (the provisional 2-Oct row dropped), the 200-close and 20-observation windows and the peak 9,114.55 on
+    2026-06-22. Returns the values."""
     from core.calendars import clocks
+    from tests.macro_m1_fixtures import check_gpost01_rows
     day = GPOST01_DAY
-    k = [r for r in ks11 if r[F13_CLOSE] is not None and r["date"] <= day]
+    k = [r for r in ks11 if r["date"] <= day]
     on_day = [r for r in k if r["date"] == day]
     assert len(on_day) == 1, f"G-POST-01: {len(on_day)} ^KS11 rows on {day}; exactly one close is stored"
-    assert len({r["date"] for r in k}) == len(k), "G-POST-01: two ^KS11 rows on one date"
-    assert len(k) >= GPOST01_SMA_N, f"G-POST-01: {len(k)} ^KS11 closes up to {day}, fewer than {GPOST01_SMA_N}"
     prev_day = clocks.prev_session("KR", day, cal=cal)
-    assert k[-2]["date"] == prev_day, (
-        f"G-POST-01: the ^KS11 row before {day} is {k[-2]['date']}, not the previous KRX session {prev_day} "
-        f"(G-POST-01/kospi_return_2oct is the return on the previous close)")
-    closes = [r[F13_CLOSE] for r in k]
-    peak_i = max(range(len(closes)), key=closes.__getitem__)
-    bad = [r for r in stocks if r["code"] not in F27_CODES or r["series_id"] not in F27_CODES]
-    assert not bad, f"G-POST-01: F27 row {bad[0]} is not a {' / '.join(F27_CODES)} row"
-    s = {c: [r[F27_CLOSE] for r in stocks if r["date"] == day and r["code"] == c] for c in F27_CODES}
-    assert all(len(v) == 1 and v[0] is not None for v in s.values()), (
-        f"G-POST-01: KRX closes on {day} by code {s}; exactly one per code is stored")
-    fx = [r for r in krwx if r[F16_CLOSE] is not None]
-    assert fx and fx[-1]["date"] == GPOST01_KRWX_LAST, (
-        f"G-POST-01: the KRW=X last row is {fx[-1]['date'] if fx else None}, not {GPOST01_KRWX_LAST} (the provisional "
-        f"2-Oct row is dropped; G-POST-01/krwx_last_row)")
-    assert len(fx) > GPOST01_DLOG_N, f"G-POST-01: {len(fx)} KRW=X rows, the 20-observation dlog needs {GPOST01_DLOG_N + 1}"
-    got = {
-        "kospi_close_2oct": round(closes[-1], 2),
-        "kospi_return_2oct": closes[-1] / closes[-2] - 1.0,
-        "drawdown_from_peak": closes[-1] / closes[peak_i] - 1.0,
-        "close_over_200d": closes[-1] / statistics.fmean(closes[-GPOST01_SMA_N:]),
-        "samsung_close_2oct": s["005930"][0],
-        "hynix_close_2oct": s["000660"][0],
-        "krwx_last_row": round(fx[-1][F16_CLOSE], 2),
-        "krwx_dlog20": math.log(fx[-1][F16_CLOSE] / fx[-1 - GPOST01_DLOG_N][F16_CLOSE]),
-    }
-    g = G.golden("G-POST-01")
-    m1 = {r.sub_id for r in g.rows if r.runs_from == "M1"}
-    assert m1 == set(got), f"G-POST-01: goldens.csv M1 rows {sorted(m1)} != the computed rows {sorted(got)}"
-    for sub, value in got.items():
-        row = g.row(sub)
-        assert G.within(row.kind, value, row.want()), (
-            f"G-POST-01/{sub}: got {value!r}, want {row.want()!r} +/- {G.tol(row.kind)} (Level 1 {row.kind}; "
-            f"spec {row.source_line})")
-    peak = (k[peak_i]["date"], round(closes[peak_i], 2))
-    assert peak == GPOST01_PEAK, (f"G-POST-01: the ^KS11 peak up to {day} is {peak[1]} on {peak[0]}, not "
-                                  f"{GPOST01_PEAK[1]} on {GPOST01_PEAK[0]} (G-POST-01/drawdown_from_peak)")
-    return got
+    assert len(k) > 1 and k[-2]["date"] == prev_day, (
+        f"G-POST-01: the ^KS11 row before {day} is {k[-2]['date'] if len(k) > 1 else None}, not the previous KRX "
+        f"session {prev_day} (G-POST-01/kospi_return_2oct is the return on the previous close)")
+    s = {c: [r["close"] for r in stocks if r["date"] == day and r["code"] == c] for c in F27_CODES}
+    assert all(len(v) == 1 for v in s.values()), f"G-POST-01: KRX closes on {day} by code {s}; exactly one per code is stored"
+    return check_gpost01_rows(k, [r for r in krwx if r["date"] <= day], s["005930"][0], s["000660"][0],
+                              f"dated up to {day}")
 
 
 def test_g_post_01_m1_data_rows_refdata():
     """G-POST-01, the M1 data rows (spec L5819-5834) on F13, F16 and F27: NOT_RUN (REFDATA) naming every absent fixture;
-    NOT_RUN (OWNER) while the signed KRX clock files do not cover the fortnight to 2 Oct (computed from the files by
-    tests.macro_m1_calendars._official_calendar); then PASS or FAIL on `_check_gpost01_m1` at Level 1 from goldens.csv
-    (look-ahead audit LA-02, part 2: it used to be NOT_RUN whatever the files). F01 and F20 (QX_DLA_postpatch.csv) are
-    not read: the rows are computed from the files they come from (spec L5812, Yahoo ^KS11), and regenerating F20's
-    column is T-FIX-01's."""
-    from tests.macro_m1_calendars import _official_calendar
+    once listed, each is read by tests.macro_m1_calendars.read_close_layout; NOT_RUN (OWNER) while the signed KRX clock
+    files do not cover the fortnight to 2 Oct (computed from the files by tests.macro_m1_calendars._official_calendar);
+    then PASS or FAIL on `_check_gpost01_m1` at Level 1 from goldens.csv (look-ahead audit LA-02, part 2: it used to be
+    NOT_RUN whatever the files). F01 and F20 (QX_DLA_postpatch.csv) are not read: the rows are computed from the files
+    they come from (spec L5812, Yahoo ^KS11), and regenerating F20's column is T-FIX-01's."""
+    from tests.macro_m1_calendars import _official_calendar, read_close_layout
     missing, text = [], {}
     for name in GPOST01_FIXTURES:
         try:
@@ -591,10 +554,8 @@ def test_g_post_01_m1_data_rows_refdata():
             missing.append(exc.reason.split(": ", 1)[1])
     if missing:
         raise NotRun("REFDATA: G-POST-01 data rows wait for " + "; ".join(missing))
-    _check_gpost01_m1(_fixture_csv(F13, text[F13], (F13_CLOSE,), F13_PROVENANCE),
-                      _fixture_csv(F16, text[F16], (F16_CLOSE,), F16_PROVENANCE),
-                      _fixture_csv(F27, text[F27], (F27_CLOSE,), F27_PROVENANCE, F27_KEYS),
-                      _official_calendar(*GPOST01_CAL_SPAN))
+    _check_gpost01_m1(read_close_layout("F13", text[F13]), read_close_layout("F16", text[F16]),
+                      read_close_layout("F27", text[F27]), _official_calendar(*GPOST01_CAL_SPAN))
 
 
 test_g_post_01_m1_data_rows_refdata.test_ids = ["G-POST-01"]
@@ -610,98 +571,112 @@ def _gpost01_days() -> list[date]:
     return days[::-1]
 
 
-def _gpost01_invented(peak=GPOST01_PEAK, close=7003.74, prev=6971.67, base=6305.93, fx_last=1356.84, fx_back=1358.33,
-                      fx_oct2=None, stocks=(276000.0, 1841000.0), extra=(), f27_keys=F27_KEYS, stock_code=None,
-                      levels=(), drop=()):
-    """Invented ^KS11, KRW=X and KRX stock rows in the declared layouts (no Yahoo or KRX data): 230 weekday closes to
-    2026-10-02 at `base`, the peak on its day, the previous close and the close (then `levels` (date, close) set, the
-    dates in `drop` removed and the `extra` rows added); KRW=X to 2026-10-01 with `fx_back` 20 observations before
-    `fx_last`. The defaults give return +0.46%, drawdown -23.16%, 200-day ratio 1.107 and dlog -0.0011. Returns the
-    three texts."""
+def _gpost01_invented(peak=(date(2026, 6, 22), 9114.55), close=7003.74, prev=6971.67, base=6305.93, fx_last=1356.84,
+                      fx_back=1358.33, fx_oct2=None, stocks=(276000.0, 1841000.0), extra=(), stock_code=None, levels=(),
+                      drop=(), fx_repeat=False):
+    """Invented ^KS11, KRW=X and KRX stock rows in the declared close layout (no Yahoo or KRX data; written by
+    tests.macro_m1_calendars.close_layout_text): 230 weekday closes to 2026-10-02 at `base`, the peak on its day, the
+    previous close and the close (then `levels` (date, close) set, the dates in `drop` removed and the `extra` rows
+    added after the rows of their date); KRW=X to 2026-10-01 with `fx_back` 20 observations before `fx_last`
+    (`fx_repeat`: one interior KRW=X row written twice). KRX rows are stamped at the KRX close (06:30:00Z /
+    06:30:30Z), KRW=X rows at 21:00Z of their day. The defaults give return +0.46%, drawdown -23.16%, 200-day ratio
+    1.107 and dlog -0.0011. Returns the three texts."""
+    from tests.macro_m1_calendars import close_layout_text
+
+    def kr(x):
+        return U(x.year, x.month, x.day, 6, 30), U(x.year, x.month, x.day, 6, 30, 30)
+
+    def fx_at(x):
+        return U(x.year, x.month, x.day, 21), U(x.year, x.month, x.day, 21)
     days = _gpost01_days()
-    k = [(x, {F13_CLOSE: base}) for x in days]
-    k[days.index(peak[0])] = (peak[0], {F13_CLOSE: peak[1]})
-    k[-2], k[-1] = (days[-2], {F13_CLOSE: prev}), (days[-1], {F13_CLOSE: close})
-    k = [(x, {F13_CLOSE: dict(levels).get(x, v[F13_CLOSE])}) for x, v in k if x not in drop]
-    k = sorted(k + [(x, {F13_CLOSE: v}) for x, v in extra], key=lambda r: r[0])
-    fx = [(x, {F16_CLOSE: 1360.0 + (i % 5)}) for i, x in enumerate(days[-40:-1])]
-    fx[-1] = (fx[-1][0], {F16_CLOSE: fx_last})
-    fx[-1 - GPOST01_DLOG_N] = (fx[-1 - GPOST01_DLOG_N][0], {F16_CLOSE: fx_back})
+    k = [(x, base) for x in days]
+    k[days.index(peak[0])] = peak
+    k[-2], k[-1] = (days[-2], prev), (days[-1], close)
+    k = [(x, dict(levels).get(x, v)) for x, v in k if x not in drop]
+    k = sorted(k + list(extra), key=lambda r: r[0])
+    fx = [(x, 1360.0 + (i % 5)) for i, x in enumerate(days[-40:-1])]
+    fx[-1] = (fx[-1][0], fx_last)
+    fx[-21] = (fx[-21][0], fx_back)                    # 20 observations before the last
+    fx = fx[:6] + fx[5:] if fx_repeat else fx
+    fx_rows = [(x, v, *fx_at(x)) for x, v in fx]
     if fx_oct2 is not None:
-        fx.append((GPOST01_DAY, {F16_CLOSE: fx_oct2}))
-    st = [(x, {"code": c, "series_id": F27_CODES[0], F27_CLOSE: v}) for x in days[-5:-1]
-          for c, v in zip(F27_CODES, (270000.0, 1800000.0))]
+        fx_rows.append((GPOST01_DAY, fx_oct2, U(2026, 10, 2, 6), U(2026, 10, 2, 6)))
+    st = [(x, v, *kr(x), c) for x in days[-5:-1] for c, v in zip(F27_CODES, (270000.0, 1800000.0))]
     if stocks is not None:
-        st += [(GPOST01_DAY, {"code": c, "series_id": F27_CODES[0], F27_CLOSE: v}) for c, v in zip(F27_CODES, stocks)]
+        st += [(GPOST01_DAY, v, *kr(GPOST01_DAY), c) for c, v in zip(F27_CODES, stocks)]
     if stock_code is not None:
-        st.append((GPOST01_DAY, {"code": stock_code, "series_id": F27_CODES[0], F27_CLOSE: 230000.0}))
-    return (_layout_text(k, (F13_CLOSE,), F13_PROVENANCE), _layout_text(fx, (F16_CLOSE,), F16_PROVENANCE),
-            _layout_text(st, (F27_CLOSE,), F27_PROVENANCE, keys=f27_keys))
+        st.append((GPOST01_DAY, 230000.0, *kr(GPOST01_DAY), stock_code))
+    return (close_layout_text("F13", [(x, v, *kr(x)) for x, v in k]), close_layout_text("F16", fx_rows),
+            close_layout_text("F27", st))
 
 
 def _gpost01_run(texts, cal=None) -> dict:
     """The real body after its gates on the three texts, on the signed calendar `cal` (default: the calendars module's
     synthetic signed set, through the same owner gate)."""
-    from tests.macro_m1_calendars import _official_calendar_on, fixture_set
+    from tests.macro_m1_calendars import _official_calendar_on, fixture_set, read_close_layout
     ks11, krwx, stocks = texts
-    return _check_gpost01_m1(_fixture_csv(F13, ks11, (F13_CLOSE,), F13_PROVENANCE),
-                             _fixture_csv(F16, krwx, (F16_CLOSE,), F16_PROVENANCE),
-                             _fixture_csv(F27, stocks, (F27_CLOSE,), F27_PROVENANCE, F27_KEYS),
+    return _check_gpost01_m1(read_close_layout("F13", ks11), read_close_layout("F16", krwx),
+                             read_close_layout("F27", stocks),
                              _official_calendar_on(*GPOST01_CAL_SPAN, fixture_set() if cal is None else cal))
 
 
 def test_g_post_01_body_passes_and_fails_on_invented_rows():
-    """LA-02 part 2: the G-POST-01 data-row body can PASS and can FAIL. Invented rows in the declared layouts (no Yahoo
-    or KRX data) on the calendars module's synthetic signed set, built to the golden values, pass, also with a float
-    artefact on the close and with a later ^KS11 row above the peak (2026-10-05, not read). The row exactly 200 closes
-    back is inside the 200-close window (its level moves the ratio) and the row 201 back is outside it (its level does
-    not). Each value clause fails on its own: the pre-patch 6,943.66 intraday print as the close (spec L5819) or beside
-    it, two ^KS11 rows on an earlier date, a previous close of 7,100, the 1-Oct row missing with 30-Sep at the previous
-    close's level (a two-session return), a peak of 9,300 (drawdown -24.7%), a lower 200-day mean, the pre-patch Samsung
-    273,750 and SK hynix 1,832,000 (L5833), a KRW=X last row of 1,360.63, the provisional 2-Oct KRW=X row kept (L5834),
-    a 20th-back KRW=X value off by 2%, a peak of 9,200 (within the drawdown tolerance) and the 9,114.55 peak on
-    2026-06-23; a stock row of another code (the preferred share 005935); and the layout without a declared column.
-    Each declared provenance equals the generator's table (docs/macro_fixtures.REFERENCE_FILES)."""
-    assert GPOST01_FIXTURES == (F13, F16, F27)
-    for name, declared in ((F13, F13_PROVENANCE), (F16, F16_PROVENANCE)):
-        assert _generator_provenance(name) == declared, (name, _generator_provenance(name))
-    assert _generator_provenance(F27) == (("series_id", F27_CODES[0]),) + F27_PROVENANCE, _generator_provenance(F27)
+    """LA-02 part 2: the G-POST-01 data-row body can PASS and can FAIL. Invented rows in the declared close layout (no
+    Yahoo or KRX data) on the calendars module's synthetic signed set, built to the golden values, pass, also with a
+    later ^KS11 row above the peak (2026-10-05, not read: this site reads by date). The row exactly 200 closes back is
+    inside the 200-close window (its level moves the ratio) and the row 201 back is outside it (its level does not).
+    Each value clause fails on its own: the pre-patch 6,943.66 intraday print as the close (spec L5819), a float32
+    artefact on the close or on KRW=X's last row (a price is exact, spec L5735), a previous close of 7,100, the 1-Oct
+    row missing with 30-Sep at the previous close's level (a two-session return), a peak of 9,300 (drawdown -24.7%), a
+    lower 200-day mean, the pre-patch Samsung 273,750 and SK hynix 1,832,000 (L5833), no 2-Oct stock rows, a KRW=X last
+    row of 1,360.63, the provisional 2-Oct KRW=X row kept (L5834), a 20th-back KRW=X value off by 2%, a peak of 9,200
+    (within the drawdown tolerance) and the 9,114.55 peak on 2026-06-23. The shared layout refuses the 6,943.66 print
+    beside the close (a repeated date), a repeated earlier ^KS11 or KRW=X date, a stock row of another code (the
+    preferred share 005935), a "." close and a missing `code` column. Each file name is the generator's."""
+    from tests.macro_m1_calendars import close_layout_file
+    assert GPOST01_FIXTURES == (F13, F16, F27) == tuple(close_layout_file(f)[0] for f in ("F13", "F16", "F27"))
     got = _gpost01_run(_gpost01_invented())
     assert got["kospi_close_2oct"] == 7003.74 and round(got["drawdown_from_peak"], 4) == -0.2316, got
     assert round(got["close_over_200d"], 3) == 1.107 and round(got["krwx_dlog20"], 4) == -0.0011, got
-    assert _gpost01_run(_gpost01_invented(close=7003.740234375))["kospi_close_2oct"] == 7003.74   # a float32 artefact
     # a row after 2 Oct is not read, even above the peak (it would move the peak, the close and the window)
     assert _gpost01_run(_gpost01_invented(extra=((date(2026, 10, 5), 9500.0),))) == got
     # the 200-close window (G-POST-01/close_over_200d note "mean of last 200 closes incl. 2 Oct"; the count is typed
-    # here, not read from GPOST01_SMA_N): the row 201 closes back is outside it, the row 200 back inside it (levels far
+    # here, not read from GPOST_SMA_N): the row 201 closes back is outside it, the row 200 back inside it (levels far
     # from the window mean, below the 9,114.55 peak; one row moves the mean by (level - base) / 200)
     day200, day201 = _gpost01_days()[-200], _gpost01_days()[-201]
     assert _gpost01_run(_gpost01_invented(levels=((day201, 3000.0),)))["close_over_200d"] == got["close_over_200d"]
     moved = _gpost01_run(_gpost01_invented(levels=((day200, 9000.0),)))["close_over_200d"]
     assert abs(moved - 7003.74 / (7003.74 / got["close_over_200d"] + (9000.0 - 6305.93) / 200)) < 1e-9, moved
     cases = (
-        (dict(close=6943.66), "G-POST-01/kospi_close_2oct: got 6943.66, want 7003.74"),
-        (dict(extra=((GPOST01_DAY, 6943.66),)), "G-POST-01: 2 ^KS11 rows on 2026-10-02"),
-        (dict(extra=((date(2026, 9, 1), 6305.93),)), "G-POST-01: two ^KS11 rows on one date"),
-        (dict(prev=7100.0), "G-POST-01/kospi_return_2oct: got"),
+        (dict(close=6943.66), "G-POST-01 deviations: kospi_close_2oct: got 6943.66, want 7003.74"),
+        (dict(close=7003.740234375), "G-POST-01 deviations: kospi_close_2oct: got 7003.740234375, want 7003.74"),
+        (dict(fx_last=1356.8399658203125), "G-POST-01 deviations: krwx_last_row: got 1356.8399658203125, want 1356.84"),
+        (dict(prev=7100.0), "G-POST-01 deviations: kospi_return_2oct: got"),
         (dict(levels=((date(2026, 9, 30), 6971.67),), drop=(date(2026, 10, 1),)),
          "G-POST-01: the ^KS11 row before 2026-10-02 is 2026-09-30, not the previous KRX session 2026-10-01"),
-        (dict(peak=(GPOST01_PEAK[0], 9300.0)), "G-POST-01/drawdown_from_peak: got"),
-        (dict(base=6000.0), "G-POST-01/close_over_200d: got"),
-        (dict(stocks=(273750.0, 1841000.0)), "G-POST-01/samsung_close_2oct: got 273750.0, want 276000"),
-        (dict(stocks=(276000.0, 1832000.0)), "G-POST-01/hynix_close_2oct: got 1832000.0, want 1841000"),
+        (dict(peak=(date(2026, 6, 22), 9300.0)), "G-POST-01 deviations: drawdown_from_peak: got"),
+        (dict(base=6000.0), "G-POST-01 deviations: close_over_200d: got"),
+        (dict(stocks=(273750.0, 1841000.0)), "G-POST-01 deviations: samsung_close_2oct: got 273750.0, want 276000"),
+        (dict(stocks=(276000.0, 1832000.0)), "G-POST-01 deviations: hynix_close_2oct: got 1832000.0, want 1841000"),
         (dict(stocks=None), "G-POST-01: KRX closes on 2026-10-02 by code {'005930': [], '000660': []}"),
-        (dict(stock_code="005935"), "is not a 005930 / 000660 row"),
-        (dict(fx_last=1360.63), "G-POST-01/krwx_last_row: got 1360.63, want 1356.84"),
-        (dict(fx_oct2=1360.63), "the KRW=X last row is 2026-10-02, not 2026-10-01"),
-        (dict(fx_back=1356.84 * 1.02), "G-POST-01/krwx_dlog20: got"),
-        (dict(peak=(GPOST01_PEAK[0], 9200.0)), "the ^KS11 peak up to 2026-10-02 is 9200.0 on 2026-06-22, not 9114.55"),
+        (dict(fx_last=1360.63), "G-POST-01 deviations: krwx_last_row: got 1360.63, want 1356.84"),
+        (dict(fx_oct2=1360.63), "the last KRW=X row dated up to 2026-10-02 is 2026-10-02, not 2026-10-01"),
+        (dict(fx_back=1356.84 * 1.02), "G-POST-01 deviations: krwx_dlog20: got"),
+        (dict(peak=(date(2026, 6, 22), 9200.0)),
+         "the peak of the KS11 closes dated up to 2026-10-02 is 9200.0 on 2026-06-22, not 9114.55"),
         (dict(peak=(date(2026, 6, 23), 9114.55)), "is 9114.55 on 2026-06-23, not 9114.55 on 2026-06-22"),
+        # the shared layout (tests.macro_m1_calendars.read_close_layout)
+        (dict(extra=((GPOST01_DAY, 6943.66),)), f"{F13} line 232: rows out of date order or repeated"),
+        (dict(extra=((date(2026, 9, 1), 6305.93),)), "rows out of date order or repeated"),
+        (dict(fx_repeat=True), f"{F16} line 8: rows out of date order or repeated"),
+        (dict(stock_code="005935"), "code '005935' not in ('005930', '000660')"),
+        (dict(close="."), f"{F13} line 231: close '.' is not a finite number > 0"),
     )
     for kw, needle in cases:
         e = _raises(lambda: _gpost01_run(_gpost01_invented(**kw)), AssertionError)
         assert needle in str(e), (kw, str(e))
-    layout = _raises(lambda: _gpost01_run(_gpost01_invented(f27_keys=("series_id",))), AssertionError)
+    ks11, krwx, stocks = _gpost01_invented()
+    layout = _raises(lambda: _gpost01_run((ks11, krwx, stocks.replace("date,code,", "date,ticker,", 1))), AssertionError)
     assert "declared columns ['code'] absent" in str(layout), layout
     from tests.macro_m1_calendars import _official_calendar, drafts_set
     owner = _raises(lambda: _official_calendar(*GPOST01_CAL_SPAN, live=drafts_set()), NotRun)
@@ -831,44 +806,45 @@ def test_print_01_circuit_breaker_print_is_never_a_close():
 test_print_01_circuit_breaker_print_is_never_a_close.test_ids = ["T-PRINT-01"]
 
 
-# T-PRINT-01 on the Yahoo ^KS11 history (F13 in the layout declared above; spec L5631, L1382): "The KOSPI close on
-# 2026-03-09 is 5,251.87 (-5.96%). The intraday -8.11% is never stored as a close." The close is a price compared at
-# its printed precision (two decimals: a vendor file may carry float artefacts); the return within the printed
-# precision of -5.96% (+/- 0.005 pp), against the previous KRX session's row.
+# T-PRINT-01 on the Yahoo ^KS11 history (F13, read by tests.macro_m1_calendars.read_close_layout as above; spec L5631,
+# L1382): "The KOSPI close on 2026-03-09 is 5,251.87 (-5.96%). The intraday -8.11% is never stored as a close." The
+# close is a price, compared exactly as the G-POST-01 prices are (Level 1 `price`, spec L5735; owner question 4 asks
+# whether a vendor file's float artefacts may be read at the printed two decimals instead); the return within the
+# printed precision of -5.96% (+/- 0.005 pp), against the previous KRX session's row.
 PRINT01_DATE, PRINT01_CLOSE, PRINT01_RETURN_PCT = date(2026, 3, 9), 5251.87, -5.96      # spec L5631
 PRINT01_PRINTED_PCT = 0.005                                                              # half the last printed digit
 
 
 def _check_print01_ks11(rows: list[dict], cal) -> float:
-    """T-PRINT-01 on the Yahoo ^KS11 vendor closes: exactly one row on 2026-03-09, its close 5,251.87 at the printed
-    precision (so neither the 10:31 print nor any other value is stored as the close), the row before it on the
-    previous KRX session of the signed calendar `cal`, and -5.96% against that row within the printed precision.
-    Returns the return in percent."""
+    """T-PRINT-01 on the Yahoo ^KS11 vendor closes: exactly one row on 2026-03-09, its close 5,251.87 exactly (a price,
+    spec L5735: so neither the 10:31 print nor any other value, a float artefact included, is stored as the close), the
+    row before it on the previous KRX session of the signed calendar `cal`, and -5.96% against that row within the
+    printed precision. Returns the return in percent."""
     from core.calendars import clocks
     d = PRINT01_DATE
     on_day = [r for r in rows if r["date"] == d]
     assert len(on_day) == 1, f"T-PRINT-01 (F13): {len(on_day)} rows on {d}; exactly one close is stored"
-    close = on_day[0][F13_CLOSE]
-    assert close is not None and round(close, 2) == PRINT01_CLOSE, (
-        f"T-PRINT-01 (F13): close {close!r} != {PRINT01_CLOSE} (spec L5631)")
+    close = on_day[0]["close"]
+    assert G.within("price", close, PRINT01_CLOSE), (
+        f"T-PRINT-01 (F13): close {close!r} != {PRINT01_CLOSE} (spec L5631; a price, exact: L5735)")
     before = [r for r in rows if r["date"] < d]
     prev_day = clocks.prev_session("KR", d, cal=cal)
-    assert before and before[-1]["date"] == prev_day and before[-1][F13_CLOSE] is not None, (
+    assert before and before[-1]["date"] == prev_day, (
         f"T-PRINT-01 (F13): the row before {d} is {before[-1]['date'] if before else None}, not the previous KRX "
         f"session {prev_day}")
-    ret_pct = 100.0 * (close / before[-1][F13_CLOSE] - 1.0)
+    ret_pct = 100.0 * (close / before[-1]["close"] - 1.0)
     assert abs(ret_pct - PRINT01_RETURN_PCT) <= PRINT01_PRINTED_PCT + 1e-9, (
         f"T-PRINT-01 (F13): return {ret_pct:.4f}% != {PRINT01_RETURN_PCT}% (spec L5631)")
     return ret_pct
 
 
 def test_print_01_real_kospi_close_refdata():
-    """T-PRINT-01 on the Yahoo ^KS11 history (F13): NOT_RUN (REFDATA) until F13 is listed with its md5, NOT_RUN (OWNER)
-    while the signed KRX clock files do not cover the fortnight to 2026-03-09 (computed from the files by
-    tests.macro_m1_calendars._official_calendar); then PASS or FAIL on `_check_print01_ks11` (look-ahead audit LA-02,
-    part 2: it used to be NOT_RUN whatever the file)."""
-    from tests.macro_m1_calendars import _official_calendar
-    rows = _fixture_csv(F13, require_fixture(F13).read_text(encoding="utf-8"), (F13_CLOSE,), F13_PROVENANCE)
+    """T-PRINT-01 on the Yahoo ^KS11 history (F13): NOT_RUN (REFDATA) until F13 is listed with its md5; read by
+    tests.macro_m1_calendars.read_close_layout; NOT_RUN (OWNER) while the signed KRX clock files do not cover the
+    fortnight to 2026-03-09 (computed from the files by tests.macro_m1_calendars._official_calendar); then PASS or FAIL
+    on `_check_print01_ks11` (look-ahead audit LA-02, part 2: it used to be NOT_RUN whatever the file)."""
+    from tests.macro_m1_calendars import _official_calendar, read_close_layout
+    rows = read_close_layout("F13", require_fixture(F13).read_text(encoding="utf-8"))
     _check_print01_ks11(rows, _official_calendar(PRINT01_DATE - timedelta(days=14), PRINT01_DATE))
 
 
@@ -876,45 +852,48 @@ test_print_01_real_kospi_close_refdata.test_ids = ["T-PRINT-01"]
 
 
 def test_print_01_body_passes_and_fails_on_invented_ks11_closes():
-    """LA-02 part 2: the T-PRINT-01 (F13) body can PASS and can FAIL. Invented closes in the declared F13 layout on the
-    synthetic signed calendars (no Yahoo data): 5,584.71 then 5,251.87 passes, also with a float artefact on the close,
-    and so does a previous close of 5,585.01 (-5.9649%, just inside the printed precision). It fails when the 10:31 KST
-    print (5,131.12) is stored as the 2026-03-09 close or beside it, when the close is 5,251.88, when the previous close
-    is 5,560 (-5.54%) or 5,585.05 (-5.9656%, just outside), when the 2026-03-06 row is missing, and on a file whose rows
-    are marked official_close. The calendar gate covers that fortnight on the synthetic set and refuses the unsigned one."""
+    """LA-02 part 2: the T-PRINT-01 (F13) body can PASS and can FAIL. Invented closes in the declared close layout on the
+    synthetic signed calendars (no Yahoo data): 5,584.71 then 5,251.87 passes, and so does a previous close of 5,585.01
+    (-5.9649%, just inside the printed precision). It fails when the 10:31 KST print (5,131.12) is stored as the
+    2026-03-09 close, when the close is 5,251.88 or carries a float32 artefact (a price is exact), when the previous close
+    is 5,560 (-5.54%) or 5,585.05 (-5.9656%, just outside), and when the 2026-03-06 row is missing; the shared layout
+    refuses the print stored beside the close (a repeated date) and a file whose rows are marked official_close. The
+    calendar gate covers that fortnight on the synthetic set and refuses the unsigned one."""
     from core.calendars import clocks
-    from tests.macro_m1_calendars import _official_calendar, _official_calendar_on, drafts_set, fixture_set
+    from tests.macro_m1_calendars import (_official_calendar, _official_calendar_on, close_layout_text, drafts_set,
+                                          fixture_set, read_close_layout)
     cal = fixture_set()
     days = clocks.sessions_between("KR", date(2026, 2, 23), PRINT01_DATE, cal=cal)
     assert days[-2:] == [date(2026, 3, 6), PRINT01_DATE], days
 
-    def text(last, extra=(), drop=(), provenance=F13_PROVENANCE):
+    def text(last, extra=(), drop=()):
         closes = [5600.0 + 3.0 * (i % 4) for i in range(len(days))]
         closes[-len(last):] = list(last)
-        rows = [(d, {F13_CLOSE: c}) for d, c in zip(days, closes) if d not in drop]
-        rows = sorted(rows + [(d, {F13_CLOSE: c}) for d, c in extra], key=lambda r: r[0])
-        return _layout_text(rows, (F13_CLOSE,), provenance)
+        rows = [(d, c) for d, c in zip(days, closes) if d not in drop]
+        rows = sorted(rows + list(extra), key=lambda r: r[0])
+        return close_layout_text("F13", [(d, c, U(d.year, d.month, d.day, 6, 30), U(d.year, d.month, d.day, 6, 30, 30))
+                                         for d, c in rows])
 
     def run(t):
-        return _check_print01_ks11(_fixture_csv(F13, t, (F13_CLOSE,), F13_PROVENANCE), cal)
+        return _check_print01_ks11(read_close_layout("F13", t), cal)
 
     assert abs(run(text((5584.71, PRINT01_CLOSE))) - PRINT01_RETURN_PCT) <= PRINT01_PRINTED_PCT
-    assert abs(run(text((5584.71, 5251.8701171875))) - PRINT01_RETURN_PCT) <= PRINT01_PRINTED_PCT  # float32 artefact
     # the printed precision's edge: a previous close of 5,585.01 gives -5.96490% (inside +/- 0.005 pp), 5,585.05 gives
     # -5.96557% (outside)
     assert abs(run(text((5585.01, PRINT01_CLOSE))) - PRINT01_RETURN_PCT) <= PRINT01_PRINTED_PCT
-    for t, needle in ((text((5584.71, 5131.12)), "close 5131.12 != 5251.87 (spec L5631)"),
-                      (text((5584.71, PRINT01_CLOSE), extra=((PRINT01_DATE, 5131.12),)), "2 rows on 2026-03-09"),
-                      (text((5584.71, 5251.88)), "close 5251.88 != 5251.87 (spec L5631)"),
+    for t, needle in ((text((5584.71, 5131.12)), "close 5131.12 != 5251.87 (spec L5631"),
+                      (text((5584.71, 5251.88)), "close 5251.88 != 5251.87 (spec L5631"),
+                      (text((5584.71, 5251.8701171875)), "close 5251.8701171875 != 5251.87 (spec L5631"),
                       (text((5560.0, PRINT01_CLOSE)), "return -5.5419% != -5.96% (spec L5631)"),
                       (text((5585.05, PRINT01_CLOSE)), "return -5.9656% != -5.96% (spec L5631)"),
                       (text((5584.71, PRINT01_CLOSE), drop=(date(2026, 3, 6),)),
-                       "the row before 2026-03-09 is 2026-03-05, not the previous KRX session 2026-03-06")):
+                       "the row before 2026-03-09 is 2026-03-05, not the previous KRX session 2026-03-06"),
+                      (text((5584.71, PRINT01_CLOSE), extra=((PRINT01_DATE, 5131.12),)),
+                       f"{F13} line {len(days) + 2}: rows out of date order or repeated"),
+                      (text((5584.71, PRINT01_CLOSE)).replace(",vendor_close\n", ",official_close\n"),
+                       f"{F13} line 2: not a KS11 / vendor_close / calendar_bound row")):
         e = _raises(lambda: run(t), AssertionError)
         assert needle in str(e), (needle, str(e))
-    official = (("series_id", "KS11"), ("value_status", "official_close"), ("available_at_source", "calendar_bound"))
-    layout = _raises(lambda: run(text((5584.71, PRINT01_CLOSE), provenance=official)), AssertionError)
-    assert "provenance" in str(layout) and "'value_status': 'official_close'" in str(layout), layout
     lo = PRINT01_DATE - timedelta(days=14)
     assert _official_calendar_on(lo, PRINT01_DATE, cal) is cal
     owner = _raises(lambda: _official_calendar(lo, PRINT01_DATE, live=drafts_set()), NotRun)
@@ -1579,7 +1558,8 @@ test_miss_01_calendar_offsets_and_the_october_gap.test_ids = ["T-MISS-01"]
 # reading, an owner question (docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md question 18): that column is the value
 # FRED served on 2026-10-02, the snapshot's current value. ACQUISITION.csv:22 lists CPIAUCSL "with ALFRED vintages;
 # vintages as of 2026-10-02" and spec L1435 / L1436 name a first release (output_type=4) and a current value; no
-# vintage column is read, and a file with one row per month and vintage fails at `_monthly` (two rows for one month).
+# vintage column is read, and a file with one row per month and vintage fails at the layout (`_fixture_csv`: a repeated
+# obs_date; `_monthly` refuses two rows for one month as well).
 # The snapshot ends with Aug-2026 for both series: section 11's current state (2 Oct 2026) prints U-3 for Aug-2026
 # (spec L6347) and the Aug-2026 CPI YoY (L1355, L5624, L6348). A later month in the file is a later vintage.
 MISS01_FIXTURES = ("CPIAUCSL.csv", "UNRATE.csv")    # F18: CPI and the household-survey rate behind Sahm (spec L1353)
@@ -1601,11 +1581,12 @@ def _f18_provenance(series_id: str) -> tuple[tuple[str, str], ...]:
 def _monthly(name: str, rows: list[dict], col: str) -> dict:
     """{first of month: value} of an F18 monthly file, read from the declared value column `col` (the snapshot's
     value; no vintage column is read); AssertionError on an obs_date that is not a first of month or on two rows for
-    one month (a long file of ALFRED vintages)."""
-    out = {}
+    one month (a long file of ALFRED vintages), a missing (".") row among them included."""
+    out, seen = {}, set()
     for r in rows:
         assert r["date"].day == 1, f"{name}: obs_date {r['date']} is not the first of a month"
-        assert r["date"] not in out, f"{name}: two rows for {r['date']:%Y-%m}"
+        assert r["date"] not in seen, f"{name}: two rows for {r['date']:%Y-%m}"
+        seen.add(r["date"])
         if r[col] is not None:
             out[r["date"]] = r[col]
     return out
@@ -1682,7 +1663,8 @@ def test_miss_01_body_passes_and_fails_on_invented_cpi():
     (after the snapshot's last month), on an Oct-2025 CPI value, on an Oct-2025 UNRATE value, on an Aug-2026 CPI giving
     3.37%, and with broken functions in place of core.ficc.pit's: a YoY that flags any window holding a gap, a
     positional shift(12) YoY, a YoY / MoM that carries the last value into a missing endpoint, and a 3-month mean over
-    the members present; and on a file whose series_id is another id, or with two rows for one month (vintages)."""
+    the members present; and on a file whose series_id is another id, or with two rows for one month (vintages: the
+    layout refuses the repeated date, and `_monthly` alone refuses it too, also when the first of the two is ".")."""
     for name in MISS01_FIXTURES:
         assert _generator_provenance(name) == _f18_provenance(name[:-len(".csv")]), (name, _generator_provenance(name))
     months = [P.add_months(date(2024, 1, 1), i) for i in range(32)]                 # Jan-2024 .. Aug-2026
@@ -1749,7 +1731,12 @@ def test_miss_01_body_passes_and_fails_on_invented_cpi():
                             _f18_provenance("CPIAUCSL"), date_col="observation_date")      # one row per vintage
     long = _raises(lambda: _monthly("CPIAUCSL.csv", _fixture_csv("CPIAUCSL.csv", vintages, ("CPIAUCSL",),
                                                                  _f18_provenance("CPIAUCSL")), "CPIAUCSL"), AssertionError)
-    assert "CPIAUCSL.csv: two rows for 2026-08" in str(long), long
+    assert "CPIAUCSL.csv line 3: rows out of date order or repeated" in str(long), long
+    # `_monthly` refuses a repeated month by itself too, also when the earlier of the two rows is FRED's "."
+    for first in (None, 322.1):
+        twice = [{"date": MISS01_AUG, "CPIAUCSL": first}, {"date": MISS01_AUG, "CPIAUCSL": 322.3}]
+        e = _raises(lambda: _monthly("CPIAUCSL.csv", twice, "CPIAUCSL"), AssertionError)
+        assert "CPIAUCSL.csv: two rows for 2026-08" in str(e), e
 
 
 def test_ser_01_named_series_and_futures_roll_days():

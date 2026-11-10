@@ -32,7 +32,7 @@ from core.quant import validate as V
 from core.quant import vol_estimators as E
 from core.quant.gjr import GJRFit, fit_gjr, simulate_gjr_series
 from core.rules.macro_rules import MacroRefusal
-from tests.golden_tools import assert_close, assert_golden, golden, near_threshold, p_kind
+from tests.golden_tools import assert_class, assert_close, assert_golden, golden, near_threshold, p_kind
 from tests.notrun import NotRun, require_fixture
 
 REG = C.load_registry()
@@ -533,10 +533,10 @@ MKTRF = "french_daily_mktrf_rf_1926-07_2026-08.csv"
 
 
 # T-B5-01 on the fixture (look-ahead audit LA-02, part 2; the pattern of docs/product/LOOKAHEAD_LA02_PART1_2026-11-10.md).
-# F13 yahoo_KS11_1996-12_2026-10-02.csv layout, declared here: docs/macro_fixtures.py writes the reference file's own
-# columns followed by the section 4.1 provenance columns, and neither ACQUISITION.csv nor the spec names the close
-# column. One row per date, in date order; the body reads (the F13 layout this part declares in tests/macro_m1_pit.py
-# and tests/macro_m1_fixtures.py as well):
+# F13 yahoo_KS11_1996-12_2026-10-02.csv layout: docs/macro_fixtures.py writes the reference file's own columns followed
+# by the section 4.1 provenance columns, and neither ACQUISITION.csv nor the spec names the close column. One row per
+# date, in date order; the body reads the declared close layout through the one reader the part 2 bodies share,
+# tests.macro_m1_calendars.read_close_layout (a blank or "." close and a repeated date are refused there):
 #   close                                           the ^KS11 close, finite and > 0
 #   series_id / value_status / available_at_source  KS11 / vendor_close / calendar_bound (docs/macro_fixtures.py:59)
 #   obs_date = session_date                         ISO dates
@@ -551,6 +551,13 @@ B501_COLUMNS = ("close", "series_id", "obs_date", "session_date", "obs_utc", "av
 B501_PROVENANCE = (("series_id", "KS11"), ("value_status", "vendor_close"), ("available_at_source", "calendar_bound"))
 B501_WINDOW = ("2016-03", "2026-10-02")     # spec L5642 / L5801 "KOSPI 2016-03 -> 2026-10"; F13 ends 2026-10-02
                                             # (docs/macro_fixtures.py:59; ACQUISITION.csv:17 "1996-12 -> 2026-10-02")
+# The harness's look-back before its first origin: the SMA20 forecast exists from the 20th return
+# (core.quant.vol_estimators.SMA_WINDOW; R-06 L1563 window 20), and an FHS origin is evaluated only once the residual
+# pool holds forecast_eval.MIN_POOL (252; brief F-9) residuals, the first of them the 20th return's. So the first origin
+# on or after 2016-03-01 is evaluated only if F13 holds SMA_WINDOW - 1 + MIN_POOL = 271 returns before it (a probe of
+# spec_form: 271 give the full origin count, 270 one origin fewer); the window clause reads the parsed history for it,
+# since spec_form writes its sample as ORIGINS_FROM..last whatever the history.
+B501_LOOKBACK = E.SMA_WINDOW - 1 + F.MIN_POOL
 B501_SIGMA_SCALE = 0.7                      # spec L5642 "A synthetic estimator with sigma x 0.7 fails" (forecast only,
                                             # brief F-16, as in test_t_b5_01_synthetic_clauses_and_bands)
 # Expected values: goldens.csv (read only), never typed here. G-B5-01/sample_origins 2,594 (count_exact; spec L5801),
@@ -559,47 +566,20 @@ B501_SIGMA_SCALE = 0.7                      # spec L5642 "A synthetic estimator 
 # The PIT p is the chi-square p on 10 bins, the B5 rule's (spec L3207; core/quant/forecast_eval.py b5).
 
 
-def _b501_utc(where: str, text: str) -> datetime:
-    try:
-        return datetime.strptime(text, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
-    except ValueError:
-        raise AssertionError(f"{where}: instant {text!r} is not written YYYY-MM-DDTHH:MM:SSZ") from None
-
-
 def _b501_closes(text: str) -> tuple[list[str], np.ndarray]:
-    """F13 in the declared layout as (ISO session dates, closes); AssertionError on any departure from it."""
-    reader = csv.DictReader(io.StringIO(text))
-    missing = [c for c in B501_COLUMNS if c not in (reader.fieldnames or ())]
-    assert not missing, f"{KS11}: declared columns {missing} absent (header {reader.fieldnames})"
-    want, dates, closes = dict(B501_PROVENANCE), [], []
-    for line, raw in enumerate(reader, start=2):
-        where = f"{KS11} line {line}"
-        got = {k: raw[k] for k in want}
-        assert got == want, f"{where}: provenance {got}, not {want}"
-        try:
-            d = date.fromisoformat(raw["session_date"]).isoformat()
-        except ValueError:
-            d = None
-        assert d is not None and raw["session_date"] == raw["obs_date"] == d, (
-            f"{where}: obs_date {raw['obs_date']!r} / session_date {raw['session_date']!r} not one ISO date")
-        obs, avail = _b501_utc(where, raw["obs_utc"]), _b501_utc(where, raw["available_at_utc"])
-        assert avail >= obs, f"{where}: available_at_utc {raw['available_at_utc']} before obs_utc {raw['obs_utc']}"
-        assert not dates or d > dates[-1], f"{where}: {d} after {dates[-1]}; rows are one per date, in date order"
-        try:
-            close = float(raw["close"])
-        except ValueError:
-            close = float("nan")
-        assert math.isfinite(close) and close > 0, f"{where}: close {raw['close']!r}"
-        dates.append(d)
-        closes.append(close)
-    assert len(dates) > 1, f"{KS11}: {len(dates)} rows"
-    return dates, np.asarray(closes, dtype=float)
+    """F13 in the declared layout as (ISO session dates, closes), read by tests.macro_m1_calendars.read_close_layout;
+    AssertionError naming the file and line on any departure from it."""
+    from tests.macro_m1_calendars import read_close_layout
+    rows = read_close_layout("F13", text)
+    assert len(rows) > 1, f"{KS11}: {len(rows)} rows"
+    return [r["date"].isoformat() for r in rows], np.asarray([r["close"] for r in rows], dtype=float)
 
 
-def _b501_replay(text: str, *, harness=None, scale: float = B501_SIGMA_SCALE) -> tuple[list[dict], dict]:
+def _b501_replay(text: str, *, harness=None, scale: float = B501_SIGMA_SCALE) -> tuple[list[dict], dict, list[str]]:
     """The B5 harness on F13: `docs/vol_backtest.spec_form` (or `harness`, a wrapper a FAIL demonstration passes) on
     the parsed closes, and for the sigma x 0.7 clause `forecast_eval.b5` on the same returns with the SMA20 forecast
-    scaled by `scale` and the residual pool standardised by the unscaled sigma (brief F-16), from the same origin."""
+    scaled by `scale` and the residual pool standardised by the unscaled sigma (brief F-16), from the same origin.
+    Returns the harness lines, the scaled run and the parsed session dates."""
     from docs import vol_backtest as VB
     dates, closes = _b501_closes(text)
     rows = (VB.spec_form if harness is None else harness)(dates, closes, "KR", "G-B5-01")
@@ -607,16 +587,18 @@ def _b501_replay(text: str, *, harness=None, scale: float = B501_SIGMA_SCALE) ->
     start = next((i for i, d in enumerate(dates[1:]) if d >= VB.ORIGINS_FROM), None)
     fc = E.sma(r, 1)
     sig = np.sqrt(np.where(fc.ok & (fc.var > 0), fc.var, np.nan))
-    return rows, F.b5(r, scale * sig, form="fhs", pool_sigma=sig, origins_from=start)
+    return rows, F.b5(r, scale * sig, form="fhs", pool_sigma=sig, origins_from=start), dates
 
 
-def _check_b501(rows: list[dict], scaled: dict) -> dict:
-    """T-B5-01 (spec L5642) on the harness lines: the SMA20 FHS line covers KOSPI 2016-03 -> 2026-10-02, has the
-    G-B5-01 origin count exactly, its exceedance and PIT chi-square p at Level 1 and the verdict PASS (a class, not a
-    point, when a statistic lies within tolerance of its B5 threshold: spec L5737, the line tests/golden_tools.py cites
-    as L5738); the SMA20 forecast x 0.7 fails B5.
-    The other harness lines (normal form, EWMA(0.94)) are printed beside their goldens, not asserted. Returns the
-    SMA20 FHS line."""
+def _check_b501(rows: list[dict], scaled: dict, dates: list[str]) -> dict:
+    """T-B5-01 (spec L5642) on the harness lines and the parsed F13 session dates: the history covers the window
+    KOSPI 2016-03 -> 2026-10-02 (its first session on or after 2016-03-01 lies in 2016-03, its last row is 2026-10-02,
+    and it holds the harness's B501_LOOKBACK returns before 2016-03-01, so the first origin is evaluated); the SMA20 FHS
+    line has the G-B5-01 origin count exactly, its exceedance and PIT chi-square p at Level 1 and the verdict PASS,
+    asserted through tests/golden_tools.assert_class: a class, not a point, when a statistic lies within tolerance of
+    its B5 threshold (spec L5737); the SMA20 forecast x 0.7 fails B5. The other harness lines (normal form,
+    EWMA(0.94)) are printed beside their goldens, not asserted. Returns the SMA20 FHS line."""
+    from docs import vol_backtest as VB
     g, gpost = golden("G-B5-01"), golden("G-POST-01")
     for x in rows:
         print(f"PRINTED T-B5-01 harness line {x['model']} {x['form']}: n {x['n_origins']}, exceedance "
@@ -624,12 +606,15 @@ def _check_b501(rows: list[dict], scaled: dict) -> dict:
     print("PRINTED G-B5-01 goldens not asserted here: " + ", ".join(
         f"{s} {g.want(s)}" for s in ("normal_exceed", "normal_pit_p", "normal_verdict", "ewma094_exceed",
                                      "ewma094_pit_p", "ewma094_verdict")))
+    before = sum(1 for d in dates[1:] if d < VB.ORIGINS_FROM)             # returns dated before the first origin
+    first = next((d for d in dates if d >= VB.ORIGINS_FROM), None)
+    assert (first or "")[:7] == B501_WINDOW[0] and dates[-1] == B501_WINDOW[1] and before >= B501_LOOKBACK, (
+        f"T-B5-01: F13 {dates[0]}..{dates[-1]} does not cover the window {B501_WINDOW[0]} -> {B501_WINDOW[1]} (spec "
+        f"L5642, L5801): first session from {VB.ORIGINS_FROM} {first}, {before} returns before it, the harness needs "
+        f"{B501_LOOKBACK} (SMA20 window + the FHS pool of {F.MIN_POOL})")
     sma = [x for x in rows if (x["model"], x["form"]) == ("sma20", "fhs")]
     assert len(sma) == 1, f"T-B5-01: {len(sma)} SMA20 FHS lines from the harness, not one"
     sma = sma[0]
-    start, _, end = sma["sample"].split(" ")[0].partition("..")
-    assert (start[:7], end) == B501_WINDOW, (f"T-B5-01: window {start}..{end}, not {B501_WINDOW[0]} -> "
-                                             f"{B501_WINDOW[1]} (spec L5642, L5801)")
     row = g.row("sample_origins")
     assert_close(sma["n_origins"], row.want(), row.kind, label="T-B5-01 origins (G-B5-01/sample_origins, spec L5801)")
     row = g.row("sma20_exceed")
@@ -640,15 +625,15 @@ def _check_b501(rows: list[dict], scaled: dict) -> dict:
         "goldens.csv: G-POST-01/gb501_pit_p != G-B5-01/sma20_pit_p")
     assert_close(sma["pit_chi2_p"], row.want(), row.kind,
                  label="T-B5-01 SMA20 FHS PIT chi2 p (G-B5-01/sma20_pit_p, G-POST-01/gb501_pit_p, spec L5642)")
+    # the verdict: PASS or FAIL as a class when any deciding statistic lies within tolerance of its threshold, else
+    # the golden verdict (golden_tools.assert_class against each threshold, the point verdict unless one is near)
     ex, p = sma["exceedance"], sma["pit_chi2_p"]
-    near = [t for s, t, k in ((ex, sma["band_lo"], "exceedance"), (ex, sma["band_hi"], "exceedance"),
-                              (p, F.PIT_P_MIN, p_kind(p))) if near_threshold(s, t, k)]
-    verdict = g.want("sma20_verdict")
-    if near:
-        assert sma["b5_status"] in ("PASS", "FAIL"), f"T-B5-01: verdict {sma['b5_status']!r} near thresholds {near}"
-    else:
-        assert sma["b5_status"] == verdict, (f"T-B5-01 verdict {sma['b5_status']} != {verdict} (G-B5-01/sma20_verdict; "
-                                             f"exceedance {ex:.4f}, PIT p {p:.4f}, no threshold within tolerance)")
+    thresholds = ((ex, sma["band_lo"], "exceedance", "exceedance band low"),
+                  (ex, sma["band_hi"], "exceedance", "exceedance band high"), (p, F.PIT_P_MIN, p_kind(p), "PIT p floor"))
+    point = None if any(near_threshold(stat, t, k) for stat, t, k, _ in thresholds) else g.want("sma20_verdict")
+    for stat, t, k, what in thresholds:
+        assert_class(stat, t, k, sma["b5_status"], ("PASS", "FAIL"), point=point,
+                     label=f"T-B5-01 verdict (G-B5-01/sma20_verdict; {what}; spec L5737)")
     assert scaled["status"] == "FAIL" and scaled["exceedance"] > scaled["band"][1], (
         f"T-B5-01: the SMA20 forecast x {B501_SIGMA_SCALE} did not fail B5 (status {scaled['status']}, exceedance "
         f"{scaled['exceedance']:.4f}, band {scaled['band']}; spec L5642)")
@@ -675,8 +660,10 @@ test_t_b5_01_kospi_golden_refdata.test_ids = ["T-B5-01", "G-B5-01", "G-POST-01"]
 B501_DEMO_SEED, B501_DEMO_EXCEED_MISS, B501_DEMO_PIT_MISS = 293, 9, 8
 
 
-def _b501_invented(seed: int = B501_DEMO_SEED, *, extra_sessions: int = 0, last: bool = True) -> str:
-    """Invented ^KS11-like rows in the declared F13 layout, in memory (see the comment above)."""
+def _b501_invented(seed: int = B501_DEMO_SEED, *, extra_sessions: int = 0, last: bool = True,
+                   first: date = date(2015, 1, 2), skip: tuple[date, date] | None = None) -> str:
+    """Invented ^KS11-like rows in the declared F13 layout, in memory (see the comment above); `first` moves the start
+    of the history and `skip` drops the sessions of a (from, to) span."""
     def weekdays(a: date, b: date) -> list[date]:
         return [a + timedelta(days=i) for i in range((b - a).days + 1) if (a + timedelta(days=i)).weekday() < 5]
     n_window = int(golden("G-B5-01").want("sample_origins")) + extra_sessions
@@ -684,6 +671,7 @@ def _b501_invented(seed: int = B501_DEMO_SEED, *, extra_sessions: int = 0, last:
     drop = {int(round((i + 0.5) * len(window) / (len(window) - n_window))) for i in range(len(window) - n_window)}
     days = weekdays(date(2015, 1, 2), date(2016, 2, 29)) + [d for i, d in enumerate(window) if i not in drop]
     days += [date(2026, 10, 2)] if last else []
+    days = [d for d in days if d >= first and not (skip and skip[0] <= d <= skip[1])]
     rng = np.random.default_rng(seed)
     n = len(days) - 1
     r = rng.standard_t(6, size=n) * math.sqrt(4 / 6) * 0.012 * np.exp(0.3 * np.sin(np.arange(n) / 150.0))
@@ -708,12 +696,16 @@ def _b501_edit(text: str, edit) -> str:
 
 def test_t_b5_01_body_passes_and_fails_on_invented_closes():
     """LA-02 part 2: the T-B5-01 body can PASS and can FAIL. On an invented path built to the goldens the harness line
-    passes every clause. It fails, each on its own clause, when the path ends on 2026-10-01 (window), holds one more
-    session (2,595 origins), misses the exceedance (5.44%) or the PIT p (0.999), when a wrapped harness reports FAIL
-    for the passing line, and when the sigma x 0.7 run is not scaled; at the layout, when the close is in a column
-    named `value` (what docs/vol_backtest.fixture_lines reads), when a row carries F01's series id, and when two rows
-    are out of date order. The declared provenance equals the generator's table (docs/macro_fixtures.REFERENCE_FILES
-    F13), and the declared columns are part 1's F01 layout."""
+    passes every clause. It fails, each on its own clause, when the history does not cover the window: the path ends on
+    2026-10-01, starts in 2018 (spec_form still writes its sample from 2016-03-01), starts in June 2015 or one session
+    after the harness's 271-return look-back, or skips March 2016; when it holds one more session (2,595 origins),
+    misses the exceedance (5.44%) or the PIT p (0.999), when a wrapped harness reports FAIL for the passing line or
+    NOT_RUN, and when the sigma x 0.7 run is not scaled. A wrapped harness that moves the band edge next to the
+    exceedance may report FAIL: the verdict is then a class (golden_tools.assert_class, spec L5737). At the layout (the
+    shared reader) it fails when the close is in a column named `value` (what docs/vol_backtest.fixture_lines reads),
+    when a row carries F01's series id, when two rows are out of date order, and on a "." close. The declared
+    provenance equals the generator's table (docs/macro_fixtures.REFERENCE_FILES F13), and the declared columns are
+    part 1's F01 layout."""
     from docs import macro_fixtures as MF
     from docs import vol_backtest as VB
     from tests.macro_m1_calendars import F01_COLUMNS
@@ -721,12 +713,24 @@ def test_t_b5_01_body_passes_and_fails_on_invented_closes():
            for fid, _rel, series, status, source, *_rest in MF.REFERENCE_FILES if fid == "F13"]
     assert f13 == [B501_PROVENANCE], f13
     assert B501_COLUMNS == F01_COLUMNS
+    assert B501_LOOKBACK == 271                                 # 20 - 1 + 252: a probe of spec_form found the same edge
     good = _b501_invented()
     sma = _check_b501(*_b501_replay(good))
     assert sma["b5_status"] == "PASS" and sma["n_origins"] == golden("G-B5-01").want("sample_origins")
     assert abs(sma["exceedance"] - 0.0486) < 1e-4 and abs(sma["pit_chi2_p"] - 0.1031) < 1e-4     # the scan's seed 293
+    window = "does not cover the window 2016-03 -> 2026-10-02 (spec L5642, L5801)"
+    pre = [d for d in _b501_closes(good)[0] if d < VB.ORIGINS_FROM]       # 302 rows, 301 returns, before 2016-03-01
     _raises(lambda: _check_b501(*_b501_replay(_b501_invented(last=False))), AssertionError,
-            "T-B5-01: window 2016-03-01..2026-10-01, not 2016-03 -> 2026-10-02")
+            f"T-B5-01: F13 2015-01-02..2026-10-01 {window}")
+    _raises(lambda: _check_b501(*_b501_replay(_b501_invented(first=date(2018, 1, 2)))), AssertionError,
+            f"T-B5-01: F13 2018-01-02..2026-10-02 {window}: first session from 2016-03-01 2018-01-02, 0 returns")
+    _raises(lambda: _check_b501(*_b501_replay(_b501_invented(first=date(2015, 6, 1)))), AssertionError,
+            "returns before it, the harness needs 271 (SMA20 window + the FHS pool of 252)")
+    edge = date.fromisoformat(pre[len(pre) - B501_LOOKBACK])          # 271 rows before 2016-03-01: 270 returns
+    _raises(lambda: _check_b501(*_b501_replay(_b501_invented(first=edge))), AssertionError,
+            "270 returns before it, the harness needs 271")
+    _raises(lambda: _check_b501(*_b501_replay(_b501_invented(skip=(date(2016, 3, 1), date(2016, 3, 31))))),
+            AssertionError, "first session from 2016-03-01 2016-04-01")
     _raises(lambda: _check_b501(*_b501_replay(_b501_invented(extra_sessions=1))), AssertionError,
             "T-B5-01 origins (G-B5-01/sample_origins, spec L5801): got 2595")
     _raises(lambda: _check_b501(*_b501_replay(_b501_invented(B501_DEMO_EXCEED_MISS))), AssertionError,
@@ -734,11 +738,17 @@ def test_t_b5_01_body_passes_and_fails_on_invented_closes():
     _raises(lambda: _check_b501(*_b501_replay(_b501_invented(B501_DEMO_PIT_MISS))), AssertionError,
             "T-B5-01 SMA20 FHS PIT chi2 p (G-B5-01/sma20_pit_p, G-POST-01/gb501_pit_p, spec L5642): got 0.99")
 
-    def flipped(dates, closes, market, symbol):
-        return [{**x, "b5_status": "FAIL"} if (x["model"], x["form"]) == ("sma20", "fhs") else x
-                for x in VB.spec_form(dates, closes, market, symbol)]
-    _raises(lambda: _check_b501(*_b501_replay(good, harness=flipped)), AssertionError,
-            "T-B5-01 verdict FAIL != PASS (G-B5-01/sma20_verdict")
+    def wrapped(**kw):
+        def harness(dates, closes, market, symbol):
+            return [{**x, **{k: f(x) for k, f in kw.items()}} if (x["model"], x["form"]) == ("sma20", "fhs") else x
+                    for x in VB.spec_form(dates, closes, market, symbol)]
+        return harness
+    _raises(lambda: _check_b501(*_b501_replay(good, harness=wrapped(b5_status=lambda x: "FAIL"))), AssertionError,
+            "T-B5-01 verdict (G-B5-01/sma20_verdict; exceedance band low; spec L5737): 'FAIL' != 'PASS' although stat")
+    _raises(lambda: _check_b501(*_b501_replay(good, harness=wrapped(b5_status=lambda x: "NOT_RUN"))), AssertionError,
+            "T-B5-01 verdict (G-B5-01/sma20_verdict; exceedance band low; spec L5737): 'NOT_RUN' not in ['FAIL', 'PASS']")
+    near = wrapped(band_hi=lambda x: x["exceedance"] + 0.001, b5_status=lambda x: "FAIL")   # within 0.3 pp of the edge
+    assert _check_b501(*_b501_replay(good, harness=near))["b5_status"] == "FAIL"           # a class: PASS or FAIL
     _raises(lambda: _check_b501(*_b501_replay(good, scale=1.0)), AssertionError,
             "T-B5-01: the SMA20 forecast x 0.7 did not fail B5 (status PASS")
 
@@ -752,10 +762,17 @@ def test_t_b5_01_body_passes_and_fails_on_invented_closes():
     def swapped(header, rows):
         rows[10], rows[11] = rows[11], rows[10]
         return header, rows
+
+    def dot(header, rows):
+        rows[20][header.index("close")] = "."
+        return header, rows
     _raises(lambda: _b501_closes(_b501_edit(good, renamed)), AssertionError, "declared columns ['close'] absent")
     _raises(lambda: _b501_closes(_b501_edit(good, f01_row)), AssertionError,
-            f"{KS11} line 5: provenance {{'series_id': 'KOSPI_OFFICIAL_CLOSE'")
-    _raises(lambda: _b501_closes(_b501_edit(good, swapped)), AssertionError, "rows are one per date, in date order")
+            f"{KS11} line 5: not a KS11 / vendor_close / calendar_bound row (series_id 'KOSPI_OFFICIAL_CLOSE'")
+    _raises(lambda: _b501_closes(_b501_edit(good, swapped)), AssertionError,
+            f"{KS11} line 13: rows out of date order or repeated")
+    _raises(lambda: _b501_closes(_b501_edit(good, dot)), AssertionError,
+            f"{KS11} line 22: close '.' is not a finite number > 0")
 
 
 def test_g_b5_02_spy_refdata_with_smoke_on_local_cache():

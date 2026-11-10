@@ -279,7 +279,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "9095a1e5bf910ddd87e7a3027b0839bef10dac8ecac519d494382d6e245d8752",
+    "docs/compliance/FACTS.md": "e2ee90ad475a122376204e0f07486661c1acad27962dfaf37880ea80feefe81b",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -318,7 +318,7 @@
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
     "docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md": "9ccc09cc2982dc78907e71cd596b980115efa4f8d05d0aeef340db91dc73864e",
     "docs/product/LOOKAHEAD_LA02_PART1_2026-11-10.md": "f4ce44fcfc95c76213c6df187e2444a7fc860bf6d72aa6e514ef11917e38a44f",
-    "docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md": "ca79e5f259a9d4ffc0ec75401ad80efdf93667af2f5b537152bd285662838855",
+    "docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md": "c9805806ddc98b5753b956e2b56d53dec95783831f79b109e99abd4e9add873f",
     "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "71dffdb67f3b38ed8b726f273c8651a8a65ec832cdfedc84ba5431bebaca2494",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
@@ -501,13 +501,13 @@
     "tests/macro_m0_rules.py": "7cb91771c62286132b269f71ac2c2c351548ff844d6bc474b1e4abcc65a09219",
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
-    "tests/macro_m1_calendars.py": "4f8b69bebea7da3042da37753f83ee943af3d47351faaa764133a05a695baba2",
-    "tests/macro_m1_fixtures.py": "4a55f98b757365b17102d4599f2017adfe0412f47997c0d1078e661f4aa93e4f",
+    "tests/macro_m1_calendars.py": "8998c2f0fc881017049ffdd0d26be37be1272f7be198ba662ffc38fae9490619",
+    "tests/macro_m1_fixtures.py": "fbfdaff1e0bb9f677e577a9607346e1e1d30e4abe958f1d32788a4cfee50baec",
     "tests/macro_m1_integration.py": "4a370e688d1fa8a5130ed470f8148712da8c8852144f9e07a60954bc286e7680",
-    "tests/macro_m1_pit.py": "e62b8b8a482ed23cd0930aae9663bc6e1fe2add3539d679d0cfa95723f39cb6c",
+    "tests/macro_m1_pit.py": "a8547c742c1698224e2b0be5e18838d764c62a2ae6425602a244c2cff22c14c8",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
-    "tests/macro_m2_risk.py": "b94092a54223807cd2bae627361e5331250784574ee2b65b9308e70efacc36bd",
-    "tests/macro_m3_estimators.py": "87da9779928ac6baab93b29da3a937a06bb4e249094380e4a41ddeb3f23f66ff",
+    "tests/macro_m2_risk.py": "b918d843fcbb0a06d3ed80582b13ee3f0297c91dafa2381caac04d96cff63b26",
+    "tests/macro_m3_estimators.py": "329a53563e5d2e3dbcbf0b90130aff06a2fd364e33c7a9e1c04987592a477fe9",
     "tests/macro_m4_integration.py": "b3cb2979c31e0450cbbf1be01c9088e87a0ef4b1882ae8adba9b95218222918d",
     "tests/macro_m4_sleeves.py": "a14f5eec30de07244b572ee1585890a03a963eb71389082ce2432e87db8b8bc3",
     "tests/macro_m5_books.py": "66f09499042dd365a4908cee882f4c5e4d5bb26d54865ef49ac9c8e9b9048a6d",
@@ -651,163 +651,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.046175+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "c0bf4b8b1f1e447a35cc70d811d4428391184ebf08bfceea1af2328c1d5c00f2",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.127585+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.048430+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "c0bf4b8b1f1e447a35cc70d811d4428391184ebf08bfceea1af2328c1d5c00f2",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.130004+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "669545a40ec07d80c0e433e9c7a69a6723c0769e3ff76a0597ffe1feee0e02f7",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.050521+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "a25749d05fc6db6feb1c52bb35cf6d02d5d68f0cade3371c77b7df0ce9d9b7f9",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.131905+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "0da02dfcaad8f129388f9b4b789df8e66a5d02a835e5602918fec866f2bcdf5c",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.052397+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "e2581b896c7b2bbb82ca096547622b6f119fed1ced1b8c5b1049ac24f1a72fcc",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.133938+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "2d6e80d5a6c6da335fd0dacc1220253b44668cad6c88f73bcf0925a124688f85",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.054648+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "45052993bad6ad4c3fefe3a8f58583ba2b95df37fbe9f1e263151f95dec4d79a",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.135869+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "d0a891cad8021b234a209aba33b16b091b7e11dbd6225f819bfd64cb45f347e2",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.056475+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "eeb85cf6941a40d4743353b4522d121e1738583abfec7cbb43568fc2cb1315d5",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.137723+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.058294+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "c0bf4b8b1f1e447a35cc70d811d4428391184ebf08bfceea1af2328c1d5c00f2",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.139621+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "d0a891cad8021b234a209aba33b16b091b7e11dbd6225f819bfd64cb45f347e2",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.060210+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "eeb85cf6941a40d4743353b4522d121e1738583abfec7cbb43568fc2cb1315d5",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.141419+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.062600+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "e22385013e8d02617dffc5ffb2c5d83a3a1a7cc7cad348fbdc2b444103770f9b",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.143367+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "0536b28f03b3637c80641849494e7ddd4fe8fe403cc300fc5467122cc46146e5",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.064314+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "ff02e23bcc39a622c1d6586fa8123fd7f13ce2bd9bc43827a2b278c0aa798bc2",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.145084+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "cac9825cae77965279e7eeb9bdf0263d288af596203f2ee82f2739c8eb4c18b0",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.066723+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "d064e1ae473620c3acad0b9458c41c1d72387ffe907bf90bad90941dde1fc666",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.146849+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "91b99a6ae9853d0012da5f988475d24099c7638ee658552e40f88989af28d57e",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.069020+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "6bc12a1c96b372b87dd7033f87434b7c64fc78a86ff6b2b96a0d7bdde03b57a2",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.148737+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.072292+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "e22385013e8d02617dffc5ffb2c5d83a3a1a7cc7cad348fbdc2b444103770f9b",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.150481+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.074021+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "e22385013e8d02617dffc5ffb2c5d83a3a1a7cc7cad348fbdc2b444103770f9b",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.152234+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.076522+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "e22385013e8d02617dffc5ffb2c5d83a3a1a7cc7cad348fbdc2b444103770f9b",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.153919+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "c7c01cd06de55a9d00a4d8a47dad2255f9c8f7f67416ad67be912c2342793587",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.078378+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "33eb5372cb34c609ad0c6dbc9b38224ca608d1578e5d1bb609f72fd530bce9ee",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.155723+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "d0a891cad8021b234a209aba33b16b091b7e11dbd6225f819bfd64cb45f347e2",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.080703+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "eeb85cf6941a40d4743353b4522d121e1738583abfec7cbb43568fc2cb1315d5",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.157503+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.083171+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "c0bf4b8b1f1e447a35cc70d811d4428391184ebf08bfceea1af2328c1d5c00f2",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.159253+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "3e7bd7fee51cfc1399f40942d9471d1d1a0bb5abe1142f3be330b602a66d1370",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.084883+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "bc9068861e7c43d37557ece63c1552df48438fd56fe4c10d7ffd811df84e1b8e",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.160865+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
-      "reviewed_by": "Claude LA-02 part 2 review fixes",
-      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
-      "reviewed_at": "2026-11-10T15:26:45.086566+00:00",
-      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
+      "source_digest": "c0bf4b8b1f1e447a35cc70d811d4428391184ebf08bfceea1af2328c1d5c00f2",
+      "reviewed_by": "Claude LA-02 part 2 code-review fixes",
+      "review_note": "Code review fixes to the LA-02 part 2 test bodies; test files and docs only",
+      "reviewed_at": "2026-11-10T16:17:51.162703+00:00",
+      "source_commit": "e60daf52b52bf96b37a23b9f16af44b0053c4e40"
     }
   }
 }
