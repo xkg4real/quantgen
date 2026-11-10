@@ -632,3 +632,20 @@ Home 표와 시장 관심종목 카드·검색·종목 제목에 로컬 문자 �
 | 보존한 이력 | 최초 21개 실행의 20 PASS+1 fixture ERROR는 NumPy가 불가능한 대형 빈 배열을 encoder 호출 전에 거부한 사례로 보존. 이후 22개·0.036초/0.031초와 통합 106개·1.533초는 이전 중복 결과. memoryview 바이트 수 보강은 소스 검토 지적에서 시작했으며 독립 실행에서 제품 실패를 재현했다고 주장하지 않음. private parser 단계 예상 오류도 별도 보존. 긴 unary 입력의 parser 자원 경계는 환경에 따라 달라 최종 검사는 형식 거부 또는 계약상 MemoryError와 `np.load` 미호출을 확인하며, RecursionError 주입 검사를 실제 재현으로 바꾸지 않음 |
 
 [제품 범위·검증 기록](../product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md)에 따라 01–20 번호 정책은 유지합니다. 여기서의 메모리 로드·pickle 비허용·내용 대조를 파일 저장/읽기 경로·fsync/replace·중복/손상 target/동시 쓰기/재시도/보유·series_ref·날짜/설정 의미·recorder/Lab·수명주기/횟수/판정·실제 원장·동결 연구·전체 R3 완료로 확대하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.
+
+<a id="r3-series-files-2026-11-10"></a>
+## R3 검증된 series 파일 저장의 분리된 일부 구현 — 2026-11-10
+
+기준 `e7ed7934`의 NPY 형식·내용 대조 함수 위에 [호출자 디렉터리 series 파일 저장](../../core/quant/run_registry_series_files.py)을 추가한 ⑨-3a/series-files/1 범위입니다. 소유자가 승인한 R3 설계 rev 2(OWNER_RULINGS_LOG 5~6번)의 §5.7 중 같은 디렉터리 임시 파일·fsync·`os.replace`·`PermissionError` 제한 재시도·기존 이름 건너뛰기만 구현하며 앱·Lab·실제 원장·환경/설정 경로·recorder·`series_error` 기록·공급자·소유자 결정 효과에는 연결하지 않습니다.
+
+| 항목 | 확인한 동작과 한계 |
+| --- | --- |
+| 경로·입력 | 이미 있는 절대 디렉터리만 받고 객체 생성은 디렉터리·파일을 만들지 않으며 모든 생성 거부는 `StoreError`. `max_bytes`는 필수 일반 양의 int(`np.intp` 이내), 잠금 대기 0–10초·기본 2초. 쓰기는 일반 bytes NPY1 payload와 소문자 64hex 내용 SHA를 기존 `decode_series`로 먼저 검증하고 거부 시 파일을 만들지 않음. 이름은 `<digest>.npy`·`<digest>.lock` 고정 |
+| 협력 잠금 | sidecar별 프로세스 잠금과 OS 잠금(POSIX `flock`, Windows `msvcrt.locking` 1바이트·잠금/해제 전 0번 바이트 seek)을 하나의 예산으로 획득하고 sidecar는 잠금 뒤에만 NUL 1바이트로 초기화하며 읽기는 sidecar를 쓰지 않음. sidecar 없는 기존 target(링크 포함)은 sidecar를 다시 확인한 뒤에도 없을 때만 생성 전에 거부. fork·PID 변경 시 Python 잠금 상태만 초기화하며 상속 FD·실행 중 fork·동기화/네트워크 폴더·하드링크·적대적 경로 변경은 지원하지 않음 |
+| 기존 파일 | 크기 상한·정규 파일·청크 읽기·추가 바이트·변경 확인·형식/내용 재해시를 통과한 target만 `created=False`로 건너뜀. 손상·초과·링크·디렉터리·특수 파일은 `IntegrityError`로 거부하고 복구·채택·삭제·덮어쓰기를 하지 않음. 같은 내용의 다른 NPY 헤더는 기존 바이트를 유지하며 저장 바이트가 `numpy.save` 정규형일 필요는 없음 |
+| 새 쓰기·재시도 | 같은 디렉터리 `mkstemp`, 짧은 쓰기 반복, fsync·close 후 `os.replace`. `os.replace`의 `PermissionError`만 최대 10회·5초 예산(대기 합 4.75초, 단일 파일시스템 호출 시간 제한 아님)으로 재시도. 매 시도 전과 최종 소진 시 원래 임시 파일 식별·크기·target 부재를 확인하며, 바뀌거나 사라진 임시 파일·나타난 target은 덮어쓰지 않고 `PublicationUncertain`. 정리는 일치하는 자기 임시 파일만 삭제 |
+| 게시 후 불확실성·중단 | rename 뒤 POSIX 디렉터리 fsync·재읽기 바이트 대조·잠금 해제·close 실패는 `PublicationUncertain`. 읽기/건너뛰기의 해제·close 실패는 게시를 주장하지 않는 `ReleaseError`. 주 오류와 `cleanup_errors`를 함께 보존하고 close는 한 번만 시도. KeyboardInterrupt/SystemExit는 정리 후 감싸지 않고 전파하며 rename 도중·이후 중단은 게시 여부 미확정 |
+| 플랫폼·내구성·자원 | Windows는 디렉터리 fsync 없이 rename 전 파일 fsync만 수행. 전원 장애·OneDrive·Defender·인덱서·네트워크 드라이브 내구성/성공을 보장하지 않음. 파일에서 읽는 바이트는 `max_bytes`+1 이하이나 peak memory는 상한이 아님(Linux 1회 측정: 읽기 약 3배, 쓰기 약 2배). 소진 시 정리 실패·프로세스 중단 시 숨김 `.<digest>.*.tmp`가 남을 수 있고 자동 정리·보존기간·TTL 없음 |
+| 실제 검증 범위 | [합성 검사](../../tests/run_registry_series_files_acceptance.py) 41개·2.177초/2.196초/2.342초(3회 반복)·각 종료 코드 0, R3 통합 147개·5.144초·종료 코드 0(겹침, 합산하지 않음), 변이 28개 모두 검출. spawn 두 프로세스 잠금 경쟁·같은 digest 동시 쓰기·sidecar 생성 경쟁·재시도 소진·target 출현·중단 정리·손상/초과/링크/비정규 target 보존 포함. 개발 중 41개 1회 실행(2.124초)도 통과했고 제품 검사 실패 실행은 없었으며, 변이 스크립트의 첫 호출은 상대 인터프리터 경로 오류로 변이 실행 전에 중단되어 절대 경로로 다시 실행함. Windows 분기는 Linux에서 가짜 `msvcrt`로 순서만 확인했으며 실제 `msvcrt`·Defender/OneDrive는 로컬 미실행 |
+
+[제품 범위·검증 기록](../product/R3_DETACHED_SERIES_FILES_2026-11-10.md)에 따라 01–20 정책을 재대조하여 01·07·20의 처리/최소화/삭제 지도에 새 `.npy`·`.lock`·남을 수 있는 숨김 임시 파일과 삭제 순서·백업 쌍 보존만 추가했습니다. 행렬 의미(날짜/PnL/설정 순서)·series_ref·recorder/Lab·series_error·보존·수명주기/횟수/판정·실제 원장·동결 연구·전체 R3 완료는 구현하거나 추정하지 않습니다. 기존 사실/실패 이력과 `review-required`·공개 준비 `BLOCKED`, 운영자/법률/계약/라이선스/동의·실제 API/공급사/Windows 사용자 검증·파일럿·게시/배포 조건 및 선택적 GPT/Gemini 추가 심사 `NOT_PERFORMED`를 유지합니다.

@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "59e2d233650c4350ce761e150efd6694a9421b0a0b374bdc82a57f6add357123",
+    ".github/workflows/runtime-smoke.yml": "3dcb3a6e3ab38b7978915d3dc901ca0419c9c9221fa06a95015cd1031b4d4a93",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -153,6 +153,7 @@
     "core/quant/run_registry_codec.py": "fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a",
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
+    "core/quant/run_registry_series_files.py": "af2553191f523a4444040733a3c25a2d8c58559bf2718912403466aa8efc0eb7",
     "core/quant/run_registry_series_format.py": "241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc",
     "core/quant/run_registry_series_hash.py": "96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043",
     "core/quant/run_registry_source_hash.py": "f38239e969a0127f8db00cbaf47fa9e1721c1642c525dff0ef5f7aa463e3bef6",
@@ -268,7 +269,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "eb1b771559846665e7781a5b39727b19c5ad7208521ec94d8c9271f6b6a910f9",
+    "docs/compliance/FACTS.md": "3c6b3bfd2adc0ed59ed863a17331813b7abb45d93f161e8e1d5c2bb5e1b3f349",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -317,6 +318,7 @@
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
+    "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "3a258ca461a294e0e8b8aaa1adfaeb4f00b778fc2f032a48c3d3e87acb3db84e",
     "docs/product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md": "04634e2e49b8b9c7e7cb4ada8d4d9669f8bf2fb2f54ea76b77f40f3ed0f11d71",
     "docs/product/R3_DETACHED_SERIES_HASH_2026-11-06.md": "aa144bbc25db49cffdda02ccc8cf55a88873dadc8f842d052c4ebf1cb6f48a2b",
     "docs/product/R3_DETACHED_SOURCE_HASH_2026-11-06.md": "1110e24650f40883e876b331d46f22780ef951d8dd7384401fbb99c555e53035",
@@ -535,6 +537,7 @@
     "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
+    "tests/run_registry_series_files_acceptance.py": "9572bf7396dedef19793d74ed52c400de32f597c164f84ecb3e5c1322bff4ebe",
     "tests/run_registry_series_format_acceptance.py": "2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73",
     "tests/run_registry_series_hash_acceptance.py": "f38a05fca045b00b3bf401a2ba3d0f2a71a6cc589acf5e790655c1e4fc76a156",
     "tests/run_registry_source_hash_acceptance.py": "461adaa26011177c0084d77aa35034ae32e5fbf800da08e0333c937d5eb80f96",
@@ -623,164 +626,164 @@
   },
   "reviews": {
     "1": {
-      "document_sha256": "7ffeb30cbf22092284b48635e1769018e2259ea44c1a5647ac50ecaf3f815d63",
-      "source_digest": "8ac8ac91d4dab52c1c996035eca97143ff560e5bf1d0aac08c46f6a7f00c8617",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.165150+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
+      "source_digest": "37bf820c4d6f4462505932334c7cd9591675901ff769e59a0e2b306f0d3ddfb0",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.404302+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "8ac8ac91d4dab52c1c996035eca97143ff560e5bf1d0aac08c46f6a7f00c8617",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.167872+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "37bf820c4d6f4462505932334c7cd9591675901ff769e59a0e2b306f0d3ddfb0",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.409119+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "9d035fedb84b0ba7cba35e58724bd91e2f2f8065d37fd1b9515c0d8c4eccde8f",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.170153+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "f3f166eef7feb6d2f7fd1bff040f8c14f52eb19b3087784009a8963452929789",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.412038+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "ab858845935e3af6a751cd5d2d6706c1290a920fd286ec74f35691a9ac04492d",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.172401+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "ccdff971dd54658848600adb180727159bba2b00eb7a551bff544c2d978c49fd",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.416518+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "2d357e9a945297e873c1cae01b487a8c7c46150b7bed1705dac1e05e2fe1559d",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.174408+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "ec5d98d8d6969908671f690a8b050d48b472367ee6f20c94efe90f21df8c7db0",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.418799+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "33c5d6421c1dfe91c03f61614229853838edc07f02ea85cc5b06e01aceba4cdd",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.176720+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "01f4eb73cc7f6f40a0a1009d49a63d6892cba07189f60314df7d4d1e7b0998f5",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.424559+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "7": {
-      "document_sha256": "cb99e2df664cbc0f5b4efa73259e32809a6a601fe4b64e08105020291a45932b",
-      "source_digest": "8ac8ac91d4dab52c1c996035eca97143ff560e5bf1d0aac08c46f6a7f00c8617",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.178906+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
+      "source_digest": "37bf820c4d6f4462505932334c7cd9591675901ff769e59a0e2b306f0d3ddfb0",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.426878+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "33c5d6421c1dfe91c03f61614229853838edc07f02ea85cc5b06e01aceba4cdd",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.181330+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "01f4eb73cc7f6f40a0a1009d49a63d6892cba07189f60314df7d4d1e7b0998f5",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.432506+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "e15cab939ea439c7a1b71e2749fb04277164b0c084da10c29ad485b789bea9e7",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.183764+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "6c503b144a9369850d9a551ab7ff401a6f69afd38c8869e525c394473a75ffc3",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.438681+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "0fc6dcab737884da1e54dea3ec8b91a2c1747b15d9c58e4f3f8480217197c4e4",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.186220+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "2452d88e9b4c70f3bf4815641fd6ce233b7b0b42f81727e19fa543eefadc8486",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.444478+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "9cfe05202448084f4638134c0763af2c4487722b83442d1d71fcbba8f675a1a9",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.188348+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "60a0f569cc631b307d522ab4d68502eef6042fe6b91209e040c6a8937d244aac",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.447954+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "e8a1dacf67a42c745f4eacc7f70ce35ce7fbdb08b9d3377df479632ad7d21363",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.190495+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "86ad350a2fda2aa3fd3a19262be836603a265a03fa1e5f1d6e34d247bc6adcea",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.452502+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "13": {
       "document_sha256": "1c4d599950946958006cfc32af93ff68d1ca81c9f0ff4291d2c722978e3dc1f9",
-      "source_digest": "e15cab939ea439c7a1b71e2749fb04277164b0c084da10c29ad485b789bea9e7",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.192799+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "6c503b144a9369850d9a551ab7ff401a6f69afd38c8869e525c394473a75ffc3",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.456041+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "14": {
       "document_sha256": "653d67e4d2540fd96d6d3bb70415f3ec11f8e89b10e662ef540779c16ac1d12a",
-      "source_digest": "e15cab939ea439c7a1b71e2749fb04277164b0c084da10c29ad485b789bea9e7",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.195115+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "6c503b144a9369850d9a551ab7ff401a6f69afd38c8869e525c394473a75ffc3",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.460378+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "15": {
       "document_sha256": "f7c87baa7b5502e684826e4189dd55f5b420c02e9b83f5ec379a55ccbaa2606f",
-      "source_digest": "e15cab939ea439c7a1b71e2749fb04277164b0c084da10c29ad485b789bea9e7",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.197760+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "6c503b144a9369850d9a551ab7ff401a6f69afd38c8869e525c394473a75ffc3",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.464046+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "3889f9e97637b74c5558fe367d4731a6666049a31e0109a4c189533e426e9faf",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.199976+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "952fe38538ecbd163d0c95270932cf16db738c1751e4a11366baef346b02c490",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.468279+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "33c5d6421c1dfe91c03f61614229853838edc07f02ea85cc5b06e01aceba4cdd",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.202185+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "01f4eb73cc7f6f40a0a1009d49a63d6892cba07189f60314df7d4d1e7b0998f5",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.471893+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "8ac8ac91d4dab52c1c996035eca97143ff560e5bf1d0aac08c46f6a7f00c8617",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.204165+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "37bf820c4d6f4462505932334c7cd9591675901ff769e59a0e2b306f0d3ddfb0",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.476412+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "19": {
       "document_sha256": "040f40ebb5add2ebcaef8f1d878dacc9ed83522a871016806673764b3c92cfea",
-      "source_digest": "ce1a083298ae897bafd7813a41184370c6eab44904516e1b3c9a6fc83f2b798a",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.206430+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "source_digest": "212e68208b18fceab83c98024dba6643f5a73e7d09a4db8d7576dc5d1e2a177f",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.479916+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     },
     "20": {
-      "document_sha256": "b84d55ab085dad8cb897528f1cda017a96eeb41e68188bd350f13fcb02ea0f88",
-      "source_digest": "8ac8ac91d4dab52c1c996035eca97143ff560e5bf1d0aac08c46f6a7f00c8617",
-      "reviewed_by": "GPT implementation source-policy review 2026-11-06",
-      "review_note": "All20 policies reviewed for detached in-memory bounded NPY1 format. Header types, byte ceiling and pre-load shape checks, falsepickle and content rehash; resource limits and reversible readonly explicit. Final22 independent13 combined106 PASS overlap; initial fixture/parser preparation history retained. No filesystem, research, owner effects. Publication BLOCKED; full final-head CI required.",
-      "reviewed_at": "2026-11-06T12:42:34.208531+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "document_sha256": "043bef50be73e7855cefb5324ec3232ea26a686b3977787e17ba71e2d855d2b0",
+      "source_digest": "37bf820c4d6f4462505932334c7cd9591675901ff769e59a0e2b306f0d3ddfb0",
+      "reviewed_by": "Claude R3 series-files review",
+      "review_note": "Reviewed all 20 policies against the new detached R3 SeriesFiles inventory in a caller-supplied existing absolute directory: <sha256>.npy verified NPY matrix, same-name .lock sidecar (one NUL byte, persists), and hidden .<digest>.*.tmp files that can remain after a kill or cleanup failure; no default path, app, Lab, ledger, recorder, network or new dependency. Added rows only to 01 (processing map, pair backup), 07 (minimization: P&L only, no prices or personal data; max_bytes is not retention) and 20 (deletion order: delete .npy before or with its .lock, no automatic cleanup or TTL). 02-06 and 08-19 need no change: no new form, consent, cookie or browser storage, third party, license, claim, price, accessibility, child or email surface. Publication stays BLOCKED.",
+      "reviewed_at": "2026-11-10T09:12:46.484323+00:00",
+      "source_commit": "e7ed79346653cd647f7f5e317fdca348037bfe4e"
     }
   }
 }
