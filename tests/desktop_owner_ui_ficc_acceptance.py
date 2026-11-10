@@ -275,7 +275,10 @@ class OwnerUiFiccTests(unittest.TestCase):
         text = pane.notes.text()
         self.assertIn('\n\n요약\n', text); self.assertIn('\n\n핵심 수치\n• ', text)
         self.assertIn('합성 곡선', text)
-        self.assertEqual(text.count(out.panel.note), 1)       # the curve repeats the panel's note
+        # The curve repeats the panel's note: shown once, in Korean (source_notes, owner issue 14).
+        from quantgen_desktop.source_notes import note_korean
+        self.assertEqual(text.count(note_korean(out.panel.note)), 1)
+        self.assertNotIn('no market data provider', text)
         hint = next(label for label in pane.findChildren(QLabel) if getattr(label, 'source_text', '')
                     .startswith('Enter either price or yield'))
         self.assertNotIn('Price', hint.text()); self.assertNotIn('Yield', hint.text())

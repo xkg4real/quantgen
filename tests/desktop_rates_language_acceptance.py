@@ -152,7 +152,10 @@ class RatesLanguageTests(unittest.TestCase):
             original = original_prefix + f'{source} · {c.date} · {len(p)} observations · {c.method}' + notes
             en = ('Synthetic curve · not current market data\n' if source == 'SYNTHETIC' else '')
             en += f'{source} · {c.date} · {len(p)} observations · {c.method}' + notes
-            ko = original_prefix + f'{source} · {c.date} · 관측 {len(p)}개 · {c.method}' + notes
+            # The method id reads by its Korean name in the Korean window (owner issue 14, 2026-11-11);
+            # provider notes that are not the app's own fixed sentences stay literal.
+            from quantgen_desktop.source_notes import method_korean
+            ko = original_prefix + f'{source} · {c.date} · 관측 {len(p)}개 · {method_korean(c.method)}' + notes
             with self.subTest(source=source):
                 self.assert_inline_roundtrip(w, out, [(original, en, ko)])
 

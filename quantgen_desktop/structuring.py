@@ -45,6 +45,7 @@ class StructuringPane(ToolPane):
         return StructuringRequest(tool=self.tool.currentData(),source=self.source.currentData(),**values)
 
     def show_result(self,out):
+        from .source_notes import method_korean, note_korean
         self.clear_result()
         r,c,p=out.report,out.curve,out.panel
         cms=r.underlying.startswith('CMS')
@@ -55,7 +56,8 @@ class StructuringPane(ToolPane):
         self.text(original, localized={'en': ('Synthetic curve · not current market data\n'
                                              if p.source == 'SYNTHETIC' else '') + shown,
                                        'ko': ('합성 곡선 · 현재 시장 데이터 아님\n'
-                                              if p.source == 'SYNTHETIC' else '') + shown})
+                                              if p.source == 'SYNTHETIC' else '')
+                                             + note_korean(shown.replace(f' · {c.method}\n', f' · {method_korean(c.method)}\n', 1))})
         self.text('모든 상품에 동일한 UST 곡선을 사용합니다. KRW 상품도 이 곡선으로 할인하는 구조 예시이며 KRW 시장 호가가 아닙니다.')
         metrics=[('Product',r.product),('Underlying',r.underlying),('Fair value · per 100',fmt(r.fair_value)),
             ('Issue price',fmt(r.issue_price)),('Margin · per 100',fmt(r.margin)),('Maturity · years',fmt(r.maturity)),
@@ -93,5 +95,6 @@ class StructuringPane(ToolPane):
         hedge_notice = 'Hedge 부호: + 매수 / 고정금리 지급, − 매도 / 고정금리 수취. 실제 주문을 실행하지 않습니다.'
         self.text(hedge_notice + '\n' + r.note,
                   localized={'en': translate(hedge_notice, 'en') + '\n' + r.note,
-                             'ko': hedge_notice + '\n' + translate(r.note, 'ko')})
+                             # Korean window: the sign convention's heading in Korean too (owner issue 14).
+                             'ko': hedge_notice.replace('Hedge 부호:', '헤지 부호:', 1) + '\n' + translate(r.note, 'ko')})
         self.finished(out.narrative, localized=structured_variants(out))

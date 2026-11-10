@@ -266,7 +266,8 @@ class AuthoredProseLanguageTests(unittest.TestCase):
                             self.assertEqual(pane.tables['Metrics'].item(0, 1).text(),
                                              translate(out.report.product, language))
                             note = next(x for x in pane.findChildren(UiLabel) if x.source_text.startswith('Hedge 부호:'))
-                            self.assertTrue(note.text().startswith('Hedge sign:' if language == 'en' else 'Hedge 부호:'))
+                            # Owner issue 14 (2026-11-11): the Korean window shows the heading in Korean.
+                            self.assertTrue(note.text().startswith('Hedge sign:' if language == 'en' else '헤지 부호:'))
                             greeks = pane.tables['Greeks']
                             self.assertEqual(greeks.horizontalHeaderItem(0).text(), 'Risk' if language == 'en' else '위험')
                             self.assertEqual(greeks.item(0, 0).text(), 'Delta · per +1% spot' if language == 'en' else '델타 · 현물 +1%당')

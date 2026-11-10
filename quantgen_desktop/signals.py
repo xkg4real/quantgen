@@ -55,8 +55,9 @@ class SignalsPane(ToolPane):
         self.text('Context only — not a v2 signal (DO-NOT-BUILD TF-12). Nothing here feeds a book.')
         origin = f'{h.symbol} · {h.source} · {h.first_date} → {h.last_date}\n{h.note}'
         original = ('합성 데이터 · ' if h.source == 'SYNTHETIC' else '') + origin
-        korean = (f'합성 데이터 · {h.symbol} · {h.first_date} → {h.last_date}\n{h.note}' if h.source == 'SYNTHETIC'
-                  else f"{h.symbol} · {source_name(h.source, 'ko')} · {h.first_date} → {h.last_date}\n{h.note}")
+        from .source_notes import note_korean
+        korean = (f'합성 데이터 · {h.symbol} · {h.first_date} → {h.last_date}\n{note_korean(h.note)}' if h.source == 'SYNTHETIC'
+                  else f"{h.symbol} · {source_name(h.source, 'ko')} · {h.first_date} → {h.last_date}\n{note_korean(h.note)}")
         self.text(original, localized={'en': ('Synthetic data · ' if h.source == 'SYNTHETIC' else '') + origin,
                                        'ko': korean})
         self.result_table('Composite',['Score · -100…100','Stance'],[[f'{r.composite:+.2f}',r.stance]])

@@ -750,6 +750,9 @@ def translate(text, language):
     if language == 'ko':
         schedule = cms_schedule_korean(text)
         if schedule != text: return schedule
+        from .source_notes import note_korean
+        note = note_korean(text)
+        if note != text: return note
     if '\n' in text:
         return '\n'.join(translate(line, language) for line in text.split('\n'))
     return text

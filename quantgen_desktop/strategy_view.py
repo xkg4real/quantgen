@@ -590,7 +590,8 @@ class RunView(ToneScope):
         column.addWidget(checks_box)
         notes = " · ".join(n for n in d.get("notes") or () if n)
         if notes:
-            column.addWidget(text_label(ui("Provider notes (original text): {notes}", notes=notes), "caption"))
+            from .source_notes import note_korean
+            column.addWidget(text_label(ui("Data notes: {notes}", notes=(note_korean(notes), notes)), "caption"))
 
 
 # --------------------------------------------------------------------------- #

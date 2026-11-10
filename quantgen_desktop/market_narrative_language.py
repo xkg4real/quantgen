@@ -216,6 +216,8 @@ def display_korean(text):
     if not isinstance(text, str) or not text:
         return text
     from ui.narrative_sections import ko_terms
+    from .source_notes import note_korean
+    text = note_korean(text)
     for pattern, replacement in _PHRASES:
         text = pattern.sub(replacement, text)
     names = _card_names()

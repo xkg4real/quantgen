@@ -36,7 +36,8 @@ class FXPane(ToolPane):
         q,d = out.request,out.data
         if any(s.source=='SYNTHETIC' for s in out.sources): self.text('합성 데이터 포함 · 현재 시장 데이터가 아닙니다.')
         self.result_table('Data sources', ['Series','Provider','First','Last','Note'],
-                          [[s.id,s.source,s.first_date,s.last_date,s.note] for s in out.sources])
+                          [[s.id,s.source,s.first_date,s.last_date,s.note] for s in out.sources],
+                          localized_columns=[4])  # app-written notes read in Korean (source_notes)
         if q.tool == 'carry':
             rows,bt = d['rows'],d['backtest']
             best,hi = rows[0],max(rows,key=lambda x:x.carry)

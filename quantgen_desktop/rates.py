@@ -1,6 +1,7 @@
 """Native yield curve, swaps, rate options and short-rate simulation."""
 import math
 from core.ficc.curves import CURVE_METHODS, EXACT_METHODS, METHOD_NAMES
+from .source_notes import method_korean, note_korean
 from core.research.rates_analysis import RatesRequest
 from .bonds import group_digits
 from .model_narrative_language import localize_columns, show_as
@@ -182,7 +183,7 @@ class RatesPane(ToolPane):
             'en': ('Synthetic curve · not current market data\n' if p.source=='SYNTHETIC' else '')+
                   f'{p.source} · {c.date} · {len(p)} observations · {c.method}\n{notes}',
             'ko': ('합성 곡선 · 현재 시장 데이터 아님\n' if p.source=='SYNTHETIC' else '')+
-                  f'{p.source} · {c.date} · 관측 {len(p)}개 · {c.method}\n{notes}',
+                  f'{p.source} · {c.date} · 관측 {len(p)}개 · {method_korean(c.method)}\n{note_korean(notes)}',
         })
         metrics = []
         if q.tool == 'curve':
@@ -223,7 +224,7 @@ class RatesPane(ToolPane):
             swap_terms = f'{q.notional:,.0f} notional · {r.swap.freq} payments/year · single curve · ACT/365F\n{r.note}'
             self.text(swap_terms, localized={
                 'en': swap_terms,
-                'ko': f'명목금액 {q.notional:,.0f} · 연 {r.swap.freq}회 지급 · 단일 곡선 · ACT/365F\n{r.note}',
+                'ko': f'명목금액 {q.notional:,.0f} · 연 {r.swap.freq}회 지급 · 단일 곡선 · ACT/365F\n{note_korean(r.note)}',
             })
         elif q.tool == 'option':
             metrics = [('Instrument',q.kind),('Strike',fmt(r.strike,'pct')),('Premium',fmt(r.premium)),('Premium / notional',f'{r.premium_bp:.2f} bp')]
@@ -232,7 +233,7 @@ class RatesPane(ToolPane):
             self.text(option_terms, localized={
                 'en': option_terms,
                 'ko': f'{q.option_model} · '+(fmt(q.vol,'bp')+' 정규' if q.option_model=='bachelier' else fmt(q.vol,'pct')+' Black')+
-                      f' · 명목금액 {q.notional:,.0f}\n{r.note}',
+                      f' · 명목금액 {q.notional:,.0f}\n{note_korean(r.note)}',
             })
             if q.kind == 'swaption':
                 self.sections.append({'type':'comparison_volatility',
@@ -267,7 +268,7 @@ class RatesPane(ToolPane):
                 'en': ('Synthetic short rate · ' if s.source=='SYNTHETIC' else '')+
                       f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{s.note}\n{params.note}\n{r.note}\nSeed 7 · {r.n_paths} paths',
                 'ko': ('합성 단기금리 · ' if s.source=='SYNTHETIC' else '')+
-                      f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{s.note}\n{params.note}\n{r.note}\n시드 7 · 경로 {r.n_paths}개',
+                      f'{s.id} · {s.source} · {s.first_date} → {s.last_date}\n{note_korean(s.note)}\n{params.note}\n{note_korean(r.note)}\n시드 7 · 경로 {r.n_paths}개',
             })
             if out.horizon_pv is not None:
                 hp = out.horizon_pv

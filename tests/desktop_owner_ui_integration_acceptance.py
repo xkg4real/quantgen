@@ -60,5 +60,45 @@ class AutomaticSourceTests(unittest.TestCase):
                 app.processEvents()
 
 
+class AppNotesTests(unittest.TestCase):
+    def test_app_written_data_notes_read_in_korean_and_other_text_stays(self):
+        from quantgen_desktop.source_notes import method_korean, note_korean
+        from quantgen_desktop.translations import translate
+        cases = {
+            "Simulated Treasury par curve (Nelson-Siegel random walk) — no market data provider was used.":
+                "넬슨-시겔 랜덤워크로 만든 합성 미국채 파 금리 곡선이며 시장 데이터 제공처를 쓰지 않았습니다.",
+            "daily; Simulated series (OU rate, mean 3.50%) — no market data provider was used.":
+                "일별; OU 금리 과정(평균 3.50%)으로 만든 합성 시계열이며 시장 데이터 제공처를 쓰지 않았습니다.",
+            "Simulated spot (GBM, vol 7%) — no market data provider was used.":
+                "GBM(변동성 7%)으로 만든 합성 현물환이며 시장 데이터 제공처를 쓰지 않았습니다.",
+            "FMP_API_KEY is not configured; Simulated series (GBM, μ=8%, σ=14%) — no market data provider was used."
+            " Yahoo Finance also failed (SPY: network forbidden).":
+                "FMP_API_KEY가 설정되지 않음: GBM(μ=8%, σ=14%)으로 만든 합성 시계열이며 시장 데이터 제공처를 쓰지 않았습니다."
+                " Yahoo Finance도 쓸 수 있는 자료를 주지 않았습니다(SPY: network forbidden).",
+        }
+        for english, korean in cases.items():
+            self.assertEqual(note_korean(english), korean)
+            self.assertEqual(translate(english, "ko"), korean)
+            self.assertEqual(translate(english, "en"), english)
+        for literal in ("Payer\nProvider note +1.250%", "Yahoo adjusted close", "My own note 678", None, ""):
+            self.assertEqual(note_korean(literal), literal)
+        self.assertEqual(method_korean("bootstrap"), "부트스트랩")
+        self.assertEqual(method_korean("unknown_method"), "unknown_method")
+
+    def test_hidden_columns_take_no_table_width(self):
+        app = QApplication.instance() or QApplication([])
+        from quantgen_desktop.app import table, table_rows
+        from quantgen_desktop.table_layout import configure_compact_table
+        t = table(["Name", "Value", "Provider", "Observed"])
+        table_rows(t, [["Alpha", "1.00", "FRED · a long provider name", "2026-11-10"]] * 3)
+        configure_compact_table(t)
+        t._compact_layout_controller.measure()
+        full = t.maximumWidth()
+        t.setColumnHidden(2, True); t.setColumnHidden(3, True)
+        t._compact_layout_controller.measure()
+        self.assertLess(t.maximumWidth(), full - 150)
+        t.deleteLater(); app.processEvents()
+
+
 if __name__ == "__main__":
     unittest.main()

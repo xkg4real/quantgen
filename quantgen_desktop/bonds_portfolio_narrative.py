@@ -147,10 +147,13 @@ def bond_notes(out, language):
         source = '합성 곡선 · 현재 시장 데이터 아님' if ko else 'Synthetic curve · not current market data'
     # A curve built from the panel repeats the panel's note: show it once.
     curve_note = out.curve.note if out.curve.note != out.panel.note else ''
+    from .source_notes import method_korean, note_korean
+    method = method_korean(out.curve.method) if ko else out.curve.method
     head = '\n'.join(n for n in [source,
-        f'{out.curve.source} · {out.curve.date} · {out.curve.method} · {len(out.panel)} '
+        f'{out.curve.source} · {out.curve.date} · {method} · {len(out.panel)} '
         + ('거래일' if ko else 'sessions'),
-        out.panel.note,curve_note,
+        note_korean(out.panel.note) if ko else out.panel.note,
+        note_korean(curve_note) if ko else curve_note,
         model_note_korean(out.analytics.note) if ko else out.analytics.note] if n)
     # A custom narrative (not the app's own) stays one paragraph, verbatim.
     return (head+'\n\n'+narrative if generated else head+'\n'+narrative) if narrative else head

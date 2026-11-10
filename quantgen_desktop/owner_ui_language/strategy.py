@@ -77,4 +77,5 @@ PAIRS = {
     "Data: {data} · walk-forward: {walk}": "데이터: {data} · 워크포워드: {walk}",
     "{family} ledger: {count} configurations": "{family} 계열 누적 설정 {count}개",
     "Provider notes (original text): {notes}": "제공처 메모(원문): {notes}",
+    "Data notes: {notes}": "데이터 메모: {notes}",
 }
