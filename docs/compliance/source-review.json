@@ -279,7 +279,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "276beb00bc90b6d4cba87d33ba7891f139f74b792e98295d5f29fe0b644cd258",
+    "docs/compliance/FACTS.md": "9095a1e5bf910ddd87e7a3027b0839bef10dac8ecac519d494382d6e245d8752",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -318,6 +318,7 @@
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
     "docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md": "9ccc09cc2982dc78907e71cd596b980115efa4f8d05d0aeef340db91dc73864e",
     "docs/product/LOOKAHEAD_LA02_PART1_2026-11-10.md": "f4ce44fcfc95c76213c6df187e2444a7fc860bf6d72aa6e514ef11917e38a44f",
+    "docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md": "ca79e5f259a9d4ffc0ec75401ad80efdf93667af2f5b537152bd285662838855",
     "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "71dffdb67f3b38ed8b726f273c8651a8a65ec832cdfedc84ba5431bebaca2494",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
@@ -500,13 +501,13 @@
     "tests/macro_m0_rules.py": "7cb91771c62286132b269f71ac2c2c351548ff844d6bc474b1e4abcc65a09219",
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
-    "tests/macro_m1_calendars.py": "6a966c14154dacbfae56e2dfcb7de6999b29a7b3c0817d117aae9ee5abc36224",
-    "tests/macro_m1_fixtures.py": "600f3c1892432b7875110035894e2e746c513d621b2abc70dca04a75ebf53bbc",
+    "tests/macro_m1_calendars.py": "4f8b69bebea7da3042da37753f83ee943af3d47351faaa764133a05a695baba2",
+    "tests/macro_m1_fixtures.py": "4a55f98b757365b17102d4599f2017adfe0412f47997c0d1078e661f4aa93e4f",
     "tests/macro_m1_integration.py": "4a370e688d1fa8a5130ed470f8148712da8c8852144f9e07a60954bc286e7680",
-    "tests/macro_m1_pit.py": "ff67c5ada20e57d794b8848c8f0d6727f920d33ebae73c2f15d85b0d71dbb954",
+    "tests/macro_m1_pit.py": "e62b8b8a482ed23cd0930aae9663bc6e1fe2add3539d679d0cfa95723f39cb6c",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
-    "tests/macro_m2_risk.py": "8e215f0907d0892baa2d8b53ad2c487fb8471125d5a23228049dd7bfa5d5aaa1",
-    "tests/macro_m3_estimators.py": "15ae23faa6b3c313771ad286985098f30fe868a485848c4e6a8e83925d8fdddb",
+    "tests/macro_m2_risk.py": "b94092a54223807cd2bae627361e5331250784574ee2b65b9308e70efacc36bd",
+    "tests/macro_m3_estimators.py": "87da9779928ac6baab93b29da3a937a06bb4e249094380e4a41ddeb3f23f66ff",
     "tests/macro_m4_integration.py": "b3cb2979c31e0450cbbf1be01c9088e87a0ef4b1882ae8adba9b95218222918d",
     "tests/macro_m4_sleeves.py": "a14f5eec30de07244b572ee1585890a03a963eb71389082ce2432e87db8b8bc3",
     "tests/macro_m5_books.py": "66f09499042dd365a4908cee882f4c5e4d5bb26d54865ef49ac9c8e9b9048a6d",
@@ -650,163 +651,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "cdcdf23b0bb0c0f9f92649f9c82257b3732fbd24683f9c9fb8e703538be69ed3",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.124143+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.046175+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "cdcdf23b0bb0c0f9f92649f9c82257b3732fbd24683f9c9fb8e703538be69ed3",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.127119+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.048430+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "26c750e1cb91d2bb2e5c7a735094e4e0c050612e21a2c4610b17f97aa1a5ca2e",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.129308+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "669545a40ec07d80c0e433e9c7a69a6723c0769e3ff76a0597ffe1feee0e02f7",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.050521+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "d53533dac244771ae9c9a9a56459869a35b1b5165ab34faaebaca0056a028927",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.131418+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "0da02dfcaad8f129388f9b4b789df8e66a5d02a835e5602918fec866f2bcdf5c",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.052397+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "aa411445b2e336f2eb99cdc2b2aa1209377f235fd1640bbd93ae9d7ef7d5b602",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.133585+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "2d6e80d5a6c6da335fd0dacc1220253b44668cad6c88f73bcf0925a124688f85",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.054648+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "6da57b32ba30d5b76dd822077bb1b897e218c89460db5f49572d636efb627db4",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.135548+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "d0a891cad8021b234a209aba33b16b091b7e11dbd6225f819bfd64cb45f347e2",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.056475+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "cdcdf23b0bb0c0f9f92649f9c82257b3732fbd24683f9c9fb8e703538be69ed3",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.137634+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.058294+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "6da57b32ba30d5b76dd822077bb1b897e218c89460db5f49572d636efb627db4",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.139608+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "d0a891cad8021b234a209aba33b16b091b7e11dbd6225f819bfd64cb45f347e2",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.060210+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "1049d4b3b16ceb74791f6b544d5ec1d5fa69db15c0dc859b8d08578716e82d72",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.141550+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.062600+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "63073aeb94048061c45c42fb837058e5c0f2d26db0240177119b6fd7a116b51a",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.143632+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "0536b28f03b3637c80641849494e7ddd4fe8fe403cc300fc5467122cc46146e5",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.064314+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "4dff2b4ca498f7a08310076566784a995859a15bb735b7d8c50a971f7a564c86",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.145415+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "cac9825cae77965279e7eeb9bdf0263d288af596203f2ee82f2739c8eb4c18b0",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.066723+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "8f89d768dfeaf623ee2dc5ed6f3f361cd8d567f85a8c76cd8962d35d1eff072d",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.147383+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "91b99a6ae9853d0012da5f988475d24099c7638ee658552e40f88989af28d57e",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.069020+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "1049d4b3b16ceb74791f6b544d5ec1d5fa69db15c0dc859b8d08578716e82d72",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.149528+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.072292+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "1049d4b3b16ceb74791f6b544d5ec1d5fa69db15c0dc859b8d08578716e82d72",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.151246+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.074021+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "1049d4b3b16ceb74791f6b544d5ec1d5fa69db15c0dc859b8d08578716e82d72",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.152972+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.076522+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "59ca2f49861a5a8cd75ce4ed4c2e087f022a29cb5932948ed4f804834bc954af",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.154860+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "c7c01cd06de55a9d00a4d8a47dad2255f9c8f7f67416ad67be912c2342793587",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.078378+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "6da57b32ba30d5b76dd822077bb1b897e218c89460db5f49572d636efb627db4",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.157748+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "d0a891cad8021b234a209aba33b16b091b7e11dbd6225f819bfd64cb45f347e2",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.080703+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "cdcdf23b0bb0c0f9f92649f9c82257b3732fbd24683f9c9fb8e703538be69ed3",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.159733+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.083171+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "bcc4335a80542dcfe2b745947de8748860475854735eb445d325c979a309fbc0",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.161733+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "3e7bd7fee51cfc1399f40942d9471d1d1a0bb5abe1142f3be330b602a66d1370",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.084883+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "cdcdf23b0bb0c0f9f92649f9c82257b3732fbd24683f9c9fb8e703538be69ed3",
-      "reviewed_by": "Claude integration review",
-      "review_note": "Merged the re-integrated adoption checks branch (main be26c24 + PR #93 + PR #95) into this branch; FACTS sections kept from both sides",
-      "reviewed_at": "2026-11-10T13:24:00.163462+00:00",
-      "source_commit": "f43ce06d7d8bd16c0635347db532514c9b404226"
+      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.086566+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     }
   }
 }
