@@ -6,9 +6,14 @@
 10.5.1, the summary fields of 10.5.2, the narrow exception to 3.9, the runs of record and the procedural gate before
 Step 8 (SPY, DGS3MO) and Step 9 (BTC-USD).
 
-It runs on the owner's machine only, after Step 7A and before Step 8, from a separate clone of this branch (U5), never
-while a pilot, the suite or a readout runs. Claude builds and tests it on synthetic data only and reads only
+It runs on the owner's machine only, after Step 7A and before Step 8, from a separate clone of the tool's branch (U5),
+never while a pilot, the suite or a readout runs. Claude builds and tests it on synthetic data only and reads only
 `summary.json`.
+
+Spec 10.5 names the tool's branch `claude/provider-parity-5-2` and leaves its commit and sha256 to an owner ruling
+before the first run. Clone that branch at the commit fixed for the run, and before the first run compare
+`git rev-parse HEAD` and `(Get-FileHash tools\provider_parity\parity_check.py -Algorithm SHA256).Hash.ToLower()` with
+the fixed values. Every summary records the sha256 of the tool that wrote it (`tool.sha256`).
 
 ## Setup (PowerShell)
 
@@ -27,6 +32,11 @@ optionally KIS_BASE_URL for `kis`); nothing else in that file is read and no val
 the `.env` and do not type a key into the shell. The `kis` fetch uses the app's KIS client, which reads and may
 rewrite its access token `~/.nextgen/kis_token.json`; nothing else under `~/.nextgen` is touched.
 
+Every `--out` is a folder that does not exist yet. The tool refuses one inside any git work tree (the research clone,
+this clone or another) and one under a folder named `asset_expansion`, `.nextgen` or `ledgers`, so nothing it writes
+enters the research clone, `docs/asset_expansion/` or a ledger. Files are UTF-8 with LF. Console lines use the
+console's own encoding (cp949 or UTF-8); a character it lacks is printed as a backslash escape.
+
 ## Fetch (one provider per call; each `--out` is a new folder)
 
 ```powershell
@@ -42,10 +52,18 @@ foreach ($p in "coinbase", "bitstamp", "binance") {
 ```
 
 Each call ends with `FETCH <series> <provider> OK exit=0 csv=<file>`, or `... UNAVAILABLE <reason> exit=4 csv=-` with
-the reason to give compare (`no_key`, `plan_or_access`, `fetch_failed`), or `REFUSED`/`ERROR`. A fetch keeps the raw
-responses, the `date,value` CSV (window start - 31 days to window end + 7 days) and `meta.json`. Every request names its
-last date (at most 2026-12-30), and a response holding an observation dated on or after 2027-01-01 is refused before
-anything is written.
+the reason to give compare (`no_key`, `plan_or_access`, `fetch_failed`) and a line above it that says what is missing
+(for example `UNAVAILABLE: FMP_API_KEY is not set (--env-file or the environment)`), or `REFUSED exit=2`/`ERROR exit=4`.
+Only an `OK` fetch writes a folder: the raw responses, the `date,value` CSV (window start - 31 days to window end + 7
+days) and `meta.json`. Every request names its last date (at most 2026-12-30), and a response holding an observation
+dated on or after 2027-01-01 is refused before anything is written. When a fetch succeeds but its first date is far
+after the window start, compare still takes the file: its coverage check counts the uncovered days. `short_history` is
+the reason to declare when a provider cannot serve the window at all.
+
+Settle every fetch of a series before its compare. A fetch is not a run and may be repeated into a new folder;
+compare is what makes the run of record. No provider endpoint has been called while the tool was built (see the last
+section), so if a fetch ends `UNAVAILABLE fetch_failed` or `ERROR`, send Claude that line and the line above it (they
+carry no value and no key) before declaring the provider unavailable.
 
 ## Compare (one call per series)
 
@@ -69,6 +87,14 @@ python -B -m tools.provider_parity.parity_check compare --series btc --table "$t
   (exit 0 PASS, 1 FAIL, 3 WITHHELD, 2 refused, 4 error). A line that does not start with `PARITY` means no result.
 - The output folder holds `summary.json` (counts, outcomes, decade buckets, calendar dates; the tool refuses to write
   anything else) and `detail.json` (the per-date values and differences). `detail.json` stays on this machine.
+- `--owner-run` says this is the owner's machine: without it the tool refuses a file under `asset_expansion/cache`
+  before opening or hashing it. `--repo` is the research clone and must not contain this tool: a clone that holds
+  the tool is refused, because the tool runs from a separate clone (U5).
+- A provider whose history starts late is compared inside its own span (P-D5); A's dates outside the span count
+  against `edge_uncovered_max` (5 for SPY and DGS3MO, 471 for BTC-USD), and above that the pair is WITHHELD on
+  coverage. The repository's own Binance client notes that BTCUSDT starts on 2017-08-17; if the fetched file starts
+  there, the `binance` pair ends WITHHELD on coverage. It is a diagnostic pair, so the series outcome does not depend
+  on it.
 
 ## After each PASS, FAIL or WITHHELD run
 
@@ -89,11 +115,43 @@ git push
   does not; Step 9 likewise for BTC-USD. The runner does not check this gate.
 - Send Claude the three `PARITY` lines; Claude reads only the pushed `summary.json` files.
 
+## Owner rulings (`results/RULINGS.md` on the tool's branch, P-D9)
+
+The file is written when the first ruling is needed; Step 10 carries its rulings into the execution record and the
+spec's Status block. A ruling is needed before:
+
+- a later run of a series that already has a run of record counts (new fetches or the same files);
+- a change to the providers or thresholds of 10.5.1 after any summary exists;
+- Step 8 (SPY, DGS3MO) or Step 9 (BTC-USD), when that series' run of record is not PASS: the ruling either holds the
+  pilot or lets it go ahead with the disagreement noted in the execution record and in 10.4;
+- a run with tool bytes other than those 10.5 fixes counts.
+
+Each entry gives the date (KST), the series, the `run_id` it concerns, the owner's words verbatim, and what follows.
+The earlier result is never removed.
+
+## Tests
+
+```
+python -B -m unittest tests.provider_parity_acceptance -v
+```
+
+78 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
+threshold of 10.5.1 from both sides, every outcome and exit code, the provider map, the 2027-01-01 cut-off, the summary
+allow-list, where the tool may write, key handling, a cp949 console, and the tool started as a module. The suite reads
+no cache file, no `.env` and nothing under `~/.nextgen`.
+
 ## Not verified (no network was used to build the tool)
 
-Endpoint shapes are taken from the repository's own clients where they exist (FMP, KIS, Binance, FRED, yfinance) and
-from public documentation otherwise: the Bitstamp OHLC endpoint, the Treasury XML feed (`BC_3MONTH`), the H.15 Data
-Download Program series id (the response must name `RIFLGFCM03_N.B`, else the fetch fails), KIS exchange code `AMS` for
-SPY, FMP's history depth on the owner's plan, Coinbase's first candle, and whether yfinance's cache follows
-`set_tz_cache_location`. A response of an unexpected shape ends `UNAVAILABLE fetch_failed`; a well-formed response
-of the wrong series shows as a coverage, calendar or value disagreement in compare.
+- No provider was called and no provider documentation was fetched. Endpoint shapes are taken from the repository's
+  own clients where they exist (FMP, KIS, Binance, FRED, yfinance). The others are written from memory of the
+  providers' public interfaces and are the least certain part of the tool: the Coinbase candles endpoint, the Bitstamp
+  OHLC endpoint, the Treasury XML feed (`BC_3MONTH`, one page per year) and the H.15 Data Download Program series id
+  (the response must name `RIFLGFCM03_N.B`, else the fetch fails). Also unknown: KIS exchange code `AMS` for SPY,
+  FMP's history depth on the owner's plan and Coinbase's first candle. A response of an unexpected shape ends
+  `UNAVAILABLE fetch_failed`; a well-formed response of the wrong series shows as a coverage, calendar or value
+  disagreement in compare.
+- The tool has not run on Windows and has not read a real pilot file. The suite was run on Linux only (Python 3.13,
+  numpy 2.3.5, pandas 2.3.3).
+- The thresholds of 10.5.1 were set without real data, so the rate of false FAIL on real series is unknown.
+- yfinance 1.7.0 routes its tz, cookie and ISIN caches through `set_tz_cache_location` (read from its source, not
+  from a download); another version may keep a cache elsewhere.

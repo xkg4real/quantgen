@@ -23,9 +23,10 @@ fetch
   explicit last date, at most LAST_REQUEST_DAY, so no observation dated on or after 2027-01-01 is ever requested; a
   response that still holds one is refused before anything is written.
 - Keys are read by NAME only (KEY_NAMES), from --env-file or the process environment, and never printed or written.
-- It writes into a new folder outside every git work tree: the raw response bytes, the normalised `date,value` CSV
-  (window start - 31 days to window end + 7 days) and `meta.json`. A provider that cannot serve the request ends
-  `UNAVAILABLE <reason>` with a reason for compare's --unavailable.
+- It writes into a new folder outside every git work tree, and never under docs/asset_expansion, ~/.nextgen or a
+  ledger folder: the raw response bytes, the normalised `date,value` CSV (window start - 31 days to window end + 7
+  days) and `meta.json`. A provider that cannot serve the request ends `UNAVAILABLE <reason>` with a reason for
+  compare's --unavailable; nothing is written then.
 
 compare
 - Reads the pilot table (--table, inside --repo) read-only, then its `prices_file` (spy, btc) or `rf_file` (rf), checks
@@ -38,7 +39,10 @@ compare
   per-date differences; it stays on the owner's machine) into a new folder outside every git work tree. Nothing is
   written into the research clone, docs/asset_expansion/ or a ledger.
 - Exit codes 0 PASS, 1 FAIL, 3 WITHHELD, 2 refused, 4 error; the result is the last console line
-  `PARITY <series> <outcome> exit=<n> summary=<path or ->`.
+  `PARITY <series> <outcome> exit=<n> summary=<path or ->`. A refused or failed run writes nothing.
+
+Every text file is written as UTF-8 with LF, and console lines are written in the console's own encoding (cp949 or
+UTF-8) with a backslash escape for a character it lacks, so a run reads the same on Windows and Linux.
 """
 from __future__ import annotations
 
@@ -208,26 +212,39 @@ def inside_git_worktree(path: Path) -> bool:
     return any((q / ".git").exists() for q in (p, *p.parents))
 
 
+NO_WRITE_PARTS = ("asset_expansion", ".nextgen", "ledgers")     # spec 10.5, Writes
+
+
 def check_new_out(out: Path) -> None:
     """The output folder must not exist yet and must lie outside every git work tree (the research clone, this
-    tool's clone and any other), so nothing the tool writes can be committed by accident."""
+    tool's clone and any other), so nothing the tool writes can be committed by accident; and never under
+    docs/asset_expansion, ~/.nextgen or a ledger folder (spec 10.5, Writes)."""
     if out.exists() or out.is_symlink():
         raise Refused(f"{out}: the output folder must be new")
     if inside_git_worktree(out.parent):
         raise Refused(f"{out}: the output folder must lie outside every git work tree")
+    named = sorted({p.lower() for p in Path(out).resolve().parts} & set(NO_WRITE_PARTS))
+    if named:
+        raise Refused(f"{out}: the output folder must not lie under a folder named {', '.join(named)}")
 
 
 def _write_new_folder(out: Path, texts: dict[str, str], blobs: dict[str, bytes] | None = None) -> None:
-    """Every file is built before this call; the folder and its files are created only here, each with mode x."""
+    """Every file is built before this call; the folder and its files are created only here, each with mode x. Text
+    is UTF-8 with LF on every platform. If a write fails, the folder is removed again, so a run that does not end
+    with a result leaves nothing behind."""
     out.mkdir(parents=True, exist_ok=False)
-    for rel, data in (blobs or {}).items():
-        (out / rel).parent.mkdir(parents=True, exist_ok=True)
-        with open(out / rel, "xb") as fh:
-            fh.write(data)
-    for rel, text in texts.items():
-        (out / rel).parent.mkdir(parents=True, exist_ok=True)
-        with open(out / rel, "x", encoding="utf-8", newline="\n") as fh:
-            fh.write(text)
+    try:
+        for rel, data in (blobs or {}).items():
+            (out / rel).parent.mkdir(parents=True, exist_ok=True)
+            with open(out / rel, "xb") as fh:
+                fh.write(data)
+        for rel, text in texts.items():
+            (out / rel).parent.mkdir(parents=True, exist_ok=True)
+            with open(out / rel, "x", encoding="utf-8", newline="\n") as fh:
+                fh.write(text)
+    except BaseException:
+        shutil.rmtree(out, ignore_errors=True)
+        raise
 
 
 # --------------------------------------------------------------------------- #
@@ -249,8 +266,8 @@ def load_keys(env_file: Path | None, environ: dict | None = None) -> dict[str, s
     found: dict[str, str] = {}
     if env_file is not None:
         try:
-            text = Path(env_file).read_text(encoding="utf-8-sig")
-        except (OSError, UnicodeDecodeError) as exc:
+            text = Path(env_file).read_bytes().decode("utf-8-sig", errors="replace")
+        except OSError as exc:
             raise Refused(f"--env-file cannot be read ({type(exc).__name__})") from None
         for line in text.splitlines():
             line = line.strip()
@@ -308,7 +325,7 @@ class Response:
 
 
 HttpGet = Callable[[str, dict, dict], Response]
-USER_AGENT = "quantgen-provider-parity/1"
+USER_AGENT = "provider-parity-check/1"
 HTTP_TIMEOUT_S = 30.0
 _MIN_GAP_S = 0.35
 _last_call: dict[str, float] = {}
@@ -454,8 +471,12 @@ def fetch_fmp(ctx: FetchContext) -> Fetched:
 
 def _kis_default_get(keys: dict) -> Callable:
     """The app's KIS client: it reads ~/.nextgen/kis_token.json and may rewrite it with a new token."""
-    from data.krx.kis_client import KISClient        # imported here: only `kis` needs the app's code
-    client = KISClient(base_url=keys.get("KIS_BASE_URL") or None)
+    try:
+        from data.krx.kis_client import KISClient    # imported here: only `kis` needs the app's code
+        client = KISClient(base_url=keys.get("KIS_BASE_URL") or None)
+    except Exception as exc:
+        raise FetchFailed("fetch_failed", f"the app's KIS client cannot be loaded ({type(exc).__name__}); run from "
+                                          "the clone's root with the app's packages installed") from None
     if not client.ready:
         raise FetchFailed("no_key", "the KIS client is not ready (KIS_APP_KEY, KIS_APP_SECRET)")
     return client._get
@@ -530,7 +551,7 @@ def fetch_yahoo_now(ctx: FetchContext) -> Fetched:
     if isinstance(close, pd.DataFrame):
         close = close.iloc[:, 0]
     rows = [(pd.Timestamp(d).strftime("%Y-%m-%d"), _num(v)) for d, v in close.items()]
-    return Fetched([params], [("yahoo_now_000.csv", df.to_csv().encode("utf-8"))], rows)
+    return Fetched([params], [("yahoo_now_000.csv", df.to_csv(lineterminator="\n").encode("utf-8"))], rows)
 
 
 def fetch_coinbase(ctx: FetchContext) -> Fetched:
@@ -779,6 +800,8 @@ def _to_series(s: pd.Series, keep_blanks: bool) -> Series:
 def read_table(table: Path, repo: Path, series: str) -> dict:
     """The pilot table, read-only: the pinned file of `series`, its md5 and the table's window."""
     repo_r = Path(repo).resolve()
+    if Path(__file__).resolve().is_relative_to(repo_r):
+        raise Refused("--repo holds this tool: run it from a separate clone, never from the research clone (U5)")
     if not (repo_r / ".git").exists():
         raise Refused("--repo must be the root of the research clone (it has no .git)")
     t = Path(table).resolve()
@@ -836,7 +859,8 @@ def read_provider(path: Path, *, provider: str, series: str, start: str, end: st
             m = json.loads(meta.read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, ValueError):
             raise Refused(f"{meta}: unreadable fetch record") from None
-        if m.get("schema") == FETCH_SCHEMA and (m.get("provider"), m.get("series")) != (provider, series):
+        if isinstance(m, dict) and m.get("schema") == FETCH_SCHEMA and \
+                (m.get("provider"), m.get("series")) != (provider, series):
             raise Refused(f"{Path(path).name}: its fetch record names another provider or series")
     try:
         data = Path(path).read_bytes()
@@ -1117,7 +1141,8 @@ def check_rf_seed(a: Series, start: str) -> Check:
 
 
 def check_rf(a: Series, b: Series, role: str) -> list[Check]:
-    """A is the pinned DGS3MO with its published blanks kept; B is another channel of the same series."""
+    """A is the pinned DGS3MO with its published blanks kept; B is another channel of the same series. A date on
+    which A has a value and B has none, whether B lacks the row or carries a blank there, is listed."""
     t = THRESHOLDS["rf"]
     av = dict(zip(a.dates, a.values))
     bv = dict(zip(b.dates, b.values))
@@ -1126,7 +1151,7 @@ def check_rf(a: Series, b: Series, role: str) -> list[Check]:
     off = [d for d, x in zip(both, diff) if x >= t["value_tol_pct"]]
     blank_a_value_b = [d for d in a.dates if not math.isfinite(av[d]) and d in bv and math.isfinite(bv[d])]
     weekday = [d for d in a.dates if date.fromisoformat(d).weekday() < 5]
-    value_a_absent_b = [d for d in weekday if math.isfinite(av[d]) and d not in bv and
+    value_a_absent_b = [d for d in weekday if math.isfinite(av[d]) and not math.isfinite(bv.get(d, math.nan)) and
                         b.dates and b.dates[0] <= d <= b.dates[-1]]
     checks = [
         Check("values", "hard", "FAIL" if off else "PASS",
@@ -1332,7 +1357,8 @@ def _accounted_pairs(series: str, pair_args: list[list[str]], unavailable_args: 
             raise Refused(f"{series}: reason {reason!r} is not one of {UNAVAILABLE_REASONS}")
     missing = [p for p, (_, _, required) in table.items() if required and p not in named]
     if missing:
-        raise Refused(f"{series}: required provider(s) {missing} neither compared nor declared unavailable")
+        raise Refused(f"{series}: required provider(s) {', '.join(missing)} neither compared (--pair <provider> "
+                      f"<file>) nor declared unavailable (--unavailable <provider> <reason>)")
     return [(table[p][0], table[p][1], p, Path(path)) for p, path in pair_args], \
         [(p, reason) for p, reason in unavailable_args]
 
@@ -1486,13 +1512,21 @@ def selftest() -> list[str]:
 # Command line
 # --------------------------------------------------------------------------- #
 class _Say:
-    """print() with every loaded key value replaced, as a last guard; the tool never formats a key into a line."""
+    """print() with every loaded key value replaced, as a last guard; the tool never formats a key into a line. A
+    character the console encoding lacks (cp949, or any other) is written as a backslash escape, so a line never
+    fails to print and the last line is the same text on every console."""
 
     def __init__(self):
         self.secrets: list[str] = []
 
     def __call__(self, line: str) -> None:
-        print(_redact(line, self.secrets))
+        text = _redact(line, self.secrets)
+        encoding = getattr(sys.stdout, "encoding", None) or "utf-8"
+        try:
+            text = text.encode(encoding, errors="backslashreplace").decode(encoding)
+        except LookupError:
+            text = text.encode("ascii", errors="backslashreplace").decode("ascii")
+        print(text)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -1560,9 +1594,4 @@ def run(argv: list[str] | None = None, *, now: datetime | None = None, http: Htt
 
 
 if __name__ == "__main__":
-    for stream in (sys.stdout, sys.stderr):
-        try:
-            stream.reconfigure(encoding="utf-8", errors="replace")
-        except Exception:
-            pass
     sys.exit(run())
