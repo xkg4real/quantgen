@@ -163,7 +163,7 @@
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
     "core/quant/run_registry_fold.py": "110bc2bdb999ecbf3e595b1f6d885ebc81589b6e3f944482837914321866c4c8",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
-    "core/quant/run_registry_series_files.py": "7795a3c65d627de80f99b5ffeb1754c5016ea28fed594f33ed7e314c09db8465",
+    "core/quant/run_registry_series_files.py": "0fd8c58b304327b9c82b3cff1e3370ae798c818d7927b5f6886b6335120f9573",
     "core/quant/run_registry_series_format.py": "241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc",
     "core/quant/run_registry_series_hash.py": "96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043",
     "core/quant/run_registry_source_hash.py": "f38239e969a0127f8db00cbaf47fa9e1721c1642c525dff0ef5f7aa463e3bef6",
@@ -279,7 +279,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "ac915ccaa5a2eae43d518af0f50c8578e3d31ed9c26b6b6bb35e03c3783e3450",
+    "docs/compliance/FACTS.md": "d5c45f81c714566bb62df899a04446332a358be13fdac7bd63a6b39ffe774f0c",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -334,7 +334,7 @@
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
     "docs/product/R3_DETACHED_RUN_FOLD_2026-11-10.md": "ff4aad9febbee475e144111f11552292bacc5a368df577c4127c8ac7b483bb08",
-    "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "06e00a0fe992f4828b32415b79889907ec4da03b34194a6bbc3cdb917dde01bd",
+    "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "a9b0d742405e70df1f3d468ad2b260d188d597bb88870b2d275cbef8cec3c0c9",
     "docs/product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md": "04634e2e49b8b9c7e7cb4ada8d4d9669f8bf2fb2f54ea76b77f40f3ed0f11d71",
     "docs/product/R3_DETACHED_SERIES_HASH_2026-11-06.md": "aa144bbc25db49cffdda02ccc8cf55a88873dadc8f842d052c4ebf1cb6f48a2b",
     "docs/product/R3_DETACHED_SOURCE_HASH_2026-11-06.md": "1110e24650f40883e876b331d46f22780ef951d8dd7384401fbb99c555e53035",
@@ -560,7 +560,7 @@
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
     "tests/run_registry_fold_acceptance.py": "4aa3227d95e4365afd2fcf9866c0529fe7903f0baba2ab2b816c88a6ae02c458",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
-    "tests/run_registry_series_files_acceptance.py": "042b56defbd8f444b5e70e1946e0dec32fc24c90fc1f72cf01721df773b3d187",
+    "tests/run_registry_series_files_acceptance.py": "17ce8cd216d69b80f290eb39794f292195afb0251cf7b1cd40c83dc4a0904e91",
     "tests/run_registry_series_format_acceptance.py": "2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73",
     "tests/run_registry_series_hash_acceptance.py": "f38a05fca045b00b3bf401a2ba3d0f2a71a6cc589acf5e790655c1e4fc76a156",
     "tests/run_registry_source_hash_acceptance.py": "461adaa26011177c0084d77aa35034ae32e5fbf800da08e0333c937d5eb80f96",
@@ -651,163 +651,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "5935afb05607d1503f0e5be048cf8a1bbb7b36f94118520339ea774e07e59840",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.933384+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "29c2926e6e7f48091073e9ed1a127cf2e3e7f611ebb033da7a22ae577dc55faf",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.616767+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "5935afb05607d1503f0e5be048cf8a1bbb7b36f94118520339ea774e07e59840",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.936058+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "29c2926e6e7f48091073e9ed1a127cf2e3e7f611ebb033da7a22ae577dc55faf",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.619056+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "6bc9928ee0f7aeb13caf293fcd4a1e4895d7fdacf640e4ad11b4198e20021bd3",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.938943+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "d559554408ae72fb13224edef261162bca5cbedf574a296445b86063095c6c00",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.621033+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "7676cadbcc88dfa59623a9e6f37837db485ed0813d1b35b937e02a585769d74e",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.940789+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "c7de7a72fe5b3f69d5b7c95efd75656496fb5c77dc1e3de97d42ebf6b040348d",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.622837+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "55338f32a85f6769d7e3c7b405e4dac6b71c5d929088c3d33ad0b2ab379f16d4",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.942697+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "aef1dd40e0c6d316b7bef831a599b1c0be7c74117ecb951b2f47409f1e15525a",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.624512+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "2f15c0f0923ca43be2d1a80d943efb1e3a1d6e9a149152bb3cd6c6613d54e2d9",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.945025+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "23cfe835e0df97a393c6018be1adbc8dbfe4982659f840e722d50afa15c6ad60",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.626416+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "5935afb05607d1503f0e5be048cf8a1bbb7b36f94118520339ea774e07e59840",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.947439+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "29c2926e6e7f48091073e9ed1a127cf2e3e7f611ebb033da7a22ae577dc55faf",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.628072+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "2f15c0f0923ca43be2d1a80d943efb1e3a1d6e9a149152bb3cd6c6613d54e2d9",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.949123+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "23cfe835e0df97a393c6018be1adbc8dbfe4982659f840e722d50afa15c6ad60",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.631723+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "08f070311d141c810bb99a7698faf4c18ad756d99ed98e5ce3f420b18f585ad5",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.950855+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "3994005086878406182645c3bcce32917b11eaedb0973d86dba6d2a8e89607d7",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.633325+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "9459c3c7eb071e1e80f94666d12124dc81b465e451116432f282c490c7144ab5",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.953115+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "cd460ee4dc620616043d866bdf02367d01b7d97e726be8c7ebc1dac1b256e4a4",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.635180+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "db0dcbb327ebed0b62cc523546cce4fbe6d8d17db7de5fbcf5c86f517a308b7e",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.955657+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "7c4540457cee4c9fc9f5e99a8bfade043ee768088ec5f237d1861edb6069b26d",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.637059+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "740a8059c17d64315e8ab476788dee3cf9583271a797799e064d14d12aaf0c5c",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.957750+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "12ae4ecaab83f1071b465fc2918e3debdc35dc91bb384fd19d02111c87233606",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.638693+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "08f070311d141c810bb99a7698faf4c18ad756d99ed98e5ce3f420b18f585ad5",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.962190+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "3994005086878406182645c3bcce32917b11eaedb0973d86dba6d2a8e89607d7",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.640749+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "08f070311d141c810bb99a7698faf4c18ad756d99ed98e5ce3f420b18f585ad5",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.964033+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "3994005086878406182645c3bcce32917b11eaedb0973d86dba6d2a8e89607d7",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.644614+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "08f070311d141c810bb99a7698faf4c18ad756d99ed98e5ce3f420b18f585ad5",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.965808+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "3994005086878406182645c3bcce32917b11eaedb0973d86dba6d2a8e89607d7",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.646353+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "b742626609fe170699bfb29ffc5e92dffc0c0267274684db3221baead9172d7c",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.967586+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "3ad506ed4489f6ecacab150f3b0afbe37a136e4f0cc7fe76a5dbc541bfd0f5d7",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.648322+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "2f15c0f0923ca43be2d1a80d943efb1e3a1d6e9a149152bb3cd6c6613d54e2d9",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.969179+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "23cfe835e0df97a393c6018be1adbc8dbfe4982659f840e722d50afa15c6ad60",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.650159+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "5935afb05607d1503f0e5be048cf8a1bbb7b36f94118520339ea774e07e59840",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.970903+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "29c2926e6e7f48091073e9ed1a127cf2e3e7f611ebb033da7a22ae577dc55faf",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.652102+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "919cf48ccd424670480cb85ba59bdaa5a70d9381d633472bc96c8f1fb3d01fb1",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.973013+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "2de92f59cbe633e88cc259c061c93e36df050f90514c6695ba09b7e2d68a6a5d",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.653723+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "5935afb05607d1503f0e5be048cf8a1bbb7b36f94118520339ea774e07e59840",
-      "reviewed_by": "Claude LA-02 part 2 verification fixes",
-      "review_note": "Verification fixes to the LA-02 part 2 test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T17:08:20.974845+00:00",
-      "source_commit": "ce08207dba0550e9a7868cd1155a5837346e5f67"
+      "source_digest": "29c2926e6e7f48091073e9ed1a127cf2e3e7f611ebb033da7a22ae577dc55faf",
+      "reviewed_by": "Claude owner rulings review",
+      "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite",
+      "reviewed_at": "2026-11-10T18:31:48.655316+00:00",
+      "source_commit": "275ec939af96baa9ace5992df1c43014306edb84"
     }
   }
 }
