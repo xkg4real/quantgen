@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "66d0d6aaebadc4651cca35076cc150676f4eae0074c1b23ec1efc7901d833af5",
+    ".github/workflows/runtime-smoke.yml": "600f5a7870606907a7a5c94b3e4ef7d8e12b1e41f9e5b94c51ac9db66dc4cd40",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -49,6 +49,8 @@
     "assets/ui/chevron-up-light.svg": "2265a4fb6c322734ffd4e35292fe0ba4c5e00fd6441368df6b1a32fd5f91dde8",
     "config.py": "266bf6754f40d83fafd5cbb2b1c06bea26c8bda63ad71ad2d7b85801b2d0d7a8",
     "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/adoption/__init__.py": "592263c22647b24151038499489911ec409ac81177e99ed3c33f3a359947953a",
+    "core/adoption/strategy_rules.py": "dca6a6b6e3a21b359da03116b7bd9d1a66f930b43a44d193136729c5002c76c2",
     "core/app_paths.py": "87cd28f423db0975e62402f09d29366d81aa1ac02b71cfb11f757c42a0f0d4cd",
     "core/calendars/__init__.py": "51bbdbd4d2326fb2ebfb2875db644b35fd874952769a7b0f07d051af3c76f8f2",
     "core/calendars/adapter.py": "fe925a34aeab1dca873aaac530a4aa5f2ba3be7b26f15ddc09f9c115324c7574",
@@ -276,13 +278,14 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "1a7a42f26e1a71d544e6761f58a6e84b266bb7e8a59ebfafa2b04a376438007d",
+    "docs/compliance/FACTS.md": "8ecdc8be327919245997e77d7ce03c0de7e77d422bcd70f84f86fd285542ee95",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
+    "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "4c5b93ba654baed900cb3ddbbc07504f8b00fe5630a8f99cb4fd77c9f0ed9928",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -406,6 +409,7 @@
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
+    "tests/adoption_strategy_rules_acceptance.py": "a22de7ebcaf372240f889a60569a8f73ebe2d84bbed6df47c64bba41adb8e614",
     "tests/ai_connection_acceptance.py": "b074a2f0c8d708c68a28a19ff187b9e3ab1095c10c83c1a47cb6ede9d338f79f",
     "tests/ai_output_check_acceptance.py": "01c54460c470062df057d398b08233cae41c420115ee24693f19ab3711a02972",
     "tests/ai_payload_acceptance.py": "a4efa39af3a06c6859607306729a9190c4f44da320556a4567388f7ab107e138",
@@ -641,163 +645,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "195a7ce380c3d60f731b68f2bfd94cd6a5e4d59bebb474e654f8a3a090da497d",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.042151+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "943ac46d920cd189da67af24db6753e1d38221a8af24d5d89b075e8721074394",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.575953+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "195a7ce380c3d60f731b68f2bfd94cd6a5e4d59bebb474e654f8a3a090da497d",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.044795+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "943ac46d920cd189da67af24db6753e1d38221a8af24d5d89b075e8721074394",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.578844+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "fe7058a94ea539b22899d583a04c0385fdefb07ef6df5c06361c0706cca727e1",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.049404+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "28c3ac52454a1a59983b6c071f9ed9797556e8748928cded74ce8a735799a4bb",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.580673+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "8963dd9a8343deaff2d855e03dd521503967cd75a3cdad28443c35a0d2702055",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.051829+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "b1113628610cc1b13665bcbab530907082ecca849b9d037635f7d6fab87483bd",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.582480+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "e5f389ceb0283cf3afec79879a77653997292b524c30a923bbd8a96b645cd4e1",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.053852+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "38c873341e5d849ec0faf90a344bdfa6a48368fa2a389c43ab1c9633aa303ea9",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.584777+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "a97bfeb30b66e94e2a592ce995fa469403fdd6f266b2cc1f6d0a79455de09223",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.055686+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "76a222ba4bc4aaee82971f4e8ea79e5cfbb501b1efd0470a7ea79ed2fb15a527",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.586796+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "195a7ce380c3d60f731b68f2bfd94cd6a5e4d59bebb474e654f8a3a090da497d",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.057479+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "943ac46d920cd189da67af24db6753e1d38221a8af24d5d89b075e8721074394",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.589072+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "a97bfeb30b66e94e2a592ce995fa469403fdd6f266b2cc1f6d0a79455de09223",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.059640+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "76a222ba4bc4aaee82971f4e8ea79e5cfbb501b1efd0470a7ea79ed2fb15a527",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.590770+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "e05b41c3f78800c7e3e38914ca100599a3e0f356a1786fc6c324108f08b4c509",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.061647+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "25d054274085f8d70c44e250fe2289170e5e1948855a539ff6838aad0c824307",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.592986+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "c6f3fe2b9590ecc5af14efbf52788fc634db1407bea2208d1e763f290de63e80",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.063611+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "e2e18ad06740c19c2a13d8811276b104cc9f51981702b3d7d13081b7df5ebfae",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.595137+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "c81bed6d37f00e9812a3f8774e1eddf9ce2d2d2866fc1a3ee8911a1a0e94f7c3",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.065810+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "3f0f2ca0710a876cb15b341252b69e57130eae1ffbdecf95c3c9335a8c4d0e32",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.597245+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "ed52e1e901ac49005b41a66ff0cb0d418d6044821d42f3758c8bcc0c1d10e3e0",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.067495+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "5fa66ceb02538986351bfd1a4eb9be2be38af489e29d82424b6f912a16f6b21a",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.599022+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "e05b41c3f78800c7e3e38914ca100599a3e0f356a1786fc6c324108f08b4c509",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.069268+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "25d054274085f8d70c44e250fe2289170e5e1948855a539ff6838aad0c824307",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.601162+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "e05b41c3f78800c7e3e38914ca100599a3e0f356a1786fc6c324108f08b4c509",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.071399+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "25d054274085f8d70c44e250fe2289170e5e1948855a539ff6838aad0c824307",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.603340+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "e05b41c3f78800c7e3e38914ca100599a3e0f356a1786fc6c324108f08b4c509",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.073106+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "25d054274085f8d70c44e250fe2289170e5e1948855a539ff6838aad0c824307",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.605574+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "87853c44c8aafe99e91dc64d1a5cfa848ea1407f31b4d48385811b2e0c1e9ace",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.074931+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "be572e1f20782486dec676db47bd612f005676c2108295b349b2ce0255439dc8",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.607225+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "a97bfeb30b66e94e2a592ce995fa469403fdd6f266b2cc1f6d0a79455de09223",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.076623+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "76a222ba4bc4aaee82971f4e8ea79e5cfbb501b1efd0470a7ea79ed2fb15a527",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.609370+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "195a7ce380c3d60f731b68f2bfd94cd6a5e4d59bebb474e654f8a3a090da497d",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.078272+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "943ac46d920cd189da67af24db6753e1d38221a8af24d5d89b075e8721074394",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.611617+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "87b3cdee48f4c0aa8d58df1ace672ede2b5aca53398680d13e554d4f43b921bd",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.079978+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "0a7ba26985920479e306b2dd11ad2e15235f472556d474612f9193786df573ad",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.613905+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "195a7ce380c3d60f731b68f2bfd94cd6a5e4d59bebb474e654f8a3a090da497d",
-      "reviewed_by": "Claude R3 series-files review",
-      "review_note": "Merged integrated series format branch (main with PR90, PR87, PR88) into series files; series-files policy rows unchanged",
-      "reviewed_at": "2026-11-10T10:30:19.081647+00:00",
-      "source_commit": "fabd8e2f541c43ec4ebda53249b0eb361f9b5691"
+      "source_digest": "943ac46d920cd189da67af24db6753e1d38221a8af24d5d89b075e8721074394",
+      "reviewed_by": "Claude adopt review",
+      "review_note": "9-4/2/a adoption strategy checks: new pure core/adoption module (S-2, S-3, S-4, S-7 lines, no outcome), synthetic acceptance test, runtime-smoke list append and FACTS section reviewed against all 20 documents; no data collection, storage, transfer or UI change, so policy text is unchanged",
+      "reviewed_at": "2026-11-10T12:24:04.615605+00:00",
+      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
     }
   }
 }
