@@ -272,6 +272,14 @@ class ToolPane(QWidget):
         chart.set_series(x, series)
         self.result_layout.addWidget(chart)
         self.charts[name] = chart
+        self._add_chart_reading(name, chart)
+
+    def _add_chart_reading(self, name, chart):
+        """'How to read this chart' under a chart with an authored guide (owner issue 02); display only."""
+        from .chart_study import chart_reading
+        chart.reading = chart_reading(name)
+        if chart.reading is not None:
+            self.result_layout.addWidget(chart.reading)
 
     def finished(self, narrative, *, localized=None, sections=None):
         """Show the narrative as headed bullets (owner issue 11), the full paragraph folded below.
@@ -308,6 +316,7 @@ class ToolPane(QWidget):
         chart.colors=self.window().colors
         self.result_layout.addWidget(chart)
         self.charts[name]=chart
+        self._add_chart_reading(name, chart)
 
     def bind_output(self, name, output):
         if not self.has_result: return

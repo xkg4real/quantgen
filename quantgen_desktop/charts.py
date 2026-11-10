@@ -1,8 +1,9 @@
 """Native Qt painting of the existing engine's percentile fan. No web view."""
 import math
 from dataclasses import dataclass
+import re
 from PyQt6.QtCore import QEvent, QPointF, QRectF, Qt
-from PyQt6.QtGui import QColor, QFontMetricsF, QPainter, QPainterPath, QPen
+from PyQt6.QtGui import QBrush, QColor, QFontMetricsF, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import QWidget
 
 from core.theme import LIGHT
@@ -15,6 +16,62 @@ def _axis_number(widget,value,digits=2,*,percent=False,group=True):
     return format(value,('.'+str(digits)+'%') if percent else (',' if group else '')+'.'+str(digits)+'f')
 
 
+_TENOR = re.compile(r'(\d+(?:\.\d+)?)([dwmy])')
+_TENOR_KO = {'d': '일물', 'w': '주물', 'm': '개월물', 'y': '년물'}
+_PCA_KO = re.compile(r'pc(\d+)')
+
+
+def chart_text(widget, text):
+    """Axis captions and series names in the window language (owner issue 02, 2026-11-10).
+
+    Korean comes first from the chart-only vocabulary (owner_ui_language.charts.CHART_TERMS), then tenor
+    names ('2y' -> '2년물', as the Flet charts), then the window catalogue. Display only: the chart keeps
+    the source names, and exports never see this text."""
+    text = str(text)
+    if getattr(widget.window(), 'ui_language', None) == 'ko':
+        from .owner_ui_language.charts import CHART_TERMS
+        if text in CHART_TERMS:
+            return CHART_TERMS[text]
+        tenor = _TENOR.fullmatch(text)
+        if tenor:
+            return tenor.group(1) + _TENOR_KO[tenor.group(2)]
+        factor = _PCA_KO.fullmatch(text)
+        if factor:
+            return '주성분 ' + factor.group(1)
+    return display(widget, text)
+
+
+def nice_ticks(lo, hi, count=4, *, integer=False):
+    """Round tick values inside [lo, hi]: steps of 1, 2, 2.5 or 5 times a power of ten, whole steps for
+    counts (owner issue 02: axes read '0.00 180.50 361.00'). Returns (ticks, step); ([], 0) when the span
+    is empty or not finite."""
+    if not (math.isfinite(lo) and math.isfinite(hi)) or hi <= lo:
+        return [], 0
+    raw = (hi - lo) / max(1, count)
+    power = 10 ** math.floor(math.log10(raw))
+    multiples = (1, 2, 5, 10) if integer and power < 10 else (1, 2, 2.5, 5, 10)
+    step = min((m * power for m in multiples), key=lambda s: abs(math.log(s / raw)))   # the nearest round step
+    if integer:
+        step = max(1, round(step))
+    first = math.ceil(lo / step - 1e-9)
+    ticks = []
+    while True:
+        value = (first + len(ticks)) * step
+        if value > hi + step * 1e-9 or len(ticks) > 50:
+            break
+        ticks.append(0.0 if abs(value) < step * 1e-9 else value)
+    return ticks, step
+
+
+def tick_digits(step):
+    """Decimals a tick step needs: 0.25 -> 2, 5 -> 0."""
+    for digits in range(0, 8):
+        scaled = step * 10 ** digits
+        if abs(scaled - round(scaled)) < 1e-6 * max(1., scaled):
+            return digits
+    return 8
+
+
 @dataclass
 class _ChartLayout:
     plot: QRectF
@@ -23,10 +80,13 @@ class _ChartLayout:
     line_height: float
     x_tick_width: float
     minimum_height: int
+    caption: QRectF = None
 
 
-def _chart_layout(widget, y_labels=(), x_labels=(), legends=(), footer=""):
-    """Measure logical pixels with the actual font; Qt owns device scaling."""
+def _chart_layout(widget, y_labels=(), x_labels=(), legends=(), footer="", caption=""):
+    """Measure logical pixels with the actual font; Qt owns device scaling.
+
+    `caption` (the y-axis caption) gets its own line above the plot, so the footer names only the x axis."""
     metrics = QFontMetricsF(widget.font())
     line_height = math.ceil(metrics.height()) + 2
     available = max(1, widget.width() - 24)
@@ -39,6 +99,10 @@ def _chart_layout(widget, y_labels=(), x_labels=(), legends=(), footer=""):
         entries.append((QRectF(x + 14, y, max(1, width - 18), line_height), text))
         x += width
     top = y + line_height + 12 if entries else 18
+    caption_rect = None
+    if caption:
+        caption_rect = QRectF(12, top - (4 if entries else 8), available, line_height)
+        top = caption_rect.bottom() + line_height / 2 + 4
     footer_height = math.ceil(metrics.boundingRect(
         QRectF(0, 0, available, 10000), Qt.TextFlag.TextWordWrap, footer).height()) if footer else 0
     footer_rect = QRectF(12, widget.height() - footer_height - 10, available, footer_height)
@@ -48,7 +112,8 @@ def _chart_layout(widget, y_labels=(), x_labels=(), legends=(), footer=""):
     right = max(24, tick_width / 2 + 8)
     return _ChartLayout(QRectF(left, top, max(1, widget.width()-left-right),
                               max(1, widget.height()-top-bottom)),
-                        footer_rect, entries, line_height, tick_width, math.ceil(top + bottom + 140))
+                        footer_rect, entries, line_height, tick_width, math.ceil(top + bottom + 140),
+                        caption_rect)
 
 
 def _draw_y_tick(painter, layout, y, text):
@@ -67,13 +132,34 @@ def _draw_x_tick(painter, layout, index, text):
                                layout.x_tick_width, layout.line_height), Qt.AlignmentFlag.AlignCenter, text)
 
 
-def _draw_chart_text(painter, layout, colors, footer, series_colors=()):
+def _draw_x_ticks_at(painter, layout, ticks):
+    """Ticks at their own x positions, [(x, text)] in plot order; thinned until no two labels touch."""
+    metrics = QFontMetricsF(painter.font())
+    shown = list(ticks)
+    for stride in range(1, len(ticks) + 1):
+        shown = ticks[::stride]
+        widths = [metrics.horizontalAdvance(text) + 6 for _, text in shown]
+        if all(b[0] - a[0] >= (wa + wb) / 2 + 6
+               for (a, wa), (b, wb) in zip(zip(shown, widths), zip(shown[1:], widths[1:]))):
+            break
+    for x, text in shown:
+        width = metrics.horizontalAdvance(text) + 6
+        left = min(max(2., x - width / 2), painter.device().width() - width - 2)
+        painter.drawText(QRectF(left, layout.plot.bottom() + 6, width, layout.line_height),
+                         Qt.AlignmentFlag.AlignCenter, text)
+
+
+def _draw_chart_text(painter, layout, colors, footer, series_colors=(), caption=""):
     for (rect, text), color in zip(layout.legends, series_colors):
         painter.setPen(QPen(QColor(color), 2))
         painter.drawLine(QPointF(rect.left()-12, rect.center().y()), QPointF(rect.left()-5, rect.center().y()))
         painter.setPen(QColor(colors.text))
         painter.drawText(rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, text)
     painter.setPen(QColor(colors.muted))
+    if caption and layout.caption is not None:
+        painter.drawText(layout.caption, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                         QFontMetricsF(painter.font()).elidedText(caption, Qt.TextElideMode.ElideRight,
+                                                                  layout.caption.width()))
     painter.drawText(layout.footer, Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap, footer)
 
 
@@ -89,12 +175,16 @@ class _CartesianChart(QWidget):
     def _footer_text(self):
         return ""
 
+    def _caption_text(self):
+        return ""
+
     def _reserve_text_space(self):
         if not hasattr(self, '_base_height'):
             return
         names = self._legend_names()
         self.setToolTip('\n'.join(names))
-        layout = _chart_layout(self, x_labels=('0',), legends=names, footer=self._footer_text())
+        layout = _chart_layout(self, x_labels=('0',), legends=names, footer=self._footer_text(),
+                               caption=self._caption_text())
         self.setMinimumHeight(max(self._base_height, layout.minimum_height))
 
     def resizeEvent(self, event):
@@ -176,9 +266,18 @@ class FrontierChart(_CartesianChart):
     def set_output(self,output):
         self.output=output;self._reserve_text_space();self.update()
 
+    # Display names of the optimiser objectives (risk area request, 2026-11-10: no raw ids such as
+    # max_sharpe in the English legend). Korean comes from the window catalogue entry of the id itself.
+    OBJECTIVE_NAMES = {'max_sharpe': 'Max Sharpe', 'min_vol': 'Minimum volatility',
+                       'risk_parity': 'Risk parity', 'equal_weight': 'Equal weight'}
+
     def _legend_names(self):
         output = getattr(self, 'output', None)
-        return [display(self, v.objective) for v in output.portfolios.values()] if output else []
+        if not output:
+            return []
+        korean = getattr(self.window(), 'ui_language', None) == 'ko'
+        return [display(self, v.objective if korean else self.OBJECTIVE_NAMES.get(v.objective, v.objective))
+                for v in output.portfolios.values()]
 
     def _footer_text(self):
         return display(self, "Annual volatility → · Y: annual return (historical estimate)")
@@ -223,6 +322,9 @@ class FrontierChart(_CartesianChart):
 
 
 class LineChart(_CartesianChart):
+    """Series against a shared x axis. Ticks are round values (whole numbers for observation counts), the
+    y-axis caption sits above the plot and the x-axis caption below it, both in the window language
+    (owner issue 02, 2026-11-10). The series and their source names are unchanged."""
     def __init__(self,x_label,y_label,parent=None):
         super().__init__(280, parent)
         self.x_label=x_label;self.y_label=y_label;self.series=[];self.x=[];self.colors=LIGHT
@@ -232,10 +334,31 @@ class LineChart(_CartesianChart):
         self.x=list(x);self.series=series;self._reserve_text_space();self.update()
 
     def _legend_names(self):
-        return [display(self, name) for name,_ in getattr(self,'series',())]
+        return [chart_text(self, name) for name,_ in getattr(self,'series',())]
 
     def _footer_text(self):
-        return display(self, getattr(self,'x_label',''))+' · '+display(self, getattr(self,'y_label',''))
+        return chart_text(self, getattr(self,'x_label',''))
+
+    def _caption_text(self):
+        return chart_text(self, getattr(self,'y_label',''))
+
+    def _ticks(self, lo, hi, count, whole):
+        """[(value, text)] at round values; as many decimals as the step needs (0.002 -> 3), so a small
+        span never repeats a label, and never '-0' (owner issue 02; market area request 2026-11-10)."""
+        ticks, step = nice_ticks(lo, hi, count, integer=whole)
+        if len(ticks) < 2:
+            ticks = [lo, hi] if hi > lo else [lo]
+            step = (hi - lo) or abs(lo) or 1.
+        digits = 0 if whole else tick_digits(step)
+        return [(v, _axis_number(self, round(v, digits) + 0., digits)) for v in ticks]
+
+    def _x_ticks(self, xmin, xmax):
+        """Whole numbers when every x is a whole number (observation counts), never '125.75'."""
+        whole = all(float(x).is_integer() for x in self.x if math.isfinite(float(x)))
+        return self._ticks(xmin, xmax, 6, whole)
+
+    def _y_ticks(self, ymin, ymax):
+        return self._ticks(ymin, ymax, 5, False)
 
     def paintEvent(self,event):
         p=QPainter(self);p.setRenderHint(QPainter.RenderHint.Antialiasing);c=self.colors
@@ -245,18 +368,21 @@ class LineChart(_CartesianChart):
         values=[y for points in pairs for x,y in points]
         if not values:return
         xmin=min(x for points in pairs for x,y in points);xmax=max(x for points in pairs for x,y in points)
-        ymin,ymax=min(values),max(values);pad=max((ymax-ymin)*.05,.001);ymin-=pad;ymax+=pad
-        y_labels=[_axis_number(self,ymin+(ymax-ymin)*i/4) for i in range(5)]
-        x_labels=[_axis_number(self,xmin+(xmax-xmin)*i/4,group=False) for i in range(5)]
-        footer=self._footer_text()
-        layout=_chart_layout(self,y_labels,x_labels,self._legend_names(),footer)
+        # A 5% margin of the data's own span (a fixed .001 flattened small series such as densities).
+        ymin,ymax=min(values),max(values);pad=(ymax-ymin)*.05 if ymax>ymin else max(abs(ymax)*.05,.001);ymin-=pad;ymax+=pad
+        y_ticks=self._y_ticks(ymin,ymax)
+        x_ticks=self._x_ticks(xmin,xmax)
+        footer=self._footer_text();caption=self._caption_text()
+        layout=_chart_layout(self,[t for _,t in y_ticks],[t for _,t in x_ticks],self._legend_names(),footer,caption)
         box=layout.plot
         def point(x,y):return QPointF(box.left()+(float(x)-xmin)/max(xmax-xmin,1e-9)*box.width(),box.bottom()-(float(y)-ymin)/(ymax-ymin)*box.height())
-        for i in range(5):
-            y=ymin+(ymax-ymin)*i/4;x=xmin+(xmax-xmin)*i/4
+        for y,text in y_ticks:
             p.setPen(QPen(QColor(c.border),1));p.drawLine(point(xmin,y),point(xmax,y))
-            p.setPen(QColor(c.muted));_draw_y_tick(p,layout,point(xmin,y).y(),y_labels[i])
-            _draw_x_tick(p,layout,i,x_labels[i])
+            p.setPen(QColor(c.muted));_draw_y_tick(p,layout,point(xmin,y).y(),text)
+        p.setPen(QPen(QColor(c.border),1));p.drawLine(QPointF(box.left(),box.bottom()),QPointF(box.right(),box.bottom()))
+        for x,_ in x_ticks:
+            px=point(x,ymin).x();p.drawLine(QPointF(px,box.bottom()),QPointF(px,box.bottom()+4))
+        p.setPen(QColor(c.muted));_draw_x_ticks_at(p,layout,[(point(x,ymin).x(),text) for x,text in x_ticks])
         for index,(name,ys) in enumerate(self.series):
             color=(c.accent,'#4474A4','#84649C','#A85F7A','#9C7B30')[index%5]
             p.setPen(QPen(QColor(color),2))
@@ -268,7 +394,7 @@ class LineChart(_CartesianChart):
                 else:line.moveTo(point(x,y));connected=True
             p.drawPath(line)
         colors=(c.accent,'#4474A4','#84649C','#A85F7A','#9C7B30')
-        _draw_chart_text(p,layout,c,footer,[colors[i%len(colors)] for i in range(len(self.series))])
+        _draw_chart_text(p,layout,c,footer,[colors[i%len(colors)] for i in range(len(self.series))],caption)
 
 
 class SignedBars(QWidget):
@@ -288,9 +414,162 @@ class SignedBars(QWidget):
         language = getattr(self.window(), 'ui_language', None)
         return self.localized_labels.get(index, {}).get(language, self.rows[index][0])
 
+    # ------------------------------------------------------------------ z-score reading (owner issue 02)
+    Z_ROW = 28
+
+    def show_zscores(self, *, groups, group_names, texts, hatched=()):
+        """Draw the rows as 1-year z-scores the way the Flet macro chart reads (PR #98).
+
+        `groups` gives each row's group key (bar colour, a rule between groups, one legend entry each),
+        `group_names` {key: {'ko': .., 'en': ..}}, `hatched` the row indices drawn hatched (synthetic data,
+        named once in the legend instead of on every row) and `texts` the band, unusual, axis and synthetic
+        captions as {'ko': .., 'en': ..}. The usual range |z| < 1 is shaded, |z| = 2 is dashed and every
+        value is printed at its bar end. Rows, values and the export are unchanged."""
+        self.zscore = {'groups': list(groups), 'names': dict(group_names), 'texts': dict(texts),
+                       'hatched': set(hatched)}
+        self._reserve_text_space()
+        self.update()
+
+    def _z_language(self):
+        return 'ko' if getattr(self.window(), 'ui_language', None) == 'ko' else 'en'
+
+    def _z_text(self, key):
+        value = self.zscore['texts'].get(key, {})
+        return value.get(self._z_language(), value.get('en', ''))
+
+    def _z_colors(self):
+        c = self.colors
+        return {'rates': c.accent, 'credit': c.error, 'fx': c.success, 'risk': c.muted}
+
+    def _z_legend(self, metrics, width):
+        """[(swatch rect, text rect, text, colour, hatched)] wrapped to `width`, and the number of lines."""
+        language = self._z_language()
+        colors = self._z_colors()
+        items = [(self.zscore['names'].get(g, {}).get(language, g), colors.get(g, self.colors.text), False)
+                 for g in dict.fromkeys(self.zscore['groups'])]
+        if self.zscore['hatched']:
+            items.append((self._z_text('synthetic'), self.colors.muted, True))
+        line = math.ceil(metrics.height()) + 2
+        out, x, y, lines = [], 12., 0., 1
+        for text, color, hatched in items:
+            w = metrics.horizontalAdvance(text) + 36
+            if x > 12 and x + w > width - 12:
+                x, y, lines = 12., y + line + 6, lines + 1
+            out.append((QRectF(x, y + (line - 12) / 2, 12, 12), QRectF(x + 18, y, w - 30, line), text, color,
+                        hatched))
+            x += w
+        return out, lines
+
+    def _z_height(self):
+        metrics = QFontMetricsF(self.font())
+        line = math.ceil(metrics.height()) + 2
+        _, lines = self._z_legend(metrics, max(350, self.width()))
+        return math.ceil(line + 16 + len(self.rows) * self.Z_ROW + 2 * (line + 4) + 10 + lines * (line + 6) + 8)
+
+    def _reserve_text_space(self):
+        if getattr(self, 'zscore', None):
+            self.setFixedHeight(self._z_height())
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        if event.size().width() != event.oldSize().width():
+            self._reserve_text_space()
+
+    def changeEvent(self, event):
+        super().changeEvent(event)
+        if event.type() in (QEvent.Type.FontChange, QEvent.Type.StyleChange):
+            self._reserve_text_space()
+
+    def _paint_zscores(self, p):
+        c = self.colors
+        metrics = QFontMetricsF(self.font())
+        line = math.ceil(metrics.height()) + 2
+        names = [self.display_label(i) for i in range(len(self.rows))]
+        label_w = min(max((metrics.horizontalAdvance(n) for n in names), default=0) + 12, self.width() * .42)
+        left, right = 8 + label_w + 10, self.width() - 18
+        finite = [abs(float(v)) for _, v in self.rows if math.isfinite(float(v))]
+        bound = max(3., float(math.ceil(max(finite, default=0.) + .9)))
+        scale = (right - left) / (2 * bound)
+        zero = (left + right) / 2
+
+        def x_at(v):
+            return zero + max(-bound, min(bound, float(v))) * scale
+
+        rows_top = line + 12
+        rows_bottom = rows_top + len(self.rows) * self.Z_ROW
+        band = QColor(c.accent)
+        band.setAlpha(22)
+        p.fillRect(QRectF(x_at(-1), rows_top, x_at(1) - x_at(-1), rows_bottom - rows_top), band)
+        p.setPen(QColor(c.muted))
+        band_text = self._z_text('band')
+        band_w = metrics.horizontalAdvance(band_text) + 8
+        p.drawText(QRectF(zero - band_w / 2, 4, band_w, line), Qt.AlignmentFlag.AlignCenter, band_text)
+        unusual = self._z_text('unusual')
+        unusual_w = metrics.horizontalAdvance(unusual) + 8
+        dashed = QPen(QColor(c.muted), 1, Qt.PenStyle.DashLine)
+        for v in (-2, 2):
+            x = x_at(v)
+            p.setPen(dashed)
+            p.drawLine(QPointF(x, rows_top), QPointF(x, rows_bottom))
+            if abs(x - zero) >= (band_w + unusual_w) / 2 + 4:
+                p.setPen(QColor(c.muted))
+                p.drawText(QRectF(x - unusual_w / 2, 4, unusual_w, line), Qt.AlignmentFlag.AlignCenter, unusual)
+        groups = self.zscore['groups']
+        p.setPen(QPen(QColor(c.border), 1))
+        for k in range(1, len(self.rows)):
+            if k < len(groups) and groups[k] != groups[k - 1]:
+                y = rows_top + k * self.Z_ROW
+                p.drawLine(QPointF(8, y), QPointF(self.width() - 8, y))
+        colors = self._z_colors()
+        for i, (_name, value) in enumerate(self.rows):
+            y = rows_top + i * self.Z_ROW + self.Z_ROW / 2
+            p.setPen(QColor(c.text))
+            p.drawText(QRectF(8, y - line / 2, label_w, line),
+                       Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
+                       metrics.elidedText(names[i], Qt.TextElideMode.ElideRight, label_w))
+            if not math.isfinite(float(value)):
+                p.drawText(QRectF(zero + 6, y - line / 2, 40, line), Qt.AlignmentFlag.AlignVCenter, '—')
+                continue
+            color = QColor(colors.get(groups[i] if i < len(groups) else None, c.text))
+            bar = QRectF(min(zero, x_at(value)), y - 8, abs(x_at(value) - zero), 16)
+            p.fillRect(bar, color)
+            if i in self.zscore['hatched']:
+                p.fillRect(bar, QBrush(QColor(c.surface), Qt.BrushStyle.BDiagPattern))
+            text = f'{float(value):+.2f}'.replace('-', '−')
+            w = metrics.horizontalAdvance(text) + 6
+            tx = x_at(value) + 4 if value >= 0 else x_at(value) - 4 - w
+            tx = min(max(tx, left - 6), self.width() - w - 2)
+            p.fillRect(QRectF(tx, y - line / 2 + 2, w, line - 4), QColor(c.surface))
+            p.setPen(QColor(c.text))
+            p.drawText(QRectF(tx, y - line / 2, w, line), Qt.AlignmentFlag.AlignCenter, text)
+        p.setPen(QPen(QColor(c.text), 1))
+        p.drawLine(QPointF(zero, rows_top - 2), QPointF(zero, rows_bottom + 2))
+        step = 1 if scale >= metrics.horizontalAdvance('−3') + 14 else 2
+        p.setPen(QColor(c.muted))
+        for v in range(-int(bound), int(bound) + 1):
+            if v % step:
+                continue
+            text = f'{v:+d}'.replace('-', '−') if v else '0'
+            p.drawText(QRectF(x_at(v) - 20, rows_bottom + 4, 40, line), Qt.AlignmentFlag.AlignCenter, text)
+        axis_top = rows_bottom + line + 8
+        p.drawText(QRectF(8, axis_top, self.width() - 16, line), Qt.AlignmentFlag.AlignCenter,
+                   metrics.elidedText(self._z_text('axis'), Qt.TextElideMode.ElideRight, self.width() - 16))
+        legend_top = axis_top + line + 10
+        entries, _ = self._z_legend(metrics, self.width())
+        for swatch, rect, text, color, hatched in entries:
+            box = swatch.translated(0, legend_top)
+            p.fillRect(box, QColor(color))
+            if hatched:
+                p.fillRect(box, QBrush(QColor(c.surface), Qt.BrushStyle.BDiagPattern))
+            p.setPen(QColor(c.text))
+            p.drawText(rect.translated(0, legend_top), Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                       text)
+
     def paintEvent(self,event):
         p=QPainter(self);p.setRenderHint(QPainter.RenderHint.Antialiasing)
         c=self.colors;p.fillRect(self.rect(),QColor(c.surface))
+        if getattr(self, 'zscore', None):
+            self._paint_zscores(p);return
         left=min(230,self.width()*.4);right=self.width()-64
         zero=(left+right)/2;half=(right-left)/2
         p.setPen(QColor(c.muted));p.drawText(QPointF(zero-4,15),'0')

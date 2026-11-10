@@ -141,7 +141,10 @@ class MacroLanguageTests(unittest.TestCase):
                     self.assertEqual(numeric_table.item(4,1).text(), '10년 실질금리 (TIPS)' if language == 'ko' else '10y real (TIPS)')
                     self.assertEqual(numeric_table.item(17,1).text(), '금' if language == 'ko' else 'Gold')
                     chart = pane.charts['1y z-scores · descriptive only']
-                    self.assertEqual(chart.display_label(17), '금 · SYNTHETIC' if language == 'ko' else 'Gold · SYNTHETIC')
+                    # Owner issue 02 (2026-11-10): plain-language row names, and the synthetic status is the
+                    # hatching plus one legend entry instead of ' · SYNTHETIC' on every row.
+                    self.assertEqual(chart.display_label(17), '금 선물 가격 (Gold)' if language == 'ko' else 'Gold')
+                    self.assertIn(17, chart.zscore['hatched'])
                     self.assertEqual(cells,[[numeric_table.item(r,c).text() for c in range(2,numeric_table.columnCount())] for r in range(numeric_table.rowCount())])
                     self.assertEqual(chart_rows,pane.charts['1y z-scores · descriptive only'].rows)
                     self.assertEqual(report,pane.report);self.assertEqual(sections,pane.sections)
@@ -169,7 +172,7 @@ class MacroLanguageTests(unittest.TestCase):
             self.assertEqual(table.item(18, 1).text(), 'Gold')
             self.assertEqual(table.item(18, 9).text(), 'PROVIDER')
             self.assertEqual(chart.display_label(18), 'Gold')
-            self.assertEqual(chart.display_label(17), '금' if language == 'ko' else 'Gold')
+            self.assertEqual(chart.display_label(17), '금 선물 가격 (Gold)' if language == 'ko' else 'Gold')
             self.assertEqual(pane.report, report)
         pane.clear_result()
 
