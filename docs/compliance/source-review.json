@@ -7,7 +7,7 @@
   "profile_sha256": "7956e2fbe845a467744dccf402c7981a4eddf06e170d2c45446e7f775f492484",
   "sources": {
     ".github/workflows/compliance-review.yml": "dbcff2021fff9f7705b6b08b68ec8e848d0af03d25f244efd1cbb05b363ae59d",
-    ".github/workflows/runtime-smoke.yml": "21dbc1438fc2f597ca3809b1aee8e4f4a6c871fa292b21011720732d7693eb10",
+    ".github/workflows/runtime-smoke.yml": "47975cc9df7a696012f371111774fdd39fe85df6f7b311b214e0b443a8e75ad9",
     "README.md": "143d45a656dc7737f85deabbfb6be491d66242449ccfef54ed8bd5157836819d",
     "Start-QUANTGEN-Desktop.cmd": "d99f08bdddba33fc11e9d91c3691b7d2a7797ea87af71d9c3d9e95a75a9724ff",
     "assets/branding/f1-symbol.svg": "6afaa3a8b0bfe4c4494a25aeed9b4ddf31a3fcbcb19cca2ae97b0cf16e507c3f",
@@ -49,6 +49,8 @@
     "assets/ui/chevron-up-light.svg": "2265a4fb6c322734ffd4e35292fe0ba4c5e00fd6441368df6b1a32fd5f91dde8",
     "config.py": "266bf6754f40d83fafd5cbb2b1c06bea26c8bda63ad71ad2d7b85801b2d0d7a8",
     "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/adoption/__init__.py": "592263c22647b24151038499489911ec409ac81177e99ed3c33f3a359947953a",
+    "core/adoption/strategy_rules.py": "8f5daf22ab378051baaa590dbfa90dc43b1cc66792e5068f54631d07ce11ef01",
     "core/app_paths.py": "87cd28f423db0975e62402f09d29366d81aa1ac02b71cfb11f757c42a0f0d4cd",
     "core/calendars/__init__.py": "51bbdbd4d2326fb2ebfb2875db644b35fd874952769a7b0f07d051af3c76f8f2",
     "core/calendars/adapter.py": "fe925a34aeab1dca873aaac530a4aa5f2ba3be7b26f15ddc09f9c115324c7574",
@@ -277,13 +279,14 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "4fdb705ea573fcf3675e73c37daf181f4be872902fc2f3f1d1406a1cd6fd55d5",
+    "docs/compliance/FACTS.md": "a2cf9da9c37ba3746b8787a718b6b4c2570580f7bff4a8d5fcf746017c7d6045",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
+    "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "2c15bbbf6dc60e18907fa7df343c6aeb07bb3db64f68457b4f3e9b7ac454d14b",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -409,6 +412,7 @@
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
+    "tests/adoption_strategy_rules_acceptance.py": "526181ecfc53f447db8c2810bff1c91608355d8319b92c9076ce512e424ade19",
     "tests/ai_connection_acceptance.py": "b074a2f0c8d708c68a28a19ff187b9e3ab1095c10c83c1a47cb6ede9d338f79f",
     "tests/ai_output_check_acceptance.py": "01c54460c470062df057d398b08233cae41c420115ee24693f19ab3711a02972",
     "tests/ai_payload_acceptance.py": "a4efa39af3a06c6859607306729a9190c4f44da320556a4567388f7ab107e138",
@@ -645,163 +649,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "540ee80d17b6dea34b02f81a586192e41369f0ed2e52d39163709b2d3cdd3492",
+      "source_digest": "1493d711ed05fde8a6ad010ae78ef177bf026357fa8fd299b3a286a00c4fb40c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.525458+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.719327+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "540ee80d17b6dea34b02f81a586192e41369f0ed2e52d39163709b2d3cdd3492",
+      "source_digest": "1493d711ed05fde8a6ad010ae78ef177bf026357fa8fd299b3a286a00c4fb40c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.528291+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.722378+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "fe812b20450a69cc74bf0ce94c04fd53349935014beee4c73b2d825f9734492e",
+      "source_digest": "404333d7cb0204f56a48f780265b3aee283e4b61a6a61f34aaf0b4da78917b92",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.530127+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.724622+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "813f247f80af69a7db32d7dc7a45bbdb54cb580ab9ec56db6c4950d4f222603a",
+      "source_digest": "f86dcb39ab4e78da6223726964b63199b0847e7f747af8601120272cb113fbb9",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.532363+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.727225+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "d618fec94afd7ff8213f44c55d46516e5e14af266f64de70a8e6bcbab1a68a8b",
+      "source_digest": "c176bcba56c38b3c8416aa2ecbca33c26b852fa03efccf313b4a37cc1d42fc8e",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.534754+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.730411+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "b496517a7b710c3193c689d5cfe37d0cf0f1a8e7da2fe5e070ca6deeb8eb44da",
+      "source_digest": "f076cf3403da7b9d1af7463277564436cc0c8eb6ebfdbd7b06cded02084fc009",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.536457+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.732264+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "540ee80d17b6dea34b02f81a586192e41369f0ed2e52d39163709b2d3cdd3492",
+      "source_digest": "1493d711ed05fde8a6ad010ae78ef177bf026357fa8fd299b3a286a00c4fb40c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.538823+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.734663+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "b496517a7b710c3193c689d5cfe37d0cf0f1a8e7da2fe5e070ca6deeb8eb44da",
+      "source_digest": "f076cf3403da7b9d1af7463277564436cc0c8eb6ebfdbd7b06cded02084fc009",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.540530+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.737125+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "a8abf20726371a9e7c004719a9fdfcc5e227b2344bd70d2c35daf8f418018049",
+      "source_digest": "e9b0a590910f0a7552a57eafb097db3e5941284d7872a412715cc34c48e0e7c0",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.542512+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.739460+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "1ec818cd64b17694971f59c1de02f50b47a534c8b68998dcaed7efb51bf1a15d",
+      "source_digest": "511df08608c7ce4c94df2a917d2a9be93433822442663542649750181b612213",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.544135+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.741964+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "584507dc03ab6aeb1978203cd8a0b53ebf3aea95f2736c7930b765f365d0aa45",
+      "source_digest": "e8180a0c0e1af1a57198dafa8822149b9b19734260745a51ffb47759d2ad40cd",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.546348+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.744471+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "819979039c54ab83d9543ade1ab61efd66249a8c8ff756f90e7ebcb58e4524c1",
+      "source_digest": "969e62cec43b3371eb885f331cbf66dc19e6a1976f7cfd43e545cc18ab8a57e6",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.548630+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.746447+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "a8abf20726371a9e7c004719a9fdfcc5e227b2344bd70d2c35daf8f418018049",
+      "source_digest": "e9b0a590910f0a7552a57eafb097db3e5941284d7872a412715cc34c48e0e7c0",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.550482+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.748299+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "a8abf20726371a9e7c004719a9fdfcc5e227b2344bd70d2c35daf8f418018049",
+      "source_digest": "e9b0a590910f0a7552a57eafb097db3e5941284d7872a412715cc34c48e0e7c0",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.552703+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.750944+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "a8abf20726371a9e7c004719a9fdfcc5e227b2344bd70d2c35daf8f418018049",
+      "source_digest": "e9b0a590910f0a7552a57eafb097db3e5941284d7872a412715cc34c48e0e7c0",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.554947+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.752873+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "e9c104375ff870b3137f425db8687541f8b94d9b1fae4941e58c4af7af356740",
+      "source_digest": "5748ae9bde5b12ca20542e53a016afd1a01881025e9b952273bbc404a9349de2",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.557306+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.754765+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "b496517a7b710c3193c689d5cfe37d0cf0f1a8e7da2fe5e070ca6deeb8eb44da",
+      "source_digest": "f076cf3403da7b9d1af7463277564436cc0c8eb6ebfdbd7b06cded02084fc009",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.558960+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.757731+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "540ee80d17b6dea34b02f81a586192e41369f0ed2e52d39163709b2d3cdd3492",
+      "source_digest": "1493d711ed05fde8a6ad010ae78ef177bf026357fa8fd299b3a286a00c4fb40c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.560997+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.761075+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "e04b1c08475235bbff691879caf4d2092b8b42d038d7db112799d1c86fa96fec",
+      "source_digest": "d1e0df0f3ff7c8e9da91b352730db924b9dc0c6efd341795335c44987cf5d46f",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.563096+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.763583+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "540ee80d17b6dea34b02f81a586192e41369f0ed2e52d39163709b2d3cdd3492",
+      "source_digest": "1493d711ed05fde8a6ad010ae78ef177bf026357fa8fd299b3a286a00c4fb40c",
       "reviewed_by": "Claude integration review",
-      "review_note": "Merged main be26c24 (LA-01) into this branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
-      "reviewed_at": "2026-11-10T13:20:59.564680+00:00",
-      "source_commit": "b468ca72dffbcc1b09cea065db414bcf7af95329"
+      "review_note": "Merged integrated fold/1 (main be26c24 + PR #93) into this branch; FACTS sections kept from both sides, runtime-smoke test lists kept from both sides",
+      "reviewed_at": "2026-11-10T13:23:24.765574+00:00",
+      "source_commit": "7282c73a6609e0d02353943c85296aa6e7cc98d3"
     }
   }
 }
