@@ -276,7 +276,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "e9d48d8393c8946d905c79ee296760705f3e447aa9336c99eb2fbc97aee19df5",
+    "docs/compliance/FACTS.md": "9483481ed0fbfe6cabb0cf322c39d2ac20b194220e24abc7710f2b8262c98c53",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -312,7 +312,7 @@
     "docs/product/LETF_ASSUMPTIONS_2026-11-02.md": "4fd6fbcd5caad90146799feb6fa7ae61a38603e22c752970474e3d23b757fd0b",
     "docs/product/LETF_INDEX_2026-10-31.md": "7c10b178f33c59f2afb2783c94413cc2c949ba3d5f0e7b4412246d0da1f54693",
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
-    "docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md": "7817c3292ddf69f4c5e35b5dcf7c29bfc606b3d58574c6757efe8dc053ce7dcf",
+    "docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md": "9ccc09cc2982dc78907e71cd596b980115efa4f8d05d0aeef340db91dc73864e",
     "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "71dffdb67f3b38ed8b726f273c8651a8a65ec832cdfedc84ba5431bebaca2494",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
@@ -513,7 +513,7 @@
     "tests/macro_m7_stats.py": "b901aa6f16c320a3244841a2fe94823f3c70b099645bdb42423f13748a1fdd8e",
     "tests/macro_m8_forward.py": "5be770aa0a9685c81d5c7aa822e427a65623048b16f0ad0cb20cb93ce12a624d",
     "tests/macro_m8_integration.py": "d72b6f46128f356526c76e29aab8a05749044bc920c5a881beb80ba020d5b65e",
-    "tests/macro_m8_pipeline.py": "d264a04d209b74bdab341f412d4f58713ebc6f9fbb47ae0e8518fbb8e1383a6a",
+    "tests/macro_m8_pipeline.py": "0a1ad39baf9e45b2dff03c6f489a0b90f71ab543ec74a603e7d955e822ff5ee4",
     "tests/macro_m9_lab.py": "c0a16636f3807ceff042ecb14740118afcb14dc48d1ba0d0ecbc301a09e0462a",
     "tests/macro_m9_scenarios.py": "4a0d7ae0b0f32d37fa2d532584ea7bd6cc38c3608c648cc2f0ef5a3a35b2cb1c",
     "tests/macro_tf_data.py": "afa04c4786c154df280269a9a1e96f43af47b9ace44a5dd6c5b88cd139654a87",
@@ -642,163 +642,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "b1cb8354101bb8861bca1d4ad1b63d1c64f529f8262a9c5d7d8c324ae43a26a3",
+      "source_digest": "b89e88acc6d58b349454bfd114e1d7897c42fa0dcb0dd5f56ea98c6d48136081",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.244913+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.557203+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "b1cb8354101bb8861bca1d4ad1b63d1c64f529f8262a9c5d7d8c324ae43a26a3",
+      "source_digest": "b89e88acc6d58b349454bfd114e1d7897c42fa0dcb0dd5f56ea98c6d48136081",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.247179+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.560596+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "3801a40e0f9eb6c3871032625072c3df15f8c32c838f82d420f5b2cf09e6731d",
+      "source_digest": "dfecc86369c220a30b825d6aa97b114a0436699471039be6d3ce654ee7e43b4c",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.249156+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.562600+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "1828811f0b2f1dfebe45bbc13dcf5a729b584ed8dcd150a9adbebbdbdf75bdba",
+      "source_digest": "2a2ee60b25da65c8346f55803992ca97a590772c6638b2234042812f5dd77e09",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.251049+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.564726+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "49c295a0932b6245314f0e73ea5ecf84871a3c1ee158562dbb6ca2013011fe6f",
+      "source_digest": "b7158c37214f890e25406361a3292ff2f20b18a057a9a526785573b5b4fd58f8",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.253326+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.566738+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "7ba21fdb25763dc05a85a7f4fb471f5f8886e9c5bcfabaa3de6323a84b969185",
+      "source_digest": "fcbb5d7fe07db9f4f2c990c1c1652802c6ff46220057226b17efd65a3340d5e3",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.255123+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.568658+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "b1cb8354101bb8861bca1d4ad1b63d1c64f529f8262a9c5d7d8c324ae43a26a3",
+      "source_digest": "b89e88acc6d58b349454bfd114e1d7897c42fa0dcb0dd5f56ea98c6d48136081",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.257169+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.570469+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "7ba21fdb25763dc05a85a7f4fb471f5f8886e9c5bcfabaa3de6323a84b969185",
+      "source_digest": "fcbb5d7fe07db9f4f2c990c1c1652802c6ff46220057226b17efd65a3340d5e3",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.259873+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.572099+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "04e643dd988a6f6bb0bbaf2d9fb9190946f5f89aef8530169ef75f2d9c7f16c2",
+      "source_digest": "c405ba6f8c8545126143461a4e3283be05c7dadec62f550962512d9f686b5e38",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.261613+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.573888+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "1aaacf9f049d95b7326b3e1fe86bfe9ecef56425a7bd8edbe51d9ce954ee62f2",
+      "source_digest": "77f814e1e6c00a872da586e876bdf7db0a5ec64353a6fbfdce3225787ca832aa",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.263704+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.575586+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "44bec8aeaf62db9968e7df9a65c3a7d9e8b7bc8c0fc71c03e083780c794d88e3",
+      "source_digest": "2d917082bbace4005cc666b82d96fff622a9431f448dbaa9c923a8e832aa3df2",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.265434+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.577310+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "1b051e6f3c57e04846e6ff84ac606b8999a85fc2da03e42663bdf1521702a060",
+      "source_digest": "186cf27799ddfd0141e5523b39adba268b7fc32b1bc1312d1cbaee2b24a583d2",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.267357+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.579132+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "04e643dd988a6f6bb0bbaf2d9fb9190946f5f89aef8530169ef75f2d9c7f16c2",
+      "source_digest": "c405ba6f8c8545126143461a4e3283be05c7dadec62f550962512d9f686b5e38",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.269188+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.580860+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "04e643dd988a6f6bb0bbaf2d9fb9190946f5f89aef8530169ef75f2d9c7f16c2",
+      "source_digest": "c405ba6f8c8545126143461a4e3283be05c7dadec62f550962512d9f686b5e38",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.271329+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.582574+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "04e643dd988a6f6bb0bbaf2d9fb9190946f5f89aef8530169ef75f2d9c7f16c2",
+      "source_digest": "c405ba6f8c8545126143461a4e3283be05c7dadec62f550962512d9f686b5e38",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.273040+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.584356+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "7e9f8e53d0b1da77e0f8f9719611b57643ef95dfdb4d782d8005077c44aac4b5",
+      "source_digest": "c59a7a6eecf72a9757d713660cf1525c13f3e413e98a78fe3f38694a774e19b3",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.275287+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.586213+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "7ba21fdb25763dc05a85a7f4fb471f5f8886e9c5bcfabaa3de6323a84b969185",
+      "source_digest": "fcbb5d7fe07db9f4f2c990c1c1652802c6ff46220057226b17efd65a3340d5e3",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.277206+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.587870+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "b1cb8354101bb8861bca1d4ad1b63d1c64f529f8262a9c5d7d8c324ae43a26a3",
+      "source_digest": "b89e88acc6d58b349454bfd114e1d7897c42fa0dcb0dd5f56ea98c6d48136081",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.278899+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.589631+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "72bb04ce8c213fcb9443292936852e645815e5ddd1680f9a8c0a913113057240",
+      "source_digest": "c67816a00d4323381472333eced7a5ce33ed1b252323cf0516abef24c70f84be",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.280844+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.591383+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "b1cb8354101bb8861bca1d4ad1b63d1c64f529f8262a9c5d7d8c324ae43a26a3",
+      "source_digest": "b89e88acc6d58b349454bfd114e1d7897c42fa0dcb0dd5f56ea98c6d48136081",
       "reviewed_by": "Claude la01 review",
-      "review_note": "LA-01 NAV line binding fix in core/skills/macro_daily.py (pit_snapshot, data_ok, lag_audit): failure-path classification of the daily macro runtime only; no new transfer, storage, account or personal-data path; regression test in tests/macro_m8_pipeline.py; FACTS section lookahead-la01-2026-11-10 and docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md added",
-      "reviewed_at": "2026-11-10T12:09:14.282446+00:00",
-      "source_commit": "ed8df4a8a612811ec0f384a6e79cc3753c743676"
+      "review_note": "LA-01 review fixes: late-stamp test case, measured live-like effect and audit merge location in the product doc and FACTS",
+      "reviewed_at": "2026-11-10T12:37:58.592980+00:00",
+      "source_commit": "fa1b08e84fb87b08b94a3e8b9869cd69e54aaa5f"
     }
   }
 }

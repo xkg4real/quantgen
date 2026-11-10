@@ -1,9 +1,10 @@
 # LA-01 fix: the NAV line close keeps both of its bindings
 
 This is roadmap part **⑨-1/2/a**, the first fix from the 2026-11-04 look-ahead audit. The audit report is
-`docs/nautilus_bridge/LOOKAHEAD_AUDIT_2026-11-04.md` at commit `7749450` on branch
-`claude/lookahead-audit-20261104` (not on main); LA-01 is at its lines 261-277, and the reproductions are
-`lookahead_evidence_2026-11-04/keys_binding.py` and `la01_nav_line.py` at the same commit.
+`docs/nautilus_bridge/LOOKAHEAD_AUDIT_2026-11-04.md`, written at commit `7749450` on branch
+`claude/lookahead-audit-20261104` and merged into main in `3059581` (after this branch's base `ed8df4a`, with the
+report unchanged). LA-01 is at its lines 261-277, and the reproductions are
+`docs/nautilus_bridge/lookahead_evidence_2026-11-04/keys_binding.py` and `la01_nav_line.py`, merged in the same commit.
 
 The owner's ruling, verbatim from `docs/nautilus_bridge/OWNER_RULINGS_LOG.md:546` on main:
 
@@ -68,20 +69,20 @@ store, `core/ficc/contracts.py` and every other module.
 ## Runtime behaviour, before and after
 
 The cases below are a live KR decision on a synthetic store, built as the audit's la01_nav_line.py builds it.
-Each was run on `ed8df4a` and on the fix with a scratch probe script that is
-not committed.
+Each was run on `ed8df4a` and on the fix with scratch probe scripts that are not committed.
 
 | Case | ed8df4a | After the fix |
 | --- | --- | --- |
 | NAV close absent on 3 consecutive KR decisions (2026-09-30, 10-01, 10-02) | `data_ok` pass, `fail_closed` empty, NAV in `forward_failed` for R-28 and R-29, `macro_state.fail_closed` false, both KR books ARMED | `data_ok` fail_closed with one component `{KRX_069500_OFFICIAL_CLOSE, [recommended:KR, specification:KR]}`, NAV still in `forward_failed` for R-28 and R-29, `macro_state.fail_closed` true. Both KR books ARMED after decisions 1 and 2 and HALTED at decision 3, class OPS, reason `acting_input_stale:KRX_069500_OFFICIAL_CLOSE` (halt_after 3, not the default 2). US books ARMED |
 | Last NAV close stamped available_at 06:00Z, before its 06:30:30Z publication bound | `lag_audit` fail with violation `available_at_utc >= publication_instant`, `halted` empty, no alert, books ARMED | Same violation, `halted == [recommended:KR, specification:KR]`, both HALTED with class OPS, reason `lag_audit_violation`, rearm_mode operator, and one `LAG_AUDIT_VIOLATION` page alert naming both books. US books ARMED |
+| Last NAV close stamped available_at 5 minutes after the decision instant | `data_ok` pass, `fail_closed` empty, NAV in `forward_failed` for R-28 and R-29, `lag_audit` pass, books ARMED | `data_ok` fail_closed with one component `{KRX_069500_OFFICIAL_CLOSE, status missing, [recommended:KR, specification:KR]}`, NAV still in `forward_failed` for R-28 and R-29, `lag_audit` pass (the row is not visible at the decision, so there is nothing to audit) |
 | NAV official close disputed by a vendor close (stock tolerance: exact) | One `INPUT_DISPUTED` naming only `forward_sim:R-28`, `forward_sim:R-29` | One `INPUT_DISPUTED` naming `recommended:KR`, `specification:KR`, `forward_sim:R-28`, `forward_sim:R-29`. A dispute is not a failure: books ARMED, `data_ok` pass |
 
 On "late" stamps: the audit's case is an `available_at` earlier than the publication instant, which claims
 availability before the close could have been published. That is the look-ahead violation `lag_audit` exists
-to catch. From reading `pit_value`, a row stamped after the decision instant is invisible to the read, so for
-an acting close it becomes a missing input, which is the first row above. That second statement comes from
-reading the code and was not run as a separate case.
+to catch (second row). A row stamped after the decision instant is the literal late stamp (third row). The read
+does not see it, so for the acting close it is a missing input: one decision of the first row, with `lag_audit`
+passing. This was run on both commits and is case (2b) of the regression test.
 
 ## What is unchanged
 
@@ -103,7 +104,7 @@ reading the code and was not run as a separate case.
 `tests/macro_m8_pipeline.py::test_la01_nav_line_close_keeps_the_failure_action_of_each_binding` sits after
 the T-SCOPE-01 (e)/(f) block, away from the I-01 dry-run block. It builds its stores synthetically from
 `_kospi_store`, `kr_rows(nav=False)`, `_close_row(..., available=...)` and `_hedge_store`, and asserts the
-three "after" columns above.
+four "after" cells above: (1) absent, (2) early stamp, (2b) late stamp, (3) disputed.
 
 It carries no `test_ids`, so `tests/macro_registry.csv` and its T-HERM-01 sync are untouched. As a result,
 `tests/run_all.py --milestone Mk` does not select it, because that selection goes by `test_ids`. Plain
@@ -115,6 +116,8 @@ Red and green, both through a guarded single-test runner (below):
 - With only the test added (core identical to `ed8df4a`): **FAIL** at the first assertion, because `data_ok`
   status was `pass` with an empty `fail_closed`.
 - With the fix: **PASS** (1 test, about 2 s).
+- Case (2b) was also run alone with a scratch script (not committed): it fails on `ed8df4a` (empty
+  `fail_closed`) and passes on the fix.
 
 ## Verification run (local Linux, Python 3.13 venv)
 
@@ -130,6 +133,8 @@ and a loopback connect. It made 0 refusals in every run below.
 - `tests.macro_m8_integration`: all 3 test functions, by name. 3 of 3 OK.
 - `tests.macro_m6_context::test_ctx_01_static_import_scan_and_positive_controls`: OK.
 - Probe and healthy-output comparison as described above.
+- A live-like synthetic store, run on `ed8df4a` and on the fix with a scratch script (not committed): the
+  result is under "Unverified" below.
 - `python -m tools.compliance.check --check` failed before the refresh, as expected for changed sources.
   After `--refresh-baseline --documents 1..20` (reviewer "Claude la01 review") it reports consistency PASS
   and publication BLOCKED. The FACTS section is `docs/compliance/FACTS.md#lookahead-la01-2026-11-10`.
@@ -137,10 +142,32 @@ and a loopback connect. It made 0 refusals in every run below.
 ## Unverified
 
 - **Live runs on the owner's PC** (Windows, real KR data and ingest): not run. Per the audit (LA-03), live
-  ingest is not yet connected, so every live acting input already fails closed. The audit's view, which is an
-  inference, is that the net live effect today is nil. That is not verified here.
+  ingest is not yet connected, so the other KR acting inputs already fail closed. The audit inferred that the
+  net live effect today would be nil. A synthetic run says it is small but not nil. The store was built like
+  the owner's PC: the three market caps, the KODEX basket row and the NAV close absent; KOSPI closes and hedge
+  rows present. It ran 4 consecutive live KR decisions on `ed8df4a` and on the fix:
+  - Unchanged: the first HALT of both KR books is at decision 2 with reason
+    `acting_input_stale:KRX_005930_MARKET_CAP`, and the open page alerts are the same 2 `HALT_OPS`.
+  - On every decision, `data_ok` `fail_closed` (which `macro_state` copies as `fail_closed_inputs`) gains a
+    `KRX_069500_OFFICIAL_CLOSE` component, and `macro_state` carries one more `ACTING_INPUT_FAIL_CLOSED` alert
+    (not a page).
+  - At decision 3, each KR book gains a fourth halt cause, `acting_input_stale:KRX_069500_OFFICIAL_CLOSE`. The
+    governance log gains 2 `halt` events (8 against 6 in this store), and the NAV entry in
+    `consecutive_failures` keeps rising.
+  - An automatic re-arm then also needs a fresh NAV close (by reading `step_decision`: a book re-arms only on
+    a decision where every acting input bound to it is fresh).
+
+  This is the intended behaviour, but the owner's live artifacts and governance log will differ from before.
+  The real owner-PC run is still unverified.
 - **Full module and suite runs:** `python -m tests.macro_m8_pipeline` and `tests/run_all.py` were not run.
   They need the cache-free harness copy, because the I-01 dry run reads `DRY_RUN_CACHE`.
+- **`tests/macro_ui_overlay.py::test_the_run_button_dry_run_writes_only_the_temp_macro_dir_and_the_view_renders_it`:**
+  not run. It runs the real dry run on the vendor cache and asserts that `HALTED` is not in the rendered view.
+  By reading `core/engine/books.py`, it should still pass. The dry-run books are DISARMED; `step_decision` never
+  HALTs a DISARMED book, and `runtime_halt` is a no-op for one. So a NAV gap in the dry run's data would only
+  add a `fail_closed` component, and a NAV look-ahead violation would add a `LAG_AUDIT_VIOLATION` alert and
+  list the books in `lag_audit.halted` without changing their mode. Whether the dry-run data has either was not
+  checked (the cache is not opened in this work). This is a reading, not a run.
 - Not run: the T-RO-01 static scans and the T-HERM-01 registry test (`tests/macro_m0_harness.py`), and
   `tests/macro_m9_scenarios.py` (it imports `tests.macro_m9_lab`). The change adds no import, call or test
   id, so they should be unaffected; that is a reading, not a run.
