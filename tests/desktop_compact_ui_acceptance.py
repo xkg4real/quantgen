@@ -1,4 +1,4 @@
-"""Actual Korean hint programs and compact controls preserve user operations."""
+"""The native interface font (owner UI-D4) and compact controls preserve user operations."""
 import os
 os.environ.setdefault('QT_QPA_PLATFORM','offscreen')
 import unittest
@@ -19,21 +19,26 @@ class CompactUiTests(unittest.TestCase):
         cls.app=QApplication.instance() or QApplication([]);load_interface_fonts(cls.app)
     def settle(self):
         for _ in range(8):self.app.processEvents()
-    def test_each_real_weight_has_hinted_components_for_all_modern_hangul(self):
+    def test_each_real_weight_is_the_flet_otf_with_all_modern_hangul(self):
+        """Owner UI-D4 (2026-11-11): the native font is the Flet screen font, the Pretendard-derived CFF
+        OTF with PostScript hints, real 400/500/600 and all 11,172 modern Hangul syllables. The earlier
+        hinted Gothic A1 TTFs (same family name) stay in assets/fonts unused, for rollback only."""
         for filename,weight in zip(INTERFACE_FILES,(400,500,600)):
+            self.assertTrue(filename.endswith('.otf'),filename)
             with TTFont(ROOT/'assets/fonts'/filename) as face:
                 self.assertEqual(face['OS/2'].usWeightClass,weight)
-                for tag in ('fpgm','prep','cvt ','gasp'):self.assertIn(tag,face)
-                cmap=face.getBestCmap();glyf=face['glyf'];seen=set()
-                def check(name):
-                    if name in seen:return
-                    seen.add(name);glyph=glyf[name]
-                    if glyph.isComposite():
-                        for c in glyph.components:check(c.glyphName)
-                    else:self.assertGreater(len(glyph.program.getBytecode()),0,name)
-                for code in range(0xAC00,0xD7A4):self.assertIn(code,cmap);check(cmap[code])
+                self.assertIn('CFF ',face)
+                top=face['CFF '].cff.topDictIndex[0]
+                privates=[fd.Private for fd in top.FDArray] if hasattr(top,'FDArray') else [top.Private]
+                for private in privates:
+                    for key in ('BlueValues','StdHW','StdVW'):self.assertTrue(hasattr(private,key),key)
+                cmap=face.getBestCmap()
+                for code in range(0xAC00,0xD7A4):self.assertIn(code,cmap)
             font=QFont(self.app.font());font.setWeight(QFont.Weight(weight));raw=QRawFont.fromFont(font)
-            self.assertEqual(raw.weight(),weight);self.assertTrue(raw.fontTable('fpgm'))
+            self.assertEqual(raw.weight(),weight);self.assertTrue(raw.fontTable('CFF '))
+        for kept in ('qg-interface.ttf','qg-interface-medium.ttf','qg-interface-semibold.ttf'):
+            self.assertTrue((ROOT/'assets/fonts'/kept).is_file(),kept)
+            self.assertNotIn(kept,INTERFACE_FILES)
     def test_categories_and_forms_reflow_preserving_keyboard_and_request(self):
         with patch('quantgen_desktop.jobs.Jobs.start',side_effect=AssertionError('unexpected request')):
             w=ResearchWindow(auto_refresh=False,language='ko');self.addCleanup(delete_owned_widget,w)
