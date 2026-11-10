@@ -513,21 +513,32 @@ GPOST01_KRWX_LAST = date(2026, 10, 1)           # G-POST-01/krwx_last_row: "KRW=
 GPOST01_PEAK = (date(2026, 6, 22), 9114.55)     # G-POST-01/drawdown_from_peak: "the 9,114.55 peak (22 Jun 2026)"; spec L5821
 GPOST01_SMA_N = 200                             # G-POST-01/close_over_200d note: "mean of last 200 closes incl. 2 Oct"
 GPOST01_DLOG_N = 20                             # G-POST-01/krwx_dlog20: "KRW=X 20-observation dlog" (spec L5834 "20-observation change")
+# The signed KRX clock files the body reads: the previous KRX session of 2 Oct (G-POST-01/kospi_return_2oct note
+# "7,003.74 / prev close - 1"), read on the fortnight to 2 Oct as T-PRINT-01 reads its own (the part-1 owner gate
+# tests.macro_m1_calendars._official_calendar; the shipped holidays_KRX covers 2026).
+GPOST01_CAL_SPAN = (GPOST01_DAY - timedelta(days=14), GPOST01_DAY)
 
 
-def _check_gpost01_m1(ks11: list[dict], krwx: list[dict], stocks: list[dict]) -> dict:
+def _check_gpost01_m1(ks11: list[dict], krwx: list[dict], stocks: list[dict], cal) -> dict:
     """G-POST-01, the M1 data rows, at Level 1 from goldens.csv (read only): the 2-Oct KOSPI close (not the 6,943.66
-    intraday print), its return on the previous row, the drawdown from the peak, the close over the mean of the last
-    200 closes, the 2-Oct Samsung and SK hynix closes, the KRW=X last row (1 Oct: the provisional 2-Oct row dropped) and
-    its 20-observation dlog. A vendor price is compared at its printed precision (two decimals: a vendor file may carry
-    float artefacts such as 7003.7399...), a KRX won price exactly. The ^KS11 peak up to 2 Oct must be 9,114.55 on
-    2026-06-22, and the computed rows must be exactly goldens.csv's M1 rows. Returns the computed values."""
+    intraday print), its return on the previous row, which must be dated the previous KRX session of the signed
+    calendar `cal` (`clocks.prev_session`, as T-PRINT-01's helper checks), the drawdown from the peak, the close over
+    the mean of the last 200 closes, the 2-Oct Samsung and SK hynix closes, the KRW=X last row (1 Oct: the provisional
+    2-Oct row dropped) and its 20-observation dlog. ^KS11 rows dated after 2 Oct are not read. A vendor price is
+    compared at its printed precision (two decimals: a vendor file may carry float artefacts such as 7003.7399...), a
+    KRX won price exactly. The ^KS11 peak up to 2 Oct must be 9,114.55 on 2026-06-22, and the computed rows must be
+    exactly goldens.csv's M1 rows. Returns the computed values."""
+    from core.calendars import clocks
     day = GPOST01_DAY
     k = [r for r in ks11 if r[F13_CLOSE] is not None and r["date"] <= day]
     on_day = [r for r in k if r["date"] == day]
     assert len(on_day) == 1, f"G-POST-01: {len(on_day)} ^KS11 rows on {day}; exactly one close is stored"
     assert len({r["date"] for r in k}) == len(k), "G-POST-01: two ^KS11 rows on one date"
     assert len(k) >= GPOST01_SMA_N, f"G-POST-01: {len(k)} ^KS11 closes up to {day}, fewer than {GPOST01_SMA_N}"
+    prev_day = clocks.prev_session("KR", day, cal=cal)
+    assert k[-2]["date"] == prev_day, (
+        f"G-POST-01: the ^KS11 row before {day} is {k[-2]['date']}, not the previous KRX session {prev_day} "
+        f"(G-POST-01/kospi_return_2oct is the return on the previous close)")
     closes = [r[F13_CLOSE] for r in k]
     peak_i = max(range(len(closes)), key=closes.__getitem__)
     bad = [r for r in stocks if r["code"] not in F27_CODES or r["series_id"] not in F27_CODES]
@@ -566,9 +577,12 @@ def _check_gpost01_m1(ks11: list[dict], krwx: list[dict], stocks: list[dict]) ->
 
 def test_g_post_01_m1_data_rows_refdata():
     """G-POST-01, the M1 data rows (spec L5819-5834) on F13, F16 and F27: NOT_RUN (REFDATA) naming every absent fixture;
-    then PASS or FAIL on `_check_gpost01_m1` at Level 1 from goldens.csv (look-ahead audit LA-02, part 2: it used to be
-    NOT_RUN whatever the files). F01 and F20 (QX_DLA_postpatch.csv) are not read: the rows are computed from the files
-    they come from (spec L5812, Yahoo ^KS11), and regenerating F20's column is T-FIX-01's."""
+    NOT_RUN (OWNER) while the signed KRX clock files do not cover the fortnight to 2 Oct (computed from the files by
+    tests.macro_m1_calendars._official_calendar); then PASS or FAIL on `_check_gpost01_m1` at Level 1 from goldens.csv
+    (look-ahead audit LA-02, part 2: it used to be NOT_RUN whatever the files). F01 and F20 (QX_DLA_postpatch.csv) are
+    not read: the rows are computed from the files they come from (spec L5812, Yahoo ^KS11), and regenerating F20's
+    column is T-FIX-01's."""
+    from tests.macro_m1_calendars import _official_calendar
     missing, text = [], {}
     for name in GPOST01_FIXTURES:
         try:
@@ -579,27 +593,36 @@ def test_g_post_01_m1_data_rows_refdata():
         raise NotRun("REFDATA: G-POST-01 data rows wait for " + "; ".join(missing))
     _check_gpost01_m1(_fixture_csv(F13, text[F13], (F13_CLOSE,), F13_PROVENANCE),
                       _fixture_csv(F16, text[F16], (F16_CLOSE,), F16_PROVENANCE),
-                      _fixture_csv(F27, text[F27], (F27_CLOSE,), F27_PROVENANCE, F27_KEYS))
+                      _fixture_csv(F27, text[F27], (F27_CLOSE,), F27_PROVENANCE, F27_KEYS),
+                      _official_calendar(*GPOST01_CAL_SPAN))
 
 
 test_g_post_01_m1_data_rows_refdata.test_ids = ["G-POST-01"]
 
 
-def _gpost01_invented(peak=GPOST01_PEAK, close=7003.74, prev=6971.67, base=6305.93, fx_last=1356.84, fx_back=1358.33,
-                      fx_oct2=None, stocks=(276000.0, 1841000.0), extra=(), f27_keys=F27_KEYS, stock_code=None):
-    """Invented ^KS11, KRW=X and KRX stock rows in the declared layouts (no Yahoo or KRX data): 230 weekday closes to
-    2026-10-02 at `base`, the peak on its day, the previous close and the close; KRW=X to 2026-10-01 with `fx_back` 20
-    observations before `fx_last`. The defaults give return +0.46%, drawdown -23.16%, 200-day ratio 1.107 and dlog
-    -0.0011. Returns the three texts."""
+def _gpost01_days() -> list[date]:
+    """The 230 weekdays to 2026-10-02 the invented ^KS11 rows are dated on."""
     days, d = [], GPOST01_DAY
     while len(days) < 230:
         if d.weekday() < 5:
             days.append(d)
         d -= timedelta(days=1)
-    days.reverse()
+    return days[::-1]
+
+
+def _gpost01_invented(peak=GPOST01_PEAK, close=7003.74, prev=6971.67, base=6305.93, fx_last=1356.84, fx_back=1358.33,
+                      fx_oct2=None, stocks=(276000.0, 1841000.0), extra=(), f27_keys=F27_KEYS, stock_code=None,
+                      levels=(), drop=()):
+    """Invented ^KS11, KRW=X and KRX stock rows in the declared layouts (no Yahoo or KRX data): 230 weekday closes to
+    2026-10-02 at `base`, the peak on its day, the previous close and the close (then `levels` (date, close) set, the
+    dates in `drop` removed and the `extra` rows added); KRW=X to 2026-10-01 with `fx_back` 20 observations before
+    `fx_last`. The defaults give return +0.46%, drawdown -23.16%, 200-day ratio 1.107 and dlog -0.0011. Returns the
+    three texts."""
+    days = _gpost01_days()
     k = [(x, {F13_CLOSE: base}) for x in days]
     k[days.index(peak[0])] = (peak[0], {F13_CLOSE: peak[1]})
     k[-2], k[-1] = (days[-2], {F13_CLOSE: prev}), (days[-1], {F13_CLOSE: close})
+    k = [(x, {F13_CLOSE: dict(levels).get(x, v[F13_CLOSE])}) for x, v in k if x not in drop]
     k = sorted(k + [(x, {F13_CLOSE: v}) for x, v in extra], key=lambda r: r[0])
     fx = [(x, {F16_CLOSE: 1360.0 + (i % 5)}) for i, x in enumerate(days[-40:-1])]
     fx[-1] = (fx[-1][0], {F16_CLOSE: fx_last})
@@ -616,22 +639,29 @@ def _gpost01_invented(peak=GPOST01_PEAK, close=7003.74, prev=6971.67, base=6305.
             _layout_text(st, (F27_CLOSE,), F27_PROVENANCE, keys=f27_keys))
 
 
-def _gpost01_run(texts) -> dict:
+def _gpost01_run(texts, cal=None) -> dict:
+    """The real body after its gates on the three texts, on the signed calendar `cal` (default: the calendars module's
+    synthetic signed set, through the same owner gate)."""
+    from tests.macro_m1_calendars import _official_calendar_on, fixture_set
     ks11, krwx, stocks = texts
     return _check_gpost01_m1(_fixture_csv(F13, ks11, (F13_CLOSE,), F13_PROVENANCE),
                              _fixture_csv(F16, krwx, (F16_CLOSE,), F16_PROVENANCE),
-                             _fixture_csv(F27, stocks, (F27_CLOSE,), F27_PROVENANCE, F27_KEYS))
+                             _fixture_csv(F27, stocks, (F27_CLOSE,), F27_PROVENANCE, F27_KEYS),
+                             _official_calendar_on(*GPOST01_CAL_SPAN, fixture_set() if cal is None else cal))
 
 
 def test_g_post_01_body_passes_and_fails_on_invented_rows():
     """LA-02 part 2: the G-POST-01 data-row body can PASS and can FAIL. Invented rows in the declared layouts (no Yahoo
-    or KRX data) built to the golden values pass, also with a float artefact on the close. Each value clause fails on
-    its own: the pre-patch 6,943.66 intraday print as the close (spec L5819) or beside it, a previous close of 7,100, a
-    peak of 9,300 (drawdown -24.7%), a lower 200-day mean, the pre-patch Samsung 273,750 and SK hynix 1,832,000 (L5833),
-    a KRW=X last row of 1,360.63, the provisional 2-Oct KRW=X row kept (L5834), a 20th-back KRW=X value off by 2%, a
-    peak of 9,200 (within the drawdown tolerance) and the 9,114.55 peak on 2026-06-23; a stock row of another code (the
-    preferred share 005935); and the layout without a declared column. Each declared provenance equals the generator's
-    table (docs/macro_fixtures.REFERENCE_FILES)."""
+    or KRX data) on the calendars module's synthetic signed set, built to the golden values, pass, also with a float
+    artefact on the close and with a later ^KS11 row above the peak (2026-10-05, not read). The row exactly 200 closes
+    back is inside the 200-close window (its level moves the ratio) and the row 201 back is outside it (its level does
+    not). Each value clause fails on its own: the pre-patch 6,943.66 intraday print as the close (spec L5819) or beside
+    it, two ^KS11 rows on an earlier date, a previous close of 7,100, the 1-Oct row missing with 30-Sep at the previous
+    close's level (a two-session return), a peak of 9,300 (drawdown -24.7%), a lower 200-day mean, the pre-patch Samsung
+    273,750 and SK hynix 1,832,000 (L5833), a KRW=X last row of 1,360.63, the provisional 2-Oct KRW=X row kept (L5834),
+    a 20th-back KRW=X value off by 2%, a peak of 9,200 (within the drawdown tolerance) and the 9,114.55 peak on
+    2026-06-23; a stock row of another code (the preferred share 005935); and the layout without a declared column.
+    Each declared provenance equals the generator's table (docs/macro_fixtures.REFERENCE_FILES)."""
     assert GPOST01_FIXTURES == (F13, F16, F27)
     for name, declared in ((F13, F13_PROVENANCE), (F16, F16_PROVENANCE)):
         assert _generator_provenance(name) == declared, (name, _generator_provenance(name))
@@ -640,10 +670,22 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
     assert got["kospi_close_2oct"] == 7003.74 and round(got["drawdown_from_peak"], 4) == -0.2316, got
     assert round(got["close_over_200d"], 3) == 1.107 and round(got["krwx_dlog20"], 4) == -0.0011, got
     assert _gpost01_run(_gpost01_invented(close=7003.740234375))["kospi_close_2oct"] == 7003.74   # a float32 artefact
+    # a row after 2 Oct is not read, even above the peak (it would move the peak, the close and the window)
+    assert _gpost01_run(_gpost01_invented(extra=((date(2026, 10, 5), 9500.0),))) == got
+    # the 200-close window (G-POST-01/close_over_200d note "mean of last 200 closes incl. 2 Oct"; the count is typed
+    # here, not read from GPOST01_SMA_N): the row 201 closes back is outside it, the row 200 back inside it (levels far
+    # from the window mean, below the 9,114.55 peak; one row moves the mean by (level - base) / 200)
+    day200, day201 = _gpost01_days()[-200], _gpost01_days()[-201]
+    assert _gpost01_run(_gpost01_invented(levels=((day201, 3000.0),)))["close_over_200d"] == got["close_over_200d"]
+    moved = _gpost01_run(_gpost01_invented(levels=((day200, 9000.0),)))["close_over_200d"]
+    assert abs(moved - 7003.74 / (7003.74 / got["close_over_200d"] + (9000.0 - 6305.93) / 200)) < 1e-9, moved
     cases = (
         (dict(close=6943.66), "G-POST-01/kospi_close_2oct: got 6943.66, want 7003.74"),
         (dict(extra=((GPOST01_DAY, 6943.66),)), "G-POST-01: 2 ^KS11 rows on 2026-10-02"),
+        (dict(extra=((date(2026, 9, 1), 6305.93),)), "G-POST-01: two ^KS11 rows on one date"),
         (dict(prev=7100.0), "G-POST-01/kospi_return_2oct: got"),
+        (dict(levels=((date(2026, 9, 30), 6971.67),), drop=(date(2026, 10, 1),)),
+         "G-POST-01: the ^KS11 row before 2026-10-02 is 2026-09-30, not the previous KRX session 2026-10-01"),
         (dict(peak=(GPOST01_PEAK[0], 9300.0)), "G-POST-01/drawdown_from_peak: got"),
         (dict(base=6000.0), "G-POST-01/close_over_200d: got"),
         (dict(stocks=(273750.0, 1841000.0)), "G-POST-01/samsung_close_2oct: got 273750.0, want 276000"),
@@ -661,6 +703,9 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
         assert needle in str(e), (kw, str(e))
     layout = _raises(lambda: _gpost01_run(_gpost01_invented(f27_keys=("series_id",))), AssertionError)
     assert "declared columns ['code'] absent" in str(layout), layout
+    from tests.macro_m1_calendars import _official_calendar, drafts_set
+    owner = _raises(lambda: _official_calendar(*GPOST01_CAL_SPAN, live=drafts_set()), NotRun)
+    assert owner.reason.startswith("OWNER: the signed KRX clock files must cover 2026-09-18..2026-10-02"), owner.reason
 
 
 # --------------------------------------------------------------------------- #
@@ -832,9 +877,10 @@ test_print_01_real_kospi_close_refdata.test_ids = ["T-PRINT-01"]
 
 def test_print_01_body_passes_and_fails_on_invented_ks11_closes():
     """LA-02 part 2: the T-PRINT-01 (F13) body can PASS and can FAIL. Invented closes in the declared F13 layout on the
-    synthetic signed calendars (no Yahoo data): 5,584.71 then 5,251.87 passes, also with a float artefact on the close.
-    It fails when the 10:31 KST print (5,131.12) is stored as the 2026-03-09 close or beside it, when the close is
-    5,251.88, when the previous close is 5,560 (-5.54%), when the 2026-03-06 row is missing, and on a file whose rows
+    synthetic signed calendars (no Yahoo data): 5,584.71 then 5,251.87 passes, also with a float artefact on the close,
+    and so does a previous close of 5,585.01 (-5.9649%, just inside the printed precision). It fails when the 10:31 KST
+    print (5,131.12) is stored as the 2026-03-09 close or beside it, when the close is 5,251.88, when the previous close
+    is 5,560 (-5.54%) or 5,585.05 (-5.9656%, just outside), when the 2026-03-06 row is missing, and on a file whose rows
     are marked official_close. The calendar gate covers that fortnight on the synthetic set and refuses the unsigned one."""
     from core.calendars import clocks
     from tests.macro_m1_calendars import _official_calendar, _official_calendar_on, drafts_set, fixture_set
@@ -854,10 +900,14 @@ def test_print_01_body_passes_and_fails_on_invented_ks11_closes():
 
     assert abs(run(text((5584.71, PRINT01_CLOSE))) - PRINT01_RETURN_PCT) <= PRINT01_PRINTED_PCT
     assert abs(run(text((5584.71, 5251.8701171875))) - PRINT01_RETURN_PCT) <= PRINT01_PRINTED_PCT  # float32 artefact
+    # the printed precision's edge: a previous close of 5,585.01 gives -5.96490% (inside +/- 0.005 pp), 5,585.05 gives
+    # -5.96557% (outside)
+    assert abs(run(text((5585.01, PRINT01_CLOSE))) - PRINT01_RETURN_PCT) <= PRINT01_PRINTED_PCT
     for t, needle in ((text((5584.71, 5131.12)), "close 5131.12 != 5251.87 (spec L5631)"),
                       (text((5584.71, PRINT01_CLOSE), extra=((PRINT01_DATE, 5131.12),)), "2 rows on 2026-03-09"),
                       (text((5584.71, 5251.88)), "close 5251.88 != 5251.87 (spec L5631)"),
                       (text((5560.0, PRINT01_CLOSE)), "return -5.5419% != -5.96% (spec L5631)"),
+                      (text((5585.05, PRINT01_CLOSE)), "return -5.9656% != -5.96% (spec L5631)"),
                       (text((5584.71, PRINT01_CLOSE), drop=(date(2026, 3, 6),)),
                        "the row before 2026-03-09 is 2026-03-05, not the previous KRX session 2026-03-06")):
         e = _raises(lambda: run(t), AssertionError)
@@ -1109,14 +1159,19 @@ def _stale01_store(obs: dict, clk) -> P.PITStore:
     return store
 
 
-def _check_stale01(store, clk, span, *, series=STALE01_SERIES, markets=STALE01_MARKETS) -> dict:
+def _check_stale01(store, clk, span, *, series=STALE01_SERIES, markets=STALE01_MARKETS,
+                   is_stale=C.is_stale) -> tuple[dict, dict]:
     """G-STALE-01's schedule-aware rows and T-STALE-01 (a)-(c) on `store` over the decisions of `span`, for each series
     and decision market. Without the source-exception list (`_NoSkipClocks`): every H.10 hit's missed observation date
-    (d_next) is in the list (a); at a hit whose d_next is in the list, `clk` (list loaded) raises no flag (b); the
-    share of decisions flagged is within Level 1 of G-STALE-01/<series>_stale_schedule_<us|krx> (goldens.csv) and at
-    most 1% (DTWEXBGS, DEXKOUS, DGS10; (a), (c)), 0% for VIXCLS (c). Returns the shares by golden sub_id."""
+    (d_next) is in the list (a); conversely, every decision past the no-list deadline of a listed H.10 date and before
+    the next stored release is a hit naming that date (a; a check that never flags fails it. A listed date published
+    with later days of its week, such as a mid-week skip, has no such decision); at a hit whose d_next is in the list,
+    `clk` (list loaded) raises no flag (b); the share of decisions flagged is within Level 1 of
+    G-STALE-01/<series>_stale_schedule_<us|krx> (goldens.csv) and at most 1% (DTWEXBGS, DEXKOUS, DGS10; (a), (c)), 0%
+    for VIXCLS (c). `is_stale` is core.ficc.contracts' (the demonstrations pass a broken one). Returns the shares and
+    the hits [(decision, d_next)], each by golden sub_id."""
     from core.calendars import publication
-    plain, g, out = _NoSkipClocks(clk), G.golden("G-STALE-01"), {}
+    plain, g, out, flagged = _NoSkipClocks(clk), G.golden("G-STALE-01"), {}, {}
     for market, col in markets:
         decisions, d = [], span[0]
         while d <= span[1]:
@@ -1128,7 +1183,7 @@ def _check_stale01(store, clk, span, *, series=STALE01_SERIES, markets=STALE01_M
             skipped = publication.source_skipped(clk.schedule(sid), cal=clk.cal)
             hits, missing = [], 0
             for dec in decisions:
-                chk = C.is_stale(store, REG, sid, dec, dec, plain)
+                chk = is_stale(store, REG, sid, dec, dec, plain)
                 if chk.stale and chk.reason == "missing":
                     missing += 1
                 elif chk.stale:
@@ -1137,14 +1192,29 @@ def _check_stale01(store, clk, span, *, series=STALE01_SERIES, markets=STALE01_M
             share = len(hits) / len(decisions)
             row = g.row(f"{sid.lower()}_stale_schedule_{col}")
             tag = f"G-STALE-01/{row.sub_id}"
-            out[row.sub_id] = share
+            out[row.sub_id], flagged[row.sub_id] = share, hits
             print(f"{tag}: {share:.4%} of {len(decisions)} {market}-close decisions ({len(hits)} flagged without the "
                   f"source-exception list, {missing} with no visible record); golden {row.want():.2%}")
             if sid in STALE01_H10:
                 other = sorted({dn for _, dn in hits} - skipped)
                 assert not other, (f"T-STALE-01 (a): {sid} at the {market} close: missed observation dates {other[:5]} "
                                    f"are not in the source-skipped list (spec L1963)")
-            kept = [(dec, dn) for dec, dn in hits if dn in skipped and C.is_stale(store, REG, sid, dec, dec, clk).stale]
+                # the converse: a listed date the series skips flags, without the list, every decision after the
+                # deadline of the observation before it (R-19 step 3) until the next stored release is visible
+                rows = sorted(store.rows(sid), key=lambda r: r["obs_date"])
+                for dn in sorted(skipped):
+                    before = [r["obs_date"] for r in rows if r["obs_date"] < dn]
+                    after = [r["available_at_utc"] for r in rows if r["obs_date"] > dn]
+                    if not before or not after or plain.next_expected_obs(sid, before[-1]) != dn:
+                        continue
+                    deadline = C.stale_deadline_utc(REG, sid, before[-1], plain)
+                    due = [dec for dec in decisions if deadline < dec < min(after)]
+                    unflagged = [dec for dec in due if (dec, dn) not in hits]
+                    assert not unflagged, (
+                        f"T-STALE-01 (a): without the source-exception list, {sid} is not flagged at the {market} "
+                        f"close on {len(unflagged)} of the {len(due)} decisions past the deadline of the listed date "
+                        f"{dn}, first {unflagged[0]:%Y-%m-%d %H:%M:%S}Z (spec L1963: 0.42-0.89% expected)")
+            kept = [(dec, dn) for dec, dn in hits if dn in skipped and is_stale(store, REG, sid, dec, dec, clk).stale]
             assert not kept, (f"T-STALE-01 (b): with the source-exception list loaded, {sid} is still flagged at the "
                               f"{market} close on {len(kept)} decisions whose missed date is listed, first {kept[0]}")
             assert G.within(row.kind, share, row.want()), (
@@ -1153,7 +1223,7 @@ def _check_stale01(store, clk, span, *, series=STALE01_SERIES, markets=STALE01_M
             bound = 0.0 if sid == "VIXCLS" else STALE01_MAX
             assert share <= bound, (f"T-STALE-01 ({'a' if sid in STALE01_H10 else 'c'}): {sid} is stale on {share:.4%} "
                                     f"of {market}-close decisions, above {bound:.0%} (spec L1963)")
-    return out
+    return out, flagged
 
 
 def test_stale_01_g_stale_01_reference_table_refdata():
@@ -1206,10 +1276,12 @@ def _stale01_invented(clk, lo, hi, series=STALE01_SERIES, drop=()) -> dict:
 def test_stale_01_body_passes_and_fails_on_invented_releases():
     """LA-02 part 2: the G-STALE-01 / T-STALE-01 body can PASS and can FAIL. Invented releases in the F18 / F07 layouts
     (no FRED data) on the calendars module's synthetic signed set, every expected date written, pass over decisions
-    2016-06-01 -> 2018-11-30 at both closes (the DTWEXBGS 2018-03-02 and DEXKOUS 2017-01-20 source skips flag a few
-    decisions without the list, none with it). It fails, each clause on its own: a week's last H.10 release deleted
-    on a date not in the list (a); clocks that ignore the list standing in for the loaded list (b); DEXKOUS over one
-    quarter around its skip (above the golden's Level 1 band); DTWEXBGS over 2018 (inside the band, above 1%); two
+    2016-06-01 -> 2018-11-30 at both closes: the DTWEXBGS 2018-03-02 and DEXKOUS 2017-01-20 source skips flag, without
+    the list, exactly the four decisions of each close between the skipped Friday's deadline and the next H.10 release
+    (none with it); the DEXKOUS 2018-12-05 skip, a Wednesday published with the rest of its week, flags none. It
+    fails, each clause on its own: a week's last H.10 release deleted on a date not in the list (a); a staleness check
+    that never flags (a, the converse); clocks that ignore the list standing in for the loaded list (b); DEXKOUS over
+    one quarter around its skip (above the golden's Level 1 band); DTWEXBGS over 2018 (inside the band, above 1%); two
     consecutive DGS10 releases deleted (above 1%); two consecutive VIXCLS closes deleted (above 0%); and the layout with
     another series id. The calendar gate names nothing on the synthetic set, only holidays_KRX on a set whose KRX file
     covers 2026-27, and the refusal on the unsigned set. Each declared provenance equals the generator's table."""
@@ -1233,18 +1305,42 @@ def test_stale_01_body_passes_and_fails_on_invented_releases():
     text = _layout_text([(d, {"VIXCLS": v, "VXVCLS": v + 2.0}) for d, v in vix], ("VIXCLS", "VXVCLS"), F07_PROVENANCE,
                         date_col="observation_date")
     assert [(r["date"], r["VIXCLS"]) for r in _fixture_csv(F07, text, ("VIXCLS",), F07_PROVENANCE)] == vix
-    got = _check_stale01(_stale01_store(obs, clk), clk, (lo, hi))
+    got, hits = _check_stale01(_stale01_store(obs, clk), clk, (lo, hi))
     assert got["dexkous_stale_schedule_us"] > 0 and got["dtwexbgs_stale_schedule_krx"] > 0, got
     assert got["dgs10_stale_schedule_us"] == got["vixcls_stale_schedule_krx"] == 0, got
+    # the decisions the two skips flag without the list. The skipped Friday is due at the next Monday's H.10 release
+    # (16:15 ET); the deadline is one publication day later (Tuesday 16:15 ET), and the following Monday's release
+    # clears it. So the US closes (16:00 ET + 30 s) and the KRX closes (06:30:30Z) of Wednesday, Thursday, Friday and
+    # that Monday are flagged: the Monday US close is before the release that clears it (2018-03-12 in EDT).
+    week = lambda days, hh, mm: [(U(y, m, d, hh, mm, 30), skip) for (y, m, d), skip in days]      # noqa: E731
+    dex = [((2017, 1, 25), date(2017, 1, 20)), ((2017, 1, 26), date(2017, 1, 20)), ((2017, 1, 27), date(2017, 1, 20)),
+           ((2017, 1, 30), date(2017, 1, 20))]
+    twx = [((2018, 3, 7), date(2018, 3, 2)), ((2018, 3, 8), date(2018, 3, 2)), ((2018, 3, 9), date(2018, 3, 2))]
+    assert hits["dexkous_stale_schedule_us"] == week(dex, 21, 0), hits["dexkous_stale_schedule_us"]
+    assert hits["dexkous_stale_schedule_krx"] == week(dex, 6, 30), hits["dexkous_stale_schedule_krx"]
+    assert hits["dtwexbgs_stale_schedule_us"] == week(twx, 21, 0) + [(U(2018, 3, 12, 20, 0, 30), date(2018, 3, 2))], \
+        hits["dtwexbgs_stale_schedule_us"]
+    assert hits["dtwexbgs_stale_schedule_krx"] == week(twx + [((2018, 3, 12), date(2018, 3, 2))], 6, 30), \
+        hits["dtwexbgs_stale_schedule_krx"]
+    assert not any(hits[k] for k in hits if k.startswith(("dgs10", "vixcls"))), hits
+    # a mid-week skip (DEXKOUS 2018-12-05, a Wednesday) is published with Thursday and Friday: no decision is flagged
+    dec2018 = (date(2018, 11, 1), date(2018, 12, 31))
+    dec_store = _stale01_store(_stale01_invented(clk, *dec2018, ("DEXKOUS",)), clk)
+    assert _check_stale01(dec_store, clk, dec2018, series=("DEXKOUS",))[1] == {
+        "dexkous_stale_schedule_us": [], "dexkous_stale_schedule_krx": []}
 
-    def fails(needle, sid, span, *, drop=(), clocks=clk):
+    def fails(needle, sid, span, *, drop=(), clocks=clk, is_stale=C.is_stale):
         store = _stale01_store(_stale01_invented(clk, span[0], span[1], (sid,), drop), clk)
-        e = _raises(lambda: _check_stale01(store, clocks, span, series=(sid,), markets=(("US", "us"),)), AssertionError)
+        e = _raises(lambda: _check_stale01(store, clocks, span, series=(sid,), markets=(("US", "us"),),
+                                           is_stale=is_stale), AssertionError)
         assert needle in str(e), (needle, str(e))
 
     q1 = (date(2017, 1, 3), date(2017, 3, 31))
     fails("T-STALE-01 (a): DEXKOUS at the US close: missed observation dates [datetime.date(2017, 4, 21)]", "DEXKOUS",
           (date(2017, 3, 1), date(2017, 5, 31)), drop=(date(2017, 4, 21),))        # a week's last (Friday) release
+    fails("T-STALE-01 (a): without the source-exception list, DEXKOUS is not flagged at the US close on 4 of the 4 "
+          "decisions past the deadline of the listed date 2017-01-20, first 2017-01-25 21:00:30Z", "DEXKOUS", q1,
+          is_stale=lambda *args: C.Fresh())                                  # a check that never flags
     fails("T-STALE-01 (b): with the source-exception list loaded, DEXKOUS is still flagged", "DEXKOUS", q1,
           clocks=_NoSkipClocks(clk))
     fails("G-STALE-01/dexkous_stale_schedule_us:", "DEXKOUS", q1)
@@ -1479,10 +1575,17 @@ test_miss_01_calendar_offsets_and_the_october_gap.test_ids = ["T-MISS-01"]
 # T-MISS-01 on the FRED snapshot of 2026-10-02 (spec L5624, L1353-1355; goldens.csv S11/cpi_yoy_aug2026 and
 # S11/cpi_yoy_wrong_lag). F18 (docs/macro_fixtures.py:65) is one file per FRED id, written flat as <id>.csv, series_id
 # the id, first_release, calendar_bound. Declared layout: the value is the column named by the id (FRED's own header),
-# obs_date the first of the observation month, a blank or "." value no observation.
+# obs_date the first of the observation month, a blank or "." value no observation, one row per month. Declared
+# reading, an owner question (docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md question 18): that column is the value
+# FRED served on 2026-10-02, the snapshot's current value. ACQUISITION.csv:22 lists CPIAUCSL "with ALFRED vintages;
+# vintages as of 2026-10-02" and spec L1435 / L1436 name a first release (output_type=4) and a current value; no
+# vintage column is read, and a file with one row per month and vintage fails at `_monthly` (two rows for one month).
+# The snapshot ends with Aug-2026 for both series: section 11's current state (2 Oct 2026) prints U-3 for Aug-2026
+# (spec L6347) and the Aug-2026 CPI YoY (L1355, L5624, L6348). A later month in the file is a later vintage.
 MISS01_FIXTURES = ("CPIAUCSL.csv", "UNRATE.csv")    # F18: CPI and the household-survey rate behind Sahm (spec L1353)
 MISS01_GAP = date(2025, 10, 1)       # spec L1353: "Oct-2025 CPI and household survey, never collected" (registry missing_months)
 MISS01_AUG = date(2026, 8, 1)        # spec L5624: CPI YoY for Aug-2026 = 3.353% +/- 0.01
+MISS01_LAST = date(2026, 8, 1)       # the last month of both series on 2026-10-02 (spec L6347 "U-3 ... (Aug-2026)"; L1355)
 MISS01_TOL = 1e-4                    # spec L5624 "+/- 0.01" in percent; S11/cpi_yoy_aug2026 note "+/- 0.01 pp (test-specific)"
 # spec L5624: derived values that use the Oct-2025 observation are NaN and flagged: YoY for Oct-2025 and Oct-2026, MoM
 # for Oct and Nov 2025, and Sahm's 3-month means (those whose window holds Oct-2025: Oct, Nov and Dec 2025).
@@ -1496,8 +1599,9 @@ def _f18_provenance(series_id: str) -> tuple[tuple[str, str], ...]:
 
 
 def _monthly(name: str, rows: list[dict], col: str) -> dict:
-    """{first of month: value} of an F18 monthly file; AssertionError on an obs_date that is not a first of month or
-    on two rows for one month."""
+    """{first of month: value} of an F18 monthly file, read from the declared value column `col` (the snapshot's
+    value; no vintage column is read); AssertionError on an obs_date that is not a first of month or on two rows for
+    one month (a long file of ALFRED vintages)."""
     out = {}
     for r in rows:
         assert r["date"].day == 1, f"{name}: obs_date {r['date']} is not the first of a month"
@@ -1508,12 +1612,17 @@ def _monthly(name: str, rows: list[dict], col: str) -> dict:
 
 
 def _check_miss01(cpi: dict, unrate: dict, *, yoy=P.yoy, mom=P.mom, rolling_mean=P.rolling_mean) -> dict:
-    """T-MISS-01 on monthly CPIAUCSL and UNRATE ({first of month: value}): neither has an Oct-2025 value; the Aug-2026
-    CPI YoY is computed (its window merely contains the gap), is not the positional shift(12) value, and equals
-    3.353% +/- 0.01 pp; YoY Oct-2025 / Oct-2026, MoM Oct / Nov 2025 and the Sahm 3-month means of UNRATE for Oct-Dec
-    2025 are NaN and flagged. The positional value and the spec's 3.713% are printed, never asserted as a value
-    (S11/cpi_yoy_wrong_lag is print_only). `yoy`, `mom` and `rolling_mean` are core.ficc.pit's (the demonstrations
-    pass broken ones). Returns the Aug-2026 YoY and the positional value."""
+    """T-MISS-01 on monthly CPIAUCSL and UNRATE ({first of month: value}): neither has a month after Aug-2026, the
+    last one in the 2026-10-02 snapshot (a later month is a later vintage), nor an Oct-2025 value; the Aug-2026 CPI YoY
+    is computed (its window merely contains the gap), is not the positional shift(12) value, and equals 3.353% +/- 0.01
+    pp; YoY Oct-2025 / Oct-2026, MoM Oct / Nov 2025 and the Sahm 3-month means of UNRATE for Oct-Dec 2025 are NaN and
+    flagged (on the snapshot, Oct-2026 has no endpoint). The positional value and the spec's 3.713% are printed, never
+    asserted as a value (S11/cpi_yoy_wrong_lag is print_only). `yoy`, `mom` and `rolling_mean` are core.ficc.pit's (the
+    demonstrations pass broken ones). Returns the Aug-2026 YoY and the positional value."""
+    for name, series in (("CPIAUCSL", cpi), ("UNRATE", unrate)):
+        late = sorted(m for m in series if m > MISS01_LAST)
+        assert not late, (f"T-MISS-01: {name} has a value for {late[0]:%Y-%m}, after {MISS01_LAST:%Y-%m}, the last month "
+                          f"of the 2026-10-02 snapshot (spec L6347, L1355): a later vintage")
     gap = MISS01_GAP
     assert gap not in cpi, f"T-MISS-01: CPIAUCSL has a value for {gap:%Y-%m} (spec L1353: never collected)"
     assert gap not in unrate, f"T-MISS-01: UNRATE has a value for {gap:%Y-%m} (spec L1353: household survey never collected)"
@@ -1569,24 +1678,27 @@ test_miss_01_cpi_yoy_3_353_refdata.test_ids = ["T-MISS-01"]
 
 def test_miss_01_body_passes_and_fails_on_invented_cpi():
     """LA-02 part 2: the T-MISS-01 body can PASS and can FAIL. Invented monthly CPI (growth 3.353% a year, Oct-2025
-    written as FRED's ".") and UNRATE in the F18 layout (no FRED data) pass. It fails on an Oct-2025 CPI value, on an
-    Oct-2025 UNRATE value, on an Aug-2026 CPI giving 3.37%, and with broken functions in place of core.ficc.pit's: a
-    YoY that flags any window holding a gap, a positional shift(12) YoY, a YoY / MoM that carries the last value into a
-    missing endpoint, and a 3-month mean over the members present; and on a file whose series_id is another id."""
+    written as FRED's ".") and UNRATE in the F18 layout (no FRED data) pass. It fails on a Sep-2026 CPI or UNRATE row
+    (after the snapshot's last month), on an Oct-2025 CPI value, on an Oct-2025 UNRATE value, on an Aug-2026 CPI giving
+    3.37%, and with broken functions in place of core.ficc.pit's: a YoY that flags any window holding a gap, a
+    positional shift(12) YoY, a YoY / MoM that carries the last value into a missing endpoint, and a 3-month mean over
+    the members present; and on a file whose series_id is another id, or with two rows for one month (vintages)."""
     for name in MISS01_FIXTURES:
         assert _generator_provenance(name) == _f18_provenance(name[:-len(".csv")]), (name, _generator_provenance(name))
     months = [P.add_months(date(2024, 1, 1), i) for i in range(32)]                 # Jan-2024 .. Aug-2026
     growth = 1.03353 ** (1 / 12)
 
-    def files(cpi_gap=None, unrate_gap=None, aug=None, sid="CPIAUCSL"):
+    def files(cpi_gap=None, unrate_gap=None, aug=None, sid="CPIAUCSL", sep=()):
         cpi = {m: 300.0 * growth ** i for i, m in enumerate(months)}
         cpi[MISS01_GAP], cpi[MISS01_AUG] = cpi_gap, aug if aug is not None else cpi[MISS01_AUG]
         unrate = {m: 4.0 + 0.1 * (i % 3) for i, m in enumerate(months)}
         unrate[MISS01_GAP] = unrate_gap
         out = []
         for col, prov_id, values in (("CPIAUCSL", sid, cpi), ("UNRATE", "UNRATE", unrate)):
-            text = _layout_text([(m, {col: values[m]}) for m in months], (col,), _f18_provenance(prov_id),
-                                date_col="observation_date")
+            rows = [(m, {col: values[m]}) for m in months]
+            if col in sep:                                # a Sep-2026 row: published after 2026-10-02 (a later vintage)
+                rows.append((date(2026, 9, 1), {col: values[MISS01_AUG]}))
+            text = _layout_text(rows, (col,), _f18_provenance(prov_id), date_col="observation_date")
             out.append(_monthly(f"{col}.csv", _fixture_csv(f"{col}.csv", text, (col,), _f18_provenance(col)), col))
         return out
 
@@ -1617,6 +1729,8 @@ def test_miss_01_body_passes_and_fails_on_invented_cpi():
     got = _check_miss01(*files())
     assert abs(got["aug_yoy"] - 0.03353) < 1e-12 and abs(got["positional"] - (1.03353 * growth - 1.0)) < 1e-12, got
     cases = (
+        (files(sep=("CPIAUCSL",)), {}, "T-MISS-01: CPIAUCSL has a value for 2026-09, after 2026-08, the last month"),
+        (files(sep=("UNRATE",)), {}, "T-MISS-01: UNRATE has a value for 2026-09, after 2026-08, the last month"),
         (files(cpi_gap=310.0), {}, "CPIAUCSL has a value for 2025-10 (spec L1353: never collected)"),
         (files(unrate_gap=4.4), {}, "UNRATE has a value for 2025-10"),
         (files(aug=300.0 * growth ** 19 * 1.0337), {}, "Aug-2026 CPI YoY 3.3700% != 3.353% +/- 0.01 pp"),
@@ -1631,6 +1745,11 @@ def test_miss_01_body_passes_and_fails_on_invented_cpi():
         assert needle in str(e), (needle, str(e))
     layout = _raises(lambda: files(sid="CPILFESL"), AssertionError)
     assert "provenance {'series_id': 'CPILFESL'" in str(layout), layout
+    vintages = _layout_text([(MISS01_AUG, {"CPIAUCSL": 322.1}), (MISS01_AUG, {"CPIAUCSL": 322.3})], ("CPIAUCSL",),
+                            _f18_provenance("CPIAUCSL"), date_col="observation_date")      # one row per vintage
+    long = _raises(lambda: _monthly("CPIAUCSL.csv", _fixture_csv("CPIAUCSL.csv", vintages, ("CPIAUCSL",),
+                                                                 _f18_provenance("CPIAUCSL")), "CPIAUCSL"), AssertionError)
+    assert "CPIAUCSL.csv: two rows for 2026-08" in str(long), long
 
 
 def test_ser_01_named_series_and_futures_roll_days():

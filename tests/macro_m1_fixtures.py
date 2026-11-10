@@ -574,6 +574,10 @@ GPOST_PEAK = (date(2026, 6, 22), 9114.55)   # G-POST-01/drawdown_from_peak "draw
                                             # 2026)"; spec L5821
 GPOST_SMA_N = 200                       # G-POST-01/close_over_200d note: "mean of last 200 closes incl. 2 Oct"
 GPOST_DLOG_N = 20                       # G-POST-01/krwx_dlog20 "KRW=X 20-observation dlog" (spec L5834)
+# The previous visible KS11 row must be the previous KRX session of 2 Oct (G-POST-01/kospi_return_2oct note "7,003.74 /
+# prev close - 1") on the signed KRX clock files, read on the fortnight to 2 Oct through the part-1 owner gate
+# tests.macro_m1_calendars._official_calendar (as tests/macro_m1_pit.py reads it; the shipped holidays_KRX covers 2026).
+GPOST_CAL_SPAN = (GPOST_DAY - timedelta(days=14), GPOST_DAY)
 
 
 def _gpost_utc(name: str, text: str) -> datetime:
@@ -584,7 +588,7 @@ def _gpost_utc(name: str, text: str) -> datetime:
 
 def _gpost_rows(fid: str, text: str) -> list[dict]:
     """One G-POST-01 fixture in its declared layout as {date, close, obs_utc, available_at_utc[, code]} rows;
-    AssertionError on any departure from it."""
+    AssertionError on any departure from it (also a row available before its own observation instant)."""
     name, (series, status, source) = FILE_OF[fid], _GPOST_PROVENANCE[fid]
     reader = csv.DictReader(io.StringIO(text))
     missing = [c for c in GPOST_COLUMNS + (("code",) if fid == "F27" else ()) if c not in (reader.fieldnames or ())]
@@ -600,6 +604,8 @@ def _gpost_rows(fid: str, text: str) -> list[dict]:
         assert math.isfinite(close) and close > 0, f"{where}: close {raw['close']!r}"
         row = {"date": d, "close": close, "obs_utc": _gpost_utc(name, raw["obs_utc"]),
                "available_at_utc": _gpost_utc(name, raw["available_at_utc"])}
+        assert row["available_at_utc"] >= row["obs_utc"], (
+            f"{where}: available_at_utc {raw['available_at_utc']} before obs_utc {raw['obs_utc']}")
         if fid == "F27":
             assert raw["code"] in GPOST_F27_CODES, f"{where}: code {raw['code']!r} not in {GPOST_F27_CODES}"
             row["code"] = raw["code"]
@@ -612,15 +618,17 @@ def _gpost_rows(fid: str, text: str) -> list[dict]:
     return rows
 
 
-def _check_g_post_01(f01: list[dict], f13: list[dict], f16: list[dict], f27: list[dict]) -> dict:
+def _check_g_post_01(f01: list[dict], f13: list[dict], f16: list[dict], f27: list[dict], cal) -> dict:
     """G-POST-01's M1 rows (goldens.csv, runs_from M1) on the 2-Oct decision. Each file is read as of 06:30:30Z: a row
     whose available_at_utc is later is not visible (spec L539), and no visible row may be dated after 2 Oct. The 2-Oct
     KOSPI rows of F13 and F01 and the 2-Oct Samsung and SK hynix rows of F27 are each the one visible row of that day,
     stamped at the scheduled close 06:30:00Z: an intraday print is not a close (the pre-patch 6,943.66 came from a file
-    written at 10:56 KST, L6286). KRW=X's last visible row is 1 Oct. Then every M1 row at Level 1 against goldens.csv:
+    written at 10:56 KST, L6286). The previous visible KS11 row is dated the previous KRX session of the signed calendar
+    `cal` (`clocks.prev_session`). KRW=X's last visible row is 1 Oct. Then every M1 row at Level 1 against goldens.csv:
     the close (F13, and F01's official close), the return on the previous visible close, the drawdown from the highest
     visible close, the close over the mean of the last 200 visible closes, the two stock closes, KRW=X's last close and
     its log change over 20 observations; and the peak is 9,114.55 on 22 Jun 2026. Returns the values."""
+    from core.calendars import clocks
     def visible(rows):
         return [r for r in rows if r["available_at_utc"] <= GPOST_DECISION_UTC]
 
@@ -639,6 +647,10 @@ def _check_g_post_01(f01: list[dict], f13: list[dict], f16: list[dict], f27: lis
     close = close_of(f13, "KS11")
     ks = visible(f13)                                      # ends on 2 Oct: one visible row that day and none after it
     assert len(ks) >= GPOST_SMA_N, f"G-POST-01: {len(ks)} visible KS11 rows, fewer than the {GPOST_SMA_N} of close_over_200d"
+    prev_day = clocks.prev_session("KR", GPOST_DAY, cal=cal)
+    assert ks[-2]["date"] == prev_day, (
+        f"G-POST-01: the previous visible KS11 row is dated {ks[-2]['date']}, not the previous KRX session {prev_day} "
+        "(G-POST-01/kospi_return_2oct is the return on the previous close)")
     peak = max(ks, key=lambda r: r["close"])
     kx = visible(f16)
     assert kx and kx[-1]["date"] == GPOST_KRWX_LAST, (
@@ -672,9 +684,12 @@ def _check_g_post_01(f01: list[dict], f13: list[dict], f16: list[dict], f27: lis
 
 def test_g_post_01_m1_data_rows_refdata():
     """The M1 rows (close, return, drawdown, 200-day ratio, Samsung / SK hynix closes, KRW=X) need F01/F13/F16/F20/F27:
-    NotRun naming each absent file; once all are listed, F01, F13, F16 and F27 are read in their declared layouts and
-    `_check_g_post_01` replays the rows on the 2-Oct decision at Level 1 against goldens.csv (look-ahead audit LA-02,
-    part 2: the body used to raise NotRun after the gate whatever the files held)."""
+    NotRun naming each absent file; once all are listed, F01, F13, F16 and F27 are read in their declared layouts, NotRun
+    (OWNER) while the signed KRX clock files do not cover the fortnight to 2 Oct (computed from the files by
+    tests.macro_m1_calendars._official_calendar), and `_check_g_post_01` replays the rows on the 2-Oct decision at Level
+    1 against goldens.csv (look-ahead audit LA-02, part 2: the body used to raise NotRun after the gate whatever the
+    files held)."""
+    from tests.macro_m1_calendars import _official_calendar
     g = G.golden("G-POST-01")
     m1 = [r for r in g.rows if r.runs_from == "M1"]
     assert {r.sub_id for r in m1} >= {"kospi_close_2oct", "kospi_return_2oct", "close_over_200d", "samsung_close_2oct",
@@ -683,7 +698,7 @@ def test_g_post_01_m1_data_rows_refdata():
     assert fids == ["F01", "F13", "F16", "F20", "F27"], fids
     _refdata(fids)
     rows = {fid: _gpost_rows(fid, require_fixture(FILE_OF[fid]).read_text(encoding="utf-8")) for fid in GPOST_READ}
-    _check_g_post_01(rows["F01"], rows["F13"], rows["F16"], rows["F27"])
+    _check_g_post_01(rows["F01"], rows["F13"], rows["F16"], rows["F27"], _official_calendar(*GPOST_CAL_SPAN))
 
 
 test_g_post_01_m1_data_rows_refdata.test_ids = ["G-POST-01"]
@@ -752,19 +767,30 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
     QX data) built to the goldens.csv values pass. It fails, naming the clause, when: a 2-Oct row is not visible at
     06:30:30Z or is an intraday print (F13, F01, F27); a later row is visible; the KS11 close, the F01 official close,
     the previous close, the peak (beyond and within the drawdown tolerance, or on another day), the flat level, a stock
-    close, KRW=X's last close or its row 20 observations back is off; the provisional 2-Oct KRW=X row is visible; there
-    are too few KS11 or KRW=X rows; and, at the layout, a declared column is absent, a row is not of its file's series
-    and status, or rows are out of order. While a fixture is absent, the real test's REFDATA reason names it."""
-    from tests.macro_m1_calendars import F01_COLUMNS
+    close, KRW=X's last close or its row 20 observations back is off; the previous visible KS11 row is not 1 Oct (that
+    row missing with 30 Sep at its level, or available only at 07:00Z); the provisional 2-Oct KRW=X row is visible;
+    there are too few KS11 or KRW=X rows; and, at the layout, a declared column is absent, a row is not of its file's
+    series and status, rows are out of order, or a row is available before its obs_utc. The row 201 closes back is
+    outside the 200-close window (its level does not move the ratio) and the row 200 back inside it. The calendar is
+    the calendars module's synthetic signed set, through the owner gate. While a fixture is absent, the real test's
+    REFDATA reason names it."""
+    from tests.macro_m1_calendars import F01_COLUMNS, _official_calendar, _official_calendar_on, drafts_set, fixture_set
     assert GPOST_COLUMNS == F01_COLUMNS                     # one declared F01 layout (part 1)
     inv = _gpost_invented()
     texts = {fid: _gpost_csv(fid, inv[fid]) for fid in GPOST_READ}
+    cal = _official_calendar_on(*GPOST_CAL_SPAN, fixture_set())
+    try:
+        _official_calendar(*GPOST_CAL_SPAN, live=drafts_set())
+    except NotRun as exc:
+        assert exc.reason.startswith("OWNER: the signed KRX clock files must cover 2026-09-18..2026-10-02"), exc.reason
+    else:
+        raise AssertionError("_official_calendar passed the unsigned set")
 
     def run(**edits):
         rows = {fid: _gpost_rows(fid, texts[fid]) for fid in GPOST_READ}
         for fid, edit in edits.items():
             rows[fid] = edit(rows[fid])
-        return _check_g_post_01(rows["F01"], rows["F13"], rows["F16"], rows["F27"])
+        return _check_g_post_01(rows["F01"], rows["F13"], rows["F16"], rows["F27"], cal)
 
     def at(day, code=None, **kw):
         return lambda rows: [{**r, **kw} if r["date"] == day and code in (None, r.get("code")) else r for r in rows]
@@ -778,6 +804,14 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
     m1 = [r.sub_id for r in g.rows if r.runs_from == "M1"]
     assert len(m1) == 8 and all(G.within(g.row(k).kind, got[k], g.want(k)) for k in m1), got
     flat, oct2 = inv["F13"][0][1], GPOST_DAY
+    # the 200-close window (G-POST-01/close_over_200d note "mean of last 200 closes incl. 2 Oct"; the count is typed
+    # here, not read from GPOST_SMA_N): the row 201 closes back is outside it, the row 200 back inside it (levels far
+    # from the window mean, below the 9,114.55 peak; one row moves the mean by (level - flat) / 200)
+    day200, day201 = inv["F13"][-200][0], inv["F13"][-201][0]
+    assert run(F13=at(day201, close=3000.0))["close_over_200d"] == got["close_over_200d"]
+    moved = run(F13=at(day200, close=9000.0))["close_over_200d"]
+    close = got["kospi_close_2oct"]
+    assert abs(moved - close / (close / got["close_over_200d"] + (9000.0 - flat) / 200)) < 1e-9, moved
     print_1056 = dict(close=6943.66, obs_utc=utc(oct2, 1, 56), available_at_utc=utc(oct2, 1, 56))   # 10:56 KST, L6286
     cases = (
         (dict(F13=at(oct2, available_at_utc=utc(oct2, 6, 31))), "G-POST-01: 0 KS11 rows of 2026-10-02 visible at 06:30:30Z"),
@@ -791,6 +825,11 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
         (dict(F01=at(oct2, close=6943.66)),
          "G-POST-01 on the F01 official close: G-POST-01 deviations: kospi_close_2oct: got 6943.66"),
         (dict(F13=at(date(2026, 10, 1), close=6800.0)), "G-POST-01 deviations: kospi_return_2oct: got 0.0299"),
+        (dict(F13=lambda rows: at(date(2026, 9, 30), close=[r for r in rows if r["date"] == date(2026, 10, 1)][0]["close"])(
+            [r for r in rows if r["date"] != date(2026, 10, 1)])),
+         "G-POST-01: the previous visible KS11 row is dated 2026-09-30, not the previous KRX session 2026-10-01"),
+        (dict(F13=at(date(2026, 10, 1), available_at_utc=utc(oct2, 7, 0))),
+         "G-POST-01: the previous visible KS11 row is dated 2026-09-30, not the previous KRX session 2026-10-01"),
         (dict(F13=at(GPOST_PEAK[0], close=9300.0)), "G-POST-01 deviations: drawdown_from_peak: got -0.246"),
         (dict(F13=lambda rows: [{**r, "close": r["close"] + 200.0} if r["close"] == flat else r for r in rows]),
          "G-POST-01 deviations: close_over_200d: got 1.07"),
@@ -820,6 +859,10 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
     head, first, second, *rest = texts["F16"].split("\n")
     _gpost_fails(lambda: _gpost_rows("F16", "\n".join([head, second, first, *rest])),
                  "yahoo_KRWX_2004_2026-10-01.csv line 3: rows out of date order or repeated")
+    early = [(d, c, o, utc(oct2, 6, 0) if d == oct2 else a) for d, c, o, a in inv["F13"]]   # before its own close
+    _gpost_fails(lambda: _gpost_rows("F13", _gpost_csv("F13", early)),
+                 f"yahoo_KS11_1996-12_2026-10-02.csv line {len(early) + 1}: available_at_utc 2026-10-02T06:00:00Z before "
+                 "obs_utc 2026-10-02T06:30:00Z")
     # while a fixture is absent the real test is NOT_RUN (REFDATA) and names it
     listed = load_manifest()
     absent = [fid for fid in ("F01", "F13", "F16", "F20", "F27") if FILE_OF[fid] not in listed]

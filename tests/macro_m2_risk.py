@@ -320,9 +320,14 @@ VT01_DAY, VT01_CLOSE_UTC = OCT2, U(2026, 10, 2, 6, 30)
 US_LABEL_DAY, US_CLOSE_UTC, US_DECISION = date(2026, 10, 1), U(2026, 10, 1, 20, 0), U(2026, 10, 1, 20, 0, 30)
 US_KNOWLEDGE = U(2026, 10, 1, 21, 0)      # after each row's retrieval (bound + 11 min); a later one reads the same rows
 # T-LABEL-01 (spec L5643; R-06 card L1565): KOSPI on 2026-10-02 "elevated" (relative) and "stressed" (absolute); US on
-# 2026-10-01 "normal" (relative). goldens.csv holds the KOSPI relative label with its trailing-756 quartiles and
-# percentile (G-POST-01 label_relative_2oct, label_q1, label_q2, label_q3, label_percentile), not the other two.
-LABEL01_KR_ABS, LABEL01_US_REL = "stressed", "normal"
+# 2026-10-01 "normal" (relative). goldens.csv holds all three: the KOSPI relative label with its trailing-756 quartiles
+# and percentile (G-POST-01 label_relative_2oct, label_q1, label_q2, label_q3, label_percentile), and the KOSPI absolute
+# and US relative labels (G-B5-04 kospi_absolute_label "stressed", us_relative_label "normal"; spec L5804), which the
+# body reads from there. G-B5-04 also holds the US sigma, quartiles and percentile (us_sigma, us_q1..us_q3,
+# us_percentile), which the body prints and does not assert: those rows name F13;U1 as their inputs, U1 being French
+# Mkt-RF to 2026-08 spliced with ^GSPC for Sep-2026 (ACQUISITION.csv:33), while the replay reads F14 ^GSPC alone
+# (owner questions 11 and 12 of docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md).
+LABEL01_B504 = ("kospi_absolute_label", "us_relative_label")     # goldens.csv G-B5-04 sub_ids asserted (spec L5643, L5804)
 
 
 def _replay_utc(name: str, text: str) -> datetime:
@@ -606,9 +611,11 @@ def _check_label01(kr, kr_rows: list[dict], us, us_rows: list[dict]) -> dict:
     (`_decided_close`: KRX 2 Oct 06:30:00Z / 06:30:30Z, NYSE 1 Oct 20:00:00Z / 20:00:30Z). From the closes it may read
     (`_read_closes`, `_label_stats`): KOSPI on 2026-10-02 at Level 1 against goldens.csv G-POST-01, label_relative_2oct
     "elevated", label_q1 0.157, label_q2 0.1855, label_q3 0.336 (vol_level +/- 0.001) and label_percentile 70
-    (percentile +/- 5); then the KOSPI absolute label "stressed" and the US relative label on 2026-10-01 "normal"
-    (L5643; goldens.csv has no row for either). The US sigma, quartiles and percentile are printed beside the spec's
-    print (L1565, L5804: 10.7%; 10.5 / 12.7 / 15.2%; 28th percentile), not asserted. Returns both markets' figures."""
+    (percentile +/- 5); then the KOSPI absolute label and the US relative label on 2026-10-01 against goldens.csv
+    G-B5-04, kospi_absolute_label "stressed" and us_relative_label "normal" (L5643, L5804). The US sigma, quartiles and
+    percentile are printed beside the spec's print (L1565, L5804: 10.7%; 10.5 / 12.7 / 15.2%; 28th percentile; the same
+    values as G-B5-04 us_sigma, us_q1..us_q3 and us_percentile, whose inputs are F13;U1, not F14), not asserted.
+    Returns both markets' figures."""
     _decided_close(kr_rows, VT01_DAY, VT01_CLOSE_UTC, DECISION, "T-LABEL-01 KOSPI")
     _decided_close(us_rows, US_LABEL_DAY, US_CLOSE_UTC, US_DECISION, "T-LABEL-01 US")
     k = _label_stats("KOSPI", kr, _read_closes(kr_rows, VT01_DAY, DECISION), VT01_DAY)
@@ -621,10 +628,12 @@ def _check_label01(kr, kr_rows: list[dict], us, us_rows: list[dict]) -> dict:
           "US 10.7%, 10.5 / 12.7 / 15.2%, 28th, normal")
     G.assert_golden("G-POST-01", {"label_relative_2oct": k["rel"], "label_q1": k["q1"], "label_q2": k["q2"],
                                   "label_q3": k["q3"], "label_percentile": k["percentile"]})
-    assert k["abs"] == LABEL01_KR_ABS, (
-        f"T-LABEL-01: KOSPI absolute label on 2026-10-02 {k['abs']!r} != 'stressed' (spec L5643)")
-    assert u["rel"] == LABEL01_US_REL, (
-        f"T-LABEL-01: US relative label on 2026-10-01 {u['rel']!r} != 'normal' (spec L5643)")
+    b504 = G.golden("G-B5-04")
+    for sub, what, got in zip(LABEL01_B504, ("KOSPI absolute label on 2026-10-02", "US relative label on 2026-10-01"),
+                              (k["abs"], u["rel"])):
+        row = b504.row(sub)
+        assert got == row.want(), (f"T-LABEL-01: {what} {got!r} != {row.want()!r} (goldens.csv G-B5-04/{sub}; "
+                                   f"spec L5643, {row.source_line})")
     return {"KOSPI": k, "US": u}
 
 
@@ -649,6 +658,9 @@ test_label_01_kospi_elevated_stressed_and_us_normal_refdata.test_ids = ["T-LABEL
 # quartile positions inside them and sigma(t) at the 70th percentile; the US series ends between its Q1 and Q2.
 LABEL01_KR_BLOCKS = ((0.157, 250), (0.1855, 266), (0.336, 180), (0.40, 40), (0.2882, 20))
 LABEL01_US_BLOCKS = ((0.09, 250), (0.15, 486), (0.107, 20))
+# The same quartiles with the 0.157 block cut to 205 values (0.1855 block 311): Q1's position (188.75 of 756) still lies
+# in it, but the 21 sigma values a wild close moves out of it would put Q1 in the next block.
+LABEL01_KR_BLOCKS_Q1_EDGE = ((0.157, 205), (0.1855, 311), (0.336, 180), (0.40, 40), (0.2882, 20))
 
 
 def _label01_kr_text(history: float = 0.12, blocks=LABEL01_KR_BLOCKS, daily: int = 820) -> str:
@@ -686,16 +698,27 @@ def test_label_01_body_passes_and_fails_on_invented_closes():
     layouts, built so that the KOSPI trailing-756 quartiles are 0.157 / 0.1855 / 0.336, sigma(2 Oct) is 0.2882 at the
     70th percentile and above the expanding history's Q3, and the US sigma(1 Oct) lies between its Q1 and Q2, pass. It
     fails, naming the clause, when: q1, q2 or q3 is 0.002 off (that row alone); the percentile is 61 (that row alone);
-    sigma(2 Oct) is 0.35 (relative label stressed); the expanding history sits at 0.30 (absolute label normal); the US
-    sigma(1 Oct) is 0.16 (US label stressed); fewer than 756 KOSPI sigma values exist; the 1-Oct US row is an intraday
-    print; or an F14 row dated 2 Oct is available at the 1-Oct decision. While F13 or F14 is absent, the real test's
-    REFDATA reason names it."""
+    sigma(2 Oct) is 0.35 (relative label stressed); the expanding history sits at 0.30 (absolute label normal, against
+    G-B5-04/kospi_absolute_label); the US sigma(1 Oct) is 0.16 (US label stressed, against G-B5-04/us_relative_label);
+    fewer than 756 KOSPI sigma values exist; the 1-Oct US row is an intraday print; or an F14 row dated 2 Oct is
+    available at the 1-Oct decision. A KOSPI row inside the trailing 756 but outside the 20-return vt window, stamped
+    available after the 06:30:30Z decision with a wild close, is read by neither market_vol_target nor the body: the
+    quartiles stay on the goldens on a block layout where that row, if read, would move Q1. While F13 or F14 is absent,
+    the real test's REFDATA reason names it."""
+    assert [G.golden("G-B5-04").want(sub) for sub in LABEL01_B504] == ["stressed", "normal"]       # spec L5643
     kr_text, us_text = _label01_kr_text(), _label01_us_text()
     got = _label01_body(kr_text, us_text)
     k, u = got["KOSPI"], got["US"]
     assert (k["rel"], k["abs"], u["rel"]) == ("elevated", "stressed", "normal"), got
     assert max(abs(k[q] - w) for q, w in (("q1", 0.157), ("q2", 0.1855), ("q3", 0.336), ("sigma", 0.2882))) < 1e-9, k
     assert abs(k["percentile"] - 70.0) < 0.5 and k["first_sigma"] < date(2016, 10, 2), k
+    # a row 650 sessions back (inside the trailing 756, outside the vt window) available only at 07:00Z, its close x 1.5
+    edge = _label01_kr_text(blocks=LABEL01_KR_BLOCKS_Q1_EDGE)
+    late_day = _replay_rows("F13", edge)[-650]["date"]
+    late = _edit_rows("F13", edge, lambda rows: [(d, c * 1.5, o, U(2026, 10, 2, 7, 0)) if d == late_day else (d, c, o, a)
+                                                 for d, c, o, a in rows])
+    kl = _label01_body(late, us_text)["KOSPI"]
+    assert max(abs(kl[q] - w) for q, w in (("q1", 0.157), ("q2", 0.1855), ("q3", 0.336))) < 1e-9, (late_day, kl)
     def swap(i: int, level: float) -> tuple:
         return tuple((level, n) if j == i else (lv, n) for j, (lv, n) in enumerate(LABEL01_KR_BLOCKS))
     cases = (

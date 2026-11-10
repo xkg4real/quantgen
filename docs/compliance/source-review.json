@@ -279,7 +279,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "642ee21860c85b53450d1a4f88dd5d0d9e6f26a8867b824b15ddb382c814aea2",
+    "docs/compliance/FACTS.md": "9095a1e5bf910ddd87e7a3027b0839bef10dac8ecac519d494382d6e245d8752",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -318,7 +318,7 @@
     "docs/product/LETF_STUDY_SCOPE_2026-10-30.md": "486c09251d18d105fd4397b9d3e2aec393fc420565ccb84650375aefe7044618",
     "docs/product/LOOKAHEAD_LA01_FIX_2026-11-10.md": "9ccc09cc2982dc78907e71cd596b980115efa4f8d05d0aeef340db91dc73864e",
     "docs/product/LOOKAHEAD_LA02_PART1_2026-11-10.md": "f4ce44fcfc95c76213c6df187e2444a7fc860bf6d72aa6e514ef11917e38a44f",
-    "docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md": "296ac9169a84487df44ac60a634056094e378b374bca8afdc88f859096e4699a",
+    "docs/product/LOOKAHEAD_LA02_PART2_2026-11-10.md": "ca79e5f259a9d4ffc0ec75401ad80efdf93667af2f5b537152bd285662838855",
     "docs/product/MARKETS_WATCHLIST_2026-11-04.md": "71dffdb67f3b38ed8b726f273c8651a8a65ec832cdfedc84ba5431bebaca2494",
     "docs/product/MARKET_DIAGNOSTICS_LANGUAGE_2026-10-31.md": "9cf84bb4371950a1aa5741a5ca2f5784471749e818d5362b23262ebb37aff579",
     "docs/product/MARKET_DISPLAY_RIGHTS_2026-10-31.md": "6cc0846354f34cfec6f4c70199cc74dfa17de083d7e980f9c98608549175033c",
@@ -501,13 +501,13 @@
     "tests/macro_m0_rules.py": "7cb91771c62286132b269f71ac2c2c351548ff844d6bc474b1e4abcc65a09219",
     "tests/macro_m0_schemas.py": "ef2870b7170a9a56b642c55cd509d5e2438efd2698ef52656aec28300fd66aa1",
     "tests/macro_m1_books.py": "e940009e977b4b45f44025b3e91e9bbd0db8b87986b7ff0f0282c08e468f3bd0",
-    "tests/macro_m1_calendars.py": "0989ccf585918fb33418cd365a25eda69dc0f0ca3485797b369c70fedf086db6",
-    "tests/macro_m1_fixtures.py": "c1cedafab1e1776e4e679e7d56f296c62b74cbb2318f98f44d290609fbc21a8e",
+    "tests/macro_m1_calendars.py": "4f8b69bebea7da3042da37753f83ee943af3d47351faaa764133a05a695baba2",
+    "tests/macro_m1_fixtures.py": "4a55f98b757365b17102d4599f2017adfe0412f47997c0d1078e661f4aa93e4f",
     "tests/macro_m1_integration.py": "4a370e688d1fa8a5130ed470f8148712da8c8852144f9e07a60954bc286e7680",
-    "tests/macro_m1_pit.py": "1a94e7a7bd9288ef93d8a949a3fc4f4a16e3ff0306cec82c7dc3f8d8d5601cb9",
+    "tests/macro_m1_pit.py": "e62b8b8a482ed23cd0930aae9663bc6e1fe2add3539d679d0cfa95723f39cb6c",
     "tests/macro_m2_costed.py": "754a2af2fac98fb245dc6c0c6c53b23e978d4db1c0dff7ec224d712730c143f3",
-    "tests/macro_m2_risk.py": "1cfacfd792c7e3a52b58a972a76d86cd4378ec60d866ff5ec1fab0cb07d626a8",
-    "tests/macro_m3_estimators.py": "12ed300305471469a1685731a588ea3d4cea83c49d9b61a38ad163e90827bffc",
+    "tests/macro_m2_risk.py": "b94092a54223807cd2bae627361e5331250784574ee2b65b9308e70efacc36bd",
+    "tests/macro_m3_estimators.py": "87da9779928ac6baab93b29da3a937a06bb4e249094380e4a41ddeb3f23f66ff",
     "tests/macro_m4_integration.py": "b3cb2979c31e0450cbbf1be01c9088e87a0ef4b1882ae8adba9b95218222918d",
     "tests/macro_m4_sleeves.py": "a14f5eec30de07244b572ee1585890a03a963eb71389082ce2432e87db8b8bc3",
     "tests/macro_m5_books.py": "66f09499042dd365a4908cee882f4c5e4d5bb26d54865ef49ac9c8e9b9048a6d",
@@ -651,163 +651,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "7f3dd692d8986af42c92b9fefaa50d94e460646779b7b0d6378b9f431fe544c0",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.691009+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.046175+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "7f3dd692d8986af42c92b9fefaa50d94e460646779b7b0d6378b9f431fe544c0",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.693312+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.048430+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "1c03da7d185babdb5ab2ca7a4c60dbb550dc1f0c6ff32a73fc7edc2c4d334935",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.695583+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "669545a40ec07d80c0e433e9c7a69a6723c0769e3ff76a0597ffe1feee0e02f7",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.050521+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "666e61643dda0a0d6d7ecd0a3881b5e7f8188a767a1a551a9b458a2f8724a34f",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.697502+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "0da02dfcaad8f129388f9b4b789df8e66a5d02a835e5602918fec866f2bcdf5c",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.052397+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "e0562848fa17c03d404600218c732595ca0a6e58235af8ca25397cbb29b95f83",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.699580+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "2d6e80d5a6c6da335fd0dacc1220253b44668cad6c88f73bcf0925a124688f85",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.054648+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "ab06d0e0d6a64aacb9553cc0bd71616ed4422645a5258bedb7531054fc499a37",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.701269+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "d0a891cad8021b234a209aba33b16b091b7e11dbd6225f819bfd64cb45f347e2",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.056475+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "7f3dd692d8986af42c92b9fefaa50d94e460646779b7b0d6378b9f431fe544c0",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.702948+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.058294+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "ab06d0e0d6a64aacb9553cc0bd71616ed4422645a5258bedb7531054fc499a37",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.704527+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "d0a891cad8021b234a209aba33b16b091b7e11dbd6225f819bfd64cb45f347e2",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.060210+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "939b50851bfcb097be08ab6bec06f88a832e2de087e3e1cec1126f2de7d975ad",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.706312+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.062600+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "fdad6ea4b1c36ef893ac1dd2f4b1ff650e85f5b5918fd4ed904587c18019ecd0",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.708089+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "0536b28f03b3637c80641849494e7ddd4fe8fe403cc300fc5467122cc46146e5",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.064314+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "64f6fdc7a76799f42c129cebbb969d89fb2cb7580a9284c698fa0255a5dd634f",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.710053+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "cac9825cae77965279e7eeb9bdf0263d288af596203f2ee82f2739c8eb4c18b0",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.066723+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "dae3546847fb027635dae6ec11cf0dd10ccf4a8828dcf9ab0adc735621e1f8ae",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.711692+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "91b99a6ae9853d0012da5f988475d24099c7638ee658552e40f88989af28d57e",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.069020+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "939b50851bfcb097be08ab6bec06f88a832e2de087e3e1cec1126f2de7d975ad",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.716205+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.072292+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "939b50851bfcb097be08ab6bec06f88a832e2de087e3e1cec1126f2de7d975ad",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.718500+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.074021+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "939b50851bfcb097be08ab6bec06f88a832e2de087e3e1cec1126f2de7d975ad",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.720152+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "f1210585e51438cb68116751415632d242a7a9d387e2ea80f8daac89c2db7802",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.076522+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "56626c01fb0d3bd8bd89b13faa36cac9fc0c93b4757ea07831da9f65310b70a7",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.721977+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "c7c01cd06de55a9d00a4d8a47dad2255f9c8f7f67416ad67be912c2342793587",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.078378+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "ab06d0e0d6a64aacb9553cc0bd71616ed4422645a5258bedb7531054fc499a37",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.723567+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "d0a891cad8021b234a209aba33b16b091b7e11dbd6225f819bfd64cb45f347e2",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.080703+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "7f3dd692d8986af42c92b9fefaa50d94e460646779b7b0d6378b9f431fe544c0",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.725586+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.083171+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "6271347e045b70cf53060f9fd8cccd68aa34cfc7d6758f68f45520ecc6ed3905",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.727256+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "3e7bd7fee51cfc1399f40942d9471d1d1a0bb5abe1142f3be330b602a66d1370",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.084883+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "7f3dd692d8986af42c92b9fefaa50d94e460646779b7b0d6378b9f431fe544c0",
-      "reviewed_by": "Claude LA-02 part 2 review",
-      "review_note": "LA-02 part 2 converts the remaining REFDATA test bodies; test files and docs only",
-      "reviewed_at": "2026-11-10T14:38:23.728899+00:00",
-      "source_commit": "8e888146ae2984fb6f390c61239976e133ab5e83"
+      "source_digest": "65bd78086a92c7096ced53bbdecaa1bc2561197d70bf39da0b2f04f00e5d258d",
+      "reviewed_by": "Claude LA-02 part 2 review fixes",
+      "review_note": "LA-02 part 2 review fixes: test files, the product record and FACTS.md only; no product code",
+      "reviewed_at": "2026-11-10T15:26:45.086566+00:00",
+      "source_commit": "4bf77c42b8e813186a5b50a202a0d9f89a887c6d"
     }
   }
 }

@@ -27,12 +27,12 @@ until ⑨-2 lists its fixture, or until the owner extends a calendar file.
 
 | Test | Before | Now |
 | --- | --- | --- |
-| G-POST-01 M1 rows, `tests/macro_m1_pit.py::test_g_post_01_m1_data_rows_refdata` | One inline identity, then an unconditional `NotRun("REFDATA: ...")` | Gate on F13, F16 and F27, naming each absent file. Then each file is parsed in its declared layout and `_check_gpost01_m1` runs |
-| G-POST-01 row replay, `tests/macro_m1_fixtures.py::test_g_post_01_m1_data_rows_refdata` | `_refdata(F01, F13, F16, F20, F27)`, then `NotRun("... wired by the M1 PIT package")` | The same gate. Then F01, F13, F16 and F27 are parsed (`_gpost_rows`) and `_check_g_post_01` replays the rows as of 06:30:30Z on 2 Oct |
+| G-POST-01 M1 rows, `tests/macro_m1_pit.py::test_g_post_01_m1_data_rows_refdata` | One inline identity, then an unconditional `NotRun("REFDATA: ...")` | Gate on F13, F16 and F27, naming each absent file. Then each file is parsed in its declared layout, the part-1 owner-calendar gate `_official_calendar` runs over 2026-09-18..2026-10-02, and `_check_gpost01_m1` runs |
+| G-POST-01 row replay, `tests/macro_m1_fixtures.py::test_g_post_01_m1_data_rows_refdata` | `_refdata(F01, F13, F16, F20, F27)`, then `NotRun("... wired by the M1 PIT package")` | The same gate. Then F01, F13, F16 and F27 are parsed (`_gpost_rows`), the same calendar gate runs, and `_check_g_post_01` replays the rows as of 06:30:30Z on 2 Oct |
 | T-PRINT-01 on Yahoo ^KS11, `tests/macro_m1_pit.py::test_print_01_real_kospi_close_refdata` | Unconditional `NotRun` | `require_fixture(F13)`, then the part-1 owner-calendar gate `_official_calendar` over 2026-02-23..2026-03-09, then `_check_print01_ks11` |
 | G-STALE-01 / T-STALE-01, `tests/macro_m1_pit.py::test_stale_01_g_stale_01_reference_table_refdata` | Unconditional `NotRun` | Gate on the four FRED files (REFDATA). Then a computed owner gate, `_stale01_waiting`, over the signed calendar files the body reads (OWNER). Then `_check_stale01` on a PIT store built from the files |
 | T-MISS-01 CPI, `tests/macro_m1_pit.py::test_miss_01_cpi_yoy_3_353_refdata` | Unconditional `NotRun` | Gate on CPIAUCSL and UNRATE, then `_check_miss01` |
-| T-CLOSE-02 on the signed files, `tests/macro_m1_calendars.py::test_close02_on_the_real_signed_files_is_owner_input` | `NotRun("OWNER: ...")` whatever the files held | `_close02_waiting` computes every refusal, coverage gap and missing owner-signed `kr_sessions` row among what the clauses read (`CLOSE02_NEEDS`). While anything waits, the test is NOT_RUN (OWNER). Once nothing waits, `_check_close02` runs on the shipped set, and a coverage or signing error inside it is a FAIL |
+| T-CLOSE-02 on the signed files, `tests/macro_m1_calendars.py::test_close02_on_the_real_signed_files_is_owner_input` | `NotRun("OWNER: ...")` whatever the files held | `_close02_waiting` computes every refusal, coverage gap, missing owner-signed `kr_sessions` row, and `kr_sessions` row list that the file still names under `owner_must_sign` (the `random_end_extension` rows), among what the clauses read (`CLOSE02_NEEDS`). While anything waits, the test is NOT_RUN (OWNER). Once nothing waits, `_check_close02` runs on the shipped set, and a coverage or signing error inside it is a FAIL |
 | T-VT-01 on 2 Oct, `tests/macro_m2_risk.py::test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata` | `_refdata(F13)`, then `NotRun("... pinned to the frozen fixture ingest")` | The same gate. Then F13 is parsed, replayed through `R.market_vol_target` at the 2-Oct KRX close, and checked by `_check_vt01` |
 | T-LABEL-01, `tests/macro_m2_risk.py::test_label_01_kospi_elevated_stressed_and_us_normal_refdata` | `_refdata(F13, F14)`, then `NotRun` | The same gate. Then F13 is replayed at the KRX close of 2 Oct and F14 at the NYSE close of 1 Oct, and `_check_label01` runs |
 | T-B5-01 on KOSPI, `tests/macro_m3_estimators.py::test_t_b5_01_kospi_golden_refdata` | `require_fixture(KS11)`, then `AssertionError("... golden assertion not implemented")` | `require_fixture(KS11)`. The parsed closes go through the product B5 harness `docs/vol_backtest.spec_form` (read only), then `_check_b501` |
@@ -55,7 +55,10 @@ Nine new demonstration tests, none with `test_ids`:
 ### Expected values and where they come from
 
 The spec is `QUANTGEN_Quant_Council_2026-10-03/claude_code/QUANTGEN_MACRO_INTEGRATION.md`. Golden rows are read from
-`tests/fixtures/macro/goldens.csv` and asserted at their Level 1 kind tolerance; the file is not edited.
+`tests/fixtures/macro/goldens.csv` and asserted at their Level 1 kind tolerance, with one exception: the
+`macro_m1_pit.py` bodies compare a vendor price (F13 ^KS11 7,003.74 and 5,251.87, F16 KRW=X 1,356.84) after rounding it
+to two decimals, where Level 1 `price` is exact (L5735), and the `macro_m1_fixtures.py` site compares the same G-POST-01
+rows exactly (question 4). The file is not edited.
 
 - **G-POST-01, M1 rows** (spec L5819-5834). Both sites assert every `goldens.csv` G-POST-01 row whose `runs_from` is M1:
   - `kospi_close_2oct` 7003.74 (price, exact);
@@ -71,20 +74,28 @@ The spec is `QUANTGEN_Quant_Council_2026-10-03/claude_code/QUANTGEN_MACRO_INTEGR
   - the peak 9,114.55 on 2026-06-22 (`drawdown_from_peak`; L5821);
   - the 200-close window (`close_over_200d` note);
   - the 20-observation dlog (`krwx_dlog20`; L5834);
-  - the KRW=X last row dated 1 Oct, with the provisional 2-Oct row dropped (`krwx_last_row`; L5834, L6291).
+  - the KRW=X last row dated 1 Oct, with the provisional 2-Oct row dropped (`krwx_last_row`; L5834, L6291);
+  - the return's previous close (`kospi_return_2oct` note "7,003.74 / prev close - 1"): the row before 2 Oct (in
+    `macro_m1_fixtures.py`, the previous visible row) must be dated the previous KRX session, `clocks.prev_session` on
+    the signed calendar. Both bodies read it through the part-1 owner gate `_official_calendar` over 2026-09-18..
+    2026-10-02, the fortnight T-PRINT-01 reads; the shipped `holidays_KRX` covers 2026, so the gate passes today.
 
   The `macro_m1_fixtures.py` site adds point-in-time visibility. Each file is read as of the decision at 06:30:30Z
   (L2096, L6278), and a row available later is invisible (L539). No visible row may be dated after 2 Oct. Each 2-Oct
   KOSPI and stock row must be stamped at the scheduled close 06:30:00Z (L1289); the pre-patch 6,943.66 was a
-  10:56 KST intraday print (L6286). That site also checks F01's official close against the same golden. The
-  `macro_m1_pit.py` site compares vendor prices (F13, F16) at two decimals and KRX won prices exactly (question 4).
+  10:56 KST intraday print (L6286). A row available before its own `obs_utc` is refused at the layout. That site also
+  checks F01's official close against the same golden. The `macro_m1_pit.py` site ignores ^KS11 rows dated after
+  2 Oct, and compares vendor prices (F13, F16) at two decimals and KRX won prices exactly (question 4).
 - **T-PRINT-01 on F13** (L5631, L1382). Exactly one row on 2026-03-09, with close 5,251.87 at two decimals. The row
   before it must be on the previous KRX session of the signed calendar (`clocks.prev_session`). The return against that
   row must be -5.96% ±0.005 pp, the printed precision.
 - **G-STALE-01 / T-STALE-01** (L1963, L5620, L5901-5908). Decisions are every session in 2016-01-04..2026-09-25 at the
   US and the KRX close-print bound, with knowledge equal to the decision. The checks:
   - (a) Without the source-exception list, every DTWEXBGS and DEXKOUS hit's missed date (`d_next`) is in
-    `source_skipped`.
+    `source_skipped`. Conversely, every decision after the no-list deadline of a listed date (R-19 step 3, the
+    observation before it) and before the next stored release is a hit naming that date, so a check that never flags
+    fails. A listed date published with later days of its week, such as the Wednesday 2018-12-05, flags no decision
+    and is not required to. The ±0.01 band of the share golden alone would accept 0.
   - (b) With the list loaded, those hits raise no flag.
   - The share of flagged decisions is within Level 1 (ratio ±0.01) of `G-STALE-01/<series>_stale_schedule_<us|krx>`.
   - (a), (c): the share is at most 1% for DTWEXBGS, DEXKOUS and DGS10, and 0% for VIXCLS.
@@ -92,7 +103,10 @@ The spec is `QUANTGEN_Quant_Council_2026-10-03/claude_code/QUANTGEN_MACRO_INTEGR
   The "schedule-aware" golden column is read as the share without the list, because T-STALE-01 (a) quotes the same
   0.42-0.89% for that case (question 7). The "1 trading day" and "3 days" columns and the median and max ages are
   printed nowhere and not asserted (question 8).
-- **T-MISS-01** (L5624, L1353). Neither CPIAUCSL nor UNRATE has an Oct-2025 value. The Aug-2026 CPI YoY is computed,
+- **T-MISS-01** (L5624, L1353). Neither CPIAUCSL nor UNRATE has a month after Aug-2026: section 11's current state on
+  2 Oct prints U-3 for Aug-2026 (L6347) and the Aug-2026 CPI YoY (L1355, L5624, L6348), so a later month is a later
+  vintage (question 18). On the snapshot, the Oct-2026 YoY clause below therefore has no endpoint to test. Neither
+  series has an Oct-2025 value. The Aug-2026 CPI YoY is computed,
   not flagged, and differs from the positional shift(12) value. It equals `goldens.csv` S11/cpi_yoy_aug2026 0.03353
   ±1e-4 (L5624's "±0.01" in percent). YoY for Oct-2025 and Oct-2026, MoM for Oct and Nov 2025, and the Sahm 3-month
   means of UNRATE for Oct-Dec 2025 must be NaN and flagged. The positional value and S11/cpi_yoy_wrong_lag (3.713%,
@@ -101,8 +115,9 @@ The spec is `QUANTGEN_Quant_Council_2026-10-03/claude_code/QUANTGEN_MACRO_INTEGR
   L1340, L2090, L5505). These are the clauses of the synthetic `test_close02_effective_dated_clocks`, plus the 2026-10-02
   bound. A value the spec states is asserted at that value. Where the spec defers to the signed calendar, the expected
   value is read from the signed rows of the set: the pre-2016 CSAT window, the Saturday close, a conditional-era
-  random-end extension, the 1999 lunch-break window and the HKEX close (checked against a floor of 08:00Z).
-  `goldens.csv` has no T-CLOSE-02 rows.
+  random-end extension, the 1999 lunch-break window and the HKEX close (checked against a floor of 08:00Z). Each of
+  these needs exactly one signed row; with none or two, the expected value is the text "one signed ... row (n)", so
+  the clause fails whatever the clock returns. `goldens.csv` has no T-CLOSE-02 rows.
 - **T-VT-01** (L5673; R-06 L1561-1563). The decision reads the 2-Oct close stamped 06:30:00Z / 06:30:30Z (L1289,
   L2096). `market_vol_target` must return status `ok` on 20 valid returns with that row as `close_t`. Then
   `G.assert_golden` checks G-POST-01 `rv20_2oct` 0.2882 (vol_level ±0.001) and `vt_2oct` 0.694 (weight ±0.02).
@@ -110,15 +125,21 @@ The spec is `QUANTGEN_Quant_Council_2026-10-03/claude_code/QUANTGEN_MACRO_INTEGR
   `label_q1` 0.157, `label_q2` 0.1855, `label_q3` 0.336 (vol_level ±0.001) and `label_percentile` 70 (percentile
   ±5). The quartiles are `np.quantile` over the trailing 756 sigma values of the closes the decision may read. The
   percentile is the share of those values at or below sigma(t), with t included (question 11). The KOSPI absolute label
-  "stressed" and the US relative label "normal" on 2026-10-01 come from L5643; `goldens.csv` has no row for either. The
-  US sigma 10.7%, quartiles 10.5 / 12.7 / 15.2% and 28th percentile (L1565, L5804) are printed, not asserted.
-- **T-B5-01** (L5642, L5801, L3207, L5738). Every value is read from `goldens.csv`:
+  and the US relative label on 2026-10-01 are read from `goldens.csv` G-B5-04: `kospi_absolute_label` "stressed" and
+  `us_relative_label` "normal" (L5804; the same as L5643). G-B5-04 also holds the US sigma 0.107, quartiles 0.105 /
+  0.127 / 0.152 and the 28th percentile (`us_sigma`, `us_q1`..`us_q3`, `us_percentile`; L1565, L5804), each listing
+  T-LABEL-01 in its `tests` column. The body prints those figures and does not assert them, because the rows name
+  `F13;U1` as their inputs, and U1 is French Mkt-RF to 2026-08 spliced with ^GSPC for Sep-2026 (ACQUISITION.csv:33),
+  while the replay reads F14 ^GSPC alone (questions 11 and 12).
+- **T-B5-01** (L5642, L5801, L3207, L5737). Every value is read from `goldens.csv`:
   - G-B5-01/`sample_origins` 2594 (count_exact);
   - G-B5-01/`sma20_exceed` 0.047 (exceedance ±0.003);
   - G-B5-01/`sma20_pit_p` 0.107 (p_hi ±0.01), with G-POST-01/`gb501_pit_p` asserted equal to it;
   - G-B5-01/`sma20_verdict` PASS.
 
-  When a statistic lies within tolerance of its B5 threshold, the verdict is a class, either PASS or FAIL (L5738). The
+  When a statistic lies within tolerance of its B5 threshold, the verdict is a class, either PASS or FAIL (L5737; the
+  repository's `tests/golden_tools.py` and `core/quant/gate_stats.py` cite the same rule as L5738, a blank line in the
+  current spec; neither is changed here). The
   window is KOSPI 2016-03 -> 2026-10-02. The SMA20 forecast scaled by 0.7 must fail B5 (L5642). The pool is
   standardised by the unscaled sigma, as in the synthetic test (brief F-16). The normal-form and EWMA(0.94) lines are
   printed beside their goldens, not asserted (question 13).
@@ -128,16 +149,18 @@ The spec is `QUANTGEN_Quant_Council_2026-10-03/claude_code/QUANTGEN_MACRO_INTEGR
 Neither `tests/fixtures/macro/ACQUISITION.csv` nor the spec names any columns, so each body declares the layout it
 reads. `docs/macro_fixtures.py` writes each file as the reference file's own columns followed by the section 4.1
 provenance columns. Each declaration is an input contract that the owner can confirm or change when ⑨-2 builds the
-files. Every provenance value is pinned to `docs/macro_fixtures.REFERENCE_FILES` by the demonstrations.
+files. Every declared provenance value is pinned to `docs/macro_fixtures.REFERENCE_FILES` by a demonstration: the
+`macro_m1_fixtures.py` and `macro_m2_risk.py` bodies read it from there, the `macro_m1_pit.py` demonstrations compare
+their declarations with it, and the T-B5-01 demonstration compares `B501_PROVENANCE` with the F13 row.
 
 - **F13** `yahoo_KS11_1996-12_2026-10-02.csv` (G-POST-01, T-PRINT-01, T-VT-01, T-LABEL-01, T-B5-01). The close is in
   a column named `close`. Every row is `KS11 / vendor_close / calendar_bound`, with `obs_date = session_date` (ISO) and
   one row per date in date order. The `macro_m1_fixtures.py`, `macro_m2_risk.py` and `macro_m3_estimators.py` bodies
   also read `obs_utc` and `available_at_utc`, written `YYYY-MM-DDTHH:MM:SSZ`. The `macro_m1_fixtures.py` and
-  `macro_m2_risk.py` demonstrations assert that their column tuple equals part 1's `F01_COLUMNS`;
-  `macro_m3_estimators.py` declares the same tuple without asserting it. The `macro_m1_pit.py` bodies do not read the
-  instants. A blank or "."
-  cell reads as missing there.
+  `macro_m2_risk.py` demonstrations assert that their column tuple equals part 1's `F01_COLUMNS`, and so does the
+  `macro_m3_estimators.py` demonstration. The `macro_m1_fixtures.py` and `macro_m3_estimators.py` layouts refuse a row
+  whose `available_at_utc` is before its `obs_utc`. The `macro_m1_pit.py` bodies do not read the instants. A blank or
+  "." cell reads as missing there.
 - **F14** `yahoo_GSPC_1990_2026-10-01.csv` (T-LABEL-01). The same layout, with `GSPC / vendor_close / calendar_bound`.
 - **F16** `yahoo_KRWX_2004_2026-10-01.csv` (G-POST-01). The same layout, with `KRWX / vendor_close / calendar_bound`.
 - **F27** `krx_005930_000660_closes_mcap.csv` (G-POST-01). Long form: one row per code and KRX session, with `code`
@@ -147,7 +170,9 @@ files. Every provenance value is pinned to `docs/macro_fixtures.REFERENCE_FILES`
   part 1's layout.
 - **F18** `fred_snapshot_2026-10-02/<id>.csv`: DTWEXBGS, DEXKOUS, DGS10, CPIAUCSL, UNRATE. The value column is named
   by the FRED id (FRED's own header), with `<id> / first_release / calendar_bound`. A blank or "." cell is no
-  observation. The monthly files carry `obs_date` on the first of the month, one row per month.
+  observation. The monthly files carry `obs_date` on the first of the month, one row per month. That column is read as
+  the value FRED served on 2026-10-02; no vintage column is read, and a long file with a row per month and vintage
+  fails at `_monthly` (question 18).
 - **F07** `fred_VIXCLS_VXVCLS_2007-12-04_2026-09-30.csv` (G-STALE-01). A `VIXCLS` column; VXVCLS rides along. Rows
   are `VIXCLS / vendor_close / calendar_bound`.
 - **F20** `results/QX_DLA_postpatch.csv` is gated by the `macro_m1_fixtures.py` G-POST-01 site, because `goldens.csv`
@@ -173,8 +198,10 @@ Layouts and generation:
    carry these ids, or the registered R-06 ids (`KOSPI_OFFICIAL_CLOSE`, `US_SLEEVE_OFFICIAL_CLOSE`,
    `KRX_005930_OFFICIAL_CLOSE`)?
 4. Is comparing vendor prices at their two-decimal printed precision acceptable (F13 5,251.87 and 7,003.74; KRW=X
-   1,356.84)? Level 1 `price` is exact, but a Yahoo file may carry float artefacts. The `macro_m1_fixtures.py`
-   G-POST-01 site compares exactly.
+   1,356.84)? Level 1 `price` is exact (L5735), but a Yahoo file may carry float artefacts. The two G-POST-01 sites
+   disagree on this: `macro_m1_pit.py` rounds to two decimals and `macro_m1_fixtures.py` compares exactly, so one F13 or
+   F16 file with a float artefact on 7,003.74 or 1,356.84 would PASS the first site and FAIL the second on the same
+   golden row. Which rule should both use?
 5. F20 is gated but not read. Should the replay also compare against F20's rows? That needs F20's layout.
 6. Stale carries. DQ-11 lists a flat zero-volume ^KS11 row on 2024-09-12, inside the trailing-756 label window. Spec
    L1324 says a stale carry is never read as a zero return. The T-VT-01, T-LABEL-01 and T-B5-01 bodies read every row as
@@ -195,12 +222,17 @@ Readings to confirm:
 10. Two G-POST-01 sites now compute the same eight golden rows from the same files. The `macro_m1_fixtures.py` one adds
     point-in-time visibility, F01 and the F20 gate. Should both stay, or should one delegate to the other?
 11. T-LABEL-01: is the percentile the share of trailing-756 values at or below sigma(t), with t included? The ±5
-    tolerance absorbs the at-or-below versus strictly-below choice (about 0.13). Should G-B5-04 rows be added to
-    `goldens.csv` so that the US figures are asserted? Should the replay run on `CalendarClocks` over the signed files,
+    tolerance absorbs the at-or-below versus strictly-below choice (about 0.13). `goldens.csv` already holds G-B5-04
+    rows for the US figures (`us_sigma` 0.107, `us_q1` 0.105, `us_q2` 0.127, `us_q3` 0.152, `us_percentile` 28), each
+    listing T-LABEL-01 in its `tests` column; the body asserts only G-B5-04's two labels. Should T-LABEL-01 assert the
+    US rows too, once question 12 settles their input? Should the replay run on `CalendarClocks` over the signed files,
     behind a computed owner gate, rather than on the module's stub calendars? A probe found the stub sessions equal to
     the signed sessions over both replay windows.
 12. T-VT-01 / T-LABEL-01: the replay files the ^GSPC rows as `VT_SERIES['US'] = US_SLEEVE_OFFICIAL_CLOSE` (a Yahoo
-    `vendor_close` in a backtest declaring Yahoo), because the spec's US label is on the S&P 500 (L6304). Confirm.
+    `vendor_close` in a backtest declaring Yahoo), because the spec's US label is on the S&P 500 (L6304). But
+    `goldens.csv` names `F13;U1` as the inputs of every G-B5-04 row, and U1 is French Mkt-RF from 1990-02-01 to 2026-08
+    spliced with ^GSPC for Sep-2026 (F10 + F14; ACQUISITION.csv:33), not F14 alone. Which input should the US label
+    replay read, F14 or U1? The answer decides whether the G-B5-04 US rows can be asserted (question 11).
 13. T-B5-01: the origin count is asserted exactly (2,594) using the harness's own convention: origins from 2016-03-01,
     origin t forecasts t+1, the last origin the session before 2026-10-02. Is that the council's convention? The PIT p
     is read as the chi-square p (L3207, `forecast_eval.b5`), not the KS p. Should a later part assert the other
@@ -210,9 +242,14 @@ Calendar inputs (owner-signed files):
 
 14. T-CLOSE-02 waits for a signed `kr_sessions` `saturday_close` row effective on 1997-06-07 and a signed `csat_window`
     row for 2015-11-12. Spec L2015, L2063 and L2067 put both on the owner from the KRX notice, and the shipped file
-    records both as absent. Is waiting for them the intended contract? The shipped file has no `random_end_extension`
-    rows and says that no extension is assumed. The body asserts the 2015-06-12 and 2014-06-02 bounds as close + 30 s +
-    the signed extension, so it does not wait for an extension list. Confirm that no rows means no extension.
+    records both as absent. Is waiting for them the intended contract? The conditional-era bounds (2015-06-12,
+    2014-06-02 and the 1997-06-07 Saturday) are asserted as close + 30 s + the extension the file signs for the session.
+    The shipped `core/calendars/data/kr_sessions.yaml` says two things about those rows. Under `unverified`:
+    "random_end_extension rows (conditional random end before 2015-06-15) are absent: no extension is assumed". Under
+    `owner_must_sign`: "random_end_extension rows for sessions before 2015-06-15 whose conditional random end was
+    triggered". So the three clauses wait while `owner_must_sign` still lists `random_end_extension` rows. Is the
+    contract that the owner removes that entry once the triggered sessions are signed, or once the owner rules that the
+    list is empty and final?
 15. Extending signed coverage. `holidays_KRX` would have to start by 1997-01-01 for T-CLOSE-02, and by 2015-12-04 for
     G-STALE-01. `holidays_JPX` would have to start by 2024-10-28. `holidays_NYSE` and `holidays_CBOE` would have to
     start by 2015-12-04. Is that extension planned?
@@ -222,15 +259,28 @@ Calendar inputs (owner-signed files):
     synthetic test's date) was a Tokyo exchange holiday. That rests on this track's own knowledge; the shipped
     `holidays_JPX` starts in 2025. Confirm when the 2024 Japan calendar is signed.
 
+Fixture vintages (added at review):
+
+18. T-MISS-01 reads one CPIAUCSL and one UNRATE value per month, from the column named by the id. ACQUISITION.csv:22
+    lists the FRED snapshot "with ALFRED vintages; vintages as of 2026-10-02", and spec L1435 (CPI) and L1436 (UNRATE)
+    name a first release (`output_type=4`) and a current value. Which vintage column should the body read for
+    CPIAUCSL and UNRATE, and in which form: long (one row per month and vintage, which `_monthly` refuses today) or
+    wide (one column per vintage)? Which vintage was S11/`cpi_yoy_aug2026` (3.353%) computed on? Until then the body
+    reads the `<id>` column as the value FRED served on 2026-10-02. It also refuses any month after Aug-2026 (L6347,
+    L1355). If the snapshot was taken after a 2 October release of the September household survey, a Sep-2026 UNRATE
+    row would be refused; should it be?
+
 ### Demonstrations on invented data
 
 Each body is shown to PASS and to FAIL on invented in-memory rows; no KRX, Yahoo, FRED or QX data is used. Each FAIL
 case asserts the message of the clause it targets.
 
-- **G-POST-01** (`macro_m1_pit.py`). Rows built to the golden values pass, also with a float32 artefact on the close.
-  Fourteen value cases fail:
+- **G-POST-01** (`macro_m1_pit.py`). Rows built to the golden values pass on the synthetic signed set, also with a
+  float32 artefact on the close and with a ^KS11 row of 9,500 dated 2026-10-05 (not read). The row exactly 200 closes
+  back moves the ratio by its share of the mean; the row 201 back does not move it. Sixteen value cases fail:
   - the 6,943.66 print stored as the close, or beside it;
-  - a previous close of 7,100;
+  - two ^KS11 rows on 2026-09-01;
+  - a previous close of 7,100, or the 1-Oct row missing with 30-Sep at the previous close's level;
   - a peak of 9,300, or of 9,200 (inside the drawdown tolerance, caught by the peak clause), or on 2026-06-23;
   - a lower 200-day base;
   - Samsung 273,750 or SK hynix 1,832,000;
@@ -238,30 +288,38 @@ case asserts the message of the clause it targets.
   - a KRW=X last row of 1,360.63, or the provisional 2-Oct KRW=X row kept;
   - the KRW=X value 20 observations back off by 2%.
 
-  A layout case without `code` also fails.
+  A layout case without `code` also fails. The calendar gate covers the fortnight on the synthetic set and refuses
+  the unsigned one.
 - **G-POST-01** (`macro_m1_fixtures.py`). 260 weekday KS11 closes, 40 KRW=X closes, F01's last five rows and the stock
-  closes, built from the golden values, pass. Twenty edited-row cases fail:
+  closes, built from the golden values, pass on the synthetic signed set. Twenty-two edited-row cases fail:
   - visibility and stamps: a 2-Oct row not visible at 06:31Z; intraday prints at 10:56 KST in F13 and F01; F27 rows
     not visible or stamped 05:00Z; a later KS11 row visible;
   - values: closes of 7,003.75 and 6,943.66, a previous close of 6,800, peaks of 9,300 and 9,200, the peak moved by a
     day, a flat level +200, Samsung 276,001 and SK hynix 1,840,000, KRW=X 1,356.85, the KRW=X row 20 back at 1,400, the
     provisional 2-Oct KRW=X row visible;
+  - the previous visible KS11 row not 1 Oct: that row missing with 30 Sep at its level, or stamped available at
+    07:00Z;
   - row counts: 150 KS11 rows, 15 KRW=X rows.
 
-  Four layout cases also fail. While any fixture is absent, the test checks that the real test's REFDATA reason names
-  each absent id.
+  The row exactly 200 closes back moves the ratio; the row 201 back does not. Five layout cases also fail, one of them
+  a 2-Oct row available at 06:00Z, before its 06:30Z close. While any fixture is absent, the test checks that the real
+  test's REFDATA reason names each absent id.
 - **T-PRINT-01 on F13**. Invented closes on the synthetic signed calendars: 5,584.71 then 5,251.87 pass, also with a
-  float artefact. It fails on:
+  float artefact, and so does a previous close of 5,585.01 (-5.9649%, inside the printed precision). It fails on:
   - the 10:31 print stored as the close, or beside it;
   - 5,251.88;
-  - a previous close of 5,560;
+  - a previous close of 5,560, or of 5,585.05 (-5.9656%, just outside ±0.005 pp);
   - the 2026-03-06 row missing;
   - rows marked `official_close`.
 
   The calendar gate covers the fortnight on the synthetic set and refuses the unsigned set.
 - **G-STALE-01**. Invented releases on every expected date over 2016-06-01..2018-11-30 pass at both closes. The DEXKOUS
-  2017-01-20 and DTWEXBGS 2018-03-02 source skips flag four decisions without the list and none with it. It fails on:
+  2017-01-20 and DTWEXBGS 2018-03-02 source skips flag four decisions each without the list and none with it; the
+  demonstration checks the exact instants (the US and KRX closes of 25, 26, 27 and 30 January 2017 and of 7, 8, 9 and
+  12 March 2018), which move if the decision instant moves. The Wednesday DEXKOUS skip of 2018-12-05 flags none. It
+  fails on:
   - a Friday H.10 release deleted on a date not in the list (a);
+  - a staleness check that never flags (the converse of (a));
   - no-skip clocks standing in for the loaded list (b);
   - DEXKOUS over Q1 2017 at 6.45% (outside the golden band);
   - DTWEXBGS over 2018 at 1.59% (above 1%);
@@ -273,17 +331,20 @@ case asserts the message of the clause it targets.
   the refusal on the drafts set.
 - **T-MISS-01**. Invented CPI growing 3.353% a year, with Oct-2025 written as FRED's ".", and invented UNRATE pass. It
   fails on:
+  - a Sep-2026 CPI or UNRATE row;
   - an Oct-2025 CPI or UNRATE value;
   - an Aug-2026 CPI giving 3.37%;
   - broken stand-ins for `core.ficc.pit`'s functions: an over-strict YoY, a positional YoY, a carry-forward YoY or MoM,
     and a 3-month mean over the members present;
-  - a CPIAUCSL file carrying `series_id` CPILFESL.
+  - a CPIAUCSL file carrying `series_id` CPILFESL, and two Aug-2026 rows (one per vintage) at `_monthly`.
 - **T-CLOSE-02**. `_check_close02` passes on the synthetic set. It also passes on `close02_signed_set()`, which holds
   only `CLOSE02_FILES` plus an invented signed 2015-11-12 `csat_window`; there nothing waits, and the signed row sets
   the close. It passes too with a Tokyo holiday on 2024-11-04. The waiting list is pinned exactly on the synthetic,
-  short-KRX and drafts sets. A `holidays_KRX` file starting 2016-06-01 is a gap for the 2016 clause, and the clauses on
-  it raise `CalendarCoverageError`. Thirty-seven table cases and an unknown-market case fail, one per value clause.
-  Each uses a wrong injected config, a wrong signed file or a wrong clock.
+  short-KRX and drafts sets, and on that signed set with the shipped `owner_must_sign` entry for `random_end_extension`
+  rows added, where exactly the three conditional-era clauses wait. A `holidays_KRX` file starting 2016-06-01 is a gap
+  for the 2016 clause, and the clauses on it raise `CalendarCoverageError`. Thirty-eight table cases and an
+  unknown-market case fail, one per value clause. Each uses a wrong injected config, a wrong signed file or a wrong
+  clock; the added one is two overlapping signed 2015-11-12 `csat_window` rows read by a clock that takes the first.
 - **T-VT-01**. Sixty invented closes whose last 20 returns give rv20 exactly 0.2882 pass, with vt = 0.20 / 0.2882. It
   fails on:
   - rv20 0.2895, with vt still inside its tolerance;
@@ -302,6 +363,10 @@ case asserts the message of the clause it targets.
   - 700 KOSPI rows (680 sigma values);
   - a US intraday print;
   - an F14 row dated 2 Oct available at the 1-Oct decision.
+
+  A KOSPI row 650 sessions back (inside the trailing 756, outside the 20-return vt window), stamped available at
+  07:00Z with its close × 1.5, passes on a block layout (`LABEL01_KR_BLOCKS_Q1_EDGE`) where reading it would move Q1
+  from 0.157 to 0.166: neither `market_vol_target` nor the body reads it.
 - **T-B5-01**. An invented Student-t(6) path (seed 293) with invented holidays leaves 2,594 sessions in the window and
   passes: exceedance 0.0486, PIT p 0.1031, PASS. It fails on:
   - the path ending on 2026-10-01;
@@ -310,6 +375,9 @@ case asserts the message of the clause it targets.
   - a wrapped harness reporting FAIL;
   - the x 0.7 run left unscaled;
   - the close in a column named `value`, a row carrying F01's id, and rows out of order.
+
+  The demonstration also compares `B501_PROVENANCE` with the F13 row of `docs/macro_fixtures.REFERENCE_FILES` and
+  `B501_COLUMNS` with part 1's `F01_COLUMNS`.
 
 ### Ratchet
 
@@ -353,12 +421,15 @@ The guarded run below shows each of the nine converted sites NOT_RUN:
   - T-LABEL-01 (F13, F14);
   - T-B5-01 (F13).
 - OWNER: T-CLOSE-02. The signed `holidays_KRX` covers 2026-01-01..2027-12-31, against needs from 1997, 1999, 2014, 2015,
-  2016 and 2025. `kr_sessions` has no signed `csat_window` row on 2015-11-12 and no `saturday_close` row on 1997-06-07.
-  The signed `holidays_JPX` covers 2025 onward, against 2024-10-28..2024-11-05.
+  2016 and 2025. `kr_sessions` has no signed `csat_window` row on 2015-11-12 and no `saturday_close` row on 1997-06-07,
+  and still lists `random_end_extension` rows under `owner_must_sign`. The signed `holidays_JPX` covers 2025 onward,
+  against 2024-10-28..2024-11-05.
 
 Once the fixtures are listed:
 
-- T-PRINT-01 on F13 passes its calendar gate today: the shipped `holidays_KRX` covers 2026.
+- T-PRINT-01 on F13 and both G-POST-01 sites pass their calendar gate today: the shipped `holidays_KRX` covers 2026
+  (a probe of `_official_calendar` over 2026-09-18..2026-10-02 returned the shipped set, with 2026-10-01 the previous
+  KRX session of 2 Oct).
 - G-STALE-01 would be NOT_RUN (OWNER) on the shipped calendars. `holidays_CBOE` and `holidays_NYSE` cover
   2025-01-01..2027-12-31 and `holidays_KRX` covers 2026-01-01..2027-12-31, against 2015-12-04..2026-10-25 (computed by a
   probe of `_stale01_waiting`).
@@ -377,9 +448,11 @@ The four remaining sites stay NOT_RUN for the reasons in "Next parts".
 - Every existing test keeps its name and its `test_ids`, checked statically against `HEAD` for all five modules. The
   nine new tests carry no `test_ids`, so the `implemented_in` column stays in sync. Each module still ends with the
   guarded `run_module` main. `tests/macro_m1_fixtures.py` stays CRLF; the other four stay LF and ASCII.
-- The new and changed tests read `tests/fixtures/macro` only through `require_fixture`. They read the shipped calendar
-  files only for their signing and coverage state, or as the official calendar. None of them reads
-  `docs/asset_expansion/cache`. Two existing tests that this part does not change do read it:
+- The new and changed tests read the data fixtures under `tests/fixtures/macro` only through `require_fixture`. They
+  read `goldens.csv` directly through `tests/golden_tools` (`G.golden`, `G.assert_golden`, `golden`) and `MANIFEST.csv`
+  through `load_manifest()` (the `macro_m1_fixtures.py` and `macro_m2_risk.py` demonstrations), both read only. They read
+  the shipped calendar files only for their signing, coverage and `owner_must_sign` state, or as the official calendar.
+  None of them reads `docs/asset_expansion/cache`. Two existing tests that this part does not change do read it:
   - `tests/macro_m1_pit.py::test_stale_01_schedule_aware_clauses_and_local_smoke` opens `fred_DEXKOUS.csv`;
   - `tests/macro_m3_estimators.py::test_g_b5_02_spy_refdata_with_smoke_on_local_cache` reads `yf_SPY.csv`.
 
@@ -431,6 +504,51 @@ mkdir under `docs/asset_expansion/cache`, any `.env` and anything under `~/.next
   nine demonstrations. `ruff --select F` finds no new finding: the unused imports it reports were already present at
   `HEAD`.
 
+### Review fixes (second commit)
+
+A review of the first commit found sixteen points. The second commit, a new commit on the same branch, fixes all of
+them, two in a different form from the one suggested (G-STALE-01's converse and the window demonstrations, below):
+
+- G-POST-01 (both sites): the return's previous row must be the previous KRX session on the signed calendar (the
+  owner gate as above). `macro_m1_fixtures.py` also refuses a row available before its `obs_utc`. Both demonstrations
+  test the 200-close window's boundary rows; the `macro_m1_pit.py` one also tests a later ^KS11 row and two rows on
+  one date.
+- T-PRINT-01: a demonstration case on each side of the ±0.005 pp edge.
+- G-STALE-01: the converse of clause (a) in `_check_stale01`, and exact flagged instants in its demonstration. The
+  review suggested requiring a hit for every listed date in the span. On the shipped list that would fail on real
+  data: a skip that is not the last observation of its H.10 week (DEXKOUS 2018-12-05, 2018-12-24, 2019-01-14,
+  2019-02-20 and 2021-01-20; DTWEXBGS 2018-12-05) is published with the later days of that week, so no decision sees
+  it missing. The demonstration shows this for DEXKOUS 2018-12-05 on the synthetic set; for the shipped dates it is
+  reasoned from the H.10 weekly rule, not run. The converse is therefore stated over the decisions between the missed
+  date's deadline and the next stored release.
+- T-MISS-01: months after Aug-2026 are refused, and the vintage reading is declared (question 18).
+- T-CLOSE-02: the `random_end_extension` gate and the one-row rule for the pre-2016 CSAT window (question 14).
+- T-LABEL-01: the labels come from G-B5-04; a late-row demonstration case; questions 11 and 12 rewritten.
+- T-B5-01: L5737; the provenance and columns are pinned.
+- This record: the two-decimal exception, question 4, the layout and read-path statements.
+
+The review suggested that the G-POST-01 window demonstrations move `close_over_200d` by more than 0.01. No single
+row can do that: closes are positive and at most the 9,114.55 peak, so one row moves the ratio by at most about
+0.006. The demonstrations instead assert the exact ratio, which a 199- or 201-close window changes; they type the 200
+of the golden note rather than reading `GPOST01_SMA_N` / `GPOST_SMA_N`, so a changed constant is caught too.
+
+Checks of the second commit, with the same guarded runner:
+
+- The same 129 test ids as the integration run: 94 PASS, 35 NOT_RUN, 0 FAIL, no guard refusal. Every status is
+  unchanged. The only NOT_RUN reason that changed is T-CLOSE-02's, which now also names the three conditional-era
+  clauses waiting on `owner_must_sign`.
+- A mutation probe, 20 mutants each compiled in memory from the module source (the worktree files were never written):
+  19 caught by their demonstration. They cover the ^KS11 look-ahead filter, the 199- and 201-close windows (both
+  sites), the duplicate-date guard, the previous-session clauses (both sites), the T-PRINT-01 tolerance widened to
+  0.40 pp, G-STALE-01 decisions moved by 20 h or by 1 min, the converse removed, the T-MISS-01 month cap removed, the
+  `available_at_utc >= obs_utc` layout check removed, the T-LABEL-01 availability filter removed, the US G-B5-04
+  label dropped, the CSAT first-row expectation restored, the extension gate removed and `B501_PROVENANCE` changed.
+  The survivor reads G-STALE-01 with knowledge a day after the decision. It is equivalent on this body: every stored
+  row is first seen at its publication instant, so visibility depends on the decision alone.
+- Static: `test_ids` per function identical to the first commit in all five modules, no test added or removed,
+  `tests/macro_m1_fixtures.py` still CRLF, the other four still ASCII; `ruff --select F,E9` reports the same four
+  pre-existing unused imports as before.
+
 ### Not run, and unverified
 
 - `tests/run_all.py`, the whole macro modules, `tests.macro_m9_lab` and `tests.macro_m8_pipeline` were not run.
@@ -445,7 +563,8 @@ mkdir under `docs/asset_expansion/cache`, any `.env` and anything under `~/.next
   - whether the real files reproduce the golden values: the G-POST-01 M1 rows, 5,251.87 and -5.96%, rv20 0.2882 and
     vt 0.694, the label quartiles and percentile, 2,594 origins with exceedance 4.70% and PIT p 0.107, the CPI YoY
     3.353%, and the G-STALE-01 shares;
-  - whether Yahoo's ^KS11 carries the 2026-03-06 row;
+  - whether Yahoo's ^KS11 carries the 2026-03-06 row and the 2026-10-01 row;
+  - whether the F18 snapshot holds any month after Aug-2026 (question 18);
   - whether R4 dropped the 2024-09-12 flat ^KS11 row when it computed the label quartiles. If it did and F13 keeps the
     row, the quartiles could move by an unknown amount;
   - whether real DTWEXBGS has gaps beyond the signed `source_skipped` list, and whether real VIXCLS is complete on every

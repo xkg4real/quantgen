@@ -613,7 +613,8 @@ def _b501_replay(text: str, *, harness=None, scale: float = B501_SIGMA_SCALE) ->
 def _check_b501(rows: list[dict], scaled: dict) -> dict:
     """T-B5-01 (spec L5642) on the harness lines: the SMA20 FHS line covers KOSPI 2016-03 -> 2026-10-02, has the
     G-B5-01 origin count exactly, its exceedance and PIT chi-square p at Level 1 and the verdict PASS (a class, not a
-    point, when a statistic lies within tolerance of its B5 threshold: spec L5738); the SMA20 forecast x 0.7 fails B5.
+    point, when a statistic lies within tolerance of its B5 threshold: spec L5737, the line tests/golden_tools.py cites
+    as L5738); the SMA20 forecast x 0.7 fails B5.
     The other harness lines (normal form, EWMA(0.94)) are printed beside their goldens, not asserted. Returns the
     SMA20 FHS line."""
     g, gpost = golden("G-B5-01"), golden("G-POST-01")
@@ -711,8 +712,15 @@ def test_t_b5_01_body_passes_and_fails_on_invented_closes():
     session (2,595 origins), misses the exceedance (5.44%) or the PIT p (0.999), when a wrapped harness reports FAIL
     for the passing line, and when the sigma x 0.7 run is not scaled; at the layout, when the close is in a column
     named `value` (what docs/vol_backtest.fixture_lines reads), when a row carries F01's series id, and when two rows
-    are out of date order."""
+    are out of date order. The declared provenance equals the generator's table (docs/macro_fixtures.REFERENCE_FILES
+    F13), and the declared columns are part 1's F01 layout."""
+    from docs import macro_fixtures as MF
     from docs import vol_backtest as VB
+    from tests.macro_m1_calendars import F01_COLUMNS
+    f13 = [(("series_id", series.split(";")[0]), ("value_status", status), ("available_at_source", source))
+           for fid, _rel, series, status, source, *_rest in MF.REFERENCE_FILES if fid == "F13"]
+    assert f13 == [B501_PROVENANCE], f13
+    assert B501_COLUMNS == F01_COLUMNS
     good = _b501_invented()
     sma = _check_b501(*_b501_replay(good))
     assert sma["b5_status"] == "PASS" and sma["n_origins"] == golden("G-B5-01").want("sample_origins")
