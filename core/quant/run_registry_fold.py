@@ -25,7 +25,11 @@ of ``recorded_utc`` values along the chain is not checked; chain order rules.
 Only STARTED, PROGRESS, FINGERPRINT, SHADOW and FINISHED are folded. Human and
 SEGMENT_START events are refused, so SUPERSEDED is never produced. A structural
 lifecycle violation refuses the whole fold. Conflicts between FINISHED and
-PROGRESS are flagged and never lower the effective status. The fold's own code
+PROGRESS are flagged and never lower the effective status: a last PROGRESS stage
+that differs from ``stage_reached`` is STATUS_STAGE_CONFLICT, and no PROGRESS at
+or above ``stage_reached`` (the page's closing PROGRESS) is PROGRESS_MISSING.
+An orphan's stage is its last PROGRESS stage even when an outage record names
+it (design 5.6); see the product record's open question. The fold's own code
 performs no I/O and reads no clock, environment, configuration or random source.
 The codec it calls parses times with ``datetime.strptime``, whose standard-library
 cache may call ``time.tzset`` when it is first built in a process.
@@ -258,10 +262,10 @@ def _record(run_id: str, state: dict, as_of: datetime, outages: frozenset) -> Ru
     if state["finished"] is not None:
         status, reached, displayed = state["finished"]
         source = "FINISHED"
+        if last is not None and last != reached:
+            flags.add("STATUS_STAGE_CONFLICT")
         if last is None or _RANK[last] < _RANK[reached]:
             flags.add("PROGRESS_MISSING")
-        elif _RANK[last] > _RANK[reached]:
-            flags.add("STATUS_STAGE_CONFLICT")
         stage = reached if last is None else max(reached, last, key=_RANK.__getitem__)
         if status == "COMPLETED":
             effective = "COMPLETED"

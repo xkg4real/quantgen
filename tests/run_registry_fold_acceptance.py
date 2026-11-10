@@ -162,6 +162,20 @@ class GoldenAndLifecycleTests(unittest.TestCase):
         self.assertEqual(result.open_run_ids, ())
         self.assertEqual(result.unmatched_outage_run_ids, ())
 
+    def test_non_ascii_values_and_any_key_order_fold_from_the_canonical_bytes(self):
+        events = [started(R1, symbols_typed=["삼성전자", "005930"]), pnl(R1, SEC),
+                  envelope("SHADOW", R1, 2 * SEC, error={"type": "KeyError", "message": "데이터 없음"}),
+                  progress(R1, 3 * SEC, "DISPLAYED"), finished(R1, 4 * SEC, "COMPLETED", "DISPLAYED")]
+        stored = lines(*events)
+        self.assertIn("삼성전자".encode("utf-8"), stored[0])
+        self.assertIn("데이터 없음".encode("utf-8"), stored[2])
+        result = fold(chain(*events))
+        self.assertEqual((result.runs[0].effective_status, result.runs[0].flags), ("COMPLETED", ()))
+        self.assertEqual(result.tail_line_md5, hashlib.md5(stored[-1], usedforsecurity=False).hexdigest())
+        reordered = [dict(reversed(list(event.items()))) for event in chain(*events)]
+        self.assertNotEqual(list(reordered[0]), sorted(reordered[0]))
+        self.assertEqual(fold(reordered), result)
+
     def test_failed_before_stats_at_requested_has_no_keys(self):
         result = fold(chain(started(R1), progress(R1, SEC, "REQUESTED"),
                             finished(R1, 2 * SEC, "FAILED_BEFORE_STATS", "REQUESTED", False)))
@@ -170,14 +184,16 @@ class GoldenAndLifecycleTests(unittest.TestCase):
                          ("FAILED_BEFORE_STATS", "FAILED_BEFORE_STATS", "REQUESTED", ()))
         self.assertEqual((run.keys, run.keys_source, run.displayed), (None, None, False))
 
-    def test_finished_without_closing_progress_is_flagged_progress_missing(self):
+    def test_finished_without_closing_progress_is_progress_missing_and_a_lower_stage_conflicts(self):
+        # No PROGRESS at all: nothing to compare, only the closing PROGRESS is missing.
         run = fold(chain(started(R1), finished(R1, SEC, "FAILED_BEFORE_STATS", "COST_RESOLVED", False))).runs[0]
         self.assertEqual((run.effective_status, run.stage, run.flags),
                          ("FAILED_BEFORE_STATS", "COST_RESOLVED", ("PROGRESS_MISSING",)))
+        # A last PROGRESS below stage_reached differs from it (scope rule 3) and closes nothing.
         run = fold(chain(started(R1), pnl(R1, SEC),
                          finished(R1, 2 * SEC, "FAILED_AFTER_STATS", "SCORED"))).runs[0]
         self.assertEqual((run.effective_status, run.stage, run.flags, run.keys),
-                         ("FAILED_AFTER_STATS", "SCORED", ("PROGRESS_MISSING",), R_KEYS))
+                         ("FAILED_AFTER_STATS", "SCORED", ("PROGRESS_MISSING", "STATUS_STAGE_CONFLICT"), R_KEYS))
 
     def test_failed_after_stats_at_walk_forward_done_uses_registered_keys(self):
         run = fold(chain(started(R1), pnl(R1, SEC), progress(R1, 2 * SEC, "WALK_FORWARD_DONE"),
@@ -238,17 +254,28 @@ class OrphanTests(unittest.TestCase):
         self.assertEqual((run.keys, run.keys_source), (None, None))
 
     def test_outage_record_changes_neither_finished_runs_nor_orphans_with_progress(self):
-        events = chain(*completed_run(R1), started(R2, 6 * SEC), pnl(R2, 7 * SEC))
+        # Design 5.6: an orphan's stage is that of its last PROGRESS, also below
+        # PNL_COMPUTED (R3 here). Open question for the recorder/outage unit: see the
+        # product record; this pins the current, design-literal reading.
+        events = chain(*completed_run(R1), started(R2, 6 * SEC), pnl(R2, 7 * SEC),
+                       started(R3, 8 * SEC), progress(R3, 9 * SEC, "DATA_LOADED"))
         as_of = T0 + 7 * HOUR
         plain = fold(events, as_of=as_of)
-        marked = fold(events, as_of=as_of, outage_run_ids=frozenset({R1, R2}))
+        marked = fold(events, as_of=as_of, outage_run_ids=frozenset({R1, R2, R3}))
         self.assertEqual(plain.runs, marked.runs)
         self.assertEqual(marked.unmatched_outage_run_ids, ())
+        self.assertEqual((marked.runs[2].effective_status, marked.runs[2].stage, marked.runs[2].keys),
+                         ("FAILED_BEFORE_STATS", "DATA_LOADED", None))
 
     def test_unmatched_outage_run_ids_are_sorted_and_respect_the_prefix(self):
         events = chain(started(R2), started(R1, SEC))
-        result = fold(events[:1], outage_run_ids=frozenset({R4, R1, R3}))
-        self.assertEqual(result.unmatched_outage_run_ids, tuple(sorted((R1, R3, R4))))
+        # Twelve IDs: a frozenset iterating them in sorted order by chance (1 in 12!)
+        # cannot hide an unsorted result under any hash seed in practice.
+        extra = [f"LAB-20261110T09{i:02d}00Z-F{9 - i}-{0xfff - i:08x}" for i in range(9)]
+        outages = frozenset(reversed([R4, R1, R3, R2] + extra))
+        result = fold(events[:1], outage_run_ids=outages)
+        self.assertEqual(result.unmatched_outage_run_ids, tuple(sorted(outages - {R2})))
+        self.assertEqual(len(result.unmatched_outage_run_ids), 12)
         self.assertEqual(fold(events, outage_run_ids=frozenset({R1})).unmatched_outage_run_ids, ())
 
     def test_open_runs_count_in_total_and_are_reported_separately(self):
@@ -293,7 +320,11 @@ class ConflictTests(unittest.TestCase):
 
     def test_completed_without_displayed_progress_is_progress_missing(self):
         run = fold(chain(started(R1), pnl(R1, SEC), finished(R1, 2 * SEC, "COMPLETED", "DISPLAYED"))).runs[0]
-        self.assertEqual((run.effective_status, run.stage, run.flags), ("COMPLETED", "DISPLAYED", ("PROGRESS_MISSING",)))
+        self.assertEqual((run.effective_status, run.stage, run.flags),
+                         ("COMPLETED", "DISPLAYED", ("PROGRESS_MISSING", "STATUS_STAGE_CONFLICT")))
+        run = fold(chain(started(R1), finished(R1, SEC, "COMPLETED", "DISPLAYED"))).runs[0]
+        self.assertEqual((run.effective_status, run.stage, run.flags, run.keys_source),
+                         ("COMPLETED", "DISPLAYED", ("PROGRESS_MISSING", "REGISTERED_KEYS_MISSING"), "planned"))
 
     def test_progress_beyond_finished_stage_is_a_conflict_and_the_larger_stage_wins(self):
         run = fold(chain(started(R1), pnl(R1, SEC), progress(R1, 2 * SEC, "SCORED"),
@@ -514,6 +545,17 @@ class InputRefusalTests(unittest.TestCase):
         self.assertEqual(len(fold(events, as_of=T0 + HOUR + timedelta(microseconds=1)).runs), 2)
         self.assertEqual(fold(chain(started(R1, HOUR)), as_of=T0 + HOUR).open_run_ids, (R1,))
 
+    def test_recorded_utc_order_along_the_chain_is_not_checked(self):
+        # Writers stamp recorded_utc before taking the lock, so chain order may differ
+        # from time order; the fold follows the chain.
+        events = chain(started(R1, 2 * SEC), started(R2, SEC), pnl(R1, timedelta(0)),
+                       finished(R2, timedelta(0), "FAILED_BEFORE_STATS", "REQUESTED", False))
+        result = fold(events)
+        self.assertEqual([(r.run_id, r.started_utc, r.event_count) for r in result.runs],
+                         [(R1, stamp(2 * SEC), 2), (R2, stamp(SEC), 2)])
+        self.assertEqual([r.effective_status for r in result.runs], ["OPEN", "FAILED_BEFORE_STATS"])
+        self.assertEqual(result.events_folded, 4)
+
     def test_non_sequence_and_non_dict_inputs_are_refused(self):
         event, second = chain(started(R1), started(R2, SEC))
         self.assertEqual(len(fold([event, second]).runs), 2)
@@ -528,30 +570,39 @@ class InputRefusalTests(unittest.TestCase):
                 self.assertTrue(str(caught.exception).startswith("event 1:"))
 
     def test_unchained_input_is_refused(self):
-        with self.assertRaises(FoldError) as caught:
-            fold([started(R1)])
-        self.assertTrue(str(caught.exception).startswith("event 0:"))
         partial = dict(chain(started(R1))[0])
         del partial["prev_row_md5"]
-        with self.assertRaises(FoldError):
-            fold([partial])
+        for value in ([started(R1)], [partial]):
+            with self.subTest(fields=sorted(set(value[0]) & {"row_md5", "prev_row_md5"})):
+                with self.assertRaises(FoldError) as caught:
+                    fold(value)
+                self.assertTrue(str(caught.exception).startswith(
+                    "event 0: not a verified prefix of segment 0"), str(caught.exception))
 
     def test_misordered_spliced_dropped_edited_or_mid_chain_input_is_refused(self):
         events = chain(*completed_run(R1))
         edited = [dict(e) for e in events]
         edited[3]["error"] = {"type": "X", "message": "edited"}
         other = chain(started(R2))
+        # Each slice below would also be a well-formed lifecycle on its own, so only the
+        # chain check can refuse it: the first link must be null, every later link the
+        # MD5 of the line before it.
+        later = chain(*completed_run(R1), started(R2, 6 * SEC), pnl(R2, 7 * SEC))
         cases = {"swapped": ([events[0], events[2], events[1]] + list(events[3:]), 1),
                  "dropped": ([events[0], events[1]] + list(events[3:]), 2),
                  "edited": (edited, 3),
                  "mid-chain": (list(events[2:]), 0),
+                 "mid-chain at STARTED": (list(later[6:]), 0),
                  "spliced": (list(events[:2]) + list(other), 2),
-                 "duplicated": ([events[0], events[0]], 1)}
+                 "duplicated": ([events[0], events[0]], 1),
+                 "linked to an absent line": ([dict(events[0], prev_row_md5=events[1]["row_md5"])], 0)}
         for name, (value, index) in cases.items():
             with self.subTest(name=name):
                 with self.assertRaises(FoldError) as caught:
                     fold(value)
-                self.assertTrue(str(caught.exception).startswith(f"event {index}:"), str(caught.exception))
+                self.assertTrue(str(caught.exception).startswith(
+                    f"event {index}: not a verified prefix of segment 0 ("), str(caught.exception))
+        self.assertEqual([r.run_id for r in fold(list(later)).runs], [R1, R2])
 
     def test_events_that_cannot_be_reencoded_are_refused(self):
         base = chain(started(R1))[0]
@@ -624,11 +675,13 @@ class PurityTests(unittest.TestCase):
 
         def fail(*args, **kwargs):
             raise AssertionError("I/O, clock, environment or network access forbidden")
+        # time.tzset exists only on Unix; create=True installs the failing stand-in on Windows too.
         with patch.object(builtins, "open", side_effect=fail), patch.object(io, "open", side_effect=fail), \
                 patch.object(os, "open", side_effect=fail), patch.object(os, "getenv", side_effect=fail), \
                 patch.object(os, "putenv", side_effect=fail), patch.object(time, "time", side_effect=fail), \
                 patch.object(time, "time_ns", side_effect=fail), patch.object(time, "monotonic", side_effect=fail), \
-                patch.object(time, "perf_counter", side_effect=fail), patch.object(time, "tzset", side_effect=fail), \
+                patch.object(time, "perf_counter", side_effect=fail), \
+                patch.object(time, "tzset", side_effect=fail, create=True), \
                 patch.object(time, "localtime", side_effect=fail), \
                 patch.object(socket.socket, "connect", side_effect=fail), guarded("no-io"):
             result = F.fold_runs(events, as_of=T0 + 7 * HOUR, outage_run_ids=frozenset({R3}))
@@ -637,7 +690,12 @@ class PurityTests(unittest.TestCase):
 
 class StoreRoundTripTests(unittest.TestCase):
     def test_round_trip_through_single_segment_store_in_a_temporary_directory(self):
-        events = completed_run(R1) + [started(R3, 10 * SEC), pnl(R3, 11 * SEC), started(R2, 12 * SEC)]
+        events = completed_run(R1) + [started(R3, 10 * SEC, symbols_typed=["삼성전자", "005930"]),
+                                      pnl(R3, 11 * SEC), started(R2, 12 * SEC)]
+        as_of = T0 + 7 * HOUR
+        # Folding the in-memory chain first also warms the codec's lazy strptime import,
+        # which reads a standard-library file, so the class passes when run alone.
+        expected = F.fold_runs(chain(*events), as_of=as_of, outage_run_ids=frozenset({R2}))
         with tempfile.TemporaryDirectory(prefix="qg-r3-fold-") as directory:
             root = Path(directory).resolve()
             self.assertTrue(root.is_relative_to(Path(tempfile.gettempdir()).resolve()))
@@ -648,9 +706,9 @@ class StoreRoundTripTests(unittest.TestCase):
                 raw = (root / "registry.jsonl").read_bytes()
             self.assertEqual(sorted(p.name for p in root.iterdir()), ["registry.jsonl", "registry.lock"])
         self.assertEqual(raw, b"".join(written))
-        as_of = T0 + 7 * HOUR
+        self.assertIn("삼성전자".encode("utf-8"), raw)
         result = F.fold_runs(stored, as_of=as_of, outage_run_ids=frozenset({R2}))
-        self.assertEqual(result, F.fold_runs(chain(*events), as_of=as_of, outage_run_ids=frozenset({R2})))
+        self.assertEqual(result, expected)
         self.assertEqual(result.tail_line_md5, hashlib.md5(written[-1], usedforsecurity=False).hexdigest())
         self.assertEqual(result.events_folded, len(written))
         self.assertEqual([(r.run_id, r.effective_status, r.flags) for r in result.runs],

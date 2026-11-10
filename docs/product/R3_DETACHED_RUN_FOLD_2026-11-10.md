@@ -27,11 +27,20 @@ no predecessor. Each line must decode canonically with a matching `row_md5`, and
 each `prev_row_md5` must be the MD5 of the line before it, starting from null.
 
 - Accepted: a prefix, cut by position, of one segment-0 chain. The tuple
-  `SingleSegmentStore.read()` returns, or its first n events, is accepted as is.
+  `SingleSegmentStore.read()` returns, or its first n events, is accepted as is,
+  including non-ASCII text such as Korean symbols or error messages (the codec
+  writes UTF-8 without escapes, and the fold re-encodes the same way). The key
+  order of the caller's dicts does not matter: the canonical line sorts keys.
 - Refused with `FoldError`, naming the event index: misordered, spliced, edited,
-  duplicated or interior-dropped events, a slice that starts mid-chain, events
-  without chain fields, non-dict items, and anything that cannot be re-encoded
-  (NaN, non-JSON values, non-string or mixed keys, lone surrogates).
+  duplicated or interior-dropped events, a slice that starts mid-chain (its first
+  `prev_row_md5` is not null, also when it starts at a later run's STARTED),
+  events without chain fields, non-dict items, and any event that does not
+  re-encode to the verified canonical line (NaN, values JSON cannot encode such as
+  sets or bytes, non-string or mixed keys, lone surrogates). Every chain refusal
+  reads `event N: not a verified prefix of segment 0 (...)`.
+- A value that re-encodes to the identical line, such as a tuple where the codec
+  wrote a list, is accepted. The fold then folds the codec's decoded copy, so the
+  result always comes from the verified bytes, never from the caller's objects.
 - Not detectable: removal of a complete suffix. That is how a caller cuts the chain
   at an earlier position, so the result names the prefix it folded:
   `events_folded` and `tail_line_md5` (the MD5 of the last folded line, which is
@@ -109,9 +118,11 @@ The whole fold is refused, naming the event index, when:
 | No FINISHED, age > 6 h, no PROGRESS, in outage set | ABORTED / INFERRED | FAILED_AFTER_STATS | STAGE_UNKNOWN; stage None |
 
 For a finished run the stage is the larger of `stage_reached` and the last
-PROGRESS stage. A PROGRESS stage above `stage_reached` adds STATUS_STAGE_CONFLICT.
-No PROGRESS at or above `stage_reached` adds PROGRESS_MISSING, because the page
-writes a closing PROGRESS at DISPLAYED or at the failure stage (5.3). Age is
+PROGRESS stage. A last PROGRESS stage that differs from `stage_reached`, above or
+below it, adds STATUS_STAGE_CONFLICT (scoping rule 3). No PROGRESS at or above
+`stage_reached` also adds PROGRESS_MISSING, because the page writes a closing
+PROGRESS at DISPLAYED or at the failure stage (5.3). A finished run with no
+PROGRESS at all has no stage to compare, so it gets PROGRESS_MISSING only. Age is
 `as_of` minus the STARTED `recorded_utc`; exactly 6 hours is still OPEN. A
 conflict can raise FAILED_BEFORE_STATS to FAILED_AFTER_STATS; it never lowers an
 effective status (fail closed, map03 R-2b).
@@ -141,16 +152,53 @@ out (5.6: "left out of counts, with a warning"). TOTAL is family-wide only.
   SUPERSEDED status and segment rollover stay with later children.
 - **(f) TOTAL is family-wide only and includes OPEN runs**; market-scoped TOTAL is
   deferred because runs that fail before PNL_COMPUTED have no market.
-- Refinements of the scoping contract, recorded here: a PROGRESS stage below
-  `stage_reached` is PROGRESS_MISSING rather than a conflict; FAILED_AFTER_STATS
-  below PNL_COMPUTED is flagged; `registered` is accepted only once and only at
-  PNL_COMPUTED; an absent `planned` is treated as null; an orphan with outage
-  keys also carries REGISTERED_KEYS_MISSING; OPEN runs carry no keys; the result
-  also reports `as_of`, `events_folded` and `tail_line_md5`.
+- Refinements of the scoping contract that change no count, recorded here:
+  PROGRESS_MISSING is also set on a finished run of any status whose PROGRESS
+  never reached `stage_reached` (rule 3 names it only for COMPLETED without a
+  DISPLAYED PROGRESS); it is added next to STATUS_STAGE_CONFLICT, never instead
+  of it. FAILED_AFTER_STATS below PNL_COMPUTED is flagged STATUS_STAGE_CONFLICT.
+  An absent `planned` is treated as null. OPEN runs carry no keys. The result
+  also reports `as_of`, `events_folded` and `tail_line_md5`. An outage orphan's
+  REGISTERED_KEYS_MISSING is rule 5 applied as written (its keys are `planned`).
+- Whole-fold refusals beyond the scoping list in rule 2 (a PROGRESS without a
+  stage is within rule 2, since an absent stage is outside STAGES): `registered`
+  in a PROGRESS whose stage is not PNL_COMPUTED, or in a second PROGRESS of the
+  run; a non-STARTED event whose `family_id` differs from the run's STARTED; and
+  a FINISHED `displayed` that is present and neither a bool nor null. They are
+  kept because each would otherwise be folded silently from an ambiguous or
+  malformed record (which `registered` to use; a run under two families; a
+  `displayed` that is not a bool). The cost is that one such recorder defect
+  refuses the whole prefix, not just one run. These refusals and the flag
+  refinement above have not been reviewed by the critic or the owner; see the
+  open questions.
 
 Design tension kept visible: 3.12 counts every STARTED event in TOTAL, while 5.6
 says OPEN runs are left out of counts. This child follows 3.12 for TOTAL and
 reports OPEN separately; whether a later count includes them is that unit's rule.
+
+## Open questions
+
+1. **3.12 versus 5.6 (OPEN in TOTAL)**, above: for the counts unit.
+2. **Outage orphan with a PROGRESS below PNL_COMPUTED** (for the recorder and
+   outage units). An orphan older than 6 hours whose last PROGRESS is below
+   PNL_COMPUTED folds to FAILED_BEFORE_STATS with no keys, even when an outage
+   record names it, because 5.6 gives an orphan the stage of its last PROGRESS and
+   the outage rule applies only with no PROGRESS (scoping rule 4). Example:
+   STARTED, PROGRESS DATA_LOADED, outage record, no FINISHED. Under design 5.3 this
+   cannot hide statistics: inside `run_family` the recorder writes only STARTED
+   and the PNL_COMPUTED PROGRESS, and a failed append disables the recorder for
+   the run (6.4), so a later PROGRESS below PNL_COMPUTED can only be the page's
+   closing PROGRESS after `run_family` raised there. If the recorder unit adds
+   in-run PROGRESS below PNL_COMPUTED (the scoping hook list names cost_resolved
+   and data_loaded), an outage at the PNL_COMPUTED append would be under-counted.
+   That unit must then either not write such PROGRESS, or change this rule to fail
+   closed (an outage record with a last stage below PNL_COMPUTED counted as
+   FAILED_AFTER_STATS with STAGE_UNKNOWN and planned keys). The test
+   `test_outage_record_changes_neither_finished_runs_nor_orphans_with_progress`
+   pins the current, design-literal reading.
+3. **Acceptance of the refinements and extra refusals** listed in the deltas: for
+   the orchestrator or critic, to be recorded in the handoff document next to
+   question 1.
 
 ## Purity
 
@@ -176,24 +224,40 @@ any test import that refuses any `open` of an `asset_expansion/cache` or `.env`
 path and every `socket.connect`/`socket.getaddrinfo`; it recorded 0 refusals),
 with `-B` and no bytecode, synthetic events only.
 
-- `tests.run_registry_fold_acceptance`: **45 tests**, Python 3.13, three runs of
-  0.446 s, 0.437 s and 0.512 s (runner elapsed), exit 0 each; also 45 passed on
-  Python 3.11 (0.347 s) and 3.12 (0.481 s). The tests include a 288-case
-  property check that a conflict never lowers the effective status, a static
-  import and name check, a call with `open`, `os.open`, `os.getenv`, `time.*`,
-  `time.tzset` and `socket.connect` patched to raise under a scoped audit hook,
-  and one round trip through `SingleSegmentStore` in a fresh temporary directory
+- `tests.run_registry_fold_acceptance`: **47 tests**, Python 3.13, three runs of
+  0.484 s, 0.510 s and 0.471 s (runner elapsed), exit 0 each; also 47 passed on
+  Python 3.11 (0.397 s) and 3.12 (0.497 s). With `time.tzset` deleted before the
+  run, to imitate Windows, 47 passed on 3.11, 3.12 and 3.13. Each of the nine
+  test classes also passed when run alone. The tests include a 288-case property
+  check that a conflict never lowers the effective status, a static import and
+  name check, a call with `open`, `os.open`, `os.getenv`, `time.*`, `time.tzset`
+  (a failing stand-in is created where the platform has none, as on Windows) and
+  `socket.connect` patched to raise under a scoped audit hook, Korean text and
+  reordered keys folded from the canonical bytes, and one round trip (with a
+  Korean symbol) through `SingleSegmentStore` in a fresh temporary directory
   under a scoped audit hook that confines file access to that directory.
-- Combined R3 run (fold 45 + series files 45 + series format 22 + series hash 15
-  + source hash 8 + data hash 15 + keys 13 + store 16 + codec 17): **196 tests in
-  3.843 s, exit 0**. A first combined attempt failed 2 series-files tests because
-  the scratch runner lacked a `__main__` guard, so spawned children replayed it;
-  the runner was fixed and no product file changed.
-- Mutation run on scratch copies: **55 of 55 mutants killed** (one test was
-  strengthened after a first run in which a dict-subclass mutant survived).
-- The module and test compiled on Python 3.11 and 3.12, and
+- Combined R3 run (fold 47 + series files 45 + series format 22 + series hash 15
+  + source hash 8 + data hash 15 + keys 13 + store 16 + codec 17): **198 tests in
+  4.198 s, exit 0**; `tests.runtime_syntax_acceptance` 1 test, exit 0. A first
+  combined attempt failed 2 series-files tests because the scratch runner lacked a
+  `__main__` guard, so spawned children replayed it; the runner was fixed and no
+  product file changed.
+- Mutation run on scratch copies: **63 of 63 mutants killed**, each under
+  `PYTHONHASHSEED` 0, 7 and 11; the 8 mutants from the review round below were
+  also killed under each of seeds 0 to 15. The first run killed 55 of 55 after one
+  test was strengthened (a dict-subclass mutant had survived).
+- Review round (same day, before merge): a review found that the purity test
+  errored where `time.tzset` does not exist (all three Windows Runtime jobs), that
+  the round-trip class failed when run alone (the codec's lazy `strptime` import
+  read a standard-library file inside the temporary-root guard), and five
+  surviving mutants: an unchecked first link, `ensure_ascii=True`,
+  `sort_keys=False`, a refusal of decreasing `recorded_utc`, and an unsorted
+  `unmatched_outage_run_ids` (survived under hash seed 7). Tests were added or
+  changed for each, finished-run flags were aligned with scoping rule 3, and the
+  open questions above were recorded. No count or effective status changed.
+- The module and test compiled on Python 3.11, 3.12 and 3.13, and
   `ast.parse(feature_version=(3, 10))` accepted them. A real 3.10 compile is the
-  CI syntax job.
+  CI syntax job. Windows was not run locally.
 
 The Runtime workflow adds the new source and test paths and runs the new module
 first in the existing R3 unittest command; every earlier entry and its order are
