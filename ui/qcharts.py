@@ -366,8 +366,10 @@ def corr_heatmap(corr: np.ndarray, symbols: tuple[str, ...]) -> ft.Control:
                             "상관이 낮은 자산을 섞을수록 분산 효과가 큽니다.",
                             "Near +1 they moved together, near 0 barely related, near −1 in opposite directions. "
                             "Mixing low-correlation assets diversifies more."),
-                 limit=("과거 기간의 상관이며, 시장이 급변할 때는 상관이 갑자기 높아지는 경우가 많습니다.",
-                        "Correlation over the past window; in market stress correlations often jump."))
+                 limit=("과거 기간의 상관이며 앞으로도 같다고 보장하지 않습니다. 시장이 급변할 때는 상관이 갑자기 "
+                        "높아지는 경우가 많습니다.",
+                        "Correlation over the past window, with no guarantee it holds; in market stress "
+                        "correlations often jump."))
         return fig
 
     return _localized(build, expand=False)
