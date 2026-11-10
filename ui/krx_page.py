@@ -17,7 +17,8 @@ import flet as ft
 from core.numfmt import format_compact, format_number, format_price
 from core.theme import RADII, active
 from data.krx import KRXGateway
-from ui.components import chip, empty_state, key_value, notice, section
+from ui.components import empty_state, key_value, notice, section
+from ui.ficc_widgets import action, form_row, lchip, ltext
 from ui.localization import table_header, literal_text
 
 # Header context only: DART Account is an accounting item, never a brokerage account.
@@ -44,7 +45,7 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
     pal = active()
     ticker = ft.TextField(label="KRX code", hint_text="005930", width=180,
                           border_radius=RADII["md"])
-    lookup = ft.Dropdown(label="Data", width=230, value="quote",
+    lookup = ft.Dropdown(label="Data", width=240, value="quote",
                          options=[ft.dropdown.Option(k, v) for k, v in _LOOKUPS])
     busy = ft.ProgressRing(visible=False, width=20, height=20)
     result_host = ft.Column(spacing=10, scroll=ft.ScrollMode.AUTO, expand=True)
@@ -55,10 +56,12 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
     def provider_bar() -> ft.Control:
         chips = []
         for s in statuses:
-            chips.append(chip(f"{s['provider']}: " + ("ready" if s.get("ready") else "not set"),
-                              "success" if s.get("ready") else "muted",
-                              tooltip=s.get("reason") or s.get("detail") or ""))
-        return ft.Row(chips, spacing=6, wrap=True)
+            ready = bool(s.get("ready"))
+            chips.append(lchip(f"{s['provider']}: " + ("연결됨" if ready else "키 미설정"),
+                               f"{s['provider']}: " + ("ready" if ready else "not set"),
+                               "success" if ready else "muted",
+                               tooltip=s.get("reason") or s.get("detail") or ""))
+        return ft.Row(chips, spacing=8, wrap=True)
 
     def show_empty() -> None:
         if ready_names:
@@ -78,8 +81,8 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
                 if on_open_settings else None)]
 
     def render_rows(rows: list[dict], columns: list[tuple[str, str]], source: str) -> None:
-        head = ft.Row([ft.Text(f"Source: {source}", size=11, color=pal.muted),
-                       ft.Text(f"{len(rows)} rows", size=11, color=pal.muted)], spacing=14)
+        head = ft.Row([ltext(f"출처: {source}", f"Source: {source}", size=12, color=pal.muted),
+                       ltext(f"{len(rows)}행", f"{len(rows)} rows", size=12, color=pal.muted)], spacing=16)
         table = ft.DataTable(
             columns=[ft.DataColumn(table_header(label, ko=_HEADERS_KO.get(label), size=11)) for _, label in columns],
             rows=[ft.DataRow(cells=[ft.DataCell(literal_text(_cell(r.get(k)), size=11))
@@ -196,10 +199,8 @@ def build_krx_page(page: ft.Page, gateway: KRXGateway, *, locale: str = "en",
         provider_bar(),
         notice("No order or account-mutation path exists in this build.",
                "muted", icon=ft.Icons.INFO_OUTLINE),
-        ft.Row([ticker, lookup,
-                ft.Button("Run", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy],
-               spacing=10, wrap=True),
+        form_row([ticker, lookup, action(ft.Button("Run", icon=ft.Icons.PLAY_ARROW_ROUNDED, on_click=run), busy)]),
         ft.Container(result_host, padding=14, bgcolor=pal.surface,
                      border=ft.Border.all(1, pal.border), border_radius=RADII["lg"],
                      expand=True),
-    ], spacing=14, expand=True)
+    ], spacing=16, expand=True)
