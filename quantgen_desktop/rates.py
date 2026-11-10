@@ -1,5 +1,6 @@
 """Native yield curve, swaps, rate options and short-rate simulation."""
 import math
+from core.ficc.curves import CURVE_METHODS, METHOD_NAMES
 from core.research.rates_analysis import RatesRequest
 from .tools import ToolPane, number, fmt
 
@@ -9,7 +10,7 @@ class RatesPane(ToolPane):
         super().__init__('Rates · 수익률 곡선과 금리 위험',
             [('curve','Yield curve'),('swap','Swap pricer'),('option','Swaption / cap-floor'),('sim','Rate simulation')],
             [('auto','Auto · FRED / synthetic fallback'),('fred','FRED'),('synthetic','Synthetic demo')], {
-            'curve': [('method','Method',[(v,v) for v in ('bootstrap','nelson_siegel','svensson')]),('lookback','Lookback · sessions','20')],
+            'curve': [('method','Method',[(v,METHOD_NAMES[v]) for v in CURVE_METHODS]),('lookback','Lookback · sessions','20')],
             'swap': [('tenor','Tenor · 10y or 5y5y','10y'),('fixed_rate','Fixed % · blank = par',''),
                 ('notional','Notional','1000000'),('pay_fixed','Side',[(True,'Pay fixed'),(False,'Receive fixed')])],
             'option': [('kind','Instrument',[(v,v) for v in ('swaption','cap','floor')]),('expiry','Expiry · swaption only','1y'),
@@ -77,7 +78,10 @@ class RatesPane(ToolPane):
             self.text(FIVE_YEAR_SIMPLE_NOTE, localized={'ko': FIVE_YEAR_SIMPLE_NOTE_KO})
             self.sections.append({'type': 'descriptor_conventions', 'values': curve_descriptor_conventions()})
             rows = c.table()
-            self.line('수익률 곡선', c.tenors, [('Zero',np.array(c.zeros)*100),('Par',np.array(r.snapshot.par_yields)*100)], 'Maturity · years','Yield · %')
+            # Smooth exact methods keep a dense knot grid; plot them at the quoted tenors.
+            quoted = np.array(r.snapshot.tenors, dtype=float)
+            xs, zs = (quoted, c.zero(quoted)) if c.pillars else (c.tenors, c.zeros)
+            self.line('수익률 곡선', xs, [('Zero',np.array(zs)*100),('Par',np.array(r.snapshot.par_yields)*100)], 'Maturity · years','Yield · %')
             self.result_table('Curve table', ['Tenor','Zero','DF','Par','1y forward',f'Change · {r.lookback}d'],
                 [[v['label'],fmt(v['zero'],'pct'),fmt(v['df']),fmt(v['par'],'pct'),fmt(v['fwd_1y'],'pct'),fmt(r.changes.get(v['label']),'bp')] for v in rows])
             # Each line uses an observed tenor; no extrapolated history is invented.
