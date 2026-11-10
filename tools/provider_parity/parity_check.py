@@ -7,7 +7,10 @@ design draft docs/nautilus_bridge/PROVIDER_PARITY_DESIGN_DRAFT_2026-11-04.md and
 claude/provider-parity-design-20261104 (owner rulings U5 and P-D2 to P-D9 of 2026-11-04); where they differ, the spec
 wins.
 
-Run on the owner's machine only, from the root of a clone of branch claude/provider-parity-5-2 (README.md here):
+Run on the owner's machine only, from the root of a clone of the run branch claude/provider-parity-runs-20261111, which
+is cut from main (owner ruling P1 of 2026-11-11). Spec 10.5 still names claude/provider-parity-5-2; that branch holds
+the unfinished tool of 2026-11-05 (777fc5b) and is not used. The tool commit and sha256 the ruling fixes are written in
+README.md here and in results/RULINGS.md, not in this file:
 
     python -B -m tools.provider_parity.parity_check fetch --series spy --provider fmp --start 2004-12-01 \
         --end 2026-09-25 --out <new folder outside every git work tree> [--env-file <research clone>/.env]
@@ -30,13 +33,14 @@ fetch
   with a reason for compare's --unavailable; nothing is written then.
 - The line before `FETCH ... OK` gives one calendar fact of the provider's own dates (weekend dates for spy and rf,
   missing UTC days for btc; calendar membership, the 3.9 exception), so a date label one day off shows before compare.
+  For `kis` the same line says when the page-back stopped after the first requested date, and why.
 
 compare
 - Reads the pilot table (--table, inside --repo) read-only, then its `prices_file` (spy, btc) or `rf_file` (rf), checks
   the md5 against the table and reads the table's window the way the runner does (lines filtered by their date text
   before any value is parsed). Provider files are `date,value` CSVs. A file that sits beside a fetch record
-  (`meta.json`) must be the file that record describes (provider, series, sha256); the summary says for each pair
-  whether it had one (`has_fetch_record`).
+  (`meta.json`) must be the file that record describes (provider, series, sha256), and the window that record was
+  fetched for must cover the table's window; the summary says for each pair whether it had one (`has_fetch_record`).
 - Roles and conventions come from PROVIDERS (10.5.1) only; every required provider is compared or declared unavailable
   with a reason. Thresholds are THRESHOLDS (10.5.1). It computes only the kinds COMPUTES names (the 3.9 exception of
   10.5); `selftest` holds the two together.
@@ -462,6 +466,7 @@ class Fetched:
     requests: list[dict]               # each request's parameters, without any key
     pages: list[tuple[str, bytes]]     # (file name, raw response bytes)
     rows: list[tuple[str, float | None]]
+    note: str = ""                     # said on the console line above `FETCH ... OK` (kis: a page-back cut short)
 
 
 # Providers whose requests carry no key: the first bytes of their error answers may be printed. Never fmp, whose URL
@@ -572,7 +577,9 @@ def _kis_detail(exc: BaseException) -> str:
 
 def fetch_kis(ctx: FetchContext) -> Fetched:
     """KIS overseas daily bars with MODP=1 (split-adjusted, dividends not reinvested): 100 rows per call, paged back
-    from BYMD = the last requested date. BYMD is never left blank (blank means today)."""
+    from BYMD = the last requested date. BYMD is never left blank (blank means today). When the page-back ends after
+    the first requested date (a page with no new date, or the request budget spent), `note` says where and why: the
+    file is short because of the fetch, and the owner reads that before compare."""
     ctx.key("KIS_APP_KEY")
     ctx.key("KIS_APP_SECRET")
     get = ctx.kis_get or _kis_default_get(ctx.keys)
@@ -580,6 +587,7 @@ def fetch_kis(ctx: FetchContext) -> Fetched:
     requests, pages = [], []
     bymd = ctx.last.replace("-", "")
     n_pages = (date.fromisoformat(ctx.last) - date.fromisoformat(ctx.first)).days // 100 + 6
+    why = f"the budget of {n_pages} requests ran out"
     for k in range(n_pages):
         params = {"AUTH": "", "EXCD": KIS_EXCHANGE, "SYMB": KIS_SYMBOL, "GUBN": "0", "BYMD": bymd, "MODP": "1"}
         try:
@@ -601,6 +609,7 @@ def fetch_kis(ctx: FetchContext) -> Fetched:
                     fresh.append(iso)
                     rows[iso] = _num(r.get("clos"))
         if not fresh:
+            why = "a page brought no new date"
             break
         earliest = min(fresh)
         if earliest <= ctx.first:
@@ -608,7 +617,10 @@ def fetch_kis(ctx: FetchContext) -> Fetched:
         bymd = (date.fromisoformat(earliest) - timedelta(days=1)).strftime("%Y%m%d")
     if not rows:
         raise FetchFailed("fetch_failed", "kis returned no rows")
-    return Fetched(requests, pages, sorted(rows.items()))
+    reached = min(rows)
+    note = "" if reached <= ctx.first else \
+        f"kis paging stopped at {reached}, after the first requested date {ctx.first}: {why}"
+    return Fetched(requests, pages, sorted(rows.items()), note)
 
 
 def _yf_default(symbol: str, start: str, end: str):
@@ -732,7 +744,9 @@ def fetch_treasury(ctx: FetchContext) -> Fetched:
 
 
 def fetch_h15(ctx: FetchContext) -> Fetched:
-    """Federal Reserve H.15 Data Download Program CSV (optional provider). The response must name H15_IDENTIFIER."""
+    """Federal Reserve H.15 Data Download Program CSV (optional provider). A response can hold several maturities,
+    one per column: the values are read from the one column whose `Unique Identifier` cell names H15_IDENTIFIER
+    (`H15/H15/<identifier>`). A response where no column or more than one names it is a failed fetch, not data."""
     d0, d1 = date.fromisoformat(ctx.first), date.fromisoformat(ctx.last)
     params = {"rel": "H15", "series": H15_SERIES, "lastobs": "", "from": d0.strftime("%m/%d/%Y"),
               "to": d1.strftime("%m/%d/%Y"), "filetype": "csv", "label": "include", "layout": "seriescolumn"}
@@ -741,13 +755,18 @@ def fetch_h15(ctx: FetchContext) -> Fetched:
         lines = body.decode("utf-8-sig").splitlines()
     except UnicodeDecodeError:
         raise FetchFailed("fetch_failed", "h15: the response is not UTF-8") from None
-    if not any(line.lstrip('"').startswith("Unique Identifier") and H15_IDENTIFIER in line for line in lines):
-        raise FetchFailed("fetch_failed", "h15: the response does not name the 3-month series")
+    table = [[c.strip().strip('"').strip() for c in line.split(",")] for line in lines]
+    named = [i for cells in table if cells[0].startswith("Unique Identifier")
+             for i, c in enumerate(cells) if i and c.rsplit("/", 1)[-1] == H15_IDENTIFIER]
+    if len(named) != 1:
+        raise FetchFailed("fetch_failed", "h15: the response names the 3-month series in more than one column" if named
+                          else "h15: the response does not name the 3-month series")
     rows = []
-    for line in lines:
-        cells = [c.strip().strip('"') for c in line.split(",")]
-        if len(cells) >= 2 and _DATE.fullmatch(cells[0]):
-            rows.append((cells[0], _num(cells[1])))       # "ND" (no data) reads as a blank
+    for cells in table:
+        if _DATE.fullmatch(cells[0]):
+            if len(cells) <= named[0]:
+                raise FetchFailed("fetch_failed", "h15: a dated row lacks the 3-month column")
+            rows.append((cells[0], _num(cells[named[0]])))    # "ND" (no data) reads as a blank
     return Fetched([params], [("h15_000.csv", body)], rows)
 
 
@@ -864,7 +883,8 @@ def run_fetch(args, *, http: HttpGet, yf_download, kis_get, now: datetime, say) 
         raise Refused("a key value reached the fetch record; nothing is written")
     _write_new_folder(args.out, {csv_name: csv_text, "meta.json": meta_text},
                       {f"raw/{n}": b for n, b in fetched.pages})
-    say(f"rows {len(rows)}, first {rows[0][0]}, last {rows[-1][0]}, {fact_words} {fact}")
+    say(f"rows {len(rows)}, first {rows[0][0]}, last {rows[-1][0]}, {fact_words} {fact}"
+        + (f"; {fetched.note}" if fetched.note else ""))
     say(f"FETCH {series} {provider} OK exit=0 csv={args.out / csv_name}")
     return 0
 
@@ -885,16 +905,15 @@ def _window_frame(data: bytes, start: str, end: str) -> pd.Series:
 
 
 def _to_series(s: pd.Series, keep_blanks: bool) -> Series:
-    n_blank = int(s.isna().sum())
+    n_blank = n_nonpos = 0
     if not keep_blanks:
+        n_blank = int(s.isna().sum())
         s = s.dropna()
-    n_nonpos = 0 if keep_blanks else int((s <= 0).sum())
-    if not keep_blanks:
+        n_nonpos = int((s <= 0).sum())
         s = s[s > 0]
     if not (s.index.is_monotonic_increasing and s.index.is_unique):
         raise Refused("dates are not strictly increasing and unique")
-    return Series(tuple(d.strftime("%Y-%m-%d") for d in s.index), s.to_numpy(dtype=float),
-                  0 if keep_blanks else n_blank, n_nonpos)
+    return Series(tuple(d.strftime("%Y-%m-%d") for d in s.index), s.to_numpy(dtype=float), n_blank, n_nonpos)
 
 
 def read_table(table: Path, repo: Path, series: str) -> dict:
@@ -951,11 +970,15 @@ def read_pinned(path: Path, *, md5: str, start: str, end: str, owner_run: bool, 
 
 
 def read_provider(path: Path, *, provider: str, series: str, start: str, end: str, owner_run: bool,
-                  keep_blanks: bool = False) -> tuple[Series, str, bool]:
+                  window: tuple[str, str], keep_blanks: bool = False) -> tuple[Series, str, bool]:
     """A provider's `date,value` file: (series, file sha256, whether it came with its fetch record). A fetch folder
     says which provider and series its CSV holds and what the CSV's sha256 was when it was fetched: a file beside a
-    fetch record that names another provider or series, another file or other bytes is refused. A file with no
-    fetch record beside it is compared, and the summary says so (`has_fetch_record` false)."""
+    fetch record that names another provider or series, another file or other bytes is refused. So is one whose
+    record was fetched for a window that does not cover `window`, the table's start and end: 10.5.1 measures coverage
+    over the provider's first-to-last span and counts A's dates outside it against `edge_uncovered_max` (P-D5), so
+    that span has to be the provider's own history, not a fetch cut short by other dates. A wider fetch is taken:
+    the file is cut to [start, end] here. A file with no fetch record beside it is compared, and the summary says so
+    (`has_fetch_record` false)."""
     guard_path(path, owner_run)
     name = Path(path).name
     try:
@@ -977,6 +1000,14 @@ def read_provider(path: Path, *, provider: str, series: str, start: str, end: st
             if recorded.get("file") != name or recorded.get("sha256") != sha:
                 raise Refused(f"{name}: not the file its fetch record describes (name or sha256 differs); fetch "
                               "again into a new folder")
+            span = m.get("window") if isinstance(m.get("window"), dict) else {}
+            got = (span.get("start"), span.get("end"))
+            if not all(isinstance(d, str) and _DATE.fullmatch(d) for d in got):
+                raise Refused(f"{name}: its fetch record names no window; fetch again into a new folder")
+            if not (got[0] <= window[0] and window[1] <= got[1]):
+                raise Refused(f"{name}: its fetch record's window {got[0]}..{got[1]} does not cover the table's window "
+                              f"{window[0]}..{window[1]}; fetch again with the table's --start and --end into a new "
+                              "folder")
             has_record = True
     lines = data.decode("utf-8", errors="replace").splitlines()
     if not lines or lines[0].strip() != "date,value":
@@ -985,13 +1016,11 @@ def read_provider(path: Path, *, provider: str, series: str, start: str, end: st
         raise Refused(f"{name}: holds an observation dated on or after 2027-01-01")
     try:
         frame = _window_frame(data, start, end)
-        infinite = bool(np.isinf(frame.to_numpy(dtype=float)).any())
-        s = None if infinite else _to_series(frame, keep_blanks)
+        if np.isinf(frame.to_numpy(dtype=float)).any():     # a fetch writes a finite number or a blank cell, never inf
+            raise Refused(f"{name}: holds a value that is not a finite number")
+        return _to_series(frame, keep_blanks), sha, has_record
     except (UnicodeDecodeError, ValueError, TypeError, IndexError, KeyError) as exc:
         raise Refused(f"{name}: cannot be read ({type(exc).__name__})") from None
-    if infinite:                              # a fetch writes a finite number or a blank cell, never inf
-        raise Refused(f"{name}: holds a value that is not a finite number")
-    return s, sha, has_record
 
 
 # --------------------------------------------------------------------------- #
@@ -1507,7 +1536,8 @@ def run_compare(args, *, now: datetime, say) -> int:
     pairs, with_record = [], set()
     for role, conv, provider, path in pair_specs:
         b, sha, has_record = read_provider(path, provider=provider, series=args.series, start=first, end=tab["end"],
-                                           owner_run=args.owner_run, keep_blanks=rf)
+                                           owner_run=args.owner_run, window=(tab["start"], tab["end"]),
+                                           keep_blanks=rf)
         pairs.append((role, conv, provider, b, sha))
         if has_record:
             with_record.add(provider)

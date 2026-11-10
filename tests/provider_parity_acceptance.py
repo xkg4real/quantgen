@@ -3,8 +3,10 @@
 Synthetic series and mocked HTTP only: every test runs with socket connects and the tool's own HTTP layer patched to
 raise, so a test that reached the network would fail (the one case that runs the tool's HTTP function replaces
 `urlopen`). No real price, rate, pilot table or key is read; every file is written into a fresh folder under the
-system temp dir. In the repository the suite reads the tool, its guide and its section of docs/compliance/FACTS.md
-(the documents are held to the tool), and the root README.md and tests/run_all.py (to see that they do not name it).
+system temp dir. In the repository the suite reads the tool, its guide, the owner's Korean run guide, results/RULINGS.md
+(the documents are held to the tool) and the CI workflow, each of which is in that workflow's path filter. It does
+not read docs/compliance/FACTS.md (`python -m tools.compliance.check --check` holds that file), the root README.md or
+tests/run_all.py: none of the three starts the workflow, so a case on them could fail on main unseen.
 
     python -B -m unittest tests.provider_parity_acceptance -v     # `load_tests` below hands unittest the same cases
     python -B -m tests.provider_parity_acceptance                 # the same cases, one PASS or FAIL line each
@@ -16,8 +18,9 @@ Covered: every outcome (PASS, FAIL, WARN, WITHHELD, REFUSED, ERROR) for SPY, BTC
 cut-off in fetch and compare; md5 refusal; the 10.5.2 summary allow-list; that no key value is ever printed or
 written; every fetcher over a fake transport, against request parameters, epoch seconds and rows typed by hand; the
 tool's own HTTP function with `urlopen` replaced; COMPUTES against the checks (selftest); where the tool may write
-(letter case, links, nested folders, OneDrive); a fetch record's sha256; what a failed run prints and leaves; a cp949
-console; UTF-8 and LF in every file the tool writes; the tool run as the owner runs it (`python -B -m ...`).
+(letter case, links, nested folders, OneDrive); a fetch record's sha256 and window; what a failed run prints and leaves;
+a cp949 console; UTF-8 and LF in every file the tool writes; the tool run as the owner runs it (`python -B -m ...`);
+every statement of the fixed tool commit and sha256.
 """
 from __future__ import annotations
 
@@ -54,7 +57,9 @@ from tools.provider_parity import parity_check as pc  # noqa: E402
 NOW = datetime(2026, 11, 5, 12, 0, 0, tzinfo=timezone.utc)
 REAL_URLLIB_GET = pc.urllib_get            # the tool's own HTTP function, kept before `no_network` replaces it
 GUIDE = ROOT / "tools" / "provider_parity" / "README.md"
-FACTS = ROOT / "docs" / "compliance" / "FACTS.md"
+KO_GUIDE = ROOT / "docs" / "product" / "PROVIDER_PARITY_OWNER_RUN_2026-11-11.md"
+RULINGS = ROOT / "results" / "RULINGS.md"
+WORKFLOW = ROOT / ".github" / "workflows" / "runtime-smoke.yml"
 FMP_KEY, KIS_KEY, KIS_SECRET = "fmpKEY-7f3a9c", "kisAPPKEY-51d2", "kisSECRET-88e0"
 
 
@@ -1304,6 +1309,26 @@ def h15_text(identifier: str) -> bytes:
     return ("\n".join(head + rows) + "\n").encode("utf-8")
 
 
+def h15_columns(*maturities: str, cut: str | None = None) -> bytes:
+    """An H.15 download with one column per maturity ("01", "03", "06" months), laid out as the Data Download Program
+    lays out a package of several series. The 3-month column carries RF's values; the others sit well apart from
+    them. `cut` is a date whose row ends after its first value."""
+    days, vals, hol = RF
+    apart = {"01": 0.37, "03": 0.0, "06": 0.61}
+    said = "Market yield on U.S. Treasury securities at {}-month   constant maturity, quoted on investment basis"
+    head = ['"Series Description",' + ",".join(f'"{said.format(int(m))}"' for m in maturities),
+            '"Unit:",' + ",".join('"Percent:_Per_Year"' for _ in maturities),
+            '"Multiplier:",' + ",".join('"1"' for _ in maturities),
+            '"Currency:",' + ",".join('"NA"' for _ in maturities),
+            '"Unique Identifier: ",' + ",".join(f'"H15/H15/RIFLGFCM{m}_N.B"' for m in maturities),
+            '"Time Period",' + ",".join(f'"RIFLGFCM{m}_N.B"' for m in maturities)]
+    rows = []
+    for i, d in enumerate(days):
+        cells = ["ND" if i in hol else f"{vals[i] + apart[m]:.2f}" for m in maturities]
+        rows.append(",".join([d] + (cells[:1] if d == cut else cells)))
+    return ("\n".join(head + rows) + "\n").encode("utf-8")
+
+
 def fred_handler(url, params):
     days, vals, hol = RF
     assert params["id"] == "DGS3MO" and params["coed"] <= pc.LAST_REQUEST_DAY
@@ -1870,20 +1895,13 @@ def test_the_tool_s_own_http_function_types_every_failure_and_never_prints_the_u
         urllib.request.urlopen, pc._MIN_GAP_S = saved_open, saved_gap
 
 
-def facts_section() -> str:
-    """The tool's own section of docs/compliance/FACTS.md, from its anchor to the next one."""
-    text = FACTS.read_text(encoding="utf-8")
-    start = text.index('<a id="provider-parity-2026-11-11"></a>')
-    end = text.find('<a id="', start + 10)
-    return text[start:] if end < 0 else text[start:end]
-
-
 def test_every_request_is_bounded_before_2027_and_the_documents_say_how():
     """No observation dated on or after 2027-01-01 is requested (spec 10.5). With a window that ends on 2026-12-29
     the fetch would run 7 days on, and each provider's request stops short of 2027 in its own way: an explicit last
     date of 2026-12-30 (an exclusive end of 2026-12-31 for yfinance, the last millisecond of 2026-12-30 for Binance)
-    or, for the Treasury's yearly file, the calendar year 2026. The tool's docstring, the owner guide and the
-    compliance facts say that, and no longer that every request names a last date."""
+    or, for the Treasury's yearly file, the calendar year 2026. The tool's docstring and the owner guide say that, and
+    no longer that every request names a last date. (docs/compliance/FACTS.md says it too; that file is held by
+    `python -m tools.compliance.check --check`, not here, because a change to it does not start this suite in CI.)"""
     root = tmp()
     keys = key_file(root)
     kis_calls, yf_calls, seen = [], [], {}
@@ -1920,8 +1938,7 @@ def test_every_request_is_bounded_before_2027_and_the_documents_say_how():
     for name, text, old, new in (
             ("docstring", pc.__doc__, "Every request names an explicit last date", "calendar year of at most 2026"),
             ("guide", GUIDE.read_text(encoding="utf-8"), "Every request names its last date",
-             "calendar year of at most 2026"),
-            ("facts", facts_section(), "모든 요청이 끝 날짜", "달력 연도")):
+             "calendar year of at most 2026")):
         flat = " ".join(text.split())
         assert old not in flat and new in flat, name
 
@@ -1947,7 +1964,9 @@ def test_duplicated_or_unsorted_dates_are_refused_on_both_sides():
 
 
 def test_a_close_that_is_not_positive_in_a_fails_its_integrity_check():
-    """A zero or negative close is dropped as the study drops it, and the dropped row fails A's integrity check."""
+    """A zero or negative close is dropped as the study drops it, and the dropped row fails A's integrity check. A
+    blank close is dropped too and counted apart (`n_dropped_blank`): the integrity check does not fail on it, and
+    the calendar check names the date A now lacks."""
     d0, _, adj0, _ = SPY
     vals = adj0.copy()
     vals[d0.index("2013-05-15")] = 0.0
@@ -1957,6 +1976,13 @@ def test_a_close_that_is_not_positive_in_a_fails_its_integrity_check():
     integ = s["integrity"][0]
     assert code == 1 and integ["outcome"] == "FAIL" and integ["no_split_shaped_jump"] is True, integ
     assert integ["n_dropped_nonpositive"] == 1 and integ["n_rows"] == 1824, integ
+    vals = adj0.copy()
+    vals[d0.index("2013-05-15")] = np.nan
+    w = spy_world(adj=vals)
+    code, out, s, _ = w.compare([("fmp", spy_b(w)[0])])
+    integ = s["integrity"][0]
+    assert integ["outcome"] == "PASS" and integ["n_dropped_blank"] == 1 and integ["n_dropped_nonpositive"] == 0, integ
+    assert integ["n_rows"] == 1824 and check_of(s, "fmp", "calendar")["only_b"] == ["2013-05-15"] and code == 1, out
     d, p, v = BTC
     bp = p.copy()
     bp[900] = -1.0
@@ -2450,38 +2476,184 @@ def test_an_output_folder_inside_onedrive_is_refused():
 
 
 # --------------------------------------------------------------------------- #
-# Review of 2026-11-11, part 4: the documents and the files this branch leaves alone
+# Review of 2026-11-11, part 4: the documents
 # --------------------------------------------------------------------------- #
 def test_the_guide_matches_the_tool_and_says_what_is_not_settled():
-    """The owner follows the guide, so it is held to the tool: the number of cases; the tool's sha256 once an owner
-    ruling has fixed it (until then both lines say so, and the guide says it is not ready and why); and the notes a
-    reader needs on what the tool leaves out and what a WITHHELD or a failed run means."""
-    guide = GUIDE.read_text(encoding="utf-8")
-    flat = " ".join(guide.split())
+    """The owner follows the guide, so it is held to the tool: the number of cases, and the notes a reader needs on
+    what the tool leaves out and what a WITHHELD, a refused or a failed run means. The Korean guide's stop point
+    names the tool's page-back note in the tool's own words. The fixed commit and sha256 have their own case below."""
+    flat = " ".join(GUIDE.read_text(encoding="utf-8").split())
     assert f"{len(tests())} cases on synthetic series" in flat, len(tests())
-    fixed = dict(re.findall(r"^Tool (commit|sha256) fixed by the owner ruling: (.+)$", guide, flags=re.M))
-    assert set(fixed) == {"commit", "sha256"}, fixed
-    unset = "not fixed yet"
-    assert fixed["sha256"] in (unset, hashlib.sha256(Path(pc.__file__).read_bytes()).hexdigest()), \
-        "the guide fixes a sha256 that is not this tool file's"
-    assert (fixed["commit"] == unset) == (fixed["sha256"] == unset), fixed
-    assert fixed["commit"] == unset or re.fullmatch(r"[0-9a-f]{40}", fixed["commit"]), fixed
-    if fixed["sha256"] == unset:
-        assert "not ready to be followed" in flat and "777fc5b" in flat, "the guide must say why it cannot be run yet"
     for phrase in ("signed NYSE calendar. That check is not built",             # the draft's 4.1 clause, left out
                    "`n_common` near 80 % of `n_a`",                             # a date label one day off
                    "`weekend dates` must be 0", "`has_fetch_record`", "LEFT BEHIND", "OneDrive",
+                   "kis paging stopped at", "does not cover the table's window",
                    "is not registered in `tests/run_all.py`"):
         assert phrase in flat, phrase
+    assert "kis paging stopped at" in KO_GUIDE.read_text(encoding="utf-8")
 
 
-def test_the_root_readme_and_run_all_do_not_name_this_suite():
-    """The root README.md and tests/run_all.py stay as they are on main. A README edit without a regenerated
-    qa/research_status.json fails `python -m tools.status.snapshot --check` in CI, and both files are where the
-    research branch adds its own rows, so an edit here would hand the owner conflicts in the Step 10 merge.
-    Registering the suite is the owner's decision; when he makes it, this case goes with that edit."""
-    for rel in ("README.md", "tests/run_all.py"):
-        assert "provider_parity" not in (ROOT / rel).read_text(encoding="utf-8"), rel
+# --------------------------------------------------------------------------- #
+# Code review of PR #102 (2026-11-11): F1 the H.15 column, F2 the fetch window, F4 the paths CI watches, F5 every
+# statement of the fixed values, F6 a KIS page-back cut short
+# --------------------------------------------------------------------------- #
+def test_h15_values_come_from_the_column_whose_identifier_is_the_three_month_series():
+    """The H.15 download holds one column per series of the package asked for. The tool takes the column whose
+    `Unique Identifier` cell is `H15/H15/RIFLGFCM03_N.B`, wherever it stands: it used to read the first value column
+    whenever the identifier stood anywhere on that row, so a 1-month column ahead of it became the cash rate and the
+    rf run of record ended FAIL on the values check. A response without the column (a longer identifier that only
+    starts like it is another series), with the column twice, or with a dated row that stops before it, is a failed
+    fetch (UNAVAILABLE fetch_failed), never data."""
+    days, vals, hol = RF
+    first, last = pc.fetch_window(*RF_WIN)
+    want = {d: None if i in hol else float(f"{vals[i]:.2f}") for i, d in enumerate(days) if first <= d <= last}
+    assert sum(1 for v in want.values() if v is not None) > 1700
+    for order in (("01", "03", "06"), ("03", "01", "06"), ("06", "01", "03"), ("03",)):
+        body = h15_columns(*order)
+        code, out, folder = fetch("rf", "h15", start=RF_WIN[0], end=RF_WIN[1],
+                                  http=FakeHttp(lambda u, p, body=body: pc.Response(200, body)))
+        assert code == 0, (order, out)
+        got = {d: None if v == "" else float(v) for d, v in read_csv_rows(folder / "rf_h15.csv")}
+        assert got == want, (order, [d for d in want if got.get(d) != want[d]][:5])
+    cut = next(d for i, d in enumerate(days) if d >= "2013-05-15" and i not in hol)
+    for body, words in ((h15_columns("01", "06"), "h15: the response does not name the 3-month series"),
+                        (h15_text("RIFLGFCM03_N.BX"), "h15: the response does not name the 3-month series"),
+                        (h15_columns("01", "03", "03"), "h15: the response names the 3-month series in more than one "
+                                                        "column"),
+                        (h15_columns("01", "03", "06", cut=cut), "h15: a dated row lacks the 3-month column")):
+        code, out, folder = fetch("rf", "h15", start=RF_WIN[0], end=RF_WIN[1],
+                                  http=FakeHttp(lambda u, p, body=body: pc.Response(200, body)))
+        assert code == 4 and not folder.exists(), out
+        assert out.splitlines()[-2:] == [f"UNAVAILABLE: {words}",
+                                         "FETCH rf h15 UNAVAILABLE fetch_failed exit=4 csv=-"], out
+    # the same short row with the 3-month column first still carries it
+    body = h15_columns("03", "01", "06", cut=cut)
+    code, out, folder = fetch("rf", "h15", start=RF_WIN[0], end=RF_WIN[1],
+                              http=FakeHttp(lambda u, p: pc.Response(200, body)))
+    assert code == 0, out
+    assert {d: None if v == "" else float(v) for d, v in read_csv_rows(folder / "rf_h15.csv")} == want
+
+
+def test_a_fetch_made_for_a_window_that_does_not_cover_the_table_s_is_refused_before_any_comparison():
+    """Spec 10.5.1 measures coverage over the provider's first-to-last span and counts A's dates outside it against
+    `edge_uncovered_max` (P-D5: a provider that starts late or ends early). That span has to be the provider's own:
+    a fetch made with other dates (another series' start or end) is short because of the request, coverage collapses
+    and the series would end WITHHELD, a run of record. So a file beside a fetch record whose window starts after
+    the table's start or ends before the table's end is REFUSED, with both windows named and nothing written. A
+    record for the table's window or a wider one is taken (the file is cut to the table's window either way). For
+    the cash rate the table's window is meant, not the 31 days of seed the tool reads before it."""
+    w = rf_world()
+    for start, end, taken in ((RF_WIN[0], RF_WIN[1], True), ("2009-06-01", "2017-06-30", True),
+                              ("2015-01-05", RF_WIN[1], False), (RF_WIN[0], "2011-12-30", False),
+                              ("2010-01-05", RF_WIN[1], False), (RF_WIN[0], "2016-12-29", False)):
+        code, out, folder = fetch("rf", "treasury", start=start, end=end, http=FakeHttp(treasury_handler))
+        assert code == 0, out
+        meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
+        assert meta["window"] == {"start": start, "end": end}, meta["window"]
+        code, out, s, path = w.compare([("treasury", folder / "rf_treasury.csv")])
+        if taken:
+            assert code == 0 and s["outcome"] == "PASS" and s["pairs"][0]["has_fetch_record"] is True, (start, end, out)
+            assert s["window"] == {"start": RF_WIN[0], "end": RF_WIN[1]}, s["window"]
+            continue
+        assert code == 2 and s is None and not path.exists(), (start, end, out)
+        assert out.splitlines()[-2] == (
+            f"REFUSED: rf_treasury.csv: its fetch record's window {start}..{end} does not cover the table's window "
+            f"{RF_WIN[0]}..{RF_WIN[1]}; fetch again with the table's --start and --end into a new folder"), out
+        assert last_line(out) == "PARITY rf REFUSED exit=2 summary=-", out
+        # the same bytes with no record beside them are compared, and the summary says they had none
+        loose = w.file(f"loose_{start}_{end}.csv", (folder / "rf_treasury.csv").read_text(encoding="utf-8"))
+        code, out, s, _ = w.compare([("treasury", loose)])
+        assert code in (0, 3) and s["pairs"][0]["has_fetch_record"] is False, out
+    # a record that names no window cannot show what it was fetched for
+    code, out, folder = fetch("rf", "treasury", start=RF_WIN[0], end=RF_WIN[1], http=FakeHttp(treasury_handler))
+    meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
+    for window in (None, {"start": RF_WIN[0]}, {"start": RF_WIN[0], "end": 20161230}, "2010-01-04..2016-12-30",
+                   {"start": "0", "end": "9"}):
+        (folder / "meta.json").write_text(json.dumps({**meta, "window": window}), encoding="utf-8")
+        code, out, s, path = w.compare([("treasury", folder / "rf_treasury.csv")])
+        assert code == 2 and s is None and not path.exists(), (window, out)
+        assert "its fetch record names no window" in out, (window, out)
+
+
+def test_a_kis_page_back_that_stops_short_says_where_and_why_above_the_result_line():
+    """The KIS fetch pages back 100 sessions at a time and ends when a page brings no new date or its request budget
+    is spent. When that happens after the first requested date, the file is short because of the fetch, and the line
+    above `FETCH ... OK` says so (the first date reached and the reason), where the owner reads it at the guide's
+    stop point, before compare makes the run of record. A page-back that reaches the first requested date adds
+    nothing to the line. The outcome rules are untouched: the fetch is still OK and compare judges coverage."""
+    d0, raw0, _, _ = SPY
+
+    def kis(first_bar: str, per_page: int):
+        def get(path, tr_id, params):
+            end = f"{params['BYMD'][:4]}-{params['BYMD'][4:6]}-{params['BYMD'][6:]}"
+            idx = [i for i, d in enumerate(d0) if first_bar <= d <= end][-per_page:]
+            return {"rt_cd": "0", "output2": [{"xymd": d0[i].replace("-", ""), "clos": f"{raw0[i]:.4f}"}
+                                              for i in reversed(idx)]}
+        return get
+    root = tmp()
+    keys = key_file(root)
+    assert pc.fetch_window(*SPY_WIN)[0] == "2009-12-04" and "2009-12-04" in d0 and "2009-12-07" in d0
+    assert d0[-372] == "2015-07-30" and d0[-1] == "2016-12-30"       # 31 requests of 12 sessions reach this far
+    for k, (first_bar, per_page, n_rows, note) in enumerate((
+            ("2009-06-01", 100, 1846, ""),
+            ("2009-12-04", 100, 1846, ""),                           # the first bar is the first requested date
+            ("2009-12-07", 100, 1845, "; kis paging stopped at 2009-12-07, after the first requested date 2009-12-04: "
+                                      "a page brought no new date"),
+            ("2012-03-01", 100, 1262, "; kis paging stopped at 2012-03-01, after the first requested date 2009-12-04: "
+                                      "a page brought no new date"),
+            ("2009-06-01", 12, 372, "; kis paging stopped at 2015-07-30, after the first requested date 2009-12-04: "
+                                    "the budget of 31 requests ran out"))):
+        with env_without(*pc.KEY_NAMES):
+            code, out, folder = fetch("spy", "kis", start=SPY_WIN[0], end=SPY_WIN[1], kis=kis(first_bar, per_page),
+                                      env_file=keys, root=root / f"case{k}")
+        first = max(first_bar, "2009-12-04") if per_page == 100 else "2015-07-30"
+        assert code == 0 and out.splitlines()[-2:] == [
+            f"rows {n_rows}, first {first}, last 2016-12-30, weekend dates 0{note}",
+            f"FETCH spy kis OK exit=0 csv={folder / 'spy_kis.csv'}"], out
+        assert len(read_csv_rows(folder / "spy_kis.csv")) == n_rows
+
+
+def test_every_statement_of_the_fixed_commit_and_sha256_agrees_with_the_tool_file():
+    """Owner ruling P1 fixes the tool by commit and sha256, and the owner pastes both from the documents: the guide's
+    two lines and its `$fixed`, the Korean guide's `$fixed`, `$sha` and table row, and results/RULINGS.md. Each
+    statement is found exactly once, every sha256 is this tool file's, and every commit is one and the same 40-hex
+    id, so a change to the tool, or to one statement alone, fails here until all of them are right again. Not held
+    here: that the id is the commit that last changed the tool (CI checks out a single commit), and the two prose
+    records (docs/nautilus_bridge/OWNER_RULINGS_LOG.md, the tool's row of docs/compliance/FACTS.md), which are
+    checked by hand whenever the values change."""
+    guide, ko, rulings = (p.read_text(encoding="utf-8") for p in (GUIDE, KO_GUIDE, RULINGS))
+    commits = {"guide line": re.findall(r"^Tool commit fixed by the owner ruling: (.+)$", guide, flags=re.M),
+               "guide $fixed": re.findall(r'^\$fixed = "([^"]*)"', guide, flags=re.M),
+               "Korean guide $fixed": re.findall(r'^\$fixed = "([^"]*)"', ko, flags=re.M),
+               "Korean guide table": re.findall(r"도구 커밋 `([^`]*)`", ko),
+               "RULINGS.md": re.findall(r"^- Tool commit fixed: `([^`]*)`", rulings, flags=re.M)}
+    shas = {"guide line": re.findall(r"^Tool sha256 fixed by the owner ruling: (.+)$", guide, flags=re.M),
+            "Korean guide $sha": re.findall(r'^\$sha = "([^"]*)"', ko, flags=re.M),
+            "Korean guide table": re.findall(r"도구 파일 sha256 `([^`]*)`", ko),
+            "RULINGS.md": re.findall(r"^- Tool sha256 fixed \(`tools/provider_parity/parity_check\.py`\): `([^`]*)`",
+                                     rulings, flags=re.M)}
+    for kind, stated in (("commit", commits), ("sha256", shas)):
+        for place, found in stated.items():
+            assert len(found) == 1, f"{place}: the fixed {kind} is stated {len(found)} times"
+    tool_sha = hashlib.sha256(Path(pc.__file__).read_bytes()).hexdigest()
+    wrong = {place: found[0] for place, found in shas.items() if found[0] != tool_sha}
+    assert not wrong, f"a fixed sha256 that is not this tool file's ({tool_sha}): {wrong}"
+    commit = commits["RULINGS.md"][0]
+    assert re.fullmatch(r"[0-9a-f]{40}", commit), commit
+    assert {found[0] for found in commits.values()} == {commit}, commits
+
+
+def test_every_repository_file_this_suite_reads_starts_the_ci_workflow():
+    """CI runs this suite only for a pull request that touches a path in the filter of runtime-smoke.yml. Every file
+    the suite reads in the repository is on that filter, so a change to one of them is checked before it merges and
+    none can break the suite on main unseen. docs/compliance/FACTS.md, the root README.md and tests/run_all.py were
+    not on the filter when this case was written (the workflow takes half an hour and documents change often), which
+    is why no case reads them; the case does not hold the rest of the filter, which belongs to other suites."""
+    listed = re.search(r"^    paths: \[(.*)\]$", WORKFLOW.read_text(encoding="utf-8"), flags=re.M).group(1)
+    paths = re.findall(r"'([^']+)'", listed)
+    for path in (Path(pc.__file__), GUIDE, KO_GUIDE, RULINGS, WORKFLOW, Path(__file__)):
+        rel = path.resolve().relative_to(ROOT).as_posix()
+        assert rel in paths or any(p.endswith("/**") and rel.startswith(p[:-2]) for p in paths), rel
 
 
 # --------------------------------------------------------------------------- #

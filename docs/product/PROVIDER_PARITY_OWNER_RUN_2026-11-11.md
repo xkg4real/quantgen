@@ -163,7 +163,7 @@ rows <행 수>, first <첫 날짜>, last <끝 날짜>, weekend dates 0
 FETCH spy fmp OK exit=0 csv=C:\Users\...\AppData\Local\quantgen\provider_parity\fetch1-spy-fmp\spy_fmp.csv
 ```
 
-BTC-USD 세 번은 첫 줄의 끝이 `weekend dates <수>` 대신 `missing days <수>`입니다.
+BTC-USD 세 번은 첫 줄의 끝이 `weekend dates <수>` 대신 `missing days <수>`입니다. 16단계(kis)는 첫 줄 끝에 `; kis paging stopped at <날짜>, after the first requested date <날짜>: <이유>`가 더 붙을 수 있습니다. 붙었을 때 할 일은 멈춤 지점에 있습니다.
 
 **15.** SPY, 공급사 fmp(키 `FMP_API_KEY`).
 
@@ -237,12 +237,13 @@ python -B -m tools.provider_parity.parity_check fetch --series btc --provider bi
 
 화면: 마지막 줄 `FETCH btc binance OK exit=0 csv=...`. `first`가 2017-08-17 무렵이어도 정상입니다(바이낸스의 BTCUSDT가 그때 시작합니다). 시간: 5~30초(1000일씩 5번 요청).
 
-**멈춤 지점.** 아홉 번이 모두 아래 네 가지를 만족하면 바로 다 구역으로 갑니다. 하나라도 아니면 여기서 멈추고, 아홉 번의 마지막 두 줄씩(18줄)을 Claude에게 보낸 뒤 답을 기다립니다. 그때는 Claude가 상황에 맞는 대조 줄을 다시 써 드립니다. 대조는 시계열마다 첫 실행이 기록으로 남으므로, 수신이 정리되기 전에 대조를 돌리지 않습니다.
+**멈춤 지점.** 아홉 번이 모두 아래 다섯 가지를 만족하면 바로 다 구역으로 갑니다. 하나라도 아니면 여기서 멈추고, 아홉 번의 마지막 두 줄씩(18줄)을 Claude에게 보낸 뒤 답을 기다립니다. 그때는 Claude가 상황에 맞는 대조 줄을 다시 써 드립니다. 대조는 시계열마다 첫 실행이 기록으로 남으므로, 수신이 정리되기 전에 대조를 돌리지 않습니다.
 
 - 마지막 줄이 `FETCH ... OK exit=0`입니다.
 - SPY와 rf 여섯 번은 `weekend dates 0`입니다. 0이 아니면 그 공급사가 날짜를 다르게 붙인 것입니다.
 - `first`: SPY 세 번은 2004-12-01이거나 그 전, rf 세 번은 2004-11-05이거나 그 전, coinbase와 bitstamp는 2016-01-01이거나 그 전입니다. binance는 따지지 않습니다.
 - `last`: 아홉 번 모두 2026-09-25이거나 그 뒤입니다.
+- 16단계(kis)의 첫 줄에 `kis paging stopped at`이 없습니다. 이 글이 있으면 KIS에서 100거래일씩 거슬러 받다가 요청한 첫 날짜(2004-10-31)에 닿기 전에 멈췄다는 뜻이고, 줄에 멈춘 날짜와 이유가 적혀 있습니다(`a page brought no new date`: KIS가 더 앞 날짜를 주지 않음, `the budget of <수> requests ran out`: 한 번에 온 행이 100개보다 적어 요청 횟수를 다 씀). 수신 자체는 `OK`로 끝나지만 파일이 그 날짜에서 시작하므로, 이 줄이 나오면 멈추고 두 줄을 Claude에게 보냅니다.
 
 BTC-USD의 `missing days`는 0이 아니어도 계속합니다(대조가 그 날짜들을 경고로 적습니다).
 
@@ -437,6 +438,7 @@ FETCH btc coinbase UNAVAILABLE fetch_failed exit=4 csv=-
 | `REFUSED: --repo holds this tool ...` | `$rc`가 도구 클론을 가리킵니다. | 1단계를 연구 클론 경로로 다시 실행합니다. |
 | `REFUSED: ... must lie outside every git work tree` 또는 `... must not lie in a OneDrive folder ...` | 출력 폴더가 git 폴더나 OneDrive 안입니다. | 4단계를 다시 실행하고 줄을 고치지 않은 채 다시 붙여넣습니다. |
 | `REFUSED: spy_fmp.csv: cannot be read (FileNotFoundError)` | 그 수신이 OK로 끝나지 않아 파일이 없습니다. | 멈춤 지점으로 돌아갑니다. |
+| `REFUSED: ...: its fetch record's window <날짜>..<날짜> does not cover the table's window <날짜>..<날짜>; ...` | 그 파일을 받을 때 쓴 `--start`나 `--end`가 표의 기간보다 좁습니다(다른 시계열의 날짜로 받은 경우). 대조는 시작되지 않았고 실행으로 세지 않습니다. | 고치려 하지 말고 두 줄을 Claude에게 보냅니다. 새 폴더 이름으로 다시 받는 줄을 Claude가 써 드립니다. |
 | `UNAVAILABLE: yfinance failed (ModuleNotFoundError)` | 이 `python`에 yfinance가 없습니다. | 13단계를 다시 보고, 설치하지 말고 Claude에게 알립니다. |
 | `weekend dates`가 0이 아님 | 공급사가 날짜를 하루 밀어 붙였을 수 있습니다. | 그 파일로 대조하지 않습니다. 두 줄을 Claude에게 보냅니다. |
 | `LEFT BEHIND: <폴더> ...`에 이어 `ERROR: ...` | 쓰다가 실패했고 폴더를 지우지 못했습니다(백신이나 동기화 프로그램이 파일을 잡고 있었습니다). | 결과가 아닙니다. 그 폴더를 직접 지우고 줄을 Claude에게 보냅니다. |
@@ -484,3 +486,5 @@ git pull --ff-only
 - **도구 브랜치, 커밋, sha256.** 2026-11-11 소유자 판정(P1)으로 고정했습니다. 다만 실행 브랜치 `claude/provider-parity-runs-20261111`에서의 실제 클론과 push는 해 보지 못했습니다(따라 해 본 것은 가짜 원격 저장소입니다). 실행 브랜치는 PR #102 병합 뒤 Claude가 main에서 만들어 올립니다.
 - **연구 클론의 실제 상태.** 표 두 개는 연구 브랜치에 올라와 있는 것(7A.3 커밋 `563db54`)을 git으로 읽어 BOM이 없고 도구가 읽는 필드가 있음을 확인했습니다. 소유자 PC의 고정 파일 세 개, `.env`, 3단계의 출력은 Claude가 볼 수 없습니다.
 - **허용치.** 스펙 10.5.1의 허용치는 실제 자료 없이 정한 것이라, 실제 시계열에서 잘못된 FAIL이 얼마나 나올지는 알 수 없습니다.
+- **코드 검토 반영 뒤.** 위의 따라 하기는 PR #102 코드 검토를 반영하기 전의 도구로 한 것입니다. 반영 뒤에는 34단계를 처음부터 다시 따라 하지 않았습니다. 같은 기간의 합성 자료와 가짜 공급사로 수신 아홉 번과 대조 세 번만 다시 실행해 `OK` 아홉 번과 `PASS` 세 번을 확인했습니다. 이번에 새로 생긴 두 줄(`kis paging stopped at ...`, `... does not cover the table's window ...`)은 합성 검사에서 문구를 맞췄습니다.
+- **검사가 아니라 기록으로 남기는 것.** 루트 `README.md`와 `tests/run_all.py`는 main 그대로이며 이 도구의 검사 모듈(`provider_parity`)을 언급하지 않습니다. 등록은 소유자 결정 사항이고, 두 파일은 연구 브랜치가 자기 행을 더하는 곳이라 여기서 고치면 Step 10 병합에서 충돌이 납니다. 이 점은 검사로 지키지 않습니다. 두 파일을 고친 PR은 CI에서 이 검사 묶음을 실행시키지 않으므로, 검사로 두면 main에서 아무도 모르게 실패한 채 남을 수 있기 때문입니다. 대신 이 문장으로 기록하며, 도구 버전을 고정한 시점에 `git grep`으로 두 파일에 그 이름이 없음을 직접 확인했습니다.

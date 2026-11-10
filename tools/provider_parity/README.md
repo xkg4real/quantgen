@@ -27,7 +27,10 @@ verbatim in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md` and in `results/RULINGS.
   carried into the Step 10 execution record; the research branch gets no extra commit for it.
 - The owner clones the run branch `claude/provider-parity-runs-20261111`, which is cut from `main` and contains the fixed commit. Summaries are
   pushed to that branch, never to `main`.
-- A change to the tool after the ruling changes its sha256, and the suite fails until the line below is right again.
+- A change to the tool after the ruling changes its sha256, and the suite fails until every statement of the fixed
+  values is right again: the two lines below, `$fixed` under Setup, the Korean guide (its table row and steps 6 and
+  7) and `results/RULINGS.md`. The rulings log and `docs/compliance/FACTS.md` state them too; those two are prose
+  records and are checked by hand.
 
 ```
 Tool commit fixed by the owner ruling: 49a3a67b246d020381b27067103d1a7ba4795f9e
@@ -101,6 +104,14 @@ a weekend, so any other count means the provider labels its days differently (a 
 local time). Do not compare that file and do not declare `short_history`; send Claude the line. `missing days` counts
 the UTC days absent inside the file's own span; compare lists them as a calendar WARN.
 
+For `kis` the same line can end with `; kis paging stopped at <date>, after the first requested date <date>: <reason>`.
+The `kis` fetch pages back 100 sessions at a time, and this says that the page-back ended before it reached the first
+requested date (31 days before `--start`): `a page brought no new date` (KIS has nothing earlier, or answered with the
+same page again) or `the budget of <n> requests ran out` (its pages were shorter than 100 sessions). The file then
+starts at that date because of the fetch. The fetch is still `OK`, but settle it before compare: send Claude the
+line. (A file that starts on or before the window start still covers the window; one that starts later would count
+against coverage.)
+
 Settle every fetch of a series before its compare. A fetch is not a run and may be repeated into a new folder;
 compare is what makes the run of record. No provider endpoint has been called while the tool was built (see the last
 section), so if a fetch ends `UNAVAILABLE fetch_failed` or `ERROR`, or `UNAVAILABLE plan_or_access` for a provider
@@ -146,6 +157,12 @@ python -B -m tools.provider_parity.parity_check compare --series btc --table "$t
 - A `--pair` file inside its fetch folder is checked against that folder's `meta.json`: a file edited, renamed or
   replaced after its fetch is refused (fetch again into a new folder). Each pair in the summary carries
   `has_fetch_record`; a file compared from anywhere else shows `false`, and Claude will ask where it came from.
+- The same record says which `--start` and `--end` the file was fetched for. A file fetched for a window that starts
+  after the table's start or ends before the table's end is refused before anything is compared:
+  `REFUSED: <file>: its fetch record's window <start>..<end> does not cover the table's window <start>..<end>; ...`.
+  10.5.1 measures coverage over the provider's own first-to-last span (P-D5), and a fetch made with another series'
+  dates is short because of the request, not because of the provider; compared, it would end WITHHELD on coverage,
+  a run of record. Fetch again with the table's dates into a new folder. A fetch for a wider window is taken.
 - A SPY pair that ends WITHHELD on coverage with `n_common` near 80 % of `n_a` points to a date label one calendar
   day off, not to a short history. The calendar check does not run on a WITHHELD pair, so the summary shows the
   coverage counts only. Report it; do not declare `short_history`. The fetch line's `weekend dates` shows the same
@@ -204,17 +221,21 @@ The earlier result is never removed.
 python -B -m unittest tests.provider_parity_acceptance -v
 ```
 
-110 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
+114 cases on synthetic series, with every provider faked in the process and socket connects patched to raise: each
 threshold of 10.5.1 from both sides, every outcome and exit code, the provider map, the 2027-01-01 cut-off, the summary
-allow-list, where the tool may write, key handling, a cp949 console, and the tool started as a module. The fetchers are
-checked against values typed by hand (epoch seconds, request parameters, expected rows), and the tool's own HTTP
-function runs with `urlopen` replaced. The suite reads no cache file, no `.env` and nothing under `~/.nextgen`; in the
-repository it reads the tool, this guide, the tool's section of `docs/compliance/FACTS.md`, the root `README.md` and
-`tests/run_all.py` (the last two only to see that they do not name this suite).
+allow-list, where the tool may write, key handling, a cp949 console, the tool started as a module, and every statement
+of the fixed tool commit and sha256. The fetchers are checked against values typed by hand (epoch seconds, request
+parameters, expected rows), and the tool's own HTTP function runs with `urlopen` replaced. The suite reads no cache
+file, no `.env` and nothing under `~/.nextgen`; in the repository it reads the tool, this guide, the Korean guide,
+`results/RULINGS.md` and the CI workflow.
 
 The suite is not registered in `tests/run_all.py` and has no row in the root `README.md`: both files are left as they
 are on main until the owner says otherwise, so the Step 10 merge of the research branch meets no conflict there. CI
-runs the suite in the "bounded source fixtures" step of `.github/workflows/runtime-smoke.yml`.
+runs the suite in the "bounded source fixtures" step of `.github/workflows/runtime-smoke.yml`, for a pull request
+that changes a path on that workflow's filter. Every file the suite reads is on the filter. The root `README.md`,
+`tests/run_all.py` and `docs/compliance/FACTS.md` are not (the workflow takes half an hour), so no case reads them:
+that the first two do not name this suite is a record (here and in section 8 of the Korean guide; checked by hand
+with `git grep` when the tool was fixed), and FACTS is held by `python -B -m tools.compliance.check --check`.
 
 ## Not included
 
@@ -231,7 +252,8 @@ runs the suite in the "bounded source fixtures" step of `.github/workflows/runti
   own clients where they exist (FMP, KIS, Binance, FRED, yfinance). The others are written from memory of the
   providers' public interfaces and are the least certain part of the tool: the Coinbase candles endpoint, the Bitstamp
   OHLC endpoint, the Treasury XML feed (`BC_3MONTH`, one page per year) and the H.15 Data Download Program series id
-  (the response must name `RIFLGFCM03_N.B`, else the fetch fails). Also unknown: KIS exchange code `AMS` for SPY,
+  (the values are read from the one column whose `Unique Identifier` is `RIFLGFCM03_N.B`; a response without that
+  column, or with it twice, ends `UNAVAILABLE fetch_failed`). Also unknown: KIS exchange code `AMS` for SPY,
   FMP's history depth on the owner's plan and Coinbase's first candle. A response of an unexpected shape ends
   `UNAVAILABLE fetch_failed`; a well-formed response of the wrong series shows as a coverage, calendar or value
   disagreement in compare.
