@@ -486,7 +486,10 @@ def pit_snapshot(ctx) -> dict:
                 v = C.read_input(s.store, s.registry, sid, rctx, consumer, s.clocks, require_session=req, vendor=s.vendor)
             except Exception as exc:                           # noqa: BLE001  (a raising read is a missing input)
                 v = P.MissingInput(sid, "missing", b.role, tuple(s.registry.book_ids(b)), detail=f"{type(exc).__name__}: {exc}")
-            inputs[key], bindings[key] = v, b
+            # every binding that shares (sid, consumer) is kept, each with its own failure action (R-19 rule 4, spec
+            # L1891): NAV_LINE_CLOSES binds consumer nav twice (acting, then forward_sim). LA-01, audit 2026-11-04.
+            inputs[key] = v
+            bindings[key] = bindings.get(key, ()) + (b,)
     ctx.state.update(inputs=inputs, bindings=bindings)
     n_missing = sum(isinstance(v, P.MissingInput) for v in inputs.values())
     return {"status": "ok", "schedule": schedule, "knowledge_utc": PL.iso(ctx.knowledge_utc), "n_read": len(inputs),
@@ -503,28 +506,31 @@ def data_ok(ctx) -> dict:
     components, forward_failed, labels = [], {}, []
     hedge_off = False
     for (sid, consumer), v in ctx.state["inputs"].items():
-        b = ctx.state["bindings"][(sid, consumer)]
-        fa = C.on_input_failure(sid, v, b)
-        books = tuple(derived.get(f"{sid}|{b.consumer or '*'}", ())) if b.role == "acting_exposure" else tuple(s.registry.book_ids(b))
-        if fa.status in ("ok", "disputed"):
-            if fa.status == "disputed":
-                _alert(ctx, "INPUT_DISPUTED", "warn", "data_ok", series_id=sid, books=books)
-            continue
-        if fa.role == "acting_exposure":
-            for book in books:
-                failed_by_book.setdefault(book, {})[sid] = b.halt_after_consecutive_decisions
-            components.append({"series_id": sid, "status": fa.status, "books": list(books), "detail": fa.sets.get("detail", "")})
-            _alert(ctx, "ACTING_INPUT_FAIL_CLOSED", "warn", "data_ok", series_id=sid, books=books, detail=fa.sets.get("detail", ""))
-        elif fa.role == "risk_model":
-            if fa.sets.get("hedge_credit_off"):
-                hedge_off = True
-            _alert(ctx, "RISK_MODEL_INPUT_STALE", "warn", "data_ok", series_id=sid, detail=fa.action)
-        elif fa.role == "forward_sim":
-            for book in books:
-                forward_failed.setdefault(book, []).append(sid)
-            _alert(ctx, "FORWARD_SIM_INPUT_FAIL_CLOSED", "warn", "data_ok", series_id=sid, books=books)
-        else:
-            labels.append({"series_id": sid, "status": fa.status})
+        disputed = None                                        # one INPUT_DISPUTED per (sid, consumer), naming every bound book
+        for b in ctx.state["bindings"][(sid, consumer)]:       # each binding applies its own failure action (LA-01)
+            fa = C.on_input_failure(sid, v, b)
+            books = tuple(derived.get(f"{sid}|{b.consumer or '*'}", ())) if b.role == "acting_exposure" else tuple(s.registry.book_ids(b))
+            if fa.status in ("ok", "disputed"):
+                if fa.status == "disputed":
+                    disputed = (disputed or ()) + tuple(x for x in books if x not in (disputed or ()))
+                continue
+            if fa.role == "acting_exposure":
+                for book in books:
+                    failed_by_book.setdefault(book, {})[sid] = b.halt_after_consecutive_decisions
+                components.append({"series_id": sid, "status": fa.status, "books": list(books), "detail": fa.sets.get("detail", "")})
+                _alert(ctx, "ACTING_INPUT_FAIL_CLOSED", "warn", "data_ok", series_id=sid, books=books, detail=fa.sets.get("detail", ""))
+            elif fa.role == "risk_model":
+                if fa.sets.get("hedge_credit_off"):
+                    hedge_off = True
+                _alert(ctx, "RISK_MODEL_INPUT_STALE", "warn", "data_ok", series_id=sid, detail=fa.action)
+            elif fa.role == "forward_sim":
+                for book in books:
+                    forward_failed.setdefault(book, []).append(sid)
+                _alert(ctx, "FORWARD_SIM_INPUT_FAIL_CLOSED", "warn", "data_ok", series_id=sid, books=books)
+            else:
+                labels.append({"series_id": sid, "status": fa.status})
+        if disputed is not None:
+            _alert(ctx, "INPUT_DISPUTED", "warn", "data_ok", series_id=sid, books=disputed)
     ctx.state.update(failed_by_book=failed_by_book, fail_closed=components, forward_failed=forward_failed,
                      context_labels=labels, hedge_credit_off=hedge_off)
     return {"status": "fail_closed" if components else "pass", "fail_closed": components, "forward_failed": forward_failed,
@@ -540,8 +546,8 @@ def lag_audit(ctx) -> dict:
     values = [v for v in ctx.state["inputs"].values() if isinstance(v, P.PITValue)]
     rep = LA.lag_audit(values, _rctx(ctx), ctx.market, s.registry, s.clocks)   # backtest: LookAheadError raises (a step error)
     roles = {}
-    for (sid, _), b in ctx.state["bindings"].items():
-        roles.setdefault(sid, set()).add(b.role)
+    for (sid, _), bs in ctx.state["bindings"].items():
+        roles.setdefault(sid, set()).update(b.role for b in bs)   # the union over every binding of the key (LA-01)
     halted, hedge = [], False
     for x in rep["violations"]:
         sid = x["series_id"]
