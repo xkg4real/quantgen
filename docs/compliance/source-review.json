@@ -291,7 +291,7 @@
     "docs/product/CHART_RECEIVED_BARS_REVIEW_20261102.md": "3f05520af76a14bbeb8fab8f7db874b25f18e52d4e884ec6b46e305e58f7ca44",
     "docs/product/CLAUDE_CONNECTION_2026-10-31.md": "2bfa046706999da34447f4aa896e19bdb350e1c1eabc436126c5adc527c44242",
     "docs/product/CMS_COUPON_DISCLOSURE_2026-11-02.md": "50d1460fdea1e4b6837dc6c2a4da4c65996dde55e5c0da35fcb98cd7d07e6f00",
-    "docs/product/COMPACT_NATIVE_UI_20261107.md": "c366e29b51988ec88c391e1390d91a29efa08d5e9cc58a5d9f5d3fe00918848e",
+    "docs/product/COMPACT_NATIVE_UI_20261107.md": "1749bda315e43413f59f68a250d6424566451f3919db7a1cfc7c4d9a1947578b",
     "docs/product/COMPANY_MARKS_READABILITY_20261106.md": "cea321847ed32fe5f077180665bcaa485dff75444bdce86526e8357ee2626be3",
     "docs/product/CRYPTO_MISSING_VALUES_2026-11-04.md": "9360c8bff2136e6c9c67d18c58caebddf2e09ee0e6abde969503aa78f1970b04",
     "docs/product/DATA_ACQUISITION_2026-10-29.md": "284d5c969d889ec1ca0b381ba5f94ee6f3f16115fac15a247a5b304ba9ae1230",
@@ -362,7 +362,7 @@
     "quantgen_desktop/data_rights.py": "c251c7b622c62ed7b796caa04dec0408b34038ab46ccb2fd89b1d152d9b0d4e3",
     "quantgen_desktop/display_prose_catalog.py": "85cd9be4469c96b83a71aa0ac3c0dad0b04cbbf35649da8beb7cef12c9eb7708",
     "quantgen_desktop/font_policy.py": "474c8169d903f5c0197305a2ba53d451235418db0cac31542fcd33c1632f7b21",
-    "quantgen_desktop/form_layout.py": "a07e00aa38f8a8dc79838d76446a962b9fe0cc25a5006984573eecbbb70cb670",
+    "quantgen_desktop/form_layout.py": "cb531c0e9f0592e18851b43308e6b084c77de8dad86b8e6ccdc5e3cf4d86ff89",
     "quantgen_desktop/fx.py": "89e77de9e85e2f1673c7ef32947893be4043eb5236292f587f400303db7456a6",
     "quantgen_desktop/fx_narrative.py": "1078cff2724ff7c6bc75f8146e7893622323899ee5bb1c52100007c11649e52e",
     "quantgen_desktop/indicator_guide.py": "ce6f8c970fcd2dea89e318e68785bacdf8367c0152ac800d5e38623f618a5559",
@@ -425,7 +425,7 @@
     "tests/desktop_carry_language_acceptance.py": "7f58ba4b867a9b0b4b6e672d564f5663931359880096d08e6ff930d2ff23df53",
     "tests/desktop_chart_rendering_acceptance.py": "3e0a71ecbd3d2a4aec8669d6fc66c5e3bf18ac0c7760f94ff8a8a3e592eb8db0",
     "tests/desktop_commentary_acceptance.py": "ed1f58c2e133796d77ba3b6cdc5d187321f7491c1091ba3b36853aff773c8250",
-    "tests/desktop_compact_ui_acceptance.py": "d8eb1ceb437b08ddaab008f45b7f5394345d2ceb4229b1fa2f5bd72c43ad1586",
+    "tests/desktop_compact_ui_acceptance.py": "9c60e89c66fb5b989d46e76aae27272668290a7a63be778a19c7790d03966b13",
     "tests/desktop_funding_inference_acceptance.py": "ebc0c752e57c8dc0c88024eaa171064eea6701e5b22671e437fdf3c8428295dc",
     "tests/desktop_fx_language_acceptance.py": "9e0250c36e13ade2615a71c45a17bc4e67ca42e64b25901de7286a68eec9d584",
     "tests/desktop_home_live_acceptance.py": "1514c7b2446c314ad3514b21de3fccd7814f8db4e1081a7fc27480fe4163c687",
@@ -635,163 +635,163 @@
   "reviews": {
     "1": {
       "document_sha256": "7ffeb30cbf22092284b48635e1769018e2259ea44c1a5647ac50ecaf3f815d63",
-      "source_digest": "d81392e3c0ea2c2b426de2b6619670805d5479764ca80b95f82efd29f66ec3ce",
+      "source_digest": "c13f1f5f4ed5365efce8dc85d3c965aba8fc758f45a2aa4d6057a554bf4a4466",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.483809+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.957462+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "d81392e3c0ea2c2b426de2b6619670805d5479764ca80b95f82efd29f66ec3ce",
+      "source_digest": "c13f1f5f4ed5365efce8dc85d3c965aba8fc758f45a2aa4d6057a554bf4a4466",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.486165+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.960288+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "24fe51865d919d7ed6c243246949aac2d51810efbb84eea1e5e1952518d8beab",
+      "source_digest": "92ea3fa5fc03428c7ed9bf7a7d288c34b5bec228b398819e904d2275c643a14d",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.488751+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.965703+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "638a9108452bc7bfb3e540fcf9d36b4f99bc4923fe69294d3428aecf68c581fc",
+      "source_digest": "780e553ad254c9dde693432cf8f9ff9181fc27cc75e01b88b885d0c5a92b7262",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.490617+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.967435+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "5d18c920988926a7944bbfd4ff5863e68d3542d264bc339fc84f86a96b20f304",
+      "source_digest": "4fe48e776661d03b049a9aace7b62e5e82ee0d98fa3f650149d16d1d7af3c10e",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.492757+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.969155+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "7c2e9016fc0e95808e40064d2d32e0eb864e3324fe31f999646a7d9da46e300f",
+      "source_digest": "6a67e8f52d73b358a2d244d5b2878450fec1a700ff7192d6ca189158c31186a1",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.494626+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.971421+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "7": {
       "document_sha256": "cb99e2df664cbc0f5b4efa73259e32809a6a601fe4b64e08105020291a45932b",
-      "source_digest": "d81392e3c0ea2c2b426de2b6619670805d5479764ca80b95f82efd29f66ec3ce",
+      "source_digest": "c13f1f5f4ed5365efce8dc85d3c965aba8fc758f45a2aa4d6057a554bf4a4466",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.496342+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.973095+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "7c2e9016fc0e95808e40064d2d32e0eb864e3324fe31f999646a7d9da46e300f",
+      "source_digest": "6a67e8f52d73b358a2d244d5b2878450fec1a700ff7192d6ca189158c31186a1",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.497877+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.974900+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "f9ce68e6d5251651273eb18e598f945ef3c79b3d73c6d5a3ee4cdef3a90ee79c",
+      "source_digest": "d7ab196a98384d785f1bcd1e537ce528de1cabc2ac0782d60dfdbd47e45a90c5",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.499413+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.977091+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "55d2b08d2ae2222c749f5779a0f204c47455882cf916e3cbf550cc3263e46226",
+      "source_digest": "90d37d9de439826e68533c0177176775da1c98e163337021d8eadc3bac756908",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.501480+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.978800+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "e30121469a2dd62d26e75f83c693c725795103269e4294b149c4909584e3ae86",
+      "source_digest": "b047c20361888a9c47e39ed02d79112ee4d477f795e047da9822d20fd69e687a",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.503155+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.980409+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "924c504be9a1583395f9023ba2cc662df8adf5461ab9a66bcce870f3ac9f221d",
+      "source_digest": "3163532955f43bb465910d7188c500c1e707379990ad57b921632378dfb372c0",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.504631+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.982846+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "f9ce68e6d5251651273eb18e598f945ef3c79b3d73c6d5a3ee4cdef3a90ee79c",
+      "source_digest": "d7ab196a98384d785f1bcd1e537ce528de1cabc2ac0782d60dfdbd47e45a90c5",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.506147+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.984430+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "f9ce68e6d5251651273eb18e598f945ef3c79b3d73c6d5a3ee4cdef3a90ee79c",
+      "source_digest": "d7ab196a98384d785f1bcd1e537ce528de1cabc2ac0782d60dfdbd47e45a90c5",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.507780+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.986366+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "f9ce68e6d5251651273eb18e598f945ef3c79b3d73c6d5a3ee4cdef3a90ee79c",
+      "source_digest": "d7ab196a98384d785f1bcd1e537ce528de1cabc2ac0782d60dfdbd47e45a90c5",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.509933+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.988088+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "d3c9d1912b4b8be41e15e37c9259063f5c36cbadc88fb8360437dcf92a758932",
+      "source_digest": "7e4eee6bbf25e591b6e2ad88c884cb12cb6ff6189b12579f533e52f75beefeb0",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.511625+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.989894+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "7c2e9016fc0e95808e40064d2d32e0eb864e3324fe31f999646a7d9da46e300f",
+      "source_digest": "6a67e8f52d73b358a2d244d5b2878450fec1a700ff7192d6ca189158c31186a1",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.513344+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.992215+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "d81392e3c0ea2c2b426de2b6619670805d5479764ca80b95f82efd29f66ec3ce",
+      "source_digest": "c13f1f5f4ed5365efce8dc85d3c965aba8fc758f45a2aa4d6057a554bf4a4466",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.514908+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.994316+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "06d10bc1ab10a3916ce38f4af22b5cdcedd1d064c76affef3b531ef3db7a9fcc",
+      "source_digest": "d59dbd893e38e1c0c09116a08347de520e53bf6de122c7766e2d608824e7977e",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.517052+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.996119+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     },
     "20": {
       "document_sha256": "b84d55ab085dad8cb897528f1cda017a96eeb41e68188bd350f13fcb02ea0f88",
-      "source_digest": "d81392e3c0ea2c2b426de2b6619670805d5479764ca80b95f82efd29f66ec3ce",
+      "source_digest": "c13f1f5f4ed5365efce8dc85d3c965aba8fc758f45a2aa4d6057a554bf4a4466",
       "reviewed_by": "Claude PR87 integration review",
-      "review_note": "Merged main into the detached series digest helper; sources and FACTS sections kept from both sides, no behaviour change",
-      "reviewed_at": "2026-11-10T09:58:35.519166+00:00",
-      "source_commit": "ea90521ddf057178d4d5eb182c426dd384256f4e"
+      "review_note": "Merged main with PR90 compact form cap fix into the detached series digest helper; no behaviour change",
+      "reviewed_at": "2026-11-10T10:27:20.997885+00:00",
+      "source_commit": "9e2775b99a2f2d424ffc88336724483c44152248"
     }
   }
 }
