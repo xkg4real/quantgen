@@ -163,7 +163,7 @@
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
     "core/quant/run_registry_fold.py": "cb3b6aec8acea30a9cded039b1288c97b793dc5edb5e077b614b58a8f9fd24c2",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
-    "core/quant/run_registry_series_files.py": "0fd8c58b304327b9c82b3cff1e3370ae798c818d7927b5f6886b6335120f9573",
+    "core/quant/run_registry_series_files.py": "58d14ccb3985e0209879bdfc6a4efde0f16993f449fac6ed71a0adffd310b02c",
     "core/quant/run_registry_series_format.py": "241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc",
     "core/quant/run_registry_series_hash.py": "96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043",
     "core/quant/run_registry_source_hash.py": "f38239e969a0127f8db00cbaf47fa9e1721c1642c525dff0ef5f7aa463e3bef6",
@@ -279,7 +279,7 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "ada79292ee21a23f2bc36ac2bf746afe1241c317612371181782b6e9cfd69410",
+    "docs/compliance/FACTS.md": "deaa03a7221b45703039961088bed616de59766735dd8a84c9779e05d93432c4",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
@@ -334,7 +334,7 @@
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
     "docs/product/R3_DETACHED_RUN_FOLD_2026-11-10.md": "f524a2a1afc51ec04809fdc50dc45c220e4a7ec38898cfcebef4c17157066cf9",
-    "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "a9b0d742405e70df1f3d468ad2b260d188d597bb88870b2d275cbef8cec3c0c9",
+    "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "32d6bfdb5f58519fdcfe4428efd79d97d808253fd93cc262c38d116f6fb627c9",
     "docs/product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md": "04634e2e49b8b9c7e7cb4ada8d4d9669f8bf2fb2f54ea76b77f40f3ed0f11d71",
     "docs/product/R3_DETACHED_SERIES_HASH_2026-11-06.md": "aa144bbc25db49cffdda02ccc8cf55a88873dadc8f842d052c4ebf1cb6f48a2b",
     "docs/product/R3_DETACHED_SOURCE_HASH_2026-11-06.md": "1110e24650f40883e876b331d46f22780ef951d8dd7384401fbb99c555e53035",
@@ -560,7 +560,7 @@
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
     "tests/run_registry_fold_acceptance.py": "7627a1ed0ba20bf04feecab8f607a59730ed3e4877626f8b5543bcc8f8f53e3a",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
-    "tests/run_registry_series_files_acceptance.py": "17ce8cd216d69b80f290eb39794f292195afb0251cf7b1cd40c83dc4a0904e91",
+    "tests/run_registry_series_files_acceptance.py": "edd9d2f37a392386caf8e04ff10c1f085678b3a50adcfc001c06fda601f92c62",
     "tests/run_registry_series_format_acceptance.py": "2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73",
     "tests/run_registry_series_hash_acceptance.py": "f38a05fca045b00b3bf401a2ba3d0f2a71a6cc589acf5e790655c1e4fc76a156",
     "tests/run_registry_source_hash_acceptance.py": "461adaa26011177c0084d77aa35034ae32e5fbf800da08e0333c937d5eb80f96",
@@ -651,163 +651,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "cd586822af6b1d9b14096a19551133eb88d2100782b1bf9071219edf47230f95",
+      "source_digest": "350929833dd4322e18c2f9f6d4d7d72530dcb4455fe47fce9571255250995db5",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.016979+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.134302+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "cd586822af6b1d9b14096a19551133eb88d2100782b1bf9071219edf47230f95",
+      "source_digest": "350929833dd4322e18c2f9f6d4d7d72530dcb4455fe47fce9571255250995db5",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.019977+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.137389+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "9689565c4a1b00a1ea0690944f3b04784a68e22c7ac4816f7945566f7f66c4c5",
+      "source_digest": "5d442c38c51e275dfe5b9cb646d4e7ae9f74ad8d044aee9a21942b53b0fd05f6",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.022008+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.139078+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "d46a9c84226f02280b2edf665d40c2f18f9c3896ab870f89f526a920853fd952",
+      "source_digest": "e1384b8ada327b4e823384e1915cb5c92d7bcc41c6d2b58477b590e1e85fcefd",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.024204+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.140660+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "7d3e4c9a6e1985523073f040edc50306a2b6eab709b5db50aedfd6ed71c1be0b",
+      "source_digest": "5cb687f5de7c70cf7eb464d1ed22a10a2d13b71f035061d9e807e55263f40983",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.026164+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.142333+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "f148bfe21355afca91ebe25085ff16e782c95fb98153e0992528ad0fbd606ef1",
+      "source_digest": "c7f55a3e1490e6f3ad00c31d25658eab5fa510d1805d1382f4a393ee57cd1b8d",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.028875+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.144027+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "7": {
       "document_sha256": "78cdfba4ec2d3876436aa95f7127cd91b5937e036b450f77286250e98be492ae",
-      "source_digest": "cd586822af6b1d9b14096a19551133eb88d2100782b1bf9071219edf47230f95",
+      "source_digest": "350929833dd4322e18c2f9f6d4d7d72530dcb4455fe47fce9571255250995db5",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.030718+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.145613+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "8": {
       "document_sha256": "39d1521a4d56a7b27e63cd5d238f2aede710b8abebf10f534c1d5134ff4a642c",
-      "source_digest": "f148bfe21355afca91ebe25085ff16e782c95fb98153e0992528ad0fbd606ef1",
+      "source_digest": "c7f55a3e1490e6f3ad00c31d25658eab5fa510d1805d1382f4a393ee57cd1b8d",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.032438+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.147156+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "ceb0e69a723df3c756a792c2657f2473609f69666c2e78bb350428538566510b",
+      "source_digest": "ba7fe92b5306b3e1ef7b79a9b3abfbba840e7abd20168e1a3c4a556fa8a7ea0f",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.034192+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.148970+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "927c0f8a88005199b294f5834b83cae6c92f1f448951f9ed2146e8f101975b8f",
+      "source_digest": "ed75bd4dbd5bb52b393cc85a06b94818fb68e10e4c0c24961de0a99359b6ccf1",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.036043+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.151702+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "ffbeaed28cb7bb8256715df3ef9f838e41993e4ac575e7b01f66114f3d079611",
+      "source_digest": "6ebf5b300de9cc38de8c4020152ed8d3bcc3c730aa4571d21f969461609c30c7",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.037679+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.153342+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "12": {
       "document_sha256": "d605d82dfa85f24e98f442473414c7f1426651c2724c2c0258d56a1347d1a290",
-      "source_digest": "262eab1b36fdb9ca671a4b52b2ff7e3cf7629ede3dd9951d891ef11fb17ae67a",
+      "source_digest": "a6e0b8a42ee709b0c3f662d5207d073a8e735aa914a905e55feeac4b0d2b4c3f",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.039484+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.154866+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "13": {
       "document_sha256": "76683f0e8f6162371dbdae1050a74b7aeb8abace4471a09d019413d64441debd",
-      "source_digest": "ceb0e69a723df3c756a792c2657f2473609f69666c2e78bb350428538566510b",
+      "source_digest": "ba7fe92b5306b3e1ef7b79a9b3abfbba840e7abd20168e1a3c4a556fa8a7ea0f",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.041173+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.158208+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "14": {
       "document_sha256": "23fcf3665d5d01938524484ac44abcf1bacdac016bf8d5d95d4da5866677e160",
-      "source_digest": "ceb0e69a723df3c756a792c2657f2473609f69666c2e78bb350428538566510b",
+      "source_digest": "ba7fe92b5306b3e1ef7b79a9b3abfbba840e7abd20168e1a3c4a556fa8a7ea0f",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.042840+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.159992+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "15": {
       "document_sha256": "703e69c4d9755a88838a62e39a248e405892bc3d4dffe1ff661527679994524f",
-      "source_digest": "ceb0e69a723df3c756a792c2657f2473609f69666c2e78bb350428538566510b",
+      "source_digest": "ba7fe92b5306b3e1ef7b79a9b3abfbba840e7abd20168e1a3c4a556fa8a7ea0f",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.044595+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.162148+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "a7c037fc2c0dddc402e3de5cff497c1d2dead47d1c82d33e9b16ecf5cba4f1ca",
+      "source_digest": "5e156392e2eb936d78911005b37888d13ce491a9cb12ea1b20729efce405aaf0",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.046201+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.164049+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "f148bfe21355afca91ebe25085ff16e782c95fb98153e0992528ad0fbd606ef1",
+      "source_digest": "c7f55a3e1490e6f3ad00c31d25658eab5fa510d1805d1382f4a393ee57cd1b8d",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.048089+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.165974+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "cd586822af6b1d9b14096a19551133eb88d2100782b1bf9071219edf47230f95",
+      "source_digest": "350929833dd4322e18c2f9f6d4d7d72530dcb4455fe47fce9571255250995db5",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.050195+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.167982+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "19": {
       "document_sha256": "ccc4e08a57fe1b4b11ebf7c7d84ae9351aa6b78b2845590e0604c0b78b04c0f8",
-      "source_digest": "f5eed74fbf80f49e238edcc92e60d30543053978d9e5c73fe9e7b1eb80ed8d62",
+      "source_digest": "c5d7e948eeb268c419b8f1b00d6e16d8cf8df683363c2c1150cea6dc1ba0a777",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.051903+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.169930+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     },
     "20": {
       "document_sha256": "cdd145c4cc4efc03215ca3f43fe0b988588ea2b92d8c1fbb7274b8326db52343",
-      "source_digest": "cd586822af6b1d9b14096a19551133eb88d2100782b1bf9071219edf47230f95",
+      "source_digest": "350929833dd4322e18c2f9f6d4d7d72530dcb4455fe47fce9571255250995db5",
       "reviewed_by": "Claude owner rulings review",
       "review_note": "Owner rulings of 2026-11-11 implemented: series files publish without overwrite, fold questions decided, registry count of record",
-      "reviewed_at": "2026-11-10T18:32:04.053625+00:00",
-      "source_commit": "d80fd54143ae0f23a2a94bc3c004ce97141bf5a7"
+      "reviewed_at": "2026-11-10T19:12:33.171851+00:00",
+      "source_commit": "72d83ffbecb185e69dd6b5469709aa63fef0e497"
     }
   }
 }

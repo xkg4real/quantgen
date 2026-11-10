@@ -12,9 +12,10 @@ file is given the target name by a call that fails when that name exists:
 ``os.link`` on POSIX, after which the temp name is unlinked, and ``os.rename``
 on Windows. ``os.replace`` and POSIX ``os.rename`` are never called. A target
 name that exists at publish time is verified against the digest and reported
-as already present, or refused and left untouched. A POSIX filesystem that
-cannot make the hard link raises ``NoClobberUnsupported``; there is no
-overwriting fallback.
+as already present, or refused and left untouched; one that cannot be opened
+or read is ``PublicationUncertain``. When ``os.link`` cannot make the hard
+link at all (a filesystem without hard links, or a kernel refusal) the write
+raises ``NoClobberUnsupported``; there is no overwriting fallback.
 
 This is not a path-security sandbox. Hostile path changes, hard-link aliases
 made by others, sync folders, network mounts, fork during active I/O and
@@ -53,9 +54,13 @@ REPLACE_BUDGET = 5.0
 # The REPLACE_* names date from the first version, which published with
 # os.replace; they now bound the no-clobber publish call.
 _REPLACE_DELAYS = (0.05, 0.1, 0.2, 0.4, 0.8, 0.8, 0.8, 0.8, 0.8)
-# os.link errors that say this filesystem cannot make the hard link at all
-# (link(2): EPERM "does not support the creation of hard links"). Permanent,
-# so never retried and never answered with an overwriting call.
+# os.link errors that say the hard link cannot be made at all. Most name a
+# filesystem without hard links (link(2): EPERM "does not support the creation
+# of hard links"). EPERM is also what the kernel returns when its
+# protected-hardlinks policy refuses (the temp's owner is not the caller, as
+# on some uid-mapped mounts) or the file is immutable or append-only. A retry
+# helps in none of these, so they are never retried and never answered with an
+# overwriting call. Six names; ENOTSUP and EOPNOTSUPP are one value on Linux.
 _NO_HARD_LINK = frozenset(getattr(errno, name) for name in (
     "EPERM", "ENOTSUP", "EOPNOTSUPP", "ENOSYS", "EMLINK", "EXDEV") if hasattr(errno, name))
 _CHUNK = 1 << 20
@@ -110,13 +115,16 @@ class PublicationUncertain(StoreError):
 
 
 class NoClobberUnsupported(StoreError):
-    """This directory's filesystem cannot publish without risking an overwrite.
+    """os.link could not make the hard link, so nothing was published.
 
-    POSIX only: os.link failed because the filesystem cannot make the hard link
-    (for example FAT or exFAT). Nothing was published and nothing was
-    overwritten; the original temp and an absent target were confirmed. The
-    store does not fall back to a call that replaces. Use a directory on a
-    filesystem with hard links.
+    POSIX only. The usual cause is a filesystem without hard links (for example
+    FAT or exFAT): use a directory on a filesystem that has them. link(2) also
+    returns EPERM when the kernel's protected-hardlinks policy refuses (the
+    temp file's owner is not the caller, as on some uid-mapped mounts) and when
+    the file is immutable or append-only, so the message names the errno and
+    not a cause; the OS error is ``__cause__``. In every case nothing was
+    overwritten, the original temp and an absent target were confirmed, and the
+    store does not fall back to a call that replaces.
     """
 
 
@@ -573,15 +581,20 @@ class SeriesFiles:
 
         The owned temp is removed first. A target that verifies against the
         digest is reported as already present (False). One that does not is
-        refused with IntegrityError and left untouched.
+        refused with IntegrityError and left untouched. One that vanished
+        again, or that could not be opened or read (for example while its
+        writer still holds it open on Windows), is PublicationUncertain with
+        the OS error as its cause; it is left untouched as well.
         """
         errors = _remove_owned_temp(temp, identity)[1]
         try:
             self._load_verified(target, digest)
-        except FileNotFoundError as exc:
+        except OSError as exc:
+            reason = ("vanished before it could be verified" if isinstance(exc, FileNotFoundError)
+                      else "could not be opened or read for verification")
             raise _attach(PublicationUncertain(
-                "A target name blocked the publish and vanished before it could be verified; "
-                "nothing was overwritten"), errors) from exc
+                "A target name blocked the publish and " + reason + "; nothing was overwritten"),
+                errors) from exc
         except BaseException as primary:
             raise _attach(primary, errors)
         if errors:
@@ -597,7 +610,8 @@ class SeriesFiles:
         attempts in 5 s. No attempt starts once 5 s have elapsed: a wait that
         would reach the budget is not taken, and the clock is read again after
         each wait. A target name found before an attempt, by the call itself
-        (FileExistsError) or at exhaustion is verified instead (False).
+        (FileExistsError), after a no-hard-link error or at exhaustion is
+        verified instead (False).
         """
         start, attempts, last = time.monotonic(), 0, None
         try:
@@ -615,9 +629,9 @@ class SeriesFiles:
                             return self._keep_existing(temp, target, identity, digest)
                         errors = _remove_owned_temp(temp, identity)[1]
                         raise _attach(NoClobberUnsupported(
-                            "This filesystem cannot hard-link, so nothing was published; "
-                            "the store does not fall back to an overwriting call"),
-                            errors) from exc
+                            "os.link refused the hard link (%s), so nothing was published; "
+                            "the store does not fall back to an overwriting call"
+                            % errno.errorcode.get(exc.errno, exc.errno)), errors) from exc
                     if not isinstance(exc, PermissionError):
                         errors = _remove_owned_temp(temp, identity)[1]
                         raise _attach(PublicationUncertain(
