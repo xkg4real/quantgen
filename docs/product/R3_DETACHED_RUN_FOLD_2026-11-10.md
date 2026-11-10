@@ -10,6 +10,10 @@ configuration, provider or owner-decision effect. It classifies no trial and
 counts no N_raw or N_eff. Nothing consumes its output yet (Q17, shadow only).
 The R3 parent remains open.
 
+Child **⑨-3a/fold/2** (2026-11-11) records the owner's rulings 8 and 9 on two
+questions this page had left open (section "Questions"). The fold's behaviour
+is unchanged: only docstrings, test comments and one test's coverage changed.
+
 ## Design reference
 
 R3 design revision 2, blob `7ca8411f5f02b48bee35ff28291acd2f171a4001`
@@ -135,8 +139,9 @@ is out of scope.
 
 TOTAL. `total_by_family` counts every STARTED event in the prefix, OPEN runs
 included (3.12: "every status and every class counts"). OPEN runs are also counted
-in `open_by_family` and listed in `open_run_ids`, so a later count can leave them
-out (5.6: "left out of counts, with a warning"). TOTAL is family-wide only.
+in `open_by_family` and listed in `open_run_ids` (5.6: "left out of counts, with
+a warning"). Owner ruling 8 of 2026-11-11 decided this: OPEN runs are in TOTAL,
+and the separate OPEN report is what meets 5.6. TOTAL is family-wide only.
 
 ## Deltas from the design and the scoping contract
 
@@ -150,8 +155,9 @@ out (5.6: "left out of counts, with a warning"). TOTAL is family-wide only.
   `recorded_utc` inside the prefix is refused (review correction).
 - **(e) Machine events only**: human and SEGMENT_START events are refused, so the
   SUPERSEDED status and segment rollover stay with later children.
-- **(f) TOTAL is family-wide only and includes OPEN runs**; market-scoped TOTAL is
-  deferred because runs that fail before PNL_COMPUTED have no market.
+- **(f) TOTAL is family-wide only and includes OPEN runs** (owner ruling 8,
+  2026-11-11); market-scoped TOTAL is deferred because runs that fail before
+  PNL_COMPUTED have no market.
 - Refinements of the scoping contract that change no count, recorded here:
   PROGRESS_MISSING is also set on a finished run of any status whose PROGRESS
   never reached `stage_reached` (rule 3 names it only for COMPLETED without a
@@ -169,36 +175,63 @@ out (5.6: "left out of counts, with a warning"). TOTAL is family-wide only.
   malformed record (which `registered` to use; a run under two families; a
   `displayed` that is not a bool). The cost is that one such recorder defect
   refuses the whole prefix, not just one run. These refusals and the flag
-  refinement above have not been reviewed by the critic or the owner; see the
-  open questions.
+  refinement above have not been reviewed by the critic or the owner; see
+  question 3 below.
 
-Design tension kept visible: 3.12 counts every STARTED event in TOTAL, while 5.6
+Design tension, now decided: 3.12 counts every STARTED event in TOTAL, while 5.6
 says OPEN runs are left out of counts. This child follows 3.12 for TOTAL and
-reports OPEN separately; whether a later count includes them is that unit's rule.
+reports OPEN separately, and owner ruling 8 of 2026-11-11 confirmed that reading
+(question 1 below).
 
-## Open questions
+## Questions
 
-1. **3.12 versus 5.6 (OPEN in TOTAL)**, above: for the counts unit.
-2. **Outage orphan with a PROGRESS below PNL_COMPUTED** (for the recorder and
-   outage units). An orphan older than 6 hours whose last PROGRESS is below
-   PNL_COMPUTED folds to FAILED_BEFORE_STATS with no keys, even when an outage
-   record names it, because 5.6 gives an orphan the stage of its last PROGRESS and
-   the outage rule applies only with no PROGRESS (scoping rule 4). Example:
-   STARTED, PROGRESS DATA_LOADED, outage record, no FINISHED. Under design 5.3 this
-   cannot hide statistics: inside `run_family` the recorder writes only STARTED
-   and the PNL_COMPUTED PROGRESS, and a failed append disables the recorder for
-   the run (6.4), so a later PROGRESS below PNL_COMPUTED can only be the page's
-   closing PROGRESS after `run_family` raised there. If the recorder unit adds
-   in-run PROGRESS below PNL_COMPUTED (the scoping hook list names cost_resolved
-   and data_loaded), an outage at the PNL_COMPUTED append would be under-counted.
-   That unit must then either not write such PROGRESS, or change this rule to fail
-   closed (an outage record with a last stage below PNL_COMPUTED counted as
-   FAILED_AFTER_STATS with STAGE_UNKNOWN and planned keys). The test
+Questions 1 and 2 were put to the owner on 2026-11-11 as items 8 and 9 of a
+decision table and are decided. The table, the owner's reply and how each answer
+is taken are in `docs/nautilus_bridge/OWNER_RULINGS_LOG.md`, section "2026-11-11,
+Claude Code 채팅: 남은 결정 14건에 대한 답 (원문)". Question 3 was not in that
+table and stays open. Neither ruling changes the fold's code.
+
+1. **3.12 versus 5.6 (OPEN in TOTAL): decided, ruling 8.** The table's item 8 was
+   "실행 중인 기록을 전체 수(TOTAL)에 넣을지", recommended "넣음(3.12, 현행 유지).
+   시행 횟수를 적게 세면 과최적화를 덜 걸러냅니다. 5.6의 의도는 별도 표시 칸으로
+   이미 충족됩니다." The owner answered "8-승인". As recorded in the log: "실행
+   중(OPEN)인 기록을 전체 수에 넣습니다(설계 3.12, 현행). 5.6의 "제외"는 별도
+   OPEN 수 표시로 충족한 것으로 봅니다." So `total_by_family` keeps counting OPEN
+   runs, and `open_by_family` and `open_run_ids` keep reporting them separately.
+   The test `test_open_runs_count_in_total_and_are_reported_separately` pins both.
+2. **Outage orphan with a PROGRESS below PNL_COMPUTED: decided, ruling 9; the
+   current rule is kept.** An orphan older than 6 hours whose last PROGRESS is
+   below PNL_COMPUTED folds to FAILED_BEFORE_STATS with no keys, even when an
+   outage record names it, because 5.6 gives an orphan the stage of its last
+   PROGRESS and the outage rule applies only with no PROGRESS (scoping rule 4).
+   Example: STARTED, PROGRESS DATA_LOADED, outage record, no FINISHED. The table's
+   item 9 was "손익 계산 전 단계의 장애 기록", and its recommendation was the
+   fail-closed alternative ("보수적으로 처리(fail closed): 장애 기록이 있으면 시행
+   1회로 집계합니다"). The owner did not take the recommendation and answered
+   "9-현행유지". As recorded in the log: "손익 계산 전 단계에서 끊긴 장애 실행은
+   지금처럼 FAILED_BEFORE_STATS로 접습니다(Claude 권장인 fail closed는 채택하지
+   않음). 이에 따라 기록기 단위는 `run_family` 안에서 PNL_COMPUTED보다 낮은 진행
+   기록(PROGRESS)을 쓰지 않아야 합니다. 쓰게 되면 과소 집계가 생기므로 그때 다시
+   여쭙니다."
+
+   What follows from it. Under design 5.3 the kept rule cannot hide statistics:
+   inside `run_family` the recorder writes only STARTED and the PNL_COMPUTED
+   PROGRESS, and a failed append disables the recorder for the run (6.4), so a
+   later PROGRESS below PNL_COMPUTED can only be the page's closing PROGRESS
+   after `run_family` raised there. If a recorder wrote an in-run PROGRESS below
+   PNL_COMPUTED (the scoping hook list names cost_resolved and data_loaded), an
+   outage at the PNL_COMPUTED append would be under-counted. The recorder unit
+   must therefore not write one inside `run_family`; if it needs one, the question
+   goes back to the owner before that PROGRESS is written. The fail-closed
+   alternative (an outage record with a last stage below PNL_COMPUTED counted as
+   FAILED_AFTER_STATS with STAGE_UNKNOWN and planned keys) is not implemented.
+   The test
    `test_outage_record_changes_neither_finished_runs_nor_orphans_with_progress`
-   pins the current, design-literal reading.
-3. **Acceptance of the refinements and extra refusals** listed in the deltas: for
-   the orchestrator or critic, to be recorded in the handoff document next to
-   question 1.
+   pins the kept rule for each of the three stages below PNL_COMPUTED
+   (REQUESTED, COST_RESOLVED, DATA_LOADED).
+3. **Acceptance of the refinements and extra refusals** listed in the deltas:
+   still open, for the orchestrator or critic, to be recorded in the handoff
+   document. It was not among the 14 items the owner answered on 2026-11-11.
 
 ## Purity
 
@@ -254,10 +287,21 @@ with `-B` and no bytecode, synthetic events only.
   `sort_keys=False`, a refusal of decreasing `recorded_utc`, and an unsorted
   `unmatched_outage_run_ids` (survived under hash seed 7). Tests were added or
   changed for each, finished-run flags were aligned with scoping rule 3, and the
-  open questions above were recorded. No count or effective status changed.
+  questions above were recorded as open. No count or effective status changed.
 - The module and test compiled on Python 3.11, 3.12 and 3.13, and
   `ast.parse(feature_version=(3, 10))` accepted them. A real 3.10 compile is the
   CI syntax job. Windows was not run locally.
+
+Child fold/2 (2026-11-11, rulings 8 and 9). The module's code is identical
+before and after apart from docstrings (its AST without docstrings was compared
+with the previous commit's). The existing test for ruling 9 now also checks
+REQUESTED and COST_RESOLVED: a scratch mutant that failed closed only below
+DATA_LOADED survived the previous test and is killed by the extended one, while
+mutants for the full fail-closed alternative and for OPEN runs left out of TOTAL
+were already killed. `tests.run_registry_fold_acceptance`: still **47 tests**,
+Python 3.13 three runs of 0.472 s, 0.377 s and 0.384 s, and 3.11 and 3.12 (0.362 s
+each), exit 0 each, run with plain `python -B -m unittest` on Linux. Windows was
+not run locally.
 
 The Runtime workflow adds the new source and test paths and runs the new module
 first in the existing R3 unittest command; every earlier entry and its order are

@@ -9,6 +9,19 @@ SHA-256 in a directory the caller names. It is not connected to the Lab, the
 recorder, any actual ledger, configuration, provider or owner-decision effect.
 The R3 parent remains open.
 
+Child **⑨-3a/series-files/2** (2026-11-11) changed the publish step: it no
+longer calls `os.replace` and can no longer overwrite an existing target (owner
+ruling 10 of 2026-11-11, section "No-clobber publish"). Two things follow for a
+caller. A target that appears while a write is in progress is now verified
+(`created=False`, or `IntegrityError`) where child 1 raised
+`PublicationUncertain`; one that cannot be opened or read still is
+`PublicationUncertain`. A POSIX `os.link` that cannot make the hard link at all
+(usually a filesystem without hard links) raises the new
+`NoClobberUnsupported`. The locks, the temp file handling, the retry limits, the
+bounded reads and the other typed errors are as child 1 left them. The sections
+below describe the current behaviour; the child 1 verification record is kept as
+written.
+
 ## Design reference and deltas
 
 The contract is R3 design revision 2 at `fa280591b9915b213a00e231a55bbe8d33b0d9d7`
@@ -20,6 +33,12 @@ The contract is R3 design revision 2 at `fa280591b9915b213a00e231a55bbe8d33b0d9d
 that is the text from before the rulings above.
 
 Deliberate deltas from §5.7:
+
+- **No-clobber publish instead of `os.replace`** (owner ruling 10, 2026-11-11;
+  child 2). §5.7 and the bridge rule name `os.replace`, which overwrites. The
+  store gives the temp its final name with a call that fails when that name
+  exists, and verifies an existing target instead of replacing it. See
+  "No-clobber publish".
 
 - **Stricter skip.** §5.7 says the writer "skips a name that exists" and records
   `series_error`. Here an existing target is fully validated (bounded read and
@@ -48,7 +67,7 @@ Deliberate deltas from §5.7:
   refuses valid larger files with `IntegrityError`.
 - `lock_timeout`: plain `int` or `float`, finite, 0 to 10 seconds, default 2. It
   bounds this digest's lock waits only, not filesystem calls, hashing, the
-  process-wide map lookup or the replace retries.
+  process-wide map lookup or the publish retries.
 
 `write(payload, expected_sha256) -> (sha256, created)` and
 `read(sha256) -> numpy.ndarray` (read-only flag set, as a convenience only).
@@ -97,32 +116,97 @@ decoder (write) or by an exact pattern check (read), so no other path is formed.
    filesystem effect; a refusal is `SeriesFormatError` and creates nothing.
 2. Lock as above.
 3. If the target name exists, it is validated as in Read. A valid target returns
-   `created=False` with no temp and no replace; an invalid one raises
+   `created=False` with no temp and no publish call; an invalid one raises
    `IntegrityError` and is never repaired, adopted, deleted or overwritten.
 4. Otherwise `tempfile.mkstemp` in the same directory (prefix `.<digest>.`,
    suffix `.tmp`). Its `lstat` identity `(st_dev, st_ino)` is recorded and it must
    be an empty regular file, else `StoreError` (the temp is then kept, because
    its ownership is unproven). Short writes continue; a zero-progress write is
    `OSError(EIO)`. Then `fsync` and a single `close`. Any failure here removes
-   only the identity-matching temp; `os.replace` is never called.
-5. `os.replace(temp, target)` with the bounded retry below.
-6. After the rename: POSIX directory fsync, then a bounded readback whose bytes
-   must equal the verified payload exactly. Any failure is `PublicationUncertain`.
+   only the identity-matching temp; the publish call is never made.
+5. The temp is given the target name by a call that fails when that name exists
+   ("No-clobber publish"), with the bounded retry below.
+6. After the publish call: on POSIX the temp name is unlinked and the directory
+   is fsynced; then, on both platforms, a bounded readback whose bytes must equal
+   the verified payload exactly. Any failure is `PublicationUncertain`.
 7. `(sha256, created)` is returned only after a clean unlock and close.
 
 | Retried | Not retried |
 | --- | --- |
-| `PermissionError` from `os.replace` only (EACCES, or a Windows access or sharing violation): at most 10 attempts within a 5 s monotonic budget, with waits 0.05, 0.1, 0.2, 0.4 and then 0.8 s (nine waits, 4.75 s in total). No attempt starts once 5 s have elapsed: a wait that would reach 5 s is not taken, and the clock is read again after each wait, so a late wake-up also ends the retries | `mkstemp`, a zero-progress write, the temp fsync or close, other `os.replace` errors, the state checks, unlink, the directory fsync, readback (including a Windows `PermissionError` on readback), unlock and close. OS-lock contention is a lock wait, bounded by `lock_timeout` |
+| `PermissionError` from the publish call only (a Windows access or sharing violation; POSIX EACCES): at most 10 attempts within a 5 s monotonic budget, with waits 0.05, 0.1, 0.2, 0.4 and then 0.8 s (nine waits, 4.75 s in total). No attempt starts once 5 s have elapsed: a wait that would reach 5 s is not taken, and the clock is read again after each wait, so a late wake-up also ends the retries | `mkstemp`, a zero-progress write, the temp fsync or close, `FileExistsError` from the publish call (the target is verified instead), the POSIX `os.link` errors that say the hard link cannot be made at all (EPERM included, although Python raises it as a `PermissionError`), other publish errors, the state checks, unlink, the directory fsync, readback (including a Windows `PermissionError` on readback), unlock and close. OS-lock contention is a lock wait, bounded by `lock_timeout` |
 
 Before every attempt and again at exhaustion, the store requires the original
-temp (same identity, regular, same size) and an absent target name. A vanished or
-changed temp, or a target that appeared, raises `PublicationUncertain` and is never
-overwritten. Exhaustion with those conditions confirmed raises
-`ReplaceRetryExhausted` with `attempts` and `temp_removed`. No time limit applies
-to a single filesystem call, so the last attempt, started before 5 s, can end
-later. The lock stays held during the retry window, so another caller of the same
-digest with the default 2 s timeout can get `LockTimeout`; other digests are
-unaffected.
+temp (same identity, regular, same size); a vanished or changed temp raises
+`PublicationUncertain`. A target name found at those checks is verified as
+"No-clobber publish" describes and is never overwritten. Exhaustion with the
+original temp and an absent target confirmed raises `ReplaceRetryExhausted` with
+`attempts` and `temp_removed`. That class name, `REPLACE_ATTEMPTS` and
+`REPLACE_BUDGET` are kept from child 1 so the typed errors and limits of the
+contract do not change; nothing is replaced. No time limit applies to a single
+filesystem call, so the last attempt, started before 5 s, can end later. The lock
+stays held during the retry window, so another caller of the same digest with the
+default 2 s timeout can get `LockTimeout`; other digests are unaffected.
+
+## No-clobber publish
+
+Owner ruling 10 of 2026-11-11 (see "Owner question" below) approved a publish
+that cannot overwrite. No call in the module can replace an existing name:
+`os.replace` and POSIX `os.rename` are not used, and a test checks the source
+for them.
+
+| Platform | Call | Why this call |
+| --- | --- | --- |
+| POSIX | `os.link(temp, target)`, then the temp name is unlinked | `link(2)` fails with `FileExistsError` when the target name exists in any form (a dangling symlink or a directory included), and it gives the name its full, already fsynced content in one step. POSIX `rename` replaces silently. A rename that refuses (`renameat2` with `RENAME_NOREPLACE` on Linux, `renamex_np` on macOS) is not in the standard library. An exclusive create followed by a copy would not overwrite either, but a crash would leave a partial file under the final name, which the store never repairs. |
+| Windows | `os.rename(temp, target)` | It is `MoveFileExW` without `MOVEFILE_REPLACE_EXISTING`: any existing target is a `FileExistsError`, the name moves in one step, and no hard-link support is needed, so FAT and exFAT volumes work. |
+
+A target name that exists at publish time was created outside the cooperating
+lock, after this call's absence check. It is found in one of four places: the
+check before an attempt, the publish call itself (`FileExistsError`), the check
+at exhaustion and, on POSIX, the check that follows a no-hard-link error
+(below). All four are handled alike: this call's temp is removed and the
+existing target is validated as in Read.
+
+- Valid bytes: the call returns `created=False`, and the file is kept byte for
+  byte (the other writer's container wins, as for any existing target). As for
+  any existing target, this call does not fsync the directory.
+- Anything else (wrong or partial bytes, a link, a directory): `IntegrityError`;
+  the target is left untouched.
+- The name vanished again before it could be validated, or the file could not
+  be opened or read (a Windows sharing violation while the program that created
+  it still holds it open, a file this process may not read, an I/O error):
+  `PublicationUncertain`, with the OS error as `__cause__`. The target is left
+  untouched and this call's temp is removed.
+
+Only a target that appeared during the publish is wrapped in this way. A target
+that was already there when the call began, and any target in `read()`, raises
+the OS error itself when it cannot be opened or read, as in child 1 (see
+Outcomes).
+
+A POSIX filesystem that cannot make the hard link (FAT, exFAT, some FUSE and
+network mounts) fails `os.link` with EPERM, ENOTSUP, EOPNOTSUPP, ENOSYS, EMLINK
+or EXDEV (six names; five values on Linux, where ENOTSUP and EOPNOTSUPP are the
+same number). These errors are permanent, so they are not retried, EPERM
+included. EPERM does not always mean the filesystem: `link(2)` also returns it
+when the kernel's protected-hardlinks policy refuses (the temp file's owner is
+not the caller, as on some uid-mapped mounts) and when the file is immutable or
+append-only. The store cannot tell these causes apart, so the error message
+names the errno, "os.link refused the hard link (EPERM), so nothing was
+published; the store does not fall back to an overwriting call", and not a
+cause; the OS error is `__cause__`. Nothing is overwritten in any of these cases.
+After confirming the original temp and an absent target, the call removes the
+temp and raises the typed `NoClobberUnsupported` at once. There is no fallback
+to a call that can overwrite, and no second primitive is tried: on POSIX such a
+directory cannot hold series files. Windows is not affected. A filesystem that
+reports the same condition with another error ends in `ReplaceRetryExhausted`
+(EACCES, after the bounded retries) or `PublicationUncertain` (any other error);
+in no case is an overwriting call made.
+
+Durability is not weaker than before. The temp is fsynced and closed before the
+publish call on both platforms. POSIX fsyncs the directory once, after the link
+and the unlink of the temp name, where child 1 fsynced it after the rename.
+Windows has no directory fsync, as before. If a POSIX process dies between the
+link and the unlink, the temp name stays next to the published file; both names
+are then the same fsynced file.
 
 The typed errors survive pickling, so a parent receives the same type,
 `attempts`, `temp_removed` and `cleanup_errors` from a worker process; as for any
@@ -149,13 +233,15 @@ cannot be read through this module.
 | `SeriesFormatError`, constructor `StoreError` | Nothing created |
 | `LockTimeout` | No temp created; an existing target untouched; a newly created empty sidecar may remain |
 | `SidecarMissing`, `SeriesNotFound` | Nothing created or changed |
-| `IntegrityError` | Target untouched; no temp |
-| `ReleaseError` | A read or idempotent skip verified its result but unlock or a close failed; no publication by this call; the result is not returned |
-| Raw `OSError` from `mkstemp`, the temp write, fsync or close | No replace call; the identity-matching temp is removed unless `cleanup_errors` says otherwise; a new sidecar may stay empty if its NUL initialization failed |
-| Temp `StoreError`, or an `lstat` failure right after `mkstemp` | No replace call; the temp is kept, because its ownership is unproven; a new sidecar may stay empty if its NUL initialization failed |
+| `IntegrityError` | Target untouched; no temp. Also raised for a target name that appeared during the publish and does not verify |
+| `ReleaseError` | A read or an existing-target check (the idempotent skip, or a valid target that appeared during the publish) verified its result, but unlock, a close or the removal of this call's temp failed; no publication by this call; the result is not returned |
+| Raw `OSError` while opening or reading a target that was there before the call (`read()`, or step 3 of Write) | No temp and no publish call; the target is untouched |
+| Raw `OSError` from `mkstemp`, the temp write, fsync or close | No publish call; the identity-matching temp is removed unless `cleanup_errors` says otherwise; a new sidecar may stay empty if its NUL initialization failed |
+| Temp `StoreError`, or an `lstat` failure right after `mkstemp` | No publish call; the temp is kept, because its ownership is unproven; a new sidecar may stay empty if its NUL initialization failed |
 | `ReplaceRetryExhausted` | Target absent at the final check; temp removed if `temp_removed` |
-| `PublicationUncertain` | Never overwrote a target it observed; the target may be absent, foreign, or published without completed checks. Do not blindly retry; a later `read()` verifies current bytes but not durability |
-| `KeyboardInterrupt`, `SystemExit` | Propagated unwrapped after cleanup (identity-checked temp removal, unlock, a single close, process-lock release). Before `os.replace` the owned temp is removed unless `cleanup_errors` says otherwise; during or after `os.replace` publication is unknown, so verify with `read()` |
+| `NoClobberUnsupported` | POSIX only: `os.link` could not make the hard link at all (a filesystem without hard links, or an EPERM refusal for another reason; the message names the errno). Nothing published and nothing overwritten; the original temp and an absent target were confirmed; the temp is removed unless `cleanup_errors` says otherwise |
+| `PublicationUncertain` | Never overwrote a target; the target may be absent, foreign (this includes a target that appeared during the publish and vanished again or could not be opened or read), or published without completed checks (on POSIX this includes a published file whose temp name could not be unlinked and is still a hard link to it). Do not blindly retry; a later `read()` verifies current bytes but not durability |
+| `KeyboardInterrupt`, `SystemExit` | Propagated unwrapped after cleanup (identity-checked temp removal, unlock, a single close, process-lock release). Before the publish call the owned temp is removed unless `cleanup_errors` says otherwise; during or after it publication is unknown, so verify with `read()` |
 
 Any raised exception may carry `cleanup_errors`, a tuple of cleanup failures.
 Typed wrappers keep their trigger as `__cause__`. Only `Exception` is collected or
@@ -163,14 +249,16 @@ wrapped; asynchronous interrupts arriving between cleanup steps are best effort.
 
 ## Platform notes
 
-- POSIX fsyncs the directory after the rename. A filesystem that rejects directory
-  fsync (EINVAL) turns every publish into `PublicationUncertain`. Files are created
-  with mode 0600 by `mkstemp`.
-- Windows has no directory fsync here; only the temp file is fsynced before the
-  rename. `msvcrt` locks are byte-range locks on byte 0, which may lie beyond end of
-  file; the NUL byte is written only after locking. If unlock fails, Windows
-  releases the lock when the handle closes, asynchronously, so an immediate
-  zero-timeout retry may still time out.
+- POSIX publishes with `os.link`, unlinks the temp name and then fsyncs the
+  directory. A filesystem that rejects directory fsync (EINVAL) turns every publish
+  into `PublicationUncertain`; one that cannot hard-link raises
+  `NoClobberUnsupported` for every new file. Files are created with mode 0600 by
+  `mkstemp`.
+- Windows publishes with `os.rename` and has no directory fsync here; only the temp
+  file is fsynced before the rename. `msvcrt` locks are byte-range locks on byte 0,
+  which may lie beyond end of file; the NUL byte is written only after locking. If
+  unlock fails, Windows releases the lock when the handle closes, asynchronously,
+  so an immediate zero-timeout retry may still time out.
 - Without long-path support, a directory longer than about 180 characters fails,
   because temp names are about 78 characters.
 - Identity checks compare `lstat` with `lstat`, never `fstat` with `lstat`. Where
@@ -184,14 +272,22 @@ wrapped; asynchronous interrupts arriving between cleanup steps are best effort.
   OneDrive, Defender, indexer or network-drive guarantee. The OneDrive refusal of
   design §5.1 (ENG-15 (d)) belongs to the future recorder; this module makes no
   environment lookup.
-- Trust model excludes hostile path changes, hard-link aliases, sync folders and
-  network mounts, fork during active I/O, inherited descriptors, and a
-  non-cooperating writer creating the target after the absence check (see the
-  owner question below).
+- Trust model excludes hostile path changes, hard-link aliases made by others,
+  sync folders and network mounts, fork during active I/O and inherited
+  descriptors. A non-cooperating writer that creates the target name while a
+  write is in progress is no longer excluded: its file is verified and never
+  overwritten (ruling 10). One that changes or removes a file after the store
+  verified it still is. On a network mount a link can report failure after it
+  succeeded. If the link reports `FileExistsError`, `PermissionError` or a
+  no-hard-link error after it succeeded, the store verifies the file it just
+  made and reports `created=False` without a directory fsync; any other
+  reported error is `PublicationUncertain`, and the published file stays.
 - One `.lock` per digest persists. Dot-prefixed `.<digest>.*.tmp` files can remain
   after a kill or a cleanup failure; they are hidden only on POSIX and are visible
   on Windows, where a leading dot sets no hidden attribute and the store sets
-  none. There is no automatic cleanup, retention,
+  none. On POSIX a temp left between the link and its unlink is a hard link to
+  the published file: the same content under a second name, to be removed with
+  the other leftovers. There is no automatic cleanup, retention,
   TTL or tombstone. The process-lock map grows by one entry per digest.
 - Deleting or omitting the `.lock` of an existing `.npy` (including restoring only
   the `.npy` from a backup) makes that digest permanently refused with
@@ -202,18 +298,29 @@ wrapped; asynchronous interrupts arriving between cleanup steps are best effort.
   opaque and not enforced; the caller must not put prices, account or personal
   data in the matrix.
 
-## Owner question
+## Owner question (closed by ruling 10, 2026-11-11)
 
-The approved design and the claimed contract name `os.replace`. A target created
-by a non-cooperating writer after the last absence check and before `os.replace`
-is overwritten on both platforms; the readback then matches the payload and
-`write()` returns `(sha256, True)`. On Windows, `os.replace` is `MoveFileExW` with
+The question, as child 1 recorded it on 2026-11-10. The approved design and the
+claimed contract name `os.replace`. With it, a target created by a
+non-cooperating writer after the last absence check and before `os.replace` was
+overwritten on both platforms; the readback then matched the payload and
+`write()` returned `(sha256, True)`. On Windows, `os.replace` is `MoveFileExW` with
 `MOVEFILE_REPLACE_EXISTING`, which replaces a foreign target that is closed or
-open with delete sharing. Only while that target is held open without delete
-sharing does it fail with `PermissionError`, and the next pre-attempt check then
-refuses. A no-clobber publish (Windows `os.rename`, or POSIX `os.link` plus
-`unlink`) would refuse to overwrite in that window on both platforms. It is
-recorded here as a question, not implemented.
+open with delete sharing. Only while that target was held open without delete
+sharing did it fail with `PermissionError`, and the next pre-attempt check then
+refused. A no-clobber publish (Windows `os.rename`, or POSIX `os.link` plus
+`unlink`) would refuse to overwrite in that window on both platforms. Child 1
+recorded this as a question and did not implement it.
+
+The answer. The decision table of 2026-11-11 carried it as item 10, "시계열 파일
+덮어쓰기 금지(no-clobber)", with the recommendation "덮어쓰기 금지로 변경. 파일
+이름이 내용 해시라서 이미 있으면 검증만 하면 되고, 덮어쓰기는 증거 손실 위험만
+남깁니다." The owner answered "10-승인"
+(`docs/nautilus_bridge/OWNER_RULINGS_LOG.md`, section "2026-11-11, Claude Code
+채팅: 남은 결정 14건에 대한 답 (원문)", reflection 10: "이미 있는 대상은 덮어쓰지
+않고 검증만 합니다"). Child ⑨-3a/series-files/2 implements it as "No-clobber
+publish" describes. The departure from the literal `os.replace` of design §5.7 is
+therefore owner-approved, and the question is closed.
 
 ## Boundaries
 
@@ -221,9 +328,16 @@ No recorder, `series_error` event, `series_ref`, retention, Lab, ledger,
 counting, verdict or prices check is implemented. The seven existing helpers
 (codec, store, keys, data hash, source hash, series hash, series format) are
 unchanged. Dependency: PR87 (series hash) and PR88 (series format) must merge
-first; base `e7ed793` is PR88's head.
+first; base `e7ed793` is PR88's head. Child 2 changes only
+`core/quant/run_registry_series_files.py`, its test and this record, plus the
+series-files section of `docs/compliance/FACTS.md` and the compliance baseline
+(`docs/compliance/source-review.json`); no 01-20 policy row names the publish
+call, so none changed.
 
 ## Verification
+
+The first part is the child 1 record of 2026-11-10, kept as written (it names
+`os.replace`, which the module no longer calls). The child 2 record follows it.
 
 All local checks ran on Linux with Python 3.13 (`-B`, no bytecode), in fresh
 temporary directories only, with no network, real series, ledger or
@@ -268,6 +382,125 @@ checks call order and offsets. Real `msvcrt`, `os.replace` under Defender,
 OneDrive or the indexer, `lstat` file-ID behavior, deferred unlock on handle
 close, spawn on Windows and `MAX_PATH` were not executed locally; the first real
 execution is the Windows Runtime CI matrix (3.11, 3.12, 3.14).
+
+### Child 2: no-clobber publish (2026-11-11)
+
+Local checks on Linux (ext4) with Python 3.13 (`-B`), fresh temporary directories
+only, no network, real series, ledger or configuration.
+
+- `tests.run_registry_series_files_acceptance`: **53 tests** (45 before; of the
+  three tests of the old `PublicationUncertain` reading one was removed and two
+  were rewritten for the new reading, and nine were added), three runs of
+  1.502 s, 1.401 s and 1.581 s, exit 0 each, and once more with
+  `-W error::ResourceWarning` (1.455 s). No run failed.
+- The race is tested on both branches. POSIX: a hook inside the publish call
+  creates the target (valid bytes, wrong bytes, a dangling symlink, a directory)
+  after the store's last absence check and then calls the real `os.link`, so the
+  kernel itself refuses. Windows branch: selected on Linux with a stand-in
+  `msvcrt`, and `os.rename` replaced by a stand-in that refuses an existing
+  destination as Windows does; on Windows the same tests use the real
+  `os.rename`. Each test's `setUp` makes `os.replace` (and, on POSIX, `os.rename`)
+  raise, so no test passes through a call that can overwrite. Other new tests: a
+  target that appears before the first attempt, during a retry and on the final
+  attempt; the six named no-hard-link errors (five distinct values on Linux,
+  where ENOTSUP equals EOPNOTSUPP; one attempt, no wait, typed error, nothing
+  left); every `PermissionError` retried on the Windows branch; a failed
+  temp unlink after the link; a blocking name that vanishes; a verified existing
+  target whose temp could not be removed; and a source check that `os.link` and
+  `os.rename` are each called once, inside `_no_clobber`, and `os.replace` never.
+- Combined run with the fold, the adoption checks and the seven other R3
+  modules: **238 tests in 6.426 s, exit 0** (230 before this child; overlapping,
+  not added together). `tests.runtime_syntax_acceptance` passed; the module and
+  its test compiled on Python 3.11, 3.12 and 3.13 and
+  `ast.parse(feature_version=(3, 10))` accepted them.
+- Mutation run on scratch copies: **26 of 26 mutants killed** (the publish call
+  swapped for `os.replace` or POSIX `os.rename` on either branch; each of the
+  three target checks removed; verification, temp removal, the typed errors and
+  their state checks removed; the EPERM carve-out removed or applied to Windows;
+  the directory fsync removed; retry count and budget changed).
+- Real-thread probe, scratch only: a second thread creates the target with an
+  exclusive create while `write()` runs, 20,000 fresh directories per run. With
+  child 1's module the foreign file was overwritten 1, 8 and 6 times in three
+  runs (15 of 60,000); with this child 0 times in two runs (0 of 40,000), and
+  the foreign file's bytes were intact in every case. The probe shows the old
+  window was reachable; a count of zero is not a proof.
+
+Not executed locally: Windows itself (real `os.rename`, `msvcrt`, Defender,
+OneDrive, the indexer), macOS, and any filesystem without hard links (no FAT or
+exFAT support in this environment), so `NoClobberUnsupported` was exercised only
+with injected errors. That EPERM is what `link(2)` returns there is taken from
+its manual page. The first real Windows execution is the Runtime CI matrix.
+
+### Child 2 review round (2026-11-11)
+
+A review of the child 2 commit (`7fabb4a`) found no case in which the committed
+module overwrites, removes or adopts a foreign target. It found two gaps in the
+tests, one untyped error, one misleading message and five inexact statements in
+the records. Each was reproduced before it was changed. The numbers in the
+child 2 record above are kept as written; the corrections to its wording are
+listed here.
+
+- **Test gaps, no product defect.** Six scratch mutants passed all 53 tests.
+  Three were in the no-hard-link window, where the tests created only a valid
+  foreign target: no verification there, an invalid foreign file overwritten,
+  and one deleted. Three acted only on the Windows branch: a truncating copy over
+  the target at the check before an attempt, the same at exhaustion, and no
+  verification at the check before an attempt. New tests: every kind of foreign
+  target (valid, invalid, dangling symlink, directory) created inside a failing
+  `os.link`, for each no-hard-link error; the Windows branch at its three checks
+  and at retry exhaustion; and the source check now counts every `open`,
+  `rename`, `link`, `unlink` and `mkstemp` attribute and refuses pathlib writers
+  and the builtin `open()`.
+- **One behaviour change.** A target that appeared during the publish and could
+  not be opened or read made `write()` raise the bare `PermissionError` or
+  `OSError`, where child 1 raised a typed error in that window. It was
+  reproduced with a real mode-000 file in a process without
+  `CAP_DAC_OVERRIDE`, and on the simulated Windows branch with the open
+  refused. It is now `PublicationUncertain` with the OS error as `__cause__`.
+  The state was safe before and is unchanged: target untouched, temp removed,
+  lock released. A target present before the call still raises the OS error
+  itself, in `write()` and in `read()`; a test now pins that too.
+- **Message.** `NoClobberUnsupported` said "This filesystem cannot hard-link"
+  for every EPERM. Two other causes were reproduced on ext4, which has hard
+  links: through the store, the kernel's protected-hardlinks policy
+  (`fs.protected_hardlinks=1`, the temp owned by another uid and unreadable to
+  the caller, no `CAP_FOWNER`), and with `ln`, an immutable file. The message
+  now names the errno and no cause. A uid-mapped mount itself was not
+  available.
+- **Record corrections.** A foreign target is found in four places, not three.
+  The network-mount sentence now says which reported errors end in
+  `created=False` (one probe: `FileExistsError`, EACCES, EPERM, ENOTSUP and
+  EXDEV, each with no directory fsync) and which in `PublicationUncertain` (EIO,
+  ETIMEDOUT; the published file stays). "The six no-hard-link errors" are six
+  names and five values on Linux, and the test ran five cases. Child 2 also
+  changed the FACTS section and the compliance baseline, which the Boundaries
+  sentence omitted. The FACTS lock row listed all hard links as unsupported,
+  although the POSIX publish makes one; it now says hard-link aliases made by
+  others.
+
+Checks after the fixes, on Linux (ext4) with Python 3.13 (`-B`), fresh temporary
+directories only:
+
+- `tests.run_registry_series_files_acceptance`: **59 tests** (53 before; six
+  added, three changed), three runs of 1.662 s, 1.634 s and 1.671 s, exit 0
+  each, and once more with `-W error::ResourceWarning` (1.763 s). Against the
+  module as child 2 committed it, the same 59 tests give 9 errors (the two new
+  tests of the untyped error) and 5 failures (the message assertions); the
+  tests for the two gaps pass there, as they should on a module that does not
+  overwrite.
+- Combined run with the fold, the adoption checks and the seven other R3
+  modules: **245 tests in 6.693 s, exit 0** (239 before this round; overlapping,
+  not added together). `tests.runtime_syntax_acceptance` passed; the module and
+  its test compiled on Python 3.11, 3.12 and 3.13 and
+  `ast.parse(feature_version=(3, 10))` accepted them.
+- Mutation run on scratch copies: **47 of 47 mutants killed**, each by at least
+  one behavioural test and not only by the source check: the review's 34 (28 of
+  them killed before this round, the six above not), three further variants of
+  those six, and ten mutants of this round's two code changes. This run is
+  separate from child 2's 26.
+
+Still not executed locally: Windows, macOS, a filesystem without hard links and
+a uid-mapped mount.
 
 Publication readiness remains BLOCKED. Optional additional GPT/Gemini
 specification review remains NOT_PERFORMED.

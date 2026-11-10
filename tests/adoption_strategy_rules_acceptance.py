@@ -1,4 +1,5 @@
-"""Synthetic acceptance for core/adoption/strategy_rules.py (roadmap ⑨-4/2/a; criteria 4.2.2 S-2, S-3, S-4, S-7).
+"""Synthetic acceptance for core/adoption/strategy_rules.py (roadmap ⑨-4/2/a; criteria 4.2.2 S-2, S-3, S-4, S-7;
+⑨-4/2/b: R-FAM as the N_raw reading of record, owner ruling 7 of 2026-11-11).
 
 Every input is a seeded synthetic array built here. No ledger, card, register, price file, cache, configuration,
 environment, provider or network is used. Gate functions are called directly as the golden reference; where an
@@ -313,6 +314,70 @@ class DsrLines(unittest.TestCase):
         self.assertIn("⑨-3d", text)
         self.assertEqual(one.rule, "S-2")
 
+    def test_r_fam_is_the_reading_of_record_and_l_fam_is_shown_for_comparison(self):
+        # Owner ruling 7 of 2026-11-11 (⑨-4/2/b): R-FAM, the R3 run-registry count, is the N_raw reading of record.
+        # Until the R3 recorder exists both readings are shown and the second DSR stays provisional.
+        self.assertEqual(S.N_RAW_READING_OF_RECORD, "R-FAM")
+        self.assertIn(S.N_RAW_READING_OF_RECORD, S.N_RAW_READINGS)
+        a, _ = pair()
+        kw = dict(n_grid=12, sr_sd_grid=0.01, sr_sd_daily=0.012, sr_sd_label="caller term")
+        record, compare = "reading of record (owner ruling 7, 2026-11-11)", "shown for comparison"
+
+        def s2(res):
+            lines = [line for line in res.lines() if line.startswith("S-2 [provisional]")]
+            return {"G": lines[0], "L-FAM": lines[1], "R-FAM": lines[2]}
+
+        both = S.dsr_two_n(a, n_raw={"L-FAM": 17, "R-FAM": 11}, **kw)
+        self.assertEqual([(r.reading, r.of_record) for r in both.readings], [("L-FAM", False), ("R-FAM", True)])
+        self.assertEqual((both.reading_of_record, both.provisional), ("R-FAM", True))
+        got = s2(both)
+        self.assertIn(f"DSR at N_raw R-FAM = 11 [{record}]:", got["R-FAM"])
+        self.assertIn(f"DSR at N_raw L-FAM = 17 [{compare}]:", got["L-FAM"])
+        self.assertEqual([record in line for line in both.lines()].count(True), 1)     # only the R-FAM line
+        self.assertNotIn("record", got["G"])
+        self.assertNotIn("not supplied", "\n".join(got.values()))
+        self.assertTrue(any("R-FAM, the R3 run-registry count, is the N_raw reading of record "
+                            "(owner ruling 7 of 2026-11-11)" in note for note in both.notes))
+        self.assertFalse(any("undecided" in line for line in both.lines()))
+
+        only_l = S.dsr_two_n(a, n_raw={"L-FAM": 17}, **kw)       # the reading of record is missing
+        got = s2(only_l)
+        self.assertIn(f"N_raw R-FAM (", got["R-FAM"])
+        self.assertIn(f"[{record}]: not supplied; the reading of record was not supplied, so this result has "
+                      "no second DSR of record and stays provisional", got["R-FAM"])
+        self.assertIn(f"[{compare}]:", got["L-FAM"])
+        self.assertNotIn("not supplied", got["L-FAM"])
+        self.assertTrue(only_l.provisional)
+        self.assertEqual([(r.reading, r.of_record, r.status == "not_supplied") for r in only_l.readings],
+                         [("L-FAM", False, False), ("R-FAM", True, True)])
+
+        only_r = S.dsr_two_n(a, n_raw={"R-FAM": 11}, **kw)       # supplied, and still provisional
+        got = s2(only_r)
+        self.assertIn(f"[{compare}]: not supplied", got["L-FAM"])
+        self.assertTrue(got["L-FAM"].endswith("not supplied"))
+        self.assertNotIn("stays provisional", got["L-FAM"])
+        self.assertIn(f"DSR at N_raw R-FAM = 11 [{record}]:", got["R-FAM"])
+        self.assertTrue(only_r.provisional)
+
+        # Naming the reading of record changes no number and no status (no threshold, gate or verdict rule).
+        grid = V.deflated_sharpe(a, n_trials=12, sr_sd_daily=0.01)
+        self.assertEqual((both.dsr_grid, both.status_grid), (grid, S.classify_dsr(grid)))
+        for res in (both, only_l, only_r):
+            for r, n in zip(res.readings, (17, 11)):
+                if r.n_raw is None:
+                    continue
+                value = V.deflated_sharpe(a, n_trials=n, sr_sd_daily=0.012)
+                self.assertEqual((r.n_raw, r.dsr, r.status),
+                                 (n, value, S.classify_dsr(value, grid_status=both.status_grid)))
+        self.assertEqual((both.dsr_min, both.borderline_min), (V.GATE["dsr_min"], 0.90))
+        # The reading of record gets the same zones as the comparison reading (criteria 6.2, keyed on the grid line).
+        for grid_value, want in ((0.95, "borderline"), (math.nextafter(0.95, 0.0), "below")):
+            values = {12: grid_value, 17: 0.93, 11: 0.93}
+            with self.subTest(grid=grid_value), patch.object(
+                    V, "deflated_sharpe", side_effect=lambda d, *, n_trials, sr_sd_daily: values[n_trials]):
+                edge = S.dsr_two_n(a, n_raw={"L-FAM": 17, "R-FAM": 11}, **kw)
+                self.assertEqual([r.status for r in edge.readings], [want, want])
+
     def test_counts_and_dispersion_inputs_refused(self):
         a, _ = pair()
         good = dict(n_grid=12, sr_sd_grid=0.01, n_raw={"L-FAM": 17}, sr_sd_daily=0.01, sr_sd_label="x")
@@ -462,6 +527,17 @@ class CollectedLines(unittest.TestCase):
                                  **{name: 50}, **self.common)
         self.assertTrue(all(r.status in S.DSR_STATUSES for r in res.s2.readings))
         self.assertIn(res.s2.status_grid, S.DSR_STATUSES)
+        # ruling 7 (2026-11-11): this registration supplies L-FAM only, so the reading of record is missing
+        missing = [line for line in lines if "N_raw R-FAM" in line]
+        self.assertEqual(len(missing), 1)
+        self.assertIn("[reading of record (owner ruling 7, 2026-11-11)]: not supplied", missing[0])
+        self.assertIn("stays provisional", missing[0])
+        self.assertTrue(res.provisional and res.s2.provisional)
+        with_record = S.strategy_lines(kind="replace", incumbent=self.inc, incumbent_dates=self.ds,
+                                       expected_dsr=0.25, **{**self.common, "n_raw": {"L-FAM": 17, "R-FAM": 11}})
+        self.assertTrue(with_record.provisional and with_record.s2.provisional)   # until the R3 recorder exists
+        self.assertTrue(any("DSR at N_raw R-FAM = 11 [reading of record" in line for line in with_record.lines()))
+        self.assertEqual((with_record.s3, with_record.s4, with_record.s7), (res.s3, res.s4, res.s7))
 
     def test_add_prints_the_incumbent_comparison_only(self):
         res = S.strategy_lines(kind="add", incumbent=self.inc, incumbent_dates=self.ds, **self.common)

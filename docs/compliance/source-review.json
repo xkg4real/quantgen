@@ -50,7 +50,7 @@
     "config.py": "266bf6754f40d83fafd5cbb2b1c06bea26c8bda63ad71ad2d7b85801b2d0d7a8",
     "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "core/adoption/__init__.py": "592263c22647b24151038499489911ec409ac81177e99ed3c33f3a359947953a",
-    "core/adoption/strategy_rules.py": "8f5daf22ab378051baaa590dbfa90dc43b1cc66792e5068f54631d07ce11ef01",
+    "core/adoption/strategy_rules.py": "2f6a72780cf43bf594e54e6df1e99de8e8e04084f9c2716f192d88baf5be8791",
     "core/app_paths.py": "87cd28f423db0975e62402f09d29366d81aa1ac02b71cfb11f757c42a0f0d4cd",
     "core/calendars/__init__.py": "51bbdbd4d2326fb2ebfb2875db644b35fd874952769a7b0f07d051af3c76f8f2",
     "core/calendars/adapter.py": "fe925a34aeab1dca873aaac530a4aa5f2ba3be7b26f15ddc09f9c115324c7574",
@@ -161,9 +161,9 @@
     "core/quant/risk_layer.py": "9ca19aa23c50a01527aa08842c06bd92f311b535628ce62cb87509ba6238ba84",
     "core/quant/run_registry_codec.py": "fdb518cf19a3de2d0165c999856ecbe40eb16725ad249cfc1b886c21ca99a74a",
     "core/quant/run_registry_data_hash.py": "f78a28ea0709f3d10a593aa82f77b8ef601b171f17e3ff89e54bcf237c360699",
-    "core/quant/run_registry_fold.py": "110bc2bdb999ecbf3e595b1f6d885ebc81589b6e3f944482837914321866c4c8",
+    "core/quant/run_registry_fold.py": "cb3b6aec8acea30a9cded039b1288c97b793dc5edb5e077b614b58a8f9fd24c2",
     "core/quant/run_registry_keys.py": "04fc64aab8dbcecbeb7850072715553d594d547afca05676ce05a372680a3069",
-    "core/quant/run_registry_series_files.py": "7795a3c65d627de80f99b5ffeb1754c5016ea28fed594f33ed7e314c09db8465",
+    "core/quant/run_registry_series_files.py": "58d14ccb3985e0209879bdfc6a4efde0f16993f449fac6ed71a0adffd310b02c",
     "core/quant/run_registry_series_format.py": "241155355a459b06f9aeb33996b41ab57327b059049256d7acf92aa8c26280dc",
     "core/quant/run_registry_series_hash.py": "96c257121ac564329148804418499f997d4127bbc6d72074a6b4b3c411fa6043",
     "core/quant/run_registry_source_hash.py": "f38239e969a0127f8db00cbaf47fa9e1721c1642c525dff0ef5f7aa463e3bef6",
@@ -287,14 +287,14 @@
     "data/macro/series_registry.yaml": "0b9d0acd1b5869f05f690a7c3e7d8e0dc9d83efd61a1c59f60723f392272780c",
     "data/net.py": "549c1af65ee12e8617089b912e157d7b9e65ccbc1d359fbcf22c60943cbae025",
     "docs/DESKTOP_MIGRATION_2026-10-30.md": "77f93d366b20d768e812bd8b6e28643363b59c8cd3a7122071d8e1544ae86688",
-    "docs/compliance/FACTS.md": "8af3174fa6cb59234eef51078474d20e0c76ac2eed1c6a92e90a8b2f4bc5a31b",
+    "docs/compliance/FACTS.md": "cf2a074a32d1bef2fe8fed66ac7f1ec9543d5956d93ae14c1a5396b732a6e4ec",
     "docs/compliance/PIPELINE.md": "691aeadcf55df31c458e8e0bc477920067e68b521d9c1cfea28125ca1b9d614e",
     "docs/compliance/README.md": "e73e064b1331cb7739e539b6df5c22da1f2a0024c56b69ad266ddc74a0644783",
     "docs/compliance/RELEASE_GAPS.md": "45f5edd52d3fe1f9501e6f211a36bb1a86884ac93139ce490862f87df88c0f14",
     "docs/compliance/SOURCES.md": "9b3bde97b69ddca17ef6ca6a11b01aa8175c04c259800d82e0d7b38ea19d84a9",
     "docs/product/A1_TERMINOLOGY_2026-11-06.md": "c52f3a6e72b2cd0cd04263597a77570545c9b037e50a0c34586c7d4e552b93ff",
     "docs/product/A3_READING_LAYOUT_2026-11-06.md": "b0f6595caae843d4a912fc332adc78882f65f9eb579cd7f97f2d33519821cc64",
-    "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "2c15bbbf6dc60e18907fa7df343c6aeb07bb3db64f68457b4f3e9b7ac454d14b",
+    "docs/product/ADOPTION_STRATEGY_CHECKS_2026-11-10.md": "e5a8d4d4c514233a6c1affdeb2f114af94a3d55df317028605387e81f2c56373",
     "docs/product/AI_COMMENTARY_GUARDS_2026-11-04.md": "0e854fc8af3bab5e75bc4690e4697ae3b11ebf0d07d762df2c8ab50ca97c13da",
     "docs/product/APP_ACCEPTANCE_2026-11-02.md": "ce3146214cca08f81c2b572fee454afa92ee0c3cb051c42b734820c5234d730c",
     "docs/product/AR1_DECAY_2026-10-30.md": "342718b7f2defa28d5f57f7fd919d33ec7d0c045e7709fdde0af7a4559e890a3",
@@ -341,8 +341,8 @@
     "docs/product/R3_DETACHED_CODEC_2026-11-06.md": "424e309c65e20b0f4e0e62211c1204da77cd439ad66e471d383b294130651ac6",
     "docs/product/R3_DETACHED_DATA_HASH_2026-11-06.md": "5d8e934360afcf777810a57221a1a1205b8be14bcadd6daffd3f4f13c8eab327",
     "docs/product/R3_DETACHED_KEYS_2026-11-06.md": "9008ba197899d9cc797c017381a3094d21fa995b70db9c3deba62c92bb656bc4",
-    "docs/product/R3_DETACHED_RUN_FOLD_2026-11-10.md": "ff4aad9febbee475e144111f11552292bacc5a368df577c4127c8ac7b483bb08",
-    "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "06e00a0fe992f4828b32415b79889907ec4da03b34194a6bbc3cdb917dde01bd",
+    "docs/product/R3_DETACHED_RUN_FOLD_2026-11-10.md": "f524a2a1afc51ec04809fdc50dc45c220e4a7ec38898cfcebef4c17157066cf9",
+    "docs/product/R3_DETACHED_SERIES_FILES_2026-11-10.md": "32d6bfdb5f58519fdcfe4428efd79d97d808253fd93cc262c38d116f6fb627c9",
     "docs/product/R3_DETACHED_SERIES_FORMAT_2026-11-06.md": "04634e2e49b8b9c7e7cb4ada8d4d9669f8bf2fb2f54ea76b77f40f3ed0f11d71",
     "docs/product/R3_DETACHED_SERIES_HASH_2026-11-06.md": "aa144bbc25db49cffdda02ccc8cf55a88873dadc8f842d052c4ebf1cb6f48a2b",
     "docs/product/R3_DETACHED_SOURCE_HASH_2026-11-06.md": "1110e24650f40883e876b331d46f22780ef951d8dd7384401fbb99c555e53035",
@@ -422,7 +422,7 @@
     "test_npu.py": "fae9f28fa1772b834ede1f22315b93f66feefc586e5afd061e188f091d48b4d4",
     "tests/__init__.py": "db1fcd9d60745c7af2cbaf67c78afaabeb6d3daa51bcab04b786fcd3432658e3",
     "tests/acceptance.py": "52145dced05c3eb193c6eab1905096a478b1940490bba608a44024e24ea7d7fc",
-    "tests/adoption_strategy_rules_acceptance.py": "526181ecfc53f447db8c2810bff1c91608355d8319b92c9076ce512e424ade19",
+    "tests/adoption_strategy_rules_acceptance.py": "add37057984451f66112644fb9e6887d11f67b6e79a75db1a68fdfbe3889e173",
     "tests/ai_connection_acceptance.py": "b074a2f0c8d708c68a28a19ff187b9e3ab1095c10c83c1a47cb6ede9d338f79f",
     "tests/ai_output_check_acceptance.py": "01c54460c470062df057d398b08233cae41c420115ee24693f19ab3711a02972",
     "tests/ai_payload_acceptance.py": "a4efa39af3a06c6859607306729a9190c4f44da320556a4567388f7ab107e138",
@@ -572,9 +572,9 @@
     "tests/run_all.py": "a8acb4f96f69742d9f25ebdfd0439b14b7635544cc596a6e120b640a3c4f6cd4",
     "tests/run_registry_codec_acceptance.py": "c36d961f5841bfdc1fdf90faed9d982b9f2cce177d9f2f0ca28873b0dee1e09e",
     "tests/run_registry_data_hash_acceptance.py": "b4907328da604bbcf6e9e4acb99c54b16fe4cc40190e47661e75255d4b5fa8ad",
-    "tests/run_registry_fold_acceptance.py": "4aa3227d95e4365afd2fcf9866c0529fe7903f0baba2ab2b816c88a6ae02c458",
+    "tests/run_registry_fold_acceptance.py": "7627a1ed0ba20bf04feecab8f607a59730ed3e4877626f8b5543bcc8f8f53e3a",
     "tests/run_registry_keys_acceptance.py": "5c05abc6f512e80d38ce09af191296ff6019d17d05a892ed60e5316e19035708",
-    "tests/run_registry_series_files_acceptance.py": "042b56defbd8f444b5e70e1946e0dec32fc24c90fc1f72cf01721df773b3d187",
+    "tests/run_registry_series_files_acceptance.py": "edd9d2f37a392386caf8e04ff10c1f085678b3a50adcfc001c06fda601f92c62",
     "tests/run_registry_series_format_acceptance.py": "2f93b3bed613189eef720367ac1dfcde1a8820bab4f2dac3ef87df98dac77b73",
     "tests/run_registry_series_hash_acceptance.py": "f38a05fca045b00b3bf401a2ba3d0f2a71a6cc589acf5e790655c1e4fc76a156",
     "tests/run_registry_source_hash_acceptance.py": "461adaa26011177c0084d77aa35034ae32e5fbf800da08e0333c937d5eb80f96",
@@ -670,163 +670,163 @@
   "reviews": {
     "1": {
       "document_sha256": "27c867d7eca790928cc0622cf87327484b1f696debbfd0d9501cb42c6ff6594e",
-      "source_digest": "b75880f7ab5405898eaf9bed75d60304e9d43909fe58d9d32e01b0a2b6235a18",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.657890+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.744572+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "2": {
       "document_sha256": "eeebbc9859f75b91db106c5de5c13e90f006fecf396b113ad2542b7bc9dc9a58",
-      "source_digest": "b75880f7ab5405898eaf9bed75d60304e9d43909fe58d9d32e01b0a2b6235a18",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.659927+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.747761+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "3": {
       "document_sha256": "031881a85308578b05a92436b42182ec13c89d7058d835367b28dd52ca7fa559",
-      "source_digest": "dfb571fc2e386d7af1ae9f0418c111d44cb1b6371d81f0e1dc1c699f11c72b97",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.661745+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "7fd18d7a598444c468e572636dd6d8b0cb0c8fdadb9aae671152ef9ddfad848f",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.750379+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "4": {
       "document_sha256": "ae8143a45bf1c4771951762439b63296d209f5344643c7b95ad1abe56b00850f",
-      "source_digest": "366572a866d559e0a3345187cd26d16a651875991a706cbf02882c9f1206a782",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.663244+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "45f044a578ffd2a9fe471e5db816b4c121de6a1acf7cb8852d732db7ea1e4c80",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.752755+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "5": {
       "document_sha256": "a43771b3ec19f88eac714b200ded119e0d51d02d149dfebf23c576d0d0aef3bd",
-      "source_digest": "0f425b8a213a77c00da93a05e76e52aa69a1a081335b68f6cff6948f20994098",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.664898+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "dcebb912c449a2de77f27d40de48f8ffddbcd46c6588ea0a5830c06e76b2ca63",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.755063+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "6": {
       "document_sha256": "5979af4da76b2b0cd9d96552a8b879afeab2c034535d7d5f9bd8201ea1b3a22f",
-      "source_digest": "f6e9a84fd9d83a27b08b1d2a365174403c4108f161dc5402e70d391800e88c58",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.666310+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "bb7865cf804fa794c44805c478124afd8f627c7115c144e067264ea1e696f26b",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.757379+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "7": {
       "document_sha256": "d0d60b79be12792ae17adbd7a48331061254e190c5a8f563f07770cb6dee9415",
-      "source_digest": "b75880f7ab5405898eaf9bed75d60304e9d43909fe58d9d32e01b0a2b6235a18",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.667658+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.759559+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "8": {
       "document_sha256": "455d8b429619c6914d3bd315efd69c1aaf083a6f995c84527511313055fc2a45",
-      "source_digest": "f6e9a84fd9d83a27b08b1d2a365174403c4108f161dc5402e70d391800e88c58",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.668931+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "bb7865cf804fa794c44805c478124afd8f627c7115c144e067264ea1e696f26b",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.761796+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "9": {
       "document_sha256": "0325fed185ebf2555db94e57a8663588704e267d33cdee341d651f95c96dbf80",
-      "source_digest": "7f9bb7f74ee3cd0ec88907c3cd8d65aac8de4de9845605c3c3fd919be4458244",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.670224+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.764143+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "10": {
       "document_sha256": "6b8b24f62840f30ab91bd1bf8fe21ca84824ab446decd99404cf1896f79dee13",
-      "source_digest": "0a11a960593fdb118dd0cf06ac2152969926c048e77e877baee4fff563adeaed",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.671579+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "da45d872b1575048c7966afb3cecccc4196c7edd15e2a426c007cc25e68b56c8",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.766426+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "11": {
       "document_sha256": "dd7eaed0d746aec21df1c66b5862b6376f48c5fb9ff765e70900c2a538c30bc7",
-      "source_digest": "01061a4c5825c659365b09d4707e02828a29eac724bd1e72d653f6218387052d",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.672943+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "de59fddb8af43367da4988c47db35ca57b39e19dccda649ed13253b2c796002e",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.768916+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "12": {
       "document_sha256": "b59560131ef7b8a596e05e60ae77e76f7473f72f459318f11321556e20dea0af",
-      "source_digest": "579ca262a1227fdf06a4d215120f8c4978b582b310b09ec67a217f081057afcf",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.674227+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "3671aebc986768af31752ebb252c7045c70fc744802963aff11850647a11eae9",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.771341+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "13": {
       "document_sha256": "58d65aa398ede4f1745df21b372c91233422ec8b02d86fda7d959cbdef490828",
-      "source_digest": "7f9bb7f74ee3cd0ec88907c3cd8d65aac8de4de9845605c3c3fd919be4458244",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.675507+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.773364+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "14": {
       "document_sha256": "ad2c6d64d03b8c3b6d3f422705bdcbbab6911ab280b78bad1215ec17462d24ec",
-      "source_digest": "7f9bb7f74ee3cd0ec88907c3cd8d65aac8de4de9845605c3c3fd919be4458244",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.676786+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.775141+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "15": {
       "document_sha256": "20cb25f45ad32eb765873a2ec4ab922c22f8a0cf1e2fcb022a9163681087b550",
-      "source_digest": "7f9bb7f74ee3cd0ec88907c3cd8d65aac8de4de9845605c3c3fd919be4458244",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.678183+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "3dd6521878a3add212d0294c59f14f0414d699034546d0d0d6ea2e1d72a5e523",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.776838+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "16": {
       "document_sha256": "131259d7fe0da92b20bb9583df959c97fe67b6fb902c92c2b0fa845ce04c924c",
-      "source_digest": "3230f47977aa0c38fa48c08c77a055a9d42e0f1a6a7ccf8ba15110d3247e9e4f",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.679575+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "c2d96dc2051e7317a31f38fbbde56fd5d5322c25860f39d3b229e948751dca60",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.778519+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "17": {
       "document_sha256": "649bbd47044c55c9598ae2359630952a2658a7a3b3cfc3986c593fd4cfab3179",
-      "source_digest": "f6e9a84fd9d83a27b08b1d2a365174403c4108f161dc5402e70d391800e88c58",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.680838+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "bb7865cf804fa794c44805c478124afd8f627c7115c144e067264ea1e696f26b",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.780204+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "18": {
       "document_sha256": "84f4a5ec6476cc970f34c830caf27e2b33d0ab0ba06d8d17912f8ddf7b3ae0d6",
-      "source_digest": "b75880f7ab5405898eaf9bed75d60304e9d43909fe58d9d32e01b0a2b6235a18",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.682090+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.783251+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "19": {
       "document_sha256": "b53071903b41d0fecf47c360fec374bbd1df002f7403dfb3a4ace51fb3f29bfd",
-      "source_digest": "e97f737661958d29f42c162696e438576cfac3d012f70fd65b08c420de59753b",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.683343+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "5a73d563a414eaac5607183377a83b2dd58fc9e217c58044cda3c2a34c31196d",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.784999+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     },
     "20": {
       "document_sha256": "3507537f4f4c4b1eec18938498a56f37e910c44f91f16f321dd141879e5cf026",
-      "source_digest": "b75880f7ab5405898eaf9bed75d60304e9d43909fe58d9d32e01b0a2b6235a18",
-      "reviewed_by": "QUANTGEN UI session (Claude, owner UI review 2026-11-10)",
-      "review_note": "Merged main PR 99 (LA-02 part 2 fixes, tests and docs only) and raised the installed CI job limit to 45 minutes; FACTS sections kept from both sides; publication gates unchanged",
-      "reviewed_at": "2026-11-10T17:40:41.684715+00:00",
-      "source_commit": "cef0e02b064fa7a0c3be086a9a22d0f1a97d47dc"
+      "source_digest": "3fa71165cce285053d794c0786cc230ecbef7c477aa88fb44eec1baf11293132",
+      "reviewed_by": "Claude integration review",
+      "review_note": "Merged main 7ddb568 (PR 98, Flet screens) into the owner rulings branch; FACTS sections kept from both sides, sources unchanged beyond the merge",
+      "reviewed_at": "2026-11-10T19:15:22.786696+00:00",
+      "source_commit": "ae7bb266c91f29f79843b8c2b9710b27368b5325"
     }
   }
 }
