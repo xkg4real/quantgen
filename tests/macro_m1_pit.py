@@ -573,12 +573,13 @@ def _gpost01_days() -> list[date]:
 
 def _gpost01_invented(peak=(date(2026, 6, 22), 9114.55), close=7003.74, prev=6971.67, base=6305.93, fx_last=1356.84,
                       fx_back=1358.33, fx_oct2=None, stocks=(276000.0, 1841000.0), extra=(), stock_code=None, levels=(),
-                      drop=(), fx_repeat=False):
+                      drop=(), fx_repeat=False, fx_extra=()):
     """Invented ^KS11, KRW=X and KRX stock rows in the declared close layout (no Yahoo or KRX data; written by
     tests.macro_m1_calendars.close_layout_text): 230 weekday closes to 2026-10-02 at `base`, the peak on its day, the
     previous close and the close (then `levels` (date, close) set, the dates in `drop` removed and the `extra` rows
     added after the rows of their date); KRW=X to 2026-10-01 with `fx_back` 20 observations before `fx_last`
-    (`fx_repeat`: one interior KRW=X row written twice). KRX rows are stamped at the KRX close (06:30:00Z /
+    (`fx_repeat`: one interior KRW=X row written twice; `fx_extra`: (date, close, obs_utc, available_at_utc) rows
+    appended after the others, stamped as given). KRX rows are stamped at the KRX close (06:30:00Z /
     06:30:30Z), KRW=X rows at 21:00Z of their day. The defaults give return +0.46%, drawdown -23.16%, 200-day ratio
     1.107 and dlog -0.0011. Returns the three texts."""
     from tests.macro_m1_calendars import close_layout_text
@@ -601,6 +602,7 @@ def _gpost01_invented(peak=(date(2026, 6, 22), 9114.55), close=7003.74, prev=697
     fx_rows = [(x, v, *fx_at(x)) for x, v in fx]
     if fx_oct2 is not None:
         fx_rows.append((GPOST01_DAY, fx_oct2, U(2026, 10, 2, 6), U(2026, 10, 2, 6)))
+    fx_rows += list(fx_extra)
     st = [(x, v, *kr(x), c) for x in days[-5:-1] for c, v in zip(F27_CODES, (270000.0, 1800000.0))]
     if stocks is not None:
         st += [(GPOST01_DAY, v, *kr(GPOST01_DAY), c) for c, v in zip(F27_CODES, stocks)]
@@ -623,15 +625,17 @@ def _gpost01_run(texts, cal=None) -> dict:
 def test_g_post_01_body_passes_and_fails_on_invented_rows():
     """LA-02 part 2: the G-POST-01 data-row body can PASS and can FAIL. Invented rows in the declared close layout (no
     Yahoo or KRX data) on the calendars module's synthetic signed set, built to the golden values, pass, also with a
-    later ^KS11 row above the peak (2026-10-05, not read: this site reads by date). The row exactly 200 closes back is
-    inside the 200-close window (its level moves the ratio) and the row 201 back is outside it (its level does not).
-    Each value clause fails on its own: the pre-patch 6,943.66 intraday print as the close (spec L5819), a float32
-    artefact on the close or on KRW=X's last row (a price is exact, spec L5735), a previous close of 7,100, the 1-Oct
-    row missing with 30-Sep at the previous close's level (a two-session return), a peak of 9,300 (drawdown -24.7%), a
-    lower 200-day mean, the pre-patch Samsung 273,750 and SK hynix 1,832,000 (L5833), no 2-Oct stock rows, a KRW=X last
-    row of 1,360.63, the provisional 2-Oct KRW=X row kept (L5834), a 20th-back KRW=X value off by 2%, a peak of 9,200
-    (within the drawdown tolerance) and the 9,114.55 peak on 2026-06-23. The shared layout refuses the 6,943.66 print
-    beside the close (a repeated date), a repeated earlier ^KS11 or KRW=X date, a stock row of another code (the
+    later ^KS11 row above the peak (2026-10-05, not read: this site reads by date) and with a KRW=X row dated 2026-10-05
+    after F16's last day, stamped available on 1 Oct (a look-ahead stamp, which tests/macro_m1_fixtures.py's
+    point-in-time site FAILs) or on 5 Oct (not read either way; read, it would be KRW=X's last row). The row exactly 200
+    closes back is inside the 200-close window (its level moves the ratio) and the row 201 back is outside it (its level
+    does not). Each value clause fails on its own: the pre-patch 6,943.66 intraday print as the close (spec L5819), a
+    float32 artefact on the close or on KRW=X's last row (a price is exact, spec L5735), a previous close of 7,100, the
+    1-Oct row missing with 30-Sep at the previous close's level (a two-session return), a peak of 9,300 (drawdown
+    -24.7%), a lower 200-day mean, the pre-patch Samsung 273,750 and SK hynix 1,832,000 (L5833), no 2-Oct stock rows, a
+    KRW=X last row of 1,360.63, the provisional 2-Oct KRW=X row kept (L5834), a 20th-back KRW=X value off by 2%, a peak
+    of 9,200 (within the drawdown tolerance) and the 9,114.55 peak on 2026-06-23. The shared layout refuses the 6,943.66
+    print beside the close (a repeated date), a repeated earlier ^KS11 or KRW=X date, a stock row of another code (the
     preferred share 005935), a "." close and a missing `code` column. Each file name is the generator's."""
     from tests.macro_m1_calendars import close_layout_file
     assert GPOST01_FIXTURES == (F13, F16, F27) == tuple(close_layout_file(f)[0] for f in ("F13", "F16", "F27"))
@@ -640,6 +644,11 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
     assert round(got["close_over_200d"], 3) == 1.107 and round(got["krwx_dlog20"], 4) == -0.0011, got
     # a row after 2 Oct is not read, even above the peak (it would move the peak, the close and the window)
     assert _gpost01_run(_gpost01_invented(extra=((date(2026, 10, 5), 9500.0),))) == got
+    # nor is a KRW=X row dated after 2 Oct (F16 ends on 2026-10-01 by its name), whatever its stamp: available on 1 Oct
+    # (a look-ahead stamp; the point-in-time site of tests/macro_m1_fixtures.py FAILs the same row) or on its own day.
+    # Read, it would be KRW=X's last row (G-POST-01/krwx_last_row is the 1-Oct row).
+    for avail in (U(2026, 10, 1, 21), U(2026, 10, 5, 21)):
+        assert _gpost01_run(_gpost01_invented(fx_extra=((date(2026, 10, 5), 1349.0, avail, avail),))) == got, avail
     # the 200-close window (G-POST-01/close_over_200d note "mean of last 200 closes incl. 2 Oct"; the count is typed
     # here, not read from GPOST_SMA_N): the row 201 closes back is outside it, the row 200 back inside it (levels far
     # from the window mean, below the 9,114.55 peak; one row moves the mean by (level - base) / 200)

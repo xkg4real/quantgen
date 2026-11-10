@@ -332,7 +332,9 @@ def _kospi_closes(text: str) -> list[dict]:
 #     refused at that line: the generator writes one row per reference row, so a close file has no missing-value row;
 #   - no date repeats (in F27, no date and code pair) and rows are in date order;
 #   - obs_date = session_date, written YYYY-MM-DD;
-#   - obs_utc and available_at_utc are written YYYY-MM-DDTHH:MM:SSZ, and available_at_utc is not before obs_utc.
+#   - obs_utc and available_at_utc are written YYYY-MM-DDTHH:MM:SSZ, zero-padded as the generator writes them (no
+#     fractional seconds, no other separator), and available_at_utc is not before obs_utc;
+#   - a file holds at least one row.
 # What each body then reads (point-in-time visibility, the dates up to its decision) stays with the body. Part 1's F01
 # reader `_kospi_closes` above is not this reader: T-PRINT-01 and T-SAT-01 on F01 count a repeated date's rows themselves.
 CLOSE_LAYOUT_FILES = ("F01", "F13", "F14", "F16", "F27")
@@ -351,10 +353,16 @@ def close_layout_file(fid: str) -> tuple[str, tuple[str, ...], str, str]:
 
 
 def _layout_instant(where: str, text: str) -> datetime:
+    """An instant written exactly YYYY-MM-DDTHH:MM:SSZ, zero-padded, as docs/macro_fixtures.py writes it (strftime of
+    CLOSE_LAYOUT_INSTANT). strptime alone also takes an unpadded "2026-9-29T6:30:0Z", so the parsed instant must write
+    back to the same text; AssertionError naming `where` otherwise."""
     try:
-        return datetime.strptime(text or "", CLOSE_LAYOUT_INSTANT).replace(tzinfo=UTC)
+        parsed = datetime.strptime(text or "", CLOSE_LAYOUT_INSTANT)
     except ValueError:
-        raise AssertionError(f"{where}: instant {text!r} is not written YYYY-MM-DDTHH:MM:SSZ") from None
+        parsed = None
+    if parsed is None or parsed.strftime(CLOSE_LAYOUT_INSTANT) != text:
+        raise AssertionError(f"{where}: instant {text!r} is not written YYYY-MM-DDTHH:MM:SSZ")
+    return parsed.replace(tzinfo=UTC)
 
 
 def read_close_layout(fid: str, text: str) -> list[dict]:

@@ -751,9 +751,13 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
     off; the previous visible KS11 row is not 1 Oct (that row missing with 30 Sep at its level, or available only at
     07:00Z); the provisional 2-Oct KRW=X row is visible; there are too few KS11 or KRW=X rows; and, at the layout (the
     shared reader), a declared column is absent, a row is not of its file's series and status, rows are out of order, a
-    row is available before its obs_utc, a close is blank or ".", or a date repeats (F16; F27 date and code). The row
-    201 closes back is outside the 200-close window (its level does not move the ratio) and the row 200 back inside it.
-    tests/macro_m1_pit.py's G-POST-01 body returns the same eight rows on the same files. The calendar is the
+    row is available before its obs_utc, a close is blank, ".", 0 or negative, a date repeats (F16; F27 date and code),
+    obs_date is not session_date or not written YYYY-MM-DD, an instant is not written zero-padded YYYY-MM-DDTHH:MM:SSZ
+    (unpadded, or with fractional seconds), or the file holds no row. The row 201 closes back is outside the 200-close
+    window (its level does not move the ratio) and the row 200 back inside it. tests/macro_m1_pit.py's G-POST-01 body
+    returns the same eight rows on the same files. A KRW=X row dated 2026-10-05, after F16's last day, stamped available
+    on 1 Oct (a look-ahead stamp) FAILs here while the by-date body returns the same eight rows (it does not read the
+    row); stamped on 5 Oct, it is visible at neither and both pass. The calendar is the
     calendars module's synthetic signed set, through the owner gate. While a fixture is absent, the real test's REFDATA
     reason names it."""
     from tests.macro_m1_calendars import F01_COLUMNS, _official_calendar, _official_calendar_on, drafts_set, fixture_set
@@ -849,9 +853,9 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
     _gpost_fails(lambda: _gpost_rows("F13", _gpost_csv("F13", early)),
                  f"yahoo_KS11_1996-12_2026-10-02.csv line {len(early) + 1}: available_at_utc 2026-10-02T06:00:00Z before "
                  "obs_utc 2026-10-02T06:30:00Z")
-    # one rule for every file of the layout: a blank or "." close is refused naming the file and line (it used to
-    # escape as a ValueError), and so is a repeated date, here a repeated F27 date and code
-    for cell in (".", ""):
+    # one rule for every file of the layout: a close that is blank or "." (each used to escape as a ValueError), 0 or
+    # negative is refused naming the file and line, and so is a repeated date, here a repeated F27 date and code
+    for cell in (".", "", "0", "-5"):
         blank = [(d, cell if i == 9 else c, o, a) for i, (d, c, o, a) in enumerate(inv["F13"])]
         _gpost_fails(lambda: _gpost_rows("F13", _gpost_csv("F13", blank)),
                      f"yahoo_KS11_1996-12_2026-10-02.csv line 11: close {cell!r} is not a finite number > 0")
@@ -859,11 +863,47 @@ def test_g_post_01_body_passes_and_fails_on_invented_rows():
                  f"krx_005930_000660_closes_mcap.csv line {len(inv['F27']) + 2}: rows out of date order or repeated")
     _gpost_fails(lambda: _gpost_rows("F16", _gpost_csv("F16", inv["F16"][:5] + inv["F16"][4:])),
                  "yahoo_KRWX_2004_2026-10-01.csv line 7: rows out of date order or repeated")
+    # obs_date is session_date, both written YYYY-MM-DD; obs_utc and available_at_utc are written zero-padded
+    # YYYY-MM-DDTHH:MM:SSZ, as docs/macro_fixtures.py writes them (strptime alone takes "2026-10-2T6:30:0Z"); a file
+    # holds a row. Each departure is refused naming the file and line (`cell_at`: one cell of one line of the F13 text)
+    f13_lines = texts["F13"].split("\n")
+
+    def cell_at(line: int, **cells) -> str:
+        cols, row = f13_lines[0].split(","), f13_lines[line - 1].split(",")
+        for col, value in cells.items():
+            row[cols.index(col)] = value
+        return "\n".join(f13_lines[:line - 1] + [",".join(row)] + f13_lines[line:])
+    day11, oct2_line = inv["F13"][9][0], len(inv["F13"]) + 1         # file line 11; the 2-Oct row's line (261)
+    assert f13_lines[oct2_line - 1].startswith("2026-10-02,"), f13_lines[oct2_line - 1]
+    for obs_date, session_date in (((day11 - timedelta(days=1)).isoformat(), day11.isoformat()),
+                                   (day11.strftime("%Y%m%d"), day11.strftime("%Y%m%d"))):
+        _gpost_fails(lambda: _gpost_rows("F13", cell_at(11, obs_date=obs_date, session_date=session_date)),
+                     "yahoo_KS11_1996-12_2026-10-02.csv line 11: obs_date != session_date or not written YYYY-MM-DD "
+                     f"({obs_date!r}, {session_date!r})")
+    for col, instant in (("obs_utc", "2026-10-2T6:30:0Z"), ("available_at_utc", "2026-10-02T06:30:30.000Z")):
+        _gpost_fails(lambda: _gpost_rows("F13", cell_at(oct2_line, **{col: instant})),
+                     f"yahoo_KS11_1996-12_2026-10-02.csv line {oct2_line}: instant {instant!r} is not written "
+                     "YYYY-MM-DDTHH:MM:SSZ")
+    _gpost_fails(lambda: _gpost_rows("F13", f13_lines[0] + "\n"), "yahoo_KS11_1996-12_2026-10-02.csv: no rows")
     # the two G-POST-01 sites share the reader and `check_gpost01_rows`: tests/macro_m1_pit.py's data-row body returns
     # the same eight rows on the same files (it reads them by date, not by instant)
     from tests.macro_m1_pit import _check_gpost01_m1
     pit_rows = _check_gpost01_m1(*(_gpost_rows(fid, texts[fid]) for fid in ("F13", "F16", "F27")), cal)
     assert {k: pit_rows[k] for k in m1} == {k: got[k] for k in m1}, (pit_rows, got)
+    # a KRW=X row dated 2026-10-05, after F16's last day (its name ends 2026-10-01): stamped available on 1 Oct, a
+    # look-ahead stamp, it is visible at the decision and FAILs here (L539), while the by-date site does not read it and
+    # returns the same eight rows; stamped on its own day it is visible at neither, and both pass
+    oct5 = date(2026, 10, 5)
+    for avail in (utc(date(2026, 10, 1), 21, 0), utc(oct5, 21, 0)):
+        fx_late = {**{fid: _gpost_rows(fid, texts[fid]) for fid in GPOST_READ},
+                   "F16": _gpost_rows("F16", _gpost_csv("F16", inv["F16"] + [(oct5, 1349.0, avail, avail)]))}
+        by_date = _check_gpost01_m1(fx_late["F13"], fx_late["F16"], fx_late["F27"], cal)
+        assert {k: by_date[k] for k in m1} == {k: got[k] for k in m1}, (avail, by_date)
+        if avail <= GPOST_DECISION_UTC:
+            _gpost_fails(lambda: _check_g_post_01(fx_late["F01"], fx_late["F13"], fx_late["F16"], fx_late["F27"], cal),
+                         "G-POST-01: a KRWX row of 2026-10-05 is visible at the 2026-10-02 decision (look-ahead; L539)")
+        else:
+            assert _check_g_post_01(fx_late["F01"], fx_late["F13"], fx_late["F16"], fx_late["F27"], cal) == got, avail
     # while a fixture is absent the real test is NOT_RUN (REFDATA) and names it
     listed = load_manifest()
     absent = [fid for fid in ("F01", "F13", "F16", "F20", "F27") if FILE_OF[fid] not in listed]

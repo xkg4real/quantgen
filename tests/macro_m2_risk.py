@@ -375,13 +375,14 @@ def _replay_waiting(live, needs=REPLAY_CAL_NEEDS) -> list[str]:
     return out
 
 
-def _replay_clocks(needs, test: str):
-    """core.calendars.adapter.CalendarClocks over the shipped owner-signed set (CalendarSet()) once every file `needs`
-    names loads and covers its days; otherwise NotRun("OWNER: ...") naming each refusal and coverage gap, computed from
-    the files (`_replay_waiting`)."""
+def _replay_clocks(needs, test: str, live=None):
+    """core.calendars.adapter.CalendarClocks over the owner-signed set `live` (default: the shipped set, CalendarSet(),
+    which the real bodies use) once every file `needs` names loads and covers its days; otherwise NotRun("OWNER: ...")
+    naming each refusal and coverage gap, computed from the files (`_replay_waiting`). The demonstrations pass `live`,
+    as part 1's tests.macro_m1_calendars._official_calendar takes it."""
     from core.calendars.adapter import CalendarClocks
     from core.calendars.store import CalendarSet
-    live = CalendarSet()
+    live = CalendarSet() if live is None else live
     waiting = _replay_waiting(live, needs)
     if waiting:
         raise NotRun(f"OWNER: {test} on the signed calendars waits for " + "; ".join(waiting))
@@ -567,6 +568,27 @@ def _replay_reads_outside(seen: dict, needs) -> list[str]:
     return out
 
 
+def _replay_gate_of(fn) -> tuple:
+    """(needs, test name, replay count) of a real replay body `fn`, read from its source (parsed, never run): its one
+    `clk = _replay_clocks(<needs>, <test>)` call with no `live` (so the shipped set), the two arguments evaluated in
+    this module, and the number of `_replay_vt` calls, each of which must take `clk=clk`. The real bodies stop at their
+    REFDATA gate while F13 / F14 are absent, so their gate wiring is pinned here."""
+    import ast
+    import inspect
+    import textwrap
+    tree = ast.parse(textwrap.dedent(inspect.getsource(fn)))
+    gates = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and getattr(n.func, "id", None) == "_replay_clocks"]
+    assigned = [n for n in ast.walk(tree) if isinstance(n, ast.Assign) and n.value in gates
+                and [getattr(t, "id", None) for t in n.targets] == ["clk"]]
+    assert len(gates) == len(assigned) == 1 and len(gates[0].args) == 2 and not gates[0].keywords, (
+        f"{fn.__name__}: the OWNER gate is not one `clk = _replay_clocks(<needs>, <test>)` on the shipped set")
+    needs, test = (eval(compile(ast.Expression(a), "<gate>", "eval"), globals()) for a in gates[0].args)
+    replays = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and getattr(n.func, "id", None) == "_replay_vt"]
+    assert replays and all([(k.arg, getattr(k.value, "id", None)) for k in n.keywords] == [("clk", "clk")]
+                           for n in replays), f"{fn.__name__}: a replay does not run on the gated clocks `clk`"
+    return needs, test, len(replays)
+
+
 def test_vt_01_body_passes_and_fails_on_invented_closes():
     """LA-02 part 2: the T-VT-01 data body can PASS and can FAIL. Invented closes on the 60 KRX sessions ending 2 Oct
     2026 of the synthetic signed set, written in F13's declared layout and replayed on CalendarClocks over that set,
@@ -578,8 +600,11 @@ def test_vt_01_body_passes_and_fails_on_invented_closes():
     / vendor_close / calendar_bound, rows are out of order, or a close is ".". The calendar files and days the replay
     reads, traced, lie inside REPLAY_CAL_NEEDS. The OWNER gate names nothing on the synthetic set or on its 2026-27 KRX
     cut, the refusal on the unsigned set, and a holidays_KRX file from 2026-06-01 as a gap (the replay on it raises
-    CalendarCoverageError: the first-session check reads from 1 January). While F13 is absent, the real test's REFDATA
-    reason names it; once it is listed, a NOT_RUN reason is the list computed from the shipped files."""
+    CalendarCoverageError: the first-session check reads from 1 January). The gate `_replay_clocks` raises NotRun
+    (OWNER) with that computed list on the unsigned and June-2026 sets and returns CalendarClocks over the synthetic
+    set, on which the replay passes; the real body, read from its source, gates on REPLAY_CAL_NEEDS' KOSPI row on the
+    shipped set and replays on the gated clocks. While F13 is absent, the real test's REFDATA reason names it; once it is
+    listed, a NOT_RUN reason is the list computed from the shipped files."""
     from core.calendars.store import CalendarCoverageError
     from tests.macro_m1_calendars import F01_COLUMNS, drafts_set, fixture_docs, fixture_set, krx_short_set
     assert REPLAY_COLUMNS == F01_COLUMNS                       # one declared close layout (part 1 F01, G-POST-01 F13)
@@ -644,7 +669,25 @@ def test_vt_01_body_passes_and_fails_on_invented_closes():
         pass
     else:
         raise AssertionError("the replay ran on a holidays_KRX file from 2026-06-01")
+    # the OWNER gate itself, `_replay_clocks` (`live` given here; the real body passes none, so the shipped set): NotRun
+    # naming the computed list on the unsigned set and on the June-2026 holidays_KRX file; on the synthetic set the
+    # CalendarClocks over that set, on which the replay passes. The real body gates on the KOSPI row of
+    # REPLAY_CAL_NEEDS, on the shipped set, and replays on the clocks the gate returns (read from its source).
+    for cal_set in (drafts_set(), june):
+        waits = _raises(lambda: _replay_clocks(REPLAY_CAL_NEEDS[:1], "T-VT-01", live=cal_set), NotRun)
+        assert waits.reason == ("OWNER: T-VT-01 on the signed calendars waits for "
+                                + "; ".join(_replay_waiting(cal_set, REPLAY_CAL_NEEDS[:1]))), waits.reason
+    gated = _replay_clocks(REPLAY_CAL_NEEDS[:1], "T-VT-01", live=fixture_set())
+    assert isinstance(gated, CalendarClocks) and gated.cal is fixture_set(), gated
+    assert _vt01_body(text, clk=gated) == got
+    gate = _replay_gate_of(test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata)
+    assert gate == (REPLAY_CAL_NEEDS[:1], "T-VT-01", 1) and gate[0][0][0].startswith("KOSPI "), gate
     from core.calendars.store import CalendarSet
+    shipped = CalendarSet()
+    if _replay_waiting(shipped, REPLAY_CAL_NEEDS[:1]):
+        _raises(lambda: _replay_clocks(REPLAY_CAL_NEEDS[:1], "T-VT-01"), NotRun)
+    else:
+        assert _replay_clocks(REPLAY_CAL_NEEDS[:1], "T-VT-01").cal.data_dir == shipped.data_dir
     if FILE_OF["F13"] in load_manifest() and _replay_waiting(CalendarSet(), REPLAY_CAL_NEEDS[:1]):
         reason = _raises(test_vt_01_rv20_28_82_and_vt_0_694_on_2_oct_refdata, NotRun).reason
         assert reason == ("OWNER: T-VT-01 on the signed calendars waits for "
@@ -831,7 +874,10 @@ def test_label_01_body_passes_and_fails_on_invented_closes():
     quartiles stay on the goldens on a block layout where that row, if read, would move Q1. The closes are invented on
     the sessions of the calendars module's synthetic signed set and replayed on CalendarClocks over it; the calendar
     files and days both replays read, traced, lie inside REPLAY_CAL_NEEDS, and the OWNER gate names the unsigned NYSE
-    file. While F13 or F14 is absent, the real test's REFDATA reason names it."""
+    file: `_replay_clocks` raises NotRun (OWNER) with that computed list there and returns CalendarClocks over the
+    synthetic set, on which both replays pass; the real body, read from its source, gates on both REPLAY_CAL_NEEDS rows
+    on the shipped set and runs both replays on the gated clocks. While F13 or F14 is absent, the real test's REFDATA
+    reason names it."""
     assert [G.golden("G-B5-04").want(sub) for sub in LABEL01_B504] == ["stressed", "normal"]       # spec L5643
     kr_text, us_text = _label01_kr_text(), _label01_us_text()
     got = _label01_body(kr_text, us_text)
@@ -845,8 +891,18 @@ def test_label_01_body_passes_and_fails_on_invented_closes():
     from tests.macro_m1_calendars import fixture_docs, fixture_set
     docs = fixture_docs()
     docs["holidays_NYSE"]["signed_off_by"] = None
-    refused = _replay_waiting(fixture_set("m2_nyse_draft", docs), REPLAY_CAL_NEEDS)
+    nyse_draft = fixture_set("m2_nyse_draft", docs)
+    refused = _replay_waiting(nyse_draft, REPLAY_CAL_NEEDS)
     assert [w.split(" refused (")[0] for w in refused] == ["US at the 2026-10-01 NYSE close: holidays_NYSE.yaml"], refused
+    # the OWNER gate itself: NotRun (OWNER) with that computed list on the unsigned NYSE file; on the synthetic set the
+    # CalendarClocks both replays pass on. The real body gates on both rows of REPLAY_CAL_NEEDS, on the shipped set, and
+    # runs both replays on the clocks the gate returns (read from its source).
+    waits = _raises(lambda: _replay_clocks(REPLAY_CAL_NEEDS, "T-LABEL-01", live=nyse_draft), NotRun)
+    assert waits.reason == "OWNER: T-LABEL-01 on the signed calendars waits for " + "; ".join(refused), waits.reason
+    gated = _replay_clocks(REPLAY_CAL_NEEDS, "T-LABEL-01", live=fixture_set())
+    assert gated.cal is fixture_set() and _label01_body(kr_text, us_text, clk=gated) == got, gated
+    gate = _replay_gate_of(test_label_01_kospi_elevated_stressed_and_us_normal_refdata)
+    assert gate == (REPLAY_CAL_NEEDS, "T-LABEL-01", 2) and len(gate[0]) == 2, gate
     # a row 650 sessions back (inside the trailing 756, outside the vt window) available only at 07:00Z, its close x 1.5
     edge = _label01_kr_text(blocks=LABEL01_KR_BLOCKS_Q1_EDGE)
     late_day = _replay_rows("F13", edge)[-650]["date"]

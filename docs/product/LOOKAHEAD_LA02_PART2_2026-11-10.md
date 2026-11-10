@@ -90,6 +90,10 @@ file's float artefacts should be read at two decimals instead). The file is not 
   dated up to 2 Oct, none after it. It does not use the instants, so it cannot tell whether a later row was visible at
   the decision; a row dated after 2 Oct is outside the decision by its date (F13 ends on 2 Oct and F16 on 1 Oct by
   their names) and is not read. A row available before its own `obs_utc` is refused at the shared layout for both.
+  So on one file the two sites can disagree: a KRW=X row dated 2026-10-05 in F16, stamped available on 1 Oct, FAILs
+  the point-in-time site as a look-ahead stamp, and the by-date site passes without reading it. Before the third
+  commit the by-date site read every KRW=X row and FAILed that file because its last row was not 1 Oct. Both
+  demonstrations pin the current behaviour (question 10 asks whether both sites should stay).
 - **T-PRINT-01 on F13** (L5631, L1382). Exactly one row on 2026-03-09, with close 5,251.87 exactly (L5735). The row
   before it must be on the previous KRX session of the signed calendar (`clocks.prev_session`). The return against that
   row must be -5.96% ±0.005 pp, the printed precision.
@@ -149,17 +153,17 @@ file's float artefacts should be read at two decimals instead). The file is not 
   - G-B5-01/`sma20_pit_p` 0.107 (p_hi ±0.01), with G-POST-01/`gb501_pit_p` asserted equal to it;
   - G-B5-01/`sma20_verdict` PASS.
 
-  The verdict is asserted through `tests/golden_tools.assert_class` against each of the three thresholds (the
-  exceedance band's two edges and the PIT p floor): PASS or FAIL as a class when any deciding statistic lies within
-  tolerance of its threshold, else the golden PASS. The rule is spec L5737; `tests/golden_tools.py` and
-  `core/quant/gate_stats.py` cite it as L5738, a blank line in the current spec, and neither is changed here. The
-  window is KOSPI 2016-03 -> 2026-10-02, read from the parsed history: its last row is 2026-10-02, its first session on
-  or after 2016-03-01 lies in 2016-03, and it holds 271 returns before that session. The harness needs them: the SMA20
-  forecast exists from the 20th return (`vol_estimators.SMA_WINDOW`, R-06 L1563) and an FHS origin is evaluated only
-  once the residual pool holds `forecast_eval.MIN_POOL` = 252 residuals (brief F-9), so 20 - 1 + 252 returns come
-  first; a probe of `spec_form` gave the full origin count with 271 and one fewer with 270. `spec_form` itself writes
-  its sample as 2016-03-01..last whatever the history holds. The SMA20 forecast scaled by 0.7 must fail B5 (L5642).
-  The pool is standardised by the unscaled sigma, as in the synthetic test (brief F-16). The normal-form and
+  The verdict is asserted through `tests/golden_tools.assert_class` against each of the three thresholds (the exceedance
+  band's two edges and the PIT p floor): PASS or FAIL as a class when any deciding statistic lies within tolerance of
+  its threshold, else the golden PASS. The rule is spec L5737, which `tests/golden_tools.py` also cites since the fourth
+  commit. The product `core/quant/gate_stats.py` still cites it as L5738, a blank line in the current spec, and is not
+  changed here. The window is KOSPI 2016-03 -> 2026-10-02, read from the parsed history: its last row is 2026-10-02, its
+  first session on or after 2016-03-01 lies in 2016-03, and it holds 271 returns before that session. The harness needs
+  them: the SMA20 forecast exists from the 20th return (`vol_estimators.SMA_WINDOW`, R-06 L1563) and an FHS origin is
+  evaluated only once the residual pool holds `forecast_eval.MIN_POOL` = 252 residuals (brief F-9), so 20 - 1 + 252
+  returns come first; a probe of `spec_form` gave the full origin count with 271 and one fewer with 270. `spec_form`
+  itself writes its sample as 2016-03-01..last whatever the history holds. The SMA20 forecast scaled by 0.7 must fail B5
+  (L5642). The pool is standardised by the unscaled sigma, as in the synthetic test (brief F-16). The normal-form and
   EWMA(0.94) lines are printed beside their goldens, not asserted (question 13).
 
 ### Declared fixture layouts
@@ -180,9 +184,15 @@ with different rules. Now one rule holds for all of them:
   `AssertionError`: the generator writes one row per reference row, so a close file has no missing-value row;
 - no date repeats (in F27, no date and code pair), and rows are in date order;
 - `obs_date` = `session_date`, written YYYY-MM-DD;
-- `obs_utc` and `available_at_utc` are written `YYYY-MM-DDTHH:MM:SSZ`, and `available_at_utc` is not before `obs_utc`;
+- `obs_utc` and `available_at_utc` are written `YYYY-MM-DDTHH:MM:SSZ`, zero-padded as `docs/macro_fixtures.py` writes
+  them (its `_iso` is `strftime("%Y-%m-%dT%H:%M:%SZ")`), and `available_at_utc` is not before `obs_utc`. Since the
+  fourth commit the parsed instant must write back to the same text: `strptime` alone also takes an unpadded
+  `2026-9-29T6:30:0Z`, which the per-site readers of the `macro_m1_fixtures.py` and `macro_m2_risk.py` sites refused
+  before the third commit. Fractional seconds, a space separator, missing seconds and an offset in place of `Z` are
+  refused too;
 - every row carries the file's provenance: a series id of its `REFERENCE_FILES` row, its `value_status` and its
-  `available_at_source`; F27 also carries `code`, one of its two ids.
+  `available_at_source`; F27 also carries `code`, one of its two ids;
+- a file holds at least one row.
 
 What each body then reads stays at the body: point-in-time visibility (`macro_m1_fixtures.py`, `macro_m2_risk.py`), the
 rows dated up to a decision (`macro_m1_pit.py`), the window (`macro_m3_estimators.py`). Part 1's own F01 reader,
@@ -316,9 +326,11 @@ Each body is shown to PASS and to FAIL on invented in-memory rows; no KRX, Yahoo
 case asserts the message of the clause it targets.
 
 - **G-POST-01** (`macro_m1_pit.py`). Rows built to the golden values in the declared close layout pass on the
-  synthetic signed set, also with a ^KS11 row of 9,500 dated 2026-10-05 (not read: this site reads by date). The row
-  exactly 200 closes back moves the ratio by its share of the mean; the row 201 back does not move it. Fifteen value
-  cases fail:
+  synthetic signed set, also with a ^KS11 row of 9,500 dated 2026-10-05 (not read: this site reads by date). They also
+  pass with a KRW=X row of 1,349 dated 2026-10-05, after F16's last day, stamped available on 1 Oct (a look-ahead
+  stamp) or on 5 Oct: neither is read, whatever its stamp (read, it would be KRW=X's last row and fail
+  `krwx_last_row`'s date). The row exactly 200 closes back moves the ratio by its share of the mean; the row 201 back
+  does not move it. Fifteen value cases fail:
   - the 6,943.66 print stored as the close;
   - a float32 artefact on the 2-Oct close (7,003.740234375) or on KRW=X's last row (1,356.8399658203125): a price is
     exact;
@@ -344,12 +356,23 @@ case asserts the message of the clause it targets.
     07:00Z;
   - row counts: 150 KS11 rows, 15 KRW=X rows.
 
-  The row exactly 200 closes back moves the ratio; the row 201 back does not. Nine layout cases fail at the shared
-  reader: a missing `close` or `code` column, a row of another status, rows out of order, a 2-Oct row available at
-  06:00Z before its 06:30Z close, a blank and a "." close (each named with file and line; they used to escape as
-  `ValueError`), a repeated F27 date and code, and a repeated KRW=X date. The `macro_m1_pit.py` site returns the same
-  eight rows on the same invented files. While any fixture is absent, the test checks that the real test's REFDATA
-  reason names each absent id.
+  The row exactly 200 closes back moves the ratio; the row 201 back does not. Sixteen layout cases fail at the shared
+  reader, each named with file and line:
+  - a missing `close` or `code` column, a row of another status, rows out of order, a 2-Oct row available at 06:00Z
+    before its 06:30Z close;
+  - a blank and a "." close (they used to escape as `ValueError`), and closes of 0 and -5;
+  - a repeated F27 date and code, and a repeated KRW=X date;
+  - an `obs_date` a day before its `session_date`, and both written 20251017 (basic ISO, which `date.fromisoformat`
+    accepts);
+  - the 2-Oct `obs_utc` written `2026-10-2T6:30:0Z` (unpadded, which `strptime` alone accepts) and its
+    `available_at_utc` written `2026-10-02T06:30:30.000Z`;
+  - a file with its header and no row.
+
+  The `macro_m1_pit.py` site returns the same eight rows on the same invented files. On F16 with a KRW=X row of 1,349
+  dated 2026-10-05 added, stamped available on 1 Oct, this site FAILs ("a KRWX row of 2026-10-05 is visible at the
+  2026-10-02 decision (look-ahead; L539)") while the `macro_m1_pit.py` site still returns the same eight rows; stamped
+  on 5 Oct, the row is visible at neither and both return the golden rows. While any fixture is absent, the test checks
+  that the real test's REFDATA reason names each absent id.
 - **T-PRINT-01 on F13**. Invented closes in the declared close layout on the synthetic signed calendars: 5,584.71 then
   5,251.87 pass, and so does a previous close of 5,585.01 (-5.9649%, inside the printed precision). It fails on:
   - the 10:31 print stored as the close;
@@ -405,7 +428,13 @@ case asserts the message of the clause it targets.
   set, whose last 20 returns give rv20 exactly 0.2882 pass, with vt = 0.20 / 0.2882. The calendar files and days the
   replay reads, traced through a recording `CalendarSet` (nothing patched), lie inside `REPLAY_CAL_NEEDS`. The OWNER
   gate names nothing on the synthetic set or its 2026-27 KRX cut, the refusal on the unsigned set, and a `holidays_KRX`
-  file from 2026-06-01 as a gap; the replay on that file raises `CalendarCoverageError`. It fails on:
+  file from 2026-06-01 as a gap; the replay on that file raises `CalendarCoverageError`. The gate the real body calls,
+  `_replay_clocks` (since the fourth commit it takes `live`, default the shipped set, as part 1's `_official_calendar`
+  does), raises `NotRun("OWNER: T-VT-01 on the signed calendars waits for ...")` with exactly that computed list on the
+  unsigned and the June-2026 sets, and returns `CalendarClocks` over the synthetic set, on which the replay passes. On
+  the shipped set it returns `CalendarClocks` over the shipped files (it waits on nothing today). A parse of the real
+  body (`_replay_gate_of`; the body stops at its REFDATA gate while F13 is absent) checks that it calls the gate once,
+  with no `live`, on the KOSPI row of `REPLAY_CAL_NEEDS`, and replays on the clocks the gate returns. It fails on:
   - rv20 0.2895, with vt still inside its tolerance;
   - a vt target of 0.25, with rv20 inside its tolerance;
   - the 2-Oct row missing, an intraday print at 01:56Z, or the row available at 06:31Z;
@@ -416,7 +445,10 @@ case asserts the message of the clause it targets.
 - **T-LABEL-01**. Invented KOSPI and US closes on the synthetic signed set's sessions, built to the golden quartiles,
   pass on `CalendarClocks` over that set: 0.157 / 0.1855 / 0.336, sigma 0.2882 at the 69.97th percentile, "elevated"
   and "stressed"; and US "normal". Both replays' traced reads lie inside `REPLAY_CAL_NEEDS`, and the OWNER gate names
-  an unsigned `holidays_NYSE`. It fails on:
+  an unsigned `holidays_NYSE`: `_replay_clocks` raises `NotRun("OWNER: T-LABEL-01 on the signed calendars waits for
+  ...")` with that computed list there, and returns `CalendarClocks` over the synthetic set, on which both replays
+  pass. A parse of the real body checks that it gates once, with no `live`, on both rows of `REPLAY_CAL_NEEDS`, and
+  runs both replays on the gated clocks. It fails on:
   - each quartile alone, and the percentile alone;
   - sigma(t) 0.35;
   - an expanding history at 0.30;
@@ -709,6 +741,63 @@ Checks of the third commit, with the same guarded runner:
   reports the same four unused imports that were there before. The second commit's `statistics` import in
   `macro_m1_pit.py` lost its last use and was removed.
 
+### Verification fixes (fourth commit)
+
+A verification pass on the third commit reported five minor findings. Each was reproduced on the third commit before it
+was fixed (in-memory mutants, a probe on invented files, a probe of the reader), and all five are fixed in a new commit
+on the same branch. It changes the five test files, `tests/golden_tools.py` (two comments), this record and FACTS.md
+only.
+
+1. **Two line numbers for the class rule.** `tests/golden_tools.py` cited L5738, a blank line in the current spec, in
+   its module docstring and in `assert_class`. Both now cite L5737. `golden_tools.py` is a test helper and is not on
+   any frozen-harness list (`core/quant/gate_package.HARNESS_SOURCES`). The product `core/quant/gate_stats.py:739`
+   still cites L5738 and is not changed here.
+2. **The shared reader took an unpadded instant.** `_layout_instant` parsed with `strptime`, which also takes
+   `2026-9-29T6:30:0Z`. The per-site readers of the `macro_m1_fixtures.py` and `macro_m2_risk.py` sites refused that
+   form before the third commit, so the shared reader had loosened them, and the record said the opposite. The parsed
+   instant must now write back to the same text. The `macro_m1_fixtures.py` demonstration refuses an unpadded
+   `obs_utc` and an `available_at_utc` with fractional seconds, each named with file and line.
+3. **The by-date G-POST-01 site's KRW=X reading was not pinned.** Since the third commit the `macro_m1_pit.py` site
+   reads KRW=X rows dated up to 2 Oct, where it used to read the whole file. So on an F16 file with a KRW=X row dated
+   2026-10-05 stamped available on 1 Oct, the point-in-time site FAILs and the by-date site passes, where both used to
+   FAIL. The record keeps the by-date reading (see "Expected values"). Both demonstrations now pin it: the
+   `macro_m1_pit.py` site passes with that row stamped on 1 Oct or on 5 Oct, and in the `macro_m1_fixtures.py`
+   demonstration the same row stamped on 1 Oct FAILs the point-in-time site while the by-date site returns the same
+   eight rows.
+4. **The OWNER gate's wiring in the real T-VT-01 and T-LABEL-01 bodies was not pinned.** The real bodies stop at their
+   REFDATA gate while F13 and F14 are absent, and `_replay_clocks` took no `live` argument, so no demonstration reached
+   it. It now takes `live` (default `CalendarSet()`, the shipped set), as part 1's `_official_calendar` does. The
+   demonstrations check that it raises the computed OWNER `NotRun` on the unsigned, June-2026 and unsigned-NYSE sets
+   and returns `CalendarClocks` over the synthetic set, on which the replays pass, and over the shipped files on the
+   shipped set (nothing waits there today). `_replay_gate_of` parses each real body: one
+   `clk = _replay_clocks(<needs>, <test>)` with no `live`, the KOSPI row for T-VT-01, both rows for T-LABEL-01, and
+   every `_replay_vt` call given `clk=clk`.
+5. **Three rules of the shared reader were not pinned.** The `macro_m1_fixtures.py` demonstration now refuses a close
+   of 0 and of -5 (new at the `macro_m1_pit.py` site, whose old reader accepted both), an `obs_date` that is not its
+   `session_date`, both dates written 20251017, and a file with its header and no row, each named with file and line.
+
+Checks of the fourth commit, with the same guarded runner:
+
+- **By id.** The same 129 test functions as the third commit, plus
+  `tests/macro_acceptance.py::test_t_herm_01_every_touchpoint_raises`: 95 PASS, 35 NOT_RUN, 0 FAIL, no guard refusal.
+  Every status and every NOT_RUN reason of the 129 is identical to the third commit's run. They include the T-HERM-01
+  rules of `macro_m1_fixtures.py` and both LA-02 ratchet tests (PASS), and the four changed demonstrations (PASS).
+  A docstring of the `macro_m1_pit.py` G-POST-01 demonstration was rewrapped after that run; that demonstration,
+  both ratchet tests and the three T-HERM-01 tests were run again and PASS.
+- **Fail before, pass after.** Before the fix, eight in-memory mutants survived every demonstration on the third commit:
+  a close > 0 rule dropped, the obs_date check dropped, a lax `fromisoformat` instant, the empty-file check dropped, the
+  unfiltered KRW=X list at the `macro_m1_pit.py` site, the gate returning the stub clocks, a gate that never waits, and
+  T-LABEL-01 gating on the KOSPI row only. A probe on invented files showed the KRW=X difference between the sites, and
+  a probe of the reader showed it taking `2026-9-29T6:30:0Z`. After the fix, the third commit's mutant set rerun with
+  the reader's instant mutant rewritten for the new code, plus six new mutants (the write-back check dropped, basic-ISO
+  dates accepted, T-VT-01 gated on the US row, `live` ignored, the T-VT-01 replay on other clocks, a `live` passed by
+  the real T-LABEL-01 body), gives 49 mutants: every one is caught by at least one demonstration, the unmutated
+  demonstrations pass, and no run hit a guard refusal. The worktree files were never written.
+- **Static.** `test_ids` per function, the test function names and the `LA02_*` constants are identical to the third
+  commit in all six files; one helper was added (`_replay_gate_of` in `macro_m2_risk.py`). `tests/macro_m1_fixtures.py`
+  is still CRLF, the other four modules are still LF and ASCII, and `tests/golden_tools.py` is still LF. `ruff
+  --select F,E9` reports the same four unused imports as before.
+
 ### Not run, and unverified
 
 - `tests/run_all.py`, the whole macro modules, `tests.macro_m9_lab` and `tests.macro_m8_pipeline` were not run.
@@ -735,8 +824,14 @@ Checks of the third commit, with the same guarded runner:
 - That 2024-11-04 was a Tokyo exchange holiday rests on a track's own knowledge (question 17).
 - Third commit: whether the ⑨-2 close files carry a blank or "." close or a repeated date, which the shared reader now
   refuses, is unverified; so is whether the real ^KS11 history starts early enough (271 returns before 2016-03-01; the
-  ACQUISITION depth "1996-12" suggests it does). `tests/golden_tools.py` and `core/quant/gate_stats.py` still cite
-  L5738. Part 1's F01 reader `_kospi_closes` still converts a close with `float()` and is not the shared reader.
+  ACQUISITION depth "1996-12" suggests it does). The product `core/quant/gate_stats.py` still cites L5738 for the
+  class rule; `tests/golden_tools.py` cites L5737 since the fourth commit. Part 1's F01 reader `_kospi_closes` still
+  converts a close with `float()` and is not the shared reader.
+- Fourth commit: that the ⑨-2 close files write zero-padded instants is read from `docs/macro_fixtures._iso`; the
+  generator was not run. The gate wiring of the real T-VT-01 and T-LABEL-01 bodies is checked by parsing their source,
+  not by running them past their REFDATA gate. The by-date reading of KRW=X at the `macro_m1_pit.py` G-POST-01 site is
+  pinned as it stands; whether it should instead FAIL a row after F16's last day, as the site did before the third
+  commit, is part of question 10.
 - The `KeyError` in `docs/macro_fixtures.calendar_available_at` for KS11, KRWX, GSPC and 005930 is read from the code;
   the generator was not run (question 3).
 
