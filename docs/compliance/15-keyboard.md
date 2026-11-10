@@ -191,3 +191,17 @@ MC 작은 결과표와 Bonds 두 결과 패널의 모든 행·가로 스크롤·
 ### 2026-11-07 네이티브 밀도 개선
 
 카테고리는 모든 버튼을 표시하며 좁으면 줄바꿈합니다. Tab/Space 선택과 기존 입력 컨트롤·포커스·값을 보존하고 넓은 표는 내부 스크롤합니다. 기존 공개 준비 및 운영 검증 조건을 유지합니다.
+
+### 2026-11-10 소유자 UI 검토 14건
+
+출처 선택 상자는 `visible=False`로 숨겨 화면에 그리지 않으므로 Tab 순서에서 빠지고 값이 고정됩니다. Strategy Lab·Portfolio·Quant Lab·Signals는 `best`, ETF는 `auto`(시세 이력은 `best`로 조회), Macro·Rates·FX·Bonds·Structuring은 `auto`, Crypto는 `live`이며, Derivatives는 KIS 키 유무에 따라 `kis` 또는 `synthetic`입니다.
+
+새 상호작용은 다음과 같습니다.
+
+- Strategy Lab 카드 표의 줄을 누르면 아래 상세로 이동합니다. 같은 상세를 카드 선택 드롭다운으로도 열 수 있습니다.
+- 펼침 영역이 늘었습니다: 노출 상세, 검증 기록 원문, 영문 원문 보기, 제공처 메시지, Macro 규칙 원문, 모형 카드 원문 보기.
+- 천 단위 구분 숫자 칸은 입력 중에는 값을 바꾸지 않고, 포커스를 벗어나거나 Enter를 누를 때만 구분 기호를 정리합니다.
+
+중요한 경고는 tooltip에만 두지 않습니다. Signals·Quant Lab·Portfolio의 합성 자료 원인은 접힌 "제공처 메시지"로, Strategy Lab의 제공 정책 문장은 요약 타일 아래 보이는 글로 옮겼습니다. tooltip에만 남은 정보는 지표 타일의 용어 설명, 출처 칩의 제공처 원문, Macro 주요 지표 타일의 1일 변화·z-점수(지표 표에도 있음)입니다.
+
+실제 Tab 순서, 포커스 표시, 클릭할 수 있는 표 줄의 Enter 동작, 스크린리더는 확인하지 않았습니다. Linux headless Chromium 캡처와 오프라인 시험만 수행했으며 Windows 수동 확인은 남아 있습니다. 기존 `review-required`와 공개 준비 `BLOCKED`를 유지합니다. [변경 사실](FACTS.md#owner-ui-review-2026-11-10)

@@ -63,6 +63,10 @@ KIS 종목 마스터의 원본 줄(`_MASTER_CACHE`)과 검색 색인, 관심종�
 
 출처 “상세 정보” 접기는 화면 숨김이며 원래 보고서·AI 입력·자료 삭제가 아닙니다. 기존 통합 삭제·외부 제공자 삭제·백업·운영 범위의 미완료 조건을 유지합니다. [A3 처리 사실](FACTS.md#a3-reading-layout-2026-11-06)을 삭제 범위 지도와 함께 적용합니다.
 
+### 2026-11-10 자동 제공처 선택의 캐시
+
+연구 화면의 `source="best"`가 Yahoo Finance에 물으면 응답이 기존 FICC 캐시 폴더의 `HIST_YFINANCE_<기호>_<일수>.json`에 저장되고, yfinance가 사용자 캐시 폴더의 `py-yfinance/cookies.db`·`tkr-tz.db`를 만듭니다. 둘 다 조회한 종목 기호를 남기는 로컬 파일이며 앱 안의 삭제 기능은 없습니다. 기존 캐시와 같이 사용자가 폴더를 직접 지워야 하며, 이 항목은 삭제 인벤토리의 미구현 상태(`deletion-not-implemented`)에 포함됩니다. [07번](07-data-minimization.md) 절과 [변경 사실](FACTS.md#owner-ui-review-2026-11-10)을 따릅니다.
+
 ## 정책 또는 구현 기준
 
 ### 삭제 범위 지도
