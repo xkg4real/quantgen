@@ -6,13 +6,13 @@ task: claude-resume-20261103
 cycle: 2026-11-10
 done_ids: ⑬-2/a4-a, ⑬-2/a4-b, ⑬-2/a4-c, ⑬-2/a4-d, ⑬-2/a2, ②-5/NEW-M6-14, ②-5/NEW-M6-15, ②-5/NEW-M6-22, ⑬-2/a4-b/2, ⑬-2/a4-c/2, ⑬-2/a4-d/2, ⑬-2/a4-e, ⑬-2/a3-type, ⑬-2/a3-rail, ⑬-2/a3-controls, ②-5/M4-N4, ②-5/M4-N7, ②-5/M4-N9, ②-5/N-M1-02/a, ②-5/NEW-M6-04, ②-5/NEW-M6-05, ②-5/NEW-M6-12, ②-5/NEW-M6-19, ⑬-2/a1, ⑬-2/a3-layout-reading, ⑫-1/display-owner-decision, ⑬-8/b2/b/2, ⑫-2/b/1, ⑨-3a/codec/1, ⑨-3a/store/1, ⑨-3a/keys/1, ⑨-3a/data-hash/1, ⑨-3a/source-digests/1
 next_ids: ⑬-2/compact-ui, ⑨-3a/series-digest/1, ⑨-3a/series-format/1, ⑨-3a/series-files/1, ⑨-3a, ⑬-2/a3, ⑬-2/k, ⑩-1/b, ⑩-2/b, ⑫-2/b, ⑬-1/c
-updated_at: 2026-11-10T17:11:50+09:00
+updated_at: 2026-11-10T18:22:41+09:00
 stale_after_hours: 3
 waiting_on: none
 work_branch: claude/ui-compact-ci-fix-20261110
-work_commit: 9d1eacd
+work_commit: 30bca10
 uncommitted_changes: no
-pr: none
+pr: 90
 usage_weekly_pct: unknown
 usage_5h_pct: unknown
 usage_resets_at: 2026-11-17T17:00:00+09:00
@@ -62,11 +62,13 @@ GPT가 2026-11-07 00:45에 `returned`로 돌려준 작업을 Claude가 다시 �
 - [x] PR87(`ea90521`, series-digest), PR88(`e7ed793`, series-format): 열림, `mergeable_state: dirty`(main이 움직여 충돌). GPT 보고는 두 head 모두 CI 성공.
 - [x] **PR89 Runtime 42245900881 = 실패.** installed (ubuntu 3.12, windows 3.11/3.12/3.14) 4개 모두 `tests.desktop_a3_layout_acceptance` 의 `test_mc_larger_combo_fonts_reflow_and_keep_field_order_and_evidence` 1건 실패: `AssertionError: 2 != 3` (window 1360, en, form_width 696, Ubuntu control min 236, Windows 308). 나머지 19개 OK. 구문·Compliance는 성공. PR89는 이 결과가 나오기 전에 병합됨.
 - [x] Notion 1107 페이지 읽음.
-- [ ] ⑬-2/compact-ui CI 수정 ← **여기서 시작**
+- [x] ⑬-2/compact-ui 원인: PR89가 모든 compact 입력폼을 고정 696px(3×224+간격)로 제한. 18px 콤보에서 열 최소폭 236(Linux)/308(Windows) → 3열 불가 → 넓은 창에서도 2열. 수정: `form_layout.py`에서 224px를 상한이 아니라 기준으로(실제 최소폭이 요구하는 폭까지만 넓힘). A3 시험 그대로, 새 회귀 시험 추가. 로컬 CI 동등 데스크톱 9개 명령 647개 통과(Linux), 독립 검토 2명 승인, 컴플라이언스 PASS. 커밋 `05db49f`, 웹 기록 `30bca10`.
+- [ ] ⑬-2/compact-ui PR #90 CI 대기 ← **여기**
+- [ ] ⑨-3a/series-files/1 설계·구현 워크플로 실행 중(브랜치 `claude/run-registry-series-files-20261110`, PR88 head `e7ed793`에서)
 
 ## 5. 중단 지점
 
-작업 브랜치 `claude/ui-compact-ci-fix-20261110` = main `9d1eacd`, 아직 변경 없음.
+작업 브랜치 `claude/ui-compact-ci-fix-20261110` = `30bca10`, [PR #90](https://github.com/xkg4real/quantgen/pull/90) CI 대기. CI 성공 시 병합 → 원장 ⑬-2/compact-ui → Notion 1107 "추가 UI" 항목 취소선.
 
 ## 6. 다음 할 일 (순서대로)
 
